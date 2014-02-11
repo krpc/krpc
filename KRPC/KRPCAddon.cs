@@ -16,8 +16,9 @@ namespace KRPC
 
 		public void Awake ()
 		{
+			Debug.Log ("[kRPC] Awake");
 			if (!hasInitServer) {
-				Debug.Log ("KRPC starting server");
+				Debug.Log ("[kRPC] Starting server on port 8888");
 				server = new RPCServer (new TCPServer (8888));
 				server.Start ();
 				hasInitServer = true;
@@ -38,6 +39,7 @@ namespace KRPC
 				try {	
 					// Get request
 					Tuple<int,Request> request = server.GetRequest ();
+					Debug.Log("[kRPC] Received request from client " + request.Item1 + " (" + request.Item2.Service + "." + request.Item2.Method + ")");
 
 					// Handle the request
 					Response.Builder response;
@@ -51,11 +53,16 @@ namespace KRPC
 					}
 					// Send response
 					response.SetTime (Planetarium.GetUniversalTime ());
-					server.SendResponse (request.Item1, response.BuildPartial ());
+					var builtResponse = response.BuildPartial();
+					server.SendResponse (request.Item1, builtResponse);
+					if (response.Error)
+						Debug.Log("[kRPC] Sent error response to client " + request.Item1 + " (" + response.ErrorMessage + ")");
+					else
+						Debug.Log("[kRPC] Sent response to client " + request.Item1);
 				} catch (NoRequestException) {
 				}
 			} else {
-				Debug.Log ("KRPC server not started");
+				Debug.Log ("[kRPC] ERROR: Server has not started!");
 			}
 		}
 	}

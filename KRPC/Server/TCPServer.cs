@@ -95,7 +95,7 @@ namespace KRPC.Server
 		    	// Blocks until a client has connected to the server
 		    	TcpClient client = tcpListener.AcceptTcpClient();
 
-				System.Console.WriteLine ("TCPServer: Client " + clientId + " connected");
+				System.Console.WriteLine ("[kRPC] TCPServer: client " + clientId + " connected");
 
 				lock (clientsLock)
 				{
