@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{82D1B716-4129-4253-8B47-D5E38A3775BA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>KRPCTest</RootNamespace>
+    <AssemblyName>KRPCTest</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\Lib\KSP\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\Lib\KSP\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers">
+      <HintPath>..\Lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers.Serialization">
+      <HintPath>..\Lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.Serialization.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Utils\TupleTest.cs" />
+    <Compile Include="Utils\ConcurrentQueueTest.cs" />
+    <Compile Include="Schema\RpcTest.cs" />
+    <Compile Include="Server\RPCServerTest.cs" />
+    <Compile Include="Server\MemoryStreamWrapper.cs" />
+    <Compile Include="Service\ServicesTest.cs" />
+    <Compile Include="Service\ITestService.cs" />
+    <Compile Include="Service\TestService.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Utils\" />
+    <Folder Include="Schema\" />
+    <Folder Include="Server\" />
+    <Folder Include="Service\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KRPC\KRPC.csproj">
+      <Project>{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}</Project>
+      <Name>KRPC</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

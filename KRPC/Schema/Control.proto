@@ -1,0 +1,17 @@
+package Control;
+
+message Controls {
+  optional float throttle = 1; // range 0 to 1
+  optional float pitch = 2;    // range -1 to 1
+  optional float yaw = 3;      // range -1 to 1
+  optional float roll = 4;     // range -1 to 1
+  optional float x = 5;        // range -1 to 1
+  optional float y = 6;        // range -1 to 1
+  optional float z = 7;        // range -1 to 1
+  optional bool sas = 8;
+  optional bool rcs = 9;
+}
+
+message CurrentStage {
+  required uint32 stage = 1; 
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>KRPC</RootNamespace>
+    <AssemblyName>krpc</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>DEBUG;</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\Lib\KSP\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\Lib\KSP\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers">
+      <HintPath>..\Lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers.Serialization">
+      <HintPath>..\Lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.Serialization.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Extensions\PartExtensions.cs" />
+    <Compile Include="Extensions\RectExtensions.cs" />
+    <Compile Include="Utils\ConcurrentQueue.cs" />
+    <Compile Include="Utils\Tuple.cs" />
+    <Compile Include="Server\RPCServer.cs" />
+    <Compile Include="Server\TCPServer.cs" />
+    <Compile Include="Server\IServer.cs" />
+    <Compile Include="Server\NoRequestException.cs" />
+    <Compile Include="Server\MalformedRequestException.cs" />
+    <Compile Include="Server\INetworkStream.cs" />
+    <Compile Include="Server\NetworkStreamWrapper.cs" />
+    <Compile Include="Schema\RPC.cs" />
+    <Compile Include="Service\Control.cs" />
+    <Compile Include="Schema\Control.cs" />
+    <Compile Include="Service\Orbit.cs" />
+    <Compile Include="Schema\Orbit.cs" />
+    <Compile Include="Service\Services.cs" />
+    <Compile Include="Service\NoSuchServiceException.cs" />
+    <Compile Include="Service\NoSuchServiceMethodException.cs" />
+    <Compile Include="Service\KRPCMethod.cs" />
+    <Compile Include="KRPCAddon.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Deployment.LinuxDeployData generatePcFile="False" />
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Schema\" />
+    <Folder Include="Server\" />
+    <Folder Include="Service\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="run.sh" />
+    <None Include="Schema\build-proto.sh" />
+    <None Include="Schema\RPC.proto" />
+    <None Include="Schema\Control.proto" />
+    <None Include="Schema\Orbit.proto" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+package Orbit;
+
+message OrbitData {
+  required double apoapsis = 1;
+  required double periapsis = 2;
+  required double eccentricity = 3;
+  required double inclination = 4;
+  required double longitudeOfAscendingNode = 5;
+  required double argumentOfPeriapsis = 6;
+  required double meanAnomalyAtEpoch = 7;
+  required string body = 8;
+}
