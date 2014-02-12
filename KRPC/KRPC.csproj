@@ -63,8 +63,9 @@
     <Compile Include="Service\NoSuchServiceMethodException.cs" />
     <Compile Include="Service\KRPCMethod.cs" />
     <Compile Include="KRPCAddon.cs" />
-    <Compile Include="KRPCWindow.cs" />
     <Compile Include="Server\ConnectionAttempt.cs" />
+    <Compile Include="GUI\ClientConnectingDialog.cs" />
+    <Compile Include="GUI\MainWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -79,6 +80,8 @@
     <Folder Include="Schema\" />
     <Folder Include="Server\" />
     <Folder Include="Service\" />
+    <Folder Include="Utils\New Folder\" />
+    <Folder Include="GUI\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="run.sh" />
