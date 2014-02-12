@@ -4,7 +4,7 @@ using UnityEngine;
 using KSP;
 using KRPC.Server;
 
-namespace KRPC
+namespace KRPC.GUI
 {
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
 	public class MainWindow : MonoBehaviour
