@@ -44,8 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Extensions\PartExtensions.cs" />
-    <Compile Include="Extensions\RectExtensions.cs" />
     <Compile Include="Utils\ConcurrentQueue.cs" />
     <Compile Include="Utils\Tuple.cs" />
     <Compile Include="Server\RPCServer.cs" />
@@ -65,6 +63,7 @@
     <Compile Include="Service\NoSuchServiceMethodException.cs" />
     <Compile Include="Service\KRPCMethod.cs" />
     <Compile Include="KRPCAddon.cs" />
+    <Compile Include="KRPCWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -75,7 +74,6 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <Folder Include="Extensions\" />
     <Folder Include="Utils\" />
     <Folder Include="Schema\" />
     <Folder Include="Server\" />
