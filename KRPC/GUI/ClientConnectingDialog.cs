@@ -53,7 +53,7 @@ namespace KRPC.GUI
 					})
 				};
 				string message = "A client is attempting to connect from " + client.RemoteEndPoint;
-				var dialog = new MultiOptionDialog (message, "kRPC", HighLogic.Skin, options);
+				var dialog = new MultiOptionDialog (message, "kRPC", UnityEngine.GUI.skin, options);
 				dialog.DrawWindow ();
 			}
 		}

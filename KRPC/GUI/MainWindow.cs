@@ -11,14 +11,21 @@ namespace KRPC.GUI
 	{
 		private int windowId = UnityEngine.Random.Range(1000, 2000000);
 		private Rect windowPosition = new Rect();
+		private bool hasInitStyles = false;
 		private GUIStyle windowStyle, labelStyle;
 
 		public void Awake() {
-			windowStyle = new GUIStyle(HighLogic.Skin.window);
-			windowStyle.fixedWidth = 250f;
-			labelStyle = new GUIStyle(HighLogic.Skin.label);
-			labelStyle.stretchWidth = true;
 			RenderingManager.AddToPostDrawQueue(5, DrawGUI);
+		}
+
+		private void InitStyles() {
+			if (!hasInitStyles) {
+				windowStyle = new GUIStyle(UnityEngine.GUI.skin.window);
+				windowStyle.fixedWidth = 250f;
+				labelStyle = new GUIStyle(UnityEngine.GUI.skin.label);
+				labelStyle.stretchWidth = true;
+				hasInitStyles = true;
+			}
 		}
 
 		private void DrawGUI() {
@@ -26,6 +33,7 @@ namespace KRPC.GUI
 		}
 
 		private void DrawWindow(int windowID) {
+			InitStyles ();
 			GUILayout.BeginVertical();
 			GUILayout.Label ("Server status: " + (KRPCAddon.Server.Running ? "Online" : "Offline"), labelStyle);
 			if (KRPCAddon.Server.Running) {
