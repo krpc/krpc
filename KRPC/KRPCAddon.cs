@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Net;
 using UnityEngine;
+using KSP.IO;
 using KRPC.Server;
 using KRPC.Service;
 using KRPC.Schema.RPC;
@@ -12,17 +13,39 @@ namespace KRPC
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
 	public class KRPCAddon : MonoBehaviour
 	{
-		private static bool hasInitServer = false;
-		private static RPCServer server;
+		private static RPCServer server = null;
+		private const int defaultPort = 50000;
+		private const string defaultEndPoint = "127.0.0.1";
 
 		public void Awake ()
 		{
 			Debug.Log ("[kRPC] Awake");
-			if (!hasInitServer) {
-				Debug.Log ("[kRPC] Starting server on port 50000; accepting connections from 127.0.0.1");
-				server = new RPCServer (new TCPServer (IPAddress.Parse("127.0.0.1"), 50000));
+			if (server == null) {
+
+				// Load configuration
+				PluginConfiguration config = PluginConfiguration.CreateForType<KRPCAddon>();
+				config.load ();
+				int port = config.GetValue<int>("port", defaultPort);
+				string endPointStr = config.GetValue<string> ("endpoint", defaultEndPoint);
+
+				// Create the config file if it doesn't already exist
+				//TODO: cleaner way to do this?
+				config ["port"] = port;
+				config ["endpoint"] = endPointStr;
+				config.save ();
+
+				// Parse the endpoint
+				IPAddress endPoint;
+				if (endPointStr == "*")
+					endPoint = IPAddress.Any;
+				else
+					endPoint = IPAddress.Parse (endPointStr);
+
+				// Start the server
+				Debug.Log ("[kRPC] Starting server on port " + port + "; accepting connections from " + endPoint);
+				server = new RPCServer (new TCPServer (endPoint, port));
 				server.Start ();
-				hasInitServer = true;
+				Debug.Log ("[kRPC] Server started successfully");
 			}
 		}
 
@@ -36,7 +59,7 @@ namespace KRPC
 
 		public void Update ()
 		{
-			if (hasInitServer) {
+			if (server != null) {
 				try {	
 					// Get request
 					Tuple<int,Request> request = server.GetRequest ();
