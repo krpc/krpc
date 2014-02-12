@@ -14,12 +14,16 @@ namespace KRPC
 	public class KRPCAddon : MonoBehaviour
 	{
 		private static RPCServer server = null;
+		private static TCPServer tcpServer = null;
 		private const int defaultPort = 50000;
 		private const string defaultEndPoint = "127.0.0.1";
 
+		public static RPCServer Server {
+			get { return server; }
+		}
+
 		public void Awake ()
 		{
-			Debug.Log ("[kRPC] Awake");
 			if (server == null) {
 
 				// Load configuration
@@ -42,25 +46,22 @@ namespace KRPC
 					endPoint = IPAddress.Parse (endPointStr);
 
 				// Start the server
-				Debug.Log ("[kRPC] Starting server on port " + port + "; accepting connections from " + endPoint);
-				server = new RPCServer (new TCPServer (endPoint, port));
-				server.Start ();
-				Debug.Log ("[kRPC] Server started successfully");
+				Debug.Log ("[kRPC] Starting RPC server on port " + port + "; accepting connections from " + endPoint);
+				tcpServer = new TCPServer (endPoint, port);
+				server = new RPCServer (tcpServer);
 			}
 		}
 
-		/*
-		public override void OnDestroy ()
+		public void OnDestroy ()
 		{
-			if (hasInitServer)
+			if (server.Running)
 				server.Stop ();
 		}
-		*/
 
 		public void Update ()
 		{
-			if (server != null) {
-				try {	
+			if (server.Running) {
+				try {
 					// Get request
 					Tuple<int,Request> request = server.GetRequest ();
 					Debug.Log("[kRPC] Received request from client " + request.Item1 + " (" + request.Item2.Service + "." + request.Item2.Method + ")");
@@ -85,8 +86,6 @@ namespace KRPC
 						Debug.Log("[kRPC] Sent response to client " + request.Item1);
 				} catch (NoRequestException) {
 				}
-			} else {
-				Debug.Log ("[kRPC] ERROR: Server has not started!");
 			}
 		}
 	}

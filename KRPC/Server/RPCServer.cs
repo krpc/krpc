@@ -10,7 +10,7 @@ namespace KRPC.Server
 	public class RPCServer
 	{
 		private IServer server;
-		Dictionary<int,MemoryStream> clientBuffers = new Dictionary<int, MemoryStream>();
+		private Dictionary<int,MemoryStream> clientBuffers = new Dictionary<int, MemoryStream>();
 
 		public RPCServer (IServer server)
 		{
@@ -27,20 +27,13 @@ namespace KRPC.Server
 			server.Stop();
 		}
 
-		/*public Tuple<int,byte[]> Recv ()
-		{
-			return server.Recv ();
+		public IServer Server {
+			get { return server; }
 		}
 
-		public void Send(int clientId, byte[] data)
-		{
-			server.Send (clientId, data);
+		public bool Running {
+			get { return server.Running; }
 		}
-
-		public Stream GetClientStream (int clientId)
-		{
-			return server.GetClientStream(clientId);
-		}*/
 
 		/// <summary>
 		/// Get an RPC request from the server. Blocks until a request is received.

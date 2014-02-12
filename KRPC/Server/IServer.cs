@@ -8,7 +8,10 @@ namespace KRPC.Server
 	{
 		void Start();
 		void Stop();
+		bool Running {
+			get;
+		}
 		INetworkStream GetClientStream(int clientId);
-		IEnumerable<int> GetConnectedClientIds();
+		ICollection<int> GetConnectedClientIds();
 	}
 }

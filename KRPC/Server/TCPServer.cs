@@ -2,6 +2,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Linq;
 using System.Collections.Generic;
 using KRPC.Utils;
 
@@ -11,13 +12,10 @@ namespace KRPC.Server
 	/// A simpler TCP server, supporting multiple client connections
 	/// Each client is identified by a unique integer
 	/// </summary>
+	//TODO: check for client disconnects
+	//TODO: cleaner handling of client identifiers (this integer approach is horrible)
 	public class TCPServer : IServer
 	{
-		/// <summary>
-		/// Listens for client connections over TCP
-		/// </summary>
-		private TcpListener tcpListener;
-
 		/// <summary>
 		/// Thread that listens for client connections
 		/// </summary>
@@ -41,12 +39,19 @@ namespace KRPC.Server
 		/// <summary>
 		/// Whether the server is running.
 		/// </summary>
-		private bool running = false;
+		private volatile bool running = false;
 
-		/// <summary>
-		/// Number of bytes to read from a client in each call to Read on the client stream
-		/// </summary>
-		private const int bufferSize = 4096;
+		public bool Running {
+			get { return running; }
+		}
+
+		public int Port {
+			get { return port; }
+		}
+
+		public IPAddress EndPoint {
+			get { return endPoint; }
+		}
 
 		/// <summary>
 		/// IP address from which incomming connections are allowed.
@@ -58,6 +63,10 @@ namespace KRPC.Server
 		/// </summary>
 		private int port;
 
+		/// <summary>
+		/// Create a TCP server that will listen for connections from endPoint on the given port.
+		/// Start() must be called to start listening for connections.
+		/// </summary>
 		public TCPServer (IPAddress endPoint, int port)
 		{
 			this.endPoint = endPoint;
@@ -68,13 +77,14 @@ namespace KRPC.Server
 		/// Start the server and listen for client connections
 		/// </summary>
 	    public void Start()
-	    {
-			if (running)
+		{
+			if (running) {
+				System.Console.WriteLine ("[kRPC] TCPServer: start requested, but server is already running");
 				return;
-			running = true;
-			tcpListener = new TcpListener(endPoint, port);
-	        listenerThread = new Thread(new ThreadStart(ConnectionListener));
-	        listenerThread.Start();
+			}
+			System.Console.WriteLine ("[kRPC] TCPServer: starting");
+			listenerThread = new Thread(new ThreadStart(ConnectionListener));
+			listenerThread.Start();
 	    }
 
 		/// <summary>
@@ -82,7 +92,8 @@ namespace KRPC.Server
 		/// </summary>
 		public void Stop()
 		{
-			// TODO: implement
+			System.Console.WriteLine ("[kRPC] TCPServer: stop requested");
+			listenerThread.Abort ();
 		}
 
 		/// <summary>
@@ -91,31 +102,50 @@ namespace KRPC.Server
 		/// </summary>
 		private void ConnectionListener()
 		{
+			TcpListener tcpListener = new TcpListener(endPoint, port);
 			tcpListener.Start();
+			System.Console.WriteLine ("[kRPC] TCPServer: listening on port " + port);
+			System.Console.WriteLine ("[kRPC] TCPServer: accepting connections from " + endPoint);
+			System.Console.WriteLine ("[kRPC] TCPServer: started successfully");
 
 			// The next client id to allocate
 			int clientId = 0;
 		  	
-		  	while (running)
-		  	{
-		    	// Blocks until a client has connected to the server
-		    	TcpClient client = tcpListener.AcceptTcpClient();
+			try
+			{
+				running = true;
+				while (true)
+				{	
+					// Blocks until a client has connected to the server
+			    	TcpClient client = tcpListener.AcceptTcpClient();
+					System.Console.WriteLine ("[kRPC] TCPServer: client " + clientId + " connected (" + client.Client.RemoteEndPoint + ")");
 
-				System.Console.WriteLine ("[kRPC] TCPServer: client " + clientId + " connected");
-
-				lock (clientsLock)
-				{
-					clients[clientId] = client;
-					clientStreams[clientId] = new NetworkStreamWrapper(client.GetStream());
+					lock (clientsLock)
+					{
+						clients[clientId] = client;
+						clientStreams[clientId] = new NetworkStreamWrapper(client.GetStream());
+					}
+					clientId++;
 				}
-				clientId++;
-		  	}
+			} catch (ThreadAbortException) {
+				System.Console.WriteLine ("[kRPC] TCPServer: stopping...");
+			} finally {
+				tcpListener.Stop ();
+
+				lock (clientsLock) {
+					clients.Clear ();
+					clientStreams.Clear ();
+				}
+
+				System.Console.WriteLine ("[kRPC] TCPServer: stopped");
+				running = false;
+			}
 		}
 
 		/// <summary>
 		/// Return a list of connected clients.
 		/// </summary>
-		public IEnumerable<int> GetConnectedClientIds ()
+		public ICollection<int> GetConnectedClientIds ()
 		{
 			lock (clientsLock) {
 				int[] ids = new int[clients.Keys.Count];
