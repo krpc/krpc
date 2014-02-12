@@ -4,7 +4,7 @@ import proto.Orbit_pb2 as schema_orbit
 import socket
 
 TCP_IP = '127.0.0.1'
-TCP_PORT = 8888
+TCP_PORT = 50000
 BUFFER_SIZE = 4096
 
 class Client(object):

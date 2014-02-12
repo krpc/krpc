@@ -49,12 +49,18 @@ namespace KRPC.Server
 		private const int bufferSize = 4096;
 
 		/// <summary>
+		/// IP address from which incomming connections are allowed.
+		/// </summary>
+		private IPAddress endPoint;
+
+		/// <summary>
 		/// Port that the server listens on for new connections.
 		/// </summary>
 		private int port;
 
-		public TCPServer (int port)
+		public TCPServer (IPAddress endPoint, int port)
 		{
+			this.endPoint = endPoint;
 			this.port = port;
 		}
 
@@ -66,7 +72,7 @@ namespace KRPC.Server
 			if (running)
 				return;
 			running = true;
-	    	tcpListener = new TcpListener(IPAddress.Any, port);
+			tcpListener = new TcpListener(endPoint, port);
 	        listenerThread = new Thread(new ThreadStart(ConnectionListener));
 	        listenerThread.Start();
 	    }

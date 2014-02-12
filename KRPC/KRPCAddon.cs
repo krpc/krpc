@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Net;
 using UnityEngine;
 using KRPC.Server;
 using KRPC.Service;
@@ -18,8 +19,8 @@ namespace KRPC
 		{
 			Debug.Log ("[kRPC] Awake");
 			if (!hasInitServer) {
-				Debug.Log ("[kRPC] Starting server on port 8888");
-				server = new RPCServer (new TCPServer (8888));
+				Debug.Log ("[kRPC] Starting server on port 50000; accepting connections from 127.0.0.1");
+				server = new RPCServer (new TCPServer (IPAddress.Parse("127.0.0.1"), 50000));
 				server.Start ();
 				hasInitServer = true;
 			}
