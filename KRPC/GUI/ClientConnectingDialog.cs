@@ -7,6 +7,15 @@ namespace KRPC.GUI
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
 	public class ClientConnectingDialog : MonoBehaviour
 	{
+		private static ClientConnectingDialog instance;
+		public static ClientConnectingDialog Instance {
+			get {
+				if (instance == null)
+					instance = (ClientConnectingDialog) FindObjectOfType (typeof(ClientConnectingDialog));
+				return instance;
+			}
+		}
+
 		private volatile bool showConnectionAttemptDialog = false;
 		private System.Net.Sockets.Socket client;
 		private ConnectionAttempt attempt;
@@ -27,7 +36,7 @@ namespace KRPC.GUI
 			}
 		}
 
-		private void CancelConnectionAttemptDialog () {
+		public void CancelConnectionAttemptDialog () {
 			showConnectionAttemptDialog = false;
 		}
 

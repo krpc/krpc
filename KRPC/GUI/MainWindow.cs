@@ -49,7 +49,7 @@ namespace KRPC.GUI
 
 		private void StopServerPressed () {
 			KRPCAddon.Server.Stop ();
-			//CancelConnectionAttemptDialog();
+			ClientConnectingDialog.Instance.CancelConnectionAttemptDialog();
 		}
 
 		private string EndPointToString(IPAddress endPoint) {
