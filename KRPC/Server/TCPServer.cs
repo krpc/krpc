@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -16,6 +17,8 @@ namespace KRPC.Server
 	//TODO: cleaner handling of client identifiers (this integer approach is horrible)
 	public class TCPServer : IServer
 	{
+		public event ClientRequestingConnectionHandler OnClientRequestingConnection;
+
 		/// <summary>
 		/// Thread that listens for client connections
 		/// </summary>
@@ -116,9 +119,19 @@ namespace KRPC.Server
 				running = true;
 				while (true)
 				{	
-					// Blocks until a client has connected to the server
-			    	TcpClient client = tcpListener.AcceptTcpClient();
-					System.Console.WriteLine ("[kRPC] TCPServer: client " + clientId + " connected (" + client.Client.RemoteEndPoint + ")");
+					// Blocks until a client connects to the server
+					TcpClient client = tcpListener.AcceptTcpClient();
+					System.Console.WriteLine ("[kRPC] TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
+
+					ConnectionAttempt attempt = new ConnectionAttempt();
+					OnClientRequestingConnection(client.Client, attempt);
+					if (attempt.ShouldDeny) {
+						System.Console.WriteLine ("[kRPC] TCPServer: client connection denied (" + client.Client.RemoteEndPoint + ")");
+						client.Close();
+						continue;
+					}
+
+					System.Console.WriteLine ("[kRPC] TCPServer: client connection accepted (" + client.Client.RemoteEndPoint + ")");
 
 					lock (clientsLock)
 					{

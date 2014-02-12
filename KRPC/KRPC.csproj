@@ -64,6 +64,7 @@
     <Compile Include="Service\KRPCMethod.cs" />
     <Compile Include="KRPCAddon.cs" />
     <Compile Include="KRPCWindow.cs" />
+    <Compile Include="Server\ConnectionAttempt.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
