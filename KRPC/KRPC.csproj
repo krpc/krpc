@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Utils\ConcurrentQueue.cs" />
     <Compile Include="Utils\Tuple.cs" />
     <Compile Include="Server\RPCServer.cs" />
     <Compile Include="Server\TCPServer.cs" />
@@ -80,7 +79,6 @@
     <Folder Include="Schema\" />
     <Folder Include="Server\" />
     <Folder Include="Service\" />
-    <Folder Include="Utils\New Folder\" />
     <Folder Include="GUI\" />
   </ItemGroup>
   <ItemGroup>
