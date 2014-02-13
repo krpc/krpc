@@ -57,7 +57,7 @@
     <Compile Include="Service\ServicesTest.cs" />
     <Compile Include="Service\ITestService.cs" />
     <Compile Include="Service\TestService.cs" />
-    <Compile Include="Server\ConnectionAttemptTest.cs" />
+    <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

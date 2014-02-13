@@ -9,19 +9,17 @@ namespace KRPC.GUI
 	public class ClientConnectingDialog : MonoBehaviour
 	{
 		private volatile bool show = false;
-		private Socket client;
-		private ConnectionAttempt attempt;
+		private ClientRequestingConnectionArgs args;
 
 		public void Awake () {
 			RenderingManager.AddToPostDrawQueue(5, DrawGUI);
 		}
 
-		public void Show (Socket client, INetworkStream stream, ConnectionAttempt attempt)
+		public void Show (object sender, ClientRequestingConnectionArgs args)
 		{
 			Logger.WriteLine("Asking player to allow/deny connection attempt...");
 			show = true;
-			this.client = client;
-			this.attempt = attempt;
+			this.args = args;
 			//TODO: This spin lock is horrible. But it works...
 			while (show) {
 				System.Threading.Thread.Sleep(50);
@@ -36,15 +34,15 @@ namespace KRPC.GUI
 			if (show) {
 				DialogOption[] options = {
 					new DialogOption ("Allow", () => {
-						attempt.Allow ();
+						args.Allow ();
 						show = false;
 					}),
 					new DialogOption ("Deny", () => {
-						attempt.Deny ();
+						args.Deny ();
 						show = false;
 					})
 				};
-				string message = "A client is attempting to connect from " + client.RemoteEndPoint;
+				string message = "A client is attempting to connect from " + args.Client.RemoteEndPoint;
 				var dialog = new MultiOptionDialog (message, "kRPC", UnityEngine.GUI.skin, options);
 				dialog.DrawWindow ();
 			}

@@ -214,12 +214,11 @@ namespace KRPCTest.Server
 			var server = new RPCServer (mock.Object);
 			server.Start ();
 
-			ConnectionAttempt attempt = new ConnectionAttempt();
-			object[] eventArgs = { null, stream.Object, attempt }; //TODO: mock the client?
+			var eventArgs = new ClientRequestingConnectionArgs (null, stream.Object); //TODO: mock the client?
 			mock.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-			Assert.IsTrue (attempt.ShouldAllow);
-			Assert.IsFalse (attempt.ShouldDeny);
+			Assert.IsTrue (eventArgs.ShouldAllow);
+			Assert.IsFalse (eventArgs.ShouldDeny);
 		}
 
 		[Test]
@@ -233,12 +232,11 @@ namespace KRPCTest.Server
 			var server = new RPCServer (mock.Object, timeout: 0.1);
 			server.Start ();
 
-			ConnectionAttempt attempt = new ConnectionAttempt();
-			object[] eventArgs = { null, stream.Object, attempt }; //TODO: mock the client?
+			var eventArgs = new ClientRequestingConnectionArgs (null, stream.Object); //TODO: mock the client?
 			mock.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-			Assert.IsFalse (attempt.ShouldAllow);
-			Assert.IsTrue (attempt.ShouldDeny);
+			Assert.IsFalse (eventArgs.ShouldAllow);
+			Assert.IsTrue (eventArgs.ShouldDeny);
 		}
 
 		[Test]
@@ -252,12 +250,11 @@ namespace KRPCTest.Server
 			var server = new RPCServer (mock.Object, timeout: 0.1);
 			server.Start ();
 
-			ConnectionAttempt attempt = new ConnectionAttempt();
-			object[] eventArgs = { null, stream.Object, attempt }; //TODO: mock the client?
+			var eventArgs = new ClientRequestingConnectionArgs (null, stream.Object); //TODO: mock the client?
 			mock.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-			Assert.IsFalse (attempt.ShouldAllow);
-			Assert.IsTrue (attempt.ShouldDeny);
+			Assert.IsFalse (eventArgs.ShouldAllow);
+			Assert.IsTrue (eventArgs.ShouldDeny);
 		}
 
 		[Test]
@@ -271,12 +268,11 @@ namespace KRPCTest.Server
 			var server = new RPCServer (mock.Object, timeout: 0.1);
 			server.Start ();
 
-			ConnectionAttempt attempt = new ConnectionAttempt();
-			object[] eventArgs = { null, stream.Object, attempt }; //TODO: mock the client?
+			var eventArgs = new ClientRequestingConnectionArgs (null, stream.Object); //TODO: mock the client?
 			mock.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-			Assert.IsFalse (attempt.ShouldAllow);
-			Assert.IsTrue (attempt.ShouldDeny);
+			Assert.IsFalse (eventArgs.ShouldAllow);
+			Assert.IsTrue (eventArgs.ShouldDeny);
 		}
 	}
 }

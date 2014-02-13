@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 namespace KRPC.Server
 {
-	public delegate void ClientRequestingConnectionHandler(Socket client, INetworkStream stream, ConnectionAttempt attempt);
-
 	public interface IServer
 	{
 		void Start();
@@ -16,7 +14,7 @@ namespace KRPC.Server
 		INetworkStream GetClientStream(int clientId);
 		ICollection<int> GetConnectedClientIds();
 
-		event ClientRequestingConnectionHandler OnInterativeClientRequestingConnection;
-		event ClientRequestingConnectionHandler OnClientRequestingConnection;
+		event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
+		event EventHandler<ClientRequestingConnectionArgs> OnInteractiveClientRequestingConnection;
 	}
 }

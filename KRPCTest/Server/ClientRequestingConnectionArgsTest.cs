@@ -5,12 +5,12 @@ using KRPC.Server;
 namespace KRPCTest.Server
 {
 	[TestFixture]
-	public class ConnectionAttemptTest
+	public class ClientRequestingConnectionArgsTest
 	{
 		[Test]
 		public void DefaultBehaviour ()
 		{
-			var attempt = new ConnectionAttempt ();
+			var attempt = new ClientRequestingConnectionArgs (null, null);
 			Assert.IsTrue (attempt.ShouldDeny);
 			Assert.IsFalse (attempt.ShouldAllow);
 		}
@@ -18,7 +18,7 @@ namespace KRPCTest.Server
 		[Test]
 		public void Deny ()
 		{
-			var attempt = new ConnectionAttempt ();
+			var attempt = new ClientRequestingConnectionArgs (null, null);
 			attempt.Deny();
 			Assert.IsTrue (attempt.ShouldDeny);
 			Assert.IsFalse (attempt.ShouldAllow);
@@ -27,7 +27,7 @@ namespace KRPCTest.Server
 		[Test]
 		public void Allow ()
 		{
-			var attempt = new ConnectionAttempt ();
+			var attempt = new ClientRequestingConnectionArgs (null, null);
 			attempt.Allow();
 			Assert.IsFalse (attempt.ShouldDeny);
 			Assert.IsTrue (attempt.ShouldAllow);
@@ -36,7 +36,7 @@ namespace KRPCTest.Server
 		[Test]
 		public void AllowAndDeny ()
 		{
-			var attempt = new ConnectionAttempt ();
+			var attempt = new ClientRequestingConnectionArgs (null, null);
 			attempt.Allow();
 			attempt.Deny();
 			Assert.IsTrue (attempt.ShouldDeny);

@@ -18,7 +18,7 @@ namespace KRPC.GUI
 		public void Init(RPCServer server) {
 			this.server = server;
 			clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog>();
-			server.Server.OnInterativeClientRequestingConnection += clientConnectingDialog.Show;
+			server.Server.OnInteractiveClientRequestingConnection += clientConnectingDialog.Show;
 		}
 
 		public void Awake() {

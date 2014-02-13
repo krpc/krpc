@@ -17,8 +17,8 @@ namespace KRPC.Server
 	//TODO: cleaner handling of client identifiers (this integer approach is horrible)
 	public class TCPServer : IServer
 	{
-		public event ClientRequestingConnectionHandler OnClientRequestingConnection;
-		public event ClientRequestingConnectionHandler OnInterativeClientRequestingConnection;
+		public event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
+		public event EventHandler<ClientRequestingConnectionArgs> OnInteractiveClientRequestingConnection;
 
 		/// <summary>
 		/// Thread that listens for client connections
@@ -124,9 +124,8 @@ namespace KRPC.Server
 					TcpClient client = tcpListener.AcceptTcpClient();
 					Logger.WriteLine("TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
 
-					ConnectionAttempt attempt = new ConnectionAttempt();
-
-					OnClientRequestingConnection(client.Client, new NetworkStreamWrapper(client.GetStream()), attempt);
+					var attempt = new ClientRequestingConnectionArgs(client.Client, new NetworkStreamWrapper(client.GetStream()));
+					OnClientRequestingConnection(this, attempt);
 					if (attempt.ShouldDeny) {
 						Logger.WriteLine("TCPServer: client connection denied (" + client.Client.RemoteEndPoint + ")");
 						client.Close();
@@ -135,7 +134,8 @@ namespace KRPC.Server
 						Logger.WriteLine("TCPServer: client connection denied (" + client.Client.RemoteEndPoint + ")");
 					}
 
-					OnInterativeClientRequestingConnection(client.Client, new NetworkStreamWrapper(client.GetStream()), attempt);
+					attempt = new ClientRequestingConnectionArgs(client.Client, new NetworkStreamWrapper(client.GetStream()));
+					OnInteractiveClientRequestingConnection(this, attempt);
 					if (attempt.ShouldDeny) {
 						Logger.WriteLine("TCPServer: client connection denied by player (" + client.Client.RemoteEndPoint + ")");
 						client.Close();
