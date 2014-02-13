@@ -17,6 +17,7 @@ namespace KRPC.Server
 		public RPCServer (IServer server)
 		{
 			this.server = server;
+			server.OnClientRequestingConnection += CheckHelloMessage;
 		}
 
 		public void CheckHelloMessage(Socket client, INetworkStream stream, ConnectionAttempt attempt) {
@@ -55,7 +56,6 @@ namespace KRPC.Server
 
 		public void Start()
 		{
-			server.OnClientRequestingConnection += CheckHelloMessage;
 			server.Start();
 		}
 
