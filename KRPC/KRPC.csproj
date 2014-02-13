@@ -82,7 +82,6 @@
     <Folder Include="GUI\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="run.sh" />
     <None Include="Schema\build-proto.sh" />
     <None Include="Schema\RPC.proto" />
     <None Include="Schema\Control.proto" />
