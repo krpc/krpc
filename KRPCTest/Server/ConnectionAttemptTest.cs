@@ -25,7 +25,7 @@ namespace KRPCTest.Server
 		}
 
 		[Test]
-		public void Accept ()
+		public void Allow ()
 		{
 			var attempt = new ConnectionAttempt ();
 			attempt.Allow();
@@ -34,7 +34,7 @@ namespace KRPCTest.Server
 		}
 
 		[Test]
-		public void AcceptAndDeny ()
+		public void AllowAndDeny ()
 		{
 			var attempt = new ConnectionAttempt ();
 			attempt.Allow();

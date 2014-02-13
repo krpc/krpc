@@ -202,5 +202,81 @@ namespace KRPCTest.Server
 			mock.Verify(x => x.Start(), Times.Once());
 			mock.Verify(x => x.Stop(), Times.Once());
 		}
+
+		[Test]
+		public void ValidHelloMessage()
+		{
+			var mock = new Mock<IServer> ();
+
+			byte[] hello = {0x48,0x45,0x4C,0x4C,0x4F,0xBA,0xDA,0x55};
+			var stream = createMockNetworkStream(hello);
+
+			var server = new RPCServer (mock.Object);
+			server.Start ();
+
+			ConnectionAttempt attempt = new ConnectionAttempt();
+			object[] eventArgs = { null, stream.Object, attempt }; //TODO: mock the client?
+			mock.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+
+			Assert.IsTrue (attempt.ShouldAllow);
+			Assert.IsFalse (attempt.ShouldDeny);
+		}
+
+		[Test]
+		public void InvalidHelloMessage()
+		{
+			var mock = new Mock<IServer> ();
+
+			byte[] hello = {0x48,0x45,0x4C,0x4C,0x4F,0xB0,0xDA,0x55};
+			var stream = createMockNetworkStream(hello);
+
+			var server = new RPCServer (mock.Object, timeout: 0.1);
+			server.Start ();
+
+			ConnectionAttempt attempt = new ConnectionAttempt();
+			object[] eventArgs = { null, stream.Object, attempt }; //TODO: mock the client?
+			mock.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+
+			Assert.IsFalse (attempt.ShouldAllow);
+			Assert.IsTrue (attempt.ShouldDeny);
+		}
+
+		[Test]
+		public void ShortHelloMessage()
+		{
+			var mock = new Mock<IServer> ();
+
+			byte[] hello = {0x48,0x45,0x4C,0x4C,0x4F,0xB0};
+			var stream = createMockNetworkStream(hello);
+
+			var server = new RPCServer (mock.Object, timeout: 0.1);
+			server.Start ();
+
+			ConnectionAttempt attempt = new ConnectionAttempt();
+			object[] eventArgs = { null, stream.Object, attempt }; //TODO: mock the client?
+			mock.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+
+			Assert.IsFalse (attempt.ShouldAllow);
+			Assert.IsTrue (attempt.ShouldDeny);
+		}
+
+		[Test]
+		public void NoHelloMessage()
+		{
+			var mock = new Mock<IServer> ();
+
+			byte[] hello = {};
+			var stream = createMockNetworkStream(hello);
+
+			var server = new RPCServer (mock.Object, timeout: 0.1);
+			server.Start ();
+
+			ConnectionAttempt attempt = new ConnectionAttempt();
+			object[] eventArgs = { null, stream.Object, attempt }; //TODO: mock the client?
+			mock.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+
+			Assert.IsFalse (attempt.ShouldAllow);
+			Assert.IsTrue (attempt.ShouldDeny);
+		}
 	}
 }
