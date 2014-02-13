@@ -23,7 +23,7 @@ namespace KRPC.Server
 		public void CheckHelloMessage(Socket client, INetworkStream stream, ConnectionAttempt attempt) {
 			// Read 8 byte hello message
 			//TODO: refactor this
-			System.Console.WriteLine("[kRPC] Waiting for hello message from client...");
+			Logger.WriteLine("Waiting for hello message from client...");
 			byte[] buffer = new byte[8];
 			int offset = 0;
 			for (int i = 0; i < 60 /*15 seconds */; i++) {
@@ -37,7 +37,7 @@ namespace KRPC.Server
 
 			// Failed to read message in sufficient time - kill connection
 			if (offset != 8) {
-				System.Console.WriteLine("[kRPC] Client connection abandoned. Timed out waiting for hello message.");
+				Logger.WriteLine("Client connection abandoned. Timed out waiting for hello message.");
 				attempt.Deny ();
 				return;
 			}
@@ -46,10 +46,10 @@ namespace KRPC.Server
 			byte[] expectedBuffer = {0x48,0x45,0x4C,0x4C,0x4F,0xBA,0xDA,0x55};
 			if (!buffer.SequenceEqual(expectedBuffer)) {
 				string hex = ("0x" + BitConverter.ToString(buffer)).Replace("-", " 0x");
-				System.Console.WriteLine("[kRPC] Client connection abandoned. Invalid hello message received (" + hex + ")");
+				Logger.WriteLine("Client connection abandoned. Invalid hello message received (" + hex + ")");
 				attempt.Deny ();
 			} else {
-				System.Console.WriteLine("[kRPC] Correct hello message received.");
+				Logger.WriteLine("Correct hello message received.");
 				attempt.Allow ();
 			}
 		}

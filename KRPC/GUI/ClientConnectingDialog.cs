@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using UnityEngine;
 using KRPC.Server;
+using KRPC.Utils;
 
 namespace KRPC.GUI
 {
@@ -17,7 +18,7 @@ namespace KRPC.GUI
 
 		public void Show (Socket client, INetworkStream stream, ConnectionAttempt attempt)
 		{
-			System.Console.WriteLine ("[kRPC] Asking player to allow/deny connection attempt...");
+			Logger.WriteLine("Asking player to allow/deny connection attempt...");
 			show = true;
 			this.client = client;
 			this.attempt = attempt;

@@ -83,10 +83,10 @@ namespace KRPC.Server
 	    public void Start()
 		{
 			if (running) {
-				System.Console.WriteLine ("[kRPC] TCPServer: start requested, but server is already running");
+				Logger.WriteLine("TCPServer: start requested, but server is already running");
 				return;
 			}
-			System.Console.WriteLine ("[kRPC] TCPServer: starting");
+			Logger.WriteLine("TCPServer: starting");
 			listenerThread = new Thread(new ThreadStart(ConnectionListener));
 			listenerThread.Start();
 	    }
@@ -96,7 +96,7 @@ namespace KRPC.Server
 		/// </summary>
 		public void Stop()
 		{
-			System.Console.WriteLine ("[kRPC] TCPServer: stop requested");
+			Logger.WriteLine("TCPServer: stop requested");
 			listenerThread.Abort ();
 		}
 
@@ -108,9 +108,9 @@ namespace KRPC.Server
 		{
 			TcpListener tcpListener = new TcpListener(endPoint, port);
 			tcpListener.Start();
-			System.Console.WriteLine ("[kRPC] TCPServer: listening on port " + port);
-			System.Console.WriteLine ("[kRPC] TCPServer: accepting connections from " + endPoint);
-			System.Console.WriteLine ("[kRPC] TCPServer: started successfully");
+			Logger.WriteLine("TCPServer: listening on port " + port);
+			Logger.WriteLine("TCPServer: accepting connections from " + endPoint);
+			Logger.WriteLine("TCPServer: started successfully");
 
 			// The next client id to allocate
 			int clientId = 0;
@@ -122,25 +122,27 @@ namespace KRPC.Server
 				{	
 					// Blocks until a client connects to the server
 					TcpClient client = tcpListener.AcceptTcpClient();
-					System.Console.WriteLine ("[kRPC] TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
+					Logger.WriteLine("TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
 
 					ConnectionAttempt attempt = new ConnectionAttempt();
 
 					OnClientRequestingConnection(client.Client, new NetworkStreamWrapper(client.GetStream()), attempt);
 					if (attempt.ShouldDeny) {
-						System.Console.WriteLine ("[kRPC] TCPServer: client connection denied (" + client.Client.RemoteEndPoint + ")");
+						Logger.WriteLine("TCPServer: client connection denied (" + client.Client.RemoteEndPoint + ")");
 						client.Close();
 						continue;
+					} else {
+						Logger.WriteLine("TCPServer: client connection denied (" + client.Client.RemoteEndPoint + ")");
 					}
 
 					OnInterativeClientRequestingConnection(client.Client, new NetworkStreamWrapper(client.GetStream()), attempt);
 					if (attempt.ShouldDeny) {
-						System.Console.WriteLine ("[kRPC] TCPServer: client connection denied by player (" + client.Client.RemoteEndPoint + ")");
+						Logger.WriteLine("TCPServer: client connection denied by player (" + client.Client.RemoteEndPoint + ")");
 						client.Close();
 						continue;
 					}
 
-					System.Console.WriteLine ("[kRPC] TCPServer: client connection accepted (" + client.Client.RemoteEndPoint + ")");
+					Logger.WriteLine("TCPServer: client connection accepted (" + client.Client.RemoteEndPoint + ")");
 
 					lock (clientsLock)
 					{
@@ -150,7 +152,10 @@ namespace KRPC.Server
 					clientId++;
 				}
 			} catch (ThreadAbortException) {
-				System.Console.WriteLine ("[kRPC] TCPServer: stopping...");
+				Logger.WriteLine("TCPServer: stopping...");
+			} catch (Exception e) {
+				Console.WriteLine (e.Message);
+				Console.WriteLine (e.StackTrace);
 			} finally {
 				tcpListener.Stop ();
 
@@ -159,7 +164,7 @@ namespace KRPC.Server
 					clientStreams.Clear ();
 				}
 
-				System.Console.WriteLine ("[kRPC] TCPServer: stopped");
+				Logger.WriteLine("TCPServer: stopped");
 				running = false;
 			}
 		}
