@@ -51,7 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Utils\TupleTest.cs" />
-    <Compile Include="Utils\ConcurrentQueueTest.cs" />
     <Compile Include="Schema\RpcTest.cs" />
     <Compile Include="Server\RPCServerTest.cs" />
     <Compile Include="Server\MemoryStreamWrapper.cs" />
