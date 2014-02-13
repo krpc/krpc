@@ -12,11 +12,13 @@ namespace KRPC.Server
 	public class RPCServer
 	{
 		private IServer server;
+		double timeout;
 		private Dictionary<int,MemoryStream> clientBuffers = new Dictionary<int, MemoryStream>();
 
-		public RPCServer (IServer server)
+		public RPCServer (IServer server, double timeout = 15)
 		{
 			this.server = server;
+			this.timeout = timeout;
 			server.OnClientRequestingConnection += CheckHelloMessage;
 		}
 
@@ -26,13 +28,13 @@ namespace KRPC.Server
 			Logger.WriteLine("Waiting for hello message from client...");
 			byte[] buffer = new byte[8];
 			int offset = 0;
-			for (int i = 0; i < 60 /*15 seconds */; i++) {
+			for (int i = 0; i < (int)(timeout * 1000) / 50; i++) {
 				if (stream.DataAvailable) {
 					offset += stream.Read (buffer, offset, 8-offset);
 					if (offset == 8)
 						break;
 				}
-				System.Threading.Thread.Sleep(250);
+				System.Threading.Thread.Sleep(50);
 			}
 
 			// Failed to read message in sufficient time - kill connection
