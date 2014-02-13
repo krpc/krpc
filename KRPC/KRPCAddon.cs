@@ -7,6 +7,7 @@ using KRPC.Server;
 using KRPC.Service;
 using KRPC.Schema.RPC;
 using KRPC.Utils;
+using KRPC.GUI;
 
 namespace KRPC
 {
@@ -49,6 +50,7 @@ namespace KRPC
 				Debug.Log ("[kRPC] Starting RPC server on port " + port + "; accepting connections from " + endPoint);
 				tcpServer = new TCPServer (endPoint, port);
 				server = new RPCServer (tcpServer);
+				server.Server.OnInterativeClientRequestingConnection += ClientConnectingDialog.ShowConnectionAttemptDialog;
 			}
 		}
 

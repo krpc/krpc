@@ -18,6 +18,7 @@ namespace KRPC.Server
 	public class TCPServer : IServer
 	{
 		public event ClientRequestingConnectionHandler OnClientRequestingConnection;
+		public event ClientRequestingConnectionHandler OnInterativeClientRequestingConnection;
 
 		/// <summary>
 		/// Thread that listens for client connections
@@ -124,9 +125,17 @@ namespace KRPC.Server
 					System.Console.WriteLine ("[kRPC] TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
 
 					ConnectionAttempt attempt = new ConnectionAttempt();
-					OnClientRequestingConnection(client.Client, attempt);
+
+					OnClientRequestingConnection(client.Client, new NetworkStreamWrapper(client.GetStream()), attempt);
 					if (attempt.ShouldDeny) {
 						System.Console.WriteLine ("[kRPC] TCPServer: client connection denied (" + client.Client.RemoteEndPoint + ")");
+						client.Close();
+						continue;
+					}
+
+					OnInterativeClientRequestingConnection(client.Client, new NetworkStreamWrapper(client.GetStream()), attempt);
+					if (attempt.ShouldDeny) {
+						System.Console.WriteLine ("[kRPC] TCPServer: client connection denied by player (" + client.Client.RemoteEndPoint + ")");
 						client.Close();
 						continue;
 					}

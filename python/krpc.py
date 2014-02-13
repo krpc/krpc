@@ -11,6 +11,7 @@ class Client(object):
     def __init__(self):
         self._conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._conn.connect((TCP_IP, TCP_PORT))
+	self._conn.send(bytearray([0x48,0x45,0x4C,0x4C,0x4F,0xBA,0xDA,0x55]))
 
     def sendRequest(self, request):
         """ Send an rpc.Request """

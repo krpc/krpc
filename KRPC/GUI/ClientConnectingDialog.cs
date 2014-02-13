@@ -22,16 +22,16 @@ namespace KRPC.GUI
 
 		public void Awake() {
 			RenderingManager.AddToPostDrawQueue(5, DrawGUI);
-			KRPCAddon.Server.Server.OnClientRequestingConnection += ShowConnectionAttemptDialog;
 		}
 
-		private void ShowConnectionAttemptDialog (System.Net.Sockets.Socket client, ConnectionAttempt attempt)
+		public static void ShowConnectionAttemptDialog (System.Net.Sockets.Socket client, Server.INetworkStream stream, ConnectionAttempt attempt)
 		{
-			showConnectionAttemptDialog = true;
-			this.client = client;
-			this.attempt = attempt;
+			//TODO: refactor this into a non-static method (note that it currently depends on the addon instantiation order)
+			Instance.showConnectionAttemptDialog = true;
+			Instance.client = client;
+			Instance.attempt = attempt;
 			//TODO: This spin lock is horrible. But it works...
-			while (showConnectionAttemptDialog) {
+			while (Instance.showConnectionAttemptDialog) {
 				System.Threading.Thread.Sleep(50);
 			}
 		}
