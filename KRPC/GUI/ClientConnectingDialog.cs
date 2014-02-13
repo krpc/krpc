@@ -1,55 +1,46 @@
 ﻿using System;
+using System.Net.Sockets;
 using UnityEngine;
 using KRPC.Server;
 
 namespace KRPC.GUI
 {
-	[KSPAddon(KSPAddon.Startup.Flight, false)]
 	public class ClientConnectingDialog : MonoBehaviour
 	{
-		private static ClientConnectingDialog instance;
-		public static ClientConnectingDialog Instance {
-			get {
-				if (instance == null)
-					instance = (ClientConnectingDialog) FindObjectOfType (typeof(ClientConnectingDialog));
-				return instance;
-			}
-		}
-
-		private volatile bool showConnectionAttemptDialog = false;
-		private System.Net.Sockets.Socket client;
+		private volatile bool show = false;
+		private Socket client;
 		private ConnectionAttempt attempt;
 
-		public void Awake() {
+		public void Awake () {
 			RenderingManager.AddToPostDrawQueue(5, DrawGUI);
 		}
 
-		public static void ShowConnectionAttemptDialog (System.Net.Sockets.Socket client, Server.INetworkStream stream, ConnectionAttempt attempt)
+		public void Show (Socket client, INetworkStream stream, ConnectionAttempt attempt)
 		{
-			//TODO: refactor this into a non-static method (note that it currently depends on the addon instantiation order)
-			Instance.showConnectionAttemptDialog = true;
-			Instance.client = client;
-			Instance.attempt = attempt;
+			System.Console.WriteLine ("[kRPC] Asking player to allow/deny connection attempt...");
+			show = true;
+			this.client = client;
+			this.attempt = attempt;
 			//TODO: This spin lock is horrible. But it works...
-			while (Instance.showConnectionAttemptDialog) {
+			while (show) {
 				System.Threading.Thread.Sleep(50);
 			}
 		}
 
-		public void CancelConnectionAttemptDialog () {
-			showConnectionAttemptDialog = false;
+		public void Cancel () {
+			show = false;
 		}
 
-		private void DrawGUI() {
-			if (showConnectionAttemptDialog) {
+		private void DrawGUI () {
+			if (show) {
 				DialogOption[] options = {
 					new DialogOption ("Allow", () => {
 						attempt.Allow ();
-						showConnectionAttemptDialog = false;
+						show = false;
 					}),
 					new DialogOption ("Deny", () => {
 						attempt.Deny ();
-						showConnectionAttemptDialog = false;
+						show = false;
 					})
 				};
 				string message = "A client is attempting to connect from " + client.RemoteEndPoint;

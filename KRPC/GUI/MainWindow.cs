@@ -6,13 +6,20 @@ using KRPC.Server;
 
 namespace KRPC.GUI
 {
-	[KSPAddon(KSPAddon.Startup.Flight, false)]
 	public class MainWindow : MonoBehaviour
 	{
 		private int windowId = UnityEngine.Random.Range(1000, 2000000);
 		private Rect windowPosition = new Rect();
 		private bool hasInitStyles = false;
 		private GUIStyle windowStyle, labelStyle;
+		private RPCServer server;
+		private ClientConnectingDialog clientConnectingDialog;
+
+		public void Init(RPCServer server) {
+			this.server = server;
+			clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog>();
+			server.Server.OnInterativeClientRequestingConnection += clientConnectingDialog.Show;
+		}
 
 		public void Awake() {
 			RenderingManager.AddToPostDrawQueue(5, DrawGUI);
@@ -29,17 +36,17 @@ namespace KRPC.GUI
 		}
 
 		private void DrawGUI() {
+			InitStyles ();
 			windowPosition = GUILayout.Window (windowId, windowPosition, DrawWindow, "kRPC Server", windowStyle);
 		}
 
 		private void DrawWindow(int windowID) {
-			InitStyles ();
 			GUILayout.BeginVertical();
-			GUILayout.Label ("Server status: " + (KRPCAddon.Server.Running ? "Online" : "Offline"), labelStyle);
-			if (KRPCAddon.Server.Running) {
+			GUILayout.Label ("Server status: " + (server.Running ? "Online" : "Offline"), labelStyle);
+			if (server.Running) {
 				if (GUILayout.Button ("Stop server"))
 					StopServerPressed();
-				TCPServer tcpServer = (TCPServer)KRPCAddon.Server.Server;
+				TCPServer tcpServer = (TCPServer)server.Server;
 				GUILayout.Label ("Port: " + tcpServer.Port, labelStyle);
 				GUILayout.Label ("Allowed client(s): " + EndPointToString(tcpServer.EndPoint), labelStyle);
 				GUILayout.Label (tcpServer.GetConnectedClientIds().Count + " clients connected", labelStyle);
@@ -52,12 +59,12 @@ namespace KRPC.GUI
 		}
 
 		private void StartServerPressed () {
-			KRPCAddon.Server.Start ();
+			server.Start ();
 		}
 
 		private void StopServerPressed () {
-			KRPCAddon.Server.Stop ();
-			ClientConnectingDialog.Instance.CancelConnectionAttemptDialog();
+			server.Stop ();
+			clientConnectingDialog.Cancel();
 		}
 
 		private string EndPointToString(IPAddress endPoint) {

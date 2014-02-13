@@ -18,40 +18,35 @@ namespace KRPC
 		private static TCPServer tcpServer = null;
 		private const int defaultPort = 50000;
 		private const string defaultEndPoint = "127.0.0.1";
-
-		public static RPCServer Server {
-			get { return server; }
-		}
+		private MainWindow mainWindow;
 
 		public void Awake ()
 		{
-			if (server == null) {
+			// Load configuration
+			PluginConfiguration config = PluginConfiguration.CreateForType<KRPCAddon>();
+			config.load ();
+			int port = config.GetValue<int>("port", defaultPort);
+			string endPointStr = config.GetValue<string> ("endpoint", defaultEndPoint);
 
-				// Load configuration
-				PluginConfiguration config = PluginConfiguration.CreateForType<KRPCAddon>();
-				config.load ();
-				int port = config.GetValue<int>("port", defaultPort);
-				string endPointStr = config.GetValue<string> ("endpoint", defaultEndPoint);
+			// Create the config file if it doesn't already exist
+			//TODO: cleaner way to do this?
+			config ["port"] = port;
+			config ["endpoint"] = endPointStr;
+			config.save ();
 
-				// Create the config file if it doesn't already exist
-				//TODO: cleaner way to do this?
-				config ["port"] = port;
-				config ["endpoint"] = endPointStr;
-				config.save ();
+			// Parse the endpoint
+			IPAddress endPoint;
+			if (endPointStr == "*")
+				endPoint = IPAddress.Any;
+			else
+				endPoint = IPAddress.Parse (endPointStr);
 
-				// Parse the endpoint
-				IPAddress endPoint;
-				if (endPointStr == "*")
-					endPoint = IPAddress.Any;
-				else
-					endPoint = IPAddress.Parse (endPointStr);
-
-				// Start the server
-				Debug.Log ("[kRPC] Starting RPC server on port " + port + "; accepting connections from " + endPoint);
-				tcpServer = new TCPServer (endPoint, port);
-				server = new RPCServer (tcpServer);
-				server.Server.OnInterativeClientRequestingConnection += ClientConnectingDialog.ShowConnectionAttemptDialog;
-			}
+			// Start the server
+			Debug.Log ("[kRPC] Starting RPC server on port " + port + "; accepting connections from " + endPoint);
+			tcpServer = new TCPServer (endPoint, port);
+			server = new RPCServer (tcpServer);
+			mainWindow = gameObject.AddComponent<MainWindow>();
+			mainWindow.Init(server);
 		}
 
 		public void OnDestroy ()
