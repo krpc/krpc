@@ -30,22 +30,22 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Lib\KSP\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\lib\KSP\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\Lib\KSP\UnityEngine.dll</HintPath>
+      <HintPath>..\..\lib\KSP\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="Google.ProtocolBuffers">
-      <HintPath>..\Lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.dll</HintPath>
+      <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\cf35\Google.ProtocolBuffers.dll</HintPath>
     </Reference>
     <Reference Include="Google.ProtocolBuffers.Serialization">
-      <HintPath>..\Lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.Serialization.dll</HintPath>
+      <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\cf35\Google.ProtocolBuffers.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\KerbalSpaceProgram\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\lib\KSP\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\KerbalSpaceProgram\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+      <HintPath>..\..\lib\KSP\TDx.TDxInput.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -58,11 +58,8 @@
     <Compile Include="Server\MalformedRequestException.cs" />
     <Compile Include="Server\INetworkStream.cs" />
     <Compile Include="Server\NetworkStreamWrapper.cs" />
-    <Compile Include="Schema\RPC.cs" />
     <Compile Include="Service\Control.cs" />
-    <Compile Include="Schema\Control.cs" />
     <Compile Include="Service\Orbit.cs" />
-    <Compile Include="Schema\Orbit.cs" />
     <Compile Include="Service\Services.cs" />
     <Compile Include="Service\NoSuchServiceException.cs" />
     <Compile Include="Service\NoSuchServiceMethodException.cs" />
@@ -73,6 +70,9 @@
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgs.cs" />
     <Compile Include="KRPCConfiguration.cs" />
+    <Compile Include="Schema\Control.cs" />
+    <Compile Include="Schema\Orbit.cs" />
+    <Compile Include="Schema\RPC.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

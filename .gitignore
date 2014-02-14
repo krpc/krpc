@@ -115,7 +115,7 @@ UpgradeLog*.XML
 
 # protobuf
 *.protobin
-KRPC/Schema/*.cs
+src/kRPC/Schema/*.cs
 python/proto/
 
 # makefile output

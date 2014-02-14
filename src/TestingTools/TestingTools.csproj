@@ -32,16 +32,16 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Lib\KSP\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\lib\KSP\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\Lib\KSP\UnityEngine.dll</HintPath>
+      <HintPath>..\..\lib\KSP\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\KerbalSpaceProgram\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\lib\KSP\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\KerbalSpaceProgram\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+      <HintPath>..\..\lib\KSP\TDx.TDxInput.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
