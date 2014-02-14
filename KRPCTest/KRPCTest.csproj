@@ -48,6 +48,12 @@
     <Reference Include="Google.ProtocolBuffers.Serialization">
       <HintPath>..\Lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\KerbalSpaceProgram\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\KerbalSpaceProgram\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Utils\TupleTest.cs" />

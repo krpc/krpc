@@ -41,6 +41,12 @@
     <Reference Include="Google.ProtocolBuffers.Serialization">
       <HintPath>..\Lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\KerbalSpaceProgram\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\KerbalSpaceProgram\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -66,6 +72,7 @@
     <Compile Include="GUI\MainWindow.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgs.cs" />
+    <Compile Include="KRPCConfiguration.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

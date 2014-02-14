@@ -37,6 +37,12 @@
     <Reference Include="UnityEngine">
       <HintPath>..\Lib\KSP\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\KerbalSpaceProgram\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\KerbalSpaceProgram\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
