@@ -55,7 +55,10 @@ Global
 		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
 		$1.ResourceNamePolicy = FileFormatDefault
 		$0.TextStylePolicy = $2
-		$2.inheritsSet = null
+		$2.FileWidth = 120
+		$2.NoTabsAfterNonTabs = True
+		$2.inheritsSet = VisualStudio
+		$2.inheritsScope = text/plain
 		$2.scope = text/x-csharp
 		$0.CSharpFormattingPolicy = $3
 		$3.AfterDelegateDeclarationParameterComma = True
@@ -204,5 +207,12 @@ Global
 		$30.NamingStyle = PascalCase
 		$30.IncludeInstanceMembers = True
 		$30.IncludeStaticEntities = True
+		$0.TextStylePolicy = $32
+		$32.inheritsSet = null
+		$32.scope = application/xml
+		$0.XmlFormattingPolicy = $33
+		$33.inheritsSet = Mono
+		$33.inheritsScope = application/xml
+		$33.scope = application/xml
 	EndGlobalSection
 EndGlobal
