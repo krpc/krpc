@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using UnityEngine;
 using KSP.IO;
 using KRPC.Server;
@@ -21,11 +23,22 @@ namespace KRPC
 
 		public void Awake ()
 		{
+			//TODO: fails due to native code not being available
+//			Logger.WriteLine ("Local addresses of available network adapters:");
+//			foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces()) {
+//				foreach (UnicastIPAddressInformation unicastIPAddressInformation in adapter.GetIPProperties().UnicastAddresses) {
+//					if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork) {
+//						Logger.WriteLine ("   " + unicastIPAddressInformation.Address.ToString());
+//					}
+//				}
+//			}
 
 			config = new KRPCConfiguration ();
 			tcpServer = new TCPServer (config.LocalAddress, config.Port);
 			server = new RPCServer (tcpServer);
 			mainWindow = gameObject.AddComponent<MainWindow>();
+			mainWindow.OnStartServerPressed += StartServer;
+			mainWindow.OnStopServerPressed += StopServer;
 			mainWindow.Init(server);
 		}
 
@@ -33,6 +46,18 @@ namespace KRPC
 		{
 			if (server.Running)
 				server.Stop ();
+		}
+
+		private void StartServer (object sender, EventArgs args)
+		{
+			tcpServer.Port = config.Port;
+			tcpServer.LocalAddress = config.LocalAddress;
+			server.Start ();
+		}
+
+		private void StopServer (object sender, EventArgs args)
+		{
+			server.Stop ();
 		}
 
 		public void Update ()
