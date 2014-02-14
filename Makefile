@@ -3,7 +3,7 @@ KRPC_DIR := $(KSP_DIR)/GameData/kRPC
 
 CSHARP_PROJECTS := kRPC kRPCTest TestingTools
 CSHARP_PROJECT_DIRS := $(foreach project,$(CSHARP_PROJECTS),src/$(project))
-CSHARP_BIN_DIRS := $(foreach project,$(CSHARP_PROJECT_DIRS),$(project)/obj) $(foreach project,$(CSHARP_PROJECTS),$(project)/bin)
+CSHARP_BIN_DIRS := $(foreach project,$(CSHARP_PROJECT_DIRS),$(project)/obj) $(foreach project,$(CSHARP_PROJECTS_DIRS),$(project)/bin)
 
 CSHARP_PROTOGEN := "lib/protobuf-csharp-port-2.4.1.521-release-binaries/tools/ProtoGen.exe"
 PROTOS := RPC Control Orbit
@@ -12,7 +12,7 @@ PROTOS := $(foreach proto,$(PROTOS),src/kRPC/Schema/$(proto).proto)
 all: dist
 
 build: protobuf
-	mdtool build -c:Release $(foreach $(project),$(CSHARP_PROJECT_DIRS),$($(project)/$(project).csproj))
+	mdtool build -c:Release $(foreach project,$(CSHARP_PROJECTS),src/$(project)/$(project).csproj)
 	find . -name "*.pyc" -exec rm -rf {} \;
 
 dist: build
@@ -33,11 +33,11 @@ pre-release: dist
 	cd dist; zip krpc-pre-`date +"%Y-%m-%d"`.zip ./*
 
 clean: protobuf-clean
-	rm -rf dist $(CSHARP_BIN_DIRS)
+	rm -rf $(CSHARP_BIN_DIRS)
 	find . -name "*.pyc" -exec rm -rf {} \;
 
 dist-clean: clean
-	rm -r dist
+	rm -rf dist
 
 # Run release copy in KSP with testing tools
 
