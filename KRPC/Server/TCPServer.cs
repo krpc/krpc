@@ -20,6 +20,9 @@ namespace KRPC.Server
 		public event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
 		public event EventHandler<ClientRequestingConnectionArgs> OnInteractiveClientRequestingConnection;
 
+		//TODO: is read access to this thread safe?!
+		TcpListener tcpListener;
+
 		/// <summary>
 		/// Thread that listens for client connections
 		/// </summary>
@@ -49,18 +52,40 @@ namespace KRPC.Server
 			get { return running; }
 		}
 
+		/// <summary>
+		/// The local port number that the server listens on. If set to 0,
+		/// returns the actual local port number when the server is started.
+		/// </summary>
+		/// <value>The port.</value>
 		public int Port {
-			get { return port; }
+			get {
+				return ((IPEndPoint) tcpListener.LocalEndpoint).Port;
+			}
+			set {
+				if (!Running)
+					port = value;
+			}
 		}
 
-		public IPAddress EndPoint {
-			get { return endPoint; }
+		/// <summary>
+		/// The local address that the server listens on. If set to IPAddress.Any,
+		/// returns the actual local IP address when the server is started.
+		/// </summary>
+		public IPAddress LocalAddress {
+			get {
+				//FIXME: returns 0.0.0.0 instead of actual ip address, when local address is set to IPAddress.Any and the server has started
+				return ((IPEndPoint) tcpListener.LocalEndpoint).Address;
+			}
+			set {
+				if (!Running)
+					localAddress = value;
+			}
 		}
 
 		/// <summary>
 		/// IP address from which incomming connections are allowed.
 		/// </summary>
-		private IPAddress endPoint;
+		private IPAddress localAddress;
 
 		/// <summary>
 		/// Port that the server listens on for new connections.
@@ -68,12 +93,12 @@ namespace KRPC.Server
 		private int port;
 
 		/// <summary>
-		/// Create a TCP server that will listen for connections from endPoint on the given port.
-		/// Start() must be called to start listening for connections.
+		/// Create a TCP server. After Start() is called, the server will listen for
+		/// connections to the specified local address and port number.
 		/// </summary>
-		public TCPServer (IPAddress endPoint, int port)
+		public TCPServer (IPAddress localAddress, int port)
 		{
-			this.endPoint = endPoint;
+			this.localAddress = localAddress;
 			this.port = port;
 		}
 
@@ -87,6 +112,7 @@ namespace KRPC.Server
 				return;
 			}
 			Logger.WriteLine("TCPServer: starting");
+			tcpListener = new TcpListener(localAddress, port);
 			listenerThread = new Thread(new ThreadStart(ConnectionListener));
 			listenerThread.Start();
 	    }
@@ -106,24 +132,26 @@ namespace KRPC.Server
 		/// </summary>
 		private void ConnectionListener()
 		{
-			TcpListener tcpListener = new TcpListener(endPoint, port);
-			tcpListener.Start();
-			Logger.WriteLine("TCPServer: listening on port " + port);
-			Logger.WriteLine("TCPServer: accepting connections from " + endPoint);
-			Logger.WriteLine("TCPServer: started successfully");
-
-			// The next client id to allocate
-			int clientId = 0;
-		  	
+			bool started = false;
 			try
 			{
+				tcpListener.Start();
+				started = true;
+				Logger.WriteLine("TCPServer: listening on local address " + ((IPEndPoint)tcpListener.LocalEndpoint).Address);
+				Logger.WriteLine("TCPServer: listening on port " + ((IPEndPoint)tcpListener.LocalEndpoint).Port);
+				Logger.WriteLine("TCPServer: started successfully");
+
+				// The next client id to allocate
+				int clientId = 0;
+
 				running = true;
 				while (true)
 				{	
-					// Blocks until a client connects to the server
+					// Block until a client connects to the server
 					TcpClient client = tcpListener.AcceptTcpClient();
 					Logger.WriteLine("TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
 
+					// Trigger OnClientRequestingConnection events to verify the connection
 					var attempt = new ClientRequestingConnectionArgs(client.Client, new NetworkStreamWrapper(client.GetStream()));
 					OnClientRequestingConnection(this, attempt);
 					if (attempt.ShouldDeny) {
@@ -134,6 +162,7 @@ namespace KRPC.Server
 						Logger.WriteLine("TCPServer: client connection denied (" + client.Client.RemoteEndPoint + ")");
 					}
 
+					// Trigger OnInteractiveClientRequestingConnection events to verify the connection
 					attempt = new ClientRequestingConnectionArgs(client.Client, new NetworkStreamWrapper(client.GetStream()));
 					OnInteractiveClientRequestingConnection(this, attempt);
 					if (attempt.ShouldDeny) {
@@ -142,8 +171,8 @@ namespace KRPC.Server
 						continue;
 					}
 
+					// Connection was successful, update the server state
 					Logger.WriteLine("TCPServer: client connection accepted (" + client.Client.RemoteEndPoint + ")");
-
 					lock (clientsLock)
 					{
 						clients[clientId] = client;
@@ -152,18 +181,33 @@ namespace KRPC.Server
 					clientId++;
 				}
 			} catch (ThreadAbortException) {
+				// Stop() was called
 				Logger.WriteLine("TCPServer: stopping...");
 			} catch (Exception e) {
+				//TODO: better error handling
 				Console.WriteLine (e.Message);
-				Console.WriteLine (e.StackTrace);
+				Console.Write (e.StackTrace);
 			} finally {
-				tcpListener.Stop ();
+				//Stop the tcp listener
+				if (!started)
+					Logger.WriteLine ("TCPServer: failed to start");
+				else
+					tcpListener.Stop ();
 
+				// Close all client connections
+				TcpClient[] tcpClients;
 				lock (clientsLock) {
+					tcpClients = clients.Values.ToArray ();
 					clients.Clear ();
 					clientStreams.Clear ();
 				}
+				foreach (TcpClient client in tcpClients) {
+					Logger.WriteLine("TCPServer: closing connection to client (" + client.Client.RemoteEndPoint + ")");
+					client.Close();
+				}
+				Logger.WriteLine("TCPServer: all client connections closed");
 
+				// Exited cleanly
 				Logger.WriteLine("TCPServer: stopped");
 				running = false;
 			}
