@@ -4,7 +4,7 @@ using UnityEngine;
 using KRPC.Server;
 using KRPC.Utils;
 
-namespace KRPC.GUI
+namespace KRPC.UI
 {
 	public class ClientConnectingDialog : MonoBehaviour
 	{

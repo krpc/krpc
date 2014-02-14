@@ -6,7 +6,7 @@ using UnityEngine;
 using KSP;
 using KRPC.Server;
 
-namespace KRPC.GUI
+namespace KRPC.UI
 {
 	public class MainWindow : MonoBehaviour
 	{

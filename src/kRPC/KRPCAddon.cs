@@ -9,7 +9,7 @@ using KRPC.Server;
 using KRPC.Service;
 using KRPC.Schema.RPC;
 using KRPC.Utils;
-using KRPC.GUI;
+using KRPC.UI;
 
 namespace KRPC
 {

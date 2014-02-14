@@ -65,14 +65,14 @@
     <Compile Include="Service\NoSuchServiceMethodException.cs" />
     <Compile Include="Service\KRPCMethod.cs" />
     <Compile Include="KRPCAddon.cs" />
-    <Compile Include="GUI\ClientConnectingDialog.cs" />
-    <Compile Include="GUI\MainWindow.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgs.cs" />
     <Compile Include="KRPCConfiguration.cs" />
     <Compile Include="Schema\Control.cs" />
     <Compile Include="Schema\Orbit.cs" />
     <Compile Include="Schema\RPC.cs" />
+    <Compile Include="UI\ClientConnectingDialog.cs" />
+    <Compile Include="UI\MainWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -87,7 +87,7 @@
     <Folder Include="Schema\" />
     <Folder Include="Server\" />
     <Folder Include="Service\" />
-    <Folder Include="GUI\" />
+    <Folder Include="UI\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema\RPC.proto" />
