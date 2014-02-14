@@ -2,7 +2,7 @@ using System;
 
 namespace KRPC.Server
 {
-	public class NoRequestException : Exception
-	{
-	}
+    public class NoRequestException : Exception
+    {
+    }
 }

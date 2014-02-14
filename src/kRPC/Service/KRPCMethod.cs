@@ -2,8 +2,8 @@
 
 namespace KRPC.Service
 {
-	[System.AttributeUsage(System.AttributeTargets.Method)]
-	public class KRPCMethod : System.Attribute
-	{
-	}
+    [System.AttributeUsage(System.AttributeTargets.Method)]
+    public class KRPCMethod : System.Attribute
+    {
+    }
 }
