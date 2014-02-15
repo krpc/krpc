@@ -40,6 +40,7 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer, 0.1);
+            server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
             // Fire a client connection event
@@ -64,6 +65,7 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer, 0.1);
+            server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
             // Fire a client connection event
@@ -88,6 +90,7 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer, 0.1);
+            server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
             // Fire a client connection event
@@ -112,6 +115,7 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer, 0.1);
+            server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
             // Fire a client connection event
@@ -143,6 +147,7 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer, 0.1);
+            server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
             // Fire a client connection event
@@ -166,6 +171,7 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer, 0.1);
+            server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
             // Fire a client connection event

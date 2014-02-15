@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Linq;
 using UnityEngine;
 using KSP.IO;
 using KRPC.Server;
@@ -72,40 +73,43 @@ namespace KRPC
                 // TODO: is there a better way to limit the number of requests handled per update?
                 int threshold = 20; // milliseconds
                 server.Update ();
-                Stopwatch timer = Stopwatch.StartNew ();
-                try {
-                    do {
-                        // Get request
-                        IClient<Request,Response> client = requestScheduler.Next();
-                        if (client.Stream.DataAvailable) {
-                            Request request = client.Stream.Read ();
-                            Logger.WriteLine("Received request from client " + client.Address + " (" + request.Service + "." + request.Method + ")");
 
-                            // Handle the request
-                            Response.Builder response;
-                            try {
-                                response = Services.HandleRequest (Assembly.GetExecutingAssembly (), "KRPC.Service", request);
-                            } catch (Exception e) {
-                                response = Response.CreateBuilder ();
-                                response.Error = true;
-                                response.ErrorMessage = e.ToString();
-                                Logger.WriteLine (e.ToString ());
+                if (server.Clients.Count () > 0) {
+                    Stopwatch timer = Stopwatch.StartNew ();
+                    try {
+                        do {
+                            // Get request
+                            IClient<Request,Response> client = requestScheduler.Next ();
+                            if (client.Stream.DataAvailable) {
+                                Request request = client.Stream.Read ();
+                                Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Method + ")");
+
+                                // Handle the request
+                                Response.Builder response;
+                                try {
+                                    response = Services.HandleRequest (Assembly.GetExecutingAssembly (), "KRPC.Service", request);
+                                } catch (Exception e) {
+                                    response = Response.CreateBuilder ();
+                                    response.Error = true;
+                                    response.ErrorMessage = e.ToString ();
+                                    Logger.WriteLine (e.ToString ());
+                                }
+
+                                // Send response
+                                response.SetTime (Planetarium.GetUniversalTime ());
+                                var builtResponse = response.Build ();
+                                //TODO: handle partial response exception
+                                client.Stream.Write (builtResponse);
+                                if (response.Error)
+                                    Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.ErrorMessage + ")");
+                                else
+                                    Logger.WriteLine ("Sent response to client " + client.Address);
                             }
 
-                            // Send response
-                            response.SetTime (Planetarium.GetUniversalTime ());
-                            var builtResponse = response.Build();
-                            //TODO: handle partial response exception
-                            client.Stream.Write (builtResponse);
-                            if (response.Error)
-                                Logger.WriteLine("Sent error response to client " + client.Address + " (" + response.ErrorMessage + ")");
-                            else
-                                Logger.WriteLine("Sent response to client " + client.Address);
-                        }
 
-
-                    } while (timer.ElapsedMilliseconds < threshold);
-                } catch (NoRequestException) {
+                        } while (timer.ElapsedMilliseconds < threshold);
+                    } catch (NoRequestException) {
+                    }
                 }
             }
         }

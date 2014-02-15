@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace KRPC.Server
 {
-    class ClientRequestingConnectionArgs<In,Out> : EventArgs 
+    class ClientRequestingConnectionArgs<In,Out> : EventArgs, IClientEventArgs<In,Out>
     {
         public IClient<In,Out> Client { get; private set; }
 

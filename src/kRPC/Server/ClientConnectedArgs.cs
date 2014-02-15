@@ -2,7 +2,7 @@
 
 namespace KRPC.Server
 {
-    class ClientConnectedArgs<In,Out> : EventArgs
+    class ClientConnectedArgs<In,Out> : EventArgs, IClientEventArgs<In,Out>
     {
         public IClient<In,Out> Client { get; private set; }
 

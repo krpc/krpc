@@ -45,6 +45,7 @@ namespace KRPC.UI
                     })
                 };
                 string message = "A client is attempting to connect from " + args.Client.Address;
+                // TODO: include RPCClient identifier
                 var dialog = new MultiOptionDialog (message, "kRPC", UnityEngine.GUI.skin, options);
                 dialog.DrawWindow ();
             }

@@ -82,6 +82,7 @@
     <Compile Include="UI\MainWindow.cs" />
     <Compile Include="KRPCAddon.cs" />
     <Compile Include="KRPCConfiguration.cs" />
+    <Compile Include="Server\IClientEventArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
