@@ -78,7 +78,7 @@ namespace KRPCTest.Server.Net
         }
 
         [Test]
-        public void RejectConnectedByDefault ()
+        public void StillPendingByDefault ()
         {
             var server = new TCPServer (IPAddress.Loopback, 0);
 

@@ -20,7 +20,11 @@ namespace KRPC.Server
         }
 
         public bool ShouldDeny {
-            get { return !ShouldAllow; }
+            get { return deny; }
+        }
+
+        public bool StillPending {
+            get { return !allow && !deny; }
         }
 
         public void Allow () {
