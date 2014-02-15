@@ -24,6 +24,7 @@ namespace KRPC.Server.RPC
 
         private IServer<byte,byte> server;
         private double timeout;
+        private Dictionary<IClient<byte,byte>,RPCClient> clients = new Dictionary<IClient<byte, byte>, RPCClient> ();
 
         public RPCServer (IServer<byte,byte> server, double timeout = defaultTimeout)
         {
@@ -37,7 +38,7 @@ namespace KRPC.Server.RPC
 
         private void HandleClientConnected(object sender, IClientEventArgs<byte,byte> args) {
             if (OnClientConnected != null) {
-                var rpcClient = new RPCClient (args.Client);
+                var rpcClient = clients [args.Client];
                 var attempt = new ClientConnectedArgs<Request,Response> (rpcClient);
                 OnClientConnected(this, attempt);
             }
@@ -45,9 +46,10 @@ namespace KRPC.Server.RPC
 
         private void HandleClientDisconnected(object sender, IClientEventArgs<byte,byte> args) {
             if (OnClientDisconnected != null) {
-                var rpcClient = new RPCClient (args.Client);
+                var rpcClient = clients [args.Client];
                 var attempt = new ClientDisconnectedArgs<Request,Response> (rpcClient);
                 OnClientDisconnected(this, attempt);
+                clients.Remove (args.Client);
             }
         }
 
@@ -76,8 +78,8 @@ namespace KRPC.Server.RPC
 
         public IEnumerable<IClient<Request,Response>> Clients {
             get {
-                foreach (var client in server.Clients) {
-                    yield return new RPCClient (client);
+                foreach (var client in clients.Values) {
+                    yield return client;
                 }
             }
         }
@@ -87,13 +89,15 @@ namespace KRPC.Server.RPC
         /// then trigger RPCServer.OnClientRequestingConnection to get response of delegates
         /// </summary>
         public void ClientRequestingConnection(object sender, ClientRequestingConnectionArgs<byte,byte> args) {
-            if (CheckHelloMessage (args.Client)) {
-                var rpcClient = new RPCClient (args.Client);
+            string name = CheckHelloMessage (args.Client);
+            if (name != null) {
+                var rpcClient = new RPCClient (name, args.Client);
                 var attempt = new ClientRequestingConnectionArgs<Request,Response> (rpcClient);
                 if (OnClientRequestingConnection != null) {
                     OnClientRequestingConnection (this, attempt);
                     if (attempt.ShouldAllow) {
                         args.Allow ();
+                        clients[args.Client] = rpcClient;
                     }
                     if (attempt.ShouldDeny) {
                         args.Deny ();
@@ -106,9 +110,10 @@ namespace KRPC.Server.RPC
 
         /// <summary>
         /// Read hello message and string identifier from client and check that they are correct.
-        /// This is triggered whenever a client connects to the server.
+        /// This is triggered whenever a client connects to the server. Returns the string identifier,
+        /// or null if the message is not valid.
         /// </summary>
-        public bool CheckHelloMessage(IClient<byte,byte> client) {
+        public string CheckHelloMessage(IClient<byte,byte> client) {
             Logger.WriteLine("RPCServer: Waiting for hello message from client...");
             byte[] buffer = new byte[headerLength + identifierLength];
             int read = ReadHelloMessage (client.Stream, buffer);
@@ -116,7 +121,7 @@ namespace KRPC.Server.RPC
             // Failed to read enough bytes in sufficient time, so kill the connection
             if (read != headerLength + identifierLength) {
                 Logger.WriteLine("RPCServer: Client connection abandoned. Timed out waiting for hello message.");
-                return false;
+                return null;
             }
 
             // Extract bytes for header and identifier
@@ -129,7 +134,7 @@ namespace KRPC.Server.RPC
             if (!CheckHelloMessageHeader (header)) {
                 string hex = ("0x" + BitConverter.ToString (header)).Replace ("-", " 0x");
                 Logger.WriteLine ("RPCServer: Client connection abandoned. Invalid hello message received (" + hex + ")");
-                return false;
+                return null;
             }
 
             // Validate and decode the identifier
@@ -137,12 +142,12 @@ namespace KRPC.Server.RPC
             if (identifierString == null) {
                 string hex = ("0x" + BitConverter.ToString (identifier)).Replace ("-", " 0x");
                 Logger.WriteLine ("RPCServer: Client connection abandoned. Failed to decode UTF-8 client identifier (" + hex + ")");
-                return false;
+                return null;
             }
 
             // Valid header and identifier received
             Logger.WriteLine("RPCServer: Correct hello message received from client '" + identifierString + "'");
-            return true;
+            return identifierString;
         }
 
         /// <summary>

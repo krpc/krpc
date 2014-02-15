@@ -15,6 +15,10 @@ namespace KRPC.Server.Net
             this.tcpClient = tcpClient;
         }
 
+        public string Name {
+            get { return ""; }
+        }
+
         public string Address {
             get { return ((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address.ToString(); }
         }

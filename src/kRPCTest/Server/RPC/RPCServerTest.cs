@@ -28,6 +28,37 @@ namespace KRPCTest.Server
         }
 
         [Test]
+        public void ValidHelloMessageWithNoIdentifier()
+        {
+            for (int i = 8; i < helloMessage.Length; i++) {
+                helloMessage [i] = 0x00;
+            }
+            var stream = new TestStream (new MemoryStream (helloMessage));
+
+            // Create mock byte server and client
+            var mockByteServer = new Mock<IServer<byte,byte>> ();
+            var byteServer = mockByteServer.Object;
+            var mockByteClient = new Mock<IClient<byte,byte>> ();
+            mockByteClient.Setup (x => x.Stream).Returns (stream);
+            var byteClient = mockByteClient.Object;
+
+            var server = new RPCServer (byteServer, 0.1);
+            server.OnClientRequestingConnection += (sender, e) => e.Allow();
+            server.Start ();
+
+            // Fire a client connection event
+            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+
+            Assert.IsTrue (eventArgs.ShouldAllow);
+            Assert.IsFalse (eventArgs.ShouldDeny);
+
+            server.Update ();
+            Assert.AreEqual (1, server.Clients.Count ());
+            Assert.AreEqual ("", server.Clients.First ().Name);
+        }
+
+        [Test]
         public void ValidHelloMessage()
         {
             var stream = new TestStream (new MemoryStream (helloMessage));
@@ -49,6 +80,10 @@ namespace KRPCTest.Server
 
             Assert.IsTrue (eventArgs.ShouldAllow);
             Assert.IsFalse (eventArgs.ShouldDeny);
+
+            server.Update ();
+            Assert.AreEqual (1, server.Clients.Count ());
+            Assert.AreEqual ("Jebediah Kerman!!!", server.Clients.First ().Name);
         }
 
         [Test]

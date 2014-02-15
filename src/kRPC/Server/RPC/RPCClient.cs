@@ -8,11 +8,14 @@ namespace KRPC.Server.RPC
     {
         private IClient<byte,byte> client;
 
-        public RPCClient (IClient<byte,byte> client)
+        public RPCClient (string name, IClient<byte,byte> client)
         {
+            Name = name;
             this.client = client;
             Stream = new RPCStream (client.Stream);
         }
+
+        public string Name { get; private set; }
 
         public string Address {
             get { return client.Address; }
