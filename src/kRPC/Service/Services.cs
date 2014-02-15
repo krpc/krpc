@@ -6,7 +6,7 @@ using KRPC.Schema.RPC;
 
 namespace KRPC.Service
 {
-    public class Services
+    class Services
     {
         public static Response.Builder HandleRequest (Assembly assembly, string ns, Request request)
         {

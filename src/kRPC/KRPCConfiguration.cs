@@ -4,20 +4,20 @@ using KSP.IO;
 
 namespace KRPC
 {
-    public class KRPCConfiguration
+    sealed class KRPCConfiguration
     {
         private PluginConfiguration config;
         private const int defaultPort = 50000;
-        private const string defaultLocalAddress = "127.0.0.1";
+        private const string defaultAddress = "127.0.0.1";
 
-        public IPAddress LocalAddress {
+        public IPAddress Address {
             get {
                 config.load ();
-                string localAddress = config.GetValue<string> ("localaddress");
-                if (localAddress == "any")
+                string address = config.GetValue<string> ("address");
+                if (address == "any")
                     return IPAddress.Any;
                 try {
-                    return IPAddress.Parse (localAddress);
+                    return IPAddress.Parse (address);
                 } catch (FormatException) {
                     //TODO: report error in GUI
                     return IPAddress.Loopback;
@@ -42,12 +42,12 @@ namespace KRPC
             config = PluginConfiguration.CreateForType<KRPCAddon>();
             config.load ();
             int port = config.GetValue<int>("port", defaultPort);
-            string localAddress = config.GetValue<string> ("localaddress", defaultLocalAddress);
+            string address = config.GetValue<string> ("address", defaultAddress);
 
             // Create the config file if it doesn't already exist
             //TODO: cleaner way to do this?
             config ["port"] = port;
-            config ["localaddress"] = localAddress;
+            config ["address"] = address;
             config.save ();
         }
     }

@@ -56,14 +56,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utils\TupleTest.cs" />
     <Compile Include="Schema\RpcTest.cs" />
-    <Compile Include="Server\RPCServerTest.cs" />
-    <Compile Include="Server\MemoryStreamWrapper.cs" />
     <Compile Include="Service\ServicesTest.cs" />
     <Compile Include="Service\ITestService.cs" />
     <Compile Include="Service\TestService.cs" />
+    <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
+    <Compile Include="Server\Net\TCPClientTest.cs" />
+    <Compile Include="Server\Net\TCPServerTest.cs" />
+    <Compile Include="Server\RPC\RPCStreamTest.cs" />
+    <Compile Include="Server\RPC\TestStream.cs" />
+    <Compile Include="Server\RPC\RPCServerTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -71,6 +74,8 @@
     <Folder Include="Schema\" />
     <Folder Include="Server\" />
     <Folder Include="Service\" />
+    <Folder Include="Server\Net\" />
+    <Folder Include="Server\RPC\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\kRPC\kRPC.csproj">

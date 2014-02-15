@@ -3,22 +3,13 @@ using System.Net.Sockets;
 
 namespace KRPC.Server
 {
-    public class ClientRequestingConnectionArgs : EventArgs 
+    class ClientRequestingConnectionArgs<In,Out> : EventArgs 
     {
-        Socket client;
-        INetworkStream stream;
+        public IClient<In,Out> Client { get; private set; }
 
-        public ClientRequestingConnectionArgs(Socket client, INetworkStream stream)
+        public ClientRequestingConnectionArgs(IClient<In,Out> client)
         {
-            this.client = client;
-            this.stream = stream;
-        }
-
-        public Socket Client {
-            get { return client; }
-        }
-        public INetworkStream Stream {
-            get { return stream; }
+            Client = client;
         }
 
         private bool allow = false;

@@ -2,7 +2,7 @@
 
 namespace KRPC.Utils
 {
-    public class Logger
+    class Logger
     {
         internal static void WriteLine (string line)
         {

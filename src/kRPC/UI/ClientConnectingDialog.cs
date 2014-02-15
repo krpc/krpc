@@ -2,20 +2,22 @@
 using System.Net.Sockets;
 using UnityEngine;
 using KRPC.Server;
+using KRPC.Server.Net;
 using KRPC.Utils;
+using KRPC.Schema.RPC;
 
 namespace KRPC.UI
 {
-    public class ClientConnectingDialog : MonoBehaviour
+    sealed class ClientConnectingDialog : MonoBehaviour
     {
         private volatile bool show = false;
-        private ClientRequestingConnectionArgs args;
+        private ClientRequestingConnectionArgs<Request,Response> args;
 
         public void Awake () {
             RenderingManager.AddToPostDrawQueue(5, DrawGUI);
         }
 
-        public void Show (object sender, ClientRequestingConnectionArgs args)
+        public void Show (object sender, ClientRequestingConnectionArgs<Request,Response> args)
         {
             Logger.WriteLine("Asking player to allow/deny connection attempt...");
             show = true;
@@ -42,7 +44,7 @@ namespace KRPC.UI
                         show = false;
                     })
                 };
-                string message = "A client is attempting to connect from " + args.Client.RemoteEndPoint;
+                string message = "A client is attempting to connect from " + args.Client.Address;
                 var dialog = new MultiOptionDialog (message, "kRPC", UnityEngine.GUI.skin, options);
                 dialog.DrawWindow ();
             }

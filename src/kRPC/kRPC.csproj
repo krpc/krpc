@@ -26,6 +26,7 @@
     <OutputPath>bin\Debug</OutputPath>
     <WarningLevel>4</WarningLevel>
     <DefineConstants>DEBUG;</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,29 +51,37 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Utils\Tuple.cs" />
-    <Compile Include="Server\RPCServer.cs" />
-    <Compile Include="Server\TCPServer.cs" />
-    <Compile Include="Server\IServer.cs" />
-    <Compile Include="Server\NoRequestException.cs" />
-    <Compile Include="Server\MalformedRequestException.cs" />
-    <Compile Include="Server\INetworkStream.cs" />
-    <Compile Include="Server\NetworkStreamWrapper.cs" />
     <Compile Include="Service\Control.cs" />
     <Compile Include="Service\Orbit.cs" />
     <Compile Include="Service\Services.cs" />
     <Compile Include="Service\NoSuchServiceException.cs" />
     <Compile Include="Service\NoSuchServiceMethodException.cs" />
     <Compile Include="Service\KRPCMethod.cs" />
-    <Compile Include="KRPCAddon.cs" />
     <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Server\ClientRequestingConnectionArgs.cs" />
-    <Compile Include="KRPCConfiguration.cs" />
     <Compile Include="Schema\Control.cs" />
     <Compile Include="Schema\Orbit.cs" />
     <Compile Include="Schema\RPC.cs" />
+    <Compile Include="Server\IServer.cs" />
+    <Compile Include="Server\IClient.cs" />
+    <Compile Include="Server\ClientConnectedArgs.cs" />
+    <Compile Include="Server\ClientDisconnectedArgs.cs" />
+    <Compile Include="Server\ClientRequestingConnectionArgs.cs" />
+    <Compile Include="Server\IStream.cs" />
+    <Compile Include="Server\Net\TCPServer.cs" />
+    <Compile Include="Server\Net\TCPClient.cs" />
+    <Compile Include="Server\Net\TCPStream.cs" />
+    <Compile Include="Utils\IScheduler.cs" />
+    <Compile Include="Utils\RoundRobinScheduler.cs" />
+    <Compile Include="Server\RPC\MalformedRequestException.cs" />
+    <Compile Include="Server\RPC\NoRequestException.cs" />
+    <Compile Include="Server\RPC\RequestBufferOverflowException.cs" />
+    <Compile Include="Server\RPC\RPCClient.cs" />
+    <Compile Include="Server\RPC\RPCStream.cs" />
+    <Compile Include="Server\RPC\RPCServer.cs" />
     <Compile Include="UI\ClientConnectingDialog.cs" />
     <Compile Include="UI\MainWindow.cs" />
+    <Compile Include="KRPCAddon.cs" />
+    <Compile Include="KRPCConfiguration.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -88,6 +97,8 @@
     <Folder Include="Server\" />
     <Folder Include="Service\" />
     <Folder Include="UI\" />
+    <Folder Include="Server\Net\" />
+    <Folder Include="Server\RPC\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema\RPC.proto" />

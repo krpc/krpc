@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using NUnit.Framework;
 using KRPC.Schema.RPC;
+using Google.ProtocolBuffers;
 
 namespace KRPCTest.Schema
 {
@@ -11,27 +12,25 @@ namespace KRPCTest.Schema
         [Test]
         public void SimpleProtobufUsage ()
         {
-            const string SERVICE = "my_service_name";
-            const string METHOD = "my_method_name";
+            const string SERVICE = "a";
+            const string METHOD = "b";
 
-            byte[] bytes;
+            var builder = Request.CreateBuilder();
+            builder.Service = SERVICE;
+            builder.Method = METHOD;
+            var request = builder.Build();
 
-            Request req = Request.CreateBuilder ()
-                .SetMethod (METHOD)
-                .SetService (SERVICE)
-                .BuildPartial ();
+            Assert.IsTrue(request.HasMethod);
+            Assert.IsTrue(request.HasService);
+            Assert.AreEqual(METHOD, request.Method);
+            Assert.AreEqual(SERVICE, request.Service);
 
-            Assert.IsTrue(req.HasMethod);
-            Assert.IsTrue(req.HasService);
-            Assert.AreEqual(METHOD, req.Method);
-            Assert.AreEqual(SERVICE, req.Service);
+            MemoryStream stream = new MemoryStream ();
+            request.WriteDelimitedTo (stream);
 
-            using (MemoryStream stream = new MemoryStream()) {
-                req.WriteTo(stream);
-                bytes = stream.ToArray();
-            }
+            stream.Seek (0, SeekOrigin.Begin);
 
-            Request reqCopy = Request.CreateBuilder().MergeFrom(bytes).BuildPartial();
+            Request reqCopy = Request.ParseDelimitedFrom(stream);
 
             Assert.IsTrue(reqCopy.HasMethod);
             Assert.IsTrue(reqCopy.HasService);

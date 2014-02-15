@@ -2,13 +2,15 @@
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Linq;
 using UnityEngine;
 using KSP;
-using KRPC.Server;
+using KRPC.Server.RPC;
+using KRPC.Server.Net;
 
 namespace KRPC.UI
 {
-    public class MainWindow : MonoBehaviour
+    sealed class MainWindow : MonoBehaviour
     {
         private int windowId = UnityEngine.Random.Range(1000, 2000000);
         private Rect windowPosition = new Rect();
@@ -23,7 +25,7 @@ namespace KRPC.UI
         public void Init(RPCServer server) {
             this.server = server;
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog>();
-            server.Server.OnInteractiveClientRequestingConnection += clientConnectingDialog.Show;
+            server.OnClientRequestingConnection += clientConnectingDialog.Show;
             OnStopServerPressed += (object sender, EventArgs e) => clientConnectingDialog.Cancel();
         }
 
@@ -50,13 +52,15 @@ namespace KRPC.UI
             GUILayout.BeginVertical();
             GUILayout.Label ("Server status: " + (server.Running ? "Online" : "Offline"), labelStyle);
             if (server.Running) {
+                //FIXME: use rpcserver not tcpserver
                 if (GUILayout.Button ("Stop server"))
                     OnStopServerPressed (this, EventArgs.Empty);
                 TCPServer tcpServer = (TCPServer)server.Server;
-                GUILayout.Label ("Server address: " + tcpServer.LocalAddress, labelStyle);
+                GUILayout.Label ("Server address: " + tcpServer.Address, labelStyle);
                 GUILayout.Label ("Server port: " + tcpServer.Port, labelStyle);
-                GUILayout.Label ("Allowed client(s): " + AllowedClientsString(tcpServer.LocalAddress), labelStyle);
-                GUILayout.Label (tcpServer.GetConnectedClientIds().Count + " clients connected", labelStyle);
+                GUILayout.Label ("Allowed client(s): " + AllowedClientsString(tcpServer.Address), labelStyle);
+                int numClients = tcpServer.Clients.Count ();
+                GUILayout.Label (numClients + " client" + (numClients == 1 ? "" : "s") + " connected", labelStyle);
             } else {
                 if (GUILayout.Button ("Start server"))
                     OnStartServerPressed (this, EventArgs.Empty);
@@ -74,7 +78,7 @@ namespace KRPC.UI
             return "?";
         }
 
-        public static IPAddress GetSubnetMask(IPAddress address)
+        private static IPAddress GetSubnetMask(IPAddress address)
         {
             //TODO: fails due to native code not being available
 //            foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces()) {

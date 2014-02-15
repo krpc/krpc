@@ -1,8 +1,6 @@
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-
-// Information about this assembly is defined by the following attributes. 
-// Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("KRPC")]
 [assembly: AssemblyDescription("RPC server for Kerbal Space Program, using Google's protocol buffers")]
@@ -25,3 +23,6 @@ using System.Runtime.CompilerServices;
 //[assembly: AssemblyDelaySign(false)]
 //[assembly: AssemblyKeyFile("")]
 
+// Allow unit tests to see internals
+[assembly:InternalsVisibleTo("KRPCTest")]
+[assembly:InternalsVisibleTo("DynamicProxyGenAssembly2")] // For Moq
