@@ -1,4 +1,4 @@
-KSP_DIR := ../KerbalSpaceProgram
+KSP_DIR := "../Kerbal Space Program"
 KRPC_DIR := $(KSP_DIR)/GameData/kRPC
 
 CSHARP_PROJECTS := kRPC kRPCTest TestingTools
@@ -41,6 +41,11 @@ clean: protobuf-clean
 
 dist-clean: clean
 	rm -rf dist
+
+install: dist
+	rm -rf $(KRPC_DIR)
+	mkdir -p $(KRPC_DIR)
+	cp -r dist/* $(KRPC_DIR)/
 
 # Run release copy in KSP with testing tools
 
