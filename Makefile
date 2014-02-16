@@ -5,7 +5,8 @@ CSHARP_PROJECTS := kRPC kRPCTest TestingTools
 CSHARP_PROJECT_DIRS := $(foreach project,$(CSHARP_PROJECTS),src/$(project))
 CSHARP_BIN_DIRS := $(foreach project,$(CSHARP_PROJECT_DIRS),$(project)/obj) $(foreach project,$(CSHARP_PROJECT_DIRS),$(project)/bin)
 
-CSHARP_PROTOGEN := "lib/protobuf-csharp-port-2.4.1.521-release-binaries/tools/ProtoGen.exe"
+PROTOC := protoc
+CSHARP_PROTOGEN := "tools/ProtoGen.exe"
 PROTOS := RPC Control Orbit
 PROTOS := $(foreach proto,$(PROTOS),src/kRPC/Schema/$(proto).proto)
 
@@ -65,7 +66,7 @@ python/proto/%.py:
 	cd src/kRPC/Schema; protoc $*.proto --python_out=../../../python/proto
 
 %.protobin:
-	protoc $*.proto -o$*.protobin --include_imports
+	$(PROTOC) $*.proto -o$*.protobin --include_imports
 
 src/kRPC/Schema/%.cs: src/kRPC/Schema/%.protobin
 	mono $(CSHARP_PROTOGEN) \

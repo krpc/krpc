@@ -121,3 +121,5 @@ python/proto/
 # makefile output
 dist
 
+# KSP libraries
+lib/ksp
