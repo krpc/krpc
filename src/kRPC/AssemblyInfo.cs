@@ -2,27 +2,17 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("KRPC")]
-[assembly: AssemblyDescription("RPC server for Kerbal Space Program, using Google's protocol buffers")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyTitle ("kRPC")]
+[assembly: AssemblyDescription ("RPC server for Kerbal Space Program, using Google's protocol buffers")]
+[assembly: AssemblyConfiguration ("")]
+[assembly: AssemblyCompany ("")]
+[assembly: AssemblyProduct ("")]
+[assembly: AssemblyCopyright ("djungelorm")]
+[assembly: AssemblyTrademark ("")]
+[assembly: AssemblyCulture ("")]
 
-// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
-// The form "{Major}.{Minor}.*" will automatically update the build and revision,
-// and "{Major}.{Minor}.{Build}.*" will update just the revision.
-
-[assembly: AssemblyVersion("0.1.*")]
-
-// The following attributes are used to specify the signing key for the assembly, 
-// if desired. See the Mono documentation for more information about signing.
-
-//[assembly: AssemblyDelaySign(false)]
-//[assembly: AssemblyKeyFile("")]
+[assembly: AssemblyVersion ("0.1.*")]
 
 // Allow unit tests to see internals
-[assembly:InternalsVisibleTo("KRPCTest")]
-[assembly:InternalsVisibleTo("DynamicProxyGenAssembly2")] // For Moq
+[assembly:InternalsVisibleTo ("KRPCTest")]
+[assembly:InternalsVisibleTo ("DynamicProxyGenAssembly2")] // For Moq
