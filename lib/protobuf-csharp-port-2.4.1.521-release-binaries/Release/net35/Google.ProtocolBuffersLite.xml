@@ -1,0 +1,2580 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.ProtocolBuffersLite</name>
+    </assembly>
+    <members>
+        <member name="T:Google.ProtocolBuffers.AbstractBuilderLite`2">
+            <summary>
+            Implementation of the non-generic IMessage interface as far as possible.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.IBuilderLite`2">
+            <summary>
+            Interface implemented by Protocol Message builders.
+            TODO(jonskeet): Consider "SetXXX" methods returning the builder, as well as the properties.
+            </summary>
+            <typeparam name="TMessage">Type of message</typeparam>
+            <typeparam name="TBuilder">Type of builder</typeparam>
+        </member>
+        <member name="T:Google.ProtocolBuffers.IBuilderLite">
+            <summary>
+            Non-generic interface for all members whose signatures don't require knowledge of
+            the type being built. The generic interface extends this one. Some methods return
+            either an IBuilder or an IMessage; in these cases the generic interface redeclares
+            the same method with a type-specific signature. Implementations are encouraged to
+            use explicit interface implemenation for the non-generic form. This mirrors
+            how IEnumerable and IEnumerable&lt;T&gt; work.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.IBuilderLite.IsInitialized">
+            <summary>
+            Returns true iff all required fields in the message and all
+            embedded messages are set.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.Clear">
+            <summary>
+            Resets all fields to their default values.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.MergeFrom(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Merge the specified other message which may be a different implementation of
+            the same message descriptor.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.Build">
+            <summary>
+            Constructs the final message. Once this is called, this Builder instance
+            is no longer valid, and calling any other method may throw a
+            NullReferenceException. If you need to continue working with the builder
+            after calling Build, call Clone first.
+            </summary>
+            <exception cref="T:Google.ProtocolBuffers.UninitializedMessageException">the message
+            is missing one or more required fields; use BuildPartial to bypass
+            this check</exception>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.BuildPartial">
+            <summary>
+            Like Build(), but does not throw an exception if the message is missing
+            required fields. Instead, a partial message is returned.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.Clone">
+            <summary>
+            Clones this builder.
+            TODO(jonskeet): Explain depth of clone.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Google.ProtocolBuffers.IBuilderLite`2.MergeFrom(Google.ProtocolBuffers.ICodedInputStream)" -->
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.MergeFrom(Google.ProtocolBuffers.ICodedInputStream,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Like MergeFrom(ICodedInputStream), but also parses extensions.
+            The extensions that you want to be able to parse must be registered
+            in <paramref name="extensionRegistry"/>. Extensions not in the registry
+            will be treated as unknown fields.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.MergeDelimitedFrom(System.IO.Stream)">
+            <summary>
+            Like MergeFrom(Stream), but does not read until the end of the file.
+            Instead, the size of the message (encoded as a varint) is read first,
+            then the message data. Use Message.WriteDelimitedTo(Stream) to
+            write messages in this format.
+            </summary>
+            <param name="input"></param>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.MergeDelimitedFrom(System.IO.Stream,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Like MergeDelimitedFrom(Stream) but supporting extensions.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.MergeFrom(Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Parse <paramref name="data"/> as a message of this type and merge
+            it with the message being built. This is just a small wrapper around
+            MergeFrom(ICodedInputStream).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.MergeFrom(Google.ProtocolBuffers.ByteString,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Parse <paramref name="data"/> as a message of this type and merge
+            it with the message being built. This is just a small wrapper around
+            MergeFrom(ICodedInputStream, ExtensionRegistry).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.MergeFrom(System.Byte[])">
+            <summary>
+            Parse <paramref name="data"/> as a message of this type and merge
+            it with the message being built. This is just a small wrapper around
+            MergeFrom(ICodedInputStream).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.MergeFrom(System.Byte[],Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Parse <paramref name="data"/> as a message of this type and merge
+            it with the message being built. This is just a small wrapper around
+            MergeFrom(ICodedInputStream, ExtensionRegistry).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.MergeFrom(System.IO.Stream)">
+            <summary>
+            Parse <paramref name="input"/> as a message of this type and merge
+            it with the message being built. This is just a small wrapper around
+            MergeFrom(ICodedInputStream). Note that this method always reads
+            the entire input (unless it throws an exception). If you want it to
+            stop earlier, you will need to wrap the input in a wrapper
+            stream which limits reading. Or, use IMessage.WriteDelimitedTo(Stream)
+            to write your message and MmergeDelimitedFrom(Stream) to read it.
+            Despite usually reading the entire stream, this method never closes the stream. 
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IBuilderLite`2.MergeFrom(System.IO.Stream,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Parse <paramref name="input"/> as a message of this type and merge
+            it with the message being built. This is just a small wrapper around
+            MergeFrom(ICodedInputStream, ExtensionRegistry).
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.IBuilderLite`2.DefaultInstanceForType">
+            <summary>
+            Get's the message's type's default instance.
+            <see cref="P:Google.ProtocolBuffers.IMessageLite`1.DefaultInstanceForType"/>
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.AbstractBuilderLite`2.LimitedInputStream">
+            <summary>
+            Stream implementation which proxies another stream, only allowing a certain amount
+            of data to be read. Note that this is only used to read delimited streams, so it
+            doesn't attempt to implement everything.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.AbstractMessageLite`2">
+            <summary>
+            Implementation of the non-generic IMessage interface as far as possible.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.IMessageLite`2">
+            <summary>
+            Type-safe interface for all generated messages to implement.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.IMessageLite">
+            <summary>
+            Non-generic interface used for all parts of the API which don't require
+            any type knowledge.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.WriteTo(Google.ProtocolBuffers.ICodedOutputStream)">
+            <summary>
+            Serializes the message and writes it to the given output stream.
+            This does not flush or close the stream.
+            </summary>
+            <remarks>
+            Protocol Buffers are not self-delimiting. Therefore, if you write
+            any more data to the stream after the message, you must somehow ensure
+            that the parser on the receiving end does not interpret this as being
+            part of the protocol message. One way of doing this is by writing the size
+            of the message before the data, then making sure you limit the input to
+            that size when receiving the data. Alternatively, use WriteDelimitedTo(Stream).
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.WriteDelimitedTo(System.IO.Stream)">
+            <summary>
+            Like WriteTo(Stream) but writes the size of the message as a varint before
+            writing the data. This allows more data to be written to the stream after the
+            message without the need to delimit the message data yourself. Use 
+            IBuilder.MergeDelimitedFrom(Stream) or the static method
+            YourMessageType.ParseDelimitedFrom(Stream) to parse messages written by this method.
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.Equals(System.Object)">
+            <summary>
+            Compares the specified object with this message for equality.
+            Returns true iff the given object is a message of the same type
+            (as defined by DescriptorForType) and has identical values
+            for all its fields.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.GetHashCode">
+            <summary>
+            Returns the hash code value for this message.
+            TODO(jonskeet): Specify the hash algorithm, but better than the Java one!
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.ToString">
+            <summary>
+            Converts the message to a string in protocol buffer text format.
+            This is just a trivial wrapper around TextFormat.PrintToString.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.PrintTo(System.IO.TextWriter)">
+            <summary>
+            Converts the message to a string.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.ToByteString">
+            <summary>
+            Serializes the message to a ByteString. This is a trivial wrapper
+            around WriteTo(ICodedOutputStream).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.ToByteArray">
+            <summary>
+            Serializes the message to a byte array. This is a trivial wrapper
+            around WriteTo(ICodedOutputStream).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.WriteTo(System.IO.Stream)">
+            <summary>
+            Serializes the message and writes it to the given stream.
+            This is just a wrapper around WriteTo(ICodedOutputStream). This
+            does not flush or close the stream.
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.WeakCreateBuilderForType">
+            <summary>
+            Creates a builder for the type, but in a weakly typed manner. This
+            is typically implemented by strongly typed messages by just returning
+            the result of CreateBuilderForType.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite.WeakToBuilder">
+            <summary>
+            Creates a builder with the same contents as this message. This
+            is typically implemented by strongly typed messages by just returning
+            the result of ToBuilder.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.IMessageLite.IsInitialized">
+            <summary>
+            Returns true iff all required fields in the message and all embedded
+            messages are set.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.IMessageLite.SerializedSize">
+            <summary>
+            Returns the number of bytes required to encode this message.
+            The result is only computed on the first call and memoized after that.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.IMessageLite`1.DefaultInstanceForType">
+            <summary>
+            Returns an instance of this message type with all fields set to
+            their default values. This may or may not be a singleton. This differs
+            from the DefaultInstance property of each generated message class in that this
+            method is an abstract method of IMessage whereas DefaultInstance is
+            a static property of a specific class. They return the same thing.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite`2.CreateBuilderForType">
+            <summary>
+            Constructs a new builder for a message of the same type as this message.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IMessageLite`2.ToBuilder">
+            <summary>
+            Creates a builder with the same contents as this current instance.
+            This is typically implemented by strongly typed messages by just
+            returning the result of ToBuilder().
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.AbstractMessageLite`2.ToByteString">
+            <summary>
+            Serializes the message to a ByteString. This is a trivial wrapper
+            around WriteTo(ICodedOutputStream).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.AbstractMessageLite`2.ToByteArray">
+            <summary>
+            Serializes the message to a byte array. This is a trivial wrapper
+            around WriteTo(ICodedOutputStream).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.AbstractMessageLite`2.WriteTo(System.IO.Stream)">
+            <summary>
+            Serializes the message and writes it to the given stream.
+            This is just a wrapper around WriteTo(CodedOutputStream). This
+            does not flush or close the stream.
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="M:Google.ProtocolBuffers.AbstractMessageLite`2.WriteDelimitedTo(System.IO.Stream)">
+            <summary>
+            Like WriteTo(Stream) but writes the size of the message as a varint before
+            writing the data. This allows more data to be written to the stream after the
+            message without the need to delimit the message data yourself. Use 
+            IBuilder.MergeDelimitedFrom(Stream) or the static method
+            YourMessageType.ParseDelimitedFrom(Stream) to parse messages written by this method.
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="T:Google.ProtocolBuffers.ByteArray">
+            <summary>
+            Provides a utility routine to copy small arrays much more quickly than Buffer.BlockCopy
+            </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.ByteArray.CopyThreshold">
+            <summary>
+            The threshold above which you should use Buffer.BlockCopy rather than ByteArray.Copy
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteArray.Copy(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Determines which copy routine to use based on the number of bytes to be copied.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteArray.ByteCopy(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Copy the bytes provided with a for loop, faster when there are only a few bytes to copy
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteArray.Reverse(System.Byte[])">
+            <summary>
+            Reverses the order of bytes in the array
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.CodedOutputStream">
+            <summary>
+            Encodes and writes protocol message fields.
+            </summary>
+            <remarks>
+            This class contains two kinds of methods:  methods that write specific
+            protocol message constructs and field types (e.g. WriteTag and
+            WriteInt32) and methods that write low-level values (e.g.
+            WriteRawVarint32 and WriteRawBytes).  If you are writing encoded protocol
+            messages, you should use the former methods, but if you are writing some
+            other format of your own design, use the latter. The names of the former
+            methods are taken from the protocol buffer type names, not .NET types.
+            (Hence WriteFloat instead of WriteSingle, and WriteBool instead of WriteBoolean.)
+            </remarks>
+        </member>
+        <member name="T:Google.ProtocolBuffers.ICodedOutputStream">
+            <summary>
+            Provides an interface that is used write a message.  Most often proto buffers are written
+            in their binary form by creating a instance via the CodedOutputStream.CreateInstance
+            static factory.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteMessageStart">
+            <summary>
+            Writes any message initialization data needed to the output stream
+            </summary>
+            <remarks>
+            This is primarily used by text formats and unnecessary for protobuffers' own
+            binary format.  The API for MessageStart/End was added for consistent handling
+            of output streams regardless of the actual writer implementation.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteMessageEnd">
+            <summary>
+            Writes any message finalization data needed to the output stream
+            </summary>
+            <remarks>
+            This is primarily used by text formats and unnecessary for protobuffers' own
+            binary format.  The API for MessageStart/End was added for consistent handling
+            of output streams regardless of the actual writer implementation.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.Flush">
+            <summary>
+            Indicates that all temporary buffers be written to the final output.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteUnknownGroup(System.Int32,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes an unknown message as a group
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteUnknownBytes(System.Int32,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Writes an unknown field value of bytes
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteUnknownField(System.Int32,Google.ProtocolBuffers.WireFormat.WireType,System.UInt64)">
+            <summary>
+            Writes an unknown field of a primitive type
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteMessageSetExtension(System.Int32,System.String,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes an extension as a message-set group
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteMessageSetExtension(System.Int32,System.String,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Writes an unknown extension as a message-set group
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteField(Google.ProtocolBuffers.Descriptors.FieldType,System.Int32,System.String,System.Object)">
+            <summary>
+            Writes a field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteDouble(System.Int32,System.String,System.Double)">
+            <summary>
+            Writes a double field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteFloat(System.Int32,System.String,System.Single)">
+            <summary>
+            Writes a float field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteUInt64(System.Int32,System.String,System.UInt64)">
+            <summary>
+            Writes a uint64 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteInt64(System.Int32,System.String,System.Int64)">
+            <summary>
+            Writes an int64 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteInt32(System.Int32,System.String,System.Int32)">
+            <summary>
+            Writes an int32 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteFixed64(System.Int32,System.String,System.UInt64)">
+            <summary>
+            Writes a fixed64 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteFixed32(System.Int32,System.String,System.UInt32)">
+            <summary>
+            Writes a fixed32 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteBool(System.Int32,System.String,System.Boolean)">
+            <summary>
+            Writes a bool field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteString(System.Int32,System.String,System.String)">
+            <summary>
+            Writes a string field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteGroup(System.Int32,System.String,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes a group field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteMessage(System.Int32,System.String,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes a message field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteBytes(System.Int32,System.String,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Writes a byte array field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteUInt32(System.Int32,System.String,System.UInt32)">
+            <summary>
+            Writes a UInt32 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteEnum(System.Int32,System.String,System.Int32,System.Object)">
+            <summary>
+            Writes an enum field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteSFixed32(System.Int32,System.String,System.Int32)">
+            <summary>
+            Writes a fixed 32-bit field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteSFixed64(System.Int32,System.String,System.Int64)">
+            <summary>
+            Writes a signed fixed 64-bit field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteSInt32(System.Int32,System.String,System.Int32)">
+            <summary>
+            Writes a signed 32-bit field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteSInt64(System.Int32,System.String,System.Int64)">
+            <summary>
+            Writes a signed 64-bit field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteArray(Google.ProtocolBuffers.Descriptors.FieldType,System.Int32,System.String,System.Collections.IEnumerable)">
+            <summary>
+            Writes a repeated field value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteGroupArray``1(System.Int32,System.String,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Writes a repeated group value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteMessageArray``1(System.Int32,System.String,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Writes a repeated message value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteStringArray(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Writes a repeated string value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteBytesArray(System.Int32,System.String,System.Collections.Generic.IEnumerable{Google.ProtocolBuffers.ByteString})">
+            <summary>
+            Writes a repeated ByteString value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteBoolArray(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.Boolean})">
+            <summary>
+            Writes a repeated boolean value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteInt32Array(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Writes a repeated Int32 value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteSInt32Array(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Writes a repeated SInt32 value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteUInt32Array(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.UInt32})">
+            <summary>
+            Writes a repeated UInt32 value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteFixed32Array(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.UInt32})">
+            <summary>
+            Writes a repeated Fixed32 value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteSFixed32Array(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Writes a repeated SFixed32 value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteInt64Array(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.Int64})">
+            <summary>
+            Writes a repeated Int64 value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteSInt64Array(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.Int64})">
+            <summary>
+            Writes a repeated SInt64 value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteUInt64Array(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.UInt64})">
+            <summary>
+            Writes a repeated UInt64 value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteFixed64Array(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.UInt64})">
+            <summary>
+            Writes a repeated Fixed64 value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteSFixed64Array(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.Int64})">
+            <summary>
+            Writes a repeated SFixed64 value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteDoubleArray(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>
+            Writes a repeated Double value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteFloatArray(System.Int32,System.String,System.Collections.Generic.IEnumerable{System.Single})">
+            <summary>
+            Writes a repeated Float value, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WriteEnumArray``1(System.Int32,System.String,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Writes a repeated enumeration value of type T, including tag(s), to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedArray(Google.ProtocolBuffers.Descriptors.FieldType,System.Int32,System.String,System.Collections.IEnumerable)">
+            <summary>
+            Writes a packed repeated primitive, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedBoolArray(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Boolean})">
+            <summary>
+            Writes a packed repeated boolean, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedInt32Array(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Writes a packed repeated Int32, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedSInt32Array(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Writes a packed repeated SInt32, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedUInt32Array(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.UInt32})">
+            <summary>
+            Writes a packed repeated UInt32, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedFixed32Array(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.UInt32})">
+            <summary>
+            Writes a packed repeated Fixed32, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedSFixed32Array(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Writes a packed repeated SFixed32, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedInt64Array(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int64})">
+            <summary>
+            Writes a packed repeated Int64, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedSInt64Array(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int64})">
+            <summary>
+            Writes a packed repeated SInt64, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedUInt64Array(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.UInt64})">
+            <summary>
+            Writes a packed repeated UInt64, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedFixed64Array(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.UInt64})">
+            <summary>
+            Writes a packed repeated Fixed64, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedSFixed64Array(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Int64})">
+            <summary>
+            Writes a packed repeated SFixed64, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedDoubleArray(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>
+            Writes a packed repeated Double, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedFloatArray(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{System.Single})">
+            <summary>
+            Writes a packed repeated Float, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedOutputStream.WritePackedEnumArray``1(System.Int32,System.String,System.Int32,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Writes a packed repeated enumeration of type T, including tag and length, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeDoubleSize(System.Int32,System.Double)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            double field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeFloatSize(System.Int32,System.Single)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            float field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeUInt64Size(System.Int32,System.UInt64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            uint64 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeInt64Size(System.Int32,System.Int64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            int64 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeInt32Size(System.Int32,System.Int32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            int32 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeFixed64Size(System.Int32,System.UInt64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            fixed64 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeFixed32Size(System.Int32,System.UInt32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            fixed32 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeBoolSize(System.Int32,System.Boolean)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            bool field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeStringSize(System.Int32,System.String)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            string field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeGroupSize(System.Int32,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            group field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeUnknownGroupSize(System.Int32,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            group field represented by an UnknownFieldSet, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeMessageSize(System.Int32,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            embedded message field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeBytesSize(System.Int32,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            bytes field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeUInt32Size(System.Int32,System.UInt32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            uint32 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeEnumSize(System.Int32,System.Int32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            enum field, including the tag. The caller is responsible for
+            converting the enum value to its numeric value.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeSFixed32Size(System.Int32,System.Int32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            sfixed32 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeSFixed64Size(System.Int32,System.Int64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            sfixed64 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeSInt32Size(System.Int32,System.Int32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            sint32 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeSInt64Size(System.Int32,System.Int64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            sint64 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeDoubleSizeNoTag(System.Double)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            double field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeFloatSizeNoTag(System.Single)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            float field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeUInt64SizeNoTag(System.UInt64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            uint64 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeInt64SizeNoTag(System.Int64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            int64 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeInt32SizeNoTag(System.Int32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            int32 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeFixed64SizeNoTag(System.UInt64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            fixed64 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeFixed32SizeNoTag(System.UInt32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            fixed32 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeBoolSizeNoTag(System.Boolean)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            bool field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeStringSizeNoTag(System.String)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            string field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeGroupSizeNoTag(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            group field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeUnknownGroupSizeNoTag(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            group field represented by an UnknownFieldSet, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeMessageSizeNoTag(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            embedded message field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeBytesSizeNoTag(Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            bytes field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeUInt32SizeNoTag(System.UInt32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            uint32 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeEnumSizeNoTag(System.Int32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            enum field, including the tag. The caller is responsible for
+            converting the enum value to its numeric value.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeSFixed32SizeNoTag(System.Int32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            sfixed32 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeSFixed64SizeNoTag(System.Int64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            sfixed64 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeSInt32SizeNoTag(System.Int32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            sint32 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeSInt64SizeNoTag(System.Int64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            sint64 field, including the tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeMessageSetExtensionSize(System.Int32,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            MessageSet extension to the stream. For historical reasons,
+            the wire format differs from normal fields.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeRawMessageSetExtensionSize(System.Int32,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Compute the number of bytes that would be needed to encode an
+            unparsed MessageSet extension field to the stream. For
+            historical reasons, the wire format differs from normal fields.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeRawVarint32Size(System.UInt32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a varint.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeRawVarint64Size(System.UInt64)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a varint.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeFieldSize(Google.ProtocolBuffers.Descriptors.FieldType,System.Int32,System.Object)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            field of arbitrary type, including the tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeFieldSizeNoTag(Google.ProtocolBuffers.Descriptors.FieldType,System.Object)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a
+            field of arbitrary type, excluding the tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.ComputeTagSize(System.Int32)">
+            <summary>
+            Compute the number of bytes that would be needed to encode a tag.
+            </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.CodedOutputStream.DefaultBufferSize">
+            <summary>
+            The buffer size used by CreateInstance(Stream).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.CreateInstance(System.IO.Stream)">
+            <summary>
+            Creates a new CodedOutputStream which write to the given stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.CreateInstance(System.IO.Stream,System.Int32)">
+            <summary>
+            Creates a new CodedOutputStream which write to the given stream and uses
+            the specified buffer size.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.CreateInstance(System.Byte[])">
+            <summary>
+            Creates a new CodedOutputStream that writes directly to the given
+            byte array. If more bytes are written than fit in the array,
+            OutOfSpaceException will be thrown.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.CreateInstance(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Creates a new CodedOutputStream that writes directly to the given
+            byte array slice. If more bytes are written than fit in the array,
+            OutOfSpaceException will be thrown.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteDouble(System.Int32,System.String,System.Double)">
+            <summary>
+            Writes a double field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteFloat(System.Int32,System.String,System.Single)">
+            <summary>
+            Writes a float field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteUInt64(System.Int32,System.String,System.UInt64)">
+            <summary>
+            Writes a uint64 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteInt64(System.Int32,System.String,System.Int64)">
+            <summary>
+            Writes an int64 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteInt32(System.Int32,System.String,System.Int32)">
+            <summary>
+            Writes an int32 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteFixed64(System.Int32,System.String,System.UInt64)">
+            <summary>
+            Writes a fixed64 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteFixed32(System.Int32,System.String,System.UInt32)">
+            <summary>
+            Writes a fixed32 field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteBool(System.Int32,System.String,System.Boolean)">
+            <summary>
+            Writes a bool field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteString(System.Int32,System.String,System.String)">
+            <summary>
+            Writes a string field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteGroup(System.Int32,System.String,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes a group field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteDoubleNoTag(System.Double)">
+            <summary>
+            Writes a double field value, including tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteFloatNoTag(System.Single)">
+            <summary>
+            Writes a float field value, without a tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteUInt64NoTag(System.UInt64)">
+            <summary>
+            Writes a uint64 field value, without a tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteInt64NoTag(System.Int64)">
+            <summary>
+            Writes an int64 field value, without a tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteInt32NoTag(System.Int32)">
+            <summary>
+            Writes an int32 field value, without a tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteFixed64NoTag(System.UInt64)">
+            <summary>
+            Writes a fixed64 field value, without a tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteFixed32NoTag(System.UInt32)">
+            <summary>
+            Writes a fixed32 field value, without a tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteBoolNoTag(System.Boolean)">
+            <summary>
+            Writes a bool field value, without a tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteStringNoTag(System.String)">
+            <summary>
+            Writes a string field value, without a tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteGroupNoTag(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes a group field value, without a tag, to the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteTag(System.Int32,Google.ProtocolBuffers.WireFormat.WireType)">
+            <summary>
+            Encodes and writes a tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteRawVarint32(System.UInt32)">
+            <summary>
+            Writes a 32 bit value as a varint. The fast route is taken when
+            there's enough buffer space left to whizz through without checking
+            for each byte; otherwise, we resort to calling WriteRawByte each time.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteRawBytes(System.Byte[])">
+            <summary>
+            Writes out an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.WriteRawBytes(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes out part of an array of bytes.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.EncodeZigZag32(System.Int32)">
+            <summary>
+            Encode a 32-bit value with ZigZag encoding.
+            </summary>
+            <remarks>
+            ZigZag encodes signed integers into values that can be efficiently
+            encoded with varint.  (Otherwise, negative values must be 
+            sign-extended to 64 bits to be varint encoded, thus always taking
+            10 bytes on the wire.)
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.EncodeZigZag64(System.Int64)">
+            <summary>
+            Encode a 64-bit value with ZigZag encoding.
+            </summary>
+            <remarks>
+            ZigZag encodes signed integers into values that can be efficiently
+            encoded with varint.  (Otherwise, negative values must be 
+            sign-extended to 64 bits to be varint encoded, thus always taking
+            10 bytes on the wire.)
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedOutputStream.CheckNoSpaceLeft">
+            <summary>
+            Verifies that SpaceLeft returns zero. It's common to create a byte array
+            that is exactly big enough to hold a message, then write to it with
+            a CodedOutputStream. Calling CheckNoSpaceLeft after writing verifies that
+            the message was actually as big as expected, which can help bugs.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.CodedOutputStream.SpaceLeft">
+            <summary>
+            If writing to a flat array, returns the space left in the array. Otherwise,
+            throws an InvalidOperationException.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.CodedOutputStream.OutOfSpaceException">
+            <summary>
+            Indicates that a CodedOutputStream wrapping a flat byte array
+            ran out of space.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Collections.Dictionaries">
+            <summary>
+            Utility class for dictionaries.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Collections.Dictionaries.Equals``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            Compares two dictionaries for equality. Each value is compared with equality using Equals
+            for non-IEnumerable implementations, and using EnumerableEquals otherwise.
+            TODO(jonskeet): This is clearly pretty slow, and involves lots of boxing/unboxing...
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Collections.Dictionaries.GetHashCode``2(System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            Creates a hashcode for a dictionary by XORing the hashcodes of all the fields
+            and values. (By XORing, we avoid ordering issues.)
+            TODO(jonskeet): Currently XORs other stuff too, and assumes non-null values.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Collections.Dictionaries.GetDeepHashCode(System.Object)">
+            <summary>
+            Determines the hash of a value by either taking it directly or hashing all the elements
+            for IEnumerable implementations.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Collections.Enumerables">
+            <summary>
+            Utility class for IEnumerable (and potentially the generic version in the future).
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Collections.IPopsicleList`1">
+            <summary>
+            A list which has an Add method which accepts an IEnumerable[T].
+            This allows whole collections to be added easily using collection initializers.
+            It causes a potential overload confusion if T : IEnumerable[T], but in
+            practice that won't happen in protocol buffers.
+            </summary>
+            <remarks>This is only currently implemented by PopsicleList, and it's likely
+            to stay that way - hence the name. More genuinely descriptive names are
+            horribly ugly. (At least, the ones the author could think of...)</remarks>
+            <typeparam name="T">The element type of the list</typeparam>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Collections.ICastArray">
+            <summary>
+            Used to efficiently cast the elements of enumerations
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Collections.Lists">
+            <summary>
+            Utility non-generic class for calling into Lists{T} using type inference.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Collections.Lists.AsReadOnly``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            Returns a read-only view of the specified list.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Collections.Lists`1">
+            <summary>
+            Utility class for dealing with lists.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Collections.Lists`1.AsReadOnly(System.Collections.Generic.IList{`0})">
+            <summary>
+            Returns either the original reference if it's already read-only,
+            or a new ReadOnlyCollection wrapping the original list.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Collections.Lists`1.Empty">
+            <summary>
+            Returns an immutable empty list.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Collections.PopsicleList`1">
+            <summary>
+            Proxies calls to a <see cref="T:System.Collections.Generic.List`1"/>, but allows the list
+            to be made read-only (with the <see cref="M:Google.ProtocolBuffers.Collections.PopsicleList`1.MakeReadOnly"/> method), 
+            after which any modifying methods throw <see cref="T:System.NotSupportedException"/>.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Collections.PopsicleList`1.MakeReadOnly">
+            <summary>
+            Makes this list read-only ("freezes the popsicle"). From this
+            point on, mutating methods (Clear, Add etc) will throw a
+            NotSupportedException. There is no way of "defrosting" the list afterwards.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Collections.ReadOnlyDictionary`2">
+            <summary>
+            Read-only wrapper around another dictionary.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.GeneratedMessageLite`2">
+            <summary>
+            All generated protocol message classes extend this class. It implements
+            most of the IMessage interface using reflection. Users
+            can ignore this class as an implementation detail.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.GeneratedMessageLite`2.PrintField``1(System.String,System.Collections.Generic.IList{``0},System.IO.TextWriter)">
+            <summary>
+            PrintTo() helper methods for Lite Runtime
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.GeneratedMessageLite`2.PrintField(System.String,System.Boolean,System.Object,System.IO.TextWriter)">
+            <summary>
+            PrintTo() helper methods for Lite Runtime
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.GeneratedMessageLite`2.EscapeBytes(System.Collections.Generic.IEnumerable{System.Byte},System.IO.TextWriter)">
+            <summary>
+            COPIED from TextFormat
+            Escapes bytes in the format used in protocol buffer text format, which
+            is the same as the format used for C string literals.  All bytes
+            that are not printable 7-bit ASCII characters are escaped, as well as
+            backslash, single-quote, and double-quote characters.  Characters for
+            which no defined short-hand escape sequence is defined will be escaped
+            using 3-digit octal sequences.
+            The returned value is guaranteed to be entirely ASCII.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableMessageLite`2.PrintTo(System.IO.TextWriter)">
+            <summary>
+            writes the extensions to the text stream
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableMessageLite`2.HasExtension``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,``0})">
+            <summary>
+            Checks if a singular extension is present.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableMessageLite`2.GetExtensionCount``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,System.Collections.Generic.IList{``0}})">
+            <summary>
+            Returns the number of elements in a repeated extension.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableMessageLite`2.GetExtension``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,``0})">
+            <summary>
+            Returns the value of an extension.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableMessageLite`2.GetExtension``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,System.Collections.Generic.IList{``0}},System.Int32)">
+            <summary>
+            Returns one element of a repeated extension.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.ExtendableMessageLite`2.Extensions">
+            <summary>
+            Access for the builder.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.ExtendableMessageLite`2.ExtensionsAreInitialized">
+            <summary>
+            Called to check if all extensions are initialized.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.ExtendableMessageLite`2.ExtensionsSerializedSize">
+            <summary>
+            Called by subclasses to compute the size of extensions.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.ExtendableMessageLite`2.ExtensionWriter">
+            <summary>
+            Used by subclasses to serialize extensions. Extension ranges may be
+            interleaves with field numbers, but we must write them in canonical
+            (sorted by field number) order. This class helps us to write individual
+            ranges of extensions at once.
+            
+            TODO(jonskeet): See if we can improve this in terms of readability.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.GeneratedBuilderLite`2">
+            <summary>
+            All generated protocol message builder classes extend this class. It implements
+            most of the IBuilder interface using reflection. Users can ignore this class
+            as an implementation detail.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.GeneratedBuilderLite`2.ParseUnknownField(Google.ProtocolBuffers.ICodedInputStream,Google.ProtocolBuffers.ExtensionRegistry,System.UInt32,System.String)">
+            <summary>
+            Called by derived classes to parse an unknown field.
+            </summary>
+            <returns>true unless the tag is an end-group tag</returns>
+        </member>
+        <member name="M:Google.ProtocolBuffers.GeneratedBuilderLite`2.BuildParsed">
+            <summary>
+            Like Build(), but will wrap UninitializedMessageException in
+            InvalidProtocolBufferException.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.GeneratedBuilderLite`2.Build">
+            <summary>
+            Implementation of <see cref="!:IBuilder&lt;TMessage, TBuilder&gt;.Build"/>.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.GeneratedBuilderLite`2.MessageBeingBuilt">
+            <summary>
+            Returns the message being built at the moment.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableBuilderLite`2.HasExtension``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,``0})">
+            <summary>
+            Checks if a singular extension is present
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableBuilderLite`2.GetExtensionCount``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,System.Collections.Generic.IList{``0}})">
+            <summary>
+            Returns the number of elements in a repeated extension.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableBuilderLite`2.GetExtension``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,``0})">
+            <summary>
+            Returns the value of an extension.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableBuilderLite`2.GetExtension``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,System.Collections.Generic.IList{``0}},System.Int32)">
+            <summary>
+            Returns one element of a repeated extension.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableBuilderLite`2.SetExtension``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,``0},``0)">
+            <summary>
+            Sets the value of an extension.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableBuilderLite`2.SetExtension``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,System.Collections.Generic.IList{``0}},System.Int32,``0)">
+            <summary>
+            Sets the value of one element of a repeated extension.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableBuilderLite`2.AddExtension``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,System.Collections.Generic.IList{``0}},``0)">
+            <summary>
+            Appends a value to a repeated extension.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableBuilderLite`2.ClearExtension``1(Google.ProtocolBuffers.GeneratedExtensionLite{`0,``0})">
+            <summary>
+            Clears an extension.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtendableBuilderLite`2.ParseUnknownField(Google.ProtocolBuffers.ICodedInputStream,Google.ProtocolBuffers.ExtensionRegistry,System.UInt32,System.String)">
+            <summary>
+            Called by subclasses to parse an unknown field or an extension.
+            </summary>
+            <returns>true unless the tag is an end-group tag</returns>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Descriptors.FieldMappingAttribute">
+            <summary>
+            Defined specifically for the <see cref="T:Google.ProtocolBuffers.Descriptors.FieldType"/> enumeration,
+            this allows each field type to specify the mapped type and wire type.
+            </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Descriptors.FieldMappingAttribute.FieldTypeToMappedTypeMap">
+            <summary>
+            Immutable mapping from field type to mapped type. Built using the attributes on
+            FieldType values.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Descriptors.FieldType">
+            <summary>
+            Enumeration of all the possible field types. The odd formatting is to make it very clear
+            which attribute applies to which value, while maintaining a compact format.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Descriptors.MappedType">
+            <summary>
+            Type as it's mapped onto a .NET type.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.IEnumLite">
+            <summary>
+            Interface for an enum value or value descriptor, to be used in FieldSet.
+            The lite library stores enum values directly in FieldSets but the full
+            library stores EnumValueDescriptors in order to better support reflection.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.IEnumLiteMap`1">
+            <summary>
+            Interface for an object which maps integers to {@link EnumLite}s.
+            {@link Descriptors.EnumDescriptor} implements this interface by mapping
+            numbers to {@link Descriptors.EnumValueDescriptor}s.  Additionally,
+            every generated enum type has a static method internalGetValueMap() which
+            returns an implementation of this type that maps numbers to enum values.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.FieldSet">
+            <summary>
+            A class which represents an arbitrary set of fields of some message type.
+            This is used to implement DynamicMessage, and also to represent extensions
+            in GeneratedMessage. This class is internal, since outside users should probably
+            be using DynamicMessage.
+            
+            As in the Java implementation, this class goes against the rest of the framework
+            in terms of mutability. Instead of having a mutable Builder class and an immutable
+            FieldSet class, FieldSet just has a MakeImmutable() method. This is safe so long as
+            all callers are careful not to let a mutable FieldSet escape into the open. This would
+            be impossible to guarantee if this were a public class, of course.
+            
+            All repeated fields are stored as IList[object] even 
+            TODO(jonskeet): Finish this comment!
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.MakeImmutable">
+            <summary>
+            Makes this FieldSet immutable, and returns it for convenience. Any
+            mutable repeated fields are made immutable, as well as the map itself.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.HasField(Google.ProtocolBuffers.IFieldDescriptorLite)">
+            <summary>
+            See <see cref="!:IMessageLite.HasField"/>.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.Clear">
+            <summary>
+            Clears all fields.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.AddRepeatedField(Google.ProtocolBuffers.IFieldDescriptorLite,System.Object)">
+            <summary>
+            See <see cref="!:IBuilder&lt;TMessage, TBuilder&gt;.AddRepeatedField"/>
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.GetEnumerator">
+            <summary>
+            Returns an enumerator for the field map. Used to write the fields out.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.IsInitializedWithRespectTo(System.Collections.IEnumerable)">
+            <summary>
+            Verifies whether all the required fields in the specified message
+            descriptor are present in this field set, as well as whether
+            all the embedded messages are themselves initialized.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.ClearField(Google.ProtocolBuffers.IFieldDescriptorLite)">
+            <summary>
+            See <see cref="!:IBuilder&lt;TMessage, TBuilder&gt;.ClearField"/>
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.GetRepeatedFieldCount(Google.ProtocolBuffers.IFieldDescriptorLite)">
+            <summary>
+            See <see cref="!:IMessageLite.GetRepeatedFieldCount"/>
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.MergeFrom(Google.ProtocolBuffers.FieldSet)">
+            <summary>
+            Implementation of both <c>MergeFrom</c> methods.
+            </summary>
+            <param name="otherFields"></param>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.WriteTo(Google.ProtocolBuffers.ICodedOutputStream)">
+            <summary>
+            See <see cref="!:IMessageLite.WriteTo(CodedOutputStream)"/>.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.WriteField(Google.ProtocolBuffers.IFieldDescriptorLite,System.Object,Google.ProtocolBuffers.ICodedOutputStream)">
+            <summary>
+            Writes a single field to a CodedOutputStream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.FieldSet.VerifyType(Google.ProtocolBuffers.IFieldDescriptorLite,System.Object)">
+            <summary>
+            Verifies that the given object is of the correct type to be a valid
+            value for the given field.
+            </summary>
+            <remarks>
+            For repeated fields, this checks if the object is of the right
+            element type, not whether it's a list.
+            </remarks>
+            <exception cref="T:System.ArgumentException">The value is not of the right type.</exception>
+            <exception cref="T:System.ArgumentNullException">The value is null.</exception>
+        </member>
+        <member name="P:Google.ProtocolBuffers.FieldSet.DefaultInstance">
+            <summary>
+            Returns the default, immutable instance with no fields defined.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.FieldSet.AllFields">
+            <summary>
+            Returns an immutable mapping of fields. Note that although the mapping itself
+            is immutable, the entries may not be (i.e. any repeated values are represented by
+            mutable lists). The behaviour is not specified if the contents are mutated.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.FieldSet.Item(Google.ProtocolBuffers.IFieldDescriptorLite)">
+            <summary>
+            See <see cref="!:IMessageLite.Item(IFieldDescriptorLite)"/>
+            </summary>
+            <remarks>
+            If the field is not set, the behaviour when fetching this property varies by field type:
+            <list>
+            <item>For singular message values, null is returned.</item>
+            <item>For singular non-message values, the default value of the field is returned.</item>
+            <item>For repeated values, an empty immutable list is returned. This will be compatible
+            with IList[object], regardless of the type of the repeated item.</item>
+            </list>
+            This method returns null if the field is a singular message type
+            and is not set; in this case it is up to the caller to fetch the 
+            message's default instance. For repeated fields of message types, 
+            an empty collection is returned. For repeated fields of non-message
+            types, null is returned.
+            <para/>
+            When setting this property, any list values are copied, and each element is checked
+            to ensure it is of an appropriate type.
+            </remarks>
+            
+        </member>
+        <member name="P:Google.ProtocolBuffers.FieldSet.Item(Google.ProtocolBuffers.IFieldDescriptorLite,System.Int32)">
+            <summary>
+            See <see cref="!:IMessageLite.Item(IFieldDescriptorLite,int)"/>
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.FieldSet.IsInitialized">
+            <summary>
+            See <see cref="P:Google.ProtocolBuffers.IMessageLite.IsInitialized"/>
+            </summary>
+            <remarks>
+            Since FieldSet itself does not have any way of knowing about
+            required fields that aren't actually present in the set, it is up
+            to the caller to check for genuinely required fields. This property
+            merely checks that any messages present are themselves initialized.
+            </remarks>
+        </member>
+        <member name="P:Google.ProtocolBuffers.FieldSet.SerializedSize">
+            <summary>
+            See <see cref="P:Google.ProtocolBuffers.IMessageLite.SerializedSize"/>. It's up to the caller to
+            cache the resulting size if desired.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.FrameworkPortability">
+            <summary>
+            Class containing helpful workarounds for various platform compatibility
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.ExtensionDescriptorLite.MessageSetWireFormat">
+            <summary>
+            This is not supported and assertions are made to ensure this does not exist on extensions of Lite types
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.GeneratedExtensionLite`2.#ctor(System.String,`0,`1,Google.ProtocolBuffers.IMessageLite,Google.ProtocolBuffers.IEnumLiteMap,System.Int32,Google.ProtocolBuffers.Descriptors.FieldType)">
+            For use by generated code only. 
+        </member>
+        <member name="M:Google.ProtocolBuffers.GeneratedExtensionLite`2.#ctor(System.String,`0,`1,Google.ProtocolBuffers.IMessageLite,Google.ProtocolBuffers.IEnumLiteMap,System.Int32,Google.ProtocolBuffers.Descriptors.FieldType,System.Boolean)">
+            Repeating fields: For use by generated code only. 
+        </member>
+        <member name="M:Google.ProtocolBuffers.GeneratedExtensionLite`2.ToReflectionType(System.Object)">
+            <summary>
+            Converts from the type used by the native accessors to the type
+            used by reflection accessors. For example, the reflection accessors
+            for enums use EnumValueDescriptors but the native accessors use
+            the generated enum type.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.GeneratedExtensionLite`2.SingularToReflectionType(System.Object)">
+            <summary>
+            Like ToReflectionType(object) but for a single element.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.GeneratedExtensionLite`2.Descriptor">
+            <summary>
+            Returns information about this extension
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.GeneratedExtensionLite`2.DefaultValue">
+            <summary>
+            Returns the default value for this extension
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.GeneratedExtensionLite`2.Google#ProtocolBuffers#IGeneratedExtensionLite#ContainingType">
+            <summary>
+            used for the extension registry
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.GeneratedExtensionLite`2.ContainingTypeDefaultInstance">
+            Default instance of the type being extended, used to identify that type.
+        </member>
+        <member name="P:Google.ProtocolBuffers.GeneratedExtensionLite`2.Number">
+            Get the field number. 
+        </member>
+        <member name="P:Google.ProtocolBuffers.GeneratedExtensionLite`2.MessageDefaultInstance">
+            If the extension is an embedded message, this is the default instance of
+            that type.
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadMessageStart">
+            <summary>
+            Reads any message initialization data expected from the input stream
+            </summary>
+            <remarks>
+            This is primarily used by text formats and unnecessary for protobuffers' own
+            binary format.  The API for MessageStart/End was added for consistent handling
+            of output streams regardless of the actual writer implementation.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadMessageEnd">
+            <summary>
+            Reads any message finalization data expected from the input stream
+            </summary>
+            <remarks>
+            This is primarily used by text formats and unnecessary for protobuffers' own
+            binary format.  The API for MessageStart/End was added for consistent handling
+            of output streams regardless of the actual writer implementation.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadTag(System.UInt32@,System.String@)">
+            <summary>
+            Attempt to read a field tag, returning false if we have reached the end
+            of the input data.
+            </summary>
+            <remarks>
+            <para>
+            If fieldTag is non-zero and ReadTag returns true then the value in fieldName
+            may or may not be populated.  However, if fieldTag is zero and ReadTag returns
+            true, then fieldName should be populated with a non-null field name.
+            </para><para>
+            In other words if ReadTag returns true then either fieldTag will be non-zero OR
+            fieldName will be non-zero.  In some cases both may be populated, however the
+            builders will always prefer the fieldTag over fieldName.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadDouble(System.Double@)">
+            <summary>
+            Read a double field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadFloat(System.Single@)">
+            <summary>
+            Read a float field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadUInt64(System.UInt64@)">
+            <summary>
+            Read a uint64 field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadInt64(System.Int64@)">
+            <summary>
+            Read an int64 field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadInt32(System.Int32@)">
+            <summary>
+            Read an int32 field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadFixed64(System.UInt64@)">
+            <summary>
+            Read a fixed64 field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadFixed32(System.UInt32@)">
+            <summary>
+            Read a fixed32 field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadBool(System.Boolean@)">
+            <summary>
+            Read a bool field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadString(System.String@)">
+            <summary>
+            Reads a string field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadGroup(System.Int32,Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Reads a group field value from the stream.
+            </summary>    
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadUnknownGroup(System.Int32,Google.ProtocolBuffers.IBuilderLite)">
+            <summary>
+            Reads a group field value from the stream and merges it into the given
+            UnknownFieldSet.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadMessage(Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Reads an embedded message field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadBytes(Google.ProtocolBuffers.ByteString@)">
+            <summary>
+            Reads a bytes field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadUInt32(System.UInt32@)">
+            <summary>
+            Reads a uint32 field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadEnum(Google.ProtocolBuffers.IEnumLite@,System.Object@,Google.ProtocolBuffers.IEnumLiteMap)">
+            <summary>
+            Reads an enum field value from the stream. The caller is responsible
+            for converting the numeric value to an actual enum.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadEnum``1(``0@,System.Object@)">
+            <summary>
+            Reads an enum field value from the stream. If the enum is valid for type T,
+            then the ref value is set and it returns true.  Otherwise the unkown output
+            value is set and this method returns false.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadSFixed32(System.Int32@)">
+            <summary>
+            Reads an sfixed32 field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadSFixed64(System.Int64@)">
+            <summary>
+            Reads an sfixed64 field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadSInt32(System.Int32@)">
+            <summary>
+            Reads an sint32 field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadSInt64(System.Int64@)">
+            <summary>
+            Reads an sint64 field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadPrimitiveArray(Google.ProtocolBuffers.Descriptors.FieldType,System.UInt32,System.String,System.Collections.Generic.ICollection{System.Object})">
+            <summary>
+            Reads an array of primitive values into the list, if the wire-type of fieldTag is length-prefixed and the 
+            type is numeric, it will read a packed array.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadEnumArray(System.UInt32,System.String,System.Collections.Generic.ICollection{Google.ProtocolBuffers.IEnumLite},System.Collections.Generic.ICollection{System.Object}@,Google.ProtocolBuffers.IEnumLiteMap)">
+            <summary>
+            Reads an array of primitive values into the list, if the wire-type of fieldTag is length-prefixed, it will
+            read a packed array.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadEnumArray``1(System.UInt32,System.String,System.Collections.Generic.ICollection{``0},System.Collections.Generic.ICollection{System.Object}@)">
+            <summary>
+            Reads an array of primitive values into the list, if the wire-type of fieldTag is length-prefixed, it will
+            read a packed array.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadMessageArray``1(System.UInt32,System.String,System.Collections.Generic.ICollection{``0},``0,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Reads a set of messages using the <paramref name="messageType"/> as a template.  T is not guaranteed to be 
+            the most derived type, it is only the type specifier for the collection.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadGroupArray``1(System.UInt32,System.String,System.Collections.Generic.ICollection{``0},``0,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Reads a set of messages using the <paramref name="messageType"/> as a template.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadPrimitiveField(Google.ProtocolBuffers.Descriptors.FieldType,System.Object@)">
+            <summary>
+            Reads a field of any primitive type. Enums, groups and embedded
+            messages are not handled by this method.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.SkipField">
+            <summary>
+            Reads and discards a single field, given its tag value.
+            </summary>
+            <returns>false if the tag is an end-group tag, in which case
+            nothing is skipped. Otherwise, returns true.</returns>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadStringArray(System.UInt32,System.String,System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Reads one or more repeated string field values from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadBytesArray(System.UInt32,System.String,System.Collections.Generic.ICollection{Google.ProtocolBuffers.ByteString})">
+            <summary>
+            Reads one or more repeated ByteString field values from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadBoolArray(System.UInt32,System.String,System.Collections.Generic.ICollection{System.Boolean})">
+            <summary>
+            Reads one or more repeated boolean field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadInt32Array(System.UInt32,System.String,System.Collections.Generic.ICollection{System.Int32})">
+            <summary>
+            Reads one or more repeated Int32 field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadSInt32Array(System.UInt32,System.String,System.Collections.Generic.ICollection{System.Int32})">
+            <summary>
+            Reads one or more repeated SInt32 field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadUInt32Array(System.UInt32,System.String,System.Collections.Generic.ICollection{System.UInt32})">
+            <summary>
+            Reads one or more repeated UInt32 field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadFixed32Array(System.UInt32,System.String,System.Collections.Generic.ICollection{System.UInt32})">
+            <summary>
+            Reads one or more repeated Fixed32 field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadSFixed32Array(System.UInt32,System.String,System.Collections.Generic.ICollection{System.Int32})">
+            <summary>
+            Reads one or more repeated SFixed32 field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadInt64Array(System.UInt32,System.String,System.Collections.Generic.ICollection{System.Int64})">
+            <summary>
+            Reads one or more repeated Int64 field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadSInt64Array(System.UInt32,System.String,System.Collections.Generic.ICollection{System.Int64})">
+            <summary>
+            Reads one or more repeated SInt64 field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadUInt64Array(System.UInt32,System.String,System.Collections.Generic.ICollection{System.UInt64})">
+            <summary>
+            Reads one or more repeated UInt64 field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadFixed64Array(System.UInt32,System.String,System.Collections.Generic.ICollection{System.UInt64})">
+            <summary>
+            Reads one or more repeated Fixed64 field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadSFixed64Array(System.UInt32,System.String,System.Collections.Generic.ICollection{System.Int64})">
+            <summary>
+            Reads one or more repeated SFixed64 field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadDoubleArray(System.UInt32,System.String,System.Collections.Generic.ICollection{System.Double})">
+            <summary>
+            Reads one or more repeated Double field values from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ICodedInputStream.ReadFloatArray(System.UInt32,System.String,System.Collections.Generic.ICollection{System.Single})">
+            <summary>
+            Reads one or more repeated Float field values from the stream.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.ICodedInputStream.IsAtEnd">
+            <summary>
+            Returns true if the stream has reached the end of the input. This is the
+            case if either the end of the underlying input source has been reached or
+            the stream has reached a limit created using PushLimit.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.IRpcServerStub">
+            <summary>
+            Provides an entry-point for transport listeners to call a specified method on a service
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IRpcServerStub.CallMethod(System.String,Google.ProtocolBuffers.ICodedInputStream,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Calls the method identified by methodName and returns the message
+            </summary>
+            <param name="methodName">The method name on the service descriptor (case-sensitive)</param>
+            <param name="input">The ICodedInputStream to deserialize the call parameter from</param>
+            <param name="registry">The extension registry to use when deserializing the call parameter</param>
+            <returns>The message that was returned from the service's method</returns>
+        </member>
+        <member name="T:Google.ProtocolBuffers.IRpcDispatch">
+            <summary>
+            Used to forward an invocation of a service method to a transport sender implementation
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.IRpcDispatch.CallMethod``2(System.String,Google.ProtocolBuffers.IMessageLite,Google.ProtocolBuffers.IBuilderLite{``0,``1})">
+            <summary>
+            Calls the service member on the endpoint connected.  This is generally done by serializing
+            the message, sending the bytes over a transport, and then deserializing the call parameter
+            to invoke the service's actual implementation via IRpcServerStub.  Once the call has
+            completed the result message is serialized and returned to the originating endpoint.
+            </summary>
+            <typeparam name="TMessage">The type of the response message</typeparam>
+            <typeparam name="TBuilder">The type of of the response builder</typeparam>
+            <param name="method">The name of the method on the service</param>
+            <param name="request">The message instance provided to the service call</param>
+            <param name="response">The builder used to deserialize the response</param>
+            <returns>The resulting message of the service call</returns>
+        </member>
+        <member name="T:Google.ProtocolBuffers.ByteString">
+            <summary>
+            Immutable array of bytes.
+            TODO(jonskeet): Implement the common collection interfaces?
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.AttachBytes(System.Byte[])">
+            <summary>
+            Internal use only.  Ensure that the provided array is not mutated and belongs to this instance.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.#ctor(System.Byte[])">
+            <summary>
+            Constructs a new ByteString from the given byte array. The array is
+            *not* copied, and must not be modified after this constructor is called.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.FromBase64(System.String)">
+            <summary>
+            Constructs a ByteString from the Base64 Encoded String.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.CopyFrom(System.Byte[])">
+            <summary>
+            Constructs a ByteString from the given array. The contents
+            are copied, so further modifications to the array will not
+            be reflected in the returned ByteString.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.CopyFrom(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Constructs a ByteString from a portion of a byte array.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.CopyFrom(System.String,System.Text.Encoding)">
+            <summary>
+            Creates a new ByteString by encoding the specified text with
+            the given encoding.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.CopyFromUtf8(System.String)">
+            <summary>
+            Creates a new ByteString by encoding the specified text in UTF-8.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.CreateCodedInput">
+            <summary>
+            Creates a CodedInputStream from this ByteString's data.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.WriteRawBytesTo(Google.ProtocolBuffers.CodedOutputStream)">
+            <summary>
+            Used internally by CodedOutputStream to avoid creating a copy for the write
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.CopyTo(System.Byte[],System.Int32)">
+            <summary>
+            Copies the entire byte array to the destination array provided at the offset specified.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.WriteTo(System.IO.Stream)">
+            <summary>
+            Writes the entire byte array to the provided stream
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.ByteString.Empty">
+            <summary>
+            Returns an empty ByteString.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.ByteString.Length">
+            <summary>
+            Returns the length of this ByteString in bytes.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.ByteString.Item(System.Int32)">
+            <summary>
+            Retuns the byte at the given index.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.ByteString.Unsafe">
+            <summary>
+            Unsafe operations that can cause IO Failure and/or other catestrophic side-effects.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.Unsafe.FromBytes(System.Byte[])">
+            <summary>
+            Constructs a new ByteString from the given byte array. The array is
+            *not* copied, and must not be modified after this constructor is called.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ByteString.Unsafe.GetBuffer(Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Provides direct, unrestricted access to the bytes contained in this instance.
+            You must not modify or resize the byte array returned by this method.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.ByteString.CodedBuilder">
+            <summary>
+            Builder for ByteStrings which allows them to be created without extra
+            copying being involved. This has to be a nested type in order to have access
+            to the private ByteString constructor.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.CodedInputStream">
+            <summary>
+            Readings and decodes protocol message fields.
+            </summary>
+            <remarks>
+            This class contains two kinds of methods:  methods that read specific
+            protocol message constructs and field types (e.g. ReadTag and
+            ReadInt32) and methods that read low-level values (e.g.
+            ReadRawVarint32 and ReadRawBytes).  If you are reading encoded protocol
+            messages, you should use the former methods, but if you are reading some
+            other format of your own design, use the latter. The names of the former
+            methods are taken from the protocol buffer type names, not .NET types.
+            (Hence ReadFloat instead of ReadSingle, and ReadBool instead of ReadBoolean.)
+            
+            TODO(jonskeet): Consider whether recursion and size limits shouldn't be readonly,
+            set at construction time.
+            </remarks>
+        </member>
+        <member name="F:Google.ProtocolBuffers.CodedInputStream.totalBytesRetired">
+            <summary>
+            The total number of bytes read before the current buffer. The
+            total bytes read up to the current position can be computed as
+            totalBytesRetired + bufferPos.
+            </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.CodedInputStream.currentLimit">
+            <summary>
+            The absolute position of the end of the current message.
+            </summary> 
+        </member>
+        <member name="F:Google.ProtocolBuffers.CodedInputStream.recursionDepth">
+            <summary>
+            <see cref="M:Google.ProtocolBuffers.CodedInputStream.SetRecursionLimit(System.Int32)"/>
+            </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.CodedInputStream.sizeLimit">
+            <summary>
+            <see cref="M:Google.ProtocolBuffers.CodedInputStream.SetSizeLimit(System.Int32)"/>
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.CreateInstance(System.IO.Stream)">
+            <summary>
+            Creates a new CodedInputStream reading data from the given
+            stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.CreateInstance(System.IO.Stream,System.Byte[])">
+            <summary>
+            Creates a new CodedInputStream reading data from the given
+            stream and a pre-allocated memory buffer.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.CreateInstance(System.Byte[])">
+            <summary>
+            Creates a new CodedInputStream reading data from the given
+            byte array.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.CreateInstance(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Creates a new CodedInputStream that reads from the given
+            byte array slice.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.CheckLastTagWas(System.UInt32)">
+            <summary>
+            Verifies that the last call to ReadTag() returned the given tag value.
+            This is used to verify that a nested group ended with the correct
+            end tag.
+            </summary>
+            <exception cref="T:Google.ProtocolBuffers.InvalidProtocolBufferException">The last
+            tag read was not the one specified</exception>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.PeekNextTag(System.UInt32@,System.String@)">
+            <summary>
+            Attempt to peek at the next field tag.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadTag(System.UInt32@,System.String@)">
+            <summary>
+            Attempt to read a field tag, returning false if we have reached the end
+            of the input data.
+            </summary>
+            <param name="fieldTag">The 'tag' of the field (id * 8 + wire-format)</param>
+            <param name="fieldName">Not Supported - For protobuffer streams, this parameter is always null</param>
+            <returns>true if the next fieldTag was read</returns>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadDouble(System.Double@)">
+            <summary>
+            Read a double field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadFloat(System.Single@)">
+            <summary>
+            Read a float field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadUInt64(System.UInt64@)">
+            <summary>
+            Read a uint64 field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadInt64(System.Int64@)">
+            <summary>
+            Read an int64 field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadInt32(System.Int32@)">
+            <summary>
+            Read an int32 field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadFixed64(System.UInt64@)">
+            <summary>
+            Read a fixed64 field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadFixed32(System.UInt32@)">
+            <summary>
+            Read a fixed32 field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadBool(System.Boolean@)">
+            <summary>
+            Read a bool field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadString(System.String@)">
+            <summary>
+            Reads a string field from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadGroup(System.Int32,Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Reads a group field value from the stream.
+            </summary>    
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadUnknownGroup(System.Int32,Google.ProtocolBuffers.IBuilderLite)">
+            <summary>
+            Reads a group field value from the stream and merges it into the given
+            UnknownFieldSet.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadMessage(Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Reads an embedded message field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadBytes(Google.ProtocolBuffers.ByteString@)">
+            <summary>
+            Reads a bytes field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadUInt32(System.UInt32@)">
+            <summary>
+            Reads a uint32 field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadEnum(Google.ProtocolBuffers.IEnumLite@,System.Object@,Google.ProtocolBuffers.IEnumLiteMap)">
+            <summary>
+            Reads an enum field value from the stream. The caller is responsible
+            for converting the numeric value to an actual enum.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadEnum``1(``0@,System.Object@)">
+            <summary>
+            Reads an enum field value from the stream. If the enum is valid for type T,
+            then the ref value is set and it returns true.  Otherwise the unkown output
+            value is set and this method returns false.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadSFixed32(System.Int32@)">
+            <summary>
+            Reads an sfixed32 field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadSFixed64(System.Int64@)">
+            <summary>
+            Reads an sfixed64 field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadSInt32(System.Int32@)">
+            <summary>
+            Reads an sint32 field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadSInt64(System.Int64@)">
+            <summary>
+            Reads an sint64 field value from the stream.
+            </summary>   
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ContinueArray(System.UInt32)">
+            <summary>
+            Returns true if the next tag is also part of the same unpacked array.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ContinueArray(System.UInt32,System.Boolean,System.Int32)">
+            <summary>
+            Returns true if the next tag is also part of the same array, which may or may not be packed.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadPrimitiveField(Google.ProtocolBuffers.Descriptors.FieldType,System.Object@)">
+            <summary>
+            Reads a field of any primitive type. Enums, groups and embedded
+            messages are not handled by this method.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.SlowReadRawVarint32">
+            <summary>
+            Same code as ReadRawVarint32, but read each byte individually, checking for
+            buffer overflow.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadRawVarint32">
+            <summary>
+            Read a raw Varint from the stream.  If larger than 32 bits, discard the upper bits.
+            This method is optimised for the case where we've got lots of data in the buffer.
+            That means we can check the size just once, then just read directly from the buffer
+            without constant rechecking of the buffer length.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadRawVarint32(System.IO.Stream)">
+            <summary>
+            Reads a varint from the input one byte at a time, so that it does not
+            read any bytes after the end of the varint. If you simply wrapped the
+            stream in a CodedInputStream and used ReadRawVarint32(Stream)}
+            then you would probably end up reading past the end of the varint since
+            CodedInputStream buffers its input.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadRawVarint64">
+            <summary>
+            Read a raw varint from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadRawLittleEndian32">
+            <summary>
+            Read a 32-bit little-endian integer from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadRawLittleEndian64">
+            <summary>
+            Read a 64-bit little-endian integer from the stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.DecodeZigZag32(System.UInt32)">
+            <summary>
+            Decode a 32-bit value with ZigZag encoding.
+            </summary>
+            <remarks>
+            ZigZag encodes signed integers into values that can be efficiently
+            encoded with varint.  (Otherwise, negative values must be 
+            sign-extended to 64 bits to be varint encoded, thus always taking
+            10 bytes on the wire.)
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.DecodeZigZag64(System.UInt64)">
+            <summary>
+            Decode a 32-bit value with ZigZag encoding.
+            </summary>
+            <remarks>
+            ZigZag encodes signed integers into values that can be efficiently
+            encoded with varint.  (Otherwise, negative values must be 
+            sign-extended to 64 bits to be varint encoded, thus always taking
+            10 bytes on the wire.)
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.SetRecursionLimit(System.Int32)">
+            <summary>
+            Set the maximum message recursion depth.
+            </summary>
+            <remarks>
+            In order to prevent malicious
+            messages from causing stack overflows, CodedInputStream limits
+            how deeply messages may be nested.  The default limit is 64.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.SetSizeLimit(System.Int32)">
+            <summary>
+            Set the maximum message size.
+            </summary>
+            <remarks>
+            In order to prevent malicious messages from exhausting memory or
+            causing integer overflows, CodedInputStream limits how large a message may be.
+            The default limit is 64MB.  You should set this limit as small
+            as you can without harming your app's functionality.  Note that
+            size limits only apply when reading from an InputStream, not
+            when constructed around a raw byte array (nor with ByteString.NewCodedInput).
+            If you want to read several messages from a single CodedInputStream, you
+            can call ResetSizeCounter() after each message to avoid hitting the
+            size limit.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ResetSizeCounter">
+            <summary>
+            Resets the current size counter to zero (see SetSizeLimit).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.PushLimit(System.Int32)">
+            <summary>
+            Sets currentLimit to (current position) + byteLimit. This is called
+            when descending into a length-delimited embedded message. The previous
+            limit is returned.
+            </summary>
+            <returns>The old limit.</returns>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.PopLimit(System.Int32)">
+            <summary>
+            Discards the current limit, returning the previous limit.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.RefillBuffer(System.Boolean)">
+            <summary>
+            Called when buffer is empty to read more bytes from the
+            input.  If <paramref name="mustSucceed"/> is true, RefillBuffer() gurantees that
+            either there will be at least one byte in the buffer when it returns
+            or it will throw an exception.  If <paramref name="mustSucceed"/> is false,
+            RefillBuffer() returns false if no more bytes were available.
+            </summary>
+            <param name="mustSucceed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadRawByte">
+            <summary>
+            Read one byte from the input.
+            </summary>
+            <exception cref="T:Google.ProtocolBuffers.InvalidProtocolBufferException">
+            the end of the stream or the current limit was reached
+            </exception>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.ReadRawBytes(System.Int32)">
+            <summary>
+            Read a fixed size of bytes from the input.
+            </summary>
+            <exception cref="T:Google.ProtocolBuffers.InvalidProtocolBufferException">
+            the end of the stream or the current limit was reached
+            </exception>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.SkipField">
+            <summary>
+            Reads and discards a single field, given its tag value.
+            </summary>
+            <returns>false if the tag is an end-group tag, in which case
+            nothing is skipped. Otherwise, returns true.</returns>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.SkipMessage">
+            <summary>
+            Reads and discards an entire message.  This will read either until EOF
+            or until an endgroup tag, whichever comes first.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.SkipRawBytes(System.Int32)">
+            <summary>
+            Reads and discards <paramref name="size"/> bytes.
+            </summary>
+            <exception cref="T:Google.ProtocolBuffers.InvalidProtocolBufferException">the end of the stream
+            or the current limit was reached</exception>
+        </member>
+        <member name="M:Google.ProtocolBuffers.CodedInputStream.SkipImpl(System.Int32)">
+            <summary>
+            Abstraction of skipping to cope with streams which can't really skip.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.CodedInputStream.Position">
+            <summary>
+            Returns the current position in the input stream, or the position in the input buffer
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.CodedInputStream.ReachedLimit">
+            <summary>
+            Returns whether or not all the data before the limit has been read.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Google.ProtocolBuffers.CodedInputStream.IsAtEnd">
+            <summary>
+            Returns true if the stream has reached the end of the input. This is the
+            case if either the end of the underlying input source has been reached or
+            the stream has reached a limit created using PushLimit.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.ExtensionRegistry">
+             <summary>
+             A table of known extensions, searchable by name or field number.  When
+             parsing a protocol message that might have extensions, you must provide
+             an <see cref="T:Google.ProtocolBuffers.ExtensionRegistry"/> in which you have registered any extensions
+             that you want to be able to parse.  Otherwise, those extensions will just
+             be treated like unknown fields.
+             </summary>
+             <example>
+             For example, if you had the <c>.proto</c> file:
+             <code>
+             option java_class = "MyProto";
+            
+             message Foo {
+               extensions 1000 to max;
+             }
+            
+             extend Foo {
+               optional int32 bar;
+             }
+             </code>
+            
+             Then you might write code like:
+            
+             <code>
+             extensionRegistry registry = extensionRegistry.CreateInstance();
+             registry.Add(MyProto.Bar);
+             MyProto.Foo message = MyProto.Foo.ParseFrom(input, registry);
+             </code>
+             </example>
+            
+             <remarks>
+             <para>You might wonder why this is necessary. Two alternatives might come to
+             mind. First, you might imagine a system where generated extensions are
+             automatically registered when their containing classes are loaded. This
+             is a popular technique, but is bad design; among other things, it creates a
+             situation where behavior can change depending on what classes happen to be
+             loaded. It also introduces a security vulnerability, because an
+             unprivileged class could cause its code to be called unexpectedly from a
+             privileged class by registering itself as an extension of the right type.
+             </para>
+             <para>Another option you might consider is lazy parsing: do not parse an
+             extension until it is first requested, at which point the caller must
+             provide a type to use. This introduces a different set of problems. First,
+             it would require a mutex lock any time an extension was accessed, which
+             would be slow. Second, corrupt data would not be detected until first
+             access, at which point it would be much harder to deal with it. Third, it
+             could violate the expectation that message objects are immutable, since the
+             type provided could be any arbitrary message class. An unprivileged user
+             could take advantage of this to inject a mutable object into a message
+             belonging to privileged code and create mischief.</para>
+             </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtensionRegistry.CreateInstance">
+            <summary>
+            Construct a new, empty instance.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ExtensionRegistry.Add(Google.ProtocolBuffers.IGeneratedExtensionLite)">
+            <summary>
+            Add an extension from a generated file to the registry.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.ExtensionRegistry.Empty">
+            <summary>
+            Get the unmodifiable singleton empty instance.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.ExtensionRegistry.Item(Google.ProtocolBuffers.IMessageLite,System.Int32)">
+            <summary>
+            Finds an extension by containing type and field number.
+            A null reference is returned if the extension can't be found.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.ExtensionRegistry.ExtensionIntPair">
+            <summary>
+            Nested type just used to represent a pair of MessageDescriptor and int, as
+            the key into the "by number" map.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.InvalidProtocolBufferException">
+            <summary>
+            Thrown when a protocol message being parsed is invalid in some way,
+            e.g. it contains a malformed varint or a negative byte length.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.ThrowHelper">
+            <summary>
+            Helper methods for throwing exceptions
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ThrowHelper.ThrowIfNull(System.Object,System.String)">
+            <summary>
+            Throws an ArgumentNullException if the given value is null.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ThrowHelper.ThrowIfNull(System.Object)">
+            <summary>
+            Throws an ArgumentNullException if the given value is null.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.ThrowHelper.ThrowIfAnyNull``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Throws an ArgumentNullException if the given value or any element within it is null.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.UninitializedMessageException">
+            <summary>
+            TODO(jonskeet): Write summary text.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.UninitializedMessageException.AsInvalidProtocolBufferException">
+            <summary>
+            Converts this exception into an InvalidProtocolBufferException.
+            When a parsed message is missing required fields, this should be thrown
+            instead of UninitializedMessageException.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.UninitializedMessageException.BuildDescription(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Constructs the description string for a given list of missing fields.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.UninitializedMessageException.#ctor(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            For Lite exceptions that do not known how to enumerate missing fields
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.UninitializedMessageException.MissingFields">
+            <summary>
+            Returns a read-only list of human-readable names of
+            required fields missing from this message. Each name
+            is a full path to a field, e.g. "foo.bar[5].baz"
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.WireFormat">
+            <summary>
+            This class is used internally by the Protocol Buffer Library and generated
+            message implementations. It is public only for the sake of those generated
+            messages. Others should not use this class directly.
+            <para>
+            This class contains constants and helper functions useful for dealing with
+            the Protocol Buffer wire format.
+            </para>
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.WireFormat.GetTagWireType(System.UInt32)">
+            <summary>
+            Given a tag value, determines the wire type (lower 3 bits).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.WireFormat.GetTagFieldNumber(System.UInt32)">
+            <summary>
+            Given a tag value, determines the field number (the upper 29 bits).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.WireFormat.MakeTag(System.Int32,Google.ProtocolBuffers.WireFormat.WireType)">
+            <summary>
+            Makes a tag value given a field number and wire type.
+            TODO(jonskeet): Should we just have a Tag structure?
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.WireFormat.GetWireType(Google.ProtocolBuffers.Descriptors.FieldType)">
+            <summary>
+            Converts a field type to its wire type. Done with a switch for the sake
+            of speed - this is significantly faster than a dictionary lookup.
+            </summary>
+        </member>
+    </members>
+</doc>

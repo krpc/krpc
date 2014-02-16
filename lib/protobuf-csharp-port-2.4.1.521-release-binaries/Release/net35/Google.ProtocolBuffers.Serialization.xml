@@ -1,0 +1,1347 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.ProtocolBuffers.Serialization</name>
+    </assembly>
+    <members>
+        <member name="T:Google.ProtocolBuffers.FrameworkPortability">
+            <summary>
+            Class containing helpful workarounds for various platform compatibility
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Extensions">
+            <summary>
+            Extension methods for using serializers on instances of IMessageLite/IBuilderLite
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.ToJson(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Serializes the message to JSON text.  This is a trivial wrapper
+            around Serialization.JsonFormatWriter.WriteMessage.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.ToXml(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Serializes the message to XML text.  This is a trivial wrapper
+            around Serialization.XmlFormatWriter.WriteMessage.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.ToXml(Google.ProtocolBuffers.IMessageLite,System.String)">
+            <summary>
+            Serializes the message to XML text using the element name provided.
+            This is a trivial wrapper around Serialization.XmlFormatWriter.WriteMessage.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.WriteTo(Google.ProtocolBuffers.IMessageLite,Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions,System.String,System.IO.Stream)">
+            <summary>
+            Writes the message instance to the stream using the content type provided
+            </summary>
+            <param name="message">An instance of a message</param>
+            <param name="options">Options specific to writing this message and/or content type</param>
+            <param name="contentType">The mime type of the content to be written</param>
+            <param name="output">The stream to write the message to</param>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.MergeFromJson``1(``0,System.String)">
+            <summary>
+            Merges a JSON object into this builder and returns
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.MergeFromJson``1(``0,System.IO.TextReader)">
+            <summary>
+            Merges a JSON object into this builder and returns
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.MergeFromJson``1(``0,System.IO.TextReader,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges a JSON object into this builder using the extensions provided and returns
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.MergeFromXml``1(``0,System.Xml.XmlReader)">
+            <summary>
+            Merges an XML object into this builder and returns
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.MergeFromXml``1(``0,System.String,System.Xml.XmlReader)">
+            <summary>
+            Merges an XML object into this builder and returns
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.MergeFromXml``1(``0,System.String,System.Xml.XmlReader,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges an XML object into this builder using the extensions provided and returns
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.MergeFrom``1(``0,Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions,System.String,System.IO.Stream)">
+            <summary>
+            Merges the message from the input stream based on the contentType provided
+            </summary>
+            <typeparam name="TBuilder">A type derived from IBuilderLite</typeparam>
+            <param name="builder">An instance of a message builder</param>
+            <param name="options">Options specific to reading this message and/or content type</param>
+            <param name="contentType">The mime type of the input stream content</param>
+            <param name="input">The stream to read the message from</param>
+            <returns>The same builder instance that was supplied in the builder parameter</returns>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Extensions.HttpCallMethod(Google.ProtocolBuffers.IRpcServerStub,System.String,Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions,System.String,System.IO.Stream,System.String,System.IO.Stream)">
+            <summary>
+            Used to implement a service endpoint on an HTTP server.  This works with services generated with the
+            service_generator_type option set to IRPCDISPATCH.
+            </summary>
+            <param name="stub">The service execution stub</param>
+            <param name="methodName">The name of the method being invoked</param>
+            <param name="options">optional arguments for the format reader/writer</param>
+            <param name="contentType">The mime type for the input stream</param>
+            <param name="input">The input stream</param>
+            <param name="responseType">The mime type for the output stream</param>
+            <param name="output">The output stream</param>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader">
+            <summary>
+            Allows reading messages from a name/value dictionary
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.AbstractTextReader">
+            <summary>
+            Provides a base class for text-parsing readers
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.AbstractReader">
+            <summary>
+            Provides a base-class that provides some basic functionality for handling type dispatching
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.#ctor">
+            <summary> Constructs a new reader </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Merge``1(``0)">
+            <summary>
+            Merges the contents of stream into the provided message builder
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Merge``1(``0,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges the contents of stream into the provided message builder
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.PeekNext(System.String@)">
+            <summary>
+            Peeks at the next field in the input stream and returns what information is available.
+            </summary>
+            <remarks>
+            This may be called multiple times without actually reading the field.  Only after the field
+            is either read, or skipped, should PeekNext return a different value.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Skip">
+            <summary>
+            Causes the reader to skip past this field
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Read(System.Boolean@)">
+            <summary>
+            Returns true if it was able to read a Boolean from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Read(System.Int32@)">
+            <summary>
+            Returns true if it was able to read a Int32 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Read(System.UInt32@)">
+            <summary>
+            Returns true if it was able to read a UInt32 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Read(System.Int64@)">
+            <summary>
+            Returns true if it was able to read a Int64 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Read(System.UInt64@)">
+            <summary>
+            Returns true if it was able to read a UInt64 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Read(System.Single@)">
+            <summary>
+            Returns true if it was able to read a Single from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Read(System.Double@)">
+            <summary>
+            Returns true if it was able to read a Double from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Read(System.String@)">
+            <summary>
+            Returns true if it was able to read a String from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.Read(Google.ProtocolBuffers.ByteString@)">
+            <summary>
+            Returns true if it was able to read a ByteString from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ReadEnum(System.Object@)">
+            <summary>
+            returns true if it was able to read a single value into the value reference.  The value
+            stored may be of type System.String, System.Int32, or an IEnumLite from the IEnumLiteMap.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ReadMessage(Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges the input stream into the provided IBuilderLite 
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ReadMessageStart">
+            <summary>
+            Reads the root-message preamble specific to this formatter
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ReadMessageEnd">
+            <summary>
+            Reads the root-message close specific to this formatter
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ReadGroup(Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges the input stream into the provided IBuilderLite 
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ForeachArrayItem(System.String)">
+            <summary>
+            Cursors through the array elements and stops at the end of the array
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ReadMessageArray``1(System.String,System.Collections.Generic.ICollection{``0},Google.ProtocolBuffers.IMessageLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Reads an array of T messages
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ReadGroupArray``1(System.String,System.Collections.Generic.ICollection{``0},Google.ProtocolBuffers.IMessageLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Reads an array of T messages as a proto-buffer group
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ReadEnumArray(System.String,System.Collections.Generic.ICollection{System.Object})">
+            <summary>
+            Reads an array of System.Enum type T and adds them to the collection
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ReadArray``1(Google.ProtocolBuffers.Descriptors.FieldType,System.String,System.Collections.Generic.ICollection{``0})">
+            <summary>
+            Reads an array of T, where T is a primitive type defined by FieldType
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractReader.ReadField(Google.ProtocolBuffers.Descriptors.FieldType,System.Object@)">
+            <summary>
+            returns true if it was able to read a single primitive value of FieldType into the value reference
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.AbstractReader.MaxDepth">
+            <summary> Gets or sets the maximum recursion depth allowed </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.#ctor">
+            <summary> Constructs a new reader </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.ReadAsText(System.String@,System.Type)">
+            <summary>
+            Reads a typed field as a string
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.Read(System.String@)">
+            <summary>
+            Returns true if it was able to read a String from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.Read(System.Boolean@)">
+            <summary>
+            Returns true if it was able to read a Boolean from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.Read(System.Int32@)">
+            <summary>
+            Returns true if it was able to read a Int32 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.Read(System.UInt32@)">
+            <summary>
+            Returns true if it was able to read a UInt32 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.Read(System.Int64@)">
+            <summary>
+            Returns true if it was able to read a Int64 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.Read(System.UInt64@)">
+            <summary>
+            Returns true if it was able to read a UInt64 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.Read(System.Single@)">
+            <summary>
+            Returns true if it was able to read a Single from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.Read(System.Double@)">
+            <summary>
+            Returns true if it was able to read a Double from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.DecodeBytes(System.String)">
+            <summary>
+            Provides decoding of bytes read from the input stream
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.Read(Google.ProtocolBuffers.ByteString@)">
+            <summary>
+            Returns true if it was able to read a ByteString from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextReader.ReadEnum(System.Object@)">
+            <summary>
+            returns true if it was able to read a single value into the value reference.  The value
+            stored may be of type System.String, System.Int32, or an IEnumLite from the IEnumLiteMap.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.#ctor(System.IO.TextReader)">
+            <summary>
+            Creates a dictionary reader from an enumeration of KeyValuePair data, like an IDictionary
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.CreateInstance(System.IO.Stream)">
+            <summary>
+            Constructs a FormUrlEncodedReader to parse form data, or url query text into a message.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.CreateInstance(System.Byte[])">
+            <summary>
+            Constructs a FormUrlEncodedReader to parse form data, or url query text into a message.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.CreateInstance(System.String)">
+            <summary>
+            Constructs a FormUrlEncodedReader to parse form data, or url query text into a message.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.CreateInstance(System.IO.TextReader)">
+            <summary>
+            Constructs a FormUrlEncodedReader to parse form data, or url query text into a message.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.ReadMessageStart">
+            <summary>
+            No-op
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.ReadMessageEnd">
+            <summary>
+            No-op
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.Merge``1(``0,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges the contents of stream into the provided message builder
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.Skip">
+            <summary>
+            Causes the reader to skip past this field
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.PeekNext(System.String@)">
+            <summary>
+            Peeks at the next field in the input stream and returns what information is available.
+            </summary>
+            <remarks>
+            This may be called multiple times without actually reading the field.  Only after the field
+            is either read, or skipped, should PeekNext return a different value.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.ReadAsText(System.String@,System.Type)">
+            <summary>
+            Returns true if it was able to read a String from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.DecodeBytes(System.String)">
+            <summary>
+            It's unlikely this will work for anything but text data as bytes UTF8 are transformed to text and back to bytes
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.ReadGroup(Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Not Supported
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.FormUrlEncodedReader.ReadMessage(Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Not Supported
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.Http.MessageFormatFactory">
+            <summary>
+            Extensions and helpers to abstract the reading/writing of messages by a client-specified content type.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.MessageFormatFactory.CreateInputStream(Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions,System.String,System.IO.Stream)">
+            <summary>
+            Constructs an ICodedInputStream from the input stream based on the contentType provided
+            </summary>
+            <param name="options">Options specific to reading this message and/or content type</param>
+            <param name="contentType">The mime type of the input stream content</param>
+            <param name="input">The stream to read the message from</param>
+            <returns>The ICodedInputStream that can be given to the IBuilder.MergeFrom(...) method</returns>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.Http.MessageFormatFactory.CreateOutputStream(Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions,System.String,System.IO.Stream)">
+            <summary>
+            Writes the message instance to the stream using the content type provided
+            </summary>
+            <param name="options">Options specific to writing this message and/or content type</param>
+            <param name="contentType">The mime type of the content to be written</param>
+            <param name="output">The stream to write the message to</param>
+            <remarks> If you do not dispose of ICodedOutputStream some formats may yield incomplete output </remarks>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.Http.CodedInputBuilder">
+            <summary>
+            A delegate used to specify a method that constructs an ICodedInputStream from a .NET Stream.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.Http.CodedOutputBuilder">
+            <summary>
+            A delegate used to specify a method that constructs an ICodedOutputStream from a .NET Stream.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions">
+            <summary>
+            Defines control information for the various formatting used with HTTP services
+            </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.ContentTypeProtoBuffer">
+            <summary>The mime type for xml content</summary>
+            <remarks>Other valid xml mime types include: application/binary, application/x-protobuf</remarks>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.ContentTypeXml">
+            <summary>The mime type for xml content</summary>
+            <remarks>Other valid xml mime types include: text/xml</remarks>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.ContentTypeJson">
+            <summary>The mime type for json content</summary>
+            <remarks>
+            Other valid json mime types include: application/json, application/x-json, 
+            application/x-javascript, text/javascript, text/x-javascript, text/x-json, text/json
+            </remarks>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.ContentFormUrlEncoded">
+            <summary>The mime type for query strings and x-www-form-urlencoded content</summary>
+            <remarks>This mime type is input-only</remarks>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.MimeInputDefaults">
+            <summary>
+            Default mime-type handling for input
+            </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.MimeOutputDefaults">
+            <summary>
+            Default mime-type handling for output
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.MimeInputTypes">
+            <summary> Provides access to modify the mime-type input stream construction </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.MimeOutputTypes">
+            <summary> Provides access to modify the mime-type input stream construction </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.DefaultContentType">
+            <summary>
+            The default content type to use if the input type is null or empty.  If this
+            value is not supplied an ArgumentOutOfRangeException exception will be raised.
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.ExtensionRegistry">
+            <summary>
+            The extension registry to use when reading messages
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.XmlReaderRootElementName">
+            <summary>
+            The name of the xml root element when reading messages
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.XmlReaderOptions">
+            <summary>
+            Xml reader options
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.FormattedOutput">
+            <summary>
+            True to use formatted output including new-lines and default indentation
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.XmlWriterRootElementName">
+            <summary>
+            The name of the xml root element when writing messages
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.Http.MessageFormatOptions.XmlWriterOptions">
+            <summary>
+            Xml writer options
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.AbstractTextWriter">
+            <summary>
+            Provides a base class for text writers
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.AbstractWriter">
+            <summary>
+            Provides a base class for writers that performs some basic type dispatching
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.Flush">
+            <summary>
+            Completes any pending write operations
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.WriteMessage(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes the message to the the formatted stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.WriteMessageStart">
+            <summary>
+            Used to write any nessary root-message preamble. After this call you can call 
+            IMessageLite.MergeTo(...) and complete the message with a call to WriteMessageEnd().
+            These three calls are identical to just calling WriteMessage(message);
+            </summary>
+            <example>
+            AbstractWriter writer;
+            writer.WriteMessageStart();
+            message.WriteTo(writer);
+            writer.WriteMessageEnd();
+            // ... or, but not both ...
+            writer.WriteMessage(message);
+            </example>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.WriteMessageEnd">
+            <summary>
+            Used to complete a root-message previously started with a call to WriteMessageStart()
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.Write(System.String,System.Boolean)">
+            <summary>
+            Writes a Boolean value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.Write(System.String,System.Int32)">
+            <summary>
+            Writes a Int32 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.Write(System.String,System.UInt32)">
+            <summary>
+            Writes a UInt32 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.Write(System.String,System.Int64)">
+            <summary>
+            Writes a Int64 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.Write(System.String,System.UInt64)">
+            <summary>
+            Writes a UInt64 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.Write(System.String,System.Single)">
+            <summary>
+            Writes a Single value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.Write(System.String,System.Double)">
+            <summary>
+            Writes a Double value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.Write(System.String,System.String)">
+            <summary>
+            Writes a String value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.Write(System.String,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Writes a set of bytes
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.WriteMessageOrGroup(System.String,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes a message or group as a field
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.WriteEnum(System.String,System.Int32,System.String)">
+            <summary>
+            Writes a System.Enum by the numeric and textual value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.WriteField(Google.ProtocolBuffers.Descriptors.FieldType,System.String,System.Object)">
+            <summary>
+            Writes a field of the type determined by field.FieldType
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.WriteArray(Google.ProtocolBuffers.Descriptors.FieldType,System.String,System.Collections.IEnumerable)">
+            <summary>
+            Writes an array of field values
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.WriteUnknown(Google.ProtocolBuffers.WireFormat.WireType,System.Int32,System.UInt64)">
+            <summary>
+            Writes a numeric unknown field of wire type: Fixed32, Fixed64, or Variant
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractWriter.WriteUnknown(Google.ProtocolBuffers.WireFormat.WireType,System.Int32,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Writes an unknown field, Expect WireType of GroupStart or LengthPrefix
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.EncodeBytes(Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Encodes raw bytes to be written to the stream
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.WriteAsText(System.String,System.String,System.Object)">
+            <summary>
+            Writes a typed field as a text value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.Write(System.String,System.String)">
+            <summary>
+            Writes a String value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.Write(System.String,System.Boolean)">
+            <summary>
+            Writes a Boolean value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.Write(System.String,System.Int32)">
+            <summary>
+            Writes a Int32 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.Write(System.String,System.UInt32)">
+            <summary>
+            Writes a UInt32 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.Write(System.String,System.Int64)">
+            <summary>
+            Writes a Int64 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.Write(System.String,System.UInt64)">
+            <summary>
+            Writes a UInt64 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.Write(System.String,System.Single)">
+            <summary>
+            Writes a Single value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.Write(System.String,System.Double)">
+            <summary>
+            Writes a Double value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.Write(System.String,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Writes a set of bytes
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.AbstractTextWriter.WriteEnum(System.String,System.Int32,System.String)">
+            <summary>
+            Writes a System.Enum by the numeric and textual value
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.DictionaryReader">
+            <summary>
+            Allows reading messages from a name/value dictionary
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}})">
+            <summary>
+            Creates a dictionary reader from an enumeration of KeyValuePair data, like an IDictionary
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.ReadMessageStart">
+            <summary>
+            No-op
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.ReadMessageEnd">
+            <summary>
+            No-op
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Merge``1(``0,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges the contents of stream into the provided message builder
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.PeekNext(System.String@)">
+            <summary>
+            Peeks at the next field in the input stream and returns what information is available.
+            </summary>
+            <remarks>
+            This may be called multiple times without actually reading the field.  Only after the field
+            is either read, or skipped, should PeekNext return a different value.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Skip">
+            <summary>
+            Causes the reader to skip past this field
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Read(System.Boolean@)">
+            <summary>
+            Returns true if it was able to read a Boolean from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Read(System.Int32@)">
+            <summary>
+            Returns true if it was able to read a Int32 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Read(System.UInt32@)">
+            <summary>
+            Returns true if it was able to read a UInt32 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Read(System.Int64@)">
+            <summary>
+            Returns true if it was able to read a Int64 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Read(System.UInt64@)">
+            <summary>
+            Returns true if it was able to read a UInt64 from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Read(System.Single@)">
+            <summary>
+            Returns true if it was able to read a Single from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Read(System.Double@)">
+            <summary>
+            Returns true if it was able to read a Double from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Read(System.String@)">
+            <summary>
+            Returns true if it was able to read a String from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.Read(Google.ProtocolBuffers.ByteString@)">
+            <summary>
+            Returns true if it was able to read a ByteString from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.ReadEnum(System.Object@)">
+            <summary>
+            returns true if it was able to read a single value into the value reference.  The value
+            stored may be of type System.String, System.Int32, or an IEnumLite from the IEnumLiteMap.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryReader.ReadMessage(Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges the input stream into the provided IBuilderLite 
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.DictionaryWriter">
+            <summary>
+            Allows writing messages to a name/value dictionary
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.#ctor">
+            <summary>
+            Constructs a writer using a new dictionary
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.#ctor(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Constructs a writer using an existing dictionary
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.Create">
+            <summary>
+            Creates the dictionary instance for a child message.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.ToDictionary">
+            <summary>
+            Accesses the dictionary that is backing this writer
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.WriteMessage(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes the message to the the formatted stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.WriteMessageStart">
+            <summary>
+            No-op
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.WriteMessageEnd">
+            <summary>
+            No-op
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.Write(System.String,System.Boolean)">
+            <summary>
+            Writes a Boolean value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.Write(System.String,System.Int32)">
+            <summary>
+            Writes a Int32 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.Write(System.String,System.UInt32)">
+            <summary>
+            Writes a UInt32 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.Write(System.String,System.Int64)">
+            <summary>
+            Writes a Int64 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.Write(System.String,System.UInt64)">
+            <summary>
+            Writes a UInt64 value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.Write(System.String,System.Single)">
+            <summary>
+            Writes a Single value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.Write(System.String,System.Double)">
+            <summary>
+            Writes a Double value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.Write(System.String,System.String)">
+            <summary>
+            Writes a String value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.Write(System.String,Google.ProtocolBuffers.ByteString)">
+            <summary>
+            Writes a set of bytes
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.WriteMessageOrGroup(System.String,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes a message or group as a field
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.WriteEnum(System.String,System.Int32,System.String)">
+            <summary>
+            Writes a System.Enum by the numeric and textual value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.DictionaryWriter.WriteArray(Google.ProtocolBuffers.Descriptors.FieldType,System.String,System.Collections.IEnumerable)">
+            <summary>
+            Writes an array of field values
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.JsonFormatReader">
+            <summary>
+            JsonFormatReader is used to parse Json into a message or an array of messages
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.CreateInstance(System.IO.Stream)">
+            <summary>
+            Constructs a JsonFormatReader to parse Json into a message, this method does not use text encoding, all bytes MUST
+            represent ASCII character values.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.CreateInstance(System.Byte[])">
+            <summary>
+            Constructs a JsonFormatReader to parse Json into a message, this method does not use text encoding, all bytes MUST
+            represent ASCII character values.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.CreateInstance(System.String)">
+            <summary>
+            Constructs a JsonFormatReader to parse Json into a message
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.CreateInstance(System.IO.TextReader)">
+            <summary>
+            Constructs a JsonFormatReader to parse Json into a message
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.#ctor(Google.ProtocolBuffers.Serialization.JsonCursor)">
+            <summary>
+            Constructs a JsonFormatReader to parse Json into a message
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.#ctor(System.IO.TextReader)">
+            <summary>
+            Constructs a JsonFormatReader to parse Json into a message
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.EnumerateArray">
+            <summary>
+            Returns an enumerator that is used to cursor over an array of messages
+            </summary>
+            <remarks>
+            This is generally used when receiving an array of messages rather than a single root message
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.ReadMessageStart">
+            <summary>
+            Reads the root-message preamble specific to this formatter
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.ReadMessageEnd">
+            <summary>
+            Reads the root-message close specific to this formatter
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.Merge``1(``0,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges the contents of stream into the provided message builder
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.Skip">
+            <summary>
+            Causes the reader to skip past this field
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.PeekNext(System.String@)">
+            <summary>
+            Peeks at the next field in the input stream and returns what information is available.
+            </summary>
+            <remarks>
+            This may be called multiple times without actually reading the field.  Only after the field
+            is either read, or skipped, should PeekNext return a different value.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.ReadAsText(System.String@,System.Type)">
+            <summary>
+            Returns true if it was able to read a String from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.Read(Google.ProtocolBuffers.ByteString@)">
+            <summary>
+            Returns true if it was able to read a ByteString from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.ForeachArrayItem(System.String)">
+            <summary>
+            Cursors through the array elements and stops at the end of the array
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatReader.ReadMessage(Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges the input stream into the provided IBuilderLite 
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.JsonFormatReader.IsArrayMessage">
+            <summary>
+            Returns true if the reader is currently on an array element
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.JsonFormatWriter">
+            <summary>
+            JsonFormatWriter is a .NET 2.0 friendly json formatter for proto buffer messages.  For .NET 3.5
+            you may also use the XmlFormatWriter with an XmlWriter created by the
+            <see cref="!:System.Runtime.Serialization.Json.JsonReaderWriterFactory">JsonReaderWriterFactory</see>.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.#ctor">
+            <summary>
+            Constructs a JsonFormatWriter, use the ToString() member to extract the final Json on completion.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.CreateInstance">
+            <summary>
+            Constructs a JsonFormatWriter, use ToString() to extract the final output
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.CreateInstance(System.IO.TextWriter)">
+            <summary>
+            Constructs a JsonFormatWriter to output to the given text writer
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.CreateInstance(System.IO.Stream)">
+            <summary>
+            Constructs a JsonFormatWriter to output to the given stream
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.WriteToOutput(System.String,System.Object[])">
+            <summary> Write to the output stream </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.WriteToOutput(System.String)">
+            <summary> Write to the output stream </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.WriteToOutput(System.Char)">
+            <summary> Write to the output stream </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.WriteToOutput(System.Char[],System.Int32,System.Int32)">
+            <summary> Write to the output stream </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.Formatted">
+            <summary> Sets the output formatting to use Environment.NewLine with 4-character indentions </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.WriteAsText(System.String,System.String,System.Object)">
+            <summary>
+            Writes a String value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.Write(System.String,System.Double)">
+            <summary>
+            Writes a Double value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.Write(System.String,System.Single)">
+            <summary>
+            Writes a Single value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.WriteArray(Google.ProtocolBuffers.Descriptors.FieldType,System.String,System.Collections.IEnumerable)">
+            <summary>
+            Writes an array of field values
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.WriteMessageOrGroup(System.String,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes a message
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.WriteMessage(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes the message to the the formatted stream.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.WriteMessageStart">
+            <summary>
+            Used to write the root-message preamble, in json this is the left-curly brace '{'.
+            After this call you can call IMessageLite.MergeTo(...) and complete the message with
+            a call to WriteMessageEnd().
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.WriteMessageEnd">
+            <summary>
+            Used to complete a root-message previously started with a call to WriteMessageStart()
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.StartArray">
+            <summary>
+            Used to write an array of messages as the output rather than a single message.
+            </summary>
+            <example>
+            <code>
+            using(writer.StartArray())
+                foreach(IMessageLite m in messages)
+                    writer.WriteMessage(m);
+            </code>
+            </example>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.JsonFormatWriter.NewLine">
+            <summary> Gets or sets the characters to use for the new-line, default = empty </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.JsonFormatWriter.Indent">
+            <summary> Gets or sets the text to use for indenting, default = empty </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.JsonFormatWriter.Whitespace">
+            <summary> Gets or sets the whitespace to use to separate the text, default = empty </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.JsonTextWriter.ToString">
+            <summary>
+            Returns the output of TextWriter.ToString() where TextWriter is the ctor argument.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.JsonFormatWriter.JsonArray">
+            <summary>
+            Used in streaming arrays of objects to the writer
+            </summary>
+            <example>
+            <code>
+            using(writer.StartArray())
+                foreach(IMessageLite m in messages)
+                    writer.WriteMessage(m);
+            </code>
+            </example>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonFormatWriter.JsonArray.EndArray">
+            <summary>
+            Causes the end of the array character to be written.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.JsonCursor">
+            <summary>
+            JSon Tokenizer used by JsonFormatReader
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonCursor.Peek">
+            <summary>Returns the next character without actually 'reading' it</summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.JsonCursor.Read">
+            <summary>Reads the next character in the input</summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.RecursionLimitExceededException">
+            <summary>
+            The exception raised when a recursion limit is reached while parsing input.
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.XmlFormatReader">
+            <summary>
+            Parses a proto buffer from an XML document or fragment.  .NET 3.5 users may also
+            use this class to process Json by setting the options to support Json and providing
+            an XmlReader obtained from <see cref="!:System.Runtime.Serialization.Json.JsonReaderWriterFactory"/>.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.CreateInstance(System.Byte[])">
+            <summary>
+            Constructs the XmlFormatReader using the stream provided as the xml
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.CreateInstance(System.IO.Stream)">
+            <summary>
+            Constructs the XmlFormatReader using the stream provided as the xml
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.CreateInstance(System.String)">
+            <summary>
+            Constructs the XmlFormatReader using the string provided as the xml to be read
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.CreateInstance(System.IO.TextReader)">
+            <summary>
+            Constructs the XmlFormatReader using the xml in the TextReader
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.CreateInstance(System.Xml.XmlReader)">
+            <summary>
+            Constructs the XmlFormatReader with the XmlReader
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.#ctor(System.Xml.XmlReader)">
+            <summary>
+            Constructs the XmlFormatReader with the XmlReader and options
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.SetOptions(Google.ProtocolBuffers.Serialization.XmlReaderOptions)">
+            <summary>
+            Sets the options to use while generating the XML
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.ReadMessageStart">
+            <summary>
+            Reads the root-message preamble specific to this formatter
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.ReadMessageStart(System.String)">
+            <summary>
+            Reads the root-message preamble specific to this formatter
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.ReadMessageEnd">
+            <summary>
+            Reads the root-message close specific to this formatter, MUST be called
+            on the reader obtained from ReadMessageStart(string element).
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.Merge``1(``0,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merge the provided builder as an element named <see cref="P:Google.ProtocolBuffers.Serialization.XmlFormatReader.RootElementName"/> in the current context
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.Merge``1(System.String,``0)">
+            <summary>
+            Merge the provided builder as an element of the current context
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.Merge``1(System.String,``0,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merge the provided builder as an element of the current context
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.PeekNext(System.String@)">
+            <summary>
+            Peeks at the next field in the input stream and returns what information is available.
+            </summary>
+            <remarks>
+            This may be called multiple times without actually reading the field.  Only after the field
+            is either read, or skipped, should PeekNext return a different value.
+            </remarks>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.Skip">
+            <summary>
+            Causes the reader to skip past this field
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.ReadEnum(System.Object@)">
+            <summary>
+            returns true if it was able to read a single value into the value reference.  The value
+            stored may be of type System.String, System.Int32, or an IEnumLite from the IEnumLiteMap.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.ReadAsText(System.String@,System.Type)">
+            <summary>
+            Returns true if it was able to read a String from the input
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.ReadMessage(Google.ProtocolBuffers.IBuilderLite,Google.ProtocolBuffers.ExtensionRegistry)">
+            <summary>
+            Merges the input stream into the provided IBuilderLite 
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatReader.ForeachArrayItem(System.String)">
+            <summary>
+            Cursors through the array elements and stops at the end of the array
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.XmlFormatReader.Options">
+            <summary>
+            Gets or sets the options to use when reading the xml
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.XmlFormatReader.RootElementName">
+            <summary>
+            Gets or sets the default element name to use when using the Merge&lt;TBuilder>()
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.XmlFormatWriter">
+            <summary>
+            Writes a proto buffer to an XML document or fragment.  .NET 3.5 users may also
+            use this class to produce Json by setting the options to support Json and providing
+            an XmlWriter obtained from <see cref="!:System.Runtime.Serialization.Json.JsonReaderWriterFactory"/>.
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.CreateInstance(System.IO.TextWriter)">
+            <summary>
+            Constructs the XmlFormatWriter to write to the given TextWriter
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.CreateInstance(System.IO.Stream)">
+            <summary>
+            Constructs the XmlFormatWriter to write to the given stream
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.CreateInstance(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Constructs the XmlFormatWriter to write to the given stream
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.CreateInstance(System.Xml.XmlWriter)">
+            <summary>
+            Constructs the XmlFormatWriter to write to the given XmlWriter
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.SetOptions(Google.ProtocolBuffers.Serialization.XmlWriterOptions)">
+            <summary>
+            Sets the options to use while generating the XML
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.Flush">
+            <summary>
+            Completes any pending write operations
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.WriteMessageStart">
+            <summary>
+            Used to write the root-message preamble, in xml this is open element for RootElementName,
+            by default "&lt;root&gt;". After this call you can call IMessageLite.MergeTo(...) and 
+            complete the message with a call to WriteMessageEnd().
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.WriteMessageStart(System.String)">
+            <summary>
+            Used to write the root-message preamble, in xml this is open element for elementName. 
+            After this call you can call IMessageLite.MergeTo(...) and  complete the message with 
+            a call to WriteMessageEnd().
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.WriteMessageEnd">
+            <summary>
+            Used to complete a root-message previously started with a call to WriteMessageStart()
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.WriteMessage(Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes a message as an element using the name defined in <see cref="P:Google.ProtocolBuffers.Serialization.XmlFormatWriter.RootElementName"/>
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.WriteMessage(System.String,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes a message as an element with the given name
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.WriteMessageOrGroup(System.String,Google.ProtocolBuffers.IMessageLite)">
+            <summary>
+            Writes a message
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.WriteAsText(System.String,System.String,System.Object)">
+            <summary>
+            Writes a String value
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.WriteArray(Google.ProtocolBuffers.Descriptors.FieldType,System.String,System.Collections.IEnumerable)">
+            <summary>
+            Writes an array of field values
+            </summary>
+        </member>
+        <member name="M:Google.ProtocolBuffers.Serialization.XmlFormatWriter.WriteEnum(System.String,System.Int32,System.String)">
+            <summary>
+            Writes a System.Enum by the numeric and textual value
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.XmlFormatWriter.RootElementName">
+            <summary>
+            Gets or sets the default element name to use when using the Merge&lt;TBuilder>()
+            </summary>
+        </member>
+        <member name="P:Google.ProtocolBuffers.Serialization.XmlFormatWriter.Options">
+            <summary>
+            Gets or sets the options to use while generating the XML
+            </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.XmlReaderOptions">
+            <summary>
+            Options available for the xml reader output
+            </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.XmlReaderOptions.None">
+            <summary> Simple xml formatting with no attributes </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.XmlReaderOptions.ReadNestedArrays">
+            <summary> Requires that arrays items are nested in an &lt;item> element </summary>
+        </member>
+        <member name="T:Google.ProtocolBuffers.Serialization.XmlWriterOptions">
+            <summary>
+            Options available for the xml writer output
+            </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.XmlWriterOptions.None">
+            <summary> Simple xml formatting with no attributes </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.XmlWriterOptions.OutputEnumValues">
+            <summary> Writes the 'value' attribute on all enumerations with the numeric identifier </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.XmlWriterOptions.OutputNestedArrays">
+            <summary> Embeds array items into child &lt;item> elements </summary>
+        </member>
+        <member name="F:Google.ProtocolBuffers.Serialization.XmlWriterOptions.OutputJsonTypes">
+            <summary> Outputs the 'type' attribute for compatibility with the <see cref="!:System.Runtime.Serialization.Json.JsonReaderWriterFactory">JsonReaderWriterFactory</see> </summary>
+            <remarks> This option must, by nessessity, also enable NestedArrayItems </remarks>
+        </member>
+    </members>
+</doc>
