@@ -47,11 +47,7 @@ install: dist
 	mkdir -p $(KRPC_DIR)
 	cp -r dist/* $(KRPC_DIR)/
 
-# Run release copy in KSP with testing tools
-
-ksp: dist
-	rm -rf $(KRPC_DIR)
-	mkdir -p $(KRPC_DIR)
+ksp: install
 	cp -r dist/* src/TestingTools/bin/Release/TestingTools.dll $(KRPC_DIR)/
 	$(KSP_DIR)/KSP.x86_64 &
 	tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
