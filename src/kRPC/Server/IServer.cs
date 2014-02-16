@@ -3,13 +3,16 @@ using System.Collections.Generic;
 
 namespace KRPC.Server
 {
-    interface IServer<In,Out>
+    interface IServer
     {
         void Start ();
         void Stop ();
         void Update ();
         bool Running { get; }
+    }
 
+    interface IServer<In,Out> : IServer
+    {
         IEnumerable<IClient<In,Out>> Clients { get; }
 
         event EventHandler<ClientRequestingConnectionArgs<In,Out>> OnClientRequestingConnection;

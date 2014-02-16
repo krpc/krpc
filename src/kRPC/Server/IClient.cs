@@ -2,12 +2,16 @@
 
 namespace KRPC.Server
 {
-    interface IClient<In,Out> : IEquatable<IClient<In,Out>>
+    interface IClient
     {
-        IStream<In,Out> Stream { get; }
         string Name { get; }
         string Address { get; }
         bool Connected { get; }
         void Close ();
+    }
+
+    interface IClient<In,Out> : IEquatable<IClient<In,Out>>, IClient
+    {
+        IStream<In,Out> Stream { get; }
     }
 }
