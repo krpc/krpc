@@ -23,6 +23,8 @@ namespace KRPC.UI
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
 
+        public bool Visible { get; set; }
+
         public void Init(RPCServer server) {
             this.server = server;
         }
@@ -51,7 +53,9 @@ namespace KRPC.UI
 
         private void DrawGUI() {
             InitStyles ();
-            windowPosition = GUILayout.Window (windowId, windowPosition, DrawWindow, "kRPC Server", windowStyle);
+            if (Visible) {
+                windowPosition = GUILayout.Window (windowId, windowPosition, DrawWindow, "kRPC Server", windowStyle);
+            }
         }
 
         private void DrawWindow(int windowID) {

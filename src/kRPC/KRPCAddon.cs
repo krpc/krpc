@@ -22,6 +22,7 @@ namespace KRPC
     {
         private static RPCServer server = null;
         private static TCPServer tcpServer = null;
+        private IButton toolbarButton;
         private MainWindow mainWindow;
         private ClientConnectingDialog clientConnectingDialog;
         private KRPCConfiguration config;
@@ -56,12 +57,22 @@ namespace KRPC
             mainWindow.OnStopServerPressed += StopServer;
             mainWindow.OnStopServerPressed += (s, e) => clientConnectingDialog.Cancel();
             server.OnClientRequestingConnection += clientConnectingDialog.Show;
+
+            // TODO: save main window position and visible attribute
+            toolbarButton = ToolbarManager.Instance.add("kRPC", "ToggleMainWindow");
+            toolbarButton.TexturePath = "kRPC/icon-offline";
+            toolbarButton.ToolTip = "kRPC Server";
+            toolbarButton.Visibility = new GameScenesVisibility(GameScenes.FLIGHT);
+            toolbarButton.OnClick += (e) => {
+                mainWindow.Visible = !mainWindow.Visible;
+            };
         }
 
         public void OnDestroy ()
         {
             if (server.Running)
                 server.Stop ();
+            toolbarButton.Destroy ();
         }
 
         private void StartServer (object sender, EventArgs args)
@@ -78,6 +89,12 @@ namespace KRPC
 
         public void Update ()
         {
+            // TODO: add server start/stop events to IServer and attach these updates to the handlers
+            if (server.Running)
+                toolbarButton.TexturePath = "kRPC/icon-online";
+            else
+                toolbarButton.TexturePath = "kRPC/icon-offline";
+
             if (server.Running) {
                 // TODO: is there a better way to limit the number of requests handled per update?
                 int threshold = 20; // milliseconds

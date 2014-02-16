@@ -16,6 +16,7 @@ all: dist
 	mdtool build -t:Build -c:Release src/$*/$*.csproj
 
 build: protobuf $(foreach project,$(CSHARP_PROJECTS),$(project).dll)
+	make -C src/kRPC/icons all
 	find . -name "*.pyc" -exec rm -rf {} \;
 
 dist: build
@@ -24,6 +25,7 @@ dist: build
 	cp -r \
 		LICENSE.txt \
 		src/kRPC/bin/Release/krpc.dll \
+		src/kRPC/bin/*.png \
 		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.dll \
 		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll \
 		python \

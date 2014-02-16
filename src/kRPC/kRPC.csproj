@@ -83,6 +83,7 @@
     <Compile Include="KRPCAddon.cs" />
     <Compile Include="KRPCConfiguration.cs" />
     <Compile Include="Server\IClientEventArgs.cs" />
+    <Compile Include="UI\Toolbar.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -105,5 +106,8 @@
     <None Include="Schema\RPC.proto" />
     <None Include="Schema\Control.proto" />
     <None Include="Schema\Orbit.proto" />
+    <None Include="icons\icon-offline.svg" />
+    <None Include="icons\icon-online.svg" />
+    <None Include="icons\Makefile" />
   </ItemGroup>
 </Project>
