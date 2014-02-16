@@ -8,6 +8,8 @@ A work-in-progress.
 
 ### Compiling the Plugin
 
+Note: these instructions are for compiling the server plugin for KSP. See below `python/README.md` for instruction on building the python client library.
+
 #### Using the Makefile
 
 1. Install the required dependencies. Libraries required by the plugin are already included in `lib` and the C# Protocol Buffers compiler is already included in `tools`, but you will need to install the .proto to .protobin Protocol Buffers compiler.
