@@ -91,6 +91,7 @@ namespace KRPC
                             IClient<Request,Response> client = requestScheduler.Next ();
                             if (client.Stream.DataAvailable) {
                                 Request request = client.Stream.Read ();
+                                mainWindow.SawClientActivity (client);
                                 Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Method + ")");
 
                                 // Handle the request
