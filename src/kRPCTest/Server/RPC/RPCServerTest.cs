@@ -38,11 +38,9 @@ namespace KRPCTest.Server
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
             var byteServer = mockByteServer.Object;
-            var mockByteClient = new Mock<IClient<byte,byte>> ();
-            mockByteClient.Setup (x => x.Stream).Returns (stream);
-            var byteClient = mockByteClient.Object;
+            var byteClient = new TestClient (stream);
 
-            var server = new RPCServer (byteServer, 0.1);
+            var server = new RPCServer (byteServer);
             server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
@@ -66,11 +64,9 @@ namespace KRPCTest.Server
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
             var byteServer = mockByteServer.Object;
-            var mockByteClient = new Mock<IClient<byte,byte>> ();
-            mockByteClient.Setup (x => x.Stream).Returns (stream);
-            var byteClient = mockByteClient.Object;
+            var byteClient = new TestClient (stream);
 
-            var server = new RPCServer (byteServer, 0.1);
+            var server = new RPCServer (byteServer);
             server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
@@ -99,7 +95,7 @@ namespace KRPCTest.Server
             mockByteClient.Setup (x => x.Stream).Returns (stream);
             var byteClient = mockByteClient.Object;
 
-            var server = new RPCServer (byteServer, 0.1);
+            var server = new RPCServer (byteServer);
             server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
@@ -124,7 +120,7 @@ namespace KRPCTest.Server
             mockByteClient.Setup (x => x.Stream).Returns (stream);
             var byteClient = mockByteClient.Object;
 
-            var server = new RPCServer (byteServer, 0.1);
+            var server = new RPCServer (byteServer);
             server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
@@ -149,7 +145,7 @@ namespace KRPCTest.Server
             mockByteClient.Setup (x => x.Stream).Returns (stream);
             var byteClient = mockByteClient.Object;
 
-            var server = new RPCServer (byteServer, 0.1);
+            var server = new RPCServer (byteServer);
             server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
@@ -181,7 +177,7 @@ namespace KRPCTest.Server
             mockByteClient.Setup (x => x.Stream).Returns (stream);
             var byteClient = mockByteClient.Object;
 
-            var server = new RPCServer (byteServer, 0.1);
+            var server = new RPCServer (byteServer);
             server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 
@@ -205,7 +201,7 @@ namespace KRPCTest.Server
             mockByteClient.Setup (x => x.Stream).Returns (stream);
             var byteClient = mockByteClient.Object;
 
-            var server = new RPCServer (byteServer, 0.1);
+            var server = new RPCServer (byteServer);
             server.OnClientRequestingConnection += (sender, e) => e.Allow();
             server.Start ();
 

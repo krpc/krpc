@@ -17,16 +17,12 @@ namespace KRPC.UI
         private bool hasInitStyles = false;
         private GUIStyle windowStyle, labelStyle;
         private RPCServer server;
-        private ClientConnectingDialog clientConnectingDialog;
 
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
 
         public void Init(RPCServer server) {
             this.server = server;
-            clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog>();
-            server.OnClientRequestingConnection += clientConnectingDialog.Show;
-            OnStopServerPressed += (object sender, EventArgs e) => clientConnectingDialog.Cancel();
         }
 
         public void Awake() {

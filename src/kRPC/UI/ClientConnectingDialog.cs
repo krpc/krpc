@@ -11,7 +11,11 @@ namespace KRPC.UI
     sealed class ClientConnectingDialog : MonoBehaviour
     {
         private volatile bool show = false;
+        private volatile bool decided = false;
         private ClientRequestingConnectionArgs<Request,Response> args;
+
+        public void Init() {
+        }
 
         public void Awake () {
             RenderingManager.AddToPostDrawQueue(5, DrawGUI);
@@ -19,17 +23,35 @@ namespace KRPC.UI
 
         public void Show (object sender, ClientRequestingConnectionArgs<Request,Response> args)
         {
-            Logger.WriteLine("Asking player to allow/deny connection attempt...");
-            show = true;
-            this.args = args;
-            //TODO: This spin lock is horrible. But it works...
-            while (show) {
-                System.Threading.Thread.Sleep(50);
+            // Already open, and no decision, so no updates necessary
+            if (show && !decided)
+                return;
+
+            // Not open, so open a dialog
+            if (show == false) {
+                Logger.WriteLine ("Asking player to allow/deny connection attempt...");
+                show = true;
+                decided = false;
+                this.args = args;
+                return;
+            }
+
+            // Open, and we have a decision, so send the decision and close the dialog
+            if (show && decided && this.args.Client == args.Client) {
+                if (this.args.ShouldAllow)
+                    args.Allow ();
+                else
+                    args.Deny ();
+                show = false;
+                decided = false;
+                args = null;
             }
         }
 
         public void Cancel () {
             show = false;
+            decided = false;
+            args = null;
         }
 
         private void DrawGUI () {
@@ -37,11 +59,11 @@ namespace KRPC.UI
                 DialogOption[] options = {
                     new DialogOption ("Allow", () => {
                         args.Allow ();
-                        show = false;
+                        decided = true;
                     }),
                     new DialogOption ("Deny", () => {
                         args.Deny ();
-                        show = false;
+                        decided = true;
                     })
                 };
                 string message;

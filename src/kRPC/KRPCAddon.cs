@@ -23,8 +23,9 @@ namespace KRPC
         private static RPCServer server = null;
         private static TCPServer tcpServer = null;
         private MainWindow mainWindow;
+        private ClientConnectingDialog clientConnectingDialog;
         private KRPCConfiguration config;
-        private IScheduler<IClient<Request,Response>> requestScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
+        private IScheduler<IClient<Request,Response>> requestScheduler;
 
         public void Awake ()
         {
@@ -41,12 +42,20 @@ namespace KRPC
             config = new KRPCConfiguration ();
             tcpServer = new TCPServer (config.Address, config.Port);
             server = new RPCServer (tcpServer);
+            requestScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
             server.OnClientConnected += (sender, e) => requestScheduler.Add(e.Client);
             server.OnClientDisconnected += (sender, e) => requestScheduler.Remove(e.Client);
+
             mainWindow = gameObject.AddComponent<MainWindow>();
+            mainWindow.Init (server);
+
+            clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog>();
+            clientConnectingDialog.Init ();
+
             mainWindow.OnStartServerPressed += StartServer;
             mainWindow.OnStopServerPressed += StopServer;
-            mainWindow.Init(server);
+            mainWindow.OnStopServerPressed += (s, e) => clientConnectingDialog.Cancel();
+            server.OnClientRequestingConnection += clientConnectingDialog.Show;
         }
 
         public void OnDestroy ()
@@ -74,7 +83,7 @@ namespace KRPC
                 int threshold = 20; // milliseconds
                 server.Update ();
 
-                if (server.Clients.Count () > 0) {
+                if (server.Clients.Count () > 0 && !requestScheduler.Empty) {
                     Stopwatch timer = Stopwatch.StartNew ();
                     try {
                         do {
@@ -105,8 +114,6 @@ namespace KRPC
                                 else
                                     Logger.WriteLine ("Sent response to client " + client.Address);
                             }
-
-
                         } while (timer.ElapsedMilliseconds < threshold);
                     } catch (NoRequestException) {
                     }

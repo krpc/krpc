@@ -55,6 +55,7 @@ namespace KRPC.Server.Net
         /// Clients requesting a connection. Must be locked before accessing.
         /// </summary>
         private List<TCPClient> pendingClients = new List<TCPClient>();
+        private Object pendingClientsLock = new object();
 
         /// <summary>
         /// Create a TCP server. After Start() is called, the server will listen for
@@ -120,26 +121,34 @@ namespace KRPC.Server.Net
             }
 
             // Process pending clients
-            lock (pendingClients) {
+            lock (pendingClientsLock) {
+                var stillPendingClients = new List<TCPClient> ();
                 foreach (var client in pendingClients) {
                     // Trigger OnClientRequestingConnection events to verify the connection
                     var attempt = new ClientRequestingConnectionArgs<byte,byte> (client);
                     if (OnClientRequestingConnection != null)
                         OnClientRequestingConnection (this, attempt);
+
+                    // Deny the connection
                     if (attempt.ShouldDeny) {
-                        // Connection failed
                         Logger.WriteLine ("TCPServer: client connection denied (" + client.Address + ")");
                         DisconnectClient (client, noEvent: true);
-                    } else {
-                        // Connection was successful, update the server state
+                    }
+
+                    // Allow the connection
+                    if (attempt.ShouldAllow) {
                         Logger.WriteLine ("TCPServer: client connection accepted (" + client.Address + ")");
                         clients.Add (client);
                         if (OnClientConnected != null)
                             OnClientConnected (this, new ClientConnectedArgs<byte,byte> (client));
                     }
+
+                    // Still pending, will either be denied or allowed on a subsequent called to Update
+                    if (attempt.StillPending) {
+                        stillPendingClients.Add (client);
+                    }
                 }
-                // All pending clients handled - so clear the list
-                pendingClients.Clear ();
+                pendingClients = stillPendingClients;
             }
         }
 
@@ -183,7 +192,7 @@ namespace KRPC.Server.Net
                     TcpClient client = tcpListener.AcceptTcpClient();
                     Logger.WriteLine("TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
                     // Add to pending clients
-                    lock (pendingClients) {
+                    lock (pendingClientsLock) {
                         pendingClients.Add(new TCPClient(nextClientUuid, client));
                     }
                     nextClientUuid++;

@@ -14,8 +14,7 @@ namespace KRPC.Server.RPC
     {
         private const double defaultTimeout = 0.1;
 
-        private byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
-        private const int headerLength = 8;
+        private byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
         private const int identifierLength = 32;
 
         public event EventHandler<ClientRequestingConnectionArgs<Request,Response>> OnClientRequestingConnection;
@@ -23,34 +22,15 @@ namespace KRPC.Server.RPC
         public event EventHandler<ClientDisconnectedArgs<Request,Response>> OnClientDisconnected;
 
         private IServer<byte,byte> server;
-        private double timeout;
         private Dictionary<IClient<byte,byte>,RPCClient> clients = new Dictionary<IClient<byte, byte>, RPCClient> ();
+        private Dictionary<IClient<byte,byte>,RPCClient> pendingClients = new Dictionary<IClient<byte, byte>, RPCClient> ();
 
-        public RPCServer (IServer<byte,byte> server, double timeout = defaultTimeout)
+        public RPCServer (IServer<byte,byte> server)
         {
             this.server = server;
-            this.timeout = timeout;
-            server.OnClientRequestingConnection += ClientRequestingConnection;
-            // Forward events from underlying server
-            server.OnClientConnected += (s, e) => HandleClientConnected (s, e);
-            server.OnClientDisconnected += (s, e) => HandleClientDisconnected (s, e);
-        }
-
-        private void HandleClientConnected(object sender, IClientEventArgs<byte,byte> args) {
-            if (OnClientConnected != null) {
-                var rpcClient = clients [args.Client];
-                var attempt = new ClientConnectedArgs<Request,Response> (rpcClient);
-                OnClientConnected(this, attempt);
-            }
-        }
-
-        private void HandleClientDisconnected(object sender, IClientEventArgs<byte,byte> args) {
-            if (OnClientDisconnected != null) {
-                var rpcClient = clients [args.Client];
-                var attempt = new ClientDisconnectedArgs<Request,Response> (rpcClient);
-                OnClientDisconnected(this, attempt);
-                clients.Remove (args.Client);
-            }
+            server.OnClientRequestingConnection += HandleClientRequestingConnection;
+            server.OnClientConnected += HandleClientConnected;
+            server.OnClientDisconnected += HandleClientDisconnected;
         }
 
         public IServer<byte,byte> Server {
@@ -84,27 +64,57 @@ namespace KRPC.Server.RPC
             }
         }
 
+        private void HandleClientConnected(object sender, IClientEventArgs<byte,byte> args) {
+            // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
+            if (OnClientConnected != null) {
+                var client = clients [args.Client];
+                OnClientConnected(this, new ClientConnectedArgs<Request,Response> (client));
+            }
+        }
+
+        private void HandleClientDisconnected(object sender, IClientEventArgs<byte,byte> args) {
+            var client = clients [args.Client];
+            clients.Remove (args.Client);
+            if (OnClientDisconnected != null) {
+                OnClientDisconnected(this, new ClientDisconnectedArgs<Request,Response> (client));
+            }
+        }
+
         /// <summary>
         /// When a client requests a connection, check and parse the hello message,
         /// then trigger RPCServer.OnClientRequestingConnection to get response of delegates
         /// </summary>
-        public void ClientRequestingConnection(object sender, ClientRequestingConnectionArgs<byte,byte> args) {
-            string name = CheckHelloMessage (args.Client);
-            if (name != null) {
-                var rpcClient = new RPCClient (name, args.Client);
-                var attempt = new ClientRequestingConnectionArgs<Request,Response> (rpcClient);
-                if (OnClientRequestingConnection != null) {
-                    OnClientRequestingConnection (this, attempt);
-                    if (attempt.ShouldAllow) {
-                        args.Allow ();
-                        clients[args.Client] = rpcClient;
-                    }
-                    if (attempt.ShouldDeny) {
-                        args.Deny ();
-                    }
+        public void HandleClientRequestingConnection(object sender, ClientRequestingConnectionArgs<byte,byte> args) {
+            if (!pendingClients.ContainsKey (args.Client)) {
+                // A new client connection attempt. Verify the hello message.
+                string name = CheckHelloMessage (args.Client);
+                if (name != null) {
+                    // Hello message OK, add it to the pending clients
+                    var client = new RPCClient (name, args.Client);
+                    pendingClients [args.Client] = client;
+                } else {
+                    // Deny the connection, don't add it to pending clients
+                    args.Deny ();
+                    return;
                 }
-            } else {
-                args.Deny ();
+            }
+
+            // Client is in pending clients and passed hello message verification.
+            // Invoke connection request events.
+            if (OnClientRequestingConnection != null) {
+                var client = pendingClients [args.Client];
+                var attempt = new ClientRequestingConnectionArgs<Request,Response> (client);
+                OnClientRequestingConnection (this, attempt);
+                if (attempt.ShouldAllow) {
+                    args.Allow ();
+                    clients [args.Client] = client;
+                }
+                if (attempt.ShouldDeny) {
+                    args.Deny ();
+                }
+                if (!attempt.StillPending) {
+                    pendingClients.Remove (args.Client);
+                }
             }
         }
 
@@ -115,17 +125,17 @@ namespace KRPC.Server.RPC
         /// </summary>
         public string CheckHelloMessage(IClient<byte,byte> client) {
             Logger.WriteLine("RPCServer: Waiting for hello message from client...");
-            byte[] buffer = new byte[headerLength + identifierLength];
+            byte[] buffer = new byte[expectedHeader.Length + identifierLength];
             int read = ReadHelloMessage (client.Stream, buffer);
 
             // Failed to read enough bytes in sufficient time, so kill the connection
-            if (read != headerLength + identifierLength) {
+            if (read != buffer.Length) {
                 Logger.WriteLine("RPCServer: Client connection abandoned. Timed out waiting for hello message.");
                 return null;
             }
 
             // Extract bytes for header and identifier
-            byte[] header = new byte[headerLength];
+            byte[] header = new byte[expectedHeader.Length];
             byte[] identifier = new byte[identifierLength];
             Array.Copy (buffer, header, header.Length);
             Array.Copy (buffer, header.Length, identifier, 0, identifier.Length);
@@ -154,12 +164,12 @@ namespace KRPC.Server.RPC
         /// Read a fixed length 40-byte message from the client with the given timeout
         /// </summary>
         private int ReadHelloMessage(IStream<byte,byte> stream, byte[] buffer) {
-            // FIXME: this waiting happens in Update(), so it freezes the game while waiting. Do it in a separate thread.
+            // FIXME: Add better support for delayed receipt of hello message
             int offset = 0;
-            for (int i = 0; i < (int)(timeout * 1000) / 50; i++) {
+            for (int i = 0; i < 5; i++) {
                 if (stream.DataAvailable) {
                     offset += stream.Read (buffer, offset);
-                    if (offset == headerLength + identifierLength)
+                    if (offset == expectedHeader.Length + identifierLength)
                         break;
                 }
                 System.Threading.Thread.Sleep(50);
@@ -168,7 +178,7 @@ namespace KRPC.Server.RPC
         }
 
         private bool CheckHelloMessageHeader(byte[] receivedHeader) {
-            return receivedHeader.SequenceEqual (header);
+            return receivedHeader.SequenceEqual (expectedHeader);
         }
 
         /// <summary>
