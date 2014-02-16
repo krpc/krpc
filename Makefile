@@ -12,7 +12,6 @@ PROTOS := $(foreach proto,$(PROTOS),src/kRPC/Schema/$(proto).proto)
 all: dist
 
 %.dll:
-	mdtool build -t:Clean -c:Release src/$*/$*.csproj
 	mdtool build -t:Build -c:Release src/$*/$*.csproj
 
 build: protobuf $(foreach project,$(CSHARP_PROJECTS),$(project).dll)
