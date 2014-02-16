@@ -11,18 +11,24 @@ class Client(object):
     def __init__(self):
         self._conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._conn.connect((TCP_IP, TCP_PORT))
-	self._conn.send(bytearray([0x48,0x45,0x4C,0x4C,0x4F,0xBA,0xDA,0x55]))
+        self._conn.send(bytearray([0x48,0x45,0x4C,0x4C,0x4F,0xBA,0xDA,0x55]))
+        self._conn.send(bytearray([0x00]*32))
 
     def sendRequest(self, request):
         """ Send an rpc.Request """
+        from google.protobuf.internal import encoder
         data = request.SerializeToString()
+        delimiter = encoder._VarintBytes(len(data))
+        self._conn.send(delimiter)
         self._conn.send(data)
 
     def getResponse(self):
         """ Receive and return an rpc.Response """
+        import google.protobuf.internal.decoder as decoder
         data = self._conn.recv(BUFFER_SIZE)
+        (size, position) = decoder._DecodeVarint(data, 0)
         response = rpc.Response()
-        response.ParseFromString(data)
+        response.ParseFromString(data[position:position+size])
         return response
 
 class Service(object):
