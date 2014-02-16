@@ -1,4 +1,4 @@
-krpc
+kRPC
 ====
 
 Remote Procedure Call server for Kerbal Space Program
