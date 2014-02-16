@@ -8,7 +8,7 @@ A work-in-progress.
 
 ### Compiling the Plugin
 
-Note: these instructions are for compiling the server plugin for KSP. See below `python/README.md` for instruction on building the python client library.
+Note: these instructions are for compiling the server plugin for KSP. See [python/README.md](python/README.md) for instruction on building the python client library.
 
 #### Using the Makefile
 
