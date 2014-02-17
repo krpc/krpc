@@ -32,7 +32,6 @@ class Service(BaseService):
     """ A service, created from information received by querying the server """
     def __init__(self, client, service):
         """ Create a service from a KRPC.Service object """
-        Logger.write('Registering service', service.name)
         super(Service, self).__init__(client, service.name)
         self._name = service.name
         for method in service.methods:
@@ -43,7 +42,6 @@ class Service(BaseService):
         # TODO: make the callback validate the parameter type
         has_parameter_type = method.HasField('parameter_type')
         has_return_type = method.HasField('return_type')
-        Logger.write('Registering method', method.name, '(', method.parameter_type, '->', method.return_type, ')')
         if (not has_parameter_type) and (not has_return_type):
             fn = lambda: self._invoke(method.name)
         elif has_parameter_type and (not has_return_type):
@@ -63,8 +61,6 @@ class Client(object):
                 self.__dict__[service.name] = Service(self, service)
 
     def _invoke(self, service, method, parameter=None, return_type=None, **kwargs):
-        Logger.write('Invoke', service+'.'+method, '(', type(parameter), '->', return_type, ')')
-
         request = proto.KRPC.Request()
         request.service = service
         request.method = method
@@ -75,18 +71,14 @@ class Client(object):
         response = self._receive_response()
 
         if response.HasField('error'):
-            Logger.write('Error returned')
             raise RuntimeError(response.error)
 
         result = None
 
         if return_type != None:
-            Logger.write('Got return value')
             package,message_type = return_type.split('.')
             result = proto.__dict__[package].__dict__[message_type]()
             result.ParseFromString(response.response)
-        else:
-            Logger.write('No return value')
 
         return result
 
