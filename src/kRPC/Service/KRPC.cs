@@ -8,6 +8,14 @@ namespace KRPC.Service
     public class KRPC
     {
         [KRPCMethod]
+        public static Schema.KRPC.Status GetStatus ()
+        {
+            var status = Schema.KRPC.Status.CreateBuilder ();
+            status.Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            return status.Build ();
+        }
+
+        [KRPCMethod]
         public static Schema.KRPC.Services GetServices ()
         {
             var services = Schema.KRPC.Services.CreateBuilder ();

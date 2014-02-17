@@ -26,3 +26,7 @@ message Method {
   optional string parameter_type = 2;
   optional string return_type = 3;
 }
+
+message Status {
+  required string version = 1;
+}

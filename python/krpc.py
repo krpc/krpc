@@ -24,6 +24,10 @@ class KRPCService(BaseService):
     def __init__(self, client):
         super(KRPCService, self).__init__(client, 'KRPC')
 
+    def GetStatus(self):
+        """ Get status message from the server, including the version number  """
+        return self._invoke('GetStatus', return_type='KRPC.Status')
+
     def GetServices(self):
         """ Get available services and methods """
         return self._invoke('GetServices', return_type='KRPC.Services')

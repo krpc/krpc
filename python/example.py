@@ -4,6 +4,7 @@ import krpc
 import time
 
 client = krpc.connect(name='Example script');
+print 'Connected to server, version', client.KRPC.GetStatus().version
 
 control = krpc.Control(client)
 orbit = krpc.Orbit(client)
