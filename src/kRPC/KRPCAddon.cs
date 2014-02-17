@@ -59,13 +59,15 @@ namespace KRPC
             server.OnClientRequestingConnection += clientConnectingDialog.Show;
 
             // TODO: save main window position and visible attribute
-            toolbarButton = ToolbarManager.Instance.add("kRPC", "ToggleMainWindow");
-            toolbarButton.TexturePath = "kRPC/icon-offline";
-            toolbarButton.ToolTip = "kRPC Server";
-            toolbarButton.Visibility = new GameScenesVisibility(GameScenes.FLIGHT);
-            toolbarButton.OnClick += (e) => {
-                mainWindow.Visible = !mainWindow.Visible;
-            };
+            if (ToolbarManager.ToolbarAvailable) {
+                toolbarButton = ToolbarManager.Instance.add ("kRPC", "ToggleMainWindow");
+                toolbarButton.TexturePath = "kRPC/icon-offline";
+                toolbarButton.ToolTip = "kRPC Server";
+                toolbarButton.Visibility = new GameScenesVisibility (GameScenes.FLIGHT);
+                toolbarButton.OnClick += (e) => {
+                    mainWindow.Visible = !mainWindow.Visible;
+                };
+            }
         }
 
         public void OnDestroy ()
