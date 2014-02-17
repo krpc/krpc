@@ -4,7 +4,7 @@ using UnityEngine;
 using KRPC.Server;
 using KRPC.Server.Net;
 using KRPC.Utils;
-using KRPC.Schema.RPC;
+using KRPC.Schema.KRPC;
 
 namespace KRPC.UI
 {

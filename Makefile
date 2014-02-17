@@ -1,14 +1,13 @@
 KSP_DIR := "../Kerbal Space Program"
 KRPC_DIR := $(KSP_DIR)/GameData/kRPC
 
-CSHARP_PROJECTS := kRPC kRPCTest TestingTools
+CSHARP_PROJECTS := kRPC kRPCServices kRPCTest TestingTools
 CSHARP_PROJECT_DIRS := $(foreach project,$(CSHARP_PROJECTS),src/$(project))
 CSHARP_BIN_DIRS := $(foreach project,$(CSHARP_PROJECT_DIRS),$(project)/obj) $(foreach project,$(CSHARP_PROJECT_DIRS),$(project)/bin)
 
 PROTOC := protoc
 CSHARP_PROTOGEN := "tools/ProtoGen.exe"
-PROTOS := RPC Control Orbit
-PROTOS := $(foreach proto,$(PROTOS),src/kRPC/Schema/$(proto).proto)
+PROTOS := src/kRPC/Schema/KRPC.proto src/kRPCServices/Schema/Test.proto
 
 all: dist
 
@@ -25,6 +24,7 @@ dist: build
 	cp -r \
 		LICENSE.txt \
 		src/kRPC/bin/Release/krpc.dll \
+		src/kRPCServices/bin/Release/krpc-services.dll \
 		src/kRPC/bin/*.png \
 		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.dll \
 		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll \
@@ -58,23 +58,27 @@ ksp: install
 
 protobuf: protobuf-csharp protobuf-python
 
-python/proto/%.py:
-	rm -f $(@:.py=.pyc)
-	mkdir -p python/proto
-	cd src/kRPC/Schema; protoc $*.proto --python_out=../../../python/proto
+protobuf-csharp: $(PROTOS) $(PROTOS:.proto=.cs)
+
+protobuf-python: $(PROTOS) $(PROTOS:.proto=.py)
+	echo "" > python/proto/__init__.py
 
 %.protobin:
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
 
-src/kRPC/Schema/%.cs: src/kRPC/Schema/%.protobin
+%.py:
+	rm -f $*.pyc
+	mkdir -p python/proto
+	cp $*.proto python/proto/$(notdir $*.proto)
+	$(PROTOC) python/proto/$(notdir $*.proto) --python_out=.
+	mv python/proto/$(notdir $*_pb2.py) python/proto/$(notdir $*.py)
+	rm python/proto/$(notdir $*.proto)
+
+%.cs: %.protobin
+	# TODO: put .cs proto files in different namespaces?
 	mono $(CSHARP_PROTOGEN) \
-		src/kRPC/Schema/$*.protobin -namespace=KRPC.Schema.$* \
-		-umbrella_classname=$* -output_directory=src/kRPC/Schema
-
-protobuf-csharp: $(PROTOS) $(PROTOS:.proto=.cs)
-
-protobuf-python: $(PROTOS) $(foreach proto,$(notdir $(PROTOS:.proto=.py)),python/proto/$(proto))
-	echo "" > python/proto/__init__.py
+		$*.protobin -namespace=KRPC.Schema.$(basename $(notdir $@)) \
+		-umbrella_classname=$(basename $(notdir $@)) -output_directory=$(dir $@)
 
 protobuf-clean:
 	rm -rf $(PROTOS:proto=cs) $(PROTOS:proto=protobin) python/proto

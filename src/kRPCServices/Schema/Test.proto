@@ -1,0 +1,5 @@
+package Test;
+
+message Echo {
+  required string data = 1;
+}

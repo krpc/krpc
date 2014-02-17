@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Linq;
 using System.Text;
 using Google.ProtocolBuffers;
-using KRPC.Schema.RPC;
+using KRPC.Schema.KRPC;
 using KRPC.Utils;
 
 namespace KRPC.Server.RPC

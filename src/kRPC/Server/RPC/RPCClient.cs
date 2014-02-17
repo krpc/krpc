@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
-using KRPC.Schema.RPC;
+using KRPC.Schema.KRPC;
 
 namespace KRPC.Server.RPC
 {

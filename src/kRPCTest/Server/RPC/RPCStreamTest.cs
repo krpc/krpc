@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using KRPC.Server.RPC;
-using KRPC.Schema.RPC;
+using KRPC.Schema.KRPC;
 
 namespace KRPCTest.Server.RPC
 {
@@ -30,8 +30,7 @@ namespace KRPCTest.Server.RPC
 
             // Create a response object and get the binary representation of it
             var responseBuilder = Response.CreateBuilder ();
-            responseBuilder.Error = true;
-            responseBuilder.ErrorMessage = "SomeErrorMessage";
+            responseBuilder.Error = "SomeErrorMessage";
             responseBuilder.Time = 42;
             expectedResponse = responseBuilder.Build ();
             using (var stream = new MemoryStream ()) {

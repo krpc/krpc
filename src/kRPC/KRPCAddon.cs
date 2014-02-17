@@ -11,7 +11,7 @@ using KRPC.Server;
 using KRPC.Server.Net;
 using KRPC.Server.RPC;
 using KRPC.Service;
-using KRPC.Schema.RPC;
+using KRPC.Schema.KRPC;
 using KRPC.Utils;
 using KRPC.UI;
 
@@ -114,11 +114,10 @@ namespace KRPC
                                 // Handle the request
                                 Response.Builder response;
                                 try {
-                                    response = Services.HandleRequest (Assembly.GetExecutingAssembly (), "KRPC.Service", request);
+                                    response = Service.Services.HandleRequest (request);
                                 } catch (Exception e) {
                                     response = Response.CreateBuilder ();
-                                    response.Error = true;
-                                    response.ErrorMessage = e.ToString ();
+                                    response.Error = e.ToString ();
                                     Logger.WriteLine (e.ToString ());
                                 }
 
@@ -127,8 +126,8 @@ namespace KRPC
                                 var builtResponse = response.Build ();
                                 //TODO: handle partial response exception
                                 client.Stream.Write (builtResponse);
-                                if (response.Error)
-                                    Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.ErrorMessage + ")");
+                                if (response.HasError)
+                                    Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")");
                                 else
                                     Logger.WriteLine ("Sent response to client " + client.Address);
                             }

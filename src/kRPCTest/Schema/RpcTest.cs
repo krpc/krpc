@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using KRPC.Schema.RPC;
+using KRPC.Schema.KRPC;
 using Google.ProtocolBuffers;
 
 namespace KRPCTest.Schema

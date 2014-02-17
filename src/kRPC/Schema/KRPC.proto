@@ -1,0 +1,28 @@
+package KRPC;
+
+message Request {
+  required string service = 1;
+  required string method = 2;
+  optional bytes request = 3;
+}
+
+message Response {
+  required double time = 1;
+  optional string error = 2;
+  optional bytes response = 3;
+}
+
+message Services {
+  repeated Service services = 1;
+}
+
+message Service {
+  required string name = 1;
+  repeated Method methods = 2;
+}
+
+message Method {
+  required string name = 1;
+  optional string parameter_type = 2;
+  optional string return_type = 3;
+}

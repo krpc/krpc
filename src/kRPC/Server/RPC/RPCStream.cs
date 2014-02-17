@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Google.ProtocolBuffers;
-using KRPC.Schema.RPC;
+using KRPC.Schema.KRPC;
 using KRPC.Server.Net;
 
 namespace KRPC.Server.RPC

@@ -51,16 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Service\Control.cs" />
-    <Compile Include="Service\Orbit.cs" />
     <Compile Include="Service\Services.cs" />
     <Compile Include="Service\NoSuchServiceException.cs" />
     <Compile Include="Service\NoSuchServiceMethodException.cs" />
     <Compile Include="Service\KRPCMethod.cs" />
     <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Schema\Control.cs" />
-    <Compile Include="Schema\Orbit.cs" />
-    <Compile Include="Schema\RPC.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IClient.cs" />
     <Compile Include="Server\ClientConnectedArgs.cs" />
@@ -84,6 +79,10 @@
     <Compile Include="KRPCConfiguration.cs" />
     <Compile Include="Server\IClientEventArgs.cs" />
     <Compile Include="UI\Toolbar.cs" />
+    <Compile Include="Service\KRPC.cs" />
+    <Compile Include="Schema\KRPC.cs" />
+    <Compile Include="Service\KRPCService.cs" />
+    <Compile Include="Utils\Reflection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -103,11 +102,9 @@
     <Folder Include="Server\RPC\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Schema\RPC.proto" />
-    <None Include="Schema\Control.proto" />
-    <None Include="Schema\Orbit.proto" />
     <None Include="icons\icon-offline.svg" />
     <None Include="icons\icon-online.svg" />
     <None Include="icons\Makefile" />
+    <None Include="Schema\KRPC.proto" />
   </ItemGroup>
 </Project>

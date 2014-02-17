@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingTools", "TestingTool
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BB331316-F7B7-49F4-8CAA-9147ED95D8A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kRPCServices", "kRPCServices\kRPCServices.csproj", "{690C8D5A-B41F-44C4-99B9-B6A3D190447B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,14 @@ Global
 		{3582BF17-7FD0-44B7-843D-916AE296280B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3582BF17-7FD0-44B7-843D-916AE296280B}.Release|x86.ActiveCfg = Release|Any CPU
 		{3582BF17-7FD0-44B7-843D-916AE296280B}.Release|x86.Build.0 = Release|Any CPU
+		{690C8D5A-B41F-44C4-99B9-B6A3D190447B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{690C8D5A-B41F-44C4-99B9-B6A3D190447B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{690C8D5A-B41F-44C4-99B9-B6A3D190447B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{690C8D5A-B41F-44C4-99B9-B6A3D190447B}.Debug|x86.Build.0 = Debug|Any CPU
+		{690C8D5A-B41F-44C4-99B9-B6A3D190447B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{690C8D5A-B41F-44C4-99B9-B6A3D190447B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{690C8D5A-B41F-44C4-99B9-B6A3D190447B}.Release|x86.ActiveCfg = Release|Any CPU
+		{690C8D5A-B41F-44C4-99B9-B6A3D190447B}.Release|x86.Build.0 = Release|Any CPU
 		{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}.Debug|x86.ActiveCfg = Debug|Any CPU

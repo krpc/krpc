@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Moq;
 using KRPC.Server;
 using KRPC.Server.RPC;
-using KRPC.Schema.RPC;
+using KRPC.Schema.KRPC;
 
 namespace KRPCTest.Server
 {

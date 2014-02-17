@@ -4,6 +4,7 @@ using KRPC.Service;
 
 namespace KRPCTest.Service
 {
+    [KRPCService]
     public class TestService
     {
         public static ITestService service;
@@ -19,19 +20,19 @@ namespace KRPCTest.Service
         }
 
         [KRPCMethod]
-        public static void MethodArgsNoReturn (ByteString data)
+        public static void MethodArgsNoReturn (KRPC.Schema.KRPC.Response data)
         {
             service.MethodArgsNoReturn (data);
         }
 
         [KRPCMethod]
-        public static IMessage MethodNoArgsReturns ()
+        public static KRPC.Schema.KRPC.Response MethodNoArgsReturns ()
         {
             return service.MethodNoArgsReturns ();
         }
 
         [KRPCMethod]
-        public static IMessage MethodArgsReturns (ByteString data)
+        public static KRPC.Schema.KRPC.Response MethodArgsReturns (KRPC.Schema.KRPC.Response data)
         {
             return service.MethodArgsReturns (data);
         }

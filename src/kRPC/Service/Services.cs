@@ -1,47 +1,81 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using Google.ProtocolBuffers;
-using KRPC.Schema.RPC;
+using KRPC.Schema.KRPC;
+using KRPC.Utils;
 
 namespace KRPC.Service
 {
     class Services
     {
-        public static Response.Builder HandleRequest (Assembly assembly, string ns, Request request)
+        //TODO: determine the assembly from the namespace
+        public static Response.Builder HandleRequest (Request request)
         {
-            var serviceType = GetServiceType (assembly, ns + "." + request.Service);
+            Logger.WriteLine("Handling client request");
+            // Get the service method
+            var serviceType = GetServiceType (request.Service);
             MethodInfo handler = GetServiceMethod(serviceType, request.Method);
 
-            object[] parameters = { request.Request_ };
-            if (handler.GetParameters().Length == 0)
-                parameters = null;
+            // Get the optional parameter
+            object parameter = null;
+            if (handler.GetParameters().Length == 1) {
+                Type type = handler.GetParameters () [0].ParameterType;
+                Logger.WriteLine("Decoding parameter");
+                // TODO: check the type is an IMessage
+                MethodInfo createBuilder = type.GetMethod ("CreateBuilder", new Type[] {});
+                IBuilder parameterBuilder = (IBuilder) createBuilder.Invoke (null, null);
+                parameter = parameterBuilder.WeakMergeFrom (request.Request_).WeakBuild ();
+                Logger.WriteLine("Successfully decoded parameter");
+            }
+            // TODO: check if there are more parameter - this isn't allowed
 
             // Invoke the handler
+            object[] parameters = { };
+            if (parameter != null)
+                parameters = new object[] { parameter };
+            Logger.WriteLine("Invoking handler");
             object result = handler.Invoke (null, parameters);
+            Logger.WriteLine("Handler returned successfully");
 
-            // Process the result
+            // Build the response
+            var responseBuilder = Response.CreateBuilder();
+
+            // Process the optional result
             if (result != null) {
+                Logger.WriteLine("Processing result");
                 byte[] resultBytes;
                 using (MemoryStream stream = new MemoryStream ()) {
                     ((IMessage)result).WriteTo (stream);
                     resultBytes = stream.ToArray ();
                 }
-                return Response.CreateBuilder ()
-                    .SetResponse_ (ByteString.CopyFrom (resultBytes))
-                    .SetError (false);
+                Logger.WriteLine("Result processed successfully");
+                responseBuilder.Response_ = ByteString.CopyFrom (resultBytes);
             }
-            return Response.CreateBuilder()
-                .SetError(false);
+
+            return responseBuilder;
         }
 
-        private static Type GetServiceType(Assembly assembly, string name) {
-            Type serviceType = assembly.GetType (name);
-            if (serviceType == null)
+        private static List<Type> services;
+
+        /// <summary>
+        /// Get a the C# type of a service by name.
+        /// </summary>
+        private static Type GetServiceType(string name) {
+            if (services == null)
+                services = Reflection.GetTypesWith<KRPCService> ().ToList ();
+            try {
+                return services.Where (x => x.Name == name).ToList ().First ();
+            } catch (InvalidOperationException) {
                 throw new NoSuchServiceException (name);
-            return serviceType;
+            }
         }
 
+        /// <summary>
+        /// Get a the C# method information of a service method by name.
+        /// </summary>
         private static MethodInfo GetServiceMethod(Type service, string name) {
             MethodInfo method = service.GetMethod (name, BindingFlags.Public | BindingFlags.Static);
             if (method == null)
