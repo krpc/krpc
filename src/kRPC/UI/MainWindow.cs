@@ -30,6 +30,7 @@ namespace KRPC.UI
         }
 
         public void Awake() {
+            Visible = true;
             RenderingManager.AddToPostDrawQueue(5, DrawGUI);
         }
 
