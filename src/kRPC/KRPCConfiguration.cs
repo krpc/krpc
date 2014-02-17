@@ -1,20 +1,38 @@
 ﻿using System;
 using System.Net;
+using UnityEngine;
 using KRPC.Utils;
 
 namespace KRPC
 {
     sealed class KRPCConfiguration : ConfigurationStorage
     {
-        [Persistent]
-        private int port = 50000;
-        [Persistent]
-        private string address = "127.0.0.1";
+        [Persistent] private int port = 50000;
+        [Persistent] private string address = "127.0.0.1";
+        [Persistent] private bool mainWindowVisible = true;
+        [Persistent] private RectStorage mainWindowPosition = new RectStorage ();
 
-        public IPAddress Address { get; private set; }
+        public IPAddress Address {
+            get;
+            private set;
+        }
 
-        public int Port {
+        public int Port
+        {
             get { return port; }
+            set { port = value; }
+        }
+
+        public bool MainWindowVisible
+        {
+            get { return mainWindowVisible; }
+            set { mainWindowVisible = value; }
+        }
+
+        public Rect MainWindowPosition
+        {
+            get { return mainWindowPosition.AsRect (); }
+            set { mainWindowPosition = RectStorage.FromRect (value); }
         }
 
         public KRPCConfiguration (string filePath):

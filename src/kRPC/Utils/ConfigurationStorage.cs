@@ -5,7 +5,7 @@ using KSP;
 
 namespace KRPC.Utils
 {
-    abstract class ConfigurationStorage : IPersistenceLoad, IPersistenceSave
+    abstract class ConfigurationStorage : ConfigurationStorageNode
     {
         private string filePath;
 
@@ -19,6 +19,9 @@ namespace KRPC.Utils
             var dir = Path.GetDirectoryName (assembly).Replace ("\\", "/");
             this.filePath = dir + "/" + filePath;
             Logger.WriteLine ("Configuration file path " + this.filePath);
+        }
+
+        private ConfigurationStorage() {
         }
 
         /// <summary>
@@ -35,21 +38,13 @@ namespace KRPC.Utils
         /// Save settings to the underlying storage
         /// </summary>
         public void Save() {
+            Logger.WriteLine ("Saving configuration to " + this.filePath);
             ConfigNode node = this.AsConfigNode;
             ConfigNode clsNode = new ConfigNode(this.GetType().Name);
             clsNode.AddNode(node);
             clsNode.Save(filePath);
+            Logger.WriteLine (clsNode.ToString ());
         }
-
-        /// <summary>
-        /// Override to provide custom behaviour before saving.
-        /// </summary>
-        protected virtual void BeforeSave() { }
-
-        /// <summary>
-        /// Override to provide custom behaviour after loading.
-        /// </summary>
-        protected virtual void AfterLoad() { }
 
         private bool FileExists {
             get { return File.Exists (filePath); }
@@ -60,14 +55,6 @@ namespace KRPC.Utils
                 ConfigNode node = new ConfigNode (this.GetType().Name);
                 return ConfigNode.CreateConfigFromObject (this, node);
             }
-        }
-
-        void IPersistenceLoad.PersistenceLoad () {
-            BeforeSave ();
-        }
-
-        void IPersistenceSave.PersistenceSave () {
-            AfterLoad ();
         }
     }
 }

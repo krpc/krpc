@@ -47,18 +47,43 @@ namespace KRPC
             server.OnClientConnected += (sender, e) => requestScheduler.Add(e.Client);
             server.OnClientDisconnected += (sender, e) => requestScheduler.Remove(e.Client);
 
+            // Create main window
             mainWindow = gameObject.AddComponent<MainWindow>();
-            mainWindow.Init (server);
+            mainWindow.Server = server;
+            mainWindow.Visible = config.MainWindowVisible;
+            mainWindow.Position = config.MainWindowPosition;
 
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog>();
             clientConnectingDialog.Init ();
 
-            mainWindow.OnStartServerPressed += StartServer;
-            mainWindow.OnStopServerPressed += StopServer;
-            mainWindow.OnStopServerPressed += (s, e) => clientConnectingDialog.Cancel();
+            // Main window events
+            mainWindow.OnStartServerPressed += (s, e) => {
+                tcpServer.Port = config.Port;
+                tcpServer.Address = config.Address;
+                server.Start ();
+            };
+            mainWindow.OnStopServerPressed += (s, e) => {
+                server.Stop ();
+                clientConnectingDialog.Cancel();
+            };
+            mainWindow.OnHide += (s, e) => {
+                config.MainWindowVisible = false;
+                config.Save ();
+            };
+            mainWindow.OnShow += (s, e) => {
+                config.MainWindowVisible = true;
+                config.Save ();
+            };
+            mainWindow.OnMoved += (s, e) => {
+                var window = s as MainWindow;
+                config.MainWindowPosition = window.Position;
+                config.Save ();
+            };
+
+            // Server events
             server.OnClientRequestingConnection += clientConnectingDialog.Show;
 
-            // TODO: save main window position and visible attribute
+            // Toolbar API
             if (ToolbarManager.ToolbarAvailable) {
                 toolbarButton = ToolbarManager.Instance.add ("kRPC", "ToggleMainWindow");
                 toolbarButton.TexturePath = "kRPC/icon-offline";
@@ -67,6 +92,9 @@ namespace KRPC
                 toolbarButton.OnClick += (e) => {
                     mainWindow.Visible = !mainWindow.Visible;
                 };
+            } else {
+                // If there is no toolbar button a hidden window can't be shown, so force it to be displayed
+                mainWindow.Visible = true;
             }
         }
 
@@ -75,18 +103,8 @@ namespace KRPC
             if (server.Running)
                 server.Stop ();
             toolbarButton.Destroy ();
-        }
-
-        private void StartServer (object sender, EventArgs args)
-        {
-            tcpServer.Port = config.Port;
-            tcpServer.Address = config.Address;
-            server.Start ();
-        }
-
-        private void StopServer (object sender, EventArgs args)
-        {
-            server.Stop ();
+            UnityEngine.Object.Destroy (mainWindow);
+            UnityEngine.Object.Destroy (clientConnectingDialog);
         }
 
         public void Update ()

@@ -12,60 +12,39 @@ using KRPC.Server.Net;
 
 namespace KRPC.UI
 {
-    sealed class MainWindow : MonoBehaviour
+    sealed class MainWindow : Window
     {
-        private int windowId = UnityEngine.Random.Range(1000, 2000000);
-        private Rect windowPosition = new Rect();
-        private bool hasInitStyles = false;
-        private GUIStyle windowStyle, labelStyle, activityStyle;
-        private RPCServer server;
+        private GUIStyle labelStyle, activityStyle;
+        public RPCServer Server { private get; set; }
         private Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
+
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
 
-        public bool Visible { get; set; }
+        protected override void Init() {
+            Style.fixedWidth = 250f;
 
-        public void Init(RPCServer server) {
-            this.server = server;
+            labelStyle = new GUIStyle(UnityEngine.GUI.skin.label);
+            labelStyle.stretchWidth = true;
+
+            activityStyle = new GUIStyle (HighLogic.Skin.toggle);
+            activityStyle.active = HighLogic.Skin.toggle.normal;
+            activityStyle.focused = HighLogic.Skin.toggle.normal;
+            activityStyle.hover = HighLogic.Skin.toggle.normal;
+            activityStyle.border = new RectOffset (0, 0, 0, 0);
+            activityStyle.padding = new RectOffset (6, 0, 6, 0);
+            activityStyle.overflow = new RectOffset (0, 0, 0, 0);
+            activityStyle.imagePosition = ImagePosition.ImageOnly;
         }
 
-        public void Awake() {
-            Visible = true;
-            RenderingManager.AddToPostDrawQueue(5, DrawGUI);
-        }
-
-        private void InitStyles() {
-            if (!hasInitStyles) {
-                windowStyle = new GUIStyle(UnityEngine.GUI.skin.window);
-                windowStyle.fixedWidth = 250f;
-                labelStyle = new GUIStyle(UnityEngine.GUI.skin.label);
-                labelStyle.stretchWidth = true;
-                activityStyle = new GUIStyle (HighLogic.Skin.toggle);
-                activityStyle.active = HighLogic.Skin.toggle.normal;
-                activityStyle.focused = HighLogic.Skin.toggle.normal;
-                activityStyle.hover = HighLogic.Skin.toggle.normal;
-                activityStyle.border = new RectOffset (0, 0, 0, 0);
-                activityStyle.padding = new RectOffset (6, 0, 6, 0);
-                activityStyle.overflow = new RectOffset (0, 0, 0, 0);
-                activityStyle.imagePosition = ImagePosition.ImageOnly;
-                hasInitStyles = true;
-            }
-        }
-
-        private void DrawGUI() {
-            InitStyles ();
-            if (Visible) {
-                windowPosition = GUILayout.Window (windowId, windowPosition, DrawWindow, "kRPC Server", windowStyle);
-            }
-        }
-
-        private void DrawWindow(int windowID) {
+        protected override void Draw ()
+        {
             GUILayout.BeginVertical();
-            GUILayout.Label ("Server status: " + (server.Running ? "Online" : "Offline"), labelStyle);
-            if (server.Running) {
+            GUILayout.Label ("Server status: " + (Server.Running ? "Online" : "Offline"), labelStyle);
+            if (Server.Running) {
                 if (GUILayout.Button ("Stop server"))
                     OnStopServerPressed (this, EventArgs.Empty);
-                TCPServer tcpServer = (TCPServer)server.Server;
+                TCPServer tcpServer = (TCPServer)Server.Server;
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label ("Server address:", labelStyle);
@@ -82,11 +61,11 @@ namespace KRPC.UI
                 GUILayout.Label (AllowedClientsString(tcpServer.Address), labelStyle);
                 GUILayout.EndHorizontal();
 
-                if (server.Clients.Count () == 0) {
+                if (Server.Clients.Count () == 0) {
                     GUILayout.Label ("No clients connected", labelStyle);
                 } else {
                     GUILayout.Label ("Clients connected:", labelStyle);
-                    foreach (var client in server.Clients) {
+                    foreach (var client in Server.Clients) {
                         string name = (client.Name == "") ? "<unknown>" : client.Name;
                         GUILayout.BeginHorizontal ();
                         GUILayout.Toggle (IsClientActive(client), "", activityStyle);
@@ -99,7 +78,7 @@ namespace KRPC.UI
                     OnStartServerPressed (this, EventArgs.Empty);
             }
             GUILayout.EndVertical ();
-            UnityEngine.GUI.DragWindow ();
+            GUI.DragWindow ();
         }
 
         public void SawClientActivity (IClient client)

@@ -84,6 +84,10 @@
     <Compile Include="Service\KRPCService.cs" />
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\ConfigurationStorage.cs" />
+    <Compile Include="Utils\RectStorage.cs" />
+    <Compile Include="Utils\ConfigurationStorageNode.cs" />
+    <Compile Include="UI\OnMovedArgs.cs" />
+    <Compile Include="UI\Window.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
