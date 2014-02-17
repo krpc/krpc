@@ -14,7 +14,6 @@ namespace KRPC.Service
         //TODO: determine the assembly from the namespace
         public static Response.Builder HandleRequest (Request request)
         {
-            Logger.WriteLine("Handling client request");
             // Get the service method
             var serviceType = GetServiceType (request.Service);
             MethodInfo handler = GetServiceMethod(serviceType, request.Method);
@@ -23,12 +22,10 @@ namespace KRPC.Service
             object parameter = null;
             if (handler.GetParameters().Length == 1) {
                 Type type = handler.GetParameters () [0].ParameterType;
-                Logger.WriteLine("Decoding parameter");
                 // TODO: check the type is an IMessage
                 MethodInfo createBuilder = type.GetMethod ("CreateBuilder", new Type[] {});
                 IBuilder parameterBuilder = (IBuilder) createBuilder.Invoke (null, null);
                 parameter = parameterBuilder.WeakMergeFrom (request.Request_).WeakBuild ();
-                Logger.WriteLine("Successfully decoded parameter");
             }
             // TODO: check if there are more parameter - this isn't allowed
 
@@ -36,22 +33,18 @@ namespace KRPC.Service
             object[] parameters = { };
             if (parameter != null)
                 parameters = new object[] { parameter };
-            Logger.WriteLine("Invoking handler");
             object result = handler.Invoke (null, parameters);
-            Logger.WriteLine("Handler returned successfully");
 
             // Build the response
             var responseBuilder = Response.CreateBuilder();
 
             // Process the optional result
             if (result != null) {
-                Logger.WriteLine("Processing result");
                 byte[] resultBytes;
                 using (MemoryStream stream = new MemoryStream ()) {
                     ((IMessage)result).WriteTo (stream);
                     resultBytes = stream.ToArray ();
                 }
-                Logger.WriteLine("Result processed successfully");
                 responseBuilder.Response_ = ByteString.CopyFrom (resultBytes);
             }
 
