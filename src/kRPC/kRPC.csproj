@@ -83,6 +83,7 @@
     <Compile Include="Schema\KRPC.cs" />
     <Compile Include="Service\KRPCService.cs" />
     <Compile Include="Utils\Reflection.cs" />
+    <Compile Include="Utils\ConfigurationStorage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

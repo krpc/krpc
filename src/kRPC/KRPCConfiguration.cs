@@ -1,55 +1,48 @@
 ﻿using System;
 using System.Net;
-using KSP.IO;
+using KRPC.Utils;
 
 namespace KRPC
 {
-    sealed class KRPCConfiguration
+    sealed class KRPCConfiguration : ConfigurationStorage
     {
-        private PluginConfiguration config;
-        private const int defaultPort = 50000;
-        private const string defaultAddress = "127.0.0.1";
+        [Persistent]
+        private int port = 50000;
+        [Persistent]
+        private string address = "127.0.0.1";
 
-        public IPAddress Address {
-            get {
-                config.load ();
-                string address = config.GetValue<string> ("address");
-                if (address == "any")
-                    return IPAddress.Any;
-                try {
-                    return IPAddress.Parse (address);
-                } catch (FormatException) {
-                    //TODO: report error in GUI
-                    return IPAddress.Loopback;
-                }
-            }
-        }
+        public IPAddress Address { get; private set; }
 
         public int Port {
-            get {
-                config.load ();
-                try {
-                    return config.GetValue<int> ("port");
-                } catch (FormatException) {
-                    //TODO: report error in GUI
-                    return defaultPort;
-                }
-            }
+            get { return port; }
         }
 
-        public KRPCConfiguration ()
+        public KRPCConfiguration (string filePath):
+            base(filePath)
         {
-            config = PluginConfiguration.CreateForType<KRPCAddon>();
-            config.load ();
-            int port = config.GetValue<int>("port", defaultPort);
-            string address = config.GetValue<string> ("address", defaultAddress);
+            Address = IPAddress.Parse(address);
+        }
 
-            // Create the config file if it doesn't already exist
-            //TODO: cleaner way to do this?
-            config ["port"] = port;
-            config ["address"] = address;
-            config.save ();
+        protected override void BeforeSave()
+        {
+            if (Address == IPAddress.Loopback)
+                address = "any";
+            else
+                address = Address.ToString ();
+        }
+
+        protected override void AfterLoad()
+        {
+            if (address == "any")
+                Address = IPAddress.Any;
+            else {
+                try {
+                    Address = IPAddress.Parse (address);
+                } catch (FormatException) {
+                    //TODO: report error
+                    Address = IPAddress.Loopback;
+                }
+            }
         }
     }
 }
-
