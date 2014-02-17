@@ -8,71 +8,58 @@ using KRPC.Schema.KRPC;
 
 namespace KRPC.UI
 {
-    sealed class ClientConnectingDialog : MonoBehaviour
+    sealed class ClientConnectingDialog : OptionDialog
     {
-        private volatile bool show = false;
-        private volatile bool decided = false;
         private ClientRequestingConnectionArgs<Request,Response> args;
 
-        public void Init() {
-        }
-
-        public void Awake () {
-            RenderingManager.AddToPostDrawQueue(5, DrawGUI);
-        }
-
-        public void Show (object sender, ClientRequestingConnectionArgs<Request,Response> args)
+        protected override void Init()
         {
-            // Already open, and no decision, so no updates necessary
-            if (show && !decided)
-                return;
+            Title = "kRPC";
+            Skin = GUI.skin;
+            Options.Add(
+                new DialogOption ("Allow", () => {
+                    args.Allow ();
+                }));
+            Options.Add (
+                new DialogOption ("Deny", () => {
+                    args.Deny ();
+                }));
+        }
 
-            // Not open, so open a dialog
-            if (show == false) {
+        protected override void Opened ()
+        {
+            if (args.Client.Name == "")
+                Message = "A client is attempting to connect from " + args.Client.Address;
+            else
+                Message = "'" + args.Client.Name + "' is attempting to connect from " + args.Client.Address;
+        }
+
+        protected override void Closed ()
+        {
+            this.args = null;
+        }
+
+        public void OnClientRequestingConnection (object sender, ClientRequestingConnectionArgs<Request,Response> args)
+        {
+            // Not open, so open the dialog
+            if (!Visible) {
                 Logger.WriteLine ("Asking player to allow/deny connection attempt...");
-                show = true;
-                decided = false;
                 this.args = args;
+                Open ();
                 return;
             }
 
-            // Open, and we have a decision, so send the decision and close the dialog
-            if (show && decided && this.args.Client == args.Client) {
+            // Already open for a different request, so ignore
+            if (Visible && this.args.Client != args.Client)
+                return;
+
+            // Open, and we have a decision (must be the correct client at this point), to close the dialog
+            if (Visible && !this.args.StillPending) {
                 if (this.args.ShouldAllow)
                     args.Allow ();
                 else
                     args.Deny ();
-                show = false;
-                decided = false;
-                args = null;
-            }
-        }
-
-        public void Cancel () {
-            show = false;
-            decided = false;
-            args = null;
-        }
-
-        private void DrawGUI () {
-            if (show) {
-                DialogOption[] options = {
-                    new DialogOption ("Allow", () => {
-                        args.Allow ();
-                        decided = true;
-                    }),
-                    new DialogOption ("Deny", () => {
-                        args.Deny ();
-                        decided = true;
-                    })
-                };
-                string message;
-                if (args.Client.Name == "")
-                    message = "A client is attempting to connect from " + args.Client.Address;
-                else
-                    message = "'" + args.Client.Name + "' is attempting to connect from " + args.Client.Address;
-                var dialog = new MultiOptionDialog (message, "kRPC", UnityEngine.GUI.skin, options);
-                dialog.DrawWindow ();
+                Close ();
             }
         }
     }

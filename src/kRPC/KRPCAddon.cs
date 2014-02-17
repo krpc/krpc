@@ -53,8 +53,8 @@ namespace KRPC
             mainWindow.Visible = config.MainWindowVisible;
             mainWindow.Position = config.MainWindowPosition;
 
+            // Create new connection dialog
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog>();
-            clientConnectingDialog.Init ();
 
             // Main window events
             mainWindow.OnStartServerPressed += (s, e) => {
@@ -64,7 +64,7 @@ namespace KRPC
             };
             mainWindow.OnStopServerPressed += (s, e) => {
                 server.Stop ();
-                clientConnectingDialog.Cancel();
+                clientConnectingDialog.Close();
             };
             mainWindow.OnHide += (s, e) => {
                 config.MainWindowVisible = false;
@@ -81,7 +81,7 @@ namespace KRPC
             };
 
             // Server events
-            server.OnClientRequestingConnection += clientConnectingDialog.Show;
+            server.OnClientRequestingConnection += clientConnectingDialog.OnClientRequestingConnection;
 
             // Toolbar API
             if (ToolbarManager.ToolbarAvailable) {
