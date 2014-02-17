@@ -41,6 +41,7 @@ namespace KRPC
 //            }
 
             config = new KRPCConfiguration ("settings.cfg");
+            config.Load ();
             tcpServer = new TCPServer (config.Address, config.Port);
             server = new RPCServer (tcpServer);
             requestScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
