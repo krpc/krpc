@@ -69,6 +69,7 @@
     <Compile Include="Server\RPC\RPCServerTest.cs" />
     <Compile Include="Server\RPC\TestClient.cs" />
     <Compile Include="Service\KRPCTest.cs" />
+    <Compile Include="KRPCConfigurationTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
