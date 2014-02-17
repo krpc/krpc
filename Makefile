@@ -32,10 +32,10 @@ dist: build
 		dist
 	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt dist/protobuf-license.txt
 	mkdir -p dist/schema
-	cp -r src/kRPC/Schema/*.proto dist/schema/
+	cp -r $(PROTOS) dist/schema/
 
 pre-release: dist
-	cd dist; zip krpc-pre-`date +"%Y-%m-%d"`.zip ./*
+	cd dist; zip -r krpc-pre-`date +"%Y-%m-%d"`.zip ./*
 
 clean: protobuf-clean
 	rm -rf $(CSHARP_BIN_DIRS)
