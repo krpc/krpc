@@ -63,10 +63,11 @@ protobuf-csharp: $(PROTOS) $(PROTOS:.proto=.cs)
 protobuf-python: $(PROTOS) $(PROTOS:.proto=.py)
 	echo "" > python/proto/__init__.py
 
-%.protobin:
+%.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
 
-%.py:
+%.py: %.proto
+	# FIXME: dependency checks don't work for this, as target is different to the file that's created
 	rm -f $*.pyc
 	mkdir -p python/proto
 	cp $*.proto python/proto/$(notdir $*.proto)
