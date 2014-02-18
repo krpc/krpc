@@ -35,31 +35,35 @@ namespace KRPC.UI
             activityStyle.padding = new RectOffset (6, 0, 6, 0);
             activityStyle.overflow = new RectOffset (0, 0, 0, 0);
             activityStyle.imagePosition = ImagePosition.ImageOnly;
+
+            address = Config.Address.ToString ();
+            port = Config.Port.ToString ();
         }
 
         protected override void Draw ()
         {
-            GUILayout.BeginVertical();
+            GUILayout.BeginVertical ();
             GUILayout.Label ("Server status: " + (Server.Running ? "Online" : "Offline"), labelStyle);
             if (Server.Running) {
                 if (GUILayout.Button ("Stop server"))
                     OnStopServerPressed (this, EventArgs.Empty);
+
                 TCPServer tcpServer = (TCPServer)Server.Server;
 
-                GUILayout.BeginHorizontal();
+                GUILayout.BeginHorizontal ();
                 GUILayout.Label ("Server address:", labelStyle);
                 GUILayout.Label (tcpServer.Address.ToString (), labelStyle);
-                GUILayout.EndHorizontal();
+                GUILayout.EndHorizontal ();
 
-                GUILayout.BeginHorizontal();
+                GUILayout.BeginHorizontal ();
                 GUILayout.Label ("Server port:", labelStyle);
                 GUILayout.Label (tcpServer.Port.ToString (), labelStyle);
-                GUILayout.EndHorizontal();
+                GUILayout.EndHorizontal ();
 
-                GUILayout.BeginHorizontal();
+                GUILayout.BeginHorizontal ();
                 GUILayout.Label ("Allowed client(s):", labelStyle);
-                GUILayout.Label (AllowedClientsString(tcpServer.Address), labelStyle);
-                GUILayout.EndHorizontal();
+                GUILayout.Label (AllowedClientsString (tcpServer.Address), labelStyle);
+                GUILayout.EndHorizontal ();
 
                 if (Server.Clients.Count () == 0) {
                     GUILayout.Label ("No clients connected", labelStyle);
@@ -68,7 +72,7 @@ namespace KRPC.UI
                     foreach (var client in Server.Clients) {
                         string name = (client.Name == "") ? "<unknown>" : client.Name;
                         GUILayout.BeginHorizontal ();
-                        GUILayout.Toggle (IsClientActive(client), "", activityStyle);
+                        GUILayout.Toggle (IsClientActive (client), "", activityStyle);
                         GUILayout.Label (name + " @ " + client.Address);
                         GUILayout.EndHorizontal ();
                     }

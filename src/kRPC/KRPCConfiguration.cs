@@ -12,10 +12,7 @@ namespace KRPC
         [Persistent] private bool mainWindowVisible = true;
         [Persistent] private RectStorage mainWindowPosition = new RectStorage ();
 
-        public IPAddress Address {
-            get;
-            private set;
-        }
+        public IPAddress Address { get; set; }
 
         public int Port
         {
