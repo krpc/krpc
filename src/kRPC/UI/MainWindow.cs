@@ -4,8 +4,10 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using KSP;
+using KRPC.Utils;
 using KRPC.Server;
 using KRPC.Server.RPC;
 using KRPC.Server.Net;
@@ -14,9 +16,13 @@ namespace KRPC.UI
 {
     sealed class MainWindow : Window
     {
-        private GUIStyle labelStyle, activityStyle;
+        private GUIStyle labelStyle, textFieldStyle, activityStyle;
+        public KRPCConfiguration Config { private get; set; }
         public RPCServer Server { private get; set; }
         private Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
+
+        private string address = "";
+        private string port = "";
 
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
@@ -24,8 +30,10 @@ namespace KRPC.UI
         protected override void Init() {
             Style.fixedWidth = 250f;
 
-            labelStyle = new GUIStyle(UnityEngine.GUI.skin.label);
+            labelStyle = new GUIStyle (UnityEngine.GUI.skin.label);
             labelStyle.stretchWidth = true;
+
+            textFieldStyle = new GUIStyle (UnityEngine.GUI.skin.textField);
 
             activityStyle = new GUIStyle (HighLogic.Skin.toggle);
             activityStyle.active = HighLogic.Skin.toggle.normal;
@@ -80,6 +88,35 @@ namespace KRPC.UI
             } else {
                 if (GUILayout.Button ("Start server"))
                     OnStartServerPressed (this, EventArgs.Empty);
+
+                // TODO: disable keypresses from affecting the game on Linux. Use input locking (as follows)?
+                // InputLockManager.SetControlLock(ControlTypes.STAGING, "kRPCLockStaging");
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Label ("Server address:", labelStyle);
+                address = GUILayout.TextField (address, "000.000.000.000".Length, textFieldStyle);
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Label ("Server port:", labelStyle);
+                port = GUILayout.TextField (port, "65535".Length, textFieldStyle);
+                GUILayout.EndHorizontal ();
+
+                if (Event.current.type == EventType.KeyUp) {
+                    // FIXME: invalid characters appear briefly
+                    address = Regex.Replace (address, @"[^0-9\.any]+", "");
+                    port = Regex.Replace (port, @"[^0-9]+", "");
+                    try {
+                        Config.Port = Convert.ToInt16 (port);
+                        Config.Save ();
+                    } catch {
+                    }
+                    try {
+                        Config.Address = IPAddress.Parse (address);
+                        Config.Save ();
+                    } catch {
+                    }
+                }
             }
             GUILayout.EndVertical ();
             GUI.DragWindow ();

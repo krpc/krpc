@@ -50,6 +50,7 @@ namespace KRPC
 
             // Create main window
             mainWindow = gameObject.AddComponent<MainWindow>();
+            mainWindow.Config = config;
             mainWindow.Server = server;
             mainWindow.Visible = config.MainWindowVisible;
             mainWindow.Position = config.MainWindowPosition;
