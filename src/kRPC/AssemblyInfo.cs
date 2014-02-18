@@ -15,4 +15,5 @@ using System.Runtime.CompilerServices;
 
 // Allow unit tests to see internals
 [assembly:InternalsVisibleTo ("KRPCTest")]
+[assembly:InternalsVisibleTo ("TestServer")]
 [assembly:InternalsVisibleTo ("DynamicProxyGenAssembly2")] // For Moq
