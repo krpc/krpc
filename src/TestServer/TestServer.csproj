@@ -40,6 +40,8 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Services\Orbit.cs" />
+    <Compile Include="Services\Control.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -54,9 +56,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Services\Orbit.cs" />
-    <None Include="Services\Control.cs" />
   </ItemGroup>
 </Project>
