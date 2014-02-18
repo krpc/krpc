@@ -35,9 +35,6 @@ namespace KRPC.UI
             activityStyle.padding = new RectOffset (6, 0, 6, 0);
             activityStyle.overflow = new RectOffset (0, 0, 0, 0);
             activityStyle.imagePosition = ImagePosition.ImageOnly;
-
-            address = Config.Address.ToString ();
-            port = Config.Port.ToString ();
         }
 
         protected override void Draw ()
