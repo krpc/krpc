@@ -7,7 +7,7 @@ namespace KRPC.Service
     [KRPCService]
     public class KRPC
     {
-        [KRPCMethod]
+        [KRPCProcedure]
         public static Schema.KRPC.Status GetStatus ()
         {
             var status = Schema.KRPC.Status.CreateBuilder ();
@@ -15,7 +15,7 @@ namespace KRPC.Service
             return status.Build ();
         }
 
-        [KRPCMethod]
+        [KRPCProcedure]
         public static Schema.KRPC.Services GetServices ()
         {
             var services = Schema.KRPC.Services.CreateBuilder ();
@@ -24,7 +24,7 @@ namespace KRPC.Service
                 var service = Schema.KRPC.Service.CreateBuilder ();
                 service.SetName (serviceType.Name);
 
-                foreach (var methodType in Reflection.GetMethodsWith<KRPCMethod> (serviceType)) {
+                foreach (var methodType in Reflection.GetMethodsWith<KRPCProcedure> (serviceType)) {
                     var method = Schema.KRPC.Method.CreateBuilder ();
                     method.Name = methodType.Name;
                     if (methodType.ReturnType != typeof(void))

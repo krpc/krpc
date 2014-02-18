@@ -54,7 +54,6 @@
     <Compile Include="Service\Services.cs" />
     <Compile Include="Service\NoSuchServiceException.cs" />
     <Compile Include="Service\NoSuchServiceMethodException.cs" />
-    <Compile Include="Service\KRPCMethod.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IClient.cs" />
@@ -89,6 +88,7 @@
     <Compile Include="UI\OnMovedArgs.cs" />
     <Compile Include="UI\Window.cs" />
     <Compile Include="UI\OptionDialog.cs" />
+    <Compile Include="Service\KRPCProcedure.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

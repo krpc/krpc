@@ -73,7 +73,7 @@ namespace KRPC.Service
             MethodInfo method = service.GetMethod (name, BindingFlags.Public | BindingFlags.Static);
             if (method == null)
                 throw new NoSuchServiceMethodException (service, name);
-            if (method.GetCustomAttributes(typeof(Service.KRPCMethod), false).Length == 0)
+            if (method.GetCustomAttributes(typeof(Service.KRPCProcedure), false).Length == 0)
                 throw new NoSuchServiceMethodException (service, name);
             return method;
         }
