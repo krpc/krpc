@@ -8,7 +8,7 @@ namespace KRPCServices
     [KRPCService]
     public class Test
     {
-        [KRPCMethod]
+        [KRPCProcedure]
         public static KRPC.Schema.Test.Echo Echo (KRPC.Schema.Test.Echo request)
         {
             return request;
