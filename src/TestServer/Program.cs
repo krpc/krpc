@@ -62,7 +62,9 @@ namespace TestServer
                         } catch (NoRequestException) {
                         }
                     }
-                    System.Threading.Thread.Sleep((int) (interval - Math.Max(timer.ElapsedMilliseconds, interval)));
+                    int delay = interval - Math.Max((int)timer.ElapsedMilliseconds, interval);
+                    if (delay > 0)
+                        System.Threading.Thread.Sleep(delay);
                 }
             } finally {
                 server.Stop ();
