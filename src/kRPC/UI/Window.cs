@@ -14,7 +14,7 @@ namespace KRPC.UI
         public event EventHandler OnHide;
         public event EventHandler<MovedArgs> OnMoved;
 
-        private bool visible;
+        private bool visible = false;
         public bool Visible {
             get { return visible; }
             set {
@@ -26,7 +26,7 @@ namespace KRPC.UI
             }
         }
 
-        private Rect position;
+        private Rect position = new Rect ();
         public Rect Position {
             get { return position; }
             set {
@@ -38,8 +38,6 @@ namespace KRPC.UI
 
         public void Awake ()
         {
-            Visible = true;
-            Position = new Rect();
             RenderingManager.AddToPostDrawQueue(1, UpdateGUI);
         }
 
