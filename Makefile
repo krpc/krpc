@@ -7,7 +7,11 @@ CSHARP_BIN_DIRS := $(foreach project,$(CSHARP_PROJECT_DIRS),$(project)/obj) $(fo
 
 PROTOC := protoc
 CSHARP_PROTOGEN := "tools/ProtoGen.exe"
-PROTOS := src/kRPC/Schema/KRPC.proto src/kRPCServices/Schema/Control.proto src/kRPCServices/Schema/Orbit.proto
+PROTOS := src/kRPC/Schema/KRPC.proto \
+          src/kRPCServices/Schema/Control.proto \
+          src/kRPCServices/Schema/Orbit.proto \
+          src/kRPCServices/Schema/Flight.proto \
+          src/kRPCServices/Schema/Vessel.proto
 
 all: dist
 
