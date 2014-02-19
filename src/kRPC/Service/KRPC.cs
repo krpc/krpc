@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using Google.ProtocolBuffers;
 using KRPC.Utils;
 
 namespace KRPC.Service
 {
     [KRPCService]
-    public class KRPC
+    class KRPC
     {
+        public static IDictionary<string,ServiceSignature> Signatures { get; set; }
+
         [KRPCProcedure]
         public static Schema.KRPC.Status GetStatus ()
         {
@@ -18,31 +21,29 @@ namespace KRPC.Service
         [KRPCProcedure]
         public static Schema.KRPC.Services GetServices ()
         {
-            // FIXME: reimplement
-            throw new NotImplementedException();
-            //var services = Schema.KRPC.Services.CreateBuilder ();
-            //
-            //foreach (var serviceType in Reflection.GetTypesWith<KRPCService> ()) {
-            //    var service = Schema.KRPC.Service.CreateBuilder ();
-            //    service.SetName (serviceType.Name);
-            //
-            //    foreach (var methodType in Reflection.GetMethodsWith<KRPCProcedure> (serviceType)) {
-            //        var procedure = Schema.KRPC.Procedure.CreateBuilder ();
-            //        procedure.Name = methodType.Name;
-            //        if (methodType.ReturnType != typeof(void))
-            //            method.ReturnType = Reflection.GetMessageType (methodType.ReturnType);
-            //        if (methodType.GetParameters ().Length == 1)
-            //            method.ParameterType = Reflection.GetMessageType (methodType.GetParameters () [0].ParameterType);
-            //        //TODO: check if there is more than one parameter - it's not allowed
-            //        service.AddMethods (method);
-            //    }
-            //
-            //    services.AddServices_ (service);
-            //}
-            //
-            //Schema.KRPC.Services result = services.Build ();
-            //Logger.WriteLine (result.ToString());
-            //return result;
+            if (Signatures == null)
+                throw new RPCException ("Services have not been loaded");
+
+            var services = Schema.KRPC.Services.CreateBuilder ();
+            foreach (var serviceSignature in Signatures.Values) {
+                var service = Schema.KRPC.Service.CreateBuilder ();
+                service.SetName (serviceSignature.Name);
+                foreach (var procedureSignature in serviceSignature.Procedures.Values) {
+                    var procedure = Schema.KRPC.Procedure.CreateBuilder ();
+                    procedure.Name = procedureSignature.Name;
+                    if (procedureSignature.HasReturnType)
+                        procedure.ReturnType = Reflection.GetMessageTypeName (procedureSignature.ReturnType);
+                    //TODO: allow multiple parameters
+                    if (procedureSignature.ParameterTypes.Count > 1)
+                        throw new NotImplementedException();
+                    if (procedureSignature.ParameterTypes.Count == 1)
+                        procedure.ParameterType = Reflection.GetMessageTypeName (procedureSignature.ParameterTypes [0]);
+                    service.AddProcedures (procedure);
+                }
+                services.AddServices_ (service);
+            }
+            Schema.KRPC.Services result = services.Build ();
+            return result;
         }
     }
 }

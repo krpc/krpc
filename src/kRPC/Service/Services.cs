@@ -11,7 +11,7 @@ namespace KRPC.Service
 {
     class Services
     {
-        private Dictionary<string, ServiceSignature> services;
+        public IDictionary<string, ServiceSignature> Signatures { get; private set; }
 
         /// <summary>
         /// Create a Services instance. Scans the loaded assemblies for services, procedures etc.
@@ -20,7 +20,7 @@ namespace KRPC.Service
         {
             var serviceTypes = Reflection.GetTypesWith<KRPCService> ();
             try {
-                services = serviceTypes
+                Signatures = serviceTypes
                     .Select (x => new ServiceSignature (x))
                     .ToDictionary (x => x.Name);
             } catch (ArgumentException) {
@@ -37,8 +37,11 @@ namespace KRPC.Service
                     "Duplicates are " + String.Join(", ", duplicates));
             }
             // Check tha the main KRPC service was found
-            if (!services.ContainsKey("KRPC"))
+            if (!Signatures.ContainsKey("KRPC"))
                 throw new ServiceException ("KRPC service could not be found");
+
+            // Update the KRPC service to use this Services object
+            KRPC.Signatures = Signatures;
         }
 
         /// <summary>
@@ -48,9 +51,9 @@ namespace KRPC.Service
         public Response.Builder HandleRequest (Request request)
         {
             // Get the service definition
-            if (!services.ContainsKey (request.Service))
+            if (!Signatures.ContainsKey (request.Service))
                throw new RPCException ("Service " + request.Service + " not found");
-            var service = services [request.Service];
+            var service = Signatures [request.Service];
 
             // Get the procedure definition
             if (!service.Procedures.ContainsKey (request.Procedure))

@@ -15,11 +15,11 @@ namespace KRPC.Service
         public string FullyQualifiedName { get; private set; }
 
         public MethodInfo Handler { get; private set; }
-        public ICollection<Type> ParameterTypes { get; private set; }
+        public IList<Type> ParameterTypes { get; private set; }
         public bool HasReturnType { get; private set; }
         public Type ReturnType { get; private set; }
 
-        public ICollection<IBuilder> ParameterBuilders { get; private set; }
+        public IList<IBuilder> ParameterBuilders { get; private set; }
         public IBuilder ReturnBuilder { get; private set; }
 
         public ProcedureSignature (string serviceName, MethodInfo method) {
