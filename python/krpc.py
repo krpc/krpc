@@ -77,7 +77,7 @@ class Service(BaseService):
         has_return_type = method.HasField('return_type')
 
         if has_parameter_type and not _protobuf_type_exists(method.parameter_type):
-            Logger.debug('Failed to ad method', self._name, method.name, '; ' +
+            Logger.debug('Failed to add method', self._name, method.name, '; ' +
                          'protobuf type', method.parameter_type, 'not found.')
             return
 
