@@ -11,7 +11,6 @@ namespace KRPC.Service
 {
     class Services
     {
-        //TODO: determine the assembly from the namespace
         public static Response.Builder HandleRequest (Request request)
         {
             // Get the service method
