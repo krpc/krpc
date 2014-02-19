@@ -5,10 +5,10 @@ message Throttle {
 }
 
 message ControlInputs {
-  optional float pitch = 2 [default = 0];
-  optional float yaw   = 3 [default = 0];
-  optional float roll  = 4 [default = 0];
-  optional float x = 5     [default = 0];
-  optional float y = 6     [default = 0];
-  optional float z = 7     [default = 0];
+  optional float pitch = 1 [default = 0];
+  optional float yaw   = 2 [default = 0];
+  optional float roll  = 3 [default = 0];
+  optional float x = 4     [default = 0];
+  optional float y = 5     [default = 0];
+  optional float z = 6     [default = 0];
 }
