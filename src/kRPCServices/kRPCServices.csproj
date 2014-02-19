@@ -61,6 +61,7 @@
     <Compile Include="Flight.cs" />
     <Compile Include="Schema\Vessel.cs" />
     <Compile Include="Vessel.cs" />
+    <Compile Include="PilotAddon.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

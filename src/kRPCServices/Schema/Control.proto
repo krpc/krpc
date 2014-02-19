@@ -1,13 +1,14 @@
 package Control;
 
+message Throttle {
+  required float throttle = 1 [default = 0];
+}
+
 message ControlInputs {
-  optional float throttle = 1 [default = 0];
   optional float pitch = 2 [default = 0];
   optional float yaw   = 3 [default = 0];
   optional float roll  = 4 [default = 0];
   optional float x = 5     [default = 0];
   optional float y = 6     [default = 0];
   optional float z = 7     [default = 0];
-  optional bool sas = 8    [default = false];
-  optional bool rcs = 9    [default = false];
 }

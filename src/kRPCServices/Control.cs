@@ -9,41 +9,44 @@ namespace KRPCServices
     public class Control
     {
         [KRPCProcedure]
-        public static void SetControlInputs(ControlInputs controls) {
-            if (controls.HasThrottle)
-                FlightInputHandler.state.mainThrottle = controls.Throttle;
-            if (controls.HasPitch)
-                FlightInputHandler.state.pitch = controls.Pitch;
-            if (controls.HasRoll)
-                FlightInputHandler.state.roll = controls.Roll;
-            if (controls.HasYaw)
-                FlightInputHandler.state.yaw = controls.Yaw;
-            if (controls.HasX)
-                FlightInputHandler.state.X = controls.X;
-            if (controls.HasY)
-                FlightInputHandler.state.Y = controls.Y;
-            if (controls.HasZ)
-                FlightInputHandler.state.Z = controls.Z;
-            if (controls.HasSas)
-                FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, controls.Sas);
-            if (controls.HasRcs)
-                FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.RCS, controls.Rcs);
+        public static void EnableSAS ()
+        {
+            FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, true);
         }
 
         [KRPCProcedure]
-        public static ControlInputs GetControlInputs() {
-            // TODO: setting the control inputs only has an effect for a single frame
-            return ControlInputs.CreateBuilder ()
-                .SetThrottle (FlightInputHandler.state.mainThrottle)
-                .SetPitch (FlightInputHandler.state.pitch)
-                .SetRoll  (FlightInputHandler.state.roll)
-                .SetYaw   (FlightInputHandler.state.yaw)
-                .SetX   (FlightInputHandler.state.X)
-                .SetY   (FlightInputHandler.state.Y)
-                .SetZ   (FlightInputHandler.state.Z)
-                .SetSas (FlightInputHandler.state.killRot)
-                .SetRcs (FlightInputHandler.RCSLock) // TODO: this is wrong
-                .Build ();
+        public static void DisableSAS ()
+        {
+            FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
+        }
+
+        [KRPCProcedure]
+        public static void EnableRCS ()
+        {
+            FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.RCS, true);
+        }
+
+        [KRPCProcedure]
+        public static void DisableRCS ()
+        {
+            FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.RCS, false);
+        }
+
+        [KRPCProcedure]
+        public static void SetThrottle (Throttle throttle)
+        {
+            FlightInputHandler.state.mainThrottle = throttle.Throttle_;
+        }
+
+        [KRPCProcedure]
+        public static Throttle GetThrottle ()
+        {
+            return Throttle.CreateBuilder ().SetThrottle_ (FlightInputHandler.state.mainThrottle).Build ();
+        }
+
+        [KRPCProcedure]
+        public static void SetControlInputs(ControlInputs controls) {
+            PilotAddon.SetControlInputs (controls);
         }
 
         [KRPCProcedure]
