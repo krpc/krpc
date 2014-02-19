@@ -1,5 +1,11 @@
 #!/usr/bin/env python2
 
+"""
+This example script is an autopilot that will launch the supplied Test.craft
+(a 2-stage rocket) and take it into orbit at 80km.
+"""
+# TODO: this script doesn't circularise the orbit... yet
+
 import krpc
 import time
 import proto # TODO: remove the need for this
