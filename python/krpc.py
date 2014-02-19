@@ -18,6 +18,12 @@ def _load_proto_service_types(service):
         Logger.write('Failed to load protobuf types for service', service)
         pass
 
+def _proto_type_exists(type):
+    """ Returns true if the given protobuf type exists,
+        where type is of the form PackageName.TypeName """
+    package, type = type.split(".")
+    return package in proto.__dict__ and type in proto.__dict__[package].__dict__
+
 class BaseService(object):
     """ Abstract base class for all services. """
     def __init__(self, client, name):
@@ -55,6 +61,15 @@ class Service(BaseService):
         # TODO: make the callback validate the parameter type
         has_parameter_type = method.HasField('parameter_type')
         has_return_type = method.HasField('return_type')
+
+        if has_parameter_type and not _proto_type_exists(method.parameter_type):
+            Logger.write('Failed to ad method', self._name, method.name, '; protobuf type', method.parameter_type, 'not found.')
+            return
+
+        if has_return_type and not _proto_type_exists(method.return_type):
+            Logger.write('Failed to add method', self._name, method.name, '; protobuf type', method.return_type, 'not found.')
+            return
+
         if (not has_parameter_type) and (not has_return_type):
             fn = lambda: self._invoke(method.name)
         elif has_parameter_type and (not has_return_type):
