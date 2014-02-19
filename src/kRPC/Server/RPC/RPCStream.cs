@@ -18,7 +18,11 @@ namespace KRPC.Server.RPC
             this.stream = stream;
         }
 
-        /// Throws MalformedRequestException if malformed data received
+        /// <summary>
+        /// Returns true if there is a request waiting to be read. A Call to Read() will
+        /// not throw NoRequestException if this returns true. Throws MalformedRequestException
+        /// if a malformed request is received.
+        /// </summary>
         public bool DataAvailable {
             get {
                 try {
@@ -30,8 +34,11 @@ namespace KRPC.Server.RPC
             }
         }
 
-        /// Throws NoRequestException if no message
-        /// Throws MalformedRequestException if malformed data received
+        /// <summary>
+        /// Read a request from the client. Blocks until a request is available.
+        /// Throws NoRequestException if there is no request.
+        /// Throws MalformedRequestException if malformed data is received.
+        /// </summary>
         public Request Read () {
             Poll();
             var request = bufferedRequest;
@@ -47,6 +54,9 @@ namespace KRPC.Server.RPC
             throw new NotImplementedException ();
         }
 
+        /// <summary>
+        /// Write a response to the client.
+        /// </summary>
         public void Write (Response value) {
             var buffer = new MemoryStream ();
             value.WriteDelimitedTo (buffer);
@@ -57,6 +67,9 @@ namespace KRPC.Server.RPC
             throw new NotImplementedException ();
         }
 
+        /// <summary>
+        /// Close the stream.
+        /// </summary>
         public void Close() {
             buffer = null;
             bufferedRequest = null;
