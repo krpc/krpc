@@ -32,6 +32,7 @@ namespace KRPCServices
 
         [KRPCProcedure]
         public static ControlInputs GetControlInputs() {
+            // TODO: setting the control inputs only has an effect for a single frame
             return ControlInputs.CreateBuilder ()
                 .SetThrottle (FlightInputHandler.state.mainThrottle)
                 .SetPitch (FlightInputHandler.state.pitch)
@@ -41,7 +42,7 @@ namespace KRPCServices
                 .SetY   (FlightInputHandler.state.Y)
                 .SetZ   (FlightInputHandler.state.Z)
                 .SetSas (FlightInputHandler.state.killRot)
-                .SetRcs (FlightInputHandler.RCSLock)
+                .SetRcs (FlightInputHandler.RCSLock) // TODO: this is wrong
                 .Build ();
         }
 

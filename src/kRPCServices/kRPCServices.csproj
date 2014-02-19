@@ -33,10 +33,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Google.ProtocolBuffers">
-      <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.dll</HintPath>
+      <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\cf35\Google.ProtocolBuffers.dll</HintPath>
     </Reference>
     <Reference Include="Google.ProtocolBuffers.Serialization">
-      <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.Serialization.dll</HintPath>
+      <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\cf35\Google.ProtocolBuffers.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\lib\ksp\Assembly-CSharp.dll</HintPath>
@@ -57,6 +57,10 @@
     <Compile Include="Schema\Orbit.cs" />
     <Compile Include="Orbit.cs" />
     <Compile Include="Control.cs" />
+    <Compile Include="Schema\Flight.cs" />
+    <Compile Include="Flight.cs" />
+    <Compile Include="Schema\Vessel.cs" />
+    <Compile Include="Vessel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -71,5 +75,7 @@
   <ItemGroup>
     <None Include="Schema\Control.proto" />
     <None Include="Schema\Orbit.proto" />
+    <None Include="Schema\Flight.proto" />
+    <None Include="Schema\Vessel.proto" />
   </ItemGroup>
 </Project>
