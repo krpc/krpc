@@ -1,5 +1,6 @@
 import proto.KRPC
 import socket
+import importlib
 
 DEFAULT_ADDRESS = '127.0.0.1'
 DEFAULT_PORT = 50000
@@ -9,6 +10,13 @@ class Logger(object):
     @classmethod
     def write(self, *args):
         print ' '.join(str(x) for x in args)
+
+def _load_proto_service_types(service):
+    try:
+        importlib.import_module('proto.' + service)
+    except ImportError:
+        Logger.write('Failed to load protobuf types for service', service)
+        pass
 
 class BaseService(object):
     """ Abstract base class for all services. """
@@ -38,6 +46,7 @@ class Service(BaseService):
         """ Create a service from a KRPC.Service object """
         super(Service, self).__init__(client, service.name)
         self._name = service.name
+        _load_proto_service_types(self._name)
         for method in service.methods:
             self._add_method(method)
 
