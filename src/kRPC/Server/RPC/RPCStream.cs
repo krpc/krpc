@@ -80,7 +80,7 @@ namespace KRPC.Server.RPC
         /// Throws NoRequestException if not
         /// Throws MalformedRequestException if malformed data received
         /// Throws RequestBufferOverflowException if buffer full but complete request not received
-        public void Poll () {
+        private void Poll () {
             if (bufferedRequest != null)
                 return;
 
