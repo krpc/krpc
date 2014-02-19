@@ -123,7 +123,7 @@ namespace KRPC.Server.RPC
         /// This is triggered whenever a client connects to the server. Returns the string identifier,
         /// or null if the message is not valid.
         /// </summary>
-        public string CheckHelloMessage(IClient<byte,byte> client) {
+        private string CheckHelloMessage(IClient<byte,byte> client) {
             Logger.WriteLine("RPCServer: Waiting for hello message from client...");
             byte[] buffer = new byte[expectedHeader.Length + identifierLength];
             int read = ReadHelloMessage (client.Stream, buffer);
