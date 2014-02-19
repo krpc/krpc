@@ -10,7 +10,6 @@
     <RootNamespace>KRPCServices</RootNamespace>
     <AssemblyName>krpc-services</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <CodePage>65001</CodePage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
