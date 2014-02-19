@@ -25,16 +25,22 @@ build: protobuf $(foreach project,$(CSHARP_PROJECTS),$(project).dll)
 dist: build
 	rm -rf dist
 	mkdir -p dist
+	# Licenses
+	cp -r LICENSE.txt dist
+	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt dist/protobuf-license.txt
+	# Plugin files
+	mkdir -p dist/GameData/kRPC
 	cp -r \
-		LICENSE.txt \
 		src/kRPC/bin/Release/krpc.dll \
 		src/kRPCServices/bin/Release/krpc-services.dll \
 		src/kRPC/bin/*.png \
 		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.dll \
 		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll \
-		python \
-		dist
-	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt dist/protobuf-license.txt
+		dist/GameData/kRPC/
+	# Python client library
+	mkdir -p dist/python
+	cp -r python/*.py python/*.craft python/proto dist/python/
+	# Schema
 	mkdir -p dist/schema
 	cp -r $(PROTOS) dist/schema/
 
@@ -51,10 +57,10 @@ dist-clean: clean
 install: dist
 	rm -rf $(KRPC_DIR)
 	mkdir -p $(KRPC_DIR)
-	cp -r dist/* $(KRPC_DIR)/
+	cp -r dist/GameData/kRPC/* $(KRPC_DIR)/
 
 ksp: install
-	cp -r dist/* src/TestingTools/bin/Release/TestingTools.dll $(KRPC_DIR)/
+	cp src/TestingTools/bin/Release/TestingTools.dll $(KRPC_DIR)/
 	$(KSP_DIR)/KSP.x86_64 &
 	tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
 
