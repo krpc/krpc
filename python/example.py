@@ -2,14 +2,16 @@
 
 import krpc
 import time
-import proto
+import proto # TODO: remove the need for this
 
 def main():
     # Connect to the server with the default settings
     # (IP address 127.0.0.1 and port 50000)
+    print 'Connecting to server...'
     ksp = krpc.connect(name='Example script')
     print 'Connected to server, version', ksp.KRPC.GetStatus().version
 
+    # TODO: remove the need for the following
     throttle = proto.Control.Throttle()
     controls = proto.Control.ControlInputs()
 
@@ -27,19 +29,19 @@ def main():
     print 'Launch!'
     ksp.Control.ActivateNextStage()
 
-    # Ascend to 10km
+    # Ascend to 10km and ditch SRBs when they're empty
     print 'Vertical ascent...'
     srbs_separated = False
     while True:
 
-        # Check altitude
+        # Check altitude, exit loop if higher than 10km
         altitude = ksp.Flight.GetFlightData().altitude
         print '  Altitude = %.1f km' % (altitude/1000)
         if altitude > 10000:
             break
 
         # Check if the solid boosters need to be ditched
-        # We assume this will happen before we reach 10km
+        # (We assume this will happen before we reach 10km)
         if not srbs_separated:
             resources = ksp.Vessel.GetResources()
             print '  Solid fuel = %.1f T' % resources.solidFuel
@@ -52,6 +54,7 @@ def main():
 
     print 'Gravity turn...'
     # Disable SAS, pitch the vessel to the west, then hold position using SAS
+    # TODO: get the heading from the craft to do this more accurately
     ksp.Control.DisableSAS()
     controls.yaw = 0.4
     ksp.Control.SetControlInputs(controls)
@@ -71,10 +74,13 @@ def main():
 
         time.sleep(1)
 
-    # Disable the control inputs
+    # Disable the control inputs and coast to apoapsis
+    print 'Coasting to apoapsis...'
     ksp.Control.DisableSAS()
     throttle.throttle = 0
     ksp.Control.SetThrottle(throttle)
+
+    # TODO: add code to circularise the orbit
 
     print 'Program complete'
 
