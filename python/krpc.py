@@ -1,6 +1,9 @@
 import proto.KRPC
 import socket
-import importlib
+try:
+    import importlib.import_module as import_module
+except ImportError:
+    import_module = lambda package: __import__(package, globals(), locals(), [], -1)
 
 DEFAULT_ADDRESS = '127.0.0.1'
 DEFAULT_PORT = 50000
@@ -18,7 +21,7 @@ class Logger(object):
 def _load_protobuf_service_types(service):
     """ Import the compiled protobuf message types for the given service """
     try:
-        importlib.import_module('proto.' + service)
+        import_module('proto.' + service)
     except ImportError:
         Logger.debug('Failed to load protobuf message types for service', service)
         pass
