@@ -27,7 +27,7 @@ namespace KRPC.Server.Net
         /// Port that the server listens on for new connections. If set to 0,
         /// a port number with be automatically chosen.
         /// </summary>
-        private int port;
+        private ushort port;
         /// <summary>
         /// The actual local address of the server. Will be identical to
         /// localAdress, unless localAddress was set to IPAddress.Any.
@@ -37,7 +37,7 @@ namespace KRPC.Server.Net
         /// The actual local port number of the server. Will be identical to
         /// port, unless port was set to 0.
         /// </summary>
-        private int actualPort;
+        private ushort actualPort;
         /// <summary>
         /// Thread used to poll for new connections.
         /// </summary>
@@ -61,7 +61,7 @@ namespace KRPC.Server.Net
         /// Create a TCP server. After Start() is called, the server will listen for
         /// connections to the specified local address and port number.
         /// </summary>
-        public TCPServer (IPAddress address, int port)
+        public TCPServer (IPAddress address, ushort port)
         {
             this.address = address;
             this.port = port;
@@ -78,7 +78,7 @@ namespace KRPC.Server.Net
             tcpListener.Start();
             IPEndPoint endPoint = (IPEndPoint)tcpListener.LocalEndpoint;
             actualAddress = endPoint.Address;
-            actualPort = endPoint.Port;
+            actualPort = (ushort) endPoint.Port;
             listenerThread = new Thread(new ThreadStart(ListenerThread));
             listenerThread.Start();
             // TODO: add timeout just in case...
@@ -166,7 +166,7 @@ namespace KRPC.Server.Net
         /// <summary>
         /// Port number that the server listens on. Server must be restarted for changes to take effect.
         /// </summary>
-        public int Port {
+        public ushort Port {
             get { return actualPort; }
             set { port = value; }
         }
