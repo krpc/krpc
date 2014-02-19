@@ -26,8 +26,9 @@ dist: build
 	rm -rf dist
 	mkdir -p dist
 	# Licenses
-	cp -r LICENSE.txt dist
+	cp LICENSE.txt dist
 	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt dist/protobuf-license.txt
+	cp lib/toolbar/LICENSE.txt dist/toolbar-license.txt
 	# Plugin files
 	mkdir -p dist/GameData/kRPC
 	cp -r \
@@ -37,6 +38,10 @@ dist: build
 		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.dll \
 		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll \
 		dist/GameData/kRPC/
+	# Toolbar
+	unzip lib/toolbar/Toolbar-1.6.0.zip -d dist
+	mv dist/Toolbar-1.6.0/GameData/* dist/GameData/
+	rm -r dist/Toolbar-1.6.0
 	# Python client library
 	mkdir -p dist/python
 	cp -r python/*.py python/*.craft python/proto dist/python/
