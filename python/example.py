@@ -2,6 +2,7 @@
 
 import krpc
 import time
+import proto
 
 def main():
     # Connect to the server with the default settings
@@ -9,11 +10,13 @@ def main():
     ksp = krpc.connect(name='Example script')
     print 'Connected to server, version', ksp.KRPC.GetStatus().version
 
+    throttle = proto.Control.Throttle()
+    controls = proto.Control.ControlInputs()
+
     # Set the throttle to 100% and enable SAS
-    controls = ksp.Control.GetControlInputs()
-    controls.throttle = 1
-    controls.sas = True
-    ksp.Control.SetControlInputs(controls)
+    throttle.throttle = 1
+    ksp.Control.SetThrottle(throttle)
+    ksp.Control.EnableSAS()
 
     # Countdown...
     print '3'; time.sleep(1)
@@ -25,7 +28,7 @@ def main():
     ksp.Control.ActivateNextStage()
 
     # Ascend to 10km
-    print 'Vertical Ascent...'
+    print 'Vertical ascent...'
     srbs_separated = False
     while True:
 
@@ -48,14 +51,13 @@ def main():
         time.sleep(1)
 
     print 'Gravity turn...'
-    # Pitch the vessel west for 4 seconds, then hold position using SAS
-    # TODO: this doesn't work
-    controls.sas = False
-    controls.pitch = 1
+    # Disable SAS, pitch the vessel to the west, then hold position using SAS
+    ksp.Control.DisableSAS()
+    controls.yaw = 0.4
     ksp.Control.SetControlInputs(controls)
-    time.sleep(3)
-    controls.sas = True
-    controls.pitch = 0
+    time.sleep(2)
+    ksp.Control.EnableSAS()
+    controls.yaw = 0
     ksp.Control.SetControlInputs(controls)
 
     # Raise apoapsis to above 80km
@@ -70,9 +72,9 @@ def main():
         time.sleep(1)
 
     # Disable the control inputs
-    controls.sas = False
-    controls.throttle = 0
-    ksp.Control.SetControlInputs(controls)
+    ksp.Control.DisableSAS()
+    throttle.throttle = 0
+    ksp.Control.SetThrottle(throttle)
 
     print 'Program complete'
 
