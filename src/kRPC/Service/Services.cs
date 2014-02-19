@@ -62,12 +62,12 @@ namespace KRPC.Service
             var procedure = service.Procedures [request.Procedure];
 
             // Invoke the procedure
-            object[] parameters = DecodeParameters (procedure, request.Request_);
+            object[] parameters = DecodeParameters (procedure, request.ParametersList);
             // TODO: catch exceptions from the following call
             object returnValue = procedure.Handler.Invoke (null, parameters);
             var responseBuilder = Response.CreateBuilder ();
             if (procedure.HasReturnType) {
-                responseBuilder.Response_ = EncodeReturnValue (procedure, returnValue);
+                responseBuilder.Return = EncodeReturnValue (procedure, returnValue);
             }
             return responseBuilder;
         }
@@ -75,23 +75,28 @@ namespace KRPC.Service
         /// <summary>
         /// Decode the parameters for a procedure from a serialized request
         /// </summary>
-        private object[] DecodeParameters(ProcedureSignature procedure, ByteString request)
+        private object[] DecodeParameters(ProcedureSignature procedure, IList<ByteString> parameters)
         {
-            // TODO: check the request has enough parameters
-            object[] parameters = new object[procedure.ParameterTypes.Count];
-
-            // TODO: Allow multiple parameters
-            if (procedure.ParameterTypes.Count > 1) {
-                throw new NotImplementedException ();
+            // Check number of parameters is correct
+            if (parameters.Count != procedure.ParameterTypes.Count) {
+                throw new RPCException (
+                    "Incorrect number of parameters for " + procedure.FullyQualifiedName + ". " +
+                    "Expected " + procedure.ParameterTypes.Count + "; got " + parameters.Count + ".");
             }
 
-            int i = 0;
-            foreach (var builder in procedure.ParameterBuilders) {
-                // FIXME: need to decode multiple values - therefore use delimited mergeing
-                parameters[i] = builder.WeakMergeFrom (request).WeakBuild ();
-                i++;
+            // Attempt to decode them
+            object[] decodedParameters = new object[parameters.Count];
+            for (int i = 0; i < parameters.Count; i++) {
+                var builder = procedure.ParameterBuilders [i];
+                try {
+                    decodedParameters[i] = builder.WeakMergeFrom (parameters [i]).WeakBuild ();
+                } catch (InvalidProtocolBufferException) {
+                    throw new RPCException (
+                        "Failed to decode parameter " + i + " for " + procedure.FullyQualifiedName + ". " +
+                        "Expected a parameter of type " + Reflection.GetMessageTypeName (procedure.ParameterTypes [i]));
+                }
             }
-            return parameters;
+            return decodedParameters;
         }
 
         /// <summary>
@@ -99,14 +104,25 @@ namespace KRPC.Service
         /// </summary>
         private ByteString EncodeReturnValue (ProcedureSignature procedure, object returnValue)
         {
-            // TODO: Check the return value is valid properly
-            if (returnValue == null || (returnValue as IMessage) == null) {
-                throw new RPCException (procedure.FullyQualifiedName + " returned an invalid return value");
+            // Check the return value is missing
+            if (returnValue == null) {
+                throw new RPCException (
+                    procedure.FullyQualifiedName + " returned null. " +
+                    "Expected an object of type " + procedure.ReturnType);
             }
 
+            // Check if the return value is of a valid type
+            IMessage message = returnValue as IMessage;
+            if (message == null || !procedure.ReturnType.IsAssignableFrom(message.GetType())) {
+                throw new RPCException (
+                    procedure.FullyQualifiedName + " returned an object of an invalid type. " +
+                    "Expected " + procedure.ReturnType + "; got " + message.GetType());
+            }
+
+            // Encode it as a ByteString
             byte[] returnBytes;
             using (MemoryStream stream = new MemoryStream ()) {
-                ((IMessage) returnValue).WriteTo (stream);
+                message.WriteTo (stream);
                 returnBytes = stream.ToArray ();
             }
             return ByteString.CopyFrom (returnBytes);

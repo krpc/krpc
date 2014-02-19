@@ -23,7 +23,6 @@ namespace KRPC.Service
         {
             if (Signatures == null)
                 throw new RPCException ("Services have not been loaded");
-
             var services = Schema.KRPC.Services.CreateBuilder ();
             foreach (var serviceSignature in Signatures.Values) {
                 var service = Schema.KRPC.Service.CreateBuilder ();
@@ -33,11 +32,10 @@ namespace KRPC.Service
                     procedure.Name = procedureSignature.Name;
                     if (procedureSignature.HasReturnType)
                         procedure.ReturnType = Reflection.GetMessageTypeName (procedureSignature.ReturnType);
-                    //TODO: allow multiple parameters
-                    if (procedureSignature.ParameterTypes.Count > 1)
-                        throw new NotImplementedException();
-                    if (procedureSignature.ParameterTypes.Count == 1)
-                        procedure.ParameterType = Reflection.GetMessageTypeName (procedureSignature.ParameterTypes [0]);
+                    foreach (var parameterType in procedureSignature.ParameterTypes) {
+                        string messageType = Reflection.GetMessageTypeName (procedureSignature.ParameterTypes [0]);
+                        procedure.AddParameterTypes (messageType);
+                    }
                     service.AddProcedures (procedure);
                 }
                 services.AddServices_ (service);
