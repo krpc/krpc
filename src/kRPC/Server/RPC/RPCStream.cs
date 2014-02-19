@@ -78,7 +78,7 @@ namespace KRPC.Server.RPC
             // Read as much data as we can from the client into the buffer, up to the buffer size
             offset += stream.Read (buffer, offset);
 
-            // Attempt to deserialize a partial request from the buffered data
+            // Attempt to deserialize a request from the buffered data
             var bufferStream = new MemoryStream (buffer, false);
             try {
                 bufferedRequest = Request.CreateBuilder().MergeDelimitedFrom (bufferStream).BuildPartial();
@@ -91,7 +91,7 @@ namespace KRPC.Server.RPC
                 }
                 // And the buffer not yet full
                 // TODO: can we detect if the partial data received is a subset of a valid request?
-                // And we read to the end, so we have a valid part part of a request
+                // And we read to the end, so we have a valid part of a request
                 throw new NoRequestException ();
             }
 
