@@ -33,7 +33,7 @@ namespace KRPC.Service
                     if (procedureSignature.HasReturnType)
                         procedure.ReturnType = Reflection.GetMessageTypeName (procedureSignature.ReturnType);
                     foreach (var parameterType in procedureSignature.ParameterTypes) {
-                        string messageType = Reflection.GetMessageTypeName (procedureSignature.ParameterTypes [0]);
+                        string messageType = Reflection.GetMessageTypeName (parameterType);
                         procedure.AddParameterTypes (messageType);
                     }
                     service.AddProcedures (procedure);
