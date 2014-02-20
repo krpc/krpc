@@ -8,7 +8,7 @@
     <ProjectGuid>{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>KRPC</RootNamespace>
-    <AssemblyName>krpc</AssemblyName>
+    <AssemblyName>kRPC</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
