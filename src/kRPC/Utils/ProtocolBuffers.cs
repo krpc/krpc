@@ -10,7 +10,10 @@ namespace KRPC.Utils
         /// Return the string name of the C# type for the Protocol Buffer message type
         /// </summary>
         public static string GetMessageTypeName (Type type) {
-            // TODO: Check if type is actually a protocol buffer message type
+            if (type == null)
+                throw new ArgumentException ("null is not a Protocol Buffer message type");
+            if (!IsAMessageType (type))
+                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer message type");
             return type.FullName.Replace("KRPC.Schema.", "");
         }
 
@@ -20,7 +23,10 @@ namespace KRPC.Utils
         /// </summary>
         public static IBuilder BuilderForMessageType (Type type)
         {
-            // TODO: Throw a ArgumentException if we can't get a builder instance (use IsAMessageType)
+            if (type == null)
+                throw new ArgumentException ("null is not a Protocol Buffer message type");
+            if (!IsAMessageType (type))
+                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer message type");
             MethodInfo createBuilder = type.GetMethod ("CreateBuilder", new Type[] {});
             return (IBuilder) createBuilder.Invoke (null, null);
         }
@@ -30,9 +36,7 @@ namespace KRPC.Utils
         /// </summary>
         public static bool IsAMessageType (Type type)
         {
-            // TODO: Use extension methods to add method to Type?!?
-            // FIXME: Should only return true if the supplied type is a protocol buffer message type
-            return true;
+            return typeof(IMessage).IsAssignableFrom (type);
         }
     }
 }
