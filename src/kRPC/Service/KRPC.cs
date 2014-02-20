@@ -8,8 +8,6 @@ namespace KRPC.Service
     [KRPCService]
     class KRPC
     {
-        public static IDictionary<string,ServiceSignature> Signatures { get; set; }
-
         [KRPCProcedure]
         public static Schema.KRPC.Status GetStatus ()
         {
@@ -21,10 +19,8 @@ namespace KRPC.Service
         [KRPCProcedure]
         public static Schema.KRPC.Services GetServices ()
         {
-            if (Signatures == null)
-                Signatures = new Services ().Signatures;
             var services = Schema.KRPC.Services.CreateBuilder ();
-            foreach (var serviceSignature in Signatures.Values) {
+            foreach (var serviceSignature in Services.Instance.Signatures.Values) {
                 var service = Schema.KRPC.Service.CreateBuilder ();
                 service.SetName (serviceSignature.Name);
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {

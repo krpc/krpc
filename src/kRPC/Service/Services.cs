@@ -13,10 +13,19 @@ namespace KRPC.Service
     {
         public IDictionary<string, ServiceSignature> Signatures { get; private set; }
 
+        private static Services instance;
+        public static Services Instance {
+            get {
+                if (instance == null)
+                    instance = new Services ();
+                return instance;
+            }
+        }
+
         /// <summary>
         /// Create a Services instance. Scans the loaded assemblies for services, procedures etc.
         /// </summary>
-        public Services ()
+        private Services ()
         {
             var serviceTypes = Reflection.GetTypesWith<KRPCService> ();
             try {
@@ -39,9 +48,6 @@ namespace KRPC.Service
             // Check tha the main KRPC service was found
             if (!Signatures.ContainsKey("KRPC"))
                 throw new ServiceException ("KRPC service could not be found");
-
-            // Update the KRPC service to use this Services object
-            KRPC.Signatures = Signatures;
         }
 
         /// <summary>

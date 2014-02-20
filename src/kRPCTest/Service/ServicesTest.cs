@@ -13,14 +13,6 @@ namespace KRPCTest.Service
     [TestFixture]
     public class ServicesTest
     {
-        private KRPC.Service.Services services;
-
-        [SetUp]
-        public void SetUp ()
-        {
-            services = new KRPC.Service.Services ();
-        }
-
         [Test]
         public void NonExistantService ()
         {
@@ -29,7 +21,7 @@ namespace KRPCTest.Service
                 .SetProcedure ("NonExistantProcedure")
                 .Build();
             Assert.Throws<RPCException>(
-                () => { services.HandleRequest (request); });
+                () => { KRPC.Service.Services.Instance.HandleRequest (request); });
         }
 
         [Test]
@@ -40,7 +32,7 @@ namespace KRPCTest.Service
                 .SetProcedure ("NonExistantProcedure")
                 .Build();
             Assert.Throws<RPCException> (
-                () => { services.HandleRequest (request); });
+                () => { KRPC.Service.Services.Instance.HandleRequest (request); });
         }
 
         [Test]
@@ -51,7 +43,7 @@ namespace KRPCTest.Service
                 .SetProcedure ("ProcedureWithoutAttribute")
                 .Build();
             Assert.Throws<RPCException>(
-                () => { services.HandleRequest (request); });
+                () => { KRPC.Service.Services.Instance.HandleRequest (request); });
         }
 
         /// <summary>
@@ -69,7 +61,7 @@ namespace KRPCTest.Service
                 .SetProcedure ("ProcedureNoArgsNoReturn")
                 .Build();
             // Run the request
-            services.HandleRequest(request);
+            KRPC.Service.Services.Instance.HandleRequest(request);
             mock.Verify (x => x.ProcedureNoArgsNoReturn (), Times.Once ());
         }
 
@@ -104,7 +96,7 @@ namespace KRPCTest.Service
                 .AddParameters(ByteString.CopyFrom(argBytes))
                 .Build();
             // Run the request
-            Assert.Throws<RPCException> (() => services.HandleRequest (request));
+            Assert.Throws<RPCException> (() => KRPC.Service.Services.Instance.HandleRequest (request));
             mock.Verify (x => x.ProcedureSingleArgNoReturn (It.IsAny<KRPC.Schema.KRPC.Response>()), Times.Never ());
         }
 
@@ -136,7 +128,7 @@ namespace KRPCTest.Service
                 .AddParameters(ByteString.CopyFrom(argBytes))
                 .Build();
             // Run the request
-            services.HandleRequest(request);
+            KRPC.Service.Services.Instance.HandleRequest(request);
             mock.Verify (x => x.ProcedureSingleArgNoReturn (It.IsAny<KRPC.Schema.KRPC.Response>()), Times.Once ());
         }
 
@@ -183,7 +175,7 @@ namespace KRPCTest.Service
                 .AddParameters(ByteString.CopyFrom(argBytes[2]))
                 .Build();
             // Run the request
-            services.HandleRequest(request);
+            KRPC.Service.Services.Instance.HandleRequest(request);
             mock.Verify (x => x.ProcedureThreeArgsNoReturn (
                 It.IsAny<KRPC.Schema.KRPC.Response>(),
                 It.IsAny<KRPC.Schema.KRPC.Request>(),
@@ -209,7 +201,7 @@ namespace KRPCTest.Service
                 .SetProcedure ("ProcedureNoArgsReturns")
                 .Build();
             // Run the request
-            Response.Builder responseBuilder = services.HandleRequest(request);
+            Response.Builder responseBuilder = KRPC.Service.Services.Instance.HandleRequest(request);
             responseBuilder.SetTime (42);
             Response response = responseBuilder.Build ();
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
@@ -243,7 +235,7 @@ namespace KRPCTest.Service
                 .AddParameters (ByteString.CopyFrom (expectedResponseBytes))
                 .Build();
             // Run the request
-            Response.Builder responseBuilder = services.HandleRequest(request);
+            Response.Builder responseBuilder = KRPC.Service.Services.Instance.HandleRequest(request);
             responseBuilder.Time = 42;
             Response response = responseBuilder.Build ();
             mock.Verify (x => x.ProcedureSingleArgReturns (It.IsAny<Response>()), Times.Once ());
