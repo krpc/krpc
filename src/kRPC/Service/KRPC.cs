@@ -6,7 +6,7 @@ using KRPC.Utils;
 namespace KRPC.Service
 {
     [KRPCService]
-    class KRPC
+    public class KRPC
     {
         [KRPCProcedure]
         public static Schema.KRPC.Status GetStatus ()
