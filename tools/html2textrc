@@ -1,0 +1,9 @@
+H1.vspace.after = 1
+H2.vspace.after = 1
+H3.vspace.after = 1
+H4.vspace.after = 1
+H5.vspace.after = 1
+H6.vspace.after = 1
+P.vspace.after = 1
+A.attributes.internal_link = NONE
+A.attributes.external_link = NONE
