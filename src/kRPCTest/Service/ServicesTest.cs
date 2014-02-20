@@ -214,7 +214,7 @@ namespace KRPCTest.Service
             Response response = responseBuilder.Build ();
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
             // Check the return value
-            Response innerResponse = Response.CreateBuilder ().MergeFrom (response.Return).Build ();
+            Response innerResponse = Response.CreateBuilder ().MergeFrom (response.ReturnValue).Build ();
             Assert.AreEqual (expectedResponse.Error, innerResponse.Error);
         }
 
@@ -248,7 +248,7 @@ namespace KRPCTest.Service
             Response response = responseBuilder.Build ();
             mock.Verify (x => x.ProcedureSingleArgReturns (It.IsAny<Response>()), Times.Once ());
             // Check the return value
-            Response innerResponse = Response.CreateBuilder ().MergeFrom (response.Return).Build ();
+            Response innerResponse = Response.CreateBuilder ().MergeFrom (response.ReturnValue).Build ();
             Assert.AreEqual (expectedResponse.Error, innerResponse.Error);
         }
 

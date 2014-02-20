@@ -67,7 +67,7 @@ namespace KRPC.Service
             object returnValue = procedure.Handler.Invoke (null, parameters);
             var responseBuilder = Response.CreateBuilder ();
             if (procedure.HasReturnType) {
-                responseBuilder.Return = EncodeReturnValue (procedure, returnValue);
+                responseBuilder.ReturnValue = EncodeReturnValue (procedure, returnValue);
             }
             return responseBuilder;
         }
