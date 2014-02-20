@@ -9,7 +9,7 @@ message Request {
 message Response {
   required double time = 1;
   optional string error = 2;
-  optional bytes return = 3;
+  optional bytes return_value = 3;
 }
 
 message Services {
