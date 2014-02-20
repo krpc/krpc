@@ -6,11 +6,12 @@ DIST_LIBS = \
   lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll
 DIST_ICONS = $(wildcard src/kRPC/bin/*.png)
 
-CSHARP_MAIN_PROJECTS = kRPC kRPCServices
-CSHARP_TEST_PROJECTS = kRPCTest TestingTools
+CSHARP_MAIN_PROJECTS  = kRPC kRPCServices
+CSHARP_TEST_PROJECTS  = kRPCTest
+CSHARP_OTHER_PROJECTS = TestingTools
 CSHARP_CONFIG = Release
 
-CSHARP_PROJECTS  = $(CSHARP_MAIN_PROJECTS) $(CSHARP_TEST_PROJECTS)
+CSHARP_PROJECTS  = $(CSHARP_MAIN_PROJECTS) $(CSHARP_TEST_PROJECTS) $(CSHARP_OTHER_PROJECTS)
 CSHARP_BINDIRS   = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin) \
                    $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/obj)
 CSHARP_MAIN_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
@@ -21,7 +22,7 @@ CSHARP_PROTOGEN = tools/ProtoGen.exe
 PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCServices/Schema/*.proto)
 
 # Main build targets
-.PHONY: all build dist pre-release install ksp clean dist-clean
+.PHONY: all build dist pre-release install test ksp clean dist-clean
 
 all: build
 
@@ -53,13 +54,16 @@ dist: build
 	mkdir -p $(DIST_DIR)/schema
 	cp -r $(PROTOS) $(DIST_DIR)/schema/
 
-pre-release: dist
+pre-release: dist test
 	cd $(DIST_DIR); zip -r krpc-pre-`date +"%Y-%m-%d"`.zip ./*
 
 install: dist
 	rm -rf $(KSP_DIR)/GameData/kRPC
 	rm -rf $(KSP_DIR)/GameData/000_Toolbar
 	cp -r $(DIST_DIR)/GameData/* $(KSP_DIR)/GameData/
+
+test: $(CSHARP_TEST_PROJECTS)
+	nunit-console --nologo -nothread -trace=Off -output=test.log src/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
 
 ksp: install TestingTools
 	cp src/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
