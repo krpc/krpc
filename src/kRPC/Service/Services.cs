@@ -11,70 +11,128 @@ namespace KRPC.Service
 {
     class Services
     {
-        public static Response.Builder HandleRequest (Request request)
+        public IDictionary<string, ServiceSignature> Signatures { get; private set; }
+
+        private static Services instance;
+        public static Services Instance {
+            get {
+                if (instance == null)
+                    instance = new Services ();
+                return instance;
+            }
+        }
+
+        /// <summary>
+        /// Create a Services instance. Scans the loaded assemblies for services, procedures etc.
+        /// </summary>
+        private Services ()
         {
-            // Get the service method
-            var serviceType = GetServiceType (request.Service);
-            MethodInfo handler = GetServiceMethod(serviceType, request.Method);
-
-            // Get the optional parameter
-            object parameter = null;
-            if (handler.GetParameters().Length == 1) {
-                Type type = handler.GetParameters () [0].ParameterType;
-                // TODO: check the type is an IMessage
-                MethodInfo createBuilder = type.GetMethod ("CreateBuilder", new Type[] {});
-                IBuilder parameterBuilder = (IBuilder) createBuilder.Invoke (null, null);
-                parameter = parameterBuilder.WeakMergeFrom (request.Request_).WeakBuild ();
+            var serviceTypes = Reflection.GetTypesWith<KRPCService> ();
+            try {
+                Signatures = serviceTypes
+                    .Select (x => new ServiceSignature (x))
+                    .ToDictionary (x => x.Name);
+            } catch (ArgumentException) {
+                // Handle service name clashes
+                // TODO: move into Utils
+                var duplicates = serviceTypes
+                        .Select (x => x.Name)
+                        .GroupBy (x => x)
+                        .Where (group => group.Count() > 1)
+                        .Select (group => group.Key)
+                        .ToArray ();
+                throw new ServiceException (
+                    "Multiple Services have the same name. " +
+                    "Duplicates are " + String.Join(", ", duplicates));
             }
-            // TODO: check if there are more parameter - this isn't allowed
+            // Check tha the main KRPC service was found
+            if (!Signatures.ContainsKey("KRPC"))
+                throw new ServiceException ("KRPC service could not be found");
+        }
 
-            // Invoke the handler
-            object[] parameters = { };
-            if (parameter != null)
-                parameters = new object[] { parameter };
-            object result = handler.Invoke (null, parameters);
+        /// <summary>
+        /// Executes the given request and returns a response builder with the relevant
+        /// fields populated. Throws RPCException if processing the request fails.
+        /// </summary>
+        public Response.Builder HandleRequest (Request request)
+        {
+            // Get the service definition
+            if (!Signatures.ContainsKey (request.Service))
+               throw new RPCException ("Service " + request.Service + " not found");
+            var service = Signatures [request.Service];
 
-            // Build the response
-            var responseBuilder = Response.CreateBuilder();
+            // Get the procedure definition
+            if (!service.Procedures.ContainsKey (request.Procedure))
+               throw new RPCException ("Procedure " + request.Procedure + " not found, " +
+                   "in Service " + request.Service);
+            var procedure = service.Procedures [request.Procedure];
 
-            // Process the optional result
-            if (result != null) {
-                byte[] resultBytes;
-                using (MemoryStream stream = new MemoryStream ()) {
-                    ((IMessage)result).WriteTo (stream);
-                    resultBytes = stream.ToArray ();
-                }
-                responseBuilder.Response_ = ByteString.CopyFrom (resultBytes);
+            // Invoke the procedure
+            object[] parameters = DecodeParameters (procedure, request.ParametersList);
+            // TODO: catch exceptions from the following call
+            object returnValue = procedure.Handler.Invoke (null, parameters);
+            var responseBuilder = Response.CreateBuilder ();
+            if (procedure.HasReturnType) {
+                responseBuilder.ReturnValue = EncodeReturnValue (procedure, returnValue);
             }
-
             return responseBuilder;
         }
 
-        private static List<Type> services;
-
         /// <summary>
-        /// Get a the C# type of a service by name.
+        /// Decode the parameters for a procedure from a serialized request
         /// </summary>
-        private static Type GetServiceType(string name) {
-            if (services == null)
-                services = Reflection.GetTypesWith<KRPCService> ().ToList ();
-            try {
-                return services.Where (x => x.Name == name).ToList ().First ();
-            } catch (InvalidOperationException) {
-                throw new NoSuchServiceException (name);
+        private object[] DecodeParameters(ProcedureSignature procedure, IList<ByteString> parameters)
+        {
+            // Check number of parameters is correct
+            if (parameters.Count != procedure.ParameterTypes.Count) {
+                throw new RPCException (
+                    "Incorrect number of parameters for " + procedure.FullyQualifiedName + ". " +
+                    "Expected " + procedure.ParameterTypes.Count + "; got " + parameters.Count + ".");
             }
+
+            // Attempt to decode them
+            object[] decodedParameters = new object[parameters.Count];
+            for (int i = 0; i < parameters.Count; i++) {
+                var builder = procedure.ParameterBuilders [i];
+                try {
+                    decodedParameters[i] = builder.WeakMergeFrom (parameters [i]).WeakBuild ();
+                } catch (Exception e) {
+                    throw new RPCException (
+                        "Failed to decode parameter " + i + " for " + procedure.FullyQualifiedName + ". " +
+                        "Expected a parameter of type " + ProtocolBuffers.GetMessageTypeName (procedure.ParameterTypes [i]) + ". " +
+                        e.GetType ().Name + ": " + e.Message);
+                }
+            }
+            return decodedParameters;
         }
 
         /// <summary>
-        /// Get a the C# method information of a service method by name.
+        /// Encodes the value returned by a procedure handler into a ByteString
         /// </summary>
-        private static MethodInfo GetServiceMethod(Type service, string name) {
-            MethodInfo method = service.GetMethod (name, BindingFlags.Public | BindingFlags.Static);
-            if (method == null)
-                throw new NoSuchServiceMethodException (service, name);
-            if (method.GetCustomAttributes(typeof(Service.KRPCProcedure), false).Length == 0)
-                throw new NoSuchServiceMethodException (service, name);
-            return method;
+        private ByteString EncodeReturnValue (ProcedureSignature procedure, object returnValue)
+        {
+            // Check the return value is missing
+            if (returnValue == null) {
+                throw new RPCException (
+                    procedure.FullyQualifiedName + " returned null. " +
+                    "Expected an object of type " + procedure.ReturnType);
+            }
+
+            // Check if the return value is of a valid type
+            IMessage message = returnValue as IMessage;
+            if (message == null || !procedure.ReturnType.IsAssignableFrom(message.GetType())) {
+                throw new RPCException (
+                    procedure.FullyQualifiedName + " returned an object of an invalid type. " +
+                    "Expected " + procedure.ReturnType + "; got " + message.GetType());
+            }
+
+            // Encode it as a ByteString
+            byte[] returnBytes;
+            using (MemoryStream stream = new MemoryStream ()) {
+                message.WriteTo (stream);
+                returnBytes = stream.ToArray ();
+            }
+            return ByteString.CopyFrom (returnBytes);
         }
     }
 }

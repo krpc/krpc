@@ -41,13 +41,5 @@ namespace KRPC.Utils
                 }
             }
         }
-
-        /// <summary>
-        /// Return the string type name of the protocol buffer message represented by the given type
-        /// </summary>
-        public static string GetMessageType (Type type) {
-            // TODO: error checking - check if type is an IMessage?
-            return type.FullName.Replace("KRPC.Schema.", "");
-        }
     }
 }

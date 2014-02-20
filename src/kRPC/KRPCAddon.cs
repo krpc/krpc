@@ -137,12 +137,12 @@ namespace KRPC
                             if (client.Stream.DataAvailable) {
                                 Request request = client.Stream.Read ();
                                 mainWindow.SawClientActivity (client);
-                                Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Method + ")");
+                                Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")");
 
                                 // Handle the request
                                 Response.Builder response;
                                 try {
-                                    response = Service.Services.HandleRequest (request);
+                                    response = KRPC.Service.Services.Instance.HandleRequest (request);
                                 } catch (Exception e) {
                                     response = Response.CreateBuilder ();
                                     response.Error = e.ToString ();

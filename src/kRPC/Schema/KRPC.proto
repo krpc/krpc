@@ -2,14 +2,14 @@ package KRPC;
 
 message Request {
   required string service = 1;
-  required string method = 2;
-  optional bytes request = 3;
+  required string procedure = 2;
+  repeated bytes parameters = 3;
 }
 
 message Response {
   required double time = 1;
   optional string error = 2;
-  optional bytes response = 3;
+  optional bytes return_value = 3;
 }
 
 message Services {
@@ -18,12 +18,12 @@ message Services {
 
 message Service {
   required string name = 1;
-  repeated Method methods = 2;
+  repeated Procedure procedures = 2;
 }
 
-message Method {
+message Procedure {
   required string name = 1;
-  optional string parameter_type = 2;
+  repeated string parameter_types = 2;
   optional string return_type = 3;
 }
 

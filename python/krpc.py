@@ -41,8 +41,8 @@ class BaseService(object):
         self._client = client
         self._name = name
 
-    def _invoke(self, method, parameter=None, return_type=None, **kwargs):
-        return self._client._invoke(self._name, method, parameter, return_type, **kwargs)
+    def _invoke(self, procedure, parameters=[], return_type=None, **kwargs):
+        return self._client._invoke(self._name, procedure, parameters, return_type, **kwargs)
 
 
 class KRPCService(BaseService):
@@ -56,7 +56,7 @@ class KRPCService(BaseService):
         return self._invoke('GetStatus', return_type='KRPC.Status')
 
     def GetServices(self):
-        """ Get available services and methods """
+        """ Get available services and procedures """
         return self._invoke('GetServices', return_type='KRPC.Services')
 
 
@@ -69,35 +69,29 @@ class Service(BaseService):
         self._name = service.name
         # Load the protobuf message types
         _load_protobuf_service_types(self._name)
-        # Add all the methods
-        for method in service.methods:
-            self._add_method(method)
+        # Add all the procedures
+        for procedure in service.procedures:
+            self._add_procedure(procedure)
 
-    def _add_method(self, method):
-        """ Add a method to this service, from a KRPC.Method object """
-        # TODO: make the callback validate the parameter type
-        has_parameter_type = method.HasField('parameter_type')
-        has_return_type = method.HasField('return_type')
+    def _add_procedure(self, procedure):
+        """ Add a procedure to this service, from a KRPC.Procedure object """
+        # TODO: make the callback validate the parameter types
+        for parameter_type in procedure.parameter_types:
+            if not _protobuf_type_exists(parameter_type):
+                Logger.debug('Failed to add procedure', self._name, procedure.name, '; ' +
+                             'protobuf type', parameter_type, 'not found.')
+                return
 
-        if has_parameter_type and not _protobuf_type_exists(method.parameter_type):
-            Logger.debug('Failed to add method', self._name, method.name, '; ' +
-                         'protobuf type', method.parameter_type, 'not found.')
+        has_return_type = procedure.HasField('return_type')
+        if has_return_type and not _protobuf_type_exists(procedure.return_type):
+            Logger.debug('Failed to add procedure', self._name, procedure.name, '; ' +
+                         'protobuf type', procedure.return_type, 'not found.')
             return
 
-        if has_return_type and not _protobuf_type_exists(method.return_type):
-            Logger.debug('Failed to add method', self._name, method.name, '; ' +
-                         'protobuf type', method.return_type, 'not found.')
-            return
-
-        if (not has_parameter_type) and (not has_return_type):
-            fn = lambda: self._invoke(method.name)
-        elif has_parameter_type and (not has_return_type):
-            fn = lambda parameter: self._invoke(method.name, parameter=parameter)
-        elif (not has_parameter_type) and has_return_type:
-            fn = lambda: self._invoke(method.name, return_type=method.return_type)
-        else:  # method.has_parameter_type and method.has_return_type:
-            fn = lambda parameter: self._invoke(method.name, parameter=parameter, return_type=method.return_type)
-        self.__dict__[method.name] = fn
+        # TODO: check the callback is passed the correct number of parameters
+        return_type = procedure.return_type if procedure.HasField('return_type') else None
+        fn = lambda *parameters: self._invoke(procedure.name, parameters=parameters, return_type=return_type)
+        self.__dict__[procedure.name] = fn
 
 
 class RPCError(RuntimeError):
@@ -122,16 +116,16 @@ class Client(object):
             if service.name != 'KRPC':
                 self.__dict__[service.name] = Service(self, service)
 
-    def _invoke(self, service, method, parameter=None, return_type=None, **kwargs):
+    def _invoke(self, service, procedure, parameters=[], return_type=None, **kwargs):
         """ Execute an RPC """
 
         # Build the request object
         # TODO: validate the request object, so we catch it here instead of in an error response from the server
         request = proto.KRPC.Request()
         request.service = service
-        request.method = method
-        if parameter is not None:
-            request.request = parameter.SerializeToString()
+        request.procedure = procedure
+        for parameter in parameters:
+            request.parameters.append(parameter.SerializeToString())
 
         # Send the request
         self._send_request(request)
@@ -146,7 +140,7 @@ class Client(object):
         if return_type is not None:
             package, message_type = return_type.split('.')
             result = proto.__dict__[package].__dict__[message_type]()
-            result.ParseFromString(response.response)
+            result.ParseFromString(response.return_value)
         return result
 
     def _send_request(self, request):

@@ -5,9 +5,11 @@ namespace KRPCTest.Service
 {
     public interface ITestService
     {
-        void MethodNoArgsNoReturn ();
-        void MethodArgsNoReturn (KRPC.Schema.KRPC.Response data);
-        KRPC.Schema.KRPC.Response MethodNoArgsReturns ();
-        KRPC.Schema.KRPC.Response MethodArgsReturns (KRPC.Schema.KRPC.Response data);
+        void ProcedureNoArgsNoReturn ();
+        void ProcedureSingleArgNoReturn (KRPC.Schema.KRPC.Response data);
+        void ProcedureThreeArgsNoReturn (KRPC.Schema.KRPC.Response x,
+            KRPC.Schema.KRPC.Request y, KRPC.Schema.KRPC.Response z);
+        KRPC.Schema.KRPC.Response ProcedureNoArgsReturns ();
+        KRPC.Schema.KRPC.Response ProcedureSingleArgReturns (KRPC.Schema.KRPC.Response data);
     }
 }

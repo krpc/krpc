@@ -52,8 +52,6 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Service\Services.cs" />
-    <Compile Include="Service\NoSuchServiceException.cs" />
-    <Compile Include="Service\NoSuchServiceMethodException.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IClient.cs" />
@@ -89,7 +87,12 @@
     <Compile Include="UI\Window.cs" />
     <Compile Include="UI\OptionDialog.cs" />
     <Compile Include="Service\KRPCProcedure.cs" />
+    <Compile Include="Service\ServiceException.cs" />
+    <Compile Include="Service\RPCException.cs" />
+    <Compile Include="Service\ServiceSignature.cs" />
+    <Compile Include="Service\ProcedureSignature.cs" />
     <Compile Include="UI\GUILayoutExtensions.cs" />
+    <Compile Include="Utils\ProtocolBuffers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
