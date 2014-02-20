@@ -79,7 +79,7 @@ ksp: install TestingTools
 
 clean: protobuf-clean
 	make -C src/kRPC/icons clean
-	-rm -rf $(CSHARP_BINDIRS)
+	-rm -rf $(CSHARP_BINDIRS) test.log
 	find . -name "*.pyc" -exec rm -rf {} \;
 
 dist-clean: clean
