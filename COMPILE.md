@@ -1,11 +1,11 @@
-Compiling kRPC from source
+Compiling kRPC from Source
 ==========================
 
 ## Compiling the Server Plugin
 
 ### Using the Makefile
 
-1. Install the required dependencies. Libraries required by the plugin are already included in `lib` and the C# Protocol Buffers compiler is already included in `tools`. You will however need to install the MonoDevelop command line tool `mdtool`, mono runtime and development libraries and the Protocol Buffers compiler.
+1. Install the required dependencies. Libraries required by the plugin are already included in `lib` and the C# Protocol Buffers compiler is already included in `tools`. You will however need to install the MonoDevelop command line tool `mdtool`, Mono runtime and development libraries, and the Protocol Buffers compiler.
 
  On Linux, you should be able to use your package manager. For example using apt:
 
@@ -25,7 +25,7 @@ Compiling kRPC from source
 
 ### Using an IDE
 
-1. Install all the Protocol Buffer compiler (as above).
+1. Install the Protocol Buffer compiler (as above).
 
 2. Compile the protocol buffer .proto files into C# classes:
 
