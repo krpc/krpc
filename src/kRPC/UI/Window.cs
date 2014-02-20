@@ -26,6 +26,7 @@ namespace KRPC.UI
             }
         }
 
+        // TODO: ensure position is not outside the KSP window
         private Rect position = new Rect ();
         public Rect Position {
             get { return position; }
