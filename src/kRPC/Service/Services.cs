@@ -90,10 +90,11 @@ namespace KRPC.Service
                 var builder = procedure.ParameterBuilders [i];
                 try {
                     decodedParameters[i] = builder.WeakMergeFrom (parameters [i]).WeakBuild ();
-                } catch (InvalidProtocolBufferException) {
+                } catch (Exception e) {
                     throw new RPCException (
                         "Failed to decode parameter " + i + " for " + procedure.FullyQualifiedName + ". " +
-                        "Expected a parameter of type " + Reflection.GetMessageTypeName (procedure.ParameterTypes [i]));
+                        "Expected a parameter of type " + Reflection.GetMessageTypeName (procedure.ParameterTypes [i]) + ". " +
+                        e.GetType ().Name + ": " + e.Message);
                 }
             }
             return decodedParameters;

@@ -74,6 +74,41 @@ namespace KRPCTest.Service
         }
 
         /// <summary>
+        /// Test calling a service method with a malformed argument
+        /// </summary>
+        [Test]
+        public void HandleRequestSingleMalformedArgNoReturn () {
+            // Create argument
+            var arg = KRPC.Schema.KRPC.Response.CreateBuilder ()
+                .SetError ("foo").SetTime (42).Build ();
+            byte[] argBytes;
+            using (MemoryStream stream = new MemoryStream()) {
+                arg.WriteTo (stream);
+                argBytes = stream.ToArray ();
+            }
+            // Screw it up!
+            for (int i = 0; i < argBytes.Length; i++)
+                argBytes[i] = (byte)(argBytes[i]+1);
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureSingleArgNoReturn (It.IsAny<KRPC.Schema.KRPC.Response>()))
+                .Callback((KRPC.Schema.KRPC.Response x) => {
+                    // Check the argument
+                    Assert.AreEqual (argBytes, x.ToByteArray());
+                } );
+            TestService.service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureSingleArgNoReturn")
+                .AddParameters(ByteString.CopyFrom(argBytes))
+                .Build();
+            // Run the request
+            Assert.Throws<RPCException> (() => services.HandleRequest (request));
+            mock.Verify (x => x.ProcedureSingleArgNoReturn (It.IsAny<KRPC.Schema.KRPC.Response>()), Times.Never ());
+        }
+
+        /// <summary>
         /// Test calling a service method with an argument and no return value
         /// </summary>
         [Test]
