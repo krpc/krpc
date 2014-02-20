@@ -7,7 +7,7 @@ A work-in-progress.
 
 ### Usage
 
-[http://github.com/djungelorm/krpc/releases](Download the plugin files) and copy them to your GameData directory. kRPCis a 'parts-less' plugin. The server configuration window will appear when piloting any vessel.
+[Download the plugin files](http://github.com/djungelorm/krpc/releases) and copy them to your GameData directory. kRPC is a 'parts-less' plugin. The server configuration window will appear when piloting any vessel.
 
 See [python/example.py](python/example.py) for an example script that sends commands to control the active vessel using kRPC.
 
@@ -21,4 +21,4 @@ The client runs outside of KSP. It communicates with the server to run Procedure
 
 ### Compiling from Source
 
-See [COMPILING.md](COMPILING.md) for instructions.
+See [COMPILE.md](COMPILE.md) for instructions.
