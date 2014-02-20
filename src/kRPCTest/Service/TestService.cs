@@ -9,32 +9,39 @@ namespace KRPCTest.Service
     {
         public static ITestService service;
 
-        public static void MethodWithoutAttribute ()
+        public static void ProcedureWithoutAttribute ()
         {
         }
 
         [KRPCProcedure]
-        public static void MethodNoArgsNoReturn ()
+        public static void ProcedureNoArgsNoReturn ()
         {
-            service.MethodNoArgsNoReturn ();
+            service.ProcedureNoArgsNoReturn ();
         }
 
         [KRPCProcedure]
-        public static void MethodArgsNoReturn (KRPC.Schema.KRPC.Response data)
+        public static void ProcedureSingleArgNoReturn (KRPC.Schema.KRPC.Response data)
         {
-            service.MethodArgsNoReturn (data);
+            service.ProcedureSingleArgNoReturn (data);
         }
 
         [KRPCProcedure]
-        public static KRPC.Schema.KRPC.Response MethodNoArgsReturns ()
+        public static void ProcedureThreeArgsNoReturn (KRPC.Schema.KRPC.Response x,
+            KRPC.Schema.KRPC.Request y, KRPC.Schema.KRPC.Response z)
         {
-            return service.MethodNoArgsReturns ();
+            service.ProcedureThreeArgsNoReturn (x, y, z);
         }
 
         [KRPCProcedure]
-        public static KRPC.Schema.KRPC.Response MethodArgsReturns (KRPC.Schema.KRPC.Response data)
+        public static KRPC.Schema.KRPC.Response ProcedureNoArgsReturns ()
         {
-            return service.MethodArgsReturns (data);
+            return service.ProcedureNoArgsReturns ();
+        }
+
+        [KRPCProcedure]
+        public static KRPC.Schema.KRPC.Response ProcedureSingleArgReturns (KRPC.Schema.KRPC.Response data)
+        {
+            return service.ProcedureSingleArgReturns (data);
         }
     }
 }
