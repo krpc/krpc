@@ -1,5 +1,7 @@
 KSP_DIR = "../Kerbal Space Program"
 
+VERSION = $(shell cat VERSION)
+
 DIST_DIR = dist
 DIST_LIBS = \
   lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.dll \
@@ -22,7 +24,7 @@ CSHARP_PROTOGEN = tools/ProtoGen.exe
 PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCServices/Schema/*.proto)
 
 # Main build targets
-.PHONY: all build dist pre-release install test ksp clean dist-clean
+.PHONY: all build dist pre-release release install test ksp clean dist-clean
 
 all: build
 
@@ -43,6 +45,8 @@ dist: build
 	cp $(DIST_DIR)/README.txt $(DIST_DIR)/GameData/kRPC/
 	# Plugin files
 	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
+	monodis --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
+	monodis --assembly $(DIST_DIR)/GameData/kRPC/kRPCServices.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCServices-version.txt
 	# Toolbar
 	unzip lib/toolbar/Toolbar-1.6.0.zip -d $(DIST_DIR)
 	mv $(DIST_DIR)/Toolbar-1.6.0/GameData/* $(DIST_DIR)/GameData/
@@ -55,7 +59,10 @@ dist: build
 	cp -r $(PROTOS) $(DIST_DIR)/schema/
 
 pre-release: dist test
-	cd $(DIST_DIR); zip -r krpc-pre-`date +"%Y-%m-%d"`.zip ./*
+	cd $(DIST_DIR); zip -r krpc-$(VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
+
+release: dist test
+	cd $(DIST_DIR); zip -r krpc-$(VERSION).zip ./*
 
 install: dist
 	rm -rf $(KSP_DIR)/GameData/kRPC
