@@ -9,17 +9,40 @@ using KRPC.Utils;
 
 namespace KRPC.Service
 {
+    /// <summary>
+    /// Signature information for a procedure, including procedure name,
+    /// parameter types and return types.
+    /// </summary>
     class ProcedureSignature
     {
+        /// <summary>
+        /// Name of the procedure, not including the service it is in.
+        /// </summary>
         public string Name { get; private set; }
+
+        /// <summary>
+        /// Name of the procedure including the service it is in.
+        /// I.e. ServiceName.ProcedureName
+        /// </summary>
         public string FullyQualifiedName { get; private set; }
 
+        /// <summary>
+        /// The method that implements the procedure.
+        /// </summary>
         public MethodInfo Handler { get; private set; }
+
         public IList<Type> ParameterTypes { get; private set; }
         public bool HasReturnType { get; private set; }
         public Type ReturnType { get; private set; }
 
+        /// <summary>
+        /// Protocol buffer builder objects, used to deserialize parameter values.
+        /// </summary>
         public IList<IBuilder> ParameterBuilders { get; private set; }
+
+        /// <summary>
+        /// Protocol buffer builder objects, used to serialize the return value.
+        /// </summary>
         public IBuilder ReturnBuilder { get; private set; }
 
         public ProcedureSignature (string serviceName, MethodInfo method) {

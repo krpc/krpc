@@ -52,7 +52,7 @@ namespace KRPC.Service
 
         /// <summary>
         /// Executes the given request and returns a response builder with the relevant
-        /// fields populated. Throw RPCException if processing the request fails.
+        /// fields populated. Throws RPCException if processing the request fails.
         /// </summary>
         public Response.Builder HandleRequest (Request request)
         {
