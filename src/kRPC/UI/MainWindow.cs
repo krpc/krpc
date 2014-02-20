@@ -4,82 +4,195 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using KSP;
+using KRPC.Utils;
 using KRPC.Server;
 using KRPC.Server.RPC;
 using KRPC.Server.Net;
+using KRPC.UI;
 
 namespace KRPC.UI
 {
     sealed class MainWindow : Window
     {
-        private GUIStyle labelStyle, activityStyle;
+        public KRPCConfiguration Config { private get; set; }
         public RPCServer Server { private get; set; }
-        private Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
 
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
 
+        private Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
+        private const long lastActivityInterval = 100L; // milliseconds
+
+        // Remember number of clients displayed, to reset window height when it changes
+        private int numClientsDisplayed = 0;
+
+        // Editable fields
+        private string address;
+        private string port;
+
+        // Errors to display
+        public List<string> Errors { get; private set; }
+        private readonly Color errorColor = Color.yellow;
+
+        // Style settings
+        private GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, buttonStyle, separatorStyle, lightStyle, errorLabelStyle;
+        private const float windowWidth = 280f;
+        private const float addressWidth = 106f;
+        private const int addressMaxLength = 15;
+        private const float portWidth = 45f;
+        private const int portMaxLength = 5;
+
+        // Strings
+        private const string startButtonText = "Start server";
+        private const string stopButtonText = "Stop server";
+        private const string serverOnlineText = "Server online";
+        private const string serverOfflineText = "Server offline";
+        private const string addressLabelText = "Address:";
+        private const string portLabelText = "Port:";
+        private const string noClientsConnectedText = "No clients connected";
+        private const string unknownClientNameText = "<unknown>";
+        private const string invalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
+        private const string invalidPortText = "Port must be between 0 and 65535";
+
+        private const string localClientOnlyText = "(Local clients only)";
+        private const string subnetAllowedText = "(Subnet {0})";
+        private const string unknownClientsAllowedText = "(Unknown visibility!)";
+
         protected override void Init() {
-            Style.fixedWidth = 250f;
+            Style.fixedWidth = windowWidth;
 
-            labelStyle = new GUIStyle(UnityEngine.GUI.skin.label);
-            labelStyle.stretchWidth = true;
+            labelStyle = new GUIStyle (UnityEngine.GUI.skin.label);
+            labelStyle.margin = new RectOffset (0, 0, 0, 0);
 
-            activityStyle = new GUIStyle (HighLogic.Skin.toggle);
-            activityStyle.active = HighLogic.Skin.toggle.normal;
-            activityStyle.focused = HighLogic.Skin.toggle.normal;
-            activityStyle.hover = HighLogic.Skin.toggle.normal;
-            activityStyle.border = new RectOffset (0, 0, 0, 0);
-            activityStyle.padding = new RectOffset (6, 0, 6, 0);
-            activityStyle.overflow = new RectOffset (0, 0, 0, 0);
-            activityStyle.imagePosition = ImagePosition.ImageOnly;
+            stretchyLabelStyle = new GUIStyle (UnityEngine.GUI.skin.label);
+            stretchyLabelStyle.margin = new RectOffset (0, 0, 0, 0);
+            stretchyLabelStyle.stretchWidth = true;
+
+            textFieldStyle = new GUIStyle (UnityEngine.GUI.skin.textField);
+            textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
+
+            buttonStyle = new GUIStyle (UnityEngine.GUI.skin.button);
+
+            separatorStyle = GUILayoutExtensions.SeparatorStyle (new Color(0f, 0f, 0f, 0.25f));
+            separatorStyle.fixedHeight = 2;
+            separatorStyle.stretchWidth = true;
+            separatorStyle.margin = new RectOffset (2, 2, 3, 3);
+
+            lightStyle = GUILayoutExtensions.LightStyle ();
+
+            errorLabelStyle = new GUIStyle (UnityEngine.GUI.skin.label);
+            errorLabelStyle.margin = new RectOffset (0, 0, 0, 0);
+            errorLabelStyle.stretchWidth = true;
+            errorLabelStyle.normal.textColor = errorColor;
+
+            Errors = new List<string> ();
+            address = Config.Address.ToString ();
+            port = Config.Port.ToString ();
         }
 
         protected override void Draw ()
         {
-            GUILayout.BeginVertical ();
-            GUILayout.Label ("Server status: " + (Server.Running ? "Online" : "Offline"), labelStyle);
-            if (Server.Running) {
-                if (GUILayout.Button ("Stop server"))
-                    OnStopServerPressed (this, EventArgs.Empty);
+            // Force window to resize to height of content when length of client list changes
+            // TODO: better way to do this?
+            if (Server.Clients.Count () != numClientsDisplayed) {
+                Position = new Rect (Position.x, Position.y, Position.width, 0f);
+                numClientsDisplayed = Server.Clients.Count ();
+            }
 
+            GUILayout.BeginVertical ();
+            if (Server.Running) {
                 TCPServer tcpServer = (TCPServer)Server.Server;
 
-                GUILayout.BeginHorizontal ();
-                GUILayout.Label ("Server address:", labelStyle);
-                GUILayout.Label (tcpServer.Address.ToString (), labelStyle);
-                GUILayout.EndHorizontal ();
+                if (GUILayout.Button (stopButtonText, buttonStyle)) {
+                    if (OnStopServerPressed != null)
+                        OnStopServerPressed (this, EventArgs.Empty);
+                    // Force window to resize to height of content
+                    // TODO: better way to do this?
+                    Position = new Rect (Position.x, Position.y, Position.width, 0f);
+                }
 
                 GUILayout.BeginHorizontal ();
-                GUILayout.Label ("Server port:", labelStyle);
-                GUILayout.Label (tcpServer.Port.ToString (), labelStyle);
-                GUILayout.EndHorizontal ();
-
-                GUILayout.BeginHorizontal ();
-                GUILayout.Label ("Allowed client(s):", labelStyle);
+                GUILayoutExtensions.Light (true, lightStyle);
+                GUILayout.Label (serverOnlineText, stretchyLabelStyle);
                 GUILayout.Label (AllowedClientsString (tcpServer.Address), labelStyle);
                 GUILayout.EndHorizontal ();
 
+                GUILayout.BeginHorizontal ();
+                GUILayout.Label (addressLabelText, labelStyle);
+                GUILayout.Label (tcpServer.Address.ToString (), stretchyLabelStyle);
+                GUILayout.Label (portLabelText, labelStyle);
+                GUILayout.Label (tcpServer.Port.ToString (), stretchyLabelStyle);
+                GUILayout.EndHorizontal ();
+
+                GUILayoutExtensions.Separator (separatorStyle);
+
                 if (Server.Clients.Count () == 0) {
-                    GUILayout.Label ("No clients connected", labelStyle);
+                    GUILayout.BeginHorizontal ();
+                    GUILayout.Label (noClientsConnectedText, labelStyle);
+                    GUILayout.EndHorizontal ();
                 } else {
-                    GUILayout.Label ("Clients connected:", labelStyle);
                     foreach (var client in Server.Clients) {
-                        string name = (client.Name == "") ? "<unknown>" : client.Name;
+                        string name = (client.Name == "") ? unknownClientNameText : client.Name;
                         GUILayout.BeginHorizontal ();
-                        GUILayout.Toggle (IsClientActive (client), "", activityStyle);
-                        GUILayout.Label (name + " @ " + client.Address);
+                        GUILayoutExtensions.Light (IsClientActive (client), lightStyle);
+                        GUILayout.Label (name + " @ " + client.Address, stretchyLabelStyle);
                         GUILayout.EndHorizontal ();
                     }
                 }
             } else {
-                if (GUILayout.Button ("Start server"))
-                    OnStartServerPressed (this, EventArgs.Empty);
+                if (GUILayout.Button (startButtonText, buttonStyle)) {
+                    if (StartServer () && OnStartServerPressed != null)
+                        OnStartServerPressed (this, EventArgs.Empty);
+                }
+
+                GUILayout.BeginHorizontal ();
+                GUILayoutExtensions.Light (false, lightStyle);
+                GUILayout.Label (serverOfflineText, stretchyLabelStyle);
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Label (addressLabelText, stretchyLabelStyle);
+                textFieldStyle.fixedWidth = addressWidth;
+                address = GUILayout.TextField (address, addressMaxLength, textFieldStyle);
+                GUILayout.Label (portLabelText, stretchyLabelStyle);
+                textFieldStyle.fixedWidth = portWidth;
+                port = GUILayout.TextField (port, portMaxLength, textFieldStyle);
+                GUILayout.EndHorizontal ();
+
+                foreach (var error in Errors) {
+                    GUILayout.Label (error, errorLabelStyle);
+                }
             }
             GUILayout.EndVertical ();
             GUI.DragWindow ();
+        }
+
+        private bool StartServer ()
+        {
+            // Validate the settings
+            Errors.Clear ();
+            IPAddress ignoreAddress;
+            ushort ignorePort;
+            bool validAddress = IPAddress.TryParse (address, out ignoreAddress);
+            bool validPort = UInt16.TryParse (port, out ignorePort);
+
+            // Display error message if required
+            if (!validAddress)
+                Errors.Add (invalidAddressText);
+            if (!validPort)
+                Errors.Add (invalidPortText);
+
+            // Save the settings and trigger start server event
+            if (Errors.Count == 0) {
+                Config.Port = Convert.ToUInt16 (port);
+                Config.Address = IPAddress.Parse (address);
+                Config.Save ();
+                return true;
+            }
+            return false;
         }
 
         public void SawClientActivity (IClient client)
@@ -92,16 +205,17 @@ namespace KRPC.UI
                 return false;
             long now = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long lastActivity = lastClientActivity [client];
-            return now - 100L < lastActivity;
+            return now - lastActivityInterval < lastActivity;
         }
 
         private string AllowedClientsString(IPAddress localAddress) {
-            if (localAddress.ToString() == "127.0.0.1")
-                return "Local only";
+            // TODO: better way of checking if address is the loopback device?
+            if (localAddress.ToString () == IPAddress.Loopback.ToString ())
+                return localClientOnlyText;
             var subnet = GetSubnetMask (localAddress);
             if (subnet != null)
-                return "Subnet mask " + subnet;
-            return "?";
+                return String.Format (subnetAllowedText, subnet);
+            return unknownClientsAllowedText;
         }
 
         private static IPAddress GetSubnetMask(IPAddress address)
