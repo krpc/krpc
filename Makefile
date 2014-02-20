@@ -7,7 +7,11 @@ CSHARP_BIN_DIRS := $(foreach project,$(CSHARP_PROJECT_DIRS),$(project)/obj) $(fo
 
 PROTOC := protoc
 CSHARP_PROTOGEN := "tools/ProtoGen.exe"
-PROTOS := src/kRPC/Schema/KRPC.proto src/kRPCServices/Schema/Test.proto
+PROTOS := src/kRPC/Schema/KRPC.proto \
+          src/kRPCServices/Schema/Control.proto \
+          src/kRPCServices/Schema/Orbit.proto \
+          src/kRPCServices/Schema/Flight.proto \
+          src/kRPCServices/Schema/Vessel.proto
 
 all: dist
 
@@ -21,16 +25,27 @@ build: protobuf $(foreach project,$(CSHARP_PROJECTS),$(project).dll)
 dist: build
 	rm -rf dist
 	mkdir -p dist
+	# Licenses
+	cp LICENSE.txt dist
+	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt dist/protobuf-license.txt
+	cp lib/toolbar/LICENSE.txt dist/toolbar-license.txt
+	# Plugin files
+	mkdir -p dist/GameData/kRPC
 	cp -r \
-		LICENSE.txt \
 		src/kRPC/bin/Release/krpc.dll \
 		src/kRPCServices/bin/Release/krpc-services.dll \
 		src/kRPC/bin/*.png \
 		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.dll \
 		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll \
-		python \
-		dist
-	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt dist/protobuf-license.txt
+		dist/GameData/kRPC/
+	# Toolbar
+	unzip lib/toolbar/Toolbar-1.6.0.zip -d dist
+	mv dist/Toolbar-1.6.0/GameData/* dist/GameData/
+	rm -r dist/Toolbar-1.6.0
+	# Python client library
+	mkdir -p dist/python
+	cp -r python/*.py python/*.craft python/proto dist/python/
+	# Schema
 	mkdir -p dist/schema
 	cp -r $(PROTOS) dist/schema/
 
@@ -47,10 +62,10 @@ dist-clean: clean
 install: dist
 	rm -rf $(KRPC_DIR)
 	mkdir -p $(KRPC_DIR)
-	cp -r dist/* $(KRPC_DIR)/
+	cp -r dist/GameData/kRPC/* $(KRPC_DIR)/
 
 ksp: install
-	cp -r dist/* src/TestingTools/bin/Release/TestingTools.dll $(KRPC_DIR)/
+	cp src/TestingTools/bin/Release/TestingTools.dll $(KRPC_DIR)/
 	$(KSP_DIR)/KSP.x86_64 &
 	tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
 

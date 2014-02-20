@@ -50,6 +50,7 @@ namespace KRPC
 
             // Create main window
             mainWindow = gameObject.AddComponent<MainWindow>();
+            mainWindow.Config = config;
             mainWindow.Server = server;
             mainWindow.Visible = config.MainWindowVisible;
             mainWindow.Position = config.MainWindowPosition;
@@ -61,7 +62,11 @@ namespace KRPC
             mainWindow.OnStartServerPressed += (s, e) => {
                 tcpServer.Port = config.Port;
                 tcpServer.Address = config.Address;
-                server.Start ();
+                try {
+                    server.Start ();
+                } catch (SocketException exn) {
+                    mainWindow.Errors.Add ("Socket error '" + exn.SocketErrorCode + "': " + exn.Message);
+                }
             };
             mainWindow.OnStopServerPressed += (s, e) => {
                 server.Stop ();

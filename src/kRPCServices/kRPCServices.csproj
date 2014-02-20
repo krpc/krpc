@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{690C8D5A-B41F-44C4-99B9-B6A3D190447B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>kRPCServices</RootNamespace>
+    <RootNamespace>KRPCServices</RootNamespace>
     <AssemblyName>krpc-services</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -37,11 +37,30 @@
     <Reference Include="Google.ProtocolBuffers.Serialization">
       <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\cf35\Google.ProtocolBuffers.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\lib\ksp\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\lib\ksp\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\lib\ksp\TDx.TDxInput.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\lib\ksp\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Test.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Schema\Test.cs" />
+    <Compile Include="Schema\Control.cs" />
+    <Compile Include="Schema\Orbit.cs" />
+    <Compile Include="Orbit.cs" />
+    <Compile Include="Control.cs" />
+    <Compile Include="Schema\Flight.cs" />
+    <Compile Include="Flight.cs" />
+    <Compile Include="Schema\Vessel.cs" />
+    <Compile Include="Vessel.cs" />
+    <Compile Include="PilotAddon.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -54,6 +73,9 @@
     <Folder Include="Schema\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Schema\Test.proto" />
+    <None Include="Schema\Control.proto" />
+    <None Include="Schema\Orbit.proto" />
+    <None Include="Schema\Flight.proto" />
+    <None Include="Schema\Vessel.proto" />
   </ItemGroup>
 </Project>

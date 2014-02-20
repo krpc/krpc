@@ -17,11 +17,11 @@ namespace KRPC.Utils
         protected virtual void AfterLoad() { }
 
         void IPersistenceLoad.PersistenceLoad () {
-            BeforeSave ();
+            AfterLoad ();
         }
 
         void IPersistenceSave.PersistenceSave () {
-            AfterLoad ();
+            BeforeSave ();
         }
     }
 }

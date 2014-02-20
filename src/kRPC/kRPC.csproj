@@ -91,6 +91,7 @@
     <Compile Include="Service\RPCException.cs" />
     <Compile Include="Service\ServiceSignature.cs" />
     <Compile Include="Service\ProcedureSignature.cs" />
+    <Compile Include="UI\GUILayoutExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
