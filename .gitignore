@@ -120,6 +120,7 @@ src/kRPC/Schema/*.py
 src/kRPCServices/Schema/*.cs
 src/kRPCServices/Schema/*.py
 python/proto/
+src/kRPC/Schema/KRPC.cs.orig
 
 # Build output
 dist

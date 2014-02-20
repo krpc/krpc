@@ -84,6 +84,8 @@ $(CSHARP_LIBRARIES):
 .PHONY: protobuf protobuf-csharp protobuf-python protobuf-clean
 
 protobuf: protobuf-csharp protobuf-python
+	# Fix for error in output of C# protobuf compiler
+	-patch -p1 --forward --reject-file=- < krpc-proto.patch
 
 protobuf-csharp: $(PROTOS) $(PROTOS:.proto=.cs)
 
