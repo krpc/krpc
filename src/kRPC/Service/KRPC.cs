@@ -22,7 +22,7 @@ namespace KRPC.Service
         public static Schema.KRPC.Services GetServices ()
         {
             if (Signatures == null)
-                throw new RPCException ("Services have not been loaded");
+                Signatures = new Services ().Signatures;
             var services = Schema.KRPC.Services.CreateBuilder ();
             foreach (var serviceSignature in Signatures.Values) {
                 var service = Schema.KRPC.Service.CreateBuilder ();

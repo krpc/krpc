@@ -21,17 +21,17 @@ namespace KRPCTest.Service
             Assert.AreEqual (2, services.Services_Count);
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "KRPC") {
-                    Assert.AreEqual (2, service.MethodsCount);
-                    foreach (KRPC.Schema.KRPC.Method method in service.MethodsList) {
+                    Assert.AreEqual (2, service.ProceduresCount);
+                    foreach (KRPC.Schema.KRPC.Procedure method in service.ProceduresList) {
                         if (method.Name == "GetStatus") {
                             Assert.AreEqual ("GetStatus", method.Name);
                             Assert.AreEqual ("KRPC.Status", method.ReturnType);
-                            Assert.IsFalse (method.HasParameterType);
+                            Assert.AreEqual (0, method.ParameterTypesCount);
                         }
                         if (method.Name == "GetServices") {
                             Assert.AreEqual ("GetServices", method.Name);
                             Assert.AreEqual ("KRPC.Services", method.ReturnType);
-                            Assert.IsFalse (method.HasParameterType);
+                            Assert.AreEqual (0, method.ParameterTypesCount);
                         }
                     }
                 }

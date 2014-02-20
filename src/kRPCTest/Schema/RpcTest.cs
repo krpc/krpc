@@ -17,12 +17,12 @@ namespace KRPCTest.Schema
 
             var builder = Request.CreateBuilder();
             builder.Service = SERVICE;
-            builder.Method = METHOD;
+            builder.Procedure = METHOD;
             var request = builder.Build();
 
-            Assert.IsTrue(request.HasMethod);
+            Assert.IsTrue(request.HasProcedure);
             Assert.IsTrue(request.HasService);
-            Assert.AreEqual(METHOD, request.Method);
+            Assert.AreEqual(METHOD, request.Procedure);
             Assert.AreEqual(SERVICE, request.Service);
 
             MemoryStream stream = new MemoryStream ();
@@ -32,9 +32,9 @@ namespace KRPCTest.Schema
 
             Request reqCopy = Request.ParseDelimitedFrom(stream);
 
-            Assert.IsTrue(reqCopy.HasMethod);
+            Assert.IsTrue(reqCopy.HasProcedure);
             Assert.IsTrue(reqCopy.HasService);
-            Assert.AreEqual(METHOD, reqCopy.Method);
+            Assert.AreEqual(METHOD, reqCopy.Procedure);
             Assert.AreEqual(SERVICE, reqCopy.Service);
         }
     }

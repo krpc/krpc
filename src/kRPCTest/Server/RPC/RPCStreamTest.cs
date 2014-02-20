@@ -21,7 +21,7 @@ namespace KRPCTest.Server.RPC
             // Create a request object and get the binary representation of it
             var requestBuilder = Request.CreateBuilder ();
             requestBuilder.Service = "SomeServiceName";
-            requestBuilder.Method = "SomeMethodName";
+            requestBuilder.Procedure = "SomeMethodName";
             expectedRequest = requestBuilder.Build ();
             using (var stream = new MemoryStream ()) {
                 expectedRequest.WriteDelimitedTo (stream);
@@ -57,7 +57,7 @@ namespace KRPCTest.Server.RPC
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
             Assert.AreEqual(expectedRequest.Service, request.Service);
-            Assert.AreEqual(expectedRequest.Method, request.Method);
+            Assert.AreEqual(expectedRequest.Procedure, request.Procedure);
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace KRPCTest.Server.RPC
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
             Assert.AreEqual(expectedRequest.Service, request.Service);
-            Assert.AreEqual(expectedRequest.Method, request.Method);
+            Assert.AreEqual(expectedRequest.Procedure, request.Procedure);
         }
 
         [Test]

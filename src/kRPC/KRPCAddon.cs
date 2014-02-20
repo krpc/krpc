@@ -20,6 +20,7 @@ namespace KRPC
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     sealed public class KRPCAddon : MonoBehaviour
     {
+        private static KRPC.Service.Services services = null;
         private static RPCServer server = null;
         private static TCPServer tcpServer = null;
         private IButton toolbarButton;
@@ -42,6 +43,7 @@ namespace KRPC
 
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
+            services = new KRPC.Service.Services ();
             tcpServer = new TCPServer (config.Address, config.Port);
             server = new RPCServer (tcpServer);
             requestScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
@@ -137,12 +139,12 @@ namespace KRPC
                             if (client.Stream.DataAvailable) {
                                 Request request = client.Stream.Read ();
                                 mainWindow.SawClientActivity (client);
-                                Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Method + ")");
+                                Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")");
 
                                 // Handle the request
                                 Response.Builder response;
                                 try {
-                                    response = Service.Services.HandleRequest (request);
+                                    response = services.HandleRequest (request);
                                 } catch (Exception e) {
                                     response = Response.CreateBuilder ();
                                     response.Error = e.ToString ();

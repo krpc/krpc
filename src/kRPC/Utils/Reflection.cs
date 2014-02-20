@@ -65,7 +65,7 @@ namespace KRPC.Utils
         {
             // TODO: Use extension methods to add method to Type?!?
             // FIXME: Returns true if the supplied type is a protocol buffer type (implements IMessage)
-            throw new NotImplementedException();
+            return true;
         }
     }
 }

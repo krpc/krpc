@@ -12,15 +12,23 @@ namespace KRPCTest.Service
     [TestFixture]
     public class ServicesTest
     {
+        private KRPC.Service.Services services;
+
+        [SetUp]
+        public void SetUp ()
+        {
+            services = new KRPC.Service.Services ();
+        }
+
         [Test]
         public void NonExistantService ()
         {
             var request = Request.CreateBuilder()
                 .SetService ("NonExistantService")
-                .SetMethod ("NonExistantMethod")
+                .SetProcedure ("NonExistantMethod")
                 .Build();
-            Assert.Throws<NoSuchServiceException>(
-                () => { KRPC.Service.Services.HandleRequest (request); });
+            Assert.Throws<RPCException>(
+                () => { services.HandleRequest (request); });
         }
 
         [Test]
@@ -28,10 +36,10 @@ namespace KRPCTest.Service
         {
             var request = Request.CreateBuilder()
                 .SetService ("TestService")
-                .SetMethod ("NonExistantMethod")
+                .SetProcedure ("NonExistantMethod")
                 .Build();
-            Assert.Throws<NoSuchServiceMethodException> (
-                () => {    KRPC.Service.Services.HandleRequest (request); });
+            Assert.Throws<RPCException> (
+                () => { services.HandleRequest (request); });
         }
 
         [Test]
@@ -39,10 +47,10 @@ namespace KRPCTest.Service
         {
             var request = Request.CreateBuilder()
                 .SetService ("TestService")
-                .SetMethod ("MethodWithoutAttribute")
+                .SetProcedure ("MethodWithoutAttribute")
                 .Build();
-            Assert.Throws<NoSuchServiceMethodException>(
-                () => { KRPC.Service.Services.HandleRequest (request); });
+            Assert.Throws<RPCException>(
+                () => { services.HandleRequest (request); });
         }
 
         /// <summary>
@@ -57,10 +65,10 @@ namespace KRPCTest.Service
             // Create request
             var request = Request.CreateBuilder()
                 .SetService ("TestService")
-                .SetMethod ("MethodNoArgsNoReturn")
+                .SetProcedure ("MethodNoArgsNoReturn")
                 .Build();
             // Run the request
-            KRPC.Service.Services.HandleRequest(request);
+            services.HandleRequest(request);
             mock.Verify (x => x.MethodNoArgsNoReturn (), Times.Once ());
         }
 
@@ -88,11 +96,11 @@ namespace KRPCTest.Service
             // Create request
             var request = Request.CreateBuilder()
                 .SetService ("TestService")
-                .SetMethod ("MethodArgsNoReturn")
-                .SetRequest_(ByteString.CopyFrom(argBytes))
+                .SetProcedure ("MethodArgsNoReturn")
+                .AddParameters(ByteString.CopyFrom(argBytes))
                 .Build();
             // Run the request
-            KRPC.Service.Services.HandleRequest(request);
+            services.HandleRequest(request);
             mock.Verify (x => x.MethodArgsNoReturn (It.IsAny<KRPC.Schema.KRPC.Response>()), Times.Once ());
         }
 
@@ -112,15 +120,15 @@ namespace KRPCTest.Service
             // Create request
             var request = Request.CreateBuilder()
                 .SetService ("TestService")
-                .SetMethod ("MethodNoArgsReturns")
+                .SetProcedure ("MethodNoArgsReturns")
                 .Build();
             // Run the request
-            Response.Builder responseBuilder = KRPC.Service.Services.HandleRequest(request);
+            Response.Builder responseBuilder = services.HandleRequest(request);
             responseBuilder.SetTime (42);
             Response response = responseBuilder.Build ();
             mock.Verify (x => x.MethodNoArgsReturns (), Times.Once ());
             // Check the return value
-            Response innerResponse = Response.CreateBuilder ().MergeFrom (response.Response_).Build ();
+            Response innerResponse = Response.CreateBuilder ().MergeFrom (response.Return).Build ();
             Assert.AreEqual (expectedResponse.Error, innerResponse.Error);
         }
 
@@ -145,16 +153,16 @@ namespace KRPCTest.Service
             // Create request
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
-                .SetMethod ("MethodArgsReturns")
-                .SetRequest_ (ByteString.CopyFrom (expectedResponseBytes))
+                .SetProcedure ("MethodArgsReturns")
+                .AddParameters (ByteString.CopyFrom (expectedResponseBytes))
                 .Build();
             // Run the request
-            Response.Builder responseBuilder = KRPC.Service.Services.HandleRequest(request);
+            Response.Builder responseBuilder = services.HandleRequest(request);
             responseBuilder.Time = 42;
             Response response = responseBuilder.Build ();
             mock.Verify (x => x.MethodArgsReturns (It.IsAny<Response>()), Times.Once ());
             // Check the return value
-            Response innerResponse = Response.CreateBuilder ().MergeFrom (response.Response_).Build ();
+            Response innerResponse = Response.CreateBuilder ().MergeFrom (response.Return).Build ();
             Assert.AreEqual (expectedResponse.Error, innerResponse.Error);
         }
 
@@ -166,26 +174,26 @@ namespace KRPCTest.Service
             Assert.AreEqual (2, services.Services_Count);
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "TestService") {
-                    Assert.AreEqual (4, service.MethodsCount);
-                    foreach (KRPC.Schema.KRPC.Method method in service.MethodsList) {
+                    Assert.AreEqual (4, service.ProceduresCount);
+                    foreach (KRPC.Schema.KRPC.Procedure method in service.ProceduresList) {
                         if (method.Name == "MethodNoArgsNoReturn") {
-                            Assert.IsFalse (method.HasParameterType);
+                            Assert.AreEqual (0, method.ParameterTypesCount);
                             Assert.IsFalse (method.HasReturnType);
                         }
                         if (method.Name == "MethodArgsNoReturn") {
-                            Assert.IsTrue (method.HasParameterType);
-                            Assert.AreEqual ("KRPC.Response", method.ParameterType);
+                            Assert.AreEqual (1, method.ParameterTypesCount);
+                            Assert.AreEqual ("KRPC.Response", method.ParameterTypesList[0]);
                             Assert.IsFalse (method.HasReturnType);
                         }
                         if (method.Name == "MethodNoArgsReturns") {
-                            Assert.IsFalse (method.HasParameterType);
+                            Assert.AreEqual (0, method.ParameterTypesCount);
                             Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("KRPC.Response", method.ReturnType);
                         }
                         if (method.Name == "MethodArgsReturns") {
-                            Assert.IsTrue (method.HasParameterType);
+                            Assert.AreEqual (1, method.ParameterTypesCount);
                             Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("KRPC.Response", method.ParameterType);
+                            Assert.AreEqual ("KRPC.Response", method.ParameterTypesList[0]);
                             Assert.AreEqual ("KRPC.Response", method.ReturnType);
                         }
                     }
