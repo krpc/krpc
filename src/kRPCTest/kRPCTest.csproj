@@ -8,7 +8,7 @@
     <ProjectGuid>{82D1B716-4129-4253-8B47-D5E38A3775BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>KRPCTest</RootNamespace>
-    <AssemblyName>KRPCTest</AssemblyName>
+    <AssemblyName>kRPCTest</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

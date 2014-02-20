@@ -1,0 +1,53 @@
+Compiling kRPC from source
+==========================
+
+## Compiling the Server Plugin
+
+### Using the Makefile
+
+1. Install the required dependencies. Libraries required by the plugin are already included in `lib` and the C# Protocol Buffers compiler is already included in `tools`. You will however need to install the MonoDevelop command line tool `mdtool`, mono runtime and development libraries and the Protocol Buffers compiler.
+
+ On Linux, you should be able to use your package manager. For example using apt:
+
+ `apt-get install mono-complete monodevelop protobuf-compiler`
+
+ You can also install the Protocol Buffers compiler from source: https://code.google.com/p/protobuf/
+
+2. Compile the plugin binaries. The following command compiles the protocol buffer .proto files into C# classes and compiles kRPC.dll and kRPCServices.dll using the MonoDevelop command line tool:
+
+ `$ make build`
+
+3. Collect together all the plugin files, and copy them into `$KSP_DIR/GameData/kRPC`. This also installs the Toolbar plugin to `$KSP_DIR/GameData/kRPC`.
+
+ `$ make install KSP_DIR=/home/djungelorm/KerbalSpaceProgram`
+
+ Alternatively, you can have the plugin files copied into directory `dist` in the root of the source tree using `make dist`, then manually copy them over to your GameData directory.
+
+### Using an IDE
+
+1. Install all the Protocol Buffer compiler (as above).
+
+2. Compile the protocol buffer .proto files into C# classes:
+
+ `$ make protobuf-csharp`
+
+3. Open the solution file `src/kRPC.sln` in your IDE.
+
+## Compiling the Python Client Library
+
+See [python/README.md](python/README.md) for instructions.
+
+## Testing
+
+The kRPCTest project contains nunit unit tests. They can be built and run using `make test`.
+
+The plugin can also be built, installed (along with the TestingTools.dll to auto-load the default save) and run using:
+
+`$ make ksp`
+
+This speeds up manual building and testing significantly!
+
+## Dependencies
+
+ * protobuf (https://code.google.com/p/protobuf/)
+ * protobuf-csharp-port (http://code.google.com/p/protobuf-csharp-port/)
