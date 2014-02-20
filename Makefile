@@ -31,12 +31,13 @@ build: protobuf $(CSHARP_MAIN_PROJECTS)
 dist: build
 	rm -rf $(DIST_DIR)
 	mkdir -p $(DIST_DIR)
+	mkdir -p $(DIST_DIR)/GameData/kRPC
 	# Licenses
 	cp LICENSE.txt $(DIST_DIR)/
 	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-license.txt
 	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
+	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# Plugin files
-	mkdir -p $(DIST_DIR)/GameData/kRPC
 	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
 	# Toolbar
 	unzip lib/toolbar/Toolbar-1.6.0.zip -d $(DIST_DIR)
@@ -81,16 +82,26 @@ $(CSHARP_LIBRARIES):
 	mdtool build -t:Build -c:$(CSHARP_CONFIG) -p:$($@_PROJECT) src/kRPC.sln
 
 # Protocol Buffers
-.PHONY: protobuf protobuf-csharp protobuf-python protobuf-clean
+.PHONY: protobuf protobuf-csharp protobuf-python protobuf-clean protobuf-csharp-clean protobuf-python-clean
 
 protobuf: protobuf-csharp protobuf-python
 	# Fix for error in output of C# protobuf compiler
 	-patch -p1 --forward --reject-file=- < krpc-proto.patch
+	-rm -f src/kRPC/Schema/KRPC.cs.orig
 
 protobuf-csharp: $(PROTOS) $(PROTOS:.proto=.cs)
 
 protobuf-python: $(PROTOS) $(PROTOS:.proto=.py)
 	echo "" > python/proto/__init__.py
+
+protobuf-clean: protobuf-csharp-clean protobuf-python-clean
+	-rm -rf $(PROTOS:.proto=.protobin)
+
+protobuf-csharp-clean:
+	-rm -rf $(PROTOS:.proto=.cs)
+
+protobuf-python-clean:
+	-rm -rf $(PROTOS:.proto=.py) python/proto
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
@@ -105,6 +116,3 @@ protobuf-python: $(PROTOS) $(PROTOS:.proto=.py)
 	$(CSHARP_PROTOGEN) \
 		$*.protobin -namespace=KRPC.Schema.$(basename $(notdir $@)) \
 		-umbrella_classname=$(basename $(notdir $@)) -output_directory=$(dir $@)
-
-protobuf-clean:
-	rm -rf $(PROTOS:.proto=.cs) $(PROTOS:.proto=.py) $(PROTOS:.proto=.protobin) python/proto

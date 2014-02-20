@@ -1,7 +1,9 @@
+.PHONY: all protobuf clean
+
 all: protobuf
 
 protobuf:
 	make -C .. protobuf-python
 
 clean:
-	rm -rf proto
+	make -C .. protobuf-python-clean
