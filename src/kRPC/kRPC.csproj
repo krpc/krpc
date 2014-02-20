@@ -92,6 +92,7 @@
     <Compile Include="Service\ServiceSignature.cs" />
     <Compile Include="Service\ProcedureSignature.cs" />
     <Compile Include="UI\GUILayoutExtensions.cs" />
+    <Compile Include="Utils\ProtocolBuffers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

@@ -27,9 +27,9 @@ namespace KRPC.Service
                     var procedure = Schema.KRPC.Procedure.CreateBuilder ();
                     procedure.Name = procedureSignature.Name;
                     if (procedureSignature.HasReturnType)
-                        procedure.ReturnType = Reflection.GetMessageTypeName (procedureSignature.ReturnType);
+                        procedure.ReturnType = ProtocolBuffers.GetMessageTypeName (procedureSignature.ReturnType);
                     foreach (var parameterType in procedureSignature.ParameterTypes) {
-                        string messageType = Reflection.GetMessageTypeName (parameterType);
+                        string messageType = ProtocolBuffers.GetMessageTypeName (parameterType);
                         procedure.AddParameterTypes (messageType);
                     }
                     service.AddProcedures (procedure);

@@ -51,8 +51,8 @@ namespace KRPC.Service
             Handler = method;
             ParameterTypes = method.GetParameters ()
                 .Select (x => x.ParameterType).ToArray ();
-            if (ParameterTypes.Any (x => !Reflection.IsAMessageType(x))) {
-                Type type = ParameterTypes.Where (x => !Reflection.IsAMessageType(x)).First ();
+            if (ParameterTypes.Any (x => !ProtocolBuffers.IsAMessageType(x))) {
+                Type type = ParameterTypes.Where (x => !ProtocolBuffers.IsAMessageType(x)).First ();
                 throw new ServiceException (
                     type.ToString() + " is not a valid Procedure parameter type, " +
                     "in " + FullyQualifiedName);
@@ -60,7 +60,7 @@ namespace KRPC.Service
             ParameterBuilders = ParameterTypes
                 .Select (x => {
                     try {
-                        return Reflection.GetBuilderForType(x);
+                        return ProtocolBuffers.BuilderForMessageType(x);
                     } catch (ArgumentException) {
                         throw new ServiceException ("Failed to instantiate a message builder for type " + x.Name);
                     }
@@ -68,12 +68,12 @@ namespace KRPC.Service
             HasReturnType = (method.ReturnType != typeof(void));
             if (HasReturnType) {
                 ReturnType = method.ReturnType;
-                if (!Reflection.IsAMessageType(ReturnType)) {
+                if (!ProtocolBuffers.IsAMessageType(ReturnType)) {
                     throw new ServiceException (
                         ReturnType.ToString() + " is not a valid Procedure return type, " +
                         "in " + FullyQualifiedName);
                 }
-                ReturnBuilder = Reflection.GetBuilderForType (ReturnType);
+                ReturnBuilder = ProtocolBuffers.BuilderForMessageType (ReturnType);
             }
         }
     }
