@@ -1,75 +1,87 @@
-KSP_DIR := "../Kerbal Space Program"
-KRPC_DIR := $(KSP_DIR)/GameData/kRPC
+KSP_DIR = "../Kerbal Space Program"
 
-CSHARP_PROJECTS := kRPC kRPCServices kRPCTest TestingTools
-CSHARP_PROJECT_DIRS := $(foreach project,$(CSHARP_PROJECTS),src/$(project))
-CSHARP_BIN_DIRS := $(foreach project,$(CSHARP_PROJECT_DIRS),$(project)/obj) $(foreach project,$(CSHARP_PROJECT_DIRS),$(project)/bin)
+DIST_DIR = dist
+DIST_LIBS = \
+  lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.dll \
+  lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll
+DIST_ICONS = $(wildcard src/kRPC/bin/*.png)
 
-PROTOC := protoc
-CSHARP_PROTOGEN := "tools/ProtoGen.exe"
-PROTOS := src/kRPC/Schema/KRPC.proto \
-          src/kRPCServices/Schema/Control.proto \
-          src/kRPCServices/Schema/Orbit.proto \
-          src/kRPCServices/Schema/Flight.proto \
-          src/kRPCServices/Schema/Vessel.proto
+CSHARP_MAIN_PROJECTS = kRPC kRPCServices
+CSHARP_TEST_PROJECTS = kRPCTest TestingTools
+CSHARP_CONFIG = Release
 
-all: dist
+CSHARP_PROJECTS  = $(CSHARP_MAIN_PROJECTS) $(CSHARP_TEST_PROJECTS)
+CSHARP_BINDIRS   = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin) \
+                   $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/obj)
+CSHARP_MAIN_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
+CSHARP_LIBRARIES      = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 
-%.dll:
-	mdtool build -t:Build -c:Release src/$*/$*.csproj
+PROTOC = protoc
+CSHARP_PROTOGEN = tools/ProtoGen.exe
+PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCServices/Schema/*.proto)
 
-build: protobuf $(foreach project,$(CSHARP_PROJECTS),$(project).dll)
-	make -C src/kRPC/icons all
-	find . -name "*.pyc" -exec rm -rf {} \;
+# Main build targets
+.PHONY: all build dist pre-release install ksp clean dist-clean
+
+all: build
+
+build: protobuf $(CSHARP_MAIN_PROJECTS)
+	make -C src/kRPC/icons
 
 dist: build
-	rm -rf dist
-	mkdir -p dist
+	rm -rf $(DIST_DIR)
+	mkdir -p $(DIST_DIR)
 	# Licenses
-	cp LICENSE.txt dist
-	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt dist/protobuf-license.txt
-	cp lib/toolbar/LICENSE.txt dist/toolbar-license.txt
+	cp LICENSE.txt $(DIST_DIR)/
+	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-license.txt
+	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	# Plugin files
-	mkdir -p dist/GameData/kRPC
-	cp -r \
-		src/kRPC/bin/Release/krpc.dll \
-		src/kRPCServices/bin/Release/krpc-services.dll \
-		src/kRPC/bin/*.png \
-		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.dll \
-		lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll \
-		dist/GameData/kRPC/
+	mkdir -p $(DIST_DIR)/GameData/kRPC
+	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
 	# Toolbar
-	unzip lib/toolbar/Toolbar-1.6.0.zip -d dist
-	mv dist/Toolbar-1.6.0/GameData/* dist/GameData/
-	rm -r dist/Toolbar-1.6.0
+	unzip lib/toolbar/Toolbar-1.6.0.zip -d $(DIST_DIR)
+	mv $(DIST_DIR)/Toolbar-1.6.0/GameData/* $(DIST_DIR)/GameData/
+	rm -r $(DIST_DIR)/Toolbar-1.6.0
 	# Python client library
-	mkdir -p dist/python
-	cp -r python/*.py python/*.craft python/proto dist/python/
+	mkdir -p $(DIST_DIR)/python
+	cp -r python/*.py python/*.craft python/proto $(DIST_DIR)/python/
 	# Schema
-	mkdir -p dist/schema
-	cp -r $(PROTOS) dist/schema/
+	mkdir -p $(DIST_DIR)/schema
+	cp -r $(PROTOS) $(DIST_DIR)/schema/
 
 pre-release: dist
-	cd dist; zip -r krpc-pre-`date +"%Y-%m-%d"`.zip ./*
-
-clean: protobuf-clean
-	rm -rf $(CSHARP_BIN_DIRS)
-	find . -name "*.pyc" -exec rm -rf {} \;
-
-dist-clean: clean
-	rm -rf dist
+	cd $(DIST_DIR); zip -r krpc-pre-`date +"%Y-%m-%d"`.zip ./*
 
 install: dist
-	rm -rf $(KRPC_DIR)
-	mkdir -p $(KRPC_DIR)
-	cp -r dist/GameData/kRPC/* $(KRPC_DIR)/
+	rm -rf $(KSP_DIR)/GameData/kRPC
+	rm -rf $(KSP_DIR)/GameData/000_Toolbar
+	cp -r $(DIST_DIR)/GameData/* $(KSP_DIR)/GameData/
 
-ksp: install
-	cp src/TestingTools/bin/Release/TestingTools.dll $(KRPC_DIR)/
+ksp: install TestingTools
+	cp src/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
 	$(KSP_DIR)/KSP.x86_64 &
 	tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
 
+clean: protobuf-clean
+	make -C src/kRPC/icons clean
+	-rm -rf $(CSHARP_BINDIRS)
+	find . -name "*.pyc" -exec rm -rf {} \;
+
+dist-clean: clean
+	-rm -rf dist
+
+# C# projects
+.PHONY: $(CSHARP_PROJECTS) $(CSHARP_LIBRARIES)
+
+.SECONDEXPANSION:
+$(CSHARP_PROJECTS): src/$$@/bin/$(CSHARP_CONFIG)/$$@.dll
+
+$(CSHARP_LIBRARIES):
+	$(eval $@_PROJECT := $(basename $(notdir $@)))
+	mdtool build -t:Build -c:$(CSHARP_CONFIG) -p:$($@_PROJECT) src/kRPC.sln
+
 # Protocol Buffers
+.PHONY: protobuf protobuf-csharp protobuf-python protobuf-clean
 
 protobuf: protobuf-csharp protobuf-python
 
@@ -82,19 +94,15 @@ protobuf-python: $(PROTOS) $(PROTOS:.proto=.py)
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
 
 %.py: %.proto
-	# FIXME: dependency checks don't work for this, as target is different to the file that's created
-	rm -f $*.pyc
+	$(PROTOC) $< --python_out=.
+	mv $*_pb2.py $@
 	mkdir -p python/proto
-	cp $*.proto python/proto/$(notdir $*.proto)
-	$(PROTOC) python/proto/$(notdir $*.proto) --python_out=.
-	mv python/proto/$(notdir $*_pb2.py) python/proto/$(notdir $*.py)
-	rm python/proto/$(notdir $*.proto)
+	cp $@ python/proto/$(notdir $@)
 
 %.cs: %.protobin
-	# TODO: put .cs proto files in different namespaces?
-	mono $(CSHARP_PROTOGEN) \
+	$(CSHARP_PROTOGEN) \
 		$*.protobin -namespace=KRPC.Schema.$(basename $(notdir $@)) \
 		-umbrella_classname=$(basename $(notdir $@)) -output_directory=$(dir $@)
 
 protobuf-clean:
-	rm -rf $(PROTOS:proto=cs) $(PROTOS:proto=protobin) python/proto
+	rm -rf $(PROTOS:.proto=.cs) $(PROTOS:.proto=.py) $(PROTOS:.proto=.protobin) python/proto

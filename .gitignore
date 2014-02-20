@@ -116,10 +116,12 @@ UpgradeLog*.XML
 # protobuf
 *.protobin
 src/kRPC/Schema/*.cs
+src/kRPC/Schema/*.py
 src/kRPCServices/Schema/*.cs
+src/kRPCServices/Schema/*.py
 python/proto/
 
-# makefile output
+# Build output
 dist
 
 # KSP libraries
