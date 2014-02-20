@@ -62,7 +62,11 @@ namespace KRPC
             mainWindow.OnStartServerPressed += (s, e) => {
                 tcpServer.Port = config.Port;
                 tcpServer.Address = config.Address;
-                server.Start ();
+                try {
+                    server.Start ();
+                } catch (SocketException exn) {
+                    mainWindow.Errors.Add ("Socket error '" + exn.SocketErrorCode + "': " + exn.Message);
+                }
             };
             mainWindow.OnStopServerPressed += (s, e) => {
                 server.Stop ();

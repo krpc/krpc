@@ -89,6 +89,7 @@
     <Compile Include="UI\Window.cs" />
     <Compile Include="UI\OptionDialog.cs" />
     <Compile Include="Service\KRPCProcedure.cs" />
+    <Compile Include="UI\GUILayoutExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
