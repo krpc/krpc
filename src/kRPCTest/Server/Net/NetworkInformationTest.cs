@@ -19,5 +19,12 @@ namespace KRPCTest.Server.Net
                 Console.WriteLine (address.ToString ());
             }
         }
+
+        [Test]
+        [Ignore]
+        public void GetLoopbackSubnetMask ()
+        {
+            Assert.AreEqual ("", NetworkInformation.GetSubnetMask (IPAddress.Loopback).ToString ());
+        }
     }
 }
