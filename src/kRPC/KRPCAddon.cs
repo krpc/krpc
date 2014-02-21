@@ -82,7 +82,6 @@ namespace KRPC
 
             // Server events
             server.OnClientRequestingConnection += clientConnectingDialog.OnClientRequestingConnection;
-            server.OnClientActivity += (s, e) => mainWindow.SawClientActivity (e.Client);
 
             // Toolbar API
             if (ToolbarManager.ToolbarAvailable) {

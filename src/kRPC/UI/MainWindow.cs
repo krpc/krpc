@@ -54,6 +54,8 @@ namespace KRPC.UI
         private const string unknownClientsAllowedText = "(Unknown visibility!)";
 
         protected override void Init() {
+            Server.OnClientActivity += (s, e) => SawClientActivity (e.Client);
+
             Style.fixedWidth = windowWidth;
 
             labelStyle = new GUIStyle (UnityEngine.GUI.skin.label);
@@ -186,7 +188,7 @@ namespace KRPC.UI
             return false;
         }
 
-        public void SawClientActivity (IClient client)
+        private void SawClientActivity (IClient client)
         {
             lastClientActivity [client] = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
