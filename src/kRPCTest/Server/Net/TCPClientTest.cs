@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System;
 using KRPC.Server;
 using KRPC.Server.Net;

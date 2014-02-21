@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using KRPC.Schema.Control;
 
 namespace KRPCServices

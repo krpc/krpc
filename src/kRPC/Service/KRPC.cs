@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Google.ProtocolBuffers;
 using KRPC.Utils;

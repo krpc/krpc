@@ -1,4 +1,4 @@
-﻿using KRPC.Service;
+using KRPC.Service;
 using KRPC.Schema.Orbit;
 
 namespace KRPCServices

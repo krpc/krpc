@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 [assembly: AssemblyTitle ("kRPCServices")]
 [assembly: AssemblyDescription ("Basic services for kRPC, such as querying data from stock game objects")]

@@ -1,4 +1,4 @@
-﻿using KRPC.Service;
+using KRPC.Service;
 using KRPC.Schema.Control;
 
 namespace KRPCServices

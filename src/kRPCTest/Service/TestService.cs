@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Google.ProtocolBuffers;
 using KRPC.Service;
 
