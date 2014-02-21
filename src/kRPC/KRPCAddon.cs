@@ -46,7 +46,11 @@ namespace KRPC
             mainWindow.OnStartServerPressed += (s, e) => {
                 server.Port = config.Port;
                 server.Address = config.Address;
-                server.Start ();
+                try {
+                    server.Start ();
+                } catch (ServerException exn) {
+                    mainWindow.Errors.Add (exn.Message);
+                }
             };
             mainWindow.OnStopServerPressed += (s, e) => {
                 server.Stop ();
