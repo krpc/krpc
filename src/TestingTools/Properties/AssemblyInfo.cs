@@ -1,6 +1,4 @@
-using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle ("TestingTools")]
 [assembly: AssemblyDescription ("")]
@@ -10,5 +8,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright ("djungelorm")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
-
 [assembly: AssemblyVersion ("1.0.*")]
