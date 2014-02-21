@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>KRPCTest</RootNamespace>
     <AssemblyName>kRPCTest</AssemblyName>
+    <CodePage>65001</CodePage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

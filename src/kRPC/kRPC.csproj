@@ -10,6 +10,7 @@
     <RootNamespace>KRPC</RootNamespace>
     <AssemblyName>kRPC</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <CodePage>65001</CodePage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
