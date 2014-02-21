@@ -71,6 +71,7 @@
     <Compile Include="Service\KRPCTest.cs" />
     <Compile Include="KRPCConfigurationTest.cs" />
     <Compile Include="Utils\ProtocolBuffersTest.cs" />
+    <Compile Include="Server\Net\NetworkInformationTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

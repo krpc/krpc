@@ -11,8 +11,14 @@ namespace KRPC.Server.Net
 {
     sealed class TCPServer : IServer<byte,byte>
     {
+        public event EventHandler OnStarted;
+        public event EventHandler OnStopped;
         public event EventHandler<ClientRequestingConnectionArgs<byte,byte>> OnClientRequestingConnection;
         public event EventHandler<ClientConnectedArgs<byte,byte>> OnClientConnected;
+        /// <summary>
+        /// Does not trigger this event.
+        /// </summary>
+        public event EventHandler<ClientActivityArgs<byte,byte>> OnClientActivity;
         public event EventHandler<ClientDisconnectedArgs<byte,byte>> OnClientDisconnected;
 
         /// <summary>
@@ -43,6 +49,10 @@ namespace KRPC.Server.Net
         /// </summary>
         private Thread listenerThread;
         private TcpListener tcpListener;
+        /// <summary>
+        /// Event used to wait for the TCP listener to start
+        /// </summary>
+        private volatile AutoResetEvent startedEvent;
         /// <summary>
         /// True if the listenerThread is running.
         /// </summary>
@@ -75,14 +85,29 @@ namespace KRPC.Server.Net
             }
             Logger.WriteLine("TCPServer: starting");
             tcpListener = new TcpListener (address, port);
-            tcpListener.Start();
+            try {
+                tcpListener.Start();
+            } catch (SocketException exn) {
+                string socketError = "Socket error '" + exn.SocketErrorCode + "': " + exn.Message;
+                Logger.WriteLine("TCPServer: Failed to start server. " + socketError);
+                throw new ServerException (socketError);
+            }
             IPEndPoint endPoint = (IPEndPoint)tcpListener.LocalEndpoint;
             actualAddress = endPoint.Address;
             actualPort = (ushort) endPoint.Port;
-            listenerThread = new Thread(new ThreadStart(ListenerThread));
+            startedEvent = new AutoResetEvent(false);
+            listenerThread = new Thread(ListenerThread);
             listenerThread.Start();
-            // TODO: add timeout just in case...
-            while (!running) { }
+            startedEvent.WaitOne (500);
+            if (!running) {
+                Logger.WriteLine("TCPServer: Failed to start server, timed out waiting for TcpListener to start");
+                listenerThread.Abort ();
+                listenerThread.Join ();
+                tcpListener = null;
+                throw new ServerException ("Failed to start server, timed out waiting for TcpListener to start");
+            }
+            if (OnStarted != null)
+                OnStarted (this, EventArgs.Empty);
             Logger.WriteLine("TCPServer: started successfully");
             Logger.WriteLine("TCPServer: listening on local address " + actualAddress);
             Logger.WriteLine("TCPServer: listening on port " + actualPort);
@@ -111,6 +136,9 @@ namespace KRPC.Server.Net
             // Exited cleanly
             running = false;
             Logger.WriteLine("TCPServer: stopped");
+
+            if (OnStopped != null)
+                OnStopped (this, EventArgs.Empty);
         }
 
         public void Update() {
@@ -125,18 +153,18 @@ namespace KRPC.Server.Net
                 var stillPendingClients = new List<TCPClient> ();
                 foreach (var client in pendingClients) {
                     // Trigger OnClientRequestingConnection events to verify the connection
-                    var attempt = new ClientRequestingConnectionArgs<byte,byte> (client);
+                    var args = new ClientRequestingConnectionArgs<byte,byte> (client);
                     if (OnClientRequestingConnection != null)
-                        OnClientRequestingConnection (this, attempt);
+                        OnClientRequestingConnection (this, args);
 
                     // Deny the connection
-                    if (attempt.ShouldDeny) {
+                    if (args.Request.ShouldDeny) {
                         Logger.WriteLine ("TCPServer: client connection denied (" + client.Address + ")");
                         DisconnectClient (client, noEvent: true);
                     }
 
                     // Allow the connection
-                    if (attempt.ShouldAllow) {
+                    if (args.Request.ShouldAllow) {
                         Logger.WriteLine ("TCPServer: client connection accepted (" + client.Address + ")");
                         clients.Add (client);
                         if (OnClientConnected != null)
@@ -144,7 +172,7 @@ namespace KRPC.Server.Net
                     }
 
                     // Still pending, will either be denied or allowed on a subsequent called to Update
-                    if (attempt.StillPending) {
+                    if (args.Request.StillPending) {
                         stillPendingClients.Add (client);
                     }
                 }
@@ -185,6 +213,7 @@ namespace KRPC.Server.Net
             try
             {
                 running = true;
+                startedEvent.Set ();
                 int nextClientUuid = 0;
                 while (true)
                 {

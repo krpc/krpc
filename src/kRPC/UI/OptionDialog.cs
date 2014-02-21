@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Collections.Generic;
 using UnityEngine;
 using KRPC.Server;
-using KRPC.Server.Net;
 using KRPC.Utils;
-using KRPC.Schema.KRPC;
-using System.Collections.Generic;
 
 namespace KRPC.UI
 {

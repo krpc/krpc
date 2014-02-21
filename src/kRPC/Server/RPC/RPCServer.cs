@@ -17,8 +17,14 @@ namespace KRPC.Server.RPC
         private byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
         private const int identifierLength = 32;
 
+        public event EventHandler OnStarted;
+        public event EventHandler OnStopped;
         public event EventHandler<ClientRequestingConnectionArgs<Request,Response>> OnClientRequestingConnection;
         public event EventHandler<ClientConnectedArgs<Request,Response>> OnClientConnected;
+        /// <summary>
+        /// Does not trigger this event, unless the underlying server does.
+        /// </summary>
+        public event EventHandler<ClientActivityArgs<Request,Response>> OnClientActivity;
         public event EventHandler<ClientDisconnectedArgs<Request,Response>> OnClientDisconnected;
 
         private IServer<byte,byte> server;
@@ -28,8 +34,17 @@ namespace KRPC.Server.RPC
         public RPCServer (IServer<byte,byte> server)
         {
             this.server = server;
+            server.OnStarted += (s, e) => {
+                if (OnStarted != null)
+                    OnStarted (this, EventArgs.Empty);
+            };
+            server.OnStopped += (s, e) => {
+                if (OnStopped != null)
+                    OnStopped (this, EventArgs.Empty);
+            };
             server.OnClientRequestingConnection += HandleClientRequestingConnection;
             server.OnClientConnected += HandleClientConnected;
+            server.OnClientConnected += HandleClientActivity;
             server.OnClientDisconnected += HandleClientDisconnected;
         }
 
@@ -72,6 +87,13 @@ namespace KRPC.Server.RPC
             }
         }
 
+        private void HandleClientActivity(object sender, IClientEventArgs<byte,byte> args) {
+            if (OnClientActivity != null) {
+                var client = clients [args.Client];
+                OnClientActivity(this, new ClientActivityArgs<Request,Response> (client));
+            }
+        }
+
         private void HandleClientDisconnected(object sender, IClientEventArgs<byte,byte> args) {
             var client = clients [args.Client];
             clients.Remove (args.Client);
@@ -94,7 +116,7 @@ namespace KRPC.Server.RPC
                     pendingClients [args.Client] = client;
                 } else {
                     // Deny the connection, don't add it to pending clients
-                    args.Deny ();
+                    args.Request.Deny ();
                     return;
                 }
             }
@@ -103,16 +125,16 @@ namespace KRPC.Server.RPC
             // Invoke connection request events.
             if (OnClientRequestingConnection != null) {
                 var client = pendingClients [args.Client];
-                var attempt = new ClientRequestingConnectionArgs<Request,Response> (client);
-                OnClientRequestingConnection (this, attempt);
-                if (attempt.ShouldAllow) {
-                    args.Allow ();
+                var subArgs = new ClientRequestingConnectionArgs<Request,Response> (client);
+                OnClientRequestingConnection (this, subArgs);
+                if (subArgs.Request.ShouldAllow) {
+                    args.Request.Allow ();
                     clients [args.Client] = client;
                 }
-                if (attempt.ShouldDeny) {
-                    args.Deny ();
+                if (subArgs.Request.ShouldDeny) {
+                    args.Request.Deny ();
                 }
-                if (!attempt.StillPending) {
+                if (!subArgs.Request.StillPending) {
                     pendingClients.Remove (args.Client);
                 }
             }

@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Net;
 using UnityEngine;
-using KSP;
-using KRPC.Utils;
 using KRPC.Server;
-using KRPC.Server.RPC;
 using KRPC.Server.Net;
-using KRPC.UI;
 
 namespace KRPC.UI
 {
     sealed class MainWindow : Window
     {
         public KRPCConfiguration Config { private get; set; }
-        public RPCServer Server { private get; set; }
+        public KRPCServer Server { private get; set; }
 
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
@@ -62,6 +55,8 @@ namespace KRPC.UI
         private const string unknownClientsAllowedText = "(Unknown visibility!)";
 
         protected override void Init() {
+            Server.OnClientActivity += (s, e) => SawClientActivity (e.Client);
+
             Style.fixedWidth = windowWidth;
 
             labelStyle = new GUIStyle (UnityEngine.GUI.skin.label);
@@ -104,7 +99,6 @@ namespace KRPC.UI
 
             GUILayout.BeginVertical ();
             if (Server.Running) {
-                TCPServer tcpServer = (TCPServer)Server.Server;
 
                 if (GUILayout.Button (stopButtonText, buttonStyle)) {
                     if (OnStopServerPressed != null)
@@ -117,14 +111,14 @@ namespace KRPC.UI
                 GUILayout.BeginHorizontal ();
                 GUILayoutExtensions.Light (true, lightStyle);
                 GUILayout.Label (serverOnlineText, stretchyLabelStyle);
-                GUILayout.Label (AllowedClientsString (tcpServer.Address), labelStyle);
+                GUILayout.Label (AllowedClientsString (Server.Address), labelStyle);
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
                 GUILayout.Label (addressLabelText, labelStyle);
-                GUILayout.Label (tcpServer.Address.ToString (), stretchyLabelStyle);
+                GUILayout.Label (Server.Address.ToString (), stretchyLabelStyle);
                 GUILayout.Label (portLabelText, labelStyle);
-                GUILayout.Label (tcpServer.Port.ToString (), stretchyLabelStyle);
+                GUILayout.Label (Server.Port.ToString (), stretchyLabelStyle);
                 GUILayout.EndHorizontal ();
 
                 GUILayoutExtensions.Separator (separatorStyle);
@@ -195,7 +189,7 @@ namespace KRPC.UI
             return false;
         }
 
-        public void SawClientActivity (IClient client)
+        private void SawClientActivity (IClient client)
         {
             lastClientActivity [client] = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
@@ -212,25 +206,12 @@ namespace KRPC.UI
             // TODO: better way of checking if address is the loopback device?
             if (localAddress.ToString () == IPAddress.Loopback.ToString ())
                 return localClientOnlyText;
-            var subnet = GetSubnetMask (localAddress);
-            if (subnet != null)
+            try {
+                var subnet = NetworkInformation.GetSubnetMask (localAddress);
                 return String.Format (subnetAllowedText, subnet);
+            } catch (ArgumentException) {
+            }
             return unknownClientsAllowedText;
-        }
-
-        private static IPAddress GetSubnetMask(IPAddress address)
-        {
-            //TODO: fails due to native code not being available
-//            foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces()) {
-//                foreach (UnicastIPAddressInformation unicastIPAddressInformation in adapter.GetIPProperties().UnicastAddresses)    {
-//                    if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork) {
-//                        if (address.Equals(unicastIPAddressInformation.Address)) {
-//                            return unicastIPAddressInformation.IPv4Mask;
-//                        }
-//                    }
-//                }
-//            }
-            return null;
         }
     }
 }

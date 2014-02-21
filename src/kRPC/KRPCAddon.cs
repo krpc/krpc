@@ -20,33 +20,17 @@ namespace KRPC
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     sealed public class KRPCAddon : MonoBehaviour
     {
-        private static RPCServer server = null;
-        private static TCPServer tcpServer = null;
+        private KRPCServer server;
+        private KRPCConfiguration config;
         private IButton toolbarButton;
         private MainWindow mainWindow;
         private ClientConnectingDialog clientConnectingDialog;
-        private KRPCConfiguration config;
-        private IScheduler<IClient<Request,Response>> requestScheduler;
 
         public void Awake ()
         {
-            //TODO: fails due to native code not being available
-//            Logger.WriteLine ("Local addresses of available network adapters:");
-//            foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces()) {
-//                foreach (UnicastIPAddressInformation unicastIPAddressInformation in adapter.GetIPProperties().UnicastAddresses) {
-//                    if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork) {
-//                        Logger.WriteLine ("   " + unicastIPAddressInformation.Address.ToString());
-//                    }
-//                }
-//            }
-
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
-            tcpServer = new TCPServer (config.Address, config.Port);
-            server = new RPCServer (tcpServer);
-            requestScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
-            server.OnClientConnected += (sender, e) => requestScheduler.Add(e.Client);
-            server.OnClientDisconnected += (sender, e) => requestScheduler.Remove(e.Client);
+            server = new KRPCServer (config.Address, config.Port);
 
             // Create main window
             mainWindow = gameObject.AddComponent<MainWindow>();
@@ -60,12 +44,12 @@ namespace KRPC
 
             // Main window events
             mainWindow.OnStartServerPressed += (s, e) => {
-                tcpServer.Port = config.Port;
-                tcpServer.Address = config.Address;
+                server.Port = config.Port;
+                server.Address = config.Address;
                 try {
                     server.Start ();
-                } catch (SocketException exn) {
-                    mainWindow.Errors.Add ("Socket error '" + exn.SocketErrorCode + "': " + exn.Message);
+                } catch (ServerException exn) {
+                    mainWindow.Errors.Add (exn.Message);
                 }
             };
             mainWindow.OnStopServerPressed += (s, e) => {
@@ -98,6 +82,12 @@ namespace KRPC
                 toolbarButton.OnClick += (e) => {
                     mainWindow.Visible = !mainWindow.Visible;
                 };
+                server.OnStarted += (s, e) => {
+                    toolbarButton.TexturePath = "kRPC/icon-online";
+                };
+                server.OnStopped += (s, e) => {
+                    toolbarButton.TexturePath = "kRPC/icon-offline";
+                };
             } else {
                 // If there is no toolbar button a hidden window can't be shown, so force it to be displayed
                 mainWindow.Visible = true;
@@ -113,57 +103,10 @@ namespace KRPC
             UnityEngine.Object.Destroy (clientConnectingDialog);
         }
 
-        public void Update ()
+        public void FixedUpdate ()
         {
-            // TODO: add server start/stop events to IServer and attach these updates to the handlers
-            if (toolbarButton != null) {
-                if (server.Running)
-                    toolbarButton.TexturePath = "kRPC/icon-online";
-                else
-                    toolbarButton.TexturePath = "kRPC/icon-offline";
-            }
-
-            if (server.Running) {
-                // TODO: is there a better way to limit the number of requests handled per update?
-                int threshold = 20; // milliseconds
+            if (server.Running)
                 server.Update ();
-
-                if (server.Clients.Count () > 0 && !requestScheduler.Empty) {
-                    Stopwatch timer = Stopwatch.StartNew ();
-                    try {
-                        do {
-                            // Get request
-                            IClient<Request,Response> client = requestScheduler.Next ();
-                            if (client.Stream.DataAvailable) {
-                                Request request = client.Stream.Read ();
-                                mainWindow.SawClientActivity (client);
-                                Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")");
-
-                                // Handle the request
-                                Response.Builder response;
-                                try {
-                                    response = KRPC.Service.Services.Instance.HandleRequest (request);
-                                } catch (Exception e) {
-                                    response = Response.CreateBuilder ();
-                                    response.Error = e.ToString ();
-                                    Logger.WriteLine (e.ToString ());
-                                }
-
-                                // Send response
-                                response.SetTime (Planetarium.GetUniversalTime ());
-                                var builtResponse = response.Build ();
-                                //TODO: handle partial response exception
-                                client.Stream.Write (builtResponse);
-                                if (response.HasError)
-                                    Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")");
-                                else
-                                    Logger.WriteLine ("Sent response to client " + client.Address);
-                            }
-                        } while (timer.ElapsedMilliseconds < threshold);
-                    } catch (NoRequestException) {
-                    }
-                }
-            }
         }
     }
 }

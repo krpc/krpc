@@ -14,7 +14,11 @@ namespace KRPCTest.Server.Net
         [Test]
         public void Simple ()
         {
+            bool serverStarted = false;
+            bool serverStopped = false;
             var server = new TCPServer (IPAddress.Loopback, 0);
+            server.OnStarted += (s, e) => serverStarted = true;
+            server.OnStopped += (s, e) => serverStopped = true;
             Assert.IsFalse (server.Running);
             server.Start ();
             Assert.IsTrue (server.Running);
@@ -24,12 +28,18 @@ namespace KRPCTest.Server.Net
             server.Stop ();
             Assert.IsFalse (server.Running);
             Assert.AreEqual (0, server.Clients.Count ());
+            Assert.IsTrue (serverStarted);
+            Assert.IsTrue (serverStopped);
         }
 
         [Test]
         public void StartStop ()
         {
+            int serverStarted = 0;
+            int serverStopped = 0;
             var server = new TCPServer (IPAddress.Loopback, 0);
+            server.OnStarted += (s, e) => serverStarted++;
+            server.OnStopped += (s, e) => serverStopped++;
             Assert.IsFalse (server.Running);
             for (int i = 0; i < 5; i++) {
                 server.Start ();
@@ -37,6 +47,8 @@ namespace KRPCTest.Server.Net
                 server.Stop ();
                 Assert.IsFalse (server.Running);
             }
+            Assert.AreEqual (5, serverStarted);
+            Assert.AreEqual (5, serverStopped);
         }
 
         [Test]
@@ -48,7 +60,7 @@ namespace KRPCTest.Server.Net
             bool clientConnected = false;
             bool clientDisconnected = false;
             server.OnClientRequestingConnection += (s, e) => {
-                e.Allow ();
+                e.Request.Allow ();
                 clientRequestingConnection = true;
             };
             server.OnClientConnected += (s, e) => clientConnected = true;
@@ -106,7 +118,7 @@ namespace KRPCTest.Server.Net
 
             bool clientConnected = false;
             bool clientDisconnected = false;
-            server.OnClientRequestingConnection += (s, e) => e.Allow ();
+            server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             server.OnClientConnected += (s, e) => clientConnected = true;
             server.OnClientDisconnected += (s, e) => clientDisconnected = true;
 

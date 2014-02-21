@@ -2,16 +2,42 @@
 
 namespace KRPC.Server
 {
+    /// <summary>
+    /// Non-generic client interface.
+    /// </summary>
     interface IClient
     {
+        /// <summary>
+        /// A string identifying the client. Should be human readable.
+        /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// The address of the client. Depends on the underlying communication method.
+        /// </summary>
+        /// <remarks>For example, could be an IP address when client
+        /// communication is over a network.</remarks>
         string Address { get; }
+
+        /// <summary>
+        /// Returns true if the client is actively connected to the server.
+        /// </summary>
         bool Connected { get; }
+
+        /// <summary>
+        /// Close the connection to the client and free the connections resources.
+        /// </summary>
         void Close ();
     }
 
-    interface IClient<In,Out> : IEquatable<IClient<In,Out>>, IClient
+    /// <summary>
+    /// Generic client interface.
+    /// </summary>
+    interface IClient<TIn,TOut> : IEquatable<IClient<TIn,TOut>>, IClient
     {
-        IStream<In,Out> Stream { get; }
+        /// <summary>
+        /// A stream for communicating with the client.
+        /// </summary>
+        IStream<TIn,TOut> Stream { get; }
     }
 }

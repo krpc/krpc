@@ -93,6 +93,11 @@
     <Compile Include="Service\ProcedureSignature.cs" />
     <Compile Include="UI\GUILayoutExtensions.cs" />
     <Compile Include="Utils\ProtocolBuffers.cs" />
+    <Compile Include="KRPCServer.cs" />
+    <Compile Include="Server\ClientConnectionRequest.cs" />
+    <Compile Include="Server\ClientActivityArgs.cs" />
+    <Compile Include="Server\Net\NetworkInformation.cs" />
+    <Compile Include="Server\ServerException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
