@@ -1,0 +1,17 @@
+#!/bin/bash
+# pre-commit.sh
+
+# Install using:
+#   ln -s ../../pre-commit.sh .git/hooks/pre-commit
+
+exec 1>&2
+
+result=`git diff --cached | grep $'\xEF\xBB\xBF'`
+
+if [ "$result" ]; then
+  echo "error: UTF-16 byte order mark(s) found in commit."
+  echo "hint: Remove them using 'make strip-bom' and try again."
+  exit 1
+fi
+
+exit 0

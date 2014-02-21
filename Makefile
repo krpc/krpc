@@ -86,7 +86,7 @@ dist-clean: clean
 	-rm -rf dist
 
 strip-bom:
-	find . -type f -exec sed -i '1 s/^\xef\xbb\xbf//' {} \;
+	tools/strip-bom.sh
 
 # C# projects
 .PHONY: $(CSHARP_PROJECTS) $(CSHARP_LIBRARIES)
