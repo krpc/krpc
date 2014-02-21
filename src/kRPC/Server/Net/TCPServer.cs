@@ -50,6 +50,10 @@ namespace KRPC.Server.Net
         private Thread listenerThread;
         private TcpListener tcpListener;
         /// <summary>
+        /// Event used to wait for the TCP listener to start
+        /// </summary>
+        private volatile AutoResetEvent startedEvent;
+        /// <summary>
         /// True if the listenerThread is running.
         /// </summary>
         private volatile bool running = false;
@@ -85,10 +89,17 @@ namespace KRPC.Server.Net
             IPEndPoint endPoint = (IPEndPoint)tcpListener.LocalEndpoint;
             actualAddress = endPoint.Address;
             actualPort = (ushort) endPoint.Port;
-            listenerThread = new Thread(new ThreadStart(ListenerThread));
+            startedEvent = new AutoResetEvent(false);
+            listenerThread = new Thread(ListenerThread);
             listenerThread.Start();
-            // TODO: add timeout just in case...
-            while (!running) { }
+            startedEvent.WaitOne (500);
+            if (!running) {
+                Logger.WriteLine("TCPServer: Failed to start server, timed out waiting for TcpListener to start");
+                listenerThread.Abort ();
+                listenerThread.Join ();
+                tcpListener = null;
+                return;
+            }
             if (OnStarted != null)
                 OnStarted (this, EventArgs.Empty);
             Logger.WriteLine("TCPServer: started successfully");
@@ -196,6 +207,7 @@ namespace KRPC.Server.Net
             try
             {
                 running = true;
+                startedEvent.Set ();
                 int nextClientUuid = 0;
                 while (true)
                 {
