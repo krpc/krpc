@@ -48,7 +48,8 @@ namespace KRPC
            try {
                 Address = IPAddress.Parse (address);
             } catch (FormatException) {
-                //TODO: report error
+                Debug.Log ("Error parsing IP address from configuration file. Got '" + address + "'. " +
+                           "Defaulting to loopback address " + IPAddress.Loopback);
                 Address = IPAddress.Loopback;
             }
         }
