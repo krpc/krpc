@@ -95,7 +95,7 @@ namespace KRPC.Server.RPC
             var bufferStream = new MemoryStream (buffer, false);
             try {
                 bufferedRequest = Request.CreateBuilder().MergeDelimitedFrom (bufferStream).BuildPartial();
-            } catch (InvalidProtocolBufferException e) {
+            } catch (InvalidProtocolBufferException) {
                 // Failed to deserialize a request
                 if (offset >= buffer.Length) {
                     // And the buffer is full
