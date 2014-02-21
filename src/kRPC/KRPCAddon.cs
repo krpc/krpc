@@ -93,6 +93,12 @@ namespace KRPC
                 toolbarButton.OnClick += (e) => {
                     mainWindow.Visible = !mainWindow.Visible;
                 };
+                server.OnStarted += (s, e) => {
+                    toolbarButton.TexturePath = "kRPC/icon-online";
+                };
+                server.OnStopped += (s, e) => {
+                    toolbarButton.TexturePath = "kRPC/icon-offline";
+                };
             } else {
                 // If there is no toolbar button a hidden window can't be shown, so force it to be displayed
                 mainWindow.Visible = true;
@@ -110,13 +116,6 @@ namespace KRPC
 
         public void Update ()
         {
-            // TODO: add server start/stop events to IServer and attach these updates to the handlers
-            if (toolbarButton != null) {
-                if (server.Running)
-                    toolbarButton.TexturePath = "kRPC/icon-online";
-                else
-                    toolbarButton.TexturePath = "kRPC/icon-offline";
-            }
             if (server.Running)
                 server.Update ();
         }
