@@ -93,9 +93,13 @@ namespace KRPC.Service
             // Attempt to decode them
             object[] decodedParameters = new object[parameters.Count];
             for (int i = 0; i < parameters.Count; i++) {
-                var builder = procedure.ParameterBuilders [i];
                 try {
-                    decodedParameters[i] = builder.WeakMergeFrom (parameters [i]).WeakBuild ();
+                    if (ProtocolBuffers.IsAMessageType (procedure.ParameterTypes [i])) {
+                        var builder = procedure.ParameterBuilders [i];
+                        decodedParameters[i] = builder.WeakMergeFrom (parameters [i]).WeakBuild ();
+                    } else {
+                        decodedParameters[i] = ProtocolBuffers.ReadValue (parameters [i], procedure.ParameterTypes [i]);
+                    }
                 } catch (Exception e) {
                     throw new RPCException (
                         "Failed to decode parameter " + i + " for " + procedure.FullyQualifiedName + ". " +
@@ -119,20 +123,18 @@ namespace KRPC.Service
             }
 
             // Check if the return value is of a valid type
-            IMessage message = returnValue as IMessage;
-            if (message == null || !procedure.ReturnType.IsAssignableFrom(message.GetType())) {
+            if (!ProtocolBuffers.IsAValidType (procedure.ReturnType)) {
                 throw new RPCException (
                     procedure.FullyQualifiedName + " returned an object of an invalid type. " +
-                    "Expected " + procedure.ReturnType + "; got " + message.GetType());
+                    "Expected " + procedure.ReturnType + "; got " + returnValue.GetType ());
             }
 
             // Encode it as a ByteString
-            byte[] returnBytes;
-            using (MemoryStream stream = new MemoryStream ()) {
-                message.WriteTo (stream);
-                returnBytes = stream.ToArray ();
+            if (ProtocolBuffers.IsAMessageType (procedure.ReturnType)) {
+                return ProtocolBuffers.WriteMessage (returnValue as IMessage);
+            } else {
+                return ProtocolBuffers.WriteValue (returnValue, procedure.ReturnType);
             }
-            return ByteString.CopyFrom (returnBytes);
         }
     }
 }

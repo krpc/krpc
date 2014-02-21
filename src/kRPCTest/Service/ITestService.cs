@@ -11,5 +11,6 @@ namespace KRPCTest.Service
             KRPC.Schema.KRPC.Request y, KRPC.Schema.KRPC.Response z);
         KRPC.Schema.KRPC.Response ProcedureNoArgsReturns ();
         KRPC.Schema.KRPC.Response ProcedureSingleArgReturns (KRPC.Schema.KRPC.Response data);
+        int ProcedureWithValueTypes (float x, string y, byte[] z);
     }
 }

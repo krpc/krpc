@@ -80,6 +80,39 @@ namespace KRPCTest.Utils
             Assert.IsFalse (ProtocolBuffers.IsAValueType (null));
             Assert.IsFalse (ProtocolBuffers.IsAValueType (typeof (ProtocolBuffersTest)));
         }
+
+        [Test]
+        public void IsAValidType ()
+        {
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (KRPC.Schema.KRPC.Request)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (KRPC.Schema.KRPC.Response)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (double)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (float)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (int)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (long)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (uint)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (ulong)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (bool)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (string)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof (byte[])));
+            Assert.IsFalse (ProtocolBuffers.IsAValidType (null));
+            Assert.IsFalse (ProtocolBuffers.IsAValidType (typeof (ProtocolBuffersTest)));
+        }
+
+        [Test]
+        public void ReadWriteValues ()
+        {
+            Assert.AreEqual (3.14159, ProtocolBuffers.ReadValue (ProtocolBuffers.WriteValue (3.14159 , typeof(double)), typeof(double)));
+            Assert.AreEqual (3.14159f, ProtocolBuffers.ReadValue (ProtocolBuffers.WriteValue (3.14159f, typeof(float)), typeof(float)));
+            Assert.AreEqual (-42, ProtocolBuffers.ReadValue (ProtocolBuffers.WriteValue (-42, typeof(int)), typeof(int)));
+            Assert.AreEqual (-42834463454, ProtocolBuffers.ReadValue (ProtocolBuffers.WriteValue (-42834463454L, typeof(long)), typeof(long)));
+            Assert.AreEqual (42U, ProtocolBuffers.ReadValue (ProtocolBuffers.WriteValue (42U, typeof(uint)), typeof(uint)));
+            Assert.AreEqual (42834463454UL, ProtocolBuffers.ReadValue (ProtocolBuffers.WriteValue (42834463454UL, typeof(ulong)), typeof(ulong)));
+            Assert.AreEqual (true, ProtocolBuffers.ReadValue (ProtocolBuffers.WriteValue (true, typeof(bool)), typeof(bool)));
+            Assert.AreEqual (false, ProtocolBuffers.ReadValue (ProtocolBuffers.WriteValue (false, typeof(bool)), typeof(bool)));
+            Assert.AreEqual ("jebediah", ProtocolBuffers.ReadValue (ProtocolBuffers.WriteValue ("jebediah", typeof(string)), typeof(string)));
+            Assert.AreEqual (new byte[] {0xBA, 0xDA, 0x55}, ProtocolBuffers.ReadValue (ProtocolBuffers.WriteValue (new byte[] {0xBA, 0xDA, 0x55}, typeof(byte[])), typeof(byte[])));
+        }
     }
 }
 

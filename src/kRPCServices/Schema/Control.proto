@@ -1,9 +1,5 @@
 package Control;
 
-message Throttle {
-  required float throttle = 1 [default = 0];
-}
-
 message ControlInputs {
   optional float pitch = 1 [default = 0];
   optional float yaw   = 2 [default = 0];

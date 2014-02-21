@@ -43,6 +43,12 @@ namespace KRPCTest.Service
         {
             return service.ProcedureSingleArgReturns (data);
         }
+
+        [KRPCProcedure]
+        public static int ProcedureWithValueTypes (float x, string y, byte[] z)
+        {
+            return service.ProcedureWithValueTypes (x, y, z);
+        }
     }
 }
 

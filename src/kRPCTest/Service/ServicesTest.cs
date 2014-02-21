@@ -244,6 +244,61 @@ namespace KRPCTest.Service
             Assert.AreEqual (expectedResponse.Error, innerResponse.Error);
         }
 
+        /// <summary>
+        /// Test calling a service method with value types for parameters
+        /// </summary>
+        [Test]
+        public void HandleRequestWithValueTypes () {
+            // Create arguments
+            float expectedX = 3.14159f;
+            string expectedY = "foo";
+            byte[] expectedZ = new byte[] { 0xDE, 0xAD, 0xBE, 0xEF };
+            byte[] xBytes, yBytes, zBytes;
+            using (var stream = new MemoryStream ()) {
+                var codedStream = CodedOutputStream.CreateInstance (stream);
+                codedStream.WriteFloatNoTag (expectedX);
+                codedStream.Flush ();
+                xBytes = stream.ToArray ();
+            }
+            using (var stream = new MemoryStream ()) {
+                var codedStream = CodedOutputStream.CreateInstance (stream);
+                codedStream.WriteStringNoTag (expectedY);
+                codedStream.Flush ();
+                yBytes = stream.ToArray ();
+            }
+            using (var stream = new MemoryStream ()) {
+                var codedStream = CodedOutputStream.CreateInstance (stream);
+                codedStream.WriteBytesNoTag (ByteString.CopyFrom (expectedZ));
+                codedStream.Flush ();
+                zBytes = stream.ToArray ();
+            }
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureWithValueTypes (
+                It.IsAny<float>(),
+                It.IsAny<string>(),
+                It.IsAny<byte[]>()))
+                .Callback((float x, string y, byte[] z) => {
+                    // Check the argument
+                    Assert.AreEqual (expectedX, x);
+                    Assert.AreEqual (expectedY, y);
+                    Assert.AreEqual (expectedZ, z);
+                }).Returns (42);
+            TestService.service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureWithValueTypes")
+                .AddParameters(ByteString.CopyFrom(xBytes))
+                .AddParameters(ByteString.CopyFrom(yBytes))
+                .AddParameters(ByteString.CopyFrom(zBytes))
+                .Build();
+            // Run the request
+            KRPC.Service.Services.Instance.HandleRequest(request);
+            mock.Verify (x => x.ProcedureWithValueTypes (
+                It.IsAny<float>(), It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once ());
+        }
+
         [Test]
         public void GetServices ()
         {
@@ -252,7 +307,7 @@ namespace KRPCTest.Service
             Assert.AreEqual (2, services.Services_Count);
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "TestService") {
-                    Assert.AreEqual (5, service.ProceduresCount);
+                    Assert.AreEqual (6, service.ProceduresCount);
                     foreach (KRPC.Schema.KRPC.Procedure method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
                             Assert.AreEqual (0, method.ParameterTypesCount);
@@ -280,6 +335,14 @@ namespace KRPCTest.Service
                             Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("KRPC.Response", method.ParameterTypesList[0]);
                             Assert.AreEqual ("KRPC.Response", method.ReturnType);
+                        }
+                        if (method.Name == "ProcedureWithValueTypes") {
+                            Assert.AreEqual (3, method.ParameterTypesCount);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("float", method.ParameterTypesList[0]);
+                            Assert.AreEqual ("string", method.ParameterTypesList[1]);
+                            Assert.AreEqual ("bytes", method.ParameterTypesList[2]);
+                            Assert.AreEqual ("int32", method.ReturnType);
                         }
                     }
                 }

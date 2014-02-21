@@ -37,6 +37,32 @@ namespace KRPCTest.Schema
             Assert.AreEqual(METHOD, reqCopy.Procedure);
             Assert.AreEqual(SERVICE, reqCopy.Service);
         }
+
+        [Test]
+        public void ValueTypeToByteString ()
+        {
+            // From Google's protobuf documentation, varint encoding example:
+            // 300 = 1010 1100 0000 0010 = 0xAC 0x02
+            const int value = 300;
+            var stream = new MemoryStream ();
+            var codedStream = CodedOutputStream.CreateInstance (stream);
+            codedStream.WriteUInt32NoTag (value);
+            codedStream.Flush ();
+            string hex = ("0x" + BitConverter.ToString (stream.ToArray ())).Replace ("-", " 0x");
+            Assert.AreEqual ("0xAC 0x02", hex);
+        }
+
+        [Test]
+        public void ByteStringToValueType ()
+        {
+            // From Google's protobuf documentation, varint encoding example:
+            // 300 = 1010 1100 0000 0010 = 0xAC 0x02
+            byte[] bytes = new byte[] { 0xAC, 0x02 };
+            var codedStream = CodedInputStream.CreateInstance (bytes);
+            uint value = 0;
+            codedStream.ReadUInt32 (ref value);
+            Assert.AreEqual (300, value);
+        }
     }
 }
 
