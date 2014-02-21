@@ -114,7 +114,7 @@ namespace KRPC
             UnityEngine.Object.Destroy (clientConnectingDialog);
         }
 
-        public void Update ()
+        public void FixedUpdate ()
         {
             if (server.Running)
                 server.Update ();
