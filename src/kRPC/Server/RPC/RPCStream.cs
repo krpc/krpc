@@ -96,7 +96,6 @@ namespace KRPC.Server.RPC
             try {
                 bufferedRequest = Request.CreateBuilder().MergeDelimitedFrom (bufferStream).BuildPartial();
             } catch (InvalidProtocolBufferException e) {
-                Console.WriteLine (e.Message);
                 // Failed to deserialize a request
                 if (offset >= buffer.Length) {
                     // And the buffer is full

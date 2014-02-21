@@ -38,12 +38,10 @@ namespace KRPC.Utils
         /// Save settings to the underlying storage
         /// </summary>
         public void Save() {
-            Logger.WriteLine ("Saving configuration to " + this.filePath);
             ConfigNode node = this.AsConfigNode;
             ConfigNode clsNode = new ConfigNode(this.GetType().Name);
             clsNode.AddNode(node);
             clsNode.Save(filePath);
-            Logger.WriteLine (clsNode.ToString ());
         }
 
         private bool FileExists {
