@@ -1,12 +1,10 @@
-﻿using System;
-using KRPC.Service;
+﻿using KRPC.Service;
 using KRPC.Schema.Control;
-using KSP;
 
 namespace KRPCServices
 {
     [KRPCService]
-    public class Control
+    static public class Control
     {
         [KRPCProcedure]
         public static void EnableSAS ()
@@ -45,13 +43,15 @@ namespace KRPCServices
         }
 
         [KRPCProcedure]
-        public static void SetControlInputs(ControlInputs controls) {
+        public static void SetControlInputs (ControlInputs controls)
+        {
             PilotAddon.SetControlInputs (controls);
         }
 
         [KRPCProcedure]
-        public static void ActivateNextStage() {
-            Staging.ActivateNextStage();
+        public static void ActivateNextStage ()
+        {
+            Staging.ActivateNextStage ();
         }
     }
 }

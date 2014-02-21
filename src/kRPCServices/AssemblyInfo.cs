@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System.Reflection;
 
 [assembly: AssemblyTitle ("kRPCServices")]
 [assembly: AssemblyDescription ("Basic services for kRPC, such as querying data from stock game objects")]
@@ -10,5 +8,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright ("djungelorm")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
-
 [assembly: AssemblyVersion ("0.1.*")]
