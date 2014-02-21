@@ -85,7 +85,13 @@ namespace KRPC.Server.Net
             }
             Logger.WriteLine("TCPServer: starting");
             tcpListener = new TcpListener (address, port);
-            tcpListener.Start();
+            try {
+                tcpListener.Start();
+            } catch (SocketException exn) {
+                string socketError = "Socket error '" + exn.SocketErrorCode + "': " + exn.Message;
+                Logger.WriteLine("TCPServer: Failed to start server. " + socketError);
+                throw new ServerException (socketError);
+            }
             IPEndPoint endPoint = (IPEndPoint)tcpListener.LocalEndpoint;
             actualAddress = endPoint.Address;
             actualPort = (ushort) endPoint.Port;
@@ -98,7 +104,7 @@ namespace KRPC.Server.Net
                 listenerThread.Abort ();
                 listenerThread.Join ();
                 tcpListener = null;
-                return;
+                throw new ServerException ("Failed to start server, timed out waiting for TcpListener to start");
             }
             if (OnStarted != null)
                 OnStarted (this, EventArgs.Empty);
