@@ -9,10 +9,21 @@ namespace KRPC.Server
         void Stop ();
         void Update ();
         bool Running { get; }
+
+        IEnumerable<IClient> Clients { get; }
+
+        event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
+        event EventHandler<ClientConnectedArgs> OnClientConnected;
+        event EventHandler<ClientDisconnectedArgs> OnClientDisconnected;
     }
 
-    interface IServer<In,Out> : IServer
+    interface IServer<In,Out>
     {
+        void Start ();
+        void Stop ();
+        void Update ();
+        bool Running { get; }
+
         IEnumerable<IClient<In,Out>> Clients { get; }
 
         event EventHandler<ClientRequestingConnectionArgs<In,Out>> OnClientRequestingConnection;

@@ -11,40 +11,40 @@ namespace KRPCTest.Server
         public void DefaultBehaviour ()
         {
             var attempt = new ClientRequestingConnectionArgs<byte,byte> (null);
-            Assert.IsFalse (attempt.ShouldDeny);
-            Assert.IsFalse (attempt.ShouldAllow);
-            Assert.IsTrue (attempt.StillPending);
+            Assert.IsFalse (attempt.Request.ShouldDeny);
+            Assert.IsFalse (attempt.Request.ShouldAllow);
+            Assert.IsTrue (attempt.Request.StillPending);
         }
 
         [Test]
         public void Deny ()
         {
             var attempt = new ClientRequestingConnectionArgs<byte,byte> (null);
-            attempt.Deny();
-            Assert.IsTrue (attempt.ShouldDeny);
-            Assert.IsFalse (attempt.ShouldAllow);
-            Assert.IsFalse (attempt.StillPending);
+            attempt.Request.Deny();
+            Assert.IsTrue (attempt.Request.ShouldDeny);
+            Assert.IsFalse (attempt.Request.ShouldAllow);
+            Assert.IsFalse (attempt.Request.StillPending);
         }
 
         [Test]
         public void Allow ()
         {
             var attempt = new ClientRequestingConnectionArgs<byte,byte> (null);
-            attempt.Allow();
-            Assert.IsFalse (attempt.ShouldDeny);
-            Assert.IsTrue (attempt.ShouldAllow);
-            Assert.IsFalse (attempt.StillPending);
+            attempt.Request.Allow();
+            Assert.IsFalse (attempt.Request.ShouldDeny);
+            Assert.IsTrue (attempt.Request.ShouldAllow);
+            Assert.IsFalse (attempt.Request.StillPending);
         }
 
         [Test]
         public void AllowAndDeny ()
         {
             var attempt = new ClientRequestingConnectionArgs<byte,byte> (null);
-            attempt.Allow();
-            attempt.Deny();
-            Assert.IsTrue (attempt.ShouldDeny);
-            Assert.IsFalse (attempt.ShouldAllow);
-            Assert.IsFalse (attempt.StillPending);
+            attempt.Request.Allow();
+            attempt.Request.Deny();
+            Assert.IsTrue (attempt.Request.ShouldDeny);
+            Assert.IsFalse (attempt.Request.ShouldAllow);
+            Assert.IsFalse (attempt.Request.StillPending);
         }
     }
 }

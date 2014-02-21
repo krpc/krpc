@@ -48,7 +48,7 @@ namespace KRPCTest.Server.Net
             bool clientConnected = false;
             bool clientDisconnected = false;
             server.OnClientRequestingConnection += (s, e) => {
-                e.Allow ();
+                e.Request.Allow ();
                 clientRequestingConnection = true;
             };
             server.OnClientConnected += (s, e) => clientConnected = true;
@@ -106,7 +106,7 @@ namespace KRPCTest.Server.Net
 
             bool clientConnected = false;
             bool clientDisconnected = false;
-            server.OnClientRequestingConnection += (s, e) => e.Allow ();
+            server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             server.OnClientConnected += (s, e) => clientConnected = true;
             server.OnClientDisconnected += (s, e) => clientDisconnected = true;
 

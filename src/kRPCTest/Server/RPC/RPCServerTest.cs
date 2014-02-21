@@ -41,15 +41,15 @@ namespace KRPCTest.Server
             var byteClient = new TestClient (stream);
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
             mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-            Assert.IsTrue (eventArgs.ShouldAllow);
-            Assert.IsFalse (eventArgs.ShouldDeny);
+            Assert.IsTrue (eventArgs.Request.ShouldAllow);
+            Assert.IsFalse (eventArgs.Request.ShouldDeny);
 
             server.Update ();
             Assert.AreEqual (1, server.Clients.Count ());
@@ -67,15 +67,15 @@ namespace KRPCTest.Server
             var byteClient = new TestClient (stream);
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
             mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-            Assert.IsTrue (eventArgs.ShouldAllow);
-            Assert.IsFalse (eventArgs.ShouldDeny);
+            Assert.IsTrue (eventArgs.Request.ShouldAllow);
+            Assert.IsFalse (eventArgs.Request.ShouldDeny);
 
             server.Update ();
             Assert.AreEqual (1, server.Clients.Count ());
@@ -96,15 +96,15 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
             mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-            Assert.IsFalse (eventArgs.ShouldAllow);
-            Assert.IsTrue (eventArgs.ShouldDeny);
+            Assert.IsFalse (eventArgs.Request.ShouldAllow);
+            Assert.IsTrue (eventArgs.Request.ShouldDeny);
         }
 
         [Test]
@@ -121,15 +121,15 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
             mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-            Assert.IsFalse (eventArgs.ShouldAllow);
-            Assert.IsTrue (eventArgs.ShouldDeny);
+            Assert.IsFalse (eventArgs.Request.ShouldAllow);
+            Assert.IsTrue (eventArgs.Request.ShouldDeny);
         }
 
         [Test]
@@ -146,15 +146,15 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
             mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-            Assert.IsFalse (eventArgs.ShouldAllow);
-            Assert.IsTrue (eventArgs.ShouldDeny);
+            Assert.IsFalse (eventArgs.Request.ShouldAllow);
+            Assert.IsTrue (eventArgs.Request.ShouldDeny);
         }
 
         [Test]
@@ -178,15 +178,15 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
             mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-            Assert.IsFalse (eventArgs.ShouldAllow);
-            Assert.IsTrue (eventArgs.ShouldDeny);
+            Assert.IsFalse (eventArgs.Request.ShouldAllow);
+            Assert.IsTrue (eventArgs.Request.ShouldDeny);
         }
 
         [Test]
@@ -202,15 +202,15 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
             mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
 
-            Assert.IsFalse (eventArgs.ShouldAllow);
-            Assert.IsTrue (eventArgs.ShouldDeny);
+            Assert.IsFalse (eventArgs.Request.ShouldAllow);
+            Assert.IsTrue (eventArgs.Request.ShouldDeny);
         }
     }
 }

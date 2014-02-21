@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Net.Sockets;
 using UnityEngine;
 using KRPC.Server;
-using KRPC.Server.Net;
 using KRPC.Utils;
-using KRPC.Schema.KRPC;
 
 namespace KRPC.UI
 {
     sealed class ClientConnectingDialog : OptionDialog
     {
-        private ClientRequestingConnectionArgs<Request,Response> args;
+        private ClientRequestingConnectionArgs args;
 
         protected override void Init()
         {
@@ -18,11 +15,11 @@ namespace KRPC.UI
             Skin = GUI.skin;
             Options.Add(
                 new DialogOption ("Allow", () => {
-                    args.Allow ();
+                    args.Request.Allow ();
                 }));
             Options.Add (
                 new DialogOption ("Deny", () => {
-                    args.Deny ();
+                    args.Request.Deny ();
                 }));
         }
 
@@ -39,7 +36,7 @@ namespace KRPC.UI
             this.args = null;
         }
 
-        public void OnClientRequestingConnection (object sender, ClientRequestingConnectionArgs<Request,Response> args)
+        public void OnClientRequestingConnection (object sender, ClientRequestingConnectionArgs args)
         {
             // Not open, so open the dialog
             if (!Visible) {
@@ -54,11 +51,11 @@ namespace KRPC.UI
                 return;
 
             // Open, and we have a decision (must be the correct client at this point), to close the dialog
-            if (Visible && !this.args.StillPending) {
-                if (this.args.ShouldAllow)
-                    args.Allow ();
+            if (Visible && !this.args.Request.StillPending) {
+                if (this.args.Request.ShouldAllow)
+                    args.Request.Allow ();
                 else
-                    args.Deny ();
+                    args.Request.Deny ();
                 Close ();
             }
         }

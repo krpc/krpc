@@ -125,18 +125,18 @@ namespace KRPC.Server.Net
                 var stillPendingClients = new List<TCPClient> ();
                 foreach (var client in pendingClients) {
                     // Trigger OnClientRequestingConnection events to verify the connection
-                    var attempt = new ClientRequestingConnectionArgs<byte,byte> (client);
+                    var args = new ClientRequestingConnectionArgs<byte,byte> (client);
                     if (OnClientRequestingConnection != null)
-                        OnClientRequestingConnection (this, attempt);
+                        OnClientRequestingConnection (this, args);
 
                     // Deny the connection
-                    if (attempt.ShouldDeny) {
+                    if (args.Request.ShouldDeny) {
                         Logger.WriteLine ("TCPServer: client connection denied (" + client.Address + ")");
                         DisconnectClient (client, noEvent: true);
                     }
 
                     // Allow the connection
-                    if (attempt.ShouldAllow) {
+                    if (args.Request.ShouldAllow) {
                         Logger.WriteLine ("TCPServer: client connection accepted (" + client.Address + ")");
                         clients.Add (client);
                         if (OnClientConnected != null)
@@ -144,7 +144,7 @@ namespace KRPC.Server.Net
                     }
 
                     // Still pending, will either be denied or allowed on a subsequent called to Update
-                    if (attempt.StillPending) {
+                    if (args.Request.StillPending) {
                         stillPendingClients.Add (client);
                     }
                 }

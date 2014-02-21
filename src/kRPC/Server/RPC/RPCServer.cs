@@ -94,7 +94,7 @@ namespace KRPC.Server.RPC
                     pendingClients [args.Client] = client;
                 } else {
                     // Deny the connection, don't add it to pending clients
-                    args.Deny ();
+                    args.Request.Deny ();
                     return;
                 }
             }
@@ -103,16 +103,16 @@ namespace KRPC.Server.RPC
             // Invoke connection request events.
             if (OnClientRequestingConnection != null) {
                 var client = pendingClients [args.Client];
-                var attempt = new ClientRequestingConnectionArgs<Request,Response> (client);
-                OnClientRequestingConnection (this, attempt);
-                if (attempt.ShouldAllow) {
-                    args.Allow ();
+                var subArgs = new ClientRequestingConnectionArgs<Request,Response> (client);
+                OnClientRequestingConnection (this, subArgs);
+                if (subArgs.Request.ShouldAllow) {
+                    args.Request.Allow ();
                     clients [args.Client] = client;
                 }
-                if (attempt.ShouldDeny) {
-                    args.Deny ();
+                if (subArgs.Request.ShouldDeny) {
+                    args.Request.Deny ();
                 }
-                if (!attempt.StillPending) {
+                if (!subArgs.Request.StillPending) {
                     pendingClients.Remove (args.Client);
                 }
             }

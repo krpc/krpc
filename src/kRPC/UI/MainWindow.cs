@@ -1,24 +1,16 @@
 ﻿using System;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Net;
 using UnityEngine;
-using KSP;
-using KRPC.Utils;
 using KRPC.Server;
-using KRPC.Server.RPC;
-using KRPC.Server.Net;
-using KRPC.UI;
 
 namespace KRPC.UI
 {
     sealed class MainWindow : Window
     {
         public KRPCConfiguration Config { private get; set; }
-        public RPCServer Server { private get; set; }
+        public KRPCServer Server { private get; set; }
 
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
@@ -104,7 +96,6 @@ namespace KRPC.UI
 
             GUILayout.BeginVertical ();
             if (Server.Running) {
-                TCPServer tcpServer = (TCPServer)Server.Server;
 
                 if (GUILayout.Button (stopButtonText, buttonStyle)) {
                     if (OnStopServerPressed != null)
@@ -117,14 +108,14 @@ namespace KRPC.UI
                 GUILayout.BeginHorizontal ();
                 GUILayoutExtensions.Light (true, lightStyle);
                 GUILayout.Label (serverOnlineText, stretchyLabelStyle);
-                GUILayout.Label (AllowedClientsString (tcpServer.Address), labelStyle);
+                GUILayout.Label (AllowedClientsString (Server.Address), labelStyle);
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
                 GUILayout.Label (addressLabelText, labelStyle);
-                GUILayout.Label (tcpServer.Address.ToString (), stretchyLabelStyle);
+                GUILayout.Label (Server.Address.ToString (), stretchyLabelStyle);
                 GUILayout.Label (portLabelText, labelStyle);
-                GUILayout.Label (tcpServer.Port.ToString (), stretchyLabelStyle);
+                GUILayout.Label (Server.Port.ToString (), stretchyLabelStyle);
                 GUILayout.EndHorizontal ();
 
                 GUILayoutExtensions.Separator (separatorStyle);
