@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using UnityEngine;
 using KRPC.Server;
+using KRPC.Server.Net;
 
 namespace KRPC.UI
 {
@@ -205,25 +206,12 @@ namespace KRPC.UI
             // TODO: better way of checking if address is the loopback device?
             if (localAddress.ToString () == IPAddress.Loopback.ToString ())
                 return localClientOnlyText;
-            var subnet = GetSubnetMask (localAddress);
-            if (subnet != null)
+            try {
+                var subnet = NetworkInformation.GetSubnetMask (localAddress);
                 return String.Format (subnetAllowedText, subnet);
+            } catch (ArgumentException) {
+            }
             return unknownClientsAllowedText;
-        }
-
-        private static IPAddress GetSubnetMask(IPAddress address)
-        {
-            //TODO: fails due to native code not being available
-//            foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces()) {
-//                foreach (UnicastIPAddressInformation unicastIPAddressInformation in adapter.GetIPProperties().UnicastAddresses)    {
-//                    if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork) {
-//                        if (address.Equals(unicastIPAddressInformation.Address)) {
-//                            return unicastIPAddressInformation.IPv4Mask;
-//                        }
-//                    }
-//                }
-//            }
-            return null;
         }
     }
 }

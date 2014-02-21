@@ -28,16 +28,6 @@ namespace KRPC
 
         public void Awake ()
         {
-            //TODO: fails due to native code not being available
-//            Logger.WriteLine ("Local addresses of available network adapters:");
-//            foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces()) {
-//                foreach (UnicastIPAddressInformation unicastIPAddressInformation in adapter.GetIPProperties().UnicastAddresses) {
-//                    if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork) {
-//                        Logger.WriteLine ("   " + unicastIPAddressInformation.Address.ToString());
-//                    }
-//                }
-//            }
-
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
             server = new KRPCServer (config.Address, config.Port);

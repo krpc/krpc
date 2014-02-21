@@ -96,6 +96,7 @@
     <Compile Include="KRPCServer.cs" />
     <Compile Include="Server\ClientConnectionRequest.cs" />
     <Compile Include="Server\ClientActivityArgs.cs" />
+    <Compile Include="Server\Net\NetworkInformation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
