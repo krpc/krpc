@@ -13,14 +13,16 @@ namespace KRPC
 {
     class KRPCServer : IServer
     {
-        public event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
-        public event EventHandler<ClientConnectedArgs> OnClientConnected;
-        public event EventHandler<ClientDisconnectedArgs> OnClientDisconnected;
-        public event EventHandler<ClientActivityArgs> OnClientActivity;
-
         private RPCServer rpcServer;
         private TCPServer tcpServer;
         private IScheduler<IClient<Request,Response>> requestScheduler;
+
+        public event EventHandler OnStarted;
+        public event EventHandler OnStopped;
+        public event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
+        public event EventHandler<ClientConnectedArgs> OnClientConnected;
+        public event EventHandler<ClientActivityArgs> OnClientActivity;
+        public event EventHandler<ClientDisconnectedArgs> OnClientDisconnected;
 
         public KRPCServer (IPAddress address, ushort port)
         {
@@ -29,6 +31,14 @@ namespace KRPC
             requestScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
 
             // Tie events to underlying server
+            rpcServer.OnStarted += (s, e) => {
+                if (OnStarted != null)
+                    OnStarted (this, EventArgs.Empty);
+            };
+            rpcServer.OnStopped += (s, e) => {
+                if (OnStopped != null)
+                    OnStopped (this, EventArgs.Empty);
+            };
             rpcServer.OnClientRequestingConnection += (s, e) => {
                 if (OnClientRequestingConnection != null)
                     OnClientRequestingConnection (s, e);

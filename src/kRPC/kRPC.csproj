@@ -94,8 +94,8 @@
     <Compile Include="UI\GUILayoutExtensions.cs" />
     <Compile Include="Utils\ProtocolBuffers.cs" />
     <Compile Include="KRPCServer.cs" />
-    <Compile Include="ClientActivityArgs.cs" />
     <Compile Include="Server\ClientConnectionRequest.cs" />
+    <Compile Include="Server\ClientActivityArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

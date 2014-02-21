@@ -17,8 +17,14 @@ namespace KRPC.Server.RPC
         private byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
         private const int identifierLength = 32;
 
+        public event EventHandler OnStarted;
+        public event EventHandler OnStopped;
         public event EventHandler<ClientRequestingConnectionArgs<Request,Response>> OnClientRequestingConnection;
         public event EventHandler<ClientConnectedArgs<Request,Response>> OnClientConnected;
+        /// <summary>
+        /// Does not trigger this event, unless the underlying server does.
+        /// </summary>
+        public event EventHandler<ClientActivityArgs<Request,Response>> OnClientActivity;
         public event EventHandler<ClientDisconnectedArgs<Request,Response>> OnClientDisconnected;
 
         private IServer<byte,byte> server;
@@ -28,8 +34,17 @@ namespace KRPC.Server.RPC
         public RPCServer (IServer<byte,byte> server)
         {
             this.server = server;
+            server.OnStarted += (s, e) => {
+                if (OnStarted != null)
+                    OnStarted (this, EventArgs.Empty);
+            };
+            server.OnStopped += (s, e) => {
+                if (OnStopped != null)
+                    OnStopped (this, EventArgs.Empty);
+            };
             server.OnClientRequestingConnection += HandleClientRequestingConnection;
             server.OnClientConnected += HandleClientConnected;
+            server.OnClientConnected += HandleClientActivity;
             server.OnClientDisconnected += HandleClientDisconnected;
         }
 
@@ -69,6 +84,13 @@ namespace KRPC.Server.RPC
             if (OnClientConnected != null) {
                 var client = clients [args.Client];
                 OnClientConnected(this, new ClientConnectedArgs<Request,Response> (client));
+            }
+        }
+
+        private void HandleClientActivity(object sender, IClientEventArgs<byte,byte> args) {
+            if (OnClientActivity != null) {
+                var client = clients [args.Client];
+                OnClientActivity(this, new ClientActivityArgs<Request,Response> (client));
             }
         }
 

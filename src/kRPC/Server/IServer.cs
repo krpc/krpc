@@ -12,8 +12,11 @@ namespace KRPC.Server
 
         IEnumerable<IClient> Clients { get; }
 
+        event EventHandler OnStarted;
+        event EventHandler OnStopped;
         event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
         event EventHandler<ClientConnectedArgs> OnClientConnected;
+        event EventHandler<ClientActivityArgs> OnClientActivity;
         event EventHandler<ClientDisconnectedArgs> OnClientDisconnected;
     }
 
@@ -26,8 +29,11 @@ namespace KRPC.Server
 
         IEnumerable<IClient<In,Out>> Clients { get; }
 
+        event EventHandler OnStarted;
+        event EventHandler OnStopped;
         event EventHandler<ClientRequestingConnectionArgs<In,Out>> OnClientRequestingConnection;
         event EventHandler<ClientConnectedArgs<In,Out>> OnClientConnected;
+        event EventHandler<ClientActivityArgs<In,Out>> OnClientActivity;
         event EventHandler<ClientDisconnectedArgs<In,Out>> OnClientDisconnected;
     }
 }

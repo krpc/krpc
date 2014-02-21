@@ -11,8 +11,14 @@ namespace KRPC.Server.Net
 {
     sealed class TCPServer : IServer<byte,byte>
     {
+        public event EventHandler OnStarted;
+        public event EventHandler OnStopped;
         public event EventHandler<ClientRequestingConnectionArgs<byte,byte>> OnClientRequestingConnection;
         public event EventHandler<ClientConnectedArgs<byte,byte>> OnClientConnected;
+        /// <summary>
+        /// Does not trigger this event.
+        /// </summary>
+        public event EventHandler<ClientActivityArgs<byte,byte>> OnClientActivity;
         public event EventHandler<ClientDisconnectedArgs<byte,byte>> OnClientDisconnected;
 
         /// <summary>
@@ -83,6 +89,8 @@ namespace KRPC.Server.Net
             listenerThread.Start();
             // TODO: add timeout just in case...
             while (!running) { }
+            if (OnStarted != null)
+                OnStarted (this, EventArgs.Empty);
             Logger.WriteLine("TCPServer: started successfully");
             Logger.WriteLine("TCPServer: listening on local address " + actualAddress);
             Logger.WriteLine("TCPServer: listening on port " + actualPort);
@@ -111,6 +119,9 @@ namespace KRPC.Server.Net
             // Exited cleanly
             running = false;
             Logger.WriteLine("TCPServer: stopped");
+
+            if (OnStopped != null)
+                OnStopped (this, EventArgs.Empty);
         }
 
         public void Update() {
