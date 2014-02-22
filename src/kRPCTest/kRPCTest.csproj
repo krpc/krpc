@@ -32,10 +32,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
+      <HintPath>..\..\lib\moq-4.2.1312.1622\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\lib\nunit-2.6.3\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\lib\ksp\Assembly-CSharp.dll</HintPath>
