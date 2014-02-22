@@ -1,12 +1,11 @@
-﻿using System;
-using System.Net.Sockets;
+using System;
 using KRPC.Schema.KRPC;
 
 namespace KRPC.Server.RPC
 {
     sealed class RPCClient : IClient<Request,Response>
     {
-        private IClient<byte,byte> client;
+        readonly IClient<byte,byte> client;
 
         public RPCClient (string name, IClient<byte,byte> client)
         {
@@ -27,26 +26,28 @@ namespace KRPC.Server.RPC
             get { return client.Connected; }
         }
 
-        public void Close () {
+        public void Close ()
+        {
             client.Close ();
         }
 
-        public override bool Equals(Object other) {
-            if (other == null)
-                return false;
-            return Equals(other as RPCClient);
+        public override bool Equals (Object obj)
+        {
+            return obj != null && Equals (obj as RPCClient);
         }
 
-        public bool Equals (IClient<Request,Response> other) {
+        public bool Equals (IClient<Request,Response> other)
+        {
             if ((object)other == null)
                 return false;
-            RPCClient otherClient = other as RPCClient;
+            var otherClient = other as RPCClient;
             if ((object)otherClient == null)
                 return false;
             return client == otherClient.client;
         }
 
-        public override int GetHashCode () {
+        public override int GetHashCode ()
+        {
             return client.GetHashCode ();
         }
 
@@ -61,7 +62,7 @@ namespace KRPC.Server.RPC
 
         public static bool operator != (RPCClient lhs, RPCClient rhs)
         {
-            return ! (lhs == rhs);
+            return !(lhs == rhs);
         }
     }
 }

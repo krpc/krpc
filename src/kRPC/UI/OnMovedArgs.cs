@@ -1,12 +1,15 @@
-﻿using System;
+using System;
 using UnityEngine;
 
-class MovedArgs : EventArgs
+namespace KRPC.UI
 {
-    public Rect Position { get; private set; }
-
-    public MovedArgs(Rect position)
+    class MovedArgs : EventArgs
     {
-        Position = position;
+        public Rect Position { get; private set; }
+
+        public MovedArgs (Rect position)
+        {
+            Position = position;
+        }
     }
 }

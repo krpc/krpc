@@ -3,20 +3,82 @@ using System.Collections.Generic;
 
 namespace KRPC.Server
 {
+    /// <summary>
+    /// A non-generic server.
+    /// </summary>
     interface IServer
     {
+        /// <summary>
+        /// Start the server.
+        /// </summary>
         void Start ();
+
+        /// <summary>
+        /// Stop the server.
+        /// </summary>
         void Stop ();
+
+        /// <summary>
+        /// Update the server. Call this regularly to ensure timely handling
+        /// of new client connections and other functionality.
+        /// </summary>
         void Update ();
+
+        /// <summary>
+        /// Returns true if the server is running and accepting client connections.
+        /// </summary>
         bool Running { get; }
+
+        /// <summary>
+        /// Clients that are connected to the server.
+        /// </summary>
+        IEnumerable<IClient> Clients { get; }
+
+        event EventHandler OnStarted;
+        event EventHandler OnStopped;
+        event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
+        event EventHandler<ClientConnectedArgs> OnClientConnected;
+        event EventHandler<ClientActivityArgs> OnClientActivity;
+        event EventHandler<ClientDisconnectedArgs> OnClientDisconnected;
     }
 
-    interface IServer<In,Out> : IServer
+    /// <summary>
+    /// A generic server, that receives values of type TIn from clients and
+    /// sends values of type TOut to them.
+    /// </summary>
+    interface IServer<TIn,TOut>
     {
-        IEnumerable<IClient<In,Out>> Clients { get; }
+        /// <summary>
+        /// Start the server.
+        /// </summary>
+        void Start ();
 
-        event EventHandler<ClientRequestingConnectionArgs<In,Out>> OnClientRequestingConnection;
-        event EventHandler<ClientConnectedArgs<In,Out>> OnClientConnected;
-        event EventHandler<ClientDisconnectedArgs<In,Out>> OnClientDisconnected;
+        /// <summary>
+        /// Stop the server.
+        /// </summary>
+        void Stop ();
+
+        /// <summary>
+        /// Update the server. Call this regularly to ensure timely handling
+        /// of new client connections and other functionality.
+        /// </summary>
+        void Update ();
+
+        /// <summary>
+        /// Returns true if the server is running and accepting client connections.
+        /// </summary>
+        bool Running { get; }
+
+        /// <summary>
+        /// Clients that are connected to the server.
+        /// </summary>
+        IEnumerable<IClient<TIn,TOut>> Clients { get; }
+
+        event EventHandler OnStarted;
+        event EventHandler OnStopped;
+        event EventHandler<ClientRequestingConnectionArgs<TIn,TOut>> OnClientRequestingConnection;
+        event EventHandler<ClientConnectedArgs<TIn,TOut>> OnClientConnected;
+        event EventHandler<ClientActivityArgs<TIn,TOut>> OnClientActivity;
+        event EventHandler<ClientDisconnectedArgs<TIn,TOut>> OnClientDisconnected;
     }
 }

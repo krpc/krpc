@@ -24,7 +24,7 @@ CSHARP_PROTOGEN = tools/ProtoGen.exe
 PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCServices/Schema/*.proto)
 
 # Main build targets
-.PHONY: all build dist pre-release release install test ksp clean dist-clean
+.PHONY: all build dist pre-release release install test ksp clean dist-clean strip-bom
 
 all: build
 
@@ -70,7 +70,7 @@ install: dist
 	cp -r $(DIST_DIR)/GameData/* $(KSP_DIR)/GameData/
 
 test: $(CSHARP_TEST_PROJECTS)
-	nunit-console --nologo -nothread -trace=Off -output=test.log src/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
+	nunit-console -nologo -nothread -trace=Off -output=test.log src/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
 
 ksp: install TestingTools
 	cp src/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
@@ -84,6 +84,9 @@ clean: protobuf-clean
 
 dist-clean: clean
 	-rm -rf dist
+
+strip-bom:
+	tools/strip-bom.sh
 
 # C# projects
 .PHONY: $(CSHARP_PROJECTS) $(CSHARP_LIBRARIES)

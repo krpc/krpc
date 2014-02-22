@@ -1,38 +1,47 @@
-﻿using System;
-using System.Net.Sockets;
+using System;
 
 namespace KRPC.Server
 {
-    class ClientRequestingConnectionArgs<In,Out> : EventArgs, IClientEventArgs<In,Out>
+    class ClientRequestingConnectionArgs : EventArgs, IClientEventArgs
     {
-        public IClient<In,Out> Client { get; private set; }
+        public IClient Client { get; private set; }
 
-        public ClientRequestingConnectionArgs(IClient<In,Out> client)
+        public ClientConnectionRequest Request { get; private set; }
+
+        public ClientRequestingConnectionArgs (IClient client)
         {
             Client = client;
+            Request = new ClientConnectionRequest ();
         }
 
-        private bool allow = false;
-        private bool deny = false;
+        public ClientRequestingConnectionArgs (IClient client, ClientConnectionRequest request)
+        {
+            Client = client;
+            Request = request;
+        }
+    }
 
-        public bool ShouldAllow {
-            get { return allow && !deny; }
+    class ClientRequestingConnectionArgs<TIn,TOut> : EventArgs, IClientEventArgs<TIn,TOut>
+    {
+        public IClient<TIn,TOut> Client { get; private set; }
+
+        public ClientConnectionRequest Request { get; private set; }
+
+        public ClientRequestingConnectionArgs (IClient<TIn,TOut> client)
+        {
+            Client = client;
+            Request = new ClientConnectionRequest ();
         }
 
-        public bool ShouldDeny {
-            get { return deny; }
+        public ClientRequestingConnectionArgs (IClient<TIn,TOut> client, ClientConnectionRequest request)
+        {
+            Client = client;
+            Request = request;
         }
 
-        public bool StillPending {
-            get { return !allow && !deny; }
-        }
-
-        public void Allow () {
-            allow = true;
-        }
-
-        public void Deny () {
-            deny = true;
+        public static implicit operator ClientRequestingConnectionArgs (ClientRequestingConnectionArgs<TIn,TOut> args)
+        {
+            return new ClientRequestingConnectionArgs (args.Client, args.Request);
         }
     }
 }

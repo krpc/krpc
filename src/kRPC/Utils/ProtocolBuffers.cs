@@ -1,22 +1,23 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 using Google.ProtocolBuffers;
 
 namespace KRPC.Utils
 {
-    class ProtocolBuffers
+    static class ProtocolBuffers
     {
         /// <summary>
         /// Return the string name of the Protocol Buffer message type (with the package name prefixing it).
         /// E.g. "KRPC.Request"
         /// </summary>
-        public static string GetMessageTypeName (Type type) {
+        public static string GetMessageTypeName (Type type)
+        {
             if (type == null)
                 throw new ArgumentException ("null is not a Protocol Buffer message type");
             if (!IsAMessageType (type))
-                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer message type");
-            return type.FullName.Replace("KRPC.Schema.", "");
+                throw new ArgumentException (type + " is not a Protocol Buffer message type");
+            return type.FullName.Replace ("KRPC.Schema.", "");
         }
 
         /// <summary>
@@ -74,9 +75,9 @@ namespace KRPC.Utils
             if (type == null)
                 throw new ArgumentException ("null is not a Protocol Buffer message type");
             if (!IsAMessageType (type))
-                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer message type");
-            MethodInfo createBuilder = type.GetMethod ("CreateBuilder", new Type[] {});
-            return (IBuilder) createBuilder.Invoke (null, null);
+                throw new ArgumentException (type + " is not a Protocol Buffer message type");
+            MethodInfo createBuilder = type.GetMethod ("CreateBuilder", new Type[] { });
+            return (IBuilder)createBuilder.Invoke (null, null);
         }
 
         /// <summary>
@@ -94,14 +95,14 @@ namespace KRPC.Utils
         {
             return
                 type == typeof(double) ||
-                type == typeof(float) ||
-                type == typeof(int) ||
-                type == typeof(long) ||
-                type == typeof(uint) ||
-                type == typeof(ulong) ||
-                type == typeof(bool) ||
-                type == typeof(string) ||
-                type == typeof(byte[]);
+            type == typeof(float) ||
+            type == typeof(int) ||
+            type == typeof(long) ||
+            type == typeof(uint) ||
+            type == typeof(ulong) ||
+            type == typeof(bool) ||
+            type == typeof(string) ||
+            type == typeof(byte[]);
         }
 
         /// <summary>
@@ -168,7 +169,7 @@ namespace KRPC.Utils
                 stream.ReadBytes (ref result);
                 return result.ToByteArray ();
             }
-            throw new ArgumentException (type.ToString() + " is not a Protocol Buffer value type");
+            throw new ArgumentException (type.ToString () + " is not a Protocol Buffer value type");
         }
 
         /// <summary>
@@ -179,25 +180,25 @@ namespace KRPC.Utils
             MemoryStream stream = new MemoryStream ();
             var encoder = CodedOutputStream.CreateInstance (stream);
             if (type == typeof(double))
-                encoder.WriteDoubleNoTag ((double) value);
+                encoder.WriteDoubleNoTag ((double)value);
             else if (type == typeof(float))
-                encoder.WriteFloatNoTag ((float) value);
+                encoder.WriteFloatNoTag ((float)value);
             else if (type == typeof(int))
-                encoder.WriteInt32NoTag ((int) value);
+                encoder.WriteInt32NoTag ((int)value);
             else if (type == typeof(long))
-                encoder.WriteInt64NoTag ((long) value);
+                encoder.WriteInt64NoTag ((long)value);
             else if (type == typeof(uint))
-                encoder.WriteUInt32NoTag ((uint) value);
+                encoder.WriteUInt32NoTag ((uint)value);
             else if (type == typeof(ulong))
-                encoder.WriteUInt64NoTag ((ulong) value);
+                encoder.WriteUInt64NoTag ((ulong)value);
             else if (type == typeof(bool))
-                encoder.WriteBoolNoTag ((bool) value);
+                encoder.WriteBoolNoTag ((bool)value);
             else if (type == typeof(string))
-                encoder.WriteStringNoTag ((string) value);
+                encoder.WriteStringNoTag ((string)value);
             else if (type == typeof(byte[]))
-                encoder.WriteBytesNoTag (ByteString.CopyFrom ((byte[]) value));
+                encoder.WriteBytesNoTag (ByteString.CopyFrom ((byte[])value));
             else
-                throw new ArgumentException (type.ToString() + " is not a Protocol Buffer value type");
+                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer value type");
             encoder.Flush ();
             return ByteString.CopyFrom (stream.ToArray ());
         }
