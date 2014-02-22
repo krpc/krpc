@@ -17,6 +17,10 @@ namespace KRPC
         readonly TCPServer tcpServer;
         readonly IScheduler<IClient<Request,Response>> requestScheduler;
 
+        internal delegate double UniversalTimeFunction ();
+
+        internal UniversalTimeFunction GetUniversalTime;
+
         public event EventHandler OnStarted;
         public event EventHandler OnStopped;
         public event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
@@ -114,7 +118,7 @@ namespace KRPC
                             }
 
                             // Send response
-                            response.SetTime (Planetarium.GetUniversalTime ());
+                            response.SetTime (GetUniversalTime ());
                             var builtResponse = response.Build ();
                             //TODO: handle partial response exception
                             client.Stream.Write (builtResponse);
