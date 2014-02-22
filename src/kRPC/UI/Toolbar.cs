@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2013-2014, Maik Schreiber
 All rights reserved.
 
@@ -27,13 +27,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
-namespace KRPC.UI {
-
-
-
+namespace KRPC.UI
+{
     /**********************************************************\
     *          --- DO NOT EDIT BELOW THIS COMMENT ---          *
     *                                                          *
@@ -45,13 +42,11 @@ namespace KRPC.UI {
     *                                                          *
     *          --- DO NOT EDIT BELOW THIS COMMENT ---          *
     \**********************************************************/
-
-
-
     /// <summary>
     /// The global tool bar manager.
     /// </summary>
-    public partial class ToolbarManager : IToolbarManager {
+    public partial class ToolbarManager : IToolbarManager
+    {
         /// <summary>
         /// Whether the Toolbar Plugin is available.
         /// </summary>
@@ -60,7 +55,7 @@ namespace KRPC.UI {
                 if (toolbarAvailable == null) {
                     toolbarAvailable = Instance != null;
                 }
-                return (bool) toolbarAvailable;
+                return (bool)toolbarAvailable;
             }
         }
 
@@ -71,24 +66,23 @@ namespace KRPC.UI {
             get {
                 if ((toolbarAvailable != false) && (instance_ == null)) {
                     Type type = AssemblyLoader.loadedAssemblies
-                        .SelectMany(a => a.assembly.GetExportedTypes())
-                        .SingleOrDefault(t => t.FullName == "Toolbar.ToolbarManager");
+                        .SelectMany (a => a.assembly.GetExportedTypes ())
+                        .SingleOrDefault (t => t.FullName == "Toolbar.ToolbarManager");
                     if (type != null) {
-                        object realToolbarManager = type.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).GetValue(null, null);
-                        instance_ = new ToolbarManager(realToolbarManager);
+                        object realToolbarManager = type.GetProperty ("Instance", BindingFlags.Public | BindingFlags.Static).GetValue (null, null);
+                        instance_ = new ToolbarManager (realToolbarManager);
                     }
                 }
                 return instance_;
             }
         }
     }
-
     #region interfaces
-
     /// <summary>
     /// A toolbar manager.
     /// </summary>
-    public interface IToolbarManager {
+    public interface IToolbarManager
+    {
         /// <summary>
         /// Adds a new button.
         /// </summary>
@@ -99,13 +93,14 @@ namespace KRPC.UI {
         /// <param name="ns">The new button's namespace. This is usually the plugin's name. Must not include special characters like '.'</param>
         /// <param name="id">The new button's ID. This ID must be unique across all buttons in the namespace. Must not include special characters like '.'</param>
         /// <returns>The button created.</returns>
-        IButton add(string ns, string id);
+        IButton add (string ns, string id);
     }
 
     /// <summary>
     /// Represents a clickable button.
     /// </summary>
-    public interface IButton {
+    public interface IButton
+    {
         /// <summary>
         /// The text displayed on the button. Set to null to hide text.
         /// </summary>
@@ -251,7 +246,6 @@ namespace KRPC.UI {
         /// </code>
         /// </example>
         event ClickHandler OnClick;
-
         /// <summary>
         /// Event handler that can be registered with to receive "on mouse enter" events.
         /// </summary>
@@ -264,7 +258,6 @@ namespace KRPC.UI {
         /// </code>
         /// </example>
         event MouseEnterHandler OnMouseEnter;
-
         /// <summary>
         /// Event handler that can be registered with to receive "on mouse leave" events.
         /// </summary>
@@ -282,22 +275,19 @@ namespace KRPC.UI {
         /// Permanently destroys this button so that it is no longer displayed.
         /// Should be used when a plugin is stopped to remove leftover buttons.
         /// </summary>
-        void Destroy();
+        void Destroy ();
     }
-
     #endregion
-
     #region events
-
     /// <summary>
     /// Event describing a click on a button.
     /// </summary>
-    public partial class ClickEvent : EventArgs {
+    public partial class ClickEvent : EventArgs
+    {
         /// <summary>
         /// The button that has been clicked.
         /// </summary>
         public readonly IButton Button;
-
         /// <summary>
         /// The mouse button which the button was clicked with.
         /// </summary>
@@ -306,17 +296,16 @@ namespace KRPC.UI {
         /// </remarks>
         public readonly int MouseButton;
     }
-
     /// <summary>
     /// An event handler that is invoked whenever a button has been clicked.
     /// </summary>
     /// <param name="e">An event describing the button click.</param>
-    public delegate void ClickHandler(ClickEvent e);
-
+    public delegate void ClickHandler (ClickEvent e);
     /// <summary>
     /// Event describing the mouse pointer moving about a button.
     /// </summary>
-    public abstract partial class MouseMoveEvent {
+    public abstract partial class MouseMoveEvent
+    {
         /// <summary>
         /// The button in question.
         /// </summary>
@@ -326,36 +315,34 @@ namespace KRPC.UI {
     /// <summary>
     /// Event describing the mouse pointer entering a button's area.
     /// </summary>
-    public partial class MouseEnterEvent : MouseMoveEvent {
+    public partial class MouseEnterEvent : MouseMoveEvent
+    {
     }
 
     /// <summary>
     /// Event describing the mouse pointer leaving a button's area.
     /// </summary>
-    public partial class MouseLeaveEvent : MouseMoveEvent {
+    public partial class MouseLeaveEvent : MouseMoveEvent
+    {
     }
-
     /// <summary>
     /// An event handler that is invoked whenever the mouse pointer enters a button's area.
     /// </summary>
     /// <param name="e">An event describing the mouse pointer entering.</param>
-    public delegate void MouseEnterHandler(MouseEnterEvent e);
-
+    public delegate void MouseEnterHandler (MouseEnterEvent e);
     /// <summary>
     /// An event handler that is invoked whenever the mouse pointer leaves a button's area.
     /// </summary>
     /// <param name="e">An event describing the mouse pointer leaving.</param>
-    public delegate void MouseLeaveHandler(MouseLeaveEvent e);
-
+    public delegate void MouseLeaveHandler (MouseLeaveEvent e);
     #endregion
-
     #region visibility
-
     /// <summary>
     /// Determines visibility of a button.
     /// </summary>
     /// <seealso cref="IButton.Visibility"/>
-    public interface IVisibility {
+    public interface IVisibility
+    {
         /// <summary>
         /// Whether a button is currently visible or not.
         /// </summary>
@@ -375,263 +362,281 @@ namespace KRPC.UI {
     /// </code>
     /// </example>
     /// <seealso cref="IButton.Visibility"/>
-    public class GameScenesVisibility : IVisibility {
-        private GameScenes[] gameScenes;
+    public class GameScenesVisibility : IVisibility
+    {
+        GameScenes[] gameScenes;
 
         public bool Visible {
             get {
-                return (bool) visibleProperty.GetValue(realGameScenesVisibility, null);
+                return (bool)visibleProperty.GetValue (realGameScenesVisibility, null);
             }
         }
 
-        private object realGameScenesVisibility;
-        private PropertyInfo visibleProperty;
+        object realGameScenesVisibility;
+        PropertyInfo visibleProperty;
 
-        public GameScenesVisibility(params GameScenes[] gameScenes) {
+        public GameScenesVisibility (params GameScenes[] gameScenes)
+        {
             Type gameScenesVisibilityType = AssemblyLoader.loadedAssemblies
-                .SelectMany(a => a.assembly.GetExportedTypes())
-                .SingleOrDefault(t => t.FullName == "Toolbar.GameScenesVisibility");
-            realGameScenesVisibility = Activator.CreateInstance(gameScenesVisibilityType, new object[] { gameScenes });
-            visibleProperty = gameScenesVisibilityType.GetProperty("Visible", BindingFlags.Public | BindingFlags.Instance);
+                .SelectMany (a => a.assembly.GetExportedTypes ())
+                .SingleOrDefault (t => t.FullName == "Toolbar.GameScenesVisibility");
+            realGameScenesVisibility = Activator.CreateInstance (gameScenesVisibilityType, new object[] { gameScenes });
+            visibleProperty = gameScenesVisibilityType.GetProperty ("Visible", BindingFlags.Public | BindingFlags.Instance);
             this.gameScenes = gameScenes;
         }
     }
-
     #endregion
-
     #region private implementations
+    public partial class ToolbarManager : IToolbarManager
+    {
+        static bool? toolbarAvailable = null;
+        static IToolbarManager instance_;
+        object realToolbarManager;
+        MethodInfo addMethod;
+        Dictionary<object, IButton> buttons = new Dictionary<object, IButton> ();
+        Type iButtonType;
+        Type functionVisibilityType;
 
-    public partial class ToolbarManager : IToolbarManager {
-        private static bool? toolbarAvailable = null;
-        private static IToolbarManager instance_;
-
-        private object realToolbarManager;
-        private MethodInfo addMethod;
-        private Dictionary<object, IButton> buttons = new Dictionary<object, IButton>();
-        private Type iButtonType;
-        private Type functionVisibilityType;
-
-        private ToolbarManager(object realToolbarManager) {
+        ToolbarManager (object realToolbarManager)
+        {
             this.realToolbarManager = realToolbarManager;
 
             Type iToolbarManagerType = AssemblyLoader.loadedAssemblies
-                .SelectMany(a => a.assembly.GetExportedTypes())
-                .SingleOrDefault(t => t.FullName == "Toolbar.IToolbarManager");
-            addMethod = iToolbarManagerType.GetMethod("add", BindingFlags.Public | BindingFlags.Instance);
+                .SelectMany (a => a.assembly.GetExportedTypes ())
+                .SingleOrDefault (t => t.FullName == "Toolbar.IToolbarManager");
+            addMethod = iToolbarManagerType.GetMethod ("add", BindingFlags.Public | BindingFlags.Instance);
 
             iButtonType = AssemblyLoader.loadedAssemblies
-                .SelectMany(a => a.assembly.GetExportedTypes())
-                .SingleOrDefault(t => t.FullName == "Toolbar.IButton");
+                .SelectMany (a => a.assembly.GetExportedTypes ())
+                .SingleOrDefault (t => t.FullName == "Toolbar.IButton");
             functionVisibilityType = AssemblyLoader.loadedAssemblies
-                .SelectMany(a => a.assembly.GetExportedTypes())
-                .SingleOrDefault(t => t.FullName == "Toolbar.FunctionVisibility");
+                .SelectMany (a => a.assembly.GetExportedTypes ())
+                .SingleOrDefault (t => t.FullName == "Toolbar.FunctionVisibility");
         }
 
-        public IButton add(string ns, string id) {
-            object realButton = addMethod.Invoke(realToolbarManager, new object[] { ns, id });
-            IButton button = new Button(realButton, iButtonType, functionVisibilityType);
-            buttons.Add(realButton, button);
+        public IButton add (string ns, string id)
+        {
+            object realButton = addMethod.Invoke (realToolbarManager, new object[] { ns, id });
+            IButton button = new Button (realButton, iButtonType, functionVisibilityType);
+            buttons.Add (realButton, button);
             return button;
         }
     }
 
-    internal class Button : IButton {
-        private object realButton;
-        private PropertyInfo textProperty;
-        private PropertyInfo textColorProperty;
-        private PropertyInfo texturePathProperty;
-        private PropertyInfo toolTipProperty;
-        private PropertyInfo visibleProperty;
-        private PropertyInfo visibilityProperty;
-        private Type functionVisibilityType;
-        private PropertyInfo effectivelyVisibleProperty;
-        private PropertyInfo enabledProperty;
-        private PropertyInfo importantProperty;
-        private EventInfo onClickEvent;
-        private Delegate realClickHandler;
-        private EventInfo onMouseEnterEvent;
-        private Delegate realMouseEnterHandler;
-        private EventInfo onMouseLeaveEvent;
-        private Delegate realMouseLeaveHandler;
-        private MethodInfo destroyMethod;
+    internal class Button : IButton
+    {
+        object realButton;
+        PropertyInfo textProperty;
+        PropertyInfo textColorProperty;
+        PropertyInfo texturePathProperty;
+        PropertyInfo toolTipProperty;
+        PropertyInfo visibleProperty;
+        PropertyInfo visibilityProperty;
+        Type functionVisibilityType;
+        PropertyInfo effectivelyVisibleProperty;
+        PropertyInfo enabledProperty;
+        PropertyInfo importantProperty;
+        EventInfo onClickEvent;
+        Delegate realClickHandler;
+        EventInfo onMouseEnterEvent;
+        Delegate realMouseEnterHandler;
+        EventInfo onMouseLeaveEvent;
+        Delegate realMouseLeaveHandler;
+        MethodInfo destroyMethod;
 
-        internal Button(object realButton, Type iButtonType, Type functionVisibilityType) {
+        internal Button (object realButton, Type iButtonType, Type functionVisibilityType)
+        {
             this.realButton = realButton;
             this.functionVisibilityType = functionVisibilityType;
 
-            textProperty = iButtonType.GetProperty("Text", BindingFlags.Public | BindingFlags.Instance);
-            textColorProperty = iButtonType.GetProperty("TextColor", BindingFlags.Public | BindingFlags.Instance);
-            texturePathProperty = iButtonType.GetProperty("TexturePath", BindingFlags.Public | BindingFlags.Instance);
-            toolTipProperty = iButtonType.GetProperty("ToolTip", BindingFlags.Public | BindingFlags.Instance);
-            visibleProperty = iButtonType.GetProperty("Visible", BindingFlags.Public | BindingFlags.Instance);
-            visibilityProperty = iButtonType.GetProperty("Visibility", BindingFlags.Public | BindingFlags.Instance);
-            effectivelyVisibleProperty = iButtonType.GetProperty("EffectivelyVisible", BindingFlags.Public | BindingFlags.Instance);
-            enabledProperty = iButtonType.GetProperty("Enabled", BindingFlags.Public | BindingFlags.Instance);
-            importantProperty = iButtonType.GetProperty("Important", BindingFlags.Public | BindingFlags.Instance);
-            onClickEvent = iButtonType.GetEvent("OnClick", BindingFlags.Public | BindingFlags.Instance);
-            onMouseEnterEvent = iButtonType.GetEvent("OnMouseEnter", BindingFlags.Public | BindingFlags.Instance);
-            onMouseLeaveEvent = iButtonType.GetEvent("OnMouseLeave", BindingFlags.Public | BindingFlags.Instance);
-            destroyMethod = iButtonType.GetMethod("Destroy", BindingFlags.Public | BindingFlags.Instance);
+            textProperty = iButtonType.GetProperty ("Text", BindingFlags.Public | BindingFlags.Instance);
+            textColorProperty = iButtonType.GetProperty ("TextColor", BindingFlags.Public | BindingFlags.Instance);
+            texturePathProperty = iButtonType.GetProperty ("TexturePath", BindingFlags.Public | BindingFlags.Instance);
+            toolTipProperty = iButtonType.GetProperty ("ToolTip", BindingFlags.Public | BindingFlags.Instance);
+            visibleProperty = iButtonType.GetProperty ("Visible", BindingFlags.Public | BindingFlags.Instance);
+            visibilityProperty = iButtonType.GetProperty ("Visibility", BindingFlags.Public | BindingFlags.Instance);
+            effectivelyVisibleProperty = iButtonType.GetProperty ("EffectivelyVisible", BindingFlags.Public | BindingFlags.Instance);
+            enabledProperty = iButtonType.GetProperty ("Enabled", BindingFlags.Public | BindingFlags.Instance);
+            importantProperty = iButtonType.GetProperty ("Important", BindingFlags.Public | BindingFlags.Instance);
+            onClickEvent = iButtonType.GetEvent ("OnClick", BindingFlags.Public | BindingFlags.Instance);
+            onMouseEnterEvent = iButtonType.GetEvent ("OnMouseEnter", BindingFlags.Public | BindingFlags.Instance);
+            onMouseLeaveEvent = iButtonType.GetEvent ("OnMouseLeave", BindingFlags.Public | BindingFlags.Instance);
+            destroyMethod = iButtonType.GetMethod ("Destroy", BindingFlags.Public | BindingFlags.Instance);
 
-            realClickHandler = attachEventHandler(onClickEvent, "clicked", realButton);
-            realMouseEnterHandler = attachEventHandler(onMouseEnterEvent, "mouseEntered", realButton);
-            realMouseLeaveHandler = attachEventHandler(onMouseLeaveEvent, "mouseLeft", realButton);
+            realClickHandler = attachEventHandler (onClickEvent, "clicked", realButton);
+            realMouseEnterHandler = attachEventHandler (onMouseEnterEvent, "mouseEntered", realButton);
+            realMouseLeaveHandler = attachEventHandler (onMouseLeaveEvent, "mouseLeft", realButton);
         }
 
-        private Delegate attachEventHandler(EventInfo @event, string methodName, object realButton) {
-            MethodInfo method = GetType().GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
-            Delegate d = Delegate.CreateDelegate(@event.EventHandlerType, this, method);
-            @event.GetAddMethod().Invoke(realButton, new object[] { d });
+        Delegate attachEventHandler (EventInfo @event, string methodName, object realButton)
+        {
+            MethodInfo method = GetType ().GetMethod (methodName, BindingFlags.NonPublic | BindingFlags.Instance);
+            Delegate d = Delegate.CreateDelegate (@event.EventHandlerType, this, method);
+            @event.GetAddMethod ().Invoke (realButton, new object[] { d });
             return d;
         }
 
         public string Text {
             set {
-                textProperty.SetValue(realButton, value, null);
+                textProperty.SetValue (realButton, value, null);
             }
             get {
-                return (string) textProperty.GetValue(realButton, null);
+                return (string)textProperty.GetValue (realButton, null);
             }
         }
 
         public Color TextColor {
             set {
-                textColorProperty.SetValue(realButton, value, null);
+                textColorProperty.SetValue (realButton, value, null);
             }
             get {
-                return (Color) textColorProperty.GetValue(realButton, null);
+                return (Color)textColorProperty.GetValue (realButton, null);
             }
         }
 
         public string TexturePath {
             set {
-                texturePathProperty.SetValue(realButton, value, null);
+                texturePathProperty.SetValue (realButton, value, null);
             }
             get {
-                return (string) texturePathProperty.GetValue(realButton, null);
+                return (string)texturePathProperty.GetValue (realButton, null);
             }
         }
 
         public string ToolTip {
             set {
-                toolTipProperty.SetValue(realButton, value, null);
+                toolTipProperty.SetValue (realButton, value, null);
             }
             get {
-                return (string) toolTipProperty.GetValue(realButton, null);
+                return (string)toolTipProperty.GetValue (realButton, null);
             }
         }
 
         public bool Visible {
             set {
-                visibleProperty.SetValue(realButton, value, null);
+                visibleProperty.SetValue (realButton, value, null);
             }
             get {
-                return (bool) visibleProperty.GetValue(realButton, null);
+                return (bool)visibleProperty.GetValue (realButton, null);
             }
         }
 
         public IVisibility Visibility {
             set {
-                object functionVisibility = Activator.CreateInstance(functionVisibilityType, new object[] { new Func<bool>(() => value.Visible) });
-                visibilityProperty.SetValue(realButton, functionVisibility, null);
+                object functionVisibility = Activator.CreateInstance (functionVisibilityType, new object[] { new Func<bool> (() => value.Visible) });
+                visibilityProperty.SetValue (realButton, functionVisibility, null);
                 visibility_ = value;
             }
             get {
                 return visibility_;
             }
         }
-        private IVisibility visibility_;
+
+        IVisibility visibility_;
 
         public bool EffectivelyVisible {
             get {
-                return (bool) effectivelyVisibleProperty.GetValue(realButton, null);
+                return (bool)effectivelyVisibleProperty.GetValue (realButton, null);
             }
         }
 
         public bool Enabled {
             set {
-                enabledProperty.SetValue(realButton, value, null);
+                enabledProperty.SetValue (realButton, value, null);
             }
             get {
-                return (bool) enabledProperty.GetValue(realButton, null);
+                return (bool)enabledProperty.GetValue (realButton, null);
             }
         }
 
         public bool Important {
             set {
-                importantProperty.SetValue(realButton, value, null);
+                importantProperty.SetValue (realButton, value, null);
             }
             get {
-                return (bool) importantProperty.GetValue(realButton, null);
+                return (bool)importantProperty.GetValue (realButton, null);
             }
         }
 
         public event ClickHandler OnClick;
 
-        private void clicked(object realEvent) {
+        void clicked (object realEvent)
+        {
             if (OnClick != null) {
-                OnClick(new ClickEvent(realEvent, this));
+                OnClick (new ClickEvent (realEvent, this));
             }
         }
 
         public event MouseEnterHandler OnMouseEnter;
 
-        private void mouseEntered(object realEvent) {
+        void mouseEntered (object realEvent)
+        {
             if (OnMouseEnter != null) {
-                OnMouseEnter(new MouseEnterEvent(this));
+                OnMouseEnter (new MouseEnterEvent (this));
             }
         }
 
         public event MouseLeaveHandler OnMouseLeave;
 
-        private void mouseLeft(object realEvent) {
+        void mouseLeft (object realEvent)
+        {
             if (OnMouseLeave != null) {
-                OnMouseLeave(new MouseLeaveEvent(this));
+                OnMouseLeave (new MouseLeaveEvent (this));
             }
         }
 
-        public void Destroy() {
-            detachEventHandler(onClickEvent, realClickHandler, realButton);
-            detachEventHandler(onMouseEnterEvent, realMouseEnterHandler, realButton);
-            detachEventHandler(onMouseLeaveEvent, realMouseLeaveHandler, realButton);
+        public void Destroy ()
+        {
+            detachEventHandler (onClickEvent, realClickHandler, realButton);
+            detachEventHandler (onMouseEnterEvent, realMouseEnterHandler, realButton);
+            detachEventHandler (onMouseLeaveEvent, realMouseLeaveHandler, realButton);
 
-            destroyMethod.Invoke(realButton, null);
+            destroyMethod.Invoke (realButton, null);
         }
 
-        private void detachEventHandler(EventInfo @event, Delegate d, object realButton) {
-            @event.GetRemoveMethod().Invoke(realButton, new object[] { d });
+        void detachEventHandler (EventInfo @event, Delegate d, object realButton)
+        {
+            @event.GetRemoveMethod ().Invoke (realButton, new object[] { d });
         }
 
-        private Delegate createDelegate(Type eventHandlerType, string methodName) {
-            return Delegate.CreateDelegate(GetType(), GetType().GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance));
+        Delegate createDelegate (Type eventHandlerType, string methodName)
+        {
+            return Delegate.CreateDelegate (GetType (), GetType ().GetMethod (methodName, BindingFlags.NonPublic | BindingFlags.Instance));
         }
     }
 
-    public partial class ClickEvent : EventArgs {
-        internal ClickEvent(object realEvent, IButton button) {
-            Type type = realEvent.GetType();
+    public partial class ClickEvent : EventArgs
+    {
+        internal ClickEvent (object realEvent, IButton button)
+        {
+            Type type = realEvent.GetType ();
             Button = button;
-            MouseButton = (int) type.GetField("MouseButton", BindingFlags.Public | BindingFlags.Instance).GetValue(realEvent);
+            MouseButton = (int)type.GetField ("MouseButton", BindingFlags.Public | BindingFlags.Instance).GetValue (realEvent);
         }
     }
 
-    public abstract partial class MouseMoveEvent : EventArgs {
-        internal MouseMoveEvent(IButton button) {
+    public abstract partial class MouseMoveEvent : EventArgs
+    {
+        internal MouseMoveEvent (IButton button)
+        {
             this.button = button;
         }
     }
 
-    public partial class MouseEnterEvent : MouseMoveEvent {
-        internal MouseEnterEvent(IButton button)
-            : base(button) {
+    public partial class MouseEnterEvent : MouseMoveEvent
+    {
+        internal MouseEnterEvent (IButton button)
+            : base (button)
+        {
         }
     }
 
-    public partial class MouseLeaveEvent : MouseMoveEvent {
-        internal MouseLeaveEvent(IButton button)
-            : base(button) {
+    public partial class MouseLeaveEvent : MouseMoveEvent
+    {
+        internal MouseLeaveEvent (IButton button)
+            : base (button)
+        {
         }
     }
-
     #endregion
 }

@@ -1,4 +1,4 @@
-﻿namespace KRPC.Server
+namespace KRPC.Server
 {
     /// <summary>
     /// A non-generic stream.

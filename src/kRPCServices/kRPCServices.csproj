@@ -10,6 +10,7 @@
     <RootNamespace>KRPCServices</RootNamespace>
     <AssemblyName>kRPCServices</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <CodePage>65001</CodePage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,7 +52,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Schema\Control.cs" />
     <Compile Include="Schema\Orbit.cs" />
     <Compile Include="Orbit.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="Schema\Vessel.cs" />
     <Compile Include="Vessel.cs" />
     <Compile Include="PilotAddon.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -71,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Schema\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema\Control.proto" />

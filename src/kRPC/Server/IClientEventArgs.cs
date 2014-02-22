@@ -1,5 +1,3 @@
-﻿using System;
-
 namespace KRPC.Server
 {
     interface IClientEventArgs
@@ -7,9 +5,9 @@ namespace KRPC.Server
         IClient Client { get; }
     }
 
-    interface IClientEventArgs<In,Out>
+    interface IClientEventArgs<TIn,TOut>
     {
-        IClient<In,Out> Client { get; }
+        IClient<TIn,TOut> Client { get; }
     }
 }
 

@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace KRPC.UI
 {
     abstract class Window : MonoBehaviour
     {
-        private int id = UnityEngine.Random.Range(1000, 2000000);
-        private bool hasInit = false;
+        int id = UnityEngine.Random.Range (1000, 2000000);
+        bool hasInit;
 
         protected GUIStyle Style { get; set; }
 
@@ -14,7 +14,8 @@ namespace KRPC.UI
         public event EventHandler OnHide;
         public event EventHandler<MovedArgs> OnMoved;
 
-        private bool visible = false;
+        bool visible;
+
         public bool Visible {
             get { return visible; }
             set {
@@ -25,9 +26,9 @@ namespace KRPC.UI
                 visible = value;
             }
         }
-
         // TODO: ensure position is not outside the KSP window
-        private Rect position = new Rect ();
+        Rect position = new Rect ();
+
         public Rect Position {
             get { return position; }
             set {
@@ -39,7 +40,7 @@ namespace KRPC.UI
 
         public void Awake ()
         {
-            RenderingManager.AddToPostDrawQueue(1, UpdateGUI);
+            RenderingManager.AddToPostDrawQueue (1, UpdateGUI);
         }
 
         protected abstract void Init ();
@@ -48,13 +49,13 @@ namespace KRPC.UI
 
         public void OnDestroy ()
         {
-            RenderingManager.RemoveFromPostDrawQueue(1, UpdateGUI);
+            RenderingManager.RemoveFromPostDrawQueue (1, UpdateGUI);
         }
 
-        private void UpdateGUI ()
+        void UpdateGUI ()
         {
             if (!hasInit) {
-                Style = new GUIStyle(UnityEngine.GUI.skin.window);
+                Style = new GUIStyle (GUI.skin.window);
                 Init ();
                 hasInit = true;
             }
@@ -63,7 +64,7 @@ namespace KRPC.UI
             }
         }
 
-        private void DrawWindow (int id)
+        void DrawWindow (int windowId)
         {
             Draw ();
         }

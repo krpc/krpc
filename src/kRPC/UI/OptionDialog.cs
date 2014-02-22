@@ -1,20 +1,20 @@
-﻿using System;
-using System.Net.Sockets;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using KRPC.Server;
-using KRPC.Utils;
 
 namespace KRPC.UI
 {
     abstract class OptionDialog : MonoBehaviour
     {
-        private MultiOptionDialog dialog;
-        private bool hasInit = false;
+        MultiOptionDialog dialog;
+        bool hasInit;
 
         protected string Title { get; set; }
+
         protected string Message { get; set; }
+
         protected GUISkin Skin { get; set; }
+
         protected List<DialogOption> Options { get; private set; }
 
         public event EventHandler OnOpen;
@@ -25,19 +25,22 @@ namespace KRPC.UI
         public void Awake ()
         {
             Options = new List<DialogOption> ();
-            RenderingManager.AddToPostDrawQueue(1, UpdateGUI);
+            RenderingManager.AddToPostDrawQueue (1, UpdateGUI);
         }
 
         protected abstract void Init ();
+
         protected abstract void Opened ();
+
         protected abstract void Closed ();
 
         public void OnDestroy ()
         {
-            RenderingManager.RemoveFromPostDrawQueue(1, UpdateGUI);
+            RenderingManager.RemoveFromPostDrawQueue (1, UpdateGUI);
         }
 
-        public void Open () {
+        public void Open ()
+        {
             if (!Visible) {
                 if (Skin == null)
                     Skin = GUI.skin;
@@ -60,7 +63,7 @@ namespace KRPC.UI
             }
         }
 
-        private void UpdateGUI ()
+        void UpdateGUI ()
         {
             if (!hasInit) {
                 Init ();

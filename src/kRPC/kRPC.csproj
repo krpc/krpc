@@ -10,6 +10,7 @@
     <RootNamespace>KRPC</RootNamespace>
     <AssemblyName>kRPC</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <CodePage>65001</CodePage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -50,7 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Service\Services.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Server\IServer.cs" />
@@ -98,6 +98,7 @@
     <Compile Include="Server\ClientActivityArgs.cs" />
     <Compile Include="Server\Net\NetworkInformation.cs" />
     <Compile Include="Server\ServerException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -115,6 +116,7 @@
     <Folder Include="UI\" />
     <Folder Include="Server\Net\" />
     <Folder Include="Server\RPC\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\icon-offline.svg" />

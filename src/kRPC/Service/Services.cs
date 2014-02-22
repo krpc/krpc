@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
 using Google.ProtocolBuffers;
 using KRPC.Schema.KRPC;
@@ -13,7 +12,8 @@ namespace KRPC.Service
     {
         public IDictionary<string, ServiceSignature> Signatures { get; private set; }
 
-        private static Services instance;
+        static Services instance;
+
         public static Services Instance {
             get {
                 if (instance == null)
@@ -25,7 +25,7 @@ namespace KRPC.Service
         /// <summary>
         /// Create a Services instance. Scans the loaded assemblies for services, procedures etc.
         /// </summary>
-        private Services ()
+        Services ()
         {
             var serviceTypes = Reflection.GetTypesWith<KRPCService> ();
             try {
@@ -38,15 +38,15 @@ namespace KRPC.Service
                 var duplicates = serviceTypes
                         .Select (x => x.Name)
                         .GroupBy (x => x)
-                        .Where (group => group.Count() > 1)
+                        .Where (group => group.Count () > 1)
                         .Select (group => group.Key)
                         .ToArray ();
                 throw new ServiceException (
                     "Multiple Services have the same name. " +
-                    "Duplicates are " + String.Join(", ", duplicates));
+                    "Duplicates are " + String.Join (", ", duplicates));
             }
             // Check tha the main KRPC service was found
-            if (!Signatures.ContainsKey("KRPC"))
+            if (!Signatures.ContainsKey ("KRPC"))
                 throw new ServiceException ("KRPC service could not be found");
         }
 
@@ -58,13 +58,13 @@ namespace KRPC.Service
         {
             // Get the service definition
             if (!Signatures.ContainsKey (request.Service))
-               throw new RPCException ("Service " + request.Service + " not found");
+                throw new RPCException ("Service " + request.Service + " not found");
             var service = Signatures [request.Service];
 
             // Get the procedure definition
             if (!service.Procedures.ContainsKey (request.Procedure))
-               throw new RPCException ("Procedure " + request.Procedure + " not found, " +
-                   "in Service " + request.Service);
+                throw new RPCException ("Procedure " + request.Procedure + " not found, " +
+                "in Service " + request.Service);
             var procedure = service.Procedures [request.Procedure];
 
             // Invoke the procedure
@@ -81,7 +81,7 @@ namespace KRPC.Service
         /// <summary>
         /// Decode the parameters for a procedure from a serialized request
         /// </summary>
-        private object[] DecodeParameters(ProcedureSignature procedure, IList<ByteString> parameters)
+        object[] DecodeParameters (ProcedureSignature procedure, IList<ByteString> parameters)
         {
             // Check number of parameters is correct
             if (parameters.Count != procedure.ParameterTypes.Count) {
@@ -91,11 +91,11 @@ namespace KRPC.Service
             }
 
             // Attempt to decode them
-            object[] decodedParameters = new object[parameters.Count];
+            var decodedParameters = new object[parameters.Count];
             for (int i = 0; i < parameters.Count; i++) {
                 var builder = procedure.ParameterBuilders [i];
                 try {
-                    decodedParameters[i] = builder.WeakMergeFrom (parameters [i]).WeakBuild ();
+                    decodedParameters [i] = builder.WeakMergeFrom (parameters [i]).WeakBuild ();
                 } catch (Exception e) {
                     throw new RPCException (
                         "Failed to decode parameter " + i + " for " + procedure.FullyQualifiedName + ". " +
@@ -109,7 +109,7 @@ namespace KRPC.Service
         /// <summary>
         /// Encodes the value returned by a procedure handler into a ByteString
         /// </summary>
-        private ByteString EncodeReturnValue (ProcedureSignature procedure, object returnValue)
+        ByteString EncodeReturnValue (ProcedureSignature procedure, object returnValue)
         {
             // Check the return value is missing
             if (returnValue == null) {
@@ -119,16 +119,21 @@ namespace KRPC.Service
             }
 
             // Check if the return value is of a valid type
-            IMessage message = returnValue as IMessage;
-            if (message == null || !procedure.ReturnType.IsAssignableFrom(message.GetType())) {
+            var message = returnValue as IMessage;
+            if (message == null) {
                 throw new RPCException (
                     procedure.FullyQualifiedName + " returned an object of an invalid type. " +
-                    "Expected " + procedure.ReturnType + "; got " + message.GetType());
+                    "Expected " + procedure.ReturnType + "; got null");
+            }
+            if (!procedure.ReturnType.IsAssignableFrom (message.GetType ())) {
+                throw new RPCException (
+                    procedure.FullyQualifiedName + " returned an object of an invalid type. " +
+                    "Expected " + procedure.ReturnType + "; got " + message.GetType ());
             }
 
             // Encode it as a ByteString
             byte[] returnBytes;
-            using (MemoryStream stream = new MemoryStream ()) {
+            using (var stream = new MemoryStream ()) {
                 message.WriteTo (stream);
                 returnBytes = stream.ToArray ();
             }

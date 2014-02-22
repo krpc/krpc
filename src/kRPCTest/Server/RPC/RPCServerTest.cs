@@ -6,29 +6,28 @@ using NUnit.Framework;
 using Moq;
 using KRPC.Server;
 using KRPC.Server.RPC;
-using KRPC.Schema.KRPC;
 
-namespace KRPCTest.Server
+namespace KRPCTest.Server.RPC
 {
     [TestFixture]
     public class RPCServerTest
     {
-        private byte[] helloMessage;
+        byte[] helloMessage;
 
         [SetUp]
-        public void SetUp()
+        public void SetUp ()
         {
             helloMessage = new byte[8 + 32];
             byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
-            Array.Copy(header, helloMessage, header.Length);
+            Array.Copy (header, helloMessage, header.Length);
             string identifier = "Jebediah Kerman!!!";
             var encoder = new UTF8Encoding (false, true);
             byte[] identifierBytes = encoder.GetBytes (identifier);
-            Array.Copy(identifierBytes, 0, helloMessage, header.Length, identifierBytes.Length);
+            Array.Copy (identifierBytes, 0, helloMessage, header.Length, identifierBytes.Length);
         }
 
         [Test]
-        public void ValidHelloMessageWithNoIdentifier()
+        public void ValidHelloMessageWithNoIdentifier ()
         {
             for (int i = 8; i < helloMessage.Length; i++) {
                 helloMessage [i] = 0x00;
@@ -41,12 +40,12 @@ namespace KRPCTest.Server
             var byteClient = new TestClient (stream);
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
-            mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsTrue (eventArgs.Request.ShouldAllow);
             Assert.IsFalse (eventArgs.Request.ShouldDeny);
@@ -57,7 +56,7 @@ namespace KRPCTest.Server
         }
 
         [Test]
-        public void ValidHelloMessage()
+        public void ValidHelloMessage ()
         {
             var stream = new TestStream (new MemoryStream (helloMessage));
 
@@ -67,12 +66,12 @@ namespace KRPCTest.Server
             var byteClient = new TestClient (stream);
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
-            mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsTrue (eventArgs.Request.ShouldAllow);
             Assert.IsFalse (eventArgs.Request.ShouldDeny);
@@ -83,7 +82,7 @@ namespace KRPCTest.Server
         }
 
         [Test]
-        public void InvalidHelloMessageHeader()
+        public void InvalidHelloMessageHeader ()
         {
             helloMessage [4] = 0x42;
             var stream = new TestStream (new MemoryStream (helloMessage));
@@ -96,19 +95,19 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
-            mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
         }
 
         [Test]
-        public void InvalidHelloMessageIdentifier()
+        public void InvalidHelloMessageIdentifier ()
         {
             helloMessage [15] = 0x00;
             var stream = new TestStream (new MemoryStream (helloMessage));
@@ -121,21 +120,21 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
-            mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
         }
 
         [Test]
-        public void ShortHelloMessageHeader()
+        public void ShortHelloMessageHeader ()
         {
-            byte[] message = new byte[3] { 0x48, 0x45, 0x4C };
+            var message = new byte[] { 0x48, 0x45, 0x4C };
             var stream = new TestStream (new MemoryStream (message));
 
             // Create mock byte server and client
@@ -146,27 +145,27 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
-            mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
         }
 
         [Test]
-        public void ShortHelloMessageIdentifier()
+        public void ShortHelloMessageIdentifier ()
         {
             var shortHelloMessage = new byte[8 + 31];
             byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
-            Array.Copy(header, shortHelloMessage, header.Length);
+            Array.Copy (header, shortHelloMessage, header.Length);
             string identifier = "Jebediah Kerman!!!";
             var encoder = new UTF8Encoding (false, true);
             byte[] identifierBytes = encoder.GetBytes (identifier);
-            Array.Copy(identifierBytes, 0, shortHelloMessage, header.Length, identifierBytes.Length);
+            Array.Copy (identifierBytes, 0, shortHelloMessage, header.Length, identifierBytes.Length);
 
             var stream = new TestStream (new MemoryStream (shortHelloMessage));
 
@@ -178,19 +177,19 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
-            mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
         }
 
         [Test]
-        public void NoHelloMessage()
+        public void NoHelloMessage ()
         {
             var stream = new TestStream (new MemoryStream ());
 
@@ -202,12 +201,12 @@ namespace KRPCTest.Server
             var byteClient = mockByteClient.Object;
 
             var server = new RPCServer (byteServer);
-            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow();
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
             server.Start ();
 
             // Fire a client connection event
             var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
-            mockByteServer.Raise(m => m.OnClientRequestingConnection += null, eventArgs);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);

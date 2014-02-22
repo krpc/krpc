@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Linq;
 using System.Collections.Generic;
@@ -13,9 +13,9 @@ namespace KRPC
 {
     class KRPCServer : IServer
     {
-        private RPCServer rpcServer;
-        private TCPServer tcpServer;
-        private IScheduler<IClient<Request,Response>> requestScheduler;
+        readonly RPCServer rpcServer;
+        readonly TCPServer tcpServer;
+        readonly IScheduler<IClient<Request,Response>> requestScheduler;
 
         public event EventHandler OnStarted;
         public event EventHandler OnStopped;
@@ -53,47 +53,45 @@ namespace KRPC
             };
 
             // Add/remove clients from the scheduler
-            rpcServer.OnClientConnected += (s, e) => requestScheduler.Add(e.Client);
-            rpcServer.OnClientDisconnected += (s, e) => requestScheduler.Remove(e.Client);
+            rpcServer.OnClientConnected += (s, e) => requestScheduler.Add (e.Client);
+            rpcServer.OnClientDisconnected += (s, e) => requestScheduler.Remove (e.Client);
         }
 
-        public void Start() {
+        public void Start ()
+        {
             rpcServer.Start ();
         }
 
-        public void Stop() {
+        public void Stop ()
+        {
             rpcServer.Stop ();
         }
 
-        public IPAddress Address
-        {
+        public IPAddress Address {
             get { return tcpServer.Address; }
             set { tcpServer.Address = value; }
         }
 
-        public ushort Port
-        {
+        public ushort Port {
             get { return tcpServer.Port; }
             set { tcpServer.Port = value; }
         }
 
-        public bool Running
-        {
+        public bool Running {
             get { return rpcServer.Running; }
         }
 
-        public IEnumerable<IClient> Clients
-        {
-            get { return rpcServer.Clients.Select(x => (IClient) x); }
+        public IEnumerable<IClient> Clients {
+            get { return rpcServer.Clients.Select (x => (IClient)x); }
         }
 
         public void Update ()
         {
             // TODO: is there a better way to limit the number of requests handled per update?
-            int threshold = 20; // milliseconds
+            const int threshold = 20; // milliseconds
             rpcServer.Update ();
 
-            if (rpcServer.Clients.Count () > 0 && !requestScheduler.Empty) {
+            if (rpcServer.Clients.Any () && !requestScheduler.Empty) {
                 Stopwatch timer = Stopwatch.StartNew ();
                 try {
                     do {

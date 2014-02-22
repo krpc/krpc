@@ -1,4 +1,3 @@
-﻿using System;
 using UnityEngine;
 using KRPC.Server;
 using KRPC.Utils;
@@ -7,20 +6,14 @@ namespace KRPC.UI
 {
     sealed class ClientConnectingDialog : OptionDialog
     {
-        private ClientRequestingConnectionArgs args;
+        ClientRequestingConnectionArgs args;
 
-        protected override void Init()
+        protected override void Init ()
         {
             Title = "kRPC";
             Skin = GUI.skin;
-            Options.Add(
-                new DialogOption ("Allow", () => {
-                    args.Request.Allow ();
-                }));
-            Options.Add (
-                new DialogOption ("Deny", () => {
-                    args.Request.Deny ();
-                }));
+            Options.Add (new DialogOption ("Allow", () => args.Request.Allow ()));
+            Options.Add (new DialogOption ("Deny", () => args.Request.Deny ()));
         }
 
         protected override void Opened ()
@@ -33,7 +26,7 @@ namespace KRPC.UI
 
         protected override void Closed ()
         {
-            this.args = null;
+            args = null;
         }
 
         public void OnClientRequestingConnection (object sender, ClientRequestingConnectionArgs args)

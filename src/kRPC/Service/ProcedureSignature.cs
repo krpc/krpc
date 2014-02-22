@@ -1,10 +1,8 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using Google.ProtocolBuffers;
-using KRPC.Schema.KRPC;
 using KRPC.Utils;
 
 namespace KRPC.Service
@@ -32,7 +30,9 @@ namespace KRPC.Service
         public MethodInfo Handler { get; private set; }
 
         public IList<Type> ParameterTypes { get; private set; }
+
         public bool HasReturnType { get; private set; }
+
         public Type ReturnType { get; private set; }
 
         /// <summary>
@@ -45,32 +45,33 @@ namespace KRPC.Service
         /// </summary>
         public IBuilder ReturnBuilder { get; private set; }
 
-        public ProcedureSignature (string serviceName, MethodInfo method) {
+        public ProcedureSignature (string serviceName, MethodInfo method)
+        {
             Name = method.Name;
             FullyQualifiedName = serviceName + "." + Name;
             Handler = method;
             ParameterTypes = method.GetParameters ()
                 .Select (x => x.ParameterType).ToArray ();
-            if (ParameterTypes.Any (x => !ProtocolBuffers.IsAMessageType(x))) {
-                Type type = ParameterTypes.Where (x => !ProtocolBuffers.IsAMessageType(x)).First ();
+            if (ParameterTypes.Any (x => !ProtocolBuffers.IsAMessageType (x))) {
+                Type type = ParameterTypes.First (x => !ProtocolBuffers.IsAMessageType (x));
                 throw new ServiceException (
-                    type.ToString() + " is not a valid Procedure parameter type, " +
+                    type + " is not a valid Procedure parameter type, " +
                     "in " + FullyQualifiedName);
             }
             ParameterBuilders = ParameterTypes
                 .Select (x => {
-                    try {
-                        return ProtocolBuffers.BuilderForMessageType(x);
-                    } catch (ArgumentException) {
-                        throw new ServiceException ("Failed to instantiate a message builder for type " + x.Name);
-                    }
-                }).ToArray ();
+                try {
+                    return ProtocolBuffers.BuilderForMessageType (x);
+                } catch (ArgumentException) {
+                    throw new ServiceException ("Failed to instantiate a message builder for type " + x.Name);
+                }
+            }).ToArray ();
             HasReturnType = (method.ReturnType != typeof(void));
             if (HasReturnType) {
                 ReturnType = method.ReturnType;
-                if (!ProtocolBuffers.IsAMessageType(ReturnType)) {
+                if (!ProtocolBuffers.IsAMessageType (ReturnType)) {
                     throw new ServiceException (
-                        ReturnType.ToString() + " is not a valid Procedure return type, " +
+                        ReturnType + " is not a valid Procedure return type, " +
                         "in " + FullyQualifiedName);
                 }
                 ReturnBuilder = ProtocolBuffers.BuilderForMessageType (ReturnType);

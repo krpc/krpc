@@ -1,5 +1,3 @@
-﻿using System;
-using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -9,9 +7,9 @@ namespace KRPC.UI
         public static GUIStyle SeparatorStyle (Color color)
         {
             var style = new GUIStyle ();
-            Texture2D texture = new Texture2D(1, 1);
-            texture.SetPixel(0, 0, color);
-            texture.Apply();
+            var texture = new Texture2D (1, 1);
+            texture.SetPixel (0, 0, color);
+            texture.Apply ();
             style.normal.background = texture;
             return style;
         }
@@ -30,8 +28,8 @@ namespace KRPC.UI
             float size = style.lineHeight;
             style.fixedWidth = size;
             style.fixedHeight = size;
-            int offset = (int) (-0.8*size);
-            style.border = new RectOffset (offset-4, offset+4, offset+4, offset-4);
+            int offset = (int)(-0.8 * size);
+            style.border = new RectOffset (offset - 4, offset + 4, offset + 4, offset - 4);
             style.padding = new RectOffset (0, 0, 0, 0);
             style.overflow = new RectOffset (0, 0, 0, 0);
             style.margin = new RectOffset (4, 0, 0, 0);

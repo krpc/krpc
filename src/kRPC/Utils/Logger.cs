@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace KRPC.Utils
 {
-    class Logger
+    static class Logger
     {
         internal static void WriteLine (string line)
         {
