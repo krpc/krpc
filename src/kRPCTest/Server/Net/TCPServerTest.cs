@@ -1,9 +1,7 @@
-using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Linq;
 using NUnit.Framework;
-using KRPC.Server;
 using KRPC.Server.Net;
 
 namespace KRPCTest.Server.Net
@@ -68,8 +66,8 @@ namespace KRPCTest.Server.Net
 
             server.Start ();
 
-            var tcpClient = new TcpClient (server.Address.ToString(), server.Port);
-            UpdateUntil(server, () => { return clientConnected; });
+            var tcpClient = new TcpClient (server.Address.ToString (), server.Port);
+            UpdateUntil (server, () => clientConnected);
 
             Assert.IsTrue (tcpClient.Connected);
             Assert.IsFalse (clientDisconnected);
@@ -78,7 +76,7 @@ namespace KRPCTest.Server.Net
             tcpClient.GetStream ().Close ();
             tcpClient.Close ();
             Assert.IsFalse (tcpClient.Connected);
-            UpdateUntil(server, () => { return clientDisconnected; });
+            UpdateUntil (server, () => clientDisconnected);
             Assert.AreEqual (0, server.Clients.Count ());
 
             Assert.IsFalse (tcpClient.Connected);
@@ -101,8 +99,8 @@ namespace KRPCTest.Server.Net
 
             server.Start ();
 
-            var tcpClient = new TcpClient (server.Address.ToString(), server.Port);
-            UpdateUntil(server, () => { return clientRequestingConnection; });
+            var tcpClient = new TcpClient (server.Address.ToString (), server.Port);
+            UpdateUntil (server, () => clientRequestingConnection);
 
             Assert.IsTrue (clientRequestingConnection);
             Assert.AreEqual (0, server.Clients.Count ());
@@ -124,8 +122,8 @@ namespace KRPCTest.Server.Net
 
             server.Start ();
 
-            var tcpClient = new TcpClient (server.Address.ToString(), server.Port);
-            UpdateUntil(server, () => { return clientConnected; });
+            var tcpClient = new TcpClient (server.Address.ToString (), server.Port);
+            UpdateUntil (server, () => clientConnected);
 
             Assert.IsFalse (clientDisconnected);
             Assert.AreEqual (1, server.Clients.Count ());
@@ -139,14 +137,13 @@ namespace KRPCTest.Server.Net
         }
 
         delegate bool BooleanPredicate ();
-
         // Calls server.Update repeatedly every 50 ms, until predicate is true
         // or up to a maximum number of iterations, after which point the test fails
         void UpdateUntil (TCPServer server, BooleanPredicate predicate, int iterations = 10)
         {
             for (int i = 0; i < iterations; i++) {
                 server.Update ();
-                if (predicate())
+                if (predicate ())
                     return;
                 System.Threading.Thread.Sleep (50);
             }

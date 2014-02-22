@@ -11,9 +11,9 @@ namespace KRPCTest.Utils
         public void Empty ()
         {
             var s = new RoundRobinScheduler<int> ();
-            Assert.IsTrue(s.Empty);
-            Assert.Throws<InvalidOperationException>(() => s.Next ());
-            Assert.Throws<InvalidOperationException>(() => s.Remove (0));
+            Assert.IsTrue (s.Empty);
+            Assert.Throws<InvalidOperationException> (() => s.Next ());
+            Assert.Throws<InvalidOperationException> (() => s.Remove (0));
         }
 
         [Test]
@@ -21,8 +21,8 @@ namespace KRPCTest.Utils
         {
             var s = new RoundRobinScheduler<int> ();
             s.Add (0);
-            Assert.IsFalse(s.Empty);
-            Assert.Throws<InvalidOperationException>(() => s.Remove (1));
+            Assert.IsFalse (s.Empty);
+            Assert.Throws<InvalidOperationException> (() => s.Remove (1));
         }
 
         [Test]
@@ -30,8 +30,8 @@ namespace KRPCTest.Utils
         {
             var s = new RoundRobinScheduler<int> ();
             s.Add (0);
-            Assert.IsFalse(s.Empty);
-            Assert.Throws<InvalidOperationException>(() => s.Add (0));
+            Assert.IsFalse (s.Empty);
+            Assert.Throws<InvalidOperationException> (() => s.Add (0));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace KRPCTest.Utils
             s.Add (0);
             s.Add (1);
             s.Add (2);
-            Assert.IsFalse(s.Empty);
+            Assert.IsFalse (s.Empty);
             for (int i = 0; i < 5; i++) {
                 Assert.AreEqual (0, s.Next ());
                 Assert.AreEqual (1, s.Next ());
@@ -91,8 +91,8 @@ namespace KRPCTest.Utils
             Assert.AreEqual (2, s.Next ());
             s.Remove (2);
             Assert.IsTrue (s.Empty);
-            Assert.Throws<InvalidOperationException>(() => s.Next ());
-            Assert.Throws<InvalidOperationException>(() => s.Remove (0));
+            Assert.Throws<InvalidOperationException> (() => s.Next ());
+            Assert.Throws<InvalidOperationException> (() => s.Remove (0));
         }
 
         [Test]

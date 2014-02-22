@@ -51,13 +51,13 @@ namespace KRPCTest.Server.RPC
         [Test]
         public void ReadSingleRequest ()
         {
-            var stream = new TestStream (new MemoryStream(requestBytes));
+            var stream = new TestStream (new MemoryStream (requestBytes));
             var rpcStream = new RPCStream (stream);
             Assert.IsTrue (rpcStream.DataAvailable);
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
-            Assert.AreEqual(expectedRequest.Service, request.Service);
-            Assert.AreEqual(expectedRequest.Procedure, request.Procedure);
+            Assert.AreEqual (expectedRequest.Service, request.Service);
+            Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
         }
 
         [Test]
@@ -98,8 +98,8 @@ namespace KRPCTest.Server.RPC
             Assert.IsTrue (rpcStream.DataAvailable);
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
-            Assert.AreEqual(expectedRequest.Service, request.Service);
-            Assert.AreEqual(expectedRequest.Procedure, request.Procedure);
+            Assert.AreEqual (expectedRequest.Service, request.Service);
+            Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace KRPCTest.Server.RPC
         [Test]
         public void WriteSingleResponse ()
         {
-            var stream = new MemoryStream();
+            var stream = new MemoryStream ();
             var rpcStream = new RPCStream (new TestStream (stream));
             rpcStream.Write (expectedResponse);
             byte[] bytes = stream.ToArray ();

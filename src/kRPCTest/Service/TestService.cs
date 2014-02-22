@@ -1,11 +1,9 @@
-using System;
-using Google.ProtocolBuffers;
 using KRPC.Service;
 
 namespace KRPCTest.Service
 {
     [KRPCService]
-    public class TestService
+    public static class TestService
     {
         public static ITestService Service;
 
