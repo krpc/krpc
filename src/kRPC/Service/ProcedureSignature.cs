@@ -52,29 +52,42 @@ namespace KRPC.Service
             Handler = method;
             ParameterTypes = method.GetParameters ()
                 .Select (x => x.ParameterType).ToArray ();
-            if (ParameterTypes.Any (x => !ProtocolBuffers.IsAMessageType (x))) {
-                Type type = ParameterTypes.First (x => !ProtocolBuffers.IsAMessageType (x));
+            // Check the parameter types are valid
+            if (ParameterTypes.Any (x => !ProtocolBuffers.IsAValidType (x))) {
+                Type type = ParameterTypes.Where (x => !ProtocolBuffers.IsAValidType (x)).First ();
                 throw new ServiceException (
                     type + " is not a valid Procedure parameter type, " +
                     "in " + FullyQualifiedName);
             }
+            // Create builders for the parameter types that are message types
             ParameterBuilders = ParameterTypes
                 .Select (x => {
                 try {
-                    return ProtocolBuffers.BuilderForMessageType (x);
+                    if (ProtocolBuffers.IsAMessageType (x))
+                        return ProtocolBuffers.BuilderForMessageType (x);
+                    else
+                        return null;
                 } catch (ArgumentException) {
-                    throw new ServiceException ("Failed to instantiate a message builder for type " + x.Name);
+                    throw new ServiceException ("Failed to instantiate a message builder for parameter type " + x.Name);
                 }
             }).ToArray ();
             HasReturnType = (method.ReturnType != typeof(void));
             if (HasReturnType) {
                 ReturnType = method.ReturnType;
-                if (!ProtocolBuffers.IsAMessageType (ReturnType)) {
+                // Check it's a valid return type
+                if (!ProtocolBuffers.IsAValidType (ReturnType)) {
                     throw new ServiceException (
                         ReturnType + " is not a valid Procedure return type, " +
                         "in " + FullyQualifiedName);
                 }
-                ReturnBuilder = ProtocolBuffers.BuilderForMessageType (ReturnType);
+                // Create a builder if it's a message type
+                if (ProtocolBuffers.IsAMessageType (ReturnType)) {
+                    try {
+                        ReturnBuilder = ProtocolBuffers.BuilderForMessageType (ReturnType);
+                    } catch (ArgumentException) {
+                        throw new ServiceException ("Failed to instantiate a message builder for return type " + ReturnType.Name);
+                    }
+                }
             }
         }
     }

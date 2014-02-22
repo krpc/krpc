@@ -31,15 +31,15 @@ namespace KRPCServices
         }
 
         [KRPCProcedure]
-        public static void SetThrottle (Throttle throttle)
+        public static void SetThrottle (float throttle)
         {
-            FlightInputHandler.state.mainThrottle = throttle.Throttle_;
+            FlightInputHandler.state.mainThrottle = throttle;
         }
 
         [KRPCProcedure]
-        public static Throttle GetThrottle ()
+        public static float GetThrottle ()
         {
-            return Throttle.CreateBuilder ().SetThrottle_ (FlightInputHandler.state.mainThrottle).Build ();
+            return FlightInputHandler.state.mainThrottle;
         }
 
         [KRPCProcedure]
