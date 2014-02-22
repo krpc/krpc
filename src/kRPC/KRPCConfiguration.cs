@@ -7,10 +7,10 @@ namespace KRPC
 {
     sealed class KRPCConfiguration : ConfigurationStorage
     {
-        [Persistent] private string address = "127.0.0.1";
-        [Persistent] private ushort port = 50000;
-        [Persistent] private bool mainWindowVisible = true;
-        [Persistent] private RectStorage mainWindowPosition = new RectStorage ();
+        [Persistent] string address = "127.0.0.1";
+        [Persistent] ushort port = 50000;
+        [Persistent] bool mainWindowVisible = true;
+        [Persistent] RectStorage mainWindowPosition = new RectStorage ();
 
         public IPAddress Address { get; set; }
 

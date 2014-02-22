@@ -1,12 +1,11 @@
 using System;
-using System.IO;
 using System.Net.Sockets;
 
 namespace KRPC.Server.Net
 {
     sealed class TCPStream : IStream<byte,byte>
     {
-        private NetworkStream stream;
+        readonly NetworkStream stream;
 
         public TCPStream (NetworkStream stream)
         {

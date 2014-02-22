@@ -1,5 +1,3 @@
-using System;
-
 namespace KRPC.Service
 {
     [System.AttributeUsage (System.AttributeTargets.Method)]

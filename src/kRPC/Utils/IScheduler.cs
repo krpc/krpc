@@ -1,5 +1,3 @@
-using System;
-
 namespace KRPC.Utils
 {
     interface IScheduler<T>

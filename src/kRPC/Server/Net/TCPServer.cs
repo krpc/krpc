@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -28,44 +27,44 @@ namespace KRPC.Server.Net
         /// If set to IPAddress.Any, an available local
         /// address from one of the network adapters will be chosen.
         /// </summary>
-        private IPAddress address;
+        IPAddress address;
         /// <summary>
         /// Port that the server listens on for new connections. If set to 0,
         /// a port number with be automatically chosen.
         /// </summary>
-        private ushort port;
+        ushort port;
         /// <summary>
         /// The actual local address of the server. Will be identical to
         /// localAdress, unless localAddress was set to IPAddress.Any.
         /// </summary>
-        private IPAddress actualAddress;
+        IPAddress actualAddress;
         /// <summary>
         /// The actual local port number of the server. Will be identical to
         /// port, unless port was set to 0.
         /// </summary>
-        private ushort actualPort;
+        ushort actualPort;
         /// <summary>
         /// Thread used to poll for new connections.
         /// </summary>
-        private Thread listenerThread;
-        private TcpListener tcpListener;
+        Thread listenerThread;
+        TcpListener tcpListener;
         /// <summary>
         /// Event used to wait for the TCP listener to start
         /// </summary>
-        private volatile AutoResetEvent startedEvent;
+        volatile AutoResetEvent startedEvent;
         /// <summary>
         /// True if the listenerThread is running.
         /// </summary>
-        private volatile bool running = false;
+        volatile bool running;
         /// <summary>
         /// Connected clients.
         /// </summary>
-        private List<TCPClient> clients = new List<TCPClient> ();
+        List<TCPClient> clients = new List<TCPClient> ();
         /// <summary>
         /// Clients requesting a connection. Must be locked before accessing.
         /// </summary>
-        private List<TCPClient> pendingClients = new List<TCPClient> ();
-        private Object pendingClientsLock = new object ();
+        List<TCPClient> pendingClients = new List<TCPClient> ();
+        Object pendingClientsLock = new object ();
 
         /// <summary>
         /// Create a TCP server. After Start() is called, the server will listen for
@@ -92,7 +91,7 @@ namespace KRPC.Server.Net
                 Logger.WriteLine ("TCPServer: Failed to start server. " + socketError);
                 throw new ServerException (socketError);
             }
-            IPEndPoint endPoint = (IPEndPoint)tcpListener.LocalEndpoint;
+            var endPoint = (IPEndPoint)tcpListener.LocalEndpoint;
             actualAddress = endPoint.Address;
             actualPort = (ushort)endPoint.Port;
             startedEvent = new AutoResetEvent (false);
@@ -209,7 +208,7 @@ namespace KRPC.Server.Net
             set { address = value; }
         }
 
-        private void ListenerThread ()
+        void ListenerThread ()
         {
             try {
                 running = true;
@@ -241,7 +240,7 @@ namespace KRPC.Server.Net
             }
         }
 
-        private void DisconnectClient (IClient<byte,byte> client, bool noEvent = false)
+        void DisconnectClient (IClient<byte,byte> client, bool noEvent = false)
         {
             client.Stream.Close ();
             client.Close ();

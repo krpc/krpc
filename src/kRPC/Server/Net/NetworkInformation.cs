@@ -6,7 +6,7 @@ using System.Net.NetworkInformation;
 
 namespace KRPC.Server.Net
 {
-    class NetworkInformation
+    static class NetworkInformation
     {
         /// <summary>
         /// Returns the IPv4 address of all local network interfaces.

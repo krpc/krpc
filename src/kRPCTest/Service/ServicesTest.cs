@@ -54,7 +54,7 @@ namespace KRPCTest.Service
             // Create mock service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureNoArgsNoReturn ());
-            TestService.service = mock.Object;
+            TestService.Service = mock.Object;
             // Create request
             var request = Request.CreateBuilder()
                 .SetService ("TestService")
@@ -88,7 +88,7 @@ namespace KRPCTest.Service
                     // Check the argument
                     Assert.AreEqual (argBytes, x.ToByteArray());
                 } );
-            TestService.service = mock.Object;
+            TestService.Service = mock.Object;
             // Create request
             var request = Request.CreateBuilder()
                 .SetService ("TestService")
@@ -120,7 +120,7 @@ namespace KRPCTest.Service
                     // Check the argument
                     Assert.AreEqual (argBytes, x.ToByteArray());
                 } );
-            TestService.service = mock.Object;
+            TestService.Service = mock.Object;
             // Create request
             var request = Request.CreateBuilder()
                 .SetService ("TestService")
@@ -165,7 +165,7 @@ namespace KRPCTest.Service
                     Assert.AreEqual (argBytes[1], y.ToByteArray());
                     Assert.AreEqual (argBytes[2], z.ToByteArray());
                 } );
-            TestService.service = mock.Object;
+            TestService.Service = mock.Object;
             // Create request
             var request = Request.CreateBuilder()
                 .SetService ("TestService")
@@ -194,7 +194,7 @@ namespace KRPCTest.Service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureNoArgsReturns ())
                 .Returns(expectedResponse);
-            TestService.service = mock.Object;
+            TestService.Service = mock.Object;
             // Create request
             var request = Request.CreateBuilder()
                 .SetService ("TestService")
@@ -227,7 +227,7 @@ namespace KRPCTest.Service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureSingleArgReturns (It.IsAny<Response>()))
                 .Returns((Response x) => Response.CreateBuilder().MergeFrom(x).Build());
-            TestService.service = mock.Object;
+            TestService.Service = mock.Object;
             // Create request
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")

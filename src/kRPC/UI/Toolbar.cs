@@ -27,7 +27,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -365,7 +364,7 @@ namespace KRPC.UI
     /// <seealso cref="IButton.Visibility"/>
     public class GameScenesVisibility : IVisibility
     {
-        private GameScenes[] gameScenes;
+        GameScenes[] gameScenes;
 
         public bool Visible {
             get {
@@ -373,8 +372,8 @@ namespace KRPC.UI
             }
         }
 
-        private object realGameScenesVisibility;
-        private PropertyInfo visibleProperty;
+        object realGameScenesVisibility;
+        PropertyInfo visibleProperty;
 
         public GameScenesVisibility (params GameScenes[] gameScenes)
         {
@@ -390,15 +389,15 @@ namespace KRPC.UI
     #region private implementations
     public partial class ToolbarManager : IToolbarManager
     {
-        private static bool? toolbarAvailable = null;
-        private static IToolbarManager instance_;
-        private object realToolbarManager;
-        private MethodInfo addMethod;
-        private Dictionary<object, IButton> buttons = new Dictionary<object, IButton> ();
-        private Type iButtonType;
-        private Type functionVisibilityType;
+        static bool? toolbarAvailable = null;
+        static IToolbarManager instance_;
+        object realToolbarManager;
+        MethodInfo addMethod;
+        Dictionary<object, IButton> buttons = new Dictionary<object, IButton> ();
+        Type iButtonType;
+        Type functionVisibilityType;
 
-        private ToolbarManager (object realToolbarManager)
+        ToolbarManager (object realToolbarManager)
         {
             this.realToolbarManager = realToolbarManager;
 
@@ -426,24 +425,24 @@ namespace KRPC.UI
 
     internal class Button : IButton
     {
-        private object realButton;
-        private PropertyInfo textProperty;
-        private PropertyInfo textColorProperty;
-        private PropertyInfo texturePathProperty;
-        private PropertyInfo toolTipProperty;
-        private PropertyInfo visibleProperty;
-        private PropertyInfo visibilityProperty;
-        private Type functionVisibilityType;
-        private PropertyInfo effectivelyVisibleProperty;
-        private PropertyInfo enabledProperty;
-        private PropertyInfo importantProperty;
-        private EventInfo onClickEvent;
-        private Delegate realClickHandler;
-        private EventInfo onMouseEnterEvent;
-        private Delegate realMouseEnterHandler;
-        private EventInfo onMouseLeaveEvent;
-        private Delegate realMouseLeaveHandler;
-        private MethodInfo destroyMethod;
+        object realButton;
+        PropertyInfo textProperty;
+        PropertyInfo textColorProperty;
+        PropertyInfo texturePathProperty;
+        PropertyInfo toolTipProperty;
+        PropertyInfo visibleProperty;
+        PropertyInfo visibilityProperty;
+        Type functionVisibilityType;
+        PropertyInfo effectivelyVisibleProperty;
+        PropertyInfo enabledProperty;
+        PropertyInfo importantProperty;
+        EventInfo onClickEvent;
+        Delegate realClickHandler;
+        EventInfo onMouseEnterEvent;
+        Delegate realMouseEnterHandler;
+        EventInfo onMouseLeaveEvent;
+        Delegate realMouseLeaveHandler;
+        MethodInfo destroyMethod;
 
         internal Button (object realButton, Type iButtonType, Type functionVisibilityType)
         {
@@ -469,7 +468,7 @@ namespace KRPC.UI
             realMouseLeaveHandler = attachEventHandler (onMouseLeaveEvent, "mouseLeft", realButton);
         }
 
-        private Delegate attachEventHandler (EventInfo @event, string methodName, object realButton)
+        Delegate attachEventHandler (EventInfo @event, string methodName, object realButton)
         {
             MethodInfo method = GetType ().GetMethod (methodName, BindingFlags.NonPublic | BindingFlags.Instance);
             Delegate d = Delegate.CreateDelegate (@event.EventHandlerType, this, method);
@@ -533,7 +532,7 @@ namespace KRPC.UI
             }
         }
 
-        private IVisibility visibility_;
+        IVisibility visibility_;
 
         public bool EffectivelyVisible {
             get {
@@ -561,7 +560,7 @@ namespace KRPC.UI
 
         public event ClickHandler OnClick;
 
-        private void clicked (object realEvent)
+        void clicked (object realEvent)
         {
             if (OnClick != null) {
                 OnClick (new ClickEvent (realEvent, this));
@@ -570,7 +569,7 @@ namespace KRPC.UI
 
         public event MouseEnterHandler OnMouseEnter;
 
-        private void mouseEntered (object realEvent)
+        void mouseEntered (object realEvent)
         {
             if (OnMouseEnter != null) {
                 OnMouseEnter (new MouseEnterEvent (this));
@@ -579,7 +578,7 @@ namespace KRPC.UI
 
         public event MouseLeaveHandler OnMouseLeave;
 
-        private void mouseLeft (object realEvent)
+        void mouseLeft (object realEvent)
         {
             if (OnMouseLeave != null) {
                 OnMouseLeave (new MouseLeaveEvent (this));
@@ -595,12 +594,12 @@ namespace KRPC.UI
             destroyMethod.Invoke (realButton, null);
         }
 
-        private void detachEventHandler (EventInfo @event, Delegate d, object realButton)
+        void detachEventHandler (EventInfo @event, Delegate d, object realButton)
         {
             @event.GetRemoveMethod ().Invoke (realButton, new object[] { d });
         }
 
-        private Delegate createDelegate (Type eventHandlerType, string methodName)
+        Delegate createDelegate (Type eventHandlerType, string methodName)
         {
             return Delegate.CreateDelegate (GetType (), GetType ().GetMethod (methodName, BindingFlags.NonPublic | BindingFlags.Instance));
         }

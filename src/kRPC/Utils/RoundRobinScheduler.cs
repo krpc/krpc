@@ -5,8 +5,8 @@ namespace KRPC.Utils
 {
     sealed class RoundRobinScheduler<T> : IScheduler<T>
     {
-        private LinkedListNode<T> next;
-        private LinkedList<T> items = new LinkedList<T> ();
+        LinkedListNode<T> next;
+        readonly LinkedList<T> items = new LinkedList<T> ();
 
         public bool Empty {
             get { return items.Count == 0; }
@@ -58,7 +58,7 @@ namespace KRPC.Utils
             }
         }
 
-        private void Advance ()
+        void Advance ()
         {
             next = next.Next;
             if (next == null)

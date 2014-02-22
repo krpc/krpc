@@ -1,16 +1,13 @@
 using System;
-using System.Net.Sockets;
 using System.Collections.Generic;
 using UnityEngine;
-using KRPC.Server;
-using KRPC.Utils;
 
 namespace KRPC.UI
 {
     abstract class OptionDialog : MonoBehaviour
     {
-        private MultiOptionDialog dialog;
-        private bool hasInit = false;
+        MultiOptionDialog dialog;
+        bool hasInit;
 
         protected string Title { get; set; }
 
@@ -66,7 +63,7 @@ namespace KRPC.UI
             }
         }
 
-        private void UpdateGUI ()
+        void UpdateGUI ()
         {
             if (!hasInit) {
                 Init ();

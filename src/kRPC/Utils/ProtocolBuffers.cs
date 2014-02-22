@@ -4,7 +4,7 @@ using Google.ProtocolBuffers;
 
 namespace KRPC.Utils
 {
-    class ProtocolBuffers
+    static class ProtocolBuffers
     {
         /// <summary>
         /// Return the string name of the C# type for the Protocol Buffer message type
@@ -14,7 +14,7 @@ namespace KRPC.Utils
             if (type == null)
                 throw new ArgumentException ("null is not a Protocol Buffer message type");
             if (!IsAMessageType (type))
-                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer message type");
+                throw new ArgumentException (type + " is not a Protocol Buffer message type");
             return type.FullName.Replace ("KRPC.Schema.", "");
         }
 
@@ -27,7 +27,7 @@ namespace KRPC.Utils
             if (type == null)
                 throw new ArgumentException ("null is not a Protocol Buffer message type");
             if (!IsAMessageType (type))
-                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer message type");
+                throw new ArgumentException (type + " is not a Protocol Buffer message type");
             MethodInfo createBuilder = type.GetMethod ("CreateBuilder", new Type[] { });
             return (IBuilder)createBuilder.Invoke (null, null);
         }

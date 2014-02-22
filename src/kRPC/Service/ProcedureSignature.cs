@@ -1,10 +1,8 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using Google.ProtocolBuffers;
-using KRPC.Schema.KRPC;
 using KRPC.Utils;
 
 namespace KRPC.Service
@@ -55,9 +53,9 @@ namespace KRPC.Service
             ParameterTypes = method.GetParameters ()
                 .Select (x => x.ParameterType).ToArray ();
             if (ParameterTypes.Any (x => !ProtocolBuffers.IsAMessageType (x))) {
-                Type type = ParameterTypes.Where (x => !ProtocolBuffers.IsAMessageType (x)).First ();
+                Type type = ParameterTypes.First (x => !ProtocolBuffers.IsAMessageType (x));
                 throw new ServiceException (
-                    type.ToString () + " is not a valid Procedure parameter type, " +
+                    type + " is not a valid Procedure parameter type, " +
                     "in " + FullyQualifiedName);
             }
             ParameterBuilders = ParameterTypes
@@ -73,7 +71,7 @@ namespace KRPC.Service
                 ReturnType = method.ReturnType;
                 if (!ProtocolBuffers.IsAMessageType (ReturnType)) {
                     throw new ServiceException (
-                        ReturnType.ToString () + " is not a valid Procedure return type, " +
+                        ReturnType + " is not a valid Procedure return type, " +
                         "in " + FullyQualifiedName);
                 }
                 ReturnBuilder = ProtocolBuffers.BuilderForMessageType (ReturnType);

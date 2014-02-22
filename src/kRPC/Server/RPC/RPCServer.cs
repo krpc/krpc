@@ -1,10 +1,7 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Linq;
 using System.Text;
-using Google.ProtocolBuffers;
 using KRPC.Schema.KRPC;
 using KRPC.Utils;
 
@@ -12,9 +9,9 @@ namespace KRPC.Server.RPC
 {
     sealed class RPCServer : IServer<Request,Response>
     {
-        private const double defaultTimeout = 0.1;
-        private byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
-        private const int identifierLength = 32;
+        const double defaultTimeout = 0.1;
+        byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
+        const int identifierLength = 32;
 
         public event EventHandler OnStarted;
         public event EventHandler OnStopped;
@@ -26,9 +23,9 @@ namespace KRPC.Server.RPC
         public event EventHandler<ClientActivityArgs<Request,Response>> OnClientActivity;
         public event EventHandler<ClientDisconnectedArgs<Request,Response>> OnClientDisconnected;
 
-        private IServer<byte,byte> server;
-        private Dictionary<IClient<byte,byte>,RPCClient> clients = new Dictionary<IClient<byte, byte>, RPCClient> ();
-        private Dictionary<IClient<byte,byte>,RPCClient> pendingClients = new Dictionary<IClient<byte, byte>, RPCClient> ();
+        IServer<byte,byte> server;
+        Dictionary<IClient<byte,byte>,RPCClient> clients = new Dictionary<IClient<byte, byte>, RPCClient> ();
+        Dictionary<IClient<byte,byte>,RPCClient> pendingClients = new Dictionary<IClient<byte, byte>, RPCClient> ();
 
         public RPCServer (IServer<byte,byte> server)
         {
@@ -78,7 +75,7 @@ namespace KRPC.Server.RPC
             }
         }
 
-        private void HandleClientConnected (object sender, IClientEventArgs<byte,byte> args)
+        void HandleClientConnected (object sender, IClientEventArgs<byte,byte> args)
         {
             // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
             if (OnClientConnected != null) {
@@ -87,7 +84,7 @@ namespace KRPC.Server.RPC
             }
         }
 
-        private void HandleClientActivity (object sender, IClientEventArgs<byte,byte> args)
+        void HandleClientActivity (object sender, IClientEventArgs<byte,byte> args)
         {
             if (OnClientActivity != null) {
                 var client = clients [args.Client];
@@ -95,7 +92,7 @@ namespace KRPC.Server.RPC
             }
         }
 
-        private void HandleClientDisconnected (object sender, IClientEventArgs<byte,byte> args)
+        void HandleClientDisconnected (object sender, IClientEventArgs<byte,byte> args)
         {
             var client = clients [args.Client];
             clients.Remove (args.Client);
@@ -148,10 +145,10 @@ namespace KRPC.Server.RPC
         /// This is triggered whenever a client connects to the server. Returns the string identifier,
         /// or null if the message is not valid.
         /// </summary>
-        private string CheckHelloMessage (IClient<byte,byte> client)
+        string CheckHelloMessage (IClient<byte,byte> client)
         {
             Logger.WriteLine ("RPCServer: Waiting for hello message from client...");
-            byte[] buffer = new byte[expectedHeader.Length + identifierLength];
+            var buffer = new byte[expectedHeader.Length + identifierLength];
             int read = ReadHelloMessage (client.Stream, buffer);
 
             // Failed to read enough bytes in sufficient time, so kill the connection
@@ -161,8 +158,8 @@ namespace KRPC.Server.RPC
             }
 
             // Extract bytes for header and identifier
-            byte[] header = new byte[expectedHeader.Length];
-            byte[] identifier = new byte[identifierLength];
+            var header = new byte[expectedHeader.Length];
+            var identifier = new byte[identifierLength];
             Array.Copy (buffer, header, header.Length);
             Array.Copy (buffer, header.Length, identifier, 0, identifier.Length);
 
@@ -189,7 +186,7 @@ namespace KRPC.Server.RPC
         /// <summary>
         /// Read a fixed length 40-byte message from the client with the given timeout
         /// </summary>
-        private int ReadHelloMessage (IStream<byte,byte> stream, byte[] buffer)
+        int ReadHelloMessage (IStream<byte,byte> stream, byte[] buffer)
         {
             // FIXME: Add better support for delayed receipt of hello message
             int offset = 0;
@@ -204,7 +201,7 @@ namespace KRPC.Server.RPC
             return offset;
         }
 
-        private bool CheckHelloMessageHeader (byte[] receivedHeader)
+        bool CheckHelloMessageHeader (byte[] receivedHeader)
         {
             return receivedHeader.SequenceEqual (expectedHeader);
         }
@@ -215,7 +212,7 @@ namespace KRPC.Server.RPC
         /// </summary>
         /// <returns>The and decode hello message identifier.</returns>
         /// <param name="receivedIdentifier">Received identifier.</param>
-        private string CheckAndDecodeHelloMessageIdentifier (byte[] receivedIdentifier)
+        string CheckAndDecodeHelloMessageIdentifier (byte[] receivedIdentifier)
         {
             string identifierString = "";
 
@@ -238,7 +235,7 @@ namespace KRPC.Server.RPC
 
             if (length > 0) {
                 // Got valid sequence of non-zero bytes, try to decode them
-                byte[] strippedIdentifier = new byte[length];
+                var strippedIdentifier = new byte[length];
                 Array.Copy (receivedIdentifier, strippedIdentifier, length);
                 var encoder = new UTF8Encoding (encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
                 try {

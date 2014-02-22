@@ -1,12 +1,11 @@
 using System;
-using System.Net.Sockets;
 using KRPC.Schema.KRPC;
 
 namespace KRPC.Server.RPC
 {
     sealed class RPCClient : IClient<Request,Response>
     {
-        private IClient<byte,byte> client;
+        readonly IClient<byte,byte> client;
 
         public RPCClient (string name, IClient<byte,byte> client)
         {
@@ -32,18 +31,16 @@ namespace KRPC.Server.RPC
             client.Close ();
         }
 
-        public override bool Equals (Object other)
+        public override bool Equals (Object obj)
         {
-            if (other == null)
-                return false;
-            return Equals (other as RPCClient);
+            return obj != null && Equals (obj as RPCClient);
         }
 
         public bool Equals (IClient<Request,Response> other)
         {
             if ((object)other == null)
                 return false;
-            RPCClient otherClient = other as RPCClient;
+            var otherClient = other as RPCClient;
             if ((object)otherClient == null)
                 return false;
             return client == otherClient.client;

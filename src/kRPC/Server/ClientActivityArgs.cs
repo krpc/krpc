@@ -12,11 +12,11 @@ namespace KRPC.Server
         }
     }
 
-    class ClientActivityArgs<In,Out> : EventArgs, IClientEventArgs<In,Out>
+    class ClientActivityArgs<TIn,TOut> : EventArgs, IClientEventArgs<TIn,TOut>
     {
-        public IClient<In,Out> Client { get; private set; }
+        public IClient<TIn,TOut> Client { get; private set; }
 
-        public ClientActivityArgs (IClient<In,Out> client)
+        public ClientActivityArgs (IClient<TIn,TOut> client)
         {
             Client = client;
         }

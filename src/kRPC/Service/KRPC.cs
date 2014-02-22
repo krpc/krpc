@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
-using Google.ProtocolBuffers;
 using KRPC.Utils;
 
 namespace KRPC.Service
 {
     [KRPCService]
-    public class KRPC
+    public static class KRPC
     {
         [KRPCProcedure]
         public static Schema.KRPC.Status GetStatus ()

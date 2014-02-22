@@ -1,12 +1,11 @@
 using System;
 using UnityEngine;
-using KSP.IO;
 
 namespace KRPC.Utils
 {
     class RectStorage : ConfigurationStorageNode
     {
-        [Persistent] private Single x, y, width, height;
+        [Persistent] Single x, y, width, height;
 
         public static RectStorage FromRect (Rect rect)
         {

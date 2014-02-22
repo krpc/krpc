@@ -17,39 +17,39 @@ namespace KRPC.UI
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
 
-        private Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
-        private const long lastActivityInterval = 100L;
+        Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
+        const long lastActivityInterval = 100L;
         // milliseconds
         // Remember number of clients displayed, to reset window height when it changes
-        private int numClientsDisplayed = 0;
+        int numClientsDisplayed;
         // Editable fields
-        private string address;
-        private string port;
+        string address;
+        string port;
         // Errors to display
         public List<string> Errors { get; private set; }
 
-        private readonly Color errorColor = Color.yellow;
+        readonly Color errorColor = Color.yellow;
         // Style settings
-        private GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, buttonStyle, separatorStyle, lightStyle, errorLabelStyle;
-        private const float windowWidth = 280f;
-        private const float addressWidth = 106f;
-        private const int addressMaxLength = 15;
-        private const float portWidth = 45f;
-        private const int portMaxLength = 5;
+        GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, buttonStyle, separatorStyle, lightStyle, errorLabelStyle;
+        const float windowWidth = 280f;
+        const float addressWidth = 106f;
+        const int addressMaxLength = 15;
+        const float portWidth = 45f;
+        const int portMaxLength = 5;
         // Strings
-        private const string startButtonText = "Start server";
-        private const string stopButtonText = "Stop server";
-        private const string serverOnlineText = "Server online";
-        private const string serverOfflineText = "Server offline";
-        private const string addressLabelText = "Address:";
-        private const string portLabelText = "Port:";
-        private const string noClientsConnectedText = "No clients connected";
-        private const string unknownClientNameText = "<unknown>";
-        private const string invalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
-        private const string invalidPortText = "Port must be between 0 and 65535";
-        private const string localClientOnlyText = "(Local clients only)";
-        private const string subnetAllowedText = "(Subnet {0})";
-        private const string unknownClientsAllowedText = "(Unknown visibility!)";
+        const string startButtonText = "Start server";
+        const string stopButtonText = "Stop server";
+        const string serverOnlineText = "Server online";
+        const string serverOfflineText = "Server offline";
+        const string addressLabelText = "Address:";
+        const string portLabelText = "Port:";
+        const string noClientsConnectedText = "No clients connected";
+        const string unknownClientNameText = "<unknown>";
+        const string invalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
+        const string invalidPortText = "Port must be between 0 and 65535";
+        const string localClientOnlyText = "(Local clients only)";
+        const string subnetAllowedText = "(Subnet {0})";
+        const string unknownClientsAllowedText = "(Unknown visibility!)";
 
         protected override void Init ()
         {
@@ -57,17 +57,17 @@ namespace KRPC.UI
 
             Style.fixedWidth = windowWidth;
 
-            labelStyle = new GUIStyle (UnityEngine.GUI.skin.label);
+            labelStyle = new GUIStyle (GUI.skin.label);
             labelStyle.margin = new RectOffset (0, 0, 0, 0);
 
-            stretchyLabelStyle = new GUIStyle (UnityEngine.GUI.skin.label);
+            stretchyLabelStyle = new GUIStyle (GUI.skin.label);
             stretchyLabelStyle.margin = new RectOffset (0, 0, 0, 0);
             stretchyLabelStyle.stretchWidth = true;
 
-            textFieldStyle = new GUIStyle (UnityEngine.GUI.skin.textField);
+            textFieldStyle = new GUIStyle (GUI.skin.textField);
             textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
 
-            buttonStyle = new GUIStyle (UnityEngine.GUI.skin.button);
+            buttonStyle = new GUIStyle (GUI.skin.button);
 
             separatorStyle = GUILayoutExtensions.SeparatorStyle (new Color (0f, 0f, 0f, 0.25f));
             separatorStyle.fixedHeight = 2;
@@ -76,7 +76,7 @@ namespace KRPC.UI
 
             lightStyle = GUILayoutExtensions.LightStyle ();
 
-            errorLabelStyle = new GUIStyle (UnityEngine.GUI.skin.label);
+            errorLabelStyle = new GUIStyle (GUI.skin.label);
             errorLabelStyle.margin = new RectOffset (0, 0, 0, 0);
             errorLabelStyle.stretchWidth = true;
             errorLabelStyle.normal.textColor = errorColor;
@@ -121,16 +121,16 @@ namespace KRPC.UI
 
                 GUILayoutExtensions.Separator (separatorStyle);
 
-                if (Server.Clients.Count () == 0) {
+                if (Server.Clients.Any ()) {
                     GUILayout.BeginHorizontal ();
                     GUILayout.Label (noClientsConnectedText, labelStyle);
                     GUILayout.EndHorizontal ();
                 } else {
                     foreach (var client in Server.Clients) {
-                        string name = (client.Name == "") ? unknownClientNameText : client.Name;
+                        string clientName = (client.Name == "") ? unknownClientNameText : client.Name;
                         GUILayout.BeginHorizontal ();
                         GUILayoutExtensions.Light (IsClientActive (client), lightStyle);
-                        GUILayout.Label (name + " @ " + client.Address, stretchyLabelStyle);
+                        GUILayout.Label (clientName + " @ " + client.Address, stretchyLabelStyle);
                         GUILayout.EndHorizontal ();
                     }
                 }
@@ -162,7 +162,7 @@ namespace KRPC.UI
             GUI.DragWindow ();
         }
 
-        private bool StartServer ()
+        bool StartServer ()
         {
             // Validate the settings
             Errors.Clear ();
@@ -187,12 +187,12 @@ namespace KRPC.UI
             return false;
         }
 
-        private void SawClientActivity (IClient client)
+        void SawClientActivity (IClient client)
         {
             lastClientActivity [client] = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
-        private bool IsClientActive (IClient client)
+        bool IsClientActive (IClient client)
         {
             if (!lastClientActivity.ContainsKey (client))
                 return false;
@@ -201,7 +201,7 @@ namespace KRPC.UI
             return now - lastActivityInterval < lastActivity;
         }
 
-        private string AllowedClientsString (IPAddress localAddress)
+        string AllowedClientsString (IPAddress localAddress)
         {
             // TODO: better way of checking if address is the loopback device?
             if (localAddress.ToString () == IPAddress.Loopback.ToString ())

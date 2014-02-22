@@ -12,16 +12,16 @@ namespace KRPC.Server
         }
     }
 
-    class ClientConnectedArgs<In,Out> : EventArgs, IClientEventArgs<In,Out>
+    class ClientConnectedArgs<TIn,TOut> : EventArgs, IClientEventArgs<TIn,TOut>
     {
-        public IClient<In,Out> Client { get; private set; }
+        public IClient<TIn,TOut> Client { get; private set; }
 
-        public ClientConnectedArgs (IClient<In,Out> client)
+        public ClientConnectedArgs (IClient<TIn,TOut> client)
         {
             Client = client;
         }
 
-        public static implicit operator ClientConnectedArgs (ClientConnectedArgs<In,Out> args)
+        public static implicit operator ClientConnectedArgs (ClientConnectedArgs<TIn,TOut> args)
         {
             return new ClientConnectedArgs (args.Client);
         }

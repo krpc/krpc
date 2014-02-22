@@ -1,19 +1,17 @@
 using System;
 using System.IO;
-using System.Net;
-using KSP;
 
 namespace KRPC.Utils
 {
     abstract class ConfigurationStorage : ConfigurationStorageNode
     {
-        private string filePath;
+        string filePath;
 
         /// <summary>
         /// Create a configuration object with default values. Call Load() to load from the file.
         /// The file path is relative to the directory containing this assembly.
         /// </summary>
-        public ConfigurationStorage (string filePath)
+        protected ConfigurationStorage (string filePath)
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly ().Location;
             var dir = Path.GetDirectoryName (assembly).Replace ("\\", "/");
@@ -21,7 +19,7 @@ namespace KRPC.Utils
             Logger.WriteLine ("Configuration file path " + this.filePath);
         }
 
-        private ConfigurationStorage ()
+        ConfigurationStorage ()
         {
         }
 
@@ -31,7 +29,7 @@ namespace KRPC.Utils
         public void Load ()
         {
             if (FileExists) {
-                ConfigNode node = ConfigNode.Load (filePath).GetNode (this.GetType ().Name);
+                ConfigNode node = ConfigNode.Load (filePath).GetNode (GetType ().Name);
                 ConfigNode.LoadObjectFromConfig (this, node);
             }
         }
@@ -41,19 +39,19 @@ namespace KRPC.Utils
         /// </summary>
         public void Save ()
         {
-            ConfigNode node = this.AsConfigNode;
-            ConfigNode clsNode = new ConfigNode (this.GetType ().Name);
+            ConfigNode node = AsConfigNode;
+            var clsNode = new ConfigNode (GetType ().Name);
             clsNode.AddNode (node);
             clsNode.Save (filePath);
         }
 
-        private bool FileExists {
+        bool FileExists {
             get { return File.Exists (filePath); }
         }
 
-        private ConfigNode AsConfigNode {
+        ConfigNode AsConfigNode {
             get {
-                ConfigNode node = new ConfigNode (this.GetType ().Name);
+                var node = new ConfigNode (GetType ().Name);
                 return ConfigNode.CreateConfigFromObject (this, node);
             }
         }

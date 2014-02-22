@@ -1,18 +1,5 @@
-using System;
-using System.Diagnostics;
-using System.Reflection;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Linq;
 using UnityEngine;
-using KSP.IO;
 using KRPC.Server;
-using KRPC.Server.Net;
-using KRPC.Server.RPC;
-using KRPC.Service;
-using KRPC.Schema.KRPC;
-using KRPC.Utils;
 using KRPC.UI;
 
 namespace KRPC
@@ -20,11 +7,11 @@ namespace KRPC
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     sealed public class KRPCAddon : MonoBehaviour
     {
-        private KRPCServer server;
-        private KRPCConfiguration config;
-        private IButton toolbarButton;
-        private MainWindow mainWindow;
-        private ClientConnectingDialog clientConnectingDialog;
+        KRPCServer server;
+        KRPCConfiguration config;
+        IButton toolbarButton;
+        MainWindow mainWindow;
+        ClientConnectingDialog clientConnectingDialog;
 
         public void Awake ()
         {
@@ -79,15 +66,9 @@ namespace KRPC
                 toolbarButton.TexturePath = "kRPC/icon-offline";
                 toolbarButton.ToolTip = "kRPC Server";
                 toolbarButton.Visibility = new GameScenesVisibility (GameScenes.FLIGHT);
-                toolbarButton.OnClick += (e) => {
-                    mainWindow.Visible = !mainWindow.Visible;
-                };
-                server.OnStarted += (s, e) => {
-                    toolbarButton.TexturePath = "kRPC/icon-online";
-                };
-                server.OnStopped += (s, e) => {
-                    toolbarButton.TexturePath = "kRPC/icon-offline";
-                };
+                toolbarButton.OnClick += (e) => mainWindow.Visible = !mainWindow.Visible;
+                server.OnStarted += (s, e) => toolbarButton.TexturePath = "kRPC/icon-online";
+                server.OnStopped += (s, e) => toolbarButton.TexturePath = "kRPC/icon-offline";
             } else {
                 // If there is no toolbar button a hidden window can't be shown, so force it to be displayed
                 mainWindow.Visible = true;

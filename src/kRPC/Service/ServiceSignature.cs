@@ -1,10 +1,6 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
-using Google.ProtocolBuffers;
-using KRPC.Schema.KRPC;
 using KRPC.Utils;
 
 namespace KRPC.Service

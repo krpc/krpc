@@ -1,13 +1,7 @@
-using System;
-
 namespace KRPC.Utils
 {
     abstract class ConfigurationStorageNode : IPersistenceLoad, IPersistenceSave
     {
-        public ConfigurationStorageNode ()
-        {
-        }
-
         /// <summary>
         /// Override to provide custom behaviour before saving.
         /// </summary>

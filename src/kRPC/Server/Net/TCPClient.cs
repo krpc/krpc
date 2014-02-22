@@ -6,8 +6,8 @@ namespace KRPC.Server.Net
 {
     sealed class TCPClient : IClient<byte,byte>
     {
-        private int uuid;
-        private TcpClient tcpClient;
+        readonly int uuid;
+        readonly TcpClient tcpClient;
 
         public TCPClient (int uuid, TcpClient tcpClient)
         {
@@ -34,7 +34,7 @@ namespace KRPC.Server.Net
                         return false;
                     }
                     if (tcpClient.Client.Poll (0, SelectMode.SelectRead)) {
-                        byte[] buffer = new byte[1];
+                        var buffer = new byte[1];
                         return tcpClient.Client.Receive (buffer, SocketFlags.Peek) != 0;
                     }
                     return true;
@@ -49,18 +49,16 @@ namespace KRPC.Server.Net
             tcpClient.Close ();
         }
 
-        public override bool Equals (Object other)
+        public override bool Equals (Object obj)
         {
-            if (other == null)
-                return false;
-            return Equals (other as TCPClient);
+            return obj != null && Equals (obj as TCPClient);
         }
 
         public bool Equals (IClient<byte,byte> other)
         {
             if ((object)other == null)
                 return false;
-            TCPClient otherClient = other as TCPClient;
+            var otherClient = other as TCPClient;
             if ((object)otherClient == null)
                 return false;
             return uuid == otherClient.uuid;

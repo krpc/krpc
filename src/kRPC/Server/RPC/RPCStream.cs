@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Google.ProtocolBuffers;
 using KRPC.Schema.KRPC;
-using KRPC.Server.Net;
 
 namespace KRPC.Server.RPC
 {
@@ -10,10 +9,10 @@ namespace KRPC.Server.RPC
     {
         // 1MB buffer
         internal const int bufferSize = 1 * 1024 * 1024;
-        private IStream<byte,byte> stream;
-        private Request bufferedRequest;
-        private byte[] buffer = new byte[bufferSize];
-        private int offset = 0;
+        readonly IStream<byte,byte> stream;
+        Request bufferedRequest;
+        byte[] buffer = new byte[bufferSize];
+        int offset;
 
         public RPCStream (IStream<byte,byte> stream)
         {
@@ -64,9 +63,9 @@ namespace KRPC.Server.RPC
         /// </summary>
         public void Write (Response value)
         {
-            var buffer = new MemoryStream ();
-            value.WriteDelimitedTo (buffer);
-            stream.Write (buffer.ToArray ());
+            var tempBuffer = new MemoryStream ();
+            value.WriteDelimitedTo (tempBuffer);
+            stream.Write (tempBuffer.ToArray ());
         }
 
         public void Write (Response[] value)
@@ -88,7 +87,7 @@ namespace KRPC.Server.RPC
         /// Throws NoRequestException if not
         /// Throws MalformedRequestException if malformed data received
         /// Throws RequestBufferOverflowException if buffer full but complete request not received
-        private void Poll ()
+        void Poll ()
         {
             if (bufferedRequest != null)
                 return;

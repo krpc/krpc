@@ -1,11 +1,9 @@
-using System;
-
 namespace KRPC.Server
 {
     class ClientConnectionRequest
     {
-        private bool allow = false;
-        private bool deny = false;
+        bool allow;
+        bool deny;
 
         public bool ShouldAllow {
             get { return allow && !deny; }
