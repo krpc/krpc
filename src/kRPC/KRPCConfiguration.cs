@@ -14,42 +14,39 @@ namespace KRPC
 
         public IPAddress Address { get; set; }
 
-        public ushort Port
-        {
+        public ushort Port {
             get { return port; }
             set { port = value; }
         }
 
-        public bool MainWindowVisible
-        {
+        public bool MainWindowVisible {
             get { return mainWindowVisible; }
             set { mainWindowVisible = value; }
         }
 
-        public Rect MainWindowPosition
-        {
+        public Rect MainWindowPosition {
             get { return mainWindowPosition.AsRect (); }
             set { mainWindowPosition = RectStorage.FromRect (value); }
         }
 
-        public KRPCConfiguration (string filePath):
-            base(filePath)
+        public KRPCConfiguration (string filePath) :
+            base (filePath)
         {
-            Address = IPAddress.Parse(address);
+            Address = IPAddress.Parse (address);
         }
 
-        protected override void BeforeSave()
+        protected override void BeforeSave ()
         {
             address = Address.ToString ();
         }
 
-        protected override void AfterLoad()
+        protected override void AfterLoad ()
         {
-           try {
+            try {
                 Address = IPAddress.Parse (address);
             } catch (FormatException) {
                 Debug.Log ("Error parsing IP address from configuration file. Got '" + address + "'. " +
-                           "Defaulting to loopback address " + IPAddress.Loopback);
+                "Defaulting to loopback address " + IPAddress.Loopback);
                 Address = IPAddress.Loopback;
             }
         }

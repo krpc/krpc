@@ -6,7 +6,7 @@ namespace KRPC.Server
     {
         public IClient Client { get; private set; }
 
-        public ClientConnectedArgs(IClient client)
+        public ClientConnectedArgs (IClient client)
         {
             Client = client;
         }
@@ -16,7 +16,7 @@ namespace KRPC.Server
     {
         public IClient<In,Out> Client { get; private set; }
 
-        public ClientConnectedArgs(IClient<In,Out> client)
+        public ClientConnectedArgs (IClient<In,Out> client)
         {
             Client = client;
         }

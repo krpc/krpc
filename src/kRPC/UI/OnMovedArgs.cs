@@ -5,7 +5,7 @@ class MovedArgs : EventArgs
 {
     public Rect Position { get; private set; }
 
-    public MovedArgs(Rect position)
+    public MovedArgs (Rect position)
     {
         Position = position;
     }

@@ -4,23 +4,31 @@ namespace KRPC.Utils
 {
     abstract class ConfigurationStorageNode : IPersistenceLoad, IPersistenceSave
     {
-        public ConfigurationStorageNode () { }
+        public ConfigurationStorageNode ()
+        {
+        }
 
         /// <summary>
         /// Override to provide custom behaviour before saving.
         /// </summary>
-        protected virtual void BeforeSave() { }
+        protected virtual void BeforeSave ()
+        {
+        }
 
         /// <summary>
         /// Override to provide custom behaviour after loading.
         /// </summary>
-        protected virtual void AfterLoad() { }
+        protected virtual void AfterLoad ()
+        {
+        }
 
-        void IPersistenceLoad.PersistenceLoad () {
+        void IPersistenceLoad.PersistenceLoad ()
+        {
             AfterLoad ();
         }
 
-        void IPersistenceSave.PersistenceSave () {
+        void IPersistenceSave.PersistenceSave ()
+        {
             BeforeSave ();
         }
     }

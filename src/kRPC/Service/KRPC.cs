@@ -12,7 +12,7 @@ namespace KRPC.Service
         public static Schema.KRPC.Status GetStatus ()
         {
             var status = Schema.KRPC.Status.CreateBuilder ();
-            status.Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            status.Version = System.Reflection.Assembly.GetExecutingAssembly ().GetName ().Version.ToString ();
             return status.Build ();
         }
 

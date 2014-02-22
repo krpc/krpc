@@ -11,25 +11,24 @@ namespace KRPC.UI
     sealed class MainWindow : Window
     {
         public KRPCConfiguration Config { private get; set; }
+
         public KRPCServer Server { private get; set; }
 
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
 
         private Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
-        private const long lastActivityInterval = 100L; // milliseconds
-
+        private const long lastActivityInterval = 100L;
+        // milliseconds
         // Remember number of clients displayed, to reset window height when it changes
         private int numClientsDisplayed = 0;
-
         // Editable fields
         private string address;
         private string port;
-
         // Errors to display
         public List<string> Errors { get; private set; }
-        private readonly Color errorColor = Color.yellow;
 
+        private readonly Color errorColor = Color.yellow;
         // Style settings
         private GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, buttonStyle, separatorStyle, lightStyle, errorLabelStyle;
         private const float windowWidth = 280f;
@@ -37,7 +36,6 @@ namespace KRPC.UI
         private const int addressMaxLength = 15;
         private const float portWidth = 45f;
         private const int portMaxLength = 5;
-
         // Strings
         private const string startButtonText = "Start server";
         private const string stopButtonText = "Stop server";
@@ -49,12 +47,12 @@ namespace KRPC.UI
         private const string unknownClientNameText = "<unknown>";
         private const string invalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
         private const string invalidPortText = "Port must be between 0 and 65535";
-
         private const string localClientOnlyText = "(Local clients only)";
         private const string subnetAllowedText = "(Subnet {0})";
         private const string unknownClientsAllowedText = "(Unknown visibility!)";
 
-        protected override void Init() {
+        protected override void Init ()
+        {
             Server.OnClientActivity += (s, e) => SawClientActivity (e.Client);
 
             Style.fixedWidth = windowWidth;
@@ -71,7 +69,7 @@ namespace KRPC.UI
 
             buttonStyle = new GUIStyle (UnityEngine.GUI.skin.button);
 
-            separatorStyle = GUILayoutExtensions.SeparatorStyle (new Color(0f, 0f, 0f, 0.25f));
+            separatorStyle = GUILayoutExtensions.SeparatorStyle (new Color (0f, 0f, 0f, 0.25f));
             separatorStyle.fixedHeight = 2;
             separatorStyle.stretchWidth = true;
             separatorStyle.margin = new RectOffset (2, 2, 3, 3);
@@ -194,7 +192,8 @@ namespace KRPC.UI
             lastClientActivity [client] = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
-        private bool IsClientActive (IClient client) {
+        private bool IsClientActive (IClient client)
+        {
             if (!lastClientActivity.ContainsKey (client))
                 return false;
             long now = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
@@ -202,7 +201,8 @@ namespace KRPC.UI
             return now - lastActivityInterval < lastActivity;
         }
 
-        private string AllowedClientsString(IPAddress localAddress) {
+        private string AllowedClientsString (IPAddress localAddress)
+        {
             // TODO: better way of checking if address is the loopback device?
             if (localAddress.ToString () == IPAddress.Loopback.ToString ())
                 return localClientOnlyText;

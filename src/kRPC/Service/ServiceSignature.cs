@@ -12,6 +12,7 @@ namespace KRPC.Service
     class ServiceSignature
     {
         public string Name { get; private set; }
+
         public Dictionary<string,ProcedureSignature> Procedures { get; private set; }
 
         public ServiceSignature (Type type)
@@ -20,7 +21,7 @@ namespace KRPC.Service
             var procedureTypes = Reflection.GetMethodsWith<KRPCProcedure> (type);
             try {
                 Procedures = procedureTypes
-                    .Select (x => new ProcedureSignature(type.Name, x))
+                    .Select (x => new ProcedureSignature (type.Name, x))
                     .ToDictionary (x => x.Name);
             } catch (ArgumentException) {
                 // Handle procedure name clashes
@@ -28,13 +29,13 @@ namespace KRPC.Service
                 var duplicates = procedureTypes
                     .Select (x => x.Name)
                     .GroupBy (x => x)
-                    .Where (group => group.Count() > 1)
+                    .Where (group => group.Count () > 1)
                     .Select (group => group.Key)
                     .ToArray ();
                 throw new ServiceException (
                     "Service " + Name + " contains duplicate Procedures, " +
                     "and overloading is not permitted. " +
-                    "Duplicates are " + String.Join(", ", duplicates));
+                    "Duplicates are " + String.Join (", ", duplicates));
             }
             if (Procedures.Count == 0)
                 throw new ServiceException ("Service " + Name + " does not contain any Procedures");

@@ -19,11 +19,13 @@ namespace KRPC.Server
             get { return !allow && !deny; }
         }
 
-        public void Allow () {
+        public void Allow ()
+        {
             allow = true;
         }
 
-        public void Deny () {
+        public void Deny ()
+        {
             deny = true;
         }
     }

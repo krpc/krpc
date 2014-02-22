@@ -20,7 +20,7 @@ namespace KRPC.Server.Net
         }
 
         public string Address {
-            get { return ((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address.ToString(); }
+            get { return ((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address.ToString (); }
         }
 
         public IStream<byte,byte> Stream {
@@ -33,10 +33,9 @@ namespace KRPC.Server.Net
                     if (!tcpClient.Client.Connected) {
                         return false;
                     }
-                    if (tcpClient.Client.Poll(0, SelectMode.SelectRead))
-                    {
+                    if (tcpClient.Client.Poll (0, SelectMode.SelectRead)) {
                         byte[] buffer = new byte[1];
-                        return tcpClient.Client.Receive(buffer, SocketFlags.Peek) != 0;
+                        return tcpClient.Client.Receive (buffer, SocketFlags.Peek) != 0;
                     }
                     return true;
                 } catch {
@@ -45,17 +44,20 @@ namespace KRPC.Server.Net
             }
         }
 
-        public void Close () {
+        public void Close ()
+        {
             tcpClient.Close ();
         }
 
-        public override bool Equals (Object other) {
+        public override bool Equals (Object other)
+        {
             if (other == null)
                 return false;
-            return Equals(other as TCPClient);
+            return Equals (other as TCPClient);
         }
 
-        public bool Equals (IClient<byte,byte> other) {
+        public bool Equals (IClient<byte,byte> other)
+        {
             if ((object)other == null)
                 return false;
             TCPClient otherClient = other as TCPClient;
@@ -64,7 +66,8 @@ namespace KRPC.Server.Net
             return uuid == otherClient.uuid;
         }
 
-        public override int GetHashCode () {
+        public override int GetHashCode ()
+        {
             return uuid;
         }
 
@@ -74,7 +77,7 @@ namespace KRPC.Server.Net
                 return true;
             if ((object)lhs == null || (object)rhs == null)
                 return false;
-            return lhs.Equals(rhs);
+            return lhs.Equals (rhs);
         }
 
         public static bool operator != (TCPClient lhs, TCPClient rhs)

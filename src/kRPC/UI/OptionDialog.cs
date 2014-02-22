@@ -13,8 +13,11 @@ namespace KRPC.UI
         private bool hasInit = false;
 
         protected string Title { get; set; }
+
         protected string Message { get; set; }
+
         protected GUISkin Skin { get; set; }
+
         protected List<DialogOption> Options { get; private set; }
 
         public event EventHandler OnOpen;
@@ -25,19 +28,22 @@ namespace KRPC.UI
         public void Awake ()
         {
             Options = new List<DialogOption> ();
-            RenderingManager.AddToPostDrawQueue(1, UpdateGUI);
+            RenderingManager.AddToPostDrawQueue (1, UpdateGUI);
         }
 
         protected abstract void Init ();
+
         protected abstract void Opened ();
+
         protected abstract void Closed ();
 
         public void OnDestroy ()
         {
-            RenderingManager.RemoveFromPostDrawQueue(1, UpdateGUI);
+            RenderingManager.RemoveFromPostDrawQueue (1, UpdateGUI);
         }
 
-        public void Open () {
+        public void Open ()
+        {
             if (!Visible) {
                 if (Skin == null)
                     Skin = GUI.skin;

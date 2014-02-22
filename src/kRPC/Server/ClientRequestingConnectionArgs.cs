@@ -6,15 +6,16 @@ namespace KRPC.Server
     class ClientRequestingConnectionArgs : EventArgs, IClientEventArgs
     {
         public IClient Client { get; private set; }
+
         public ClientConnectionRequest Request { get; private set; }
 
-        public ClientRequestingConnectionArgs(IClient client)
+        public ClientRequestingConnectionArgs (IClient client)
         {
             Client = client;
             Request = new ClientConnectionRequest ();
         }
 
-        public ClientRequestingConnectionArgs(IClient client, ClientConnectionRequest request)
+        public ClientRequestingConnectionArgs (IClient client, ClientConnectionRequest request)
         {
             Client = client;
             Request = request;
@@ -24,15 +25,16 @@ namespace KRPC.Server
     class ClientRequestingConnectionArgs<In,Out> : EventArgs, IClientEventArgs<In,Out>
     {
         public IClient<In,Out> Client { get; private set; }
+
         public ClientConnectionRequest Request { get; private set; }
 
-        public ClientRequestingConnectionArgs(IClient<In,Out> client)
+        public ClientRequestingConnectionArgs (IClient<In,Out> client)
         {
             Client = client;
             Request = new ClientConnectionRequest ();
         }
 
-        public ClientRequestingConnectionArgs(IClient<In,Out> client, ClientConnectionRequest request)
+        public ClientRequestingConnectionArgs (IClient<In,Out> client, ClientConnectionRequest request)
         {
             Client = client;
             Request = request;

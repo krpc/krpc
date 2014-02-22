@@ -27,17 +27,20 @@ namespace KRPC.Server.RPC
             get { return client.Connected; }
         }
 
-        public void Close () {
+        public void Close ()
+        {
             client.Close ();
         }
 
-        public override bool Equals(Object other) {
+        public override bool Equals (Object other)
+        {
             if (other == null)
                 return false;
-            return Equals(other as RPCClient);
+            return Equals (other as RPCClient);
         }
 
-        public bool Equals (IClient<Request,Response> other) {
+        public bool Equals (IClient<Request,Response> other)
+        {
             if ((object)other == null)
                 return false;
             RPCClient otherClient = other as RPCClient;
@@ -46,7 +49,8 @@ namespace KRPC.Server.RPC
             return client == otherClient.client;
         }
 
-        public override int GetHashCode () {
+        public override int GetHashCode ()
+        {
             return client.GetHashCode ();
         }
 
@@ -61,7 +65,7 @@ namespace KRPC.Server.RPC
 
         public static bool operator != (RPCClient lhs, RPCClient rhs)
         {
-            return ! (lhs == rhs);
+            return !(lhs == rhs);
         }
     }
 }

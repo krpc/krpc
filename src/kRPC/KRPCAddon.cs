@@ -17,7 +17,7 @@ using KRPC.UI;
 
 namespace KRPC
 {
-    [KSPAddon(KSPAddon.Startup.Flight, false)]
+    [KSPAddon (KSPAddon.Startup.Flight, false)]
     sealed public class KRPCAddon : MonoBehaviour
     {
         private KRPCServer server;
@@ -33,14 +33,14 @@ namespace KRPC
             server = new KRPCServer (config.Address, config.Port);
 
             // Create main window
-            mainWindow = gameObject.AddComponent<MainWindow>();
+            mainWindow = gameObject.AddComponent<MainWindow> ();
             mainWindow.Config = config;
             mainWindow.Server = server;
             mainWindow.Visible = config.MainWindowVisible;
             mainWindow.Position = config.MainWindowPosition;
 
             // Create new connection dialog
-            clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog>();
+            clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog> ();
 
             // Main window events
             mainWindow.OnStartServerPressed += (s, e) => {
@@ -54,7 +54,7 @@ namespace KRPC
             };
             mainWindow.OnStopServerPressed += (s, e) => {
                 server.Stop ();
-                clientConnectingDialog.Close();
+                clientConnectingDialog.Close ();
             };
             mainWindow.OnHide += (s, e) => {
                 config.MainWindowVisible = false;

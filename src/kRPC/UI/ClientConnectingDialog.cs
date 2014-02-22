@@ -9,11 +9,11 @@ namespace KRPC.UI
     {
         private ClientRequestingConnectionArgs args;
 
-        protected override void Init()
+        protected override void Init ()
         {
             Title = "kRPC";
             Skin = GUI.skin;
-            Options.Add(
+            Options.Add (
                 new DialogOption ("Allow", () => {
                     args.Request.Allow ();
                 }));

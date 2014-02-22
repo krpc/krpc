@@ -21,13 +21,15 @@ namespace KRPC.Utils
             Logger.WriteLine ("Configuration file path " + this.filePath);
         }
 
-        private ConfigurationStorage() {
+        private ConfigurationStorage ()
+        {
         }
 
         /// <summary>
         /// Load settings from the underlying storage
         /// </summary>
-        public void Load() {
+        public void Load ()
+        {
             if (FileExists) {
                 ConfigNode node = ConfigNode.Load (filePath).GetNode (this.GetType ().Name);
                 ConfigNode.LoadObjectFromConfig (this, node);
@@ -37,11 +39,12 @@ namespace KRPC.Utils
         /// <summary>
         /// Save settings to the underlying storage
         /// </summary>
-        public void Save() {
+        public void Save ()
+        {
             ConfigNode node = this.AsConfigNode;
-            ConfigNode clsNode = new ConfigNode(this.GetType().Name);
-            clsNode.AddNode(node);
-            clsNode.Save(filePath);
+            ConfigNode clsNode = new ConfigNode (this.GetType ().Name);
+            clsNode.AddNode (node);
+            clsNode.Save (filePath);
         }
 
         private bool FileExists {
@@ -50,7 +53,7 @@ namespace KRPC.Utils
 
         private ConfigNode AsConfigNode {
             get {
-                ConfigNode node = new ConfigNode (this.GetType().Name);
+                ConfigNode node = new ConfigNode (this.GetType ().Name);
                 return ConfigNode.CreateConfigFromObject (this, node);
             }
         }
