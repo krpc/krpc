@@ -14,20 +14,20 @@ namespace KRPC.UI
 
         public KRPCServer Server { private get; set; }
 
+        /// <summary>
+        /// Errors to display
+        /// </summary>
+        public List<string> Errors { get; private set; }
+
         public event EventHandler OnStartServerPressed;
         public event EventHandler OnStopServerPressed;
 
         Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
-        const long lastActivityInterval = 100L;
-        // milliseconds
-        // Remember number of clients displayed, to reset window height when it changes
+        const long lastActivityMillisecondsInterval = 100L;
         int numClientsDisplayed;
         // Editable fields
         string address;
         string port;
-        // Errors to display
-        public List<string> Errors { get; private set; }
-
         readonly Color errorColor = Color.yellow;
         // Style settings
         GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, buttonStyle, separatorStyle, lightStyle, errorLabelStyle;
@@ -36,7 +36,7 @@ namespace KRPC.UI
         const int addressMaxLength = 15;
         const float portWidth = 45f;
         const int portMaxLength = 5;
-        // Strings
+        // Text strings
         const string startButtonText = "Start server";
         const string stopButtonText = "Stop server";
         const string serverOnlineText = "Server online";
@@ -121,7 +121,7 @@ namespace KRPC.UI
 
                 GUILayoutExtensions.Separator (separatorStyle);
 
-                if (Server.Clients.Any ()) {
+                if (!Server.Clients.Any ()) {
                     GUILayout.BeginHorizontal ();
                     GUILayout.Label (noClientsConnectedText, labelStyle);
                     GUILayout.EndHorizontal ();
@@ -198,7 +198,7 @@ namespace KRPC.UI
                 return false;
             long now = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long lastActivity = lastClientActivity [client];
-            return now - lastActivityInterval < lastActivity;
+            return now - lastActivityMillisecondsInterval < lastActivity;
         }
 
         string AllowedClientsString (IPAddress localAddress)
