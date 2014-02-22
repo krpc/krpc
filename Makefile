@@ -71,6 +71,7 @@ install: dist
 
 test: $(CSHARP_TEST_PROJECTS)
 	nunit-console -nologo -nothread -trace=Off -output=test.log src/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
+	make -C python test
 
 ksp: install TestingTools
 	cp src/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
