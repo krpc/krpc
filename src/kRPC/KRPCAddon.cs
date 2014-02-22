@@ -18,6 +18,7 @@ namespace KRPC
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
             server = new KRPCServer (config.Address, config.Port);
+            server.GetUniversalTime = Planetarium.GetUniversalTime;
 
             // Create main window
             mainWindow = gameObject.AddComponent<MainWindow> ();

@@ -9,7 +9,7 @@ DIST_LIBS = \
 DIST_ICONS = $(wildcard src/kRPC/bin/*.png)
 
 CSHARP_MAIN_PROJECTS  = kRPC kRPCServices
-CSHARP_TEST_PROJECTS  = kRPCTest
+CSHARP_TEST_PROJECTS  = kRPCTest TestServer
 CSHARP_OTHER_PROJECTS = TestingTools
 CSHARP_CONFIG = Release
 
