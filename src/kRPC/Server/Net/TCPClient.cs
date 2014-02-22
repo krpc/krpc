@@ -13,18 +13,30 @@ namespace KRPC.Server.Net
         {
             this.uuid = uuid;
             this.tcpClient = tcpClient;
+            try {
+                var remoteEndPoint = tcpClient.Client.RemoteEndPoint as IPEndPoint;
+                Address = remoteEndPoint.Address.ToString ();
+            } catch {
+                Address = "";
+            }
         }
 
         public string Name {
             get { return ""; }
         }
 
-        public string Address {
-            get { return ((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address.ToString (); }
-        }
+        public string Address { get; private set; }
 
         public IStream<byte,byte> Stream {
-            get { return new TCPStream (tcpClient.GetStream ()); }
+            get {
+                try {
+                    return new TCPStream (tcpClient.GetStream ());
+                } catch (ObjectDisposedException) {
+                    throw new ClientDisconnectedException ();
+                } catch (InvalidOperationException) {
+                    throw new ClientDisconnectedException ();
+                }
+            }
         }
 
         public bool Connected {

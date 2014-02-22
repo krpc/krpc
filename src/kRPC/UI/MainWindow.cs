@@ -30,7 +30,8 @@ namespace KRPC.UI
         string port;
         readonly Color errorColor = Color.yellow;
         // Style settings
-        GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, buttonStyle, separatorStyle, lightStyle, errorLabelStyle;
+        GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, buttonStyle,
+            separatorStyle, lightStyle, errorLabelStyle, disconnectClientButtonStyle;
         const float windowWidth = 280f;
         const float addressWidth = 106f;
         const int addressMaxLength = 15;
@@ -81,6 +82,8 @@ namespace KRPC.UI
             errorLabelStyle.stretchWidth = true;
             errorLabelStyle.normal.textColor = errorColor;
 
+            disconnectClientButtonStyle = new GUIStyle (GUI.skin.button);
+
             Errors = new List<string> ();
             address = Config.Address.ToString ();
             port = Config.Port.ToString ();
@@ -121,18 +124,35 @@ namespace KRPC.UI
 
                 GUILayoutExtensions.Separator (separatorStyle);
 
-                if (!Server.Clients.Any ()) {
+                // Get list of client descriptions
+                IDictionary<IClient,string> clientDescriptions = new Dictionary<IClient,string> ();
+                if (Server.Clients.Any ()) {
+                    foreach (var client in Server.Clients) {
+                        try {
+                            string clientName = (client.Name == "") ? unknownClientNameText : client.Name;
+                            clientDescriptions [client] = clientName + " @ " + client.Address;
+                        } catch (ClientDisconnectedException) {
+                        }
+                    }
+                }
+
+                // Display the list of clients
+                if (clientDescriptions.Any ()) {
+                    foreach (var entry in clientDescriptions) {
+                        var client = entry.Key;
+                        var description = entry.Value;
+                        GUILayout.BeginHorizontal ();
+                        GUILayoutExtensions.Light (IsClientActive (client), lightStyle);
+                        GUILayout.Label (description, stretchyLabelStyle);
+                        if (GUILayout.Button ("x", disconnectClientButtonStyle)) {
+                            client.Close ();
+                        }
+                        GUILayout.EndHorizontal ();
+                    }
+                } else {
                     GUILayout.BeginHorizontal ();
                     GUILayout.Label (noClientsConnectedText, labelStyle);
                     GUILayout.EndHorizontal ();
-                } else {
-                    foreach (var client in Server.Clients) {
-                        string clientName = (client.Name == "") ? unknownClientNameText : client.Name;
-                        GUILayout.BeginHorizontal ();
-                        GUILayoutExtensions.Light (IsClientActive (client), lightStyle);
-                        GUILayout.Label (clientName + " @ " + client.Address, stretchyLabelStyle);
-                        GUILayout.EndHorizontal ();
-                    }
                 }
             } else {
                 if (GUILayout.Button (startButtonText, buttonStyle)) {

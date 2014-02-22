@@ -242,10 +242,11 @@ namespace KRPC.Server.Net
 
         void DisconnectClient (IClient<byte,byte> client, bool noEvent = false)
         {
-            client.Stream.Close ();
+            var clientAddress = client.Address;
             client.Close ();
             if (!noEvent && OnClientDisconnected != null)
                 OnClientDisconnected (this, new ClientDisconnectedArgs<byte,byte> (client));
+            Logger.WriteLine ("TCPServer: Client disconnected (" + clientAddress + ")");
         }
     }
 }
