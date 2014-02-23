@@ -5,11 +5,11 @@ Compiling kRPC from Source
 
 ### Using the Makefile
 
-1. Install the required dependencies. Libraries required by the plugin are already included in `lib` and the C# Protocol Buffers compiler is already included in `tools`. You will however need to install the MonoDevelop command line tool `mdtool`, Mono runtime and development libraries, and the Protocol Buffers compiler.
+1. Install the required dependencies. Libraries required by the plugin are already included in `lib` and the C# Protocol Buffers compiler is already included in `tools`. You will however need to install the MonoDevelop command line tool `mdtool`, Mono runtime and development libraries, the Protocol Buffers compiler and Inkscape to convert icons to png.
 
  On Linux, you should be able to use your package manager. For example using apt:
 
- `apt-get install mono-complete monodevelop protobuf-compiler`
+ `apt-get install mono-complete monodevelop protobuf-compiler inkscape`
 
  You can also install the Protocol Buffers compiler from source: https://code.google.com/p/protobuf/
 
