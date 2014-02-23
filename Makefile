@@ -1,4 +1,5 @@
-KSP_DIR = "../Kerbal Space Program"
+# Note: This must be an absolute path
+KSP_DIR = "$(shell pwd)/../Kerbal Space Program"
 
 VERSION = $(shell cat VERSION)
 
@@ -24,11 +25,14 @@ CSHARP_PROTOGEN = tools/ProtoGen.exe
 PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCServices/Schema/*.proto)
 
 # Main build targets
-.PHONY: all build dist pre-release release install test ksp clean dist-clean strip-bom
+.PHONY: all configure build dist pre-release release install test ksp clean dist-clean strip-bom
 
 all: build
 
-build: protobuf $(CSHARP_MAIN_PROJECTS)
+configure:
+	test -L lib/KSP_Data || ln -s -t lib/ $(KSP_DIR)/KSP_Data
+
+build: configure protobuf $(CSHARP_MAIN_PROJECTS)
 	make -C src/kRPC/icons
 
 dist: build
@@ -78,6 +82,7 @@ ksp: install TestingTools
 	tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
 
 clean: protobuf-clean
+	-rm -f lib/KSP_Data
 	make -C src/kRPC/icons clean
 	-rm -rf $(CSHARP_BINDIRS) test.log
 	find . -name "*.pyc" -exec rm -rf {} \;

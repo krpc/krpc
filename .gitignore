@@ -126,4 +126,4 @@ src/kRPC/Schema/KRPC.cs.orig
 dist
 
 # KSP libraries
-lib/ksp
+lib/KSP_Data
