@@ -10,3 +10,5 @@ test:
 
 clean:
 	make -C .. protobuf-python-clean
+	find . -name "*.pyc" -exec rm -rf {} \;
+	-rm -f test/server.log
