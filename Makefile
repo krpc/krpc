@@ -69,6 +69,7 @@ release: dist test
 	cd $(DIST_DIR); zip -r krpc-$(VERSION).zip ./*
 
 install: dist
+	test -d $(KSP_DIR)/GameData
 	rm -rf $(KSP_DIR)/GameData/kRPC
 	rm -rf $(KSP_DIR)/GameData/000_Toolbar
 	cp -r $(DIST_DIR)/GameData/* $(KSP_DIR)/GameData/
