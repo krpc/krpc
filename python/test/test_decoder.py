@@ -3,12 +3,12 @@
 import unittest
 import binascii
 from krpc import _Decoder as Decoder
-import proto.KRPC
+import schema.KRPC
 
 class TestDecoder(unittest.TestCase):
 
     def test_decode_message(self):
-        typ = proto.KRPC.Request
+        typ = schema.KRPC.Request
         message = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         request = Decoder.decode(typ, binascii.unhexlify(message))
         self.assertEquals('ServiceName', request.service)
@@ -19,7 +19,7 @@ class TestDecoder(unittest.TestCase):
         self.assertEquals(int(300), value)
 
     def test_decode_message_delimited(self):
-        typ = proto.KRPC.Request
+        typ = schema.KRPC.Request
         message = '1c'+'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         request = Decoder.decode_delimited(typ, binascii.unhexlify(message))
         self.assertEquals('ServiceName', request.service)

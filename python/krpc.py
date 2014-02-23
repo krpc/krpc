@@ -1,4 +1,4 @@
-import proto
+import schema
 import os
 import glob
 import socket
@@ -9,11 +9,11 @@ except ImportError:
     import_module = lambda package: __import__(package, globals(), locals(), [], -1)
 
 # Load all protobuf message types
-_modules = glob.glob(os.path.dirname(__file__)+"/proto/*.py")
+_modules = glob.glob(os.path.dirname(__file__)+"/schema/*.py")
 _modules = filter(lambda f: not os.path.basename(f).startswith('_'), _modules)
 _modules = [os.path.basename(f)[:-3] for f in _modules]
 for module in _modules:
-    import_module('proto.' + module)
+    import_module('schema.' + module)
 
 # TODO: avoid using internals
 from google.protobuf.internal import encoder as protobuf_encoder
@@ -74,8 +74,8 @@ class _Types(object):
             return cls.PROTOBUF_TO_PYTHON_VALUE_TYPE[protobuf_type]
         if '.' in protobuf_type:
             package, typ = protobuf_type.split('.')
-            if package in proto.__dict__ and typ in proto.__dict__[package].__dict__:
-                return proto.__dict__[package].__dict__[typ]
+            if package in schema.__dict__ and typ in schema.__dict__[package].__dict__:
+                return schema.__dict__[package].__dict__[typ]
         raise TypeError(protobuf_type + ' is not a valid protobuf type')
 
     @classmethod
@@ -311,11 +311,11 @@ class KRPCService(BaseService):
 
     def GetStatus(self):
         """ Get status message from the server, including the version number  """
-        return self._invoke('GetStatus', return_type=proto.KRPC.Status)
+        return self._invoke('GetStatus', return_type=schema.KRPC.Status)
 
     def GetServices(self):
         """ Get available services and procedures """
-        return self._invoke('GetServices', return_type=proto.KRPC.Services)
+        return self._invoke('GetServices', return_type=schema.KRPC.Services)
 
 
 class Service(BaseService):
@@ -397,7 +397,7 @@ class Client(object):
             validated_parameters.append(value)
 
         # Build the request object
-        request = proto.KRPC.Request()
+        request = schema.KRPC.Request()
         request.service = service
         request.procedure = procedure
         for parameter in validated_parameters:
@@ -427,7 +427,7 @@ class Client(object):
         """ Receive data from the server and decode it into a KRPC.Response object """
         # FIXME: we might not receive all of the data in one go
         data = self._connection.recv(BUFFER_SIZE)
-        return _Decoder.decode_delimited(proto.KRPC.Response, data)
+        return _Decoder.decode_delimited(schema.KRPC.Response, data)
 
 
 def connect(address=DEFAULT_ADDRESS, port=DEFAULT_PORT, name=None):

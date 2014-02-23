@@ -2,7 +2,7 @@
 
 TEST_SERVER=../../src/TestServer/bin/Debug/TestServer.exe
 
-test -f $TEST_SERVER || make -C ../.. CSHARP_CONFIG=Debug TestServer
+test -f $TEST_SERVER || make -C ../.. CSHARP_CONFIG=Debug protobuf-csharp TestServer
 $TEST_SERVER 1>server.log &
 PID=$!
 echo "Test server running as process $PID"

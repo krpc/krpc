@@ -3,7 +3,7 @@
 import unittest
 import binascii
 from krpc import _Encoder as Encoder
-import proto.KRPC
+import schema.KRPC
 
 class TestEncoder(unittest.TestCase):
 
@@ -32,7 +32,7 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual ('61'*32, binascii.hexlify(message[8:]))
 
     def test_encode_message(self):
-        request = proto.KRPC.Request()
+        request = schema.KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
         data = Encoder.encode(request)
@@ -45,7 +45,7 @@ class TestEncoder(unittest.TestCase):
         self.assertEquals(expected, binascii.hexlify(data))
 
     def test_encode_message_delimited(self):
-        request = proto.KRPC.Request()
+        request = schema.KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
         data = Encoder.encode_delimited(request)

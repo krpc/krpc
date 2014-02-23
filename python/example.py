@@ -8,7 +8,7 @@ This example script is an autopilot that will launch the supplied Test.craft
 
 import krpc
 import time
-import proto # TODO: remove the need for this
+import schema # TODO: remove the need for this
 
 def main():
     # Connect to the server with the default settings
@@ -18,7 +18,7 @@ def main():
     print 'Connected to server, version', ksp.KRPC.GetStatus().version
 
     # TODO: remove the need for the following
-    controls = proto.Control.ControlInputs()
+    controls = schema.Control.ControlInputs()
 
     # Set the throttle to 100% and enable SAS
     ksp.Control.SetThrottle(1)

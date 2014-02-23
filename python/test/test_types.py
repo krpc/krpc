@@ -2,7 +2,7 @@
 
 import unittest
 from krpc import _Types as Types
-import proto.KRPC
+import schema.KRPC
 
 class TestTypes(unittest.TestCase):
 
@@ -16,13 +16,13 @@ class TestTypes(unittest.TestCase):
         self.assertFalse(Types.is_value_type(type(TestTypes)))
         self.assertFalse(Types.is_value_type('int'))
         self.assertFalse(Types.is_value_type('int32'))
-        self.assertFalse(Types.is_value_type(proto.KRPC.Request))
-        self.assertFalse(Types.is_value_type(proto.KRPC.Response))
+        self.assertFalse(Types.is_value_type(schema.KRPC.Request))
+        self.assertFalse(Types.is_value_type(schema.KRPC.Response))
         self.assertFalse(Types.is_value_type(None))
 
     def test_is_message_type(self):
-        self.assertTrue(Types.is_message_type(proto.KRPC.Request))
-        self.assertTrue(Types.is_message_type(proto.KRPC.Response))
+        self.assertTrue(Types.is_message_type(schema.KRPC.Request))
+        self.assertTrue(Types.is_message_type(schema.KRPC.Response))
         self.assertFalse(Types.is_message_type(float))
         self.assertFalse(Types.is_message_type(int))
         self.assertFalse(Types.is_message_type(long))
@@ -49,13 +49,13 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(long, Types.as_python_type('int64'))
         self.assertEqual(bool, Types.as_python_type('bool'))
         self.assertEqual(str, Types.as_python_type('string'))
-        self.assertEqual(proto.KRPC.Response, Types.as_python_type('KRPC.Response'))
-        self.assertEqual(proto.KRPC.Request, Types.as_python_type('KRPC.Request'))
+        self.assertEqual(schema.KRPC.Response, Types.as_python_type('KRPC.Response'))
+        self.assertEqual(schema.KRPC.Request, Types.as_python_type('KRPC.Request'))
         self.assertRaises(TypeError, Types.as_python_type, None)
         self.assertRaises(TypeError, Types.as_python_type, '')
         self.assertRaises(TypeError, Types.as_python_type, 'TestTypes')
         self.assertRaises(TypeError, Types.as_python_type, float)
-        self.assertRaises(TypeError, Types.as_python_type, proto.KRPC.Response)
+        self.assertRaises(TypeError, Types.as_python_type, schema.KRPC.Response)
 
     def test_as_protobuf_type(self):
         self.assertEqual('float', Types.as_protobuf_type(float))
@@ -63,8 +63,8 @@ class TestTypes(unittest.TestCase):
         self.assertEqual('int64', Types.as_protobuf_type(long))
         self.assertEqual('bool', Types.as_protobuf_type(bool))
         self.assertEqual('string', Types.as_protobuf_type(str))
-        self.assertEqual('KRPC.Response', Types.as_protobuf_type(proto.KRPC.Response))
-        self.assertEqual('KRPC.Request', Types.as_protobuf_type(proto.KRPC.Request))
+        self.assertEqual('KRPC.Response', Types.as_protobuf_type(schema.KRPC.Response))
+        self.assertEqual('KRPC.Request', Types.as_protobuf_type(schema.KRPC.Request))
         self.assertRaises(TypeError, Types.as_protobuf_type, None)
         self.assertRaises(TypeError, Types.as_protobuf_type, '')
         self.assertRaises(TypeError, Types.as_protobuf_type, type)

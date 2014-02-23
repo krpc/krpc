@@ -47,7 +47,7 @@ dist: build
 	rm -r $(DIST_DIR)/Toolbar-1.6.0
 	# Python client library
 	mkdir -p $(DIST_DIR)/python
-	cp -r python/*.py python/*.craft python/proto $(DIST_DIR)/python/
+	cp -r python/*.py python/*.craft python/schema $(DIST_DIR)/python/
 	# Schema
 	mkdir -p $(DIST_DIR)/schema
 	cp -r $(PROTOS) $(DIST_DIR)/schema/
@@ -119,7 +119,7 @@ protobuf: protobuf-csharp protobuf-python
 protobuf-csharp: $(PROTOS) $(PROTOS:.proto=.cs)
 
 protobuf-python: $(PROTOS) $(PROTOS:.proto=.py)
-	echo "" > python/proto/__init__.py
+	echo "" > python/schema/__init__.py
 
 protobuf-clean: protobuf-csharp-clean protobuf-python-clean
 	-rm -rf $(PROTOS:.proto=.protobin)
@@ -128,7 +128,7 @@ protobuf-csharp-clean:
 	-rm -rf $(PROTOS:.proto=.cs)
 
 protobuf-python-clean:
-	-rm -rf $(PROTOS:.proto=.py) python/proto
+	-rm -rf $(PROTOS:.proto=.py) python/schema
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
@@ -136,8 +136,8 @@ protobuf-python-clean:
 %.py: %.proto
 	$(PROTOC) $< --python_out=.
 	mv $*_pb2.py $@
-	mkdir -p python/proto
-	cp $@ python/proto/$(notdir $@)
+	mkdir -p python/schema
+	cp $@ python/schema/$(notdir $@)
 
 %.cs: %.protobin
 	$(CSHARP_PROTOGEN) \
