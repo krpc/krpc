@@ -103,7 +103,7 @@ namespace KRPC.Service
                 } catch (Exception e) {
                     throw new RPCException (
                         "Failed to decode parameter " + i + " for " + procedure.FullyQualifiedName + ". " +
-                        "Expected a parameter of type " + ProtocolBuffers.GetMessageTypeName (procedure.ParameterTypes [i]) + ". " +
+                        "Expected a parameter of type " + ProtocolBuffers.GetTypeName (procedure.ParameterTypes [i]) + ". " +
                         e.GetType ().Name + ": " + e.Message);
                 }
             }

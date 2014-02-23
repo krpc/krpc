@@ -47,7 +47,7 @@ dist: build
 	rm -r $(DIST_DIR)/Toolbar-1.6.0
 	# Python client library
 	mkdir -p $(DIST_DIR)/python
-	cp -r python/*.py python/*.craft python/proto $(DIST_DIR)/python/
+	cp -r python/*.py python/*.craft python/schema $(DIST_DIR)/python/
 	# Schema
 	mkdir -p $(DIST_DIR)/schema
 	cp -r $(PROTOS) $(DIST_DIR)/schema/
@@ -55,7 +55,9 @@ dist: build
 pre-release: dist test
 	# Licenses
 	cp LICENSE.txt $(DIST_DIR)/
-	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-license.txt
+	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-csharp-port-license.txt
+	cp python/protobuf-license.txt $(DIST_DIR)/protobuf-license.txt
+	cp python/protobuf-license.txt $(DIST_DIR)/python/protobuf-license.txt
 	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# README
@@ -77,6 +79,7 @@ install: dist
 
 test: $(CSHARP_TEST_PROJECTS)
 	nunit-console -nologo -nothread -trace=Off -output=test.log src/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
+	make -C python test
 
 ksp: install TestingTools
 	cp src/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
@@ -116,7 +119,7 @@ protobuf: protobuf-csharp protobuf-python
 protobuf-csharp: $(PROTOS) $(PROTOS:.proto=.cs)
 
 protobuf-python: $(PROTOS) $(PROTOS:.proto=.py)
-	echo "" > python/proto/__init__.py
+	echo "" > python/schema/__init__.py
 
 protobuf-clean: protobuf-csharp-clean protobuf-python-clean
 	-rm -rf $(PROTOS:.proto=.protobin)
@@ -125,7 +128,7 @@ protobuf-csharp-clean:
 	-rm -rf $(PROTOS:.proto=.cs)
 
 protobuf-python-clean:
-	-rm -rf $(PROTOS:.proto=.py) python/proto
+	-rm -rf $(PROTOS:.proto=.py) python/schema
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
@@ -133,8 +136,8 @@ protobuf-python-clean:
 %.py: %.proto
 	$(PROTOC) $< --python_out=.
 	mv $*_pb2.py $@
-	mkdir -p python/proto
-	cp $@ python/proto/$(notdir $@)
+	mkdir -p python/schema
+	cp $@ python/schema/$(notdir $@)
 
 %.cs: %.protobin
 	$(CSHARP_PROTOGEN) \
