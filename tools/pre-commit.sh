@@ -2,7 +2,7 @@
 # pre-commit.sh
 
 # Install using:
-#   ln -s ../../pre-commit.sh .git/hooks/pre-commit
+#   ln -s ../../tools/pre-commit.sh .git/hooks/pre-commit
 
 exec 1>&2
 

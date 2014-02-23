@@ -11,4 +11,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture ("")]
 [assembly: AssemblyVersion ("0.1.*")]
 [assembly: InternalsVisibleTo ("kRPCTest")]
+[assembly: InternalsVisibleTo ("TestServer")]
 [assembly: InternalsVisibleTo ("DynamicProxyGenAssembly2")]

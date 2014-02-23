@@ -119,11 +119,11 @@ src/kRPC/Schema/*.cs
 src/kRPC/Schema/*.py
 src/kRPCServices/Schema/*.cs
 src/kRPCServices/Schema/*.py
-python/proto/
+python/schema/
 src/kRPC/Schema/KRPC.cs.orig
 
 # Build output
 dist
 
 # KSP libraries
-lib/ksp
+lib/KSP_Data

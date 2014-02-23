@@ -32,22 +32,22 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
+      <HintPath>..\..\lib\moq-4.2.1312.1622\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\lib\nunit-2.6.3\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\lib\ksp\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\lib\ksp\UnityEngine.dll</HintPath>
+      <HintPath>..\..\lib\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\lib\ksp\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\lib\ksp\TDx.TDxInput.dll</HintPath>
+      <HintPath>..\..\lib\\TDx.TDxInput.dll</HintPath>
     </Reference>
     <Reference Include="Google.ProtocolBuffers">
       <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.dll</HintPath>
