@@ -339,7 +339,6 @@ class Service(BaseService):
                              'protobuf type', procedure.return_type, 'not found.')
                 return
 
-        # TODO: check the callback is passed the correct number of parameters
         fn = lambda *parameters: self._invoke(
             procedure.name, parameters=parameters,
             parameter_types=parameter_types, return_type=return_type)
