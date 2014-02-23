@@ -14,38 +14,73 @@ DEFAULT_PORT = 50000
 BUFFER_SIZE = 4096
 DEBUG_LOGGING = True
 
-PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32',
-                        'uint64', 'bool', 'string', 'bytes']
-PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytearray]
+class _Types(object):
 
-PROTOBUF_VALUE_TYPE_MAP = {
-    float: 'float',
-    int: 'int32',
-    long: 'int64',
-    bool: 'bool',
-    str: 'string',
-    #TODO: complete
-}
+    #PROTOBUF_VALUE_TYPES = set(['double', 'float', 'int32', 'int64', 'uint32',
+    #                        'uint64', 'bool', 'string', 'bytes'])
+    PROTOBUF_VALUE_TYPES = set(['float', 'int32', 'int64', 'bool', 'string'])
+    PYTHON_VALUE_TYPES = set([float, int, long, bool, str])
 
-def _is_value_type(typ):
-    return typ in PYTHON_VALUE_TYPES
+    PYTHON_TO_PROTOBUF_VALUE_TYPE = {
+        float: 'float',
+        int: 'int32',
+        long: 'int64',
+        bool: 'bool',
+        str: 'string',
+        #TODO: complete
+    }
+
+    PROTOBUF_TO_PYTHON_VALUE_TYPE = {
+        'float': float,
+        'int32': int,
+        'int64': long,
+        'bool': bool,
+        'string': str,
+        #TODO: complete
+    }
 
 
-def _is_message_type(typ):
-    return 'SerializeToString' in typ.__dict__
+    @classmethod
+    def is_value_type(cls, typ):
+        if type(typ) != type:
+            return False
+        return typ in cls.PYTHON_VALUE_TYPES
 
 
-def _to_protobuf_value_type(typ):
-    return PROTOBUF_VALUE_TYPE_MAP[typ]
+    @classmethod
+    def is_message_type(cls, typ):
+        import google.protobuf.reflection
+        try:
+            return typ.__metaclass__ == google.protobuf.reflection.GeneratedProtocolMessageType
+        except AttributeError:
+            return False
 
+
+    @classmethod
+    def is_valid_type(cls, typ):
+        return cls.is_value_type(typ) or cls.is_message_type(typ)
+
+
+    @classmethod
+    def as_python_type(cls, protobuf_type):
+        if protobuf_type in cls.PROTOBUF_VALUE_TYPES:
+            return cls.PROTOBUF_TO_PYTHON_VALUE_TYPE[protobuf_type]
+        if '.' in protobuf_type:
+            package, typ = protobuf_type.split('.')
+            if package in proto.__dict__ and typ in proto.__dict__[package].__dict__:
+                return proto.__dict__[package].__dict__[typ]
+        raise TypeError(protobuf_type + ' is not a valid protobuf type')
+
+
+    @classmethod
+    def as_protobuf_type(cls, python_type):
+        if cls.is_value_type(python_type):
+            return cls.PYTHON_TO_PROTOBUF_VALUE_TYPE[python_type]
+        if cls.is_message_type(python_type):
+            return python_type.DESCRIPTOR.full_name
+        raise TypeError(str(python_type) + ' does not map to a protobuf type')
 
 class _Encoder(object):
-    @classmethod
-    def _unicode_truncate(cls, string, length, encoding='utf-8'):
-        """ Shorten a unicode string so that it's encoding uses at
-            most length bytes. """
-        encoded = string.encode(encoding=encoding)[:length]
-        return encoded.decode(encoding, 'ignore')
 
     @classmethod
     def hello_message(cls, name=None):
@@ -63,13 +98,21 @@ class _Encoder(object):
         return header + identifier
 
     @classmethod
+    def _unicode_truncate(cls, string, length, encoding='utf-8'):
+        """ Shorten a unicode string so that it's encoding uses at
+            most length bytes. """
+        encoded = string.encode(encoding=encoding)[:length]
+        return encoded.decode(encoding, 'ignore')
+
+
+    @classmethod
     def encode(cls, x):
-        if _is_message_type(type(x)):
+        if _Types.is_message_type(type(x)):
             return x.SerializeToString()
-        elif _is_value_type(type(x)):
+        elif _Types.is_value_type(type(x)):
             return cls._encode_value(x)
         else:
-            raise RuntimeError ('Cannot encode type ' + type(x))
+            raise RuntimeError ('Cannot encode objects of type ' + str(type(x)))
 
     @classmethod
     def encode_delimited(cls, x):
@@ -81,8 +124,8 @@ class _Encoder(object):
 
     @classmethod
     def _encode_value(cls, value):
-        ptyp = _to_protobuf_value_type(type(value))
-        encode_fn = _ValueEncoder.__dict__['encode_'+ptyp].__func__
+        protobuf_type = _Types.as_protobuf_type(type(value))
+        encode_fn = _ValueEncoder.__dict__['encode_' + protobuf_type].__func__
         return encode_fn(_ValueEncoder, value)
 
 
@@ -134,9 +177,9 @@ class _Decoder(object):
     @classmethod
     def decode(cls, typ, data):
         """ Given a python type, and serialized data, decode the value """
-        if _is_message_type(typ):
+        if _Types.is_message_type(typ):
             return cls._decode_message(typ, data)
-        elif _is_value_type(typ):
+        elif _Types.is_value_type(typ):
             return cls._decode_value(typ, data)
         else:
             raise RuntimeError ('Cannot decode type ' + typ)
@@ -156,8 +199,8 @@ class _Decoder(object):
 
     @classmethod
     def _decode_value(cls, typ, data):
-        ptyp = _to_protobuf_value_type(typ)
-        decode_fn = _ValueDecoder.__dict__['decode_'+ptyp].__func__
+        protobuf_type = _Types.as_protobuf_type(typ)
+        decode_fn = _ValueDecoder.__dict__['decode_' + protobuf_type].__func__
         return decode_fn(_ValueDecoder, data)
 
 
@@ -179,7 +222,7 @@ class _ValueDecoder(object):
     def decode_float(cls, data):
         # The following code is taken from google.protobuf.internal.decoder._FloatDecoder
         # Copyright 2008, Google Inc.
-        # See licence-protobuf.txt, distributed with this file
+        # See license-protobuf.txt, distributed with this file
 
         # We expect a 32-bit value in little-endian byte order. Bit 1 is the sign
         # bit, bits 2-9 represent the exponent, and bits 10-32 are the significand.
@@ -219,24 +262,13 @@ class _ValueDecoder(object):
 class Logger(object):
 
     @classmethod
-    def debug(cls, *args):
+    def info(cls, *args):
         print ' '.join(str(x) for x in args)
 
-
-def _load_protobuf_service_types(service):
-    """ Import the compiled protobuf message types for the given service """
-    try:
-        import_module('proto.' + service)
-    except ImportError:
-        Logger.debug('Failed to load protobuf message types for service', service)
-        pass
-
-
-def _protobuf_type_exists(typ):
-    """ Returns true if the given protobuf message type exists,
-        where type is of the form PackageName.TypeName """
-    package, typ = typ.split(".")
-    return package in proto.__dict__ and typ in proto.__dict__[package].__dict__
+    @classmethod
+    def debug(cls, *args):
+        if DEBUG_LOGGING:
+            print ' '.join(str(x) for x in args)
 
 
 class BaseService(object):
@@ -258,11 +290,11 @@ class KRPCService(BaseService):
 
     def GetStatus(self):
         """ Get status message from the server, including the version number  """
-        return self._invoke('GetStatus', return_type='KRPC.Status')
+        return self._invoke('GetStatus', return_type=proto.KRPC.Status)
 
     def GetServices(self):
         """ Get available services and procedures """
-        return self._invoke('GetServices', return_type='KRPC.Services')
+        return self._invoke('GetServices', return_type=proto.KRPC.Services)
 
 
 class Service(BaseService):
@@ -272,29 +304,31 @@ class Service(BaseService):
         """ Create a service from a KRPC.Service object received from a call to KRPC.GetServices() """
         super(Service, self).__init__(client, service.name)
         self._name = service.name
-        # Load the protobuf message types
-        _load_protobuf_service_types(self._name)
-        # Add all the procedures
         for procedure in service.procedures:
             self._add_procedure(procedure)
 
     def _add_procedure(self, procedure):
         """ Add a procedure to this service, from a KRPC.Procedure object """
         # TODO: make the callback validate the parameter types
+        parameter_types = []
         for parameter_type in procedure.parameter_types:
-            if not _protobuf_type_exists(parameter_type):
-                Logger.debug('Failed to add procedure', self._name, procedure.name, '; ' +
+            try:
+                parameter_types.append(_Types.as_python_type(parameter_type))
+            except TypeError:
+                Logger.info('Failed to add procedure', self._name, procedure.name, '; ' +
                              'protobuf type', parameter_type, 'not found.')
                 return
 
-        has_return_type = procedure.HasField('return_type')
-        if has_return_type and not _protobuf_type_exists(procedure.return_type):
-            Logger.debug('Failed to add procedure', self._name, procedure.name, '; ' +
-                         'protobuf type', procedure.return_type, 'not found.')
-            return
+        return_type = None
+        if procedure.HasField('return_type'):
+            try:
+                return_type = _Types.as_python_type(procedure.return_type)
+            except TypeError:
+                Logger.info('Failed to add procedure', self._name, procedure.name, '; ' +
+                             'protobuf type', procedure.return_type, 'not found.')
+                return
 
         # TODO: check the callback is passed the correct number of parameters
-        return_type = procedure.return_type if procedure.HasField('return_type') else None
         fn = lambda *parameters: self._invoke(procedure.name, parameters=parameters, return_type=return_type)
         self.__dict__[procedure.name] = fn
 
@@ -330,7 +364,7 @@ class Client(object):
         request.service = service
         request.procedure = procedure
         for parameter in parameters:
-            request.parameters.append(parameter.SerializeToString())
+            request.parameters.append(_Encoder.encode(parameter))
 
         # Send the request
         self._send_request(request)
@@ -343,21 +377,20 @@ class Client(object):
         # Decode the response and return the (optional) result
         result = None
         if return_type is not None:
-            package, message_type = return_type.split('.')
-            result = proto.__dict__[package].__dict__[message_type]()
-            result.ParseFromString(response.return_value)
+            result = _Decoder.decode(return_type, response.return_value)
+
         return result
 
     def _send_request(self, request):
         """ Send a KRPC.Request object to the server """
-        data = _Encoder.encode_delimited()
+        data = _Encoder.encode_delimited(request)
         self._connection.send(data)
 
     def _receive_response(self):
         """ Receive data from the server and decode it into a KRPC.Response object """
-        data = self._connection.recv(BUFFER_SIZE)
         # FIXME: we might not receive all of the data in one go
-        return Decoder.decode(proto.KRPC.Response, data)
+        data = self._connection.recv(BUFFER_SIZE)
+        return _Decoder.decode_delimited(proto.KRPC.Response, data)
 
 def connect(address=DEFAULT_ADDRESS, port=DEFAULT_PORT, name=None):
     """
