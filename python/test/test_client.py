@@ -4,10 +4,10 @@ import unittest
 import binascii
 import krpc
 
-class TestServer(unittest.TestCase):
+class TestClient(unittest.TestCase):
 
     def setUp(self):
-        self.ksp = krpc.connect(name='TestServer')
+        self.ksp = krpc.connect(name='TestClient')
 
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.ksp.TestService.FloatToString(float(3.14159)))
