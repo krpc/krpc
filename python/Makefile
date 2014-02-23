@@ -6,7 +6,7 @@ protobuf:
 	make -C .. protobuf-python
 
 test:
-	PYTHONPATH=`pwd` test/test.py
+	(cd test; ./run.sh)
 
 clean:
 	make -C .. protobuf-python-clean
