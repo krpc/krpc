@@ -1,5 +1,6 @@
 import proto.KRPC
 import socket
+import itertools
 try:
     import importlib.import_module as import_module
 except ImportError:
@@ -13,6 +14,7 @@ DEFAULT_ADDRESS = '127.0.0.1'
 DEFAULT_PORT = 50000
 BUFFER_SIZE = 4096
 DEBUG_LOGGING = True
+
 
 class _Types(object):
 
@@ -39,13 +41,11 @@ class _Types(object):
         #TODO: complete
     }
 
-
     @classmethod
     def is_value_type(cls, typ):
         if type(typ) != type:
             return False
         return typ in cls.PYTHON_VALUE_TYPES
-
 
     @classmethod
     def is_message_type(cls, typ):
@@ -55,11 +55,9 @@ class _Types(object):
         except AttributeError:
             return False
 
-
     @classmethod
     def is_valid_type(cls, typ):
         return cls.is_value_type(typ) or cls.is_message_type(typ)
-
 
     @classmethod
     def as_python_type(cls, protobuf_type):
@@ -71,7 +69,6 @@ class _Types(object):
                 return proto.__dict__[package].__dict__[typ]
         raise TypeError(protobuf_type + ' is not a valid protobuf type')
 
-
     @classmethod
     def as_protobuf_type(cls, python_type):
         if cls.is_value_type(python_type):
@@ -79,7 +76,6 @@ class _Types(object):
         if cls.is_message_type(python_type):
             return python_type.DESCRIPTOR.full_name
         raise TypeError(str(python_type) + ' does not map to a protobuf type')
-
 
     @classmethod
     def coerce_to(cls, value, typ):
@@ -94,6 +90,7 @@ class _Types(object):
             return int(value)
         else:
             return long(value)
+
 
 class _Encoder(object):
 
@@ -293,8 +290,8 @@ class BaseService(object):
         self._client = client
         self._name = name
 
-    def _invoke(self, procedure, parameters=[], return_type=None, **kwargs):
-        return self._client._invoke(self._name, procedure, parameters, return_type, **kwargs)
+    def _invoke(self, procedure, parameters=[], parameter_types=[], return_type=None, **kwargs):
+        return self._client._invoke(self._name, procedure, parameters, parameter_types, return_type, **kwargs)
 
 
 class KRPCService(BaseService):
@@ -324,7 +321,6 @@ class Service(BaseService):
 
     def _add_procedure(self, procedure):
         """ Add a procedure to this service, from a KRPC.Procedure object """
-        # TODO: make the callback validate the parameter types
         parameter_types = []
         for parameter_type in procedure.parameter_types:
             try:
@@ -344,7 +340,9 @@ class Service(BaseService):
                 return
 
         # TODO: check the callback is passed the correct number of parameters
-        fn = lambda *parameters: self._invoke(procedure.name, parameters=parameters, return_type=return_type)
+        fn = lambda *parameters: self._invoke(
+            procedure.name, parameters=parameters,
+            parameter_types=parameter_types, return_type=return_type)
         self.__dict__[procedure.name] = fn
 
 
@@ -370,15 +368,31 @@ class Client(object):
             if service.name != 'KRPC':
                 self.__dict__[service.name] = Service(self, service)
 
-    def _invoke(self, service, procedure, parameters=[], return_type=None, **kwargs):
+    def _invoke(self, service, procedure, parameters=[], parameter_types=[], return_type=None, **kwargs):
         """ Execute an RPC """
 
+        # Validate the parameter types
+        validated_parameters = []
+        if len(parameters) != len(parameter_types):
+           raise RPCError(
+               'Wrong number of parameters for ' + procedure + '. ' +
+               'Expected ' + len(parameter_types) + ', got ' + len(parameters) + '.')
+        for i, (value, typ) in enumerate(itertools.izip(parameters, parameter_types)):
+            if type(value) != typ:
+                # Try coercing to the correct type
+                try:
+                    value = _Types.coerce_to(value, typ)
+                except ValueError:
+                    raise ValueError(
+                        'Incorrect type for parameter ' + str(i) + ' of ' + procedure + '. ' +
+                        'Expected ' + str(typ) + ', got ' + str(type(value)) + '.')
+            validated_parameters.append(value)
+
         # Build the request object
-        # TODO: validate the request object, so we catch it here instead of in an error response from the server
         request = proto.KRPC.Request()
         request.service = service
         request.procedure = procedure
-        for parameter in parameters:
+        for parameter in validated_parameters:
             request.parameters.append(_Encoder.encode(parameter))
 
         # Send the request
@@ -406,6 +420,7 @@ class Client(object):
         # FIXME: we might not receive all of the data in one go
         data = self._connection.recv(BUFFER_SIZE)
         return _Decoder.decode_delimited(proto.KRPC.Response, data)
+
 
 def connect(address=DEFAULT_ADDRESS, port=DEFAULT_PORT, name=None):
     """

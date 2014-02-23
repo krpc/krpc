@@ -20,8 +20,15 @@ class TestClient(unittest.TestCase):
     def test_multiple_value_parameters(self):
         self.assertEqual('3.14159', self.ksp.TestService.AddMultipleValues(0.14159, 1, 2))
 
+    def test_auto_value_type_conversion(self):
+        self.assertEqual('42', self.ksp.TestService.FloatToString(42))
+        self.assertEqual('42', self.ksp.TestService.FloatToString(42L))
+        self.assertEqual('6', self.ksp.TestService.AddMultipleValues(1L, 2L, 3L))
+        self.assertRaises(ValueError, self.ksp.TestService.FloatToString, '42')
+
     def test_incorrect_parameter_type(self):
-        self.ksp.TestService.FloatToString(42)
+        self.assertRaises(ValueError, self.ksp.TestService.FloatToString, 'foo')
+        self.assertRaises(ValueError, self.ksp.TestService.AddMultipleValues, 0.14159, 'foo', 2)
 
 if __name__ == '__main__':
     unittest.main()
