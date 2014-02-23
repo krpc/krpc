@@ -39,18 +39,8 @@ dist: build
 	rm -rf $(DIST_DIR)
 	mkdir -p $(DIST_DIR)
 	mkdir -p $(DIST_DIR)/GameData/kRPC
-	# Licenses
-	cp LICENSE.txt $(DIST_DIR)/
-	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-license.txt
-	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
-	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
-	# README
-	markdown README.md | html2text -rcfile tools/html2textrc | sed -e "/Compiling from Source/,//d" > $(DIST_DIR)/README.txt
-	cp $(DIST_DIR)/README.txt $(DIST_DIR)/GameData/kRPC/
 	# Plugin files
 	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
-	monodis --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
-	monodis --assembly $(DIST_DIR)/GameData/kRPC/kRPCServices.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCServices-version.txt
 	# Toolbar
 	unzip lib/toolbar/Toolbar-1.6.0.zip -d $(DIST_DIR)
 	mv $(DIST_DIR)/Toolbar-1.6.0/GameData/* $(DIST_DIR)/GameData/
@@ -63,6 +53,17 @@ dist: build
 	cp -r $(PROTOS) $(DIST_DIR)/schema/
 
 pre-release: dist test
+	# Licenses
+	cp LICENSE.txt $(DIST_DIR)/
+	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-license.txt
+	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
+	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
+	# README
+	markdown README.md | html2text -rcfile tools/html2textrc | sed -e "/Compiling from Source/,//d" > $(DIST_DIR)/README.txt
+	cp $(DIST_DIR)/README.txt $(DIST_DIR)/GameData/kRPC/
+	# Plugin files
+	monodis --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
+	monodis --assembly $(DIST_DIR)/GameData/kRPC/kRPCServices.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCServices-version.txt
 	cd $(DIST_DIR); zip -r krpc-$(VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
 
 release: dist test
