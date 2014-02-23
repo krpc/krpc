@@ -18,12 +18,10 @@ def main():
     print 'Connected to server, version', ksp.KRPC.GetStatus().version
 
     # TODO: remove the need for the following
-    throttle = proto.Control.Throttle()
     controls = proto.Control.ControlInputs()
 
     # Set the throttle to 100% and enable SAS
-    throttle.throttle = 1
-    ksp.Control.SetThrottle(throttle)
+    ksp.Control.SetThrottle(1)
     ksp.Control.EnableSAS()
 
     # Countdown...
@@ -83,8 +81,7 @@ def main():
     # Disable the control inputs and coast to apoapsis
     print 'Coasting to apoapsis...'
     ksp.Control.DisableSAS()
-    throttle.throttle = 0
-    ksp.Control.SetThrottle(throttle)
+    ksp.Control.SetThrottle(0)
 
     # TODO: add code to circularise the orbit
 
