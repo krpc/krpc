@@ -177,35 +177,34 @@ class _ValueDecoder(object):
 
     @classmethod
     def decode_float(cls, data):
+        # The following code is taken from google.protobuf.internal.decoder._FloatDecoder
+        # Copyright 2008, Google Inc.
+        # See licence-protobuf.txt, distributed with this file
 
-        # Taken from protobuf implementation
-        def FloatDecode(buffer, pos):
-            # We expect a 32-bit value in little-endian byte order.  Bit 1 is the sign
-            # bit, bits 2-9 represent the exponent, and bits 10-32 are the significand.
-            new_pos = pos + 4
-            float_bytes = buffer[pos:new_pos]
+        # We expect a 32-bit value in little-endian byte order. Bit 1 is the sign
+        # bit, bits 2-9 represent the exponent, and bits 10-32 are the significand.
+        float_bytes = data[0:4]
 
-            # If this value has all its exponent bits set, then it's non-finite.
-            # In Python 2.4, struct.unpack will convert it to a finite 64-bit value.
-            # To avoid that, we parse it specially.
-            if ((float_bytes[3] in '\x7F\xFF')
-                and (float_bytes[2] >= '\x80')):
-              # If at least one significand bit is set...
-              if float_bytes[0:3] != '\x00\x00\x80':
-                return (_NAN, new_pos)
-              # If sign bit is set...
-              if float_bytes[3] == '\xFF':
-                return (_NEG_INF, new_pos)
-              return (_POS_INF, new_pos)
+        # If this value has all its exponent bits set, then it's non-finite.
+        # In Python 2.4, struct.unpack will convert it to a finite 64-bit value.
+        # To avoid that, we parse it specially.
+        if ((float_bytes[3] in '\x7F\xFF')
+            and (float_bytes[2] >= '\x80')):
+          # If at least one significand bit is set...
+          if float_bytes[0:3] != '\x00\x00\x80':
+            return _NAN
+          # If sign bit is set...
+          if float_bytes[3] == '\xFF':
+            return _NEG_INF
+          return _POS_INF
 
-            # Note that we expect someone up-stack to catch struct.error and convert
-            # it to _DecodeError -- this way we don't have to set up exception-
-            # handling blocks every time we parse one value.
-            import struct
-            result = struct.unpack('<f', float_bytes)[0]
-            return (result, new_pos)
+        # Note that we expect someone up-stack to catch struct.error and convert
+        # it to _DecodeError -- this way we don't have to set up exception-
+        # handling blocks every time we parse one value.
+        import struct
+        return struct.unpack('<f', float_bytes)[0]
 
-        return FloatDecode(data, 0)[0]
+        # End of code taken from google.protobuf.internal.decoder._FloatDecoder
 
     @classmethod
     def decode_bool(cls, data):
