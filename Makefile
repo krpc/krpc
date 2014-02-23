@@ -55,7 +55,9 @@ dist: build
 pre-release: dist test
 	# Licenses
 	cp LICENSE.txt $(DIST_DIR)/
-	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-license.txt
+	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-csharp-port-license.txt
+	cp python/protobuf-license.txt $(DIST_DIR)/protobuf-license.txt
+	cp python/protobuf-license.txt $(DIST_DIR)/python/protobuf-license.txt
 	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# README

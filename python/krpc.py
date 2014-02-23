@@ -243,7 +243,7 @@ class _ValueDecoder(object):
     def decode_float(cls, data):
         # The following code is taken from google.protobuf.internal.decoder._FloatDecoder
         # Copyright 2008, Google Inc.
-        # See license-protobuf.txt, distributed with this file
+        # See protobuf-license.txt, distributed with this file
 
         # We expect a 32-bit value in little-endian byte order. Bit 1 is the sign
         # bit, bits 2-9 represent the exponent, and bits 10-32 are the significand.
