@@ -71,5 +71,16 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(TypeError, Types.as_protobuf_type, TestTypes)
         self.assertRaises(TypeError, Types.as_protobuf_type, 'KRPC.Response')
 
+    def test_coerce_to(self):
+        self.assertEqual(42, Types.coerce_to(42.0, int))
+        self.assertEqual(int, type(Types.coerce_to(42.0, int)))
+        self.assertEqual(42L, Types.coerce_to(42.0, long))
+        self.assertEqual(long, type(Types.coerce_to(42.0, long)))
+        self.assertEqual(42.0, Types.coerce_to(42, float))
+        self.assertEqual(float, type(Types.coerce_to(42L, float)))
+        self.assertRaises(ValueError, Types.coerce_to, None, float)
+        self.assertRaises(ValueError, Types.coerce_to, '', float)
+        self.assertRaises(ValueError, Types.coerce_to, True, float)
+
 if __name__ == '__main__':
     unittest.main()

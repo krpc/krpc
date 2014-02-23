@@ -80,6 +80,21 @@ class _Types(object):
             return python_type.DESCRIPTOR.full_name
         raise TypeError(str(python_type) + ' does not map to a protobuf type')
 
+
+    @classmethod
+    def coerce_to(cls, value, typ):
+        """ Coerce a value to the specified type. Raises ValueError if the coercion is not possible. """
+        # See http://docs.python.org/2/reference/datamodel.html#coercion-rules
+        numeric_types = (float, int, long)
+        if type(value) not in numeric_types or typ not in numeric_types:
+            raise ValueError('Failed to coerce value of type ' + str(type(value)) + ' to type ' + str(typ))
+        if typ == float:
+            return float(value)
+        elif typ == int:
+            return int(value)
+        else:
+            return long(value)
+
 class _Encoder(object):
 
     @classmethod
