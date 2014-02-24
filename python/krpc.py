@@ -335,7 +335,7 @@ class Service(BaseService):
             try:
                 parameter_types.append(_Types.as_python_type(parameter_type))
             except TypeError:
-                Logger.info('Failed to add procedure', self._name, procedure.name, '; ' +
+                Logger.info('Failed to add procedure', self._name + '.' + procedure.name, '; ' +
                              'protobuf type', parameter_type, 'not found.')
                 return
 
