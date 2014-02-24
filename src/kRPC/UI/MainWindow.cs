@@ -14,6 +14,8 @@ namespace KRPC.UI
 
         public KRPCServer Server { private get; set; }
 
+        public ClientDisconnectDialog ClientDisconnectDialog { private get; set; }
+
         /// <summary>
         /// Errors to display
         /// </summary>
@@ -144,7 +146,7 @@ namespace KRPC.UI
                         GUILayout.Label (description, stretchyLabelStyle);
                         if (GUILayout.Button (new GUIContent (Icons.Instance.buttonDisconnectClient, "Disconnect client"),
                                 buttonStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20))) {
-                            client.Close ();
+                            ClientDisconnectDialog.Show (client);
                         }
                         GUILayout.EndHorizontal ();
                     }

@@ -12,6 +12,7 @@ namespace KRPC
         IButton toolbarButton;
         MainWindow mainWindow;
         ClientConnectingDialog clientConnectingDialog;
+        ClientDisconnectDialog clientDisconnectDialog;
 
         public void Awake ()
         {
@@ -20,12 +21,16 @@ namespace KRPC
             server = new KRPCServer (config.Address, config.Port);
             server.GetUniversalTime = Planetarium.GetUniversalTime;
 
+            // Disconnect client dialog
+            clientDisconnectDialog = gameObject.AddComponent<ClientDisconnectDialog> ();
+
             // Create main window
             mainWindow = gameObject.AddComponent<MainWindow> ();
             mainWindow.Config = config;
             mainWindow.Server = server;
             mainWindow.Visible = config.MainWindowVisible;
             mainWindow.Position = config.MainWindowPosition;
+            mainWindow.ClientDisconnectDialog = clientDisconnectDialog;
 
             // Create new connection dialog
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog> ();
