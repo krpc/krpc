@@ -99,6 +99,9 @@
     <Compile Include="Server\Net\NetworkInformation.cs" />
     <Compile Include="Server\ServerException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\ClientDisconnectedException.cs" />
+    <Compile Include="UI\Icons.cs" />
+    <Compile Include="UI\ClientDisconnectDialog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

@@ -1,6 +1,6 @@
-ICONS = icon-online.png icon-offline.png
+ICONS = toolbar-online.png toolbar-offline.png button-disconnect-client.png
 
-BINDIR = ../bin
+BINDIR = ../bin/icons
 BINICONS = $(foreach ICON,$(ICONS),$(BINDIR)/$(ICON))
 
 all: $(BINICONS)
@@ -10,6 +10,6 @@ clean:
 
 $(BINICONS): $(BINDIR)/%.png: %.svg
 	mkdir -p $(BINDIR)
-	inkscape --export-png=$@ $< --export-width=24 --export-height=24
+	inkscape --export-png=$@ $<
 
 .PHONY: all clean

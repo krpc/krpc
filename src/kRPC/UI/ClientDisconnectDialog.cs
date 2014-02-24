@@ -1,0 +1,45 @@
+using UnityEngine;
+using KRPC.Server;
+using KRPC.Utils;
+
+namespace KRPC.UI
+{
+    sealed class ClientDisconnectDialog : OptionDialog
+    {
+        IClient client;
+
+        protected override void Init ()
+        {
+            Title = "kRPC";
+            Skin = GUI.skin;
+            Options.Add (new DialogOption ("Yes, disconnect the client", () => {
+                client.Close ();
+                Close ();
+            }));
+            Options.Add (new DialogOption ("No, don't disconnect the client", () => {
+                Close ();
+            }));
+        }
+
+        protected override void Opened ()
+        {
+            if (client.Name == "")
+                Message = "Are you sure you want to disconnect the client at address " + client.Address + "?";
+            else
+                Message = "Are you sure you want to disconnect '" + client.Name + "' at address " + client.Address + "?";
+        }
+
+        protected override void Closed ()
+        {
+            client = null;
+        }
+
+        public void Show (IClient client)
+        {
+            if (!Visible) {
+                this.client = client;
+                Open ();
+            }
+        }
+    }
+}

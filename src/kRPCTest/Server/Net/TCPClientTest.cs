@@ -36,6 +36,16 @@ namespace KRPCTest.Server.Net
         {
             Assert.IsTrue (new TCPClient (0, null).GetHashCode () == new TCPClient (0, null).GetHashCode ());
         }
+
+        [Test]
+        public void NotConnected ()
+        {
+            var client = new TCPClient (1, new System.Net.Sockets.TcpClient ());
+            Assert.IsFalse (client.Connected);
+            Assert.AreEqual ("", client.Name);
+            Assert.AreEqual ("", client.Address);
+            Assert.DoesNotThrow (() => client.Close ());
+        }
     }
 }
 

@@ -14,7 +14,11 @@ namespace KRPC.Server.Net
 
         public bool DataAvailable {
             get {
-                return stream.DataAvailable;
+                try {
+                    return stream.DataAvailable;
+                } catch {
+                    return false;
+                }
             }
         }
 
