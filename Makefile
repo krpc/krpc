@@ -91,6 +91,7 @@ clean: protobuf-clean
 	make -C src/kRPC/icons clean
 	-rm -rf $(CSHARP_BINDIRS) test.log
 	find . -name "*.pyc" -exec rm -rf {} \;
+	-rm -f KSP.log TestResults.xml
 
 dist-clean: clean
 	-rm -rf dist
