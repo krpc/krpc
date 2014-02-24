@@ -26,12 +26,13 @@ namespace KRPC.UI
                 visible = value;
             }
         }
-        // TODO: ensure position is not outside the KSP window
+
         Rect position = new Rect ();
 
         public Rect Position {
             get { return position; }
             set {
+                ConstrainToScreen (ref value);
                 if (OnMoved != null && position != value)
                     OnMoved (this, new MovedArgs (value));
                 position = value;
@@ -67,6 +68,15 @@ namespace KRPC.UI
         void DrawWindow (int windowId)
         {
             Draw ();
+        }
+
+        void ConstrainToScreen (ref Rect rect)
+        {
+            const int border = 10;
+            rect.x = Math.Max (-(rect.width - border), rect.x);
+            rect.y = Math.Max (-(rect.height - border), rect.y);
+            rect.x = Math.Min (Screen.width - border, rect.x);
+            rect.y = Math.Min (Screen.height - border, rect.y);
         }
     }
 }
