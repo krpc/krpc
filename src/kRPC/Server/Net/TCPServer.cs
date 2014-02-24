@@ -34,11 +34,6 @@ namespace KRPC.Server.Net
         /// </summary>
         ushort port;
         /// <summary>
-        /// The actual local address of the server. Will be identical to
-        /// localAdress, unless localAddress was set to IPAddress.Any.
-        /// </summary>
-        IPAddress actualAddress;
-        /// <summary>
         /// The actual local port number of the server. Will be identical to
         /// port, unless port was set to 0.
         /// </summary>
@@ -92,7 +87,6 @@ namespace KRPC.Server.Net
                 throw new ServerException (socketError);
             }
             var endPoint = (IPEndPoint)tcpListener.LocalEndpoint;
-            actualAddress = endPoint.Address;
             actualPort = (ushort)endPoint.Port;
             startedEvent = new AutoResetEvent (false);
             listenerThread = new Thread (ListenerThread);
@@ -108,7 +102,10 @@ namespace KRPC.Server.Net
             if (OnStarted != null)
                 OnStarted (this, EventArgs.Empty);
             Logger.WriteLine ("TCPServer: started successfully");
-            Logger.WriteLine ("TCPServer: listening on local address " + actualAddress);
+            if (address.ToString () == "0.0.0.0")
+                Logger.WriteLine ("TCPServer: listening on all local network interfaces");
+            else
+                Logger.WriteLine ("TCPServer: listening on local address " + address);
             Logger.WriteLine ("TCPServer: listening on port " + actualPort);
         }
 
@@ -203,8 +200,7 @@ namespace KRPC.Server.Net
         /// Local address that the server listens on. Server must be restarted for changes to take effect.
         /// </summary>
         public IPAddress Address {
-            //FIXME: returns 0.0.0.0 instead of actual ip address, when local address is set to IPAddress.Any and the server has started
-            get { return actualAddress; }
+            get { return address; }
             set { address = value; }
         }
 

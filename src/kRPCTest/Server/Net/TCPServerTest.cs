@@ -149,6 +149,27 @@ namespace KRPCTest.Server.Net
             }
             Assert.Fail ();
         }
+
+        [Test]
+        public void BindToAnyAddress ()
+        {
+            bool serverStarted = false;
+            bool serverStopped = false;
+            var server = new TCPServer (IPAddress.Any, 0);
+            server.OnStarted += (s, e) => serverStarted = true;
+            server.OnStopped += (s, e) => serverStopped = true;
+            Assert.IsFalse (server.Running);
+            server.Start ();
+            Assert.IsTrue (server.Running);
+            Assert.AreEqual (0, server.Clients.Count ());
+            Assert.AreEqual (IPAddress.Any, server.Address);
+            Assert.IsTrue (server.Port > 0);
+            server.Stop ();
+            Assert.IsFalse (server.Running);
+            Assert.AreEqual (0, server.Clients.Count ());
+            Assert.IsTrue (serverStarted);
+            Assert.IsTrue (serverStopped);
+        }
     }
 }
 
