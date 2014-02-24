@@ -47,6 +47,22 @@ namespace KRPCTest.Service
         {
             return Service.ProcedureWithValueTypes (x, y, z);
         }
+
+        [KRPCProperty]
+        public static string PropertyWithGetAndSet {
+            get { return Service.PropertyWithGetAndSet; }
+            set { Service.PropertyWithGetAndSet = value; }
+        }
+
+        [KRPCProperty]
+        public static string PropertyWithGet {
+            get { return Service.PropertyWithGet; }
+        }
+
+        [KRPCProperty]
+        public static string PropertyWithSet {
+            set { Service.PropertyWithSet = value; }
+        }
     }
 }
 

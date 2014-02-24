@@ -30,5 +30,11 @@ class TestClient(unittest.TestCase):
         self.assertRaises(ValueError, self.ksp.TestService.FloatToString, 'foo')
         self.assertRaises(ValueError, self.ksp.TestService.AddMultipleValues, 0.14159, 'foo', 2)
 
+    def test_properties(self):
+        self.ksp.TestService.StringProperty = 'foo';
+        self.assertEqual('foo', self.ksp.TestService.StringProperty)
+        self.assertEqual('foo', self.ksp.TestService.StringPropertyPrivateSet)
+        self.ksp.TestService.StringPropertyPrivateGet = 'foo'
+
 if __name__ == '__main__':
     unittest.main()

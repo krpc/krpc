@@ -3,6 +3,7 @@ import os
 import glob
 import socket
 import itertools
+import re
 try:
     import importlib.import_module as import_module
 except ImportError:
@@ -328,6 +329,24 @@ class Service(BaseService):
         for procedure in service.procedures:
             self._add_procedure(procedure)
 
+        properties = {}
+        for procedure in service.procedures:
+            for attribute in procedure.attributes:
+                match = re.match(r'^Property\.(Get|Set)\((.+)\)$', attribute)
+                if match:
+                    typ, name = match.groups((1,2))
+                    if name not in properties:
+                        properties[name] = [None,None]
+                    if typ == 'Get':
+                        properties[name][0] = procedure
+                    else:
+                        properties[name][1] = procedure
+                    break
+
+        for name, methods in properties.items():
+            self._add_property(name, methods[0], methods[1])
+
+
     def _add_procedure(self, procedure):
         """ Add a procedure to this service, from a KRPC.Procedure object """
         parameter_types = []
@@ -352,6 +371,15 @@ class Service(BaseService):
             procedure.name, parameters=parameters,
             parameter_types=parameter_types, return_type=return_type)
         self.__dict__[procedure.name] = fn
+
+
+    def _add_property(self, name, getter=None, setter=None):
+        fget = fset = None
+        if getter:
+            fget = lambda s: self.__dict__[getter.name]()
+        if setter:
+            fset = lambda s, value: self.__dict__[setter.name](value)
+        setattr(self.__class__, name, property(fget, fset))
 
 
 class RPCError(RuntimeError):
@@ -384,7 +412,7 @@ class Client(object):
         if len(parameters) != len(parameter_types):
            raise RPCError(
                'Wrong number of parameters for ' + procedure + '. ' +
-               'Expected ' + len(parameter_types) + ', got ' + len(parameters) + '.')
+               'Expected ' + str(len(parameter_types)) + ', got ' + str(len(parameters)) + '.')
         for i, (value, typ) in enumerate(itertools.izip(parameters, parameter_types)):
             if type(value) != typ:
                 # Try coercing to the correct type

@@ -41,5 +41,18 @@ namespace KRPC.Utils
                 }
             }
         }
+
+        /// <summary>
+        /// Returns all properties within a given type that have the specified attribute.
+        /// </summary>
+        public static IEnumerable<PropertyInfo> GetPropertiesWith<TAttribute> (Type cls, bool inherit = false)
+            where TAttribute : Attribute
+        {
+            foreach (var property in cls.GetProperties ()) {
+                if (property.IsDefined (typeof(TAttribute), inherit)) {
+                    yield return property;
+                }
+            }
+        }
     }
 }

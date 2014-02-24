@@ -21,8 +21,8 @@ def main():
     controls = schema.Control.ControlInputs()
 
     # Set the throttle to 100% and enable SAS
-    ksp.Control.SetThrottle(1)
-    ksp.Control.EnableSAS()
+    ksp.Control.Throttle = 1
+    ksp.Control.SAS = True
 
     # Countdown...
     print '3'; time.sleep(1)
@@ -59,11 +59,11 @@ def main():
     print 'Gravity turn...'
     # Disable SAS, pitch the vessel to the west, then hold position using SAS
     # TODO: get the heading from the craft to do this more accurately
-    ksp.Control.DisableSAS()
+    ksp.Control.SAS = False
     controls.yaw = 0.4
     ksp.Control.SetControlInputs(controls)
     time.sleep(2)
-    ksp.Control.EnableSAS()
+    ksp.Control.SAS = True
     controls.yaw = 0
     ksp.Control.SetControlInputs(controls)
 
@@ -80,8 +80,8 @@ def main():
 
     # Disable the control inputs and coast to apoapsis
     print 'Coasting to apoapsis...'
-    ksp.Control.DisableSAS()
-    ksp.Control.SetThrottle(0)
+    ksp.Control.SAS = False
+    ksp.Control.Throttle = 0
 
     # TODO: add code to circularise the orbit
 

@@ -25,6 +25,7 @@ message Procedure {
   required string name = 1;
   repeated string parameter_types = 2;
   optional string return_type = 3;
+  repeated string attributes = 4;
 }
 
 message Status {
