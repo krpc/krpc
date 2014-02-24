@@ -9,11 +9,11 @@ except ImportError:
     import_module = lambda package: __import__(package, globals(), locals(), [], -1)
 
 # Load all protobuf message types
-_modules = glob.glob(os.path.dirname(__file__)+"/schema/*.py")
+_modules = glob.glob(os.path.dirname(schema.__file__)+"/*.py")
 _modules = filter(lambda f: not os.path.basename(f).startswith('_'), _modules)
 _modules = [os.path.basename(f)[:-3] for f in _modules]
 for module in _modules:
-    import_module('schema.' + module)
+    schema = import_module('schema.' + module)
 
 # TODO: avoid using internals
 from google.protobuf.internal import encoder as protobuf_encoder
