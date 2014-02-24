@@ -113,8 +113,8 @@ namespace KRPC.Server.Net
         {
             Logger.WriteLine ("TCPServer: stop requested");
             listenerThread.Abort ();
-            // TODO: add timeout just in case...
-            listenerThread.Join ();
+            if (!listenerThread.Join (3000))
+                throw new ServerException ("Failed to stop TCP listener thread (timed out after 3 seconds)");
 
             // Close all client connections
             foreach (var client in pendingClients) {
