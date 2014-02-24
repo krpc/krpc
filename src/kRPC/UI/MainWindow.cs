@@ -31,7 +31,7 @@ namespace KRPC.UI
         readonly Color errorColor = Color.yellow;
         // Style settings
         GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, buttonStyle,
-            separatorStyle, lightStyle, errorLabelStyle, disconnectClientButtonStyle;
+            separatorStyle, lightStyle, errorLabelStyle;
         const float windowWidth = 280f;
         const float addressWidth = 106f;
         const int addressMaxLength = 15;
@@ -81,8 +81,6 @@ namespace KRPC.UI
             errorLabelStyle.margin = new RectOffset (0, 0, 0, 0);
             errorLabelStyle.stretchWidth = true;
             errorLabelStyle.normal.textColor = errorColor;
-
-            disconnectClientButtonStyle = new GUIStyle (GUI.skin.button);
 
             Errors = new List<string> ();
             address = Config.Address.ToString ();
@@ -144,7 +142,8 @@ namespace KRPC.UI
                         GUILayout.BeginHorizontal ();
                         GUILayoutExtensions.Light (IsClientActive (client), lightStyle);
                         GUILayout.Label (description, stretchyLabelStyle);
-                        if (GUILayout.Button ("x", disconnectClientButtonStyle)) {
+                        if (GUILayout.Button (new GUIContent (Icons.Instance.buttonDisconnectClient, "Disconnect client"),
+                                buttonStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20))) {
                             client.Close ();
                         }
                         GUILayout.EndHorizontal ();
