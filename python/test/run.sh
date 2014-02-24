@@ -9,4 +9,8 @@ echo "Test server running as process $PID"
 # Wait for server to start properly
 sleep 0.1
 PYTHONPATH=`pwd`/.. ./test.py
+ret=$?
 kill $PID
+if [ $ret != 0 ]; then
+  exit $ret
+fi
