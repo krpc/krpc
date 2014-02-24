@@ -7,7 +7,7 @@ DIST_DIR = dist
 DIST_LIBS = \
   lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.dll \
   lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll
-DIST_ICONS = $(wildcard src/kRPC/bin/*.png)
+DIST_ICONS = src/kRPC/bin/icons
 
 CSHARP_MAIN_PROJECTS  = kRPC kRPCServices
 CSHARP_TEST_PROJECTS  = kRPCTest TestServer

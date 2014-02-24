@@ -64,12 +64,12 @@ namespace KRPC
             // Toolbar API
             if (ToolbarManager.ToolbarAvailable) {
                 toolbarButton = ToolbarManager.Instance.add ("kRPC", "ToggleMainWindow");
-                toolbarButton.TexturePath = "kRPC/icon-offline";
+                toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
                 toolbarButton.ToolTip = "kRPC Server";
                 toolbarButton.Visibility = new GameScenesVisibility (GameScenes.FLIGHT);
                 toolbarButton.OnClick += (e) => mainWindow.Visible = !mainWindow.Visible;
-                server.OnStarted += (s, e) => toolbarButton.TexturePath = "kRPC/icon-online";
-                server.OnStopped += (s, e) => toolbarButton.TexturePath = "kRPC/icon-offline";
+                server.OnStarted += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-online";
+                server.OnStopped += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
             } else {
                 // If there is no toolbar button a hidden window can't be shown, so force it to be displayed
                 mainWindow.Visible = true;

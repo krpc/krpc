@@ -9,7 +9,7 @@ namespace KRPC.UI
         /// <summary>
         /// Path to directory in GameData when icons are stored
         /// </summary>
-        const string iconsPath = "kRPC";
+        const string iconsPath = "kRPC/icons";
         public Texture2D buttonDisconnectClient;
         static Icons instance;
 
