@@ -33,8 +33,6 @@ namespace KRPC.Service
                     "and overloading is not permitted. " +
                     "Duplicates are " + String.Join (", ", duplicates));
             }
-            if (Procedures.Count == 0)
-                throw new ServiceException ("Service " + Name + " does not contain any Procedures");
         }
     }
 }
