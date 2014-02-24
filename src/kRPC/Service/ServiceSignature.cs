@@ -14,10 +14,21 @@ namespace KRPC.Service
         public ServiceSignature (Type type)
         {
             Name = type.Name;
-            var procedureTypes = Reflection.GetMethodsWith<KRPCProcedure> (type);
+            var procedures = Reflection.GetMethodsWith<KRPCProcedure> (type);
+            var properties = Reflection.GetPropertiesWith<KRPCProperty> (type).SelectMany (x => x.GetAccessors ());
+            var procedureTypes = procedures.ToList ();
+            procedureTypes.AddRange (properties);
             try {
                 Procedures = procedureTypes
-                    .Select (x => new ProcedureSignature (type.Name, x))
+                    .Select (x => {
+                    if (x.Name.StartsWith ("get_") || x.Name.StartsWith ("set_")) {
+                        string attribute = (x.Name.StartsWith ("get_") ? "Get" : "Set");
+                        attribute = "Property." + attribute + "(" + x.Name.Split ('_') [1] + ")";
+                        return new ProcedureSignature (type.Name, x, attribute);
+                    } else {
+                        return new ProcedureSignature (type.Name, x);
+                    }
+                })
                     .ToDictionary (x => x.Name);
             } catch (ArgumentException) {
                 // Handle procedure name clashes

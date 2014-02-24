@@ -102,6 +102,7 @@
     <Compile Include="Server\ClientDisconnectedException.cs" />
     <Compile Include="UI\Icons.cs" />
     <Compile Include="UI\ClientDisconnectDialog.cs" />
+    <Compile Include="Service\KRPCProperty.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

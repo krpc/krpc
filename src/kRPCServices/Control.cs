@@ -6,6 +6,14 @@ namespace KRPCServices
     [KRPCService]
     static public class Control
     {
+        static bool sas;
+
+        [KRPCProperty]
+        public static bool SAS {
+            get { return sas; }
+            set { sas = value; }
+        }
+
         [KRPCProcedure]
         public static void EnableSAS ()
         {

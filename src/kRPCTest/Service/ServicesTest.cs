@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -5,6 +6,7 @@ using Moq;
 using Google.ProtocolBuffers;
 using KRPC.Schema.KRPC;
 using KRPC.Service;
+using KRPC.Utils;
 
 namespace KRPCTest.Service
 {
@@ -302,6 +304,42 @@ namespace KRPCTest.Service
         }
 
         [Test]
+        public void HandleRequestForPropertyGetter ()
+        {
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.PropertyWithGet).Returns ("foo");
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("get_PropertyWithGet")
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            Assert.AreEqual ("foo", ProtocolBuffers.ReadValue (response.ReturnValue, typeof(string)));
+            mock.Verify (x => x.PropertyWithGet, Times.Once ());
+        }
+
+        [Test]
+        public void HandleRequestForPropertySetter ()
+        {
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.SetupSet (x => x.PropertyWithSet = "foo");
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("set_PropertyWithSet")
+                .AddParameters (ProtocolBuffers.WriteValue ("foo", typeof(string)))
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            Assert.False (response.HasError);
+        }
+
+        [Test]
         public void GetServices ()
         {
             var services = KRPC.Service.KRPC.GetServices ();
@@ -309,16 +347,21 @@ namespace KRPCTest.Service
             Assert.AreEqual (2, services.Services_Count);
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "TestService") {
-                    Assert.AreEqual (6, service.ProceduresCount);
+                    Assert.AreEqual (10, service.ProceduresCount);
+                    int found = 0;
                     foreach (KRPC.Schema.KRPC.Procedure method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
                             Assert.AreEqual (0, method.ParameterTypesCount);
                             Assert.IsFalse (method.HasReturnType);
+                            Assert.AreEqual (0, method.AttributesCount);
+                            found++;
                         }
                         if (method.Name == "ProcedureSingleArgNoReturn") {
                             Assert.AreEqual (1, method.ParameterTypesCount);
                             Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [0]);
                             Assert.IsFalse (method.HasReturnType);
+                            Assert.AreEqual (0, method.AttributesCount);
+                            found++;
                         }
                         if (method.Name == "ProcedureThreeArgsNoReturn") {
                             Assert.AreEqual (3, method.ParameterTypesCount);
@@ -326,17 +369,23 @@ namespace KRPCTest.Service
                             Assert.AreEqual ("KRPC.Request", method.ParameterTypesList [1]);
                             Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [2]);
                             Assert.IsFalse (method.HasReturnType);
+                            Assert.AreEqual (0, method.AttributesCount);
+                            found++;
                         }
                         if (method.Name == "ProcedureNoArgsReturns") {
                             Assert.AreEqual (0, method.ParameterTypesCount);
                             Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("KRPC.Response", method.ReturnType);
+                            Assert.AreEqual (0, method.AttributesCount);
+                            found++;
                         }
                         if (method.Name == "ProcedureSingleArgReturns") {
                             Assert.AreEqual (1, method.ParameterTypesCount);
                             Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [0]);
                             Assert.AreEqual ("KRPC.Response", method.ReturnType);
+                            Assert.AreEqual (0, method.AttributesCount);
+                            found++;
                         }
                         if (method.Name == "ProcedureWithValueTypes") {
                             Assert.AreEqual (3, method.ParameterTypesCount);
@@ -345,8 +394,43 @@ namespace KRPCTest.Service
                             Assert.AreEqual ("string", method.ParameterTypesList [1]);
                             Assert.AreEqual ("bytes", method.ParameterTypesList [2]);
                             Assert.AreEqual ("int32", method.ReturnType);
+                            Assert.AreEqual (0, method.AttributesCount);
+                            found++;
+                        }
+                        if (method.Name == "get_PropertyWithGetAndSet") {
+                            Assert.AreEqual (0, method.ParameterTypesCount);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("string", method.ReturnType);
+                            Assert.AreEqual (1, method.AttributesCount);
+                            Assert.AreEqual ("Property.Get(PropertyWithGetAndSet)", method.AttributesList [0]);
+                            found++;
+                        }
+                        if (method.Name == "set_PropertyWithGetAndSet") {
+                            Assert.AreEqual (1, method.ParameterTypesCount);
+                            Assert.AreEqual ("string", method.ParameterTypesList [0]);
+                            Assert.IsFalse (method.HasReturnType);
+                            Assert.AreEqual (1, method.AttributesCount);
+                            Assert.AreEqual ("Property.Set(PropertyWithGetAndSet)", method.AttributesList [0]);
+                            found++;
+                        }
+                        if (method.Name == "get_PropertyWithGet") {
+                            Assert.AreEqual (0, method.ParameterTypesCount);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("string", method.ReturnType);
+                            Assert.AreEqual (1, method.AttributesCount);
+                            Assert.AreEqual ("Property.Get(PropertyWithGet)", method.AttributesList [0]);
+                            found++;
+                        }
+                        if (method.Name == "set_PropertyWithSet") {
+                            Assert.AreEqual (1, method.ParameterTypesCount);
+                            Assert.AreEqual ("string", method.ParameterTypesList [0]);
+                            Assert.IsFalse (method.HasReturnType);
+                            Assert.AreEqual (1, method.AttributesCount);
+                            Assert.AreEqual ("Property.Set(PropertyWithSet)", method.AttributesList [0]);
+                            found++;
                         }
                     }
+                    Assert.AreEqual (10, found);
                 }
             }
         }

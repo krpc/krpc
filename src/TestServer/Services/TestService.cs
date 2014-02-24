@@ -41,6 +41,15 @@ namespace TestServer.Services
         {
             return (x + y + z).ToString ();
         }
+
+        [KRPCProperty]
+        public static string StringProperty { get; set; }
+
+        [KRPCProperty]
+        public static string StringPropertyPrivateGet { private get; set; }
+
+        [KRPCProperty]
+        public static string StringPropertyPrivateSet { get; private set; }
     }
 }
 

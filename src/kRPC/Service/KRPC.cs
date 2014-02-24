@@ -29,6 +29,9 @@ namespace KRPC.Service
                     foreach (var parameterType in procedureSignature.ParameterTypes) {
                         procedure.AddParameterTypes (ProtocolBuffers.GetTypeName (parameterType));
                     }
+                    foreach (var attribute in procedureSignature.Attributes) {
+                        procedure.AddAttributes (attribute);
+                    }
                     service.AddProcedures (procedure);
                 }
                 services.AddServices_ (service);

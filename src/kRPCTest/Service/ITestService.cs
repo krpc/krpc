@@ -12,6 +12,13 @@ namespace KRPCTest.Service
         KRPC.Schema.KRPC.Response ProcedureNoArgsReturns ();
 
         KRPC.Schema.KRPC.Response ProcedureSingleArgReturns (KRPC.Schema.KRPC.Response data);
+
         int ProcedureWithValueTypes (float x, string y, byte[] z);
+
+        string PropertyWithGetAndSet { get; set; }
+
+        string PropertyWithGet { get; }
+
+        string PropertyWithSet { set; }
     }
 }

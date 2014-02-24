@@ -45,11 +45,14 @@ namespace KRPC.Service
         /// </summary>
         public IBuilder ReturnBuilder { get; private set; }
 
-        public ProcedureSignature (string serviceName, MethodInfo method)
+        public IList<string> Attributes { get; private set; }
+
+        public ProcedureSignature (string serviceName, MethodInfo method, params string[] attributes)
         {
             Name = method.Name;
             FullyQualifiedName = serviceName + "." + Name;
             Handler = method;
+            Attributes = attributes;
             ParameterTypes = method.GetParameters ()
                 .Select (x => x.ParameterType).ToArray ();
             // Check the parameter types are valid
