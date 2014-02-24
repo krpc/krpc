@@ -48,8 +48,13 @@ namespace TestServer.Services
         [KRPCProperty]
         public static string StringPropertyPrivateGet { private get; set; }
 
+        static string stringPropertyPrivateSet = "foo";
+
         [KRPCProperty]
-        public static string StringPropertyPrivateSet { get; private set; }
+        public static string StringPropertyPrivateSet {
+            get { return stringPropertyPrivateSet; }
+            private set { stringPropertyPrivateSet = value; }
+        }
     }
 }
 

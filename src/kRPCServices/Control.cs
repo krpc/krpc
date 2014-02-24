@@ -1,53 +1,28 @@
 using KRPC.Service;
 using KRPC.Schema.Control;
+using KSP;
 
 namespace KRPCServices
 {
     [KRPCService]
     static public class Control
     {
-        static bool sas;
-
         [KRPCProperty]
         public static bool SAS {
-            get { return sas; }
-            set { sas = value; }
+            get { return FlightGlobals.ActiveVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
+            set { FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
         }
 
-        [KRPCProcedure]
-        public static void EnableSAS ()
-        {
-            FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, true);
+        [KRPCProperty]
+        public static bool RCS {
+            get { return FlightGlobals.ActiveVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)]; }
+            set { FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.RCS, value); }
         }
 
-        [KRPCProcedure]
-        public static void DisableSAS ()
-        {
-            FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
-        }
-
-        [KRPCProcedure]
-        public static void EnableRCS ()
-        {
-            FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.RCS, true);
-        }
-
-        [KRPCProcedure]
-        public static void DisableRCS ()
-        {
-            FlightGlobals.ActiveVessel.ActionGroups.SetGroup (KSPActionGroup.RCS, false);
-        }
-
-        [KRPCProcedure]
-        public static void SetThrottle (float throttle)
-        {
-            FlightInputHandler.state.mainThrottle = throttle;
-        }
-
-        [KRPCProcedure]
-        public static float GetThrottle ()
-        {
-            return FlightInputHandler.state.mainThrottle;
+        [KRPCProperty]
+        public static float Throttle {
+            get { return FlightInputHandler.state.mainThrottle; }
+            set { FlightInputHandler.state.mainThrottle = value; }
         }
 
         [KRPCProcedure]
