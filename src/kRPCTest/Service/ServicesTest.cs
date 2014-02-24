@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -95,6 +96,46 @@ namespace KRPCTest.Service
             // Run the request
             Assert.Throws<RPCException> (() => KRPC.Service.Services.Instance.HandleRequest (request));
             mock.Verify (x => x.ProcedureSingleArgNoReturn (It.IsAny<Response> ()), Times.Never ());
+        }
+
+        /// <summary>
+        /// Test calling a service method that returns null
+        /// </summary>
+        [Test]
+        public void HandleRequestNoArgsReturnsNull ()
+        {
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ((Response)null);
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureNoArgsReturns")
+                .Build ();
+            // Run the request
+            Assert.Throws<RPCException> (() => KRPC.Service.Services.Instance.HandleRequest (request));
+            mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method that throws an exception
+        /// </summary>
+        [Test]
+        public void HandleRequestNoArgsThrows ()
+        {
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Throws (new ArgumentException ());
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureNoArgsReturns")
+                .Build ();
+            // Run the request
+            Assert.Throws<RPCException> (() => KRPC.Service.Services.Instance.HandleRequest (request));
+            mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
         }
 
         /// <summary>

@@ -224,13 +224,13 @@ namespace KRPC.UI
 
         string AllowedClientsString (IPAddress localAddress)
         {
-            // TODO: better way of checking if address is the loopback device?
-            if (localAddress.ToString () == IPAddress.Loopback.ToString ())
+            if (IPAddress.IsLoopback (localAddress))
                 return localClientOnlyText;
             try {
                 var subnet = NetworkInformation.GetSubnetMask (localAddress);
                 return String.Format (subnetAllowedText, subnet);
             } catch (ArgumentException) {
+            } catch (DllNotFoundException) {
             }
             return unknownClientsAllowedText;
         }

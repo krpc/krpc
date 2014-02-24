@@ -21,20 +21,15 @@ namespace KRPC.Service
                     .ToDictionary (x => x.Name);
             } catch (ArgumentException) {
                 // Handle procedure name clashes
-                // TODO: move into Utils
                 var duplicates = procedureTypes
                     .Select (x => x.Name)
-                    .GroupBy (x => x)
-                    .Where (group => group.Count () > 1)
-                    .Select (group => group.Key)
+                    .Duplicates ()
                     .ToArray ();
                 throw new ServiceException (
                     "Service " + Name + " contains duplicate Procedures, " +
                     "and overloading is not permitted. " +
                     "Duplicates are " + String.Join (", ", duplicates));
             }
-            if (Procedures.Count == 0)
-                throw new ServiceException ("Service " + Name + " does not contain any Procedures");
         }
     }
 }
