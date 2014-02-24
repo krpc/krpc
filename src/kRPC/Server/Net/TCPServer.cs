@@ -224,9 +224,9 @@ namespace KRPC.Server.Net
                 // Stop() was called
                 Logger.WriteLine ("TCPServer: stopping...");
             } catch (Exception e) {
-                //TODO: better error handling
-                Console.WriteLine (e.Message);
-                Console.Write (e.StackTrace);
+                Logger.WriteLine ("TCPServer: Caught exception");
+                Logger.WriteLine (e.Message);
+                Logger.WriteLine (e.StackTrace);
             } finally {
                 //Stop the tcp listener
                 if (!running)
