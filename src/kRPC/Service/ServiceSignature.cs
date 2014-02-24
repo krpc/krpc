@@ -21,12 +21,9 @@ namespace KRPC.Service
                     .ToDictionary (x => x.Name);
             } catch (ArgumentException) {
                 // Handle procedure name clashes
-                // TODO: move into Utils
                 var duplicates = procedureTypes
                     .Select (x => x.Name)
-                    .GroupBy (x => x)
-                    .Where (group => group.Count () > 1)
-                    .Select (group => group.Key)
+                    .Duplicates ()
                     .ToArray ();
                 throw new ServiceException (
                     "Service " + Name + " contains duplicate Procedures, " +

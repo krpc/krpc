@@ -74,6 +74,7 @@
     <Compile Include="Utils\ProtocolBuffersTest.cs" />
     <Compile Include="Server\Net\NetworkInformationTest.cs" />
     <Compile Include="Server\Net\AssumptionsTest.cs" />
+    <Compile Include="Utils\IEnumerableExtensionsTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

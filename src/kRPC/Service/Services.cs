@@ -35,13 +35,10 @@ namespace KRPC.Service
                     .ToDictionary (x => x.Name);
             } catch (ArgumentException) {
                 // Handle service name clashes
-                // TODO: move into Utils
                 var duplicates = serviceTypes
-                        .Select (x => x.Name)
-                        .GroupBy (x => x)
-                        .Where (group => group.Count () > 1)
-                        .Select (group => group.Key)
-                        .ToArray ();
+                    .Select (x => x.Name)
+                    .Duplicates ()
+                    .ToArray ();
                 throw new ServiceException (
                     "Multiple Services have the same name. " +
                     "Duplicates are " + String.Join (", ", duplicates));
