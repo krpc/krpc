@@ -6,17 +6,18 @@ namespace TestingTools
     [KSPAddon (KSPAddon.Startup.MainMenu, false)]
     public class AutoLoadPersistentSaveOnStartup : MonoBehaviour
     {
-        //public static bool hasRun = false;
+        static bool hasRun;
+
         public void Start ()
         {
-            //if (hasRun) {
-            HighLogic.SaveFolder = "default";
-            var game = GamePersistence.LoadGame ("persistent", HighLogic.SaveFolder, true, false);
-            if (game != null && game.flightState != null && game.compatible) {
-                FlightDriver.StartAndFocusVessel (game, 0);
-                //hasRun = true;
+            if (!hasRun) {
+                HighLogic.SaveFolder = "default";
+                var game = GamePersistence.LoadGame ("persistent", HighLogic.SaveFolder, true, false);
+                if (game != null && game.flightState != null && game.compatible) {
+                    FlightDriver.StartAndFocusVessel (game, 0);
+                    hasRun = true;
+                }
             }
-            //}
         }
     }
 }
