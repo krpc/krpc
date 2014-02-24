@@ -12,11 +12,11 @@ namespace KRPC.UI
         {
             Title = "kRPC";
             Skin = GUI.skin;
-            Options.Add (new DialogOption ("Yes", () => {
+            Options.Add (new DialogOption ("Yes, disconnect the client", () => {
                 client.Close ();
                 Close ();
             }));
-            Options.Add (new DialogOption ("No", () => {
+            Options.Add (new DialogOption ("No, don't disconnect the client", () => {
                 Close ();
             }));
         }
