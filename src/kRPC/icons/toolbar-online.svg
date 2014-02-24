@@ -9,12 +9,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="25"
-   height="25.000002"
+   width="24"
+   height="24"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="icon-online.svg"
+   sodipodi:docname="toolbar-online.svg"
    inkscape:export-filename="/home/alex/workspaces/ksp/git/icon.png"
    inkscape:export-xdpi="38.230087"
    inkscape:export-ydpi="38.230087">
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="22.4"
-     inkscape:cx="1.7142005"
-     inkscape:cy="12.227178"
+     inkscape:zoom="44.8"
+     inkscape:cx="7.8284186"
+     inkscape:cy="12.381247"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -69,22 +69,22 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-71,-246.86218)">
+     transform="translate(-71,-247.86218)">
     <path
        style="fill:none;stroke:#cbcbcb;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 73,259.36218 21,0"
+       d="m 72,259.36217 22,0"
        id="path2987"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#cbcbcb;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 89,259.36218 0,-3"
+       d="m 89,259.36217 0,-3"
        id="path2989"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#cbcbcb;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 78,259.36218 0,-3"
+       d="m 77,259.36217 0,-3"
        id="path2991"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -105,15 +105,15 @@
        style="fill:#50c878;fill-opacity:1;fill-rule:evenodd;stroke:#cbcbcb;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect2995-5-5"
        width="8"
-       height="6.9999976"
-       x="74"
-       y="249.36218" />
+       height="7.0000029"
+       x="73"
+       y="249.36217" />
     <rect
        style="fill:#50c878;fill-opacity:1;fill-rule:evenodd;stroke:#cbcbcb;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect2995-5-4"
        width="8"
-       height="7.0000024"
+       height="7.0000124"
        x="85"
-       y="249.36218" />
+       y="249.36217" />
   </g>
 </svg>
