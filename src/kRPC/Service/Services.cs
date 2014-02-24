@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Google.ProtocolBuffers;
 using KRPC.Schema.KRPC;
 using KRPC.Utils;
@@ -34,13 +35,10 @@ namespace KRPC.Service
                     .ToDictionary (x => x.Name);
             } catch (ArgumentException) {
                 // Handle service name clashes
-                // TODO: move into Utils
                 var duplicates = serviceTypes
-                        .Select (x => x.Name)
-                        .GroupBy (x => x)
-                        .Where (group => group.Count () > 1)
-                        .Select (group => group.Key)
-                        .ToArray ();
+                    .Select (x => x.Name)
+                    .Duplicates ()
+                    .ToArray ();
                 throw new ServiceException (
                     "Multiple Services have the same name. " +
                     "Duplicates are " + String.Join (", ", duplicates));
@@ -69,8 +67,13 @@ namespace KRPC.Service
 
             // Invoke the procedure
             object[] parameters = DecodeParameters (procedure, request.ParametersList);
-            // TODO: catch exceptions from the following call
-            object returnValue = procedure.Handler.Invoke (null, parameters);
+            object returnValue;
+            try {
+                returnValue = procedure.Handler.Invoke (null, parameters);
+            } catch (TargetInvocationException e) {
+                throw new RPCException ("Procedure '" + procedure.FullyQualifiedName + "' threw an exception. " +
+                e.InnerException.GetType () + ": " + e.InnerException.Message);
+            }
             var responseBuilder = Response.CreateBuilder ();
             if (procedure.HasReturnType) {
                 responseBuilder.ReturnValue = EncodeReturnValue (procedure, returnValue);

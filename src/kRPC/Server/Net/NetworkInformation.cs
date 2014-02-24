@@ -36,7 +36,6 @@ namespace KRPC.Server.Net
                     }
                 }
             }
-            // TODO: is this an appropriate type of exception?
             throw new ArgumentException ("Network interface with IPv4 address " + address + " does not exist.");
         }
     }
