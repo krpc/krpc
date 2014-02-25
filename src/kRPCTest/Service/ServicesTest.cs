@@ -294,9 +294,9 @@ namespace KRPCTest.Service
         public void HandleRequestWithValueTypes ()
         {
             // Create arguments
-            float expectedX = 3.14159f;
-            string expectedY = "foo";
-            byte[] expectedZ = new byte[] { 0xDE, 0xAD, 0xBE, 0xEF };
+            const float expectedX = 3.14159f;
+            const string expectedY = "foo";
+            var expectedZ = new byte[] { 0xDE, 0xAD, 0xBE, 0xEF };
             byte[] xBytes, yBytes, zBytes;
             using (var stream = new MemoryStream ()) {
                 var codedStream = CodedOutputStream.CreateInstance (stream);
@@ -343,6 +343,9 @@ namespace KRPCTest.Service
                 It.IsAny<float> (), It.IsAny<string> (), It.IsAny<byte[]> ()), Times.Once ());
         }
 
+        /// <summary>
+        /// Test calling the getter for a property
+        /// </summary>
         [Test]
         public void HandleRequestForPropertyGetter ()
         {
@@ -361,6 +364,9 @@ namespace KRPCTest.Service
             mock.Verify (x => x.PropertyWithGet, Times.Once ());
         }
 
+        /// <summary>
+        /// Test calling the setter for a property
+        /// </summary>
         [Test]
         public void HandleRequestForPropertySetter ()
         {
@@ -379,6 +385,167 @@ namespace KRPCTest.Service
             Assert.False (response.HasError);
         }
 
+        /// <summary>
+        /// Test calling a procedure that returns a proxy object
+        /// </summary>
+        [Test]
+        public void HandleRequestWithObjectReturn ()
+        {
+            var instance = new TestService.TestClass ("foo");
+            var guid = ObjectStore.AddInstance (instance);
+            var argBytes = ProtocolBuffers.WriteValue ("foo", typeof(string));
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.CreateTestObject ("foo")).Returns (instance);
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("CreateTestObject")
+                .AddParameters (argBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            Assert.False (response.HasError);
+            response.Time = 42;
+            Response builtResponse = response.Build ();
+            Assert.True (builtResponse.HasReturnValue);
+            Assert.AreEqual (guid, ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(ulong)));
+        }
+
+        /// <summary>
+        /// Test calling a procedure that takes a proxy object as a parameter
+        /// </summary>
+        [Test]
+        public void HandleRequestWithObjectParameter ()
+        {
+            // Create argument
+            var instance = new TestService.TestClass ("foo");
+            var arg = ObjectStore.AddInstance (instance);
+            ByteString argBytes = ProtocolBuffers.WriteValue (arg, typeof(ulong));
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.DeleteTestObject (It.IsAny<TestService.TestClass> ()))
+                .Callback ((TestService.TestClass x) => {
+                // Check the argument
+                Assert.AreSame (instance, x);
+            });
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("DeleteTestObject")
+                .AddParameters (argBytes)
+                .Build ();
+            // Run the request
+            KRPC.Service.Services.Instance.HandleRequest (request);
+            mock.Verify (x => x.DeleteTestObject (It.IsAny<TestService.TestClass> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling the method of a proxy object
+        /// </summary>
+        [Test]
+        public void HandleRequestForObjectMethod ()
+        {
+            // Create argument
+            var instance = new TestService.TestClass ("jeb");
+            var guid = ObjectStore.AddInstance (instance);
+            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
+            ByteString argBytes = ProtocolBuffers.WriteValue (3.14159f, typeof(float));
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("TestClass_FloatToString")
+                .AddParameters (guidBytes)
+                .AddParameters (argBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 42;
+            var builtResponse = response.Build ();
+            Assert.AreEqual ("jeb3.14159", ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(string)));
+        }
+
+        /// <summary>
+        /// Test calling the method of a proxy object, and pass a proxy object as a parameter
+        /// </summary>
+        [Test]
+        public void HandleRequestForObjectMethodWithObjectParameter ()
+        {
+            // Create argument
+            var instance = new TestService.TestClass ("bill");
+            var argInstance = new TestService.TestClass ("bob");
+            var guid = ObjectStore.AddInstance (instance);
+            var argGuid = ObjectStore.AddInstance (argInstance);
+            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
+            ByteString argBytes = ProtocolBuffers.WriteValue (argGuid, typeof(ulong));
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("TestClass_ObjectToString")
+                .AddParameters (guidBytes)
+                .AddParameters (argBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 42;
+            var builtResponse = response.Build ();
+            Assert.AreEqual ("billbob", ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(string)));
+        }
+
+        /// <summary>
+        /// Test the getting a property value in a proxy object
+        /// </summary>
+        [Test]
+        public void HandleRequestForClassPropertyGetter ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            instance.IntProperty = 42;
+            var guid = ObjectStore.AddInstance (instance);
+            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("TestClass_get_IntProperty")
+                .AddParameters (guidBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 0;
+            var builtResponse = response.Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (42, ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(int)));
+        }
+
+        /// <summary>
+        /// Test setting a property value in a proxy object
+        /// </summary>
+        [Test]
+        public void HandleRequestForClassPropertySetter ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            instance.IntProperty = 42;
+            var guid = ObjectStore.AddInstance (instance);
+            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("TestClass_set_IntProperty")
+                .AddParameters (guidBytes)
+                .AddParameters (ProtocolBuffers.WriteValue (1337, typeof(int)))
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 0;
+            var builtResponse = response.Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (1337, instance.IntProperty);
+        }
+
+        /// <summary>
+        /// Check the output of the service scanner
+        /// </summary>
         [Test]
         public void GetServices ()
         {
@@ -387,9 +554,9 @@ namespace KRPCTest.Service
             Assert.AreEqual (2, services.Services_Count);
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "TestService") {
-                    Assert.AreEqual (10, service.ProceduresCount);
+                    Assert.AreEqual (18, service.ProceduresCount);
                     int found = 0;
-                    foreach (KRPC.Schema.KRPC.Procedure method in service.ProceduresList) {
+                    foreach (var method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
                             Assert.AreEqual (0, method.ParameterTypesCount);
                             Assert.IsFalse (method.HasReturnType);
@@ -469,10 +636,133 @@ namespace KRPCTest.Service
                             Assert.AreEqual ("Property.Set(PropertyWithSet)", method.AttributesList [0]);
                             found++;
                         }
+                        if (method.Name == "CreateTestObject") {
+                            Assert.AreEqual (1, method.ParameterTypesCount);
+                            Assert.AreEqual ("string", method.ParameterTypesList [0]);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("uint64", method.ReturnType);
+                            Assert.AreEqual (1, method.AttributesCount);
+                            Assert.AreEqual ("ReturnType.Class(TestClass)", method.AttributesList [0]);
+                            found++;
+                        }
+                        if (method.Name == "DeleteTestObject") {
+                            Assert.AreEqual (1, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.IsFalse (method.HasReturnType);
+                            Assert.AreEqual (1, method.AttributesCount);
+                            Assert.AreEqual ("ParameterType(0).Class(TestClass)", method.AttributesList [0]);
+                            found++;
+                        }
+                        if (method.Name == "TestClass_FloatToString") {
+                            Assert.AreEqual (2, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.AreEqual ("float", method.ParameterTypesList [1]);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("string", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("Class.Method(FloatToString)", method.AttributesList [0]);
+                            Assert.AreEqual ("ParameterType(0).Class(TestClass)", method.AttributesList [1]);
+                            found++;
+                        }
+                        if (method.Name == "TestClass_ObjectToString") {
+                            Assert.AreEqual (2, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [1]);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("string", method.ReturnType);
+                            Assert.AreEqual (3, method.AttributesCount);
+                            Assert.AreEqual ("Class.Method(ObjectToString)", method.AttributesList [0]);
+                            Assert.AreEqual ("ParameterType(0).Class(TestClass)", method.AttributesList [1]);
+                            Assert.AreEqual ("ParameterType(1).Class(TestClass)", method.AttributesList [2]);
+                            found++;
+                        }
+                        if (method.Name == "TestClass_get_IntProperty") {
+                            Assert.AreEqual (1, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("int32", method.ReturnType);
+                            Assert.AreEqual (1, method.AttributesCount);
+                            Assert.AreEqual ("Class.Property.Get(TestClass,IntProperty)", method.AttributesList [0]);
+                            found++;
+                        }
+                        if (method.Name == "TestClass_set_IntProperty") {
+                            Assert.AreEqual (2, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.AreEqual ("int32", method.ParameterTypesList [1]);
+                            Assert.IsFalse (method.HasReturnType);
+                            Assert.AreEqual (1, method.AttributesCount);
+                            Assert.AreEqual ("Class.Property.Set(TestClass,IntProperty)", method.AttributesList [0]);
+                            found++;
+                        }
+                        if (method.Name == "TestClass_get_ObjectProperty") {
+                            Assert.AreEqual (1, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("uint64", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("Class.Property.Get(TestClass,ObjectProperty)", method.AttributesList [0]);
+                            Assert.AreEqual ("ReturnType.Class(TestClass)", method.AttributesList [1]);
+                            found++;
+                        }
+                        if (method.Name == "TestClass_set_ObjectProperty") {
+                            Assert.AreEqual (2, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [1]);
+                            Assert.IsFalse (method.HasReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("Class.Property.Set(TestClass,ObjectProperty)", method.AttributesList [0]);
+                            Assert.AreEqual ("ParameterType(1).Class(TestClass)", method.AttributesList [1]);
+                            found++;
+                        }
                     }
-                    Assert.AreEqual (10, found);
+                    Assert.AreEqual (18, found);
                 }
             }
+        }
+
+        [Test]
+        public void IsAValidType ()
+        {
+            Assert.IsTrue (TypeUtils.IsAValidType (typeof(string)));
+            Assert.IsTrue (TypeUtils.IsAValidType (typeof(long)));
+            Assert.IsTrue (TypeUtils.IsAValidType (typeof(TestService.TestClass)));
+            Assert.IsFalse (TypeUtils.IsAValidType (typeof(TestService)));
+        }
+
+        [Test]
+        public void IsAClassType ()
+        {
+            Assert.IsFalse (TypeUtils.IsAClassType (typeof(string)));
+            Assert.IsFalse (TypeUtils.IsAClassType (typeof(long)));
+            Assert.IsTrue (TypeUtils.IsAClassType (typeof(TestService.TestClass)));
+            Assert.IsFalse (TypeUtils.IsAClassType (typeof(TestService)));
+        }
+
+        [Test]
+        public void GetTypeName ()
+        {
+            Assert.AreEqual ("string", TypeUtils.GetTypeName (typeof(string)));
+            Assert.AreEqual ("int64", TypeUtils.GetTypeName (typeof(long)));
+            Assert.AreEqual ("uint64", TypeUtils.GetTypeName (typeof(TestService.TestClass)));
+            Assert.Throws<ArgumentException> (() => TypeUtils.GetTypeName (typeof(TestService)));
+        }
+
+        [Test]
+        public void ParameterTypeAttributes ()
+        {
+            Assert.AreEqual (new string[]{ }, TypeUtils.ParameterTypeAttributes (0, typeof(string)));
+            Assert.AreEqual (new string[]{ }, TypeUtils.ParameterTypeAttributes (3, typeof(long)));
+            Assert.AreEqual (new []{ "ParameterType(1).Class(TestClass)" }, TypeUtils.ParameterTypeAttributes (1, typeof(TestService.TestClass)));
+            Assert.Throws<ArgumentException> (() => TypeUtils.ParameterTypeAttributes (0, typeof(TestService)));
+        }
+
+        [Test]
+        public void ReturnTypeAttributes ()
+        {
+            Assert.AreEqual (new string[]{ }, TypeUtils.ReturnTypeAttributes (typeof(string)));
+            Assert.AreEqual (new string[]{ }, TypeUtils.ReturnTypeAttributes (typeof(long)));
+            Assert.AreEqual (new []{ "ReturnType.Class(TestClass)" }, TypeUtils.ReturnTypeAttributes (typeof(TestService.TestClass)));
+            Assert.Throws<ArgumentException> (() => TypeUtils.ReturnTypeAttributes (typeof(TestService)));
         }
     }
 }

@@ -109,7 +109,7 @@ namespace KRPCTest.Utils
 
         static ByteString FromHex (string hex)
         {
-            byte[] bytes = new byte[hex.Length / 2];
+            var bytes = new byte[hex.Length / 2];
             for (int i = 0; i < hex.Length; i += 2)
                 bytes [i / 2] = Convert.ToByte (hex.Substring (i, 2), 16);
             return ByteString.CopyFrom (bytes);

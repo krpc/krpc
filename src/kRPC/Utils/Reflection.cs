@@ -54,5 +54,18 @@ namespace KRPC.Utils
                 }
             }
         }
+
+        /// <summary>
+        /// Returns all methods within a given type that have the specified attribute.
+        /// </summary>
+        public static IEnumerable<Type> GetClassesWith<TAttribute> (Type cls, bool inherit = false)
+            where TAttribute : Attribute
+        {
+            foreach (var nestedType in cls.GetNestedTypes()) {
+                if (nestedType.IsClass && nestedType.IsDefined (typeof(TAttribute), inherit)) {
+                    yield return nestedType;
+                }
+            }
+        }
     }
 }

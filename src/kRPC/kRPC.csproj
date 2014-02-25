@@ -78,7 +78,6 @@
     <Compile Include="UI\Toolbar.cs" />
     <Compile Include="Service\KRPC.cs" />
     <Compile Include="Schema\KRPC.cs" />
-    <Compile Include="Service\KRPCService.cs" />
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\ConfigurationStorage.cs" />
     <Compile Include="Utils\RectStorage.cs" />
@@ -86,11 +85,7 @@
     <Compile Include="UI\OnMovedArgs.cs" />
     <Compile Include="UI\Window.cs" />
     <Compile Include="UI\OptionDialog.cs" />
-    <Compile Include="Service\KRPCProcedure.cs" />
-    <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\RPCException.cs" />
-    <Compile Include="Service\ServiceSignature.cs" />
-    <Compile Include="Service\ProcedureSignature.cs" />
     <Compile Include="UI\GUILayoutExtensions.cs" />
     <Compile Include="Utils\ProtocolBuffers.cs" />
     <Compile Include="KRPCServer.cs" />
@@ -102,8 +97,21 @@
     <Compile Include="Server\ClientDisconnectedException.cs" />
     <Compile Include="UI\Icons.cs" />
     <Compile Include="UI\ClientDisconnectDialog.cs" />
-    <Compile Include="Service\KRPCProperty.cs" />
     <Compile Include="Utils\IEnumerableExtensions.cs" />
+    <Compile Include="Service\ClassMethodHandler.cs" />
+    <Compile Include="Service\IProcedureHandler.cs" />
+    <Compile Include="Service\ProcedureHandler.cs" />
+    <Compile Include="Service\ObjectStore.cs" />
+    <Compile Include="Service\Attributes\KRPCClass.cs" />
+    <Compile Include="Service\Attributes\KRPCMethod.cs" />
+    <Compile Include="Service\Attributes\KRPCProcedure.cs" />
+    <Compile Include="Service\Attributes\KRPCProperty.cs" />
+    <Compile Include="Service\Attributes\KRPCService.cs" />
+    <Compile Include="Service\Scanner\ServiceSignature.cs" />
+    <Compile Include="Service\Scanner\ProcedureSignature.cs" />
+    <Compile Include="Service\ServiceException.cs" />
+    <Compile Include="Service\Scanner\Scanner.cs" />
+    <Compile Include="Service\TypeUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -122,6 +130,8 @@
     <Folder Include="Server\Net\" />
     <Folder Include="Server\RPC\" />
     <Folder Include="Properties\" />
+    <Folder Include="Service\Attributes\" />
+    <Folder Include="Service\Scanner\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\icon-offline.svg" />

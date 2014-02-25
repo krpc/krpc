@@ -20,5 +20,9 @@ namespace KRPCTest.Service
         string PropertyWithGet { get; }
 
         string PropertyWithSet { set; }
+
+        TestService.TestClass CreateTestObject (string value);
+
+        void DeleteTestObject (TestService.TestClass obj);
     }
 }

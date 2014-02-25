@@ -1,5 +1,5 @@
 using System;
-using KRPC.Service;
+using KRPC.Service.Attributes;
 
 namespace TestServer.Services
 {

@@ -1,4 +1,4 @@
-using KRPC.Service;
+using KRPC.Service.Attributes;
 
 namespace KRPCTest.Service
 {
@@ -62,6 +62,47 @@ namespace KRPCTest.Service
         [KRPCProperty]
         public static string PropertyWithSet {
             set { Service.PropertyWithSet = value; }
+        }
+
+        [KRPCProcedure]
+        public static TestClass CreateTestObject (string value)
+        {
+            return Service.CreateTestObject (value);
+        }
+
+        [KRPCProcedure]
+        public static void DeleteTestObject (TestClass obj)
+        {
+            Service.DeleteTestObject (obj);
+        }
+
+        [KRPCClass]
+        public class TestClass
+        {
+            string value;
+
+            public TestClass (string value)
+            {
+                this.value = value;
+            }
+
+            [KRPCMethod]
+            public string FloatToString (float x)
+            {
+                return value + x.ToString ();
+            }
+
+            [KRPCMethod]
+            public string ObjectToString (TestClass other)
+            {
+                return value + other.value;
+            }
+
+            [KRPCProperty]
+            public int IntProperty { get; set; }
+
+            [KRPCProperty]
+            public TestClass ObjectProperty { get; set; }
         }
     }
 }
