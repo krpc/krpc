@@ -24,17 +24,38 @@ class TestClient(unittest.TestCase):
         self.assertEqual('42', self.ksp.TestService.FloatToString(42))
         self.assertEqual('42', self.ksp.TestService.FloatToString(42L))
         self.assertEqual('6', self.ksp.TestService.AddMultipleValues(1L, 2L, 3L))
-        self.assertRaises(ValueError, self.ksp.TestService.FloatToString, '42')
+        self.assertRaises(TypeError, self.ksp.TestService.FloatToString, '42')
 
     def test_incorrect_parameter_type(self):
-        self.assertRaises(ValueError, self.ksp.TestService.FloatToString, 'foo')
-        self.assertRaises(ValueError, self.ksp.TestService.AddMultipleValues, 0.14159, 'foo', 2)
+        self.assertRaises(TypeError, self.ksp.TestService.FloatToString, 'foo')
+        self.assertRaises(TypeError, self.ksp.TestService.AddMultipleValues, 0.14159, 'foo', 2)
 
     def test_properties(self):
         self.ksp.TestService.StringProperty = 'foo';
         self.assertEqual('foo', self.ksp.TestService.StringProperty)
         self.assertEqual('foo', self.ksp.TestService.StringPropertyPrivateSet)
         self.ksp.TestService.StringPropertyPrivateGet = 'foo'
+
+    def test_class_as_return_value(self):
+        obj = self.ksp.TestService.CreateTestObject('jeb')
+        self.assertEqual('TestClass', type(obj).__name__)
+
+    def test_class_methods(self):
+        obj = self.ksp.TestService.CreateTestObject('bob')
+        self.assertEqual('value=bob', obj.GetValue())
+        self.assertEqual('bob3.14159', obj.FloatToString(3.14159))
+        obj2 = self.ksp.TestService.CreateTestObject('bill')
+        self.assertEqual('bobbill', obj.ObjectToString(obj2))
+
+    def test_class_properties(self):
+        obj = self.ksp.TestService.CreateTestObject('jeb')
+        self.assertEqual(0, obj.IntProperty)
+        obj.IntProperty = 42
+        self.assertEqual(42, obj.IntProperty)
+        obj2 = self.ksp.TestService.CreateTestObject('kermin')
+        obj.ObjectProperty = obj2
+        self.assertEqual(obj2._object_id, obj.ObjectProperty._object_id)
+
 
 if __name__ == '__main__':
     unittest.main()

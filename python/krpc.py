@@ -30,7 +30,7 @@ class _Types(object):
 
     #PROTOBUF_VALUE_TYPES = set(['double', 'float', 'int32', 'int64', 'uint32',
     #                        'uint64', 'bool', 'string', 'bytes'])
-    PROTOBUF_VALUE_TYPES = set(['float', 'int32', 'int64', 'bool', 'string'])
+    PROTOBUF_VALUE_TYPES = set(['float', 'int32', 'int64', 'uint64', 'bool', 'string'])
     PYTHON_VALUE_TYPES = set([float, int, long, bool, str])
 
     PYTHON_TO_PROTOBUF_VALUE_TYPE = {
@@ -46,6 +46,7 @@ class _Types(object):
         'float': float,
         'int32': int,
         'int64': long,
+        'uint64': long,
         'bool': bool,
         'string': str,
         #TODO: complete
@@ -204,7 +205,7 @@ class _Decoder(object):
         elif _Types.is_value_type(typ):
             return cls._decode_value(typ, data)
         else:
-            raise RuntimeError ('Cannot decode type ' + typ)
+            raise RuntimeError ('Cannot decode type %s' % typ.__name__)
 
     @classmethod
     def decode_delimited(cls, typ, data):
@@ -304,6 +305,12 @@ class BaseService(object):
         return self._client._invoke(self._name, procedure, parameters, parameter_types, return_type, **kwargs)
 
 
+class BaseClass(object):
+
+    def __init__(self, object_id):
+        self._object_id = object_id
+
+
 class KRPCService(BaseService):
     """ Core kRPC service, e.g. for querying for the available services """
 
@@ -319,6 +326,102 @@ class KRPCService(BaseService):
         return self._invoke('GetServices', return_type=schema.KRPC.Services)
 
 
+class _Attributes(object):
+
+    @classmethod
+    def is_a_procedure(cls, attrs):
+        return not cls.is_a_property_accessor(attrs) and \
+               not cls.is_a_class_method(attrs) and \
+               not cls.is_a_class_property_accessor(attrs)
+
+    @classmethod
+    def is_a_property_accessor(cls, attrs):
+        return any(attr.startswith('Property.') for attr in attrs)
+
+    @classmethod
+    def is_a_property_getter(cls, attrs):
+        return any(attr.startswith('Property.Get(') for attr in attrs)
+
+    @classmethod
+    def is_a_property_setter(cls, attrs):
+        return any(attr.startswith('Property.Set(') for attr in attrs)
+
+    @classmethod
+    def is_a_class_method(cls, attrs):
+        return any(attr.startswith('Class.Method(') for attr in attrs)
+
+    @classmethod
+    def is_a_class_property_accessor(cls, attrs):
+        return any(attr.startswith('Class.Property.') for attr in attrs)
+
+    @classmethod
+    def is_a_class_property_getter(cls, attrs):
+        return any(attr.startswith('Class.Property.Get(') for attr in attrs)
+
+    @classmethod
+    def is_a_class_property_setter(cls, attrs):
+        return any(attr.startswith('Class.Property.Set(') for attr in attrs)
+
+    @classmethod
+    def get_property_name(cls, attrs):
+        if cls.is_a_property_accessor(attrs):
+            for attr in attrs:
+                match = re.match(r'^Property\.(Get|Set)\((.+)\)$', attr)
+                if match:
+                    return match.group(2)
+        raise ValueError('Procedure attributes are not a property accessor')
+
+    @classmethod
+    def get_class_name(cls, attrs):
+        if cls.is_a_class_method(attrs):
+            for attr in attrs:
+                match = re.match(r'^Class\.Method\(([^,]+),[^,]+\)$', attr)
+                if match:
+                    return match.group(1)
+        if cls.is_a_class_property_accessor(attrs):
+            for attr in attrs:
+                match = re.match(r'^Class\.Property.(Get|Set)\(([^,]+),[^,]+\)$', attr)
+                if match:
+                    return match.group(2)
+        raise ValueError('Procedure attributes are not a class method or class property accessor')
+
+    @classmethod
+    def get_class_method_name(cls, attrs):
+        if cls.is_a_class_method(attrs):
+            for attr in attrs:
+                match = re.match(r'^Class\.Method\([^,]+,([^,]+)\)$', attr)
+                if match:
+                    return match.group(1)
+        raise ValueError('Procedure attributes are not a class method accessor')
+
+    @classmethod
+    def get_class_property_name(cls, attrs):
+        if cls.is_a_class_property_accessor(attrs):
+            for attr in attrs:
+                match = re.match(r'^Class\.Property\.(Get|Set)\([^,]+,([^,]+)\)$', attr)
+                if match:
+                    return match.group(2)
+        raise ValueError('Procedure attributes are not a class property accessor')
+
+    @classmethod
+    def get_return_type_attrs(cls, attrs):
+        return_type_attrs = []
+        for attr in attrs:
+            match = re.match(r'^ReturnType.(.+)$', attr)
+            if match:
+                return_type_attrs.append(match.group(1))
+        return return_type_attrs
+
+    @classmethod
+    def get_parameter_type_attrs(cls, pos, attrs):
+        parameter_type_attrs = []
+        for attr in attrs:
+            match = re.match(r'^ParameterType\(' + str(pos) + '\).(.+)$', attr)
+            if match:
+                parameter_type_attrs.append(match.group(1))
+        return parameter_type_attrs
+
+
 class Service(BaseService):
     """ A dynamically created service, created using information received from the server """
 
@@ -326,60 +429,134 @@ class Service(BaseService):
         """ Create a service from a KRPC.Service object received from a call to KRPC.GetServices() """
         super(Service, self).__init__(client, service.name)
         self._name = service.name
-        for procedure in service.procedures:
-            self._add_procedure(procedure)
 
+        # Class types
+        for procedure in service.procedures:
+            try:
+                name = _Attributes.get_class_name(procedure.attributes)
+                self._add_class(name)
+            except ValueError:
+                pass
+
+        # Plain procedures
+        for procedure in service.procedures:
+            if _Attributes.is_a_procedure(procedure.attributes):
+                self._add_procedure(procedure)
+
+        # Properties
         properties = {}
         for procedure in service.procedures:
-            for attribute in procedure.attributes:
-                match = re.match(r'^Property\.(Get|Set)\((.+)\)$', attribute)
-                if match:
-                    typ, name = match.groups((1,2))
-                    if name not in properties:
-                        properties[name] = [None,None]
-                    if typ == 'Get':
-                        properties[name][0] = procedure
-                    else:
-                        properties[name][1] = procedure
-                    break
+            if _Attributes.is_a_property_accessor(procedure.attributes):
+                name = _Attributes.get_property_name(procedure.attributes)
+                if name not in properties:
+                    properties[name] = [None,None]
+                if _Attributes.is_a_property_getter(procedure.attributes):
+                    properties[name][0] = procedure
+                else:
+                    properties[name][1] = procedure
+        for name, procedures in properties.items():
+            self._add_property(name, procedures[0], procedures[1])
 
-        for name, methods in properties.items():
-            self._add_property(name, methods[0], methods[1])
+        # Class methods
+        for procedure in service.procedures:
+            if _Attributes.is_a_class_method(procedure.attributes):
+                class_name = _Attributes.get_class_name(procedure.attributes)
+                method_name = _Attributes.get_class_method_name(procedure.attributes)
+                self._add_class_method(class_name, method_name, procedure)
+
+        # Class properties
+        properties = {}
+        for procedure in service.procedures:
+            if _Attributes.is_a_class_property_accessor(procedure.attributes):
+                class_name = _Attributes.get_class_name(procedure.attributes)
+                property_name = _Attributes.get_class_property_name(procedure.attributes)
+                key = (class_name, property_name)
+                if key not in properties:
+                    properties[key] = [None,None]
+                if _Attributes.is_a_class_property_getter(procedure.attributes):
+                    properties[key][0] = procedure
+                else:
+                    properties[key][1] = procedure
+        for (class_name, property_name), procedures in properties.items():
+            self._add_class_property(class_name, property_name, procedures[0], procedures[1])
+
+
+    def _get_parameter_type(self, pos, typ, attrs):
+        attrs = _Attributes.get_parameter_type_attrs(pos, attrs)
+        for attr in attrs:
+            match = re.match(r'Class.\(([^,]+)\)', attr)
+            if match:
+                class_name = match.group(1)
+                return self.__dict__[class_name]
+        return _Types.as_python_type(typ)
+
+
+    def _get_return_type(self, typ, attrs):
+        attrs = _Attributes.get_return_type_attrs(attrs)
+        for attr in attrs:
+            match = re.match(r'Class\(([^,]+)\)', attr)
+            if match:
+                class_name = match.group(1)
+                return self.__dict__[class_name]
+        return _Types.as_python_type(typ)
 
 
     def _add_procedure(self, procedure):
         """ Add a procedure to this service, from a KRPC.Procedure object """
-        parameter_types = []
-        for parameter_type in procedure.parameter_types:
-            try:
-                parameter_types.append(_Types.as_python_type(parameter_type))
-            except TypeError:
-                Logger.info('Failed to add procedure', self._name + '.' + procedure.name, '; ' +
-                             'protobuf type', parameter_type, 'not found.')
-                return
-
+        parameter_types = [self._get_parameter_type(i,typ,procedure.attributes) for i,typ in enumerate(procedure.parameter_types)]
         return_type = None
         if procedure.HasField('return_type'):
-            try:
-                return_type = _Types.as_python_type(procedure.return_type)
-            except TypeError:
-                Logger.info('Failed to add procedure', self._name, procedure.name, '; ' +
-                             'protobuf type', procedure.return_type, 'not found.')
-                return
-
-        fn = lambda *parameters: self._invoke(
+            return_type = self._get_return_type(procedure.return_type, procedure.attributes)
+        self.__dict__[procedure.name] = lambda *parameters: self._invoke(
             procedure.name, parameters=parameters,
             parameter_types=parameter_types, return_type=return_type)
-        self.__dict__[procedure.name] = fn
 
 
     def _add_property(self, name, getter=None, setter=None):
         fget = fset = None
         if getter:
+            self._add_procedure(getter)
             fget = lambda s: self.__dict__[getter.name]()
         if setter:
+            self._add_procedure(setter)
             fset = lambda s, value: self.__dict__[setter.name](value)
         setattr(self.__class__, name, property(fget, fset))
+
+
+    def _add_class(self, name):
+        name = str(name) # convert from unicode
+        # Create type
+        typ = type(name, (BaseClass,), dict())
+
+        # Add constructor
+        def ctor(s, object_id):
+            super(typ, s).__init__(object_id)
+        typ.__init__ = ctor
+
+        # Add to service's module
+        self.__dict__[name] = typ
+
+
+    def _add_class_method(self, class_name, method_name, procedure):
+        cls = self.__dict__[class_name]
+        parameter_types = [_Types.as_python_type(parameter_type) for parameter_type in procedure.parameter_types]
+        return_type = None
+        if procedure.HasField('return_type'):
+            return_type = _Types.as_python_type(procedure.return_type)
+        setattr(cls, method_name,
+                lambda s, *parameters: self._invoke(procedure.name, parameters=[s._object_id] + list(parameters),
+                                                    parameter_types=parameter_types, return_type=return_type))
+
+
+    def _add_class_property(self, class_name, property_name, getter=None, setter=None):
+        fget = fset = None
+        if getter:
+            self._add_procedure(getter)
+            fget = lambda s: self.__dict__[getter.name](s._object_id)
+        if setter:
+            self._add_procedure(setter)
+            fset = lambda s, value: self.__dict__[setter.name](s._object_id, value)
+        setattr(self.__dict__[class_name], property_name, property(fget, fset))
 
 
 class RPCError(RuntimeError):
@@ -407,21 +584,19 @@ class Client(object):
     def _invoke(self, service, procedure, parameters=[], parameter_types=[], return_type=None, **kwargs):
         """ Execute an RPC """
 
-        # Validate the parameter types
+        # Validate the parameters
         validated_parameters = []
         if len(parameters) != len(parameter_types):
-           raise RPCError(
-               'Wrong number of parameters for ' + procedure + '. ' +
-               'Expected ' + str(len(parameter_types)) + ', got ' + str(len(parameters)) + '.')
+            raise TypeError('%s.%s() takes exactly %d arguments (%d given)' % (service, procedure, len(parameter_types), len(parameters)))
         for i, (value, typ) in enumerate(itertools.izip(parameters, parameter_types)):
+            if isinstance(value, BaseClass):
+                value = value._object_id
             if type(value) != typ:
                 # Try coercing to the correct type
                 try:
                     value = _Types.coerce_to(value, typ)
                 except ValueError:
-                    raise ValueError(
-                        'Incorrect type for parameter ' + str(i) + ' of ' + procedure + '. ' +
-                        'Expected ' + str(typ) + ', got ' + str(type(value)) + '.')
+                    raise TypeError('%s.%s() argument %d must be a %s' % (service, procedure, i, typ.__name__))
             validated_parameters.append(value)
 
         # Build the request object
@@ -442,8 +617,11 @@ class Client(object):
         # Decode the response and return the (optional) result
         result = None
         if return_type is not None:
-            result = _Decoder.decode(return_type, response.return_value)
-
+            if _Types.is_valid_type(return_type):
+                result = _Decoder.decode(return_type, response.return_value)
+            else:
+                # Return type must be a class type, so instantiate it
+                result = return_type(_Decoder.decode(long, response.return_value))
         return result
 
     def _send_request(self, request):

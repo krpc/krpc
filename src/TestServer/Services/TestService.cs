@@ -55,6 +55,47 @@ namespace TestServer.Services
             get { return stringPropertyPrivateSet; }
             private set { stringPropertyPrivateSet = value; }
         }
+
+        [KRPCProcedure]
+        public static TestClass CreateTestObject (string value)
+        {
+            return new TestClass (value);
+        }
+
+        [KRPCClass]
+        public class TestClass
+        {
+            string value;
+
+            public TestClass (string value)
+            {
+                this.value = value;
+            }
+
+            [KRPCMethod]
+            public string GetValue ()
+            {
+                return "value=" + value;
+            }
+
+            [KRPCMethod]
+            public string FloatToString (float x)
+            {
+                return value + x.ToString ();
+            }
+
+            [KRPCMethod]
+            public string ObjectToString (TestClass other)
+            {
+                return value + other.value;
+            }
+
+            [KRPCProperty]
+            public int IntProperty { get; set; }
+
+            [KRPCProperty]
+            public TestClass ObjectProperty { get; set; }
+        }
     }
 }
 
