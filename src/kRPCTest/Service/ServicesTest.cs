@@ -392,7 +392,7 @@ namespace KRPCTest.Service
         public void HandleRequestWithObjectReturn ()
         {
             var instance = new TestService.TestClass ("foo");
-            var guid = ObjectStore.AddInstance (instance);
+            var guid = ObjectStore.Instance.AddInstance (instance);
             var argBytes = ProtocolBuffers.WriteValue ("foo", typeof(string));
             // Create mock service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
@@ -421,7 +421,7 @@ namespace KRPCTest.Service
         {
             // Create argument
             var instance = new TestService.TestClass ("foo");
-            var arg = ObjectStore.AddInstance (instance);
+            var arg = ObjectStore.Instance.AddInstance (instance);
             ByteString argBytes = ProtocolBuffers.WriteValue (arg, typeof(ulong));
             // Create mock service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
@@ -450,7 +450,7 @@ namespace KRPCTest.Service
         {
             // Create argument
             var instance = new TestService.TestClass ("jeb");
-            var guid = ObjectStore.AddInstance (instance);
+            var guid = ObjectStore.Instance.AddInstance (instance);
             ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
             ByteString argBytes = ProtocolBuffers.WriteValue (3.14159f, typeof(float));
             // Create request
@@ -476,8 +476,8 @@ namespace KRPCTest.Service
             // Create argument
             var instance = new TestService.TestClass ("bill");
             var argInstance = new TestService.TestClass ("bob");
-            var guid = ObjectStore.AddInstance (instance);
-            var argGuid = ObjectStore.AddInstance (argInstance);
+            var guid = ObjectStore.Instance.AddInstance (instance);
+            var argGuid = ObjectStore.Instance.AddInstance (argInstance);
             ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
             ByteString argBytes = ProtocolBuffers.WriteValue (argGuid, typeof(ulong));
             // Create request
@@ -502,7 +502,7 @@ namespace KRPCTest.Service
         {
             var instance = new TestService.TestClass ("jeb");
             instance.IntProperty = 42;
-            var guid = ObjectStore.AddInstance (instance);
+            var guid = ObjectStore.Instance.AddInstance (instance);
             ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
             // Create request
             var request = Request.CreateBuilder ()
@@ -526,7 +526,7 @@ namespace KRPCTest.Service
         {
             var instance = new TestService.TestClass ("jeb");
             instance.IntProperty = 42;
-            var guid = ObjectStore.AddInstance (instance);
+            var guid = ObjectStore.Instance.AddInstance (instance);
             ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
             // Create request
             var request = Request.CreateBuilder ()
@@ -541,228 +541,6 @@ namespace KRPCTest.Service
             var builtResponse = response.Build ();
             Assert.IsFalse (builtResponse.HasError);
             Assert.AreEqual (1337, instance.IntProperty);
-        }
-
-        /// <summary>
-        /// Check the output of the service scanner
-        /// </summary>
-        [Test]
-        public void GetServices ()
-        {
-            var services = KRPC.Service.KRPC.GetServices ();
-            Assert.IsNotNull (services);
-            Assert.AreEqual (2, services.Services_Count);
-            foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
-                if (service.Name == "TestService") {
-                    Assert.AreEqual (18, service.ProceduresCount);
-                    int found = 0;
-                    foreach (var method in service.ProceduresList) {
-                        if (method.Name == "ProcedureNoArgsNoReturn") {
-                            Assert.AreEqual (0, method.ParameterTypesCount);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "ProcedureSingleArgNoReturn") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [0]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "ProcedureThreeArgsNoReturn") {
-                            Assert.AreEqual (3, method.ParameterTypesCount);
-                            Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [0]);
-                            Assert.AreEqual ("KRPC.Request", method.ParameterTypesList [1]);
-                            Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [2]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "ProcedureNoArgsReturns") {
-                            Assert.AreEqual (0, method.ParameterTypesCount);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("KRPC.Response", method.ReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "ProcedureSingleArgReturns") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [0]);
-                            Assert.AreEqual ("KRPC.Response", method.ReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "ProcedureWithValueTypes") {
-                            Assert.AreEqual (3, method.ParameterTypesCount);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("float", method.ParameterTypesList [0]);
-                            Assert.AreEqual ("string", method.ParameterTypesList [1]);
-                            Assert.AreEqual ("bytes", method.ParameterTypesList [2]);
-                            Assert.AreEqual ("int32", method.ReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "get_PropertyWithGetAndSet") {
-                            Assert.AreEqual (0, method.ParameterTypesCount);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("string", method.ReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("Property.Get(PropertyWithGetAndSet)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "set_PropertyWithGetAndSet") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.AreEqual ("string", method.ParameterTypesList [0]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("Property.Set(PropertyWithGetAndSet)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "get_PropertyWithGet") {
-                            Assert.AreEqual (0, method.ParameterTypesCount);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("string", method.ReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("Property.Get(PropertyWithGet)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "set_PropertyWithSet") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.AreEqual ("string", method.ParameterTypesList [0]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("Property.Set(PropertyWithSet)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "CreateTestObject") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.AreEqual ("string", method.ParameterTypesList [0]);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("uint64", method.ReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("ReturnType.Class(TestClass)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "DeleteTestObject") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("ParameterType(0).Class(TestClass)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "TestClass_FloatToString") {
-                            Assert.AreEqual (2, method.ParameterTypesCount);
-                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
-                            Assert.AreEqual ("float", method.ParameterTypesList [1]);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("string", method.ReturnType);
-                            Assert.AreEqual (2, method.AttributesCount);
-                            Assert.AreEqual ("Class.Method(FloatToString)", method.AttributesList [0]);
-                            Assert.AreEqual ("ParameterType(0).Class(TestClass)", method.AttributesList [1]);
-                            found++;
-                        }
-                        if (method.Name == "TestClass_ObjectToString") {
-                            Assert.AreEqual (2, method.ParameterTypesCount);
-                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
-                            Assert.AreEqual ("uint64", method.ParameterTypesList [1]);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("string", method.ReturnType);
-                            Assert.AreEqual (3, method.AttributesCount);
-                            Assert.AreEqual ("Class.Method(ObjectToString)", method.AttributesList [0]);
-                            Assert.AreEqual ("ParameterType(0).Class(TestClass)", method.AttributesList [1]);
-                            Assert.AreEqual ("ParameterType(1).Class(TestClass)", method.AttributesList [2]);
-                            found++;
-                        }
-                        if (method.Name == "TestClass_get_IntProperty") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("int32", method.ReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("Class.Property.Get(TestClass,IntProperty)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "TestClass_set_IntProperty") {
-                            Assert.AreEqual (2, method.ParameterTypesCount);
-                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
-                            Assert.AreEqual ("int32", method.ParameterTypesList [1]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("Class.Property.Set(TestClass,IntProperty)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "TestClass_get_ObjectProperty") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("uint64", method.ReturnType);
-                            Assert.AreEqual (2, method.AttributesCount);
-                            Assert.AreEqual ("Class.Property.Get(TestClass,ObjectProperty)", method.AttributesList [0]);
-                            Assert.AreEqual ("ReturnType.Class(TestClass)", method.AttributesList [1]);
-                            found++;
-                        }
-                        if (method.Name == "TestClass_set_ObjectProperty") {
-                            Assert.AreEqual (2, method.ParameterTypesCount);
-                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
-                            Assert.AreEqual ("uint64", method.ParameterTypesList [1]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (2, method.AttributesCount);
-                            Assert.AreEqual ("Class.Property.Set(TestClass,ObjectProperty)", method.AttributesList [0]);
-                            Assert.AreEqual ("ParameterType(1).Class(TestClass)", method.AttributesList [1]);
-                            found++;
-                        }
-                    }
-                    Assert.AreEqual (18, found);
-                }
-            }
-        }
-
-        [Test]
-        public void IsAValidType ()
-        {
-            Assert.IsTrue (TypeUtils.IsAValidType (typeof(string)));
-            Assert.IsTrue (TypeUtils.IsAValidType (typeof(long)));
-            Assert.IsTrue (TypeUtils.IsAValidType (typeof(TestService.TestClass)));
-            Assert.IsFalse (TypeUtils.IsAValidType (typeof(TestService)));
-        }
-
-        [Test]
-        public void IsAClassType ()
-        {
-            Assert.IsFalse (TypeUtils.IsAClassType (typeof(string)));
-            Assert.IsFalse (TypeUtils.IsAClassType (typeof(long)));
-            Assert.IsTrue (TypeUtils.IsAClassType (typeof(TestService.TestClass)));
-            Assert.IsFalse (TypeUtils.IsAClassType (typeof(TestService)));
-        }
-
-        [Test]
-        public void GetTypeName ()
-        {
-            Assert.AreEqual ("string", TypeUtils.GetTypeName (typeof(string)));
-            Assert.AreEqual ("int64", TypeUtils.GetTypeName (typeof(long)));
-            Assert.AreEqual ("uint64", TypeUtils.GetTypeName (typeof(TestService.TestClass)));
-            Assert.Throws<ArgumentException> (() => TypeUtils.GetTypeName (typeof(TestService)));
-        }
-
-        [Test]
-        public void ParameterTypeAttributes ()
-        {
-            Assert.AreEqual (new string[]{ }, TypeUtils.ParameterTypeAttributes (0, typeof(string)));
-            Assert.AreEqual (new string[]{ }, TypeUtils.ParameterTypeAttributes (3, typeof(long)));
-            Assert.AreEqual (new []{ "ParameterType(1).Class(TestClass)" }, TypeUtils.ParameterTypeAttributes (1, typeof(TestService.TestClass)));
-            Assert.Throws<ArgumentException> (() => TypeUtils.ParameterTypeAttributes (0, typeof(TestService)));
-        }
-
-        [Test]
-        public void ReturnTypeAttributes ()
-        {
-            Assert.AreEqual (new string[]{ }, TypeUtils.ReturnTypeAttributes (typeof(string)));
-            Assert.AreEqual (new string[]{ }, TypeUtils.ReturnTypeAttributes (typeof(long)));
-            Assert.AreEqual (new []{ "ReturnType.Class(TestClass)" }, TypeUtils.ReturnTypeAttributes (typeof(TestService.TestClass)));
-            Assert.Throws<ArgumentException> (() => TypeUtils.ReturnTypeAttributes (typeof(TestService)));
         }
     }
 }

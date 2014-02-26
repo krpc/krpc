@@ -80,7 +80,7 @@ namespace KRPC.Service
             for (int i = 0; i < parameters.Count; i++) {
                 try {
                     if (TypeUtils.IsAClassType (procedure.ParameterTypes [i])) {
-                        decodedParameters [i] = ObjectStore.GetInstance ((ulong)ProtocolBuffers.ReadValue (parameters [i], typeof(ulong)));
+                        decodedParameters [i] = ObjectStore.Instance.GetInstance ((ulong)ProtocolBuffers.ReadValue (parameters [i], typeof(ulong)));
                     } else if (ProtocolBuffers.IsAMessageType (procedure.ParameterTypes [i])) {
                         var builder = procedure.ParameterBuilders [i];
                         decodedParameters [i] = builder.WeakMergeFrom (parameters [i]).WeakBuild ();
@@ -118,7 +118,7 @@ namespace KRPC.Service
 
             // Encode it as a ByteString
             if (TypeUtils.IsAClassType (procedure.ReturnType))
-                return ProtocolBuffers.WriteValue (ObjectStore.AddInstance (returnValue), typeof(ulong));
+                return ProtocolBuffers.WriteValue (ObjectStore.Instance.AddInstance (returnValue), typeof(ulong));
             else if (ProtocolBuffers.IsAMessageType (procedure.ReturnType))
                 return ProtocolBuffers.WriteMessage (returnValue as IMessage);
             else

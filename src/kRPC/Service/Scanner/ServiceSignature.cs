@@ -34,13 +34,13 @@ namespace KRPC.Service.Scanner
             procedures.AddRange (Reflection.GetPropertiesWith<KRPCProperty> (type)
                 .SelectMany (x => {
                 var accessors = new List<ProcedureSignature> ();
-                if (x.CanRead) {
+                if (x.GetGetMethod () != null) {
                     var method = x.GetGetMethod ();
                     var handler = new ProcedureHandler (method);
                     var attribute = "Property.Get(" + x.Name + ")";
                     accessors.Add (new ProcedureSignature (type.Name, method.Name, handler, attribute));
                 }
-                if (x.CanWrite) {
+                if (x.GetSetMethod () != null) {
                     var method = x.GetSetMethod ();
                     var handler = new ProcedureHandler (method);
                     var attribute = "Property.Set(" + x.Name + ")";
@@ -56,7 +56,7 @@ namespace KRPC.Service.Scanner
                 foreach (var method in classMethods) {
                     var handler = new ClassMethodHandler (method);
                     procedures.Add (new ProcedureSignature (type.Name, cls.Name + '_' + method.Name, handler,
-                        "Class.Method(" + method.Name + ")", "ParameterType(0).Class(" + cls.Name + ")"));
+                        "Class.Method(" + cls.Name + "," + method.Name + ")", "ParameterType(0).Class(" + cls.Name + ")"));
                 }
             }
 

@@ -30,7 +30,7 @@ namespace KRPC.Service
             for (int i = 1; i < parameters.Length; i++) {
                 methodParameters [i - 1] = parameters [i];
             }
-            return method.Invoke (ObjectStore.GetInstance (instanceGuid), methodParameters);
+            return method.Invoke (ObjectStore.Instance.GetInstance (instanceGuid), methodParameters);
         }
 
         public Type ReturnType {

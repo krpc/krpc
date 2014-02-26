@@ -3,18 +3,27 @@ using System.Collections.Generic;
 
 namespace KRPC.Service
 {
-    static class ObjectStore
+    class ObjectStore
     {
-        readonly static IDictionary<object, ulong> instances = new Dictionary<object, ulong> ();
-        readonly static IDictionary<ulong, object> objectIds = new Dictionary<ulong, object> ();
-        static ulong nextObjectId;
+        readonly IDictionary<object, ulong> instances = new Dictionary<object, ulong> ();
+        readonly IDictionary<ulong, object> objectIds = new Dictionary<ulong, object> ();
+        ulong nextObjectId;
+        static ObjectStore instance;
+
+        public static ObjectStore Instance {
+            get {
+                if (instance == null)
+                    instance = new ObjectStore ();
+                return instance;
+            }
+        }
 
         /// <summary>
         /// Register an instance with the object store, associating a unique object
         /// identifier with the instance that can be passed to clients.
         /// If the instance has already been added, this just returns it's object identifier.
         /// </summary>
-        public static ulong AddInstance (object instance)
+        public ulong AddInstance (object instance)
         {
             if (instances.ContainsKey (instance))
                 return instances [instance];
@@ -29,7 +38,7 @@ namespace KRPC.Service
         /// Remove an instance from the object store.
         /// Note: this doesn't destroy the instance, just removes the reference to it.
         /// </summary>
-        public static void RemoveInstance (object instance)
+        public void RemoveInstance (object instance)
         {
             if (instances.ContainsKey (instance)) {
                 var objectId = instances [instance];
@@ -41,7 +50,7 @@ namespace KRPC.Service
         /// <summary>
         /// Get an instance by it's unique object identifier.
         /// </summary>
-        public static object GetInstance (ulong objectId)
+        public object GetInstance (ulong objectId)
         {
             if (!objectIds.ContainsKey (objectId))
                 throw new ArgumentException ("Instance not found");
@@ -51,7 +60,7 @@ namespace KRPC.Service
         /// <summary>
         /// Get the object identifier for a given instance.
         /// </summary>
-        public static object GetObjectId (object instance)
+        public object GetObjectId (object instance)
         {
             if (!instances.ContainsKey (instance))
                 throw new ArgumentException ("Instance not found");
