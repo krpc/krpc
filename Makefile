@@ -1,5 +1,5 @@
 # Note: This must be an absolute path
-KSP_DIR = "$(shell pwd)/../Kerbal Space Program"
+KSP_DIR = "$(shell pwd)/../ksp"
 
 VERSION = $(shell cat VERSION)
 
@@ -20,9 +20,16 @@ CSHARP_BINDIRS   = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin) \
 CSHARP_MAIN_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 CSHARP_LIBRARIES      = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 
-PROTOC = protoc
-CSHARP_PROTOGEN = tools/ProtoGen.exe
 PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCServices/Schema/*.proto)
+
+PROTOC = protoc
+PROTOGEN = tools/ProtoGen.exe
+MDTOOL = mdtool
+MONODIS = monodis
+NUNIT_CONSOLE = nunit-console
+UNZIP = unzip
+MARKDOWN = markdown
+HTML2TEXT = html2text
 
 # Main build targets
 .PHONY: all configure build dist pre-release release install test ksp clean dist-clean strip-bom
@@ -43,7 +50,7 @@ dist: build
 	# Plugin files
 	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
 	# Toolbar
-	unzip lib/toolbar/Toolbar-1.6.0.zip -d $(DIST_DIR)
+	$(UNZIP) lib/toolbar/Toolbar-1.6.0.zip -d $(DIST_DIR)
 	mv $(DIST_DIR)/Toolbar-1.6.0/GameData/* $(DIST_DIR)/GameData/
 	rm -r $(DIST_DIR)/Toolbar-1.6.0
 	# Python client library
@@ -62,11 +69,11 @@ pre-release: dist test
 	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# README
-	markdown README.md | html2text -rcfile tools/html2textrc | sed -e "/Compiling from Source/,//d" > $(DIST_DIR)/README.txt
+	$(MARKDOWN) README.md | $(HTML2TEXT) -rcfile tools/html2textrc | sed -e "/Compiling from Source/,//d" > $(DIST_DIR)/README.txt
 	cp $(DIST_DIR)/README.txt $(DIST_DIR)/GameData/kRPC/
 	# Plugin files
-	monodis --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
-	monodis --assembly $(DIST_DIR)/GameData/kRPC/kRPCServices.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCServices-version.txt
+	$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
+	$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPCServices.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCServices-version.txt
 	cd $(DIST_DIR); zip -r krpc-$(VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
 
 release: dist test
@@ -79,7 +86,7 @@ install: dist
 	cp -r $(DIST_DIR)/GameData/* $(KSP_DIR)/GameData/
 
 test: $(CSHARP_TEST_PROJECTS)
-	nunit-console -nologo -nothread -trace=Off -output=test.log src/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
+	$(NUNIT_CONSOLE) -nologo -nothread -trace=Off -output=test.log src/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
 	make -C python test
 
 ksp: install TestingTools
@@ -108,7 +115,7 @@ $(CSHARP_PROJECTS): src/$$@/bin/$(CSHARP_CONFIG)/$$@.dll
 
 $(CSHARP_LIBRARIES):
 	$(eval $@_PROJECT := $(basename $(notdir $@)))
-	mdtool build -t:Build -c:$(CSHARP_CONFIG) -p:$($@_PROJECT) src/kRPC.sln
+	$(MDTOOL) build -t:Build -c:$(CSHARP_CONFIG) -p:$($@_PROJECT) src/kRPC.sln
 
 # Protocol Buffers
 .PHONY: protobuf protobuf-csharp protobuf-python protobuf-clean protobuf-csharp-clean protobuf-python-clean
@@ -142,6 +149,6 @@ protobuf-python-clean:
 	cp $@ python/schema/$(notdir $@)
 
 %.cs: %.protobin
-	$(CSHARP_PROTOGEN) \
+	$(PROTOGEN) \
 		$*.protobin -namespace=KRPC.Schema.$(basename $(notdir $@)) \
 		-umbrella_classname=$(basename $(notdir $@)) -output_directory=$(dir $@)
