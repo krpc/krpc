@@ -37,15 +37,17 @@ Compiling kRPC from Source
 
 See [python/README.md](python/README.md) for instructions.
 
-## Testing
+## Running the Tests
 
-The kRPCTest project contains nunit unit tests. They can be built and run using `make test`.
+This project contains unit tests for the server code (written using NUnit) and for the python client code (using the unittest module). The tests can be run using `make test` (after compiling everything using `make build`).
 
-The plugin can also be built, installed (along with the TestingTools.dll to auto-load the default save) and run using:
+Running the C# unit tests using the Makefile requires `nunit-console` to be installed, for example using apt:
 
-`$ make ksp`
+`apt-get install nunit-console`
 
-This speeds up manual building and testing significantly!
+The plugin can also be built, installed into KSP (along with the TestingTools.dll to auto-load the default save) and run using:
+
+`make ksp`
 
 ## Dependencies
 
