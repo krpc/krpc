@@ -15,11 +15,11 @@ Compiling kRPC from Source
 
 2. Compile the plugin binaries. The following command compiles the protocol buffer .proto files into C# classes and compiles kRPC.dll and kRPCServices.dll using the MonoDevelop command line tool:
 
- `$ make build`
+ `make build`
 
-3. Collect together all the plugin files, and copy them into `$KSP_DIR/GameData/kRPC`. This also installs the Toolbar plugin to `$KSP_DIR/GameData/kRPC`.
+3. Collect together all the plugin files, and copy them into `$KSP_DIR/GameData/kRPC`. This also installs the Toolbar plugin to `$KSP_DIR/GameData/000_Toolbar` (although this can be removed as kRPC will work without it).
 
- `$ make install KSP_DIR=/home/djungelorm/KerbalSpaceProgram`
+ `make install KSP_DIR=/home/djungelorm/KerbalSpaceProgram`
 
  Alternatively, you can have the plugin files copied into directory `dist` in the root of the source tree using `make dist`, then manually copy them over to your GameData directory.
 
@@ -29,7 +29,7 @@ Compiling kRPC from Source
 
 2. Compile the protocol buffer .proto files into C# classes:
 
- `$ make protobuf-csharp`
+ `make protobuf-csharp`
 
 3. Open the solution file `src/kRPC.sln` in your IDE.
 
