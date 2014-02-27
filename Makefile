@@ -30,6 +30,7 @@ PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCServices/Schema/
 all: build
 
 configure:
+	test -d $(KSP_DIR)/KSP_Data
 	test -L lib/KSP_Data || ln -s -t lib/ $(KSP_DIR)/KSP_Data
 
 build: configure protobuf $(CSHARP_MAIN_PROJECTS)
