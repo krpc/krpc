@@ -13,6 +13,12 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
+        public static string DoubleToString (double value)
+        {
+            return value.ToString ();
+        }
+
+        [KRPCProcedure]
         public static string Int32ToString (int value)
         {
             return value.ToString ();
