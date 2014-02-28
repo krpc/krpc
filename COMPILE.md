@@ -13,6 +13,15 @@ Compiling kRPC from Source
 
  You can also install the Protocol Buffers compiler from source: https://code.google.com/p/protobuf/
 
+ On Ubuntu 13.10, You may also want to use a more recent version of MonoDevelop than those provided in the apt repositories.
+ The latest can be installed from a ppa as follows:
+
+ ```
+ add-apt-repository ppa:keks9n/monodevelop-latest
+ apt-get update
+ apt-get install monodevelop-latest
+ ```
+
 2. Compile the plugin binaries. The following command compiles the protocol buffer .proto files into C# classes and compiles kRPC.dll and kRPCServices.dll using the MonoDevelop command line tool:
 
  `make build`
