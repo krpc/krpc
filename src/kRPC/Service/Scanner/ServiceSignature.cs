@@ -56,7 +56,7 @@ namespace KRPC.Service.Scanner
                 foreach (var method in classMethods) {
                     var handler = new ClassMethodHandler (method);
                     procedures.Add (new ProcedureSignature (type.Name, cls.Name + '_' + method.Name, handler,
-                        "Class.Method(" + cls.Name + "," + method.Name + ")", "ParameterType(0).Class(" + cls.Name + ")"));
+                        "Class.Method(" + Name + "." + cls.Name + "," + method.Name + ")", "ParameterType(0).Class(" + Name + "." + cls.Name + ")"));
                 }
             }
 
@@ -69,13 +69,13 @@ namespace KRPC.Service.Scanner
                     if (x.CanRead) {
                         var method = x.GetGetMethod ();
                         var handler = new ClassMethodHandler (method);
-                        var attribute = "Class.Property.Get(" + cls.Name + "," + x.Name + ")";
+                        var attribute = "Class.Property.Get(" + Name + "." + cls.Name + "," + x.Name + ")";
                         accessors.Add (new ProcedureSignature (type.Name, cls.Name + '_' + method.Name, handler, attribute));
                     }
                     if (x.CanWrite) {
                         var method = x.GetSetMethod ();
                         var handler = new ClassMethodHandler (method);
-                        var attribute = "Class.Property.Set(" + cls.Name + "," + x.Name + ")";
+                        var attribute = "Class.Property.Set(" + Name + "." + cls.Name + "," + x.Name + ")";
                         accessors.Add (new ProcedureSignature (type.Name, cls.Name + '_' + method.Name, handler, attribute));
                     }
                     return accessors;

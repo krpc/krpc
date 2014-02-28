@@ -542,6 +542,54 @@ namespace KRPCTest.Service
             Assert.IsFalse (builtResponse.HasError);
             Assert.AreEqual (1337, instance.IntProperty);
         }
+
+        /// <summary>
+        /// Test calling a procedure with a class as the parameter,
+        /// where the class is defined in a different service
+        /// </summary>
+        [Test]
+        public void HandleRequestWithClassTypeParameterFromDifferentService ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            instance.IntProperty = 42;
+            var guid = ObjectStore.Instance.AddInstance (instance);
+            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService2")
+                .SetProcedure ("ClassTypeFromOtherServiceAsParameter")
+                .AddParameters (guidBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 0;
+            var builtResponse = response.Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (42, ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(long)));
+        }
+
+        /// <summary>
+        /// Test calling a procedure that returns an object,
+        /// where the class of the object is defined in a different service
+        /// </summary>
+        [Test]
+        public void HandleRequestWithClassTypeReturnFromDifferentService ()
+        {
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService2")
+                .SetProcedure ("ClassTypeFromOtherServiceAsReturn")
+                .AddParameters (ProtocolBuffers.WriteValue ("jeb", typeof(string)))
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 0;
+            var builtResponse = response.Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            var guid = (ulong)ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(ulong));
+            var obj = (TestService.TestClass)ObjectStore.Instance.GetInstance (guid);
+            Assert.AreEqual ("jeb", obj.value);
+        }
     }
 }
 

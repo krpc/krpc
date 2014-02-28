@@ -31,7 +31,7 @@ namespace KRPC.Service
             if (!IsAValidType (type))
                 throw new ArgumentException ();
             else if (IsAClassType (type))
-                return new [] { "ParameterType(" + position + ").Class(" + type.Name + ")" };
+                return new [] { "ParameterType(" + position + ").Class(" + Scanner.Utils.GetServiceFor (type) + "." + type.Name + ")" };
             else
                 return new string[] { };
         }
@@ -41,7 +41,7 @@ namespace KRPC.Service
             if (!IsAValidType (type))
                 throw new ArgumentException ();
             else if (IsAClassType (type))
-                return new [] { "ReturnType.Class(" + type.Name + ")" };
+                return new [] { "ReturnType.Class(" + Scanner.Utils.GetServiceFor (type) + "." + type.Name + ")" };
             else
                 return new string[] { };
         }

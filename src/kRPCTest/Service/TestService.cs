@@ -79,7 +79,7 @@ namespace KRPCTest.Service
         [KRPCClass]
         public class TestClass
         {
-            string value;
+            public string value;
 
             public TestClass (string value)
             {

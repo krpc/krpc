@@ -112,6 +112,7 @@
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Scanner\Scanner.cs" />
     <Compile Include="Service\TypeUtils.cs" />
+    <Compile Include="Service\Scanner\Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

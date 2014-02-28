@@ -39,7 +39,7 @@ namespace KRPCTest.Service
         {
             Assert.AreEqual (new string[]{ }, TypeUtils.ParameterTypeAttributes (0, typeof(string)));
             Assert.AreEqual (new string[]{ }, TypeUtils.ParameterTypeAttributes (3, typeof(long)));
-            Assert.AreEqual (new []{ "ParameterType(1).Class(TestClass)" }, TypeUtils.ParameterTypeAttributes (1, typeof(TestService.TestClass)));
+            Assert.AreEqual (new []{ "ParameterType(1).Class(TestService.TestClass)" }, TypeUtils.ParameterTypeAttributes (1, typeof(TestService.TestClass)));
             Assert.Throws<ArgumentException> (() => TypeUtils.ParameterTypeAttributes (0, typeof(TestService)));
         }
 
@@ -48,7 +48,7 @@ namespace KRPCTest.Service
         {
             Assert.AreEqual (new string[]{ }, TypeUtils.ReturnTypeAttributes (typeof(string)));
             Assert.AreEqual (new string[]{ }, TypeUtils.ReturnTypeAttributes (typeof(long)));
-            Assert.AreEqual (new []{ "ReturnType.Class(TestClass)" }, TypeUtils.ReturnTypeAttributes (typeof(TestService.TestClass)));
+            Assert.AreEqual (new []{ "ReturnType.Class(TestService.TestClass)" }, TypeUtils.ReturnTypeAttributes (typeof(TestService.TestClass)));
             Assert.Throws<ArgumentException> (() => TypeUtils.ReturnTypeAttributes (typeof(TestService)));
         }
     }
