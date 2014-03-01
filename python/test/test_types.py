@@ -8,8 +8,8 @@ from krpc import _ClassType as ClassType
 from krpc import _BaseClass as BaseClass
 import schema.KRPC
 
-PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string'] # TODO: add bytes
-PYTHON_VALUE_TYPES = [float, int, long, bool, str] #TODO: add bytearray
+PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
+PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
 
 PROTOBUF_TO_PYTHON_VALUE_TYPE = {
     'double': float,
@@ -20,7 +20,7 @@ PROTOBUF_TO_PYTHON_VALUE_TYPE = {
     'uint64': long,
     'bool': bool,
     'string': str,
-    #TODO: add bytes/bytearray
+    'bytes': bytes
 }
 
 class TestTypes(unittest.TestCase):
