@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using KRPC.Service;
+using KRPC.Service.Attributes;
 using KRPC.Schema.Vessel;
 
 namespace KRPCServices

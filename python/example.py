@@ -8,7 +8,6 @@ This example script is an autopilot that will launch the supplied Test.craft
 
 import krpc
 import time
-import schema # TODO: remove the need for this
 
 def main():
     # Connect to the server with the default settings
@@ -16,9 +15,6 @@ def main():
     print 'Connecting to server...'
     ksp = krpc.connect(name='Example script')
     print 'Connected to server, version', ksp.KRPC.GetStatus().version
-
-    # TODO: remove the need for the following
-    controls = schema.Control.ControlInputs()
 
     # Set the throttle to 100% and enable SAS
     ksp.Control.Throttle = 1
@@ -39,7 +35,7 @@ def main():
     while True:
 
         # Check altitude, exit loop if higher than 10km
-        altitude = ksp.Flight.GetFlightData().altitude
+        altitude = ksp.Flight.Altitude
         print '  Altitude = %.1f km' % (altitude/1000)
         if altitude > 10000:
             break
@@ -60,18 +56,16 @@ def main():
     # Disable SAS, pitch the vessel to the west, then hold position using SAS
     # TODO: get the heading from the craft to do this more accurately
     ksp.Control.SAS = False
-    controls.yaw = 0.4
-    ksp.Control.SetControlInputs(controls)
+    ksp.Control.Yaw = 0.4
     time.sleep(2)
     ksp.Control.SAS = True
-    controls.yaw = 0
-    ksp.Control.SetControlInputs(controls)
+    ksp.Control.Yaw = 0
 
     # Raise apoapsis to above 80km
     while True:
 
         # Apoapsis is relative to the center of Kerbin, so subtract 600km
-        apoapsis = ksp.Orbit.GetOrbitData().apoapsis - 600000
+        apoapsis = ksp.Orbit.Apoapsis - 600000
         print '  Apoapsis = %.1f km' % (apoapsis/1000)
         if apoapsis > 80000:
             break

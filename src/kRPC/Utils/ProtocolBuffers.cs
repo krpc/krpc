@@ -119,7 +119,7 @@ namespace KRPC.Utils
         public static ByteString WriteMessage (IMessage message)
         {
             byte[] returnBytes;
-            using (MemoryStream stream = new MemoryStream ()) {
+            using (var stream = new MemoryStream ()) {
                 message.WriteTo (stream);
                 returnBytes = stream.ToArray ();
             }
@@ -177,7 +177,7 @@ namespace KRPC.Utils
         /// </summary>
         public static ByteString WriteValue (object value, Type type)
         {
-            MemoryStream stream = new MemoryStream ();
+            var stream = new MemoryStream ();
             var encoder = CodedOutputStream.CreateInstance (stream);
             if (type == typeof(double))
                 encoder.WriteDoubleNoTag ((double)value);

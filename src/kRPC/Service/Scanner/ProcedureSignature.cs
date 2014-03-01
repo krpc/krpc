@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
 using Google.ProtocolBuffers;
 using KRPC.Utils;
 
-namespace KRPC.Service
+namespace KRPC.Service.Scanner
 {
     /// <summary>
     /// Signature information for a procedure, including procedure name,
@@ -27,7 +26,7 @@ namespace KRPC.Service
         /// <summary>
         /// The method that implements the procedure.
         /// </summary>
-        public MethodInfo Handler { get; private set; }
+        public IProcedureHandler Handler { get; private set; }
 
         public IList<Type> ParameterTypes { get; private set; }
 
@@ -45,19 +44,21 @@ namespace KRPC.Service
         /// </summary>
         public IBuilder ReturnBuilder { get; private set; }
 
-        public IList<string> Attributes { get; private set; }
+        public List<string> Attributes { get; private set; }
 
-        public ProcedureSignature (string serviceName, MethodInfo method, params string[] attributes)
+        public ProcedureSignature (string serviceName, string methodName, IProcedureHandler handler, params string[] attributes)
         {
-            Name = method.Name;
+            Name = methodName;
             FullyQualifiedName = serviceName + "." + Name;
-            Handler = method;
-            Attributes = attributes;
-            ParameterTypes = method.GetParameters ()
-                .Select (x => x.ParameterType).ToArray ();
+            Handler = handler;
+            Attributes = attributes.ToList ();
+            ParameterTypes = handler.GetParameters ().ToList ();
+            // Add parameter type attributes
+            for (int position = 0; position < ParameterTypes.Count; position++)
+                Attributes.AddRange (TypeUtils.ParameterTypeAttributes (position, ParameterTypes [position]));
             // Check the parameter types are valid
-            if (ParameterTypes.Any (x => !ProtocolBuffers.IsAValidType (x))) {
-                Type type = ParameterTypes.Where (x => !ProtocolBuffers.IsAValidType (x)).First ();
+            if (ParameterTypes.Any (x => !TypeUtils.IsAValidType (x))) {
+                Type type = ParameterTypes.First (x => !TypeUtils.IsAValidType (x));
                 throw new ServiceException (
                     type + " is not a valid Procedure parameter type, " +
                     "in " + FullyQualifiedName);
@@ -66,23 +67,22 @@ namespace KRPC.Service
             ParameterBuilders = ParameterTypes
                 .Select (x => {
                 try {
-                    if (ProtocolBuffers.IsAMessageType (x))
-                        return ProtocolBuffers.BuilderForMessageType (x);
-                    else
-                        return null;
+                    return ProtocolBuffers.IsAMessageType (x) ? ProtocolBuffers.BuilderForMessageType (x) : null;
                 } catch (ArgumentException) {
                     throw new ServiceException ("Failed to instantiate a message builder for parameter type " + x.Name);
                 }
             }).ToArray ();
-            HasReturnType = (method.ReturnType != typeof(void));
+            HasReturnType = (handler.ReturnType != typeof(void));
             if (HasReturnType) {
-                ReturnType = method.ReturnType;
+                ReturnType = handler.ReturnType;
                 // Check it's a valid return type
-                if (!ProtocolBuffers.IsAValidType (ReturnType)) {
+                if (!TypeUtils.IsAValidType (ReturnType)) {
                     throw new ServiceException (
                         ReturnType + " is not a valid Procedure return type, " +
                         "in " + FullyQualifiedName);
                 }
+                // Add return type attributes
+                Attributes.AddRange (TypeUtils.ReturnTypeAttributes (ReturnType));
                 // Create a builder if it's a message type
                 if (ProtocolBuffers.IsAMessageType (ReturnType)) {
                     try {

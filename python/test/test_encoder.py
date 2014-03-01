@@ -3,6 +3,8 @@
 import unittest
 import binascii
 from krpc import _Encoder as Encoder
+from krpc import _Types as Types
+from krpc import _BaseClass as BaseClass
 import schema.KRPC
 
 class TestEncoder(unittest.TestCase):
@@ -35,53 +37,34 @@ class TestEncoder(unittest.TestCase):
         request = schema.KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
-        data = Encoder.encode(request)
+        data = Encoder.encode(request, Types().as_type('KRPC.Request'))
         expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         self.assertEquals(expected, binascii.hexlify(data))
 
     def test_encode_value(self):
-        data = Encoder.encode(int(300))
-        expected = 'ac02'
-        self.assertEquals(expected, binascii.hexlify(data))
+        data = Encoder.encode(300, Types().as_type('int32'))
+        self.assertEquals('ac02', binascii.hexlify(data))
 
     def test_encode_message_delimited(self):
         request = schema.KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
-        data = Encoder.encode_delimited(request)
+        data = Encoder.encode_delimited(request, Types().as_type('KRPC.Request'))
         expected = '1c'+'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         self.assertEquals(expected, binascii.hexlify(data))
 
     def test_encode_value_delimited(self):
-        data = Encoder.encode_delimited(int(300))
-        expected = '02'+'ac02'
-        self.assertEquals(expected, binascii.hexlify(data))
+        data = Encoder.encode_delimited(300, Types().as_type('int32'))
+        self.assertEquals('02'+'ac02', binascii.hexlify(data))
 
-    def test_encode_float_value(self):
-        data = Encoder.encode(float(3.14159))
-        expected = 'd00f4940' # TODO : check this
-        self.assertEquals(expected, binascii.hexlify(data))
-
-    def test_encode_int_value(self):
-        data = Encoder.encode(42)
-        expected = '2a'
-        self.assertEquals(expected, binascii.hexlify(data))
-
-    def test_encode_long_value(self):
-        data = Encoder.encode(1234567890000L)
-        expected = 'd088ec8ff723' # TODO: check this
-        self.assertEquals(expected, binascii.hexlify(data))
-
-    def test_encode_bool_value(self):
-        data = Encoder.encode(True)
-        self.assertEquals('01', binascii.hexlify(data))
-        data = Encoder.encode(False)
-        self.assertEquals('00', binascii.hexlify(data))
-
-    def test_encode_string_value(self):
-        data = Encoder.encode('testing')
-        expected = '0774657374696e67'
-        self.assertEquals(expected, binascii.hexlify(data))
+    def test_encode_class(self):
+        typ = Types().as_type('Class(ServiceName.ClassName)')
+        class_type = typ.python_type
+        self.assertTrue(issubclass(class_type, BaseClass))
+        value = class_type(300)
+        self.assertEquals(300, value._object_id)
+        data = Encoder.encode(value, typ)
+        self.assertEquals('ac02', binascii.hexlify(data))
 
 if __name__ == '__main__':
     unittest.main()

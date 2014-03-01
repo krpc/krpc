@@ -1,5 +1,0 @@
-package Flight;
-
-message FlightData {
-  required double altitude = 1;
-}

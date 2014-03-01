@@ -75,6 +75,12 @@
     <Compile Include="Server\Net\NetworkInformationTest.cs" />
     <Compile Include="Server\Net\AssumptionsTest.cs" />
     <Compile Include="Utils\IEnumerableExtensionsTest.cs" />
+    <Compile Include="Service\TypeUtilsTest.cs" />
+    <Compile Include="Service\Scanner\ScannerTest.cs" />
+    <Compile Include="Service\ObjectStoreTest.cs" />
+    <Compile Include="Service\ClassMethodHandlerTest.cs" />
+    <Compile Include="Service\ProcedureHandlerTest.cs" />
+    <Compile Include="Service\TestService2.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -84,6 +90,7 @@
     <Folder Include="Service\" />
     <Folder Include="Server\Net\" />
     <Folder Include="Server\RPC\" />
+    <Folder Include="Service\Scanner\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\kRPC\kRPC.csproj">

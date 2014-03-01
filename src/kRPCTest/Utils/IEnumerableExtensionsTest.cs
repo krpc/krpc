@@ -10,9 +10,9 @@ namespace KRPCTest.Utils
         [Test]
         public void TestDuplicates ()
         {
-            var withDups = new string[] { "foo", "bar", "baz", "bar", "bar", "baz" };
-            Assert.AreEqual (new string[] { "bar", "baz" }, withDups.Duplicates ().ToArray ());
-            var withoutDups = new string[] { "foo", "bar", "baz" };
+            var withDups = new [] { "foo", "bar", "baz", "bar", "bar", "baz" };
+            Assert.AreEqual (new [] { "bar", "baz" }, withDups.Duplicates ().ToArray ());
+            var withoutDups = new [] { "foo", "bar", "baz" };
             Assert.AreEqual (new string[] { }, withoutDups.Duplicates ().ToArray ());
         }
     }

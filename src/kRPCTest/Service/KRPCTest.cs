@@ -17,7 +17,7 @@ namespace KRPCTest.Service
         {
             var services = KRPC.Service.KRPC.GetServices ();
             Assert.IsNotNull (services);
-            Assert.AreEqual (2, services.Services_Count);
+            Assert.AreEqual (3, services.Services_Count);
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "KRPC") {
                     Assert.AreEqual (2, service.ProceduresCount);

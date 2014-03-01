@@ -294,9 +294,9 @@ namespace KRPCTest.Service
         public void HandleRequestWithValueTypes ()
         {
             // Create arguments
-            float expectedX = 3.14159f;
-            string expectedY = "foo";
-            byte[] expectedZ = new byte[] { 0xDE, 0xAD, 0xBE, 0xEF };
+            const float expectedX = 3.14159f;
+            const string expectedY = "foo";
+            var expectedZ = new byte[] { 0xDE, 0xAD, 0xBE, 0xEF };
             byte[] xBytes, yBytes, zBytes;
             using (var stream = new MemoryStream ()) {
                 var codedStream = CodedOutputStream.CreateInstance (stream);
@@ -343,6 +343,9 @@ namespace KRPCTest.Service
                 It.IsAny<float> (), It.IsAny<string> (), It.IsAny<byte[]> ()), Times.Once ());
         }
 
+        /// <summary>
+        /// Test calling the getter for a property
+        /// </summary>
         [Test]
         public void HandleRequestForPropertyGetter ()
         {
@@ -361,6 +364,9 @@ namespace KRPCTest.Service
             mock.Verify (x => x.PropertyWithGet, Times.Once ());
         }
 
+        /// <summary>
+        /// Test calling the setter for a property
+        /// </summary>
         [Test]
         public void HandleRequestForPropertySetter ()
         {
@@ -379,100 +385,210 @@ namespace KRPCTest.Service
             Assert.False (response.HasError);
         }
 
+        /// <summary>
+        /// Test calling a procedure that returns a proxy object
+        /// </summary>
         [Test]
-        public void GetServices ()
+        public void HandleRequestWithObjectReturn ()
         {
-            var services = KRPC.Service.KRPC.GetServices ();
-            Assert.IsNotNull (services);
-            Assert.AreEqual (2, services.Services_Count);
-            foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
-                if (service.Name == "TestService") {
-                    Assert.AreEqual (10, service.ProceduresCount);
-                    int found = 0;
-                    foreach (KRPC.Schema.KRPC.Procedure method in service.ProceduresList) {
-                        if (method.Name == "ProcedureNoArgsNoReturn") {
-                            Assert.AreEqual (0, method.ParameterTypesCount);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "ProcedureSingleArgNoReturn") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [0]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "ProcedureThreeArgsNoReturn") {
-                            Assert.AreEqual (3, method.ParameterTypesCount);
-                            Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [0]);
-                            Assert.AreEqual ("KRPC.Request", method.ParameterTypesList [1]);
-                            Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [2]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "ProcedureNoArgsReturns") {
-                            Assert.AreEqual (0, method.ParameterTypesCount);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("KRPC.Response", method.ReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "ProcedureSingleArgReturns") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("KRPC.Response", method.ParameterTypesList [0]);
-                            Assert.AreEqual ("KRPC.Response", method.ReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "ProcedureWithValueTypes") {
-                            Assert.AreEqual (3, method.ParameterTypesCount);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("float", method.ParameterTypesList [0]);
-                            Assert.AreEqual ("string", method.ParameterTypesList [1]);
-                            Assert.AreEqual ("bytes", method.ParameterTypesList [2]);
-                            Assert.AreEqual ("int32", method.ReturnType);
-                            Assert.AreEqual (0, method.AttributesCount);
-                            found++;
-                        }
-                        if (method.Name == "get_PropertyWithGetAndSet") {
-                            Assert.AreEqual (0, method.ParameterTypesCount);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("string", method.ReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("Property.Get(PropertyWithGetAndSet)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "set_PropertyWithGetAndSet") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.AreEqual ("string", method.ParameterTypesList [0]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("Property.Set(PropertyWithGetAndSet)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "get_PropertyWithGet") {
-                            Assert.AreEqual (0, method.ParameterTypesCount);
-                            Assert.IsTrue (method.HasReturnType);
-                            Assert.AreEqual ("string", method.ReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("Property.Get(PropertyWithGet)", method.AttributesList [0]);
-                            found++;
-                        }
-                        if (method.Name == "set_PropertyWithSet") {
-                            Assert.AreEqual (1, method.ParameterTypesCount);
-                            Assert.AreEqual ("string", method.ParameterTypesList [0]);
-                            Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
-                            Assert.AreEqual ("Property.Set(PropertyWithSet)", method.AttributesList [0]);
-                            found++;
-                        }
-                    }
-                    Assert.AreEqual (10, found);
-                }
-            }
+            var instance = new TestService.TestClass ("foo");
+            var guid = ObjectStore.Instance.AddInstance (instance);
+            var argBytes = ProtocolBuffers.WriteValue ("foo", typeof(string));
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.CreateTestObject ("foo")).Returns (instance);
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("CreateTestObject")
+                .AddParameters (argBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            Assert.False (response.HasError);
+            response.Time = 42;
+            Response builtResponse = response.Build ();
+            Assert.True (builtResponse.HasReturnValue);
+            Assert.AreEqual (guid, ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(ulong)));
+        }
+
+        /// <summary>
+        /// Test calling a procedure that takes a proxy object as a parameter
+        /// </summary>
+        [Test]
+        public void HandleRequestWithObjectParameter ()
+        {
+            // Create argument
+            var instance = new TestService.TestClass ("foo");
+            var arg = ObjectStore.Instance.AddInstance (instance);
+            ByteString argBytes = ProtocolBuffers.WriteValue (arg, typeof(ulong));
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.DeleteTestObject (It.IsAny<TestService.TestClass> ()))
+                .Callback ((TestService.TestClass x) => {
+                // Check the argument
+                Assert.AreSame (instance, x);
+            });
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("DeleteTestObject")
+                .AddParameters (argBytes)
+                .Build ();
+            // Run the request
+            KRPC.Service.Services.Instance.HandleRequest (request);
+            mock.Verify (x => x.DeleteTestObject (It.IsAny<TestService.TestClass> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling the method of a proxy object
+        /// </summary>
+        [Test]
+        public void HandleRequestForObjectMethod ()
+        {
+            // Create argument
+            var instance = new TestService.TestClass ("jeb");
+            var guid = ObjectStore.Instance.AddInstance (instance);
+            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
+            ByteString argBytes = ProtocolBuffers.WriteValue (3.14159f, typeof(float));
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("TestClass_FloatToString")
+                .AddParameters (guidBytes)
+                .AddParameters (argBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 42;
+            var builtResponse = response.Build ();
+            Assert.AreEqual ("jeb3.14159", ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(string)));
+        }
+
+        /// <summary>
+        /// Test calling the method of a proxy object, and pass a proxy object as a parameter
+        /// </summary>
+        [Test]
+        public void HandleRequestForObjectMethodWithObjectParameter ()
+        {
+            // Create argument
+            var instance = new TestService.TestClass ("bill");
+            var argInstance = new TestService.TestClass ("bob");
+            var guid = ObjectStore.Instance.AddInstance (instance);
+            var argGuid = ObjectStore.Instance.AddInstance (argInstance);
+            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
+            ByteString argBytes = ProtocolBuffers.WriteValue (argGuid, typeof(ulong));
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("TestClass_ObjectToString")
+                .AddParameters (guidBytes)
+                .AddParameters (argBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 42;
+            var builtResponse = response.Build ();
+            Assert.AreEqual ("billbob", ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(string)));
+        }
+
+        /// <summary>
+        /// Test the getting a property value in a proxy object
+        /// </summary>
+        [Test]
+        public void HandleRequestForClassPropertyGetter ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            instance.IntProperty = 42;
+            var guid = ObjectStore.Instance.AddInstance (instance);
+            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("TestClass_get_IntProperty")
+                .AddParameters (guidBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 0;
+            var builtResponse = response.Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (42, ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(int)));
+        }
+
+        /// <summary>
+        /// Test setting a property value in a proxy object
+        /// </summary>
+        [Test]
+        public void HandleRequestForClassPropertySetter ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            instance.IntProperty = 42;
+            var guid = ObjectStore.Instance.AddInstance (instance);
+            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("TestClass_set_IntProperty")
+                .AddParameters (guidBytes)
+                .AddParameters (ProtocolBuffers.WriteValue (1337, typeof(int)))
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 0;
+            var builtResponse = response.Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (1337, instance.IntProperty);
+        }
+
+        /// <summary>
+        /// Test calling a procedure with a class as the parameter,
+        /// where the class is defined in a different service
+        /// </summary>
+        [Test]
+        public void HandleRequestWithClassTypeParameterFromDifferentService ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            instance.IntProperty = 42;
+            var guid = ObjectStore.Instance.AddInstance (instance);
+            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService2")
+                .SetProcedure ("ClassTypeFromOtherServiceAsParameter")
+                .AddParameters (guidBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 0;
+            var builtResponse = response.Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (42, ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(long)));
+        }
+
+        /// <summary>
+        /// Test calling a procedure that returns an object,
+        /// where the class of the object is defined in a different service
+        /// </summary>
+        [Test]
+        public void HandleRequestWithClassTypeReturnFromDifferentService ()
+        {
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService2")
+                .SetProcedure ("ClassTypeFromOtherServiceAsReturn")
+                .AddParameters (ProtocolBuffers.WriteValue ("jeb", typeof(string)))
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 0;
+            var builtResponse = response.Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            var guid = (ulong)ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(ulong));
+            var obj = (TestService.TestClass)ObjectStore.Instance.GetInstance (guid);
+            Assert.AreEqual ("jeb", obj.value);
         }
     }
 }

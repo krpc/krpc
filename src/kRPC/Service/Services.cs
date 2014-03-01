@@ -1,10 +1,9 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Google.ProtocolBuffers;
 using KRPC.Schema.KRPC;
+using KRPC.Service.Scanner;
 using KRPC.Utils;
 
 namespace KRPC.Service
@@ -28,24 +27,7 @@ namespace KRPC.Service
         /// </summary>
         Services ()
         {
-            var serviceTypes = Reflection.GetTypesWith<KRPCService> ();
-            try {
-                Signatures = serviceTypes
-                    .Select (x => new ServiceSignature (x))
-                    .ToDictionary (x => x.Name);
-            } catch (ArgumentException) {
-                // Handle service name clashes
-                var duplicates = serviceTypes
-                    .Select (x => x.Name)
-                    .Duplicates ()
-                    .ToArray ();
-                throw new ServiceException (
-                    "Multiple Services have the same name. " +
-                    "Duplicates are " + String.Join (", ", duplicates));
-            }
-            // Check tha the main KRPC service was found
-            if (!Signatures.ContainsKey ("KRPC"))
-                throw new ServiceException ("KRPC service could not be found");
+            Signatures = Scanner.Scanner.GetServices ();
         }
 
         /// <summary>
@@ -69,7 +51,7 @@ namespace KRPC.Service
             object[] parameters = DecodeParameters (procedure, request.ParametersList);
             object returnValue;
             try {
-                returnValue = procedure.Handler.Invoke (null, parameters);
+                returnValue = procedure.Handler.Invoke (parameters);
             } catch (TargetInvocationException e) {
                 throw new RPCException ("Procedure '" + procedure.FullyQualifiedName + "' threw an exception. " +
                 e.InnerException.GetType () + ": " + e.InnerException.Message);
@@ -97,7 +79,9 @@ namespace KRPC.Service
             var decodedParameters = new object[parameters.Count];
             for (int i = 0; i < parameters.Count; i++) {
                 try {
-                    if (ProtocolBuffers.IsAMessageType (procedure.ParameterTypes [i])) {
+                    if (TypeUtils.IsAClassType (procedure.ParameterTypes [i])) {
+                        decodedParameters [i] = ObjectStore.Instance.GetInstance ((ulong)ProtocolBuffers.ReadValue (parameters [i], typeof(ulong)));
+                    } else if (ProtocolBuffers.IsAMessageType (procedure.ParameterTypes [i])) {
                         var builder = procedure.ParameterBuilders [i];
                         decodedParameters [i] = builder.WeakMergeFrom (parameters [i]).WeakBuild ();
                     } else {
@@ -126,18 +110,19 @@ namespace KRPC.Service
             }
 
             // Check if the return value is of a valid type
-            if (!ProtocolBuffers.IsAValidType (procedure.ReturnType)) {
+            if (!TypeUtils.IsAValidType (procedure.ReturnType)) {
                 throw new RPCException (
                     procedure.FullyQualifiedName + " returned an object of an invalid type. " +
                     "Expected " + procedure.ReturnType + "; got " + returnValue.GetType ());
             }
 
             // Encode it as a ByteString
-            if (ProtocolBuffers.IsAMessageType (procedure.ReturnType)) {
+            if (TypeUtils.IsAClassType (procedure.ReturnType))
+                return ProtocolBuffers.WriteValue (ObjectStore.Instance.AddInstance (returnValue), typeof(ulong));
+            else if (ProtocolBuffers.IsAMessageType (procedure.ReturnType))
                 return ProtocolBuffers.WriteMessage (returnValue as IMessage);
-            } else {
+            else
                 return ProtocolBuffers.WriteValue (returnValue, procedure.ReturnType);
-            }
         }
     }
 }

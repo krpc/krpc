@@ -1,11 +1,18 @@
 using System;
-using KRPC.Utils;
+using KRPC.Service.Attributes;
 
 namespace KRPC.Service
 {
+    /// <summary>
+    /// Main KRPC service, used by clients to interact with basic server functionality.
+    /// This includes requesting a description of the available services.
+    /// </summary>
     [KRPCService]
     public static class KRPC
     {
+        /// <summary>
+        /// Returns some information about the server, such as the version.
+        /// </summary>
         [KRPCProcedure]
         public static Schema.KRPC.Status GetStatus ()
         {
@@ -14,6 +21,10 @@ namespace KRPC.Service
             return status.Build ();
         }
 
+        /// <summary>
+        /// Returns information on all services, procedures, classes, properties etc. provided by the server.
+        /// Can be used by client libraries to automatically create functionality such as stubs.
+        /// </summary>
         [KRPCProcedure]
         public static Schema.KRPC.Services GetServices ()
         {
@@ -25,9 +36,9 @@ namespace KRPC.Service
                     var procedure = Schema.KRPC.Procedure.CreateBuilder ();
                     procedure.Name = procedureSignature.Name;
                     if (procedureSignature.HasReturnType)
-                        procedure.ReturnType = ProtocolBuffers.GetTypeName (procedureSignature.ReturnType);
+                        procedure.ReturnType = TypeUtils.GetTypeName (procedureSignature.ReturnType);
                     foreach (var parameterType in procedureSignature.ParameterTypes) {
-                        procedure.AddParameterTypes (ProtocolBuffers.GetTypeName (parameterType));
+                        procedure.AddParameterTypes (TypeUtils.GetTypeName (parameterType));
                     }
                     foreach (var attribute in procedureSignature.Attributes) {
                         procedure.AddAttributes (attribute);

@@ -1,13 +1,14 @@
 #!/bin/bash
 
-TEST_SERVER=../../src/TestServer/bin/Debug/TestServer.exe
+CSHARP_CONFIG=Release
+TEST_SERVER=../../src/TestServer/bin/$CSHARP_CONFIG/TestServer.exe
 
-test -f $TEST_SERVER || make -C ../.. CSHARP_CONFIG=Debug protobuf-csharp TestServer
+test -f $TEST_SERVER || make -C ../.. CSHARP_CONFIG=$CSHARP_CONFIG protobuf-csharp TestServer
 $TEST_SERVER 1>server.log &
 PID=$!
 echo "Test server running as process $PID"
 # Wait for server to start properly
-sleep 0.1
+sleep 1
 PYTHONPATH=`pwd`/.. ./test.py
 ret=$?
 kill $PID
