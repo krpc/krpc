@@ -11,6 +11,7 @@ class TestClient(unittest.TestCase):
 
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.ksp.TestService.FloatToString(float(3.14159)))
+        self.assertEqual('3.14159', self.ksp.TestService.DoubleToString(float(3.14159)))
         self.assertEqual('42', self.ksp.TestService.Int32ToString(42))
         self.assertEqual('123456789000', self.ksp.TestService.Int64ToString(123456789000L))
         self.assertEqual('True', self.ksp.TestService.BoolToString(True))

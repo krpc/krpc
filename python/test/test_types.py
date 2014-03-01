@@ -2,85 +2,98 @@
 
 import unittest
 from krpc import _Types as Types
+from krpc import _ValueType as ValueType
+from krpc import _MessageType as MessageType
+from krpc import _ClassType as ClassType
+from krpc import _BaseClass as BaseClass
 import schema.KRPC
+
+PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string'] # TODO: add bytes
+PYTHON_VALUE_TYPES = [float, int, long, bool, str] #TODO: add bytearray
+
+PROTOBUF_TO_PYTHON_VALUE_TYPE = {
+    'double': float,
+    'float': float,
+    'int32': int,
+    'int64': long,
+    'uint32': int,
+    'uint64': long,
+    'bool': bool,
+    'string': str,
+    #TODO: add bytes/bytearray
+}
 
 class TestTypes(unittest.TestCase):
 
-    def test_is_value_type(self):
-        self.assertTrue(Types.is_value_type(float))
-        self.assertTrue(Types.is_value_type(int))
-        self.assertTrue(Types.is_value_type(long))
-        self.assertTrue(Types.is_value_type(bool))
-        self.assertTrue(Types.is_value_type(str))
-        self.assertFalse(Types.is_value_type(type))
-        self.assertFalse(Types.is_value_type(type(TestTypes)))
-        self.assertFalse(Types.is_value_type('int'))
-        self.assertFalse(Types.is_value_type('int32'))
-        self.assertFalse(Types.is_value_type(schema.KRPC.Request))
-        self.assertFalse(Types.is_value_type(schema.KRPC.Response))
-        self.assertFalse(Types.is_value_type(None))
+    def test_value_types(self):
+        types = Types()
+        for protobuf_typ in PROTOBUF_VALUE_TYPES:
+            python_typ = PROTOBUF_TO_PYTHON_VALUE_TYPE[protobuf_typ]
+            typ = types.as_type(protobuf_typ)
+            self.assertTrue(isinstance(typ, ValueType))
+            self.assertEqual(protobuf_typ, typ.protobuf_type)
+            self.assertEqual(python_typ, typ.python_type)
 
-    def test_is_message_type(self):
-        self.assertTrue(Types.is_message_type(schema.KRPC.Request))
-        self.assertTrue(Types.is_message_type(schema.KRPC.Response))
-        self.assertFalse(Types.is_message_type(float))
-        self.assertFalse(Types.is_message_type(int))
-        self.assertFalse(Types.is_message_type(long))
-        self.assertFalse(Types.is_message_type(bool))
-        self.assertFalse(Types.is_message_type(str))
-        self.assertFalse(Types.is_message_type(type))
-        self.assertFalse(Types.is_message_type(type(TestTypes)))
-        self.assertFalse(Types.is_message_type('int'))
-        self.assertFalse(Types.is_message_type('int32'))
-        self.assertFalse(Types.is_message_type(None))
+    def test_message_types(self):
+        types = Types()
+        typ = types.as_type('KRPC.Request')
+        self.assertTrue(isinstance(typ, MessageType))
+        self.assertEqual(schema.KRPC.Request, typ.python_type)
+        self.assertEqual('KRPC.Request', typ.protobuf_type)
 
-    def test_is_valid_type(self):
-        self.assertTrue(Types.is_valid_type(float))
-        self.assertTrue(Types.is_valid_type(int))
-        self.assertFalse(Types.is_valid_type(type))
-        self.assertFalse(Types.is_valid_type(type(TestTypes)))
-        self.assertFalse(Types.is_valid_type('int'))
-        self.assertFalse(Types.is_valid_type('int32'))
-        self.assertFalse(Types.is_valid_type(None))
+    def test_class_types(self):
+        types = Types()
+        typ = types.as_type('Class(ServiceName.ClassName)')
+        self.assertTrue(isinstance(typ, ClassType))
+        self.assertTrue(issubclass(typ.python_type, BaseClass))
+        self.assertTrue('Class(ServiceName.ClassName)', typ.protobuf_type)
+        instance = typ.python_type(42)
+        self.assertEqual(42, instance._object_id)
+        typ2 = types.as_type('Class(ServiceName.ClassName)')
+        self.assertEqual(typ, typ2)
 
-    def test_as_python_type(self):
-        self.assertEqual(float, Types.as_python_type('float'))
-        self.assertEqual(int, Types.as_python_type('int32'))
-        self.assertEqual(long, Types.as_python_type('int64'))
-        self.assertEqual(bool, Types.as_python_type('bool'))
-        self.assertEqual(str, Types.as_python_type('string'))
-        self.assertEqual(schema.KRPC.Response, Types.as_python_type('KRPC.Response'))
-        self.assertEqual(schema.KRPC.Request, Types.as_python_type('KRPC.Request'))
-        self.assertRaises(TypeError, Types.as_python_type, None)
-        self.assertRaises(TypeError, Types.as_python_type, '')
-        self.assertRaises(TypeError, Types.as_python_type, 'TestTypes')
-        self.assertRaises(TypeError, Types.as_python_type, float)
-        self.assertRaises(TypeError, Types.as_python_type, schema.KRPC.Response)
+    def test_get_parameter_type(self):
+        types = Types()
+        self.assertEqual(float, types.get_parameter_type(0, 'float', []).python_type)
+        self.assertEqual('int32', types.get_parameter_type(0, 'int32', []).protobuf_type)
+        self.assertEqual('KRPC.Response', types.get_parameter_type(1, 'KRPC.Response', []).protobuf_type)
+        class_parameter = types.get_parameter_type(0, 'uint64', ['ParameterType(0).Class(ServiceName.ClassName)'])
+        self.assertEqual(types.as_type('Class(ServiceName.ClassName)'), class_parameter)
+        self.assertTrue(isinstance(class_parameter, ClassType))
+        self.assertTrue(issubclass(class_parameter.python_type, BaseClass))
+        self.assertEqual('Class(ServiceName.ClassName)', class_parameter.protobuf_type)
+        self.assertEqual('uint64', types.get_parameter_type(0, 'uint64', ['ParameterType(1).Class(ServiceName.ClassName)']).protobuf_type)
 
-    def test_as_protobuf_type(self):
-        self.assertEqual('float', Types.as_protobuf_type(float))
-        self.assertEqual('int32', Types.as_protobuf_type(int))
-        self.assertEqual('int64', Types.as_protobuf_type(long))
-        self.assertEqual('bool', Types.as_protobuf_type(bool))
-        self.assertEqual('string', Types.as_protobuf_type(str))
-        self.assertEqual('KRPC.Response', Types.as_protobuf_type(schema.KRPC.Response))
-        self.assertEqual('KRPC.Request', Types.as_protobuf_type(schema.KRPC.Request))
-        self.assertRaises(TypeError, Types.as_protobuf_type, None)
-        self.assertRaises(TypeError, Types.as_protobuf_type, '')
-        self.assertRaises(TypeError, Types.as_protobuf_type, type)
-        self.assertRaises(TypeError, Types.as_protobuf_type, TestTypes)
-        self.assertRaises(TypeError, Types.as_protobuf_type, 'KRPC.Response')
+    def test_get_return_type(self):
+        types = Types()
+        self.assertEqual('float', types.get_return_type('float', []).protobuf_type)
+        self.assertEqual('int32', types.get_return_type( 'int32', []).protobuf_type)
+        self.assertEqual('KRPC.Response', types.get_return_type('KRPC.Response', []).protobuf_type)
+        self.assertEqual('Class(ServiceName.ClassName)', types.get_return_type('uint64', ['ReturnType.Class(ServiceName.ClassName)']).protobuf_type)
 
     def test_coerce_to(self):
-        self.assertEqual(42, Types.coerce_to(42.0, int))
-        self.assertEqual(int, type(Types.coerce_to(42.0, int)))
-        self.assertEqual(42L, Types.coerce_to(42.0, long))
-        self.assertEqual(long, type(Types.coerce_to(42.0, long)))
-        self.assertEqual(42.0, Types.coerce_to(42, float))
-        self.assertEqual(float, type(Types.coerce_to(42L, float)))
-        self.assertRaises(ValueError, Types.coerce_to, None, float)
-        self.assertRaises(ValueError, Types.coerce_to, '', float)
-        self.assertRaises(ValueError, Types.coerce_to, True, float)
+        types = Types()
+        cases = [
+            (42.0, 42,   'double'),
+            (42.0, 42,   'float'),
+            (42,   42.0, 'int32'),
+            (42,   42L,  'int32'),
+            (42L,  42.0, 'int64'),
+            (42L,  42,   'int64'),
+            (42,   42.0, 'uint32'),
+            (42,   42L,  'uint32'),
+            (42L,  42.0, 'uint64'),
+            (42L,  42,   'uint64'),
+        ]
+        for expected, value, typ in cases:
+            coerced_value = types.coerce_to(value, types.as_type(typ))
+            self.assertEqual(expected, coerced_value)
+            self.assertEqual(type(expected), type(coerced_value))
+
+        self.assertRaises(ValueError, types.coerce_to, None, types.as_type('float'))
+        self.assertRaises(ValueError, types.coerce_to, '', types.as_type('float'))
+        self.assertRaises(ValueError, types.coerce_to, True, types.as_type('float'))
+
 
 if __name__ == '__main__':
     unittest.main()
