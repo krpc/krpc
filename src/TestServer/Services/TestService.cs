@@ -43,6 +43,13 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
+        public static string BytesToHexString (byte[] value)
+        {
+
+            return BitConverter.ToString (value).Replace ("-", "").ToLower ();
+        }
+
+        [KRPCProcedure]
         public static string AddMultipleValues (float x, int y, long z)
         {
             return (x + y + z).ToString ();

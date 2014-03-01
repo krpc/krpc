@@ -111,5 +111,14 @@ class TestEncoder(unittest.TestCase):
         self._run_test_encode_value('string', cases)
         self._run_test_decode_value('string', cases)
 
+    def test_encode_bytearray_value(self):
+        cases = [
+            (b'', '00'),
+            (b'\xba\xda\x55', '03bada55'),
+            (b'\xde\xad\xbe\xef', '04deadbeef')
+        ]
+        self._run_test_encode_value('bytes', cases)
+        self._run_test_decode_value('bytes', cases)
+
 if __name__ == '__main__':
     unittest.main()

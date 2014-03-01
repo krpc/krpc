@@ -25,8 +25,8 @@ DEFAULT_PORT = 50000
 BUFFER_SIZE = 4096
 DEBUG_LOGGING = True
 
-PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string'] # TODO: add bytes
-PYTHON_VALUE_TYPES = [float, int, long, bool, str] #TODO: add bytearray
+PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
+PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
 PROTOBUF_TO_PYTHON_VALUE_TYPE = {
     'double': float,
     'float': float,
@@ -36,7 +36,7 @@ PROTOBUF_TO_PYTHON_VALUE_TYPE = {
     'uint64': long,
     'bool': bool,
     'string': str,
-    #TODO: add bytes/bytearray
+    'bytes': bytes
 }
 
 
@@ -411,6 +411,10 @@ class _ValueEncoder(object):
         write(encoded)
         return ''.join(data)
 
+    @classmethod
+    def encode_bytes(cls, value):
+        return ''.join([cls._encode_varint(len(value)), value])
+
 
 class _Decoder(object):
     """ Routines for decoding messages and values from the protocol buffer serialization format """
@@ -535,6 +539,11 @@ class _ValueDecoder(object):
     def decode_string(cls, data):
         (size, position) = protobuf_decoder._DecodeVarint(data, 0)
         return unicode(data[position:position+size], 'utf-8')
+
+    @classmethod
+    def decode_bytes(cls, data):
+        (size, pos) = protobuf_decoder._DecodeVarint(data, 0)
+        return data[pos:pos+size]
 
 
 class Logger(object):

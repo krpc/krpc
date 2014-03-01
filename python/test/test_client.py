@@ -17,6 +17,7 @@ class TestClient(unittest.TestCase):
         self.assertEqual('True', self.ksp.TestService.BoolToString(True))
         self.assertEqual('False', self.ksp.TestService.BoolToString(False))
         self.assertEqual(12345, self.ksp.TestService.StringToInt32('12345'))
+        self.assertEqual('deadbeef', self.ksp.TestService.BytesToHexString(b'\xde\xad\xbe\xef'))
 
     def test_multiple_value_parameters(self):
         self.assertEqual('3.14159', self.ksp.TestService.AddMultipleValues(0.14159, 1, 2))
