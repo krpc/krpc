@@ -1,5 +1,4 @@
 using UnityEngine;
-using KRPC.Schema.Control;
 
 namespace KRPCServices
 {
@@ -7,16 +6,27 @@ namespace KRPCServices
     public class PilotAddon : MonoBehaviour
     {
         global::Vessel controlledVessel;
-        static ControlInputs controls;
+
+        public static float Pitch { get; set; }
+
+        public static float Roll { get; set; }
+
+        public static float Yaw { get; set; }
+
+        public static float X { get; set; }
+
+        public static float Y { get; set; }
+
+        public static float Z { get; set; }
 
         public void Awake ()
         {
-            controls = ControlInputs.CreateBuilder ().Build ();
-        }
-
-        public static void SetControlInputs (ControlInputs controls)
-        {
-            PilotAddon.controls = controls;
+            Pitch = 0;
+            Roll = 0;
+            Yaw = 0;
+            X = 0;
+            Y = 0;
+            Z = 0;
         }
 
         public void FixedUpdate ()
@@ -40,18 +50,12 @@ namespace KRPCServices
         static void Fly (FlightCtrlState state)
         {
             // TODO: need to clear these if all clients disconnect, or similar
-            if (controls.HasPitch)
-                state.pitch += controls.Pitch;
-            if (controls.HasRoll)
-                state.roll += controls.Roll;
-            if (controls.HasYaw)
-                state.yaw += controls.Yaw;
-            if (controls.HasX)
-                state.X += controls.X;
-            if (controls.HasY)
-                state.Y += controls.Y;
-            if (controls.HasZ)
-                state.Z += controls.Z;
+            state.pitch += Pitch;
+            state.roll += Roll;
+            state.yaw += Yaw;
+            state.X += X;
+            state.Y += Y;
+            state.Z += Z;
         }
     }
 }

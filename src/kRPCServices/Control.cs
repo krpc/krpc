@@ -1,5 +1,4 @@
 using KRPC.Service.Attributes;
-using KRPC.Schema.Control;
 using KSP;
 
 namespace KRPCServices
@@ -25,10 +24,40 @@ namespace KRPCServices
             set { FlightInputHandler.state.mainThrottle = value; }
         }
 
-        [KRPCProcedure]
-        public static void SetControlInputs (ControlInputs controls)
-        {
-            PilotAddon.SetControlInputs (controls);
+        [KRPCProperty]
+        public static float X {
+            get { return PilotAddon.X; }
+            set { PilotAddon.X = value; }
+        }
+
+        [KRPCProperty]
+        public static float Y {
+            get { return PilotAddon.Y; }
+            set { PilotAddon.Y = value; }
+        }
+
+        [KRPCProperty]
+        public static float Z {
+            get { return PilotAddon.Z; }
+            set { PilotAddon.Z = value; }
+        }
+
+        [KRPCProperty]
+        public static float Pitch {
+            get { return PilotAddon.Pitch; }
+            set { PilotAddon.Pitch = value; }
+        }
+
+        [KRPCProperty]
+        public static float Roll {
+            get { return PilotAddon.Roll; }
+            set { PilotAddon.Roll = value; }
+        }
+
+        [KRPCProperty]
+        public static float Yaw {
+            get { return PilotAddon.Yaw; }
+            set { PilotAddon.Yaw = value; }
         }
 
         [KRPCProcedure]
