@@ -146,8 +146,9 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
                             Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("int32", method.ReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
+                            Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("Class.Property.Get(TestService.TestClass,IntProperty)", method.AttributesList [0]);
+                            Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
                             found++;
                         }
                         if (method.Name == "TestClass_set_IntProperty") {
@@ -155,8 +156,9 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
                             Assert.AreEqual ("int32", method.ParameterTypesList [1]);
                             Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (1, method.AttributesCount);
+                            Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("Class.Property.Set(TestService.TestClass,IntProperty)", method.AttributesList [0]);
+                            Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
                             found++;
                         }
                         if (method.Name == "TestClass_get_ObjectProperty") {
@@ -164,9 +166,10 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
                             Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("uint64", method.ReturnType);
-                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual (3, method.AttributesCount);
                             Assert.AreEqual ("Class.Property.Get(TestService.TestClass,ObjectProperty)", method.AttributesList [0]);
-                            Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", method.AttributesList [1]);
+                            Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
+                            Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", method.AttributesList [2]);
                             found++;
                         }
                         if (method.Name == "TestClass_set_ObjectProperty") {
@@ -174,9 +177,10 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
                             Assert.AreEqual ("uint64", method.ParameterTypesList [1]);
                             Assert.IsFalse (method.HasReturnType);
-                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual (3, method.AttributesCount);
                             Assert.AreEqual ("Class.Property.Set(TestService.TestClass,ObjectProperty)", method.AttributesList [0]);
-                            Assert.AreEqual ("ParameterType(1).Class(TestService.TestClass)", method.AttributesList [1]);
+                            Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
+                            Assert.AreEqual ("ParameterType(1).Class(TestService.TestClass)", method.AttributesList [2]);
                             found++;
                         }
                     }

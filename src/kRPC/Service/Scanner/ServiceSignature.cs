@@ -70,13 +70,15 @@ namespace KRPC.Service.Scanner
                         var method = x.GetGetMethod ();
                         var handler = new ClassMethodHandler (method);
                         var attribute = "Class.Property.Get(" + Name + "." + cls.Name + "," + x.Name + ")";
-                        accessors.Add (new ProcedureSignature (type.Name, cls.Name + '_' + method.Name, handler, attribute));
+                        var parameter_attribute = "ParameterType(0).Class(" + Name + "." + cls.Name + ")";
+                        accessors.Add (new ProcedureSignature (type.Name, cls.Name + '_' + method.Name, handler, attribute, parameter_attribute));
                     }
                     if (x.CanWrite) {
                         var method = x.GetSetMethod ();
                         var handler = new ClassMethodHandler (method);
                         var attribute = "Class.Property.Set(" + Name + "." + cls.Name + "," + x.Name + ")";
-                        accessors.Add (new ProcedureSignature (type.Name, cls.Name + '_' + method.Name, handler, attribute));
+                        var parameter_attribute = "ParameterType(0).Class(" + Name + "." + cls.Name + ")";
+                        accessors.Add (new ProcedureSignature (type.Name, cls.Name + '_' + method.Name, handler, attribute, parameter_attribute));
                     }
                     return accessors;
                 }));
