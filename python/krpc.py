@@ -293,15 +293,13 @@ class _Encoder(object):
     def hello_message(cls, name=None):
         """ Generate a hello message with the given name
             truncated to fit if necessary """
-        header = bytearray([0x48,0x45,0x4C,0x4C,0x4F,0xBA,0xDA,0x55])
-        identifier = bytearray(32)
-        if name is not None:
+        header = b'\x48\x45\x4C\x4C\x4F\xBA\xDA\x55'
+        if name is None:
+            name = ''
+        else:
             name = cls._unicode_truncate(name, 32, 'utf-8')
-            name = bytearray(name, 'utf_8')
-            for i,x in enumerate(name):
-                if i >= 32:
-                    raise RuntimeError('Name too long')
-                identifier[i] = x
+        name = name.encode('utf-8')
+        identifier = name + (b'\x00' * (32-len(name)))
         return header + identifier
 
     @classmethod
