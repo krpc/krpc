@@ -135,8 +135,6 @@
     <Folder Include="Service\Scanner\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="icons\icon-offline.svg" />
-    <None Include="icons\icon-online.svg" />
     <None Include="icons\Makefile" />
     <None Include="Schema\KRPC.proto" />
   </ItemGroup>
