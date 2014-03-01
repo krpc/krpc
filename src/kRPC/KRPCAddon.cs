@@ -64,7 +64,12 @@ namespace KRPC
             };
 
             // Server events
-            server.OnClientRequestingConnection += clientConnectingDialog.OnClientRequestingConnection;
+            server.OnClientRequestingConnection += (s, e) => {
+                if (config.AutoAcceptConnections)
+                    e.Request.Allow ();
+                else
+                    clientConnectingDialog.OnClientRequestingConnection (s, e);
+            };
 
             // Toolbar API
             if (ToolbarManager.ToolbarAvailable) {
