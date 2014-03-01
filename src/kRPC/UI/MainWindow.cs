@@ -200,6 +200,7 @@ namespace KRPC.UI
 
             // Save the settings and trigger start server event
             if (Errors.Count == 0) {
+                Config.Load ();
                 Config.Port = Convert.ToUInt16 (port);
                 Config.Address = IPAddress.Parse (address);
                 Config.Save ();
