@@ -37,6 +37,7 @@ namespace KRPC
 
             // Main window events
             mainWindow.OnStartServerPressed += (s, e) => {
+                config.Load ();
                 server.Port = config.Port;
                 server.Address = config.Address;
                 try {
@@ -50,21 +51,29 @@ namespace KRPC
                 clientConnectingDialog.Close ();
             };
             mainWindow.OnHide += (s, e) => {
+                config.Load ();
                 config.MainWindowVisible = false;
                 config.Save ();
             };
             mainWindow.OnShow += (s, e) => {
+                config.Load ();
                 config.MainWindowVisible = true;
                 config.Save ();
             };
             mainWindow.OnMoved += (s, e) => {
+                config.Load ();
                 var window = s as MainWindow;
                 config.MainWindowPosition = window.Position;
                 config.Save ();
             };
 
             // Server events
-            server.OnClientRequestingConnection += clientConnectingDialog.OnClientRequestingConnection;
+            server.OnClientRequestingConnection += (s, e) => {
+                if (config.AutoAcceptConnections)
+                    e.Request.Allow ();
+                else
+                    clientConnectingDialog.OnClientRequestingConnection (s, e);
+            };
 
             // Toolbar API
             if (ToolbarManager.ToolbarAvailable) {

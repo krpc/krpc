@@ -14,6 +14,7 @@ namespace KRPCTest
             Assert.AreEqual (IPAddress.Loopback, config.Address);
             Assert.AreEqual (50000, config.Port);
             Assert.AreEqual (true, config.MainWindowVisible);
+            Assert.AreEqual (false, config.AutoAcceptConnections);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace KRPC
         [Persistent] ushort port = 50000;
         [Persistent] bool mainWindowVisible = true;
         [Persistent] RectStorage mainWindowPosition = new RectStorage ();
+        [Persistent] bool autoAcceptConnections = false;
 
         public IPAddress Address { get; set; }
 
@@ -27,6 +28,11 @@ namespace KRPC
         public Rect MainWindowPosition {
             get { return mainWindowPosition.AsRect (); }
             set { mainWindowPosition = RectStorage.FromRect (value); }
+        }
+
+        public bool AutoAcceptConnections {
+            get { return autoAcceptConnections; }
+            set { autoAcceptConnections = value; }
         }
 
         public KRPCConfiguration (string filePath) :
