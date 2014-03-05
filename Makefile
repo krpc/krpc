@@ -1,5 +1,5 @@
 # Note: This must be an absolute path
-KSP_DIR = "$(shell pwd)/../Kerbal Space Program"
+KSP_DIR = "$(shell pwd)/../ksp"
 
 VERSION = $(shell cat VERSION)
 
@@ -85,8 +85,12 @@ install: dist
 	rm -rf $(KSP_DIR)/GameData/000_Toolbar
 	cp -r $(DIST_DIR)/GameData/* $(KSP_DIR)/GameData/
 
-test: $(CSHARP_TEST_PROJECTS)
+test: test-csharp test-python
+
+test-csharp: $(CSHARP_TEST_PROJECTS)
 	$(NUNIT_CONSOLE) -nologo -nothread -trace=Off -output=test.log src/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
+
+test-python:
 	make -C python test
 
 ksp: install TestingTools
