@@ -1,5 +1,5 @@
 # Note: This must be an absolute path
-KSP_DIR = "$(shell pwd)/../ksp"
+KSP_DIR = "$(shell pwd)/../Kerbal Space Program"
 
 VERSION = $(shell cat VERSION)
 
