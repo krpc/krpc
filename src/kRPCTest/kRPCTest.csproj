@@ -86,6 +86,7 @@
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Service\ProcedureParameterTest.cs" />
     <Compile Include="Schema\Test.cs" />
+    <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
