@@ -48,9 +48,16 @@
   <ItemGroup>
     <Compile Include="AutoLoadPersistentSaveOnStartup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="KRPCService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\kRPC\kRPC.csproj">
+      <Project>{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}</Project>
+      <Name>kRPC</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
