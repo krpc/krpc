@@ -1,6 +1,6 @@
 using KRPC.Service.Attributes;
 
-namespace KRPCServices
+namespace KRPCServices.Services
 {
     [KRPCService]
     static public class Orbit

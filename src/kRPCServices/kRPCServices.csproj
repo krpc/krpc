@@ -52,13 +52,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Orbit.cs" />
-    <Compile Include="Control.cs" />
-    <Compile Include="Flight.cs" />
     <Compile Include="Schema\Vessel.cs" />
-    <Compile Include="Vessel.cs" />
     <Compile Include="PilotAddon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Schema\Geometry.cs" />
+    <Compile Include="VesselData.cs" />
+    <Compile Include="Services\Control.cs" />
+    <Compile Include="Services\Flight.cs" />
+    <Compile Include="Services\Orbit.cs" />
+    <Compile Include="Services\Vessel.cs" />
+    <Compile Include="VesselAddon.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -70,8 +74,10 @@
   <ItemGroup>
     <Folder Include="Schema\" />
     <Folder Include="Properties\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema\Vessel.proto" />
+    <None Include="Schema\Geometry.proto" />
   </ItemGroup>
 </Project>

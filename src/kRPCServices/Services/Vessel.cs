@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.Schema.Vessel;
 
-namespace KRPCServices
+namespace KRPCServices.Services
 {
     [KRPCService]
     static public class Vessel
