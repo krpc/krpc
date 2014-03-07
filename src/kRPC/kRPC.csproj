@@ -115,6 +115,11 @@
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
     <Compile Include="Service\Scanner\ParameterSignature.cs" />
     <Compile Include="Service\ProcedureParameter.cs" />
+    <Compile Include="Service\Scanner\Utils.cs" />
+    <Compile Include="Continuations\IContinuation.cs" />
+    <Compile Include="Continuations\Continuation.cs" />
+    <Compile Include="Continuations\YieldException.cs" />
+    <Compile Include="Continuations\ParameterizedContinuation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
