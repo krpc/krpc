@@ -10,7 +10,7 @@ namespace KRPC.Continuations
         Fn fn;
         TIn data;
 
-        ParameterizedContinuation (Fn fn, TIn data)
+        public ParameterizedContinuation (Fn fn, TIn data)
         {
             this.fn = fn;
             this.data = data;
@@ -32,7 +32,7 @@ namespace KRPC.Continuations
         Fn fn;
         TIn data;
 
-        ParameterizedContinuation (Fn fn, TIn data)
+        public ParameterizedContinuation (Fn fn, TIn data)
         {
             this.fn = fn;
             this.data = data;
