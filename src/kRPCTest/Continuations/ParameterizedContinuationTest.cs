@@ -36,7 +36,7 @@ namespace KRPCTest.Continuations
         {
             x = 0;
             IContinuation cont = new ParameterizedContinuation<int> (FnSet, 42);
-            cont.RunUntyped ();
+            Assert.AreEqual(null, cont.RunUntyped ());
             Assert.AreEqual(42, x);
         }
 
