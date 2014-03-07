@@ -583,12 +583,24 @@ class KRPCService(BaseService):
 
 
 
+def _create_service_class(client, service):
+    def init(s, client, service):
+        Service.__init__(s, s.__class__, client, service)
+    return type(
+        str(service.name),
+        (Service,),
+        {'__init__': init }
+    )
+
+
 class Service(BaseService):
     """ A dynamically created service, created using information received from the server """
 
-    def __init__(self, client, service):
-        """ Create a service from a KRPC.Service object received from a call to KRPC.GetServices() """
+    def __init__(self, cls, client, service):
+        """ Create a service from a KRPC.Service object received from a call to KRPC.GetServices()
+            cls is a dynamically created class for this service, to which properties can be added """
         super(Service, self).__init__(client, service.name)
+        self._cls = cls
         self._name = service.name
         self._types = client._types
 
@@ -667,7 +679,7 @@ class Service(BaseService):
         if setter:
             self._add_procedure(setter)
             fset = lambda s, value: getattr(self, setter.name)(value)
-        setattr(self.__class__, name, property(fget, fset))
+        setattr(self._cls, name, property(fget, fset))
 
     def _add_class_method(self, class_name, method_name, procedure):
         """ Add a class method to the service """
@@ -728,7 +740,9 @@ class Client(object):
         # Set up services
         for service in services:
             if service.name != 'KRPC':
-                setattr(self, service.name, Service(self, service))
+                service_cls = _create_service_class(self, service)
+                service_obj = service_cls(self, service)
+                setattr(self, service.name, service_obj)
 
     def _invoke(self, service, procedure, parameters=[], parameter_types=[], return_type=None, **kwargs):
         """ Execute an RPC """
