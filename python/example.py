@@ -52,14 +52,14 @@ def main():
 
         time.sleep(1)
 
+    # Disable SAS, pitch the vessel to 50 degrees to the west, then hold position using SAS
     print 'Gravity turn...'
-    # Disable SAS, pitch the vessel to the west, then hold position using SAS
-    # TODO: get the heading from the craft to do this more accurately
     ksp.Control.SAS = False
-    ksp.Control.Yaw = 0.4
-    time.sleep(2)
-    ksp.Control.SAS = True
+    ksp.Control.Yaw = 0.1
+    while ksp.Flight.Pitch > 50:
+        time.sleep(0.25)
     ksp.Control.Yaw = 0
+    ksp.Control.SAS = True
 
     # Raise apoapsis to above 80km
     while True:
@@ -76,8 +76,51 @@ def main():
     print 'Coasting to apoapsis...'
     ksp.Control.SAS = False
     ksp.Control.Throttle = 0
+    while True:
 
-    # TODO: add code to circularise the orbit
+        # Check altitude, exit loop if higher than 79km
+        altitude = ksp.Flight.Altitude
+        print '  Altitude = %.1f km' % (altitude/1000)
+        if altitude > 79000:
+            break
+        time.sleep(1)
+
+    # Circularize the orbit
+    print 'Circularizing...'
+    ksp.Control.SAS = False
+    ksp.Control.Yaw = 0.1
+    while ksp.Flight.Pitch > 0:
+        time.sleep(0.25)
+    ksp.Control.Yaw = 0
+    ksp.Control.SAS = True
+    # Raise periapsis until eccentricity starts the increase (happens just after reaching 0)
+    ksp.Control.Throttle = 1
+
+    eccentricity = ksp.Orbit.Eccentricity
+    time.sleep(1)
+
+    while True:
+
+        apoapsis = ksp.Orbit.Apoapsis - 600000
+        periapsis = ksp.Orbit.Periapsis - 600000
+        prevEccentricity = eccentricity;
+        eccentricity = ksp.Orbit.Eccentricity
+
+        print '  Orbit = %.1f km x %.1f km (e = %.3f)' % ((apoapsis/1000), (periapsis/1000), ksp.Orbit.Eccentricity)
+
+        print (prevEccentricity - eccentricity)
+        if prevEccentricity - eccentricity < 0:
+            break
+
+        if eccentricity > 0.1:
+            time.sleep(1)
+        else:
+            # We are close, so reduce throttle and check eccentricity more frequently
+            ksp.Control.Throttle = 0.1
+            time.sleep(0.2)
+
+    ksp.Control.Throttle = 0
+    ksp.Control.SAS = False
 
     print 'Program complete'
 
