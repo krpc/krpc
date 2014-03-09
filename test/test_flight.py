@@ -100,13 +100,13 @@ class TestFlight(testingtools.TestCase):
 
     def test_roll_control(self):
         self.ksp.Control.SAS = False
-        self.ksp.Control.Roll = 1
+        self.ksp.Control.Roll = 0.1
         time.sleep(3)
         self.ksp.Control.Roll = 0
 
         self.assertBetween(57, 58, self.ksp.Flight.Pitch)
         self.assertBetween(224, 227, self.ksp.Flight.Heading)
-        self.assertBetween(-90, -10, self.ksp.Flight.Roll)
+        self.assertBetween(80, 110, self.ksp.Flight.Roll)
 
         # Check vessel is rolling in correct direction
         roll = self.ksp.Flight.Roll
