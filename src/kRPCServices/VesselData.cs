@@ -40,6 +40,20 @@ namespace KRPCServices
         }
 
         /// <summary>
+        /// Direction to the north of the main body (0 degrees pitch, north direction on nav ball) in world coordinates
+        /// </summary>
+        public Vector3 NorthDirection {
+            get {
+                // Position of the north pole of the main body
+                var northPole = Vessel.mainBody.position + Vessel.mainBody.transform.up * (float)Vessel.mainBody.Radius;
+                // Vector from vessel to the north pole
+                var toNorthPole = northPole - Position;
+                // Direction from the vessel to the north pole, perpendicular to the surface of the main body
+                return (toNorthPole - Vector3d.Project (toNorthPole, UpDirection)).normalized;
+            }
+        }
+
+        /// <summary>
         /// Altitude above sea level in meters
         /// </summary>
         public double Altitude {
@@ -96,14 +110,8 @@ namespace KRPCServices
         /// </summary>
         public Quaternion Rotation {
             get {
-                // Position of the north pole of the main body
-                var northPole = Vessel.mainBody.position + Vessel.mainBody.transform.up * (float)Vessel.mainBody.Radius;
-                // Vector from vessel to the north pole
-                var toNorthPole = northPole - Position;
-                // Direction from the vessel to the north pole, perpendicular to the surface of the main body
-                var north = (toNorthPole - Vector3d.Project (toNorthPole, UpDirection)).normalized;
                 // Rotation of the vessel w.r.t. north
-                var rotation = Quaternion.LookRotation (north, UpDirection);
+                var rotation = Quaternion.LookRotation (NorthDirection, UpDirection);
                 return Quaternion.Inverse (Quaternion.Euler (90f, 0f, 0f) * Quaternion.Inverse (Vessel.GetTransform ().rotation) * rotation);
             }
         }
