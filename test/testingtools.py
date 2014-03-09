@@ -32,3 +32,6 @@ class TestCase(unittest.TestCase):
 
     def assertNotBetween(self, min_value, max_value, value):
         self.assertTrue(value < min_value or max_value < value)
+
+    def assertClose(self, expected, actual, error=0.0001):
+        self.assertBetween(expected-error, expected+error, actual)
