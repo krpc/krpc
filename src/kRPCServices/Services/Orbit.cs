@@ -31,6 +31,16 @@ namespace KRPCServices.Services
         }
 
         [KRPCProperty]
+        public static double TimeToApoapsis {
+            get { return FlightGlobals.ActiveVessel.GetOrbit ().timeToAp; }
+        }
+
+        [KRPCProperty]
+        public static double TimeToPeriapsis {
+            get { return FlightGlobals.ActiveVessel.GetOrbit ().timeToPe; }
+        }
+
+        [KRPCProperty]
         public static double Eccentricity {
             get { return FlightGlobals.ActiveVessel.GetOrbit ().eccentricity; }
         }
