@@ -6,6 +6,11 @@ namespace KRPCServices.Services
     static public class Orbit
     {
         [KRPCProperty]
+        public static string Body {
+            get { return FlightGlobals.ActiveVessel.GetOrbit ().referenceBody.name; }
+        }
+
+        [KRPCProperty]
         public static double Apoapsis {
             get { return FlightGlobals.ActiveVessel.GetOrbit ().ApR; }
         }
@@ -13,6 +18,16 @@ namespace KRPCServices.Services
         [KRPCProperty]
         public static double Periapsis {
             get { return FlightGlobals.ActiveVessel.GetOrbit ().PeR; }
+        }
+
+        [KRPCProperty]
+        public static double ApoapsisAltitude {
+            get { return FlightGlobals.ActiveVessel.GetOrbit ().ApA; }
+        }
+
+        [KRPCProperty]
+        public static double PeriapsisAltitude {
+            get { return FlightGlobals.ActiveVessel.GetOrbit ().PeA; }
         }
 
         [KRPCProperty]
@@ -38,11 +53,6 @@ namespace KRPCServices.Services
         [KRPCProperty]
         public static double MeanAnomalyAtEpoch {
             get { return FlightGlobals.ActiveVessel.GetOrbit ().meanAnomalyAtEpoch; }
-        }
-
-        [KRPCProperty]
-        public static string ReferenceBody {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().referenceBody.name; }
         }
     }
 }
