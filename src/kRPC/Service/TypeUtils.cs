@@ -13,7 +13,7 @@ namespace KRPC.Service
 
         public static bool IsAClassType (Type type)
         {
-            return type.IsDefined (typeof(KRPCClass), false);
+            return type.IsDefined (typeof(KRPCClassAttribute), false);
         }
 
         public static string GetTypeName (Type type)

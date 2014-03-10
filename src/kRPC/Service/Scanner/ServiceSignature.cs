@@ -20,18 +20,18 @@ namespace KRPC.Service.Scanner
 
             // Get all KRPC Classes
             Classes = new HashSet<string> ();
-            var classes = Reflection.GetClassesWith<KRPCClass> (type);
+            var classes = Reflection.GetClassesWith<KRPCClassAttribute> (type);
             foreach (var cls in classes) {
                 Classes.Add (cls.Name);
             }
 
             // Get all KRPC Procedures
             var procedures = new List<ProcedureSignature> ();
-            procedures.AddRange (Reflection.GetMethodsWith<KRPCProcedure> (type)
+            procedures.AddRange (Reflection.GetMethodsWith<KRPCProcedureAttribute> (type)
                 .Select (x => new ProcedureSignature (type.Name, x.Name, new ProcedureHandler (x))));
 
             // Get all property-defined KRPC Procedures
-            procedures.AddRange (Reflection.GetPropertiesWith<KRPCProperty> (type)
+            procedures.AddRange (Reflection.GetPropertiesWith<KRPCPropertyAttribute> (type)
                 .SelectMany (x => {
                 var accessors = new List<ProcedureSignature> ();
                 if (x.GetGetMethod () != null) {
@@ -50,9 +50,9 @@ namespace KRPC.Service.Scanner
             }));
 
             // Get all class-method-defined KRPC Procedures
-            classes = Reflection.GetClassesWith<KRPCClass> (type);
+            classes = Reflection.GetClassesWith<KRPCClassAttribute> (type);
             foreach (var cls in classes) {
-                var classMethods = Reflection.GetMethodsWith<KRPCMethod> (cls);
+                var classMethods = Reflection.GetMethodsWith<KRPCMethodAttribute> (cls);
                 foreach (var method in classMethods) {
                     var handler = new ClassMethodHandler (method);
                     procedures.Add (new ProcedureSignature (type.Name, cls.Name + '_' + method.Name, handler,
@@ -61,9 +61,9 @@ namespace KRPC.Service.Scanner
             }
 
             // Get all class-property-defined KRPC Procedures
-            classes = Reflection.GetClassesWith<KRPCClass> (type);
+            classes = Reflection.GetClassesWith<KRPCClassAttribute> (type);
             foreach (var cls in classes) {
-                procedures.AddRange (Reflection.GetPropertiesWith<KRPCProperty> (cls)
+                procedures.AddRange (Reflection.GetPropertiesWith<KRPCPropertyAttribute> (cls)
                     .SelectMany (x => {
                     var accessors = new List<ProcedureSignature> ();
                     if (x.CanRead) {

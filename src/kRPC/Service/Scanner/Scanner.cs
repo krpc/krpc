@@ -11,7 +11,7 @@ namespace KRPC.Service.Scanner
         public static IDictionary<string, ServiceSignature> GetServices ()
         {
             IDictionary<string, ServiceSignature> signatures;
-            var serviceTypes = Reflection.GetTypesWith<KRPCService> ();
+            var serviceTypes = Reflection.GetTypesWith<KRPCServiceAttribute> ();
             try {
                 signatures = serviceTypes
                     .Select (x => new ServiceSignature (x))
