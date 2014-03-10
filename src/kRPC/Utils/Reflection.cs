@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace KRPC.Utils
 {
@@ -66,6 +67,42 @@ namespace KRPC.Utils
                     yield return nestedType;
                 }
             }
+        }
+
+        /// <summary>
+        /// Return attribute of type T for the given member. Does not follow inheritance.
+        /// Throws ArgumentException if there is no attribute, or more than one attribute.
+        /// </summary>
+        public static T GetAttribute<T> (MemberInfo member)
+        {
+            object[] attributes = member.GetCustomAttributes (typeof(T), false);
+            if (attributes.Length != 1)
+                throw new ArgumentException ();
+            return (T)attributes [0];
+        }
+
+        /// <summary>
+        /// Return true if member has the attribute of type T. Does not follow inheritance.
+        /// </summary>
+        public static bool HasAttribute<T> (MemberInfo member)
+        {
+            return member.GetCustomAttributes (typeof(T), false).Length == 1;
+        }
+
+        /// <summary>
+        /// Extension method to check if a type is static.
+        /// </summary>
+        public static bool IsStatic (this Type type)
+        {
+            return type.IsAbstract && type.IsSealed;
+        }
+
+        /// <summary>
+        /// Extension method to check if a property is static.
+        /// </summary>
+        public static bool IsStatic (this PropertyInfo property)
+        {
+            return (property.GetGetMethod () == null || property.GetGetMethod ().IsStatic) && (property.GetSetMethod () == null || property.GetSetMethod ().IsStatic);
         }
     }
 }
