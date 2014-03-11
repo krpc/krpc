@@ -36,6 +36,11 @@ class TestDecoder(unittest.TestCase):
         self.assertTrue(isinstance(value, typ.python_type))
         self.assertEqual(300, value._object_id)
 
+    def test_decode_class_none(self):
+        typ = Types().as_type('Class(ServiceName.ClassName)')
+        value = Decoder.decode(binascii.unhexlify('00'), typ)
+        self.assertIsNone(value)
+
 
 if __name__ == '__main__':
     unittest.main()

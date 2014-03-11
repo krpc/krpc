@@ -82,6 +82,9 @@ class _Types(object):
 
     def coerce_to(self, value, typ):
         """ Coerce a value to the specified type. Raises ValueError if the coercion is not possible. """
+        # A NoneType can be coerced to a _ClassType
+        if isinstance(typ, _ClassType) and value is None:
+            return None
         # See http://docs.python.org/2/reference/datamodel.html#coercion-rules
         numeric_types = (float, int, long)
         if type(value) not in numeric_types or typ.python_type not in numeric_types:
@@ -318,7 +321,8 @@ class _Encoder(object):
         elif isinstance(typ, _ValueType):
             return cls._encode_value(x, typ)
         elif isinstance(typ, _ClassType):
-            return cls._encode_value(x._object_id, _Types().as_type('uint64'))
+            object_id = x._object_id if x is not None else 0
+            return cls._encode_value(object_id, _Types().as_type('uint64'))
         else:
             raise RuntimeError ('Cannot encode objects of type ' + str(type(x)))
 
@@ -427,7 +431,7 @@ class _Decoder(object):
         elif isinstance(typ, _ClassType):
             object_id_typ = _Types().as_type('uint64')
             object_id = cls._decode_value(data, object_id_typ)
-            return typ.python_type(object_id)
+            return typ.python_type(object_id) if object_id != 0 else None
         else:
             raise RuntimeError ('Cannot decode type %s' % str(typ))
 
