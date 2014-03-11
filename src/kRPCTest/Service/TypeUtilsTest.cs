@@ -8,6 +8,17 @@ namespace KRPCTest.Service
     public class TypeUtilsTest
     {
         [Test]
+        public void IsAValidIdentifier ()
+        {
+            Assert.IsTrue (TypeUtils.IsAValidIdentifier ("IdentifierName"));
+            Assert.IsTrue (TypeUtils.IsAValidIdentifier ("Foo123"));
+            Assert.IsFalse (TypeUtils.IsAValidIdentifier ("123Foo"));
+            Assert.IsFalse (TypeUtils.IsAValidIdentifier (""));
+            Assert.IsFalse (TypeUtils.IsAValidIdentifier ("_Foo"));
+            Assert.IsFalse (TypeUtils.IsAValidIdentifier ("Foo%"));
+        }
+
+        [Test]
         public void IsAValidType ()
         {
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(string)));
@@ -50,6 +61,33 @@ namespace KRPCTest.Service
             Assert.AreEqual (new string[]{ }, TypeUtils.ReturnTypeAttributes (typeof(long)));
             Assert.AreEqual (new []{ "ReturnType.Class(TestService.TestClass)" }, TypeUtils.ReturnTypeAttributes (typeof(TestService.TestClass)));
             Assert.Throws<ArgumentException> (() => TypeUtils.ReturnTypeAttributes (typeof(TestService)));
+        }
+
+        [Test]
+        public void GetServiceName ()
+        {
+            Assert.AreEqual ("TestService", TypeUtils.GetServiceName (typeof(TestService)));
+            Assert.AreEqual ("TestService2", TypeUtils.GetServiceName (typeof(TestService2)));
+            Assert.AreEqual ("TestService3Name", TypeUtils.GetServiceName (typeof(TestService3)));
+        }
+
+        [Test]
+        public void GetClassServiceName ()
+        {
+            Assert.AreEqual ("TestService", TypeUtils.GetClassServiceName (typeof(TestService.TestClass)));
+            Assert.AreEqual ("TestService3Name", TypeUtils.GetClassServiceName (typeof(TestClass3)));
+            Assert.AreEqual ("TestService", TypeUtils.GetClassServiceName (typeof(TestTopLevelClass)));
+        }
+
+        [Test]
+        public void ValidateIdentifier ()
+        {
+            Assert.DoesNotThrow (() => TypeUtils.ValidateIdentifier ("IdentifierName"));
+            Assert.DoesNotThrow (() => TypeUtils.ValidateIdentifier ("Foo123"));
+            Assert.Throws<ServiceException> (() => TypeUtils.ValidateIdentifier ("123Foo"));
+            Assert.Throws<ServiceException> (() => TypeUtils.ValidateIdentifier (""));
+            Assert.Throws<ServiceException> (() => TypeUtils.ValidateIdentifier ("_Foo"));
+            Assert.Throws<ServiceException> (() => TypeUtils.ValidateIdentifier ("Foo%"));
         }
     }
 }
