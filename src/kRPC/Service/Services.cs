@@ -103,7 +103,7 @@ namespace KRPC.Service
         ByteString EncodeReturnValue (ProcedureSignature procedure, object returnValue)
         {
             // Check the return value is missing
-            if (returnValue == null) {
+            if (returnValue == null && !TypeUtils.IsAClassType (procedure.ReturnType)) {
                 throw new RPCException (
                     procedure.FullyQualifiedName + " returned null. " +
                     "Expected an object of type " + procedure.ReturnType);
