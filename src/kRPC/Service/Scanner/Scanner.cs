@@ -10,49 +10,44 @@ namespace KRPC.Service.Scanner
     {
         public static IDictionary<string, ServiceSignature> GetServices ()
         {
-            ValidateAttributes ();
+            IDictionary<string, ServiceSignature> signatures = new Dictionary<string, ServiceSignature> ();
 
-            // Find all services
-            var serviceTypes = Reflection.GetTypesWith<KRPCServiceAttribute> ();
-
-            IDictionary<string, ServiceSignature> signatures;
-            try {
-                signatures = serviceTypes
-                    .Select (x => new ServiceSignature (x))
-                    .ToDictionary (x => x.Name);
-            } catch (ArgumentException) {
-                // Handle service name clashes
-                var duplicates = serviceTypes
-                    .Select (x => x.Name)
-                    .Duplicates ()
-                    .ToArray ();
-                throw new ServiceException (
-                    "Multiple Services have the same name. " +
-                    "Duplicates are " + String.Join (", ", duplicates));
+            // Scan for static classes annotated with KRPCService
+            foreach (var serviceType in Reflection.GetTypesWith<KRPCServiceAttribute> ()) {
+                var service = new ServiceSignature (serviceType);
+                if (signatures.ContainsKey (service.Name))
+                    service = signatures [service.Name];
+                else
+                    signatures [service.Name] = service;
+                // Add procedures
+                foreach (var method in Reflection.GetMethodsWith<KRPCProcedureAttribute> (serviceType))
+                    service.AddProcedure (method);
+                // Add properties
+                foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (serviceType))
+                    service.AddProperty (property);
             }
+
+            // Scan for classes annotated with KRPCClass
+            foreach (var classType in Reflection.GetTypesWith<KRPCClassAttribute> ()) {
+                TypeUtils.ValidateKRPCClass (classType);
+                var serviceName = TypeUtils.GetClassServiceName (classType);
+                if (!signatures.ContainsKey (serviceName))
+                    signatures [serviceName] = new ServiceSignature (serviceName);
+                var service = signatures [serviceName];
+                var cls = service.AddClass (classType);
+                // Add class methods
+                foreach (var method in Reflection.GetMethodsWith<KRPCMethodAttribute> (classType))
+                    service.AddClassMethod (cls, method);
+                // Add class properties
+                foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (classType))
+                    service.AddClassProperty (cls, property);
+            }
+
             // Check that the main KRPC service was found
             if (!signatures.ContainsKey ("KRPC"))
                 throw new ServiceException ("KRPC service could not be found");
-            // TODO: Find KRPCClassAttribute annotated classes at top-level with the Service field set
-            return signatures;
-        }
 
-        public static void ValidateAttributes ()
-        {
-            foreach (var type in Reflection.GetTypesWith<KRPCServiceAttribute> ()) {
-                TypeUtils.ValidateKRPCService (type);
-                foreach (var method in Reflection.GetMethodsWith<KRPCProcedureAttribute> (type))
-                    TypeUtils.ValidateKRPCProcedure (method);
-                foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (type))
-                    TypeUtils.ValidateKRPCProperty (property);
-            }
-            foreach (var cls in Reflection.GetTypesWith<KRPCClassAttribute> ()) {
-                TypeUtils.ValidateKRPCClass (cls);
-                foreach (var method in Reflection.GetMethodsWith<KRPCMethodAttribute> (cls))
-                    TypeUtils.ValidateKRPCMethod (method);
-                foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (cls))
-                    TypeUtils.ValidateKRPCProperty (property);
-            }
+            return signatures;
         }
     }
 }

@@ -81,6 +81,8 @@
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
     <Compile Include="Service\ProcedureHandlerTest.cs" />
     <Compile Include="Service\TestService2.cs" />
+    <Compile Include="Service\TestTopLevelClass.cs" />
+    <Compile Include="Service\TestService3.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -79,13 +79,22 @@ namespace KRPC.Service
         /// </summary>
         public static string GetServiceName (Type type)
         {
-            if (!Reflection.HasAttribute<KRPCServiceAttribute> (type))
-                throw new ArgumentException ();
+            ValidateKRPCService (type);
             var attribute = Reflection.GetAttribute<KRPCServiceAttribute> (type);
             var name = attribute.Name;
             if (name != null)
                 return name;
             return type.Name;
+        }
+
+        /// <summary>
+        /// Get the name of the service for the given KRPCClass annotated type
+        /// </summary>
+        public static string GetClassServiceName (Type type)
+        {
+            ValidateKRPCClass (type);
+            var attribute = Reflection.GetAttribute<KRPCClassAttribute> (type);
+            return attribute.Service == null ? GetServiceName (type.DeclaringType) : attribute.Service;
         }
 
         /// <summary>
@@ -140,7 +149,7 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Check the given type is a valid kRPC property
+        /// Check the given type is a valid kRPC property (a service property, not a class property)
         /// </summary>
         public static void ValidateKRPCProperty (PropertyInfo property)
         {
@@ -149,21 +158,13 @@ namespace KRPC.Service
             // Note: Type must already be a property, due to AttributeUsage definition
             // Validate the identifier.
             ValidateIdentifier (property.Name);
-            // Check the method is defined directly inside a KRPCService or KRPCClass
+            // Check the method is defined directly inside a KRPCService
             var declaringType = property.DeclaringType;
-            if (declaringType == null ||
-                (!Reflection.HasAttribute<KRPCServiceAttribute> (declaringType) && !Reflection.HasAttribute<KRPCClassAttribute> (declaringType))) {
-                throw new ServiceException ("KRPCProperty " + property + " is not declared inside a KRPCService or KRPCClass");
-            }
-            if (Reflection.HasAttribute<KRPCServiceAttribute> (declaringType)) {
-                // If inside a KRPCService, check it's static
-                if (!property.IsStatic ())
-                    throw new ServiceException ("KRPCProperty " + property + " must be static");
-            } else {
-                // If inside a KRPCClass, check it's not static
-                if (property.IsStatic ())
-                    throw new ServiceException ("KRPCProperty " + property + " must not be static");
-            }
+            if (declaringType == null || !Reflection.HasAttribute<KRPCServiceAttribute> (declaringType))
+                throw new ServiceException ("KRPCProperty " + property + " is not declared inside a KRPCService");
+            // Check it's static
+            if (!property.IsStatic ())
+                throw new ServiceException ("KRPCProperty " + property + " must be static");
         }
 
         /// <summary>
@@ -208,6 +209,25 @@ namespace KRPC.Service
             // Check the method is not static
             if (method.IsStatic)
                 throw new ServiceException ("KRPCMethod " + method + " must not be static");
+        }
+
+        /// <summary>
+        /// Check the given type is a valid kRPC class property
+        /// </summary>
+        public static void ValidateKRPCClassProperty (PropertyInfo property)
+        {
+            if (!Reflection.HasAttribute<KRPCPropertyAttribute> (property))
+                throw new ArgumentException (property + " does not have KRPCProperty attribute");
+            // Note: Type must already be a property, due to AttributeUsage definition
+            // Validate the identifier.
+            ValidateIdentifier (property.Name);
+            // Check the method is defined directly inside a KRPCClass
+            var declaringType = property.DeclaringType;
+            if (declaringType == null || !Reflection.HasAttribute<KRPCClassAttribute> (declaringType))
+                throw new ServiceException ("KRPCProperty " + property + " is not declared inside a KRPCClass");
+            // Check it's not static
+            if (property.IsStatic ())
+                throw new ServiceException ("KRPCProperty " + property + " must not be static");
         }
     }
 }
