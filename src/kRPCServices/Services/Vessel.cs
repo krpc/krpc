@@ -114,9 +114,9 @@ namespace KRPCServices.Services
         public KRPC.Schema.Geometry.Vector3 RadialNeg {
             get { return Utils.ToVector3 (vesselData.RadialNeg); }
         }
-        /*
+
         [KRPCMethod]
-        public Resources GetResources ()
+        public double GetResource (string name)
         {
             // Get all resources
             var resources = new List<PartResource> ();
@@ -126,14 +126,7 @@ namespace KRPCServices.Services
                     resources.Add (resource);
                 }
             }
-
-            return Resources.CreateBuilder ()
-                .SetLiquidFuel (GetResourceAmount ("LiquidFuel", resources))
-                .SetOxidizer (GetResourceAmount ("Oxidizer", resources))
-                .SetSolidFuel (GetResourceAmount ("SolidFuel", resources))
-                .SetMonoPropellant (GetResourceAmount ("MonoPropellant", resources))
-                .SetElectricCharge (GetResourceAmount ("ElectricCharge", resources))
-                .Build ();
+            return GetResourceAmount (name, resources);
         }
 
         double GetResourceAmount (string name, ICollection<PartResource> resources)
@@ -146,6 +139,5 @@ namespace KRPCServices.Services
             }
             return amount;
         }
-        */
     }
 }
