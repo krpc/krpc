@@ -7,7 +7,7 @@ namespace KRPC.Service
     {
         readonly IDictionary<object, ulong> instances = new Dictionary<object, ulong> ();
         readonly IDictionary<ulong, object> objectIds = new Dictionary<ulong, object> ();
-        ulong nextObjectId;
+        ulong nextObjectId = 1; // 0 is reserved to represent null values
         static ObjectStore instance;
 
         public static ObjectStore Instance {
@@ -25,6 +25,8 @@ namespace KRPC.Service
         /// </summary>
         public ulong AddInstance (object instance)
         {
+            if (instance == null)
+                return 0;
             if (instances.ContainsKey (instance))
                 return instances [instance];
             var objectId = nextObjectId;
@@ -40,6 +42,8 @@ namespace KRPC.Service
         /// </summary>
         public void RemoveInstance (object instance)
         {
+            if (instance == null)
+                return;
             if (instances.ContainsKey (instance)) {
                 var objectId = instances [instance];
                 instances.Remove (instance);
@@ -52,6 +56,8 @@ namespace KRPC.Service
         /// </summary>
         public object GetInstance (ulong objectId)
         {
+            if (objectId == 0ul)
+                return null;
             if (!objectIds.ContainsKey (objectId))
                 throw new ArgumentException ("Instance not found");
             return objectIds [objectId];
@@ -60,8 +66,10 @@ namespace KRPC.Service
         /// <summary>
         /// Get the object identifier for a given instance.
         /// </summary>
-        public object GetObjectId (object instance)
+        public ulong GetObjectId (object instance)
         {
+            if (instance == null)
+                return 0;
             if (!instances.ContainsKey (instance))
                 throw new ArgumentException ("Instance not found");
             return instances [instance];
