@@ -11,8 +11,8 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public static string GetServiceFor (Type classType)
         {
-            foreach (var service in Reflection.GetTypesWith<KRPCService> ()) {
-                foreach (var cls in Reflection.GetClassesWith<KRPCClass> (service)) {
+            foreach (var service in Reflection.GetTypesWith<KRPCServiceAttribute> ()) {
+                foreach (var cls in Reflection.GetClassesWith<KRPCClassAttribute> (service)) {
                     if (cls == classType)
                         return service.Name;
                 }
