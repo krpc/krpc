@@ -3,17 +3,19 @@ using KRPC.Service.Attributes;
 namespace KRPCServices.Services
 {
     /// <summary>
-    /// Represents an orbit of an object.
+    /// Represents an orbit of an object such as a vessel or a celestial body.
     /// </summary>
-    // TODO: only current supports orbits of vessels. Extend to include CelestialBodies
-    [KRPCClass (Service = "Utils")]
+    // TODO: extend to include CelestialBodies
+    [KRPCClass (Service = "SpaceCenter")]
     public class Orbit
     {
         global::Vessel vessel;
+        VesselData vesselData;
 
-        public Orbit (global::Vessel vessel)
+        internal Orbit (VesselData vesselData)
         {
-            this.vessel = vessel;
+            this.vessel = vesselData.Vessel;
+            this.vesselData = vesselData;
         }
 
         [KRPCProperty]
@@ -74,6 +76,11 @@ namespace KRPCServices.Services
         [KRPCProperty]
         public double MeanAnomalyAtEpoch {
             get { return vessel.GetOrbit ().meanAnomalyAtEpoch; }
+        }
+
+        [KRPCProperty]
+        public double OrbitalSpeed {
+            get { return vesselData.OrbitalSpeed; }
         }
     }
 }
