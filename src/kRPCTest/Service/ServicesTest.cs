@@ -443,6 +443,37 @@ namespace KRPCTest.Service
         }
 
         /// <summary>
+        /// Test calling a procedure with a null proxy object as a parameter, and a null proxy object return value
+        /// </summary>
+        [Test]
+        public void HandleRequestWithNullObjectParameterAndReturn ()
+        {
+            // Create argument
+            ByteString argBytes = ProtocolBuffers.WriteValue (0ul, typeof(ulong));
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoTestObject (It.IsAny<TestService.TestClass> ()))
+                .Callback ((TestService.TestClass x) => {
+                // Check the argument
+                Assert.AreEqual (null, x);
+            }).Returns ((TestService.TestClass x) => x);
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("EchoTestObject")
+                .AddParameters (argBytes)
+                .Build ();
+            // Run the request
+            Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
+            Assert.False (response.HasError);
+            response.Time = 42;
+            Response builtResponse = response.Build ();
+            Assert.True (builtResponse.HasReturnValue);
+            Assert.AreEqual (0, ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(ulong)));
+        }
+
+        /// <summary>
         /// Test calling the method of a proxy object
         /// </summary>
         [Test]

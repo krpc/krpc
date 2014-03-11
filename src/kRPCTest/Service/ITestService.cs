@@ -24,5 +24,7 @@ namespace KRPCTest.Service
         TestService.TestClass CreateTestObject (string value);
 
         void DeleteTestObject (TestService.TestClass obj);
+
+        TestService.TestClass EchoTestObject (TestService.TestClass obj);
     }
 }
