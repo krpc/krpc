@@ -104,5 +104,13 @@ namespace KRPC.Utils
         {
             return (property.GetGetMethod () == null || property.GetGetMethod ().IsStatic) && (property.GetSetMethod () == null || property.GetSetMethod ().IsStatic);
         }
+
+        /// <summary>
+        /// Extension method to check if a property is public.
+        /// </summary>
+        public static bool IsPublic (this PropertyInfo property)
+        {
+            return (property.GetGetMethod () == null || property.GetGetMethod ().IsPublic) && (property.GetSetMethod () == null || property.GetSetMethod ().IsPublic);
+        }
     }
 }
