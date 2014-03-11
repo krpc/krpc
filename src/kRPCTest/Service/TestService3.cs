@@ -3,7 +3,7 @@
 namespace KRPCTest.Service
 {
     [KRPCService (Name = "TestService3Name")]
-    public static class TestService3a
+    public static class TestService3
     {
         [KRPCProcedure]
         public static void AProcedure ()
