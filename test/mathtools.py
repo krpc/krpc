@@ -1,3 +1,5 @@
+import math
+
 def v3(v):
     """ Convert a Geometry.Vector3 to a list of 3-elements """
     return [v.x, v.y, v.z]
