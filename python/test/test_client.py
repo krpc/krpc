@@ -69,6 +69,12 @@ class TestClient(unittest.TestCase):
         obj.ObjectProperty = obj2
         self.assertEqual(obj2._object_id, obj.ObjectProperty._object_id)
 
+    def test_setattr_for_properties(self):
+        """ Check that properties are added to the dynamically generated service class,
+            not the base class krpc.Service """
+        self.assertRaises (AttributeError, getattr, krpc._Service, 'ObjectProperty')
+        self.assertIsNotNone (getattr(self.ksp.TestService, 'ObjectProperty'))
+
 
 if __name__ == '__main__':
     unittest.main()

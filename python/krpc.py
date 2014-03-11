@@ -591,13 +591,22 @@ class KRPCService(BaseService):
         return self._invoke('GetServices', return_type=self._client._types.as_type('KRPC.Services'))
 
 
+def _create_service(client, service):
+    """ Create a new class type for a service and instantiate it """
+    typ = type(str('_Service_' + service.name), (_Service,), {})
+    return typ(typ, client, service)
 
-class Service(BaseService):
-    """ A dynamically created service, created using information received from the server """
 
-    def __init__(self, client, service):
-        """ Create a service from a KRPC.Service object received from a call to KRPC.GetServices() """
-        super(Service, self).__init__(client, service.name)
+class _Service(BaseService):
+    """ A dynamically created service, created using information received from the server.
+        Should not be instantiated directly. Use _create_service instead. """
+
+    def __init__(self, typ, client, service):
+        """ Create a service from the dynamically created class type for the service, the client,
+            and a KRPC.Service object received from a call to KRPC.GetServices()
+            Should not be instantiated directly. Use _create_service instead. """
+        super(_Service, self).__init__(client, service.name)
+        self._typ = typ
         self._name = service.name
         self._types = client._types
 
@@ -676,7 +685,7 @@ class Service(BaseService):
         if setter:
             self._add_procedure(setter)
             fset = lambda s, value: getattr(self, setter.name)(value)
-        setattr(self.__class__, name, property(fget, fset))
+        setattr(self._typ, name, property(fget, fset))
 
     def _add_class_method(self, class_name, method_name, procedure):
         """ Add a class method to the service """
@@ -737,7 +746,7 @@ class Client(object):
         # Set up services
         for service in services:
             if service.name != 'KRPC':
-                setattr(self, service.name, Service(self, service))
+                setattr(self, service.name, _create_service(self, service))
 
     def _invoke(self, service, procedure, parameters=[], parameter_types=[], return_type=None, **kwargs):
         """ Execute an RPC """
