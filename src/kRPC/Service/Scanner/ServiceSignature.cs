@@ -114,14 +114,14 @@ namespace KRPC.Service.Scanner
         {
             if (!Classes.Contains (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
-            if (property.CanRead) {
+            if (property.GetGetMethod () != null) {
                 var method = property.GetGetMethod ();
                 var handler = new ClassMethodHandler (method);
                 var attribute = "Class.Property.Get(" + Name + "." + cls + "," + property.Name + ")";
                 var parameter_attribute = "ParameterType(0).Class(" + Name + "." + cls + ")";
                 AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, attribute, parameter_attribute));
             }
-            if (property.CanWrite) {
+            if (property.GetSetMethod () != null) {
                 var method = property.GetSetMethod ();
                 var handler = new ClassMethodHandler (method);
                 var attribute = "Class.Property.Set(" + Name + "." + cls + "," + property.Name + ")";

@@ -107,7 +107,6 @@
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Scanner\Scanner.cs" />
     <Compile Include="Service\TypeUtils.cs" />
-    <Compile Include="Service\Scanner\Utils.cs" />
     <Compile Include="Service\Attributes\KRPCServiceAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCPropertyAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />
