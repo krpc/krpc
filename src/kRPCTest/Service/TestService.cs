@@ -76,6 +76,12 @@ namespace KRPCTest.Service
             Service.DeleteTestObject (obj);
         }
 
+        [KRPCProcedure]
+        public static TestClass EchoTestObject (TestClass obj)
+        {
+            return Service.EchoTestObject (obj);
+        }
+
         [KRPCClass]
         public class TestClass
         {

@@ -66,5 +66,11 @@ class TestEncoder(unittest.TestCase):
         data = Encoder.encode(value, typ)
         self.assertEquals('ac02', binascii.hexlify(data))
 
+    def test_encode_class_none(self):
+        typ = Types().as_type('Class(ServiceName.ClassName)')
+        value = None
+        data = Encoder.encode(value, typ)
+        self.assertEquals('00', binascii.hexlify(data))
+
 if __name__ == '__main__':
     unittest.main()

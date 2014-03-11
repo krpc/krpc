@@ -19,7 +19,7 @@ namespace KRPCTest.Service.Scanner
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "TestService") {
                     foundServices++;
-                    Assert.AreEqual (21, service.ProceduresCount);
+                    Assert.AreEqual (22, service.ProceduresCount);
                     int found = 0;
                     foreach (var method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
@@ -116,6 +116,16 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [0]);
+                            found++;
+                        }
+                        if (method.Name == "EchoTestObject") {
+                            Assert.AreEqual (1, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("uint64", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [0]);
+                            Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", method.AttributesList [1]);
                             found++;
                         }
                         if (method.Name == "TestClass_FloatToString") {
@@ -215,7 +225,7 @@ namespace KRPCTest.Service.Scanner
                             found++;
                         }
                     }
-                    Assert.AreEqual (21, found);
+                    Assert.AreEqual (22, found);
                 }
                 if (service.Name == "TestService2") {
                     foundServices++;
