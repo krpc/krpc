@@ -159,6 +159,11 @@ class _BaseClass(object):
             the server with the given object identifier """
         self._object_id = object_id
 
+    def __eq__(self, other):
+        return isinstance(other, _BaseClass) and self._object_id == other._object_id
+
+    def __hash__(self):
+        return self._object_id
 
 
 class _Attributes(object):
