@@ -22,7 +22,7 @@ from google.protobuf.internal import decoder as protobuf_decoder
 
 DEFAULT_ADDRESS = '127.0.0.1'
 DEFAULT_PORT = 50000
-BUFFER_SIZE = 4096
+BUFFER_SIZE = 8*1024*1024
 DEBUG_LOGGING = True
 
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
