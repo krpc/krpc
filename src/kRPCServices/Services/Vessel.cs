@@ -1,25 +1,122 @@
 using System.Collections.Generic;
 using KRPC.Service.Attributes;
-using KRPC.Schema.Vessel;
 
 namespace KRPCServices.Services
 {
-    [KRPCService]
-    static public class Vessel
+    /// <summary>
+    /// Class representing a vessel. For example, can be used to control the vessel and get orbital data.
+    /// </summary>
+    [KRPCClass (Service = "Utils")]
+    public class Vessel
     {
-        static double GetResourceAmount (string name, ICollection<PartResource> resources)
+        VesselData vesselData;
+
+        public Vessel (global::Vessel vessel)
         {
-            double amount = 0;
-            foreach (var resource in resources) {
-                if (resource.resourceName == name) {
-                    amount += resource.amount;
-                }
-            }
-            return amount;
+            vesselData = new VesselData (vessel);
+            Orbit = new KRPCServices.Services.Orbit (vessel);
         }
 
-        [KRPCProcedure]
-        public static Resources GetResources ()
+        [KRPCProperty]
+        public KRPCServices.Services.Orbit Orbit { get; private set; }
+
+        [KRPCProperty]
+        public string Body {
+            get { return vesselData.Vessel.mainBody.name; }
+        }
+
+        [KRPCProperty]
+        public double Altitude {
+            get { return vesselData.Altitude; }
+        }
+
+        [KRPCProperty]
+        public double TrueAltitude {
+            get { return vesselData.TrueAltitude; }
+        }
+
+        [KRPCProperty]
+        public double OrbitalSpeed {
+            get { return vesselData.OrbitalSpeed; }
+        }
+
+        [KRPCProperty]
+        public double SurfaceSpeed {
+            get { return vesselData.SurfaceSpeed; }
+        }
+
+        [KRPCProperty]
+        public double VerticalSurfaceSpeed {
+            get { return vesselData.VerticalSurfaceSpeed; }
+        }
+
+        [KRPCProperty]
+        public double Pitch {
+            get { return vesselData.Pitch; }
+        }
+
+        [KRPCProperty]
+        public double Heading {
+            get { return vesselData.Heading; }
+        }
+
+        [KRPCProperty]
+        public double Roll {
+            get { return vesselData.Roll; }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Direction {
+            get { return Utils.ToVector3 (vesselData.Direction); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 UpDirection {
+            get { return Utils.ToVector3 (vesselData.UpDirection); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 NorthDirection {
+            get { return Utils.ToVector3 (vesselData.NorthDirection); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 CenterOfMass {
+            get { return Utils.ToVector3 (vesselData.Position); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Prograde {
+            get { return Utils.ToVector3 (vesselData.Prograde); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Retrograde {
+            get { return Utils.ToVector3 (vesselData.Retrograde); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Normal {
+            get { return Utils.ToVector3 (vesselData.Normal); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 NormalNeg {
+            get { return Utils.ToVector3 (vesselData.NormalNeg); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Radial {
+            get { return Utils.ToVector3 (vesselData.Radial); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 RadialNeg {
+            get { return Utils.ToVector3 (vesselData.RadialNeg); }
+        }
+        /*
+        [KRPCMethod]
+        public Resources GetResources ()
         {
             // Get all resources
             var resources = new List<PartResource> ();
@@ -38,5 +135,17 @@ namespace KRPCServices.Services
                 .SetElectricCharge (GetResourceAmount ("ElectricCharge", resources))
                 .Build ();
         }
+
+        double GetResourceAmount (string name, ICollection<PartResource> resources)
+        {
+            double amount = 0;
+            foreach (var resource in resources) {
+                if (resource.resourceName == name) {
+                    amount += resource.amount;
+                }
+            }
+            return amount;
+        }
+        */
     }
 }

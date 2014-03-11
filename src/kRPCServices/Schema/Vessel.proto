@@ -1,9 +1,0 @@
-package Vessel;
-
-message Resources {
-  required double liquidFuel = 1;
-  required double oxidizer = 2;
-  required double solidFuel = 3;
-  required double monoPropellant = 4;
-  required double electricCharge = 5;
-}

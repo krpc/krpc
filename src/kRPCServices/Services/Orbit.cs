@@ -2,67 +2,78 @@ using KRPC.Service.Attributes;
 
 namespace KRPCServices.Services
 {
-    [KRPCService]
-    static public class Orbit
+    /// <summary>
+    /// Represents an orbit of an object.
+    /// </summary>
+    // TODO: only current supports orbits of vessels. Extend to include CelestialBodies
+    [KRPCClass (Service = "Utils")]
+    public class Orbit
     {
-        [KRPCProperty]
-        public static string Body {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().referenceBody.name; }
+        global::Vessel vessel;
+
+        public Orbit (global::Vessel vessel)
+        {
+            this.vessel = vessel;
         }
 
         [KRPCProperty]
-        public static double Apoapsis {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().ApR; }
+        public string Body {
+            get { return vessel.GetOrbit ().referenceBody.name; }
         }
 
         [KRPCProperty]
-        public static double Periapsis {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().PeR; }
+        public double Apoapsis {
+            get { return vessel.GetOrbit ().ApR; }
         }
 
         [KRPCProperty]
-        public static double ApoapsisAltitude {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().ApA; }
+        public double Periapsis {
+            get { return vessel.GetOrbit ().PeR; }
         }
 
         [KRPCProperty]
-        public static double PeriapsisAltitude {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().PeA; }
+        public double ApoapsisAltitude {
+            get { return vessel.GetOrbit ().ApA; }
         }
 
         [KRPCProperty]
-        public static double TimeToApoapsis {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().timeToAp; }
+        public double PeriapsisAltitude {
+            get { return vessel.GetOrbit ().PeA; }
         }
 
         [KRPCProperty]
-        public static double TimeToPeriapsis {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().timeToPe; }
+        public double TimeToApoapsis {
+            get { return vessel.GetOrbit ().timeToAp; }
         }
 
         [KRPCProperty]
-        public static double Eccentricity {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().eccentricity; }
+        public double TimeToPeriapsis {
+            get { return vessel.GetOrbit ().timeToPe; }
         }
 
         [KRPCProperty]
-        public static double Inclination {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().inclination; }
+        public double Eccentricity {
+            get { return vessel.GetOrbit ().eccentricity; }
         }
 
         [KRPCProperty]
-        public static double LongitudeOfAscendingNode {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().LAN; }
+        public double Inclination {
+            get { return vessel.GetOrbit ().inclination; }
         }
 
         [KRPCProperty]
-        public static double ArgumentOfPeriapsis {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().argumentOfPeriapsis; }
+        public double LongitudeOfAscendingNode {
+            get { return vessel.GetOrbit ().LAN; }
         }
 
         [KRPCProperty]
-        public static double MeanAnomalyAtEpoch {
-            get { return FlightGlobals.ActiveVessel.GetOrbit ().meanAnomalyAtEpoch; }
+        public double ArgumentOfPeriapsis {
+            get { return vessel.GetOrbit ().argumentOfPeriapsis; }
+        }
+
+        [KRPCProperty]
+        public double MeanAnomalyAtEpoch {
+            get { return vessel.GetOrbit ().meanAnomalyAtEpoch; }
         }
     }
 }
