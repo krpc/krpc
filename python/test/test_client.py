@@ -37,10 +37,21 @@ class TestClient(unittest.TestCase):
         self.assertEqual('foo', self.ksp.TestService.StringProperty)
         self.assertEqual('foo', self.ksp.TestService.StringPropertyPrivateSet)
         self.ksp.TestService.StringPropertyPrivateGet = 'foo'
+        obj = self.ksp.TestService.CreateTestObject('bar')
+        self.ksp.TestService.ObjectProperty = obj
+        self.assertEqual (obj, self.ksp.TestService.ObjectProperty)
 
     def test_class_as_return_value(self):
         obj = self.ksp.TestService.CreateTestObject('jeb')
         self.assertEqual('TestClass', type(obj).__name__)
+
+    def test_class_none_value(self):
+        self.assertIsNone(self.ksp.TestService.EchoTestObject(None))
+        obj = self.ksp.TestService.CreateTestObject('bob')
+        self.assertEqual('bobnull', obj.ObjectToString(None))
+        self.assertIsNone (self.ksp.TestService.ObjectProperty)
+        self.ksp.TestService.ObjectProperty = None
+        self.assertIsNone (self.ksp.TestService.ObjectProperty)
 
     def test_class_methods(self):
         obj = self.ksp.TestService.CreateTestObject('bob')

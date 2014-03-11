@@ -75,6 +75,15 @@ namespace TestServer.Services
             return new TestClass (value);
         }
 
+        [KRPCProcedure]
+        public static TestClass EchoTestObject (TestClass value)
+        {
+            return value;
+        }
+
+        [KRPCProperty]
+        public static TestClass ObjectProperty { get; set; }
+
         [KRPCClass]
         public class TestClass
         {
@@ -100,7 +109,7 @@ namespace TestServer.Services
             [KRPCMethod]
             public string ObjectToString (TestClass other)
             {
-                return value + other.value;
+                return value + (other == null ? "null" : other.value);
             }
 
             [KRPCProperty]
