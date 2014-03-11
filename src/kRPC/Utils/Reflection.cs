@@ -57,19 +57,6 @@ namespace KRPC.Utils
         }
 
         /// <summary>
-        /// Returns all methods within a given type that have the specified attribute.
-        /// </summary>
-        public static IEnumerable<Type> GetClassesWith<TAttribute> (Type cls, bool inherit = false)
-            where TAttribute : Attribute
-        {
-            foreach (var nestedType in cls.GetNestedTypes()) {
-                if (nestedType.IsClass && nestedType.IsDefined (typeof(TAttribute), inherit)) {
-                    yield return nestedType;
-                }
-            }
-        }
-
-        /// <summary>
         /// Return attribute of type T for the given member. Does not follow inheritance.
         /// Throws ArgumentException if there is no attribute, or more than one attribute.
         /// </summary>
