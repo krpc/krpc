@@ -82,11 +82,7 @@ namespace KRPCTest.Service
                 argBytes [i] = (byte)(argBytes [i] + 1);
             // Create mock service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureSingleArgNoReturn (It.IsAny<Response> ()))
-                .Callback ((Response x) => {
-                // Check the argument
-                Assert.AreEqual (argBytes, x.ToByteArray ());
-            });
+            mock.Setup (x => x.ProcedureSingleArgNoReturn (It.IsAny<Response> ()));
             TestService.Service = mock.Object;
             // Create request
             var request = Request.CreateBuilder ()
