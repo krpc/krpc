@@ -102,17 +102,17 @@
     <Compile Include="Service\IProcedureHandler.cs" />
     <Compile Include="Service\ProcedureHandler.cs" />
     <Compile Include="Service\ObjectStore.cs" />
-    <Compile Include="Service\Attributes\KRPCClass.cs" />
-    <Compile Include="Service\Attributes\KRPCMethod.cs" />
-    <Compile Include="Service\Attributes\KRPCProcedure.cs" />
-    <Compile Include="Service\Attributes\KRPCProperty.cs" />
-    <Compile Include="Service\Attributes\KRPCService.cs" />
     <Compile Include="Service\Scanner\ServiceSignature.cs" />
     <Compile Include="Service\Scanner\ProcedureSignature.cs" />
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Scanner\Scanner.cs" />
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="Service\Scanner\Utils.cs" />
+    <Compile Include="Service\Attributes\KRPCServiceAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCPropertyAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCMethodAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

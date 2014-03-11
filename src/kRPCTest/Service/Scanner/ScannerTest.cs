@@ -14,12 +14,12 @@ namespace KRPCTest.Service.Scanner
         {
             var services = KRPC.Service.KRPC.GetServices ();
             Assert.IsNotNull (services);
-            Assert.AreEqual (3, services.Services_Count);
+            Assert.AreEqual (4, services.Services_Count);
             int foundServices = 0;
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "TestService") {
                     foundServices++;
-                    Assert.AreEqual (18, service.ProceduresCount);
+                    Assert.AreEqual (21, service.ProceduresCount);
                     int found = 0;
                     foreach (var method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
@@ -183,8 +183,39 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("ParameterType(1).Class(TestService.TestClass)", method.AttributesList [2]);
                             found++;
                         }
+                        if (method.Name == "TestTopLevelClass_AMethod") {
+                            Assert.AreEqual (2, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.AreEqual ("int32", method.ParameterTypesList [1]);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("string", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("Class.Method(TestService.TestTopLevelClass,AMethod)", method.AttributesList [0]);
+                            Assert.AreEqual ("ParameterType(0).Class(TestService.TestTopLevelClass)", method.AttributesList [1]);
+                            found++;
+                        }
+                        if (method.Name == "TestTopLevelClass_get_AProperty") {
+                            Assert.AreEqual (1, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("string", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("Class.Property.Get(TestService.TestTopLevelClass,AProperty)", method.AttributesList [0]);
+                            Assert.AreEqual ("ParameterType(0).Class(TestService.TestTopLevelClass)", method.AttributesList [1]);
+                            found++;
+                        }
+                        if (method.Name == "TestTopLevelClass_set_AProperty") {
+                            Assert.AreEqual (2, method.ParameterTypesCount);
+                            Assert.AreEqual ("uint64", method.ParameterTypesList [0]);
+                            Assert.AreEqual ("string", method.ParameterTypesList [1]);
+                            Assert.IsFalse (method.HasReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("Class.Property.Set(TestService.TestTopLevelClass,AProperty)", method.AttributesList [0]);
+                            Assert.AreEqual ("ParameterType(0).Class(TestService.TestTopLevelClass)", method.AttributesList [1]);
+                            found++;
+                        }
                     }
-                    Assert.AreEqual (18, found);
+                    Assert.AreEqual (21, found);
                 }
                 if (service.Name == "TestService2") {
                     foundServices++;
@@ -212,8 +243,12 @@ namespace KRPCTest.Service.Scanner
                     }
                     Assert.AreEqual (2, found);
                 }
+                if (service.Name == "TestService3Name") {
+                    foundServices++;
+                    Assert.AreEqual (1, service.ProceduresCount);
+                }
             }
-            Assert.AreEqual (2, foundServices);
+            Assert.AreEqual (3, foundServices);
         }
     }
 }
