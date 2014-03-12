@@ -8,5 +8,8 @@ namespace KRPCServices.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class Parts
     {
+        internal Parts (global::Vessel vessel)
+        {
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace KRPCServices.Services
             Orbit = new Orbit (vesselData);
             Control = new Control (vessel);
             Resources = new Resources (vessel);
+            Parts = new Parts (vessel);
         }
 
         [KRPCProperty]
@@ -30,5 +31,8 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public Resources Resources { get; private set; }
+
+        [KRPCProperty]
+        public Parts Parts { get; private set; }
     }
 }
