@@ -65,6 +65,7 @@
     <Compile Include="Services\CelestialBody.cs" />
     <Compile Include="Services\Node.cs" />
     <Compile Include="Services\Parts.cs" />
+    <Compile Include="Services\SpaceCenter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

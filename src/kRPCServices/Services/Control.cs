@@ -75,9 +75,7 @@ namespace KRPCServices.Services
         {
             vessel.ActionGroups.SetGroup (Utils.GetActionGroup (grp), value);
         }
-
         // FIXME: what if vessel is not the active vessel?
-
         /// <summary>
         /// Throttle setting of the active vessel. Should be between 0 and 1.
         /// </summary>
@@ -123,7 +121,7 @@ namespace KRPCServices.Services
             set { PilotAddon.Yaw = value; }
         }
 
-        [KRPCProcedure]
+        [KRPCMethod]
         public void ActivateNextStage ()
         {
             Staging.ActivateNextStage ();
