@@ -16,9 +16,11 @@ def main():
     ksp = krpc.connect(name='Example script')
     print 'Connected to server, version', ksp.KRPC.GetStatus().version
 
-    vessel = ksp.Flight.ActiveVessel
+    vessel = ksp.SpaceCenter.ActiveVessel
     orbit = vessel.Orbit
-    control = ksp.Control
+    control = vessel.Control
+    flight = vessel.Flight
+    resources = vessel.Resources
 
     # Set the throttle to 100% and enable SAS
     control.Throttle = 1
@@ -39,7 +41,7 @@ def main():
     while True:
 
         # Check altitude, exit loop if higher than 10km
-        altitude = vessel.Altitude
+        altitude = flight.Altitude
         print '  Altitude = %.1f km' % (altitude/1000)
         if altitude > 10000:
             break
@@ -47,7 +49,7 @@ def main():
         # Check if the solid boosters need to be ditched
         # (We assume this will happen before we reach 10km)
         if not srbs_separated:
-            solidFuel = vessel.GetResource('SolidFuel')
+            solidFuel = resources.GetResource('SolidFuel')
             print '  Solid fuel = %.1f T' % solidFuel
             if solidFuel < 0.1:
                 print '  SRB separation!'
@@ -60,7 +62,7 @@ def main():
     print 'Gravity turn...'
     control.SAS = False
     control.Yaw = 0.1
-    while vessel.Pitch > 50:
+    while flight.Pitch > 50:
         time.sleep(0.25)
     control.Yaw = 0
     control.SAS = True
@@ -83,7 +85,7 @@ def main():
     while True:
 
         # Check altitude, exit loop if higher than 79km
-        altitude = vessel.Altitude
+        altitude = flight.Altitude
         print '  Altitude = %.1f km' % (altitude/1000)
         if altitude > 79000:
             break
@@ -93,7 +95,7 @@ def main():
     print 'Circularizing...'
     control.SAS = False
     control.Yaw = 0.1
-    while vessel.Pitch > 0:
+    while flight.Pitch > 0:
         time.sleep(0.25)
     control.Yaw = 0
     control.SAS = True
@@ -112,7 +114,6 @@ def main():
 
         print '  Orbit = %.1f km x %.1f km (e = %.3f)' % ((apoapsis/1000), (periapsis/1000), orbit.Eccentricity)
 
-        print (prevEccentricity - eccentricity)
         if prevEccentricity - eccentricity < 0:
             break
 
