@@ -104,11 +104,29 @@ namespace KRPCTest.Service
                 return value + other.value;
             }
 
+            [KRPCMethod]
+            public string IntToString (int x = 42)
+            {
+                return value + x.ToString ();
+            }
+
             [KRPCProperty]
             public int IntProperty { get; set; }
 
             [KRPCProperty]
             public TestClass ObjectProperty { get; set; }
+        }
+
+        [KRPCProcedure]
+        public static void ProcedureSingleOptionalArgNoReturn (string x = "foo")
+        {
+            Service.ProcedureSingleOptionalArgNoReturn (x);
+        }
+
+        [KRPCProcedure]
+        public static void ProcedureThreeOptionalArgsNoReturn (float x, string y = "jeb", int z = 42)
+        {
+            Service.ProcedureThreeOptionalArgsNoReturn (x, y, z);
         }
     }
 }

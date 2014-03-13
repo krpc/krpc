@@ -28,13 +28,13 @@ namespace KRPCTest.Service
                         if (method.Name == "GetStatus") {
                             Assert.AreEqual ("GetStatus", method.Name);
                             Assert.AreEqual ("KRPC.Status", method.ReturnType);
-                            Assert.AreEqual (0, method.ParameterTypesCount);
+                            Assert.AreEqual (0, method.ParametersCount);
                             found++;
                         }
                         if (method.Name == "GetServices") {
                             Assert.AreEqual ("GetServices", method.Name);
                             Assert.AreEqual ("KRPC.Services", method.ReturnType);
-                            Assert.AreEqual (0, method.ParameterTypesCount);
+                            Assert.AreEqual (0, method.ParametersCount);
                             found++;
                         }
                     }
