@@ -48,10 +48,10 @@ namespace KRPC.Service
             var procedure = service.Procedures [request.Procedure];
 
             // Invoke the procedure
-            object[] parameters = DecodeParameters (procedure, request.ParametersList);
+            object[] arguments = DecodeArguments (procedure, request.ArgumentsList);
             object returnValue;
             try {
-                returnValue = procedure.Handler.Invoke (parameters);
+                returnValue = procedure.Handler.Invoke (arguments);
             } catch (TargetInvocationException e) {
                 throw new RPCException ("Procedure '" + procedure.FullyQualifiedName + "' threw an exception. " +
                 e.InnerException.GetType () + ": " + e.InnerException.Message);
@@ -64,37 +64,44 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Decode the parameters for a procedure from a serialized request
+        /// Decode the arguments for a procedure from a serialized request
         /// </summary>
-        object[] DecodeParameters (ProcedureSignature procedure, IList<ByteString> parameters)
+        object[] DecodeArguments (ProcedureSignature procedure, IList<Schema.KRPC.Argument> arguments)
         {
-            // Check number of parameters is correct
-            if (parameters.Count != procedure.ParameterTypes.Count) {
-                throw new RPCException (
-                    "Incorrect number of parameters for " + procedure.FullyQualifiedName + ". " +
-                    "Expected " + procedure.ParameterTypes.Count + "; got " + parameters.Count + ".");
-            }
+            // Rearrange argument values
+            var argumentValues = new ByteString [procedure.Parameters.Count];
+            foreach (var argument in arguments)
+                argumentValues [argument.Position] = argument.Value;
 
-            // Attempt to decode them
-            var decodedParameters = new object[parameters.Count];
-            for (int i = 0; i < parameters.Count; i++) {
-                try {
-                    if (TypeUtils.IsAClassType (procedure.ParameterTypes [i])) {
-                        decodedParameters [i] = ObjectStore.Instance.GetInstance ((ulong)ProtocolBuffers.ReadValue (parameters [i], typeof(ulong)));
-                    } else if (ProtocolBuffers.IsAMessageType (procedure.ParameterTypes [i])) {
-                        var builder = procedure.ParameterBuilders [i];
-                        decodedParameters [i] = builder.WeakMergeFrom (parameters [i]).WeakBuild ();
-                    } else {
-                        decodedParameters [i] = ProtocolBuffers.ReadValue (parameters [i], procedure.ParameterTypes [i]);
+            var decodedArgumentValues = new object[procedure.Parameters.Count];
+            for (int i = 0; i < procedure.Parameters.Count; i++) {
+                var type = procedure.Parameters [i].Type;
+                var value = argumentValues [i];
+                if (value == null) {
+                    // Handle default arguments
+                    if (!procedure.Parameters [i].HasDefaultArgument)
+                        throw new RPCException ("Argument not specified for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". ");
+                    decodedArgumentValues [i] = Type.Missing;
+                } else {
+                    // Decode argument
+                    try {
+                        if (TypeUtils.IsAClassType (type)) {
+                            decodedArgumentValues [i] = ObjectStore.Instance.GetInstance ((ulong)ProtocolBuffers.ReadValue (value, typeof(ulong)));
+                        } else if (ProtocolBuffers.IsAMessageType (type)) {
+                            var builder = procedure.ParameterBuilders [i];
+                            decodedArgumentValues [i] = builder.WeakMergeFrom (value).WeakBuild ();
+                        } else {
+                            decodedArgumentValues [i] = ProtocolBuffers.ReadValue (value, type);
+                        }
+                    } catch (Exception e) {
+                        throw new RPCException (
+                            "Failed to decode argument for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". " +
+                            "Expected an argument of type " + ProtocolBuffers.GetTypeName (type) + ". " +
+                            e.GetType ().Name + ": " + e.Message);
                     }
-                } catch (Exception e) {
-                    throw new RPCException (
-                        "Failed to decode parameter " + i + " for " + procedure.FullyQualifiedName + ". " +
-                        "Expected a parameter of type " + ProtocolBuffers.GetTypeName (procedure.ParameterTypes [i]) + ". " +
-                        e.GetType ().Name + ": " + e.Message);
                 }
             }
-            return decodedParameters;
+            return decodedArgumentValues;
         }
 
         /// <summary>
