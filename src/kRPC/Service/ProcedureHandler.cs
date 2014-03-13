@@ -17,9 +17,14 @@ namespace KRPC.Service
             this.method = method;
         }
 
-        public object Invoke (params object[] parameters)
+        public object Invoke (params object[] arguments)
         {
-            return method.Invoke (null, parameters);
+            // TODO: should be able to invoke default arguments using Type.Missing, but get "System.ArgumentException : failed to convert parameters"
+            var parameters = Parameters.ToArray ();
+            var newArguments = new object[arguments.Length];
+            for (int i = 0; i < arguments.Length; i++)
+                newArguments [i] = (arguments [i] == Type.Missing) ? parameters [i].DefaultValue : arguments [i];
+            return method.Invoke (null, newArguments);
         }
 
         public IEnumerable<ProcedureParameter> Parameters {
