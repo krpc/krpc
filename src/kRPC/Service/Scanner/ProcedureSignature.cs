@@ -28,7 +28,7 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public IProcedureHandler Handler { get; private set; }
 
-        public IList<Type> ParameterTypes { get; private set; }
+        public IList<ParameterSignature> Parameters { get; private set; }
 
         public bool HasReturnType { get; private set; }
 
@@ -46,30 +46,25 @@ namespace KRPC.Service.Scanner
 
         public List<string> Attributes { get; private set; }
 
-        public ProcedureSignature (string serviceName, string methodName, IProcedureHandler handler, params string[] attributes)
+        public ProcedureSignature (string serviceName, string procedureName, IProcedureHandler handler, params string[] attributes)
         {
-            Name = methodName;
+            Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;
             Handler = handler;
             Attributes = attributes.ToList ();
-            ParameterTypes = handler.GetParameters ().ToList ();
+            Parameters = handler.Parameters.Select (x => new ParameterSignature (FullyQualifiedName, x)).ToList ();
+
             // Add parameter type attributes
-            for (int position = 0; position < ParameterTypes.Count; position++)
-                Attributes.AddRange (TypeUtils.ParameterTypeAttributes (position, ParameterTypes [position]));
-            // Check the parameter types are valid
-            if (ParameterTypes.Any (x => !TypeUtils.IsAValidType (x))) {
-                Type type = ParameterTypes.First (x => !TypeUtils.IsAValidType (x));
-                throw new ServiceException (
-                    type + " is not a valid Procedure parameter type, " +
-                    "in " + FullyQualifiedName);
-            }
+            for (int position = 0; position < Parameters.Count; position++)
+                Attributes.AddRange (TypeUtils.ParameterTypeAttributes (position, Parameters [position].Type));
+
             // Create builders for the parameter types that are message types
-            ParameterBuilders = ParameterTypes
+            ParameterBuilders = Parameters
                 .Select (x => {
                 try {
-                    return ProtocolBuffers.IsAMessageType (x) ? ProtocolBuffers.BuilderForMessageType (x) : null;
+                    return ProtocolBuffers.IsAMessageType (x.Type) ? ProtocolBuffers.BuilderForMessageType (x.Type) : null;
                 } catch (ArgumentException) {
-                    throw new ServiceException ("Failed to instantiate a message builder for parameter type " + x.Name);
+                    throw new ServiceException ("Failed to instantiate a message builder for parameter type " + x.Type.Name);
                 }
             }).ToArray ();
             HasReturnType = (handler.ReturnType != typeof(void));
