@@ -1,5 +1,4 @@
 using KRPC.Service.Attributes;
-using KSP;
 
 namespace KRPCServices.Services
 {

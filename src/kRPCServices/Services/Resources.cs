@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using KRPC.Service.Attributes;
+using System.Collections.Generic;
 
 namespace KRPCServices.Services
 {
