@@ -33,15 +33,16 @@ namespace KRPC.Service
             return method.Invoke (ObjectStore.Instance.GetInstance (instanceGuid), methodParameters);
         }
 
-        public Type ReturnType {
-            get { return method.ReturnType; }
+        public IEnumerable<ProcedureParameter> Parameters {
+            get {
+                var parameters = method.GetParameters ().Select (x => new ProcedureParameter (x)).ToList ();
+                parameters.Insert (0, new ProcedureParameter (typeof(ulong), "this"));
+                return parameters;
+            }
         }
 
-        public IEnumerable<Type> GetParameters ()
-        {
-            var parameters = method.GetParameters ().Select (x => x.ParameterType).ToList ();
-            parameters.Insert (0, typeof(ulong));
-            return parameters.ToArray ();
+        public Type ReturnType {
+            get { return method.ReturnType; }
         }
     }
 }
