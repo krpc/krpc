@@ -23,8 +23,8 @@ namespace KRPCTest.Utils
         [Test]
         public void GetMethodsWithAttribute ()
         {
-            Assert.AreEqual (9, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService)).Count ());
-            Assert.AreEqual (2, Reflection.GetMethodsWith<KRPCMethodAttribute> (typeof(TestService.TestClass)).Count ());
+            Assert.AreEqual (11, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService)).Count ());
+            Assert.AreEqual (3, Reflection.GetMethodsWith<KRPCMethodAttribute> (typeof(TestService.TestClass)).Count ());
             Assert.AreEqual (0, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService.TestClass)).Count ());
             Assert.AreEqual (0, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(string)).Count ());
         }
@@ -53,12 +53,22 @@ namespace KRPCTest.Utils
             Assert.IsFalse (Reflection.HasAttribute<KRPCServiceAttribute> (typeof(TestService.TestClass)));
         }
 
-        public static class TestStaticClass {}
-        public class TestNonStaticClass {}
+        public static class TestStaticClass
+        {
+        }
+
+        public class TestNonStaticClass
+        {
+        }
+
         public static int TestStaticProperty { get; set; }
+
         public int TestNonStaticProperty { get; set; }
+
         public int TestPublicProperty { get; set; }
+
         public int TestPublicGetProperty { get; private set; }
+
         public int TestPublicSetProperty { private get; set; }
 
         [Test]
