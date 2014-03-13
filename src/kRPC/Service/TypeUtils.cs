@@ -218,6 +218,7 @@ namespace KRPC.Service
         ///  1. Must have KRPCMethod attribute
         ///  2. Must have a valid identifier
         ///  3. Must be a public non-static method
+        ///  4. Must be declared inside a kRPC class
         /// </summary>
         public static void ValidateKRPCMethod (MethodInfo method)
         {
@@ -229,13 +230,17 @@ namespace KRPC.Service
             // Check it's public non-static
             if (!(method.IsPublic && !method.IsStatic))
                 throw new ServiceException ("KRPCMethod " + method + " is not public non-static");
+            // Check the class is defined in a KRPCClass
+            var declaringType = method.DeclaringType;
+            if (!Reflection.HasAttribute<KRPCClassAttribute> (declaringType))
+                throw new ServiceException ("KRPCMethod " + method + " is not declared inside a KRPCClass");
         }
 
         /// <summary>
         /// Check the given type is a valid kRPC class property
         ///  1. Must have KRPCProperty attribute
         ///  2. Must have a valid identifier
-        ///  3. Must not be a public static property
+        ///  3. Must be a public non-static property
         ///  4. Must be declared inside a kRPC class
         /// </summary>
         public static void ValidateKRPCClassProperty (PropertyInfo property)
