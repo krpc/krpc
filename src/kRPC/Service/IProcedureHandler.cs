@@ -11,9 +11,9 @@ namespace KRPC.Service
     {
         object Invoke (params object[] parameters);
 
-        Type ReturnType { get; }
+        IEnumerable<ProcedureParameter> Parameters { get; }
 
-        IEnumerable<Type> GetParameters ();
+        Type ReturnType { get; }
     }
 }
 

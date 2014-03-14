@@ -26,5 +26,9 @@ namespace KRPCTest.Service
         void DeleteTestObject (TestService.TestClass obj);
 
         TestService.TestClass EchoTestObject (TestService.TestClass obj);
+
+        void ProcedureSingleOptionalArgNoReturn (string x);
+
+        void ProcedureThreeOptionalArgsNoReturn (float x, string y, int z);
     }
 }

@@ -13,6 +13,14 @@ namespace KRPCTest.Service
     [TestFixture]
     public class ServicesTest
     {
+        Argument Arg (uint position, ByteString value)
+        {
+            return Argument.CreateBuilder ()
+                .SetPosition (position)
+                .SetValue (value)
+                .Build ();
+        }
+
         [Test]
         public void NonExistantService ()
         {
@@ -88,7 +96,7 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("ProcedureSingleArgNoReturn")
-                .AddParameters (ByteString.CopyFrom (argBytes))
+                .AddArguments (Arg (0, ByteString.CopyFrom (argBytes)))
                 .Build ();
             // Run the request
             Assert.Throws<RPCException> (() => KRPC.Service.Services.Instance.HandleRequest (request));
@@ -161,7 +169,7 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("ProcedureSingleArgNoReturn")
-                .AddParameters (ByteString.CopyFrom (argBytes))
+                .AddArguments (Arg (0, ByteString.CopyFrom (argBytes)))
                 .Build ();
             // Run the request
             KRPC.Service.Services.Instance.HandleRequest (request);
@@ -207,9 +215,9 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("ProcedureThreeArgsNoReturn")
-                .AddParameters (ByteString.CopyFrom (argBytes [0]))
-                .AddParameters (ByteString.CopyFrom (argBytes [1]))
-                .AddParameters (ByteString.CopyFrom (argBytes [2]))
+                .AddArguments (Arg (0, ByteString.CopyFrom (argBytes [0])))
+                .AddArguments (Arg (1, ByteString.CopyFrom (argBytes [1])))
+                .AddArguments (Arg (2, ByteString.CopyFrom (argBytes [2])))
                 .Build ();
             // Run the request
             KRPC.Service.Services.Instance.HandleRequest (request);
@@ -271,7 +279,7 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("ProcedureSingleArgReturns")
-                .AddParameters (ByteString.CopyFrom (expectedResponseBytes))
+                .AddArguments (Arg (0, ByteString.CopyFrom (expectedResponseBytes)))
                 .Build ();
             // Run the request
             Response.Builder responseBuilder = KRPC.Service.Services.Instance.HandleRequest (request);
@@ -329,9 +337,9 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("ProcedureWithValueTypes")
-                .AddParameters (ByteString.CopyFrom (xBytes))
-                .AddParameters (ByteString.CopyFrom (yBytes))
-                .AddParameters (ByteString.CopyFrom (zBytes))
+                .AddArguments (Arg (0, ByteString.CopyFrom (xBytes)))
+                .AddArguments (Arg (1, ByteString.CopyFrom (yBytes)))
+                .AddArguments (Arg (2, ByteString.CopyFrom (zBytes)))
                 .Build ();
             // Run the request
             KRPC.Service.Services.Instance.HandleRequest (request);
@@ -374,7 +382,7 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("set_PropertyWithSet")
-                .AddParameters (ProtocolBuffers.WriteValue ("foo", typeof(string)))
+                .AddArguments (Arg (0, ProtocolBuffers.WriteValue ("foo", typeof(string))))
                 .Build ();
             // Run the request
             Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
@@ -398,7 +406,7 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("CreateTestObject")
-                .AddParameters (argBytes)
+                .AddArguments (Arg (0, argBytes))
                 .Build ();
             // Run the request
             Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
@@ -431,7 +439,7 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("DeleteTestObject")
-                .AddParameters (argBytes)
+                .AddArguments (Arg (0, argBytes))
                 .Build ();
             // Run the request
             KRPC.Service.Services.Instance.HandleRequest (request);
@@ -458,7 +466,7 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("EchoTestObject")
-                .AddParameters (argBytes)
+                .AddArguments (Arg (0, argBytes))
                 .Build ();
             // Run the request
             Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
@@ -484,8 +492,8 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("TestClass_FloatToString")
-                .AddParameters (guidBytes)
-                .AddParameters (argBytes)
+                .AddArguments (Arg (0, guidBytes))
+                .AddArguments (Arg (1, argBytes))
                 .Build ();
             // Run the request
             Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
@@ -511,8 +519,8 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("TestClass_ObjectToString")
-                .AddParameters (guidBytes)
-                .AddParameters (argBytes)
+                .AddArguments (Arg (0, guidBytes))
+                .AddArguments (Arg (1, argBytes))
                 .Build ();
             // Run the request
             Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
@@ -535,7 +543,7 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("TestClass_get_IntProperty")
-                .AddParameters (guidBytes)
+                .AddArguments (Arg (0, guidBytes))
                 .Build ();
             // Run the request
             Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
@@ -559,8 +567,8 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService")
                 .SetProcedure ("TestClass_set_IntProperty")
-                .AddParameters (guidBytes)
-                .AddParameters (ProtocolBuffers.WriteValue (1337, typeof(int)))
+                .AddArguments (Arg (0, guidBytes))
+                .AddArguments (Arg (1, ProtocolBuffers.WriteValue (1337, typeof(int))))
                 .Build ();
             // Run the request
             Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
@@ -585,7 +593,7 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService2")
                 .SetProcedure ("ClassTypeFromOtherServiceAsParameter")
-                .AddParameters (guidBytes)
+                .AddArguments (Arg (0, guidBytes))
                 .Build ();
             // Run the request
             Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
@@ -606,7 +614,7 @@ namespace KRPCTest.Service
             var request = Request.CreateBuilder ()
                 .SetService ("TestService2")
                 .SetProcedure ("ClassTypeFromOtherServiceAsReturn")
-                .AddParameters (ProtocolBuffers.WriteValue ("jeb", typeof(string)))
+                .AddArguments (Arg (0, ProtocolBuffers.WriteValue ("jeb", typeof(string))))
                 .Build ();
             // Run the request
             Response.Builder response = KRPC.Service.Services.Instance.HandleRequest (request);
@@ -616,6 +624,91 @@ namespace KRPCTest.Service
             var guid = (ulong)ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(ulong));
             var obj = (TestService.TestClass)ObjectStore.Instance.GetInstance (guid);
             Assert.AreEqual ("jeb", obj.value);
+        }
+
+        /// <summary>
+        /// Test calling a service method with an optional argument and no return value
+        /// </summary>
+        [Test]
+        public void HandleRequestSingleOptionalArgNoReturn ()
+        {
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureSingleOptionalArgNoReturn (It.IsAny<string> ()))
+                .Callback ((string x) => {
+                // Check the argument
+                Assert.AreEqual (x, "foo");
+            });
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureSingleOptionalArgNoReturn")
+                .Build ();
+            // Run the request
+            KRPC.Service.Services.Instance.HandleRequest (request);
+            mock.Verify (x => x.ProcedureSingleOptionalArgNoReturn (It.IsAny<string> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method with multiple parameters, by name with optional arguments
+        /// </summary>
+        [Test]
+        public void HandleRequestThreeOptionalArgs ()
+        {
+            // Create arguments
+            var arg0 = 3.14159f;
+            var arg2 = 42;
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureThreeOptionalArgsNoReturn (
+                It.IsAny<float> (),
+                It.IsAny<string> (),
+                It.IsAny<int> ()))
+                .Callback ((float x,
+                            string y,
+                            int z) => {
+                // Check the argument
+                Assert.AreEqual (arg0, x);
+                Assert.AreEqual ("jeb", y);
+                Assert.AreEqual (arg2, z);
+            });
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureThreeOptionalArgsNoReturn")
+                .AddArguments (Arg (2, ProtocolBuffers.WriteValue (arg2, arg2.GetType ())))
+                .AddArguments (Arg (0, ProtocolBuffers.WriteValue (arg0, arg0.GetType ())))
+                .Build ();
+            // Run the request
+            KRPC.Service.Services.Instance.HandleRequest (request);
+            mock.Verify (x => x.ProcedureThreeOptionalArgsNoReturn (
+                It.IsAny<float> (),
+                It.IsAny<string> (),
+                It.IsAny<int> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method with a missing argument
+        /// </summary>
+        [Test]
+        public void HandleRequestMissingArgs ()
+        {
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureThreeOptionalArgsNoReturn (
+                It.IsAny<float> (),
+                It.IsAny<string> (),
+                It.IsAny<int> ()));
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureThreeOptionalArgsNoReturn")
+                .Build ();
+            // Run the request
+            Assert.Throws<RPCException> (() => KRPC.Service.Services.Instance.HandleRequest (request));
         }
     }
 }

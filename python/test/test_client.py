@@ -69,6 +69,40 @@ class TestClient(unittest.TestCase):
         obj.ObjectProperty = obj2
         self.assertEqual(obj2._object_id, obj.ObjectProperty._object_id)
 
+    def test_setattr_for_properties(self):
+        """ Check that properties are added to the dynamically generated service class,
+            not the base class krpc.Service """
+        self.assertRaises (AttributeError, getattr, krpc._Service, 'ObjectProperty')
+        self.assertIsNotNone (getattr(self.ksp.TestService, 'ObjectProperty'))
+
+    def test_optional_arguments(self):
+        self.assertEqual('jebfoobarbaz', self.ksp.TestService.OptionalArguments('jeb'))
+        self.assertEqual('jebbobbillbaz', self.ksp.TestService.OptionalArguments('jeb', 'bob', 'bill'))
+
+    def test_named_parameters(self):
+        self.assertEqual('1234', self.ksp.TestService.OptionalArguments(x='1', y='2', z='3', w='4'))
+        self.assertEqual('2413', self.ksp.TestService.OptionalArguments(z='1', x='2', w='3', y='4'))
+        self.assertEqual('1243', self.ksp.TestService.OptionalArguments('1', '2', w='3', z='4'))
+        self.assertEqual('123baz', self.ksp.TestService.OptionalArguments('1', '2', z='3'))
+        self.assertEqual('12bar3', self.ksp.TestService.OptionalArguments('1', '2', w='3'))
+        self.assertRaises(TypeError, self.ksp.TestService.OptionalArguments, '1', '2', '3', '4', w='5')
+        self.assertRaises(TypeError, self.ksp.TestService.OptionalArguments, '1', '2', '3', y='4')
+        self.assertRaises(TypeError, self.ksp.TestService.OptionalArguments, '1', foo='4')
+
+        obj = self.ksp.TestService.CreateTestObject('jeb')
+        self.assertEqual('1234', obj.OptionalArguments(x='1', y='2', z='3', w='4'))
+        self.assertEqual('2413', obj.OptionalArguments(z='1', x='2', w='3', y='4'))
+        self.assertEqual('1243', obj.OptionalArguments('1', '2', w='3', z='4'))
+        self.assertEqual('123baz', obj.OptionalArguments('1', '2', z='3'))
+        self.assertEqual('12bar3', obj.OptionalArguments('1', '2', w='3'))
+        self.assertRaises(TypeError, obj.OptionalArguments, '1', '2', '3', '4', w='5')
+        self.assertRaises(TypeError, obj.OptionalArguments, '1', '2', '3', y='4')
+        self.assertRaises(TypeError, obj.OptionalArguments, '1', foo='4')
+
+    def test_too_many_arguments(self):
+        self.assertRaises(TypeError, self.ksp.TestService.OptionalArguments, '1', '2', '3', '4', '5')
+        obj = self.ksp.TestService.CreateTestObject('jeb')
+        self.assertRaises(TypeError, obj.OptionalArguments, '1', '2', '3', '4', '5')
 
 if __name__ == '__main__':
     unittest.main()

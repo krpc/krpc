@@ -3,7 +3,12 @@ package KRPC;
 message Request {
   required string service = 1;
   required string procedure = 2;
-  repeated bytes parameters = 3;
+  repeated Argument arguments = 3;
+}
+
+message Argument {
+  required uint32 position = 1;
+  required bytes value = 2;
 }
 
 message Response {
@@ -23,9 +28,15 @@ message Service {
 
 message Procedure {
   required string name = 1;
-  repeated string parameter_types = 2;
+  repeated Parameter parameters = 2;
   optional string return_type = 3;
   repeated string attributes = 4;
+}
+
+message Parameter {
+  required string name = 1;
+  required string type = 2;
+  optional bytes default_argument = 3;
 }
 
 message Status {

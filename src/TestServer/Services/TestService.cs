@@ -117,6 +117,18 @@ namespace TestServer.Services
 
             [KRPCProperty]
             public TestClass ObjectProperty { get; set; }
+
+            [KRPCMethod]
+            public static string OptionalArguments (string x, string y = "foo", string z = "bar", string w = "baz")
+            {
+                return x + y + z + w;
+            }
+        }
+
+        [KRPCProcedure]
+        public static string OptionalArguments (string x, string y = "foo", string z = "bar", string w = "baz")
+        {
+            return x + y + z + w;
         }
     }
 }
