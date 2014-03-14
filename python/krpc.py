@@ -22,7 +22,7 @@ from google.protobuf.internal import decoder as protobuf_decoder
 
 DEFAULT_ADDRESS = '127.0.0.1'
 DEFAULT_PORT = 50000
-BUFFER_SIZE = 4096
+BUFFER_SIZE = 8*1024*1024
 DEBUG_LOGGING = True
 
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
@@ -593,20 +593,19 @@ class KRPCService(BaseService):
 
 def _create_service(client, service):
     """ Create a new class type for a service and instantiate it """
-    typ = type(str('_Service_' + service.name), (_Service,), {})
-    return typ(typ, client, service)
-
+    cls = type(str('_Service_' + service.name), (_Service,), {})
+    return cls(cls, client, service)
 
 class _Service(BaseService):
     """ A dynamically created service, created using information received from the server.
         Should not be instantiated directly. Use _create_service instead. """
 
-    def __init__(self, typ, client, service):
+    def __init__(self, cls, client, service):
         """ Create a service from the dynamically created class type for the service, the client,
             and a KRPC.Service object received from a call to KRPC.GetServices()
             Should not be instantiated directly. Use _create_service instead. """
         super(_Service, self).__init__(client, service.name)
-        self._typ = typ
+        self._cls = cls
         self._name = service.name
         self._types = client._types
 
@@ -686,7 +685,7 @@ class _Service(BaseService):
         if setter:
             self._add_procedure(setter)
             fset = lambda s, value: getattr(self, setter.name)(value)
-        setattr(self._typ, name, property(fget, fset))
+        setattr(self._cls, name, property(fget, fset))
 
     def _add_class_method(self, class_name, method_name, procedure):
         """ Add a class method to the service """
