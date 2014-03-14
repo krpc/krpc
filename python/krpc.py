@@ -572,8 +572,8 @@ class BaseService(object):
         self._client = client
         self._name = name
 
-    def _invoke(self, procedure, parameters=[], parameter_types=[], return_type=None, **kwargs):
-        return self._client._invoke(self._name, procedure, parameters, parameter_types, return_type, **kwargs)
+    def _invoke(self, procedure, args=[], kwargs={}, param_names=[], param_types=[], return_type=None):
+        return self._client._invoke(self._name, procedure, args, kwargs, param_names, param_types, return_type)
 
 
 class KRPCService(BaseService):
@@ -667,14 +667,15 @@ class _Service(BaseService):
 
     def _add_procedure(self, procedure):
         """ Add a plain procedure to this service """
-        parameter_types = [self._types.get_parameter_type(i, typ, procedure.attributes) for i,typ in enumerate(procedure.parameter_types)]
+        param_names = [param.name for param in procedure.parameters]
+        param_types = [self._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
         return_type = None
         if procedure.HasField('return_type'):
             return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
         setattr(self, procedure.name,
-                lambda *parameters: self._invoke(
-                    procedure.name, parameters=parameters,
-                    parameter_types=parameter_types, return_type=return_type))
+                lambda *args, **kwargs: self._invoke(
+                    procedure.name, args=args, kwargs=kwargs,
+                    param_names=param_names, param_types=param_types, return_type=return_type))
 
     def _add_property(self, name, getter=None, setter=None):
         """ Add a property to the service, with a getter and/or setter procedure """
@@ -690,13 +691,15 @@ class _Service(BaseService):
     def _add_class_method(self, class_name, method_name, procedure):
         """ Add a class method to the service """
         cls = getattr(self, class_name)
-        parameter_types = [self._types.get_parameter_type(i, typ, procedure.attributes) for i,typ in enumerate(procedure.parameter_types)]
+        param_names = [param.name for param in procedure.parameters]
+        param_types = [self._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
         return_type = None
         if procedure.HasField('return_type'):
             return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
         setattr(cls, method_name,
-                lambda s, *parameters: self._invoke(procedure.name, parameters=[s] + list(parameters),
-                                                    parameter_types=parameter_types, return_type=return_type))
+                lambda s, *args, **kwargs: self._invoke(procedure.name, args=[s] + list(args), kwargs=kwargs,
+                                                        param_names=param_names, param_types=param_types,
+                                                        return_type=return_type))
 
     def _add_class_property(self, class_name, property_name, getter=None, setter=None):
         fget = fset = None
@@ -748,28 +751,48 @@ class Client(object):
             if service.name != 'KRPC':
                 setattr(self, service.name, _create_service(self, service))
 
-    def _invoke(self, service, procedure, parameters=[], parameter_types=[], return_type=None, **kwargs):
+    def _invoke(self, service, procedure, args=[], kwargs={}, param_names=[], param_types=[], return_type=None):
         """ Execute an RPC """
 
-        # Validate the parameters
-        validated_parameters = []
-        if len(parameters) != len(parameter_types):
-            raise TypeError('%s.%s() takes exactly %d arguments (%d given)' % (service, procedure, len(parameter_types), len(parameters)))
-        for i, (value, typ) in enumerate(itertools.izip(parameters, parameter_types)):
+        def encode_argument(i, value):
+            typ = param_types[i]
             if type(value) != typ.python_type:
                 # Try coercing to the correct type
                 try:
                     value = self._types.coerce_to(value, typ)
                 except ValueError:
                     raise TypeError('%s.%s() argument %d must be a %s, got a %s' % (service, procedure, i, typ.python_type, type(value)))
-            validated_parameters.append(value)
+            return _Encoder.encode(value, typ)
+
+        if len(args) > len(param_types):
+            raise TypeError('%s.%s() takes exactly %d arguments (%d given)' % (service, procedure, len(param_types), len(args)))
+
+        # Encode positional arguments
+        arguments = []
+        for i,arg in enumerate(args):
+            argument = schema.KRPC.Argument()
+            argument.position = i
+            argument.value = encode_argument(i, arg)
+            arguments.append(argument)
+
+        # Encode keyword arguments
+        for key,arg in kwargs.items():
+            try:
+                i = param_names.index(key)
+            except ValueError:
+                raise TypeError('%s.%s() got an unexpected keyword argument \'%s\'' % (service, procedure, key))
+            if i < len(args):
+                raise TypeError('%s.%s() got multiple values for keyword argument \'%s\'' % (service, procedure, key))
+            argument = schema.KRPC.Argument()
+            argument.position = i
+            argument.value = encode_argument(i, arg)
+            arguments.append(argument)
 
         # Build the request object
         request = schema.KRPC.Request()
         request.service = service
         request.procedure = procedure
-        for parameter, typ in itertools.izip(validated_parameters, parameter_types):
-            request.parameters.append(_Encoder.encode(parameter, typ))
+        request.arguments.extend(arguments)
 
         # Send the request
         self._send_request(request)

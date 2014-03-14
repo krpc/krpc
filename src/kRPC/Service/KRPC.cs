@@ -37,8 +37,13 @@ namespace KRPC.Service
                     procedure.Name = procedureSignature.Name;
                     if (procedureSignature.HasReturnType)
                         procedure.ReturnType = TypeUtils.GetTypeName (procedureSignature.ReturnType);
-                    foreach (var parameterType in procedureSignature.ParameterTypes) {
-                        procedure.AddParameterTypes (TypeUtils.GetTypeName (parameterType));
+                    foreach (var parameterSignature in procedureSignature.Parameters) {
+                        var parameter = Schema.KRPC.Parameter.CreateBuilder ();
+                        parameter.Name = parameterSignature.Name;
+                        parameter.Type = TypeUtils.GetTypeName (parameterSignature.Type);
+                        if (parameterSignature.HasDefaultArgument)
+                            parameter.DefaultArgument = parameterSignature.DefaultArgument;
+                        procedure.AddParameters (parameter);
                     }
                     foreach (var attribute in procedureSignature.Attributes) {
                         procedure.AddAttributes (attribute);

@@ -112,6 +112,8 @@
     <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCMethodAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
+    <Compile Include="Service\Scanner\ParameterSignature.cs" />
+    <Compile Include="Service\ProcedureParameter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
