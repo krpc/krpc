@@ -1,9 +1,8 @@
-Compiling kRPC from Source
-==========================
+## Compiling kRPC from Source
 
-## Compiling the Server Plugin
+### Compiling the Server Plugin
 
-### Using the Makefile
+#### Using the Makefile
 
 1. Install the required dependencies. Libraries required by the plugin are already included in `lib` and the C# Protocol Buffers compiler is already included in `tools`. You will however need to install the MonoDevelop command line tool `mdtool`, Mono runtime and development libraries, the Protocol Buffers compiler and Inkscape to convert icons to png.
 
@@ -32,7 +31,7 @@ Compiling kRPC from Source
 
  Alternatively, you can have the plugin files copied into directory `dist` in the root of the source tree using `make dist`, then manually copy them over to your GameData directory.
 
-### Using an IDE
+#### Using an IDE
 
 1. Install the Protocol Buffer compiler (as above).
 
@@ -42,11 +41,11 @@ Compiling kRPC from Source
 
 3. Open the solution file `src/kRPC.sln` in your IDE.
 
-## Compiling the Python Client Library
+### Compiling the Python Client Library
 
 See [python/README.md](python/README.md) for instructions.
 
-## Running the Tests
+### Running the Tests
 
 This project contains unit tests for the server code (written using NUnit) and for the python client code (using the unittest module). The tests can be run using `make test` (after compiling everything using `make build`).
 
@@ -58,7 +57,7 @@ The plugin can also be built, installed into KSP (along with the TestingTools.dl
 
 `make ksp`
 
-## Dependencies
+### Dependencies
 
  * protobuf (https://code.google.com/p/protobuf/)
  * protobuf-csharp-port (http://code.google.com/p/protobuf-csharp-port/)
