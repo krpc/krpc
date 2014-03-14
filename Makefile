@@ -50,9 +50,9 @@ dist: build
 	# Plugin files
 	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
 	# Toolbar
-	$(UNZIP) lib/toolbar/Toolbar-1.6.0.zip -d $(DIST_DIR)
-	mv $(DIST_DIR)/Toolbar-1.6.0/GameData/* $(DIST_DIR)/GameData/
-	rm -r $(DIST_DIR)/Toolbar-1.6.0
+	$(UNZIP) lib/toolbar/Toolbar-1.7.0.zip -d $(DIST_DIR)
+	mv $(DIST_DIR)/Toolbar-1.7.0/GameData/* $(DIST_DIR)/GameData/
+	rm -r $(DIST_DIR)/Toolbar-1.7.0
 	# Python client library
 	mkdir -p $(DIST_DIR)/python
 	cp -r python/*.py python/*.craft python/schema $(DIST_DIR)/python/
