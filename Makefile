@@ -104,6 +104,7 @@ clean: protobuf-clean
 	-rm -rf $(CSHARP_BINDIRS) test.log
 	find . -name "*.pyc" -exec rm -rf {} \;
 	-rm -f KSP.log TestResult.xml
+	make -C python clean
 
 dist-clean: clean
 	-rm -rf dist
