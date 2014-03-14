@@ -10,7 +10,7 @@ class TestOrbit(testingtools.TestCase):
     def test_orbit_kerbin(self):
         load_save('orbit-kerbin')
         ksp = krpc.connect()
-        vessel = ksp.Flight.ActiveVessel
+        vessel = ksp.SpaceCenter.ActiveVessel
         orbit = vessel.Orbit
         self.assertEqual("Kerbin", orbit.Body)
         self.assertClose(1039066.5139,  orbit.Apoapsis)
@@ -28,7 +28,7 @@ class TestOrbit(testingtools.TestCase):
     def test_orbit_bop(self):
         load_save('orbit-bop')
         ksp = krpc.connect()
-        vessel = ksp.Flight.ActiveVessel
+        vessel = ksp.SpaceCenter.ActiveVessel
         orbit = vessel.Orbit
         self.assertEqual("Bop", orbit.Body)
         self.assertClose(244466.66085938932,  orbit.Apoapsis)
@@ -46,7 +46,7 @@ class TestOrbit(testingtools.TestCase):
     def test_orbit_mun_escape_soi(self):
         load_save('orbit-mun-escape-soi')
         ksp = krpc.connect()
-        vessel = ksp.Flight.ActiveVessel
+        vessel = ksp.SpaceCenter.ActiveVessel
         orbit = vessel.Orbit
         self.assertEqual("Mun", orbit.Body)
         self.assertClose(2659937.0232935967, orbit.Apoapsis)
@@ -64,7 +64,7 @@ class TestOrbit(testingtools.TestCase):
     def test_orbit_minmus_parabolic(self):
         load_save('orbit-minmus-parabolic')
         ksp = krpc.connect()
-        vessel = ksp.Flight.ActiveVessel
+        vessel = ksp.SpaceCenter.ActiveVessel
         orbit = vessel.Orbit
         self.assertEqual("Minmus", orbit.Body)
         self.assertClose(-175327.32795440647, orbit.Apoapsis)
