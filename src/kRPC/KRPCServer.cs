@@ -91,46 +91,51 @@ namespace KRPC
 
         public void Update ()
         {
-            // TODO: is there a better way to limit the number of requests handled per update?
-            const int threshold = 20; // milliseconds
             rpcServer.Update ();
 
-            if (rpcServer.Clients.Any () && !requestScheduler.Empty) {
-                Stopwatch timer = Stopwatch.StartNew ();
-                try {
-                    do {
-                        // Get request
-                        IClient<Request,Response> client = requestScheduler.Next ();
-                        if (client.Stream.DataAvailable) {
-                            Request request = client.Stream.Read ();
-                            if (OnClientActivity != null)
-                                OnClientActivity (this, new ClientActivityArgs (client));
-                            Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")");
+            // TODO: is there a better way to limit the number of requests handled per update?
+            const int threshold = 20; // milliseconds
 
-                            // Handle the request
-                            Response.Builder response;
-                            try {
-                                response = KRPC.Service.Services.Instance.HandleRequest (request);
-                            } catch (Exception e) {
-                                response = Response.CreateBuilder ();
-                                response.Error = e.ToString ();
-                                Logger.WriteLine (e.ToString ());
-                            }
+            // Return if no clients are connected
+            if (!rpcServer.Clients.Any () || requestScheduler.Empty)
+                return;
 
-                            // Send response
-                            response.SetTime (GetUniversalTime ());
-                            var builtResponse = response.Build ();
-                            //TODO: handle partial response exception
-                            client.Stream.Write (builtResponse);
-                            if (response.HasError)
-                                Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")");
-                            else
-                                Logger.WriteLine ("Sent response to client " + client.Address);
-                        }
-                    } while (timer.ElapsedMilliseconds < threshold);
-                } catch (NoRequestException) {
+            // Return if no clients have data available
+            if (!requestScheduler.ToList ().Any (((client) => client.Stream.DataAvailable)))
+                return;
+
+            // Repeatedly process requests until either no client has more data, or we reach the execution time threshold
+            Stopwatch timer = Stopwatch.StartNew ();
+            do {
+                // Get request
+                IClient<Request,Response> client = requestScheduler.Next ();
+                if (client.Stream.DataAvailable) {
+                    Request request = client.Stream.Read ();
+                    if (OnClientActivity != null)
+                        OnClientActivity (this, new ClientActivityArgs (client));
+                    Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")");
+
+                    // Handle the request
+                    Response.Builder response;
+                    try {
+                        response = KRPC.Service.Services.Instance.HandleRequest (request);
+                    } catch (Exception e) {
+                        response = Response.CreateBuilder ();
+                        response.Error = e.ToString ();
+                        Logger.WriteLine (e.ToString ());
+                    }
+
+                    // Send response
+                    response.SetTime (GetUniversalTime ());
+                    var builtResponse = response.Build ();
+                    //TODO: handle partial response exception
+                    client.Stream.Write (builtResponse);
+                    if (response.HasError)
+                        Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")");
+                    else
+                        Logger.WriteLine ("Sent response to client " + client.Address);
                 }
-            }
+            } while (timer.ElapsedMilliseconds < threshold && requestScheduler.Any (((client) => client.Stream.DataAvailable)));
         }
     }
 }

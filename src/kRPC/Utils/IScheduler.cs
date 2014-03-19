@@ -1,6 +1,8 @@
+using System.Collections.Generic;
+
 namespace KRPC.Utils
 {
-    interface IScheduler<T>
+    interface IScheduler<T> : IEnumerable<T>
     {
         bool Empty { get; }
 

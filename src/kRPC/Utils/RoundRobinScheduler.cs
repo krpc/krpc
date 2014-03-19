@@ -64,6 +64,16 @@ namespace KRPC.Utils
             if (next == null)
                 next = items.First;
         }
+
+        public IEnumerator<T> GetEnumerator ()
+        {
+            return items.GetEnumerator ();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
+        {
+            return this.GetEnumerator ();
+        }
     }
 }
 
