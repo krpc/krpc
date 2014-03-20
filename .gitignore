@@ -119,6 +119,8 @@ src/kRPC/Schema/*.cs
 src/kRPC/Schema/*.py
 src/kRPCServices/Schema/*.cs
 src/kRPCServices/Schema/*.py
+src/kRPCTest/Schema/*.cs
+src/kRPCTest/Schema/*.py
 python/schema/
 src/kRPC/Schema/KRPC.cs.orig
 
