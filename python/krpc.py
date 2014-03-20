@@ -25,6 +25,13 @@ DEFAULT_PORT = 50000
 BUFFER_SIZE = 8*1024*1024
 DEBUG_LOGGING = True
 
+_regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
+_regex_single_uppercase = re.compile(r'([a-z0-9])([A-Z])')
+
+def _to_snake_case(camel_case):
+    """ Convert camel case to snake case, e.g. GetServices -> get_services """
+    return re.sub(_regex_multi_uppercase, r'\1_\2', re.sub(_regex_single_uppercase, r'\1_\2', camel_case)).lower()
+
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
 PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
 PROTOBUF_TO_PYTHON_VALUE_TYPE = {
