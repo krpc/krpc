@@ -90,6 +90,9 @@ namespace KRPC.Service
                         } else if (ProtocolBuffers.IsAMessageType (type)) {
                             var builder = procedure.ParameterBuilders [i];
                             decodedArgumentValues [i] = builder.WeakMergeFrom (value).WeakBuild ();
+                        } else if (ProtocolBuffers.IsAnEnumType (type)) {
+                            // TODO: Assumes it's underlying type is int
+                            decodedArgumentValues [i] = ProtocolBuffers.ReadValue (value, typeof(int));
                         } else {
                             decodedArgumentValues [i] = ProtocolBuffers.ReadValue (value, type);
                         }
@@ -128,7 +131,10 @@ namespace KRPC.Service
                 return ProtocolBuffers.WriteValue (ObjectStore.Instance.AddInstance (returnValue), typeof(ulong));
             else if (ProtocolBuffers.IsAMessageType (procedure.ReturnType))
                 return ProtocolBuffers.WriteMessage (returnValue as IMessage);
-            else
+            else if (ProtocolBuffers.IsAnEnumType (procedure.ReturnType)) {
+                // TODO: Assumes it's underlying type is int
+                return ProtocolBuffers.WriteValue ((int) returnValue, typeof(int));
+            } else
                 return ProtocolBuffers.WriteValue (returnValue, procedure.ReturnType);
         }
     }

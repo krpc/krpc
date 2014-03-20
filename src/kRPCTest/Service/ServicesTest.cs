@@ -710,6 +710,56 @@ namespace KRPCTest.Service
             // Run the request
             Assert.Throws<RPCException> (() => KRPC.Service.Services.Instance.HandleRequest (request));
         }
+
+        /// <summary>
+        /// Test calling a service method with an argument that is a .proto enumeration
+        /// </summary>
+        [Test]
+        public void HandleRequestSingleEnumArgNoReturn ()
+        {
+            var arg = KRPC.Schema.Test.TestEnum.b;
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureEnumArg (It.IsAny<KRPC.Schema.Test.TestEnum> ()))
+                .Callback ((KRPC.Schema.Test.TestEnum x) => {
+                // Check the argument
+                Assert.AreEqual (KRPC.Schema.Test.TestEnum.b, x);
+            });
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureEnumArg")
+                .AddArguments (Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))))
+                .Build ();
+            // Run the request
+            KRPC.Service.Services.Instance.HandleRequest (request);
+            mock.Verify (x => x.ProcedureEnumArg (It.IsAny<KRPC.Schema.Test.TestEnum> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method that returns a .proto enumeration
+        /// </summary>
+        [Test]
+        public void HandleRequestNoArgEnumReturn ()
+        {
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureEnumReturn ()).Returns(KRPC.Schema.Test.TestEnum.c);
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureEnumReturn")
+                .Build ();
+            // Run the request
+            var response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 0;
+            var builtResponse = response.Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (ProtocolBuffers.WriteValue((int) KRPC.Schema.Test.TestEnum.c, typeof(int)), builtResponse.ReturnValue);
+            mock.Verify (x => x.ProcedureEnumReturn (), Times.Once ());
+        }
     }
 }
 

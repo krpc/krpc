@@ -132,12 +132,13 @@ namespace KRPCTest.Service
         [KRPCProcedure]
         public static void ProcedureEnumArg (KRPC.Schema.Test.TestEnum x)
         {
+            Service.ProcedureEnumArg (x);
         }
 
         [KRPCProcedure]
         public static KRPC.Schema.Test.TestEnum ProcedureEnumReturn ()
         {
-            return KRPC.Schema.Test.TestEnum.a;
+            return Service.ProcedureEnumReturn ();
         }
     }
 }
