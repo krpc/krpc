@@ -85,6 +85,7 @@
     <Compile Include="Service\TestService3.cs" />
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Service\ProcedureParameterTest.cs" />
+    <Compile Include="Schema\Test.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
