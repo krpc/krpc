@@ -21,6 +21,18 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// Return the string name of the Protocol Buffer enumeration type (with the package name prefixing it).
+        /// </summary>
+        public static string GetEnumTypeName (Type type)
+        {
+            if (type == null)
+                throw new ArgumentException ("null is not a Protocol Buffer enumeration type");
+            if (!IsAnEnumType (type))
+                throw new ArgumentException (type + " is not a Protocol Buffer enumeration type");
+            return type.FullName.Replace ("KRPC.Schema.", "");
+        }
+
+        /// <summary>
         /// Return the string name of the Protocol Buffer message type corresponding to the given type.
         /// E.g. "uint32" for uint
         /// </summary>
@@ -54,16 +66,18 @@ namespace KRPC.Utils
         }
 
         /// <summary>
-        /// Return the string name of the Protocol Buffer message or value type.
+        /// Return the string name of the Protocol Buffer message, enumeration or value type.
         /// </summary>
         public static string GetTypeName (Type type)
         {
             if (IsAMessageType (type))
                 return GetMessageTypeName (type);
+            else if (IsAnEnumType (type))
+                return GetEnumTypeName (type);
             else if (IsAValueType (type))
                 return GetValueTypeName (type);
             else
-                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer message or value type");
+                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer message, enumeration or value type");
         }
 
         /// <summary>
@@ -89,6 +103,15 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// Returns true if the given type is a Protocol Buffer enumeration type.
+        /// </summary>
+        public static bool IsAnEnumType (Type type)
+        {
+            // TODO: this is not sufficient, could be any C# enum
+            return type == null ? false : type.IsEnum;
+        }
+
+        /// <summary>
         /// Returns true if the given type is a Protocol Buffer value type.
         /// </summary>
         public static bool IsAValueType (Type type)
@@ -110,7 +133,7 @@ namespace KRPC.Utils
         /// </summary>
         public static bool IsAValidType (Type type)
         {
-            return IsAValueType (type) || IsAMessageType (type);
+            return IsAValueType (type) || IsAMessageType (type) || IsAnEnumType (type);
         }
 
         /// <summary>
