@@ -600,7 +600,7 @@ class KRPCService(BaseService):
 
 def _create_service(client, service):
     """ Create a new class type for a service and instantiate it """
-    cls = type(str('_Service_' + service.name), (_Service,), {})
+    cls = type(str('_Service' + service.name), (_Service,), {})
     return cls(cls, client, service)
 
 class _Service(BaseService):
