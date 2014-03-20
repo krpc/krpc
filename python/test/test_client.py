@@ -3,6 +3,7 @@
 import unittest
 import binascii
 import krpc
+import schema.Test
 
 class TestClient(unittest.TestCase):
 
@@ -105,6 +106,12 @@ class TestClient(unittest.TestCase):
         self.assertRaises(TypeError, self.ksp.TestService.OptionalArguments, '1', '2', '3', '4', '5')
         obj = self.ksp.TestService.CreateTestObject('jeb')
         self.assertRaises(TypeError, obj.OptionalArguments, '1', '2', '3', '4', '5')
+
+    def test_enums(self):
+        self.assertEqual(schema.Test.a, self.ksp.TestService.EnumReturn())
+        self.assertEqual(schema.Test.a, self.ksp.TestService.EnumEcho(schema.Test.a))
+        self.assertEqual(schema.Test.b, self.ksp.TestService.EnumEcho(schema.Test.b))
+        self.assertEqual(schema.Test.c, self.ksp.TestService.EnumEcho(schema.Test.c))
 
 if __name__ == '__main__':
     unittest.main()

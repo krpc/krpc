@@ -56,7 +56,11 @@ class _Types(object):
         elif type_string.startswith('Class('):
             typ = _ClassType(type_string)
         else:
-            typ = _MessageType(type_string)
+            package, _, message = type_string.rpartition('.')
+            if hasattr(schema, package) and hasattr(getattr(schema, package), message):
+                typ = _MessageType(type_string)
+            else:
+                typ = _EnumType(type_string)
         self._types[type_string] = typ
         return typ
 
@@ -128,8 +132,15 @@ class _MessageType(_TypeBase):
 
     def __init__(self, type_string):
         package, message = type_string.split('.')
-        typ = schema.__dict__[package].__dict__[message]
+        typ = getattr(getattr(schema, package), message)
         super(_MessageType, self).__init__(type_string, typ)
+
+
+class _EnumType(_TypeBase):
+    """ A protocol buffer enumeration type """
+
+    def __init__(self, type_string):
+        super(_EnumType, self).__init__(type_string, int)
 
 
 class _ClassType(_TypeBase):
@@ -325,6 +336,8 @@ class _Encoder(object):
             return x.SerializeToString()
         elif isinstance(typ, _ValueType):
             return cls._encode_value(x, typ)
+        elif isinstance(typ, _EnumType):
+            return cls._encode_value(x, _Types().as_type('int32'))
         elif isinstance(typ, _ClassType):
             object_id = x._object_id if x is not None else 0
             return cls._encode_value(object_id, _Types().as_type('uint64'))
@@ -430,6 +443,8 @@ class _Decoder(object):
         """ Given a python type, and serialized data, decode the value """
         if isinstance(typ, _MessageType):
             return cls._decode_message(data, typ)
+        elif isinstance(typ, _EnumType):
+            return cls._decode_value(data, _Types().as_type('int32'))
         elif isinstance(typ, _ValueType):
             return cls._decode_value(data, typ)
         elif isinstance(typ, _ClassType):

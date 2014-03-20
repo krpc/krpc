@@ -4,6 +4,7 @@ import unittest
 from krpc import _Types as Types
 from krpc import _ValueType as ValueType
 from krpc import _MessageType as MessageType
+from krpc import _EnumType as EnumType
 from krpc import _ClassType as ClassType
 from krpc import _BaseClass as BaseClass
 import schema.KRPC
@@ -41,6 +42,13 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(schema.KRPC.Request, typ.python_type)
         self.assertEqual('KRPC.Request', typ.protobuf_type)
 
+    def test_enum_types(self):
+        types = Types()
+        typ = types.as_type('Test.TestEnum')
+        self.assertTrue(isinstance(typ, EnumType))
+        self.assertEqual(int, typ.python_type)
+        self.assertEqual('Test.TestEnum', typ.protobuf_type)
+
     def test_class_types(self):
         types = Types()
         typ = types.as_type('Class(ServiceName.ClassName)')
@@ -63,12 +71,15 @@ class TestTypes(unittest.TestCase):
         self.assertTrue(issubclass(class_parameter.python_type, BaseClass))
         self.assertEqual('Class(ServiceName.ClassName)', class_parameter.protobuf_type)
         self.assertEqual('uint64', types.get_parameter_type(0, 'uint64', ['ParameterType(1).Class(ServiceName.ClassName)']).protobuf_type)
+        self.assertEqual('KRPC.Test.TestEnum', types.get_parameter_type(0, 'KRPC.Test.TestEnum', []).protobuf_type)
+
 
     def test_get_return_type(self):
         types = Types()
         self.assertEqual('float', types.get_return_type('float', []).protobuf_type)
         self.assertEqual('int32', types.get_return_type( 'int32', []).protobuf_type)
         self.assertEqual('KRPC.Response', types.get_return_type('KRPC.Response', []).protobuf_type)
+        self.assertEqual('KRPC.Test.TestEnum', types.get_return_type('KRPC.Test.TestEnum', []).protobuf_type)
         self.assertEqual('Class(ServiceName.ClassName)', types.get_return_type('uint64', ['ReturnType.Class(ServiceName.ClassName)']).protobuf_type)
 
     def test_coerce_to(self):
