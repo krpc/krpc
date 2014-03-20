@@ -713,11 +713,11 @@ class _Service(BaseService):
     def _add_class_property(self, class_name, property_name, getter=None, setter=None):
         fget = fset = None
         if getter:
-            self._add_procedure(getter)
-            fget = lambda s: getattr(self, _to_snake_case(getter.name))(s)
+            self._add_class_method(class_name, getter.name, getter)
+            fget = lambda self_: getattr(self_, _to_snake_case(getter.name))()
         if setter:
-            self._add_procedure(setter)
-            fset = lambda s, value: getattr(self, _to_snake_case(setter.name))(s, value)
+            self._add_class_method(class_name, setter.name, setter)
+            fset = lambda self_, value: getattr(self_, _to_snake_case(setter.name))(value)
         class_type = getattr(self, class_name)
         setattr(class_type, _to_snake_case(property_name), property(fget, fset))
 

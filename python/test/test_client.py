@@ -106,5 +106,70 @@ class TestClient(unittest.TestCase):
         obj = self.ksp.test_service.create_test_object('jeb')
         self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', '5')
 
+    def test_client_members(self):
+        self.assertSetEqual(
+            set(['krpc', 'test_service']),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp))))
+
+    def test_krpc_service_members(self):
+        self.assertSetEqual(
+            set(['get_services', 'get_status']),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.krpc))))
+
+    def test_test_service_service_members(self):
+        self.assertSetEqual(
+            set([
+                'float_to_string',
+                'double_to_string',
+                'int32_to_string',
+                'int64_to_string',
+                'bool_to_string',
+                'string_to_int32',
+                'bytes_to_hex_string',
+                'add_multiple_values',
+
+                'string_property',
+                'get__string_property',
+                'set__string_property',
+
+                'string_property_private_get',
+                'set__string_property_private_get',
+
+                'string_property_private_set',
+                'get__string_property_private_set',
+
+                'create_test_object',
+                'echo_test_object',
+
+                'object_property',
+                'get__object_property',
+                'set__object_property',
+
+                'TestClass',
+
+                'optional_arguments'
+            ]),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service))))
+
+    def test_test_service_test_class_members(self):
+        self.assertSetEqual(
+            set([
+                'get_value',
+                'float_to_string',
+                'object_to_string',
+
+                'int_property',
+                'test_class__get__int_property',
+                'test_class__set__int_property',
+
+                'object_property',
+                'test_class__get__object_property',
+                'test_class__set__object_property',
+
+                'optional_arguments'
+            ]),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service.TestClass))))
+
+
 if __name__ == '__main__':
     unittest.main()
