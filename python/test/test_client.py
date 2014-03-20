@@ -49,7 +49,8 @@ class TestClient(unittest.TestCase):
         self.assertIsNone(self.ksp.test_service.echo_test_object(None))
         obj = self.ksp.test_service.create_test_object('bob')
         self.assertEqual('bobnull', obj.object_to_string(None))
-        self.assertIsNone (self.ksp.test_service.object_property)
+        # Check following doesn't throw an exception
+        self.ksp.test_service.object_property
         self.ksp.test_service.object_property = None
         self.assertIsNone (self.ksp.test_service.object_property)
 
@@ -73,7 +74,8 @@ class TestClient(unittest.TestCase):
         """ Check that properties are added to the dynamically generated service class,
             not the base class krpc.Service """
         self.assertRaises (AttributeError, getattr, krpc._Service, 'object_property')
-        self.assertIsNone(getattr(self.ksp.test_service, 'object_property'))
+        # Check following does not throw an exception
+        getattr(self.ksp.test_service, 'object_property')
 
     def test_optional_arguments(self):
         self.assertEqual('jebfoobarbaz', self.ksp.test_service.optional_arguments('jeb'))
