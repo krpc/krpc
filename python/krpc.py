@@ -341,8 +341,7 @@ class _Encoder(object):
 
     @classmethod
     def _encode_value(cls, value, typ):
-        encode_fn = _ValueEncoder.__dict__['encode_' + typ.protobuf_type].__func__
-        return encode_fn(_ValueEncoder, value)
+        return getattr(_ValueEncoder, 'encode_' + typ.protobuf_type)(value)
 
 
 class _ValueEncoder(object):
@@ -455,8 +454,7 @@ class _Decoder(object):
 
     @classmethod
     def _decode_value(cls, data, typ):
-        decode_fn = _ValueDecoder.__dict__['decode_' + typ.protobuf_type].__func__
-        return decode_fn(_ValueDecoder, data)
+        return getattr(_ValueDecoder, 'decode_' + typ.protobuf_type)(data)
 
 
 class _ValueDecoder(object):
