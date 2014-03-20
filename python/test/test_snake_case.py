@@ -24,13 +24,13 @@ class TestSnakeCase(unittest.TestCase):
 
         # With underscores
         self.assertEquals('_http_server', t('_HTTPServer'))
-        self.assertEquals('http_server', t('HTTP_Server'))
+        self.assertEquals('http__server', t('HTTP_Server'))
 
 
     def test_non_camel_case_examples(self):
         t = krpc._to_snake_case
         self.assertEquals('foobar', t('foobar'))
-        self.assertEquals('foo_bar', t('foo_bar'))
+        self.assertEquals('foo__bar', t('foo_bar'))
         self.assertEquals('_foobar', t('_foobar'))
 
 
