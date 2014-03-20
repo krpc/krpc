@@ -128,6 +128,17 @@ namespace KRPCTest.Service
         {
             Service.ProcedureThreeOptionalArgsNoReturn (x, y, z);
         }
+
+        [KRPCProcedure]
+        public static void ProcedureEnumArg (KRPC.Schema.Test.TestEnum x)
+        {
+        }
+
+        [KRPCProcedure]
+        public static KRPC.Schema.Test.TestEnum ProcedureEnumReturn ()
+        {
+            return KRPC.Schema.Test.TestEnum.a;
+        }
     }
 }
 
