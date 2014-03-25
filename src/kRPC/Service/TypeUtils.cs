@@ -24,7 +24,7 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsAValidType (Type type)
         {
-            return ProtocolBuffers.IsAValidType (type) || IsAClassType (type);
+            return ProtocolBuffers.IsAValidType (type) || IsAClassType (type) || IsAnEnumType (type);
         }
 
         /// <summary>
@@ -36,6 +36,14 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Returns true if the given type can be used as a kRPC enum type
+        /// </summary>
+        public static bool IsAnEnumType (Type type)
+        {
+            return Reflection.HasAttribute<KRPCEnumAttribute> (type);
+        }
+
+        /// <summary>
         /// Return the name of the protocol buffer type for the given C# type
         /// </summary>
         public static string GetTypeName (Type type)
@@ -44,8 +52,10 @@ namespace KRPC.Service
                 throw new ArgumentException ("Type is not valid");
             else if (ProtocolBuffers.IsAValidType (type))
                 return ProtocolBuffers.GetTypeName (type);
-            else
+            else if (IsAClassType (type))
                 return ProtocolBuffers.GetTypeName (typeof(ulong)); // Class instance GUIDs are uint64
+            else // an enum type
+                return ProtocolBuffers.GetTypeName (typeof(int)); // Enums are int32
         }
 
         /// <summary>
@@ -57,6 +67,8 @@ namespace KRPC.Service
                 throw new ArgumentException ();
             else if (IsAClassType (type))
                 return new [] { "ParameterType(" + position + ").Class(" + GetClassServiceName (type) + "." + type.Name + ")" };
+            else if (IsAnEnumType (type))
+                return new [] { "ParameterType(" + position + ").Enum(" + GetEnumServiceName (type) + "." + type.Name + ")" };
             else
                 return new string[] { };
         }
@@ -70,6 +82,8 @@ namespace KRPC.Service
                 throw new ArgumentException ();
             else if (IsAClassType (type))
                 return new [] { "ReturnType.Class(" + GetClassServiceName (type) + "." + type.Name + ")" };
+            else if (IsAnEnumType (type))
+                return new [] { "ReturnType.Enum(" + GetEnumServiceName (type) + "." + type.Name + ")" };
             else
                 return new string[] { };
         }
@@ -94,6 +108,16 @@ namespace KRPC.Service
         {
             ValidateKRPCClass (type);
             var attribute = Reflection.GetAttribute<KRPCClassAttribute> (type);
+            return attribute.Service == null ? GetServiceName (type.DeclaringType) : attribute.Service;
+        }
+
+        /// <summary>
+        /// Get the name of the service for the given KRPCEnum annotated type
+        /// </summary>
+        public static string GetEnumServiceName (Type type)
+        {
+            ValidateKRPCEnum (type);
+            var attribute = Reflection.GetAttribute<KRPCEnumAttribute> (type);
             return attribute.Service == null ? GetServiceName (type.DeclaringType) : attribute.Service;
         }
 
@@ -201,6 +225,40 @@ namespace KRPC.Service
             // If it doesn't have the Service property set, check the class is defined directly inside a KRPCService
             if (attribute.Service == null && (type.DeclaringType == null || !Reflection.HasAttribute<KRPCServiceAttribute> (type.DeclaringType)))
                 throw new ServiceException ("KRPCClass " + type + " is not declared inside a KRPCService");
+            // If it does have the Service property set, check the class isn't defined in a KRPCService
+            if (attribute.Service != null) {
+                ValidateIdentifier (attribute.Service);
+                var declaringType = type.DeclaringType;
+                while (declaringType != null) {
+                    if (Reflection.HasAttribute<KRPCServiceAttribute> (declaringType))
+                        throw new ServiceException ("KRPCClass " + type + " is declared inside a KRPCService, but has the service name explicitly set");
+                    declaringType = declaringType.DeclaringType;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check the given type is a valid kRPC enumeration
+        ///  1. Must have KRPCEnum attribute
+        ///  2. Must have a valid identifier
+        ///  3. Must be a public enum
+        ///  4. Must be declared inside a kRPC service if it doesn't have the service explicity set
+        ///  5. Must not be declared inside a kRPC service if it does have the service explicity set
+        /// </summary>
+        public static void ValidateKRPCEnum (Type type)
+        {
+            if (!Reflection.HasAttribute<KRPCEnumAttribute> (type))
+                throw new ArgumentException (type + " does not have KRPCEnum attribute");
+            var attribute = Reflection.GetAttribute<KRPCEnumAttribute> (type);
+            // Note: Type must already be an enum, due to AttributeUsage definition
+            // Validate the identifier.
+            ValidateIdentifier (type.Name);
+            // Check it's public
+            if (!(type.IsPublic || type.IsNestedPublic))
+                throw new ServiceException ("KRPCEnum " + type + " is not public");
+            // If it doesn't have the Service property set, check the enum is defined directly inside a KRPCService
+            if (attribute.Service == null && (type.DeclaringType == null || !Reflection.HasAttribute<KRPCServiceAttribute> (type.DeclaringType)))
+                throw new ServiceException ("KRPCEnum " + type + " is not declared inside a KRPCService");
             // If it does have the Service property set, check the class isn't defined in a KRPCService
             if (attribute.Service != null) {
                 ValidateIdentifier (attribute.Service);

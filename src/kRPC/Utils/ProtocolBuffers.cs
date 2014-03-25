@@ -107,8 +107,10 @@ namespace KRPC.Utils
         /// </summary>
         public static bool IsAnEnumType (Type type)
         {
-            // TODO: this is not sufficient, could be any C# enum
-            return type == null ? false : type.IsEnum;
+            // TODO: is this sufficient?
+            if (type == null)
+               return false;
+            return type.FullName.StartsWith("KRPC.Schema.") ? type.IsEnum : false;
         }
 
         /// <summary>

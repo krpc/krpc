@@ -140,6 +140,11 @@ namespace KRPCTest.Service
         {
             return Service.ProcedureEnumReturn ();
         }
+
+        [KRPCEnum]
+        public enum CSharpEnum { x, y, z };
+
+        public enum CSharpEnumWithoutAttribute { foo, bar, baz };
     }
 }
 
