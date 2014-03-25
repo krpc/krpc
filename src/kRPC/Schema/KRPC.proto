@@ -24,6 +24,8 @@ message Services {
 message Service {
   required string name = 1;
   repeated Procedure procedures = 2;
+  repeated Class classes = 3;
+  repeated Enumeration enumerations = 4;
 }
 
 message Procedure {
@@ -37,6 +39,20 @@ message Parameter {
   required string name = 1;
   required string type = 2;
   optional bytes default_argument = 3;
+}
+
+message Class {
+  required string name = 1;
+}
+
+message Enumeration {
+  required string name = 1;
+  repeated EnumerationValue values = 2;
+}
+
+message EnumerationValue {
+  required string name = 1;
+  required int32 value = 2;
 }
 
 message Status {

@@ -25,6 +25,11 @@ namespace KRPC.Service.Scanner
         public HashSet<string> Classes { get; private set; }
 
         /// <summary>
+        /// The names of all C# defined enums defined in this service, and their allowed values
+        /// </summary>
+        public Dictionary<string,Dictionary<string,int>> Enums { get; private set; }
+
+        /// <summary>
         /// Create a service signature from a C# type annotated with the KRPCService attribute
         /// </summary>
         /// <param name="type">Type.</param>
@@ -33,6 +38,7 @@ namespace KRPC.Service.Scanner
             TypeUtils.ValidateKRPCService (type);
             Name = TypeUtils.GetServiceName (type);
             Classes = new HashSet<string> ();
+            Enums = new Dictionary<string, Dictionary<string, int>> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
         }
 
@@ -93,6 +99,23 @@ namespace KRPC.Service.Scanner
             TypeUtils.ValidateKRPCClass (classType);
             Classes.Add (classType.Name);
             return classType.Name;
+        }
+
+        /// <summary>
+        /// Add an enum to the service for the given enum type annotated with the KRPCEnum attribute.
+        /// </summary>
+        public IDictionary<string,int> AddEnum (Type enumType)
+        {
+            TypeUtils.ValidateKRPCEnum (enumType);
+            var name = enumType.Name;
+            if (Enums.ContainsKey (name))
+                throw new ServiceException ("service already contains the enum"); //FIXME: better message
+            Enums [enumType.Name] = new Dictionary<string, int> ();
+            foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static)) {
+                // TODO: assumes raw value can be cast to an int
+                Enums [enumType.Name] [field.Name] = (int) field.GetRawConstantValue ();
+            }
+            return Enums [enumType.Name];
         }
 
         /// <summary>
