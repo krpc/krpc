@@ -124,67 +124,67 @@ class TestClient(unittest.TestCase):
 
     def test_client_members(self):
         self.assertSetEqual(
-            set(['krpc', 'test_service']),
+            set(['KRPC', 'TestService']),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp))))
 
     def test_krpc_service_members(self):
         self.assertSetEqual(
-            set(['get_services', 'get_status']),
-            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.krpc))))
+            set(['GetServices', 'GetStatus']),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.KRPC))))
 
     def test_test_service_service_members(self):
         self.assertSetEqual(
             set([
-                'float_to_string',
-                'double_to_string',
-                'int32_to_string',
-                'int64_to_string',
-                'bool_to_string',
-                'string_to_int32',
-                'bytes_to_hex_string',
-                'add_multiple_values',
+                'FloatToString',
+                'DoubleToString',
+                'Int32ToString',
+                'Int64ToString',
+                'BoolToString',
+                'StringToInt32',
+                'BytesToHexString',
+                'AddMultipleValues',
 
-                'string_property',
-                'get__string_property',
-                'set__string_property',
+                'StringProperty',
+                'get_StringProperty',
+                'set_StringProperty',
 
-                'string_property_private_get',
-                'set__string_property_private_get',
+                'StringPropertyPrivateGet',
+                'set_StringPropertyPrivateGet',
 
-                'string_property_private_set',
-                'get__string_property_private_set',
+                'StringPropertyPrivateSet',
+                'get_StringPropertyPrivateSet',
 
-                'create_test_object',
-                'echo_test_object',
+                'CreateTestObject',
+                'EchoTestObject',
 
-                'object_property',
-                'get__object_property',
-                'set__object_property',
+                'ObjectProperty',
+                'get_ObjectProperty',
+                'set_ObjectProperty',
 
                 'TestClass',
 
-                'optional_arguments'
+                'OptionalArguments',
             ]),
-            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service))))
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.TestService))))
 
     def test_test_service_test_class_members(self):
         self.assertSetEqual(
             set([
-                'get_value',
-                'float_to_string',
-                'object_to_string',
+                'GetValue',
+                'FloatToString',
+                'ObjectToString',
 
-                'int_property',
-                'test_class__get__int_property',
-                'test_class__set__int_property',
+                'IntProperty',
+                'TestClass_get_IntProperty',
+                'TestClass_set_IntProperty',
 
-                'object_property',
-                'test_class__get__object_property',
-                'test_class__set__object_property',
+                'ObjectProperty',
+                'TestClass_get_ObjectProperty',
+                'TestClass_set_ObjectProperty',
 
-                'optional_arguments'
+                'OptionalArguments'
             ]),
-            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service.TestClass))))
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.TestService.TestClass))))
 
 
 if __name__ == '__main__':
