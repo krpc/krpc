@@ -1,20 +1,9 @@
-import schema
 import os
 import glob
 import socket
 import itertools
 import re
-try:
-    import importlib.import_module as import_module
-except ImportError:
-    import_module = lambda package: __import__(package, globals(), locals(), [], -1)
-
-# Load all protocol buffer message types
-_modules = glob.glob(os.path.dirname(schema.__file__)+"/*.py")
-_modules = filter(lambda f: not os.path.basename(f).startswith('_'), _modules)
-_modules = [os.path.basename(f)[:-3] for f in _modules]
-for module in _modules:
-    schema = import_module('schema.' + module)
+import krpc.schema.KRPC
 
 # TODO: avoid using internals
 from google.protobuf.internal import encoder as protobuf_encoder
@@ -128,7 +117,7 @@ class _MessageType(_TypeBase):
 
     def __init__(self, type_string):
         package, message = type_string.split('.')
-        typ = schema.__dict__[package].__dict__[message]
+        typ = krpc.schema.__dict__[package].__dict__[message]
         super(_MessageType, self).__init__(type_string, typ)
 
 
@@ -769,7 +758,7 @@ class Client(object):
         # Encode positional arguments
         arguments = []
         for i,arg in enumerate(args):
-            argument = schema.KRPC.Argument()
+            argument = krpc.schema.KRPC.Argument()
             argument.position = i
             argument.value = encode_argument(i, arg)
             arguments.append(argument)
@@ -782,13 +771,13 @@ class Client(object):
                 raise TypeError('%s.%s() got an unexpected keyword argument \'%s\'' % (service, procedure, key))
             if i < len(args):
                 raise TypeError('%s.%s() got multiple values for keyword argument \'%s\'' % (service, procedure, key))
-            argument = schema.KRPC.Argument()
+            argument = krpc.schema.KRPC.Argument()
             argument.position = i
             argument.value = encode_argument(i, arg)
             arguments.append(argument)
 
         # Build the request object
-        request = schema.KRPC.Request()
+        request = krpc.schema.KRPC.Request()
         request.service = service
         request.procedure = procedure
         request.arguments.extend(arguments)

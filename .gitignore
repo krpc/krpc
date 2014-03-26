@@ -112,6 +112,7 @@ UpgradeLog*.XML
 
 # Python
 *.pyc
+python/MANIFEST
 
 # protobuf
 *.protobin
@@ -119,7 +120,7 @@ src/kRPC/Schema/*.cs
 src/kRPC/Schema/*.py
 src/kRPCServices/Schema/*.cs
 src/kRPCServices/Schema/*.py
-python/schema/
+python/krpc/schema/
 src/kRPC/Schema/KRPC.cs.orig
 
 # Build output

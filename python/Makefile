@@ -1,4 +1,4 @@
-.PHONY: all protobuf test clean
+.PHONY: all protobuf test dist release clean
 
 all: protobuf
 
@@ -7,6 +7,13 @@ protobuf:
 
 test:
 	(cd test; ./run.sh)
+
+dist:
+	python setup.py sdist
+
+release:
+	python setup.py register
+	python setup.py sdist upload
 
 clean:
 	make -C .. protobuf-python-clean

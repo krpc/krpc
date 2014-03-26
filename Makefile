@@ -53,19 +53,11 @@ dist: build
 	$(UNZIP) lib/toolbar/Toolbar-1.7.0.zip -d $(DIST_DIR)
 	mv $(DIST_DIR)/Toolbar-1.7.0/GameData/* $(DIST_DIR)/GameData/
 	rm -r $(DIST_DIR)/Toolbar-1.7.0
-	# Python client library
-	mkdir -p $(DIST_DIR)/python
-	cp -r python/*.py python/*.craft python/schema $(DIST_DIR)/python/
-	# Schema
-	mkdir -p $(DIST_DIR)/schema
-	cp -r $(PROTOS) $(DIST_DIR)/schema/
 
 pre-release: dist test
 	# Licenses
 	cp LICENSE.txt $(DIST_DIR)/
 	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-csharp-port-license.txt
-	cp python/protobuf-license.txt $(DIST_DIR)/protobuf-license.txt
-	cp python/protobuf-license.txt $(DIST_DIR)/python/protobuf-license.txt
 	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# README
@@ -133,7 +125,7 @@ protobuf: protobuf-csharp protobuf-python
 protobuf-csharp: $(PROTOS) $(PROTOS:.proto=.cs)
 
 protobuf-python: $(PROTOS) $(PROTOS:.proto=.py)
-	echo "" > python/schema/__init__.py
+	echo "" > python/krpc/schema/__init__.py
 
 protobuf-clean: protobuf-csharp-clean protobuf-python-clean
 	-rm -rf $(PROTOS:.proto=.protobin)
@@ -142,7 +134,7 @@ protobuf-csharp-clean:
 	-rm -rf $(PROTOS:.proto=.cs)
 
 protobuf-python-clean:
-	-rm -rf $(PROTOS:.proto=.py) python/schema
+	-rm -rf $(PROTOS:.proto=.py) python/krpc/schema
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
@@ -150,8 +142,8 @@ protobuf-python-clean:
 %.py: %.proto
 	$(PROTOC) $< --python_out=.
 	mv $*_pb2.py $@
-	mkdir -p python/schema
-	cp $@ python/schema/$(notdir $@)
+	mkdir -p python/krpc/schema
+	cp $@ python/krpc/schema/$(notdir $@)
 
 %.cs: %.protobin
 	$(PROTOGEN) \
