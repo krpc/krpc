@@ -164,6 +164,12 @@ class TestClient(unittest.TestCase):
                 'TestClass',
 
                 'OptionalArguments',
+
+                'EnumReturn',
+                'EnumEcho',
+                'CSharpEnum',
+                'CSharpEnumReturn',
+                'CSharpEnumEcho'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.TestService))))
 
@@ -185,6 +191,14 @@ class TestClient(unittest.TestCase):
                 'OptionalArguments'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.TestService.TestClass))))
+
+    def test_test_service_enum_members(self):
+        self.assertSetEqual(
+            set(['x','y','z']),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.TestService.CSharpEnum))))
+        self.assertEqual (0, self.ksp.TestService.CSharpEnum.x)
+        self.assertEqual (1, self.ksp.TestService.CSharpEnum.y)
+        self.assertEqual (2, self.ksp.TestService.CSharpEnum.z)
 
 
 if __name__ == '__main__':
