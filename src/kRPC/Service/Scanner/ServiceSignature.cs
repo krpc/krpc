@@ -58,7 +58,7 @@ namespace KRPC.Service.Scanner
         void AddProcedure (ProcedureSignature signature)
         {
             if (Procedures.ContainsKey (signature.Name))
-                throw new ServiceException ("Service " + Name + " contains duplicates procedures " + signature.Name);
+                throw new ServiceException ("Service " + Name + " contains duplicate procedures " + signature.Name);
             Procedures [signature.Name] = signature;
         }
 
@@ -97,6 +97,7 @@ namespace KRPC.Service.Scanner
         public string AddClass (Type classType)
         {
             TypeUtils.ValidateKRPCClass (classType);
+            // TODO: do we need to check for duplicates?
             Classes.Add (classType.Name);
             return classType.Name;
         }
@@ -109,7 +110,7 @@ namespace KRPC.Service.Scanner
             TypeUtils.ValidateKRPCEnum (enumType);
             var name = enumType.Name;
             if (Enums.ContainsKey (name))
-                throw new ServiceException ("service already contains the enum"); //FIXME: better message
+                throw new ServiceException ("Service " + Name + " contains duplicate enumerations " + name);
             Enums [enumType.Name] = new Dictionary<string, int> ();
             foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static)) {
                 // TODO: assumes raw value can be cast to an int
