@@ -119,5 +119,8 @@ class TestClient(unittest.TestCase):
         self.assertEqual(enum.y, self.ksp.TestService.CSharpEnumEcho(enum.y))
         self.assertEqual(enum.z, self.ksp.TestService.CSharpEnumEcho(enum.z))
 
+    def test_invalid_enum(self):
+        self.assertRaises(krpc.RPCError, self.ksp.TestService.CSharpEnumEcho, 9999)
+
 if __name__ == '__main__':
     unittest.main()
