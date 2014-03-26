@@ -9,11 +9,11 @@ test:
 	(cd test; ./run.sh)
 
 dist:
-	python setup.py sdist
+	python setup.py sdist --formats=gztar,zip
 
 release:
 	python setup.py register
-	python setup.py sdist upload
+	python setup.py sdist --formats=gztar,zip upload
 
 clean:
 	make -C .. protobuf-python-clean
