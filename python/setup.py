@@ -8,6 +8,7 @@ setup(
     author_email='djungelorm@users.noreply.github.com',
     url='https://github.com/djungelorm/krpc',
     packages=['krpc', 'krpc.schema'],
+    requires=['protobuf'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: End Users/Desktop',
