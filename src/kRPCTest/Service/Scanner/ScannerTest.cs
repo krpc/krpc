@@ -301,7 +301,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("x", method.ParametersList [0].Name);
                             Assert.AreEqual ("string", method.ParametersList [0].Type);
                             Assert.IsTrue (method.ParametersList [0].HasDefaultArgument);
-                            //Assert.AreEqual ("...hex...", method.ParametersList [0].DefaultArgument);
+                            Assert.AreEqual (new byte[] { 0x03, 0x66, 0x6f, 0x6f}, method.ParametersList [0].DefaultArgument);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
                             found++;
@@ -317,7 +317,8 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.ParametersList [0].HasDefaultArgument);
                             Assert.IsTrue (method.ParametersList [1].HasDefaultArgument);
                             Assert.IsTrue (method.ParametersList [2].HasDefaultArgument);
-                            //Assert.AreEqual ("...hex...", method.ParametersList [0].DefaultArgument);
+                            Assert.AreEqual (new byte[] {0x03, 0x6a, 0x65, 0x62}, method.ParametersList [1].DefaultArgument);
+                            Assert.AreEqual (new byte[] {0x2a}, method.ParametersList [2].DefaultArgument);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
                             found++;
