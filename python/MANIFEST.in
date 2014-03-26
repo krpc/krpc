@@ -1,3 +1,4 @@
+include *.txt
 exclude krpc/schema/Test.py
 exclude krpc/schema/Vessel.py
 exclude test/test_client.py
