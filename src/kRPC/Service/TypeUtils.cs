@@ -242,8 +242,9 @@ namespace KRPC.Service
         ///  1. Must have KRPCEnum attribute
         ///  2. Must have a valid identifier
         ///  3. Must be a public enum
-        ///  4. Must be declared inside a kRPC service if it doesn't have the service explicity set
-        ///  5. Must not be declared inside a kRPC service if it does have the service explicity set
+        ///  4. Underlying type must be a 32-bit signed integer (int)
+        ///  5. Must be declared inside a kRPC service if it doesn't have the service explicity set
+        ///  6. Must not be declared inside a kRPC service if it does have the service explicity set
         /// </summary>
         public static void ValidateKRPCEnum (Type type)
         {
@@ -256,6 +257,9 @@ namespace KRPC.Service
             // Check it's public
             if (!(type.IsPublic || type.IsNestedPublic))
                 throw new ServiceException ("KRPCEnum " + type + " is not public");
+            // Check the underlying type is an int
+            if (Enum.GetUnderlyingType (type) != typeof (int))
+                throw new ServiceException ("KRPCEnum " + type + " has underlying type " + Enum.GetUnderlyingType (type) + "; but only int is supported");
             // If it doesn't have the Service property set, check the enum is defined directly inside a KRPCService
             if (attribute.Service == null && (type.DeclaringType == null || !Reflection.HasAttribute<KRPCServiceAttribute> (type.DeclaringType)))
                 throw new ServiceException ("KRPCEnum " + type + " is not declared inside a KRPCService");
