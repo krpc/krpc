@@ -92,14 +92,17 @@ namespace KRPC.Service
                             decodedArgumentValues [i] = builder.WeakMergeFrom (value).WeakBuild ();
                         } else if (ProtocolBuffers.IsAnEnumType (type) || TypeUtils.IsAnEnumType (type)) {
                             // TODO: Assumes it's underlying type is int
-                            decodedArgumentValues [i] = ProtocolBuffers.ReadValue (value, typeof(int));
+                            var enumValue = ProtocolBuffers.ReadValue (value, typeof(int));
+                            if (!Enum.IsDefined (type, enumValue))
+                                throw new RPCException ("Failed to convert value " + enumValue + " to enumeration type " + type);
+                            decodedArgumentValues [i] = Enum.ToObject (type, enumValue);
                         } else {
                             decodedArgumentValues [i] = ProtocolBuffers.ReadValue (value, type);
                         }
                     } catch (Exception e) {
                         throw new RPCException (
                             "Failed to decode argument for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". " +
-                            "Expected an argument of type " + ProtocolBuffers.GetTypeName (type) + ". " +
+                            "Expected an argument of type " + TypeUtils.GetTypeName (type) + ". " +
                             e.GetType ().Name + ": " + e.Message);
                     }
                 }

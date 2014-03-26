@@ -810,6 +810,27 @@ namespace KRPCTest.Service
             Assert.AreEqual (ProtocolBuffers.WriteValue((int) TestService.CSharpEnum.z, typeof(int)), builtResponse.ReturnValue);
             mock.Verify (x => x.ProcedureCSharpEnumReturn (), Times.Once ());
         }
+
+        /// <summary>
+        /// Test calling a service method with an argument that is an invalid value for a C# enumeration
+        /// </summary>
+        [Test]
+        public void HandleRequestSingleInvalidCSharpEnumArgNoReturn ()
+        {
+            int arg = 9999;
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureCSharpEnumArg (It.IsAny<TestService.CSharpEnum> ()));
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureCSharpEnumArg")
+                .AddArguments (Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))))
+                .Build ();
+            // Run the request
+            Assert.Throws<RPCException> (() => KRPC.Service.Services.Instance.HandleRequest (request));
+        }
     }
 }
 
