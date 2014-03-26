@@ -142,6 +142,21 @@ namespace TestServer.Services
         {
             return x;
         }
+
+        [KRPCEnum]
+        public enum CSharpEnum { x, y, z };
+
+        [KRPCProcedure]
+        public static CSharpEnum CSharpEnumReturn ()
+        {
+            return CSharpEnum.y;
+        }
+
+        [KRPCProcedure]
+        public static CSharpEnum CSharpEnumEcho (CSharpEnum x)
+        {
+            return x;
+        }
     }
 }
 

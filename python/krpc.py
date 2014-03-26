@@ -623,12 +623,12 @@ class _Service(BaseService):
         self._types = client._types
 
         # Add class types to service
-        for procedure in service.procedures:
-            try:
-                name = _Attributes.get_class_name(procedure.attributes)
-                self._add_class(name)
-            except ValueError:
-                pass
+        for cls in service.classes:
+            self._add_class(cls)
+
+        # Add enumeration types to service
+        for enum in service.enumerations:
+            self._add_enumeration(enum)
 
         # Create plain procedures
         for procedure in service.procedures:
@@ -672,10 +672,16 @@ class _Service(BaseService):
         for (class_name, property_name), procedures in properties.items():
             self._add_class_property(class_name, property_name, procedures[0], procedures[1])
 
-    def _add_class(self, name):
-        """ Add a class type with the given name to this service, and the type store """
+    def _add_class(self, cls):
+        """ Add a class type to this service, and the type store """
+        name = cls.name
         class_type = self._types.as_type('Class(' + self._name + '.' + name + ')')
         setattr(self, name, class_type.python_type)
+
+    def _add_enumeration(self, enum):
+        """ Add an enumeration to this service """
+        name = enum.name
+        setattr(self, name, type(str(name), (object,), dict((x.name, x.value) for x in enum.values)))
 
     def _add_procedure(self, procedure):
         """ Add a plain procedure to this service """

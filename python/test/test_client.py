@@ -113,5 +113,11 @@ class TestClient(unittest.TestCase):
         self.assertEqual(schema.Test.b, self.ksp.TestService.EnumEcho(schema.Test.b))
         self.assertEqual(schema.Test.c, self.ksp.TestService.EnumEcho(schema.Test.c))
 
+        enum = self.ksp.TestService.CSharpEnum
+        self.assertEqual(enum.y, self.ksp.TestService.CSharpEnumReturn())
+        self.assertEqual(enum.x, self.ksp.TestService.CSharpEnumEcho(enum.x))
+        self.assertEqual(enum.y, self.ksp.TestService.CSharpEnumEcho(enum.y))
+        self.assertEqual(enum.z, self.ksp.TestService.CSharpEnumEcho(enum.z))
+
 if __name__ == '__main__':
     unittest.main()
