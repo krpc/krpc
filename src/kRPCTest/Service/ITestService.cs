@@ -34,5 +34,9 @@ namespace KRPCTest.Service
         void ProcedureEnumArg (KRPC.Schema.Test.TestEnum x);
 
         KRPC.Schema.Test.TestEnum ProcedureEnumReturn ();
+
+        void ProcedureCSharpEnumArg (TestService.CSharpEnum x);
+
+        TestService.CSharpEnum ProcedureCSharpEnumReturn ();
     }
 }

@@ -145,6 +145,18 @@ namespace KRPCTest.Service
         public enum CSharpEnum { x, y, z };
 
         public enum CSharpEnumWithoutAttribute { foo, bar, baz };
+
+        [KRPCProcedure]
+        public static void ProcedureCSharpEnumArg (CSharpEnum x)
+        {
+            Service.ProcedureCSharpEnumArg (x);
+        }
+
+        [KRPCProcedure]
+        public static CSharpEnum ProcedureCSharpEnumReturn ()
+        {
+            return Service.ProcedureCSharpEnumReturn ();
+        }
     }
 }
 

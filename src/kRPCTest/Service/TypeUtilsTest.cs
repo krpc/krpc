@@ -41,6 +41,17 @@ namespace KRPCTest.Service
         }
 
         [Test]
+        public void IsAnEnumType ()
+        {
+            Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(string)));
+            Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(long)));
+            Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(TestService.TestClass)));
+            Assert.IsTrue (TypeUtils.IsAnEnumType (typeof(TestService.CSharpEnum)));
+            Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(TestService.CSharpEnumWithoutAttribute)));
+            Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(TestService)));
+        }
+
+        [Test]
         public void GetTypeName ()
         {
             Assert.AreEqual ("string", TypeUtils.GetTypeName (typeof(string)));

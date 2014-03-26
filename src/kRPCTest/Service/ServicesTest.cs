@@ -760,6 +760,56 @@ namespace KRPCTest.Service
             Assert.AreEqual (ProtocolBuffers.WriteValue((int) KRPC.Schema.Test.TestEnum.c, typeof(int)), builtResponse.ReturnValue);
             mock.Verify (x => x.ProcedureEnumReturn (), Times.Once ());
         }
+
+        /// <summary>
+        /// Test calling a service method with an argument that is a C# enumeration
+        /// </summary>
+        [Test]
+        public void HandleRequestSingleCSharpEnumArgNoReturn ()
+        {
+            var arg = TestService.CSharpEnum.y;
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureCSharpEnumArg (It.IsAny<TestService.CSharpEnum> ()))
+                .Callback ((TestService.CSharpEnum x) => {
+                // Check the argument
+                Assert.AreEqual (TestService.CSharpEnum.y, x);
+            });
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureCSharpEnumArg")
+                .AddArguments (Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))))
+                .Build ();
+            // Run the request
+            KRPC.Service.Services.Instance.HandleRequest (request);
+            mock.Verify (x => x.ProcedureCSharpEnumArg (It.IsAny<TestService.CSharpEnum> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method that returns a C# enumeration
+        /// </summary>
+        [Test]
+        public void HandleRequestNoArgCSharpEnumReturn ()
+        {
+            // Create mock service
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureCSharpEnumReturn ()).Returns(TestService.CSharpEnum.z);
+            TestService.Service = mock.Object;
+            // Create request
+            var request = Request.CreateBuilder ()
+                .SetService ("TestService")
+                .SetProcedure ("ProcedureCSharpEnumReturn")
+                .Build ();
+            // Run the request
+            var response = KRPC.Service.Services.Instance.HandleRequest (request);
+            response.Time = 0;
+            var builtResponse = response.Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (ProtocolBuffers.WriteValue((int) TestService.CSharpEnum.z, typeof(int)), builtResponse.ReturnValue);
+            mock.Verify (x => x.ProcedureCSharpEnumReturn (), Times.Once ());
+        }
     }
 }
 
