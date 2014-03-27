@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -14,18 +15,18 @@ namespace KRPC.Utils
             where TAttribute : Attribute
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-                var types = new List<Type> ();
+                // Get all types that can be loaded from the assembly
+                Type[] types;
                 try {
-                    foreach (var type in assembly.GetTypes()) {
-                        if (type.IsDefined (typeof(TAttribute), inherit)) {
-                            types.Add (type);
-                        }
-                    }
-                } catch {
-                    // Assembly is not accessible
+                    types = assembly.GetTypes ();
+                } catch (ReflectionTypeLoadException e) {
+                    types = e.Types.Where (x => x != null).ToArray ();
                 }
+
+                // Yield loaded types that have the given attribute
                 foreach (var type in types) {
-                    yield return type;
+                    if (type.IsDefined (typeof(TAttribute), inherit))
+                        yield return type;
                 }
             }
         }
