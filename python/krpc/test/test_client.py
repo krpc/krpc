@@ -2,12 +2,23 @@
 
 import unittest
 import binascii
+import subprocess
+import time
 import krpc
 
 class TestClient(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe'], stdout=subprocess.PIPE)
+        time.sleep(0.25)
+
     def setUp(self):
         self.ksp = krpc.connect(name='TestClient')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.kill()
 
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.ksp.TestService.FloatToString(float(3.14159)))
@@ -72,7 +83,7 @@ class TestClient(unittest.TestCase):
     def test_setattr_for_properties(self):
         """ Check that properties are added to the dynamically generated service class,
             not the base class krpc.Service """
-        self.assertRaises (AttributeError, getattr, krpc._Service, 'ObjectProperty')
+        self.assertRaises (AttributeError, getattr, krpc.service._Service, 'ObjectProperty')
         self.assertIsNotNone (getattr(self.ksp.TestService, 'ObjectProperty'))
 
     def test_optional_arguments(self):

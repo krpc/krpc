@@ -1,11 +1,11 @@
 #!/usr/bin/env python2
 
 import unittest
-from krpc import _Types as Types
-from krpc import _ValueType as ValueType
-from krpc import _MessageType as MessageType
-from krpc import _ClassType as ClassType
-from krpc import _BaseClass as BaseClass
+from krpc.types import _Types as Types
+from krpc.types import _ValueType as ValueType
+from krpc.types import _MessageType as MessageType
+from krpc.types import _ClassType as ClassType
+from krpc.types import _BaseClass as BaseClass
 import krpc.schema.KRPC
 
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']

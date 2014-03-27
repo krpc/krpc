@@ -1,14 +1,20 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
-    name='krpc',
+    name='kRPC',
     version='0.1.0',
-    description='Remote Procedure Call server for Kerbal Space Program',
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
+    packages=['krpc','krpc.schema','krpc.test'],
+    scripts=['bin/example.py'],
     url='https://github.com/djungelorm/krpc',
-    packages=['krpc', 'krpc.schema'],
-    requires=['protobuf'],
+    license='LICENSE.txt',
+    description='Remote Procedure Call server for Kerbal Space Program',
+    long_description=open('README.txt').read(),
+    install_requires=[
+        'protobuf >= 2.5.0'
+    ],
+    test_suite='krpc.test',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: End Users/Desktop',
@@ -20,5 +26,5 @@ setup(
         'Topic :: Communications',
         'Topic :: Games/Entertainment :: Simulation',
         'Topic :: Internet'
-    ]
+    ],
 )
