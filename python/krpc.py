@@ -25,6 +25,16 @@ DEFAULT_PORT = 50000
 BUFFER_SIZE = 8*1024*1024
 DEBUG_LOGGING = True
 
+_regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
+_regex_single_uppercase = re.compile(r'([a-z0-9])([A-Z])')
+_regex_underscores = re.compile(r'(.)_')
+
+def _to_snake_case(camel_case):
+    """ Convert camel case to snake case, e.g. GetServices -> get_services """
+    result = re.sub(_regex_underscores, r'\1__', camel_case)
+    result = re.sub(_regex_single_uppercase, r'\1_\2', result)
+    return re.sub(_regex_multi_uppercase, r'\1_\2', result).lower()
+
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
 PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
 PROTOBUF_TO_PYTHON_VALUE_TYPE = {
@@ -595,18 +605,18 @@ class KRPCService(BaseService):
     def __init__(self, client):
         super(KRPCService, self).__init__(client, 'KRPC')
 
-    def GetStatus(self):
+    def get_status(self):
         """ Get status message from the server, including the version number  """
         return self._invoke('GetStatus', return_type=self._client._types.as_type('KRPC.Status'))
 
-    def GetServices(self):
+    def get_services(self):
         """ Get available services and procedures """
         return self._invoke('GetServices', return_type=self._client._types.as_type('KRPC.Services'))
 
 
 def _create_service(client, service):
     """ Create a new class type for a service and instantiate it """
-    cls = type(str('_Service_' + service.name), (_Service,), {})
+    cls = type(str('_Service' + service.name), (_Service,), {})
     return cls(cls, client, service)
 
 class _Service(BaseService):
@@ -690,7 +700,7 @@ class _Service(BaseService):
         return_type = None
         if procedure.HasField('return_type'):
             return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
-        setattr(self, procedure.name,
+        setattr(self, _to_snake_case(procedure.name),
                 lambda *args, **kwargs: self._invoke(
                     procedure.name, args=args, kwargs=kwargs,
                     param_names=param_names, param_types=param_types, return_type=return_type))
@@ -700,11 +710,11 @@ class _Service(BaseService):
         fget = fset = None
         if getter:
             self._add_procedure(getter)
-            fget = lambda s: getattr(self, getter.name)()
+            fget = lambda s: getattr(self, _to_snake_case(getter.name))()
         if setter:
             self._add_procedure(setter)
-            fset = lambda s, value: getattr(self, setter.name)(value)
-        setattr(self._cls, name, property(fget, fset))
+            fset = lambda s, value: getattr(self, _to_snake_case(setter.name))(value)
+        setattr(self._cls, _to_snake_case(name), property(fget, fset))
 
     def _add_class_method(self, class_name, method_name, procedure):
         """ Add a class method to the service """
@@ -714,7 +724,7 @@ class _Service(BaseService):
         return_type = None
         if procedure.HasField('return_type'):
             return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
-        setattr(cls, method_name,
+        setattr(cls, _to_snake_case(method_name),
                 lambda s, *args, **kwargs: self._invoke(procedure.name, args=[s] + list(args), kwargs=kwargs,
                                                         param_names=param_names, param_types=param_types,
                                                         return_type=return_type))
@@ -723,12 +733,12 @@ class _Service(BaseService):
         fget = fset = None
         if getter:
             self._add_class_method(class_name, getter.name, getter)
-            fget = lambda self_: getattr(self_, getter.name)()
+            fget = lambda self_: getattr(self_, _to_snake_case(getter.name))()
         if setter:
             self._add_class_method(class_name, setter.name, setter)
-            fset = lambda self_, value: getattr(self_, setter.name)(value)
+            fset = lambda self_, value: getattr(self_, _to_snake_case(setter.name))(value)
         class_type = getattr(self, class_name)
-        setattr(class_type, property_name, property(fget, fset))
+        setattr(class_type, _to_snake_case(property_name), property(fget, fset))
 
 
 class RPCError(RuntimeError):
@@ -751,9 +761,9 @@ class Client(object):
         self._response_type = self._types.as_type('KRPC.Response')
 
         # Set up the main KRPC service
-        self.KRPC = KRPCService(self)
+        self.krpc = KRPCService(self)
 
-        services = self.KRPC.GetServices().services
+        services = self.krpc.get_services().services
 
         # Create class types
         for service in services:
@@ -767,7 +777,7 @@ class Client(object):
         # Set up services
         for service in services:
             if service.name != 'KRPC':
-                setattr(self, service.name, _create_service(self, service))
+                setattr(self, _to_snake_case(service.name), _create_service(self, service))
 
     def _invoke(self, service, procedure, args=[], kwargs={}, param_names=[], param_types=[], return_type=None):
         """ Execute an RPC """
