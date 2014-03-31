@@ -56,7 +56,11 @@ class _Types(object):
         elif type_string.startswith('Class('):
             typ = _ClassType(type_string)
         else:
-            typ = _MessageType(type_string)
+            package, _, message = type_string.rpartition('.')
+            if hasattr(schema, package) and hasattr(getattr(schema, package), message):
+                typ = _MessageType(type_string)
+            else:
+                typ = _EnumType(type_string)
         self._types[type_string] = typ
         return typ
 
@@ -128,8 +132,15 @@ class _MessageType(_TypeBase):
 
     def __init__(self, type_string):
         package, message = type_string.split('.')
-        typ = schema.__dict__[package].__dict__[message]
+        typ = getattr(getattr(schema, package), message)
         super(_MessageType, self).__init__(type_string, typ)
+
+
+class _EnumType(_TypeBase):
+    """ A protocol buffer enumeration type """
+
+    def __init__(self, type_string):
+        super(_EnumType, self).__init__(type_string, int)
 
 
 class _ClassType(_TypeBase):
@@ -325,6 +336,8 @@ class _Encoder(object):
             return x.SerializeToString()
         elif isinstance(typ, _ValueType):
             return cls._encode_value(x, typ)
+        elif isinstance(typ, _EnumType):
+            return cls._encode_value(x, _Types().as_type('int32'))
         elif isinstance(typ, _ClassType):
             object_id = x._object_id if x is not None else 0
             return cls._encode_value(object_id, _Types().as_type('uint64'))
@@ -430,6 +443,8 @@ class _Decoder(object):
         """ Given a python type, and serialized data, decode the value """
         if isinstance(typ, _MessageType):
             return cls._decode_message(data, typ)
+        elif isinstance(typ, _EnumType):
+            return cls._decode_value(data, _Types().as_type('int32'))
         elif isinstance(typ, _ValueType):
             return cls._decode_value(data, typ)
         elif isinstance(typ, _ClassType):
@@ -608,12 +623,12 @@ class _Service(BaseService):
         self._types = client._types
 
         # Add class types to service
-        for procedure in service.procedures:
-            try:
-                name = _Attributes.get_class_name(procedure.attributes)
-                self._add_class(name)
-            except ValueError:
-                pass
+        for cls in service.classes:
+            self._add_class(cls)
+
+        # Add enumeration types to service
+        for enum in service.enumerations:
+            self._add_enumeration(enum)
 
         # Create plain procedures
         for procedure in service.procedures:
@@ -657,10 +672,16 @@ class _Service(BaseService):
         for (class_name, property_name), procedures in properties.items():
             self._add_class_property(class_name, property_name, procedures[0], procedures[1])
 
-    def _add_class(self, name):
-        """ Add a class type with the given name to this service, and the type store """
+    def _add_class(self, cls):
+        """ Add a class type to this service, and the type store """
+        name = cls.name
         class_type = self._types.as_type('Class(' + self._name + '.' + name + ')')
         setattr(self, name, class_type.python_type)
+
+    def _add_enumeration(self, enum):
+        """ Add an enumeration to this service """
+        name = enum.name
+        setattr(self, name, type(str(name), (object,), dict((x.name, x.value) for x in enum.values)))
 
     def _add_procedure(self, procedure):
         """ Add a plain procedure to this service """
@@ -701,11 +722,11 @@ class _Service(BaseService):
     def _add_class_property(self, class_name, property_name, getter=None, setter=None):
         fget = fset = None
         if getter:
-            self._add_procedure(getter)
-            fget = lambda s: getattr(self, getter.name)(s)
+            self._add_class_method(class_name, getter.name, getter)
+            fget = lambda self_: getattr(self_, getter.name)()
         if setter:
-            self._add_procedure(setter)
-            fset = lambda s, value: getattr(self, setter.name)(s, value)
+            self._add_class_method(class_name, setter.name, setter)
+            fset = lambda self_, value: getattr(self_, setter.name)(value)
         class_type = getattr(self, class_name)
         setattr(class_type, property_name, property(fget, fset))
 

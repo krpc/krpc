@@ -50,6 +50,22 @@ namespace KRPC.Service
                     }
                     service.AddProcedures (procedure);
                 }
+                foreach (var clsName in serviceSignature.Classes) {
+                    var cls = Schema.KRPC.Class.CreateBuilder ();
+                    cls.Name = clsName;
+                    service.AddClasses (cls);
+                }
+                foreach (var enumName in serviceSignature.Enums.Keys) {
+                    var enm = Schema.KRPC.Enumeration.CreateBuilder ();
+                    enm.Name = enumName;
+                    foreach (var enumValueName in serviceSignature.Enums[enumName].Keys) {
+                        var enmValue = Schema.KRPC.EnumerationValue.CreateBuilder ();
+                        enmValue.Name = enumValueName;
+                        enmValue.Value = serviceSignature.Enums[enumName][enumValueName];
+                        enm.AddValues (enmValue);
+                    }
+                    service.AddEnumerations (enm);
+                }
                 services.AddServices_ (service);
             }
             Schema.KRPC.Services result = services.Build ();

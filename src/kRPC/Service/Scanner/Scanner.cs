@@ -43,6 +43,16 @@ namespace KRPC.Service.Scanner
                     service.AddClassProperty (cls, property);
             }
 
+            // Scan for enumerations annotated with KRPCEnum
+            foreach (var enumType in Reflection.GetTypesWith<KRPCEnumAttribute> ()) {
+                TypeUtils.ValidateKRPCEnum (enumType);
+                var serviceName = TypeUtils.GetEnumServiceName (enumType);
+                if (!signatures.ContainsKey (serviceName))
+                    signatures [serviceName] = new ServiceSignature (serviceName);
+                var service = signatures [serviceName];
+                service.AddEnum (enumType);
+            }
+
             // Check that the main KRPC service was found
             if (!signatures.ContainsKey ("KRPC"))
                 throw new ServiceException ("KRPC service could not be found");

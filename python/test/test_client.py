@@ -3,6 +3,7 @@
 import unittest
 import binascii
 import krpc
+import schema.Test
 
 class TestClient(unittest.TestCase):
 
@@ -105,6 +106,100 @@ class TestClient(unittest.TestCase):
         self.assertRaises(TypeError, self.ksp.TestService.OptionalArguments, '1', '2', '3', '4', '5')
         obj = self.ksp.TestService.CreateTestObject('jeb')
         self.assertRaises(TypeError, obj.OptionalArguments, '1', '2', '3', '4', '5')
+
+    def test_enums(self):
+        self.assertEqual(schema.Test.a, self.ksp.TestService.EnumReturn())
+        self.assertEqual(schema.Test.a, self.ksp.TestService.EnumEcho(schema.Test.a))
+        self.assertEqual(schema.Test.b, self.ksp.TestService.EnumEcho(schema.Test.b))
+        self.assertEqual(schema.Test.c, self.ksp.TestService.EnumEcho(schema.Test.c))
+
+        enum = self.ksp.TestService.CSharpEnum
+        self.assertEqual(enum.y, self.ksp.TestService.CSharpEnumReturn())
+        self.assertEqual(enum.x, self.ksp.TestService.CSharpEnumEcho(enum.x))
+        self.assertEqual(enum.y, self.ksp.TestService.CSharpEnumEcho(enum.y))
+        self.assertEqual(enum.z, self.ksp.TestService.CSharpEnumEcho(enum.z))
+
+    def test_invalid_enum(self):
+        self.assertRaises(krpc.RPCError, self.ksp.TestService.CSharpEnumEcho, 9999)
+
+    def test_client_members(self):
+        self.assertSetEqual(
+            set(['KRPC', 'TestService']),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp))))
+
+    def test_krpc_service_members(self):
+        self.assertSetEqual(
+            set(['GetServices', 'GetStatus']),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.KRPC))))
+
+    def test_test_service_service_members(self):
+        self.assertSetEqual(
+            set([
+                'FloatToString',
+                'DoubleToString',
+                'Int32ToString',
+                'Int64ToString',
+                'BoolToString',
+                'StringToInt32',
+                'BytesToHexString',
+                'AddMultipleValues',
+
+                'StringProperty',
+                'get_StringProperty',
+                'set_StringProperty',
+
+                'StringPropertyPrivateGet',
+                'set_StringPropertyPrivateGet',
+
+                'StringPropertyPrivateSet',
+                'get_StringPropertyPrivateSet',
+
+                'CreateTestObject',
+                'EchoTestObject',
+
+                'ObjectProperty',
+                'get_ObjectProperty',
+                'set_ObjectProperty',
+
+                'TestClass',
+
+                'OptionalArguments',
+
+                'EnumReturn',
+                'EnumEcho',
+                'CSharpEnum',
+                'CSharpEnumReturn',
+                'CSharpEnumEcho'
+            ]),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.TestService))))
+
+    def test_test_service_test_class_members(self):
+        self.assertSetEqual(
+            set([
+                'GetValue',
+                'FloatToString',
+                'ObjectToString',
+
+                'IntProperty',
+                'TestClass_get_IntProperty',
+                'TestClass_set_IntProperty',
+
+                'ObjectProperty',
+                'TestClass_get_ObjectProperty',
+                'TestClass_set_ObjectProperty',
+
+                'OptionalArguments'
+            ]),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.TestService.TestClass))))
+
+    def test_test_service_enum_members(self):
+        self.assertSetEqual(
+            set(['x','y','z']),
+            set(filter(lambda x: not x.startswith('_'), dir(self.ksp.TestService.CSharpEnum))))
+        self.assertEqual (0, self.ksp.TestService.CSharpEnum.x)
+        self.assertEqual (1, self.ksp.TestService.CSharpEnum.y)
+        self.assertEqual (2, self.ksp.TestService.CSharpEnum.z)
+
 
 if __name__ == '__main__':
     unittest.main()

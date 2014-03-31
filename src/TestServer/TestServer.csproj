@@ -52,5 +52,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\TestService.cs" />
+    <Compile Include="..\kRPCTest\Schema\Test.cs" />
   </ItemGroup>
 </Project>

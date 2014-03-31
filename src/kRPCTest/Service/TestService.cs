@@ -128,6 +128,35 @@ namespace KRPCTest.Service
         {
             Service.ProcedureThreeOptionalArgsNoReturn (x, y, z);
         }
+
+        [KRPCProcedure]
+        public static void ProcedureEnumArg (KRPC.Schema.Test.TestEnum x)
+        {
+            Service.ProcedureEnumArg (x);
+        }
+
+        [KRPCProcedure]
+        public static KRPC.Schema.Test.TestEnum ProcedureEnumReturn ()
+        {
+            return Service.ProcedureEnumReturn ();
+        }
+
+        [KRPCEnum]
+        public enum CSharpEnum { x, y, z };
+
+        public enum CSharpEnumWithoutAttribute { foo, bar, baz };
+
+        [KRPCProcedure]
+        public static void ProcedureCSharpEnumArg (CSharpEnum x)
+        {
+            Service.ProcedureCSharpEnumArg (x);
+        }
+
+        [KRPCProcedure]
+        public static CSharpEnum ProcedureCSharpEnumReturn ()
+        {
+            return Service.ProcedureCSharpEnumReturn ();
+        }
     }
 }
 
