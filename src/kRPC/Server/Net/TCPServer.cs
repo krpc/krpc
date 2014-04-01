@@ -212,7 +212,19 @@ namespace KRPC.Server.Net
                 int nextClientUuid = 0;
                 while (true) {
                     // Block until a client connects to the server
-                    TcpClient client = tcpListener.AcceptTcpClient ();
+                    // Note: Uses async calls so that calls to Thread.Abort() will succeed
+                    TcpClient client = null;
+                    var clientConnected = new ManualResetEvent (false);
+                    clientConnected.Reset ();
+                    tcpListener.BeginAcceptTcpClient (delegate(IAsyncResult asyncResult) {
+                        try {
+                            client = tcpListener.EndAcceptTcpClient (asyncResult);
+                        } catch (ObjectDisposedException) {
+                        }
+                        clientConnected.Set ();
+                    }, null);
+                    clientConnected.WaitOne ();
+
                     Logger.WriteLine ("TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
                     // Add to pending clients
                     lock (pendingClientsLock) {
