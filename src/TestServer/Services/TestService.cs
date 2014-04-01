@@ -130,6 +130,33 @@ namespace TestServer.Services
         {
             return x + y + z + w;
         }
+
+        [KRPCProcedure]
+        public static KRPC.Schema.Test.TestEnum EnumReturn ()
+        {
+            return KRPC.Schema.Test.TestEnum.a;
+        }
+
+        [KRPCProcedure]
+        public static KRPC.Schema.Test.TestEnum EnumEcho (KRPC.Schema.Test.TestEnum x)
+        {
+            return x;
+        }
+
+        [KRPCEnum]
+        public enum CSharpEnum { x, y, z };
+
+        [KRPCProcedure]
+        public static CSharpEnum CSharpEnumReturn ()
+        {
+            return CSharpEnum.y;
+        }
+
+        [KRPCProcedure]
+        public static CSharpEnum CSharpEnumEcho (CSharpEnum x)
+        {
+            return x;
+        }
     }
 }
 

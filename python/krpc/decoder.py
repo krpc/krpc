@@ -1,6 +1,6 @@
 # TODO: avoid using internals
 from google.protobuf.internal import decoder as protobuf_decoder
-from krpc.types import _Types, _ValueType, _MessageType, _ClassType
+from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType
 
 
 class _Decoder(object):
@@ -11,6 +11,8 @@ class _Decoder(object):
         """ Given a python type, and serialized data, decode the value """
         if isinstance(typ, _MessageType):
             return cls._decode_message(data, typ)
+        elif isinstance(typ, _EnumType):
+            return cls._decode_value(data, _Types().as_type('int32'))
         elif isinstance(typ, _ValueType):
             return cls._decode_value(data, typ)
         elif isinstance(typ, _ClassType):
@@ -35,8 +37,7 @@ class _Decoder(object):
 
     @classmethod
     def _decode_value(cls, data, typ):
-        decode_fn = _ValueDecoder.__dict__['decode_' + typ.protobuf_type].__func__
-        return decode_fn(_ValueDecoder, data)
+        return getattr(_ValueDecoder, 'decode_' + typ.protobuf_type)(data)
 
 
 class _ValueDecoder(object):

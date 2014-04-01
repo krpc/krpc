@@ -21,23 +21,23 @@ class TestObjects(unittest.TestCase):
         cls.server.kill()
 
     def test_equality(self):
-        obj1 = self.ksp.TestService.CreateTestObject('jeb')
-        obj2 = self.ksp.TestService.CreateTestObject('jeb')
+        obj1 = self.ksp.test_service.create_test_object('jeb')
+        obj2 = self.ksp.test_service.create_test_object('jeb')
         self.assertNotEqual(obj1, obj2)
 
-        self.ksp.TestService.ObjectProperty = obj1
-        obj1a = self.ksp.TestService.ObjectProperty
+        self.ksp.test_service.object_property = obj1
+        obj1a = self.ksp.test_service.object_property
         self.assertEqual(obj1, obj1a)
 
     def test_hash(self):
-        obj1 = self.ksp.TestService.CreateTestObject('jeb')
-        obj2 = self.ksp.TestService.CreateTestObject('jeb')
+        obj1 = self.ksp.test_service.create_test_object('jeb')
+        obj2 = self.ksp.test_service.create_test_object('jeb')
         self.assertEqual(obj1._object_id, hash(obj1))
         self.assertEqual(obj2._object_id, hash(obj2))
         self.assertNotEqual(hash(obj1), hash(obj2))
 
-        self.ksp.TestService.ObjectProperty = obj1
-        obj1a = self.ksp.TestService.ObjectProperty
+        self.ksp.test_service.object_property = obj1
+        obj1a = self.ksp.test_service.object_property
         self.assertEqual(hash(obj1), hash(obj1a))
 
 

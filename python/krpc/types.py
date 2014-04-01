@@ -34,7 +34,11 @@ class _Types(object):
         elif type_string.startswith('Class('):
             typ = _ClassType(type_string)
         else:
-            typ = _MessageType(type_string)
+            package, _, message = type_string.rpartition('.')
+            if hasattr(krpc.schema, package) and hasattr(getattr(krpc.schema, package), message):
+                typ = _MessageType(type_string)
+            else:
+                typ = _EnumType(type_string)
         self._types[type_string] = typ
         return typ
 
@@ -108,6 +112,13 @@ class _MessageType(_TypeBase):
         package, message = type_string.split('.')
         typ = getattr(getattr(krpc.schema, package), message)
         super(_MessageType, self).__init__(type_string, typ)
+
+
+class _EnumType(_TypeBase):
+    """ A protocol buffer enumeration type """
+
+    def __init__(self, type_string):
+        super(_EnumType, self).__init__(type_string, int)
 
 
 class _ClassType(_TypeBase):

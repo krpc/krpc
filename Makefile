@@ -21,6 +21,7 @@ CSHARP_MAIN_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)
 CSHARP_LIBRARIES      = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 
 PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCServices/Schema/*.proto)
+PROTOS_TEST = $(wildcard src/kRPCTest/Schema/*.proto)
 
 PROTOC = protoc
 PROTOGEN = tools/ProtoGen.exe
@@ -122,19 +123,19 @@ protobuf: protobuf-csharp protobuf-python
 	-patch -p1 --forward --reject-file=- < krpc-proto.patch
 	-rm -f src/kRPC/Schema/KRPC.cs.orig
 
-protobuf-csharp: $(PROTOS) $(PROTOS:.proto=.cs)
+protobuf-csharp: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
-protobuf-python: $(PROTOS) $(PROTOS:.proto=.py)
+protobuf-python: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py)
 	echo "" > python/krpc/schema/__init__.py
 
 protobuf-clean: protobuf-csharp-clean protobuf-python-clean
-	-rm -rf $(PROTOS:.proto=.protobin)
+	-rm -rf $(PROTOS:.proto=.protobin) $(PROTOS_TEST:.proto=.protobin)
 
 protobuf-csharp-clean:
-	-rm -rf $(PROTOS:.proto=.cs)
+	-rm -rf $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
 protobuf-python-clean:
-	-rm -rf $(PROTOS:.proto=.py) python/krpc/schema
+	-rm -rf $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py) python/krpc/schema
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports

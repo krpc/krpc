@@ -1,6 +1,6 @@
 # TODO: avoid using internals
 from google.protobuf.internal import encoder as protobuf_encoder
-from krpc.types import _Types, _ValueType, _MessageType, _ClassType
+from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType
 
 
 class _Encoder(object):
@@ -34,6 +34,8 @@ class _Encoder(object):
             return x.SerializeToString()
         elif isinstance(typ, _ValueType):
             return cls._encode_value(x, typ)
+        elif isinstance(typ, _EnumType):
+            return cls._encode_value(x, _Types().as_type('int32'))
         elif isinstance(typ, _ClassType):
             object_id = x._object_id if x is not None else 0
             return cls._encode_value(object_id, _Types().as_type('uint64'))
@@ -50,8 +52,7 @@ class _Encoder(object):
 
     @classmethod
     def _encode_value(cls, value, typ):
-        encode_fn = _ValueEncoder.__dict__['encode_' + typ.protobuf_type].__func__
-        return encode_fn(_ValueEncoder, value)
+        return getattr(_ValueEncoder, 'encode_' + typ.protobuf_type)(value)
 
 
 class _ValueEncoder(object):

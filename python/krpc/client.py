@@ -1,5 +1,5 @@
 from krpc.types import _Types
-from krpc.service import BaseService, _create_service
+from krpc.service import BaseService, _create_service, _to_snake_case
 from krpc.encoder import _Encoder
 from krpc.decoder import _Decoder
 from krpc.attributes import _Attributes
@@ -21,11 +21,11 @@ class KRPCService(BaseService):
     def __init__(self, client):
         super(KRPCService, self).__init__(client, 'KRPC')
 
-    def GetStatus(self):
+    def get_status(self):
         """ Get status message from the server, including the version number  """
         return self._invoke('GetStatus', return_type=self._client._types.as_type('KRPC.Status'))
 
-    def GetServices(self):
+    def get_services(self):
         """ Get available services and procedures """
         return self._invoke('GetServices', return_type=self._client._types.as_type('KRPC.Services'))
 
@@ -44,9 +44,9 @@ class Client(object):
         self._response_type = self._types.as_type('KRPC.Response')
 
         # Set up the main KRPC service
-        self.KRPC = KRPCService(self)
+        self.krpc = KRPCService(self)
 
-        services = self.KRPC.GetServices().services
+        services = self.krpc.get_services().services
 
         # Create class types
         for service in services:
@@ -60,7 +60,7 @@ class Client(object):
         # Set up services
         for service in services:
             if service.name != 'KRPC':
-                setattr(self, service.name, _create_service(self, service))
+                setattr(self, _to_snake_case(service.name), _create_service(self, service))
 
     def _invoke(self, service, procedure, args=[], kwargs={}, param_names=[], param_types=[], return_type=None):
         """ Execute an RPC """

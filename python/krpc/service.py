@@ -1,4 +1,15 @@
+import re
 from krpc.attributes import _Attributes
+
+_regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
+_regex_single_uppercase = re.compile(r'([a-z0-9])([A-Z])')
+_regex_underscores = re.compile(r'(.)_')
+
+def _to_snake_case(camel_case):
+    """ Convert camel case to snake case, e.g. GetServices -> get_services """
+    result = re.sub(_regex_underscores, r'\1__', camel_case)
+    result = re.sub(_regex_single_uppercase, r'\1_\2', result)
+    return re.sub(_regex_multi_uppercase, r'\1_\2', result).lower()
 
 
 class BaseService(object):
@@ -14,7 +25,7 @@ class BaseService(object):
 
 def _create_service(client, service):
     """ Create a new class type for a service and instantiate it """
-    cls = type(str('_Service_' + service.name), (_Service,), {})
+    cls = type(str('_Service' + service.name), (_Service,), {})
     return cls(cls, client, service)
 
 
@@ -32,12 +43,12 @@ class _Service(BaseService):
         self._types = client._types
 
         # Add class types to service
-        for procedure in service.procedures:
-            try:
-                name = _Attributes.get_class_name(procedure.attributes)
-                self._add_class(name)
-            except ValueError:
-                pass
+        for cls in service.classes:
+            self._add_class(cls)
+
+        # Add enumeration types to service
+        for enum in service.enumerations:
+            self._add_enumeration(enum)
 
         # Create plain procedures
         for procedure in service.procedures:
@@ -81,10 +92,16 @@ class _Service(BaseService):
         for (class_name, property_name), procedures in properties.items():
             self._add_class_property(class_name, property_name, procedures[0], procedures[1])
 
-    def _add_class(self, name):
-        """ Add a class type with the given name to this service, and the type store """
+    def _add_class(self, cls):
+        """ Add a class type to this service, and the type store """
+        name = cls.name
         class_type = self._types.as_type('Class(' + self._name + '.' + name + ')')
         setattr(self, name, class_type.python_type)
+
+    def _add_enumeration(self, enum):
+        """ Add an enumeration to this service """
+        name = enum.name
+        setattr(self, name, type(str(name), (object,), dict((x.name, x.value) for x in enum.values)))
 
     def _add_procedure(self, procedure):
         """ Add a plain procedure to this service """
@@ -93,7 +110,7 @@ class _Service(BaseService):
         return_type = None
         if procedure.HasField('return_type'):
             return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
-        setattr(self, procedure.name,
+        setattr(self, _to_snake_case(procedure.name),
                 lambda *args, **kwargs: self._invoke(
                     procedure.name, args=args, kwargs=kwargs,
                     param_names=param_names, param_types=param_types, return_type=return_type))
@@ -103,11 +120,11 @@ class _Service(BaseService):
         fget = fset = None
         if getter:
             self._add_procedure(getter)
-            fget = lambda s: getattr(self, getter.name)()
+            fget = lambda s: getattr(self, _to_snake_case(getter.name))()
         if setter:
             self._add_procedure(setter)
-            fset = lambda s, value: getattr(self, setter.name)(value)
-        setattr(self._cls, name, property(fget, fset))
+            fset = lambda s, value: getattr(self, _to_snake_case(setter.name))(value)
+        setattr(self._cls, _to_snake_case(name), property(fget, fset))
 
     def _add_class_method(self, class_name, method_name, procedure):
         """ Add a class method to the service """
@@ -117,7 +134,7 @@ class _Service(BaseService):
         return_type = None
         if procedure.HasField('return_type'):
             return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
-        setattr(cls, method_name,
+        setattr(cls, _to_snake_case(method_name),
                 lambda s, *args, **kwargs: self._invoke(procedure.name, args=[s] + list(args), kwargs=kwargs,
                                                         param_names=param_names, param_types=param_types,
                                                         return_type=return_type))
@@ -125,10 +142,10 @@ class _Service(BaseService):
     def _add_class_property(self, class_name, property_name, getter=None, setter=None):
         fget = fset = None
         if getter:
-            self._add_procedure(getter)
-            fget = lambda s: getattr(self, getter.name)(s)
+            self._add_class_method(class_name, getter.name, getter)
+            fget = lambda self_: getattr(self_, _to_snake_case(getter.name))()
         if setter:
-            self._add_procedure(setter)
-            fset = lambda s, value: getattr(self, setter.name)(s, value)
+            self._add_class_method(class_name, setter.name, setter)
+            fset = lambda self_, value: getattr(self_, _to_snake_case(setter.name))(value)
         class_type = getattr(self, class_name)
-        setattr(class_type, property_name, property(fget, fset))
+        setattr(class_type, _to_snake_case(property_name), property(fget, fset))

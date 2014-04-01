@@ -39,6 +39,8 @@ namespace KRPCTest.Service
                         }
                     }
                     Assert.AreEqual (2, found);
+                    Assert.AreEqual (0, service.ClassesCount);
+                    Assert.AreEqual (0, service.EnumerationsCount);
                 }
             }
             Assert.IsTrue (foundKRPCService);

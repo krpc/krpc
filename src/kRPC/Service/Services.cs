@@ -90,13 +90,19 @@ namespace KRPC.Service
                         } else if (ProtocolBuffers.IsAMessageType (type)) {
                             var builder = procedure.ParameterBuilders [i];
                             decodedArgumentValues [i] = builder.WeakMergeFrom (value).WeakBuild ();
+                        } else if (ProtocolBuffers.IsAnEnumType (type) || TypeUtils.IsAnEnumType (type)) {
+                            // TODO: Assumes it's underlying type is int
+                            var enumValue = ProtocolBuffers.ReadValue (value, typeof(int));
+                            if (!Enum.IsDefined (type, enumValue))
+                                throw new RPCException ("Failed to convert value " + enumValue + " to enumeration type " + type);
+                            decodedArgumentValues [i] = Enum.ToObject (type, enumValue);
                         } else {
                             decodedArgumentValues [i] = ProtocolBuffers.ReadValue (value, type);
                         }
                     } catch (Exception e) {
                         throw new RPCException (
                             "Failed to decode argument for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". " +
-                            "Expected an argument of type " + ProtocolBuffers.GetTypeName (type) + ". " +
+                            "Expected an argument of type " + TypeUtils.GetTypeName (type) + ". " +
                             e.GetType ().Name + ": " + e.Message);
                     }
                 }
@@ -128,7 +134,10 @@ namespace KRPC.Service
                 return ProtocolBuffers.WriteValue (ObjectStore.Instance.AddInstance (returnValue), typeof(ulong));
             else if (ProtocolBuffers.IsAMessageType (procedure.ReturnType))
                 return ProtocolBuffers.WriteMessage (returnValue as IMessage);
-            else
+            else if (ProtocolBuffers.IsAnEnumType (procedure.ReturnType) || TypeUtils.IsAnEnumType (procedure.ReturnType)) {
+                // TODO: Assumes it's underlying type is int
+                return ProtocolBuffers.WriteValue ((int) returnValue, typeof(int));
+            } else
                 return ProtocolBuffers.WriteValue (returnValue, procedure.ReturnType);
         }
     }

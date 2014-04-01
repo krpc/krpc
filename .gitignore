@@ -121,6 +121,8 @@ src/kRPC/Schema/*.py
 src/kRPCServices/Schema/*.cs
 src/kRPCServices/Schema/*.py
 python/krpc/schema/
+src/kRPCTest/Schema/*.cs
+src/kRPCTest/Schema/*.py
 src/kRPC/Schema/KRPC.cs.orig
 
 # Build output
