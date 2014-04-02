@@ -12,7 +12,7 @@ setup(
     description='Remote Procedure Call server for Kerbal Space Program',
     long_description=open('README.txt').read(),
     install_requires=[
-        'protobuf >= 2.5.0'
+        'protobuf >= 2.4.1'
     ],
     test_suite='krpc.test',
     classifiers=[
