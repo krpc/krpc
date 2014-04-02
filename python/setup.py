@@ -1,15 +1,15 @@
 from setuptools import setup
 
 setup(
-    name='kRPC',
-    version='0.1.0-pre-2014-04-02',
+    name='krpc',
+    version='0.1.0',
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     packages=['krpc','krpc.schema','krpc.test'],
     scripts=['bin/example.py'],
     url='https://github.com/djungelorm/krpc',
     license='LICENSE.txt',
-    description='Remote Procedure Call server for Kerbal Space Program',
+    description='Client library for kRPC, a Remote Procedure Call server for Kerbal Space Program',
     long_description=open('README.txt').read(),
     install_requires=[
         'protobuf >= 2.4.1'
