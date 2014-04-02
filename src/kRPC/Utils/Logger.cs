@@ -7,12 +7,7 @@ namespace KRPC.Utils
     {
         internal static void WriteLine (string line)
         {
-            line = "[kRPC] " + line;
-            try {
-                Debug.Log (line);
-            } catch {
-                Console.WriteLine (line);
-            }
+            Console.WriteLine ("[kRPC] " + line);
         }
     }
 }
