@@ -1,12 +1,11 @@
 #!/usr/bin/env python2
 
 import unittest
-import krpc
+from krpc.service import _to_snake_case as t
 
 class TestSnakeCase(unittest.TestCase):
 
     def test_examples(self):
-        t = krpc._to_snake_case
         # Simple cases
         self.assertEquals('server', t('Server'))
         self.assertEquals('my_server', t('MyServer'))
@@ -28,7 +27,6 @@ class TestSnakeCase(unittest.TestCase):
 
 
     def test_non_camel_case_examples(self):
-        t = krpc._to_snake_case
         self.assertEquals('foobar', t('foobar'))
         self.assertEquals('foo__bar', t('foo_bar'))
         self.assertEquals('_foobar', t('_foobar'))
