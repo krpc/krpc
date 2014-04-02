@@ -5,7 +5,7 @@ import binascii
 import subprocess
 import time
 import krpc
-import krpc.schema.Test
+import krpc.test.Test as TestSchema
 
 class TestClient(unittest.TestCase):
 
@@ -184,10 +184,10 @@ class TestClient(unittest.TestCase):
 
 
     def test_enums(self):
-        self.assertEqual(krpc.schema.Test.a, self.ksp.test_service.enum_return())
-        self.assertEqual(krpc.schema.Test.a, self.ksp.test_service.enum_echo(krpc.schema.Test.a))
-        self.assertEqual(krpc.schema.Test.b, self.ksp.test_service.enum_echo(krpc.schema.Test.b))
-        self.assertEqual(krpc.schema.Test.c, self.ksp.test_service.enum_echo(krpc.schema.Test.c))
+        self.assertEqual(TestSchema.a, self.ksp.test_service.enum_return())
+        self.assertEqual(TestSchema.a, self.ksp.test_service.enum_echo(TestSchema.a))
+        self.assertEqual(TestSchema.b, self.ksp.test_service.enum_echo(TestSchema.b))
+        self.assertEqual(TestSchema.c, self.ksp.test_service.enum_echo(TestSchema.c))
 
         enum = self.ksp.test_service.CSharpEnum
         self.assertEqual(enum.y, self.ksp.test_service.c_sharp_enum_return())

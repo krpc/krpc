@@ -129,6 +129,7 @@ protobuf-csharp: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.cs) $(PROTOS_TEST:.pr
 
 protobuf-python: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py)
 	echo "" > python/krpc/schema/__init__.py
+	test -f python/krpc/test/Test.py || mv python/krpc/schema/Test.py python/krpc/test/Test.py
 
 protobuf-clean: protobuf-csharp-clean protobuf-python-clean
 	-rm -rf $(PROTOS:.proto=.protobin) $(PROTOS_TEST:.proto=.protobin)
@@ -137,7 +138,7 @@ protobuf-csharp-clean:
 	-rm -rf $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
 protobuf-python-clean:
-	-rm -rf $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py) python/krpc/schema
+	-rm -rf $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py) python/krpc/schema python/krpc/test/Test.py
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
