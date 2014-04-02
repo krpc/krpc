@@ -21,7 +21,6 @@ dist: protobuf bin
 	python setup.py sdist --formats=gztar,zip
 
 release: protobuf bin
-	python setup.py register
 	python setup.py sdist --formats=gztar,zip upload
 
 clean:
