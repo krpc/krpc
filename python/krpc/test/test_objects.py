@@ -2,12 +2,23 @@
 
 import unittest
 import binascii
+import subprocess
+import time
 import krpc
 
 class TestObjects(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe'], stdout=subprocess.PIPE)
+        time.sleep(0.25)
+
     def setUp(self):
         self.ksp = krpc.connect(name='TestObjects')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.kill()
 
     def test_equality(self):
         obj1 = self.ksp.test_service.create_test_object('jeb')

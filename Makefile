@@ -55,21 +55,11 @@ dist: build
 	$(UNZIP) lib/toolbar/Toolbar-1.7.0.zip -d $(DIST_DIR)
 	mv $(DIST_DIR)/Toolbar-1.7.0/GameData/* $(DIST_DIR)/GameData/
 	rm -r $(DIST_DIR)/Toolbar-1.7.0
-	# Python client library
-	mkdir -p $(DIST_DIR)/python
-	cp -r python/*.py python/*.craft $(DIST_DIR)/python/
-	mkdir -p $(DIST_DIR)/python/schema/
-	cp -r $(PROTOS:.proto=.py) $(DIST_DIR)/python/schema/
-	# Schema
-	mkdir -p $(DIST_DIR)/schema
-	cp -r $(PROTOS) $(DIST_DIR)/schema/
 
 pre-release: dist test
 	# Licenses
 	cp LICENSE.txt $(DIST_DIR)/
 	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-csharp-port-license.txt
-	cp python/protobuf-license.txt $(DIST_DIR)/protobuf-license.txt
-	cp python/protobuf-license.txt $(DIST_DIR)/python/protobuf-license.txt
 	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# README
@@ -138,7 +128,8 @@ protobuf: protobuf-csharp protobuf-python
 protobuf-csharp: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
 protobuf-python: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py)
-	echo "" > python/schema/__init__.py
+	echo "" > python/krpc/schema/__init__.py
+	test -f python/krpc/test/Test.py || mv python/krpc/schema/Test.py python/krpc/test/Test.py
 
 protobuf-clean: protobuf-csharp-clean protobuf-python-clean
 	-rm -rf $(PROTOS:.proto=.protobin) $(PROTOS_TEST:.proto=.protobin)
@@ -147,7 +138,7 @@ protobuf-csharp-clean:
 	-rm -rf $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
 protobuf-python-clean:
-	-rm -rf $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py) python/schema
+	-rm -rf $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py) python/krpc/schema python/krpc/test/Test.py
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
@@ -155,8 +146,8 @@ protobuf-python-clean:
 %.py: %.proto
 	$(PROTOC) $< --python_out=.
 	mv $*_pb2.py $@
-	mkdir -p python/schema
-	cp $@ python/schema/$(notdir $@)
+	mkdir -p python/krpc/schema
+	cp $@ python/krpc/schema/$(notdir $@)
 
 %.cs: %.protobin
 	$(PROTOGEN) \

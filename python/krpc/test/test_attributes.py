@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 import unittest
-from krpc import _Attributes as Attributes
+from krpc.attributes import _Attributes as Attributes
 
 class TestTypes(unittest.TestCase):
 

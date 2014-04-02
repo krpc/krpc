@@ -2,13 +2,24 @@
 
 import unittest
 import binascii
+import subprocess
+import time
 import krpc
-import schema.Test
+import krpc.test.Test as TestSchema
 
 class TestClient(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe'], stdout=subprocess.PIPE)
+        time.sleep(0.25)
+
     def setUp(self):
         self.ksp = krpc.connect(name='TestClient')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.kill()
 
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.ksp.test_service.float_to_string(float(3.14159)))
@@ -74,7 +85,7 @@ class TestClient(unittest.TestCase):
     def test_setattr_for_properties(self):
         """ Check that properties are added to the dynamically generated service class,
             not the base class krpc.Service """
-        self.assertRaises (AttributeError, getattr, krpc._Service, 'object_property')
+        self.assertRaises (AttributeError, getattr, krpc.service._Service, 'object_property')
         # Check following does not throw an exception
         getattr(self.ksp.test_service, 'object_property')
 
@@ -173,10 +184,10 @@ class TestClient(unittest.TestCase):
 
 
     def test_enums(self):
-        self.assertEqual(schema.Test.a, self.ksp.test_service.enum_return())
-        self.assertEqual(schema.Test.a, self.ksp.test_service.enum_echo(schema.Test.a))
-        self.assertEqual(schema.Test.b, self.ksp.test_service.enum_echo(schema.Test.b))
-        self.assertEqual(schema.Test.c, self.ksp.test_service.enum_echo(schema.Test.c))
+        self.assertEqual(TestSchema.a, self.ksp.test_service.enum_return())
+        self.assertEqual(TestSchema.a, self.ksp.test_service.enum_echo(TestSchema.a))
+        self.assertEqual(TestSchema.b, self.ksp.test_service.enum_echo(TestSchema.b))
+        self.assertEqual(TestSchema.c, self.ksp.test_service.enum_echo(TestSchema.c))
 
         enum = self.ksp.test_service.CSharpEnum
         self.assertEqual(enum.y, self.ksp.test_service.c_sharp_enum_return())
@@ -185,7 +196,7 @@ class TestClient(unittest.TestCase):
         self.assertEqual(enum.z, self.ksp.test_service.c_sharp_enum_echo(enum.z))
 
     def test_invalid_enum(self):
-        self.assertRaises(krpc.RPCError, self.ksp.test_service.c_sharp_enum_echo, 9999)
+        self.assertRaises(krpc.client.RPCError, self.ksp.test_service.c_sharp_enum_echo, 9999)
 
     def test_client_members(self):
         self.assertSetEqual(
@@ -258,6 +269,7 @@ class TestClient(unittest.TestCase):
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service.TestClass))))
 
     def test_test_service_enum_members(self):
+        #TODO: should this be converted to snake case?
         self.assertSetEqual(
             set(['x','y','z']),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service.CSharpEnum))))

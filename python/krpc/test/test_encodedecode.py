@@ -2,10 +2,10 @@
 
 import unittest
 import binascii
-from krpc import _Encoder as Encoder
-from krpc import _Decoder as Decoder
-from krpc import _Types as Types
-import schema.KRPC
+from krpc.encoder import _Encoder as Encoder
+from krpc.decoder import _Decoder as Decoder
+from krpc.types import _Types as Types
+import krpc.schema.KRPC
 
 class TestEncoder(unittest.TestCase):
 

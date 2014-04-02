@@ -1,0 +1,3 @@
+include *.txt
+include bin/*
+include bin/TestServer/*

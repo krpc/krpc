@@ -1,14 +1,29 @@
-.PHONY: all protobuf test clean
+.PHONY: all protobuf bin test dist release clean
 
-all: protobuf
+all: dist
 
 protobuf:
 	make -C .. protobuf-python
 
-test:
-	(cd test; ./run.sh)
+bin:
+	make -C .. TestServer
+	mkdir -p bin/TestServer
+	cp ../src/TestServer/bin/Release/TestServer.exe \
+           ../src/TestServer/bin/Release/kRPC.dll \
+           ../src/TestServer/bin/Release/Google.ProtocolBuffers.Serialization.dll \
+           ../src/TestServer/bin/Release/Google.ProtocolBuffers.dll \
+           ./bin/TestServer/
+
+test: protobuf bin
+	python setup.py test
+
+dist: protobuf bin
+	python setup.py sdist --formats=gztar,zip
+
+release: protobuf bin
+	python setup.py sdist --formats=gztar,zip upload
 
 clean:
 	make -C .. protobuf-python-clean
 	find . -name "*.pyc" -exec rm -rf {} \;
-	-rm -f test/server.log
+	-rm -rf dist MANIFEST kRPC.egg-info bin/TestServer

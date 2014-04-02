@@ -2,10 +2,10 @@
 
 import unittest
 import binascii
-from krpc import _Encoder as Encoder
-from krpc import _Types as Types
-from krpc import _BaseClass as BaseClass
-import schema.KRPC
+from krpc.encoder import _Encoder as Encoder
+from krpc.types import _Types as Types
+from krpc.types import _BaseClass as BaseClass
+import krpc.schema.KRPC
 
 class TestEncoder(unittest.TestCase):
 
@@ -34,7 +34,7 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual ('61'*32, binascii.hexlify(message[8:]))
 
     def test_encode_message(self):
-        request = schema.KRPC.Request()
+        request = krpc.schema.KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
         data = Encoder.encode(request, Types().as_type('KRPC.Request'))
@@ -46,7 +46,7 @@ class TestEncoder(unittest.TestCase):
         self.assertEquals('ac02', binascii.hexlify(data))
 
     def test_encode_message_delimited(self):
-        request = schema.KRPC.Request()
+        request = krpc.schema.KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
         data = Encoder.encode_delimited(request, Types().as_type('KRPC.Request'))
