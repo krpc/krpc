@@ -112,7 +112,7 @@ namespace KRPC.Server.Net
         public void Stop ()
         {
             Logger.WriteLine ("TCPServer: stop requested");
-            listenerThread.Abort ();
+            tcpListener.Stop ();
             if (!listenerThread.Join (3000))
                 throw new ServerException ("Failed to stop TCP listener thread (timed out after 3 seconds)");
 
@@ -212,19 +212,7 @@ namespace KRPC.Server.Net
                 int nextClientUuid = 0;
                 while (true) {
                     // Block until a client connects to the server
-                    // Note: Uses async calls so that calls to Thread.Abort() will succeed
-                    TcpClient client = null;
-                    var clientConnected = new ManualResetEvent (false);
-                    clientConnected.Reset ();
-                    tcpListener.BeginAcceptTcpClient (delegate(IAsyncResult asyncResult) {
-                        try {
-                            client = tcpListener.EndAcceptTcpClient (asyncResult);
-                        } catch (ObjectDisposedException) {
-                        }
-                        clientConnected.Set ();
-                    }, null);
-                    clientConnected.WaitOne ();
-
+                    var client = tcpListener.AcceptTcpClient ();
                     Logger.WriteLine ("TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
                     // Add to pending clients
                     lock (pendingClientsLock) {
@@ -232,19 +220,15 @@ namespace KRPC.Server.Net
                     }
                     nextClientUuid++;
                 }
-            } catch (ThreadAbortException) {
-                // Stop() was called
-                Logger.WriteLine ("TCPServer: stopping...");
             } catch (Exception e) {
                 Logger.WriteLine ("TCPServer: Caught exception");
                 Logger.WriteLine (e.Message);
                 Logger.WriteLine (e.StackTrace);
+                tcpListener.Stop ();
             } finally {
                 //Stop the tcp listener
                 if (!running)
                     Logger.WriteLine ("TCPServer: failed to start");
-                else if (tcpListener != null)
-                    tcpListener.Stop ();
             }
         }
 
