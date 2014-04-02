@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace KRPC.Utils
 {
@@ -6,7 +7,12 @@ namespace KRPC.Utils
     {
         internal static void WriteLine (string line)
         {
-            Console.WriteLine ("[kRPC] " + line);
+            line = "[kRPC] " + line;
+            try {
+                Debug.Log (line);
+            } catch {
+                Console.WriteLine (line);
+            }
         }
     }
 }
