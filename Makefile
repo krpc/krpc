@@ -130,6 +130,7 @@ $(CSHARP_LIBRARIES):
 
 protobuf: protobuf-csharp protobuf-python
 	# Fix for error in output of C# protobuf compiler
+	-dos2unix src/kRPC/Schema/KRPC.cs
 	-patch -p1 --forward --reject-file=- < krpc-proto.patch
 	-rm -f src/kRPC/Schema/KRPC.cs.orig
 
