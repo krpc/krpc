@@ -2,6 +2,10 @@ import re
 import krpc.schema
 from krpc.attributes import _Attributes
 
+try:
+    import importlib.import_module as import_module
+except ImportError:
+    import_module = lambda package: __import__(package, globals(), locals(), [], -1)
 
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
 PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
@@ -34,10 +38,15 @@ class _Types(object):
         elif type_string.startswith('Class('):
             typ = _ClassType(type_string)
         else:
+            typ = None
             package, _, message = type_string.rpartition('.')
-            if hasattr(krpc.schema, package) and hasattr(getattr(krpc.schema, package), message):
-                typ = _MessageType(type_string)
-            else:
+            try:
+                module = import_module('krpc.schema.' + package)
+                if hasattr(getattr(module.schema, package), message):
+                    typ = _MessageType(type_string)
+            except:
+                pass
+            if typ is None:
                 typ = _EnumType(type_string)
         self._types[type_string] = typ
         return typ
