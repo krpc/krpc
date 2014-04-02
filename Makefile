@@ -39,7 +39,8 @@ all: build
 
 configure:
 	test -d $(KSP_DIR)/KSP_Data
-	test -L lib/KSP_Data || ln -s -t lib/ $(KSP_DIR)/KSP_Data
+	mkdir -p lib/KSP_Data
+	test -d lib/KSP_Data/Managed || cp -r $(KSP_DIR)/KSP_Data/Managed lib/KSP_Data/
 
 build: configure protobuf $(CSHARP_MAIN_PROJECTS)
 	make -C src/kRPC/icons
@@ -102,7 +103,7 @@ ksp: install TestingTools
 	tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
 
 clean: protobuf-clean
-	-rm -f lib/KSP_Data
+	-rm -rf lib/KSP_Data
 	make -C src/kRPC/icons clean
 	-rm -rf $(CSHARP_BINDIRS) test.log
 	find . -name "*.pyc" -exec rm -rf {} \;
@@ -130,6 +131,7 @@ $(CSHARP_LIBRARIES):
 
 protobuf: protobuf-csharp protobuf-python
 	# Fix for error in output of C# protobuf compiler
+	-dos2unix src/kRPC/Schema/KRPC.cs
 	-patch -p1 --forward --reject-file=- < krpc-proto.patch
 	-rm -f src/kRPC/Schema/KRPC.cs.orig
 
