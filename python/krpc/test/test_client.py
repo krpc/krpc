@@ -11,7 +11,7 @@ class TestClient(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe'], stdout=subprocess.PIPE)
+        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe'])
         time.sleep(0.25)
 
     def setUp(self):
