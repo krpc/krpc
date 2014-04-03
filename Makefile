@@ -52,9 +52,9 @@ dist: build
 	# Plugin files
 	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
 	# Toolbar
-	$(UNZIP) lib/toolbar/Toolbar-1.7.0.zip -d $(DIST_DIR)
-	mv $(DIST_DIR)/Toolbar-1.7.0/GameData/* $(DIST_DIR)/GameData/
-	rm -r $(DIST_DIR)/Toolbar-1.7.0
+	$(UNZIP) lib/toolbar/Toolbar-1.7.1.zip -d $(DIST_DIR)
+	mv $(DIST_DIR)/Toolbar-1.7.1/GameData/* $(DIST_DIR)/GameData/
+	rm -r $(DIST_DIR)/Toolbar-1.7.1
 
 pre-release: dist test
 	# Licenses
