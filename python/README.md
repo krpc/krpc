@@ -1,31 +1,32 @@
 kRPC Python Client
 ==================
 
-krpc.py provides a client interface for the kRPC server.
-
 ### Installation
 
-1. Install using:
+The easiest way to install the krpc python package is using pip:
 
-   `python setup.py install`
+   ```pip install krpc```
 
-   Or, alternatively, using pip:
-
-   `pip install krpc`
-
-2. The python client library requires the Protocol Buffers python package.
-   The easiest way to install it is using pip:
-
-   `pip install protobuf`
-
-   Or you can install it from source: https://code.google.com/p/protobuf/
+This will install the latest version of the package and all it's dependencies, from https://pypi.python.org/pypi/krpc
 
 ### Usage
 
-`import krpc` from your python scripts and away you go! See [example.py](example.py) for an example.
+`import krpc` from your python scripts and away you go! See [bin/example.py](bin/example.py) for an example.
 
-### Compiling from source
+### Installation from Source
 
-1. Compile the .proto files to .py files using:
+Alternatively, you can install it from source as follows:
 
- `$ make protobuf`
+1. Install the Protocol Buffers python package, for example using pip:
+
+   ```pip install protobuf```
+
+   Or, alternatively, you can install it from source: https://code.google.com/p/protobuf
+
+2. Compile the Protocol Buffers .proto files to .py files using:
+
+   ```make protobuf```
+
+2. Install the krpc python package:
+
+   `python setup.py install`
