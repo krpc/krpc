@@ -4,7 +4,9 @@
 
 #### Using the Makefile
 
-1. Install the required dependencies. Libraries required by the plugin are already included in `lib` and the C# Protocol Buffers compiler is already included in `tools`. You will however need to install the MonoDevelop command line tool `mdtool`, Mono runtime and development libraries, the Protocol Buffers compiler and Inkscape to convert icons to png.
+1. Install the required dependencies.
+
+ Required DLLs are included in the `lib` directory and the C# Protocol Buffers compiler is included in `tools`. You will need to install the MonoDevelop command line tool `mdtool`, Mono runtime and development libraries, the Protocol Buffers compiler and Inkscape (to convert icon files to PNG).
 
  On Linux, you should be able to use your package manager. For example using apt:
 
@@ -12,8 +14,8 @@
 
  You can also install the Protocol Buffers compiler from source: https://code.google.com/p/protobuf/
 
- On Ubuntu 13.10, You may also want to use a more recent version of MonoDevelop than those provided in the apt repositories.
- The latest can be installed from a ppa as follows:
+ On Ubuntu 13.10, you may want to use a more recent version of MonoDevelop than that provided in the apt repositories.
+ The latest version can be installed from a ppa as follows:
 
  ```
  add-apt-repository ppa:keks9n/monodevelop-latest
@@ -21,19 +23,27 @@
  apt-get install monodevelop-latest
  ```
 
-2. Compile the plugin binaries. The following command compiles the protocol buffer .proto files into C# classes and compiles kRPC.dll and kRPCServices.dll using the MonoDevelop command line tool:
+2. Compile the plugin binaries.
 
- `make build`
+ Running `make build` compiles the protocol buffer .proto files into C# classes, and compiles kRPC.dll and kRPCServices.dll using the MonoDevelop command line tool.
 
-3. Collect together all the plugin files, and copy them into `$KSP_DIR/GameData/kRPC`. This also installs the Toolbar plugin to `$KSP_DIR/GameData/000_Toolbar` (although this can be removed as kRPC will work without it).
+3. Collect together all the plugin files.
+
+ Running `make dist` will collect together all of the plugin files that need to go into your GameData directory, and places them in a directory called `dist`.
+
+4. Install the plugin files to KSP `$KSP_DIR/GameData/kRPC`.
+
+ You can either manually copy the files from the `dist` directory to your GameData directory, or simply run:
 
  `make install KSP_DIR=/home/djungelorm/KerbalSpaceProgram`
 
- Alternatively, you can have the plugin files copied into directory `dist` in the root of the source tree using `make dist`, then manually copy them over to your GameData directory.
-
 #### Using an IDE
 
-1. Install the Protocol Buffer compiler (as above).
+1. Install the Protocol Buffers compiler (as above).
+
+ For example, on Linux, using your package manager:
+
+ `apt-get install protobuf-compiler`
 
 2. Compile the protocol buffer .proto files into C# classes:
 
@@ -47,17 +57,8 @@ See [python/README.md](python/README.md) for instructions.
 
 ### Running the Tests
 
-This project contains unit tests for the server code (written using NUnit) and for the python client code (using the unittest module). The tests can be run using `make test` (after compiling everything using `make build`).
+The project contains unit tests for the server code (using NUnit) and for the python client code (using unittest). The tests can be run using `make test` (after compiling everything using `make build`).
 
 Running the C# unit tests using the Makefile requires `nunit-console` to be installed, for example using apt:
 
 `apt-get install nunit-console`
-
-The plugin can also be built, installed into KSP (along with the TestingTools.dll to auto-load the default save) and run using:
-
-`make ksp`
-
-### Dependencies
-
- * protobuf (https://code.google.com/p/protobuf/)
- * protobuf-csharp-port (http://code.google.com/p/protobuf-csharp-port/)
