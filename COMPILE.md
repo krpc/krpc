@@ -12,7 +12,7 @@
 
  `apt-get install mono-complete monodevelop protobuf-compiler inkscape`
 
- You can also install the Protocol Buffers compiler from source: https://code.google.com/p/protobuf/
+ Alternatively, you can install the Protocol Buffers compiler from source: https://code.google.com/p/protobuf/
 
  On Ubuntu 13.10, you may want to use a more recent version of MonoDevelop than that provided in the apt repositories.
  The latest version can be installed from a ppa as follows:
@@ -31,7 +31,7 @@
 
  Running `make dist` will collect together all of the plugin files that need to go into your GameData directory, and places them in a directory called `dist`.
 
-4. Install the plugin files to KSP `$KSP_DIR/GameData/kRPC`.
+4. Copy the plugin files to KSP's GameData directory.
 
  You can either manually copy the files from the `dist` directory to your GameData directory, or simply run:
 
@@ -59,6 +59,6 @@ See [python/README.md](python/README.md) for instructions.
 
 The project contains unit tests for the server code (using NUnit) and for the python client code (using unittest). The tests can be run using `make test` (after compiling everything using `make build`).
 
-Running the C# unit tests using the Makefile requires `nunit-console` to be installed, for example using apt:
+Running the NUnit tests requires `nunit-console` to be installed. For example, on Linux, using your package manager:
 
 `apt-get install nunit-console`
