@@ -30,10 +30,10 @@ namespace KRPC.UI
         // Editable fields
         string address;
         string port;
-        readonly Color errorColor = Color.yellow;
         // Style settings
+        readonly Color errorColor = Color.yellow;
         GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, buttonStyle,
-            separatorStyle, lightStyle, errorLabelStyle;
+            toggleStyle, separatorStyle, lightStyle, errorLabelStyle;
         const float windowWidth = 280f;
         const float addressWidth = 106f;
         const int addressMaxLength = 15;
@@ -46,6 +46,8 @@ namespace KRPC.UI
         const string serverOfflineText = "Server offline";
         const string addressLabelText = "Address:";
         const string portLabelText = "Port:";
+        const string autoStartServerText = "Auto-start server";
+        const string autoAcceptConnectionsText = "Auto-accept new connections";
         const string noClientsConnectedText = "No clients connected";
         const string unknownClientNameText = "<unknown>";
         const string invalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
@@ -71,6 +73,8 @@ namespace KRPC.UI
             textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
 
             buttonStyle = new GUIStyle (GUI.skin.button);
+
+            toggleStyle = new GUIStyle (GUI.skin.toggle);
 
             separatorStyle = GUILayoutExtensions.SeparatorStyle (new Color (0f, 0f, 0f, 0.25f));
             separatorStyle.fixedHeight = 2;
@@ -169,15 +173,31 @@ namespace KRPC.UI
                 GUILayout.BeginHorizontal ();
                 GUILayout.Label (addressLabelText, stretchyLabelStyle);
                 textFieldStyle.fixedWidth = addressWidth;
+                // Note: address and port are only saved to config when values are valid, and server is started
                 address = GUILayout.TextField (address, addressMaxLength, textFieldStyle);
                 GUILayout.Label (portLabelText, stretchyLabelStyle);
                 textFieldStyle.fixedWidth = portWidth;
                 port = GUILayout.TextField (port, portMaxLength, textFieldStyle);
                 GUILayout.EndHorizontal ();
 
-                foreach (var error in Errors) {
-                    GUILayout.Label (error, errorLabelStyle);
+                GUILayout.BeginHorizontal ();
+                bool autoStartServer = GUILayout.Toggle (Config.AutoStartServer, autoStartServerText, toggleStyle, new GUILayoutOption[] { });
+                if (autoStartServer != Config.AutoStartServer) {
+                    Config.AutoStartServer = autoStartServer;
+                    Config.Save ();
                 }
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                bool autoAcceptConnections = GUILayout.Toggle (Config.AutoAcceptConnections, autoAcceptConnectionsText, toggleStyle, new GUILayoutOption[] { });
+                if (autoAcceptConnections != Config.AutoAcceptConnections) {
+                    Config.AutoAcceptConnections = autoAcceptConnections;
+                    Config.Save ();
+                }
+                GUILayout.EndHorizontal ();
+
+                foreach (var error in Errors)
+                    GUILayout.Label (error, errorLabelStyle);
             }
             GUILayout.EndVertical ();
             GUI.DragWindow ();

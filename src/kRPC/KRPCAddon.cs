@@ -37,14 +37,7 @@ namespace KRPC
 
             // Main window events
             mainWindow.OnStartServerPressed += (s, e) => {
-                config.Load ();
-                server.Port = config.Port;
-                server.Address = config.Address;
-                try {
-                    server.Start ();
-                } catch (ServerException exn) {
-                    mainWindow.Errors.Add (exn.Message);
-                }
+                StartServer ();
             };
             mainWindow.OnStopServerPressed += (s, e) => {
                 server.Stop ();
@@ -87,6 +80,22 @@ namespace KRPC
             } else {
                 // If there is no toolbar button a hidden window can't be shown, so force it to be displayed
                 mainWindow.Visible = true;
+            }
+
+            // Auto-start the server, if required
+            if (config.AutoStartServer)
+                StartServer ();
+        }
+
+        private void StartServer ()
+        {
+            config.Load ();
+            server.Port = config.Port;
+            server.Address = config.Address;
+            try {
+                server.Start ();
+            } catch (ServerException exn) {
+                mainWindow.Errors.Add (exn.Message);
             }
         }
 
