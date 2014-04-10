@@ -1,4 +1,4 @@
-ICONS = toolbar-online.png toolbar-offline.png button-disconnect-client.png
+ICONS = toolbar-online.png toolbar-offline.png button-disconnect-client.png button-close-window.png
 
 INKSCAPE = inkscape
 

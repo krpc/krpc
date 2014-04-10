@@ -7,6 +7,7 @@ namespace KRPC.UI
     {
         int id = UnityEngine.Random.Range (1000, 2000000);
         bool hasInit;
+        GUIStyle closeButtonStyle;
 
         protected GUIStyle Style { get; set; }
 
@@ -14,7 +15,8 @@ namespace KRPC.UI
         public event EventHandler OnHide;
         public event EventHandler<MovedArgs> OnMoved;
 
-        bool visible;
+        bool visible = true;
+        bool closable = false;
 
         public bool Visible {
             get { return visible; }
@@ -25,6 +27,11 @@ namespace KRPC.UI
                     OnHide (this, EventArgs.Empty);
                 visible = value;
             }
+        }
+
+        public bool Closable {
+            get { return closable; }
+            set { closable = value; }
         }
 
         Rect position = new Rect ();
@@ -58,6 +65,11 @@ namespace KRPC.UI
             if (!hasInit) {
                 Style = new GUIStyle (GUI.skin.window);
                 Init ();
+                closeButtonStyle = new GUIStyle (GUI.skin.button);
+                closeButtonStyle.margin = new RectOffset (0, 0, 0, 0);
+                closeButtonStyle.padding = new RectOffset (0, 0, 0, 0);
+                closeButtonStyle.fixedWidth = 16;
+                closeButtonStyle.fixedHeight = 16;
                 hasInit = true;
             }
             if (Visible) {
@@ -67,6 +79,12 @@ namespace KRPC.UI
 
         void DrawWindow (int windowId)
         {
+            if (Closable) {
+                if (GUI.Button (new Rect (Position.width - 18, 2, closeButtonStyle.fixedWidth, closeButtonStyle.fixedHeight),
+                        new GUIContent (Icons.Instance.buttonCloseWindow, "Close window"), closeButtonStyle)) {
+                    Visible = false;
+                }
+            }
             Draw ();
         }
 

@@ -70,6 +70,7 @@ namespace KRPC
 
             // Toolbar API
             if (ToolbarManager.ToolbarAvailable) {
+                mainWindow.Closable = true;
                 toolbarButton = ToolbarManager.Instance.add ("kRPC", "ToggleMainWindow");
                 toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
                 toolbarButton.ToolTip = "kRPC Server";
@@ -79,6 +80,7 @@ namespace KRPC
                 server.OnStopped += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
             } else {
                 // If there is no toolbar button a hidden window can't be shown, so force it to be displayed
+                mainWindow.Closable = false;
                 mainWindow.Visible = true;
             }
 
