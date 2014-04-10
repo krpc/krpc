@@ -16,15 +16,15 @@ def main():
     ksp = krpc.connect(name='Example script')
     print 'Connected to server, version', ksp.krpc.get_status().version
 
-    vessel = ksp.SpaceCenter.ActiveVessel
-    orbit = vessel.Orbit
-    control = vessel.Control
-    flight = vessel.Flight
-    resources = vessel.Resources
+    vessel = ksp.space_center.active_vessel
+    orbit = vessel.orbit
+    control = vessel.control
+    flight = vessel.flight
+    resources = vessel.resources
 
     # Set the throttle to 100% and enable SAS
-    control.Throttle = 1
-    control.SAS = True
+    control.throttle = 1
+    control.sas = True
 
     # Countdown...
     print '3'; time.sleep(1)
@@ -33,7 +33,7 @@ def main():
 
     # Activate the first stage
     print 'Launch!'
-    ksp.control.activate_next_stage()
+    control.activate_next_stage()
 
     # Ascend to 10km and ditch SRBs when they're empty
     print 'Vertical ascent...'
@@ -41,7 +41,7 @@ def main():
     while True:
 
         # Check altitude, exit loop if higher than 10km
-        altitude = ksp.flight.altitude
+        altitude = flight.altitude
         print '  Altitude = %.1f km' % (altitude/1000)
         if altitude > 10000:
             break
@@ -49,51 +49,29 @@ def main():
         # Check if the solid boosters need to be ditched
         # (We assume this will happen before we reach 10km)
         if not srbs_separated:
-<<<<<<< HEAD:python/example.py
-            solidFuel = resources.GetResource('SolidFuel')
-            print '  Solid fuel = %.1f T' % solidFuel
-            if solidFuel < 0.1:
+            solid_fuel = resources.get_resource('SolidFuel')
+            print '  Solid fuel = %.1f T' % solid_fuel
+            if solid_fuel < 15.1:
                 print '  SRB separation!'
-                control.ActivateNextStage()
-=======
-            resources = ksp.vessel.get_resources()
-            print '  Solid fuel = %.1f T' % resources.solidFuel
-            if resources.solidFuel < 0.1:
-                print '  SRB separation!'
-                ksp.control.activate_next_stage()
->>>>>>> master:python/bin/example.py
+                control.activate_next_stage()
                 srbs_separated = True
 
         time.sleep(1)
 
     # Disable SAS, pitch the vessel to 50 degrees to the west, then hold position using SAS
     print 'Gravity turn...'
-<<<<<<< HEAD:python/example.py
-    control.SAS = False
-    control.Yaw = 0.1
-    while flight.Pitch > 50:
+    control.sas = False
+    control.yaw = 0.1
+    while flight.pitch > 50:
         time.sleep(0.25)
-    control.Yaw = 0
-    control.SAS = True
-=======
-    # Disable SAS, pitch the vessel to the west, then hold position using SAS
-    # TODO: get the heading from the craft to do this more accurately
-    ksp.control.sas = False
-    ksp.control.yaw = 0.4
-    time.sleep(2)
-    ksp.control.sas = True
-    ksp.control.yaw = 0
->>>>>>> master:python/bin/example.py
+    control.yaw = 0
+    control.sas = True
 
     # Raise apoapsis to above 80km
     while True:
 
         # Apoapsis is relative to the center of Kerbin, so subtract 600km
-<<<<<<< HEAD:python/example.py
-        apoapsis = orbit.Apoapsis - 600000
-=======
-        apoapsis = ksp.orbit.apoapsis - 600000
->>>>>>> master:python/bin/example.py
+        apoapsis = orbit.apoapsis - 600000
         print '  Apoapsis = %.1f km' % (apoapsis/1000)
         if apoapsis > 80000:
             break
@@ -102,13 +80,12 @@ def main():
 
     # Disable the control inputs and coast to apoapsis
     print 'Coasting to apoapsis...'
-<<<<<<< HEAD:python/example.py
-    control.SAS = False
-    control.Throttle = 0
+    control.sas = False
+    control.throttle = 0
     while True:
 
         # Check altitude, exit loop if higher than 79km
-        altitude = flight.Altitude
+        altitude = flight.altitude
         print '  Altitude = %.1f km' % (altitude/1000)
         if altitude > 79000:
             break
@@ -116,43 +93,39 @@ def main():
 
     # Circularize the orbit
     print 'Circularizing...'
-    control.SAS = False
-    control.Yaw = 0.1
-    while flight.Pitch > 0:
+    control.sas = False
+    control.yaw = 0.1
+    while abs(flight.pitch) > 3:
         time.sleep(0.25)
-    control.Yaw = 0
-    control.SAS = True
+    control.yaw = 0
+    control.sas = True
     # Raise periapsis until eccentricity starts the increase (happens just after reaching 0)
-    control.Throttle = 1
+    control.throttle = 1
 
-    eccentricity = orbit.Eccentricity
+    eccentricity = orbit.eccentricity
     time.sleep(1)
 
     while True:
 
-        apoapsis = orbit.Apoapsis - 600000
-        periapsis = orbit.Periapsis - 600000
-        prevEccentricity = eccentricity;
-        eccentricity = orbit.Eccentricity
+        apoapsis = orbit.apoapsis - 600000
+        periapsis = orbit.periapsis - 600000
+        prev_eccentricity = eccentricity;
+        eccentricity = orbit.eccentricity
 
-        print '  Orbit = %.1f km x %.1f km (e = %.3f)' % ((apoapsis/1000), (periapsis/1000), orbit.Eccentricity)
+        print '  Orbit = %.1f km x %.1f km (e = %.3f)' % ((apoapsis/1000), (periapsis/1000), orbit.eccentricity)
 
-        if prevEccentricity - eccentricity < 0:
+        if prev_eccentricity - eccentricity < 0:
             break
 
         if eccentricity > 0.1:
             time.sleep(1)
         else:
             # We are close, so reduce throttle and check eccentricity more frequently
-            control.Throttle = 0.1
+            control.throttle = 0.1
             time.sleep(0.2)
-=======
-    ksp.control.sas = False
-    ksp.control.throttle = 0
->>>>>>> master:python/bin/example.py
 
-    control.Throttle = 0
-    control.SAS = False
+    control.throttle = 0
+    control.sas = False
 
     print 'Program complete'
 
