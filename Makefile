@@ -21,6 +21,7 @@ CSHARP_MAIN_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)
 CSHARP_LIBRARIES      = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 
 PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCServices/Schema/*.proto)
+PROTOS_TEST = $(wildcard src/kRPCTest/Schema/*.proto)
 
 PROTOC = protoc
 PROTOGEN = tools/ProtoGen.exe
@@ -38,7 +39,8 @@ all: build
 
 configure:
 	test -d $(KSP_DIR)/KSP_Data
-	test -L lib/KSP_Data || ln -s -t lib/ $(KSP_DIR)/KSP_Data
+	mkdir -p lib/KSP_Data
+	test -d lib/KSP_Data/Managed || cp -r $(KSP_DIR)/KSP_Data/Managed lib/KSP_Data/
 
 build: configure protobuf $(CSHARP_MAIN_PROJECTS)
 	make -C src/kRPC/icons
@@ -50,22 +52,14 @@ dist: build
 	# Plugin files
 	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
 	# Toolbar
-	$(UNZIP) lib/toolbar/Toolbar-1.7.0.zip -d $(DIST_DIR)
-	mv $(DIST_DIR)/Toolbar-1.7.0/GameData/* $(DIST_DIR)/GameData/
-	rm -r $(DIST_DIR)/Toolbar-1.7.0
-	# Python client library
-	mkdir -p $(DIST_DIR)/python
-	cp -r python/*.py python/*.craft python/schema $(DIST_DIR)/python/
-	# Schema
-	mkdir -p $(DIST_DIR)/schema
-	cp -r $(PROTOS) $(DIST_DIR)/schema/
+	$(UNZIP) lib/toolbar/Toolbar-1.7.1.zip -d $(DIST_DIR)
+	mv $(DIST_DIR)/Toolbar-1.7.1/GameData/* $(DIST_DIR)/GameData/
+	rm -r $(DIST_DIR)/Toolbar-1.7.1
 
 pre-release: dist test
 	# Licenses
 	cp LICENSE.txt $(DIST_DIR)/
 	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-csharp-port-license.txt
-	cp python/protobuf-license.txt $(DIST_DIR)/protobuf-license.txt
-	cp python/protobuf-license.txt $(DIST_DIR)/python/protobuf-license.txt
 	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# README
@@ -99,11 +93,12 @@ ksp: install TestingTools
 	tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
 
 clean: protobuf-clean
-	-rm -f lib/KSP_Data
+	-rm -rf lib/KSP_Data
 	make -C src/kRPC/icons clean
 	-rm -rf $(CSHARP_BINDIRS) test.log
 	find . -name "*.pyc" -exec rm -rf {} \;
 	-rm -f KSP.log TestResult.xml
+	make -C python clean
 
 dist-clean: clean
 	-rm -rf dist
@@ -126,22 +121,24 @@ $(CSHARP_LIBRARIES):
 
 protobuf: protobuf-csharp protobuf-python
 	# Fix for error in output of C# protobuf compiler
+	-dos2unix src/kRPC/Schema/KRPC.cs
 	-patch -p1 --forward --reject-file=- < krpc-proto.patch
 	-rm -f src/kRPC/Schema/KRPC.cs.orig
 
-protobuf-csharp: $(PROTOS) $(PROTOS:.proto=.cs)
+protobuf-csharp: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
-protobuf-python: $(PROTOS) $(PROTOS:.proto=.py)
-	echo "" > python/schema/__init__.py
+protobuf-python: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py)
+	echo "" > python/krpc/schema/__init__.py
+	test -f python/krpc/test/Test.py || mv python/krpc/schema/Test.py python/krpc/test/Test.py
 
 protobuf-clean: protobuf-csharp-clean protobuf-python-clean
-	-rm -rf $(PROTOS:.proto=.protobin)
+	-rm -rf $(PROTOS:.proto=.protobin) $(PROTOS_TEST:.proto=.protobin)
 
 protobuf-csharp-clean:
-	-rm -rf $(PROTOS:.proto=.cs)
+	-rm -rf $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
 protobuf-python-clean:
-	-rm -rf $(PROTOS:.proto=.py) python/schema
+	-rm -rf $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py) python/krpc/schema python/krpc/test/Test.py
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
@@ -149,8 +146,8 @@ protobuf-python-clean:
 %.py: %.proto
 	$(PROTOC) $< --python_out=.
 	mv $*_pb2.py $@
-	mkdir -p python/schema
-	cp $@ python/schema/$(notdir $@)
+	mkdir -p python/krpc/schema
+	cp $@ python/krpc/schema/$(notdir $@)
 
 %.cs: %.protobin
 	$(PROTOGEN) \

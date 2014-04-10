@@ -30,5 +30,13 @@ namespace KRPCTest.Service
         void ProcedureSingleOptionalArgNoReturn (string x);
 
         void ProcedureThreeOptionalArgsNoReturn (float x, string y, int z);
+
+        void ProcedureEnumArg (KRPC.Schema.Test.TestEnum x);
+
+        KRPC.Schema.Test.TestEnum ProcedureEnumReturn ();
+
+        void ProcedureCSharpEnumArg (TestService.CSharpEnum x);
+
+        TestService.CSharpEnum ProcedureCSharpEnumReturn ();
     }
 }

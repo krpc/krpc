@@ -1,4 +1,6 @@
+using System;
 using System.Net;
+using System.Net.Sockets;
 using NUnit.Framework;
 
 namespace KRPCTest.Server.Net
@@ -7,15 +9,27 @@ namespace KRPCTest.Server.Net
     public class AssumptionsTest
     {
         /// <summary>
-        /// Test for checking assumptions about the IPAddress class
+        /// Test for checking assumptions about loopback IP addresses
         /// </summary>
         [Test]
-        public void TestCase ()
+        public void LoopbackIPAddress ()
         {
             var localAddress = IPAddress.Parse ("127.0.0.1");
             Assert.AreEqual (IPAddress.Loopback.ToString (), localAddress.ToString ());
             Assert.AreEqual (IPAddress.Loopback, localAddress);
             Assert.IsTrue (IPAddress.IsLoopback (localAddress));
+        }
+
+        /// <summary>
+        /// Check that TcpListener.Stop works as expected
+        /// </summary>
+        [Test]
+        public void StopTcpListener ()
+        {
+            var listener = new TcpListener (IPAddress.Loopback, 50001);
+            listener.Start ();
+            listener.Stop ();
+            Assert.Throws<InvalidOperationException> (() => listener.AcceptTcpClient ());
         }
     }
 }

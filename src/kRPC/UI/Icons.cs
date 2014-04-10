@@ -11,6 +11,7 @@ namespace KRPC.UI
         /// </summary>
         const string iconsPath = "kRPC/icons";
         public Texture2D buttonDisconnectClient;
+        public Texture2D buttonCloseWindow;
         static Icons instance;
 
         public static Icons Instance {
@@ -25,6 +26,7 @@ namespace KRPC.UI
         Icons ()
         {
             buttonDisconnectClient = LoadTexture ("button-disconnect-client.png");
+            buttonCloseWindow = LoadTexture ("button-close-window.png");
         }
 
         /// <summary>

@@ -14,7 +14,7 @@ def main():
     # (IP address 127.0.0.1 and port 50000)
     print 'Connecting to server...'
     ksp = krpc.connect(name='Example script')
-    print 'Connected to server, version', ksp.KRPC.GetStatus().version
+    print 'Connected to server, version', ksp.krpc.get_status().version
 
     vessel = ksp.SpaceCenter.ActiveVessel
     orbit = vessel.Orbit
@@ -33,7 +33,7 @@ def main():
 
     # Activate the first stage
     print 'Launch!'
-    control.ActivateNextStage()
+    ksp.control.activate_next_stage()
 
     # Ascend to 10km and ditch SRBs when they're empty
     print 'Vertical ascent...'
@@ -41,7 +41,7 @@ def main():
     while True:
 
         # Check altitude, exit loop if higher than 10km
-        altitude = flight.Altitude
+        altitude = ksp.flight.altitude
         print '  Altitude = %.1f km' % (altitude/1000)
         if altitude > 10000:
             break
@@ -49,29 +49,51 @@ def main():
         # Check if the solid boosters need to be ditched
         # (We assume this will happen before we reach 10km)
         if not srbs_separated:
+<<<<<<< HEAD:python/example.py
             solidFuel = resources.GetResource('SolidFuel')
             print '  Solid fuel = %.1f T' % solidFuel
             if solidFuel < 0.1:
                 print '  SRB separation!'
                 control.ActivateNextStage()
+=======
+            resources = ksp.vessel.get_resources()
+            print '  Solid fuel = %.1f T' % resources.solidFuel
+            if resources.solidFuel < 0.1:
+                print '  SRB separation!'
+                ksp.control.activate_next_stage()
+>>>>>>> master:python/bin/example.py
                 srbs_separated = True
 
         time.sleep(1)
 
     # Disable SAS, pitch the vessel to 50 degrees to the west, then hold position using SAS
     print 'Gravity turn...'
+<<<<<<< HEAD:python/example.py
     control.SAS = False
     control.Yaw = 0.1
     while flight.Pitch > 50:
         time.sleep(0.25)
     control.Yaw = 0
     control.SAS = True
+=======
+    # Disable SAS, pitch the vessel to the west, then hold position using SAS
+    # TODO: get the heading from the craft to do this more accurately
+    ksp.control.sas = False
+    ksp.control.yaw = 0.4
+    time.sleep(2)
+    ksp.control.sas = True
+    ksp.control.yaw = 0
+>>>>>>> master:python/bin/example.py
 
     # Raise apoapsis to above 80km
     while True:
 
         # Apoapsis is relative to the center of Kerbin, so subtract 600km
+<<<<<<< HEAD:python/example.py
         apoapsis = orbit.Apoapsis - 600000
+=======
+        apoapsis = ksp.orbit.apoapsis - 600000
+>>>>>>> master:python/bin/example.py
         print '  Apoapsis = %.1f km' % (apoapsis/1000)
         if apoapsis > 80000:
             break
@@ -80,6 +102,7 @@ def main():
 
     # Disable the control inputs and coast to apoapsis
     print 'Coasting to apoapsis...'
+<<<<<<< HEAD:python/example.py
     control.SAS = False
     control.Throttle = 0
     while True:
@@ -123,6 +146,10 @@ def main():
             # We are close, so reduce throttle and check eccentricity more frequently
             control.Throttle = 0.1
             time.sleep(0.2)
+=======
+    ksp.control.sas = False
+    ksp.control.throttle = 0
+>>>>>>> master:python/bin/example.py
 
     control.Throttle = 0
     control.SAS = False

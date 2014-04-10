@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -14,18 +15,21 @@ namespace KRPC.Utils
             where TAttribute : Attribute
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-                var types = new List<Type> ();
+                // Get all types that can be loaded from the assembly
+                Type[] types;
                 try {
-                    foreach (var type in assembly.GetTypes()) {
-                        if (type.IsDefined (typeof(TAttribute), inherit)) {
-                            types.Add (type);
-                        }
-                    }
-                } catch {
-                    // Assembly is not accessible
+                    types = assembly.GetTypes ();
+                } catch (ReflectionTypeLoadException) {
+                    // FIXME: should include loadable types from partially loadable assembly, but causes MonoDevelop crash:
+                    // Assertion at class.c:5594, condition `!mono_loader_get_last_error ()
+                    //types = e.Types.Where (x => x != null).ToArray ();
+                    types = new Type[] { };
                 }
+
+                // Yield loaded types that have the given attribute
                 foreach (var type in types) {
-                    yield return type;
+                    if (type.IsDefined (typeof(TAttribute), inherit))
+                        yield return type;
                 }
             }
         }

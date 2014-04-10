@@ -112,7 +112,7 @@ namespace KRPC.Server.Net
         public void Stop ()
         {
             Logger.WriteLine ("TCPServer: stop requested");
-            listenerThread.Abort ();
+            tcpListener.Stop ();
             if (!listenerThread.Join (3000))
                 throw new ServerException ("Failed to stop TCP listener thread (timed out after 3 seconds)");
 
@@ -131,7 +131,7 @@ namespace KRPC.Server.Net
 
             // Exited cleanly
             running = false;
-            Logger.WriteLine ("TCPServer: stopped");
+            Logger.WriteLine ("TCPServer: stopped successfully");
 
             if (OnStopped != null)
                 OnStopped (this, EventArgs.Empty);
@@ -207,32 +207,32 @@ namespace KRPC.Server.Net
         void ListenerThread ()
         {
             try {
-                running = true;
-                startedEvent.Set ();
-                int nextClientUuid = 0;
-                while (true) {
-                    // Block until a client connects to the server
-                    TcpClient client = tcpListener.AcceptTcpClient ();
-                    Logger.WriteLine ("TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
-                    // Add to pending clients
-                    lock (pendingClientsLock) {
-                        pendingClients.Add (new TCPClient (nextClientUuid, client));
+                try {
+                    running = true;
+                    startedEvent.Set ();
+                    int nextClientUuid = 0;
+                    while (true) {
+                        // Block until a client connects to the server
+                        var client = tcpListener.AcceptTcpClient ();
+                        Logger.WriteLine ("TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
+                        // Add to pending clients
+                        lock (pendingClientsLock) {
+                            pendingClients.Add (new TCPClient (nextClientUuid, client));
+                        }
+                        nextClientUuid++;
                     }
-                    nextClientUuid++;
+                } catch (SocketException e) {
+                    if (e.SocketErrorCode == SocketError.Interrupted)
+                        Logger.WriteLine ("TCPServer: listener stopped");
+                    else
+                        throw;
                 }
-            } catch (ThreadAbortException) {
-                // Stop() was called
-                Logger.WriteLine ("TCPServer: stopping...");
             } catch (Exception e) {
-                Logger.WriteLine ("TCPServer: Caught exception");
+                Logger.WriteLine ("TCPServer: Caught exception, listener stopped");
+                Logger.WriteLine (e.GetType ().Name);
                 Logger.WriteLine (e.Message);
                 Logger.WriteLine (e.StackTrace);
-            } finally {
-                //Stop the tcp listener
-                if (!running)
-                    Logger.WriteLine ("TCPServer: failed to start");
-                else if (tcpListener != null)
-                    tcpListener.Stop ();
+                tcpListener.Stop ();
             }
         }
 

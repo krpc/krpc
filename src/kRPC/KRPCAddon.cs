@@ -37,14 +37,7 @@ namespace KRPC
 
             // Main window events
             mainWindow.OnStartServerPressed += (s, e) => {
-                config.Load ();
-                server.Port = config.Port;
-                server.Address = config.Address;
-                try {
-                    server.Start ();
-                } catch (ServerException exn) {
-                    mainWindow.Errors.Add (exn.Message);
-                }
+                StartServer ();
             };
             mainWindow.OnStopServerPressed += (s, e) => {
                 server.Stop ();
@@ -77,6 +70,7 @@ namespace KRPC
 
             // Toolbar API
             if (ToolbarManager.ToolbarAvailable) {
+                mainWindow.Closable = true;
                 toolbarButton = ToolbarManager.Instance.add ("kRPC", "ToggleMainWindow");
                 toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
                 toolbarButton.ToolTip = "kRPC Server";
@@ -86,7 +80,24 @@ namespace KRPC
                 server.OnStopped += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
             } else {
                 // If there is no toolbar button a hidden window can't be shown, so force it to be displayed
+                mainWindow.Closable = false;
                 mainWindow.Visible = true;
+            }
+
+            // Auto-start the server, if required
+            if (config.AutoStartServer)
+                StartServer ();
+        }
+
+        private void StartServer ()
+        {
+            config.Load ();
+            server.Port = config.Port;
+            server.Address = config.Address;
+            try {
+                server.Start ();
+            } catch (ServerException exn) {
+                mainWindow.Errors.Add (exn.Message);
             }
         }
 
