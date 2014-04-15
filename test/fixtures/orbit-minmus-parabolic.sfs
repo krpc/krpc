@@ -1,8 +1,10 @@
 GAME
 {
-	version = 0.23.0
+	version = 0.23.5
 	Title = test (SANDBOX)
 	Description = No description available.
+	linkURL = 
+	linkCaption = 
 	Mode = 0
 	Status = 1
 	scene = 5
@@ -109,7 +111,7 @@ GAME
 	}
 	FLIGHTSTATE
 	{
-		version = 0.23.0
+		version = 0.23.5
 		UT = 376.439999999948
 		activeVessel = 0
 		VESSEL
@@ -117,34 +119,34 @@ GAME
 			pid = 465709228ce745d4ba0881ad5c77177b
 			name = Test
 			type = Ship
-			sit = ESCAPING
+			sit = SUB_ORBITAL
 			landed = False
 			landedAt = 
 			splashed = False
 			met = 365.479999999948
 			lct = 10.9599999999999
 			root = 0
-			lat = 11.6131276643085
-			lon = -134.37388183237
-			alt = 196005.376957243
+			lat = 11.6131368148555
+			lon = -134.372901286683
+			alt = 196005.16095608
 			hgt = -1
-			nrm = 0.8992335,-0.4274122,0.09326497
-			rot = -0.6405599,-0.3236622,-0.5381278,0.4419779
-			CoM = -0.0001532435,-2.595087,0.0001894236
+			nrm = -0.8618108,-0.503938,-0.05769715
+			rot = 0.6520587,0.3140185,0.5241355,-0.4488809
+			CoM = 2.980232E-07,-2.594996,4.563481E-08
 			stg = 1
 			prst = False
 			ref = 3564429473
-			cPch = 0.332
-			cHdg = -0.396
+			cPch = 0.5555316
+			cHdg = 0.127964
 			cMod = 0
 			ORBIT
 			{
-				SMA = -44069.8412913593
-				ECC = 2.97839708101655
-				INC = 168.280967855609
-				LPE = 165.50774557981
-				LAN = 181.171756205933
-				MNA = -4.65482114687744
+				SMA = 128003.242487983
+				ECC = 1
+				INC = 150.240240539425
+				LPE = 336.073775980441
+				LAN = 257.915811416762
+				MNA = 3.14159265358979
 				EPH = 376.439999999948
 				REF = 3
 			}
@@ -166,7 +168,7 @@ GAME
 				attN = bottom, 1
 				attN = None, -1
 				mass = 0.8
-				temp = 0
+				temp = -25.1867
 				expt = 0.5
 				state = 0
 				connected = True
@@ -383,6 +385,30 @@ GAME
 				}
 				MODULE
 				{
+					name = FlagDecal
+					isEnabled = True
+					flagDisplayed = True
+					EVENTS
+					{
+						ToggleFlag
+						{
+							active = True
+							guiActive = False
+							guiActiveEditor = True
+							guiIcon = ToggleFlag
+							guiName = ToggleFlag
+							category = ToggleFlag
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+					}
+					ACTIONS
+					{
+					}
+				}
+				MODULE
+				{
 					name = ModuleTripLogger
 					isEnabled = True
 					EVENTS
@@ -403,11 +429,10 @@ GAME
 					}
 					Orbited
 					{
-						at = Kerbin
-						at = Mun
 					}
 					SubOrbited
 					{
+						at = Minmus
 					}
 				}
 				RESOURCE
@@ -449,7 +474,7 @@ GAME
 				attN = top, 0
 				attN = bottom, 2
 				mass = 0.5
-				temp = 0
+				temp = -25.21354
 				expt = 0.5
 				state = 0
 				connected = True
@@ -501,7 +526,7 @@ GAME
 				attN = top, 1
 				attN = None, -1
 				mass = 1.5
-				temp = 0
+				temp = -25.17939
 				expt = 0.5
 				state = 0
 				connected = True
@@ -664,7 +689,7 @@ GAME
 				RESOURCE
 				{
 					name = ElectricCharge
-					amount = 0.113554105162621
+					amount = 0
 					maxAmount = 0.119999997317791
 					flowState = True
 					isTweakable = False
@@ -690,7 +715,7 @@ GAME
 				sym = 5
 				srfN = srfAttach, 1
 				mass = 0.025
-				temp = 0
+				temp = -25.17591
 				expt = 0.5
 				state = 0
 				connected = True
@@ -707,7 +732,7 @@ GAME
 				{
 					name = ModuleDeployableSolarPanel
 					isEnabled = True
-					currentRotation = (-0.7024764, -0.08081984, 0.08088266, 0.7024622)
+					currentRotation = (-0.7024761, -0.08082017, 0.08088311, 0.7024624)
 					stateString = EXTENDED
 					storedAnimationTime = 0
 					storedAnimationSpeed = 0
@@ -771,7 +796,7 @@ GAME
 				sym = 5
 				srfN = srfAttach, 1
 				mass = 0.025
-				temp = 0
+				temp = -25.17271
 				expt = 0.5
 				state = 0
 				connected = True
@@ -788,7 +813,7 @@ GAME
 				{
 					name = ModuleDeployableSolarPanel
 					isEnabled = True
-					currentRotation = (-0.6877059, 0.1647785, -0.1648273, 0.6875614)
+					currentRotation = (-0.6877061, 0.1647784, -0.1648269, 0.6875615)
 					stateString = EXTENDED
 					storedAnimationTime = 0
 					storedAnimationSpeed = 0
@@ -852,7 +877,7 @@ GAME
 				sym = 4
 				srfN = srfAttach, 1
 				mass = 0.025
-				temp = 0
+				temp = -25.16952
 				expt = 0.5
 				state = 0
 				connected = True
@@ -869,7 +894,7 @@ GAME
 				{
 					name = ModuleDeployableSolarPanel
 					isEnabled = True
-					currentRotation = (-0.7007303, -0.09468128, 0.09486432, 0.7007235)
+					currentRotation = (-0.7007303, -0.09468102, 0.09486369, 0.7007235)
 					stateString = EXTENDED
 					storedAnimationTime = 0
 					storedAnimationSpeed = 0
@@ -934,6 +959,27 @@ GAME
 				Custom08 = False, 0
 				Custom09 = False, 0
 				Custom10 = True, 10.4199999999999
+			}
+			DISCOVERY
+			{
+				state = -1
+				lastObservedTime = 0
+				lifetime = Infinity
+				refTime = Infinity
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+				pitch = 0
+				yaw = 0
+				roll = 0
+				trimPitch = 0
+				trimYaw = 0
+				trimRoll = 0
+				mainThrottle = 0
 			}
 		}
 	}

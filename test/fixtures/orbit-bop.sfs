@@ -1,8 +1,10 @@
 GAME
 {
-	version = 0.23.0
+	version = 0.23.5
 	Title = test (SANDBOX)
 	Description = No description available.
+	linkURL = 
+	linkCaption = 
 	Mode = 0
 	Status = 1
 	scene = 5
@@ -63,20 +65,63 @@ GAME
 	}
 	SCENARIO
 	{
+		name = ScenarioDiscoverableObjects
+		scene = 7, 8, 5
+		 = 343483972
+		sizeCurve
+		{
+			key = 0 0 1.5 1.5
+			key = 0.3 0.45 0.875 0.875
+			key = 0.7 0.55 0.875 0.875
+			key = 1 1 1.5 1.5
+		}
+	}
+	SCENARIO
+	{
 		name = ProgressTracking
-		scene = 5, 7, 8
+		scene = 7, 8, 5
 		Progress
 		{
 			FirstLaunch
 			{
-				completed = 10.9599999999999
+				completed = 11.6799999999998
+			}
+			Sun
+			{
+				reached = 1.98
+				Orbit
+				{
+					completed = 1.98
+					vessel
+					{
+						name = Ast. HSJ-227
+						flag = 
+					}
+				}
 			}
 			Kerbin
 			{
-				reached = 10.9599999999999
+				reached = 11.6799999999998
 				Orbit
 				{
-					completed = 10.9599999999999
+					completed = 11.6799999999998
+					vessel
+					{
+						name = Test
+						flag = Squad/Flags/default
+					}
+					crew
+					{
+						crews = 0
+					}
+				}
+			}
+			Bop
+			{
+				reached = 243.04000000005
+				Orbit
+				{
+					completed = 243.04000000005
 					vessel
 					{
 						name = Test
@@ -92,50 +137,50 @@ GAME
 	}
 	FLIGHTSTATE
 	{
-		version = 0.23.0
-		UT = 159.660000000008
+		version = 0.23.5
+		UT = 356.079999999966
 		activeVessel = 0
 		VESSEL
 		{
-			pid = 465709228ce745d4ba0881ad5c77177b
+			pid = 66f57f5d62cb4ffb9301169d8176b49a
 			name = Test
 			type = Ship
 			sit = ORBITING
 			landed = False
 			landedAt = 
 			splashed = False
-			met = 148.700000000008
-			lct = 10.9599999999999
+			met = 344.399999999966
+			lct = 11.6799999999998
 			root = 0
-			lat = 11.6835245782167
-			lon = -168.475918204929
-			alt = 170378.431845883
+			lat = 13.2356316183621
+			lon = -164.744119062589
+			alt = 301320.569010332
 			hgt = -1
-			nrm = 0.9286437,0.1605113,0.3344508
-			rot = -0.6360412,-0.3347935,-0.5322911,0.4472484
-			CoM = -0.0001063943,-2.594646,-0.0001369119
+			nrm = 0.6967266,0.6777681,0.2349527
+			rot = -0.3528506,0.6148739,0.6134672,0.3479721
+			CoM = 0,0,0
 			stg = 1
 			prst = False
-			ref = 3564429473
-			cPch = 0.164
-			cHdg = -4.112
+			ref = 2667401008
+			cPch = 0.2
+			cHdg = 0.3
 			cMod = 0
 			ORBIT
 			{
-				SMA = 208031.87237823
-				ECC = 0.17514041509426
-				INC = 27.4224603461332
-				LPE = 241.186299925129
-				LAN = 38.141690891514
-				MNA = 2.30395571797464
-				EPH = 159.660000000008
+				SMA = 320000
+				ECC = 0.18
+				INC = 27
+				LPE = 241
+				LAN = 38
+				MNA = 2.3
+				EPH = 0
 				REF = 11
 			}
 			PART
 			{
 				name = mk1pod
-				uid = 3564429473
-				mid = 1385213222
+				uid = 2667401008
+				mid = 1476683459
 				parent = 0
 				position = 0,0,0
 				rotation = 0,0,0,1
@@ -146,10 +191,10 @@ GAME
 				sidx = -1
 				attm = 0
 				srfN = None, -1
-				attN = bottom, 1
+				attN = None, -1
 				attN = None, -1
 				mass = 0.8
-				temp = -0.5076475
+				temp = 0
 				expt = 0.5
 				state = 0
 				connected = True
@@ -366,6 +411,30 @@ GAME
 				}
 				MODULE
 				{
+					name = FlagDecal
+					isEnabled = True
+					flagDisplayed = True
+					EVENTS
+					{
+						ToggleFlag
+						{
+							active = True
+							guiActive = False
+							guiActiveEditor = True
+							guiIcon = ToggleFlag
+							guiName = ToggleFlag
+							category = ToggleFlag
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+					}
+					ACTIONS
+					{
+					}
+				}
+				MODULE
+				{
 					name = ModuleTripLogger
 					isEnabled = True
 					EVENTS
@@ -386,6 +455,7 @@ GAME
 					Orbited
 					{
 						at = Kerbin
+						at = Bop
 					}
 					SubOrbited
 					{
@@ -412,509 +482,496 @@ GAME
 					flowMode = Both
 				}
 			}
-			PART
-			{
-				name = fuelTank.long
-				uid = 2144810237
-				mid = 1385213222
-				parent = 0
-				position = 0,-2.28003835678101,0
-				rotation = 0,0,0,1
-				mirror = 1,1,1
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sidx = -1
-				attm = 0
-				srfN = None, -1
-				attN = top, 0
-				attN = bottom, 2
-				mass = 0.5
-				temp = -0.5066149
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = fuelTank.long
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				RESOURCE
-				{
-					name = LiquidFuel
-					amount = 360
-					maxAmount = 360
-					flowState = True
-					isTweakable = True
-					hideFlow = False
-					flowMode = Both
-				}
-				RESOURCE
-				{
-					name = Oxidizer
-					amount = 440
-					maxAmount = 440
-					flowState = True
-					isTweakable = True
-					hideFlow = False
-					flowMode = Both
-				}
-			}
-			PART
-			{
-				name = liquidEngine2
-				uid = 961303347
-				mid = 1385213222
-				parent = 1
-				position = 0,-5.06936407089233,0
-				rotation = 0,0,0,1
-				mirror = 1,1,1
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sidx = -1
-				attm = 0
-				srfN = None, -1
-				attN = top, 1
-				attN = None, -1
-				mass = 1.5
-				temp = -0.5045199
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = liquidEngine2
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				MODULE
-				{
-					name = ModuleEngines
-					isEnabled = True
-					staged = False
-					flameout = False
-					EngineIgnited = False
-					engineShutdown = False
-					currentThrottle = 0
-					thrustPercentage = 100
-					manuallyOverridden = False
-					thrustPercentage_UIFlight
-					{
-						controlEnabled = True
-						minValue = 0
-						maxValue = 100
-						stepIncrement = 0.5
-					}
-					EVENTS
-					{
-						Activate
-						{
-							active = True
-							guiActive = True
-							guiIcon = Activate Engine
-							guiName = Activate Engine
-							category = Activate Engine
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						Shutdown
-						{
-							active = False
-							guiActive = True
-							guiIcon = Shutdown Engine
-							guiName = Shutdown Engine
-							category = Shutdown Engine
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						OnAction
-						{
-							actionGroup = None
-						}
-						ShutdownAction
-						{
-							actionGroup = None
-						}
-						ActivateAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-				MODULE
-				{
-					name = ModuleJettison
-					isEnabled = True
-					EVENTS
-					{
-						Jettison
-						{
-							active = False
-							guiActive = True
-							guiIcon = Jettison
-							guiName = Jettison
-							category = Jettison
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						JettisonAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-				MODULE
-				{
-					name = ModuleGimbal
-					isEnabled = True
-					gimbalLock = False
-					EVENTS
-					{
-						LockGimbal
-						{
-							active = True
-							guiActive = True
-							guiActiveEditor = True
-							guiIcon = Lock Gimbal
-							guiName = Lock Gimbal
-							category = Lock Gimbal
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						FreeGimbal
-						{
-							active = False
-							guiActive = True
-							guiActiveEditor = True
-							guiIcon = Free Gimbal
-							guiName = Free Gimbal
-							category = Free Gimbal
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						ToggleAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-				MODULE
-				{
-					name = ModuleAnimateHeat
-					isEnabled = True
-					EVENTS
-					{
-					}
-					ACTIONS
-					{
-					}
-				}
-				MODULE
-				{
-					name = ModuleAlternator
-					isEnabled = True
-					EVENTS
-					{
-					}
-					ACTIONS
-					{
-					}
-				}
-				RESOURCE
-				{
-					name = ElectricCharge
-					amount = 0
-					maxAmount = 0.119999997317791
-					flowState = True
-					isTweakable = False
-					hideFlow = True
-					flowMode = Both
-				}
-			}
-			PART
-			{
-				name = solarPanels1
-				uid = 4100340643
-				mid = 1385213222
-				parent = 1
-				position = 0,-1.0690803527832,-0.619213879108429
-				rotation = 0,0.7071068,0,-0.7071068
-				mirror = 1,1,1
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sidx = -1
-				attm = 1
-				sym = 4
-				sym = 5
-				srfN = srfAttach, 1
-				mass = 0.025
-				temp = -0.5037312
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = solarPanels1
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				MODULE
-				{
-					name = ModuleDeployableSolarPanel
-					isEnabled = True
-					currentRotation = (-0.4207039, 0.5683333, -0.5683502, 0.4206942)
-					stateString = EXTENDED
-					storedAnimationTime = 0
-					storedAnimationSpeed = 0
-					EVENTS
-					{
-						Extend
-						{
-							active = False
-							guiActive = True
-							guiIcon = Extend Panels
-							guiName = Extend Panels
-							category = Extend Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-						Retract
-						{
-							active = True
-							guiActive = True
-							guiIcon = Retract Panels
-							guiName = Retract Panels
-							category = Retract Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						ExtendPanelsAction
-						{
-							actionGroup = None
-						}
-						ExtendAction
-						{
-							actionGroup = None
-						}
-						RetractAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-			}
-			PART
-			{
-				name = solarPanels1
-				uid = 2765112708
-				mid = 1385213222
-				parent = 1
-				position = -0.5362548828125,-1.0690803527832,0.309607118368149
-				rotation = 0,-0.2588192,0,-0.9659259
-				mirror = 1,1,1
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sidx = -1
-				attm = 1
-				sym = 3
-				sym = 5
-				srfN = srfAttach, 1
-				mass = 0.025
-				temp = -0.5026218
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = solarPanels1
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				MODULE
-				{
-					name = ModuleDeployableSolarPanel
-					isEnabled = True
-					currentRotation = (-0.3804848, -0.5959931, 0.5960363, 0.3804792)
-					stateString = EXTENDED
-					storedAnimationTime = 0
-					storedAnimationSpeed = 0
-					EVENTS
-					{
-						Extend
-						{
-							active = False
-							guiActive = True
-							guiIcon = Extend Panels
-							guiName = Extend Panels
-							category = Extend Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-						Retract
-						{
-							active = True
-							guiActive = True
-							guiIcon = Retract Panels
-							guiName = Retract Panels
-							category = Retract Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						ExtendPanelsAction
-						{
-							actionGroup = None
-						}
-						ExtendAction
-						{
-							actionGroup = None
-						}
-						RetractAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-			}
-			PART
-			{
-				name = solarPanels1
-				uid = 102568904
-				mid = 1385213222
-				parent = 1
-				position = 0.536255180835724,-1.0690803527832,0.309606909751892
-				rotation = 0,-0.9659259,0,-0.2588189
-				mirror = 1,1,1
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sidx = -1
-				attm = 1
-				sym = 3
-				sym = 4
-				srfN = srfAttach, 1
-				mass = 0.025
-				temp = -0.5015148
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = solarPanels1
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				MODULE
-				{
-					name = ModuleDeployableSolarPanel
-					isEnabled = True
-					currentRotation = (-0.5928988, -0.3853048, 0.3853439, 0.5928923)
-					stateString = EXTENDED
-					storedAnimationTime = 0
-					storedAnimationSpeed = 0
-					EVENTS
-					{
-						Extend
-						{
-							active = False
-							guiActive = True
-							guiIcon = Extend Panels
-							guiName = Extend Panels
-							category = Extend Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-						Retract
-						{
-							active = True
-							guiActive = True
-							guiIcon = Retract Panels
-							guiName = Retract Panels
-							category = Retract Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						ExtendPanelsAction
-						{
-							actionGroup = None
-						}
-						ExtendAction
-						{
-							actionGroup = None
-						}
-						RetractAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-			}
 			ACTIONGROUPS
 			{
 				Stage = False, 0
 				Gear = True, 0
 				Light = False, 0
 				RCS = False, 0
-				SAS = False, 57.2000000000033
-				Brakes = False, 0
-				Abort = False, 0
-				Custom01 = True, 7.87999999999992
-				Custom02 = False, 0
-				Custom03 = False, 0
+				SAS = False, 0
+				Brakes = False, 104.639999999996
+				Abort = False, 344.979999999976
+				Custom01 = True, 9.85999999999988
+				Custom02 = False, 333.219999999986
+				Custom03 = True, 348.759999999972
 				Custom04 = False, 0
-				Custom05 = False, 0
+				Custom05 = True, 111.799999999995
 				Custom06 = False, 0
-				Custom07 = False, 0
-				Custom08 = False, 0
+				Custom07 = True, 333.279999999986
+				Custom08 = True, 336.779999999983
 				Custom09 = False, 0
-				Custom10 = True, 10.4199999999999
+				Custom10 = True, 351.47999999997
+			}
+			DISCOVERY
+			{
+				state = -1
+				lastObservedTime = 0
+				lifetime = Infinity
+				refTime = Infinity
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+				pitch = 0
+				yaw = 0
+				roll = 0
+				trimPitch = 0
+				trimYaw = 0
+				trimRoll = 0
+				mainThrottle = 0
+			}
+		}
+		VESSEL
+		{
+			pid = f1dbcf4de81e4e6d88ab5e4319e3cbdf
+			name = Ast. FBH-113
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 31.4999999999994
+			lct = 31.4999999999994
+			root = 0
+			lat = 0.959196671766373
+			lon = 187.157837330317
+			alt = 15936346516.2204
+			hgt = -1
+			nrm = 0,1,0
+			rot = -0.6869258,0.5215643,0.2033898,0.4633964
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 15970774080.9812
+				ECC = 0.147016359481393
+				INC = 0.959217259439816
+				LPE = 193.531750151185
+				LAN = 97.5596157182453
+				MNA = 6.23396992072819
+				EPH = 2744246.63671875
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1497897740
+				mid = 1497897740
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 31.4999999999994
+				lifetime = 654025.561523438
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = 28cd7b10a8ca406d998d4c5a69528ec7
+			name = Ast. HKA-549
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 46.5000000000017
+			lct = 46.5000000000017
+			root = 0
+			lat = 2.03587513557609
+			lon = 181.708533327194
+			alt = 13996245026.8101
+			hgt = -1
+			nrm = 0,1,0
+			rot = -0.9359797,0.04267932,-0.349092,0.01597464
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 14148435569.7494
+				ECC = 0.0398409423053457
+				INC = 2.03614052021764
+				LPE = 192.498287295742
+				LAN = 92.6727886117101
+				MNA = 6.07945663165146
+				EPH = 2367755.99707031
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1380687175
+				mid = 1380687175
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 46.5000000000017
+				lifetime = 1200553.50036621
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = 6b29ed0bf07c4d31b1524bf412d56503
+			name = Ast. AWJ-477
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 89.1999999999994
+			lct = 89.1999999999994
+			root = 0
+			lat = -0.468430764824998
+			lon = 194.958645696404
+			alt = 16330568055.798
+			hgt = -1
+			nrm = 0,1,0
+			rot = 0.7410667,0.3237302,-0.4358448,0.395042
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 15407787125.2367
+				ECC = 0.12599697402072
+				INC = 0.470047762396206
+				LPE = 38.3670771822187
+				LAN = 289.786948340268
+				MNA = 6.05325072559701
+				EPH = 3351269.74199219
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1764405907
+				mid = 1764405907
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 89.1999999999994
+				lifetime = 240954.009246826
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = 2213131a8c9649c29d0cedc68a60bc62
+			name = Ast. HPU-514
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 104.219999999996
+			lct = 104.219999999996
+			root = 0
+			lat = 1.1426982480964
+			lon = 179.905668390043
+			alt = 14060710525.6381
+			hgt = -1
+			nrm = 0,1,0
+			rot = -0.1222337,0.2163159,-0.2585483,0.9334984
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 14769628872.0069
+				ECC = 0.0826369809830214
+				INC = 1.28234607968695
+				LPE = 189.9649780523
+				LAN = 63.0004141934401
+				MNA = 6.09087676375573
+				EPH = 1535808.3215625
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1630946009
+				mid = 1630946009
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 104.219999999996
+				lifetime = 172663.663101196
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = 0c8745cbee9543b4b14a941e964be448
+			name = Ast. ZAE-820
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 149.220000000003
+			lct = 149.220000000003
+			root = 0
+			lat = 0.0428146415830763
+			lon = 179.176679140367
+			alt = 13266649735.958
+			hgt = -1
+			nrm = 0,1,0
+			rot = 0.5850267,-0.3998382,0.555737,0.4347754
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 13673291232.0634
+				ECC = 0.0106267609823532
+				INC = 0.048953279935799
+				LPE = 122.475435098012
+				LAN = 60.299275595283
+				MNA = 1.01879896848913
+				EPH = 1592213.18484375
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1377708160
+				mid = 1377708160
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 149.220000000003
+				lifetime = 788258.688354492
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = e129dfb433134e3c80d703a1ba44f35a
+			name = Ast. MXY-850
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 341.659999999979
+			lct = 341.659999999979
+			root = 0
+			lat = 0.481935708081244
+			lon = 186.083940123202
+			alt = 14828183351.8923
+			hgt = -1
+			nrm = 0,1,0
+			rot = 0.05591899,0.6326631,-0.5377299,0.554488
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 14476241891.6016
+				ECC = 0.0640400917920064
+				INC = 1.07336350294041
+				LPE = 160.814838597617
+				LAN = 159.692072950802
+				MNA = 0.330138764475256
+				EPH = 4144454.39193359
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 343483972
+				mid = 343483972
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 341.659999999979
+				lifetime = 852994.830322266
+				refTime = 1728000
+				size = 0
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
 			}
 		}
 	}
