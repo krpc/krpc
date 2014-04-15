@@ -14,116 +14,70 @@ class TestFlight(testingtools.TestCase):
     def setUp(self):
         load_save('flight')
         self.ksp = krpc.connect()
-        self.vessel = self.ksp.SpaceCenter.ActiveVessel
-        self.flight = self.vessel.Flight
-        self.control = self.vessel.Control
+        self.vessel = self.ksp.space_center.active_vessel
+        self.flight = self.vessel.flight
+        self.control = self.vessel.control
 
     def test_flight(self):
 
         # Check basic flight telemetry
-        self.assertBetween(99900, 100100, self.flight.Altitude)
-        self.assertBetween(99900, 100100, self.flight.TrueAltitude)
-        #self.assertBetween(2245, 2247, self.flight.OrbitalSpeed)
-        #self.assertBetween(2041, 2043, self.flight.SurfaceSpeed)
-        #self.assertBetween(-1, 1, self.flight.VerticalSurfaceSpeed)
-        #v3(self.flight.CenterOfMass)
+        self.assertBetween(99900, 100100, self.flight.altitude)
+        self.assertBetween(99900, 100100, self.flight.true_altitude)
+        #self.assertBetween(2245, 2247, self.flight.orbital_speed)
+        #self.assertBetween(2041, 2043, self.flight.surface_speed)
+        #self.assertBetween(-1, 1, self.flight.vertical_surface_speed)
+        #v3(self.flight.center_of_mass)
 
         # Check vessel direction vectors
-        direction      = v3(self.flight.Direction)
-        upDirection    = v3(self.flight.UpDirection)
-        northDirection = v3(self.flight.NorthDirection)
+        direction       = v3(self.flight.direction)
+        up_direction    = v3(self.flight.up_direction)
+        north_direction = v3(self.flight.north_direction)
         self.assertClose(1, np.linalg.norm(direction))
-        self.assertClose(1, np.linalg.norm(upDirection))
-        self.assertClose(1, np.linalg.norm(northDirection))
-        self.assertClose(0, np.dot(upDirection, northDirection))
+        self.assertClose(1, np.linalg.norm(up_direction))
+        self.assertClose(1, np.linalg.norm(north_direction))
+        self.assertClose(0, np.dot(up_direction, north_direction))
 
         # Check vessel direction vector agrees with pitch angle
-        pitch = self.flight.Pitch
-        heading = self.flight.Heading
-        self.assertClose(pitch, 90 - rad2deg(math.acos(np.dot(direction, upDirection))))
+        pitch = self.flight.pitch
+        heading = self.flight.heading
+        self.assertClose(pitch, 90 - rad2deg(math.acos(np.dot(direction, up_direction))), error=0.1)
 
         # Check vessel direction vector agrees with heading angle
-        upComponent = np.dot(direction, upDirection) * np.array(upDirection)
-        northComponent = np.array(direction) - upComponent
-        northComponent = northComponent / np.linalg.norm(northComponent)
-        self.assertClose(heading, 360 - rad2deg(math.acos(np.dot(northComponent, northDirection))))
+        up_component = np.dot(direction, up_direction) * np.array(up_direction)
+        north_component = np.array(direction) - up_component
+        north_component = north_component / np.linalg.norm(north_component)
+        self.assertClose(heading, rad2deg(math.acos(np.dot(north_component, north_direction))), error=0.1)
 
         # Check orbital direction vectors
-        prograde   = v3(self.flight.Prograde)
-        retrograde = v3(self.flight.Retrograde)
-        normal     = v3(self.flight.Normal)
-        normalNeg  = v3(self.flight.NormalNeg)
-        radial     = v3(self.flight.Radial)
-        radialNeg  = v3(self.flight.RadialNeg)
+        prograde    = v3(self.flight.prograde)
+        retrograde  = v3(self.flight.retrograde)
+        normal      = v3(self.flight.normal)
+        normal_neg  = v3(self.flight.normal_neg)
+        radial      = v3(self.flight.radial)
+        radial_neg  = v3(self.flight.radial_neg)
         self.assertClose(1, np.linalg.norm(prograde))
         self.assertClose(1, np.linalg.norm(retrograde))
         self.assertClose(1, np.linalg.norm(normal))
-        self.assertClose(1, np.linalg.norm(normalNeg))
+        self.assertClose(1, np.linalg.norm(normal_neg))
         self.assertClose(1, np.linalg.norm(radial))
-        self.assertClose(1, np.linalg.norm(radialNeg))
-        self.assertEqual(prograde, [-x for x in retrograde])
-        self.assertEqual(radial, [-x for x in radialNeg])
-        self.assertEqual(normal, [-x for x in normalNeg])
-        self.assertClose(0, np.dot(prograde, radial))
-        self.assertClose(0, np.dot(prograde, normal))
-        self.assertClose(0, np.dot(radial, normal))
+        self.assertClose(1, np.linalg.norm(radial_neg))
+        self.assertClose(prograde, [-x for x in retrograde], error=0.001)
+        self.assertClose(radial, [-x for x in radial_neg], error=0.001)
+        self.assertClose(normal, [-x for x in normal_neg], error=0.001)
+        self.assertClose(0, np.dot(prograde, radial), error=0.001)
+        self.assertClose(0, np.dot(prograde, normal), error=0.001)
+        self.assertClose(0, np.dot(radial, normal), error=0.001)
 
         # Check vessel directions agree with orbital directions
         # (we are in a 0 degree inclined orbit, so they should do)
-        self.assertClose(1, np.dot(upDirection, radial))
-        self.assertClose(1, np.dot(northDirection, normal))
+        self.assertClose(1, np.dot(up_direction, radial))
+        self.assertClose(1, np.dot(north_direction, normal))
 
     def test_roll_pitch_yaw(self):
-        vessel = self.ksp.SpaceCenter.ActiveVessel
-        self.assertBetween(57, 58, self.flight.Pitch)
-        self.assertBetween(224, 227, self.flight.Heading)
-        self.assertBetween(132, 134, self.flight.Roll)
-
-    def test_pitch_control(self):
-        vessel = self.ksp.SpaceCenter.ActiveVessel
-
-        self.control.SAS = False
-        self.control.Pitch = 1
-        time.sleep(3)
-        self.control.Pitch = 0
-
-        # Check flight is pitching in correct direction
-        pitch = self.flight.Pitch
-        time.sleep(0.1)
-        diff = pitch - self.flight.Pitch
-        self.assertGreater(diff, 0)
-
-    def test_yaw_control(self):
-        vessel = self.ksp.SpaceCenter.ActiveVessel
-
-        self.control.SAS = False
-        self.control.Yaw = 1
-        time.sleep(3)
-        self.control.Yaw = 0
-
-        # Check flight is yawing in correct direction
-        heading = self.flight.Heading
-        time.sleep(0.1)
-        diff = heading - self.flight.Heading
-        self.assertGreater(diff, 0)
-
-    def test_roll_control(self):
-        vessel = self.ksp.SpaceCenter.ActiveVessel
-
-        self.control.SAS = False
-        self.control.Roll = 0.1
-        time.sleep(3)
-        self.control.Roll = 0
-
-        self.assertBetween(57, 58, self.flight.Pitch)
-        self.assertBetween(224, 227, self.flight.Heading)
-        self.assertBetween(80, 110, self.flight.Roll)
-
-        # Check flight is rolling in correct direction
-        roll = self.flight.Roll
-        time.sleep(0.1)
-        diff = roll - self.flight.Roll
-        self.assertGreater(diff, 0)
+        vessel = self.ksp.space_center.active_vessel
+        self.assertClose(26, self.flight.pitch, error=1)
+        self.assertClose(116, self.flight.heading, error=1)
+        self.assertClose(39, self.flight.roll, error=1)
 
 if __name__ == "__main__":
     unittest.main()

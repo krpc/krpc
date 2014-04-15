@@ -3,6 +3,7 @@ import time
 import unittest
 import os
 import shutil
+import itertools
 
 KSP_DIR='../../Kerbal Space Program'
 
@@ -13,7 +14,7 @@ def load_save(name):
     shutil.copy('fixtures/' + name + '.sfs', save_dir + '/' + name + '.sfs')
     # Connect and issue load save RPC
     ksp = krpc.connect(name='testingtools.load_save')
-    ksp.TestingTools.LoadSave('test', name)
+    ksp.testing_tools.load_save('test', name)
     time.sleep(1)
     # Wait until server comes back up
     while True:
@@ -34,4 +35,9 @@ class TestCase(unittest.TestCase):
         self.assertTrue(value < min_value or max_value < value)
 
     def assertClose(self, expected, actual, error=0.0001):
-        self.assertBetween(expected-error, expected+error, actual)
+        if type(expected) == list:
+            for x,y in itertools.izip(expected, actual):
+                self.assertEqual(len(expected), len(actual))
+                self.assertClose(x, y)
+        else:
+            self.assertBetween(expected-error, expected+error, actual)
