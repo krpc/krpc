@@ -24,7 +24,7 @@ class TestControl(testingtools.TestCase):
         # Check flight is pitching in correct direction
         pitch = self.flight.pitch
         time.sleep(0.1)
-        diff = pitch - self.flight.pitch
+        diff = self.flight.pitch - pitch
         self.assertGreater(diff, 0)
 
     def test_yaw_control(self):
@@ -45,13 +45,13 @@ class TestControl(testingtools.TestCase):
         time.sleep(3)
         self.control.roll = 0
 
-        self.assertClose(23, self.flight.pitch, error=1)
-        self.assertClose(115, self.flight.heading, error=1)
+        self.assertClose(26, self.flight.pitch, error=1)
+        self.assertClose(116, self.flight.heading, error=1)
 
         # Check flight is rolling in correct direction
         roll = self.flight.roll
         time.sleep(0.1)
-        diff = roll - self.flight.roll
+        diff = self.flight.roll - roll
         self.assertGreater(diff, 0)
 
 if __name__ == "__main__":
