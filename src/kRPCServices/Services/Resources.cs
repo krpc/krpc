@@ -11,18 +11,15 @@ namespace KRPCServices.Services
     public class Resources
     {
         //global::Vessel vessel;
-
         internal Resources (global::Vessel vessel)
         {
             //this.vessel = vessel;
         }
-
         //FIXME: what return type?
-        [KRPCProperty]
-        public string[] ResourceNames {
-            get { throw new NotImplementedException (); }
-        }
-
+        //        [KRPCProperty]
+        //        public string[] ResourceNames {
+        //            get { throw new NotImplementedException (); }
+        //        }
         [KRPCMethod]
         public bool HasResource (string name)
         {
@@ -46,7 +43,6 @@ namespace KRPCServices.Services
         {
             throw new NotImplementedException ();
         }
-
         //[KRPCMethod]
         //public double GetResource (string name)
         //{
