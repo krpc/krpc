@@ -13,11 +13,12 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public static double UT {
-            get { throw new NotImplementedException (); }
+            get { return Planetarium.GetUniversalTime (); }
         }
 
         [KRPCProcedure]
-        public static void WarpTo (double UT) {
+        public static void WarpTo (double UT)
+        {
             throw new NotImplementedException ();
         }
     }
