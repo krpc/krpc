@@ -111,9 +111,9 @@ namespace KRPCServices.Services
         }
 
         [KRPCMethod]
-        public Node AddNode (ulong UT, double prograde = 0, double radial = 0, double normal = 0)
+        public Node AddNode (ulong UT, double prograde = 0, double normal = 0, double radial = 0)
         {
-            throw new NotImplementedException ();
+            return new Node (vessel, UT, prograde, normal, radial);
         }
 
         [KRPCMethod]
