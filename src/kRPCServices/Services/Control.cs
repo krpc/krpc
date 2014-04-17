@@ -118,7 +118,10 @@ namespace KRPCServices.Services
         [KRPCMethod]
         public void RemoveNodes ()
         {
-            throw new NotImplementedException ();
+            var nodes = vessel.patchedConicSolver.maneuverNodes.ToArray ();
+            foreach (var node in nodes)
+                node.RemoveSelf ();
+            // TODO: delete the Node objects
         }
     }
 }

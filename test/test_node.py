@@ -9,6 +9,14 @@ import krpc
 
 class TestNode(testingtools.TestCase):
 
+    def check(self, node, v):
+        self.assertEqual(v[0], node.prograde)
+        self.assertEqual(v[1], node.normal)
+        self.assertEqual(v[2], node.radial)
+        self.assertEqual(v, vec3(node.vector))
+        self.assertEqual(length(v), node.delta_v)
+        self.assertEqual(normalize(v), vec3(node.direction))
+
     def test_basic(self):
         load_save('orbit-kerbin')
         ksp = krpc.connect()
@@ -22,12 +30,7 @@ class TestNode(testingtools.TestCase):
         node = control.add_node(ut, *v0)
         self.assertClose(ut, node.ut, error=1)
         self.assertClose(ut - start_ut, node.time_to, error=1)
-        self.assertEqual(v0[0], node.prograde)
-        self.assertEqual(v0[1], node.normal)
-        self.assertEqual(v0[2], node.radial)
-        self.assertEqual(v0, vec3(node.vector))
-        self.assertEqual(length(v0), node.delta_v)
-        self.assertEqual(normalize(v0), vec3(node.direction))
+        self.check(node, v0)
 
         # Test setters
         v2 = [-50,500,-150]
@@ -38,38 +41,32 @@ class TestNode(testingtools.TestCase):
         node.radial = v2[2]
         self.assertClose(ut2, node.ut, error=1)
         self.assertClose(ut2 - start_ut, node.time_to, error=1)
-        self.assertEqual(v2[0], node.prograde)
-        self.assertEqual(v2[1], node.normal)
-        self.assertEqual(v2[2], node.radial)
-        self.assertEqual(v2, vec3(node.vector))
-        self.assertEqual(length(v2), node.delta_v)
-        self.assertEqual(normalize(v2), vec3(node.direction))
+        self.check(node, v2)
 
         # Test set magnitude
         magnitude = 128
         v3 = [x*magnitude for x in vec3(node.direction)]
         node.delta_v = magnitude
-        self.assertEqual(v3[0], node.prograde)
-        self.assertEqual(v3[1], node.normal)
-        self.assertEqual(v3[2], node.radial)
-        self.assertEqual(v3, vec3(node.vector))
-        self.assertEqual(length(v3), node.delta_v)
-        self.assertEqual(normalize(v3), vec3(node.direction))
+        self.check(node, v3)
 
         # Test set direction
         magnitude = node.delta_v
         direction = normalize([2,1,-0.5])
         v4 = [x*magnitude for x in direction]
         node.direction = to_vector(direction)
-        self.assertEqual(v4[0], node.prograde)
-        self.assertEqual(v4[1], node.normal)
-        self.assertEqual(v4[2], node.radial)
-        self.assertEqual(v4, vec3(node.vector))
-        self.assertEqual(length(v4), node.delta_v)
-        self.assertEqual(normalize(v4), vec3(node.direction))
+        self.check(node, v4)
 
         # Remove node
         node.remove()
+        with self.assertRaises (krpc.client.RPCError):
+            node.prograde = 0
+
+        # Remove nodes
+        node = control.add_node(ut, *v0)
+        control.remove_nodes()
+        # TODO: don't skip the following
+        #with self.assertRaises (krpc.client.RPCError):
+        #    node.prograde = 0
 
 if __name__ == "__main__":
     unittest.main()

@@ -100,6 +100,7 @@ namespace KRPCServices.Services
         {
             node.RemoveSelf ();
             node = null;
+            // TODO: delete this Node object
         }
     }
 }
