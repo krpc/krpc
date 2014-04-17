@@ -42,7 +42,6 @@ namespace KRPCServices.Services
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Brakes)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.Brakes, value); }
         }
-
         // FIXME: what if vessel is not the active vessel?
         [KRPCProperty]
         public float Throttle {
@@ -95,19 +94,19 @@ namespace KRPCServices.Services
         [KRPCMethod]
         public bool GetActionGroup (uint group)
         {
-            return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (Utils.GetActionGroup ((int) group))];
+            return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (Utils.GetActionGroup (group))];
         }
 
         [KRPCMethod]
         public void SetActionGroup (uint group, bool state)
         {
-            vessel.ActionGroups.SetGroup (Utils.GetActionGroup ((int) group), state);
+            vessel.ActionGroups.SetGroup (Utils.GetActionGroup (group), state);
         }
 
         [KRPCMethod]
         public void ToggleActionGroup (uint group)
         {
-            throw new NotImplementedException ();
+            vessel.ActionGroups.ToggleGroup (Utils.GetActionGroup (group));
         }
 
         [KRPCMethod]

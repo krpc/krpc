@@ -21,7 +21,7 @@ namespace KRPCServices
         /// <summary>
         /// Get the custom action group for a given index (1 through 9)
         /// </summary>
-        public static KSPActionGroup GetActionGroup (int index)
+        public static KSPActionGroup GetActionGroup (uint index)
         {
             switch (index) {
             case 1:
