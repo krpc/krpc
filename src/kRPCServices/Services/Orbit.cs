@@ -79,8 +79,33 @@ namespace KRPCServices.Services
         }
 
         [KRPCProperty]
-        public double OrbitalSpeed {
-            get { return vesselData.OrbitalSpeed; }
+        public KRPC.Schema.Geometry.Vector3 Prograde {
+            get { return Utils.ToVector3 (vesselData.Prograde); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Retrograde {
+            get { return Utils.ToVector3 (vesselData.Retrograde); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Normal {
+            get { return Utils.ToVector3 (vesselData.Normal); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 NormalNeg {
+            get { return Utils.ToVector3 (vesselData.NormalNeg); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Radial {
+            get { return Utils.ToVector3 (vesselData.Radial); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 RadialNeg {
+            get { return Utils.ToVector3 (vesselData.RadialNeg); }
         }
     }
 }

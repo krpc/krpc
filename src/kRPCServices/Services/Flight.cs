@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 using KRPC.Schema.Geometry;
 
@@ -27,28 +28,28 @@ namespace KRPCServices.Services
         }
 
         [KRPCProperty]
-        public double SurfaceSpeed {
-            get { return vesselData.SurfaceSpeed; }
+        public KRPC.Schema.Geometry.Vector3 Velocity {
+            get { throw new NotImplementedException (); }
         }
 
         [KRPCProperty]
-        public double VerticalSurfaceSpeed {
-            get { return vesselData.VerticalSurfaceSpeed; }
+        public KRPC.Schema.Geometry.Vector3 Speed {
+            get { throw new NotImplementedException (); }
         }
 
         [KRPCProperty]
-        public double Pitch {
-            get { return vesselData.Pitch; }
+        public double HorizontalSpeed {
+            get { throw new NotImplementedException (); }
         }
 
         [KRPCProperty]
-        public double Heading {
-            get { return vesselData.Heading; }
+        public double VerticalSpeed {
+            get { throw new NotImplementedException (); }
         }
 
         [KRPCProperty]
-        public double Roll {
-            get { return vesselData.Roll; }
+        public KRPC.Schema.Geometry.Vector3 CenterOfMass {
+            get { return Utils.ToVector3 (vesselData.Position); }
         }
 
         [KRPCProperty]
@@ -66,39 +67,19 @@ namespace KRPCServices.Services
             get { return Utils.ToVector3 (vesselData.NorthDirection); }
         }
 
-        [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 CenterOfMass {
-            get { return Utils.ToVector3 (vesselData.Position); }
+         [KRPCProperty]
+        public double Pitch {
+            get { return vesselData.Pitch; }
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Prograde {
-            get { return Utils.ToVector3 (vesselData.Prograde); }
+        public double Heading {
+            get { return vesselData.Heading; }
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Retrograde {
-            get { return Utils.ToVector3 (vesselData.Retrograde); }
-        }
-
-        [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Normal {
-            get { return Utils.ToVector3 (vesselData.Normal); }
-        }
-
-        [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 NormalNeg {
-            get { return Utils.ToVector3 (vesselData.NormalNeg); }
-        }
-
-        [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Radial {
-            get { return Utils.ToVector3 (vesselData.Radial); }
-        }
-
-        [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 RadialNeg {
-            get { return Utils.ToVector3 (vesselData.RadialNeg); }
+        public double Roll {
+            get { return vesselData.Roll; }
         }
     }
 }

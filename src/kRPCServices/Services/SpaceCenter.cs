@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPCServices.Services
@@ -8,7 +9,16 @@ namespace KRPCServices.Services
         [KRPCProperty]
         public static Vessel ActiveVessel {
             get { return new Vessel (FlightGlobals.ActiveVessel); }
-            // TODO: implement set to switch active vessel
+        }
+
+        [KRPCProperty]
+        public static double UT {
+            get { throw new NotImplementedException (); }
+        }
+
+        [KRPCProcedure]
+        public static void WarpTo (double UT) {
+            throw new NotImplementedException ();
         }
     }
 }

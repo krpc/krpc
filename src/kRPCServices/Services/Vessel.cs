@@ -1,10 +1,8 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPCServices.Services
 {
-    /// <summary>
-    /// Class representing a vessel. For example, can be used to control the vessel and get orbital data.
-    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Vessel
     {
@@ -13,7 +11,9 @@ namespace KRPCServices.Services
         internal Vessel (global::Vessel vessel)
         {
             vesselData = new VesselData (vessel);
-            Flight = new Flight (vesselData);
+            OrbitalFlight = new Flight (vesselData);
+            //TODO: SurfaceFlight
+            //TODO: TargetFlight
             Orbit = new Orbit (vesselData);
             Control = new Control (vessel);
             Resources = new Resources (vessel);
@@ -21,7 +21,22 @@ namespace KRPCServices.Services
         }
 
         [KRPCProperty]
-        public Flight Flight { get; private set; }
+        public string Name {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        [KRPCProperty]
+        public Flight OrbitalFlight { get; private set; }
+
+        [KRPCProperty]
+        public Flight SurfaceFlight { get { throw new NotImplementedException(); } }
+
+        [KRPCProperty]
+        public Flight TargetFlight { get { throw new NotImplementedException(); } }
+
+        [KRPCProperty]
+        public Vessel Target { get; set; }
 
         [KRPCProperty]
         public Orbit Orbit { get; private set; }
