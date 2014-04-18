@@ -2,20 +2,14 @@ using KRPC.Service.Attributes;
 
 namespace KRPCServices.Services
 {
-    /// <summary>
-    /// Represents an orbit of an object such as a vessel or a celestial body.
-    /// </summary>
-    // TODO: extend to include CelestialBodies
     [KRPCClass (Service = "SpaceCenter")]
     public class Orbit
     {
         global::Vessel vessel;
-        VesselData vesselData;
 
-        internal Orbit (VesselData vesselData)
+        internal Orbit (global::Vessel vessel)
         {
-            this.vessel = vesselData.Vessel;
-            this.vesselData = vesselData;
+            this.vessel = vessel;
         }
 
         [KRPCProperty]
@@ -78,34 +72,60 @@ namespace KRPCServices.Services
             get { return vessel.GetOrbit ().meanAnomalyAtEpoch; }
         }
 
+        /// <summary>
+        /// Prograde direction in world coordinates
+        /// </summary>
+        Vector3d GetPrograde ()
+        {
+            return vessel.GetOrbit ().GetVel ().normalized;
+        }
+
+        /// <summary>
+        /// Normal+ direction in world coordinates
+        /// </summary>
+        Vector3d GetNormal ()
+        {
+            return Vector3d.Cross (GetPrograde (), GetRadial ());
+        }
+
+        /// <summary>
+        /// Radial+ direction in world coordinates
+        /// </summary>
+        Vector3d GetRadial ()
+        {
+            var orbitalVelocity = vessel.GetOrbit ().GetVel ();
+            var upDirection = (vessel.findWorldCenterOfMass () - vessel.mainBody.position).normalized;
+            return Vector3d.Exclude (orbitalVelocity, upDirection).normalized; // TODO: does this have to be normalized?
+        }
+
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Prograde {
-            get { return Utils.ToVector3 (vesselData.Prograde); }
+            get { return Utils.ToVector3 (GetPrograde ()); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Retrograde {
-            get { return Utils.ToVector3 (vesselData.Retrograde); }
+            get { return Utils.ToVector3 (-GetPrograde ()); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Normal {
-            get { return Utils.ToVector3 (vesselData.Normal); }
+            get { return Utils.ToVector3 (GetNormal ()); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 NormalNeg {
-            get { return Utils.ToVector3 (vesselData.NormalNeg); }
+            get { return Utils.ToVector3 (-GetNormal ()); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Radial {
-            get { return Utils.ToVector3 (vesselData.Radial); }
+            get { return Utils.ToVector3 (GetRadial ()); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 RadialNeg {
-            get { return Utils.ToVector3 (vesselData.RadialNeg); }
+            get { return Utils.ToVector3 (-GetRadial ()); }
         }
     }
 }

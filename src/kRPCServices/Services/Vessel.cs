@@ -6,15 +6,12 @@ namespace KRPCServices.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class Vessel
     {
-        VesselData vesselData;
-
         internal Vessel (global::Vessel vessel)
         {
-            vesselData = new VesselData (vessel);
-            OrbitalFlight = new Flight (vesselData);
-            //TODO: SurfaceFlight
-            //TODO: TargetFlight
-            Orbit = new Orbit (vesselData);
+            OrbitalFlight = new Flight (vessel, Flight.ReferenceFrame.Orbital);
+            SurfaceFlight = new Flight (vessel, Flight.ReferenceFrame.Surface);
+            TargetFlight = new Flight (vessel, Flight.ReferenceFrame.Target);
+            Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             Resources = new Resources (vessel);
             Parts = new Parts (vessel);
@@ -22,18 +19,18 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public string Name {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { throw new NotImplementedException (); }
+            set { throw new NotImplementedException (); }
         }
 
         [KRPCProperty]
         public Flight OrbitalFlight { get; private set; }
 
         [KRPCProperty]
-        public Flight SurfaceFlight { get { throw new NotImplementedException(); } }
+        public Flight SurfaceFlight { get; private set; }
 
         [KRPCProperty]
-        public Flight TargetFlight { get { throw new NotImplementedException(); } }
+        public Flight TargetFlight { get; private set; }
 
         [KRPCProperty]
         public Vessel Target { get; set; }
