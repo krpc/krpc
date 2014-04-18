@@ -30,7 +30,7 @@ namespace KRPCServices.Services
             case ReferenceFrame.Orbital:
                 return vessel.GetOrbit ().GetVel ();
             case ReferenceFrame.Surface:
-                return vessel.GetOrbit ().GetVel () - vessel.mainBody.getRFrmVel (vessel.findWorldCenterOfMass ());
+                return vessel.srf_velocity;
             default: //ReferenceFrame.Target:
                 throw new NotImplementedException ();
             }
@@ -41,7 +41,7 @@ namespace KRPCServices.Services
         /// </summary>
         Vector3d GetPosition ()
         {
-            return vessel.findWorldCenterOfMass ();
+            return vessel.CoM;
         }
 
         /// <summary>
@@ -107,12 +107,22 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public double HorizontalSpeed {
-            get { return Speed - VerticalSpeed; }
+            get {
+                if (referenceFrame == ReferenceFrame.Surface)
+                    return vessel.horizontalSrfSpeed;
+                else
+                    return Vector3d.Exclude (GetUpDirection (), GetVelocity ()).magnitude;
+            }
         }
 
         [KRPCProperty]
         public double VerticalSpeed {
-            get { return Vector3d.Dot (GetVelocity (), GetUpDirection ()); }
+            get {
+                if (referenceFrame == ReferenceFrame.Surface)
+                    return vessel.verticalSpeed;
+                else
+                    return Vector3d.Dot (GetVelocity (), GetUpDirection ());
+            }
         }
 
         [KRPCProperty]
