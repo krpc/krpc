@@ -95,7 +95,7 @@ GAME
 	FLIGHTSTATE
 	{
 		version = 0.23.5
-		UT = 79.0600000000014
+		UT = 100.939999999997
 		activeVessel = 0
 		VESSEL
 		{
@@ -106,31 +106,31 @@ GAME
 			landed = False
 			landedAt = 
 			splashed = False
-			met = 68.0800000000015
+			met = 89.9599999999972
 			lct = 10.9599999999999
 			root = 0
-			lat = -8.44118590406427E-05
-			lon = 285.478277062849
-			alt = 99982.0792769361
+			lat = -8.39443379925702E-05
+			lon = 286.871880999803
+			alt = 100000.718124818
 			hgt = -1
-			nrm = -0.5669334,0.4378392,-0.6977703
-			rot = 0.2855785,0.0670778,0.7848802,-0.5458101
-			CoM = -4.327297E-05,-2.594985,-8.022785E-05
+			nrm = -0.5691499,0.4584102,-0.6825895
+			rot = 0.2861072,0.06671067,0.7846967,-0.545842
+			CoM = 8.074939E-05,-2.595116,4.351139E-05
 			stg = 1
 			prst = False
 			ref = 3564429473
-			cPch = 0.292
-			cHdg = -0.03199993
+			cPch = 0.1839999
+			cHdg = -4.220001
 			cMod = 0
 			ORBIT
 			{
-				SMA = 699999.186612785
-				ECC = 3.98509372947808E-05
-				INC = 5.72728773124927E-06
-				LPE = 233.872204275565
-				LAN = 192.078132532724
-				MNA = 5.42540074979486
-				EPH = 79.0600000000014
+				SMA = 700000.034409841
+				ECC = 3.2075705200639E-05
+				INC = 0
+				LPE = 91.3256608822246
+				LAN = 198.521511288149
+				MNA = 1.54822701327508
+				EPH = 100.939999999997
 				REF = 1
 			}
 			PART
@@ -151,7 +151,7 @@ GAME
 				attN = bottom, 1
 				attN = None, -1
 				mass = 0.8
-				temp = -40.07838
+				temp = -40.05934
 				expt = 0.5
 				state = 0
 				connected = True
@@ -456,7 +456,7 @@ GAME
 				attN = top, 0
 				attN = bottom, 2
 				mass = 0.5
-				temp = -40.12476
+				temp = -40.10579
 				expt = 0.5
 				state = 0
 				connected = True
@@ -508,7 +508,7 @@ GAME
 				attN = top, 1
 				attN = None, -1
 				mass = 1.5
-				temp = -39.9693
+				temp = -39.95042
 				expt = 0.5
 				state = 0
 				connected = True
@@ -671,7 +671,7 @@ GAME
 				RESOURCE
 				{
 					name = ElectricCharge
-					amount = 0.079500213265419
+					amount = 0.0818750374019146
 					maxAmount = 0.119999997317791
 					flowState = True
 					isTweakable = False
@@ -697,7 +697,7 @@ GAME
 				sym = 5
 				srfN = srfAttach, 1
 				mass = 0.025
-				temp = -39.9379
+				temp = -39.91904
 				expt = 0.5
 				state = 0
 				connected = True
@@ -714,7 +714,7 @@ GAME
 				{
 					name = ModuleDeployableSolarPanel
 					isEnabled = True
-					currentRotation = (-0.5717168, 0.4160976, -0.4160994, 0.5717202)
+					currentRotation = (-0.5767611, 0.4090744, -0.409075, 0.5767691)
 					stateString = EXTENDED
 					storedAnimationTime = 0
 					storedAnimationSpeed = 0
@@ -778,7 +778,7 @@ GAME
 				sym = 5
 				srfN = srfAttach, 1
 				mass = 0.025
-				temp = -39.89577
+				temp = -39.87698
 				expt = 0.5
 				state = 0
 				connected = True
@@ -795,7 +795,7 @@ GAME
 				{
 					name = ModuleDeployableSolarPanel
 					isEnabled = True
-					currentRotation = (-0.5494382, -0.445105, 0.4451014, 0.5494397)
+					currentRotation = (-0.5432288, -0.4526638, 0.452658, 0.5432299)
 					stateString = EXTENDED
 					storedAnimationTime = 0
 					storedAnimationSpeed = 0
@@ -859,7 +859,7 @@ GAME
 				sym = 4
 				srfN = srfAttach, 1
 				mass = 0.025
-				temp = -39.85374
+				temp = -39.83496
 				expt = 0.5
 				state = 0
 				connected = True
@@ -876,7 +876,7 @@ GAME
 				{
 					name = ModuleDeployableSolarPanel
 					isEnabled = True
-					currentRotation = (-0.664388, 0.2420433, -0.2420436, 0.6643934)
+					currentRotation = (-0.5832239, 0.3998068, -0.3998037, 0.5832335)
 					stateString = EXTENDED
 					storedAnimationTime = 0
 					storedAnimationSpeed = 0
@@ -931,7 +931,7 @@ GAME
 				SAS = True, 77.7800000000016
 				Brakes = False, 0
 				Abort = False, 0
-				Custom01 = True, 7.87999999999992
+				Custom01 = False, 92.8399999999987
 				Custom02 = False, 0
 				Custom03 = False, 0
 				Custom04 = False, 0
@@ -940,7 +940,7 @@ GAME
 				Custom07 = False, 0
 				Custom08 = False, 0
 				Custom09 = False, 0
-				Custom10 = True, 10.4199999999999
+				Custom10 = False, 93.7399999999985
 			}
 			DISCOVERY
 			{
@@ -955,9 +955,9 @@ GAME
 			}
 			CTRLSTATE
 			{
-				pitch = 0.0007923818
-				yaw = 0.0004639232
-				roll = -0.0007867384
+				pitch = -0.0004459703
+				yaw = -0.0003044237
+				roll = -7.245524E-05
 				trimPitch = 0
 				trimYaw = 0
 				trimRoll = 0

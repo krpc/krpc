@@ -65,7 +65,7 @@ class TestControl(testingtools.TestCase):
         time.sleep(3)
         self.control.roll = 0
 
-        self.assertClose(26, self.orbital_flight.pitch, error=1)
+        self.assertClose(27, self.orbital_flight.pitch, error=1)
         self.assertClose(116, self.orbital_flight.heading, error=1)
 
         # Check flight is rolling in correct direction

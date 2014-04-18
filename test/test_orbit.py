@@ -3,9 +3,32 @@
 import unittest
 import testingtools
 from testingtools import load_save
+from mathtools import v3
 import krpc
+import numpy as np
 
 class TestOrbit(testingtools.TestCase):
+
+    def check_orbital_vectors(self, orbit):
+        # Check orbital direction vectors
+        prograde    = v3(orbit.prograde)
+        retrograde  = v3(orbit.retrograde)
+        normal      = v3(orbit.normal)
+        normal_neg  = v3(orbit.normal_neg)
+        radial      = v3(orbit.radial)
+        radial_neg  = v3(orbit.radial_neg)
+        self.assertClose(1, np.linalg.norm(prograde))
+        self.assertClose(1, np.linalg.norm(retrograde))
+        self.assertClose(1, np.linalg.norm(normal))
+        self.assertClose(1, np.linalg.norm(normal_neg))
+        self.assertClose(1, np.linalg.norm(radial))
+        self.assertClose(1, np.linalg.norm(radial_neg))
+        self.assertClose(prograde, [-x for x in retrograde], error=0.001)
+        self.assertClose(radial, [-x for x in radial_neg], error=0.001)
+        self.assertClose(normal, [-x for x in normal_neg], error=0.001)
+        self.assertClose(0, np.dot(prograde, radial), error=0.001)
+        self.assertClose(0, np.dot(prograde, normal), error=0.001)
+        self.assertClose(0, np.dot(radial, normal), error=0.001)
 
     def test_orbit_kerbin(self):
         load_save('orbit-kerbin')
@@ -32,6 +55,7 @@ class TestOrbit(testingtools.TestCase):
         self.assertClose(0, orbit.longitude_of_ascending_node)
         self.assertClose(0, orbit.argument_of_periapsis)
         self.assertClose(0, orbit.mean_anomaly_at_epoch)
+        self.check_orbital_vectors(orbit)
 
     def test_orbit_bop(self):
         load_save('orbit-bop')
@@ -58,6 +82,7 @@ class TestOrbit(testingtools.TestCase):
         self.assertClose(38, orbit.longitude_of_ascending_node)
         self.assertClose(241, orbit.argument_of_periapsis)
         self.assertClose(2.3, orbit.mean_anomaly_at_epoch)
+        self.check_orbital_vectors(orbit)
 
     def test_orbit_mun_escape_soi(self):
         load_save('orbit-mun-escape-soi')
@@ -69,7 +94,7 @@ class TestOrbit(testingtools.TestCase):
         # sma   1800000
         # lan   13
         # w     67
-        # mEp   6.2
+        # mEp   6.25
         # epoch 0
         # body  Mun
         self.assertEqual("Mun", orbit.body)
@@ -84,6 +109,8 @@ class TestOrbit(testingtools.TestCase):
         self.assertClose(13, orbit.longitude_of_ascending_node)
         self.assertClose(67, orbit.argument_of_periapsis)
         self.assertClose(6.2, orbit.mean_anomaly_at_epoch)
+        self.check_orbital_vectors(orbit)
+
     """
     def test_orbit_minmus_parabolic(self):
         load_save('orbit-minmus-parabolic')
