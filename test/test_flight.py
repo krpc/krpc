@@ -21,7 +21,7 @@ class TestFlight(testingtools.TestCase):
     def test_orbital_flight(self):
 
         self.assertClose(100000, self.orbital_flight.altitude, error=10)
-        self.assertClose(100000, self.orbital_flight.true_altitude, error=10)
+        self.assertClose(100920, self.orbital_flight.true_altitude, error=10)
         #self.assertClose([-1013.6, 0.0, -2004.4], v3(self.orbital_flight.velocity), error=100)
         self.assertClose(2246.1, self.orbital_flight.speed, error=0.05)
         self.assertClose(2246.1, self.orbital_flight.horizontal_speed, error=0.5)
@@ -37,7 +37,7 @@ class TestFlight(testingtools.TestCase):
     def test_surface_flight(self):
 
         self.assertClose(100000, self.surface_flight.altitude, error=10)
-        self.assertClose(100000, self.surface_flight.true_altitude, error=10)
+        self.assertClose(100920, self.surface_flight.true_altitude, error=10)
         #self.assertClose([-1013.6, 0.0, -2004.4], v3(self.surface_flight.velocity), error=100)
         self.assertClose(2042.5, self.surface_flight.speed, error=0.05)
         self.assertClose(2042.5, self.surface_flight.horizontal_speed, error=0.5)

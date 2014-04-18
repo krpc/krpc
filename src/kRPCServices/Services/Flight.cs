@@ -85,12 +85,14 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public double Altitude {
-            get { return vessel.GetOrbit ().altitude; }
+            get { return vessel.mainBody.GetAltitude (vessel.CoM); }
         }
 
         [KRPCProperty]
         public double TrueAltitude {
-            get { return vessel.mainBody.GetAltitude (GetPosition ()); }
+            get {
+                return Altitude - vessel.terrainAltitude;
+            }
         }
 
         [KRPCProperty]
