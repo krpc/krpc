@@ -74,29 +74,33 @@ namespace KRPCServices.Services
         }
 
         /// <summary>
-        /// Prograde direction in world coordinates
+        /// Prograde direction in surface reference frame
         /// </summary>
         Vector3d GetPrograde ()
         {
-            return vessel.GetOrbit ().GetVel ().normalized;
+            var rot = ReferenceFrameRotation.Get (ReferenceFrame.Surface, vessel).Inverse ();
+            return (rot * vessel.GetOrbit ().GetVel ()).normalized;
         }
 
         /// <summary>
-        /// Normal+ direction in world coordinates
+        /// Normal+ direction in surface reference frame
         /// </summary>
         Vector3d GetNormal ()
         {
-            return Vector3d.Cross (GetPrograde (), GetRadial ());
+            var rot = ReferenceFrameRotation.Get (ReferenceFrame.Surface, vessel).Inverse ();
+            var normal = vessel.GetOrbit ().GetOrbitNormal ();
+            var tmp = normal.y;
+            normal.y = normal.z;
+            normal.z = tmp;
+            return (rot * normal).normalized;
         }
 
         /// <summary>
-        /// Radial+ direction in world coordinates
+        /// Radial+ direction in surface reference frame
         /// </summary>
         Vector3d GetRadial ()
         {
-            var orbitalVelocity = vessel.GetOrbit ().GetVel ();
-            var upDirection = (vessel.findWorldCenterOfMass () - vessel.mainBody.position).normalized;
-            return Vector3d.Exclude (orbitalVelocity, upDirection).normalized; // TODO: does this have to be normalized?
+            return Vector3d.Cross (GetNormal (), GetPrograde ()).normalized;
         }
 
         [KRPCProperty]
