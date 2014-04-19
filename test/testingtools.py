@@ -34,10 +34,10 @@ class TestCase(unittest.TestCase):
     def assertNotBetween(self, min_value, max_value, value):
         self.assertTrue(value < min_value or max_value < value)
 
-    def assertClose(self, expected, actual, error=0.0001):
+    def assertClose(self, expected, actual, error=0.001):
         if type(expected) == list:
             for x,y in itertools.izip(expected, actual):
                 self.assertEqual(len(expected), len(actual))
-                self.assertClose(x, y)
+                self.assertClose(x, y, error=error)
         else:
             self.assertBetween(expected-error, expected+error, actual)
