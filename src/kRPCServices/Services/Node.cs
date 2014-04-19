@@ -1,5 +1,6 @@
 using KRPC.Service.Attributes;
 using KRPC.Schema.Geometry;
+using KRPCServices.ExtensionMethods;
 
 namespace KRPCServices.Services
 {
@@ -67,7 +68,7 @@ namespace KRPCServices.Services
         public KRPC.Schema.Geometry.Vector3 Direction {
             get {
                 var direction = node.DeltaV.normalized;
-                return Utils.ToVector3 (new Vector3d (direction.z, direction.y, direction.x));
+                return new Vector3d (direction.z, direction.y, direction.x).ToMessage ();
             }
             set {
                 var magnitude = node.DeltaV.magnitude;

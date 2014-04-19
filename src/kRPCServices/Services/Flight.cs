@@ -2,19 +2,13 @@ using System;
 using KRPC.Service.Attributes;
 using KRPC.Schema.Geometry;
 using UnityEngine;
+using KRPCServices.ExtensionMethods;
 
 namespace KRPCServices.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
     public class Flight
     {
-        public enum ReferenceFrame
-        {
-            Orbital,
-            Surface,
-            Target
-        }
-
         global::Vessel vessel;
         ReferenceFrame referenceFrame;
 
@@ -97,7 +91,8 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Velocity {
-            get { return Utils.ToVector3 (GetVelocity ()); }
+            // TODO: convert to a reference frame?
+            get { return GetVelocity ().ToMessage (); }
         }
 
         [KRPCProperty]

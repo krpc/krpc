@@ -1,4 +1,5 @@
 using KRPC.Service.Attributes;
+using KRPCServices.ExtensionMethods;
 
 namespace KRPCServices.Services
 {
@@ -100,32 +101,32 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Prograde {
-            get { return Utils.ToVector3 (GetPrograde ()); }
+            get { return GetPrograde ().ToMessage (); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Retrograde {
-            get { return Utils.ToVector3 (-GetPrograde ()); }
+            get { return (-GetPrograde ()).ToMessage (); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Normal {
-            get { return Utils.ToVector3 (GetNormal ()); }
+            get { return GetNormal ().ToMessage (); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 NormalNeg {
-            get { return Utils.ToVector3 (-GetNormal ()); }
+            get { return (-GetNormal ()).ToMessage (); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Radial {
-            get { return Utils.ToVector3 (GetRadial ()); }
+            get { return GetRadial ().ToMessage (); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 RadialNeg {
-            get { return Utils.ToVector3 (-GetRadial ()); }
+            get { return (-GetRadial ()).ToMessage (); }
         }
     }
 }
