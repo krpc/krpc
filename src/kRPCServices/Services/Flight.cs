@@ -122,22 +122,23 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 CenterOfMass {
-            get { return Utils.ToVector3 (GetPosition ()); }
+            // TODO: convert to a reference frame?
+            get { return GetPosition ().ToMessage (); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Direction {
-            get { return Utils.ToVector3 (GetDirection ()); }
+            get { return (ReferenceFrameRotation.Get (referenceFrame, vessel).Inverse () * GetDirection ()).ToMessage (); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 UpDirection {
-            get { return Utils.ToVector3 (GetUpDirection ()); }
+            get { return (ReferenceFrameRotation.Get (referenceFrame, vessel).Inverse () * GetUpDirection ()).ToMessage (); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 NorthDirection {
-            get { return Utils.ToVector3 (GetNorthDirection ()); }
+            get { return (ReferenceFrameRotation.Get (referenceFrame, vessel).Inverse () * GetNorthDirection ()).ToMessage (); }
         }
 
         [KRPCProperty]
