@@ -36,28 +36,22 @@ namespace KRPCServices.Services
         [KRPCMethod]
         public void SetRotation (ReferenceFrame referenceFrame, double pitch, double yaw, double roll = Double.NaN)
         {
-            AutoPilot.ReferenceFrame = referenceFrame;
-            AutoPilot.Pitch = pitch;
-            AutoPilot.Yaw = yaw;
-            AutoPilot.Roll = roll;
-            AutoPilot.Engaged = true;
+            Engaged = true;
+            ReferenceFrame = referenceFrame;
+            Pitch = pitch;
+            Yaw = yaw;
+            Roll = roll;
         }
 
         [KRPCMethod]
         public void SetDirection (ReferenceFrame referenceFrame, KRPC.Schema.Geometry.Vector3 direction, double roll = Double.NaN)
         {
-            System.Console.WriteLine ("forward = " + Vector3d.forward);
-            System.Console.WriteLine ("direction = " + direction.ToVector ());
-            AutoPilot.ReferenceFrame = referenceFrame;
-            var dir = direction.ToVector ();
-            var rotation = Quaternion.FromToRotation (Vector3d.forward, dir);
-            AutoPilot.Pitch = Math.Abs (((rotation.eulerAngles.x + 270f) % 360f) - 180f) - 90f;
-            //AutoPilot.Pitch = (rotation.eulerAngles.x > 90d) ? (180d - rotation.eulerAngles.x) : rotation.eulerAngles.x;
-            AutoPilot.Yaw = 360f - rotation.eulerAngles.y;
-            AutoPilot.Roll = roll;
-            AutoPilot.Engaged = true;
-            System.Console.WriteLine (rotation.eulerAngles);
-            System.Console.WriteLine ("pitch = " + Pitch + ", yaw = " + Yaw);
+            var rotation = Quaternion.FromToRotation (Vector3d.forward, direction.ToVector ());
+            Engaged = true;
+            ReferenceFrame = referenceFrame;
+            Pitch = Math.Abs (((rotation.eulerAngles.x + 270f) % 360f) - 180f) - 90f;
+            Yaw = 360f - rotation.eulerAngles.y;
+            Roll = roll;
         }
 
         [KRPCMethod]
@@ -206,7 +200,6 @@ namespace KRPCServices.Services
         static double GetThrustTorque (Part p, global::Vessel vessel)
         {
             var CoM = vessel.CoM;
-
             if (p.State == PartStates.ACTIVE) {
                 if (p is LiquidEngine) {
                     if (((LiquidEngine)p).thrustVectoringCapable) {
@@ -222,7 +215,6 @@ namespace KRPCServices.Services
                     }
                 }
             }
-
             return 0;
         }
 
@@ -237,7 +229,6 @@ namespace KRPCServices.Services
             var angularMomentum = new Vector3d (angularVelocity.x * MoI.x, angularVelocity.y * MoI.y, angularVelocity.z * MoI.z);
             var retVar = Vector3d.Scale (angularMomentum.Sign () * 2.0f, Vector3d.Scale (angularMomentum.Pow (2), Vector3d.Scale (torque, MoI).Inverse ()));
             retVar.y *= 10;
-
             return retVar;
         }
     }
