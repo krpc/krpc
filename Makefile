@@ -89,6 +89,7 @@ test-python:
 
 ksp: install TestingTools
 	cp src/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
+	-cp settings.cfg $(KSP_DIR)/GameData/kRPC/settings.cfg
 	$(KSP_DIR)/KSP.x86_64 &
 	tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
 
