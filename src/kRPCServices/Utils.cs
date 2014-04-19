@@ -7,18 +7,6 @@ namespace KRPCServices
     static class Utils
     {
         /// <summary>
-        /// Convert a Unity Vector3d to a protobuf Vector3
-        /// </summary>
-        public static Vector3 ToVector3 (Vector3d v)
-        {
-            return Vector3.CreateBuilder ()
-                .SetX (v.x)
-                .SetY (v.y)
-                .SetZ (v.z)
-                .Build ();
-        }
-
-        /// <summary>
         /// Get the custom action group for a given index (1 through 9)
         /// </summary>
         public static KSPActionGroup GetActionGroup (uint index)

@@ -65,6 +65,10 @@
     <Compile Include="Services\Node.cs" />
     <Compile Include="Services\Parts.cs" />
     <Compile Include="Services\SpaceCenter.cs" />
+    <Compile Include="Services\AutoPilot.cs" />
+    <Compile Include="Services\ReferenceFrame.cs" />
+    <Compile Include="ReferenceFrameRotation.cs" />
+    <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -77,6 +81,7 @@
     <Folder Include="Schema\" />
     <Folder Include="Properties\" />
     <Folder Include="Services\" />
+    <Folder Include="ExtensionMethods\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema\Geometry.proto" />

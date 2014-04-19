@@ -56,6 +56,7 @@ namespace KRPCServices
             state.X += X;
             state.Y += Y;
             state.Z += Z;
+            Services.AutoPilot.Fly (state);
         }
     }
 }
