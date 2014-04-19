@@ -8,11 +8,12 @@ namespace KRPCServices.Services
     {
         internal Vessel (global::Vessel vessel)
         {
-            OrbitalFlight = new Flight (vessel, Flight.ReferenceFrame.Orbital);
-            SurfaceFlight = new Flight (vessel, Flight.ReferenceFrame.Surface);
-            TargetFlight = new Flight (vessel, Flight.ReferenceFrame.Target);
+            OrbitalFlight = new Flight (vessel, ReferenceFrame.Orbital);
+            SurfaceFlight = new Flight (vessel, ReferenceFrame.Surface);
+            TargetFlight = new Flight (vessel, ReferenceFrame.Target);
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
+            AutoPilot = new AutoPilot (vessel);
             Resources = new Resources (vessel);
             Parts = new Parts (vessel);
         }
@@ -40,6 +41,9 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public Control Control { get; private set; }
+
+        [KRPCProperty]
+        public AutoPilot AutoPilot { get; private set; }
 
         [KRPCProperty]
         public Resources Resources { get; private set; }
