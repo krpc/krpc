@@ -158,7 +158,7 @@ namespace KRPCServices.Services
         public double Roll {
             get {
                 var roll = GetRotation ().eulerAngles.z;
-                return (roll > 180d) ? (360d - roll) : roll;
+                return roll > 180d ? 360d - roll : -roll;
             }
         }
     }
