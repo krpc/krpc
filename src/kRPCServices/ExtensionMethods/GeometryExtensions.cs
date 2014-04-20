@@ -72,6 +72,18 @@ namespace KRPCServices.ExtensionMethods
         }
 
         /// <summary>
+        /// Round all values in a vector to the given precision
+        /// </summary>
+        public static Vector3 Round (this Vector3 v, int decimalPlaces)
+        {
+            // TODO: remove horrid casts
+            return new Vector3 (
+                (float)Math.Round ((double)v.x, decimalPlaces),
+                (float)Math.Round ((double)v.y, decimalPlaces),
+                (float)Math.Round ((double)v.z, decimalPlaces));
+        }
+
+        /// <summary>
         /// Clamp a value to the given range
         /// </summary>
         public static T Clamp<T> (this T value, T min, T max) where T : IComparable<T>
@@ -83,6 +95,22 @@ namespace KRPCServices.ExtensionMethods
             else
                 return value;
         }
+
+        /// <summary>
+        /// Compute the pitch angle of a quaternion in degrees.
+        /// </summary>
+        public static Vector3 PitchHeadingRoll (this Quaternion q)
+        {
+            // First, adjust the euler angle extraction order frmo z,y,x -> -y,z,x
+            // i.e. to extra pitch, then heading, then roll
+            var r = q * Quaternion.Euler (-90f, 0f, 0f);
+            // Convert angle around -y axis to pitch, with range [-90, 90]
+            var pitch = r.eulerAngles.x > 180f ? r.eulerAngles.x - 360f : r.eulerAngles.x;
+            // Convert angle around z axis to heading, with range [0, 360]
+            var heading = 360f - r.eulerAngles.y;
+            // Convert angle around x axis to heading, with range [-180, 180]
+            var roll = 180f - r.eulerAngles.z;
+            return new Vector3 (pitch, heading, roll).Round (1);
+        }
     }
 }
-

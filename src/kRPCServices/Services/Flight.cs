@@ -35,11 +35,11 @@ namespace KRPCServices.Services
         /// </summary>
         Vector3d GetPosition ()
         {
-            return vessel.CoM;
+            return vessel.findWorldCenterOfMass ();
         }
 
         /// <summary>
-        /// Direction the vessel is pointing in, in world coordinates
+        /// Direction the vessel is pointing in in world coordinates
         /// </summary>
         Vector3d GetDirection ()
         {
@@ -47,7 +47,7 @@ namespace KRPCServices.Services
         }
 
         /// <summary>
-        /// Direction away from the main body, in world coordinates
+        /// Direction normal to the main body in world coordinates
         /// </summary>
         Vector3d GetUpDirection ()
         {
@@ -64,17 +64,18 @@ namespace KRPCServices.Services
             // Vector from vessel to the north pole
             var toNorthPole = northPole - GetPosition ();
             // Direction from the vessel to the north pole, perpendicular to the surface of the main body
-            return (toNorthPole - Vector3d.Project (toNorthPole, GetUpDirection ())).normalized;
+            return Vector3d.Exclude (GetUpDirection (), toNorthPole - GetPosition ()).normalized;
+            //return (toNorthPole - Vector3d.Project (toNorthPole, GetUpDirection ())).normalized;
         }
 
         /// <summary>
-        /// Rotation of the vessel relative to the surface of the main body
+        /// Rotation of the vessel in the given reference frame
+        /// E.g. in the surface reference frame, is a rotation from the vessel direction vector
+        /// (in surface-space coordinates) to the surface space basis vector
         /// </summary>
         Quaternion GetRotation ()
         {
-            // Rotation of the vessel w.r.t. north
-            var rotation = Quaternion.LookRotation (GetNorthDirection (), GetUpDirection ());
-            return Quaternion.Inverse (Quaternion.Euler (90f, 0f, 0f) * Quaternion.Inverse (vessel.GetTransform ().rotation) * rotation);
+            return ReferenceFrameRotation.Get (referenceFrame, vessel).Inverse () * vessel.GetTransform ().rotation;
         }
 
         [KRPCProperty]
@@ -142,24 +143,18 @@ namespace KRPCServices.Services
         }
 
         [KRPCProperty]
-        public double Pitch {
-            get {
-                var pitch = GetRotation ().eulerAngles.x;
-                return (pitch > 180d) ? (360d - pitch) : -pitch;
-            }
+        public float Pitch {
+            get { return GetRotation ().PitchHeadingRoll ().x; }
         }
 
         [KRPCProperty]
-        public double Heading {
-            get { return GetRotation ().eulerAngles.y; }
+        public float Heading {
+            get { return GetRotation ().PitchHeadingRoll ().y; }
         }
 
         [KRPCProperty]
-        public double Roll {
-            get {
-                var roll = GetRotation ().eulerAngles.z;
-                return roll > 180d ? 360d - roll : -roll;
-            }
+        public float Roll {
+            get { return GetRotation ().PitchHeadingRoll ().z; }
         }
     }
 }
