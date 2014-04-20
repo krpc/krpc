@@ -15,13 +15,13 @@ class TestFlight(testingtools.TestCase):
         load_save('flight')
         self.ksp = krpc.connect()
         self.vessel = self.ksp.space_center.active_vessel
-        self.orbital_flight = self.vessel.orbital_flight
-        self.surface_flight = self.vessel.surface_flight
+        self.surface_flight = self.vessel.flight()
+        self.orbital_flight = self.vessel.flight(self.ksp.space_center.ReferenceFrame.orbital)
 
     def test_orbital_flight(self):
 
         self.assertClose(100000, self.orbital_flight.altitude, error=10)
-        self.assertClose(100920, self.orbital_flight.true_altitude, error=10)
+        self.assertClose(100920, self.orbital_flight.true_altitude, error=20)
         #self.assertClose([-1013.6, 0.0, -2004.4], v3(self.orbital_flight.velocity), error=100)
         self.assertClose(2246.1, self.orbital_flight.speed, error=0.05)
         self.assertClose(2246.1, self.orbital_flight.horizontal_speed, error=0.5)
@@ -29,16 +29,16 @@ class TestFlight(testingtools.TestCase):
         #self.assertClose([0,0,0], v3(self.orbital_flight.center_of_mass))
 
         self.assertClose(27, self.orbital_flight.pitch, error=1)
-        self.assertClose(116, self.orbital_flight.heading, error=1)
+        self.assertClose(116 - 90, self.orbital_flight.heading, error=1)
         self.assertClose(39, self.orbital_flight.roll, error=1)
 
-        self.check_directions(self.orbital_flight)
+        self.check_directions(self.orbital_flight, 'orbital')
 
     def test_surface_flight(self):
 
         self.assertClose(100000, self.surface_flight.altitude, error=10)
-        self.assertClose(100920, self.surface_flight.true_altitude, error=10)
-        #self.assertClose([-1013.6, 0.0, -2004.4], v3(self.surface_flight.velocity), error=100)
+        self.assertClose(100920, self.surface_flight.true_altitude, error=20)
+        self.assertClose([-1013.6, 0.0, -2004.4], v3(self.surface_flight.velocity), error=100)
         self.assertClose(2042.5, self.surface_flight.speed, error=0.05)
         self.assertClose(2042.5, self.surface_flight.horizontal_speed, error=0.5)
         self.assertClose(0, self.surface_flight.vertical_speed, error=0.5)
@@ -48,9 +48,9 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(116, self.surface_flight.heading, error=1)
         self.assertClose(39, self.surface_flight.roll, error=1)
 
-        self.check_directions(self.surface_flight)
+        self.check_directions(self.surface_flight, 'surface')
 
-    def check_directions(self, flight):
+    def check_directions(self, flight, frame):
         direction       = v3(flight.direction)
         up_direction    = v3(flight.up_direction)
         north_direction = v3(flight.north_direction)
@@ -60,15 +60,14 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(0, np.dot(up_direction, north_direction))
 
         # Check vessel direction vector agrees with pitch angle
-        pitch = flight.pitch
-        heading = flight.heading
-        self.assertClose(pitch, 90 - rad2deg(math.acos(np.dot(direction, up_direction))), error=0.1)
+        pitch = 90 - rad2deg(math.acos(np.dot(up_direction, direction)))
+        self.assertClose(flight.pitch, pitch, error=2)
 
         # Check vessel direction vector agrees with heading angle
         up_component = np.dot(direction, up_direction) * np.array(up_direction)
         north_component = np.array(direction) - up_component
         north_component = north_component / np.linalg.norm(north_component)
-        self.assertClose(heading, rad2deg(math.acos(np.dot(north_component, north_direction))), error=0.1)
+        self.assertClose(flight.heading, rad2deg(math.acos(np.dot(north_component, north_direction))), error=1)
 
         # Check vessel directions agree with orbital directions
         # (we are in a 0 degree inclined orbit, so they should do)
