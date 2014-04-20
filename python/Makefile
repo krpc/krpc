@@ -26,4 +26,4 @@ release: protobuf bin
 clean:
 	make -C .. protobuf-python-clean
 	find . -name "*.pyc" -exec rm -rf {} \;
-	-rm -rf dist MANIFEST kRPC.egg-info bin/TestServer
+	-rm -rf dist MANIFEST krpc.egg-info build bin/TestServer
