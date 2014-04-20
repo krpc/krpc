@@ -14,52 +14,59 @@ namespace KRPCServices
     static class ReferenceFrameRotation
     {
         /// <summary>
-        /// Returns a rotation for the reference frame specified by a forward and up vector
+        /// Returns the up vector for the given reference frame in world coordinates
+        /// Vector is not normalized
         /// </summary>
-        static Quaternion FromForwardAndUp (Vector3 forward, Vector3 up)
+        static Vector3 GetUpNotNormalized (ReferenceFrame referenceFrame, Vessel vessel)
         {
-            Vector3.OrthoNormalize (ref forward, ref up);
-            return Quaternion.LookRotation (forward, up);
+            switch (referenceFrame) {
+            case ReferenceFrame.Orbital:
+            case ReferenceFrame.SurfaceVelocity:
+            case ReferenceFrame.Surface:
+            case ReferenceFrame.Maneuver:
+            case ReferenceFrame.TargetVelocity:
+            case ReferenceFrame.Target:
+                return vessel.CoM - vessel.mainBody.position;
+            // Relative to the negative surface normal of the target docking port, or relative to the target if the target is not a docking port
+            case ReferenceFrame.Docking:
+                throw new NotImplementedException ();
+            default:
+                throw new ArgumentException ("No such reference frame");
+            }
         }
 
         /// <summary>
-        /// Returns the reference rotation quaternion for the given mode.
-        /// Applying the rotation converts from the given reference frame to world space. TODO: is this correct?!?
+        /// Returns the forward vector for the given reference frame in world coordinates
+        /// Vector is not normalized
         /// </summary>
-        public static Quaternion Get (ReferenceFrame referenceFrame, Vessel vessel)
+        static Vector3 GetForwardNotNormalized (ReferenceFrame referenceFrame, Vessel vessel)
         {
-            Vector3 up = vessel.mainBody.position - vessel.CoM;
-
             switch (referenceFrame) {
             // Relative to the orbital velocity vector
             case ReferenceFrame.Orbital:
-                return FromForwardAndUp (vessel.GetObtVelocity (), up);
+                return vessel.GetObtVelocity ();
             // Relative to the surface velocity vector
             case ReferenceFrame.SurfaceVelocity:
-                return FromForwardAndUp (vessel.GetSrfVelocity (), up);
+                return vessel.GetSrfVelocity ();
             // Relative to the surface / navball
             case ReferenceFrame.Surface:
-                {
-                    Vector3 forward = Vector3.Exclude (up, vessel.mainBody.position + vessel.mainBody.transform.up * (float)vessel.mainBody.Radius - vessel.CoM);
-                    return FromForwardAndUp (forward, up);
-                }
+                return Vector3.Exclude (GetUp (referenceFrame, vessel), vessel.mainBody.position + vessel.mainBody.transform.up * (float)vessel.mainBody.Radius - vessel.CoM);
             // Relative to the direction of the burn for a maneuver node, or relative to the orbit if there is no node
             case ReferenceFrame.Maneuver:
                 {
-                    if (vessel.patchedConicSolver.maneuverNodes.Count > 0) {
-                        Vector3 forward = vessel.patchedConicSolver.maneuverNodes [0].GetBurnVector (vessel.orbit);
-                        return FromForwardAndUp (forward, up);
-                    } else
-                        return Get (ReferenceFrame.Orbital, vessel);
+                    if (vessel.patchedConicSolver.maneuverNodes.Count > 0)
+                        return vessel.patchedConicSolver.maneuverNodes [0].GetBurnVector (vessel.orbit);
+                    else
+                        return GetForward (ReferenceFrame.Orbital, vessel);
                 }
             // Relative to the target's velocity vector, or relative to the orbit if there is no target
             case ReferenceFrame.TargetVelocity:
                 {
                     var target = FlightGlobals.fetch.VesselTarget;
                     if (target != null)
-                        return FromForwardAndUp (vessel.GetObtVelocity () - target.GetObtVelocity (), up);
+                        return vessel.GetObtVelocity () - target.GetObtVelocity ();
                     else
-                        return Get (ReferenceFrame.Orbital, vessel);
+                        return GetForward (ReferenceFrame.Orbital, vessel);
                 }
             // Relative to the direction to the target, or relative to the orbit if there is no target
             case ReferenceFrame.Target:
@@ -67,26 +74,55 @@ namespace KRPCServices
                     var target = FlightGlobals.fetch.VesselTarget;
                     if (target != null)
                         // TODO: use the center of control instead of v.CoM?
-                        return FromForwardAndUp (target.GetTransform ().position - vessel.CoM, up);
+                        return target.GetTransform ().position - vessel.CoM;
                     else
-                        return Get (ReferenceFrame.Orbital, vessel);
+                        return GetForward (ReferenceFrame.Orbital, vessel);
                 }
             // Relative to the negative surface normal of the target docking port, or relative to the target if the target is not a docking port
             case ReferenceFrame.Docking:
-                {
-                    var target = FlightGlobals.fetch.VesselTarget;
-                    if (target != null && target is ModuleDockingNode) {
-                        // Who knows why this Quaternion.Euler(90, 0, 0) rotation is required?
-                        // Note that the delta-calculation in AutoPilotAddon seems to reverse this rotation.
-                        // So it seems like a problem with what Quaternion.LookRotation does.
-                        return (target as ModuleDockingNode).transform.rotation * Quaternion.Euler (90, 0, 0);
-                    } else {
-                        return Get (ReferenceFrame.Target, vessel);
-                    }
-                }
+                throw new NotImplementedException ();
             default:
                 throw new ArgumentException ("No such reference frame");
             }
+        }
+
+        /// <summary>
+        /// Returns the up vector for the given reference frame in world coordinates
+        /// </summary>
+        public static Vector3 GetUp (ReferenceFrame referenceFrame, Vessel vessel)
+        {
+            return GetUpNotNormalized (referenceFrame, vessel).normalized;
+        }
+
+        /// <summary>
+        /// Returns the forward vector for the given reference frame in world coordinates
+        /// </summary>
+        public static Vector3 GetForward (ReferenceFrame referenceFrame, Vessel vessel)
+        {
+            return GetForwardNotNormalized (referenceFrame, vessel).normalized;
+        }
+
+        /// <summary>
+        /// Returns the reference rotation quaternion for the given mode.
+        /// Applying the rotation converts from the given reference frame to world space. TODO: is this correct?!?
+        /// </summary>
+        public static Quaternion GetRotation (ReferenceFrame referenceFrame, Vessel vessel)
+        {
+            if (referenceFrame == ReferenceFrame.Docking) {
+                var target = FlightGlobals.fetch.VesselTarget;
+                if (target != null && target is ModuleDockingNode) {
+                    // Who knows why this Quaternion.Euler(90, 0, 0) rotation is required?
+                    // Note that the delta-calculation in AutoPilotAddon seems to reverse this rotation.
+                    // So it seems like a problem with what Quaternion.LookRotation does.
+                    return (target as ModuleDockingNode).transform.rotation * Quaternion.Euler (90, 0, 0);
+                } else {
+                    return GetRotation (ReferenceFrame.Target, vessel);
+                }
+            }
+            var forward = GetForwardNotNormalized (referenceFrame, vessel);
+            var up = GetUpNotNormalized (referenceFrame, vessel);
+            Vector3.OrthoNormalize (ref forward, ref up);
+            return Quaternion.LookRotation (forward, up);
         }
     }
 }

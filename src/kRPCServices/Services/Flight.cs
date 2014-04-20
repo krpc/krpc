@@ -51,7 +51,7 @@ namespace KRPCServices.Services
         /// </summary>
         Vector3d GetUpDirection ()
         {
-            return (GetPosition () - vessel.mainBody.position).normalized;
+            return ReferenceFrameRotation.GetUp (referenceFrame, vessel);
         }
 
         /// <summary>
@@ -59,13 +59,7 @@ namespace KRPCServices.Services
         /// </summary>
         Vector3d GetNorthDirection ()
         {
-            // Position of the north pole of the main body
-            var northPole = vessel.mainBody.position + vessel.mainBody.transform.up * (float)vessel.mainBody.Radius;
-            // Vector from vessel to the north pole
-            var toNorthPole = northPole - GetPosition ();
-            // Direction from the vessel to the north pole, perpendicular to the surface of the main body
-            return Vector3d.Exclude (GetUpDirection (), toNorthPole - GetPosition ()).normalized;
-            //return (toNorthPole - Vector3d.Project (toNorthPole, GetUpDirection ())).normalized;
+            return ReferenceFrameRotation.GetForward (referenceFrame, vessel);
         }
 
         /// <summary>
@@ -75,7 +69,7 @@ namespace KRPCServices.Services
         /// </summary>
         Quaternion GetRotation ()
         {
-            return ReferenceFrameRotation.Get (referenceFrame, vessel).Inverse () * vessel.GetTransform ().rotation;
+            return ReferenceFrameRotation.GetRotation (referenceFrame, vessel).Inverse () * vessel.GetTransform ().rotation;
         }
 
         [KRPCProperty]
@@ -129,17 +123,17 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Direction {
-            get { return (ReferenceFrameRotation.Get (referenceFrame, vessel).Inverse () * GetDirection ()).ToMessage (); }
+            get { return (ReferenceFrameRotation.GetRotation (referenceFrame, vessel).Inverse () * GetDirection ()).ToMessage (); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 UpDirection {
-            get { return (ReferenceFrameRotation.Get (referenceFrame, vessel).Inverse () * GetUpDirection ()).ToMessage (); }
+            get { return (ReferenceFrameRotation.GetRotation (referenceFrame, vessel).Inverse () * GetUpDirection ()).ToMessage (); }
         }
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 NorthDirection {
-            get { return (ReferenceFrameRotation.Get (referenceFrame, vessel).Inverse () * GetNorthDirection ()).ToMessage (); }
+            get { return (ReferenceFrameRotation.GetRotation (referenceFrame, vessel).Inverse () * GetNorthDirection ()).ToMessage (); }
         }
 
         [KRPCProperty]
