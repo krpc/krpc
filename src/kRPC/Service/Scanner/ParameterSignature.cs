@@ -48,7 +48,10 @@ namespace KRPC.Service.Scanner
                 var value = parameter.DefaultValue;
                 if (TypeUtils.IsAClassType (Type))
                     DefaultArgument = ProtocolBuffers.WriteValue (ObjectStore.Instance.AddInstance (value), typeof(ulong));
-                else if (ProtocolBuffers.IsAMessageType (Type))
+                else if (ProtocolBuffers.IsAnEnumType (Type) || TypeUtils.IsAnEnumType (Type)) {
+                    // TODO: Assumes it's underlying type is int
+                    DefaultArgument = ProtocolBuffers.WriteValue ((int)value, typeof(int));
+                } else if (ProtocolBuffers.IsAMessageType (Type))
                     DefaultArgument = ProtocolBuffers.WriteMessage (value as IMessage);
                 else
                     DefaultArgument = ProtocolBuffers.WriteValue (value, Type);
