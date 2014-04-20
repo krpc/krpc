@@ -101,7 +101,8 @@ class _Service(BaseService):
     def _add_enumeration(self, enum):
         """ Add an enumeration to this service """
         name = enum.name
-        setattr(self, name, type(str(name), (object,), dict((x.name, x.value) for x in enum.values)))
+        setattr(self, name, type(str(name), (object,),
+            dict((_to_snake_case(x.name), x.value) for x in enum.values)))
 
     def _add_procedure(self, procedure):
         """ Add a plain procedure to this service """
