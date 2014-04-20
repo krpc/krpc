@@ -16,7 +16,6 @@ namespace KRPCServices.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class AutoPilot
     {
-        global::Vessel vessel;
         static bool Engaged = false;
         static ReferenceFrame ReferenceFrame = ReferenceFrame.Surface;
         static double Pitch = 0d;
@@ -30,7 +29,6 @@ namespace KRPCServices.Services
 
         public AutoPilot (global::Vessel vessel)
         {
-            this.vessel = vessel;
         }
 
         [KRPCMethod]
