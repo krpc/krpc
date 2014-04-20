@@ -1,16 +1,18 @@
 using System;
 using KRPC.Service.Attributes;
+using System.Collections.Generic;
 
 namespace KRPCServices.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
     public class Vessel
     {
+        global::Vessel vessel;
+        IDictionary<ReferenceFrame, Flight> flightObjects;
+
         internal Vessel (global::Vessel vessel)
         {
-            OrbitalFlight = new Flight (vessel, ReferenceFrame.Orbital);
-            SurfaceFlight = new Flight (vessel, ReferenceFrame.Surface);
-            TargetFlight = new Flight (vessel, ReferenceFrame.Target);
+            this.vessel = vessel;
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
@@ -24,14 +26,13 @@ namespace KRPCServices.Services
             set { throw new NotImplementedException (); }
         }
 
-        [KRPCProperty]
-        public Flight OrbitalFlight { get; private set; }
-
-        [KRPCProperty]
-        public Flight SurfaceFlight { get; private set; }
-
-        [KRPCProperty]
-        public Flight TargetFlight { get; private set; }
+        [KRPCMethod]
+        public Flight Flight (ReferenceFrame referenceFrame = ReferenceFrame.Surface)
+        {
+            if (!flightObjects.ContainsKey (referenceFrame))
+                flightObjects [referenceFrame] = new Flight (vessel, referenceFrame);
+            return flightObjects [referenceFrame];
+        }
 
         [KRPCProperty]
         public Vessel Target { get; set; }
