@@ -13,6 +13,7 @@ namespace KRPCServices.Services
         internal Vessel (global::Vessel vessel)
         {
             this.vessel = vessel;
+            flightObjects = new Dictionary<ReferenceFrame, KRPCServices.Services.Flight> ();
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
