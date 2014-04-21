@@ -99,7 +99,7 @@ namespace KRPCServices.Services
             //if (FlightGlobals.ActiveVessel != vessel)
             //    throw new InvalidOperationException ();
             Quaternion vesselR = FlightGlobals.ActiveVessel.transform.rotation;
-            Quaternion target = ReferenceFrameRotation.GetRotation (ReferenceFrame, FlightGlobals.ActiveVessel);
+            Quaternion target = ReferenceFrameTransform.GetRotation (ReferenceFrame, FlightGlobals.ActiveVessel);
             // TODO: don't force the roll to 0 if specific roll not requested
             var roll = Double.IsNaN (AutoPilot.Roll) ? 0 : AutoPilot.Roll;
             target *= Quaternion.Euler (new Vector3d (Pitch, -Yaw, 180 - roll));

@@ -14,7 +14,7 @@ namespace KRPCServices
     /// https://github.com/Cilph/RemoteTech2
     /// http://forum.kerbalspaceprogram.com/threads/69313-WIP-kRPC-A-language-agnostic-Remote-Procedure-Call-server-for-KSP?p=1021721&viewfull=1#post1021721
     /// </remarks>
-    static class ReferenceFrameRotation
+    static class ReferenceFrameTransform
     {
         /// <summary>
         /// Returns the up vector for the given reference frame in world coordinates.

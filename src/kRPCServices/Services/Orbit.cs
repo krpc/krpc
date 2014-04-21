@@ -78,7 +78,7 @@ namespace KRPCServices.Services
         /// </summary>
         Vector3d GetPrograde ()
         {
-            var rot = ReferenceFrameRotation.GetRotation (ReferenceFrame.Surface, vessel).Inverse ();
+            var rot = ReferenceFrameTransform.GetRotation (ReferenceFrame.Surface, vessel).Inverse ();
             return (rot * vessel.GetOrbit ().GetVel ()).normalized;
         }
 
@@ -87,7 +87,7 @@ namespace KRPCServices.Services
         /// </summary>
         Vector3d GetNormal ()
         {
-            var rot = ReferenceFrameRotation.GetRotation (ReferenceFrame.Surface, vessel).Inverse ();
+            var rot = ReferenceFrameTransform.GetRotation (ReferenceFrame.Surface, vessel).Inverse ();
             var normal = vessel.GetOrbit ().GetOrbitNormal ();
             var tmp = normal.y;
             normal.y = normal.z;

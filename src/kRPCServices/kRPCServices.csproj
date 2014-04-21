@@ -67,8 +67,8 @@
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
-    <Compile Include="ReferenceFrameRotation.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
+    <Compile Include="ReferenceFrameTransform.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
