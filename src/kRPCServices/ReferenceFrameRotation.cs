@@ -5,6 +5,9 @@ using KRPCServices.Services;
 
 namespace KRPCServices
 {
+    /// <summary>
+    /// Used to compute transformations for conversion between different reference frames and world-space
+    /// </summary>
     /// <remarks>
     /// Adapted from MJ2/RT2/forum discussion; credit goes to r4m0n, Cilph and mic_e
     /// https://github.com/MuMech/MechJeb2
@@ -14,8 +17,8 @@ namespace KRPCServices
     static class ReferenceFrameRotation
     {
         /// <summary>
-        /// Returns the up vector for the given reference frame in world coordinates
-        /// Vector is not normalized
+        /// Returns the up vector for the given reference frame in world coordinates.
+        /// The resulting vector is not normalized.
         /// </summary>
         static Vector3 GetUpNotNormalized (ReferenceFrame referenceFrame, Vessel vessel)
         {
@@ -36,8 +39,8 @@ namespace KRPCServices
         }
 
         /// <summary>
-        /// Returns the forward vector for the given reference frame in world coordinates
-        /// Vector is not normalized
+        /// Returns the forward vector for the given reference frame in world coordinates.
+        /// The resulting vector is not normalized.
         /// </summary>
         static Vector3 GetForwardNotNormalized (ReferenceFrame referenceFrame, Vessel vessel)
         {
@@ -103,8 +106,8 @@ namespace KRPCServices
         }
 
         /// <summary>
-        /// Returns the reference rotation quaternion for the given mode.
-        /// Applying the rotation converts from the given reference frame to world space. TODO: is this correct?!?
+        /// Returns the rotation for the given frame of reference.
+        /// Applying the rotation to a vector in reference-frame-space produces the corresponding vector in world-space.
         /// </summary>
         public static Quaternion GetRotation (ReferenceFrame referenceFrame, Vessel vessel)
         {
