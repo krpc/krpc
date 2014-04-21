@@ -128,6 +128,31 @@ namespace KRPCServices
             Vector3.OrthoNormalize (ref forward, ref up);
             return Quaternion.LookRotation (forward, up);
         }
+
+        /// <summary>
+        /// Returns the velocity of the reference frame in world-space.
+        /// </summary>
+        public static Vector3 GetVelocity (ReferenceFrame referenceFrame, Vessel vessel)
+        {
+            switch (referenceFrame) {
+            case ReferenceFrame.Orbital:
+            case ReferenceFrame.Surface:
+            case ReferenceFrame.Maneuver:
+            case ReferenceFrame.Target:
+                return Vector3.zero;
+            // Relative to the surface velocity vector
+            case ReferenceFrame.SurfaceVelocity:
+                return vessel.GetObtVelocity () - vessel.GetSrfVelocity ();
+            // Relative to the target's velocity vector, or relative to the orbit if there is no target
+            case ReferenceFrame.TargetVelocity:
+                throw new NotImplementedException ();
+            // Relative to the negative surface normal of the target docking port, or relative to the target if the target is not a docking port
+            case ReferenceFrame.Docking:
+                throw new NotImplementedException ();
+            default:
+                throw new ArgumentException ("No such reference frame");
+            }
+        }
     }
 }
 
