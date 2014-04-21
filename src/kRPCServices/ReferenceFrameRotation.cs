@@ -123,7 +123,7 @@ namespace KRPCServices
             // Note: forward is along the z-axis, up is along the negative y-axis
             var up = -GetUpNotNormalized (referenceFrame, vessel);
             Vector3.OrthoNormalize (ref forward, ref up);
-            return Quaternion.LookRotation (forward, -up);
+            return Quaternion.LookRotation (forward, up);
         }
     }
 }
