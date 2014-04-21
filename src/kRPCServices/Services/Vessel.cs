@@ -1,9 +1,22 @@
 using System;
 using KRPC.Service.Attributes;
 using System.Collections.Generic;
+using KRPCServices.ExtensionMethods;
 
 namespace KRPCServices.Services
 {
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum VesselType
+    {
+        Ship,
+        Station,
+        Lander,
+        Probe,
+        Rover,
+        Base,
+        Debris
+    }
+
     [KRPCClass (Service = "SpaceCenter")]
     public class Vessel
     {
@@ -23,8 +36,18 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public string Name {
-            get { throw new NotImplementedException (); }
-            set { throw new NotImplementedException (); }
+            get { return vessel.vesselName; }
+            set { vessel.vesselName = value; }
+        }
+
+        [KRPCProperty]
+        public VesselType Type {
+            get {
+                return vessel.vesselType.ToVesselType ();
+            }
+            set {
+                vessel.vesselType = value.FromVesselType ();
+            }
         }
 
         [KRPCMethod]
@@ -36,7 +59,10 @@ namespace KRPCServices.Services
         }
 
         [KRPCProperty]
-        public Vessel Target { get; set; }
+        public Vessel Target {
+            get { throw new NotImplementedException (); }
+            set { throw new NotImplementedException (); }
+        }
 
         [KRPCProperty]
         public Orbit Orbit { get; private set; }
