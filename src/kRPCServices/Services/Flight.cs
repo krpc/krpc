@@ -18,16 +18,12 @@ namespace KRPCServices.Services
             this.referenceFrame = referenceFrame;
         }
 
+        /// <summary>
+        /// Velocity of the vessel in world-space.
+        /// </summary>
         Vector3d GetVelocity ()
         {
-            switch (referenceFrame) {
-            case ReferenceFrame.Orbital:
-                return vessel.GetOrbit ().GetVel ();
-            case ReferenceFrame.Surface:
-                return vessel.srf_velocity;
-            default: //ReferenceFrame.Target:
-                throw new NotImplementedException ();
-            }
+            return vessel.GetOrbit ().GetVel ();
         }
 
         /// <summary>
@@ -86,32 +82,33 @@ namespace KRPCServices.Services
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Velocity {
-            // TODO: convert to a reference frame?
-            get { return GetVelocity ().ToMessage (); }
+            get {
+                var rotation = ReferenceFrameTransform.GetRotation (referenceFrame, vessel);
+                var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
+                return (rotation.Inverse () * (GetVelocity () - velocity)).ToMessage ();
+            }
         }
 
         [KRPCProperty]
         public double Speed {
-            get { return GetVelocity ().magnitude; }
+            get {
+                var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
+                return (GetVelocity () - velocity).magnitude;
+            }
         }
 
         [KRPCProperty]
         public double HorizontalSpeed {
             get {
-                if (referenceFrame == ReferenceFrame.Surface)
-                    return vessel.horizontalSrfSpeed;
-                else
-                    return Vector3d.Exclude (GetUpDirection (), GetVelocity ()).magnitude;
+                return Speed - VerticalSpeed;
             }
         }
 
         [KRPCProperty]
         public double VerticalSpeed {
             get {
-                if (referenceFrame == ReferenceFrame.Surface)
-                    return vessel.verticalSpeed;
-                else
-                    return Vector3d.Dot (GetVelocity (), GetUpDirection ());
+                var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
+                return Vector3d.Dot (GetVelocity () - velocity, GetUpDirection ());
             }
         }
 
