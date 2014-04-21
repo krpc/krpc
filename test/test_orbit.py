@@ -23,12 +23,12 @@ class TestOrbit(testingtools.TestCase):
         self.assertClose(1, np.linalg.norm(normal_neg))
         self.assertClose(1, np.linalg.norm(radial))
         self.assertClose(1, np.linalg.norm(radial_neg))
-        self.assertClose(prograde, [-x for x in retrograde], error=0.001)
-        self.assertClose(radial, [-x for x in radial_neg], error=0.001)
-        self.assertClose(normal, [-x for x in normal_neg], error=0.001)
-        self.assertClose(0, np.dot(prograde, radial), error=0.001)
-        self.assertClose(0, np.dot(prograde, normal), error=0.001)
-        self.assertClose(0, np.dot(radial, normal), error=0.001)
+        self.assertClose(prograde, [-x for x in retrograde], error=0.01)
+        self.assertClose(radial, [-x for x in radial_neg], error=0.01)
+        self.assertClose(normal, [-x for x in normal_neg], error=0.01)
+        self.assertClose(0, np.dot(prograde, radial), error=0.01)
+        self.assertClose(0, np.dot(prograde, normal), error=0.01)
+        self.assertClose(0, np.dot(radial, normal), error=0.01)
 
     def test_orbit_kerbin(self):
         load_save('orbit-kerbin')

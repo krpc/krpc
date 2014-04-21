@@ -11,9 +11,10 @@ class TestControl(testingtools.TestCase):
     def setUp(self):
         load_save('flight')
         self.ksp = krpc.connect()
+        ref = self.ksp.space_center.ReferenceFrame
         self.vessel = self.ksp.space_center.active_vessel
         self.control = self.vessel.control
-        self.orbital_flight = self.vessel.orbital_flight
+        self.orbital_flight = self.vessel.flight(ref.orbital)
 
     def test_basics(self):
         # Check bool properties
@@ -60,13 +61,16 @@ class TestControl(testingtools.TestCase):
         self.assertGreater(diff, 0)
 
     def test_roll_control(self):
+        pitch = self.orbital_flight.pitch
+        heading = self.orbital_flight.heading
+
         self.control.sas = False
         self.control.roll = 0.1
         time.sleep(3)
         self.control.roll = 0
 
-        self.assertClose(27, self.orbital_flight.pitch, error=1)
-        self.assertClose(116, self.orbital_flight.heading, error=1)
+        self.assertClose(pitch, self.orbital_flight.pitch, error=1)
+        self.assertClose(heading, self.orbital_flight.heading, error=1)
 
         # Check flight is rolling in correct direction
         roll = self.orbital_flight.roll
