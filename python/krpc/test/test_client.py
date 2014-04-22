@@ -189,11 +189,19 @@ class TestClient(unittest.TestCase):
         self.assertEqual(TestSchema.b, self.ksp.test_service.enum_echo(TestSchema.b))
         self.assertEqual(TestSchema.c, self.ksp.test_service.enum_echo(TestSchema.c))
 
+        self.assertEqual(TestSchema.a, self.ksp.test_service.enum_default_arg(TestSchema.a))
+        self.assertEqual(TestSchema.c, self.ksp.test_service.enum_default_arg())
+        self.assertEqual(TestSchema.b, self.ksp.test_service.enum_default_arg(TestSchema.b))
+
         enum = self.ksp.test_service.CSharpEnum
         self.assertEqual(enum.value_b, self.ksp.test_service.c_sharp_enum_return())
         self.assertEqual(enum.value_a, self.ksp.test_service.c_sharp_enum_echo(enum.value_a))
         self.assertEqual(enum.value_b, self.ksp.test_service.c_sharp_enum_echo(enum.value_b))
         self.assertEqual(enum.value_c, self.ksp.test_service.c_sharp_enum_echo(enum.value_c))
+
+        self.assertEqual(enum.value_a, self.ksp.test_service.c_sharp_enum_default_arg(enum.value_a))
+        self.assertEqual(enum.value_c, self.ksp.test_service.c_sharp_enum_default_arg())
+        self.assertEqual(enum.value_b, self.ksp.test_service.c_sharp_enum_default_arg(enum.value_b))
 
     def test_invalid_enum(self):
         self.assertRaises(krpc.client.RPCError, self.ksp.test_service.c_sharp_enum_echo, 9999)
@@ -243,9 +251,11 @@ class TestClient(unittest.TestCase):
 
                 'enum_return',
                 'enum_echo',
+                'enum_default_arg',
                 'CSharpEnum',
                 'c_sharp_enum_return',
-                'c_sharp_enum_echo'
+                'c_sharp_enum_echo',
+                'c_sharp_enum_default_arg'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service))))
 

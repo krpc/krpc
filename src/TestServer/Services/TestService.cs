@@ -143,6 +143,12 @@ namespace TestServer.Services
             return x;
         }
 
+        [KRPCProcedure]
+        public static KRPC.Schema.Test.TestEnum EnumDefaultArg (KRPC.Schema.Test.TestEnum x = KRPC.Schema.Test.TestEnum.c)
+        {
+            return x;
+        }
+
         [KRPCEnum]
         public enum CSharpEnum { ValueA, ValueB, ValueC };
 
@@ -154,6 +160,12 @@ namespace TestServer.Services
 
         [KRPCProcedure]
         public static CSharpEnum CSharpEnumEcho (CSharpEnum x)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static CSharpEnum CSharpEnumDefaultArg (CSharpEnum x = CSharpEnum.ValueC)
         {
             return x;
         }
