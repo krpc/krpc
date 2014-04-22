@@ -144,12 +144,12 @@ namespace TestServer.Services
         }
 
         [KRPCEnum]
-        public enum CSharpEnum { x, y, z };
+        public enum CSharpEnum { ValueA, ValueB, ValueC };
 
         [KRPCProcedure]
         public static CSharpEnum CSharpEnumReturn ()
         {
-            return CSharpEnum.y;
+            return CSharpEnum.ValueB;
         }
 
         [KRPCProcedure]

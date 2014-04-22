@@ -190,10 +190,10 @@ class TestClient(unittest.TestCase):
         self.assertEqual(TestSchema.c, self.ksp.test_service.enum_echo(TestSchema.c))
 
         enum = self.ksp.test_service.CSharpEnum
-        self.assertEqual(enum.y, self.ksp.test_service.c_sharp_enum_return())
-        self.assertEqual(enum.x, self.ksp.test_service.c_sharp_enum_echo(enum.x))
-        self.assertEqual(enum.y, self.ksp.test_service.c_sharp_enum_echo(enum.y))
-        self.assertEqual(enum.z, self.ksp.test_service.c_sharp_enum_echo(enum.z))
+        self.assertEqual(enum.value_b, self.ksp.test_service.c_sharp_enum_return())
+        self.assertEqual(enum.value_a, self.ksp.test_service.c_sharp_enum_echo(enum.value_a))
+        self.assertEqual(enum.value_b, self.ksp.test_service.c_sharp_enum_echo(enum.value_b))
+        self.assertEqual(enum.value_c, self.ksp.test_service.c_sharp_enum_echo(enum.value_c))
 
     def test_invalid_enum(self):
         self.assertRaises(krpc.client.RPCError, self.ksp.test_service.c_sharp_enum_echo, 9999)
@@ -269,13 +269,12 @@ class TestClient(unittest.TestCase):
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service.TestClass))))
 
     def test_test_service_enum_members(self):
-        #TODO: should this be converted to snake case?
         self.assertSetEqual(
-            set(['x','y','z']),
+            set(['value_a','value_b','value_c']),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service.CSharpEnum))))
-        self.assertEqual (0, self.ksp.test_service.CSharpEnum.x)
-        self.assertEqual (1, self.ksp.test_service.CSharpEnum.y)
-        self.assertEqual (2, self.ksp.test_service.CSharpEnum.z)
+        self.assertEqual (0, self.ksp.test_service.CSharpEnum.value_a)
+        self.assertEqual (1, self.ksp.test_service.CSharpEnum.value_b)
+        self.assertEqual (2, self.ksp.test_service.CSharpEnum.value_c)
 
 
 if __name__ == '__main__':
