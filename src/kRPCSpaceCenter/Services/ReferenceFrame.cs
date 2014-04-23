@@ -1,6 +1,6 @@
 ﻿using KRPC.Service.Attributes;
 
-namespace KRPCServices.Services
+namespace KRPCSpaceCenter.Services
 {
     [KRPCEnum (Service = "SpaceCenter")]
     public enum ReferenceFrame

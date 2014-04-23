@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using KSP.IO;
-using KRPCServices.Services;
+using KRPCSpaceCenter.Services;
 
-namespace KRPCServices
+namespace KRPCSpaceCenter
 {
     /// <summary>
     /// Used to compute transformations for conversion between different reference frames and world-space

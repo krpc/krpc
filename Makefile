@@ -9,7 +9,7 @@ DIST_LIBS = \
   lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll
 DIST_ICONS = src/kRPC/bin/icons
 
-CSHARP_MAIN_PROJECTS  = kRPC kRPCServices
+CSHARP_MAIN_PROJECTS  = kRPC kRPCSpaceCenter
 CSHARP_TEST_PROJECTS  = kRPCTest TestServer
 CSHARP_OTHER_PROJECTS = TestingTools
 CSHARP_CONFIG = Release
@@ -20,7 +20,7 @@ CSHARP_BINDIRS   = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin) \
 CSHARP_MAIN_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 CSHARP_LIBRARIES      = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 
-PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCServices/Schema/*.proto)
+PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCSpaceCenter/Schema/*.proto)
 PROTOS_TEST = $(wildcard src/kRPCTest/Schema/*.proto)
 
 PROTOC = protoc
@@ -67,7 +67,7 @@ pre-release: dist test
 	cp $(DIST_DIR)/README.txt $(DIST_DIR)/GameData/kRPC/
 	# Plugin files
 	$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
-	$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPCServices.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCServices-version.txt
+	$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter-version.txt
 	cd $(DIST_DIR); zip -r krpc-$(VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
 
 release: dist test

@@ -1,9 +1,9 @@
 using System;
 using KRPC.Service.Attributes;
 using System.Collections.Generic;
-using KRPCServices.ExtensionMethods;
+using KRPCSpaceCenter.ExtensionMethods;
 
-namespace KRPCServices.Services
+namespace KRPCSpaceCenter.Services
 {
     [KRPCEnum (Service = "SpaceCenter")]
     public enum VesselType
@@ -26,7 +26,7 @@ namespace KRPCServices.Services
         internal Vessel (global::Vessel vessel)
         {
             this.vessel = vessel;
-            flightObjects = new Dictionary<ReferenceFrame, KRPCServices.Services.Flight> ();
+            flightObjects = new Dictionary<ReferenceFrame, Flight> ();
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);

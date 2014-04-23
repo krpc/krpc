@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace KRPCServices
+namespace KRPCSpaceCenter
 {
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class PilotAddon : MonoBehaviour

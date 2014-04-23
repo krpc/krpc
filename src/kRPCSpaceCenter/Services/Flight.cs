@@ -2,9 +2,9 @@ using System;
 using KRPC.Service.Attributes;
 using KRPC.Schema.Geometry;
 using UnityEngine;
-using KRPCServices.ExtensionMethods;
+using KRPCSpaceCenter.ExtensionMethods;
 
-namespace KRPCServices.Services
+namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
     public class Flight

@@ -1,8 +1,8 @@
 using KRPC.Service.Attributes;
 using KRPC.Schema.Geometry;
-using KRPCServices.ExtensionMethods;
+using KRPCSpaceCenter.ExtensionMethods;
 
-namespace KRPCServices.Services
+namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
     public class Node

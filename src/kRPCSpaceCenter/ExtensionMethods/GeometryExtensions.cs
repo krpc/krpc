@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace KRPCServices.ExtensionMethods
+namespace KRPCSpaceCenter.ExtensionMethods
 {
     public static class GeometryExtensions
     {

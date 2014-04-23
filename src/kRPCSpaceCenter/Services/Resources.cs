@@ -2,7 +2,7 @@ using System;
 using KRPC.Service.Attributes;
 using System.Collections.Generic;
 
-namespace KRPCServices.Services
+namespace KRPCSpaceCenter.Services
 {
     /// <summary>
     /// Class used to manage the resources for a vessel.

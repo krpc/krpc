@@ -1,7 +1,7 @@
 using KRPC.Service.Attributes;
-using KRPCServices.ExtensionMethods;
+using KRPCSpaceCenter.ExtensionMethods;
 
-namespace KRPCServices.Services
+namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
     public class Orbit

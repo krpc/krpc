@@ -1,6 +1,6 @@
 using KRPC.Service.Attributes;
 
-namespace KRPCServices.Services
+namespace KRPCSpaceCenter.Services
 {
     /// <summary>
     /// Class used to manage the individual parts on a vessel.

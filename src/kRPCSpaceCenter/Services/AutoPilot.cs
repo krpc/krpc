@@ -1,9 +1,9 @@
 ﻿using KRPC.Service.Attributes;
 using System;
 using UnityEngine;
-using KRPCServices.ExtensionMethods;
+using KRPCSpaceCenter.ExtensionMethods;
 
-namespace KRPCServices.Services
+namespace KRPCSpaceCenter.Services
 {
     /// <remarks>
     /// Taken and adapted from MJ2/kOS/RT2/and forum discussion; credit goes to the authors of those plugins:

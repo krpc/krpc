@@ -2,7 +2,7 @@ using System;
 using KSP;
 using KRPC.Schema.Geometry;
 
-namespace KRPCServices
+namespace KRPCSpaceCenter
 {
     static class Utils
     {

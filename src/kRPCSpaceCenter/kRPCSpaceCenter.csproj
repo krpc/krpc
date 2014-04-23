@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{690C8D5A-B41F-44C4-99B9-B6A3D190447B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>KRPCServices</RootNamespace>
-    <AssemblyName>kRPCServices</AssemblyName>
+    <RootNamespace>KRPCSpaceCenter</RootNamespace>
+    <AssemblyName>kRPCSpaceCenter</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <CodePage>65001</CodePage>
   </PropertyGroup>

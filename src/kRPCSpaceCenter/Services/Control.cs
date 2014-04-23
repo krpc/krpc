@@ -1,7 +1,7 @@
 using System;
 using KRPC.Service.Attributes;
 
-namespace KRPCServices.Services
+namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
     public class Control
