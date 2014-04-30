@@ -12,7 +12,7 @@ A work-in-progress.
 
     ```pip install krpc```
 
-    Or, alternatively, by [downloading the source distribution](https://pypi.python.org/pypi/krpc), extracting and install it using:
+    Or, alternatively, download the source distribution from https://pypi.python.org/pypi/krpc and install it using:
 
     ```python setup.py install```
 

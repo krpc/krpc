@@ -55,8 +55,6 @@ dist: build
 	$(UNZIP) lib/toolbar/Toolbar-1.7.1.zip -d $(DIST_DIR)
 	mv $(DIST_DIR)/Toolbar-1.7.1/GameData/* $(DIST_DIR)/GameData/
 	rm -r $(DIST_DIR)/Toolbar-1.7.1
-
-pre-release: dist test
 	# Licenses
 	cp LICENSE.txt $(DIST_DIR)/
 	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-csharp-port-license.txt
@@ -68,6 +66,8 @@ pre-release: dist test
 	# Plugin files
 	$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
 	$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter-version.txt
+
+pre-release: dist test
 	cd $(DIST_DIR); zip -r krpc-$(VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
 
 release: dist test
