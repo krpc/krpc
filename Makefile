@@ -91,8 +91,10 @@ test-python:
 ksp: install TestingTools
 	cp src/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
 	-cp settings.cfg $(KSP_DIR)/GameData/kRPC/settings.cfg
-	$(KSP_DIR)/KSP.x86_64 &
-	tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
+	test "!" -f $(KSP_DIR)/KSP.x86_64 || $(KSP_DIR)/KSP.x86_64 &
+	test "!" -f $(KSP_DIR)/KSP.exe || $(KSP_DIR)/KSP.exe &
+	test "!" -d $(HOME)/.config/unity3d || tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
+	test "!" -f $(KSP_DIR)/KSP_Data/output_log.txt || tail -f $(KSP_DIR)/KSP_Data/output_log.txt
 
 clean: protobuf-clean
 	-rm -rf lib/KSP_Data
