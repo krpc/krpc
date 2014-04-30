@@ -115,6 +115,7 @@
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
     <Compile Include="Service\Scanner\ParameterSignature.cs" />
     <Compile Include="Service\ProcedureParameter.cs" />
+    <Compile Include="Service\RequestContinuation.cs" />
     <Compile Include="Continuations\IContinuation.cs" />
     <Compile Include="Continuations\Continuation.cs" />
     <Compile Include="Continuations\YieldException.cs" />

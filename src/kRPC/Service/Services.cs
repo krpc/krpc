@@ -5,6 +5,7 @@ using Google.ProtocolBuffers;
 using KRPC.Schema.KRPC;
 using KRPC.Service.Scanner;
 using KRPC.Utils;
+using KRPC.Continuations;
 
 namespace KRPC.Service
 {
@@ -32,7 +33,8 @@ namespace KRPC.Service
 
         /// <summary>
         /// Executes the given request and returns a response builder with the relevant
-        /// fields populated. Throws RPCException if processing the request fails.
+        /// fields populated. Throws YieldException, containing a continuation, if the request yields.
+        /// Throws RPCException if processing the request fails.
         /// </summary>
         public Response.Builder HandleRequest (Request request)
         {
@@ -53,8 +55,43 @@ namespace KRPC.Service
             try {
                 returnValue = procedure.Handler.Invoke (arguments);
             } catch (TargetInvocationException e) {
+                if (e.InnerException.GetType () == typeof (YieldException))
+                    throw e.InnerException;
                 throw new RPCException ("Procedure '" + procedure.FullyQualifiedName + "' threw an exception. " +
                 e.InnerException.GetType () + ": " + e.InnerException.Message);
+            }
+            var responseBuilder = Response.CreateBuilder ();
+            if (procedure.HasReturnType) {
+                responseBuilder.ReturnValue = EncodeReturnValue (procedure, returnValue);
+            }
+            return responseBuilder;
+        }
+
+        public Response.Builder HandleRequest (Request request, IContinuation continuation)
+        {
+            if (continuation == null)
+                throw new ArgumentException ();
+
+            // Get the service definition
+            if (!Signatures.ContainsKey (request.Service))
+                throw new RPCException ("Service " + request.Service + " not found");
+            var service = Signatures [request.Service];
+
+            // Get the procedure definition
+            if (!service.Procedures.ContainsKey (request.Procedure))
+                throw new RPCException ("Procedure " + request.Procedure + " not found, " +
+                    "in Service " + request.Service);
+            var procedure = service.Procedures [request.Procedure];
+
+            // Invoke the procedure
+            object returnValue;
+            try {
+                returnValue = continuation.RunUntyped ();
+            } catch (YieldException e) {
+                throw;
+            } catch (Exception e) {
+                throw new RPCException ("Procedure '" + procedure.FullyQualifiedName + "' threw an exception. " +
+                    e.GetType () + ": " + e.Message);
             }
             var responseBuilder = Response.CreateBuilder ();
             if (procedure.HasReturnType) {

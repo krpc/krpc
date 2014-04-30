@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Continuations;
 
 namespace TestServer.Services
 {
@@ -169,6 +170,12 @@ namespace TestServer.Services
         {
             return x;
         }
+
+        [KRPCProcedure]
+        public static int BlockingProcedure(int n, int sum) {
+            if (n == 0)
+                return sum;
+            throw new YieldException(new ParameterizedContinuation<int,int,int>(BlockingProcedure, n-1, sum+n));
+        }
     }
 }
-

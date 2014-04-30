@@ -7,6 +7,7 @@ using Google.ProtocolBuffers;
 using KRPC.Schema.KRPC;
 using KRPC.Service;
 using KRPC.Utils;
+using KRPC.Continuations;
 
 namespace KRPCTest.Service
 {
@@ -628,6 +629,92 @@ namespace KRPCTest.Service
             var request = Req ("TestService", "ProcedureCSharpEnumArg",
                 Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
             Assert.Throws<RPCException> (() => Run (request));
+        }
+
+        int BlockingProcedureNoReturnFnCount;
+
+        void BlockingProcedureNoReturnFn (int n)
+        {
+            BlockingProcedureNoReturnFnCount++;
+            if (n == 0)
+                return;
+            else
+                throw new YieldException (new ParameterizedContinuationVoid<int> (BlockingProcedureNoReturnFn, n-1));
+        }
+
+        int BlockingProcedureReturnsFnCount;
+
+        int BlockingProcedureReturnsFn (int n, int sum)
+        {
+            BlockingProcedureReturnsFnCount++;
+            if (n == 0)
+                return sum;
+            else
+                throw new YieldException (new ParameterizedContinuation<int,int,int> (BlockingProcedureReturnsFn, n-1, sum+n));
+        }
+
+        /// <summary>
+        /// Test calling a service method that blocks, takes arguments and returns nothing
+        /// </summary>
+        [Test]
+        public void HandleBlockingRequestArgsNoReturn ()
+        {
+            const int num = 42;
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.BlockingProcedureNoReturn (It.IsAny<int> ()))
+                .Callback ((int n) => {
+                BlockingProcedureNoReturnFn (n);
+            });
+            TestService.Service = mock.Object;
+            var request = Req ("TestService", "BlockingProcedureNoReturn",
+                Arg (0, ProtocolBuffers.WriteValue (num, typeof(int))));
+            BlockingProcedureNoReturnFnCount = 0;
+            Response.Builder response = null;
+            Continuation<Response.Builder> continuation = new RequestContinuation (request);
+            while (response == null) {
+                try {
+                    response = continuation.Run ();
+                } catch (YieldException e) {
+                    continuation = (Continuation<Response.Builder>) e.Continuation;
+                }
+            }
+            var builtResponse = response.SetTime (0).Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            // Verify the KRPCProcedure is called once, but the handler function is called multiple times
+            mock.Verify (x => x.BlockingProcedureNoReturn (It.IsAny<int> ()), Times.Once ());
+            Assert.AreEqual (num+1, BlockingProcedureNoReturnFnCount);
+        }
+
+        /// <summary>
+        /// Test calling a service method that blocks, takes arguments and returns a value
+        /// </summary>
+        [Test]
+        public void HandleBlockingRequestArgsReturns ()
+        {
+            const int num = 10;
+            const int expectedResult = 55;
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()))
+                .Returns ((int n, int sum) => BlockingProcedureReturnsFn (n, sum));
+            TestService.Service = mock.Object;
+            var request = Req ("TestService", "BlockingProcedureReturns",
+                Arg (0, ProtocolBuffers.WriteValue (num, typeof(int))));
+            BlockingProcedureReturnsFnCount = 0;
+            Response.Builder response = null;
+            Continuation<Response.Builder> continuation = new RequestContinuation (request);
+            while (response == null) {
+                try {
+                    response = continuation.Run ();
+                } catch (YieldException e) {
+                    continuation = (Continuation<Response.Builder>) e.Continuation;
+                }
+            }
+            var builtResponse = response.SetTime (0).Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (expectedResult, ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(int)));
+            // Verify the KRPCProcedure is called once, but the handler function is called multiple times
+            mock.Verify (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()), Times.Once ());
+            Assert.AreEqual (num+1, BlockingProcedureReturnsFnCount);
         }
     }
 }
