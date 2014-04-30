@@ -1,7 +1,7 @@
 # Note: This must be an absolute path
 KSP_DIR = "$(shell pwd)/../Kerbal Space Program"
 
-VERSION = $(shell cat VERSION)
+VERSION = $(shell cat VERSION.txt)
 
 DIST_DIR = dist
 DIST_LIBS = \
