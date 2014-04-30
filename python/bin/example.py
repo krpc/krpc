@@ -60,7 +60,7 @@ def main():
         if not srbs_separated:
             solid_fuel = resources.amount('SolidFuel', 3)
             print '  Solid fuel = %.1f T' % solid_fuel
-            if True: #solid_fuel < 0.1:
+            if solid_fuel < 0.1:
                 print '  SRB separation!'
                 control.activate_next_stage()
                 srbs_separated = True
