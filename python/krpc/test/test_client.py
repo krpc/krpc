@@ -255,7 +255,9 @@ class TestClient(unittest.TestCase):
                 'CSharpEnum',
                 'c_sharp_enum_return',
                 'c_sharp_enum_echo',
-                'c_sharp_enum_default_arg'
+                'c_sharp_enum_default_arg',
+
+                'blocking_procedure'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service))))
 

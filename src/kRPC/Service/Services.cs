@@ -55,7 +55,7 @@ namespace KRPC.Service
             try {
                 returnValue = procedure.Handler.Invoke (arguments);
             } catch (TargetInvocationException e) {
-                if (e.InnerException.GetType () == typeof (YieldException))
+                if (e.InnerException.GetType () == typeof(YieldException))
                     throw e.InnerException;
                 throw new RPCException ("Procedure '" + procedure.FullyQualifiedName + "' threw an exception. " +
                 e.InnerException.GetType () + ": " + e.InnerException.Message);
@@ -69,9 +69,6 @@ namespace KRPC.Service
 
         public Response.Builder HandleRequest (Request request, IContinuation continuation)
         {
-            if (continuation == null)
-                throw new ArgumentException ();
-
             // Get the service definition
             if (!Signatures.ContainsKey (request.Service))
                 throw new RPCException ("Service " + request.Service + " not found");
@@ -80,18 +77,18 @@ namespace KRPC.Service
             // Get the procedure definition
             if (!service.Procedures.ContainsKey (request.Procedure))
                 throw new RPCException ("Procedure " + request.Procedure + " not found, " +
-                    "in Service " + request.Service);
+                "in Service " + request.Service);
             var procedure = service.Procedures [request.Procedure];
 
             // Invoke the procedure
             object returnValue;
             try {
                 returnValue = continuation.RunUntyped ();
-            } catch (YieldException e) {
+            } catch (YieldException) {
                 throw;
             } catch (Exception e) {
                 throw new RPCException ("Procedure '" + procedure.FullyQualifiedName + "' threw an exception. " +
-                    e.GetType () + ": " + e.Message);
+                e.GetType () + ": " + e.Message);
             }
             var responseBuilder = Response.CreateBuilder ();
             if (procedure.HasReturnType) {
@@ -173,7 +170,7 @@ namespace KRPC.Service
                 return ProtocolBuffers.WriteMessage (returnValue as IMessage);
             else if (ProtocolBuffers.IsAnEnumType (procedure.ReturnType) || TypeUtils.IsAnEnumType (procedure.ReturnType)) {
                 // TODO: Assumes it's underlying type is int
-                return ProtocolBuffers.WriteValue ((int) returnValue, typeof(int));
+                return ProtocolBuffers.WriteValue ((int)returnValue, typeof(int));
             } else
                 return ProtocolBuffers.WriteValue (returnValue, procedure.ReturnType);
         }

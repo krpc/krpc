@@ -1,5 +1,6 @@
 using KRPC.Schema.KRPC;
 using KRPC.Continuations;
+using KRPC.Server;
 
 namespace KRPC.Service
 {
@@ -7,19 +8,24 @@ namespace KRPC.Service
     /// A continuation that runs a request object. Captures the common case where a
     /// request always returns a result, and never throws YieldException
     /// </summary>
-    public class RequestContinuation : Continuation<Response.Builder>
+    class RequestContinuation : Continuation<Response.Builder>
     {
-        public Request request;
+        public IClient Client { get; private set; }
+
+        public Request Request { get; private set; }
+
         IContinuation continuation;
 
-        public RequestContinuation (Request request)
+        public RequestContinuation (IClient client, Request request)
         {
-            this.request = request;
+            Client = client;
+            Request = request;
         }
 
-        public RequestContinuation (Request request, IContinuation continuation)
+        RequestContinuation (IClient client, Request request, IContinuation continuation)
         {
-            this.request = request;
+            Client = client;
+            Request = request;
             this.continuation = continuation;
         }
 
@@ -27,11 +33,11 @@ namespace KRPC.Service
         {
             try {
                 if (continuation == null)
-                    return Services.Instance.HandleRequest (request);
+                    return Services.Instance.HandleRequest (Request);
                 else
-                    return Services.Instance.HandleRequest (request, continuation);
+                    return Services.Instance.HandleRequest (Request, continuation);
             } catch (YieldException e) {
-                throw new YieldException (new RequestContinuation (request, e.Continuation));
+                throw new YieldException (new RequestContinuation (Client, Request, e.Continuation));
             }
         }
     };

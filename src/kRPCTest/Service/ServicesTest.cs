@@ -198,9 +198,9 @@ namespace KRPCTest.Service
             args [1] = Req ("bar", "bar");
             args [2] = Res ("baz", 123);
             var argBytes = new List<byte[]> ();
-            argBytes.Add (ToBytes (args[0]));
-            argBytes.Add (ToBytes (args[1]));
-            argBytes.Add (ToBytes (args[2]));
+            argBytes.Add (ToBytes (args [0]));
+            argBytes.Add (ToBytes (args [1]));
+            argBytes.Add (ToBytes (args [2]));
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureThreeArgsNoReturn (
                 It.IsAny<Response> (),
@@ -235,7 +235,7 @@ namespace KRPCTest.Service
             mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns (expectedResponse);
             TestService.Service = mock.Object;
             var responseBuilder = Run (Req ("TestService", "ProcedureNoArgsReturns"));
-            var response = responseBuilder.SetTime (42).Build();
+            var response = responseBuilder.SetTime (42).Build ();
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
             Response innerResponse = Res (response.ReturnValue);
             Assert.AreEqual (expectedResponse.Error, innerResponse.Error);
@@ -251,10 +251,10 @@ namespace KRPCTest.Service
             byte[] expectedResponseBytes = ToBytes (expectedResponse);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureSingleArgReturns (It.IsAny<Response> ()))
-                .Returns ((Response x) => Res(x));
+                .Returns ((Response x) => Res (x));
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureSingleArgReturns",
-                Arg (0, ByteString.CopyFrom (expectedResponseBytes)));
+                              Arg (0, ByteString.CopyFrom (expectedResponseBytes)));
             Response.Builder responseBuilder = Run (request);
             Response response = responseBuilder.SetTime (42).Build ();
             mock.Verify (x => x.ProcedureSingleArgReturns (It.IsAny<Response> ()), Times.Once ());
@@ -317,7 +317,7 @@ namespace KRPCTest.Service
             mock.SetupSet (x => x.PropertyWithSet = "foo");
             TestService.Service = mock.Object;
             var request = Req ("TestService", "set_PropertyWithSet",
-                Arg (0, ProtocolBuffers.WriteValue ("foo", typeof(string))));
+                              Arg (0, ProtocolBuffers.WriteValue ("foo", typeof(string))));
             Response.Builder response = Run (request);
             Assert.False (response.HasError);
         }
@@ -442,7 +442,7 @@ namespace KRPCTest.Service
             var guid = ObjectStore.Instance.AddInstance (instance);
             ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
             var request = Req ("TestService", "TestClass_set_IntProperty",
-                Arg (0, guidBytes), Arg (1, ProtocolBuffers.WriteValue (1337, typeof(int))));
+                              Arg (0, guidBytes), Arg (1, ProtocolBuffers.WriteValue (1337, typeof(int))));
             Response.Builder response = Run (request);
             var builtResponse = response.SetTime (0).Build ();
             Assert.IsFalse (builtResponse.HasError);
@@ -475,7 +475,7 @@ namespace KRPCTest.Service
         public void HandleRequestWithClassTypeReturnFromDifferentService ()
         {
             var request = Req ("TestService2", "ClassTypeFromOtherServiceAsReturn",
-                Arg (0, ProtocolBuffers.WriteValue ("jeb", typeof(string))));
+                              Arg (0, ProtocolBuffers.WriteValue ("jeb", typeof(string))));
             Response.Builder response = Run (request);
             var builtResponse = response.SetTime (0).Build ();
             Assert.IsFalse (builtResponse.HasError);
@@ -522,8 +522,8 @@ namespace KRPCTest.Service
             });
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureThreeOptionalArgsNoReturn",
-                Arg (2, ProtocolBuffers.WriteValue (arg2, arg2.GetType ())),
-                Arg (0, ProtocolBuffers.WriteValue (arg0, arg0.GetType ())));
+                              Arg (2, ProtocolBuffers.WriteValue (arg2, arg2.GetType ())),
+                              Arg (0, ProtocolBuffers.WriteValue (arg0, arg0.GetType ())));
             Run (request);
             mock.Verify (x => x.ProcedureThreeOptionalArgsNoReturn (
                 It.IsAny<float> (),
@@ -560,7 +560,7 @@ namespace KRPCTest.Service
             });
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureEnumArg",
-                Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
+                              Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
             Run (request);
             mock.Verify (x => x.ProcedureEnumArg (It.IsAny<KRPC.Schema.Test.TestEnum> ()), Times.Once ());
         }
@@ -572,12 +572,12 @@ namespace KRPCTest.Service
         public void HandleRequestNoArgEnumReturn ()
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureEnumReturn ()).Returns(KRPC.Schema.Test.TestEnum.c);
+            mock.Setup (x => x.ProcedureEnumReturn ()).Returns (KRPC.Schema.Test.TestEnum.c);
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "ProcedureEnumReturn"));
             var builtResponse = response.SetTime (0).Build ();
             Assert.IsFalse (builtResponse.HasError);
-            Assert.AreEqual (ProtocolBuffers.WriteValue((int) KRPC.Schema.Test.TestEnum.c, typeof(int)), builtResponse.ReturnValue);
+            Assert.AreEqual (ProtocolBuffers.WriteValue ((int)KRPC.Schema.Test.TestEnum.c, typeof(int)), builtResponse.ReturnValue);
             mock.Verify (x => x.ProcedureEnumReturn (), Times.Once ());
         }
 
@@ -595,7 +595,7 @@ namespace KRPCTest.Service
             });
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureCSharpEnumArg",
-                Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
+                              Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
             Run (request);
             mock.Verify (x => x.ProcedureCSharpEnumArg (It.IsAny<TestService.CSharpEnum> ()), Times.Once ());
         }
@@ -607,12 +607,12 @@ namespace KRPCTest.Service
         public void HandleRequestNoArgCSharpEnumReturn ()
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureCSharpEnumReturn ()).Returns(TestService.CSharpEnum.z);
+            mock.Setup (x => x.ProcedureCSharpEnumReturn ()).Returns (TestService.CSharpEnum.z);
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "ProcedureCSharpEnumReturn"));
             var builtResponse = response.SetTime (0).Build ();
             Assert.IsFalse (builtResponse.HasError);
-            Assert.AreEqual (ProtocolBuffers.WriteValue((int) TestService.CSharpEnum.z, typeof(int)), builtResponse.ReturnValue);
+            Assert.AreEqual (ProtocolBuffers.WriteValue ((int)TestService.CSharpEnum.z, typeof(int)), builtResponse.ReturnValue);
             mock.Verify (x => x.ProcedureCSharpEnumReturn (), Times.Once ());
         }
 
@@ -627,7 +627,7 @@ namespace KRPCTest.Service
             mock.Setup (x => x.ProcedureCSharpEnumArg (It.IsAny<TestService.CSharpEnum> ()));
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureCSharpEnumArg",
-                Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
+                              Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
             Assert.Throws<RPCException> (() => Run (request));
         }
 
@@ -639,7 +639,7 @@ namespace KRPCTest.Service
             if (n == 0)
                 return;
             else
-                throw new YieldException (new ParameterizedContinuationVoid<int> (BlockingProcedureNoReturnFn, n-1));
+                throw new YieldException (new ParameterizedContinuationVoid<int> (BlockingProcedureNoReturnFn, n - 1));
         }
 
         int BlockingProcedureReturnsFnCount;
@@ -650,7 +650,7 @@ namespace KRPCTest.Service
             if (n == 0)
                 return sum;
             else
-                throw new YieldException (new ParameterizedContinuation<int,int,int> (BlockingProcedureReturnsFn, n-1, sum+n));
+                throw new YieldException (new ParameterizedContinuation<int,int,int> (BlockingProcedureReturnsFn, n - 1, sum + n));
         }
 
         /// <summary>
@@ -667,22 +667,22 @@ namespace KRPCTest.Service
             });
             TestService.Service = mock.Object;
             var request = Req ("TestService", "BlockingProcedureNoReturn",
-                Arg (0, ProtocolBuffers.WriteValue (num, typeof(int))));
+                              Arg (0, ProtocolBuffers.WriteValue (num, typeof(int))));
             BlockingProcedureNoReturnFnCount = 0;
             Response.Builder response = null;
-            Continuation<Response.Builder> continuation = new RequestContinuation (request);
+            Continuation<Response.Builder> continuation = new RequestContinuation (null, request);
             while (response == null) {
                 try {
                     response = continuation.Run ();
                 } catch (YieldException e) {
-                    continuation = (Continuation<Response.Builder>) e.Continuation;
+                    continuation = (Continuation<Response.Builder>)e.Continuation;
                 }
             }
             var builtResponse = response.SetTime (0).Build ();
             Assert.IsFalse (builtResponse.HasError);
             // Verify the KRPCProcedure is called once, but the handler function is called multiple times
             mock.Verify (x => x.BlockingProcedureNoReturn (It.IsAny<int> ()), Times.Once ());
-            Assert.AreEqual (num+1, BlockingProcedureNoReturnFnCount);
+            Assert.AreEqual (num + 1, BlockingProcedureNoReturnFnCount);
         }
 
         /// <summary>
@@ -698,15 +698,15 @@ namespace KRPCTest.Service
                 .Returns ((int n, int sum) => BlockingProcedureReturnsFn (n, sum));
             TestService.Service = mock.Object;
             var request = Req ("TestService", "BlockingProcedureReturns",
-                Arg (0, ProtocolBuffers.WriteValue (num, typeof(int))));
+                              Arg (0, ProtocolBuffers.WriteValue (num, typeof(int))));
             BlockingProcedureReturnsFnCount = 0;
             Response.Builder response = null;
-            Continuation<Response.Builder> continuation = new RequestContinuation (request);
+            Continuation<Response.Builder> continuation = new RequestContinuation (null, request);
             while (response == null) {
                 try {
                     response = continuation.Run ();
                 } catch (YieldException e) {
-                    continuation = (Continuation<Response.Builder>) e.Continuation;
+                    continuation = (Continuation<Response.Builder>)e.Continuation;
                 }
             }
             var builtResponse = response.SetTime (0).Build ();
@@ -714,7 +714,7 @@ namespace KRPCTest.Service
             Assert.AreEqual (expectedResult, ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(int)));
             // Verify the KRPCProcedure is called once, but the handler function is called multiple times
             mock.Verify (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()), Times.Once ());
-            Assert.AreEqual (num+1, BlockingProcedureReturnsFnCount);
+            Assert.AreEqual (num + 1, BlockingProcedureReturnsFnCount);
         }
     }
 }
