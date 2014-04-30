@@ -5,8 +5,7 @@ using KRPC.Server;
 namespace KRPC.Service
 {
     /// <summary>
-    /// A continuation that runs a request object. Captures the common case where a
-    /// request always returns a result, and never throws YieldException
+    /// A continuation that runs a client request.
     /// </summary>
     class RequestContinuation : Continuation<Response.Builder>
     {

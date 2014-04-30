@@ -36,7 +36,7 @@ namespace KRPC.Service
         /// fields populated. Throws YieldException, containing a continuation, if the request yields.
         /// Throws RPCException if processing the request fails.
         /// </summary>
-        public Response.Builder HandleRequest (Request request)
+        internal Response.Builder HandleRequest (Request request)
         {
             // Get the service definition
             if (!Signatures.ContainsKey (request.Service))
@@ -67,7 +67,12 @@ namespace KRPC.Service
             return responseBuilder;
         }
 
-        public Response.Builder HandleRequest (Request request, IContinuation continuation)
+        /// <summary>
+        /// Executes the request, continuing using the give continuation. Returns a response builder with the relevant
+        /// fields populated. Throws YieldException, containing a continuation, if the request yields.
+        /// Throws RPCException if processing the request fails.
+        /// </summary>
+        internal Response.Builder HandleRequest (Request request, IContinuation continuation)
         {
             // Get the service definition
             if (!Signatures.ContainsKey (request.Service))
