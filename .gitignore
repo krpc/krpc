@@ -114,6 +114,7 @@ UpgradeLog*.XML
 *.pyc
 python/MANIFEST
 python/krpc.egg-info
+python/protobuf-*-py*.egg
 
 # protobuf
 *.protobin

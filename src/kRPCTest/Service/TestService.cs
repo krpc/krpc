@@ -1,4 +1,5 @@
 using KRPC.Service.Attributes;
+using KRPC.Continuations;
 
 namespace KRPCTest.Service
 {
@@ -156,6 +157,16 @@ namespace KRPCTest.Service
         public static CSharpEnum ProcedureCSharpEnumReturn ()
         {
             return Service.ProcedureCSharpEnumReturn ();
+        }
+
+        [KRPCProcedure]
+        public static void BlockingProcedureNoReturn(int n) {
+            Service.BlockingProcedureNoReturn (n);
+        }
+
+        [KRPCProcedure]
+        public static int BlockingProcedureReturns(int n, int sum = 0) {
+            return Service.BlockingProcedureReturns (n, sum);
         }
     }
 }

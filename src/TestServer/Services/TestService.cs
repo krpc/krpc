@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Continuations;
 
 namespace TestServer.Services
 {
@@ -143,13 +144,19 @@ namespace TestServer.Services
             return x;
         }
 
+        [KRPCProcedure]
+        public static KRPC.Schema.Test.TestEnum EnumDefaultArg (KRPC.Schema.Test.TestEnum x = KRPC.Schema.Test.TestEnum.c)
+        {
+            return x;
+        }
+
         [KRPCEnum]
-        public enum CSharpEnum { x, y, z };
+        public enum CSharpEnum { ValueA, ValueB, ValueC };
 
         [KRPCProcedure]
         public static CSharpEnum CSharpEnumReturn ()
         {
-            return CSharpEnum.y;
+            return CSharpEnum.ValueB;
         }
 
         [KRPCProcedure]
@@ -157,6 +164,18 @@ namespace TestServer.Services
         {
             return x;
         }
+
+        [KRPCProcedure]
+        public static CSharpEnum CSharpEnumDefaultArg (CSharpEnum x = CSharpEnum.ValueC)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static int BlockingProcedure(int n, int sum = 0) {
+            if (n == 0)
+                return sum;
+            throw new YieldException(new ParameterizedContinuation<int,int,int>(BlockingProcedure, n-1, sum+n));
+        }
     }
 }
-

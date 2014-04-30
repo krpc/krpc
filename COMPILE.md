@@ -6,11 +6,11 @@
 
 1. Install the required dependencies.
 
- Required DLLs are included in the `lib` directory and the C# Protocol Buffers compiler is included in `tools`. You will need to install the MonoDevelop command line tool `mdtool`, Mono runtime and development libraries, the Protocol Buffers compiler and Inkscape (to convert icon files to PNG).
+ You will need to install the MonoDevelop command line tool `mdtool`, Mono runtime and development libraries, the Protocol Buffers compiler, Inkscape and the `unzip` command line tool.
 
  On Linux, you should be able to use your package manager. For example using apt:
 
- `apt-get install mono-complete monodevelop protobuf-compiler inkscape`
+ `apt-get install mono-complete monodevelop protobuf-compiler inkscape unzip`
 
  Alternatively, you can install the Protocol Buffers compiler from source: https://code.google.com/p/protobuf/
 

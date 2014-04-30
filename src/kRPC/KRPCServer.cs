@@ -6,6 +6,8 @@ using KRPC.Server;
 using KRPC.Server.Net;
 using KRPC.Server.RPC;
 using KRPC.Schema.KRPC;
+using KRPC.Service;
+using KRPC.Continuations;
 using KRPC.Utils;
 using System.Diagnostics;
 
@@ -15,7 +17,9 @@ namespace KRPC
     {
         readonly RPCServer rpcServer;
         readonly TCPServer tcpServer;
-        readonly IScheduler<IClient<Request,Response>> requestScheduler;
+        IScheduler<IClient<Request,Response>> clientScheduler;
+        //TODO: add maximum execution time for continuations to prevent livelock?
+        IList<RequestContinuation> continuations;
 
         internal delegate double UniversalTimeFunction ();
 
@@ -32,7 +36,8 @@ namespace KRPC
         {
             tcpServer = new TCPServer (address, port);
             rpcServer = new RPCServer (tcpServer);
-            requestScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
+            clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
+            continuations = new List<RequestContinuation> ();
 
             // Tie events to underlying server
             rpcServer.OnStarted += (s, e) => {
@@ -57,8 +62,8 @@ namespace KRPC
             };
 
             // Add/remove clients from the scheduler
-            rpcServer.OnClientConnected += (s, e) => requestScheduler.Add (e.Client);
-            rpcServer.OnClientDisconnected += (s, e) => requestScheduler.Remove (e.Client);
+            rpcServer.OnClientConnected += (s, e) => clientScheduler.Add (e.Client);
+            rpcServer.OnClientDisconnected += (s, e) => clientScheduler.Remove (e.Client);
         }
 
         public void Start ()
@@ -91,52 +96,83 @@ namespace KRPC
 
         public void Update ()
         {
-            rpcServer.Update ();
-
             // TODO: is there a better way to limit the number of requests handled per update?
             const int threshold = 20; // milliseconds
 
-            // Return if no clients are connected
-            if (!rpcServer.Clients.Any () || requestScheduler.Empty)
-                return;
-
-            // Return if no clients have data available
-            if (!requestScheduler.ToList ().Any (((client) => client.Stream.DataAvailable)))
-                return;
-
-            // Repeatedly process requests until either no client has more data, or we reach the execution time threshold
             Stopwatch timer = Stopwatch.StartNew ();
             do {
-                // Get request
-                IClient<Request,Response> client = requestScheduler.Next ();
-                if (client.Stream.DataAvailable) {
+                rpcServer.Update ();
+
+                // Check for new requests from clients
+                PollRequests ();
+
+                // Process pending continuations (client requests)
+                if (continuations.Count > 0) {
+                    var newContinuations = new List<RequestContinuation> ();
+                    foreach (var continuation in continuations) {
+                        try {
+                            ExecuteContinuation (continuation);
+                        } catch (YieldException e) {
+                            // TODO: remove cast
+                            newContinuations.Add ((RequestContinuation)e.Continuation);
+                        }
+                    }
+                    continuations = newContinuations;
+                }
+            } while (timer.ElapsedMilliseconds < threshold && continuations.Count > 0);
+        }
+
+        /// <summary>
+        /// Poll connected clients for new requests.
+        /// Adds a continuation to the queue for any client with a new request,
+        /// if a continuation is not already being processed for the client.
+        /// </summary>
+        void PollRequests ()
+        {
+            var currentClients = continuations.Select (((c) => c.Client));
+            foreach (var client in clientScheduler) {
+                if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
                     Request request = client.Stream.Read ();
                     if (OnClientActivity != null)
                         OnClientActivity (this, new ClientActivityArgs (client));
                     Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")");
-
-                    // Handle the request
-                    Response.Builder response;
-                    try {
-                        response = KRPC.Service.Services.Instance.HandleRequest (request);
-                    } catch (Exception e) {
-                        response = Response.CreateBuilder ();
-                        response.Error = e.ToString ();
-                        Logger.WriteLine (e.ToString ());
-                    }
-
-                    // Send response
-                    response.SetTime (GetUniversalTime ());
-                    var builtResponse = response.Build ();
-                    //TODO: handle partial response exception
-                    client.Stream.Write (builtResponse);
-                    if (response.HasError)
-                        Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")");
-                    else
-                        Logger.WriteLine ("Sent response to client " + client.Address);
+                    continuations.Add (new RequestContinuation (client, request));
                 }
-            } while (timer.ElapsedMilliseconds < threshold && requestScheduler.Any (((client) => client.Stream.DataAvailable)));
+            }
+        }
+
+        /// <summary>
+        /// Execute the continuation and send a response to the client,
+        /// or throw a YieldException if the continuation is not complete.
+        /// </summary>
+        void ExecuteContinuation (RequestContinuation continuation)
+        {
+            var client = continuation.Client;
+            var request = continuation.Request;
+
+            // Run the continuation, and either return a result, an error,
+            // or throw a YieldException if the continuation has not completed
+            Response.Builder response;
+            try {
+                response = continuation.Run ();
+            } catch (YieldException) {
+                throw;
+            } catch (Exception e) {
+                response = Response.CreateBuilder ();
+                response.Error = e.ToString ();
+                Logger.WriteLine (e.ToString ());
+            }
+
+            // Send response to the client
+            response.SetTime (GetUniversalTime ());
+            var builtResponse = response.Build ();
+            //TODO: handle partial response exception
+            //TODO: remove cast
+            ((RPCClient)client).Stream.Write (builtResponse);
+            if (response.HasError)
+                Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")");
+            else
+                Logger.WriteLine ("Sent response to client " + client.Address);
         }
     }
 }
-

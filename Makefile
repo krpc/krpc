@@ -33,7 +33,7 @@ MARKDOWN = markdown
 HTML2TEXT = html2text
 
 # Main build targets
-.PHONY: all configure build dist pre-release release install test ksp clean dist-clean strip-bom
+.PHONY: all configure build cog protobuf dist pre-release release install test ksp clean dist-clean strip-bom
 
 all: build
 
@@ -42,7 +42,7 @@ configure:
 	mkdir -p lib/KSP_Data
 	test -d lib/KSP_Data/Managed || cp -r $(KSP_DIR)/KSP_Data/Managed lib/KSP_Data/
 
-build: configure protobuf $(CSHARP_MAIN_PROJECTS)
+build: configure protobuf cog $(CSHARP_MAIN_PROJECTS)
 	make -C src/kRPC/icons
 
 dist: build
@@ -117,8 +117,12 @@ $(CSHARP_LIBRARIES):
 	$(eval $@_PROJECT := $(basename $(notdir $@)))
 	$(MDTOOL) build -t:Build -c:$(CSHARP_CONFIG) -p:$($@_PROJECT) src/kRPC.sln
 
+# Cog
+cog:
+	-python -m cogapp -D nargs=10 -r src/kRPC/Continuations/ParameterizedContinuation.cs
+
 # Protocol Buffers
-.PHONY: protobuf protobuf-csharp protobuf-python protobuf-clean protobuf-csharp-clean protobuf-python-clean
+.PHONY: protobuf-csharp protobuf-python protobuf-clean protobuf-csharp-clean protobuf-python-clean
 
 protobuf: protobuf-csharp protobuf-python
 	# Fix for error in output of C# protobuf compiler
