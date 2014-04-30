@@ -1,4 +1,4 @@
-﻿using KRPC.Service.Attributes;
+using KRPC.Service.Attributes;
 using System;
 using UnityEngine;
 using KRPCSpaceCenter.ExtensionMethods;
