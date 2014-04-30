@@ -172,7 +172,7 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
-        public static int BlockingProcedure(int n, int sum) {
+        public static int BlockingProcedure(int n, int sum = 0) {
             if (n == 0)
                 return sum;
             throw new YieldException(new ParameterizedContinuation<int,int,int>(BlockingProcedure, n-1, sum+n));

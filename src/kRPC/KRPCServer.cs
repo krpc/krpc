@@ -154,7 +154,7 @@ namespace KRPC
             // or throw a YieldException if the continuation has not completed
             Response.Builder response;
             try {
-                response = KRPC.Service.Services.Instance.HandleRequest (continuation.Request);
+                response = continuation.Run ();
             } catch (YieldException) {
                 throw;
             } catch (Exception e) {
