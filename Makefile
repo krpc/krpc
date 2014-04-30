@@ -61,11 +61,12 @@ dist: build
 	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# README
-	$(MARKDOWN) README.md | $(HTML2TEXT) -rcfile tools/html2textrc | sed -e "/Compiling from Source/,//d" > $(DIST_DIR)/README.txt
+	#$(MARKDOWN) README.md | $(HTML2TEXT) -rcfile tools/html2textrc | sed -e "/Compiling from Source/,//d" > $(DIST_DIR)/README.txt
+	echo "See https://github.com/djungelorm/krpc/wiki" >dist/README.txt
 	cp $(DIST_DIR)/README.txt $(DIST_DIR)/GameData/kRPC/
-	# Plugin files
-	$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
-	$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter-version.txt
+	# Version files
+	#$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
+	#$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter-version.txt
 
 pre-release: dist test
 	cd $(DIST_DIR); zip -r krpc-$(VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
