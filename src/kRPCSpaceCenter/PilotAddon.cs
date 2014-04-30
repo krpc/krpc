@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace KRPCServices
+namespace KRPCSpaceCenter
 {
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class PilotAddon : MonoBehaviour
@@ -31,24 +31,30 @@ namespace KRPCServices
 
         public void FixedUpdate ()
         {
-            // TODO: is this the best way to attach to OnFlyByWire of the active vessel?
             if (controlledVessel == null && FlightGlobals.ActiveVessel != null) {
                 controlledVessel = FlightGlobals.ActiveVessel;
-                controlledVessel.OnFlyByWire += new FlightInputCallback (Fly);
+                controlledVessel.OnFlyByWire += Fly;
             } else if (controlledVessel != null && FlightGlobals.ActiveVessel == null) {
-                controlledVessel.OnFlyByWire -= new FlightInputCallback (Fly);
+                controlledVessel.OnFlyByWire -= Fly;
                 controlledVessel = null;
+            } else if (controlledVessel != FlightGlobals.ActiveVessel) {
+                controlledVessel.OnFlyByWire -= Fly;
+                controlledVessel = FlightGlobals.ActiveVessel;
+                controlledVessel.OnFlyByWire += Fly;
             }
         }
 
         public void OnDestroy ()
         {
             if (controlledVessel != null)
-                controlledVessel.OnFlyByWire -= new FlightInputCallback (Fly);
+                controlledVessel.OnFlyByWire -= Fly;
         }
 
         static void Fly (FlightCtrlState state)
         {
+            if (FlightGlobals.ActiveVessel == null)
+                return;
+
             // TODO: need to clear these if all clients disconnect, or similar
             state.pitch += Pitch;
             state.roll += Roll;
@@ -56,6 +62,7 @@ namespace KRPCServices
             state.X += X;
             state.Y += Y;
             state.Z += Z;
+            Services.AutoPilot.Fly (state);
         }
     }
 }

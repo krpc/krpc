@@ -25,7 +25,7 @@
 
 2. Compile the plugin binaries.
 
- Running `make build` compiles the protocol buffer .proto files into C# classes, and compiles kRPC.dll and kRPCServices.dll using the MonoDevelop command line tool.
+ Running `make build` compiles the protocol buffer .proto files into C# classes, and compiles kRPC.dll and kRPCSpaceCenter.dll using the MonoDevelop command line tool.
 
 3. Collect together all the plugin files.
 

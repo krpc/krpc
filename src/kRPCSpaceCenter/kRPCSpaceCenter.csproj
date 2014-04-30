@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{690C8D5A-B41F-44C4-99B9-B6A3D190447B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>KRPCServices</RootNamespace>
-    <AssemblyName>kRPCServices</AssemblyName>
+    <RootNamespace>KRPCSpaceCenter</RootNamespace>
+    <AssemblyName>kRPCSpaceCenter</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <CodePage>65001</CodePage>
   </PropertyGroup>
@@ -52,13 +52,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Orbit.cs" />
-    <Compile Include="Control.cs" />
-    <Compile Include="Flight.cs" />
-    <Compile Include="Schema\Vessel.cs" />
-    <Compile Include="Vessel.cs" />
     <Compile Include="PilotAddon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Schema\Geometry.cs" />
+    <Compile Include="Services\Control.cs" />
+    <Compile Include="Services\Flight.cs" />
+    <Compile Include="Services\Orbit.cs" />
+    <Compile Include="Services\Vessel.cs" />
+    <Compile Include="Services\Resources.cs" />
+    <Compile Include="Services\CelestialBody.cs" />
+    <Compile Include="Services\Node.cs" />
+    <Compile Include="Services\Parts.cs" />
+    <Compile Include="Services\SpaceCenter.cs" />
+    <Compile Include="Services\AutoPilot.cs" />
+    <Compile Include="Services\ReferenceFrame.cs" />
+    <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
+    <Compile Include="ReferenceFrameTransform.cs" />
+    <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -70,8 +81,10 @@
   <ItemGroup>
     <Folder Include="Schema\" />
     <Folder Include="Properties\" />
+    <Folder Include="Services\" />
+    <Folder Include="ExtensionMethods\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Schema\Vessel.proto" />
+    <None Include="Schema\Geometry.proto" />
   </ItemGroup>
 </Project>

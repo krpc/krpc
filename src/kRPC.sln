@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingTools", "TestingTool
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BB331316-F7B7-49F4-8CAA-9147ED95D8A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kRPCServices", "kRPCServices\kRPCServices.csproj", "{690C8D5A-B41F-44C4-99B9-B6A3D190447B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kRPCSpaceCenter", "kRPCSpaceCenter\kRPCSpaceCenter.csproj", "{690C8D5A-B41F-44C4-99B9-B6A3D190447B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "TestServer\TestServer.csproj", "{5206E8C0-04DA-4A47-8FD3-B3D9B1E6ADEC}"
 EndProject

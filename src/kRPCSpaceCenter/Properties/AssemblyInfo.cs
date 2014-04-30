@@ -1,6 +1,6 @@
 using System.Reflection;
 
-[assembly: AssemblyTitle ("kRPCServices")]
+[assembly: AssemblyTitle ("kRPCSpaceCenter")]
 [assembly: AssemblyDescription ("Basic services for kRPC, such as querying data from stock game objects")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]

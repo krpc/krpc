@@ -1,0 +1,1108 @@
+GAME
+{
+	version = 0.23.5
+	Title = test (SANDBOX)
+	Description = No description available.
+	linkURL = 
+	linkCaption = 
+	Mode = 0
+	Status = 1
+	scene = 5
+	flag = Squad/Flags/default
+	PARAMETERS
+	{
+		FLIGHT
+		{
+			CanQuickSave = True
+			CanQuickLoad = True
+			CanAutoSave = True
+			CanUseMap = True
+			CanSwitchVesselsNear = True
+			CanSwitchVesselsFar = True
+			CanTimeWarpHigh = True
+			CanTimeWarpLow = True
+			CanEVA = True
+			CanIVA = True
+			CanBoard = True
+			CanRestart = True
+			CanLeaveToEditor = True
+			CanLeaveToTrackingStation = True
+			CanLeaveToSpaceCenter = True
+			CanLeaveToMainMenu = False
+		}
+		EDITOR
+		{
+			CanSave = True
+			CanLoad = True
+			CanStartNew = True
+			CanLaunch = True
+			CanLeaveToSpaceCenter = True
+			CanLeaveToMainMenu = False
+			startUpMode = 0
+			craftFileToLoad = 
+		}
+		TRACKINGSTATION
+		{
+			CanFlyVessel = True
+			CanAbortVessel = True
+			CanLeaveToSpaceCenter = True
+			CanLeaveToMainMenu = False
+		}
+		SPACECENTER
+		{
+			CanGoInVAB = True
+			CanGoInSPH = True
+			CanGoInTrackingStation = True
+			CanLaunchAtPad = True
+			CanLaunchAtRunway = True
+			CanLeaveToMainMenu = True
+		}
+		DIFFICULTY
+		{
+			MissingCrewsRespawn = True
+			AllowStockVessels = True
+		}
+	}
+	SCENARIO
+	{
+		name = ScenarioDiscoverableObjects
+		scene = 7, 8, 5
+		 = 1895513901
+		sizeCurve
+		{
+			key = 0 0 1.5 1.5
+			key = 0.3 0.45 0.875 0.875
+			key = 0.7 0.55 0.875 0.875
+			key = 1 1 1.5 1.5
+		}
+	}
+	SCENARIO
+	{
+		name = ProgressTracking
+		scene = 7, 8, 5
+		Progress
+		{
+			FirstLaunch
+			{
+				completed = 11.6799999999998
+			}
+			Sun
+			{
+				reached = 1.98
+				Orbit
+				{
+					completed = 1.98
+					vessel
+					{
+						name = Ast. HSJ-227
+						flag = 
+					}
+				}
+			}
+			Kerbin
+			{
+				reached = 11.6799999999998
+				Orbit
+				{
+					completed = 11.6799999999998
+					vessel
+					{
+						name = Test
+						flag = Squad/Flags/default
+					}
+					crew
+					{
+						crews = 0
+					}
+				}
+			}
+			Mun
+			{
+				reached = 399.759999999926
+				Orbit
+				{
+					completed = 399.759999999926
+					vessel
+					{
+						name = Test
+						flag = Squad/Flags/default
+					}
+					crew
+					{
+						crews = 0
+					}
+				}
+			}
+			Bop
+			{
+				reached = 243.04000000005
+				Orbit
+				{
+					completed = 243.04000000005
+					vessel
+					{
+						name = Test
+						flag = Squad/Flags/default
+					}
+					crew
+					{
+						crews = 0
+					}
+				}
+			}
+		}
+	}
+	FLIGHTSTATE
+	{
+		version = 0.23.5
+		UT = 525.099999999812
+		activeVessel = 0
+		VESSEL
+		{
+			pid = 66f57f5d62cb4ffb9301169d8176b49a
+			name = Test
+			type = Ship
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 513.399999999812
+			lct = 11.6799999999998
+			root = 0
+			lat = 0
+			lon = -157.235265598577
+			alt = 665555.198504037
+			hgt = -1
+			nrm = 0.788222,0.6153563,0.00654121
+			rot = -0.3610295,0.6101617,0.6086898,0.3561703
+			CoM = 0,0,0
+			stg = 1
+			prst = False
+			ref = 2667401008
+			cPch = 0.2
+			cHdg = 0.3
+			cMod = 0
+			ORBIT
+			{
+				SMA = 1800000
+				ECC = 0.52
+				INC = 0
+				LPE = 67
+				LAN = 13
+				MNA = 6.2
+				EPH = 0
+				REF = 2
+			}
+			PART
+			{
+				name = mk1pod
+				uid = 2667401008
+				mid = 1476683459
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = -1
+				sidx = -1
+				attm = 0
+				srfN = None, -1
+				attN = None, -1
+				attN = None, -1
+				mass = 0.8
+				temp = -1.148619E-06
+				expt = 0.5
+				state = 0
+				connected = True
+				attached = True
+				flag = Squad/Flags/default
+				rTrf = mk1pod (Test)
+				crew = 0
+				EVENTS
+				{
+				}
+				ACTIONS
+				{
+				}
+				MODULE
+				{
+					name = ModuleCommand
+					isEnabled = True
+					controlSrcStatusText = Operational
+					EVENTS
+					{
+						MakeReference
+						{
+							active = True
+							guiActive = True
+							guiIcon = Control From Here
+							guiName = Control From Here
+							category = Control From Here
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+						RenameVessel
+						{
+							active = True
+							guiActive = True
+							guiIcon = Rename Vessel
+							guiName = Rename Vessel
+							category = Rename Vessel
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+					}
+					ACTIONS
+					{
+					}
+				}
+				MODULE
+				{
+					name = ModuleSAS
+					isEnabled = True
+					EVENTS
+					{
+					}
+					ACTIONS
+					{
+					}
+				}
+				MODULE
+				{
+					name = ModuleReactionWheel
+					isEnabled = True
+					stateString = Operational
+					WheelState = Active
+					EVENTS
+					{
+						OnToggle
+						{
+							active = True
+							guiActive = True
+							guiIcon = Toggle Torque
+							guiName = Toggle Torque
+							category = Toggle Torque
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+					}
+					ACTIONS
+					{
+						Activate
+						{
+							actionGroup = None
+						}
+						Deactivate
+						{
+							actionGroup = None
+						}
+						Toggle
+						{
+							actionGroup = None
+						}
+					}
+				}
+				MODULE
+				{
+					name = ModuleScienceExperiment
+					isEnabled = True
+					Deployed = False
+					Inoperable = False
+					EVENTS
+					{
+						DeployExperiment
+						{
+							active = True
+							guiActive = True
+							guiIcon = Deploy
+							guiName = Crew Report
+							category = Deploy
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+						CollectDataExternalEvent
+						{
+							active = False
+							guiActive = False
+							guiIcon = 
+							guiName = Take Data
+							category = 
+							guiActiveUnfocused = True
+							unfocusedRange = 1.5
+							externalToEVAOnly = True
+						}
+						ReviewDataEvent
+						{
+							active = False
+							guiActive = True
+							guiIcon = Review Data
+							guiName = Review Report
+							category = Review Data
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+						ResetExperiment
+						{
+							active = False
+							guiActive = True
+							guiIcon = Reset
+							guiName = Discard Crew Report
+							category = Reset
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+						ResetExperimentExternal
+						{
+							active = False
+							guiActive = False
+							guiIcon = Reset
+							guiName = Discard Crew Report
+							category = Reset
+							guiActiveUnfocused = True
+							unfocusedRange = 1.5
+							externalToEVAOnly = True
+						}
+					}
+					ACTIONS
+					{
+						DeployAction
+						{
+							actionGroup = None
+						}
+						ResetAction
+						{
+							actionGroup = None
+						}
+					}
+				}
+				MODULE
+				{
+					name = ModuleScienceContainer
+					isEnabled = True
+					EVENTS
+					{
+						StoreDataExternalEvent
+						{
+							active = False
+							guiActive = False
+							guiIcon = 
+							guiName = Store Experiments (0)
+							category = 
+							guiActiveUnfocused = True
+							unfocusedRange = 1.3
+							externalToEVAOnly = True
+						}
+						CollectDataExternalEvent
+						{
+							active = False
+							guiActive = False
+							guiIcon = 
+							guiName = Take Data (0)
+							category = 
+							guiActiveUnfocused = True
+							unfocusedRange = 1.3
+							externalToEVAOnly = True
+						}
+						ReviewDataEvent
+						{
+							active = False
+							guiActive = True
+							guiIcon = Review Data
+							guiName = Review Stored Data (0)
+							category = Review Data
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+					}
+					ACTIONS
+					{
+					}
+				}
+				MODULE
+				{
+					name = FlagDecal
+					isEnabled = True
+					flagDisplayed = True
+					EVENTS
+					{
+						ToggleFlag
+						{
+							active = True
+							guiActive = False
+							guiActiveEditor = True
+							guiIcon = ToggleFlag
+							guiName = ToggleFlag
+							category = ToggleFlag
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+					}
+					ACTIONS
+					{
+					}
+				}
+				MODULE
+				{
+					name = ModuleTripLogger
+					isEnabled = True
+					EVENTS
+					{
+					}
+					ACTIONS
+					{
+					}
+					Surfaced
+					{
+					}
+					Flew
+					{
+					}
+					FlewBy
+					{
+					}
+					Orbited
+					{
+						at = Kerbin
+						at = Bop
+						at = Mun
+					}
+					SubOrbited
+					{
+						at = Mun
+					}
+				}
+				RESOURCE
+				{
+					name = ElectricCharge
+					amount = 50
+					maxAmount = 50
+					flowState = True
+					isTweakable = True
+					hideFlow = False
+					flowMode = Both
+				}
+				RESOURCE
+				{
+					name = MonoPropellant
+					amount = 10
+					maxAmount = 10
+					flowState = True
+					isTweakable = True
+					hideFlow = False
+					flowMode = Both
+				}
+			}
+			ACTIONGROUPS
+			{
+				Stage = False, 0
+				Gear = True, 0
+				Light = False, 0
+				RCS = False, 0
+				SAS = False, 0
+				Brakes = False, 104.639999999996
+				Abort = True, 373.67999999995
+				Custom01 = True, 9.85999999999988
+				Custom02 = False, 333.219999999986
+				Custom03 = True, 348.759999999972
+				Custom04 = False, 0
+				Custom05 = True, 111.799999999995
+				Custom06 = False, 0
+				Custom07 = True, 333.279999999986
+				Custom08 = True, 336.779999999983
+				Custom09 = False, 0
+				Custom10 = False, 370.339999999953
+			}
+			DISCOVERY
+			{
+				state = -1
+				lastObservedTime = 0
+				lifetime = Infinity
+				refTime = Infinity
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+				pitch = 0
+				yaw = 0
+				roll = 0
+				trimPitch = 0
+				trimYaw = 0
+				trimRoll = 0
+				mainThrottle = 0
+			}
+		}
+		VESSEL
+		{
+			pid = f1dbcf4de81e4e6d88ab5e4319e3cbdf
+			name = Ast. FBH-113
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 31.4999999999994
+			lct = 31.4999999999994
+			root = 0
+			lat = 0.959196671766373
+			lon = 187.157837330317
+			alt = 15936346516.2204
+			hgt = -1
+			nrm = 0,1,0
+			rot = -0.6869258,0.5215643,0.2033898,0.4633964
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 15970774080.9812
+				ECC = 0.147016359481393
+				INC = 0.959217259439816
+				LPE = 193.531750151185
+				LAN = 97.5596157182453
+				MNA = 6.23396992072819
+				EPH = 2744246.63671875
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1497897740
+				mid = 1497897740
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 31.4999999999994
+				lifetime = 654025.561523438
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = 28cd7b10a8ca406d998d4c5a69528ec7
+			name = Ast. HKA-549
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 46.5000000000017
+			lct = 46.5000000000017
+			root = 0
+			lat = 2.03587513557609
+			lon = 181.708533327194
+			alt = 13996245026.8101
+			hgt = -1
+			nrm = 0,1,0
+			rot = -0.9359797,0.04267932,-0.349092,0.01597464
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 14148435569.7494
+				ECC = 0.0398409423053457
+				INC = 2.03614052021764
+				LPE = 192.498287295742
+				LAN = 92.6727886117101
+				MNA = 6.07945663165146
+				EPH = 2367755.99707031
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1380687175
+				mid = 1380687175
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 46.5000000000017
+				lifetime = 1200553.50036621
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = 6b29ed0bf07c4d31b1524bf412d56503
+			name = Ast. AWJ-477
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 89.1999999999994
+			lct = 89.1999999999994
+			root = 0
+			lat = -0.468430764824998
+			lon = 194.958645696404
+			alt = 16330568055.798
+			hgt = -1
+			nrm = 0,1,0
+			rot = 0.7410667,0.3237302,-0.4358448,0.395042
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 15407787125.2367
+				ECC = 0.12599697402072
+				INC = 0.470047762396206
+				LPE = 38.3670771822187
+				LAN = 289.786948340268
+				MNA = 6.05325072559701
+				EPH = 3351269.74199219
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1764405907
+				mid = 1764405907
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 89.1999999999994
+				lifetime = 240954.009246826
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = 2213131a8c9649c29d0cedc68a60bc62
+			name = Ast. HPU-514
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 104.219999999996
+			lct = 104.219999999996
+			root = 0
+			lat = 1.1426982480964
+			lon = 179.905668390043
+			alt = 14060710525.6381
+			hgt = -1
+			nrm = 0,1,0
+			rot = -0.1222337,0.2163159,-0.2585483,0.9334984
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 14769628872.0069
+				ECC = 0.0826369809830214
+				INC = 1.28234607968695
+				LPE = 189.9649780523
+				LAN = 63.0004141934401
+				MNA = 6.09087676375573
+				EPH = 1535808.3215625
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1630946009
+				mid = 1630946009
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 104.219999999996
+				lifetime = 172663.663101196
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = 0c8745cbee9543b4b14a941e964be448
+			name = Ast. ZAE-820
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 149.220000000003
+			lct = 149.220000000003
+			root = 0
+			lat = 0.0428146415830763
+			lon = 179.176679140367
+			alt = 13266649735.958
+			hgt = -1
+			nrm = 0,1,0
+			rot = 0.5850267,-0.3998382,0.555737,0.4347754
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 13673291232.0634
+				ECC = 0.0106267609823532
+				INC = 0.048953279935799
+				LPE = 122.475435098012
+				LAN = 60.299275595283
+				MNA = 1.01879896848913
+				EPH = 1592213.18484375
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1377708160
+				mid = 1377708160
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 149.220000000003
+				lifetime = 788258.688354492
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = e129dfb433134e3c80d703a1ba44f35a
+			name = Ast. MXY-850
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 341.659999999979
+			lct = 341.659999999979
+			root = 0
+			lat = 0.481935708081244
+			lon = 186.083940123202
+			alt = 14828183351.8923
+			hgt = -1
+			nrm = 0,1,0
+			rot = 0.05591899,0.6326631,-0.5377299,0.554488
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 14476241891.6016
+				ECC = 0.0640400917920064
+				INC = 1.07336350294041
+				LPE = 160.814838597617
+				LAN = 159.692072950802
+				MNA = 0.330138764475256
+				EPH = 4144454.39193359
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 343483972
+				mid = 343483972
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 341.659999999979
+				lifetime = 852994.830322266
+				refTime = 1728000
+				size = 0
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+		VESSEL
+		{
+			pid = 3606e001982e442fa73f384b7ed513ce
+			name = Ast. CPQ-583
+			type = SpaceObject
+			sit = ORBITING
+			landed = False
+			landedAt = 
+			splashed = False
+			met = 450.45999999988
+			lct = 450.45999999988
+			root = 0
+			lat = 0.391054229291476
+			lon = 178.657431656596
+			alt = 13215444182.6187
+			hgt = -1
+			nrm = 0,1,0
+			rot = -0.7081624,-0.0540336,-0.6055276,0.3590581
+			CoM = 0,0,0
+			stg = 0
+			prst = False
+			ref = 0
+			ORBIT
+			{
+				SMA = 13567360162.8089
+				ECC = 0.00666417933242951
+				INC = 0.402392236710227
+				LPE = 100.929315438459
+				LAN = 75.3991320320002
+				MNA = 1.26641162906831
+				EPH = 1780866.28641602
+				REF = 0
+			}
+			PART
+			{
+				name = PotatoRoid
+				uid = 1895513901
+				mid = 1895513901
+				parent = 0
+				position = 0,0,0
+				rotation = 0,0,0,1
+				mirror = 1,1,1
+				istg = 0
+				dstg = 0
+				sqor = 0
+				sidx = 0
+				attm = 0
+				srfN = None, -1
+				mass = 150
+				temp = 0
+				expt = 0.1
+				state = 1
+				connected = True
+				attached = True
+				flag = 
+				rTrf = 
+			}
+			ACTIONGROUPS
+			{
+			}
+			DISCOVERY
+			{
+				state = 1
+				lastObservedTime = 450.45999999988
+				lifetime = 1002183.6730957
+				refTime = 1728000
+				size = 2
+			}
+			FLIGHTPLAN
+			{
+			}
+			CTRLSTATE
+			{
+			}
+		}
+	}
+	ROSTER
+	{
+		CREW
+		{
+			name = Jebediah Kerman
+			brave = 0.5
+			dumb = 0.5
+			badS = True
+			state = 1
+			ToD = 0
+			idx = 0
+		}
+		CREW
+		{
+			name = Bill Kerman
+			brave = 0.5
+			dumb = 0.8
+			badS = False
+			state = 0
+			ToD = 0
+			idx = -1
+		}
+		CREW
+		{
+			name = Bob Kerman
+			brave = 0.3
+			dumb = 0.1
+			badS = False
+			state = 0
+			ToD = 0
+			idx = -1
+		}
+		APPLICANTS
+		{
+		}
+	}
+}
