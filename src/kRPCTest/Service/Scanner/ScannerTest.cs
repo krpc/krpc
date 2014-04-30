@@ -19,7 +19,7 @@ namespace KRPCTest.Service.Scanner
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "TestService") {
                     foundServices++;
-                    Assert.AreEqual (29, service.ProceduresCount);
+                    Assert.AreEqual (31, service.ProceduresCount);
                     int foundProcedures = 0;
                     foreach (var method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
@@ -357,8 +357,16 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("ReturnType.Enum(TestService.CSharpEnum)", method.AttributesList [0]);
                             foundProcedures++;
                         }
+                        if (method.Name == "BlockingProcedureNoReturn") {
+                            //TODO
+                            foundProcedures++;
+                        }
+                        if (method.Name == "BlockingProcedureReturns") {
+                            //TODO
+                            foundProcedures++;
+                        }
                     }
-                    Assert.AreEqual (29, foundProcedures);
+                    Assert.AreEqual (31, foundProcedures);
                     int foundClasses = 0;
                     foreach (var cls in service.ClassesList) {
                         if (cls.Name == "TestClass")

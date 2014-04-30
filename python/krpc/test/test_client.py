@@ -83,8 +83,8 @@ class TestClient(unittest.TestCase):
         self.assertEqual(obj2._object_id, obj.object_property._object_id)
 
     def test_setattr_for_properties(self):
-        """ Check that properties are added to the dynamically generated service class,
-            not the base class krpc.Service """
+        # Check that properties are added to the dynamically generated service class,
+        # not the base class krpc.Service
         self.assertRaises (AttributeError, getattr, krpc.service._Service, 'object_property')
         # Check following does not throw an exception
         getattr(self.ksp.test_service, 'object_property')
@@ -112,6 +112,12 @@ class TestClient(unittest.TestCase):
         self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', w='5')
         self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', y='4')
         self.assertRaises(TypeError, obj.optional_arguments, '1', foo='4')
+
+    def test_blocking_procedure(self):
+        self.assertEqual(0, self.ksp.test_service.blocking_procedure(0,0))
+        self.assertEqual(1, self.ksp.test_service.blocking_procedure(1,0))
+        self.assertEqual(1+2, self.ksp.test_service.blocking_procedure(2))
+        self.assertEqual(sum(x for x in range(1,43)), self.ksp.test_service.blocking_procedure(42))
 
     def test_too_many_arguments(self):
         self.assertRaises(TypeError, self.ksp.test_service.optional_arguments, '1', '2', '3', '4', '5')
@@ -255,7 +261,9 @@ class TestClient(unittest.TestCase):
                 'CSharpEnum',
                 'c_sharp_enum_return',
                 'c_sharp_enum_echo',
-                'c_sharp_enum_default_arg'
+                'c_sharp_enum_default_arg',
+
+                'blocking_procedure'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service))))
 
@@ -285,7 +293,6 @@ class TestClient(unittest.TestCase):
         self.assertEqual (0, self.ksp.test_service.CSharpEnum.value_a)
         self.assertEqual (1, self.ksp.test_service.CSharpEnum.value_b)
         self.assertEqual (2, self.ksp.test_service.CSharpEnum.value_c)
-
 
 if __name__ == '__main__':
     unittest.main()

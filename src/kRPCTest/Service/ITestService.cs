@@ -38,5 +38,9 @@ namespace KRPCTest.Service
         void ProcedureCSharpEnumArg (TestService.CSharpEnum x);
 
         TestService.CSharpEnum ProcedureCSharpEnumReturn ();
+
+        void BlockingProcedureNoReturn (int n);
+
+        int BlockingProcedureReturns (int n, int sum);
     }
 }
