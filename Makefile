@@ -37,7 +37,7 @@ NUNIT_CONSOLE = nunit-console
 UNZIP = unzip
 
 # Main build targets
-.PHONY: all configure build cog protobuf dist pre-release release install test ksp clean dist-clean strip-bom
+.PHONY: all configure build cog protobuf dist dist-python pre-release release install test ksp clean dist-clean strip-bom
 
 all: build
 
@@ -49,7 +49,10 @@ configure:
 build: configure protobuf cog $(CSHARP_MAIN_PROJECTS)
 	make -C src/kRPC/icons
 
-dist: build
+dist-python:
+	make -C python dist
+
+dist: build dist-python
 	rm -rf $(DIST_DIR)
 	mkdir -p $(DIST_DIR)
 	mkdir -p $(DIST_DIR)/GameData/kRPC
@@ -70,6 +73,9 @@ dist: build
 	# Version files
 	echo $(SERVER_VERSION) > $(DIST_DIR)/VERSION.txt
 	echo $(SERVER_VERSION) > $(DIST_DIR)/GameData/kRPC/VERSION.txt
+	# Python client library
+	mkdir $(DIST_DIR)/python-client
+	cp python/dist/krpc-$(PYTHON_CLIENT_VERSION).zip $(DIST_DIR)/python-client/
 
 pre-release: dist test
 	cd $(DIST_DIR); zip -r krpc-$(SERVER_VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
