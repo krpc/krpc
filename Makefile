@@ -1,7 +1,8 @@
 # Note: This must be an absolute path
 KSP_DIR = "$(shell pwd)/../Kerbal Space Program"
 
-VERSION = $(shell cat VERSION.txt)
+SERVER_VERSION = $(shell cat VERSION.txt)
+PYTHON_CLIENT_VERSION = $(shell grep "version=" python/setup.py | sed "s/\s*version='\(.*\)',/\1/")
 
 DIST_DIR = dist
 DIST_LIBS = \
@@ -11,17 +12,22 @@ DIST_ICONS = src/kRPC/bin/icons
 
 CSHARP_MAIN_PROJECTS  = kRPC kRPCSpaceCenter
 CSHARP_TEST_PROJECTS  = kRPCTest TestServer
-CSHARP_OTHER_PROJECTS = TestingTools
+CSHARP_TEST_UTILS_PROJECTS = TestingTools
 CSHARP_CONFIG = Release
 
-CSHARP_PROJECTS  = $(CSHARP_MAIN_PROJECTS) $(CSHARP_TEST_PROJECTS) $(CSHARP_OTHER_PROJECTS)
-CSHARP_BINDIRS   = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin) \
-                   $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/obj)
+CSHARP_PROJECTS  = $(CSHARP_MAIN_PROJECTS) $(CSHARP_TEST_PROJECTS) $(CSHARP_TEST_UTILS_PROJECTS)
+CSHARP_PROJECT_DIRS = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)) \
+                      $(foreach PROJECT,$(CSHARP_TEST_PROJECTS),test/$(PROJECT)) \
+                      $(foreach PROJECT,$(CSHARP_TEST_UTILS_PROJECTS),test/$(PROJECT))
+CSHARP_BINDIRS = $(foreach DIR,$(CSHARP_PROJECT_DIRS),$(DIR)/bin) \
+                 $(foreach DIR,$(CSHARP_PROJECT_DIRS),$(DIR)/obj)
 CSHARP_MAIN_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
-CSHARP_LIBRARIES      = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
+CSHARP_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll) \
+                   $(foreach PROJECT,$(CSHARP_TEST_PROJECTS),test/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll) \
+                   $(foreach PROJECT,$(CSHARP_TEST_UTILS_PROJECTS),test/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 
 PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCSpaceCenter/Schema/*.proto)
-PROTOS_TEST = $(wildcard src/kRPCTest/Schema/*.proto)
+PROTOS_TEST = $(wildcard test/kRPCTest/Schema/*.proto)
 
 PROTOC = protoc
 PROTOGEN = tools/ProtoGen.exe
@@ -29,11 +35,9 @@ MDTOOL = mdtool
 MONODIS = monodis
 NUNIT_CONSOLE = nunit-console
 UNZIP = unzip
-MARKDOWN = markdown
-HTML2TEXT = html2text
 
 # Main build targets
-.PHONY: all configure build cog protobuf dist pre-release release install test ksp clean dist-clean strip-bom
+.PHONY: all configure build cog protobuf dist dist-python pre-release release install test ksp clean dist-clean strip-bom
 
 all: build
 
@@ -45,7 +49,10 @@ configure:
 build: configure protobuf cog $(CSHARP_MAIN_PROJECTS)
 	make -C src/kRPC/icons
 
-dist: build
+dist-python:
+	make -C python dist
+
+dist: build dist-python
 	rm -rf $(DIST_DIR)
 	mkdir -p $(DIST_DIR)
 	mkdir -p $(DIST_DIR)/GameData/kRPC
@@ -61,18 +68,20 @@ dist: build
 	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# README
-	#$(MARKDOWN) README.md | $(HTML2TEXT) -rcfile tools/html2textrc | sed -e "/Compiling from Source/,//d" > $(DIST_DIR)/README.txt
 	echo "See https://github.com/djungelorm/krpc/wiki" >dist/README.txt
 	cp $(DIST_DIR)/README.txt $(DIST_DIR)/GameData/kRPC/
 	# Version files
-	#$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
-	#$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter-version.txt
+	echo $(SERVER_VERSION) > $(DIST_DIR)/VERSION.txt
+	echo $(SERVER_VERSION) > $(DIST_DIR)/GameData/kRPC/VERSION.txt
+	# Python client library
+	mkdir $(DIST_DIR)/python-client
+	cp python/dist/krpc-$(PYTHON_CLIENT_VERSION).zip $(DIST_DIR)/python-client/
 
 pre-release: dist test
-	cd $(DIST_DIR); zip -r krpc-$(VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
+	cd $(DIST_DIR); zip -r krpc-$(SERVER_VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
 
 release: dist test
-	cd $(DIST_DIR); zip -r krpc-$(VERSION).zip ./*
+	cd $(DIST_DIR); zip -r krpc-$(SERVER_VERSION).zip ./*
 
 install: dist
 	test -d $(KSP_DIR)/GameData
@@ -83,13 +92,13 @@ install: dist
 test: test-csharp test-python
 
 test-csharp: $(CSHARP_TEST_PROJECTS)
-	$(NUNIT_CONSOLE) -nologo -nothread -trace=Off -output=test.log src/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
+	$(NUNIT_CONSOLE) -nologo -nothread -trace=Off -output=test.log test/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
 
 test-python:
 	make -C python test
 
 ksp: install TestingTools
-	cp src/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
+	cp test/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
 	-cp settings.cfg $(KSP_DIR)/GameData/kRPC/settings.cfg
 	test "!" -f $(KSP_DIR)/KSP.x86_64 || $(KSP_DIR)/KSP.x86_64 &
 	test "!" -f $(KSP_DIR)/KSP.exe || $(KSP_DIR)/KSP.exe &
@@ -114,11 +123,17 @@ strip-bom:
 .PHONY: $(CSHARP_PROJECTS) $(CSHARP_LIBRARIES)
 
 .SECONDEXPANSION:
-$(CSHARP_PROJECTS): src/$$@/bin/$(CSHARP_CONFIG)/$$@.dll
+$(CSHARP_MAIN_PROJECTS): src/$$@/bin/$(CSHARP_CONFIG)/$$@.dll
+
+.SECONDEXPANSION:
+$(CSHARP_TEST_PROJECTS): test/$$@/bin/$(CSHARP_CONFIG)/$$@.dll
+
+.SECONDEXPANSION:
+$(CSHARP_TEST_UTILS_PROJECTS): test/$$@/bin/$(CSHARP_CONFIG)/$$@.dll
 
 $(CSHARP_LIBRARIES):
 	$(eval $@_PROJECT := $(basename $(notdir $@)))
-	$(MDTOOL) build -t:Build -c:$(CSHARP_CONFIG) -p:$($@_PROJECT) src/kRPC.sln
+	$(MDTOOL) build -t:Build -c:$(CSHARP_CONFIG) -p:$($@_PROJECT) kRPC.sln
 
 # Cog
 cog:

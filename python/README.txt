@@ -1,1 +1,1 @@
-See https://github.com/djungelorm/krpc/wiki for details.
+See https://github.com/djungelorm/krpc/wiki
