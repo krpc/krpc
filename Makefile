@@ -1,7 +1,8 @@
 # Note: This must be an absolute path
 KSP_DIR = "$(shell pwd)/../Kerbal Space Program"
 
-VERSION = $(shell cat VERSION.txt)
+SERVER_VERSION = $(shell cat VERSION.txt)
+PYTHON_CLIENT_VERSION = $(shell grep "version=" python/setup.py | sed "s/\s*version='\(.*\)',/\1/")
 
 DIST_DIR = dist
 DIST_LIBS = \
@@ -34,8 +35,6 @@ MDTOOL = mdtool
 MONODIS = monodis
 NUNIT_CONSOLE = nunit-console
 UNZIP = unzip
-MARKDOWN = markdown
-HTML2TEXT = html2text
 
 # Main build targets
 .PHONY: all configure build cog protobuf dist pre-release release install test ksp clean dist-clean strip-bom
@@ -66,18 +65,17 @@ dist: build
 	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# README
-	#$(MARKDOWN) README.md | $(HTML2TEXT) -rcfile tools/html2textrc | sed -e "/Compiling from Source/,//d" > $(DIST_DIR)/README.txt
 	echo "See https://github.com/djungelorm/krpc/wiki" >dist/README.txt
 	cp $(DIST_DIR)/README.txt $(DIST_DIR)/GameData/kRPC/
 	# Version files
-	#$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPC.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPC-version.txt
-	#$(MONODIS) --assembly $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter.dll | grep -m1 Version | sed -n -e 's/^Version:\s*//p' > $(DIST_DIR)/GameData/kRPC/kRPCSpaceCenter-version.txt
+	echo $(SERVER_VERSION) > $(DIST_DIR)/VERSION.txt
+	echo $(SERVER_VERSION) > $(DIST_DIR)/GameData/kRPC/VERSION.txt
 
 pre-release: dist test
-	cd $(DIST_DIR); zip -r krpc-$(VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
+	cd $(DIST_DIR); zip -r krpc-$(SERVER_VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
 
 release: dist test
-	cd $(DIST_DIR); zip -r krpc-$(VERSION).zip ./*
+	cd $(DIST_DIR); zip -r krpc-$(SERVER_VERSION).zip ./*
 
 install: dist
 	test -d $(KSP_DIR)/GameData
