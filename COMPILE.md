@@ -49,7 +49,7 @@
 
  `make protobuf-csharp`
 
-3. Open the solution file `src/kRPC.sln` in your IDE.
+3. Open the solution file `kRPC.sln` in your IDE.
 
 ### Compiling the Python Client Library
 
