@@ -8,11 +8,11 @@ protobuf:
 bin:
 	make -C .. TestServer
 	mkdir -p bin/TestServer
-	cp ../src/TestServer/bin/Release/TestServer.exe \
-           ../src/TestServer/bin/Release/kRPC.dll \
-           ../src/TestServer/bin/Release/Google.ProtocolBuffers.Serialization.dll \
-           ../src/TestServer/bin/Release/Google.ProtocolBuffers.dll \
-           ./bin/TestServer/
+	cp ../test/TestServer/bin/Release/TestServer.exe \
+	../test/TestServer/bin/Release/kRPC.dll \
+	../test/TestServer/bin/Release/Google.ProtocolBuffers.Serialization.dll \
+	../test/TestServer/bin/Release/Google.ProtocolBuffers.dll \
+	./bin/TestServer/
 
 test: protobuf bin
 	python setup.py test

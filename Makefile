@@ -11,17 +11,22 @@ DIST_ICONS = src/kRPC/bin/icons
 
 CSHARP_MAIN_PROJECTS  = kRPC kRPCSpaceCenter
 CSHARP_TEST_PROJECTS  = kRPCTest TestServer
-CSHARP_OTHER_PROJECTS = TestingTools
+CSHARP_TEST_UTILS_PROJECTS = TestingTools
 CSHARP_CONFIG = Release
 
-CSHARP_PROJECTS  = $(CSHARP_MAIN_PROJECTS) $(CSHARP_TEST_PROJECTS) $(CSHARP_OTHER_PROJECTS)
-CSHARP_BINDIRS   = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin) \
-                   $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/obj)
+CSHARP_PROJECTS  = $(CSHARP_MAIN_PROJECTS) $(CSHARP_TEST_PROJECTS) $(CSHARP_TEST_UTILS_PROJECTS)
+CSHARP_PROJECT_DIRS = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)) \
+                      $(foreach PROJECT,$(CSHARP_TEST_PROJECTS),test/$(PROJECT)) \
+                      $(foreach PROJECT,$(CSHARP_TEST_UTILS_PROJECTS),test/$(PROJECT))
+CSHARP_BINDIRS = $(foreach DIR,$(CSHARP_PROJECT_DIRS),$(DIR)/bin) \
+                 $(foreach DIR,$(CSHARP_PROJECT_DIRS),$(DIR)/obj)
 CSHARP_MAIN_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
-CSHARP_LIBRARIES      = $(foreach PROJECT,$(CSHARP_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
+CSHARP_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll) \
+                   $(foreach PROJECT,$(CSHARP_TEST_PROJECTS),test/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll) \
+                   $(foreach PROJECT,$(CSHARP_TEST_UTILS_PROJECTS),test/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 
 PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCSpaceCenter/Schema/*.proto)
-PROTOS_TEST = $(wildcard src/kRPCTest/Schema/*.proto)
+PROTOS_TEST = $(wildcard test/kRPCTest/Schema/*.proto)
 
 PROTOC = protoc
 PROTOGEN = tools/ProtoGen.exe
@@ -83,13 +88,13 @@ install: dist
 test: test-csharp test-python
 
 test-csharp: $(CSHARP_TEST_PROJECTS)
-	$(NUNIT_CONSOLE) -nologo -nothread -trace=Off -output=test.log src/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
+	$(NUNIT_CONSOLE) -nologo -nothread -trace=Off -output=test.log test/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
 
 test-python:
 	make -C python test
 
 ksp: install TestingTools
-	cp src/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
+	cp test/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
 	-cp settings.cfg $(KSP_DIR)/GameData/kRPC/settings.cfg
 	test "!" -f $(KSP_DIR)/KSP.x86_64 || $(KSP_DIR)/KSP.x86_64 &
 	test "!" -f $(KSP_DIR)/KSP.exe || $(KSP_DIR)/KSP.exe &
@@ -114,11 +119,17 @@ strip-bom:
 .PHONY: $(CSHARP_PROJECTS) $(CSHARP_LIBRARIES)
 
 .SECONDEXPANSION:
-$(CSHARP_PROJECTS): src/$$@/bin/$(CSHARP_CONFIG)/$$@.dll
+$(CSHARP_MAIN_PROJECTS): src/$$@/bin/$(CSHARP_CONFIG)/$$@.dll
+
+.SECONDEXPANSION:
+$(CSHARP_TEST_PROJECTS): test/$$@/bin/$(CSHARP_CONFIG)/$$@.dll
+
+.SECONDEXPANSION:
+$(CSHARP_TEST_UTILS_PROJECTS): test/$$@/bin/$(CSHARP_CONFIG)/$$@.dll
 
 $(CSHARP_LIBRARIES):
 	$(eval $@_PROJECT := $(basename $(notdir $@)))
-	$(MDTOOL) build -t:Build -c:$(CSHARP_CONFIG) -p:$($@_PROJECT) src/kRPC.sln
+	$(MDTOOL) build -t:Build -c:$(CSHARP_CONFIG) -p:$($@_PROJECT) kRPC.sln
 
 # Cog
 cog:
