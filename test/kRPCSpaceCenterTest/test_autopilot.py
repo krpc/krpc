@@ -23,7 +23,7 @@ class TestAutoPilot(testingtools.TestCase):
         roll = 30
 
         self.vessel.control.sas = False
-        self.ap.set_rotation(self.ref.surface, pitch, yaw, roll)
+        self.ap.set_rotation(pitch, yaw, roll)
         while self.ap.error > 0.1:
             time.sleep(0.25)
         self.vessel.control.sas = True
@@ -39,7 +39,7 @@ class TestAutoPilot(testingtools.TestCase):
         roll = 42
 
         self.vessel.control.sas = False
-        self.ap.set_direction(self.ref.surface, direction, roll=roll)
+        self.ap.set_direction(direction, roll=roll)
         while self.ap.error > 0.1:
             time.sleep(0.25)
         self.vessel.control.sas = True
@@ -51,7 +51,7 @@ class TestAutoPilot(testingtools.TestCase):
 
     def check_direction(self, direction, pitch, heading):
         self.vessel.control.sas = False
-        self.ap.set_direction(self.ref.surface, direction)
+        self.ap.set_direction(direction)
         while self.ap.error > 0.1:
             time.sleep(0.25)
         self.vessel.control.sas = True
