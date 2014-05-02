@@ -39,6 +39,16 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double SemiMajorAxis {
+            get { return 0.5d * (Apoapsis + Periapsis); }
+        }
+
+        [KRPCProperty]
+        public double SemiMajorAxisAltitude {
+            get { return 0.5d * (ApoapsisAltitude + PeriapsisAltitude); }
+        }
+
+        [KRPCProperty]
         public double TimeToApoapsis {
             get { return vessel.GetOrbit ().timeToAp; }
         }
