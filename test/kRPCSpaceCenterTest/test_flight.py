@@ -5,9 +5,8 @@ import testingtools
 from testingtools import load_save
 import krpc
 import time
-import numpy as np
 import math
-from mathtools import v3, rad2deg
+from mathtools import v3, rad2deg, norm, dot, vector
 
 class TestFlight(testingtools.TestCase):
 
@@ -69,32 +68,32 @@ class TestFlight(testingtools.TestCase):
         direction       = v3(flight.direction)
         up_direction    = v3(flight.up_direction)
         north_direction = v3(flight.north_direction)
-        self.assertClose(1, np.linalg.norm(direction))
-        self.assertClose(1, np.linalg.norm(up_direction))
-        self.assertClose(1, np.linalg.norm(north_direction))
-        self.assertClose(0, np.dot(up_direction, north_direction))
+        self.assertClose(1, norm(direction))
+        self.assertClose(1, norm(up_direction))
+        self.assertClose(1, norm(north_direction))
+        self.assertClose(0, dot(up_direction, north_direction))
 
         # Check vessel direction vector agrees with pitch angle
-        pitch = 90 - rad2deg(math.acos(np.dot(up_direction, direction)))
+        pitch = 90 - rad2deg(math.acos(dot(up_direction, direction)))
         self.assertClose(flight.pitch, pitch, error=2)
 
         # Check vessel direction vector agrees with heading angle
-        up_component = np.dot(direction, up_direction) * np.array(up_direction)
-        north_component = np.array(direction) - up_component
-        north_component = north_component / np.linalg.norm(north_component)
-        self.assertClose(flight.heading, rad2deg(math.acos(np.dot(north_component, north_direction))), error=1)
+        up_component = dot(direction, up_direction) * vector(up_direction)
+        north_component = vector(direction) - up_component
+        north_component = north_component / norm(north_component)
+        self.assertClose(flight.heading, rad2deg(math.acos(dot(north_component, north_direction))), error=1)
 
         # Check vessel directions agree with orbital directions
         # (we are in a 0 degree inclined orbit, so they should do)
-        self.assertClose(1, np.dot(up_direction, v3(self.vessel.orbit.radial)))
-        self.assertClose(1, np.dot(north_direction, v3(self.vessel.orbit.normal)))
+        self.assertClose(1, dot(up_direction, v3(self.vessel.orbit.radial)))
+        self.assertClose(1, dot(north_direction, v3(self.vessel.orbit.normal)))
 
     def check_speeds(self, flight):
         up_direction = v3(flight.up_direction)
         velocity = v3(flight.velocity)
-        vertical_speed = np.linalg.norm(np.dot(velocity, up_direction))
-        horizontal_speed = np.linalg.norm(velocity) - vertical_speed
-        self.assertClose(np.linalg.norm(velocity), flight.speed, error=1)
+        vertical_speed = dot(velocity, up_direction)
+        horizontal_speed = norm(velocity) - vertical_speed
+        self.assertClose(norm(velocity), flight.speed, error=1)
         self.assertClose(horizontal_speed, flight.horizontal_speed, error=1)
         self.assertClose(vertical_speed, flight.vertical_speed, error=1)
 

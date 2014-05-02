@@ -3,9 +3,8 @@
 import unittest
 import testingtools
 from testingtools import load_save
-from mathtools import v3
+from mathtools import v3, norm, dot
 import krpc
-import numpy as np
 
 class TestOrbit(testingtools.TestCase):
 
@@ -17,18 +16,18 @@ class TestOrbit(testingtools.TestCase):
         normal_neg  = v3(orbit.normal_neg)
         radial      = v3(orbit.radial)
         radial_neg  = v3(orbit.radial_neg)
-        self.assertClose(1, np.linalg.norm(prograde))
-        self.assertClose(1, np.linalg.norm(retrograde))
-        self.assertClose(1, np.linalg.norm(normal))
-        self.assertClose(1, np.linalg.norm(normal_neg))
-        self.assertClose(1, np.linalg.norm(radial))
-        self.assertClose(1, np.linalg.norm(radial_neg))
+        self.assertClose(1, norm(prograde))
+        self.assertClose(1, norm(retrograde))
+        self.assertClose(1, norm(normal))
+        self.assertClose(1, norm(normal_neg))
+        self.assertClose(1, norm(radial))
+        self.assertClose(1, norm(radial_neg))
         self.assertClose(prograde, [-x for x in retrograde], error=0.01)
         self.assertClose(radial, [-x for x in radial_neg], error=0.01)
         self.assertClose(normal, [-x for x in normal_neg], error=0.01)
-        self.assertClose(0, np.dot(prograde, radial), error=0.01)
-        self.assertClose(0, np.dot(prograde, normal), error=0.01)
-        self.assertClose(0, np.dot(radial, normal), error=0.01)
+        self.assertClose(0, dot(prograde, radial), error=0.01)
+        self.assertClose(0, dot(prograde, normal), error=0.01)
+        self.assertClose(0, dot(radial, normal), error=0.01)
 
     def test_orbit_kerbin(self):
         load_save('orbit-kerbin')

@@ -4,7 +4,7 @@ import unittest
 import testingtools
 from testingtools import load_save
 from mathtools import v3 as vec3
-from mathtools import length, normalize, to_vector
+from mathtools import norm, normalize, to_vector
 import krpc
 
 class TestNode(testingtools.TestCase):
@@ -14,7 +14,7 @@ class TestNode(testingtools.TestCase):
         self.assertEqual(v[1], node.normal)
         self.assertEqual(v[2], node.radial)
         self.assertEqual(v, vec3(node.vector))
-        self.assertEqual(length(v), node.delta_v)
+        self.assertEqual(norm(v), node.delta_v)
         self.assertEqual(normalize(v), vec3(node.direction))
 
     def test_basic(self):

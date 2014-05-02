@@ -5,7 +5,6 @@ import testingtools
 from testingtools import load_save
 import krpc
 import time
-import numpy as np
 import math
 from mathtools import v3, rad2deg, normalize, to_vector
 
