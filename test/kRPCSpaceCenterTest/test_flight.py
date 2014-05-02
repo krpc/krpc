@@ -6,7 +6,7 @@ from testingtools import load_save
 import krpc
 import time
 import math
-from mathtools import v3, rad2deg, norm, dot, vector
+from mathtools import rad2deg, norm, dot, vector
 
 class TestFlight(testingtools.TestCase):
 
@@ -22,7 +22,7 @@ class TestFlight(testingtools.TestCase):
     def test_orbital_flight(self):
         self.assertClose(100000, self.orbital_flight.altitude, error=10)
         self.assertClose(100920, self.orbital_flight.true_altitude, error=20)
-        self.assertClose([0, 0, 2246.1], v3(self.orbital_flight.velocity), error=0.5)
+        self.assertClose([0, 0, 2246.1], vector(self.orbital_flight.velocity), error=0.5)
         self.assertClose(2246.1, self.orbital_flight.speed, error=0.5)
         self.assertClose(2246.1, self.orbital_flight.horizontal_speed, error=0.5)
         self.assertClose(0, self.orbital_flight.vertical_speed, error=0.5)
@@ -37,7 +37,7 @@ class TestFlight(testingtools.TestCase):
     def test_surface_flight(self):
         self.assertClose(100000, self.surface_flight.altitude, error=10)
         self.assertClose(100920, self.surface_flight.true_altitude, error=20)
-        self.assertClose([-2246.1, 0.0, 0.0], v3(self.surface_flight.velocity), error=0.5)
+        self.assertClose([-2246.1, 0.0, 0.0], vector(self.surface_flight.velocity), error=0.5)
         self.assertClose(2246.1, self.surface_flight.speed, error=0.5)
         self.assertClose(2246.1, self.surface_flight.horizontal_speed, error=0.5)
         self.assertClose(0, self.surface_flight.vertical_speed, error=0.5)
@@ -52,7 +52,7 @@ class TestFlight(testingtools.TestCase):
     def test_surfacev_flight(self):
         self.assertClose(100000, self.surfacev_flight.altitude, error=10)
         self.assertClose(100920, self.surfacev_flight.true_altitude, error=20)
-        self.assertClose([0,0,2042.5], v3(self.surfacev_flight.velocity), error=0.5)
+        self.assertClose([0,0,2042.5], vector(self.surfacev_flight.velocity), error=0.5)
         self.assertClose(2042.5, self.surfacev_flight.speed, error=0.5)
         self.assertClose(2042.5, self.surfacev_flight.horizontal_speed, error=0.5)
         self.assertClose(0, self.surfacev_flight.vertical_speed, error=0.5)
@@ -65,9 +65,9 @@ class TestFlight(testingtools.TestCase):
         self.check_speeds(self.surfacev_flight)
 
     def check_directions(self, flight):
-        direction       = v3(flight.direction)
-        up_direction    = v3(flight.up_direction)
-        north_direction = v3(flight.north_direction)
+        direction       = vector(flight.direction)
+        up_direction    = vector(flight.up_direction)
+        north_direction = vector(flight.north_direction)
         self.assertClose(1, norm(direction))
         self.assertClose(1, norm(up_direction))
         self.assertClose(1, norm(north_direction))
@@ -85,12 +85,12 @@ class TestFlight(testingtools.TestCase):
 
         # Check vessel directions agree with orbital directions
         # (we are in a 0 degree inclined orbit, so they should do)
-        self.assertClose(1, dot(up_direction, v3(self.vessel.orbit.radial)))
-        self.assertClose(1, dot(north_direction, v3(self.vessel.orbit.normal)))
+        self.assertClose(1, dot(up_direction, vector(self.vessel.orbit.radial)))
+        self.assertClose(1, dot(north_direction, vector(self.vessel.orbit.normal)))
 
     def check_speeds(self, flight):
-        up_direction = v3(flight.up_direction)
-        velocity = v3(flight.velocity)
+        up_direction = vector(flight.up_direction)
+        velocity = vector(flight.velocity)
         vertical_speed = dot(velocity, up_direction)
         horizontal_speed = norm(velocity) - vertical_speed
         self.assertClose(norm(velocity), flight.speed, error=1)

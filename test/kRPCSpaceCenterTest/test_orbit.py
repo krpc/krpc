@@ -3,19 +3,19 @@
 import unittest
 import testingtools
 from testingtools import load_save
-from mathtools import v3, norm, dot
+from mathtools import vector, norm, dot
 import krpc
 
 class TestOrbit(testingtools.TestCase):
 
     def check_orbital_vectors(self, orbit):
         # Check orbital direction vectors
-        prograde    = v3(orbit.prograde)
-        retrograde  = v3(orbit.retrograde)
-        normal      = v3(orbit.normal)
-        normal_neg  = v3(orbit.normal_neg)
-        radial      = v3(orbit.radial)
-        radial_neg  = v3(orbit.radial_neg)
+        prograde    = vector(orbit.prograde)
+        retrograde  = vector(orbit.retrograde)
+        normal      = vector(orbit.normal)
+        normal_neg  = vector(orbit.normal_neg)
+        radial      = vector(orbit.radial)
+        radial_neg  = vector(orbit.radial_neg)
         self.assertClose(1, norm(prograde))
         self.assertClose(1, norm(retrograde))
         self.assertClose(1, norm(normal))
