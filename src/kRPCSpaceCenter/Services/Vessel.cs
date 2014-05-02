@@ -47,6 +47,11 @@ namespace KRPCSpaceCenter.Services
             Parts = new Parts (vessel);
         }
 
+        internal global::CelestialBody MainBody {
+            //TODO: remove
+            get { return vessel.mainBody; }
+        }
+
         [KRPCProperty]
         public string Name {
             get { return vessel.vesselName; }
