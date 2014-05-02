@@ -11,7 +11,9 @@ class TestVessel(testingtools.TestCase):
         load_save('flight')
         ksp = krpc.connect()
         vtype = ksp.space_center.VesselType
+        vsituation = ksp.space_center.VesselSituation
         vessel = ksp.space_center.active_vessel
+
         self.assertEqual('Test', vessel.name)
         vessel.name = 'Foo Bar Baz';
         self.assertEqual('Foo Bar Baz', vessel.name)
@@ -19,6 +21,8 @@ class TestVessel(testingtools.TestCase):
         self.assertEqual(vtype.ship, vessel.type)
         vessel.type = vtype.station
         self.assertEqual(vtype.station, vessel.type)
+
+        self.assertEqual(vsituation.orbiting, vessel.situation)
 
 if __name__ == "__main__":
     unittest.main()

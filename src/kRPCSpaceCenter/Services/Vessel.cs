@@ -17,6 +17,19 @@ namespace KRPCSpaceCenter.Services
         Debris
     }
 
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum VesselSituation
+    {
+        Docked,
+        Escaping,
+        Flying,
+        Landed,
+        Orbiting,
+        PreLaunch,
+        Splashed,
+        SubOrbital
+    }
+
     [KRPCClass (Service = "SpaceCenter")]
     public class Vessel
     {
@@ -48,6 +61,11 @@ namespace KRPCSpaceCenter.Services
             set {
                 vessel.vesselType = value.FromVesselType ();
             }
+        }
+
+        [KRPCProperty]
+        public VesselSituation Situation {
+            get { return vessel.situation.ToVesselSituation (); }
         }
 
         [KRPCMethod]
