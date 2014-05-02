@@ -89,13 +89,16 @@ install: dist
 	rm -rf $(KSP_DIR)/GameData/000_Toolbar
 	cp -r $(DIST_DIR)/GameData/* $(KSP_DIR)/GameData/
 
-test: test-csharp test-python
+test: test-csharp test-python test-spacecenter
 
 test-csharp: $(CSHARP_TEST_PROJECTS)
 	$(NUNIT_CONSOLE) -nologo -nothread -trace=Off -output=test.log test/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
 
 test-python:
 	make -C python test
+
+test-spacecenter:
+	make -C test/kRPCSpaceCenterTest test
 
 ksp: install TestingTools
 	cp test/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/

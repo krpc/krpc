@@ -5,13 +5,13 @@ import os
 import shutil
 import itertools
 
-KSP_DIR='../../Kerbal Space Program'
+KSP_DIR='../../../Kerbal Space Program'
 
 def load_save(name):
     save_dir = KSP_DIR + '/saves/test'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
-    shutil.copy('fixtures/' + name + '.sfs', save_dir + '/' + name + '.sfs')
+    shutil.copy(os.path.dirname(os.path.realpath(__file__)) + '/fixtures/' + name + '.sfs', save_dir + '/' + name + '.sfs')
     # Connect and issue load save RPC
     ksp = krpc.connect(name='testingtools.load_save')
     ksp.testing_tools.load_save('test', name)
@@ -21,7 +21,7 @@ def load_save(name):
         try:
             ksp = krpc.connect(name='testingtools.load_save')
             break
-	except:
+        except:
             time.sleep(0.2)
             pass
 
