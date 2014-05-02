@@ -98,7 +98,7 @@ test-python:
 	make -C python test
 
 test-spacecenter:
-	make -C test/kRPCSpaceCenterTest test
+	make -C test/kRPCSpaceCenterTest KSP_DIR=$(KSP_DIR) test
 
 ksp: install TestingTools
 	cp test/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/

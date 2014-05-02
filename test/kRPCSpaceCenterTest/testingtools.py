@@ -5,10 +5,8 @@ import os
 import shutil
 import itertools
 
-KSP_DIR='../../../Kerbal Space Program'
-
 def load_save(name):
-    save_dir = KSP_DIR + '/saves/test'
+    save_dir = os.getenv('KSP_DIR') + '/saves/test'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     shutil.copy(os.path.dirname(os.path.realpath(__file__)) + '/fixtures/' + name + '.sfs', save_dir + '/' + name + '.sfs')
