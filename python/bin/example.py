@@ -1,13 +1,17 @@
 #!/usr/bin/env python2
 
 """
-This example script is an autopilot that will launch the supplied Test.craft
-(a 2-stage rocket) and take it into orbit at 80km.
+This example script is an autopilot that will launch the supplied Example.craft
+(a 3-stage rocket) and take it into a (roughly) circular orbit at 80km.
 """
-# TODO: this script doesn't circularise the orbit... yet
 
 import krpc
 import time
+import math
+
+turn_start_altitude = 250
+turn_end_altitude = 70000
+target_altitude = 80000
 
 def main():
     # Connect to the server with the default settings
@@ -19,12 +23,12 @@ def main():
     vessel = ksp.space_center.active_vessel
     orbit = vessel.orbit
     control = vessel.control
-    flight = vessel.flight
+    auto_pilot = vessel.auto_pilot
+    flight = vessel.flight()
     resources = vessel.resources
 
     # Set the throttle to 100% and enable SAS
     control.throttle = 1
-    control.sas = True
 
     # Countdown...
     print '3'; time.sleep(1)
@@ -34,82 +38,75 @@ def main():
     # Activate the first stage
     print 'Launch!'
     control.activate_next_stage()
+    auto_pilot.set_rotation(ksp.space_center.ReferenceFrame.surface, 90, 90)
 
-    # Ascend to 10km and ditch SRBs when they're empty
-    print 'Vertical ascent...'
+    time.sleep(1)
+
     srbs_separated = False
+    stage_separated = False
     while True:
 
-        # Check altitude, exit loop if higher than 10km
-        altitude = flight.altitude
-        print '  Altitude = %.1f km' % (altitude/1000)
-        if altitude > 10000:
-            break
+        alt = flight.altitude
+        if alt > turn_start_altitude and alt < turn_end_altitude:
+            frac = (alt - turn_start_altitude) / (turn_end_altitude - turn_start_altitude)
+            frac *= 12
+            frac -= 6
+            sig = 1 / (1 + math.exp(-frac))
+            turn = sig * 90
 
-        # Check if the solid boosters need to be ditched
-        # (We assume this will happen before we reach 10km)
+            auto_pilot.set_rotation(ksp.space_center.ReferenceFrame.surface, 90-turn, 90)
+
+        # Separate SRBs when finished
         if not srbs_separated:
-            solid_fuel = resources.get_resource('SolidFuel')
+            solid_fuel = resources.amount('SolidFuel', 3)
             print '  Solid fuel = %.1f T' % solid_fuel
-            if solid_fuel < 15.1:
+            if solid_fuel < 0.1:
                 print '  SRB separation!'
                 control.activate_next_stage()
                 srbs_separated = True
 
-        time.sleep(1)
+        # Separate launch stage when finished
+        if srbs_separated and not stage_separated:
+            liquid_fuel = resources.amount('LiquidFuel') - 1440
+            oxidizer = resources.amount('Oxidizer') - 320
+            print '  LF = %.1f T, Ox = %.1f T' % (liquid_fuel, oxidizer)
+            if liquid_fuel < 0.1:
+                print '  Stage separation!'
+                control.activate_next_stage()
+                stage_separated = True
 
-    # Disable SAS, pitch the vessel to 50 degrees to the west, then hold position using SAS
-    print 'Gravity turn...'
-    control.sas = False
-    control.yaw = 0.1
-    while flight.pitch > 50:
-        time.sleep(0.25)
-    control.yaw = 0
-    control.sas = True
-
-    # Raise apoapsis to above 80km
-    while True:
-
-        # Apoapsis is relative to the center of Kerbin, so subtract 600km
-        apoapsis = orbit.apoapsis - 600000
+        # Disable engines when 80km apoapsis is reached
+        apoapsis = orbit.apoapsis_altitude
         print '  Apoapsis = %.1f km' % (apoapsis/1000)
         if apoapsis > 80000:
+            control.throttle = 0
             break
 
         time.sleep(1)
 
-    # Disable the control inputs and coast to apoapsis
-    print 'Coasting to apoapsis...'
-    control.sas = False
-    control.throttle = 0
-    while True:
+    # Point at 0 degrees pitch, west
+    auto_pilot.set_rotation(ksp.space_center.ReferenceFrame.surface, 0, 90)
 
-        # Check altitude, exit loop if higher than 79km
+    # Wait until altitude is higher than 79km
+    print 'Coasting to apoapsis...'
+    while True:
         altitude = flight.altitude
         print '  Altitude = %.1f km' % (altitude/1000)
         if altitude > 79000:
             break
         time.sleep(1)
 
-    # Circularize the orbit
+    # Circularize the orbit by raising periapsis until eccentricity
+    # starts to increase (which happens just after reaching 0)
     print 'Circularizing...'
-    control.sas = False
-    control.yaw = 0.1
-    while abs(flight.pitch) > 3:
-        time.sleep(0.25)
-    control.yaw = 0
-    control.sas = True
-    # Raise periapsis until eccentricity starts the increase (happens just after reaching 0)
     control.throttle = 1
-
     eccentricity = orbit.eccentricity
     time.sleep(1)
 
     while True:
-
-        apoapsis = orbit.apoapsis - 600000
-        periapsis = orbit.periapsis - 600000
-        prev_eccentricity = eccentricity;
+        apoapsis = orbit.apoapsis_altitude
+        periapsis = orbit.periapsis_altitude
+        prev_eccentricity = eccentricity
         eccentricity = orbit.eccentricity
 
         print '  Orbit = %.1f km x %.1f km (e = %.3f)' % ((apoapsis/1000), (periapsis/1000), orbit.eccentricity)
@@ -125,8 +122,7 @@ def main():
             time.sleep(0.2)
 
     control.throttle = 0
-    control.sas = False
-
+    auto_pilot.disengage()
     print 'Program complete'
 
 if __name__ == "__main__":

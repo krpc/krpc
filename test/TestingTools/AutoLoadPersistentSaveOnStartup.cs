@@ -14,6 +14,9 @@ namespace TestingTools
                 HighLogic.SaveFolder = "default";
                 var game = GamePersistence.LoadGame ("persistent", HighLogic.SaveFolder, true, false);
                 if (game != null && game.flightState != null && game.compatible) {
+                    // Check there is a vessel
+                    if (game.flightState.protoVessels.Count == 0)
+                        return;
                     // Get the vessel index of the first non-asteroid
                     int vesselIdx = 0;
                     foreach (var vessel in game.flightState.protoVessels) {

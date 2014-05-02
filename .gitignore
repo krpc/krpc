@@ -124,9 +124,9 @@ src/kRPCSpaceCenter/Schema/*.cs
 src/kRPCSpaceCenter/Schema/*.py
 python/krpc/schema/
 python/krpc/test/Test.py
-src/kRPCTest/Schema/*.cs
-src/kRPCTest/Schema/*.py
-src/kRPC/Schema/KRPC.cs.orig
+test/kRPCTest/Schema/*.cs
+test/kRPCTest/Schema/*.py
+test/kRPC/Schema/KRPC.cs.orig
 
 # Build output
 dist

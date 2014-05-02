@@ -55,7 +55,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\kRPC\kRPC.csproj">
+    <ProjectReference Include="..\..\src\kRPC\kRPC.csproj">
       <Project>{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}</Project>
       <Name>kRPC</Name>
     </ProjectReference>
