@@ -5,9 +5,8 @@ import testingtools
 from testingtools import load_save
 import krpc
 import time
-import numpy as np
 import math
-from mathtools import v3, rad2deg, normalize, to_vector
+from mathtools import vector, rad2deg, normalize, to_vector
 
 class TestAutoPilot(testingtools.TestCase):
 
@@ -47,7 +46,7 @@ class TestAutoPilot(testingtools.TestCase):
         self.ap.disengage()
 
         flight = self.vessel.flight()
-        self.assertClose(v3(direction), v3(flight.direction), error=0.1)
+        self.assertClose(vector(direction), vector(flight.direction), error=0.1)
         self.assertClose(roll, flight.roll, error=0.5)
 
     def check_direction(self, direction, pitch, heading):
@@ -60,7 +59,7 @@ class TestAutoPilot(testingtools.TestCase):
 
         # Check resulting direction vector in vessel space
         flight = self.vessel.flight()
-        self.assertClose(v3(direction), v3(flight.direction), error=0.1)
+        self.assertClose(vector(direction), vector(flight.direction), error=0.1)
 
         # Check resulting pitch and heading in orbital space
         flight = self.vessel.flight(self.ksp.space_center.ReferenceFrame.orbital)
