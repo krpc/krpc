@@ -11,7 +11,7 @@ namespace KRPC.Service
 {
     class Services
     {
-        public IDictionary<string, ServiceSignature> Signatures { get; private set; }
+        internal IDictionary<string, ServiceSignature> Signatures { get; private set; }
 
         static Services instance;
 
@@ -31,7 +31,7 @@ namespace KRPC.Service
             Signatures = Scanner.Scanner.GetServices ();
         }
 
-        internal ProcedureSignature GetProcedureSignature (Request request)
+        public ProcedureSignature GetProcedureSignature (Request request)
         {
             if (!Signatures.ContainsKey (request.Service))
                 throw new RPCException ("Service " + request.Service + " not found");
@@ -47,7 +47,7 @@ namespace KRPC.Service
         /// fields populated. Throws YieldException, containing a continuation, if the request yields.
         /// Throws RPCException if processing the request fails.
         /// </summary>
-        internal Response.Builder HandleRequest (ProcedureSignature procedure, Request request)
+        public Response.Builder HandleRequest (ProcedureSignature procedure, Request request)
         {
             object[] arguments = DecodeArguments (procedure, request.ArgumentsList);
             object returnValue;
@@ -70,7 +70,7 @@ namespace KRPC.Service
         /// fields populated. Throws YieldException, containing a continuation, if the request yields.
         /// Throws RPCException if processing the request fails.
         /// </summary>
-        internal Response.Builder HandleRequest (ProcedureSignature procedure, IContinuation continuation)
+        public Response.Builder HandleRequest (ProcedureSignature procedure, IContinuation continuation)
         {
             object returnValue;
             try {
