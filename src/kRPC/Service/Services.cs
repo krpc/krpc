@@ -31,25 +31,24 @@ namespace KRPC.Service
             Signatures = Scanner.Scanner.GetServices ();
         }
 
+        internal ProcedureSignature GetProcedureSignature (Request request)
+        {
+            if (!Signatures.ContainsKey (request.Service))
+                throw new RPCException ("Service " + request.Service + " not found");
+            var service = Signatures [request.Service];
+            if (!service.Procedures.ContainsKey (request.Procedure))
+                throw new RPCException ("Procedure " + request.Procedure + " not found, " +
+                "in Service " + request.Service);
+            return service.Procedures [request.Procedure];
+        }
+
         /// <summary>
         /// Executes the given request and returns a response builder with the relevant
         /// fields populated. Throws YieldException, containing a continuation, if the request yields.
         /// Throws RPCException if processing the request fails.
         /// </summary>
-        internal Response.Builder HandleRequest (Request request)
+        internal Response.Builder HandleRequest (ProcedureSignature procedure, Request request)
         {
-            // Get the service definition
-            if (!Signatures.ContainsKey (request.Service))
-                throw new RPCException ("Service " + request.Service + " not found");
-            var service = Signatures [request.Service];
-
-            // Get the procedure definition
-            if (!service.Procedures.ContainsKey (request.Procedure))
-                throw new RPCException ("Procedure " + request.Procedure + " not found, " +
-                "in Service " + request.Service);
-            var procedure = service.Procedures [request.Procedure];
-
-            // Invoke the procedure
             object[] arguments = DecodeArguments (procedure, request.ArgumentsList);
             object returnValue;
             try {
@@ -61,9 +60,8 @@ namespace KRPC.Service
                 e.InnerException.GetType () + ": " + e.InnerException.Message);
             }
             var responseBuilder = Response.CreateBuilder ();
-            if (procedure.HasReturnType) {
+            if (procedure.HasReturnType)
                 responseBuilder.ReturnValue = EncodeReturnValue (procedure, returnValue);
-            }
             return responseBuilder;
         }
 
@@ -72,20 +70,8 @@ namespace KRPC.Service
         /// fields populated. Throws YieldException, containing a continuation, if the request yields.
         /// Throws RPCException if processing the request fails.
         /// </summary>
-        internal Response.Builder HandleRequest (Request request, IContinuation continuation)
+        internal Response.Builder HandleRequest (ProcedureSignature procedure, IContinuation continuation)
         {
-            // Get the service definition
-            if (!Signatures.ContainsKey (request.Service))
-                throw new RPCException ("Service " + request.Service + " not found");
-            var service = Signatures [request.Service];
-
-            // Get the procedure definition
-            if (!service.Procedures.ContainsKey (request.Procedure))
-                throw new RPCException ("Procedure " + request.Procedure + " not found, " +
-                "in Service " + request.Service);
-            var procedure = service.Procedures [request.Procedure];
-
-            // Invoke the procedure
             object returnValue;
             try {
                 returnValue = continuation.RunUntyped ();
@@ -96,9 +82,8 @@ namespace KRPC.Service
                 e.GetType () + ": " + e.Message);
             }
             var responseBuilder = Response.CreateBuilder ();
-            if (procedure.HasReturnType) {
+            if (procedure.HasReturnType)
                 responseBuilder.ReturnValue = EncodeReturnValue (procedure, returnValue);
-            }
             return responseBuilder;
         }
 

@@ -1,6 +1,7 @@
 using KRPC.Schema.KRPC;
 using KRPC.Continuations;
 using KRPC.Server;
+using KRPC.Service.Scanner;
 
 namespace KRPC.Service
 {
@@ -11,20 +12,22 @@ namespace KRPC.Service
     {
         public IClient Client { get; private set; }
 
-        public Request Request { get; private set; }
-
+        Request request;
+        ProcedureSignature procedure;
         IContinuation continuation;
 
         public RequestContinuation (IClient client, Request request)
         {
             Client = client;
-            Request = request;
+            this.request = request;
+            this.procedure = Services.Instance.GetProcedureSignature (request);
         }
 
-        RequestContinuation (IClient client, Request request, IContinuation continuation)
+        RequestContinuation (IClient client, Request request, ProcedureSignature procedure, IContinuation continuation)
         {
             Client = client;
-            Request = request;
+            this.request = request;
+            this.procedure = procedure;
             this.continuation = continuation;
         }
 
@@ -32,11 +35,11 @@ namespace KRPC.Service
         {
             try {
                 if (continuation == null)
-                    return Services.Instance.HandleRequest (Request);
+                    return Services.Instance.HandleRequest (procedure, request);
                 else
-                    return Services.Instance.HandleRequest (Request, continuation);
+                    return Services.Instance.HandleRequest (procedure, continuation);
             } catch (YieldException e) {
-                throw new YieldException (new RequestContinuation (Client, Request, e.Continuation));
+                throw new YieldException (new RequestContinuation (Client, request, procedure, e.Continuation));
             }
         }
     };

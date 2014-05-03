@@ -52,7 +52,8 @@ namespace KRPCTest.Service
 
         Response.Builder Run (Request request)
         {
-            return KRPC.Service.Services.Instance.HandleRequest (request);
+            var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request);
+            return KRPC.Service.Services.Instance.HandleRequest (procedure, request);
         }
 
         byte[] ToBytes<T> (T x) where T : IMessage

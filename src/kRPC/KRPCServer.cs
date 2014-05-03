@@ -148,7 +148,6 @@ namespace KRPC
         void ExecuteContinuation (RequestContinuation continuation)
         {
             var client = continuation.Client;
-            var request = continuation.Request;
 
             // Run the continuation, and either return a result, an error,
             // or throw a YieldException if the continuation has not completed
