@@ -35,6 +35,16 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double SurfaceGravity {
+            get { return body.GeeASL * 9.81d; }
+        }
+
+        [KRPCProperty]
+        public double RotationalPeriod {
+            get { return body.rotationPeriod; }
+        }
+
+        [KRPCProperty]
         public double EquatorialRadius {
             get { return body.Radius; }
         }
@@ -47,6 +57,26 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public Orbit Orbit {
             get { return orbit; }
+        }
+
+        [KRPCProperty]
+        public bool HasAtmosphere {
+            get { return body.atmosphere; }
+        }
+
+        [KRPCProperty]
+        public double AtmospherePressure {
+            get { return HasAtmosphere ? body.atmosphereMultiplier * 101.325d : 0d; }
+        }
+
+        [KRPCProperty]
+        public double AtmosphereScaleHeight {
+            get { return HasAtmosphere ? body.atmosphereScaleHeight * 1000 : 0d; }
+        }
+
+        [KRPCProperty]
+        public double AtmosphereMaxAltitude {
+            get { return HasAtmosphere ? body.maxAtmosphereAltitude : 0d; }
         }
     }
 }
