@@ -3,7 +3,7 @@ using KRPCSpaceCenter;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
-    public static class VesselSItuationExtensions
+    public static class VesselSituationExtensions
     {
         public static KRPCSpaceCenter.Services.VesselSituation ToVesselSituation (this global::Vessel.Situations situation)
         {
