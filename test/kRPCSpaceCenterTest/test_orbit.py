@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 import testingtools
 from testingtools import load_save
@@ -42,15 +40,15 @@ class TestOrbit(testingtools.TestCase):
         # mEp   0
         # epoch 0
         # body  Kerbin
-        self.assertEqual("Kerbin", orbit.body)
-        self.assertClose(100000 + 600000, orbit.apoapsis)
-        self.assertClose(100000 + 600000, orbit.periapsis)
-        self.assertClose(100000,  orbit.apoapsis_altitude)
-        self.assertClose(100000, orbit.periapsis_altitude)
-        self.assertClose(100000 + 600000, orbit.semi_major_axis)
-        self.assertClose(100000, orbit.semi_major_axis_altitude)
-        self.assertClose(603.48, orbit.time_to_apoapsis, error=0.25)
-        self.assertClose(1582.5, orbit.time_to_periapsis, error=0.25)
+        self.assertEqual('Kerbin', orbit.body.name)
+        self.assertClose(100000 + 600000, orbit.apoapsis, error=10)
+        self.assertClose(100000 + 600000, orbit.periapsis, error=10)
+        self.assertClose(100000,  orbit.apoapsis_altitude, error=10)
+        self.assertClose(100000, orbit.periapsis_altitude, error=10)
+        self.assertClose(100000 + 600000, orbit.semi_major_axis, error=10)
+        self.assertClose(100000, orbit.semi_major_axis_altitude, error=10)
+        self.assertClose(603.48, orbit.time_to_apoapsis, error=1)
+        self.assertClose(1582.5, orbit.time_to_periapsis, error=1)
         self.assertClose(0, orbit.eccentricity)
         self.assertClose(0, orbit.inclination)
         self.assertClose(0, orbit.longitude_of_ascending_node)
@@ -71,15 +69,15 @@ class TestOrbit(testingtools.TestCase):
         # mEp   2.3
         # epoch 0
         # body  Kerbin
-        self.assertEqual("Bop", orbit.body)
-        self.assertClose(377600,  orbit.apoapsis)
-        self.assertClose(262400 , orbit.periapsis)
-        self.assertClose(377600 - 65000,  orbit.apoapsis_altitude)
-        self.assertClose(262400 - 65000, orbit.periapsis_altitude)
-        self.assertClose(0.5 * (377600 + 262400), orbit.semi_major_axis)
-        self.assertClose(0.5 * (377600 - 65000 + 262400 - 65000), orbit.semi_major_axis_altitude)
-        self.assertClose(2698.33, orbit.time_to_apoapsis, error=0.25)
-        self.assertClose(14102.17, orbit.time_to_periapsis, error=0.25)
+        self.assertEqual('Bop', orbit.body.name)
+        self.assertClose(377600,  orbit.apoapsis, error=10)
+        self.assertClose(262400 , orbit.periapsis, error=10)
+        self.assertClose(377600 - 65000,  orbit.apoapsis_altitude, error=10)
+        self.assertClose(262400 - 65000, orbit.periapsis_altitude, error=10)
+        self.assertClose(0.5 * (377600 + 262400), orbit.semi_major_axis, error=10)
+        self.assertClose(0.5 * (377600 - 65000 + 262400 - 65000), orbit.semi_major_axis_altitude, error=10)
+        self.assertClose(2698.33, orbit.time_to_apoapsis, error=1)
+        self.assertClose(14102.17, orbit.time_to_periapsis, error=1)
         self.assertClose(0.18, orbit.eccentricity)
         self.assertClose(27, orbit.inclination)
         self.assertClose(38, orbit.longitude_of_ascending_node)
@@ -100,15 +98,15 @@ class TestOrbit(testingtools.TestCase):
         # mEp   6.25
         # epoch 0
         # body  Mun
-        self.assertEqual("Mun", orbit.body)
-        self.assertClose(2736000, orbit.apoapsis)
-        self.assertClose(864000, orbit.periapsis)
-        self.assertClose(2736000 - 200000, orbit.apoapsis_altitude)
-        self.assertClose(864000 - 200000, orbit.periapsis_altitude)
-        self.assertClose(0.5 * (2736000 + 864000), orbit.semi_major_axis)
-        self.assertClose(0.5 * (2736000 - 200000 + 864000 - 200000), orbit.semi_major_axis_altitude)
-        self.assertClose(29987.92, orbit.time_to_apoapsis, error=0.25)
-        self.assertClose(261.65, orbit.time_to_periapsis, error=0.25)
+        self.assertEqual('Mun', orbit.body.name)
+        self.assertClose(2736000, orbit.apoapsis, error=10)
+        self.assertClose(864000, orbit.periapsis, error=10)
+        self.assertClose(2736000 - 200000, orbit.apoapsis_altitude, error=10)
+        self.assertClose(864000 - 200000, orbit.periapsis_altitude, error=10)
+        self.assertClose(0.5 * (2736000 + 864000), orbit.semi_major_axis, error=10)
+        self.assertClose(0.5 * (2736000 - 200000 + 864000 - 200000), orbit.semi_major_axis_altitude, error=10)
+        self.assertClose(29987.92, orbit.time_to_apoapsis, error=1)
+        self.assertClose(261.65, orbit.time_to_periapsis, error=1)
         self.assertClose(0.52, orbit.eccentricity)
         self.assertClose(0, orbit.inclination)
         self.assertClose(13, orbit.longitude_of_ascending_node)
@@ -122,7 +120,7 @@ class TestOrbit(testingtools.TestCase):
         ksp = krpc.connect()
         vessel = ksp.space_center.active_vessel
         orbit = vessel.orbit
-        self.assertEqual("Minmus", orbit.body)
+        self.assertEqual('Minmus', orbit.body.name)
         self.assertClose(-175327.32795440647, orbit.apoapsis)
         self.assertClose(87187.64537168786, orbit.periapsis)
         self.assertClose(-235327.32795440647, orbit.apoapsis_altitude)

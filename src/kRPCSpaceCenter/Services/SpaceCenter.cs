@@ -2,6 +2,7 @@ using System;
 using KRPC.Service.Attributes;
 using KRPC.Continuations;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -11,6 +12,24 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public static Vessel ActiveVessel {
             get { return new Vessel (FlightGlobals.ActiveVessel); }
+        }
+
+        static IDictionary<string,CelestialBody> bodies = new Dictionary<string, CelestialBody> ();
+
+        [KRPCProcedure]
+        public static CelestialBody Body (string name)
+        {
+            if (bodies.ContainsKey (name))
+                return bodies [name];
+            else {
+                foreach (var body in FlightGlobals.Bodies) {
+                    if (body.name == name) {
+                        bodies [name] = new CelestialBody (body);
+                        return bodies [name];
+                    }
+                }
+                throw new ArgumentException ("Celestial body '" + name + "' does not exist");
+            }
         }
 
         [KRPCProperty]

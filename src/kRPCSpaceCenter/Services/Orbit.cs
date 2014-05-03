@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 using KRPCSpaceCenter.ExtensionMethods;
 
@@ -7,35 +8,45 @@ namespace KRPCSpaceCenter.Services
     public class Orbit
     {
         global::Vessel vessel;
+        global::Orbit orbit;
 
         internal Orbit (global::Vessel vessel)
         {
             this.vessel = vessel;
+            this.orbit = vessel.GetOrbit ();
+        }
+
+        internal Orbit (global::CelestialBody body)
+        {
+            if (body.name == "Sun")
+                throw new ArgumentException ("The sun has no orbit");
+            //FIXME: vessel is null
+            this.orbit = body.GetOrbit ();
         }
 
         [KRPCProperty]
-        public string Body {
-            get { return vessel.GetOrbit ().referenceBody.name; }
+        public CelestialBody Body {
+            get { return SpaceCenter.Body (orbit.referenceBody.name); }
         }
 
         [KRPCProperty]
         public double Apoapsis {
-            get { return vessel.GetOrbit ().ApR; }
+            get { return orbit.ApR; }
         }
 
         [KRPCProperty]
         public double Periapsis {
-            get { return vessel.GetOrbit ().PeR; }
+            get { return orbit.PeR; }
         }
 
         [KRPCProperty]
         public double ApoapsisAltitude {
-            get { return vessel.GetOrbit ().ApA; }
+            get { return orbit.ApA; }
         }
 
         [KRPCProperty]
         public double PeriapsisAltitude {
-            get { return vessel.GetOrbit ().PeA; }
+            get { return orbit.PeA; }
         }
 
         [KRPCProperty]
@@ -50,37 +61,37 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double TimeToApoapsis {
-            get { return vessel.GetOrbit ().timeToAp; }
+            get { return orbit.timeToAp; }
         }
 
         [KRPCProperty]
         public double TimeToPeriapsis {
-            get { return vessel.GetOrbit ().timeToPe; }
+            get { return orbit.timeToPe; }
         }
 
         [KRPCProperty]
         public double Eccentricity {
-            get { return vessel.GetOrbit ().eccentricity; }
+            get { return orbit.eccentricity; }
         }
 
         [KRPCProperty]
         public double Inclination {
-            get { return vessel.GetOrbit ().inclination; }
+            get { return orbit.inclination; }
         }
 
         [KRPCProperty]
         public double LongitudeOfAscendingNode {
-            get { return vessel.GetOrbit ().LAN; }
+            get { return orbit.LAN; }
         }
 
         [KRPCProperty]
         public double ArgumentOfPeriapsis {
-            get { return vessel.GetOrbit ().argumentOfPeriapsis; }
+            get { return orbit.argumentOfPeriapsis; }
         }
 
         [KRPCProperty]
         public double MeanAnomalyAtEpoch {
-            get { return vessel.GetOrbit ().meanAnomalyAtEpoch; }
+            get { return orbit.meanAnomalyAtEpoch; }
         }
 
         /// <summary>
@@ -89,7 +100,7 @@ namespace KRPCSpaceCenter.Services
         Vector3d GetPrograde ()
         {
             var rot = ReferenceFrameTransform.GetRotation (ReferenceFrame.Surface, vessel).Inverse ();
-            return (rot * vessel.GetOrbit ().GetVel ()).normalized;
+            return (rot * orbit.GetVel ()).normalized;
         }
 
         /// <summary>
@@ -98,7 +109,7 @@ namespace KRPCSpaceCenter.Services
         Vector3d GetNormal ()
         {
             var rot = ReferenceFrameTransform.GetRotation (ReferenceFrame.Surface, vessel).Inverse ();
-            var normal = vessel.GetOrbit ().GetOrbitNormal ();
+            var normal = orbit.GetOrbitNormal ();
             var tmp = normal.y;
             normal.y = normal.z;
             normal.z = tmp;
