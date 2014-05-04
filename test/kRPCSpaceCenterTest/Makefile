@@ -3,7 +3,7 @@
 all: test
 
 test:
-	./run.sh $(KSP_DIR)
+	./run.sh "$(KSP_DIR)"
 
 clean:
 	find . -name "*.pyc" -exec rm -rf {} \;
