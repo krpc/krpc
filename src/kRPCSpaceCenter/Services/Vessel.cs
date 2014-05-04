@@ -31,7 +31,7 @@ namespace KRPCSpaceCenter.Services
     }
 
     [KRPCClass (Service = "SpaceCenter")]
-    public class Vessel
+    public sealed class Vessel
     {
         global::Vessel vessel;
         IDictionary<ReferenceFrame, Flight> flightObjects;

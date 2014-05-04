@@ -7,7 +7,7 @@ using KRPCSpaceCenter.ExtensionMethods;
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public class Flight
+    public sealed class Flight
     {
         global::Vessel vessel;
         ReferenceFrame referenceFrame;

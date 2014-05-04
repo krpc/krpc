@@ -5,7 +5,7 @@ using KRPCSpaceCenter.ExtensionMethods;
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public class Orbit
+    public sealed class Orbit
     {
         global::Vessel vessel;
         global::Orbit orbit;

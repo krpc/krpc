@@ -14,7 +14,7 @@ namespace KRPCSpaceCenter.Services
     /// http://forum.kerbalspaceprogram.com/threads/69313-WIP-kRPC-A-language-agnostic-Remote-Procedure-Call-server-for-KSP?p=1021721&viewfull=1#post1021721
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public class AutoPilot
+    public sealed class AutoPilot
     {
         static bool Engaged = false;
         static ReferenceFrame ReferenceFrame = ReferenceFrame.Surface;

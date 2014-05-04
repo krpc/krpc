@@ -8,7 +8,7 @@ namespace KRPCSpaceCenter.Services
     /// Class used to manage the resources for a vessel.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Resources
+    public sealed class Resources
     {
         global::Vessel vessel;
 
