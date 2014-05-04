@@ -68,6 +68,11 @@ namespace KRPCSpaceCenter.Services
             get { return vessel.situation.ToVesselSituation (); }
         }
 
+        [KRPCProperty]
+        public double MET {
+            get { return vessel.missionTime; }
+        }
+
         [KRPCMethod]
         public Flight Flight (ReferenceFrame referenceFrame = ReferenceFrame.Surface)
         {
