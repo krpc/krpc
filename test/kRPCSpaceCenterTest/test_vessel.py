@@ -6,7 +6,7 @@ import krpc
 class TestVessel(testingtools.TestCase):
 
     def test_basic(self):
-        load_save('flight')
+        load_save('basic')
         ksp = krpc.connect()
         vtype = ksp.space_center.VesselType
         vsituation = ksp.space_center.VesselSituation

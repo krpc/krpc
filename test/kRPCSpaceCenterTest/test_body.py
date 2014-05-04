@@ -8,7 +8,7 @@ import krpc
 class TestBody(testingtools.TestCase):
 
     def test_basic(self):
-        load_save('flight')
+        load_save('basic')
         ksp = krpc.connect()
 
         kerbin = ksp.space_center.body('Kerbin')

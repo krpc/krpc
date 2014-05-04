@@ -6,7 +6,7 @@ import krpc
 class TestWarp(testingtools.TestCase):
 
     def test_basic(self):
-        load_save('flight')
+        load_save('basic')
         ksp = krpc.connect()
         t = ksp.space_center.ut + (5*60)
         ksp.space_center.warp_to(t)
