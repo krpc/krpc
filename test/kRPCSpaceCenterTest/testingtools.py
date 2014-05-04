@@ -22,6 +22,8 @@ def load_save(name):
         except:
             time.sleep(0.2)
             pass
+    # Wait until the vessel is loaded properly
+    time.sleep(0.2)
 
 class TestCase(unittest.TestCase):
 
