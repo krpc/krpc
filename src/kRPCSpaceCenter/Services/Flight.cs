@@ -146,5 +146,56 @@ namespace KRPCSpaceCenter.Services
         public float Roll {
             get { return GetRotation ().PitchHeadingRoll ().z; }
         }
+
+        Vector3d GetPrograde ()
+        {
+            var rot = ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse ();
+            return (rot * vessel.GetOrbit ().GetVel ()).normalized;
+        }
+
+        Vector3d GetNormal ()
+        {
+            var rot = ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse ();
+            var normal = vessel.GetOrbit ().GetOrbitNormal ();
+            var tmp = normal.y;
+            normal.y = normal.z;
+            normal.z = tmp;
+            return (rot * normal).normalized;
+        }
+
+        Vector3d GetRadial ()
+        {
+            return Vector3d.Cross (GetNormal (), GetPrograde ()).normalized;
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Prograde {
+            get { return GetPrograde ().ToMessage (); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Retrograde {
+            get { return (-GetPrograde ()).ToMessage (); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Normal {
+            get { return GetNormal ().ToMessage (); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 NormalNeg {
+            get { return (-GetNormal ()).ToMessage (); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 Radial {
+            get { return GetRadial ().ToMessage (); }
+        }
+
+        [KRPCProperty]
+        public KRPC.Schema.Geometry.Vector3 RadialNeg {
+            get { return (-GetRadial ()).ToMessage (); }
+        }
     }
 }

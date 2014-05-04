@@ -66,12 +66,13 @@ class TestAutoPilot(testingtools.TestCase):
             self.assertClose(heading, flight.heading, error=0.5)
 
     def test_orbital_directions(self):
-        self.check_direction(self.vessel.orbit.prograde,   0, 0)
-        self.check_direction(self.vessel.orbit.retrograde, 0, 180)
-        self.check_direction(self.vessel.orbit.normal,     0, 270)
-        self.check_direction(self.vessel.orbit.normal_neg, 0, 90)
-        self.check_direction(self.vessel.orbit.radial,     90, None)
-        self.check_direction(self.vessel.orbit.radial_neg, -90, None)
+        flight = self.vessel.flight()
+        self.check_direction(flight.prograde,    0,  0)
+        self.check_direction(flight.retrograde,  0,  180)
+        self.check_direction(flight.normal,      0,  270)
+        self.check_direction(flight.normal_neg,  0,  90)
+        self.check_direction(flight.radial,      90, None)
+        self.check_direction(flight.radial_neg, -90, None)
 
 if __name__ == "__main__":
     unittest.main()

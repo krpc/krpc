@@ -9,7 +9,8 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class CelestialBody
     {
-        global::CelestialBody body;
+        // FIXME: make this private
+        internal global::CelestialBody body;
         Orbit orbit;
 
         internal CelestialBody (global::CelestialBody body)
