@@ -27,7 +27,7 @@ namespace KRPCSpaceCenter.Services
         const double StrengthYaw = 120d;
         const double StrengthRoll = 120d;
 
-        public AutoPilot (global::Vessel vessel)
+        internal AutoPilot (global::Vessel vessel)
         {
         }
 

@@ -12,7 +12,7 @@ namespace KRPCSpaceCenter.Services
         global::CelestialBody body;
         Orbit orbit;
 
-        public CelestialBody (global::CelestialBody body)
+        internal CelestialBody (global::CelestialBody body)
         {
             this.body = body;
             if (body.name != "Sun")
