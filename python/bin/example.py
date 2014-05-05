@@ -38,7 +38,7 @@ def main():
     # Activate the first stage
     print 'Launch!'
     control.activate_next_stage()
-    auto_pilot.set_rotation(ksp.space_center.ReferenceFrame.surface, 90, 90)
+    auto_pilot.set_rotation(90, 90)
 
     time.sleep(1)
 
@@ -54,11 +54,11 @@ def main():
             sig = 1 / (1 + math.exp(-frac))
             turn = sig * 90
 
-            auto_pilot.set_rotation(ksp.space_center.ReferenceFrame.surface, 90-turn, 90)
+            auto_pilot.set_rotation(90-turn, 90)
 
         # Separate SRBs when finished
         if not srbs_separated:
-            solid_fuel = resources.amount('SolidFuel', 3)
+            solid_fuel = resources.amount('SolidFuel', stage=3, cumulative=False) - 64
             print '  Solid fuel = %.1f T' % solid_fuel
             if solid_fuel < 0.1:
                 print '  SRB separation!'
@@ -67,8 +67,8 @@ def main():
 
         # Separate launch stage when finished
         if srbs_separated and not stage_separated:
-            liquid_fuel = resources.amount('LiquidFuel') - 1440
-            oxidizer = resources.amount('Oxidizer') - 320
+            liquid_fuel = resources.amount('LiquidFuel', stage=2, cumulative=False)
+            oxidizer = resources.amount('Oxidizer', stage=2, cumulative=False)
             print '  LF = %.1f T, Ox = %.1f T' % (liquid_fuel, oxidizer)
             if liquid_fuel < 0.1:
                 print '  Stage separation!'
@@ -85,7 +85,7 @@ def main():
         time.sleep(1)
 
     # Point at 0 degrees pitch, west
-    auto_pilot.set_rotation(ksp.space_center.ReferenceFrame.surface, 0, 90)
+    auto_pilot.set_rotation(0, 90)
 
     # Wait until altitude is higher than 79km
     print 'Coasting to apoapsis...'
