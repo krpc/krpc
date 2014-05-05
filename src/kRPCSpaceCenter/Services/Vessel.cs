@@ -44,7 +44,6 @@ namespace KRPCSpaceCenter.Services
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
             Resources = new Resources (vessel);
-            Parts = new Parts (vessel);
         }
 
         [KRPCProperty]
@@ -98,8 +97,5 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Resources Resources { get; private set; }
-
-        [KRPCProperty]
-        public Parts Parts { get; private set; }
     }
 }

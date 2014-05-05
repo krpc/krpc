@@ -63,7 +63,6 @@
     <Compile Include="Services\Resources.cs" />
     <Compile Include="Services\CelestialBody.cs" />
     <Compile Include="Services\Node.cs" />
-    <Compile Include="Services\Parts.cs" />
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
