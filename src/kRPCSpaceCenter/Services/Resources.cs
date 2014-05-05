@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPCSpaceCenter.ExtensionMethods;
 using System.Collections.Generic;
 
 namespace KRPCSpaceCenter.Services
@@ -17,11 +18,11 @@ namespace KRPCSpaceCenter.Services
             this.vessel = vessel;
         }
 
-        List<PartResource> GetResources (uint stage = 0)
+        List<PartResource> GetResources (int stage = -1, bool cumulative = false)
         {
             var resources = new List<PartResource> ();
             foreach (Part part in vessel.Parts) {
-                if (stage == 0 || part.inverseStage == stage) {
+                if (stage < 0 || part.DecoupledAt () + 1 == stage || (cumulative && part.DecoupledAt () < stage)) {
                     foreach (PartResource resource in part.Resources)
                         resources.Add (resource);
                 }
@@ -43,10 +44,10 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public double Max (string name, uint stage = 0)
+        public double Max (string name, int stage = -1, bool cumulative = true)
         {
             double amount = 0;
-            foreach (var resource in GetResources(stage)) {
+            foreach (var resource in GetResources(stage, cumulative)) {
                 if (resource.resourceName == name)
                     amount += resource.maxAmount;
             }
@@ -54,10 +55,10 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public double Amount (string name, uint stage = 0)
+        public double Amount (string name, int stage = -1, bool cumulative = true)
         {
             double amount = 0;
-            foreach (var resource in GetResources(stage)) {
+            foreach (var resource in GetResources(stage, cumulative)) {
                 if (resource.resourceName == name)
                     amount += resource.amount;
             }
