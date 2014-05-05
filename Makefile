@@ -74,6 +74,8 @@ dist: build dist-python
 	# README
 	echo "See https://github.com/djungelorm/krpc/wiki" >dist/README.txt
 	cp $(DIST_DIR)/README.txt $(DIST_DIR)/GameData/kRPC/
+	# CHANGELOG
+	cp CHANGELOG.txt $(DIST_DIR)/
 	# Version files
 	echo $(SERVER_VERSION) > $(DIST_DIR)/VERSION.txt
 	echo $(SERVER_VERSION) > $(DIST_DIR)/GameData/kRPC/VERSION.txt
@@ -107,7 +109,7 @@ test-spacecenter:
 ksp: install TestingTools
 	cp test/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
 	-cp settings.cfg $(KSP_DIR)/GameData/kRPC/settings.cfg
-	test "!" -f $(KSP_DIR)/KSP.x86_64 || $(KSP_DIR)/KSP.x86_64 &
+	test "!" -f $(KSP_DIR)/KSP.x86_64 || optirun $(KSP_DIR)/KSP.x86_64 &
 	test "!" -f $(KSP_DIR)/KSP.exe || $(KSP_DIR)/KSP.exe &
 	test "!" -d $(HOME)/.config/unity3d || tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
 	test "!" -f $(KSP_DIR)/KSP_Data/output_log.txt || tail -f $(KSP_DIR)/KSP_Data/output_log.txt
