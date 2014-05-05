@@ -11,12 +11,17 @@ namespace KRPCSpaceCenter.ExtensionMethods
         /// <summary>
         public static int DecoupledAt (this Part part)
         {
-            if (part.Modules.OfType<ModuleDecouple> ().Any () || part.Modules.OfType<ModuleAnchoredDecoupler> ().Any ())
-                return part.inverseStage;
-            else if (part.parent != null)
-                return part.parent.DecoupledAt ();
-            else
-                return -1;
+            do {
+                if (part.IsDecoupler ())
+                    return part.inverseStage;
+                part = part.parent;
+            } while (part != null);
+            return -1;
+        }
+
+        public static bool IsDecoupler (this Part part)
+        {
+            return part.Modules.OfType<ModuleDecouple> ().Any () || part.Modules.OfType<ModuleAnchoredDecoupler> ().Any ();
         }
     }
 }
