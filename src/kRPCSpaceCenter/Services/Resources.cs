@@ -6,9 +6,6 @@ using System.Collections.Generic;
 
 namespace KRPCSpaceCenter.Services
 {
-    /// <summary>
-    /// Class used to manage the resources for a vessel.
-    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Resources
     {
