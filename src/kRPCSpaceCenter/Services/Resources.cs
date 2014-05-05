@@ -22,7 +22,7 @@ namespace KRPCSpaceCenter.Services
         List<PartResource> GetResources (int stage = -1, bool cumulative = false)
         {
             var resources = new List<PartResource> ();
-            foreach (Part part in vessel.Parts) {
+            foreach (var part in vessel.Parts) {
                 if (stage < 0 || part.DecoupledAt () + 1 == stage || (cumulative && part.DecoupledAt () < stage)) {
                     foreach (PartResource resource in part.Resources)
                         resources.Add (resource);
@@ -35,7 +35,7 @@ namespace KRPCSpaceCenter.Services
         public Names Names {
             get {
                 var names = new HashSet<string> ();
-                foreach (Part part in vessel.Parts) {
+                foreach (var part in vessel.Parts) {
                     foreach (PartResource resource in part.Resources)
                         names.Add (resource.resourceName);
                 }
@@ -74,12 +74,6 @@ namespace KRPCSpaceCenter.Services
                     amount += resource.amount;
             }
             return amount;
-        }
-
-        [KRPCMethod]
-        public double Rate (string name)
-        {
-            throw new NotImplementedException ();
         }
     }
 }
