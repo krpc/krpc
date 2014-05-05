@@ -69,6 +69,11 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double GForce {
+            get { return vessel.geeForce; }
+        }
+
+        [KRPCProperty]
         public double Altitude {
             get { return vessel.mainBody.GetAltitude (vessel.CoM); }
         }

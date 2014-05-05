@@ -39,6 +39,7 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(0, dot(radial, normal), error=0.01)
 
     def test_orbital_flight(self):
+        self.assertClose(0, self.orbital_flight.g_force)
         self.assertClose(100000, self.orbital_flight.altitude, error=10)
         self.assertClose(100920, self.orbital_flight.true_altitude, error=20)
         self.assertClose([0, 0, 2246.1], vector(self.orbital_flight.velocity), error=0.5)
@@ -55,6 +56,7 @@ class TestFlight(testingtools.TestCase):
         self.check_orbital_vectors(self.orbital_flight)
 
     def test_surface_flight(self):
+        self.assertClose(0, self.orbital_flight.g_force)
         self.assertClose(100000, self.surface_flight.altitude, error=10)
         self.assertClose(100920, self.surface_flight.true_altitude, error=20)
         self.assertClose([-2246.1, 0.0, 0.0], vector(self.surface_flight.velocity), error=0.5)
@@ -71,6 +73,7 @@ class TestFlight(testingtools.TestCase):
         self.check_orbital_vectors(self.surface_flight)
 
     def test_surfacev_flight(self):
+        self.assertClose(0, self.orbital_flight.g_force)
         self.assertClose(100000, self.surfacev_flight.altitude, error=10)
         self.assertClose(100920, self.surfacev_flight.true_altitude, error=20)
         self.assertClose([0,0,2042.5], vector(self.surfacev_flight.velocity), error=0.5)
