@@ -1,0 +1,6 @@
+v0.1.1
+ - Add new functionality to SpaceCenter service
+ - Minor server code improvements
+
+v0.1.0
+ - Initial pre-release
