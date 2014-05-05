@@ -5,7 +5,7 @@ using KRPCSpaceCenter.ExtensionMethods;
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public class Node
+    public sealed class Node
     {
         /// Note: Maneuver node delta-v vectors use a special coordinate system.
         /// The z-component is the prograde component.

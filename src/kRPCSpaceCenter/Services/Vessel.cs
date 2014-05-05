@@ -17,8 +17,21 @@ namespace KRPCSpaceCenter.Services
         Debris
     }
 
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum VesselSituation
+    {
+        Docked,
+        Escaping,
+        Flying,
+        Landed,
+        Orbiting,
+        PreLaunch,
+        Splashed,
+        SubOrbital
+    }
+
     [KRPCClass (Service = "SpaceCenter")]
-    public class Vessel
+    public sealed class Vessel
     {
         global::Vessel vessel;
         IDictionary<ReferenceFrame, Flight> flightObjects;
@@ -31,7 +44,6 @@ namespace KRPCSpaceCenter.Services
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
             Resources = new Resources (vessel);
-            Parts = new Parts (vessel);
         }
 
         [KRPCProperty]
@@ -48,6 +60,16 @@ namespace KRPCSpaceCenter.Services
             set {
                 vessel.vesselType = value.FromVesselType ();
             }
+        }
+
+        [KRPCProperty]
+        public VesselSituation Situation {
+            get { return vessel.situation.ToVesselSituation (); }
+        }
+
+        [KRPCProperty]
+        public double MET {
+            get { return vessel.missionTime; }
         }
 
         [KRPCMethod]
@@ -75,8 +97,5 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Resources Resources { get; private set; }
-
-        [KRPCProperty]
-        public Parts Parts { get; private set; }
     }
 }

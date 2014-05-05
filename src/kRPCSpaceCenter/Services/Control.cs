@@ -4,7 +4,7 @@ using KRPC.Service.Attributes;
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public class Control
+    public sealed class Control
     {
         global::Vessel vessel;
 

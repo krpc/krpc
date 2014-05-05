@@ -63,13 +63,15 @@
     <Compile Include="Services\Resources.cs" />
     <Compile Include="Services\CelestialBody.cs" />
     <Compile Include="Services\Node.cs" />
-    <Compile Include="Services\Parts.cs" />
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
     <Compile Include="ReferenceFrameTransform.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
+    <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
+    <Compile Include="Schema\Resources.cs" />
+    <Compile Include="ExtensionMethods\PartExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -86,5 +88,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema\Geometry.proto" />
+    <None Include="Schema\Resources.proto" />
   </ItemGroup>
 </Project>

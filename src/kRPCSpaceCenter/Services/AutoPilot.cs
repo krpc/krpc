@@ -14,7 +14,7 @@ namespace KRPCSpaceCenter.Services
     /// http://forum.kerbalspaceprogram.com/threads/69313-WIP-kRPC-A-language-agnostic-Remote-Procedure-Call-server-for-KSP?p=1021721&viewfull=1#post1021721
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public class AutoPilot
+    public sealed class AutoPilot
     {
         static bool Engaged = false;
         static ReferenceFrame ReferenceFrame = ReferenceFrame.Surface;
@@ -27,12 +27,12 @@ namespace KRPCSpaceCenter.Services
         const double StrengthYaw = 120d;
         const double StrengthRoll = 120d;
 
-        public AutoPilot (global::Vessel vessel)
+        internal AutoPilot (global::Vessel vessel)
         {
         }
 
         [KRPCMethod]
-        public void SetRotation (ReferenceFrame referenceFrame, double pitch, double yaw, double roll = Double.NaN)
+        public void SetRotation (double pitch, double yaw, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Surface)
         {
             Engaged = true;
             ReferenceFrame = referenceFrame;
@@ -42,7 +42,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public void SetDirection (ReferenceFrame referenceFrame, KRPC.Schema.Geometry.Vector3 direction, double roll = Double.NaN)
+        public void SetDirection (KRPC.Schema.Geometry.Vector3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Surface)
         {
             var rotation = Quaternion.FromToRotation (Vector3d.forward, direction.ToVector ());
             Engaged = true;
