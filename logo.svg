@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="293"
+   height="261"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="logo.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="29.114745"
+     inkscape:cy="142.30958"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1317"
+     inkscape:window-height="744"
+     inkscape:window-x="49"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-791.36218)">
+    <text
+       xml:space="preserve"
+       style="font-size:95.75469208px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Webdings;-inkscape-font-specification:Webdings"
+       x="8.44946"
+       y="919.24268"
+       id="text2985"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2987"
+         x="8.44946"
+         y="919.24268"><tspan
+           style="fill:#bada55;fill-opacity:1"
+           id="tspan3757">k</tspan><tspan
+           style="fill:#303030;fill-opacity:1"
+           id="tspan3775">RPC</tspan></tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3777"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Webdings;-inkscape-font-specification:Webdings"
+       transform="translate(3.0304576,788.33172)"><flowRegion
+         id="flowRegion3779"><rect
+           id="rect3781"
+           width="414.16254"
+           height="183.84776"
+           x="-164.65486"
+           y="47.857815" /></flowRegion><flowPara
+         id="flowPara3783" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3791"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#2b2b2b;fill-opacity:1;stroke:none;font-family:Webdings;-inkscape-font-specification:Webdings"
+       transform="matrix(1.1404106,0,0,1.1404106,-25.73104,765.24176)"><flowRegion
+         id="flowRegion3793"><rect
+           id="rect3795"
+           width="231.32494"
+           height="79.802048"
+           x="45.456863"
+           y="144.83246"
+           style="fill:#2b2b2b;fill-opacity:1" /></flowRegion><flowPara
+         style="font-size:24.55256081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#2b2b2b;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
+         id="flowPara3801">Remote Procedure</flowPara><flowPara
+         style="font-size:24.55256081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#2b2b2b;fill-opacity:1;font-family:FreeSans;-inkscape-font-specification:FreeSans"
+         id="flowPara3805"><flowSpan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial"
+   id="flowSpan3807">Call Server for </flowSpan>KSP</flowPara><flowPara
+         id="flowPara3799"
+         style="font-size:24.55256081px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#2b2b2b;fill-opacity:1;font-family:FreeSans;-inkscape-font-specification:FreeSans" /></flowRoot>  </g>
+</svg>

@@ -35,9 +35,10 @@ MDTOOL = mdtool
 MONODIS = monodis
 NUNIT_CONSOLE = nunit-console
 UNZIP = unzip
+INKSCAPE = inkscape
 
 # Main build targets
-.PHONY: all configure build cog protobuf dist dist-python pre-release release install test ksp clean dist-clean strip-bom
+.PHONY: all configure logo build cog protobuf dist dist-python pre-release release install test ksp clean dist-clean strip-bom
 
 all: build
 
@@ -45,6 +46,9 @@ configure:
 	test -d $(KSP_DIR)/KSP_Data
 	mkdir -p lib/KSP_Data
 	test -d lib/KSP_Data/Managed || cp -r $(KSP_DIR)/KSP_Data/Managed lib/KSP_Data/
+
+logo:
+	-$(INKSCAPE) --export-png=logo.png logo.svg
 
 build: configure protobuf cog $(CSHARP_MAIN_PROJECTS)
 	make -C src/kRPC/icons
@@ -103,12 +107,13 @@ test-spacecenter:
 ksp: install TestingTools
 	cp test/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
 	-cp settings.cfg $(KSP_DIR)/GameData/kRPC/settings.cfg
-	test "!" -f $(KSP_DIR)/KSP.x86_64 || $(KSP_DIR)/KSP.x86_64 &
+	test "!" -f $(KSP_DIR)/KSP.x86_64 || optirun $(KSP_DIR)/KSP.x86_64 &
 	test "!" -f $(KSP_DIR)/KSP.exe || $(KSP_DIR)/KSP.exe &
 	test "!" -d $(HOME)/.config/unity3d || tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
 	test "!" -f $(KSP_DIR)/KSP_Data/output_log.txt || tail -f $(KSP_DIR)/KSP_Data/output_log.txt
 
 clean: protobuf-clean
+	-rm -f logo.png
 	-rm -rf lib/KSP_Data
 	make -C src/kRPC/icons clean
 	-rm -rf $(CSHARP_BINDIRS) test.log

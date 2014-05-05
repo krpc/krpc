@@ -110,6 +110,9 @@ UpgradeLog*.XML
 # MonoDevelop
 *.userprefs
 
+# Logo
+logo.png
+
 # Python
 *.pyc
 python/MANIFEST
