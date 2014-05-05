@@ -1,0 +1,5 @@
+package Resources;
+
+message Names {
+  repeated string names = 1;
+}

@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Schema.Resources;
 using KRPCSpaceCenter.ExtensionMethods;
 using System.Collections.Generic;
 
@@ -29,11 +30,21 @@ namespace KRPCSpaceCenter.Services
             }
             return resources;
         }
-        //FIXME: what return type?
-        //[KRPCProperty]
-        //public string[] ResourceNames {
-        //    get { throw new NotImplementedException (); }
-        //}
+
+        [KRPCProperty]
+        public Names Names {
+            get {
+                var names = new HashSet<string> ();
+                foreach (Part part in vessel.Parts) {
+                    foreach (PartResource resource in part.Resources)
+                        names.Add (resource.resourceName);
+                }
+                var result = new Names.Builder ();
+                result.AddRangeNames_ (names);
+                return result.Build ();
+            }
+        }
+
         [KRPCMethod]
         public bool HasResource (string name)
         {
