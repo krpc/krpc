@@ -62,6 +62,8 @@ namespace KRPCSpaceCenter
             state.X += X;
             state.Y += Y;
             state.Z += Z;
+
+            //FIXME: send appropriate state for each vessel
             Services.AutoPilot.Fly (state);
         }
     }

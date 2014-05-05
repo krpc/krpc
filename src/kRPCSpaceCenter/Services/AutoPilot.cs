@@ -1,6 +1,7 @@
-using KRPC.Service.Attributes;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using KRPC.Service.Attributes;
 using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
@@ -16,52 +17,54 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class AutoPilot
     {
-        static bool Engaged = false;
-        static ReferenceFrame ReferenceFrame = ReferenceFrame.Surface;
-        static double Pitch = 0d;
-        static double Yaw = 0d;
-        static double Roll = 0d;
         const double DeltaInfluence = 1d;
         const double InertiaInfluence = 1d;
         const double StrengthPitch = 120d;
         const double StrengthYaw = 120d;
         const double StrengthRoll = 120d;
+        global::Vessel vessel;
+        static HashSet<AutoPilot> engaged = new HashSet<AutoPilot> ();
+        ReferenceFrame referenceFrame;
+        double pitch;
+        double yaw;
+        double roll;
 
         internal AutoPilot (global::Vessel vessel)
         {
+            this.vessel = vessel;
         }
 
         [KRPCMethod]
         public void SetRotation (double pitch, double yaw, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
         {
-            Engaged = true;
-            ReferenceFrame = referenceFrame;
-            Pitch = pitch;
-            Yaw = yaw;
-            Roll = roll;
+            engaged.Add (this);
+            this.referenceFrame = referenceFrame;
+            this.pitch = pitch;
+            this.yaw = yaw;
+            this.roll = roll;
         }
 
         [KRPCMethod]
         public void SetDirection (KRPC.Schema.Geometry.Vector3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
         {
+            engaged.Add (this);
+            this.referenceFrame = referenceFrame;
             var rotation = Quaternion.FromToRotation (Vector3d.forward, direction.ToVector ());
-            Engaged = true;
-            ReferenceFrame = referenceFrame;
-            Pitch = Math.Abs (((rotation.eulerAngles.x + 270f) % 360f) - 180f) - 90f;
-            Yaw = 360f - rotation.eulerAngles.y;
-            Roll = roll;
+            this.pitch = Math.Abs (((rotation.eulerAngles.x + 270f) % 360f) - 180f) - 90f;
+            this.yaw = 360f - rotation.eulerAngles.y;
+            this.roll = roll;
         }
 
         [KRPCMethod]
         public void Disengage ()
         {
-            AutoPilot.Engaged = false;
+            engaged.Remove (this);
         }
 
         [KRPCProperty]
         public double Error {
             get {
-                if (Double.IsNaN (Roll))
+                if (Double.IsNaN (roll))
                     return GetPYError ();
                 else
                     return GetPYRError ();
@@ -75,7 +78,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         float GetPYRError ()
         {
-            Quaternion delta = getErrorQuaternion ();
+            Quaternion delta = GetErrorQuaternion ();
             Vector3 axis;
             float angle;
             delta.ToAngleAxis (out angle, out axis);
@@ -89,27 +92,26 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         float GetPYError ()
         {
-            Quaternion delta = getErrorQuaternion ();
+            Quaternion delta = GetErrorQuaternion ();
             Vector3 test = new Vector3 (0, 0, 1);
             return Vector3.Angle (test, delta * test);
         }
 
-        static Quaternion getErrorQuaternion ()
+        Quaternion GetErrorQuaternion ()
         {
-            //if (FlightGlobals.ActiveVessel != vessel)
-            //    throw new InvalidOperationException ();
-            Quaternion vesselR = FlightGlobals.ActiveVessel.transform.rotation;
-            Quaternion target = ReferenceFrameTransform.GetRotation (ReferenceFrame, FlightGlobals.ActiveVessel);
+            Quaternion vesselR = vessel.transform.rotation;
+            Quaternion target = ReferenceFrameTransform.GetRotation (referenceFrame, vessel);
             // TODO: don't force the roll to 0 if specific roll not requested
-            var roll = Double.IsNaN (AutoPilot.Roll) ? 0 : AutoPilot.Roll;
-            target *= Quaternion.Euler (new Vector3d (Pitch, -Yaw, 180 - roll));
+            var actualRoll = Double.IsNaN (roll) ? 0 : roll;
+            target *= Quaternion.Euler (new Vector3d (pitch, -yaw, 180 - actualRoll));
             return Quaternion.Inverse (Quaternion.Euler (90, 0, 0) * Quaternion.Inverse (vesselR) * target);
         }
 
         public static void Fly (FlightCtrlState state)
         {
-            if (Engaged)
-                DoAutoPiloting (state);
+            foreach (var autoPilot in engaged) {
+                autoPilot.DoAutoPiloting (state); //FIXME
+            }
         }
 
         /// <summary>
@@ -117,21 +119,18 @@ namespace KRPCSpaceCenter.Services
         /// TODO: a controller that works with the delta quaternion as a whole, instead of the components.
         /// (nothing against kOS/MJ2, but this seems like a really cheap controller... not that I knew any better, though)
         /// </summary>
-        static void DoAutoPiloting (FlightCtrlState state)
+        void DoAutoPiloting (FlightCtrlState state)
         {
-            //if (FlightGlobals.ActiveVessel != vessel)
-            //    return;
+            Vector3d CoM = vessel.findWorldCenterOfMass ();
+            Vector3d MoI = vessel.findLocalMOI (CoM);
 
-            Vector3d CoM = FlightGlobals.ActiveVessel.findWorldCenterOfMass ();
-            Vector3d MoI = FlightGlobals.ActiveVessel.findLocalMOI (CoM);
-
-            Quaternion delta = getErrorQuaternion ();
+            Quaternion delta = GetErrorQuaternion ();
 
             Vector3d deltaEuler = ((Vector3d)delta.eulerAngles).ReduceAngles ();
             deltaEuler.y *= -1d;
 
-            Vector3d torque = GetTorque (FlightGlobals.ActiveVessel, state.mainThrottle);
-            Vector3d inertia = GetEffectiveInertia (FlightGlobals.ActiveVessel, torque);
+            Vector3d torque = GetTorque (state.mainThrottle);
+            Vector3d inertia = GetEffectiveInertia (torque);
 
             Vector3d err = DeltaInfluence * deltaEuler * Math.PI / 180d;
             err += InertiaInfluence * new Vector3d (inertia.x, inertia.z, inertia.y);
@@ -154,7 +153,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Calculate the amount of torque that can be provided by all parts of the vessel
         /// </summary>
-        static Vector3d GetTorque (global::Vessel vessel, float thrust)
+        Vector3d GetTorque (float thrust)
         {
             var CoM = vessel.findWorldCenterOfMass ();
 
@@ -186,7 +185,7 @@ namespace KRPCSpaceCenter.Services
                     }
                 }
 
-                pitchYaw += (float)GetThrustTorque (part, vessel) * thrust;
+                pitchYaw += (float)GetThrustTorque (part) * thrust;
             }
 
             return new Vector3d (pitchYaw, roll, pitchYaw);
@@ -195,7 +194,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         // Calculate the amount of torque that can be provided by an engine
         /// </summary>
-        static double GetThrustTorque (Part p, global::Vessel vessel)
+        double GetThrustTorque (Part p)
         {
             var CoM = vessel.CoM;
             if (p.State == PartStates.ACTIVE) {
@@ -219,7 +218,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         // Calculate the inertia vector for the vessel
         /// </summary>
-        static Vector3d GetEffectiveInertia (global::Vessel vessel, Vector3d torque)
+        Vector3d GetEffectiveInertia (Vector3d torque)
         {
             var CoM = vessel.findWorldCenterOfMass ();
             var MoI = vessel.findLocalMOI (CoM);
