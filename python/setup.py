@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='krpc',
-    version='0.1.0',
+    version='0.1.1',
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     packages=['krpc','krpc.schema','krpc.test'],
