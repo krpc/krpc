@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.Continuations;
 
@@ -176,6 +178,33 @@ namespace TestServer.Services
             if (n == 0)
                 return sum;
             throw new YieldException(new ParameterizedContinuation<int,int,int>(BlockingProcedure, n-1, sum+n));
+        }
+
+        [KRPCProcedure]
+        public static IList<int> IncrementList(IList<int> l) {
+            return l.Select (x => x + 1).ToList ();
+        }
+
+        [KRPCProcedure]
+        public static IDictionary<string,int> IncrementDictionary(IDictionary<string,int> d) {
+            var result = new Dictionary<string,int> ();
+            foreach (var entry in d)
+                result[entry.Key] = entry.Value + 1;
+            return result;
+        }
+
+        [KRPCProcedure]
+        public static IDictionary<string,IList<int>> IncrementNestedCollection(IDictionary<string,IList<int>> d) {
+            IDictionary<string,IList<int>> result = new Dictionary<string,IList<int>> ();
+            foreach (var entry in d)
+                result[entry.Key] = entry.Value.Select (x => x + 1).ToList ();
+            return result;
+        }
+
+        [KRPCProcedure]
+        public static IList<TestClass> AddToObjectList(IList<TestClass> l, string value) {
+            l.Add(new TestClass(value));
+            return l;
         }
     }
 }

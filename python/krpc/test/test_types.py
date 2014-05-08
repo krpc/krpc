@@ -6,6 +6,8 @@ from krpc.types import _ValueType as ValueType
 from krpc.types import _MessageType as MessageType
 from krpc.types import _ClassType as ClassType
 from krpc.types import _EnumType as EnumType
+from krpc.types import _ListType as ListType
+from krpc.types import _DictionaryType as DictionaryType
 from krpc.types import _BaseClass as BaseClass
 import krpc.schema.KRPC
 
@@ -48,6 +50,7 @@ class TestTypes(unittest.TestCase):
         self.assertTrue(isinstance(typ, EnumType))
         self.assertEqual(int, typ.python_type)
         self.assertEqual('Test.TestEnum', typ.protobuf_type)
+        self.assertRaises(ValueError, types.as_type, 'Test.TestEnumFoo')
 
     def test_class_types(self):
         types = Types()
@@ -60,6 +63,39 @@ class TestTypes(unittest.TestCase):
         typ2 = types.as_type('Class(ServiceName.ClassName)')
         self.assertEqual(typ, typ2)
 
+    def test_list_types(self):
+        types = Types()
+        typ = types.as_type('List(int32)')
+        self.assertTrue(isinstance(typ, ListType))
+        self.assertEqual(typ.python_type, list)
+        self.assertTrue('List(int32)', typ.protobuf_type)
+        self.assertTrue(isinstance(typ.value_type, ValueType))
+        self.assertEqual('int32', typ.value_type.protobuf_type)
+        self.assertEqual(int, typ.value_type.python_type)
+        self.assertRaises(ValueError, types.as_type, 'List')
+        self.assertRaises(ValueError, types.as_type, 'List()')
+        self.assertRaises(ValueError, types.as_type, 'List(int32,string)')
+
+    def test_dictionary_types(self):
+        types = Types()
+        typ = types.as_type('Dictionary(string,int32)')
+        self.assertTrue(isinstance(typ, DictionaryType))
+        self.assertEqual(typ.python_type, dict)
+        self.assertTrue('Dictionary(string,int32)', typ.protobuf_type)
+        self.assertTrue(isinstance(typ.key_type, ValueType))
+        self.assertEqual('string', typ.key_type.protobuf_type)
+        self.assertEqual(str, typ.key_type.python_type)
+        self.assertTrue(isinstance(typ.value_type, ValueType))
+        self.assertEqual('int32', typ.value_type.protobuf_type)
+        self.assertEqual(int, typ.value_type.python_type)
+        self.assertRaises(ValueError, types.as_type, 'Dictionary')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary()')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(string)')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(string,)')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(,)')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(,string)')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(int,string))')
+
     def test_get_parameter_type(self):
         types = Types()
         self.assertEqual(float, types.get_parameter_type(0, 'float', []).python_type)
@@ -71,15 +107,14 @@ class TestTypes(unittest.TestCase):
         self.assertTrue(issubclass(class_parameter.python_type, BaseClass))
         self.assertEqual('Class(ServiceName.ClassName)', class_parameter.protobuf_type)
         self.assertEqual('uint64', types.get_parameter_type(0, 'uint64', ['ParameterType(1).Class(ServiceName.ClassName)']).protobuf_type)
-        self.assertEqual('KRPC.Test.TestEnum', types.get_parameter_type(0, 'KRPC.Test.TestEnum', []).protobuf_type)
-
+        self.assertEqual('Test.TestEnum', types.get_parameter_type(0, 'Test.TestEnum', []).protobuf_type)
 
     def test_get_return_type(self):
         types = Types()
         self.assertEqual('float', types.get_return_type('float', []).protobuf_type)
         self.assertEqual('int32', types.get_return_type( 'int32', []).protobuf_type)
         self.assertEqual('KRPC.Response', types.get_return_type('KRPC.Response', []).protobuf_type)
-        self.assertEqual('KRPC.Test.TestEnum', types.get_return_type('KRPC.Test.TestEnum', []).protobuf_type)
+        self.assertEqual('Test.TestEnum', types.get_return_type('Test.TestEnum', []).protobuf_type)
         self.assertEqual('Class(ServiceName.ClassName)', types.get_return_type('uint64', ['ReturnType.Class(ServiceName.ClassName)']).protobuf_type)
 
     def test_coerce_to(self):

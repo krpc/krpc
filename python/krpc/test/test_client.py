@@ -212,6 +212,28 @@ class TestClient(unittest.TestCase):
     def test_invalid_enum(self):
         self.assertRaises(krpc.client.RPCError, self.ksp.test_service.c_sharp_enum_echo, 9999)
 
+    def test_collections(self):
+        self.assertEqual([], self.ksp.test_service.increment_list([]))
+        self.assertEqual([1,2,3], self.ksp.test_service.increment_list([0,1,2]))
+        self.assertEqual({}, self.ksp.test_service.increment_dictionary({}))
+        self.assertEqual({'a': 1, 'b': 2, 'c': 3}, self.ksp.test_service.increment_dictionary({'a': 0, 'b': 1, 'c': 2}))
+        self.assertRaises(TypeError, self.ksp.test_service.increment_list, None)
+        self.assertRaises(TypeError, self.ksp.test_service.increment_dictionary, None)
+
+    def test_nested_collections(self):
+        self.assertEqual({}, self.ksp.test_service.increment_nested_collection({}))
+        self.assertEqual({'a': [1, 2], 'b': [], 'c': [3]},
+                         self.ksp.test_service.increment_nested_collection({'a': [0, 1], 'b': [], 'c': [2]}))
+
+    def test_collections_of_objects(self):
+        l = self.ksp.test_service.add_to_object_list([], "jeb")
+        self.assertEqual(1, len(l))
+        self.assertEqual("value=jeb", l[0].get_value())
+        l = self.ksp.test_service.add_to_object_list(l, "bob")
+        self.assertEqual(2, len(l))
+        self.assertEqual("value=jeb", l[0].get_value())
+        self.assertEqual("value=bob", l[1].get_value())
+
     def test_client_members(self):
         self.assertSetEqual(
             set(['krpc', 'test_service']),
@@ -263,7 +285,12 @@ class TestClient(unittest.TestCase):
                 'c_sharp_enum_echo',
                 'c_sharp_enum_default_arg',
 
-                'blocking_procedure'
+                'blocking_procedure',
+
+                'increment_list',
+                'increment_dictionary',
+                'increment_nested_collection',
+                'add_to_object_list'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service))))
 
@@ -293,6 +320,7 @@ class TestClient(unittest.TestCase):
         self.assertEqual (0, self.ksp.test_service.CSharpEnum.value_a)
         self.assertEqual (1, self.ksp.test_service.CSharpEnum.value_b)
         self.assertEqual (2, self.ksp.test_service.CSharpEnum.value_c)
+
 
 if __name__ == '__main__':
     unittest.main()

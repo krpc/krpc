@@ -1,6 +1,6 @@
 # TODO: avoid using internals
 from google.protobuf.internal import encoder as protobuf_encoder
-from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType
+from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType
 
 
 class _Encoder(object):
@@ -39,6 +39,21 @@ class _Encoder(object):
         elif isinstance(typ, _ClassType):
             object_id = x._object_id if x is not None else 0
             return cls._encode_value(object_id, _Types().as_type('uint64'))
+        elif isinstance(typ, _ListType):
+            msg = _Types().as_type('KRPC.List').python_type()
+            msg.items.extend(cls.encode(item, typ.value_type) for item in x)
+            return msg.SerializeToString()
+        elif isinstance(typ, _DictionaryType):
+            msg = _Types().as_type('KRPC.Dictionary').python_type()
+            entry_type = _Types().as_type('KRPC.DictionaryEntry')
+            entries = []
+            for key,value in x.items():
+                entry = entry_type.python_type()
+                entry.key = cls.encode(key, typ.key_type)
+                entry.value = cls.encode(value, typ.value_type)
+                entries.append(entry)
+            msg.entries.extend(entries)
+            return msg.SerializeToString()
         else:
             raise RuntimeError ('Cannot encode objects of type ' + str(type(x)))
 
