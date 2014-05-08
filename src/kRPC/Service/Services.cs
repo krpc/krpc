@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using Google.ProtocolBuffers;
 using KRPC.Schema.KRPC;
 using KRPC.Service.Scanner;
@@ -109,20 +110,7 @@ namespace KRPC.Service
                 } else {
                     // Decode argument
                     try {
-                        if (TypeUtils.IsAClassType (type)) {
-                            decodedArgumentValues [i] = ObjectStore.Instance.GetInstance ((ulong)ProtocolBuffers.ReadValue (value, typeof(ulong)));
-                        } else if (ProtocolBuffers.IsAMessageType (type)) {
-                            var builder = procedure.ParameterBuilders [i];
-                            decodedArgumentValues [i] = builder.WeakMergeFrom (value).WeakBuild ();
-                        } else if (ProtocolBuffers.IsAnEnumType (type) || TypeUtils.IsAnEnumType (type)) {
-                            // TODO: Assumes it's underlying type is int
-                            var enumValue = ProtocolBuffers.ReadValue (value, typeof(int));
-                            if (!Enum.IsDefined (type, enumValue))
-                                throw new RPCException ("Failed to convert value " + enumValue + " to enumeration type " + type);
-                            decodedArgumentValues [i] = Enum.ToObject (type, enumValue);
-                        } else {
-                            decodedArgumentValues [i] = ProtocolBuffers.ReadValue (value, type);
-                        }
+                        decodedArgumentValues [i] = Decode (procedure, i, type, value);
                     } catch (Exception e) {
                         throw new RPCException (
                             "Failed to decode argument for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". " +
@@ -132,6 +120,61 @@ namespace KRPC.Service
                 }
             }
             return decodedArgumentValues;
+        }
+
+        /// <summary>
+        /// Decode a serialized value
+        /// </summary>
+        object Decode (ProcedureSignature procedure, int i, Type type, ByteString value)
+        {
+            if (TypeUtils.IsAClassType (type)) {
+                return ObjectStore.Instance.GetInstance ((ulong)ProtocolBuffers.ReadValue (value, typeof(ulong)));
+            } else if (TypeUtils.IsACollectionType (type)) {
+                return DecodeCollection (procedure, i, type, value);
+            } else if (ProtocolBuffers.IsAMessageType (type)) {
+                var builder = procedure.ParameterBuilders [i];
+                return builder.WeakMergeFrom (value).WeakBuild ();
+            } else if (ProtocolBuffers.IsAnEnumType (type) || TypeUtils.IsAnEnumType (type)) {
+                // TODO: Assumes it's underlying type is int
+                var enumValue = ProtocolBuffers.ReadValue (value, typeof(int));
+                if (!Enum.IsDefined (type, enumValue))
+                    throw new RPCException ("Failed to convert value " + enumValue + " to enumeration type " + type);
+                return Enum.ToObject (type, enumValue);
+            } else {
+                return ProtocolBuffers.ReadValue (value, type);
+            }
+        }
+
+        /// <summary>
+        /// Decode a serialized collection
+        /// </summary>
+        object DecodeCollection (ProcedureSignature procedure, int i, Type type, ByteString value)
+        {
+            if (TypeUtils.IsAListCollectionType (type)) {
+                var builder = Schema.KRPC.List.CreateBuilder ();
+                var encodedList = builder.MergeFrom (value).Build ();
+                var list = (System.Collections.IList) (typeof (System.Collections.Generic.List<>)
+                    .MakeGenericType (type.GetGenericArguments ().Single ())
+                    .GetConstructor (Type.EmptyTypes)
+                    .Invoke (null));
+                foreach (var item in encodedList.ItemsList) {
+                    list.Add (Decode (procedure, i, type.GetGenericArguments ().Single (), item));
+                }
+                return list;
+            } else { // a dictionary
+                var builder = Schema.KRPC.Dictionary.CreateBuilder ();
+                var encodedDictionary = builder.MergeFrom (value).Build ();
+                var dictionary = (System.Collections.IDictionary) (typeof (System.Collections.Generic.Dictionary<,>)
+                    .MakeGenericType (type.GetGenericArguments ()[0], type.GetGenericArguments ()[1])
+                    .GetConstructor (Type.EmptyTypes)
+                    .Invoke (null));
+                foreach (var entry in encodedDictionary.EntriesList) {
+                    var k = Decode (procedure, i, type.GetGenericArguments ()[0], entry.Key);
+                    var v = Decode (procedure, i, type.GetGenericArguments ()[1], entry.Value);
+                    dictionary[k] = v;
+                }
+                return dictionary;
+            }
         }
 
         /// <summary>
@@ -154,15 +197,51 @@ namespace KRPC.Service
             }
 
             // Encode it as a ByteString
-            if (TypeUtils.IsAClassType (procedure.ReturnType))
-                return ProtocolBuffers.WriteValue (ObjectStore.Instance.AddInstance (returnValue), typeof(ulong));
-            else if (ProtocolBuffers.IsAMessageType (procedure.ReturnType))
-                return ProtocolBuffers.WriteMessage (returnValue as IMessage);
-            else if (ProtocolBuffers.IsAnEnumType (procedure.ReturnType) || TypeUtils.IsAnEnumType (procedure.ReturnType)) {
+            return Encode (procedure.ReturnType, returnValue);
+        }
+
+        /// <summary>
+        /// Encode a value
+        /// </summary>
+        ByteString Encode (Type type, object value)
+        {
+            if (TypeUtils.IsAClassType (type))
+                return ProtocolBuffers.WriteValue (ObjectStore.Instance.AddInstance (value), typeof(ulong));
+            else if (TypeUtils.IsACollectionType (type))
+                return EncodeCollection (type, value);
+            else if (ProtocolBuffers.IsAMessageType (type))
+                return ProtocolBuffers.WriteMessage (value as IMessage);
+            else if (ProtocolBuffers.IsAnEnumType (type) || TypeUtils.IsAnEnumType (type)) {
                 // TODO: Assumes it's underlying type is int
-                return ProtocolBuffers.WriteValue ((int)returnValue, typeof(int));
+                return ProtocolBuffers.WriteValue ((int)value, typeof(int));
             } else
-                return ProtocolBuffers.WriteValue (returnValue, procedure.ReturnType);
+                return ProtocolBuffers.WriteValue (value, type);
+        }
+
+        /// <summary>
+        /// Encode a collection
+        /// </summary>
+        ByteString EncodeCollection (Type type, object value)
+        {
+            if (TypeUtils.IsAListCollectionType (type)) {
+                var builder = Schema.KRPC.List.CreateBuilder ();
+                var list = (System.Collections.IList) value;
+                var valueType = type.GetGenericArguments ().Single ();
+                foreach (var item in list)
+                    builder.AddItems (Encode (valueType, item));
+                return ProtocolBuffers.WriteMessage (builder.Build ());
+            } else { // a dictionary
+                var keyType = type.GetGenericArguments ()[0];
+                var valueType = type.GetGenericArguments ()[1];
+                var builder = Schema.KRPC.Dictionary.CreateBuilder ();
+                var entryBuilder = Schema.KRPC.DictionaryEntry.CreateBuilder ();
+                foreach (System.Collections.DictionaryEntry entry in (System.Collections.IDictionary) value) {
+                    entryBuilder.SetKey (Encode (keyType, entry.Key));
+                    entryBuilder.SetValue (Encode (valueType, entry.Value));
+                    builder.AddEntries (entryBuilder.Build ());
+                }
+                return ProtocolBuffers.WriteMessage (builder.Build ());
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.Continuations;
 
@@ -167,6 +168,30 @@ namespace KRPCTest.Service
         [KRPCProcedure]
         public static int BlockingProcedureReturns(int n, int sum = 0) {
             return Service.BlockingProcedureReturns (n, sum);
+        }
+
+        [KRPCProcedure]
+        public static IList<string> EchoList (IList<string> l)
+        {
+            return Service.EchoList (l);
+        }
+
+        [KRPCProcedure]
+        public static IDictionary<int,string> EchoDictionary (IDictionary<int,string> d)
+        {
+            return Service.EchoDictionary (d);
+        }
+
+        [KRPCProcedure]
+        public static IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c)
+        {
+            return Service.EchoNestedCollection (c);
+        }
+
+        [KRPCProcedure]
+        public static IList<TestClass> EchoListOfObjects (IList<TestClass> l)
+        {
+            return Service.EchoListOfObjects (l);
         }
     }
 }

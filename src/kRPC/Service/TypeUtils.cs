@@ -1,8 +1,11 @@
 using System;
-using KRPC.Utils;
-using KRPC.Service.Attributes;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Linq;
+using KRPC.Utils;
+using KRPC.Service.Attributes;
+using KRPC.Schema;
 
 namespace KRPC.Service
 {
@@ -24,7 +27,21 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsAValidType (Type type)
         {
-            return ProtocolBuffers.IsAValidType (type) || IsAClassType (type) || IsAnEnumType (type);
+            return ProtocolBuffers.IsAValidType (type) || IsAClassType (type) || IsAnEnumType (type) || IsACollectionType (type);
+        }
+
+        /// <summary>
+        /// Returns true if the given type can be used as a kRPC key type
+        /// </summary>
+        public static bool IsAValidKeyType (Type type)
+        {
+            return
+            type == typeof(int) ||
+            type == typeof(long) ||
+            type == typeof(uint) ||
+            type == typeof(ulong) ||
+            type == typeof(bool) ||
+            type == typeof(string);
         }
 
         /// <summary>
@@ -44,6 +61,33 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Returns true if the given type can be used as a kRPC collection type
+        /// </summary>
+        public static bool IsACollectionType (Type type)
+        {
+            return IsAListCollectionType (type) || IsADictionaryCollectionType (type);
+        }
+
+        /// <summary>
+        /// Returns true if the given type can be used as a kRPC list collection type
+        /// </summary>
+        public static bool IsAListCollectionType (Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition () == typeof (IList<>) &&
+                   IsAValidType (type.GetGenericArguments ().Single ());
+        }
+
+        /// <summary>
+        /// Returns true if the given type can be used as a kRPC dictionary collection type
+        /// </summary>
+        public static bool IsADictionaryCollectionType (Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition () == typeof (IDictionary<,>) &&
+                   IsAValidKeyType (type.GetGenericArguments ()[0]) &&
+                   IsAValidType (type.GetGenericArguments ()[1]);
+        }
+
+        /// <summary>
         /// Return the name of the protocol buffer type for the given C# type
         /// </summary>
         public static string GetTypeName (Type type)
@@ -54,8 +98,32 @@ namespace KRPC.Service
                 return ProtocolBuffers.GetTypeName (type);
             else if (IsAClassType (type))
                 return ProtocolBuffers.GetTypeName (typeof(ulong)); // Class instance GUIDs are uint64
-            else // an enum type
+            else if (IsAnEnumType (type))
                 return ProtocolBuffers.GetTypeName (typeof(int)); // Enums are int32
+            else if (IsAListCollectionType (type))
+                return ProtocolBuffers.GetMessageTypeName (typeof (global::KRPC.Schema.KRPC.List));
+            else // a dictionary collection type
+                return ProtocolBuffers.GetMessageTypeName (typeof (global::KRPC.Schema.KRPC.Dictionary));
+        }
+
+        /// <summary>
+        /// Return the name of the kRPC type for the given C# type
+        /// </summary>
+        public static string GetKRPCTypeName (Type type)
+        {
+            if (!IsAValidType (type))
+                throw new ArgumentException ();
+            else if (IsAClassType (type))
+                return "Class(" + GetClassServiceName (type) + "." + type.Name + ")";
+            else if (IsAnEnumType (type))
+                return "Enum(" + GetEnumServiceName (type) + "." + type.Name + ")";
+            else if (IsAListCollectionType (type))
+                return "List(" + GetKRPCTypeName (type.GetGenericArguments ().Single ()) + ")";
+            else if (IsADictionaryCollectionType (type))
+                return "Dictionary(" + GetKRPCTypeName (type.GetGenericArguments ()[0]) + "," +
+                                       GetKRPCTypeName (type.GetGenericArguments ()[1]) + ")";
+            else
+                return ProtocolBuffers.GetTypeName (type);
         }
 
         /// <summary>
@@ -65,10 +133,8 @@ namespace KRPC.Service
         {
             if (!IsAValidType (type))
                 throw new ArgumentException ();
-            else if (IsAClassType (type))
-                return new [] { "ParameterType(" + position + ").Class(" + GetClassServiceName (type) + "." + type.Name + ")" };
-            else if (IsAnEnumType (type))
-                return new [] { "ParameterType(" + position + ").Enum(" + GetEnumServiceName (type) + "." + type.Name + ")" };
+            else if (IsAClassType (type) || IsAnEnumType (type) || IsACollectionType (type))
+                return new [] { "ParameterType(" + position + ")." + GetKRPCTypeName (type) };
             else
                 return new string[] { };
         }
@@ -80,10 +146,8 @@ namespace KRPC.Service
         {
             if (!IsAValidType (type))
                 throw new ArgumentException ();
-            else if (IsAClassType (type))
-                return new [] { "ReturnType.Class(" + GetClassServiceName (type) + "." + type.Name + ")" };
-            else if (IsAnEnumType (type))
-                return new [] { "ReturnType.Enum(" + GetEnumServiceName (type) + "." + type.Name + ")" };
+            else if (IsAClassType (type) || IsAnEnumType (type) || IsACollectionType (type))
+                return new [] { "ReturnType." + GetKRPCTypeName (type) };
             else
                 return new string[] { };
         }

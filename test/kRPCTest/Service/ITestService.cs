@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace KRPCTest.Service
 {
     public interface ITestService
@@ -42,5 +44,13 @@ namespace KRPCTest.Service
         void BlockingProcedureNoReturn (int n);
 
         int BlockingProcedureReturns (int n, int sum);
+
+        IList<string> EchoList (IList<string> l);
+
+        IDictionary<int,string> EchoDictionary (IDictionary<int,string> d);
+
+        IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c);
+
+        IList<TestService.TestClass> EchoListOfObjects (IList<TestService.TestClass> l);
     }
 }
