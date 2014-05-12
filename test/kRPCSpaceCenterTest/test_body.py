@@ -22,7 +22,7 @@ class TestBody(testingtools.TestCase):
         self.assertClose(1.36e10, kerbin.orbit.apoapsis, error=0.0001e10)
         self.assertClose(1.36e10, kerbin.orbit.periapsis, error=0.0001e10)
         self.assertEqual(True, kerbin.has_atmosphere)
-        self.assertClose(101.325, kerbin.atmosphere_pressure)
+        self.assertClose(101325, kerbin.atmosphere_pressure)
         self.assertClose(5000, kerbin.atmosphere_scale_height)
         self.assertClose(70000, kerbin.atmosphere_max_altitude)
 
@@ -59,7 +59,7 @@ class TestBody(testingtools.TestCase):
 
         duna = ksp.space_center.body('Duna')
         self.assertEqual(True, duna.has_atmosphere)
-        self.assertClose(20.265, duna.atmosphere_pressure)
+        self.assertClose(20265, duna.atmosphere_pressure)
         self.assertClose(3000, duna.atmosphere_scale_height)
         self.assertClose(50000, duna.atmosphere_max_altitude)
 

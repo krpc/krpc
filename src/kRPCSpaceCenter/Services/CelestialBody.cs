@@ -64,7 +64,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double AtmospherePressure {
-            get { return HasAtmosphere ? body.atmosphereMultiplier * 101.325d : 0d; }
+            get { return HasAtmosphere ? body.atmosphereMultiplier * 101325d : 0d; }
         }
 
         [KRPCProperty]
