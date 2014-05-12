@@ -154,18 +154,20 @@ namespace KRPCSpaceCenter.Services
 
         Vector3d GetPrograde ()
         {
-            var rot = ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse ();
-            return (rot * vessel.GetOrbit ().GetVel ()).normalized;
+            var rotation = ReferenceFrameTransform.GetRotation (referenceFrame, vessel);
+            var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
+            return (rotation.Inverse () * (GetVelocity () - velocity)).normalized;
         }
 
         Vector3d GetNormal ()
         {
-            var rot = ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse ();
+            var rotation = ReferenceFrameTransform.GetRotation (referenceFrame, vessel);
+            var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
             var normal = vessel.GetOrbit ().GetOrbitNormal ();
             var tmp = normal.y;
             normal.y = normal.z;
             normal.z = tmp;
-            return (rot * normal).normalized;
+            return (rotation.Inverse () * (normal - velocity)).normalized;
         }
 
         Vector3d GetRadial ()
