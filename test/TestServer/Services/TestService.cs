@@ -120,16 +120,16 @@ namespace TestServer.Services
             public TestClass ObjectProperty { get; set; }
 
             [KRPCMethod]
-            public static string OptionalArguments (string x, string y = "foo", string z = "bar", string w = "baz")
+            public static string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
             {
-                return x + y + z + w;
+                return x + y + z + anotherParameter;
             }
         }
 
         [KRPCProcedure]
-        public static string OptionalArguments (string x, string y = "foo", string z = "bar", string w = "baz")
+        public static string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
         {
-            return x + y + z + w;
+            return x + y + z + anotherParameter;
         }
 
         [KRPCProcedure]
@@ -151,7 +151,12 @@ namespace TestServer.Services
         }
 
         [KRPCEnum]
-        public enum CSharpEnum { ValueA, ValueB, ValueC };
+        public enum CSharpEnum
+        {
+            ValueA,
+            ValueB,
+            ValueC}
+        ;
 
         [KRPCProcedure]
         public static CSharpEnum CSharpEnumReturn ()
@@ -172,10 +177,11 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
-        public static int BlockingProcedure(int n, int sum = 0) {
+        public static int BlockingProcedure (int n, int sum = 0)
+        {
             if (n == 0)
                 return sum;
-            throw new YieldException(new ParameterizedContinuation<int,int,int>(BlockingProcedure, n-1, sum+n));
+            throw new YieldException (new ParameterizedContinuation<int,int,int> (BlockingProcedure, n - 1, sum + n));
         }
     }
 }

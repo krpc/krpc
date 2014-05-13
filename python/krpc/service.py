@@ -106,7 +106,7 @@ class _Service(BaseService):
 
     def _add_procedure(self, procedure):
         """ Add a plain procedure to this service """
-        param_names = [param.name for param in procedure.parameters]
+        param_names = [_to_snake_case(param.name) for param in procedure.parameters]
         param_types = [self._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
         return_type = None
         if procedure.HasField('return_type'):
@@ -130,7 +130,7 @@ class _Service(BaseService):
     def _add_class_method(self, class_name, method_name, procedure):
         """ Add a class method to the service """
         cls = getattr(self, class_name)
-        param_names = [param.name for param in procedure.parameters]
+        param_names = [_to_snake_case(param.name) for param in procedure.parameters]
         param_types = [self._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
         return_type = None
         if procedure.HasField('return_type'):
