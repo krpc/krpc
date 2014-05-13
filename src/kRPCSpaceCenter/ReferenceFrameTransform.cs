@@ -24,10 +24,8 @@ namespace KRPCSpaceCenter
         {
             switch (referenceFrame) {
             case ReferenceFrame.Orbital:
-            case ReferenceFrame.SurfaceVelocity:
             case ReferenceFrame.Surface:
             case ReferenceFrame.Maneuver:
-            case ReferenceFrame.TargetVelocity:
             case ReferenceFrame.Target:
                 return vessel.CoM - vessel.mainBody.position;
             // Relative to the negative surface normal of the target docking port, or relative to the target if the target is not a docking port
@@ -46,12 +44,13 @@ namespace KRPCSpaceCenter
         {
             switch (referenceFrame) {
             // Relative to the orbital velocity vector
-            case ReferenceFrame.Orbital:
-                return vessel.GetObtVelocity ();
+            //case ReferenceFrame.Orbital:
+            //    return vessel.GetObtVelocity ();
             // Relative to the surface velocity vector
-            case ReferenceFrame.SurfaceVelocity:
-                return vessel.GetSrfVelocity ();
+            //case ReferenceFrame.Surface:
+            //    return vessel.GetSrfVelocity ();
             // Relative to the surface / navball
+            case ReferenceFrame.Orbital:
             case ReferenceFrame.Surface:
                 return Vector3.Exclude (GetUp (referenceFrame, vessel), vessel.mainBody.position + vessel.mainBody.transform.up * (float)vessel.mainBody.Radius - vessel.CoM);
             // Relative to the direction of the burn for a maneuver node, or relative to the orbit if there is no node
@@ -63,7 +62,7 @@ namespace KRPCSpaceCenter
                         return GetForward (ReferenceFrame.Orbital, vessel);
                 }
             // Relative to the target's velocity vector, or relative to the orbit if there is no target
-            case ReferenceFrame.TargetVelocity:
+            case ReferenceFrame.Target:
                 {
                     var target = FlightGlobals.fetch.VesselTarget;
                     if (target != null)
@@ -72,15 +71,15 @@ namespace KRPCSpaceCenter
                         return GetForward (ReferenceFrame.Orbital, vessel);
                 }
             // Relative to the direction to the target, or relative to the orbit if there is no target
-            case ReferenceFrame.Target:
-                {
-                    var target = FlightGlobals.fetch.VesselTarget;
-                    if (target != null)
-                        // TODO: use the center of control instead of v.CoM?
-                        return target.GetTransform ().position - vessel.CoM;
-                    else
-                        return GetForward (ReferenceFrame.Orbital, vessel);
-                }
+            //case ReferenceFrame.Target:
+            //    {
+            //        var target = FlightGlobals.fetch.VesselTarget;
+            //        if (target != null)
+            //            // TODO: use the center of control instead of v.CoM?
+            //            return target.GetTransform ().position - vessel.CoM;
+            //        else
+            //            return GetForward (ReferenceFrame.Orbital, vessel);
+            //    }
             // Relative to the negative surface normal of the target docking port, or relative to the target if the target is not a docking port
             case ReferenceFrame.Docking:
                 throw new NotImplementedException ();
@@ -136,15 +135,13 @@ namespace KRPCSpaceCenter
         {
             switch (referenceFrame) {
             case ReferenceFrame.Orbital:
-            case ReferenceFrame.Surface:
             case ReferenceFrame.Maneuver:
-            case ReferenceFrame.Target:
                 return Vector3.zero;
             // Relative to the surface velocity vector
-            case ReferenceFrame.SurfaceVelocity:
+            case ReferenceFrame.Surface:
                 return vessel.GetObtVelocity () - vessel.GetSrfVelocity ();
             // Relative to the target's velocity vector, or relative to the orbit if there is no target
-            case ReferenceFrame.TargetVelocity:
+            case ReferenceFrame.Target:
                 throw new NotImplementedException ();
             // Relative to the negative surface normal of the target docking port, or relative to the target if the target is not a docking port
             case ReferenceFrame.Docking:

@@ -73,7 +73,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public Flight Flight (ReferenceFrame referenceFrame = ReferenceFrame.Surface)
+        public Flight Flight (ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
         {
             if (!flightObjects.ContainsKey (referenceFrame))
                 flightObjects [referenceFrame] = new Flight (vessel, referenceFrame);

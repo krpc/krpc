@@ -7,9 +7,7 @@ namespace KRPCSpaceCenter.Services
     {
         Orbital,
         Surface,
-        SurfaceVelocity,
         Target,
-        TargetVelocity,
         Maneuver,
         Docking
     }

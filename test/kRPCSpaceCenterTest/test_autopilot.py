@@ -55,15 +55,9 @@ class TestAutoPilot(testingtools.TestCase):
         self.vessel.control.sas = True
         self.ap.disengage()
 
-        # Check resulting direction vector in vessel space
+        # Check resulting direction vector
         flight = self.vessel.flight()
         self.assertClose(vector(direction), vector(flight.direction), error=0.1)
-
-        # Check resulting pitch and heading in orbital space
-        flight = self.vessel.flight(self.ksp.space_center.ReferenceFrame.orbital)
-        self.assertClose(pitch, flight.pitch, error=0.5)
-        if heading is not None:
-            self.assertClose(heading, flight.heading, error=0.5)
 
     def test_orbital_directions(self):
         flight = self.vessel.flight()

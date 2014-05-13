@@ -32,7 +32,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public void SetRotation (double pitch, double yaw, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Surface)
+        public void SetRotation (double pitch, double yaw, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
         {
             Engaged = true;
             ReferenceFrame = referenceFrame;
@@ -42,7 +42,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public void SetDirection (KRPC.Schema.Geometry.Vector3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Surface)
+        public void SetDirection (KRPC.Schema.Geometry.Vector3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
         {
             var rotation = Quaternion.FromToRotation (Vector3d.forward, direction.ToVector ());
             Engaged = true;
