@@ -74,8 +74,8 @@ dist: build dist-python
 	# README
 	echo "See https://github.com/djungelorm/krpc/wiki" >dist/README.txt
 	cp $(DIST_DIR)/README.txt $(DIST_DIR)/GameData/kRPC/
-	# CHANGELOG
-	cp CHANGELOG.txt $(DIST_DIR)/
+	# CHANGES
+	cp CHANGES.txt $(DIST_DIR)/
 	# Version files
 	echo $(SERVER_VERSION) > $(DIST_DIR)/VERSION.txt
 	echo $(SERVER_VERSION) > $(DIST_DIR)/GameData/kRPC/VERSION.txt

@@ -1,3 +1,6 @@
+v0.1.2
+ - Convert parameter names to snake_case
+
 v0.1.1
  - Update example script
 

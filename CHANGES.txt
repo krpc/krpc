@@ -1,0 +1,14 @@
+v0.1.2
+ - SpaceCenter service:
+   - Include reference frame velocity in orbital direction vectors
+   - Remove ReferenceFrame.SurfaceVelocity and ReferenceFrame.TargetVelocity
+   - Change default reference frames for Vessel.Flight()
+     and AutoPilot functions to ReferenceFrame.Orbital
+   - Use Pa instead of kPa for atmospheric pressure
+
+v0.1.1
+ - Add new functionality to SpaceCenter service
+ - Minor server code improvements
+
+v0.1.0
+ - Initial pre-release
