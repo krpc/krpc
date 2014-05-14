@@ -1,4 +1,5 @@
 import re
+import collections
 import krpc.schema
 from krpc.attributes import _Attributes
 
@@ -37,16 +38,36 @@ class _Types(object):
             typ = _ValueType(type_string)
         elif type_string.startswith('Class('):
             typ = _ClassType(type_string)
+        elif type_string.startswith('List('):
+            typ = _ListType(type_string, self)
+        elif type_string.startswith('Dictionary('):
+            typ = _DictionaryType(type_string, self)
+        elif type_string.startswith('Set('):
+            typ = _SetType(type_string, self)
         else:
             typ = None
             package, _, message = type_string.rpartition('.')
+            # TODO: Check it's a valid enum type
+            # NOTE: Disabled as it requires the protobuf .py file to be in the
+            #       krpc.schema package which isn't the case for 3rd party services
             try:
                 module = import_module('krpc.schema.' + package)
                 if hasattr(getattr(module.schema, package), message):
                     typ = _MessageType(type_string)
+                #else:
+                #    # TODO: avoid using protobuf internals
+                #    import google.protobuf
+                #    desc = google.protobuf.descriptor_pb2.FileDescriptorProto()
+                #    getattr(module.schema, package).DESCRIPTOR.CopyToProto(desc)
+                #    for enum in desc.enum_type:
+                #        if message == enum.name:
+                #           typ = _EnumType(type_string)
+                #           break
+                #    typ = _EnumType(type_string)
+                if typ == None:
+                    raise ValueError
             except:
-                pass
-            if typ is None:
+                #raise ValueError('\'%s\' is not a valid type string' % type_string)
                 typ = _EnumType(type_string)
         self._types[type_string] = typ
         return typ
@@ -56,9 +77,10 @@ class _Types(object):
             position, protocol buffer type, and procedure attributes """
         attrs = _Attributes.get_parameter_type_attrs(pos, attrs)
         for attr in attrs:
-            match = re.match(r'^Class\([^,\.]+\.[^,\.]+\)$', attr)
-            if match:
+            try:
                 return self.as_type(attr)
+            except ValueError:
+                pass
         return self.as_type(typ)
 
     def get_return_type(self, typ, attrs):
@@ -66,9 +88,10 @@ class _Types(object):
             protocol buffer type and procedure attributes """
         attrs = _Attributes.get_return_type_attrs(attrs)
         for attr in attrs:
-            match = re.match(r'^Class\([^,\.]+\.[^,\.]+\)$', attr)
-            if match:
+            try:
                 return self.as_type(attr)
+            except ValueError:
+                pass
         return self.as_type(typ)
 
     def coerce_to(self, value, typ):
@@ -76,6 +99,7 @@ class _Types(object):
         # A NoneType can be coerced to a _ClassType
         if isinstance(typ, _ClassType) and value is None:
             return None
+        # Numeric types
         # See http://docs.python.org/2/reference/datamodel.html#coercion-rules
         numeric_types = (float, int, long)
         if type(value) not in numeric_types or typ.python_type not in numeric_types:
@@ -147,6 +171,64 @@ class _ClassType(_TypeBase):
         typ.__init__ = ctor
 
         super(_ClassType, self).__init__(str(type_string), typ)
+
+
+class _ListType(_TypeBase):
+    """ A list collection type, represented by a protobuf message """
+
+    def __init__(self, type_string, type_store):
+        # Get inner type
+        match = re.match(r'List\((.+)\)', type_string)
+        if not match:
+            raise ValueError('\'%s\' is not a valid type string for a list type' % type_string)
+        self.value_type = type_store.as_type(match.group(1))
+
+        super(_ListType, self).__init__(str(type_string), list)
+
+
+class _DictionaryType(_TypeBase):
+    """ A dictionary collection type, represented by a protobuf message """
+
+    def __init__(self, type_string, type_store):
+        # Check for valud type string
+        match = re.match(r'Dictionary\((.+)\)', type_string)
+        if not match:
+            raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
+        typ = match.group(1)
+
+        # Get key type
+        key_string = ''
+        level = 0
+        for x in typ:
+            if level == 0 and x == ',':
+                break
+            if x == '(':
+                level += 1
+            if x == ')':
+                level -= 1
+            key_string += x
+        if level != 0 or len(key_string) == len(typ) or typ[len(key_string)] != ',':
+            raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
+        self.key_type = type_store.as_type(key_string)
+
+        # Get value type
+        value_string = typ[len(key_string)+1:]
+        self.value_type = type_store.as_type(value_string)
+
+        super(_DictionaryType, self).__init__(str(type_string), dict)
+
+
+class _SetType(_TypeBase):
+    """ A set collection type, represented by a protobuf message """
+
+    def __init__(self, type_string, type_store):
+        # Get inner type
+        match = re.match(r'Set\((.+)\)', type_string)
+        if not match:
+            raise ValueError('\'%s\' is not a valid type string for a set type' % type_string)
+        self.value_type = type_store.as_type(match.group(1))
+
+        super(_SetType, self).__init__(str(type_string), set)
 
 
 class _BaseClass(object):

@@ -114,6 +114,11 @@ class TestTypes(unittest.TestCase):
         self.assertEqual([], Attributes.get_return_type_attrs(['Class.Method(ServiceName.ClassName,MethodName)']))
         self.assertEqual(['Class(ServiceName.ClassName)'], Attributes.get_return_type_attrs(['ReturnType.Class(ServiceName.ClassName)']))
         self.assertEqual(['Class(ServiceName.ClassName)'], Attributes.get_return_type_attrs(['Class.Method(ServiceName.ClassName,MethodName)', 'ReturnType.Class(ServiceName.ClassName)']))
+        self.assertEqual(['List(string)'], Attributes.get_return_type_attrs(['ReturnType.List(string)']))
+        self.assertEqual(['Dictionary(int32,string)'], Attributes.get_return_type_attrs(['ReturnType.Dictionary(int32,string)']))
+        self.assertEqual(['Set(string)'], Attributes.get_return_type_attrs(['ReturnType.Set(string)']))
+        self.assertEqual(['List(Dictionary(int32,string))'], Attributes.get_return_type_attrs(['ReturnType.List(Dictionary(int32,string))']))
+        self.assertEqual(['Dictionary(int32,List(ServiceName.ClassName))'], Attributes.get_return_type_attrs(['ReturnType.Dictionary(int32,List(ServiceName.ClassName))']))
 
     def test_get_parameter_type_attributes(self):
         self.assertEqual([], Attributes.get_parameter_type_attrs(0, []))
@@ -124,6 +129,11 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(['Class(ServiceName.ClassName)'], Attributes.get_parameter_type_attrs(2, ['ParameterType(2).Class(ServiceName.ClassName)']))
         self.assertEqual(['Class(ServiceName.ClassName2)'], Attributes.get_parameter_type_attrs(2, ['ParameterType(0).Class(ServiceName.ClassName1)', 'ParameterType(2).Class(ServiceName.ClassName2)']))
         self.assertEqual(['Class(ServiceName.ClassName)'], Attributes.get_parameter_type_attrs(1, ['Class.Method(ServiceName.ClassName,MethodName)', 'ParameterType(1).Class(ServiceName.ClassName)']))
+        self.assertEqual(['List(string)'], Attributes.get_parameter_type_attrs(1, ['ParameterType(1).List(string)']))
+        self.assertEqual(['Dictionary(int32,string)'], Attributes.get_parameter_type_attrs(1, ['ParameterType(1).Dictionary(int32,string)']))
+        self.assertEqual(['Set(string)'], Attributes.get_parameter_type_attrs(1, ['ParameterType(1).Set(string)']))
+        self.assertEqual(['List(Dictionary(int32,string))'], Attributes.get_parameter_type_attrs(1, ['ParameterType(1).List(Dictionary(int32,string))']))
+        self.assertEqual(['Dictionary(int32,List(ServiceName.ClassName))'], Attributes.get_parameter_type_attrs(1, ['ParameterType(1).Dictionary(int32,List(ServiceName.ClassName))']))
 
 if __name__ == '__main__':
     unittest.main()

@@ -120,5 +120,29 @@ class TestEncoder(unittest.TestCase):
         self._run_test_encode_value('bytes', cases)
         self._run_test_decode_value('bytes', cases)
 
+    def test_encode_list(self):
+        cases = [
+            ([], ''),
+            ([1], '0a0101'),
+            ([1,2,3,4], '0a01010a01020a01030a01040a0105')
+        ]
+        self._run_test_encode_value('List(int32)', cases)
+
+    def test_encode_dictionary(self):
+        cases = [
+            ({}, ''),
+            ({'': 0}, '0a060a0100120100'),
+            ({'foo': 42, 'bar': 365, 'baz': 3}, '0a090a040362617a1201030a090a0403666f6f12012a0a0a0a04036261721202ed02')
+        ]
+        self._run_test_encode_value('Dictionary(string,int32)', cases)
+
+    def test_encode_list(self):
+        cases = [
+            (set(), ''),
+            (set([1]), '0a0101'),
+            (set([1,2,3,4]), '0a01010a01020a01030a0104')
+        ]
+        self._run_test_encode_value('Set(int32)', cases)
+
 if __name__ == '__main__':
     unittest.main()

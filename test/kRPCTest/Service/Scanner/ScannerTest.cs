@@ -19,7 +19,7 @@ namespace KRPCTest.Service.Scanner
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "TestService") {
                     foundServices++;
-                    Assert.AreEqual (31, service.ProceduresCount);
+                    Assert.AreEqual (36, service.ProceduresCount);
                     int foundProcedures = 0;
                     foreach (var method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
@@ -365,8 +365,63 @@ namespace KRPCTest.Service.Scanner
                             //TODO
                             foundProcedures++;
                         }
+                        if (method.Name == "EchoList") {
+                            Assert.AreEqual (1, method.ParametersCount);
+                            Assert.AreEqual ("l", method.ParametersList [0].Name);
+                            Assert.AreEqual ("KRPC.List", method.ParametersList [0].Type);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("KRPC.List", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("ParameterType(0).List(string)", method.AttributesList [0]);
+                            Assert.AreEqual ("ReturnType.List(string)", method.AttributesList [1]);
+                            foundProcedures++;
+                        }
+                        if (method.Name == "EchoDictionary") {
+                            Assert.AreEqual (1, method.ParametersCount);
+                            Assert.AreEqual ("d", method.ParametersList [0].Name);
+                            Assert.AreEqual ("KRPC.Dictionary", method.ParametersList [0].Type);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("KRPC.Dictionary", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("ParameterType(0).Dictionary(int32,string)", method.AttributesList [0]);
+                            Assert.AreEqual ("ReturnType.Dictionary(int32,string)", method.AttributesList [1]);
+                            foundProcedures++;
+                        }
+                        if (method.Name == "EchoSet") {
+                            Assert.AreEqual (1, method.ParametersCount);
+                            Assert.AreEqual ("h", method.ParametersList [0].Name);
+                            Assert.AreEqual ("KRPC.Set", method.ParametersList [0].Type);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("KRPC.Set", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("ParameterType(0).Set(int32)", method.AttributesList [0]);
+                            Assert.AreEqual ("ReturnType.Set(int32)", method.AttributesList [1]);
+                            foundProcedures++;
+                        }
+                        if (method.Name == "EchoNestedCollection") {
+                            Assert.AreEqual (1, method.ParametersCount);
+                            Assert.AreEqual ("c", method.ParametersList [0].Name);
+                            Assert.AreEqual ("KRPC.Dictionary", method.ParametersList [0].Type);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("KRPC.Dictionary", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("ParameterType(0).Dictionary(int32,List(string))", method.AttributesList [0]);
+                            Assert.AreEqual ("ReturnType.Dictionary(int32,List(string))", method.AttributesList [1]);
+                            foundProcedures++;
+                        }
+                        if (method.Name == "EchoListOfObjects") {
+                            Assert.AreEqual (1, method.ParametersCount);
+                            Assert.AreEqual ("l", method.ParametersList [0].Name);
+                            Assert.AreEqual ("KRPC.List", method.ParametersList [0].Type);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("KRPC.List", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("ParameterType(0).List(Class(TestService.TestClass))", method.AttributesList [0]);
+                            Assert.AreEqual ("ReturnType.List(Class(TestService.TestClass))", method.AttributesList [1]);
+                            foundProcedures++;
+                        }
                     }
-                    Assert.AreEqual (31, foundProcedures);
+                    Assert.AreEqual (36, foundProcedures);
                     int foundClasses = 0;
                     foreach (var cls in service.ClassesList) {
                         if (cls.Name == "TestClass")

@@ -717,6 +717,144 @@ namespace KRPCTest.Service
             mock.Verify (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()), Times.Once ());
             Assert.AreEqual (num + 1, BlockingProcedureReturnsFnCount);
         }
+
+        /// <summary>
+        /// Test calling a service method that takes a list as an argument and returns the same list
+        /// </summary>
+        [Test]
+        public void HandleEchoList ()
+        {
+            var list = KRPC.Schema.KRPC.List.CreateBuilder ()
+                .AddItems (ProtocolBuffers.WriteValue ("jeb", typeof (string)))
+                .AddItems (ProtocolBuffers.WriteValue ("bob", typeof (string)))
+                .AddItems (ProtocolBuffers.WriteValue ("bill", typeof (string)))
+                .Build ();
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoList (It.IsAny<IList<string>> ()))
+                .Returns ((IList<string> x) => x);
+            TestService.Service = mock.Object;
+            var response = Run (Req ("TestService", "EchoList",
+                                Arg (0, ProtocolBuffers.WriteMessage (list))));
+            var builtResponse = response.SetTime (0).Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (ProtocolBuffers.WriteMessage (list), builtResponse.ReturnValue);
+            mock.Verify (x => x.EchoList (It.IsAny<IList<string>> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method that takes a dictionary as an argument and returns the same dictionary
+        /// </summary>
+        [Test]
+        public void HandleEchoDictionary ()
+        {
+            var dictionary = KRPC.Schema.KRPC.Dictionary.CreateBuilder ()
+                .AddEntries (DictionaryEntry.CreateBuilder ()
+                    .SetKey (ProtocolBuffers.WriteValue (0, typeof (int)))
+                    .SetValue (ProtocolBuffers.WriteValue ("jeb", typeof (string))).Build())
+                .AddEntries (DictionaryEntry.CreateBuilder ()
+                    .SetKey (ProtocolBuffers.WriteValue (1, typeof (int)))
+                    .SetValue (ProtocolBuffers.WriteValue ("bob", typeof (string))).Build())
+                .AddEntries (DictionaryEntry.CreateBuilder ()
+                    .SetKey (ProtocolBuffers.WriteValue (2, typeof (int)))
+                    .SetValue (ProtocolBuffers.WriteValue ("bill", typeof (string))).Build())
+                .Build ();
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoDictionary (It.IsAny<IDictionary<int,string>> ()))
+                .Returns ((IDictionary<int,string> x) => x);
+            TestService.Service = mock.Object;
+            var response = Run (Req ("TestService", "EchoDictionary",
+                                Arg (0, ProtocolBuffers.WriteMessage (dictionary))));
+            var builtResponse = response.SetTime (0).Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (ProtocolBuffers.WriteMessage (dictionary), builtResponse.ReturnValue);
+            mock.Verify (x => x.EchoDictionary (It.IsAny<IDictionary<int,string>> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method that takes a set as an argument and returns the same set
+        /// </summary>
+        [Test]
+        public void HandleEchoSet ()
+        {
+            var set = KRPC.Schema.KRPC.Set.CreateBuilder ()
+                .AddItems (ProtocolBuffers.WriteValue (345, typeof (int)))
+                .AddItems (ProtocolBuffers.WriteValue (723, typeof (int)))
+                .AddItems (ProtocolBuffers.WriteValue (112, typeof (int)))
+                .Build ();
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoSet (It.IsAny<HashSet<int>> ()))
+                .Returns ((HashSet<int> x) => x);
+            TestService.Service = mock.Object;
+            var response = Run (Req ("TestService", "EchoSet",
+                                Arg (0, ProtocolBuffers.WriteMessage (set))));
+            var builtResponse = response.SetTime (0).Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (ProtocolBuffers.WriteMessage (set), builtResponse.ReturnValue);
+            mock.Verify (x => x.EchoSet (It.IsAny<HashSet<int>> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method that takes a nested collection as an argument and returns the same collection
+        /// </summary>
+        [Test]
+        public void HandleEchoNestedCollection ()
+        {
+            var list0 = KRPC.Schema.KRPC.List.CreateBuilder ()
+                .AddItems (ProtocolBuffers.WriteValue ("jeb", typeof (string)))
+                .AddItems (ProtocolBuffers.WriteValue ("bob", typeof (string)))
+                .Build ();
+            var list1 = KRPC.Schema.KRPC.List.CreateBuilder ().Build ();
+            var list2 = KRPC.Schema.KRPC.List.CreateBuilder ()
+                .AddItems (ProtocolBuffers.WriteValue ("bill", typeof (string)))
+                .AddItems (ProtocolBuffers.WriteValue ("edzor", typeof (string)))
+                .Build ();
+            var collection = KRPC.Schema.KRPC.Dictionary.CreateBuilder ()
+                .AddEntries (DictionaryEntry.CreateBuilder ()
+                    .SetKey (ProtocolBuffers.WriteValue (0, typeof (int)))
+                    .SetValue (ProtocolBuffers.WriteMessage (list0)).Build())
+                .AddEntries (DictionaryEntry.CreateBuilder ()
+                    .SetKey (ProtocolBuffers.WriteValue (1, typeof (int)))
+                    .SetValue (ProtocolBuffers.WriteMessage (list1)).Build())
+                .AddEntries (DictionaryEntry.CreateBuilder ()
+                    .SetKey (ProtocolBuffers.WriteValue (2, typeof (int)))
+                    .SetValue (ProtocolBuffers.WriteMessage (list2)).Build())
+                .Build ();
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoNestedCollection (It.IsAny<IDictionary<int,IList<string>>> ()))
+                .Returns ((IDictionary<int,IList<string>> x) => x);
+            TestService.Service = mock.Object;
+            var response = Run (Req ("TestService", "EchoNestedCollection",
+                                Arg (0, ProtocolBuffers.WriteMessage (collection))));
+            var builtResponse = response.SetTime (0).Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (ProtocolBuffers.WriteMessage (collection), builtResponse.ReturnValue);
+            mock.Verify (x => x.EchoNestedCollection (It.IsAny<IDictionary<int,IList<string>>> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method that takes a list of objects as an argument and returns the same list
+        /// </summary>
+        [Test]
+        public void HandleEchoListOfObjects ()
+        {
+            var instance0 = new TestService.TestClass ("foo");
+            var instance1 = new TestService.TestClass ("bar");
+            var guid0 = ObjectStore.Instance.AddInstance (instance0);
+            var guid1 = ObjectStore.Instance.AddInstance (instance1);
+            var list = KRPC.Schema.KRPC.List.CreateBuilder ()
+                .AddItems (ProtocolBuffers.WriteValue (guid0, typeof (ulong)))
+                .AddItems (ProtocolBuffers.WriteValue (guid1, typeof (ulong)))
+                .Build ();
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoListOfObjects (It.IsAny<IList<TestService.TestClass>> ()))
+                .Returns ((IList<TestService.TestClass> x) => x);
+            TestService.Service = mock.Object;
+            var response = Run (Req ("TestService", "EchoListOfObjects",
+                                Arg (0, ProtocolBuffers.WriteMessage (list))));
+            var builtResponse = response.SetTime (0).Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (ProtocolBuffers.WriteMessage (list), builtResponse.ReturnValue);
+            mock.Verify (x => x.EchoListOfObjects (It.IsAny<IList<TestService.TestClass>> ()), Times.Once ());
+        }
     }
 }
-
