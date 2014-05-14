@@ -67,6 +67,11 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double TimeToSOIChange {
+            get { throw new NotImplementedException (); }
+        }
+
+        [KRPCProperty]
         public double Eccentricity {
             get { return orbit.eccentricity; }
         }
@@ -89,6 +94,11 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double MeanAnomalyAtEpoch {
             get { return orbit.meanAnomalyAtEpoch; }
+        }
+
+        [KRPCProperty]
+        public Orbit NextOrbit {
+            get { throw new NotImplementedException (); }
         }
     }
 }
