@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 using KRPC.Schema.Geometry;
 using KRPCSpaceCenter.ExtensionMethods;
