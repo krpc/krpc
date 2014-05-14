@@ -49,6 +49,8 @@ namespace KRPCTest.Service
 
         IDictionary<int,string> EchoDictionary (IDictionary<int,string> d);
 
+        HashSet<int> EchoSet (HashSet<int> h);
+
         IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c);
 
         IList<TestService.TestClass> EchoListOfObjects (IList<TestService.TestClass> l);

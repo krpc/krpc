@@ -42,27 +42,33 @@ class _Types(object):
             typ = _ListType(type_string, self)
         elif type_string.startswith('Dictionary('):
             typ = _DictionaryType(type_string, self)
+        elif type_string.startswith('Set('):
+            typ = _SetType(type_string, self)
         else:
             typ = None
             package, _, message = type_string.rpartition('.')
+            # TODO: Check it's a valid enum type
+            # NOTE: Disabled as it requires the protobuf .py file to be in the
+            #       krpc.schema package which isn't the case for 3rd party services
             try:
                 module = import_module('krpc.schema.' + package)
                 if hasattr(getattr(module.schema, package), message):
                     typ = _MessageType(type_string)
-                else:
-                    # Check it it's an enum type
-                    # TODO: avoid using protobuf internals
-                    import google.protobuf
-                    desc = google.protobuf.descriptor_pb2.FileDescriptorProto()
-                    getattr(module.schema, package).DESCRIPTOR.CopyToProto(desc)
-                    for enum in desc.enum_type:
-                        if message == enum.name:
-                           typ = _EnumType(type_string)
-                           break
+                #else:
+                #    # TODO: avoid using protobuf internals
+                #    import google.protobuf
+                #    desc = google.protobuf.descriptor_pb2.FileDescriptorProto()
+                #    getattr(module.schema, package).DESCRIPTOR.CopyToProto(desc)
+                #    for enum in desc.enum_type:
+                #        if message == enum.name:
+                #           typ = _EnumType(type_string)
+                #           break
+                #    typ = _EnumType(type_string)
                 if typ == None:
                     raise ValueError
             except:
-                raise ValueError('\'%s\' is not a valid type string' % type_string)
+                #raise ValueError('\'%s\' is not a valid type string' % type_string)
+                typ = _EnumType(type_string)
         self._types[type_string] = typ
         return typ
 
@@ -210,6 +216,19 @@ class _DictionaryType(_TypeBase):
         self.value_type = type_store.as_type(value_string)
 
         super(_DictionaryType, self).__init__(str(type_string), dict)
+
+
+class _SetType(_TypeBase):
+    """ A set collection type, represented by a protobuf message """
+
+    def __init__(self, type_string, type_store):
+        # Get inner type
+        match = re.match(r'Set\((.+)\)', type_string)
+        if not match:
+            raise ValueError('\'%s\' is not a valid type string for a set type' % type_string)
+        self.value_type = type_store.as_type(match.group(1))
+
+        super(_SetType, self).__init__(str(type_string), set)
 
 
 class _BaseClass(object):

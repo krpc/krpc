@@ -65,7 +65,7 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsACollectionType (Type type)
         {
-            return IsAListCollectionType (type) || IsADictionaryCollectionType (type);
+            return IsAListCollectionType (type) || IsADictionaryCollectionType (type) || IsASetCollectionType (type);
         }
 
         /// <summary>
@@ -88,6 +88,15 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Returns true if the given type can be used as a kRPC list collection type
+        /// </summary>
+        public static bool IsASetCollectionType (Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition () == typeof (HashSet<>) &&
+                   IsAValidType (type.GetGenericArguments ().Single ());
+        }
+
+        /// <summary>
         /// Return the name of the protocol buffer type for the given C# type
         /// </summary>
         public static string GetTypeName (Type type)
@@ -102,8 +111,12 @@ namespace KRPC.Service
                 return ProtocolBuffers.GetTypeName (typeof(int)); // Enums are int32
             else if (IsAListCollectionType (type))
                 return ProtocolBuffers.GetMessageTypeName (typeof (global::KRPC.Schema.KRPC.List));
-            else // a dictionary collection type
+            else if (IsADictionaryCollectionType (type))
                 return ProtocolBuffers.GetMessageTypeName (typeof (global::KRPC.Schema.KRPC.Dictionary));
+            else if (IsASetCollectionType (type))
+                return ProtocolBuffers.GetMessageTypeName (typeof (global::KRPC.Schema.KRPC.Set));
+            else
+                throw new ArgumentException ("Type is not valid");
         }
 
         /// <summary>
@@ -122,6 +135,8 @@ namespace KRPC.Service
             else if (IsADictionaryCollectionType (type))
                 return "Dictionary(" + GetKRPCTypeName (type.GetGenericArguments ()[0]) + "," +
                                        GetKRPCTypeName (type.GetGenericArguments ()[1]) + ")";
+            else if (IsASetCollectionType (type))
+                return "Set(" + GetKRPCTypeName (type.GetGenericArguments ().Single ()) + ")";
             else
                 return ProtocolBuffers.GetTypeName (type);
         }

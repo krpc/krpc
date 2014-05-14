@@ -157,11 +157,10 @@ namespace KRPC.Service
                     .MakeGenericType (type.GetGenericArguments ().Single ())
                     .GetConstructor (Type.EmptyTypes)
                     .Invoke (null));
-                foreach (var item in encodedList.ItemsList) {
+                foreach (var item in encodedList.ItemsList)
                     list.Add (Decode (procedure, i, type.GetGenericArguments ().Single (), item));
-                }
                 return list;
-            } else { // a dictionary
+            } else if (TypeUtils.IsADictionaryCollectionType (type)) {
                 var builder = Schema.KRPC.Dictionary.CreateBuilder ();
                 var encodedDictionary = builder.MergeFrom (value).Build ();
                 var dictionary = (System.Collections.IDictionary) (typeof (System.Collections.Generic.Dictionary<,>)
@@ -174,6 +173,22 @@ namespace KRPC.Service
                     dictionary[k] = v;
                 }
                 return dictionary;
+            } else { // a set
+                var builder = Schema.KRPC.Set.CreateBuilder ();
+                var encodedSet = builder.MergeFrom (value).Build ();
+
+                var set = (System.Collections.IEnumerable) (typeof (System.Collections.Generic.HashSet<>)
+                    .MakeGenericType (type.GetGenericArguments ().Single ())
+                    .GetConstructor (Type.EmptyTypes)
+                    .Invoke (null));
+
+                MethodInfo methodInfo = type.GetMethod ("Add");
+
+                foreach (var item in encodedSet.ItemsList) {
+                    var decodedItem = Decode (procedure, i, type.GetGenericArguments ().Single (), item);
+                    methodInfo.Invoke (set, new object[] { decodedItem });
+                }
+                return set;
             }
         }
 
@@ -230,7 +245,7 @@ namespace KRPC.Service
                 foreach (var item in list)
                     builder.AddItems (Encode (valueType, item));
                 return ProtocolBuffers.WriteMessage (builder.Build ());
-            } else { // a dictionary
+            } else if (TypeUtils.IsADictionaryCollectionType (type)) {
                 var keyType = type.GetGenericArguments ()[0];
                 var valueType = type.GetGenericArguments ()[1];
                 var builder = Schema.KRPC.Dictionary.CreateBuilder ();
@@ -240,6 +255,13 @@ namespace KRPC.Service
                     entryBuilder.SetValue (Encode (valueType, entry.Value));
                     builder.AddEntries (entryBuilder.Build ());
                 }
+                return ProtocolBuffers.WriteMessage (builder.Build ());
+            } else { // a set
+                var builder = Schema.KRPC.Set.CreateBuilder ();
+                var set = (System.Collections.IEnumerable) value;
+                var valueType = type.GetGenericArguments ().Single ();
+                foreach (var item in set)
+                    builder.AddItems (Encode (valueType, item));
                 return ProtocolBuffers.WriteMessage (builder.Build ());
             }
         }

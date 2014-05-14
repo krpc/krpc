@@ -771,6 +771,29 @@ namespace KRPCTest.Service
         }
 
         /// <summary>
+        /// Test calling a service method that takes a set as an argument and returns the same set
+        /// </summary>
+        [Test]
+        public void HandleEchoSet ()
+        {
+            var set = KRPC.Schema.KRPC.Set.CreateBuilder ()
+                .AddItems (ProtocolBuffers.WriteValue (345, typeof (int)))
+                .AddItems (ProtocolBuffers.WriteValue (723, typeof (int)))
+                .AddItems (ProtocolBuffers.WriteValue (112, typeof (int)))
+                .Build ();
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoSet (It.IsAny<HashSet<int>> ()))
+                .Returns ((HashSet<int> x) => x);
+            TestService.Service = mock.Object;
+            var response = Run (Req ("TestService", "EchoSet",
+                                Arg (0, ProtocolBuffers.WriteMessage (set))));
+            var builtResponse = response.SetTime (0).Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (ProtocolBuffers.WriteMessage (set), builtResponse.ReturnValue);
+            mock.Verify (x => x.EchoSet (It.IsAny<HashSet<int>> ()), Times.Once ());
+        }
+
+        /// <summary>
         /// Test calling a service method that takes a nested collection as an argument and returns the same collection
         /// </summary>
         [Test]

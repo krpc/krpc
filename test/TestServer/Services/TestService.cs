@@ -194,6 +194,14 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
+        public static HashSet<int> IncrementSet(HashSet<int> h) {
+            var result = new HashSet<int> ();
+            foreach (var item in h)
+                result.Add (item + 1);
+            return result;
+        }
+
+        [KRPCProcedure]
         public static IDictionary<string,IList<int>> IncrementNestedCollection(IDictionary<string,IList<int>> d) {
             IDictionary<string,IList<int>> result = new Dictionary<string,IList<int>> ();
             foreach (var entry in d)

@@ -68,6 +68,10 @@ message DictionaryEntry {
   required bytes value = 2;
 }
 
+message Set {
+  repeated bytes items = 1;
+}
+
 message Status {
   required string version = 1;
 }

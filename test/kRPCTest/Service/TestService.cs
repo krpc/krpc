@@ -183,6 +183,12 @@ namespace KRPCTest.Service
         }
 
         [KRPCProcedure]
+        public static HashSet<int> EchoSet (HashSet<int> h)
+        {
+            return Service.EchoSet (h);
+        }
+
+        [KRPCProcedure]
         public static IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c)
         {
             return Service.EchoNestedCollection (c);

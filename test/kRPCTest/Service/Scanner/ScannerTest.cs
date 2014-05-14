@@ -19,7 +19,7 @@ namespace KRPCTest.Service.Scanner
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "TestService") {
                     foundServices++;
-                    Assert.AreEqual (35, service.ProceduresCount);
+                    Assert.AreEqual (36, service.ProceduresCount);
                     int foundProcedures = 0;
                     foreach (var method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
@@ -387,6 +387,17 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("ReturnType.Dictionary(int32,string)", method.AttributesList [1]);
                             foundProcedures++;
                         }
+                        if (method.Name == "EchoSet") {
+                            Assert.AreEqual (1, method.ParametersCount);
+                            Assert.AreEqual ("h", method.ParametersList [0].Name);
+                            Assert.AreEqual ("KRPC.Set", method.ParametersList [0].Type);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("KRPC.Set", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("ParameterType(0).Set(int32)", method.AttributesList [0]);
+                            Assert.AreEqual ("ReturnType.Set(int32)", method.AttributesList [1]);
+                            foundProcedures++;
+                        }
                         if (method.Name == "EchoNestedCollection") {
                             Assert.AreEqual (1, method.ParametersCount);
                             Assert.AreEqual ("c", method.ParametersList [0].Name);
@@ -410,7 +421,7 @@ namespace KRPCTest.Service.Scanner
                             foundProcedures++;
                         }
                     }
-                    Assert.AreEqual (35, foundProcedures);
+                    Assert.AreEqual (36, foundProcedures);
                     int foundClasses = 0;
                     foreach (var cls in service.ClassesList) {
                         if (cls.Name == "TestClass")

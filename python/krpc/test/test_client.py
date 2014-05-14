@@ -188,7 +188,6 @@ class TestClient(unittest.TestCase):
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service.TestClass))))
 
-
     def test_enums(self):
         self.assertEqual(TestSchema.a, self.ksp.test_service.enum_return())
         self.assertEqual(TestSchema.a, self.ksp.test_service.enum_echo(TestSchema.a))
@@ -217,7 +216,10 @@ class TestClient(unittest.TestCase):
         self.assertEqual([1,2,3], self.ksp.test_service.increment_list([0,1,2]))
         self.assertEqual({}, self.ksp.test_service.increment_dictionary({}))
         self.assertEqual({'a': 1, 'b': 2, 'c': 3}, self.ksp.test_service.increment_dictionary({'a': 0, 'b': 1, 'c': 2}))
+        self.assertEqual(set(), self.ksp.test_service.increment_set(set()))
+        self.assertEqual(set([1,2,3]), self.ksp.test_service.increment_set(set([0,1,2])))
         self.assertRaises(TypeError, self.ksp.test_service.increment_list, None)
+        self.assertRaises(TypeError, self.ksp.test_service.increment_set, None)
         self.assertRaises(TypeError, self.ksp.test_service.increment_dictionary, None)
 
     def test_nested_collections(self):
@@ -289,6 +291,7 @@ class TestClient(unittest.TestCase):
 
                 'increment_list',
                 'increment_dictionary',
+                'increment_set',
                 'increment_nested_collection',
                 'add_to_object_list'
             ]),
