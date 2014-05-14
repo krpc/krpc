@@ -21,6 +21,11 @@ class TestClient(unittest.TestCase):
     def tearDownClass(cls):
         cls.server.kill()
 
+    def test_version(self):
+        status = self.ksp.krpc.get_status()
+        version = open('../VERSION.txt').readlines()[0].rstrip()
+        self.assertEqual(version, status.version)
+
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.ksp.test_service.float_to_string(float(3.14159)))
         self.assertEqual('3.14159', self.ksp.test_service.double_to_string(float(3.14159)))
