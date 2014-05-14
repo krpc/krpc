@@ -70,7 +70,6 @@
     <Compile Include="ReferenceFrameTransform.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
-    <Compile Include="Schema\Resources.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

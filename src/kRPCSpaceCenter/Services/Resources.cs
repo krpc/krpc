@@ -1,6 +1,6 @@
 using System;
+using System.Linq;
 using KRPC.Service.Attributes;
-using KRPC.Schema.Resources;
 using KRPCSpaceCenter.ExtensionMethods;
 using System.Collections.Generic;
 
@@ -29,16 +29,14 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public Names Names {
+        public IList<string> Names {
             get {
                 var names = new HashSet<string> ();
                 foreach (var part in vessel.Parts) {
                     foreach (PartResource resource in part.Resources)
                         names.Add (resource.resourceName);
                 }
-                var result = new Names.Builder ();
-                result.AddRangeNames_ (names);
-                return result.Build ();
+                return names.ToList ();
             }
         }
 
