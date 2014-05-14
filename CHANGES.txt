@@ -1,3 +1,6 @@
+v0.1.3
+ - Add support for collections (lists, dictionaries and sets)
+
 v0.1.2
  - SpaceCenter service:
    - Include reference frame velocity in orbital direction vectors
