@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KRPC.Service.Attributes;
 
 namespace KRPCSpaceCenter.Services
@@ -20,6 +21,17 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public string Name {
             get { return body.name; }
+        }
+
+        [KRPCProperty]
+        public IList<CelestialBody> Satellites {
+            get {
+                var bodies = new List<CelestialBody> ();
+                foreach (var body in this.body.orbitingBodies) {
+                    bodies.Add (new CelestialBody (body));
+                }
+                return bodies;
+            }
         }
 
         [KRPCProperty]
