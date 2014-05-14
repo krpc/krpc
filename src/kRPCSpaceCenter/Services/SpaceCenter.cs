@@ -15,6 +15,18 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public static IDictionary<string,Vessel> Vessels
+        {
+            get {
+                var vessels = new Dictionary<string, Vessel> ();
+                foreach (var vessel in FlightGlobals.Vessels) {
+                    vessels [vessel.name] = new Vessel (vessel);
+                }
+                return vessels;
+            }
+        }
+
+        [KRPCProperty]
         public static IDictionary<string,CelestialBody> Bodies
         {
             get {
