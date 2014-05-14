@@ -49,7 +49,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Vector {
-            get { 
+            get {
                 return Vector3.CreateBuilder ()
                     .SetX (Prograde)
                     .SetY (Normal)
@@ -94,6 +94,11 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double TimeTo {
             get { return UT - SpaceCenter.UT; }
+        }
+
+        [KRPCProperty]
+        public Orbit Orbit {
+            get { throw new NotImplementedException (); }
         }
 
         [KRPCMethod]
