@@ -14,10 +14,8 @@ namespace TestServer
             server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             server.Start ();
             Console.WriteLine ("Started test server...");
-            while (server.Running) {
+            while (server.Running)
                 server.Update ();
-                System.Threading.Thread.Sleep (50);
-            }
             Console.WriteLine ("Test server stopped");
         }
     }
