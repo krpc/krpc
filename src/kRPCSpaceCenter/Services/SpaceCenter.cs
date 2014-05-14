@@ -14,21 +14,15 @@ namespace KRPCSpaceCenter.Services
             get { return new Vessel (FlightGlobals.ActiveVessel); }
         }
 
-        static IDictionary<string,CelestialBody> bodies = new Dictionary<string, CelestialBody> ();
-
-        [KRPCProcedure]
-        public static CelestialBody Body (string name)
+        [KRPCProperty]
+        public static IDictionary<string,CelestialBody> Bodies
         {
-            if (bodies.ContainsKey (name))
-                return bodies [name];
-            else {
+            get {
+                var bodies = new Dictionary<string, CelestialBody> ();
                 foreach (var body in FlightGlobals.Bodies) {
-                    if (body.name == name) {
-                        bodies [name] = new CelestialBody (body);
-                        return bodies [name];
-                    }
+                    bodies [body.name] = new CelestialBody (body);
                 }
-                throw new ArgumentException ("Celestial body '" + name + "' does not exist");
+                return bodies;
             }
         }
 

@@ -23,7 +23,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public CelestialBody Body {
-            get { return SpaceCenter.Body (orbit.referenceBody.name); }
+            get { return SpaceCenter.Bodies [orbit.referenceBody.name]; }
         }
 
         [KRPCProperty]
