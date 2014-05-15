@@ -14,25 +14,31 @@ namespace KRPCSpaceCenter.Services
             get { return new Vessel (FlightGlobals.ActiveVessel); }
         }
 
+        static IDictionary<Guid, Vessel> vesselsCache = new Dictionary<Guid, Vessel> ();
+        static IDictionary<string, CelestialBody> bodiesCache = new Dictionary<string, CelestialBody> ();
+
         [KRPCProperty]
-        public static IDictionary<string,Vessel> Vessels
-        {
+        public static IList<Vessel> Vessels {
             get {
-                var vessels = new Dictionary<string, Vessel> ();
+                var vessels = new List<Vessel> ();
                 foreach (var vessel in FlightGlobals.Vessels) {
-                    vessels [vessel.name] = new Vessel (vessel);
+                    if (!vesselsCache.ContainsKey (vessel.id))
+                        vesselsCache [vessel.id] = new Vessel (vessel);
+                    vessels.Add (vesselsCache [vessel.id]);
                 }
                 return vessels;
             }
         }
 
         [KRPCProperty]
-        public static IDictionary<string,CelestialBody> Bodies
-        {
+        public static IDictionary<string,CelestialBody> Bodies {
             get {
+                // Note: Assumes body.name is a guid
                 var bodies = new Dictionary<string, CelestialBody> ();
                 foreach (var body in FlightGlobals.Bodies) {
-                    bodies [body.name] = new CelestialBody (body);
+                    if (!bodiesCache.ContainsKey (body.name))
+                        bodiesCache [body.name] = new CelestialBody (body);
+                    bodies [body.name] = bodiesCache [body.name];
                 }
                 return bodies;
             }
