@@ -87,6 +87,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema\Geometry.proto" />
-    <None Include="Schema\Resources.proto" />
   </ItemGroup>
 </Project>
