@@ -22,6 +22,11 @@ namespace KRPCSpaceCenter.Services
             this.orbit = body.GetOrbit ();
         }
 
+        internal Orbit (global::Orbit orbit)
+        {
+            this.orbit = orbit;
+        }
+
         [KRPCProperty]
         public CelestialBody Body {
             get { return SpaceCenter.Bodies [orbit.referenceBody.name]; }

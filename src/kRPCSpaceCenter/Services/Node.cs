@@ -99,7 +99,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Orbit Orbit {
-            get { throw new NotImplementedException (); }
+            get { return new Orbit (node.nextPatch); }
         }
 
         [KRPCMethod]
