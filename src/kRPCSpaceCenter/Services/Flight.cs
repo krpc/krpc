@@ -1,13 +1,14 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPC.Schema.Geometry;
+using KRPC.Utils;
 using UnityEngine;
 using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Flight
+    public sealed class Flight : Equatable<Flight>
     {
         global::Vessel vessel;
         ReferenceFrame referenceFrame;
@@ -16,6 +17,16 @@ namespace KRPCSpaceCenter.Services
         {
             this.vessel = vessel;
             this.referenceFrame = referenceFrame;
+        }
+
+        public override bool Equals (Flight other)
+        {
+            return vessel == other.vessel && referenceFrame == other.referenceFrame;
+        }
+
+        public override int GetHashCode ()
+        {
+            return vessel.GetHashCode () ^ referenceFrame.GetHashCode ();
         }
 
         /// <summary>

@@ -1,19 +1,30 @@
 using System;
 using System.Linq;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 using System.Collections.Generic;
 
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Resources
+    public sealed class Resources : Equatable<Resources>
     {
         global::Vessel vessel;
 
         internal Resources (global::Vessel vessel)
         {
             this.vessel = vessel;
+        }
+
+        public override bool Equals (Resources other)
+        {
+            return vessel == other.vessel;
+        }
+
+        public override int GetHashCode ()
+        {
+            return vessel.GetHashCode ();
         }
 
         List<PartResource> GetResources (int stage = -1, bool cumulative = false)

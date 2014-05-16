@@ -1,16 +1,27 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Control
+    public sealed class Control : Equatable<Control>
     {
         global::Vessel vessel;
 
         internal Control (global::Vessel vessel)
         {
             this.vessel = vessel;
+        }
+
+        public override bool Equals (Control other)
+        {
+            return vessel == other.vessel;
+        }
+
+        public override int GetHashCode ()
+        {
+            return vessel.GetHashCode ();
         }
 
         [KRPCProperty]

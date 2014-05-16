@@ -1,6 +1,7 @@
 using System;
-using KRPC.Service.Attributes;
 using System.Collections.Generic;
+using KRPC.Service.Attributes;
+using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
@@ -31,7 +32,7 @@ namespace KRPCSpaceCenter.Services
     }
 
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Vessel
+    public sealed class Vessel : Equatable<Vessel>
     {
         global::Vessel vessel;
         IDictionary<ReferenceFrame, Flight> flightObjects;
@@ -45,6 +46,17 @@ namespace KRPCSpaceCenter.Services
             AutoPilot = new AutoPilot (vessel);
             Resources = new Resources (vessel);
         }
+
+        public override bool Equals (Vessel other)
+        {
+            return vessel == other.vessel;
+        }
+
+        public override int GetHashCode ()
+        {
+            return vessel.GetHashCode ();
+        }
+
 
         [KRPCProperty]
         public string Name {
