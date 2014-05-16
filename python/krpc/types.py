@@ -159,16 +159,32 @@ class _ClassType(_TypeBase):
 
     def __init__(self, type_string):
         # Create class type
-        match = re.match(r'Class\([^\.]+\.([^\.]+)\)', type_string)
+        match = re.match(r'Class\(([^\.]+)\.([^\.]+)\)', type_string)
         if not match:
             raise ValueError('\'%s\' is not a valid type string for a class type' % type_string)
-        class_name = match.group(1)
+        service_name = match.group(1)
+        class_name = match.group(2)
         typ = type(str(class_name), (_BaseClass,), dict())
 
         # Add constructor
         def ctor(s, object_id):
             super(typ, s).__init__(object_id)
         typ.__init__ = ctor
+
+        # Add cmp method
+        def cmp_(s, other):
+            return s._object_id.__cmp__(other._object_id)
+        typ.__cmp__ = cmp_
+
+        # Add hash method
+        def hash_(s):
+            return hash(s._object_id)
+        typ.__hash__ = hash_
+
+        # Add repr method
+        def repr_(s):
+            return '<%s.%s object #%d>' % (service_name, class_name, s._object_id)
+        typ.__repr__ = repr_
 
         super(_ClassType, self).__init__(str(type_string), typ)
 
