@@ -63,6 +63,16 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double Radius {
+            get { return orbit.radius; }
+        }
+
+        [KRPCProperty]
+        public double Speed {
+            get { return orbit.orbitalSpeed; }
+        }
+
+        [KRPCProperty]
         public double TimeToApoapsis {
             get { return orbit.timeToAp; }
         }
@@ -74,7 +84,10 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double TimeToSOIChange {
-            get { throw new NotImplementedException (); }
+            get {
+                var time = orbit.UTsoi - SpaceCenter.UT;
+                return time < 0 ? Double.NaN : time;
+            }
         }
 
         [KRPCProperty]
@@ -104,7 +117,9 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Orbit NextOrbit {
-            get { throw new NotImplementedException (); }
+            get {
+                return (Double.IsNaN (TimeToSOIChange)) ? null : new Orbit (orbit.nextPatch);
+            }
         }
     }
 }
