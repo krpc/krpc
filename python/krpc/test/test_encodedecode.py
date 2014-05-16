@@ -2,6 +2,7 @@
 
 import unittest
 import binascii
+import sys
 from krpc.encoder import _Encoder as Encoder
 from krpc.decoder import _Decoder as Decoder
 from krpc.types import _Types as Types
@@ -52,8 +53,9 @@ class TestEncoder(unittest.TestCase):
             (1, '01'),
             (42, '2a'),
             (300, 'ac02'),
-            (-33, 'dfffffffffffffffff01')
-            # TODO: test max/min int
+            (-33, 'dfffffffffffffffff01'),
+            (sys.maxint, 'ffffffffffffffff7f'),
+            (-sys.maxint-1, '80808080808080808001')
         ]
         self._run_test_encode_value('int32', cases)
         self._run_test_decode_value('int32', cases)
@@ -75,8 +77,8 @@ class TestEncoder(unittest.TestCase):
             (0, '00'),
             (1, '01'),
             (42, '2a'),
-            (300, 'ac02')
-            # TODO: test max/min int
+            (300, 'ac02'),
+            (sys.maxint, 'ffffffffffffffff7f')
         ]
         self._run_test_encode_value('uint32', cases)
         self._run_test_decode_value('uint32', cases)
@@ -91,7 +93,6 @@ class TestEncoder(unittest.TestCase):
             (42, '2a'),
             (300, 'ac02'),
             (1234567890000L, 'd088ec8ff723')
-            # TODO: test max/min int
         ]
         self._run_test_encode_value('uint64', cases)
         self._run_test_decode_value('uint64', cases)
