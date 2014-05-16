@@ -80,6 +80,9 @@ class _ValueDecoder(object):
     # google.protobuf.internal.decoder._FloatDecoder and _DoubleDecoder
     # Copyright 2008, Google Inc.
     # See protobuf-license.txt distributed with this file
+    _POS_INF = 1e10000
+    _NEG_INF = -_POS_INF
+    _NAN = _POS_INF * 0
 
     @classmethod
     def decode_double(cls, data):
@@ -93,7 +96,7 @@ class _ValueDecoder(object):
         if ((double_bytes[7] in '\x7F\xFF')
             and (double_bytes[6] >= '\xF0')
             and (double_bytes[0:7] != '\x00\x00\x00\x00\x00\x00\xF0')):
-          return _NAN
+          return cls._NAN
 
         # Note that we expect someone up-stack to catch struct.error and convert
         # it to _DecodeError -- this way we don't have to set up exception-
@@ -114,11 +117,11 @@ class _ValueDecoder(object):
             and (float_bytes[2] >= '\x80')):
           # If at least one significand bit is set...
           if float_bytes[0:3] != '\x00\x00\x80':
-            return _NAN
+            return cls._NAN
           # If sign bit is set...
           if float_bytes[3] == '\xFF':
-            return _NEG_INF
-          return _POS_INF
+            return cls._NEG_INF
+          return cls._POS_INF
 
         # Note that we expect someone up-stack to catch struct.error and convert
         # it to _DecodeError -- this way we don't have to set up exception-
