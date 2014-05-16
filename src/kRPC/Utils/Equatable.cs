@@ -26,7 +26,7 @@ namespace KRPC.Utils
         public static bool operator != (Equatable<T> lhs, Equatable<T> rhs)
         {
             if (Object.ReferenceEquals (lhs, rhs)) return false;
-            if (Object.ReferenceEquals (lhs, null)) return false;
+            if (Object.ReferenceEquals (lhs, null)) return true;
             return !(lhs.Equals (rhs));
         }
     }
