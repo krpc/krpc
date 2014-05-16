@@ -358,11 +358,22 @@ namespace KRPCTest.Service.Scanner
                             foundProcedures++;
                         }
                         if (method.Name == "BlockingProcedureNoReturn") {
-                            //TODO
+                            Assert.AreEqual (1, method.ParametersCount);
+                            Assert.AreEqual ("n", method.ParametersList [0].Name);
+                            Assert.AreEqual ("int32", method.ParametersList [0].Type);
+                            Assert.IsFalse (method.HasReturnType);
+                            Assert.AreEqual (0, method.AttributesCount);
                             foundProcedures++;
                         }
                         if (method.Name == "BlockingProcedureReturns") {
-                            //TODO
+                            Assert.AreEqual (2, method.ParametersCount);
+                            Assert.AreEqual ("n", method.ParametersList [0].Name);
+                            Assert.AreEqual ("int32", method.ParametersList [0].Type);
+                            Assert.AreEqual ("sum", method.ParametersList [1].Name);
+                            Assert.AreEqual ("int32", method.ParametersList [1].Type);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("int32", method.ReturnType);
+                            Assert.AreEqual (0, method.AttributesCount);
                             foundProcedures++;
                         }
                         if (method.Name == "EchoList") {
