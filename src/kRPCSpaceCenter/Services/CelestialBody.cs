@@ -26,9 +26,10 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public IList<CelestialBody> Satellites {
             get {
+                var allBodies = SpaceCenter.Bodies;
                 var bodies = new List<CelestialBody> ();
                 foreach (var body in Body.orbitingBodies) {
-                    bodies.Add (new CelestialBody (body));
+                    bodies.Add (allBodies [body.name]);
                 }
                 return bodies;
             }
