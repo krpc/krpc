@@ -17,6 +17,7 @@ class TestBody(testingtools.TestCase):
         minmus = bodies['Minmus']
         sun = bodies['Sun']
         duna = bodies['Duna']
+        ike = bodies['Ike']
 
         self.assertEqual('Kerbin', kerbin.name)
         self.assertClose(5.2915e22, kerbin.mass, error=0.0001e22)
@@ -65,11 +66,6 @@ class TestBody(testingtools.TestCase):
         self.assertClose(3000, duna.atmosphere_scale_height)
         self.assertClose(50000, duna.atmosphere_max_altitude)
 
-        print kerbin._object_id
-        print kerbin.name
-        print mun.orbit.body._object_id
-        print mun.orbit.body.name
-
         self.assertEqual(kerbin, mun.orbit.body)
         self.assertEqual(kerbin, minmus.orbit.body)
         self.assertEqual(sun, kerbin.orbit.body)
@@ -78,6 +74,10 @@ class TestBody(testingtools.TestCase):
         self.assertNotEqual(sun, mun.orbit.body)
         self.assertNotEqual(sun, minmus.orbit.body)
         self.assertNotEqual(mun, kerbin.orbit.body)
+
+        self.assertEqual(set([mun,minmus]), set(kerbin.satellites))
+        self.assertEqual(set([ike]), set(duna.satellites))
+        self.assertEqual(set(), set(mun.satellites))
 
 if __name__ == "__main__":
     unittest.main()
