@@ -52,13 +52,13 @@ class TestResources(testingtools.TestCase):
         #TODO: remove calls to str(.)
 
         # Check per-stage amounts (non-cumulative)
-        for name in r.names.names:
+        for name in r.names:
             for stage in range(4):
                 self.assertClose(expected[stage][name][0], r.amount(str(name), stage=stage, cumulative=False), error=0.5)
                 self.assertClose(expected[stage][name][1], r.max(str(name), stage=stage, cumulative=False), error=0.5)
 
         # Check per-stage amounts (cumulative)
-        for name in r.names.names:
+        for name in r.names:
             for stage in range(4):
                 expected_amount = sum(expected[x][name][0] for x in range(stage+1))
                 expected_max = sum(expected[x][name][1] for x in range(stage+1))
@@ -66,7 +66,7 @@ class TestResources(testingtools.TestCase):
                 self.assertClose(expected_max, r.max(str(name), stage=stage), error=0.5)
 
         # Check total amounts
-        for name in r.names.names:
+        for name in r.names:
             expected_amount = sum(expected[stage][name][0] for stage in range(4))
             expected_max = sum(expected[stage][name][1] for stage in range(4))
             self.assertClose(expected_amount, r.amount(str(name)), error=0.5)

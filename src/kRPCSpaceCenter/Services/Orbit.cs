@@ -16,14 +16,20 @@ namespace KRPCSpaceCenter.Services
 
         internal Orbit (global::CelestialBody body)
         {
+            // TODO: better way of checking if a body has an orbit?
             if (body.name == "Sun")
                 throw new ArgumentException ("The sun has no orbit");
             this.orbit = body.GetOrbit ();
         }
 
+        internal Orbit (global::Orbit orbit)
+        {
+            this.orbit = orbit;
+        }
+
         [KRPCProperty]
         public CelestialBody Body {
-            get { return SpaceCenter.Body (orbit.referenceBody.name); }
+            get { return SpaceCenter.Bodies [orbit.referenceBody.name]; }
         }
 
         [KRPCProperty]
@@ -57,6 +63,16 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double Radius {
+            get { return orbit.radius; }
+        }
+
+        [KRPCProperty]
+        public double Speed {
+            get { return orbit.orbitalSpeed; }
+        }
+
+        [KRPCProperty]
         public double TimeToApoapsis {
             get { return orbit.timeToAp; }
         }
@@ -64,6 +80,14 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double TimeToPeriapsis {
             get { return orbit.timeToPe; }
+        }
+
+        [KRPCProperty]
+        public double TimeToSOIChange {
+            get {
+                var time = orbit.UTsoi - SpaceCenter.UT;
+                return time < 0 ? Double.NaN : time;
+            }
         }
 
         [KRPCProperty]
@@ -89,6 +113,13 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double MeanAnomalyAtEpoch {
             get { return orbit.meanAnomalyAtEpoch; }
+        }
+
+        [KRPCProperty]
+        public Orbit NextOrbit {
+            get {
+                return (Double.IsNaN (TimeToSOIChange)) ? null : new Orbit (orbit.nextPatch);
+            }
         }
     }
 }

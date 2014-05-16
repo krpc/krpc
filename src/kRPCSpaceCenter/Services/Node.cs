@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 using KRPC.Schema.Geometry;
 using KRPCSpaceCenter.ExtensionMethods;
@@ -49,7 +50,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Vector {
-            get { 
+            get {
                 return Vector3.CreateBuilder ()
                     .SetX (Prograde)
                     .SetY (Normal)
@@ -94,6 +95,11 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double TimeTo {
             get { return UT - SpaceCenter.UT; }
+        }
+
+        [KRPCProperty]
+        public Orbit Orbit {
+            get { return new Orbit (node.nextPatch); }
         }
 
         [KRPCMethod]

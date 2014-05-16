@@ -1,5 +1,16 @@
 master
  - Add support for collections (lists, dictionaries and sets)
+ - Updates to SpaceCenter service:
+   - Add SpaceCenter.Vessels
+   - Add SpaceCenter.G
+   - Remove SpaceCenter.Body, replace with SpaceCenter.Bodies
+   - Add CelestialBody.Satellites
+   - Add Orbit.Radius
+   - Add Orbit.Speed
+   - Add Orbit.TimeToSOIChange
+   - Add Orbit.NextOrbit
+   - Add Node.Orbit
+   - Resources.Names now returns a list of resource names
 
 v0.1.2
  - SpaceCenter service:

@@ -65,5 +65,36 @@ class TestNode(testingtools.TestCase):
         #with self.assertRaises (krpc.client.RPCError):
         #    node.prograde = 0
 
+    def test_orbit(self):
+        load_save('orbit-kerbin')
+        ksp = krpc.connect()
+        vessel = ksp.space_center.active_vessel
+        control = vessel.control
+
+        start_ut = ksp.space_center.ut
+        ut = start_ut + 60
+        v = [100,0,0]
+        node = control.add_node(ut, *v)
+        self.check(node, v)
+
+        orbit0 = vessel.orbit
+        orbit1 = node.orbit
+
+        # Check semi-major axis using vis-viva equation
+        GM = ksp.space_center.bodies['Kerbin'].gravitational_parameter
+        vsq = (orbit0.speed + v[0])**2
+        r = orbit0.radius
+        self.assertClose (GM / ((2*GM/r) - vsq), orbit1.semi_major_axis, error=0.1)
+
+        # Check there is no inclination change
+        self.assertClose(orbit0.inclination, orbit1.inclination)
+
+        # Check the eccentricity
+        rp = orbit1.periapsis
+        ra = orbit1.apoapsis
+        e = (ra - rp) / (ra + rp)
+        self.assertGreater(orbit1.eccentricity, orbit0.eccentricity)
+        self.assertClose(e, orbit1.eccentricity)
+
 if __name__ == "__main__":
     unittest.main()

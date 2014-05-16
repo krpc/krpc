@@ -70,7 +70,6 @@
     <Compile Include="ReferenceFrameTransform.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
-    <Compile Include="Schema\Resources.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -88,6 +87,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Schema\Geometry.proto" />
-    <None Include="Schema\Resources.proto" />
   </ItemGroup>
 </Project>

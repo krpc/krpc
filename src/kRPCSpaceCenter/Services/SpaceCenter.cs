@@ -14,27 +14,49 @@ namespace KRPCSpaceCenter.Services
             get { return new Vessel (FlightGlobals.ActiveVessel); }
         }
 
-        static IDictionary<string,CelestialBody> bodies = new Dictionary<string, CelestialBody> ();
+        static IDictionary<Guid, Vessel> vesselsCache = new Dictionary<Guid, Vessel> ();
+        static IDictionary<string, CelestialBody> bodiesCache = new Dictionary<string, CelestialBody> ();
 
-        [KRPCProcedure]
-        public static CelestialBody Body (string name)
-        {
-            if (bodies.ContainsKey (name))
-                return bodies [name];
-            else {
-                foreach (var body in FlightGlobals.Bodies) {
-                    if (body.name == name) {
-                        bodies [name] = new CelestialBody (body);
-                        return bodies [name];
-                    }
+        [KRPCProperty]
+        public static IList<Vessel> Vessels {
+            get {
+                var vessels = new List<Vessel> ();
+                foreach (var vessel in FlightGlobals.Vessels) {
+                    if (vessel.vesselType == global::VesselType.EVA ||
+                        vessel.vesselType == global::VesselType.Flag ||
+                        vessel.vesselType == global::VesselType.SpaceObject ||
+                        vessel.vesselType == global::VesselType.Unknown)
+                        continue;
+                    if (!vesselsCache.ContainsKey (vessel.id))
+                        vesselsCache [vessel.id] = new Vessel (vessel);
+                    vessels.Add (vesselsCache [vessel.id]);
                 }
-                throw new ArgumentException ("Celestial body '" + name + "' does not exist");
+                return vessels;
+            }
+        }
+
+        [KRPCProperty]
+        public static IDictionary<string,CelestialBody> Bodies {
+            get {
+                // Note: Assumes body.name is a guid
+                var bodies = new Dictionary<string, CelestialBody> ();
+                foreach (var body in FlightGlobals.Bodies) {
+                    if (!bodiesCache.ContainsKey (body.name))
+                        bodiesCache [body.name] = new CelestialBody (body);
+                    bodies [body.name] = bodiesCache [body.name];
+                }
+                return bodies;
             }
         }
 
         [KRPCProperty]
         public static double UT {
             get { return Planetarium.GetUniversalTime (); }
+        }
+
+        [KRPCProperty]
+        public static double G {
+            get { return 6.673; }
         }
 
         [KRPCProcedure]
@@ -44,7 +66,7 @@ namespace KRPCSpaceCenter.Services
 
             var vessel = ActiveVessel;
             var flight = vessel.Flight ();
-            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (1, vessel.Orbit.Body.body);
+            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (1, vessel.Orbit.Body.Body);
 
             if (vessel.Situation != VesselSituation.Landed && vessel.Situation != VesselSituation.Splashed && flight.Altitude < altitudeLimit)
                 WarpPhysicsAtRate (vessel, flight, Mathf.Min (rate, 2));
@@ -94,7 +116,7 @@ namespace KRPCSpaceCenter.Services
             if (Math.Abs (Planetarium.GetUniversalTime () - warpIncreaseAttemptTime) < 2)
                 return;
             // Check we don't increase the warp rate beyond the altitude limit
-            if (flight.Altitude < TimeWarp.fetch.GetAltitudeLimit (TimeWarp.CurrentRateIndex + 1, vessel.Orbit.Body.body))
+            if (flight.Altitude < TimeWarp.fetch.GetAltitudeLimit (TimeWarp.CurrentRateIndex + 1, vessel.Orbit.Body.Body))
                 return;
             warpIncreaseAttemptTime = Planetarium.GetUniversalTime ();
             TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
