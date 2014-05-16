@@ -21,6 +21,7 @@ namespace KRPCSpaceCenter.Services
                 foreach (var vessel in FlightGlobals.Vessels) {
                     if (vessel.vesselType == global::VesselType.EVA ||
                         vessel.vesselType == global::VesselType.Flag ||
+                        vessel.vesselType == global::VesselType.SpaceObject ||
                         vessel.vesselType == global::VesselType.Unknown)
                         continue;
                     vessels.Add (new Vessel (vessel));
