@@ -11,11 +11,11 @@ class TestClient(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe'])
+        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe', '50001'])
         time.sleep(0.25)
 
     def setUp(self):
-        self.ksp = krpc.connect(name='TestClient')
+        self.ksp = krpc.connect(name='TestClient', port=50001)
 
     @classmethod
     def tearDownClass(cls):
