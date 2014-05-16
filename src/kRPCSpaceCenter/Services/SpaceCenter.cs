@@ -49,6 +49,11 @@ namespace KRPCSpaceCenter.Services
             get { return Planetarium.GetUniversalTime (); }
         }
 
+        [KRPCProperty]
+        public static double G {
+            get { return 6.673; }
+        }
+
         [KRPCProcedure]
         public static void WarpTo (double UT, double maxRate = 100000)
         {
