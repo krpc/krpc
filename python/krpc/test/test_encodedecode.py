@@ -26,8 +26,10 @@ class TestEncoder(unittest.TestCase):
         cases = [
             (0.0, '0000000000000000'),
             (-1.0, '000000000000f0bf'),
-            (3.14159265359, 'ea2e4454fb210940')
-            # TODO: test infinities
+            (3.14159265359, 'ea2e4454fb210940'),
+            (float('inf'), '000000000000f07f'),
+            (-float('inf'), '000000000000f0ff'),
+            (float('nan'), '000000000000f87f')
         ]
         self._run_test_encode_value('double', cases)
         self._run_test_decode_value('double', cases)
@@ -36,7 +38,10 @@ class TestEncoder(unittest.TestCase):
         cases = [
             (3.14159265359, 'db0f4940'),
             (-1.0, '000080bf'),
-            (0.0, '00000000')
+            (0.0, '00000000'),
+            (float('inf'), '0000807f'),
+            (-float('inf'), '000080ff'),
+            (float('nan'), '0000c07f')
         ]
         self._run_test_encode_value('float', cases)
         self._run_test_decode_value('float', cases)
