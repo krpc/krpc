@@ -1,6 +1,6 @@
 master
  - Add support for collections (lists, dictionaries and sets)
- - Update to SpaceCenter service:
+ - Updates to SpaceCenter service:
    - Add SpaceCenter.Vessels
    - Add SpaceCenter.G
    - Remove SpaceCenter.Body, replace with SpaceCenter.Bodies
