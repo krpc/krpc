@@ -11,6 +11,7 @@ master
    - Add Orbit.NextOrbit
    - Add Node.Orbit
    - Resources.Names now returns a list of resource names
+   - Add support for abort and 0 action groups
 
 v0.1.2
  - SpaceCenter service:
