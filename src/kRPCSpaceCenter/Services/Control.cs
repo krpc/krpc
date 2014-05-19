@@ -53,6 +53,12 @@ namespace KRPCSpaceCenter.Services
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Brakes)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.Brakes, value); }
         }
+
+        [KRPCProperty]
+        public bool Abort {
+            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Abort)]; }
+            set { vessel.ActionGroups.SetGroup (KSPActionGroup.Abort, value); }
+        }
         // FIXME: what if vessel is not the active vessel?
         [KRPCProperty]
         public float Throttle {
@@ -105,18 +111,24 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public bool GetActionGroup (uint group)
         {
+            if (group > 9)
+                throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
             return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (Utils.GetActionGroup (group))];
         }
 
         [KRPCMethod]
         public void SetActionGroup (uint group, bool state)
         {
+            if (group > 9)
+                throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
             vessel.ActionGroups.SetGroup (Utils.GetActionGroup (group), state);
         }
 
         [KRPCMethod]
         public void ToggleActionGroup (uint group)
         {
+            if (group > 9)
+                throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
             vessel.ActionGroups.ToggleGroup (Utils.GetActionGroup (group));
         }
 

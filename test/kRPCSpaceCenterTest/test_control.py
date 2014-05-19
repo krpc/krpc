@@ -19,19 +19,22 @@ class TestControl(testingtools.TestCase):
 
     def test_basics(self):
         # Check bool properties
-        for name in ['sas', 'rcs', 'gear', 'lights', 'brakes']:
+        for name in ['sas', 'rcs', 'gear', 'lights', 'brakes', 'abort']:
             setattr(self.control, name, True)
             self.assertTrue(getattr(self.control, name))
             setattr(self.control, name, False)
             self.assertFalse(getattr(self.control, name))
         # Action groups
-        for i in [1,2,3,4,5,6,7,8,9]:
+        for i in [0,1,2,3,4,5,6,7,8,9]:
             self.control.set_action_group(i, False)
             self.assertFalse(self.control.get_action_group(i))
             self.control.set_action_group(i, True)
             self.assertTrue(self.control.get_action_group(i))
             self.control.toggle_action_group(i)
             self.assertFalse(self.control.get_action_group(i))
+        self.assertRaises(krpc.client.RPCError, self.control.set_action_group, 11, False)
+        self.assertRaises(krpc.client.RPCError, self.control.get_action_group, 11)
+        self.assertRaises(krpc.client.RPCError, self.control.toggle_action_group, 11)
         # Maneuver node editing
         node = self.control.add_node(self.ksp.space_center.ut + 60, 100, 0, 0)
         self.assertEquals(100, node.prograde)
