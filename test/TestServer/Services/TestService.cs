@@ -1,3 +1,4 @@
+
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -88,7 +89,7 @@ namespace TestServer.Services
         public static TestClass ObjectProperty { get; set; }
 
         [KRPCClass]
-        public class TestClass
+        public class TestClass : KRPC.Utils.Equatable<TestClass>
         {
             string value;
 
@@ -125,6 +126,16 @@ namespace TestServer.Services
             public static string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
             {
                 return x + y + z + anotherParameter;
+            }
+
+            public override bool Equals (TestClass other)
+            {
+                return value == other.value;
+            }
+
+            public override int GetHashCode ()
+            {
+                return value.GetHashCode ();
             }
         }
 

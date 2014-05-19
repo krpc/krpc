@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
@@ -15,7 +16,7 @@ namespace KRPCSpaceCenter.Services
     /// http://forum.kerbalspaceprogram.com/threads/69313-WIP-kRPC-A-language-agnostic-Remote-Procedure-Call-server-for-KSP?p=1021721&viewfull=1#post1021721
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class AutoPilot
+    public sealed class AutoPilot : Equatable<AutoPilot>
     {
         const double DeltaInfluence = 1d;
         const double InertiaInfluence = 1d;
@@ -32,6 +33,16 @@ namespace KRPCSpaceCenter.Services
         internal AutoPilot (global::Vessel vessel)
         {
             this.vessel = vessel;
+        }
+
+        public override bool Equals (AutoPilot other)
+        {
+            return vessel == other.vessel;
+        }
+
+        public override int GetHashCode ()
+        {
+            return vessel.GetHashCode ();
         }
 
         [KRPCMethod]

@@ -5,6 +5,7 @@ using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
 {
+    //FIXME: need to perform memory management for node objects
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Node
     {

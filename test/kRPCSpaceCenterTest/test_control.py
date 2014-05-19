@@ -14,6 +14,9 @@ class TestControl(testingtools.TestCase):
         self.control = self.vessel.control
         self.orbital_flight = self.vessel.flight(ref.orbital)
 
+    def test_equality(self):
+        self.assertEqual(self.vessel.control, self.control)
+
     def test_basics(self):
         # Check bool properties
         for name in ['sas', 'rcs', 'gear', 'lights', 'brakes', 'abort']:

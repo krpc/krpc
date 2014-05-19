@@ -9,6 +9,9 @@ class TestResources(testingtools.TestCase):
         load_save('resources')
         ksp = krpc.connect()
         r = ksp.space_center.active_vessel.resources
+
+        self.assertEqual(ksp.space_center.active_vessel.resources, r)
+
         self.assertEqual(set(['ElectricCharge', 'MonoPropellant', 'LiquidFuel', 'Oxidizer', 'SolidFuel']), set(r.names))
 
         expected = {

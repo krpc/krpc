@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class CelestialBody
+    public sealed class CelestialBody : Equatable<CelestialBody>
     {
         Orbit orbit;
 
@@ -17,6 +18,16 @@ namespace KRPCSpaceCenter.Services
         }
 
         internal global::CelestialBody Body { get; private set; }
+
+        public override bool Equals (CelestialBody other)
+        {
+            return Body == other.Body;
+        }
+
+        public override int GetHashCode ()
+        {
+            return Body.GetHashCode ();
+        }
 
         [KRPCProperty]
         public string Name {
