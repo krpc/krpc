@@ -11,10 +11,14 @@ class TestFlight(testingtools.TestCase):
     def setUp(self):
         load_save('flight')
         self.ksp = krpc.connect()
-        ref = self.ksp.space_center.ReferenceFrame
+        self.ref = self.ksp.space_center.ReferenceFrame
         self.vessel = self.ksp.space_center.active_vessel
-        self.surface_flight = self.vessel.flight(ref.surface)
-        self.orbital_flight = self.vessel.flight(ref.orbital)
+        self.surface_flight = self.vessel.flight(self.ref.surface)
+        self.orbital_flight = self.vessel.flight(self.ref.orbital)
+
+    def test_equality(self):
+        self.assertEqual(self.vessel.flight(self.ref.surface), self.surface_flight)
+        self.assertEqual(self.vessel.flight(self.ref.orbital), self.orbital_flight)
 
     def check_orbital_vectors(self, flight):
         # Check orbital direction vectors

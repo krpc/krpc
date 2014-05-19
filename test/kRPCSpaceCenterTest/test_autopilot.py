@@ -15,6 +15,9 @@ class TestAutoPilot(testingtools.TestCase):
         self.ref = self.ksp.space_center.ReferenceFrame
         self.ap = self.vessel.auto_pilot
 
+    def test_equality(self):
+        self.assertEqual(self.vessel.auto_pilot, self.ap)
+
     def test_basic_rotation(self):
         pitch = 10
         yaw = 20

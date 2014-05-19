@@ -19,6 +19,10 @@ class TestBody(testingtools.TestCase):
         duna = bodies['Duna']
         ike = bodies['Ike']
 
+        bodies2 = ksp.space_center.bodies
+        for key,body in bodies.items():
+            self.assertEqual(bodies2[key], body)
+
         self.assertEqual('Kerbin', kerbin.name)
         self.assertClose(5.2915e22, kerbin.mass, error=0.0001e22)
         self.assertClose(3.5316e12, kerbin.gravitational_parameter, error=0.0001e12)
