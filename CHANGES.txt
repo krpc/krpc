@@ -12,6 +12,10 @@ master
    - Add Node.Orbit
    - Resources.Names now returns a list of resource names
    - Add support for abort and 0 action groups
+   - Rename Flight.Altitude to Flight.TrueAltitude
+   - Rename Flight.TrueAltitude to Flight.AbsoluteAltitude
+   - Add Flight.SurfaceAltitude
+   - Add Flight.Elevation
 
 v0.1.2
  - SpaceCenter service:
