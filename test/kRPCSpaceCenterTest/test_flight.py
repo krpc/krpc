@@ -8,13 +8,14 @@ from mathtools import rad2deg, norm, dot, vector
 
 class TestFlight(testingtools.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         load_save('flight')
-        self.ksp = krpc.connect()
-        self.ref = self.ksp.space_center.ReferenceFrame
-        self.vessel = self.ksp.space_center.active_vessel
-        self.surface_flight = self.vessel.flight(self.ref.surface)
-        self.orbital_flight = self.vessel.flight(self.ref.orbital)
+        cls.conn = krpc.connect()
+        cls.ref = cls.conn.space_center.ReferenceFrame
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.surface_flight = cls.vessel.flight(cls.ref.surface)
+        cls.orbital_flight = cls.vessel.flight(cls.ref.orbital)
 
     def test_equality(self):
         self.assertEqual(self.vessel.flight(self.ref.surface), self.surface_flight)
@@ -44,7 +45,7 @@ class TestFlight(testingtools.TestCase):
     def test_orbital_flight(self):
         self.assertClose(0, self.orbital_flight.g_force)
         self.assertClose(100000, self.orbital_flight.altitude, error=10)
-        self.assertClose(100920, self.orbital_flight.true_altitude, error=20)
+        self.assertClose(100940, self.orbital_flight.true_altitude, error=20)
         self.assertClose([-2246.1, 0, 0], vector(self.orbital_flight.velocity), error=0.5)
         self.assertClose(2246.1, self.orbital_flight.speed, error=0.5)
         self.assertClose(2246.1, self.orbital_flight.horizontal_speed, error=0.5)
@@ -61,7 +62,7 @@ class TestFlight(testingtools.TestCase):
     def test_surface_flight(self):
         self.assertClose(0, self.orbital_flight.g_force)
         self.assertClose(100000, self.surface_flight.altitude, error=10)
-        self.assertClose(100920, self.surface_flight.true_altitude, error=20)
+        self.assertClose(100940, self.surface_flight.true_altitude, error=20)
         self.assertClose([-2042.5, 0, 0], vector(self.surface_flight.velocity), error=0.5)
         self.assertClose(2042.5, self.surface_flight.speed, error=0.5)
         self.assertClose(2042.5, self.surface_flight.horizontal_speed, error=0.5)

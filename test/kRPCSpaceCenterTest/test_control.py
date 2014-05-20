@@ -6,25 +6,25 @@ import time
 
 class TestControl(testingtools.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         load_save('flight')
-        self.ksp = krpc.connect()
-        ref = self.ksp.space_center.ReferenceFrame
-        self.vessel = self.ksp.space_center.active_vessel
-        self.control = self.vessel.control
-        self.orbital_flight = self.vessel.flight(ref.orbital)
+        cls.conn = krpc.connect()
+        cls.control = cls.conn.space_center.active_vessel.control
+        vessel = cls.conn.space_center.active_vessel
+        cls.orbital_flight = vessel.flight(cls.conn.space_center.ReferenceFrame.orbital)
 
     def test_equality(self):
-        self.assertEqual(self.vessel.control, self.control)
+        self.assertEqual(self.conn.space_center.active_vessel.control, self.control)
 
-    def test_basics(self):
-        # Check bool properties
+    def test_special_action_groups(self):
         for name in ['sas', 'rcs', 'gear', 'lights', 'brakes', 'abort']:
             setattr(self.control, name, True)
             self.assertTrue(getattr(self.control, name))
             setattr(self.control, name, False)
             self.assertFalse(getattr(self.control, name))
-        # Action groups
+
+    def test_numeric_action_groups(self):
         for i in [0,1,2,3,4,5,6,7,8,9]:
             self.control.set_action_group(i, False)
             self.assertFalse(self.control.get_action_group(i))
@@ -35,12 +35,15 @@ class TestControl(testingtools.TestCase):
         self.assertRaises(krpc.client.RPCError, self.control.set_action_group, 11, False)
         self.assertRaises(krpc.client.RPCError, self.control.get_action_group, 11)
         self.assertRaises(krpc.client.RPCError, self.control.toggle_action_group, 11)
-        # Maneuver node editing
-        node = self.control.add_node(self.ksp.space_center.ut + 60, 100, 0, 0)
+
+    def test_maneuver_node_editing(self):
+        node = self.control.add_node(self.conn.space_center.ut + 60, 100, 0, 0)
         self.assertEquals(100, node.prograde)
         self.control.remove_nodes()
 
     def test_pitch_control(self):
+        self.setUpClass()
+
         self.control.sas = False
         self.control.pitch = 1
         time.sleep(3)
@@ -53,6 +56,8 @@ class TestControl(testingtools.TestCase):
         self.assertGreater(diff, 0)
 
     def test_yaw_control(self):
+        self.setUpClass()
+
         self.control.sas = False
         self.control.yaw = 1
         time.sleep(3)
@@ -65,6 +70,8 @@ class TestControl(testingtools.TestCase):
         self.assertGreater(diff, 0)
 
     def test_roll_control(self):
+        self.setUpClass()
+
         pitch = self.orbital_flight.pitch
         heading = self.orbital_flight.heading
 

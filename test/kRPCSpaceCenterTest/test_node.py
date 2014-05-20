@@ -6,6 +6,13 @@ import krpc
 
 class TestNode(testingtools.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        load_save('orbit-kerbin')
+        cls.conn = krpc.connect()
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.control = cls.vessel.control
+
     def check(self, node, v):
         self.assertEqual(v[0], node.prograde)
         self.assertEqual(v[1], node.normal)
@@ -14,74 +21,75 @@ class TestNode(testingtools.TestCase):
         self.assertEqual(norm(v), node.delta_v)
         self.assertEqual(normalize(v), vector(node.direction))
 
-    def test_basic(self):
-        load_save('orbit-kerbin')
-        ksp = krpc.connect()
-        vessel = ksp.space_center.active_vessel
-        control = vessel.control
-
-        # Test creation
-        start_ut = ksp.space_center.ut
+    def test_add_node(self):
+        start_ut = self.conn.space_center.ut
         ut = start_ut + 60
         v0 = [100,200,-350]
-        node = control.add_node(ut, *v0)
+        node = self.control.add_node(ut, *v0)
         self.assertClose(ut, node.ut, error=1)
         self.assertClose(ut - start_ut, node.time_to, error=1)
         self.check(node, v0)
+        node.remove()
 
-        # Test setters
-        v2 = [-50,500,-150]
-        ut2 = ut + 500
-        node.ut = ut2
-        node.prograde = v2[0]
-        node.normal = v2[1]
-        node.radial = v2[2]
-        self.assertClose(ut2, node.ut, error=1)
-        self.assertClose(ut2 - start_ut, node.time_to, error=1)
-        self.check(node, v2)
-
-        # Test set magnitude
-        magnitude = 128
-        v3 = [x*magnitude for x in vector(node.direction)]
-        node.delta_v = magnitude
-        self.check(node, v3)
-
-        # Test set direction
-        magnitude = node.delta_v
-        direction = normalize([2,1,-0.5])
-        v4 = [x*magnitude for x in direction]
-        node.direction = to_vector(direction)
-        self.check(node, v4)
-
-        # Remove node
+    def test_remove_node(self):
+        node = self.control.add_node(self.conn.space_center.ut, 0, 0, 0)
         node.remove()
         with self.assertRaises (krpc.client.RPCError):
             node.prograde = 0
 
-        # Remove nodes
-        node = control.add_node(ut, *v0)
-        control.remove_nodes()
+    def test_remove_nodes(self):
+        node0 = self.control.add_node(self.conn.space_center.ut+15, 4, -2, 1)
+        node1 = self.control.add_node(self.conn.space_center.ut+40, 1, 3, 2)
+        node2 = self.control.add_node(self.conn.space_center.ut+60, 0, 4, 0)
+        self.control.remove_nodes()
         # TODO: don't skip the following
         #with self.assertRaises (krpc.client.RPCError):
         #    node.prograde = 0
 
-    def test_orbit(self):
-        load_save('orbit-kerbin')
-        ksp = krpc.connect()
-        vessel = ksp.space_center.active_vessel
-        control = vessel.control
+    def test_setters(self):
+        start_ut = self.conn.space_center.ut
+        ut = start_ut + 60
+        node = self.control.add_node(ut, 0, 0, 0)
+        v = [-50,500,-150]
+        ut2 = ut + 500
+        node.ut = ut2
+        node.prograde = v[0]
+        node.normal = v[1]
+        node.radial = v[2]
+        self.assertClose(ut2, node.ut, error=1)
+        self.assertClose(ut2 - start_ut, node.time_to, error=1)
+        self.check(node, v)
+        node.remove()
 
-        start_ut = ksp.space_center.ut
+    def test_set_magnitude(self):
+        node = self.control.add_node(self.conn.space_center.ut, 1, -2, 3)
+        magnitude = 128
+        v = [x*magnitude for x in vector(node.direction)]
+        node.delta_v = magnitude
+        self.check(node, v)
+        node.remove()
+
+    def test_set_direction(self):
+        node = self.control.add_node(self.conn.space_center.ut, 1, -2, 3)
+        magnitude = node.delta_v
+        direction = normalize([2,1,-0.5])
+        v = [x*magnitude for x in direction]
+        node.direction = to_vector(direction)
+        self.check(node, v)
+        node.remove()
+
+    def test_orbit(self):
+        start_ut = self.conn.space_center.ut
         ut = start_ut + 60
         v = [100,0,0]
-        node = control.add_node(ut, *v)
+        node = self.control.add_node(ut, *v)
         self.check(node, v)
 
-        orbit0 = vessel.orbit
+        orbit0 = self.vessel.orbit
         orbit1 = node.orbit
 
         # Check semi-major axis using vis-viva equation
-        GM = ksp.space_center.bodies['Kerbin'].gravitational_parameter
+        GM = self.conn.space_center.bodies['Kerbin'].gravitational_parameter
         vsq = (orbit0.speed + v[0])**2
         r = orbit0.radius
         self.assertClose (GM / ((2*GM/r) - vsq), orbit1.semi_major_axis, error=0.1)

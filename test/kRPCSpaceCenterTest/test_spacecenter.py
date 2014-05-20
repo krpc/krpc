@@ -4,29 +4,43 @@ import unittest
 import testingtools
 from testingtools import load_save
 import krpc
+import time
 
 class TestBody(testingtools.TestCase):
 
-    def test_basic(self):
+    @classmethod
+    def setUpClass(cls):
         load_save('basic')
-        ksp = krpc.connect()
+        cls.conn = krpc.connect()
 
-        active = ksp.space_center.active_vessel
-        self.assertEqual(ksp.space_center.active_vessel, active)
+    def test_active_vessel(self):
+        active = self.conn.space_center.active_vessel
         self.assertEqual(active.name, 'Test')
+        self.assertEqual(self.conn.space_center.active_vessel, active)
 
-        vessels = ksp.space_center.vessels
+    def test_vessels(self):
+        vessels = self.conn.space_center.vessels
         self.assertEqual(set(['Test']), set(v.name for v in vessels))
-        self.assertEqual(ksp.space_center.vessels, vessels)
+        self.assertEqual(self.conn.space_center.vessels, vessels)
 
+    def test_bodies(self):
         self.assertEqual(set([
             'Sun', 'Moho', 'Eve', 'Gilly', 'Kerbin', 'Mun', 'Minmus',
             'Duna', 'Ike', 'Dres', 'Jool', 'Laythe', 'Vall', 'Tylo',
-            'Bop', 'Pol', 'Eeloo']), set(ksp.space_center.bodies.keys()))
+            'Bop', 'Pol', 'Eeloo']), set(self.conn.space_center.bodies.keys()))
 
-        self.assertClose(290, ksp.space_center.ut, error=5)
+    def test_ut(self):
+        self.assertClose(290, self.conn.space_center.ut, error=5)
+        time.sleep(1)
+        self.assertClose(291, self.conn.space_center.ut, error=5)
 
-        self.assertEqual(6.673, ksp.space_center.g)
+    def test_g(self):
+        self.assertEqual(6.673, self.conn.space_center.g)
+
+    def test_warp_to(self):
+        t = self.conn.space_center.ut + (5*60)
+        self.conn.space_center.warp_to(t)
+        self.assertClose(t, self.conn.space_center.ut, error=2)
 
 if __name__ == "__main__":
     unittest.main()

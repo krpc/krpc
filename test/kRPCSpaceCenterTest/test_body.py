@@ -7,22 +7,19 @@ import krpc
 
 class TestBody(testingtools.TestCase):
 
-    def test_basic(self):
+    @classmethod
+    def setUpClass(cls):
         load_save('basic')
-        ksp = krpc.connect()
-        bodies = ksp.space_center.bodies
+        cls.conn = krpc.connect()
 
-        kerbin = bodies['Kerbin']
-        mun = bodies['Mun']
-        minmus = bodies['Minmus']
-        sun = bodies['Sun']
-        duna = bodies['Duna']
-        ike = bodies['Ike']
-
-        bodies2 = ksp.space_center.bodies
+    def test_equality(self):
+        bodies = self.conn.space_center.bodies
+        bodies2 = self.conn.space_center.bodies
         for key,body in bodies.items():
             self.assertEqual(bodies2[key], body)
 
+    def test_kerbin(self):
+        kerbin = self.conn.space_center.bodies['Kerbin']
         self.assertEqual('Kerbin', kerbin.name)
         self.assertClose(5.2915e22, kerbin.mass, error=0.0001e22)
         self.assertClose(3.5316e12, kerbin.gravitational_parameter, error=0.0001e12)
@@ -37,6 +34,8 @@ class TestBody(testingtools.TestCase):
         self.assertClose(5000, kerbin.atmosphere_scale_height)
         self.assertClose(70000, kerbin.atmosphere_max_altitude)
 
+    def test_mun(self):
+        mun = self.conn.space_center.bodies['Mun']
         self.assertEqual('Mun', mun.name)
         self.assertClose(9.76e20, mun.mass, error=0.0001e20)
         self.assertClose(6.5138e10, mun.gravitational_parameter, error=0.0001e10)
@@ -51,24 +50,39 @@ class TestBody(testingtools.TestCase):
         self.assertClose(0, mun.atmosphere_scale_height)
         self.assertClose(0, mun.atmosphere_max_altitude)
 
+    def test_minmus(self):
+        minmus = self.conn.space_center.bodies['Minmus']
         self.assertEqual('Minmus', minmus.name)
         self.assertClose(4.7e7, minmus.orbit.apoapsis, error=0.0001e7)
         self.assertClose(4.7e7, minmus.orbit.periapsis, error=0.0001e7)
         self.assertClose(6, minmus.orbit.inclination)
-        self.assertEqual(False, mun.has_atmosphere)
+        self.assertEqual(False, minmus.has_atmosphere)
 
+    def test_sun(self):
+        sun = self.conn.space_center.bodies['Sun']
         self.assertEqual('Sun', sun.name)
         self.assertClose(1.7566e28, sun.mass, error=0.0001e28)
         self.assertClose(1.1723e18, sun.gravitational_parameter, error=0.0001e18)
         self.assertClose(2.616e8, sun.equatorial_radius, error=0.0001e8)
         self.assertEqual(float('inf'), sun.sphere_of_influence)
         self.assertEqual(None, sun.orbit)
-        self.assertEqual(False, mun.has_atmosphere)
+        self.assertEqual(False, sun.has_atmosphere)
 
+    def test_duna(self):
+        duna = self.conn.space_center.bodies['Duna']
         self.assertEqual(True, duna.has_atmosphere)
         self.assertClose(20265, duna.atmosphere_pressure)
         self.assertClose(3000, duna.atmosphere_scale_height)
         self.assertClose(50000, duna.atmosphere_max_altitude)
+
+    def test_system(self):
+        bodies = self.conn.space_center.bodies
+        kerbin = bodies['Kerbin']
+        mun = bodies['Mun']
+        minmus = bodies['Minmus']
+        sun = bodies['Sun']
+        duna = bodies['Duna']
+        ike = bodies['Ike']
 
         self.assertEqual(kerbin, mun.orbit.body)
         self.assertEqual(kerbin, minmus.orbit.body)
