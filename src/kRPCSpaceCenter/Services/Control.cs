@@ -102,6 +102,12 @@ namespace KRPCSpaceCenter.Services
             set { PilotAddon.Yaw = value; }
         }
 
+        [KRPCProperty]
+        public int Stage
+        {
+            get { throw new NotImplementedException (); }
+        }
+
         [KRPCMethod]
         public void ActivateNextStage ()
         {
