@@ -11,13 +11,15 @@ master
    - Add Orbit.TimeToSOIChange
    - Add Orbit.NextOrbit
    - Add Node.Orbit
-   - Add Control.Stage
+   - Add Control.CurrentStage
    - Resources.Names now returns a list of resource names
    - Add support for abort and 0 action groups
    - Rename Flight.Altitude to Flight.TrueAltitude
    - Rename Flight.TrueAltitude to Flight.AbsoluteAltitude
    - Add Flight.SurfaceAltitude
    - Add Flight.Elevation
+   - Fix bug with Node.Vector returning a vector in the wrong vector space
+   - Improvements to Resources class
 
 v0.1.2
  - SpaceCenter service:
