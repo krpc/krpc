@@ -121,7 +121,9 @@ namespace KRPCSpaceCenter.Services
         public static void Fly (FlightCtrlState state)
         {
             foreach (var autoPilot in engaged) {
-                autoPilot.DoAutoPiloting (state); //FIXME
+                // TODO: make this work for any vessel, not just the active one
+                if (autoPilot.vessel == FlightGlobals.ActiveVessel)
+                    autoPilot.DoAutoPiloting (state);
             }
         }
 
