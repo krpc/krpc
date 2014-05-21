@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
@@ -35,12 +36,10 @@ namespace KRPCSpaceCenter.Services
     public sealed class Vessel : Equatable<Vessel>
     {
         global::Vessel vessel;
-        IDictionary<ReferenceFrame, Flight> flightObjects;
 
         internal Vessel (global::Vessel vessel)
         {
             this.vessel = vessel;
-            flightObjects = new Dictionary<ReferenceFrame, Flight> ();
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
@@ -56,7 +55,6 @@ namespace KRPCSpaceCenter.Services
         {
             return vessel.GetHashCode ();
         }
-
 
         [KRPCProperty]
         public string Name {
@@ -87,9 +85,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public Flight Flight (ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
         {
-            if (!flightObjects.ContainsKey (referenceFrame))
-                flightObjects [referenceFrame] = new Flight (vessel, referenceFrame);
-            return flightObjects [referenceFrame];
+            return new Flight (vessel, referenceFrame);
         }
 
         [KRPCProperty]
