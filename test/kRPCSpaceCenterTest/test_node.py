@@ -19,7 +19,6 @@ class TestNode(testingtools.TestCase):
         self.assertEqual(v[2], node.radial)
         self.assertEqual([0,0,norm(v)], vector(node.vector))
         self.assertEqual(norm(v), node.delta_v)
-        self.assertEqual(normalize(v), vector(node.direction))
 
     def test_add_node(self):
         start_ut = self.conn.space_center.ut
@@ -64,17 +63,9 @@ class TestNode(testingtools.TestCase):
     def test_set_magnitude(self):
         node = self.control.add_node(self.conn.space_center.ut, 1, -2, 3)
         magnitude = 128
-        v = [x*magnitude for x in vector(node.direction)]
         node.delta_v = magnitude
-        self.check(node, v)
-        node.remove()
-
-    def test_set_direction(self):
-        node = self.control.add_node(self.conn.space_center.ut, 1, -2, 3)
-        magnitude = node.delta_v
-        direction = normalize([2,1,-0.5])
-        v = [x*magnitude for x in direction]
-        node.direction = to_vector(direction)
+        v = normalize([1,-2,3]) * magnitude
+        print magnitude * normalize([1,-2,3])
         self.check(node, v)
         node.remove()
 

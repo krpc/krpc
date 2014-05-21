@@ -55,18 +55,6 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Direction {
-            get {
-                var direction = node.DeltaV.normalized;
-                return new Vector3d (direction.z, direction.y, direction.x).ToMessage ();
-            }
-            set {
-                var magnitude = node.DeltaV.magnitude;
-                node.OnGizmoUpdated (new Vector3d (value.Z * magnitude, value.Y * magnitude, value.X * magnitude), node.UT);
-            }
-        }
-
-        [KRPCProperty]
         public double DeltaV {
             get { return node.DeltaV.magnitude; }
             set {
