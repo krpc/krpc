@@ -27,6 +27,15 @@ class TestVessel(testingtools.TestCase):
     def test_situation(self):
         self.assertEqual(self.vsituation.orbiting, self.vessel.situation)
 
+    def test_root_part(self):
+        root = self.vessel.root_part
+        self.assertEqual('mk1pod', root.name)
+        self.assertEqual(self.vessel, root.vessel)
+
+    def test_parts(self):
+        parts = self.vessel.parts
+        self.assertEqual([self.vessel.root_part], parts)
+
     def test_met(self):
         ut = self.conn.space_center.ut
         met = self.vessel.met
