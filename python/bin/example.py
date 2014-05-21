@@ -46,7 +46,7 @@ def main():
     stage_separated = False
     while True:
 
-        alt = flight.altitude
+        alt = flight.true_altitude
         if alt > turn_start_altitude and alt < turn_end_altitude:
             frac = (alt - turn_start_altitude) / (turn_end_altitude - turn_start_altitude)
             frac *= 12
@@ -90,7 +90,7 @@ def main():
     # Wait until altitude is higher than 79km
     print 'Coasting to apoapsis...'
     while True:
-        altitude = flight.altitude
+        altitude = flight.true_altitude
         print '  Altitude = %.1f km' % (altitude/1000)
         if altitude > 79000:
             break
