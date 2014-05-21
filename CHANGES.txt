@@ -2,8 +2,9 @@ master
  - Add support for collections (lists, dictionaries and sets)
  - Updates to SpaceCenter service:
    - Add SpaceCenter.Vessels
+   - Add SpaceCenter.Bodies
+   - Remove SpaceCenter.Body
    - Add SpaceCenter.G
-   - Remove SpaceCenter.Body, replace with SpaceCenter.Bodies
    - Add CelestialBody.Satellites
    - Add Orbit.Radius
    - Add Orbit.Speed
