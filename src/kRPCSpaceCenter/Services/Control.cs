@@ -103,9 +103,8 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public int Stage
-        {
-            get { throw new NotImplementedException (); }
+        public int CurrentStage {
+            get { return vessel.currentStage; }
         }
 
         [KRPCMethod]

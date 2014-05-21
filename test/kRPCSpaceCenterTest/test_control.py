@@ -89,5 +89,10 @@ class TestControl(testingtools.TestCase):
         diff = self.orbital_flight.roll - roll
         self.assertGreater(diff, 0)
 
+    def test_staging(self):
+        self.assertEqual(1, self.control.current_stage)
+        self.control.activate_next_stage()
+        self.assertEqual(0, self.control.current_stage)
+
 if __name__ == "__main__":
     unittest.main()
