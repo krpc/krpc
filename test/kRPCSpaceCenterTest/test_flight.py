@@ -16,6 +16,7 @@ class TestFlight(testingtools.TestCase):
         cls.vessel = cls.conn.space_center.active_vessel
         cls.surface_flight = cls.vessel.flight(cls.ref.surface)
         cls.orbital_flight = cls.vessel.flight(cls.ref.orbital)
+        cls.maneuver_flight = cls.vessel.flight(cls.ref.maneuver)
 
     def test_equality(self):
         self.assertEqual(self.vessel.flight(self.ref.surface), self.surface_flight)
@@ -80,7 +81,23 @@ class TestFlight(testingtools.TestCase):
         self.check_speeds(self.surface_flight)
         self.check_orbital_vectors(self.surface_flight)
 
-    def check_directions(self, flight):
+    def test_maneuver_flight(self):
+        # Create a node with burn vector pointing north
+        # and check that orbital flight vectors
+        node = self.vessel.control.add_node(self.conn.space_center.ut, 100, 0, 0)
+        self.assertClose([ 0, 0, 100], vector(node.vector))
+        self.assertClose([ 0, 0, 1], vector(self.maneuver_flight.prograde), error=0.01)
+        self.assertClose([ 0, 0, -1], vector(self.maneuver_flight.retrograde), error=0.01)
+        self.assertClose([ 0,-1, 0], vector(self.maneuver_flight.radial), error=0.01)
+        self.assertClose([ 0, 1, 0], vector(self.maneuver_flight.radial_neg), error=0.01)
+        self.assertClose([ 1, 0, 0], vector(self.maneuver_flight.normal), error=0.01)
+        self.assertClose([-1, 0, 0], vector(self.maneuver_flight.normal_neg), error=0.01)
+
+        self.check_directions(self.maneuver_flight, check_against_orbital=False)
+        self.check_speeds(self.maneuver_flight)
+        self.check_orbital_vectors(self.maneuver_flight)
+
+    def check_directions(self, flight, check_against_orbital=True):
         direction       = vector(flight.direction)
         up_direction    = vector(flight.up_direction)
         north_direction = vector(flight.north_direction)
@@ -99,10 +116,11 @@ class TestFlight(testingtools.TestCase):
         north_component = north_component / norm(north_component)
         self.assertClose(flight.heading, rad2deg(math.acos(dot(north_component, north_direction))), error=1)
 
-        # Check vessel directions agree with orbital directions
-        # (we are in a 0 degree inclined orbit, so they should do)
-        self.assertClose(1, dot(up_direction, vector(flight.radial)))
-        self.assertClose(1, dot(north_direction, vector(flight.normal)))
+        if check_against_orbital == True:
+            # Check vessel directions agree with orbital directions
+            # (we are in a 0 degree inclined orbit, so they should do)
+            self.assertClose(1, dot(up_direction, vector(flight.radial)))
+            self.assertClose(1, dot(north_direction, vector(flight.normal)))
 
     def check_speeds(self, flight):
         up_direction = vector(flight.up_direction)

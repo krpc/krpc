@@ -17,7 +17,7 @@ class TestNode(testingtools.TestCase):
         self.assertEqual(v[0], node.prograde)
         self.assertEqual(v[1], node.normal)
         self.assertEqual(v[2], node.radial)
-        self.assertEqual(v, vector(node.vector))
+        self.assertEqual([0,0,norm(v)], vector(node.vector))
         self.assertEqual(norm(v), node.delta_v)
         self.assertEqual(normalize(v), vector(node.direction))
 

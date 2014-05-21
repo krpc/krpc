@@ -51,19 +51,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public KRPC.Schema.Geometry.Vector3 Vector {
-            get {
-                return Vector3.CreateBuilder ()
-                    .SetX (Prograde)
-                    .SetY (Normal)
-                    .SetZ (Radial)
-                    .Build ();
-            }
-            set {
-                node.DeltaV.x = value.Z;
-                node.DeltaV.y = value.Y;
-                node.DeltaV.z = value.X;
-                node.OnGizmoUpdated (node.DeltaV, node.UT);
-            }
+            get { return Vector3.CreateBuilder ().SetX (0).SetY (0).SetZ (DeltaV).Build (); }
         }
 
         [KRPCProperty]
