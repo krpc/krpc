@@ -20,7 +20,7 @@ def norm(v):
 
 def normalize(v):
     m = norm(v)
-    return [x/m for x in v]
+    return vector([x/m for x in v])
 
 def dot(u,v):
     return sum(x*y for x,y in itertools.izip(u,v))
