@@ -35,7 +35,7 @@ class TestBody(testingtools.TestCase):
         self.assertClose(291, self.conn.space_center.ut, error=5)
 
     def test_g(self):
-        self.assertEqual(6.673, self.conn.space_center.g)
+        self.assertEqual(6.673e-11, self.conn.space_center.g)
 
     def test_warp_to(self):
         t = self.conn.space_center.ut + (5*60)

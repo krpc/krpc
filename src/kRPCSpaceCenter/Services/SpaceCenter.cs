@@ -47,7 +47,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public static double G {
-            get { return 6.673; }
+            get { return 6.673e-11; }
         }
 
         [KRPCProcedure]
