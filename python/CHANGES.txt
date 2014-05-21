@@ -1,5 +1,5 @@
 v0.1.3
- - Fix bug with encoding/decoding of Convert parameter names to snake_case
+ - Fix bug with encoding/decoding of infinities and NaNs
 
 v0.1.2
  - Convert parameter names to snake_case
