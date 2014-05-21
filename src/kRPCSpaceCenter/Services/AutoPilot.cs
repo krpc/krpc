@@ -171,7 +171,7 @@ namespace KRPCSpaceCenter.Services
             float pitchYaw = 0;
             float roll = 0;
 
-            foreach (Part part in vessel.parts) {
+            foreach (global::Part part in vessel.parts) {
                 var relCoM = part.Rigidbody.worldCenterOfMass - CoM;
 
                 if (part is CommandPod) {
@@ -189,7 +189,7 @@ namespace KRPCSpaceCenter.Services
                     pitchYaw += max * relCoM.magnitude;
                 }
 
-                foreach (PartModule module in part.Modules) {
+                foreach (global::PartModule module in part.Modules) {
                     if (module is ModuleReactionWheel) {
                         pitchYaw += ((ModuleReactionWheel)module).PitchTorque;
                         roll += ((ModuleReactionWheel)module).RollTorque;
@@ -205,7 +205,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         // Calculate the amount of torque that can be provided by an engine
         /// </summary>
-        double GetThrustTorque (Part p)
+        double GetThrustTorque (global::Part p)
         {
             var CoM = vessel.CoM;
             if (p.State == PartStates.ACTIVE) {

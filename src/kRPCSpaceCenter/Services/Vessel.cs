@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
@@ -109,5 +110,21 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Resources Resources { get; private set; }
+
+        [KRPCProperty]
+        public Part RootPart {
+            get { return new Part (vessel.rootPart); }
+        }
+
+        [KRPCProperty]
+        public Part ControllingPart {
+            get { throw new NotImplementedException (); }
+            set { throw new NotImplementedException (); }
+        }
+
+        [KRPCProperty]
+        public IList<Part> Parts {
+            get { return vessel.parts.Select (x => new Part (x)).ToList (); }
+        }
     }
 }

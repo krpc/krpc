@@ -12,6 +12,7 @@ master
    - Add Node.Orbit
    - Resources.Names now returns a list of resource names
    - Add support for abort and 0 action groups
+   - Add Part and PartModule
 
 v0.1.2
  - SpaceCenter service:

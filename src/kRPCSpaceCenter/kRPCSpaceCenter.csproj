@@ -60,6 +60,7 @@
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\Orbit.cs" />
     <Compile Include="Services\Vessel.cs" />
+    <Compile Include="Services\Part.cs" />
     <Compile Include="Services\Resources.cs" />
     <Compile Include="Services\CelestialBody.cs" />
     <Compile Include="Services\Node.cs" />
@@ -71,6 +72,8 @@
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
+    <Compile Include="ExtensionMethods\PartStateExtensions.cs" />
+    <Compile Include="Services\PartModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
