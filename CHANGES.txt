@@ -11,6 +11,7 @@ master
    - Add Orbit.TimeToSOIChange
    - Add Orbit.NextOrbit
    - Add Node.Orbit
+   - Add Control.Stage
    - Resources.Names now returns a list of resource names
    - Add support for abort and 0 action groups
    - Rename Flight.Altitude to Flight.TrueAltitude

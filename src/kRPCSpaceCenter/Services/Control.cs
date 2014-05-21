@@ -102,6 +102,11 @@ namespace KRPCSpaceCenter.Services
             set { PilotAddon.Yaw = value; }
         }
 
+        [KRPCProperty]
+        public int CurrentStage {
+            get { return vessel.currentStage; }
+        }
+
         [KRPCMethod]
         public void ActivateNextStage ()
         {
