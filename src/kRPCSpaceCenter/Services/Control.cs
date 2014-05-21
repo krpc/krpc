@@ -104,7 +104,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public int CurrentStage {
-            get { return vessel.currentStage; }
+            get { return Staging.CurrentStage; }
         }
 
         [KRPCMethod]

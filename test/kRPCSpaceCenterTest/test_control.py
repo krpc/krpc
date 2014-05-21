@@ -8,7 +8,7 @@ class TestControl(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        load_save('flight')
+        load_save('control')
         cls.conn = krpc.connect()
         cls.control = cls.conn.space_center.active_vessel.control
         vessel = cls.conn.space_center.active_vessel
@@ -89,8 +89,18 @@ class TestControl(testingtools.TestCase):
         diff = self.orbital_flight.roll - roll
         self.assertGreater(diff, 0)
 
-    def test_staging(self):
+    def test_staging_single(self):
+        self.assertEqual(3, self.control.current_stage)
+        time.sleep(0.5)
+        self.control.activate_next_stage()
+        self.assertEqual(2, self.control.current_stage)
+        time.sleep(0.5)
+        self.control.activate_next_stage()
         self.assertEqual(1, self.control.current_stage)
+        time.sleep(0.5)
+        self.control.activate_next_stage()
+        self.assertEqual(0, self.control.current_stage)
+        time.sleep(0.5)
         self.control.activate_next_stage()
         self.assertEqual(0, self.control.current_stage)
 
