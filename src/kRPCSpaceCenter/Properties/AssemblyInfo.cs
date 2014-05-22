@@ -8,4 +8,4 @@ using System.Reflection;
 [assembly: AssemblyCopyright ("djungelorm")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
-[assembly: AssemblyVersion ("0.1.2")]
+[assembly: AssemblyVersion ("0.1.3")]
