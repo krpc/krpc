@@ -31,6 +31,7 @@ class TestBody(testingtools.TestCase):
         self.assertClose(1.36e10, kerbin.orbit.periapsis, error=0.0001e10)
         self.assertEqual(True, kerbin.has_atmosphere)
         self.assertClose(101325, kerbin.atmosphere_pressure)
+        self.assertClose(1.0 * 1.2230948554874, kerbin.atmosphere_density)
         self.assertClose(5000, kerbin.atmosphere_scale_height)
         self.assertClose(70000, kerbin.atmosphere_max_altitude)
 
@@ -47,6 +48,7 @@ class TestBody(testingtools.TestCase):
         self.assertClose(1.2e7, mun.orbit.periapsis, error=0.0001e7)
         self.assertEqual(False, mun.has_atmosphere)
         self.assertClose(0, mun.atmosphere_pressure)
+        self.assertClose(0, mun.atmosphere_density)
         self.assertClose(0, mun.atmosphere_scale_height)
         self.assertClose(0, mun.atmosphere_max_altitude)
 
@@ -72,6 +74,7 @@ class TestBody(testingtools.TestCase):
         duna = self.conn.space_center.bodies['Duna']
         self.assertEqual(True, duna.has_atmosphere)
         self.assertClose(20265, duna.atmosphere_pressure)
+        self.assertClose(0.2 * 1.2230948554874, duna.atmosphere_density)
         self.assertClose(3000, duna.atmosphere_scale_height)
         self.assertClose(50000, duna.atmosphere_max_altitude)
 

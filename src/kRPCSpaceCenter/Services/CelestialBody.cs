@@ -92,6 +92,11 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double AtmosphereDensity {
+            get { return HasAtmosphere ? Body.atmosphereMultiplier * 1.2230948554874d : 0d; }
+        }
+
+        [KRPCProperty]
         public double AtmosphereScaleHeight {
             get { return HasAtmosphere ? Body.atmosphereScaleHeight * 1000 : 0d; }
         }
