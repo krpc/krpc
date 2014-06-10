@@ -45,6 +45,17 @@ class TestNode(testingtools.TestCase):
         #with self.assertRaises (krpc.client.RPCError):
         #    node.prograde = 0
 
+    def test_get_nodes(self):
+        self.assertEquals([], self.control.nodes)
+        node0 = self.control.add_node(self.conn.space_center.ut+35, 4, -2, 1)
+        self.assertEquals([node0], self.control.nodes)
+        node1 = self.control.add_node(self.conn.space_center.ut+15, 1, 3, 2)
+        self.assertEquals([node1, node0], self.control.nodes)
+        node2 = self.control.add_node(self.conn.space_center.ut+60, 0, 4, 0)
+        self.assertEquals([node1, node0, node2], self.control.nodes)
+        self.control.remove_nodes()
+        self.assertEquals([], self.control.nodes)
+
     def test_setters(self):
         start_ut = self.conn.space_center.ut
         ut = start_ut + 60

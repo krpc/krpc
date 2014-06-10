@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -141,6 +143,13 @@ namespace KRPCSpaceCenter.Services
         public Node AddNode (double UT, double prograde = 0, double normal = 0, double radial = 0)
         {
             return new Node (vessel, UT, prograde, normal, radial);
+        }
+
+        [KRPCProperty]
+        public IList<Node> Nodes {
+            get {
+                return vessel.patchedConicSolver.maneuverNodes.Select ((x) => new Node (x)).ToList ();
+            }
         }
 
         [KRPCMethod]

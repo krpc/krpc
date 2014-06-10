@@ -22,6 +22,11 @@ namespace KRPCSpaceCenter.Services
             node.OnGizmoUpdated (new Vector3d (radial, normal, prograde), UT);
         }
 
+        internal Node (ManeuverNode node)
+        {
+            this.node = node;
+        }
+
         [KRPCProperty]
         public double Prograde {
             get { return node.DeltaV.z; }
