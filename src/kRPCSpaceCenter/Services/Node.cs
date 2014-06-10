@@ -1,13 +1,14 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPC.Schema.Geometry;
+using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
 {
     //FIXME: need to perform memory management for node objects
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Node
+    public sealed class Node : Equatable<Node>
     {
         /// Note: Maneuver node delta-v vectors use a special coordinate system.
         /// The z-component is the prograde component.
@@ -25,6 +26,17 @@ namespace KRPCSpaceCenter.Services
         internal Node (ManeuverNode node)
         {
             this.node = node;
+        }
+
+        public override bool Equals (Node other)
+        {
+            return node == other.node;
+        }
+
+        public override int GetHashCode ()
+        {
+            //TODO: node should not be null, but Remove could set it as null
+            return node == null ? 0 : node.GetHashCode ();
         }
 
         [KRPCProperty]
