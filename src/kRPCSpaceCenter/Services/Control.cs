@@ -148,7 +148,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public IList<Node> Nodes {
             get {
-                return vessel.patchedConicSolver.maneuverNodes.Select ((x) => new Node (x)).ToList ();
+                return vessel.patchedConicSolver.maneuverNodes.Select ((x) => new Node (x)).OrderBy (x => x.UT).ToList ();
             }
         }
 
