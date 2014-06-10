@@ -76,7 +76,6 @@ class TestNode(testingtools.TestCase):
         magnitude = 128
         node.delta_v = magnitude
         v = normalize([1,-2,3]) * magnitude
-        print magnitude * normalize([1,-2,3])
         self.check(node, v)
         node.remove()
 
