@@ -148,6 +148,7 @@ $(CSHARP_LIBRARIES):
 # Cog
 cog:
 	-python -m cogapp -D nargs=10 -r src/kRPC/Continuations/ParameterizedContinuation.cs
+	-python -m cogapp -D nargs=8 -r src/kRPC/Utils/Tuple.cs
 
 # Protocol Buffers
 .PHONY: protobuf-csharp protobuf-python protobuf-clean protobuf-csharp-clean protobuf-python-clean
