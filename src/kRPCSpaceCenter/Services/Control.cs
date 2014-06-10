@@ -138,7 +138,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public Node AddNode (ulong UT, double prograde = 0, double normal = 0, double radial = 0)
+        public Node AddNode (double UT, double prograde = 0, double normal = 0, double radial = 0)
         {
             return new Node (vessel, UT, prograde, normal, radial);
         }
