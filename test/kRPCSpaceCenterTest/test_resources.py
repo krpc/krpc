@@ -11,6 +11,13 @@ class TestResources(testingtools.TestCase):
         cls.conn = krpc.connect()
         cls.r = cls.conn.space_center.active_vessel.resources
 
+    density = {
+        'MonoPropellant': 4,
+        'LiquidFuel':     5,
+        'Oxidizer':       5,
+        'SolidFuel':      7.5
+    }
+
     expected = {
         0: {
             'ElectricCharge': (150, 150),
@@ -77,6 +84,15 @@ class TestResources(testingtools.TestCase):
             expected_max = sum(self.expected[stage][name][1] for stage in range(4))
             self.assertClose(expected_amount, self.r.amount(str(name)), error=0.5)
             self.assertClose(expected_max, self.r.max(str(name)), error=0.5)
+
+    def test_vessel_mass(self):
+        mass = self.conn.space_center.active_vessel.dry_mass
+        self.assertEquals(29945, mass)
+        for name in self.r.names:
+            amount = sum(self.expected[stage][name][0] for stage in range(4))
+            if name in self.density:
+                mass += amount * self.density[name]
+        self.assertEquals(mass, self.conn.space_center.active_vessel.mass)
 
 if __name__ == "__main__":
     unittest.main()
