@@ -4,6 +4,7 @@ from krpc.encoder import _Encoder
 from krpc.decoder import _Decoder
 from krpc.attributes import _Attributes
 import krpc.schema.KRPC
+import threading
 
 
 BUFFER_SIZE = 8*1024*1024
@@ -39,6 +40,7 @@ class Client(object):
 
     def __init__(self, connection):
         self._connection = connection
+        self._connection_lock = threading.Lock()
         self._types = _Types()
         self._request_type = self._types.as_type('KRPC.Request')
         self._response_type = self._types.as_type('KRPC.Response')
@@ -122,10 +124,12 @@ class Client(object):
     def _send_request(self, request):
         """ Send a KRPC.Request object to the server """
         data = _Encoder.encode_delimited(request, self._request_type)
-        self._connection.send(data)
+        with self._connection_lock:
+            self._connection.send(data)
 
     def _receive_response(self):
         """ Receive data from the server and decode it into a KRPC.Response object """
         # FIXME: we might not receive all of the data in one go
-        data = self._connection.recv(BUFFER_SIZE)
+        with self._connection_lock:
+            data = self._connection.recv(BUFFER_SIZE)
         return _Decoder.decode_delimited(data, self._response_type)
