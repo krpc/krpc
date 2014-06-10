@@ -46,19 +46,19 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Returns the total mass of the part and any resources it contains.
+        /// Returns the total mass of the part and any resources it contains, in kg.
         /// <summary>
         public static float TotalMass (this Part part)
         {
-            return part.mass + part.GetResourceMass ();
+            return (part.mass + part.GetResourceMass ()) * 1000;
         }
 
         /// <summary>
-        /// Returns the total mass of the part, excluding any resources it contains.
+        /// Returns the total mass of the part, excluding any resources it contains, in kg.
         /// <summary>
         public static float DryMass (this Part part)
         {
-            return part.mass;
+            return part.mass * 1000;
         }
     }
 }
