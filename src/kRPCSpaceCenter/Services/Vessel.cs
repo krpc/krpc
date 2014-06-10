@@ -105,5 +105,19 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Resources Resources { get; private set; }
+
+        [KRPCProperty]
+        public double Mass {
+            get {
+                return vessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.TotalMass ()).Sum ();
+            }
+        }
+
+        [KRPCProperty]
+        public double DryMass {
+            get {
+                return vessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.DryMass ()).Sum ();
+            }
+        }
     }
 }

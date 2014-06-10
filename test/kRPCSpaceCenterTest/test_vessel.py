@@ -35,5 +35,14 @@ class TestVessel(testingtools.TestCase):
         self.assertClose(met+1, self.vessel.met, error=0.25)
         self.assertGreater(self.conn.space_center.ut, self.vessel.met)
 
+    def test_mass(self):
+        # 0.8 t dry mass
+        # 10 l of monoprop at 4 kg/l
+        self.assertEqual(0.8 * 1000 + 10 * 4, self.vessel.mass)
+
+    def test_dry_mass(self):
+        # 0.8 t dry mass
+        self.assertEqual(0.8 * 1000, self.vessel.dry_mass)
+
 if __name__ == "__main__":
     unittest.main()
