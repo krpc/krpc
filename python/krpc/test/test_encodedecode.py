@@ -130,7 +130,7 @@ class TestEncoder(unittest.TestCase):
         cases = [
             ([], ''),
             ([1], '0a0101'),
-            ([1,2,3,4], '0a01010a01020a01030a01040a0105')
+            ([1,2,3,4], '0a01010a01020a01030a0104')
         ]
         self._run_test_encode_value('List(int32)', cases)
 
@@ -152,7 +152,7 @@ class TestEncoder(unittest.TestCase):
 
     def test_encode_tuple(self):
         self._run_test_encode_value('Tuple(int32)', [((1,), '0a0101')])
-        self._run_test_encode_value('Tuple(int32,string,float)', [((1,'jeb',1.2), '')])
+        self._run_test_encode_value('Tuple(int32,string,float)', [((1,'jeb',1.2), '0a01010a04036a65620a049a99993f')])
 
 
 if __name__ == '__main__':
