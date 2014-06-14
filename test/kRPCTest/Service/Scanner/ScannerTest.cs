@@ -19,7 +19,7 @@ namespace KRPCTest.Service.Scanner
             foreach (KRPC.Schema.KRPC.Service service in services.Services_List) {
                 if (service.Name == "TestService") {
                     foundServices++;
-                    Assert.AreEqual (36, service.ProceduresCount);
+                    Assert.AreEqual (37, service.ProceduresCount);
                     int foundProcedures = 0;
                     foreach (var method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
@@ -301,7 +301,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("x", method.ParametersList [0].Name);
                             Assert.AreEqual ("string", method.ParametersList [0].Type);
                             Assert.IsTrue (method.ParametersList [0].HasDefaultArgument);
-                            Assert.AreEqual (new byte[] { 0x03, 0x66, 0x6f, 0x6f}, method.ParametersList [0].DefaultArgument);
+                            Assert.AreEqual (new byte[] { 0x03, 0x66, 0x6f, 0x6f }, method.ParametersList [0].DefaultArgument);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
                             foundProcedures++;
@@ -317,8 +317,8 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.ParametersList [0].HasDefaultArgument);
                             Assert.IsTrue (method.ParametersList [1].HasDefaultArgument);
                             Assert.IsTrue (method.ParametersList [2].HasDefaultArgument);
-                            Assert.AreEqual (new byte[] {0x03, 0x6a, 0x65, 0x62}, method.ParametersList [1].DefaultArgument);
-                            Assert.AreEqual (new byte[] {0x2a}, method.ParametersList [2].DefaultArgument);
+                            Assert.AreEqual (new byte[] { 0x03, 0x6a, 0x65, 0x62 }, method.ParametersList [1].DefaultArgument);
+                            Assert.AreEqual (new byte[] { 0x2a }, method.ParametersList [2].DefaultArgument);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
                             foundProcedures++;
@@ -409,6 +409,17 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("ReturnType.Set(int32)", method.AttributesList [1]);
                             foundProcedures++;
                         }
+                        if (method.Name == "EchoTuple") {
+                            Assert.AreEqual (1, method.ParametersCount);
+                            Assert.AreEqual ("t", method.ParametersList [0].Name);
+                            Assert.AreEqual ("KRPC.Tuple", method.ParametersList [0].Type);
+                            Assert.IsTrue (method.HasReturnType);
+                            Assert.AreEqual ("KRPC.Tuple", method.ReturnType);
+                            Assert.AreEqual (2, method.AttributesCount);
+                            Assert.AreEqual ("ParameterType(0).Tuple(int32,bool)", method.AttributesList [0]);
+                            Assert.AreEqual ("ReturnType.Tuple(int32,bool)", method.AttributesList [1]);
+                            foundProcedures++;
+                        }
                         if (method.Name == "EchoNestedCollection") {
                             Assert.AreEqual (1, method.ParametersCount);
                             Assert.AreEqual ("c", method.ParametersList [0].Name);
@@ -432,7 +443,7 @@ namespace KRPCTest.Service.Scanner
                             foundProcedures++;
                         }
                     }
-                    Assert.AreEqual (36, foundProcedures);
+                    Assert.AreEqual (37, foundProcedures);
                     int foundClasses = 0;
                     foreach (var cls in service.ClassesList) {
                         if (cls.Name == "TestClass")

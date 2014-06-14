@@ -1,7 +1,7 @@
 # TODO: avoid using internals
 from google.protobuf.internal import encoder as protobuf_encoder
-from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType
-
+from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
+import itertools
 
 class _Encoder(object):
     """ Routines for encoding messages and values in the protocol buffer serialization format """
@@ -57,6 +57,10 @@ class _Encoder(object):
         elif isinstance(typ, _SetType):
             msg = _Types().as_type('KRPC.Set').python_type()
             msg.items.extend(cls.encode(item, typ.value_type) for item in x)
+            return msg.SerializeToString()
+        elif isinstance(typ, _TupleType):
+            msg = _Types().as_type('KRPC.Tuple').python_type()
+            msg.items.extend(cls.encode(item, value_type) for item,value_type in itertools.izip(x,typ.value_types))
             return msg.SerializeToString()
         else:
             raise RuntimeError ('Cannot encode objects of type ' + str(type(x)))

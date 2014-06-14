@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using KRPC.Service;
+using KRPC.Utils;
 
 namespace KRPCTest.Service
 {
@@ -31,6 +32,10 @@ namespace KRPCTest.Service
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(IList<string>)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(IDictionary<int,string>)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(HashSet<long>)));
+            Assert.IsFalse (TypeUtils.IsAValidType (typeof(System.Tuple<long>)));
+            Assert.IsTrue (TypeUtils.IsAValidType (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.IsTrue (TypeUtils.IsAValidType (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.IsTrue (TypeUtils.IsAValidType (typeof(KRPC.Utils.Tuple<long,int,string>)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(IList<IDictionary<int,string>>)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(IList<TestService.TestClass>)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(IList<TestService.CSharpEnum>)));
@@ -58,6 +63,9 @@ namespace KRPCTest.Service
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(IList<string>)));
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(IDictionary<int,string>)));
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(HashSet<long>)));
+            Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(KRPC.Utils.Tuple<long,int,string>)));
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(IList<IDictionary<int,string>>)));
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(IList<TestService.TestClass>)));
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(IList<TestService.CSharpEnum>)));
@@ -79,6 +87,9 @@ namespace KRPCTest.Service
             Assert.IsFalse (TypeUtils.IsAClassType (typeof(IList<string>)));
             Assert.IsFalse (TypeUtils.IsAClassType (typeof(IDictionary<int,string>)));
             Assert.IsFalse (TypeUtils.IsAClassType (typeof(HashSet<long>)));
+            Assert.IsFalse (TypeUtils.IsAClassType (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.IsFalse (TypeUtils.IsAClassType (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.IsFalse (TypeUtils.IsAClassType (typeof(KRPC.Utils.Tuple<long,int,string>)));
         }
 
         [Test]
@@ -93,6 +104,9 @@ namespace KRPCTest.Service
             Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(IList<string>)));
             Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(IDictionary<int,string>)));
             Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(HashSet<long>)));
+            Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(KRPC.Utils.Tuple<long,int,string>)));
         }
 
         [Test]
@@ -107,6 +121,9 @@ namespace KRPCTest.Service
             Assert.IsTrue (TypeUtils.IsACollectionType (typeof(IList<string>)));
             Assert.IsTrue (TypeUtils.IsACollectionType (typeof(IDictionary<int,string>)));
             Assert.IsTrue (TypeUtils.IsACollectionType (typeof(HashSet<long>)));
+            Assert.IsTrue (TypeUtils.IsACollectionType (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.IsTrue (TypeUtils.IsACollectionType (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.IsTrue (TypeUtils.IsACollectionType (typeof(KRPC.Utils.Tuple<long,int,string>)));
             Assert.IsTrue (TypeUtils.IsACollectionType (typeof(IList<IDictionary<int,string>>)));
             Assert.IsTrue (TypeUtils.IsACollectionType (typeof(IList<TestService.TestClass>)));
             Assert.IsTrue (TypeUtils.IsACollectionType (typeof(IList<TestService.CSharpEnum>)));
@@ -128,6 +145,9 @@ namespace KRPCTest.Service
             Assert.IsTrue (TypeUtils.IsAListCollectionType (typeof(IList<string>)));
             Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(IDictionary<int,string>)));
             Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(HashSet<long>)));
+            Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(KRPC.Utils.Tuple<long,int,string>)));
             Assert.IsTrue (TypeUtils.IsAListCollectionType (typeof(IList<IDictionary<int,string>>)));
             Assert.IsTrue (TypeUtils.IsAListCollectionType (typeof(IList<TestService.TestClass>)));
             Assert.IsTrue (TypeUtils.IsAListCollectionType (typeof(IList<TestService.CSharpEnum>)));
@@ -149,6 +169,9 @@ namespace KRPCTest.Service
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(IList<string>)));
             Assert.IsTrue (TypeUtils.IsADictionaryCollectionType (typeof(IDictionary<int,string>)));
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(HashSet<long>)));
+            Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(KRPC.Utils.Tuple<long,int,string>)));
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(IList<IDictionary<int,string>>)));
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(IList<TestService.TestClass>)));
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(IList<TestService.CSharpEnum>)));
@@ -156,6 +179,30 @@ namespace KRPCTest.Service
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(IDictionary<TestService.TestClass,string>)));
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(IList<TestService.CSharpEnumWithoutAttribute>)));
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(IEnumerable<string>)));
+        }
+
+        [Test]
+        public void IsATupleCollectionType ()
+        {
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(string)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(long)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(TestService.TestClass)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(TestService.CSharpEnum)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(TestService.CSharpEnumWithoutAttribute)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(TestService)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(IList<string>)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(IDictionary<int,string>)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(HashSet<long>)));
+            Assert.IsTrue (TypeUtils.IsATupleCollectionType (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.IsTrue (TypeUtils.IsATupleCollectionType (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.IsTrue (TypeUtils.IsATupleCollectionType (typeof(KRPC.Utils.Tuple<long,int,string>)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(IList<IDictionary<int,string>>)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(IList<TestService.TestClass>)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(IList<TestService.CSharpEnum>)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(IDictionary<double,string>)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(IDictionary<TestService.TestClass,string>)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(IList<TestService.CSharpEnumWithoutAttribute>)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(IEnumerable<string>)));
         }
 
         [Test]
@@ -168,6 +215,9 @@ namespace KRPCTest.Service
             Assert.AreEqual ("KRPC.List", TypeUtils.GetTypeName (typeof(IList<string>)));
             Assert.AreEqual ("KRPC.Dictionary", TypeUtils.GetTypeName (typeof(IDictionary<int,string>)));
             Assert.AreEqual ("KRPC.Set", TypeUtils.GetTypeName (typeof(HashSet<long>)));
+            Assert.AreEqual ("KRPC.Tuple", TypeUtils.GetTypeName (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.AreEqual ("KRPC.Tuple", TypeUtils.GetTypeName (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.AreEqual ("KRPC.Tuple", TypeUtils.GetTypeName (typeof(KRPC.Utils.Tuple<long,int,string>)));
             Assert.AreEqual ("KRPC.List", TypeUtils.GetTypeName (typeof(IList<IDictionary<int,string>>)));
             Assert.AreEqual ("KRPC.List", TypeUtils.GetTypeName (typeof(IList<TestService.TestClass>)));
             Assert.AreEqual ("KRPC.List", TypeUtils.GetTypeName (typeof(IList<TestService.CSharpEnum>)));
@@ -186,6 +236,9 @@ namespace KRPCTest.Service
             Assert.AreEqual ("List(string)", TypeUtils.GetKRPCTypeName (typeof(IList<string>)));
             Assert.AreEqual ("Dictionary(int32,string)", TypeUtils.GetKRPCTypeName (typeof(IDictionary<int,string>)));
             Assert.AreEqual ("Set(int64)", TypeUtils.GetKRPCTypeName (typeof(HashSet<long>)));
+            Assert.AreEqual ("Tuple(int64)", TypeUtils.GetKRPCTypeName (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.AreEqual ("Tuple(int64,int32)", TypeUtils.GetKRPCTypeName (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.AreEqual ("Tuple(int64,int32,string)", TypeUtils.GetKRPCTypeName (typeof(KRPC.Utils.Tuple<long,int,string>)));
             Assert.AreEqual ("List(Dictionary(int32,string))", TypeUtils.GetKRPCTypeName (typeof(IList<IDictionary<int,string>>)));
             Assert.AreEqual ("List(Class(TestService.TestClass))", TypeUtils.GetKRPCTypeName (typeof(IList<TestService.TestClass>)));
             Assert.AreEqual ("List(Enum(TestService.CSharpEnum))", TypeUtils.GetKRPCTypeName (typeof(IList<TestService.CSharpEnum>)));
@@ -205,6 +258,9 @@ namespace KRPCTest.Service
             Assert.AreEqual (new [] { "ParameterType(1).Dictionary(int32,string)" }, TypeUtils.ParameterTypeAttributes (1, typeof(IDictionary<int,string>)));
             Assert.AreEqual (new [] { "ParameterType(2).Set(int64)" }, TypeUtils.ParameterTypeAttributes (2, typeof(HashSet<long>)));
             Assert.AreEqual (new [] { "ParameterType(1).Dictionary(int32,List(Class(TestService.TestClass)))" }, TypeUtils.ParameterTypeAttributes (1, typeof(IDictionary<int,IList<TestService.TestClass>>)));
+            Assert.AreEqual (new [] { "ParameterType(3).Tuple(int64)" }, TypeUtils.ParameterTypeAttributes (3, typeof(KRPC.Utils.Tuple<long>)));
+            Assert.AreEqual (new [] { "ParameterType(3).Tuple(int64,int32)" }, TypeUtils.ParameterTypeAttributes (3, typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.AreEqual (new [] { "ParameterType(3).Tuple(int64,int32,bool)" }, TypeUtils.ParameterTypeAttributes (3, typeof(KRPC.Utils.Tuple<long,int,bool>)));
             Assert.Throws<ArgumentException> (() => TypeUtils.ParameterTypeAttributes (0, typeof(TestService.CSharpEnumWithoutAttribute)));
             Assert.Throws<ArgumentException> (() => TypeUtils.ParameterTypeAttributes (0, typeof(TestService)));
             Assert.Throws<ArgumentException> (() => TypeUtils.ParameterTypeAttributes (0, typeof(IDictionary<double,string>)));
@@ -221,6 +277,9 @@ namespace KRPCTest.Service
             Assert.AreEqual (new [] { "ReturnType.Dictionary(int32,string)" }, TypeUtils.ReturnTypeAttributes (typeof(IDictionary<int,string>)));
             Assert.AreEqual (new [] { "ReturnType.Set(int64)" }, TypeUtils.ReturnTypeAttributes (typeof(HashSet<long>)));
             Assert.AreEqual (new [] { "ReturnType.Dictionary(int32,List(Class(TestService.TestClass)))" }, TypeUtils.ReturnTypeAttributes (typeof(IDictionary<int,IList<TestService.TestClass>>)));
+            Assert.AreEqual (new [] { "ReturnType.Tuple(int64)" }, TypeUtils.ReturnTypeAttributes (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.AreEqual (new [] { "ReturnType.Tuple(int64,int32)" }, TypeUtils.ReturnTypeAttributes (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.AreEqual (new [] { "ReturnType.Tuple(int64,int32,bool)" }, TypeUtils.ReturnTypeAttributes (typeof(KRPC.Utils.Tuple<long,int,bool>)));
             Assert.Throws<ArgumentException> (() => TypeUtils.ReturnTypeAttributes (typeof(TestService.CSharpEnumWithoutAttribute)));
             Assert.Throws<ArgumentException> (() => TypeUtils.ReturnTypeAttributes (typeof(TestService)));
             Assert.Throws<ArgumentException> (() => TypeUtils.ReturnTypeAttributes (typeof(IDictionary<double,string>)));

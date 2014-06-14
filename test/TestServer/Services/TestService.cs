@@ -1,4 +1,3 @@
-
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -198,20 +197,23 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
-        public static IList<int> IncrementList(IList<int> l) {
+        public static IList<int> IncrementList (IList<int> l)
+        {
             return l.Select (x => x + 1).ToList ();
         }
 
         [KRPCProcedure]
-        public static IDictionary<string,int> IncrementDictionary(IDictionary<string,int> d) {
+        public static IDictionary<string,int> IncrementDictionary (IDictionary<string,int> d)
+        {
             var result = new Dictionary<string,int> ();
             foreach (var entry in d)
-                result[entry.Key] = entry.Value + 1;
+                result [entry.Key] = entry.Value + 1;
             return result;
         }
 
         [KRPCProcedure]
-        public static HashSet<int> IncrementSet(HashSet<int> h) {
+        public static HashSet<int> IncrementSet (HashSet<int> h)
+        {
             var result = new HashSet<int> ();
             foreach (var item in h)
                 result.Add (item + 1);
@@ -219,16 +221,24 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
-        public static IDictionary<string,IList<int>> IncrementNestedCollection(IDictionary<string,IList<int>> d) {
+        public static KRPC.Utils.Tuple<int,long> IncrementTuple (KRPC.Utils.Tuple<int,long> t)
+        {
+            return KRPC.Utils.Tuple.Create<int,long> (t.Item1 + 1, t.Item2 + 1);
+        }
+
+        [KRPCProcedure]
+        public static IDictionary<string,IList<int>> IncrementNestedCollection (IDictionary<string,IList<int>> d)
+        {
             IDictionary<string,IList<int>> result = new Dictionary<string,IList<int>> ();
             foreach (var entry in d)
-                result[entry.Key] = entry.Value.Select (x => x + 1).ToList ();
+                result [entry.Key] = entry.Value.Select (x => x + 1).ToList ();
             return result;
         }
 
         [KRPCProcedure]
-        public static IList<TestClass> AddToObjectList(IList<TestClass> l, string value) {
-            l.Add(new TestClass(value));
+        public static IList<TestClass> AddToObjectList (IList<TestClass> l, string value)
+        {
+            l.Add (new TestClass (value));
             return l;
         }
     }

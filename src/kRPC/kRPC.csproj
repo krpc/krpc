@@ -121,6 +121,7 @@
     <Compile Include="Continuations\YieldException.cs" />
     <Compile Include="Continuations\ParameterizedContinuation.cs" />
     <Compile Include="Utils\Equatable.cs" />
+    <Compile Include="Utils\Tuple.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
