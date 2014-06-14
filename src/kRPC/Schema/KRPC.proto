@@ -72,6 +72,10 @@ message Set {
   repeated bytes items = 1;
 }
 
+message Tuple {
+  repeated bytes items = 1;
+}
+
 message Status {
   required string version = 1;
 }

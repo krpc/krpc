@@ -144,9 +144,19 @@ namespace KRPCTest.Service
         }
 
         [KRPCEnum]
-        public enum CSharpEnum { x, y, z };
+        public enum CSharpEnum
+        {
+            x,
+            y,
+            z}
+        ;
 
-        public enum CSharpEnumWithoutAttribute { foo, bar, baz };
+        public enum CSharpEnumWithoutAttribute
+        {
+            foo,
+            bar,
+            baz}
+        ;
 
         [KRPCProcedure]
         public static void ProcedureCSharpEnumArg (CSharpEnum x)
@@ -161,12 +171,14 @@ namespace KRPCTest.Service
         }
 
         [KRPCProcedure]
-        public static void BlockingProcedureNoReturn(int n) {
+        public static void BlockingProcedureNoReturn (int n)
+        {
             Service.BlockingProcedureNoReturn (n);
         }
 
         [KRPCProcedure]
-        public static int BlockingProcedureReturns(int n, int sum = 0) {
+        public static int BlockingProcedureReturns (int n, int sum = 0)
+        {
             return Service.BlockingProcedureReturns (n, sum);
         }
 
@@ -186,6 +198,12 @@ namespace KRPCTest.Service
         public static HashSet<int> EchoSet (HashSet<int> h)
         {
             return Service.EchoSet (h);
+        }
+
+        [KRPCProcedure]
+        public static KRPC.Utils.Tuple<int,bool> EchoTuple (KRPC.Utils.Tuple<int,bool> t)
+        {
+            return Service.EchoTuple (t);
         }
 
         [KRPCProcedure]

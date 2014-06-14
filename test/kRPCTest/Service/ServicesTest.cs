@@ -725,16 +725,16 @@ namespace KRPCTest.Service
         public void HandleEchoList ()
         {
             var list = KRPC.Schema.KRPC.List.CreateBuilder ()
-                .AddItems (ProtocolBuffers.WriteValue ("jeb", typeof (string)))
-                .AddItems (ProtocolBuffers.WriteValue ("bob", typeof (string)))
-                .AddItems (ProtocolBuffers.WriteValue ("bill", typeof (string)))
+                .AddItems (ProtocolBuffers.WriteValue ("jeb", typeof(string)))
+                .AddItems (ProtocolBuffers.WriteValue ("bob", typeof(string)))
+                .AddItems (ProtocolBuffers.WriteValue ("bill", typeof(string)))
                 .Build ();
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoList (It.IsAny<IList<string>> ()))
                 .Returns ((IList<string> x) => x);
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoList",
-                                Arg (0, ProtocolBuffers.WriteMessage (list))));
+                               Arg (0, ProtocolBuffers.WriteMessage (list))));
             var builtResponse = response.SetTime (0).Build ();
             Assert.IsFalse (builtResponse.HasError);
             Assert.AreEqual (ProtocolBuffers.WriteMessage (list), builtResponse.ReturnValue);
@@ -749,21 +749,21 @@ namespace KRPCTest.Service
         {
             var dictionary = KRPC.Schema.KRPC.Dictionary.CreateBuilder ()
                 .AddEntries (DictionaryEntry.CreateBuilder ()
-                    .SetKey (ProtocolBuffers.WriteValue (0, typeof (int)))
-                    .SetValue (ProtocolBuffers.WriteValue ("jeb", typeof (string))).Build())
+                    .SetKey (ProtocolBuffers.WriteValue (0, typeof(int)))
+                    .SetValue (ProtocolBuffers.WriteValue ("jeb", typeof(string))).Build ())
                 .AddEntries (DictionaryEntry.CreateBuilder ()
-                    .SetKey (ProtocolBuffers.WriteValue (1, typeof (int)))
-                    .SetValue (ProtocolBuffers.WriteValue ("bob", typeof (string))).Build())
+                    .SetKey (ProtocolBuffers.WriteValue (1, typeof(int)))
+                    .SetValue (ProtocolBuffers.WriteValue ("bob", typeof(string))).Build ())
                 .AddEntries (DictionaryEntry.CreateBuilder ()
-                    .SetKey (ProtocolBuffers.WriteValue (2, typeof (int)))
-                    .SetValue (ProtocolBuffers.WriteValue ("bill", typeof (string))).Build())
+                    .SetKey (ProtocolBuffers.WriteValue (2, typeof(int)))
+                    .SetValue (ProtocolBuffers.WriteValue ("bill", typeof(string))).Build ())
                 .Build ();
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoDictionary (It.IsAny<IDictionary<int,string>> ()))
                 .Returns ((IDictionary<int,string> x) => x);
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoDictionary",
-                                Arg (0, ProtocolBuffers.WriteMessage (dictionary))));
+                               Arg (0, ProtocolBuffers.WriteMessage (dictionary))));
             var builtResponse = response.SetTime (0).Build ();
             Assert.IsFalse (builtResponse.HasError);
             Assert.AreEqual (ProtocolBuffers.WriteMessage (dictionary), builtResponse.ReturnValue);
@@ -777,20 +777,42 @@ namespace KRPCTest.Service
         public void HandleEchoSet ()
         {
             var set = KRPC.Schema.KRPC.Set.CreateBuilder ()
-                .AddItems (ProtocolBuffers.WriteValue (345, typeof (int)))
-                .AddItems (ProtocolBuffers.WriteValue (723, typeof (int)))
-                .AddItems (ProtocolBuffers.WriteValue (112, typeof (int)))
+                .AddItems (ProtocolBuffers.WriteValue (345, typeof(int)))
+                .AddItems (ProtocolBuffers.WriteValue (723, typeof(int)))
+                .AddItems (ProtocolBuffers.WriteValue (112, typeof(int)))
                 .Build ();
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoSet (It.IsAny<HashSet<int>> ()))
                 .Returns ((HashSet<int> x) => x);
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoSet",
-                                Arg (0, ProtocolBuffers.WriteMessage (set))));
+                               Arg (0, ProtocolBuffers.WriteMessage (set))));
             var builtResponse = response.SetTime (0).Build ();
             Assert.IsFalse (builtResponse.HasError);
             Assert.AreEqual (ProtocolBuffers.WriteMessage (set), builtResponse.ReturnValue);
             mock.Verify (x => x.EchoSet (It.IsAny<HashSet<int>> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method that takes a tuple as an argument and returns the same tuple
+        /// </summary>
+        [Test]
+        public void HandleEchoTuple ()
+        {
+            var tuple = KRPC.Schema.KRPC.Tuple.CreateBuilder ()
+                .AddItems (ProtocolBuffers.WriteValue (42, typeof(int)))
+                .AddItems (ProtocolBuffers.WriteValue (false, typeof(bool)))
+                .Build ();
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoTuple (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()))
+                .Returns ((KRPC.Utils.Tuple<int,bool> x) => x);
+            TestService.Service = mock.Object;
+            var response = Run (Req ("TestService", "EchoTuple",
+                               Arg (0, ProtocolBuffers.WriteMessage (tuple))));
+            var builtResponse = response.SetTime (0).Build ();
+            Assert.IsFalse (builtResponse.HasError);
+            Assert.AreEqual (ProtocolBuffers.WriteMessage (tuple), builtResponse.ReturnValue);
+            mock.Verify (x => x.EchoTuple (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()), Times.Once ());
         }
 
         /// <summary>
@@ -800,31 +822,31 @@ namespace KRPCTest.Service
         public void HandleEchoNestedCollection ()
         {
             var list0 = KRPC.Schema.KRPC.List.CreateBuilder ()
-                .AddItems (ProtocolBuffers.WriteValue ("jeb", typeof (string)))
-                .AddItems (ProtocolBuffers.WriteValue ("bob", typeof (string)))
+                .AddItems (ProtocolBuffers.WriteValue ("jeb", typeof(string)))
+                .AddItems (ProtocolBuffers.WriteValue ("bob", typeof(string)))
                 .Build ();
             var list1 = KRPC.Schema.KRPC.List.CreateBuilder ().Build ();
             var list2 = KRPC.Schema.KRPC.List.CreateBuilder ()
-                .AddItems (ProtocolBuffers.WriteValue ("bill", typeof (string)))
-                .AddItems (ProtocolBuffers.WriteValue ("edzor", typeof (string)))
+                .AddItems (ProtocolBuffers.WriteValue ("bill", typeof(string)))
+                .AddItems (ProtocolBuffers.WriteValue ("edzor", typeof(string)))
                 .Build ();
             var collection = KRPC.Schema.KRPC.Dictionary.CreateBuilder ()
                 .AddEntries (DictionaryEntry.CreateBuilder ()
-                    .SetKey (ProtocolBuffers.WriteValue (0, typeof (int)))
-                    .SetValue (ProtocolBuffers.WriteMessage (list0)).Build())
+                    .SetKey (ProtocolBuffers.WriteValue (0, typeof(int)))
+                    .SetValue (ProtocolBuffers.WriteMessage (list0)).Build ())
                 .AddEntries (DictionaryEntry.CreateBuilder ()
-                    .SetKey (ProtocolBuffers.WriteValue (1, typeof (int)))
-                    .SetValue (ProtocolBuffers.WriteMessage (list1)).Build())
+                    .SetKey (ProtocolBuffers.WriteValue (1, typeof(int)))
+                    .SetValue (ProtocolBuffers.WriteMessage (list1)).Build ())
                 .AddEntries (DictionaryEntry.CreateBuilder ()
-                    .SetKey (ProtocolBuffers.WriteValue (2, typeof (int)))
-                    .SetValue (ProtocolBuffers.WriteMessage (list2)).Build())
+                    .SetKey (ProtocolBuffers.WriteValue (2, typeof(int)))
+                    .SetValue (ProtocolBuffers.WriteMessage (list2)).Build ())
                 .Build ();
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoNestedCollection (It.IsAny<IDictionary<int,IList<string>>> ()))
                 .Returns ((IDictionary<int,IList<string>> x) => x);
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoNestedCollection",
-                                Arg (0, ProtocolBuffers.WriteMessage (collection))));
+                               Arg (0, ProtocolBuffers.WriteMessage (collection))));
             var builtResponse = response.SetTime (0).Build ();
             Assert.IsFalse (builtResponse.HasError);
             Assert.AreEqual (ProtocolBuffers.WriteMessage (collection), builtResponse.ReturnValue);
@@ -842,15 +864,15 @@ namespace KRPCTest.Service
             var guid0 = ObjectStore.Instance.AddInstance (instance0);
             var guid1 = ObjectStore.Instance.AddInstance (instance1);
             var list = KRPC.Schema.KRPC.List.CreateBuilder ()
-                .AddItems (ProtocolBuffers.WriteValue (guid0, typeof (ulong)))
-                .AddItems (ProtocolBuffers.WriteValue (guid1, typeof (ulong)))
+                .AddItems (ProtocolBuffers.WriteValue (guid0, typeof(ulong)))
+                .AddItems (ProtocolBuffers.WriteValue (guid1, typeof(ulong)))
                 .Build ();
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoListOfObjects (It.IsAny<IList<TestService.TestClass>> ()))
                 .Returns ((IList<TestService.TestClass> x) => x);
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoListOfObjects",
-                                Arg (0, ProtocolBuffers.WriteMessage (list))));
+                               Arg (0, ProtocolBuffers.WriteMessage (list))));
             var builtResponse = response.SetTime (0).Build ();
             Assert.IsFalse (builtResponse.HasError);
             Assert.AreEqual (ProtocolBuffers.WriteMessage (list), builtResponse.ReturnValue);

@@ -65,7 +65,7 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsACollectionType (Type type)
         {
-            return IsAListCollectionType (type) || IsADictionaryCollectionType (type) || IsASetCollectionType (type);
+            return IsAListCollectionType (type) || IsADictionaryCollectionType (type) || IsASetCollectionType (type) || IsATupleCollectionType (type);
         }
 
         /// <summary>
@@ -73,8 +73,8 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsAListCollectionType (Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition () == typeof (IList<>) &&
-                   IsAValidType (type.GetGenericArguments ().Single ());
+            return type.IsGenericType && type.GetGenericTypeDefinition () == typeof(IList<>) &&
+            IsAValidType (type.GetGenericArguments ().Single ());
         }
 
         /// <summary>
@@ -82,9 +82,9 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsADictionaryCollectionType (Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition () == typeof (IDictionary<,>) &&
-                   IsAValidKeyType (type.GetGenericArguments ()[0]) &&
-                   IsAValidType (type.GetGenericArguments ()[1]);
+            return type.IsGenericType && type.GetGenericTypeDefinition () == typeof(IDictionary<,>) &&
+            IsAValidKeyType (type.GetGenericArguments () [0]) &&
+            IsAValidType (type.GetGenericArguments () [1]);
         }
 
         /// <summary>
@@ -92,8 +92,21 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsASetCollectionType (Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition () == typeof (HashSet<>) &&
-                   IsAValidType (type.GetGenericArguments ().Single ());
+            return type.IsGenericType && type.GetGenericTypeDefinition () == typeof(HashSet<>) &&
+            IsAValidType (type.GetGenericArguments ().Single ());
+        }
+
+        /// <summary>
+        /// Returns true if the given type can be used as a kRPC tuple collection type
+        /// </summary>
+        public static bool IsATupleCollectionType (Type type)
+        {
+            if (!type.IsGenericType)
+                return false;
+            // TODO: this is an ugly way of checking the type is a tuple
+            if (!type.GetGenericTypeDefinition ().FullName.StartsWith ("KRPC.Utils.Tuple`"))
+                return false;
+            return type.GetGenericArguments ().All (t => IsAValidType (t));
         }
 
         /// <summary>
@@ -110,11 +123,13 @@ namespace KRPC.Service
             else if (IsAnEnumType (type))
                 return ProtocolBuffers.GetTypeName (typeof(int)); // Enums are int32
             else if (IsAListCollectionType (type))
-                return ProtocolBuffers.GetMessageTypeName (typeof (global::KRPC.Schema.KRPC.List));
+                return ProtocolBuffers.GetMessageTypeName (typeof(global::KRPC.Schema.KRPC.List));
             else if (IsADictionaryCollectionType (type))
-                return ProtocolBuffers.GetMessageTypeName (typeof (global::KRPC.Schema.KRPC.Dictionary));
+                return ProtocolBuffers.GetMessageTypeName (typeof(global::KRPC.Schema.KRPC.Dictionary));
             else if (IsASetCollectionType (type))
-                return ProtocolBuffers.GetMessageTypeName (typeof (global::KRPC.Schema.KRPC.Set));
+                return ProtocolBuffers.GetMessageTypeName (typeof(global::KRPC.Schema.KRPC.Set));
+            else if (IsATupleCollectionType (type))
+                return ProtocolBuffers.GetMessageTypeName (typeof(global::KRPC.Schema.KRPC.Tuple));
             else
                 throw new ArgumentException ("Type is not valid");
         }
@@ -125,7 +140,7 @@ namespace KRPC.Service
         public static string GetKRPCTypeName (Type type)
         {
             if (!IsAValidType (type))
-                throw new ArgumentException ();
+                throw new ArgumentException ("Type " + type + " does not have a kRPC type name");
             else if (IsAClassType (type))
                 return "Class(" + GetClassServiceName (type) + "." + type.Name + ")";
             else if (IsAnEnumType (type))
@@ -133,10 +148,12 @@ namespace KRPC.Service
             else if (IsAListCollectionType (type))
                 return "List(" + GetKRPCTypeName (type.GetGenericArguments ().Single ()) + ")";
             else if (IsADictionaryCollectionType (type))
-                return "Dictionary(" + GetKRPCTypeName (type.GetGenericArguments ()[0]) + "," +
-                                       GetKRPCTypeName (type.GetGenericArguments ()[1]) + ")";
+                return "Dictionary(" + GetKRPCTypeName (type.GetGenericArguments () [0]) + "," +
+                GetKRPCTypeName (type.GetGenericArguments () [1]) + ")";
             else if (IsASetCollectionType (type))
                 return "Set(" + GetKRPCTypeName (type.GetGenericArguments ().Single ()) + ")";
+            else if (IsATupleCollectionType (type))
+                return "Tuple(" + String.Join (",", type.GetGenericArguments ().Select (t => GetKRPCTypeName (t)).ToArray ()) + ")";
             else
                 return ProtocolBuffers.GetTypeName (type);
         }
@@ -337,7 +354,7 @@ namespace KRPC.Service
             if (!(type.IsPublic || type.IsNestedPublic))
                 throw new ServiceException ("KRPCEnum " + type + " is not public");
             // Check the underlying type is an int
-            if (Enum.GetUnderlyingType (type) != typeof (int))
+            if (Enum.GetUnderlyingType (type) != typeof(int))
                 throw new ServiceException ("KRPCEnum " + type + " has underlying type " + Enum.GetUnderlyingType (type) + "; but only int is supported");
             // If it doesn't have the Service property set, check the enum is defined directly inside a KRPCService
             if (attribute.Service == null && (type.DeclaringType == null || !Reflection.HasAttribute<KRPCServiceAttribute> (type.DeclaringType)))

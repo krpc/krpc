@@ -51,6 +51,8 @@ namespace KRPCTest.Service
 
         HashSet<int> EchoSet (HashSet<int> h);
 
+        KRPC.Utils.Tuple<int,bool> EchoTuple (KRPC.Utils.Tuple<int,bool> t);
+
         IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c);
 
         IList<TestService.TestClass> EchoListOfObjects (IList<TestService.TestClass> l);

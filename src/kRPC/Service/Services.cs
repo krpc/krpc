@@ -153,7 +153,7 @@ namespace KRPC.Service
             if (TypeUtils.IsAListCollectionType (type)) {
                 var builder = Schema.KRPC.List.CreateBuilder ();
                 var encodedList = builder.MergeFrom (value).Build ();
-                var list = (System.Collections.IList) (typeof (System.Collections.Generic.List<>)
+                var list = (System.Collections.IList)(typeof(System.Collections.Generic.List<>)
                     .MakeGenericType (type.GetGenericArguments ().Single ())
                     .GetConstructor (Type.EmptyTypes)
                     .Invoke (null));
@@ -163,21 +163,21 @@ namespace KRPC.Service
             } else if (TypeUtils.IsADictionaryCollectionType (type)) {
                 var builder = Schema.KRPC.Dictionary.CreateBuilder ();
                 var encodedDictionary = builder.MergeFrom (value).Build ();
-                var dictionary = (System.Collections.IDictionary) (typeof (System.Collections.Generic.Dictionary<,>)
-                    .MakeGenericType (type.GetGenericArguments ()[0], type.GetGenericArguments ()[1])
+                var dictionary = (System.Collections.IDictionary)(typeof(System.Collections.Generic.Dictionary<,>)
+                    .MakeGenericType (type.GetGenericArguments () [0], type.GetGenericArguments () [1])
                     .GetConstructor (Type.EmptyTypes)
                     .Invoke (null));
                 foreach (var entry in encodedDictionary.EntriesList) {
-                    var k = Decode (procedure, i, type.GetGenericArguments ()[0], entry.Key);
-                    var v = Decode (procedure, i, type.GetGenericArguments ()[1], entry.Value);
-                    dictionary[k] = v;
+                    var k = Decode (procedure, i, type.GetGenericArguments () [0], entry.Key);
+                    var v = Decode (procedure, i, type.GetGenericArguments () [1], entry.Value);
+                    dictionary [k] = v;
                 }
                 return dictionary;
-            } else { // a set
+            } else if (TypeUtils.IsASetCollectionType (type)) {
                 var builder = Schema.KRPC.Set.CreateBuilder ();
                 var encodedSet = builder.MergeFrom (value).Build ();
 
-                var set = (System.Collections.IEnumerable) (typeof (System.Collections.Generic.HashSet<>)
+                var set = (System.Collections.IEnumerable)(typeof(System.Collections.Generic.HashSet<>)
                     .MakeGenericType (type.GetGenericArguments ().Single ())
                     .GetConstructor (Type.EmptyTypes)
                     .Invoke (null));
@@ -189,6 +189,25 @@ namespace KRPC.Service
                     methodInfo.Invoke (set, new object[] { decodedItem });
                 }
                 return set;
+            } else { // a tuple
+                // TODO: this is ugly
+
+                var builder = Schema.KRPC.Tuple.CreateBuilder ();
+                var encodedTuple = builder.MergeFrom (value).Build ();
+                var valueTypes = type.GetGenericArguments ().ToArray ();
+                var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
+
+                Object[] values = new Object[valueTypes.Length];
+                for (int j = 0; j < valueTypes.Length; j++) {
+                    var item = encodedTuple.ItemsList [j];
+                    values [j] = Decode (procedure, i, valueTypes [j], item);
+                }
+
+                var tuple = genericType
+                    .MakeGenericType (valueTypes)
+                    .GetConstructor (valueTypes)
+                    .Invoke (values);
+                return tuple;
             }
         }
 
@@ -240,14 +259,14 @@ namespace KRPC.Service
         {
             if (TypeUtils.IsAListCollectionType (type)) {
                 var builder = Schema.KRPC.List.CreateBuilder ();
-                var list = (System.Collections.IList) value;
+                var list = (System.Collections.IList)value;
                 var valueType = type.GetGenericArguments ().Single ();
                 foreach (var item in list)
                     builder.AddItems (Encode (valueType, item));
                 return ProtocolBuffers.WriteMessage (builder.Build ());
             } else if (TypeUtils.IsADictionaryCollectionType (type)) {
-                var keyType = type.GetGenericArguments ()[0];
-                var valueType = type.GetGenericArguments ()[1];
+                var keyType = type.GetGenericArguments () [0];
+                var valueType = type.GetGenericArguments () [1];
                 var builder = Schema.KRPC.Dictionary.CreateBuilder ();
                 var entryBuilder = Schema.KRPC.DictionaryEntry.CreateBuilder ();
                 foreach (System.Collections.DictionaryEntry entry in (System.Collections.IDictionary) value) {
@@ -256,12 +275,24 @@ namespace KRPC.Service
                     builder.AddEntries (entryBuilder.Build ());
                 }
                 return ProtocolBuffers.WriteMessage (builder.Build ());
-            } else { // a set
+            } else if (TypeUtils.IsASetCollectionType (type)) {
                 var builder = Schema.KRPC.Set.CreateBuilder ();
-                var set = (System.Collections.IEnumerable) value;
+                var set = (System.Collections.IEnumerable)value;
                 var valueType = type.GetGenericArguments ().Single ();
                 foreach (var item in set)
                     builder.AddItems (Encode (valueType, item));
+                return ProtocolBuffers.WriteMessage (builder.Build ());
+            } else { // a tuple
+                // TODO: this is ugly
+                var builder = Schema.KRPC.Set.CreateBuilder ();
+                var valueTypes = type.GetGenericArguments ().ToArray ();
+                var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
+                var tupleType = genericType.MakeGenericType (valueTypes);
+                for (int i = 0; i < valueTypes.Length; i++) {
+                    var property = tupleType.GetProperty ("Item" + (i + 1));
+                    var item = property.GetGetMethod ().Invoke (value, null);
+                    builder.AddItems (Encode (valueTypes [i], item));
+                }
                 return ProtocolBuffers.WriteMessage (builder.Build ());
             }
         }
