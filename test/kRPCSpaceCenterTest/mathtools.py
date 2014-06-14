@@ -7,14 +7,6 @@ def rad2deg(rad):
     """ Convert radians to degrees """
     return rad * 180 / math.pi;
 
-def to_vector(v):
-    """ Convert a Vector to a protocol buffer vector message """
-    r = Vector3()
-    r.x = v[0]
-    r.y = v[1]
-    r.z = v[2]
-    return r
-
 def norm(v):
     return math.sqrt(sum(x*x for x in v))
 

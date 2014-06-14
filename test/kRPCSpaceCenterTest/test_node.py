@@ -1,7 +1,7 @@
 import unittest
 import testingtools
 from testingtools import load_save
-from mathtools import vector, norm, normalize, to_vector
+from mathtools import vector, norm, normalize
 import krpc
 
 class TestNode(testingtools.TestCase):
