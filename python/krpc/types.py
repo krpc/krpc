@@ -103,11 +103,23 @@ class _Types(object):
         # A NoneType can be coerced to a _ClassType
         if isinstance(typ, _ClassType) and value is None:
             return None
+        # Collection types
+        try:
+            # Coerce tuples to lists
+            if isinstance(value, collections.Iterable) and isinstance(typ, _ListType):
+                return typ.python_type(self.coerce_to(x, typ.value_type) for x in value)
+            # Coerce lists (with appropriate number of elements) to tuples
+            if isinstance(value, collections.Iterable) and isinstance(typ, _TupleType):
+                if len(value) != len(typ.value_types):
+                    raise ValueError
+                return typ.python_type([self.coerce_to(x, typ.value_types[i]) for i,x in enumerate(value)])
+        except ValueError:
+            raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) + ' to type ' + str(typ))
         # Numeric types
         # See http://docs.python.org/2/reference/datamodel.html#coercion-rules
         numeric_types = (float, int, long)
         if type(value) not in numeric_types or typ.python_type not in numeric_types:
-            raise ValueError('Failed to coerce value of type ' + str(type(value)) + ' to type ' + str(typ))
+            raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) + ' to type ' + str(typ))
         if typ.python_type == float:
             return float(value)
         elif typ.python_type == int:
@@ -132,6 +144,9 @@ class _TypeBase(object):
     def python_type(self):
         """ Get the python type """
         return self._python_type
+
+    def __str__(self):
+        return '<pbtype: \'' + self.protobuf_type + '\'>'
 
 
 class _ValueType(_TypeBase):
