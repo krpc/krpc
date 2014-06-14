@@ -4,6 +4,8 @@ using KRPC.Utils;
 using UnityEngine;
 using KRPCSpaceCenter.ExtensionMethods;
 
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
@@ -104,11 +106,11 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Velocity {
+        public Tuple3 Velocity {
             get {
                 var rotation = ReferenceFrameTransform.GetRotation (referenceFrame, vessel);
                 var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
-                return (rotation.Inverse () * (GetVelocity () - velocity)).ToMessage ();
+                return (rotation.Inverse () * (GetVelocity () - velocity)).ToTuple ();
             }
         }
 
@@ -136,23 +138,23 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 CenterOfMass {
-            get { return GetPosition ().ToMessage (); }
+        public Tuple3 CenterOfMass {
+            get { return GetPosition ().ToTuple (); }
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Direction {
-            get { return (ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * GetDirection ()).ToMessage (); }
+        public Tuple3 Direction {
+            get { return (ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * GetDirection ()).ToTuple (); }
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 UpDirection {
-            get { return (ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * GetUpDirection ()).ToMessage (); }
+        public Tuple3 UpDirection {
+            get { return (ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * GetUpDirection ()).ToTuple (); }
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 NorthDirection {
-            get { return (ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * GetNorthDirection ()).ToMessage (); }
+        public Tuple3 NorthDirection {
+            get { return (ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * GetNorthDirection ()).ToTuple (); }
         }
 
         [KRPCProperty]
@@ -194,33 +196,33 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Prograde {
-            get { return GetPrograde ().ToMessage (); }
+        public Tuple3 Prograde {
+            get { return GetPrograde ().ToTuple (); }
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Retrograde {
-            get { return (-GetPrograde ()).ToMessage (); }
+        public Tuple3 Retrograde {
+            get { return (-GetPrograde ()).ToTuple (); }
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Normal {
-            get { return GetNormal ().ToMessage (); }
+        public Tuple3 Normal {
+            get { return GetNormal ().ToTuple (); }
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 NormalNeg {
-            get { return (-GetNormal ()).ToMessage (); }
+        public Tuple3 NormalNeg {
+            get { return (-GetNormal ()).ToTuple (); }
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Radial {
-            get { return GetRadial ().ToMessage (); }
+        public Tuple3 Radial {
+            get { return GetRadial ().ToTuple (); }
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 RadialNeg {
-            get { return (-GetRadial ()).ToMessage (); }
+        public Tuple3 RadialNeg {
+            get { return (-GetRadial ()).ToTuple (); }
         }
     }
 }

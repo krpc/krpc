@@ -3,6 +3,8 @@ using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+
 namespace KRPCSpaceCenter.Services
 {
     //FIXME: need to perform memory management for node objects
@@ -66,8 +68,8 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public KRPC.Schema.Geometry.Vector3 Vector {
-            get { return Vector3.CreateBuilder ().SetX (0).SetY (0).SetZ (DeltaV).Build (); }
+        public Tuple3 Vector {
+            get { return new Tuple3(0, 0, DeltaV); }
         }
 
         [KRPCProperty]
