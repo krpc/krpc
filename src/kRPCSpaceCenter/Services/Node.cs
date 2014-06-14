@@ -1,6 +1,5 @@
 using System;
 using KRPC.Service.Attributes;
-using KRPC.Schema.Geometry;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 

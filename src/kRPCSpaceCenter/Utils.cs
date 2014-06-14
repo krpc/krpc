@@ -1,6 +1,5 @@
 using System;
 using KSP;
-using KRPC.Schema.Geometry;
 
 namespace KRPCSpaceCenter
 {
