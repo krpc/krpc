@@ -5,6 +5,8 @@ using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+
 namespace KRPCSpaceCenter.Services
 {
     /// <remarks>
@@ -56,7 +58,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public void SetDirection (KRPC.Schema.Geometry.Vector3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
+        public void SetDirection (Tuple3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
         {
             engaged.Add (this);
             this.referenceFrame = referenceFrame;

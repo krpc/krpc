@@ -1,19 +1,10 @@
 import math
 import itertools
 import functools
-from krpc.schema.Geometry import Vector3
 
 def rad2deg(rad):
     """ Convert radians to degrees """
     return rad * 180 / math.pi;
-
-def to_vector(v):
-    """ Convert a Vector to a protocol buffer vector message """
-    r = Vector3()
-    r.x = v[0]
-    r.y = v[1]
-    r.z = v[2]
-    return r
 
 def norm(v):
     return math.sqrt(sum(x*x for x in v))
@@ -28,10 +19,7 @@ def dot(u,v):
 @functools.total_ordering
 class vector(object):
     def __init__(self, v):
-        if type(v) == Vector3:
-            self.v = [v.x, v.y, v.z]
-        else:
-            self.v = v
+        self.v = v
 
     def __len__(self):
         return len(self.v)

@@ -4,7 +4,7 @@ from testingtools import load_save
 import krpc
 import time
 import math
-from mathtools import vector, rad2deg, normalize, to_vector
+from mathtools import vector, rad2deg, normalize
 
 class TestAutoPilot(testingtools.TestCase):
 
@@ -36,7 +36,7 @@ class TestAutoPilot(testingtools.TestCase):
         self.assertClose(roll, flight.roll, error=0.5)
 
     def test_basic_direction(self):
-        direction = to_vector(normalize([10,20,30]))
+        direction = normalize([10,20,30])
         roll = 42
 
         self.vessel.control.sas = False

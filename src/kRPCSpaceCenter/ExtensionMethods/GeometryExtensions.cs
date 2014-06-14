@@ -8,27 +8,25 @@ namespace KRPCSpaceCenter.ExtensionMethods
         /// <summary>
         /// Convert a Unity3d vector to a protocol buffer vector
         /// </summary>
-        public static KRPC.Schema.Geometry.Vector3 ToMessage (this Vector3d v)
+        public static KRPC.Utils.Tuple<double,double,double> ToTuple (this Vector3d v)
         {
-            return KRPC.Schema.Geometry.Vector3.CreateBuilder ()
-                .SetX (v.x).SetY (v.y).SetZ (v.z).Build ();
+            return new KRPC.Utils.Tuple<double,double,double>(v.x, v.y, v.z);
         }
 
         /// <summary>
         /// Convert a Unity3d vector to a protocol buffer vector
         /// </summary>
-        public static KRPC.Schema.Geometry.Vector3 ToMessage (this Vector3 v)
+        public static KRPC.Utils.Tuple<double,double,double> ToTuple (this Vector3 v)
         {
-            return KRPC.Schema.Geometry.Vector3.CreateBuilder ()
-                .SetX (v.x).SetY (v.y).SetZ (v.z).Build ();
+            return new KRPC.Utils.Tuple<double,double,double>(v.x, v.y, v.z);
         }
 
         /// <summary>
         /// Convert a protocol buffer vector to a Unity3d vector
         /// </summary>
-        public static Vector3d ToVector (this KRPC.Schema.Geometry.Vector3 v)
+        public static Vector3d ToVector (this KRPC.Utils.Tuple<double,double,double> v)
         {
-            return new Vector3d (v.X, v.Y, v.Z);
+            return new Vector3d (v.Item1, v.Item2, v.Item3);
         }
 
         /// <summary>

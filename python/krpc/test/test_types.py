@@ -202,6 +202,9 @@ class TestTypes(unittest.TestCase):
             (42,   42L,  'uint32'),
             (42L,  42.0, 'uint64'),
             (42L,  42,   'uint64'),
+            (list(), tuple(), 'List(string)'),
+            ((0,1,2), [0,1,2], 'Tuple(int32,int32,int32)'),
+            ([0,1,2], (0,1,2), 'List(int32)'),
         ]
         for expected, value, typ in cases:
             coerced_value = types.coerce_to(value, types.as_type(typ))
@@ -212,6 +215,10 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError, types.coerce_to, '', types.as_type('float'))
         self.assertRaises(ValueError, types.coerce_to, True, types.as_type('float'))
 
+        self.assertRaises(ValueError, types.coerce_to, list(), types.as_type('Tuple(int32)'))
+        self.assertRaises(ValueError, types.coerce_to, ["foo",2], types.as_type('Tuple(string)'))
+        self.assertRaises(ValueError, types.coerce_to, [1], types.as_type('Tuple(string)'))
+        self.assertRaises(ValueError, types.coerce_to, [1,"a","b"], types.as_type('List(string)'))
 
 if __name__ == '__main__':
     unittest.main()
