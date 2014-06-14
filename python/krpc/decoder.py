@@ -1,6 +1,7 @@
 # TODO: avoid using internals
 from google.protobuf.internal import decoder as protobuf_decoder
-from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType
+from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
+import itertools
 
 
 class _Decoder(object):
@@ -28,6 +29,9 @@ class _Decoder(object):
         elif isinstance(typ, _SetType):
             msg = cls._decode_message(data, _Types().as_type('KRPC.Set'))
             return set(cls.decode(item, typ.value_type) for item in msg.items)
+        elif isinstance(typ, _TupleType):
+            msg = cls._decode_message(data, _Types().as_type('KRPC.Tuple'))
+            return tuple(cls.decode(item, value_type) for item,value_type in itertools.izip(msg.items,typ.value_types))
         else:
             raise RuntimeError ('Cannot decode type %s' % str(typ))
 

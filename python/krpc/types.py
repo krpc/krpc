@@ -44,7 +44,11 @@ class _Types(object):
             typ = _DictionaryType(type_string, self)
         elif type_string.startswith('Set('):
             typ = _SetType(type_string, self)
+        elif type_string.startswith('Tuple('):
+            typ = _TupleType(type_string, self)
         else:
+            if not re.match(r'^[A-Za-z0-9_\.]+$', type_string):
+                raise ValueError('\'%s\' is not a valid type string' % type_string)
             typ = None
             package, _, message = type_string.rpartition('.')
             # TODO: Check it's a valid enum type
@@ -189,14 +193,38 @@ class _ClassType(_TypeBase):
         super(_ClassType, self).__init__(str(type_string), typ)
 
 
+def _parse_type_string(typ):
+    """ Given a string, extract a substring up to the first comma. Parses parnetheses.
+        Multiple calls can be used to separate a string by commas. """
+    if typ == None:
+        raise ValueError
+    result = ''
+    level = 0
+    for x in typ:
+        if level == 0 and x == ',':
+            break
+        if x == '(':
+            level += 1
+        if x == ')':
+            level -= 1
+        result += x
+    if level != 0:
+        raise ValueError
+    if result == typ:
+        return result, None
+    if typ[len(result)] != ',':
+        raise ValueError
+    return result, typ[len(result)+1:]
+
+
 class _ListType(_TypeBase):
     """ A list collection type, represented by a protobuf message """
 
     def __init__(self, type_string, type_store):
-        # Get inner type
-        match = re.match(r'List\((.+)\)', type_string)
+        match = re.match(r'^List\((.+)\)$', type_string)
         if not match:
             raise ValueError('\'%s\' is not a valid type string for a list type' % type_string)
+
         self.value_type = type_store.as_type(match.group(1))
 
         super(_ListType, self).__init__(str(type_string), list)
@@ -206,30 +234,21 @@ class _DictionaryType(_TypeBase):
     """ A dictionary collection type, represented by a protobuf message """
 
     def __init__(self, type_string, type_store):
-        # Check for valud type string
-        match = re.match(r'Dictionary\((.+)\)', type_string)
+        match = re.match(r'^Dictionary\((.+)\)$', type_string)
         if not match:
             raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
+
         typ = match.group(1)
 
-        # Get key type
-        key_string = ''
-        level = 0
-        for x in typ:
-            if level == 0 and x == ',':
-                break
-            if x == '(':
-                level += 1
-            if x == ')':
-                level -= 1
-            key_string += x
-        if level != 0 or len(key_string) == len(typ) or typ[len(key_string)] != ',':
+        try:
+            key_string, typ = _parse_type_string(typ)
+            value_string, typ = _parse_type_string(typ)
+            if typ != None:
+                raise ValueError
+            self.key_type = type_store.as_type(key_string)
+            self.value_type = type_store.as_type(value_string)
+        except ValueError:
             raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
-        self.key_type = type_store.as_type(key_string)
-
-        # Get value type
-        value_string = typ[len(key_string)+1:]
-        self.value_type = type_store.as_type(value_string)
 
         super(_DictionaryType, self).__init__(str(type_string), dict)
 
@@ -238,13 +257,30 @@ class _SetType(_TypeBase):
     """ A set collection type, represented by a protobuf message """
 
     def __init__(self, type_string, type_store):
-        # Get inner type
-        match = re.match(r'Set\((.+)\)', type_string)
+        match = re.match(r'^Set\((.+)\)$', type_string)
         if not match:
             raise ValueError('\'%s\' is not a valid type string for a set type' % type_string)
+
         self.value_type = type_store.as_type(match.group(1))
 
         super(_SetType, self).__init__(str(type_string), set)
+
+
+class _TupleType(_TypeBase):
+    """ A tuple collection type, represented by a protobuf message """
+
+    def __init__(self, type_string, type_store):
+        match = re.match(r'^Tuple\((.+)\)$', type_string)
+        if not match:
+            raise ValueError('\'%s\' is not a valid type string for a set type' % type_string)
+
+        self.value_types = []
+        typ = match.group(1)
+        while typ != None:
+            value_type, typ = _parse_type_string(typ)
+            self.value_types.append(type_store.as_type(value_type))
+
+        super(_TupleType, self).__init__(str(type_string), tuple)
 
 
 class _BaseClass(object):

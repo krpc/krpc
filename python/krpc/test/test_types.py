@@ -9,6 +9,7 @@ from krpc.types import _EnumType as EnumType
 from krpc.types import _ListType as ListType
 from krpc.types import _DictionaryType as DictionaryType
 from krpc.types import _SetType as SetType
+from krpc.types import _TupleType as TupleType
 from krpc.types import _BaseClass as BaseClass
 import krpc.schema.KRPC
 
@@ -76,8 +77,10 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(int, typ.value_type.python_type)
         # TODO: reenable tests
         #self.assertRaises(ValueError, types.as_type, 'List')
-        #self.assertRaises(ValueError, types.as_type, 'List()')
-        #self.assertRaises(ValueError, types.as_type, 'List(int32,string)')
+        self.assertRaises(ValueError, types.as_type, 'List(')
+        self.assertRaises(ValueError, types.as_type, 'List()')
+        self.assertRaises(ValueError, types.as_type, 'List(foo')
+        self.assertRaises(ValueError, types.as_type, 'List(int32,string)')
 
     def test_dictionary_types(self):
         types = Types()
@@ -93,12 +96,14 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(int, typ.value_type.python_type)
         # TODO: reenable tests
         #self.assertRaises(ValueError, types.as_type, 'Dictionary')
-        #self.assertRaises(ValueError, types.as_type, 'Dictionary()')
-        #self.assertRaises(ValueError, types.as_type, 'Dictionary(string)')
-        #self.assertRaises(ValueError, types.as_type, 'Dictionary(string,)')
-        #self.assertRaises(ValueError, types.as_type, 'Dictionary(,)')
-        #self.assertRaises(ValueError, types.as_type, 'Dictionary(,string)')
-        #self.assertRaises(ValueError, types.as_type, 'Dictionary(int,string))')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary()')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(foo')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(string)')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(string,)')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(,)')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(,string)')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary(int,string))')
 
     def test_set_types(self):
         types = Types()
@@ -111,11 +116,57 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(str, typ.value_type.python_type)
         # TODO: reenable tests
         #self.assertRaises(ValueError, types.as_type, 'Set')
-        #self.assertRaises(ValueError, types.as_type, 'Set()')
-        #self.assertRaises(ValueError, types.as_type, 'Set(string,)')
-        #self.assertRaises(ValueError, types.as_type, 'Set(,)')
-        #self.assertRaises(ValueError, types.as_type, 'Set(,string)')
-        #self.assertRaises(ValueError, types.as_type, 'Set(int,string))')
+        self.assertRaises(ValueError, types.as_type, 'Set(')
+        self.assertRaises(ValueError, types.as_type, 'Set()')
+        self.assertRaises(ValueError, types.as_type, 'Set(string,)')
+        self.assertRaises(ValueError, types.as_type, 'Set(,)')
+        self.assertRaises(ValueError, types.as_type, 'Set(,string)')
+        self.assertRaises(ValueError, types.as_type, 'Set(int,string))')
+
+    def test_tuple_types(self):
+        types = Types()
+        typ = types.as_type('Tuple(bool)')
+        self.assertTrue(isinstance(typ, TupleType))
+        self.assertEqual(typ.python_type, tuple)
+        self.assertTrue('Tuple(bool)', typ.protobuf_type)
+        self.assertEqual(1, len(typ.value_types))
+        self.assertTrue(isinstance(typ.value_types[0], ValueType))
+        self.assertEqual('bool', typ.value_types[0].protobuf_type)
+        self.assertEqual(bool, typ.value_types[0].python_type)
+        typ = types.as_type('Tuple(int32,string)')
+        self.assertTrue(isinstance(typ, TupleType))
+        self.assertEqual(typ.python_type, tuple)
+        self.assertTrue('Tuple(int32,string)', typ.protobuf_type)
+        self.assertEqual(2, len(typ.value_types))
+        self.assertTrue(isinstance(typ.value_types[0], ValueType))
+        self.assertTrue(isinstance(typ.value_types[1], ValueType))
+        self.assertEqual('int32', typ.value_types[0].protobuf_type)
+        self.assertEqual('string', typ.value_types[1].protobuf_type)
+        self.assertEqual(int, typ.value_types[0].python_type)
+        self.assertEqual(str, typ.value_types[1].python_type)
+        typ = types.as_type('Tuple(float,int64,string)')
+        self.assertTrue(isinstance(typ, TupleType))
+        self.assertEqual(typ.python_type, tuple)
+        self.assertTrue('Tuple(float,int64,string)', typ.protobuf_type)
+        self.assertEqual(3, len(typ.value_types))
+        self.assertTrue(isinstance(typ.value_types[0], ValueType))
+        self.assertTrue(isinstance(typ.value_types[1], ValueType))
+        self.assertTrue(isinstance(typ.value_types[2], ValueType))
+        self.assertEqual('float', typ.value_types[0].protobuf_type)
+        self.assertEqual('int64', typ.value_types[1].protobuf_type)
+        self.assertEqual('string', typ.value_types[2].protobuf_type)
+        self.assertEqual(float, typ.value_types[0].python_type)
+        self.assertEqual(long, typ.value_types[1].python_type)
+        self.assertEqual(str, typ.value_types[2].python_type)
+        # TODO: reenable test
+        #self.assertRaises(ValueError, types.as_type, 'Tuple')
+        self.assertRaises(ValueError, types.as_type, 'Tuple(')
+        self.assertRaises(ValueError, types.as_type, 'Tuple()')
+        self.assertRaises(ValueError, types.as_type, 'Tuple(foo')
+        self.assertRaises(ValueError, types.as_type, 'Tuple(string,)')
+        self.assertRaises(ValueError, types.as_type, 'Tuple(,)')
+        self.assertRaises(ValueError, types.as_type, 'Tuple(,string)')
+        self.assertRaises(ValueError, types.as_type, 'Tuple(int,string))')
 
     def test_get_parameter_type(self):
         types = Types()
