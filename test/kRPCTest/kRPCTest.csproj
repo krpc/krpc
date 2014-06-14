@@ -88,6 +88,7 @@
     <Compile Include="Schema\Test.cs" />
     <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
     <Compile Include="Utils\EquatableTest.cs" />
+    <Compile Include="Utils\TupleTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
