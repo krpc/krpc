@@ -85,18 +85,18 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double TrueAltitude {
+        public double MeanAltitude {
             get { return vessel.mainBody.GetAltitude (vessel.CoM); }
         }
 
         [KRPCProperty]
-        public double AbsoluteAltitude {
-            get { return Math.Min (SurfaceAltitude, TrueAltitude); }
+        public double SurfaceAltitude {
+            get { return Math.Min (BedrockAltitude, MeanAltitude); }
         }
 
         [KRPCProperty]
-        public double SurfaceAltitude {
-            get { return TrueAltitude - vessel.terrainAltitude; }
+        public double BedrockAltitude {
+            get { return MeanAltitude - vessel.terrainAltitude; }
         }
 
         [KRPCProperty]

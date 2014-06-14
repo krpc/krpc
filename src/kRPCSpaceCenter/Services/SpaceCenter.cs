@@ -59,7 +59,7 @@ namespace KRPCSpaceCenter.Services
             var flight = vessel.Flight ();
             var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (1, vessel.Orbit.Body.Body);
 
-            if (vessel.Situation != VesselSituation.Landed && vessel.Situation != VesselSituation.Splashed && flight.TrueAltitude < altitudeLimit)
+            if (vessel.Situation != VesselSituation.Landed && vessel.Situation != VesselSituation.Splashed && flight.MeanAltitude < altitudeLimit)
                 WarpPhysicsAtRate (vessel, flight, Mathf.Min (rate, 2));
             else
                 WarpRegularAtRate (vessel, flight, rate);
@@ -107,7 +107,7 @@ namespace KRPCSpaceCenter.Services
             if (Math.Abs (Planetarium.GetUniversalTime () - warpIncreaseAttemptTime) < 2)
                 return;
             // Check we don't increase the warp rate beyond the altitude limit
-            if (flight.TrueAltitude < TimeWarp.fetch.GetAltitudeLimit (TimeWarp.CurrentRateIndex + 1, vessel.Orbit.Body.Body))
+            if (flight.MeanAltitude < TimeWarp.fetch.GetAltitudeLimit (TimeWarp.CurrentRateIndex + 1, vessel.Orbit.Body.Body))
                 return;
             warpIncreaseAttemptTime = Planetarium.GetUniversalTime ();
             TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);

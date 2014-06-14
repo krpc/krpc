@@ -45,9 +45,9 @@ class TestFlight(testingtools.TestCase):
 
     def test_orbital_flight(self):
         self.assertClose(0, self.orbital_flight.g_force)
-        self.assertClose(100000, self.orbital_flight.true_altitude, error=50)
-        self.assertClose(100000, self.orbital_flight.absolute_altitude, error=50)
-        self.assertClose(100930, self.orbital_flight.surface_altitude, error=50)
+        self.assertClose(100000, self.orbital_flight.mean_altitude, error=50)
+        self.assertClose(100000, self.orbital_flight.surface_altitude, error=50)
+        self.assertClose(100930, self.orbital_flight.bedrock_altitude, error=50)
         self.assertClose(930, self.orbital_flight.elevation, error=50)
         self.assertClose([-2246.1, 0, 0], vector(self.orbital_flight.velocity), error=0.5)
         self.assertClose(2246.1, self.orbital_flight.speed, error=0.5)
@@ -64,9 +64,9 @@ class TestFlight(testingtools.TestCase):
 
     def test_surface_flight(self):
         self.assertClose(0, self.orbital_flight.g_force)
-        self.assertClose(100000, self.surface_flight.true_altitude, error=50)
-        self.assertClose(100000, self.surface_flight.absolute_altitude, error=50)
-        self.assertClose(100930, self.surface_flight.surface_altitude, error=50)
+        self.assertClose(100000, self.surface_flight.mean_altitude, error=50)
+        self.assertClose(100000, self.surface_flight.surface_altitude, error=50)
+        self.assertClose(100930, self.surface_flight.bedrock_altitude, error=50)
         self.assertClose(930, self.surface_flight.elevation, error=50)
         self.assertClose([-2042.5, 0, 0], vector(self.surface_flight.velocity), error=0.5)
         self.assertClose(2042.5, self.surface_flight.speed, error=0.5)
