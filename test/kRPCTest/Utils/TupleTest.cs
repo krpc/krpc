@@ -19,13 +19,13 @@ namespace KRPCTest.Utils
             var t3 = Tuple.Create<bool,int,float> (false, 42, 3.14159f);
             Assert.AreEqual (false, t3.Item1);
             Assert.AreEqual (42, t3.Item2);
-            Assert.AreEqual (3.14159, t3.Item2);
+            Assert.AreEqual (3.14159f, t3.Item3);
 
             var t4 = Tuple.Create<bool,int,float,string> (false, 42, 3.14159f, "foo");
             Assert.AreEqual (false, t4.Item1);
             Assert.AreEqual (42, t4.Item2);
-            Assert.AreEqual (3.14159, t4.Item2);
-            Assert.AreEqual ("foo", t4.Item2);
+            Assert.AreEqual (3.14159f, t4.Item3);
+            Assert.AreEqual ("foo", t4.Item4);
         }
     }
 }
