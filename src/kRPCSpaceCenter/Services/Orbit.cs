@@ -8,10 +8,12 @@ namespace KRPCSpaceCenter.Services
     public sealed class Orbit
     {
         global::Orbit orbit;
+        ReferenceFrame referenceFrame;
 
         internal Orbit (global::Vessel vessel)
         {
             this.orbit = vessel.GetOrbit ();
+            referenceFrame = new ReferenceFrame (ReferenceFrame.Type.Orbital, vessel);
         }
 
         internal Orbit (global::CelestialBody body)
@@ -20,6 +22,7 @@ namespace KRPCSpaceCenter.Services
             if (body.name == "Sun")
                 throw new ArgumentException ("The sun has no orbit");
             this.orbit = body.GetOrbit ();
+            referenceFrame = new ReferenceFrame (ReferenceFrame.Type.Orbital, body);
         }
 
         internal Orbit (global::Orbit orbit)
@@ -120,6 +123,11 @@ namespace KRPCSpaceCenter.Services
             get {
                 return (Double.IsNaN (TimeToSOIChange)) ? null : new Orbit (orbit.nextPatch);
             }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return referenceFrame; }
         }
     }
 }

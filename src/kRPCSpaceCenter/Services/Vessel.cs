@@ -4,6 +4,7 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -35,57 +36,57 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Vessel : Equatable<Vessel>
     {
-        global::Vessel vessel;
-
         internal Vessel (global::Vessel vessel)
         {
-            this.vessel = vessel;
+            InternalVessel = vessel;
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
             Resources = new Resources (vessel);
         }
 
+        internal global::Vessel InternalVessel { get; private set; }
+
         public override bool Equals (Vessel other)
         {
-            return vessel == other.vessel;
+            return InternalVessel == other.InternalVessel;
         }
 
         public override int GetHashCode ()
         {
-            return vessel.GetHashCode ();
+            return InternalVessel.GetHashCode ();
         }
 
         [KRPCProperty]
         public string Name {
-            get { return vessel.vesselName; }
-            set { vessel.vesselName = value; }
+            get { return InternalVessel.vesselName; }
+            set { InternalVessel.vesselName = value; }
         }
 
         [KRPCProperty]
         public VesselType Type {
             get {
-                return vessel.vesselType.ToVesselType ();
+                return InternalVessel.vesselType.ToVesselType ();
             }
             set {
-                vessel.vesselType = value.FromVesselType ();
+                InternalVessel.vesselType = value.FromVesselType ();
             }
         }
 
         [KRPCProperty]
         public VesselSituation Situation {
-            get { return vessel.situation.ToVesselSituation (); }
+            get { return InternalVessel.situation.ToVesselSituation (); }
         }
 
         [KRPCProperty]
         public double MET {
-            get { return vessel.missionTime; }
+            get { return InternalVessel.missionTime; }
         }
 
         [KRPCMethod]
-        public Flight Flight (ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
+        public Flight Flight (ReferenceFrame referenceFrame)
         {
-            return new Flight (vessel, referenceFrame);
+            return new Flight (InternalVessel, referenceFrame);
         }
 
         [KRPCProperty]
@@ -109,14 +110,14 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double Mass {
             get {
-                return vessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.TotalMass ()).Sum ();
+                return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.TotalMass ()).Sum ();
             }
         }
 
         [KRPCProperty]
         public double DryMass {
             get {
-                return vessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.DryMass ()).Sum ();
+                return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.DryMass ()).Sum ();
             }
         }
 
@@ -130,9 +131,26 @@ namespace KRPCSpaceCenter.Services
             get {
                 // Mass-weighted average of max_drag for each part
                 // Note: Uses Part.mass, so does not include the mass of resources
-                return vessel.Parts.Select (p => p.maximum_drag * p.mass).Sum () /
-                vessel.Parts.Select (p => p.mass).Sum ();
+                return InternalVessel.Parts.Select (p => p.maximum_drag * p.mass).Sum () /
+                InternalVessel.Parts.Select (p => p.mass).Sum ();
             }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return new ReferenceFrame (ReferenceFrame.Type.Vessel, InternalVessel); }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame SurfaceReferenceFrame {
+            get {
+                return new ReferenceFrame (ReferenceFrame.Type.CelestialBodySurface, InternalVessel.mainBody, InternalVessel);
+            }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame OrbitReferenceFrame {
+            get { return Orbit.ReferenceFrame; }
         }
     }
 }

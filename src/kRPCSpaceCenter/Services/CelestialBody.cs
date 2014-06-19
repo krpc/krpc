@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using KRPCSpaceCenter.ExtensionMethods;
+using UnityEngine;
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -12,27 +16,27 @@ namespace KRPCSpaceCenter.Services
 
         internal CelestialBody (global::CelestialBody body)
         {
-            Body = body;
+            InternalBody = body;
             // TODO: better way to check for orbits?
             if (body.name != "Sun")
                 this.orbit = new Orbit (body);
         }
 
-        internal global::CelestialBody Body { get; private set; }
+        internal global::CelestialBody InternalBody { get; private set; }
 
         public override bool Equals (CelestialBody other)
         {
-            return Body == other.Body;
+            return InternalBody == other.InternalBody;
         }
 
         public override int GetHashCode ()
         {
-            return Body.GetHashCode ();
+            return InternalBody.GetHashCode ();
         }
 
         [KRPCProperty]
         public string Name {
-            get { return Body.name; }
+            get { return InternalBody.name; }
         }
 
         [KRPCProperty]
@@ -40,7 +44,7 @@ namespace KRPCSpaceCenter.Services
             get {
                 var allBodies = SpaceCenter.Bodies;
                 var bodies = new List<CelestialBody> ();
-                foreach (var body in Body.orbitingBodies) {
+                foreach (var body in InternalBody.orbitingBodies) {
                     bodies.Add (allBodies [body.name]);
                 }
                 return bodies;
@@ -49,32 +53,32 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double Mass {
-            get { return Body.Mass; }
+            get { return InternalBody.Mass; }
         }
 
         [KRPCProperty]
         public double GravitationalParameter {
-            get { return Body.gravParameter; }
+            get { return InternalBody.gravParameter; }
         }
 
         [KRPCProperty]
         public double SurfaceGravity {
-            get { return Body.GeeASL * 9.81d; }
+            get { return InternalBody.GeeASL * 9.81d; }
         }
 
         [KRPCProperty]
         public double RotationalPeriod {
-            get { return Body.rotationPeriod; }
+            get { return InternalBody.rotationPeriod; }
         }
 
         [KRPCProperty]
         public double EquatorialRadius {
-            get { return Body.Radius; }
+            get { return InternalBody.Radius; }
         }
 
         [KRPCProperty]
         public double SphereOfInfluence {
-            get { return Body.sphereOfInfluence; }
+            get { return InternalBody.sphereOfInfluence; }
         }
 
         [KRPCProperty]
@@ -84,27 +88,27 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public bool HasAtmosphere {
-            get { return Body.atmosphere; }
+            get { return InternalBody.atmosphere; }
         }
 
         [KRPCProperty]
         public double AtmospherePressure {
-            get { return HasAtmosphere ? Body.atmosphereMultiplier * 101325d : 0d; }
+            get { return HasAtmosphere ? InternalBody.atmosphereMultiplier * 101325d : 0d; }
         }
 
         [KRPCProperty]
         public double AtmosphereDensity {
-            get { return HasAtmosphere ? Body.atmosphereMultiplier * FlightGlobals.getAtmDensity (1d) : 0d; }
+            get { return HasAtmosphere ? InternalBody.atmosphereMultiplier * FlightGlobals.getAtmDensity (1d) : 0d; }
         }
 
         [KRPCProperty]
         public double AtmosphereScaleHeight {
-            get { return HasAtmosphere ? Body.atmosphereScaleHeight * 1000 : 0d; }
+            get { return HasAtmosphere ? InternalBody.atmosphereScaleHeight * 1000d : 0d; }
         }
 
         [KRPCProperty]
         public double AtmosphereMaxAltitude {
-            get { return HasAtmosphere ? Body.maxAtmosphereAltitude : 0d; }
+            get { return HasAtmosphere ? InternalBody.maxAtmosphereAltitude : 0d; }
         }
 
         [KRPCMethod]
@@ -117,6 +121,17 @@ namespace KRPCSpaceCenter.Services
         public double AtmosphereDensityAt (double meanAltitude)
         {
             return AtmosphereDensity * Math.Exp (-meanAltitude / AtmosphereScaleHeight);
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return new ReferenceFrame (ReferenceFrame.Type.CelestialBody, InternalBody); }
+        }
+
+        [KRPCMethod]
+        public ReferenceFrame SurfaceReferenceFrame (Vessel vessel)
+        {
+            return new ReferenceFrame (ReferenceFrame.Type.CelestialBodySurface, InternalBody, vessel.InternalVessel);
         }
     }
 }

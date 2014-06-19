@@ -58,7 +58,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         Vector3d GetUpDirection ()
         {
-            return ReferenceFrameTransform.GetUp (referenceFrame, vessel);
+            return referenceFrame.Up;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         Vector3d GetNorthDirection ()
         {
-            return ReferenceFrameTransform.GetForward (referenceFrame, vessel);
+            return referenceFrame.Forward;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         QuaternionD GetRotation ()
         {
-            return ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * ((QuaternionD)vessel.GetTransform ().rotation);
+            return referenceFrame.Rotation.Inverse () * ((QuaternionD)vessel.GetTransform ().rotation);
         }
 
         [KRPCProperty]
@@ -106,34 +106,22 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Tuple3 Velocity {
-            get {
-                var rotation = ReferenceFrameTransform.GetRotation (referenceFrame, vessel);
-                var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
-                return (rotation.Inverse () * (GetVelocity () - velocity)).ToTuple ();
-            }
+            get { return (referenceFrame.Rotation.Inverse () * (GetVelocity () - referenceFrame.Velocity)).ToTuple (); }
         }
 
         [KRPCProperty]
         public double Speed {
-            get {
-                var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
-                return (GetVelocity () - velocity).magnitude;
-            }
+            get { return (GetVelocity () - referenceFrame.Velocity).magnitude; }
         }
 
         [KRPCProperty]
         public double HorizontalSpeed {
-            get {
-                return Speed - VerticalSpeed;
-            }
+            get { return Speed - VerticalSpeed; }
         }
 
         [KRPCProperty]
         public double VerticalSpeed {
-            get {
-                var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
-                return Vector3d.Dot (GetVelocity () - velocity, GetUpDirection ());
-            }
+            get { return Vector3d.Dot (GetVelocity () - referenceFrame.Velocity, GetUpDirection ()); }
         }
 
         [KRPCProperty]
@@ -143,17 +131,17 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Tuple3 Direction {
-            get { return (ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * GetDirection ()).ToTuple (); }
+            get { return (referenceFrame.Rotation.Inverse () * GetDirection ()).ToTuple (); }
         }
 
         [KRPCProperty]
         public Tuple3 UpDirection {
-            get { return (ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * GetUpDirection ()).ToTuple (); }
+            get { return (referenceFrame.Rotation.Inverse () * GetUpDirection ()).ToTuple (); }
         }
 
         [KRPCProperty]
         public Tuple3 NorthDirection {
-            get { return (ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * GetNorthDirection ()).ToTuple (); }
+            get { return (referenceFrame.Rotation.Inverse () * GetNorthDirection ()).ToTuple (); }
         }
 
         [KRPCProperty]
@@ -173,20 +161,16 @@ namespace KRPCSpaceCenter.Services
 
         Vector3d GetPrograde ()
         {
-            var rotation = ReferenceFrameTransform.GetRotation (referenceFrame, vessel);
-            var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
-            return (rotation.Inverse () * (GetVelocity () - velocity)).normalized;
+            return (referenceFrame.Rotation.Inverse () * (GetVelocity () - referenceFrame.Velocity)).normalized;
         }
 
         Vector3d GetNormal ()
         {
-            var rotation = ReferenceFrameTransform.GetRotation (referenceFrame, vessel);
-            var velocity = ReferenceFrameTransform.GetVelocity (referenceFrame, vessel);
             var normal = vessel.GetOrbit ().GetOrbitNormal ();
             var tmp = normal.y;
             normal.y = normal.z;
             normal.z = tmp;
-            return (rotation.Inverse () * (normal - velocity)).normalized;
+            return (referenceFrame.Rotation.Inverse () * (normal - referenceFrame.Velocity)).normalized;
         }
 
         Vector3d GetRadial ()
