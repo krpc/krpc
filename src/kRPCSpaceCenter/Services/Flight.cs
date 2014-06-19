@@ -223,5 +223,16 @@ namespace KRPCSpaceCenter.Services
         public Tuple3 RadialNeg {
             get { return (-GetRadial ()).ToTuple (); }
         }
+
+        [KRPCProperty]
+        public double Drag {
+            get {
+                var body = new CelestialBody (this.vessel.mainBody);
+                if (!body.HasAtmosphere)
+                    return 0d;
+                var vessel = new Vessel (this.vessel);
+                return 0.5d * body.AtmosphereDensityAt (MeanAltitude) * Math.Pow (Speed, 2d) * vessel.DragCoefficient * vessel.CrossSectionalArea;
+            }
+        }
     }
 }
