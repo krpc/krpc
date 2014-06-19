@@ -58,7 +58,7 @@ namespace KRPC.Service
                 if (e.InnerException.GetType () == typeof(YieldException))
                     throw e.InnerException;
                 throw new RPCException ("Procedure '" + procedure.FullyQualifiedName + "' threw an exception. " +
-                e.InnerException.GetType () + ": " + e.InnerException.Message);
+                e.InnerException.GetType () + ": " + e.InnerException.Message + "\n" + e.InnerException.StackTrace);
             }
             var responseBuilder = Response.CreateBuilder ();
             if (procedure.HasReturnType)
