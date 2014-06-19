@@ -13,7 +13,7 @@ namespace KRPCSpaceCenter.Services
         internal Orbit (global::Vessel vessel)
         {
             this.orbit = vessel.GetOrbit ();
-            referenceFrame = new ReferenceFrame (ReferenceFrame.Type.Orbital, vessel);
+            referenceFrame = ReferenceFrame.Orbital (vessel);
         }
 
         internal Orbit (global::CelestialBody body)
@@ -22,7 +22,7 @@ namespace KRPCSpaceCenter.Services
             if (body.name == "Sun")
                 throw new ArgumentException ("The sun has no orbit");
             this.orbit = body.GetOrbit ();
-            referenceFrame = new ReferenceFrame (ReferenceFrame.Type.Orbital, body);
+            referenceFrame = ReferenceFrame.Orbital (body);
         }
 
         internal Orbit (global::Orbit orbit)

@@ -50,7 +50,7 @@ namespace KRPCSpaceCenter.Services
         public void SetRotation (double pitch, double yaw, double roll = Double.NaN, ReferenceFrame referenceFrame = null)
         {
             if (referenceFrame == null)
-                referenceFrame = new ReferenceFrame (ReferenceFrame.Type.Orbital, vessel);
+                referenceFrame = ReferenceFrame.Orbital (vessel);
             engaged.Add (this);
             this.referenceFrame = referenceFrame;
             this.pitch = pitch;
@@ -62,7 +62,7 @@ namespace KRPCSpaceCenter.Services
         public void SetDirection (Tuple3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = null)
         {
             if (referenceFrame == null)
-                referenceFrame = new ReferenceFrame (ReferenceFrame.Type.Orbital, vessel);
+                referenceFrame = ReferenceFrame.Orbital (vessel);
             engaged.Add (this);
             this.referenceFrame = referenceFrame;
             var rotation = Quaternion.FromToRotation (Vector3d.forward, direction.ToVector ());

@@ -8,45 +8,59 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class ReferenceFrame
     {
-        public enum Type
+        enum Type
         {
             CelestialBody,
             CelestialBodySurface,
             Vessel,
             Orbital,
-            Part,
-            Maneuver
+            Maneuver,
+            Part
         }
 
         Type type;
         global::CelestialBody body;
         global::Vessel vessel;
 
-        public ReferenceFrame (Type type, global::CelestialBody body)
+        ReferenceFrame (Type type)
         {
             this.type = type;
-            this.body = body;
-            this.vessel = null;
-            if (type != Type.CelestialBody && type != Type.Orbital)
-                throw new ArgumentException ("Incorrect data for reference frame type. Got " + type + " with CelestialBody data.");
         }
 
-        public ReferenceFrame (Type type, global::Vessel vessel)
+        internal static ReferenceFrame CelestialBody (global::CelestialBody body)
         {
-            this.type = type;
-            this.vessel = vessel;
-            this.body = vessel.mainBody;
-            if (type != Type.Vessel && type != Type.Orbital)
-                throw new ArgumentException ("Incorrect data for reference frame type. Got " + type + " with Vessel data.");
+            var r = new ReferenceFrame (Type.CelestialBody);
+            r.body = body;
+            return r;
         }
 
-        public ReferenceFrame (Type type, global::CelestialBody body, global::Vessel vessel)
+        internal static ReferenceFrame CelestialBodySurface (global::CelestialBody body, global::Vessel vessel)
         {
-            this.type = type;
-            this.body = body;
-            this.vessel = vessel;
-            if (type != Type.CelestialBodySurface)
-                throw new ArgumentException ("Incorrect data for reference frame type. Got " + type + " with CelestialBody and Vessel data.");
+            var r = new ReferenceFrame (Type.CelestialBodySurface);
+            r.body = body;
+            r.vessel = vessel;
+            return r;
+        }
+
+        internal static ReferenceFrame Vessel (global::Vessel vessel)
+        {
+            var r = new ReferenceFrame (Type.Vessel);
+            r.vessel = vessel;
+            return r;
+        }
+
+        internal static ReferenceFrame Orbital (global::CelestialBody body)
+        {
+            var r = new ReferenceFrame (Type.Orbital);
+            r.body = body;
+            return r;
+        }
+
+        internal static ReferenceFrame Orbital (global::Vessel vessel)
+        {
+            var r = new ReferenceFrame (Type.Orbital);
+            r.vessel = vessel;
+            return r;
         }
 
         /// <summary>

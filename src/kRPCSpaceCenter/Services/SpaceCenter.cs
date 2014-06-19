@@ -58,7 +58,7 @@ namespace KRPCSpaceCenter.Services
             float rate = Mathf.Clamp ((float)(UT - Planetarium.GetUniversalTime ()), 1f, (float)maxRate);
 
             var vessel = ActiveVessel;
-            var flight = vessel.Flight (new ReferenceFrame (ReferenceFrame.Type.Orbital, vessel.InternalVessel));
+            var flight = vessel.Flight (ReferenceFrame.Orbital (vessel.InternalVessel));
             var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (1, vessel.Orbit.Body.InternalBody);
 
             if (vessel.Situation != VesselSituation.Landed && vessel.Situation != VesselSituation.Splashed && flight.MeanAltitude < altitudeLimit)

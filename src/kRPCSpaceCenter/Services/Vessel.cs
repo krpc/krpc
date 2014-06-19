@@ -87,7 +87,7 @@ namespace KRPCSpaceCenter.Services
         public Flight Flight (ReferenceFrame referenceFrame = null)
         {
             if (referenceFrame == null)
-                referenceFrame = new ReferenceFrame (ReferenceFrame.Type.Orbital, InternalVessel);
+                referenceFrame = ReferenceFrame.Orbital (InternalVessel);
             return new Flight (InternalVessel, referenceFrame);
         }
 
@@ -140,13 +140,13 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return new ReferenceFrame (ReferenceFrame.Type.Vessel, InternalVessel); }
+            get { return ReferenceFrame.Vessel (InternalVessel); }
         }
 
         [KRPCProperty]
         public ReferenceFrame SurfaceReferenceFrame {
             get {
-                return new ReferenceFrame (ReferenceFrame.Type.CelestialBodySurface, InternalVessel.mainBody, InternalVessel);
+                return ReferenceFrame.CelestialBodySurface (InternalVessel.mainBody, InternalVessel);
             }
         }
 

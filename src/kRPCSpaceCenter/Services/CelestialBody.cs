@@ -125,13 +125,13 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return new ReferenceFrame (ReferenceFrame.Type.CelestialBody, InternalBody); }
+            get { return ReferenceFrame.CelestialBody (InternalBody); }
         }
 
         [KRPCMethod]
         public ReferenceFrame SurfaceReferenceFrame (Vessel vessel)
         {
-            return new ReferenceFrame (ReferenceFrame.Type.CelestialBodySurface, InternalBody, vessel.InternalVessel);
+            return ReferenceFrame.CelestialBodySurface (InternalBody, vessel.InternalVessel);
         }
 
         [KRPCProcedure]
