@@ -3,6 +3,7 @@
 import unittest
 import testingtools
 from testingtools import load_save
+from mathtools import norm
 import krpc
 import time
 
@@ -41,6 +42,53 @@ class TestBody(testingtools.TestCase):
         t = self.conn.space_center.ut + (5*60)
         self.conn.space_center.warp_to(t)
         self.assertClose(t, self.conn.space_center.ut, error=2)
+
+    def test_transform_position_same_reference_frame(self):
+        r = self.conn.space_center.active_vessel.reference_frame
+        self.assertEqual((1,2,3), self.conn.space_center.transform_position((1,2,3), r, r))
+
+    def test_transform_position_between_celestial_bodies(self):
+        bodies = self.conn.space_center.bodies
+        sun = bodies['Sun']
+        kerbin = bodies['Kerbin']
+        mun = bodies['Mun']
+        ref_sun = sun.reference_frame
+        ref_kerbin = kerbin.reference_frame
+        ref_mun = mun.reference_frame
+
+        p = self.conn.space_center.transform_position((0,0,0), ref_kerbin, ref_mun)
+        self.assertClose(mun.orbit.radius, norm(p))
+
+        p = self.conn.space_center.transform_position((0,0,0), ref_sun, ref_kerbin)
+        self.assertClose(kerbin.orbit.radius, norm(p))
+
+    def test_transform_position_between_vessel_and_celestial_body(self):
+        bodies = self.conn.space_center.bodies
+        vessel = self.conn.space_center.active_vessel
+        kerbin = bodies['Kerbin']
+        ref_vessel = vessel.reference_frame
+        ref_kerbin = kerbin.reference_frame
+
+        p = self.conn.space_center.transform_position((0,0,0), ref_vessel, ref_kerbin)
+        self.assertClose(vessel.orbit.radius, norm(p), error=0.01)
+
+    def test_transform_position_between_vessel_and_celestial_bodies(self):
+        bodies = self.conn.space_center.bodies
+        vessel = self.conn.space_center.active_vessel
+        sun = bodies['Sun']
+        kerbin = bodies['Kerbin']
+        ref_vessel = vessel.reference_frame
+        ref_sun = sun.reference_frame
+        ref_kerbin = kerbin.reference_frame
+
+        p0 = self.conn.space_center.transform_position((0,0,0), ref_vessel, ref_kerbin)
+        p1 = self.conn.space_center.transform_position((0,0,0), ref_vessel, ref_sun)
+        p2 = self.conn.space_center.transform_position((0,0,0), ref_kerbin, ref_sun)
+
+        import itertools
+        p3 = tuple(x-y for (x,y) in itertools.izip(p1,p2))
+        #TODO: large error
+        self.assertClose(norm(p0), norm(p3), error=500)
 
 if __name__ == "__main__":
     unittest.main()
