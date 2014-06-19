@@ -92,7 +92,7 @@ class TestBody(testingtools.TestCase):
         self.assertClose(0.2 * 1.2230948554874, duna.atmosphere_density)
         self.assertClose(3000, duna.atmosphere_scale_height)
         self.assertClose(50000, duna.atmosphere_max_altitude)
-        self.assertClose(duna.atmosphere_pressure, kerbin.atmosphere_pressure_at(0))
+        self.assertClose(duna.atmosphere_pressure, duna.atmosphere_pressure_at(0))
         self.assertClose(duna.atmosphere_density, duna.atmosphere_density_at(0))
         self.assertClose(duna.atmosphere_pressure * math.exp(-1), duna.atmosphere_pressure_at(3000))
         self.assertClose(duna.atmosphere_density * math.exp(-1), duna.atmosphere_density_at(3000))
