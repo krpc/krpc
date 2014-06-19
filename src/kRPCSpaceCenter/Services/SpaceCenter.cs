@@ -114,5 +114,33 @@ namespace KRPCSpaceCenter.Services
             warpIncreaseAttemptTime = Planetarium.GetUniversalTime ();
             TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
         }
+
+        /// <summary>
+        /// Given a position as a vector in reference frame `from`, convert it to a position in reference frame `to`.
+        /// </summary>
+        [KRPCProcedure]
+        public static Tuple3 TransformPosition (Tuple3 position, ReferenceFrame from, ReferenceFrame to)
+        {
+            return to.PositionFromWorldSpace (from.PositionToWorldSpace (position.ToVector ())).ToTuple ();
+        }
+
+        /// <summary>
+        /// Given a direction as a 3D normalized vector in reference frame `from`,
+        /// convert it to a direction in reference frame `to`.
+        /// </summary>
+        [KRPCProcedure]
+        public static Tuple3 TransformDirection (Tuple3 direction, ReferenceFrame from, ReferenceFrame to)
+        {
+            throw new NotImplementedException ();
+        }
+
+        /// <summary>
+        /// Given a velcoity as a 3D vector in reference frame `from`, convert it to a velocity in reference frame `to`.
+        /// </summary>
+        [KRPCProcedure]
+        public static Tuple3 TransformVelocity (Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
+        {
+            return to.VelocityFromWorldSpace (from.VelocityToWorldSpace (velocity.ToVector ())).ToTuple ();
+        }
     }
 }
