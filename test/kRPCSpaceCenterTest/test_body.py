@@ -4,6 +4,7 @@ import unittest
 import testingtools
 from testingtools import load_save
 import krpc
+import math
 
 class TestBody(testingtools.TestCase):
 
@@ -34,6 +35,18 @@ class TestBody(testingtools.TestCase):
         self.assertClose(1.0 * 1.2230948554874, kerbin.atmosphere_density)
         self.assertClose(5000, kerbin.atmosphere_scale_height)
         self.assertClose(70000, kerbin.atmosphere_max_altitude)
+        self.assertClose(kerbin.atmosphere_pressure, kerbin.atmosphere_pressure_at(0))
+        self.assertClose(kerbin.atmosphere_density, kerbin.atmosphere_density_at(0))
+        self.assertClose(kerbin.atmosphere_pressure * math.exp(-1), kerbin.atmosphere_pressure_at(5000))
+        self.assertClose(kerbin.atmosphere_density * math.exp(-1), kerbin.atmosphere_density_at(5000))
+        self.assertClose(kerbin.atmosphere_pressure * math.exp(-2), kerbin.atmosphere_pressure_at(10000))
+        self.assertClose(kerbin.atmosphere_density * math.exp(-2), kerbin.atmosphere_density_at(10000))
+        self.assertClose(0, kerbin.atmosphere_pressure_at(float('inf')))
+        self.assertClose(0, kerbin.atmosphere_density_at(float('inf')))
+        self.assertClose(kerbin.atmosphere_pressure * math.exp(1), kerbin.atmosphere_pressure_at(-5000))
+        self.assertClose(kerbin.atmosphere_density * math.exp(1), kerbin.atmosphere_density_at(-5000))
+        self.assertClose(float('inf'), kerbin.atmosphere_pressure_at(-float('inf')))
+        self.assertClose(float('inf'), kerbin.atmosphere_density_at(-float('inf')))
 
     def test_mun(self):
         mun = self.conn.space_center.bodies['Mun']

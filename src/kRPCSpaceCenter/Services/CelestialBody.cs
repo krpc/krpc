@@ -106,5 +106,17 @@ namespace KRPCSpaceCenter.Services
         public double AtmosphereMaxAltitude {
             get { return HasAtmosphere ? Body.maxAtmosphereAltitude : 0d; }
         }
+
+        [KRPCMethod]
+        public double AtmospherePressureAt (double meanAltitude)
+        {
+            return AtmospherePressure * Math.Exp (-meanAltitude / AtmosphereScaleHeight);
+        }
+
+        [KRPCMethod]
+        public double AtmosphereDensityAt (double meanAltitude)
+        {
+            return AtmosphereDensity * Math.Exp (-meanAltitude / AtmosphereScaleHeight);
+        }
     }
 }
