@@ -1,0 +1,11 @@
+{
+  "NAME": "kRPC",
+  "URL": "https://raw.githubusercontent.com/djungelorm/krpc/latest-version/.version",
+  "DOWNLOAD": "https://github.com/djungelorm/krpc/releases/download/v0.1.3/krpc-0.1.3.zip",
+  "VERSION": "0.1.3",
+  "KSP_VERSION": {
+    "MAJOR": 0,
+    "MINOR": 23,
+    "PATCH": 5
+  }
+}
