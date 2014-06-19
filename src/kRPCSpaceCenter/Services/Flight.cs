@@ -74,9 +74,9 @@ namespace KRPCSpaceCenter.Services
         /// E.g. in the surface reference frame, is a rotation from the vessel direction vector
         /// (in surface-space coordinates) to the surface space basis vector
         /// </summary>
-        Quaternion GetRotation ()
+        QuaternionD GetRotation ()
         {
-            return ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * vessel.GetTransform ().rotation;
+            return ReferenceFrameTransform.GetRotation (referenceFrame, vessel).Inverse () * ((QuaternionD)vessel.GetTransform ().rotation);
         }
 
         [KRPCProperty]
@@ -157,17 +157,17 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public float Pitch {
+        public double Pitch {
             get { return GetRotation ().PitchHeadingRoll ().x; }
         }
 
         [KRPCProperty]
-        public float Heading {
+        public double Heading {
             get { return GetRotation ().PitchHeadingRoll ().y; }
         }
 
         [KRPCProperty]
-        public float Roll {
+        public double Roll {
             get { return GetRotation ().PitchHeadingRoll ().z; }
         }
 

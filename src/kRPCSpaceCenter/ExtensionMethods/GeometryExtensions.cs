@@ -97,18 +97,27 @@ namespace KRPCSpaceCenter.ExtensionMethods
         /// <summary>
         /// Compute the pitch angle of a quaternion in degrees.
         /// </summary>
-        public static Vector3 PitchHeadingRoll (this Quaternion q)
+        public static Vector3d PitchHeadingRoll (this QuaternionD q)
         {
             // First, adjust the euler angle extraction order frmo z,y,x -> -y,z,x
             // i.e. to extra pitch, then heading, then roll
-            var r = q * Quaternion.Euler (-90f, 0f, 0f);
+            // FIXME: QuaternionD.Euler method is not found at runtime
+            var r = q * ((QuaternionD)Quaternion.Euler (-90f, 0f, 0f)); //QuaternionD.Euler (-90d, 0d, 0d);
+            // FIXME: QuaternionD.eulerAngles property is not found at runtime
+            Vector3d eulerAngles = ((Quaternion)r).eulerAngles;
             // Convert angle around -y axis to pitch, with range [-90, 90]
-            var pitch = r.eulerAngles.x > 180f ? r.eulerAngles.x - 360f : r.eulerAngles.x;
+            var pitch = eulerAngles.x > 180d ? eulerAngles.x - 360d : eulerAngles.x;
             // Convert angle around z axis to heading, with range [0, 360]
-            var heading = 360f - r.eulerAngles.y;
+            var heading = 360d - eulerAngles.y;
             // Convert angle around x axis to heading, with range [-180, 180]
-            var roll = 180f - r.eulerAngles.z;
-            return new Vector3 (pitch, heading, roll).Round (1);
+            var roll = 180d - eulerAngles.z;
+            return new Vector3d (pitch, heading, roll);
+        }
+
+        public static QuaternionD Inverse (this QuaternionD q)
+        {
+            // FIXME: QuaternionD.Inverse is not defined. This uses single precision floating point for now.
+            return ((Quaternion)q).Inverse ();
         }
     }
 }

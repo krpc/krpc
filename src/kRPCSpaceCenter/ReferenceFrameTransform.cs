@@ -20,14 +20,14 @@ namespace KRPCSpaceCenter
         /// Returns the up vector for the given reference frame in world coordinates.
         /// The resulting vector is not normalized.
         /// </summary>
-        static Vector3 GetUpNotNormalized (ReferenceFrame referenceFrame, Vessel vessel)
+        static Vector3d GetUpNotNormalized (ReferenceFrame referenceFrame, Vessel vessel)
         {
             switch (referenceFrame) {
             case ReferenceFrame.Orbital:
             case ReferenceFrame.Surface:
             case ReferenceFrame.Maneuver:
             case ReferenceFrame.Target:
-                return vessel.CoM - vessel.mainBody.position;
+                return ((Vector3d)vessel.CoM) - vessel.mainBody.position;
             // Relative to the negative surface normal of the target docking port, or relative to the target if the target is not a docking port
             case ReferenceFrame.Docking:
                 throw new NotImplementedException ();
@@ -40,7 +40,7 @@ namespace KRPCSpaceCenter
         /// Returns the forward vector for the given reference frame in world coordinates.
         /// The resulting vector is not normalized.
         /// </summary>
-        static Vector3 GetForwardNotNormalized (ReferenceFrame referenceFrame, Vessel vessel)
+        static Vector3d GetForwardNotNormalized (ReferenceFrame referenceFrame, Vessel vessel)
         {
             switch (referenceFrame) {
             // Relative to the orbital velocity vector
@@ -52,7 +52,11 @@ namespace KRPCSpaceCenter
             // Relative to the surface / navball
             case ReferenceFrame.Orbital:
             case ReferenceFrame.Surface:
-                return Vector3.Exclude (GetUp (referenceFrame, vessel), vessel.mainBody.position + vessel.mainBody.transform.up * (float)vessel.mainBody.Radius - vessel.CoM);
+                {
+                    var up = GetUp (referenceFrame, vessel);
+                    var exclude = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - ((Vector3d)vessel.CoM);
+                    return Vector3d.Exclude (up, exclude);
+                }
             // Relative to the direction of the burn for a maneuver node, or relative to the orbit if there is no node
             case ReferenceFrame.Maneuver:
                 {
@@ -66,7 +70,7 @@ namespace KRPCSpaceCenter
                 {
                     var target = FlightGlobals.fetch.VesselTarget;
                     if (target != null)
-                        return vessel.GetObtVelocity () - target.GetObtVelocity ();
+                        return ((Vector3d)vessel.GetObtVelocity ()) - ((Vector3d)target.GetObtVelocity ());
                     else
                         return GetForward (ReferenceFrame.Orbital, vessel);
                 }
@@ -91,7 +95,7 @@ namespace KRPCSpaceCenter
         /// <summary>
         /// Returns the up vector for the given reference frame in world coordinates
         /// </summary>
-        public static Vector3 GetUp (ReferenceFrame referenceFrame, Vessel vessel)
+        public static Vector3d GetUp (ReferenceFrame referenceFrame, Vessel vessel)
         {
             return GetUpNotNormalized (referenceFrame, vessel).normalized;
         }
@@ -99,7 +103,7 @@ namespace KRPCSpaceCenter
         /// <summary>
         /// Returns the forward vector for the given reference frame in world coordinates
         /// </summary>
-        public static Vector3 GetForward (ReferenceFrame referenceFrame, Vessel vessel)
+        public static Vector3d GetForward (ReferenceFrame referenceFrame, Vessel vessel)
         {
             return GetForwardNotNormalized (referenceFrame, vessel).normalized;
         }
@@ -108,7 +112,7 @@ namespace KRPCSpaceCenter
         /// Returns the rotation for the given frame of reference.
         /// Applying the rotation to a vector in reference-frame-space produces the corresponding vector in world-space.
         /// </summary>
-        public static Quaternion GetRotation (ReferenceFrame referenceFrame, Vessel vessel)
+        public static QuaternionD GetRotation (ReferenceFrame referenceFrame, Vessel vessel)
         {
             if (referenceFrame == ReferenceFrame.Docking) {
                 var target = FlightGlobals.fetch.VesselTarget;
@@ -116,6 +120,7 @@ namespace KRPCSpaceCenter
                     // Who knows why this Quaternion.Euler(90, 0, 0) rotation is required?
                     // Note that the delta-calculation in AutoPilotAddon seems to reverse this rotation.
                     // So it seems like a problem with what Quaternion.LookRotation does.
+                    // FIXME: Uses single precision floating point
                     return (target as ModuleDockingNode).transform.rotation * Quaternion.Euler (90, 0, 0);
                 } else {
                     return GetRotation (ReferenceFrame.Target, vessel);
@@ -124,22 +129,27 @@ namespace KRPCSpaceCenter
             var forward = GetForwardNotNormalized (referenceFrame, vessel);
             // Note: forward is along the z-axis, up is along the negative y-axis
             var up = -GetUpNotNormalized (referenceFrame, vessel);
-            Vector3.OrthoNormalize (ref forward, ref up);
-            return Quaternion.LookRotation (forward, up);
+            //FIXME: Vector3d.OrthoNormalize and QuaternionD.LookRotation methods are not found at run-time
+            //Vector3d.OrthoNormalize (ref forward, ref up);
+            //return QuaternionD.LookRotation (forward, up);
+            Vector3 forward2 = forward;
+            Vector3 up2 = up;
+            Vector3.OrthoNormalize (ref forward2, ref up2);
+            return Quaternion.LookRotation (forward2, up2);
         }
 
         /// <summary>
         /// Returns the velocity of the reference frame in world-space.
         /// </summary>
-        public static Vector3 GetVelocity (ReferenceFrame referenceFrame, Vessel vessel)
+        public static Vector3d GetVelocity (ReferenceFrame referenceFrame, Vessel vessel)
         {
             switch (referenceFrame) {
             case ReferenceFrame.Orbital:
             case ReferenceFrame.Maneuver:
-                return Vector3.zero;
+                return Vector3d.zero;
             // Relative to the surface velocity vector
             case ReferenceFrame.Surface:
-                return vessel.GetObtVelocity () - vessel.GetSrfVelocity ();
+                return ((Vector3d)vessel.GetObtVelocity ()) - ((Vector3d)vessel.GetSrfVelocity ());
             // Relative to the target's velocity vector, or relative to the orbit if there is no target
             case ReferenceFrame.Target:
                 throw new NotImplementedException ();
