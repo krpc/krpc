@@ -44,5 +44,11 @@ class TestVessel(testingtools.TestCase):
         # 0.8 t dry mass
         self.assertEqual(0.8 * 1000, self.vessel.dry_mass)
 
+    def test_cross_sectional_area(self):
+        self.assertClose(0.008 * (0.84 * 1000), self.vessel.cross_sectional_area)
+
+    def test_drag_coefficient(self):
+        self.assertClose((0.84 * 0.2) / 0.84, self.vessel.drag_coefficient)
+
 if __name__ == "__main__":
     unittest.main()

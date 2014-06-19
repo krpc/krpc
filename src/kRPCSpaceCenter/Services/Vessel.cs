@@ -119,5 +119,20 @@ namespace KRPCSpaceCenter.Services
                 return vessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.DryMass ()).Sum ();
             }
         }
+
+        [KRPCProperty]
+        public double CrossSectionalArea {
+            get { return FlightGlobals.DragMultiplier * Mass; }
+        }
+
+        [KRPCProperty]
+        public double DragCoefficient {
+            get {
+                // Mass-weighted average of max_drag for each part
+                // Note: Uses Part.mass, so does not include the mass of resources
+                return vessel.Parts.Select (p => p.maximum_drag * p.mass).Sum () /
+                vessel.Parts.Select (p => p.mass).Sum ();
+            }
+        }
     }
 }
