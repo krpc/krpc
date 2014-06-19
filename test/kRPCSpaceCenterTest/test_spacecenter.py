@@ -6,6 +6,7 @@ from testingtools import load_save
 from mathtools import norm
 import krpc
 import time
+import itertools
 
 class TestBody(testingtools.TestCase):
 
@@ -85,10 +86,60 @@ class TestBody(testingtools.TestCase):
         p1 = self.conn.space_center.transform_position((0,0,0), ref_vessel, ref_sun)
         p2 = self.conn.space_center.transform_position((0,0,0), ref_kerbin, ref_sun)
 
-        import itertools
         p3 = tuple(x-y for (x,y) in itertools.izip(p1,p2))
         #TODO: large error
         self.assertClose(norm(p0), norm(p3), error=500)
+
+    def test_transform_velocity_same_reference_frame(self):
+        r = self.conn.space_center.active_vessel.reference_frame
+        self.assertEqual((1,2,3), self.conn.space_center.transform_velocity((1,2,3), r, r))
+
+    def test_transform_position_between_celestial_bodies(self):
+        bodies = self.conn.space_center.bodies
+        sun = bodies['Sun']
+        kerbin = bodies['Kerbin']
+        mun = bodies['Mun']
+        ref_sun = sun.reference_frame
+        ref_kerbin = kerbin.reference_frame
+        ref_mun = mun.reference_frame
+
+        v1 = self.conn.space_center.transform_velocity((0,0,0), ref_mun, ref_kerbin)
+        v2 = self.conn.space_center.transform_velocity((0,0,0), ref_kerbin, ref_mun)
+        self.assertClose(mun.orbit.speed, norm(v1))
+        self.assertClose(mun.orbit.speed, norm(v2))
+        self.assertClose(v1, tuple(-x for x in v2))
+
+        v1 = self.conn.space_center.transform_velocity((0,0,0), ref_kerbin, ref_sun)
+        v2 = self.conn.space_center.transform_velocity((0,0,0), ref_sun, ref_kerbin)
+        self.assertClose(kerbin.orbit.speed, norm(v1))
+        self.assertClose(kerbin.orbit.speed, norm(v2))
+        self.assertClose(v1, tuple(-x for x in v2))
+
+    def test_transform_velocity_between_vessel_and_celestial_body(self):
+        bodies = self.conn.space_center.bodies
+        vessel = self.conn.space_center.active_vessel
+        kerbin = bodies['Kerbin']
+        ref_vessel = vessel.reference_frame
+        ref_kerbin = kerbin.reference_frame
+
+        v = self.conn.space_center.transform_velocity((0,0,0), ref_vessel, ref_kerbin)
+        self.assertClose(vessel.orbit.speed, norm(v))
+
+    def test_transform_velocity_between_vessel_and_celestial_bodies(self):
+        bodies = self.conn.space_center.bodies
+        vessel = self.conn.space_center.active_vessel
+        sun = bodies['Sun']
+        kerbin = bodies['Kerbin']
+        ref_vessel = vessel.reference_frame
+        ref_sun = sun.reference_frame
+        ref_kerbin = kerbin.reference_frame
+
+        v0 = self.conn.space_center.transform_velocity((0,0,0), ref_vessel, ref_kerbin)
+        v1 = self.conn.space_center.transform_velocity((0,0,0), ref_vessel, ref_sun)
+        v2 = self.conn.space_center.transform_velocity((0,0,0), ref_kerbin, ref_sun)
+
+        v3 = tuple(x-y for (x,y) in itertools.izip(v1,v2))
+        self.assertClose(norm(v0), norm(v3))
 
 if __name__ == "__main__":
     unittest.main()
