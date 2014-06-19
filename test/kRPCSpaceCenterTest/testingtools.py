@@ -35,7 +35,7 @@ class TestCase(unittest.TestCase):
         self.assertTrue(value < min_value or max_value < value)
 
     def assertClose(self, expected, actual, error=0.001):
-        if type(expected) == list:
+        if type(expected) in (list,tuple):
             for x,y in itertools.izip(expected, actual):
                 self.assertEqual(len(expected), len(actual))
                 self.assertClose(x, y, error=error)
