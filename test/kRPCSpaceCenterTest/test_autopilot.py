@@ -24,13 +24,13 @@ class TestAutoPilot(testingtools.TestCase):
         roll = 30
 
         self.vessel.control.sas = False
-        self.ap.set_rotation(pitch, yaw, roll, self.vessel.orbit.reference_frame)
+        self.ap.set_rotation(pitch, yaw, roll)
         while self.ap.error > 0.1:
             time.sleep(0.25)
         self.vessel.control.sas = True
         self.ap.disengage()
 
-        flight = self.vessel.flight(self.vessel.orbit.reference_frame)
+        flight = self.vessel.flight()
         self.assertClose(pitch, flight.pitch, error=0.5)
         self.assertClose(yaw, flight.heading, error=0.5)
         self.assertClose(roll, flight.roll, error=0.5)
@@ -40,30 +40,30 @@ class TestAutoPilot(testingtools.TestCase):
         roll = 42
 
         self.vessel.control.sas = False
-        self.ap.set_direction(direction, roll=roll, reference_frame=self.vessel.orbit.reference_frame)
+        self.ap.set_direction(direction, roll=roll)
         while self.ap.error > 0.1:
             time.sleep(0.25)
         self.vessel.control.sas = True
         self.ap.disengage()
 
-        flight = self.vessel.flight(self.vessel.orbit.reference_frame)
+        flight = self.vessel.flight()
         self.assertClose(vector(direction), vector(flight.direction), error=0.1)
         self.assertClose(roll, flight.roll, error=0.5)
 
     def check_direction(self, direction, pitch, heading):
         self.vessel.control.sas = False
-        self.ap.set_direction(direction, reference_frame=self.vessel.orbit.reference_frame)
+        self.ap.set_direction(direction)
         while self.ap.error > 0.1:
             time.sleep(0.25)
         self.vessel.control.sas = True
         self.ap.disengage()
 
         # Check resulting direction vector
-        flight = self.vessel.flight(self.vessel.orbit.reference_frame)
+        flight = self.vessel.flight()
         self.assertClose(vector(direction), vector(flight.direction), error=0.1)
 
     def test_orbital_directions(self):
-        flight = self.vessel.flight(self.vessel.orbit.reference_frame)
+        flight = self.vessel.flight()
         self.check_direction(flight.prograde,    0,  0)
         self.check_direction(flight.retrograde,  0,  180)
         self.check_direction(flight.normal,      0,  270)
