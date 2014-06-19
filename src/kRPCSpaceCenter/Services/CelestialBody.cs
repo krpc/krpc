@@ -133,5 +133,11 @@ namespace KRPCSpaceCenter.Services
         {
             return new ReferenceFrame (ReferenceFrame.Type.CelestialBodySurface, InternalBody, vessel.InternalVessel);
         }
+
+        [KRPCProcedure]
+        public Tuple3 Position (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.PositionFromWorldSpace (InternalBody.position).ToTuple ();
+        }
     }
 }

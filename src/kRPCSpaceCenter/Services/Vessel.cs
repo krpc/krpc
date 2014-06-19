@@ -152,5 +152,11 @@ namespace KRPCSpaceCenter.Services
         public ReferenceFrame OrbitReferenceFrame {
             get { return Orbit.ReferenceFrame; }
         }
+
+        [KRPCMethod]
+        public Tuple3 Position (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.PositionFromWorldSpace (InternalVessel.GetWorldPos3D ()).ToTuple ();
+        }
     }
 }

@@ -2,7 +2,6 @@ using System;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
-
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 
 namespace KRPCSpaceCenter.Services
@@ -69,7 +68,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Tuple3 Vector {
-            get { return new Tuple3(0, 0, DeltaV); }
+            get { return new Tuple3 (0, 0, DeltaV); }
         }
 
         [KRPCProperty]
@@ -103,6 +102,13 @@ namespace KRPCSpaceCenter.Services
             node.RemoveSelf ();
             node = null;
             // TODO: delete this Node object
+        }
+
+        [KRPCMethod]
+        public Tuple3 Position (ReferenceFrame referenceFrame)
+        {
+            // TODO: is this the best way to get the position of the node in world space?
+            return referenceFrame.PositionFromWorldSpace (node.attachedGizmo.transform.position).ToTuple ();
         }
     }
 }
