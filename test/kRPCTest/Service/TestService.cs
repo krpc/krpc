@@ -132,6 +132,12 @@ namespace KRPCTest.Service
         }
 
         [KRPCProcedure]
+        public static void ProcedureOptionalNullArg (TestClass x = null)
+        {
+            Service.ProcedureOptionalNullArg (x);
+        }
+
+        [KRPCProcedure]
         public static void ProcedureEnumArg (KRPC.Schema.Test.TestEnum x)
         {
             Service.ProcedureEnumArg (x);

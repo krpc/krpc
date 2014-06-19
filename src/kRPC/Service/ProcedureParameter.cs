@@ -12,7 +12,7 @@ namespace KRPC.Service
         public object DefaultValue { get; private set; }
 
         public bool HasDefaultValue {
-            get { return DefaultValue != null; }
+            get { return DefaultValue != DBNull.Value; }
         }
 
         public ProcedureParameter (ParameterInfo info)
@@ -20,10 +20,17 @@ namespace KRPC.Service
             Type = info.ParameterType;
             Name = info.Name;
             bool hasDefaultValue = info.IsOptional && (info.Attributes & ParameterAttributes.HasDefault) == ParameterAttributes.HasDefault;
-            DefaultValue = hasDefaultValue ? info.DefaultValue : null;
+            DefaultValue = hasDefaultValue ? info.DefaultValue : DBNull.Value;
         }
 
-        public ProcedureParameter (Type type, string name, object defaultValue = null)
+        public ProcedureParameter (Type type, string name)
+        {
+            Type = type;
+            Name = name;
+            DefaultValue = DBNull.Value;
+        }
+
+        public ProcedureParameter (Type type, string name, object defaultValue)
         {
             Type = type;
             Name = name;

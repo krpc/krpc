@@ -533,6 +533,22 @@ namespace KRPCTest.Service
         }
 
         /// <summary>
+        /// Test calling a service method with an optional null argument
+        /// </summary>
+        [Test]
+        public void HandleRequestOptionalNullArg ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureOptionalNullArg (It.IsAny<TestService.TestClass> ()))
+                .Callback ((TestService.TestClass x) => {
+                Assert.AreEqual (x, null);
+            });
+            TestService.Service = mock.Object;
+            Run (Req ("TestService", "ProcedureOptionalNullArg"));
+            mock.Verify (x => x.ProcedureOptionalNullArg (It.IsAny<TestService.TestClass> ()), Times.Once ());
+        }
+
+        /// <summary>
         /// Test calling a service method with a missing argument
         /// </summary>
         [Test]

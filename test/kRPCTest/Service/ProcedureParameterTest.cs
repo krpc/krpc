@@ -15,6 +15,10 @@ namespace KRPCTest.Service
         {
         }
 
+        public static void MethodWithDefaultNullArg (string x = null)
+        {
+        }
+
         [Test]
         public void BasicUsage ()
         {
@@ -32,6 +36,16 @@ namespace KRPCTest.Service
             Assert.AreEqual (typeof(int), parameter.Type);
             Assert.IsTrue (parameter.HasDefaultValue);
             Assert.AreEqual (42, parameter.DefaultValue);
+        }
+
+        [Test]
+        public void DefaultNullArgument ()
+        {
+            var parameter = new ProcedureParameter (typeof(string), "bar", null);
+            Assert.AreEqual ("bar", parameter.Name);
+            Assert.AreEqual (typeof(string), parameter.Type);
+            Assert.IsTrue (parameter.HasDefaultValue);
+            Assert.AreEqual (null, parameter.DefaultValue);
         }
 
         [Test]
@@ -53,6 +67,17 @@ namespace KRPCTest.Service
             Assert.AreEqual (typeof(string), parameter.Type);
             Assert.IsTrue (parameter.HasDefaultValue);
             Assert.AreEqual ("foo", parameter.DefaultValue);
+        }
+
+        [Test]
+        public void FromMethodDefaultNullArgument ()
+        {
+            var method = typeof(ProcedureParameterTest).GetMethod ("MethodWithDefaultNullArg");
+            var parameter = new ProcedureParameter (method.GetParameters () [0]);
+            Assert.AreEqual ("x", parameter.Name);
+            Assert.AreEqual (typeof(string), parameter.Type);
+            Assert.IsTrue (parameter.HasDefaultValue);
+            Assert.AreEqual (null, parameter.DefaultValue);
         }
     }
 }
