@@ -84,8 +84,10 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public Flight Flight (ReferenceFrame referenceFrame)
+        public Flight Flight (ReferenceFrame referenceFrame = null)
         {
+            if (referenceFrame == null)
+                referenceFrame = new ReferenceFrame (ReferenceFrame.Type.Orbital, InternalVessel);
             return new Flight (InternalVessel, referenceFrame);
         }
 
