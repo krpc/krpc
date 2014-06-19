@@ -64,6 +64,8 @@ class TestBody(testingtools.TestCase):
         self.assertClose(0, mun.atmosphere_density)
         self.assertClose(0, mun.atmosphere_scale_height)
         self.assertClose(0, mun.atmosphere_max_altitude)
+        self.assertClose(0, mun.atmosphere_pressure_at(5000))
+        self.assertClose(0, mun.atmosphere_density_at(5000))
 
     def test_minmus(self):
         minmus = self.conn.space_center.bodies['Minmus']
@@ -90,6 +92,12 @@ class TestBody(testingtools.TestCase):
         self.assertClose(0.2 * 1.2230948554874, duna.atmosphere_density)
         self.assertClose(3000, duna.atmosphere_scale_height)
         self.assertClose(50000, duna.atmosphere_max_altitude)
+        self.assertClose(duna.atmosphere_pressure, kerbin.atmosphere_pressure_at(0))
+        self.assertClose(duna.atmosphere_density, duna.atmosphere_density_at(0))
+        self.assertClose(duna.atmosphere_pressure * math.exp(-1), duna.atmosphere_pressure_at(3000))
+        self.assertClose(duna.atmosphere_density * math.exp(-1), duna.atmosphere_density_at(3000))
+        self.assertClose(duna.atmosphere_pressure * math.exp(-2), duna.atmosphere_pressure_at(6000))
+        self.assertClose(duna.atmosphere_density * math.exp(-2), duna.atmosphere_density_at(6000))
 
     def test_system(self):
         bodies = self.conn.space_center.bodies
