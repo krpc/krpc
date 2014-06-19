@@ -10,7 +10,7 @@ namespace KRPCSpaceCenter.ExtensionMethods
         /// </summary>
         public static KRPC.Utils.Tuple<double,double,double> ToTuple (this Vector3d v)
         {
-            return new KRPC.Utils.Tuple<double,double,double>(v.x, v.y, v.z);
+            return new KRPC.Utils.Tuple<double,double,double> (v.x, v.y, v.z);
         }
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace KRPCSpaceCenter.ExtensionMethods
         /// </summary>
         public static KRPC.Utils.Tuple<double,double,double> ToTuple (this Vector3 v)
         {
-            return new KRPC.Utils.Tuple<double,double,double>(v.x, v.y, v.z);
+            return new KRPC.Utils.Tuple<double,double,double> (v.x, v.y, v.z);
         }
 
         /// <summary>

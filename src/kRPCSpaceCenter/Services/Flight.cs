@@ -3,7 +3,6 @@ using KRPC.Service.Attributes;
 using KRPC.Utils;
 using UnityEngine;
 using KRPCSpaceCenter.ExtensionMethods;
-
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 
 namespace KRPCSpaceCenter.Services
