@@ -1,6 +1,7 @@
-using KRPC.Service.Attributes;
-using UnityEngine;
 using System;
+using System.Linq;
+using UnityEngine;
+using KRPC.Service.Attributes;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -148,12 +149,18 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
-                    {// TODO: better way to check for orbits?
-                        if (body.name != "Sun")
+                    {
+                        // TODO: better way to check for having an orbit, that doesn't depend on name?
+                        if (body.name != "Sun") {
                             return body.GetOrbit ().GetVel ();
-                        else
-                        //TODO: The sun moves in world-space. How do we get this velocity?
-                        throw new NotImplementedException ();
+                        } else {
+                            // Get a body that orbits the sun
+                            var orbitingBody = FlightGlobals.Bodies.Find (b => b.name != "Sun" && b.GetOrbit ().referenceBody == body);
+                            var orbit = orbitingBody.GetOrbit ();
+                            // Compute the velocity of the sun in world space from this body
+                            // Can't be done for from the sun object as it has no orbit object
+                            return orbit.GetVel () - orbit.GetRelativeVel ();
+                        }
                     }
                 case Type.CelestialBodySurface:
                     {
@@ -166,6 +173,9 @@ namespace KRPCSpaceCenter.Services
                 case Type.Orbital:
                     // TODO: is this correct? (relative to world space)
                     return Vector3d.zero;
+                case Type.Maneuver:
+                case Type.Part:
+                    throw new NotImplementedException ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
