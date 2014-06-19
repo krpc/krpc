@@ -13,6 +13,7 @@ namespace KRPCSpaceCenter.Services
         internal CelestialBody (global::CelestialBody body)
         {
             Body = body;
+            // TODO: better way to check for orbits?
             if (body.name != "Sun")
                 this.orbit = new Orbit (body);
         }
