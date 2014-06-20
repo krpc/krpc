@@ -104,6 +104,11 @@ namespace KRPCSpaceCenter.Services
             // TODO: delete this Node object
         }
 
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return ReferenceFrame.Maneuver (node); }
+        }
+
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {

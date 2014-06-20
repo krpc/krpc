@@ -13,7 +13,9 @@ namespace KRPCSpaceCenter.Services
             CelestialBody,
             CelestialBodySurface,
             Vessel,
-            Orbital,
+            VesselSurface,
+            OrbitalBody,
+            OrbitalVessel,
             Maneuver,
             Part
         }
@@ -21,6 +23,7 @@ namespace KRPCSpaceCenter.Services
         Type type;
         global::CelestialBody body;
         global::Vessel vessel;
+        global::ManeuverNode node;
 
         ReferenceFrame (Type type)
         {
@@ -34,11 +37,10 @@ namespace KRPCSpaceCenter.Services
             return r;
         }
 
-        internal static ReferenceFrame CelestialBodySurface (global::CelestialBody body, global::Vessel vessel)
+        internal static ReferenceFrame CelestialBodySurface (global::CelestialBody body)
         {
             var r = new ReferenceFrame (Type.CelestialBodySurface);
             r.body = body;
-            r.vessel = vessel;
             return r;
         }
 
@@ -49,17 +51,33 @@ namespace KRPCSpaceCenter.Services
             return r;
         }
 
+        internal static ReferenceFrame VesselSurface (global::Vessel vessel)
+        {
+            var r = new ReferenceFrame (Type.VesselSurface);
+            r.vessel = vessel;
+            return r;
+        }
+
         internal static ReferenceFrame Orbital (global::CelestialBody body)
         {
-            var r = new ReferenceFrame (Type.Orbital);
+            if (body == body.referenceBody)
+                throw new ArgumentException ("Body does not orbit anything.");
+            var r = new ReferenceFrame (Type.OrbitalBody);
             r.body = body;
             return r;
         }
 
         internal static ReferenceFrame Orbital (global::Vessel vessel)
         {
-            var r = new ReferenceFrame (Type.Orbital);
+            var r = new ReferenceFrame (Type.OrbitalVessel);
             r.vessel = vessel;
+            return r;
+        }
+
+        internal static ReferenceFrame Maneuver (global::ManeuverNode node)
+        {
+            var r = new ReferenceFrame (Type.Maneuver);
+            r.node = node;
             return r;
         }
 
@@ -70,12 +88,17 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
+                case Type.CelestialBodySurface:
                     return body.position;
                 case Type.Vessel:
+                case Type.VesselSurface:
                     return vessel.GetWorldPos3D ();
-                case Type.CelestialBodySurface:
-                case Type.Orbital:
+                case Type.OrbitalBody:
+                    return body.referenceBody.position;
+                case Type.OrbitalVessel:
+                    return vessel.mainBody.position;
                 case Type.Maneuver:
+                    return node.patch.getPositionAtUT (node.UT);
                 case Type.Part:
                     throw new NotImplementedException ();
                 default:
@@ -91,11 +114,13 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
+                case Type.CelestialBodySurface:
                     {
-                        // TODO: better way to check for having an orbit, that doesn't depend on name?
-                        if (body.name != "Sun") {
+                        if (body != body.referenceBody) {
+                            // Body orbits something
                             return body.GetOrbit ().GetVel ();
                         } else {
+                            // Body does not orbit anything
                             // Get a body that orbits the sun
                             var orbitingBody = FlightGlobals.Bodies.Find (b => b.name != "Sun" && b.GetOrbit ().referenceBody == body);
                             var orbit = orbitingBody.GetOrbit ();
@@ -104,18 +129,16 @@ namespace KRPCSpaceCenter.Services
                             return orbit.GetVel () - orbit.GetRelativeVel ();
                         }
                     }
-                case Type.CelestialBodySurface:
-                    {
-                        if (vessel.mainBody != body)
-                            throw new ArgumentException ("Vessel is in orbit around a different body");
-                        return ((Vector3d)vessel.GetObtVelocity ()) - ((Vector3d)vessel.GetSrfVelocity ());
-                    }
                 case Type.Vessel:
                     return vessel.GetOrbit ().GetVel ();
-                case Type.Orbital:
-                    // TODO: is this correct? (relative to world space)
-                    return Vector3d.zero;
+                case Type.VesselSurface:
+                    return vessel.GetOrbit ().GetVel () - ((Vector3d)vessel.GetSrfVelocity ());
+                case Type.OrbitalBody:
+                    return body.GetOrbit ().GetVel ();
+                case Type.OrbitalVessel:
+                    return vessel.GetOrbit ().GetVel ();
                 case Type.Maneuver:
+                    return node.patch.GetVel ();
                 case Type.Part:
                     throw new NotImplementedException ();
                 default:
@@ -165,18 +188,21 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
+                case Type.CelestialBodySurface:
                     // The axis of rotation of the body
                     return body.bodyTransform.up;
-                case Type.CelestialBodySurface:
-                    return ((Vector3d)vessel.CoM) - body.position;
                 case Type.Vessel:
                     return vessel.upAxis;
-                case Type.Orbital:
-                    if (vessel != null)
-                        return ((Vector3d)vessel.CoM) - vessel.mainBody.position;
-                    else
+                case Type.VesselSurface:
+                    return ((Vector3d)vessel.CoM) - vessel.mainBody.position;
+                case Type.OrbitalBody:
+                    if (body.name == "Sun")
                         throw new NotImplementedException ();
+                    return body.position - body.referenceBody.position;
+                case Type.OrbitalVessel:
+                    return ((Vector3d)vessel.CoM) - vessel.mainBody.position;
                 case Type.Maneuver:
+                    return node.patch.GetOrbitNormal ();
                 case Type.Part:
                     throw new NotImplementedException ();
                 default:
@@ -194,23 +220,32 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                     return body.bodyTransform.up;
-                case Type.Vessel:
-                    return vessel.upAxis;
                 case Type.CelestialBodySurface:
                     {
-                        if (body != vessel.mainBody)
-                            throw new ArgumentException ("Vessel is in orbit around another body");
+                        throw new NotImplementedException ();
+                    }
+                case Type.Vessel:
+                    return vessel.upAxis;
+                case Type.VesselSurface:
+                    {
                         var exclude = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - ((Vector3d)vessel.CoM);
                         return Vector3d.Exclude (Up, exclude);
                     }
-                case Type.Orbital:
+                case Type.OrbitalBody:
                     {
-                        if (vessel != null) {
-                            var exclude = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - ((Vector3d)vessel.CoM);
-                            return Vector3d.Exclude (Up, exclude);
-                        } else
-                            throw new NotImplementedException ();
+                        // TODO: is this correct?
+                        var exclude = body.referenceBody.position + ((Vector3d)body.referenceBody.transform.up) * body.referenceBody.Radius - body.position;
+                        return Vector3d.Exclude (Up, exclude);
                     }
+                case Type.OrbitalVessel:
+                    {
+                        var exclude = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - ((Vector3d)vessel.CoM);
+                        return Vector3d.Exclude (Up, exclude);
+                    }
+                case Type.Maneuver:
+                    return node.patch.getOrbitalVelocityAtUT (node.UT);
+                case Type.Part:
+                    throw new NotImplementedException ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
