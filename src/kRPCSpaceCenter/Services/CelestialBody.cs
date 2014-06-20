@@ -72,6 +72,11 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double RotationalSpeed {
+            get { return (2d * Math.PI) / RotationalPeriod; }
+        }
+
+        [KRPCProperty]
         public double EquatorialRadius {
             get { return InternalBody.Radius; }
         }
