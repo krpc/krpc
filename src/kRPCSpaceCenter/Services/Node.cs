@@ -106,7 +106,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return ReferenceFrame.Maneuver (node); }
+            get { return ReferenceFrame.Object (node); }
         }
 
         [KRPCMethod]

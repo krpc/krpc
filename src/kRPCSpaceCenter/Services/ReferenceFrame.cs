@@ -11,18 +11,24 @@ namespace KRPCSpaceCenter.Services
         enum Type
         {
             CelestialBody,
+            CelestialBodyOrbital,
             CelestialBodySurface,
             Vessel,
+            VesselOrbital,
             VesselSurface,
-            OrbitalBody,
-            OrbitalVessel,
-            Maneuver,
-            Part
+            Part,
+            PartOrbital,
+            PartSurface,
+            //SpaceObject,
+            //SpaceObjectOrbital,
+            //SpaceObjectSurface,
+            Maneuver
         }
 
         Type type;
         global::CelestialBody body;
         global::Vessel vessel;
+        global::Part part;
         global::ManeuverNode node;
 
         ReferenceFrame (Type type)
@@ -30,31 +36,10 @@ namespace KRPCSpaceCenter.Services
             this.type = type;
         }
 
-        internal static ReferenceFrame CelestialBody (global::CelestialBody body)
+        internal static ReferenceFrame Object (global::CelestialBody body)
         {
             var r = new ReferenceFrame (Type.CelestialBody);
             r.body = body;
-            return r;
-        }
-
-        internal static ReferenceFrame CelestialBodySurface (global::CelestialBody body)
-        {
-            var r = new ReferenceFrame (Type.CelestialBodySurface);
-            r.body = body;
-            return r;
-        }
-
-        internal static ReferenceFrame Vessel (global::Vessel vessel)
-        {
-            var r = new ReferenceFrame (Type.Vessel);
-            r.vessel = vessel;
-            return r;
-        }
-
-        internal static ReferenceFrame VesselSurface (global::Vessel vessel)
-        {
-            var r = new ReferenceFrame (Type.VesselSurface);
-            r.vessel = vessel;
             return r;
         }
 
@@ -62,19 +47,63 @@ namespace KRPCSpaceCenter.Services
         {
             if (body == body.referenceBody)
                 throw new ArgumentException ("Body does not orbit anything.");
-            var r = new ReferenceFrame (Type.OrbitalBody);
+            var r = new ReferenceFrame (Type.CelestialBodyOrbital);
             r.body = body;
+            return r;
+        }
+
+        internal static ReferenceFrame Surface (global::CelestialBody body)
+        {
+            if (body == body.referenceBody)
+                throw new ArgumentException ("Body does not orbit anything.");
+            var r = new ReferenceFrame (Type.CelestialBodySurface);
+            r.body = body;
+            return r;
+        }
+
+        internal static ReferenceFrame Object (global::Vessel vessel)
+        {
+            var r = new ReferenceFrame (Type.Vessel);
+            r.vessel = vessel;
             return r;
         }
 
         internal static ReferenceFrame Orbital (global::Vessel vessel)
         {
-            var r = new ReferenceFrame (Type.OrbitalVessel);
+            var r = new ReferenceFrame (Type.VesselOrbital);
             r.vessel = vessel;
             return r;
         }
 
-        internal static ReferenceFrame Maneuver (global::ManeuverNode node)
+        internal static ReferenceFrame Surface (global::Vessel vessel)
+        {
+            var r = new ReferenceFrame (Type.VesselSurface);
+            r.vessel = vessel;
+            return r;
+        }
+
+        internal static ReferenceFrame Object (global::Part part)
+        {
+            var r = new ReferenceFrame (Type.Part);
+            r.part = part;
+            return r;
+        }
+
+        internal static ReferenceFrame Orbital (global::Part part)
+        {
+            var r = new ReferenceFrame (Type.PartOrbital);
+            r.part = part;
+            return r;
+        }
+
+        internal static ReferenceFrame Surface (global::Part part)
+        {
+            var r = new ReferenceFrame (Type.PartSurface);
+            r.part = part;
+            return r;
+        }
+
+        internal static ReferenceFrame Object (global::ManeuverNode node)
         {
             var r = new ReferenceFrame (Type.Maneuver);
             r.node = node;
