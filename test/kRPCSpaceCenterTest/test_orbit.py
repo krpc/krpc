@@ -7,7 +7,12 @@ import krpc
 
 class TestOrbit(testingtools.TestCase):
 
-    def test_orbit_kerbin(self):
+    @classmethod
+    def setUpClass(cls):
+        load_save('basic')
+        cls.conn = krpc.connect()
+
+    def test_vessel_orbiting_kerbin(self):
         load_save('orbit-kerbin')
         ksp = krpc.connect()
         vessel = ksp.space_center.active_vessel
@@ -39,7 +44,7 @@ class TestOrbit(testingtools.TestCase):
         self.assertClose(0, orbit.mean_anomaly_at_epoch, error=0.1)
         self.assertEqual(None, orbit.next_orbit)
 
-    def test_orbit_bop(self):
+    def test_vessel_orbiting_bop(self):
         load_save('orbit-bop')
         ksp = krpc.connect()
         vessel = ksp.space_center.active_vessel
@@ -71,7 +76,7 @@ class TestOrbit(testingtools.TestCase):
         self.assertClose(2.3, orbit.mean_anomaly_at_epoch, error=0.1)
         self.assertEqual(None, orbit.next_orbit)
 
-    def test_orbit_mun_escape_soi(self):
+    def test_vessel_orbiting_mun_on_escape_soi(self):
         load_save('orbit-mun-escape-soi')
         ksp = krpc.connect()
         vessel = ksp.space_center.active_vessel
@@ -110,7 +115,7 @@ class TestOrbit(testingtools.TestCase):
         self.assertClose(12428000, orbit.periapsis, error=1000)
 
     """
-    def test_orbit_minmus_parabolic(self):
+    def test_vessel_orbiting_minmus_on_parabolic_arc(self):
         load_save('orbit-minmus-parabolic')
         ksp = krpc.connect()
         vessel = ksp.space_center.active_vessel
@@ -130,6 +135,64 @@ class TestOrbit(testingtools.TestCase):
         self.assertClose(0, orbit.radius)
         self.assertClose(0, orbit.speed)
     """
+
+    def test_sun_orbit(self):
+        sun = self.conn.space_center.bodies['Sun']
+        self.assertIsNone(sun.orbit)
+
+    def test_kerbin_orbiting_sun(self):
+        kerbin = self.conn.space_center.bodies['Kerbin']
+        orbit = kerbin.orbit
+        self.assertEqual('Sun', orbit.body.name)
+        self.assertClose(13599840256, orbit.apoapsis)
+        self.assertClose(13599840256, orbit.periapsis)
+        self.assertClose(13599840256 - 261600000, orbit.apoapsis_altitude)
+        self.assertClose(13599840256 - 261600000, orbit.periapsis_altitude)
+        #self.assertClose(0, orbit.time_to_apoapsis, error=0.5)
+        #self.assertClose(0, orbit.time_to_periapsis, error=0.5)
+        self.assertClose(0, orbit.eccentricity)
+        self.assertClose(0, orbit.inclination)
+        self.assertClose(0, orbit.longitude_of_ascending_node)
+        self.assertClose(0, orbit.argument_of_periapsis)
+        #self.assertClose(0, orbit.mean_anomaly_at_epoch)
+        self.assertClose(13599840256, orbit.radius)
+        self.assertClose(9284.5, orbit.speed)
+
+    def test_minmus_orbiting_kerbin(self):
+        minmus = self.conn.space_center.bodies['Minmus']
+        orbit = minmus.orbit
+        self.assertEqual('Kerbin', orbit.body.name)
+        self.assertClose(47000000, orbit.apoapsis)
+        self.assertClose(47000000, orbit.periapsis)
+        self.assertClose(47000000 - 600000, orbit.apoapsis_altitude)
+        self.assertClose(47000000 - 600000, orbit.periapsis_altitude)
+        #self.assertClose(0, orbit.time_to_apoapsis, error=0.5)
+        #self.assertClose(0, orbit.time_to_periapsis, error=0.5)
+        self.assertClose(0, orbit.eccentricity)
+        self.assertClose(6, orbit.inclination)
+        self.assertClose(78, orbit.longitude_of_ascending_node)
+        self.assertClose(38, orbit.argument_of_periapsis)
+        #self.assertClose(0, orbit.mean_anomaly_at_epoch)
+        self.assertClose(47000000, orbit.radius)
+        self.assertClose(274.1, orbit.speed, error=0.5)
+
+    def test_eeloo_orbiting_sun(self):
+        eeloo = self.conn.space_center.bodies['Eeloo']
+        orbit = eeloo.orbit
+        self.assertEqual('Sun', orbit.body.name)
+        self.assertClose(113549713200, orbit.apoapsis)
+        self.assertClose(66687926800, orbit.periapsis)
+        self.assertClose(113549713200 - 261600000, orbit.apoapsis_altitude)
+        self.assertClose(66687926800 - 261600000, orbit.periapsis_altitude)
+        #self.assertClose(0, orbit.time_to_apoapsis, error=0.5)
+        #self.assertClose(0, orbit.time_to_periapsis, error=0.5)
+        self.assertClose(0.26, orbit.eccentricity)
+        self.assertClose(6.15, orbit.inclination)
+        self.assertClose(50, orbit.longitude_of_ascending_node)
+        self.assertClose(260, orbit.argument_of_periapsis)
+        #self.assertClose(0, orbit.mean_anomaly_at_epoch)
+        #self.assertClose(13599840256, orbit.radius)
+        #self.assertClose(9284.5, orbit.speed)
 
 if __name__ == "__main__":
     unittest.main()
