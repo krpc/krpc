@@ -117,19 +117,19 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
+                case Type.CelestialBodyOrbital:
                 case Type.CelestialBodySurface:
                     return body.position;
                 case Type.Vessel:
+                case Type.VesselOrbital:
                 case Type.VesselSurface:
                     return vessel.GetWorldPos3D ();
-                case Type.OrbitalBody:
-                    return body.referenceBody.position;
-                case Type.OrbitalVessel:
-                    return vessel.mainBody.position;
+                case Type.Part:
+                case Type.PartOrbital:
+                case Type.PartSurface:
+                    return part.vessel.GetWorldPos3D () + part.CoMOffset;
                 case Type.Maneuver:
                     return node.patch.getPositionAtUT (node.UT);
-                case Type.Part:
-                    throw new NotImplementedException ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
