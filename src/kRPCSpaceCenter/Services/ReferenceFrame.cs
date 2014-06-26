@@ -197,6 +197,7 @@ namespace KRPCSpaceCenter.Services
 
         /// <summary>
         /// Returns the up vector of the reference frame in world coordinates.
+        /// The direction in which the y-axis points.
         /// </summary>
         public Vector3d Up {
             get { return UpNotNormalized.normalized; }
@@ -204,6 +205,7 @@ namespace KRPCSpaceCenter.Services
 
         /// <summary>
         /// Returns the forward vector of the reference frame in world coordinates.
+        /// The direction in which the z axis points.
         /// </summary>
         public Vector3d Forward {
             get { return ForwardNotNormalized.normalized; }
@@ -211,6 +213,7 @@ namespace KRPCSpaceCenter.Services
 
         /// <summary>
         /// Returns the up vector for the reference frame in world coordinates.
+        /// The direction in which the y-axis points.
         /// The vector is not normalized.
         /// </summary>
         Vector3d UpNotNormalized {
@@ -242,6 +245,7 @@ namespace KRPCSpaceCenter.Services
 
         /// <summary>
         /// Returns the forward vector of the reference frame in world coordinates.
+        /// The direction in which the z axis points.
         /// The vector is not normalized.
         /// </summary>
         Vector3d ForwardNotNormalized {
