@@ -14,7 +14,7 @@ class TestFlight(testingtools.TestCase):
         cls.conn = krpc.connect()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.ref_surface = cls.vessel.surface_reference_frame
-        cls.ref_orbital = cls.vessel.orbit.reference_frame
+        cls.ref_orbital = cls.vessel.orbital_reference_frame
         cls.surface_flight = cls.vessel.flight(cls.ref_surface)
         cls.orbital_flight = cls.vessel.flight(cls.ref_orbital)
 
