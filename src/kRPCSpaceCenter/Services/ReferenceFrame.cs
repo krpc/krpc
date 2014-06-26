@@ -232,11 +232,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.CelestialBodySurface:
                     return body.bodyTransform.up;
                 case Type.CelestialBodyOrbital:
-                    {
-                        if (body.referenceBody == body)
-                            throw new NotImplementedException ();
-                        return body.position - body.referenceBody.position;
-                    }
+                    return body.position - body.referenceBody.position;
                 case Type.Vessel:
                     return vessel.upAxis;
                 case Type.VesselSurface:
