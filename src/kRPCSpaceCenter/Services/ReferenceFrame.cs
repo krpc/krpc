@@ -46,7 +46,7 @@ namespace KRPCSpaceCenter.Services
         internal static ReferenceFrame Orbital (global::CelestialBody body)
         {
             if (body == body.referenceBody)
-                throw new ArgumentException ("Body does not orbit anything.");
+                throw new ArgumentException ("CelestialBody '" + body.name + "' does not orbit anything");
             var r = new ReferenceFrame (Type.CelestialBodyOrbital);
             r.body = body;
             return r;
@@ -55,7 +55,7 @@ namespace KRPCSpaceCenter.Services
         internal static ReferenceFrame Surface (global::CelestialBody body)
         {
             if (body == body.referenceBody)
-                throw new ArgumentException ("Body does not orbit anything.");
+                throw new ArgumentException ("CelestialBody '" + body.name + "' does not orbit anything");
             var r = new ReferenceFrame (Type.CelestialBodySurface);
             r.body = body;
             return r;
