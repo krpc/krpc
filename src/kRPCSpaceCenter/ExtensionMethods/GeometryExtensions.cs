@@ -123,15 +123,15 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Implementation of QuaternionD.OrthoNormalize
+        /// Implementation of QuaternionD.OrthoNormalize, using stabilized Gram-Schmidt
         /// </summary>
         public static void OrthoNormalize2 (ref Vector3d normal, ref Vector3d tangent)
         {
-            Vector3 u = normal;
-            Vector3 v = tangent;
-            Vector3.OrthoNormalize (ref u, ref v);
-            normal = u;
-            tangent = v;
+            normal.Normalize ();
+            tangent.Normalize (); // Additional normalization, avoids large tangent norm
+            var proj = normal * Vector3d.Dot (tangent, normal);
+            tangent = tangent - proj;
+            tangent.Normalize ();
         }
 
         /// <summary>
