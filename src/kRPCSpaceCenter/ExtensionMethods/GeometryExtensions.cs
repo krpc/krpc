@@ -135,6 +135,23 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Compute the norm of a quaternion
+        /// </summary>
+        public static double Norm (this QuaternionD q)
+        {
+            return Math.Sqrt (q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
+        }
+
+        /// <summary>
+        /// Normalize a quaternion
+        /// </summary>
+        public static QuaternionD Normalize (this QuaternionD q)
+        {
+            var sf = 1d / q.Norm ();
+            return new QuaternionD (q.x * sf, q.y * sf, q.z * sf, q.w * sf);
+        }
+
+        /// <summary>
         /// Implementation of QuaternionD.LookRotation
         /// </summary>
         public static QuaternionD LookRotation2 (Vector3d forward, Vector3d up)
