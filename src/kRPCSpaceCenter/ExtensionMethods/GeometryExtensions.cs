@@ -156,7 +156,8 @@ namespace KRPCSpaceCenter.ExtensionMethods
         /// </summary>
         public static QuaternionD LookRotation2 (Vector3d forward, Vector3d up)
         {
-            return Quaternion.LookRotation (forward, up);
+            QuaternionD rotation = Quaternion.LookRotation (forward, up);
+            return rotation.Normalize ();
         }
     }
 }
