@@ -18,9 +18,8 @@ namespace KRPCSpaceCenter.Services
 
         internal Orbit (global::CelestialBody body)
         {
-            // TODO: better way of checking if a body has an orbit?
-            if (body.name == "Sun")
-                throw new ArgumentException ("The sun has no orbit");
+            if (body == body.referenceBody)
+                throw new ArgumentException ("Body does not orbit anything");
             this.orbit = body.GetOrbit ();
             referenceFrame = ReferenceFrame.Orbital (body);
         }
