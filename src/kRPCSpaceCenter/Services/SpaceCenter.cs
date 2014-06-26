@@ -125,17 +125,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
-        /// Given a direction as a 3D normalized vector in reference frame `from`,
-        /// convert it to a direction in reference frame `to`.
-        /// </summary>
-        [KRPCProcedure]
-        public static Tuple3 TransformDirection (Tuple3 direction, ReferenceFrame from, ReferenceFrame to)
-        {
-            throw new NotImplementedException ();
-        }
-
-        /// <summary>
-        /// Given a velcoity as a 3D vector in reference frame `from`, convert it to a velocity in reference frame `to`.
+        /// Given a velocity as a 3D vector in reference frame `from`, convert it to a velocity in reference frame `to`.
         /// </summary>
         [KRPCProcedure]
         public static Tuple3 TransformVelocity (Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
