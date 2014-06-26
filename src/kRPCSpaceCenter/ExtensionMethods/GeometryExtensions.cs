@@ -114,10 +114,12 @@ namespace KRPCSpaceCenter.ExtensionMethods
             return new Vector3d (pitch, heading, roll);
         }
 
+        /// <summary>
+        /// Compute the inverse quaternion. Assumes the input is a unit quaternion.
+        /// </summary>
         public static QuaternionD Inverse (this QuaternionD q)
         {
-            // FIXME: QuaternionD.Inverse is not defined. This uses single precision floating point for now.
-            return ((Quaternion)q).Inverse ();
+            return new QuaternionD (-q.x, -q.y, -q.z, q.w);
         }
     }
 }
