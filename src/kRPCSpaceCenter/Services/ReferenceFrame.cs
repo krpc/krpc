@@ -296,7 +296,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         public Vector3d PositionFromWorldSpace (Vector3d worldPosition)
         {
-            return worldPosition - Position;
+            return Rotation.Inverse () * (worldPosition - Position);
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         public Vector3d PositionToWorldSpace (Vector3d position)
         {
-            return Position + position;
+            return Position + (Rotation * position);
         }
 
         /// <summary>
