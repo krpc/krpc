@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using KRPC.Service.Attributes;
+using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -185,13 +186,8 @@ namespace KRPCSpaceCenter.Services
                 Vector3d forward = ForwardNotNormalized;
                 // Note: forward is along the z-axis, up is along the negative y-axis
                 Vector3d up = -UpNotNormalized;
-                //FIXME: Vector3d.OrthoNormalize and QuaternionD.LookRotation methods are not found at run-time
-                //Vector3d.OrthoNormalize (ref forward, ref up);
-                //return QuaternionD.LookRotation (forward, up);
-                Vector3 forward2 = forward;
-                Vector3 up2 = up;
-                Vector3.OrthoNormalize (ref forward2, ref up2);
-                return Quaternion.LookRotation (forward2, up2);
+                GeometryExtensions.OrthoNormalize2 (ref forward, ref up);
+                return GeometryExtensions.LookRotation2 (forward, up);
             }
         }
 

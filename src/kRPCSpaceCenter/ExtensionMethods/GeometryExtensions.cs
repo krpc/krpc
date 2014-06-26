@@ -121,5 +121,25 @@ namespace KRPCSpaceCenter.ExtensionMethods
         {
             return new QuaternionD (-q.x, -q.y, -q.z, q.w);
         }
+
+        /// <summary>
+        /// Implementation of QuaternionD.OrthoNormalize
+        /// </summary>
+        public static void OrthoNormalize2 (ref Vector3d normal, ref Vector3d tangent)
+        {
+            Vector3 u = normal;
+            Vector3 v = tangent;
+            Vector3.OrthoNormalize (ref u, ref v);
+            normal = u;
+            tangent = v;
+        }
+
+        /// <summary>
+        /// Implementation of QuaternionD.LookRotation
+        /// </summary>
+        public static QuaternionD LookRotation2 (Vector3d forward, Vector3d up)
+        {
+            return Quaternion.LookRotation (forward, up);
+        }
     }
 }
