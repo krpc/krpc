@@ -265,7 +265,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.CelestialBodyOrbital:
                     return body.position - body.referenceBody.position;
                 case Type.Vessel:
-                    return vessel.upAxis;
+                    return vessel.transform.up;
                 case Type.VesselSurface:
                     return ((Vector3d)vessel.CoM) - vessel.mainBody.position;
                 case Type.VesselOrbital:
