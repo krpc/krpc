@@ -303,7 +303,7 @@ namespace KRPCSpaceCenter.Services
                         return Vector3d.Exclude (Up, exclude);
                     }
                 case Type.Vessel:
-                    return vessel.upAxis;
+                    return vessel.transform.forward;
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                     {
@@ -340,6 +340,22 @@ namespace KRPCSpaceCenter.Services
         public Vector3d PositionToWorldSpace (Vector3d position)
         {
             return Position + (Rotation * position);
+        }
+
+        /// <summary>
+        /// Convert the given direction in world space, to a direction in this reference frame.
+        /// </summary>
+        public Vector3d DirectionFromWorldSpace (Vector3d worldDirection)
+        {
+            return Rotation.Inverse () * worldDirection;
+        }
+
+        /// <summary>
+        /// Convert the given position in this reference frame, to a position in world space.
+        /// </summary>
+        public Vector3d DirectionToWorldSpace (Vector3d direction)
+        {
+            return Rotation * direction;
         }
 
         /// <summary>
