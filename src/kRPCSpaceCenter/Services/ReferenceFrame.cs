@@ -300,7 +300,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.CelestialBodyOrbital:
                     {
                         var exclude = body.referenceBody.position + (((Vector3d)body.referenceBody.transform.up) * body.referenceBody.Radius) - body.position;
-                        exclude.Normalize();
+                        exclude.Normalize ();
                         return Vector3d.Exclude (Up, exclude);
                     }
                 case Type.Vessel:
@@ -309,7 +309,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.VesselSurface:
                     {
                         var exclude = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - ((Vector3d)vessel.CoM);
-                        exclude.Normalize();
+                        exclude.Normalize ();
                         return Vector3d.Exclude (Up, exclude);
                     }
                 case Type.Maneuver:

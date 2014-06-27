@@ -63,7 +63,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double SemiMinorAxis {
-            get { return SemiMajorAxis * Math.Sqrt(1d - (Eccentricity * Eccentricity)); }
+            get { return SemiMajorAxis * Math.Sqrt (1d - (Eccentricity * Eccentricity)); }
         }
 
         [KRPCProperty]
