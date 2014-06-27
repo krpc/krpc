@@ -1,6 +1,7 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPCSpaceCenter.ExtensionMethods;
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -61,8 +62,8 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double SemiMajorAxisAltitude {
-            get { return 0.5d * (ApoapsisAltitude + PeriapsisAltitude); }
+        public double SemiMinorAxis {
+            get { return SemiMajorAxis * Math.Sqrt(1d - (Eccentricity * Eccentricity)); }
         }
 
         [KRPCProperty]
@@ -100,22 +101,39 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double Inclination {
-            get { return orbit.inclination; }
+            get { return orbit.inclination * (Math.PI / 180d); }
         }
 
         [KRPCProperty]
         public double LongitudeOfAscendingNode {
-            get { return orbit.LAN; }
+            get { return orbit.LAN * (Math.PI / 180d); }
         }
 
         [KRPCProperty]
         public double ArgumentOfPeriapsis {
-            get { return orbit.argumentOfPeriapsis; }
+            get { return orbit.argumentOfPeriapsis * (Math.PI / 180d); }
         }
 
         [KRPCProperty]
-        public double MeanAnomalyAtEpoch {
-            get { return orbit.meanAnomalyAtEpoch; }
+        public double MeanAnomaly {
+            get { return orbit.meanAnomaly; }
+        }
+
+        [KRPCProperty]
+        public double EccentricAnomaly {
+            get { return orbit.eccentricAnomaly; }
+        }
+
+        [KRPCMethod]
+        public static Tuple3 ReferencePlaneNormal (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.DirectionFromWorldSpace (Planetarium.up).normalized.ToTuple ();
+        }
+
+        [KRPCMethod]
+        public static Tuple3 ReferencePlaneDirection (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.DirectionFromWorldSpace (Planetarium.right).normalized.ToTuple ();
         }
 
         [KRPCProperty]
