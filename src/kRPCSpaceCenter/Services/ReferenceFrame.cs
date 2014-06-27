@@ -12,15 +12,19 @@ namespace KRPCSpaceCenter.Services
         enum Type
         {
             CelestialBody,
+            CelestialBodyNonRotating,
             CelestialBodyOrbital,
             CelestialBodySurface,
             Vessel,
+            VesselNonRotating,
             VesselOrbital,
             VesselSurface,
             Part,
+            PartNonRotating,
             PartOrbital,
             PartSurface,
             //SpaceObject,
+            //SpaceObjectNonRotating,
             //SpaceObjectOrbital,
             //SpaceObjectSurface,
             Maneuver
@@ -40,6 +44,13 @@ namespace KRPCSpaceCenter.Services
         internal static ReferenceFrame Object (global::CelestialBody body)
         {
             var r = new ReferenceFrame (Type.CelestialBody);
+            r.body = body;
+            return r;
+        }
+
+        internal static ReferenceFrame NonRotating (global::CelestialBody body)
+        {
+            var r = new ReferenceFrame (Type.CelestialBodyNonRotating);
             r.body = body;
             return r;
         }
@@ -69,6 +80,13 @@ namespace KRPCSpaceCenter.Services
             return r;
         }
 
+        internal static ReferenceFrame NonRotating (global::Vessel vessel)
+        {
+            var r = new ReferenceFrame (Type.VesselNonRotating);
+            r.vessel = vessel;
+            return r;
+        }
+
         internal static ReferenceFrame Orbital (global::Vessel vessel)
         {
             var r = new ReferenceFrame (Type.VesselOrbital);
@@ -86,6 +104,13 @@ namespace KRPCSpaceCenter.Services
         internal static ReferenceFrame Object (global::Part part)
         {
             var r = new ReferenceFrame (Type.Part);
+            r.part = part;
+            return r;
+        }
+
+        internal static ReferenceFrame NonRotating (global::Part part)
+        {
+            var r = new ReferenceFrame (Type.PartNonRotating);
             r.part = part;
             return r;
         }
@@ -123,14 +148,17 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
+                case Type.CelestialBodyNonRotating:
                 case Type.CelestialBodyOrbital:
                 case Type.CelestialBodySurface:
                     return body.position;
                 case Type.Vessel:
+                case Type.VesselNonRotating:
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                     return vessel.GetWorldPos3D ();
                 case Type.Part:
+                case Type.PartNonRotating:
                 case Type.PartOrbital:
                 case Type.PartSurface:
                     return part.vessel.GetWorldPos3D () + part.CoMOffset;
@@ -149,6 +177,7 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
+                case Type.CelestialBodyNonRotating:
                     {
                         if (body != body.referenceBody) {
                             // Body orbits something
@@ -174,11 +203,13 @@ namespace KRPCSpaceCenter.Services
                         return orbitalVelocity - rotationalVelocityRelToParent;
                     }
                 case Type.Vessel:
+                case Type.VesselNonRotating:
                 case Type.VesselOrbital:
                     return vessel.GetOrbit ().GetVel ();
                 case Type.VesselSurface:
                     return vessel.GetOrbit ().GetVel () - ((Vector3d)vessel.GetSrfVelocity ());
                 case Type.Part:
+                case Type.PartNonRotating:
                 case Type.PartOrbital:
                 case Type.PartSurface:
                     throw new NotImplementedException ();
@@ -245,6 +276,10 @@ namespace KRPCSpaceCenter.Services
                 case Type.PartOrbital:
                 case Type.PartSurface:
                     throw new NotImplementedException ();
+                case Type.CelestialBodyNonRotating:
+                case Type.VesselNonRotating:
+                case Type.PartNonRotating:
+                    return Planetarium.up;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -281,6 +316,10 @@ namespace KRPCSpaceCenter.Services
                 case Type.PartOrbital:
                 case Type.PartSurface:
                     throw new NotImplementedException ();
+                case Type.CelestialBodyNonRotating:
+                case Type.VesselNonRotating:
+                case Type.PartNonRotating:
+                    return Planetarium.forward;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
