@@ -72,7 +72,7 @@ class TestBody(testingtools.TestCase):
         self.assertEqual('Minmus', minmus.name)
         self.assertClose(4.7e7, minmus.orbit.apoapsis, error=0.0001e7)
         self.assertClose(4.7e7, minmus.orbit.periapsis, error=0.0001e7)
-        self.assertClose(6, minmus.orbit.inclination)
+        self.assertClose(6 * (math.pi/180), minmus.orbit.inclination)
         self.assertEqual(False, minmus.has_atmosphere)
 
     def test_sun(self):
