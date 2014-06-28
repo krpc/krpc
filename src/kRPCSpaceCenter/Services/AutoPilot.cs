@@ -53,8 +53,8 @@ namespace KRPCSpaceCenter.Services
                 referenceFrame = ReferenceFrame.Orbital (vessel);
             engaged.Add (this);
             this.referenceFrame = referenceFrame;
-            this.pitch = pitch;
-            this.yaw = yaw;
+            this.pitch = -pitch;
+            this.yaw = -yaw;
             this.roll = roll;
         }
 
@@ -119,7 +119,7 @@ namespace KRPCSpaceCenter.Services
             Quaternion target = referenceFrame.Rotation;
             // TODO: don't force the roll to 0 if specific roll not requested
             var actualRoll = Double.IsNaN (roll) ? 0 : roll;
-            target *= Quaternion.Euler (new Vector3d (pitch, -yaw, 180 - actualRoll));
+            target *= Quaternion.Euler (new Vector3d (pitch, -yaw, -actualRoll));
             return Quaternion.Inverse (Quaternion.Euler (90, 0, 0) * Quaternion.Inverse (vesselR) * target);
         }
 
