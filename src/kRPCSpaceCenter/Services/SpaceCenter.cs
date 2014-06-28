@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using KRPCSpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using Tuple2 = KRPC.Utils.Tuple<double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -140,6 +141,19 @@ namespace KRPCSpaceCenter.Services
         public static Tuple3 TransformVelocity (Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
         {
             return to.VelocityFromWorldSpace (from.VelocityToWorldSpace (velocity.ToVector ())).ToTuple ();
+        }
+
+        [KRPCProcedure]
+        public static Tuple2 GetPitchHeading (Tuple3 direction)
+        {
+            // FIXME: QuarternionD.FromToRotation is not available at runtime !?
+            QuaternionD rotation = Quaternion.FromToRotation (Vector3d.forward, direction.ToVector ());
+            // FIXME: why doesn't rotation.PitchHeadingRoll work here?
+            //return rotation.PitchHeadingRoll ().ToTuple ();
+            var eulerAngles = ((Quaternion)rotation).eulerAngles;
+            var pitch = -Math.Abs (((eulerAngles.x + 270f) % 360f) - 180f) + 90f;
+            var yaw = eulerAngles.y;
+            return new Tuple2 (pitch, yaw);
         }
     }
 }
