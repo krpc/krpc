@@ -30,43 +30,24 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
-        /// Velocity of the vessel in world-space.
+        /// Velocity of the vessel in world space
         /// </summary>
-        Vector3d GetVelocity ()
-        {
-            return vessel.GetOrbit ().GetVel ();
+        Vector3d WorldVelocity {
+            get { return vessel.GetOrbit ().GetVel (); }
         }
 
         /// <summary>
-        /// Position of the vessel's center of mass in world coordinates.
+        /// Position of the vessels center of mass in world space
         /// </summary>
-        Vector3d GetPosition ()
-        {
-            return vessel.findWorldCenterOfMass ();
+        Vector3d WorldCoM {
+            get { return vessel.findWorldCenterOfMass (); }
         }
 
         /// <summary>
-        /// Direction the vessel is pointing in in world coordinates
+        /// Direction the vessel is pointing in in world space
         /// </summary>
-        Vector3d GetDirection ()
-        {
-            return vessel.GetTransform ().up;
-        }
-
-        /// <summary>
-        /// Direction normal to the main body in world coordinates
-        /// </summary>
-        Vector3d GetUpDirection ()
-        {
-            return referenceFrame.Up;
-        }
-
-        /// <summary>
-        /// Direction to the north of the main body (0 degrees pitch, north direction on nav ball) in world coordinates
-        /// </summary>
-        Vector3d GetNorthDirection ()
-        {
-            return referenceFrame.Forward;
+        Vector3d WorldUp {
+            get { return vessel.GetTransform ().up; }
         }
 
         /// <summary>
@@ -74,9 +55,36 @@ namespace KRPCSpaceCenter.Services
         /// E.g. in the surface reference frame, is a rotation from the vessel direction vector
         /// (in surface-space coordinates) to the surface space basis vector
         /// </summary>
-        QuaternionD GetRotation ()
-        {
-            return referenceFrame.Rotation.Inverse () * ((QuaternionD)vessel.GetTransform ().rotation);
+        QuaternionD Rotation {
+            get { return referenceFrame.RotationFromWorldSpace (vessel.GetTransform ().rotation); }
+        }
+
+        /// <summary>
+        /// Orbit prograde direction in world space
+        /// </summary>
+        Vector3d WorldPrograde {
+            get { return vessel.GetOrbit ().GetVel ().normalized; }
+        }
+
+        /// <summary>
+        /// Orbit normal direction in world space
+        /// </summary>
+        Vector3d WorldNormal {
+            get {
+                // Note: y and z components of normal vector are swapped
+                var normal = vessel.GetOrbit ().GetOrbitNormal ();
+                var tmp = normal.y;
+                normal.y = normal.z;
+                normal.z = tmp;
+                return normal.normalized;
+            }
+        }
+
+        /// <summary>
+        /// Orbit radial direction in world space
+        /// </summary>
+        Vector3d WorldRadial {
+            get { return Vector3d.Cross (WorldNormal, WorldPrograde); }
         }
 
         [KRPCProperty]
@@ -106,12 +114,12 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Tuple3 Velocity {
-            get { return (referenceFrame.Rotation.Inverse () * (GetVelocity () - referenceFrame.Velocity)).ToTuple (); }
+            get { return referenceFrame.VelocityFromWorldSpace (WorldVelocity).ToTuple (); }
         }
 
         [KRPCProperty]
         public double Speed {
-            get { return (GetVelocity () - referenceFrame.Velocity).magnitude; }
+            get { return referenceFrame.VelocityFromWorldSpace (WorldVelocity).magnitude; }
         }
 
         [KRPCProperty]
@@ -121,91 +129,62 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double VerticalSpeed {
-            get { return Vector3d.Dot (GetVelocity () - referenceFrame.Velocity, GetUpDirection ()); }
+            get { return Vector3d.Dot (referenceFrame.VelocityFromWorldSpace (WorldVelocity), Vector3d.up); }
         }
 
         [KRPCProperty]
         public Tuple3 CenterOfMass {
-            get { return GetPosition ().ToTuple (); }
+            get { return referenceFrame.PositionFromWorldSpace (WorldCoM).ToTuple (); }
         }
 
         [KRPCProperty]
         public Tuple3 Direction {
-            get { return (referenceFrame.Rotation.Inverse () * GetDirection ()).ToTuple (); }
-        }
-
-        [KRPCProperty]
-        public Tuple3 UpDirection {
-            get { return (referenceFrame.Rotation.Inverse () * GetUpDirection ()).ToTuple (); }
-        }
-
-        [KRPCProperty]
-        public Tuple3 NorthDirection {
-            get { return (referenceFrame.Rotation.Inverse () * GetNorthDirection ()).ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldCoM).ToTuple (); }
         }
 
         [KRPCProperty]
         public double Pitch {
-            get { return GetRotation ().PitchHeadingRoll ().x; }
+            get { return Rotation.PitchHeadingRoll ().x; }
         }
 
         [KRPCProperty]
         public double Heading {
-            get { return GetRotation ().PitchHeadingRoll ().y; }
+            get { return Rotation.PitchHeadingRoll ().y; }
         }
 
         [KRPCProperty]
         public double Roll {
-            get { return GetRotation ().PitchHeadingRoll ().z; }
-        }
-
-        Vector3d GetPrograde ()
-        {
-            return (referenceFrame.Rotation.Inverse () * (GetVelocity () - referenceFrame.Velocity)).normalized;
-        }
-
-        Vector3d GetNormal ()
-        {
-            var normal = vessel.GetOrbit ().GetOrbitNormal ();
-            var tmp = normal.y;
-            normal.y = normal.z;
-            normal.z = tmp;
-            return (referenceFrame.Rotation.Inverse () * (normal - referenceFrame.Velocity)).normalized;
-        }
-
-        Vector3d GetRadial ()
-        {
-            return Vector3d.Cross (GetNormal (), GetPrograde ()).normalized;
+            get { return Rotation.PitchHeadingRoll ().z; }
         }
 
         [KRPCProperty]
         public Tuple3 Prograde {
-            get { return GetPrograde ().ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldPrograde).ToTuple (); }
         }
 
         [KRPCProperty]
         public Tuple3 Retrograde {
-            get { return (-GetPrograde ()).ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (-WorldPrograde).ToTuple (); }
         }
 
         [KRPCProperty]
         public Tuple3 Normal {
-            get { return GetNormal ().ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldNormal).ToTuple (); }
         }
 
         [KRPCProperty]
         public Tuple3 NormalNeg {
-            get { return (-GetNormal ()).ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (-WorldNormal).ToTuple (); }
         }
 
         [KRPCProperty]
         public Tuple3 Radial {
-            get { return GetRadial ().ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldRadial).ToTuple (); }
         }
 
         [KRPCProperty]
         public Tuple3 RadialNeg {
-            get { return (-GetRadial ()).ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (-WorldRadial).ToTuple (); }
         }
 
         [KRPCProperty]
