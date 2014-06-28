@@ -28,7 +28,7 @@ namespace KRPCSpaceCenter.Services
         internal Orbit (global::Orbit orbit)
         {
             this.orbit = orbit;
-            referenceFrame = ReferenceFrame.Orbital (orbit);
+            referenceFrame = ReferenceFrame.Orbital (orbit.referenceBody);
         }
 
         [KRPCProperty]

@@ -136,11 +136,6 @@ namespace KRPCSpaceCenter.Services
             return r;
         }
 
-        internal static ReferenceFrame Orbital (global::Orbit orbit)
-        {
-            throw new NotImplementedException ();
-        }
-
         /// <summary>
         /// Returns the position of the origin of the reference frame in world-space.
         /// </summary>
