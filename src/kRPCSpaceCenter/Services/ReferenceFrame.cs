@@ -356,6 +356,22 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
+        /// Convert the given rotation in world space, to a rotation in this reference frame.
+        /// </summary>
+        public QuaternionD RotationFromWorldSpace (QuaternionD worldRotation)
+        {
+            return Rotation.Inverse () * worldRotation;
+        }
+
+        /// <summary>
+        /// Convert the given rotation in this reference frame, to a rotation in world space.
+        /// </summary>
+        public QuaternionD RotationToWorldSpace (QuaternionD rotation)
+        {
+            return Rotation * rotation;
+        }
+
+        /// <summary>
         /// Convert the given velocity in world space, to a velocity in this reference frame.
         /// </summary>
         public Vector3d VelocityFromWorldSpace (Vector3d worldVelocity)
