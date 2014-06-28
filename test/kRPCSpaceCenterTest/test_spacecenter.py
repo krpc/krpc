@@ -44,7 +44,7 @@ class TestBody(testingtools.TestCase):
 
     def test_transform_position_same_reference_frame(self):
         r = self.conn.space_center.active_vessel.reference_frame
-        self.assertEqual((1,2,3), self.conn.space_center.transform_position((1,2,3), r, r))
+        self.assertClose((1,2,3), self.conn.space_center.transform_position((1,2,3), r, r))
 
     def test_transform_position_between_celestial_bodies(self):
         bodies = self.conn.space_center.bodies
@@ -90,16 +90,16 @@ class TestBody(testingtools.TestCase):
 
     def test_transform_velocity_same_reference_frame(self):
         r = self.conn.space_center.active_vessel.reference_frame
-        self.assertEqual((1,2,3), self.conn.space_center.transform_velocity((1,2,3), r, r))
+        self.assertClose((1,2,3), self.conn.space_center.transform_velocity((1,2,3), r, r))
 
     def test_transform_position_between_celestial_bodies(self):
         bodies = self.conn.space_center.bodies
         sun = bodies['Sun']
         kerbin = bodies['Kerbin']
         mun = bodies['Mun']
-        ref_sun = sun.reference_frame
-        ref_kerbin = kerbin.reference_frame
-        ref_mun = mun.reference_frame
+        ref_sun = sun.non_rotating_reference_frame
+        ref_kerbin = kerbin.non_rotating_reference_frame
+        ref_mun = mun.non_rotating_reference_frame
 
         v1 = self.conn.space_center.transform_velocity((0,0,0), ref_mun, ref_kerbin)
         v2 = self.conn.space_center.transform_velocity((0,0,0), ref_kerbin, ref_mun)
