@@ -165,6 +165,22 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        Vector3d GetBodyVelocity (global::CelestialBody body)
+        {
+            if (body != body.referenceBody) {
+                // Body orbits something
+                return body.GetOrbit ().GetVel ();
+            } else {
+                // Body does not orbit anything
+                // Get a body that orbits the sun
+                var orbitingBody = FlightGlobals.Bodies.Find (b => b.name != "Sun" && b.GetOrbit ().referenceBody == body);
+                var orbit = orbitingBody.GetOrbit ();
+                // Compute the velocity of the sun in world space from this body
+                // Can't be done for from the sun object as it has no orbit object
+                return orbit.GetVel () - orbit.GetRelativeVel ();
+            }
+        }
+
         /// <summary>
         /// Returns the velocity of the reference frame in world-space.
         /// </summary>
@@ -173,22 +189,9 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                 case Type.CelestialBodyNonRotating:
-                    {
-                        if (body != body.referenceBody) {
-                            // Body orbits something
-                            return body.GetOrbit ().GetVel ();
-                        } else {
-                            // Body does not orbit anything
-                            // Get a body that orbits the sun
-                            var orbitingBody = FlightGlobals.Bodies.Find (b => b.name != "Sun" && b.GetOrbit ().referenceBody == body);
-                            var orbit = orbitingBody.GetOrbit ();
-                            // Compute the velocity of the sun in world space from this body
-                            // Can't be done for from the sun object as it has no orbit object
-                            return orbit.GetVel () - orbit.GetRelativeVel ();
-                        }
-                    }
+                    return GetBodyVelocity (body);
                 case Type.CelestialBodyOrbital:
-                    return body.GetOrbit ().GetVel ();
+                    return GetBodyVelocity (body.referenceBody);
                 case Type.CelestialBodySurface:
                     {
                         var orbit = body.GetOrbit ();
@@ -199,8 +202,9 @@ namespace KRPCSpaceCenter.Services
                     }
                 case Type.Vessel:
                 case Type.VesselNonRotating:
-                case Type.VesselOrbital:
                     return vessel.GetOrbit ().GetVel ();
+                case Type.VesselOrbital:
+                    return GetBodyVelocity (vessel.mainBody);
                 case Type.VesselSurface:
                     return vessel.GetOrbit ().GetVel () - ((Vector3d)vessel.GetSrfVelocity ());
                 case Type.Part:
