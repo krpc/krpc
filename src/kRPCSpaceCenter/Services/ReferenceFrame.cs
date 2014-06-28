@@ -262,7 +262,6 @@ namespace KRPCSpaceCenter.Services
                 case Type.Vessel:
                     return vessel.transform.up;
                 case Type.VesselSurface:
-                    return ((Vector3d)vessel.CoM) - vessel.mainBody.position;
                 case Type.VesselOrbital:
                     return ((Vector3d)vessel.CoM) - vessel.mainBody.position;
                 case Type.Maneuver:
