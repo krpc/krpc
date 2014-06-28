@@ -95,7 +95,7 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Compute the pitch angle of a quaternion in degrees.
+        /// Compute the pitch, heading and roll angle of a quaternion in degrees.
         /// </summary>
         public static Vector3d PitchHeadingRoll (this QuaternionD q)
         {
@@ -106,11 +106,11 @@ namespace KRPCSpaceCenter.ExtensionMethods
             // FIXME: QuaternionD.eulerAngles property is not found at runtime
             Vector3d eulerAngles = ((Quaternion)r).eulerAngles;
             // Convert angle around -y axis to pitch, with range [-90, 90]
-            var pitch = eulerAngles.x > 180d ? eulerAngles.x - 360d : eulerAngles.x;
+            var pitch = eulerAngles.x > 180d ? 360d - eulerAngles.x : -eulerAngles.x;
             // Convert angle around z axis to heading, with range [0, 360]
-            var heading = 360d - eulerAngles.y;
-            // Convert angle around x axis to heading, with range [-180, 180]
-            var roll = 180d - eulerAngles.z;
+            var heading = eulerAngles.y;
+            // Convert angle around x axis to roll, with range [-180, 180]
+            var roll = eulerAngles.z > 180d ? 360d - eulerAngles.z : -eulerAngles.z;
             return new Vector3d (pitch, heading, roll);
         }
 
