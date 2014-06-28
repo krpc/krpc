@@ -10,9 +10,9 @@ class TestAutoPilot(testingtools.TestCase):
 
     def setUp(self):
         load_save('autopilot')
-        self.ksp = krpc.connect()
-        self.vessel = self.ksp.space_center.active_vessel
-        self.ref = self.ksp.space_center.ReferenceFrame
+        self.conn = krpc.connect()
+        self.vessel = self.conn.space_center.active_vessel
+        self.ref = self.conn.space_center.ReferenceFrame
         self.ap = self.vessel.auto_pilot
         self.vessel.control.sas = False
 
@@ -41,6 +41,9 @@ class TestAutoPilot(testingtools.TestCase):
         flight = self.vessel.flight()
         self.assertClose(direction, flight.direction, error=0.1)
         self.assertClose(roll, flight.roll, error=0.5)
+        pitch,heading = self.conn.space_center.get_pitch_heading(direction)
+        self.assertClose(pitch, flight.pitch, error=1)
+        self.assertClose(heading, flight.heading, error=1)
 
     def test_set_pitch(self):
         for pitch in range(-80, 80, 20):
