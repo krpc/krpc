@@ -95,6 +95,17 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Clamps the given angle to the range [0,360]
+        /// </summary>
+        static double ClampAngleDegrees (double angle)
+        {
+            angle = angle % 360d;
+            if (angle < 0d)
+                angle += 360d;
+            return angle;
+        }
+
+        /// <summary>
         /// Compute the pitch, heading and roll angle of a quaternion in degrees.
         /// </summary>
         public static Vector3d PitchHeadingRoll (this QuaternionD q)
@@ -105,6 +116,10 @@ namespace KRPCSpaceCenter.ExtensionMethods
             var r = q * ((QuaternionD)Quaternion.Euler (-90f, 0f, 0f)); //QuaternionD.Euler (-90d, 0d, 0d);
             // FIXME: QuaternionD.eulerAngles property is not found at runtime
             Vector3d eulerAngles = ((Quaternion)r).eulerAngles;
+            // Clamp angles to range (0,360)
+            eulerAngles.x = ClampAngleDegrees (eulerAngles.x);
+            eulerAngles.y = ClampAngleDegrees (eulerAngles.y);
+            eulerAngles.z = ClampAngleDegrees (eulerAngles.z);
             // Convert angle around -y axis to pitch, with range [-90, 90]
             var pitch = eulerAngles.x > 180d ? 360d - eulerAngles.x : -eulerAngles.x;
             // Convert angle around z axis to heading, with range [0, 360]
