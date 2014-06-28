@@ -222,9 +222,9 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         public QuaternionD Rotation {
             get {
+                // Note: up is along the y-axis, forward is along the z-axis
+                Vector3d up = UpNotNormalized;
                 Vector3d forward = ForwardNotNormalized;
-                // Note: forward is along the z-axis, up is along the negative y-axis
-                Vector3d up = -UpNotNormalized;
                 GeometryExtensions.OrthoNormalize2 (ref forward, ref up);
                 return GeometryExtensions.LookRotation2 (forward, up);
             }
