@@ -46,7 +46,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Direction the vessel is pointing in in world space
         /// </summary>
-        Vector3d WorldUp {
+        Vector3d WorldDirection {
             get { return vessel.GetTransform ().up; }
         }
 
@@ -139,7 +139,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Tuple3 Direction {
-            get { return referenceFrame.DirectionFromWorldSpace (WorldCoM).ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldDirection).ToTuple (); }
         }
 
         [KRPCProperty]
