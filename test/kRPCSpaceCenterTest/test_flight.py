@@ -99,12 +99,9 @@ class TestFlight(testingtools.TestCase):
 
     def check_directions(self, flight, check_against_orbital=True):
         direction       = vector(flight.direction)
-        up_direction    = vector(flight.up_direction)
-        north_direction = vector(flight.north_direction)
+        up_direction    = (0,1,0)
+        north_direction = (0,0,1)
         self.assertClose(1, norm(direction))
-        self.assertClose(1, norm(up_direction))
-        self.assertClose(1, norm(north_direction))
-        self.assertClose(0, dot(up_direction, north_direction))
 
         # Check vessel direction vector agrees with pitch angle
         pitch = 90 - rad2deg(math.acos(dot(up_direction, direction)))
@@ -123,7 +120,7 @@ class TestFlight(testingtools.TestCase):
             self.assertClose(1, dot(north_direction, vector(flight.normal)))
 
     def check_speeds(self, flight):
-        up_direction = vector(flight.up_direction)
+        up_direction = (0,1,0)
         velocity = vector(flight.velocity)
         vertical_speed = dot(velocity, up_direction)
         horizontal_speed = norm(velocity) - vertical_speed
