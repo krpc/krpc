@@ -376,7 +376,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         public Vector3d VelocityFromWorldSpace (Vector3d worldVelocity)
         {
-            return worldVelocity + Velocity;
+            return Rotation.Inverse () * (worldVelocity - Velocity);
         }
 
         /// <summary>
@@ -384,7 +384,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         public Vector3d VelocityToWorldSpace (Vector3d velocity)
         {
-            return velocity - Velocity;
+            return Velocity + (Rotation * velocity);
         }
     }
 }
