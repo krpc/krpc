@@ -229,6 +229,9 @@ namespace KRPCSpaceCenter.Services
                 // Note: up is along the y-axis, forward is along the z-axis
                 Vector3d up = UpNotNormalized;
                 Vector3d forward = ForwardNotNormalized;
+                // Check that the up and forward directions are roughly perpendicular
+                if (Math.Abs (Vector3d.Dot (up.normalized, forward.normalized)) > 0.1)
+                    throw new ArithmeticException ("forward and up directions are not close to perpendicular");
                 GeometryExtensions.OrthoNormalize2 (ref forward, ref up);
                 return GeometryExtensions.LookRotation2 (forward, up);
             }
