@@ -1,5 +1,7 @@
-# Note: This must be an absolute path
-KSP_DIR = "$(shell pwd)/../Kerbal Space Program"
+ifndef KSP_DIR
+$(error KSP_DIR is not set. See https://github.com/djungelorm/krpc/wiki/Compiling for details)
+endif
+KSP_DIR := $(shell readlink -f "$(KSP_DIR)")
 
 SERVER_VERSION = $(shell cat VERSION.txt)
 PYTHON_CLIENT_VERSION = $(shell grep "version=" python/setup.py | sed "s/\s*version='\(.*\)',/\1/")
@@ -43,9 +45,11 @@ INKSCAPE = inkscape
 all: build
 
 configure:
+	@test -d $(KSP_DIR) || (echo "KSP_DIR directory does not exist: $(KSP_DIR)"; exit 1)
 	test -d $(KSP_DIR)/KSP_Data
+	-rm -rf lib/KSP_Data
 	mkdir -p lib/KSP_Data
-	test -d lib/KSP_Data/Managed || cp -r $(KSP_DIR)/KSP_Data/Managed lib/KSP_Data/
+	cp -r $(KSP_DIR)/KSP_Data/Managed lib/KSP_Data/
 
 logo:
 	-$(INKSCAPE) --export-png=logo.png logo.svg
