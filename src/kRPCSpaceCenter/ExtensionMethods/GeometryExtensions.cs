@@ -1,32 +1,42 @@
 using System;
 using UnityEngine;
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
     public static class GeometryExtensions
     {
         /// <summary>
-        /// Convert a Unity3d vector to a protocol buffer vector
+        /// Convert a vector to a tuple
         /// </summary>
-        public static KRPC.Utils.Tuple<double,double,double> ToTuple (this Vector3d v)
+        public static Tuple3 ToTuple (this Vector3d v)
         {
-            return new KRPC.Utils.Tuple<double,double,double> (v.x, v.y, v.z);
+            return new Tuple3 (v.x, v.y, v.z);
         }
 
         /// <summary>
-        /// Convert a Unity3d vector to a protocol buffer vector
+        /// Convert a tuple to a vector
         /// </summary>
-        public static KRPC.Utils.Tuple<double,double,double> ToTuple (this Vector3 v)
+        public static Vector3d ToVector (this Tuple3 t)
         {
-            return new KRPC.Utils.Tuple<double,double,double> (v.x, v.y, v.z);
+            return new Vector3d (t.Item1, t.Item2, t.Item3);
         }
 
         /// <summary>
-        /// Convert a protocol buffer vector to a Unity3d vector
+        /// Convert a quaternion to tuple
         /// </summary>
-        public static Vector3d ToVector (this KRPC.Utils.Tuple<double,double,double> v)
+        public static Tuple4 ToTuple (this QuaternionD q)
         {
-            return new Vector3d (v.Item1, v.Item2, v.Item3);
+            return new Tuple4 (q.x, q.y, q.z, q.w);
+        }
+
+        /// <summary>
+        /// Convert a tuple to a quaternion
+        /// </summary>
+        public static QuaternionD ToQuaternion (this Tuple4 t)
+        {
+            return new QuaternionD (t.Item1, t.Item2, t.Item3, t.Item4);
         }
 
         /// <summary>
