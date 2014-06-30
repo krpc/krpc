@@ -4,8 +4,9 @@ using KRPC.Continuations;
 using UnityEngine;
 using System.Collections.Generic;
 using KRPCSpaceCenter.ExtensionMethods;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 using Tuple2 = KRPC.Utils.Tuple<double,double>;
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -132,6 +133,15 @@ namespace KRPCSpaceCenter.Services
         public static Tuple3 TransformDirection (Tuple3 direction, ReferenceFrame from, ReferenceFrame to)
         {
             return to.DirectionFromWorldSpace (from.DirectionToWorldSpace (direction.ToVector ())).ToTuple ();
+        }
+
+        /// <summary>
+        /// Given a rotation as a quaternion in reference frame `from`, convert it to a rotation in reference frame `to`.
+        /// </summary>
+        [KRPCProcedure]
+        public static Tuple4 TransformRotation (Tuple4 rotation, ReferenceFrame from, ReferenceFrame to)
+        {
+            return to.RotationFromWorldSpace (from.RotationToWorldSpace (rotation.ToQuaternion ())).ToTuple ();
         }
 
         /// <summary>
