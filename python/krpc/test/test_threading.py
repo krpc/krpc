@@ -11,6 +11,12 @@ def worker_thread(tid, conn):
     for i in range(1000):
         conn.krpc.get_status()
 
+def worker_thread2(tid, conn, test):
+    for i in range(100):
+        test.assertEqual('3.14159', conn.test_service.float_to_string(float(3.14159)))
+        test.assertEqual('3.14159', conn.test_service.double_to_string(float(3.14159)))
+        test.assertEqual('42', conn.test_service.int32_to_string(42))
+
 class TestClient(unittest.TestCase):
 
     @classmethod
@@ -32,6 +38,13 @@ class TestClient(unittest.TestCase):
         thread1.start()
         thread0.join()
         thread1.join()
+
+    def test_rpc_interleaving(self):
+        threads = [threading.Thread(target=worker_thread2, args=(i, self.conn, self)) for i in range(10)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
 
 if __name__ == '__main__':
     unittest.main()
