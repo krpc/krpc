@@ -108,8 +108,9 @@ class Client(object):
         request.arguments.extend(arguments)
 
         # Send the request
-        self._send_request(request)
-        response = self._receive_response()
+        with self._connection_lock:
+            self._send_request(request)
+            response = self._receive_response()
 
         # Check for an error response
         if response.HasField('error'):
@@ -124,12 +125,10 @@ class Client(object):
     def _send_request(self, request):
         """ Send a KRPC.Request object to the server """
         data = _Encoder.encode_delimited(request, self._request_type)
-        with self._connection_lock:
-            self._connection.send(data)
+        self._connection.send(data)
 
     def _receive_response(self):
         """ Receive data from the server and decode it into a KRPC.Response object """
         # FIXME: we might not receive all of the data in one go
-        with self._connection_lock:
-            data = self._connection.recv(BUFFER_SIZE)
+        data = self._connection.recv(BUFFER_SIZE)
         return _Decoder.decode_delimited(data, self._response_type)
