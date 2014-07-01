@@ -66,7 +66,6 @@
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
-    <Compile Include="ReferenceFrameTransform.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
