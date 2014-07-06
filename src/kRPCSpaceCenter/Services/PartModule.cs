@@ -7,7 +7,7 @@ using KRPC.Utils;
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class PartModule : Equatable<PartModule>
+    public class PartModule : Equatable<PartModule>
     {
         global::PartModule module;
 
@@ -36,7 +36,7 @@ namespace KRPCSpaceCenter.Services
             get { return module.Events.Select (e => e.name).ToList (); }
         }
 
-        [KRPCMethod]
+       [KRPCMethod]
         public void TriggerEvent (string eventName)
         {
             module.part.SendEvent (eventName);

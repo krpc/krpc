@@ -37,6 +37,11 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public string Name {
+            get { return part.partInfo.name; }
+        }
+
+        [KRPCProperty]
+        public string ClassName {
             get { return part.ClassName; }
         }
 
@@ -83,6 +88,11 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double MaxTemperature {
             get { return part.maxTemp; }
+        }
+
+        [KRPCProperty]
+        public bool isControlSource {
+            get { return part.isControlSource; }
         }
 
         [KRPCMethod]

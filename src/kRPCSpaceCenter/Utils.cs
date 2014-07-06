@@ -33,7 +33,7 @@ namespace KRPCSpaceCenter
             case 0:
                 return KSPActionGroup.Custom10;
             default:
-                throw new ArgumentException ("Action group index must be betwee 0 and 9 inclusive");
+                throw new ArgumentException ("Action group index must be between 0 and 9 inclusive");
             }
         }
     }

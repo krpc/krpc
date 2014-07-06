@@ -118,13 +118,36 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Part ControllingPart {
-            get { throw new NotImplementedException (); }
+            get { return Parts.FirstOrDefault(x => x.isControlSource); }
             set { throw new NotImplementedException (); }
         }
 
         [KRPCProperty]
         public IList<Part> Parts {
             get { return vessel.parts.Select (x => new Part (x)).ToList (); }
+        }
+
+        //There might be a better solution for this, but for now this works.
+        [KRPCProperty]
+        public IList<ModuleEngines> Engines
+        {
+            get
+            {
+                List<ModuleEngines> engines = new List<ModuleEngines>();
+                foreach (var part in vessel.Parts)
+                {
+                    foreach (global::PartModule module in part.Modules)
+                    {
+                        var engineModule = module as global::ModuleEngines;
+                        if (engineModule != null)
+                        {
+                            engines.Add(new ModuleEngines(engineModule));
+                        }
+                    }
+                }
+
+                return engines;
+            } 
         }
     }
 }
