@@ -24,6 +24,18 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public bool AllowRestart
+        {
+            get { return moduleEngines.allowRestart; }
+        }
+
+        [KRPCProperty]
+        public bool AllowShutdown
+        {
+            get { return moduleEngines.allowShutdown; }
+        }
+
+        [KRPCProperty]
         public float CurrentThrottle
         {
             get { return moduleEngines.currentThrottle; }
@@ -33,6 +45,13 @@ namespace KRPCSpaceCenter.Services
         public bool ThrottleLocked
         {
             get { return moduleEngines.throttleLocked; }
+        }
+
+        [KRPCProperty]
+        public float ThrustLimit
+        {
+            get { return moduleEngines.thrustPercentage; }
+            set { moduleEngines.thrustPercentage = value; }
         }
 
         [KRPCProperty]
