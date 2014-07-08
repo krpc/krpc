@@ -99,7 +99,7 @@ namespace KRPC
         {
             // TODO: is there a better way to limit the number of requests handled per update?
             // The maximum amount of time to spend executing continuations
-            const int maxTime = 20; // milliseconds
+            const int maxTime = 10; // milliseconds
             // The maximum amount of time to wait after executing continuations to check for new requests
             const int timeout = 1; // milliseconds
             var done = false;
