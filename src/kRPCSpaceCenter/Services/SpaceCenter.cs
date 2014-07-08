@@ -145,12 +145,13 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
-        /// Given a velocity as a 3D vector in reference frame `from`, convert it to a velocity in reference frame `to`.
+        /// Given a velocity at a position in reference frame `from`, convert it to a velocity in reference frame `to`.
         /// </summary>
         [KRPCProcedure]
-        public static Tuple3 TransformVelocity (Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
+        public static Tuple3 TransformVelocity (Tuple3 position, Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
         {
-            return to.VelocityFromWorldSpace (from.VelocityToWorldSpace (velocity.ToVector ())).ToTuple ();
+            var worldPosition = from.PositionToWorldSpace (position.ToVector ());
+            return to.VelocityFromWorldSpace (worldPosition, from.VelocityToWorldSpace (position.ToVector (), velocity.ToVector ())).ToTuple ();
         }
 
         [KRPCProcedure]

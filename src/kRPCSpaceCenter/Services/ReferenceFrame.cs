@@ -166,45 +166,6 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the velocity of the reference frame in world-space.
-        /// </summary>
-        public Vector3d Velocity {
-            get {
-                switch (type) {
-                case Type.CelestialBody:
-                case Type.CelestialBodyNonRotating:
-                    return body.GetWorldVelocity ();
-                case Type.CelestialBodyOrbital:
-                    return body.referenceBody.GetWorldVelocity ();
-                case Type.CelestialBodySurface:
-                    {
-                        var orbit = body.GetOrbit ();
-                        var parent = orbit.referenceBody;
-                        var orbitalVelocity = orbit.GetVel () - parent.GetOrbit ().GetVel ();
-                        var rotationalVelocityRelToParent = parent.getRFrmVel (body.position);
-                        return orbitalVelocity - rotationalVelocityRelToParent;
-                    }
-                case Type.Vessel:
-                case Type.VesselNonRotating:
-                    return vessel.GetOrbit ().GetVel ();
-                case Type.VesselOrbital:
-                    return vessel.mainBody.GetWorldVelocity ();
-                case Type.VesselSurface:
-                    return vessel.GetOrbit ().GetVel () - ((Vector3d)vessel.GetSrfVelocity ());
-                case Type.Part:
-                case Type.PartNonRotating:
-                case Type.PartOrbital:
-                case Type.PartSurface:
-                    throw new NotImplementedException ();
-                case Type.Maneuver:
-                    return node.patch.GetVel ();
-                default:
-                    throw new ArgumentException ("No such reference frame");
-                }
-            }
-        }
-
-        /// <summary>
         /// Returns the rotation of the given frame of reference, relative to world space.
         /// Applying the rotation to a vector in reference-frame-space produces the corresponding vector in world-space.
         /// </summary>
@@ -314,6 +275,73 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
+        /// Returns the velocity of the reference frame in world-space.
+        /// </summary>
+        public Vector3d Velocity {
+            get {
+                switch (type) {
+                case Type.CelestialBody:
+                case Type.CelestialBodyNonRotating:
+                case Type.CelestialBodyOrbital:
+                case Type.CelestialBodySurface:
+                    return body.GetWorldVelocity ();
+                case Type.Vessel:
+                case Type.VesselNonRotating:
+                case Type.VesselOrbital:
+                case Type.VesselSurface:
+                     return vessel.GetOrbit ().GetVel ();
+                case Type.Part:
+                case Type.PartNonRotating:
+                case Type.PartOrbital:
+                case Type.PartSurface:
+                    throw new NotImplementedException ();
+                case Type.Maneuver:
+                    return node.patch.GetVel ();
+                default:
+                    throw new ArgumentException ("No such reference frame");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the rotational velocity of the reference frame in world-space.
+        /// Vector points in direction of axis of rotation
+        /// Vector's magnitude is the speed of rotation in radians per second
+        /// </summary>
+        public Vector3d RotationalVelocity {
+            get {
+                switch (type) {
+                case Type.CelestialBody:
+                    {
+                        var speed = (2d * Math.PI) / vessel.mainBody.rotationPeriod;
+                        return speed * Vector3d.forward;
+                    }
+                case Type.CelestialBodyNonRotating:
+                case Type.CelestialBodyOrbital:
+                case Type.CelestialBodySurface:
+                    return Vector3d.zero;
+                case Type.Vessel:
+                    // FIXME: should be the rotational velocity of the vessel
+                    return Vector3d.zero;
+                case Type.VesselNonRotating:
+                case Type.VesselOrbital:
+                case Type.VesselSurface:
+                    return Vector3d.zero;
+                case Type.Part:
+                    throw new NotImplementedException ();
+                case Type.PartNonRotating:
+                case Type.PartOrbital:
+                case Type.PartSurface:
+                    return Vector3d.zero;
+                case Type.Maneuver:
+                    return node.patch.GetVel ();
+                default:
+                    throw new ArgumentException ("No such reference frame");
+                }
+            }
+        }
+
+        /// <summary>
         /// Convert the given position in world space, to a position in this reference frame.
         /// </summary>
         public Vector3d PositionFromWorldSpace (Vector3d worldPosition)
@@ -362,19 +390,20 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
-        /// Convert the given velocity in world space, to a velocity in this reference frame.
+        /// Convert the given velocity at the given position in world space, to a velocity in this reference frame.
         /// </summary>
-        public Vector3d VelocityFromWorldSpace (Vector3d worldVelocity)
+        public Vector3d VelocityFromWorldSpace (Vector3d worldPosition, Vector3d worldVelocity)
         {
             return Rotation.Inverse () * (worldVelocity - Velocity);
         }
 
         /// <summary>
-        /// Convert the given velocity in this reference frame, to a velocity in world space.
+        /// Convert the given velocity at the given position in this reference frame, to a velocity in world space.
         /// </summary>
-        public Vector3d VelocityToWorldSpace (Vector3d velocity)
+        public Vector3d VelocityToWorldSpace (Vector3d position, Vector3d velocity)
         {
-            return Velocity + (Rotation * velocity);
+            var vel = velocity + (RotationalVelocity * position.magnitude);
+            return Velocity + (Rotation * vel);
         }
     }
 }

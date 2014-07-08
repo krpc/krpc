@@ -163,5 +163,11 @@ namespace KRPCSpaceCenter.Services
         {
             return referenceFrame.PositionFromWorldSpace (InternalVessel.GetWorldPos3D ()).ToTuple ();
         }
+
+        [KRPCMethod]
+        public Tuple3 Velocity (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.VelocityFromWorldSpace (InternalVessel.CoM, InternalVessel.GetOrbit ().GetVel ()).ToTuple ();
+        }
     }
 }

@@ -114,12 +114,12 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Tuple3 Velocity {
-            get { return referenceFrame.VelocityFromWorldSpace (WorldVelocity).ToTuple (); }
+            get { return referenceFrame.VelocityFromWorldSpace (WorldCoM, WorldVelocity).ToTuple (); }
         }
 
         [KRPCProperty]
         public double Speed {
-            get { return referenceFrame.VelocityFromWorldSpace (WorldVelocity).magnitude; }
+            get { return referenceFrame.VelocityFromWorldSpace (WorldCoM, WorldVelocity).magnitude; }
         }
 
         [KRPCProperty]
@@ -129,7 +129,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double VerticalSpeed {
-            get { return Vector3d.Dot (referenceFrame.VelocityFromWorldSpace (WorldVelocity), Vector3d.up); }
+            get { return Vector3d.Dot (referenceFrame.VelocityFromWorldSpace (WorldCoM, WorldVelocity), Vector3d.up); }
         }
 
         [KRPCProperty]
