@@ -124,7 +124,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double HorizontalSpeed {
-            get { return Speed - VerticalSpeed; }
+            get { return Speed - Math.Abs (VerticalSpeed); }
         }
 
         [KRPCProperty]
