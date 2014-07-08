@@ -13,14 +13,49 @@ class TestFlight(testingtools.TestCase):
         load_save('flight')
         cls.conn = krpc.connect()
         cls.vessel = cls.conn.space_center.active_vessel
-        cls.ref_surface = cls.vessel.surface_reference_frame
-        cls.ref_orbital = cls.vessel.orbital_reference_frame
-        cls.surface_flight = cls.vessel.flight(cls.ref_surface)
-        cls.orbital_flight = cls.vessel.flight(cls.ref_orbital)
 
     def test_equality(self):
         self.assertEqual(self.vessel.flight(self.ref_surface), self.surface_flight)
         self.assertEqual(self.vessel.flight(self.ref_orbital), self.orbital_flight)
+
+    def check_properties_not_affected_by_reference_frame(self, flight):
+        #self.assertClose(0, flight.g_force)
+        self.assertClose(100000, flight.mean_altitude, error=50)
+        self.assertClose(100000, flight.surface_altitude, error=50)
+        self.assertClose(100930, flight.bedrock_altitude, error=100)
+        self.assertClose(930, flight.elevation, error=100)
+        self.assertClose(flight.elevation, flight.bedrock_altitude - flight.mean_altitude, error=5)
+
+    def check_directions(self, flight, check_against_orbital=True):
+        direction       = vector(flight.direction)
+        up_direction    = (0,1,0)
+        north_direction = (0,0,1)
+        self.assertClose(1, norm(direction))
+
+        # Check vessel direction vector agrees with pitch angle
+        pitch = 90 - rad2deg(math.acos(dot(up_direction, direction)))
+        self.assertClose(flight.pitch, pitch, error=2)
+
+        # Check vessel direction vector agrees with heading angle
+        up_component = dot(direction, up_direction) * vector(up_direction)
+        north_component = vector(direction) - up_component
+        north_component = north_component / norm(north_component)
+        self.assertClose(flight.heading, rad2deg(math.acos(dot(north_component, north_direction))), error=1)
+
+        if check_against_orbital == True:
+            # Check vessel directions agree with orbital directions
+            # (we are in a 0 degree inclined orbit, so they should do)
+            self.assertClose(1, dot(up_direction, vector(flight.radial)))
+            self.assertClose(1, dot(north_direction, vector(flight.normal)))
+
+    def check_speeds(self, flight):
+        up_direction = (0,1,0)
+        velocity = vector(flight.velocity)
+        vertical_speed = dot(velocity, up_direction)
+        horizontal_speed = norm(velocity) - vertical_speed
+        self.assertClose(norm(velocity), flight.speed, error=1)
+        self.assertClose(horizontal_speed, flight.horizontal_speed, error=1)
+        self.assertClose(vertical_speed, flight.vertical_speed, error=1)
 
     def check_orbital_vectors(self, flight):
         # Check orbital direction vectors
@@ -43,25 +78,135 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(0, dot(prograde, normal), error=0.01)
         self.assertClose(0, dot(radial, normal), error=0.01)
 
-    def test_orbital_flight(self):
-        self.assertClose(0, self.orbital_flight.g_force)
-        self.assertClose(100000, self.orbital_flight.mean_altitude, error=50)
-        self.assertClose(100000, self.orbital_flight.surface_altitude, error=50)
-        self.assertClose(100930, self.orbital_flight.bedrock_altitude, error=50)
-        self.assertClose(930, self.orbital_flight.elevation, error=50)
-        self.assertClose([2246.1, 0, 0], self.orbital_flight.velocity, error=0.5)
-        self.assertClose(2246.1, self.orbital_flight.speed, error=0.5)
-        self.assertClose(2246.1, self.orbital_flight.horizontal_speed, error=0.5)
-        self.assertClose(0, self.orbital_flight.vertical_speed, error=0.5)
+    def test_flight_vessel_reference_frame(self):
+        ref = self.vessel.reference_frame
+        flight = self.vessel.flight(ref)
+        self.check_properties_not_affected_by_reference_frame(flight)
 
-        self.assertClose(27, self.orbital_flight.pitch, error=1)
-        self.assertClose(116, self.orbital_flight.heading, error=1)
-        self.assertClose(39, self.orbital_flight.roll, error=1)
+        self.assertClose([0, 0, 0], flight.velocity, error=0.5)
+        self.assertClose(0, flight.speed, error=0.5)
+        self.assertClose(0, flight.horizontal_speed, error=0.5)
+        self.assertClose(0, flight.vertical_speed, error=0.5)
+        #TODO: are these correct?
+        self.assertCloseDegrees(90, flight.pitch, error=1)
+        self.assertCloseDegrees(0, flight.heading, error=1)
+        self.assertCloseDegrees(0, flight.roll, error=1)
 
-        self.check_directions(self.orbital_flight)
-        self.check_speeds(self.orbital_flight)
-        self.check_orbital_vectors(self.orbital_flight)
+        #TODO: uncomment
+        #self.check_directions(flight)
+        self.check_speeds(flight)
+        self.check_orbital_vectors(flight)
 
+    def test_flight_vessel_non_rotating_reference_frame(self):
+        ref = self.vessel.non_rotating_reference_frame
+        flight = self.vessel.flight(ref)
+        self.check_properties_not_affected_by_reference_frame(flight)
+
+        self.assertClose([0, 0, 0], flight.velocity, error=0.5)
+        self.assertClose(0, flight.speed, error=0.5)
+        self.assertClose(0, flight.horizontal_speed, error=0.5)
+        self.assertClose(0, flight.vertical_speed, error=0.5)
+        # TODO: compute what these should be
+        #self.assertCloseDegrees(336.72, flight.pitch, error=1)
+        #self.assertCloseDegrees(10.92, flight.heading, error=1)
+        #self.assertCloseDegrees(117, flight.roll, error=1)
+
+        #TODO: uncomment
+        #self.check_directions(flight)
+        self.check_speeds(flight)
+        self.check_orbital_vectors(flight)
+
+    def test_flight_vessel_orbital_reference_frame(self):
+        ref = self.vessel.orbital_reference_frame
+        flight = self.vessel.flight(ref)
+        self.check_properties_not_affected_by_reference_frame(flight)
+
+        self.assertClose([0, 0, 0], flight.velocity, error=0.5)
+        self.assertClose(0, flight.speed, error=0.5)
+        self.assertClose(0, flight.horizontal_speed, error=0.5)
+        self.assertClose(0, flight.vertical_speed, error=0.5)
+        self.assertClose(27, flight.pitch, error=1)
+        self.assertClose(116, flight.heading, error=1)
+        self.assertClose(39, flight.roll, error=1)
+
+        #TODO: uncomment
+        #self.check_directions(flight)
+        self.check_speeds(flight)
+        self.check_orbital_vectors(flight)
+
+    def test_flight_vessel_surface_reference_frame(self):
+        ref = self.vessel.surface_reference_frame
+        flight = self.vessel.flight(ref)
+        self.check_properties_not_affected_by_reference_frame(flight)
+
+        self.assertClose([0, 0, 0], flight.velocity, error=0.5)
+        self.assertClose(0, flight.speed, error=0.5)
+        self.assertClose(0, flight.horizontal_speed, error=0.5)
+        self.assertClose(0, flight.vertical_speed, error=0.5)
+        self.assertClose(27, flight.pitch, error=1)
+        self.assertClose(116, flight.heading, error=1)
+        self.assertClose(39, flight.roll, error=1)
+
+        #TODO: uncomment
+        #self.check_directions(flight)
+        self.check_speeds(flight)
+        self.check_orbital_vectors(flight)
+
+    def test_flight_orbit_body_reference_frame(self):
+        ref = self.vessel.orbit.body.reference_frame
+        flight = self.vessel.flight(ref)
+        self.check_properties_not_affected_by_reference_frame(flight)
+
+        #TODO: uncomment
+        #v = [2148.6, 0, 654.72]
+        #self.assertClose(2246.1, norm(v), error=0.5)
+        #self.assertClose(v, flight.velocity, error=2)
+        self.assertClose(2246.1, flight.speed, error=0.5)
+        self.assertClose(2246.1, flight.horizontal_speed, error=0.5)
+        self.assertClose(0, flight.vertical_speed, error=0.5)
+        #TODO: are these correct?
+        self.assertClose(-23, flight.pitch, error=1)
+        self.assertClose(103, flight.heading, error=1)
+        self.assertClose(117, flight.roll, error=1)
+
+        #TODO: uncomment
+        #self.check_directions(flight)
+        self.check_speeds(flight)
+        self.check_orbital_vectors(flight)
+
+        #TODO: uncomment
+        #self.assertClose([2246.1, 0, 0], flight.velocity, error=0.5)
+        #self.assertClose(2246.1, flight.speed, error=0.5)
+        #self.assertClose(2246.1, flight.horizontal_speed, error=0.5)
+
+    def test_flight_orbit_body_non_rotating_reference_frame(self):
+        ref = self.vessel.orbit.body.non_rotating_reference_frame
+        flight = self.vessel.flight(ref)
+        self.check_properties_not_affected_by_reference_frame(flight)
+
+        #TODO: uncomment
+        #v = [2148.6, 0, 654.72]
+        #self.assertClose(2246.1, norm(v), error=0.5)
+        self.assertClose(v, flight.velocity, error=2)
+        self.assertClose(2246.1, flight.speed, error=0.5)
+        self.assertClose(2246.1, flight.horizontal_speed, error=0.5)
+        self.assertClose(0, flight.vertical_speed, error=0.5)
+        #TODO: uncomment
+        #self.assertClose(-23, flight.pitch, error=1)
+        #self.assertClose(103, flight.heading, error=1)
+        #self.assertClose(117, flight.roll, error=1)
+
+        #TODO: uncomment
+        #self.check_directions(flight)
+        self.check_speeds(flight)
+        self.check_orbital_vectors(flight)
+
+        #TODO: uncomment
+        #self.assertClose([2246.1, 0, 0], flight.velocity, error=0.5)
+        #self.assertClose(2246.1, flight.speed, error=0.5)
+        #self.assertClose(2246.1, flight.horizontal_speed, error=0.5)
+
+    """
     def test_surface_flight(self):
         self.assertClose(0, self.orbital_flight.g_force)
         self.assertClose(100000, self.surface_flight.mean_altitude, error=50)
@@ -96,37 +241,7 @@ class TestFlight(testingtools.TestCase):
         self.check_directions(self.maneuver_flight, check_against_orbital=False)
         self.check_speeds(self.maneuver_flight)
         self.check_orbital_vectors(self.maneuver_flight)
-
-    def check_directions(self, flight, check_against_orbital=True):
-        direction       = vector(flight.direction)
-        up_direction    = (0,1,0)
-        north_direction = (0,0,1)
-        self.assertClose(1, norm(direction))
-
-        # Check vessel direction vector agrees with pitch angle
-        pitch = 90 - rad2deg(math.acos(dot(up_direction, direction)))
-        self.assertClose(flight.pitch, pitch, error=2)
-
-        # Check vessel direction vector agrees with heading angle
-        up_component = dot(direction, up_direction) * vector(up_direction)
-        north_component = vector(direction) - up_component
-        north_component = north_component / norm(north_component)
-        self.assertClose(flight.heading, rad2deg(math.acos(dot(north_component, north_direction))), error=1)
-
-        if check_against_orbital == True:
-            # Check vessel directions agree with orbital directions
-            # (we are in a 0 degree inclined orbit, so they should do)
-            self.assertClose(1, dot(up_direction, vector(flight.radial)))
-            self.assertClose(1, dot(north_direction, vector(flight.normal)))
-
-    def check_speeds(self, flight):
-        up_direction = (0,1,0)
-        velocity = vector(flight.velocity)
-        vertical_speed = dot(velocity, up_direction)
-        horizontal_speed = norm(velocity) - vertical_speed
-        self.assertClose(norm(velocity), flight.speed, error=1)
-        self.assertClose(horizontal_speed, flight.horizontal_speed, error=1)
-        self.assertClose(vertical_speed, flight.vertical_speed, error=1)
+    """
 
 if __name__ == "__main__":
     unittest.main()
