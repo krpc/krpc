@@ -27,6 +27,7 @@ namespace KRPCSpaceCenter.Services
 
         internal Orbit (global::Orbit orbit)
         {
+            //FIXME: should be relative to the object in orbit, not the reference body
             this.orbit = orbit;
             referenceFrame = ReferenceFrame.Orbital (orbit.referenceBody);
         }
