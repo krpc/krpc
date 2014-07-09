@@ -21,9 +21,13 @@ class TestClient(unittest.TestCase):
         cls.server.kill()
 
     def test_basic(self):
+        n = 1000
         def wrapper():
             self.ksp.test_service.float_to_string(float(3.14159))
-        self.assertGreater(1, timeit.timeit(stmt=wrapper, number=1000))
+        t = timeit.timeit(stmt=wrapper, number=n)
+        print 'Total execution time: %.2f seconds' % t
+        print 'RPC execution rate: %d per second' % (n/t)
+        print 'Latency: %.3f milliseconds' % ((t*1000)/n)
 
 if __name__ == '__main__':
     unittest.main()

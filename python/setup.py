@@ -1,4 +1,8 @@
 from setuptools import setup
+import sys
+
+if sys.version_info.major != 2:
+    raise Exception("kRPC only works with python version 2.x")
 
 setup(
     name='krpc',

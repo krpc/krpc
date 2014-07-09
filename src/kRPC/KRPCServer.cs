@@ -2,6 +2,8 @@ using System;
 using System.Net;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using KRPC.Server;
 using KRPC.Server.Net;
 using KRPC.Server.RPC;
@@ -9,7 +11,6 @@ using KRPC.Schema.KRPC;
 using KRPC.Service;
 using KRPC.Continuations;
 using KRPC.Utils;
-using System.Diagnostics;
 
 namespace KRPC
 {
@@ -97,7 +98,12 @@ namespace KRPC
         public void Update ()
         {
             // TODO: is there a better way to limit the number of requests handled per update?
-            const int threshold = 20; // milliseconds
+            // The maximum amount of time to spend executing continuations
+            const int maxTime = 10; // milliseconds
+            // The maximum amount of time to wait after executing continuations to check for new requests
+            const int timeout = 1; // milliseconds
+            var done = false;
+            var hadNewContinuations = false;
 
             Stopwatch timer = Stopwatch.StartNew ();
             do {
@@ -107,7 +113,9 @@ namespace KRPC
                 PollRequests ();
 
                 // Process pending continuations (client requests)
+                hadNewContinuations = false;
                 if (continuations.Count > 0) {
+                    hadNewContinuations = true;
                     var newContinuations = new List<RequestContinuation> ();
                     foreach (var continuation in continuations) {
                         try {
@@ -119,7 +127,13 @@ namespace KRPC
                     }
                     continuations = newContinuations;
                 }
-            } while (timer.ElapsedMilliseconds < threshold && continuations.Count > 0);
+
+                if (timer.ElapsedMilliseconds > maxTime) {
+                    done = true;
+                } else if (timeout > 0 && hadNewContinuations && continuations.Count == 0) {
+                    Thread.Sleep (timeout);
+                }
+            } while (!done);
         }
 
         /// <summary>

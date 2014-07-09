@@ -45,11 +45,11 @@ INKSCAPE = inkscape
 all: build
 
 configure:
-	@test -d $(KSP_DIR) || (echo "KSP_DIR directory does not exist: $(KSP_DIR)"; exit 1)
-	test -d $(KSP_DIR)/KSP_Data
+	@test -d "$(KSP_DIR)" || (echo "KSP_DIR directory does not exist: $(KSP_DIR)"; exit 1)
+	test -d "$(KSP_DIR)/KSP_Data"
 	-rm -rf lib/KSP_Data
 	mkdir -p lib/KSP_Data
-	cp -r $(KSP_DIR)/KSP_Data/Managed lib/KSP_Data/
+	cp -r "$(KSP_DIR)/KSP_Data/Managed" lib/KSP_Data/
 
 logo:
 	-$(INKSCAPE) --export-png=logo.png logo.svg
@@ -97,10 +97,10 @@ release: dist test
 	cd $(DIST_DIR); zip -r krpc-$(SERVER_VERSION).zip ./*
 
 install: dist
-	test -d $(KSP_DIR)/GameData
-	rm -rf $(KSP_DIR)/GameData/kRPC
-	rm -rf $(KSP_DIR)/GameData/000_Toolbar
-	cp -r $(DIST_DIR)/GameData/* $(KSP_DIR)/GameData/
+	test -d "$(KSP_DIR)/GameData"
+	rm -rf "$(KSP_DIR)/GameData/kRPC"
+	rm -rf "$(KSP_DIR)/GameData/000_Toolbar"
+	cp -r $(DIST_DIR)/GameData/* "$(KSP_DIR)/GameData/"
 
 test: test-csharp test-python test-spacecenter
 
@@ -111,15 +111,15 @@ test-python:
 	make -C python test
 
 test-spacecenter:
-	make -C test/kRPCSpaceCenterTest KSP_DIR=$(KSP_DIR) test
+	make -C test/kRPCSpaceCenterTest KSP_DIR="$(KSP_DIR)" test
 
 ksp: install TestingTools
-	cp test/TestingTools/bin/Release/TestingTools.dll $(KSP_DIR)/GameData/
-	-cp settings.cfg $(KSP_DIR)/GameData/kRPC/settings.cfg
-	test "!" -f $(KSP_DIR)/KSP.x86_64 || $(KSP_DIR)/KSP.x86_64 &
-	test "!" -f $(KSP_DIR)/KSP.exe || $(KSP_DIR)/KSP.exe &
-	test "!" -d $(HOME)/.config/unity3d || tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
-	test "!" -f $(KSP_DIR)/KSP_Data/output_log.txt || tail -f $(KSP_DIR)/KSP_Data/output_log.txt
+	cp test/TestingTools/bin/Release/TestingTools.dll "$(KSP_DIR)/GameData/"
+	-cp settings.cfg "$(KSP_DIR)/GameData/kRPC/settings.cfg"
+	test "!" -f "$(KSP_DIR)/KSP.x86_64" || "$(KSP_DIR)/KSP.x86_64" &
+	test "!" -f "$(KSP_DIR)/KSP.exe" || "$(KSP_DIR)/KSP.exe" &
+	test "!" -d "$(HOME)/.config/unity3d" || tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
+	test "!" -f "$(KSP_DIR)/KSP_Data/output_log.txt" || tail -f "$(KSP_DIR)/KSP_Data/output_log.txt"
 
 clean: protobuf-clean
 	-rm -f logo.png
