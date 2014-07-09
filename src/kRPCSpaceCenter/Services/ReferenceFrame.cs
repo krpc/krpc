@@ -336,17 +336,13 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
-                    {
-                        var speed = (2d * Math.PI) / vessel.mainBody.rotationPeriod;
-                        return speed * Vector3d.forward;
-                    }
+                    return body.angularVelocity;
                 case Type.CelestialBodyNonRotating:
                 case Type.CelestialBodyOrbital:
                 case Type.CelestialBodySurface:
                     return Vector3d.zero;
                 case Type.Vessel:
-                    // FIXME: should be the rotational velocity of the vessel
-                    return Vector3d.zero;
+                    return vessel.angularVelocity;
                 case Type.VesselNonRotating:
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
