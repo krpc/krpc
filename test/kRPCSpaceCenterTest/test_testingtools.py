@@ -18,6 +18,12 @@ class TestTestingTools(testingtools.TestCase):
         self.checkFails(self.assertClose, 0, 1, 0.5)
         self.checkFails(self.assertClose, 0, 1, 0)
 
+    def test_not_close(self):
+        self.checkFails(self.assertNotClose, 0, 0, 0)
+        self.checkFails(self.assertNotClose, 0, 1, 1)
+        self.assertNotClose(0, 1, 0.5)
+        self.assertNotClose(0, 1, 0)
+
     def test_close_iterable(self):
         self.assertClose((1,2,3), (1,2,3), 0)
         self.assertClose((1,2,3), [1,2,3], 0)
@@ -29,6 +35,10 @@ class TestTestingTools(testingtools.TestCase):
         self.checkFails(self.assertClose, (1,2,3), (2,3,5), 1)
         self.checkFails(self.assertClose, (1,2,3), (1,2), 1)
         self.checkFails(self.assertClose, (1,2), (1,2,3), 1)
+
+    def test_not_close_iterable(self):
+        self.checkFails(self.assertNotClose, (1,2,3), (1,2,3), 0)
+        self.assertNotClose((1,2,3), (3,3,4), 1)
 
     def test_close_degrees(self):
         self.assertCloseDegrees(0, 0, 0)
