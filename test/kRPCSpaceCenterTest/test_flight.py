@@ -185,7 +185,7 @@ class TestFlight(testingtools.TestCase):
         self.check_properties_not_affected_by_reference_frame(flight)
 
         #TODO: uncomment
-        #v = [2148.6, 0, 654.72]
+        v = [2148.6, 0, 654.72]
         #self.assertClose(2246.1, norm(v), error=0.5)
         self.assertClose(v, flight.velocity, error=2)
         self.assertClose(2246.1, flight.speed, error=0.5)
