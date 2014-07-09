@@ -15,8 +15,8 @@ class TestFlight(testingtools.TestCase):
         cls.vessel = cls.conn.space_center.active_vessel
 
     def test_equality(self):
-        self.assertEqual(self.vessel.flight(self.ref_surface), self.surface_flight)
-        self.assertEqual(self.vessel.flight(self.ref_orbital), self.orbital_flight)
+        flight = self.vessel.flight(self.vessel.reference_frame)
+        self.assertEqual(flight, self.vessel.flight(self.vessel.reference_frame))
 
     def check_properties_not_affected_by_reference_frame(self, flight):
         #self.assertClose(0, flight.g_force)

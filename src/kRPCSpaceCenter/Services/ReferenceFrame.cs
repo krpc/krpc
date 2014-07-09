@@ -2,12 +2,13 @@ using System;
 using System.Linq;
 using UnityEngine;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public class ReferenceFrame
+    public class ReferenceFrame : Equatable<ReferenceFrame>
     {
         enum Type
         {
@@ -39,6 +40,29 @@ namespace KRPCSpaceCenter.Services
         ReferenceFrame (Type type)
         {
             this.type = type;
+        }
+
+        public override bool Equals (ReferenceFrame other)
+        {
+            return this.type == other.type &&
+            this.body == other.body &&
+            this.vessel == other.vessel &&
+            this.part == other.part &&
+            this.node == other.node;
+        }
+
+        public override int GetHashCode ()
+        {
+            var hash = type.GetHashCode ();
+            if (body != null)
+                hash ^= body.GetHashCode ();
+            if (vessel != null)
+                hash ^= vessel.GetHashCode ();
+            if (part != null)
+                hash ^= part.GetHashCode ();
+            if (node != null)
+                hash ^= node.GetHashCode ();
+            return hash;
         }
 
         internal static ReferenceFrame Object (global::CelestialBody body)
@@ -289,7 +313,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.VesselNonRotating:
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
-                     return vessel.GetOrbit ().GetVel ();
+                    return vessel.GetOrbit ().GetVel ();
                 case Type.Part:
                 case Type.PartNonRotating:
                 case Type.PartOrbital:
