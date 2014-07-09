@@ -362,6 +362,20 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
+        /// Get the linear velocity at the given position that results from the reference frames angular velocity.
+        /// Position is in reference frame space.
+        /// </summary>
+        Vector3d AngularVelocityAt (Vector3d position)
+        {
+            var axis = AngularVelocity.normalized;
+            var plane_position = Vector3d.Exclude (axis, position);
+            var radius = plane_position.magnitude;
+            var plane_direction = plane_position.normalized;
+            var direction = Vector3d.Cross (axis, plane_direction);
+            return direction * AngularVelocity.magnitude * radius;
+        }
+
+        /// <summary>
         /// Convert the given position in world space, to a position in this reference frame.
         /// </summary>
         public Vector3d PositionFromWorldSpace (Vector3d worldPosition)
@@ -414,7 +428,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         public Vector3d VelocityFromWorldSpace (Vector3d worldPosition, Vector3d worldVelocity)
         {
-            return Rotation.Inverse () * (worldVelocity - Velocity);
+            return (Rotation.Inverse () * (worldVelocity - Velocity)) - AngularVelocityAt (PositionFromWorldSpace (worldPosition));
         }
 
         /// <summary>
@@ -422,8 +436,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         public Vector3d VelocityToWorldSpace (Vector3d position, Vector3d velocity)
         {
-            var vel = velocity + (RotationalVelocity * position.magnitude);
-            return Velocity + (Rotation * vel);
+            return Velocity + (Rotation * (velocity + AngularVelocityAt (position)));
         }
     }
 }

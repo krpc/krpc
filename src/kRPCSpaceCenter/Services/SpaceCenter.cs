@@ -151,7 +151,8 @@ namespace KRPCSpaceCenter.Services
         public static Tuple3 TransformVelocity (Tuple3 position, Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
         {
             var worldPosition = from.PositionToWorldSpace (position.ToVector ());
-            return to.VelocityFromWorldSpace (worldPosition, from.VelocityToWorldSpace (position.ToVector (), velocity.ToVector ())).ToTuple ();
+            var worldVelocity = from.VelocityToWorldSpace (position.ToVector (), velocity.ToVector ());
+            return to.VelocityFromWorldSpace (worldPosition, worldVelocity).ToTuple ();
         }
 
         [KRPCProcedure]
