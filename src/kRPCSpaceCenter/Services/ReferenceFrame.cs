@@ -332,7 +332,7 @@ namespace KRPCSpaceCenter.Services
         /// Vector points in direction of axis of rotation
         /// Vector's magnitude is the speed of rotation in radians per second
         /// </summary>
-        public Vector3d RotationalVelocity {
+        public Vector3d AngularVelocity {
             get {
                 switch (type) {
                 case Type.CelestialBody:
