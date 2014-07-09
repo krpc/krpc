@@ -42,7 +42,6 @@ class TestCase(unittest.TestCase):
             for x,y in itertools.izip(expected, actual):
                 if len(expected) != len(actual):
                     self.fail(str(actual) + ' is not close to ' + str(expected))
-                if not (value < min_value < value or max_value < value):
                 self.assertBetween(x-error, x+error, y)
         else:
             self.assertBetween(expected-error, expected+error, actual)
