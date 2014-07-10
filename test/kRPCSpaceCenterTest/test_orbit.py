@@ -212,5 +212,13 @@ class TestOrbit(testingtools.TestCase):
         #self.assertClose(13599840256, orbit.radius)
         #self.assertClose(9284.5, orbit.speed)
 
+    def test_reference_plane(self):
+        kerbin = self.conn.space_center.bodies['Kerbin']
+        ref = kerbin.non_rotating_reference_frame
+        normal = kerbin.orbit.reference_plane_normal(ref)
+        direction = kerbin.orbit.reference_plane_direction(ref)
+        self.assertClose((0,1,0), normal)
+        self.assertClose((1,0,0), direction)
+
 if __name__ == "__main__":
     unittest.main()
