@@ -4,7 +4,7 @@ from testingtools import load_save
 import krpc
 import time
 import math
-from mathtools import rad2deg, norm, dot, vector
+from mathtools import rad2deg, norm, normalize, dot, cross, vector
 
 class TestFlight(testingtools.TestCase):
 
@@ -91,10 +91,9 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(0, flight.speed, error=0.5)
         self.assertClose(0, flight.horizontal_speed, error=0.5)
         self.assertClose(0, flight.vertical_speed, error=0.5)
-        #TODO: are these correct?
         self.assertCloseDegrees(0, flight.pitch, error=1)
         self.assertCloseDegrees(0, flight.heading, error=1)
-        self.assertCloseDegrees(0, flight.roll, error=1)
+        self.assertCloseDegrees(-90, flight.roll, error=1)
 
         self.check_directions(flight)
         self.check_speeds(flight)
@@ -109,10 +108,8 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(0, flight.speed, error=0.5)
         self.assertClose(0, flight.horizontal_speed, error=0.5)
         self.assertClose(0, flight.vertical_speed, error=0.5)
-        # TODO: compute what these should be
-        #self.assertCloseDegrees(336.72, flight.pitch, error=1)
-        #self.assertCloseDegrees(10.92, flight.heading, error=1)
-        #self.assertCloseDegrees(117, flight.roll, error=1)
+        # pitch, roll, yaw are meaningless as the reference frame
+        # is in an arbitrary, but fixed, orientation
 
         self.check_directions(flight)
         self.check_speeds(flight)
@@ -127,10 +124,9 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(0, flight.speed, error=0.5)
         self.assertClose(0, flight.horizontal_speed, error=0.5)
         self.assertClose(0, flight.vertical_speed, error=0.5)
-        # TODO: compute what these should be
-        #self.assertClose(27, flight.pitch, error=1)
-        #self.assertClose(116, flight.heading, error=1)
-        #self.assertClose(39, flight.roll, error=1)
+        self.assertClose(27, flight.pitch, error=1)
+        self.assertClose(116, flight.heading, error=1)
+        self.assertClose(39, flight.roll, error=1)
 
         self.check_directions(flight)
         self.check_speeds(flight)
@@ -145,7 +141,6 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(0, flight.speed, error=0.5)
         self.assertClose(0, flight.horizontal_speed, error=0.5)
         self.assertClose(0, flight.vertical_speed, error=0.5)
-        #TODO: are these correct?
         self.assertClose(27, flight.pitch, error=1)
         self.assertClose(116, flight.heading, error=1)
         self.assertClose(39, flight.roll, error=1)
@@ -159,20 +154,16 @@ class TestFlight(testingtools.TestCase):
         flight = self.vessel.flight(ref)
         self.check_properties_not_affected_by_reference_frame(flight)
 
-        #TODO: are these correct?
-        v = [1953.8, 0, 595.3]
-        self.assertClose(2042.5, norm(v), error=0.5)
-        self.assertClose(v, flight.velocity, error=2)
-        self.assertClose(2042.5, flight.speed, error=0.5)
-        self.assertClose(2042.5, flight.horizontal_speed, error=0.5)
+        speed = 2042.5
+        self.assertClose(speed, norm(flight.velocity), error=0.5)
+        position = self.vessel.position(ref)
+        direction = vector(cross(normalize(position), (0,1,0)))
+        velocity = direction * speed
+        self.assertClose(velocity, flight.velocity, error=0.1)
+        self.assertClose(speed, flight.speed, error=0.5)
+        self.assertClose(speed, flight.horizontal_speed, error=0.5)
         self.assertClose(0, flight.vertical_speed, error=0.5)
-        #TODO: are these correct?
-        self.assertClose(63, flight.pitch, error=1)
-        self.assertClose(207, flight.heading, error=1)
-        self.assertClose(147, flight.roll, error=1)
 
-        #TODO: fix this
-        #self.check_directions(flight)
         self.check_speeds(flight)
         self.check_orbital_vectors(flight)
 
@@ -181,19 +172,16 @@ class TestFlight(testingtools.TestCase):
         flight = self.vessel.flight(ref)
         self.check_properties_not_affected_by_reference_frame(flight)
 
-        #TODO: are these correct?
-        v = [-717.2, 0, 2128.5]
-        self.assertClose(2246.1, norm(v), error=0.5)
-        self.assertClose(v, flight.velocity, error=2)
-        self.assertClose(2246.1, flight.speed, error=0.5)
-        self.assertClose(2246.1, flight.horizontal_speed, error=0.5)
+        speed = 2246.1
+        self.assertClose(speed, norm(flight.velocity), error=0.5)
+        position = self.vessel.position(ref)
+        direction = vector(cross(normalize(position), (0,1,0)))
+        velocity = direction * speed
+        self.assertClose(velocity, flight.velocity, error=2)
+        self.assertClose(speed, flight.speed, error=0.5)
+        self.assertClose(speed, flight.horizontal_speed, error=0.5)
         self.assertClose(0, flight.vertical_speed, error=0.5)
-        #TODO: are these correct?
-        self.assertClose(10.2, flight.pitch, error=1)
-        self.assertClose(113.6, flight.heading, error=1)
-        self.assertClose(31.5, flight.roll, error=1)
 
-        self.check_directions(flight)
         self.check_speeds(flight)
         self.check_orbital_vectors(flight)
 
