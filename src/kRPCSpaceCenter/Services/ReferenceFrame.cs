@@ -466,6 +466,24 @@ namespace KRPCSpaceCenter.Services
         {
             return Velocity + (Rotation * (velocity + AngularVelocityAt (position)));
         }
+
+        /// <summary>
+        /// Convert the given angular velocity in world space, to an angular velocity in this reference frame.
+        /// This only make sense when considering an object that is rotating at the origin of the reference frame.
+        /// </summary>
+        public Vector3d AngularVelocityFromWorldSpace (Vector3d worldAngularVelocity)
+        {
+            return Rotation.Inverse () * (worldAngularVelocity - AngularVelocity);
+        }
+
+        /// <summary>
+        /// Convert the given angular velocity at the given position in this reference frame, to an angular velocity in world space.
+        /// This only make sense when considering an object that is rotating at the origin of the reference frame.
+        /// </summary>
+        public Vector3d AngularVelocityToWorldSpace (Vector3d angularVelocity)
+        {
+            return AngularVelocity + (Rotation * angularVelocity);
+        }
     }
 }
 

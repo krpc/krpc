@@ -171,5 +171,11 @@ namespace KRPCSpaceCenter.Services
             var rotation = Quaternion.LookRotation (forward, up);
             return referenceFrame.RotationFromWorldSpace (rotation).ToTuple ();
         }
+
+        [KRPCMethod]
+        public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.AngularVelocityFromWorldSpace (InternalBody.angularVelocity).ToTuple ();
+        }
     }
 }
