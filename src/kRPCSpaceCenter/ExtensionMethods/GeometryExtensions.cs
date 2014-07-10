@@ -115,8 +115,9 @@ namespace KRPCSpaceCenter.ExtensionMethods
             return angle;
         }
 
-        public enum AxisOrder {
-           YZX
+        public enum AxisOrder
+        {
+            YZX
         }
 
         /// <summary>
@@ -127,15 +128,15 @@ namespace KRPCSpaceCenter.ExtensionMethods
             // Unity3d euler angle extraction order is ZXY
             Vector3d result;
             switch (order) {
-                case AxisOrder.YZX:
+            case AxisOrder.YZX:
                 {
                     // FIXME: use double precision arithmetic
-                    var angles = new Quaternion((float)q.z, (float)q.x, (float)q.y, (float)q.w).eulerAngles;
+                    var angles = new Quaternion ((float)q.z, (float)q.x, (float)q.y, (float)q.w).eulerAngles;
                     result = new Vector3d (angles.z, angles.x, angles.y);
                     break;
                 }
-                default:
-                    throw new ArgumentException ("Axis order not supported");
+            default:
+                throw new ArgumentException ("Axis order not supported");
             }
             // Clamp angles to range (0,360)
             result.x = ClampAngleDegrees (result.x);
