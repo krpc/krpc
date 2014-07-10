@@ -8,104 +8,104 @@ using KRPCSpaceCenter.ExtensionMethods;
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass(Service = "SpaceCenter")]
-    public class ModuleEngines : PartModule
+    public class ModuleEngine : PartModule
     {
-        global::ModuleEngines moduleEngines;
+        global::ModuleEngines moduleEngine;
 
-        internal ModuleEngines(global::ModuleEngines moduleEngines)
-            : base(moduleEngines)
+        internal ModuleEngine(global::ModuleEngines moduleEngine)
+            : base(moduleEngine)
         {
-            this.moduleEngines = moduleEngines;
+            this.moduleEngine = moduleEngine;
         }
 
         public override int GetHashCode ()
         {
-            return moduleEngines.GetHashCode();
+            return moduleEngine.GetHashCode();
         }
 
         [KRPCProperty]
         public bool AllowRestart
         {
-            get { return moduleEngines.allowRestart; }
+            get { return moduleEngine.allowRestart; }
         }
 
         [KRPCProperty]
         public bool AllowShutdown
         {
-            get { return moduleEngines.allowShutdown; }
+            get { return moduleEngine.allowShutdown; }
         }
 
         [KRPCProperty]
         public float CurrentThrottle
         {
-            get { return moduleEngines.currentThrottle; }
+            get { return moduleEngine.currentThrottle; }
         }
 
         [KRPCProperty]
         public bool ThrottleLocked
         {
-            get { return moduleEngines.throttleLocked; }
+            get { return moduleEngine.throttleLocked; }
         }
 
         [KRPCProperty]
         public float ThrustLimit
         {
-            get { return moduleEngines.thrustPercentage; }
-            set { moduleEngines.thrustPercentage = value; }
+            get { return moduleEngine.thrustPercentage; }
+            set { moduleEngine.thrustPercentage = value; }
         }
 
         [KRPCProperty]
         public bool EngineIgnited
         {
-            get { return moduleEngines.EngineIgnited; }
+            get { return moduleEngine.EngineIgnited; }
         }
 
         [KRPCProperty]
         public bool Flameout
         {
-            get { return moduleEngines.flameout; }
+            get { return moduleEngine.flameout; }
         }
         
         [KRPCProperty]
         public float Isp
         {
-            get { return moduleEngines.realIsp; }
+            get { return moduleEngine.realIsp; }
         }
 
         [KRPCProperty]
         public float MinThrust
         {
-            get { return moduleEngines.minThrust; }
+            get { return moduleEngine.minThrust; }
         }
 
         [KRPCProperty]
         public float MaxThrust
         {
-            get { return moduleEngines.maxThrust; }
+            get { return moduleEngine.maxThrust; }
         }
 
         [KRPCProperty]
         public Vessel Vessel
         {
-            get { return new Vessel(moduleEngines.vessel); } 
+            get { return new Vessel(moduleEngine.vessel); } 
         }
 
         [KRPCProperty]
         public bool IsActivated
         {
-            get { return moduleEngines.engineShutdown; } 
+            get { return moduleEngine.engineShutdown; } 
         }
 
         [KRPCMethod]
         public void Activate()
         {
-            moduleEngines.Activate();
+            moduleEngine.Activate();
         }
 
         [KRPCMethod]
         public void Shutdown()
         {
-            moduleEngines.Shutdown();
+            moduleEngine.Shutdown();
         }
     }
 }
