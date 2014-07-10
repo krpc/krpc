@@ -115,27 +115,45 @@ namespace KRPCSpaceCenter.ExtensionMethods
             return angle;
         }
 
+        public enum AxisOrder {
+           YZX
+        }
+
         /// <summary>
-        /// Compute the pitch, heading and roll angle of a quaternion in degrees.
+        /// Extract euler angles from a quarternion using the specified axis order.
+        /// </summary>
+        public static Vector3d EulerAngles (this QuaternionD q, AxisOrder order)
+        {
+            // Unity3d euler angle extraction order is ZXY
+            Vector3d result;
+            switch (order) {
+                case AxisOrder.YZX:
+                {
+                    // FIXME: use double precision arithmetic
+                    var angles = new Quaternion((float)q.z, (float)q.x, (float)q.y, (float)q.w).eulerAngles;
+                    result = new Vector3d (angles.z, angles.x, angles.y);
+                    break;
+                }
+                default:
+                    throw new ArgumentException ("Axis order not supported");
+            }
+            // Clamp angles to range (0,360)
+            result.x = ClampAngleDegrees (result.x);
+            result.y = ClampAngleDegrees (result.y);
+            result.z = ClampAngleDegrees (result.z);
+            return result;
+        }
+
+        /// <summary>
+        /// Compute the pitch, heading and roll angles of a quaternion in degrees.
         /// </summary>
         public static Vector3d PitchHeadingRoll (this QuaternionD q)
         {
-            // First, adjust the euler angle extraction order frmo z,y,x -> -y,z,x
-            // i.e. to extra pitch, then heading, then roll
-            // FIXME: QuaternionD.Euler method is not found at runtime
-            var r = q * ((QuaternionD)Quaternion.Euler (-90f, 0f, 0f)); //QuaternionD.Euler (-90d, 0d, 0d);
-            // FIXME: QuaternionD.eulerAngles property is not found at runtime
-            Vector3d eulerAngles = ((Quaternion)r).eulerAngles;
-            // Clamp angles to range (0,360)
-            eulerAngles.x = ClampAngleDegrees (eulerAngles.x);
-            eulerAngles.y = ClampAngleDegrees (eulerAngles.y);
-            eulerAngles.z = ClampAngleDegrees (eulerAngles.z);
-            // Convert angle around -y axis to pitch, with range [-90, 90]
-            var pitch = eulerAngles.x > 180d ? 360d - eulerAngles.x : -eulerAngles.x;
-            // Convert angle around z axis to heading, with range [0, 360]
-            var heading = eulerAngles.y;
-            // Convert angle around x axis to roll, with range [-180, 180]
-            var roll = eulerAngles.z > 180d ? 360d - eulerAngles.z : -eulerAngles.z;
+            // Extract angles in order: roll (y), pitch (z), heading (x)
+            Vector3d eulerAngles = q.EulerAngles (AxisOrder.YZX);
+            var pitch = eulerAngles.y > 180d ? 360d - eulerAngles.y : -eulerAngles.y;
+            var heading = eulerAngles.z;
+            var roll = eulerAngles.x >= 90d ? 270d - eulerAngles.x : -90d - eulerAngles.x;
             return new Vector3d (pitch, heading, roll);
         }
 
