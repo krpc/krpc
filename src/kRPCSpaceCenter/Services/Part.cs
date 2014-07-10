@@ -41,6 +41,11 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public string Title {
+            get { return part.partInfo.title; }
+        }
+
+        [KRPCProperty]
         public string ClassName {
             get { return part.ClassName; }
         }
@@ -91,7 +96,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public bool isControlSource {
+        public bool IsControlSource {
             get { return part.isControlSource; }
         }
 
