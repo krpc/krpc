@@ -223,6 +223,24 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
+        /// Vector from given vessel to north pole of body being orbited, in world space.
+        /// </summary>
+        Vector3d ToNorthPole (global::Vessel vessel)
+        {
+            var parent = vessel.mainBody;
+            return parent.position + ((Vector3d)parent.transform.up) * parent.Radius - ((Vector3d)vessel.CoM);
+        }
+
+        /// <summary>
+        /// Vector from center of given body to north pole of body being orbited, in world space.
+        /// </summary>
+        Vector3d ToNorthPole (global::CelestialBody body)
+        {
+            var parent = body.referenceBody;
+            return parent.position + (((Vector3d)parent.transform.up) * parent.Radius) - body.position;
+        }
+
+        /// <summary>
         /// Returns the up vector for the reference frame in world coordinates.
         /// The direction in which the y-axis points.
         /// The vector is not normalized.
@@ -234,12 +252,18 @@ namespace KRPCSpaceCenter.Services
                 case Type.CelestialBodySurface:
                     return body.bodyTransform.up;
                 case Type.CelestialBodyOrbital:
-                    return body.position - body.referenceBody.position;
+                    {
+                        var right = (body.position - body.referenceBody.position).normalized;
+                        return Vector3d.Exclude (Forward, ToNorthPole (body).normalized);
+                    }
                 case Type.Vessel:
                     return vessel.transform.up;
                 case Type.VesselSurface:
                 case Type.VesselOrbital:
-                    return ((Vector3d)vessel.CoM) - vessel.mainBody.position;
+                    {
+                        var right = ((Vector3d)vessel.CoM) - vessel.mainBody.position;
+                        return Vector3d.Exclude (right, ToNorthPole (vessel).normalized);
+                    }
                 case Type.Maneuver:
                     return node.patch.GetOrbitNormal ();
                 case Type.Part:
@@ -266,21 +290,25 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                 case Type.CelestialBodySurface:
-                    return body.bodyTransform.forward;
+                    {
+                        var right = body.GetRelSurfacePosition (0,0,1).normalized;
+                        return Vector3d.Cross(right, Up);
+                        //return body.bodyTransform.forward;
+                    }
                 case Type.CelestialBodyOrbital:
                     {
-                        var exclude = body.referenceBody.position + (((Vector3d)body.referenceBody.transform.up) * body.referenceBody.Radius) - body.position;
-                        exclude.Normalize ();
-                        return Vector3d.Exclude (Up, exclude);
+                        var right = (body.position - body.referenceBody.position).normalized;
+                        var northPole = ToNorthPole (body).normalized;
+                        return Vector3d.Cross (right, northPole);
                     }
                 case Type.Vessel:
-                    return vessel.transform.forward;
+                    return vessel.transform.right;
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                     {
-                        var exclude = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - ((Vector3d)vessel.CoM);
-                        exclude.Normalize ();
-                        return Vector3d.Exclude (Up, exclude);
+                        var right = ((Vector3d)vessel.CoM) - vessel.mainBody.position;
+                        var northPole = ToNorthPole (vessel).normalized;
+                        return Vector3d.Cross (right, northPole);
                     }
                 case Type.Maneuver:
                     return node.patch.getOrbitalVelocityAtUT (node.UT);
