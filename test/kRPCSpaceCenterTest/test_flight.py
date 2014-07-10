@@ -118,7 +118,7 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(0, flight.vertical_speed, error=0.5)
         self.assertClose(27, flight.pitch, error=1)
         self.assertClose(116, flight.heading, error=1)
-        self.assertClose(39, flight.roll, error=1)
+        self.assertClose(40, flight.roll, error=1)
 
         self.check_directions(flight)
         self.check_speeds(flight)
@@ -135,7 +135,7 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(0, flight.vertical_speed, error=0.5)
         self.assertClose(27, flight.pitch, error=1)
         self.assertClose(116, flight.heading, error=1)
-        self.assertClose(39, flight.roll, error=1)
+        self.assertClose(40, flight.roll, error=1)
 
         self.check_directions(flight)
         self.check_speeds(flight)
