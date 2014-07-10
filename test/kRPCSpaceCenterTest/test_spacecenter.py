@@ -51,10 +51,10 @@ class TestBody(testingtools.TestCase):
     def test_g(self):
         self.assertEqual(6.673e-11, self.sc.g)
 
-    #def test_warp_to(self):
-    #    t = self.sc.ut + (5*60)
-    #    self.sc.warp_to(t)
-    #    self.assertClose(t, self.sc.ut, error=2)
+    def test_warp_to(self):
+        t = self.sc.ut + (5*60)
+        self.sc.warp_to(t)
+        self.assertClose(t, self.sc.ut, error=2)
 
     def test_transform_position_same_reference_frame(self):
         self.assertClose((1,2,3), self.sc.transform_position((1,2,3), self.ref_vessel, self.ref_vessel))
