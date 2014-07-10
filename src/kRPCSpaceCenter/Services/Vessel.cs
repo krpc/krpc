@@ -176,5 +176,11 @@ namespace KRPCSpaceCenter.Services
         {
             return referenceFrame.RotationFromWorldSpace (InternalVessel.transform.rotation).ToTuple ();
         }
+
+        [KRPCMethod]
+        public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.angularVelocity).ToTuple ();
+        }
     }
 }
