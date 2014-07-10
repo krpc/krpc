@@ -76,13 +76,13 @@ class TestCase(unittest.TestCase):
             return a
 
         min, max = _clamp_degrees(expected - error), _clamp_degrees(expected + error)
-        actual = _clamp_degrees(actual)
+        actual_clamped = _clamp_degrees(actual)
 
-        if min <= actual and actual <= max:
+        if min <= actual_clamped and actual_clamped <= max:
             return
-        if (min > max) and (0 <= actual) and (actual <= max):
+        if (min > max) and (0 <= actual_clamped) and (actual_clamped <= max):
             return
-        if (min > max) and (min <= actual) and (actual <= 360):
+        if (min > max) and (min <= actual_clamped) and (actual_clamped <= 360):
             return
 
         self.fail('Angle %.2f is not close to %.2f, within an absolute error of %f' % (actual, expected, error))
