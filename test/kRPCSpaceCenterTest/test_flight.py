@@ -27,9 +27,8 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(930, flight.elevation, error=100)
         self.assertClose(flight.elevation, flight.bedrock_altitude - flight.mean_altitude, error=5)
 
-    def check_directions(self, flight, check_against_orbital=True):
-        """ Check flight.direction against flight.heading and flight.pitch
-            If check_against_orbital is True, check flight.direction against flight.radial and flight.normal """
+    def check_directions(self, flight):
+        """ Check flight.direction against flight.heading and flight.pitch """
         direction       = vector(flight.direction)
         up_direction    = (1,0,0)
         north_direction = (0,1,0)
@@ -44,13 +43,6 @@ class TestFlight(testingtools.TestCase):
         north_component = vector(direction) - up_component
         north_component = north_component / norm(north_component)
         self.assertCloseDegrees(flight.heading, rad2deg(math.acos(dot(north_component, north_direction))), error=1)
-
-        #TODO: uncomment
-        #if check_against_orbital == True:
-        #    # Check vessel directions agree with orbital directions
-        #    # (we are in a 0 degree inclined orbit, so they should do)
-        #    self.assertClose(1, dot(up_direction, vector(flight.prograde)))
-        #    self.assertClose(1, dot(north_direction, vector(flight.normal)))
 
     def check_speeds(self, flight):
         """ Check flight.velocity agrees with flight.*_speed """
