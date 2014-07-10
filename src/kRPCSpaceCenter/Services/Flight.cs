@@ -4,6 +4,7 @@ using KRPC.Utils;
 using UnityEngine;
 using KRPCSpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -47,16 +48,15 @@ namespace KRPCSpaceCenter.Services
         /// Direction the vessel is pointing in in world space
         /// </summary>
         Vector3d WorldDirection {
-            get { return vessel.GetTransform ().up; }
+            get { return vessel.transform.up; }
         }
 
         /// <summary>
-        /// Rotation of the vessel in the given reference frame
-        /// E.g. in the surface reference frame, is a rotation from the vessel direction vector
-        /// (in surface-space coordinates) to the surface space basis vector
+        /// Rotation of the vessel in the given reference frame.
+        /// Rotation * Vector3d.up gives the direction vector in which the vessel points, in reference frame space.
         /// </summary>
-        QuaternionD Rotation {
-            get { return referenceFrame.RotationFromWorldSpace (vessel.GetTransform ().rotation); }
+        QuaternionD VesselRotation {
+            get { return referenceFrame.RotationFromWorldSpace (vessel.transform.rotation); }
         }
 
         /// <summary>
@@ -138,23 +138,28 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public Tuple4 Rotation {
+            get { return VesselRotation.ToTuple (); }
+        }
+
+        [KRPCProperty]
         public Tuple3 Direction {
-            get { return referenceFrame.DirectionFromWorldSpace (WorldDirection).ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldDirection).normalized.ToTuple (); }
         }
 
         [KRPCProperty]
         public double Pitch {
-            get { return Rotation.PitchHeadingRoll ().x; }
+            get { return VesselRotation.PitchHeadingRoll ().x; }
         }
 
         [KRPCProperty]
         public double Heading {
-            get { return Rotation.PitchHeadingRoll ().y; }
+            get { return VesselRotation.PitchHeadingRoll ().y; }
         }
 
         [KRPCProperty]
         public double Roll {
-            get { return Rotation.PitchHeadingRoll ().z; }
+            get { return VesselRotation.PitchHeadingRoll ().z; }
         }
 
         [KRPCProperty]
