@@ -5,6 +5,7 @@ using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -168,6 +169,12 @@ namespace KRPCSpaceCenter.Services
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
             return referenceFrame.VelocityFromWorldSpace (InternalVessel.CoM, InternalVessel.GetOrbit ().GetVel ()).ToTuple ();
+        }
+
+        [KRPCMethod]
+        public Tuple4 Rotation (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.RotationFromWorldSpace (InternalVessel.transform.rotation).ToTuple ();
         }
     }
 }

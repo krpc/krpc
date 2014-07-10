@@ -6,6 +6,7 @@ using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -158,6 +159,17 @@ namespace KRPCSpaceCenter.Services
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
             return referenceFrame.VelocityFromWorldSpace (InternalBody.position, InternalBody.GetWorldVelocity ()).ToTuple ();
+        }
+
+        [KRPCMethod]
+        public Tuple4 Rotation (ReferenceFrame referenceFrame)
+        {
+            var up = Vector3.up;
+            var right = InternalBody.GetRelSurfacePosition (0,0,1).normalized;
+            var forward = Vector3.Cross (right, up);
+            Vector3.OrthoNormalize(ref forward, ref up);
+            var rotation = Quaternion.LookRotation (forward, up);
+            return referenceFrame.RotationFromWorldSpace (rotation).ToTuple ();
         }
     }
 }
