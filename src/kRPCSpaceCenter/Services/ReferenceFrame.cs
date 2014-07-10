@@ -228,7 +228,7 @@ namespace KRPCSpaceCenter.Services
         Vector3d ToNorthPole (global::Vessel vessel)
         {
             var parent = vessel.mainBody;
-            return parent.position + ((Vector3d)parent.transform.up) * parent.Radius - ((Vector3d)vessel.CoM);
+            return parent.position + ((Vector3d)parent.transform.up) * parent.Radius - (vessel.GetWorldPos3D ());
         }
 
         /// <summary>
@@ -249,8 +249,8 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
-                case Type.CelestialBodySurface:
                     return body.bodyTransform.up;
+                case Type.CelestialBodySurface:
                 case Type.CelestialBodyOrbital:
                     {
                         var right = (body.position - body.referenceBody.position).normalized;
@@ -261,7 +261,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.VesselSurface:
                 case Type.VesselOrbital:
                     {
-                        var right = ((Vector3d)vessel.CoM) - vessel.mainBody.position;
+                        var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
                         return Vector3d.Exclude (right, ToNorthPole (vessel).normalized);
                     }
                 case Type.Maneuver:
@@ -289,12 +289,8 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
+                    return body.bodyTransform.forward;
                 case Type.CelestialBodySurface:
-                    {
-                        var right = body.GetRelSurfacePosition (0,0,1).normalized;
-                        return Vector3d.Cross(right, Up);
-                        //return body.bodyTransform.forward;
-                    }
                 case Type.CelestialBodyOrbital:
                     {
                         var right = (body.position - body.referenceBody.position).normalized;
@@ -302,11 +298,11 @@ namespace KRPCSpaceCenter.Services
                         return Vector3d.Cross (right, northPole);
                     }
                 case Type.Vessel:
-                    return vessel.transform.right;
+                    return vessel.transform.forward;
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                     {
-                        var right = ((Vector3d)vessel.CoM) - vessel.mainBody.position;
+                        var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
                         var northPole = ToNorthPole (vessel).normalized;
                         return Vector3d.Cross (right, northPole);
                     }
