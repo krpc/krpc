@@ -64,19 +64,19 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Normalize an angle
+        /// Normalize an angle to the range (-180,180)
         /// </summary>
-        public static double normAngle (double angle)
+        public static double NormAngle (double angle)
         {
             return angle - 360d * Math.Floor ((angle + 180d) / 360d);
         }
 
         /// <summary>
-        /// Apply normAngle element-wise to a vector
+        /// Apply NormAngle element-wise to a vector
         /// </summary>
         public static Vector3d ReduceAngles (this Vector3d v)
         {
-            return new Vector3d (normAngle (v.x), normAngle (v.y), normAngle (v.z));
+            return new Vector3d (NormAngle (v.x), NormAngle (v.y), NormAngle (v.z));
         }
 
         /// <summary>
@@ -156,6 +156,39 @@ namespace KRPCSpaceCenter.ExtensionMethods
             var heading = eulerAngles.z;
             var roll = eulerAngles.x >= 90d ? 270d - eulerAngles.x : -90d - eulerAngles.x;
             return new Vector3d (pitch, heading, roll);
+        }
+
+        /// <summary>
+        /// Create a quaternion rotation from the given euler angles, and axis order.
+        /// </summary>
+        public static QuaternionD QuaternionFromEuler (Vector3d eulerAngles, AxisOrder order)
+        {
+            QuaternionD result;
+            switch (order) {
+            case AxisOrder.YZX:
+                // FIXME: use double precision arithmetic
+                var angles = new Vector3 ((float)eulerAngles.y, (float)eulerAngles.z, (float)eulerAngles.x);
+                var tmp = Quaternion.Euler (angles);
+                result = new QuaternionD (tmp.y, tmp.z, tmp.x, tmp.w);
+                break;
+            default:
+                throw new ArgumentException ("Axis order not supported");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Create a quarternion rotation for the given pitch, heading and roll angles.
+        /// </summary>
+        public static QuaternionD QuaternionFromPitchHeadingRoll (Vector3d phr)
+        {
+            var pitch = phr.x;
+            var heading = phr.y;
+            var roll = phr.z;
+            var y = pitch < 0d ? -pitch : 360d - pitch;
+            var z = heading;
+            var x = roll <= -90d ? -roll - 90d : 270d - roll;
+            return QuaternionFromEuler (new Vector3d (x, y, z), AxisOrder.YZX);
         }
 
         /// <summary>
