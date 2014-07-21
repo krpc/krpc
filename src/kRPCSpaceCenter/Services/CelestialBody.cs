@@ -172,6 +172,7 @@ namespace KRPCSpaceCenter.Services
             return referenceFrame.RotationFromWorldSpace (rotation).ToTuple ();
         }
 
+        //TODO: default argument value?
         [KRPCMethod]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
