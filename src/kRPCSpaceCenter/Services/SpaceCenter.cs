@@ -154,18 +154,5 @@ namespace KRPCSpaceCenter.Services
             var worldVelocity = from.VelocityToWorldSpace (position.ToVector (), velocity.ToVector ());
             return to.VelocityFromWorldSpace (worldPosition, worldVelocity).ToTuple ();
         }
-
-        [KRPCProcedure]
-        public static Tuple2 GetPitchHeading (Tuple3 direction)
-        {
-            // FIXME: QuarternionD.FromToRotation is not available at runtime !?
-            QuaternionD rotation = Quaternion.FromToRotation (Vector3d.forward, direction.ToVector ());
-            // FIXME: why doesn't rotation.PitchHeadingRoll work here?
-            //return rotation.PitchHeadingRoll ().ToTuple ();
-            var eulerAngles = ((Quaternion)rotation).eulerAngles;
-            var pitch = -Math.Abs (((eulerAngles.x + 270f) % 360f) - 180f) + 90f;
-            var yaw = eulerAngles.y;
-            return new Tuple2 (pitch, yaw);
-        }
     }
 }
