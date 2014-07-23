@@ -178,6 +178,12 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
+        public Tuple3 Direction (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.DirectionFromWorldSpace (InternalVessel.transform.up).ToTuple ();
+        }
+
+        [KRPCMethod]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
             return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.angularVelocity).ToTuple ();
