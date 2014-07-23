@@ -27,17 +27,62 @@ def load_save(name):
 
 class TestCase(unittest.TestCase):
 
-    def assertBetween(self, min_value, max_value, value):
-        self.assertLessEqual(min_value, value)
-        self.assertLessEqual(value, max_value)
+    def _isInRange(self, min_value, max_value, value):
+        return min_value <= value and value <= max_value
 
-    def assertNotBetween(self, min_value, max_value, value):
-        self.assertTrue(value < min_value or max_value < value)
-
-    def assertClose(self, expected, actual, error=0.001):
+    def _isClose(self, expected, actual, error=0.001):
         if type(expected) in (list,tuple):
-            for x,y in itertools.izip(expected, actual):
-                self.assertEqual(len(expected), len(actual))
-                self.assertClose(x, y, error=error)
-        else:
-            self.assertBetween(expected-error, expected+error, actual)
+            ok = True
+            if len(expected) != len(actual):
+                ok = False
+            else:
+                for x,y in itertools.izip(expected, actual):
+                    if not self._isInRange(x-error, x+error, y):
+                        ok = False
+                        break
+            if not ok:
+                return False
+        elif not self._isInRange(expected-error, expected+error, actual):
+            return False
+        return True
+
+    def assertNotClose(self, expected, actual, error=0.01):
+        """ Check that actual is not equal to expected, within the given absolute error
+            i.e. actual is not in the range (expected-error,expected+error) """
+        if self._isClose(expected, actual, error):
+            if type(expected) in (list,tuple):
+                args = [str(tuple(x)) for x in (actual,expected)] + [error]
+                self.fail('%s is close to %s, within an absolute error of %f' % tuple(args))
+            else:
+                self.fail('%f is close to %f, within an absolute error of %f' % (actual,expected,error))
+
+    def assertClose(self, expected, actual, error=0.01):
+        """ Check that actual is equal to expected, within the given absolute error
+            i.e. actual is in the range (expected-error,expected+error) """
+        if not self._isClose(expected, actual, error):
+            if type(expected) in (list,tuple):
+                args = [str(tuple(x)) for x in (actual,expected)] + [error]
+                self.fail('%s is not close to %s, within an absolute error of %f' % tuple(args))
+            else:
+                self.fail('%f is not close to %f, within an absolute error of %f' % (actual,expected,error))
+
+    def assertCloseDegrees(self, expected, actual, error=0.001):
+        """ Check that angle actual is equal to angle expected, within the given absolute error.
+            Uses clock arithmetic to compare angles, in range (0,360] """
+        def _clamp_degrees(a):
+            a = a % 360
+            if a < 0:
+                a += 360
+            return a
+
+        min, max = _clamp_degrees(expected - error), _clamp_degrees(expected + error)
+        actual_clamped = _clamp_degrees(actual)
+
+        if min <= actual_clamped and actual_clamped <= max:
+            return
+        if (min > max) and (0 <= actual_clamped) and (actual_clamped <= max):
+            return
+        if (min > max) and (min <= actual_clamped) and (actual_clamped <= 360):
+            return
+
+        self.fail('Angle %.2f is not close to %.2f, within an absolute error of %f' % (actual, expected, error))

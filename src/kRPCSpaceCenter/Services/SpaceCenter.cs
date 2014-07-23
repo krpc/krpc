@@ -3,6 +3,10 @@ using KRPC.Service.Attributes;
 using KRPC.Continuations;
 using UnityEngine;
 using System.Collections.Generic;
+using KRPCSpaceCenter.ExtensionMethods;
+using Tuple2 = KRPC.Utils.Tuple<double,double>;
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -56,8 +60,8 @@ namespace KRPCSpaceCenter.Services
             float rate = Mathf.Clamp ((float)(UT - Planetarium.GetUniversalTime ()), 1f, (float)maxRate);
 
             var vessel = ActiveVessel;
-            var flight = vessel.Flight ();
-            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (1, vessel.Orbit.Body.Body);
+            var flight = vessel.Flight (ReferenceFrame.Orbital (vessel.InternalVessel));
+            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (1, vessel.Orbit.Body.InternalBody);
 
             if (vessel.Situation != VesselSituation.Landed && vessel.Situation != VesselSituation.Splashed && flight.MeanAltitude < altitudeLimit)
                 WarpPhysicsAtRate (vessel, flight, Mathf.Min (rate, 2));
@@ -107,10 +111,48 @@ namespace KRPCSpaceCenter.Services
             if (Math.Abs (Planetarium.GetUniversalTime () - warpIncreaseAttemptTime) < 2)
                 return;
             // Check we don't increase the warp rate beyond the altitude limit
-            if (flight.MeanAltitude < TimeWarp.fetch.GetAltitudeLimit (TimeWarp.CurrentRateIndex + 1, vessel.Orbit.Body.Body))
+            if (flight.MeanAltitude < TimeWarp.fetch.GetAltitudeLimit (TimeWarp.CurrentRateIndex + 1, vessel.Orbit.Body.InternalBody))
                 return;
             warpIncreaseAttemptTime = Planetarium.GetUniversalTime ();
             TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
+        }
+
+        /// <summary>
+        /// Given a position as a vector in reference frame `from`, convert it to a position in reference frame `to`.
+        /// </summary>
+        [KRPCProcedure]
+        public static Tuple3 TransformPosition (Tuple3 position, ReferenceFrame from, ReferenceFrame to)
+        {
+            return to.PositionFromWorldSpace (from.PositionToWorldSpace (position.ToVector ())).ToTuple ();
+        }
+
+        /// <summary>
+        /// Given a direction as a 3D unit vector in reference frame `from`, convert it to a unit vector in reference frame `to`.
+        /// </summary>
+        [KRPCProcedure]
+        public static Tuple3 TransformDirection (Tuple3 direction, ReferenceFrame from, ReferenceFrame to)
+        {
+            return to.DirectionFromWorldSpace (from.DirectionToWorldSpace (direction.ToVector ())).ToTuple ();
+        }
+
+        /// <summary>
+        /// Given a rotation as a quaternion in reference frame `from`, convert it to a rotation in reference frame `to`.
+        /// </summary>
+        [KRPCProcedure]
+        public static Tuple4 TransformRotation (Tuple4 rotation, ReferenceFrame from, ReferenceFrame to)
+        {
+            return to.RotationFromWorldSpace (from.RotationToWorldSpace (rotation.ToQuaternion ())).ToTuple ();
+        }
+
+        /// <summary>
+        /// Given a velocity at a position in reference frame `from`, convert it to a velocity in reference frame `to`.
+        /// </summary>
+        [KRPCProcedure]
+        public static Tuple3 TransformVelocity (Tuple3 position, Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
+        {
+            var worldPosition = from.PositionToWorldSpace (position.ToVector ());
+            var worldVelocity = from.VelocityToWorldSpace (position.ToVector (), velocity.ToVector ());
+            return to.VelocityFromWorldSpace (worldPosition, worldVelocity).ToTuple ();
         }
     }
 }

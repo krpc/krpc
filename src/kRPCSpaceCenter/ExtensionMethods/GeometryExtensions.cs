@@ -1,32 +1,42 @@
 using System;
 using UnityEngine;
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
     public static class GeometryExtensions
     {
         /// <summary>
-        /// Convert a Unity3d vector to a protocol buffer vector
+        /// Convert a vector to a tuple
         /// </summary>
-        public static KRPC.Utils.Tuple<double,double,double> ToTuple (this Vector3d v)
+        public static Tuple3 ToTuple (this Vector3d v)
         {
-            return new KRPC.Utils.Tuple<double,double,double> (v.x, v.y, v.z);
+            return new Tuple3 (v.x, v.y, v.z);
         }
 
         /// <summary>
-        /// Convert a Unity3d vector to a protocol buffer vector
+        /// Convert a tuple to a vector
         /// </summary>
-        public static KRPC.Utils.Tuple<double,double,double> ToTuple (this Vector3 v)
+        public static Vector3d ToVector (this Tuple3 t)
         {
-            return new KRPC.Utils.Tuple<double,double,double> (v.x, v.y, v.z);
+            return new Vector3d (t.Item1, t.Item2, t.Item3);
         }
 
         /// <summary>
-        /// Convert a protocol buffer vector to a Unity3d vector
+        /// Convert a quaternion to tuple
         /// </summary>
-        public static Vector3d ToVector (this KRPC.Utils.Tuple<double,double,double> v)
+        public static Tuple4 ToTuple (this QuaternionD q)
         {
-            return new Vector3d (v.Item1, v.Item2, v.Item3);
+            return new Tuple4 (q.x, q.y, q.z, q.w);
+        }
+
+        /// <summary>
+        /// Convert a tuple to a quaternion
+        /// </summary>
+        public static QuaternionD ToQuaternion (this Tuple4 t)
+        {
+            return new QuaternionD (t.Item1, t.Item2, t.Item3, t.Item4);
         }
 
         /// <summary>
@@ -54,19 +64,19 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Normalize an angle
+        /// Normalize an angle to the range (-180,180)
         /// </summary>
-        public static double normAngle (double angle)
+        public static double NormAngle (double angle)
         {
             return angle - 360d * Math.Floor ((angle + 180d) / 360d);
         }
 
         /// <summary>
-        /// Apply normAngle element-wise to a vector
+        /// Apply NormAngle element-wise to a vector
         /// </summary>
         public static Vector3d ReduceAngles (this Vector3d v)
         {
-            return new Vector3d (normAngle (v.x), normAngle (v.y), normAngle (v.z));
+            return new Vector3d (NormAngle (v.x), NormAngle (v.y), NormAngle (v.z));
         }
 
         /// <summary>
@@ -95,29 +105,142 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Compute the pitch angle of a quaternion in degrees.
+        /// Clamps the given angle to the range [0,360]
+        /// </summary>
+        static double ClampAngleDegrees (double angle)
+        {
+            angle = angle % 360d;
+            if (angle < 0d)
+                angle += 360d;
+            return angle;
+        }
+
+        public enum AxisOrder
+        {
+            YZX
+        }
+
+        /// <summary>
+        /// Extract euler angles from a quarternion using the specified axis order.
+        /// </summary>
+        public static Vector3d EulerAngles (this QuaternionD q, AxisOrder order)
+        {
+            // Unity3d euler angle extraction order is ZXY
+            Vector3d result;
+            switch (order) {
+            case AxisOrder.YZX:
+                {
+                    // FIXME: use double precision arithmetic
+                    var angles = new Quaternion ((float)q.z, (float)q.x, (float)q.y, (float)q.w).eulerAngles;
+                    result = new Vector3d (angles.z, angles.x, angles.y);
+                    break;
+                }
+            default:
+                throw new ArgumentException ("Axis order not supported");
+            }
+            // Clamp angles to range (0,360)
+            result.x = ClampAngleDegrees (result.x);
+            result.y = ClampAngleDegrees (result.y);
+            result.z = ClampAngleDegrees (result.z);
+            return result;
+        }
+
+        /// <summary>
+        /// Compute the pitch, heading and roll angles of a quaternion in degrees.
         /// </summary>
         public static Vector3d PitchHeadingRoll (this QuaternionD q)
         {
-            // First, adjust the euler angle extraction order frmo z,y,x -> -y,z,x
-            // i.e. to extra pitch, then heading, then roll
-            // FIXME: QuaternionD.Euler method is not found at runtime
-            var r = q * ((QuaternionD)Quaternion.Euler (-90f, 0f, 0f)); //QuaternionD.Euler (-90d, 0d, 0d);
-            // FIXME: QuaternionD.eulerAngles property is not found at runtime
-            Vector3d eulerAngles = ((Quaternion)r).eulerAngles;
-            // Convert angle around -y axis to pitch, with range [-90, 90]
-            var pitch = eulerAngles.x > 180d ? eulerAngles.x - 360d : eulerAngles.x;
-            // Convert angle around z axis to heading, with range [0, 360]
-            var heading = 360d - eulerAngles.y;
-            // Convert angle around x axis to heading, with range [-180, 180]
-            var roll = 180d - eulerAngles.z;
+            // Extract angles in order: roll (y), pitch (z), heading (x)
+            Vector3d eulerAngles = q.EulerAngles (AxisOrder.YZX);
+            var pitch = eulerAngles.y > 180d ? 360d - eulerAngles.y : -eulerAngles.y;
+            var heading = eulerAngles.z;
+            var roll = eulerAngles.x >= 90d ? 270d - eulerAngles.x : -90d - eulerAngles.x;
             return new Vector3d (pitch, heading, roll);
         }
 
+        /// <summary>
+        /// Create a quaternion rotation from the given euler angles, and axis order.
+        /// </summary>
+        public static QuaternionD QuaternionFromEuler (Vector3d eulerAngles, AxisOrder order)
+        {
+            QuaternionD result;
+            switch (order) {
+            case AxisOrder.YZX:
+                // FIXME: use double precision arithmetic
+                var angles = new Vector3 ((float)eulerAngles.y, (float)eulerAngles.z, (float)eulerAngles.x);
+                var tmp = Quaternion.Euler (angles);
+                result = new QuaternionD (tmp.y, tmp.z, tmp.x, tmp.w);
+                break;
+            default:
+                throw new ArgumentException ("Axis order not supported");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Create a quarternion rotation for the given pitch, heading and roll angles.
+        /// </summary>
+        public static QuaternionD QuaternionFromPitchHeadingRoll (Vector3d phr)
+        {
+            var pitch = phr.x;
+            var heading = phr.y;
+            var roll = phr.z;
+            var y = pitch < 0d ? -pitch : 360d - pitch;
+            var z = heading;
+            var x = roll <= -90d ? -roll - 90d : 270d - roll;
+            return QuaternionFromEuler (new Vector3d (x, y, z), AxisOrder.YZX);
+        }
+
+        /// <summary>
+        /// Compute the inverse quaternion. Assumes the input is a unit quaternion.
+        /// </summary>
         public static QuaternionD Inverse (this QuaternionD q)
         {
-            // FIXME: QuaternionD.Inverse is not defined. This uses single precision floating point for now.
-            return ((Quaternion)q).Inverse ();
+            return new QuaternionD (-q.x, -q.y, -q.z, q.w);
+        }
+
+        /// <summary>
+        /// Implementation of QuaternionD.OrthoNormalize, using stabilized Gram-Schmidt
+        /// </summary>
+        public static void OrthoNormalize2 (ref Vector3d normal, ref Vector3d tangent)
+        {
+            normal.Normalize ();
+            tangent.Normalize (); // Additional normalization, avoids large tangent norm
+            var proj = normal * Vector3d.Dot (tangent, normal);
+            tangent = tangent - proj;
+            tangent.Normalize ();
+        }
+
+        /// <summary>
+        /// Compute the norm of a quaternion
+        /// </summary>
+        public static double Norm (this QuaternionD q)
+        {
+            return Math.Sqrt (q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
+        }
+
+        /// <summary>
+        /// Normalize a quaternion
+        /// </summary>
+        public static QuaternionD Normalize (this QuaternionD q)
+        {
+            var sf = 1d / q.Norm ();
+            return new QuaternionD (q.x * sf, q.y * sf, q.z * sf, q.w * sf);
+        }
+
+        /// <summary>
+        /// Implementation of QuaternionD.LookRotation
+        /// </summary>
+        public static QuaternionD LookRotation2 (Vector3d forward, Vector3d up)
+        {
+            OrthoNormalize2 (ref forward, ref up);
+            Vector3d right = Vector3d.Cross (up, forward);
+            var w = Math.Sqrt (1.0d + right.x + up.y + forward.z) * 0.5d;
+            var r = 0.25d / w;
+            var x = (up.z - forward.y) * r;
+            var y = (forward.x - right.z) * r;
+            var z = (right.y - up.x) * r;
+            return new QuaternionD (x, y, z, w);
         }
     }
 }

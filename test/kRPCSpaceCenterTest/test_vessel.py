@@ -31,8 +31,8 @@ class TestVessel(testingtools.TestCase):
         ut = self.conn.space_center.ut
         met = self.vessel.met
         time.sleep(1)
-        self.assertClose(ut+1, self.conn.space_center.ut, error=0.25)
-        self.assertClose(met+1, self.vessel.met, error=0.25)
+        self.assertClose(ut+1, self.conn.space_center.ut, error=0.5)
+        self.assertClose(met+1, self.vessel.met, error=0.5)
         self.assertGreater(self.conn.space_center.ut, self.vessel.met)
 
     def test_mass(self):

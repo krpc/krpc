@@ -12,7 +12,7 @@ class TestControl(testingtools.TestCase):
         cls.conn = krpc.connect()
         cls.control = cls.conn.space_center.active_vessel.control
         vessel = cls.conn.space_center.active_vessel
-        cls.orbital_flight = vessel.flight(cls.conn.space_center.ReferenceFrame.orbital)
+        cls.orbital_flight = vessel.flight(vessel.orbit.reference_frame)
 
     def test_equality(self):
         self.assertEqual(self.conn.space_center.active_vessel.control, self.control)

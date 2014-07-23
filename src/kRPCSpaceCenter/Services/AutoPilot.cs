@@ -47,18 +47,22 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public void SetRotation (double pitch, double yaw, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
+        public void SetRotation (double pitch, double yaw, double roll = Double.NaN, ReferenceFrame referenceFrame = null)
         {
+            if (referenceFrame == null)
+                referenceFrame = ReferenceFrame.Orbital (vessel);
             engaged.Add (this);
             this.referenceFrame = referenceFrame;
-            this.pitch = pitch;
-            this.yaw = yaw;
+            this.pitch = -pitch;
+            this.yaw = -yaw;
             this.roll = roll;
         }
 
         [KRPCMethod]
-        public void SetDirection (Tuple3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
+        public void SetDirection (Tuple3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = null)
         {
+            if (referenceFrame == null)
+                referenceFrame = ReferenceFrame.Orbital (vessel);
             engaged.Add (this);
             this.referenceFrame = referenceFrame;
             var rotation = Quaternion.FromToRotation (Vector3d.forward, direction.ToVector ());
@@ -112,10 +116,10 @@ namespace KRPCSpaceCenter.Services
         Quaternion GetErrorQuaternion ()
         {
             Quaternion vesselR = vessel.transform.rotation;
-            Quaternion target = ReferenceFrameTransform.GetRotation (referenceFrame, vessel);
+            Quaternion target = referenceFrame.Rotation;
             // TODO: don't force the roll to 0 if specific roll not requested
             var actualRoll = Double.IsNaN (roll) ? 0 : roll;
-            target *= Quaternion.Euler (new Vector3d (pitch, -yaw, 180 - actualRoll));
+            target *= Quaternion.Euler (new Vector3d (pitch, -yaw, -actualRoll));
             return Quaternion.Inverse (Quaternion.Euler (90, 0, 0) * Quaternion.Inverse (vesselR) * target);
         }
 

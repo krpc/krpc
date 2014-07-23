@@ -4,6 +4,8 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
+using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -35,57 +37,59 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Vessel : Equatable<Vessel>
     {
-        global::Vessel vessel;
-
         internal Vessel (global::Vessel vessel)
         {
-            this.vessel = vessel;
+            InternalVessel = vessel;
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
             Resources = new Resources (vessel);
         }
 
+        internal global::Vessel InternalVessel { get; private set; }
+
         public override bool Equals (Vessel other)
         {
-            return vessel == other.vessel;
+            return InternalVessel == other.InternalVessel;
         }
 
         public override int GetHashCode ()
         {
-            return vessel.GetHashCode ();
+            return InternalVessel.GetHashCode ();
         }
 
         [KRPCProperty]
         public string Name {
-            get { return vessel.vesselName; }
-            set { vessel.vesselName = value; }
+            get { return InternalVessel.vesselName; }
+            set { InternalVessel.vesselName = value; }
         }
 
         [KRPCProperty]
         public VesselType Type {
             get {
-                return vessel.vesselType.ToVesselType ();
+                return InternalVessel.vesselType.ToVesselType ();
             }
             set {
-                vessel.vesselType = value.FromVesselType ();
+                InternalVessel.vesselType = value.FromVesselType ();
             }
         }
 
         [KRPCProperty]
         public VesselSituation Situation {
-            get { return vessel.situation.ToVesselSituation (); }
+            get { return InternalVessel.situation.ToVesselSituation (); }
         }
 
         [KRPCProperty]
         public double MET {
-            get { return vessel.missionTime; }
+            get { return InternalVessel.missionTime; }
         }
 
         [KRPCMethod]
-        public Flight Flight (ReferenceFrame referenceFrame = ReferenceFrame.Orbital)
+        public Flight Flight (ReferenceFrame referenceFrame = null)
         {
-            return new Flight (vessel, referenceFrame);
+            if (referenceFrame == null)
+                referenceFrame = ReferenceFrame.Orbital (InternalVessel);
+            return new Flight (InternalVessel, referenceFrame);
         }
 
         [KRPCProperty]
@@ -109,14 +113,14 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double Mass {
             get {
-                return vessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.TotalMass ()).Sum ();
+                return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.TotalMass ()).Sum ();
             }
         }
 
         [KRPCProperty]
         public double DryMass {
             get {
-                return vessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.DryMass ()).Sum ();
+                return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.DryMass ()).Sum ();
             }
         }
 
@@ -130,9 +134,59 @@ namespace KRPCSpaceCenter.Services
             get {
                 // Mass-weighted average of max_drag for each part
                 // Note: Uses Part.mass, so does not include the mass of resources
-                return vessel.Parts.Select (p => p.maximum_drag * p.mass).Sum () /
-                vessel.Parts.Select (p => p.mass).Sum ();
+                return InternalVessel.Parts.Select (p => p.maximum_drag * p.mass).Sum () /
+                InternalVessel.Parts.Select (p => p.mass).Sum ();
             }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return ReferenceFrame.Object (InternalVessel); }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame NonRotatingReferenceFrame {
+            get { return ReferenceFrame.NonRotating (InternalVessel); }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame OrbitalReferenceFrame {
+            get { return ReferenceFrame.Orbital (InternalVessel); }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame SurfaceReferenceFrame {
+            get { return ReferenceFrame.Surface (InternalVessel); }
+        }
+
+        [KRPCMethod]
+        public Tuple3 Position (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.PositionFromWorldSpace (InternalVessel.GetWorldPos3D ()).ToTuple ();
+        }
+
+        [KRPCMethod]
+        public Tuple3 Velocity (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.VelocityFromWorldSpace (InternalVessel.CoM, InternalVessel.GetOrbit ().GetVel ()).ToTuple ();
+        }
+
+        [KRPCMethod]
+        public Tuple4 Rotation (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.RotationFromWorldSpace (InternalVessel.transform.rotation).ToTuple ();
+        }
+
+        [KRPCMethod]
+        public Tuple3 Direction (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.DirectionFromWorldSpace (InternalVessel.transform.up).ToTuple ();
+        }
+
+        [KRPCMethod]
+        public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.angularVelocity).ToTuple ();
         }
     }
 }

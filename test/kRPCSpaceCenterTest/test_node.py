@@ -75,7 +75,7 @@ class TestNode(testingtools.TestCase):
         node = self.control.add_node(self.conn.space_center.ut, 1, -2, 3)
         magnitude = 128
         node.delta_v = magnitude
-        v = normalize([1,-2,3]) * magnitude
+        v = vector(normalize([1,-2,3])) * magnitude
         self.check(node, v)
         node.remove()
 
