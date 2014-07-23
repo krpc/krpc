@@ -192,6 +192,8 @@ class _ClassType(_TypeBase):
 
         # Add cmp method
         def cmp_(s, other):
+            if not hasattr(other, '_object_id'):
+                return -1
             return s._object_id.__cmp__(other._object_id)
         typ.__cmp__ = cmp_
 

@@ -34,6 +34,11 @@ class TestObjects(unittest.TestCase):
         obj1a = self.ksp.test_service.object_property
         self.assertEqual(obj1, obj1a)
 
+        self.assertFalse(obj1 == None)
+        self.assertTrue(obj1 != None)
+        self.assertFalse(None == obj1)
+        self.assertTrue(None != obj1)
+
     def test_hash(self):
         obj1 = self.ksp.test_service.create_test_object('jeb')
         obj2 = self.ksp.test_service.create_test_object('jeb')
