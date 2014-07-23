@@ -5,6 +5,7 @@ KSP_DIR := $(shell readlink -f "$(KSP_DIR)")
 
 SERVER_VERSION = $(shell cat VERSION.txt)
 PYTHON_CLIENT_VERSION = $(shell grep "version=" python/setup.py | sed "s/\s*version='\(.*\)',/\1/")
+TOOLBAR_VERSION = 1.7.4
 
 DIST_DIR = dist
 DIST_LIBS = \
@@ -67,9 +68,9 @@ dist: build dist-python
 	# Plugin files
 	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
 	# Toolbar
-	$(UNZIP) lib/toolbar/Toolbar-1.7.1.zip -d $(DIST_DIR)
-	mv $(DIST_DIR)/Toolbar-1.7.1/GameData/* $(DIST_DIR)/GameData/
-	rm -r $(DIST_DIR)/Toolbar-1.7.1
+	$(UNZIP) lib/toolbar/Toolbar-$(TOOLBAR_VERSION).zip -d $(DIST_DIR)
+	mv $(DIST_DIR)/Toolbar-$(TOOLBAR_VERSION)/GameData/* $(DIST_DIR)/GameData/
+	rm -r $(DIST_DIR)/Toolbar-$(TOOLBAR_VERSION)
 	# Licenses
 	cp LICENSE.txt $(DIST_DIR)/
 	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-csharp-port-license.txt

@@ -396,8 +396,6 @@ namespace KRPC.UI
     /// <seealso cref="IButton.Visibility"/>
     public class GameScenesVisibility : IVisibility
     {
-        private GameScenes[] gameScenes;
-
         public bool Visible {
             get {
                 return (bool)visibleProperty.GetValue (realGameScenesVisibility, null);
@@ -412,7 +410,6 @@ namespace KRPC.UI
             Type gameScenesVisibilityType = ToolbarTypes.getType ("Toolbar.GameScenesVisibility");
             realGameScenesVisibility = Activator.CreateInstance (gameScenesVisibilityType, new object[] { gameScenes });
             visibleProperty = ToolbarTypes.getProperty (gameScenesVisibilityType, "Visible");
-            this.gameScenes = gameScenes;
         }
     }
     #endregion
