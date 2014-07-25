@@ -1,6 +1,6 @@
 import unittest
 import testingtools
-from testingtools import load_save
+from testingtools
 import krpc
 import time
 import math
@@ -10,7 +10,7 @@ class TestFlight(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        load_save('flight')
+        testingtools.load_save('flight')
         cls.conn = krpc.connect()
         cls.vessel = cls.conn.space_center.active_vessel
 

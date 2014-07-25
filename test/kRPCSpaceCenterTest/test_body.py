@@ -1,6 +1,5 @@
 import unittest
 import testingtools
-from testingtools import load_save
 from mathtools import norm, normalize, dot
 import krpc
 import math
@@ -9,7 +8,7 @@ class TestBody(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        load_save('basic')
+        testingtools.new_save()
         cls.conn = krpc.connect()
 
     def test_equality(self):
