@@ -4,7 +4,7 @@ description =
 type = VAB
 PART
 {
-	part = mk1pod_4294797048
+	part = mk1pod_4294866428
 	partName = Part
 	pos = 0,10,0
 	rot = 0,0,0,1
@@ -15,8 +15,8 @@ PART
 	sidx = -1
 	sqor = -1
 	attm = 0
-	link = fuelTank_4294794616
-	attN = bottom,fuelTank_4294794616
+	link = fuelTank_4294866334
+	attN = bottom,fuelTank_4294866334
 	EVENTS
 	{
 	}
@@ -297,7 +297,7 @@ PART
 }
 PART
 {
-	part = fuelTank_4294794616
+	part = fuelTank_4294866334
 	partName = Part
 	pos = 0,8.629272,0
 	rot = 0,0,0,1
@@ -308,14 +308,14 @@ PART
 	sidx = -1
 	sqor = -1
 	attm = 0
-	link = liquidEngine_4294794300
-	link = batteryPack_4294793458
-	link = batteryPack_4294793414
-	link = solarPanels1_4294793136
-	link = solarPanels1_4294791420
-	link = solarPanels1_4294791306
-	attN = top,mk1pod_4294797048
-	attN = bottom,liquidEngine_4294794300
+	link = batteryPack_4294866210
+	link = batteryPack_4294866176
+	link = solarPanels1_4294866142
+	link = solarPanels1_4294866032
+	link = solarPanels1_4294865922
+	link = liquidEngine2_4294859514
+	attN = top,mk1pod_4294866428
+	attN = bottom,liquidEngine2_4294859514
 	EVENTS
 	{
 	}
@@ -345,7 +345,287 @@ PART
 }
 PART
 {
-	part = liquidEngine_4294794300
+	part = batteryPack_4294866210
+	partName = Part
+	pos = -5.441017E-08,8.136793,-0.6223798
+	rot = -4.371139E-08,0,-1,0
+	attRot = 0,0,-0.9999999,0
+	mir = 1,1,1
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	attm = 1
+	sym = batteryPack_4294866176
+	srfN = srfAttach,fuelTank_4294866334
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	RESOURCE
+	{
+		name = ElectricCharge
+		amount = 100
+		maxAmount = 100
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		flowMode = Both
+	}
+}
+PART
+{
+	part = batteryPack_4294866176
+	partName = Part
+	pos = 1.088203E-07,8.136793,0.6223798
+	rot = -1,0,8.742278E-08,0
+	attRot = 0,0,-0.9999999,0
+	mir = 1,1,1
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	attm = 1
+	sym = batteryPack_4294866210
+	srfN = srfAttach,fuelTank_4294866334
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	RESOURCE
+	{
+		name = ElectricCharge
+		amount = 100
+		maxAmount = 100
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		flowMode = Both
+	}
+}
+PART
+{
+	part = solarPanels1_4294866142
+	partName = Part
+	pos = -5.420311E-08,9.179872,-0.6200113
+	rot = 0,0.7071068,0,-0.7071068
+	attRot = 0,0,0,1
+	mir = 1,1,1
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	attm = 1
+	sym = solarPanels1_4294866032
+	sym = solarPanels1_4294865922
+	srfN = srfAttach,fuelTank_4294866334
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	MODULE
+	{
+		name = ModuleDeployableSolarPanel
+		isEnabled = True
+		currentRotation = (0, 0, 0, 0)
+		stateString = RETRACTED
+		storedAnimationTime = 0
+		storedAnimationSpeed = 0
+		EVENTS
+		{
+			Extend
+			{
+				active = True
+				guiActive = True
+				guiIcon = Extend Panels
+				guiName = Extend Panels
+				category = Extend Panels
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+			Retract
+			{
+				active = True
+				guiActive = True
+				guiIcon = Retract Panels
+				guiName = Retract Panels
+				category = Retract Panels
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ExtendPanelsAction
+			{
+				actionGroup = None
+			}
+			ExtendAction
+			{
+				actionGroup = Custom01
+			}
+			RetractAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+}
+PART
+{
+	part = solarPanels1_4294866032
+	partName = Part
+	pos = -0.5369455,9.179872,0.3100058
+	rot = 0,-0.2588192,0,-0.9659259
+	attRot = 0,0,0,1
+	mir = 1,1,1
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	attm = 1
+	sym = solarPanels1_4294866142
+	sym = solarPanels1_4294865922
+	srfN = srfAttach,fuelTank_4294866334
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	MODULE
+	{
+		name = ModuleDeployableSolarPanel
+		isEnabled = True
+		currentRotation = (0, 0, 0, 0)
+		stateString = RETRACTED
+		storedAnimationTime = 0
+		storedAnimationSpeed = 0
+		EVENTS
+		{
+			Extend
+			{
+				active = True
+				guiActive = True
+				guiIcon = Extend Panels
+				guiName = Extend Panels
+				category = Extend Panels
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+			Retract
+			{
+				active = True
+				guiActive = True
+				guiIcon = Retract Panels
+				guiName = Retract Panels
+				category = Retract Panels
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ExtendPanelsAction
+			{
+				actionGroup = None
+			}
+			ExtendAction
+			{
+				actionGroup = Custom01
+			}
+			RetractAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+}
+PART
+{
+	part = solarPanels1_4294865922
+	partName = Part
+	pos = 0.5369456,9.179872,0.3100056
+	rot = 0,-0.9659259,0,-0.2588189
+	attRot = 0,0,0,1
+	mir = 1,1,1
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	attm = 1
+	sym = solarPanels1_4294866142
+	sym = solarPanels1_4294866032
+	srfN = srfAttach,fuelTank_4294866334
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	MODULE
+	{
+		name = ModuleDeployableSolarPanel
+		isEnabled = True
+		currentRotation = (0, 0, 0, 0)
+		stateString = RETRACTED
+		storedAnimationTime = 0
+		storedAnimationSpeed = 0
+		EVENTS
+		{
+			Extend
+			{
+				active = True
+				guiActive = True
+				guiIcon = Extend Panels
+				guiName = Extend Panels
+				category = Extend Panels
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+			Retract
+			{
+				active = True
+				guiActive = True
+				guiIcon = Retract Panels
+				guiName = Retract Panels
+				category = Retract Panels
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ExtendPanelsAction
+			{
+				actionGroup = None
+			}
+			ExtendAction
+			{
+				actionGroup = Custom01
+			}
+			RetractAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+}
+PART
+{
+	part = liquidEngine2_4294859514
 	partName = Part
 	pos = 0,6.814946,0
 	rot = 0,0,0,1
@@ -356,7 +636,7 @@ PART
 	sidx = -1
 	sqor = -1
 	attm = 0
-	attN = top,fuelTank_4294794616
+	attN = top,fuelTank_4294866334
 	EVENTS
 	{
 	}
@@ -450,6 +730,46 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleGimbal
+		isEnabled = True
+		gimbalLock = False
+		EVENTS
+		{
+			LockGimbal
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiIcon = Lock Gimbal
+				guiName = Lock Gimbal
+				category = Lock Gimbal
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			FreeGimbal
+			{
+				active = False
+				guiActive = True
+				guiActiveEditor = True
+				guiIcon = Free Gimbal
+				guiName = Free Gimbal
+				category = Free Gimbal
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
 		name = ModuleAnimateHeat
 		isEnabled = True
 		EVENTS
@@ -470,6 +790,28 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -479,285 +821,5 @@ PART
 		isTweakable = False
 		hideFlow = True
 		flowMode = Both
-	}
-}
-PART
-{
-	part = batteryPack_4294793458
-	partName = Part
-	pos = -5.441017E-08,8.136793,-0.6223798
-	rot = -4.371139E-08,0,-1,0
-	attRot = 0,0,-0.9999999,0
-	mir = 1,1,1
-	istg = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	attm = 1
-	sym = batteryPack_4294793414
-	srfN = srfAttach,fuelTank_4294794616
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	RESOURCE
-	{
-		name = ElectricCharge
-		amount = 100
-		maxAmount = 100
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		flowMode = Both
-	}
-}
-PART
-{
-	part = batteryPack_4294793414
-	partName = Part
-	pos = 1.088203E-07,8.136793,0.6223798
-	rot = -1,0,8.742278E-08,0
-	attRot = 0,0,-0.9999999,0
-	mir = 1,1,1
-	istg = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	attm = 1
-	sym = batteryPack_4294793458
-	srfN = srfAttach,fuelTank_4294794616
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	RESOURCE
-	{
-		name = ElectricCharge
-		amount = 100
-		maxAmount = 100
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		flowMode = Both
-	}
-}
-PART
-{
-	part = solarPanels1_4294793136
-	partName = Part
-	pos = -5.420311E-08,9.179872,-0.6200113
-	rot = 0,0.7071068,0,-0.7071069
-	attRot = 0,0,0,1
-	mir = 1,1,1
-	istg = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	attm = 1
-	sym = solarPanels1_4294791420
-	sym = solarPanels1_4294791306
-	srfN = srfAttach,fuelTank_4294794616
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	MODULE
-	{
-		name = ModuleDeployableSolarPanel
-		isEnabled = True
-		currentRotation = (0, 0, 0, 0)
-		stateString = RETRACTED
-		storedAnimationTime = 0
-		storedAnimationSpeed = 0
-		EVENTS
-		{
-			Extend
-			{
-				active = True
-				guiActive = True
-				guiIcon = Extend Panels
-				guiName = Extend Panels
-				category = Extend Panels
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Retract
-			{
-				active = True
-				guiActive = True
-				guiIcon = Retract Panels
-				guiName = Retract Panels
-				category = Retract Panels
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ExtendPanelsAction
-			{
-				actionGroup = None
-			}
-			ExtendAction
-			{
-				actionGroup = Custom01
-			}
-			RetractAction
-			{
-				actionGroup = None
-			}
-		}
-	}
-}
-PART
-{
-	part = solarPanels1_4294791420
-	partName = Part
-	pos = -0.5369455,9.179872,0.3100058
-	rot = 0,-0.2588192,0,-0.9659259
-	attRot = 0,0,0,1
-	mir = 1,1,1
-	istg = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	attm = 1
-	sym = solarPanels1_4294793136
-	sym = solarPanels1_4294791306
-	srfN = srfAttach,fuelTank_4294794616
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	MODULE
-	{
-		name = ModuleDeployableSolarPanel
-		isEnabled = True
-		currentRotation = (0, 0, 0, 0)
-		stateString = RETRACTED
-		storedAnimationTime = 0
-		storedAnimationSpeed = 0
-		EVENTS
-		{
-			Extend
-			{
-				active = True
-				guiActive = True
-				guiIcon = Extend Panels
-				guiName = Extend Panels
-				category = Extend Panels
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Retract
-			{
-				active = True
-				guiActive = True
-				guiIcon = Retract Panels
-				guiName = Retract Panels
-				category = Retract Panels
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ExtendPanelsAction
-			{
-				actionGroup = None
-			}
-			ExtendAction
-			{
-				actionGroup = Custom01
-			}
-			RetractAction
-			{
-				actionGroup = None
-			}
-		}
-	}
-}
-PART
-{
-	part = solarPanels1_4294791306
-	partName = Part
-	pos = 0.5369456,9.179872,0.3100056
-	rot = 0,-0.9659259,0,-0.2588189
-	attRot = 0,0,0,1
-	mir = 1,1,1
-	istg = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	attm = 1
-	sym = solarPanels1_4294793136
-	sym = solarPanels1_4294791420
-	srfN = srfAttach,fuelTank_4294794616
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	MODULE
-	{
-		name = ModuleDeployableSolarPanel
-		isEnabled = True
-		currentRotation = (0, 0, 0, 0)
-		stateString = RETRACTED
-		storedAnimationTime = 0
-		storedAnimationSpeed = 0
-		EVENTS
-		{
-			Extend
-			{
-				active = True
-				guiActive = True
-				guiIcon = Extend Panels
-				guiName = Extend Panels
-				category = Extend Panels
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Retract
-			{
-				active = True
-				guiActive = True
-				guiIcon = Retract Panels
-				guiName = Retract Panels
-				category = Retract Panels
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ExtendPanelsAction
-			{
-				actionGroup = None
-			}
-			ExtendAction
-			{
-				actionGroup = Custom01
-			}
-			RetractAction
-			{
-				actionGroup = None
-			}
-		}
 	}
 }
