@@ -25,6 +25,63 @@ def load_save(name):
     # Wait until the vessel is loaded properly
     time.sleep(0.2)
 
+def new_save(name='test'):
+    save_dir = os.getenv('KSP_DIR') + '/saves/' + name
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    shutil.copy(os.path.dirname(os.path.realpath(__file__)) + '/fixtures/blank.sfs', save_dir + '/persistent.sfs')
+
+    # Connect and issue load save RPC
+    ksp = krpc.connect()
+    ksp.testing_tools.load_save('test', 'persistent')
+    time.sleep(1)
+    # Wait until server comes back up
+    while True:
+        try:
+            ksp = krpc.connect()
+            del ksp
+            break
+        except:
+            time.sleep(0.2)
+            pass
+    # Wait until the vessel is loaded properly
+    time.sleep(0.2)
+
+def launch_vessel_from_vab(name):
+    #TODO: assumes test is the currently loaded save
+    save_dir = os.getenv('KSP_DIR') + '/saves/test'
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    ships_dir = save_dir + '/Ships/VAB'
+    if not os.path.exists(ships_dir):
+        os.makedirs(ships_dir)
+    shutil.copy(os.path.dirname(os.path.realpath(__file__)) + '/fixtures/' + name + '.craft', ships_dir + '/' + name + '.craft')
+
+    # Connect and issue load save RPC
+    ksp = krpc.connect(name='testingtools.launch_vessel_from_vab')
+    ksp.testing_tools.launch_vessel_from_vab(name)
+    time.sleep(1)
+    # Wait until server comes back up
+    while True:
+        try:
+            ksp = krpc.connect(name='testingtools.launch_vessel_from_vab')
+            break
+        except:
+            time.sleep(0.2)
+            pass
+    # Wait until the vessel is loaded properly
+    time.sleep(1)
+
+def set_orbit(body, sma, e, inc, lan, w, mEp, epoch):
+    conn = krpc.connect()
+    conn.testing_tools.set_orbit(body, sma, e, inc, lan, w, mEp, epoch)
+    del conn
+
+def set_circular_orbit(body, altitude):
+    conn = krpc.connect()
+    conn.testing_tools.set_circular_orbit(body, altitude)
+    del conn
+
 class TestCase(unittest.TestCase):
 
     def _isInRange(self, min_value, max_value, value):
