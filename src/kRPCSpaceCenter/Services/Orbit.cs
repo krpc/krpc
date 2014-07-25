@@ -78,6 +78,11 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double Period {
+            get { return orbit.period; }
+        }
+
+        [KRPCProperty]
         public double TimeToApoapsis {
             get { return orbit.timeToAp; }
         }
@@ -113,6 +118,16 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double ArgumentOfPeriapsis {
             get { return orbit.argumentOfPeriapsis * (Math.PI / 180d); }
+        }
+
+        [KRPCProperty]
+        public double MeanAnomalyAtEpoch {
+            get { return orbit.meanAnomalyAtEpoch; }
+        }
+
+        [KRPCProperty]
+        public double Epoch {
+            get { return orbit.epoch; }
         }
 
         [KRPCProperty]
