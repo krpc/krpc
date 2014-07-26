@@ -11,6 +11,9 @@ class TestBody(testingtools.TestCase):
     def setUpClass(cls):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('Basic')
+        testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        testingtools.launch_vessel_from_vab('Basic')
         testingtools.set_circular_orbit('Kerbin', 260000)
         cls.conn = krpc.connect()
         cls.sc = cls.conn.space_center
@@ -30,12 +33,15 @@ class TestBody(testingtools.TestCase):
 
     def test_active_vessel(self):
         active = self.sc.active_vessel
-        self.assertEqual(active.name, 'Basic')
+        active.name = 'Active'
+        self.assertEqual(active.name, 'Active')
         self.assertEqual(self.sc.active_vessel, active)
 
     def test_vessels(self):
+        active = self.sc.active_vessel
+        active.name = 'Active'
         vessels = self.sc.vessels
-        self.assertEqual(set(['Basic']), set(v.name for v in vessels))
+        self.assertEqual(['Active', 'Basic'], sorted(v.name for v in vessels))
         self.assertEqual(self.sc.vessels, vessels)
 
     def test_bodies(self):

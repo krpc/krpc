@@ -1,6 +1,5 @@
 import unittest
 import testingtools
-from testingtools import load_save
 import krpc
 import time
 
@@ -10,6 +9,7 @@ class TestControl(testingtools.TestCase):
     def setUpClass(cls):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('Basic')
+        testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
         cls.conn = krpc.connect()
         cls.control = cls.conn.space_center.active_vessel.control
@@ -94,19 +94,18 @@ class TestControl(testingtools.TestCase):
         diff = self.orbital_flight.roll - roll
         self.assertGreater(diff, 0)
 
-    def test_staging_single(self):
-        self.assertEqual(3, self.control.current_stage)
-        time.sleep(0.5)
-        self.control.activate_next_stage()
-        self.assertEqual(2, self.control.current_stage)
-        time.sleep(0.5)
-        self.control.activate_next_stage()
-        self.assertEqual(1, self.control.current_stage)
-        time.sleep(0.5)
-        self.control.activate_next_stage()
-        self.assertEqual(0, self.control.current_stage)
-        time.sleep(0.5)
-        self.control.activate_next_stage()
+class TestControlStaging(testingtools.TestCase):
+
+    def test_staging(self):
+        testingtools.launch_vessel_from_vab('Staging')
+        testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        self.conn = krpc.connect()
+        self.control = self.conn.space_center.active_vessel.control
+        for i in reversed(range(12)):
+            self.assertEqual(i, self.control.current_stage)
+            time.sleep(3)
+            self.control.activate_next_stage()
         self.assertEqual(0, self.control.current_stage)
 
 if __name__ == "__main__":

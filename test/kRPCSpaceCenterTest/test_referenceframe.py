@@ -1,6 +1,5 @@
 import unittest
 import testingtools
-from testingtools import load_save
 from mathtools import *
 from geometrytools import compute_position
 import krpc
@@ -12,7 +11,8 @@ class TestBody(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        load_save('basic')
+        testingtools.new_save()
+        testingtools.set_circular_orbit('Kerbin', 100000)
         cls.conn = krpc.connect()
         cls.sc = cls.conn.space_center
 

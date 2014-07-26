@@ -1,12 +1,12 @@
 import unittest
 import testingtools
-from testingtools import load_save
 import krpc
 
 class TestResources(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        testingtools.new_save()
         testingtools.launch_vessel_from_vab('Resources')
         cls.conn = krpc.connect()
         cls.r = cls.conn.space_center.active_vessel.resources

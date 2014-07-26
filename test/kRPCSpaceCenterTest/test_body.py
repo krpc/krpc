@@ -8,7 +8,6 @@ class TestBody(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
         cls.conn = krpc.connect()
 
     def test_equality(self):
@@ -23,8 +22,8 @@ class TestBody(testingtools.TestCase):
         self.assertClose(5.2915e22, kerbin.mass, error=0.0001e22)
         self.assertClose(3.5316e12, kerbin.gravitational_parameter, error=0.0001e12)
         self.assertClose(9.81, kerbin.surface_gravity)
-        self.assertClose(21600, kerbin.rotational_period)
-        self.assertClose((2*3.14159) / 21600, kerbin.rotational_speed)
+        self.assertClose(21600, kerbin.rotational_period, error=0.1)
+        self.assertClose((2*3.14159) / 21600, kerbin.rotational_speed, error=0.1)
         self.assertClose(600000, kerbin.equatorial_radius)
         self.assertClose(8.4159e7, kerbin.sphere_of_influence, error=0.0001e7)
         self.assertClose(1.36e10, kerbin.orbit.apoapsis, error=0.0001e10)
