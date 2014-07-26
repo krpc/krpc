@@ -5,7 +5,7 @@ KSP_DIR := $(shell readlink -f "$(KSP_DIR)")
 
 SERVER_VERSION = $(shell cat VERSION.txt)
 PYTHON_CLIENT_VERSION = $(shell grep "version=" python/setup.py | sed "s/\s*version='\(.*\)',/\1/")
-TOOLBAR_VERSION = 1.7.4
+TOOLBAR_VERSION = 1.7.5
 
 DIST_DIR = dist
 DIST_LIBS = \
