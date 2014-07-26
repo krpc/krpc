@@ -1,7 +1,8 @@
 using System;
+using System.Linq;
+using UnityEngine;
 using KRPC;
 using KRPC.Service.Attributes;
-using System.Linq;
 
 namespace TestingTools
 {
@@ -37,6 +38,15 @@ namespace TestingTools
         }
 
         [KRPCProcedure]
+        public static void RemoveAllVessels ()
+        {
+            // FIXME: this removes the vessels from the save, but doesn't update the current game state
+            var vessels = FlightGlobals.Vessels.Where (v => v != FlightGlobals.ActiveVessel).ToList ();
+            foreach (var vessel in vessels)
+                HighLogic.CurrentGame.DestroyVessel (vessel);
+        }
+
+        [KRPCProcedure]
         public static void SetCircularOrbit (string body, double altitude)
         {
             var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
@@ -49,6 +59,21 @@ namespace TestingTools
         {
             var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
             OrbitTools.OrbitDriver.orbit.SetOrbit (OrbitTools.CreateOrbit (celestialBody, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch));
+        }
+
+        [KRPCProcedure]
+        public static void ClearRotation ()
+        {
+            var vessel = FlightGlobals.ActiveVessel;
+            var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
+            var northPole = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - (vessel.GetWorldPos3D ());
+            northPole.Normalize ();
+            var up = Vector3.Exclude (right, northPole);
+            var forward = Vector3.Cross (right, northPole);
+            Vector3.OrthoNormalize (ref forward, ref up);
+            var rotation = Quaternion.LookRotation (forward, up);
+            rotation = Quaternion.AngleAxis (90, new Vector3 (0, -1, 0)) * rotation;
+            vessel.SetRotation (rotation);
         }
     }
 }
