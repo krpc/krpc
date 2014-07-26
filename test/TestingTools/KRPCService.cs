@@ -31,6 +31,14 @@ namespace TestingTools
         }
 
         [KRPCProcedure]
+        public static void RemoveOtherVessels ()
+        {
+            var vessels = FlightGlobals.Vessels.Where (v => v != FlightGlobals.ActiveVessel).ToList ();
+            foreach (var vessel in vessels)
+                vessel.Die ();
+        }
+
+        [KRPCProcedure]
         public static void LaunchVesselFromVAB (string name)
         {
             var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/VAB/" + name + ".craft";
@@ -44,15 +52,6 @@ namespace TestingTools
             var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/SPH/" + name + ".craft";
             var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft), true);
             FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "Runway", crew);
-        }
-
-        [KRPCProcedure]
-        public static void RemoveAllVessels ()
-        {
-            // FIXME: this removes the vessels from the save, but doesn't update the current game state
-            var vessels = FlightGlobals.Vessels.Where (v => v != FlightGlobals.ActiveVessel).ToList ();
-            foreach (var vessel in vessels)
-                HighLogic.CurrentGame.DestroyVessel (vessel);
         }
 
         [KRPCProcedure]
