@@ -39,6 +39,21 @@ namespace KRPCSpaceCenter.Services
             return node == null ? 0 : node.GetHashCode ();
         }
 
+        Vector3d WorldBurnVector {
+            get {
+                var prograde = node.patch.getOrbitalVelocityAtUT (node.UT).normalized;
+                var normal = node.patch.GetOrbitNormal ().normalized;
+                var radial = Vector3d.Cross (normal, prograde);
+                var bv = Prograde * prograde + Normal * normal + Radial * radial;
+                Console.WriteLine (node.UT);
+                Console.WriteLine (prograde);
+                Console.WriteLine (normal);
+                Console.WriteLine (radial);
+                Console.WriteLine ("##### " + bv);
+                return bv;
+            }
+        }
+
         [KRPCProperty]
         public double Prograde {
             get { return node.DeltaV.z; }
@@ -67,17 +82,18 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public Tuple3 Vector {
-            get { return new Tuple3 (0, 0, DeltaV); }
-        }
-
-        [KRPCProperty]
         public double DeltaV {
             get { return node.DeltaV.magnitude; }
             set {
                 var direction = node.DeltaV.normalized;
                 node.OnGizmoUpdated (new Vector3d (direction.x * value, direction.y * value, direction.z * value), node.UT);
             }
+        }
+
+        [KRPCMethod]
+        public Tuple3 BurnVector (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.DirectionFromWorldSpace (WorldBurnVector).ToTuple ();
         }
 
         [KRPCProperty]
@@ -112,8 +128,13 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
-            // TODO: is this the best way to get the position of the node in world space?
-            return referenceFrame.PositionFromWorldSpace (node.attachedGizmo.transform.position).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (node.patch.getPositionAtUT (node.UT)).ToTuple ();
+        }
+
+        [KRPCMethod]
+        public Tuple3 Direction (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.DirectionFromWorldSpace (WorldBurnVector.normalized).ToTuple ();
         }
     }
 }

@@ -12,13 +12,28 @@ class TestNode(testingtools.TestCase):
         cls.conn = krpc.connect()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
+        for node in cls.control.nodes:
+            node.remove()
 
     def check(self, node, v):
-        self.assertEqual(v[0], node.prograde)
-        self.assertEqual(v[1], node.normal)
-        self.assertEqual(v[2], node.radial)
-        self.assertEqual([0,0,norm(v)], vector(node.vector))
-        self.assertEqual(norm(v), node.delta_v)
+        self.assertClose(v[0], node.prograde)
+        self.assertClose(v[1], node.normal)
+        self.assertClose(v[2], node.radial)
+        self.assertClose(norm(v), node.delta_v)
+
+        bv = node.burn_vector(node.reference_frame)
+        self.assertClose(v[0], bv[2])
+        self.assertClose(v[1], bv[1])
+        self.assertClose(v[2], bv[0])
+
+        bv = node.burn_vector(self.vessel.reference_frame)
+        self.assertClose(norm(v), norm(bv))
+
+        direction = node.direction(node.reference_frame)
+        expected_direction = normalize(v)
+        self.assertClose(direction[0], expected_direction[2])
+        self.assertClose(direction[1], expected_direction[1])
+        self.assertClose(direction[2], expected_direction[0])
 
     def test_add_node(self):
         start_ut = self.conn.space_center.ut
