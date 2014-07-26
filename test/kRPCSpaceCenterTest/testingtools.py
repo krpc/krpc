@@ -5,27 +5,6 @@ import os
 import shutil
 import itertools
 
-#def load_save(name):
-#    save_dir = os.getenv('KSP_DIR') + '/saves/test'
-#    if not os.path.exists(save_dir):
-#        os.makedirs(save_dir)
-#    shutil.copy(os.path.dirname(os.path.realpath(__file__)) + '/fixtures/' + name + '.sfs', save_dir + '/' + name + '.sfs')
-#    # Connect and issue load save RPC
-#    ksp = krpc.connect(name='testingtools.load_save')
-#    ksp.testing_tools.load_save('test', name)
-#    time.sleep(1)
-#    # Wait until server comes back up
-#    while True:
-#        try:
-#            ksp = krpc.connect(name='testingtools.load_save')
-#            break
-#        except:
-#            time.sleep(0.2)
-#            pass
-#    # Wait until the vessel is loaded properly
-#    #TODO: check the vessel is loaded properly
-#    time.sleep(3)
-
 def new_save(name='test'):
     conn = krpc.connect()
 
@@ -41,6 +20,32 @@ def new_save(name='test'):
         os.makedirs(save_path)
     shutil.copy(os.path.join(fixtures_path, 'blank.sfs'), os.path.join(save_path, 'persistent.sfs'))
     conn.testing_tools.load_save('test', 'persistent')
+    del conn
+
+    # Wait until server comes back up
+    time.sleep(1)
+    while True:
+        try:
+            conn = krpc.connect()
+            del conn
+            break
+        except:
+            time.sleep(0.2)
+
+    #TODO: remove sleep
+    time.sleep(3)
+
+def load_save(name):
+    # Copy save file to save directory
+    fixtures_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
+    save_path = os.path.join(os.getenv('KSP_DIR'), 'saves', 'test')
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    shutil.copy(os.path.join(fixtures_path, name + '.sfs'), os.path.join(save_path, name + '.sfs'))
+
+    # Load the save file
+    conn = krpc.connect()
+    ksp.testing_tools.load_save('test', name)
     del conn
 
     # Wait until server comes back up
