@@ -69,19 +69,32 @@ namespace TestingTools
             OrbitTools.OrbitDriver.orbit.SetOrbit (OrbitTools.CreateOrbit (celestialBody, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch));
         }
 
+        static Quaternion ZeroRotation {
+            get {
+                var vessel = FlightGlobals.ActiveVessel;
+                var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
+                var northPole = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - (vessel.GetWorldPos3D ());
+                northPole.Normalize ();
+                var up = Vector3.Exclude (right, northPole);
+                var forward = Vector3.Cross (right, northPole);
+                Vector3.OrthoNormalize (ref forward, ref up);
+                var rotation = Quaternion.LookRotation (forward, up);
+                return Quaternion.AngleAxis (90, new Vector3 (0, -1, 0)) * rotation;
+            }
+        }
+
         [KRPCProcedure]
         public static void ClearRotation ()
         {
-            var vessel = FlightGlobals.ActiveVessel;
-            var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
-            var northPole = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - (vessel.GetWorldPos3D ());
-            northPole.Normalize ();
-            var up = Vector3.Exclude (right, northPole);
-            var forward = Vector3.Cross (right, northPole);
-            Vector3.OrthoNormalize (ref forward, ref up);
-            var rotation = Quaternion.LookRotation (forward, up);
-            rotation = Quaternion.AngleAxis (90, new Vector3 (0, -1, 0)) * rotation;
-            vessel.SetRotation (rotation);
+            FlightGlobals.ActiveVessel.SetRotation (ZeroRotation);
+        }
+
+        [KRPCProcedure]
+        public static void ApplyRotation (float angle, KRPC.Utils.Tuple<float,float,float> axis)
+        {
+            var axisVector = new Vector3 (axis.Item1, axis.Item2, axis.Item3);
+            var rotation = FlightGlobals.ActiveVessel.transform.rotation * Quaternion.AngleAxis (angle, axisVector);
+            FlightGlobals.ActiveVessel.SetRotation (rotation);
         }
     }
 }
