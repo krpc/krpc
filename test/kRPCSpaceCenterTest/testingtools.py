@@ -74,7 +74,7 @@ def launch_vessel_from_vab(name):
     save_path = os.path.join(os.getenv('KSP_DIR'), 'saves', conn.testing_tools.current_save)
     if not os.path.exists(save_path):
         os.makedirs(save_path)
-    ships_path = os.path.join(save_path, 'Ships', 'AB')
+    ships_path = os.path.join(save_path, 'Ships', 'VAB')
     if not os.path.exists(ships_path):
         os.makedirs(ships_path)
     shutil.copy(os.path.join(fixtures_path, name + '.craft'), os.path.join(ships_path, name + '.craft'))
