@@ -44,13 +44,7 @@ namespace KRPCSpaceCenter.Services
                 var prograde = node.patch.getOrbitalVelocityAtUT (node.UT).normalized;
                 var normal = node.patch.GetOrbitNormal ().normalized;
                 var radial = Vector3d.Cross (normal, prograde);
-                var bv = Prograde * prograde + Normal * normal + Radial * radial;
-                Console.WriteLine (node.UT);
-                Console.WriteLine (prograde);
-                Console.WriteLine (normal);
-                Console.WriteLine (radial);
-                Console.WriteLine ("##### " + bv);
-                return bv;
+                return Prograde * prograde + Normal * normal + Radial * radial;
             }
         }
 
