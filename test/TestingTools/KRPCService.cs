@@ -9,6 +9,15 @@ namespace TestingTools
     [KRPCService]
     public static class TestingTools
     {
+        [KRPCProperty]
+        public static string CurrentSave {
+            get {
+                var title = HighLogic.CurrentGame.Title.Split (' ');
+                var name = title.Take (title.Length - 1).ToArray ();
+                return String.Join (" ", name);
+            }
+        }
+
         [KRPCProcedure]
         public static void LoadSave (string directory, string name)
         {
