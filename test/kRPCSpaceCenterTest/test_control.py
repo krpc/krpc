@@ -8,7 +8,9 @@ class TestControl(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        load_save('control')
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Basic')
+        testingtools.set_circular_orbit('Kerbin', 100000)
         cls.conn = krpc.connect()
         cls.control = cls.conn.space_center.active_vessel.control
         vessel = cls.conn.space_center.active_vessel
@@ -42,11 +44,12 @@ class TestControl(testingtools.TestCase):
         self.control.remove_nodes()
 
     def test_pitch_control(self):
-        self.setUpClass()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        self.conn.testing_tools.clear_rotation()
 
         self.control.sas = False
         self.control.pitch = 1
-        time.sleep(3)
+        time.sleep(1)
         self.control.pitch = 0
 
         # Check flight is pitching in correct direction
@@ -56,11 +59,12 @@ class TestControl(testingtools.TestCase):
         self.assertGreater(diff, 0)
 
     def test_yaw_control(self):
-        self.setUpClass()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        self.conn.testing_tools.clear_rotation()
 
         self.control.sas = False
         self.control.yaw = 1
-        time.sleep(3)
+        time.sleep(1)
         self.control.yaw = 0
 
         # Check flight is yawing in correct direction
@@ -70,18 +74,19 @@ class TestControl(testingtools.TestCase):
         self.assertGreater(diff, 0)
 
     def test_roll_control(self):
-        self.setUpClass()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        self.conn.testing_tools.clear_rotation()
 
         pitch = self.orbital_flight.pitch
         heading = self.orbital_flight.heading
 
         self.control.sas = False
         self.control.roll = 0.1
-        time.sleep(3)
+        time.sleep(1)
         self.control.roll = 0
 
         self.assertClose(pitch, self.orbital_flight.pitch, error=1)
-        self.assertClose(heading, self.orbital_flight.heading, error=1)
+        self.assertCloseDegrees(heading, self.orbital_flight.heading, error=1)
 
         # Check flight is rolling in correct direction
         roll = self.orbital_flight.roll
