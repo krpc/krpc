@@ -104,12 +104,12 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double BedrockAltitude {
-            get { return MeanAltitude - vessel.terrainAltitude; }
+            get { return MeanAltitude - Elevation; }
         }
 
         [KRPCProperty]
         public double Elevation {
-            get { return -vessel.terrainAltitude; }
+            get { return vessel.terrainAltitude; }
         }
 
         [KRPCProperty]
