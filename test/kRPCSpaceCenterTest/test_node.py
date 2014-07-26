@@ -1,6 +1,5 @@
 import unittest
 import testingtools
-from testingtools import load_save
 from mathtools import vector, norm, normalize
 import krpc
 
@@ -8,7 +7,8 @@ class TestNode(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        load_save('orbit-kerbin')
+        testingtools.new_save()
+        testingtools.set_circular_orbit('Kerbin', 100000)
         cls.conn = krpc.connect()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control

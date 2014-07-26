@@ -1,6 +1,5 @@
 import unittest
 import testingtools
-from testingtools import load_save
 import krpc
 import time
 
@@ -8,7 +7,10 @@ class TestControl(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        load_save('control')
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Basic')
+        testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
         cls.conn = krpc.connect()
         cls.control = cls.conn.space_center.active_vessel.control
         vessel = cls.conn.space_center.active_vessel
@@ -42,11 +44,12 @@ class TestControl(testingtools.TestCase):
         self.control.remove_nodes()
 
     def test_pitch_control(self):
-        self.setUpClass()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        self.conn.testing_tools.clear_rotation()
 
         self.control.sas = False
         self.control.pitch = 1
-        time.sleep(3)
+        time.sleep(1)
         self.control.pitch = 0
 
         # Check flight is pitching in correct direction
@@ -56,11 +59,12 @@ class TestControl(testingtools.TestCase):
         self.assertGreater(diff, 0)
 
     def test_yaw_control(self):
-        self.setUpClass()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        self.conn.testing_tools.clear_rotation()
 
         self.control.sas = False
         self.control.yaw = 1
-        time.sleep(3)
+        time.sleep(1)
         self.control.yaw = 0
 
         # Check flight is yawing in correct direction
@@ -70,18 +74,19 @@ class TestControl(testingtools.TestCase):
         self.assertGreater(diff, 0)
 
     def test_roll_control(self):
-        self.setUpClass()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        self.conn.testing_tools.clear_rotation()
 
         pitch = self.orbital_flight.pitch
         heading = self.orbital_flight.heading
 
         self.control.sas = False
         self.control.roll = 0.1
-        time.sleep(3)
+        time.sleep(1)
         self.control.roll = 0
 
         self.assertClose(pitch, self.orbital_flight.pitch, error=1)
-        self.assertClose(heading, self.orbital_flight.heading, error=1)
+        self.assertCloseDegrees(heading, self.orbital_flight.heading, error=1)
 
         # Check flight is rolling in correct direction
         roll = self.orbital_flight.roll
@@ -89,19 +94,18 @@ class TestControl(testingtools.TestCase):
         diff = self.orbital_flight.roll - roll
         self.assertGreater(diff, 0)
 
-    def test_staging_single(self):
-        self.assertEqual(3, self.control.current_stage)
-        time.sleep(0.5)
-        self.control.activate_next_stage()
-        self.assertEqual(2, self.control.current_stage)
-        time.sleep(0.5)
-        self.control.activate_next_stage()
-        self.assertEqual(1, self.control.current_stage)
-        time.sleep(0.5)
-        self.control.activate_next_stage()
-        self.assertEqual(0, self.control.current_stage)
-        time.sleep(0.5)
-        self.control.activate_next_stage()
+class TestControlStaging(testingtools.TestCase):
+
+    def test_staging(self):
+        testingtools.launch_vessel_from_vab('Staging')
+        testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        self.conn = krpc.connect()
+        self.control = self.conn.space_center.active_vessel.control
+        for i in reversed(range(12)):
+            self.assertEqual(i, self.control.current_stage)
+            time.sleep(3)
+            self.control.activate_next_stage()
         self.assertEqual(0, self.control.current_stage)
 
 if __name__ == "__main__":

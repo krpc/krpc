@@ -5,25 +5,110 @@ import os
 import shutil
 import itertools
 
-def load_save(name):
-    save_dir = os.getenv('KSP_DIR') + '/saves/test'
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-    shutil.copy(os.path.dirname(os.path.realpath(__file__)) + '/fixtures/' + name + '.sfs', save_dir + '/' + name + '.sfs')
-    # Connect and issue load save RPC
-    ksp = krpc.connect(name='testingtools.load_save')
-    ksp.testing_tools.load_save('test', name)
-    time.sleep(1)
+def new_save(name='test'):
+    conn = krpc.connect()
+
+    # Return if the save is already running
+    if conn.testing_tools.current_save == name:
+        del conn
+        return
+
+    # Load a new save using template from fixtures directory
+    fixtures_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
+    save_path = os.path.join(os.getenv('KSP_DIR'), 'saves', name)
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    shutil.copy(os.path.join(fixtures_path, 'blank.sfs'), os.path.join(save_path, 'persistent.sfs'))
+    conn.testing_tools.load_save('test', 'persistent')
+    del conn
+
     # Wait until server comes back up
+    time.sleep(1)
     while True:
         try:
-            ksp = krpc.connect(name='testingtools.load_save')
+            conn = krpc.connect()
+            del conn
             break
         except:
             time.sleep(0.2)
-            pass
-    # Wait until the vessel is loaded properly
-    time.sleep(0.2)
+
+    #TODO: remove sleep
+    time.sleep(3)
+
+def load_save(name):
+    # Copy save file to save directory
+    fixtures_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
+    save_path = os.path.join(os.getenv('KSP_DIR'), 'saves', 'test')
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    shutil.copy(os.path.join(fixtures_path, name + '.sfs'), os.path.join(save_path, name + '.sfs'))
+
+    # Load the save file
+    conn = krpc.connect()
+    ksp.testing_tools.load_save('test', name)
+    del conn
+
+    # Wait until server comes back up
+    time.sleep(1)
+    while True:
+        try:
+            conn = krpc.connect()
+            del conn
+            break
+        except:
+            time.sleep(0.2)
+
+    #TODO: remove sleep
+    time.sleep(3)
+
+def remove_other_vessels():
+    conn = krpc.connect()
+    conn.testing_tools.remove_other_vessels()
+    del conn
+
+def launch_vessel_from_vab(name):
+    conn = krpc.connect()
+
+    # Copy craft file to save directory
+    fixtures_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
+    save_path = os.path.join(os.getenv('KSP_DIR'), 'saves', conn.testing_tools.current_save)
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    ships_path = os.path.join(save_path, 'Ships', 'AB')
+    if not os.path.exists(ships_path):
+        os.makedirs(ships_path)
+    shutil.copy(os.path.join(fixtures_path, name + '.craft'), os.path.join(ships_path, name + '.craft'))
+
+    # Launch the craft
+    conn.testing_tools.launch_vessel_from_vab(name)
+    del conn
+
+    # Wait until server comes back up
+    time.sleep(1)
+    while True:
+        try:
+            conn = krpc.connect()
+            del conn
+            break
+        except:
+            time.sleep(0.2)
+
+    #TODO: remove sleep
+    time.sleep(3)
+
+def set_orbit(body, sma, e, inc, lan, w, mEp, epoch):
+    conn = krpc.connect()
+    conn.testing_tools.set_orbit(body, sma, e, inc, lan, w, mEp, epoch)
+    del conn
+    #TODO: remove sleep
+    time.sleep(1)
+
+def set_circular_orbit(body, altitude):
+    conn = krpc.connect()
+    conn.testing_tools.set_circular_orbit(body, altitude)
+    del conn
+    #TODO: remove sleep
+    time.sleep(1)
 
 class TestCase(unittest.TestCase):
 

@@ -1,6 +1,5 @@
 import unittest
 import testingtools
-from testingtools import load_save
 import krpc
 import time
 import math
@@ -10,9 +9,14 @@ class TestFlight(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        load_save('flight')
+        testingtools.new_save()
+        testingtools.set_circular_orbit('Kerbin', 100000)
         cls.conn = krpc.connect()
         cls.vessel = cls.conn.space_center.active_vessel
+        cls.conn.testing_tools.clear_rotation()
+        cls.conn.testing_tools.apply_rotation(116, (0,0,-1))
+        cls.conn.testing_tools.apply_rotation(27, (-1,0,0))
+        cls.conn.testing_tools.apply_rotation(40, (0,-1,0))
 
     def test_equality(self):
         flight = self.vessel.flight(self.vessel.reference_frame)
@@ -21,11 +25,9 @@ class TestFlight(testingtools.TestCase):
     def check_properties_not_affected_by_reference_frame(self, flight):
         """ Verify flight properties that aren't affected by reference frames """
         #self.assertClose(0, flight.g_force)
-        self.assertClose(100000, flight.mean_altitude, error=50)
-        self.assertClose(100000, flight.surface_altitude, error=50)
-        self.assertClose(100930, flight.bedrock_altitude, error=100)
-        self.assertClose(930, flight.elevation, error=100)
-        self.assertClose(flight.elevation, flight.bedrock_altitude - flight.mean_altitude, error=5)
+        self.assertClose(100000, flight.mean_altitude, error=1)
+        self.assertClose(flight.mean_altitude - max(0, flight.elevation), flight.surface_altitude, error=1)
+        self.assertClose(flight.mean_altitude - flight.elevation, flight.bedrock_altitude, error=1)
 
     def check_directions(self, flight):
         """ Check flight.direction against flight.heading and flight.pitch """
@@ -40,8 +42,7 @@ class TestFlight(testingtools.TestCase):
 
         # Check vessel direction vector agrees with heading angle
         up_component = dot(direction, up_direction) * vector(up_direction)
-        north_component = vector(direction) - up_component
-        north_component = north_component / norm(north_component)
+        north_component = normalize(vector(direction) - up_component)
         self.assertCloseDegrees(flight.heading, rad2deg(math.acos(dot(north_component, north_direction))), error=1)
 
     def check_speeds(self, flight):

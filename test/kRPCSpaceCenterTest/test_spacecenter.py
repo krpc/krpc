@@ -1,6 +1,5 @@
 import unittest
 import testingtools
-from testingtools import load_save
 from mathtools import norm, normalize
 import krpc
 import time
@@ -10,7 +9,12 @@ class TestBody(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        load_save('basic')
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Basic')
+        testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        testingtools.launch_vessel_from_vab('Basic')
+        testingtools.set_circular_orbit('Kerbin', 260000)
         cls.conn = krpc.connect()
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
@@ -29,12 +33,15 @@ class TestBody(testingtools.TestCase):
 
     def test_active_vessel(self):
         active = self.sc.active_vessel
-        self.assertEqual(active.name, 'Test')
+        active.name = 'Active'
+        self.assertEqual(active.name, 'Active')
         self.assertEqual(self.sc.active_vessel, active)
 
     def test_vessels(self):
+        active = self.sc.active_vessel
+        active.name = 'Active'
         vessels = self.sc.vessels
-        self.assertEqual(set(['Test']), set(v.name for v in vessels))
+        self.assertEqual(['Active', 'Basic'], sorted(v.name for v in vessels))
         self.assertEqual(self.sc.vessels, vessels)
 
     def test_bodies(self):
@@ -44,9 +51,9 @@ class TestBody(testingtools.TestCase):
             'Bop', 'Pol', 'Eeloo']), set(self.sc.bodies.keys()))
 
     def test_ut(self):
-        self.assertClose(290, self.sc.ut, error=5)
+        ut = self.sc.ut
         time.sleep(1)
-        self.assertClose(291, self.sc.ut, error=5)
+        self.assertClose(ut + 1, self.sc.ut, error=0.25)
 
     def test_g(self):
         self.assertEqual(6.673e-11, self.sc.g)

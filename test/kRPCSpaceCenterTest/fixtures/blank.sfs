@@ -1,14 +1,15 @@
 GAME
 {
-	version = 0.23.5
-	Title = default (SANDBOX)
+	version = 0.24.0
+	Title = test (SANDBOX)
 	Description = No description available.
 	linkURL = 
 	linkCaption = 
-	Mode = 0
+	Mode = SANDBOX
 	Status = 1
-	scene = 5
+	scene = 7
 	flag = Squad/Flags/default
+	launchID = 3
 	PARAMETERS
 	{
 		FLIGHT
@@ -67,7 +68,7 @@ GAME
 	{
 		name = ScenarioDiscoverableObjects
 		scene = 7, 8, 5
-		 = 793419800
+		 = 1092684838
 		sizeCurve
 		{
 			key = 0 0 1.5 1.5
@@ -82,88 +83,79 @@ GAME
 		scene = 7, 8, 5
 		Progress
 		{
-			FirstLaunch
+			AltitudeRecord
 			{
-				completed = 175.820000000017
-			}
-			Sun
-			{
-				reached = 34.74
-				Orbit
-				{
-					completed = 34.74
-					vessel
-					{
-						name = Ast. HSJ-227
-						flag = 
-					}
-				}
+				reached = 22.1599999999996
+				record = 148.682813114719
 			}
 			Kerbin
 			{
-				reached = 175.820000000017
-				Orbit
+				reached = 27.6199999999995
+				Landing
 				{
-					completed = 175.820000000017
+					completed = 27.6199999999995
 					vessel
 					{
-						name = Test
+						name = Basic Debris
 						flag = Squad/Flags/default
-					}
-					crew
-					{
-						crews = 0
 					}
 				}
 			}
 		}
 	}
+	SCENARIO
+	{
+		name = VesselRecovery
+		scene = 5, 7, 8, 6, 9
+	}
 	FLIGHTSTATE
 	{
-		version = 0.23.5
-		UT = 290.481666107178
+		version = 0.24.0
+		UT = 1099.3799999993
 		activeVessel = 0
-		VESSEL
+    VESSEL
 		{
-			pid = 3cb817a1094049d5ac91bfe73bfbdf89
-			name = Test
+			pid = 38ccaebf920549ed806f1861d998a603
+			name = Basic
 			type = Ship
-			sit = ORBITING
-			landed = False
-			landedAt = 
+			sit = LANDED
+			landed = True
+			landedAt = LaunchPad
 			splashed = False
-			met = 114.641666107162
-			lct = 175.820000000017
+			met = 1073.3199999993
+			lct = 26.0399999999995
 			root = 0
-			lat = 0
-			lon = 308.866796364162
-			alt = 199995.739405726
-			hgt = -1
-			nrm = 0.4285709,0.9034969,0.004518836
-			rot = -0.7025132,-0.08052272,-0.08556311,0.7019048
+			lat = -0.0971019508899459
+			lon = 285.442235136976
+			alt = 72.8922701242846
+			hgt = 0.2875293
+			nrm = 7.092953E-06,1,1.53482E-06
+			rot = -0.6829126,-0.002327707,-0.1856771,0.7065048
 			CoM = 0,0,0
 			stg = 1
 			prst = False
-			ref = 1473590144
-			cPch = -0.126921
-			cHdg = -5.045101
+			ref = 3496185044
+			ctrl = True
+			cPch = 0.2
+			cHdg = 0.3
 			cMod = 0
 			ORBIT
 			{
-				SMA = 800000.050008934
-				ECC = 2.70109526397989E-05
-				INC = 0
-				LPE = 281.505248360477
-				LAN = 43.7111650358378
-				MNA = 1.36993892544601
-				EPH = 290.481666107178
+				SMA = 300815.136576897
+				ECC = 0.994822797442728
+				INC = 0.0971019497602915
+				LPE = 90.0009313008735
+				LAN = 123.764710045428
+				MNA = 3.14159265358979
+				EPH = 1099.3799999993
 				REF = 1
 			}
 			PART
 			{
 				name = mk1pod
-				uid = 1473590144
-				mid = 2282750917
+				uid = 3496185044
+				mid = 1631974417
+				launchID = 2
 				parent = 0
 				position = 0,0,0
 				rotation = 0,0,0,1
@@ -177,14 +169,14 @@ GAME
 				attN = None, -1
 				attN = None, -1
 				mass = 0.8
-				temp = -40.16882
+				temp = 16.90458
 				expt = 0.5
 				state = 0
 				connected = True
 				attached = True
 				flag = Squad/Flags/default
-				rTrf = mk1pod
-				crew = 0
+				rTrf = mk1pod (Basic)
+				crew = Bill Kerman
 				EVENTS
 				{
 				}
@@ -428,16 +420,17 @@ GAME
 					}
 					Surfaced
 					{
+						at = Kerbin
 					}
 					Flew
 					{
+						at = Kerbin
 					}
 					FlewBy
 					{
 					}
 					Orbited
 					{
-						at = Kerbin
 					}
 					SubOrbited
 					{
@@ -473,8 +466,8 @@ GAME
 				SAS = False, 0
 				Brakes = False, 0
 				Abort = False, 0
-				Custom01 = True, 172.560000000015
-				Custom02 = True, 174.060000000016
+				Custom01 = False, 0
+				Custom02 = False, 0
 				Custom03 = False, 0
 				Custom04 = False, 0
 				Custom05 = False, 0
@@ -482,7 +475,7 @@ GAME
 				Custom07 = False, 0
 				Custom08 = False, 0
 				Custom09 = False, 0
-				Custom10 = True, 175.360000000016
+				Custom10 = False, 0
 			}
 			DISCOVERY
 			{
@@ -503,294 +496,48 @@ GAME
 				trimPitch = 0
 				trimYaw = 0
 				trimRoll = 0
-				mainThrottle = 0
-			}
-		}
-		VESSEL
-		{
-			pid = fb829fb557d7449bafcd655e0387b882
-			name = Ast. HXI-297
-			type = SpaceObject
-			sit = ORBITING
-			landed = False
-			landedAt = 
-			splashed = False
-			met = 240.541666107202
-			lct = 240.541666107202
-			root = 0
-			lat = -0.161494771380353
-			lon = 182.117997355406
-			alt = 13648879329.1819
-			hgt = -1
-			nrm = 0,1,0
-			rot = -0.01134353,-0.4759785,0.6113582,0.6321052
-			CoM = 0,0,0
-			stg = 0
-			prst = False
-			ref = 0
-			ORBIT
-			{
-				SMA = 13762834225.7435
-				ECC = 0.0111251800119537
-				INC = 0.641900853581615
-				LPE = 359.380098639129
-				LAN = 347.74751117987
-				MNA = 0.0262534049488204
-				EPH = 4319987.08707626
-				REF = 0
-			}
-			PART
-			{
-				name = PotatoRoid
-				uid = 1355072608
-				mid = 1355072608
-				parent = 0
-				position = 0,0,0
-				rotation = 0,0,0,1
-				mirror = 1,1,1
-				istg = 0
-				dstg = 0
-				sqor = 0
-				sidx = 0
-				attm = 0
-				srfN = None, -1
-				mass = 150
-				temp = 0
-				expt = 0.1
-				state = 1
-				connected = True
-				attached = True
-				flag = 
-				rTrf = 
-			}
-			ACTIONGROUPS
-			{
-			}
-			DISCOVERY
-			{
-				state = 1
-				lastObservedTime = 240.541666107202
-				lifetime = 1589700.64086914
-				refTime = 1728000
-				size = 1
-			}
-			FLIGHTPLAN
-			{
-			}
-			CTRLSTATE
-			{
-			}
-		}
-		VESSEL
-		{
-			pid = a4e8f4b12f2b4fa48f07048a91716bdb
-			name = Ast. VPE-127
-			type = SpaceObject
-			sit = ORBITING
-			landed = False
-			landedAt = 
-			splashed = False
-			met = 285.581666107183
-			lct = 285.581666107183
-			root = 0
-			lat = -0.159222012809767
-			lon = 181.884643163016
-			alt = 13858856710.7291
-			hgt = -1
-			nrm = 0,1,0
-			rot = 0.2949279,0.1233561,-0.07777712,0.944326
-			CoM = 0,0,0
-			stg = 0
-			prst = False
-			ref = 0
-			ORBIT
-			{
-				SMA = 13958539740.2108
-				ECC = 0.0262854886817912
-				INC = 0.164609116844298
-				LPE = 12.8321337817893
-				LAN = 286.821404579419
-				MNA = 5.89466458058227
-				EPH = 2461250.21789658
-				REF = 0
-			}
-			PART
-			{
-				name = PotatoRoid
-				uid = 793419800
-				mid = 793419800
-				parent = 0
-				position = 0,0,0
-				rotation = 0,0,0,1
-				mirror = 1,1,1
-				istg = 0
-				dstg = 0
-				sqor = 0
-				sidx = 0
-				attm = 0
-				srfN = None, -1
-				mass = 150
-				temp = 0
-				expt = 0.1
-				state = 1
-				connected = True
-				attached = True
-				flag = 
-				rTrf = 
-			}
-			ACTIONGROUPS
-			{
-			}
-			DISCOVERY
-			{
-				state = 1
-				lastObservedTime = 285.581666107183
-				lifetime = 686743.615722656
-				refTime = 1728000
-				size = 0
-			}
-			FLIGHTPLAN
-			{
-			}
-			CTRLSTATE
-			{
+				mainThrottle = 0.5
 			}
 		}
 	}
 	ROSTER
 	{
-		CREW
+		KERBAL
 		{
 			name = Jebediah Kerman
+			type = Crew
 			brave = 0.5
 			dumb = 0.5
 			badS = True
-			state = 1
-			ToD = 0
+			state = Missing
+			ToD = 2020.92
 			idx = 0
 		}
-		CREW
+		KERBAL
 		{
 			name = Bill Kerman
+			type = Crew
 			brave = 0.5
 			dumb = 0.8
 			badS = False
-			state = 0
+			state = Assigned
 			ToD = 0
-			idx = 1
+			idx = 0
 		}
-		CREW
+		KERBAL
 		{
 			name = Bob Kerman
+			type = Crew
 			brave = 0.3
 			dumb = 0.1
 			badS = False
-			state = 0
+			state = Available
 			ToD = 0
-			idx = 2
-		}
-		CREW
-		{
-			name = Rodble Kerman
-			brave = 0.1595944
-			dumb = 0.1270729
-			badS = False
-			state = 0
-			ToD = 120028.872353516
 			idx = -1
 		}
-		APPLICANTS
-		{
-			RECRUIT
-			{
-				name = Oroly Kerman
-				brave = 0.348766
-				dumb = 0.8884103
-				badS = False
-				state = 0
-				ToD = 200307.379586182
-				idx = -1
-			}
-			RECRUIT
-			{
-				name = Hanfrid Kerman
-				brave = 0.8361087
-				dumb = 0.008463144
-				badS = False
-				state = 0
-				ToD = 87086.7382592774
-				idx = -1
-			}
-			RECRUIT
-			{
-				name = Melbree Kerman
-				brave = 0.7833583
-				dumb = 0.3277447
-				badS = False
-				state = 0
-				ToD = 233249.245888672
-				idx = -1
-			}
-			RECRUIT
-			{
-				name = Edfry Kerman
-				brave = 0.4595441
-				dumb = 0.9346315
-				badS = False
-				state = 0
-				ToD = 123206.406838379
-				idx = -1
-			}
-			RECRUIT
-			{
-				name = Newman Kerman
-				brave = 0.7350788
-				dumb = 0.9427695
-				badS = False
-				state = 0
-				ToD = 188067.854744873
-				idx = -1
-			}
-			RECRUIT
-			{
-				name = Matry Kerman
-				brave = 0.2806546
-				dumb = 0.4268433
-				badS = False
-				state = 0
-				ToD = 231009.147316895
-				idx = -1
-			}
-			RECRUIT
-			{
-				name = Newcott Kerman
-				brave = 0.0525831
-				dumb = 0.4269184
-				badS = False
-				state = 0
-				ToD = 195261.8740625
-				idx = -1
-			}
-			RECRUIT
-			{
-				name = Genecan Kerman
-				brave = 0.001343131
-				dumb = 0.9119414
-				badS = False
-				state = 0
-				ToD = 140435.788018188
-				idx = -1
-			}
-			RECRUIT
-			{
-				name = Dilfal Kerman
-				brave = 0.01127493
-				dumb = 0.01072276
-				badS = False
-				state = 0
-				ToD = 188044.495064697
-				idx = -1
-			}
-		}
+	}
+	MESSAGESYSTEM
+	{
+		flash = False
 	}
 }
