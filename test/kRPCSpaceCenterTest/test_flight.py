@@ -182,5 +182,58 @@ class TestFlight(testingtools.TestCase):
         #TODO: implement
         pass
 
+class TestFlightVerticalSpeed(testingtools.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        testingtools.new_save()
+        cls.conn = krpc.connect()
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.conn.testing_tools.remove_other_vessels()
+
+    def check_speed(self, flight, ref):
+        up = normalize(vector(self.vessel.position(ref)) - vector(self.vessel.orbit.body.position(ref)))
+        v = self.vessel.velocity(ref)
+
+        speed = norm(v)
+        vertical_speed = dot(v, up)
+        horizontal_speed = speed - abs(vertical_speed)
+
+        self.assertClose(speed, flight.speed, error=0.5)
+        self.assertClose(vertical_speed, flight.vertical_speed, error=0.5)
+        self.assertClose(horizontal_speed, flight.horizontal_speed, error=0.5)
+
+    def test_vertical_speed_positive(self):
+        testingtools.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, 0, 0)
+        ref = self.vessel.orbit.body.reference_frame
+        flight = self.vessel.flight(ref)
+        self.assertGreater(flight.vertical_speed, 0)
+        self.check_speed(flight, ref)
+
+    def test_vertical_speed_negative(self):
+        testingtools.set_orbit('Kerbin', 700000, 0.2, 0, 0, 0, 0.2, 0)
+        ref = self.vessel.orbit.body.reference_frame
+        flight = self.vessel.flight(ref)
+        self.assertGreater(0, flight.vertical_speed)
+        self.check_speed(flight, ref)
+
+    def test_surface_speed(self):
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        ref = self.vessel.orbit.body.reference_frame
+        flight = self.vessel.flight(ref)
+        self.check_speed(flight, ref)
+        self.assertClose(2042.5, flight.speed, error=0.1)
+        self.assertClose(2042.5, flight.horizontal_speed, error=0.1)
+        self.assertClose(0, flight.vertical_speed, error=0.1)
+
+    def test_orbital_speed(self):
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        ref = self.vessel.orbit.body.non_rotating_reference_frame
+        flight = self.vessel.flight(ref)
+        self.check_speed(flight, ref)
+        self.assertClose(2246.1, flight.speed, error=0.1)
+        self.assertClose(2246.1, flight.horizontal_speed, error=0.1)
+        self.assertClose(0, flight.vertical_speed, error=0.1)
+
 if __name__ == "__main__":
     unittest.main()
