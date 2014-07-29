@@ -5,7 +5,7 @@
   "VERSION": "%VERSION%",
   "KSP_VERSION": {
     "MAJOR": 0,
-    "MINOR": 23,
-    "PATCH": 5
+    "MINOR": 24,
+    "PATCH": 2
   }
 }
