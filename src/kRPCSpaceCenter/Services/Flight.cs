@@ -129,7 +129,11 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double VerticalSpeed {
-            get { return Vector3d.Dot (referenceFrame.VelocityFromWorldSpace (WorldCoM, WorldVelocity), Vector3d.up); }
+            get {
+                var velocity = referenceFrame.VelocityFromWorldSpace (WorldCoM, WorldVelocity);
+                var up = referenceFrame.DirectionFromWorldSpace ((WorldCoM - vessel.orbit.referenceBody.position).normalized);
+                return Vector3d.Dot (velocity, up);
+            }
         }
 
         [KRPCProperty]
