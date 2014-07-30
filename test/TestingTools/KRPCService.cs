@@ -92,7 +92,7 @@ namespace TestingTools
         [KRPCProcedure]
         public static void ApplyRotation (float angle, KRPC.Utils.Tuple<float,float,float> axis)
         {
-            var axisVector = new Vector3 (axis.Item1, axis.Item2, axis.Item3);
+            var axisVector = new Vector3 (axis.Item1, axis.Item2, axis.Item3).normalized;
             var rotation = FlightGlobals.ActiveVessel.transform.rotation * Quaternion.AngleAxis (angle, axisVector);
             FlightGlobals.ActiveVessel.SetRotation (rotation);
         }
