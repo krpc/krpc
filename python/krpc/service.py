@@ -20,7 +20,12 @@ class BaseService(object):
         self._name = name
 
     def _invoke(self, procedure, args=[], kwargs={}, param_names=[], param_types=[], return_type=None):
-        return self._client._invoke(self._name, procedure, args, kwargs, param_names, param_types, return_type)
+        return self._client._invoke(self._name, procedure, args, kwargs,
+                                    param_names, param_types, return_type)
+
+    def _build_request(self, procedure, args=[], kwargs={}, param_names=[], param_types=[], return_type=None):
+        return self._client._build_request(self._name, procedure, args, kwargs,
+                                           param_names, param_types, return_type)
 
 
 def _create_service(client, service):
@@ -111,10 +116,14 @@ class _Service(BaseService):
         return_type = None
         if procedure.HasField('return_type'):
             return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
-        setattr(self, _to_snake_case(procedure.name),
-                lambda *args, **kwargs: self._invoke(
+        func = lambda *args, **kwargs: self._invoke(
+            procedure.name, args=args, kwargs=kwargs,
+            param_names=param_names, param_types=param_types, return_type=return_type)
+        setattr(func, '_build_request',
+                lambda *args, **kwargs: self._build_request(
                     procedure.name, args=args, kwargs=kwargs,
                     param_names=param_names, param_types=param_types, return_type=return_type))
+        setattr(self, _to_snake_case(procedure.name), func)
 
     def _add_property(self, name, getter=None, setter=None):
         """ Add a property to the service, with a getter and/or setter procedure """
@@ -122,6 +131,8 @@ class _Service(BaseService):
         if getter:
             self._add_procedure(getter)
             fget = lambda s: getattr(self, _to_snake_case(getter.name))()
+            fget_request = lambda s: getattr(self, _to_snake_case(getter.name))._build_request()
+            setattr(fget, '_build_request', fget_request)
         if setter:
             self._add_procedure(setter)
             fset = lambda s, value: getattr(self, _to_snake_case(setter.name))(value)
@@ -135,18 +146,25 @@ class _Service(BaseService):
         return_type = None
         if procedure.HasField('return_type'):
             return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
-        setattr(cls, _to_snake_case(method_name),
-                lambda s, *args, **kwargs: self._invoke(procedure.name, args=[s] + list(args), kwargs=kwargs,
-                                                        param_names=param_names, param_types=param_types,
-                                                        return_type=return_type))
+        func = lambda s, *args, **kwargs: self._invoke(procedure.name, args=[s] + list(args), kwargs=kwargs,
+                                                       param_names=param_names, param_types=param_types,
+                                                       return_type=return_type)
+        setattr(func, '_build_request',
+                lambda s, *args, **kwargs: self._build_request(procedure.name, args=[s] + list(args), kwargs=kwargs,
+                                                               param_names=param_names, param_types=param_types,
+                                                               return_type=return_type))
+        setattr(cls, _to_snake_case(method_name), func)
 
     def _add_class_property(self, class_name, property_name, getter=None, setter=None):
+        """ Add a class property to the service """
         fget = fset = None
         if getter:
             self._add_class_method(class_name, getter.name, getter)
-            fget = lambda self_: getattr(self_, _to_snake_case(getter.name))()
+            fget = lambda s: getattr(s, _to_snake_case(getter.name))()
+            setattr(fget, '_build_request',
+                    lambda s: getattr(s, _to_snake_case(getter.name))._build_request(s))
         if setter:
             self._add_class_method(class_name, setter.name, setter)
-            fset = lambda self_, value: getattr(self_, _to_snake_case(setter.name))(value)
+            fset = lambda s, value: getattr(s, _to_snake_case(setter.name))(value)
         class_type = getattr(self, class_name)
         setattr(class_type, _to_snake_case(property_name), property(fget, fset))

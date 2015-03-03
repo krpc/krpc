@@ -67,45 +67,8 @@ class Client(object):
     def _invoke(self, service, procedure, args=[], kwargs={}, param_names=[], param_types=[], return_type=None):
         """ Execute an RPC """
 
-        def encode_argument(i, value):
-            typ = param_types[i]
-            if type(value) != typ.python_type:
-                # Try coercing to the correct type
-                try:
-                    value = self._types.coerce_to(value, typ)
-                except ValueError:
-                    raise TypeError('%s.%s() argument %d must be a %s, got a %s' % (service, procedure, i, typ.python_type, type(value)))
-            return _Encoder.encode(value, typ)
-
-        if len(args) > len(param_types):
-            raise TypeError('%s.%s() takes exactly %d arguments (%d given)' % (service, procedure, len(param_types), len(args)))
-
-        # Encode positional arguments
-        arguments = []
-        for i,arg in enumerate(args):
-            argument = krpc.schema.KRPC.Argument()
-            argument.position = i
-            argument.value = encode_argument(i, arg)
-            arguments.append(argument)
-
-        # Encode keyword arguments
-        for key,arg in kwargs.items():
-            try:
-                i = param_names.index(key)
-            except ValueError:
-                raise TypeError('%s.%s() got an unexpected keyword argument \'%s\'' % (service, procedure, key))
-            if i < len(args):
-                raise TypeError('%s.%s() got multiple values for keyword argument \'%s\'' % (service, procedure, key))
-            argument = krpc.schema.KRPC.Argument()
-            argument.position = i
-            argument.value = encode_argument(i, arg)
-            arguments.append(argument)
-
-        # Build the request object
-        request = krpc.schema.KRPC.Request()
-        request.service = service
-        request.procedure = procedure
-        request.arguments.extend(arguments)
+        # Build the request
+        request = self._build_request(service, procedure, args, kwargs, param_names, param_types, return_type)
 
         # Send the request
         with self._connection_lock:
@@ -121,6 +84,55 @@ class Client(object):
         if return_type is not None:
             result = _Decoder.decode(response.return_value, return_type)
         return result
+
+    def _build_request(self, service, procedure, args=[], kwargs={},
+                       param_names=[], param_types=[], return_type=None):
+        """ Build a KRPC.Request object """
+
+        def encode_argument(i, value):
+            typ = param_types[i]
+            if type(value) != typ.python_type:
+                # Try coercing to the correct type
+                try:
+                    value = self._types.coerce_to(value, typ)
+                except ValueError:
+                    raise TypeError('%s.%s() argument %d must be a %s, got a %s' % \
+                                    (service, procedure, i, typ.python_type, type(value)))
+            return _Encoder.encode(value, typ)
+
+        if len(args) > len(param_types):
+            raise TypeError('%s.%s() takes exactly %d arguments (%d given)' % \
+                            (service, procedure, len(param_types), len(args)))
+
+        # Encode positional arguments
+        arguments = []
+        for i,arg in enumerate(args):
+            argument = krpc.schema.KRPC.Argument()
+            argument.position = i
+            argument.value = encode_argument(i, arg)
+            arguments.append(argument)
+
+        # Encode keyword arguments
+        for key,arg in kwargs.items():
+            try:
+                i = param_names.index(key)
+            except ValueError:
+                raise TypeError('%s.%s() got an unexpected keyword argument \'%s\'' % \
+                                (service, procedure, key))
+            if i < len(args):
+                raise TypeError('%s.%s() got multiple values for keyword argument \'%s\'' % \
+                                (service, procedure, key))
+            argument = krpc.schema.KRPC.Argument()
+            argument.position = i
+            argument.value = encode_argument(i, arg)
+            arguments.append(argument)
+
+        # Build the request object
+        request = krpc.schema.KRPC.Request()
+        request.service = service
+        request.procedure = procedure
+        request.arguments.extend(arguments)
+        return request
 
     def _send_request(self, request):
         """ Send a KRPC.Request object to the server """
