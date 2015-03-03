@@ -210,16 +210,14 @@ namespace KRPC.Server.Net
                 try {
                     running = true;
                     startedEvent.Set ();
-                    int nextClientUuid = 0;
                     while (true) {
                         // Block until a client connects to the server
                         var client = tcpListener.AcceptTcpClient ();
                         Logger.WriteLine ("TCPServer: client requesting connection (" + client.Client.RemoteEndPoint + ")");
                         // Add to pending clients
                         lock (pendingClientsLock) {
-                            pendingClients.Add (new TCPClient (nextClientUuid, client));
+                            pendingClients.Add (new TCPClient (client));
                         }
-                        nextClientUuid++;
                     }
                 } catch (SocketException e) {
                     if (e.SocketErrorCode == SocketError.Interrupted)

@@ -18,6 +18,10 @@ namespace KRPCTest.Server.RPC
             get { throw new NotImplementedException (); }
         }
 
+        public Guid Guid {
+            get { throw new NotImplementedException (); }
+        }
+
         public string Address {
             get { throw new NotImplementedException (); }
         }

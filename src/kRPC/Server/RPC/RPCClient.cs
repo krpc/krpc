@@ -16,6 +16,10 @@ namespace KRPC.Server.RPC
 
         public string Name { get; private set; }
 
+        public Guid Guid {
+            get { return client.Guid; }
+        }
+
         public string Address {
             get { return client.Address; }
         }
