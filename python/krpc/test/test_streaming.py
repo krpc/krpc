@@ -5,7 +5,7 @@ import subprocess
 import time
 import krpc
 import krpc.test.Test as TestSchema
-from krpc.stream import stream, add_stream
+from krpc.stream import Stream, stream, add_stream
 
 class TestStreaming(unittest.TestCase):
 
@@ -20,6 +20,13 @@ class TestStreaming(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.server.kill()
+
+    def test_add_stream(self):
+        s = Stream(self.conn.test_service.float_to_string, 3.14159)
+        print s.request
+        stream_id = self.conn.krpc.add_stream(s.request)
+        print stream_id
+        self.conn.krpc.remove_stream(stream_id)
 
     def test_method(self):
         with stream(self.conn.test_service.float_to_string, 3.14159) as x:

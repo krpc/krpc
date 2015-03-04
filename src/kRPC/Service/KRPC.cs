@@ -1,11 +1,12 @@
 using System;
+using KRPC.Schema.KRPC;
 using KRPC.Service.Attributes;
 
 namespace KRPC.Service
 {
     /// <summary>
     /// Main KRPC service, used by clients to interact with basic server functionality.
-    /// This includes requesting a description of the available services.
+    /// This includes requesting a description of the available services and setting up streams.
     /// </summary>
     [KRPCService]
     public static class KRPC
@@ -71,6 +72,25 @@ namespace KRPC.Service
             }
             Schema.KRPC.Services result = services.Build ();
             return result;
+        }
+
+        /// <summary>
+        /// Add a request to the stream. Returns the identifier for the streaming request.
+        /// </summary>
+        [KRPCProcedure]
+        public static uint AddStream (Request request)
+        {
+            // TODO: implement
+            return 42;
+        }
+
+        /// <summary>
+        /// Remove a streaming request.
+        /// </summary>
+        [KRPCProcedure]
+        public static void RemoveStream (uint id)
+        {
+            // TODO: implement
         }
     }
 }

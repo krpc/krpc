@@ -7,7 +7,7 @@ using KRPC.Utils;
 
 namespace KRPC.Server.Stream
 {
-    sealed class StreamServer : IServer<byte,byte>
+    sealed class StreamServer : IServer<byte,StreamResponse>
     {
         const double defaultTimeout = 0.1;
         byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
@@ -16,17 +16,17 @@ namespace KRPC.Server.Stream
 
         public event EventHandler OnStarted;
         public event EventHandler OnStopped;
-        public event EventHandler<ClientRequestingConnectionArgs<byte,byte>> OnClientRequestingConnection;
-        public event EventHandler<ClientConnectedArgs<byte,byte>> OnClientConnected;
+        public event EventHandler<ClientRequestingConnectionArgs<byte,StreamResponse>> OnClientRequestingConnection;
+        public event EventHandler<ClientConnectedArgs<byte,StreamResponse>> OnClientConnected;
         /// <summary>
         /// Does not trigger this event, unless the underlying server does.
         /// </summary>
-        public event EventHandler<ClientActivityArgs<byte,byte>> OnClientActivity;
-        public event EventHandler<ClientDisconnectedArgs<byte,byte>> OnClientDisconnected;
+        public event EventHandler<ClientActivityArgs<byte,StreamResponse>> OnClientActivity;
+        public event EventHandler<ClientDisconnectedArgs<byte,StreamResponse>> OnClientDisconnected;
 
         IServer<byte,byte> server;
-        Dictionary<IClient<byte,byte>,StreamClient> clients = new Dictionary<IClient<byte, byte>, StreamClient> ();
-        Dictionary<IClient<byte,byte>,StreamClient> pendingClients = new Dictionary<IClient<byte, byte>, StreamClient> ();
+        Dictionary<IClient<byte,byte>,StreamClient> clients = new Dictionary<IClient<byte,byte>, StreamClient> ();
+        Dictionary<IClient<byte,byte>,StreamClient> pendingClients = new Dictionary<IClient<byte,byte>, StreamClient> ();
 
         public StreamServer (IServer<byte,byte> server)
         {
@@ -68,7 +68,7 @@ namespace KRPC.Server.Stream
             get { return server.Running; }
         }
 
-        public IEnumerable<IClient<byte,byte>> Clients {
+        public IEnumerable<IClient<byte,StreamResponse>> Clients {
             get {
                 foreach (var client in clients.Values) {
                     yield return client;
@@ -81,7 +81,7 @@ namespace KRPC.Server.Stream
             // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
             if (OnClientConnected != null) {
                 var client = clients [args.Client];
-                OnClientConnected (this, new ClientConnectedArgs<byte,byte> (client));
+                OnClientConnected (this, new ClientConnectedArgs<byte,StreamResponse> (client));
             }
         }
 
@@ -89,7 +89,7 @@ namespace KRPC.Server.Stream
         {
             if (OnClientActivity != null) {
                 var client = clients [args.Client];
-                OnClientActivity (this, new ClientActivityArgs<byte,byte> (client));
+                OnClientActivity (this, new ClientActivityArgs<byte,StreamResponse> (client));
             }
         }
 
@@ -98,7 +98,7 @@ namespace KRPC.Server.Stream
             var client = clients [args.Client];
             clients.Remove (args.Client);
             if (OnClientDisconnected != null) {
-                OnClientDisconnected (this, new ClientDisconnectedArgs<byte,byte> (client));
+                OnClientDisconnected (this, new ClientDisconnectedArgs<byte,StreamResponse> (client));
             }
         }
 
@@ -125,7 +125,7 @@ namespace KRPC.Server.Stream
             // Invoke connection request events.
             if (OnClientRequestingConnection != null) {
                 var client = pendingClients [args.Client];
-                var subArgs = new ClientRequestingConnectionArgs<byte,byte> (client);
+                var subArgs = new ClientRequestingConnectionArgs<byte,StreamResponse> (client);
                 OnClientRequestingConnection (this, subArgs);
                 if (subArgs.Request.ShouldAllow) {
                     args.Request.Allow ();

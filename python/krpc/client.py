@@ -27,6 +27,17 @@ class KRPCService(BaseService):
         """ Get available services and procedures """
         return self._invoke('GetServices', return_type=self._client._types.as_type('KRPC.Services'))
 
+    def add_stream(self, request):
+        """ Add a streaming request. Returns its identifier. """
+        return self._invoke('AddStream', args=[request],
+                            param_names=['request'], param_types=[self._client._types.as_type('KRPC.Request')],
+                            return_type=self._client._types.as_type('uint32'))
+
+    def remove_stream(self, stream_id):
+        """ Remove a streaming request """
+        return self._invoke('RemoveStream', args=[stream_id],
+                            param_names=['id'], param_types=[self._client._types.as_type('uint32')])
+
 
 class Client(object):
     """
