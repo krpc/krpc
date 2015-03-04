@@ -7,9 +7,6 @@ import krpc.schema.KRPC
 import threading
 
 
-BUFFER_SIZE = 8*1024*1024
-
-
 class RPCError(RuntimeError):
     """ Error raised when an RPC returns an error response """
     def __init__(self, message):
@@ -129,6 +126,25 @@ class Client(object):
 
     def _receive_response(self):
         """ Receive data from the server and decode it into a KRPC.Response object """
-        # FIXME: we might not receive all of the data in one go
-        data = self._connection.recv(BUFFER_SIZE)
-        return _Decoder.decode_delimited(data, self._response_type)
+        data = ''
+
+        # Read the size and position of the response message
+        while True:
+            try:
+                data += self._connection.recv(32)
+                size,position = _Decoder.decode_size_and_position(data)
+                break
+            except IndexError:
+                pass
+        data = data[position:]
+
+        # Read the response message data
+        while len(data) < size:
+            data += self._connection.recv(8192)
+        # Note: it's only possible for one response to be received
+        assert len(data) == size
+
+        # Decode the response
+        response = _Decoder.decode(data[:size], self._response_type)
+
+        return response

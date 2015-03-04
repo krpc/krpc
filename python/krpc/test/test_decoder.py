@@ -19,6 +19,12 @@ class TestDecoder(unittest.TestCase):
         value = Decoder.decode(binascii.unhexlify('ac02'), Types().as_type('int32'))
         self.assertEquals(int(300), value)
 
+    def test_decode_size_and_position(self):
+        message = '1c'
+        size,position = Decoder.decode_size_and_position(binascii.unhexlify(message))
+        self.assertEquals(28, size)
+        self.assertEquals(1, position)
+
     def test_decode_message_delimited(self):
         typ = krpc.schema.KRPC.Request
         message = '1c'+'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
