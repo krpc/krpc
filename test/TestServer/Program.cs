@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Diagnostics;
 using KRPC;
+using KRPC.Utils;
 
 namespace TestServer
 {
@@ -9,13 +10,14 @@ namespace TestServer
     {
         public static void Main (string[] args)
         {
+            Logger.Enabled = (args.Length > 1 && args[1] == "log");
             var frameTime = 50;
             var server = new KRPCServer (IPAddress.Loopback, ushort.Parse (args [0]));
             var timeSpan = new TimeSpan ();
             server.GetUniversalTime = () => timeSpan.TotalSeconds;
             server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             server.Start ();
-            Console.WriteLine ("Started test server...");
+            Logger.WriteLine ("Started test server...");
             while (server.Running) {
                 Stopwatch timer = Stopwatch.StartNew ();
                 server.Update ();
@@ -24,7 +26,7 @@ namespace TestServer
                 if (sleep > 0)
                     System.Threading.Thread.Sleep ((int)sleep);
             }
-            Console.WriteLine ("Test server stopped");
+            Logger.WriteLine ("Test server stopped");
         }
     }
 }
