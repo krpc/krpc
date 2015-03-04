@@ -26,25 +26,32 @@ namespace KRPCTest.Service
                     int found = 0;
                     foreach (KRPC.Schema.KRPC.Procedure method in service.ProceduresList) {
                         if (method.Name == "GetStatus") {
+                            Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("KRPC.Status", method.ReturnType);
                             Assert.AreEqual (0, method.ParametersCount);
                             found++;
                         }
                         if (method.Name == "GetServices") {
+                            Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("KRPC.Services", method.ReturnType);
                             Assert.AreEqual (0, method.ParametersCount);
                             found++;
                         }
                         if (method.Name == "AddStream") {
+                            Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("uint32", method.ReturnType);
-                            Assert.AreEqual (0, method.ParametersCount);
-                            // TODO: check the parameters
+                            Assert.AreEqual (1, method.ParametersCount);
+                            Assert.AreEqual ("request", method.ParametersList [0].Name);
+                            Assert.AreEqual ("KRPC.Request", method.ParametersList [0].Type);
+                            Assert.IsFalse (method.ParametersList [0].HasDefaultArgument);
                             found++;
                         }
                         if (method.Name == "RemoveStream") {
-                            // TODO: check return type is void
+                            Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (1, method.ParametersCount);
-                            // TODO: check the parameters
+                            Assert.AreEqual ("id", method.ParametersList [0].Name);
+                            Assert.AreEqual ("uint32", method.ParametersList [0].Type);
+                            Assert.IsFalse (method.ParametersList [0].HasDefaultArgument);
                             found++;
                         }
                     }

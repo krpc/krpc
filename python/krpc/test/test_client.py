@@ -249,7 +249,7 @@ class TestClient(unittest.TestCase):
 
     def test_krpc_service_members(self):
         self.assertSetEqual(
-            set(['get_services', 'get_status']),
+            set(['get_services', 'get_status', 'add_stream', 'remove_stream']),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.krpc))))
 
     def test_test_service_service_members(self):
