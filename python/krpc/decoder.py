@@ -56,10 +56,15 @@ class _Decoder(object):
             raise RuntimeError ('Cannot decode type %s' % str(typ))
 
     @classmethod
+    def decode_size_and_position(cls, data):
+        """ Decode a varint and return the (size, position) """
+        return protobuf_decoder._DecodeVarint(data, 0)
+
+    @classmethod
     def decode_delimited(cls, data, typ):
         """ Decode a message or value with size information
             (used in a delimited communication stream) """
-        (size, position) = protobuf_decoder._DecodeVarint(data, 0)
+        (size, position) = cls.decode_size_and_position(data)
         return cls.decode(data[position:position+size], typ)
 
     @classmethod

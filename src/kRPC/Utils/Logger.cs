@@ -5,10 +5,13 @@ namespace KRPC.Utils
 {
     static class Logger
     {
+        public static bool Enabled = true;
+
         internal static void WriteLine (string line)
         {
-            Console.WriteLine ("[kRPC] " + line);
+            if (Enabled) {
+                Console.WriteLine ("[kRPC] " + line);
+            }
         }
     }
 }
-
