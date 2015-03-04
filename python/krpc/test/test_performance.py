@@ -20,11 +20,12 @@ class TestClient(unittest.TestCase):
     def tearDownClass(cls):
         cls.server.kill()
 
-    def test_basic(self):
-        n = 1000
+    def test_performance(self):
+        n = 100
         def wrapper():
             self.ksp.test_service.float_to_string(float(3.14159))
         t = timeit.timeit(stmt=wrapper, number=n)
+        print
         print 'Total execution time: %.2f seconds' % t
         print 'RPC execution rate: %d per second' % (n/t)
         print 'Latency: %.3f milliseconds' % ((t*1000)/n)
