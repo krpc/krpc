@@ -42,7 +42,7 @@ namespace TestingTools
         public static void LaunchVesselFromVAB (string name)
         {
             var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/VAB/" + name + ".craft";
-            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft), true);
+            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
             FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "LaunchPad", crew);
         }
 
@@ -50,7 +50,7 @@ namespace TestingTools
         public static void LaunchVesselFromSPH (string name)
         {
             var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/SPH/" + name + ".craft";
-            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft), true);
+            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
             FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "Runway", crew);
         }
 
