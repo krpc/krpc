@@ -8,11 +8,11 @@ import krpc
 import krpc.test.Test as TestSchema
 
 def worker_thread(tid, conn):
-    for i in range(1000):
+    for i in range(100):
         conn.krpc.get_status()
 
 def worker_thread2(tid, conn, test):
-    for i in range(100):
+    for i in range(10):
         test.assertEqual('3.14159', conn.test_service.float_to_string(float(3.14159)))
         test.assertEqual('3.14159', conn.test_service.double_to_string(float(3.14159)))
         test.assertEqual('42', conn.test_service.int32_to_string(42))
