@@ -10,8 +10,7 @@ namespace TestServer
         public static void Main (string[] args)
         {
             var frameTime = 50;
-            // TODO: make the stream server port configurable
-            var server = new KRPCServer (IPAddress.Loopback, ushort.Parse (args [0]), (ushort)(ushort.Parse (args [0])+1));
+            var server = new KRPCServer (IPAddress.Loopback, ushort.Parse (args [0]), ushort.Parse (args [1]));
             var timeSpan = new TimeSpan ();
             server.GetUniversalTime = () => timeSpan.TotalSeconds;
             server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();

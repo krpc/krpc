@@ -14,13 +14,14 @@ def connect(address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, stream_port=DEFA
     (up to 32 bytes of UTF-8 encoded text)
     """
     # TODO: add checks that the connection is established correctly
+    assert rpc_port != stream_port
     rpc_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    rpc_connection.connect((address, port))
+    rpc_connection.connect((address, rpc_port))
     rpc_connection.send(_Encoder.hello_message)
     rpc_connection.send(_Encoder.client_name(name))
     client_id = rpc_connection.recv(_Decoder.GUID_LENGTH)
     stream_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    stream_connection.connect((address, port+1))
+    stream_connection.connect((address, stream_port))
     stream_connection.send(_Encoder.hello_message)
     stream_connection.send(client_id)
     ok_message = stream_connection.recv(2)
