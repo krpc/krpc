@@ -35,7 +35,7 @@ namespace KRPC
 
         public KRPCServer (IPAddress address, ushort port)
         {
-            tcpServer = new TCPServer (address, port);
+            tcpServer = new TCPServer ("RPCServer", address, port);
             rpcServer = new RPCServer (tcpServer);
             clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
             continuations = new List<RequestContinuation> ();
