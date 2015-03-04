@@ -10,6 +10,7 @@ namespace KRPC
         KRPCServer server;
         KRPCConfiguration config;
         IButton toolbarButton;
+        ApplicationLauncherButton applauncherButton;
         MainWindow mainWindow;
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
@@ -68,8 +69,9 @@ namespace KRPC
                     clientConnectingDialog.OnClientRequestingConnection (s, e);
             };
 
-            // Toolbar API
+            // Add show/hide window button
             if (ToolbarManager.ToolbarAvailable) {
+                // Add a button to the Toolbar plugin if it's available
                 mainWindow.Closable = true;
                 toolbarButton = ToolbarManager.Instance.add ("kRPC", "ToggleMainWindow");
                 toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
@@ -78,10 +80,24 @@ namespace KRPC
                 toolbarButton.OnClick += (e) => mainWindow.Visible = !mainWindow.Visible;
                 server.OnStarted += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-online";
                 server.OnStopped += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
+                applauncherButton = null;
             } else {
-                // If there is no toolbar button a hidden window can't be shown, so force it to be displayed
-                mainWindow.Closable = false;
-                mainWindow.Visible = true;
+                // Otherwise add a button to the stock KSP applauncher
+                mainWindow.Closable = true;
+                GameEvents.onGUIApplicationLauncherReady.Add(() => {
+                    applauncherButton = ApplicationLauncher.Instance.AddModApplication (
+                        () => mainWindow.Visible = true,
+                        () => mainWindow.Visible = false,
+                        null, null, null, null,
+                        ApplicationLauncher.AppScenes.FLIGHT,
+                        GameDatabase.Instance.GetTexture ("kRPC/icons/toolbar-offline", false));
+                });
+                GameEvents.onGUIApplicationLauncherDestroyed.Add(() => {
+                    if (applauncherButton != null) {
+                        ApplicationLauncher.Instance.RemoveModApplication (applauncherButton);
+                    }
+                });
+                toolbarButton = null;
             }
 
             // Auto-start the server, if required
@@ -105,7 +121,8 @@ namespace KRPC
         {
             if (server.Running)
                 server.Stop ();
-            toolbarButton.Destroy ();
+            if (toolbarButton != null)
+                toolbarButton.Destroy ();
             UnityEngine.Object.Destroy (mainWindow);
             UnityEngine.Object.Destroy (clientConnectingDialog);
         }
