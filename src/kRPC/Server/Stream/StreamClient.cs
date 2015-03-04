@@ -1,63 +1,62 @@
 using System;
-using KRPC.Server;
+using KRPC.Schema.KRPC;
 
-namespace KRPCTest.Server.RPC
+namespace KRPC.Server.Stream
 {
-    // TODO: This is only required due to mocking not preforming equality testing. Is there a better way to do this?
-    class TestClient : IClient<byte,byte>
+    sealed class StreamClient : IClient<byte,byte>
     {
-        Guid guid;
+        readonly IClient<byte,byte> client;
 
-        public TestClient (TestStream stream)
+        public StreamClient (IClient<byte,byte> client)
         {
-            guid = Guid.NewGuid();
-            Stream = stream;
+            this.client = client;
+            Stream = new StreamStream (client.Stream);
         }
 
         public string Name {
-            get { throw new NotImplementedException (); }
+            get { return client.Name; }
         }
 
         public Guid Guid {
-            get { return guid; }
+            get { return client.Guid; }
         }
 
         public string Address {
-            get { throw new NotImplementedException (); }
+            get { return client.Address; }
         }
 
         public IStream<byte,byte> Stream { get; private set; }
 
         public bool Connected {
-            get { throw new NotImplementedException (); }
+            get { return client.Connected; }
         }
 
         public void Close ()
         {
-            throw new NotImplementedException ();
+            client.Close ();
         }
 
         public override bool Equals (Object obj)
         {
-            return obj != null && Equals (obj as TestClient);
+            return obj != null && Equals (obj as StreamClient);
         }
 
         public bool Equals (IClient<byte,byte> other)
         {
             if ((object)other == null)
                 return false;
-            var otherClient = other as TestClient;
+            var otherClient = other as StreamClient;
             if ((object)otherClient == null)
                 return false;
-            return guid == otherClient.guid;
+            return client == otherClient.client;
         }
 
         public override int GetHashCode ()
         {
-            return guid.GetHashCode ();
+            return client.GetHashCode ();
         }
 
-        public static bool operator == (TestClient lhs, TestClient rhs)
+        public static bool operator == (StreamClient lhs, StreamClient rhs)
         {
             if (Object.ReferenceEquals (lhs, rhs))
                 return true;
@@ -66,9 +65,10 @@ namespace KRPCTest.Server.RPC
             return lhs.Equals (rhs);
         }
 
-        public static bool operator != (TestClient lhs, TestClient rhs)
+        public static bool operator != (StreamClient lhs, StreamClient rhs)
         {
             return !(lhs == rhs);
         }
     }
 }
+

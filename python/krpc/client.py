@@ -38,9 +38,10 @@ class Client(object):
     RPCs can be made using client.ServiceName.ProcedureName(parameter)
     """
 
-    def __init__(self, connection):
-        self._connection = connection
-        self._connection_lock = threading.Lock()
+    def __init__(self, rpc_connection, stream_connection):
+        self._rpc_connection = rpc_connection
+        self._rpc_connection_lock = threading.Lock()
+        self._stream_connection = stream_connection
         self._types = _Types()
         self._request_type = self._types.as_type('KRPC.Request')
         self._response_type = self._types.as_type('KRPC.Response')
@@ -71,7 +72,7 @@ class Client(object):
         request = self._build_request(service, procedure, args, kwargs, param_names, param_types, return_type)
 
         # Send the request
-        with self._connection_lock:
+        with self._rpc_connection_lock:
             self._send_request(request)
             response = self._receive_response()
 
@@ -137,10 +138,10 @@ class Client(object):
     def _send_request(self, request):
         """ Send a KRPC.Request object to the server """
         data = _Encoder.encode_delimited(request, self._request_type)
-        self._connection.send(data)
+        self._rpc_connection.send(data)
 
     def _receive_response(self):
         """ Receive data from the server and decode it into a KRPC.Response object """
         # FIXME: we might not receive all of the data in one go
-        data = self._connection.recv(BUFFER_SIZE)
+        data = self._rpc_connection.recv(BUFFER_SIZE)
         return _Decoder.decode_delimited(data, self._response_type)

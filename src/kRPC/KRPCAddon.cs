@@ -18,7 +18,8 @@ namespace KRPC
         {
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
-            server = new KRPCServer (config.Address, config.Port);
+            // TODO: make the Stream port configurable
+            server = new KRPCServer (config.Address, config.Port, (ushort)(config.Port+1));
             server.GetUniversalTime = Planetarium.GetUniversalTime;
 
             // Disconnect client dialog
@@ -92,7 +93,9 @@ namespace KRPC
         private void StartServer ()
         {
             config.Load ();
-            server.Port = config.Port;
+            server.RPCPort = config.Port;
+            // TODO: Make the stream server port configurable
+            server.StreamPort = (ushort)(config.Port+1);
             server.Address = config.Address;
             try {
                 server.Start ();

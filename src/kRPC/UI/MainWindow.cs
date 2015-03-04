@@ -140,7 +140,7 @@ namespace KRPC.UI
         private void DrawPort ()
         {
             if (Server.Running)
-                GUILayout.Label (portLabelText + " " + Server.Port.ToString (), stretchyLabelStyle);
+                GUILayout.Label (portLabelText + " " + Server.RPCPort.ToString (), stretchyLabelStyle);
             else {
                 GUILayout.Label (portLabelText, stretchyLabelStyle);
                 textFieldStyle.fixedWidth = portWidth;

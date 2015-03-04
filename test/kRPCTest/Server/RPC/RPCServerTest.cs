@@ -29,10 +29,12 @@ namespace KRPCTest.Server.RPC
         [Test]
         public void ValidHelloMessageWithNoIdentifier ()
         {
+            var responseStream = new MemoryStream();
+
             for (int i = 8; i < helloMessage.Length; i++) {
                 helloMessage [i] = 0x00;
             }
-            var stream = new TestStream (new MemoryStream (helloMessage));
+            var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -53,12 +55,17 @@ namespace KRPCTest.Server.RPC
             server.Update ();
             Assert.AreEqual (1, server.Clients.Count ());
             Assert.AreEqual ("", server.Clients.First ().Name);
+
+            byte[] bytes = responseStream.ToArray ();
+            byte[] responseBytes = byteClient.Guid.ToByteArray ();
+            Assert.IsTrue (responseBytes.SequenceEqual (bytes));
         }
 
         [Test]
         public void ValidHelloMessage ()
         {
-            var stream = new TestStream (new MemoryStream (helloMessage));
+            var responseStream = new MemoryStream();
+            var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -79,13 +86,19 @@ namespace KRPCTest.Server.RPC
             server.Update ();
             Assert.AreEqual (1, server.Clients.Count ());
             Assert.AreEqual ("Jebediah Kerman!!!", server.Clients.First ().Name);
+
+            byte[] bytes = responseStream.ToArray ();
+            byte[] responseBytes = byteClient.Guid.ToByteArray ();
+            Assert.IsTrue (responseBytes.SequenceEqual (bytes));
         }
 
         [Test]
         public void InvalidHelloMessageHeader ()
         {
+            var responseStream = new MemoryStream();
+
             helloMessage [4] = 0x42;
-            var stream = new TestStream (new MemoryStream (helloMessage));
+            var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -104,13 +117,16 @@ namespace KRPCTest.Server.RPC
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
+
+            Assert.AreEqual (0, responseStream.Length);
         }
 
         [Test]
         public void InvalidHelloMessageIdentifier ()
         {
+            var responseStream = new MemoryStream();
             helloMessage [15] = 0x00;
-            var stream = new TestStream (new MemoryStream (helloMessage));
+            var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -129,13 +145,17 @@ namespace KRPCTest.Server.RPC
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
+
+            Assert.AreEqual (0, responseStream.Length);
         }
 
         [Test]
         public void ShortHelloMessageHeader ()
         {
+            var responseStream = new MemoryStream();
+
             var message = new byte[] { 0x48, 0x45, 0x4C };
-            var stream = new TestStream (new MemoryStream (message));
+            var stream = new TestStream (new MemoryStream (message), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -154,11 +174,15 @@ namespace KRPCTest.Server.RPC
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
+
+            Assert.AreEqual (0, responseStream.Length);
         }
 
         [Test]
         public void ShortHelloMessageIdentifier ()
         {
+            var responseStream = new MemoryStream();
+
             var shortHelloMessage = new byte[8 + 31];
             byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
             Array.Copy (header, shortHelloMessage, header.Length);
@@ -167,7 +191,7 @@ namespace KRPCTest.Server.RPC
             byte[] identifierBytes = encoder.GetBytes (identifier);
             Array.Copy (identifierBytes, 0, shortHelloMessage, header.Length, identifierBytes.Length);
 
-            var stream = new TestStream (new MemoryStream (shortHelloMessage));
+            var stream = new TestStream (new MemoryStream (shortHelloMessage), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -186,12 +210,15 @@ namespace KRPCTest.Server.RPC
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
+
+            Assert.AreEqual (0, responseStream.Length);
         }
 
         [Test]
         public void NoHelloMessage ()
         {
-            var stream = new TestStream (new MemoryStream ());
+            var responseStream = new MemoryStream();
+            var stream = new TestStream (new MemoryStream (), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -210,6 +237,8 @@ namespace KRPCTest.Server.RPC
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
+
+            Assert.AreEqual (0, responseStream.Length);
         }
     }
 }

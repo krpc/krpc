@@ -6,18 +6,17 @@ import itertools
 class _Encoder(object):
     """ Routines for encoding messages and values in the protocol buffer serialization format """
 
+    hello_message = b'\x48\x45\x4C\x4C\x4F\xBA\xDA\x55'
+
     @classmethod
-    def hello_message(cls, name=None):
-        """ Generate a hello message with the given name
-            truncated to fit if necessary """
-        header = b'\x48\x45\x4C\x4C\x4F\xBA\xDA\x55'
+    def client_name(cls, name=None):
+        """ A client name, truncated/lengthened to fit 32 bytes """
         if name is None:
             name = ''
         else:
             name = cls._unicode_truncate(name, 32, 'utf-8')
         name = name.encode('utf-8')
-        identifier = name + (b'\x00' * (32-len(name)))
-        return header + identifier
+        return name + (b'\x00' * (32-len(name)))
 
     @classmethod
     def _unicode_truncate(cls, string, length, encoding='utf-8'):

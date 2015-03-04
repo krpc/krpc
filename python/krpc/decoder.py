@@ -7,6 +7,26 @@ import itertools
 class _Decoder(object):
     """ Routines for decoding messages and values from the protocol buffer serialization format """
 
+    GUID_LENGTH = 16
+
+    @classmethod
+    def guid(cls, data):
+        """ Decode a 16-byte GUID into a string """
+        # TODO: test this
+        chunks = [4,2,2,2,6]
+        reverse_chunk = [True,True,True,False,False]
+        result = ''
+        offset = 0
+        for c,chunk in enumerate(chunks):
+            poss = range(offset,offset+chunk)
+            if reverse_chunk[c]:
+                poss = reversed(poss)
+            for pos in poss:
+                result += '%02x' % ord(data[pos])
+            offset += chunk
+            result += '-'
+        return result[:-1]
+
     @classmethod
     def decode(cls, data, typ):
         """ Given a python type, and serialized data, decode the value """

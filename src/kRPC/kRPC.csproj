@@ -122,6 +122,9 @@
     <Compile Include="Continuations\ParameterizedContinuation.cs" />
     <Compile Include="Utils\Equatable.cs" />
     <Compile Include="Utils\Tuple.cs" />
+    <Compile Include="Server\Stream\StreamServer.cs" />
+    <Compile Include="Server\Stream\StreamClient.cs" />
+    <Compile Include="Server\Stream\StreamStream.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

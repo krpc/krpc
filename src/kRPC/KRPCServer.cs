@@ -7,6 +7,7 @@ using System.Threading;
 using KRPC.Server;
 using KRPC.Server.Net;
 using KRPC.Server.RPC;
+using KRPC.Server.Stream;
 using KRPC.Schema.KRPC;
 using KRPC.Service;
 using KRPC.Continuations;
@@ -16,8 +17,10 @@ namespace KRPC
 {
     class KRPCServer : IServer
     {
+        readonly TCPServer rpcTcpServer;
+        readonly TCPServer streamTcpServer;
         readonly RPCServer rpcServer;
-        readonly TCPServer tcpServer;
+        readonly StreamServer streamServer;
         IScheduler<IClient<Request,Response>> clientScheduler;
         //TODO: add maximum execution time for continuations to prevent livelock?
         IList<RequestContinuation> continuations;
@@ -33,10 +36,12 @@ namespace KRPC
         public event EventHandler<ClientActivityArgs> OnClientActivity;
         public event EventHandler<ClientDisconnectedArgs> OnClientDisconnected;
 
-        public KRPCServer (IPAddress address, ushort port)
+        public KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort)
         {
-            tcpServer = new TCPServer ("RPCServer", address, port);
-            rpcServer = new RPCServer (tcpServer);
+            rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
+            streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
+            rpcServer = new RPCServer (rpcTcpServer);
+            streamServer = new StreamServer (streamTcpServer);
             clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
             continuations = new List<RequestContinuation> ();
 
@@ -70,25 +75,35 @@ namespace KRPC
         public void Start ()
         {
             rpcServer.Start ();
+            streamServer.Start ();
         }
 
         public void Stop ()
         {
             rpcServer.Stop ();
+            streamServer.Stop ();
         }
 
         public IPAddress Address {
-            get { return tcpServer.Address; }
-            set { tcpServer.Address = value; }
+            get { return rpcTcpServer.Address; }
+            set {
+                rpcTcpServer.Address = value;
+                streamTcpServer.Address = value;
+            }
         }
 
-        public ushort Port {
-            get { return tcpServer.Port; }
-            set { tcpServer.Port = value; }
+        public ushort RPCPort {
+            get { return rpcTcpServer.Port; }
+            set { rpcTcpServer.Port = value; }
+        }
+
+        public ushort StreamPort {
+            get { return streamTcpServer.Port; }
+            set { streamTcpServer.Port = value; }
         }
 
         public bool Running {
-            get { return rpcServer.Running; }
+            get { return rpcServer.Running && streamServer.Running; }
         }
 
         public IEnumerable<IClient> Clients {
@@ -108,6 +123,7 @@ namespace KRPC
             Stopwatch timer = Stopwatch.StartNew ();
             do {
                 rpcServer.Update ();
+                streamServer.Update ();
 
                 // Check for new requests from clients
                 PollRequests ();
