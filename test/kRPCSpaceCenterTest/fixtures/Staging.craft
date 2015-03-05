@@ -1,21 +1,28 @@
 ship = Staging
-version = 0.24.1
+version = 0.90.0
 description = 
 type = VAB
+size = 6.39435,21.42825,6.394351
 PART
 {
 	part = Mark1-2Pod_4294138784
 	partName = Part
 	pos = -6.802042E-05,24.47405,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 0
 	dstg = 0
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = stackSeparator_4294138674
 	link = stackSeparatorBig_4294138544
 	link = parachuteRadial_4294136308
@@ -28,6 +35,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -59,17 +69,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleSAS
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -265,20 +264,9 @@ PART
 		ACTIONS
 		{
 		}
-		Surfaced
+		Log
 		{
-		}
-		Flew
-		{
-		}
-		FlewBy
-		{
-		}
-		Orbited
-		{
-		}
-		SubOrbited
-		{
+			flight = 0
 		}
 	}
 	RESOURCE
@@ -307,15 +295,21 @@ PART
 	part = stackSeparator_4294138674
 	partName = Part
 	pos = -6.802042E-05,25.85054,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 1
 	sidx = 1
 	sqor = 2
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = LaunchEscapeSystem_4294138636
 	attN = bottom,Mark1-2Pod_4294138784
 	attN = top,LaunchEscapeSystem_4294138636
@@ -323,6 +317,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -380,20 +377,29 @@ PART
 	part = LaunchEscapeSystem_4294138636
 	partName = Part
 	pos = -6.802042E-05,27.40639,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 2
 	sidx = 0
 	sqor = 2
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	attN = bottom,stackSeparator_4294138674
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -493,15 +499,21 @@ PART
 	part = stackSeparatorBig_4294138544
 	partName = Part
 	pos = -6.802042E-05,23.89481,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 1
 	dstg = 1
 	sidx = 0
 	sqor = 1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank2-2_4294138502
 	attN = bottom,fuelTank2-2_4294138502
 	attN = top,Mark1-2Pod_4294138784
@@ -509,6 +521,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -566,15 +581,21 @@ PART
 	part = fuelTank2-2_4294138502
 	partName = Part
 	pos = -6.802042E-05,22.85731,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 2
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = engineLargeSkipper_4294138474
 	link = radialDecoupler2_4294138090
 	link = radialDecoupler2_4294138044
@@ -590,6 +611,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -618,15 +642,21 @@ PART
 	part = engineLargeSkipper_4294138474
 	partName = Part
 	pos = -6.802042E-05,21.91981,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 2
 	sidx = 3
 	sqor = 4
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = decoupler1-2_4294138364
 	attN = top,fuelTank2-2_4294138502
 	attN = bottom,decoupler1-2_4294138364
@@ -634,6 +664,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -821,15 +854,21 @@ PART
 	part = decoupler1-2_4294138364
 	partName = Part
 	pos = -6.802042E-05,19.09395,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 3
 	sidx = 4
 	sqor = 4
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank2-2_4294138296
 	attN = bottom,fuelTank2-2_4294138296
 	attN = top,engineLargeSkipper_4294138474
@@ -837,6 +876,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -894,15 +936,21 @@ PART
 	part = fuelTank2-2_4294138296
 	partName = Part
 	pos = -6.802042E-05,17.79098,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = engineLargeSkipper_4294138268
 	link = sepMotor1_4294135764
 	link = sepMotor1_4294121740
@@ -914,6 +962,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -942,15 +993,21 @@ PART
 	part = engineLargeSkipper_4294138268
 	partName = Part
 	pos = -6.802042E-05,16.85348,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 5
 	dstg = 4
 	sidx = 3
 	sqor = 5
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = decoupler1-2_4294138158
 	attN = top,fuelTank2-2_4294138296
 	attN = bottom,decoupler1-2_4294138158
@@ -958,6 +1015,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1145,15 +1205,21 @@ PART
 	part = decoupler1-2_4294138158
 	partName = Part
 	pos = -6.802042E-05,14.02762,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 5
 	dstg = 5
 	sidx = 4
 	sqor = 5
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank2-2_4294137298
 	attN = bottom,fuelTank2-2_4294137298
 	attN = top,engineLargeSkipper_4294138268
@@ -1161,6 +1227,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1218,15 +1287,21 @@ PART
 	part = radialDecoupler2_4294138090
 	partName = Part
 	pos = -6.8024E-05,22.81484,1.22909
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0.7071068,0,0.7071068
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 3
 	sidx = 4
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank_4294137906
 	sym = radialDecoupler2_4294138044
 	sym = radialDecoupler2_4294137998
@@ -1236,6 +1311,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1293,15 +1371,21 @@ PART
 	part = radialDecoupler2_4294138044
 	partName = Part
 	pos = 1.179602,22.81484,0.04941936
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,1,0,0
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 3
 	sidx = 5
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank_4294137782
 	sym = radialDecoupler2_4294138090
 	sym = radialDecoupler2_4294137998
@@ -1311,6 +1395,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1368,15 +1455,21 @@ PART
 	part = radialDecoupler2_4294137998
 	partName = Part
 	pos = -6.811997E-05,22.81484,-1.130251
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0.7071068,0,-0.7071068
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 3
 	sidx = 6
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank_4294137658
 	sym = radialDecoupler2_4294138090
 	sym = radialDecoupler2_4294138044
@@ -1386,6 +1479,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1443,15 +1539,21 @@ PART
 	part = radialDecoupler2_4294137952
 	partName = Part
 	pos = -1.179738,22.81484,0.04941935
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,-1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 3
 	sidx = 7
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank_4294137534
 	sym = radialDecoupler2_4294138090
 	sym = radialDecoupler2_4294138044
@@ -1461,6 +1563,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1518,15 +1623,21 @@ PART
 	part = fuelTank_4294137906
 	partName = Part
 	pos = -6.76913E-05,22.79128,2.477268
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,-0.7071069,0,-0.7071068
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = liquidEngine_4294137874
 	link = noseCone_4294137382
 	link = sepMotor1_4294135644
@@ -1541,6 +1652,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -1569,15 +1683,21 @@ PART
 	part = liquidEngine_4294137874
 	partName = Part
 	pos = -6.762703E-05,20.97695,2.477268
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 2.603227E-07,-0.6087613,-1.502973E-07,0.7933536
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 4
 	sidx = 0
 	sqor = 6
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = liquidEngine_4294137750
 	sym = liquidEngine_4294137626
 	sym = liquidEngine_4294137502
@@ -1586,6 +1706,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1711,15 +1834,21 @@ PART
 	part = fuelTank_4294137782
 	partName = Part
 	pos = 2.427781,22.79128,0.04941918
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,-1,0,8.42937E-08
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = liquidEngine_4294137750
 	link = noseCone_4294137410
 	link = sepMotor1_4294118494
@@ -1734,6 +1863,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -1762,15 +1894,21 @@ PART
 	part = liquidEngine_4294137750
 	partName = Part
 	pos = 2.42778,20.97695,0.04941911
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 7.779977E-08,0.1305264,-2.903522E-07,0.9914449
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 4
 	sidx = 1
 	sqor = 6
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = liquidEngine_4294137874
 	sym = liquidEngine_4294137626
 	sym = liquidEngine_4294137502
@@ -1779,6 +1917,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1904,15 +2045,21 @@ PART
 	part = fuelTank_4294137658
 	partName = Part
 	pos = -6.837828E-05,22.79128,-2.37843
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,-0.7071067,0,0.7071069
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = liquidEngine_4294137626
 	link = noseCone_4294137354
 	link = sepMotor1_4294118440
@@ -1927,6 +2074,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -1955,15 +2105,21 @@ PART
 	part = liquidEngine_4294137626
 	partName = Part
 	pos = -6.844255E-05,20.97695,-2.378429
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -1.502973E-07,0.7933534,-2.603227E-07,0.6087615
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 4
 	sidx = 2
 	sqor = 6
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = liquidEngine_4294137874
 	sym = liquidEngine_4294137750
 	sym = liquidEngine_4294137502
@@ -1972,6 +2128,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2097,15 +2256,21 @@ PART
 	part = fuelTank_4294137534
 	partName = Part
 	pos = -2.427917,22.79128,0.04941953
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,8.42937E-08,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = liquidEngine_4294137502
 	link = noseCone_4294137326
 	link = sepMotor1_4294118386
@@ -2120,6 +2285,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -2148,15 +2316,21 @@ PART
 	part = liquidEngine_4294137502
 	partName = Part
 	pos = -2.427916,20.97695,0.0494196
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -2.903522E-07,0.9914449,-7.779977E-08,-0.1305264
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 4
 	sidx = 3
 	sqor = 6
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = liquidEngine_4294137874
 	sym = liquidEngine_4294137750
 	sym = liquidEngine_4294137626
@@ -2165,6 +2339,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2290,15 +2467,21 @@ PART
 	part = noseCone_4294137410
 	partName = Part
 	pos = 2.427781,23.75697,0.04941918
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294137382
 	sym = noseCone_4294137354
 	sym = noseCone_4294137326
@@ -2309,21 +2492,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = noseCone_4294137382
 	partName = Part
 	pos = -6.76913E-05,23.75697,2.477268
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,-0.7071069,0,0.7071068
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294137410
 	sym = noseCone_4294137354
 	sym = noseCone_4294137326
@@ -2334,21 +2526,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = noseCone_4294137354
 	partName = Part
 	pos = -6.837828E-05,23.75697,-2.378431
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0.7071068,0,0.7071069
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294137410
 	sym = noseCone_4294137382
 	sym = noseCone_4294137326
@@ -2359,21 +2560,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = noseCone_4294137326
 	partName = Part
 	pos = -2.427917,23.75697,0.04941953
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,1,0,0
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294137410
 	sym = noseCone_4294137382
 	sym = noseCone_4294137354
@@ -2384,21 +2594,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = fuelTank2-2_4294137298
 	partName = Part
 	pos = -6.802042E-05,12.72465,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 6
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = engineLargeSkipper_4294137270
 	link = radialDecoupler2_4294137160
 	link = radialDecoupler2_4294137046
@@ -2415,6 +2634,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -2443,20 +2665,29 @@ PART
 	part = engineLargeSkipper_4294137270
 	partName = Part
 	pos = -6.802042E-05,11.78715,0.04941928
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 10
 	dstg = 6
 	sidx = 0
 	sqor = 10
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	attN = top,fuelTank2-2_4294137298
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2644,15 +2875,21 @@ PART
 	part = radialDecoupler2_4294137160
 	partName = Part
 	pos = 1.023513,12.71746,0.6403839
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0.9659259,0,0.258819
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 7
 	sidx = 0
 	sqor = 8
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = solidBooster1-1_4294137114
 	sym = radialDecoupler2_4294137046
 	srfN = srfAttach,fuelTank2-2_4294137298
@@ -2660,6 +2897,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2717,15 +2957,21 @@ PART
 	part = solidBooster1-1_4294137114
 	partName = Part
 	pos = 2.1078,12.43923,1.266397
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0.5000002,0,0.8660254
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 10
 	dstg = 8
 	sidx = 2
 	sqor = 10
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = noseCone_4294136420
 	link = sepMotor1_4294126272
 	link = sepMotor1_4294126508
@@ -2738,6 +2984,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleEngines
@@ -2746,7 +2995,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9
+		currentThrottle = 0.987629
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -2846,15 +3095,21 @@ PART
 	part = radialDecoupler2_4294137046
 	partName = Part
 	pos = -1.023649,12.71746,-0.5415452
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0.258819,0,-0.9659259
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 7
 	sidx = 1
 	sqor = 8
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = solidBooster1-1_4294137000
 	sym = radialDecoupler2_4294137160
 	srfN = srfAttach,fuelTank2-2_4294137298
@@ -2862,6 +3117,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2919,15 +3177,21 @@ PART
 	part = solidBooster1-1_4294137000
 	partName = Part
 	pos = -2.107936,12.43923,-1.167559
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0.8660254,0,-0.5000002
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 10
 	dstg = 8
 	sidx = 3
 	sqor = 10
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = noseCone_4294136392
 	link = sepMotor1_4294123868
 	link = sepMotor1_4294123340
@@ -2940,6 +3204,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleEngines
@@ -2948,7 +3215,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9
+		currentThrottle = 0.987629
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -3048,15 +3315,21 @@ PART
 	part = radialDecoupler2_4294136932
 	partName = Part
 	pos = 1.019624,12.6997,-0.5393004
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0.9659259,0,-0.2588191
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 9
 	dstg = 7
 	sidx = 2
 	sqor = 9
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = solidBooster1-1_4294136886
 	sym = radialDecoupler2_4294136818
 	srfN = srfAttach,fuelTank2-2_4294137298
@@ -3064,6 +3337,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -3121,15 +3397,21 @@ PART
 	part = solidBooster1-1_4294136886
 	partName = Part
 	pos = 2.103914,12.42147,-1.165314
-	rot = 0,0.8660256,0,0.5
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 0,0.8660255,0,0.5
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 10
 	dstg = 8
 	sidx = 4
 	sqor = 10
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = noseCone_4294136476
 	link = sepMotor1_4294128440
 	link = sepMotor1_4294127952
@@ -3142,6 +3424,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleEngines
@@ -3150,7 +3435,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9
+		currentThrottle = 0.987629
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -3250,15 +3535,21 @@ PART
 	part = radialDecoupler2_4294136818
 	partName = Part
 	pos = -1.01976,12.6997,0.638139
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,-0.2588191,0,-0.9659259
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 9
 	dstg = 7
 	sidx = 3
 	sqor = 9
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = solidBooster1-1_4294136772
 	sym = radialDecoupler2_4294136932
 	srfN = srfAttach,fuelTank2-2_4294137298
@@ -3266,6 +3557,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -3323,15 +3617,21 @@ PART
 	part = solidBooster1-1_4294136772
 	partName = Part
 	pos = -2.104047,12.42147,1.264152
-	rot = 0,0.5,0,-0.8660256
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 0,0.5,0,-0.8660255
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 10
 	dstg = 8
 	sidx = 5
 	sqor = 10
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = noseCone_4294136448
 	link = sepMotor1_4294124110
 	link = sepMotor1_4294123050
@@ -3344,6 +3644,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleEngines
@@ -3352,7 +3655,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9
+		currentThrottle = 0.987629
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -3452,15 +3755,21 @@ PART
 	part = radialDecoupler2_4294136704
 	partName = Part
 	pos = -6.782004E-05,12.69063,1.226866
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,-0.7071068,0,-0.7071068
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 7
 	dstg = 7
 	sidx = 2
 	sqor = 7
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = solidBooster1-1_4294136658
 	sym = radialDecoupler2_4294136590
 	srfN = srfAttach,fuelTank2-2_4294137298
@@ -3468,6 +3777,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -3525,15 +3837,21 @@ PART
 	part = solidBooster1-1_4294136658
 	partName = Part
 	pos = -6.760113E-05,12.4124,2.478893
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,-1.192093E-07,0,-1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 10
 	dstg = 8
 	sidx = 1
 	sqor = 10
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = noseCone_4294136364
 	link = sepMotor1_4294124348
 	link = sepMotor1_4294124824
@@ -3546,6 +3864,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleEngines
@@ -3554,7 +3875,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9
+		currentThrottle = 0.987629
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -3654,15 +3975,21 @@ PART
 	part = radialDecoupler2_4294136590
 	partName = Part
 	pos = -6.832374E-05,12.69063,-1.128028
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,-0.7071067,0,0.7071069
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 7
 	dstg = 7
 	sidx = 3
 	sqor = 7
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = solidBooster1-1_4294136544
 	sym = radialDecoupler2_4294136704
 	srfN = srfAttach,fuelTank2-2_4294137298
@@ -3670,6 +3997,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -3727,15 +4057,21 @@ PART
 	part = solidBooster1-1_4294136544
 	partName = Part
 	pos = -6.831878E-05,12.4124,-2.380054
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,-1,0,1.788139E-07
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 10
 	dstg = 8
 	sidx = 6
 	sqor = 10
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = noseCone_4294136336
 	link = sepMotor1_4294125808
 	link = sepMotor1_4294123604
@@ -3748,6 +4084,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleEngines
@@ -3756,7 +4095,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9
+		currentThrottle = 0.987629
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -3856,15 +4195,21 @@ PART
 	part = noseCone_4294136476
 	partName = Part
 	pos = 2.103914,16.36097,-1.165314
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 8
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294136448
 	attN = bottom01,solidBooster1-1_4294136886
 	EVENTS
@@ -3873,21 +4218,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = noseCone_4294136448
 	partName = Part
 	pos = -2.104047,16.36097,1.264152
-	rot = 0,1,0,-5.960464E-08
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 0,1,0,-7.450581E-08
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 8
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294136476
 	attN = bottom01,solidBooster1-1_4294136772
 	EVENTS
@@ -3896,21 +4250,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = noseCone_4294136420
 	partName = Part
 	pos = 2.1078,16.37872,1.266398
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,-1.341105E-07,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 8
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294136392
 	attN = bottom01,solidBooster1-1_4294137114
 	EVENTS
@@ -3919,21 +4282,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = noseCone_4294136392
 	partName = Part
 	pos = -2.107936,16.37872,-1.167559
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,1,0,-1.490116E-08
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 8
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294136420
 	attN = bottom01,solidBooster1-1_4294137000
 	EVENTS
@@ -3942,21 +4314,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = noseCone_4294136364
 	partName = Part
 	pos = -6.760113E-05,16.35189,2.478893
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 8
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294136336
 	attN = bottom01,solidBooster1-1_4294136658
 	EVENTS
@@ -3965,21 +4346,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = noseCone_4294136336
 	partName = Part
 	pos = -6.831878E-05,16.35189,-2.380055
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,1,0,-8.940697E-08
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 8
 	sidx = -1
 	sqor = -1
 	attm = 0
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294136364
 	attN = bottom01,solidBooster1-1_4294136544
 	EVENTS
@@ -3988,21 +4378,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = parachuteRadial_4294136308
 	partName = Part
 	pos = -0.5986871,24.93988,0.6480382
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.0696513,-0.8977355,0.185456,-0.3934792
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 0
 	dstg = 0
 	sidx = 0
 	sqor = 0
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = parachuteRadial_4294136262
 	sym = parachuteRadial_4294136216
 	sym = parachuteRadial_4294136170
@@ -4011,6 +4410,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -4111,15 +4513,21 @@ PART
 	part = parachuteRadial_4294136262
 	partName = Part
 	pos = 0.5985509,24.93988,0.6480383
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0.08188628,-0.9130266,0.1803881,0.3565631
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 0
 	dstg = 0
 	sidx = 1
 	sqor = 0
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = parachuteRadial_4294136308
 	sym = parachuteRadial_4294136216
 	sym = parachuteRadial_4294136170
@@ -4128,6 +4536,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -4228,15 +4639,21 @@ PART
 	part = parachuteRadial_4294136216
 	partName = Part
 	pos = 0.598551,24.93988,-0.5491997
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0.185456,-0.3934791,0.06965129,0.8977355
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 0
 	dstg = 0
 	sidx = 2
 	sqor = 0
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = parachuteRadial_4294136308
 	sym = parachuteRadial_4294136262
 	sym = parachuteRadial_4294136170
@@ -4245,6 +4662,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -4345,15 +4765,21 @@ PART
 	part = parachuteRadial_4294136170
 	partName = Part
 	pos = -0.5986869,24.93988,-0.5491997
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0.1803881,0.3565631,-0.08188628,0.9130266
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 0
 	dstg = 0
 	sidx = 3
 	sqor = 0
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = parachuteRadial_4294136308
 	sym = parachuteRadial_4294136262
 	sym = parachuteRadial_4294136216
@@ -4362,6 +4788,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -4462,15 +4891,21 @@ PART
 	part = sepMotor1_4294135484
 	partName = Part
 	pos = 0.8692238,22.89085,0.9187109
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.3826835,5.371527E-07,-0.9238796,-1.4393E-07
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 1
 	dstg = 2
 	sidx = 4
 	sqor = 1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135444
 	sym = sepMotor1_4294135404
 	sym = sepMotor1_4294135364
@@ -4479,6 +4914,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -4578,15 +5016,21 @@ PART
 	part = sepMotor1_4294135444
 	partName = Part
 	pos = 0.8692237,22.89085,-0.8198724
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.9238796,2.780504E-07,-0.3826834,-4.815982E-07
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 1
 	dstg = 2
 	sidx = 1
 	sqor = 1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135484
 	sym = sepMotor1_4294135404
 	sym = sepMotor1_4294135364
@@ -4595,6 +5039,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -4694,15 +5141,21 @@ PART
 	part = sepMotor1_4294135404
 	partName = Part
 	pos = -0.8693599,22.89085,-0.8198723
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.9238796,-1.4393E-07,0.3826835,-5.371527E-07
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 1
 	dstg = 2
 	sidx = 2
 	sqor = 1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135484
 	sym = sepMotor1_4294135444
 	sym = sepMotor1_4294135364
@@ -4711,6 +5164,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -4810,15 +5266,21 @@ PART
 	part = sepMotor1_4294135364
 	partName = Part
 	pos = -0.8693596,22.89085,0.9187111
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.3826834,-4.815982E-07,0.9238796,-2.780504E-07
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 1
 	dstg = 2
 	sidx = 3
 	sqor = 1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135484
 	sym = sepMotor1_4294135444
 	sym = sepMotor1_4294135404
@@ -4827,6 +5289,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -4926,21 +5391,30 @@ PART
 	part = sepMotor1_4294125808
 	partName = Part
 	pos = 0.6213974,9.678591,-2.380054
-	rot = -0.7071068,-7.38376E-08,-0.7071068,5.665741E-08
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.7071068,-7.38376E-08,-0.7071069,5.665741E-08
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 7
 	dstg = 8
 	sidx = 1
 	sqor = 7
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294124348
 	srfN = srfAttach,solidBooster1-1_4294136544
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -5039,22 +5513,31 @@ PART
 {
 	part = sepMotor1_4294124348
 	partName = Part
-	pos = -0.6215335,9.678591,2.478894
-	rot = 0.7071069,-5.665741E-08,-0.7071069,-7.383761E-08
+	pos = -0.6215336,9.678591,2.478894
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 0.7071069,-5.665741E-08,-0.7071069,-7.383762E-08
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 7
 	dstg = 8
 	sidx = 1
 	sqor = 7
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294125808
 	srfN = srfAttach,solidBooster1-1_4294136658
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -5153,22 +5636,31 @@ PART
 {
 	part = sepMotor1_4294128440
 	partName = Part
-	pos = 2.413549,9.652812,-0.6290134
-	rot = -0.258819,-1.301528E-07,-0.9659262,5.391124E-08
+	pos = 2.41355,9.652812,-0.6290135
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.258819,-1.301528E-07,-0.9659261,5.391123E-08
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 9
 	dstg = 8
 	sidx = 0
 	sqor = 9
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294124110
 	srfN = srfAttach,solidBooster1-1_4294136886
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -5267,22 +5759,31 @@ PART
 {
 	part = sepMotor1_4294124110
 	partName = Part
-	pos = -2.413682,9.652812,0.7278511
-	rot = -0.9659261,5.391123E-08,0.258819,1.301528E-07
+	pos = -2.413682,9.652812,0.727851
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.9659261,5.391122E-08,0.258819,1.301528E-07
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 9
 	dstg = 8
 	sidx = 0
 	sqor = 9
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294128440
 	srfN = srfAttach,solidBooster1-1_4294136772
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -5382,21 +5883,30 @@ PART
 	part = sepMotor1_4294126272
 	partName = Part
 	pos = 1.796383,9.715323,1.805788
-	rot = -0.2588192,8.815876E-08,0.9659259,1.160624E-08
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.2588193,8.815876E-08,0.9659259,1.160624E-08
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 8
 	sidx = -1
 	sqor = -1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294123868
 	srfN = srfAttach,solidBooster1-1_4294137114
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -5496,21 +6006,30 @@ PART
 	part = sepMotor1_4294123868
 	partName = Part
 	pos = -1.796519,9.715323,-1.70695
-	rot = 0.9659259,1.160624E-08,0.2588192,-8.815877E-08
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 0.9659259,1.160624E-08,0.2588193,-8.815876E-08
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 8
 	sidx = -1
 	sqor = -1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294126272
 	srfN = srfAttach,solidBooster1-1_4294137000
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -5609,22 +6128,31 @@ PART
 {
 	part = sepMotor1_4294124824
 	partName = Part
-	pos = 0.6232753,9.664945,2.478894
+	pos = 0.6232754,9.664945,2.478894
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.7071069,8.867129E-11,-0.7071069,-6.803964E-11
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 7
 	dstg = 8
 	sidx = 1
 	sqor = 7
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294123604
 	srfN = srfAttach,solidBooster1-1_4294136658
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -5724,21 +6252,30 @@ PART
 	part = sepMotor1_4294123604
 	partName = Part
 	pos = -0.6234112,9.664945,-2.380054
-	rot = -0.7071068,-6.803966E-11,0.7071068,-8.867128E-11
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.7071069,-6.803966E-11,0.7071068,-8.867129E-11
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 7
 	dstg = 8
 	sidx = 1
 	sqor = 7
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294124824
 	srfN = srfAttach,solidBooster1-1_4294136544
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -5838,21 +6375,30 @@ PART
 	part = sepMotor1_4294126508
 	partName = Part
 	pos = 2.414038,9.765276,0.7359784
-	rot = -0.965926,1.160624E-08,-0.258819,-8.815876E-08
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.965926,1.160624E-08,-0.258819,-8.815875E-08
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 8
 	sidx = -1
 	sqor = -1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294123340
 	srfN = srfAttach,solidBooster1-1_4294137114
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -5951,22 +6497,31 @@ PART
 {
 	part = sepMotor1_4294123340
 	partName = Part
-	pos = -2.414173,9.765276,-0.6371405
-	rot = -0.258819,-8.815876E-08,0.965926,-1.160624E-08
+	pos = -2.414173,9.765276,-0.6371407
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.258819,-8.815875E-08,0.965926,-1.160624E-08
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 8
 	dstg = 8
 	sidx = -1
 	sqor = -1
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294126508
 	srfN = srfAttach,solidBooster1-1_4294137000
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -6066,21 +6621,30 @@ PART
 	part = sepMotor1_4294127952
 	partName = Part
 	pos = 1.791914,9.685286,-1.705716
-	rot = -0.9659262,-5.391124E-08,0.258819,-1.301528E-07
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.9659261,-5.391123E-08,0.258819,-1.301528E-07
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 9
 	dstg = 8
 	sidx = 0
 	sqor = 9
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294123050
 	srfN = srfAttach,solidBooster1-1_4294136886
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -6180,21 +6744,30 @@ PART
 	part = sepMotor1_4294123050
 	partName = Part
 	pos = -1.792047,9.685286,1.804554
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0.258819,-1.301528E-07,0.9659261,5.391124E-08
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 9
 	dstg = 8
 	sidx = 0
 	sqor = 9
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294127952
 	srfN = srfAttach,solidBooster1-1_4294136772
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -6294,15 +6867,21 @@ PART
 	part = sepMotor1_4294135884
 	partName = Part
 	pos = 0.6036357,12.73213,1.095065
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.2588191,0,-0.9659259,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 5
 	dstg = 6
 	sidx = 0
 	sqor = 5
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294122274
 	sym = sepMotor1_4294122220
 	srfN = srfAttach,fuelTank2-2_4294137298
@@ -6310,6 +6889,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -6408,16 +6990,22 @@ PART
 {
 	part = sepMotor1_4294122274
 	partName = Part
-	pos = 0.6036357,12.73213,-0.9962264
+	pos = 0.6036357,12.73213,-0.9962263
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.9659259,0,-0.258819,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 5
 	dstg = 6
 	sidx = 0
 	sqor = 5
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135884
 	sym = sepMotor1_4294122220
 	srfN = srfAttach,fuelTank2-2_4294137298
@@ -6425,6 +7013,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -6524,15 +7115,21 @@ PART
 	part = sepMotor1_4294122220
 	partName = Part
 	pos = -1.207476,12.73213,0.04941932
-	rot = -0.7071068,0,0.7071069,0
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.7071068,0,0.7071068,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 5
 	dstg = 6
 	sidx = 0
 	sqor = 5
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135884
 	sym = sepMotor1_4294122274
 	srfN = srfAttach,fuelTank2-2_4294137298
@@ -6540,6 +7137,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -6639,15 +7239,21 @@ PART
 	part = sepMotor1_4294135764
 	partName = Part
 	pos = 0.876505,17.82219,0.9259922
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.3826835,5.371527E-07,-0.9238796,-1.4393E-07
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = 0
 	sqor = 4
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294121740
 	sym = sepMotor1_4294121686
 	sym = sepMotor1_4294121632
@@ -6656,6 +7262,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -6755,15 +7364,21 @@ PART
 	part = sepMotor1_4294121740
 	partName = Part
 	pos = 0.8765049,17.82219,-0.8271536
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.9238796,2.780505E-07,-0.3826834,-4.815982E-07
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = 0
 	sqor = 4
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135764
 	sym = sepMotor1_4294121686
 	sym = sepMotor1_4294121632
@@ -6772,6 +7387,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -6871,15 +7489,21 @@ PART
 	part = sepMotor1_4294121686
 	partName = Part
 	pos = -0.876641,17.82219,-0.8271536
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.9238796,-1.4393E-07,0.3826835,-5.371527E-07
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = 0
 	sqor = 4
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135764
 	sym = sepMotor1_4294121740
 	sym = sepMotor1_4294121632
@@ -6888,6 +7512,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -6987,15 +7614,21 @@ PART
 	part = sepMotor1_4294121632
 	partName = Part
 	pos = -0.8766408,17.82219,0.9259923
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.3826834,-4.815982E-07,0.9238796,-2.780505E-07
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = 0
 	sqor = 4
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135764
 	sym = sepMotor1_4294121740
 	sym = sepMotor1_4294121686
@@ -7004,6 +7637,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -7102,16 +7738,22 @@ PART
 {
 	part = sepMotor1_4294135644
 	partName = Part
-	pos = 0.622447,22.2839,2.477269
+	pos = 0.6224471,22.2839,2.477269
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.7071068,0,-0.7071069,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 4
 	sidx = 0
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294118494
 	sym = sepMotor1_4294118440
 	sym = sepMotor1_4294118386
@@ -7120,6 +7762,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -7219,15 +7864,21 @@ PART
 	part = sepMotor1_4294118494
 	partName = Part
 	pos = 2.427782,22.2839,-0.5730956
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -1,0,7.105427E-15,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 4
 	sidx = 0
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135644
 	sym = sepMotor1_4294118440
 	sym = sepMotor1_4294118386
@@ -7236,6 +7887,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -7334,16 +7988,22 @@ PART
 {
 	part = sepMotor1_4294118440
 	partName = Part
-	pos = -0.6225832,22.2839,-2.378431
-	rot = -0.7071068,0,0.7071068,0
+	pos = -0.6225833,22.2839,-2.378431
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.7071069,0,0.7071068,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 4
 	sidx = 0
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135644
 	sym = sepMotor1_4294118494
 	sym = sepMotor1_4294118386
@@ -7352,6 +8012,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -7451,15 +8114,21 @@ PART
 	part = sepMotor1_4294118386
 	partName = Part
 	pos = -2.427918,22.2839,0.6719342
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 7.105427E-15,0,1,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 4
 	sidx = 0
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294135644
 	sym = sepMotor1_4294118494
 	sym = sepMotor1_4294118440
@@ -7468,6 +8137,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -7567,15 +8239,21 @@ PART
 	part = sepMotor1_4294120218
 	partName = Part
 	pos = -0.61976,22.26594,2.477269
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.7071069,0,0.7071068,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 4
 	sidx = 0
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294118050
 	sym = sepMotor1_4294117996
 	sym = sepMotor1_4294117942
@@ -7584,6 +8262,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -7683,15 +8364,21 @@ PART
 	part = sepMotor1_4294118050
 	partName = Part
 	pos = 2.427781,22.26594,0.6691115
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 7.105427E-15,0,1,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 4
 	sidx = 0
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294120218
 	sym = sepMotor1_4294117996
 	sym = sepMotor1_4294117942
@@ -7700,6 +8387,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -7798,16 +8488,22 @@ PART
 {
 	part = sepMotor1_4294117996
 	partName = Part
-	pos = 0.619624,22.26594,-2.378431
-	rot = 0.7071068,0,0.7071068,0
+	pos = 0.6196241,22.26594,-2.378431
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 0.7071068,0,0.7071069,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 4
 	sidx = 0
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294120218
 	sym = sepMotor1_4294118050
 	sym = sepMotor1_4294117942
@@ -7816,6 +8512,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -7915,15 +8614,21 @@ PART
 	part = sepMotor1_4294117942
 	partName = Part
 	pos = -2.427917,22.26594,-0.5702728
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 1,0,-7.105427E-15,0
 	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 4
 	sidx = 0
 	sqor = 3
 	attm = 1
 	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294120218
 	sym = sepMotor1_4294118050
 	sym = sepMotor1_4294117996
@@ -7932,6 +8637,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
