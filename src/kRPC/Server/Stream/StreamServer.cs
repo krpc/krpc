@@ -110,9 +110,10 @@ namespace KRPC.Server.Stream
         {
             if (!pendingClients.ContainsKey (args.Client)) {
                 // A new client connection attempt. Verify the hello message.
-                if (CheckHelloMessage (args.Client)) {
+                var guid = CheckHelloMessage (args.Client);
+                if (guid != Guid.Empty) {
                     // Hello message OK, add it to the pending clients
-                    var client = new StreamClient (args.Client);
+                    var client = new StreamClient (args.Client, guid);
                     pendingClients [args.Client] = client;
                 } else {
                     // Deny the connection, don't add it to pending clients
@@ -152,9 +153,9 @@ namespace KRPC.Server.Stream
         /// <summary>
         /// Read hello message from client, and client identifier and check they are correct.
         /// This is triggered whenever a client connects to the server.
-        /// Returns true if the hello message and client identifier are valid.
+        /// Returns the guid of the client, or Guid.Empty if the hello message and client identifier are valid.
         /// </summary>
-        bool CheckHelloMessage (IClient<byte,byte> client)
+        Guid CheckHelloMessage (IClient<byte,byte> client)
         {
             Logger.WriteLine ("StreamServer: Waiting for hello message from client...");
             var buffer = new byte[expectedHeader.Length + identifierLength];
@@ -163,7 +164,7 @@ namespace KRPC.Server.Stream
             // Failed to read enough bytes in sufficient time, so kill the connection
             if (read != buffer.Length) {
                 Logger.WriteLine ("StreamServer: Client connection abandoned. Timed out waiting for hello message.");
-                return false;
+                return Guid.Empty;
             }
 
             // Extract bytes for header and identifier
@@ -176,7 +177,7 @@ namespace KRPC.Server.Stream
             if (!CheckHelloMessageHeader (header)) {
                 string hex = ("0x" + BitConverter.ToString (header)).Replace ("-", " 0x");
                 Logger.WriteLine ("StreamServer: Client connection abandoned. Invalid hello message received (" + hex + ")");
-                return false;
+                return Guid.Empty;
             }
 
             // Validate and decode the identifier
@@ -187,14 +188,14 @@ namespace KRPC.Server.Stream
             } catch (ArgumentException) {
                 string hex = ("0x" + BitConverter.ToString (identifier)).Replace ("-", " 0x");
                 Logger.WriteLine ("StreamServer: Client connection abandoned. Failed to decode client identifier (" + hex + ")");
-                return false;
+                return Guid.Empty;
             }
 
             // TODO: check the client identifier
 
             // Valid header and identifier received
             Logger.WriteLine ("StreamServer: Correct hello message received from client '" + identifierGuid.ToString() + "'");
-            return true;
+            return identifierGuid;
         }
 
         /// <summary>

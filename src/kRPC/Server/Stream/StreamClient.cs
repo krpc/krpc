@@ -7,9 +7,10 @@ namespace KRPC.Server.Stream
     {
         readonly IClient<byte,byte> client;
 
-        public StreamClient (IClient<byte,byte> client)
+        public StreamClient (IClient<byte,byte> client, Guid guid)
         {
             this.client = client;
+            Guid = guid;
             Stream = new StreamStream (client.Stream);
         }
 
@@ -17,9 +18,7 @@ namespace KRPC.Server.Stream
             get { return client.Name; }
         }
 
-        public Guid Guid {
-            get { return client.Guid; }
-        }
+        public Guid Guid { get; private set; }
 
         public string Address {
             get { return client.Address; }
