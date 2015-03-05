@@ -1,4 +1,6 @@
 v0.1.4
+ - Add KSP AppLauncher button
+ - No longer bundle Toolbar plugin (kRPC will still use Toolbar plugin if available)
  - Add KSP-AVC for version checking (#64)
  - Add support for tuples (#49)
  - Remove vector type, replace with tuples (#50)
