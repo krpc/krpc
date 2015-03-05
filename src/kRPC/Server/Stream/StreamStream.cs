@@ -4,7 +4,7 @@ using KRPC.Schema.KRPC;
 
 namespace KRPC.Server.Stream
 {
-    sealed class StreamStream : IStream<byte,StreamResponse>
+    sealed class StreamStream : IStream<byte,StreamMessage>
     {
         readonly IStream<byte,byte> stream;
 
@@ -34,14 +34,14 @@ namespace KRPC.Server.Stream
             throw new NotImplementedException ();
         }
 
-        public void Write (StreamResponse value)
+        public void Write (StreamMessage value)
         {
             var tempBuffer = new MemoryStream ();
             value.WriteDelimitedTo (tempBuffer);
             stream.Write (tempBuffer.ToArray ());
         }
 
-        public void Write (StreamResponse[] value)
+        public void Write (StreamMessage[] value)
         {
             throw new NotImplementedException ();
         }
