@@ -5,7 +5,6 @@ KSP_DIR := $(shell readlink -f "$(KSP_DIR)")
 
 SERVER_VERSION = $(shell cat VERSION.txt)
 PYTHON_CLIENT_VERSION = $(shell grep "version=" python/setup.py | sed "s/\s*version='\(.*\)',/\1/")
-TOOLBAR_VERSION = 1.7.8
 
 DIST_DIR = dist
 DIST_LIBS = \
@@ -67,14 +66,9 @@ dist: build dist-python
 	mkdir -p $(DIST_DIR)/GameData/kRPC
 	# Plugin files
 	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
-	# Toolbar
-	$(UNZIP) lib/toolbar/Toolbar-$(TOOLBAR_VERSION).zip -d $(DIST_DIR)
-	mv $(DIST_DIR)/Toolbar-$(TOOLBAR_VERSION)/GameData/* $(DIST_DIR)/GameData/
-	rm -r $(DIST_DIR)/Toolbar-$(TOOLBAR_VERSION)
 	# Licenses
 	cp LICENSE.txt $(DIST_DIR)/
 	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-csharp-port-license.txt
-	cp lib/toolbar/LICENSE.txt  $(DIST_DIR)/toolbar-license.txt
 	cp LICENSE.txt $(DIST_DIR)/*-license.txt $(DIST_DIR)/GameData/kRPC/
 	# README
 	echo "See https://github.com/djungelorm/krpc/wiki" >dist/README.txt
@@ -100,7 +94,6 @@ release: dist test
 install: dist
 	test -d "$(KSP_DIR)/GameData"
 	rm -rf "$(KSP_DIR)/GameData/kRPC"
-	rm -rf "$(KSP_DIR)/GameData/000_Toolbar"
 	cp -r $(DIST_DIR)/GameData/* "$(KSP_DIR)/GameData/"
 
 test: test-csharp test-python test-spacecenter
@@ -163,9 +156,7 @@ cog:
 
 protobuf: protobuf-csharp protobuf-python
 	# Fix for error in output of C# protobuf compiler
-	-dos2unix src/kRPC/Schema/KRPC.cs
-	-patch -p1 --forward --reject-file=- < krpc-proto.patch
-	-rm -f src/kRPC/Schema/KRPC.cs.orig
+	-git apply krpc-proto.patch
 
 protobuf-csharp: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
