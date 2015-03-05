@@ -129,7 +129,6 @@ python/krpc/schema/
 python/krpc/test/Test.py
 test/kRPCTest/Schema/*.cs
 test/kRPCTest/Schema/*.py
-test/kRPC/Schema/KRPC.cs.orig
 
 # Build output
 dist

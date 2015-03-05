@@ -156,9 +156,7 @@ cog:
 
 protobuf: protobuf-csharp protobuf-python
 	# Fix for error in output of C# protobuf compiler
-	-dos2unix src/kRPC/Schema/KRPC.cs
-	-patch -p1 --forward --reject-file=- < krpc-proto.patch
-	-rm -f src/kRPC/Schema/KRPC.cs.orig
+	-git apply krpc-proto.patch
 
 protobuf-csharp: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
