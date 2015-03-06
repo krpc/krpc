@@ -3,14 +3,11 @@ from krpc.service import BaseService, _create_service, _to_snake_case
 from krpc.encoder import _Encoder
 from krpc.decoder import _Decoder
 from krpc.attributes import _Attributes
+from krpc.error import RPCError
+import krpc.stream
 import krpc.schema.KRPC
+from contextlib import contextmanager
 import threading
-
-
-class RPCError(RuntimeError):
-    """ Error raised when an RPC returns an error response """
-    def __init__(self, message):
-        super(RPCError, self).__init__(message)
 
 
 class KRPCService(BaseService):
@@ -72,6 +69,23 @@ class Client(object):
         for service in services:
             if service.name != 'KRPC':
                 setattr(self, _to_snake_case(service.name), _create_service(self, service))
+
+        # Set up stream update thread
+        self._stream_thread = threading.Thread(target=krpc.stream.update_thread, args=(stream_connection,))
+        self._stream_thread.daemon = True
+        self._stream_thread.start()
+
+    def add_stream(self, func, *args, **kwargs):
+        return krpc.stream.add_stream(self, func, *args, **kwargs)
+
+    @contextmanager
+    def stream(self, func, *args, **kwargs):
+        """ 'with' support """
+        s = self.add_stream(func, *args, **kwargs)
+        try:
+            yield s
+        finally:
+            s.remove()
 
     def _invoke(self, service, procedure, args=[], kwargs={}, param_names=[], param_types=[], return_type=None):
         """ Execute an RPC """

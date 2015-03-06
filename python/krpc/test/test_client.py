@@ -244,7 +244,7 @@ class TestClient(unittest.TestCase):
 
     def test_client_members(self):
         self.assertSetEqual(
-            set(['krpc', 'test_service']),
+            set(['krpc', 'test_service', 'add_stream', 'stream']),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp))))
 
     def test_krpc_service_members(self):
@@ -300,7 +300,9 @@ class TestClient(unittest.TestCase):
                 'increment_set',
                 'increment_tuple',
                 'increment_nested_collection',
-                'add_to_object_list'
+                'add_to_object_list',
+
+                'counter'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service))))
 

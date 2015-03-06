@@ -241,5 +241,14 @@ namespace TestServer.Services
             l.Add (new TestClass (value));
             return l;
         }
+
+        static int count = -1;
+
+        [KRPCProcedure]
+        public static int Counter ()
+        {
+            count++;
+            return count;
+        }
     }
 }
