@@ -133,7 +133,10 @@ namespace KRPC.Service
                 return DecodeCollection (procedure, i, type, value);
             } else if (ProtocolBuffers.IsAMessageType (type)) {
                 var builder = procedure.ParameterBuilders [i];
-                return builder.WeakMergeFrom (value).WeakBuild ();
+                builder.WeakMergeFrom (value);
+                var built = builder.WeakBuild ();
+                builder.WeakClear ();
+                return built;
             } else if (ProtocolBuffers.IsAnEnumType (type) || TypeUtils.IsAnEnumType (type)) {
                 // TODO: Assumes it's underlying type is int
                 var enumValue = ProtocolBuffers.ReadValue (value, typeof(int));
