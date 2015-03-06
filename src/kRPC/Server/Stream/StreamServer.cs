@@ -183,15 +183,12 @@ namespace KRPC.Server.Stream
             // Validate and decode the identifier
             Guid identifierGuid;
             try {
-                identifierGuid = CheckAndDecodeClientIdentifier (identifier);
-                //TODO: add validation
+                identifierGuid = DecodeClientIdentifier (identifier);
             } catch (ArgumentException) {
                 string hex = ("0x" + BitConverter.ToString (identifier)).Replace ("-", " 0x");
                 Logger.WriteLine ("StreamServer: Client connection abandoned. Failed to decode client identifier (" + hex + ")");
                 return Guid.Empty;
             }
-
-            // TODO: check the client identifier
 
             // Valid header and identifier received
             Logger.WriteLine ("StreamServer: Correct hello message received from client '" + identifierGuid.ToString () + "'");
@@ -226,7 +223,7 @@ namespace KRPC.Server.Stream
         /// </summary>
         /// <returns>The clients GUID.</returns>
         /// <param name="receivedIdentifier">Received identifier.</param>
-        Guid CheckAndDecodeClientIdentifier (byte[] receivedIdentifier)
+        Guid DecodeClientIdentifier (byte[] receivedIdentifier)
         {
             return new Guid (receivedIdentifier);
         }

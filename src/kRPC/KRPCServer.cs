@@ -96,8 +96,17 @@ namespace KRPC
             rpcServer.OnClientConnected += (s, e) => clientScheduler.Add (e.Client);
             rpcServer.OnClientDisconnected += (s, e) => clientScheduler.Remove (e.Client);
 
+            // Add/remove clients from the list of stream requests
             streamServer.OnClientConnected += (s, e) => streamRequests [e.Client] = new List<StreamRequest> ();
             streamServer.OnClientDisconnected += (s, e) => streamRequests.Remove (e.Client);
+
+            // Validate stream client identifiers
+            streamServer.OnClientRequestingConnection += (s, e) => {
+                if (rpcServer.Clients.Where(c => c.Guid == e.Client.Guid).Any())
+                    e.Request.Allow ();
+                else
+                    e.Request.Deny ();
+            };
         }
 
         public void Start ()
