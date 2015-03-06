@@ -1,29 +1,26 @@
 #!/usr/bin/env python2
 
 import unittest
-import subprocess
-import time
 import timeit
-import krpc
+from krpc.test.servertestcase import ServerTestCase
 
-class TestClient(unittest.TestCase):
+class TestPerformance(ServerTestCase, unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe', '50001', '50002'])
-        time.sleep(0.25)
-
-    def setUp(self):
-        self.ksp = krpc.connect(name='TestClient', rpc_port=50001, stream_port=50002)
+        super(TestPerformance, cls).setUpClass()
 
     @classmethod
     def tearDownClass(cls):
-        cls.server.kill()
+        super(TestPerformance, cls).tearDownClass()
+
+    def setUp(self):
+        super(TestPerformance, self).setUp()
 
     def test_performance(self):
         n = 100
         def wrapper():
-            self.ksp.test_service.float_to_string(float(3.14159))
+            self.conn.test_service.float_to_string(float(3.14159))
         t = timeit.timeit(stmt=wrapper, number=n)
         print
         print 'Total execution time: %.2f seconds' % t

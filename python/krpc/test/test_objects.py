@@ -2,36 +2,33 @@
 
 import unittest
 import binascii
-import subprocess
-import time
-import krpc
+from krpc.test.servertestcase import ServerTestCase
 
-class TestObjects(unittest.TestCase):
+class TestObjects(ServerTestCase, unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe', '50001', '50002'])
-        time.sleep(0.25)
-
-    def setUp(self):
-        self.ksp = krpc.connect(name='TestObjects', rpc_port=50001, stream_port=50002)
+        super(TestObjects, cls).setUpClass()
 
     @classmethod
     def tearDownClass(cls):
-        cls.server.kill()
+        super(TestObjects, cls).tearDownClass()
+
+    def setUp(self):
+        super(TestObjects, self).setUp()
 
     def test_equality(self):
-        obj1 = self.ksp.test_service.create_test_object('jeb')
-        obj2 = self.ksp.test_service.create_test_object('jeb')
+        obj1 = self.conn.test_service.create_test_object('jeb')
+        obj2 = self.conn.test_service.create_test_object('jeb')
         self.assertTrue(obj1 == obj2)
         self.assertFalse(obj1 != obj2)
 
-        obj3 = self.ksp.test_service.create_test_object('bob')
+        obj3 = self.conn.test_service.create_test_object('bob')
         self.assertFalse(obj1 == obj3)
         self.assertTrue(obj1 != obj3)
 
-        self.ksp.test_service.object_property = obj1
-        obj1a = self.ksp.test_service.object_property
+        self.conn.test_service.object_property = obj1
+        obj1a = self.conn.test_service.object_property
         self.assertEqual(obj1, obj1a)
 
         self.assertFalse(obj1 == None)
@@ -40,23 +37,23 @@ class TestObjects(unittest.TestCase):
         self.assertTrue(None != obj1)
 
     def test_hash(self):
-        obj1 = self.ksp.test_service.create_test_object('jeb')
-        obj2 = self.ksp.test_service.create_test_object('jeb')
-        obj3 = self.ksp.test_service.create_test_object('bob')
+        obj1 = self.conn.test_service.create_test_object('jeb')
+        obj2 = self.conn.test_service.create_test_object('jeb')
+        obj3 = self.conn.test_service.create_test_object('bob')
         self.assertEqual(obj1._object_id, hash(obj1))
         self.assertEqual(obj2._object_id, hash(obj2))
         self.assertNotEqual(obj1._object_id, hash(obj3))
         self.assertEqual(hash(obj1), hash(obj2))
         self.assertNotEqual(hash(obj1), hash(obj3))
 
-        self.ksp.test_service.object_property = obj1
-        obj1a = self.ksp.test_service.object_property
+        self.conn.test_service.object_property = obj1
+        obj1a = self.conn.test_service.object_property
         self.assertEqual(hash(obj1), hash(obj1a))
 
     def test_memory_allocation(self):
-        obj1 = self.ksp.test_service.create_test_object('jeb')
-        obj2 = self.ksp.test_service.create_test_object('jeb')
-        obj3 = self.ksp.test_service.create_test_object('bob')
+        obj1 = self.conn.test_service.create_test_object('jeb')
+        obj2 = self.conn.test_service.create_test_object('jeb')
+        obj3 = self.conn.test_service.create_test_object('bob')
         self.assertEquals (obj1._object_id, obj2._object_id)
         self.assertNotEquals (obj1._object_id, obj3._object_id)
 

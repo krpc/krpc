@@ -1,24 +1,22 @@
 #!/usr/bin/env python2
 
 import unittest
-import subprocess
 import time
-import krpc
 import krpc.test.Test as TestSchema
+from krpc.test.servertestcase import ServerTestCase
 
-class TestStream(unittest.TestCase):
+class TestStream(ServerTestCase, unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe', '50001', '50002'])
-        time.sleep(0.25)
-
-    def setUp(self):
-        self.conn = krpc.connect(name='TestClient', rpc_port=50001, stream_port=50002)
+        super(TestStream, cls).setUpClass()
 
     @classmethod
     def tearDownClass(cls):
-        cls.server.kill()
+        super(TestStream, cls).tearDownClass()
+
+    def setUp(self):
+        super(TestStream, self).setUp()
 
     def test_method(self):
         with self.conn.stream(self.conn.test_service.float_to_string, 3.14159) as x:
@@ -110,6 +108,7 @@ class TestStream(unittest.TestCase):
         self.assertRaises(RuntimeError, s)
         s.remove()
         self.assertRaises(RuntimeError, s)
+
 
 if __name__ == '__main__':
     unittest.main()
