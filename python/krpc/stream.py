@@ -1,6 +1,7 @@
 from krpc.types import _Types
 from krpc.decoder import _Decoder
 from krpc.error import RPCError
+import socket
 import threading
 
 _stream_cache = {}
@@ -81,6 +82,8 @@ def update_thread(connection):
                 break
             except IndexError:
                 pass
+            except socket.error:
+                return
 
         # Read and decode the response message
         data = connection.receive(size)
