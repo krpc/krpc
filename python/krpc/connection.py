@@ -15,6 +15,7 @@ class Connection(object):
 
     def send(self, data):
         """ Send data to the connection. Blocks until all data has been sent. """
+        assert len(data) > 0
         while len(data) > 0:
             sent = self._socket.send(data)
             if sent == 0:
@@ -23,6 +24,7 @@ class Connection(object):
 
     def receive(self, length):
         """ Receive data from the connection. Blocks until length bytes have been received. """
+        assert length > 0
         data = b''
         while len(data) < length:
             remaining = length - len(data)
@@ -35,6 +37,7 @@ class Connection(object):
     def partial_receive(self, length):
         """ Receive up to length bytes of data from the connection.
             Blocks until at least 1 byte has been received. """
+        assert length > 0
         data = self._socket.recv(length)
         if len(data) == 0:
             raise socket.error("Connection closed")
