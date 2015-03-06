@@ -18,7 +18,11 @@ class Connection(object):
         """ Receive data from the connection. Blocks until length bytes have been received. """
         data = b''
         while len(data) < length:
-            data += self._socket.recv(length - len(data))
+            remaining = length - len(data)
+            result = self._socket.recv(min(4096, remaining))
+            if len(result) == 0:
+                raise IOError("Connection closed")
+            data += result
         return data
 
     def partial_receive(self, length):
