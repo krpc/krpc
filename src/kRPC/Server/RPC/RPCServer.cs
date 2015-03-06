@@ -10,7 +10,7 @@ namespace KRPC.Server.RPC
     sealed class RPCServer : IServer<Request,Response>
     {
         const double defaultTimeout = 0.1;
-        byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
+        byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x52, 0x50, 0x43, 0x00, 0x00, 0x00 };
         const int clientNameLength = 32;
 
         public event EventHandler OnStarted;
@@ -131,7 +131,7 @@ namespace KRPC.Server.RPC
                 if (subArgs.Request.ShouldAllow) {
                     args.Request.Allow ();
                     clients [args.Client] = client;
-                    args.Client.Stream.Write(client.Guid.ToByteArray());
+                    args.Client.Stream.Write (client.Guid.ToByteArray ());
                     Logger.WriteLine ("RPCServer: client connection allowed");
                 }
                 if (subArgs.Request.ShouldDeny) {
@@ -145,7 +145,7 @@ namespace KRPC.Server.RPC
                 // No events configured, so allow the connection
                 args.Request.Allow ();
                 clients [args.Client] = pendingClients [args.Client];
-                args.Client.Stream.Write(args.Client.Guid.ToByteArray());
+                args.Client.Stream.Write (args.Client.Guid.ToByteArray ());
                 Logger.WriteLine ("RPCServer: client connection allowed");
                 pendingClients.Remove (args.Client);
             }
@@ -190,7 +190,7 @@ namespace KRPC.Server.RPC
             }
 
             // Valid header and client name received
-            Logger.WriteLine ("RPCServer: correct hello message received from client '" + client.Guid.ToString() + "' (" + clientNameString + ")");
+            Logger.WriteLine ("RPCServer: correct hello message received from client '" + client.Guid.ToString () + "' (" + clientNameString + ")");
             return clientNameString;
         }
 

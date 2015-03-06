@@ -10,7 +10,7 @@ namespace KRPC.Server.Stream
     sealed class StreamServer : IServer<byte,StreamMessage>
     {
         const double defaultTimeout = 0.1;
-        byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
+        byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x53, 0x54, 0x52, 0x45, 0x41, 0x4D };
         byte[] okMessage = { 0x4F, 0x4B };
         const int identifierLength = 16;
 
@@ -132,7 +132,7 @@ namespace KRPC.Server.Stream
                     args.Request.Allow ();
                     clients [args.Client] = client;
                     Logger.WriteLine ("StreamServer: Client connection allowed.");
-                    args.Client.Stream.Write(okMessage);
+                    args.Client.Stream.Write (okMessage);
                 }
                 if (subArgs.Request.ShouldDeny) {
                     args.Request.Deny ();
@@ -145,7 +145,7 @@ namespace KRPC.Server.Stream
                 args.Request.Allow ();
                 clients [args.Client] = pendingClients [args.Client];
                 Logger.WriteLine ("StreamServer: Client connection allowed.");
-                args.Client.Stream.Write(okMessage);
+                args.Client.Stream.Write (okMessage);
                 pendingClients.Remove (args.Client);
             }
         }
@@ -194,7 +194,7 @@ namespace KRPC.Server.Stream
             // TODO: check the client identifier
 
             // Valid header and identifier received
-            Logger.WriteLine ("StreamServer: Correct hello message received from client '" + identifierGuid.ToString() + "'");
+            Logger.WriteLine ("StreamServer: Correct hello message received from client '" + identifierGuid.ToString () + "'");
             return identifierGuid;
         }
 
@@ -228,7 +228,7 @@ namespace KRPC.Server.Stream
         /// <param name="receivedIdentifier">Received identifier.</param>
         Guid CheckAndDecodeClientIdentifier (byte[] receivedIdentifier)
         {
-            return new Guid(receivedIdentifier);
+            return new Guid (receivedIdentifier);
         }
     }
 }

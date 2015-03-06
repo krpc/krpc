@@ -7,6 +7,9 @@ import itertools
 class _Decoder(object):
     """ Routines for decoding messages and values from the protocol buffer serialization format """
 
+    OK_LENGTH = 2
+    OK_MESSAGE = b'\x4F\x4B'
+
     GUID_LENGTH = 16
 
     @classmethod

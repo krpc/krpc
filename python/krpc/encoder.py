@@ -3,10 +3,12 @@ from google.protobuf.internal import encoder as protobuf_encoder
 from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
 import itertools
 
+
 class _Encoder(object):
     """ Routines for encoding messages and values in the protocol buffer serialization format """
 
-    hello_message = b'\x48\x45\x4C\x4C\x4F\xBA\xDA\x55'
+    RPC_HELLO_MESSAGE = b'\x48\x45\x4C\x4C\x4F\x2D\x52\x50\x43\x00\x00\x00'
+    STREAM_HELLO_MESSAGE = b'\x48\x45\x4C\x4C\x4F\x2D\x53\x54\x52\x45\x41\x4D'
 
     @classmethod
     def client_name(cls, name=None):

@@ -17,8 +17,9 @@ namespace KRPCTest.Server.RPC
         [SetUp]
         public void SetUp ()
         {
-            helloMessage = new byte[8 + 32];
-            byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0xBA, 0xDA, 0x55 };
+            helloMessage = new byte[12 + 32];
+            const int i = 0xBA;
+            byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x52, 0x50, 0x43, 0x00, 0x00, 0x00 };
             Array.Copy (header, helloMessage, header.Length);
             string identifier = "Jebediah Kerman!!!";
             var encoder = new UTF8Encoding (false, true);
@@ -31,7 +32,7 @@ namespace KRPCTest.Server.RPC
         {
             var responseStream = new MemoryStream();
 
-            for (int i = 8; i < helloMessage.Length; i++) {
+            for (int i = 12; i < helloMessage.Length; i++) {
                 helloMessage [i] = 0x00;
             }
             var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
