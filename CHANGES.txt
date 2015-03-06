@@ -20,9 +20,9 @@ v0.1.4
    - Fix argument type in Conrol.AddNode (#59)
    - Fix bug with Vessel.HorizontalSpeed (#67)
  - Updates to Python client:
+   - Improved network code to fix bugs and make it more robust
    - Add python version checks (#70)
    - Make connections thread safe (#54)
-   - Fix "truncated string" bug when receiving long messages
 
 v0.1.3
  - Add support for collections (lists, dictionaries and sets)
