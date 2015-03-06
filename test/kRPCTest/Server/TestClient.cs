@@ -1,7 +1,7 @@
 using System;
 using KRPC.Server;
 
-namespace KRPCTest.Server.RPC
+namespace KRPCTest.Server
 {
     // TODO: This is only required due to mocking not preforming equality testing. Is there a better way to do this?
     class TestClient : IClient<byte,byte>
