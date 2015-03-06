@@ -1,14 +1,15 @@
 v0.1.4
- - Support for KSP 0.90.0
- - Updates to server plugin:
+ - General changes:
+   - Support for KSP 0.90.0
+   - Add support for tuples (#49,#50)
+   - Add support for streams (#24,#56)
+   - Fix issue with null values passed as a parameter (#65)
+ - Server plugin specific changes:
    - Add KSP AppLauncher button
    - No longer bundle Toolbar plugin (kRPC will still use Toolbar plugin if available)
    - Add KSP-AVC for version checking (#64)
-   - Add support for tuples (#49,#50)
-   - Add support for streams (#24)
-   - Fix issue with null values passed as a parameter (#65)
    - Performance improvements (#68)
- - Updates to SpaceCenter service:
+ - SpaceCenter service specific changes:
    - Major refactoring of reference frames (#66)
    - Add Control.Nodes (#53)
    - Add Body.AtmosphereDensity (#52)
@@ -20,7 +21,7 @@ v0.1.4
    - Improvements to Control.Node class (#48)
    - Fix argument type in Conrol.AddNode (#59)
    - Fix bug with Vessel.HorizontalSpeed (#67)
- - Updates to Python client:
+ - Python client specific changes:
    - Improved network code to fix bugs and make it more robust
    - Add python version checks (#70)
    - Make connections thread safe (#54)
