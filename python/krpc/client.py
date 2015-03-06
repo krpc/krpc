@@ -164,25 +164,17 @@ class Client(object):
 
     def _receive_response(self):
         """ Receive data from the server and decode it into a KRPC.Response object """
-        data = ''
 
         # Read the size and position of the response message
+        data = b''
         while True:
             try:
-                data += self._rpc_connection.recv(32)
+                data += self._rpc_connection.partial_receive(1)
                 size,position = _Decoder.decode_size_and_position(data)
                 break
             except IndexError:
                 pass
-        data = data[position:]
 
-        # Read the response message data
-        while len(data) < size:
-            data += self._rpc_connection.recv(8192)
-        # Note: it's only possible for one response to be received
-        assert len(data) == size
-
-        # Decode the response
-        response = _Decoder.decode(data[:size], self._response_type)
-
-        return response
+        # Read and decode the response message
+        data = self._rpc_connection.receive(size)
+        return _Decoder.decode(data, self._response_type)

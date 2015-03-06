@@ -67,29 +67,24 @@ def add_stream(conn, func, *args, **kwargs):
     return Stream(conn, func, *args, **kwargs)
 
 def update_thread(connection):
-    data = ''
     stream_message_type = _Types().as_type('KRPC.StreamMessage')
     response_type = _Types().as_type('KRPC.Response')
 
     while True:
 
         # Read the size and position of the response message
+        data = b''
         while True:
             try:
-                data += connection.recv(32)
+                data += connection.partial_receive(1)
                 size,position = _Decoder.decode_size_and_position(data)
                 break
             except IndexError:
                 pass
-        data = data[position:]
 
-        # Read the response message data
-        while len(data) < size:
-            data += connection.recv(8192)
-
-        # Decode the response
-        response = _Decoder.decode(data[:size], stream_message_type)
-        data = data[size:]
+        # Read and decode the response message
+        data = connection.receive(size)
+        response = _Decoder.decode(data, stream_message_type)
 
         # Add the data to the cache
         with _stream_cache_lock:
