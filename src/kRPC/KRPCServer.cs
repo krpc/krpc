@@ -200,6 +200,8 @@ namespace KRPC
             foreach (var entry in streamRequests) {
                 var streamClient = entry.Key;
                 var requests = entry.Value;
+                if (!requests.Any ())
+                    continue;
                 var streamMessage = StreamMessage.CreateBuilder ();
                 foreach (var request in requests) {
                     Response.Builder response;
