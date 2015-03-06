@@ -23,7 +23,7 @@ def connect(address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, stream_port=DEFA
     client_id = b''
     while len(client_id) < _Decoder.GUID_LENGTH:
         client_id += rpc_connection.recv(_Decoder.GUID_LENGTH - len(client_id))
-    assert len(client_id == _Decoder.GUID_LENGTH)
+    assert len(client_id) == _Decoder.GUID_LENGTH
     # Connect to Stream server
     stream_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     stream_connection.connect((address, stream_port))
