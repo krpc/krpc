@@ -9,10 +9,15 @@ import krpc.schema.KRPC
 
 class TestEncoder(unittest.TestCase):
 
-    def test_hello_message(self):
-        message = Encoder.hello_message
-        self.assertEqual (8, len(message))
-        self.assertEqual ('48454c4c4fbada55', binascii.hexlify(message))
+    def test_rpc_hello_message(self):
+        message = Encoder.RPC_HELLO_MESSAGE
+        self.assertEqual (12, len(message))
+        self.assertEqual ('48454c4c4f2d525043000000', binascii.hexlify(message))
+
+    def test_stream_hello_message(self):
+        message = Encoder.STREAM_HELLO_MESSAGE
+        self.assertEqual (12, len(message))
+        self.assertEqual ('48454c4c4f2d53545245414d', binascii.hexlify(message))
 
     def test_client_name(self):
         message = Encoder.client_name('foo')
