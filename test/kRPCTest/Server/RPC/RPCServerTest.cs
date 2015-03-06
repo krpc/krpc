@@ -18,7 +18,6 @@ namespace KRPCTest.Server.RPC
         public void SetUp ()
         {
             helloMessage = new byte[12 + 32];
-            const int i = 0xBA;
             byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x52, 0x50, 0x43, 0x00, 0x00, 0x00 };
             Array.Copy (header, helloMessage, header.Length);
             string name = "Jebediah Kerman!!!";

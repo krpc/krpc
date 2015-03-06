@@ -19,7 +19,6 @@ namespace KRPCTest.Server.Stream
         public void SetUp ()
         {
             helloMessage = new byte[12 + 16];
-            const int i = 0xBA;
             byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x53, 0x54, 0x52, 0x45, 0x41, 0x4D };
             Array.Copy (header, helloMessage, header.Length);
             clientGuid = Guid.NewGuid ();
