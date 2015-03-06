@@ -24,6 +24,7 @@ namespace KRPC
         IScheduler<IClient<Request,Response>> clientScheduler;
         //TODO: add maximum execution time for continuations to prevent livelock?
         IList<RequestContinuation> continuations;
+        IDictionary<IClient<byte,StreamMessage>, IList<StreamRequest>> streamRequests;
 
         internal delegate double UniversalTimeFunction ();
 
@@ -36,6 +37,29 @@ namespace KRPC
         public event EventHandler<ClientActivityArgs> OnClientActivity;
         public event EventHandler<ClientDisconnectedArgs> OnClientDisconnected;
 
+        /// <summary>
+        /// Stores the context in which a continuation is executed.
+        /// For example, used by a continuation to find out which client made the request.
+        /// </summary>
+        public static class Context
+        {
+            public static KRPCServer Server { get; private set; }
+
+            public static IClient RPCClient { get; private set; }
+
+            public static void Set (KRPCServer server, IClient rpcClient)
+            {
+                Server = server;
+                RPCClient = rpcClient;
+            }
+
+            public static void Clear ()
+            {
+                Server = null;
+                RPCClient = null;
+            }
+        }
+
         public KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort)
         {
             rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
@@ -44,6 +68,7 @@ namespace KRPC
             streamServer = new StreamServer (streamTcpServer);
             clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
             continuations = new List<RequestContinuation> ();
+            streamRequests = new Dictionary<IClient<byte,StreamMessage>,IList<StreamRequest>> ();
 
             // Tie events to underlying server
             rpcServer.OnStarted += (s, e) => {
@@ -70,6 +95,9 @@ namespace KRPC
             // Add/remove clients from the scheduler
             rpcServer.OnClientConnected += (s, e) => clientScheduler.Add (e.Client);
             rpcServer.OnClientDisconnected += (s, e) => clientScheduler.Remove (e.Client);
+
+            streamServer.OnClientConnected += (s, e) => streamRequests [e.Client] = new List<StreamRequest> ();
+            streamServer.OnClientDisconnected += (s, e) => streamRequests.Remove (e.Client);
         }
 
         public void Start ()
@@ -112,6 +140,15 @@ namespace KRPC
 
         public void Update ()
         {
+            RPCServerUpdate ();
+            StreamServerUpdate ();
+        }
+
+        /// <summary>
+        /// Update the RPC server
+        /// </summary>
+        void RPCServerUpdate ()
+        {
             // TODO: is there a better way to limit the number of requests handled per update?
             // The maximum amount of time to spend executing continuations
             const int maxTime = 10; // milliseconds
@@ -153,6 +190,53 @@ namespace KRPC
         }
 
         /// <summary>
+        /// Update the Stream server
+        /// </summary>
+        void StreamServerUpdate ()
+        {
+            streamServer.Update ();
+
+            // Run streaming requests
+            foreach (var entry in streamRequests) {
+                var streamClient = entry.Key;
+                var requests = entry.Value;
+                var streamMessage = StreamMessage.CreateBuilder ();
+                foreach (var request in requests) {
+                    Response.Builder response;
+                    try {
+                        response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
+                    } catch (Exception e) {
+                        response = Response.CreateBuilder ();
+                        response.SetError (e.ToString ());
+                    }
+                    response.SetTime (GetUniversalTime ());
+                    var builtResponse = response.Build ();
+                    var streamResponse = request.ResponseBuilder;
+                    streamResponse.SetResponse (builtResponse);
+                    streamMessage.AddResponses (streamResponse);
+                }
+                streamClient.Stream.Write (streamMessage.Build ());
+            }
+        }
+
+        public uint AddStream (IClient client, Request request)
+        {
+            var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
+            var streamRequest = new StreamRequest (request);
+            streamRequests [streamClient].Add (streamRequest);
+            return streamRequest.Identifier;
+        }
+
+        public void RemoveStream (IClient client, uint identifier)
+        {
+            var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
+            var requests = streamRequests [streamClient].Where (x => x.Identifier == identifier).ToList ();
+            if (!requests.Any ())
+                return;
+            streamRequests [streamClient].Remove (requests.Single ());
+        }
+
+        /// <summary>
         /// Poll connected clients for new requests.
         /// Adds a continuation to the queue for any client with a new request,
         /// if a continuation is not already being processed for the client.
@@ -183,6 +267,7 @@ namespace KRPC
             // or throw a YieldException if the continuation has not completed
             Response.Builder response;
             try {
+                Context.Set (this, client);
                 response = continuation.Run ();
             } catch (YieldException) {
                 throw;
@@ -190,6 +275,8 @@ namespace KRPC
                 response = Response.CreateBuilder ();
                 response.Error = e.ToString ();
                 Logger.WriteLine (e.ToString ());
+            } finally {
+                Context.Clear ();
             }
 
             // Send response to the client

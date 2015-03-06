@@ -50,7 +50,16 @@ namespace KRPC.Service
         /// </summary>
         public Response.Builder HandleRequest (ProcedureSignature procedure, Request request)
         {
-            object[] arguments = DecodeArguments (procedure, request.ArgumentsList);
+            return HandleRequest (procedure, DecodeArguments (procedure, request.ArgumentsList));
+        }
+
+        /// <summary>
+        /// Executes a request (from an array of decoded arguments) and returns a response builder with the relevant
+        /// fields populated. Throws YieldException, containing a continuation, if the request yields.
+        /// Throws RPCException if processing the request fails.
+        /// </summary>
+        public Response.Builder HandleRequest (ProcedureSignature procedure, object[] arguments)
+        {
             object returnValue;
             try {
                 returnValue = procedure.Handler.Invoke (arguments);
@@ -86,6 +95,14 @@ namespace KRPC.Service
             if (procedure.HasReturnType)
                 responseBuilder.ReturnValue = EncodeReturnValue (procedure, returnValue);
             return responseBuilder;
+        }
+
+        /// <summary>
+        /// Decode the arguments for a request
+        /// </summary>
+        public object[] DecodeArguments (ProcedureSignature procedure, Request request)
+        {
+            return DecodeArguments (procedure, request.ArgumentsList);
         }
 
         /// <summary>

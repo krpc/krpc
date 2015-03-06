@@ -63,7 +63,7 @@ namespace KRPC.Service
                     foreach (var enumValueName in serviceSignature.Enums[enumName].Keys) {
                         var enmValue = Schema.KRPC.EnumerationValue.CreateBuilder ();
                         enmValue.Name = enumValueName;
-                        enmValue.Value = serviceSignature.Enums[enumName][enumValueName];
+                        enmValue.Value = serviceSignature.Enums [enumName] [enumValueName];
                         enm.AddValues (enmValue);
                     }
                     service.AddEnumerations (enm);
@@ -75,13 +75,12 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Add a request to the stream. Returns the identifier for the streaming request.
+        /// Add a streaming request and return its identifier.
         /// </summary>
         [KRPCProcedure]
         public static uint AddStream (Request request)
         {
-            // TODO: implement
-            return 42;
+            return KRPCServer.Context.Server.AddStream (KRPCServer.Context.RPCClient, request);
         }
 
         /// <summary>
@@ -90,7 +89,7 @@ namespace KRPC.Service
         [KRPCProcedure]
         public static void RemoveStream (uint id)
         {
-            // TODO: implement
+            KRPCServer.Context.Server.RemoveStream (KRPCServer.Context.RPCClient, id);
         }
     }
 }

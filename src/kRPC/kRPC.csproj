@@ -125,6 +125,7 @@
     <Compile Include="Server\Stream\StreamServer.cs" />
     <Compile Include="Server\Stream\StreamClient.cs" />
     <Compile Include="Server\Stream\StreamStream.cs" />
+    <Compile Include="Server\Stream\StreamRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
