@@ -332,6 +332,21 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual (1, self.conn.test_service.CSharpEnum.value_b)
         self.assertEqual (2, self.conn.test_service.CSharpEnum.value_c)
 
+    def test_line_endings(self):
+        strings = [
+            'foo\nbar',
+            'foo\rbar',
+            'foo\n\rbar',
+            'foo\r\nbar',
+            'foo' + b'\x10' + 'bar',
+            'foo' + b'\x13' + 'bar',
+            'foo' + b'\x10\x13' + 'bar',
+            'foo' + b'\x13\x10' + 'bar'
+        ]
+        for string in strings:
+            self.conn.test_service.string_property = string
+            self.assertEqual(string, self.conn.test_service.string_property)
+
 
 if __name__ == '__main__':
     unittest.main()
