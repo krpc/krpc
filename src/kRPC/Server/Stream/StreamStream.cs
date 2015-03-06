@@ -15,7 +15,7 @@ namespace KRPC.Server.Stream
 
         public bool DataAvailable {
             get {
-                return stream.DataAvailable;
+                throw new NotImplementedException ();
             }
         }
 
