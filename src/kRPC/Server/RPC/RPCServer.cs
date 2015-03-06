@@ -110,10 +110,10 @@ namespace KRPC.Server.RPC
         {
             if (!pendingClients.ContainsKey (args.Client)) {
                 // A new client connection attempt. Verify the hello message.
-                string name = CheckHelloMessage (args.Client);
-                if (name != null) {
+                string clientName = CheckHelloMessage (args.Client);
+                if (clientName != null) {
                     // Hello message OK, add it to the pending clients
-                    var client = new RPCClient (name, args.Client);
+                    var client = new RPCClient (clientName, args.Client);
                     pendingClients [args.Client] = client;
                 } else {
                     // Deny the connection, don't add it to pending clients
@@ -221,14 +221,14 @@ namespace KRPC.Server.RPC
         /// Validate a fixed-length 32-byte array as a UTF8 string, and return it as a string object.
         /// </summary>
         /// <returns>The decoded client name, or null if not valid.</returns>
-        string CheckAndDecodeClientName (byte[] receivedIdentifier)
+        string CheckAndDecodeClientName (byte[] receivedClientName)
         {
-            string identifierString = "";
+            string clientNameString = "";
 
             // Strip null bytes from the end
             int length = 0;
             bool foundEnd = false;
-            foreach (byte x in receivedIdentifier) {
+            foreach (byte x in receivedClientName) {
                 if (!foundEnd) {
                     if (x == 0x00)
                         foundEnd = true;
@@ -244,16 +244,16 @@ namespace KRPC.Server.RPC
 
             if (length > 0) {
                 // Got valid sequence of non-zero bytes, try to decode them
-                var strippedIdentifier = new byte[length];
-                Array.Copy (receivedIdentifier, strippedIdentifier, length);
+                var strippedClientName = new byte[length];
+                Array.Copy (receivedClientName, strippedClientName, length);
                 var encoder = new UTF8Encoding (encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
                 try {
-                    identifierString = encoder.GetString (strippedIdentifier);
+                    clientNameString = encoder.GetString (strippedClientName);
                 } catch (ArgumentException) {
                     return null;
                 }
             }
-            return identifierString;
+            return clientNameString;
         }
     }
 }
