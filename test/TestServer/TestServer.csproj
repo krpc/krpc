@@ -48,8 +48,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\" />
     <Folder Include="Properties\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />

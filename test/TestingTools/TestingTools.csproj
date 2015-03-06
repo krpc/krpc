@@ -32,33 +32,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\lib\KSP_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="TDx.TDxInput">
       <HintPath>..\..\lib\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AutoLoadPersistentSaveOnStartup.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="KRPCService.cs" />
-    <Compile Include="OrbitTools.cs" />
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\kRPC\kRPC.csproj">
       <Project>{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}</Project>
       <Name>kRPC</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutoLoadPersistentSaveOnStartup.cs" />
+    <Compile Include="KRPCService.cs" />
+    <Compile Include="OrbitTools.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>

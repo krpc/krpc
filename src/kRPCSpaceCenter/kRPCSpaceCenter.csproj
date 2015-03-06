@@ -38,38 +38,18 @@
     <Reference Include="Google.ProtocolBuffers.Serialization">
       <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\cf35\Google.ProtocolBuffers.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\lib\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\lib\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\lib\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\lib\KSP_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="PilotAddon.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils.cs" />
-    <Compile Include="Services\Control.cs" />
-    <Compile Include="Services\Flight.cs" />
-    <Compile Include="Services\Orbit.cs" />
-    <Compile Include="Services\Vessel.cs" />
-    <Compile Include="Services\Resources.cs" />
-    <Compile Include="Services\CelestialBody.cs" />
-    <Compile Include="Services\Node.cs" />
-    <Compile Include="Services\SpaceCenter.cs" />
-    <Compile Include="Services\AutoPilot.cs" />
-    <Compile Include="Services\ReferenceFrame.cs" />
-    <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
-    <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
-    <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
-    <Compile Include="ExtensionMethods\PartExtensions.cs" />
-    <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -79,9 +59,29 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Schema\" />
+    <Folder Include="ExtensionMethods\" />
     <Folder Include="Properties\" />
     <Folder Include="Services\" />
-    <Folder Include="ExtensionMethods\" />
+    <Folder Include="Schema\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
+    <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
+    <Compile Include="ExtensionMethods\PartExtensions.cs" />
+    <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
+    <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
+    <Compile Include="PilotAddon.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AutoPilot.cs" />
+    <Compile Include="Services\CelestialBody.cs" />
+    <Compile Include="Services\Control.cs" />
+    <Compile Include="Services\Flight.cs" />
+    <Compile Include="Services\Node.cs" />
+    <Compile Include="Services\Orbit.cs" />
+    <Compile Include="Services\ReferenceFrame.cs" />
+    <Compile Include="Services\Resources.cs" />
+    <Compile Include="Services\SpaceCenter.cs" />
+    <Compile Include="Services\Vessel.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
 </Project>

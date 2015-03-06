@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>KRPCTest</RootNamespace>
     <AssemblyName>kRPCTest</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <CodePage>65001</CodePage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,17 +32,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Moq">
-      <HintPath>..\..\lib\moq-4.2.1312.1622\net40\Moq.dll</HintPath>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\lib\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\lib\nunit-2.6.3\nunit.framework.dll</HintPath>
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\lib\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\lib\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
@@ -52,56 +50,14 @@
     <Reference Include="Google.ProtocolBuffers.Serialization">
       <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\lib\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\lib\nunit-2.6.3\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\lib\moq-4.2.1312.1622\net40\Moq.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Schema\RpcTest.cs" />
-    <Compile Include="Service\ServicesTest.cs" />
-    <Compile Include="Service\ITestService.cs" />
-    <Compile Include="Service\TestService.cs" />
-    <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
-    <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
-    <Compile Include="Server\Net\TCPClientTest.cs" />
-    <Compile Include="Server\Net\TCPServerTest.cs" />
-    <Compile Include="Server\RPC\RPCStreamTest.cs" />
-    <Compile Include="Server\TestStream.cs" />
-    <Compile Include="Server\RPC\RPCServerTest.cs" />
-    <Compile Include="Server\TestClient.cs" />
-    <Compile Include="Service\KRPCTest.cs" />
-    <Compile Include="KRPCConfigurationTest.cs" />
-    <Compile Include="Utils\ProtocolBuffersTest.cs" />
-    <Compile Include="Server\Net\NetworkInformationTest.cs" />
-    <Compile Include="Server\Net\AssumptionsTest.cs" />
-    <Compile Include="Utils\IEnumerableExtensionsTest.cs" />
-    <Compile Include="Service\TypeUtilsTest.cs" />
-    <Compile Include="Service\Scanner\ScannerTest.cs" />
-    <Compile Include="Service\ObjectStoreTest.cs" />
-    <Compile Include="Service\ClassMethodHandlerTest.cs" />
-    <Compile Include="Service\ProcedureHandlerTest.cs" />
-    <Compile Include="Service\TestService2.cs" />
-    <Compile Include="Service\TestTopLevelClass.cs" />
-    <Compile Include="Service\TestService3.cs" />
-    <Compile Include="Utils\ReflectionTest.cs" />
-    <Compile Include="Service\ProcedureParameterTest.cs" />
-    <Compile Include="Schema\Test.cs" />
-    <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
-    <Compile Include="Utils\EquatableTest.cs" />
-    <Compile Include="Utils\TupleTest.cs" />
-    <Compile Include="Server\Stream\StreamServerTest.cs" />
-    <Compile Include="Server\Stream\StreamStreamTest.cs" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Utils\" />
-    <Folder Include="Schema\" />
-    <Folder Include="Server\" />
-    <Folder Include="Service\" />
-    <Folder Include="Server\Net\" />
-    <Folder Include="Server\RPC\" />
-    <Folder Include="Service\Scanner\" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\kRPC\kRPC.csproj">
       <Project>{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}</Project>
@@ -110,5 +66,50 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Schema\" />
+    <Folder Include="Server\" />
+    <Folder Include="Server\Net\" />
+    <Folder Include="Server\RPC\" />
+    <Folder Include="Service\" />
+    <Folder Include="Service\Scanner\" />
+    <Folder Include="Utils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
+    <Compile Include="KRPCConfigurationTest.cs" />
+    <Compile Include="Schema\RpcTest.cs" />
+    <Compile Include="Schema\Test.cs" />
+    <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
+    <Compile Include="Server\Net\AssumptionsTest.cs" />
+    <Compile Include="Server\Net\NetworkInformationTest.cs" />
+    <Compile Include="Server\Net\TCPClientTest.cs" />
+    <Compile Include="Server\Net\TCPServerTest.cs" />
+    <Compile Include="Server\RPC\RPCServerTest.cs" />
+    <Compile Include="Server\RPC\RPCStreamTest.cs" />
+    <Compile Include="Server\Stream\StreamServerTest.cs" />
+    <Compile Include="Server\Stream\StreamStreamTest.cs" />
+    <Compile Include="Server\TestClient.cs" />
+    <Compile Include="Server\TestStream.cs" />
+    <Compile Include="Service\ClassMethodHandlerTest.cs" />
+    <Compile Include="Service\ITestService.cs" />
+    <Compile Include="Service\KRPCTest.cs" />
+    <Compile Include="Service\ObjectStoreTest.cs" />
+    <Compile Include="Service\ProcedureHandlerTest.cs" />
+    <Compile Include="Service\ProcedureParameterTest.cs" />
+    <Compile Include="Service\Scanner\ScannerTest.cs" />
+    <Compile Include="Service\ServicesTest.cs" />
+    <Compile Include="Service\TestService2.cs" />
+    <Compile Include="Service\TestService3.cs" />
+    <Compile Include="Service\TestService.cs" />
+    <Compile Include="Service\TestTopLevelClass.cs" />
+    <Compile Include="Service\TypeUtilsTest.cs" />
+    <Compile Include="Utils\EquatableTest.cs" />
+    <Compile Include="Utils\IEnumerableExtensionsTest.cs" />
+    <Compile Include="Utils\ProtocolBuffersTest.cs" />
+    <Compile Include="Utils\ReflectionTest.cs" />
+    <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
+    <Compile Include="Utils\TupleTest.cs" />
   </ItemGroup>
 </Project>
