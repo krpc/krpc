@@ -17,6 +17,15 @@ message Response {
   optional bytes return_value = 3;
 }
 
+message StreamMessage {
+  repeated StreamResponse responses = 1;
+}
+
+message StreamResponse {
+  required uint32 id = 1;
+  required Response response = 2;
+}
+
 message Services {
   repeated Service services = 1;
 }

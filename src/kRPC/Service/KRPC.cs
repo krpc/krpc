@@ -1,11 +1,12 @@
 using System;
+using KRPC.Schema.KRPC;
 using KRPC.Service.Attributes;
 
 namespace KRPC.Service
 {
     /// <summary>
     /// Main KRPC service, used by clients to interact with basic server functionality.
-    /// This includes requesting a description of the available services.
+    /// This includes requesting a description of the available services and setting up streams.
     /// </summary>
     [KRPCService]
     public static class KRPC
@@ -62,7 +63,7 @@ namespace KRPC.Service
                     foreach (var enumValueName in serviceSignature.Enums[enumName].Keys) {
                         var enmValue = Schema.KRPC.EnumerationValue.CreateBuilder ();
                         enmValue.Name = enumValueName;
-                        enmValue.Value = serviceSignature.Enums[enumName][enumValueName];
+                        enmValue.Value = serviceSignature.Enums [enumName] [enumValueName];
                         enm.AddValues (enmValue);
                     }
                     service.AddEnumerations (enm);
@@ -71,6 +72,24 @@ namespace KRPC.Service
             }
             Schema.KRPC.Services result = services.Build ();
             return result;
+        }
+
+        /// <summary>
+        /// Add a streaming request and return its identifier.
+        /// </summary>
+        [KRPCProcedure]
+        public static uint AddStream (Request request)
+        {
+            return KRPCServer.Context.Server.AddStream (KRPCServer.Context.RPCClient, request);
+        }
+
+        /// <summary>
+        /// Remove a streaming request.
+        /// </summary>
+        [KRPCProcedure]
+        public static void RemoveStream (uint id)
+        {
+            KRPCServer.Context.Server.RemoveStream (KRPCServer.Context.RPCClient, id);
         }
     }
 }

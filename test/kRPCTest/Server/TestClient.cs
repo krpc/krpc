@@ -1,21 +1,25 @@
 using System;
 using KRPC.Server;
 
-namespace KRPCTest.Server.RPC
+namespace KRPCTest.Server
 {
     // TODO: This is only required due to mocking not preforming equality testing. Is there a better way to do this?
     class TestClient : IClient<byte,byte>
     {
-        readonly int uuid;
+        Guid guid;
 
-        public TestClient (TestStream stream, int uuid = 0)
+        public TestClient (TestStream stream)
         {
-            this.uuid = uuid;
+            guid = Guid.NewGuid();
             Stream = stream;
         }
 
         public string Name {
             get { throw new NotImplementedException (); }
+        }
+
+        public Guid Guid {
+            get { return guid; }
         }
 
         public string Address {
@@ -45,12 +49,12 @@ namespace KRPCTest.Server.RPC
             var otherClient = other as TestClient;
             if ((object)otherClient == null)
                 return false;
-            return uuid == otherClient.uuid;
+            return guid == otherClient.guid;
         }
 
         public override int GetHashCode ()
         {
-            return uuid;
+            return guid.GetHashCode ();
         }
 
         public static bool operator == (TestClient lhs, TestClient rhs)

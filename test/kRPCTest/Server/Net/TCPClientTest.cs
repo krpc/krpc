@@ -9,16 +9,13 @@ namespace KRPCTest.Server.Net
         [Test]
         public void Equality ()
         {
-            Assert.IsTrue (new TCPClient (0, null).Equals (new TCPClient (0, null)));
-            Assert.IsFalse (new TCPClient (0, null).Equals (new TCPClient (1, null)));
-            Assert.IsTrue (new TCPClient (0, null) == new TCPClient (0, null));
-            Assert.IsFalse (new TCPClient (0, null) == new TCPClient (1, null));
-            Assert.IsFalse (new TCPClient (0, null) != new TCPClient (0, null));
-            Assert.IsTrue (new TCPClient (0, null) != new TCPClient (1, null));
+            Assert.IsFalse (new TCPClient (null).Equals (new TCPClient (null)));
+            Assert.IsFalse (new TCPClient (null) == new TCPClient (null));
+            Assert.IsTrue (new TCPClient (null) != new TCPClient (null));
 
-            var clientA = new TCPClient (0, null);
+            var clientA = new TCPClient (null);
             TCPClient clientA2 = clientA;
-            var clientB = new TCPClient (1, null);
+            var clientB = new TCPClient (null);
             Assert.IsTrue (clientA.Equals (clientA));
             Assert.IsFalse (clientA.Equals (clientB));
             Assert.IsTrue (clientA == clientA2);
@@ -32,17 +29,11 @@ namespace KRPCTest.Server.Net
         }
 
         [Test]
-        public void HashCode ()
-        {
-            Assert.IsTrue (new TCPClient (0, null).GetHashCode () == new TCPClient (0, null).GetHashCode ());
-        }
-
-        [Test]
         public void NotConnected ()
         {
-            var client = new TCPClient (1, new System.Net.Sockets.TcpClient ());
+            var client = new TCPClient (new System.Net.Sockets.TcpClient ());
             Assert.IsFalse (client.Connected);
-            Assert.AreEqual ("", client.Name);
+            Assert.AreEqual (client.Guid.ToString(), client.Name);
             Assert.AreEqual ("", client.Address);
             Assert.DoesNotThrow (() => client.Close ());
         }

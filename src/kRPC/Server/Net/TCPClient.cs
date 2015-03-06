@@ -6,12 +6,12 @@ namespace KRPC.Server.Net
 {
     sealed class TCPClient : IClient<byte,byte>
     {
-        readonly int uuid;
+        readonly Guid guid;
         readonly TcpClient tcpClient;
 
-        public TCPClient (int uuid, TcpClient tcpClient)
+        public TCPClient (TcpClient tcpClient)
         {
-            this.uuid = uuid;
+            this.guid = Guid.NewGuid();
             this.tcpClient = tcpClient;
             try {
                 var remoteEndPoint = tcpClient.Client.RemoteEndPoint as IPEndPoint;
@@ -22,7 +22,11 @@ namespace KRPC.Server.Net
         }
 
         public string Name {
-            get { return ""; }
+            get { return Guid.ToString(); }
+        }
+
+        public Guid Guid {
+            get { return guid; }
         }
 
         public string Address { get; private set; }
@@ -73,12 +77,12 @@ namespace KRPC.Server.Net
             var otherClient = other as TCPClient;
             if ((object)otherClient == null)
                 return false;
-            return uuid == otherClient.uuid;
+            return guid == otherClient.guid;
         }
 
         public override int GetHashCode ()
         {
-            return uuid;
+            return guid.GetHashCode ();
         }
 
         public static bool operator == (TCPClient lhs, TCPClient rhs)

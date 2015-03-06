@@ -66,9 +66,9 @@
     <Compile Include="Server\Net\TCPClientTest.cs" />
     <Compile Include="Server\Net\TCPServerTest.cs" />
     <Compile Include="Server\RPC\RPCStreamTest.cs" />
-    <Compile Include="Server\RPC\TestStream.cs" />
+    <Compile Include="Server\TestStream.cs" />
     <Compile Include="Server\RPC\RPCServerTest.cs" />
-    <Compile Include="Server\RPC\TestClient.cs" />
+    <Compile Include="Server\TestClient.cs" />
     <Compile Include="Service\KRPCTest.cs" />
     <Compile Include="KRPCConfigurationTest.cs" />
     <Compile Include="Utils\ProtocolBuffersTest.cs" />
@@ -89,6 +89,8 @@
     <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
     <Compile Include="Utils\EquatableTest.cs" />
     <Compile Include="Utils\TupleTest.cs" />
+    <Compile Include="Server\Stream\StreamServerTest.cs" />
+    <Compile Include="Server\Stream\StreamStreamTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

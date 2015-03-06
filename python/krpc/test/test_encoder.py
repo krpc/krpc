@@ -9,29 +9,30 @@ import krpc.schema.KRPC
 
 class TestEncoder(unittest.TestCase):
 
-    def test_hello_message(self):
-        message = Encoder.hello_message()
-        self.assertEqual (8 + 32, len(message))
-        self.assertEqual ('48454c4c4fbada55', binascii.hexlify(message[:8]))
-        self.assertEqual ('00'*32, binascii.hexlify(message[8:]))
+    def test_rpc_hello_message(self):
+        message = Encoder.RPC_HELLO_MESSAGE
+        self.assertEqual (12, len(message))
+        self.assertEqual ('48454c4c4f2d525043000000', binascii.hexlify(message))
 
-    def test_hello_message_with_identifier(self):
-        message = Encoder.hello_message(name='foo')
-        self.assertEqual (8 + 32, len(message))
-        self.assertEqual ('48454c4c4fbada55', binascii.hexlify(message[:8]))
-        self.assertEqual ('666f6f'+'00'*29, binascii.hexlify(message[8:]))
+    def test_stream_hello_message(self):
+        message = Encoder.STREAM_HELLO_MESSAGE
+        self.assertEqual (12, len(message))
+        self.assertEqual ('48454c4c4f2d53545245414d', binascii.hexlify(message))
 
-    def test_hello_message_with_empty_identifier(self):
-        message = Encoder.hello_message(name='')
-        self.assertEqual (8 + 32, len(message))
-        self.assertEqual ('48454c4c4fbada55', binascii.hexlify(message[:8]))
-        self.assertEqual ('00'*32, binascii.hexlify(message[8:]))
+    def test_client_name(self):
+        message = Encoder.client_name('foo')
+        self.assertEqual (32, len(message))
+        self.assertEqual ('666f6f'+'00'*29, binascii.hexlify(message))
 
-    def test_hello_message_with_long_identifier(self):
-        message = Encoder.hello_message(name='a'*33)
-        self.assertEqual (8 + 32, len(message))
-        self.assertEqual ('48454c4c4fbada55', binascii.hexlify(message[:8]))
-        self.assertEqual ('61'*32, binascii.hexlify(message[8:]))
+    def test_empty_client_name(self):
+        message = Encoder.client_name()
+        self.assertEqual (32, len(message))
+        self.assertEqual ('00'*32, binascii.hexlify(message))
+
+    def test_long_client_name(self):
+        message = Encoder.client_name('a'*33)
+        self.assertEqual (32, len(message))
+        self.assertEqual ('61'*32, binascii.hexlify(message))
 
     def test_encode_message(self):
         request = krpc.schema.KRPC.Request()

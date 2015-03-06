@@ -42,7 +42,7 @@ namespace KRPCTest.Server.RPC
         [Test]
         public void Empty ()
         {
-            var stream = new TestStream (new MemoryStream ());
+            var stream = new TestStream (new MemoryStream (), null);
             var rpcStream = new RPCStream (stream);
             Assert.IsFalse (rpcStream.DataAvailable);
             //rpcStream.Read ();
@@ -51,7 +51,7 @@ namespace KRPCTest.Server.RPC
         [Test]
         public void ReadSingleRequest ()
         {
-            var stream = new TestStream (new MemoryStream (requestBytes));
+            var stream = new TestStream (new MemoryStream (requestBytes), null);
             var rpcStream = new RPCStream (stream);
             Assert.IsTrue (rpcStream.DataAvailable);
             Request request = rpcStream.Read ();
@@ -78,7 +78,7 @@ namespace KRPCTest.Server.RPC
             stream.Seek (0, SeekOrigin.Begin);
 
             // Read part 1
-            var rpcStream = new RPCStream (new TestStream (stream));
+            var rpcStream = new RPCStream (new TestStream (stream, null));
             Assert.IsFalse (rpcStream.DataAvailable);
 
             // Write part 2
@@ -112,7 +112,7 @@ namespace KRPCTest.Server.RPC
             var stream = new MemoryStream ();
             expectedRequest.WriteDelimitedTo (stream);
             stream.Seek (0, SeekOrigin.Begin);
-            var rpcStream = new RPCStream (new TestStream (stream));
+            var rpcStream = new RPCStream (new TestStream (stream, null));
             Assert.Throws<MalformedRequestException> (() => rpcStream.Read ());
         }
 
@@ -122,7 +122,7 @@ namespace KRPCTest.Server.RPC
             byte[] data = new byte[RPCStream.bufferSize + 1];
             Random rand = new Random (42);
             rand.NextBytes (data);
-            var rpcStream = new RPCStream (new TestStream (new MemoryStream (data)));
+            var rpcStream = new RPCStream (new TestStream (new MemoryStream (data), null));
             Assert.Throws<RequestBufferOverflowException> (() => rpcStream.Read ());
         }
 
@@ -130,7 +130,7 @@ namespace KRPCTest.Server.RPC
         public void WriteSingleResponse ()
         {
             var stream = new MemoryStream ();
-            var rpcStream = new RPCStream (new TestStream (stream));
+            var rpcStream = new RPCStream (new TestStream (null, stream));
             rpcStream.Write (expectedResponse);
             byte[] bytes = stream.ToArray ();
             Assert.IsTrue (responseBytes.SequenceEqual (bytes));

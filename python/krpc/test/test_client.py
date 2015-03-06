@@ -11,11 +11,11 @@ class TestClient(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe', '50001'])
+        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe', '50001', '50002'])
         time.sleep(0.25)
 
     def setUp(self):
-        self.ksp = krpc.connect(name='TestClient', port=50001)
+        self.ksp = krpc.connect(name='TestClient', rpc_port=50001, stream_port=50002)
 
     @classmethod
     def tearDownClass(cls):
@@ -244,12 +244,12 @@ class TestClient(unittest.TestCase):
 
     def test_client_members(self):
         self.assertSetEqual(
-            set(['krpc', 'test_service']),
+            set(['krpc', 'test_service', 'add_stream', 'stream']),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp))))
 
     def test_krpc_service_members(self):
         self.assertSetEqual(
-            set(['get_services', 'get_status']),
+            set(['get_services', 'get_status', 'add_stream', 'remove_stream']),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.krpc))))
 
     def test_test_service_service_members(self):
@@ -300,7 +300,9 @@ class TestClient(unittest.TestCase):
                 'increment_set',
                 'increment_tuple',
                 'increment_nested_collection',
-                'add_to_object_list'
+                'add_to_object_list',
+
+                'counter'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.ksp.test_service))))
 
