@@ -115,7 +115,7 @@ namespace KRPC
                 () => mainWindow.Visible = !mainWindow.Visible,
                 null, null, null, null,
                 ApplicationLauncher.AppScenes.FLIGHT,
-                textureOffline);
+                server.Running ? textureOnline : textureOffline);
         }
 
         void OnGUIApplicationLauncherDestroyed() {
