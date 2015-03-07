@@ -1,20 +1,28 @@
 ship = Example
-version = 0.23.5
+version = 0.90.0
 description = 
 type = VAB
+size = 10.42991,32.02543,10.42991
 PART
 {
 	part = Mark1-2Pod_4294829134
 	partName = Part
 	pos = 0.1155881,24.68662,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 0
 	dstg = 0
 	sidx = -1
 	sqor = -1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = stackSeparatorBig_4294781908
 	link = stackSeparator_4294780186
 	link = parachuteRadial_4294768348
@@ -26,6 +34,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -64,20 +75,9 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleSAS
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
 		name = ModuleReactionWheel
 		isEnabled = True
-		stateString = 
+		stateString = Active
 		WheelState = Active
 		EVENTS
 		{
@@ -263,20 +263,9 @@ PART
 		ACTIONS
 		{
 		}
-		Surfaced
+		Log
 		{
-		}
-		Flew
-		{
-		}
-		FlewBy
-		{
-		}
-		Orbited
-		{
-		}
-		SubOrbited
-		{
+			flight = 0
 		}
 	}
 	RESOURCE
@@ -305,14 +294,21 @@ PART
 	part = stackSeparatorBig_4294781908
 	partName = Part
 	pos = 0.1155881,24.10738,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 0
 	dstg = 1
 	sidx = 0
 	sqor = 0
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank1-2_4294824916
 	attN = bottom,fuelTank1-2_4294824916
 	attN = top,Mark1-2Pod_4294829134
@@ -320,6 +316,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -349,20 +348,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = fuelTank1-2_4294824916
 	partName = Part
 	pos = 0.1155881,22.13238,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 2
 	sidx = -1
 	sqor = -1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = engineLargeSkipper_4294821468
 	link = solarPanels2_4294760472
 	link = solarPanels2_4294760076
@@ -374,6 +402,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -402,14 +433,21 @@ PART
 	part = engineLargeSkipper_4294821468
 	partName = Part
 	pos = 0.1155881,20.25738,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 1
 	dstg = 2
 	sidx = 0
 	sqor = 1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = stackSeparatorBig_4294782976
 	attN = top,fuelTank1-2_4294824916
 	attN = bottom,stackSeparatorBig_4294782976
@@ -417,6 +455,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -566,6 +607,28 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -582,14 +645,21 @@ PART
 	part = stackSeparatorBig_4294782976
 	partName = Part
 	pos = 0.1155881,17.78238,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 1
 	dstg = 3
 	sidx = 1
 	sqor = 1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank2-2_4294824152
 	attN = bottom,fuelTank2-2_4294824152
 	attN = top,engineLargeSkipper_4294821468
@@ -597,6 +667,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -626,20 +699,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = fuelTank2-2_4294824152
 	partName = Part
 	pos = 0.1155881,16.74488,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank1-2_4294790996
 	attN = top,stackSeparatorBig_4294782976
 	attN = bottom,fuelTank1-2_4294790996
@@ -647,6 +749,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -675,14 +780,21 @@ PART
 	part = fuelTank1-2_4294790996
 	partName = Part
 	pos = 0.1155881,13.93238,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank1-2_4294824484
 	attN = top,fuelTank2-2_4294824152
 	attN = bottom,fuelTank1-2_4294824484
@@ -690,6 +802,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -718,14 +833,21 @@ PART
 	part = fuelTank1-2_4294824484
 	partName = Part
 	pos = 0.1155881,10.18238,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 4
 	dstg = 4
 	sidx = -1
 	sqor = -1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = liquidEngine1-2_4294820874
 	link = radialDecoupler2_4294818014
 	link = radialDecoupler2_4294817690
@@ -737,6 +859,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	RESOURCE
@@ -765,19 +890,29 @@ PART
 	part = liquidEngine1-2_4294820874
 	partName = Part
 	pos = 0.1155881,7.242071,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 4
 	sidx = 0
 	sqor = 3
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	attN = top,fuelTank1-2_4294824484
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -927,6 +1062,28 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -943,14 +1100,21 @@ PART
 	part = radialDecoupler2_4294818014
 	partName = Part
 	pos = 0.4235936,11.06687,-1.053366
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -6.810793E-07,0.7933534,6.810812E-07,-0.6087614
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 5
-	sidx = 3
+	sidx = 0
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = solidBooster1-1_4294814604
 	sym = radialDecoupler2_4294817690
 	sym = radialDecoupler2_4294817642
@@ -960,6 +1124,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -989,20 +1156,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = solidBooster1-1_4294814604
 	partName = Part
-	pos = 0.7476262,10.90935,-2.262672
-	rot = 5.684341E-14,0.9914448,-5.684341E-14,0.1305263
+	pos = 0.7476263,10.90935,-2.262672
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 5.941294E-14,0.9914449,-6.633948E-14,0.1305263
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 6
 	sidx = 1
 	sqor = 3
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = noseCone_4294811382
 	link = sepMotor1_4294801206
 	link = sepMotor1_4294800848
@@ -1019,6 +1215,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleEngines
@@ -1027,7 +1226,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9
+		currentThrottle = 0.9876297
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -1089,6 +1288,28 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -1104,15 +1325,22 @@ PART
 {
 	part = noseCone_4294811382
 	partName = Part
-	pos = 0.7476262,14.84885,-2.262672
-	rot = -3.705824E-14,-0.7071069,-6.221272E-14,0.7071067
+	pos = 0.7476263,14.84885,-2.262672
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -4.71561E-14,-0.7071069,-4.379763E-14,0.7071067
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 6
 	sidx = -1
 	sqor = -1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294811526
 	sym = noseCone_4294811350
 	sym = noseCone_4294811318
@@ -1123,20 +1351,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = sepMotor1_4294801206
 	partName = Part
 	pos = 1.349852,11.69237,-2.101306
-	rot = -0.4304594,0.4304591,-0.5609856,0.5609857
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.4304594,0.4304591,-0.5609857,0.5609857
 	attRot = 0,0,-0.7071067,0.7071067
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 6
-	sidx = 0
+	sidx = 1
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294806572
 	sym = sepMotor1_4294801154
 	sym = sepMotor1_4294801102
@@ -1145,6 +1383,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1204,6 +1445,28 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
 		}
 	}
 	RESOURCE
@@ -1221,15 +1484,22 @@ PART
 {
 	part = sepMotor1_4294800848
 	partName = Part
-	pos = 0.1551489,11.68918,-2.421426
-	rot = -0.5609856,-0.5609858,0.4304593,0.430459
+	pos = 0.1551487,11.68918,-2.421427
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.5609857,-0.5609858,0.4304593,0.430459
 	attRot = 0,0,-0.7071067,-0.7071067
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 6
-	sidx = 9
+	sidx = 2
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294803184
 	sym = sepMotor1_4294800796
 	sym = sepMotor1_4294800744
@@ -1238,6 +1508,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1299,6 +1572,28 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -1313,16 +1608,23 @@ PART
 PART
 {
 	part = launchClamp1_4294798362
-	partName = Strut
-	pos = 1.114676,11.90958,-3.632522
-	rot = -4.253613E-08,0.1305263,5.861978E-14,-0.9914449
+	partName = Part
+	pos = 1.114676,11.90958,-3.632523
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -4.253613E-08,0.1305263,5.902689E-14,-0.9914449
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 6
-	sidx = 5
+	sidx = 2
 	sqor = 3
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = launchClamp1_4294795706
 	sym = launchClamp1_4294795596
 	sym = launchClamp1_4294795486
@@ -1333,13 +1635,16 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.981668
+		scaleFactor = 4.981669
 		height = 12.56973
-		towerRot = 4.253613E-08,-0.1305263,-5.861978E-14,-0.9914449
+		towerRot = 4.253613E-08,-0.1305263,-5.902689E-14,-0.9914448
 		EVENTS
 		{
 			Release
@@ -1409,21 +1714,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = strutConnector_4294787152
-	partName = StrutConnector
+	partName = CompoundPart
 	pos = 0.588761,14.6931,-1.669779
-	rot = 0.4999999,-0.5000001,0.5000002,-0.4999999
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 0.5,-0.5000002,0.5000002,-0.5
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 6
 	sidx = -1
 	sqor = -1
 	attm = 1
-	cData = tgt: fuelTank1-2_6; pos: -0.9979229,-0.5602698,-0.1465847; dir: -0.8649064,-0.4855886,-0.1270462
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = strutConnector_4294787654
 	sym = strutConnector_4294787092
 	sym = strutConnector_4294787032
@@ -1434,20 +1767,56 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+		tgt = 4294790996
+		pos = -0.9979229,-0.5602698,-0.1465847
+		rot = 0,0,0,0
+		dir = -0.8649064,-0.4855886,-0.1270462
+	}
+	MODULE
+	{
+		name = CModuleLinkedMesh
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = CModuleStrut
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = radialDecoupler2_4294817690
 	partName = Part
 	pos = -1.033903,11.06687,-0.2118802
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 1.326414E-12,0.1305262,9.631929E-07,-0.9914449
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 5
-	sidx = 4
+	sidx = 3
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = solidBooster1-1_4294813480
 	sym = radialDecoupler2_4294818014
 	sym = radialDecoupler2_4294817642
@@ -1457,6 +1826,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1486,20 +1858,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = solidBooster1-1_4294813480
 	partName = Part
 	pos = -2.243208,10.90935,-0.5359125
-	rot = -5.684342E-14,0.7933534,-3.552714E-14,-0.6087614
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -7.032225E-14,0.7933534,2.942468E-16,-0.6087615
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 6
-	sidx = 2
+	sidx = 3
 	sqor = 3
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = noseCone_4294811526
 	link = sepMotor1_4294806572
 	link = sepMotor1_4294803184
@@ -1516,6 +1917,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleEngines
@@ -1524,7 +1928,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9
+		currentThrottle = 0.9876297
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -1586,6 +1990,28 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -1602,14 +2028,21 @@ PART
 	part = noseCone_4294811526
 	partName = Part
 	pos = -2.243208,14.84885,-0.5359125
-	rot = 0,0,0,1
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 2.786584E-15,-1.477368E-08,2.256448E-15,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 6
 	sidx = -1
 	sqor = -1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294811382
 	sym = noseCone_4294811350
 	sym = noseCone_4294811318
@@ -1620,20 +2053,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = sepMotor1_4294806572
 	partName = Part
 	pos = -2.081842,11.69237,-1.138138
-	rot = -0.7010575,0.7010574,-0.09229589,0.09229616
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.7010576,0.7010574,-0.0922959,0.09229614
 	attRot = 0,0,-0.7071067,0.7071067
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 6
-	sidx = 7
+	sidx = 4
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294801206
 	sym = sepMotor1_4294801154
 	sym = sepMotor1_4294801102
@@ -1642,6 +2085,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1701,6 +2147,28 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
 		}
 	}
 	RESOURCE
@@ -1718,15 +2186,22 @@ PART
 {
 	part = sepMotor1_4294803184
 	partName = Part
-	pos = -2.401962,11.68918,0.05656481
-	rot = -0.09229594,-0.09229624,0.7010574,0.7010574
+	pos = -2.401962,11.68918,0.05656501
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.09229597,-0.09229627,0.7010574,0.7010574
 	attRot = 0,0,-0.7071067,-0.7071067
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 6
-	sidx = 8
+	sidx = 5
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294800848
 	sym = sepMotor1_4294800796
 	sym = sepMotor1_4294800744
@@ -1735,6 +2210,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1796,6 +2274,28 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -1810,16 +2310,23 @@ PART
 PART
 {
 	part = launchClamp1_4294795706
-	partName = Strut
-	pos = -3.613059,11.90958,-0.9029625
-	rot = -3.007758E-08,-0.6087615,3.007757E-08,-0.7933533
+	partName = Part
+	pos = -3.613059,11.90958,-0.9029626
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -3.007758E-08,-0.6087615,3.007758E-08,-0.7933534
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 6
-	sidx = 6
+	sidx = 4
 	sqor = 3
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = launchClamp1_4294798362
 	sym = launchClamp1_4294795596
 	sym = launchClamp1_4294795486
@@ -1830,11 +2337,14 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.981668
+		scaleFactor = 4.981669
 		height = 12.56973
 		towerRot = 3.007758E-08,0.6087615,-3.007757E-08,-0.7933533
 		EVENTS
@@ -1906,21 +2416,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = strutConnector_4294787654
-	partName = StrutConnector
+	partName = CompoundPart
 	pos = -1.650316,14.6931,-0.3770473
-	rot = 0.7071068,-0.7071067,1.192093E-07,1.192093E-07
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 0.7071069,-0.7071068,8.442036E-08,1.61275E-07
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 6
 	sidx = -1
 	sqor = -1
 	attm = 1
-	cData = tgt: fuelTank1-2_6; pos: -0.9979208,-0.5602673,-0.1465848; dir: -0.8649064,-0.4855886,-0.1270462
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = strutConnector_4294787152
 	sym = strutConnector_4294787092
 	sym = strutConnector_4294787032
@@ -1931,20 +2469,56 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+		tgt = 4294790996
+		pos = -0.9979208,-0.5602673,-0.1465848
+		rot = 0,0,0,0
+		dir = -0.8649064,-0.4855886,-0.1270462
+	}
+	MODULE
+	{
+		name = CModuleLinkedMesh
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = CModuleStrut
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = radialDecoupler2_4294817642
 	partName = Part
 	pos = -0.1924172,11.06687,1.245617
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 6.810812E-07,-0.6087615,6.810793E-07,-0.7933534
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 5
-	sidx = 5
+	sidx = 6
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = solidBooster1-1_4294813376
 	sym = radialDecoupler2_4294818014
 	sym = radialDecoupler2_4294817690
@@ -1954,6 +2528,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -1983,20 +2560,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = solidBooster1-1_4294813376
 	partName = Part
-	pos = -0.5164496,10.90935,2.454923
-	rot = -5.684342E-14,0.1305262,-1.136868E-13,-0.9914449
+	pos = -0.5164497,10.90935,2.454923
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 3.899208E-15,0.1305262,-1.567835E-13,-0.9914449
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 6
-	sidx = 3
+	sidx = 5
 	sqor = 3
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = noseCone_4294811350
 	link = sepMotor1_4294801154
 	link = sepMotor1_4294800796
@@ -2013,6 +2619,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleEngines
@@ -2021,7 +2630,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9
+		currentThrottle = 0.9876297
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -2078,6 +2687,28 @@ PART
 		isEnabled = True
 		EVENTS
 		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 		}
 		ACTIONS
 		{
@@ -2098,15 +2729,22 @@ PART
 {
 	part = noseCone_4294811350
 	partName = Part
-	pos = -0.5164496,14.84885,2.454923
-	rot = -1.073096E-13,0.7071068,7.166233E-14,0.7071068
+	pos = -0.5164497,14.84885,2.454923
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -1.517046E-13,0.7071069,1.181849E-14,0.7071069
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 6
 	sidx = -1
 	sqor = -1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294811526
 	sym = noseCone_4294811382
 	sym = noseCone_4294811318
@@ -2117,20 +2755,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = sepMotor1_4294801154
 	partName = Part
 	pos = -1.118675,11.69237,2.293557
-	rot = -0.5609854,0.5609857,0.4304594,-0.4304591
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.5609854,0.5609858,0.4304594,-0.4304592
 	attRot = 0,0,-0.7071067,0.7071067
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 6
-	sidx = 1
+	sidx = 7
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294806572
 	sym = sepMotor1_4294801206
 	sym = sepMotor1_4294801102
@@ -2139,6 +2787,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2198,6 +2849,28 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
 		}
 	}
 	RESOURCE
@@ -2215,15 +2888,22 @@ PART
 {
 	part = sepMotor1_4294800796
 	partName = Part
-	pos = 0.07602763,11.68918,2.613677
+	pos = 0.07602763,11.68918,2.613678
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0.4304594,0.4304591,0.5609856,0.5609857
 	attRot = 0,0,-0.7071067,-0.7071067
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 6
-	sidx = 10
+	sidx = 8
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294803184
 	sym = sepMotor1_4294800848
 	sym = sepMotor1_4294800744
@@ -2232,6 +2912,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2293,6 +2976,28 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -2307,16 +3012,23 @@ PART
 PART
 {
 	part = launchClamp1_4294795596
-	partName = Strut
-	pos = -0.8834994,11.90958,3.824774
-	rot = 1.203482E-13,-0.9914449,4.253613E-08,-0.1305262
+	partName = Part
+	pos = -0.8834995,11.90958,3.824775
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 1.238048E-13,-0.9914449,4.253616E-08,-0.1305262
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 6
-	sidx = 7
+	sidx = 6
 	sqor = 3
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = launchClamp1_4294798362
 	sym = launchClamp1_4294795706
 	sym = launchClamp1_4294795486
@@ -2327,13 +3039,16 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.981668
+		scaleFactor = 4.981669
 		height = 12.56973
-		towerRot = -1.203482E-13,0.9914449,-4.253613E-08,-0.1305262
+		towerRot = -1.238048E-13,0.9914449,-4.253616E-08,-0.1305262
 		EVENTS
 		{
 			Release
@@ -2403,21 +3118,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = strutConnector_4294787092
-	partName = StrutConnector
-	pos = -0.3575846,14.6931,1.862031
-	rot = 0.5000001,-0.4999999,-0.4999999,0.5000001
+	partName = CompoundPart
+	pos = -0.3575847,14.6931,1.862031
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 0.5000001,-0.4999999,-0.4999999,0.5000002
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 6
 	sidx = -1
 	sqor = -1
 	attm = 1
-	cData = tgt: fuelTank1-2_6; pos: -0.9979152,-0.5602643,-0.1465843; dir: -0.8649064,-0.4855886,-0.1270462
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = strutConnector_4294787654
 	sym = strutConnector_4294787152
 	sym = strutConnector_4294787032
@@ -2428,20 +3171,56 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+		tgt = 4294790996
+		pos = -0.9979152,-0.5602643,-0.1465843
+		rot = 0,0,0,0
+		dir = -0.8649064,-0.4855886,-0.1270462
+	}
+	MODULE
+	{
+		name = CModuleLinkedMesh
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = CModuleStrut
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = radialDecoupler2_4294817594
 	partName = Part
 	pos = 1.265079,11.06687,0.4041306
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 9.631929E-07,-0.9914449,-1.326414E-12,-0.1305262
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 5
-	sidx = 6
+	sidx = 9
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = solidBooster1-1_4294813272
 	sym = radialDecoupler2_4294818014
 	sym = radialDecoupler2_4294817690
@@ -2451,6 +3230,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2480,20 +3262,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = solidBooster1-1_4294813272
 	partName = Part
-	pos = 2.474385,10.90935,0.7281631
-	rot = -2.842182E-14,-0.6087614,5.684342E-14,-0.7933534
+	pos = 2.474385,10.90935,0.7281632
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 2.942468E-16,-0.6087615,7.032225E-14,-0.7933534
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 6
-	sidx = 4
+	sidx = 7
 	sqor = 3
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = noseCone_4294811318
 	link = sepMotor1_4294801102
 	link = sepMotor1_4294800744
@@ -2510,6 +3321,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleEngines
@@ -2518,7 +3332,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9
+		currentThrottle = 0.9876297
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -2580,6 +3394,28 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -2595,15 +3431,22 @@ PART
 {
 	part = noseCone_4294811318
 	partName = Part
-	pos = 2.474385,14.84885,0.7281631
-	rot = -4.325441E-15,1,-5.637031E-15,-2.019484E-27
+	pos = 2.474385,14.84885,0.7281632
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 2.912237E-15,1,-7.767794E-15,1.477368E-08
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 6
 	sidx = -1
 	sqor = -1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = noseCone_4294811526
 	sym = noseCone_4294811382
 	sym = noseCone_4294811350
@@ -2614,20 +3457,30 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 }
 PART
 {
 	part = sepMotor1_4294801102
 	partName = Part
 	pos = 2.31302,11.69237,1.330389
-	rot = -0.09229586,0.09229615,0.7010574,-0.7010573
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = -0.09229585,0.09229614,0.7010575,-0.7010574
 	attRot = 0,0,-0.7071067,0.7071067
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 6
-	sidx = 2
+	sidx = 10
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294806572
 	sym = sepMotor1_4294801206
 	sym = sepMotor1_4294801154
@@ -2636,6 +3489,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2695,6 +3551,28 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
 		}
 	}
 	RESOURCE
@@ -2712,15 +3590,22 @@ PART
 {
 	part = sepMotor1_4294800744
 	partName = Part
-	pos = 2.633139,11.68918,0.1356857
-	rot = 0.7010574,0.7010574,0.09229591,0.09229624
+	pos = 2.633139,11.68918,0.1356856
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 0.7010574,0.7010574,0.09229592,0.09229627
 	attRot = 0,0,-0.7071067,-0.7071067
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 6
 	sidx = 11
 	sqor = 2
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = sepMotor1_4294803184
 	sym = sepMotor1_4294800848
 	sym = sepMotor1_4294800796
@@ -2729,6 +3614,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2790,6 +3678,28 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -2804,16 +3714,23 @@ PART
 PART
 {
 	part = launchClamp1_4294795486
-	partName = Strut
-	pos = 3.844237,11.90958,1.095213
-	rot = 3.007757E-08,-0.7933533,3.007759E-08,0.6087615
+	partName = Part
+	pos = 3.844238,11.90958,1.095213
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 3.007758E-08,-0.7933534,3.007758E-08,0.6087615
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 3
 	dstg = 6
 	sidx = 8
 	sqor = 3
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = launchClamp1_4294798362
 	sym = launchClamp1_4294795706
 	sym = launchClamp1_4294795596
@@ -2824,13 +3741,16 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.981668
+		scaleFactor = 4.981669
 		height = 12.56973
-		towerRot = -3.007757E-08,0.7933533,-3.007759E-08,0.6087615
+		towerRot = -3.007757E-08,0.7933533,-3.007758E-08,0.6087615
 		EVENTS
 		{
 			Release
@@ -2900,21 +3820,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = strutConnector_4294787032
-	partName = StrutConnector
+	partName = CompoundPart
 	pos = 1.881493,14.6931,0.569298
-	rot = 1.192093E-07,1.490116E-07,-0.7071068,0.7071068
+	attPos = 0,0,0
+	attPos0 = 0,0,0
+	rot = 9.880089E-08,1.756556E-07,-0.7071069,0.7071069
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 6
 	dstg = 6
 	sidx = -1
 	sqor = -1
 	attm = 1
-	cData = tgt: fuelTank1-2_6; pos: -0.9979162,-0.5602652,-0.1465841; dir: -0.8649064,-0.4855886,-0.1270462
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = strutConnector_4294787654
 	sym = strutConnector_4294787152
 	sym = strutConnector_4294787092
@@ -2925,20 +3873,56 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+		tgt = 4294790996
+		pos = -0.9979162,-0.5602652,-0.1465841
+		rot = 0,0,0,0
+		dir = -0.8649064,-0.4855886,-0.1270462
+	}
+	MODULE
+	{
+		name = CModuleLinkedMesh
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = CModuleStrut
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = stackSeparator_4294780186
 	partName = Part
 	pos = 0.1155881,26.06312,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 1
 	dstg = 1
-	sidx = 3
+	sidx = 2
 	sqor = 1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	link = LaunchEscapeSystem_4294774236
 	attN = bottom,Mark1-2Pod_4294829134
 	attN = top,LaunchEscapeSystem_4294774236
@@ -2946,6 +3930,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -2975,25 +3962,57 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = LaunchEscapeSystem_4294774236
 	partName = Part
 	pos = 0.1155881,27.61897,0.09612527
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 1
 	dstg = 2
-	sidx = 2
+	sidx = 3
 	sqor = 1
 	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	attN = bottom,stackSeparator_4294780186
 	EVENTS
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -3055,6 +4074,28 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -3071,14 +4112,21 @@ PART
 	part = parachuteRadial_4294768348
 	partName = Part
 	pos = 0.3595397,24.92945,-0.8143141
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.1984044,0.1349275,-0.009615897,-0.9707409
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 2
+	sidx = 1
 	sqor = 0
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = parachuteRadial_4294766324
 	sym = parachuteRadial_4294766276
 	srfN = srfAttach,Mark1-2Pod_4294829134
@@ -3086,6 +4134,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -3156,6 +4207,28 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
 		}
 	}
 }
@@ -3164,14 +4237,21 @@ PART
 	part = parachuteRadial_4294766324
 	partName = Part
 	pos = -0.7948513,24.92945,0.3400768
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -0.1075298,-0.7732226,0.1670153,-0.602221
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 3
+	sidx = 2
 	sqor = 0
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = parachuteRadial_4294768348
 	sym = parachuteRadial_4294766276
 	srfN = srfAttach,Mark1-2Pod_4294829134
@@ -3181,6 +4261,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleParachute
@@ -3251,20 +4334,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = parachuteRadial_4294766276
 	partName = Part
 	pos = 0.7820761,24.92945,0.7626132
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = 0.09087463,-0.90815,0.1766312,0.3685199
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 4
+	sidx = 3
 	sqor = 0
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = parachuteRadial_4294768348
 	sym = parachuteRadial_4294766324
 	srfN = srfAttach,Mark1-2Pod_4294829134
@@ -3274,6 +4386,9 @@ PART
 	ACTIONS
 	{
 	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
 		name = ModuleParachute
@@ -3344,20 +4459,49 @@ PART
 			}
 		}
 	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = solarPanels2_4294760472
 	partName = Part
 	pos = -0.7597713,22.99423,0.9714846
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -2.780501E-07,-0.3826834,-4.815964E-07,-0.9238796
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 2
 	sidx = -1
 	sqor = -1
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = solarPanels2_4294760076
 	sym = solarPanels2_4294759962
 	sym = solarPanels2_4294759848
@@ -3366,6 +4510,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -3423,14 +4570,21 @@ PART
 	part = solarPanels2_4294760076
 	partName = Part
 	pos = 0.9909474,22.99423,0.9714847
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -5.371512E-07,-0.9238796,-1.43929E-07,-0.3826835
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 2
 	sidx = -1
 	sqor = -1
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = solarPanels2_4294760472
 	sym = solarPanels2_4294759962
 	sym = solarPanels2_4294759848
@@ -3439,6 +4593,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -3496,14 +4653,21 @@ PART
 	part = solarPanels2_4294759962
 	partName = Part
 	pos = 0.9909475,22.99423,-0.7792342
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -4.815964E-07,-0.9238796,2.780501E-07,0.3826834
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 2
 	sidx = -1
 	sqor = -1
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = solarPanels2_4294760472
 	sym = solarPanels2_4294760076
 	sym = solarPanels2_4294759848
@@ -3512,6 +4676,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
@@ -3569,14 +4736,21 @@ PART
 	part = solarPanels2_4294759848
 	partName = Part
 	pos = -0.7597712,22.99423,-0.7792341
+	attPos = 0,0,0
+	attPos0 = 0,0,0
 	rot = -1.43929E-07,-0.3826835,5.371512E-07,0.9238796
 	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
 	mir = 1,1,1
+	symMethod = Radial
 	istg = 2
 	dstg = 2
 	sidx = -1
 	sqor = -1
 	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
 	sym = solarPanels2_4294760472
 	sym = solarPanels2_4294760076
 	sym = solarPanels2_4294759962
@@ -3585,6 +4759,9 @@ PART
 	{
 	}
 	ACTIONS
+	{
+	}
+	PARTDATA
 	{
 	}
 	MODULE
