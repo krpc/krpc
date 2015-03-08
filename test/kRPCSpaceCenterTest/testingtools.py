@@ -45,7 +45,7 @@ def load_save(name):
 
     # Load the save file
     conn = krpc.connect()
-    ksp.testing_tools.load_save('test', name)
+    conn.testing_tools.load_save('test', name)
     del conn
 
     # Wait until server comes back up
