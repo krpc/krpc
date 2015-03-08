@@ -19,10 +19,13 @@ class TestAutoPilot(testingtools.TestCase):
     def test_equality(self):
         self.assertEqual(self.vessel.auto_pilot, self.ap)
 
+    def wait_for_autopilot(self):
+        while self.ap.error > 0.25:
+            time.sleep(0.25)
+
     def set_rotation(self, pitch, heading, roll):
         self.ap.set_rotation(pitch, heading, roll)
-        while self.ap.error > 0.05:
-            time.sleep(0.25)
+        self.wait_for_autopilot()
         self.ap.disengage()
 
     def check_rotation(self, pitch, heading, roll):
@@ -31,19 +34,16 @@ class TestAutoPilot(testingtools.TestCase):
         actual_phr = (flight.pitch, flight.heading, flight.roll)
         self.assertClose(phr, actual_phr, error=1)
 
-    def set_direction(self, direction, roll=0):
+    def set_direction(self, direction, roll=float('nan')):
         self.ap.set_direction(direction, roll=roll)
-        while self.ap.error > 0.05:
-            time.sleep(0.25)
+        self.wait_for_autopilot()
         self.ap.disengage()
 
-    def check_direction(self, direction, roll=0):
+    def check_direction(self, direction, roll=None):
         flight = self.vessel.flight()
         self.assertClose(direction, flight.direction, error=0.1)
-        self.assertClose(roll, flight.roll, error=0.5)
-        pitch,heading = self.conn.space_center.get_pitch_heading(direction)
-        self.assertClose(pitch, flight.pitch, error=1)
-        self.assertClose(heading, flight.heading, error=1)
+        if roll is not None:
+            self.assertClose(roll, flight.roll, error=1)
 
     def test_set_pitch(self):
         for pitch in range(-80, 80, 20):
@@ -51,7 +51,7 @@ class TestAutoPilot(testingtools.TestCase):
             self.check_rotation(pitch,90,0)
 
     def test_set_heading(self):
-        for heading in range(20, 340, 20):
+        for heading in range(20, 340, 40):
             self.set_rotation(0,heading,0)
             self.check_rotation(0,heading,0)
 
@@ -77,12 +77,28 @@ class TestAutoPilot(testingtools.TestCase):
 
     def test_set_direction(self):
         cases = [
-            ((1,0,0), 0),
-            ((0,1,0), 0),
-            ((0,0,1), 0),
-            ((-1,0,0), 0),
-            ((0,-1,0), 0),
-            ((0,0,-1), 0),
+            (1,0,0),
+            (0,1,0),
+            (0,0,1),
+            (-1,0,0),
+            (0,-1,0),
+            (0,0,-1),
+            (1,2,3)
+        ]
+
+        for direction in cases:
+            direction = normalize(direction)
+            self.set_direction(direction)
+            self.check_direction(direction)
+
+    def test_set_direction_and_roll(self):
+        cases = [
+            ((1,1,0), 23),
+            ((0,1,1), -75),
+            ((1,0,1), 14),
+            ((-1,0,1), -83),
+            ((0,-1,1), -11),
+            ((1,0,-1), 2),
             ((1,2,3), 42)
         ]
 
