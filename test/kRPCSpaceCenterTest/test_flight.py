@@ -25,9 +25,9 @@ class TestFlight(testingtools.TestCase):
     def check_properties_not_affected_by_reference_frame(self, flight):
         """ Verify flight properties that aren't affected by reference frames """
         #self.assertClose(0, flight.g_force)
-        self.assertClose(100000, flight.mean_altitude, error=1)
-        self.assertClose(flight.mean_altitude - max(0, flight.elevation), flight.surface_altitude, error=1)
-        self.assertClose(flight.mean_altitude - flight.elevation, flight.bedrock_altitude, error=1)
+        self.assertClose(100000, flight.mean_altitude, error=10)
+        self.assertClose(flight.mean_altitude - max(0, flight.elevation), flight.surface_altitude, error=10)
+        self.assertClose(flight.mean_altitude - flight.elevation, flight.bedrock_altitude, error=10)
 
     def check_directions(self, flight):
         """ Check flight.direction against flight.heading and flight.pitch """
