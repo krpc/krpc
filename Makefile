@@ -108,7 +108,7 @@ test-spacecenter:
 	make -C test/kRPCSpaceCenterTest KSP_DIR="$(KSP_DIR)" test
 
 ksp: install TestingTools
-	cp test/TestingTools/bin/Release/TestingTools.dll "$(KSP_DIR)/GameData/"
+	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.dll "$(KSP_DIR)/GameData/"
 	-cp settings.cfg "$(KSP_DIR)/GameData/kRPC/settings.cfg"
 	test "!" -f "$(KSP_DIR)/KSP.x86_64" || "$(KSP_DIR)/KSP.x86_64" &
 	test "!" -f "$(KSP_DIR)/KSP.exe" || "$(KSP_DIR)/KSP.exe" &

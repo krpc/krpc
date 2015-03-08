@@ -1,5 +1,7 @@
 .PHONY: all protobuf bin test dist release clean
 
+CSHARP_CONFIG = Release
+
 all: dist
 
 protobuf:
@@ -8,10 +10,10 @@ protobuf:
 bin:
 	make -C .. TestServer
 	mkdir -p bin/TestServer
-	cp ../test/TestServer/bin/Release/TestServer.exe \
-	   ../test/TestServer/bin/Release/kRPC.dll \
-	   ../test/TestServer/bin/Release/Google.ProtocolBuffers.Serialization.dll \
-	   ../test/TestServer/bin/Release/Google.ProtocolBuffers.dll \
+	cp ../test/TestServer/bin/$(CSHARP_CONFIG)/TestServer.exe \
+	   ../test/TestServer/bin/$(CSHARP_CONFIG)/kRPC.dll \
+	   ../test/TestServer/bin/$(CSHARP_CONFIG)/Google.ProtocolBuffers.Serialization.dll \
+	   ../test/TestServer/bin/$(CSHARP_CONFIG)/Google.ProtocolBuffers.dll \
 	   ./bin/TestServer/
 
 test: protobuf bin
