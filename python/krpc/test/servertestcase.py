@@ -6,7 +6,7 @@ class ServerTestCase(object):
 
     @classmethod
     def setUpClass(cls):
-        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe', '50123', '50124'])
+        cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe', '50011', '50012'])
         time.sleep(0.25)
 
     @classmethod
