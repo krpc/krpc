@@ -18,6 +18,13 @@ namespace KRPC.Service
             }
         }
 
+        public static void Clear ()
+        {
+            Instance.nextObjectId = 1;
+            Instance.objectIds.Clear ();
+            Instance.instances.Clear ();
+        }
+
         /// <summary>
         /// Register an instance with the object store, associating a unique object
         /// identifier with the instance that can be passed to clients.

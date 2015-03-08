@@ -102,7 +102,7 @@ namespace KRPC
 
             // Validate stream client identifiers
             streamServer.OnClientRequestingConnection += (s, e) => {
-                if (rpcServer.Clients.Where(c => c.Guid == e.Client.Guid).Any())
+                if (rpcServer.Clients.Where (c => c.Guid == e.Client.Guid).Any ())
                     e.Request.Allow ();
                 else
                     e.Request.Deny ();
@@ -119,6 +119,7 @@ namespace KRPC
         {
             rpcServer.Stop ();
             streamServer.Stop ();
+            ObjectStore.Clear ();
         }
 
         public IPAddress Address {
