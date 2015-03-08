@@ -22,9 +22,13 @@ namespace KRPC.UI
 
         public bool Visible { get; private set; }
 
-        public void Awake ()
+        protected OptionDialog ()
         {
             Options = new List<DialogOption> ();
+        }
+
+        public void Awake ()
+        {
             RenderingManager.AddToPostDrawQueue (1, UpdateGUI);
         }
 
