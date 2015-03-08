@@ -8,7 +8,8 @@ namespace KRPC
     sealed class KRPCConfiguration : ConfigurationStorage
     {
         [Persistent] string address = "127.0.0.1";
-        [Persistent] ushort port = 50000;
+        [Persistent] ushort rpcPort = 50000;
+        [Persistent] ushort streamPort = 50001;
         [Persistent] bool mainWindowVisible = true;
         [Persistent] RectStorage mainWindowPosition = new RectStorage ();
         [Persistent] bool autoStartServer = false;
@@ -16,9 +17,14 @@ namespace KRPC
 
         public IPAddress Address { get; set; }
 
-        public ushort Port {
-            get { return port; }
-            set { port = value; }
+        public ushort RPCPort {
+            get { return rpcPort; }
+            set { rpcPort = value; }
+        }
+
+        public ushort StreamPort {
+            get { return streamPort; }
+            set { streamPort = value; }
         }
 
         public bool MainWindowVisible {

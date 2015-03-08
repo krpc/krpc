@@ -21,8 +21,7 @@ namespace KRPC
         {
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
-            // TODO: make the Stream port configurable
-            server = new KRPCServer (config.Address, config.Port, (ushort)(config.Port+1));
+            server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
             server.GetUniversalTime = Planetarium.GetUniversalTime;
 
             // Disconnect client dialog
@@ -109,7 +108,8 @@ namespace KRPC
                 StartServer ();
         }
 
-        void OnGUIApplicationLauncherReady() {
+        void OnGUIApplicationLauncherReady ()
+        {
             applauncherButton = ApplicationLauncher.Instance.AddModApplication (
                 () => mainWindow.Visible = !mainWindow.Visible,
                 () => mainWindow.Visible = !mainWindow.Visible,
@@ -118,7 +118,8 @@ namespace KRPC
                 server.Running ? textureOnline : textureOffline);
         }
 
-        void OnGUIApplicationLauncherDestroyed() {
+        void OnGUIApplicationLauncherDestroyed ()
+        {
             ApplicationLauncher.Instance.RemoveModApplication (applauncherButton);
             applauncherButton = null;
         }
@@ -126,9 +127,8 @@ namespace KRPC
         private void StartServer ()
         {
             config.Load ();
-            server.RPCPort = config.Port;
-            // TODO: Make the stream server port configurable
-            server.StreamPort = (ushort)(config.Port+1);
+            server.RPCPort = config.RPCPort;
+            server.StreamPort = config.StreamPort;
             server.Address = config.Address;
             try {
                 server.Start ();

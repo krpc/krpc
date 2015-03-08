@@ -29,10 +29,11 @@ namespace KRPC.UI
         int numClientsDisplayed;
         // Editable fields
         string address;
-        string port;
+        string rpcPort;
+        string streamPort;
         // Style settings
         readonly Color errorColor = Color.yellow;
-        GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, buttonStyle,
+        GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, stretchyTextFieldStyle, buttonStyle,
             toggleStyle, separatorStyle, lightStyle, errorLabelStyle;
         const float windowWidth = 288f;
         const float addressWidth = 106f;
@@ -45,13 +46,15 @@ namespace KRPC.UI
         const string serverOnlineText = "Server online";
         const string serverOfflineText = "Server offline";
         const string addressLabelText = "Address:";
-        const string portLabelText = "Port:";
+        const string rpcPortLabelText = "RPC port:";
+        const string streamPortLabelText = "Stream port:";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
         const string noClientsConnectedText = "No clients connected";
         const string unknownClientNameText = "<unknown>";
         const string invalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
-        const string invalidPortText = "Port must be between 0 and 65535";
+        const string invalidRPCPortText = "RPC port must be between 0 and 65535";
+        const string invalidStreamPortText = "Stream port must be between 0 and 65535";
         const string localClientOnlyText = "Local clients only";
         const string subnetAllowedText = "Subnet {0}";
         const string unknownClientsAllowedText = "Unknown visibility";
@@ -73,6 +76,10 @@ namespace KRPC.UI
 
             textFieldStyle = new GUIStyle (GUI.skin.textField);
             textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
+
+            stretchyTextFieldStyle = new GUIStyle (GUI.skin.textField);
+            stretchyTextFieldStyle.margin = new RectOffset (0, 0, 0, 0);
+            stretchyTextFieldStyle.stretchWidth = true;
 
             buttonStyle = new GUIStyle (GUI.skin.button);
             buttonStyle.margin = new RectOffset (0, 0, 0, 0);
@@ -96,7 +103,8 @@ namespace KRPC.UI
 
             Errors = new List<string> ();
             address = Config.Address.ToString ();
-            port = Config.Port.ToString ();
+            rpcPort = Config.RPCPort.ToString ();
+            streamPort = Config.StreamPort.ToString ();
         }
 
         private void DrawServerStatus ()
@@ -129,22 +137,33 @@ namespace KRPC.UI
         private void DrawAddress ()
         {
             if (Server.Running)
-                GUILayout.Label (addressLabelText + " " + Server.Address.ToString (), stretchyLabelStyle);
+                GUILayout.Label (addressLabelText + " " + Server.Address, labelStyle);
             else {
-                GUILayout.Label (addressLabelText, stretchyLabelStyle);
+                GUILayout.Label (addressLabelText, labelStyle);
                 textFieldStyle.fixedWidth = addressWidth;
-                address = GUILayout.TextField (address, addressMaxLength, textFieldStyle);
+                address = GUILayout.TextField (address, addressMaxLength, stretchyTextFieldStyle);
             }
         }
 
-        private void DrawPort ()
+        private void DrawRPCPort ()
         {
             if (Server.Running)
-                GUILayout.Label (portLabelText + " " + Server.RPCPort.ToString (), stretchyLabelStyle);
+                GUILayout.Label (rpcPortLabelText + " " + Server.RPCPort, labelStyle);
             else {
-                GUILayout.Label (portLabelText, stretchyLabelStyle);
+                GUILayout.Label (rpcPortLabelText, labelStyle);
                 textFieldStyle.fixedWidth = portWidth;
-                port = GUILayout.TextField (port, portMaxLength, textFieldStyle);
+                rpcPort = GUILayout.TextField (rpcPort, portMaxLength, textFieldStyle);
+            }
+        }
+
+        private void DrawStreamPort ()
+        {
+            if (Server.Running)
+                GUILayout.Label (streamPortLabelText + " " + Server.StreamPort, labelStyle);
+            else {
+                GUILayout.Label (streamPortLabelText, labelStyle);
+                textFieldStyle.fixedWidth = portWidth;
+                streamPort = GUILayout.TextField (streamPort, portMaxLength, textFieldStyle);
             }
         }
 
@@ -229,8 +248,12 @@ namespace KRPC.UI
 
             GUILayout.BeginHorizontal ();
             DrawAddress ();
-            GUILayout.Space (8);
-            DrawPort ();
+            GUILayout.EndHorizontal ();
+
+            GUILayout.BeginHorizontal ();
+            DrawRPCPort ();
+            GUILayout.Space (4);
+            DrawStreamPort ();
             GUILayout.EndHorizontal ();
 
             if (Server.Running) {
@@ -264,19 +287,23 @@ namespace KRPC.UI
             IPAddress ignoreAddress;
             ushort ignorePort;
             bool validAddress = IPAddress.TryParse (address, out ignoreAddress);
-            bool validPort = UInt16.TryParse (port, out ignorePort);
+            bool validRPCPort = UInt16.TryParse (rpcPort, out ignorePort);
+            bool validStreamPort = UInt16.TryParse (streamPort, out ignorePort);
 
             // Display error message if required
             if (!validAddress)
                 Errors.Add (invalidAddressText);
-            if (!validPort)
-                Errors.Add (invalidPortText);
+            if (!validRPCPort)
+                Errors.Add (invalidRPCPortText);
+            if (!validStreamPort)
+                Errors.Add (invalidStreamPortText);
 
             // Save the settings and trigger start server event
             if (Errors.Count == 0) {
                 Config.Load ();
-                Config.Port = Convert.ToUInt16 (port);
                 Config.Address = IPAddress.Parse (address);
+                Config.RPCPort = Convert.ToUInt16 (rpcPort);
+                Config.StreamPort = Convert.ToUInt16 (streamPort);
                 Config.Save ();
                 return true;
             }
