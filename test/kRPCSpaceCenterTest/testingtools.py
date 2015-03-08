@@ -94,7 +94,7 @@ def launch_vessel_from_vab(name):
             time.sleep(0.2)
 
     #TODO: remove sleep
-    time.sleep(3)
+    time.sleep(10)
 
 def set_orbit(body, sma, e, inc, lan, w, mEp, epoch):
     conn = krpc.connect()
