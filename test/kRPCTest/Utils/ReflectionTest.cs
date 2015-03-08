@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Reflection;
 using NUnit.Framework;
 using KRPC.Utils;
 using KRPC.Service.Attributes;

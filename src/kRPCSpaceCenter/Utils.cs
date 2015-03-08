@@ -1,5 +1,4 @@
 using System;
-using KSP;
 
 namespace KRPCSpaceCenter
 {

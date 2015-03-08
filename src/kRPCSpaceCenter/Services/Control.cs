@@ -9,16 +9,16 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Control : Equatable<Control>
     {
-        global::Vessel vessel;
+        readonly global::Vessel vessel;
 
         internal Control (global::Vessel vessel)
         {
             this.vessel = vessel;
         }
 
-        public override bool Equals (Control other)
+        public override bool Equals (Control obj)
         {
-            return vessel == other.vessel;
+            return vessel == obj.vessel;
         }
 
         public override int GetHashCode ()
@@ -148,7 +148,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public IList<Node> Nodes {
             get {
-                return vessel.patchedConicSolver.maneuverNodes.Select ((x) => new Node (x)).OrderBy (x => x.UT).ToList ();
+                return vessel.patchedConicSolver.maneuverNodes.Select (x => new Node (x)).OrderBy (x => x.UT).ToList ();
             }
         }
 

@@ -90,7 +90,7 @@ namespace TestServer.Services
         [KRPCClass]
         public class TestClass : KRPC.Utils.Equatable<TestClass>
         {
-            string value;
+            readonly string value;
 
             public TestClass (string value)
             {
@@ -106,7 +106,7 @@ namespace TestServer.Services
             [KRPCMethod]
             public string FloatToString (float x)
             {
-                return value + x.ToString ();
+                return value + x;
             }
 
             [KRPCMethod]
@@ -127,9 +127,9 @@ namespace TestServer.Services
                 return x + y + z + anotherParameter;
             }
 
-            public override bool Equals (TestClass other)
+            public override bool Equals (TestClass obj)
             {
-                return value == other.value;
+                return value == obj.value;
             }
 
             public override int GetHashCode ()

@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 using UnityEngine;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
-using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -20,14 +19,14 @@ namespace KRPCSpaceCenter.Services
             InternalBody = body;
             // TODO: better way to check for orbits?
             if (body.name != "Sun")
-                this.orbit = new Orbit (body);
+                orbit = new Orbit (body);
         }
 
         internal global::CelestialBody InternalBody { get; private set; }
 
-        public override bool Equals (CelestialBody other)
+        public override bool Equals (CelestialBody obj)
         {
-            return InternalBody == other.InternalBody;
+            return InternalBody == obj.InternalBody;
         }
 
         public override int GetHashCode ()
@@ -165,9 +164,9 @@ namespace KRPCSpaceCenter.Services
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
             var up = Vector3.up;
-            var right = InternalBody.GetRelSurfacePosition (0,0,1).normalized;
+            var right = InternalBody.GetRelSurfacePosition (0, 0, 1).normalized;
             var forward = Vector3.Cross (right, up);
-            Vector3.OrthoNormalize(ref forward, ref up);
+            Vector3.OrthoNormalize (ref forward, ref up);
             var rotation = Quaternion.LookRotation (forward, up);
             return referenceFrame.RotationFromWorldSpace (rotation).ToTuple ();
         }

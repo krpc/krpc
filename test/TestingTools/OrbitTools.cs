@@ -9,7 +9,7 @@ namespace TestingTools
      * As of writing, supported by Team HyperEdit, and Ezriilc.
      * Original HyperEdit concept and code by khyperia (no longer involved).
      */
-    internal static class OrbitTools
+    static class OrbitTools
     {
         internal static Orbit CreateOrbit (CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
         {
@@ -64,7 +64,7 @@ namespace TestingTools
             } catch (NullReferenceException) {
             }
 
-            foreach (var v in (FlightGlobals.fetch == null ? (IEnumerable<Vessel>)new[] { vessel } : FlightGlobals.Vessels).Where(v => v.packed == false))
+            foreach (var v in (FlightGlobals.fetch == null ? (IEnumerable<Vessel>)new[] { vessel } : FlightGlobals.Vessels).Where(v => !v.packed))
                 v.GoOnRails ();
 
             HardsetOrbit (vessel.orbit, newOrbit);

@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using System;
 using System.IO;
 using System.Linq;
 using KRPC.Server.Stream;
@@ -24,16 +23,16 @@ namespace KRPCTest.Server.Stream
             responseBuilder1.SetError ("Foo");
 
             var streamResponseBuilder1 = StreamResponse.CreateBuilder ();
-            streamResponseBuilder1.SetId(1263);
-            streamResponseBuilder1.SetResponse(responseBuilder1.Build ());
+            streamResponseBuilder1.SetId (1263);
+            streamResponseBuilder1.SetResponse (responseBuilder1.Build ());
 
             var responseBuilder2 = Response.CreateBuilder ();
             responseBuilder2.SetTime (123);
             responseBuilder2.SetError ("Bar");
 
             var streamResponseBuilder2 = StreamResponse.CreateBuilder ();
-            streamResponseBuilder2.SetId(3443);
-            streamResponseBuilder2.SetResponse(responseBuilder2.Build ());
+            streamResponseBuilder2.SetId (3443);
+            streamResponseBuilder2.SetResponse (responseBuilder2.Build ());
 
             streamMessageBuilder.AddResponses (streamResponseBuilder1.Build ());
             streamMessageBuilder.AddResponses (streamResponseBuilder2.Build ());

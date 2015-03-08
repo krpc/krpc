@@ -57,7 +57,7 @@ namespace KRPCTest.Schema
         {
             // From Google's protobuf documentation, varint encoding example:
             // 300 = 1010 1100 0000 0010 = 0xAC 0x02
-            byte[] bytes = new byte[] { 0xAC, 0x02 };
+            byte[] bytes = { 0xAC, 0x02 };
             var codedStream = CodedInputStream.CreateInstance (bytes);
             uint value = 0;
             codedStream.ReadUInt32 (ref value);

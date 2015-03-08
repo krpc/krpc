@@ -12,15 +12,15 @@ namespace KRPC.Service
     {
         public IClient Client { get; private set; }
 
-        Request request;
-        ProcedureSignature procedure;
-        IContinuation continuation;
+        readonly Request request;
+        readonly ProcedureSignature procedure;
+        readonly IContinuation continuation;
 
         public RequestContinuation (IClient client, Request request)
         {
             Client = client;
             this.request = request;
-            this.procedure = Services.Instance.GetProcedureSignature (request);
+            procedure = Services.Instance.GetProcedureSignature (request);
         }
 
         RequestContinuation (IClient client, Request request, ProcedureSignature procedure, IContinuation continuation)

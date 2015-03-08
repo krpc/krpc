@@ -6,16 +6,16 @@ namespace KRPCTest.Server
     // TODO: This is only required due to mocking not preforming equality testing. Is there a better way to do this?
     class TestClient : IClient<byte,byte>
     {
-        Guid guid;
+        readonly Guid guid;
 
         public TestClient (TestStream stream)
         {
-            guid = Guid.NewGuid();
+            guid = Guid.NewGuid ();
             Stream = stream;
         }
 
         public string Name {
-            get { throw new NotImplementedException (); }
+            get { throw new NotSupportedException (); }
         }
 
         public Guid Guid {
@@ -23,18 +23,18 @@ namespace KRPCTest.Server
         }
 
         public string Address {
-            get { throw new NotImplementedException (); }
+            get { throw new NotSupportedException (); }
         }
 
         public IStream<byte,byte> Stream { get; private set; }
 
         public bool Connected {
-            get { throw new NotImplementedException (); }
+            get { throw new NotSupportedException (); }
         }
 
         public void Close ()
         {
-            throw new NotImplementedException ();
+            throw new NotSupportedException ();
         }
 
         public override bool Equals (Object obj)

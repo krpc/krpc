@@ -19,7 +19,7 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class AutoPilot : Equatable<AutoPilot>
     {
-        global::Vessel vessel;
+        readonly global::Vessel vessel;
         static HashSet<AutoPilot> engaged = new HashSet<AutoPilot> ();
         ReferenceFrame referenceFrame;
         double pitch;
@@ -33,9 +33,9 @@ namespace KRPCSpaceCenter.Services
             this.vessel = vessel;
         }
 
-        public override bool Equals (AutoPilot other)
+        public override bool Equals (AutoPilot obj)
         {
-            return vessel == other.vessel;
+            return vessel == obj.vessel;
         }
 
         public override int GetHashCode ()
@@ -63,8 +63,8 @@ namespace KRPCSpaceCenter.Services
             this.referenceFrame = referenceFrame;
             QuaternionD rotation = Quaternion.FromToRotation (Vector3d.up, direction.ToVector ());
             var phr = rotation.PitchHeadingRoll ();
-            this.pitch = phr [0];
-            this.heading = phr [1];
+            pitch = phr [0];
+            heading = phr [1];
             this.roll = roll;
             Engage ();
         }

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using UnityEngine;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -31,7 +30,7 @@ namespace KRPCSpaceCenter.Services
             Maneuver
         }
 
-        Type type;
+        readonly Type type;
         global::CelestialBody body;
         global::Vessel vessel;
         global::Part part;
@@ -42,13 +41,13 @@ namespace KRPCSpaceCenter.Services
             this.type = type;
         }
 
-        public override bool Equals (ReferenceFrame other)
+        public override bool Equals (ReferenceFrame obj)
         {
-            return this.type == other.type &&
-            this.body == other.body &&
-            this.vessel == other.vessel &&
-            this.part == other.part &&
-            this.node == other.node;
+            return type == obj.type &&
+            body == obj.body &&
+            vessel == obj.vessel &&
+            part == obj.part &&
+            node == obj.node;
         }
 
         public override int GetHashCode ()
@@ -225,7 +224,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Vector from given vessel to north pole of body being orbited, in world space.
         /// </summary>
-        Vector3d ToNorthPole (global::Vessel vessel)
+        static Vector3d ToNorthPole (global::Vessel vessel)
         {
             var parent = vessel.mainBody;
             return parent.position + ((Vector3d)parent.transform.up) * parent.Radius - (vessel.GetWorldPos3D ());
@@ -234,7 +233,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Vector from center of given body to north pole of body being orbited, in world space.
         /// </summary>
-        Vector3d ToNorthPole (global::CelestialBody body)
+        static Vector3d ToNorthPole (global::CelestialBody body)
         {
             var parent = body.referenceBody;
             return parent.position + (((Vector3d)parent.transform.up) * parent.Radius) - body.position;
@@ -253,7 +252,6 @@ namespace KRPCSpaceCenter.Services
                 case Type.CelestialBodySurface:
                 case Type.CelestialBodyOrbital:
                     {
-                        var right = (body.position - body.referenceBody.position).normalized;
                         return Vector3d.Exclude (Forward, ToNorthPole (body).normalized);
                     }
                 case Type.Vessel:

@@ -50,12 +50,12 @@ namespace KRPC.Server.RPC
 
         public int Read (Request[] buffer, int offset)
         {
-            throw new NotImplementedException ();
+            throw new NotSupportedException ();
         }
 
         public int Read (Request[] buffer, int offset, int size)
         {
-            throw new NotImplementedException ();
+            throw new NotSupportedException ();
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace KRPC.Server.RPC
 
         public void Write (Response[] value)
         {
-            throw new NotImplementedException ();
+            throw new NotSupportedException ();
         }
 
         /// <summary>

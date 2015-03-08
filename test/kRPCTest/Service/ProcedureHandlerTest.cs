@@ -15,7 +15,7 @@ namespace KRPCTest.Service
 
         public static string TestProcedureWithDefaultArg (int x, string y = "foo")
         {
-            return x.ToString () + y;
+            return x + y;
         }
 
         [Test]

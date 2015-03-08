@@ -61,7 +61,7 @@ namespace KRPC.Utils
                 if (type == null)
                     throw new ArgumentException ("null is not a Protocol Buffer value type");
                 else
-                    throw new ArgumentException (type.ToString () + " is not a Protocol Buffer value type");
+                    throw new ArgumentException (type + " is not a Protocol Buffer value type");
             }
         }
 
@@ -77,7 +77,7 @@ namespace KRPC.Utils
             else if (IsAValueType (type))
                 return GetValueTypeName (type);
             else
-                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer message, enumeration or value type");
+                throw new ArgumentException (type + " is not a Protocol Buffer message, enumeration or value type");
         }
 
         /// <summary>
@@ -109,8 +109,8 @@ namespace KRPC.Utils
         {
             // TODO: is this sufficient?
             if (type == null)
-               return false;
-            return type.FullName.StartsWith("KRPC.Schema.") ? type.IsEnum : false;
+                return false;
+            return type.FullName.StartsWith ("KRPC.Schema.") && type.IsEnum;
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace KRPC.Utils
                 stream.ReadBytes (ref result);
                 return result.ToByteArray ();
             }
-            throw new ArgumentException (type.ToString () + " is not a Protocol Buffer value type");
+            throw new ArgumentException (type + " is not a Protocol Buffer value type");
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace KRPC.Utils
             else if (type == typeof(byte[]))
                 encoder.WriteBytesNoTag (ByteString.CopyFrom ((byte[])value));
             else
-                throw new ArgumentException (type.ToString () + " is not a Protocol Buffer value type");
+                throw new ArgumentException (type + " is not a Protocol Buffer value type");
             encoder.Flush ();
             return ByteString.CopyFrom (stream.ToArray ());
         }

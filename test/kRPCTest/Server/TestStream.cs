@@ -41,7 +41,7 @@ namespace KRPCTest.Server
 
         public void Write (byte value)
         {
-            throw new NotImplementedException ();
+            throw new NotSupportedException ();
         }
 
         public void Write (byte[] buffer)
@@ -51,7 +51,7 @@ namespace KRPCTest.Server
 
         public void Close ()
         {
-            throw new NotImplementedException ();
+            throw new NotSupportedException ();
         }
     }
 }

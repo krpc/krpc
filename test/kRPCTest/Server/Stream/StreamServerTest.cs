@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Moq;
 using KRPC.Server;
@@ -29,7 +28,7 @@ namespace KRPCTest.Server.Stream
         [Test]
         public void ValidHelloMessage ()
         {
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
 
             // Create mock byte server and client
@@ -60,7 +59,7 @@ namespace KRPCTest.Server.Stream
         [Test]
         public void InvalidHelloMessageHeader ()
         {
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
 
             helloMessage [4] = 0x42;
             var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
@@ -92,7 +91,7 @@ namespace KRPCTest.Server.Stream
             var shortHelloMessage = new byte[5];
             Array.Copy (helloMessage, shortHelloMessage, shortHelloMessage.Length);
 
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (shortHelloMessage), responseStream);
 
             // Create mock byte server and client
@@ -122,7 +121,7 @@ namespace KRPCTest.Server.Stream
             var shortHelloMessage = new byte[8 + 15];
             Array.Copy (helloMessage, shortHelloMessage, shortHelloMessage.Length);
 
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (shortHelloMessage), responseStream);
 
             // Create mock byte server and client
@@ -149,7 +148,7 @@ namespace KRPCTest.Server.Stream
         [Test]
         public void NoHelloMessage ()
         {
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (), responseStream);
 
             // Create mock byte server and client

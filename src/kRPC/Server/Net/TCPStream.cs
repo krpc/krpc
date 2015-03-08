@@ -24,7 +24,7 @@ namespace KRPC.Server.Net
 
         public byte Read ()
         {
-            throw new NotImplementedException ();
+            throw new NotSupportedException ();
         }
 
         public int Read (byte[] buffer, int offset)
@@ -39,7 +39,7 @@ namespace KRPC.Server.Net
 
         public void Write (byte value)
         {
-            throw new NotImplementedException ();
+            throw new NotSupportedException ();
         }
 
         public void Write (byte[] buffer)

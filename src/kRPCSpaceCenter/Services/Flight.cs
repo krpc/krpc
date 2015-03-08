@@ -11,8 +11,8 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Flight : Equatable<Flight>
     {
-        global::Vessel vessel;
-        ReferenceFrame referenceFrame;
+        readonly global::Vessel vessel;
+        readonly ReferenceFrame referenceFrame;
 
         internal Flight (global::Vessel vessel, ReferenceFrame referenceFrame)
         {
@@ -20,9 +20,9 @@ namespace KRPCSpaceCenter.Services
             this.referenceFrame = referenceFrame;
         }
 
-        public override bool Equals (Flight other)
+        public override bool Equals (Flight obj)
         {
-            return vessel == other.vessel && referenceFrame == other.referenceFrame;
+            return vessel == obj.vessel && referenceFrame == obj.referenceFrame;
         }
 
         public override int GetHashCode ()

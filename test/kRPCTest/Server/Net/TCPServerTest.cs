@@ -139,7 +139,7 @@ namespace KRPCTest.Server.Net
         delegate bool BooleanPredicate ();
         // Calls server.Update repeatedly every 50 ms, until predicate is true
         // or up to a maximum number of iterations, after which point the test fails
-        void UpdateUntil (TCPServer server, BooleanPredicate predicate, int iterations = 10)
+        void UpdateUntil (KRPC.Server.IServer<byte, byte> server, BooleanPredicate predicate, int iterations = 10)
         {
             for (int i = 0; i < iterations; i++) {
                 server.Update ();

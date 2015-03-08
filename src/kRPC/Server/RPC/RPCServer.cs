@@ -190,7 +190,7 @@ namespace KRPC.Server.RPC
             }
 
             // Valid header and client name received
-            Logger.WriteLine ("RPCServer: correct hello message received from client '" + client.Guid.ToString () + "' (" + clientNameString + ")");
+            Logger.WriteLine ("RPCServer: correct hello message received from client '" + client.Guid + "' (" + clientNameString + ")");
             return clientNameString;
         }
 
@@ -212,7 +212,7 @@ namespace KRPC.Server.RPC
             return offset;
         }
 
-        bool CheckHelloMessageHeader (byte[] receivedHeader)
+        bool CheckHelloMessageHeader (IEnumerable<byte> receivedHeader)
         {
             return receivedHeader.SequenceEqual (expectedHeader);
         }
@@ -221,7 +221,7 @@ namespace KRPC.Server.RPC
         /// Validate a fixed-length 32-byte array as a UTF8 string, and return it as a string object.
         /// </summary>
         /// <returns>The decoded client name, or null if not valid.</returns>
-        string CheckAndDecodeClientName (byte[] receivedClientName)
+        static string CheckAndDecodeClientName (byte[] receivedClientName)
         {
             string clientNameString = "";
 
@@ -246,7 +246,7 @@ namespace KRPC.Server.RPC
                 // Got valid sequence of non-zero bytes, try to decode them
                 var strippedClientName = new byte[length];
                 Array.Copy (receivedClientName, strippedClientName, length);
-                var encoder = new UTF8Encoding (encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
+                var encoder = new UTF8Encoding (false, true);
                 try {
                     clientNameString = encoder.GetString (strippedClientName);
                 } catch (ArgumentException) {

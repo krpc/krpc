@@ -8,12 +8,12 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Orbit
     {
-        global::Orbit orbit;
-        ReferenceFrame referenceFrame;
+        readonly global::Orbit orbit;
+        readonly ReferenceFrame referenceFrame;
 
         internal Orbit (global::Vessel vessel)
         {
-            this.orbit = vessel.GetOrbit ();
+            orbit = vessel.GetOrbit ();
             referenceFrame = ReferenceFrame.Orbital (vessel);
         }
 
@@ -21,7 +21,7 @@ namespace KRPCSpaceCenter.Services
         {
             if (body == body.referenceBody)
                 throw new ArgumentException ("Body does not orbit anything");
-            this.orbit = body.GetOrbit ();
+            orbit = body.GetOrbit ();
             referenceFrame = ReferenceFrame.Orbital (body);
         }
 
@@ -31,6 +31,8 @@ namespace KRPCSpaceCenter.Services
             this.orbit = orbit;
             referenceFrame = ReferenceFrame.Orbital (orbit.referenceBody);
         }
+
+        //TODO: make equatable? add hashcode???
 
         [KRPCProperty]
         public CelestialBody Body {

@@ -1,7 +1,3 @@
-using System;
-using KRPCSpaceCenter;
-using UnityEngine;
-
 namespace KRPCSpaceCenter.ExtensionMethods
 {
     public static class CelestialBodyExtensions

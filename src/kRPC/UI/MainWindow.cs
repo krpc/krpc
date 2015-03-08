@@ -107,7 +107,7 @@ namespace KRPC.UI
             streamPort = Config.StreamPort.ToString ();
         }
 
-        private void DrawServerStatus ()
+        void DrawServerStatus ()
         {
             GUILayoutExtensions.Light (Server.Running, lightStyle);
             if (Server.Running)
@@ -116,7 +116,7 @@ namespace KRPC.UI
                 GUILayout.Label (serverOfflineText, stretchyLabelStyle);
         }
 
-        private void DrawStartStopButton ()
+        void DrawStartStopButton ()
         {
             if (Server.Running) {
                 if (GUILayout.Button (stopButtonText, buttonStyle)) {
@@ -134,7 +134,7 @@ namespace KRPC.UI
             }
         }
 
-        private void DrawAddress ()
+        void DrawAddress ()
         {
             if (Server.Running)
                 GUILayout.Label (addressLabelText + " " + Server.Address, labelStyle);
@@ -145,7 +145,7 @@ namespace KRPC.UI
             }
         }
 
-        private void DrawRPCPort ()
+        void DrawRPCPort ()
         {
             if (Server.Running)
                 GUILayout.Label (rpcPortLabelText + " " + Server.RPCPort, labelStyle);
@@ -156,7 +156,7 @@ namespace KRPC.UI
             }
         }
 
-        private void DrawStreamPort ()
+        void DrawStreamPort ()
         {
             if (Server.Running)
                 GUILayout.Label (streamPortLabelText + " " + Server.StreamPort, labelStyle);
@@ -167,7 +167,7 @@ namespace KRPC.UI
             }
         }
 
-        private void DrawAutoStartServerToggle ()
+        void DrawAutoStartServerToggle ()
         {
             bool autoStartServer = GUILayout.Toggle (Config.AutoStartServer, autoStartServerText, toggleStyle, new GUILayoutOption[] { });
             if (autoStartServer != Config.AutoStartServer) {
@@ -176,7 +176,7 @@ namespace KRPC.UI
             }
         }
 
-        private void DrawAutoAcceptConnectionsToggle ()
+        void DrawAutoAcceptConnectionsToggle ()
         {
             bool autoAcceptConnections = GUILayout.Toggle (Config.AutoAcceptConnections, autoAcceptConnectionsText, toggleStyle, new GUILayoutOption[] { });
             if (autoAcceptConnections != Config.AutoAcceptConnections) {
@@ -185,7 +185,7 @@ namespace KRPC.UI
             }
         }
 
-        private void DrawServerInfo ()
+        void DrawServerInfo ()
         {
             string info = AllowedClientsString (Server.Address);
             if (Config.AutoAcceptConnections)
@@ -193,7 +193,7 @@ namespace KRPC.UI
             GUILayout.Label (info, labelStyle);
         }
 
-        private void DrawClientsList ()
+        void DrawClientsList ()
         {
             // Get list of client descriptions
             IDictionary<IClient,string> clientDescriptions = new Dictionary<IClient,string> ();
@@ -324,7 +324,7 @@ namespace KRPC.UI
             return now - lastActivityMillisecondsInterval < lastActivity;
         }
 
-        string AllowedClientsString (IPAddress localAddress)
+        static string AllowedClientsString (IPAddress localAddress)
         {
             if (IPAddress.IsLoopback (localAddress))
                 return localClientOnlyText;

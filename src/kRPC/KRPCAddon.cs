@@ -39,9 +39,7 @@ namespace KRPC
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog> ();
 
             // Main window events
-            mainWindow.OnStartServerPressed += (s, e) => {
-                StartServer ();
-            };
+            mainWindow.OnStartServerPressed += (s, e) => StartServer ();
             mainWindow.OnStopServerPressed += (s, e) => {
                 server.Stop ();
                 clientConnectingDialog.Close ();
@@ -79,7 +77,7 @@ namespace KRPC
                 toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
                 toolbarButton.ToolTip = "kRPC Server";
                 toolbarButton.Visibility = new GameScenesVisibility (GameScenes.FLIGHT);
-                toolbarButton.OnClick += (e) => mainWindow.Visible = !mainWindow.Visible;
+                toolbarButton.OnClick += e => mainWindow.Visible = !mainWindow.Visible;
                 server.OnStarted += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-online";
                 server.OnStopped += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
                 applauncherButton = null;
@@ -124,7 +122,7 @@ namespace KRPC
             applauncherButton = null;
         }
 
-        private void StartServer ()
+        void StartServer ()
         {
             config.Load ();
             server.RPCPort = config.RPCPort;

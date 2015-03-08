@@ -1,4 +1,3 @@
-using System;
 using KRPC.Service.Attributes;
 
 namespace KRPCTest.Service

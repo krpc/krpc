@@ -65,9 +65,9 @@ namespace KRPCTest.Server.RPC
         {
             // Split the message bytes into 3 parts
             Assert.IsTrue (requestBytes.Length > 15);
-            byte[] part1 = new byte[4];
-            byte[] part2 = new byte[6];
-            byte[] part3 = new byte[requestBytes.Length - 10];
+            var part1 = new byte[4];
+            var part2 = new byte[6];
+            var part3 = new byte[requestBytes.Length - 10];
             Array.Copy (requestBytes, 0, part1, 0, part1.Length);
             Array.Copy (requestBytes, part1.Length, part2, 0, part2.Length);
             Array.Copy (requestBytes, part1.Length + part2.Length, part3, 0, part3.Length);
@@ -119,8 +119,8 @@ namespace KRPCTest.Server.RPC
         [Test]
         public void ReadGarbage ()
         {
-            byte[] data = new byte[RPCStream.bufferSize + 1];
-            Random rand = new Random (42);
+            var data = new byte[RPCStream.bufferSize + 1];
+            var rand = new Random (42);
             rand.NextBytes (data);
             var rpcStream = new RPCStream (new TestStream (new MemoryStream (data), null));
             Assert.Throws<RequestBufferOverflowException> (() => rpcStream.Read ());

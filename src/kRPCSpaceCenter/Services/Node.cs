@@ -1,8 +1,7 @@
-using System;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -28,9 +27,9 @@ namespace KRPCSpaceCenter.Services
             this.node = node;
         }
 
-        public override bool Equals (Node other)
+        public override bool Equals (Node obj)
         {
-            return node == other.node;
+            return node == obj.node;
         }
 
         public override int GetHashCode ()

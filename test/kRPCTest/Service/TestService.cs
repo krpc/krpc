@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using KRPC.Service.Attributes;
-using KRPC.Continuations;
 
 namespace KRPCTest.Service
 {
@@ -87,7 +86,7 @@ namespace KRPCTest.Service
         [KRPCClass]
         public class TestClass
         {
-            public string value;
+            public readonly string value;
 
             public TestClass (string value)
             {
@@ -97,7 +96,7 @@ namespace KRPCTest.Service
             [KRPCMethod]
             public string FloatToString (float x)
             {
-                return value + x.ToString ();
+                return value + x;
             }
 
             [KRPCMethod]
@@ -109,7 +108,7 @@ namespace KRPCTest.Service
             [KRPCMethod]
             public string IntToString (int x = 42)
             {
-                return value + x.ToString ();
+                return value + x;
             }
 
             [KRPCProperty]

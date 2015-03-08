@@ -1,5 +1,4 @@
 using System;
-using KRPCSpaceCenter;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {

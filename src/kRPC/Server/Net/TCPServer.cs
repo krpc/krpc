@@ -23,15 +23,7 @@ namespace KRPC.Server.Net
         /// <summary>
         /// A name for the server.
         /// </summary>
-        string name;
-        /// <summary>
-        /// Local IP address on which the service listens.
-        /// If set to localhost (127.0.0.1) the server with listen on
-        /// the loopback device and only accept connections from the local machine.
-        /// If set to IPAddress.Any, an available local
-        /// address from one of the network adapters will be chosen.
-        /// </summary>
-        IPAddress address;
+        readonly string name;
         /// <summary>
         /// Port that the server listens on for new connections. If set to 0,
         /// a port number with be automatically chosen.
@@ -72,7 +64,7 @@ namespace KRPC.Server.Net
         public TCPServer (String name, IPAddress address, ushort port)
         {
             this.name = name;
-            this.address = address;
+            Address = address;
             this.port = port;
         }
 
@@ -83,7 +75,7 @@ namespace KRPC.Server.Net
                 return;
             }
             Logger.WriteLine ("TCPServer(" + name + "): starting");
-            tcpListener = new TcpListener (address, port);
+            tcpListener = new TcpListener (Address, port);
             try {
                 tcpListener.Start ();
             } catch (SocketException exn) {
@@ -107,10 +99,10 @@ namespace KRPC.Server.Net
             if (OnStarted != null)
                 OnStarted (this, EventArgs.Empty);
             Logger.WriteLine ("TCPServer(" + name + "): started successfully");
-            if (address.ToString () == "0.0.0.0")
+            if (Address.ToString () == "0.0.0.0")
                 Logger.WriteLine ("TCPServer(" + name + "): listening on all local network interfaces");
             else
-                Logger.WriteLine ("TCPServer(" + name + "): listening on local address " + address);
+                Logger.WriteLine ("TCPServer(" + name + "): listening on local address " + Address);
             Logger.WriteLine ("TCPServer(" + name + "): listening on port " + actualPort);
         }
 
@@ -124,7 +116,7 @@ namespace KRPC.Server.Net
             // Close all client connections
             foreach (var client in pendingClients) {
                 Logger.WriteLine ("TCPServer(" + name + "): cancelling pending connection to client (" + client.Address + ")");
-                DisconnectClient (client, noEvent: true);
+                DisconnectClient (client, true);
             }
             foreach (var client in clients) {
                 Logger.WriteLine ("TCPServer(" + name + "): closing connection to client (" + client.Address + ")");
@@ -162,7 +154,7 @@ namespace KRPC.Server.Net
                     // Deny the connection
                     if (args.Request.ShouldDeny) {
                         Logger.WriteLine ("TCPServer(" + name + "): client connection denied (" + client.Address + ")");
-                        DisconnectClient (client, noEvent: true);
+                        DisconnectClient (client, true);
                     }
 
                     // Allow the connection
@@ -204,10 +196,7 @@ namespace KRPC.Server.Net
         /// <summary>
         /// Local address that the server listens on. Server must be restarted for changes to take effect.
         /// </summary>
-        public IPAddress Address {
-            get { return address; }
-            set { address = value; }
-        }
+        public IPAddress Address { get; set; }
 
         void ListenerThread ()
         {

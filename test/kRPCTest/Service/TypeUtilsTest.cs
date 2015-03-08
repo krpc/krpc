@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using KRPC.Service;
-using KRPC.Utils;
 
 namespace KRPCTest.Service
 {
@@ -32,7 +31,7 @@ namespace KRPCTest.Service
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(IList<string>)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(IDictionary<int,string>)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(HashSet<long>)));
-            Assert.IsFalse (TypeUtils.IsAValidType (typeof(System.Tuple<long>)));
+            Assert.IsFalse (TypeUtils.IsAValidType (typeof(Tuple<long>)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(KRPC.Utils.Tuple<long>)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(KRPC.Utils.Tuple<long,int>)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(KRPC.Utils.Tuple<long,int,string>)));

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -48,9 +47,9 @@ namespace KRPCSpaceCenter.Services
 
         internal global::Vessel InternalVessel { get; private set; }
 
-        public override bool Equals (Vessel other)
+        public override bool Equals (Vessel obj)
         {
-            return InternalVessel == other.InternalVessel;
+            return InternalVessel == obj.InternalVessel;
         }
 
         public override int GetHashCode ()
@@ -113,14 +112,14 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double Mass {
             get {
-                return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.TotalMass ()).Sum ();
+                return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.TotalMass ());
             }
         }
 
         [KRPCProperty]
         public double DryMass {
             get {
-                return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Select (p => p.DryMass ()).Sum ();
+                return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.DryMass ());
             }
         }
 
@@ -134,8 +133,7 @@ namespace KRPCSpaceCenter.Services
             get {
                 // Mass-weighted average of max_drag for each part
                 // Note: Uses Part.mass, so does not include the mass of resources
-                return InternalVessel.Parts.Select (p => p.maximum_drag * p.mass).Sum () /
-                InternalVessel.Parts.Select (p => p.mass).Sum ();
+                return InternalVessel.Parts.Sum (p => p.maximum_drag * p.mass) / InternalVessel.Parts.Sum (p => p.mass);
             }
         }
 

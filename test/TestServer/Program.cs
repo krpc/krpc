@@ -10,8 +10,8 @@ namespace TestServer
     {
         public static void Main (string[] args)
         {
-            Logger.Enabled = (args.Length > 2 && args[2] == "log");
-            var frameTime = 50;
+            Logger.Enabled = (args.Length > 2 && args [2] == "log");
+            const int frameTime = 50;
             var server = new KRPCServer (IPAddress.Loopback, ushort.Parse (args [0]), ushort.Parse (args [1]));
             var timeSpan = new TimeSpan ();
             server.GetUniversalTime = () => timeSpan.TotalSeconds;

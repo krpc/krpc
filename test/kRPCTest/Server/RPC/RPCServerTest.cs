@@ -20,7 +20,7 @@ namespace KRPCTest.Server.RPC
             helloMessage = new byte[12 + 32];
             byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x52, 0x50, 0x43, 0x00, 0x00, 0x00 };
             Array.Copy (header, helloMessage, header.Length);
-            string name = "Jebediah Kerman!!!";
+            const string name = "Jebediah Kerman!!!";
             var encoder = new UTF8Encoding (false, true);
             byte[] nameBytes = encoder.GetBytes (name);
             Array.Copy (nameBytes, 0, helloMessage, header.Length, nameBytes.Length);
@@ -33,7 +33,7 @@ namespace KRPCTest.Server.RPC
                 helloMessage [i] = 0x00;
             }
 
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
 
             // Create mock byte server and client
@@ -64,7 +64,7 @@ namespace KRPCTest.Server.RPC
         [Test]
         public void ValidHelloMessage ()
         {
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
 
             // Create mock byte server and client
@@ -97,7 +97,7 @@ namespace KRPCTest.Server.RPC
         {
             helloMessage [4] = 0x42;
 
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
 
             // Create mock byte server and client
@@ -126,7 +126,7 @@ namespace KRPCTest.Server.RPC
         {
             helloMessage [15] = 0x00;
 
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
 
             // Create mock byte server and client
@@ -153,7 +153,7 @@ namespace KRPCTest.Server.RPC
         [Test]
         public void ShortHelloMessageHeader ()
         {
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
 
             var message = new byte[] { 0x48, 0x45, 0x4C };
             var stream = new TestStream (new MemoryStream (message), responseStream);
@@ -185,7 +185,7 @@ namespace KRPCTest.Server.RPC
             var shortHelloMessage = new byte[8 + 31];
             Array.Copy (helloMessage, shortHelloMessage, shortHelloMessage.Length);
 
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (shortHelloMessage), responseStream);
 
             // Create mock byte server and client
@@ -212,7 +212,7 @@ namespace KRPCTest.Server.RPC
         [Test]
         public void NoHelloMessage ()
         {
-            var responseStream = new MemoryStream();
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (), responseStream);
 
             // Create mock byte server and client

@@ -15,9 +15,9 @@ namespace KRPC.Service
         /// Returns some information about the server, such as the version.
         /// </summary>
         [KRPCProcedure]
-        public static Schema.KRPC.Status GetStatus ()
+        public static Status GetStatus ()
         {
-            var status = Schema.KRPC.Status.CreateBuilder ();
+            var status = Status.CreateBuilder ();
             var version = System.Reflection.Assembly.GetExecutingAssembly ().GetName ().Version;
             status.Version = version.Major + "." + version.Minor + "." + version.Build;
             return status.Build ();
@@ -35,12 +35,12 @@ namespace KRPC.Service
                 var service = Schema.KRPC.Service.CreateBuilder ();
                 service.SetName (serviceSignature.Name);
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
-                    var procedure = Schema.KRPC.Procedure.CreateBuilder ();
+                    var procedure = Procedure.CreateBuilder ();
                     procedure.Name = procedureSignature.Name;
                     if (procedureSignature.HasReturnType)
                         procedure.ReturnType = TypeUtils.GetTypeName (procedureSignature.ReturnType);
                     foreach (var parameterSignature in procedureSignature.Parameters) {
-                        var parameter = Schema.KRPC.Parameter.CreateBuilder ();
+                        var parameter = Parameter.CreateBuilder ();
                         parameter.Name = parameterSignature.Name;
                         parameter.Type = TypeUtils.GetTypeName (parameterSignature.Type);
                         if (parameterSignature.HasDefaultArgument)
@@ -53,15 +53,15 @@ namespace KRPC.Service
                     service.AddProcedures (procedure);
                 }
                 foreach (var clsName in serviceSignature.Classes) {
-                    var cls = Schema.KRPC.Class.CreateBuilder ();
+                    var cls = Class.CreateBuilder ();
                     cls.Name = clsName;
                     service.AddClasses (cls);
                 }
                 foreach (var enumName in serviceSignature.Enums.Keys) {
-                    var enm = Schema.KRPC.Enumeration.CreateBuilder ();
+                    var enm = Enumeration.CreateBuilder ();
                     enm.Name = enumName;
                     foreach (var enumValueName in serviceSignature.Enums[enumName].Keys) {
-                        var enmValue = Schema.KRPC.EnumerationValue.CreateBuilder ();
+                        var enmValue = EnumerationValue.CreateBuilder ();
                         enmValue.Name = enumValueName;
                         enmValue.Value = serviceSignature.Enums [enumName] [enumValueName];
                         enm.AddValues (enmValue);

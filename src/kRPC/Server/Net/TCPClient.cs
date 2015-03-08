@@ -11,7 +11,7 @@ namespace KRPC.Server.Net
 
         public TCPClient (TcpClient tcpClient)
         {
-            this.guid = Guid.NewGuid();
+            guid = Guid.NewGuid ();
             this.tcpClient = tcpClient;
             try {
                 var remoteEndPoint = tcpClient.Client.RemoteEndPoint as IPEndPoint;
@@ -22,7 +22,7 @@ namespace KRPC.Server.Net
         }
 
         public string Name {
-            get { return Guid.ToString(); }
+            get { return Guid.ToString (); }
         }
 
         public Guid Guid {

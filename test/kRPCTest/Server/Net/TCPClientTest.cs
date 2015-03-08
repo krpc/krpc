@@ -33,9 +33,9 @@ namespace KRPCTest.Server.Net
         {
             var client = new TCPClient (new System.Net.Sockets.TcpClient ());
             Assert.IsFalse (client.Connected);
-            Assert.AreEqual (client.Guid.ToString(), client.Name);
+            Assert.AreEqual (client.Guid.ToString (), client.Name);
             Assert.AreEqual ("", client.Address);
-            Assert.DoesNotThrow (() => client.Close ());
+            Assert.DoesNotThrow (client.Close);
         }
     }
 }

@@ -206,7 +206,7 @@ namespace KRPC.Service
 
                 foreach (var item in encodedSet.ItemsList) {
                     var decodedItem = Decode (procedure, i, type.GetGenericArguments ().Single (), item);
-                    methodInfo.Invoke (set, new object[] { decodedItem });
+                    methodInfo.Invoke (set, new [] { decodedItem });
                 }
                 return set;
             } else { // a tuple

@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using KRPC.Service.Attributes;
-using KRPC.Utils;
 using System.Reflection;
 
 namespace KRPC.Service.Scanner
@@ -114,7 +111,7 @@ namespace KRPC.Service.Scanner
             Enums [enumType.Name] = new Dictionary<string, int> ();
             foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static)) {
                 // TODO: assumes raw value can be cast to an int
-                Enums [enumType.Name] [field.Name] = (int) field.GetRawConstantValue ();
+                Enums [enumType.Name] [field.Name] = (int)field.GetRawConstantValue ();
             }
             return Enums [enumType.Name];
         }

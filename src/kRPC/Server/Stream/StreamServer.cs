@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using KRPC.Schema.KRPC;
 using KRPC.Utils;
 
@@ -191,7 +190,7 @@ namespace KRPC.Server.Stream
             }
 
             // Valid header and identifier received
-            Logger.WriteLine ("StreamServer: Correct hello message received from client '" + identifierGuid.ToString () + "'");
+            Logger.WriteLine ("StreamServer: Correct hello message received from client '" + identifierGuid + "'");
             return identifierGuid;
         }
 
@@ -213,7 +212,7 @@ namespace KRPC.Server.Stream
             return offset;
         }
 
-        bool CheckHelloMessageHeader (byte[] receivedHeader)
+        bool CheckHelloMessageHeader (IEnumerable<byte> receivedHeader)
         {
             return receivedHeader.SequenceEqual (expectedHeader);
         }
@@ -223,7 +222,7 @@ namespace KRPC.Server.Stream
         /// </summary>
         /// <returns>The clients GUID.</returns>
         /// <param name="receivedIdentifier">Received identifier.</param>
-        Guid DecodeClientIdentifier (byte[] receivedIdentifier)
+        static Guid DecodeClientIdentifier (byte[] receivedIdentifier)
         {
             return new Guid (receivedIdentifier);
         }

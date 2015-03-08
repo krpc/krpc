@@ -14,7 +14,7 @@ namespace KRPCTest.Service
     [TestFixture]
     public class ServicesTest
     {
-        Request Req (string service, string procedure, params Argument[] args)
+        static Request Req (string service, string procedure, params Argument[] args)
         {
             var request = Request.CreateBuilder ()
                 .SetService (service)
@@ -24,7 +24,7 @@ namespace KRPCTest.Service
             return request.Build ();
         }
 
-        Response Res (string error, int time)
+        static Response Res (string error, int time)
         {
             return Response.CreateBuilder ()
                 .SetError (error)
@@ -32,17 +32,17 @@ namespace KRPCTest.Service
                 .Build ();
         }
 
-        Response Res (ByteString data)
+        static Response Res (ByteString data)
         {
             return Response.CreateBuilder ().MergeFrom (data).Build ();
         }
 
-        Response Res (Response response)
+        static Response Res (Response response)
         {
             return Response.CreateBuilder ().MergeFrom (response).Build ();
         }
 
-        Argument Arg (uint position, ByteString value)
+        static Argument Arg (uint position, ByteString value)
         {
             return Argument.CreateBuilder ()
                 .SetPosition (position)
@@ -50,13 +50,13 @@ namespace KRPCTest.Service
                 .Build ();
         }
 
-        Response.Builder Run (Request request)
+        static Response.Builder Run (Request request)
         {
             var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request);
             return KRPC.Service.Services.Instance.HandleRequest (procedure, request);
         }
 
-        byte[] ToBytes<T> (T x) where T : IMessage
+        static byte[] ToBytes<T> (T x) where T : IMessage
         {
             using (var stream = new MemoryStream ()) {
                 x.WriteTo (stream);
@@ -64,7 +64,7 @@ namespace KRPCTest.Service
             }
         }
 
-        byte[] ToBytes (float x)
+        static byte[] ToBytes (float x)
         {
             using (var stream = new MemoryStream ()) {
                 var codedStream = CodedOutputStream.CreateInstance (stream);
@@ -74,7 +74,7 @@ namespace KRPCTest.Service
             }
         }
 
-        byte[] ToBytes (string x)
+        static byte[] ToBytes (string x)
         {
             using (var stream = new MemoryStream ()) {
                 var codedStream = CodedOutputStream.CreateInstance (stream);
@@ -84,7 +84,7 @@ namespace KRPCTest.Service
             }
         }
 
-        byte[] ToBytes (byte[] x)
+        static byte[] ToBytes (byte[] x)
         {
             using (var stream = new MemoryStream ()) {
                 var codedStream = CodedOutputStream.CreateInstance (stream);
@@ -180,9 +180,7 @@ namespace KRPCTest.Service
             byte[] argBytes = ToBytes (arg);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureSingleArgNoReturn (It.IsAny<Response> ()))
-                .Callback ((Response x) => {
-                Assert.AreEqual (argBytes, x.ToByteArray ());
-            });
+                .Callback ((Response x) => Assert.AreEqual (argBytes, x.ToByteArray ()));
             TestService.Service = mock.Object;
             Run (Req ("TestService", "ProcedureSingleArgNoReturn", Arg (0, ByteString.CopyFrom (argBytes))));
             mock.Verify (x => x.ProcedureSingleArgNoReturn (It.IsAny<Response> ()), Times.Once ());
@@ -353,9 +351,7 @@ namespace KRPCTest.Service
             ByteString argBytes = ProtocolBuffers.WriteValue (arg, typeof(ulong));
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.DeleteTestObject (It.IsAny<TestService.TestClass> ()))
-                .Callback ((TestService.TestClass x) => {
-                Assert.AreSame (instance, x);
-            });
+                .Callback ((TestService.TestClass x) => Assert.AreSame (instance, x));
             TestService.Service = mock.Object;
             Run (Req ("TestService", "DeleteTestObject", Arg (0, argBytes)));
             mock.Verify (x => x.DeleteTestObject (It.IsAny<TestService.TestClass> ()), Times.Once ());
@@ -370,9 +366,8 @@ namespace KRPCTest.Service
             ByteString argBytes = ProtocolBuffers.WriteValue (0ul, typeof(ulong));
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoTestObject (It.IsAny<TestService.TestClass> ()))
-                .Callback ((TestService.TestClass x) => {
-                Assert.AreEqual (null, x);
-            }).Returns ((TestService.TestClass x) => x);
+                .Callback ((TestService.TestClass x) => Assert.AreEqual (null, x))
+                .Returns ((TestService.TestClass x) => x);
             TestService.Service = mock.Object;
             Response.Builder response = Run (Req ("TestService", "EchoTestObject", Arg (0, argBytes)));
             Assert.False (response.HasError);
@@ -493,9 +488,7 @@ namespace KRPCTest.Service
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureSingleOptionalArgNoReturn (It.IsAny<string> ()))
-                .Callback ((string x) => {
-                Assert.AreEqual (x, "foo");
-            });
+                .Callback ((string x) => Assert.AreEqual (x, "foo"));
             TestService.Service = mock.Object;
             Run (Req ("TestService", "ProcedureSingleOptionalArgNoReturn"));
             mock.Verify (x => x.ProcedureSingleOptionalArgNoReturn (It.IsAny<string> ()), Times.Once ());
@@ -507,8 +500,8 @@ namespace KRPCTest.Service
         [Test]
         public void HandleRequestThreeOptionalArgs ()
         {
-            var arg0 = 3.14159f;
-            var arg2 = 42;
+            const float arg0 = 3.14159f;
+            const int arg2 = 42;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureThreeOptionalArgsNoReturn (
                 It.IsAny<float> (),
@@ -540,9 +533,7 @@ namespace KRPCTest.Service
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureOptionalNullArg (It.IsAny<TestService.TestClass> ()))
-                .Callback ((TestService.TestClass x) => {
-                Assert.AreEqual (x, null);
-            });
+                .Callback ((TestService.TestClass x) => Assert.AreEqual (x, null));
             TestService.Service = mock.Object;
             Run (Req ("TestService", "ProcedureOptionalNullArg"));
             mock.Verify (x => x.ProcedureOptionalNullArg (It.IsAny<TestService.TestClass> ()), Times.Once ());
@@ -572,9 +563,7 @@ namespace KRPCTest.Service
             var arg = KRPC.Schema.Test.TestEnum.b;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureEnumArg (It.IsAny<KRPC.Schema.Test.TestEnum> ()))
-                .Callback ((KRPC.Schema.Test.TestEnum x) => {
-                Assert.AreEqual (KRPC.Schema.Test.TestEnum.b, x);
-            });
+                .Callback ((KRPC.Schema.Test.TestEnum x) => Assert.AreEqual (KRPC.Schema.Test.TestEnum.b, x));
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureEnumArg",
                               Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
@@ -607,9 +596,7 @@ namespace KRPCTest.Service
             var arg = TestService.CSharpEnum.y;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureCSharpEnumArg (It.IsAny<TestService.CSharpEnum> ()))
-                .Callback ((TestService.CSharpEnum x) => {
-                Assert.AreEqual (TestService.CSharpEnum.y, x);
-            });
+                .Callback ((TestService.CSharpEnum x) => Assert.AreEqual (TestService.CSharpEnum.y, x));
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureCSharpEnumArg",
                               Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
@@ -639,7 +626,7 @@ namespace KRPCTest.Service
         [Test]
         public void HandleRequestSingleInvalidCSharpEnumArgNoReturn ()
         {
-            int arg = 9999;
+            const int arg = 9999;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureCSharpEnumArg (It.IsAny<TestService.CSharpEnum> ()));
             TestService.Service = mock.Object;
@@ -679,9 +666,7 @@ namespace KRPCTest.Service
             const int num = 42;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.BlockingProcedureNoReturn (It.IsAny<int> ()))
-                .Callback ((int n) => {
-                BlockingProcedureNoReturnFn (n);
-            });
+                .Callback ((int n) => BlockingProcedureNoReturnFn (n));
             TestService.Service = mock.Object;
             var request = Req ("TestService", "BlockingProcedureNoReturn",
                               Arg (0, ProtocolBuffers.WriteValue (num, typeof(int))));
@@ -763,7 +748,7 @@ namespace KRPCTest.Service
         [Test]
         public void HandleEchoDictionary ()
         {
-            var dictionary = KRPC.Schema.KRPC.Dictionary.CreateBuilder ()
+            var dictionary = Dictionary.CreateBuilder ()
                 .AddEntries (DictionaryEntry.CreateBuilder ()
                     .SetKey (ProtocolBuffers.WriteValue (0, typeof(int)))
                     .SetValue (ProtocolBuffers.WriteValue ("jeb", typeof(string))).Build ())
@@ -792,7 +777,7 @@ namespace KRPCTest.Service
         [Test]
         public void HandleEchoSet ()
         {
-            var set = KRPC.Schema.KRPC.Set.CreateBuilder ()
+            var set = Set.CreateBuilder ()
                 .AddItems (ProtocolBuffers.WriteValue (345, typeof(int)))
                 .AddItems (ProtocolBuffers.WriteValue (723, typeof(int)))
                 .AddItems (ProtocolBuffers.WriteValue (112, typeof(int)))
@@ -846,7 +831,7 @@ namespace KRPCTest.Service
                 .AddItems (ProtocolBuffers.WriteValue ("bill", typeof(string)))
                 .AddItems (ProtocolBuffers.WriteValue ("edzor", typeof(string)))
                 .Build ();
-            var collection = KRPC.Schema.KRPC.Dictionary.CreateBuilder ()
+            var collection = Dictionary.CreateBuilder ()
                 .AddEntries (DictionaryEntry.CreateBuilder ()
                     .SetKey (ProtocolBuffers.WriteValue (0, typeof(int)))
                     .SetValue (ProtocolBuffers.WriteMessage (list0)).Build ())

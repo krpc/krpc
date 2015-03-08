@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using KRPC.Utils;
 using KRPC.Service.Attributes;
-using KRPC.Schema;
 
 namespace KRPC.Service
 {
@@ -106,7 +105,7 @@ namespace KRPC.Service
             // TODO: this is an ugly way of checking the type is a tuple
             if (!type.GetGenericTypeDefinition ().FullName.StartsWith ("KRPC.Utils.Tuple`"))
                 return false;
-            return type.GetGenericArguments ().All (t => IsAValidType (t));
+            return type.GetGenericArguments ().All (IsAValidType);
         }
 
         /// <summary>
@@ -192,9 +191,7 @@ namespace KRPC.Service
             ValidateKRPCService (type);
             var attribute = Reflection.GetAttribute<KRPCServiceAttribute> (type);
             var name = attribute.Name;
-            if (name != null)
-                return name;
-            return type.Name;
+            return name ?? type.Name;
         }
 
         /// <summary>
@@ -204,7 +201,7 @@ namespace KRPC.Service
         {
             ValidateKRPCClass (type);
             var attribute = Reflection.GetAttribute<KRPCClassAttribute> (type);
-            return attribute.Service == null ? GetServiceName (type.DeclaringType) : attribute.Service;
+            return attribute.Service ?? GetServiceName (type.DeclaringType);
         }
 
         /// <summary>
@@ -214,7 +211,7 @@ namespace KRPC.Service
         {
             ValidateKRPCEnum (type);
             var attribute = Reflection.GetAttribute<KRPCEnumAttribute> (type);
-            return attribute.Service == null ? GetServiceName (type.DeclaringType) : attribute.Service;
+            return attribute.Service ?? GetServiceName (type.DeclaringType);
         }
 
         /// <summary>
@@ -240,7 +237,7 @@ namespace KRPC.Service
             var attribute = Reflection.GetAttribute<KRPCServiceAttribute> (type);
             // Note: Type must already be a class, due to AttributeUsage definition
             // Validate the identifier. If Name is specified, use that as the identifier.
-            ValidateIdentifier (attribute.Name == null ? type.Name : attribute.Name);
+            ValidateIdentifier (attribute.Name ?? type.Name);
             // Check it's public static
             if (!((type.IsPublic || type.IsNestedPublic) && type.IsStatic ()))
                 throw new ServiceException ("KRPCService " + type + " is not public static");

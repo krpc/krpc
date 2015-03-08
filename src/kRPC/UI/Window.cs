@@ -88,7 +88,7 @@ namespace KRPC.UI
             Draw ();
         }
 
-        void ConstrainToScreen (ref Rect rect)
+        static void ConstrainToScreen (ref Rect rect)
         {
             const int border = 10;
             rect.x = Math.Max (-(rect.width - border), rect.x);

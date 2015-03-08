@@ -1,12 +1,10 @@
 using NUnit.Framework;
-using System;
-using KRPC.Utils;
 
 namespace KRPCTest.Utils
 {
     class MyEquatable : KRPC.Utils.Equatable<MyEquatable>
     {
-        public string key;
+        readonly public string key;
 
         public MyEquatable (string key)
         {

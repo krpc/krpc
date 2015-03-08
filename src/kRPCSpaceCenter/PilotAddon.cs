@@ -5,7 +5,7 @@ namespace KRPCSpaceCenter
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class PilotAddon : MonoBehaviour
     {
-        global::Vessel controlledVessel;
+        Vessel controlledVessel;
 
         public static float Pitch { get; set; }
 

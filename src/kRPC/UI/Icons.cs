@@ -32,7 +32,7 @@ namespace KRPC.UI
         /// <summary>
         /// Load a file as a 2D texture.
         /// </summary>
-        Texture2D LoadTexture (string filepath)
+        static Texture2D LoadTexture (string filepath)
         {
             if (!filepath.EndsWith (".png", StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException ();

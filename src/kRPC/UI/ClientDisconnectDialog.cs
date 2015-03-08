@@ -1,6 +1,5 @@
 using UnityEngine;
 using KRPC.Server;
-using KRPC.Utils;
 
 namespace KRPC.UI
 {
@@ -16,9 +15,7 @@ namespace KRPC.UI
                 client.Close ();
                 Close ();
             }));
-            Options.Add (new DialogOption ("No, don't disconnect the client", () => {
-                Close ();
-            }));
+            Options.Add (new DialogOption ("No, don't disconnect the client", Close));
         }
 
         protected override void Opened ()
