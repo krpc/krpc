@@ -1,6 +1,7 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -8,6 +9,8 @@ namespace KRPC.Service.Scanner
 {
     static class Scanner
     {
+        static public Assembly CurrentAssembly { get; private set; }
+
         public static IDictionary<string, ServiceSignature> GetServices ()
         {
             IDictionary<string, ServiceSignature> signatures = new Dictionary<string, ServiceSignature> ();
@@ -21,6 +24,7 @@ namespace KRPC.Service.Scanner
                 serviceTypes.Add (typeof(Service.KRPC));
 
             foreach (var serviceType in serviceTypes) {
+                CurrentAssembly = serviceType.Assembly;
                 var service = new ServiceSignature (serviceType);
                 if (signatures.ContainsKey (service.Name))
                     service = signatures [service.Name];
@@ -36,6 +40,7 @@ namespace KRPC.Service.Scanner
 
             // Scan for classes annotated with KRPCClass
             foreach (var classType in Reflection.GetTypesWith<KRPCClassAttribute> ()) {
+                CurrentAssembly = classType.Assembly;
                 TypeUtils.ValidateKRPCClass (classType);
                 var serviceName = TypeUtils.GetClassServiceName (classType);
                 if (!signatures.ContainsKey (serviceName))
@@ -52,6 +57,7 @@ namespace KRPC.Service.Scanner
 
             // Scan for enumerations annotated with KRPCEnum
             foreach (var enumType in Reflection.GetTypesWith<KRPCEnumAttribute> ()) {
+                CurrentAssembly = enumType.Assembly;
                 TypeUtils.ValidateKRPCEnum (enumType);
                 var serviceName = TypeUtils.GetEnumServiceName (enumType);
                 if (!signatures.ContainsKey (serviceName))
@@ -59,6 +65,8 @@ namespace KRPC.Service.Scanner
                 var service = signatures [serviceName];
                 service.AddEnum (enumType);
             }
+
+            CurrentAssembly = null;
 
             // Check that the main KRPC service was found
             if (!signatures.ContainsKey ("KRPC"))

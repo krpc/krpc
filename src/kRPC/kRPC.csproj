@@ -140,6 +140,7 @@
     <Compile Include="Utils\RoundRobinScheduler.cs" />
     <Compile Include="Utils\Tuple.cs" />
     <Compile Include="CompatibilityChecker.cs" />
+    <Compile Include="ServicesChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\Makefile" />

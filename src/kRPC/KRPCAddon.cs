@@ -19,6 +19,9 @@ namespace KRPC
 
         public void Awake ()
         {
+            if (!ServicesChecker.OK)
+                return;
+
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
             server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
@@ -137,6 +140,8 @@ namespace KRPC
 
         public void OnDestroy ()
         {
+            if (!ServicesChecker.OK)
+                return;
             if (server.Running)
                 server.Stop ();
             if (toolbarButton != null)
@@ -152,6 +157,8 @@ namespace KRPC
 
         public void FixedUpdate ()
         {
+            if (!ServicesChecker.OK)
+                return;
             if (server.Running)
                 server.Update ();
         }
