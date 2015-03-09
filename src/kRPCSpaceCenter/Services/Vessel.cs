@@ -163,7 +163,7 @@ namespace KRPCSpaceCenter.Services
                         }
                     }
                 }
-                return thrust;
+                return thrust * 1000d;
             }
         }
 
