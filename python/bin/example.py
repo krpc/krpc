@@ -10,120 +10,154 @@ import time
 import math
 
 turn_start_altitude = 250
-turn_end_altitude = 70000
-target_altitude = 80000
+turn_end_altitude = 125000
+target_altitude = 150000
 
 def main():
     # Connect to the server with the default settings
-    # (IP address 127.0.0.1 and port 50000)
     print 'Connecting to server...'
-    ksp = krpc.connect(name='Example script')
-    print 'Connected to server, version', ksp.krpc.get_status().version
+    conn = krpc.connect(name='Example script')
+    print 'Connected to server, version', conn.krpc.get_status().version
 
-    vessel = ksp.space_center.active_vessel
+    # Get objects
+    vessel = conn.space_center.active_vessel
     orbit = vessel.orbit
     control = vessel.control
     auto_pilot = vessel.auto_pilot
     flight = vessel.flight()
     resources = vessel.resources
 
-    # Set the throttle to 100% and enable SAS
+    # Set up streams for telemetry
+    ut = conn.add_stream(getattr, conn.space_center, 'ut')
+    altitude = conn.add_stream(getattr, flight, 'mean_altitude')
+    apoapsis = conn.add_stream(getattr, orbit, 'apoapsis_altitude')
+    periapsis = conn.add_stream(getattr, orbit, 'periapsis_altitude')
+    eccentricity = conn.add_stream(getattr, orbit, 'eccentricity')
+    ap_error = conn.add_stream(getattr, auto_pilot, 'error')
+    srb_fuel = conn.add_stream(resources.amount, 'SolidFuel', stage=3, cumulative=False)
+    launcher_fuel = conn.add_stream(resources.amount, 'LiquidFuel', stage=2, cumulative=False)
+
+    # Pre-launch setup
+    control.sas = False
+    control.rcs = False
     control.throttle = 1
 
     # Countdown...
-    print '3'; time.sleep(1)
-    print '2'; time.sleep(1)
-    print '1'; time.sleep(1)
+    print '3...'; time.sleep(1)
+    print '2...'; time.sleep(1)
+    print '1...'; time.sleep(1)
+    print 'Launch!'
 
     # Activate the first stage
-    print 'Launch!'
     control.activate_next_stage()
     auto_pilot.set_rotation(90, 90)
 
-    time.sleep(1)
-
+    # Main ascent loop
     srbs_separated = False
-    stage_separated = False
+    launcher_separated = False
+    turn_angle = 0
     while True:
 
-        alt = flight.true_altitude
-        if alt > turn_start_altitude and alt < turn_end_altitude:
-            frac = (alt - turn_start_altitude) / (turn_end_altitude - turn_start_altitude)
-            frac *= 12
-            frac -= 6
-            sig = 1 / (1 + math.exp(-frac))
-            turn = sig * 90
-
-            auto_pilot.set_rotation(90-turn, 90)
+        # Gravity turn
+        if altitude() > turn_start_altitude and altitude() < turn_end_altitude:
+            frac = (altitude() - turn_start_altitude) / (turn_end_altitude - turn_start_altitude)
+            new_turn_angle = frac * 90
+            if abs(new_turn_angle - turn_angle) > 1:
+                turn_angle = new_turn_angle
+                auto_pilot.set_rotation(90-turn_angle, 90)
 
         # Separate SRBs when finished
         if not srbs_separated:
-            solid_fuel = resources.amount('SolidFuel', stage=3, cumulative=False) - 64
-            print '  Solid fuel = %.1f T' % solid_fuel
-            if solid_fuel < 0.1:
-                print '  SRB separation!'
+            if srb_fuel() - 64 < 0.1:
+                control.throttle = 0.1
+                time.sleep(0.1)
                 control.activate_next_stage()
+                time.sleep(1)
+                control.throttle = 1
                 srbs_separated = True
+                print 'SRBs separated'
 
         # Separate launch stage when finished
-        if srbs_separated and not stage_separated:
-            liquid_fuel = resources.amount('LiquidFuel', stage=2, cumulative=False)
-            oxidizer = resources.amount('Oxidizer', stage=2, cumulative=False)
-            print '  LF = %.1f T, Ox = %.1f T' % (liquid_fuel, oxidizer)
-            if liquid_fuel < 0.1:
-                print '  Stage separation!'
+        if srbs_separated and not launcher_separated:
+            if launcher_fuel() < 0.1:
+                control.throttle = 0.1
+                time.sleep(0.1)
                 control.activate_next_stage()
-                stage_separated = True
+                time.sleep(1)
+                control.throttle = 1
+                launcher_separated = True
+                print 'Launcher separated'
 
-        # Disable engines when 80km apoapsis is reached
-        apoapsis = orbit.apoapsis_altitude
-        print '  Apoapsis = %.1f km' % (apoapsis/1000)
-        if apoapsis > 80000:
+        # Disable engines when target apoapsis is reached
+        if apoapsis() > target_altitude:
+            print 'Target apoapsis reached'
             control.throttle = 0
             break
 
-        time.sleep(1)
+        time.sleep(0.1)
 
-    # Point at 0 degrees pitch, west
-    auto_pilot.set_rotation(0, 90)
+    # Wait until out of atmosphere
+    print 'Coasting out of atmosphere'
+    while altitude() < 70500:
+        time.sleep(0.1)
 
-    # Wait until altitude is higher than 79km
-    print 'Coasting to apoapsis...'
-    while True:
-        altitude = flight.true_altitude
-        print '  Altitude = %.1f km' % (altitude/1000)
-        if altitude > 79000:
-            break
-        time.sleep(1)
+    # Plan circularization burn (using vis-viva equation)
+    print 'Planning circularization burn'
+    mu = orbit.body.gravitational_parameter
+    r = orbit.apoapsis
+    a1 = orbit.semi_major_axis
+    a2 = r
+    v1 = math.sqrt(mu*((2./r)-(1./a1)))
+    v2 = math.sqrt(mu*((2./r)-(1./a2)))
+    delta_v = v2 - v1
+    node = control.add_node(conn.space_center.ut + orbit.time_to_apoapsis, prograde=delta_v)
 
-    # Circularize the orbit by raising periapsis until eccentricity
-    # starts to increase (which happens just after reaching 0)
-    print 'Circularizing...'
+    # Calculate burn time (using rocket equation)
+    F = vessel.thrust
+    Isp = vessel.specific_impulse * 9.82
+    m0 = vessel.mass
+    m1 = m0 / math.exp(delta_v/Isp)
+    flow_rate = F / Isp
+    burn_time = (m0 - m1) / flow_rate
+
+    # Wait until burn
+    print 'Waiting until circularization burn'
+    burn_ut = conn.space_center.ut + orbit.time_to_apoapsis - (burn_time/2.)
+    lead_time = 30
+    while ut() < burn_ut - lead_time:
+        time.sleep(0.1)
+
+    # Orientate ship
+    print 'Orientating ship for circularization burn'
+    auto_pilot.set_direction((0,0,1), reference_frame=node.reference_frame)
+    while ap_error() > 0.5:
+        time.sleep(0.1)
+
+    # Execute burn
+    print 'Ready to execute burn'
+    time_to_apoapsis = conn.add_stream(getattr, orbit, 'time_to_apoapsis')
+    while time_to_apoapsis() - (burn_time/2.) > 0:
+        pass
+    print 'Executing burn'
     control.throttle = 1
-    eccentricity = orbit.eccentricity
-    time.sleep(1)
-
-    while True:
-        apoapsis = orbit.apoapsis_altitude
-        periapsis = orbit.periapsis_altitude
-        prev_eccentricity = eccentricity
-        eccentricity = orbit.eccentricity
-
-        print '  Orbit = %.1f km x %.1f km (e = %.3f)' % ((apoapsis/1000), (periapsis/1000), orbit.eccentricity)
-
-        if prev_eccentricity - eccentricity < 0:
-            break
-
-        if eccentricity > 0.1:
-            time.sleep(1)
-        else:
-            # We are close, so reduce throttle and check eccentricity more frequently
-            control.throttle = 0.1
-            time.sleep(0.2)
-
+    time.sleep(burn_time - 0.5)
+    print 'Fine tuning'
+    control.throttle = 0.1
+    remaining_delta_v = conn.add_stream(getattr, node, 'remaining_delta_v')
+    prev_delta_v = float('inf')
+    while prev_delta_v > remaining_delta_v():
+        prev_delta_v = remaining_delta_v()
+        time.sleep(0.1)
     control.throttle = 0
+    node.remove()
+
+    # Post-launch clean up
     auto_pilot.disengage()
-    print 'Program complete'
+    control.throttle = 0
+    control.sas = False
+    control.rcs = False
+
+    print 'Launch complete'
 
 if __name__ == "__main__":
     main()
