@@ -7,7 +7,6 @@ v0.1.4
  - Server plugin specific changes:
    - Add KSP AppLauncher button
    - No longer bundle Toolbar plugin (kRPC will still use Toolbar plugin if available)
-   - Add KSP-AVC for version checking (#64)
    - Performance improvements (#68)
  - SpaceCenter service specific changes:
    - Major refactoring of reference frames (#66)

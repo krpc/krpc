@@ -78,9 +78,6 @@ dist: build dist-python
 	# Version files
 	echo $(SERVER_VERSION) > $(DIST_DIR)/VERSION.txt
 	echo $(SERVER_VERSION) > $(DIST_DIR)/GameData/kRPC/VERSION.txt
-	cp .version.template $(DIST_DIR)/GameData/kRPC/.version
-	sed -i 's/%VERSION%/$(SERVER_VERSION)/g' $(DIST_DIR)/GameData/kRPC/.version
-	cp $(DIST_DIR)/GameData/kRPC/.version .version
 	# Python client library
 	mkdir $(DIST_DIR)/python-client
 	cp python/dist/krpc-$(PYTHON_CLIENT_VERSION).zip $(DIST_DIR)/python-client/
