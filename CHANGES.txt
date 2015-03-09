@@ -1,65 +1,64 @@
 v0.1.4
- - General changes:
-   - Support for KSP 0.90.0
-   - Add support for tuples (#49,#50)
-   - Add support for streams (#24,#56)
-   - Fix issue with null values passed as a parameter (#65)
- - Server plugin specific changes:
-   - Add KSP AppLauncher button
-   - No longer bundle Toolbar plugin (kRPC will still use Toolbar plugin if available)
-   - Performance improvements (#68)
- - SpaceCenter service specific changes:
-   - Major refactoring of reference frames (#66)
-   - Add Control.Nodes (#53)
-   - Add Body.AtmosphereDensity (#52)
-   - Add CelestialBody.AtmospherePressureAt and AtmosphereDensityAt
-   - Add Vessel.Mass and DryMass (#51)
-   - Add Vessel.CrossSectionalArea, DragCoefficient and Drag
-   - Add Vessel.Thrust and SpecificImpulse
-   - Add Orbit.Period, MeanAnomalyAtEpoch and Epoch
-   - Change altitude properties to have sensible names (#62)
-   - Improvements to Control.Node class (#48)
-   - Fix argument type in Conrol.AddNode (#59)
-   - Fix bug with Vessel.HorizontalSpeed (#67)
- - Python client specific changes:
-   - Improved network code to fix bugs and make it more robust
-   - Add python version checks (#70)
-   - Make connections thread safe (#54)
+* General changes:
+  * Support for KSP 0.90.0
+  * Add support for tuples (#49,#50)
+  * Add support for streams (#24,#56)
+  * Fix issue with null values passed as a parameter (#65)
+* Server plugin specific changes:
+  * Add KSP AppLauncher button
+  * No longer bundle Toolbar plugin (kRPC will still use Toolbar plugin if available)
+  * Performance improvements (#68)
+* SpaceCenter service specific changes:
+  * Major refactoring of reference frames (#66)
+  * Add Control.Nodes (#53)
+  * Add Body.AtmosphereDensity (#52)
+  * Add CelestialBody.AtmospherePressureAt and AtmosphereDensityAt
+  * Add Vessel.Mass and DryMass (#51)
+  * Add Vessel.CrossSectionalArea, DragCoefficient and Drag
+  * Add Vessel.Thrust and SpecificImpulse
+  * Add Orbit.Period, MeanAnomalyAtEpoch and Epoch
+  * Change altitude properties to have sensible names (#62)
+  * Improvements to Control.Node class (#48)
+  * Fix argument type in Conrol.AddNode (#59)
+  * Fix bug with Vessel.HorizontalSpeed (#67)
+* Python client specific changes:
+  * Improved network code to fix bugs and make it more robust
+  * Add python version checks (#70)
+  * Make connections thread safe (#54)
 
 v0.1.3
- - Add support for collections (lists, dictionaries and sets)
- - Updates to SpaceCenter service:
-   - Add SpaceCenter.Vessels
-   - Add SpaceCenter.Bodies
-   - Remove SpaceCenter.Body
-   - Add SpaceCenter.G
-   - Add CelestialBody.Satellites
-   - Add Orbit.Radius
-   - Add Orbit.Speed
-   - Add Orbit.TimeToSOIChange
-   - Add Orbit.NextOrbit
-   - Add Node.Orbit
-   - Add Control.CurrentStage
-   - Resources.Names now returns a list of resource names
-   - Add support for abort and 0 action groups
-   - Rename Flight.Altitude to Flight.TrueAltitude
-   - Rename Flight.TrueAltitude to Flight.AbsoluteAltitude
-   - Add Flight.SurfaceAltitude
-   - Add Flight.Elevation
-   - Fix bug with Node.Vector returning a vector in the wrong vector space
-   - Improvements to Resources class
+* Add support for collections (lists, dictionaries and sets)
+* Updates to SpaceCenter service:
+  * Add SpaceCenter.Vessels
+  * Add SpaceCenter.Bodies
+  * Remove SpaceCenter.Body
+  * Add SpaceCenter.G
+  * Add CelestialBody.Satellites
+  * Add Orbit.Radius
+  * Add Orbit.Speed
+  * Add Orbit.TimeToSOIChange
+  * Add Orbit.NextOrbit
+  * Add Node.Orbit
+  * Add Control.CurrentStage
+  * Resources.Names now returns a list of resource names
+  * Add support for abort and 0 action groups
+  * Rename Flight.Altitude to Flight.TrueAltitude
+  * Rename Flight.TrueAltitude to Flight.AbsoluteAltitude
+  * Add Flight.SurfaceAltitude
+  * Add Flight.Elevation
+  * Fix bug with Node.Vector returning a vector in the wrong vector space
+  * Improvements to Resources class
 
 v0.1.2
- - SpaceCenter service:
-   - Include reference frame velocity in orbital direction vectors
-   - Remove ReferenceFrame.SurfaceVelocity and ReferenceFrame.TargetVelocity
-   - Change default reference frames for Vessel.Flight()
-     and AutoPilot functions to ReferenceFrame.Orbital
-   - Use Pa instead of kPa for atmospheric pressure
+* SpaceCenter service:
+  * Include reference frame velocity in orbital direction vectors
+  * Remove ReferenceFrame.SurfaceVelocity and ReferenceFrame.TargetVelocity
+  * Change default reference frames for Vessel.Flight() and AutoPilot functions to ReferenceFrame.Orbital
+  * Use Pa instead of kPa for atmospheric pressure
 
 v0.1.1
- - Add new functionality to SpaceCenter service
- - Minor server code improvements
+* Add new functionality to SpaceCenter service
+* Minor server code improvements
 
 v0.1.0
- - Initial pre-release
+* Initial pre-release
