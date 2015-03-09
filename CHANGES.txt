@@ -16,6 +16,7 @@ v0.1.4
    - Add CelestialBody.AtmospherePressureAt and AtmosphereDensityAt
    - Add Vessel.Mass and DryMass (#51)
    - Add Vessel.CrossSectionalArea, DragCoefficient and Drag
+   - Add Vessel.Thrust and SpecificImpulse
    - Add Orbit.Period, MeanAnomalyAtEpoch and Epoch
    - Change altitude properties to have sensible names (#62)
    - Improvements to Control.Node class (#48)

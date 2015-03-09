@@ -137,6 +137,68 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// The maximum thrust (in Newtons) of all active engines combined when throttled up to 100%
+        /// </summary>
+        //FIXME: just sums the max thrust of every engine, i.e. assumes all engines are pointing the same direction
+        [KRPCProperty]
+        public double Thrust {
+            get {
+                double thrust = 0;
+                foreach (var part in InternalVessel.parts) {
+                    foreach (PartModule module in part.Modules) {
+                        if (!module.isEnabled)
+                            continue;
+                        var engine = module as ModuleEngines;
+                        if (engine != null) {
+                            if (!engine.EngineIgnited || engine.getFlameoutState)
+                                continue;
+                            thrust += engine.maxThrust;
+                        }
+                        var engineFx = module as ModuleEnginesFX;
+                        if (engineFx != null) {
+                            if (!engine.EngineIgnited || engine.getFlameoutState)
+                                continue;
+                            thrust += engineFx.maxThrust;
+                        }
+                    }
+                }
+                return thrust;
+            }
+        }
+
+        /// <summary>
+        /// The combined specific impulse (in seconds) of all active engines
+        /// </summary>
+        [KRPCProperty]
+        public double SpecificImpulse {
+            get {
+                double totalThrust = 0;
+                double totalFlowRate = 0;
+                foreach (var part in InternalVessel.parts) {
+                    foreach (PartModule module in part.Modules) {
+                        if (!module.isEnabled)
+                            continue;
+                        var engine = module as ModuleEngines;
+                        if (engine != null) {
+                            if (!engine.EngineIgnited || engine.getFlameoutState)
+                                continue;
+                            totalThrust += engine.maxThrust;
+                            totalFlowRate += (engine.maxThrust / engine.realIsp);
+                        }
+                        var engineFx = module as ModuleEnginesFX;
+                        if (engineFx != null) {
+                            if (!engine.EngineIgnited || engine.getFlameoutState)
+                                continue;
+                            totalThrust += engine.maxThrust;
+                            totalFlowRate += (engine.maxThrust / engine.realIsp);
+                        }
+                    }
+                }
+                return totalThrust / totalFlowRate;
+            }
+        }
+
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
             get { return ReferenceFrame.Object (InternalVessel); }
