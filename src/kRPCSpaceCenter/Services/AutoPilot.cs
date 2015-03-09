@@ -89,6 +89,11 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        public static void Clear ()
+        {
+            engaged.Clear ();
+        }
+
         public static void Fly (FlightCtrlState state)
         {
             foreach (var autoPilot in engaged) {

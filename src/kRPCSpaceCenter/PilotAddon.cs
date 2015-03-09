@@ -48,6 +48,7 @@ namespace KRPCSpaceCenter
         {
             if (controlledVessel != null)
                 controlledVessel.OnFlyByWire -= Fly;
+            Services.AutoPilot.Clear ();
         }
 
         static void Fly (FlightCtrlState state)
