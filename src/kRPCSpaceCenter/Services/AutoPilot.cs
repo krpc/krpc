@@ -85,7 +85,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double Error {
             get {
-                return ComputeError (ComputeTarget ());
+                return engaged.Contains (this) ? ComputeError (ComputeTarget ()) : Double.NaN;
             }
         }
 
