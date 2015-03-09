@@ -139,6 +139,7 @@
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\RoundRobinScheduler.cs" />
     <Compile Include="Utils\Tuple.cs" />
+    <Compile Include="CompatibilityChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\Makefile" />
