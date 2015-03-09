@@ -106,7 +106,7 @@ namespace KRPCSpaceCenter.Services
             }
 
             var target = ComputeTarget ();
-            if (ComputeError (target) < 1.0f) {
+            if (ComputeError (target) < 3.0f) {
                 // Update SAS heading when the SAS heading has large error
                 // At most every 5 frames so that the SAS autopilot has a chance to affect the ship heading
                 if (sasUpdate > 5) {
