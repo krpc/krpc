@@ -85,6 +85,11 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        [KRPCProperty]
+        public double RemainingDeltaV {
+            get { return node.GetBurnVector (node.patch).magnitude; }
+        }
+
         [KRPCMethod]
         public Tuple3 BurnVector (ReferenceFrame referenceFrame = null)
         {
