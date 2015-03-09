@@ -64,6 +64,14 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Swap the Y and Z components of a vector
+        /// </summary>
+        public static Vector3d SwapYZ (this Vector3d v)
+        {
+            return new Vector3d (v.x, v.z, v.y);
+        }
+
+        /// <summary>
         /// Normalize an angle to the range (-180,180)
         /// </summary>
         public static double NormAngle (double angle)

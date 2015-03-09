@@ -181,7 +181,15 @@ namespace KRPCSpaceCenter.Services
                 case Type.PartSurface:
                     return part.vessel.GetWorldPos3D () + part.CoMOffset;
                 case Type.Maneuver:
-                    return node.patch.getPositionAtUT (node.UT);
+                    {
+                        //TODO: is there a better way to do this?
+                        // node.patch.getPositionAtUT (node.UT) appears to return a position vector
+                        // in a different space to vessel.GetWorldPos3D()
+                        var vesselPos = FlightGlobals.ActiveVessel.GetWorldPos3D ();
+                        var vesselOrbitPos = FlightGlobals.ActiveVessel.orbit.getPositionAtUT (Planetarium.GetUniversalTime ());
+                        var nodeOrbitPos = node.patch.getPositionAtUT (node.UT);
+                        return vesselPos - vesselOrbitPos + nodeOrbitPos;
+                    }
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -263,7 +271,7 @@ namespace KRPCSpaceCenter.Services
                         return Vector3d.Exclude (right, ToNorthPole (vessel).normalized);
                     }
                 case Type.Maneuver:
-                    return node.patch.GetOrbitNormal ();
+                    return node.patch.GetOrbitNormal ().SwapYZ ();
                 case Type.Part:
                 case Type.PartOrbital:
                 case Type.PartSurface:
@@ -305,7 +313,7 @@ namespace KRPCSpaceCenter.Services
                         return Vector3d.Cross (right, northPole);
                     }
                 case Type.Maneuver:
-                    return node.patch.getOrbitalVelocityAtUT (node.UT);
+                    return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
                 case Type.Part:
                 case Type.PartOrbital:
                 case Type.PartSurface:
