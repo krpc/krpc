@@ -23,7 +23,7 @@ dist: protobuf bin
 	python setup.py sdist --formats=gztar,zip
 
 release: protobuf bin
-	python setup.py sdist --formats=gztar,zip upload
+	python setup.py sdist --formats=gztar,zip register upload
 
 clean:
 	make -C .. protobuf-python-clean
