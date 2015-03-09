@@ -14,10 +14,12 @@ namespace KRPCSpaceCenter.Services
         /// The y-component is the normal component.
         /// The x-component is the radial component.
 
+        readonly global::Vessel vessel;
         ManeuverNode node;
 
         internal Node (global::Vessel vessel, double UT, double prograde, double normal, double radial)
         {
+            this.vessel = vessel;
             node = vessel.patchedConicSolver.AddManeuverNode (UT);
             node.OnGizmoUpdated (new Vector3d (radial, normal, prograde), UT);
         }
@@ -84,8 +86,10 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public Tuple3 BurnVector (ReferenceFrame referenceFrame)
+        public Tuple3 BurnVector (ReferenceFrame referenceFrame = null)
         {
+            if (referenceFrame == null)
+                referenceFrame = ReferenceFrame.Orbital (vessel);
             return referenceFrame.DirectionFromWorldSpace (WorldBurnVector).ToTuple ();
         }
 
