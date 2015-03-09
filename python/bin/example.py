@@ -1,8 +1,8 @@
 #!/usr/bin/env python2
 
 """
-This example script is an autopilot that will launch the supplied Example.craft
-(a 3-stage rocket) and take it into a (roughly) circular orbit at 80km.
+This example script launches Example.craft (a 3-stage rocket)
+into a circular orbit at 150km.
 """
 
 import krpc
