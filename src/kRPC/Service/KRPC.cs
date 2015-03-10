@@ -5,8 +5,7 @@ using KRPC.Service.Attributes;
 namespace KRPC.Service
 {
     /// <summary>
-    /// Main KRPC service, used by clients to interact with basic server functionality.
-    /// This includes requesting a description of the available services and setting up streams.
+    /// Main kRPC service, used by clients to interact with basic server functionality.
     /// </summary>
     [KRPCService]
     public static class KRPC

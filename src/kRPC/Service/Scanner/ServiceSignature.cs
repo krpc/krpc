@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using KRPC.Utils;
 
 namespace KRPC.Service.Scanner
 {
@@ -10,6 +11,11 @@ namespace KRPC.Service.Scanner
         /// The name of the service
         /// </summary>
         public string Name { get; private set; }
+
+        /// <summary>
+        /// Documentation for the service
+        /// </summary>
+        public string Documentation { get; private set; }
 
         /// <summary>
         /// A mapping from procedure names to signatures for all RPCs in this service
@@ -39,6 +45,7 @@ namespace KRPC.Service.Scanner
         {
             TypeUtils.ValidateKRPCService (type);
             Name = TypeUtils.GetServiceName (type);
+            Documentation = type.GetDocumentation ();
             Classes = new HashSet<string> ();
             Enums = new Dictionary<string, Dictionary<string, int>> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
@@ -71,7 +78,7 @@ namespace KRPC.Service.Scanner
         public void AddProcedure (MethodInfo method)
         {
             TypeUtils.ValidateKRPCProcedure (method);
-            AddProcedure (new ProcedureSignature (Name, method.Name, new ProcedureHandler (method), GameScene));
+            AddProcedure (new ProcedureSignature (Name, method.Name, method.GetDocumentation (), new ProcedureHandler (method), GameScene));
         }
 
         /// <summary>
@@ -84,13 +91,13 @@ namespace KRPC.Service.Scanner
                 var method = property.GetGetMethod ();
                 var handler = new ProcedureHandler (method);
                 var attribute = "Property.Get(" + property.Name + ")";
-                AddProcedure (new ProcedureSignature (Name, method.Name, handler, GameScene, attribute));
+                AddProcedure (new ProcedureSignature (Name, method.Name, method.GetDocumentation (), handler, GameScene, attribute));
             }
             if (property.GetSetMethod () != null) {
                 var method = property.GetSetMethod ();
                 var handler = new ProcedureHandler (method);
                 var attribute = "Property.Set(" + property.Name + ")";
-                AddProcedure (new ProcedureSignature (Name, method.Name, handler, GameScene, attribute));
+                AddProcedure (new ProcedureSignature (Name, method.Name, method.GetDocumentation (), handler, GameScene, attribute));
             }
         }
 
@@ -130,7 +137,7 @@ namespace KRPC.Service.Scanner
             if (!Classes.Contains (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var handler = new ClassMethodHandler (method);
-            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, GameScene,
+            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, method.GetDocumentation (), handler, GameScene,
                 "Class.Method(" + Name + "." + cls + "," + method.Name + ")", "ParameterType(0).Class(" + Name + "." + cls + ")"));
         }
 
@@ -146,14 +153,14 @@ namespace KRPC.Service.Scanner
                 var handler = new ClassMethodHandler (method);
                 var attribute = "Class.Property.Get(" + Name + "." + cls + "," + property.Name + ")";
                 var parameter_attribute = "ParameterType(0).Class(" + Name + "." + cls + ")";
-                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, GameScene, attribute, parameter_attribute));
+                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, method.GetDocumentation (), handler, GameScene, attribute, parameter_attribute));
             }
             if (property.GetSetMethod () != null) {
                 var method = property.GetSetMethod ();
                 var handler = new ClassMethodHandler (method);
                 var attribute = "Class.Property.Set(" + Name + "." + cls + "," + property.Name + ")";
                 var parameter_attribute = "ParameterType(0).Class(" + Name + "." + cls + ")";
-                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, GameScene, attribute, parameter_attribute));
+                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, method.GetDocumentation (), handler, GameScene, attribute, parameter_attribute));
             }
         }
     }
