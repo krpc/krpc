@@ -6,9 +6,15 @@ using KRPC.Continuations;
 
 namespace TestServer.Services
 {
+    /// <summary>
+    /// Service documentation string.
+    /// </summary>
     [KRPCService]
     public static class TestService
     {
+        /// <summary>
+        /// Procedure documentation string.
+        /// </summary>
         [KRPCProcedure]
         public static string FloatToString (float value)
         {
@@ -58,6 +64,9 @@ namespace TestServer.Services
             return (x + y + z).ToString ();
         }
 
+        /// <summary>
+        /// Property documentation string.
+        /// </summary>
         [KRPCProperty]
         public static string StringProperty { get; set; }
 
@@ -87,6 +96,9 @@ namespace TestServer.Services
         [KRPCProperty]
         public static TestClass ObjectProperty { get; set; }
 
+        /// <summary>
+        /// Class documentation string.
+        /// </summary>
         [KRPCClass]
         public class TestClass : KRPC.Utils.Equatable<TestClass>
         {
@@ -97,6 +109,9 @@ namespace TestServer.Services
                 this.value = value;
             }
 
+            /// <summary>
+            /// Method documentation string.
+            /// </summary>
             [KRPCMethod]
             public string GetValue ()
             {
@@ -115,6 +130,9 @@ namespace TestServer.Services
                 return value + (other == null ? "null" : other.value);
             }
 
+            /// <summary>
+            /// Property documentation string.
+            /// </summary>
             [KRPCProperty]
             public int IntProperty { get; set; }
 

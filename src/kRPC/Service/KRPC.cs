@@ -49,6 +49,8 @@ namespace KRPC.Service
                     foreach (var attribute in procedureSignature.Attributes) {
                         procedure.AddAttributes (attribute);
                     }
+                    if (procedureSignature.Documentation != "")
+                        procedure.SetDocumentation (procedureSignature.Documentation);
                     service.AddProcedures (procedure);
                 }
                 foreach (var clsName in serviceSignature.Classes) {
@@ -67,6 +69,8 @@ namespace KRPC.Service
                     }
                     service.AddEnumerations (enm);
                 }
+                if (serviceSignature.Documentation != "")
+                    service.SetDocumentation (serviceSignature.Documentation);
                 services.AddServices_ (service);
             }
             Schema.KRPC.Services result = services.Build ();

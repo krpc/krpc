@@ -20,12 +20,16 @@ namespace KRPCTest.Service.Scanner
                 if (service.Name == "TestService") {
                     foundServices++;
                     Assert.AreEqual (38, service.ProceduresCount);
+                    Assert.IsTrue (service.HasDocumentation);
+                    Assert.AreEqual ("Test service documentation.", service.Documentation);
                     int foundProcedures = 0;
                     foreach (var method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
                             Assert.AreEqual (0, method.ParametersCount);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsTrue (method.HasDocumentation);
+                            Assert.AreEqual ("Procedure with no return arguments.", method.Documentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureSingleArgNoReturn") {
@@ -35,6 +39,8 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.ParametersList [0].HasDefaultArgument);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsTrue (method.HasDocumentation);
+                            Assert.AreEqual ("Procedure with a single return argument.", method.Documentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureThreeArgsNoReturn") {
@@ -50,6 +56,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.ParametersList [2].HasDefaultArgument);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureNoArgsReturns") {
@@ -57,6 +64,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("KRPC.Response", method.ReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureSingleArgReturns") {
@@ -67,6 +75,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("KRPC.Response", method.ReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureWithValueTypes") {
@@ -83,6 +92,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.ParametersList [2].HasDefaultArgument);
                             Assert.AreEqual ("int32", method.ReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "get_PropertyWithGetAndSet") {
@@ -91,6 +101,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("string", method.ReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("Property.Get(PropertyWithGetAndSet)", method.AttributesList [0]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "set_PropertyWithGetAndSet") {
@@ -101,6 +112,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("Property.Set(PropertyWithGetAndSet)", method.AttributesList [0]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "get_PropertyWithGet") {
@@ -109,6 +121,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("string", method.ReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("Property.Get(PropertyWithGet)", method.AttributesList [0]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "set_PropertyWithSet") {
@@ -119,6 +132,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("Property.Set(PropertyWithSet)", method.AttributesList [0]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "CreateTestObject") {
@@ -130,6 +144,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("uint64", method.ReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", method.AttributesList [0]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "DeleteTestObject") {
@@ -140,6 +155,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [0]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "EchoTestObject") {
@@ -152,6 +168,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [0]);
                             Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "TestClass_FloatToString") {
@@ -167,6 +184,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("Class.Method(TestService.TestClass,FloatToString)", method.AttributesList [0]);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "TestClass_ObjectToString") {
@@ -183,6 +201,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("Class.Method(TestService.TestClass,ObjectToString)", method.AttributesList [0]);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
                             Assert.AreEqual ("ParameterType(1).Class(TestService.TestClass)", method.AttributesList [2]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "TestClass_IntToString") {
@@ -199,6 +218,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("Class.Method(TestService.TestClass,IntToString)", method.AttributesList [0]);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "TestClass_get_IntProperty") {
@@ -211,6 +231,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("Class.Property.Get(TestService.TestClass,IntProperty)", method.AttributesList [0]);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "TestClass_set_IntProperty") {
@@ -225,6 +246,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("Class.Property.Set(TestService.TestClass,IntProperty)", method.AttributesList [0]);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "TestClass_get_ObjectProperty") {
@@ -238,6 +260,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("Class.Property.Get(TestService.TestClass,ObjectProperty)", method.AttributesList [0]);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
                             Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", method.AttributesList [2]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "TestClass_set_ObjectProperty") {
@@ -253,6 +276,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("Class.Property.Set(TestService.TestClass,ObjectProperty)", method.AttributesList [0]);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [1]);
                             Assert.AreEqual ("ParameterType(1).Class(TestService.TestClass)", method.AttributesList [2]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "TestTopLevelClass_AMethod") {
@@ -268,6 +292,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("Class.Method(TestService.TestTopLevelClass,AMethod)", method.AttributesList [0]);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestTopLevelClass)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "TestTopLevelClass_get_AProperty") {
@@ -280,6 +305,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("Class.Property.Get(TestService.TestTopLevelClass,AProperty)", method.AttributesList [0]);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestTopLevelClass)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "TestTopLevelClass_set_AProperty") {
@@ -294,6 +320,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("Class.Property.Set(TestService.TestTopLevelClass,AProperty)", method.AttributesList [0]);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestTopLevelClass)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureSingleOptionalArgNoReturn") {
@@ -304,6 +331,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (new byte[] { 0x03, 0x66, 0x6f, 0x6f }, method.ParametersList [0].DefaultArgument);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureThreeOptionalArgsNoReturn") {
@@ -321,6 +349,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (new byte[] { 0x2a }, method.ParametersList [2].DefaultArgument);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureOptionalNullArg") {
@@ -332,6 +361,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [0]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureEnumArg") {
@@ -341,6 +371,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.ParametersList [0].HasDefaultArgument);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureEnumReturn") {
@@ -348,6 +379,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("Test.TestEnum", method.ReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureCSharpEnumArg") {
@@ -358,6 +390,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Enum(TestService.CSharpEnum)", method.AttributesList [0]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureCSharpEnumReturn") {
@@ -366,6 +399,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("int32", method.ReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("ReturnType.Enum(TestService.CSharpEnum)", method.AttributesList [0]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "BlockingProcedureNoReturn") {
@@ -374,6 +408,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("int32", method.ParametersList [0].Type);
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "BlockingProcedureReturns") {
@@ -385,6 +420,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsTrue (method.HasReturnType);
                             Assert.AreEqual ("int32", method.ReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "EchoList") {
@@ -396,6 +432,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).List(string)", method.AttributesList [0]);
                             Assert.AreEqual ("ReturnType.List(string)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "EchoDictionary") {
@@ -407,6 +444,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Dictionary(int32,string)", method.AttributesList [0]);
                             Assert.AreEqual ("ReturnType.Dictionary(int32,string)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "EchoSet") {
@@ -418,6 +456,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Set(int32)", method.AttributesList [0]);
                             Assert.AreEqual ("ReturnType.Set(int32)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "EchoTuple") {
@@ -429,6 +468,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Tuple(int32,bool)", method.AttributesList [0]);
                             Assert.AreEqual ("ReturnType.Tuple(int32,bool)", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "EchoNestedCollection") {
@@ -440,6 +480,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Dictionary(int32,List(string))", method.AttributesList [0]);
                             Assert.AreEqual ("ReturnType.Dictionary(int32,List(string))", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                         if (method.Name == "EchoListOfObjects") {
@@ -451,6 +492,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (2, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).List(Class(TestService.TestClass))", method.AttributesList [0]);
                             Assert.AreEqual ("ReturnType.List(Class(TestService.TestClass))", method.AttributesList [1]);
+                            Assert.IsFalse (method.HasDocumentation);
                             foundProcedures++;
                         }
                     }
@@ -481,6 +523,8 @@ namespace KRPCTest.Service.Scanner
                 if (service.Name == "TestService2") {
                     foundServices++;
                     Assert.AreEqual (2, service.ProceduresCount);
+                    Assert.IsTrue (service.HasDocumentation);
+                    Assert.AreEqual ("TestService2 documentation.", service.Documentation);
                     int found = 0;
                     foreach (var method in service.ProceduresList) {
                         if (method.Name == "ClassTypeFromOtherServiceAsParameter") {
@@ -492,6 +536,8 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("int32", method.ReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [0]);
+                            Assert.IsTrue (method.HasDocumentation);
+                            Assert.AreEqual("TestService2 procedure documentation.", method.Documentation);
                             found++;
                         }
                         if (method.Name == "ClassTypeFromOtherServiceAsReturn") {
@@ -503,6 +549,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual ("uint64", method.ReturnType);
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", method.AttributesList [0]);
+                            Assert.IsFalse (method.HasDocumentation);
                             found++;
                         }
                     }
@@ -511,6 +558,7 @@ namespace KRPCTest.Service.Scanner
                 if (service.Name == "TestService3Name") {
                     foundServices++;
                     Assert.AreEqual (1, service.ProceduresCount);
+                    Assert.IsFalse (service.HasDocumentation);
                 }
             }
             Assert.AreEqual (3, foundServices);

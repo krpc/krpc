@@ -35,6 +35,7 @@ message Service {
   repeated Procedure procedures = 2;
   repeated Class classes = 3;
   repeated Enumeration enumerations = 4;
+  optional string documentation = 5;
 }
 
 message Procedure {
@@ -42,6 +43,7 @@ message Procedure {
   repeated Parameter parameters = 2;
   optional string return_type = 3;
   repeated string attributes = 4;
+  optional string documentation = 5;
 }
 
 message Parameter {
