@@ -44,6 +44,7 @@ namespace KRPC.Utils
             case MemberTypes.Method:
                 prefixCode = 'M';
                 string paramTypesList = String.Join (",", ((MethodBase)member).GetParameters ().Select (x => x.ParameterType.FullName).ToArray ());
+                paramTypesList = paramTypesList.Replace ('+', '.');
                 if (!String.IsNullOrEmpty (paramTypesList))
                     memberName += "(" + paramTypesList + ")";
                 break;
