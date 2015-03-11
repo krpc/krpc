@@ -137,3 +137,6 @@ dist
 
 # KSP libraries
 lib/KSP_Data
+
+# Documentation
+docs
