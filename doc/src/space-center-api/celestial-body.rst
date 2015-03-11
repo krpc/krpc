@@ -1,0 +1,195 @@
+Celestial Body
+==============
+
+.. class:: CelestialBody
+
+   Represents a celestial body (such as a planet or moon).
+
+.. attribute:: CelestialBody.Name
+
+   Gets the name of the body.
+
+   :rtype: `string`
+
+.. attribute:: CelestialBody.Satellites
+
+   Gets a list of celestial bodies that are in orbit around this celestial body.
+
+   :rtype: :class:`List` ( :class:`CelestialBody` )
+
+.. attribute:: CelestialBody.Mass
+
+   Gets the mass of the body, in kilograms.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.GravitationalParameter
+
+   Gets the `standard gravitational parameter
+   <http://en.wikipedia.org/wiki/Standard_gravitational_parameter>`_ of the body
+   in :math:`m^3s^{-2}`.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.SurfaceGravity
+
+   Gets the acceleration due to gravity at sea level (mean altitude) on the
+   body, in :math:`m/s^2`.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.RotationalPeriod
+
+   Gets the rotational period of the body, in seconds.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.RotationalSpeed
+
+   Returns the rotational speed of the body, in radians per second.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.EquatorialRadius
+
+   Gets the equatorial radius of the body, in meters.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.sphere_of_influence
+
+   Gets the radius of the sphere of influence of the body, in meters.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.Orbit
+
+   Gets the orbit of the body.
+
+   :rtype: :class:`Orbit`
+
+.. attribute:: CelestialBody.HasAtmosphere
+
+   `True` if the body has an atmosphere.
+
+   :rtype: `bool`
+
+.. attribute:: CelestialBody.AtmospherePressure
+
+   Gets the pressure of the atmosphere at sea level, in Pascals.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.AtmosphereScaleHeight
+
+   Gets the `scale height
+   <http://wiki.kerbalspaceprogram.com/wiki/Kerbin#Atmosphere>`_ of the
+   atmosphere, in meters.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.AtmosphereMaxAltitude
+
+   Gets the maximum altitude of the atmosphere, in meters.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.AtmopshereDensity
+
+   Gets the density of the atmosphere at sea level, in :math:`kg/m^3`.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.ReferenceFrame
+
+   Gets the reference frame that is fixed relative to this celestial body.
+   The origin is at the center of the body.
+   The y-axis points from the center of the body towards the north pole.
+   The x-axis points from the center of the body towards the intersection of the
+   prime meridian and equator (the position at 0 degrees longitude, 0 degrees
+   latitude).
+
+   :rtype: :class:`ReferenceFrame`
+
+.. attribute:: CelestialBody.NonRotatingReferenceFrame
+
+   Gets the reference frame whose origin is at the center of the body, and whose
+   axes point in an arbitrary but fixed direction.
+
+   :rtype: :class:`ReferenceFrame`
+
+.. attribute:: CelestialBody.orbital_reference_frame
+
+   Gets the reference frame relative to the orbit of this body.
+   The origin is at the center of the body.
+   The x-axis points normal to the body being orbited (from the center of the
+   body being orbited towards the center of this body).
+   The y-axis points towards the north pole of the body being orbited.
+
+   :rtype: :class:`ReferenceFrame`
+
+.. attribute:: CelestialBody.surface_reference_frame
+
+   Gets the reference frame relative to the surface of the body being orbited by
+   this vessel.
+   The origin is at the center of the body.
+   The x-axis points normal to the body being orbited (from the center of the
+   body being orbited towards the center of this body).
+   The y-axis points towards the north pole of the body being orbited.
+
+   :rtype: :class:`ReferenceFrame`
+
+.. method:: CelestialBody.AtmopsherePressureAt (altitude)
+
+   Returns the atmospheric pressure, in Pascals, at the given altitude above sea
+   level, in meters.
+
+   :param double altitude:
+   :rtype: `double`
+
+.. method:: CelestialBody.AtmopshereDensityAt (altitude)
+
+   Returns the density of the atmosphere, in :math:`kg/m^3`, at the given
+   altitude above sea level, in meters.
+
+   :param double altitude:
+   :rtype: `double`
+
+.. method:: CelestialBody.Position (reference_frame)
+
+   Returns the position vector of the center of the body in the specified reference frame.
+
+   :param ReferenceFrame reference_frame:
+   :rtype: :class:`Vector`
+
+.. method:: CelestialBody.Velocity (reference_frame)
+
+   Returns the velocity vector of the body in the specified reference frame.
+
+   :param ReferenceFrame reference_frame:
+   :rtype: :class:`Vector`
+
+.. method:: CelestialBody.Rotation (reference_frame)
+
+   Returns the rotation of the body in the specified reference frame.
+
+   :param ReferenceFrame reference_frame:
+   :rtype: :class:`Quaternion`
+
+.. method:: CelestialBody.Direction (reference_frame)
+
+   Returns the direction in which the north pole of the celestial body is
+   pointing, as a unit vector, in the specified reference frame.
+
+   :param ReferenceFrame reference_frame:
+   :rtype: :class:`Vector`
+
+.. method:: CelestialBody.AngularVelocity (reference_frame)
+
+   Returns the angular velocity of the body in the specified reference
+   frame. The magnitude of the vector is the rotational speed of the body, in
+   radians per second, and the direction of the vector indicates the axis of
+   rotation, using the right-hand rule.
+
+   :param ReferenceFrame reference_frame:
+   :rtype: :class:`Vector`
