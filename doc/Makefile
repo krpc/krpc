@@ -18,4 +18,4 @@ gh-pages:
 	$(SPHINX_BUILD) -b html $(SPHINX_OPTS) ../docs
 
 clean:
-	rm -rf html doctrees
+	rm -rf html doctrees ../docs
