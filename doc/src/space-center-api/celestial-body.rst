@@ -163,14 +163,14 @@ CelestialBody
    Returns the position vector of the center of the body in the specified reference frame.
 
    :param ReferenceFrame reference_frame:
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. method:: CelestialBody.Velocity (reference_frame)
 
    Returns the velocity vector of the body in the specified reference frame.
 
    :param ReferenceFrame reference_frame:
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. method:: CelestialBody.Rotation (reference_frame)
 
@@ -185,7 +185,7 @@ CelestialBody
    pointing, as a unit vector, in the specified reference frame.
 
    :param ReferenceFrame reference_frame:
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. method:: CelestialBody.AngularVelocity (reference_frame)
 
@@ -195,4 +195,4 @@ CelestialBody
    rotation, using the right-hand rule.
 
    :param ReferenceFrame reference_frame:
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`

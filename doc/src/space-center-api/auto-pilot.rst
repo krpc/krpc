@@ -30,7 +30,7 @@ AutoPilot
    and the auto-pilot continues to set the rotation of the vessel, until
    :meth:`AutoPilot.Disengage` is called.
 
-   :param Vector direction: The desired direction (pitch and heading) as a unit
+   :param Vector3 direction: The desired direction (pitch and heading) as a unit
                             vector.
    :param double roll: Optional desired roll angle relative to the horizon, in
                        degrees. A value between -180° and 180°.

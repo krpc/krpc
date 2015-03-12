@@ -158,14 +158,14 @@ Orbit
    plane. The reference plane is the plane from which the orbits inclination is
    measured.
 
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. attribute:: Orbit.ReferencePlaneDirection
 
    Gets the unit direction vector (in the reference plane) from which the orbits
    longitude of ascending node is measured.
 
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. attribute:: Orbit.ReferenceFrame
 

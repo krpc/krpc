@@ -50,7 +50,7 @@ Flight
    speed of the vessel in meters per second. The direction of the vector is the
    direction of the vessels motion.
 
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. attribute:: Flight.Speed
 
@@ -74,7 +74,7 @@ Flight
 
    Gets the position of the center of mass of the vessel.
 
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. attribute:: Flight.Rotation
 
@@ -86,7 +86,7 @@ Flight
 
    Gets the direction vector that the vessel is pointing in.
 
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. attribute:: Flight.Pitch
 
@@ -113,19 +113,19 @@ Flight
 
    Gets the unit direction vector pointing in the prograde direction.
 
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. attribute:: Flight.normal
 
    Gets a unit direction vector pointing in the normal direction.
 
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. attribute:: Flight.radial
 
    Gets a unit direction vector pointing in the radial direction direction.
 
-   :rtype: :class:`Vector`
+   :rtype: :class:`Vector3`
 
 .. attribute:: Flight.Drag
 

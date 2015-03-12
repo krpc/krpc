@@ -77,7 +77,7 @@ resources, planning maneuver nodes and auto-piloting.
    :param ReferenceFrame from: The reference frame that the position vector is in.
    :param ReferenceFrame to: The reference frame to covert the position vector to.
    :return: The corresponding position vector in reference frame `to`.
-   :rtype: `Vector3`
+   :rtype: :class:`Vector3`
 
 .. method:: SpaceCenter.TransformDirection (direction, from, to)
 
@@ -87,7 +87,7 @@ resources, planning maneuver nodes and auto-piloting.
    :param ReferenceFrame from: The reference frame that the direction vector is in.
    :param ReferenceFrame to: The reference frame to covert the direction vector to.
    :return: The corresponding direction vector in reference frame `to`.
-   :rtype: `Vector3`
+   :rtype: :class:`Vector3`
 
 .. method:: SpaceCenter.TransformRotation (rotation, from, to)
 
@@ -97,7 +97,7 @@ resources, planning maneuver nodes and auto-piloting.
    :param ReferenceFrame from: The reference frame that the rotation is in.
    :param ReferenceFrame to: The reference frame to covert the rotation to.
    :return: The corresponding rotation in reference frame `to`.
-   :rtype: `Quaternion`
+   :rtype: :class:`Quaternion`
 
 .. method:: SpaceCenter.TransformVelocity (position, velocity, from, to)
 
@@ -111,4 +111,4 @@ resources, planning maneuver nodes and auto-piloting.
                                velocity vectors are in.
    :param ReferenceFrame to: The reference frame to covert the velocity vector to.
    :return: The corresponding velocity in reference frame `to`.
-   :rtype: `Vector3`
+   :rtype: :class:`Vector3`
