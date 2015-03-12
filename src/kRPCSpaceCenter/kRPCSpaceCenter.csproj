@@ -89,5 +89,6 @@
     <Compile Include="Services\Vessel.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
+    <Compile Include="ExtensionMethods\SpeedDisplayModesExtensions.cs" />
   </ItemGroup>
 </Project>

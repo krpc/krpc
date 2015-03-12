@@ -24,6 +24,14 @@ namespace KRPCSpaceCenter.Services
         AntiTarget
     }
 
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum SpeedMode
+    {
+        Orbit,
+        Surface,
+        Target
+    }
+
     /// <remarks>
     /// Taken and adapted from MechJeb2/KOS/RemoteTech2/forum discussion; credit goes to the authors of those plugins/posts:
     /// https://github.com/MuMech/MechJeb2
@@ -77,6 +85,12 @@ namespace KRPCSpaceCenter.Services
                     modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
                 }
             }
+        }
+
+        [KRPCProperty]
+        public SpeedMode SpeedMode {
+            get { return FlightUIController.speedDisplayMode.ToSpeedMode (); }
+            set { FlightUIController.speedDisplayMode = value.FromSpeedMode (); }
         }
 
         [KRPCMethod]
