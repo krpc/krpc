@@ -14,7 +14,8 @@ class TestAutoPilot(testingtools.TestCase):
         self.vessel = self.conn.space_center.active_vessel
         self.ref = self.conn.space_center.ReferenceFrame
         self.ap = self.vessel.auto_pilot
-        self.vessel.control.sas = False
+        self.ap.sas = False
+        self.sas_mode = self.conn.space_center.SASMode
 
     def test_equality(self):
         self.assertEqual(self.vessel.auto_pilot, self.ap)
@@ -44,6 +45,12 @@ class TestAutoPilot(testingtools.TestCase):
         self.assertClose(direction, flight.direction, error=0.1)
         if roll is not None:
             self.assertClose(roll, flight.roll, error=1)
+
+    def test_sas(self):
+        self.ap.sas = True
+        self.assertTrue(self.ap.sas)
+        self.ap.sas = False
+        self.assertFalse(self.ap.sas)
 
     def test_set_pitch(self):
         for pitch in range(-80, 80, 20):
