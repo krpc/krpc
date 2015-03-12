@@ -8,15 +8,19 @@ SPHINX_OPTS = -d doctrees $(SRC_DIR)
 
 all: build
 
-build:
+python-api:
+	rm -rf src/python-api
+	./build-api.py api src/python-api
+
+build: python-api
 	$(SPHINX_BUILD) -b html $(SPHINX_OPTS) $(BUILD_DIR)
 
 serve: build
 	$(SPHINX_AUTOBUILD) -b html $(SPHINX_OPTS) $(BUILD_DIR)
 
-gh-pages:
+gh-pages: python-api
 	rm -rf ../docs
 	$(SPHINX_BUILD) -b html $(SPHINX_OPTS) ../docs
 
 clean:
-	rm -rf html doctrees ../docs
+	rm -rf html doctrees ../docs src/python-api

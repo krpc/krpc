@@ -10,6 +10,6 @@ kRPC Documentation
 
    getting-started
    tutorials
-   space-center-api
+   python-api
 
 :ref:`genindex`

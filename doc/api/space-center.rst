@@ -5,24 +5,6 @@ The SpaceCenter service provides functionality to interact with vessels in
 Kerbal Space Program. This includes controlling the vessel, managing it's
 resources, planning maneuver nodes and auto-piloting.
 
-.. note:: The python client automatically renames properties and procedures to
-          use `snake case <http://en.wikipedia.org/wiki/Snake_case>`_.
-
-.. toctree::
-   :hidden:
-
-   space-center-api/vessel
-   space-center-api/celestial-body
-   space-center-api/flight
-   space-center-api/orbit
-   space-center-api/control
-   space-center-api/resources
-   space-center-api/node
-   space-center-api/reference-frame
-   space-center-api/auto-pilot
-   space-center-api/enumeration-types
-   space-center-api/geometry-types
-
 .. class:: SpaceCenter
 
 .. attribute:: SpaceCenter.ActiveVessel

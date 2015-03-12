@@ -17,7 +17,7 @@ Orbit
    Gets the apoapsis of the orbit, in meters, from the center of mass of the body being orbited.
 
    .. note:: For the apoapsis altitude reported on the in-game map view, use
-      :attr:`Orbit.apoapsis_altitude`.
+      :attr:`Orbit.ApoapsisAltitude`.
 
    :rtype: `double`
 
@@ -28,7 +28,7 @@ Orbit
    :rtype: `double`
 
    .. note:: For the periapsis altitude reported on the in-game map view, use
-      :attr:`Orbit.periapsis_altitude`.
+      :attr:`Orbit.PeriapsisAltitude`.
 
 .. attribute:: Orbit.ApoapsisAltitude
 
@@ -47,7 +47,7 @@ Orbit
 
    :rtype: `double`
 
-   .. note:: This is equal to :attr:`Orbit.periapsis` minus the equatorial
+   .. note:: This is equal to :attr:`Orbit.Periapsis` minus the equatorial
       radius of the body.
 
 .. attribute:: Orbit.SemiMajorAxis
