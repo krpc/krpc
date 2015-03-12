@@ -95,14 +95,6 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double TimeToSOIChange {
-            get {
-                var time = orbit.UTsoi - SpaceCenter.UT;
-                return time < 0 ? Double.NaN : time;
-            }
-        }
-
-        [KRPCProperty]
         public double Eccentricity {
             get { return orbit.eccentricity; }
         }
@@ -158,6 +150,14 @@ namespace KRPCSpaceCenter.Services
         public Orbit NextOrbit {
             get {
                 return (Double.IsNaN (TimeToSOIChange)) ? null : new Orbit (orbit.nextPatch);
+            }
+        }
+
+        [KRPCProperty]
+        public double TimeToSOIChange {
+            get {
+                var time = orbit.UTsoi - SpaceCenter.UT;
+                return time < 0 ? Double.NaN : time;
             }
         }
 
