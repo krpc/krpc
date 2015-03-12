@@ -11,15 +11,15 @@ resources, planning maneuver nodes and auto-piloting.
 .. toctree::
    :hidden:
 
-   Vessel <space-center-api/vessel>
-   CelestialBody <space-center-api/celestial-body>
-   Flight <space-center-api/flight>
-   Orbit <space-center-api/orbit>
-   Control <space-center-api/control>
-   Resources <space-center-api/resources>
-   Node <space-center-api/node>
-   ReferenceFrame <space-center-api/reference-frame>
-   AutoPilot <space-center-api/auto-pilot>
+   space-center-api/vessel
+   space-center-api/celestial-body
+   space-center-api/flight
+   space-center-api/orbit
+   space-center-api/control
+   space-center-api/resources
+   space-center-api/node
+   space-center-api/reference-frame
+   space-center-api/auto-pilot
    space-center-api/enumeration-types
    space-center-api/geometry-types
 
@@ -58,9 +58,9 @@ resources, planning maneuver nodes and auto-piloting.
 
    :rtype: `double`
 
-.. method:: SpaceCenter.WarpTo (ut, [max_rate=100000])
+.. method:: SpaceCenter.WarpTo (ut, max_rate=100000)
 
-   Uses time acceleration to warp to the specified time.  Automatically uses
+   Uses time acceleration to warp to the specified time. Automatically uses
    regular or physical time warp as appropriate. For example, physical time warp
    is used when the active vessel is travelling through an atmosphere. When
    using physical time warp, the warp rate is at most 2x.

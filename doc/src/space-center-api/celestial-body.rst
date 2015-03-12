@@ -1,5 +1,5 @@
-Celestial Body
-==============
+CelestialBody
+=============
 
 .. class:: CelestialBody
 
@@ -56,7 +56,7 @@ Celestial Body
 
    :rtype: `double`
 
-.. attribute:: CelestialBody.sphere_of_influence
+.. attribute:: CelestialBody.SphereOfInfluence
 
    Gets the radius of the sphere of influence of the body, in meters.
 
@@ -76,7 +76,15 @@ Celestial Body
 
 .. attribute:: CelestialBody.AtmospherePressure
 
-   Gets the pressure of the atmosphere at sea level, in Pascals.
+   Gets the pressure of the atmosphere at sea level, in Pascals. Returns 0 if
+   the body has no atmosphere.
+
+   :rtype: `double`
+
+.. attribute:: CelestialBody.AtmopshereDensity
+
+   Gets the density of the atmosphere at sea level, in :math:`kg/m^3`. Returns 0
+   if the body has no atmosphere.
 
    :rtype: `double`
 
@@ -84,20 +92,31 @@ Celestial Body
 
    Gets the `scale height
    <http://wiki.kerbalspaceprogram.com/wiki/Kerbin#Atmosphere>`_ of the
-   atmosphere, in meters.
+   atmosphere, in meters. Returns 0 if the atmosphere has no atmosphere.
 
    :rtype: `double`
 
 .. attribute:: CelestialBody.AtmosphereMaxAltitude
 
-   Gets the maximum altitude of the atmosphere, in meters.
+   Gets the maximum altitude of the atmosphere, in meters. Returns 0 if the body
+   has no atmosphere.
 
    :rtype: `double`
 
-.. attribute:: CelestialBody.AtmopshereDensity
+.. method:: CelestialBody.AtmopsherePressureAt (altitude)
 
-   Gets the density of the atmosphere at sea level, in :math:`kg/m^3`.
+   Returns the atmospheric pressure, in Pascals, at the given altitude above sea
+   level, in meters. Returns 0 if the body has no atmosphere.
 
+   :param double altitude:
+   :rtype: `double`
+
+.. method:: CelestialBody.AtmopshereDensityAt (altitude)
+
+   Returns the density of the atmosphere, in :math:`kg/m^3`, at the given
+   altitude above sea level, in meters. Returns 0 if the body has no atmosphere.
+
+   :param double altitude:
    :rtype: `double`
 
 .. attribute:: CelestialBody.ReferenceFrame
@@ -118,7 +137,7 @@ Celestial Body
 
    :rtype: :class:`ReferenceFrame`
 
-.. attribute:: CelestialBody.orbital_reference_frame
+.. attribute:: CelestialBody.OrbitalReferenceFrame
 
    Gets the reference frame relative to the orbit of this body.
    The origin is at the center of the body.
@@ -128,7 +147,7 @@ Celestial Body
 
    :rtype: :class:`ReferenceFrame`
 
-.. attribute:: CelestialBody.surface_reference_frame
+.. attribute:: CelestialBody.SurfaceReferenceFrame
 
    Gets the reference frame relative to the surface of the body being orbited by
    this vessel.
@@ -138,22 +157,6 @@ Celestial Body
    The y-axis points towards the north pole of the body being orbited.
 
    :rtype: :class:`ReferenceFrame`
-
-.. method:: CelestialBody.AtmopsherePressureAt (altitude)
-
-   Returns the atmospheric pressure, in Pascals, at the given altitude above sea
-   level, in meters.
-
-   :param double altitude:
-   :rtype: `double`
-
-.. method:: CelestialBody.AtmopshereDensityAt (altitude)
-
-   Returns the density of the atmosphere, in :math:`kg/m^3`, at the given
-   altitude above sea level, in meters.
-
-   :param double altitude:
-   :rtype: `double`
 
 .. method:: CelestialBody.Position (reference_frame)
 

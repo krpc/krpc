@@ -76,28 +76,17 @@ Flight
 
    :rtype: :class:`Vector`
 
-.. attribute:: Flight.Drag
-
-   Gets the aerodynamic drag currently acting on the vessel in :math:`kg.m/s^2`.
-
-   :rtype: double
-
-   .. note::
-
-      This is calculated using `KSPs basic aerodynamic model
-      <http://wiki.kerbalspaceprogram.com/wiki/Atmosphere>`_.
-
-.. attribute:: Flight.direction
-
-   Gets the direction vector that the vessel is pointing in.
-
-   :rtype: :class:`Vector`
-
 .. attribute:: Flight.Rotation
 
    Gets the rotation of the vessel.
 
    :rtype: :class:`Quaternion`
+
+.. attribute:: Flight.Direction
+
+   Gets the direction vector that the vessel is pointing in.
+
+   :rtype: :class:`Vector`
 
 .. attribute:: Flight.Pitch
 
@@ -137,6 +126,17 @@ Flight
    Gets a unit direction vector pointing in the radial direction direction.
 
    :rtype: :class:`Vector`
+
+.. attribute:: Flight.Drag
+
+   Gets the aerodynamic drag currently acting on the vessel in :math:`kg.m/s^2`.
+
+   :rtype: double
+
+   .. note::
+
+      This is calculated using `KSPs basic aerodynamic model
+      <http://wiki.kerbalspaceprogram.com/wiki/Atmosphere>`_.
 
 Examples
 --------

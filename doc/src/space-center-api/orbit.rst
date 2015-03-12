@@ -80,6 +80,12 @@ Orbit
 
    .. note:: This value will change over time if the orbit is elliptical.
 
+.. attribute:: Orbit.Period
+
+   Gets the orbital period, in seconds.
+
+   :rtype: `double`
+
 .. attribute:: Orbit.TimeToApoapsis
 
    Gets the time until the object reaches apoapsis, in seconds.
@@ -89,14 +95,6 @@ Orbit
 .. attribute:: Orbit.TimeToPeriapsis
 
    Gets the time until the object reaches periapsis, in seconds.
-
-   :rtype: `double`
-
-.. attribute:: Orbit.TimeToSOIChange
-
-   Gets the time until the object changes sphere of influence, in
-   seconds. Returns `NaN` if the object is not going to change sphere of
-   influence.
 
    :rtype: `double`
 
@@ -128,16 +126,17 @@ Orbit
 
    :rtype: `double`
 
-.. attribute:: _Orbit_ Orbit.NextOrbit
+.. attribute:: Orbit.MeanAnomalyAtEpoch
 
-   If the object is going to change sphere of influence in the future, returns
-   the new orbit after the change. Otherwise returns `null`.
+   Gets the `mean anomaly at epoch
+   <http://en.wikipedia.org/wiki/Mean_anomaly>`_.
 
-   :rtype: :class:`Orbit`
+   :rtype: `double`
 
-.. attribute:: Orbit.Period
+.. attribute:: Orbit.Epoch
 
-   Gets the orbital period, in seconds.
+   Gets the time since the epoch (the point at which the `mean anomaly at epoch
+   <http://en.wikipedia.org/wiki/Mean_anomaly>`_ was measured, in seconds.
 
    :rtype: `double`
 
@@ -150,20 +149,6 @@ Orbit
 .. attribute:: Orbit.EccentricAnomaly
 
    Gets the `eccentric anomaly <http://en.wikipedia.org/wiki/Eccentric_anomaly>`_.
-
-   :rtype: `double`
-
-.. attribute:: Orbit.MeanAnomalyAtEpoch
-
-   Gets the `mean anomaly at epoch
-   <http://en.wikipedia.org/wiki/Mean_anomaly>`_.
-
-   :rtype: `double`
-
-.. attribute:: Orbit.Epoch
-
-   Gets the time since the epoch (the point at which the `mean anomaly at epoch
-   <http://en.wikipedia.org/wiki/Mean_anomaly>`_ was measured, in seconds.
 
    :rtype: `double`
 
@@ -191,3 +176,18 @@ Orbit
    body to the object in orbit).
 
    :rtype: :class:`ReferenceFrame`
+
+.. attribute:: Orbit.TimeToSOIChange
+
+   Gets the time until the object changes sphere of influence, in
+   seconds. Returns `NaN` if the object is not going to change sphere of
+   influence.
+
+   :rtype: `double`
+
+.. attribute:: _Orbit_ Orbit.NextOrbit
+
+   If the object is going to change sphere of influence in the future, returns
+   the new orbit after the change. Otherwise returns `null`.
+
+   :rtype: :class:`Orbit`

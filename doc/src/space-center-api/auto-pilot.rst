@@ -1,5 +1,5 @@
-Auto-Pilot
-==========
+AutoPilot
+=========
 
 .. class:: AutoPilot
 
@@ -9,9 +9,9 @@ Auto-Pilot
 .. method:: AutoPilot.SetRotation (pitch, heading, roll = NaN, reference_frame = Vessel.OrbitalReferenceFrame)
 
    Points the vessel in the specified direction, and holds it there. Setting the
-   roll angle is optional.
-   This method returns immediately, and the auto-pilot continues to set the
-   rotation of the vessel, until :meth:`AutoPilot.Disengage` is called.
+   roll angle is optional. This method returns immediately, and the auto-pilot
+   continues to set the rotation of the vessel, until
+   :meth:`AutoPilot.Disengage` is called.
 
    :param double pitch: The desired pitch above/below the horizon, in degrees. A
                         value between -90° and +90° degrees.
@@ -26,9 +26,9 @@ Auto-Pilot
 .. method:: AutoPilot.SetDirection (direction, roll = NaN, reference_frame = Vessel.OrbitalReferenceFrame)
 
    Points the vessel along the specified direction vector, and holds it
-   there. Setting the roll angle is optional.
-   This method returns immediately, and the auto-pilot continues to set the
-   rotation of the vessel, until :meth:`AutoPilot.Disengage` is called.
+   there. Setting the roll angle is optional. This method returns immediately,
+   and the auto-pilot continues to set the rotation of the vessel, until
+   :meth:`AutoPilot.Disengage` is called.
 
    :param Vector direction: The desired direction (pitch and heading) as a unit
                             vector.
@@ -41,8 +41,8 @@ Auto-Pilot
 .. method:: AutoPilot.Error
 
    Gets the error, in degrees, between the direction the ship has been asked to
-   point in and the actual direction it is pointing in.
-   If the auto-pilot has not been engaged, returns NaN.
+   point in and the actual direction it is pointing in. If the auto-pilot has
+   not been engaged, returns NaN.
 
    :rtype: `double`
 

@@ -1,5 +1,5 @@
-SpaceCenter.Vessel
-==================
+Vessel
+======
 
 .. class:: Vessel
 
@@ -30,15 +30,21 @@ SpaceCenter.Vessel
 
    :rtype: `double`
 
+.. method:: Vessel.Flight (reference_frame = Vessel.Orbital)
+
+   Gets a :class:`Flight` object that can be used to get flight telemetry for
+   the vessel, in the specified reference frame.
+
+   :param ReferenceFrame reference_frame: Defaults to the orbital reference
+                                          frame of the vessel.
+   :rtype: :class:`Flight`
+
 .. attribute:: Vessel.Target
 
    Gets or sets the target vessel. Returns `null` if there is no target. When
    setting the target, the target cannot be the current vessel.
 
    :type: :class:`Vessel`
-
-   .. warning::
-      NOT YET IMPLEMENTED
 
 .. attribute:: Vessel.Orbit
 
@@ -53,6 +59,12 @@ SpaceCenter.Vessel
 
    :rtype: :class:`Control`
 
+.. attribute:: Vessel.AutoPilot
+
+   Gets an :class:`AutoPilot` object, that can be used to perform simple
+   auto-piloting of the vessel.
+
+   :rtype: :class:`AutoPilot`
 
 .. attribute:: Vessel.Resources
 
@@ -60,13 +72,6 @@ SpaceCenter.Vessel
    manage, the vessels resources.
 
    :rtype: :class:`Resources`
-
-.. attribute:: Vessel.AutoPilot
-
-   Gets an :class:`AutoPilot` object, that can be used to perform simple
-   auto-piloting of the vessel.
-
-   :rtype: :class:`AutoPilot`
 
 .. attribute:: Vessel.Mass
 
@@ -77,21 +82,6 @@ SpaceCenter.Vessel
 .. attribute:: Vessel.DryMass
 
    Gets the total mass of the vessel (excluding resources) in kg.
-
-   :rtype: `double`
-
-.. attribute:: Vessel.Thrust
-
-   Gets the total thrust of all active engines combined in Newtons.
-
-   :rtype: `double`
-
-   .. note::
-      Assumes all active engines are pointing in the same direction.
-
-.. attribute:: Vessel.SpecificImpulse
-
-   Gets the combined specific impulse of all active engines in seconds.
 
    :rtype: `double`
 
@@ -114,6 +104,21 @@ SpaceCenter.Vessel
    .. note::
       This is calculated using `KSPs basic aerodynamic model
       <http://wiki.kerbalspaceprogram.com/wiki/Atmosphere>`_.
+
+.. attribute:: Vessel.Thrust
+
+   Gets the total thrust of all active engines combined in Newtons.
+
+   :rtype: `double`
+
+   .. note::
+      Assumes all active engines are pointing in the same direction.
+
+.. attribute:: Vessel.SpecificImpulse
+
+   Gets the combined specific impulse of all active engines in seconds.
+
+   :rtype: `double`
 
 .. attribute:: Vessel.ReferenceFrame
 
@@ -193,12 +198,3 @@ SpaceCenter.Vessel
 
    :param ReferenceFrame reference_frame:
    :rtype: :class:`Vector3`
-
-.. method:: Vessel.Flight (reference_frame = Vessel.Orbital)
-
-   Gets a :class:`Flight` object that can be used to get flight telemetry for
-   the vessel, in the specified reference frame.
-
-   :param ReferenceFrame reference_frame: Defaults to the orbital reference
-                                          frame of the vessel.
-   :rtype: :class:`Flight`

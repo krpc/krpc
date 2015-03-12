@@ -43,6 +43,15 @@ Node
 
    :rtype: `double`
 
+.. method:: Node.BurnVector (reference_frame)
+
+   Returns a vector in the given reference frame whose:
+     - direction is the direction of the maneuver nodes burn
+     - magnitude is the delta-v of the maneuver node
+
+   :param ReferenceFrame reference_frame:
+   :rtype: :class:`Vector3`
+
 .. attribute:: Node.UT
 
    Gets or sets the universal time at which the maneuver will occur, in seconds.
@@ -61,6 +70,10 @@ Node
 
    :rtype: :class:`Orbit`
 
+.. method:: Node.Remove ()
+
+   Removes the maneuver node.
+
 .. attribute:: Node.ReferenceFrame
 
    Gets the reference frame for the maneuver node.
@@ -69,10 +82,6 @@ Node
    The z-axis points in the orbit prograde direction along the original orbit.
 
    :rtype: :class:`ReferenceFrame`
-
-.. method:: Node.Remove ()
-
-   Removes the maneuver node.
 
 .. method:: Node.Position (reference_frame)
 
@@ -86,15 +95,6 @@ Node
 
    Returns the unit direction vector of the maneuver nodes burn in the given
    reference frame.
-
-   :param ReferenceFrame reference_frame:
-   :rtype: :class:`Vector3`
-
-.. method:: Node.BurnVector (reference_frame)
-
-   Returns a vector in the given reference frame whose:
-     - direction is the direction of the maneuver nodes burn
-     - magnitude is the delta-v of the maneuver node
 
    :param ReferenceFrame reference_frame:
    :rtype: :class:`Vector3`

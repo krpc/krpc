@@ -44,12 +44,9 @@ Control
 
 .. attribute:: Control.Abort
 
-   Set to `True` to trigger the abort action group.
+   Gets or sets the state of the abort action group.
 
    :type: `bool`
-
-   .. warning::
-      Should change this into a method?
 
 .. attribute:: Control.Throttle
 
@@ -106,13 +103,6 @@ Control
 
    :rtype: `int16`
 
-.. attribute:: Control.Nodes
-
-   Gets a list of all existing maneuver nodes, ordered by time from first to
-   last.
-
-   :rtype: :class:`List` ( :class:`Node` )
-
 .. method:: Control.ActivateNextStage ()
 
    Activates the next stage. Equivalent to pressing the space bar in-game.
@@ -139,7 +129,7 @@ Control
 
    :ptype group: `uint16`
 
-.. method:: Control.AddNode (ut, [[[prograde = 0], normal = 0], radial = 0])
+.. method:: Control.AddNode (ut, prograde = 0, normal = 0, radial = 0)
 
    Creates a maneuver node at the given universal time, and returns a
    :class:`Node` object that can be used to modify it. Optionally sets
@@ -151,6 +141,13 @@ Control
    :param double normal: delta-v in the normal direction
    :param double radial: delta-v in the radial direction
    :rtype: :class:`Node`
+
+.. attribute:: Control.Nodes
+
+   Gets a list of all existing maneuver nodes, ordered by time from first to
+   last.
+
+   :rtype: :class:`List` ( :class:`Node` )
 
 .. method:: Control.RemoveNodes ()
 
