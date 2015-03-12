@@ -15,6 +15,7 @@ serve: build
 	$(SPHINX_AUTOBUILD) -b html $(SPHINX_OPTS) $(BUILD_DIR)
 
 gh-pages:
+	rm -rf ../docs
 	$(SPHINX_BUILD) -b html $(SPHINX_OPTS) ../docs
 
 clean:
