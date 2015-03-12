@@ -22,6 +22,8 @@ namespace KRPC
             if (!ServicesChecker.OK)
                 return;
 
+            GUILayoutExtensions.Init (gameObject);
+
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
             server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
@@ -153,6 +155,7 @@ namespace KRPC
             GameEvents.onGUIApplicationLauncherDestroyed.Remove (OnGUIApplicationLauncherDestroyed);
             UnityEngine.Object.Destroy (mainWindow);
             UnityEngine.Object.Destroy (clientConnectingDialog);
+            GUILayoutExtensions.Destroy (gameObject);
         }
 
         public void FixedUpdate ()
