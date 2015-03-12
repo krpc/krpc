@@ -26,6 +26,11 @@ Installation
 
 .. image:: /images/getting-started/server-window-online.png
 
+6. You can show/hide this window by clicking the kRPC icon in the application
+   launcher in the top right:
+
+.. image:: /images/getting-started/applauncher.png
+
 Configuration
 ^^^^^^^^^^^^^
 
