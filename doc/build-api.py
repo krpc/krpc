@@ -29,20 +29,40 @@ def parse_file(path):
     with open(path, 'r') as f:
         lines = []
         for line in f.readlines():
-            m = re.match('^\.\. ([a-z]+):: ([A-Za-z\.]+)(.*)$', line)
+            m = re.match('^\.\. ([a-z]+):: (.+)$', line)
             if m is not None:
                 typ = m.group(1)
-                name = m.group(2)
-                rest = m.group(3)
-                if typ in ['method', 'attribute']:
+                signature = m.group(2)
+                if typ == 'attribute' or typ == 'data':
+                    line = '.. %s:: %s' % (typ, snake_case_name(signature))
+                if typ == 'method':
+                    m = re.match('^(.+) \((.*)\)$', signature)
+                    name = m.group(1)
+                    params = m.group(2)
                     name = snake_case_name(name)
-                    line = '.. %s:: %s%s' % (typ, name, rest)
+                    params = params.split(',')
+                    for i in range(len(params)):
+                        param = params[i]
+                        if '=' in param:
+                            param,default = param.split('=')
+                            param = param.strip()
+                            default = default.strip()
+                            if '.' in default:
+                                default = snake_case_name(default)
+                            param = snake_case(param)+' = '+default
+                        else:
+                            param = snake_case(param)
+                        params[i] = param
+                    line = '.. %s:: %s (%s)' % (typ, name, ', '.join(params))
             inlines = [':meth:', ':attr:']
             for inline in inlines:
                 if inline in line:
                     def repl(m):
                         return inline+'`'+snake_case_name(m.group(1))+'`'
                     line = re.sub(inline+'`([^`]+)`', repl, line)
+            def repl(m):
+                return ':param '+m.group(1)+' '+snake_case_name(m.group(2))+':'
+            line = re.sub(':param ([^ ]+) (.+):', repl, line)
             lines.append(line.rstrip())
         return '\n'.join(lines)+'\n'
 
