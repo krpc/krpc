@@ -115,12 +115,12 @@ class TestAutoPilot(testingtools.TestCase):
         self.check_direction(flight.retrograde)
         self.set_direction(flight.normal)
         self.check_direction(flight.normal)
-        self.set_direction(flight.normal_neg)
-        self.check_direction(flight.normal_neg)
+        self.set_direction(flight.anti_normal)
+        self.check_direction(flight.anti_normal)
         self.set_direction(flight.radial)
         self.check_direction(flight.radial)
-        self.set_direction(flight.radial_neg)
-        self.check_direction(flight.radial_neg)
+        self.set_direction(flight.anti_radial)
+        self.check_direction(flight.anti_radial)
 
 if __name__ == "__main__":
     unittest.main()

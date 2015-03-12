@@ -182,7 +182,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public Tuple3 NormalNeg {
+        public Tuple3 AntiNormal {
             get { return referenceFrame.DirectionFromWorldSpace (-WorldNormal).ToTuple (); }
         }
 
@@ -192,7 +192,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public Tuple3 RadialNeg {
+        public Tuple3 AntiRadial {
             get { return referenceFrame.DirectionFromWorldSpace (-WorldRadial).ToTuple (); }
         }
 
