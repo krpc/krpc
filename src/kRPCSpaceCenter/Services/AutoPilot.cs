@@ -93,6 +93,62 @@ namespace KRPCSpaceCenter.Services
             set { FlightUIController.speedDisplayMode = value.FromSpeedMode (); }
         }
 
+        double ComputeSASError ()
+        {
+            //TODO: Rewrite this avoiding the use of the front-end API,
+            //      and all the calls to .ToVector() that that entails.
+            //      There doesn't appear to be a way to get the direction that
+            //      SAS is targeting from the vessel.Autopilot.SAS object, o
+            //      from FlightUIController.
+            var speedMode = FlightUIController.speedDisplayMode;
+            if (speedMode == FlightUIController.SpeedDisplayModes.Surface) {
+                throw new NotImplementedException ();
+            }
+            if (speedMode == FlightUIController.SpeedDisplayModes.Target) {
+                throw new NotImplementedException ();
+            }
+
+            // Orbital reference frame
+            var v = new Vessel (vessel);
+            var refFrame = v.OrbitalReferenceFrame;
+            var direction = v.Direction (refFrame).ToVector ();
+            Vector3 target = Vector3.up;
+            switch (SASMode) {
+            case SASMode.StabilityAssist:
+                return Double.NaN;
+            case SASMode.Maneuver:
+                if (!v.Control.Nodes.Any ())
+                    return Double.NaN;
+                target = v.Control.Nodes [0].Direction (refFrame).ToVector ();
+                break;
+            case SASMode.Prograde:
+                target = v.Flight (refFrame).Prograde.ToVector ();
+                break;
+            case SASMode.Retrograde:
+                target = v.Flight (refFrame).Retrograde.ToVector ();
+                break;
+            case SASMode.Normal:
+                target = v.Flight (refFrame).Normal.ToVector ();
+                break;
+            case SASMode.AntiNormal:
+                target = v.Flight (refFrame).AntiNormal.ToVector ();
+                break;
+            case SASMode.Radial:
+                target = v.Flight (refFrame).Radial.ToVector ();
+                break;
+            case SASMode.AntiRadial:
+                target = v.Flight (refFrame).AntiRadial.ToVector ();
+                break;
+            case SASMode.Target:
+            case SASMode.AntiTarget:
+                target = v.Target.Position (refFrame).ToVector () - v.Position (refFrame).ToVector ();
+                if (SASMode == SASMode.AntiTarget)
+                    target *= -1;
+                break;
+            }
+            return Math.Abs (Math.Acos (Vector3.Dot (direction, target))) * (180.0d / Math.PI);
+        }
+
         [KRPCMethod]
         public void SetRotation (double pitch, double heading, double roll = Double.NaN, ReferenceFrame referenceFrame = null)
         {
@@ -140,7 +196,7 @@ namespace KRPCSpaceCenter.Services
                 if (engaged.Contains (this))
                     return ComputeError (ComputeTarget ());
                 else if (SAS)
-                    throw new NotImplementedException ();
+                    return ComputeSASError ();
                 else
                     return Double.NaN;
             }
