@@ -9,6 +9,8 @@ namespace KRPC.UI
         bool hasInit;
         GUIStyle closeButtonStyle;
 
+        protected string Title { get; set; }
+
         protected GUIStyle Style { get; set; }
 
         public event EventHandler OnShow;
@@ -73,7 +75,7 @@ namespace KRPC.UI
                 hasInit = true;
             }
             if (Visible) {
-                Position = GUILayout.Window (id, Position, DrawWindow, "kRPC Server", Style);
+                Position = GUILayout.Window (id, Position, DrawWindow, Title, Style);
             }
         }
 

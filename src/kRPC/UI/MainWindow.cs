@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using UnityEngine;
 using KRPC.Server;
 using KRPC.Server.Net;
+using UnityEngine;
 
 namespace KRPC.UI
 {
@@ -63,6 +63,8 @@ namespace KRPC.UI
 
         protected override void Init ()
         {
+            Title = "kRPC Server";
+
             Server.OnClientActivity += (s, e) => SawClientActivity (e.Client);
 
             Style.fixedWidth = windowWidth;
