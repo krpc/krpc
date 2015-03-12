@@ -1,6 +1,9 @@
 v0.1.5
-* Server plugin specific changes:
+* Server plugin changes:
   * Display service errors when KSP loads (#89)
+
+* SpaceCenter service changes:
+  * Fix Body.AtmospherePressureAt and AtmosphereDensityAt when there is no atmosphere
 
 v0.1.4
 * General changes:

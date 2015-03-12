@@ -117,15 +117,15 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public double AtmospherePressureAt (double meanAltitude)
+        public double AtmospherePressureAt (double altitude)
         {
-            return AtmospherePressure * Math.Exp (-meanAltitude / AtmosphereScaleHeight);
+            return HasAtmosphere ? AtmospherePressure * Math.Exp (-altitude / AtmosphereScaleHeight) : 0d;
         }
 
         [KRPCMethod]
-        public double AtmosphereDensityAt (double meanAltitude)
+        public double AtmosphereDensityAt (double altitude)
         {
-            return AtmosphereDensity * Math.Exp (-meanAltitude / AtmosphereScaleHeight);
+            return HasAtmosphere ? AtmosphereDensity * Math.Exp (-altitude / AtmosphereScaleHeight) : 0d;
         }
 
         [KRPCProperty]
