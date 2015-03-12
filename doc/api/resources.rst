@@ -3,7 +3,7 @@ Resources
 
 .. class:: Resources
 
-   Created by calling :meth:`Vessel.Resources`.
+   Created by calling :attr:`Vessel.Resources`.
 
 .. attribute:: Resources.Names
 

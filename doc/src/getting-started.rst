@@ -8,6 +8,7 @@ Installation
 ^^^^^^^^^^^^
 
 1. Download the kRPC server plugin from one of these locations:
+
  * `KerbalStuff <https://kerbalstuff.com/mod/636>`_
  * `Curse <http://www.curse.com/project/220219>`_
  * `Github <https://github.com/djungelorm/krpc/releases>`_
