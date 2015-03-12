@@ -366,6 +366,7 @@ namespace KRPC.UI
             try {
                 var subnet = NetworkInformation.GetSubnetMask (localAddress);
                 return String.Format (subnetAllowedText, subnet);
+            } catch (NotImplementedException) {
             } catch (ArgumentException) {
             } catch (DllNotFoundException) {
             }
