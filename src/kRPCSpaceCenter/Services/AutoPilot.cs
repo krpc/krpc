@@ -115,13 +115,20 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public void Disengage ()
         {
+            SASMode = SASMode.StabilityAssist;
+            SAS = false;
             engaged.Remove (this);
         }
 
         [KRPCProperty]
         public double Error {
             get {
-                return engaged.Contains (this) ? ComputeError (ComputeTarget ()) : Double.NaN;
+                if (engaged.Contains (this))
+                    return ComputeError (ComputeTarget ());
+                else if (SAS)
+                    throw new NotImplementedException ();
+                else
+                    return Double.NaN;
             }
         }
 
@@ -141,8 +148,8 @@ namespace KRPCSpaceCenter.Services
         {
             // Initialize SAS autopilot
             if (!sasSet) {
-                vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, true);
-                vessel.Autopilot.SetMode (VesselAutopilot.AutopilotMode.StabilityAssist);
+                SAS = true;
+                SASMode = SASMode.StabilityAssist;
                 sasSet = true;
             }
 
