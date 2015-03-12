@@ -8,7 +8,8 @@ kRPC Documentation
    :includehidden:
    :maxdepth: 2
 
+   getting-started
+   tutorials
    space-center-api
-   examples
 
 :ref:`genindex`
