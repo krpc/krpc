@@ -88,5 +88,6 @@
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\Vessel.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
   </ItemGroup>
 </Project>

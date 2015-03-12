@@ -9,6 +9,21 @@ using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum SASMode
+    {
+        StabilityAssist,
+        Maneuver,
+        Prograde,
+        Retrograde,
+        Normal,
+        AntiNormal,
+        Radial,
+        AntiRadial,
+        Target,
+        AntiTarget
+    }
+
     /// <remarks>
     /// Taken and adapted from MechJeb2/KOS/RemoteTech2/forum discussion; credit goes to the authors of those plugins/posts:
     /// https://github.com/MuMech/MechJeb2
@@ -41,6 +56,27 @@ namespace KRPCSpaceCenter.Services
         public override int GetHashCode ()
         {
             return vessel.GetHashCode ();
+        }
+
+        [KRPCProperty]
+        public bool SAS {
+            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
+            set { vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
+        }
+
+        [KRPCProperty]
+        public SASMode SASMode {
+            get { return vessel.Autopilot.Mode.ToSASMode (); }
+            set {
+                var mode = value.FromSASMode ();
+                if (vessel.Autopilot.CanSetMode (mode)) {
+                    vessel.Autopilot.SetMode (mode);
+                    // Update the UI buttons
+                    var modeIndex = (int)vessel.Autopilot.Mode;
+                    var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
+                    modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
+                }
+            }
         }
 
         [KRPCMethod]
