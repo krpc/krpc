@@ -4,9 +4,9 @@ AutoPilot
 .. class:: AutoPilot
 
    Provides basic auto-piloting utilities for a vessel. Created by calling
-   :meth:`Vessel.AutoPilot`.
+   :attr:`Vessel.AutoPilot`.
 
-.. method:: AutoPilot.SetRotation (pitch, heading, roll = NaN, reference_frame = Vessel.OrbitalReferenceFrame)
+.. method:: AutoPilot.SetRotation (pitch, heading, roll = NaN, referenceFrame = Vessel.OrbitalReferenceFrame)
 
    Points the vessel in the specified direction, and holds it there. Setting the
    roll angle is optional. This method returns immediately, and the auto-pilot
@@ -19,11 +19,11 @@ AutoPilot
                           360°.
    :param double roll: Optional desired roll angle relative to the horizon, in
                        degrees. A value between -180° and +180°.
-   :param ReferenceFrame reference_frame: The reference frame that the pitch,
-                                          heading and roll are in. Defaults to
-                                          the vessels orbital reference frame.
+   :param ReferenceFrame referenceFrame: The reference frame that the pitch,
+                                         heading and roll are in. Defaults to
+                                         the vessels orbital reference frame.
 
-.. method:: AutoPilot.SetDirection (direction, roll = NaN, reference_frame = Vessel.OrbitalReferenceFrame)
+.. method:: AutoPilot.SetDirection (direction, roll = NaN, referenceFrame = Vessel.OrbitalReferenceFrame)
 
    Points the vessel along the specified direction vector, and holds it
    there. Setting the roll angle is optional. This method returns immediately,
@@ -34,11 +34,11 @@ AutoPilot
                             vector.
    :param double roll: Optional desired roll angle relative to the horizon, in
                        degrees. A value between -180° and 180°.
-   :param ReferenceFrame reference_frame: The reference frame that the direction
-                                          vector is in. Defaults to the vessels
-                                          orbital reference frame.
+   :param ReferenceFrame referenceFrame: The reference frame that the direction
+                                         vector is in. Defaults to the vessels
+                                         orbital reference frame.
 
-.. method:: AutoPilot.Error
+.. attribute:: AutoPilot.Error
 
    Gets the error, in degrees, between the direction the ship has been asked to
    point in and the actual direction it is pointing in. If the auto-pilot has

@@ -37,7 +37,7 @@ Orbit
 
    :rtype: `double`
 
-   .. note:: This is equal to :attr:`Orbit.apoapsis` minus the equatorial radius
+   .. note:: This is equal to :attr:`Orbit.Apoapsis` minus the equatorial radius
       of the body.
 
 .. attribute:: Orbit.PeriapsisAltitude
@@ -185,7 +185,7 @@ Orbit
 
    :rtype: `double`
 
-.. attribute:: _Orbit_ Orbit.NextOrbit
+.. attribute:: Orbit.NextOrbit
 
    If the object is going to change sphere of influence in the future, returns
    the new orbit after the change. Otherwise returns `null`.

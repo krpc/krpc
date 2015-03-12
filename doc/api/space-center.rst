@@ -40,7 +40,7 @@ resources, planning maneuver nodes and auto-piloting.
 
    :rtype: `double`
 
-.. method:: SpaceCenter.WarpTo (ut, max_rate=100000)
+.. method:: SpaceCenter.WarpTo (ut, maxRate = 100000)
 
    Uses time acceleration to warp to the specified time. Automatically uses
    regular or physical time warp as appropriate. For example, physical time warp
@@ -48,7 +48,7 @@ resources, planning maneuver nodes and auto-piloting.
    using physical time warp, the warp rate is at most 2x.
 
    :param double ut: The universal time to warp to, in seconds
-   :param double max_rate: The maximum warp rate to use
+   :param double maxRate: The maximum warp rate to use
    :returns: When the time warp is complete.
 
 .. method:: SpaceCenter.TransformPosition (position, from, to)

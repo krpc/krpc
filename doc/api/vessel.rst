@@ -30,13 +30,13 @@ Vessel
 
    :rtype: `double`
 
-.. method:: Vessel.Flight (reference_frame = Vessel.Orbital)
+.. method:: Vessel.Flight (referenceFrame = Vessel.Orbital)
 
    Gets a :class:`Flight` object that can be used to get flight telemetry for
    the vessel, in the specified reference frame.
 
-   :param ReferenceFrame reference_frame: Defaults to the orbital reference
-                                          frame of the vessel.
+   :param ReferenceFrame referenceFrame: Defaults to the orbital reference frame
+                                         of the vessel.
    :rtype: :class:`Flight`
 
 .. attribute:: Vessel.Target
@@ -157,44 +157,44 @@ Vessel
 
    :rtype: :class:`ReferenceFrame`
 
-.. method:: Vessel.Position (reference_frame)
+.. method:: Vessel.Position (referenceFrame)
 
    Returns the position vector of the center of mass of the vessel in the given
    reference frame.
 
-   :param ReferenceFrame reference_frame:
+   :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`
 
-.. method:: Vessel.Velocity (reference_frame)
+.. method:: Vessel.Velocity (referenceFrame)
 
    Returns the velocity vector of the center of mass of the vessel in the given
    reference frame.
 
-   :param ReferenceFrame reference_frame:
+   :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`
 
-.. method:: Vessel.Rotation (reference_frame)
+.. method:: Vessel.Rotation (referenceFrame)
 
    Returns the rotation of the center of mass of the vessel in the given
    reference frame.
 
-   :param ReferenceFrame reference_frame:
+   :param ReferenceFrame referenceFrame:
    :rtype: :class:`Quaternion`
 
-.. method:: Vessel.Direction (reference_frame)
+.. method:: Vessel.Direction (referenceFrame)
 
    Returns the direction in which the vessel is pointing, as a unit vector, in
    the given reference frame.
 
-   :param ReferenceFrame reference_frame:
+   :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`
 
-.. method:: Vessel.AngularVelocity (reference_frame)
+.. method:: Vessel.AngularVelocity (referenceFrame)
 
    Returns the angular velocity of the vessel in the given reference frame. The
    magnitude of the returned vector is the rotational speed in radians per
    second, and the direction of the vector indicates the axis of rotation (using
    the right hand rule).
 
-   :param ReferenceFrame reference_frame:
+   :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`

@@ -43,13 +43,13 @@ Node
 
    :rtype: `double`
 
-.. method:: Node.BurnVector (reference_frame)
+.. method:: Node.BurnVector (referenceFrame)
 
    Returns a vector in the given reference frame whose:
      - direction is the direction of the maneuver nodes burn
      - magnitude is the delta-v of the maneuver node
 
-   :param ReferenceFrame reference_frame:
+   :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`
 
 .. attribute:: Node.UT
@@ -83,18 +83,18 @@ Node
 
    :rtype: :class:`ReferenceFrame`
 
-.. method:: Node.Position (reference_frame)
+.. method:: Node.Position (referenceFrame)
 
    Returns the position vector of the maneuver node in the given reference
    frame.
 
-   :param ReferenceFrame reference_frame:
+   :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`
 
-.. method:: Node.Direction (reference_frame)
+.. method:: Node.Direction (referenceFrame)
 
    Returns the unit direction vector of the maneuver nodes burn in the given
    reference frame.
 
-   :param ReferenceFrame reference_frame:
+   :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`
