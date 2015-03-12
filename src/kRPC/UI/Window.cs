@@ -9,6 +9,8 @@ namespace KRPC.UI
         bool hasInit;
         GUIStyle closeButtonStyle;
 
+        protected int Id { get { return id; } }
+
         protected string Title { get; set; }
 
         protected GUIStyle Style { get; set; }
