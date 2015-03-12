@@ -29,12 +29,14 @@ namespace KRPC.UI
         int numClientsDisplayed;
         // Editable fields
         string address;
+        bool manualAddress;
+        List<string> availableAddresses;
         string rpcPort;
         string streamPort;
         // Style settings
         readonly Color errorColor = Color.yellow;
         GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, stretchyTextFieldStyle, buttonStyle,
-            toggleStyle, separatorStyle, lightStyle, errorLabelStyle;
+            toggleStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
         const float windowWidth = 288f;
         const float addressWidth = 106f;
         const int addressMaxLength = 15;
@@ -103,10 +105,20 @@ namespace KRPC.UI
             errorLabelStyle.stretchWidth = true;
             errorLabelStyle.normal.textColor = errorColor;
 
+            comboOptionsStyle = GUILayoutExtensions.ComboOptionsStyle ();
+            comboOptionStyle = GUILayoutExtensions.ComboOptionStyle ();
+
             Errors = new List<string> ();
             address = Config.Address.ToString ();
             rpcPort = Config.RPCPort.ToString ();
             streamPort = Config.StreamPort.ToString ();
+
+            // Get list of available addresses for drop down
+            var interfaceAddresses = NetworkInformation.GetLocalIPAddresses ().Select (x => x.ToString ()).ToList ();
+            interfaceAddresses.Remove ("127.0.0.1");
+            availableAddresses = new List<string> (new [] { "localhost" });
+            availableAddresses.AddRange (interfaceAddresses);
+            availableAddresses.Add ("Manual");
         }
 
         void DrawServerStatus ()
@@ -143,7 +155,28 @@ namespace KRPC.UI
             else {
                 GUILayout.Label (addressLabelText, labelStyle);
                 textFieldStyle.fixedWidth = addressWidth;
-                address = GUILayout.TextField (address, addressMaxLength, stretchyTextFieldStyle);
+                // Get the index of the address in the combo box
+                int selected;
+                if (!manualAddress && address == IPAddress.Loopback.ToString ())
+                    selected = 0;
+                else if (!manualAddress && availableAddresses.Contains (address))
+                    selected = availableAddresses.IndexOf (address);
+                else
+                    selected = availableAddresses.Count () - 1;
+                // Display the combo box
+                selected = GUILayoutExtensions.ComboBox ("address", selected, availableAddresses, buttonStyle, comboOptionsStyle, comboOptionStyle);
+                // Get the address from the combo box selection
+                if (selected == 0) {
+                    address = IPAddress.Loopback.ToString ();
+                    manualAddress = false;
+                } else if (selected < availableAddresses.Count () - 1) {
+                    address = availableAddresses [selected];
+                    manualAddress = false;
+                } else {
+                    // Display a text field when "Manual" is selected
+                    address = GUILayout.TextField (address, addressMaxLength, stretchyTextFieldStyle);
+                    manualAddress = true;
+                }
             }
         }
 
