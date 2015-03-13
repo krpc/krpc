@@ -52,49 +52,49 @@ Control
 
    Gets or sets to state of the throttle. A value between 0 and 1.
 
-   :type: `double`
+   :type: `float`
 
 .. attribute:: Control.Forward
 
    Gets or sets the state of the forward translational control (equivalent to
    the `h` and `n` keys). A value between -1 and 1.
 
-   :type: `double`
+   :type: `float`
 
 .. attribute:: Control.Up
 
    Gets or sets the state of the up translational control (equivalent to the `i`
    and `k` keys). A value between -1 and 1.
 
-   :type: `double`
+   :type: `float`
 
 .. attribute:: Control.Sideways
 
    Gets or sets the state of the sideways translational control (equivalent to
    the `j` and `l` keys). A value between -1 and 1.
 
-   :type: `double`
+   :type: `float`
 
 .. attribute:: Control.Pitch
 
    Gets or sets the state of the pitch control (equivalent to the `w` and `s`
    keys). A value between -1 and 1.
 
-   :type: `double`
+   :type: `float`
 
 .. attribute:: Control.Roll
 
    Gets or sets the state of the roll control (equivalent to the `q` and `e`
    keys). A value between -1 and 1.
 
-   :type: `double`
+   :type: `float`
 
 .. attribute:: Control.Yaw
 
    Gets or sets the state of the yaw control (equivalent to the `a` and `d`
    keys). A value between -1 and 1.
 
-   :type: `double`
+   :type: `float`
 
 .. attribute:: Control.CurrentStage
 
