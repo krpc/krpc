@@ -6,6 +6,7 @@ v0.1.5
 * SpaceCenter service changes:
   * Fix Body.AtmospherePressureAt and AtmosphereDensityAt when there is no atmosphere
   * Rename Flight.NormalNeg to AntiNormal and Flight.RadialNeg to AntiRadial (#90)
+  * Add Flight.Longitude and Latitude
 
 v0.1.4
 * General changes:
