@@ -96,6 +96,22 @@ Control
 
    :type: `double`
 
+.. attribute:: Control.WheelThrottle
+
+   Gets or sets to state of the wheel throttle. A value between -1 and 1. A
+   value of 1 rotates the wheels fowards, a value of -1 rotates the wheels
+   backwards.
+
+   :type: `double`
+
+.. attribute:: Control.WheelSteering
+
+   Gets or sets to state of the wheel steering. A value between -1 and 1. A
+   value of 1 steers to the left, and a value of -1 steers to the right (using
+   the right handed rule).
+
+   :type: `double`
+
 .. attribute:: Control.CurrentStage
 
    Gets the current stage of the vessel. Corresponds to the stage number in the

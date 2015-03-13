@@ -19,6 +19,10 @@ namespace KRPCSpaceCenter
 
         public static float Z { get; set; }
 
+        public static float WheelThrottle { get; set; }
+
+        public static float WheelSteer { get; set; }
+
         public void Awake ()
         {
             Pitch = 0;
@@ -27,6 +31,8 @@ namespace KRPCSpaceCenter
             X = 0;
             Y = 0;
             Z = 0;
+            WheelThrottle = 0;
+            WheelSteer = 0;
         }
 
         public void FixedUpdate ()
@@ -63,6 +69,8 @@ namespace KRPCSpaceCenter
             state.X += X;
             state.Y += Y;
             state.Z += Z;
+            state.wheelThrottle += WheelThrottle;
+            state.wheelSteer += WheelSteer;
 
             //FIXME: send appropriate state for each vessel
             Services.AutoPilot.Fly (state);

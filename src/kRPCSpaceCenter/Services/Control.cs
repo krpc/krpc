@@ -105,6 +105,18 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public float WheelThrottle {
+            get { return PilotAddon.WheelThrottle; }
+            set { PilotAddon.WheelThrottle = value; }
+        }
+
+        [KRPCProperty]
+        public float WheelSteering {
+            get { return PilotAddon.WheelSteer; }
+            set { PilotAddon.WheelSteer = value; }
+        }
+
+        [KRPCProperty]
         public int CurrentStage {
             get { return Staging.CurrentStage; }
         }

@@ -7,6 +7,7 @@ v0.1.5
   * Fix Body.AtmospherePressureAt and AtmosphereDensityAt when there is no atmosphere
   * Rename Flight.NormalNeg to AntiNormal and Flight.RadialNeg to AntiRadial (#90)
   * Add Flight.Longitude and Latitude
+  * Add Control.WheelThrottle and WheelSteering
 
 v0.1.4
 * General changes:
