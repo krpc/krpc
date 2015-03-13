@@ -182,6 +182,19 @@ class TestFlight(testingtools.TestCase):
         #TODO: implement
         pass
 
+    def test_latitude_and_longitude(self):
+        # In a circular orbit, in anti-clockwise direction looking down on north pole of Kerbin.
+        # Latitude should be 0 (we're the equator)
+        # Longitude should be gradually increasing
+        flight = self.vessel.flight()
+        longitude = flight.longitude
+        time.sleep(1)
+        for i in range(5):
+            self.assertClose(0, flight.latitude, 0.001)
+            self.assertLess(longitude, flight.longitude)
+            longitude = flight.longitude
+            time.sleep(1)
+
 class TestFlightVerticalSpeed(testingtools.TestCase):
 
     @classmethod
@@ -234,6 +247,21 @@ class TestFlightVerticalSpeed(testingtools.TestCase):
         self.assertClose(2246.1, flight.speed, error=0.1)
         self.assertClose(2246.1, flight.horizontal_speed, error=0.1)
         self.assertClose(0, flight.vertical_speed, error=0.1)
+
+class TestFlightAtLaunchpad(testingtools.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Basic')
+        cls.conn = krpc.connect()
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.conn.testing_tools.remove_other_vessels()
+
+    def test_latitude_and_longitude(self):
+        flight = self.vessel.flight()
+        self.assertClose(-0.09694444, flight.latitude, 0.001)
+        self.assertClose(-74.5575, flight.longitude, 0.001)
 
 if __name__ == "__main__":
     unittest.main()

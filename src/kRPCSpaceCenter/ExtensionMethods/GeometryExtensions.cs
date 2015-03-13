@@ -115,11 +115,22 @@ namespace KRPCSpaceCenter.ExtensionMethods
         /// <summary>
         /// Clamps the given angle to the range [0,360]
         /// </summary>
-        static double ClampAngleDegrees (double angle)
+        public static double ClampAngle360 (double angle)
         {
             angle = angle % 360d;
             if (angle < 0d)
                 angle += 360d;
+            return angle;
+        }
+
+        /// <summary>
+        /// Clamps the given angle to the range [-180,180]
+        /// </summary>
+        public static double ClampAngle180 (double angle)
+        {
+            angle = ClampAngle360 (angle);
+            if (angle > 180)
+                angle -= 360;
             return angle;
         }
 
@@ -147,9 +158,9 @@ namespace KRPCSpaceCenter.ExtensionMethods
                 throw new ArgumentException ("Axis order not supported");
             }
             // Clamp angles to range (0,360)
-            result.x = ClampAngleDegrees (result.x);
-            result.y = ClampAngleDegrees (result.y);
-            result.z = ClampAngleDegrees (result.z);
+            result.x = ClampAngle360 (result.x);
+            result.y = ClampAngle360 (result.y);
+            result.z = ClampAngle360 (result.z);
             return result;
         }
 

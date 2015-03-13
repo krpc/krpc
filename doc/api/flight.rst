@@ -44,6 +44,20 @@ Flight
 
    :rtype: double
 
+.. attribute:: Flight.Latitude
+
+   Gets the `latitude <http://en.wikipedia.org/wiki/Latitude>`_ of the vessel
+   for the body being orbited, in degrees.
+
+   :rtype: double
+
+.. attribute:: Flight.Longitude
+
+   Gets the `latitude <http://en.wikipedia.org/wiki/Longitude>`_ of the vessel
+   for the body being orbited, in degrees.
+
+   :rtype: double
+
 .. attribute:: Flight.Velocity
 
    Gets the velocity vector of the vessel. The magnitude of the vector is the

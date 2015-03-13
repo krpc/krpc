@@ -113,6 +113,16 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double Latitude {
+            get { return vessel.mainBody.GetLatitude (WorldCoM); }
+        }
+
+        [KRPCProperty]
+        public double Longitude {
+            get { return GeometryExtensions.ClampAngle180 (vessel.mainBody.GetLongitude (WorldCoM)); }
+        }
+
+        [KRPCProperty]
         public Tuple3 Velocity {
             get { return referenceFrame.VelocityFromWorldSpace (WorldCoM, WorldVelocity).ToTuple (); }
         }
