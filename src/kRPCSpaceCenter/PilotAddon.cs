@@ -1,4 +1,5 @@
 using UnityEngine;
+using KRPC;
 
 namespace KRPCSpaceCenter
 {
@@ -24,6 +25,11 @@ namespace KRPCSpaceCenter
         public static float WheelSteer { get; set; }
 
         public void Awake ()
+        {
+            Clear ();
+        }
+
+        static void Clear ()
         {
             Pitch = 0;
             Roll = 0;
@@ -61,6 +67,11 @@ namespace KRPCSpaceCenter
         {
             if (FlightGlobals.ActiveVessel == null)
                 return;
+
+            var krpc = Object.FindObjectOfType<KRPCAddon> ();
+            if (krpc != null && krpc.NumberOfClients == 0) {
+                Clear ();
+            }
 
             // TODO: need to clear these if all clients disconnect, or similar
             state.pitch += Pitch;

@@ -1,6 +1,7 @@
-using UnityEngine;
+using System.Linq;
 using KRPC.Server;
 using KRPC.UI;
+using UnityEngine;
 
 namespace KRPC
 {
@@ -138,6 +139,10 @@ namespace KRPC
             } catch (ServerException exn) {
                 mainWindow.Errors.Add (exn.Message);
             }
+        }
+
+        public int NumberOfClients {
+            get { return server.Clients.Count (); }
         }
 
         public void OnDestroy ()
