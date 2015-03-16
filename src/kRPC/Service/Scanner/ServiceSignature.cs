@@ -27,6 +27,11 @@ namespace KRPC.Service.Scanner
         public Dictionary<string,Dictionary<string,int>> Enums { get; private set; }
 
         /// <summary>
+        /// Which game scene(s) the service should be active during
+        /// </summary>
+        public GameScene GameScene { get; private set; }
+
+        /// <summary>
         /// Create a service signature from a C# type annotated with the KRPCService attribute
         /// </summary>
         /// <param name="type">Type.</param>
@@ -37,6 +42,7 @@ namespace KRPC.Service.Scanner
             Classes = new HashSet<string> ();
             Enums = new Dictionary<string, Dictionary<string, int>> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
+            GameScene = TypeUtils.GetServiceGameScene (type);
         }
 
         /// <summary>
@@ -65,7 +71,7 @@ namespace KRPC.Service.Scanner
         public void AddProcedure (MethodInfo method)
         {
             TypeUtils.ValidateKRPCProcedure (method);
-            AddProcedure (new ProcedureSignature (Name, method.Name, new ProcedureHandler (method)));
+            AddProcedure (new ProcedureSignature (Name, method.Name, new ProcedureHandler (method), GameScene));
         }
 
         /// <summary>
@@ -78,13 +84,13 @@ namespace KRPC.Service.Scanner
                 var method = property.GetGetMethod ();
                 var handler = new ProcedureHandler (method);
                 var attribute = "Property.Get(" + property.Name + ")";
-                AddProcedure (new ProcedureSignature (Name, method.Name, handler, attribute));
+                AddProcedure (new ProcedureSignature (Name, method.Name, handler, GameScene, attribute));
             }
             if (property.GetSetMethod () != null) {
                 var method = property.GetSetMethod ();
                 var handler = new ProcedureHandler (method);
                 var attribute = "Property.Set(" + property.Name + ")";
-                AddProcedure (new ProcedureSignature (Name, method.Name, handler, attribute));
+                AddProcedure (new ProcedureSignature (Name, method.Name, handler, GameScene, attribute));
             }
         }
 
@@ -124,7 +130,7 @@ namespace KRPC.Service.Scanner
             if (!Classes.Contains (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var handler = new ClassMethodHandler (method);
-            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler,
+            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, GameScene,
                 "Class.Method(" + Name + "." + cls + "," + method.Name + ")", "ParameterType(0).Class(" + Name + "." + cls + ")"));
         }
 
@@ -140,14 +146,14 @@ namespace KRPC.Service.Scanner
                 var handler = new ClassMethodHandler (method);
                 var attribute = "Class.Property.Get(" + Name + "." + cls + "," + property.Name + ")";
                 var parameter_attribute = "ParameterType(0).Class(" + Name + "." + cls + ")";
-                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, attribute, parameter_attribute));
+                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, GameScene, attribute, parameter_attribute));
             }
             if (property.GetSetMethod () != null) {
                 var method = property.GetSetMethod ();
                 var handler = new ClassMethodHandler (method);
                 var attribute = "Class.Property.Set(" + Name + "." + cls + "," + property.Name + ")";
                 var parameter_attribute = "ParameterType(0).Class(" + Name + "." + cls + ")";
-                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, attribute, parameter_attribute));
+                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, GameScene, attribute, parameter_attribute));
             }
         }
     }

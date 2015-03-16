@@ -47,7 +47,7 @@ namespace KRPC.UI
         {
             if (!Visible) {
                 if (Skin == null)
-                    Skin = GUI.skin;
+                    Skin = UI.Skin.DefaultSkin;
                 Visible = true;
                 Opened ();
                 if (OnOpen != null)

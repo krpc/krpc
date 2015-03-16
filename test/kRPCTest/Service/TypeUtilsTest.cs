@@ -293,6 +293,14 @@ namespace KRPCTest.Service
         }
 
         [Test]
+        public void GetServiceGameScene ()
+        {
+            Assert.AreEqual (GameScene.Flight, TypeUtils.GetServiceGameScene (typeof(TestService)));
+            Assert.AreEqual (GameScene.All, TypeUtils.GetServiceGameScene (typeof(TestService2)));
+            Assert.AreEqual (GameScene.Editor, TypeUtils.GetServiceGameScene (typeof(TestService3)));
+        }
+
+        [Test]
         public void GetClassServiceName ()
         {
             Assert.AreEqual ("TestService", TypeUtils.GetClassServiceName (typeof(TestService.TestClass)));

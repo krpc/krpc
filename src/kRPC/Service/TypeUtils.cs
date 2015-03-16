@@ -195,6 +195,16 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Get the GameScene that the service should active during
+        /// </summary>
+        public static GameScene GetServiceGameScene (Type type)
+        {
+            ValidateKRPCService (type);
+            var attribute = Reflection.GetAttribute<KRPCServiceAttribute> (type);
+            return attribute.GameScene;
+        }
+
+        /// <summary>
         /// Get the name of the service for the given KRPCClass annotated type
         /// </summary>
         public static string GetClassServiceName (Type type)

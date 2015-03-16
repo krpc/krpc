@@ -64,7 +64,7 @@ namespace KRPC.UI
 
         public static GUIStyle ComboOptionsStyle ()
         {
-            var style = new GUIStyle (GUI.skin.window);
+            var style = new GUIStyle (Skin.DefaultSkin.window);
             var texture = new Texture2D (16, 16, TextureFormat.RGBA32, false);
             const int border = 2;
             texture.wrapMode = TextureWrapMode.Clamp;
@@ -86,7 +86,7 @@ namespace KRPC.UI
 
         public static GUIStyle ComboOptionStyle ()
         {
-            var style = new GUIStyle (GUI.skin.label);
+            var style = new GUIStyle (Skin.DefaultSkin.label);
             style.hover.textColor = Color.yellow;
             var texture = new Texture2D (1, 1);
             texture.SetPixel (0, 0, new Color (0, 0, 0, 0));

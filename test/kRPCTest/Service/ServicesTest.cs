@@ -1,13 +1,14 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-using NUnit.Framework;
-using Moq;
+using System.IO;
 using Google.ProtocolBuffers;
+using KRPC;
+using KRPC.Continuations;
 using KRPC.Schema.KRPC;
 using KRPC.Service;
 using KRPC.Utils;
-using KRPC.Continuations;
+using Moq;
+using NUnit.Framework;
 
 namespace KRPCTest.Service
 {
@@ -92,6 +93,12 @@ namespace KRPCTest.Service
                 codedStream.Flush ();
                 return stream.ToArray ();
             }
+        }
+
+        [SetUp]
+        public void SetUp ()
+        {
+            KRPCServer.Context.SetGameScene (GameScene.Flight);
         }
 
         [Test]
@@ -878,6 +885,20 @@ namespace KRPCTest.Service
             Assert.IsFalse (builtResponse.HasError);
             Assert.AreEqual (ProtocolBuffers.WriteMessage (list), builtResponse.ReturnValue);
             mock.Verify (x => x.EchoListOfObjects (It.IsAny<IList<TestService.TestClass>> ()), Times.Once ());
+        }
+
+        /// <summary>
+        /// Test calling a service method that is not active in the current game mode
+        /// </summary>
+        [Test]
+        public void HandleRequestWrongGameMode ()
+        {
+            KRPCServer.Context.SetGameScene (GameScene.TrackingStation);
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsNoReturn ());
+            TestService.Service = mock.Object;
+            Assert.Throws<RPCException> (() => Run (Req ("TestService", "ProcedureNoArgsNoReturn")));
+            mock.Verify (x => x.ProcedureNoArgsNoReturn (), Times.Never ());
         }
     }
 }

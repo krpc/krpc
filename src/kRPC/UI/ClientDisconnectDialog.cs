@@ -1,4 +1,3 @@
-using UnityEngine;
 using KRPC.Server;
 
 namespace KRPC.UI
@@ -10,7 +9,7 @@ namespace KRPC.UI
         protected override void Init ()
         {
             Title = "kRPC";
-            Skin = GUI.skin;
+            Skin = UI.Skin.DefaultSkin;
             Options.Add (new DialogOption ("Yes, disconnect the client", () => {
                 client.Close ();
                 Close ();

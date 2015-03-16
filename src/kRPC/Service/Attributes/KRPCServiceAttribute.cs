@@ -6,5 +6,12 @@ namespace KRPC.Service.Attributes
     public class KRPCServiceAttribute : Attribute
     {
         public string Name { get; set; }
+
+        public GameScene GameScene { get; set; }
+
+        public KRPCServiceAttribute ()
+        {
+            GameScene = GameScene.All;
+        }
     }
 }

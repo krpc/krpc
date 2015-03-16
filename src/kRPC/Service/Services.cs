@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 using Google.ProtocolBuffers;
+using KRPC.Continuations;
 using KRPC.Schema.KRPC;
 using KRPC.Service.Scanner;
 using KRPC.Utils;
-using KRPC.Continuations;
 
 namespace KRPC.Service
 {
@@ -60,6 +60,8 @@ namespace KRPC.Service
         /// </summary>
         public Response.Builder HandleRequest (ProcedureSignature procedure, object[] arguments)
         {
+            if ((KRPCServer.Context.GameScene & procedure.GameScene) == 0)
+                throw new RPCException ("Procedure not available in game scene '" + KRPCServer.Context.GameScene + "'");
             object returnValue;
             try {
                 returnValue = procedure.Handler.Invoke (arguments);

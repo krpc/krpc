@@ -1,16 +1,17 @@
 using System;
-using KRPC.Service.Attributes;
-using KRPC.Continuations;
-using UnityEngine;
 using System.Collections.Generic;
+using KRPC.Continuations;
+using KRPC.Service;
+using KRPC.Service.Attributes;
 using KRPCSpaceCenter.ExtensionMethods;
-using Tuple2 = KRPC.Utils.Tuple<double,double>;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
-using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
+using UnityEngine;
+using Tuple2 = KRPC.Utils.Tuple<double, double>;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
-    [KRPCService]
+    [KRPCService (GameScene = GameScene.Flight)]
     public static class SpaceCenter
     {
         [KRPCProperty]

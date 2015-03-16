@@ -35,6 +35,11 @@ namespace KRPC.Service.Scanner
         public Type ReturnType { get; private set; }
 
         /// <summary>
+        /// Which game scene(s) the service should be active during
+        /// </summary>
+        public GameScene GameScene { get; private set; }
+
+        /// <summary>
         /// Protocol buffer builder objects, used to deserialize parameter values.
         /// </summary>
         public IList<IBuilder> ParameterBuilders { get; private set; }
@@ -46,11 +51,12 @@ namespace KRPC.Service.Scanner
 
         public List<string> Attributes { get; private set; }
 
-        public ProcedureSignature (string serviceName, string procedureName, IProcedureHandler handler, params string[] attributes)
+        public ProcedureSignature (string serviceName, string procedureName, IProcedureHandler handler, GameScene gameScene, params string[] attributes)
         {
             Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;
             Handler = handler;
+            GameScene = gameScene;
             Attributes = attributes.ToList ();
             Parameters = handler.Parameters.Select (x => new ParameterSignature (FullyQualifiedName, x)).ToList ();
 

@@ -67,9 +67,9 @@ namespace KRPC.UI
         void UpdateGUI ()
         {
             if (!hasInit) {
-                Style = new GUIStyle (GUI.skin.window);
+                Style = new GUIStyle (Skin.DefaultSkin.window);
                 Init ();
-                closeButtonStyle = new GUIStyle (GUI.skin.button);
+                closeButtonStyle = new GUIStyle (Skin.DefaultSkin.button);
                 closeButtonStyle.margin = new RectOffset (0, 0, 0, 0);
                 closeButtonStyle.padding = new RectOffset (0, 0, 0, 0);
                 closeButtonStyle.fixedWidth = 16;

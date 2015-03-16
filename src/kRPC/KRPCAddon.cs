@@ -1,33 +1,57 @@
 using System.Linq;
 using KRPC.Server;
 using KRPC.UI;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC
 {
-    [KSPAddon (KSPAddon.Startup.Flight, false)]
+    [KSPAddonImproved (KSPAddonImproved.Startup.RealTime | KSPAddonImproved.Startup.Editor, false)]
     sealed public class KRPCAddon : MonoBehaviour
     {
-        KRPCServer server;
-        KRPCConfiguration config;
+        static KRPCServer server;
+        static KRPCConfiguration config;
+        static Texture textureOnline;
+        static Texture textureOffline;
+
         IButton toolbarButton;
         ApplicationLauncherButton applauncherButton;
-        Texture textureOnline;
-        Texture textureOffline;
         MainWindow mainWindow;
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
+
+        void Init ()
+        {
+            if (server != null)
+                return;
+
+            config = new KRPCConfiguration ("settings.cfg");
+            config.Load ();
+            server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
+
+            // Auto-start the server, if required
+            if (config.AutoStartServer)
+                StartServer ();
+        }
+
+        ~KRPCAddon ()
+        {
+            if (server.Running)
+                server.Stop ();
+        }
 
         public void Awake ()
         {
             if (!ServicesChecker.OK)
                 return;
 
+            Init ();
+
+            KRPCServer.Context.SetGameScene (KSPAddonImproved.CurrentGameScene.ToGameScene ());
+            Logger.WriteLine ("Game scene switched to " + KRPCServer.Context.GameScene);
+
             GUILayoutExtensions.Init (gameObject);
 
-            config = new KRPCConfiguration ("settings.cfg");
-            config.Load ();
-            server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
             server.GetUniversalTime = Planetarium.GetUniversalTime;
 
             // Disconnect client dialog
@@ -82,7 +106,7 @@ namespace KRPC
                 toolbarButton = ToolbarManager.Instance.add ("kRPC", "ToggleMainWindow");
                 toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
                 toolbarButton.ToolTip = "kRPC Server";
-                toolbarButton.Visibility = new GameScenesVisibility (GameScenes.FLIGHT);
+                toolbarButton.Visibility = new GameScenesVisibility (GameScenes.SPACECENTER, GameScenes.FLIGHT, GameScenes.TRACKSTATION, GameScenes.EDITOR);
                 toolbarButton.OnClick += e => mainWindow.Visible = !mainWindow.Visible;
                 server.OnStarted += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-online";
                 server.OnStopped += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
@@ -106,10 +130,6 @@ namespace KRPC
                 };
                 toolbarButton = null;
             }
-
-            // Auto-start the server, if required
-            if (config.AutoStartServer)
-                StartServer ();
         }
 
         void OnGUIApplicationLauncherReady ()
@@ -118,7 +138,7 @@ namespace KRPC
                 () => mainWindow.Visible = !mainWindow.Visible,
                 () => mainWindow.Visible = !mainWindow.Visible,
                 null, null, null, null,
-                ApplicationLauncher.AppScenes.FLIGHT,
+                ApplicationLauncher.AppScenes.ALWAYS,
                 server.Running ? textureOnline : textureOffline);
         }
 
@@ -149,8 +169,6 @@ namespace KRPC
         {
             if (!ServicesChecker.OK)
                 return;
-            if (server.Running)
-                server.Stop ();
             if (toolbarButton != null)
                 toolbarButton.Destroy ();
             if (applauncherButton != null) {
@@ -158,8 +176,8 @@ namespace KRPC
             }
             GameEvents.onGUIApplicationLauncherReady.Remove (OnGUIApplicationLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Remove (OnGUIApplicationLauncherDestroyed);
-            UnityEngine.Object.Destroy (mainWindow);
-            UnityEngine.Object.Destroy (clientConnectingDialog);
+            Object.Destroy (mainWindow);
+            Object.Destroy (clientConnectingDialog);
             GUILayoutExtensions.Destroy (gameObject);
         }
 

@@ -71,24 +71,26 @@ namespace KRPC.UI
 
             Style.fixedWidth = windowWidth;
 
-            labelStyle = new GUIStyle (GUI.skin.label);
+            var skin = Skin.DefaultSkin;
+
+            labelStyle = new GUIStyle (skin.label);
             labelStyle.margin = new RectOffset (0, 0, 0, 0);
 
-            stretchyLabelStyle = new GUIStyle (GUI.skin.label);
+            stretchyLabelStyle = new GUIStyle (skin.label);
             stretchyLabelStyle.margin = new RectOffset (0, 0, 0, 0);
             stretchyLabelStyle.stretchWidth = true;
 
-            textFieldStyle = new GUIStyle (GUI.skin.textField);
+            textFieldStyle = new GUIStyle (skin.textField);
             textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
 
-            stretchyTextFieldStyle = new GUIStyle (GUI.skin.textField);
+            stretchyTextFieldStyle = new GUIStyle (skin.textField);
             stretchyTextFieldStyle.margin = new RectOffset (0, 0, 0, 0);
             stretchyTextFieldStyle.stretchWidth = true;
 
-            buttonStyle = new GUIStyle (GUI.skin.button);
+            buttonStyle = new GUIStyle (skin.button);
             buttonStyle.margin = new RectOffset (0, 0, 0, 0);
 
-            toggleStyle = new GUIStyle (GUI.skin.toggle);
+            toggleStyle = new GUIStyle (skin.toggle);
             labelStyle.margin = new RectOffset (0, 0, 0, 0);
             toggleStyle.stretchWidth = false;
             toggleStyle.contentOffset = new Vector2 (4, 0);
@@ -100,7 +102,7 @@ namespace KRPC.UI
 
             lightStyle = GUILayoutExtensions.LightStyle ();
 
-            errorLabelStyle = new GUIStyle (GUI.skin.label);
+            errorLabelStyle = new GUIStyle (skin.label);
             errorLabelStyle.margin = new RectOffset (0, 0, 0, 0);
             errorLabelStyle.stretchWidth = true;
             errorLabelStyle.normal.textColor = errorColor;

@@ -47,6 +47,8 @@ namespace KRPC
 
             public static IClient RPCClient { get; private set; }
 
+            public static GameScene GameScene { get; private set; }
+
             public static void Set (KRPCServer server, IClient rpcClient)
             {
                 Server = server;
@@ -57,6 +59,11 @@ namespace KRPC
             {
                 Server = null;
                 RPCClient = null;
+            }
+
+            public static void SetGameScene (GameScene gameScene)
+            {
+                GameScene = gameScene;
             }
         }
 

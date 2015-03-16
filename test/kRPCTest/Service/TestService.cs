@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 
 namespace KRPCTest.Service
 {
-    [KRPCService]
+    [KRPCService (GameScene = GameScene.Flight)]
     public static class TestService
     {
         public static ITestService Service;
