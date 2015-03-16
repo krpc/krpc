@@ -162,7 +162,7 @@ namespace KRPC
         }
 
         public int NumberOfClients {
-            get { return server.Clients.Count (); }
+            get { return server == null ? 0 : server.Clients.Count (); }
         }
 
         public void OnDestroy ()
