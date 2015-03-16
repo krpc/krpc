@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Diagnostics;
 using KRPC;
+using KRPC.Service;
 using KRPC.Utils;
 
 namespace TestServer
@@ -13,6 +14,7 @@ namespace TestServer
             Logger.Enabled = (args.Length > 2 && args [2] == "log");
             const int frameTime = 50;
             var server = new KRPCServer (IPAddress.Loopback, ushort.Parse (args [0]), ushort.Parse (args [1]));
+            KRPCServer.Context.SetGameScene (GameScene.SpaceCenter);
             var timeSpan = new TimeSpan ();
             server.GetUniversalTime = () => timeSpan.TotalSeconds;
             server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
