@@ -11,9 +11,6 @@ interact with it from any programming language (as long as it can communicate
 over a TCP connection) and you can run your program using any
 compiler/interpreter/virtual machine you like.
 
-.. warning:: This documentation is still under construction, and may be
-             inaccurate! But fear not, I'm actively working to improve it.
-
 .. toctree::
    :includehidden:
    :maxdepth: 2
@@ -21,5 +18,8 @@ compiler/interpreter/virtual machine you like.
    getting-started
    tutorials
    python-api
+   compiling
+   extending
+   communication-protocol
 
 :ref:`genindex`
