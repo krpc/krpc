@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Continuations;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
@@ -123,9 +124,21 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public void ActivateNextStage ()
+        public IList<Vessel> ActivateNextStage ()
         {
+            if (!Staging.separate_ready)
+                throw new YieldException (new ParameterizedContinuation<IList<Vessel>> (ActivateNextStage));
+            var preVessels = FlightGlobals.Vessels.ToArray ();
             Staging.ActivateNextStage ();
+            return PostActivateStage (preVessels);
+        }
+
+        IList<Vessel> PostActivateStage (global::Vessel[] preVessels)
+        {
+            if (!Staging.separate_ready)
+                throw new YieldException (new ParameterizedContinuation<IList<Vessel>, global::Vessel[]> (PostActivateStage, preVessels));
+            var postVessels = FlightGlobals.Vessels;
+            return postVessels.Except (preVessels).Select (vessel => new Vessel (vessel)).ToList ();
         }
 
         [KRPCMethod]

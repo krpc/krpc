@@ -8,6 +8,7 @@ v0.1.5
   * Rename Flight.NormalNeg to AntiNormal and Flight.RadialNeg to AntiRadial (#90)
   * Add Flight.Longitude and Latitude
   * Add Control.WheelThrottle and WheelSteering
+  * Control.ActivateNextStage returns a list of vessels that are jettisoned
 
 v0.1.4
 * General changes:

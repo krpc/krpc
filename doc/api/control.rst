@@ -123,6 +123,9 @@ Control
 
    Activates the next stage. Equivalent to pressing the space bar in-game.
 
+   :rtype: :class:`List` ( :class:`Vessel` )
+   :return: A list of vessel objects that are jettisoned from the active vessel.
+
 .. method:: Control.GetActionGroup (group)
 
    Returns `True` if the given action group (a value between 0 and 9 inclusive)
