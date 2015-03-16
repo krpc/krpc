@@ -36,7 +36,6 @@ PROTOGEN = tools/ProtoGen.exe
 MDTOOL = mdtool
 MONODIS = monodis
 NUNIT_CONSOLE = nunit-console
-UNZIP = unzip
 INKSCAPE = inkscape
 
 # Main build targets
