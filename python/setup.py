@@ -10,7 +10,7 @@ setup(
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     packages=['krpc','krpc.schema','krpc.test'],
-    url='https://github.com/djungelorm/krpc',
+    url='https://djungelorm.github.io/krpc/docs',
     license='GNU GPL v3',
     description='Client library for kRPC, a Remote Procedure Call server for Kerbal Space Program',
     long_description=open('README.txt').read(),
