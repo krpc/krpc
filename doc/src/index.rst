@@ -21,5 +21,8 @@ compiler/interpreter/virtual machine you like.
    getting-started
    tutorials
    python-api
+   compiling
+   extending
+   communication-protocol
 
 :ref:`genindex`
