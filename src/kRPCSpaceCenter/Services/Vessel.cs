@@ -216,11 +216,6 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public ReferenceFrame NonRotatingReferenceFrame {
-            get { return ReferenceFrame.NonRotating (InternalVessel); }
-        }
-
-        [KRPCProperty]
         public ReferenceFrame OrbitalReferenceFrame {
             get { return ReferenceFrame.Orbital (InternalVessel); }
         }

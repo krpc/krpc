@@ -76,10 +76,30 @@ Node
 
 .. attribute:: Node.ReferenceFrame
 
-   Gets the reference frame for the maneuver node.
-   The origin is at the position of the maneuver node.
-   The y-axis points in the orbit normal direction along the original orbit.
-   The z-axis points in the orbit prograde direction along the original orbit.
+   Gets the reference frame that is fixed relative to the maneuver node, and
+   orientated with the direction of the burn.
+
+   * The origin is at the position of the maneuver node.
+
+   * The y-axis points in the direction of the burn.
+
+   .. todo:: In which directions do the x-axis and z-axis point?
+
+   :rtype: :class:`ReferenceFrame`
+
+.. attribute:: Node.OrbitalReferenceFrame
+
+   Gets the reference frame that is fixed relative to the maneuver node, and
+   orientated with the orbital prograde/normal/radial directions of the original
+   orbit at the position of the maneuver node.
+
+   * The origin is at the position of the maneuver node.
+
+   * The x-axis points in the orbital radial direction of the original orbit, at
+     the position of the maneuver node.
+
+   * The y-axis points in the orbital prograde direction of the original orbit,
+     at the position of the maneuver node.
 
    :rtype: :class:`ReferenceFrame`
 

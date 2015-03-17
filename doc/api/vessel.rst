@@ -121,40 +121,57 @@ Vessel
 
 .. attribute:: Vessel.ReferenceFrame
 
-   Gets the reference frame that is fixed relative to this vessel.
-   The origin is at the center of mass of the vessel.
-   The y-axis points in the direction the vessels controlling part is pointing.
-   The x-axis and z-axis point in perpendicular directions out to the side of the vessel.
+   Gets the reference frame that is fixed relative to the vessel, and orientated
+   with the vessel.
 
-   :rtype: :class:`ReferenceFrame`
+   * The origin is at the center of mass of the vessel.
 
-.. attribute:: Vessel.NonRotatingReferenceFrame
+   * The axes rotate with the vessel.
 
-   Gets the reference frame whose origin is at the center of mass of the vessel,
-   and whose axes point in an arbitrary but fixed direction.
+   * The y-axis points in the direction the vessels controlling part is
+     pointing.
+
+   * The x-axis and z-axis point in perpendicular directions out to the side of
+     the vessel.
 
    :rtype: :class:`ReferenceFrame`
 
 .. attribute:: Vessel.OrbitalReferenceFrame
 
-   Gets the reference frame relative to the orbit of this vessel.
-   The origin is at the center of mass of the vessel.
-   The x-axis points normal to the body being orbited (from the center of the
-   body towards the center of mass of the vessel).
-   The y-axis points to the north pole of the body being orbited.
+   Gets the reference frame that is fixed relative to the vessel, and orientated
+   with the vessels orbital prograde/normal/radial directions.
+
+   * The origin is at the center of mass of the vessel.
+
+   * The axes rotate with the orbital prograde/normal/radial directions.
+
+   * The x-axis points in the orbital radial direction.
+
+   * The y-axis points in the orbital prograde direction.
 
    :rtype: :class:`ReferenceFrame`
+
+   .. note:: Be careful not to confuse this with 'orbit' mode on the navball.
 
 .. attribute:: Vessel.SurfaceReferenceFrame
 
-   Gets the reference frame relative to the surface of the body being orbited by
-   this vessel.
-   The origin is at the center of mass of the vessel.
-   The x-axis points normal to the body being orbited (from the center of the
-   body towards the center of mass of the vessel).
-   The y-axis points to the north pole of the body being orbited.
+   Gets the reference frame that is fixed relative to the vessel, and orientated
+   with the surface of the body being orbited.
+
+   * The origin is at the center of mass of the vessel.
+
+   * The axes rotate with the north and up directions on the surface of the
+     body.
+
+   * The x-axis points normal to the body being orbited (from the center of the
+     body towards the center of mass of the vessel).
+
+   * The y-axis points northwards and tangential to the surface of the body
+     (i.e. the direction in which a compass would point when on the surface)
 
    :rtype: :class:`ReferenceFrame`
+
+   .. note:: Be careful not to confuse this with 'surface' mode on the navball.
 
 .. method:: Vessel.Position (referenceFrame)
 

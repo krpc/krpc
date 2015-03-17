@@ -12,28 +12,17 @@ namespace KRPCSpaceCenter.Services
         enum Type
         {
             CelestialBody,
-            CelestialBodyNonRotating,
             CelestialBodyOrbital,
-            CelestialBodySurface,
             Vessel,
-            VesselNonRotating,
             VesselOrbital,
             VesselSurface,
-            Part,
-            PartNonRotating,
-            PartOrbital,
-            PartSurface,
-            //SpaceObject,
-            //SpaceObjectNonRotating,
-            //SpaceObjectOrbital,
-            //SpaceObjectSurface,
-            Maneuver
+            Maneuver,
+            ManeuverOrbital
         }
 
         readonly Type type;
         global::CelestialBody body;
         global::Vessel vessel;
-        global::Part part;
         global::ManeuverNode node;
 
         ReferenceFrame (Type type)
@@ -46,7 +35,6 @@ namespace KRPCSpaceCenter.Services
             return type == obj.type &&
             body == obj.body &&
             vessel == obj.vessel &&
-            part == obj.part &&
             node == obj.node;
         }
 
@@ -57,8 +45,6 @@ namespace KRPCSpaceCenter.Services
                 hash ^= body.GetHashCode ();
             if (vessel != null)
                 hash ^= vessel.GetHashCode ();
-            if (part != null)
-                hash ^= part.GetHashCode ();
             if (node != null)
                 hash ^= node.GetHashCode ();
             return hash;
@@ -67,13 +53,6 @@ namespace KRPCSpaceCenter.Services
         internal static ReferenceFrame Object (global::CelestialBody body)
         {
             var r = new ReferenceFrame (Type.CelestialBody);
-            r.body = body;
-            return r;
-        }
-
-        internal static ReferenceFrame NonRotating (global::CelestialBody body)
-        {
-            var r = new ReferenceFrame (Type.CelestialBodyNonRotating);
             r.body = body;
             return r;
         }
@@ -87,25 +66,9 @@ namespace KRPCSpaceCenter.Services
             return r;
         }
 
-        internal static ReferenceFrame Surface (global::CelestialBody body)
-        {
-            if (body == body.referenceBody)
-                throw new ArgumentException ("CelestialBody '" + body.name + "' does not orbit anything");
-            var r = new ReferenceFrame (Type.CelestialBodySurface);
-            r.body = body;
-            return r;
-        }
-
         internal static ReferenceFrame Object (global::Vessel vessel)
         {
             var r = new ReferenceFrame (Type.Vessel);
-            r.vessel = vessel;
-            return r;
-        }
-
-        internal static ReferenceFrame NonRotating (global::Vessel vessel)
-        {
-            var r = new ReferenceFrame (Type.VesselNonRotating);
             r.vessel = vessel;
             return r;
         }
@@ -124,37 +87,16 @@ namespace KRPCSpaceCenter.Services
             return r;
         }
 
-        internal static ReferenceFrame Object (global::Part part)
-        {
-            var r = new ReferenceFrame (Type.Part);
-            r.part = part;
-            return r;
-        }
-
-        internal static ReferenceFrame NonRotating (global::Part part)
-        {
-            var r = new ReferenceFrame (Type.PartNonRotating);
-            r.part = part;
-            return r;
-        }
-
-        internal static ReferenceFrame Orbital (global::Part part)
-        {
-            var r = new ReferenceFrame (Type.PartOrbital);
-            r.part = part;
-            return r;
-        }
-
-        internal static ReferenceFrame Surface (global::Part part)
-        {
-            var r = new ReferenceFrame (Type.PartSurface);
-            r.part = part;
-            return r;
-        }
-
         internal static ReferenceFrame Object (global::ManeuverNode node)
         {
             var r = new ReferenceFrame (Type.Maneuver);
+            r.node = node;
+            return r;
+        }
+
+        internal static ReferenceFrame Orbital (global::ManeuverNode node)
+        {
+            var r = new ReferenceFrame (Type.ManeuverOrbital);
             r.node = node;
             return r;
         }
@@ -166,21 +108,14 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
-                case Type.CelestialBodyNonRotating:
                 case Type.CelestialBodyOrbital:
-                case Type.CelestialBodySurface:
                     return body.position;
                 case Type.Vessel:
-                case Type.VesselNonRotating:
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                     return vessel.GetWorldPos3D ();
-                case Type.Part:
-                case Type.PartNonRotating:
-                case Type.PartOrbital:
-                case Type.PartSurface:
-                    return part.vessel.GetWorldPos3D () + part.CoMOffset;
                 case Type.Maneuver:
+                case Type.ManeuverOrbital:
                     {
                         //TODO: is there a better way to do this?
                         // node.patch.getPositionAtUT (node.UT) appears to return a position vector
@@ -257,29 +192,23 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                     return body.bodyTransform.up;
-                case Type.CelestialBodySurface:
                 case Type.CelestialBodyOrbital:
                     {
                         return Vector3d.Exclude (Forward, ToNorthPole (body).normalized);
                     }
                 case Type.Vessel:
                     return vessel.transform.up;
-                case Type.VesselSurface:
                 case Type.VesselOrbital:
+                    throw new NotImplementedException ();
+                case Type.VesselSurface:
                     {
                         var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
                         return Vector3d.Exclude (right, ToNorthPole (vessel).normalized);
                     }
                 case Type.Maneuver:
-                    return node.patch.GetOrbitNormal ().SwapYZ ();
-                case Type.Part:
-                case Type.PartOrbital:
-                case Type.PartSurface:
                     throw new NotImplementedException ();
-                case Type.CelestialBodyNonRotating:
-                case Type.VesselNonRotating:
-                case Type.PartNonRotating:
-                    return Planetarium.up;
+                case Type.ManeuverOrbital:
+                    return node.patch.GetOrbitNormal ().SwapYZ ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -296,7 +225,6 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                     return body.bodyTransform.forward;
-                case Type.CelestialBodySurface:
                 case Type.CelestialBodyOrbital:
                     {
                         var right = (body.position - body.referenceBody.position).normalized;
@@ -306,6 +234,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.Vessel:
                     return vessel.transform.forward;
                 case Type.VesselOrbital:
+                    throw new NotImplementedException ();
                 case Type.VesselSurface:
                     {
                         var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
@@ -313,15 +242,9 @@ namespace KRPCSpaceCenter.Services
                         return Vector3d.Cross (right, northPole);
                     }
                 case Type.Maneuver:
-                    return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
-                case Type.Part:
-                case Type.PartOrbital:
-                case Type.PartSurface:
                     throw new NotImplementedException ();
-                case Type.CelestialBodyNonRotating:
-                case Type.VesselNonRotating:
-                case Type.PartNonRotating:
-                    return Planetarium.forward;
+                case Type.ManeuverOrbital:
+                    return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -335,22 +258,15 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
-                case Type.CelestialBodyNonRotating:
                 case Type.CelestialBodyOrbital:
-                case Type.CelestialBodySurface:
                     return body.GetWorldVelocity ();
                 case Type.Vessel:
-                case Type.VesselNonRotating:
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                     return vessel.GetOrbit ().GetVel ();
-                case Type.Part:
-                case Type.PartNonRotating:
-                case Type.PartOrbital:
-                case Type.PartSurface:
-                    throw new NotImplementedException ();
                 case Type.Maneuver:
-                    return node.patch.GetVel ();
+                case Type.ManeuverOrbital:
+                    throw new NotImplementedException ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -367,24 +283,18 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                     return body.angularVelocity;
-                case Type.CelestialBodyNonRotating:
                 case Type.CelestialBodyOrbital:
-                case Type.CelestialBodySurface:
-                    return Vector3d.zero;
+                    throw new NotImplementedException ();
                 case Type.Vessel:
                     return vessel.angularVelocity;
-                case Type.VesselNonRotating:
                 case Type.VesselOrbital:
-                case Type.VesselSurface:
-                    return Vector3d.zero;
-                case Type.Part:
                     throw new NotImplementedException ();
-                case Type.PartNonRotating:
-                case Type.PartOrbital:
-                case Type.PartSurface:
-                    return Vector3d.zero;
+                case Type.VesselSurface:
+                    throw new NotImplementedException ();
                 case Type.Maneuver:
-                    return node.patch.GetVel ();
+                    throw new NotImplementedException ();
+                case Type.ManeuverOrbital:
+                    throw new NotImplementedException ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }

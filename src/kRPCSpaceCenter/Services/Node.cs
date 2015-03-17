@@ -127,6 +127,11 @@ namespace KRPCSpaceCenter.Services
             get { return ReferenceFrame.Object (node); }
         }
 
+        [KRPCProperty]
+        public ReferenceFrame OrbitalReferenceFrame {
+            get { return ReferenceFrame.Orbital (node); }
+        }
+
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
