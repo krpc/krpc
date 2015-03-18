@@ -53,7 +53,7 @@ Flight
 
 .. attribute:: Flight.Longitude
 
-   Gets the `latitude <http://en.wikipedia.org/wiki/Longitude>`_ of the vessel
+   Gets the `longitude <http://en.wikipedia.org/wiki/Longitude>`_ of the vessel
    for the body being orbited, in degrees.
 
    :rtype: double
