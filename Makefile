@@ -38,8 +38,10 @@ MONODIS = monodis
 NUNIT_CONSOLE = nunit-console
 INKSCAPE = inkscape
 
-# Main build targets
-.PHONY: all configure logo build cog protobuf dist dist-python pre-release release install test ksp clean dist-clean strip-bom
+.PHONY: all configure build dist install release clean dist-clean \
+        test dist-python doc cog protobuf icons logo ksp strip-bom
+
+# Main targets -----------------------------------------------------------------
 
 all: build
 
@@ -50,16 +52,9 @@ configure:
 	mkdir -p lib/KSP_Data
 	cp -r "$(KSP_DIR)/KSP_Data/Managed" lib/KSP_Data/
 
-logo:
-	-$(INKSCAPE) --export-png=logo.png logo.svg
+build: configure protobuf cog icons $(CSHARP_MAIN_PROJECTS)
 
-build: configure protobuf cog $(CSHARP_MAIN_PROJECTS)
-	make -C src/kRPC/icons
-
-dist-python:
-	make -C python dist
-
-dist: build dist-python
+dist: build doc dist-python
 	rm -rf $(DIST_DIR)
 	mkdir -p $(DIST_DIR)
 	mkdir -p $(DIST_DIR)/GameData/kRPC
@@ -80,17 +75,31 @@ dist: build dist-python
 	# Python client library
 	mkdir $(DIST_DIR)/python-client
 	cp python/dist/krpc-$(PYTHON_CLIENT_VERSION).zip $(DIST_DIR)/python-client/
-
-pre-release: dist test
-	cd $(DIST_DIR); zip -r krpc-$(SERVER_VERSION)-pre-`date +"%Y-%m-%d"`.zip ./*
-
-release: dist test
-	cd $(DIST_DIR); zip -r krpc-$(SERVER_VERSION).zip ./*
+	# Documentation
+	cp doc/build/pdf/kRPC.pdf $(DIST_DIR)/
 
 install: dist
 	test -d "$(KSP_DIR)/GameData"
 	rm -rf "$(KSP_DIR)/GameData/kRPC"
 	cp -r $(DIST_DIR)/GameData/* "$(KSP_DIR)/GameData/"
+
+release: dist test
+	cd $(DIST_DIR); zip -r krpc-$(SERVER_VERSION).zip ./*
+
+clean: protobuf-clean
+	-rm -f logo.png
+	-rm -rf lib/KSP_Data
+	make -C src/kRPC/icons clean
+	-rm -rf $(CSHARP_BINDIRS) test.log
+	find . -name "*.pyc" -exec rm -rf {} \;
+	-rm -f KSP.log TestResult.xml
+	make -C python clean
+	make -C doc clean
+
+dist-clean: clean
+	-rm -rf dist
+
+# Tests ------------------------------------------------------------------------
 
 test: test-csharp test-python test-spacecenter
 
@@ -103,30 +112,8 @@ test-python:
 test-spacecenter:
 	make -C test/kRPCSpaceCenterTest KSP_DIR="$(KSP_DIR)" test
 
-ksp: install TestingTools
-	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.dll "$(KSP_DIR)/GameData/"
-	-cp settings.cfg "$(KSP_DIR)/GameData/kRPC/settings.cfg"
-	test "!" -f "$(KSP_DIR)/KSP.x86_64" || "$(KSP_DIR)/KSP.x86_64" &
-	test "!" -f "$(KSP_DIR)/KSP.exe" || "$(KSP_DIR)/KSP.exe" &
-	test "!" -d "$(HOME)/.config/unity3d" || tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
-	test "!" -f "$(KSP_DIR)/KSP_Data/output_log.txt" || tail -f "$(KSP_DIR)/KSP_Data/output_log.txt"
+# C# projects ------------------------------------------------------------------
 
-clean: protobuf-clean
-	-rm -f logo.png
-	-rm -rf lib/KSP_Data
-	make -C src/kRPC/icons clean
-	-rm -rf $(CSHARP_BINDIRS) test.log
-	find . -name "*.pyc" -exec rm -rf {} \;
-	-rm -f KSP.log TestResult.xml
-	make -C python clean
-
-dist-clean: clean
-	-rm -rf dist
-
-strip-bom:
-	tools/strip-bom.sh
-
-# C# projects
 .PHONY: $(CSHARP_PROJECTS) $(CSHARP_LIBRARIES)
 
 .SECONDEXPANSION:
@@ -142,12 +129,24 @@ $(CSHARP_LIBRARIES):
 	$(eval $@_PROJECT := $(basename $(notdir $@)))
 	$(MDTOOL) build -t:Build -c:$(CSHARP_CONFIG) -p:$($@_PROJECT) kRPC.sln
 
-# Cog
+# Python -----------------------------------------------------------------------
+
+dist-python:
+	make -C python dist
+
+# Documentation ----------------------------------------------------------------
+
+doc:
+	make -C doc build
+
+# Cog --------------------------------------------------------------------------
+
 cog:
 	-python -m cogapp -D nargs=10 -r src/kRPC/Continuations/ParameterizedContinuation.cs
 	-python -m cogapp -D nargs=8 -r src/kRPC/Utils/Tuple.cs
 
-# Protocol Buffers
+# Protocol Buffers -------------------------------------------------------------
+
 .PHONY: protobuf-csharp protobuf-python protobuf-clean protobuf-csharp-clean protobuf-python-clean
 
 protobuf: protobuf-csharp protobuf-python
@@ -182,3 +181,24 @@ protobuf-python-clean:
 	$(PROTOGEN) \
 		$*.protobin -namespace=KRPC.Schema.$(basename $(notdir $@)) \
 		-umbrella_classname=$(basename $(notdir $@)) -output_directory=$(dir $@)
+
+# Images -----------------------------------------------------------------------
+
+icons:
+	make -C src/kRPC/icons
+
+logo:
+	-$(INKSCAPE) --export-png=logo.png logo.svg
+
+# Tools / Other ----------------------------------------------------------------
+
+ksp: install TestingTools
+	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.dll "$(KSP_DIR)/GameData/"
+	-cp settings.cfg "$(KSP_DIR)/GameData/kRPC/settings.cfg"
+	test "!" -f "$(KSP_DIR)/KSP.x86_64" || "$(KSP_DIR)/KSP.x86_64" &
+	test "!" -f "$(KSP_DIR)/KSP.exe" || "$(KSP_DIR)/KSP.exe" &
+	test "!" -d "$(HOME)/.config/unity3d" || tail -f "$(HOME)/.config/unity3d/Squad/Kerbal Space Program/Player.log"
+	test "!" -f "$(KSP_DIR)/KSP_Data/output_log.txt" || tail -f "$(KSP_DIR)/KSP_Data/output_log.txt"
+
+strip-bom:
+	tools/strip-bom.sh

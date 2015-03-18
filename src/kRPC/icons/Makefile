@@ -4,16 +4,16 @@ ICONS = toolbar-online.png toolbar-offline.png \
 
 INKSCAPE = inkscape
 
-BINDIR = ../bin/icons
-BINICONS = $(foreach ICON,$(ICONS),$(BINDIR)/$(ICON))
-
-all: $(BINICONS)
-
-clean:
-	-rm -f $(BINICONS)
-
-$(BINICONS): $(BINDIR)/%.png: %.svg
-	mkdir -p $(BINDIR)
-	$(INKSCAPE) --export-png=$@ $<
+BUILD_DIR = ../bin/icons
+BUILD_ICONS = $(foreach ICON,$(ICONS),$(BUILD_DIR)/$(ICON))
 
 .PHONY: all clean
+
+all: $(BUILD_ICONS)
+
+clean:
+	-rm -f $(BUILD_ICONS)
+
+$(BUILD_ICONS): $(BUILD_DIR)/%.png: %.svg
+	mkdir -p $(BUILD_DIR)
+	$(INKSCAPE) --export-png=$@ $<
