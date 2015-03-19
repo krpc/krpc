@@ -88,7 +88,7 @@ the navball:
    :linenos:
 
    import krpc
-   conn = krpc.connect()
+   conn = krpc.connect(name='Navball directions')
    vessel = conn.space_center.active_vessel
 
    # Point the vessel north on the navball, with a pitch of 0 degrees
@@ -130,7 +130,7 @@ directions, as seen on the navball when it is in 'orbit' mode, using the
    :linenos:
 
    import krpc
-   conn = krpc.connect()
+   conn = krpc.connect(name='Orbital directions')
    vessel = conn.space_center.active_vessel
 
    # Point the vessel in the prograde direction
@@ -161,13 +161,13 @@ computing the velocity of the vessel:
    :linenos:
 
    import krpc, time
-   conn = krpc.connect()
+   conn = krpc.connect(name='Surface speed')
    vessel = conn.space_center.active_vessel
 
    while True:
 
        velocity = vessel.flight(vessel.orbit.body.reference_frame).velocity
-       print 'Surface velocity = (%.1f, %.1f, %.1f)' % v
+       print 'Surface velocity = (%.1f, %.1f, %.1f)' % velocity
 
        speed = vessel.flight(vessel.orbit.body.reference_frame).speed
        print 'Surface speed = %.1f m/s' % speed
@@ -188,7 +188,7 @@ velocity vector we got in the previous example:
    :linenos:
 
    import krpc
-   conn = krpc.connect()
+   conn = krpc.connect(name='Surface prograde')
    vessel = conn.space_center.active_vessel
 
    velocity = vessel.flight(vessel.orbit.body.reference_frame).velocity
@@ -208,12 +208,12 @@ Angle of attack
 ---------------
 
 This example computes the angle between the direction the vessel is pointing in,
-and the direction that the vessel is moving in (relative to the surface).
+and the direction that the vessel is moving in (relative to the surface):
 
 .. code-block:: python
 
    import krpc, math, time
-   conn = krpc.connect()
+   conn = krpc.connect(name='Angle of attack')
    vessel = conn.space_center.active_vessel
 
    while True:
@@ -224,64 +224,59 @@ and the direction that the vessel is moving in (relative to the surface).
        # Compute the dot product of d and v
        dotprod = d[0]*v[0] + d[1]*v[1] + d[2]*v[2]
 
+       # Compute the magnitude of v
+       vmag = math.sqrt(v[0]**2 + v[1]**2 + v[2]**2)
+       # Note: don't need to magnitude of d as it is a unit vector
+
        # Compute the angle between the vectors
-       angle = abs(math.acos (dotprod) * (180. / math.pi))
+       if dotprod == 0:
+           angle = 0
+       else:
+           angle = abs(math.acos (dotprod / vmag) * (180. / math.pi))
 
        print 'Angle of attack = %.1f' % angle
 
        time.sleep(1)
 
-Pitch and yaw angles
---------------------
+Pitch and heading angles
+------------------------
 
-The following example calculates the pitch and yaw angles of the vessel and
-prints them out once per second:
+The following example calculates the pitch and heading angle of the vessel once
+per second:
 
 .. code-block:: python
 
    import krpc, math, time
-   conn = krpc.connect(name='Pitch/Yaw')
+   conn = krpc.connect(name='Pitch/Heading')
    vessel = conn.space_center.active_vessel
+
+   def angle_between(x, y):
+       """ Compute the angle between vector x and y """
+       dotprod = x[0]*y[0] + x[1]*y[1] + x[2]*y[2]
+       if dotprod == 0:
+           return 0
+       xmag = math.sqrt(x[0]**2 + x[1]**2 + x[2]**2)
+       ymag = math.sqrt(y[0]**2 + y[1]**2 + y[2]**2)
+       return math.acos(dotprod / (xmag * ymag)) * (180. / math.pi)
 
    while True:
 
-       # x north
-       # y normal to surface
-       # z forward
+       vessel_direction = vessel.direction(vessel.surface_reference_frame)
 
-       direction = vessel.direction(vessel.orbit.body.reference_frame)
-       velocity = vessel.velocity(vessel.orbit.body.reference_frame)
+       # Get the direction of the vessel in the horizon plane
+       horizon_direction = (0, vessel_direction[1], vessel_direction[2])
 
-       # x yaw
-       # y pitch
-       # z roll
-
-       # direction unit vector, with corrected axes
-       x0 = direction[1]
-       y0 = direction[0]
-       z0 = direction[2]
-
-       # calculate unit vector of velocity
-       magnitude = math.sqrt( velocity[0]**2 + velocity[1]**2 + velocity[2]**2 )
-       v = (velocity[0]/ magnitude, velocity[1]/ magnitude, velocity[2]/ magnitude)
-
-       # velocity unit vector, with corrected axes
-       x1 = v[1]
-       y1 = v[0]
-       z1 = v[2]
-
-       # calculate pitch
-       pitch = math.acos((x0*x1 + y0*y1) / (math.sqrt(x0**2 + y0**2) * math.sqrt(x1**2 + y1 **2))) * (180 / math.pi)
-       # pitch is positive if velocity is below attitude, negative if above (this is arbitrary)
-       if x0 > x1:
+       # Compute the pitch - the angle between the vessels direction and the direction in the horizon plane
+       pitch = angle_between(vessel_direction, horizon_direction)
+       if vessel_direction[0] < 0:
            pitch = -pitch
 
-       # calculate yaw
-       yaw = math.acos((y0*y1 + z0*z1) / (math.sqrt(y0**2 + z0**2) * math.sqrt(y1**2 + z1 **2))) * (180 / math.pi)
-       # yaw is positive if velocity is left of attitude, negative if right (this is arbitrary)
-       if y0 < y1:
-           yaw = -yaw
+       # Compute the heading - the angle between north and the direction in the horizon plane
+       north = (0,1,0)
+       heading = angle_between(north, horizon_direction)
+       if horizon_direction[2] < 0:
+           heading = 360 - heading
 
-       print "pitch: % 5.1f, yaw: % 5.1f" % (pitch, yaw)
+       print 'pitch = % 5.1f, heading = % 5.1f' % (pitch, heading)
 
        time.sleep(1)
