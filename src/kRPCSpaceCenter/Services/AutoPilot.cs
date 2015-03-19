@@ -90,7 +90,15 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public SpeedMode SpeedMode {
             get { return FlightUIController.speedDisplayMode.ToSpeedMode (); }
-            set { FlightUIController.speedDisplayMode = value.FromSpeedMode (); }
+            set {
+                var startMode = FlightUIController.speedDisplayMode;
+                var mode = value.FromSpeedMode ();
+                while (FlightUIController.speedDisplayMode != mode) {
+                    FlightUIController.fetch.cycleSpdModes ();
+                    if (FlightUIController.speedDisplayMode == startMode)
+                        break;
+                }
+            }
         }
 
         double ComputeSASError ()
