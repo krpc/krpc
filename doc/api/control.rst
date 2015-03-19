@@ -7,13 +7,6 @@ Control
    throttle, enabling/disabling systems such as SAS and RCS, or altering the
    direction in which the vessel is pointing.
 
-.. attribute:: Control.SAS
-
-   Gets or sets the state of SAS.
-
-   :rtype: `bool`
-   :returns: `True` if SAS is enabled, `False` if it is not.
-
 .. attribute:: Control.RCS
 
    Gets or sets the state of RCS.

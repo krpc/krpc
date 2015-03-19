@@ -6,6 +6,21 @@ AutoPilot
    Provides basic auto-piloting utilities for a vessel. Created by calling
    :attr:`Vessel.AutoPilot`.
 
+.. attribute:: AutoPilot.SAS
+
+   Gets or sets the state of SAS.
+
+   :rtype: `bool`
+   :returns: `True` if SAS is enabled, `False` if it is not.
+
+.. attribute:: AutoPilot.SASMode
+
+   Gets or sets the SAS mode. These modes are equivalent to the mode buttons to
+   the left of the navball that appear when SAS is enabled.
+
+   :rtype: :class:`SASMode`
+   :returns: The current :class:`SASMode`
+
 .. method:: AutoPilot.SetRotation (pitch, heading, roll = NaN, referenceFrame = Vessel.OrbitalReferenceFrame)
 
    Points the vessel in the specified direction, and holds it there. Setting the
@@ -41,12 +56,13 @@ AutoPilot
 .. attribute:: AutoPilot.Error
 
    Gets the error, in degrees, between the direction the ship has been asked to
-   point in and the actual direction it is pointing in. If the auto-pilot has
-   not been engaged, returns NaN.
+   point in and the actual direction it is pointing in. Works with SAS,
+   :meth:`AutoPilot.SetRotation` and :meth:`AutoPilot.SetDirection`. If the
+   auto-pilot has not been engaged, returns 0.
 
    :rtype: `double`
 
 .. method:: AutoPilot.Disengage ()
 
-   Disengage the auto-pilot.  Has no effect unless :meth:`AutoPilot.SetRotation`
+   Disengage the auto-pilot. Has no effect unless :meth:`AutoPilot.SetRotation`
    or :meth:`AutoPilot.SetDirection` have been called previously.

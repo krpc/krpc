@@ -51,3 +51,28 @@ VesselSituation
 .. data:: VesselSituation.Splashed
 
 .. data:: VesselSituation.SubOrbital
+
+SASMode
+-------
+
+.. class:: SASMode
+
+.. data:: SASMode.StabilityAssist
+
+.. data:: SASMode.Maneuver
+
+.. data:: SASMode.Prograde
+
+.. data:: SASMode.Retrograde
+
+.. data:: SASMode.Normal
+
+.. data:: SASMode.AntiNormal
+
+.. data:: SASMode.Radial
+
+.. data:: SASMode.AntiRadial
+
+.. data:: SASMode.Target
+
+.. data:: SASMode.AntiTarget
