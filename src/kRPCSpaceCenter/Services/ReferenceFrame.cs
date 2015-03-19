@@ -199,7 +199,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.Vessel:
                     return vessel.transform.up;
                 case Type.VesselOrbital:
-                    throw new NotImplementedException ();
+                    return vessel.GetOrbit ().GetVel ();
                 case Type.VesselSurface:
                     {
                         var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
@@ -217,7 +217,7 @@ namespace KRPCSpaceCenter.Services
 
         /// <summary>
         /// Returns the forward vector of the reference frame in world coordinates.
-        /// The direction in which the z axis points.
+        /// The direction in which the z-axis points.
         /// The vector is not normalized.
         /// </summary>
         Vector3d ForwardNotNormalized {
@@ -234,7 +234,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.Vessel:
                     return vessel.transform.forward;
                 case Type.VesselOrbital:
-                    throw new NotImplementedException ();
+                    return vessel.GetOrbit ().GetOrbitNormal ().SwapYZ ();
                 case Type.VesselSurface:
                     {
                         var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
