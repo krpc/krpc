@@ -129,5 +129,71 @@ class TestAutoPilot(testingtools.TestCase):
         self.set_direction(flight.anti_radial)
         self.check_direction(flight.anti_radial)
 
+class TestAutoPilotSAS(testingtools.TestCase):
+
+    def setUp(self):
+        load_save('autopilot')
+        self.conn = krpc.connect()
+        self.vessel = self.conn.space_center.active_vessel
+        self.ap = self.vessel.auto_pilot
+        self.sas_mode = self.conn.space_center.SASMode
+        self.speed_mode = self.conn.space_center.SpeedMode
+
+    def wait_for_autopilot(self):
+        while self.ap.error > 0.25:
+            time.sleep(0.25)
+
+            self.ap.sas = False
+
+    def test_sas_mode(self):
+        self.ap.sas = True
+        self.ap.sas_mode = self.sas_mode.stability_assist
+        self.vessel.control.add_node(self.conn.space_center.ut + 60, 100, 0, 0)
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.stability_assist)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.maneuver
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.maneuver)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.prograde
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.prograde)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.retrograde
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.retrograde)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.normal
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.normal)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.anti_normal
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_normal)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.radial
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.radial)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.anti_radial
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
+        time.sleep(0.25)
+        # No target set, should not change
+        # TODO: test with a target set
+        self.ap.sas_mode = self.sas_mode.target
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.anti_target
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
+
+    def test_speed_mode(self):
+        self.ap.speed_mode = self.speed_mode.orbit
+        self.assertEqual(self.ap.speed_mode, self.speed_mode.orbit)
+        time.sleep(0.25)
+        self.ap.speed_mode = self.speed_mode.surface
+        self.assertEqual(self.ap.speed_mode, self.speed_mode.surface)
+        time.sleep(0.25)
+        # No target set, should not change
+        # TODO: test with a target set
+        self.ap.speed_mode = self.speed_mode.target
+        self.assertEqual(self.ap.speed_mode, self.speed_mode.surface)
+        time.sleep(0.25)
+        self.ap.speed_mode = self.speed_mode.orbit
+        self.assertEqual(self.ap.speed_mode, self.speed_mode.orbit)
+
 if __name__ == "__main__":
     unittest.main()
