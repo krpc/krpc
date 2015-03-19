@@ -81,12 +81,16 @@ CelestialBody
 
    :rtype: `double`
 
+   .. note:: Calculated using `KSPs stock aerodynamic model`_.
+
 .. attribute:: CelestialBody.AtmopshereDensity
 
    Gets the density of the atmosphere at sea level, in :math:`kg/m^3`. Returns 0
    if the body has no atmosphere.
 
    :rtype: `double`
+
+   .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
 .. attribute:: CelestialBody.AtmosphereScaleHeight
 
@@ -96,12 +100,16 @@ CelestialBody
 
    :rtype: `double`
 
+   .. note:: Calculated using `KSPs stock aerodynamic model`_.
+
 .. attribute:: CelestialBody.AtmosphereMaxAltitude
 
    Gets the maximum altitude of the atmosphere, in meters. Returns 0 if the body
    has no atmosphere.
 
    :rtype: `double`
+
+   .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
 .. method:: CelestialBody.AtmopsherePressureAt (altitude)
 
@@ -111,6 +119,8 @@ CelestialBody
    :param double altitude:
    :rtype: `double`
 
+   .. note:: Calculated using `KSPs stock aerodynamic model`_.
+
 .. method:: CelestialBody.AtmopshereDensityAt (altitude)
 
    Returns the density of the atmosphere, in :math:`kg/m^3`, at the given
@@ -118,6 +128,8 @@ CelestialBody
 
    :param double altitude:
    :rtype: `double`
+
+   .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
 .. attribute:: CelestialBody.ReferenceFrame
 
@@ -196,3 +208,5 @@ CelestialBody
 
    :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`
+
+.. _KSPs stock aerodynamic model: http://wiki.kerbalspaceprogram.com/wiki/Atmosphere

@@ -1,6 +1,9 @@
 using System;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using KRPC.Service;
+using KRPCSpaceCenter.ExternalAPI;
 using UnityEngine;
 using KRPCSpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
@@ -85,6 +88,17 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         Vector3d WorldRadial {
             get { return Vector3d.Cross (WorldNormal, WorldPrograde); }
+        }
+
+        /// <summary>
+        /// Check that FAR is installed and that it is active for the vessel
+        /// </summary>
+        void CheckFAR ()
+        {
+            if (!FAR.IsAvailable)
+                throw new RPCException ("FAR is not available");
+            if (!FAR.ActiveControlSysIsOnVessel (this.vessel))
+                throw new RPCException ("FAR is not active on this vessel");
         }
 
         [KRPCProperty]
@@ -207,13 +221,129 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public double AtmosphereDensity {
+            get {
+                if (FAR.IsAvailable) {
+                    CheckFAR ();
+                    return FAR.GetActiveControlSys_AirDensity ();
+                } else {
+                    return new CelestialBody (vessel.mainBody).AtmosphereDensityAt (MeanAltitude);
+                }
+            }
+        }
+
+        [KRPCProperty]
         public double Drag {
             get {
+                if (FAR.IsAvailable)
+                    CheckFAR ();
                 var body = new CelestialBody (this.vessel.mainBody);
                 if (!body.HasAtmosphere)
                     return 0d;
                 var vessel = new Vessel (this.vessel);
-                return 0.5d * body.AtmosphereDensityAt (MeanAltitude) * Math.Pow (Speed, 2d) * vessel.DragCoefficient * vessel.CrossSectionalArea;
+                return 0.5d * AtmosphereDensity * Math.Pow (Speed, 2d) * DragCoefficient * vessel.CrossSectionalArea;
+            }
+        }
+
+        [KRPCProperty]
+        public double DynamicPressure {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_Q ();
+            }
+        }
+
+        [KRPCProperty]
+        public double AngleOfAttack {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_AoA ();
+            }
+        }
+
+        [KRPCProperty]
+        public double SideslipAngle {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_Sideslip ();
+            }
+        }
+
+        [KRPCProperty]
+        public double StallFraction {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_StallFrac ();
+            }
+        }
+
+        [KRPCProperty]
+        public double MachNumber {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_MachNumber ();
+            }
+        }
+
+        [KRPCProperty]
+        public double TerminalVelocity {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_TermVel ();
+            }
+        }
+
+        [KRPCProperty]
+        public double DragCoefficient {
+            get {
+                if (FAR.IsAvailable) {
+                    CheckFAR ();
+                    return FAR.GetActiveControlSys_Cd ();
+                } else {
+                    // Mass-weighted average of max_drag for each part
+                    // Note: Uses Part.mass, so does not include the mass of resources
+                    return vessel.Parts.Sum (p => p.maximum_drag * p.mass) / vessel.Parts.Sum (p => p.mass);
+                }
+            }
+        }
+
+        [KRPCProperty]
+        public double LiftCoefficient {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_Cl ();
+            }
+        }
+
+        [KRPCProperty]
+        public double PitchingMomentCoefficient {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_Cm ();
+            }
+        }
+
+        [KRPCProperty]
+        public double BallisticCoefficient {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_BallisticCoeff ();
+            }
+        }
+
+        [KRPCProperty]
+        public double ThrustSpecificFuelConsumption {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_TSFC ();
+            }
+        }
+
+        [KRPCProperty]
+        public string FARStatus {
+            get {
+                CheckFAR ();
+                return FAR.GetActiveControlSys_StatusMessage ();
             }
         }
     }

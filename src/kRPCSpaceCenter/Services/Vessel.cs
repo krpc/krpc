@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
+using KRPCSpaceCenter.ExternalAPI;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
@@ -36,6 +38,8 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Vessel : Equatable<Vessel>
     {
+        Comms comms;
+
         internal Vessel (global::Vessel vessel)
         {
             InternalVessel = vessel;
@@ -43,6 +47,8 @@ namespace KRPCSpaceCenter.Services
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
             Resources = new Resources (vessel);
+            if (RemoteTech.IsAvailable)
+                comms = new Comms (vessel);
         }
 
         internal global::Vessel InternalVessel { get; private set; }
@@ -110,6 +116,15 @@ namespace KRPCSpaceCenter.Services
         public Resources Resources { get; private set; }
 
         [KRPCProperty]
+        public Comms Comms {
+            get {
+                if (!RemoteTech.IsAvailable)
+                    throw new RPCException ("RemoteTech is not installed");
+                return comms;
+            }
+        }
+
+        [KRPCProperty]
         public double Mass {
             get {
                 return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.TotalMass ());
@@ -125,15 +140,11 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public double CrossSectionalArea {
-            get { return FlightGlobals.DragMultiplier * Mass; }
-        }
-
-        [KRPCProperty]
-        public double DragCoefficient {
             get {
-                // Mass-weighted average of max_drag for each part
-                // Note: Uses Part.mass, so does not include the mass of resources
-                return InternalVessel.Parts.Sum (p => p.maximum_drag * p.mass) / InternalVessel.Parts.Sum (p => p.mass);
+                if (FAR.IsAvailable)
+                    return FAR.GetActiveControlSys_RefArea ();
+                else
+                    return FlightGlobals.DragMultiplier * Mass;
             }
         }
 

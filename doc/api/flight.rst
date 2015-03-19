@@ -141,36 +141,137 @@ Flight
 
    :rtype: :class:`Vector3`
 
+.. attribute:: Flight.AtmosphereDensity
+
+   Gets the current density of the atmosphere around the vessel, in
+   :math:`kg/m^3`.
+
+   :rtype: `double`
+
+   .. note:: Calculated using `Ferram Aerospace Research`_ if it is
+      installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
+
 .. attribute:: Flight.Drag
 
-   Gets the aerodynamic drag currently acting on the vessel in :math:`kg.m/s^2`.
+   Gets the aerodynamic drag force currently acting on the vessel, in Newtons.
 
    :rtype: double
 
-   .. note::
+.. attribute:: Flight.DynamicPressure
 
-      This is calculated using `KSPs basic aerodynamic model
-      <http://wiki.kerbalspaceprogram.com/wiki/Atmosphere>`_.
+   Gets the dynamic pressure acting on the vessel. This is a measure of the
+   strength of the aerodynamic forces. It is equal to :math:`\frac{1}{2}
+   . \mbox{air density} .  \mbox{velocity}^2`, and is measured in :math:`kg .
+   m^{-1}s^{-2}`. It is commonly denoted as :math:`Q`.
 
-Examples
---------
+   :rtype: `double`
 
-Getting the orbital speed of a vessel
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   .. note:: Requires `Ferram Aerospace Research`_
 
-.. code-block:: python
+.. attribute:: Flight.AngleOfAttack
 
-   conn = krpc.connect()
-   vessel = conn.space_center.active_vessel
-   flight = vessel.flight()
-   orbital_speed = flight.speed
+   Gets the pitch angle between the orientation of the vessel and its velocity
+   vector, in degrees. (The angle between the mean chord of the wing and the
+   free-stream velocity.)
 
-Getting the vertical speed of a vessel relative to the surface
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   :rtype: `double`
 
-.. code-block:: python
+   .. note:: Requires `Ferram Aerospace Research`_
 
-   conn = krpc.connect()
-   vessel = conn.space_center.active_vessel
-   flight = vessel.flight(vessel.SurfaceReferenceFrame)
-   surface_speed = flight.vertical_speed
+.. attribute:: Flight.SideslipAngle
+
+   Gets the yaw angle between the orientation of the vessel and its velocity
+   vector, in degrees. (The angle between the center line of the aircraft or
+   rocket and the free-stream velocity in the lateral plane.)
+
+   :rtype: `double`
+
+   .. note:: Requires `Ferram Aerospace Research`_
+
+.. attribute:: Flight.StallFraction
+
+   Gets the current amount of stall, between 0 and 1. A value greater than 0.005
+   indicates a minor stall and a value greater than 0.5 indicates a large-scale
+   stall.
+
+   :rtype: `double`
+
+   .. note:: Requires `Ferram Aerospace Research`_
+
+.. attribute:: Flight.MachNumber
+
+   Gets the current mach number for the vessel. This is the current velocity
+   divided by the local speed of sound.
+
+   :rtype: `double`
+
+   .. note:: Requires `Ferram Aerospace Research`_
+
+.. attribute:: Flight.TerminalVelocity
+
+   Gets the terminal velocity of the vessel, in :math:`m/s`. This is the speed
+   at which the drag forces cancel out the force of gravity.
+
+   :rtype: `double`
+
+   .. note:: Requires `Ferram Aerospace Research`_
+
+.. attribute:: Flight.DragCoefficient
+
+   Gets the coefficient of drag. This is the amount of drag produced by the
+   vessel. When calculated using `Ferram Aerospace Research`_ it depends on air
+   speed, air density and wing area.
+
+   :rtype: `double`
+
+   .. note:: Calculated using `Ferram Aerospace Research`_ if it is
+      installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
+
+.. attribute:: Flight.LiftCoefficient
+
+   Gets the coefficient of lift. This is the amount of lift produced by the
+   vessel, and depends on air speed, air density and wing area.
+
+   :rtype: `double`
+
+   .. note:: Requires `Ferram Aerospace Research`_
+
+.. attribute:: Flight.PitchingMomentCoefficient
+
+   Gets the `pitching moment coefficient
+   <http://en.wikipedia.org/wiki/Pitching_moment#Coefficient>`_.
+
+   :rtype: `double`
+
+   .. note:: Requires `Ferram Aerospace Research`_
+
+.. attribute:: Flight.BallisticCoefficient
+
+   Gets the `ballistic coefficient
+   <http://en.wikipedia.org/wiki/Ballistic_coefficient>`_.
+
+   :rtype: `double`
+
+   .. note:: Requires `Ferram Aerospace Research`_
+
+.. attribute:: Flight.ThrustSpecificFuelConsumption
+
+   Gets the thrust specific fuel consumption for the jet engines on the
+   vessel. This is a measure of the efficiency of the engines, with a lower
+   value indicating a more efficient vessel. This value is the number of Newtons
+   of fuel that are burned, per hour, to product one newton of thrust.
+
+   :rtype: `double`
+
+   .. note:: Requires `Ferram Aerospace Research`_
+
+.. attribute:: Flight.FARStatus
+
+   Gets current status message from `Ferram Aerospace Research`_.
+
+   :rtype: `string`
+
+   .. note:: Requires `Ferram Aerospace Research`_
+
+.. _Ferram Aerospace Research: http://forum.kerbalspaceprogram.com/threads/20451-0-90-Ferram-Aerospace-Research-v0-14-6-12-27-14
+.. _KSPs stock aerodynamic model: http://wiki.kerbalspaceprogram.com/wiki/Atmosphere

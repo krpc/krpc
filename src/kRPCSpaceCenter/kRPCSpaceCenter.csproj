@@ -78,6 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\CelestialBody.cs" />
+    <Compile Include="Services\Comms.cs" />
     <Compile Include="Services\Control.cs" />
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\Node.cs" />

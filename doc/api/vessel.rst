@@ -73,6 +73,15 @@ Vessel
 
    :rtype: :class:`Resources`
 
+.. attribute:: Vessel.Comms
+
+   Gets a :class:`Comms` object, that can used to interact with `RemoteTech`_
+   for this vessel.
+
+   :rtype: :class:`Comms`
+
+   .. note:: Requires `RemoteTech`_ to be installed.
+
 .. attribute:: Vessel.Mass
 
    Gets the total mass of the vessel (including resources) in kg.
@@ -87,23 +96,13 @@ Vessel
 
 .. attribute:: Vessel.CrossSectionalArea
 
-   Gets the cross sectional area of the vessel in :math:`m^3`.
+   Gets the cross sectional area of the vessel in :math:`m^3`. See
+   :attr:`Flight.Drag`.
 
    :rtype: `double`
 
-   .. note::
-      This is calculated using `KSPs basic aerodynamic model
-      <http://wiki.kerbalspaceprogram.com/wiki/Atmosphere>`_.
-
-.. attribute:: Vessel.DragCoefficient
-
-   Gets the drag coefficient for the vessel (a dimensionless quantity).
-
-   :rtype: `double`
-
-   .. note::
-      This is calculated using `KSPs basic aerodynamic model
-      <http://wiki.kerbalspaceprogram.com/wiki/Atmosphere>`_.
+   .. note:: Calculated using `Ferram Aerospace Research`_ if it is
+      installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
 
 .. attribute:: Vessel.Thrust
 
@@ -198,3 +197,7 @@ Vessel
 
    :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`
+
+.. _Ferram Aerospace Research: http://forum.kerbalspaceprogram.com/threads/20451-0-90-Ferram-Aerospace-Research-v0-14-6-12-27-14
+.. _RemoteTech: http://forum.kerbalspaceprogram.com/threads/83305-0-90-0-RemoteTech-v1-6-3-2015-02-06
+.. _KSPs stock aerodynamic model: http://wiki.kerbalspaceprogram.com/wiki/Atmosphere
