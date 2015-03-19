@@ -5,27 +5,32 @@ All of the positions, directions, velocities, rotations etc. need to be relative
 to something -- which is where reference frames come in.
 
 A reference frame is defined by an origin (the position ``(0,0,0)``) and a set
-of axes (``x``, ``y``, and ``z``. The reference frame can also have a linear
+of axes (``x``, ``y``, and ``z``). The reference frame can also have a linear
 velocity (the velocity of the origin) and an angular/rotational velocity which
 specifies the speed at which the axes rotate.
+
+.. note:: KSP, and therefore kRPC and its reference frames, uses a left handed
+          coordinate system.
 
 .. figure:: /images/tutorials/celestial-body-reference-frame.*
    :align: right
    :figwidth: 250
 
    The reference frame for a celestial body, such as Kerbin. The equator is
-   shown in blue, and the prime meridian in red. The black arrows show the x and
-   y axes, and the origin is at the center of the planet.
+   shown in blue, and the prime meridian in red. The black arrows show the axes,
+   and the origin is at the center of the planet.
 
 For example, the reference frame obtained by calling
 :attr:`CelestialBody.reference_frame` for Kerbin has the following properties:
 
-* The origin is the center of Kerbin,
+* The origin is at the center of Kerbin,
 
 * the y-axis points from the center of Kerbin to the north pole,
 
 * the x-axis points from the center of Kerbin to the intersection of the prime
   meridian and equator (the surface position at 0° longitude, 0° latitude),
+
+* the z-axis points from the center of Kerbin to the equator at 90°E longitude,
 
 * and the axes rotate with the planet, i.e. the reference frame has the same
   rotational/angular velocity as Kerbin.
@@ -34,9 +39,17 @@ For example, the reference frame obtained by calling
 
    ..
 
+.. figure:: /images/tutorials/vessel-orbital-reference-frame.*
+   :align: right
+   :figwidth: 350
+
+   The orbital reference frame for a vessel. The black arrows show the axes,
+   aligned with the orbital directions, and the origin is at the center of mass
+   of the vessel.
+
 Another example of a reference frame is the one obtained by calling
 :attr:`Vessel.orbital_reference_frame` for the current vessel. This reference
-frame is attached to the vessel (the origin moves with the vessel) but is
+frame is attached to the vessel (the origin moves with the vessel) but it is
 orientated so that the axes point in the orbital prograde/normal/radial
 directions:
 
@@ -44,14 +57,18 @@ directions:
 
 * the y-axis points in the prograde direction of the vessels orbit,
 
-* the x-axis points in the radial direction of the vessels orbit,
+* the x-axis points in the anti-radial direction of the vessels orbit,
 
-* and the axes rotate with any changes to the prograde/normal/radial directions.
+* the z-axis points in the normal direction of the vessels orbit,
+
+* and the axes rotate with any changes to the prograde/normal/radial directions,
+  for example when the prograde direction changes as the vessel continues on its
+  orbit.
 
 Compare this to the reference frame returned by calling
 :attr:`Vessel.reference_frame`. This reference frame is also attached to the
 vessel (the origin moves with the vessel), however its orientation is
-different. The axes is track the orientation of the vessel.
+different. The axes track the orientation of the vessel:
 
 * The origin is at the center of mass of the vessel,
 
@@ -60,9 +77,6 @@ different. The axes is track the orientation of the vessel.
 * the x-axis and z-axis point out to the side of the vessel,
 
 * and the axes rotate with any changes to the direction of the vessel.
-
-The following sections demonstrate the use of reference frame in a few different
-scenarios.
 
 Navball directions
 ------------------
@@ -77,7 +91,7 @@ the navball:
    conn = krpc.connect()
    vessel = conn.space_center.active_vessel
 
-   # Point the vessel north on the navball
+   # Point the vessel north on the navball, with a pitch of 0 degrees
    vessel.auto_pilot.set_direction((0,1,0), reference_frame = vessel.surface_reference_frame)
    while vessel.auto_pilot.error > 0.1:
        pass
@@ -87,7 +101,7 @@ the navball:
    while vessel.auto_pilot.error > 0.1:
        pass
 
-   # Point the vessel east
+   # Point the vessel west (heading of 270 degrees), with a pitch of 0 degrees
    vessel.auto_pilot.set_direction((0,0,-1), reference_frame = vessel.surface_reference_frame)
    while vessel.auto_pilot.error > 0.1:
        pass
@@ -102,8 +116,8 @@ x-axis) in the vessel's surface reference frame. This x-axis of the reference
 frame points upwards (away from the planet) as required.
 
 Line 16 instructs the auto-pilot to point in direction ``(0,0,-1)`` (along the
-negative z axis). The z-axis of the reference frame points west, so the request
-direction points east -- as required.
+negative z axis). The z-axis of the reference frame points east, so the
+requested direction points west -- as required.
 
 Orbital directions
 ------------------
@@ -126,6 +140,11 @@ directions, as seen on the navball when it is in 'orbit' mode, using the
 
    # Point the vessel in the orbit normal direction
    vessel.auto_pilot.set_direction((0,0,1), reference_frame = vessel.orbital_reference_frame)
+   while vessel.auto_pilot.error > 0.1:
+       pass
+
+   # Point the vessel in the orbit radial direction
+   vessel.auto_pilot.set_direction((-1,0,0), reference_frame = vessel.orbital_reference_frame)
    while vessel.auto_pilot.error > 0.1:
        pass
 

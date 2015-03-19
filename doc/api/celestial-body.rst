@@ -139,10 +139,12 @@ CelestialBody
 
    * The axes rotate with the body.
 
-   * The y-axis points from the center of the body towards the north pole.
-
    * The x-axis points from the center of the body towards the intersection of
      the prime meridian and equator (the position at 0° longitude, 0° latitude).
+
+   * The y-axis points from the center of the body towards the north pole.
+
+   * The z-axis points from the center of the body towards the equator at 90°E longitude.
 
    :rtype: :class:`ReferenceFrame`
 
@@ -155,9 +157,11 @@ CelestialBody
 
    * The axes rotate with the orbital prograde/normal/radial directions.
 
-   * The x-axis points in the orbital normal direction.
+   * The x-axis points in the orbital anti-radial direction.
 
    * The y-axis points in the orbital prograde direction.
+
+   * The z-axis points in the orbital normal direction.
 
    :rtype: :class:`ReferenceFrame`
 

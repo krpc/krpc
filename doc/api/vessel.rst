@@ -30,7 +30,7 @@ Vessel
 
    :rtype: `double`
 
-.. method:: Vessel.Flight (referenceFrame = Vessel.Orbital)
+.. method:: Vessel.Flight (referenceFrame = Vessel.OrbitalReferenceFrame)
 
    Gets a :class:`Flight` object that can be used to get flight telemetry for
    the vessel, in the specified reference frame.
@@ -145,9 +145,11 @@ Vessel
 
    * The axes rotate with the orbital prograde/normal/radial directions.
 
-   * The x-axis points in the orbital radial direction.
+   * The x-axis points in the orbital anti-radial direction.
 
    * The y-axis points in the orbital prograde direction.
+
+   * The z-axis points in the orbital normal direction.
 
    :rtype: :class:`ReferenceFrame`
 
@@ -163,11 +165,14 @@ Vessel
    * The axes rotate with the north and up directions on the surface of the
      body.
 
-   * The x-axis points normal to the body being orbited (from the center of the
-     body towards the center of mass of the vessel).
+   * The x-axis points upwards, normal to the body being orbited (from the
+     center of the body towards the center of mass of the vessel).
 
-   * The y-axis points northwards and tangential to the surface of the body
-     (i.e. the direction in which a compass would point when on the surface)
+   * The y-axis points north, and tangential to the surface of the body (the
+     direction in which a compass would point when on the surface)
+
+   * The z-axis points east, and tangential to the surface of the body (east on
+     a compass when on the surface).
 
    :rtype: :class:`ReferenceFrame`
 
