@@ -21,6 +21,14 @@ AutoPilot
    :rtype: :class:`SASMode`
    :returns: The current :class:`SASMode`
 
+.. attribute:: AutoPilot.SpeedMode
+
+   Gets or sets the speed mode of the navball. This is the mode displayed next
+   to the speed at the top of the navball.
+
+   :rtype: :class:`SpeedMode`
+   :returns: The current :class:`SpeedMode`
+
 .. method:: AutoPilot.SetRotation (pitch, heading, roll = NaN, referenceFrame = Vessel.OrbitalReferenceFrame)
 
    Points the vessel in the specified direction, and holds it there. Setting the

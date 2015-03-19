@@ -76,3 +76,14 @@ SASMode
 .. data:: SASMode.Target
 
 .. data:: SASMode.AntiTarget
+
+SpeedMode
+---------
+
+.. class:: SpeedMode
+
+.. data:: SpeedMode.Orbit
+
+.. data:: SpeedMode.Surface
+
+.. data:: SpeedMode.Target
