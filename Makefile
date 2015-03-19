@@ -192,7 +192,11 @@ logo:
 
 # Tools / Other ----------------------------------------------------------------
 
-ksp: install TestingTools
+ksp: build TestingTools
+	test -d "$(KSP_DIR)/GameData"
+	rm -rf "$(KSP_DIR)/GameData/kRPC"
+	mkdir "$(KSP_DIR)/GameData/kRPC"
+	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(KSP_DIR)/GameData/kRPC/
 	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.dll "$(KSP_DIR)/GameData/"
 	-cp settings.cfg "$(KSP_DIR)/GameData/kRPC/settings.cfg"
 	test "!" -f "$(KSP_DIR)/KSP.x86_64" || "$(KSP_DIR)/KSP.x86_64" &
