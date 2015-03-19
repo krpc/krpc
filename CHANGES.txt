@@ -9,6 +9,8 @@ v0.1.5
   * Add Flight.Longitude and Latitude
   * Add Control.WheelThrottle and WheelSteering
   * Control.ActivateNextStage returns a list of vessels that are jettisoned
+  * Add FAR support and functionality
+  * Add RemoteTech support and functionality
 
 v0.1.4
 * General changes:

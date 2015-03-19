@@ -263,5 +263,27 @@ class TestFlightAtLaunchpad(testingtools.TestCase):
         self.assertClose(-0.09694444, flight.latitude, 0.001)
         self.assertClose(-74.5575, flight.longitude, 0.001)
 
+    def test_ferram_aerospace_research(self):
+        flight = self.vessel.flight()
+
+        self.assertClose(1.188, flight.atmosphere_density, 0.001)
+        self.assertClose(0, flight.drag, 0.5)
+        self.assertClose(0, flight.dynamic_pressure)
+
+        self.assertClose(0, flight.angle_of_attack, 2)
+        self.assertClose(-27, flight.sideslip_angle, 2)
+        self.assertClose(0, flight.stall_fraction)
+
+        self.assertClose(0, flight.mach_number)
+        self.assertClose(193, flight.terminal_velocity, 0.5)
+
+        self.assertClose(0.103, flight.drag_coefficient, 0.001)
+        self.assertClose(0, flight.lift_coefficient, 0.001)
+        self.assertClose(0, flight.pitching_moment_coefficient, 0.001)
+        self.assertClose(2260, flight.ballistic_coefficient, 1)
+        self.assertClose(0, flight.thrust_specific_fuel_consumption)
+
+        self.assertEqual('Nominal', flight.far_status)
+
 if __name__ == "__main__":
     unittest.main()

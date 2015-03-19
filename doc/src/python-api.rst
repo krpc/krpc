@@ -13,6 +13,7 @@ Python API
    python-api/control
    python-api/resources
    python-api/node
+   python-api/comms
    python-api/reference-frame
    python-api/auto-pilot
    python-api/enumeration-types

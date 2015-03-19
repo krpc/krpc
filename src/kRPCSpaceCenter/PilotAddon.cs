@@ -1,5 +1,6 @@
 using UnityEngine;
 using KRPC;
+using KRPCSpaceCenter.ExternalAPI;
 
 namespace KRPCSpaceCenter
 {
@@ -45,22 +46,38 @@ namespace KRPCSpaceCenter
         {
             if (controlledVessel == null && FlightGlobals.ActiveVessel != null) {
                 controlledVessel = FlightGlobals.ActiveVessel;
-                controlledVessel.OnFlyByWire += Fly;
+                AddPilot ();
             } else if (controlledVessel != null && FlightGlobals.ActiveVessel == null) {
-                controlledVessel.OnFlyByWire -= Fly;
+                RemovePilot ();
                 controlledVessel = null;
             } else if (controlledVessel != FlightGlobals.ActiveVessel) {
-                controlledVessel.OnFlyByWire -= Fly;
+                RemovePilot ();
                 controlledVessel = FlightGlobals.ActiveVessel;
-                controlledVessel.OnFlyByWire += Fly;
+                AddPilot ();
             }
         }
 
         public void OnDestroy ()
         {
             if (controlledVessel != null)
-                controlledVessel.OnFlyByWire -= Fly;
+                RemovePilot ();
             Services.AutoPilot.Clear ();
+        }
+
+        void AddPilot ()
+        {
+            if (RemoteTech.IsAvailable && RemoteTech.HasFlightComputer (controlledVessel.id))
+                RemoteTech.AddSanctionedPilot (controlledVessel.id, Fly);
+            else
+                controlledVessel.OnFlyByWire += Fly;
+        }
+
+        void RemovePilot ()
+        {
+            if (RemoteTech.IsAvailable && RemoteTech.HasFlightComputer (controlledVessel.id))
+                RemoteTech.RemoveSanctionedPilot (controlledVessel.id, Fly);
+            else
+                controlledVessel.OnFlyByWire -= Fly;
         }
 
         static void Fly (FlightCtrlState state)
