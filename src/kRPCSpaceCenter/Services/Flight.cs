@@ -75,11 +75,7 @@ namespace KRPCSpaceCenter.Services
         Vector3d WorldNormal {
             get {
                 // Note: y and z components of normal vector are swapped
-                var normal = vessel.GetOrbit ().GetOrbitNormal ();
-                var tmp = normal.y;
-                normal.y = normal.z;
-                normal.z = tmp;
-                return normal.normalized;
+                return vessel.GetOrbit ().GetOrbitNormal ().SwapYZ ().normalized;
             }
         }
 
