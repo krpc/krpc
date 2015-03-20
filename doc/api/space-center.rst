@@ -94,3 +94,16 @@ resources, planning maneuver nodes and auto-piloting.
    :param ReferenceFrame to: The reference frame to covert the velocity vector to.
    :return: The corresponding velocity in reference frame `to`.
    :rtype: :class:`Vector3`
+
+.. method:: SpaceCenter.DrawDirection (direction, referenceFrame, color, [length])
+
+   Draw a direction vector on the active vessel.
+
+   :param Vector3 direction: Direction to draw the line in.
+   :param ReferenceFrame referenceFrame: Reference frame that the direction is in.
+   :param Vector3 color: The color to use for the line, as an r,g,b color.
+   :param float length: The length of the line. Defaults to 10.
+
+.. method:: SpaceCenter.ClearDirections ()
+
+   Remove all directions currently being drawn.

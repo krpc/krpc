@@ -155,5 +155,17 @@ namespace KRPCSpaceCenter.Services
             var worldVelocity = from.VelocityToWorldSpace (position.ToVector (), velocity.ToVector ());
             return to.VelocityFromWorldSpace (worldPosition, worldVelocity).ToTuple ();
         }
+
+        [KRPCProcedure]
+        public static void DrawDirection (Tuple3 direction, ReferenceFrame referenceFrame, Tuple3 color, float length = 10f)
+        {
+            DrawAddon.AddDirection (direction.ToVector (), referenceFrame, color, length);
+        }
+
+        [KRPCProcedure]
+        public static void ClearDirections ()
+        {
+            DrawAddon.ClearDirections ();
+        }
     }
 }

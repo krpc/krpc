@@ -2,7 +2,7 @@ using System;
 
 namespace KRPC.Server
 {
-    class ClientDisconnectedArgs : EventArgs, IClientEventArgs
+    public class ClientDisconnectedArgs : EventArgs, IClientEventArgs
     {
         public IClient Client { get; private set; }
 

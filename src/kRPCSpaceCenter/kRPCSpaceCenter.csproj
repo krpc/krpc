@@ -66,6 +66,7 @@
     <Folder Include="Schema\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrawAddon.cs" />
     <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
