@@ -17,6 +17,7 @@ namespace KRPCSpaceCenter.Services
             Vessel,
             VesselOrbital,
             VesselSurface,
+            VesselSurfaceVelocity,
             Maneuver,
             ManeuverOrbital
         }
@@ -83,6 +84,11 @@ namespace KRPCSpaceCenter.Services
             return new ReferenceFrame (Type.VesselSurface, null, vessel, null);
         }
 
+        internal static ReferenceFrame SurfaceVelocity (global::Vessel vessel)
+        {
+            return new ReferenceFrame (Type.VesselSurfaceVelocity, null, vessel, null);
+        }
+
         internal static ReferenceFrame Object (ManeuverNode node)
         {
             return new ReferenceFrame (Type.Maneuver, null, null, node);
@@ -106,6 +112,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.Vessel:
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
+                case Type.VesselSurfaceVelocity:
                     return vessel.GetWorldPos3D ();
                 case Type.Maneuver:
                 case Type.ManeuverOrbital:
@@ -200,6 +207,8 @@ namespace KRPCSpaceCenter.Services
                         var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
                         return Vector3d.Exclude (right, ToNorthPole (vessel).normalized);
                     }
+                case Type.VesselSurfaceVelocity:
+                    return vessel.srf_velocity;
                 case Type.Maneuver:
                     return new Node (node).WorldBurnVector;
                 case Type.ManeuverOrbital:
@@ -238,6 +247,14 @@ namespace KRPCSpaceCenter.Services
                         var northPole = ToNorthPole (vessel).normalized;
                         return Vector3d.Cross (right, northPole);
                     }
+                case Type.VesselSurfaceVelocity:
+                    {
+                        // Compute orthogonal vector to vessels velocity, in the horizon plane
+                        var up = vessel.GetWorldPos3D () - vessel.mainBody.position;
+                        var velocity = vessel.srf_velocity;
+                        var proj = GeometryExtensions.ProjectVectorOntoPlane (up, velocity);
+                        return Vector3d.Cross (up, proj);
+                    }
                 case Type.Maneuver:
                     {
                         var up = UpNotNormalized;
@@ -270,6 +287,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.Vessel:
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
+                case Type.VesselSurfaceVelocity:
                     return vessel.GetOrbit ().GetVel ();
                 case Type.Maneuver:
                 case Type.ManeuverOrbital:
@@ -299,6 +317,8 @@ namespace KRPCSpaceCenter.Services
                 case Type.VesselOrbital:
                     throw new NotImplementedException ();
                 case Type.VesselSurface:
+                    throw new NotImplementedException ();
+                case Type.VesselSurfaceVelocity:
                     throw new NotImplementedException ();
                 case Type.Maneuver:
                     throw new NotImplementedException ();

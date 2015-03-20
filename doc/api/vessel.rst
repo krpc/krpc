@@ -178,6 +178,22 @@ Vessel
 
    .. note:: Be careful not to confuse this with 'surface' mode on the navball.
 
+.. attribute:: Vessel.SurfaceVelocityReferenceFrame
+
+   Gets the reference frame that is fixed relative to the vessel, and orientated
+   with the velocity vector of the vessel relative to the surface of the body
+   being orbited.
+
+   * The origin is at the center of mass of the vessel.
+
+   * The axes rotate with the vessel's velocity vector.
+
+   * The y-axis points in the direction of the vessel's velocity vector.
+
+   * The z-axis points in a the plane of the horizon.
+
+   :rtype: :class:`ReferenceFrame`
+
 .. method:: Vessel.Position (referenceFrame)
 
    Returns the position vector of the center of mass of the vessel in the given

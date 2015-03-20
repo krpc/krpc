@@ -225,6 +225,11 @@ namespace KRPCSpaceCenter.Services
             get { return ReferenceFrame.Surface (InternalVessel); }
         }
 
+        [KRPCProperty]
+        public ReferenceFrame SurfaceVelocityReferenceFrame {
+            get { return ReferenceFrame.SurfaceVelocity (InternalVessel); }
+        }
+
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {

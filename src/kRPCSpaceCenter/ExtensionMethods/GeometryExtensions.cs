@@ -261,5 +261,13 @@ namespace KRPCSpaceCenter.ExtensionMethods
             var z = (right.y - up.x) * r;
             return new QuaternionD (x, y, z, w);
         }
+
+        /// <summary>
+        /// Project a vector onto a plane, defined by its normal
+        /// </summary>
+        public static Vector3d ProjectVectorOntoPlane (Vector3d normal, Vector3d v)
+        {
+            return v - normal * Vector3d.Dot (normal, v);
+        }
     }
 }
