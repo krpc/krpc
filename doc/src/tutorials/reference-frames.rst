@@ -1,6 +1,12 @@
 Reference Frames
 ================
 
+.. contents::
+   :local:
+
+Introduction
+------------
+
 All of the positions, directions, velocities, rotations etc. need to be relative
 to something -- which is where reference frames come in.
 
@@ -185,7 +191,7 @@ negative z axis). The z-axis of the reference frame points east, so the
 requested direction points west -- as required.
 
 Orbital directions
-------------------
+^^^^^^^^^^^^^^^^^^
 
 This example demonstrates how to make the vessel point in the various orbital
 directions, as seen on the navball when it is in 'orbit' mode, using the
@@ -214,7 +220,7 @@ directions, as seen on the navball when it is in 'orbit' mode, using the
        pass
 
 Surface speed
--------------
+^^^^^^^^^^^^^
 
 To compute the speed of a vessel relative to the surface of a planet/moon, you
 need to get the velocity relative to the planets's reference frame using
@@ -240,7 +246,7 @@ computing the velocity of the vessel:
        time.sleep(1)
 
 Surface 'prograde'
-------------------
+^^^^^^^^^^^^^^^^^^
 
 This example demonstrates how to point the vessel in the 'prograde' direction on
 the navball, when in surface mode. This is the direction of the velocity of the
@@ -264,7 +270,7 @@ below.
    :align: center
 
 Angle of attack
----------------
+^^^^^^^^^^^^^^^
 
 This example computes the angle between the direction the vessel is pointing in,
 and the direction that the vessel is moving in (relative to the surface):
