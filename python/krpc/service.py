@@ -161,6 +161,8 @@ class _Service(BaseService):
                                                                param_names=param_names, param_types=param_types,
                                                                return_type=return_type))
         setattr(func, '_return_type', return_type)
+        if procedure.HasField('documentation'):
+            setattr(func, '__doc__', procedure.documentation)
         setattr(cls, _to_snake_case(method_name), func)
 
     def _add_class_property(self, class_name, property_name, getter=None, setter=None):
