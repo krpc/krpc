@@ -26,53 +26,54 @@ namespace KRPC.Utils
                 }
             }
             var xml = documentationFiles [path];
-            var query = "string(/doc/members/member[@name='" + GetMemberElementName (member) + "']/summary)";
+            var query = "string(/doc/members/member[@name='" + GetDocumentationName (member) + "']/summary)";
             return xml == null ? "" : xml.XPathEvaluate (query).ToString ().Trim ();
         }
 
-        static String GetMemberElementName (MemberInfo member)
+        internal static string GetDocumentationName (MemberInfo member)
         {
-            char prefixCode;
-            string memberName = member is Type ? ((Type)member).FullName : (member.DeclaringType.FullName + "." + member.Name);
+            char prefix = '?';
+            string name = member is Type ? ((Type)member).FullName : (member.DeclaringType.FullName + "." + member.Name);
+            name = name.Replace ('+', '.');
 
             switch (member.MemberType) {
 
-            case MemberTypes.Constructor:
-                memberName = memberName.Replace (".ctor", "#ctor");
-                goto case MemberTypes.Method;
+            case MemberTypes.NestedType:
+            case MemberTypes.TypeInfo:
+                prefix = 'T';
+                break;
 
             case MemberTypes.Method:
-                prefixCode = 'M';
-                string paramTypesList = String.Join (",", ((MethodBase)member).GetParameters ().Select (x => x.ParameterType.FullName).ToArray ());
-                paramTypesList = paramTypesList.Replace ('+', '.');
-                if (!String.IsNullOrEmpty (paramTypesList))
-                    memberName += "(" + paramTypesList + ")";
-                break;
-
-            case MemberTypes.Event:
-                prefixCode = 'E';
-                break;
-
-            case MemberTypes.Field:
-                prefixCode = 'F';
-                break;
-
-            case MemberTypes.NestedType:
-                memberName = memberName.Replace ('+', '.');
-                goto case MemberTypes.TypeInfo;
-
-            case MemberTypes.TypeInfo:
-                prefixCode = 'T';
+                prefix = 'M';
+                var parameters = String.Join (",", ((MethodBase)member).GetParameters ().Select (x => ParameterName (x)).ToArray ());
+                if (!String.IsNullOrEmpty (parameters))
+                    name += "(" + parameters + ")";
                 break;
 
             case MemberTypes.Property:
-                prefixCode = 'P';
+                prefix = 'P';
                 break;
 
             default:
-                throw new ArgumentException ("Unknown member type", "member");
+                throw new ArgumentException ("Unknown member type");
             }
-            return prefixCode + ":" + memberName;
+            return prefix + ":" + name;
+        }
+
+        static string TypeName (Type type)
+        {
+            var name = type.FullName;
+            name = name.Replace('+', '.');
+            if (!type.IsGenericType)
+                return name;
+            name = name.Remove (name.IndexOf ('`'));
+            var typeArguments = "{" + String.Join (",", type.GetGenericArguments ().Select (x => TypeName (x)).ToArray ()) + "}";
+            return name + typeArguments;
+        }
+
+        static string ParameterName (ParameterInfo parameter)
+        {
+            return TypeName (parameter.ParameterType);
         }
     }
 }
