@@ -201,9 +201,9 @@ namespace KRPCSpaceCenter.Services
                         return Vector3d.Exclude (right, ToNorthPole (vessel).normalized);
                     }
                 case Type.Maneuver:
-                    throw new NotImplementedException ();
+                    return new Node (node).WorldBurnVector;
                 case Type.ManeuverOrbital:
-                    return node.patch.GetOrbitNormal ().SwapYZ ();
+                    return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -239,9 +239,18 @@ namespace KRPCSpaceCenter.Services
                         return Vector3d.Cross (right, northPole);
                     }
                 case Type.Maneuver:
-                    throw new NotImplementedException ();
+                    {
+                        var up = UpNotNormalized;
+                        // Pick an arbitrary vector that is not close to the burn vector
+                        var forward = Planetarium.forward;
+                        if (Vector3d.Dot (up, forward) < 0.1)
+                            forward = Planetarium.up;
+                        // Make the arbitrary vector orthogonal to the burn vector
+                        GeometryExtensions.OrthoNormalize2 (ref up, ref forward);
+                        return forward;
+                    }
                 case Type.ManeuverOrbital:
-                    return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
+                    return node.patch.GetOrbitNormal ().SwapYZ ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
