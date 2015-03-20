@@ -268,7 +268,8 @@ namespace KRPC
                     Request request = client.Stream.Read ();
                     if (OnClientActivity != null)
                         OnClientActivity (this, new ClientActivityArgs (client));
-                    Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")");
+                    if (Logger.ShouldLog (Logger.Severity.Debug))
+                        Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")", Logger.Severity.Debug);
                     continuations.Add (new RequestContinuation (client, request));
                 }
             }
@@ -293,7 +294,8 @@ namespace KRPC
             } catch (Exception e) {
                 response = Response.CreateBuilder ();
                 response.Error = e.ToString ();
-                Logger.WriteLine (e.ToString ());
+                if (Logger.ShouldLog (Logger.Severity.Debug))
+                    Logger.WriteLine (e.ToString (), Logger.Severity.Debug);
             } finally {
                 Context.Clear ();
             }
@@ -304,10 +306,12 @@ namespace KRPC
             //TODO: handle partial response exception
             //TODO: remove cast
             ((RPCClient)client).Stream.Write (builtResponse);
-            if (response.HasError)
-                Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")");
-            else
-                Logger.WriteLine ("Sent response to client " + client.Address);
+            if (Logger.ShouldLog (Logger.Severity.Debug)) {
+                if (response.HasError)
+                    Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
+                else
+                    Logger.WriteLine ("Sent response to client " + client.Address, Logger.Severity.Debug);
+            }
         }
     }
 }
