@@ -46,6 +46,8 @@ class _Service(BaseService):
         self._cls = cls
         self._name = service.name
         self._types = client._types
+        if service.HasField('documentation'):
+            self.__doc__ = service.documentation
 
         # Add class types to service
         for cls in service.classes:
@@ -124,6 +126,8 @@ class _Service(BaseService):
                     procedure.name, args=args, kwargs=kwargs,
                     param_names=param_names, param_types=param_types, return_type=return_type))
         setattr(func, '_return_type', return_type)
+        if procedure.HasField('documentation'):
+            setattr(func, '__doc__', procedure.documentation)
         setattr(self, _to_snake_case(procedure.name), func)
 
     def _add_property(self, name, getter=None, setter=None):
