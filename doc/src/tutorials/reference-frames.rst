@@ -238,45 +238,19 @@ and the direction that the vessel is moving in (relative to the surface):
 
        time.sleep(1)
 
-Pitch and heading angles
-------------------------
+Holding surface-relative retrograde for descent/landing
+-------------------------------------------------------
 
-The following example calculates the pitch and heading angle of the vessel once
-per second:
+This example will instruct the autopilot to keep the vessel pointed in a
+retrograde direction during descent, for example as part of a powered landing:
 
 .. code-block:: python
 
-   import krpc, math, time
-   conn = krpc.connect(name='Pitch/Heading')
+   import krpc
+   conn = krpc.connect(name='Hold surface retrograde')
    vessel = conn.space_center.active_vessel
 
-   def angle_between(x, y):
-       """ Compute the angle between vector x and y """
-       dotprod = x[0]*y[0] + x[1]*y[1] + x[2]*y[2]
-       if dotprod == 0:
-           return 0
-       xmag = math.sqrt(x[0]**2 + x[1]**2 + x[2]**2)
-       ymag = math.sqrt(y[0]**2 + y[1]**2 + y[2]**2)
-       return math.acos(dotprod / (xmag * ymag)) * (180. / math.pi)
-
    while True:
-
-       vessel_direction = vessel.direction(vessel.surface_reference_frame)
-
-       # Get the direction of the vessel in the horizon plane
-       horizon_direction = (0, vessel_direction[1], vessel_direction[2])
-
-       # Compute the pitch - the angle between the vessels direction and the direction in the horizon plane
-       pitch = angle_between(vessel_direction, horizon_direction)
-       if vessel_direction[0] < 0:
-           pitch = -pitch
-
-       # Compute the heading - the angle between north and the direction in the horizon plane
-       north = (0,1,0)
-       heading = angle_between(north, horizon_direction)
-       if horizon_direction[2] < 0:
-           heading = 360 - heading
-
-       print 'pitch = % 5.1f, heading = % 5.1f' % (pitch, heading)
-
-       time.sleep(1)
+       velocity = vessel.flight(vessel.orbit.body.reference_frame).velocity
+       retrograde = (-velocity[0], -velocity[1], -velocity[2])
+       vessel.auto_pilot.set_direction(retrograde, reference_frame = vessel.orbit.body.reference_frame)
