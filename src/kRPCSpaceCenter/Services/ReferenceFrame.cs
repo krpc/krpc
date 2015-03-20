@@ -195,9 +195,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.CelestialBodyNonRotating:
                     return Planetarium.up;
                 case Type.CelestialBodyOrbital:
-                    {
-                        return Vector3d.Exclude (Forward, ToNorthPole (body).normalized);
-                    }
+                    return Vector3d.Exclude (Forward, ToNorthPole (body).normalized);
                 case Type.Vessel:
                     return vessel.transform.up;
                 case Type.VesselOrbital:
