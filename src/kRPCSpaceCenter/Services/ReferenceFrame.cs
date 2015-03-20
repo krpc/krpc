@@ -21,21 +21,21 @@ namespace KRPCSpaceCenter.Services
         }
 
         readonly Type type;
-        global::CelestialBody body;
-        global::Vessel vessel;
-        global::ManeuverNode node;
+        readonly global::CelestialBody body;
+        readonly global::Vessel vessel;
+        readonly ManeuverNode node;
 
-        ReferenceFrame (Type type)
+        ReferenceFrame (Type type, global::CelestialBody body, global::Vessel vessel, ManeuverNode node)
         {
             this.type = type;
+            this.body = body;
+            this.vessel = vessel;
+            this.node = node;
         }
 
         public override bool Equals (ReferenceFrame obj)
         {
-            return type == obj.type &&
-            body == obj.body &&
-            vessel == obj.vessel &&
-            node == obj.node;
+            return type == obj.type && body == obj.body && vessel == obj.vessel && node == obj.node;
         }
 
         public override int GetHashCode ()
@@ -52,53 +52,39 @@ namespace KRPCSpaceCenter.Services
 
         internal static ReferenceFrame Object (global::CelestialBody body)
         {
-            var r = new ReferenceFrame (Type.CelestialBody);
-            r.body = body;
-            return r;
+            return new ReferenceFrame (Type.CelestialBody, body, null, null);
         }
 
         internal static ReferenceFrame Orbital (global::CelestialBody body)
         {
             if (body == body.referenceBody)
                 throw new ArgumentException ("CelestialBody '" + body.name + "' does not orbit anything");
-            var r = new ReferenceFrame (Type.CelestialBodyOrbital);
-            r.body = body;
-            return r;
+            return new ReferenceFrame (Type.CelestialBodyOrbital, body, null, null);
         }
 
         internal static ReferenceFrame Object (global::Vessel vessel)
         {
-            var r = new ReferenceFrame (Type.Vessel);
-            r.vessel = vessel;
-            return r;
+            return new ReferenceFrame (Type.Vessel, null, vessel, null);
         }
 
         internal static ReferenceFrame Orbital (global::Vessel vessel)
         {
-            var r = new ReferenceFrame (Type.VesselOrbital);
-            r.vessel = vessel;
-            return r;
+            return new ReferenceFrame (Type.VesselOrbital, null, vessel, null);
         }
 
         internal static ReferenceFrame Surface (global::Vessel vessel)
         {
-            var r = new ReferenceFrame (Type.VesselSurface);
-            r.vessel = vessel;
-            return r;
+            return new ReferenceFrame (Type.VesselSurface, null, vessel, null);
         }
 
-        internal static ReferenceFrame Object (global::ManeuverNode node)
+        internal static ReferenceFrame Object (ManeuverNode node)
         {
-            var r = new ReferenceFrame (Type.Maneuver);
-            r.node = node;
-            return r;
+            return new ReferenceFrame (Type.Maneuver, null, null, node);
         }
 
-        internal static ReferenceFrame Orbital (global::ManeuverNode node)
+        internal static ReferenceFrame Orbital (ManeuverNode node)
         {
-            var r = new ReferenceFrame (Type.ManeuverOrbital);
-            r.node = node;
-            return r;
+            return new ReferenceFrame (Type.ManeuverOrbital, null, null, node);
         }
 
         /// <summary>
