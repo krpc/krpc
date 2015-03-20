@@ -12,6 +12,7 @@ namespace KRPCSpaceCenter.Services
         enum Type
         {
             CelestialBody,
+            CelestialBodyNonRotating,
             CelestialBodyOrbital,
             Vessel,
             VesselOrbital,
@@ -55,6 +56,11 @@ namespace KRPCSpaceCenter.Services
             return new ReferenceFrame (Type.CelestialBody, body, null, null);
         }
 
+        internal static ReferenceFrame NonRotating (global::CelestialBody body)
+        {
+            return new ReferenceFrame (Type.CelestialBodyNonRotating, body, null, null);
+        }
+
         internal static ReferenceFrame Orbital (global::CelestialBody body)
         {
             if (body == body.referenceBody)
@@ -94,6 +100,7 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
+                case Type.CelestialBodyNonRotating:
                 case Type.CelestialBodyOrbital:
                     return body.position;
                 case Type.Vessel:
@@ -178,6 +185,8 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                     return body.bodyTransform.up;
+                case Type.CelestialBodyNonRotating:
+                    return Planetarium.up;
                 case Type.CelestialBodyOrbital:
                     {
                         return Vector3d.Exclude (Forward, ToNorthPole (body).normalized);
@@ -211,6 +220,8 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                     return body.bodyTransform.forward;
+                case Type.CelestialBodyNonRotating:
+                    return Planetarium.forward;
                 case Type.CelestialBodyOrbital:
                     {
                         var right = (body.position - body.referenceBody.position).normalized;
@@ -244,6 +255,7 @@ namespace KRPCSpaceCenter.Services
             get {
                 switch (type) {
                 case Type.CelestialBody:
+                case Type.CelestialBodyNonRotating:
                 case Type.CelestialBodyOrbital:
                     return body.GetWorldVelocity ();
                 case Type.Vessel:
@@ -269,6 +281,8 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                     return body.angularVelocity;
+                case Type.CelestialBodyNonRotating:
+                    return Vector3d.zero;
                 case Type.CelestialBodyOrbital:
                     throw new NotImplementedException ();
                 case Type.Vessel:
