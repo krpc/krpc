@@ -128,13 +128,24 @@ Vessel
 
    * The axes rotate with the vessel.
 
-   * The y-axis points in the direction the vessels controlling part is
-     pointing.
+   * The x-axis points out to the right of the vessel.
 
-   * The x-axis and z-axis point in perpendicular directions out to the side of
-     the vessel.
+   * The y-axis points in the forward direction of the vessel.
+
+   * The z-axis points out of the bottom off the vessel.
 
    :rtype: :class:`ReferenceFrame`
+
+   .. figure:: /images/reference-frames/vessel-aircraft.*
+      :align: center
+
+      Vessel reference frame origin and axes for the Aeris 3A aircraft
+
+   .. figure:: /images/reference-frames/vessel-rocket.*
+      :align: center
+
+      Vessel reference frame origin and axes for the Kerbal-X rocket
+
 
 .. attribute:: Vessel.OrbitalReferenceFrame
 
@@ -154,6 +165,11 @@ Vessel
    :rtype: :class:`ReferenceFrame`
 
    .. note:: Be careful not to confuse this with 'orbit' mode on the navball.
+
+   .. figure:: /images/reference-frames/vessel-orbital.*
+      :align: center
+
+      Vessel orbital reference frame origin and axes
 
 .. attribute:: Vessel.SurfaceReferenceFrame
 
@@ -178,6 +194,11 @@ Vessel
 
    .. note:: Be careful not to confuse this with 'surface' mode on the navball.
 
+   .. figure:: /images/reference-frames/vessel-surface.*
+      :align: center
+
+      Vessel surface reference frame origin and axes
+
 .. attribute:: Vessel.SurfaceVelocityReferenceFrame
 
    Gets the reference frame that is fixed relative to the vessel, and orientated
@@ -193,6 +214,11 @@ Vessel
    * The z-axis points in a the plane of the horizon.
 
    :rtype: :class:`ReferenceFrame`
+
+   .. figure:: /images/reference-frames/vessel-surface-velocity.*
+      :align: center
+
+      Vessel surface velocity reference frame origin and axes
 
 .. method:: Vessel.Position (referenceFrame)
 

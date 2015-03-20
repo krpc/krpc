@@ -148,6 +148,29 @@ CelestialBody
 
    :rtype: :class:`ReferenceFrame`
 
+   .. figure:: /images/reference-frames/celestial-body.*
+      :align: center
+
+      Celestial body reference frame origin and axes. The equator is shown in
+      blue, and the prime meridian in red.
+
+.. attribute:: CelestialBody.NonRotatingReferenceFrame
+
+   Gets the reference frame that is fixed relative to this celestial body, and
+   orientated in a fixed direction (it does not rotate with the body).
+
+   * The origin is at the center of the body.
+
+   * The axes do not rotate.
+
+   * The x-axis points in an arbitrary direction through the equator.
+
+   * The y-axis points from the center of the body towards the north pole.
+
+   * The z-axis points in an arbitrary direction through the equator.
+
+   :rtype: :class:`ReferenceFrame`
+
 .. attribute:: CelestialBody.OrbitalReferenceFrame
 
    Gets the reference frame that is fixed relative to this celestial body, but

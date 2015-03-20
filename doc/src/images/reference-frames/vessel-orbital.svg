@@ -9,12 +9,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="483.18143"
+   width="479.4292"
    height="240.30176"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="vessel-orbital-reference-frame.svg">
+   sodipodi:docname="vessel-orbital.svg">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -23,16 +23,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="389.04135"
+     inkscape:cx="385.87721"
      inkscape:cy="123.44093"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="865"
-     inkscape:window-height="887"
-     inkscape:window-x="952"
-     inkscape:window-y="134"
-     inkscape:window-maximized="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1150"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -238,19 +238,19 @@
      transform="translate(214.97337,-230.78055)">
     <text
        xml:space="preserve"
-       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-       x="112.82741"
-       y="291.24286"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans"
+       x="137.5177"
+       y="291.95715"
        id="text3010"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3012"
-         x="112.82741"
-         y="291.24286">z-axis</tspan><tspan
+         x="137.5177"
+         y="291.95715">z-axis</tspan><tspan
          sodipodi:role="line"
-         x="112.82741"
-         y="311.24286"
-         id="tspan3064">normal</tspan></text>
+         x="137.5177"
+         y="311.95715"
+         id="tspan3064">(normal)</tspan></text>
     <path
        sodipodi:type="arc"
        style="fill:none;stroke:#838383;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -266,19 +266,19 @@
        sodipodi:open="true" />
     <text
        xml:space="preserve"
-       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-       x="196.30962"
-       y="381.50943"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans"
+       x="225.86208"
+       y="326.86658"
        id="text3010-7"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3012-4"
-         x="196.30962"
-         y="381.50943">y-axis</tspan><tspan
+         x="225.86208"
+         y="326.86658">y-axis</tspan><tspan
          sodipodi:role="line"
-         x="196.30962"
-         y="401.50943"
-         id="tspan3062">prograde</tspan></text>
+         x="225.86208"
+         y="346.86658"
+         id="tspan3062">(prograde)</tspan></text>
     <g
        id="g4244">
       <path
@@ -521,16 +521,16 @@
        sodipodi:open="true" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="130.0482"
-       y="408.47385"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans"
+       x="176.47678"
+       y="410.25955"
        id="text3804"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3806"
-         x="130.0482"
-         y="408.47385"
-         style="font-size:16px">origin</tspan></text>
+         x="176.47678"
+         y="410.25955"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Open Sans;-inkscape-font-specification:Open Sans">origin</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-mid:none"
        d="m 220.29315,353.8571 -60.02529,38.77293"
@@ -539,18 +539,18 @@
        sodipodi:nodetypes="cc" />
     <text
        xml:space="preserve"
-       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-       x="39.832409"
-       y="376.04489"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans"
+       x="83.51992"
+       y="387.8306"
        id="text3010-7-4"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3012-4-8"
-         x="39.832409"
-         y="376.04489">x-axis</tspan><tspan
+         x="83.51992"
+         y="387.8306">x-axis</tspan><tspan
          sodipodi:role="line"
-         x="39.832409"
-         y="396.04489"
-         id="tspan3066">anti-radial</tspan></text>
+         x="83.51992"
+         y="407.8306"
+         id="tspan3066">(anti-radial)</tspan></text>
   </g>
 </svg>

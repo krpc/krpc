@@ -9,10 +9,9 @@ of axes (``x``, ``y``, and ``z``). The reference frame can also have a linear
 velocity (the velocity of the origin) and an angular/rotational velocity which
 specifies the speed at which the axes rotate.
 
-.. note:: KSP, and therefore kRPC and its reference frames, uses a left handed
-          coordinate system.
+.. note:: KSP and kRPC use a left handed coordinate system.
 
-.. figure:: /images/tutorials/celestial-body-reference-frame.*
+.. figure:: /images/reference-frames/celestial-body.*
    :align: right
    :figwidth: 250
 
@@ -39,13 +38,11 @@ For example, the reference frame obtained by calling
 
    ..
 
-.. figure:: /images/tutorials/vessel-orbital-reference-frame.*
+.. figure:: /images/reference-frames/vessel-orbital.*
    :align: right
    :figwidth: 350
 
-   The orbital reference frame for a vessel. The black arrows show the axes,
-   aligned with the orbital directions, and the origin is at the center of mass
-   of the vessel.
+   The orbital reference frame for a vessel.
 
 Another example of a reference frame is the one obtained by calling
 :attr:`Vessel.orbital_reference_frame` for the current vessel. This reference
@@ -65,6 +62,16 @@ directions:
   for example when the prograde direction changes as the vessel continues on its
   orbit.
 
+.. container:: clearer
+
+   ..
+
+.. figure:: /images/reference-frames/vessel-aircraft.*
+   :align: right
+   :figwidth: 350
+
+   The reference frame for an aircraft.
+
 Compare this to the reference frame returned by calling
 :attr:`Vessel.reference_frame`. This reference frame is also attached to the
 vessel (the origin moves with the vessel), however its orientation is
@@ -78,8 +85,43 @@ different. The axes track the orientation of the vessel:
 
 * and the axes rotate with any changes to the direction of the vessel.
 
+.. container:: clearer
+
+   ..
+
+Available Reference Frames
+--------------------------
+
+kRPC provides the following reference frames:
+
+* :meth:`Vessel.reference_frame`
+
+* :meth:`Vessel.orbital_reference_frame`
+* :meth:`Vessel.surface_reference_frame`
+* :meth:`Vessel.surface_velocity_reference_frame`
+* :meth:`CelestialBody.reference_frame`
+* :meth:`CelestialBody.orbital_reference_frame`
+* :meth:`Node.reference_frame`
+* :meth:`Node.orbital_reference_frame`
+
+Converting Between Reference Frames
+-----------------------------------
+
+kRPC provides a few utility methods to convert positions, directions and
+velocities between reference frames:
+
+* :meth:`SpaceCenter.transform_position`
+* :meth:`SpaceCenter.transform_direction`
+* :meth:`SpaceCenter.transform_rotation`
+* :meth:`SpaceCenter.transform_velocity`
+
+Examples
+--------
+
+The following examples demonstrate the use of reference frames.
+
 Navball directions
-------------------
+^^^^^^^^^^^^^^^^^^
 
 This example demonstrates how to make the vessel point in various directions on
 the navball:
@@ -179,10 +221,7 @@ Surface 'prograde'
 
 This example demonstrates how to point the vessel in the 'prograde' direction on
 the navball, when in surface mode. This is the direction of the velocity of the
-vessel relative to the surface. We therefore need to use
-:attr:`CelestialBody.reference_frame` as this reference frame rotates with the
-planet. In other words, we want to point the vessel in the direction of the
-velocity vector we got in the previous example:
+vessel relative to the surface:
 
 .. code-block:: python
    :linenos:
@@ -191,18 +230,15 @@ velocity vector we got in the previous example:
    conn = krpc.connect(name='Surface prograde')
    vessel = conn.space_center.active_vessel
 
-   velocity = vessel.flight(vessel.orbit.body.reference_frame).velocity
-
-   vessel.auto_pilot.set_direction(velocity, reference_frame = vessel.orbit.body.reference_frame)
+   vessel.auto_pilot.set_direction((0,1,0), reference_frame = vessel.surface_velocity_reference_frame)
    while vessel.auto_pilot.error > 0.1:
        pass
 
-.. note:: The velocity passed to :meth:`AutoPilot.set_direction` does not need
-          to be normalized to a unit vector.
+This code uses the :attr:`Vessel.surface_velocity_reference_frame` pictured
+below.
 
-.. note:: The reason I put 'prograde' in quotes here is that prograde refers to
-          an orbital direction, whereas here we mean the direction of the
-          velocity vector of the vessel relative to the surface.
+.. image:: /images/reference-frames/vessel-surface-velocity.*
+   :align: center
 
 Angle of attack
 ---------------
@@ -237,20 +273,3 @@ and the direction that the vessel is moving in (relative to the surface):
        print 'Angle of attack = %.1f' % angle
 
        time.sleep(1)
-
-Holding surface-relative retrograde for descent/landing
--------------------------------------------------------
-
-This example will instruct the autopilot to keep the vessel pointed in a
-retrograde direction during descent, for example as part of a powered landing:
-
-.. code-block:: python
-
-   import krpc
-   conn = krpc.connect(name='Hold surface retrograde')
-   vessel = conn.space_center.active_vessel
-
-   while True:
-       velocity = vessel.flight(vessel.orbit.body.reference_frame).velocity
-       retrograde = (-velocity[0], -velocity[1], -velocity[2])
-       vessel.auto_pilot.set_direction(retrograde, reference_frame = vessel.orbit.body.reference_frame)

@@ -46,8 +46,10 @@ Node
 .. method:: Node.BurnVector (referenceFrame)
 
    Returns a vector in the given reference frame whose:
-     - direction is the direction of the maneuver nodes burn
-     - magnitude is the delta-v of the maneuver node
+
+   * direction is the direction of the maneuver nodes burn
+
+   * magnitude is the delta-v of the maneuver node
 
    :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`
@@ -76,14 +78,13 @@ Node
 
 .. attribute:: Node.ReferenceFrame
 
-   Gets the reference frame that is fixed relative to the maneuver node, and
-   orientated with the direction of the burn.
+   Gets the reference frame that is fixed relative to the maneuver node's burn.
 
    * The origin is at the position of the maneuver node.
 
    * The y-axis points in the direction of the burn.
 
-   .. todo:: In which directions do the x-axis and z-axis point?
+   * The x-axis and z-axis point in arbitrary but fixed directions.
 
    :rtype: :class:`ReferenceFrame`
 
@@ -91,15 +92,18 @@ Node
 
    Gets the reference frame that is fixed relative to the maneuver node, and
    orientated with the orbital prograde/normal/radial directions of the original
-   orbit at the position of the maneuver node.
+   orbit at the maneuver node's position.
 
    * The origin is at the position of the maneuver node.
 
-   * The x-axis points in the orbital radial direction of the original orbit, at
+   * The x-axis points in the orbital anti-radial direction of the original orbit, at
      the position of the maneuver node.
 
-   * The y-axis points in the orbital prograde direction of the original orbit,
-     at the position of the maneuver node.
+   * The y-axis points in the orbital prograde direction of the original orbit, at
+     the position of the maneuver node.
+
+   * The z-axis points in the orbital normal direction of the original orbit, at
+     the position of the maneuver node.
 
    :rtype: :class:`ReferenceFrame`
 
