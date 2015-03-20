@@ -115,6 +115,29 @@ velocities between reference frames:
 * :meth:`SpaceCenter.transform_rotation`
 * :meth:`SpaceCenter.transform_velocity`
 
+Visual Debugging
+----------------
+
+:meth:`SpaceCenter.DrawDirection` can be used to draw a direction vector
+in-game, and is useful to visualize reference frames and debug your code. For
+example, the following will draw the vessels surface velocity vector in red:
+
+.. code-block:: python
+
+   import krpc
+   conn = krpc.connect(name='Navball directions')
+   vessel = conn.space_center.active_vessel
+   ref_frame = vessel.orbit.body.reference_frame
+
+   velocity = vessel.flight(ref_frame).velocity
+   conn.space_center.draw_direction(velocity, ref_frame, (1,0,0))
+
+   while True:
+      pass
+
+.. note:: The client must remain connected, otherwise kRPC will stop drawing the
+          directions, hence the while loop at the end of this example.
+
 Examples
 --------
 
