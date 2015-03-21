@@ -1,3 +1,6 @@
+v0.1.4-hotfix1
+* Fix null reference exception in Vessel.Thrust
+
 v0.1.5
 * Server can now run during more game scenes and does not get restarted when switching vessel
 * Server plugin changes:
