@@ -16,6 +16,9 @@ class TestAutoPilot(testingtools.TestCase):
         self.ap = self.vessel.auto_pilot
         self.vessel.control.sas = False
 
+    def tearDown(self):
+        del self.conn
+
     def test_equality(self):
         self.assertEqual(self.vessel.auto_pilot, self.ap)
 
@@ -121,6 +124,18 @@ class TestAutoPilot(testingtools.TestCase):
         self.check_direction(flight.radial)
         self.set_direction(flight.anti_radial)
         self.check_direction(flight.anti_radial)
+
+    def test_error(self):
+        flight = self.vessel.flight()
+        self.ap.disengage()
+        self.assertTrue(math.isnan(self.ap.error))
+        self.set_direction(flight.prograde)
+        self.ap.set_direction(flight.retrograde)
+        self.assertClose(180, self.ap.error, 1)
+        self.ap.set_direction(flight.normal)
+        self.assertClose(90, self.ap.error, 1)
+        self.ap.set_direction(flight.anti_normal)
+        self.assertClose(90, self.ap.error, 1)
 
 if __name__ == "__main__":
     unittest.main()
