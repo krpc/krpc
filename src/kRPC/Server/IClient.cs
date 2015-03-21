@@ -5,7 +5,7 @@ namespace KRPC.Server
     /// <summary>
     /// Non-generic client interface.
     /// </summary>
-    interface IClient
+    public interface IClient
     {
         /// <summary>
         /// A string identifying the client. Should be human readable.

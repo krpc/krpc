@@ -133,40 +133,58 @@ CelestialBody
 
 .. attribute:: CelestialBody.ReferenceFrame
 
-   Gets the reference frame that is fixed relative to this celestial body.
-   The origin is at the center of the body.
-   The y-axis points from the center of the body towards the north pole.
-   The x-axis points from the center of the body towards the intersection of the
-   prime meridian and equator (the position at 0 degrees longitude, 0 degrees
-   latitude).
+   Gets the reference frame that is fixed relative to the celestial body.
+
+   * The origin is at the center of the body.
+
+   * The axes rotate with the body.
+
+   * The x-axis points from the center of the body towards the intersection of
+     the prime meridian and equator (the position at 0° longitude, 0° latitude).
+
+   * The y-axis points from the center of the body towards the north pole.
+
+   * The z-axis points from the center of the body towards the equator at 90°E longitude.
 
    :rtype: :class:`ReferenceFrame`
 
+   .. figure:: /images/reference-frames/celestial-body.*
+      :align: center
+
+      Celestial body reference frame origin and axes. The equator is shown in
+      blue, and the prime meridian in red.
+
 .. attribute:: CelestialBody.NonRotatingReferenceFrame
 
-   Gets the reference frame whose origin is at the center of the body, and whose
-   axes point in an arbitrary but fixed direction.
+   Gets the reference frame that is fixed relative to this celestial body, and
+   orientated in a fixed direction (it does not rotate with the body).
+
+   * The origin is at the center of the body.
+
+   * The axes do not rotate.
+
+   * The x-axis points in an arbitrary direction through the equator.
+
+   * The y-axis points from the center of the body towards the north pole.
+
+   * The z-axis points in an arbitrary direction through the equator.
 
    :rtype: :class:`ReferenceFrame`
 
 .. attribute:: CelestialBody.OrbitalReferenceFrame
 
-   Gets the reference frame relative to the orbit of this body.
-   The origin is at the center of the body.
-   The x-axis points normal to the body being orbited (from the center of the
-   body being orbited towards the center of this body).
-   The y-axis points towards the north pole of the body being orbited.
+   Gets the reference frame that is fixed relative to this celestial body, but
+   orientated with the body's orbital prograde/normal/radial directions.
 
-   :rtype: :class:`ReferenceFrame`
+   * The origin is at the center of the body.
 
-.. attribute:: CelestialBody.SurfaceReferenceFrame
+   * The axes rotate with the orbital prograde/normal/radial directions.
 
-   Gets the reference frame relative to the surface of the body being orbited by
-   this vessel.
-   The origin is at the center of the body.
-   The x-axis points normal to the body being orbited (from the center of the
-   body being orbited towards the center of this body).
-   The y-axis points towards the north pole of the body being orbited.
+   * The x-axis points in the orbital anti-radial direction.
+
+   * The y-axis points in the orbital prograde direction.
+
+   * The z-axis points in the orbital normal direction.
 
    :rtype: :class:`ReferenceFrame`
 

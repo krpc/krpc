@@ -1,6 +1,6 @@
 namespace KRPC.Server
 {
-    class ClientConnectionRequest
+    public class ClientConnectionRequest
     {
         bool allow;
         bool deny;

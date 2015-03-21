@@ -143,11 +143,6 @@ namespace KRPCSpaceCenter.Services
             get { return ReferenceFrame.Orbital (InternalBody); }
         }
 
-        [KRPCProperty]
-        public ReferenceFrame SurfaceReferenceFrame {
-            get { return ReferenceFrame.Surface (InternalBody); }
-        }
-
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {

@@ -15,7 +15,7 @@ using KRPC.Utils;
 
 namespace KRPC
 {
-    class KRPCServer : IServer
+    public class KRPCServer : IServer
     {
         readonly TCPServer rpcTcpServer;
         readonly TCPServer streamTcpServer;

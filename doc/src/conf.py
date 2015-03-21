@@ -5,11 +5,14 @@ copyright = '2015, djungelorm'
 
 master_doc = 'index'
 source_suffix = '.rst'
-extensions = ['sphinx.ext.mathjax']
+extensions = ['sphinx.ext.mathjax', 'sphinx.ext.todo']
 
 pygments_style = 'sphinx'
 import sphinx_rtd_theme
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 htmlhelp_basename = 'krpc-doc'
-html_static_path = ['crafts','scripts']
+html_static_path = ['crafts','scripts','_static']
+html_context = { 'css_files': ['_static/custom.css'] }
+
+todo_include_todos = True

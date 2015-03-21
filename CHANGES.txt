@@ -12,6 +12,10 @@ v0.1.5
   * Add Flight.Longitude and Latitude
   * Add Control.WheelThrottle and WheelSteering
   * Control.ActivateNextStage returns a list of vessels that are jettisoned
+  * Add SpaceCenter.DrawDirection and ClearDirections for visual debugging
+  * Added Vessel.SurfaceVelocityReferenceFrame
+  * Removed Vessel.NonRotatingReferenceFrame
+  * Fixed some reference frame bugs
   * Add FAR support and functionality
   * Add RemoteTech support and functionality
 

@@ -30,7 +30,7 @@ Vessel
 
    :rtype: `double`
 
-.. method:: Vessel.Flight (referenceFrame = Vessel.Orbital)
+.. method:: Vessel.Flight (referenceFrame = Vessel.OrbitalReferenceFrame)
 
    Gets a :class:`Flight` object that can be used to get flight telemetry for
    the vessel, in the specified reference frame.
@@ -121,40 +121,104 @@ Vessel
 
 .. attribute:: Vessel.ReferenceFrame
 
-   Gets the reference frame that is fixed relative to this vessel.
-   The origin is at the center of mass of the vessel.
-   The y-axis points in the direction the vessels controlling part is pointing.
-   The x-axis and z-axis point in perpendicular directions out to the side of the vessel.
+   Gets the reference frame that is fixed relative to the vessel, and orientated
+   with the vessel.
+
+   * The origin is at the center of mass of the vessel.
+
+   * The axes rotate with the vessel.
+
+   * The x-axis points out to the right of the vessel.
+
+   * The y-axis points in the forward direction of the vessel.
+
+   * The z-axis points out of the bottom off the vessel.
 
    :rtype: :class:`ReferenceFrame`
 
-.. attribute:: Vessel.NonRotatingReferenceFrame
+   .. figure:: /images/reference-frames/vessel-aircraft.*
+      :align: center
 
-   Gets the reference frame whose origin is at the center of mass of the vessel,
-   and whose axes point in an arbitrary but fixed direction.
+      Vessel reference frame origin and axes for the Aeris 3A aircraft
 
-   :rtype: :class:`ReferenceFrame`
+   .. figure:: /images/reference-frames/vessel-rocket.*
+      :align: center
+
+      Vessel reference frame origin and axes for the Kerbal-X rocket
+
 
 .. attribute:: Vessel.OrbitalReferenceFrame
 
-   Gets the reference frame relative to the orbit of this vessel.
-   The origin is at the center of mass of the vessel.
-   The x-axis points normal to the body being orbited (from the center of the
-   body towards the center of mass of the vessel).
-   The y-axis points to the north pole of the body being orbited.
+   Gets the reference frame that is fixed relative to the vessel, and orientated
+   with the vessels orbital prograde/normal/radial directions.
+
+   * The origin is at the center of mass of the vessel.
+
+   * The axes rotate with the orbital prograde/normal/radial directions.
+
+   * The x-axis points in the orbital anti-radial direction.
+
+   * The y-axis points in the orbital prograde direction.
+
+   * The z-axis points in the orbital normal direction.
 
    :rtype: :class:`ReferenceFrame`
+
+   .. note:: Be careful not to confuse this with 'orbit' mode on the navball.
+
+   .. figure:: /images/reference-frames/vessel-orbital.*
+      :align: center
+
+      Vessel orbital reference frame origin and axes
 
 .. attribute:: Vessel.SurfaceReferenceFrame
 
-   Gets the reference frame relative to the surface of the body being orbited by
-   this vessel.
-   The origin is at the center of mass of the vessel.
-   The x-axis points normal to the body being orbited (from the center of the
-   body towards the center of mass of the vessel).
-   The y-axis points to the north pole of the body being orbited.
+   Gets the reference frame that is fixed relative to the vessel, and orientated
+   with the surface of the body being orbited.
+
+   * The origin is at the center of mass of the vessel.
+
+   * The axes rotate with the north and up directions on the surface of the
+     body.
+
+   * The x-axis points upwards, normal to the body being orbited (from the
+     center of the body towards the center of mass of the vessel).
+
+   * The y-axis points north, and tangential to the surface of the body (the
+     direction in which a compass would point when on the surface)
+
+   * The z-axis points east, and tangential to the surface of the body (east on
+     a compass when on the surface).
 
    :rtype: :class:`ReferenceFrame`
+
+   .. note:: Be careful not to confuse this with 'surface' mode on the navball.
+
+   .. figure:: /images/reference-frames/vessel-surface.*
+      :align: center
+
+      Vessel surface reference frame origin and axes
+
+.. attribute:: Vessel.SurfaceVelocityReferenceFrame
+
+   Gets the reference frame that is fixed relative to the vessel, and orientated
+   with the velocity vector of the vessel relative to the surface of the body
+   being orbited.
+
+   * The origin is at the center of mass of the vessel.
+
+   * The axes rotate with the vessel's velocity vector.
+
+   * The y-axis points in the direction of the vessel's velocity vector.
+
+   * The z-axis points in a the plane of the horizon.
+
+   :rtype: :class:`ReferenceFrame`
+
+   .. figure:: /images/reference-frames/vessel-surface-velocity.*
+      :align: center
+
+      Vessel surface velocity reference frame origin and axes
 
 .. method:: Vessel.Position (referenceFrame)
 
