@@ -157,7 +157,7 @@ namespace KRPCSpaceCenter.Services
                         }
                         var engineFx = module as ModuleEnginesFX;
                         if (engineFx != null) {
-                            if (!engine.EngineIgnited || engine.getFlameoutState)
+                            if (!engineFx.EngineIgnited || engineFx.getFlameoutState)
                                 continue;
                             thrust += engineFx.maxThrust;
                         }
