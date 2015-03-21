@@ -64,7 +64,7 @@ namespace KRPCSpaceCenter.Services
 
         internal static ReferenceFrame Orbital (global::CelestialBody body)
         {
-            if (body == body.referenceBody)
+            if (body == body.referenceBody || body.orbit == null)
                 throw new ArgumentException ("CelestialBody '" + body.name + "' does not orbit anything");
             return new ReferenceFrame (Type.CelestialBodyOrbital, body, null, null);
         }
@@ -195,7 +195,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.CelestialBodyNonRotating:
                     return Planetarium.up;
                 case Type.CelestialBodyOrbital:
-                    return Vector3d.Exclude (Forward, ToNorthPole (body).normalized);
+                    return body.orbit.GetVel () - body.orbit.referenceBody.GetWorldVelocity ();
                 case Type.Vessel:
                     return vessel.transform.up;
                 case Type.VesselOrbital:
@@ -231,9 +231,9 @@ namespace KRPCSpaceCenter.Services
                     return Planetarium.forward;
                 case Type.CelestialBodyOrbital:
                     {
-                        var right = (body.position - body.referenceBody.position).normalized;
-                        var northPole = ToNorthPole (body).normalized;
-                        return Vector3d.Cross (right, northPole);
+                        var up = UpNotNormalized;
+                        var radial = body.referenceBody.position - body.position;
+                        return Vector3d.Cross (radial, up);
                     }
                 case Type.Vessel:
                     return vessel.transform.forward;
