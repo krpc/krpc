@@ -8,9 +8,13 @@ class TestResources(testingtools.TestCase):
     def setUpClass(cls):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('Resources')
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestResources')
         cls.r = cls.conn.space_center.active_vessel.resources
         cls.num_stages = len(cls.expected.keys())
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     density = {
         'MonoPropellant': 4,

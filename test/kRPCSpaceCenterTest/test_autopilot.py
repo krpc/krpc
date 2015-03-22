@@ -17,7 +17,7 @@ class TestAutoPilot(testingtools.TestCase):
         self.vessel.control.sas = False
 
     def tearDown(self):
-        del self.conn
+        self.conn.close()
 
     def test_equality(self):
         self.assertEqual(self.vessel.auto_pilot, self.ap)
@@ -136,6 +136,14 @@ class TestAutoPilot(testingtools.TestCase):
         self.assertClose(90, self.ap.error, 1)
         self.ap.set_direction(flight.anti_normal)
         self.assertClose(90, self.ap.error, 1)
+
+    def test_disengage_on_disconnect(self):
+        self.ap.set_rotation(90,0)
+        self.assertGreater(self.ap.error, 0)
+        self.conn.close()
+        conn = krpc.connect()
+        ap = conn.space_center.active_vessel.auto_pilot
+        self.assertTrue(math.isnan(ap.error))
 
 if __name__ == "__main__":
     unittest.main()

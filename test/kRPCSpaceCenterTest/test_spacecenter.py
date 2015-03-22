@@ -5,7 +5,7 @@ import krpc
 import time
 import itertools
 
-class TestBody(testingtools.TestCase):
+class TestSpaceCenter(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -15,11 +15,10 @@ class TestBody(testingtools.TestCase):
         testingtools.set_circular_orbit('Kerbin', 100000)
         testingtools.launch_vessel_from_vab('Basic')
         testingtools.set_circular_orbit('Kerbin', 260000)
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestSpaceCenter')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
         cls.ref_vessel = cls.vessel.reference_frame
-        cls.ref_nr_vessel = cls.vessel.non_rotating_reference_frame
         bodies = cls.sc.bodies
         cls.sun = bodies['Sun']
         cls.kerbin = bodies['Kerbin']
@@ -30,6 +29,10 @@ class TestBody(testingtools.TestCase):
         cls.ref_nr_sun = cls.sun.non_rotating_reference_frame
         cls.ref_nr_kerbin = cls.kerbin.non_rotating_reference_frame
         cls.ref_nr_mun = cls.mun.non_rotating_reference_frame
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     def test_active_vessel(self):
         active = self.sc.active_vessel
@@ -120,12 +123,12 @@ class TestBody(testingtools.TestCase):
         self.assertClose(v, self.sc.transform_velocity(p + (10,20,30), v, r, r))
 
     def test_transform_velocity_between_vessel_and_celestial_body(self):
-        v = self.sc.transform_velocity((0,0,0), (0,0,0), self.ref_nr_vessel, self.ref_nr_kerbin)
+        v = self.sc.transform_velocity((0,0,0), (0,0,0), self.ref_vessel, self.ref_nr_kerbin)
         self.assertClose(self.vessel.orbit.speed, norm(v))
 
     def test_transform_velocity_between_vessel_and_celestial_bodies(self):
-        v0 = self.sc.transform_velocity((0,0,0), (0,0,0), self.ref_nr_vessel, self.ref_nr_kerbin)
-        v1 = self.sc.transform_velocity((0,0,0), (0,0,0), self.ref_nr_vessel, self.ref_nr_sun)
+        v0 = self.sc.transform_velocity((0,0,0), (0,0,0), self.ref_vessel, self.ref_nr_kerbin)
+        v1 = self.sc.transform_velocity((0,0,0), (0,0,0), self.ref_vessel, self.ref_nr_sun)
         v2 = self.sc.transform_velocity((0,0,0), (0,0,0), self.ref_nr_kerbin, self.ref_nr_sun)
         v3 = tuple(x-y for (x,y) in itertools.izip(v1,v2))
         self.assertClose(norm(v0), norm(v3))

@@ -17,6 +17,7 @@ class TestFlight(testingtools.TestCase):
         cls.conn.testing_tools.apply_rotation(116, (0,0,-1))
         cls.conn.testing_tools.apply_rotation(27, (-1,0,0))
         cls.conn.testing_tools.apply_rotation(40, (0,-1,0))
+        cls.far = cls.conn.space_center.far_available
 
     def test_equality(self):
         flight = self.vessel.flight(self.vessel.reference_frame)
@@ -24,7 +25,7 @@ class TestFlight(testingtools.TestCase):
 
     def check_properties_not_affected_by_reference_frame(self, flight):
         """ Verify flight properties that aren't affected by reference frames """
-        #self.assertClose(0, flight.g_force)
+        self.assertClose(0, flight.g_force)
         self.assertClose(100000, flight.mean_altitude, error=10)
         self.assertClose(flight.mean_altitude - max(0, flight.elevation), flight.surface_altitude, error=10)
         self.assertClose(flight.mean_altitude - flight.elevation, flight.bedrock_altitude, error=10)
@@ -62,7 +63,7 @@ class TestFlight(testingtools.TestCase):
         normal      = vector(flight.normal)
         anti_normal = vector(flight.anti_normal)
         radial      = vector(flight.radial)
-        anti_radial = vector(flight.ant_radial)
+        anti_radial = vector(flight.anti_radial)
         self.assertClose(1, norm(prograde))
         self.assertClose(1, norm(retrograde))
         self.assertClose(1, norm(normal))
@@ -92,22 +93,6 @@ class TestFlight(testingtools.TestCase):
         self.check_speeds(flight)
         self.check_orbital_vectors(flight)
 
-    def test_flight_vessel_non_rotating_reference_frame(self):
-        ref = self.vessel.non_rotating_reference_frame
-        flight = self.vessel.flight(ref)
-        self.check_properties_not_affected_by_reference_frame(flight)
-
-        self.assertClose((0,0,0), flight.velocity, error=0.5)
-        self.assertClose(0, flight.speed, error=0.5)
-        self.assertClose(0, flight.horizontal_speed, error=0.5)
-        self.assertClose(0, flight.vertical_speed, error=0.5)
-        # pitch, roll, yaw are meaningless as the reference frame
-        # is in an arbitrary, but fixed, orientation
-
-        self.check_directions(flight)
-        self.check_speeds(flight)
-        self.check_orbital_vectors(flight)
-
     def test_flight_vessel_orbital_reference_frame(self):
         ref = self.vessel.orbital_reference_frame
         flight = self.vessel.flight(ref)
@@ -117,11 +102,7 @@ class TestFlight(testingtools.TestCase):
         self.assertClose(0, flight.speed, error=0.5)
         self.assertClose(0, flight.horizontal_speed, error=0.5)
         self.assertClose(0, flight.vertical_speed, error=0.5)
-        self.assertClose(27, flight.pitch, error=1)
-        self.assertClose(116, flight.heading, error=1)
-        self.assertClose(40, flight.roll, error=1)
 
-        self.check_directions(flight)
         self.check_speeds(flight)
         self.check_orbital_vectors(flight)
 
@@ -178,10 +159,6 @@ class TestFlight(testingtools.TestCase):
         self.check_speeds(flight)
         self.check_orbital_vectors(flight)
 
-    def test_maneuver_flight(self):
-        #TODO: implement
-        pass
-
     def test_latitude_and_longitude(self):
         # In a circular orbit, in anti-clockwise direction looking down on north pole of Kerbin.
         # Latitude should be 0 (we're the equator)
@@ -200,9 +177,13 @@ class TestFlightVerticalSpeed(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestFlightVerticalSpeed')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.remove_other_vessels()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     def check_speed(self, flight, ref):
         up = normalize(vector(self.vessel.position(ref)) - vector(self.vessel.orbit.body.position(ref)))
@@ -254,9 +235,14 @@ class TestFlightAtLaunchpad(testingtools.TestCase):
     def setUpClass(cls):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('Basic')
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestFlightAtLaunchpad')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.remove_other_vessels()
+        cls.far = cls.conn.space_center.far_available
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     def test_latitude_and_longitude(self):
         flight = self.vessel.flight()
@@ -264,26 +250,43 @@ class TestFlightAtLaunchpad(testingtools.TestCase):
         self.assertClose(-74.5575, flight.longitude, 0.001)
 
     def test_ferram_aerospace_research(self):
-        flight = self.vessel.flight()
+        if self.far:
 
-        self.assertClose(1.188, flight.atmosphere_density, 0.001)
-        self.assertClose(0, flight.drag, 0.5)
-        self.assertClose(0, flight.dynamic_pressure)
+            flight = self.vessel.flight()
 
-        self.assertClose(0, flight.angle_of_attack, 2)
-        self.assertClose(-27, flight.sideslip_angle, 2)
-        self.assertClose(0, flight.stall_fraction)
+            self.assertClose(1.188, flight.atmosphere_density, 0.001)
+            self.assertClose(0, flight.drag, 0.5)
+            self.assertClose(0, flight.dynamic_pressure)
 
-        self.assertClose(0, flight.mach_number)
-        self.assertClose(193, flight.terminal_velocity, 0.5)
+            self.assertClose(0, flight.angle_of_attack, 2)
+            self.assertClose(-27, flight.sideslip_angle, 2)
+            self.assertClose(0, flight.stall_fraction)
 
-        self.assertClose(0.103, flight.drag_coefficient, 0.001)
-        self.assertClose(0, flight.lift_coefficient, 0.001)
-        self.assertClose(0, flight.pitching_moment_coefficient, 0.001)
-        self.assertClose(2260, flight.ballistic_coefficient, 1)
-        self.assertClose(0, flight.thrust_specific_fuel_consumption)
+            self.assertClose(0, flight.mach_number)
+            self.assertClose(193, flight.terminal_velocity, 0.5)
 
-        self.assertEqual('Nominal', flight.far_status)
+            self.assertClose(0.103, flight.drag_coefficient, 0.001)
+            self.assertClose(0, flight.lift_coefficient, 0.001)
+            self.assertClose(0, flight.pitching_moment_coefficient, 0.001)
+            self.assertClose(2260, flight.ballistic_coefficient, 5)
+            self.assertClose(0, flight.thrust_specific_fuel_consumption)
+
+            self.assertEqual('Nominal', flight.far_status)
+
+    def test_drag_coefficient(self):
+        if not self.far:
+            # Using stock aerodynamic model
+            parts = {
+                'mk1pod': {'n': 1, 'mass': 0.8, 'drag': 0.2},
+                'fuelTank': {'n': 1, 'mass': 0.125, 'drag': 0.2},
+                'batteryPack': {'n': 2, 'mass': 0.01, 'drag': 0.2},
+                'solarPanels1': {'n': 3, 'mass': 0.02, 'drag': 0.25},
+                'liquidEngine2': {'n': 1, 'mass': 1.5, 'drag': 0.2}
+            }
+            total_mass = sum(x['mass']*x['n'] for x in parts.values())
+            mass_drag_products = sum(x['mass']*x['drag']*x['n'] for x in parts.values())
+            drag_coefficient = mass_drag_products / total_mass
+            self.assertClose(drag_coefficient, self.vessel.flight().drag_coefficient)
 
 if __name__ == "__main__":
     unittest.main()

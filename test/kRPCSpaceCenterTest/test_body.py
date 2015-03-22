@@ -8,7 +8,11 @@ class TestBody(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestBody')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     def test_equality(self):
         bodies = self.conn.space_center.bodies

@@ -12,10 +12,14 @@ class TestControl(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestControl')
         cls.control = cls.conn.space_center.active_vessel.control
         vessel = cls.conn.space_center.active_vessel
         cls.orbital_flight = vessel.flight(vessel.orbit.reference_frame)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     def test_equality(self):
         self.assertEqual(self.conn.space_center.active_vessel.control, self.control)
@@ -56,7 +60,7 @@ class TestControl(testingtools.TestCase):
         # Check flight is pitching in correct direction
         pitch = self.orbital_flight.pitch
         time.sleep(0.1)
-        diff = self.orbital_flight.pitch - pitch
+        diff = pitch - self.orbital_flight.pitch
         self.assertGreater(diff, 0)
 
     def test_yaw_control(self):
@@ -71,7 +75,7 @@ class TestControl(testingtools.TestCase):
         # Check flight is yawing in correct direction
         heading = self.orbital_flight.heading
         time.sleep(0.1)
-        diff = self.orbital_flight.heading - heading
+        diff = heading - self.orbital_flight.heading
         self.assertGreater(diff, 0)
 
     def test_roll_control(self):
@@ -95,13 +99,29 @@ class TestControl(testingtools.TestCase):
         diff = self.orbital_flight.roll - roll
         self.assertGreater(diff, 0)
 
+    def test_clear_on_disconnect(self):
+        conn = krpc.connect(name='TestControl.test_clear_on_disconnect')
+        control = conn.space_center.active_vessel.control
+        control.pitch = 1
+        control.yaw = 1
+        control.roll = 1
+        conn.close()
+        self.assertEqual(self.control.pitch, 0)
+        self.assertEqual(self.control.yaw, 0)
+        self.assertEqual(self.control.roll, 0)
+
 class TestControlStaging(testingtools.TestCase):
 
-    def test_staging(self):
+    def setUp(self):
         testingtools.launch_vessel_from_vab('Staging')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        self.conn = krpc.connect()
+        self.conn = krpc.connect(name='TestStaging')
+
+    def tearDown(self):
+        self.conn.close()
+
+    def test_staging(self):
         self.control = self.conn.space_center.active_vessel.control
         for i in reversed(range(12)):
             self.assertEqual(i, self.control.current_stage)
@@ -111,17 +131,17 @@ class TestControlStaging(testingtools.TestCase):
 
 class TestControlRover(testingtools.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        testingtools.new_save()
-
     def setUp(self):
+        testingtools.new_save()
         testingtools.launch_vessel_from_vab('Rover')
         testingtools.remove_other_vessels()
-        self.conn = krpc.connect()
+        self.conn = krpc.connect(name='TestControlRover')
         self.vessel = self.conn.space_center.active_vessel
         self.control = self.vessel.control
         self.flight = self.vessel.flight(self.vessel.orbit.body.reference_frame)
+
+    def tearDown(self):
+        self.conn.close()
 
     def test_move_forward(self):
         self.control = self.conn.space_center.active_vessel.control
