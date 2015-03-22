@@ -75,6 +75,16 @@ class Client(object):
         self._stream_thread.daemon = True
         self._stream_thread.start()
 
+    def close(self):
+        self._rpc_connection.close()
+        self._stream_connection.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, typ, value, traceback):
+        self.close()
+
     def add_stream(self, func, *args, **kwargs):
         return krpc.stream.add_stream(self, func, *args, **kwargs)
 
