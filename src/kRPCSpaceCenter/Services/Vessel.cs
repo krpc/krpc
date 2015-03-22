@@ -93,7 +93,7 @@ namespace KRPCSpaceCenter.Services
         public Flight Flight (ReferenceFrame referenceFrame = null)
         {
             if (referenceFrame == null)
-                referenceFrame = ReferenceFrame.Orbital (InternalVessel);
+                referenceFrame = ReferenceFrame.Surface (InternalVessel);
             return new Flight (InternalVessel, referenceFrame);
         }
 
@@ -199,10 +199,10 @@ namespace KRPCSpaceCenter.Services
                         }
                         var engineFx = module as ModuleEnginesFX;
                         if (engineFx != null) {
-                            if (!engine.EngineIgnited || engine.getFlameoutState)
+                            if (!engineFx.EngineIgnited || engineFx.getFlameoutState)
                                 continue;
-                            totalThrust += engine.maxThrust;
-                            totalFlowRate += (engine.maxThrust / engine.realIsp);
+                            totalThrust += engineFx.maxThrust;
+                            totalFlowRate += (engineFx.maxThrust / engineFx.realIsp);
                         }
                     }
                 }
