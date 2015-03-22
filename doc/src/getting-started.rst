@@ -39,9 +39,10 @@ The server can be configured using the window displayed in-game. The
 configuration options are:
 
 1. **Address**: this is the IP address that the server will listen on. To only
-   allow connections from the local machine, enter 127.0.0.1 (the default). To
-   allow connections over the network, enter the local IP address of your
-   machine.
+   allow connections from the local machine, select 'localhost' (the
+   default). To allow connections over the network, either select the local IP
+   address of your machine, or choose 'Manual' and enter the local IP address
+   manually.
 2. **RPC and Stream port numbers**: These need to be set to port numbers that
    are available on your machine. In most cases, they can just be left as the
    default.
