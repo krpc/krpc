@@ -168,6 +168,7 @@ namespace KRPC.UI
             protected override void Init ()
             {
                 Title = "";
+                Visible = false;
                 Style.border.top = Style.border.bottom;
                 Style.padding.top = Style.padding.bottom;
                 stalePosition = true;
