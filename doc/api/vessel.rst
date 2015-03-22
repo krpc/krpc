@@ -136,12 +136,12 @@ Vessel
 
    :rtype: :class:`ReferenceFrame`
 
-   .. figure:: /images/reference-frames/vessel-aircraft.*
+   .. figure:: /images/reference-frames/vessel-aircraft.png
       :align: center
 
       Vessel reference frame origin and axes for the Aeris 3A aircraft
 
-   .. figure:: /images/reference-frames/vessel-rocket.*
+   .. figure:: /images/reference-frames/vessel-rocket.png
       :align: center
 
       Vessel reference frame origin and axes for the Kerbal-X rocket
@@ -166,7 +166,7 @@ Vessel
 
    .. note:: Be careful not to confuse this with 'orbit' mode on the navball.
 
-   .. figure:: /images/reference-frames/vessel-orbital.*
+   .. figure:: /images/reference-frames/vessel-orbital.png
       :align: center
 
       Vessel orbital reference frame origin and axes
@@ -194,7 +194,7 @@ Vessel
 
    .. note:: Be careful not to confuse this with 'surface' mode on the navball.
 
-   .. figure:: /images/reference-frames/vessel-surface.*
+   .. figure:: /images/reference-frames/vessel-surface.png
       :align: center
 
       Vessel surface reference frame origin and axes
@@ -215,7 +215,7 @@ Vessel
 
    :rtype: :class:`ReferenceFrame`
 
-   .. figure:: /images/reference-frames/vessel-surface-velocity.*
+   .. figure:: /images/reference-frames/vessel-surface-velocity.png
       :align: center
 
       Vessel surface velocity reference frame origin and axes

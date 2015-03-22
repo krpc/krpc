@@ -148,7 +148,7 @@ CelestialBody
 
    :rtype: :class:`ReferenceFrame`
 
-   .. figure:: /images/reference-frames/celestial-body.*
+   .. figure:: /images/reference-frames/celestial-body.png
       :align: center
 
       Celestial body reference frame origin and axes. The equator is shown in

@@ -23,7 +23,7 @@ Origin Position and Axes Orientation
 The following gives some examples of the origin position and axes orientation
 for some different reference frames.
 
-.. figure:: /images/reference-frames/celestial-body.*
+.. figure:: /images/reference-frames/celestial-body.png
    :align: right
    :figwidth: 250
 
@@ -50,7 +50,7 @@ for Kerbin has the following properties:
 
    ..
 
-.. figure:: /images/reference-frames/vessel-orbital.*
+.. figure:: /images/reference-frames/vessel-orbital.png
    :align: right
    :figwidth: 350
 
@@ -78,7 +78,7 @@ directions:
 
    ..
 
-.. figure:: /images/reference-frames/vessel-aircraft.*
+.. figure:: /images/reference-frames/vessel-aircraft.png
    :align: right
    :figwidth: 350
 
@@ -195,7 +195,7 @@ the navball:
 This code uses the vessel's surface reference frame
 (:attr:`Vessel.surface_reference_frame`) pictured below:
 
-.. image:: /images/reference-frames/vessel-surface.*
+.. image:: /images/reference-frames/vessel-surface.png
    :align: center
 
 Line 6 instructs the auto-pilot to point in direction ``(0,1,0)`` (i.e. along
@@ -235,7 +235,7 @@ directions, as seen on the navball when it is in 'orbit' mode, using the
 
 This code uses the vessel's orbital reference frame pictured below:
 
-.. image:: /images/reference-frames/vessel-orbital.*
+.. image:: /images/reference-frames/vessel-orbital.png
    :align: center
 
 Surface 'prograde'
@@ -257,7 +257,7 @@ vessel relative to the surface:
 This code uses the :attr:`Vessel.surface_velocity_reference_frame` pictured
 below:
 
-.. image:: /images/reference-frames/vessel-surface-velocity.*
+.. image:: /images/reference-frames/vessel-surface-velocity.png
    :align: center
 
 Orbital speed
