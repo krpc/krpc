@@ -98,8 +98,10 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public void Disengage ()
         {
-            vessel.Autopilot.SetMode (VesselAutopilot.AutopilotMode.StabilityAssist);
-            vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
+            if (vessel != null) {
+                vessel.Autopilot.SetMode (VesselAutopilot.AutopilotMode.StabilityAssist);
+                vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
+            }
             requestingClient = null;
             engaged.Remove (this);
         }
@@ -121,7 +123,7 @@ namespace KRPCSpaceCenter.Services
             foreach (var autoPilot in engaged.ToList ()) {
                 // If the client that made the auto-pilot command has disconnected,
                 // disengage the auto-pilot
-                if (!autoPilot.requestingClient.Connected)
+                if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected)
                     autoPilot.Disengage ();
                 // Skip if the auto-pilot is not for the active vessel
                 //TODO: cannot control vessels other than the active vessel
