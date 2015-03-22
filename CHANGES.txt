@@ -1,23 +1,29 @@
-v0.1.4-hotfix1
-* Fix null reference exception in Vessel.Thrust
-
 v0.1.5
 * Server can now run during more game scenes and does not get restarted when switching vessel
 * Server plugin changes:
-  * Display service errors when KSP loads (#89)
+  * Server now persists across game scene changes
+  * Services specify during which game scenes they are available
   * Use a combo box for the server address
+  * Display service errors when KSP loads (#89)
+  * Add KSP compatibility checker
+  * Add logging severity levels
 * SpaceCenter service changes:
-  * Fix Body.AtmospherePressureAt and AtmosphereDensityAt when there is no atmosphere
-  * Rename Flight.NormalNeg to AntiNormal and Flight.RadialNeg to AntiRadial (#90)
-  * Add Flight.Longitude and Latitude
-  * Add Control.WheelThrottle and WheelSteering
-  * Control.ActivateNextStage returns a list of vessels that are jettisoned
   * Add SpaceCenter.DrawDirection and ClearDirections for visual debugging
-  * Added Vessel.SurfaceVelocityReferenceFrame
-  * Removed Vessel.NonRotatingReferenceFrame
-  * Fixed some reference frame bugs
-  * Add FAR support and functionality
-  * Add RemoteTech support and functionality
+  * Add Vessel.Comms to interact with RemoteTech
+  * Add Control.WheelThrottle and WheelSteering
+  * Change Control.ActivateNextStage to return a list of jettisoned vessels
+  * Add Flight.Longitude and Latitude
+  * Rename Flight.NormalNeg to AntiNormal and Flight.RadialNeg to AntiRadial (#90)
+  * Add FAR functionality to Vessel.Flight
+  * Fix Body.AtmospherePressureAt and AtmosphereDensityAt when there is no atmosphere
+  * Add Vessel.SurfaceVelocityReferenceFrame
+  * Add Node.OrbitalReferenceFrame
+  * Fix lots of reference frame bugs
+  * Remove Vessel.NonRotatingReferenceFrame
+  * Remove Body.SurfaceReferenceFrame
+
+v0.1.4-hotfix1
+* Fix null reference exception in Vessel.Thrust
 
 v0.1.4
 * General changes:
