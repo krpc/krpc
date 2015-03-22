@@ -45,14 +45,22 @@ Node
 
 .. method:: Node.BurnVector (referenceFrame)
 
-   Returns a vector in the given reference frame whose:
-
-   * direction is the direction of the maneuver nodes burn
-
-   * magnitude is the delta-v of the maneuver node
+   Returns a vector whose direction the direction of the maneuver node burn, and
+   whose magnitude is the delta-v of the burn in m/s.
 
    :param ReferenceFrame referenceFrame:
    :rtype: :class:`Vector3`
+
+   .. note:: Does not change when executing the maneuver node. See
+             :meth:`Node.RemainingBurnVector`.
+
+.. method:: Node.RemainingBurnVector (referenceFrame)
+
+   Returns a vector whose direction the direction of the maneuver node burn, and
+   whose magnitude is the delta-v of the burn in m/s. The direction and
+   magnitude change as the burn is executed.
+
+   :rtype: `double`
 
 .. attribute:: Node.UT
 

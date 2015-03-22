@@ -98,6 +98,14 @@ namespace KRPCSpaceCenter.Services
             return referenceFrame.DirectionFromWorldSpace (WorldBurnVector).ToTuple ();
         }
 
+        [KRPCMethod]
+        public Tuple3 RemainingBurnVector (ReferenceFrame referenceFrame = null)
+        {
+            if (referenceFrame == null)
+                referenceFrame = ReferenceFrame.Orbital (vessel);
+            return referenceFrame.DirectionFromWorldSpace (node.GetBurnVector (node.patch)).ToTuple ();
+        }
+
         [KRPCProperty]
         public double UT {
             get { return node.UT; }
