@@ -246,9 +246,21 @@ namespace KRPC
         public uint AddStream (IClient client, Request request)
         {
             var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
-            var streamRequest = new StreamRequest (request);
-            streamRequests [streamClient].Add (streamRequest);
-            return streamRequest.Identifier;
+
+            // Check for an existing stream for the request
+            var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request);
+            var arguments = KRPC.Service.Services.Instance.DecodeArguments (procedure, request);
+            foreach (var streamRequest in streamRequests[streamClient]) {
+                if (streamRequest.Procedure == procedure && streamRequest.Arguments.SequenceEqual (arguments))
+                    return streamRequest.Identifier;
+            }
+
+            // Create a new stream
+            {
+                var streamRequest = new StreamRequest (request);
+                streamRequests [streamClient].Add (streamRequest);
+                return streamRequest.Identifier;
+            }
         }
 
         public void RemoveStream (IClient client, uint identifier)

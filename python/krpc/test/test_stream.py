@@ -109,6 +109,17 @@ class TestStream(ServerTestCase, unittest.TestCase):
         s.remove()
         self.assertRaises(RuntimeError, s)
 
+    def test_add_stream_twice(self):
+        s0 = self.conn.add_stream(self.conn.test_service.int32_to_string, 42)
+        stream_id = s0._stream_id
+        time.sleep(0.1)
+        self.assertEqual('42', s0())
+
+        s1 = self.conn.add_stream(self.conn.test_service.int32_to_string, 42)
+        self.assertEqual(stream_id, s1._stream_id)
+        time.sleep(0.1)
+        self.assertEqual('42', s1())
+
 
 if __name__ == '__main__':
     unittest.main()
