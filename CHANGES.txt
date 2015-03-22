@@ -1,5 +1,4 @@
 v0.1.5
-* Server can now run during more game scenes and does not get restarted when switching vessel
 * Server plugin changes:
   * Server now persists across game scene changes
   * Services specify during which game scenes they are available
