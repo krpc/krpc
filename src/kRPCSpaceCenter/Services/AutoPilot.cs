@@ -78,7 +78,6 @@ namespace KRPCSpaceCenter.Services
 
         void Wait ()
         {
-            Console.WriteLine (Error + "-" + vessel.angularVelocity.magnitude);
             if (Error > 0.5f)
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
             if (vessel.angularVelocity.magnitude > 0.05f)
