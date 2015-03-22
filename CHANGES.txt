@@ -7,6 +7,7 @@ v0.1.5
   * Display service errors when KSP loads (#89)
   * Add KSP compatibility checker
   * Add logging severity levels
+  * Fix bug where yielded continuations are run more than once per update
 * SpaceCenter service changes:
   * Add SpaceCenter.DrawDirection and ClearDirections for visual debugging
   * Add Vessel.Comms to interact with RemoteTech

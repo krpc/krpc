@@ -172,38 +172,43 @@ namespace KRPC
             // The maximum amount of time to wait after executing continuations to check for new requests
             const int timeout = 1; // milliseconds
             var done = false;
-            var hadNewContinuations = false;
+            var waited = false;
+            var yieldedContinuations = new List<RequestContinuation> ();
 
             Stopwatch timer = Stopwatch.StartNew ();
             do {
+                // Check for new requests from clients
                 rpcServer.Update ();
                 streamServer.Update ();
-
-                // Check for new requests from clients
-                PollRequests ();
+                PollRequests (yieldedContinuations);
 
                 // Process pending continuations (client requests)
-                hadNewContinuations = false;
                 if (continuations.Count > 0) {
-                    hadNewContinuations = true;
-                    var newContinuations = new List<RequestContinuation> ();
                     foreach (var continuation in continuations) {
+                        // Ignore the continuation if the client has disconnected
+                        if (!continuation.Client.Connected)
+                            continue;
+                        // Execute the continuation
                         try {
                             ExecuteContinuation (continuation);
                         } catch (YieldException e) {
                             // TODO: remove cast
-                            newContinuations.Add ((RequestContinuation)e.Continuation);
+                            yieldedContinuations.Add ((RequestContinuation)e.Continuation);
                         }
                     }
-                    continuations = newContinuations;
+                    continuations.Clear ();
                 }
 
                 if (timer.ElapsedMilliseconds > maxTime) {
                     done = true;
-                } else if (timeout > 0 && hadNewContinuations && continuations.Count == 0) {
+                } else if (!waited && continuations.Count == 0) {
                     Thread.Sleep (timeout);
+                    waited = true;
                 }
             } while (!done);
+
+            // Run yielded continuations on the next update
+            continuations = yieldedContinuations;
         }
 
         /// <summary>
@@ -260,9 +265,10 @@ namespace KRPC
         /// Adds a continuation to the queue for any client with a new request,
         /// if a continuation is not already being processed for the client.
         /// </summary>
-        void PollRequests ()
+        void PollRequests (IEnumerable<RequestContinuation> yieldedContinuations)
         {
-            var currentClients = continuations.Select (((c) => c.Client));
+            var currentClients = continuations.Select (((c) => c.Client)).ToList ();
+            currentClients.AddRange (yieldedContinuations.Select (((c) => c.Client)));
             foreach (var client in clientScheduler) {
                 if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
                     Request request = client.Stream.Read ();
