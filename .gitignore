@@ -118,8 +118,6 @@ logo.png
 python/MANIFEST
 python/krpc.egg-info
 python/protobuf-*-py*.egg
-!python/bin
-python/bin/TestServer
 
 # protobuf
 *.protobin
