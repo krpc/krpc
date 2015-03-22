@@ -44,8 +44,8 @@ namespace KRPCSpaceCenter.Services
             get {
                 var prograde = node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ().normalized;
                 var normal = node.patch.GetOrbitNormal ().SwapYZ ().normalized;
-                var anti_radial = Vector3d.Cross (normal, prograde);
-                return Prograde * prograde + Normal * normal - Radial * anti_radial;
+                var radial = Vector3d.Cross (normal, prograde);
+                return Prograde * prograde + Normal * normal + Radial * radial;
             }
         }
 
