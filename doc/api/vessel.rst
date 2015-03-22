@@ -30,12 +30,12 @@ Vessel
 
    :rtype: `double`
 
-.. method:: Vessel.Flight (referenceFrame = Vessel.OrbitalReferenceFrame)
+.. method:: Vessel.Flight ([referenceFrame = Vessel.SurfaceReferenceFrame])
 
    Gets a :class:`Flight` object that can be used to get flight telemetry for
    the vessel, in the specified reference frame.
 
-   :param ReferenceFrame referenceFrame: Defaults to the orbital reference frame
+   :param ReferenceFrame referenceFrame: Defaults to the surface reference frame
                                          of the vessel.
    :rtype: :class:`Flight`
 

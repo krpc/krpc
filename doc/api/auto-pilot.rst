@@ -6,7 +6,7 @@ AutoPilot
    Provides basic auto-piloting utilities for a vessel. Created by calling
    :attr:`Vessel.AutoPilot`.
 
-.. method:: AutoPilot.SetRotation (pitch, heading, [roll = NaN], [referenceFrame = Vessel.OrbitalReferenceFrame], [wait = false])
+.. method:: AutoPilot.SetRotation (pitch, heading, [roll = NaN], [referenceFrame = Vessel.SurfaceReferenceFrame], [wait = false])
 
    Points the vessel in the specified direction, and holds it there. Setting the
    roll angle is optional.
@@ -27,11 +27,11 @@ AutoPilot
                        degrees. A value between -180° and +180°.
    :param ReferenceFrame referenceFrame: The reference frame that the pitch,
                                          heading and roll are in. Defaults to
-                                         the vessels orbital reference frame.
+                                         the vessels surface reference frame.
    :param bool wait: If true, this method returns when the auto-pilot has
                      rotated the vessel into the requested orientation.
 
-.. method:: AutoPilot.SetDirection (direction, [roll = NaN], [referenceFrame = Vessel.OrbitalReferenceFrame], [wait = false])
+.. method:: AutoPilot.SetDirection (direction, [roll = NaN], [referenceFrame = Vessel.SurfaceReferenceFrame], [wait = false])
 
    Points the vessel along the specified direction vector, and holds it
    there. Setting the roll angle is optional.
@@ -50,7 +50,7 @@ AutoPilot
                        degrees. A value between -180° and 180°.
    :param ReferenceFrame referenceFrame: The reference frame that the direction
                                          vector is in. Defaults to the vessels
-                                         orbital reference frame.
+                                         surface reference frame.
    :param bool wait: If true, this method returns when the auto-pilot has
                      rotated the vessel into the requested orientation.
 
