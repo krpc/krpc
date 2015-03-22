@@ -7,8 +7,8 @@ Reference Frames
 Introduction
 ------------
 
-All of the positions, directions, velocities, rotations etc. need to be relative
-to something -- which is where reference frames come in.
+All of the positions, directions and velocities in kRPC need to be relative to
+something -- which is what a reference frame provides.
 
 A reference frame is defined by an origin (the position ``(0,0,0)``) and a set
 of axes (``x``, ``y``, and ``z``). The reference frame can also have a linear
@@ -16,6 +16,12 @@ velocity (the velocity of the origin) and an angular/rotational velocity which
 specifies the speed at which the axes rotate.
 
 .. note:: KSP and kRPC use a left handed coordinate system.
+
+Origin Position and Axes Orientation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following gives some examples of the origin position and axes orientation
+for some different reference frames.
 
 .. figure:: /images/reference-frames/celestial-body.*
    :align: right
@@ -25,8 +31,8 @@ specifies the speed at which the axes rotate.
    shown in blue, and the prime meridian in red. The black arrows show the axes,
    and the origin is at the center of the planet.
 
-For example, the reference frame obtained by calling
-:attr:`CelestialBody.reference_frame` for Kerbin has the following properties:
+The reference frame obtained by calling :attr:`CelestialBody.reference_frame`
+for Kerbin has the following properties:
 
 * The origin is at the center of Kerbin,
 
@@ -95,17 +101,31 @@ different. The axes track the orientation of the vessel:
 
    ..
 
+Linear Velocity and Angular Velocity
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Reference frames can move and rotate relative to one another. For example, the
+reference frames discussed previously all have their origin position fixed to
+some object (such as a vessel). This means they move and rotate to track said
+object, and therefore have both a linear and angular velocity.
+
+For example, the reference frame obtained by calling the
+:attr:`CelestialBody.reference_frame` for Kerbin is fixed relative to
+Kerbin. This means the angular velocity of the reference frame is identical to
+Kerbin's angular velocity, and the linear velocity of the reference frame
+matches the velocity of Kerbin through space.
+
 Available Reference Frames
 --------------------------
 
 kRPC provides the following reference frames:
 
 * :meth:`Vessel.reference_frame`
-
 * :meth:`Vessel.orbital_reference_frame`
 * :meth:`Vessel.surface_reference_frame`
 * :meth:`Vessel.surface_velocity_reference_frame`
 * :meth:`CelestialBody.reference_frame`
+* :meth:`CelestialBody.non_rotating_reference_frame`
 * :meth:`CelestialBody.orbital_reference_frame`
 * :meth:`Node.reference_frame`
 * :meth:`Node.orbital_reference_frame`
@@ -125,8 +145,9 @@ Visual Debugging
 ----------------
 
 :meth:`SpaceCenter.DrawDirection` can be used to draw a direction vector
-in-game, and is useful to visualize reference frames and debug your code. For
-example, the following will draw the vessels surface velocity vector in red:
+in-game, and is useful for visualizing reference frames and debugging your
+code. For example, the following will draw the vessels surface velocity vector
+in red:
 
 .. code-block:: python
 
@@ -163,30 +184,29 @@ the navball:
    vessel = conn.space_center.active_vessel
 
    # Point the vessel north on the navball, with a pitch of 0 degrees
-   vessel.auto_pilot.set_direction((0,1,0), reference_frame = vessel.surface_reference_frame)
-   while vessel.auto_pilot.error > 0.1:
-       pass
+   vessel.auto_pilot.set_direction((0,1,0), reference_frame=vessel.surface_reference_frame, wait=True)
 
    # Point the vessel vertically upwards on the navball
-   vessel.auto_pilot.set_direction((1,0,0), reference_frame = vessel.surface_reference_frame)
-   while vessel.auto_pilot.error > 0.1:
-       pass
+   vessel.auto_pilot.set_direction((1,0,0), reference_frame=vessel.surface_reference_frame, wait=True)
 
    # Point the vessel west (heading of 270 degrees), with a pitch of 0 degrees
-   vessel.auto_pilot.set_direction((0,0,-1), reference_frame = vessel.surface_reference_frame)
-   while vessel.auto_pilot.error > 0.1:
-       pass
+   vessel.auto_pilot.set_direction((0,0,-1), reference_frame=vessel.surface_reference_frame, wait=True)
+
+This code uses the vessel's surface reference frame
+(:attr:`Vessel.surface_reference_frame`) pictured below:
+
+.. image:: /images/reference-frames/vessel-surface.*
+   :align: center
 
 Line 6 instructs the auto-pilot to point in direction ``(0,1,0)`` (i.e. along
-the y-axis) in the vessel's surface reference frame
-(:attr:`Vessel.surface_reference_frame`). The y-axis of the reference frame
-points in the north direction, as required.
+the y-axis) in the vessel's surface reference frame. The y-axis of the reference
+frame points in the north direction, as required.
 
-Line 11 instructs the auto-pilot to point in direction ``(1,0,0)`` (along the
+Line 9 instructs the auto-pilot to point in direction ``(1,0,0)`` (along the
 x-axis) in the vessel's surface reference frame. This x-axis of the reference
 frame points upwards (away from the planet) as required.
 
-Line 16 instructs the auto-pilot to point in direction ``(0,0,-1)`` (along the
+Line 12 instructs the auto-pilot to point in direction ``(0,0,-1)`` (along the
 negative z axis). The z-axis of the reference frame points east, so the
 requested direction points west -- as required.
 
@@ -205,26 +225,72 @@ directions, as seen on the navball when it is in 'orbit' mode, using the
    vessel = conn.space_center.active_vessel
 
    # Point the vessel in the prograde direction
-   vessel.auto_pilot.set_direction((0,1,0), reference_frame = vessel.orbital_reference_frame)
-   while vessel.auto_pilot.error > 0.1:
-       pass
+   vessel.auto_pilot.set_direction((0,1,0), reference_frame=vessel.orbital_reference_frame, wait=True)
 
    # Point the vessel in the orbit normal direction
-   vessel.auto_pilot.set_direction((0,0,1), reference_frame = vessel.orbital_reference_frame)
-   while vessel.auto_pilot.error > 0.1:
-       pass
+   vessel.auto_pilot.set_direction((0,0,1), reference_frame=vessel.orbital_reference_frame, wait=True)
 
    # Point the vessel in the orbit radial direction
-   vessel.auto_pilot.set_direction((-1,0,0), reference_frame = vessel.orbital_reference_frame)
-   while vessel.auto_pilot.error > 0.1:
-       pass
+   vessel.auto_pilot.set_direction((-1,0,0), reference_frame=vessel.orbital_reference_frame, wait=True)
+
+This code uses the vessel's orbital reference frame pictured below:
+
+.. image:: /images/reference-frames/vessel-orbital.*
+   :align: center
+
+Surface 'prograde'
+^^^^^^^^^^^^^^^^^^
+
+This example demonstrates how to point the vessel in the 'prograde' direction on
+the navball, when in surface mode. This is the direction of the velocity of the
+vessel relative to the surface:
+
+.. code-block:: python
+   :linenos:
+
+   import krpc
+   conn = krpc.connect(name='Surface prograde')
+   vessel = conn.space_center.active_vessel
+
+   vessel.auto_pilot.set_direction((0,1,0), reference_frame=vessel.surface_velocity_reference_frame, wait=True)
+
+This code uses the :attr:`Vessel.surface_velocity_reference_frame` pictured
+below:
+
+.. image:: /images/reference-frames/vessel-surface-velocity.*
+   :align: center
+
+Orbital speed
+^^^^^^^^^^^^^
+
+To compute the orbital speed of a vessel, you need to get the velocity relative
+to the planet's non-rotating reference frame
+(:attr:`CelestialBody.non_rotating_reference_frame`). This reference frame is
+fixed relative to the body, but does not rotate:
+
+.. code-block:: python
+   :linenos:
+
+   import krpc, time
+   conn = krpc.connect(name='Orbital speed')
+   vessel = conn.space_center.active_vessel
+
+   while True:
+
+       velocity = vessel.flight(vessel.orbit.body.non_rotating_reference_frame).velocity
+       print 'Orbital velocity = (%.1f, %.1f, %.1f)' % velocity
+
+       speed = vessel.flight(vessel.orbit.body.non_rotating_reference_frame).speed
+       print 'Orbital speed = %.1f m/s' % speed
+
+       time.sleep(1)
 
 Surface speed
 ^^^^^^^^^^^^^
 
 To compute the speed of a vessel relative to the surface of a planet/moon, you
-need to get the velocity relative to the planets's reference frame using
-:attr:`CelestialBody.reference_frame`. This reference frame rotates with the
+need to get the velocity relative to the planets's reference frame
+(:attr:`CelestialBody.reference_frame`). This reference frame rotates with the
 body, therefore the rotational velocity of the body is taken into account when
 computing the velocity of the vessel:
 
@@ -245,30 +311,6 @@ computing the velocity of the vessel:
 
        time.sleep(1)
 
-Surface 'prograde'
-^^^^^^^^^^^^^^^^^^
-
-This example demonstrates how to point the vessel in the 'prograde' direction on
-the navball, when in surface mode. This is the direction of the velocity of the
-vessel relative to the surface:
-
-.. code-block:: python
-   :linenos:
-
-   import krpc
-   conn = krpc.connect(name='Surface prograde')
-   vessel = conn.space_center.active_vessel
-
-   vessel.auto_pilot.set_direction((0,1,0), reference_frame = vessel.surface_velocity_reference_frame)
-   while vessel.auto_pilot.error > 0.1:
-       pass
-
-This code uses the :attr:`Vessel.surface_velocity_reference_frame` pictured
-below.
-
-.. image:: /images/reference-frames/vessel-surface-velocity.*
-   :align: center
-
 Angle of attack
 ^^^^^^^^^^^^^^^
 
@@ -276,6 +318,7 @@ This example computes the angle between the direction the vessel is pointing in,
 and the direction that the vessel is moving in (relative to the surface):
 
 .. code-block:: python
+   :linenos:
 
    import krpc, math, time
    conn = krpc.connect(name='Angle of attack')
@@ -302,3 +345,10 @@ and the direction that the vessel is moving in (relative to the surface):
        print 'Angle of attack = %.1f' % angle
 
        time.sleep(1)
+
+The orientation of the reference frame used to get the direction and velocity
+vectors (on lines 7 and 8) does not matter, as the angle between two vectors is
+the same regardless of the orientation of the axes. However, if we were to use a
+reference frame that moves with the vessel, line 8 would return ``(0,0,0)``. We
+therefore need a reference frame that is not fixed relative to the
+vessel. :attr:`CelestialBody.reference_frame` fits these requirements.
