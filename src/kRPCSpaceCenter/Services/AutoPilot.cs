@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -46,7 +47,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public void SetRotation (double pitch, double heading, double roll = Double.NaN, ReferenceFrame referenceFrame = null)
+        public void SetRotation (double pitch, double heading, double roll = Double.NaN, ReferenceFrame referenceFrame = null, bool wait = false)
         {
             if (referenceFrame == null)
                 referenceFrame = ReferenceFrame.Orbital (vessel);
@@ -55,10 +56,12 @@ namespace KRPCSpaceCenter.Services
             this.heading = heading;
             this.roll = roll;
             Engage ();
+            if (wait)
+                throw new YieldException (new ParameterizedContinuationVoid (Wait));
         }
 
         [KRPCMethod]
-        public void SetDirection (Tuple3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = null)
+        public void SetDirection (Tuple3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = null, bool wait = false)
         {
             if (referenceFrame == null)
                 referenceFrame = ReferenceFrame.Orbital (vessel);
@@ -69,6 +72,17 @@ namespace KRPCSpaceCenter.Services
             heading = phr [1];
             this.roll = roll;
             Engage ();
+            if (wait)
+                throw new YieldException (new ParameterizedContinuationVoid (Wait));
+        }
+
+        void Wait ()
+        {
+            Console.WriteLine (Error + "-" + vessel.angularVelocity.magnitude);
+            if (Error > 0.5f)
+                throw new YieldException (new ParameterizedContinuationVoid (Wait));
+            if (vessel.angularVelocity.magnitude > 0.05f)
+                throw new YieldException (new ParameterizedContinuationVoid (Wait));
         }
 
         void Engage ()

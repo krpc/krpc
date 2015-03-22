@@ -6,11 +6,15 @@ AutoPilot
    Provides basic auto-piloting utilities for a vessel. Created by calling
    :attr:`Vessel.AutoPilot`.
 
-.. method:: AutoPilot.SetRotation (pitch, heading, roll = NaN, referenceFrame = Vessel.OrbitalReferenceFrame)
+.. method:: AutoPilot.SetRotation (pitch, heading, [roll = NaN], [referenceFrame = Vessel.OrbitalReferenceFrame], [wait = false])
 
    Points the vessel in the specified direction, and holds it there. Setting the
-   roll angle is optional. This method returns immediately, and the auto-pilot
-   continues to set the rotation of the vessel.
+   roll angle is optional.
+
+   If wait is ``false`` (the default) this method returns immediately, and the
+   auto-pilot continues to rotate the vessel. If wait is ``true``, this method
+   returns when the auto-pilot has rotated the vessel into the requested
+   orientation.
 
    The auto-pilot is disengaged either when :meth:`AutoPilot.Disengage` is
    called, or when the client that requested the auto-pilot command disconnects.
@@ -24,12 +28,18 @@ AutoPilot
    :param ReferenceFrame referenceFrame: The reference frame that the pitch,
                                          heading and roll are in. Defaults to
                                          the vessels orbital reference frame.
+   :param bool wait: If true, this method returns when the auto-pilot has
+                     rotated the vessel into the requested orientation.
 
-.. method:: AutoPilot.SetDirection (direction, roll = NaN, referenceFrame = Vessel.OrbitalReferenceFrame)
+.. method:: AutoPilot.SetDirection (direction, [roll = NaN], [referenceFrame = Vessel.OrbitalReferenceFrame], [wait = false])
 
    Points the vessel along the specified direction vector, and holds it
-   there. Setting the roll angle is optional. This method returns immediately,
-   and the auto-pilot continues to set the rotation of the vessel.
+   there. Setting the roll angle is optional.
+
+   If wait is ``false`` (the default) this method returns immediately, and the
+   auto-pilot continues to rotate the vessel. If wait is ``true``, this method
+   returns when the auto-pilot has rotated the vessel into the requested
+   orientation.
 
    The auto-pilot is disengaged either when :meth:`AutoPilot.Disengage` is
    called, or when the client that requested the auto-pilot command disconnects.
@@ -41,6 +51,8 @@ AutoPilot
    :param ReferenceFrame referenceFrame: The reference frame that the direction
                                          vector is in. Defaults to the vessels
                                          orbital reference frame.
+   :param bool wait: If true, this method returns when the auto-pilot has
+                     rotated the vessel into the requested orientation.
 
 .. attribute:: AutoPilot.Error
 

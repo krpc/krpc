@@ -21,6 +21,7 @@ v0.1.5
   * Fix lots of reference frame bugs
   * Remove Vessel.NonRotatingReferenceFrame
   * Remove Body.SurfaceReferenceFrame
+  * Add wait parameter to AutoPilot methods
   * AutoPilot and Control inputs reset to 0 when the client that requested them disconnects
   * Change AutoPilot to set SAS to false when it's disengaged
 
