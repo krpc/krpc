@@ -95,6 +95,18 @@ resources, planning maneuver nodes and auto-piloting.
    :return: The corresponding velocity in reference frame `to`.
    :rtype: :class:`Vector3`
 
+.. attribute:: SpaceCenter.FARAvailable
+
+   Gets whether `Ferram Aerospace Research`_ is installed.
+
+   :rtype: bool
+
+.. attribute:: SpaceCenter.RemoteTechAvailable
+
+   Gets whether `RemoteTech`_ is installed.
+
+   :rtype: bool
+
 .. method:: SpaceCenter.DrawDirection (direction, referenceFrame, color, [length])
 
    Draw a direction vector on the active vessel.
@@ -107,3 +119,6 @@ resources, planning maneuver nodes and auto-piloting.
 .. method:: SpaceCenter.ClearDirections ()
 
    Remove all directions currently being drawn.
+
+.. _Ferram Aerospace Research: http://forum.kerbalspaceprogram.com/threads/20451-0-90-Ferram-Aerospace-Research-v0-14-6-12-27-14
+.. _RemoteTech: http://forum.kerbalspaceprogram.com/threads/83305-0-90-0-RemoteTech-v1-6-3-2015-02-06

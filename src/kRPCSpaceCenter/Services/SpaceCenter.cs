@@ -156,6 +156,16 @@ namespace KRPCSpaceCenter.Services
             return to.VelocityFromWorldSpace (worldPosition, worldVelocity).ToTuple ();
         }
 
+        [KRPCProperty]
+        public static bool FARAvailable {
+            get { return ExternalAPI.FAR.IsAvailable; }
+        }
+
+        [KRPCProperty]
+        public static bool RemoteTechAvailable {
+            get { return ExternalAPI.RemoteTech.IsAvailable; }
+        }
+
         [KRPCProcedure]
         public static void DrawDirection (Tuple3 direction, ReferenceFrame referenceFrame, Tuple3 color, float length = 10f)
         {
