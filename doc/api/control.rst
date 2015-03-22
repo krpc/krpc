@@ -54,61 +54,61 @@ Control
 
    :type: `float`
 
-.. attribute:: Control.Forward
-
-   Gets or sets the state of the forward translational control (equivalent to
-   the `h` and `n` keys). A value between -1 and 1.
-
-   :type: `float`
-
-.. attribute:: Control.Up
-
-   Gets or sets the state of the up translational control (equivalent to the `i`
-   and `k` keys). A value between -1 and 1.
-
-   :type: `float`
-
-.. attribute:: Control.Sideways
-
-   Gets or sets the state of the sideways translational control (equivalent to
-   the `j` and `l` keys). A value between -1 and 1.
-
-   :type: `float`
-
 .. attribute:: Control.Pitch
 
    Gets or sets the state of the pitch control (equivalent to the `w` and `s`
-   keys). A value between -1 and 1.
-
-   :type: `float`
-
-.. attribute:: Control.Roll
-
-   Gets or sets the state of the roll control (equivalent to the `q` and `e`
-   keys). A value between -1 and 1.
+   keys) [#control-reset]_. A value between -1 and 1.
 
    :type: `float`
 
 .. attribute:: Control.Yaw
 
    Gets or sets the state of the yaw control (equivalent to the `a` and `d`
-   keys). A value between -1 and 1.
+   keys) [#control-reset]_. A value between -1 and 1.
+
+   :type: `float`
+
+.. attribute:: Control.Roll
+
+   Gets or sets the state of the roll control (equivalent to the `q` and `e`
+   keys) [#control-reset]_. A value between -1 and 1.
+
+   :type: `float`
+
+.. attribute:: Control.Forward
+
+   Gets or sets the state of the forward translational control (equivalent to
+   the `h` and `n` keys) [#control-reset]_. A value between -1 and 1.
+
+   :type: `float`
+
+.. attribute:: Control.Up
+
+   Gets or sets the state of the up translational control (equivalent to the `i`
+   and `k` keys) [#control-reset]_. A value between -1 and 1.
+
+   :type: `float`
+
+.. attribute:: Control.Sideways
+
+   Gets or sets the state of the sideways translational control (equivalent to
+   the `j` and `l` keys) [#control-reset]_. A value between -1 and 1.
 
    :type: `float`
 
 .. attribute:: Control.WheelThrottle
 
-   Gets or sets to state of the wheel throttle. A value between -1 and 1. A
-   value of 1 rotates the wheels fowards, a value of -1 rotates the wheels
-   backwards.
+   Gets or sets the state of the wheel throttle [#control-reset]_. A value
+   between -1 and 1. A value of 1 rotates the wheels fowards, a value of -1
+   rotates the wheels backwards.
 
    :type: `float`
 
 .. attribute:: Control.WheelSteering
 
-   Gets or sets to state of the wheel steering. A value between -1 and 1. A
-   value of 1 steers to the left, and a value of -1 steers to the right (using
-   the right handed rule).
+   Gets or sets the state of the wheel steering [#control-reset]_. A value
+   between -1 and 1. A value of 1 steers to the left, and a value of -1 steers
+   to the right.
 
    :type: `float`
 
@@ -171,3 +171,10 @@ Control
 .. method:: Control.RemoveNodes ()
 
    Removes all maneuver nodes.
+
+.. rubric:: Footnotes
+
+.. [#control-reset] The control input will persist until the client that
+                    requested it disconnects. If multiple clients set a control
+                    input, they are added together and clamped to the range
+                    [-1,1].

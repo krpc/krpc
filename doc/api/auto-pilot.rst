@@ -10,8 +10,10 @@ AutoPilot
 
    Points the vessel in the specified direction, and holds it there. Setting the
    roll angle is optional. This method returns immediately, and the auto-pilot
-   continues to set the rotation of the vessel, until
-   :meth:`AutoPilot.Disengage` is called.
+   continues to set the rotation of the vessel.
+
+   The auto-pilot is disengaged either when :meth:`AutoPilot.Disengage` is
+   called, or when the client that requested the auto-pilot command disconnects.
 
    :param double pitch: The desired pitch above/below the horizon, in degrees. A
                         value between -90° and +90° degrees.
@@ -27,8 +29,10 @@ AutoPilot
 
    Points the vessel along the specified direction vector, and holds it
    there. Setting the roll angle is optional. This method returns immediately,
-   and the auto-pilot continues to set the rotation of the vessel, until
-   :meth:`AutoPilot.Disengage` is called.
+   and the auto-pilot continues to set the rotation of the vessel.
+
+   The auto-pilot is disengaged either when :meth:`AutoPilot.Disengage` is
+   called, or when the client that requested the auto-pilot command disconnects.
 
    :param Vector3 direction: The desired direction (pitch and heading) as a unit
                             vector.
@@ -50,3 +54,5 @@ AutoPilot
 
    Disengage the auto-pilot.  Has no effect unless :meth:`AutoPilot.SetRotation`
    or :meth:`AutoPilot.SetDirection` have been called previously.
+
+   .. note:: This will disable :attr:`Control.SAS`.

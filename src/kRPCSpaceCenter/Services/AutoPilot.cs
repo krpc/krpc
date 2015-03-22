@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using KRPC.Server;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using UnityEngine;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -21,6 +22,7 @@ namespace KRPCSpaceCenter.Services
     {
         readonly global::Vessel vessel;
         static HashSet<AutoPilot> engaged = new HashSet<AutoPilot> ();
+        IClient requestingClient;
         ReferenceFrame referenceFrame;
         double pitch;
         double heading;
@@ -71,6 +73,10 @@ namespace KRPCSpaceCenter.Services
 
         void Engage ()
         {
+            //TODO: add support for auto-piloting other vessels when they are in physics range
+            if (FlightGlobals.ActiveVessel != vessel)
+                throw new InvalidOperationException ("Vessel is not the active vessel");
+            requestingClient = KRPC.KRPCServer.Context.RPCClient;
             sasSet = false;
             sasUpdate = 0;
             engaged.Add (this);
@@ -79,6 +85,9 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public void Disengage ()
         {
+            vessel.Autopilot.SetMode (VesselAutopilot.AutopilotMode.StabilityAssist);
+            vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
+            requestingClient = null;
             engaged.Remove (this);
         }
 
@@ -94,9 +103,17 @@ namespace KRPCSpaceCenter.Services
             engaged.Clear ();
         }
 
-        public static void Fly (FlightCtrlState state)
+        public static void Fly (global::Vessel vessel, FlightCtrlState state)
         {
-            foreach (var autoPilot in engaged) {
+            foreach (var autoPilot in engaged.ToList ()) {
+                // If the client that made the auto-pilot command has disconnected,
+                // disengage the auto-pilot
+                if (!autoPilot.requestingClient.Connected)
+                    autoPilot.Disengage ();
+                // Skip if the auto-pilot is not for the active vessel
+                //TODO: cannot control vessels other than the active vessel
+                if (vessel != autoPilot.vessel)
+                    continue;
                 autoPilot.DoAutoPiloting (state);
             }
         }
