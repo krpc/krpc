@@ -94,7 +94,10 @@ def update_thread(connection):
                 return
 
         # Read and decode the response message
-        data = connection.receive(size)
+        try:
+            data = connection.receive(size)
+        except socket.error:
+            return
         response = _Decoder.decode(data, stream_message_type)
 
         # Add the data to the cache
