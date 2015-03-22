@@ -289,7 +289,7 @@ namespace KRPCSpaceCenter.Services
                     return vessel.GetOrbit ().GetVel ();
                 case Type.Maneuver:
                 case Type.ManeuverOrbital:
-                    throw new NotImplementedException ();
+                    return Vector3d.zero; //TODO: check this
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -309,19 +309,19 @@ namespace KRPCSpaceCenter.Services
                 case Type.CelestialBodyNonRotating:
                     return Vector3d.zero;
                 case Type.CelestialBodyOrbital:
-                    throw new NotImplementedException ();
+                    return Vector3d.zero; //TODO: check this
                 case Type.Vessel:
                     return vessel.angularVelocity;
                 case Type.VesselOrbital:
-                    throw new NotImplementedException ();
+                    return Vector3d.zero; //TODO: check this
                 case Type.VesselSurface:
-                    throw new NotImplementedException ();
+                    return Vector3d.zero; //TODO: check this
                 case Type.VesselSurfaceVelocity:
-                    throw new NotImplementedException ();
+                    return Vector3d.zero; //TODO: check this
                 case Type.Maneuver:
-                    throw new NotImplementedException ();
+                    return Vector3d.zero; //TODO: check this
                 case Type.ManeuverOrbital:
-                    throw new NotImplementedException ();
+                    return Vector3d.zero; //TODO: check this
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
