@@ -137,7 +137,7 @@ dist
 lib/KSP_Data
 
 # Documentation
-docs
+!docs
 doc/build
 doc/src/python-api
 doc/src/images/**/*.png
