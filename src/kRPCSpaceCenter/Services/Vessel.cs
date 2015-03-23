@@ -119,7 +119,7 @@ namespace KRPCSpaceCenter.Services
         public Comms Comms {
             get {
                 if (!RemoteTech.IsAvailable)
-                    throw new RPCException ("RemoteTech is not installed");
+                    throw new InvalidOperationException ("RemoteTech is not installed");
                 return comms;
             }
         }

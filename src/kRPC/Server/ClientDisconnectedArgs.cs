@@ -2,21 +2,33 @@ using System;
 
 namespace KRPC.Server
 {
+    /// <summary>
+    /// Arguments passed to a client disconnected event
+    /// </summary>
     public class ClientDisconnectedArgs : EventArgs, IClientEventArgs
     {
+        /// <summary>
+        /// The client
+        /// </summary>
         public IClient Client { get; private set; }
 
-        public ClientDisconnectedArgs (IClient client)
+        internal ClientDisconnectedArgs (IClient client)
         {
             Client = client;
         }
     }
 
+    /// <summary>
+    /// Arguments passed to a client disconnected event
+    /// </summary>
     class ClientDisconnectedArgs<TIn,TOut> : EventArgs, IClientEventArgs<TIn,TOut>
     {
+        /// <summary>
+        /// The client
+        /// </summary>
         public IClient<TIn,TOut> Client { get; private set; }
 
-        public ClientDisconnectedArgs (IClient<TIn,TOut> client)
+        internal ClientDisconnectedArgs (IClient<TIn,TOut> client)
         {
             Client = client;
         }

@@ -15,6 +15,9 @@ using KRPC.Utils;
 
 namespace KRPC
 {
+    /// <summary>
+    /// The kRPC server
+    /// </summary>
     public class KRPCServer : IServer
     {
         readonly TCPServer rpcTcpServer;
@@ -30,11 +33,34 @@ namespace KRPC
 
         internal UniversalTimeFunction GetUniversalTime;
 
+        /// <summary>
+        /// Event triggered when the server starts
+        /// </summary>
         public event EventHandler OnStarted;
+
+        /// <summary>
+        /// Event triggered when the server stops
+        /// </summary>
         public event EventHandler OnStopped;
+
+        /// <summary>
+        /// Event triggered when a client is requesting a connection
+        /// </summary>
         public event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
+
+        /// <summary>
+        /// Event triggered when a client has connected
+        /// </summary>
         public event EventHandler<ClientConnectedArgs> OnClientConnected;
+
+        /// <summary>
+        /// Event triggered when a client performs some activity
+        /// </summary>
         public event EventHandler<ClientActivityArgs> OnClientActivity;
+
+        /// <summary>
+        /// Event triggered when a client has disconnected
+        /// </summary>
         public event EventHandler<ClientDisconnectedArgs> OnClientDisconnected;
 
         /// <summary>
@@ -43,31 +69,40 @@ namespace KRPC
         /// </summary>
         public static class Context
         {
+            /// <summary>
+            /// The server instance
+            /// </summary>
             public static KRPCServer Server { get; private set; }
 
+            /// <summary>
+            /// The current client
+            /// </summary>
             public static IClient RPCClient { get; private set; }
 
+            /// <summary>
+            /// The current game scene
+            /// </summary>
             public static GameScene GameScene { get; private set; }
 
-            public static void Set (KRPCServer server, IClient rpcClient)
+            internal static void Set (KRPCServer server, IClient rpcClient)
             {
                 Server = server;
                 RPCClient = rpcClient;
             }
 
-            public static void Clear ()
+            internal static void Clear ()
             {
                 Server = null;
                 RPCClient = null;
             }
 
-            public static void SetGameScene (GameScene gameScene)
+            internal static void SetGameScene (GameScene gameScene)
             {
                 GameScene = gameScene;
             }
         }
 
-        public KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort)
+        internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort)
         {
             rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
@@ -116,12 +151,18 @@ namespace KRPC
             };
         }
 
+        /// <summary>
+        /// Start the server
+        /// </summary>
         public void Start ()
         {
             rpcServer.Start ();
             streamServer.Start ();
         }
 
+        /// <summary>
+        /// Stop the server
+        /// </summary>
         public void Stop ()
         {
             rpcServer.Stop ();
@@ -129,6 +170,9 @@ namespace KRPC
             ObjectStore.Clear ();
         }
 
+        /// <summary>
+        /// Get/set the servers listen address
+        /// </summary>
         public IPAddress Address {
             get { return rpcTcpServer.Address; }
             set {
@@ -137,24 +181,40 @@ namespace KRPC
             }
         }
 
+        /// <summary>
+        /// Get/set the RPC port
+        /// </summary>
         public ushort RPCPort {
             get { return rpcTcpServer.Port; }
             set { rpcTcpServer.Port = value; }
         }
 
+        /// <summary>
+        /// Get/set the Stream port
+        /// </summary>
         public ushort StreamPort {
             get { return streamTcpServer.Port; }
             set { streamTcpServer.Port = value; }
         }
 
+        /// <summary>
+        /// Returns true if the server is running
+        /// </summary>
         public bool Running {
             get { return rpcServer.Running && streamServer.Running; }
         }
 
+        /// <summary>
+        /// Returns a list of clients the server knows about. Note that they might
+        /// not be connected to the server.
+        /// </summary>
         public IEnumerable<IClient> Clients {
             get { return rpcServer.Clients.Select (x => (IClient)x); }
         }
 
+        /// <summary>
+        /// Update the server
+        /// </summary>
         public void Update ()
         {
             RPCServerUpdate ();
@@ -243,7 +303,7 @@ namespace KRPC
             }
         }
 
-        public uint AddStream (IClient client, Request request)
+        internal uint AddStream (IClient client, Request request)
         {
             var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
 
@@ -263,7 +323,7 @@ namespace KRPC
             }
         }
 
-        public void RemoveStream (IClient client, uint identifier)
+        internal void RemoveStream (IClient client, uint identifier)
         {
             var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
             var requests = streamRequests [streamClient].Where (x => x.Identifier == identifier).ToList ();

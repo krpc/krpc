@@ -2,38 +2,56 @@ using System;
 
 namespace KRPC.Server
 {
+    /// <summary>
+    /// Arguments passed to a client requesting connection event
+    /// </summary>
     public class ClientRequestingConnectionArgs : EventArgs, IClientEventArgs
     {
+        /// <summary>
+        /// The client
+        /// </summary>
         public IClient Client { get; private set; }
 
+        /// <summary>
+        /// The request
+        /// </summary>
         public ClientConnectionRequest Request { get; private set; }
 
-        public ClientRequestingConnectionArgs (IClient client)
+        internal ClientRequestingConnectionArgs (IClient client)
         {
             Client = client;
             Request = new ClientConnectionRequest ();
         }
 
-        public ClientRequestingConnectionArgs (IClient client, ClientConnectionRequest request)
+        internal ClientRequestingConnectionArgs (IClient client, ClientConnectionRequest request)
         {
             Client = client;
             Request = request;
         }
     }
 
+    /// <summary>
+    /// Arguments passed to a client requesting connection event
+    /// </summary>
     class ClientRequestingConnectionArgs<TIn,TOut> : EventArgs, IClientEventArgs<TIn,TOut>
     {
+        /// <summary>
+        /// The client
+        /// </summary>
         public IClient<TIn,TOut> Client { get; private set; }
 
+        /// <summary>
+        /// The request
+        /// </summary>
         public ClientConnectionRequest Request { get; private set; }
 
-        public ClientRequestingConnectionArgs (IClient<TIn,TOut> client)
+        internal ClientRequestingConnectionArgs (IClient<TIn,TOut> client)
         {
             Client = client;
             Request = new ClientConnectionRequest ();
         }
 
-        public ClientRequestingConnectionArgs (IClient<TIn,TOut> client, ClientConnectionRequest request)
+        internal ClientRequestingConnectionArgs (IClient<TIn,TOut> client, ClientConnectionRequest request)
         {
             Client = client;
             Request = request;

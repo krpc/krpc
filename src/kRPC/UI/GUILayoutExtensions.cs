@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KRPC.UI
 {
-    public static class GUILayoutExtensions
+    static class GUILayoutExtensions
     {
         public static void Init (GameObject gameObject)
         {

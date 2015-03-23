@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -13,7 +14,7 @@ namespace KRPCSpaceCenter.Services
         internal Comms (global::Vessel vessel)
         {
             if (!RemoteTech.IsAvailable)
-                throw new RPCException ("RemoteTech is not installed");
+                throw new InvalidOperationException ("RemoteTech is not installed");
             this.vessel = vessel;
         }
 

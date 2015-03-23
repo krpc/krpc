@@ -92,9 +92,9 @@ namespace KRPCSpaceCenter.Services
         void CheckFAR ()
         {
             if (!FAR.IsAvailable)
-                throw new RPCException ("FAR is not available");
+                throw new InvalidOperationException ("FAR is not available");
             if (!FAR.ActiveControlSysIsOnVessel (this.vessel))
-                throw new RPCException ("FAR is not active on this vessel");
+                throw new InvalidOperationException ("FAR is not active on this vessel");
         }
 
         [KRPCProperty]
