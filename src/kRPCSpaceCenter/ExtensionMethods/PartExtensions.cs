@@ -2,7 +2,7 @@ using System.Linq;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
-    public static class PartExtensions
+    static class PartExtensions
     {
         /// <summary>
         /// Returns true if the part contains the given part module

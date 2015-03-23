@@ -9,6 +9,9 @@ namespace KRPCSpaceCenter
 {
     using Direction = Tuple<KRPC.Server.IClient, GameObject, LineRenderer, Vector3, float, ReferenceFrame>;
 
+    /// <summary>
+    /// Addon for visual debugging functionality
+    /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class DrawAddon : MonoBehaviour
     {
@@ -37,10 +40,16 @@ namespace KRPCSpaceCenter
             directions.Clear ();
         }
 
+        /// <summary>
+        /// Wake the addon
+        /// </summary>
         public void Awake ()
         {
         }
 
+        /// <summary>
+        /// Update the addon
+        /// </summary>
         public void Update ()
         {
             // Remove directions for disconnected clients
@@ -63,6 +72,9 @@ namespace KRPCSpaceCenter
             }
         }
 
+        /// <summary>
+        /// Destroy the addon
+        /// </summary>
         public void OnDestroy ()
         {
             ClearDirections ();

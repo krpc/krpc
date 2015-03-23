@@ -2,7 +2,7 @@ using System;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
-    public static class VesselSituationExtensions
+    static class VesselSituationExtensions
     {
         public static KRPCSpaceCenter.Services.VesselSituation ToVesselSituation (this Vessel.Situations situation)
         {

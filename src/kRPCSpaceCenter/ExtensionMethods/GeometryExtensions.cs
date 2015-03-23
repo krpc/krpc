@@ -5,7 +5,7 @@ using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
-    public static class GeometryExtensions
+    static class GeometryExtensions
     {
         /// <summary>
         /// Convert a vector to a tuple

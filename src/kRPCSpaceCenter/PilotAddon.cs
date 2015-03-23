@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace KRPCSpaceCenter
 {
+    /// <summary>
+    /// Addon to update a vessels control inputs
+    /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class PilotAddon : MonoBehaviour
     {
@@ -53,7 +56,7 @@ namespace KRPCSpaceCenter
             CheckClients ();
         }
 
-        public static float Pitch {
+        internal static float Pitch {
             get {
                 AddClient (KRPC.KRPCServer.Context.RPCClient);
                 return controlInputs [KRPC.KRPCServer.Context.RPCClient].pitch;
@@ -64,7 +67,7 @@ namespace KRPCSpaceCenter
             }
         }
 
-        public static float Yaw {
+        internal static float Yaw {
             get {
                 AddClient (KRPC.KRPCServer.Context.RPCClient);
                 return controlInputs [KRPC.KRPCServer.Context.RPCClient].yaw;
@@ -75,7 +78,7 @@ namespace KRPCSpaceCenter
             }
         }
 
-        public static float Roll {
+        internal static float Roll {
             get {
                 AddClient (KRPC.KRPCServer.Context.RPCClient);
                 return controlInputs [KRPC.KRPCServer.Context.RPCClient].roll;
@@ -86,7 +89,7 @@ namespace KRPCSpaceCenter
             }
         }
 
-        public static float Forward {
+        internal static float Forward {
             get {
                 AddClient (KRPC.KRPCServer.Context.RPCClient);
                 return controlInputs [KRPC.KRPCServer.Context.RPCClient].forward;
@@ -97,7 +100,7 @@ namespace KRPCSpaceCenter
             }
         }
 
-        public static float Up {
+        internal static float Up {
             get {
                 AddClient (KRPC.KRPCServer.Context.RPCClient);
                 return controlInputs [KRPC.KRPCServer.Context.RPCClient].up;
@@ -108,7 +111,7 @@ namespace KRPCSpaceCenter
             }
         }
 
-        public static float Right {
+        internal static float Right {
             get {
                 AddClient (KRPC.KRPCServer.Context.RPCClient);
                 return controlInputs [KRPC.KRPCServer.Context.RPCClient].right;
@@ -119,7 +122,7 @@ namespace KRPCSpaceCenter
             }
         }
 
-        public static float WheelThrottle {
+        internal static float WheelThrottle {
             get {
                 AddClient (KRPC.KRPCServer.Context.RPCClient);
                 return controlInputs [KRPC.KRPCServer.Context.RPCClient].wheelThrottle;
@@ -130,7 +133,7 @@ namespace KRPCSpaceCenter
             }
         }
 
-        public static float WheelSteer {
+        internal static float WheelSteer {
             get {
                 AddClient (KRPC.KRPCServer.Context.RPCClient);
                 return controlInputs [KRPC.KRPCServer.Context.RPCClient].wheelSteer;
@@ -141,11 +144,17 @@ namespace KRPCSpaceCenter
             }
         }
 
+        /// <summary>
+        /// Wake the addon
+        /// </summary>
         public void Awake ()
         {
             controlInputs = new Dictionary<IClient, ControlInputs> ();
         }
 
+        /// <summary>
+        /// Update the pilot addon for a current vessel
+        /// </summary>
         public void FixedUpdate ()
         {
             if (controlledVessel == null && FlightGlobals.ActiveVessel != null) {
@@ -161,6 +170,9 @@ namespace KRPCSpaceCenter
             }
         }
 
+        /// <summary>
+        /// Destroy the addon
+        /// </summary>
         public void OnDestroy ()
         {
             if (controlledVessel != null)

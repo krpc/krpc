@@ -1,6 +1,6 @@
 namespace KRPCSpaceCenter.ExtensionMethods
 {
-    public static class CelestialBodyExtensions
+    static class CelestialBodyExtensions
     {
         public static Vector3d GetWorldVelocity (this global::CelestialBody body)
         {
