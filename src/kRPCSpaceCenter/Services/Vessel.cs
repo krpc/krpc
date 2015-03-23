@@ -148,9 +148,6 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
-        /// <summary>
-        /// The maximum thrust (in Newtons) of all active engines combined when throttled up to 100%
-        /// </summary>
         //FIXME: just sums the max thrust of every engine, i.e. assumes all engines are pointing the same direction
         [KRPCProperty]
         public double Thrust {
@@ -178,9 +175,6 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
-        /// <summary>
-        /// The combined specific impulse (in seconds) of all active engines
-        /// </summary>
         [KRPCProperty]
         public double SpecificImpulse {
             get {

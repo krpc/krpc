@@ -118,36 +118,24 @@ namespace KRPCSpaceCenter.Services
             TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
         }
 
-        /// <summary>
-        /// Given a position as a vector in reference frame `from`, convert it to a position in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple3 TransformPosition (Tuple3 position, ReferenceFrame from, ReferenceFrame to)
         {
             return to.PositionFromWorldSpace (from.PositionToWorldSpace (position.ToVector ())).ToTuple ();
         }
 
-        /// <summary>
-        /// Given a direction as a 3D unit vector in reference frame `from`, convert it to a unit vector in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple3 TransformDirection (Tuple3 direction, ReferenceFrame from, ReferenceFrame to)
         {
             return to.DirectionFromWorldSpace (from.DirectionToWorldSpace (direction.ToVector ())).ToTuple ();
         }
 
-        /// <summary>
-        /// Given a rotation as a quaternion in reference frame `from`, convert it to a rotation in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple4 TransformRotation (Tuple4 rotation, ReferenceFrame from, ReferenceFrame to)
         {
             return to.RotationFromWorldSpace (from.RotationToWorldSpace (rotation.ToQuaternion ())).ToTuple ();
         }
 
-        /// <summary>
-        /// Given a velocity at a position in reference frame `from`, convert it to a velocity in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple3 TransformVelocity (Tuple3 position, Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
         {
