@@ -57,6 +57,5 @@ namespace KRPCSpaceCenter.Services
         public double SignalDelayToVessel (Vessel other) {
             return RemoteTech.GetSignalDelayToSatellite (vessel.id, other.InternalVessel.id);
         }
-
     }
 }

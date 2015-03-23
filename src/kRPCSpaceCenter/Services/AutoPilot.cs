@@ -113,12 +113,13 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
-        public static void Clear ()
+        //FIXME: this is never called
+        static void Clear ()
         {
             engaged.Clear ();
         }
 
-        public static void Fly (global::Vessel vessel, FlightCtrlState state)
+        internal static void Fly (global::Vessel vessel, FlightCtrlState state)
         {
             foreach (var autoPilot in engaged.ToList ()) {
                 // If the client that made the auto-pilot command has disconnected,

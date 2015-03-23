@@ -5,6 +5,7 @@ using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
+    //FIXME: should extend equatable interface?
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Orbit
     {
