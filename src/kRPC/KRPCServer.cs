@@ -371,9 +371,9 @@ namespace KRPC
                 throw;
             } catch (Exception e) {
                 response = Response.CreateBuilder ();
-                response.Error = e.ToString ();
+                response.Error = e.Message;
                 if (Logger.ShouldLog (Logger.Severity.Debug))
-                    Logger.WriteLine (e.ToString (), Logger.Severity.Debug);
+                    Logger.WriteLine (e.Message, Logger.Severity.Debug);
             } finally {
                 Context.Clear ();
             }

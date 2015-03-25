@@ -24,6 +24,19 @@ class TestClient(ServerTestCase, unittest.TestCase):
         version = open('../VERSION.txt').readlines()[0].rstrip()
         self.assertEqual(version, status.version)
 
+    def test_error(self):
+        self.assertRaises(self.conn.test_service.throw_argument_exception)
+        try:
+            self.conn.test_service.throw_argument_exception()
+        except krpc.client.RPCError, e:
+            self.assertEqual('Invalid argument', str(e))
+
+        self.assertRaises(self.conn.test_service.throw_invalid_operation_exception)
+        try:
+            self.conn.test_service.throw_invalid_operation_exception()
+        except krpc.client.RPCError, e:
+            self.assertEqual('Invalid operation', str(e))
+
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.conn.test_service.float_to_string(float(3.14159)))
         self.assertEqual('3.14159', self.conn.test_service.double_to_string(float(3.14159)))
