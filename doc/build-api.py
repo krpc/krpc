@@ -64,6 +64,15 @@ def parse_file(path):
             def repl(m):
                 return ':param '+m.group(1)+' '+snake_case_name(m.group(2))+':'
             line = re.sub(':param ([^ ]+) (.+):', repl, line)
+            def repl2(m):
+                return m.group(1)+'*'+snake_case(m.group(2))+'*'+m.group(3)
+            line = re.sub('([^\*])\*([^\*]+)\*([^\*])', repl2, line)
+            line = line.replace('``null``', '``None``')
+            line = line.replace('``true``', '``True``')
+            line = line.replace('``false``', '``False``')
+            line = line.replace('``string``', '``str``')
+            line = line.replace(':class:`Dictionary`', '``dict``')
+            line = line.replace(':class:`List`', '``list``')
             lines.append(line.rstrip())
         return '\n'.join(lines)+'\n'
 
