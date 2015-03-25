@@ -5,6 +5,7 @@ copyright = '2015, djungelorm'
 
 master_doc = 'index'
 source_suffix = '.rst'
+exclude_patterns = ['**/.#*']
 extensions = ['sphinx.ext.mathjax', 'sphinx.ext.todo']
 
 pygments_style = 'sphinx'
