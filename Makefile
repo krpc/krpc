@@ -39,7 +39,7 @@ NUNIT_CONSOLE = nunit-console
 INKSCAPE = inkscape
 
 .PHONY: all configure build dist install release clean dist-clean \
-        test dist-python doc cog protobuf icons logo ksp strip-bom
+        test dist-python doc gh-pages cog protobuf icons logo ksp strip-bom
 
 # Main targets -----------------------------------------------------------------
 
@@ -138,6 +138,9 @@ dist-python:
 
 doc:
 	make -C doc build
+
+gh-pages:
+	make -C doc gh-pages
 
 # Cog --------------------------------------------------------------------------
 
