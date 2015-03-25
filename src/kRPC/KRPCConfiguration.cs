@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using UnityEngine;
+using KRPC.Service;
 using KRPC.Utils;
 
 namespace KRPC
@@ -15,6 +16,7 @@ namespace KRPC
         [Persistent] bool autoStartServer = false;
         [Persistent] bool autoAcceptConnections = false;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
+        [Persistent] bool verboseErrors = RPCException.VerboseErrors;
 
         public IPAddress Address { get; set; }
 
@@ -53,12 +55,14 @@ namespace KRPC
         {
             Address = IPAddress.Parse (address);
             Logger.Level = (Logger.Severity)Enum.Parse (typeof(Logger.Severity), logLevel);
+            RPCException.VerboseErrors = verboseErrors;
         }
 
         protected override void BeforeSave ()
         {
             address = Address.ToString ();
             logLevel = Logger.Level.ToString ();
+            verboseErrors = RPCException.VerboseErrors;
         }
 
         protected override void AfterLoad ()
@@ -79,6 +83,7 @@ namespace KRPC
                     "Defaulting to " + Logger.Severity.Info);
                 Logger.Level = Logger.Severity.Info;
             }
+            RPCException.VerboseErrors = verboseErrors;
         }
     }
 }
