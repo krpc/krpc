@@ -10,12 +10,15 @@ following topics:
 * Tracking the amount of resources in the vessel
 * Tracking of flight and orbital data (such as altitude and apoapsis altitude)
 
+.. note:: For details on how to write scripts for kRPC, see the
+          :ref:`getting-started` guide
+
 Part One: Preparing for Launch
 ------------------------------
 
 This tutorial uses the following two stage rocket. The craft file can be
-:download:`downloaded here </crafts/SubOrbitalFlight.craft>`, and the entire
-python script :download:`from here </scripts/SubOrbitalFlight.py>`.
+:download:`downloaded here </crafts/SubOrbitalFlight.craft>` and the entire
+python script :download:`from here </scripts/SubOrbitalFlight.py>`
 
 .. image:: /images/tutorials/SubOrbitalFlight.png
    :align: center
@@ -39,7 +42,7 @@ object that we will give the rocket instructions:
 We then need to prepare the rocket for launch. The following code sets the
 throttle to maximum and instructs the auto-pilot to hold a pitch and heading of
 90° (vertically upwards). It then waits for 1 second to give the rocket time to
-update the throttle before we actually launch..
+update the throttle before we actually launch.
 
 .. code-block:: python
 
@@ -142,7 +145,7 @@ repeatedly print out the altitude of the capsule until its speed reaches zero
    print 'Landed!'
 
 This bit of code uses the ``vessel.flight()`` function as before, but this time
-it is passed :class:`ReferenceFrame` parameter. We want to get the vertical
+it is passed a :class:`ReferenceFrame` parameter. We want to get the vertical
 speed of the capsule relative to the surface of Kerbin, so the values that the
 flight object returns need to be relative to the surface of Kerbin. Therefore we
 pass ``vessel.orbit.body.reference_frame`` to ``vessel.flight()`` as this

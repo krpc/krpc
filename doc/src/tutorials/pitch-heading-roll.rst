@@ -1,8 +1,8 @@
 Pitch, Heading and Roll
 =======================
 
-The following example calculates the pitch and heading angle of the vessel once
-per second:
+The following example calculates the pitch, heading and rolls angles of the
+active vessel once per second:
 
 .. code-block:: python
 
