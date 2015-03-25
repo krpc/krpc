@@ -2,6 +2,7 @@ Tutorials
 =========
 
 .. toctree::
+   :maxdepth: 1
 
    tutorials/suborbital-flight
    tutorials/reference-frames
