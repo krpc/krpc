@@ -6,19 +6,19 @@ VesselType
 
 .. class:: VesselType
 
-.. data:: VesselType.Ship
+   .. data:: Ship
 
-.. data:: VesselType.Station
+   .. data:: Station
 
-.. data:: VesselType.Lander
+   .. data:: Lander
 
-.. data:: VesselType.Probe
+   .. data:: Probe
 
-.. data:: VesselType.Rover
+   .. data:: Rover
 
-.. data:: VesselType.Base
+   .. data:: Base
 
-.. data:: VesselType.Debris
+   .. data:: Debris
 
 Example
 ^^^^^^^
@@ -36,18 +36,18 @@ VesselSituation
 
 .. class:: VesselSituation
 
-.. data:: VesselSituation.Docked
+   .. data:: Docked
 
-.. data:: VesselSituation.Escaping
+   .. data:: Escaping
 
-.. data:: VesselSituation.Flying
+   .. data:: Flying
 
-.. data:: VesselSituation.Landed
+   .. data:: Landed
 
-.. data:: VesselSituation.Orbiting
+   .. data:: Orbiting
 
-.. data:: VesselSituation.PreLaunch
+   .. data:: PreLaunch
 
-.. data:: VesselSituation.Splashed
+   .. data:: Splashed
 
-.. data:: VesselSituation.SubOrbital
+   .. data:: SubOrbital
