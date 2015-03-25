@@ -29,12 +29,13 @@ def parse_file(path):
     with open(path, 'r') as f:
         lines = []
         for line in f.readlines():
-            m = re.match('^\.\. ([a-z]+):: (.+)$', line)
+            m = re.match('^(\s+)\.\. ([a-z]+):: (.+)$', line)
             if m is not None:
-                typ = m.group(1)
-                signature = m.group(2)
+                indent = m.group(1)
+                typ = m.group(2)
+                signature = m.group(3)
                 if typ == 'attribute' or typ == 'data':
-                    line = '.. %s:: %s' % (typ, snake_case_name(signature))
+                    line = '%s.. %s:: %s' % (indent, typ, snake_case_name(signature))
                 if typ == 'method':
                     m = re.match('^(.+) \((.*)\)$', signature)
                     name = m.group(1)
@@ -53,7 +54,7 @@ def parse_file(path):
                         else:
                             param = snake_case(param)
                         params[i] = param
-                    line = '.. %s:: %s (%s)' % (typ, name, ', '.join(params))
+                    line = '%s.. %s:: %s (%s)' % (indent, typ, name, ', '.join(params))
             inlines = [':meth:', ':attr:']
             for inline in inlines:
                 if inline in line:
