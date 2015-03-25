@@ -29,12 +29,13 @@ def parse_file(path):
     with open(path, 'r') as f:
         lines = []
         for line in f.readlines():
-            m = re.match('^\.\. ([a-z]+):: (.+)$', line)
+            m = re.match('^(\s+)\.\. ([a-z]+):: (.+)$', line)
             if m is not None:
-                typ = m.group(1)
-                signature = m.group(2)
+                indent = m.group(1)
+                typ = m.group(2)
+                signature = m.group(3)
                 if typ == 'attribute' or typ == 'data':
-                    line = '.. %s:: %s' % (typ, snake_case_name(signature))
+                    line = '%s.. %s:: %s' % (indent, typ, snake_case_name(signature))
                 if typ == 'method':
                     m = re.match('^(.+) \((.*)\)$', signature)
                     name = m.group(1)
@@ -53,7 +54,7 @@ def parse_file(path):
                         else:
                             param = snake_case(param)
                         params[i] = param
-                    line = '.. %s:: %s (%s)' % (typ, name, ', '.join(params))
+                    line = '%s.. %s:: %s (%s)' % (indent, typ, name, ', '.join(params))
             inlines = [':meth:', ':attr:']
             for inline in inlines:
                 if inline in line:
@@ -63,6 +64,15 @@ def parse_file(path):
             def repl(m):
                 return ':param '+m.group(1)+' '+snake_case_name(m.group(2))+':'
             line = re.sub(':param ([^ ]+) (.+):', repl, line)
+            def repl2(m):
+                return m.group(1)+'*'+snake_case(m.group(2))+'*'+m.group(3)
+            line = re.sub('([^\*])\*([^\*]+)\*([^\*])', repl2, line)
+            line = line.replace('``null``', '``None``')
+            line = line.replace('``true``', '``True``')
+            line = line.replace('``false``', '``False``')
+            line = line.replace('``string``', '``str``')
+            line = line.replace(':class:`Dictionary`', '``dict``')
+            line = line.replace(':class:`List`', '``list``')
             lines.append(line.rstrip())
         return '\n'.join(lines)+'\n'
 
@@ -70,9 +80,22 @@ for dirname,dirnames,filenames in os.walk(src):
     for filename in filenames:
         src_path = os.path.join(dirname, filename)
         dst_path = os.path.join(dst, src_path[len(src)+1:])
+        try:
+            content = parse_file(src_path)
+        except IOError:
+            continue
+
+        # Skip if already up to date
+        if os.path.exists(dst_path):
+            try:
+                old_content = open(dst_path, 'r').read()
+                if content == old_content:
+                    continue
+            except IOError:
+                pass
+
+        # Update
         print src_path+' -> '+dst_path
-        assert not os.path.exists(dst_path)
-        content = parse_file(src_path)
         if not os.path.exists(os.path.dirname(dst_path)):
             os.makedirs(os.path.dirname(dst_path))
         with open(dst_path, 'w') as f:

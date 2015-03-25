@@ -1,124 +1,124 @@
 SpaceCenter
 ===========
 
-The SpaceCenter service provides functionality to interact with vessels in
-Kerbal Space Program. This includes controlling the vessel, managing it's
-resources, planning maneuver nodes and auto-piloting.
-
 .. class:: SpaceCenter
 
-.. attribute:: SpaceCenter.ActiveVessel
+   The SpaceCenter service provides functionality to interact with Kerbal Space
+   Program. This includes controlling the active vessel, managing it's
+   resources, planning maneuver nodes and auto-piloting.
 
-   Gets the currently active vessel.
+   .. attribute:: ActiveVessel
 
-   :rtype: :class:`Vessel`
+      Gets the currently active vessel.
 
-.. attribute:: SpaceCenter.Vessels
+      :rtype: :class:`Vessel`
 
-   Gets a list of all the vessels in the game.
+   .. attribute:: Vessels
 
-   :rtype: :class:`List` ( :class:`Vessel` )
+      Gets a list of all the vessels in the game.
 
-.. attribute:: SpaceCenter.Bodies
+      :rtype: :class:`List` ( :class:`Vessel` )
 
-   Gets a dictionary of all celestial bodies (planets, moons, etc.) in the game,
-   keyed by the name of the body.
+   .. attribute:: Bodies
 
-   :rtype: :class:`Dictionary` ( `string`, :class:`CelestialBody` )
+      Gets a dictionary of all celestial bodies (planets, moons, etc.) in the game,
+      keyed by the name of the body.
 
-.. attribute:: SpaceCenter.UT
+      :rtype: :class:`Dictionary` ( string, :class:`CelestialBody` )
 
-   Gets the current universal time in seconds.
+   .. attribute:: UT
 
-   :rtype: `double`
+      Gets the current universal time in seconds.
 
-.. attribute:: SpaceCenter.G
+      :rtype: double
 
-   Gets the value of the `gravitational constant
-   <http://en.wikipedia.org/wiki/Gravitational_constant>`_ G in
-   :math:`N(m/kg)^2`.
+   .. attribute:: G
 
-   :rtype: `double`
+      Gets the value of the `gravitational constant
+      <http://en.wikipedia.org/wiki/Gravitational_constant>`_ G in
+      :math:`N(m/kg)^2`.
 
-.. method:: SpaceCenter.WarpTo (ut, maxRate = 100000)
+      :rtype: double
 
-   Uses time acceleration to warp to the specified time. Automatically uses
-   regular or physical time warp as appropriate. For example, physical time warp
-   is used when the active vessel is travelling through an atmosphere. When
-   using physical time warp, the warp rate is at most 2x.
+   .. method:: WarpTo (ut, maxRate = 100000)
 
-   :param double ut: The universal time to warp to, in seconds
-   :param double maxRate: The maximum warp rate to use
-   :returns: When the time warp is complete.
+      Uses time acceleration to warp to the specified time. Automatically uses
+      regular or physical time warp as appropriate. For example, physical time warp
+      is used when the active vessel is travelling through an atmosphere. When
+      using physical time warp, the warp rate is at most 2x.
 
-.. method:: SpaceCenter.TransformPosition (position, from, to)
+      :param double ut: The universal time to warp to, in seconds
+      :param double maxRate: The maximum warp rate to use
+      :returns: When the time warp is complete.
 
-   Converts a position vector from one reference frame to another.
+   .. method:: TransformPosition (position, from, to)
 
-   :param Vector3 position: Position vector in reference frame `from`.
-   :param ReferenceFrame from: The reference frame that the position vector is in.
-   :param ReferenceFrame to: The reference frame to covert the position vector to.
-   :return: The corresponding position vector in reference frame `to`.
-   :rtype: :class:`Vector3`
+      Converts a position vector from one reference frame to another.
 
-.. method:: SpaceCenter.TransformDirection (direction, from, to)
+      :param Vector3 position: Position vector in reference frame *from*.
+      :param ReferenceFrame from: The reference frame that the position vector is in.
+      :param ReferenceFrame to: The reference frame to covert the position vector to.
+      :return: The corresponding position vector in reference frame *to*.
+      :rtype: :class:`Vector3`
 
-   Converts a direction vector from one reference frame to another.
+   .. method:: TransformDirection (direction, from, to)
 
-   :param Vector3 direction: Direction vector in reference frame `from`.
-   :param ReferenceFrame from: The reference frame that the direction vector is in.
-   :param ReferenceFrame to: The reference frame to covert the direction vector to.
-   :return: The corresponding direction vector in reference frame `to`.
-   :rtype: :class:`Vector3`
+      Converts a direction vector from one reference frame to another.
 
-.. method:: SpaceCenter.TransformRotation (rotation, from, to)
+      :param Vector3 direction: Direction vector in reference frame *from*.
+      :param ReferenceFrame from: The reference frame that the direction vector is in.
+      :param ReferenceFrame to: The reference frame to covert the direction vector to.
+      :return: The corresponding direction vector in reference frame *to*.
+      :rtype: :class:`Vector3`
 
-   Converts a rotation from one reference frame to another.
+   .. method:: TransformRotation (rotation, from, to)
 
-   :param Quaternion direction: Rotation in reference frame `from`.
-   :param ReferenceFrame from: The reference frame that the rotation is in.
-   :param ReferenceFrame to: The reference frame to covert the rotation to.
-   :return: The corresponding rotation in reference frame `to`.
-   :rtype: :class:`Quaternion`
+      Converts a rotation from one reference frame to another.
 
-.. method:: SpaceCenter.TransformVelocity (position, velocity, from, to)
+      :param Quaternion direction: Rotation in reference frame *from*.
+      :param ReferenceFrame from: The reference frame that the rotation is in.
+      :param ReferenceFrame to: The reference frame to covert the rotation to.
+      :return: The corresponding rotation in reference frame *to*.
+      :rtype: :class:`Quaternion`
 
-   Converts a velocity vector (acting at the specified position vector) from one
-   reference frame to another. The position vector is required to take the
-   relative angular velocity of the reference frames into account.
+   .. method:: TransformVelocity (position, velocity, from, to)
 
-   :param Vector3 position: Position vector in reference frame `from`.
-   :param Vector3 velocity: Velocity vector in reference frame `from`.
-   :param ReferenceFrame from: The reference frame that the position and
-                               velocity vectors are in.
-   :param ReferenceFrame to: The reference frame to covert the velocity vector to.
-   :return: The corresponding velocity in reference frame `to`.
-   :rtype: :class:`Vector3`
+      Converts a velocity vector (acting at the specified position vector) from one
+      reference frame to another. The position vector is required to take the
+      relative angular velocity of the reference frames into account.
 
-.. attribute:: SpaceCenter.FARAvailable
+      :param Vector3 position: Position vector in reference frame *from*.
+      :param Vector3 velocity: Velocity vector in reference frame *from*.
+      :param ReferenceFrame from: The reference frame that the position and
+                                  velocity vectors are in.
+      :param ReferenceFrame to: The reference frame to covert the velocity vector to.
+      :return: The corresponding velocity in reference frame *to*.
+      :rtype: :class:`Vector3`
 
-   Gets whether `Ferram Aerospace Research`_ is installed.
+   .. attribute:: FARAvailable
 
-   :rtype: bool
+      Gets whether `Ferram Aerospace Research`_ is installed.
 
-.. attribute:: SpaceCenter.RemoteTechAvailable
+      :rtype: bool
 
-   Gets whether `RemoteTech`_ is installed.
+   .. attribute:: RemoteTechAvailable
 
-   :rtype: bool
+      Gets whether `RemoteTech`_ is installed.
 
-.. method:: SpaceCenter.DrawDirection (direction, referenceFrame, color, [length])
+      :rtype: bool
 
-   Draw a direction vector on the active vessel.
+   .. method:: DrawDirection (direction, referenceFrame, color, [length])
 
-   :param Vector3 direction: Direction to draw the line in.
-   :param ReferenceFrame referenceFrame: Reference frame that the direction is in.
-   :param Vector3 color: The color to use for the line, as an r,g,b color.
-   :param float length: The length of the line. Defaults to 10.
+      Draw a direction vector on the active vessel.
 
-.. method:: SpaceCenter.ClearDirections ()
+      :param Vector3 direction: Direction to draw the line in.
+      :param ReferenceFrame referenceFrame: Reference frame that the direction is in.
+      :param Vector3 color: The color to use for the line, as an r,g,b color.
+      :param float length: The length of the line. Defaults to 10.
 
-   Remove all directions currently being drawn.
+   .. method:: ClearDirections ()
+
+      Remove all directions currently being drawn.
 
 .. _Ferram Aerospace Research: http://forum.kerbalspaceprogram.com/threads/20451-0-90-Ferram-Aerospace-Research-v0-14-6-12-27-14
 .. _RemoteTech: http://forum.kerbalspaceprogram.com/threads/83305-0-90-0-RemoteTech-v1-6-3-2015-02-06
