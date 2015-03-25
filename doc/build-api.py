@@ -70,9 +70,22 @@ for dirname,dirnames,filenames in os.walk(src):
     for filename in filenames:
         src_path = os.path.join(dirname, filename)
         dst_path = os.path.join(dst, src_path[len(src)+1:])
+        try:
+            content = parse_file(src_path)
+        except IOError:
+            continue
+
+        # Skip if already up to date
+        if os.path.exists(dst_path):
+            try:
+                old_content = open(dst_path, 'r').read()
+                if content == old_content:
+                    continue
+            except IOError:
+                pass
+
+        # Update
         print src_path+' -> '+dst_path
-        assert not os.path.exists(dst_path)
-        content = parse_file(src_path)
         if not os.path.exists(os.path.dirname(dst_path)):
             os.makedirs(os.path.dirname(dst_path))
         with open(dst_path, 'w') as f:

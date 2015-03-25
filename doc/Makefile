@@ -17,9 +17,8 @@ all: build
 
 build: html pdf
 
-#TODO: doesn't watch changes in api/
 serve: html
-	$(SPHINX_AUTOBUILD) -b html $(SPHINX_OPTS) $(BUILD_DIR)/html
+	bash ./auto-build-api.sh & $(SPHINX_AUTOBUILD) -b html $(SPHINX_OPTS) $(BUILD_DIR)/html
 
 gh-pages: python-api
 	rm -rf ../docs
