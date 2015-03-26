@@ -128,28 +128,20 @@ class TestParts(testingtools.TestCase):
         modules = self.parts.modules_with_name('DoesntExist')
         self.assertEqual(len(modules), 0)
 
+    def test_decouplers(self):
+        self.assertEqual(
+            ['TR-XL Stack Separator', 'TR-XL Stack Separator', 'TR-XL Stack Separator',
+             'TT-70 Radial Decoupler', 'TT-70 Radial Decoupler', 'TT-70 Radial Decoupler'],
+            sorted(e.part.title for e in self.parts.decouplers))
+
     def test_engines(self):
         self.assertEqual(
             ['Rockomax "Mainsail" Liquid Engine', 'Rockomax "Poodle" Liquid Engine',
              'Rockomax "Skipper" Liquid Engine', 'S1 SRB-KD25k', 'S1 SRB-KD25k', 'S1 SRB-KD25k'],
             sorted(e.part.title for e in self.parts.engines))
 
-    def test_solar_panels(self):
-        self.assertEqual(
-            ['Gigantor XL Solar Array', 'OX-STAT Photovoltaic Panels',
-             'SP-L 1x6 Photovoltaic Panels', 'SP-L 1x6 Photovoltaic Panels'],
-            sorted(e.part.title for e in self.parts.solar_panels))
-
-    def test_sensors(self):
-        self.assertEqual(
-            ['GRAVMAX Negative Gravioli Detector', 'PresMat Barometer'],
-            sorted(e.part.title for e in self.parts.sensors))
-
-    def test_decouplers(self):
-        self.assertEqual(
-            ['TR-XL Stack Separator', 'TR-XL Stack Separator', 'TR-XL Stack Separator',
-             'TT-70 Radial Decoupler', 'TT-70 Radial Decoupler', 'TT-70 Radial Decoupler'],
-            sorted(e.part.title for e in self.parts.decouplers))
+    def test_launch_clamps(self):
+        self.assertEqual(['TT18-A Launch Stability Enhancer']*6, sorted(e.part.title for e in self.parts.launch_clamps))
 
     def test_lights(self):
         self.assertEqual(['Illuminator Mk1']*3, sorted(e.part.title for e in self.parts.lights))
@@ -160,8 +152,16 @@ class TestParts(testingtools.TestCase):
              'Mk2-R Radial-Mount Parachute', 'Mk2-R Radial-Mount Parachute'],
             sorted(e.part.title for e in self.parts.parachutes))
 
-    def test_launch_clamps(self):
-        self.assertEqual(['TT18-A Launch Stability Enhancer']*6, sorted(e.part.title for e in self.parts.launch_clamps))
+    def test_sensors(self):
+        self.assertEqual(
+            ['GRAVMAX Negative Gravioli Detector', 'PresMat Barometer'],
+            sorted(e.part.title for e in self.parts.sensors))
+
+    def test_solar_panels(self):
+        self.assertEqual(
+            ['Gigantor XL Solar Array', 'OX-STAT Photovoltaic Panels',
+             'SP-L 1x6 Photovoltaic Panels', 'SP-L 1x6 Photovoltaic Panels'],
+            sorted(e.part.title for e in self.parts.solar_panels))
 
 if __name__ == "__main__":
     unittest.main()

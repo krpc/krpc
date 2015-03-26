@@ -73,23 +73,18 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
+        public IList<Decoupler> Decouplers {
+            get { return All.Where (part => part.IsDecoupler).Select (part => part.Decoupler).ToList (); }
+        }
+
+        [KRPCProperty]
         public IList<Engine> Engines {
             get { return All.Where (part => part.IsEngine).Select (part => part.Engine).ToList (); }
         }
 
         [KRPCProperty]
-        public IList<SolarPanel> SolarPanels {
-            get { return All.Where (part => part.IsSolarPanel).Select (part => part.SolarPanel).ToList (); }
-        }
-
-        [KRPCProperty]
-        public IList<Sensor> Sensors {
-            get { return All.Where (part => part.IsSensor).Select (part => part.Sensor).ToList (); }
-        }
-
-        [KRPCProperty]
-        public IList<Decoupler> Decouplers {
-            get { return All.Where (part => part.IsDecoupler).Select (part => part.Decoupler).ToList (); }
+        public IList<LaunchClamp> LaunchClamps {
+            get { return All.Where (part => part.IsLaunchClamp).Select (part => part.LaunchClamp).ToList (); }
         }
 
         [KRPCProperty]
@@ -103,8 +98,13 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
-        public IList<LaunchClamp> LaunchClamps {
-            get { return All.Where (part => part.IsLaunchClamp).Select (part => part.LaunchClamp).ToList (); }
+        public IList<Sensor> Sensors {
+            get { return All.Where (part => part.IsSensor).Select (part => part.Sensor).ToList (); }
+        }
+
+        [KRPCProperty]
+        public IList<SolarPanel> SolarPanels {
+            get { return All.Where (part => part.IsSolarPanel).Select (part => part.SolarPanel).ToList (); }
         }
     }
 }

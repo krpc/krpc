@@ -158,13 +158,28 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
+        internal bool IsDecoupler {
+            get { return part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> (); }
+        }
+
         internal bool IsEngine {
             get { return part.HasModule<ModuleEngines> () || part.HasModule<ModuleEnginesFX> (); }
         }
 
-        [KRPCProperty]
-        public Engine Engine {
-            get { return IsEngine ? new Engine (this) : null; }
+        internal bool IsLaunchClamp {
+            get { return part.HasModule<global::LaunchClamp> (); }
+        }
+
+        internal bool IsLight {
+            get { return part.HasModule<ModuleLight> (); }
+        }
+
+        internal bool IsParachute {
+            get { return part.HasModule<ModuleParachute> (); }
+        }
+
+        internal bool IsSensor {
+            get { return part.HasModule<ModuleEnviroSensor> (); }
         }
 
         internal bool IsSolarPanel {
@@ -172,30 +187,18 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
-        public SolarPanel SolarPanel {
-            get { return IsSolarPanel ? new SolarPanel (this) : null; }
-        }
-
-        internal bool IsSensor {
-            get { return part.HasModule<ModuleEnviroSensor> (); }
-        }
-
-        [KRPCProperty]
-        public Sensor Sensor {
-            get { return IsSensor ? new Sensor (this) : null; }
-        }
-
-        internal bool IsDecoupler {
-            get { return part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> (); }
-        }
-
-        [KRPCProperty]
         public Decoupler Decoupler {
             get { return IsDecoupler ? new Decoupler (this) : null; }
         }
 
-        internal bool IsLight {
-            get { return part.HasModule<ModuleLight> (); }
+        [KRPCProperty]
+        public Engine Engine {
+            get { return IsEngine ? new Engine (this) : null; }
+        }
+
+        [KRPCProperty]
+        public LaunchClamp LaunchClamp {
+            get { return IsLaunchClamp ? new LaunchClamp (this) : null; }
         }
 
         [KRPCProperty]
@@ -203,22 +206,19 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return IsLight ? new Light (this) : null; }
         }
 
-        internal bool IsParachute {
-            get { return part.HasModule<ModuleParachute> (); }
-        }
-
         [KRPCProperty]
         public Parachute Parachute {
             get { return IsParachute ? new Parachute (this) : null; }
         }
 
-        internal bool IsLaunchClamp {
-            get { return part.HasModule<global::LaunchClamp> (); }
+        [KRPCProperty]
+        public Sensor Sensor {
+            get { return IsSensor ? new Sensor (this) : null; }
         }
 
         [KRPCProperty]
-        public LaunchClamp LaunchClamp {
-            get { return IsLaunchClamp ? new LaunchClamp (this) : null; }
+        public SolarPanel SolarPanel {
+            get { return IsSolarPanel ? new SolarPanel (this) : null; }
         }
     }
 }
