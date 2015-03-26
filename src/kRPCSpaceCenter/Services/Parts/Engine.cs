@@ -73,12 +73,12 @@ namespace KRPCSpaceCenter.Services.Parts
 
         [KRPCProperty]
         public float Thrust {
-            get { return engine != null ? engine.finalThrust : engineFx.finalThrust; }
+            get { return engine != null ? engine.finalThrust * 1000f : engineFx.finalThrust * 1000f; }
         }
 
         [KRPCProperty]
         public float MaxThrust {
-            get { return engine != null ? engine.maxThrust : engineFx.maxThrust; }
+            get { return engine != null ? engine.maxThrust * 1000f : engineFx.maxThrust * 1000f; }
         }
 
         [KRPCProperty]
