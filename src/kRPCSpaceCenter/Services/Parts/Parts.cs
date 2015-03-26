@@ -98,6 +98,11 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
+        public IList<ReactionWheel> ReactionWheels {
+            get { return All.Where (part => part.IsReactionWheel).Select (part => part.ReactionWheel).ToList (); }
+        }
+
+        [KRPCProperty]
         public IList<Sensor> Sensors {
             get { return All.Where (part => part.IsSensor).Select (part => part.Sensor).ToList (); }
         }

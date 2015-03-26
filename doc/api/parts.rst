@@ -106,6 +106,12 @@ Parts
 
       :rtype: :class:`List` ( :class:`Parachute` )
 
+   .. attribute:: ReactionWheels
+
+      Gets a list of all reaction wheels in the vessel.
+
+      :rtype: :class:`List` ( :class:`ReactionWheel` )
+
    .. attribute:: Sensors
 
       Gets a list of all sensors in the vessel.
@@ -314,6 +320,12 @@ Part
       A :class:`Parachute` if the part is a parachute, otherwise ``null``.
 
       :rtype: :class:`Parachute`
+
+   .. attribute:: ReactionWheel
+
+      A :class:`ReactionWheel` if the part is a reaction wheel, otherwise ``null``.
+
+      :rtype: :class:`ReactionWheel`
 
    .. attribute:: Sensor
 
@@ -669,6 +681,49 @@ Parachute
    .. attribute:: Cut
 
       The parachute has been cut.
+
+Reaction Wheel
+^^^^^^^^^^^^^^
+
+.. class:: ReactionWheel
+
+   Obtained by calling :attr:`Part.ReactionWheel`.
+
+   .. attribute:: Part
+
+      Gets the part object for this reaction wheel.
+
+      :rtype: :class:`Part`
+
+   .. attribute:: Active
+
+      Gets or sets whether the reaction wheel is active.
+
+      :rtype: bool
+
+   .. attribute:: Broken
+
+      Gets whether the reaction wheel is broken.
+
+      :rtype: bool
+
+   .. attribute:: PitchTorque
+
+      Gets the torque in the pitch axis, in Newton meters.
+
+      :rtype: float
+
+   .. attribute:: YawTorque
+
+      Gets the torque in the yaw axis, in Newton meters.
+
+      :rtype: float
+
+   .. attribute:: RollTorque
+
+      Gets the torque in the roll axis, in Newton meters.
+
+      :rtype: float
 
 Sensor
 ^^^^^^
