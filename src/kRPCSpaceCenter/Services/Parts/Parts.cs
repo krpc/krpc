@@ -101,5 +101,10 @@ namespace KRPCSpaceCenter.Services.Parts
         public IList<Parachute> Parachutes {
             get { return All.Where (part => part.IsParachute).Select (part => part.Parachute).ToList (); }
         }
+
+        [KRPCProperty]
+        public IList<LaunchClamp> LaunchClamps {
+            get { return All.Where (part => part.IsLaunchClamp).Select (part => part.LaunchClamp).ToList (); }
+        }
     }
 }
