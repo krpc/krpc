@@ -75,7 +75,7 @@ namespace KRPCSpaceCenter.Services.Parts
 
         [KRPCProperty]
         public int Stage {
-            get { return part.inverseStage; }
+            get { return part.hasStagingIcon ? part.inverseStage : -1; }
         }
 
         [KRPCProperty]
