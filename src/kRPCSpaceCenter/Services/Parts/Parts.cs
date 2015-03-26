@@ -61,15 +61,15 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCMethod]
-        public IList<Module> ModulesWithName (string moduleName)
+        public IList<Part> InDecoupleStage (int stage)
         {
-            return All.SelectMany (part => part.Modules).Where (module => module.Name == moduleName).ToList ();
+            return All.Where (part => part.DecoupleStage == stage).ToList ();
         }
 
         [KRPCMethod]
-        public IList<Module> ModulesInStage (int stage)
+        public IList<Module> ModulesWithName (string moduleName)
         {
-            return All.Where (part => part.Stage == stage).SelectMany (part => part.Modules).ToList ();
+            return All.SelectMany (part => part.Modules).Where (module => module.Name == moduleName).ToList ();
         }
 
         [KRPCProperty]
