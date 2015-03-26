@@ -69,6 +69,16 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
+        public bool AxiallyAttached {
+            get { return part.parent == null || part.attachMode == AttachModes.STACK; }
+        }
+
+        [KRPCProperty]
+        public bool RadiallyAttached {
+            get { return part.parent != null && part.attachMode == AttachModes.SRF_ATTACH; }
+        }
+
+        [KRPCProperty]
         public PartState State {
             get { return part.State.ToPartState (); }
         }
@@ -119,6 +129,31 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
+        public bool Crossfeed {
+            get { return part.fuelCrossFeed; }
+        }
+
+        [KRPCProperty]
+        public IList<Part> FuelLinesFrom {
+            get { return part.fuelLookupTargets.Select (x => new Part (x.parent)).ToList (); }
+        }
+
+        [KRPCProperty]
+        public IList<Part> FuelLinesTo {
+            get {
+                var result = new HashSet<global::Part> ();
+                foreach (var otherPart in part.vessel.parts) {
+                    foreach (var target in otherPart.fuelLookupTargets) {
+                        if (target == part)
+                            result.Add (target);
+                    }
+                }
+                //TODO: need to get parent? part of the fuel line
+                return result.Select (x => new Part (x)).ToList ();
+            }
+        }
+
+        [KRPCProperty]
         public IList<Module> Modules {
             get {
                 IList<Module> modules = new List<Module> ();
@@ -128,8 +163,7 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
-        [KRPCProperty]
-        public bool IsEngine {
+        internal bool IsEngine {
             get { return part.HasModule<ModuleEngines> () || part.HasModule<ModuleEnginesFX> (); }
         }
 
@@ -138,8 +172,7 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return IsEngine ? new Engine (this) : null; }
         }
 
-        [KRPCProperty]
-        public bool IsSolarPanel {
+        internal bool IsSolarPanel {
             get { return part.HasModule<ModuleDeployableSolarPanel> (); }
         }
 
@@ -148,8 +181,7 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return IsSolarPanel ? new SolarPanel (this) : null; }
         }
 
-        [KRPCProperty]
-        public bool IsSensor {
+        internal bool IsSensor {
             get { return part.HasModule<ModuleEnviroSensor> (); }
         }
 
@@ -158,8 +190,7 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return IsSensor ? new Sensor (this) : null; }
         }
 
-        [KRPCProperty]
-        public bool IsDecoupler {
+        internal bool IsDecoupler {
             get { return part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> (); }
         }
 
@@ -168,8 +199,7 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return IsDecoupler ? new Decoupler (this) : null; }
         }
 
-        [KRPCProperty]
-        public bool IsLight {
+        internal bool IsLight {
             get { return part.HasModule<ModuleLight> (); }
         }
 
@@ -178,14 +208,22 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return IsLight ? new Light (this) : null; }
         }
 
-        [KRPCProperty]
-        public bool IsParachute {
+        internal bool IsParachute {
             get { return part.HasModule<ModuleParachute> (); }
         }
 
         [KRPCProperty]
         public Parachute Parachute {
             get { return IsParachute ? new Parachute (this) : null; }
+        }
+
+        internal bool IsLaunchClamp {
+            get { return part.HasModule<global::LaunchClamp> (); }
+        }
+
+        [KRPCProperty]
+        public LaunchClamp LaunchClamp {
+            get { return IsLaunchClamp ? new LaunchClamp (this) : null; }
         }
     }
 }
