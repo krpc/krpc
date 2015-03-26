@@ -29,22 +29,25 @@ class TestPartsPart(testingtools.TestCase):
             ['LT-1 Landing Struts', 'LT-1 Landing Struts', 'LT-1 Landing Struts',
              'Mk16-XL Parachute', 'Reflectron DP-10', 'TR-XL Stack Separator'],
             sorted(p.title for p in part.children))
-        #stage
-        #decouple stage
+        self.assertTrue(part.axially_attached)
+        self.assertFalse(part.radially_attached)
+        self.assertEquals(-1, part.stage)
+        self.assertEquals(-1, part.decouple_stage)
         self.assertFalse(part.massless)
         self.assertClose(4120, part.mass)
         self.assertClose(4000, part.dry_mass)
+        self.assertEqual(45, part.impact_tolerance)
         self.assertGreater(part.temperature, 15)
         self.assertLess(part.temperature, 25)
-        self.assertEqual(45, part.impact_tolerance)
         self.assertClose(3400, part.max_temperature, 0.5)
-        #resources
+        self.assertTrue(part.crossfeed)
+        self.assertEquals(0, len(part.fuel_lines_from))
+        self.assertEquals(0, len(part.fuel_lines_to))
         modules = ['FlagDecal', 'ModuleCommand', 'ModuleReactionWheel',
                    'ModuleScienceContainer', 'ModuleScienceExperiment', 'ModuleTripLogger']
         if self.conn.space_center.far_available:
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-
         self.assertEqual(None, part.engine)
         self.assertEqual(None, part.solar_panel)
         self.assertEqual(None, part.sensor)
@@ -60,21 +63,24 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('TT-70 Radial Decoupler', part.parent.title)
         self.assertEqual(['Aerodynamic Nose Cone'], [p.title for p in part.children])
-        #stage
-        #decouple stage
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEquals(6, part.stage)
+        self.assertEquals(5, part.decouple_stage)
         self.assertFalse(part.massless)
         self.assertClose(21750, part.mass)
         self.assertClose(3000, part.dry_mass)
+        self.assertEqual(7, part.impact_tolerance)
         self.assertGreater(part.temperature, 15)
         self.assertLess(part.temperature, 25)
         self.assertClose(3900, part.max_temperature, 0.5)
-        self.assertEqual(7, part.impact_tolerance)
-        #resources
+        self.assertTrue(part.crossfeed)
+        self.assertEquals(0, len(part.fuel_lines_from))
+        self.assertEquals(0, len(part.fuel_lines_to))
         modules = ['FlagDecal', 'ModuleAnimateHeat', 'ModuleEnginesFX', 'ModuleTestSubject']
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-
         self.assertNotEqual(None, part.engine)
         self.assertEqual(None, part.solar_panel)
         self.assertEqual(None, part.sensor)
@@ -90,21 +96,24 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('FL-R1 RCS Fuel Tank', part.parent.title)
         self.assertEqual(0, len(part.children))
-        #stage
-        #decouple stage
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEquals(-1, part.stage)
+        self.assertEquals(3, part.decouple_stage)
         self.assertFalse(part.massless)
         self.assertClose(350, part.mass)
         self.assertClose(350, part.dry_mass)
+        self.assertEqual(8, part.impact_tolerance)
         self.assertGreater(part.temperature, 15)
         self.assertLess(part.temperature, 25)
         self.assertClose(3200, part.max_temperature, 0.5)
-        self.assertEqual(8, part.impact_tolerance)
-        #resources
+        self.assertTrue(part.crossfeed)
+        self.assertEquals(0, len(part.fuel_lines_from))
+        self.assertEquals(0, len(part.fuel_lines_to))
         modules = ['ModuleDeployableSolarPanel']
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-
         self.assertEqual(None, part.engine)
         self.assertNotEqual(None, part.solar_panel)
         self.assertEqual(None, part.sensor)
@@ -120,21 +129,24 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Rockomax X200-8 Fuel Tank', part.parent.title)
         self.assertEqual(0, len(part.children))
-        #stage
-        #decouple stage
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEquals(-1, part.stage)
+        self.assertEquals(1, part.decouple_stage)
         self.assertTrue(part.massless)
         self.assertClose(0, part.mass)
         self.assertClose(0, part.dry_mass)
+        self.assertEqual(8, part.impact_tolerance)
         self.assertGreater(part.temperature, 15)
         self.assertLess(part.temperature, 25)
         self.assertClose(3200, part.max_temperature, 0.5)
-        self.assertEqual(8, part.impact_tolerance)
-        #resources
+        self.assertTrue(part.crossfeed)
+        self.assertEquals(0, len(part.fuel_lines_from))
+        self.assertEquals(0, len(part.fuel_lines_to))
         modules = ['ModuleEnviroSensor', 'ModuleScienceExperiment']
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-
         self.assertEqual(None, part.engine)
         self.assertEqual(None, part.solar_panel)
         self.assertNotEqual(None, part.sensor)
@@ -150,21 +162,24 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Rockomax Jumbo-64 Fuel Tank', part.parent.title)
         self.assertEqual(['S1 SRB-KD25k'], [p.title for p in part.children])
-        #stage
-        #decouple stage
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEquals(5, part.stage)
+        self.assertEquals(5, part.decouple_stage)
         self.assertFalse(part.massless)
         self.assertClose(50, part.mass)
         self.assertClose(50, part.dry_mass)
+        self.assertEqual(8, part.impact_tolerance)
         self.assertGreater(part.temperature, 15)
         self.assertLess(part.temperature, 25)
         self.assertClose(3200, part.max_temperature, 0.5)
-        self.assertEqual(8, part.impact_tolerance)
-        #resources
+        self.assertTrue(part.crossfeed)
+        self.assertEquals(0, len(part.fuel_lines_from))
+        self.assertEquals(0, len(part.fuel_lines_to))
         modules = ['ModuleAnchoredDecoupler', 'ModuleTestSubject']
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-
         self.assertEqual(None, part.engine)
         self.assertEqual(None, part.solar_panel)
         self.assertEqual(None, part.sensor)
@@ -180,21 +195,24 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Aerodynamic Nose Cone', part.parent.title)
         self.assertEqual(0, len(part.children))
-        #stage
-        #decouple stage
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEquals(-1, part.stage)
+        self.assertEquals(5, part.decouple_stage)
         self.assertTrue(part.massless)
         self.assertClose(0, part.mass)
         self.assertClose(0, part.dry_mass)
+        self.assertEqual(8, part.impact_tolerance)
         self.assertGreater(part.temperature, 15)
         self.assertLess(part.temperature, 25)
         self.assertClose(3200, part.max_temperature, 0.5)
-        self.assertEqual(8, part.impact_tolerance)
-        #resources
+        self.assertTrue(part.crossfeed)
+        self.assertEquals(0, len(part.fuel_lines_from))
+        self.assertEquals(0, len(part.fuel_lines_to))
         modules = ['ModuleLight']
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-
         self.assertEqual(None, part.engine)
         self.assertEqual(None, part.solar_panel)
         self.assertEqual(None, part.sensor)
@@ -210,18 +228,21 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Mk1-2 Command Pod', part.parent.title)
         self.assertEqual(0, len(part.children))
-        #stage
-        #decouple stage
+        self.assertTrue(part.axially_attached)
+        self.assertFalse(part.radially_attached)
+        self.assertEquals(0, part.stage)
+        self.assertEquals(-1, part.decouple_stage)
         self.assertFalse(part.massless)
         self.assertClose(300, part.mass)
         self.assertClose(300, part.dry_mass)
+        self.assertEqual(12, part.impact_tolerance)
         self.assertGreater(part.temperature, 15)
         self.assertLess(part.temperature, 25)
         self.assertClose(3100, part.max_temperature, 0.5)
-        self.assertEqual(12, part.impact_tolerance)
-        #resources
+        self.assertTrue(part.crossfeed)
+        self.assertEquals(0, len(part.fuel_lines_from))
+        self.assertEquals(0, len(part.fuel_lines_to))
         self.assertEqual(['ModuleParachute', 'ModuleTestSubject'], sorted(m.name for m in part.modules))
-
         self.assertEqual(None, part.engine)
         self.assertEqual(None, part.solar_panel)
         self.assertEqual(None, part.sensor)

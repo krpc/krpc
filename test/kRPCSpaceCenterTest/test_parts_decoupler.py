@@ -21,22 +21,22 @@ class TestPartsDecoupler(testingtools.TestCase):
 
     def test_stack_decoupler(self):
         decoupler = filter(lambda e: e.part.title == 'TR-18A Stack Decoupler', self.parts.decouplers)[0]
-        self.assertEqual(decoupler.force, 250)
-        self.assertEqual(decoupler.is_decoupled, False)
+        self.assertEqual(decoupler.impulse, 2500)
+        self.assertEqual(decoupler.decoupled, False)
         self.assertEqual(decoupler.part.vessel, self.vessel)
         decoupler.decouple()
         time.sleep(0.5)
-        self.assertEqual(decoupler.is_decoupled, True)
+        self.assertEqual(decoupler.decoupled, True)
         self.assertNotEqual(decoupler.part.vessel, self.vessel)
 
     def test_radial_decoupler(self):
         decoupler = filter(lambda e: e.part.title == 'TT-70 Radial Decoupler', self.parts.decouplers)[0]
-        self.assertEqual(decoupler.force, 260)
-        self.assertEqual(decoupler.is_decoupled, False)
+        self.assertEqual(decoupler.impulse, 2600)
+        self.assertEqual(decoupler.decoupled, False)
         self.assertEqual(decoupler.part.vessel, self.vessel)
         decoupler.decouple()
         time.sleep(0.5)
-        self.assertEqual(decoupler.is_decoupled, True)
+        self.assertEqual(decoupler.decoupled, True)
         self.assertNotEqual(decoupler.part.vessel, self.vessel)
 
 if __name__ == "__main__":
