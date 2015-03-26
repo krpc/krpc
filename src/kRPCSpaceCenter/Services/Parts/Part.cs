@@ -79,11 +79,6 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
-        public PartState State {
-            get { return part.State.ToPartState (); }
-        }
-
-        [KRPCProperty]
         public int Stage {
             get { return part.hasStagingIcon ? part.inverseStage : -1; }
         }

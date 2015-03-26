@@ -33,5 +33,11 @@ namespace KRPCSpaceCenter.Services.Parts
         public Part Part {
             get { return part; }
         }
+
+        [KRPCMethod]
+        public void Release ()
+        {
+            launchClamp.Release ();
+        }
     }
 }

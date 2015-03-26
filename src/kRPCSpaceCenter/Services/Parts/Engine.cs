@@ -112,7 +112,7 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
-        public bool IsThrottleLocked {
+        public bool ThrottleLocked {
             get { return engine != null ? engine.throttleLocked : engineFx.throttleLocked; }
         }
 
@@ -127,33 +127,13 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
-        public bool IsGimballed {
+        public bool Gimballed {
             get { return gimbal != null; }
         }
 
         [KRPCProperty]
         public float GimbalRange {
             get { return gimbal != null && !gimbal.gimbalLock ? gimbal.gimbalRange : 0f; }
-        }
-
-        [KRPCProperty]
-        public float GimbalSpeed {
-            get { return gimbal != null && !gimbal.gimbalLock ? gimbal.gimbalResponseSpeed : 0f; }
-        }
-
-        [KRPCProperty]
-        public float GimbalPitch {
-            get { return gimbal != null && !gimbal.gimbalLock ? gimbal.gimbalAnglePitch : 0f; }
-        }
-
-        [KRPCProperty]
-        public float GimbalYaw {
-            get { return gimbal != null && !gimbal.gimbalLock ? gimbal.gimbalAngleYaw : 0f; }
-        }
-
-        [KRPCProperty]
-        public float GimbalRoll {
-            get { return gimbal != null && !gimbal.gimbalLock ? gimbal.gimbalAngleRoll : 0f; }
         }
 
         [KRPCProperty]

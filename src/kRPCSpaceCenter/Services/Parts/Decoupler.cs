@@ -52,7 +52,7 @@ namespace KRPCSpaceCenter.Services.Parts
 
         [KRPCProperty]
         public float Impulse {
-            get { return decoupler != null ? decoupler.ejectionForce : anchoredDecoupler.ejectionForce; }
+            get { return (decoupler != null ? decoupler.ejectionForce : anchoredDecoupler.ejectionForce) * 10f; }
         }
     }
 }
