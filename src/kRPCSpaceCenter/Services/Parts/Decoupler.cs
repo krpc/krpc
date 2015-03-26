@@ -46,12 +46,12 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
-        public bool IsDecoupled {
+        public bool Decoupled {
             get { return decoupler != null ? decoupler.isDecoupled : anchoredDecoupler.isDecoupled; }
         }
 
         [KRPCProperty]
-        public float Force {
+        public float Impulse {
             get { return decoupler != null ? decoupler.ejectionForce : anchoredDecoupler.ejectionForce; }
         }
     }
