@@ -37,7 +37,7 @@ namespace KRPCSpaceCenter.ExtensionMethods
         public static int DecoupledAt (this Part part)
         {
             do {
-                if (part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> ())
+                if (part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> () || part.HasModule<LaunchClamp> ())
                     return part.inverseStage;
                 part = part.parent;
             } while (part != null);
