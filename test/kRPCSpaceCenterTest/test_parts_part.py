@@ -51,6 +51,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(None, part.decoupler)
         self.assertEqual(None, part.docking_port)
         self.assertEqual(None, part.engine)
+        self.assertEqual(None, part.landing_leg)
         self.assertEqual(None, part.launch_clamp)
         self.assertEqual(None, part.light)
         self.assertEqual(None, part.parachute)
@@ -142,6 +143,34 @@ class TestPartsPart(testingtools.TestCase):
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.engine)
+
+    def test_landing_leg(self):
+        part = self.parts.with_title('LT-1 Landing Struts')[0]
+        self.assertEqual('landingLeg1', part.name)
+        self.assertEqual('LT-1 Landing Struts', part.title)
+        self.assertEqual(240, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Mk1-2 Command Pod', part.parent.title)
+        self.assertEqual([], [p.title for p in part.children])
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEquals(-1, part.stage)
+        self.assertEquals(-1, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertClose(50, part.mass)
+        self.assertClose(50, part.dry_mass)
+        self.assertEqual(12, part.impact_tolerance)
+        self.assertGreater(part.temperature, 15)
+        self.assertLess(part.temperature, 25)
+        self.assertClose(2900, part.max_temperature, 0.5)
+        self.assertTrue(part.crossfeed)
+        self.assertEquals(0, len(part.fuel_lines_from))
+        self.assertEquals(0, len(part.fuel_lines_to))
+        modules = ['ModuleLandingLeg']
+        if self.conn.space_center.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.landing_leg)
 
     def test_launch_clamp(self):
         part = self.parts.with_title('TT18-A Launch Stability Enhancer')[0]

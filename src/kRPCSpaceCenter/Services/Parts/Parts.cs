@@ -88,6 +88,11 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
+        public IList<LandingLeg> LandingLegs {
+            get { return All.Where (part => part.IsLandingLeg).Select (part => part.LandingLeg).ToList (); }
+        }
+
+        [KRPCProperty]
         public IList<LaunchClamp> LaunchClamps {
             get { return All.Where (part => part.IsLaunchClamp).Select (part => part.LaunchClamp).ToList (); }
         }

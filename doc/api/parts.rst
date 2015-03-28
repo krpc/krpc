@@ -94,6 +94,12 @@ Parts
 
       :rtype: :class:`List` ( :class:`Engine` )
 
+   .. attribute:: LandingLegs
+
+      Gets a list of all landing legs attached to the vessel.
+
+      :rtype: :class:`List` ( :class:`LandingLeg` )
+
    .. attribute:: LaunchClamps
 
       Gets a list of all launch clamps attached to the vessel.
@@ -314,6 +320,12 @@ Part
       An :class:`Engine` if the part is an engine, otherwise ``null``.
 
       :rtype: :class:`Engine`
+
+   .. attribute:: LandingLeg
+
+      A :class:`LandingLeg` if the part is a landing leg, otherwise ``null``.
+
+      :rtype: :class:`LandingLeg`
 
    .. attribute:: LaunchClamp
 
@@ -741,6 +753,45 @@ Engine
       attribute has no effect if the engine is not gimballed.
 
       :rtype: bool
+
+Landing Leg
+^^^^^^^^^^^
+
+.. class:: LandingLeg
+
+   Obtained by calling :attr:`Part.LandingLeg`.
+
+   .. attribute:: Part
+
+      Gets the part object for this landing leg.
+
+      :rtype: :class:`Part`
+
+   .. attribute:: State
+
+      Gets the current state of the landing leg.
+
+      :rtype: :class:`LandingLegState`
+
+   .. attribute:: Deployed
+
+      Gets or sets whether the landing leg is deployed.
+
+      :rtype: bool
+
+.. class:: LandingLegState
+
+   .. attribute:: Deployed
+
+   .. attribute:: Retracted
+
+   .. attribute:: Deploying
+
+   .. attribute:: Retracting
+
+   .. attribute:: Broken
+
+   .. attribute:: Repairing
 
 Launch Clamp
 ^^^^^^^^^^^^
