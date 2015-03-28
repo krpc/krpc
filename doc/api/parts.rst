@@ -94,6 +94,12 @@ Parts
 
       :rtype: :class:`List` ( :class:`Engine` )
 
+   .. attribute:: LandingGear
+
+      Gets a list of all landing gear attached to the vessel.
+
+      :rtype: :class:`List` ( :class:`LandingGear` )
+
    .. attribute:: LandingLegs
 
       Gets a list of all landing legs attached to the vessel.
@@ -320,6 +326,12 @@ Part
       An :class:`Engine` if the part is an engine, otherwise ``null``.
 
       :rtype: :class:`Engine`
+
+   .. attribute:: LandingGear
+
+      A :class:`LandingGear` if the part is landing gear, otherwise ``null``.
+
+      :rtype: :class:`LandingGear`
 
    .. attribute:: LandingLeg
 
@@ -753,6 +765,41 @@ Engine
       attribute has no effect if the engine is not gimballed.
 
       :rtype: bool
+
+Landing Gear
+^^^^^^^^^^^^
+
+.. class:: LandingGear
+
+   Obtained by calling :attr:`Part.LandingGear`.
+
+   .. attribute:: Part
+
+      Gets the part object for this landing gear.
+
+      :rtype: :class:`Part`
+
+   .. attribute:: State
+
+      Gets the current state of the landing gear.
+
+      :rtype: :class:`LandingGearState`
+
+   .. attribute:: Deployed
+
+      Gets or sets whether the landing gear is deployed.
+
+      :rtype: bool
+
+.. class:: LandingGearState
+
+   .. attribute:: Deployed
+
+   .. attribute:: Retracted
+
+   .. attribute:: Deploying
+
+   .. attribute:: Retracting
 
 Landing Leg
 ^^^^^^^^^^^

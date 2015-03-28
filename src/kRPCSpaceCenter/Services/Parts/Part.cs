@@ -172,6 +172,10 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return part.HasModule<ModuleEngines> () || part.HasModule<ModuleEnginesFX> (); }
         }
 
+        internal bool IsLandingGear {
+            get { return part.HasModule<ModuleLandingGear> (); }
+        }
+
         internal bool IsLandingLeg {
             get { return part.HasModule<ModuleLandingLeg> (); }
         }
@@ -213,6 +217,11 @@ namespace KRPCSpaceCenter.Services.Parts
         [KRPCProperty]
         public Engine Engine {
             get { return IsEngine ? new Engine (this) : null; }
+        }
+
+        [KRPCProperty]
+        public LandingGear LandingGear {
+            get { return IsLandingGear ? new LandingGear (this) : null; }
         }
 
         [KRPCProperty]

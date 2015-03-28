@@ -41,6 +41,7 @@ class TestParts(testingtools.TestCase):
              'Rockomax Jumbo-64 Fuel Tank', 'Rockomax X200-32 Fuel Tank',
              'Rockomax X200-8 Fuel Tank', 'S1 SRB-KD25k', 'S1 SRB-KD25k', 'S1 SRB-KD25k',
              'SP-L 1x6 Photovoltaic Panels', 'SP-L 1x6 Photovoltaic Panels',
+             'Small Gear Bay',
              'TR-XL Stack Separator', 'TR-XL Stack Separator', 'TR-XL Stack Separator',
              'TT-70 Radial Decoupler', 'TT-70 Radial Decoupler', 'TT-70 Radial Decoupler',
              'TT18-A Launch Stability Enhancer', 'TT18-A Launch Stability Enhancer',
@@ -70,7 +71,7 @@ class TestParts(testingtools.TestCase):
 
     def test_parts_with_module(self):
         parts = self.parts.with_module('ModuleLight')
-        self.assertEqual(['spotLight1']*3, [p.name for p in parts])
+        self.assertEqual(['spotLight1']*3 + ['SmallGearBay'], [p.name for p in parts])
         parts = self.parts.with_module('DoesntExist')
         self.assertEqual(len(parts), 0)
 
@@ -89,6 +90,7 @@ class TestParts(testingtools.TestCase):
             'Reflectron KR-7', 'Rockomax Jumbo-64 Fuel Tank',
             'Rockomax X200-32 Fuel Tank', 'Rockomax X200-8 Fuel Tank',
             'SP-L 1x6 Photovoltaic Panels', 'SP-L 1x6 Photovoltaic Panels',
+            'Small Gear Bay',
             'Z-400 Rechargeable Battery'], sorted([p.title for p in self.parts.in_stage(-1)]))
         self.assertEqual(['Mk16-XL Parachute'], sorted([p.title for p in self.parts.in_stage(0)]))
         self.assertEqual(['TR-XL Stack Separator'], sorted([p.title for p in self.parts.in_stage(1)]))
@@ -106,7 +108,7 @@ class TestParts(testingtools.TestCase):
 
     def test_parts_in_decouple_stage(self):
         self.assertEqual(['LT-1 Landing Struts', 'LT-1 Landing Struts', 'LT-1 Landing Struts',
-                          'Mk1-2 Command Pod', 'Mk16-XL Parachute', 'Reflectron DP-10'],
+                          'Mk1-2 Command Pod', 'Mk16-XL Parachute', 'Reflectron DP-10', 'Small Gear Bay'],
                          sorted([p.title for p in self.parts.in_decouple_stage(-1)]))
         self.assertEqual(len(self.parts.in_decouple_stage(0)), 0)
         self.assertEqual(['Rockomax "Mainsail" Liquid Engine', 'Rockomax Jumbo-64 Fuel Tank',
@@ -124,7 +126,7 @@ class TestParts(testingtools.TestCase):
 
     def test_modules_with_name(self):
         modules = self.parts.modules_with_name('ModuleLight')
-        self.assertEqual(['ModuleLight', 'ModuleLight', 'ModuleLight'], [m.name for m in modules])
+        self.assertEqual(['ModuleLight']*4, [m.name for m in modules])
         modules = self.parts.modules_with_name('DoesntExist')
         self.assertEqual(len(modules), 0)
 
@@ -144,6 +146,9 @@ class TestParts(testingtools.TestCase):
             ['Rockomax "Mainsail" Liquid Engine', 'Rockomax "Poodle" Liquid Engine',
              'Rockomax "Skipper" Liquid Engine', 'S1 SRB-KD25k', 'S1 SRB-KD25k', 'S1 SRB-KD25k'],
             sorted(x.part.title for x in self.parts.engines))
+
+    def test_landing_gear(self):
+        self.assertEqual(['Small Gear Bay'], sorted(x.part.title for x in self.parts.landing_gear))
 
     def test_landing_legs(self):
         self.assertEqual(['LT-1 Landing Struts']*3, sorted(x.part.title for x in self.parts.landing_legs))
