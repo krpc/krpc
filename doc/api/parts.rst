@@ -994,27 +994,27 @@ When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
 
     Command Pod Mk1
-   -- TR-18A Stack Decoupler
-   ---- FL-T400 Fuel Tank
-   ------ LV-909 Liquid Fuel Engine
-   -------- TR-18A Stack Decoupler
-   ---------- FL-T800 Fuel Tank
-   ------------ LV-909 Liquid Fuel Engine
-   ------------ TT-70 Radial Decoupler
-   -------------- FL-T400 Fuel Tank
-   ---------------- TT18-A Launch Stability Enhancer
-   ---------------- FTX-2 External Fuel Duct
-   ---------------- LV-909 Liquid Fuel Engine
-   ---------------- Aerodynamic Nose Cone
-   ------------ TT-70 Radial Decoupler
-   -------------- FL-T400 Fuel Tank
-   ---------------- TT18-A Launch Stability Enhancer
-   ---------------- FTX-2 External Fuel Duct
-   ---------------- LV-909 Liquid Fuel Engine
-   ---------------- Aerodynamic Nose Cone
-   ------ LT-1 Landing Struts
-   ------ LT-1 Landing Struts
-   -- Mk16 Parachute
+     TR-18A Stack Decoupler
+      FL-T400 Fuel Tank
+       LV-909 Liquid Fuel Engine
+        TR-18A Stack Decoupler
+         FL-T800 Fuel Tank
+          LV-909 Liquid Fuel Engine
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+       LT-1 Landing Struts
+       LT-1 Landing Struts
+     Mk16 Parachute
 
 .. _api-parts-attachment-modes:
 
