@@ -48,11 +48,13 @@ class TestPartsPart(testingtools.TestCase):
         if self.conn.space_center.far_available:
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-        self.assertEqual(None, part.engine)
         self.assertEqual(None, part.decoupler)
+        self.assertEqual(None, part.docking_port)
+        self.assertEqual(None, part.engine)
         self.assertEqual(None, part.launch_clamp)
         self.assertEqual(None, part.light)
         self.assertEqual(None, part.parachute)
+        self.assertNotEqual(None, part.reaction_wheel)
         self.assertEqual(None, part.sensor)
         self.assertEqual(None, part.solar_panel)
 
@@ -82,13 +84,36 @@ class TestPartsPart(testingtools.TestCase):
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-        self.assertEqual(None, part.engine)
         self.assertNotEqual(None, part.decoupler)
-        self.assertEqual(None, part.launch_clamp)
-        self.assertEqual(None, part.light)
-        self.assertEqual(None, part.parachute)
-        self.assertEqual(None, part.sensor)
-        self.assertEqual(None, part.solar_panel)
+        self.assertEqual(None, part.reaction_wheel)
+
+    def test_docking_port(self):
+        part = self.parts.with_title('Clamp-O-Tron Docking Port')[0]
+        self.assertEqual('dockingPort2', part.name)
+        self.assertEqual('Clamp-O-Tron Docking Port', part.title)
+        self.assertEqual(280, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Rockomax X200-32 Fuel Tank', part.parent.title)
+        self.assertEqual([], [p.title for p in part.children])
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEquals(-1, part.stage)
+        self.assertEquals(3, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertClose(50, part.mass)
+        self.assertClose(50, part.dry_mass)
+        self.assertEqual(10, part.impact_tolerance)
+        self.assertGreater(part.temperature, 15)
+        self.assertLess(part.temperature, 25)
+        self.assertClose(3400, part.max_temperature, 0.5)
+        self.assertTrue(part.crossfeed)
+        self.assertEquals(0, len(part.fuel_lines_from))
+        self.assertEquals(0, len(part.fuel_lines_to))
+        modules = ['ModuleDockingNode', 'ModuleDockingNodeNamed']
+        if self.conn.space_center.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.docking_port)
 
     def test_engine(self):
         part = self.parts.with_title('S1 SRB-KD25k')[0]
@@ -117,12 +142,6 @@ class TestPartsPart(testingtools.TestCase):
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.engine)
-        self.assertEqual(None, part.decoupler)
-        self.assertEqual(None, part.launch_clamp)
-        self.assertEqual(None, part.light)
-        self.assertEqual(None, part.parachute)
-        self.assertEqual(None, part.sensor)
-        self.assertEqual(None, part.solar_panel)
 
     def test_launch_clamp(self):
         part = self.parts.with_title('TT18-A Launch Stability Enhancer')[0]
@@ -150,13 +169,7 @@ class TestPartsPart(testingtools.TestCase):
         if self.conn.space_center.remote_tech_available:
             modules.append('ModuleRTAntennaPassive')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-        self.assertEqual(None, part.engine)
-        self.assertEqual(None, part.decoupler)
         self.assertNotEqual(None, part.launch_clamp)
-        self.assertEqual(None, part.light)
-        self.assertEqual(None, part.parachute)
-        self.assertEqual(None, part.sensor)
-        self.assertEqual(None, part.solar_panel)
 
     def test_light(self):
         part = self.parts.with_title('Illuminator Mk1')[0]
@@ -184,13 +197,7 @@ class TestPartsPart(testingtools.TestCase):
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-        self.assertEqual(None, part.engine)
-        self.assertEqual(None, part.decoupler)
-        self.assertEqual(None, part.launch_clamp)
         self.assertNotEqual(None, part.light)
-        self.assertEqual(None, part.parachute)
-        self.assertEqual(None, part.sensor)
-        self.assertEqual(None, part.solar_panel)
 
     def test_parachute(self):
         part = self.parts.with_title('Mk16-XL Parachute')[0]
@@ -215,13 +222,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEquals(0, len(part.fuel_lines_from))
         self.assertEquals(0, len(part.fuel_lines_to))
         self.assertEqual(['ModuleParachute', 'ModuleTestSubject'], sorted(m.name for m in part.modules))
-        self.assertEqual(None, part.engine)
-        self.assertEqual(None, part.decoupler)
-        self.assertEqual(None, part.launch_clamp)
-        self.assertEqual(None, part.light)
         self.assertNotEqual(None, part.parachute)
-        self.assertEqual(None, part.sensor)
-        self.assertEqual(None, part.solar_panel)
 
     def test_sensor(self):
         part = self.parts.with_title('PresMat Barometer')[0]
@@ -249,13 +250,7 @@ class TestPartsPart(testingtools.TestCase):
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-        self.assertEqual(None, part.engine)
-        self.assertEqual(None, part.decoupler)
-        self.assertEqual(None, part.launch_clamp)
-        self.assertEqual(None, part.light)
-        self.assertEqual(None, part.parachute)
         self.assertNotEqual(None, part.sensor)
-        self.assertEqual(None, part.solar_panel)
 
     def test_solar_panel(self):
         part = self.parts.with_title('Gigantor XL Solar Array')[0]
@@ -283,12 +278,6 @@ class TestPartsPart(testingtools.TestCase):
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-        self.assertEqual(None, part.engine)
-        self.assertEqual(None, part.decoupler)
-        self.assertEqual(None, part.launch_clamp)
-        self.assertEqual(None, part.light)
-        self.assertEqual(None, part.parachute)
-        self.assertEqual(None, part.sensor)
         self.assertNotEqual(None, part.solar_panel)
 
 if __name__ == "__main__":
