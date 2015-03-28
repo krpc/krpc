@@ -1,6 +1,7 @@
 import unittest
 import testingtools
 import krpc
+from mathtools import dot
 
 class TestPartsPart(testingtools.TestCase):
 
@@ -58,6 +59,35 @@ class TestPartsPart(testingtools.TestCase):
         self.assertNotEqual(None, part.reaction_wheel)
         self.assertEqual(None, part.sensor)
         self.assertEqual(None, part.solar_panel)
+
+    def test_control_from(self):
+        ref = self.vessel.orbit.body.reference_frame
+        root = self.parts.root
+        port = self.parts.with_title('Clamp-O-Tron Docking Port')[0]
+
+        # Check vessel direction is in direction of root part
+        # and perpendicular to the docking port
+        vessel_dir = self.vessel.direction(ref)
+        root_dir = root.direction(ref)
+        port_dir = port.direction(ref)
+        self.assertClose(vessel_dir, root_dir)
+        self.assertClose(0, dot(vessel_dir, port_dir))
+
+        # Control from the docking port
+        port.control_from()
+
+        # Check vessel direction is now the direction of the docking port
+        vessel_dir = self.vessel.direction(ref)
+        self.assertClose(0, dot(vessel_dir, root_dir))
+        self.assertClose(vessel_dir, port_dir)
+
+        # Control from the root part
+        root.control_from()
+
+        # Check vessel direction is now the direction of the root part
+        vessel_dir = self.vessel.direction(ref)
+        self.assertClose(vessel_dir, root_dir)
+        self.assertClose(0, dot(vessel_dir, port_dir))
 
     def test_decoupler(self):
         part = self.parts.with_title('TT-70 Radial Decoupler')[0]

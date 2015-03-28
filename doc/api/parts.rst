@@ -303,6 +303,10 @@ Part
 
       .. note:: See the discussion on :ref:`api-parts-fuel-lines`.
 
+   .. method:: ControlFrom ()
+
+      Control the vessel from this part.
+
    .. attribute:: Modules
 
       Gets the modules for this part.
