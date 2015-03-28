@@ -162,6 +162,10 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> (); }
         }
 
+        internal bool IsDockingPort {
+            get { return part.HasModule<ModuleDockingNode> (); }
+        }
+
         internal bool IsEngine {
             get { return part.HasModule<ModuleEngines> () || part.HasModule<ModuleEnginesFX> (); }
         }
@@ -193,6 +197,11 @@ namespace KRPCSpaceCenter.Services.Parts
         [KRPCProperty]
         public Decoupler Decoupler {
             get { return IsDecoupler ? new Decoupler (this) : null; }
+        }
+
+        [KRPCProperty]
+        public DockingPort DockingPort {
+            get { return IsDockingPort ? new DockingPort (this) : null; }
         }
 
         [KRPCProperty]

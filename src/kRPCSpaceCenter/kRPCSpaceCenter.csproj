@@ -87,6 +87,7 @@
     <Compile Include="Services\Node.cs" />
     <Compile Include="Services\Orbit.cs" />
     <Compile Include="Services\Parts\Decoupler.cs" />
+    <Compile Include="Services\Parts\DockingPort.cs" />
     <Compile Include="Services\Parts\Engine.cs" />
     <Compile Include="Services\Parts\LaunchClamp.cs" />
     <Compile Include="Services\Parts\Light.cs" />

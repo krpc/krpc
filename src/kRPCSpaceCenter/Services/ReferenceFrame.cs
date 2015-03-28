@@ -19,25 +19,30 @@ namespace KRPCSpaceCenter.Services
             VesselSurface,
             VesselSurfaceVelocity,
             Maneuver,
-            ManeuverOrbital
+            ManeuverOrbital,
+            DockingPort
         }
 
         readonly Type type;
         readonly global::CelestialBody body;
         readonly global::Vessel vessel;
         readonly ManeuverNode node;
+        readonly ModuleDockingNode dockingPort;
 
-        ReferenceFrame (Type type, global::CelestialBody body, global::Vessel vessel, ManeuverNode node)
+        ReferenceFrame (
+            Type type, global::CelestialBody body = null, global::Vessel vessel = null,
+            ManeuverNode node = null, ModuleDockingNode dockingPort = null)
         {
             this.type = type;
             this.body = body;
             this.vessel = vessel;
             this.node = node;
+            this.dockingPort = dockingPort;
         }
 
         public override bool Equals (ReferenceFrame obj)
         {
-            return type == obj.type && body == obj.body && vessel == obj.vessel && node == obj.node;
+            return type == obj.type && body == obj.body && vessel == obj.vessel && node == obj.node && dockingPort == obj.dockingPort;
         }
 
         public override int GetHashCode ()
@@ -49,12 +54,14 @@ namespace KRPCSpaceCenter.Services
                 hash ^= vessel.GetHashCode ();
             if (node != null)
                 hash ^= node.GetHashCode ();
+            if (dockingPort != null)
+                hash ^= dockingPort.GetHashCode ();
             return hash;
         }
 
         internal static ReferenceFrame Object (global::CelestialBody body)
         {
-            return new ReferenceFrame (Type.CelestialBody, body, null, null);
+            return new ReferenceFrame (Type.CelestialBody, body);
         }
 
         internal static ReferenceFrame NonRotating (global::CelestialBody body)
@@ -66,37 +73,42 @@ namespace KRPCSpaceCenter.Services
         {
             if (body == body.referenceBody || body.orbit == null)
                 throw new ArgumentException ("CelestialBody '" + body.name + "' does not orbit anything");
-            return new ReferenceFrame (Type.CelestialBodyOrbital, body, null, null);
+            return new ReferenceFrame (Type.CelestialBodyOrbital, body);
         }
 
         internal static ReferenceFrame Object (global::Vessel vessel)
         {
-            return new ReferenceFrame (Type.Vessel, null, vessel, null);
+            return new ReferenceFrame (Type.Vessel, vessel: vessel);
         }
 
         internal static ReferenceFrame Orbital (global::Vessel vessel)
         {
-            return new ReferenceFrame (Type.VesselOrbital, null, vessel, null);
+            return new ReferenceFrame (Type.VesselOrbital, vessel: vessel);
         }
 
         internal static ReferenceFrame Surface (global::Vessel vessel)
         {
-            return new ReferenceFrame (Type.VesselSurface, null, vessel, null);
+            return new ReferenceFrame (Type.VesselSurface, vessel: vessel);
         }
 
         internal static ReferenceFrame SurfaceVelocity (global::Vessel vessel)
         {
-            return new ReferenceFrame (Type.VesselSurfaceVelocity, null, vessel, null);
+            return new ReferenceFrame (Type.VesselSurfaceVelocity, vessel: vessel);
         }
 
         internal static ReferenceFrame Object (ManeuverNode node)
         {
-            return new ReferenceFrame (Type.Maneuver, null, null, node);
+            return new ReferenceFrame (Type.Maneuver, node: node);
         }
 
         internal static ReferenceFrame Orbital (ManeuverNode node)
         {
-            return new ReferenceFrame (Type.ManeuverOrbital, null, null, node);
+            return new ReferenceFrame (Type.ManeuverOrbital, node: node);
+        }
+
+        internal static ReferenceFrame Object (ModuleDockingNode dockingPort)
+        {
+            return new ReferenceFrame (Type.DockingPort, dockingPort: dockingPort);
         }
 
         /// <summary>
@@ -125,6 +137,8 @@ namespace KRPCSpaceCenter.Services
                         var nodeOrbitPos = node.patch.getPositionAtUT (node.UT);
                         return vesselPos - vesselOrbitPos + nodeOrbitPos;
                     }
+                case Type.DockingPort:
+                    return dockingPort.nodeTransform.position;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -211,6 +225,8 @@ namespace KRPCSpaceCenter.Services
                     return new Node (node).WorldBurnVector;
                 case Type.ManeuverOrbital:
                     return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
+                case Type.DockingPort:
+                    return dockingPort.nodeTransform.up;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -266,6 +282,8 @@ namespace KRPCSpaceCenter.Services
                     }
                 case Type.ManeuverOrbital:
                     return node.patch.GetOrbitNormal ().SwapYZ ();
+                case Type.DockingPort:
+                    return dockingPort.nodeTransform.forward;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -290,6 +308,8 @@ namespace KRPCSpaceCenter.Services
                 case Type.Maneuver:
                 case Type.ManeuverOrbital:
                     return Vector3d.zero; //TODO: check this
+                case Type.DockingPort:
+                    return dockingPort.vessel.GetOrbit ().GetVel ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -313,14 +333,11 @@ namespace KRPCSpaceCenter.Services
                 case Type.Vessel:
                     return vessel.angularVelocity;
                 case Type.VesselOrbital:
-                    return Vector3d.zero; //TODO: check this
                 case Type.VesselSurface:
-                    return Vector3d.zero; //TODO: check this
                 case Type.VesselSurfaceVelocity:
-                    return Vector3d.zero; //TODO: check this
                 case Type.Maneuver:
-                    return Vector3d.zero; //TODO: check this
                 case Type.ManeuverOrbital:
+                case Type.DockingPort:
                     return Vector3d.zero; //TODO: check this
                 default:
                     throw new ArgumentException ("No such reference frame");

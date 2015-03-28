@@ -82,6 +82,12 @@ Parts
 
       :rtype: :class:`List` ( :class:`Decoupler` )
 
+   .. attribute:: DockingPorts
+
+      Gets a list of all docking ports in the vessel.
+
+      :rtype: :class:`List` ( :class:`DockingPort` )
+
    .. attribute:: Engines
 
       Gets a list of all engines in the vessel.
@@ -297,6 +303,12 @@ Part
 
       :rtype: :class:`Decoupler`
 
+   .. attribute:: DockingPort
+
+      A :class:`DockingPort` if the part is a docking port, otherwise ``null``.
+
+      :rtype: :class:`DockingPort`
+
    .. attribute:: Engine
 
       An :class:`Engine` if the part is an engine, otherwise ``null``.
@@ -459,6 +471,124 @@ Decoupler
       fired, in Newton seconds.
 
       :rtype: float
+
+Docking Port
+^^^^^^^^^^^^
+
+.. class:: DockingPort
+
+   Obtained by calling :attr:`Part.DockingPort`.
+
+   .. attribute:: Part
+
+      Gets the part object for this docking port.
+
+      :rtype: :class:`Part`
+
+   .. attribute:: State
+
+      Gets the current state of the docking port.
+
+      :rtype: :class:`DockingPortState`
+
+   .. attribute:: DockedPart
+
+      Gets the part that this docking port is docked to. Returns ``null`` if
+      this docking port is not docked to anything.
+
+      :rtype: :class:`Part`
+
+   .. method:: Undock ()
+
+      Undocks the docking port and returns the vessel that was undocked
+      from.
+
+      Note that after undocking, the active vessel may change
+      (:attr:`SpaceCenter.ActiveVessel`). This method can be called for either
+      docking port in a docked pair -- both calls will have the same
+      effect. Returns ``null`` if the docking port is not docked to anything.
+
+      :rtype: :class:`Vessel`
+
+   .. attribute:: ReengageDistance
+
+      Gets the distance a docking port must move away when it undocks before it
+      becomes ready to dock with another port, in meters.
+
+      :rtype: float
+
+   .. attribute:: HasShield
+
+      Gets whether the docking port has a shield.
+
+      :rtype: bool
+
+   .. attribute:: Shielded
+
+      Gets or sets the state of the docking ports shield, if it has one.
+
+      Returns ``true`` if the docking port has a shield, and the shield is
+      closed. Otherwise returns ``false``. When set to ``true``, the shield is
+      closed, and when set to ``false`` the shield is opened. If the docking
+      port does not have a shield, setting this attribute has no effect.
+
+   .. method:: Position (referenceFrame)
+
+      Gets the position of the docking port in the given reference frame.
+
+      :param ReferenceFrame referenceFrame:
+      :rtype: :class:`Vector3`
+
+   .. method:: Direction (referenceFrame)
+
+      Gets the direction that docking port points in, in the given reference
+      frame.
+
+      :param ReferenceFrame referenceFrame:
+      :rtype: :class:`Vector3`
+
+   .. method:: Rotation (referenceFrame)
+
+      Gets the rotation of the docking port, in the given reference frame.
+
+      :param ReferenceFrame referenceFrame:
+      :rtype: :class:`Quaternion`
+
+   .. attribute:: ReferenceFrame
+
+      Gets the reference frame fixed relative to this docking port.
+
+      :rtype: :class:`ReferenceFrame`
+
+.. class:: DockingPortState
+
+   .. attribute:: Ready
+
+      The docking port is ready to dock to another docking port.
+
+   .. attribute:: Docked
+
+      The docking port is docked to another docking port, or docked to another
+      part (from the VAB/SPH).
+
+   .. attribute:: Docking
+
+      The docking port is very close to another docking port, but has not
+      docked. It is using magnetic force to acquire a solid dock.
+
+   .. attribute:: Undocking
+
+      The docking port has just been undocked from another docking port, and is
+      disabled until it moves away by a sufficient distance
+      (:attr:`DockingPort.ReengageDistance`).
+
+   .. attribute:: Shielded
+
+      The docking port has a shield, and the shield is closed.
+
+   .. attribute:: Moving
+
+      The docking ports shield is currently opening/closing.
 
 Engine
 ^^^^^^
