@@ -132,36 +132,49 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(
             ['TR-XL Stack Separator', 'TR-XL Stack Separator', 'TR-XL Stack Separator',
              'TT-70 Radial Decoupler', 'TT-70 Radial Decoupler', 'TT-70 Radial Decoupler'],
-            sorted(e.part.title for e in self.parts.decouplers))
+            sorted(x.part.title for x in self.parts.decouplers))
+
+    def test_docking_ports(self):
+        self.assertEqual(
+            ['Clamp-O-Tron Docking Port', 'Clamp-O-Tron Docking Port Jr.'],
+            sorted(x.part.title for x in self.parts.docking_ports))
 
     def test_engines(self):
         self.assertEqual(
             ['Rockomax "Mainsail" Liquid Engine', 'Rockomax "Poodle" Liquid Engine',
              'Rockomax "Skipper" Liquid Engine', 'S1 SRB-KD25k', 'S1 SRB-KD25k', 'S1 SRB-KD25k'],
-            sorted(e.part.title for e in self.parts.engines))
+            sorted(x.part.title for x in self.parts.engines))
+
+    def test_landing_legs(self):
+        self.assertEqual(['LT-1 Landing Struts']*3, sorted(x.part.title for x in self.parts.landing_legs))
 
     def test_launch_clamps(self):
-        self.assertEqual(['TT18-A Launch Stability Enhancer']*6, sorted(e.part.title for e in self.parts.launch_clamps))
+        self.assertEqual(['TT18-A Launch Stability Enhancer']*6, sorted(x.part.title for x in self.parts.launch_clamps))
 
     def test_lights(self):
-        self.assertEqual(['Illuminator Mk1']*3, sorted(e.part.title for e in self.parts.lights))
+        self.assertEqual(['Illuminator Mk1']*3 + ['Small Gear Bay'], sorted(x.part.title for x in self.parts.lights))
 
     def test_parachutes(self):
         self.assertEqual(
             ['Mk16-XL Parachute', 'Mk2-R Radial-Mount Parachute',
              'Mk2-R Radial-Mount Parachute', 'Mk2-R Radial-Mount Parachute'],
-            sorted(e.part.title for e in self.parts.parachutes))
+            sorted(x.part.title for x in self.parts.parachutes))
+
+    def test_reaction_wheels(self):
+        self.assertEqual(
+            ['Advanced Reaction Wheel Module, Large', 'Mk1-2 Command Pod'],
+            sorted(x.part.title for x in self.parts.reaction_wheels))
 
     def test_sensors(self):
         self.assertEqual(
             ['GRAVMAX Negative Gravioli Detector', 'PresMat Barometer'],
-            sorted(e.part.title for e in self.parts.sensors))
+            sorted(x.part.title for x in self.parts.sensors))
 
     def test_solar_panels(self):
         self.assertEqual(
             ['Gigantor XL Solar Array', 'OX-STAT Photovoltaic Panels',
              'SP-L 1x6 Photovoltaic Panels', 'SP-L 1x6 Photovoltaic Panels'],
-            sorted(e.part.title for e in self.parts.solar_panels))
+            sorted(x.part.title for x in self.parts.solar_panels))
 
 if __name__ == "__main__":
     unittest.main()
