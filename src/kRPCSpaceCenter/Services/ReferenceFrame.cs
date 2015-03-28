@@ -20,6 +20,7 @@ namespace KRPCSpaceCenter.Services
             VesselSurfaceVelocity,
             Maneuver,
             ManeuverOrbital,
+            Part,
             DockingPort
         }
 
@@ -27,22 +28,24 @@ namespace KRPCSpaceCenter.Services
         readonly global::CelestialBody body;
         readonly global::Vessel vessel;
         readonly ManeuverNode node;
+        readonly Part part;
         readonly ModuleDockingNode dockingPort;
 
         ReferenceFrame (
             Type type, global::CelestialBody body = null, global::Vessel vessel = null,
-            ManeuverNode node = null, ModuleDockingNode dockingPort = null)
+            ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null)
         {
             this.type = type;
             this.body = body;
             this.vessel = vessel;
             this.node = node;
+            this.part = part;
             this.dockingPort = dockingPort;
         }
 
         public override bool Equals (ReferenceFrame obj)
         {
-            return type == obj.type && body == obj.body && vessel == obj.vessel && node == obj.node && dockingPort == obj.dockingPort;
+            return type == obj.type && body == obj.body && vessel == obj.vessel && node == obj.node && part == obj.part && dockingPort == obj.dockingPort;
         }
 
         public override int GetHashCode ()
@@ -54,6 +57,8 @@ namespace KRPCSpaceCenter.Services
                 hash ^= vessel.GetHashCode ();
             if (node != null)
                 hash ^= node.GetHashCode ();
+            if (part != null)
+                hash ^= part.GetHashCode ();
             if (dockingPort != null)
                 hash ^= dockingPort.GetHashCode ();
             return hash;
@@ -106,6 +111,11 @@ namespace KRPCSpaceCenter.Services
             return new ReferenceFrame (Type.ManeuverOrbital, node: node);
         }
 
+        internal static ReferenceFrame Object (Part part)
+        {
+            return new ReferenceFrame (Type.Part, part: part);
+        }
+
         internal static ReferenceFrame Object (ModuleDockingNode dockingPort)
         {
             return new ReferenceFrame (Type.DockingPort, dockingPort: dockingPort);
@@ -137,6 +147,8 @@ namespace KRPCSpaceCenter.Services
                         var nodeOrbitPos = node.patch.getPositionAtUT (node.UT);
                         return vesselPos - vesselOrbitPos + nodeOrbitPos;
                     }
+                case Type.Part:
+                    return part.transform.position;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.position;
                 default:
@@ -225,6 +237,8 @@ namespace KRPCSpaceCenter.Services
                     return new Node (node).WorldBurnVector;
                 case Type.ManeuverOrbital:
                     return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
+                case Type.Part:
+                    return part.transform.up;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.up;
                 default:
@@ -282,6 +296,8 @@ namespace KRPCSpaceCenter.Services
                     }
                 case Type.ManeuverOrbital:
                     return node.patch.GetOrbitNormal ().SwapYZ ();
+                case Type.Part:
+                    return part.transform.forward;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.forward;
                 default:
@@ -308,6 +324,8 @@ namespace KRPCSpaceCenter.Services
                 case Type.Maneuver:
                 case Type.ManeuverOrbital:
                     return Vector3d.zero; //TODO: check this
+                case Type.Part:
+                    return part.vessel.GetOrbit ().GetVel ();
                 case Type.DockingPort:
                     return dockingPort.vessel.GetOrbit ().GetVel ();
                 default:
@@ -337,6 +355,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.VesselSurfaceVelocity:
                 case Type.Maneuver:
                 case Type.ManeuverOrbital:
+                case Type.Part:
                 case Type.DockingPort:
                     return Vector3d.zero; //TODO: check this
                 default:

@@ -150,6 +150,7 @@ kRPC provides the following reference frames:
 * :meth:`CelestialBody.orbital_reference_frame`
 * :meth:`Node.reference_frame`
 * :meth:`Node.orbital_reference_frame`
+* :meth:`Part.reference_frame`
 * :meth:`DockingPort.reference_frame`
 
 Converting Between Reference Frames

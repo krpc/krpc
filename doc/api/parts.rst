@@ -351,6 +351,40 @@ Part
 
       :rtype: :class:`SolarPanel`
 
+   .. method:: Position (referenceFrame)
+
+      Gets the position of the part in the given reference frame.
+
+      :param ReferenceFrame referenceFrame:
+      :rtype: :class:`Vector3`
+
+   .. method:: Direction (referenceFrame)
+
+      Gets the direction of the part in the given reference frame.
+
+      :param ReferenceFrame referenceFrame:
+      :rtype: :class:`Vector3`
+
+   .. method:: Velocity (referenceFrame)
+
+      Gets the velocity of the part in the given reference frame.
+
+      :param ReferenceFrame referenceFrame:
+      :rtype: :class:`Vector3`
+
+   .. method:: Rotation (referenceFrame)
+
+      Gets the rotation of the part in the given reference frame.
+
+      :param ReferenceFrame referenceFrame:
+      :rtype: :class:`Quaternion`
+
+   .. attribute:: ReferenceFrame
+
+      Gets the reference frame that is fixed relative to this part.
+
+      :rtype: :class:`ReferenceFrame`
+
 Module
 ------
 

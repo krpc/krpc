@@ -3,6 +3,8 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
@@ -237,6 +239,35 @@ namespace KRPCSpaceCenter.Services.Parts
         [KRPCProperty]
         public SolarPanel SolarPanel {
             get { return IsSolarPanel ? new SolarPanel (this) : null; }
+        }
+
+        [KRPCMethod]
+        public Tuple3 Position (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.PositionFromWorldSpace (part.transform.position).ToTuple ();
+        }
+
+        [KRPCMethod]
+        public Tuple3 Direction (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.DirectionFromWorldSpace (part.transform.forward).ToTuple ();
+        }
+
+        [KRPCMethod]
+        public Tuple3 Velocity (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.VelocityFromWorldSpace (part.transform.position, part.orbit.GetVel ()).ToTuple ();
+        }
+
+        [KRPCMethod]
+        public Tuple4 Rotation (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.RotationToWorldSpace (part.transform.rotation).ToTuple ();
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return ReferenceFrame.Object (part); }
         }
     }
 }
