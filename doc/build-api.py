@@ -25,6 +25,18 @@ def snake_case_name(name):
     else:
         return snake_case(name)
 
+def convert_type(name):
+    typs = {
+       'double': 'float',
+       'int32': 'int',
+       'Dictionary': 'dict',
+       'List': 'list'
+    }
+    if name in typs:
+        return typs[name]
+    else:
+        return name
+
 def parse_file(path):
     with open(path, 'r') as f:
         lines = []
@@ -62,7 +74,7 @@ def parse_file(path):
                         return inline+'`'+snake_case_name(m.group(1))+'`'
                     line = re.sub(inline+'`([^`]+)`', repl, line)
             def repl(m):
-                return ':param '+m.group(1)+' '+snake_case_name(m.group(2))+':'
+                return ':param '+convert_type(m.group(1))+' '+snake_case_name(m.group(2))+':'
             line = re.sub(':param ([^ ]+) (.+):', repl, line)
             def repl2(m):
                 return m.group(1)+'*'+snake_case(m.group(2))+'*'+m.group(3)
@@ -71,6 +83,8 @@ def parse_file(path):
             line = line.replace('``true``', '``True``')
             line = line.replace('``false``', '``False``')
             line = line.replace('``string``', '``str``')
+            line = line.replace('``double``', '``float``')
+            line = line.replace('``int32``', '``int``')
             line = line.replace(':class:`Dictionary`', '``dict``')
             line = line.replace(':class:`List`', '``list``')
             lines.append(line.rstrip())
