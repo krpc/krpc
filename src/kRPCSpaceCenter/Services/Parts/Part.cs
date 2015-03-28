@@ -280,7 +280,7 @@ namespace KRPCSpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.DirectionFromWorldSpace (part.transform.forward).ToTuple ();
+            return referenceFrame.DirectionFromWorldSpace (part.transform.up).ToTuple ();
         }
 
         [KRPCMethod]

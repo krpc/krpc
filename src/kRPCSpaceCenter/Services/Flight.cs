@@ -51,7 +51,7 @@ namespace KRPCSpaceCenter.Services
         /// Direction the vessel is pointing in in world space
         /// </summary>
         Vector3d WorldDirection {
-            get { return vessel.transform.up; }
+            get { return vessel.ReferenceTransform.up; }
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace KRPCSpaceCenter.Services
         /// Rotation * Vector3d.up gives the direction vector in which the vessel points, in reference frame space.
         /// </summary>
         QuaternionD VesselRotation {
-            get { return referenceFrame.RotationFromWorldSpace (vessel.transform.rotation); }
+            get { return referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation); }
         }
 
         /// <summary>

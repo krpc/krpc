@@ -176,7 +176,7 @@ namespace KRPCSpaceCenter.Services
 
         double ComputeError (Quaternion target)
         {
-            return Math.Abs (Quaternion.Angle (vessel.transform.rotation, target));
+            return Math.Abs (Quaternion.Angle (vessel.ReferenceTransform.rotation, target));
         }
 
         static void SteerShipToward (Quaternion target, FlightCtrlState c, global::Vessel vessel)
@@ -218,7 +218,7 @@ namespace KRPCSpaceCenter.Services
         {
             var centerOfMass = vessel.findWorldCenterOfMass ();
             var momentOfInertia = vessel.findLocalMOI (centerOfMass);
-            var angularVelocity = Quaternion.Inverse (vessel.transform.rotation) * vessel.rigidbody.angularVelocity;
+            var angularVelocity = Quaternion.Inverse (vessel.ReferenceTransform.rotation) * vessel.rigidbody.angularVelocity;
             var angularMomentum = new Vector3d (angularVelocity.x * momentOfInertia.x, angularVelocity.y * momentOfInertia.y, angularVelocity.z * momentOfInertia.z);
 
             var retVar = Vector3d.Scale
@@ -235,7 +235,7 @@ namespace KRPCSpaceCenter.Services
         static Vector3d GetTorque (global::Vessel vessel, float thrust)
         {
             var centerOfMass = vessel.findWorldCenterOfMass ();
-            var rollaxis = vessel.transform.up;
+            var rollaxis = vessel.ReferenceTransform.up;
             rollaxis.Normalize ();
             var pitchaxis = vessel.GetFwdVector ();
             pitchaxis.Normalize ();

@@ -243,13 +243,13 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.RotationFromWorldSpace (InternalVessel.transform.rotation).ToTuple ();
+            return referenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).ToTuple ();
         }
 
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.DirectionFromWorldSpace (InternalVessel.transform.up).ToTuple ();
+            return referenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up).ToTuple ();
         }
 
         [KRPCMethod]

@@ -223,7 +223,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.CelestialBodyOrbital:
                     return body.orbit.GetVel () - body.orbit.referenceBody.GetWorldVelocity ();
                 case Type.Vessel:
-                    return vessel.transform.up;
+                    return vessel.ReferenceTransform.up;
                 case Type.VesselOrbital:
                     return vessel.GetOrbit ().GetVel ();
                 case Type.VesselSurface:
@@ -266,7 +266,7 @@ namespace KRPCSpaceCenter.Services
                         return Vector3d.Cross (radial, up);
                     }
                 case Type.Vessel:
-                    return vessel.transform.forward;
+                    return vessel.ReferenceTransform.forward;
                 case Type.VesselOrbital:
                     return vessel.GetOrbit ().GetOrbitNormal ().SwapYZ ();
                 case Type.VesselSurface:
