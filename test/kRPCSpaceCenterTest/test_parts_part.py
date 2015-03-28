@@ -27,7 +27,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(None, part.parent)
         self.assertEqual(
             ['LT-1 Landing Struts', 'LT-1 Landing Struts', 'LT-1 Landing Struts',
-             'Mk16-XL Parachute', 'Reflectron DP-10', 'TR-XL Stack Separator'],
+             'Mk16-XL Parachute', 'Reflectron DP-10', 'Small Gear Bay', 'TR-XL Stack Separator'],
             sorted(p.title for p in part.children))
         self.assertTrue(part.axially_attached)
         self.assertFalse(part.radially_attached)
