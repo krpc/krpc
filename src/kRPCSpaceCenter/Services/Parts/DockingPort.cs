@@ -56,6 +56,10 @@ namespace KRPCSpaceCenter.Services.Parts
             return part.GetHashCode ();
         }
 
+        internal ModuleDockingNode InternalPort {
+            get { return port; }
+        }
+
         [KRPCProperty]
         public Part Part {
             get { return part; }

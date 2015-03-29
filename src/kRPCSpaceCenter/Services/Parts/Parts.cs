@@ -1,7 +1,8 @@
-using KRPC.Service.Attributes;
-using KRPC.Utils;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Service.Attributes;
+using KRPC.Utils;
+using KRPCSpaceCenter.ExtensionMethods;
 using KRPCSpaceCenter.Services.Parts;
 
 namespace KRPCSpaceCenter.Services.Parts
@@ -34,6 +35,21 @@ namespace KRPCSpaceCenter.Services.Parts
         [KRPCProperty]
         public Part Root {
             get { return new Part (vessel.rootPart); }
+        }
+
+        [KRPCProperty]
+        public Part Controlling {
+            get { return new Part (vessel.GetReferenceTransformPart () ?? vessel.rootPart); }
+            set {
+                var part = value.InternalPart;
+                if (part.HasModule <ModuleCommand> ()) {
+                    part.Module<ModuleCommand> ().MakeReference ();
+                } else if (part.HasModule <ModuleDockingNode> ()) {
+                    part.Module<ModuleDockingNode> ().MakeReferenceTransform ();
+                } else {
+                    part.vessel.SetReferenceTransform (part);
+                }
+            }
         }
 
         [KRPCMethod]

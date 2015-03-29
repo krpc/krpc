@@ -57,6 +57,21 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(None, root.parent)
         self.assertGreater(len(root.children), 0)
 
+    def test_controlling_part(self):
+        commandpod = self.parts.root
+        dockingport = self.parts.docking_ports[0].part
+        part = self.parts.with_title('Z-400 Rechargeable Battery')[0]
+        self.assertNotEqual(commandpod, dockingport)
+        self.assertNotEqual(commandpod, part)
+
+        self.assertEqual(commandpod, self.parts.controlling)
+        self.parts.controlling = dockingport
+        self.assertEqual(dockingport, self.parts.controlling)
+        self.parts.controlling = part
+        self.assertEqual(part, self.parts.controlling)
+        self.parts.controlling = commandpod
+        self.assertEqual(commandpod, self.parts.controlling)
+
     def test_parts_with_name(self):
         parts = self.parts.with_name('spotLight1')
         self.assertEqual(['spotLight1']*3, [p.name for p in parts])

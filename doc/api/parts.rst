@@ -28,6 +28,12 @@ Parts
 
       .. note:: See the discussion on :ref:`api-parts-trees-of-parts`.
 
+   .. attribute:: Controlling
+
+      Gets or sets the part from which the vessel is controlled.
+
+      :rtype: :class:`Part`
+
    .. method:: WithName (name)
 
       Gets a list of parts whose :attr:`Part.Name` is *name*.
@@ -311,10 +317,6 @@ Part
       :rtype: bool
 
       .. note:: See the discussion on :ref:`api-parts-fuel-lines`.
-
-   .. method:: ControlFrom ()
-
-      Control the vessel from this part.
 
    .. attribute:: Modules
 

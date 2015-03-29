@@ -150,18 +150,6 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
-        [KRPCMethod]
-        public void ControlFrom ()
-        {
-            if (part.HasModule <ModuleCommand> ()) {
-                part.Module<ModuleCommand> ().MakeReference ();
-            } else if (part.HasModule <ModuleDockingNode> ()) {
-                part.Module<ModuleDockingNode> ().MakeReferenceTransform ();
-            } else {
-                part.vessel.SetReferenceTransform (part);
-            }
-        }
-
         [KRPCProperty]
         public IList<Module> Modules {
             get {
