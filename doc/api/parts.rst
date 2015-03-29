@@ -424,7 +424,22 @@ Part
 
       Gets the reference frame that is fixed relative to this part.
 
+      * The origin is at the position of the part.
+
+      * The axes rotate with the part.
+
+      * The x, y and z axis directions depend on the design of the part.
+
       :rtype: :class:`ReferenceFrame`
+
+      .. figure:: /images/reference-frames/part.png
+         :align: center
+
+         Mk1 Command Pod reference frame origin and axes
+
+      .. note:: For docking port parts, this reference frame is not necessarily
+                equivalent to the reference frame for the docking port, returned
+                by :attr:`DockingPort.ReferenceFrame`.
 
 Module
 ------
@@ -640,9 +655,34 @@ Docking Port
 
    .. attribute:: ReferenceFrame
 
-      Gets the reference frame fixed relative to this docking port.
+      Gets the reference frame that is fixed relative to this docking port, and
+      oriented with the port.
+
+      * The origin is at the position of the docking port.
+
+      * The axes rotate with the docking port.
+
+      * The x-axis points out to the right side of the docking port.
+
+      * The y-axis points in the direction the docking port is facing.
+
+      * The z-axis points out of the bottom off the docking port.
 
       :rtype: :class:`ReferenceFrame`
+
+      .. figure:: /images/reference-frames/docking-port.png
+         :align: center
+
+         Docking port reference frame origin and axes
+
+      .. figure:: /images/reference-frames/docking-port-inline.png
+         :align: center
+
+         Inline docking port reference frame origin and axes
+
+      .. note:: This reference frame is not necessarily equivalent to the
+                reference frame for the part, returned by
+                :attr:`Part.ReferenceFrame`.
 
 .. class:: DockingPortState
 
