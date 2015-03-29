@@ -1,4 +1,4 @@
-package KRPC;
+package krpc;
 
 message Request {
   required string service = 1;

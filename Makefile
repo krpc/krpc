@@ -75,6 +75,13 @@ dist: build doc dist-python
 	# Python client library
 	mkdir $(DIST_DIR)/python-client
 	cp python/dist/krpc-$(PYTHON_CLIENT_VERSION).zip $(DIST_DIR)/python-client/
+	# protobuf source
+	mkdir $(DIST_DIR)/src
+	echo "See http://djungelorm.github.io/krpc/docs/communication-protocol.html" > $(DIST_DIR)/src/README.txt
+	cp src/kRPC/Schema/KRPC.proto $(DIST_DIR)/src/
+	mkdir -p $(DIST_DIR)/src/python
+	cp -R python/krpc/schema/KRPC.py $(DIST_DIR)/src/python/
+	cp -R java cpp $(DIST_DIR)/src/
 	# Documentation
 	cp doc/build/pdf/kRPC.pdf $(DIST_DIR)/
 
@@ -150,40 +157,65 @@ cog:
 
 # Protocol Buffers -------------------------------------------------------------
 
-.PHONY: protobuf-csharp protobuf-python protobuf-clean protobuf-csharp-clean protobuf-python-clean
+.PHONY: protobuf-csharp protobuf-python protobuf-java protobuf-cpp \
+	      protobuf-clean protobuf-csharp-clean protobuf-python-clean protobuf-java-clean protobuf-cpp-clean
 
-protobuf: protobuf-csharp protobuf-python
+protobuf: protobuf-csharp protobuf-python protobuf-java protobuf-cpp
 	# Fix for error in output of C# protobuf compiler
 	-git apply krpc-proto.patch
 
 protobuf-csharp: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
 protobuf-python: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py)
+	mkdir -p python/krpc/schema
 	echo "" > python/krpc/schema/__init__.py
-	test -f python/krpc/test/Test.py || mv python/krpc/schema/Test.py python/krpc/test/Test.py
+	cp $(PROTOS:.proto=.py) python/krpc/schema/
+	cp $(PROTOS_TEST:.proto=.py) python/krpc/test/
 
-protobuf-clean: protobuf-csharp-clean protobuf-python-clean
-	-rm -rf $(PROTOS:.proto=.protobin) $(PROTOS_TEST:.proto=.protobin)
+protobuf-java: $(PROTOS) $(PROTOS:.proto=.java)
+	mkdir -p java/krpc
+	cp $(PROTOS:.proto=.java) java/krpc/
+
+protobuf-cpp: $(PROTOS) $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
+	mkdir -p cpp/src/kRPC/Schema
+	cp $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc) cpp/src/kRPC/Schema/
+
+protobuf-clean: protobuf-csharp-clean protobuf-python-clean protobuf-java-clean protobuf-cpp-clean
+	rm -rf $(PROTOS:.proto=.protobin) $(PROTOS_TEST:.proto=.protobin)
 
 protobuf-csharp-clean:
-	-rm -rf $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
+	rm -rf $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
 protobuf-python-clean:
-	-rm -rf $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py) python/krpc/schema python/krpc/test/Test.py
+	rm -rf $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py) python/krpc/schema python/krpc/test/Test.py
+
+protobuf-java-clean:
+	rm -rf java
+
+protobuf-cpp-clean:
+	rm -rf cpp
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
-
-%.py: %.proto
-	$(PROTOC) $< --python_out=.
-	mv $*_pb2.py $@
-	mkdir -p python/krpc/schema
-	cp $@ python/krpc/schema/$(notdir $@)
 
 %.cs: %.protobin
 	$(PROTOGEN) \
 		$*.protobin -namespace=KRPC.Schema.$(basename $(notdir $@)) \
 		-umbrella_classname=$(basename $(notdir $@)) -output_directory=$(dir $@)
+
+%.py: %.proto
+	$(PROTOC) $< --python_out=.
+	mv $*_pb2.py $@
+
+JAVATMP:=$(shell mktemp -d)
+
+%.java: %.proto
+	$(PROTOC) $< --java_out=$(JAVATMP)
+	# Following is an ugly hack
+	mv $(JAVATMP)/krpc/KRPC.java $@
+
+%.pb.cc: %.proto
+	$(PROTOC) $< --cpp_out=.
 
 # Images -----------------------------------------------------------------------
 
