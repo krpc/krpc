@@ -216,6 +216,9 @@ JAVATMP:=$(shell mktemp -d)
 	# Following is an ugly hack
 	mv $(JAVATMP)/krpc/KRPC.java $@
 
+%.pb.h: %.proto
+	$(PROTOC) $< --cpp_out=.
+
 %.pb.cc: %.proto
 	$(PROTOC) $< --cpp_out=.
 
