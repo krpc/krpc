@@ -40,7 +40,7 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
-        public bool Activated {
+        public bool Active {
             get { return engine != null ? engine.EngineIgnited : engineFx.EngineIgnited; }
             set {
                 if (value) {

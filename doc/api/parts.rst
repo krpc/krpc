@@ -727,9 +727,9 @@ Engine
 
       :rtype: :class:`Part`
 
-   .. attribute:: Activated
+   .. attribute:: Active
 
-      Gets or sets whether the engine is activated. Note that setting this
+      Gets or sets whether the engine is active. Note that setting this
       attribute may have no effect, depending on :attr:`Engine.CanShutdown` and
       :attr:`Engine.CanRestart`.
 

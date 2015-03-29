@@ -1,5 +1,6 @@
 v0.1.7
 * Fix orientation of docking port reference frames
+* Rename Engine.Activated to Engine.Active to match other parts
 
 v0.1.6
 * Parts

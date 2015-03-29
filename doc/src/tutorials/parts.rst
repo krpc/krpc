@@ -54,7 +54,7 @@ http://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
    conn = krpc.connect()
    vessel = conn.space_center.active_vessel
 
-   active_engines = filter(lambda e: e.activated and e.has_fuel, vessel.parts.engines)
+   active_engines = filter(lambda e: e.active and e.has_fuel, vessel.parts.engines)
 
    print 'Active engines:'
    for engine in active_engines:
