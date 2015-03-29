@@ -46,6 +46,40 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public static CelestialBody TargetBody {
+            get {
+                var target = FlightGlobals.fetch.VesselTarget;
+                return target is global::CelestialBody ? new CelestialBody (target as global::CelestialBody) : null;
+            }
+            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalBody); }
+        }
+
+        [KRPCProperty]
+        public static Vessel TargetVessel {
+            get {
+                var target = FlightGlobals.fetch.VesselTarget;
+                return target is global::Vessel ? new Vessel (target as global::Vessel) : null;
+            }
+            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalVessel); }
+        }
+
+        [KRPCProperty]
+        public static Parts.DockingPort TargetDockingPort {
+            get {
+                var target = FlightGlobals.fetch.VesselTarget;
+                var part = target is ModuleDockingNode ? new Parts.Part ((target as ModuleDockingNode).part) : null;
+                return part != null ? new Parts.DockingPort (part) : null;
+            }
+            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalPort); }
+        }
+
+        [KRPCProcedure]
+        public static void ClearTarget ()
+        {
+            FlightGlobals.fetch.SetVesselTarget (null);
+        }
+
+        [KRPCProperty]
         public static double UT {
             get { return Planetarium.GetUniversalTime (); }
         }

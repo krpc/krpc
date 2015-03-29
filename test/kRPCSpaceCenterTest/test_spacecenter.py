@@ -18,6 +18,7 @@ class TestSpaceCenter(testingtools.TestCase):
         cls.conn = krpc.connect(name='TestSpaceCenter')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
+        cls.other_vessel = filter(lambda v: v != cls.vessel, cls.sc.vessels)[0]
         cls.ref_vessel = cls.vessel.reference_frame
         bodies = cls.sc.bodies
         cls.sun = bodies['Sun']
@@ -52,6 +53,53 @@ class TestSpaceCenter(testingtools.TestCase):
             'Sun', 'Moho', 'Eve', 'Gilly', 'Kerbin', 'Mun', 'Minmus',
             'Duna', 'Ike', 'Dres', 'Jool', 'Laythe', 'Vall', 'Tylo',
             'Bop', 'Pol', 'Eeloo']), set(self.sc.bodies.keys()))
+
+    def test_target_body(self):
+        self.assertEqual(None, self.sc.target_body)
+        self.sc.target_body = self.mun
+        time.sleep(1)
+        self.assertEqual(self.mun, self.sc.target_body)
+        self.assertEqual(None, self.sc.target_vessel)
+        self.assertEqual(None, self.sc.target_docking_port)
+        self.sc.target_body = None
+        time.sleep(1)
+        self.assertEqual(None, self.sc.target_body)
+        self.assertEqual(None, self.sc.target_vessel)
+        self.assertEqual(None, self.sc.target_docking_port)
+
+    def test_target_vessel(self):
+        self.assertEqual(None, self.sc.target_vessel)
+        self.sc.target_vessel = self.other_vessel
+        time.sleep(1)
+        self.assertEqual(None, self.sc.target_body)
+        self.assertEqual(self.other_vessel, self.sc.target_vessel)
+        self.assertEqual(None, self.sc.target_docking_port)
+        self.sc.target_vessel = None
+        time.sleep(1)
+        self.assertEqual(None, self.sc.target_body)
+        self.assertEqual(None, self.sc.target_vessel)
+        self.assertEqual(None, self.sc.target_docking_port)
+
+    def test_clear_target(self):
+        self.assertEqual(None, self.sc.target_body)
+        self.assertEqual(None, self.sc.target_vessel)
+        self.assertEqual(None, self.sc.target_docking_port)
+
+        self.sc.target_body = self.mun
+        self.assertEqual(self.mun, self.sc.target_body)
+        self.sc.clear_target()
+
+        self.assertEqual(None, self.sc.target_body)
+        self.assertEqual(None, self.sc.target_vessel)
+        self.assertEqual(None, self.sc.target_docking_port)
+
+        self.sc.target_vessel = self.other_vessel
+        self.assertEqual(self.other_vessel, self.sc.target_vessel)
+        self.sc.clear_target()
+
+        self.assertEqual(None, self.sc.target_body)
+        self.assertEqual(None, self.sc.target_vessel)
+        self.assertEqual(None, self.sc.target_docking_port)
 
     def test_ut(self):
         ut = self.sc.ut

@@ -26,6 +26,28 @@ SpaceCenter
 
       :rtype: :class:`Dictionary` ( string, :class:`CelestialBody` )
 
+   .. attribute:: TargetBody
+
+      Gets or sets the currently targeted celestial body.
+
+      :rtype: :class:`CelestialBody`
+
+   .. attribute:: TargetVessel
+
+      Gets or sets the currently targeted vessel.
+
+      :rtype: :class:`Vessel`
+
+   .. attribute:: TargetDockingPort
+
+      Gets or sets the currently targeted docking port.
+
+      :rtype: :class:`DockingPort`
+
+   .. method:: ClearTarget ()
+
+      Clears the current target.
+
    .. attribute:: UT
 
       Gets the current universal time in seconds.
