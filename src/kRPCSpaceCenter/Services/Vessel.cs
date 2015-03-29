@@ -5,8 +5,8 @@ using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 using KRPCSpaceCenter.ExternalAPI;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
-using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -46,7 +46,8 @@ namespace KRPCSpaceCenter.Services
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
-            Resources = new Resources (vessel);
+            Parts = new Parts.Parts (vessel);
+            Resources = new VesselResources (vessel);
             if (RemoteTech.IsAvailable)
                 comms = new Comms (vessel);
         }
@@ -113,7 +114,10 @@ namespace KRPCSpaceCenter.Services
         public AutoPilot AutoPilot { get; private set; }
 
         [KRPCProperty]
-        public Resources Resources { get; private set; }
+        public VesselResources Resources { get; private set; }
+
+        [KRPCProperty]
+        public Parts.Parts Parts { get; private set; }
 
         [KRPCProperty]
         public Comms Comms {
@@ -154,7 +158,7 @@ namespace KRPCSpaceCenter.Services
             get {
                 double thrust = 0;
                 foreach (var part in InternalVessel.parts) {
-                    foreach (PartModule module in part.Modules) {
+                    foreach (global::PartModule module in part.Modules) {
                         if (!module.isEnabled)
                             continue;
                         var engine = module as ModuleEngines;
@@ -181,7 +185,7 @@ namespace KRPCSpaceCenter.Services
                 double totalThrust = 0;
                 double totalFlowRate = 0;
                 foreach (var part in InternalVessel.parts) {
-                    foreach (PartModule module in part.Modules) {
+                    foreach (global::PartModule module in part.Modules) {
                         if (!module.isEnabled)
                             continue;
                         var engine = module as ModuleEngines;
@@ -239,13 +243,13 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.RotationFromWorldSpace (InternalVessel.transform.rotation).ToTuple ();
+            return referenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).ToTuple ();
         }
 
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.DirectionFromWorldSpace (InternalVessel.transform.up).ToTuple ();
+            return referenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up).ToTuple ();
         }
 
         [KRPCMethod]

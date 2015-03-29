@@ -13,6 +13,14 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Returns the first part module of the specified type, and null if none can be found
+        /// </summary>
+        public static T Module<T> (this Part part) where T : PartModule
+        {
+            return part.Modules.OfType<T> ().FirstOrDefault ();
+        }
+
+        /// <summary>
         /// Returns true if the part contributes to the physics simulation (e.g. it has mass)
         /// </summary>
         public static bool IsPhysicallySignificant (this Part part)
@@ -28,20 +36,12 @@ namespace KRPCSpaceCenter.ExtensionMethods
         /// </summary>
         public static int DecoupledAt (this Part part)
         {
-            do  {
-                if (part.IsDecoupler ())
+            do {
+                if (part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> () || part.HasModule<LaunchClamp> ())
                     return part.inverseStage;
                 part = part.parent;
             } while (part != null);
             return -1;
-        }
-
-        /// <summary>
-        /// Returns true if the part is a decoupler.
-        /// </summary>
-        public static bool IsDecoupler (this Part part)
-        {
-            return part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> ();
         }
 
         /// <summary>

@@ -176,7 +176,7 @@ namespace KRPCSpaceCenter.Services
 
         double ComputeError (Quaternion target)
         {
-            return Math.Abs (Quaternion.Angle (vessel.transform.rotation, target));
+            return Math.Abs (Quaternion.Angle (vessel.ReferenceTransform.rotation, target));
         }
 
         static void SteerShipToward (Quaternion target, FlightCtrlState c, global::Vessel vessel)
@@ -218,7 +218,7 @@ namespace KRPCSpaceCenter.Services
         {
             var centerOfMass = vessel.findWorldCenterOfMass ();
             var momentOfInertia = vessel.findLocalMOI (centerOfMass);
-            var angularVelocity = Quaternion.Inverse (vessel.transform.rotation) * vessel.rigidbody.angularVelocity;
+            var angularVelocity = Quaternion.Inverse (vessel.ReferenceTransform.rotation) * vessel.rigidbody.angularVelocity;
             var angularMomentum = new Vector3d (angularVelocity.x * momentOfInertia.x, angularVelocity.y * momentOfInertia.y, angularVelocity.z * momentOfInertia.z);
 
             var retVar = Vector3d.Scale
@@ -235,7 +235,7 @@ namespace KRPCSpaceCenter.Services
         static Vector3d GetTorque (global::Vessel vessel, float thrust)
         {
             var centerOfMass = vessel.findWorldCenterOfMass ();
-            var rollaxis = vessel.transform.up;
+            var rollaxis = vessel.ReferenceTransform.up;
             rollaxis.Normalize ();
             var pitchaxis = vessel.GetFwdVector ();
             pitchaxis.Normalize ();
@@ -244,10 +244,10 @@ namespace KRPCSpaceCenter.Services
             float yaw = 0.0f;
             float roll = 0.0f;
 
-            foreach (Part part in vessel.parts) {
+            foreach (var part in vessel.parts) {
                 var relCoM = part.Rigidbody.worldCenterOfMass - centerOfMass;
 
-                foreach (PartModule module in part.Modules) {
+                foreach (global::PartModule module in part.Modules) {
                     var wheel = module as ModuleReactionWheel;
                     if (wheel == null)
                         continue;
@@ -257,7 +257,7 @@ namespace KRPCSpaceCenter.Services
                     roll += wheel.RollTorque;
                 }
                 if (vessel.ActionGroups [KSPActionGroup.RCS]) {
-                    foreach (PartModule module in part.Modules) {
+                    foreach (global::PartModule module in part.Modules) {
                         var rcs = module as ModuleRCS;
                         if (rcs == null || !rcs.rcsEnabled)
                             continue;
@@ -281,7 +281,7 @@ namespace KRPCSpaceCenter.Services
             return new Vector3d (pitch, roll, yaw);
         }
 
-        static double GetThrustTorque (Part p, global::Vessel vessel)
+        static double GetThrustTorque (global::Part p, global::Vessel vessel)
         {
             //TODO: implement gimbalthrust Torque calculation
             return 0;

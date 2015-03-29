@@ -73,6 +73,13 @@ Vessel
 
       :rtype: :class:`Resources`
 
+   .. attribute:: Vessel.Parts
+
+      Gets a :class:`Parts` object, that can used to interact with the parts
+      that make up this vessel.
+
+      :rtype: :class:`Parts`
+
    .. attribute:: Comms
 
       Gets a :class:`Comms` object, that can used to interact with `RemoteTech`_

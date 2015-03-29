@@ -7,16 +7,16 @@ using System.Collections.Generic;
 namespace KRPCSpaceCenter.Services
 {
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Resources : Equatable<Resources>
+    public sealed class VesselResources : Equatable<VesselResources>
     {
         readonly global::Vessel vessel;
 
-        internal Resources (global::Vessel vessel)
+        internal VesselResources (global::Vessel vessel)
         {
             this.vessel = vessel;
         }
 
-        public override bool Equals (Resources obj)
+        public override bool Equals (VesselResources obj)
         {
             return vessel == obj.vessel;
         }
