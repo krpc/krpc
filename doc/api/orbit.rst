@@ -158,29 +158,22 @@ Orbit
 
       :rtype: double
 
-   .. attribute:: ReferencePlaneNormal
+   .. method:: ReferencePlaneNormal (referenceFrame)
 
       Gets the unit direction vector that is normal to the orbits reference
-      plane. The reference plane is the plane from which the orbits inclination
-      is measured.
+      plane, in the given reference frame. The reference plane is the plane from
+      which the orbits inclination is measured.
 
+      :param ReferenceFrame referenceFrame:
       :rtype: :class:`Vector3`
 
-   .. attribute:: ReferencePlaneDirection
+   .. method:: ReferencePlaneDirection (referenceFrame)
 
-      Gets the unit direction vector (in the reference plane) from which the
-      orbits longitude of ascending node is measured.
+      Gets the unit direction vector from which the orbits longitude of
+      ascending node is measured, in the given reference frame.
 
+      :param ReferenceFrame referenceFrame:
       :rtype: :class:`Vector3`
-
-   .. attribute:: ReferenceFrame
-
-      Gets the reference frame for the orbit. The origin is at the position of
-      the object in orbit. The x-axis points in the north direction of the body
-      being orbited. The y-axis points normal to the body being orbited (from
-      the center of the body to the object in orbit).
-
-      :rtype: :class:`ReferenceFrame`
 
    .. attribute:: TimeToSOIChange
 
