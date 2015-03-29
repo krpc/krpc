@@ -191,9 +191,11 @@ protobuf-python-clean:
 
 protobuf-java-clean:
 	rm -rf java
+	rm -rf $(PROTOS:.proto=.java)
 
 protobuf-cpp-clean:
 	rm -rf cpp
+	rm -rf $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
