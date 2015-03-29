@@ -314,7 +314,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'increment_nested_collection',
                 'add_to_object_list',
 
-                'counter'
+                'counter',
+
+                'throw_argument_exception',
+                'throw_invalid_operation_exception'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service))))
 
