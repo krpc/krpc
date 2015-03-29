@@ -109,7 +109,17 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double Error {
             get {
-                return engaged.Contains (this) ? ComputeError (ComputeTarget ()) : Double.NaN;
+                return engaged.Contains (this) ? Vector3d.Angle (vessel.ReferenceTransform.up, TargetDirection ()) : 0d;
+            }
+        }
+
+        [KRPCProperty]
+        public double RollError {
+            get {
+                if (!engaged.Contains (this) || Double.IsNaN (roll))
+                    return 0d;
+                var currentRoll = referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
+                return Math.Abs (roll - currentRoll);
             }
         }
 
@@ -143,7 +153,7 @@ namespace KRPCSpaceCenter.Services
                 sasSet = true;
             }
 
-            var target = ComputeTarget ();
+            var target = TargetRotation ();
             if (ComputeError (target) < 3.0f) {
                 // Update SAS heading when the SAS heading has large error
                 // At most every 5 frames so that the SAS autopilot has a chance to affect the ship heading
@@ -158,7 +168,7 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
-        Quaternion ComputeTarget ()
+        Quaternion TargetRotation ()
         {
             // Compute world space target rotation from pitch, heading, roll
             Quaternion rotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (new Vector3d (pitch, heading, Double.IsNaN (roll) ? 0.0f : roll));
@@ -172,6 +182,11 @@ namespace KRPCSpaceCenter.Services
             }
 
             return target;
+        }
+
+        Vector3d TargetDirection ()
+        {
+            return TargetRotation () * Vector3.up;
         }
 
         double ComputeError (Quaternion target)

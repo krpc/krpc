@@ -60,7 +60,15 @@ AutoPilot
 
       Gets the error, in degrees, between the direction the ship has been asked
       to point in and the actual direction it is pointing in. If the auto-pilot
-      has not been engaged, returns ``NaN``.
+      has not been engaged, returns zero.
+
+      :rtype: double
+
+   .. attribute:: RollError
+
+      Gets the error, in degrees, between the roll the ship has been asked to be
+      in and the actual roll. If the auto-pilot has not been engaged, returns
+      zero.
 
       :rtype: double
 
