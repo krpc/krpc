@@ -27,11 +27,21 @@ namespace KRPCSpaceCenter.Services.Parts
         readonly ModuleDockingNode port;
         readonly ModuleAnimateGeneric shield;
 
+        readonly PartModule portNameModule;
+        readonly BaseField portNameField;
+
         internal DockingPort (Part part)
         {
             this.part = part;
             port = part.InternalPart.Module<ModuleDockingNode> ();
             shield = part.InternalPart.Module<ModuleAnimateGeneric> ();
+            foreach (PartModule module in part.InternalPart.Modules) {
+                if (module.moduleName == "ModuleDockingNodeNamed") {
+                    portNameModule = module;
+                    portNameField = module.Fields.Cast<BaseField> ().FirstOrDefault (x => x.guiName == "Port Name");
+                    break;
+                }
+            }
             if (port == null)
                 throw new ArgumentException ("Part does not have a ModuleDockingNode PartModule");
         }
@@ -49,6 +59,16 @@ namespace KRPCSpaceCenter.Services.Parts
         [KRPCProperty]
         public Part Part {
             get { return part; }
+        }
+
+        [KRPCProperty]
+        public string Name {
+            get { return portNameField == null ? part.Title : portNameField.GetValue (portNameModule).ToString (); }
+            set {
+                if (portNameField == null)
+                    throw new InvalidOperationException ("Docking port does not have a 'Port Name' field");
+                portNameField.SetValue (Convert.ChangeType (value, portNameField.FieldInfo.FieldType), portNameModule);
+            }
         }
 
         [KRPCProperty]

@@ -82,6 +82,12 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return All.Where (part => part.IsDockingPort).Select (part => part.DockingPort).ToList (); }
         }
 
+        [KRPCMethod]
+        public DockingPort DockingPortWithName (string name)
+        {
+            return All.Where (part => part.IsDockingPort).Select (part => part.DockingPort).FirstOrDefault (port => port.Name == name);
+        }
+
         [KRPCProperty]
         public IList<Engine> Engines {
             get { return All.Where (part => part.IsEngine).Select (part => part.Engine).ToList (); }

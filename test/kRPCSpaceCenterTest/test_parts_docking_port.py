@@ -34,6 +34,17 @@ class TestPartsDockingPort(testingtools.TestCase):
         self.assertFalse(self.port1.has_shield)
         self.assertFalse(self.port1.shielded)
 
+    def test_name(self):
+        self.assertEquals(self.port1.name, 'Clamp-O-Tron Docking Port Jr.')
+        try:
+            self.port1.name = 'Named docking port'
+            self.assertEquals(self.port1.name, 'Named docking port')
+            self.port1.name = 'Clamp-O-Tron Docking Port Jr.'
+            self.assertEquals(self.port1.name, 'Clamp-O-Tron Docking Port Jr.')
+        except krpc.client.RPCError:
+            # TODO: Docking Port Alignment Indicator mod probably not installed
+            pass
+
     def check_shielded(self, port):
         self.assertTrue(port.has_shield)
         self.assertTrue(port.shielded)

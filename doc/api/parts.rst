@@ -88,6 +88,15 @@ Parts
 
       :rtype: :class:`List` ( :class:`DockingPort` )
 
+   .. method:: DockingPortWithName (portName)
+
+      Gets the first docking port in the vessel with the given port name, as
+      returned by :attr:`DockingPort.Name`. Returns ``null`` if there are no
+      such docking ports.
+
+      :param string portName:
+      :rtype: :class:`DockingPort`
+
    .. attribute:: Engines
 
       Gets a list of all engines in the vessel.
@@ -546,6 +555,15 @@ Docking Port
       Gets the part object for this docking port.
 
       :rtype: :class:`Part`
+
+   .. attribute:: Name
+
+      Gets the port name of the docking port. This is the name of the port that
+      can be set in the right click menu, when the `Docking Port Alignment
+      Indicator`_ mod is installed. If this mod is not installed, returns the
+      title of the part (:attr:`Part.Title`).
+
+      :rtype: string
 
    .. attribute:: State
 
@@ -1292,3 +1310,4 @@ stages in which each part of the vessel will be *decoupled*.
 .. _PartModule:
    http://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES>`
 .. _PartModules: http://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES>`
+.. _Docking Port Alignment Indicator: http://forum.kerbalspaceprogram.com/threads/43901-0-90-Docking-Port-Alignment-Indicator-%28Version-6-1-Updated-03-07-2015%29

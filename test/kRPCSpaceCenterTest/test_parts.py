@@ -141,6 +141,18 @@ class TestParts(testingtools.TestCase):
             ['Clamp-O-Tron Docking Port', 'Clamp-O-Tron Docking Port Jr.'],
             sorted(x.part.title for x in self.parts.docking_ports))
 
+    def test_docking_port_with_name(self):
+        port = self.parts.docking_ports[0]
+        # FIXME: unicode -> str bug
+        name = str(port.name)
+        self.assertEqual(port, self.parts.docking_port_with_name(name))
+        self.assertEqual(None, self.parts.docking_port_with_name('Not the name'))
+        port.name = 'Jeb\'s port'
+        self.assertEqual(port, self.parts.docking_port_with_name('Jeb\'s port'))
+        self.assertEqual(None, self.parts.docking_port_with_name(name))
+        self.assertEqual(None, self.parts.docking_port_with_name('Not the name'))
+        port.name = name
+
     def test_engines(self):
         self.assertEqual(
             ['Rockomax "Mainsail" Liquid Engine', 'Rockomax "Poodle" Liquid Engine',
