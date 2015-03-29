@@ -8,3 +8,5 @@ Tutorials
    tutorials/reference-frames
    tutorials/launch-into-orbit
    tutorials/pitch-heading-roll
+   tutorials/parts
+   tutorials/docking-guidance
