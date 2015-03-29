@@ -61,7 +61,7 @@ namespace KRPC.Service
         public Response.Builder HandleRequest (ProcedureSignature procedure, object[] arguments)
         {
             if ((KRPCServer.Context.GameScene & procedure.GameScene) == 0)
-                throw new RPCException ("Procedure not available in game scene '" + KRPCServer.Context.GameScene + "'");
+                throw new RPCException (procedure, "Procedure not available in game scene '" + KRPCServer.Context.GameScene + "'");
             object returnValue;
             try {
                 returnValue = procedure.Handler.Invoke (arguments);
@@ -77,7 +77,7 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Executes the request, continuing using the give continuation. Returns a response builder with the relevant
+        /// Executes the request, continuing using the given continuation. Returns a response builder with the relevant
         /// fields populated. Throws YieldException, containing a continuation, if the request yields.
         /// Throws RPCException if processing the request fails.
         /// </summary>
@@ -89,8 +89,7 @@ namespace KRPC.Service
             } catch (YieldException) {
                 throw;
             } catch (Exception e) {
-                throw new RPCException ("Procedure '" + procedure.FullyQualifiedName + "' threw an exception. " +
-                e.GetType () + ": " + e.Message);
+                throw new RPCException (procedure, e);
             }
             var responseBuilder = Response.CreateBuilder ();
             if (procedure.HasReturnType)
@@ -123,7 +122,7 @@ namespace KRPC.Service
                 if (value == null) {
                     // Handle default arguments
                     if (!procedure.Parameters [i].HasDefaultArgument)
-                        throw new RPCException ("Argument not specified for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". ");
+                        throw new RPCException (procedure, "Argument not specified for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". ");
                     decodedArgumentValues [i] = Type.Missing;
                 } else {
                     // Decode argument
@@ -131,6 +130,7 @@ namespace KRPC.Service
                         decodedArgumentValues [i] = Decode (procedure, i, type, value);
                     } catch (Exception e) {
                         throw new RPCException (
+                            procedure,
                             "Failed to decode argument for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". " +
                             "Expected an argument of type " + TypeUtils.GetTypeName (type) + ". " +
                             e.GetType ().Name + ": " + e.Message);
@@ -159,7 +159,7 @@ namespace KRPC.Service
                 // TODO: Assumes it's underlying type is int
                 var enumValue = ProtocolBuffers.ReadValue (value, typeof(int));
                 if (!Enum.IsDefined (type, enumValue))
-                    throw new RPCException ("Failed to convert value " + enumValue + " to enumeration type " + type);
+                    throw new RPCException (procedure, "Failed to convert value " + enumValue + " to enumeration type " + type);
                 return Enum.ToObject (type, enumValue);
             } else {
                 return ProtocolBuffers.ReadValue (value, type);
@@ -240,6 +240,7 @@ namespace KRPC.Service
             // Check the return value is missing
             if (returnValue == null && !TypeUtils.IsAClassType (procedure.ReturnType)) {
                 throw new RPCException (
+                    procedure,
                     procedure.FullyQualifiedName + " returned null. " +
                     "Expected an object of type " + procedure.ReturnType);
             }
@@ -247,6 +248,7 @@ namespace KRPC.Service
             // Check if the return value is of a valid type
             if (!TypeUtils.IsAValidType (procedure.ReturnType)) {
                 throw new RPCException (
+                    procedure,
                     procedure.FullyQualifiedName + " returned an object of an invalid type. " +
                     "Expected " + procedure.ReturnType + "; got " + returnValue.GetType ());
             }

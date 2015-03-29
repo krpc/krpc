@@ -16,7 +16,7 @@ namespace KRPC
         [Persistent] bool autoStartServer = false;
         [Persistent] bool autoAcceptConnections = false;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
-        [Persistent] bool verboseErrors = RPCException.VerboseErrors;
+        [Persistent] bool verboseErrors = false;
 
         public IPAddress Address { get; set; }
 
