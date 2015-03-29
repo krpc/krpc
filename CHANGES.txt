@@ -1,3 +1,10 @@
+v0.1.6
+* Parts
+* Targeting of vessels, bodies and docking ports
+* Remove Orbit.ReferenceFrame
+* Nicer errors returned to client (#97)
+* Include protobuf source and compiled Python, Java and C++ versions in release (#100)
+
 v0.1.5
 * Server plugin changes:
   * Server now persists across game scene changes
