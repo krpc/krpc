@@ -1,3 +1,6 @@
+v0.1.7
+* Fix orientation of docking port reference frames
+
 v0.1.6
 * Parts
 * Targeting of vessels, bodies and docking ports

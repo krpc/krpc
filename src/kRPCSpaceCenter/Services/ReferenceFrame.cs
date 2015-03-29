@@ -240,7 +240,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.Part:
                     return part.transform.up;
                 case Type.DockingPort:
-                    return dockingPort.nodeTransform.up;
+                    return dockingPort.nodeTransform.forward;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -299,7 +299,7 @@ namespace KRPCSpaceCenter.Services
                 case Type.Part:
                     return part.transform.forward;
                 case Type.DockingPort:
-                    return dockingPort.nodeTransform.forward;
+                    return -dockingPort.nodeTransform.up;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
