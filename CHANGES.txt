@@ -5,6 +5,7 @@ v0.1.6
 * Parts
 * Targeting of vessels, bodies and docking ports
 * Remove Orbit.ReferenceFrame
+* Fix AutoPilot.Error and add AutoPilot.RollError (#98)
 * Nicer errors returned to client (#97)
 * Include protobuf source and compiled Python, Java and C++ versions in release (#100)
 
