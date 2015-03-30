@@ -7,6 +7,7 @@ master_doc = 'index'
 source_suffix = '.rst'
 exclude_patterns = ['**/.#*']
 extensions = ['sphinx.ext.mathjax', 'sphinx.ext.todo']
+templates_path = ['_templates']
 
 pygments_style = 'sphinx'
 import sphinx_rtd_theme
