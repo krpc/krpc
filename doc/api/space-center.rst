@@ -62,7 +62,7 @@ SpaceCenter
 
       :rtype: double
 
-   .. method:: WarpTo (ut, maxRate = 100000)
+   .. method:: WarpTo (ut, [maxRate = 100000])
 
       Uses time acceleration to warp to the specified time. Automatically uses
       regular or physical time warp as appropriate. For example, physical time warp
