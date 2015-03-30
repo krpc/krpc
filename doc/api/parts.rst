@@ -681,31 +681,31 @@ Docking Port
 
 .. class:: DockingPortState
 
-   .. attribute:: Ready
+   .. data:: Ready
 
       The docking port is ready to dock to another docking port.
 
-   .. attribute:: Docked
+   .. data:: Docked
 
       The docking port is docked to another docking port, or docked to another
       part (from the VAB/SPH).
 
-   .. attribute:: Docking
+   .. data:: Docking
 
       The docking port is very close to another docking port, but has not
       docked. It is using magnetic force to acquire a solid dock.
 
-   .. attribute:: Undocking
+   .. data:: Undocking
 
       The docking port has just been undocked from another docking port, and is
       disabled until it moves away by a sufficient distance
       (:attr:`DockingPort.ReengageDistance`).
 
-   .. attribute:: Shielded
+   .. data:: Shielded
 
       The docking port has a shield, and the shield is closed.
 
-   .. attribute:: Moving
+   .. data:: Moving
 
       The docking ports shield is currently opening/closing.
 
@@ -854,13 +854,13 @@ Landing Gear
 
 .. class:: LandingGearState
 
-   .. attribute:: Deployed
+   .. data:: Deployed
 
-   .. attribute:: Retracted
+   .. data:: Retracted
 
-   .. attribute:: Deploying
+   .. data:: Deploying
 
-   .. attribute:: Retracting
+   .. data:: Retracting
 
 Landing Leg
 ^^^^^^^^^^^
@@ -889,17 +889,17 @@ Landing Leg
 
 .. class:: LandingLegState
 
-   .. attribute:: Deployed
+   .. data:: Deployed
 
-   .. attribute:: Retracted
+   .. data:: Retracted
 
-   .. attribute:: Deploying
+   .. data:: Deploying
 
-   .. attribute:: Retracting
+   .. data:: Retracting
 
-   .. attribute:: Broken
+   .. data:: Broken
 
-   .. attribute:: Repairing
+   .. data:: Repairing
 
 Launch Clamp
 ^^^^^^^^^^^^
@@ -1120,15 +1120,15 @@ Solar Panel
 
 .. class:: SolarPanelState
 
-   .. attribute:: Extended
+   .. data:: Extended
 
-   .. attribute:: Retracted
+   .. data:: Retracted
 
-   .. attribute:: Extending
+   .. data:: Extending
 
-   .. attribute:: Retracting
+   .. data:: Retracting
 
-   .. attribute:: Broken
+   .. data:: Broken
 
 .. _api-parts-trees-of-parts:
 
