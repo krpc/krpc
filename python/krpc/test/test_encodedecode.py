@@ -13,7 +13,7 @@ class TestEncoder(unittest.TestCase):
     def _run_test_encode_value(self, typ, cases):
         for decoded, encoded in cases:
             data = Encoder.encode(decoded, Types().as_type(typ))
-            self.assertEquals(encoded, binascii.hexlify(data))
+            self.assertEqual(encoded, binascii.hexlify(data))
 
     def _run_test_decode_value(self, typ, cases):
         for decoded, encoded in cases:

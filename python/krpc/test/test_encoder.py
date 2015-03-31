@@ -40,11 +40,11 @@ class TestEncoder(unittest.TestCase):
         request.procedure = 'ProcedureName'
         data = Encoder.encode(request, Types().as_type('KRPC.Request'))
         expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
-        self.assertEquals(expected, binascii.hexlify(data))
+        self.assertEqual(expected, binascii.hexlify(data))
 
     def test_encode_value(self):
         data = Encoder.encode(300, Types().as_type('int32'))
-        self.assertEquals('ac02', binascii.hexlify(data))
+        self.assertEqual('ac02', binascii.hexlify(data))
 
     def test_encode_message_delimited(self):
         request = krpc.schema.KRPC.Request()
@@ -52,26 +52,26 @@ class TestEncoder(unittest.TestCase):
         request.procedure = 'ProcedureName'
         data = Encoder.encode_delimited(request, Types().as_type('KRPC.Request'))
         expected = '1c'+'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
-        self.assertEquals(expected, binascii.hexlify(data))
+        self.assertEqual(expected, binascii.hexlify(data))
 
     def test_encode_value_delimited(self):
         data = Encoder.encode_delimited(300, Types().as_type('int32'))
-        self.assertEquals('02'+'ac02', binascii.hexlify(data))
+        self.assertEqual('02'+'ac02', binascii.hexlify(data))
 
     def test_encode_class(self):
         typ = Types().as_type('Class(ServiceName.ClassName)')
         class_type = typ.python_type
         self.assertTrue(issubclass(class_type, BaseClass))
         value = class_type(300)
-        self.assertEquals(300, value._object_id)
+        self.assertEqual(300, value._object_id)
         data = Encoder.encode(value, typ)
-        self.assertEquals('ac02', binascii.hexlify(data))
+        self.assertEqual('ac02', binascii.hexlify(data))
 
     def test_encode_class_none(self):
         typ = Types().as_type('Class(ServiceName.ClassName)')
         value = None
         data = Encoder.encode(value, typ)
-        self.assertEquals('00', binascii.hexlify(data))
+        self.assertEqual('00', binascii.hexlify(data))
 
 if __name__ == '__main__':
     unittest.main()
