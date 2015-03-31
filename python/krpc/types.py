@@ -70,7 +70,7 @@ class _Types(object):
                 #    typ = _EnumType(type_string)
                 if typ == None:
                     raise ValueError
-            except:
+            except (ImportError, AttributeError, ValueError):
                 #raise ValueError('\'%s\' is not a valid type string' % type_string)
                 typ = _EnumType(type_string)
         self._types[type_string] = typ

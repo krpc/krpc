@@ -28,13 +28,13 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRaises(self.conn.test_service.throw_argument_exception)
         try:
             self.conn.test_service.throw_argument_exception()
-        except krpc.client.RPCError, e:
+        except krpc.client.RPCError as e:
             self.assertEqual('Invalid argument', str(e))
 
         self.assertRaises(self.conn.test_service.throw_invalid_operation_exception)
         try:
             self.conn.test_service.throw_invalid_operation_exception()
-        except krpc.client.RPCError, e:
+        except krpc.client.RPCError as e:
             self.assertEqual('Invalid operation', str(e))
 
     def test_value_parameters(self):

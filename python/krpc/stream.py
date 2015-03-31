@@ -72,7 +72,7 @@ def add_stream(conn, func, *args, **kwargs):
     """ Create a stream and return it """
     try:
         return Stream(conn, func, *args, **kwargs)
-    except StreamExistsError, e:
+    except StreamExistsError as e:
         return _stream_cache[e.stream_id]
 
 def update_thread(connection):
