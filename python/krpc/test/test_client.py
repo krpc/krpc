@@ -21,8 +21,9 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_version(self):
         status = self.conn.krpc.get_status()
-        version = open('../VERSION.txt').readlines()[0].rstrip()
-        self.assertEqual(version, status.version)
+        with open('../VERSION.txt') as f:
+            version = f.readlines()[0].rstrip()
+            self.assertEqual(version, status.version)
 
     def test_error(self):
         self.assertRaises(self.conn.test_service.throw_argument_exception)
