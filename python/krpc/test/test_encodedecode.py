@@ -8,7 +8,7 @@ from krpc.decoder import _Decoder as Decoder
 from krpc.types import _Types as Types
 import krpc.schema.KRPC
 
-class TestEncoder(unittest.TestCase):
+class TestEncodeDecode(unittest.TestCase):
 
     def _run_test_encode_value(self, typ, cases):
         for decoded, encoded in cases:
