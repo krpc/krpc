@@ -89,7 +89,7 @@ class _ValueEncoder(object):
         #TODO: only handles finite values
         encoder = protobuf_encoder.DoubleEncoder(1,False,False)
         encoder(write, value)
-        return ''.join(data[1:]) # strips the tag value
+        return b''.join(data[1:]) # strips the tag value
 
     @classmethod
     def encode_float(cls, value):
@@ -99,7 +99,7 @@ class _ValueEncoder(object):
         #TODO: only handles finite values
         encoder = protobuf_encoder.FloatEncoder(1,False,False)
         encoder(write, value)
-        return ''.join(data[1:]) # strips the tag value
+        return b''.join(data[1:]) # strips the tag value
 
     @classmethod
     def _encode_varint(cls, value):
@@ -107,7 +107,7 @@ class _ValueEncoder(object):
         def write(x):
             data.append(x)
         protobuf_encoder._VarintEncoder()(write, value)
-        return ''.join(data)
+        return b''.join(data)
 
     @classmethod
     def _encode_signed_varint(cls, value):
@@ -115,7 +115,7 @@ class _ValueEncoder(object):
         def write(x):
             data.append(x)
         protobuf_encoder._SignedVarintEncoder()(write, value)
-        return ''.join(data)
+        return b''.join(data)
 
     @classmethod
     def encode_int32(cls, value):
@@ -149,8 +149,8 @@ class _ValueEncoder(object):
         encoded = value.encode('utf-8')
         protobuf_encoder._VarintEncoder()(write, len(encoded))
         write(encoded)
-        return ''.join(data)
+        return b''.join(data)
 
     @classmethod
     def encode_bytes(cls, value):
-        return ''.join([cls._encode_varint(len(value)), value])
+        return b''.join([cls._encode_varint(len(value)), value])
