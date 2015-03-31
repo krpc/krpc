@@ -138,7 +138,7 @@ class TestEncoder(unittest.TestCase):
         cases = [
             ({}, ''),
             ({'': 0}, '0a060a0100120100'),
-            ({'foo': 42, 'bar': 365, 'baz': 3}, '0a090a040362617a1201030a090a0403666f6f12012a0a0a0a04036261721202ed02')
+            ({'foo': 42, 'bar': 365, 'baz': 3}, '0a0a0a04036261721202ed020a090a040362617a1201030a090a0403666f6f12012a')
         ]
         self._run_test_encode_value('Dictionary(string,int32)', cases)
 

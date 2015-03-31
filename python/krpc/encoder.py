@@ -48,7 +48,7 @@ class _Encoder(object):
             msg = _Types().as_type('KRPC.Dictionary').python_type()
             entry_type = _Types().as_type('KRPC.DictionaryEntry')
             entries = []
-            for key,value in x.items():
+            for key,value in sorted(x.items(), key=lambda i: i[0]):
                 entry = entry_type.python_type()
                 entry.key = cls.encode(key, typ.key_type)
                 entry.value = cls.encode(value, typ.value_type)
