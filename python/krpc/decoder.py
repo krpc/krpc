@@ -1,8 +1,7 @@
 # TODO: avoid using internals
 from google.protobuf.internal import decoder as protobuf_decoder
 from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
-import itertools
-
+import krpc.platform
 
 class _Decoder(object):
     """ Routines for decoding messages and values from the protocol buffer serialization format """
@@ -54,7 +53,7 @@ class _Decoder(object):
             return set(cls.decode(item, typ.value_type) for item in msg.items)
         elif isinstance(typ, _TupleType):
             msg = cls._decode_message(data, _Types().as_type('KRPC.Tuple'))
-            return tuple(cls.decode(item, value_type) for item,value_type in itertools.izip(msg.items,typ.value_types))
+            return tuple(cls.decode(item, value_type) for item,value_type in zip(msg.items,typ.value_types))
         else:
             raise RuntimeError ('Cannot decode type %s' % str(typ))
 
@@ -112,12 +111,13 @@ class _ValueDecoder(object):
     # google.protobuf.internal.decoder._FloatDecoder and _DoubleDecoder
     # Copyright 2008, Google Inc.
     # See protobuf-license.txt distributed with this file
-    _POS_INF = 1e10000
-    _NEG_INF = -_POS_INF
-    _NAN = _POS_INF * 0
 
     @classmethod
     def decode_double(cls, data):
+        import struct
+        local_unpack = struct.unpack
+        b = (lambda x:x) if krpc.platform.PY2 else lambda x:x.encode('latin1')  ##PY25
+
         # We expect a 64-bit value in little-endian byte order.  Bit 1 is the sign
         # bit, bits 2-12 represent the exponent, and bits 13-64 are the significand.
         double_bytes = data[0:8]
@@ -125,41 +125,50 @@ class _ValueDecoder(object):
         # If this value has all its exponent bits set and at least one significand
         # bit set, it's not a number.  In Python 2.4, struct.unpack will treat it
         # as inf or -inf.  To avoid that, we treat it specially.
-        if ((double_bytes[7] in '\x7F\xFF')
-            and (double_bytes[6] >= '\xF0')
-            and (double_bytes[0:7] != '\x00\x00\x00\x00\x00\x00\xF0')):
-          return cls._NAN
+##!PY25    if ((double_bytes[7:8] in b'\x7F\xFF')
+##!PY25        and (double_bytes[6:7] >= b'\xF0')
+##!PY25        and (double_bytes[0:7] != b'\x00\x00\x00\x00\x00\x00\xF0')):
+        if ((double_bytes[7:8] in b('\x7F\xFF'))  ##PY25
+            and (double_bytes[6:7] >= b('\xF0'))  ##PY25
+            and (double_bytes[0:7] != b('\x00\x00\x00\x00\x00\x00\xF0'))):  ##PY25
+          return krpc.platform.NAN
 
         # Note that we expect someone up-stack to catch struct.error and convert
         # it to _DecodeError -- this way we don't have to set up exception-
         # handling blocks every time we parse one value.
-        import struct
-        return struct.unpack('<d', double_bytes)[0]
+        return local_unpack('<d', double_bytes)[0]
 
     @classmethod
     def decode_float(cls, data):
-        # We expect a 32-bit value in little-endian byte order. Bit 1 is the sign
+        import struct
+        local_unpack = struct.unpack
+        b = (lambda x:x) if krpc.platform.PY2 else lambda x:x.encode('latin1')  ##PY25
+
+        # We expect a 32-bit value in little-endian byte order.  Bit 1 is the sign
         # bit, bits 2-9 represent the exponent, and bits 10-32 are the significand.
         float_bytes = data[0:4]
 
         # If this value has all its exponent bits set, then it's non-finite.
         # In Python 2.4, struct.unpack will convert it to a finite 64-bit value.
         # To avoid that, we parse it specially.
-        if ((float_bytes[3] in '\x7F\xFF')
-            and (float_bytes[2] >= '\x80')):
+        if ((float_bytes[3:4] in b('\x7F\xFF'))  ##PY25
+##!PY25    if ((float_bytes[3:4] in b'\x7F\xFF')
+            and (float_bytes[2:3] >= b('\x80'))):  ##PY25
+##!PY25        and (float_bytes[2:3] >= b'\x80')):
           # If at least one significand bit is set...
-          if float_bytes[0:3] != '\x00\x00\x80':
-            return cls._NAN
+          if float_bytes[0:3] != b('\x00\x00\x80'):  ##PY25
+##!PY25      if float_bytes[0:3] != b'\x00\x00\x80':
+            return krpc.platform.NAN
           # If sign bit is set...
-          if float_bytes[3] == '\xFF':
-            return cls._NEG_INF
-          return cls._POS_INF
+          if float_bytes[3:4] == b('\xFF'):  ##PY25
+##!PY25      if float_bytes[3:4] == b'\xFF':
+            return krpc.platform.NEG_INF
+          return krpc.platform.POS_INF
 
         # Note that we expect someone up-stack to catch struct.error and convert
         # it to _DecodeError -- this way we don't have to set up exception-
         # handling blocks every time we parse one value.
-        import struct
-        return struct.unpack('<f', float_bytes)[0]
+        return local_unpack('<f', float_bytes)[0]
 
     # End of code taken from google.protobuf.internal.decoder._FloatDecoder and _DoubleDecoder
 
@@ -170,7 +179,7 @@ class _ValueDecoder(object):
     @classmethod
     def decode_string(cls, data):
         (size, position) = protobuf_decoder._DecodeVarint(data, 0)
-        return unicode(data[position:position+size], 'utf-8')
+        return (data[position:position+size]).decode()
 
     @classmethod
     def decode_bytes(cls, data):

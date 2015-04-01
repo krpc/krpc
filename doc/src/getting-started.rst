@@ -61,13 +61,14 @@ configuration options are:
 The Python Client
 -----------------
 
+.. note:: kRPC supports both Python 2.7 and Python 3.x.
+
 On Windows
 ^^^^^^^^^^
 
 1. If you don't already have python installed, download the python installer and
-   run it: https://www.python.org/downloads/windows You want version
-   2.x. Version 3 does not work with kRPC. When running the installer, make sure
-   that pip is installed as well.
+   run it: https://www.python.org/downloads/windows When running the installer,
+   make sure that pip is installed as well.
 
 2. Install the kRPC python module, by opening command prompt and running the
    following command: ``pip install krpc``
@@ -78,8 +79,8 @@ On Linux
 ^^^^^^^^
 
 1. Your linux distribution likely already comes with python installed. If not,
-   install python version 2.x using your favourite package manager, or get it
-   from here: https://www.python.org/downloads
+   install python using your favourite package manager, or get it from here:
+   https://www.python.org/downloads
 
 2. You also need to install pip, either using your package manager, or from
    here: https://pypi.python.org/pypi/pip

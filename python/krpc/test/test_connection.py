@@ -53,7 +53,7 @@ class TestConnection(unittest.TestCase):
         conn.send(b'disconnect')
         self.assertEqual(b'disconnect', conn.receive(10))
         # Wait for the connection to close
-        while conn._socket.recv(1) != '':
+        while conn._socket.recv(1) != b'':
             pass
 
     def connect(self):
