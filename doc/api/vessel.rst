@@ -269,6 +269,40 @@ Vessel
       :param ReferenceFrame referenceFrame:
       :rtype: :class:`Vector3`
 
+.. class:: VesselType
+
+   .. data:: Ship
+
+   .. data:: Station
+
+   .. data:: Lander
+
+   .. data:: Probe
+
+   .. data:: Rover
+
+   .. data:: Base
+
+   .. data:: Debris
+
+.. class:: VesselSituation
+
+   .. data:: Docked
+
+   .. data:: Escaping
+
+   .. data:: Flying
+
+   .. data:: Landed
+
+   .. data:: Orbiting
+
+   .. data:: PreLaunch
+
+   .. data:: Splashed
+
+   .. data:: SubOrbital
+
 .. _Ferram Aerospace Research: http://forum.kerbalspaceprogram.com/threads/20451-0-90-Ferram-Aerospace-Research-v0-14-6-12-27-14
 .. _RemoteTech: http://forum.kerbalspaceprogram.com/threads/83305-0-90-0-RemoteTech-v1-6-3-2015-02-06
 .. _KSPs stock aerodynamic model: http://wiki.kerbalspaceprogram.com/wiki/Atmosphere

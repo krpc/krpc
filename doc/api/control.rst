@@ -149,7 +149,7 @@ Control
 
       :ptype group: uint16
 
-   .. method:: AddNode (ut, prograde = 0, normal = 0, radial = 0)
+   .. method:: AddNode (ut, [prograde = 0], [normal = 0], [radial = 0])
 
       Creates a maneuver node at the given universal time, and returns a
       :class:`Node` object that can be used to modify it. Optionally sets the
