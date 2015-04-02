@@ -10,7 +10,8 @@ Using the Makefile
 1. Install the required dependencies.
 
    You will need to install the MonoDevelop command line tool, Mono runtime and
-   development libraries, the Protocol Buffers compiler and Inkscape.
+   development libraries, the Protocol Buffers compiler (at least version
+   3.0.0-alpha-1) and Inkscape.
 
    On Linux, you should be able to use your package manager. For example on
    Ubuntu:
@@ -75,7 +76,8 @@ The Python Client Library
 The source code for the python client library can be found in the directory
 ``python``. You can install it from source as follows:
 
-1. Install the Protocol Buffers python package, for example using pip:
+1. Install the Protocol Buffers python package (at least version 3.0.0-alpha-1)
+   for example using pip:
 
    ``pip install protobuf``
 
