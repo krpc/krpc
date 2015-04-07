@@ -1,4 +1,5 @@
 v0.1.7
+ - Optionally don't connect to the stream server
  - Support for Python 3
  - Update to use Protocol Buffers 3.0.0-alpha-1
 

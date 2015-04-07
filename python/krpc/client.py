@@ -71,13 +71,17 @@ class Client(object):
                 setattr(self, _to_snake_case(service.name), _create_service(self, service))
 
         # Set up stream update thread
-        self._stream_thread = threading.Thread(target=krpc.stream.update_thread, args=(stream_connection,))
-        self._stream_thread.daemon = True
-        self._stream_thread.start()
+        if stream_connection is not None:
+            self._stream_thread = threading.Thread(target=krpc.stream.update_thread, args=(stream_connection,))
+            self._stream_thread.daemon = True
+            self._stream_thread.start()
+        else:
+            self._stream_thread = None
 
     def close(self):
         self._rpc_connection.close()
-        self._stream_connection.close()
+        if self._stream_connection is not None:
+            self._stream_connection.close()
 
     def __enter__(self):
         return self
@@ -86,6 +90,8 @@ class Client(object):
         self.close()
 
     def add_stream(self, func, *args, **kwargs):
+        if self._stream_connection is None:
+            raise RuntimeError('Not connected to stream server')
         return krpc.stream.add_stream(self, func, *args, **kwargs)
 
     @contextmanager

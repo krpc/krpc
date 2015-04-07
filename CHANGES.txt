@@ -1,8 +1,11 @@
 v0.1.7
-* Fix orientation of docking port reference frames
-* Rename Engine.Activated to Engine.Active to match other parts
-* Support for Python 3
-* Update to use Protocol Buffers 3.0.0-alpha-1
+* SpaceCenter service changes:
+  * Fix orientation of docking port reference frames
+  * Rename Engine.Activated to Engine.Active to match other parts
+* Python client changes:
+  * Optionally don't connect to the stream server
+  * Support for Python 3
+  * Upgrade to Protocol Buffers 3.0.0-alpha-1
 
 v0.1.6
 * Parts

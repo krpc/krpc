@@ -57,7 +57,7 @@ class Stream(object):
             if self._stream_id in _stream_cache:
                 self._conn.krpc.remove_stream(self._stream_id)
                 del _stream_cache[self._stream_id]
-                self._value = RuntimeError("Stream has been removed")
+                self._value = RuntimeError('Stream has been removed')
 
     @property
     def return_type(self):
