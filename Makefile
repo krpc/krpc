@@ -32,7 +32,7 @@ PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCSpaceCenter/Sche
 PROTOS_TEST = $(wildcard test/kRPCTest/Schema/*.proto)
 
 PROTOC = protoc
-PROTOGEN = tools/ProtoGen.exe
+PROTOGEN = mono tools/ProtoGen.exe
 MDTOOL = mdtool
 MONODIS = monodis
 NUNIT_CONSOLE = nunit-console
