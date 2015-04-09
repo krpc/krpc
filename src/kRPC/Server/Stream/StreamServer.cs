@@ -135,7 +135,7 @@ namespace KRPC.Server.Stream
                 }
                 if (subArgs.Request.ShouldDeny) {
                     args.Request.Deny ();
-                    Logger.WriteLine ("StreamServer: Client connection denied.");
+                    Logger.WriteLine ("StreamServer: Client connection denied.", Logger.Severity.Warning);
                 }
                 if (!subArgs.Request.StillPending) {
                     pendingClients.Remove (args.Client);
@@ -156,13 +156,13 @@ namespace KRPC.Server.Stream
         /// </summary>
         Guid CheckHelloMessage (IClient<byte,byte> client)
         {
-            Logger.WriteLine ("StreamServer: Waiting for hello message from client...");
+            Logger.WriteLine ("StreamServer: Waiting for hello message from client...", Logger.Severity.Debug);
             var buffer = new byte[expectedHeader.Length + identifierLength];
             int read = ReadHelloMessage (client.Stream, buffer);
 
             // Failed to read enough bytes in sufficient time, so kill the connection
             if (read != buffer.Length) {
-                Logger.WriteLine ("StreamServer: Client connection abandoned. Timed out waiting for hello message.");
+                Logger.WriteLine ("StreamServer: Client connection abandoned. Timed out waiting for hello message.", Logger.Severity.Warning);
                 return Guid.Empty;
             }
 
@@ -175,7 +175,7 @@ namespace KRPC.Server.Stream
             // Validate header
             if (!CheckHelloMessageHeader (header)) {
                 string hex = ("0x" + BitConverter.ToString (header)).Replace ("-", " 0x");
-                Logger.WriteLine ("StreamServer: Client connection abandoned. Invalid hello message received (" + hex + ")");
+                Logger.WriteLine ("StreamServer: Client connection abandoned. Invalid hello message received (" + hex + ")", Logger.Severity.Warning);
                 return Guid.Empty;
             }
 
@@ -185,12 +185,12 @@ namespace KRPC.Server.Stream
                 identifierGuid = DecodeClientIdentifier (identifier);
             } catch (ArgumentException) {
                 string hex = ("0x" + BitConverter.ToString (identifier)).Replace ("-", " 0x");
-                Logger.WriteLine ("StreamServer: Client connection abandoned. Failed to decode client identifier (" + hex + ")");
+                Logger.WriteLine ("StreamServer: Client connection abandoned. Failed to decode client identifier (" + hex + ")", Logger.Severity.Warning);
                 return Guid.Empty;
             }
 
             // Valid header and identifier received
-            Logger.WriteLine ("StreamServer: Correct hello message received from client '" + identifierGuid + "'");
+            Logger.WriteLine ("StreamServer: Correct hello message received from client '" + identifierGuid + "'", Logger.Severity.Debug);
             return identifierGuid;
         }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KRPC.UI
 {
-    public static class GUILayoutExtensions
+    static class GUILayoutExtensions
     {
         public static void Init (GameObject gameObject)
         {
@@ -168,6 +168,7 @@ namespace KRPC.UI
             protected override void Init ()
             {
                 Title = "";
+                Visible = false;
                 Style.border.top = Style.border.bottom;
                 Style.padding.top = Style.padding.bottom;
                 stalePosition = true;

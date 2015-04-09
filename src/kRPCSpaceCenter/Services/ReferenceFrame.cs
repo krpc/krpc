@@ -14,40 +14,38 @@ namespace KRPCSpaceCenter.Services
             CelestialBody,
             CelestialBodyNonRotating,
             CelestialBodyOrbital,
-            CelestialBodySurface,
             Vessel,
-            VesselNonRotating,
             VesselOrbital,
             VesselSurface,
+            VesselSurfaceVelocity,
+            Maneuver,
+            ManeuverOrbital,
             Part,
-            PartNonRotating,
-            PartOrbital,
-            PartSurface,
-            //SpaceObject,
-            //SpaceObjectNonRotating,
-            //SpaceObjectOrbital,
-            //SpaceObjectSurface,
-            Maneuver
+            DockingPort
         }
 
         readonly Type type;
-        global::CelestialBody body;
-        global::Vessel vessel;
-        global::Part part;
-        global::ManeuverNode node;
+        readonly global::CelestialBody body;
+        readonly global::Vessel vessel;
+        readonly ManeuverNode node;
+        readonly Part part;
+        readonly ModuleDockingNode dockingPort;
 
-        ReferenceFrame (Type type)
+        ReferenceFrame (
+            Type type, global::CelestialBody body = null, global::Vessel vessel = null,
+            ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null)
         {
             this.type = type;
+            this.body = body;
+            this.vessel = vessel;
+            this.node = node;
+            this.part = part;
+            this.dockingPort = dockingPort;
         }
 
         public override bool Equals (ReferenceFrame obj)
         {
-            return type == obj.type &&
-            body == obj.body &&
-            vessel == obj.vessel &&
-            part == obj.part &&
-            node == obj.node;
+            return type == obj.type && body == obj.body && vessel == obj.vessel && node == obj.node && part == obj.part && dockingPort == obj.dockingPort;
         }
 
         public override int GetHashCode ()
@@ -57,130 +55,89 @@ namespace KRPCSpaceCenter.Services
                 hash ^= body.GetHashCode ();
             if (vessel != null)
                 hash ^= vessel.GetHashCode ();
-            if (part != null)
-                hash ^= part.GetHashCode ();
             if (node != null)
                 hash ^= node.GetHashCode ();
+            if (part != null)
+                hash ^= part.GetHashCode ();
+            if (dockingPort != null)
+                hash ^= dockingPort.GetHashCode ();
             return hash;
         }
 
         internal static ReferenceFrame Object (global::CelestialBody body)
         {
-            var r = new ReferenceFrame (Type.CelestialBody);
-            r.body = body;
-            return r;
+            return new ReferenceFrame (Type.CelestialBody, body);
         }
 
         internal static ReferenceFrame NonRotating (global::CelestialBody body)
         {
-            var r = new ReferenceFrame (Type.CelestialBodyNonRotating);
-            r.body = body;
-            return r;
+            return new ReferenceFrame (Type.CelestialBodyNonRotating, body, null, null);
         }
 
         internal static ReferenceFrame Orbital (global::CelestialBody body)
         {
-            if (body == body.referenceBody)
+            if (body == body.referenceBody || body.orbit == null)
                 throw new ArgumentException ("CelestialBody '" + body.name + "' does not orbit anything");
-            var r = new ReferenceFrame (Type.CelestialBodyOrbital);
-            r.body = body;
-            return r;
-        }
-
-        internal static ReferenceFrame Surface (global::CelestialBody body)
-        {
-            if (body == body.referenceBody)
-                throw new ArgumentException ("CelestialBody '" + body.name + "' does not orbit anything");
-            var r = new ReferenceFrame (Type.CelestialBodySurface);
-            r.body = body;
-            return r;
+            return new ReferenceFrame (Type.CelestialBodyOrbital, body);
         }
 
         internal static ReferenceFrame Object (global::Vessel vessel)
         {
-            var r = new ReferenceFrame (Type.Vessel);
-            r.vessel = vessel;
-            return r;
-        }
-
-        internal static ReferenceFrame NonRotating (global::Vessel vessel)
-        {
-            var r = new ReferenceFrame (Type.VesselNonRotating);
-            r.vessel = vessel;
-            return r;
+            return new ReferenceFrame (Type.Vessel, vessel: vessel);
         }
 
         internal static ReferenceFrame Orbital (global::Vessel vessel)
         {
-            var r = new ReferenceFrame (Type.VesselOrbital);
-            r.vessel = vessel;
-            return r;
+            return new ReferenceFrame (Type.VesselOrbital, vessel: vessel);
         }
 
         internal static ReferenceFrame Surface (global::Vessel vessel)
         {
-            var r = new ReferenceFrame (Type.VesselSurface);
-            r.vessel = vessel;
-            return r;
+            return new ReferenceFrame (Type.VesselSurface, vessel: vessel);
         }
 
-        internal static ReferenceFrame Object (global::Part part)
+        internal static ReferenceFrame SurfaceVelocity (global::Vessel vessel)
         {
-            var r = new ReferenceFrame (Type.Part);
-            r.part = part;
-            return r;
+            return new ReferenceFrame (Type.VesselSurfaceVelocity, vessel: vessel);
         }
 
-        internal static ReferenceFrame NonRotating (global::Part part)
+        internal static ReferenceFrame Object (ManeuverNode node)
         {
-            var r = new ReferenceFrame (Type.PartNonRotating);
-            r.part = part;
-            return r;
+            return new ReferenceFrame (Type.Maneuver, node: node);
         }
 
-        internal static ReferenceFrame Orbital (global::Part part)
+        internal static ReferenceFrame Orbital (ManeuverNode node)
         {
-            var r = new ReferenceFrame (Type.PartOrbital);
-            r.part = part;
-            return r;
+            return new ReferenceFrame (Type.ManeuverOrbital, node: node);
         }
 
-        internal static ReferenceFrame Surface (global::Part part)
+        internal static ReferenceFrame Object (Part part)
         {
-            var r = new ReferenceFrame (Type.PartSurface);
-            r.part = part;
-            return r;
+            return new ReferenceFrame (Type.Part, part: part);
         }
 
-        internal static ReferenceFrame Object (global::ManeuverNode node)
+        internal static ReferenceFrame Object (ModuleDockingNode dockingPort)
         {
-            var r = new ReferenceFrame (Type.Maneuver);
-            r.node = node;
-            return r;
+            return new ReferenceFrame (Type.DockingPort, dockingPort: dockingPort);
         }
 
         /// <summary>
         /// Returns the position of the origin of the reference frame in world-space.
         /// </summary>
-        public Vector3d Position {
+        Vector3d Position {
             get {
                 switch (type) {
                 case Type.CelestialBody:
                 case Type.CelestialBodyNonRotating:
                 case Type.CelestialBodyOrbital:
-                case Type.CelestialBodySurface:
                     return body.position;
                 case Type.Vessel:
-                case Type.VesselNonRotating:
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
+                case Type.VesselSurfaceVelocity:
                     return vessel.GetWorldPos3D ();
-                case Type.Part:
-                case Type.PartNonRotating:
-                case Type.PartOrbital:
-                case Type.PartSurface:
-                    return part.vessel.GetWorldPos3D () + part.CoMOffset;
                 case Type.Maneuver:
+                case Type.ManeuverOrbital:
                     {
                         //TODO: is there a better way to do this?
                         // node.patch.getPositionAtUT (node.UT) appears to return a position vector
@@ -190,6 +147,10 @@ namespace KRPCSpaceCenter.Services
                         var nodeOrbitPos = node.patch.getPositionAtUT (node.UT);
                         return vesselPos - vesselOrbitPos + nodeOrbitPos;
                     }
+                case Type.Part:
+                    return part.transform.position;
+                case Type.DockingPort:
+                    return dockingPort.nodeTransform.position;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -200,7 +161,7 @@ namespace KRPCSpaceCenter.Services
         /// Returns the rotation of the given frame of reference, relative to world space.
         /// Applying the rotation to a vector in reference-frame-space produces the corresponding vector in world-space.
         /// </summary>
-        public QuaternionD Rotation {
+        QuaternionD Rotation {
             get {
                 // Note: up is along the y-axis, forward is along the z-axis
                 Vector3d up = UpNotNormalized;
@@ -217,7 +178,7 @@ namespace KRPCSpaceCenter.Services
         /// Returns the up vector of the reference frame in world coordinates.
         /// The direction in which the y-axis points.
         /// </summary>
-        public Vector3d Up {
+        Vector3d Up {
             get { return UpNotNormalized.normalized; }
         }
 
@@ -225,7 +186,7 @@ namespace KRPCSpaceCenter.Services
         /// Returns the forward vector of the reference frame in world coordinates.
         /// The direction in which the z axis points.
         /// </summary>
-        public Vector3d Forward {
+        Vector3d Forward {
             get { return ForwardNotNormalized.normalized; }
         }
 
@@ -257,29 +218,29 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                     return body.bodyTransform.up;
-                case Type.CelestialBodySurface:
+                case Type.CelestialBodyNonRotating:
+                    return Planetarium.up;
                 case Type.CelestialBodyOrbital:
-                    {
-                        return Vector3d.Exclude (Forward, ToNorthPole (body).normalized);
-                    }
+                    return body.orbit.GetVel () - body.orbit.referenceBody.GetWorldVelocity ();
                 case Type.Vessel:
-                    return vessel.transform.up;
-                case Type.VesselSurface:
+                    return vessel.ReferenceTransform.up;
                 case Type.VesselOrbital:
+                    return vessel.GetOrbit ().GetVel ();
+                case Type.VesselSurface:
                     {
                         var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
                         return Vector3d.Exclude (right, ToNorthPole (vessel).normalized);
                     }
+                case Type.VesselSurfaceVelocity:
+                    return vessel.srf_velocity;
                 case Type.Maneuver:
-                    return node.patch.GetOrbitNormal ().SwapYZ ();
+                    return new Node (node).WorldBurnVector;
+                case Type.ManeuverOrbital:
+                    return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
                 case Type.Part:
-                case Type.PartOrbital:
-                case Type.PartSurface:
-                    throw new NotImplementedException ();
-                case Type.CelestialBodyNonRotating:
-                case Type.VesselNonRotating:
-                case Type.PartNonRotating:
-                    return Planetarium.up;
+                    return part.transform.up;
+                case Type.DockingPort:
+                    return dockingPort.nodeTransform.forward;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -288,7 +249,7 @@ namespace KRPCSpaceCenter.Services
 
         /// <summary>
         /// Returns the forward vector of the reference frame in world coordinates.
-        /// The direction in which the z axis points.
+        /// The direction in which the z-axis points.
         /// The vector is not normalized.
         /// </summary>
         Vector3d ForwardNotNormalized {
@@ -296,32 +257,49 @@ namespace KRPCSpaceCenter.Services
                 switch (type) {
                 case Type.CelestialBody:
                     return body.bodyTransform.forward;
-                case Type.CelestialBodySurface:
+                case Type.CelestialBodyNonRotating:
+                    return Planetarium.forward;
                 case Type.CelestialBodyOrbital:
                     {
-                        var right = (body.position - body.referenceBody.position).normalized;
-                        var northPole = ToNorthPole (body).normalized;
-                        return Vector3d.Cross (right, northPole);
+                        var up = UpNotNormalized;
+                        var radial = body.referenceBody.position - body.position;
+                        return Vector3d.Cross (radial, up);
                     }
                 case Type.Vessel:
-                    return vessel.transform.forward;
+                    return vessel.ReferenceTransform.forward;
                 case Type.VesselOrbital:
+                    return vessel.GetOrbit ().GetOrbitNormal ().SwapYZ ();
                 case Type.VesselSurface:
                     {
                         var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
                         var northPole = ToNorthPole (vessel).normalized;
                         return Vector3d.Cross (right, northPole);
                     }
+                case Type.VesselSurfaceVelocity:
+                    {
+                        // Compute orthogonal vector to vessels velocity, in the horizon plane
+                        var up = vessel.GetWorldPos3D () - vessel.mainBody.position;
+                        var velocity = vessel.srf_velocity;
+                        var proj = GeometryExtensions.ProjectVectorOntoPlane (up, velocity);
+                        return Vector3d.Cross (up, proj);
+                    }
                 case Type.Maneuver:
-                    return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
+                    {
+                        var up = UpNotNormalized;
+                        // Pick an arbitrary vector that is not close to the burn vector
+                        var forward = Planetarium.forward;
+                        if (Vector3d.Dot (up, forward) < 0.1)
+                            forward = Planetarium.up;
+                        // Make the arbitrary vector orthogonal to the burn vector
+                        GeometryExtensions.OrthoNormalize2 (ref up, ref forward);
+                        return forward;
+                    }
+                case Type.ManeuverOrbital:
+                    return node.patch.GetOrbitNormal ().SwapYZ ();
                 case Type.Part:
-                case Type.PartOrbital:
-                case Type.PartSurface:
-                    throw new NotImplementedException ();
-                case Type.CelestialBodyNonRotating:
-                case Type.VesselNonRotating:
-                case Type.PartNonRotating:
-                    return Planetarium.forward;
+                    return part.transform.forward;
+                case Type.DockingPort:
+                    return -dockingPort.nodeTransform.up;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -331,26 +309,25 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Returns the velocity of the reference frame in world-space.
         /// </summary>
-        public Vector3d Velocity {
+        Vector3d Velocity {
             get {
                 switch (type) {
                 case Type.CelestialBody:
                 case Type.CelestialBodyNonRotating:
                 case Type.CelestialBodyOrbital:
-                case Type.CelestialBodySurface:
                     return body.GetWorldVelocity ();
                 case Type.Vessel:
-                case Type.VesselNonRotating:
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
+                case Type.VesselSurfaceVelocity:
                     return vessel.GetOrbit ().GetVel ();
-                case Type.Part:
-                case Type.PartNonRotating:
-                case Type.PartOrbital:
-                case Type.PartSurface:
-                    throw new NotImplementedException ();
                 case Type.Maneuver:
-                    return node.patch.GetVel ();
+                case Type.ManeuverOrbital:
+                    return Vector3d.zero; //TODO: check this
+                case Type.Part:
+                    return part.vessel.GetOrbit ().GetVel ();
+                case Type.DockingPort:
+                    return dockingPort.vessel.GetOrbit ().GetVel ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -362,29 +339,25 @@ namespace KRPCSpaceCenter.Services
         /// Vector points in direction of axis of rotation
         /// Vector's magnitude is the speed of rotation in radians per second
         /// </summary>
-        public Vector3d AngularVelocity {
+        Vector3d AngularVelocity {
             get {
                 switch (type) {
                 case Type.CelestialBody:
                     return body.angularVelocity;
                 case Type.CelestialBodyNonRotating:
-                case Type.CelestialBodyOrbital:
-                case Type.CelestialBodySurface:
                     return Vector3d.zero;
+                case Type.CelestialBodyOrbital:
+                    return Vector3d.zero; //TODO: check this
                 case Type.Vessel:
                     return vessel.angularVelocity;
-                case Type.VesselNonRotating:
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
-                    return Vector3d.zero;
-                case Type.Part:
-                    throw new NotImplementedException ();
-                case Type.PartNonRotating:
-                case Type.PartOrbital:
-                case Type.PartSurface:
-                    return Vector3d.zero;
+                case Type.VesselSurfaceVelocity:
                 case Type.Maneuver:
-                    return node.patch.GetVel ();
+                case Type.ManeuverOrbital:
+                case Type.Part:
+                case Type.DockingPort:
+                    return Vector3d.zero; //TODO: check this
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -408,7 +381,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Convert the given position in world space, to a position in this reference frame.
         /// </summary>
-        public Vector3d PositionFromWorldSpace (Vector3d worldPosition)
+        internal Vector3d PositionFromWorldSpace (Vector3d worldPosition)
         {
             return Rotation.Inverse () * (worldPosition - Position);
         }
@@ -416,7 +389,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Convert the given position in this reference frame, to a position in world space.
         /// </summary>
-        public Vector3d PositionToWorldSpace (Vector3d position)
+        internal Vector3d PositionToWorldSpace (Vector3d position)
         {
             return Position + (Rotation * position);
         }
@@ -424,7 +397,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Convert the given direction in world space, to a direction in this reference frame.
         /// </summary>
-        public Vector3d DirectionFromWorldSpace (Vector3d worldDirection)
+        internal Vector3d DirectionFromWorldSpace (Vector3d worldDirection)
         {
             return Rotation.Inverse () * worldDirection;
         }
@@ -432,7 +405,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Convert the given position in this reference frame, to a position in world space.
         /// </summary>
-        public Vector3d DirectionToWorldSpace (Vector3d direction)
+        internal Vector3d DirectionToWorldSpace (Vector3d direction)
         {
             return Rotation * direction;
         }
@@ -440,7 +413,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Convert the given rotation in world space, to a rotation in this reference frame.
         /// </summary>
-        public QuaternionD RotationFromWorldSpace (QuaternionD worldRotation)
+        internal QuaternionD RotationFromWorldSpace (QuaternionD worldRotation)
         {
             return Rotation.Inverse () * worldRotation;
         }
@@ -448,7 +421,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Convert the given rotation in this reference frame, to a rotation in world space.
         /// </summary>
-        public QuaternionD RotationToWorldSpace (QuaternionD rotation)
+        internal QuaternionD RotationToWorldSpace (QuaternionD rotation)
         {
             return Rotation * rotation;
         }
@@ -456,7 +429,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Convert the given velocity at the given position in world space, to a velocity in this reference frame.
         /// </summary>
-        public Vector3d VelocityFromWorldSpace (Vector3d worldPosition, Vector3d worldVelocity)
+        internal Vector3d VelocityFromWorldSpace (Vector3d worldPosition, Vector3d worldVelocity)
         {
             return (Rotation.Inverse () * (worldVelocity - Velocity)) - AngularVelocityAt (PositionFromWorldSpace (worldPosition));
         }
@@ -464,7 +437,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// Convert the given velocity at the given position in this reference frame, to a velocity in world space.
         /// </summary>
-        public Vector3d VelocityToWorldSpace (Vector3d position, Vector3d velocity)
+        internal Vector3d VelocityToWorldSpace (Vector3d position, Vector3d velocity)
         {
             return Velocity + (Rotation * (velocity + AngularVelocityAt (position)));
         }
@@ -473,7 +446,7 @@ namespace KRPCSpaceCenter.Services
         /// Convert the given angular velocity in world space, to an angular velocity in this reference frame.
         /// This only make sense when considering an object that is rotating at the origin of the reference frame.
         /// </summary>
-        public Vector3d AngularVelocityFromWorldSpace (Vector3d worldAngularVelocity)
+        internal Vector3d AngularVelocityFromWorldSpace (Vector3d worldAngularVelocity)
         {
             return Rotation.Inverse () * (worldAngularVelocity - AngularVelocity);
         }
@@ -482,10 +455,9 @@ namespace KRPCSpaceCenter.Services
         /// Convert the given angular velocity at the given position in this reference frame, to an angular velocity in world space.
         /// This only make sense when considering an object that is rotating at the origin of the reference frame.
         /// </summary>
-        public Vector3d AngularVelocityToWorldSpace (Vector3d angularVelocity)
+        internal Vector3d AngularVelocityToWorldSpace (Vector3d angularVelocity)
         {
             return AngularVelocity + (Rotation * angularVelocity);
         }
     }
 }
-

@@ -1,7 +1,6 @@
 # TODO: avoid using internals
 from google.protobuf.internal import encoder as protobuf_encoder
 from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
-import itertools
 
 
 class _Encoder(object):
@@ -48,7 +47,7 @@ class _Encoder(object):
             msg = _Types().as_type('KRPC.Dictionary').python_type()
             entry_type = _Types().as_type('KRPC.DictionaryEntry')
             entries = []
-            for key,value in x.items():
+            for key,value in sorted(x.items(), key=lambda i: i[0]):
                 entry = entry_type.python_type()
                 entry.key = cls.encode(key, typ.key_type)
                 entry.value = cls.encode(value, typ.value_type)
@@ -61,7 +60,7 @@ class _Encoder(object):
             return msg.SerializeToString()
         elif isinstance(typ, _TupleType):
             msg = _Types().as_type('KRPC.Tuple').python_type()
-            msg.items.extend(cls.encode(item, value_type) for item,value_type in itertools.izip(x,typ.value_types))
+            msg.items.extend(cls.encode(item, value_type) for item,value_type in zip(x,typ.value_types))
             return msg.SerializeToString()
         else:
             raise RuntimeError ('Cannot encode objects of type ' + str(type(x)))
@@ -90,7 +89,7 @@ class _ValueEncoder(object):
         #TODO: only handles finite values
         encoder = protobuf_encoder.DoubleEncoder(1,False,False)
         encoder(write, value)
-        return ''.join(data[1:]) # strips the tag value
+        return b''.join(data[1:]) # strips the tag value
 
     @classmethod
     def encode_float(cls, value):
@@ -100,7 +99,7 @@ class _ValueEncoder(object):
         #TODO: only handles finite values
         encoder = protobuf_encoder.FloatEncoder(1,False,False)
         encoder(write, value)
-        return ''.join(data[1:]) # strips the tag value
+        return b''.join(data[1:]) # strips the tag value
 
     @classmethod
     def _encode_varint(cls, value):
@@ -108,7 +107,7 @@ class _ValueEncoder(object):
         def write(x):
             data.append(x)
         protobuf_encoder._VarintEncoder()(write, value)
-        return ''.join(data)
+        return b''.join(data)
 
     @classmethod
     def _encode_signed_varint(cls, value):
@@ -116,7 +115,7 @@ class _ValueEncoder(object):
         def write(x):
             data.append(x)
         protobuf_encoder._SignedVarintEncoder()(write, value)
-        return ''.join(data)
+        return b''.join(data)
 
     @classmethod
     def encode_int32(cls, value):
@@ -150,8 +149,8 @@ class _ValueEncoder(object):
         encoded = value.encode('utf-8')
         protobuf_encoder._VarintEncoder()(write, len(encoded))
         write(encoded)
-        return ''.join(data)
+        return b''.join(data)
 
     @classmethod
     def encode_bytes(cls, value):
-        return ''.join([cls._encode_varint(len(value)), value])
+        return b''.join([cls._encode_varint(len(value)), value])

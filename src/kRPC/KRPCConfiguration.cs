@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using UnityEngine;
+using KRPC.Service;
 using KRPC.Utils;
 
 namespace KRPC
@@ -14,6 +15,8 @@ namespace KRPC
         [Persistent] RectStorage mainWindowPosition = new RectStorage ();
         [Persistent] bool autoStartServer = false;
         [Persistent] bool autoAcceptConnections = false;
+        [Persistent] string logLevel = Logger.Severity.Info.ToString ();
+        [Persistent] bool verboseErrors = false;
 
         public IPAddress Address { get; set; }
 
@@ -51,11 +54,15 @@ namespace KRPC
             base (filePath)
         {
             Address = IPAddress.Parse (address);
+            Logger.Level = (Logger.Severity)Enum.Parse (typeof(Logger.Severity), logLevel);
+            RPCException.VerboseErrors = verboseErrors;
         }
 
         protected override void BeforeSave ()
         {
             address = Address.ToString ();
+            logLevel = Logger.Level.ToString ();
+            verboseErrors = RPCException.VerboseErrors;
         }
 
         protected override void AfterLoad ()
@@ -63,10 +70,20 @@ namespace KRPC
             try {
                 Address = IPAddress.Parse (address);
             } catch (FormatException) {
-                Debug.Log ("Error parsing IP address from configuration file. Got '" + address + "'. " +
-                "Defaulting to loopback address " + IPAddress.Loopback);
+                Console.WriteLine (
+                    "[kRPC] Error parsing IP address from configuration file. Got '" + address + "'. " +
+                    "Defaulting to loopback address " + IPAddress.Loopback);
                 Address = IPAddress.Loopback;
             }
+            try {
+                Logger.Level = (Logger.Severity)Enum.Parse (typeof(Logger.Severity), logLevel);
+            } catch (ArgumentException) {
+                Console.WriteLine (
+                    "[kRPC] Error parsing log level from configuration file. Got '" + logLevel + "'. " +
+                    "Defaulting to " + Logger.Severity.Info);
+                Logger.Level = Logger.Severity.Info;
+            }
+            RPCException.VerboseErrors = verboseErrors;
         }
     }
 }

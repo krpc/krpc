@@ -2,7 +2,7 @@ using System.Linq;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
-    public static class PartExtensions
+    static class PartExtensions
     {
         /// <summary>
         /// Returns true if the part contains the given part module
@@ -10,6 +10,14 @@ namespace KRPCSpaceCenter.ExtensionMethods
         public static bool HasModule<T> (this Part part) where T : PartModule
         {
             return part.Modules.OfType<T> ().Any ();
+        }
+
+        /// <summary>
+        /// Returns the first part module of the specified type, and null if none can be found
+        /// </summary>
+        public static T Module<T> (this Part part) where T : PartModule
+        {
+            return part.Modules.OfType<T> ().FirstOrDefault ();
         }
 
         /// <summary>
@@ -28,20 +36,12 @@ namespace KRPCSpaceCenter.ExtensionMethods
         /// </summary>
         public static int DecoupledAt (this Part part)
         {
-            do  {
-                if (part.IsDecoupler ())
+            do {
+                if (part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> () || part.HasModule<LaunchClamp> ())
                     return part.inverseStage;
                 part = part.parent;
             } while (part != null);
             return -1;
-        }
-
-        /// <summary>
-        /// Returns true if the part is a decoupler.
-        /// </summary>
-        public static bool IsDecoupler (this Part part)
-        {
-            return part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> ();
         }
 
         /// <summary>

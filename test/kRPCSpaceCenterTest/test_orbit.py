@@ -12,7 +12,11 @@ class TestOrbit(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestOrbit')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     def check_radius_and_speed(self, obj, orbit):
         # Compute position from orbital elements

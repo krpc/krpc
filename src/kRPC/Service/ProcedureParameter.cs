@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace KRPC.Service
 {
-    public class ProcedureParameter
+    class ProcedureParameter
     {
         public Type Type { get; private set; }
 

@@ -7,160 +7,168 @@ Control
    throttle, enabling/disabling systems such as SAS and RCS, or altering the
    direction in which the vessel is pointing.
 
-.. attribute:: Control.RCS
+   .. attribute:: RCS
 
-   Gets or sets the state of RCS.
+      Gets or sets the state of RCS.
 
-   :rtype: `bool`
-   :returns: `True` if RCS is enabled, `False` if it is not.
+      :rtype: bool
+      :returns: ``true`` if RCS is enabled, ``false`` if it is not.
 
-.. attribute:: Control.Gear
+   .. attribute:: Gear
 
-   Gets or sets the state of the gear/landing legs.
+      Gets or sets the state of the gear/landing legs.
 
-   :rtype: `bool`
-   :returns: `True` if gear/landing legs are lowered, `False` if not.
+      :rtype: bool
+      :returns: ``true`` if gear/landing legs are lowered, ``false`` if not.
 
-.. attribute:: Control.Lights
+   .. attribute:: Lights
 
-   Gets or sets the state of the lights.
+      Gets or sets the state of the lights.
 
-   :rtype: `bool`
-   :returns: `True` if lights are enabled, `False` if they are not.
+      :rtype: bool
+      :returns: ``true`` if lights are enabled, ``false`` if they are not.
 
-.. attribute:: Control.Brakes
+   .. attribute:: Brakes
 
-   Gets or sets the state of the wheel brakes.
+      Gets or sets the state of the wheel brakes.
 
-   :rtype: `bool`
-   :returns: `True` if wheel brakes are enabled, `False` if they are not.
+      :rtype: bool
+      :returns: ``true`` if wheel brakes are enabled, ``false`` if they are not.
 
-.. attribute:: Control.Abort
+   .. attribute:: Abort
 
-   Gets or sets the state of the abort action group.
+      Gets or sets the state of the abort action group.
 
-   :type: `bool`
+      :type: bool
 
-.. attribute:: Control.Throttle
+   .. attribute:: Throttle
 
-   Gets or sets to state of the throttle. A value between 0 and 1.
+      Gets or sets to state of the throttle. A value between 0 and 1.
 
-   :type: `float`
+      :type: float
 
-.. attribute:: Control.Forward
+   .. attribute:: Pitch
 
-   Gets or sets the state of the forward translational control (equivalent to
-   the `h` and `n` keys). A value between -1 and 1.
+      Gets or sets the state of the pitch control (equivalent to the *w* and *s*
+      keys) [#control-reset]_. A value between -1 and 1.
 
-   :type: `float`
+      :type: float
 
-.. attribute:: Control.Up
+   .. attribute:: Yaw
 
-   Gets or sets the state of the up translational control (equivalent to the `i`
-   and `k` keys). A value between -1 and 1.
+      Gets or sets the state of the yaw control (equivalent to the *a* and *d*
+      keys) [#control-reset]_. A value between -1 and 1.
 
-   :type: `float`
+      :type: float
 
-.. attribute:: Control.Sideways
+   .. attribute:: Roll
 
-   Gets or sets the state of the sideways translational control (equivalent to
-   the `j` and `l` keys). A value between -1 and 1.
+      Gets or sets the state of the roll control (equivalent to the *q* and *e*
+      keys) [#control-reset]_. A value between -1 and 1.
 
-   :type: `float`
+      :type: float
 
-.. attribute:: Control.Pitch
+   .. attribute:: Forward
 
-   Gets or sets the state of the pitch control (equivalent to the `w` and `s`
-   keys). A value between -1 and 1.
+      Gets or sets the state of the forward translational control (equivalent to
+      the *h* and *n* keys) [#control-reset]_. A value between -1 and 1.
 
-   :type: `float`
+      :type: float
 
-.. attribute:: Control.Roll
+   .. attribute:: Up
 
-   Gets or sets the state of the roll control (equivalent to the `q` and `e`
-   keys). A value between -1 and 1.
+      Gets or sets the state of the up translational control (equivalent to the
+      *i* and *k* keys) [#control-reset]_. A value between -1 and 1.
 
-   :type: `float`
+      :type: float
 
-.. attribute:: Control.Yaw
+   .. attribute:: Sideways
 
-   Gets or sets the state of the yaw control (equivalent to the `a` and `d`
-   keys). A value between -1 and 1.
+      Gets or sets the state of the sideways translational control (equivalent
+      to the *j* and *l* keys) [#control-reset]_. A value between -1 and 1.
 
-   :type: `float`
+      :type: float
 
-.. attribute:: Control.WheelThrottle
+   .. attribute:: WheelThrottle
 
-   Gets or sets to state of the wheel throttle. A value between -1 and 1. A
-   value of 1 rotates the wheels fowards, a value of -1 rotates the wheels
-   backwards.
+      Gets or sets the state of the wheel throttle [#control-reset]_. A value
+      between -1 and 1. A value of 1 rotates the wheels fowards, a value of -1
+      rotates the wheels backwards.
 
-   :type: `float`
+      :type: float
 
-.. attribute:: Control.WheelSteering
+   .. attribute:: WheelSteering
 
-   Gets or sets to state of the wheel steering. A value between -1 and 1. A
-   value of 1 steers to the left, and a value of -1 steers to the right (using
-   the right handed rule).
+      Gets or sets the state of the wheel steering [#control-reset]_. A value
+      between -1 and 1. A value of 1 steers to the left, and a value of -1
+      steers to the right.
 
-   :type: `float`
+      :type: float
 
-.. attribute:: Control.CurrentStage
+   .. attribute:: CurrentStage
 
-   Gets the current stage of the vessel. Corresponds to the stage number in the
-   in-game UI.
+      Gets the current stage of the vessel. Corresponds to the stage number in
+      the in-game UI.
 
-   :rtype: `int16`
+      :rtype: int16
 
-.. method:: Control.ActivateNextStage ()
+   .. method:: ActivateNextStage ()
 
-   Activates the next stage. Equivalent to pressing the space bar in-game.
+      Activates the next stage. Equivalent to pressing the space bar in-game.
 
-   :rtype: :class:`List` ( :class:`Vessel` )
-   :return: A list of vessel objects that are jettisoned from the active vessel.
+      :rtype: :class:`List` ( :class:`Vessel` )
+      :return: A list of vessel objects that are jettisoned from the active vessel.
 
-.. method:: Control.GetActionGroup (group)
+   .. method:: GetActionGroup (group)
 
-   Returns `True` if the given action group (a value between 0 and 9 inclusive)
-   is enabled.
+      Returns ``true`` if the given action group (a value between 0 and 9
+      inclusive) is enabled.
 
-   :ptype group: `uint16`
-   :rtype: `bool`
+      :ptype group: uint16
+      :rtype: bool
 
-.. method:: Control.SetActionGroup (group, state)
+   .. method:: SetActionGroup (group, state)
 
-   Sets the state of the given action group (a value between 0 and 9 inclusive).
+      Sets the state of the given action group (a value between 0 and 9
+      inclusive).
 
-   :ptype group: `uint16`
-   :ptype state: `bool`
+      :ptype group: uint16
+      :ptype state: bool
 
-.. method:: Control.ToggleActionGroup (group)
+   .. method:: ToggleActionGroup (group)
 
-   Toggles the state of the given action group (a value between 0 and 9
-   inclusive).
+      Toggles the state of the given action group (a value between 0 and 9
+      inclusive).
 
-   :ptype group: `uint16`
+      :ptype group: uint16
 
-.. method:: Control.AddNode (ut, prograde = 0, normal = 0, radial = 0)
+   .. method:: AddNode (ut, [prograde = 0], [normal = 0], [radial = 0])
 
-   Creates a maneuver node at the given universal time, and returns a
-   :class:`Node` object that can be used to modify it. Optionally sets
-   the magnitude of the delta-v for the maneuver node in the prograde, normal
-   and radial directions.
+      Creates a maneuver node at the given universal time, and returns a
+      :class:`Node` object that can be used to modify it. Optionally sets the
+      magnitude of the delta-v for the maneuver node in the prograde, normal and
+      radial directions.
 
-   :param double ut: universal time of the maneuver node
-   :param double prograde: delta-v in the prograde direction
-   :param double normal: delta-v in the normal direction
-   :param double radial: delta-v in the radial direction
-   :rtype: :class:`Node`
+      :param double ut: universal time of the maneuver node
+      :param double prograde: delta-v in the prograde direction
+      :param double normal: delta-v in the normal direction
+      :param double radial: delta-v in the radial direction
+      :rtype: :class:`Node`
 
-.. attribute:: Control.Nodes
+   .. attribute:: Nodes
 
-   Gets a list of all existing maneuver nodes, ordered by time from first to
-   last.
+      Gets a list of all existing maneuver nodes, ordered by time from first to
+      last.
 
-   :rtype: :class:`List` ( :class:`Node` )
+      :rtype: :class:`List` ( :class:`Node` )
 
-.. method:: Control.RemoveNodes ()
+   .. method:: RemoveNodes ()
 
-   Removes all maneuver nodes.
+      Removes all maneuver nodes.
+
+.. rubric:: Footnotes
+
+.. [#control-reset] The control input will persist until the client that
+                    requested it disconnects. If multiple clients set a control
+                    input, they are added together and clamped to the range
+                    [-1,1].

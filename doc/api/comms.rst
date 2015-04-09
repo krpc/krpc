@@ -8,44 +8,44 @@ Comms
 
    .. note:: This class requires `RemoteTech`_ to be installed.
 
-.. attribute:: Comms.HasFlightComputer
+   .. attribute:: HasFlightComputer
 
-   Gets whether the vessel has a `RemoteTech`_ flight computer on board.
+      Gets whether the vessel has a `RemoteTech`_ flight computer on board.
 
-   :rtype: bool
+      :rtype: bool
 
-.. attribute:: Comms.HasConnection
+   .. attribute:: HasConnection
 
-   Gets whether the vessel can receive commands from the KSC or a command
-   station.
+      Gets whether the vessel can receive commands from the KSC or a command
+      station.
 
-   :rtype: bool
+      :rtype: bool
 
-.. attribute:: Comms.HasConnectionToGroundStation
+   .. attribute:: HasConnectionToGroundStation
 
-   Gets whether the vessel can transmit science data to a ground station.
+      Gets whether the vessel can transmit science data to a ground station.
 
-   :rtype: bool
+      :rtype: bool
 
-.. attribute:: Comms.SignalDelay
+   .. attribute:: SignalDelay
 
-   Gets the signal delay when sending commands to the vessel, in seconds.
+      Gets the signal delay when sending commands to the vessel, in seconds.
 
-   :rtype: double
+      :rtype: double
 
-.. attribute:: Comms.SignalDelayToGroundStation
+   .. attribute:: SignalDelayToGroundStation
 
-   Gets the signal delay between the vessel and the closest ground station, in
-   seconds.
+      Gets the signal delay between the vessel and the closest ground station,
+      in seconds.
 
-   :rtype: double
+      :rtype: double
 
-.. attribute:: Comms.SignalDelayToVessel (other)
+   .. attribute:: SignalDelayToVessel (other)
 
-   Gets the signal delay between the current vessel and another vessel, in
-   seconds.
+      Gets the signal delay between the current vessel and another vessel, in
+      seconds.
 
-   :param Vessel other:
-   :rtype: double
+      :param Vessel other:
+      :rtype: double
 
 .. _RemoteTech: http://forum.kerbalspaceprogram.com/threads/83305-0-90-0-RemoteTech-v1-6-3-2015-02-06

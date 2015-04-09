@@ -1,16 +1,51 @@
-v0.1.5
-* Server can now run during more game scenes and does not get restarted when switching vessel
-* Server plugin changes:
-  * Display service errors when KSP loads (#89)
-  * Use a combo box for the server address
+v0.1.7
 * SpaceCenter service changes:
-  * Fix Body.AtmospherePressureAt and AtmosphereDensityAt when there is no atmosphere
-  * Rename Flight.NormalNeg to AntiNormal and Flight.RadialNeg to AntiRadial (#90)
-  * Add Flight.Longitude and Latitude
+  * Fix orientation of docking port reference frames
+  * Rename Engine.Activated to Engine.Active to match other parts
+* Python client changes:
+  * Optionally don't connect to the stream server
+  * Support for Python 3
+  * Upgrade to Protocol Buffers 3.0.0-alpha-1
+
+v0.1.6
+* Parts
+* Targeting of vessels, bodies and docking ports
+* Remove Orbit.ReferenceFrame
+* Fix AutoPilot.Error and add AutoPilot.RollError (#98)
+* Nicer errors returned to client (#97)
+* Include protobuf source and compiled Python, Java and C++ versions in release (#100)
+
+v0.1.5
+* Server plugin changes:
+  * Server now persists across game scene changes
+  * Services specify during which game scenes they are available
+  * Use a combo box for the server address
+  * Display service errors when KSP loads (#89)
+  * Add KSP compatibility checker
+  * Add logging severity levels
+  * Fix bug where yielded continuations are run more than once per update
+* SpaceCenter service changes:
+  * Add SpaceCenter.DrawDirection and ClearDirections for visual debugging
+  * Add Vessel.Comms to interact with RemoteTech
   * Add Control.WheelThrottle and WheelSteering
-  * Control.ActivateNextStage returns a list of vessels that are jettisoned
-  * Add FAR support and functionality
-  * Add RemoteTech support and functionality
+  * Change Control.ActivateNextStage to return a list of jettisoned vessels
+  * Add Flight.Longitude and Latitude
+  * Rename Flight.NormalNeg to AntiNormal and Flight.RadialNeg to AntiRadial (#90)
+  * Add FAR functionality to Vessel.Flight
+  * Fix Body.AtmospherePressureAt and AtmosphereDensityAt when there is no atmosphere
+  * Add Vessel.SurfaceVelocityReferenceFrame
+  * Add Node.OrbitalReferenceFrame
+  * Add Node.RemainingBurnVector
+  * Fix lots of reference frame bugs
+  * Remove Vessel.NonRotatingReferenceFrame
+  * Remove Body.SurfaceReferenceFrame
+  * Change default reference frame to Vessel.SurfaceReferenceFrame for Vessel.Flight and AutoPilot methods
+  * Add wait parameter to AutoPilot methods
+  * AutoPilot and Control inputs reset to 0 when the client that requested them disconnects
+  * Change AutoPilot to set SAS to false when it's disengaged
+
+v0.1.4-hotfix1
+* Fix null reference exception in Vessel.Thrust
 
 v0.1.4
 * General changes:

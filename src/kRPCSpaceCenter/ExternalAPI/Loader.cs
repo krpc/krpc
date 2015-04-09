@@ -4,9 +4,15 @@ using UnityEngine;
 
 namespace KRPCSpaceCenter.ExternalAPI
 {
+    /// <summary>
+    /// Addon to load external APIs
+    /// </summary>
     [KSPAddon (KSPAddon.Startup.Instantly, true)]
     public class Loader : MonoBehaviour
     {
+        /// <summary>
+        /// Load the external APIs
+        /// </summary>
         public void Awake ()
         {
             FAR.Load ();

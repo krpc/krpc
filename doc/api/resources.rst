@@ -5,46 +5,46 @@ Resources
 
    Created by calling :attr:`Vessel.Resources`.
 
-.. attribute:: Resources.Names
+   .. attribute:: Names
 
-   Gets a list of resource names that can be stored by the vessel.
+      Gets a list of resource names that can be stored by the vessel.
 
-   :rtype: :class:`List` ( `string` )
+      :rtype: :class:`List` ( string )
 
-.. method:: Resources.HasResource (name)
+   .. method:: HasResource (name)
 
-   Returns `True` if the vessel can store the named resource.
+      Returns ``true`` if the vessel can store the named resource.
 
-   :param string name:
-   :rtype: bool
+      :param string name:
+      :rtype: bool
 
-.. method:: Resources.Max (name, stage = -1, cumulative = True)
+   .. method:: Max (name, [stage = -1], [cumulative = true])
 
-   Returns the amount of a resource that the vessel can store.
+      Returns the amount of a resource that the vessel can store.
 
-   :param string name: The name of the resource.
-   :param int32 stage: When set to -1, returns the amount of resource in all
-                       stages. Otherwise returns the amount of resource in the
-                       given stage.
-   :param bool cumulative: When `False`, returns the amount of resource in the
-                           given stage. When `True` returns the amount of
-                           resource in the given stage and all subsequent stages
-                           combined.
-   :rtype: `double`
+      :param string name: The name of the resource.
+      :param int32 stage: When set to -1, returns the amount of resource in all
+                          stages. Otherwise returns the amount of resource in
+                          the given stage.
+      :param bool cumulative: When ``false``, returns the amount of resource in
+                              the given stage. When ``true`` returns the amount
+                              of resource in the given stage and all subsequent
+                              stages combined.
+      :rtype: double
 
-.. method:: Resources.Amount (name, stage = -1, cumulative = True)
+   .. method:: Amount (name, [stage = -1], [cumulative = true])
 
-   Returns the amount of a resource that the vessel is currently storing.
+      Returns the amount of a resource that the vessel is currently storing.
 
-   :param string name: The name of the resource.
-   :param int32 stage: When set to -1, returns the amount of resource in all
-                       stages. Otherwise returns the amount of resource in the
-                       given stage.
-   :param bool cumulative: When `False`, returns the amount of resource in the
-                           given stage. When `True` returns the amount of
-                           resource in the given stage and all subsequent stages
-                           combined.
-   :rtype: `double`
+      :param string name: The name of the resource.
+      :param int32 stage: When set to -1, returns the amount of resource in all
+                          stages. Otherwise returns the amount of resource in
+                          the given stage.
+      :param bool cumulative: When ``false``, returns the amount of resource in
+                              the given stage. When ``true`` returns the amount
+                              of resource in the given stage and all subsequent
+                              stages combined.
+      :rtype: double
 
 Examples
 --------

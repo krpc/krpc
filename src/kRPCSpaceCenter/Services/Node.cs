@@ -40,10 +40,10 @@ namespace KRPCSpaceCenter.Services
             return node == null ? 0 : node.GetHashCode ();
         }
 
-        Vector3d WorldBurnVector {
+        internal Vector3d WorldBurnVector {
             get {
-                var prograde = node.patch.getOrbitalVelocityAtUT (node.UT).normalized;
-                var normal = node.patch.GetOrbitNormal ().normalized;
+                var prograde = node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ().normalized;
+                var normal = node.patch.GetOrbitNormal ().SwapYZ ().normalized;
                 var radial = Vector3d.Cross (normal, prograde);
                 return Prograde * prograde + Normal * normal + Radial * radial;
             }
@@ -98,6 +98,14 @@ namespace KRPCSpaceCenter.Services
             return referenceFrame.DirectionFromWorldSpace (WorldBurnVector).ToTuple ();
         }
 
+        [KRPCMethod]
+        public Tuple3 RemainingBurnVector (ReferenceFrame referenceFrame = null)
+        {
+            if (referenceFrame == null)
+                referenceFrame = ReferenceFrame.Orbital (vessel);
+            return referenceFrame.DirectionFromWorldSpace (node.GetBurnVector (node.patch)).ToTuple ();
+        }
+
         [KRPCProperty]
         public double UT {
             get { return node.UT; }
@@ -125,6 +133,11 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
             get { return ReferenceFrame.Object (node); }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame OrbitalReferenceFrame {
+            get { return ReferenceFrame.Orbital (node); }
         }
 
         [KRPCMethod]

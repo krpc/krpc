@@ -11,10 +11,15 @@ class TestVessel(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestVessel')
         cls.vtype = cls.conn.space_center.VesselType
         cls.vsituation = cls.conn.space_center.VesselSituation
         cls.vessel = cls.conn.space_center.active_vessel
+        cls.far = cls.conn.space_center.far_available
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     def test_name(self):
         self.assertEqual('Basic', self.vessel.name)
@@ -51,22 +56,11 @@ class TestVessel(testingtools.TestCase):
         self.assertEqual(2625, self.vessel.dry_mass)
 
     def test_cross_sectional_area(self):
-        # Stock aerodynamic model uses: A = 0.008 . m
-        self.assertClose(0.008 * self.vessel.mass, self.vessel.cross_sectional_area)
-
-    def test_drag_coefficient(self):
-        # Using stock aerodynamic model
-        parts = {
-            'mk1pod': {'n': 1, 'mass': 0.8, 'drag': 0.2},
-            'fuelTank': {'n': 1, 'mass': 0.125, 'drag': 0.2},
-            'batteryPack': {'n': 2, 'mass': 0.01, 'drag': 0.2},
-            'solarPanels1': {'n': 3, 'mass': 0.02, 'drag': 0.25},
-            'liquidEngine2': {'n': 1, 'mass': 1.5, 'drag': 0.2}
-        }
-        total_mass = sum(x['mass']*x['n'] for x in parts.values())
-        mass_drag_products = sum(x['mass']*x['drag']*x['n'] for x in parts.values())
-        drag_coefficient = mass_drag_products / total_mass
-        self.assertClose(drag_coefficient, self.vessel.drag_coefficient)
+        if not self.far:
+            # Stock aerodynamic model uses: A = 0.008 . m
+            self.assertClose(0.008 * self.vessel.mass, self.vessel.cross_sectional_area)
+        else:
+            self.assertClose(20.048, self.vessel.cross_sectional_area, 0.01)
 
 if __name__ == "__main__":
     unittest.main()

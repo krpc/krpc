@@ -5,8 +5,8 @@ using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 using KRPCSpaceCenter.ExternalAPI;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
-using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -46,7 +46,8 @@ namespace KRPCSpaceCenter.Services
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
-            Resources = new Resources (vessel);
+            Parts = new Parts.Parts (vessel);
+            Resources = new VesselResources (vessel);
             if (RemoteTech.IsAvailable)
                 comms = new Comms (vessel);
         }
@@ -93,7 +94,7 @@ namespace KRPCSpaceCenter.Services
         public Flight Flight (ReferenceFrame referenceFrame = null)
         {
             if (referenceFrame == null)
-                referenceFrame = ReferenceFrame.Orbital (InternalVessel);
+                referenceFrame = ReferenceFrame.Surface (InternalVessel);
             return new Flight (InternalVessel, referenceFrame);
         }
 
@@ -113,13 +114,16 @@ namespace KRPCSpaceCenter.Services
         public AutoPilot AutoPilot { get; private set; }
 
         [KRPCProperty]
-        public Resources Resources { get; private set; }
+        public VesselResources Resources { get; private set; }
+
+        [KRPCProperty]
+        public Parts.Parts Parts { get; private set; }
 
         [KRPCProperty]
         public Comms Comms {
             get {
                 if (!RemoteTech.IsAvailable)
-                    throw new RPCException ("RemoteTech is not installed");
+                    throw new InvalidOperationException ("RemoteTech is not installed");
                 return comms;
             }
         }
@@ -148,16 +152,13 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
-        /// <summary>
-        /// The maximum thrust (in Newtons) of all active engines combined when throttled up to 100%
-        /// </summary>
         //FIXME: just sums the max thrust of every engine, i.e. assumes all engines are pointing the same direction
         [KRPCProperty]
         public double Thrust {
             get {
                 double thrust = 0;
                 foreach (var part in InternalVessel.parts) {
-                    foreach (PartModule module in part.Modules) {
+                    foreach (global::PartModule module in part.Modules) {
                         if (!module.isEnabled)
                             continue;
                         var engine = module as ModuleEngines;
@@ -168,7 +169,7 @@ namespace KRPCSpaceCenter.Services
                         }
                         var engineFx = module as ModuleEnginesFX;
                         if (engineFx != null) {
-                            if (!engine.EngineIgnited || engine.getFlameoutState)
+                            if (!engineFx.EngineIgnited || engineFx.getFlameoutState)
                                 continue;
                             thrust += engineFx.maxThrust;
                         }
@@ -178,16 +179,13 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
-        /// <summary>
-        /// The combined specific impulse (in seconds) of all active engines
-        /// </summary>
         [KRPCProperty]
         public double SpecificImpulse {
             get {
                 double totalThrust = 0;
                 double totalFlowRate = 0;
                 foreach (var part in InternalVessel.parts) {
-                    foreach (PartModule module in part.Modules) {
+                    foreach (global::PartModule module in part.Modules) {
                         if (!module.isEnabled)
                             continue;
                         var engine = module as ModuleEngines;
@@ -199,10 +197,10 @@ namespace KRPCSpaceCenter.Services
                         }
                         var engineFx = module as ModuleEnginesFX;
                         if (engineFx != null) {
-                            if (!engine.EngineIgnited || engine.getFlameoutState)
+                            if (!engineFx.EngineIgnited || engineFx.getFlameoutState)
                                 continue;
-                            totalThrust += engine.maxThrust;
-                            totalFlowRate += (engine.maxThrust / engine.realIsp);
+                            totalThrust += engineFx.maxThrust;
+                            totalFlowRate += (engineFx.maxThrust / engineFx.realIsp);
                         }
                     }
                 }
@@ -216,11 +214,6 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public ReferenceFrame NonRotatingReferenceFrame {
-            get { return ReferenceFrame.NonRotating (InternalVessel); }
-        }
-
-        [KRPCProperty]
         public ReferenceFrame OrbitalReferenceFrame {
             get { return ReferenceFrame.Orbital (InternalVessel); }
         }
@@ -228,6 +221,11 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public ReferenceFrame SurfaceReferenceFrame {
             get { return ReferenceFrame.Surface (InternalVessel); }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame SurfaceVelocityReferenceFrame {
+            get { return ReferenceFrame.SurfaceVelocity (InternalVessel); }
         }
 
         [KRPCMethod]
@@ -245,13 +243,13 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.RotationFromWorldSpace (InternalVessel.transform.rotation).ToTuple ();
+            return referenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).ToTuple ();
         }
 
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.DirectionFromWorldSpace (InternalVessel.transform.up).ToTuple ();
+            return referenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up).ToTuple ();
         }
 
         [KRPCMethod]

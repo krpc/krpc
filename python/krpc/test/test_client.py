@@ -21,8 +21,22 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_version(self):
         status = self.conn.krpc.get_status()
-        version = open('../VERSION.txt').readlines()[0].rstrip()
-        self.assertEqual(version, status.version)
+        with open('../VERSION.txt') as f:
+            version = f.readlines()[0].rstrip()
+            self.assertEqual(version, status.version)
+
+    def test_error(self):
+        self.assertRaises(self.conn.test_service.throw_argument_exception)
+        try:
+            self.conn.test_service.throw_argument_exception()
+        except krpc.client.RPCError as e:
+            self.assertEqual('Invalid argument', str(e))
+
+        self.assertRaises(self.conn.test_service.throw_invalid_operation_exception)
+        try:
+            self.conn.test_service.throw_invalid_operation_exception()
+        except krpc.client.RPCError as e:
+            self.assertEqual('Invalid operation', str(e))
 
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.conn.test_service.float_to_string(float(3.14159)))
@@ -243,7 +257,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_client_members(self):
         self.assertSetEqual(
-            set(['krpc', 'test_service', 'add_stream', 'stream']),
+            set(['krpc', 'test_service', 'add_stream', 'stream', 'close']),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn))))
 
     def test_krpc_service_members(self):
@@ -301,7 +315,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'increment_nested_collection',
                 'add_to_object_list',
 
-                'counter'
+                'counter',
+
+                'throw_argument_exception',
+                'throw_invalid_operation_exception'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service))))
 
@@ -338,10 +355,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
             'foo\rbar',
             'foo\n\rbar',
             'foo\r\nbar',
-            'foo' + b'\x10' + 'bar',
-            'foo' + b'\x13' + 'bar',
-            'foo' + b'\x10\x13' + 'bar',
-            'foo' + b'\x13\x10' + 'bar'
+            'foo\x10bar',
+            'foo\x13bar',
+            'foo\x10\x13bar',
+            'foo\x13\x10bar'
         ]
         for string in strings:
             self.conn.test_service.string_property = string

@@ -10,8 +10,11 @@ class TestComms(testingtools.TestCase):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('Comms')
         testingtools.remove_other_vessels()
-        self.conn = krpc.connect()
+        self.conn = krpc.connect(name='TestComms')
         self.vessel = self.conn.space_center.active_vessel
+
+    def tearDown(self):
+        self.conn.close()
 
     def test_basic(self):
         base = self.vessel.control.activate_next_stage()[0]

@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace KRPC
 {
+    /// <summary>
+    /// Main KRPC addon. Contains the server instance and UI.
+    /// </summary>
     [KSPAddonImproved (KSPAddonImproved.Startup.RealTime | KSPAddonImproved.Startup.Editor, false)]
     sealed public class KRPCAddon : MonoBehaviour
     {
@@ -34,12 +37,18 @@ namespace KRPC
                 StartServer ();
         }
 
+        /// <summary>
+        /// Destructor. Stops the server if running.
+        /// </summary>
         ~KRPCAddon ()
         {
             if (server.Running)
                 server.Stop ();
         }
 
+        /// <summary>
+        /// Wake the addon. Creates the server instance and UI.
+        /// </summary>
         public void Awake ()
         {
             if (!ServicesChecker.OK)
@@ -161,10 +170,9 @@ namespace KRPC
             }
         }
 
-        public int NumberOfClients {
-            get { return server == null ? 0 : server.Clients.Count (); }
-        }
-
+        /// <summary>
+        /// Destroy the UI.
+        /// </summary>
         public void OnDestroy ()
         {
             if (!ServicesChecker.OK)
@@ -181,6 +189,9 @@ namespace KRPC
             GUILayoutExtensions.Destroy (gameObject);
         }
 
+        /// <summary>
+        /// Trigger server update
+        /// </summary>
         public void FixedUpdate ()
         {
             if (!ServicesChecker.OK)

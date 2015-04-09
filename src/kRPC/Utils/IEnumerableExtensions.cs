@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace KRPC.Utils
 {
-    public static class IEnumerableExtensions
+    static class IEnumerableExtensions
     {
         public static IEnumerable<T> Duplicates<T> (this IEnumerable<T> enumerable)
         {

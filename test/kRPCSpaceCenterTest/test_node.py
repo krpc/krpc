@@ -9,40 +9,44 @@ class TestNode(testingtools.TestCase):
     def setUpClass(cls):
         testingtools.new_save()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestNode')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
         for node in cls.control.nodes:
             node.remove()
 
-    def check(self, node, v):
-        self.assertClose(v[0], node.prograde)
-        self.assertClose(v[1], node.normal)
-        self.assertClose(v[2], node.radial)
-        self.assertClose(norm(v), node.delta_v)
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
+
+    def check(self, node, deltav):
+        self.assertClose(deltav[0], node.prograde)
+        self.assertClose(deltav[1], node.normal)
+        self.assertClose(deltav[2], node.radial)
+        self.assertClose(norm(deltav), node.delta_v)
+        self.assertClose(norm(deltav), node.remaining_delta_v, 0.2)
 
         bv = node.burn_vector(node.reference_frame)
-        self.assertClose(v[0], bv[2])
-        self.assertClose(v[1], bv[1])
-        self.assertClose(v[2], bv[0])
+        self.assertClose(norm(deltav), norm(bv))
+        self.assertClose((0,1,0), normalize(bv))
 
-        bv = node.burn_vector(self.vessel.reference_frame)
-        self.assertClose(norm(v), norm(bv))
+        orbital_bv = node.burn_vector(node.orbital_reference_frame)
+        self.assertClose(norm(deltav), norm(orbital_bv))
+        self.assertClose((-deltav[2],deltav[0],deltav[1]), orbital_bv)
 
-        direction = node.direction(node.reference_frame)
-        expected_direction = normalize(v)
-        self.assertClose(direction[0], expected_direction[2])
-        self.assertClose(direction[1], expected_direction[1])
-        self.assertClose(direction[2], expected_direction[0])
+        d = node.direction(node.reference_frame)
+        self.assertClose((0,1,0), d)
+        orbital_d = node.direction(node.orbital_reference_frame)
+        self.assertClose(normalize((-deltav[2],deltav[0],deltav[1])), orbital_d)
 
     def test_add_node(self):
         start_ut = self.conn.space_center.ut
         ut = start_ut + 60
-        v0 = [100,200,-350]
-        node = self.control.add_node(ut, *v0)
+        deltav = [100,200,-350]
+        node = self.control.add_node(ut, *deltav)
         self.assertClose(ut, node.ut, error=1)
         self.assertClose(ut - start_ut, node.time_to, error=1)
-        self.check(node, v0)
+        self.check(node, deltav)
         node.remove()
 
     def test_remove_node(self):

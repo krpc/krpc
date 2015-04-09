@@ -15,7 +15,10 @@ using KRPC.Utils;
 
 namespace KRPC
 {
-    class KRPCServer : IServer
+    /// <summary>
+    /// The kRPC server
+    /// </summary>
+    public class KRPCServer : IServer
     {
         readonly TCPServer rpcTcpServer;
         readonly TCPServer streamTcpServer;
@@ -30,11 +33,34 @@ namespace KRPC
 
         internal UniversalTimeFunction GetUniversalTime;
 
+        /// <summary>
+        /// Event triggered when the server starts
+        /// </summary>
         public event EventHandler OnStarted;
+
+        /// <summary>
+        /// Event triggered when the server stops
+        /// </summary>
         public event EventHandler OnStopped;
+
+        /// <summary>
+        /// Event triggered when a client is requesting a connection
+        /// </summary>
         public event EventHandler<ClientRequestingConnectionArgs> OnClientRequestingConnection;
+
+        /// <summary>
+        /// Event triggered when a client has connected
+        /// </summary>
         public event EventHandler<ClientConnectedArgs> OnClientConnected;
+
+        /// <summary>
+        /// Event triggered when a client performs some activity
+        /// </summary>
         public event EventHandler<ClientActivityArgs> OnClientActivity;
+
+        /// <summary>
+        /// Event triggered when a client has disconnected
+        /// </summary>
         public event EventHandler<ClientDisconnectedArgs> OnClientDisconnected;
 
         /// <summary>
@@ -43,31 +69,40 @@ namespace KRPC
         /// </summary>
         public static class Context
         {
+            /// <summary>
+            /// The server instance
+            /// </summary>
             public static KRPCServer Server { get; private set; }
 
+            /// <summary>
+            /// The current client
+            /// </summary>
             public static IClient RPCClient { get; private set; }
 
+            /// <summary>
+            /// The current game scene
+            /// </summary>
             public static GameScene GameScene { get; private set; }
 
-            public static void Set (KRPCServer server, IClient rpcClient)
+            internal static void Set (KRPCServer server, IClient rpcClient)
             {
                 Server = server;
                 RPCClient = rpcClient;
             }
 
-            public static void Clear ()
+            internal static void Clear ()
             {
                 Server = null;
                 RPCClient = null;
             }
 
-            public static void SetGameScene (GameScene gameScene)
+            internal static void SetGameScene (GameScene gameScene)
             {
                 GameScene = gameScene;
             }
         }
 
-        public KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort)
+        internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort)
         {
             rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
@@ -116,12 +151,18 @@ namespace KRPC
             };
         }
 
+        /// <summary>
+        /// Start the server
+        /// </summary>
         public void Start ()
         {
             rpcServer.Start ();
             streamServer.Start ();
         }
 
+        /// <summary>
+        /// Stop the server
+        /// </summary>
         public void Stop ()
         {
             rpcServer.Stop ();
@@ -129,6 +170,9 @@ namespace KRPC
             ObjectStore.Clear ();
         }
 
+        /// <summary>
+        /// Get/set the servers listen address
+        /// </summary>
         public IPAddress Address {
             get { return rpcTcpServer.Address; }
             set {
@@ -137,24 +181,40 @@ namespace KRPC
             }
         }
 
+        /// <summary>
+        /// Get/set the RPC port
+        /// </summary>
         public ushort RPCPort {
             get { return rpcTcpServer.Port; }
             set { rpcTcpServer.Port = value; }
         }
 
+        /// <summary>
+        /// Get/set the Stream port
+        /// </summary>
         public ushort StreamPort {
             get { return streamTcpServer.Port; }
             set { streamTcpServer.Port = value; }
         }
 
+        /// <summary>
+        /// Returns true if the server is running
+        /// </summary>
         public bool Running {
             get { return rpcServer.Running && streamServer.Running; }
         }
 
+        /// <summary>
+        /// Returns a list of clients the server knows about. Note that they might
+        /// not be connected to the server.
+        /// </summary>
         public IEnumerable<IClient> Clients {
             get { return rpcServer.Clients.Select (x => (IClient)x); }
         }
 
+        /// <summary>
+        /// Update the server
+        /// </summary>
         public void Update ()
         {
             RPCServerUpdate ();
@@ -172,38 +232,43 @@ namespace KRPC
             // The maximum amount of time to wait after executing continuations to check for new requests
             const int timeout = 1; // milliseconds
             var done = false;
-            var hadNewContinuations = false;
+            var waited = false;
+            var yieldedContinuations = new List<RequestContinuation> ();
 
             Stopwatch timer = Stopwatch.StartNew ();
             do {
+                // Check for new requests from clients
                 rpcServer.Update ();
                 streamServer.Update ();
-
-                // Check for new requests from clients
-                PollRequests ();
+                PollRequests (yieldedContinuations);
 
                 // Process pending continuations (client requests)
-                hadNewContinuations = false;
                 if (continuations.Count > 0) {
-                    hadNewContinuations = true;
-                    var newContinuations = new List<RequestContinuation> ();
                     foreach (var continuation in continuations) {
+                        // Ignore the continuation if the client has disconnected
+                        if (!continuation.Client.Connected)
+                            continue;
+                        // Execute the continuation
                         try {
                             ExecuteContinuation (continuation);
                         } catch (YieldException e) {
                             // TODO: remove cast
-                            newContinuations.Add ((RequestContinuation)e.Continuation);
+                            yieldedContinuations.Add ((RequestContinuation)e.Continuation);
                         }
                     }
-                    continuations = newContinuations;
+                    continuations.Clear ();
                 }
 
                 if (timer.ElapsedMilliseconds > maxTime) {
                     done = true;
-                } else if (timeout > 0 && hadNewContinuations && continuations.Count == 0) {
+                } else if (!waited && continuations.Count == 0) {
                     Thread.Sleep (timeout);
+                    waited = true;
                 }
             } while (!done);
+
+            // Run yielded continuations on the next update
+            continuations = yieldedContinuations;
         }
 
         /// <summary>
@@ -238,15 +303,27 @@ namespace KRPC
             }
         }
 
-        public uint AddStream (IClient client, Request request)
+        internal uint AddStream (IClient client, Request request)
         {
             var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
-            var streamRequest = new StreamRequest (request);
-            streamRequests [streamClient].Add (streamRequest);
-            return streamRequest.Identifier;
+
+            // Check for an existing stream for the request
+            var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request);
+            var arguments = KRPC.Service.Services.Instance.DecodeArguments (procedure, request);
+            foreach (var streamRequest in streamRequests[streamClient]) {
+                if (streamRequest.Procedure == procedure && streamRequest.Arguments.SequenceEqual (arguments))
+                    return streamRequest.Identifier;
+            }
+
+            // Create a new stream
+            {
+                var streamRequest = new StreamRequest (request);
+                streamRequests [streamClient].Add (streamRequest);
+                return streamRequest.Identifier;
+            }
         }
 
-        public void RemoveStream (IClient client, uint identifier)
+        internal void RemoveStream (IClient client, uint identifier)
         {
             var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
             var requests = streamRequests [streamClient].Where (x => x.Identifier == identifier).ToList ();
@@ -260,15 +337,17 @@ namespace KRPC
         /// Adds a continuation to the queue for any client with a new request,
         /// if a continuation is not already being processed for the client.
         /// </summary>
-        void PollRequests ()
+        void PollRequests (IEnumerable<RequestContinuation> yieldedContinuations)
         {
-            var currentClients = continuations.Select (((c) => c.Client));
+            var currentClients = continuations.Select (((c) => c.Client)).ToList ();
+            currentClients.AddRange (yieldedContinuations.Select (((c) => c.Client)));
             foreach (var client in clientScheduler) {
                 if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
                     Request request = client.Stream.Read ();
                     if (OnClientActivity != null)
                         OnClientActivity (this, new ClientActivityArgs (client));
-                    Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")");
+                    if (Logger.ShouldLog (Logger.Severity.Debug))
+                        Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")", Logger.Severity.Debug);
                     continuations.Add (new RequestContinuation (client, request));
                 }
             }
@@ -292,8 +371,9 @@ namespace KRPC
                 throw;
             } catch (Exception e) {
                 response = Response.CreateBuilder ();
-                response.Error = e.ToString ();
-                Logger.WriteLine (e.ToString ());
+                response.Error = e.Message;
+                if (Logger.ShouldLog (Logger.Severity.Debug))
+                    Logger.WriteLine (e.Message, Logger.Severity.Debug);
             } finally {
                 Context.Clear ();
             }
@@ -304,10 +384,12 @@ namespace KRPC
             //TODO: handle partial response exception
             //TODO: remove cast
             ((RPCClient)client).Stream.Write (builtResponse);
-            if (response.HasError)
-                Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")");
-            else
-                Logger.WriteLine ("Sent response to client " + client.Address);
+            if (Logger.ShouldLog (Logger.Severity.Debug)) {
+                if (response.HasError)
+                    Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
+                else
+                    Logger.WriteLine ("Sent response to client " + client.Address, Logger.Severity.Debug);
+            }
         }
     }
 }

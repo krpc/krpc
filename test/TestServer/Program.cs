@@ -11,7 +11,8 @@ namespace TestServer
     {
         public static void Main (string[] args)
         {
-            Logger.Enabled = (args.Length > 2 && args [2] == "log");
+            Logger.Enabled = true;
+            Logger.Level = Logger.Severity.Warning;
             const int frameTime = 50;
             var server = new KRPCServer (IPAddress.Loopback, ushort.Parse (args [0]), ushort.Parse (args [1]));
             KRPCServer.Context.SetGameScene (GameScene.SpaceCenter);

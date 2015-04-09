@@ -8,7 +8,11 @@ class TestBody(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestBody')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     def test_equality(self):
         bodies = self.conn.space_center.bodies
@@ -134,8 +138,7 @@ class TestBody(testingtools.TestCase):
                     self.assertClose(0, p[1])
                 else:
                     self.assertNotClose(0, p[1])
-                #TODO: large error
-                self.assertClose(body.orbit.radius, norm(p), error=100)
+                self.assertClose(body.orbit.radius, norm(p), error=10)
 
     def test_velocity(self):
         for body in self.conn.space_center.bodies.values():
@@ -148,10 +151,6 @@ class TestBody(testingtools.TestCase):
 
             # Check body velocity in parent body's non-rotating reference frame
             v = body.velocity(body.orbit.body.non_rotating_reference_frame)
-            #if abs(body.orbit.inclination) < 0.01:
-            #    self.assertClose(0, v[1], error=50)
-            #else:
-            #    self.assertNotClose(0, v[1], error=50)
             self.assertClose(body.orbit.speed, norm(v))
 
             # Check body velocity in parent body's reference frame

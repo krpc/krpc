@@ -115,18 +115,25 @@ logo.png
 
 # Python
 *.pyc
+__pycache__
 python/MANIFEST
 python/krpc.egg-info
 python/protobuf-*-py*.egg
-!python/bin
-python/bin/TestServer
+python/build
+
+# Java
+java
+
+# C++
+cpp
 
 # protobuf
 *.protobin
 src/kRPC/Schema/*.cs
 src/kRPC/Schema/*.py
-src/kRPCSpaceCenter/Schema/*.cs
-src/kRPCSpaceCenter/Schema/*.py
+src/kRPC/Schema/*.java
+src/kRPC/Schema/*.h
+src/kRPC/Schema/*.cc
 python/krpc/schema/
 python/krpc/test/Test.py
 test/kRPCTest/Schema/*.cs
@@ -139,6 +146,7 @@ dist
 lib/KSP_Data
 
 # Documentation
-docs
+!docs
 doc/build
 doc/src/python-api
+doc/src/images/**/*.png

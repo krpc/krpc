@@ -61,55 +61,55 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float Throttle {
             get { return FlightInputHandler.state.mainThrottle; }
-            set { FlightInputHandler.state.mainThrottle = value.Clamp (-1f, 1f); }
-        }
-
-        [KRPCProperty]
-        public float Forward {
-            get { return PilotAddon.X; }
-            set { PilotAddon.X = value.Clamp (-1f, 1f); }
-        }
-
-        [KRPCProperty]
-        public float Up {
-            get { return PilotAddon.Y; }
-            set { PilotAddon.Y = value.Clamp (-1f, 1f); }
-        }
-
-        [KRPCProperty]
-        public float Sideways {
-            get { return PilotAddon.Z; }
-            set { PilotAddon.Z = value.Clamp (-1f, 1f); }
+            set { FlightInputHandler.state.mainThrottle = value; }
         }
 
         [KRPCProperty]
         public float Pitch {
             get { return PilotAddon.Pitch; }
-            set { PilotAddon.Pitch = value.Clamp (-1f, 1f); }
-        }
-
-        [KRPCProperty]
-        public float Roll {
-            get { return PilotAddon.Roll; }
-            set { PilotAddon.Roll = value.Clamp (-1f, 1f); }
+            set { PilotAddon.Pitch = value; }
         }
 
         [KRPCProperty]
         public float Yaw {
             get { return PilotAddon.Yaw; }
-            set { PilotAddon.Yaw = value.Clamp (-1f, 1f); }
+            set { PilotAddon.Yaw = value; }
+        }
+
+        [KRPCProperty]
+        public float Roll {
+            get { return PilotAddon.Roll; }
+            set { PilotAddon.Roll = value; }
+        }
+
+        [KRPCProperty]
+        public float Forward {
+            get { return PilotAddon.Forward; }
+            set { PilotAddon.Forward = value; }
+        }
+
+        [KRPCProperty]
+        public float Up {
+            get { return PilotAddon.Up; }
+            set { PilotAddon.Up = value; }
+        }
+
+        [KRPCProperty]
+        public float Right {
+            get { return PilotAddon.Right; }
+            set { PilotAddon.Right = value; }
         }
 
         [KRPCProperty]
         public float WheelThrottle {
             get { return PilotAddon.WheelThrottle; }
-            set { PilotAddon.WheelThrottle = value.Clamp (-1f, 1f); }
+            set { PilotAddon.WheelThrottle = value; }
         }
 
         [KRPCProperty]
         public float WheelSteering {
             get { return PilotAddon.WheelSteer; }
-            set { PilotAddon.WheelSteer = value.Clamp (-1f, 1f); }
+            set { PilotAddon.WheelSteer = value; }
         }
 
         [KRPCProperty]

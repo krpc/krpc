@@ -2,11 +2,7 @@ import re
 import collections
 import krpc.schema
 from krpc.attributes import _Attributes
-
-try:
-    import importlib.import_module as import_module
-except ImportError:
-    import_module = lambda package: __import__(package, globals(), locals(), [], -1)
+import importlib
 
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
 PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
@@ -55,9 +51,10 @@ class _Types(object):
             # NOTE: Disabled as it requires the protobuf .py file to be in the
             #       krpc.schema package which isn't the case for 3rd party services
             try:
-                module = import_module('krpc.schema.' + package)
-                if hasattr(getattr(module.schema, package), message):
-                    typ = _MessageType(type_string)
+                if package != '':
+                    module = importlib.import_module('krpc.schema.' + package)
+                    if hasattr(module, message):
+                        typ = _MessageType(type_string)
                 #else:
                 #    # TODO: avoid using protobuf internals
                 #    import google.protobuf
@@ -70,7 +67,7 @@ class _Types(object):
                 #    typ = _EnumType(type_string)
                 if typ == None:
                     raise ValueError
-            except:
+            except (ImportError, AttributeError, ValueError):
                 #raise ValueError('\'%s\' is not a valid type string' % type_string)
                 typ = _EnumType(type_string)
         self._types[type_string] = typ

@@ -5,7 +5,7 @@ using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
-    public static class GeometryExtensions
+    static class GeometryExtensions
     {
         /// <summary>
         /// Convert a vector to a tuple
@@ -260,6 +260,14 @@ namespace KRPCSpaceCenter.ExtensionMethods
             var y = (forward.x - right.z) * r;
             var z = (right.y - up.x) * r;
             return new QuaternionD (x, y, z, w);
+        }
+
+        /// <summary>
+        /// Project a vector onto a plane, defined by its normal
+        /// </summary>
+        public static Vector3d ProjectVectorOntoPlane (Vector3d normal, Vector3d v)
+        {
+            return v - normal * Vector3d.Dot (normal, v);
         }
     }
 }

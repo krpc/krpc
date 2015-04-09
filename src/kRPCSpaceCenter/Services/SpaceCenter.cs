@@ -46,6 +46,40 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public static CelestialBody TargetBody {
+            get {
+                var target = FlightGlobals.fetch.VesselTarget;
+                return target is global::CelestialBody ? new CelestialBody (target as global::CelestialBody) : null;
+            }
+            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalBody); }
+        }
+
+        [KRPCProperty]
+        public static Vessel TargetVessel {
+            get {
+                var target = FlightGlobals.fetch.VesselTarget;
+                return target is global::Vessel ? new Vessel (target as global::Vessel) : null;
+            }
+            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalVessel); }
+        }
+
+        [KRPCProperty]
+        public static Parts.DockingPort TargetDockingPort {
+            get {
+                var target = FlightGlobals.fetch.VesselTarget;
+                var part = target is ModuleDockingNode ? new Parts.Part ((target as ModuleDockingNode).part) : null;
+                return part != null ? new Parts.DockingPort (part) : null;
+            }
+            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalPort); }
+        }
+
+        [KRPCProcedure]
+        public static void ClearTarget ()
+        {
+            FlightGlobals.fetch.SetVesselTarget (null);
+        }
+
+        [KRPCProperty]
         public static double UT {
             get { return Planetarium.GetUniversalTime (); }
         }
@@ -118,42 +152,52 @@ namespace KRPCSpaceCenter.Services
             TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
         }
 
-        /// <summary>
-        /// Given a position as a vector in reference frame `from`, convert it to a position in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple3 TransformPosition (Tuple3 position, ReferenceFrame from, ReferenceFrame to)
         {
             return to.PositionFromWorldSpace (from.PositionToWorldSpace (position.ToVector ())).ToTuple ();
         }
 
-        /// <summary>
-        /// Given a direction as a 3D unit vector in reference frame `from`, convert it to a unit vector in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple3 TransformDirection (Tuple3 direction, ReferenceFrame from, ReferenceFrame to)
         {
             return to.DirectionFromWorldSpace (from.DirectionToWorldSpace (direction.ToVector ())).ToTuple ();
         }
 
-        /// <summary>
-        /// Given a rotation as a quaternion in reference frame `from`, convert it to a rotation in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple4 TransformRotation (Tuple4 rotation, ReferenceFrame from, ReferenceFrame to)
         {
             return to.RotationFromWorldSpace (from.RotationToWorldSpace (rotation.ToQuaternion ())).ToTuple ();
         }
 
-        /// <summary>
-        /// Given a velocity at a position in reference frame `from`, convert it to a velocity in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple3 TransformVelocity (Tuple3 position, Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
         {
             var worldPosition = from.PositionToWorldSpace (position.ToVector ());
             var worldVelocity = from.VelocityToWorldSpace (position.ToVector (), velocity.ToVector ());
             return to.VelocityFromWorldSpace (worldPosition, worldVelocity).ToTuple ();
+        }
+
+        [KRPCProperty]
+        public static bool FARAvailable {
+            get { return ExternalAPI.FAR.IsAvailable; }
+        }
+
+        [KRPCProperty]
+        public static bool RemoteTechAvailable {
+            get { return ExternalAPI.RemoteTech.IsAvailable; }
+        }
+
+        [KRPCProcedure]
+        public static void DrawDirection (Tuple3 direction, ReferenceFrame referenceFrame, Tuple3 color, float length = 10f)
+        {
+            DrawAddon.AddDirection (direction.ToVector (), referenceFrame, color, length);
+        }
+
+        [KRPCProcedure]
+        public static void ClearDirections ()
+        {
+            DrawAddon.ClearDirections ();
         }
     }
 }

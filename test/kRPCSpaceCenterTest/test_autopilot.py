@@ -17,11 +17,14 @@ class TestAutoPilot(testingtools.TestCase):
         self.ap.sas = False
         self.sas_mode = self.conn.space_center.SASMode
 
+    def tearDown(self):
+        self.conn.close()
+
     def test_equality(self):
         self.assertEqual(self.vessel.auto_pilot, self.ap)
 
     def wait_for_autopilot(self):
-        while self.ap.error > 0.25:
+        while self.ap.error > 0.25 or self.ap.roll_error > 0.25:
             time.sleep(0.25)
 
     def set_rotation(self, pitch, heading, roll):
@@ -128,6 +131,55 @@ class TestAutoPilot(testingtools.TestCase):
         self.check_direction(flight.radial)
         self.set_direction(flight.anti_radial)
         self.check_direction(flight.anti_radial)
+
+    def test_error(self):
+        flight = self.vessel.flight()
+
+        self.ap.disengage()
+        self.assertClose(0, self.ap.error)
+
+        self.set_direction(flight.prograde, roll=27)
+        self.vessel.control.sas = True
+        for wheel in self.vessel.parts.reaction_wheels:
+            wheel.active = False
+
+        self.ap.set_direction(flight.prograde)
+        self.assertClose(0, self.ap.error, 1)
+
+        self.ap.set_direction(flight.retrograde)
+        self.assertClose(180, self.ap.error, 1)
+
+        self.ap.set_direction(flight.normal)
+        self.assertClose(90, self.ap.error, 1)
+
+        self.ap.set_direction(flight.radial)
+        self.assertClose(90, self.ap.error, 1)
+
+        self.ap.set_direction(flight.anti_radial)
+        self.assertClose(90, self.ap.error, 1)
+
+    def test_roll_error(self):
+        self.ap.disengage()
+        self.assertClose(0, self.ap.roll_error)
+
+        set_roll = -57
+        direction = self.vessel.direction(self.vessel.surface_reference_frame)
+        self.set_direction(direction, roll=set_roll)
+        self.vessel.control.sas = True
+        for wheel in self.vessel.parts.reaction_wheels:
+            wheel.active = False
+
+        for roll in [0,-54,-90,27,45,90]:
+            self.ap.set_direction(direction, roll=roll)
+            self.assertClose(abs(set_roll - roll), self.ap.roll_error, 1)
+
+    def test_disengage_on_disconnect(self):
+        self.ap.set_rotation(90,0)
+        self.assertGreater(self.ap.error, 0)
+        self.conn.close()
+        conn = krpc.connect()
+        ap = conn.space_center.active_vessel.auto_pilot
+        self.assertTrue(math.isnan(ap.error))
 
 class TestAutoPilotSAS(testingtools.TestCase):
 

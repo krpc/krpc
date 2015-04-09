@@ -12,10 +12,9 @@ Python API
    python-api/orbit
    python-api/control
    python-api/resources
+   python-api/parts
    python-api/node
    python-api/comms
    python-api/reference-frame
    python-api/auto-pilot
-   python-api/enumeration-types
    python-api/geometry-types
-

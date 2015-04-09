@@ -51,7 +51,7 @@ namespace KRPCSpaceCenter.Services
         /// Direction the vessel is pointing in in world space
         /// </summary>
         Vector3d WorldDirection {
-            get { return vessel.transform.up; }
+            get { return vessel.ReferenceTransform.up; }
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace KRPCSpaceCenter.Services
         /// Rotation * Vector3d.up gives the direction vector in which the vessel points, in reference frame space.
         /// </summary>
         QuaternionD VesselRotation {
-            get { return referenceFrame.RotationFromWorldSpace (vessel.transform.rotation); }
+            get { return referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation); }
         }
 
         /// <summary>
@@ -75,11 +75,7 @@ namespace KRPCSpaceCenter.Services
         Vector3d WorldNormal {
             get {
                 // Note: y and z components of normal vector are swapped
-                var normal = vessel.GetOrbit ().GetOrbitNormal ();
-                var tmp = normal.y;
-                normal.y = normal.z;
-                normal.z = tmp;
-                return normal.normalized;
+                return vessel.GetOrbit ().GetOrbitNormal ().SwapYZ ().normalized;
             }
         }
 
@@ -96,9 +92,9 @@ namespace KRPCSpaceCenter.Services
         void CheckFAR ()
         {
             if (!FAR.IsAvailable)
-                throw new RPCException ("FAR is not available");
+                throw new InvalidOperationException ("FAR is not available");
             if (!FAR.ActiveControlSysIsOnVessel (this.vessel))
-                throw new RPCException ("FAR is not active on this vessel");
+                throw new InvalidOperationException ("FAR is not active on this vessel");
         }
 
         [KRPCProperty]

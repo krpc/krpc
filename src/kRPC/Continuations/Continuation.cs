@@ -5,8 +5,14 @@ namespace KRPC.Continuations
     /// </summary>
     public abstract class Continuation<T> : IContinuation
     {
+        /// <summary>
+        /// Run the continuation and return the result.
+        /// </summary>
         public abstract T Run ();
 
+        /// <summary>
+        /// Run the continuation and return the result.
+        /// </summary>
         public object RunUntyped ()
         {
             return Run ();
@@ -18,8 +24,14 @@ namespace KRPC.Continuations
     /// </summary>
     public abstract class Continuation : IContinuation
     {
+        /// <summary>
+        /// Run the continuation and return the result.
+        /// </summary>
         public abstract void Run ();
 
+        /// <summary>
+        /// Run the continuation and return the result.
+        /// </summary>
         public object RunUntyped ()
         {
             Run ();

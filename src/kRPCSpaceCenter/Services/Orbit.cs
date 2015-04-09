@@ -5,16 +5,15 @@ using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 
 namespace KRPCSpaceCenter.Services
 {
+    //FIXME: should extend equatable interface?
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Orbit
     {
         readonly global::Orbit orbit;
-        readonly ReferenceFrame referenceFrame;
 
         internal Orbit (global::Vessel vessel)
         {
             orbit = vessel.GetOrbit ();
-            referenceFrame = ReferenceFrame.Orbital (vessel);
         }
 
         internal Orbit (global::CelestialBody body)
@@ -22,14 +21,11 @@ namespace KRPCSpaceCenter.Services
             if (body == body.referenceBody)
                 throw new ArgumentException ("Body does not orbit anything");
             orbit = body.GetOrbit ();
-            referenceFrame = ReferenceFrame.Orbital (body);
         }
 
         internal Orbit (global::Orbit orbit)
         {
-            //FIXME: should be relative to the object in orbit, not the reference body
             this.orbit = orbit;
-            referenceFrame = ReferenceFrame.Orbital (orbit.referenceBody);
         }
 
         //TODO: make equatable? add hashcode???
@@ -159,11 +155,6 @@ namespace KRPCSpaceCenter.Services
                 var time = orbit.UTsoi - SpaceCenter.UT;
                 return time < 0 ? Double.NaN : time;
             }
-        }
-
-        [KRPCProperty]
-        public ReferenceFrame ReferenceFrame {
-            get { return referenceFrame; }
         }
     }
 }
