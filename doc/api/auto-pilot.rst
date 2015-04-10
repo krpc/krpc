@@ -6,6 +6,29 @@ AutoPilot
    Provides basic auto-piloting utilities for a vessel. Created by calling
    :attr:`Vessel.AutoPilot`.
 
+   .. attribute:: SAS
+
+      Gets or sets the state of SAS.
+
+      :rtype: `bool`
+      :returns: `True` if SAS is enabled, `False` if it is not.
+
+   .. attribute:: SASMode
+
+      Gets or sets the SAS mode. These modes are equivalent to the mode buttons to
+      the left of the navball that appear when SAS is enabled.
+
+      :rtype: :class:`SASMode`
+      :returns: The current :class:`SASMode`
+
+   .. attribute:: SpeedMode
+
+      Gets or sets the speed mode of the navball. This is the mode displayed next
+      to the speed at the top of the navball.
+
+      :rtype: :class:`SpeedMode`
+      :returns: The current :class:`SpeedMode`
+
    .. method:: SetRotation (pitch, heading, [roll = NaN], [referenceFrame = Vessel.SurfaceReferenceFrame], [wait = false])
 
       Points the vessel in the specified direction, and holds it there. Setting
@@ -79,3 +102,33 @@ AutoPilot
       called previously.
 
       .. note:: This will disable :attr:`Control.SAS`.
+
+.. class:: SASMode
+
+   .. data:: StabilityAssist
+
+   .. data:: Maneuver
+
+   .. data:: Prograde
+
+   .. data:: Retrograde
+
+   .. data:: Normal
+
+   .. data:: AntiNormal
+
+   .. data:: Radial
+
+   .. data:: AntiRadial
+
+   .. data:: Target
+
+   .. data:: AntiTarget
+
+.. class:: SpeedMode
+
+   .. data:: Orbit
+
+   .. data:: Surface
+
+   .. data:: Target

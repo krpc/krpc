@@ -14,6 +14,8 @@ Control
       :rtype: bool
       :returns: ``true`` if SAS is enabled, ``false`` if it is not.
 
+      .. note:: Equivalent to :attr:`AutoPilot.SAS`
+
    .. attribute:: RCS
 
       Gets or sets the state of RCS.

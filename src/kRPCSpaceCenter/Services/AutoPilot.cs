@@ -11,6 +11,29 @@ using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum SASMode
+    {
+        StabilityAssist,
+        Maneuver,
+        Prograde,
+        Retrograde,
+        Normal,
+        AntiNormal,
+        Radial,
+        AntiRadial,
+        Target,
+        AntiTarget
+    }
+
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum SpeedMode
+    {
+        Orbit,
+        Surface,
+        Target
+    }
+
     /// <remarks>
     /// Taken and adapted from MechJeb2/KOS/RemoteTech2/forum discussion; credit goes to the authors of those plugins/posts:
     /// https://github.com/MuMech/MechJeb2
@@ -44,6 +67,41 @@ namespace KRPCSpaceCenter.Services
         public override int GetHashCode ()
         {
             return vessel.GetHashCode ();
+        }
+
+        [KRPCProperty]
+        public bool SAS {
+            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
+            set { vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
+        }
+
+        [KRPCProperty]
+        public SASMode SASMode {
+            get { return vessel.Autopilot.Mode.ToSASMode (); }
+            set {
+                var mode = value.FromSASMode ();
+                if (vessel.Autopilot.CanSetMode (mode)) {
+                    vessel.Autopilot.SetMode (mode);
+                    // Update the UI buttons
+                    var modeIndex = (int)vessel.Autopilot.Mode;
+                    var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
+                    modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
+                }
+            }
+        }
+
+        [KRPCProperty]
+        public SpeedMode SpeedMode {
+            get { return FlightUIController.speedDisplayMode.ToSpeedMode (); }
+            set {
+                var startMode = FlightUIController.speedDisplayMode;
+                var mode = value.FromSpeedMode ();
+                while (FlightUIController.speedDisplayMode != mode) {
+                    FlightUIController.fetch.cycleSpdModes ();
+                    if (FlightUIController.speedDisplayMode == startMode)
+                        break;
+                }
+            }
         }
 
         [KRPCMethod]
@@ -99,8 +157,8 @@ namespace KRPCSpaceCenter.Services
         public void Disengage ()
         {
             if (vessel != null) {
-                vessel.Autopilot.SetMode (VesselAutopilot.AutopilotMode.StabilityAssist);
-                vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
+                SASMode = SASMode.StabilityAssist;
+                SAS = false;
             }
             requestingClient = null;
             engaged.Remove (this);
@@ -109,7 +167,12 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public double Error {
             get {
-                return engaged.Contains (this) ? Vector3d.Angle (vessel.ReferenceTransform.up, TargetDirection ()) : 0d;
+                if (engaged.Contains (this))
+                    return Vector3d.Angle (vessel.ReferenceTransform.up, TargetDirection ());
+                else if (SAS && SASMode != SASMode.StabilityAssist)
+                    return Vector3d.Angle (vessel.ReferenceTransform.up, SASTargetDirection ());
+                else
+                    return 0d;
             }
         }
 
@@ -127,6 +190,91 @@ namespace KRPCSpaceCenter.Services
         static void Clear ()
         {
             engaged.Clear ();
+        }
+
+        /// <summary>
+        /// Gets the direction vector that the SAS autopilot is trying to hold in world space
+        /// </summary>
+        Vector3d SASTargetDirection ()
+        {
+            // Stability assist
+            if (SASMode == SASMode.StabilityAssist)
+                throw new InvalidOperationException ("No target direction in stability assist mode");
+
+            // Maneuver node
+            if (SASMode == SASMode.Maneuver) {
+                var node = vessel.patchedConicSolver.maneuverNodes.OrderBy (x => x.UT).FirstOrDefault ();
+                if (node == null)
+                    throw new InvalidOperationException ("No maneuver node");
+                return new Node (node).WorldBurnVector;
+            }
+
+            // Orbital directions, in different speed modes
+            if (SASMode == SASMode.Prograde || SASMode == SASMode.Retrograde ||
+                SASMode == SASMode.Normal || SASMode == SASMode.AntiNormal ||
+                SASMode == SASMode.Radial || SASMode == SASMode.AntiRadial) {
+
+                if (SpeedMode == SpeedMode.Orbit) {
+                    switch (SASMode) {
+                    case SASMode.Prograde:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.up);
+                    case SASMode.Retrograde:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.down);
+                    case SASMode.Normal:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.forward);
+                    case SASMode.AntiNormal:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.back);
+                    case SASMode.Radial:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.left);
+                    case SASMode.AntiRadial:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.right);
+                    }
+                } else if (SpeedMode == SpeedMode.Surface) {
+                    switch (SASMode) {
+                    case SASMode.Prograde:
+                        return ReferenceFrame.SurfaceVelocity (vessel).DirectionToWorldSpace (Vector3d.up);
+                    case SASMode.Retrograde:
+                        return ReferenceFrame.SurfaceVelocity (vessel).DirectionToWorldSpace (Vector3d.down);
+                    case SASMode.Normal:
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
+                    case SASMode.AntiNormal:
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
+                    case SASMode.Radial:
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.right);
+                    case SASMode.AntiRadial:
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.left);
+                    }
+                } else if (SpeedMode == SpeedMode.Target) {
+                    switch (SASMode) {
+                    case SASMode.Prograde:
+                        return vessel.GetWorldVelocity () - FlightGlobals.fetch.VesselTarget.GetWorldVelocity ();
+                    case SASMode.Retrograde:
+                        return FlightGlobals.fetch.VesselTarget.GetWorldVelocity () - vessel.GetWorldVelocity ();
+                    case SASMode.Normal:
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
+                    case SASMode.AntiNormal:
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
+                    case SASMode.Radial:
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.right);
+                    case SASMode.AntiRadial:
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.left);
+                    }
+                }
+                throw new InvalidOperationException ("Unknown speed mode for orbital direction");
+            }
+
+            // Target and anti-target
+            if (SASMode == SASMode.Target || SASMode == SASMode.AntiTarget) {
+                var target = FlightGlobals.fetch.VesselTarget;
+                if (target == null)
+                    throw new InvalidOperationException ("No target");
+                var direction = target.GetWorldPosition () - vessel.GetWorldPos3D ();
+                if (SASMode == SASMode.AntiTarget)
+                    direction *= -1;
+                return direction;
+            }
+
+            throw new InvalidOperationException ("Unknown SAS mode");
         }
 
         internal static void Fly (global::Vessel vessel, FlightCtrlState state)
@@ -148,8 +296,8 @@ namespace KRPCSpaceCenter.Services
         {
             // Initialize SAS autopilot
             if (!sasSet) {
-                vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, true);
-                vessel.Autopilot.SetMode (VesselAutopilot.AutopilotMode.StabilityAssist);
+                SAS = true;
+                SASMode = SASMode.StabilityAssist;
                 sasSet = true;
             }
 

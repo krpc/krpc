@@ -14,7 +14,8 @@ class TestAutoPilot(testingtools.TestCase):
         self.vessel = self.conn.space_center.active_vessel
         self.ref = self.conn.space_center.ReferenceFrame
         self.ap = self.vessel.auto_pilot
-        self.vessel.control.sas = False
+        self.ap.sas = False
+        self.sas_mode = self.conn.space_center.SASMode
 
     def tearDown(self):
         self.conn.close()
@@ -47,6 +48,12 @@ class TestAutoPilot(testingtools.TestCase):
         self.assertClose(direction, flight.direction, error=0.1)
         if roll is not None:
             self.assertClose(roll, flight.roll, error=1)
+
+    def test_sas(self):
+        self.ap.sas = True
+        self.assertTrue(self.ap.sas)
+        self.ap.sas = False
+        self.assertFalse(self.ap.sas)
 
     def test_set_pitch(self):
         for pitch in range(-80, 80, 20):
@@ -132,7 +139,7 @@ class TestAutoPilot(testingtools.TestCase):
         self.assertClose(0, self.ap.error)
 
         self.set_direction(flight.prograde, roll=27)
-        self.vessel.control.sas = True
+        self.ap.sas = True
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = False
 
@@ -145,11 +152,17 @@ class TestAutoPilot(testingtools.TestCase):
         self.ap.set_direction(flight.normal)
         self.assertClose(90, self.ap.error, 1)
 
+        self.ap.set_direction(flight.anti_normal)
+        self.assertClose(90, self.ap.error, 1)
+
         self.ap.set_direction(flight.radial)
         self.assertClose(90, self.ap.error, 1)
 
         self.ap.set_direction(flight.anti_radial)
         self.assertClose(90, self.ap.error, 1)
+
+        for wheel in self.vessel.parts.reaction_wheels:
+            wheel.active = True
 
     def test_roll_error(self):
         self.ap.disengage()
@@ -158,7 +171,7 @@ class TestAutoPilot(testingtools.TestCase):
         set_roll = -57
         direction = self.vessel.direction(self.vessel.surface_reference_frame)
         self.set_direction(direction, roll=set_roll)
-        self.vessel.control.sas = True
+        self.ap.sas = True
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = False
 
@@ -172,7 +185,109 @@ class TestAutoPilot(testingtools.TestCase):
         self.conn.close()
         conn = krpc.connect()
         ap = conn.space_center.active_vessel.auto_pilot
-        self.assertTrue(math.isnan(ap.error))
+        self.assertEqual(ap.error, 0)
+
+class TestAutoPilotSAS(testingtools.TestCase):
+
+    def setUp(self):
+        load_save('autopilot')
+        self.conn = krpc.connect()
+        self.vessel = self.conn.space_center.active_vessel
+        self.ap = self.vessel.auto_pilot
+        self.sas_mode = self.conn.space_center.SASMode
+        self.speed_mode = self.conn.space_center.SpeedMode
+
+    def wait_for_autopilot(self):
+        while self.ap.error > 0.25:
+            time.sleep(0.25)
+
+            self.ap.sas = False
+
+    def test_sas_mode(self):
+        self.ap.sas = True
+        self.ap.sas_mode = self.sas_mode.stability_assist
+        self.vessel.control.add_node(self.conn.space_center.ut + 60, 100, 0, 0)
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.stability_assist)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.maneuver
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.maneuver)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.prograde
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.prograde)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.retrograde
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.retrograde)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.normal
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.normal)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.anti_normal
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_normal)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.radial
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.radial)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.anti_radial
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
+        time.sleep(0.25)
+        # No target set, should not change
+        # TODO: test with a target set
+        self.ap.sas_mode = self.sas_mode.target
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
+        time.sleep(0.25)
+        self.ap.sas_mode = self.sas_mode.anti_target
+        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
+
+    def test_speed_mode(self):
+        self.ap.speed_mode = self.speed_mode.orbit
+        self.assertEqual(self.ap.speed_mode, self.speed_mode.orbit)
+        time.sleep(0.25)
+        self.ap.speed_mode = self.speed_mode.surface
+        self.assertEqual(self.ap.speed_mode, self.speed_mode.surface)
+        time.sleep(0.25)
+        # No target set, should not change
+        # TODO: test with a target set
+        self.ap.speed_mode = self.speed_mode.target
+        self.assertEqual(self.ap.speed_mode, self.speed_mode.surface)
+        time.sleep(0.25)
+        self.ap.speed_mode = self.speed_mode.orbit
+        self.assertEqual(self.ap.speed_mode, self.speed_mode.orbit)
+
+    def set_direction(self, direction, roll=float('nan')):
+        self.ap.set_direction(direction, roll=roll)
+        self.wait_for_autopilot()
+        self.ap.disengage()
+
+    def test_sas_error(self):
+        flight = self.vessel.flight()
+        self.set_direction(flight.prograde, roll=27)
+        self.ap.sas = True
+        for wheel in self.vessel.parts.reaction_wheels:
+            wheel.active = False
+
+        self.ap.speed_mode = self.speed_mode.orbit
+
+        self.ap.sas_mode = self.sas_mode.prograde
+        self.assertClose(0, self.ap.error, 1)
+
+        self.ap.sas_mode = self.sas_mode.retrograde
+        self.assertClose(180, self.ap.error, 1)
+
+        self.ap.sas_mode = self.sas_mode.normal
+        self.assertClose(90, self.ap.error, 1)
+
+        self.ap.sas_mode = self.sas_mode.anti_normal
+        self.assertClose(90, self.ap.error, 1)
+
+        self.ap.sas_mode = self.sas_mode.radial
+        self.assertClose(90, self.ap.error, 1)
+
+        self.ap.sas_mode = self.sas_mode.anti_radial
+        self.assertClose(90, self.ap.error, 1)
+
+        self.ap.sas = False
+        for wheel in self.vessel.parts.reaction_wheels:
+            wheel.active = True
 
 if __name__ == "__main__":
     unittest.main()

@@ -13,8 +13,9 @@ class TestControl(testingtools.TestCase):
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
         cls.conn = krpc.connect(name='TestControl')
-        cls.control = cls.conn.space_center.active_vessel.control
         vessel = cls.conn.space_center.active_vessel
+        cls.control = vessel.control
+        cls.auto_pilot = vessel.auto_pilot
         cls.orbital_flight = vessel.flight(vessel.orbit.reference_frame)
 
     @classmethod
@@ -25,7 +26,7 @@ class TestControl(testingtools.TestCase):
         self.assertEqual(self.conn.space_center.active_vessel.control, self.control)
 
     def test_special_action_groups(self):
-        for name in ['sas', 'rcs', 'gear', 'lights', 'brakes', 'abort']:
+        for name in ['rcs', 'gear', 'lights', 'brakes', 'abort']:
             setattr(self.control, name, True)
             self.assertTrue(getattr(self.control, name))
             setattr(self.control, name, False)
@@ -52,7 +53,7 @@ class TestControl(testingtools.TestCase):
         testingtools.set_circular_orbit('Kerbin', 100000)
         self.conn.testing_tools.clear_rotation()
 
-        self.control.sas = False
+        self.auto_pilot.sas = False
         self.control.pitch = 1
         time.sleep(1)
         self.control.pitch = 0
@@ -67,7 +68,7 @@ class TestControl(testingtools.TestCase):
         testingtools.set_circular_orbit('Kerbin', 100000)
         self.conn.testing_tools.clear_rotation()
 
-        self.control.sas = False
+        self.auto_pilot.sas = False
         self.control.yaw = 1
         time.sleep(1)
         self.control.yaw = 0
@@ -85,7 +86,7 @@ class TestControl(testingtools.TestCase):
         pitch = self.orbital_flight.pitch
         heading = self.orbital_flight.heading
 
-        self.control.sas = False
+        self.auto_pilot.sas = False
         self.control.roll = 0.1
         time.sleep(1)
         self.control.roll = 0
