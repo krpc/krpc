@@ -29,6 +29,12 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public bool SAS {
+            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
+            set { vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
+        }
+
+        [KRPCProperty]
         public bool RCS {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.RCS, value); }
