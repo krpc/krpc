@@ -67,10 +67,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrawAddon.cs" />
+    <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
     <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
+    <Compile Include="ExtensionMethods\ITargetableExtensions.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
     <Compile Include="ExtensionMethods\PartStateExtensions.cs" />
+    <Compile Include="ExtensionMethods\SpeedDisplayModesExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
@@ -105,7 +108,5 @@
     <Compile Include="Services\Vessel.cs" />
     <Compile Include="Services\VesselResources.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
-    <Compile Include="ExtensionMethods\SpeedDisplayModesExtensions.cs" />
   </ItemGroup>
 </Project>
