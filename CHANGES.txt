@@ -1,5 +1,8 @@
 v0.1.7
 * SpaceCenter service changes:
+  * Change return types of Vessel.Mass, DryMass, CrossSectionalArea, SpecificImpulse to float
+  * Changes to thrust functions Vessel.Thrust, AvailableThrust and MaxThrust
+  * Changes to thrust functions Engine.Thrust, Engine.AvailableThrust and MaxThrust
   * Fix orientation of docking port reference frames
   * Rename Engine.Activated to Engine.Active to match other parts
 * Python client changes:

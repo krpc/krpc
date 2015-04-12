@@ -93,38 +93,71 @@ Vessel
 
       Gets the total mass of the vessel (including resources) in kg.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: DryMass
 
       Gets the total mass of the vessel (excluding resources) in kg.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: CrossSectionalArea
 
       Gets the cross sectional area of the vessel in :math:`m^3`. See
       :attr:`Flight.Drag`.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Calculated using `Ferram Aerospace Research`_ if it is
          installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
 
    .. attribute:: Thrust
 
-      Gets the total thrust of all active engines combined in Newtons.
+      Gets the total thrust currently being produced by the vessel's active
+      engines, in Newtons. This is computed by summing :attr:`Engine.Thrust` for
+      every active engine in the vessel.
 
-      :rtype: double
+      :rtype: float
 
-      .. note::
-         Assumes all active engines are pointing in the same direction.
+   .. attribute:: AvailableThrust
+
+      Gets the total available thrust that can be produced by the vessel's
+      active engines, in Newtons. This is computed by summing
+      :attr:`Engine.AvailableThrust` for every active engine in the vessel.
+
+      :rtype: float
+
+   .. attribute:: MaxThrust
+
+      Gets the total maximum thrust that can be produced by the vessel's active
+      engines, in Newtons. This is computed by summing :attr:`Engine.MaxThrust`
+      for every active engine.
+
+      :rtype: float
 
    .. attribute:: SpecificImpulse
 
-      Gets the combined specific impulse of all active engines in seconds.
+      Gets the combined specific impulse of all active engines, in seconds. This
+      is computed using the formula `described here
+      <http://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
 
-      :rtype: double
+      :rtype: float
+
+   .. attribute:: VacuumSpecificImpulse
+
+      Gets the combined vacuum specific impulse of all active engines, in
+      seconds. This is computed using the formula `described here
+      <http://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
+
+      :rtype: float
+
+   .. attribute:: KerbinSeaLevelSpecificImpulse
+
+      Gets the combined specific impulse of all active engines at sea level on
+      Kerbin, in seconds. This is computed using the formula `described here
+      <http://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
+
+      :rtype: float
 
    .. attribute:: ReferenceFrame
 

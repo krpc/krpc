@@ -7,6 +7,8 @@ using KRPCSpaceCenter.ExtensionMethods;
 using KRPCSpaceCenter.ExternalAPI;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -129,82 +131,74 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double Mass {
+        public float Mass {
             get {
                 return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.TotalMass ());
             }
         }
 
         [KRPCProperty]
-        public double DryMass {
+        public float DryMass {
             get {
                 return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.DryMass ());
             }
         }
 
         [KRPCProperty]
-        public double CrossSectionalArea {
+        public float CrossSectionalArea {
             get {
                 if (FAR.IsAvailable)
-                    return FAR.GetActiveControlSys_RefArea ();
+                    return (float)FAR.GetActiveControlSys_RefArea ();
                 else
                     return FlightGlobals.DragMultiplier * Mass;
             }
         }
 
-        //FIXME: just sums the max thrust of every engine, i.e. assumes all engines are pointing the same direction
         [KRPCProperty]
-        public double Thrust {
+        public float Thrust {
+            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust); }
+        }
+
+        [KRPCProperty]
+        public float AvailableThrust {
+            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.AvailableThrust); }
+        }
+
+        [KRPCProperty]
+        public float MaxThrust {
+            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust); }
+        }
+
+        [KRPCProperty]
+        public float SpecificImpulse {
             get {
-                double thrust = 0;
-                foreach (var part in InternalVessel.parts) {
-                    foreach (global::PartModule module in part.Modules) {
-                        if (!module.isEnabled)
-                            continue;
-                        var engine = module as ModuleEngines;
-                        if (engine != null) {
-                            if (!engine.EngineIgnited || engine.getFlameoutState)
-                                continue;
-                            thrust += engine.maxThrust;
-                        }
-                        var engineFx = module as ModuleEnginesFX;
-                        if (engineFx != null) {
-                            if (!engineFx.EngineIgnited || engineFx.getFlameoutState)
-                                continue;
-                            thrust += engineFx.maxThrust;
-                        }
-                    }
-                }
-                return thrust * 1000d;
+                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust);
+                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust / e.SpecificImpulse);
+                if (fuelConsumption > 0f)
+                    return thrust / fuelConsumption;
+                return 0f;
             }
         }
 
         [KRPCProperty]
-        public double SpecificImpulse {
+        public float VacuumSpecificImpulse {
             get {
-                double totalThrust = 0;
-                double totalFlowRate = 0;
-                foreach (var part in InternalVessel.parts) {
-                    foreach (global::PartModule module in part.Modules) {
-                        if (!module.isEnabled)
-                            continue;
-                        var engine = module as ModuleEngines;
-                        if (engine != null) {
-                            if (!engine.EngineIgnited || engine.getFlameoutState)
-                                continue;
-                            totalThrust += engine.maxThrust;
-                            totalFlowRate += (engine.maxThrust / engine.realIsp);
-                        }
-                        var engineFx = module as ModuleEnginesFX;
-                        if (engineFx != null) {
-                            if (!engineFx.EngineIgnited || engineFx.getFlameoutState)
-                                continue;
-                            totalThrust += engineFx.maxThrust;
-                            totalFlowRate += (engineFx.maxThrust / engineFx.realIsp);
-                        }
-                    }
-                }
-                return totalThrust / totalFlowRate;
+                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust);
+                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust / e.VacuumSpecificImpulse);
+                if (fuelConsumption > 0f)
+                    return thrust / fuelConsumption;
+                return 0f;
+            }
+        }
+
+        [KRPCProperty]
+        public float KerbinSeaLevelSpecificImpulse {
+            get {
+                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust);
+                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust / e.KerbinSeaLevelSpecificImpulse);
+                if (fuelConsumption > 0f)
+                    return thrust / fuelConsumption;
+                return 0f;
             }
         }
 

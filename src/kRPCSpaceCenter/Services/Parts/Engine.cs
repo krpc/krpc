@@ -58,6 +58,21 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
+        public float Thrust {
+            get { return engine != null ? engine.finalThrust * 1000f : engineFx.finalThrust * 1000f; }
+        }
+
+        [KRPCProperty]
+        public float AvailableThrust {
+            get { return (engine != null ? engine.maxThrust * (engine.thrustPercentage / 100f) : engineFx.maxThrust * (engineFx.thrustPercentage / 100f)) * 1000f; }
+        }
+
+        [KRPCProperty]
+        public float MaxThrust {
+            get { return (engine != null ? engine.maxThrust : engineFx.maxThrust) * 1000f; }
+        }
+
+        [KRPCProperty]
         public float ThrustLimit {
             get {
                 return (engine != null ? engine.thrustPercentage : engineFx.thrustPercentage) / 100f;
@@ -69,16 +84,6 @@ namespace KRPCSpaceCenter.Services.Parts
                 else
                     engineFx.thrustPercentage = value;
             }
-        }
-
-        [KRPCProperty]
-        public float Thrust {
-            get { return engine != null ? engine.finalThrust * 1000f : engineFx.finalThrust * 1000f; }
-        }
-
-        [KRPCProperty]
-        public float MaxThrust {
-            get { return engine != null ? engine.maxThrust * 1000f : engineFx.maxThrust * 1000f; }
         }
 
         [KRPCProperty]

@@ -20,19 +20,20 @@ class TestPartsEngine(testingtools.TestCase):
 
     def set_idle(self, engine):
         self.vessel.control.throttle = 0
-        engine.activated = False
+        engine.active = False
         time.sleep(0.5)
 
     def set_throttle(self, engine, value):
         self.vessel.control.throttle = value
-        engine.activated = True
+        engine.active = True
         time.sleep(0.5)
 
     def check_engine_idle(self, engine, thrust, vac_isp, msl_isp, propellants, srb=False, gimballed=False):
-        self.assertFalse(engine.activated)
-        self.assertEqual(engine.thrust_limit, 1)
-        self.assertEqual(engine.max_thrust, thrust)
+        self.assertFalse(engine.active)
         self.assertEqual(engine.thrust, 0)
+        self.assertEqual(engine.available_thrust, thrust)
+        self.assertEqual(engine.max_thrust, thrust)
+        self.assertEqual(engine.thrust_limit, 1)
         self.assertEqual(engine.specific_impulse, 0)
         self.assertEqual(engine.vacuum_specific_impulse, vac_isp)
         self.assertEqual(engine.kerbin_sea_level_specific_impulse, msl_isp)
@@ -46,23 +47,20 @@ class TestPartsEngine(testingtools.TestCase):
         self.assertEqual(engine.gimballed, gimballed)
         if not gimballed:
             self.assertEqual(engine.gimbal_range, 0)
-            self.assertEqual(engine.gimbal_speed, 0)
-            self.assertEqual(engine.gimbal_pitch, 0)
-            self.assertEqual(engine.gimbal_yaw, 0)
-            self.assertEqual(engine.gimbal_roll, 0)
             self.assertFalse(engine.gimbal_locked)
 
     def check_engine_throttle(self, engine, throttle, thrust, isp, vac_isp, msl_isp, propellants, srb=False, jet=False, gimballed=False):
         if jet:
             time.sleep(10)
-        self.assertTrue(engine.activated)
-        self.assertEqual(engine.thrust_limit, 1)
-        self.assertEqual(engine.max_thrust, thrust)
+        self.assertTrue(engine.active)
         if not jet:
             self.assertClose(engine.thrust, thrust*throttle)
         else:
             self.assertGreater(engine.thrust, thrust*throttle*0.66)
             self.assertGreater(thrust*throttle*1.33, engine.thrust)
+        self.assertEqual(engine.available_thrust, thrust)
+        self.assertEqual(engine.max_thrust, thrust)
+        self.assertEqual(engine.thrust_limit, 1)
         self.assertClose(engine.specific_impulse, isp, 1)
         self.assertEqual(engine.vacuum_specific_impulse, vac_isp)
         self.assertEqual(engine.kerbin_sea_level_specific_impulse, msl_isp)
@@ -76,11 +74,11 @@ class TestPartsEngine(testingtools.TestCase):
         self.assertEqual(engine.gimballed, gimballed)
         if not gimballed:
             self.assertEqual(engine.gimbal_range, 0)
-            self.assertEqual(engine.gimbal_speed, 0)
-            self.assertEqual(engine.gimbal_pitch, 0)
-            self.assertEqual(engine.gimbal_yaw, 0)
-            self.assertEqual(engine.gimbal_roll, 0)
             self.assertFalse(engine.gimbal_locked)
+
+    def test_test(self):
+        engine = filter(lambda e: e.part.title == 'LV-T30 Liquid Fuel Engine', self.parts.engines)[0]
+        self.set_throttle(engine, 1)
 
     def test_lfo_engine(self):
         engine = filter(lambda e: e.part.title == 'LV-T30 Liquid Fuel Engine', self.parts.engines)[0]
@@ -105,10 +103,6 @@ class TestPartsEngine(testingtools.TestCase):
         propellants = ['LiquidFuel', 'Oxidizer']
         def check_gimbal():
             self.assertEqual(engine.gimbal_range, 1)
-            self.assertEqual(engine.gimbal_speed, 10)
-            self.assertEqual(engine.gimbal_pitch, 0)
-            self.assertEqual(engine.gimbal_yaw, 0)
-            self.assertEqual(engine.gimbal_roll, 0)
             self.assertFalse(engine.gimbal_locked)
         self.set_idle(engine)
         self.check_engine_idle(engine, thrust, vac_isp, msl_isp, propellants, gimballed=True)
@@ -187,8 +181,8 @@ class TestPartsEngine(testingtools.TestCase):
         self.check_engine_idle(engine, thrust, vac_isp, msl_isp, propellants, srb=True)
         self.set_throttle(engine, 1)
         self.check_engine_throttle(engine, 1, thrust, isp, vac_isp, msl_isp, propellants, srb=True)
-        engine.activated = False
-        self.assertEqual(engine.activated, True)
+        engine.active = False
+        self.assertEqual(engine.active, True)
         self.set_idle(engine)
 
     def test_thrust_limit(self):
@@ -196,17 +190,24 @@ class TestPartsEngine(testingtools.TestCase):
         thrust = 215000
 
         engine.thrust_limit = 1
-        self.assertEqual(engine.thrust_limit, 1)
         self.vessel.control.throttle = 1
-        engine.activated = True
+        self.assertEqual(engine.thrust_limit, 1)
+        self.assertEqual(engine.thrust, 0)
+        self.assertEqual(engine.available_thrust, thrust)
+        self.assertEqual(engine.max_thrust, thrust)
+        engine.active = True
 
-        for thrust_limit in [1,0.8,0.333,0.1,0]:
-            engine.thrust_limit = thrust_limit
-            self.assertClose(engine.thrust_limit, thrust_limit, 1)
-            time.sleep(0.5)
-            self.assertClose(engine.thrust, thrust_limit * thrust, 1)
+        for throttle in [1,0.666,0.2,0]:
+            self.vessel.control.throttle = throttle
+            for thrust_limit in [1,0.8,0.333,0.1,0]:
+                engine.thrust_limit = thrust_limit
+                self.assertClose(engine.thrust_limit, thrust_limit, 1)
+                time.sleep(0.5)
+                self.assertClose(engine.thrust, throttle * thrust_limit * thrust, 1)
+                self.assertClose(engine.available_thrust, thrust_limit * thrust, 1)
+                self.assertClose(engine.max_thrust, thrust, 1)
 
-        engine.activated = False
+        engine.active = False
         engine.thrust_limit = 1
         self.assertEqual(engine.thrust_limit, 1)
 

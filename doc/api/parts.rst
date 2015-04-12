@@ -764,37 +764,49 @@ Engine
 
    .. attribute:: Active
 
-      Gets or sets whether the engine is active. Note that setting this
-      attribute may have no effect, depending on :attr:`Engine.CanShutdown` and
+      Gets or sets whether the engine is active. Setting this attribute may have
+      no effect, depending on :attr:`Engine.CanShutdown` and
       :attr:`Engine.CanRestart`.
 
       :rtype: bool
 
-   .. attribute:: ThrustLimit
-
-      Gets or sets the thrust limit of the engine. A value between 0 and 1.
-      Note that setting this attribute may have no effect, for example the
-      thrust limit for a solid rocket booster cannot be changed in flight
-
-      :rtype: float
-
    .. attribute:: Thrust
 
       Gets the current amount of thrust being produced by the engine, in
-      Newtons.
+      Newtons. Returns zero if the engine is not active.
+
+      :rtype: float
+
+   .. attribute:: AvailableThrust
+
+      Gets the maximum available amount of thrust that can be produced by the
+      engine, in Newtons. This takes :attr:`Engine.ThrustLimit` into account,
+      and is the amount of thrust produced by the engine when activated and the
+      main throttle is set to 100%.
 
       :rtype: float
 
    .. attribute:: MaxThrust
 
       Gets the maximum amount of thrust that can be produced by the engine, in
-      Newtons. Ignores the :attr:`Engine.ThrustLimit` for the engine.
+      Newtons. This is the amount of thrust produced by the engine when
+      activated, :attr:`Engine.ThrustLimit` is set to 100% and the main vessel's
+      throttle is set to 100%.
+
+      :rtype: float
+
+   .. attribute:: ThrustLimit
+
+      Gets or sets the thrust limiter of the engine. A value between 0
+      and 1. Setting this attribute may have no effect, for example the thrust
+      limit for a solid rocket booster cannot be changed in flight.
 
       :rtype: float
 
    .. attribute:: SpecificImpulse
 
-      Gets the current specific impulse of the engine, in seconds.
+      Gets the current specific impulse of the engine, in seconds. Returns zero
+      if the engine is not active.
 
       :rtype: float
 
