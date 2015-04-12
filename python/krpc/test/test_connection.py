@@ -57,7 +57,9 @@ class TestConnection(unittest.TestCase):
             pass
 
     def connect(self):
-        return Connection('localhost', port)
+        conn = Connection('localhost', port)
+        conn.connect()
+        return conn
 
     def test_send_receive(self):
         conn = self.connect()
