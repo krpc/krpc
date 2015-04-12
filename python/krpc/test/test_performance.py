@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 import timeit
 from krpc.test.servertestcase import ServerTestCase

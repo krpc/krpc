@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 import time
 import krpc.test.Test as TestSchema
@@ -119,7 +117,6 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertEqual(stream_id, s1._stream_id)
         time.sleep(0.1)
         self.assertEqual('42', s1())
-
 
 if __name__ == '__main__':
     unittest.main()

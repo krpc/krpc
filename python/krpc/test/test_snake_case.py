@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 from krpc.service import _to_snake_case as t
 
@@ -30,7 +28,6 @@ class TestSnakeCase(unittest.TestCase):
         self.assertEqual('foobar', t('foobar'))
         self.assertEqual('foo__bar', t('foo_bar'))
         self.assertEqual('_foobar', t('_foobar'))
-
 
 if __name__ == '__main__':
     unittest.main()

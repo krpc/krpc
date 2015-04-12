@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 from krpc.encoder import _Encoder as Encoder
 from krpc.types import _Types as Types

@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 from krpc.decoder import _Decoder as Decoder
 from krpc.types import _Types as Types

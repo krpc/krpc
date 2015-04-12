@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 from krpc.attributes import _Attributes as Attributes
 

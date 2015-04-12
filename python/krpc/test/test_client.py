@@ -1,7 +1,4 @@
-#!/usr/bin/env python2
-
 import unittest
-import binascii
 import krpc
 import krpc.test.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
@@ -363,7 +360,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
         for string in strings:
             self.conn.test_service.string_property = string
             self.assertEqual(string, self.conn.test_service.string_property)
-
 
 if __name__ == '__main__':
     unittest.main()

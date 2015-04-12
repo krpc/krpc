@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 import sys
 from krpc.encoder import _Encoder as Encoder
@@ -155,7 +153,6 @@ class TestEncodeDecode(unittest.TestCase):
     def test_encode_tuple(self):
         self._run_test_encode_value('Tuple(int32)', [((1,), '0a0101')])
         self._run_test_encode_value('Tuple(int32,string,float)', [((1,'jeb',1.2), '0a01010a04036a65620a049a99993f')])
-
 
 if __name__ == '__main__':
     unittest.main()

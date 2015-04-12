@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 from krpc.test.servertestcase import ServerTestCase
 
@@ -55,7 +53,6 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         obj3 = self.conn.test_service.create_test_object('bob')
         self.assertEqual(obj1._object_id, obj2._object_id)
         self.assertNotEqual(obj1._object_id, obj3._object_id)
-
 
 if __name__ == '__main__':
     unittest.main()

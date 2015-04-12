@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 import threading
 import krpc.test.Test as TestSchema
