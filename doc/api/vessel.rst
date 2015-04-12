@@ -221,14 +221,18 @@ Vessel
       * The axes rotate with the north and up directions on the surface of the
         body.
 
-      * The x-axis points upwards, normal to the body being orbited (from the
-        center of the body towards the center of mass of the vessel).
+      * The x-axis points in the `zenith <http://en.wikipedia.org/wiki/Zenith>`_
+        direction (upwards, normal to the body being orbited, from the center of
+        the body towards the center of mass of the vessel).
 
-      * The y-axis points north, and tangential to the surface of the body (the
-        direction in which a compass would point when on the surface)
+      * The y-axis points northwards towards the `astronomical horizon
+        <http://en.wikipedia.org/wiki/Horizon>`_ (north, and tangential to the
+        surface of the body -- the direction in which a compass would point when
+        on the surface).
 
-      * The z-axis points east, and tangential to the surface of the body (east on
-        a compass when on the surface).
+      * The z-axis points eastwards towards the `astronomical horizon
+        <http://en.wikipedia.org/wiki/Horizon>`_ (east, and tangential to the
+        surface of the body -- east on a compass when on the surface).
 
       :rtype: :class:`ReferenceFrame`
 
@@ -249,9 +253,13 @@ Vessel
 
       * The axes rotate with the vessel's velocity vector.
 
-      * The y-axis points in the direction of the vessel's velocity vector.
+      * The y-axis points in the direction of the vessel's velocity vector,
+        relative to the surface of the body being orbited.
 
-      * The z-axis points in a the plane of the horizon.
+      * The z-axis is in the plane of the `astronomical horizon
+        <http://en.wikipedia.org/wiki/Horizon>`_.
+
+      * The x-axis is orthogonal to the other two axes.
 
       :rtype: :class:`ReferenceFrame`
 
