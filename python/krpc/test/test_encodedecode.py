@@ -1,23 +1,23 @@
 #!/usr/bin/env python2
 
 import unittest
-import binascii
 import sys
 from krpc.encoder import _Encoder as Encoder
 from krpc.decoder import _Decoder as Decoder
 from krpc.types import _Types as Types
 import krpc.schema.KRPC
+from krpc.platform import hexlify, unhexlify
 
 class TestEncodeDecode(unittest.TestCase):
 
     def _run_test_encode_value(self, typ, cases):
         for decoded, encoded in cases:
             data = Encoder.encode(decoded, Types().as_type(typ))
-            self.assertEqual(encoded.encode(), binascii.hexlify(data))
+            self.assertEqual(encoded, hexlify(data))
 
     def _run_test_decode_value(self, typ, cases):
         for decoded, encoded in cases:
-            value = Decoder.decode(binascii.unhexlify(encoded), Types().as_type(typ))
+            value = Decoder.decode(unhexlify(encoded), Types().as_type(typ))
             if typ in ('float','double'):
                 self.assertEqual(str(decoded)[0:8], str(value)[0:8])
             else:
@@ -112,7 +112,9 @@ class TestEncodeDecode(unittest.TestCase):
         cases = [
             ('', '00'),
             ('testing', '0774657374696e67'),
-            ('One small step for Kerbal-kind!', '1f4f6e6520736d616c6c207374657020666f72204b657262616c2d6b696e6421')
+            ('One small step for Kerbal-kind!', '1f4f6e6520736d616c6c207374657020666f72204b657262616c2d6b696e6421'),
+            (b'\xe2\x84\xa2'.decode('utf-8'), '03e284a2'),
+            (b'Mystery Goo\xe2\x84\xa2 Containment Unit'.decode('utf-8'), '1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974')
         ]
         self._run_test_encode_value('string', cases)
         self._run_test_decode_value('string', cases)

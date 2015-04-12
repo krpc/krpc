@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 
 import unittest
-import binascii
 from krpc.test.servertestcase import ServerTestCase
 
 class TestObjects(ServerTestCase, unittest.TestCase):

@@ -1,7 +1,7 @@
 # TODO: avoid using internals
 from google.protobuf.internal import encoder as protobuf_encoder
 from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
-
+import platform
 
 class _Encoder(object):
     """ Routines for encoding messages and values in the protocol buffer serialization format """
@@ -143,13 +143,9 @@ class _ValueEncoder(object):
 
     @classmethod
     def encode_string(cls, value):
-        data = []
-        def write(x):
-            data.append(x)
-        encoded = value.encode('utf-8')
-        protobuf_encoder._VarintEncoder()(write, len(encoded))
-        write(encoded)
-        return b''.join(data)
+        size = cls._encode_varint(platform.bytelength(value))
+        data = value.encode('utf-8')
+        return size + data
 
     @classmethod
     def encode_bytes(cls, value):
