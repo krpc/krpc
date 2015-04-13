@@ -91,7 +91,7 @@ Control
 
       :type: float
 
-   .. attribute:: Sideways
+   .. attribute:: Right
 
       Gets or sets the state of the sideways translational control (equivalent
       to the *j* and *l* keys) [#control-reset]_. A value between -1 and 1.
@@ -151,7 +151,7 @@ Control
 
       :ptype group: uint16
 
-   .. method:: AddNode (ut, [prograde = 0], [normal = 0], [radial = 0])
+   .. method:: AddNode (UT, [prograde = 0], [normal = 0], [radial = 0])
 
       Creates a maneuver node at the given universal time, and returns a
       :class:`Node` object that can be used to modify it. Optionally sets the

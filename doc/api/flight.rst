@@ -123,21 +123,39 @@ Flight
 
       :rtype: double
 
-   .. attribute:: prograde
+   .. attribute:: Prograde
 
       Gets the unit direction vector pointing in the prograde direction.
 
       :rtype: :class:`Vector3`
 
-   .. attribute:: normal
+   .. attribute:: Retrograde
+
+      Gets the unit direction vector pointing in the retrograde direction.
+
+      :rtype: :class:`Vector3`
+
+   .. attribute:: Normal
 
       Gets a unit direction vector pointing in the normal direction.
 
       :rtype: :class:`Vector3`
 
-   .. attribute:: radial
+   .. attribute:: AntiNormal
 
-      Gets a unit direction vector pointing in the radial direction direction.
+      Gets a unit direction vector pointing in the anti-normal direction.
+
+      :rtype: :class:`Vector3`
+
+   .. attribute:: Radial
+
+      Gets a unit direction vector pointing in the radial direction.
+
+      :rtype: :class:`Vector3`
+
+   .. attribute:: AntiRadial
+
+      Gets a unit direction vector pointing in the anti-radial direction.
 
       :rtype: :class:`Vector3`
 

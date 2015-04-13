@@ -1,7 +1,7 @@
-Resources
-=========
+Vessel Resources
+================
 
-.. class:: Resources
+.. class:: VesselResources
 
    Created by calling :attr:`Vessel.Resources`.
 

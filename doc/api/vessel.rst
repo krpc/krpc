@@ -68,12 +68,12 @@ Vessel
 
    .. attribute:: Resources
 
-      Gets a :class:`Resources` object, that can used to get information about, and
-      manage, the vessels resources.
+      Gets a :class:`VesselResources` object, that can used to get information
+      about, and manage, the vessels resources.
 
-      :rtype: :class:`Resources`
+      :rtype: :class:`VesselResources`
 
-   .. attribute:: Vessel.Parts
+   .. attribute:: Parts
 
       Gets a :class:`Parts` object, that can used to interact with the parts
       that make up this vessel.

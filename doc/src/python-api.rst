@@ -11,7 +11,7 @@ Python API
    python-api/flight
    python-api/orbit
    python-api/control
-   python-api/resources
+   python-api/vessel-resources
    python-api/parts
    python-api/node
    python-api/comms

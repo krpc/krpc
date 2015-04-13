@@ -56,7 +56,10 @@ clean-images:
 
 .PHONY: api python-api
 
-api: python-api
+api: check-api python-api
+
+check-api:
+	./check-api.py $(API_DIR) services.yaml
 
 python-api:
 	./build-api.py $(API_DIR) $(PYTHON_API_DIR)

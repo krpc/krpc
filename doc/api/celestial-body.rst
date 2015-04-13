@@ -83,7 +83,7 @@ CelestialBody
 
       .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
-   .. attribute:: AtmopshereDensity
+   .. attribute:: AtmosphereDensity
 
       Gets the density of the atmosphere at sea level, in :math:`kg/m^3`. Returns 0
       if the body has no atmosphere.
@@ -111,7 +111,7 @@ CelestialBody
 
       .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
-   .. method:: AtmopsherePressureAt (altitude)
+   .. method:: AtmospherePressureAt (altitude)
 
       Returns the atmospheric pressure, in Pascals, at the given altitude above sea
       level, in meters. Returns 0 if the body has no atmosphere.
@@ -121,7 +121,7 @@ CelestialBody
 
       .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
-   .. method:: AtmopshereDensityAt (altitude)
+   .. method:: AtmosphereDensityAt (altitude)
 
       Returns the density of the atmosphere, in :math:`kg/m^3`, at the given
       altitude above sea level, in meters. Returns 0 if the body has no atmosphere.

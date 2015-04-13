@@ -40,7 +40,7 @@ Comms
 
       :rtype: double
 
-   .. attribute:: SignalDelayToVessel (other)
+   .. method:: SignalDelayToVessel (other)
 
       Gets the signal delay between the current vessel and another vessel, in
       seconds.

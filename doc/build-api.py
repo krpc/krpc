@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Simple script to build python API docs from the generic API docs
+# Build Python API docs from generic API docs
 
 import sys
 import os
@@ -13,17 +13,14 @@ _regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
 _regex_single_uppercase = re.compile(r'([a-z0-9])([A-Z])')
 _regex_underscores = re.compile(r'(.)_')
 
-def snake_case(camel_case):
-    result = re.sub(_regex_underscores, r'\1__', camel_case)
-    result = re.sub(_regex_single_uppercase, r'\1_\2', result)
-    return re.sub(_regex_multi_uppercase, r'\1_\2', result).lower()
-
-def snake_case_name(name):
+def snake_case(name):
     if '.' in name:
         cls,name = name.split('.')
         return cls+'.'+snake_case(name)
     else:
-        return snake_case(name)
+        result = re.sub(_regex_underscores, r'\1__', name)
+        result = re.sub(_regex_single_uppercase, r'\1_\2', result)
+        return re.sub(_regex_multi_uppercase, r'\1_\2', result).lower()
 
 def convert_type(name):
     typs = {
@@ -37,57 +34,87 @@ def convert_type(name):
     else:
         return name
 
-def parse_file(path):
+def process_directive(line):
+    global in_class
+    m = re.match('^(\s*)\.\. ([a-z]+):: (.+)$', line)
+    if m is not None:
+        indent = m.group(1)
+        typ = m.group(2)
+        signature = m.group(3)
+        if typ == 'attribute' or typ == 'data':
+            line = '%s.. %s:: %s' % (indent, typ, snake_case(signature))
+        if typ == 'method':
+            m = re.match('^(.+) \((.*)\)$', signature)
+            name = m.group(1)
+            params = m.group(2)
+            name = snake_case(name)
+            params = params.split(',')
+            optional = False
+            for i in range(len(params)):
+                param = params[i].strip()
+                if '=' in param:
+                    optional = True
+                    param,default = param.split('=')
+                    param = param.strip()
+                    default = default.strip()
+                    param = snake_case(param)+'='+snake_case(default)
+                    if not param.startswith('[') or not param.endswith(']'):
+                        raise RuntimeError('Optional parameter not enclosed in [ ... ]')
+                else:
+                    param = snake_case(param)
+                params[i] = param
+            line = '%s.. %s:: %s (%s)' % (indent, typ, name, ', '.join(params))
+    return line
+
+def process_inline(line):
+    for inline in [':meth:', ':attr:']:
+       if inline in line:
+            def repl(m):
+                return inline+'`'+snake_case(m.group(1))+'`'
+            line = re.sub(inline+'`([^`]+)`', repl, line)
+    return line
+
+def process_inline_types_and_values(line):
+    replacements = {
+        '``null``': '``None``',
+        '``true``': '``True``',
+        '``false``': '``False``',
+        '``string``': '``str``',
+        '``double``': '``float``',
+        '``int32``': '``int``',
+        ':class:`Dictionary`': '``dict``',
+        ':class:`List`': '``list``'
+    }
+    for x,y in replacements.items():
+        line = line.replace(x, y)
+    return line
+
+def process_parameters(line):
+    def repl(m):
+        return ':param '+convert_type(m.group(1))+' '+snake_case(m.group(2))+':'
+    return re.sub(':param ([^ ]+) (.+):', repl, line)
+
+def process_inline_parameters(line):
+    def repl(m):
+        return m.group(1)+'*'+snake_case(m.group(2))+'*'+m.group(3)
+    return re.sub('([^\*])\*([^\*]+)\*([^\*])', repl, line)
+
+def process_file(path):
     with open(path, 'r') as f:
         lines = []
-        for line in f.readlines():
-            m = re.match('^(\s+)\.\. ([a-z]+):: (.+)$', line)
-            if m is not None:
-                indent = m.group(1)
-                typ = m.group(2)
-                signature = m.group(3)
-                if typ == 'attribute' or typ == 'data':
-                    line = '%s.. %s:: %s' % (indent, typ, snake_case_name(signature))
-                if typ == 'method':
-                    m = re.match('^(.+) \((.*)\)$', signature)
-                    name = m.group(1)
-                    params = m.group(2)
-                    name = snake_case_name(name)
-                    params = params.split(',')
-                    for i in range(len(params)):
-                        param = params[i]
-                        if '=' in param:
-                            param,default = param.split('=')
-                            param = param.strip()
-                            default = default.strip()
-                            if '.' in default:
-                                default = snake_case_name(default)
-                            param = snake_case(param)+' = '+default
-                        else:
-                            param = snake_case(param)
-                        params[i] = param
-                    line = '%s.. %s:: %s (%s)' % (indent, typ, name, ', '.join(params))
-            inlines = [':meth:', ':attr:']
-            for inline in inlines:
-                if inline in line:
-                    def repl(m):
-                        return inline+'`'+snake_case_name(m.group(1))+'`'
-                    line = re.sub(inline+'`([^`]+)`', repl, line)
-            def repl(m):
-                return ':param '+convert_type(m.group(1))+' '+snake_case_name(m.group(2))+':'
-            line = re.sub(':param ([^ ]+) (.+):', repl, line)
-            def repl2(m):
-                return m.group(1)+'*'+snake_case(m.group(2))+'*'+m.group(3)
-            line = re.sub('([^\*])\*([^\*]+)\*([^\*])', repl2, line)
-            line = line.replace('``null``', '``None``')
-            line = line.replace('``true``', '``True``')
-            line = line.replace('``false``', '``False``')
-            line = line.replace('``string``', '``str``')
-            line = line.replace('``double``', '``float``')
-            line = line.replace('``int32``', '``int``')
-            line = line.replace(':class:`Dictionary`', '``dict``')
-            line = line.replace(':class:`List`', '``list``')
-            lines.append(line.rstrip())
+        for lineno,line in enumerate(f.readlines()):
+            try:
+                line = process_directive(line)
+                line = process_inline(line)
+                line = process_parameters(line)
+                line = process_inline_parameters(line)
+                line = process_inline_types_and_values(line)
+                lines.append(line.rstrip())
+            except Exception, e:
+                print 'Error on line', lineno, 'in', path
+                print line
+                print e
+                exit(1)
         return '\n'.join(lines)+'\n'
 
 for dirname,dirnames,filenames in os.walk(src):
@@ -95,7 +122,7 @@ for dirname,dirnames,filenames in os.walk(src):
         src_path = os.path.join(dirname, filename)
         dst_path = os.path.join(dst, src_path[len(src)+1:])
         try:
-            content = parse_file(src_path)
+            content = process_file(src_path)
         except IOError:
             continue
 

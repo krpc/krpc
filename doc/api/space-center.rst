@@ -62,7 +62,7 @@ SpaceCenter
 
       :rtype: double
 
-   .. method:: WarpTo (ut, [maxRate = 100000])
+   .. method:: WarpTo (UT, [maxRate = 100000])
 
       Uses time acceleration to warp to the specified time. Automatically uses
       regular or physical time warp as appropriate. For example, physical time warp
@@ -129,7 +129,7 @@ SpaceCenter
 
       :rtype: bool
 
-   .. method:: DrawDirection (direction, referenceFrame, color, [length])
+   .. method:: DrawDirection (direction, referenceFrame, color, [length = 10])
 
       Draw a direction vector on the active vessel.
 

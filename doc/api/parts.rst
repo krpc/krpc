@@ -96,13 +96,13 @@ Parts
 
       :rtype: :class:`List` ( :class:`DockingPort` )
 
-   .. method:: DockingPortWithName (portName)
+   .. method:: DockingPortWithName (name)
 
       Gets the first docking port in the vessel with the given port name, as
       returned by :attr:`DockingPort.Name`. Returns ``null`` if there are no
       such docking ports.
 
-      :param string portName:
+      :param string name:
       :rtype: :class:`DockingPort`
 
    .. attribute:: Engines
@@ -1013,6 +1013,12 @@ Parachute
 
       Deploys the parachute. This has no effect if the parachute has already
       been deployed.
+
+   .. attribute:: Deployed
+
+      Gets whether the parachute has been deployed.
+
+      :rtype: bool
 
    .. attribute:: State
 
