@@ -37,7 +37,10 @@ def documented_class(name):
     pass
 
 def documented_method(name, params):
-    cls,meth = name.split('.')
+    try:
+        cls,meth = name.split('.')
+    except ValueError:
+        raise RuntimeError('Invalid class method name %s' % name)
     proc = cls+'_'+meth
     if proc not in not_documented:
         raise RuntimeError('%s is documented, but does not exist' % name)
@@ -53,7 +56,10 @@ def documented_property(name):
         del not_documented[set_proc]
 
 def documented_class_property(name):
-    cls,prop = name.split('.')
+    try:
+        cls,prop = name.split('.')
+    except ValueError:
+        raise RuntimeError('Invalid class property name %s' % name)
     get_proc = cls+'_get_'+prop
     set_proc = cls+'_set_'+prop
     if get_proc in not_documented:
