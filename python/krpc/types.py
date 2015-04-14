@@ -17,7 +17,32 @@ PROTOBUF_TO_PYTHON_VALUE_TYPE = {
     'string': str,
     'bytes': bytes
 }
+PROTOBUF_TO_MESSAGE_TYPE = {}
+PROTOBUF_TO_ENUM_TYPE = {}
 
+_packages_loaded = set()
+_package_search_paths = ['krpc.schema']
+
+def add_search_path(path):
+    """ Add a python package to the list of search locations for finding Protocol Buffer message and enum types """
+    _package_search_paths.append(path)
+
+def _load_types(package):
+    """ Load all message and enum types from the given package,
+        and populate PROTOBUF_TO_MESSAGE_TYPE and PROTOBUF_TO_ENUM_TYPE """
+    if package in _packages_loaded:
+        return
+    _packages_loaded.add(package)
+    for path in _package_search_paths:
+        try:
+            module = importlib.import_module(path + '.' + package)
+            if hasattr(module, 'DESCRIPTOR'):
+               for name in module.DESCRIPTOR.message_types_by_name.keys():
+                   PROTOBUF_TO_MESSAGE_TYPE[package+'.'+name] = getattr(module, name)
+               for name in module.DESCRIPTOR.enum_types_by_name.keys():
+                   PROTOBUF_TO_ENUM_TYPE[package+'.'+name] = getattr(module, name)
+        except (KeyError, ImportError, AttributeError, ValueError):
+            pass
 
 class _Types(object):
     """ For handling conversion between protocol buffer types and
@@ -32,44 +57,28 @@ class _Types(object):
             return self._types[type_string]
         if type_string in PROTOBUF_VALUE_TYPES:
             typ = _ValueType(type_string)
-        elif type_string.startswith('Class('):
+        elif type_string.startswith('Class(') or type_string == 'Class':
             typ = _ClassType(type_string)
-        elif type_string.startswith('List('):
+        elif type_string.startswith('List(') or type_string == 'List':
             typ = _ListType(type_string, self)
-        elif type_string.startswith('Dictionary('):
+        elif type_string.startswith('Dictionary(') or type_string == 'Dictionary':
             typ = _DictionaryType(type_string, self)
-        elif type_string.startswith('Set('):
+        elif type_string.startswith('Set(') or type_string == 'Set':
             typ = _SetType(type_string, self)
-        elif type_string.startswith('Tuple('):
+        elif type_string.startswith('Tuple(') or type_string == 'Tuple':
             typ = _TupleType(type_string, self)
         else:
             if not re.match(r'^[A-Za-z0-9_\.]+$', type_string):
                 raise ValueError('\'%s\' is not a valid type string' % type_string)
-            typ = None
-            package, _, message = type_string.rpartition('.')
-            # TODO: Check it's a valid enum type
-            # NOTE: Disabled as it requires the protobuf .py file to be in the
-            #       krpc.schema package which isn't the case for 3rd party services
-            try:
-                if package != '':
-                    module = importlib.import_module('krpc.schema.' + package)
-                    if hasattr(module, message):
-                        typ = _MessageType(type_string)
-                #else:
-                #    # TODO: avoid using protobuf internals
-                #    import google.protobuf
-                #    desc = google.protobuf.descriptor_pb2.FileDescriptorProto()
-                #    getattr(module.schema, package).DESCRIPTOR.CopyToProto(desc)
-                #    for enum in desc.enum_type:
-                #        if message == enum.name:
-                #           typ = _EnumType(type_string)
-                #           break
-                #    typ = _EnumType(type_string)
-                if typ == None:
-                    raise ValueError
-            except (ImportError, AttributeError, ValueError):
-                #raise ValueError('\'%s\' is not a valid type string' % type_string)
+            package,_,_ = type_string.rpartition('.')
+            _load_types(package)
+            if type_string in PROTOBUF_TO_MESSAGE_TYPE:
+                typ = _MessageType(type_string)
+            elif type_string in PROTOBUF_TO_ENUM_TYPE:
                 typ = _EnumType(type_string)
+            else:
+                raise ValueError('\'%s\' is not a valid type string' % type_string)
+
         self._types[type_string] = typ
         return typ
 
@@ -158,8 +167,11 @@ class _MessageType(_TypeBase):
     """ A protocol buffer message type """
 
     def __init__(self, type_string):
-        package, message = type_string.split('.')
-        typ = getattr(getattr(krpc.schema, package), message)
+        package,_,_ = type_string.rpartition('.')
+        _load_types(package)
+        if type_string not in PROTOBUF_TO_MESSAGE_TYPE:
+            raise ValueError('\'%s\' is not a valid type string for a message type' % type_string)
+        typ = PROTOBUF_TO_MESSAGE_TYPE[type_string]
         super(_MessageType, self).__init__(type_string, typ)
 
 
@@ -167,6 +179,10 @@ class _EnumType(_TypeBase):
     """ A protocol buffer enumeration type """
 
     def __init__(self, type_string):
+        package,_,_ = type_string.rpartition('.')
+        _load_types(package)
+        if type_string not in PROTOBUF_TO_ENUM_TYPE:
+            raise ValueError('\'%s\' is not a valid type string for an enum type' % type_string)
         super(_EnumType, self).__init__(type_string, int)
 
 

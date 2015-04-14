@@ -3,6 +3,8 @@ import krpc
 import krpc.test.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
 
+krpc.types.add_search_path('krpc.test')
+
 class TestClient(ServerTestCase, unittest.TestCase):
 
     @classmethod

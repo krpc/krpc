@@ -2,6 +2,9 @@ import unittest
 import time
 import krpc.test.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
+import krpc.types
+
+krpc.types.add_search_path('krpc.test')
 
 class TestStream(ServerTestCase, unittest.TestCase):
 
