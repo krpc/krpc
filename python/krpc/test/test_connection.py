@@ -78,12 +78,6 @@ class TestConnection(unittest.TestCase):
         self.assertEqual(message[:len(partial)], partial)
         self.assertEqual(message[len(partial):], conn.receive(len(message) - len(partial)))
 
-    def test_send_on_remote_closed_connection(self):
-        conn = self.connect()
-        self.server_close_connection(conn)
-        #FIXME
-        #self.assertRaises(socket.error, conn.send, b'foo')
-
     def test_receive_on_remote_closed_connection(self):
         conn = self.connect()
         self.server_close_connection(conn)
