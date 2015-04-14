@@ -49,5 +49,8 @@ class TestDecoder(unittest.TestCase):
         value = Decoder.decode(unhexlify('00'), typ)
         self.assertIsNone(value)
 
+    def test_guid(self):
+        self.assertEqual('6f271b39-00dd-4de4-9732-f0d3a68838df', Decoder.guid(unhexlify('391b276fdd00e44d9732f0d3a68838df')))
+
 if __name__ == '__main__':
     unittest.main()

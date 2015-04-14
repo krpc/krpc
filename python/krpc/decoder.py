@@ -2,6 +2,7 @@
 from google.protobuf.internal import decoder as protobuf_decoder
 from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
 import krpc.platform
+from krpc.platform import hexlify
 
 class _Decoder(object):
     """ Routines for decoding messages and values from the protocol buffer serialization format """
@@ -14,20 +15,8 @@ class _Decoder(object):
     @classmethod
     def guid(cls, data):
         """ Decode a 16-byte GUID into a string """
-        # TODO: test this
-        chunks = [4,2,2,2,6]
-        reverse_chunk = [True,True,True,False,False]
-        result = ''
-        offset = 0
-        for c,chunk in enumerate(chunks):
-            poss = range(offset,offset+chunk)
-            if reverse_chunk[c]:
-                poss = reversed(poss)
-            for pos in poss:
-                result += '%02x' % ord(data[pos])
-            offset += chunk
-            result += '-'
-        return result[:-1]
+        return '-'.join((hexlify(data[3::-1]), hexlify(data[5:3:-1]), hexlify(data[7:5:-1]),
+                         hexlify(data[8:10]), hexlify(data[10:16])))
 
     @classmethod
     def decode(cls, data, typ):
