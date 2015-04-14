@@ -56,7 +56,7 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsAnEnumType (Type type)
         {
-            return Reflection.HasAttribute<KRPCEnumAttribute> (type);
+            return Reflection.HasAttribute<KRPCEnumAttribute> (type) && Enum.GetUnderlyingType (type) == typeof(int);
         }
 
         /// <summary>
