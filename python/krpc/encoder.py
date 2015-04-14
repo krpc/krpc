@@ -1,4 +1,3 @@
-# TODO: avoid using internals
 from google.protobuf.internal import encoder as protobuf_encoder
 from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
 import platform
@@ -86,7 +85,6 @@ class _ValueEncoder(object):
         data = []
         def write(x):
             data.append(x)
-        #TODO: only handles finite values
         encoder = protobuf_encoder.DoubleEncoder(1,False,False)
         encoder(write, value)
         return b''.join(data[1:]) # strips the tag value
@@ -96,7 +94,6 @@ class _ValueEncoder(object):
         data = []
         def write(x):
             data.append(x)
-        #TODO: only handles finite values
         encoder = protobuf_encoder.FloatEncoder(1,False,False)
         encoder(write, value)
         return b''.join(data[1:]) # strips the tag value

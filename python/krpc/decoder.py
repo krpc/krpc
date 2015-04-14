@@ -1,4 +1,3 @@
-# TODO: avoid using internals
 from google.protobuf.internal import decoder as protobuf_decoder
 from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
 import krpc.platform
