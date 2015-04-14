@@ -25,7 +25,6 @@ namespace KRPC
         readonly RPCServer rpcServer;
         readonly StreamServer streamServer;
         IScheduler<IClient<Request,Response>> clientScheduler;
-        //TODO: add maximum execution time for continuations to prevent livelock?
         IList<RequestContinuation> continuations;
         IDictionary<IClient<byte,StreamMessage>, IList<StreamRequest>> streamRequests;
 
@@ -226,7 +225,6 @@ namespace KRPC
         /// </summary>
         void RPCServerUpdate ()
         {
-            // TODO: is there a better way to limit the number of requests handled per update?
             // The maximum amount of time to spend executing continuations
             const int maxTime = 10; // milliseconds
             // The maximum amount of time to wait after executing continuations to check for new requests
@@ -252,7 +250,6 @@ namespace KRPC
                         try {
                             ExecuteContinuation (continuation);
                         } catch (YieldException e) {
-                            // TODO: remove cast
                             yieldedContinuations.Add ((RequestContinuation)e.Continuation);
                         }
                     }
@@ -381,8 +378,6 @@ namespace KRPC
             // Send response to the client
             response.SetTime (GetUniversalTime ());
             var builtResponse = response.Build ();
-            //TODO: handle partial response exception
-            //TODO: remove cast
             ((RPCClient)client).Stream.Write (builtResponse);
             if (Logger.ShouldLog (Logger.Severity.Debug)) {
                 if (response.HasError)
