@@ -43,7 +43,7 @@ Node
 
       :rtype: double
 
-   .. method:: BurnVector (referenceFrame)
+   .. method:: BurnVector ([referenceFrame = Vessel.OrbitalReferenceFrame])
 
       Returns a vector whose direction the direction of the maneuver node burn,
       and whose magnitude is the delta-v of the burn in m/s.
@@ -54,7 +54,7 @@ Node
       .. note:: Does not change when executing the maneuver node. See
                 :meth:`Node.RemainingBurnVector`.
 
-   .. method:: RemainingBurnVector (referenceFrame)
+   .. method:: RemainingBurnVector ([referenceFrame = Vessel.OrbitalReferenceFrame])
 
       Returns a vector whose direction the direction of the maneuver node burn,
       and whose magnitude is the delta-v of the burn in m/s. The direction and
