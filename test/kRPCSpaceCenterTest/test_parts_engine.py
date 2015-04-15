@@ -79,6 +79,7 @@ class TestPartsEngine(testingtools.TestCase):
     def test_test(self):
         engine = filter(lambda e: e.part.title == 'LV-T30 Liquid Fuel Engine', self.parts.engines)[0]
         self.set_throttle(engine, 1)
+        engine.active = False
 
     def test_lfo_engine(self):
         engine = filter(lambda e: e.part.title == 'LV-T30 Liquid Fuel Engine', self.parts.engines)[0]
@@ -93,6 +94,7 @@ class TestPartsEngine(testingtools.TestCase):
             self.set_throttle(engine, throttle)
             self.check_engine_throttle(engine, throttle, thrust, isp, vac_isp, msl_isp, propellants)
         self.set_idle(engine)
+        engine.active = False
 
     def test_gimballed_lfo_engine(self):
         engine = filter(lambda e: e.part.title == 'LV-T45 Liquid Fuel Engine', self.parts.engines)[0]
@@ -113,6 +115,7 @@ class TestPartsEngine(testingtools.TestCase):
             check_gimbal()
         self.set_idle(engine)
         self.check_engine_idle(engine, thrust, vac_isp, msl_isp, propellants, gimballed=True)
+        engine.active = False
 
     def test_gimballed_nuclear_engine(self):
         engine = filter(lambda e: e.part.title == 'LV-N Atomic Rocket Motor', self.parts.engines)[0]
@@ -128,6 +131,7 @@ class TestPartsEngine(testingtools.TestCase):
             self.check_engine_throttle(engine, throttle, thrust, isp, vac_isp, msl_isp, propellants, gimballed=True)
         self.set_idle(engine)
         self.check_engine_idle(engine, thrust, vac_isp, msl_isp, propellants, gimballed=True)
+        engine.active = False
 
     def test_jet_engine(self):
         engine = filter(lambda e: e.part.title == 'Basic Jet Engine', self.parts.engines)[0]
@@ -143,6 +147,7 @@ class TestPartsEngine(testingtools.TestCase):
             self.check_engine_throttle(engine, throttle, thrust, isp, vac_isp, msl_isp, propellants, gimballed=True, jet=True)
         self.set_idle(engine)
         self.check_engine_idle(engine, thrust, vac_isp, msl_isp, propellants, gimballed=True)
+        engine.active = False
 
     def test_ion_engine(self):
         engine = filter(lambda e: e.part.title == 'PB-ION Electric Propulsion System', self.parts.engines)[0]
@@ -155,6 +160,7 @@ class TestPartsEngine(testingtools.TestCase):
             self.set_throttle(engine, throttle)
             self.check_engine_throttle(engine, throttle, thrust, isp, isp, isp, propellants)
         self.set_idle(engine)
+        engine.active = False
 
     def test_rcs_engine(self):
         engine = filter(lambda e: e.part.title == 'O-10 MonoPropellant Engine', self.parts.engines)[0]
@@ -169,6 +175,7 @@ class TestPartsEngine(testingtools.TestCase):
             self.set_throttle(engine, throttle)
             self.check_engine_throttle(engine, throttle, thrust, isp, vac_isp, msl_isp, propellants)
         self.set_idle(engine)
+        engine.active = False
 
     def test_srb_engine(self):
         engine = filter(lambda e: e.part.title == 'RT-10 Solid Fuel Booster', self.parts.engines)[0]
