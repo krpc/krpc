@@ -5,7 +5,7 @@ Python API
    :includehidden:
    :maxdepth: 2
 
-   python-api/space-center.rst
+   python-api/space-center
    python-api/vessel
    python-api/celestial-body
    python-api/flight
