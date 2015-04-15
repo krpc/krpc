@@ -16,7 +16,7 @@ class TestControl(testingtools.TestCase):
         vessel = cls.conn.space_center.active_vessel
         cls.control = vessel.control
         cls.auto_pilot = vessel.auto_pilot
-        cls.orbital_flight = vessel.flight(vessel.orbit.reference_frame)
+        cls.orbital_flight = vessel.flight(vessel.orbital_reference_frame)
 
     @classmethod
     def tearDownClass(cls):
