@@ -1,6 +1,7 @@
 import unittest
 import testingtools
 import krpc
+from mathtools import dot
 
 class TestParts(testingtools.TestCase):
 
@@ -57,7 +58,7 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(None, root.parent)
         self.assertGreater(len(root.children), 0)
 
-    def test_controlling_part(self):
+    def test_controlling(self):
         commandpod = self.parts.root
         dockingport = self.parts.docking_ports[0].part
         part = self.parts.with_title('Z-400 Rechargeable Battery')[0]
@@ -71,6 +72,35 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(part, self.parts.controlling)
         self.parts.controlling = commandpod
         self.assertEqual(commandpod, self.parts.controlling)
+
+    def test_controlling_orientation(self):
+        ref = self.vessel.orbit.body.reference_frame
+        root = self.parts.root
+        port = self.parts.with_title('Clamp-O-Tron Docking Port')[0]
+
+        # Check vessel direction is in direction of root part
+        # and perpendicular to the docking port
+        vessel_dir = self.vessel.direction(ref)
+        root_dir = root.direction(ref)
+        port_dir = port.direction(ref)
+        self.assertClose(vessel_dir, root_dir)
+        self.assertClose(0, dot(vessel_dir, port_dir))
+
+        # Control from the docking port
+        self.parts.controlling = port
+
+        # Check vessel direction is now the direction of the docking port
+        vessel_dir = self.vessel.direction(ref)
+        self.assertClose(0, dot(vessel_dir, root_dir))
+        self.assertClose(vessel_dir, port_dir)
+
+        # Control from the root part
+        self.parts.controlling = root
+
+        # Check vessel direction is now the direction of the root part
+        vessel_dir = self.vessel.direction(ref)
+        self.assertClose(vessel_dir, root_dir)
+        self.assertClose(0, dot(vessel_dir, port_dir))
 
     def test_parts_with_name(self):
         parts = self.parts.with_name('spotLight1')
