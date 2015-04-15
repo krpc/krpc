@@ -76,12 +76,12 @@ dist: build doc dist-python
 	mkdir $(DIST_DIR)/python-client
 	cp python/dist/krpc-$(PYTHON_CLIENT_VERSION).zip $(DIST_DIR)/python-client/
 	# protobuf source
-	mkdir $(DIST_DIR)/src
-	echo "See http://djungelorm.github.io/krpc/docs/communication-protocol.html" > $(DIST_DIR)/src/README.txt
-	cp src/kRPC/Schema/KRPC.proto $(DIST_DIR)/src/
-	mkdir -p $(DIST_DIR)/src/python
-	cp -R python/krpc/schema/KRPC.py $(DIST_DIR)/src/python/
-	cp -R java cpp $(DIST_DIR)/src/
+	mkdir $(DIST_DIR)/schema
+	echo "See http://djungelorm.github.io/krpc/docs/communication-protocol.html" > $(DIST_DIR)/schema/README.txt
+	cp src/kRPC/Schema/KRPC.proto $(DIST_DIR)/schema/
+	mkdir -p $(DIST_DIR)/schema/python
+	cp -R python/krpc/schema/KRPC.py $(DIST_DIR)/schema/python/
+	cp -R java cpp $(DIST_DIR)/schema/
 	# Documentation
 	cp doc/build/pdf/kRPC.pdf $(DIST_DIR)/
 
