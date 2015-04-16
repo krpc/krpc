@@ -11,6 +11,10 @@ import copy
 src = sys.argv[1]
 service_definition = sys.argv[2]
 
+if not os.path.exists(service_definition):
+    print 'WARNING: %s does not exist, skipping' % service_definition
+    exit(0)
+
 services = None
 with open(service_definition, 'r') as f:
     services = yaml.load(f)
