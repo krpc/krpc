@@ -45,7 +45,7 @@ AutoPilot
 
       :param double pitch: The desired pitch above/below the horizon, in
                            degrees. A value between -90° and +90° degrees.
-      :param double heading: The desired heading in degrees. A valud between 0°
+      :param double heading: The desired heading in degrees. A value between 0°
                              and 360°.
       :param double roll: Optional desired roll angle relative to the horizon,
                           in degrees. A value between -180° and +180°.

@@ -447,7 +447,7 @@ Module
 .. class:: Module
 
    In KSP, each part has zero or more `PartModules`_ associated with it. Each
-   one contains some of the functionlity of the part. For example, an engine has
+   one contains some of the functionality of the part. For example, an engine has
    a "ModuleEngines" PartModule that contains all the functionality of an
    engine.
 
@@ -846,14 +846,14 @@ Engine
    .. attribute:: CanRestart
 
       Gets whether the engine can be restarted once shutdown. If the engine
-      cannot be shutdown, returns ``false``. For exampke, this is ``true`` for
+      cannot be shutdown, returns ``false``. For example, this is ``true`` for
       liquid fueled rockets and ``false`` for solid rocket boosters.
 
       :rtype: bool
 
    .. attribute:: CanShutdown
 
-      Gets whether the engine can be shutdown once activated. For exampke, this
+      Gets whether the engine can be shutdown once activated. For example, this
       is ``true`` for liquid fueled rockets and ``false`` for solid rocket
       boosters.
 
@@ -1360,7 +1360,7 @@ used to discover these connections. In the example in Figure 5, when
 :attr:`Part.FuelLinesTo` is called on fuel tank part 11, it will return a list
 of parts containing just fuel tank part 9 (the blue part). When
 :attr:`Part.FuelLinesFrom` is called on fuel tank part 9, it will return a list
-containing fuel tank parts 11 and 17 (the parts coloured green).
+containing fuel tank parts 11 and 17 (the parts colored green).
 
 .. _api-parts-staging:
 

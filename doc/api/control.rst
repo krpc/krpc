@@ -101,7 +101,7 @@ Control
    .. attribute:: WheelThrottle
 
       Gets or sets the state of the wheel throttle [#control-reset]_. A value
-      between -1 and 1. A value of 1 rotates the wheels fowards, a value of -1
+      between -1 and 1. A value of 1 rotates the wheels forwards, a value of -1
       rotates the wheels backwards.
 
       :type: float

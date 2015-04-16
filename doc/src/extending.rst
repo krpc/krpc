@@ -16,7 +16,7 @@ active clients.
 Clients run outside of KSP. This gives you the freedom to run scripts in
 whatever environment you want. A client communicates with the server to run
 procedures. kRPC comes with a `Python client library
-<https://pypi.python.org/pypi/krpc>`_ that implementes the :ref:`communication
+<https://pypi.python.org/pypi/krpc>`_ that implements the :ref:`communication
 protocol <communication-protocol>`, making it easy to write Python scripts that
 can talk to the server. Client libraries for other languages may be added in the
 future. kRPC supports multiple concurrent clients.

@@ -66,7 +66,7 @@ SpaceCenter
 
       Uses time acceleration to warp to the specified time. Automatically uses
       regular or physical time warp as appropriate. For example, physical time warp
-      is used when the active vessel is travelling through an atmosphere. When
+      is used when the active vessel is traveling through an atmosphere. When
       using physical time warp, the warp rate is at most 2x.
 
       :param double ut: The universal time to warp to, in seconds

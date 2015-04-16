@@ -96,7 +96,7 @@ Running the Tests
 ^^^^^^^^^^^^^^^^^
 
 The project contains unit tests for the server code (using NUnit) and for the
-python client code (using unittest), and integraton tests to test the
+python client code (using unittest), and integration tests to test the
 SpaceCenter API when a copy of KSP is running. The tests can be run using ``make
 test`` (after compiling everything using ``make build``).
 

@@ -79,7 +79,7 @@ On Linux
 ^^^^^^^^
 
 1. Your linux distribution likely already comes with python installed. If not,
-   install python using your favourite package manager, or get it from here:
+   install python using your favorite package manager, or get it from here:
    https://www.python.org/downloads
 
 2. You also need to install pip, either using your package manager, or from
