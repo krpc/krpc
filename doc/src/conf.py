@@ -6,7 +6,7 @@ copyright = '2015, djungelorm'
 master_doc = 'index'
 source_suffix = '.rst'
 exclude_patterns = ['**/.#*']
-extensions = ['sphinx.ext.mathjax', 'sphinx.ext.todo']
+extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo']
 templates_path = ['_templates']
 
 pygments_style = 'sphinx'
@@ -18,3 +18,5 @@ html_static_path = ['crafts','scripts','_static']
 html_context = { 'css_files': ['_static/custom.css'] }
 
 todo_include_todos = True
+
+spelling_word_list_filename = 'dictionary.txt'

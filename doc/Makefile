@@ -18,7 +18,7 @@ INKSCAPE_FLAGS = -C -d=90 --export-background-opacity=\#00
 
 all: build
 
-build: html pdf
+build: spelling html pdf
 
 clean: clean-images
 	rm -rf $(BUILD_DIR) $(PYTHON_API_DIR) $(GH_PAGES_DIR)
@@ -26,6 +26,9 @@ clean: clean-images
 # Build specific types of doc---------------------------------------------------
 
 .PHONY: html pdf gh-pages
+
+spelling: images api
+	$(SPHINX_BUILD) -b spelling $(SPHINX_OPTS) $(BUILD_DIR)/spelling
 
 html: images api
 	$(SPHINX_BUILD) -b html $(SPHINX_OPTS) $(BUILD_DIR)/html
