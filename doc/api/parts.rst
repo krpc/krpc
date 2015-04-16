@@ -1237,7 +1237,7 @@ traversal over all of the parts in a vessel:
    stack = [(root, 0)]
    while len(stack) > 0:
        part,depth = stack.pop()
-       print ' '*depth, part.title
+       print(' '*depth, part.title)
        for child in part.children:
            stack.append((child, depth+1))
 
@@ -1296,7 +1296,7 @@ prints out the attachment mode used by the part:
            attach_mode = 'axial'
        else: # radially_attached
            attach_mode = 'radial'
-       print ' '*depth, part.title, '-', attach_mode
+       print(' '*depth, part.title, '-', attach_mode)
        for child in part.children:
            stack.append((child, depth+1))
 

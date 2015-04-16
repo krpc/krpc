@@ -64,7 +64,7 @@ in Kerbin's reference frame:
    import krpc
    conn = krpc.connect()
    vessel = conn.space_center.active_vessel
-   print vessel.position(vessel.orbit.body.reference_frame)
+   print(vessel.position(vessel.orbit.body.reference_frame))
 
 For a vessel sat on the launchpad, the magnitude of this position vector will be
 roughly 600,000 meters (equal to the radius of Kerbin). The position vector will
@@ -304,10 +304,10 @@ fixed relative to the body, but does not rotate:
    while True:
 
        velocity = vessel.flight(vessel.orbit.body.non_rotating_reference_frame).velocity
-       print 'Orbital velocity = (%.1f, %.1f, %.1f)' % velocity
+       print('Orbital velocity = (%.1f, %.1f, %.1f)' % velocity)
 
        speed = vessel.flight(vessel.orbit.body.non_rotating_reference_frame).speed
-       print 'Orbital speed = %.1f m/s' % speed
+       print('Orbital speed = %.1f m/s' % speed)
 
        time.sleep(1)
 
@@ -330,10 +330,10 @@ computing the velocity of the vessel:
    while True:
 
        velocity = vessel.flight(vessel.orbit.body.reference_frame).velocity
-       print 'Surface velocity = (%.1f, %.1f, %.1f)' % velocity
+       print('Surface velocity = (%.1f, %.1f, %.1f)' % velocity)
 
        speed = vessel.flight(vessel.orbit.body.reference_frame).speed
-       print 'Surface speed = %.1f m/s' % speed
+       print('Surface speed = %.1f m/s' % speed)
 
        time.sleep(1)
 
@@ -368,7 +368,7 @@ and the direction that the vessel is moving in (relative to the surface):
        else:
            angle = abs(math.acos (dotprod / vmag) * (180. / math.pi))
 
-       print 'Angle of attack = %.1f' % angle
+       print('Angle of attack = %.1f' % angle)
 
        time.sleep(1)
 

@@ -102,7 +102,7 @@ following python script:
    import krpc
    conn = krpc.connect(name='Hello World')
    vessel = conn.space_center.active_vessel
-   print vessel.name
+   print(vessel.name)
 
 This does the following: line 1 loads the kRPC python module, line 2 opens a new
 connection to the server, line 3 gets the active vessel and line 4 prints out

@@ -8,8 +8,9 @@ Geometry Types
    .. code-block:: python
 
       import krpc
-      v = krpc.space_center.active_vessel.flight().prograde
-      print v[0], v[1], v[2]
+      conn = krpc.connect()
+      v = conn.space_center.active_vessel.flight().prograde
+      print(v[0], v[1], v[2])
 
 .. class:: Quaternion
 
@@ -19,5 +20,6 @@ Geometry Types
    .. code-block:: python
 
       import krpc
-      q = krpc.space_center.active_vessel.flight().rotation
-      print q[0], q[1], q[2], q[3]
+      conn = krpc.connect()
+      q = conn.space_center.active_vessel.flight().rotation
+      print(q[0], q[1], q[2], q[3])

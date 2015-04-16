@@ -38,7 +38,7 @@ control the vessel from it:
    vessel = conn.space_center.active_vessel
 
    ports = vessel.parts.docking_ports:
-   port = filter(lambda p: p.part.title == 'Clamp-O-Tron Docking Port', ports)[0]
+   port = list(filter(lambda p: p.part.title == 'Clamp-O-Tron Docking Port', ports))[0]
    vessel.parts.controlling = port
 
 Combined Specific Impulse
@@ -56,12 +56,12 @@ http://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
 
    active_engines = filter(lambda e: e.active and e.has_fuel, vessel.parts.engines)
 
-   print 'Active engines:'
+   print('Active engines:')
    for engine in active_engines:
-       print '   ', engine.part.title, 'in stage', engine.part.stage
+       print('   ', engine.part.title, 'in stage', engine.part.stage)
 
    thrust = sum(engine.thrust for engine in active_engines)
    fuel_consumption = sum(engine.thrust / engine.specific_impulse for engine in active_engines)
    isp = thrust / fuel_consumption
 
-   print 'Combined vaccuum Isp = %d seconds' % isp
+   print('Combined vaccuum Isp = %d seconds' % isp)

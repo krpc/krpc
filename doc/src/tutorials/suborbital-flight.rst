@@ -60,7 +60,7 @@ the space bar):
 
 .. code-block:: python
 
-   print 'Launch!'
+   print('Launch!')
    vessel.control.activate_next_stage()
 
 The rocket has a solid fuel stage that will quickly run out, and will need to be
@@ -73,7 +73,7 @@ boosters:
 
    while vessel.resources.amount('SolidFuel') > 0.1:
        time.sleep(1)
-   print 'Booster separation'
+   print('Booster separation')
    control.activate_next_stage()
 
 In this bit of code, ``vessel.resources`` returns a :class:`Resources` object
@@ -100,7 +100,7 @@ Now we need to angle the rocket over to a pitch of 60° and maintain a heading o
 
 .. code-block:: python
 
-   print 'Gravity turn'
+   print('Gravity turn')
    vessel.auto_pilot.set_rotation(60,90)
 
 Now we wait until the apoapsis reaches 100km, then reduce the throttle to zero,
@@ -111,7 +111,7 @@ jettison the launch stage and turn off the auto-pilot:
    while vessel.orbit.apoapsis_altitude < 100000:
        time.sleep(1)
 
-   print 'Launch stage separation'
+   print('Launch stage separation')
    vessel.control.throttle = 0
    time.sleep(1)
    vessel.control.activate_next_stage()
@@ -142,9 +142,9 @@ which will happen when it lands:
 .. code-block:: python
 
    while vessel.flight(vessel.orbit.body.reference_frame).vertical_speed < -0.1:
-       print 'Altitude = %.1f meters' % vessel.flight().surface_altitude
+       print('Altitude = %.1f meters' % vessel.flight().surface_altitude)
        time.sleep(1)
-   print 'Landed!'
+   print('Landed!')
 
 This bit of code uses the ``vessel.flight()`` function, as before, but this time
 it is passed a :class:`ReferenceFrame` parameter. We want to get the vertical
