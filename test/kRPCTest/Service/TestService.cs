@@ -117,6 +117,12 @@ namespace KRPCTest.Service
 
             [KRPCProperty]
             public TestClass ObjectProperty { get; set; }
+
+            [KRPCMethod]
+            public static string StaticMethod (string a = "")
+            {
+                return "jeb" + a;
+            }
         }
 
         [KRPCProcedure]

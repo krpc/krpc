@@ -89,6 +89,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
         obj2 = self.conn.test_service.create_test_object('bill')
         self.assertEqual('bobbill', obj.object_to_string(obj2))
 
+    def test_class_static_methods(self):
+        self.assertEqual('jeb', self.conn.test_service.TestClass.static_method())
+        self.assertEqual('jebbobbill', self.conn.test_service.TestClass.static_method('bob', 'bill'))
+
     def test_class_properties(self):
         obj = self.conn.test_service.create_test_object('jeb')
         obj.int_property = 0
@@ -336,7 +340,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'test_class__get__object_property',
                 'test_class__set__object_property',
 
-                'optional_arguments'
+                'optional_arguments',
+                'static_method'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestClass))))
 

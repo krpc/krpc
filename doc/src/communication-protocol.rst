@@ -506,6 +506,11 @@ The following attributes specify what the procedure implements:
    Indicates that the procedure is a method for a class with the given
    ``class-name`` and ``method-name``.
 
+ * ``Class.StaticMethod(class-name,method-name)``
+
+   Indicates that the procedure is a static method for a class with the given
+   ``class-name`` and ``method-name``.
+
  * ``Class.Property.Get(class-name,property-name)``
 
    Indicates that the procedure is a property getter for a class with the given

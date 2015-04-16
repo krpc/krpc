@@ -33,6 +33,11 @@ class _Attributes(object):
         return any(attr.startswith('Class.Method(') for attr in attrs)
 
     @classmethod
+    def is_a_class_static_method(cls, attrs):
+        """ Return true if the attributes are for a static class method. """
+        return any(attr.startswith('Class.StaticMethod(') for attr in attrs)
+
+    @classmethod
     def is_a_class_property_accessor(cls, attrs):
         """ Return true if the attributes are for a class property getter or setter. """
         return any(attr.startswith('Class.Property.') for attr in attrs)
@@ -80,12 +85,17 @@ class _Attributes(object):
                 match = re.match(r'^Class\.Method\([^,\.]+\.([^,\.]+),[^,]+\)$', attr)
                 if match:
                     return match.group(1)
+        if cls.is_a_class_static_method(attrs):
+            for attr in attrs:
+                match = re.match(r'^Class\.StaticMethod\([^,\.]+\.([^,\.]+),[^,]+\)$', attr)
+                if match:
+                    return match.group(1)
         if cls.is_a_class_property_accessor(attrs):
             for attr in attrs:
                 match = re.match(r'^Class\.Property.(Get|Set)\([^,\.]+\.([^,]+),[^,]+\)$', attr)
                 if match:
                     return match.group(2)
-        raise ValueError('Procedure attributes are not a class method or class property accessor')
+        raise ValueError('Procedure attributes are not a class method, static method or property accessor')
 
     @classmethod
     def get_class_method_name(cls, attrs):
@@ -95,7 +105,12 @@ class _Attributes(object):
                 match = re.match(r'^Class\.Method\([^,]+,([^,]+)\)$', attr)
                 if match:
                     return match.group(1)
-        raise ValueError('Procedure attributes are not a class method accessor')
+        if cls.is_a_class_static_method(attrs):
+            for attr in attrs:
+                match = re.match(r'^Class\.StaticMethod\([^,]+,([^,]+)\)$', attr)
+                if match:
+                    return match.group(1)
+        raise ValueError('Procedure attributes are not a class method or static method')
 
     @classmethod
     def get_class_property_name(cls, attrs):

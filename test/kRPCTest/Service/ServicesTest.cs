@@ -453,6 +453,19 @@ namespace KRPCTest.Service
         }
 
         /// <summary>
+        /// Test calling the static method of a class
+        /// </summary>
+        [Test]
+        public void HandleRequestForClassStaticMethod ()
+        {
+            ByteString argBytes = ProtocolBuffers.WriteValue ("bob", typeof(string));
+            var request = Req ("TestService", "TestClass_StaticMethod", Arg (0, argBytes));
+            Response.Builder response = Run (request);
+            var builtResponse = response.SetTime (42).Build ();
+            Assert.AreEqual ("jebbob", ProtocolBuffers.ReadValue (builtResponse.ReturnValue, typeof(string)));
+        }
+
+        /// <summary>
         /// Test calling a procedure with a class as the parameter,
         /// where the class is defined in a different service
         /// </summary>

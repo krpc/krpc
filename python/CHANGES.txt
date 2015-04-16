@@ -1,3 +1,6 @@
+v0.1.8:
+ - Support for static class methods (#106)
+
 v0.1.7
  - Support for Python 3
  - Upgrade to Protocol Buffers 3.0.0-alpha-1

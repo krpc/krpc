@@ -1,3 +1,9 @@
+v0.1.8
+* Server plugin changes:
+  * Add support for static class methods (#106)
+* Python client changes:
+  * Add support for static class methods (#106)
+
 v0.1.7
 * Fix CKAN install bug on Windows (#105)
 * SpaceCenter service changes:

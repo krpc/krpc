@@ -122,9 +122,15 @@ namespace TestServer.Services
             public TestClass ObjectProperty { get; set; }
 
             [KRPCMethod]
-            public static string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
+            public string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
             {
                 return x + y + z + anotherParameter;
+            }
+
+            [KRPCMethod]
+            public static string StaticMethod (string a = "", string b = "")
+            {
+                return "jeb" + a + b;
             }
 
             public override bool Equals (TestClass obj)

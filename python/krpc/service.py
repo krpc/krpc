@@ -81,6 +81,13 @@ class _Service(BaseService):
                 method_name = _Attributes.get_class_method_name(procedure.attributes)
                 self._add_class_method(class_name, method_name, procedure)
 
+        # Create static class methods
+        for procedure in service.procedures:
+            if _Attributes.is_a_class_static_method(procedure.attributes):
+                class_name = _Attributes.get_class_name(procedure.attributes)
+                method_name = _Attributes.get_class_method_name(procedure.attributes)
+                self._add_class_static_method(class_name, method_name, procedure)
+
         # Create class properties
         properties = {}
         for procedure in service.procedures:
@@ -158,6 +165,24 @@ class _Service(BaseService):
                                                                return_type=return_type))
         setattr(func, '_return_type', return_type)
         setattr(cls, _to_snake_case(method_name), func)
+
+    def _add_class_static_method(self, class_name, method_name, procedure):
+        """ Add a static class method to the service """
+        cls = getattr(self, class_name)
+        param_names = [_to_snake_case(param.name) for param in procedure.parameters]
+        param_types = [self._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
+        return_type = None
+        if procedure.HasField('return_type'):
+            return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
+        func = lambda c, *args, **kwargs: self._invoke(procedure.name, args=list(args), kwargs=kwargs,
+                                                       param_names=param_names, param_types=param_types,
+                                                       return_type=return_type)
+        setattr(func, '_build_request',
+                lambda c, *args, **kwargs: self._build_request(procedure.name, args=list(args), kwargs=kwargs,
+                                                               param_names=param_names, param_types=param_types,
+                                                               return_type=return_type))
+        setattr(func, '_return_type', return_type)
+        setattr(cls, _to_snake_case(method_name), classmethod(func))
 
     def _add_class_property(self, class_name, property_name, getter=None, setter=None):
         """ Add a class property to the service """
