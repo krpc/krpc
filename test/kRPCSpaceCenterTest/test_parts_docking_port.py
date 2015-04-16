@@ -18,29 +18,29 @@ class TestPartsDockingPort(testingtools.TestCase):
 
         # Get the three undocked ports
         ports = cls.parts.docking_ports
-        cls.port1 = filter(lambda p: p.part.title == 'Clamp-O-Tron Docking Port Jr.', ports)[0]
-        cls.port2 = filter(lambda p: p.part.title == 'Clamp-O-Tron Shielded Docking Port', ports)[0]
-        cls.port3 = filter(lambda p: p.part.title == 'Mk2 Clamp-O-Tron', ports)[0]
-        cls.port4 = filter(lambda p: p.part.title == 'Inline Clamp-O-Tron', ports)[0]
+        cls.port1 = next(iter(filter(lambda p: p.part.title == 'Clamp-O-Tron Docking Port Jr.', ports)))
+        cls.port2 = next(iter(filter(lambda p: p.part.title == 'Clamp-O-Tron Shielded Docking Port', ports)))
+        cls.port3 = next(iter(filter(lambda p: p.part.title == 'Mk2 Clamp-O-Tron', ports)))
+        cls.port4 = next(iter(filter(lambda p: p.part.title == 'Inline Clamp-O-Tron', ports)))
 
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
 
     def test_docking_port(self):
-        self.assertEquals(self.state.ready, self.port1.state)
-        self.assertEquals(self.port1.docked_part, None)
-        self.assertEquals(1, self.port1.reengage_distance)
+        self.assertEqual(self.state.ready, self.port1.state)
+        self.assertEqual(self.port1.docked_part, None)
+        self.assertEqual(1, self.port1.reengage_distance)
         self.assertFalse(self.port1.has_shield)
         self.assertFalse(self.port1.shielded)
 
     def test_name(self):
-        self.assertEquals(self.port1.name, 'Clamp-O-Tron Docking Port Jr.')
+        self.assertEqual(self.port1.name, 'Clamp-O-Tron Docking Port Jr.')
         try:
             self.port1.name = 'Named docking port'
-            self.assertEquals(self.port1.name, 'Named docking port')
+            self.assertEqual(self.port1.name, 'Named docking port')
             self.port1.name = 'Clamp-O-Tron Docking Port Jr.'
-            self.assertEquals(self.port1.name, 'Clamp-O-Tron Docking Port Jr.')
+            self.assertEqual(self.port1.name, 'Clamp-O-Tron Docking Port Jr.')
         except krpc.client.RPCError:
             # TODO: Docking Port Alignment Indicator mod probably not installed
             pass
@@ -48,24 +48,24 @@ class TestPartsDockingPort(testingtools.TestCase):
     def check_shielded(self, port):
         self.assertTrue(port.has_shield)
         self.assertTrue(port.shielded)
-        self.assertEquals(self.state.shielded, port.state)
-        self.assertEquals(port.docked_part, None)
+        self.assertEqual(self.state.shielded, port.state)
+        self.assertEqual(port.docked_part, None)
 
     def open_and_close_shield(self, port):
         port.shielded = False
         time.sleep(0.1)
-        self.assertEquals(self.state.moving, port.state)
+        self.assertEqual(self.state.moving, port.state)
         while port.state == self.state.moving:
             pass
         time.sleep(0.1)
-        self.assertEquals(self.state.ready, port.state)
+        self.assertEqual(self.state.ready, port.state)
         port.shielded = True
         time.sleep(0.1)
-        self.assertEquals(self.state.moving, port.state)
+        self.assertEqual(self.state.moving, port.state)
         while port.state == self.state.moving:
             pass
         time.sleep(0.1)
-        self.assertEquals(self.state.shielded, port.state)
+        self.assertEqual(self.state.shielded, port.state)
 
     def test_shielded_docking_port1(self):
         self.check_shielded(self.port2)
@@ -81,14 +81,14 @@ class TestPartsDockingPort(testingtools.TestCase):
 
     def test_pre_attached_ports(self):
         """ Test ports that were pre-attached in the VAB """
-        bottom_port = filter(lambda p: p.part.parent.title == 'Clamp-O-Tron Docking Port', self.parts.docking_ports)[0]
+        bottom_port = next(iter(filter(lambda p: p.part.parent.title == 'Clamp-O-Tron Docking Port', self.parts.docking_ports)))
         top_port = bottom_port.part.parent.docking_port
         launch_clamp = bottom_port.part.children[0].launch_clamp
 
-        self.assertEquals(self.state.docked, top_port.state)
-        self.assertEquals(self.state.docked, bottom_port.state)
-        self.assertEquals(top_port.part, bottom_port.docked_part)
-        self.assertEquals(bottom_port.part, top_port.docked_part)
+        self.assertEqual(self.state.docked, top_port.state)
+        self.assertEqual(self.state.docked, bottom_port.state)
+        self.assertEqual(top_port.part, bottom_port.docked_part)
+        self.assertEqual(bottom_port.part, top_port.docked_part)
 
         # Undock
         mass_before = self.vessel.mass
@@ -96,17 +96,17 @@ class TestPartsDockingPort(testingtools.TestCase):
         self.vessel = self.conn.space_center.active_vessel
         mass_after = self.vessel.mass
 
-        self.assertEquals(bottom_port.docked_part, None)
-        self.assertEquals(top_port.docked_part, None)
+        self.assertEqual(bottom_port.docked_part, None)
+        self.assertEqual(top_port.docked_part, None)
 
         # Undocking
         self.assertNotEqual(self.vessel, undocked)
         self.assertLess(mass_after, mass_before)
         self.assertClose(mass_after, mass_before - undocked.mass)
-        self.assertEquals(self.state.undocking, top_port.state)
-        self.assertEquals(self.state.undocking, bottom_port.state)
-        self.assertEquals(bottom_port.docked_part, None)
-        self.assertEquals(top_port.docked_part, None)
+        self.assertEqual(self.state.undocking, top_port.state)
+        self.assertEqual(self.state.undocking, bottom_port.state)
+        self.assertEqual(bottom_port.docked_part, None)
+        self.assertEqual(top_port.docked_part, None)
 
         # Drop the port
         launch_clamp.release()
@@ -114,22 +114,22 @@ class TestPartsDockingPort(testingtools.TestCase):
             pass
 
         # Undocked
-        self.assertEquals(self.state.ready, top_port.state)
-        self.assertEquals(self.state.ready, bottom_port.state)
-        self.assertEquals(bottom_port.docked_part, None)
-        self.assertEquals(top_port.docked_part, None)
+        self.assertEqual(self.state.ready, top_port.state)
+        self.assertEqual(self.state.ready, bottom_port.state)
+        self.assertEqual(bottom_port.docked_part, None)
+        self.assertEqual(top_port.docked_part, None)
         distance = norm(top_port.position(bottom_port.reference_frame))
         self.assertGreater(distance, top_port.reengage_distance)
         self.assertLess(distance, top_port.reengage_distance*1.5)
 
     def test_pre_attached_port_and_part(self):
         """ Test a port and part that were pre-attached in the VAB """
-        port = filter(lambda p: p.part.title == 'Clamp-O-Tron Docking Port Sr.', self.parts.docking_ports)[0]
+        port = next(iter(filter(lambda p: p.part.title == 'Clamp-O-Tron Docking Port Sr.', self.parts.docking_ports)))
         part = port.part.children[0]
         launch_clamp = part.children[0].launch_clamp
 
-        self.assertEquals(self.state.docked, port.state)
-        self.assertEquals(part, port.docked_part)
+        self.assertEqual(self.state.docked, port.state)
+        self.assertEqual(part, port.docked_part)
 
         # Undock
         mass_before = self.vessel.mass
@@ -137,14 +137,14 @@ class TestPartsDockingPort(testingtools.TestCase):
         self.vessel = self.conn.space_center.active_vessel
         mass_after = self.vessel.mass
 
-        self.assertEquals(port.docked_part, None)
+        self.assertEqual(port.docked_part, None)
 
         # Undocked (there is no undocking state when undocking from a part)
         self.assertNotEqual(self.vessel, undocked)
         self.assertLess(mass_after, mass_before)
         self.assertClose(mass_after, mass_before - undocked.mass)
-        self.assertEquals(self.state.ready, port.state)
-        self.assertEquals(port.docked_part, None)
+        self.assertEqual(self.state.ready, port.state)
+        self.assertEqual(port.docked_part, None)
 
     def test_direction(self):
         self.assertClose((0,0,-1), self.port1.direction(self.vessel.reference_frame))
@@ -191,20 +191,20 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
                 vessel.control.sas = False
                 time.sleep(1)
 
-            self.assertEquals(self.state.docked, port1.state)
-            self.assertEquals(self.state.docked, port2.state)
-            self.assertEquals(port1.part, port2.docked_part)
-            self.assertEquals(port2.part, port1.docked_part)
+            self.assertEqual(self.state.docked, port1.state)
+            self.assertEqual(self.state.docked, port2.state)
+            self.assertEqual(port1.part, port2.docked_part)
+            self.assertEqual(port2.part, port1.docked_part)
 
             # Undock
             mass_before = vessel.mass
             undocked = port1.undock()
             vessel = self.sc.active_vessel
             self.assertNotEqual(vessel, undocked)
-            self.assertEquals(self.state.undocking, port1.state)
-            self.assertEquals(self.state.undocking, port2.state)
-            self.assertEquals(None, port2.docked_part)
-            self.assertEquals(None, port1.docked_part)
+            self.assertEqual(self.state.undocking, port1.state)
+            self.assertEqual(self.state.undocking, port2.state)
+            self.assertEqual(None, port2.docked_part)
+            self.assertEqual(None, port1.docked_part)
             mass_after = vessel.mass
             self.assertLess(mass_after, mass_before)
             self.assertClose(mass_after, mass_before - undocked.mass)
@@ -216,18 +216,18 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
             vessel.control.forward = 0
             while port1.state == self.state.undocking:
                 pass
-            self.assertEquals(self.state.ready, port1.state)
-            self.assertEquals(self.state.ready, port2.state)
-            self.assertEquals(None, port2.docked_part)
-            self.assertEquals(None, port1.docked_part)
+            self.assertEqual(self.state.ready, port1.state)
+            self.assertEqual(self.state.ready, port2.state)
+            self.assertEqual(None, port2.docked_part)
+            self.assertEqual(None, port1.docked_part)
             distance = norm(port1.position(port2.reference_frame))
             self.assertGreater(distance, port1.reengage_distance)
             self.assertLess(distance, port1.reengage_distance*1.05)
             time.sleep(0.5)
 
             # Check undocking when not docked
-            self.assertEquals(None, port1.undock())
-            self.assertEquals(None, port2.undock())
+            self.assertEqual(None, port1.undock())
+            self.assertEqual(None, port2.undock())
 
             # Move forward
             vessel.control.forward = 0.25
@@ -238,16 +238,16 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
                 pass
 
             # Docking
-            self.assertEquals(self.state.docking, port1.state)
-            self.assertEquals(self.state.docking, port2.state)
+            self.assertEqual(self.state.docking, port1.state)
+            self.assertEqual(self.state.docking, port2.state)
             while port1.state == self.state.docking:
                 pass
 
             # Docked
-            self.assertEquals(self.state.docked, port1.state)
-            self.assertEquals(self.state.docked, port2.state)
-            self.assertEquals(port1.part, port2.docked_part)
-            self.assertEquals(port2.part, port1.docked_part)
+            self.assertEqual(self.state.docked, port1.state)
+            self.assertEqual(self.state.docked, port2.state)
+            self.assertEqual(port1.part, port2.docked_part)
+            self.assertEqual(port2.part, port1.docked_part)
 
             # Get the new vessel
             vessel = self.sc.active_vessel
@@ -276,7 +276,7 @@ class TestPartsDockingPortPreAttachedTo(testingtools.TestCase):
         # parts[7] - Tank
 
         cls.parts = [cls.vessel.parts.root]
-        cls.parts.append(filter(lambda p: p.docking_port != None, cls.parts[0].children)[0])
+        cls.parts.append(next(iter(filter(lambda p: p.docking_port != None, cls.parts[0].children))))
         part = cls.parts[-1]
         while len(part.children) == 1:
             part = part.children[0]

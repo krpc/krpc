@@ -20,11 +20,11 @@ class TestPartsReactionWheel(testingtools.TestCase):
         cls.conn.close()
 
     def test_reaction_wheel(self):
-        wheel = filter(lambda e: e.part.title == 'Advanced Reaction Wheel Module, Large', self.parts.reaction_wheels)[0]
+        wheel = next(iter(filter(lambda e: e.part.title == 'Advanced Reaction Wheel Module, Large', self.parts.reaction_wheels)))
         self.assertFalse(wheel.broken)
-        self.assertEquals(30000, wheel.pitch_torque)
-        self.assertEquals(30000, wheel.yaw_torque)
-        self.assertEquals(30000, wheel.roll_torque)
+        self.assertEqual(30000, wheel.pitch_torque)
+        self.assertEqual(30000, wheel.yaw_torque)
+        self.assertEqual(30000, wheel.roll_torque)
         self.assertTrue(wheel.active)
         time.sleep(0.1)
         wheel.active = False

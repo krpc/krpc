@@ -7,7 +7,7 @@ class TestTestingTools(testingtools.TestCase):
         failed = False
         try:
             f(*args)
-        except AssertionError, e:
+        except AssertionError as e:
             failed = True
         if not failed:
             self.fail('Expected test case to fail, but it passed')

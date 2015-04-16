@@ -21,7 +21,7 @@ class TestPartsParachute(testingtools.TestCase):
         parachutes = self.parts.parachutes
         for parachute in parachutes:
             self.assertFalse(parachute.deployed)
-            self.assertEquals(parachute.state, self.state.stowed)
+            self.assertEqual(parachute.state, self.state.stowed)
             self.assertClose(parachute.deploy_altitude, 500)
             self.assertClose(parachute.deploy_min_pressure, 0.01)
 
@@ -37,7 +37,7 @@ class TestPartsParachute(testingtools.TestCase):
         time.sleep(0.1)
         for parachute in parachutes:
             self.assertTrue(parachute.deployed)
-            self.assertEquals(parachute.state, self.state.active)
+            self.assertEqual(parachute.state, self.state.active)
 
     def test_parachute_on_descent(self):
         parachutes = self.parts.parachutes
@@ -47,7 +47,7 @@ class TestPartsParachute(testingtools.TestCase):
 
         for parachute in parachutes:
             self.assertFalse(parachute.deployed)
-            self.assertEquals(parachute.state, self.state.stowed)
+            self.assertEqual(parachute.state, self.state.stowed)
             self.assertClose(parachute.deploy_altitude, alt)
             self.assertClose(parachute.deploy_min_pressure, 0.01)
 
@@ -58,7 +58,7 @@ class TestPartsParachute(testingtools.TestCase):
 
         for parachute in parachutes:
             self.assertFalse(parachute.deployed)
-            self.assertEquals(parachute.state, self.state.stowed)
+            self.assertEqual(parachute.state, self.state.stowed)
 
         for parachute in parachutes:
             parachute.deploy()
@@ -66,14 +66,14 @@ class TestPartsParachute(testingtools.TestCase):
 
         for parachute in parachutes:
             self.assertTrue(parachute.deployed)
-            self.assertEquals(parachute.state, self.state.semi_deployed)
+            self.assertEqual(parachute.state, self.state.semi_deployed)
 
         while flight.surface_altitude > 0.9*alt:
             pass
 
         for parachute in parachutes:
             self.assertTrue(parachute.deployed)
-            self.assertEquals(parachute.state, self.state.deployed)
+            self.assertEqual(parachute.state, self.state.deployed)
 
         while abs(flight.vertical_speed) > 0.1:
             pass
@@ -81,7 +81,7 @@ class TestPartsParachute(testingtools.TestCase):
 
         for parachute in parachutes:
             self.assertTrue(parachute.deployed)
-            self.assertEquals(parachute.state, self.state.cut)
+            self.assertEqual(parachute.state, self.state.cut)
 
 if __name__ == "__main__":
     unittest.main()

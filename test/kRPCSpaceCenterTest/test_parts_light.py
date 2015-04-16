@@ -20,7 +20,7 @@ class TestPartsLight(testingtools.TestCase):
         cls.conn.close()
 
     def test_light(self):
-        light = filter(lambda e: e.part.title == 'Illuminator Mk1', self.parts.lights)[0]
+        light = next(iter(filter(lambda e: e.part.title == 'Illuminator Mk1', self.parts.lights)))
         self.assertFalse(light.active)
         self.assertEqual(light.power_usage, 0)
         light.active = True

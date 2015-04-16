@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 import os
 
@@ -9,7 +7,7 @@ def main():
     try:
         conn = krpc.connect()
     except:
-        print 'kRPC server not running; skipping tests'
+        print('kRPC server not running; skipping tests')
         exit(0)
 
     suite = unittest.TestLoader().discover(os.path.dirname(__file__), pattern='test_*.py')

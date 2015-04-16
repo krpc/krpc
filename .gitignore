@@ -150,3 +150,7 @@ lib/KSP_Data
 doc/build
 doc/src/python-api
 doc/src/images/**/*.png
+
+# Tests
+test/kRPCSpaceCenterTest/env2
+test/kRPCSpaceCenterTest/env3

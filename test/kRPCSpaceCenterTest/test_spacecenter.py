@@ -18,7 +18,7 @@ class TestSpaceCenter(testingtools.TestCase):
         cls.conn = krpc.connect(name='TestSpaceCenter')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
-        cls.other_vessel = filter(lambda v: v != cls.vessel, cls.sc.vessels)[0]
+        cls.other_vessel = next(filter(lambda v: v != cls.vessel, cls.sc.vessels))
         cls.ref_vessel = cls.vessel.reference_frame
         bodies = cls.sc.bodies
         cls.sun = bodies['Sun']

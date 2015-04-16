@@ -123,7 +123,7 @@ class TestCase(unittest.TestCase):
             if len(expected) != len(actual):
                 ok = False
             else:
-                for x,y in itertools.izip(expected, actual):
+                for x,y in zip(expected, actual):
                     if not self._isInRange(x-error, x+error, y):
                         ok = False
                         break

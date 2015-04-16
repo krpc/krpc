@@ -22,7 +22,7 @@ class TestParts(testingtools.TestCase):
     def test_all_parts(self):
         parts = self.parts.all
         part_titles = sorted(p.title for p in parts)
-        self.assertEquals(
+        self.assertEqual(
             part_titles,
             ['Advanced Reaction Wheel Module, Large', 'Aerodynamic Nose Cone',
              'Aerodynamic Nose Cone', 'Aerodynamic Nose Cone',

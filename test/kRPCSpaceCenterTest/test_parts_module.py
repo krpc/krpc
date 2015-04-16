@@ -21,7 +21,7 @@ class TestPartsModule(testingtools.TestCase):
 
     def test_command_module(self):
         part = self.parts.with_title('Mk1-2 Command Pod')[0]
-        module = filter(lambda m: m.name == 'ModuleCommand', part.modules)[0]
+        module = next(iter(filter(lambda m: m.name == 'ModuleCommand', part.modules)))
         self.assertEqual('ModuleCommand', module.name)
         self.assertEqual(part, module.part)
         self.assertEqual({'State': 'Operational'}, module.fields)
@@ -41,7 +41,7 @@ class TestPartsModule(testingtools.TestCase):
 
     def test_solar_panel(self):
         part = self.parts.with_title('SP-L 1x6 Photovoltaic Panels')[0]
-        module = filter(lambda m: m.name == 'ModuleDeployableSolarPanel', part.modules)[0]
+        module = next(iter(filter(lambda m: m.name == 'ModuleDeployableSolarPanel', part.modules)))
         self.assertEqual('ModuleDeployableSolarPanel', module.name)
         self.assertEqual(part, module.part)
         self.assertEqual({'Energy Flow': '0', 'Status': 'Retracted', 'Sun Exposure': '0'}, module.fields)
@@ -60,7 +60,7 @@ class TestPartsModule(testingtools.TestCase):
 
     def test_events(self):
         part = self.parts.with_title('Illuminator Mk1')[0]
-        module = filter(lambda m: m.name == 'ModuleLight', part.modules)[0]
+        module = next(iter(filter(lambda m: m.name == 'ModuleLight', part.modules)))
         self.assertTrue(module.has_event('Lights On'))
         self.assertFalse(module.has_event('Lights Off'))
         module.trigger_event('Lights On')
@@ -74,7 +74,7 @@ class TestPartsModule(testingtools.TestCase):
 
     def test_actions(self):
         part = self.parts.with_title('Illuminator Mk1')[0]
-        module = filter(lambda m: m.name == 'ModuleLight', part.modules)[0]
+        module = next(iter(filter(lambda m: m.name == 'ModuleLight', part.modules)))
         self.assertTrue(module.has_event('Lights On'))
         self.assertFalse(module.has_event('Lights Off'))
         module.set_action('ToggleLight', True)

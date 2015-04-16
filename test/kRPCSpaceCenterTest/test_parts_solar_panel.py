@@ -20,14 +20,14 @@ class TestPartsSolarPanel(testingtools.TestCase):
         cls.conn.close()
 
     def test_fixed_panel(self):
-        panel = filter(lambda e: e.part.title == 'OX-STAT Photovoltaic Panels', self.parts.solar_panels)[0]
+        panel = next(iter(filter(lambda e: e.part.title == 'OX-STAT Photovoltaic Panels', self.parts.solar_panels)))
         self.assertTrue(panel.deployed)
         self.assertEqual(panel.state, self.state.extended)
         self.assertGreater(panel.energy_flow, 0)
         self.assertGreater(panel.sun_exposure, 0)
 
     def test_extendable_panel(self):
-        panel = filter(lambda e: e.part.title == 'Gigantor XL Solar Array', self.parts.solar_panels)[0]
+        panel = next(iter(filter(lambda e: e.part.title == 'Gigantor XL Solar Array', self.parts.solar_panels)))
         self.assertFalse(panel.deployed)
         self.assertEqual(panel.state, self.state.retracted)
         self.assertEqual(panel.energy_flow, 0)
@@ -68,8 +68,7 @@ class TestPartsSolarPanel(testingtools.TestCase):
         self.assertEqual(panel.sun_exposure, 0)
 
     def test_break_panel(self):
-        panel = filter(
-            lambda e: e.part.title == 'OX-4L 1x6 Photovoltaic Panels', self.parts.solar_panels)[0]
+        panel = next(iter(filter(lambda e: e.part.title == 'OX-4L 1x6 Photovoltaic Panels', self.parts.solar_panels)))
 
         self.assertEqual(panel.state, self.state.retracted)
         panel.deployed = True

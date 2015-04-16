@@ -20,7 +20,7 @@ class TestPartsSensor(testingtools.TestCase):
         cls.conn.close()
 
     def test_barometer(self):
-        sensor = filter(lambda e: e.part.title == 'PresMat Barometer', self.parts.sensors)[0]
+        sensor = next(iter(filter(lambda e: e.part.title == 'PresMat Barometer', self.parts.sensors)))
         self.assertFalse(sensor.active)
         self.assertEqual(sensor.value, 'Off')
         self.assertClose(sensor.power_usage, 0)
@@ -36,7 +36,7 @@ class TestPartsSensor(testingtools.TestCase):
         self.assertClose(sensor.power_usage, 0)
 
     def test_gravity(self):
-        sensor = filter(lambda e: e.part.title == 'GRAVMAX Negative Gravioli Detector', self.parts.sensors)[0]
+        sensor = next(iter(filter(lambda e: e.part.title == 'GRAVMAX Negative Gravioli Detector', self.parts.sensors)))
         self.assertFalse(sensor.active)
         self.assertEqual(sensor.value, 'Off')
         self.assertClose(sensor.power_usage, 0)

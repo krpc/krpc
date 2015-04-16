@@ -14,7 +14,7 @@ def normalize(v):
     return tuple(x/m for x in v)
 
 def dot(u,v):
-    return sum(x*y for x,y in itertools.izip(u,v))
+    return sum(x*y for x,y in zip(u,v))
 
 def cross(u, v):
     return tuple([u[1]*v[2] - u[2]*v[1],
@@ -67,13 +67,13 @@ class vector(object):
 
     def __add__(self, u):
         try:
-            return vector([x+y for x,y in itertools.izip(self.v,u)])
+            return vector([x+y for x,y in zip(self.v,u)])
         except TypeError:
             return vector([x+u for x in self.v])
 
     def __sub__(self, u):
         try:
-            return vector([x-y for x,y in itertools.izip(self.v,u)])
+            return vector([x-y for x,y in zip(self.v,u)])
         except TypeError:
             return vector([x-u for x in self.v])
 
@@ -84,10 +84,10 @@ class vector(object):
         return vector([-x for x in self.v])
 
     def __eq__(self, u):
-        return all(x == y for x,y in itertools.izip(self.v,u))
+        return all(x == y for x,y in zip(self.v,u))
 
     def __lt__(self, u):
-        return all(x < y for x,y in itertools.izip(self.v,u))
+        return all(x < y for x,y in zip(self.v,u))
 
     def __str__(self):
         return str(self.v)

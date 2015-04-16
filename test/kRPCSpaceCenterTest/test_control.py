@@ -46,7 +46,7 @@ class TestControl(testingtools.TestCase):
 
     def test_maneuver_node_editing(self):
         node = self.control.add_node(self.conn.space_center.ut + 60, 100, 0, 0)
-        self.assertEquals(100, node.prograde)
+        self.assertEqual(100, node.prograde)
         self.control.remove_nodes()
 
     def test_pitch_control(self):
