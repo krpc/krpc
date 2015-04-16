@@ -10,7 +10,9 @@ class _Attributes(object):
             i.e. not a property accessor, class method etc. """
         return not cls.is_a_property_accessor(attrs) and \
                not cls.is_a_class_method(attrs) and \
-               not cls.is_a_class_property_accessor(attrs)
+               not cls.is_a_class_static_method(attrs) and \
+               not cls.is_a_class_property_accessor(attrs) and \
+               not cls.is_a_class_static_property_accessor(attrs)
 
     @classmethod
     def is_a_property_accessor(cls, attrs):
@@ -64,53 +66,43 @@ class _Attributes(object):
 
     @classmethod
     def get_service_name(cls, attrs):
-        """ Return the name of the services that a class method or property accessor is part of. """
-        if cls.is_a_class_method(attrs):
+        """ Return the name of the service that a class method or property accessor is part of. """
+        if cls.is_a_class_method(attrs) or cls.is_a_class_static_method(attrs):
             for attr in attrs:
-                match = re.match(r'^Class\.Method\(([^,\.]+)\.[^,]+,[^,]+\)$', attr)
+                match = re.match(r'^Class\.(Static)?Method\(([^,\.]+)\.[^,]+,[^,]+\)$', attr)
                 if match:
-                    return match.group(1)
+                    return match.group(2)
         if cls.is_a_class_property_accessor(attrs):
             for attr in attrs:
                 match = re.match(r'^Class\.Property.(Get|Set)\(([^,\.]+)\.[^,]+,[^,]+\)$', attr)
                 if match:
                     return match.group(2)
-        raise ValueError('Procedure attributes are not a class method or class property accessor')
+        raise ValueError('Procedure attributes are not a class method or property accessor')
 
     @classmethod
     def get_class_name(cls, attrs):
         """ Return the name of the class that a method or property accessor is part of. """
-        if cls.is_a_class_method(attrs):
+        if cls.is_a_class_method(attrs) or cls.is_a_class_static_method(attrs):
             for attr in attrs:
-                match = re.match(r'^Class\.Method\([^,\.]+\.([^,\.]+),[^,]+\)$', attr)
+                match = re.match(r'^Class\.(Static)?Method\([^,\.]+\.([^,\.]+),[^,]+\)$', attr)
                 if match:
-                    return match.group(1)
-        if cls.is_a_class_static_method(attrs):
-            for attr in attrs:
-                match = re.match(r'^Class\.StaticMethod\([^,\.]+\.([^,\.]+),[^,]+\)$', attr)
-                if match:
-                    return match.group(1)
+                    return match.group(2)
         if cls.is_a_class_property_accessor(attrs):
             for attr in attrs:
                 match = re.match(r'^Class\.Property.(Get|Set)\([^,\.]+\.([^,]+),[^,]+\)$', attr)
                 if match:
                     return match.group(2)
-        raise ValueError('Procedure attributes are not a class method, static method or property accessor')
+        raise ValueError('Procedure attributes are not a class method or property accessor')
 
     @classmethod
     def get_class_method_name(cls, attrs):
-        """ Return the name of a class mathod. """
-        if cls.is_a_class_method(attrs):
+        """ Return the name of a class method. """
+        if cls.is_a_class_method(attrs) or cls.is_a_class_static_method(attrs):
             for attr in attrs:
-                match = re.match(r'^Class\.Method\([^,]+,([^,]+)\)$', attr)
+                match = re.match(r'^Class\.(Static)?Method\([^,]+,([^,]+)\)$', attr)
                 if match:
-                    return match.group(1)
-        if cls.is_a_class_static_method(attrs):
-            for attr in attrs:
-                match = re.match(r'^Class\.StaticMethod\([^,]+,([^,]+)\)$', attr)
-                if match:
-                    return match.group(1)
-        raise ValueError('Procedure attributes are not a class method or static method')
+                    return match.group(2)
+        raise ValueError('Procedure attributes are not a class method')
 
     @classmethod
     def get_class_property_name(cls, attrs):

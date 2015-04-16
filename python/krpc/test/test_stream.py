@@ -39,6 +39,12 @@ class TestStream(ServerTestCase, unittest.TestCase):
                 time.sleep(0.1)
                 self.assertEqual('bob3.14159', x())
 
+    def test_class_static_method(self):
+        with self.conn.stream(self.conn.test_service.TestClass.static_method, 'foo') as x:
+            for i in range(5):
+                time.sleep(0.1)
+                self.assertEqual('jebfoo', x())
+
     def test_class_property(self):
         obj = self.conn.test_service.create_test_object('jeb')
         obj.int_property = 42
