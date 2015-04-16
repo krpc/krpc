@@ -1,8 +1,10 @@
 v0.1.7
- - Optionally don't connect to the stream server
- - Checking of address and port parameters before connecting
  - Support for Python 3
- - Update to use Protocol Buffers 3.0.0-alpha-1
+ - Upgrade to Protocol Buffers 3.0.0-alpha-1
+ - Checking of address and port parameters before connecting
+ - Connecting to the stream server is now optional
+ - Improve detection of protobuf message and enum types and improve support for 3rd party types (#38)
+ - Fix unicode decoding/encoding bugs (#104)
 
 v0.1.6
  - None, bumped version to match server version
