@@ -3,7 +3,7 @@ import sys
 
 setup(
     name='krpc',
-    version='0.1.6',
+    version='0.1.7',
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     packages=['krpc','krpc.schema','krpc.test'],
