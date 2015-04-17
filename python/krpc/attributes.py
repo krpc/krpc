@@ -11,8 +11,7 @@ class _Attributes(object):
         return not cls.is_a_property_accessor(attrs) and \
                not cls.is_a_class_method(attrs) and \
                not cls.is_a_class_static_method(attrs) and \
-               not cls.is_a_class_property_accessor(attrs) and \
-               not cls.is_a_class_static_property_accessor(attrs)
+               not cls.is_a_class_property_accessor(attrs)
 
     @classmethod
     def is_a_property_accessor(cls, attrs):
