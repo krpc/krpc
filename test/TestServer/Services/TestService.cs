@@ -260,13 +260,13 @@ namespace TestServer.Services
         [KRPCProcedure]
         public static void ThrowArgumentException ()
         {
-            throw new ArgumentException("Invalid argument");
+            throw new ArgumentException ("Invalid argument");
         }
 
         [KRPCProcedure]
         public static void ThrowInvalidOperationException ()
         {
-            throw new InvalidOperationException("Invalid operation");
+            throw new InvalidOperationException ("Invalid operation");
         }
     }
 }
