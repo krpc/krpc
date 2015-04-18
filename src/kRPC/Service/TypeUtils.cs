@@ -382,7 +382,7 @@ namespace KRPC.Service
         /// Check the given method is a valid kRPC class method
         ///  1. Must have KRPCMethod attribute
         ///  2. Must have a valid identifier
-        ///  3. Must be a public non-static method
+        ///  3. Must be a public method
         ///  4. Must be declared inside a kRPC class
         /// </summary>
         public static void ValidateKRPCMethod (MethodInfo method)
@@ -393,8 +393,8 @@ namespace KRPC.Service
             // Validate the identifier.
             ValidateIdentifier (method.Name);
             // Check it's public non-static
-            if (!(method.IsPublic && !method.IsStatic))
-                throw new ServiceException ("KRPCMethod " + method + " is not public non-static");
+            if (!method.IsPublic)
+                throw new ServiceException ("KRPCMethod " + method + " is not public");
             // Check the class is defined in a KRPCClass
             var declaringType = method.DeclaringType;
             if (!Reflection.HasAttribute<KRPCClassAttribute> (declaringType))

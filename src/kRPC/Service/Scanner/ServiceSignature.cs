@@ -130,9 +130,15 @@ namespace KRPC.Service.Scanner
         {
             if (!Classes.Contains (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
-            var handler = new ClassMethodHandler (method);
-            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, GameScene,
-                "Class.Method(" + Name + "." + cls + "," + method.Name + ")", "ParameterType(0).Class(" + Name + "." + cls + ")"));
+            if (!method.IsStatic) {
+                var handler = new ClassMethodHandler (method);
+                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, GameScene,
+                    "Class.Method(" + Name + "." + cls + "," + method.Name + ")", "ParameterType(0).Class(" + Name + "." + cls + ")"));
+            } else {
+                var handler = new ClassStaticMethodHandler (method);
+                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, handler, GameScene,
+                    "Class.StaticMethod(" + Name + "." + cls + "," + method.Name + ")"));
+            }
         }
 
         /// <summary>

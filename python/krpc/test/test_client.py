@@ -89,6 +89,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
         obj2 = self.conn.test_service.create_test_object('bill')
         self.assertEqual('bobbill', obj.object_to_string(obj2))
 
+    def test_class_static_methods(self):
+        self.assertEqual('jeb', self.conn.test_service.TestClass.static_method())
+        self.assertEqual('jebbobbill', self.conn.test_service.TestClass.static_method('bob', 'bill'))
+
     def test_class_properties(self):
         obj = self.conn.test_service.create_test_object('jeb')
         obj.int_property = 0
@@ -150,60 +154,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertSetEqual(
             set(['get_services', 'get_status']),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.krpc))))
-
-    def test_test_service_service_members(self):
-        self.assertSetEqual(
-            set([
-                'float_to_string',
-                'double_to_string',
-                'int32_to_string',
-                'int64_to_string',
-                'bool_to_string',
-                'string_to_int32',
-                'bytes_to_hex_string',
-                'add_multiple_values',
-
-                'string_property',
-                'get__string_property',
-                'set__string_property',
-
-                'string_property_private_get',
-                'set__string_property_private_get',
-
-                'string_property_private_set',
-                'get__string_property_private_set',
-
-                'create_test_object',
-                'echo_test_object',
-
-                'object_property',
-                'get__object_property',
-                'set__object_property',
-
-                'TestClass',
-
-                'optional_arguments'
-            ]),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service))))
-
-    def test_test_service_test_class_members(self):
-        self.assertSetEqual(
-            set([
-                'get_value',
-                'float_to_string',
-                'object_to_string',
-
-                'int_property',
-                'test_class__get__int_property',
-                'test_class__set__int_property',
-
-                'object_property',
-                'test_class__get__object_property',
-                'test_class__set__object_property',
-
-                'optional_arguments'
-            ]),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestClass))))
 
     def test_enums(self):
         self.assertEqual(TestSchema.a, self.conn.test_service.enum_return())
@@ -336,7 +286,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'test_class__get__object_property',
                 'test_class__set__object_property',
 
-                'optional_arguments'
+                'optional_arguments',
+                'static_method'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestClass))))
 

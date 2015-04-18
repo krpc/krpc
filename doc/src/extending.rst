@@ -251,14 +251,13 @@ functionality to the kRPC server.
 .. class:: KRPCMethod
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is
-   applied to non-static methods inside a :class:`KRPCClass`. This allows a
-   client to call methods on an instance of a class. This attribute works
-   similarly to :class:`KRPCProcedure` but is applied to non-static methods.
+   applied to methods inside a :class:`KRPCClass`. This allows a client to call
+   methods on an instance, or static methods in the class.
 
    The method to which this attribute is applied must satisfy the following
    criteria:
 
-   * The method must be ``public`` and *not* ``static``.
+   * The method must be ``public``.
 
    * The name of the method must be a valid :ref:`kRPC identifier
      <service-api-identifiers>`.

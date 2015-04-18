@@ -23,7 +23,7 @@ namespace KRPCTest.Utils
         public void GetMethodsWithAttribute ()
         {
             Assert.AreEqual (24, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService)).Count ());
-            Assert.AreEqual (3, Reflection.GetMethodsWith<KRPCMethodAttribute> (typeof(TestService.TestClass)).Count ());
+            Assert.AreEqual (4, Reflection.GetMethodsWith<KRPCMethodAttribute> (typeof(TestService.TestClass)).Count ());
             Assert.AreEqual (0, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService.TestClass)).Count ());
             Assert.AreEqual (0, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(string)).Count ());
         }
