@@ -14,7 +14,10 @@ class ServerTestCase(object):
         cls.server.kill()
 
     def setUp(self):
-        self.conn = krpc.connect(name='TestClient', address='localhost', rpc_port=50011, stream_port=50012)
+        self.conn = self.connect()
 
     def tearDown(self):
         self.conn.close()
+
+    def connect(self):
+        return krpc.connect(name='TestClient', address='localhost', rpc_port=50011, stream_port=50012)

@@ -314,5 +314,11 @@ class TestClient(ServerTestCase, unittest.TestCase):
             self.conn.test_service.string_property = string
             self.assertEqual(string, self.conn.test_service.string_property)
 
+    def test_types_from_different_connections(self):
+        conn1 = self.connect()
+        conn2 = self.connect()
+        self.assertEqual(conn1.test_service.TestClass, conn2.test_service.TestClass)
+
+
 if __name__ == '__main__':
     unittest.main()
