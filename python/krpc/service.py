@@ -1,5 +1,6 @@
 import re
 from krpc.attributes import _Attributes
+from krpc.types import _Types
 
 _regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
 _regex_single_uppercase = re.compile(r'([a-z0-9])([A-Z])')
@@ -45,7 +46,6 @@ class _Service(BaseService):
         super(_Service, self).__init__(client, service.name)
         self._cls = cls
         self._name = service.name
-        self._types = client._types
 
         # Add class types to service
         for cls in service.classes:
@@ -107,7 +107,7 @@ class _Service(BaseService):
     def _add_class(self, cls):
         """ Add a class type to this service, and the type store """
         name = cls.name
-        class_type = self._types.as_type('Class(' + self._name + '.' + name + ')')
+        class_type = _Types.as_type('Class(' + self._name + '.' + name + ')')
         setattr(self, name, class_type.python_type)
 
     def _add_enumeration(self, enum):
@@ -119,10 +119,10 @@ class _Service(BaseService):
     def _add_procedure(self, procedure):
         """ Add a plain procedure to this service """
         param_names = [_to_snake_case(param.name) for param in procedure.parameters]
-        param_types = [self._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
+        param_types = [_Types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
         return_type = None
         if procedure.HasField('return_type'):
-            return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
+            return_type = _Types.get_return_type(procedure.return_type, procedure.attributes)
         func = lambda *args, **kwargs: self._invoke(
             procedure.name, args=args, kwargs=kwargs,
             param_names=param_names, param_types=param_types, return_type=return_type)
@@ -152,10 +152,10 @@ class _Service(BaseService):
         """ Add a class method to the service """
         cls = getattr(self, class_name)
         param_names = [_to_snake_case(param.name) for param in procedure.parameters]
-        param_types = [self._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
+        param_types = [_Types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
         return_type = None
         if procedure.HasField('return_type'):
-            return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
+            return_type = _Types.get_return_type(procedure.return_type, procedure.attributes)
         func = lambda s, *args, **kwargs: self._invoke(procedure.name, args=[s] + list(args), kwargs=kwargs,
                                                        param_names=param_names, param_types=param_types,
                                                        return_type=return_type)
@@ -170,10 +170,10 @@ class _Service(BaseService):
         """ Add a static class method to the service """
         cls = getattr(self, class_name)
         param_names = [_to_snake_case(param.name) for param in procedure.parameters]
-        param_types = [self._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
+        param_types = [_Types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
         return_type = None
         if procedure.HasField('return_type'):
-            return_type = self._types.get_return_type(procedure.return_type, procedure.attributes)
+            return_type = _Types.get_return_type(procedure.return_type, procedure.attributes)
         func = lambda c, *args, **kwargs: self._invoke(procedure.name, args=list(args), kwargs=kwargs,
                                                        param_names=param_names, param_types=param_types,
                                                        return_type=return_type)

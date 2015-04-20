@@ -23,24 +23,24 @@ class _Decoder(object):
         if isinstance(typ, _MessageType):
             return cls._decode_message(data, typ)
         elif isinstance(typ, _EnumType):
-            return cls._decode_value(data, _Types().as_type('int32'))
+            return cls._decode_value(data, _Types.as_type('int32'))
         elif isinstance(typ, _ValueType):
             return cls._decode_value(data, typ)
         elif isinstance(typ, _ClassType):
-            object_id_typ = _Types().as_type('uint64')
+            object_id_typ = _Types.as_type('uint64')
             object_id = cls._decode_value(data, object_id_typ)
             return typ.python_type(object_id) if object_id != 0 else None
         elif isinstance(typ, _ListType):
-            msg = cls._decode_message(data, _Types().as_type('KRPC.List'))
+            msg = cls._decode_message(data, _Types.as_type('KRPC.List'))
             return [cls.decode(item, typ.value_type) for item in msg.items]
         elif isinstance(typ, _DictionaryType):
-            msg = cls._decode_message(data, _Types().as_type('KRPC.Dictionary'))
+            msg = cls._decode_message(data, _Types.as_type('KRPC.Dictionary'))
             return dict((cls.decode(entry.key, typ.key_type), cls.decode(entry.value, typ.value_type)) for entry in msg.entries)
         elif isinstance(typ, _SetType):
-            msg = cls._decode_message(data, _Types().as_type('KRPC.Set'))
+            msg = cls._decode_message(data, _Types.as_type('KRPC.Set'))
             return set(cls.decode(item, typ.value_type) for item in msg.items)
         elif isinstance(typ, _TupleType):
-            msg = cls._decode_message(data, _Types().as_type('KRPC.Tuple'))
+            msg = cls._decode_message(data, _Types.as_type('KRPC.Tuple'))
             return tuple(cls.decode(item, value_type) for item,value_type in zip(msg.items,typ.value_types))
         else:
             raise RuntimeError ('Cannot decode type %s' % str(typ))

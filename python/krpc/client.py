@@ -18,22 +18,22 @@ class KRPCService(BaseService):
 
     def get_status(self):
         """ Get status message from the server, including the version number  """
-        return self._invoke('GetStatus', return_type=self._client._types.as_type('KRPC.Status'))
+        return self._invoke('GetStatus', return_type=_Types.as_type('KRPC.Status'))
 
     def get_services(self):
         """ Get available services and procedures """
-        return self._invoke('GetServices', return_type=self._client._types.as_type('KRPC.Services'))
+        return self._invoke('GetServices', return_type=_Types.as_type('KRPC.Services'))
 
     def add_stream(self, request):
         """ Add a streaming request. Returns its identifier. """
         return self._invoke('AddStream', args=[request],
-                            param_names=['request'], param_types=[self._client._types.as_type('KRPC.Request')],
-                            return_type=self._client._types.as_type('uint32'))
+                            param_names=['request'], param_types=[_Types.as_type('KRPC.Request')],
+                            return_type=_Types.as_type('uint32'))
 
     def remove_stream(self, stream_id):
         """ Remove a streaming request """
         return self._invoke('RemoveStream', args=[stream_id],
-                            param_names=['id'], param_types=[self._client._types.as_type('uint32')])
+                            param_names=['id'], param_types=[_Types.as_type('uint32')])
 
 
 class Client(object):
@@ -47,9 +47,8 @@ class Client(object):
         self._rpc_connection = rpc_connection
         self._rpc_connection_lock = threading.Lock()
         self._stream_connection = stream_connection
-        self._types = _Types()
-        self._request_type = self._types.as_type('KRPC.Request')
-        self._response_type = self._types.as_type('KRPC.Response')
+        self._request_type = _Types.as_type('KRPC.Request')
+        self._response_type = _Types.as_type('KRPC.Response')
 
         # Set up the main KRPC service
         self.krpc = KRPCService(self)
@@ -61,7 +60,7 @@ class Client(object):
             for procedure in service.procedures:
                 try:
                     name = _Attributes.get_class_name(procedure.attributes)
-                    self._types.as_type('Class(' + service.name + '.' + name + ')')
+                    _Types.as_type('Class(' + service.name + '.' + name + ')')
                 except ValueError:
                     pass
 
@@ -133,7 +132,7 @@ class Client(object):
             if type(value) != typ.python_type:
                 # Try coercing to the correct type
                 try:
-                    value = self._types.coerce_to(value, typ)
+                    value = _Types.coerce_to(value, typ)
                 except ValueError:
                     raise TypeError('%s.%s() argument %d must be a %s, got a %s' % \
                                     (service, procedure, i, typ.python_type, type(value)))

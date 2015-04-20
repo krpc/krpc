@@ -76,8 +76,8 @@ def add_stream(conn, func, *args, **kwargs):
         return _stream_cache[e.stream_id]
 
 def update_thread(connection):
-    stream_message_type = _Types().as_type('KRPC.StreamMessage')
-    response_type = _Types().as_type('KRPC.Response')
+    stream_message_type = _Types.as_type('KRPC.StreamMessage')
+    response_type = _Types.as_type('KRPC.Response')
 
     while True:
 

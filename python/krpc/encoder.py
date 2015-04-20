@@ -34,17 +34,17 @@ class _Encoder(object):
         elif isinstance(typ, _ValueType):
             return cls._encode_value(x, typ)
         elif isinstance(typ, _EnumType):
-            return cls._encode_value(x, _Types().as_type('int32'))
+            return cls._encode_value(x, _Types.as_type('int32'))
         elif isinstance(typ, _ClassType):
             object_id = x._object_id if x is not None else 0
-            return cls._encode_value(object_id, _Types().as_type('uint64'))
+            return cls._encode_value(object_id, _Types.as_type('uint64'))
         elif isinstance(typ, _ListType):
-            msg = _Types().as_type('KRPC.List').python_type()
+            msg = _Types.as_type('KRPC.List').python_type()
             msg.items.extend(cls.encode(item, typ.value_type) for item in x)
             return msg.SerializeToString()
         elif isinstance(typ, _DictionaryType):
-            msg = _Types().as_type('KRPC.Dictionary').python_type()
-            entry_type = _Types().as_type('KRPC.DictionaryEntry')
+            msg = _Types.as_type('KRPC.Dictionary').python_type()
+            entry_type = _Types.as_type('KRPC.DictionaryEntry')
             entries = []
             for key,value in sorted(x.items(), key=lambda i: i[0]):
                 entry = entry_type.python_type()
@@ -54,11 +54,11 @@ class _Encoder(object):
             msg.entries.extend(entries)
             return msg.SerializeToString()
         elif isinstance(typ, _SetType):
-            msg = _Types().as_type('KRPC.Set').python_type()
+            msg = _Types.as_type('KRPC.Set').python_type()
             msg.items.extend(cls.encode(item, typ.value_type) for item in x)
             return msg.SerializeToString()
         elif isinstance(typ, _TupleType):
-            msg = _Types().as_type('KRPC.Tuple').python_type()
+            msg = _Types.as_type('KRPC.Tuple').python_type()
             msg.items.extend(cls.encode(item, value_type) for item,value_type in zip(x,typ.value_types))
             return msg.SerializeToString()
         else:

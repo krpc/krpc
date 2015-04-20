@@ -36,32 +36,32 @@ class TestEncoder(unittest.TestCase):
         request = krpc.schema.KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
-        data = Encoder.encode(request, Types().as_type('KRPC.Request'))
+        data = Encoder.encode(request, Types.as_type('KRPC.Request'))
         expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         self.assertEqual(expected, hexlify(data))
 
     def test_encode_value(self):
-        data = Encoder.encode(300, Types().as_type('int32'))
+        data = Encoder.encode(300, Types.as_type('int32'))
         self.assertEqual('ac02', hexlify(data))
 
     def test_encode_unicode_string(self):
-        data = Encoder.encode(b'\xe2\x84\xa2'.decode('utf-8'), Types().as_type('string'))
+        data = Encoder.encode(b'\xe2\x84\xa2'.decode('utf-8'), Types.as_type('string'))
         self.assertEqual('03e284a2', hexlify(data))
 
     def test_encode_message_delimited(self):
         request = krpc.schema.KRPC.Request()
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
-        data = Encoder.encode_delimited(request, Types().as_type('KRPC.Request'))
+        data = Encoder.encode_delimited(request, Types.as_type('KRPC.Request'))
         expected = '1c'+'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         self.assertEqual(expected, hexlify(data))
 
     def test_encode_value_delimited(self):
-        data = Encoder.encode_delimited(300, Types().as_type('int32'))
+        data = Encoder.encode_delimited(300, Types.as_type('int32'))
         self.assertEqual('02'+'ac02', hexlify(data))
 
     def test_encode_class(self):
-        typ = Types().as_type('Class(ServiceName.ClassName)')
+        typ = Types.as_type('Class(ServiceName.ClassName)')
         class_type = typ.python_type
         self.assertTrue(issubclass(class_type, BaseClass))
         value = class_type(300)
@@ -70,7 +70,7 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual('ac02', hexlify(data))
 
     def test_encode_class_none(self):
-        typ = Types().as_type('Class(ServiceName.ClassName)')
+        typ = Types.as_type('Class(ServiceName.ClassName)')
         value = None
         data = Encoder.encode(value, typ)
         self.assertEqual('00', hexlify(data))

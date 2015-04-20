@@ -48,25 +48,25 @@ class _Types(object):
     """ For handling conversion between protocol buffer types and
         python types, and storing type objects for class types """
 
-    def __init__(self):
-        self._types = {}
+    _types = {}
 
-    def as_type(self, type_string):
+    @classmethod
+    def as_type(cls, type_string):
         """ Return a type object given a protocol buffer type string """
-        if type_string in self._types:
-            return self._types[type_string]
+        if type_string in cls._types:
+            return cls._types[type_string]
         if type_string in PROTOBUF_VALUE_TYPES:
             typ = _ValueType(type_string)
         elif type_string.startswith('Class(') or type_string == 'Class':
             typ = _ClassType(type_string)
         elif type_string.startswith('List(') or type_string == 'List':
-            typ = _ListType(type_string, self)
+            typ = _ListType(type_string)
         elif type_string.startswith('Dictionary(') or type_string == 'Dictionary':
-            typ = _DictionaryType(type_string, self)
+            typ = _DictionaryType(type_string)
         elif type_string.startswith('Set(') or type_string == 'Set':
-            typ = _SetType(type_string, self)
+            typ = _SetType(type_string)
         elif type_string.startswith('Tuple(') or type_string == 'Tuple':
-            typ = _TupleType(type_string, self)
+            typ = _TupleType(type_string)
         else:
             if not re.match(r'^[A-Za-z0-9_\.]+$', type_string):
                 raise ValueError('\'%s\' is not a valid type string' % type_string)
@@ -79,32 +79,35 @@ class _Types(object):
             else:
                 raise ValueError('\'%s\' is not a valid type string' % type_string)
 
-        self._types[type_string] = typ
+        cls._types[type_string] = typ
         return typ
 
-    def get_parameter_type(self, pos, typ, attrs):
+    @classmethod
+    def get_parameter_type(cls, pos, typ, attrs):
         """ Return a type object for a parameter at the given
             position, protocol buffer type, and procedure attributes """
         attrs = _Attributes.get_parameter_type_attrs(pos, attrs)
         for attr in attrs:
             try:
-                return self.as_type(attr)
+                return cls.as_type(attr)
             except ValueError:
                 pass
-        return self.as_type(typ)
+        return cls.as_type(typ)
 
-    def get_return_type(self, typ, attrs):
+    @classmethod
+    def get_return_type(cls, typ, attrs):
         """ Return a type object for a return value with the given
             protocol buffer type and procedure attributes """
         attrs = _Attributes.get_return_type_attrs(attrs)
         for attr in attrs:
             try:
-                return self.as_type(attr)
+                return cls.as_type(attr)
             except ValueError:
                 pass
-        return self.as_type(typ)
+        return cls.as_type(typ)
 
-    def coerce_to(self, value, typ):
+    @classmethod
+    def coerce_to(cls, value, typ):
         """ Coerce a value to the specified type. Raises ValueError if the coercion is not possible. """
         # A NoneType can be coerced to a _ClassType
         if isinstance(typ, _ClassType) and value is None:
@@ -113,12 +116,12 @@ class _Types(object):
         try:
             # Coerce tuples to lists
             if isinstance(value, collections.Iterable) and isinstance(typ, _ListType):
-                return typ.python_type(self.coerce_to(x, typ.value_type) for x in value)
+                return typ.python_type(cls.coerce_to(x, typ.value_type) for x in value)
             # Coerce lists (with appropriate number of elements) to tuples
             if isinstance(value, collections.Iterable) and isinstance(typ, _TupleType):
                 if len(value) != len(typ.value_types):
                     raise ValueError
-                return typ.python_type([self.coerce_to(x, typ.value_types[i]) for i,x in enumerate(value)])
+                return typ.python_type([cls.coerce_to(x, typ.value_types[i]) for i,x in enumerate(value)])
         except ValueError:
             raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) + ' to type ' + str(typ))
         # Numeric types
@@ -250,12 +253,12 @@ def _parse_type_string(typ):
 class _ListType(_TypeBase):
     """ A list collection type, represented by a protobuf message """
 
-    def __init__(self, type_string, type_store):
+    def __init__(self, type_string):
         match = re.match(r'^List\((.+)\)$', type_string)
         if not match:
             raise ValueError('\'%s\' is not a valid type string for a list type' % type_string)
 
-        self.value_type = type_store.as_type(match.group(1))
+        self.value_type = _Types.as_type(match.group(1))
 
         super(_ListType, self).__init__(str(type_string), list)
 
@@ -263,7 +266,7 @@ class _ListType(_TypeBase):
 class _DictionaryType(_TypeBase):
     """ A dictionary collection type, represented by a protobuf message """
 
-    def __init__(self, type_string, type_store):
+    def __init__(self, type_string):
         match = re.match(r'^Dictionary\((.+)\)$', type_string)
         if not match:
             raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
@@ -275,8 +278,8 @@ class _DictionaryType(_TypeBase):
             value_string, typ = _parse_type_string(typ)
             if typ != None:
                 raise ValueError
-            self.key_type = type_store.as_type(key_string)
-            self.value_type = type_store.as_type(value_string)
+            self.key_type = _Types.as_type(key_string)
+            self.value_type = _Types.as_type(value_string)
         except ValueError:
             raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
 
@@ -286,12 +289,12 @@ class _DictionaryType(_TypeBase):
 class _SetType(_TypeBase):
     """ A set collection type, represented by a protobuf message """
 
-    def __init__(self, type_string, type_store):
+    def __init__(self, type_string):
         match = re.match(r'^Set\((.+)\)$', type_string)
         if not match:
             raise ValueError('\'%s\' is not a valid type string for a set type' % type_string)
 
-        self.value_type = type_store.as_type(match.group(1))
+        self.value_type = _Types.as_type(match.group(1))
 
         super(_SetType, self).__init__(str(type_string), set)
 
@@ -299,7 +302,7 @@ class _SetType(_TypeBase):
 class _TupleType(_TypeBase):
     """ A tuple collection type, represented by a protobuf message """
 
-    def __init__(self, type_string, type_store):
+    def __init__(self, type_string):
         match = re.match(r'^Tuple\((.+)\)$', type_string)
         if not match:
             raise ValueError('\'%s\' is not a valid type string for a set type' % type_string)
@@ -308,7 +311,7 @@ class _TupleType(_TypeBase):
         typ = match.group(1)
         while typ != None:
             value_type, typ = _parse_type_string(typ)
-            self.value_types.append(type_store.as_type(value_type))
+            self.value_types.append(_Types.as_type(value_type))
 
         super(_TupleType, self).__init__(str(type_string), tuple)
 
