@@ -10,8 +10,8 @@ AutoPilot
 
       Gets or sets the state of SAS.
 
-      :rtype: `bool`
-      :returns: `True` if SAS is enabled, `False` if it is not.
+      :rtype: bool
+      :returns: ``true`` if SAS is enabled, ``false`` if it is not.
 
    .. attribute:: SASMode
 

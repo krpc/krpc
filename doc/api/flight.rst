@@ -164,7 +164,7 @@ Flight
       Gets the current density of the atmosphere around the vessel, in
       :math:`kg/m^3`.
 
-      :rtype: `double`
+      :rtype: double
 
       .. note:: Calculated using `Ferram Aerospace Research`_ if it is
          installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
