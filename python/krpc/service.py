@@ -174,15 +174,15 @@ class _Service(BaseService):
         return_type = None
         if procedure.HasField('return_type'):
             return_type = _Types.get_return_type(procedure.return_type, procedure.attributes)
-        func = lambda c, *args, **kwargs: self._invoke(procedure.name, args=list(args), kwargs=kwargs,
-                                                       param_names=param_names, param_types=param_types,
-                                                       return_type=return_type)
+        func = lambda *args, **kwargs: self._invoke(procedure.name, args=list(args), kwargs=kwargs,
+                                                    param_names=param_names, param_types=param_types,
+                                                    return_type=return_type)
         setattr(func, '_build_request',
-                lambda c, *args, **kwargs: self._build_request(procedure.name, args=list(args), kwargs=kwargs,
-                                                               param_names=param_names, param_types=param_types,
-                                                               return_type=return_type))
+                lambda *args, **kwargs: self._build_request(procedure.name, args=list(args), kwargs=kwargs,
+                                                            param_names=param_names, param_types=param_types,
+                                                            return_type=return_type))
         setattr(func, '_return_type', return_type)
-        setattr(cls, _to_snake_case(method_name), classmethod(func))
+        setattr(cls, _to_snake_case(method_name), staticmethod(func))
 
     def _add_class_property(self, class_name, property_name, getter=None, setter=None):
         """ Add a class property to the service """
