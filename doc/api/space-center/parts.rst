@@ -292,9 +292,9 @@ Part
 
    .. attribute:: Resources
 
-      Gets a resources object for the part.
+      Gets a :class:`Resources` object for the part.
 
-      :rtype: :class:`PartResources`
+      :rtype: :class:`Resources`
 
    .. attribute:: Crossfeed
 
@@ -523,41 +523,6 @@ Module
    .. method:: SetAction (name, [value = true])
 
       Set the value of an action with the given name.
-
-PartResources
--------------
-
-.. class:: PartResources
-
-   Used to examine the resources stored in a part. An instance can be obtained
-   via :attr:`Part.Resources`.
-
-   .. attribute:: Names
-
-      Gets a list of the resources that the part can store.
-
-      :rtype: :class:`List` ( string )
-
-   .. method:: HasResource (name)
-
-      Gets whether the part has the named resource.
-
-      :param string name:
-      :rtype: bool
-
-   .. method:: Max (name)
-
-      Gets the maximum amount of the named resource that the part can store.
-
-      :param string name:
-      :rtype: float
-
-   .. method:: Amount (name)
-
-      Gets the current amount of the named resource that the part is storing.
-
-      :param string name:
-      :rtype: float
 
 Specific Types of Part
 ----------------------

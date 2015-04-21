@@ -68,10 +68,22 @@ Vessel
 
    .. attribute:: Resources
 
-      Gets a :class:`VesselResources` object, that can used to get information
-      about, and manage, the vessels resources.
+      Gets a :class:`Resources` object, that can used to get information about
+      resources stored in the vessel.
 
-      :rtype: :class:`VesselResources`
+   .. method:: ResourcesInDecoupleStage (stage, [cumulative = true])
+
+      Gets a :class:`Resources` object, that can used to get information about
+      resources stored in a given *stage*.
+
+      :param int32 stage: Get resources for parts that are decoupled in this
+                          stage. For details on stage numbering, see the
+                          discussion on :ref:`api-parts-staging`.
+      :param bool cumulative: When ``false``, returns the resources for parts
+                              decoupled in just the given stage. When ``true``
+                              returns the resources decoupled in the given stage
+                              and all subsequent stages combined.
+      :rtype: :class:`Resources`
 
    .. attribute:: Parts
 
@@ -183,7 +195,6 @@ Vessel
          :align: center
 
          Vessel reference frame origin and axes for the Kerbal-X rocket
-
 
    .. attribute:: OrbitalReferenceFrame
 
