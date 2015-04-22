@@ -43,12 +43,12 @@ AutoPilot
       called, or when the client that requested the auto-pilot command
       disconnects.
 
-      :param double pitch: The desired pitch above/below the horizon, in
-                           degrees. A value between -90° and +90° degrees.
-      :param double heading: The desired heading in degrees. A value between 0°
-                             and 360°.
-      :param double roll: Optional desired roll angle relative to the horizon,
-                          in degrees. A value between -180° and +180°.
+      :param float pitch: The desired pitch above/below the horizon, in
+                          degrees. A value between -90° and +90° degrees.
+      :param float heading: The desired heading in degrees. A value between 0°
+                            and 360°.
+      :param float roll: Optional desired roll angle relative to the horizon, in
+                         degrees. A value between -180° and +180°.
       :param ReferenceFrame referenceFrame: The reference frame that the pitch,
                                             heading and roll are in. Defaults to
                                             the vessels surface reference frame.
@@ -71,8 +71,8 @@ AutoPilot
 
       :param Vector3 direction: The desired direction (pitch and heading) as a
                                unit vector.
-      :param double roll: Optional desired roll angle relative to the horizon,
-                          in degrees. A value between -180° and 180°.
+      :param float roll: Optional desired roll angle relative to the horizon, in
+                         degrees. A value between -180° and 180°.
       :param ReferenceFrame referenceFrame: The reference frame that the
                                             direction vector is in. Defaults to
                                             the vessels surface reference frame.
@@ -85,7 +85,7 @@ AutoPilot
       to point in and the actual direction it is pointing in. If the auto-pilot
       has not been engaged, returns zero.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: RollError
 
@@ -93,7 +93,7 @@ AutoPilot
       in and the actual roll. If the auto-pilot has not been engaged, returns
       zero.
 
-      :rtype: double
+      :rtype: float
 
    .. method:: Disengage ()
 

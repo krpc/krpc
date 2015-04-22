@@ -10,27 +10,27 @@ Node
       Gets or sets the magnitude of the maneuver nodes delta-v in the prograde
       direction, in meters per second.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: Normal
 
       Gets or sets the magnitude of the maneuver nodes delta-v in the normal
       direction, in meters per second.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: Radial
 
       Gets or sets the magnitude of the maneuver nodes delta-v in the radial
       direction, in meters per second.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: DeltaV
 
       Gets or sets the delta-v of the maneuver node, in meters per second.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Does not change when executing the maneuver node. See
                 :meth:`Node.RemainingDeltaV`.
@@ -41,7 +41,7 @@ Node
       second. Changes as the node is executed. This is equivalent to the delta-v
       reported in-game.
 
-      :rtype: double
+      :rtype: float
 
    .. method:: BurnVector ([referenceFrame = Vessel.OrbitalReferenceFrame])
 
@@ -60,7 +60,7 @@ Node
       and whose magnitude is the delta-v of the burn in m/s. The direction and
       magnitude change as the burn is executed.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: UT
 

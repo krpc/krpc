@@ -30,7 +30,7 @@ Vessel Resources
                               the given stage. When ``true`` returns the amount
                               of resource in the given stage and all subsequent
                               stages combined.
-      :rtype: double
+      :rtype: float
 
    .. method:: Amount (name, [stage = -1], [cumulative = true])
 
@@ -44,7 +44,7 @@ Vessel Resources
                               the given stage. When ``true`` returns the amount
                               of resource in the given stage and all subsequent
                               stages combined.
-      :rtype: double
+      :rtype: float
 
 Examples
 --------

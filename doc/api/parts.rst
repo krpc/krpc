@@ -550,14 +550,14 @@ PartResources
       Gets the maximum amount of the named resource that the part can store.
 
       :param string name:
-      :rtype: double
+      :rtype: float
 
    .. method:: Amount (name)
 
       Gets the current amount of the named resource that the part is storing.
 
       :param string name:
-      :rtype: double
+      :rtype: float
 
 Specific Types of Part
 ----------------------

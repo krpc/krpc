@@ -52,38 +52,38 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double Mass {
-            get { return InternalBody.Mass; }
+        public float Mass {
+            get { return (float) InternalBody.Mass; }
         }
 
         [KRPCProperty]
-        public double GravitationalParameter {
-            get { return InternalBody.gravParameter; }
+        public float GravitationalParameter {
+            get { return (float) InternalBody.gravParameter; }
         }
 
         [KRPCProperty]
-        public double SurfaceGravity {
-            get { return InternalBody.GeeASL * 9.81d; }
+        public float SurfaceGravity {
+            get { return (float) InternalBody.GeeASL * 9.81f; }
         }
 
         [KRPCProperty]
-        public double RotationalPeriod {
-            get { return InternalBody.rotationPeriod; }
+        public float RotationalPeriod {
+            get { return (float) InternalBody.rotationPeriod; }
         }
 
         [KRPCProperty]
-        public double RotationalSpeed {
-            get { return (2d * Math.PI) / RotationalPeriod; }
+        public float RotationalSpeed {
+            get { return (float) (2f * Math.PI) / RotationalPeriod; }
         }
 
         [KRPCProperty]
-        public double EquatorialRadius {
-            get { return InternalBody.Radius; }
+        public float EquatorialRadius {
+            get { return (float) InternalBody.Radius; }
         }
 
         [KRPCProperty]
-        public double SphereOfInfluence {
-            get { return InternalBody.sphereOfInfluence; }
+        public float SphereOfInfluence {
+            get { return (float) InternalBody.sphereOfInfluence; }
         }
 
         [KRPCProperty]
@@ -97,35 +97,35 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double AtmospherePressure {
-            get { return HasAtmosphere ? InternalBody.atmosphereMultiplier * 101325d : 0d; }
+        public float AtmospherePressure {
+            get { return HasAtmosphere ? InternalBody.atmosphereMultiplier * 101325f : 0f; }
         }
 
         [KRPCProperty]
-        public double AtmosphereDensity {
-            get { return HasAtmosphere ? InternalBody.atmosphereMultiplier * FlightGlobals.getAtmDensity (1d) : 0d; }
+        public float AtmosphereDensity {
+            get { return HasAtmosphere ? (float) (InternalBody.atmosphereMultiplier * FlightGlobals.getAtmDensity (1f)) : 0f; }
         }
 
         [KRPCProperty]
-        public double AtmosphereScaleHeight {
-            get { return HasAtmosphere ? InternalBody.atmosphereScaleHeight * 1000d : 0d; }
+        public float AtmosphereScaleHeight {
+            get { return HasAtmosphere ? (float) InternalBody.atmosphereScaleHeight * 1000f : 0f; }
         }
 
         [KRPCProperty]
-        public double AtmosphereMaxAltitude {
-            get { return HasAtmosphere ? InternalBody.maxAtmosphereAltitude : 0d; }
+        public float AtmosphereMaxAltitude {
+            get { return HasAtmosphere ? (float) InternalBody.maxAtmosphereAltitude : 0f; }
         }
 
         [KRPCMethod]
-        public double AtmospherePressureAt (double altitude)
+        public float AtmospherePressureAt (float altitude)
         {
-            return HasAtmosphere ? AtmospherePressure * Math.Exp (-altitude / AtmosphereScaleHeight) : 0d;
+            return HasAtmosphere ? (float) (AtmospherePressure * Math.Exp (-altitude / AtmosphereScaleHeight)) : 0f;
         }
 
         [KRPCMethod]
-        public double AtmosphereDensityAt (double altitude)
+        public float AtmosphereDensityAt (float altitude)
         {
-            return HasAtmosphere ? AtmosphereDensity * Math.Exp (-altitude / AtmosphereScaleHeight) : 0d;
+            return HasAtmosphere ? (float) (AtmosphereDensity * Math.Exp (-altitude / AtmosphereScaleHeight)) : 0f;
         }
 
         [KRPCProperty]

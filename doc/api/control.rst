@@ -119,7 +119,7 @@ Control
       Gets the current stage of the vessel. Corresponds to the stage number in
       the in-game UI.
 
-      :rtype: int16
+      :rtype: int32
 
    .. method:: ActivateNextStage ()
 
@@ -133,7 +133,7 @@ Control
       Returns ``true`` if the given action group (a value between 0 and 9
       inclusive) is enabled.
 
-      :ptype group: uint16
+      :ptype group: uint32
       :rtype: bool
 
    .. method:: SetActionGroup (group, state)
@@ -141,7 +141,7 @@ Control
       Sets the state of the given action group (a value between 0 and 9
       inclusive).
 
-      :ptype group: uint16
+      :ptype group: uint32
       :ptype state: bool
 
    .. method:: ToggleActionGroup (group)
@@ -149,7 +149,7 @@ Control
       Toggles the state of the given action group (a value between 0 and 9
       inclusive).
 
-      :ptype group: uint16
+      :ptype group: uint32
 
    .. method:: AddNode (UT, [prograde = 0], [normal = 0], [radial = 0])
 
@@ -159,9 +159,9 @@ Control
       radial directions.
 
       :param double ut: universal time of the maneuver node
-      :param double prograde: delta-v in the prograde direction
-      :param double normal: delta-v in the normal direction
-      :param double radial: delta-v in the radial direction
+      :param float prograde: delta-v in the prograde direction
+      :param float normal: delta-v in the normal direction
+      :param float radial: delta-v in the radial direction
       :rtype: :class:`Node`
 
    .. attribute:: Nodes

@@ -45,23 +45,23 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCMethod]
-        public double Max (string name)
+        public float Max (string name)
         {
-            double amount = 0;
+            float amount = 0;
             foreach (PartResource resource in part.Resources) {
                 if (resource.resourceName == name)
-                    amount += resource.maxAmount;
+                    amount += (float) resource.maxAmount;
             }
             return amount;
         }
 
         [KRPCMethod]
-        public double Amount (string name)
+        public float Amount (string name)
         {
-            double amount = 0;
+            float amount = 0;
             foreach (PartResource resource in part.Resources) {
                 if (resource.resourceName == name)
-                    amount += resource.amount;
+                    amount += (float) resource.amount;
             }
             return amount;
         }

@@ -60,7 +60,7 @@ SpaceCenter
       <http://en.wikipedia.org/wiki/Gravitational_constant>`_ G in
       :math:`N(m/kg)^2`.
 
-      :rtype: double
+      :rtype: float
 
    .. method:: WarpTo (UT, [maxRate = 100000])
 
@@ -70,7 +70,7 @@ SpaceCenter
       using physical time warp, the warp rate is at most 2x.
 
       :param double ut: The universal time to warp to, in seconds
-      :param double maxRate: The maximum warp rate to use
+      :param float maxRate: The maximum warp rate to use
       :returns: When the time warp is complete.
 
    .. method:: TransformPosition (position, from, to)

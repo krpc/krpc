@@ -98,8 +98,8 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double GForce {
-            get { return vessel.geeForce; }
+        public float GForce {
+            get { return (float) vessel.geeForce; }
         }
 
         [KRPCProperty]
@@ -172,18 +172,18 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double Pitch {
-            get { return VesselRotation.PitchHeadingRoll ().x; }
+        public float Pitch {
+            get { return (float) VesselRotation.PitchHeadingRoll ().x; }
         }
 
         [KRPCProperty]
-        public double Heading {
-            get { return VesselRotation.PitchHeadingRoll ().y; }
+        public float Heading {
+            get { return (float) VesselRotation.PitchHeadingRoll ().y; }
         }
 
         [KRPCProperty]
-        public double Roll {
-            get { return VesselRotation.PitchHeadingRoll ().z; }
+        public float Roll {
+            get { return (float) VesselRotation.PitchHeadingRoll ().z; }
         }
 
         [KRPCProperty]
@@ -217,84 +217,84 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double AtmosphereDensity {
+        public float AtmosphereDensity {
             get {
                 if (FAR.IsAvailable) {
                     CheckFAR ();
-                    return FAR.GetActiveControlSys_AirDensity ();
+                    return (float) FAR.GetActiveControlSys_AirDensity ();
                 } else {
-                    return new CelestialBody (vessel.mainBody).AtmosphereDensityAt (MeanAltitude);
+                    return new CelestialBody (vessel.mainBody).AtmosphereDensityAt ((float) MeanAltitude);
                 }
             }
         }
 
         [KRPCProperty]
-        public double Drag {
+        public float Drag {
             get {
                 if (FAR.IsAvailable)
                     CheckFAR ();
                 var body = new CelestialBody (this.vessel.mainBody);
                 if (!body.HasAtmosphere)
-                    return 0d;
+                    return 0f;
                 var vessel = new Vessel (this.vessel);
-                return 0.5d * AtmosphereDensity * Math.Pow (Speed, 2d) * DragCoefficient * vessel.CrossSectionalArea;
+                return 0.5f * AtmosphereDensity * (float) Math.Pow (Speed, 2f) * DragCoefficient * vessel.CrossSectionalArea;
             }
         }
 
         [KRPCProperty]
-        public double DynamicPressure {
+        public float DynamicPressure {
             get {
                 CheckFAR ();
-                return FAR.GetActiveControlSys_Q ();
+                return (float) FAR.GetActiveControlSys_Q ();
             }
         }
 
         [KRPCProperty]
-        public double AngleOfAttack {
+        public float AngleOfAttack {
             get {
                 CheckFAR ();
-                return FAR.GetActiveControlSys_AoA ();
+                return (float) FAR.GetActiveControlSys_AoA ();
             }
         }
 
         [KRPCProperty]
-        public double SideslipAngle {
+        public float SideslipAngle {
             get {
                 CheckFAR ();
-                return FAR.GetActiveControlSys_Sideslip ();
+                return (float) FAR.GetActiveControlSys_Sideslip ();
             }
         }
 
         [KRPCProperty]
-        public double StallFraction {
+        public float StallFraction {
             get {
                 CheckFAR ();
-                return FAR.GetActiveControlSys_StallFrac ();
+                return (float) FAR.GetActiveControlSys_StallFrac ();
             }
         }
 
         [KRPCProperty]
-        public double MachNumber {
+        public float MachNumber {
             get {
                 CheckFAR ();
-                return FAR.GetActiveControlSys_MachNumber ();
+                return (float) FAR.GetActiveControlSys_MachNumber ();
             }
         }
 
         [KRPCProperty]
-        public double TerminalVelocity {
+        public float TerminalVelocity {
             get {
                 CheckFAR ();
-                return FAR.GetActiveControlSys_TermVel ();
+                return (float) FAR.GetActiveControlSys_TermVel ();
             }
         }
 
         [KRPCProperty]
-        public double DragCoefficient {
+        public float DragCoefficient {
             get {
                 if (FAR.IsAvailable) {
                     CheckFAR ();
-                    return FAR.GetActiveControlSys_Cd ();
+                    return (float) FAR.GetActiveControlSys_Cd ();
                 } else {
                     // Mass-weighted average of max_drag for each part
                     // Note: Uses Part.mass, so does not include the mass of resources
@@ -304,34 +304,34 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double LiftCoefficient {
+        public float LiftCoefficient {
             get {
                 CheckFAR ();
-                return FAR.GetActiveControlSys_Cl ();
+                return (float) FAR.GetActiveControlSys_Cl ();
             }
         }
 
         [KRPCProperty]
-        public double PitchingMomentCoefficient {
+        public float PitchingMomentCoefficient {
             get {
                 CheckFAR ();
-                return FAR.GetActiveControlSys_Cm ();
+                return (float) FAR.GetActiveControlSys_Cm ();
             }
         }
 
         [KRPCProperty]
-        public double BallisticCoefficient {
+        public float BallisticCoefficient {
             get {
                 CheckFAR ();
-                return FAR.GetActiveControlSys_BallisticCoeff ();
+                return (float) FAR.GetActiveControlSys_BallisticCoeff ();
             }
         }
 
         [KRPCProperty]
-        public double ThrustSpecificFuelConsumption {
+        public float ThrustSpecificFuelConsumption {
             get {
                 CheckFAR ();
-                return FAR.GetActiveControlSys_TSFC ();
+                return (float) FAR.GetActiveControlSys_TSFC ();
             }
         }
 

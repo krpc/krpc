@@ -21,7 +21,7 @@ CelestialBody
 
       Gets the mass of the body, in kilograms.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: GravitationalParameter
 
@@ -29,38 +29,38 @@ CelestialBody
       <http://en.wikipedia.org/wiki/Standard_gravitational_parameter>`_ of the body
       in :math:`m^3s^{-2}`.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: SurfaceGravity
 
       Gets the acceleration due to gravity at sea level (mean altitude) on the
       body, in :math:`m/s^2`.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: RotationalPeriod
 
       Gets the rotational period of the body, in seconds.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: RotationalSpeed
 
       Returns the rotational speed of the body, in radians per second.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: EquatorialRadius
 
       Gets the equatorial radius of the body, in meters.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: SphereOfInfluence
 
       Gets the radius of the sphere of influence of the body, in meters.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: Orbit
 
@@ -79,7 +79,7 @@ CelestialBody
       Gets the pressure of the atmosphere at sea level, in Pascals. Returns 0 if
       the body has no atmosphere.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
@@ -88,7 +88,7 @@ CelestialBody
       Gets the density of the atmosphere at sea level, in :math:`kg/m^3`. Returns 0
       if the body has no atmosphere.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
@@ -98,7 +98,7 @@ CelestialBody
       <http://wiki.kerbalspaceprogram.com/wiki/Kerbin#Atmosphere>`_ of the
       atmosphere, in meters. Returns 0 if the atmosphere has no atmosphere.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
@@ -107,7 +107,7 @@ CelestialBody
       Gets the maximum altitude of the atmosphere, in meters. Returns 0 if the body
       has no atmosphere.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
@@ -116,8 +116,8 @@ CelestialBody
       Returns the atmospheric pressure, in Pascals, at the given altitude above sea
       level, in meters. Returns 0 if the body has no atmosphere.
 
-      :param double altitude:
-      :rtype: double
+      :param float altitude:
+      :rtype: float
 
       .. note:: Calculated using `KSPs stock aerodynamic model`_.
 
@@ -126,8 +126,8 @@ CelestialBody
       Returns the density of the atmosphere, in :math:`kg/m^3`, at the given
       altitude above sea level, in meters. Returns 0 if the body has no atmosphere.
 
-      :param double altitude:
-      :rtype: double
+      :param float altitude:
+      :rtype: float
 
       .. note:: Calculated using `KSPs stock aerodynamic model`_.
 

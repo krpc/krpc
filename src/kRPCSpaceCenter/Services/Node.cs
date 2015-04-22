@@ -17,7 +17,7 @@ namespace KRPCSpaceCenter.Services
         readonly global::Vessel vessel;
         ManeuverNode node;
 
-        internal Node (global::Vessel vessel, double UT, double prograde, double normal, double radial)
+        internal Node (global::Vessel vessel, double UT, float prograde, float normal, float radial)
         {
             this.vessel = vessel;
             node = vessel.patchedConicSolver.AddManeuverNode (UT);
@@ -50,8 +50,8 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double Prograde {
-            get { return node.DeltaV.z; }
+        public float Prograde {
+            get { return (float) node.DeltaV.z; }
             set {
                 node.DeltaV.z = value;
                 node.OnGizmoUpdated (node.DeltaV, node.UT);
@@ -59,8 +59,8 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double Normal {
-            get { return node.DeltaV.y; }
+        public float Normal {
+            get { return (float) node.DeltaV.y; }
             set {
                 node.DeltaV.y = value;
                 node.OnGizmoUpdated (node.DeltaV, node.UT);
@@ -68,8 +68,8 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double Radial {
-            get { return node.DeltaV.x; }
+        public float Radial {
+            get { return (float) node.DeltaV.x; }
             set {
                 node.DeltaV.x = value;
                 node.OnGizmoUpdated (node.DeltaV, node.UT);
@@ -77,8 +77,8 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double DeltaV {
-            get { return node.DeltaV.magnitude; }
+        public float DeltaV {
+            get { return (float) node.DeltaV.magnitude; }
             set {
                 var direction = node.DeltaV.normalized;
                 node.OnGizmoUpdated (new Vector3d (direction.x * value, direction.y * value, direction.z * value), node.UT);
@@ -86,8 +86,8 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double RemainingDeltaV {
-            get { return node.GetBurnVector (node.patch).magnitude; }
+        public float RemainingDeltaV {
+            get { return (float) node.GetBurnVector (node.patch).magnitude; }
         }
 
         [KRPCMethod]

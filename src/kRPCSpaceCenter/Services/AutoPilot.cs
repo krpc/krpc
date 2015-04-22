@@ -48,9 +48,9 @@ namespace KRPCSpaceCenter.Services
         static HashSet<AutoPilot> engaged = new HashSet<AutoPilot> ();
         IClient requestingClient;
         ReferenceFrame referenceFrame;
-        double pitch;
-        double heading;
-        double roll;
+        float pitch;
+        float heading;
+        float roll;
         bool sasSet;
         int sasUpdate;
 
@@ -105,7 +105,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public void SetRotation (double pitch, double heading, double roll = Double.NaN, ReferenceFrame referenceFrame = null, bool wait = false)
+        public void SetRotation (float pitch, float heading, float roll = float.NaN, ReferenceFrame referenceFrame = null, bool wait = false)
         {
             if (referenceFrame == null)
                 referenceFrame = ReferenceFrame.Surface (vessel);
@@ -119,16 +119,16 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public void SetDirection (Tuple3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = null, bool wait = false)
+        public void SetDirection (Tuple3 direction, float roll = float.NaN, ReferenceFrame referenceFrame = null, bool wait = false)
         {
             if (referenceFrame == null)
                 referenceFrame = ReferenceFrame.Surface (vessel);
             this.referenceFrame = referenceFrame;
             QuaternionD rotation = Quaternion.FromToRotation (Vector3d.up, direction.ToVector ());
             var phr = rotation.PitchHeadingRoll ();
-            pitch = phr [0];
-            heading = phr [1];
-            this.roll = roll;
+            pitch = (float) phr [0];
+            heading = (float) phr [1];
+            this.roll = (float) roll;
             Engage ();
             if (wait)
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
@@ -165,24 +165,24 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double Error {
+        public float Error {
             get {
                 if (engaged.Contains (this))
-                    return Vector3d.Angle (vessel.ReferenceTransform.up, TargetDirection ());
+                    return Vector3.Angle (vessel.ReferenceTransform.up, TargetDirection ());
                 else if (SAS && SASMode != SASMode.StabilityAssist)
-                    return Vector3d.Angle (vessel.ReferenceTransform.up, SASTargetDirection ());
+                    return Vector3.Angle (vessel.ReferenceTransform.up, SASTargetDirection ());
                 else
-                    return 0d;
+                    return 0f;
             }
         }
 
         [KRPCProperty]
-        public double RollError {
+        public float RollError {
             get {
-                if (!engaged.Contains (this) || Double.IsNaN (roll))
-                    return 0d;
+                if (!engaged.Contains (this) || float.IsNaN (roll))
+                    return 0f;
                 var currentRoll = referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                return Math.Abs (roll - currentRoll);
+                return (float) Math.Abs (roll - currentRoll);
             }
         }
 
@@ -319,11 +319,11 @@ namespace KRPCSpaceCenter.Services
         Quaternion TargetRotation ()
         {
             // Compute world space target rotation from pitch, heading, roll
-            Quaternion rotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (new Vector3d (pitch, heading, Double.IsNaN (roll) ? 0.0f : roll));
+            Quaternion rotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (new Vector3d (pitch, heading, float.IsNaN (roll) ? 0.0f : roll));
             var target = referenceFrame.RotationToWorldSpace (rotation);
 
             // If roll is not specified, re-compute rotation between direction vectors
-            if (Double.IsNaN (roll)) {
+            if (float.IsNaN (roll)) {
                 var from = Vector3.up;
                 var to = target * Vector3.up;
                 target = Quaternion.FromToRotation (from, to);

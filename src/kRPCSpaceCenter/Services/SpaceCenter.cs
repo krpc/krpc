@@ -85,12 +85,12 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public static double G {
-            get { return 6.673e-11; }
+        public static float G {
+            get { return 6.673e-11f; }
         }
 
         [KRPCProcedure]
-        public static void WarpTo (double UT, double maxRate = 100000)
+        public static void WarpTo (double UT, float maxRate = 100000)
         {
             float rate = Mathf.Clamp ((float)(UT - Planetarium.GetUniversalTime ()), 1f, (float)maxRate);
 
@@ -104,7 +104,7 @@ namespace KRPCSpaceCenter.Services
                 WarpRegularAtRate (vessel, flight, rate);
 
             if (rate > 1)
-                throw new YieldException (new ParameterizedContinuationVoid<double,double> (WarpTo, UT, maxRate));
+                throw new YieldException (new ParameterizedContinuationVoid<double,float> (WarpTo, UT, maxRate));
             else
                 TimeWarp.SetRate (0, false);
         }

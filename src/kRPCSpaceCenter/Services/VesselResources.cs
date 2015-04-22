@@ -60,23 +60,23 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCMethod]
-        public double Max (string name, int stage = -1, bool cumulative = true)
+        public float Max (string name, int stage = -1, bool cumulative = true)
         {
-            double amount = 0;
+            float amount = 0;
             foreach (var resource in GetResources(stage, cumulative)) {
                 if (resource.resourceName == name)
-                    amount += resource.maxAmount;
+                    amount += (float) resource.maxAmount;
             }
             return amount;
         }
 
         [KRPCMethod]
-        public double Amount (string name, int stage = -1, bool cumulative = true)
+        public float Amount (string name, int stage = -1, bool cumulative = true)
         {
-            double amount = 0;
+            float amount = 0;
             foreach (var resource in GetResources(stage, cumulative)) {
                 if (resource.resourceName == name)
-                    amount += resource.amount;
+                    amount += (float) resource.amount;
             }
             return amount;
         }

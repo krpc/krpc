@@ -14,7 +14,7 @@ Flight
 
       Gets the current G force acting on the vessel in :math:`m/s^2`.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: MeanAltitude
 
@@ -107,21 +107,21 @@ Flight
       Gets the pitch angle of the vessel relative to the horizon, in degrees. A
       value between -90° and +90°.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: Heading
 
       Gets the heading angle of the vessel relative to north, in degrees. A value
       between 0° and 360°.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: Roll
 
       Gets the roll angle of the vessel relative to the horizon, in degrees. A
       value between -180° and +180°.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: Prograde
 
@@ -164,7 +164,7 @@ Flight
       Gets the current density of the atmosphere around the vessel, in
       :math:`kg/m^3`.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Calculated using `Ferram Aerospace Research`_ if it is
          installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
@@ -173,7 +173,7 @@ Flight
 
       Gets the aerodynamic drag force currently acting on the vessel, in Newtons.
 
-      :rtype: double
+      :rtype: float
 
    .. attribute:: DynamicPressure
 
@@ -182,7 +182,7 @@ Flight
       . \mbox{air density} .  \mbox{velocity}^2`, and is measured in :math:`kg .
       m^{-1}s^{-2}`. It is commonly denoted as :math:`Q`.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Requires `Ferram Aerospace Research`_
 
@@ -192,7 +192,7 @@ Flight
       vector, in degrees. (The angle between the mean chord of the wing and the
       free-stream velocity.)
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Requires `Ferram Aerospace Research`_
 
@@ -202,7 +202,7 @@ Flight
       vector, in degrees. (The angle between the center line of the aircraft or
       rocket and the free-stream velocity in the lateral plane.)
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Requires `Ferram Aerospace Research`_
 
@@ -212,7 +212,7 @@ Flight
       indicates a minor stall and a value greater than 0.5 indicates a large-scale
       stall.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Requires `Ferram Aerospace Research`_
 
@@ -221,7 +221,7 @@ Flight
       Gets the current mach number for the vessel. This is the current velocity
       divided by the local speed of sound.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Requires `Ferram Aerospace Research`_
 
@@ -230,7 +230,7 @@ Flight
       Gets the terminal velocity of the vessel, in :math:`m/s`. This is the speed
       at which the drag forces cancel out the force of gravity.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Requires `Ferram Aerospace Research`_
 
@@ -240,7 +240,7 @@ Flight
       vessel. When calculated using `Ferram Aerospace Research`_ it depends on air
       speed, air density and wing area.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Calculated using `Ferram Aerospace Research`_ if it is
          installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
@@ -250,7 +250,7 @@ Flight
       Gets the coefficient of lift. This is the amount of lift produced by the
       vessel, and depends on air speed, air density and wing area.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Requires `Ferram Aerospace Research`_
 
@@ -259,7 +259,7 @@ Flight
       Gets the `pitching moment coefficient
       <http://en.wikipedia.org/wiki/Pitching_moment#Coefficient>`_.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Requires `Ferram Aerospace Research`_
 
@@ -268,7 +268,7 @@ Flight
       Gets the `ballistic coefficient
       <http://en.wikipedia.org/wiki/Ballistic_coefficient>`_.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Requires `Ferram Aerospace Research`_
 
@@ -279,7 +279,7 @@ Flight
       value indicating a more efficient vessel. This value is the number of Newtons
       of fuel that are burned, per hour, to product one newton of thrust.
 
-      :rtype: double
+      :rtype: float
 
       .. note:: Requires `Ferram Aerospace Research`_
 
