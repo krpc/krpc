@@ -1,8 +1,8 @@
 import socket
 from krpc.connection import Connection
 from krpc.client import Client
-from krpc.encoder import _Encoder
-from krpc.decoder import _Decoder
+from krpc.encoder import Encoder
+from krpc.decoder import Decoder
 
 DEFAULT_ADDRESS = '127.0.0.1'
 DEFAULT_RPC_PORT = 50000
@@ -20,18 +20,18 @@ def connect(address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, stream_port=DEFA
     # Connect to RPC server
     rpc_connection = Connection(address, rpc_port)
     rpc_connection.connect()
-    rpc_connection.send(_Encoder.RPC_HELLO_MESSAGE)
-    rpc_connection.send(_Encoder.client_name(name))
-    client_identifier = rpc_connection.receive(_Decoder.GUID_LENGTH)
+    rpc_connection.send(Encoder.RPC_HELLO_MESSAGE)
+    rpc_connection.send(Encoder.client_name(name))
+    client_identifier = rpc_connection.receive(Decoder.GUID_LENGTH)
 
     # Connect to Stream server
     if stream_port is not None:
         stream_connection = Connection(address, stream_port)
         stream_connection.connect()
-        stream_connection.send(_Encoder.STREAM_HELLO_MESSAGE)
+        stream_connection.send(Encoder.STREAM_HELLO_MESSAGE)
         stream_connection.send(client_identifier)
-        ok_message = stream_connection.receive(_Decoder.OK_LENGTH)
-        assert ok_message == _Decoder.OK_MESSAGE
+        ok_message = stream_connection.receive(Decoder.OK_LENGTH)
+        assert ok_message == Decoder.OK_MESSAGE
     else:
         stream_connection = None
 

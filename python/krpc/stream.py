@@ -1,5 +1,5 @@
-from krpc.types import _Types
-from krpc.decoder import _Decoder
+from krpc.types import Types
+from krpc.decoder import Decoder
 from krpc.error import RPCError
 import socket
 import threading
@@ -76,8 +76,8 @@ def add_stream(conn, func, *args, **kwargs):
         return _stream_cache[e.stream_id]
 
 def update_thread(connection):
-    stream_message_type = _Types.as_type('KRPC.StreamMessage')
-    response_type = _Types.as_type('KRPC.Response')
+    stream_message_type = Types().as_type('KRPC.StreamMessage')
+    response_type = Types().as_type('KRPC.Response')
 
     while True:
 
@@ -86,7 +86,7 @@ def update_thread(connection):
         while True:
             try:
                 data += connection.partial_receive(1)
-                size,position = _Decoder.decode_size_and_position(data)
+                size,position = Decoder.decode_size_and_position(data)
                 break
             except IndexError:
                 pass
@@ -98,7 +98,7 @@ def update_thread(connection):
             data = connection.receive(size)
         except socket.error:
             return
-        response = _Decoder.decode(data, stream_message_type)
+        response = Decoder.decode(data, stream_message_type)
 
         # Add the data to the cache
         with _stream_cache_lock:
@@ -114,5 +114,5 @@ def update_thread(connection):
 
                 # Decode the return value and store it in the cache
                 typ = _stream_cache[id].return_type
-                value = _Decoder.decode(response.response.return_value, typ)
+                value = Decoder.decode(response.response.return_value, typ)
                 _stream_cache[id].update(value)

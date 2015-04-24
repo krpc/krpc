@@ -61,7 +61,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRaises(TypeError, self.conn.test_service.add_multiple_values, 0.14159, 'foo', 2)
 
     def test_properties(self):
-        self.conn.test_service.string_property = 'foo';
+        self.conn.test_service.string_property = 'foo'
         self.assertEqual('foo', self.conn.test_service.string_property)
         self.assertEqual('foo', self.conn.test_service.string_property_private_set)
         self.conn.test_service.string_property_private_get = 'foo'
@@ -102,13 +102,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
         obj2 = self.conn.test_service.create_test_object('kermin')
         obj.object_property = obj2
         self.assertEqual(obj2._object_id, obj.object_property._object_id)
-
-    def test_setattr_for_properties(self):
-        # Check that properties are added to the dynamically generated service class,
-        # not the base class krpc.Service
-        self.assertRaises (AttributeError, getattr, krpc.service._Service, 'object_property')
-        # Check following does not throw an exception
-        getattr(self.conn.test_service, 'object_property')
 
     def test_optional_arguments(self):
         self.assertEqual('jebfoobarbaz', self.conn.test_service.optional_arguments('jeb'))
@@ -227,21 +220,15 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'add_multiple_values',
 
                 'string_property',
-                'get__string_property',
-                'set__string_property',
 
                 'string_property_private_get',
-                'set__string_property_private_get',
 
                 'string_property_private_set',
-                'get__string_property_private_set',
 
                 'create_test_object',
                 'echo_test_object',
 
                 'object_property',
-                'get__object_property',
-                'set__object_property',
 
                 'TestClass',
 
@@ -279,12 +266,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'object_to_string',
 
                 'int_property',
-                'test_class__get__int_property',
-                'test_class__set__int_property',
 
                 'object_property',
-                'test_class__get__object_property',
-                'test_class__set__object_property',
 
                 'optional_arguments',
                 'static_method'
@@ -317,8 +300,13 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def test_types_from_different_connections(self):
         conn1 = self.connect()
         conn2 = self.connect()
-        self.assertEqual(conn1.test_service.TestClass, conn2.test_service.TestClass)
-
+        self.assertNotEqual(conn1.test_service.TestClass, conn2.test_service.TestClass)
+        obj2 = conn2.test_service.TestClass(0)
+        obj1 = conn1._types.coerce_to(obj2, conn1._types.as_type('Class(TestService.TestClass)'))
+        self.assertEqual(obj1, obj2)
+        self.assertNotEqual(type(obj1), type(obj2))
+        self.assertEqual(type(obj1), conn1.test_service.TestClass)
+        self.assertEqual(type(obj2), conn2.test_service.TestClass)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,5 +1,5 @@
 import unittest
-from krpc.attributes import _Attributes as Attributes
+from krpc.attributes import Attributes
 
 class TestTypes(unittest.TestCase):
 
