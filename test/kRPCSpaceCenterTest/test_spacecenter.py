@@ -18,7 +18,7 @@ class TestSpaceCenter(testingtools.TestCase):
         cls.conn = krpc.connect(name='TestSpaceCenter')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
-        cls.other_vessel = next(filter(lambda v: v != cls.vessel, cls.sc.vessels))
+        cls.other_vessel = next(iter(filter(lambda v: v != cls.vessel, cls.sc.vessels)))
         cls.ref_vessel = cls.vessel.reference_frame
         bodies = cls.sc.bodies
         cls.sun = bodies['Sun']
@@ -107,7 +107,7 @@ class TestSpaceCenter(testingtools.TestCase):
         self.assertClose(ut + 1, self.sc.ut, error=0.25)
 
     def test_g(self):
-        self.assertEqual(6.673e-11, self.sc.g)
+        self.assertClose(6.673e-11, self.sc.g, error=0.0005e-11)
 
     def test_warp_to(self):
         t = self.sc.ut + (5*60)
@@ -133,7 +133,7 @@ class TestSpaceCenter(testingtools.TestCase):
         p1 = self.sc.transform_position((0,0,0), self.ref_vessel, self.ref_sun)
         p2 = self.sc.transform_position((0,0,0), self.ref_kerbin, self.ref_sun)
 
-        p3 = tuple(x-y for (x,y) in itertools.izip(p1,p2))
+        p3 = tuple(x-y for (x,y) in zip(p1,p2))
         #TODO: sometimes there is a large difference?!?! but only sometimes...
         self.assertClose(norm(p0), norm(p3), error=100)
 
@@ -178,7 +178,7 @@ class TestSpaceCenter(testingtools.TestCase):
         v0 = self.sc.transform_velocity((0,0,0), (0,0,0), self.ref_vessel, self.ref_nr_kerbin)
         v1 = self.sc.transform_velocity((0,0,0), (0,0,0), self.ref_vessel, self.ref_nr_sun)
         v2 = self.sc.transform_velocity((0,0,0), (0,0,0), self.ref_nr_kerbin, self.ref_nr_sun)
-        v3 = tuple(x-y for (x,y) in itertools.izip(v1,v2))
+        v3 = tuple(x-y for (x,y) in zip(v1,v2))
         self.assertClose(norm(v0), norm(v3))
 
     def test_transform_velocity_between_celestial_bodies(self):
