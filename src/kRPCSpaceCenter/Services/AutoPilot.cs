@@ -45,18 +45,18 @@ namespace KRPCSpaceCenter.Services
     public sealed class AutoPilot : Equatable<AutoPilot>
     {
         readonly global::Vessel vessel;
-        static HashSet<AutoPilot> engaged = new HashSet<AutoPilot> ();
+        static IDictionary<global::Vessel, AutoPilot> engaged = new Dictionary<global::Vessel, AutoPilot> ();
         IClient requestingClient;
         ReferenceFrame referenceFrame;
         float pitch;
         float heading;
         float roll;
-        bool sasSet;
-        int sasUpdate;
 
         internal AutoPilot (global::Vessel vessel)
         {
             this.vessel = vessel;
+            if (!engaged.ContainsKey (vessel))
+                engaged [vessel] = null;
         }
 
         public override bool Equals (AutoPilot obj)
@@ -80,13 +80,13 @@ namespace KRPCSpaceCenter.Services
             get { return vessel.Autopilot.Mode.ToSASMode (); }
             set {
                 var mode = value.FromSASMode ();
-                if (vessel.Autopilot.CanSetMode (mode)) {
-                    vessel.Autopilot.SetMode (mode);
-                    // Update the UI buttons
-                    var modeIndex = (int)vessel.Autopilot.Mode;
-                    var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
-                    modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
-                }
+                if (!vessel.Autopilot.CanSetMode (mode))
+                    throw new InvalidOperationException ("Cannot set SAS mode of vessel");
+                vessel.Autopilot.SetMode (mode);
+                // Update the UI buttons
+                var modeIndex = (int)vessel.Autopilot.Mode;
+                var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
+                modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
             }
         }
 
@@ -144,30 +144,21 @@ namespace KRPCSpaceCenter.Services
 
         void Engage ()
         {
-            //TODO: add support for auto-piloting other vessels when they are in physics range
-            if (FlightGlobals.ActiveVessel != vessel)
-                throw new InvalidOperationException ("Vessel is not the active vessel");
             requestingClient = KRPC.KRPCServer.Context.RPCClient;
-            sasSet = false;
-            sasUpdate = 0;
-            engaged.Add (this);
+            engaged [vessel] = this;
         }
 
         [KRPCMethod]
         public void Disengage ()
         {
-            if (vessel != null) {
-                SASMode = SASMode.StabilityAssist;
-                SAS = false;
-            }
             requestingClient = null;
-            engaged.Remove (this);
+            engaged [vessel] = null;
         }
 
         [KRPCProperty]
         public float Error {
             get {
-                if (engaged.Contains (this))
+                if (engaged [vessel] == this)
                     return Vector3.Angle (vessel.ReferenceTransform.up, TargetDirection ());
                 else if (SAS && SASMode != SASMode.StabilityAssist)
                     return Vector3.Angle (vessel.ReferenceTransform.up, SASTargetDirection ());
@@ -179,17 +170,11 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float RollError {
             get {
-                if (!engaged.Contains (this) || float.IsNaN (roll))
+                if (engaged [vessel] != this || Double.IsNaN (roll))
                     return 0f;
                 var currentRoll = referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
                 return (float) Math.Abs (roll - currentRoll);
             }
-        }
-
-        //FIXME: this is never called
-        static void Clear ()
-        {
-            engaged.Clear ();
         }
 
         /// <summary>
@@ -279,41 +264,25 @@ namespace KRPCSpaceCenter.Services
 
         internal static void Fly (global::Vessel vessel, FlightCtrlState state)
         {
-            foreach (var autoPilot in engaged.ToList ()) {
-                // If the client that made the auto-pilot command has disconnected,
-                // disengage the auto-pilot
-                if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected)
-                    autoPilot.Disengage ();
-                // Skip if the auto-pilot is not for the active vessel
-                //TODO: cannot control vessels other than the active vessel
-                if (vessel != autoPilot.vessel)
-                    continue;
-                autoPilot.DoAutoPiloting (state);
+            // Get the auto-pilot object. Do nothing if there is no auto-pilot engaged for this vessel.
+            if (!engaged.ContainsKey (vessel))
+                return;
+            var autoPilot = engaged [vessel];
+            if (autoPilot == null)
+                return;
+            // If the client that engaged the auto-pilot has disconnected, disengage the auto-pilot
+            if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected) {
+                autoPilot.Disengage ();
+                return;
             }
+            // Run the auto-pilot
+            autoPilot.DoAutoPiloting (state);
         }
 
         void DoAutoPiloting (FlightCtrlState state)
         {
-            // Initialize SAS autopilot
-            if (!sasSet) {
-                SAS = true;
-                SASMode = SASMode.StabilityAssist;
-                sasSet = true;
-            }
-
-            var target = TargetRotation ();
-            if (ComputeError (target) < 3.0f) {
-                // Update SAS heading when the SAS heading has large error
-                // At most every 5 frames so that the SAS autopilot has a chance to affect the ship heading
-                if (sasUpdate > 5) {
-                    vessel.Autopilot.SAS.LockHeading (target, false);
-                    sasUpdate = 0;
-                } else {
-                    sasUpdate++;
-                }
-            } else {
-                SteerShipToward (target, state, vessel);
-            }
+            SAS = false;
+            SteerShipToward (TargetRotation (), state, vessel);
         }
 
         Quaternion TargetRotation ()

@@ -83,17 +83,19 @@ namespace TestingTools
         }
 
         [KRPCProcedure]
-        public static void ClearRotation ()
+        public static void ClearRotation (KRPCSpaceCenter.Services.Vessel vessel = null)
         {
-            FlightGlobals.ActiveVessel.SetRotation (ZeroRotation);
+            Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
+            internalVessel.SetRotation (ZeroRotation);
         }
 
         [KRPCProcedure]
-        public static void ApplyRotation (float angle, KRPC.Utils.Tuple<float,float,float> axis)
+        public static void ApplyRotation (float angle, KRPC.Utils.Tuple<float,float,float> axis, KRPCSpaceCenter.Services.Vessel vessel = null)
         {
+            Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
             var axisVector = new Vector3 (axis.Item1, axis.Item2, axis.Item3).normalized;
-            var rotation = FlightGlobals.ActiveVessel.transform.rotation * Quaternion.AngleAxis (angle, axisVector);
-            FlightGlobals.ActiveVessel.SetRotation (rotation);
+            var rotation = internalVessel.transform.rotation * Quaternion.AngleAxis (angle, axisVector);
+            internalVessel.SetRotation (rotation);
         }
     }
 }

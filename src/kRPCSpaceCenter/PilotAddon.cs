@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Server;
 using KRPCSpaceCenter.ExtensionMethods;
-using KRPCSpaceCenter.ExternalAPI;
 using UnityEngine;
 
 namespace KRPCSpaceCenter
@@ -13,161 +13,66 @@ namespace KRPCSpaceCenter
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class PilotAddon : MonoBehaviour
     {
-        class ControlInputs
+        public class ControlInputs
         {
-            public float pitch;
-            public float yaw;
-            public float roll;
-            public float forward;
-            public float up;
-            public float right;
-            public float wheelThrottle;
-            public float wheelSteer;
+            float pitch;
+            float yaw;
+            float roll;
+            float forward;
+            float up;
+            float right;
+            float wheelThrottle;
+            float wheelSteer;
+
+            public float Pitch {
+                get { return pitch; }
+                set { pitch = value.Clamp (-1f, 1f); }
+            }
+
+            public float Yaw {
+                get { return yaw; }
+                set { yaw = value.Clamp (-1f, 1f); }
+            }
+
+            public float Roll {
+                get { return roll; }
+                set { roll = value.Clamp (-1f, 1f); }
+            }
+
+            public float Forward {
+                get { return forward; }
+                set { forward = value.Clamp (-1f, 1f); }
+            }
+
+            public float Up {
+                get { return up; }
+                set { up = value.Clamp (-1f, 1f); }
+            }
+
+            public float Right {
+                get { return right; }
+                set { right = value.Clamp (-1f, 1f); }
+            }
+
+            public float WheelThrottle {
+                get { return wheelThrottle; }
+                set { wheelThrottle = value.Clamp (-1f, 1f); }
+            }
+
+            public float WheelSteer {
+                get { return wheelSteer; }
+                set { wheelSteer = value.Clamp (-1f, 1f); }
+            }
         };
 
-        Vessel controlledVessel;
-        static IDictionary<IClient, ControlInputs> controlInputs;
-
-        static void AddClient (IClient client)
-        {
-            if (!controlInputs.ContainsKey (client))
-                controlInputs [client] = new ControlInputs ();
-        }
-
-        static void CheckClients ()
-        {
-            foreach (var client in controlInputs.Keys.ToList ())
-                if (!client.Connected)
-                    controlInputs.Remove (client);
-        }
-
-        static void Clear ()
-        {
-            foreach (var client in controlInputs.Keys) {
-                controlInputs [client].pitch = 0f;
-                controlInputs [client].yaw = 0f;
-                controlInputs [client].roll = 0f;
-                controlInputs [client].forward = 0f;
-                controlInputs [client].up = 0f;
-                controlInputs [client].right = 0f;
-                controlInputs [client].wheelThrottle = 0f;
-                controlInputs [client].wheelSteer = 0f;
-            }
-            CheckClients ();
-        }
-
-        internal static float Pitch {
-            get {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                return controlInputs [KRPC.KRPCServer.Context.RPCClient].pitch;
-            }
-            set {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                controlInputs [KRPC.KRPCServer.Context.RPCClient].pitch = value.Clamp (-1f, 1f);
-            }
-        }
-
-        internal static float Yaw {
-            get {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                return controlInputs [KRPC.KRPCServer.Context.RPCClient].yaw;
-            }
-            set {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                controlInputs [KRPC.KRPCServer.Context.RPCClient].yaw = value.Clamp (-1f, 1f);
-            }
-        }
-
-        internal static float Roll {
-            get {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                return controlInputs [KRPC.KRPCServer.Context.RPCClient].roll;
-            }
-            set {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                controlInputs [KRPC.KRPCServer.Context.RPCClient].roll = value.Clamp (-1f, 1f);
-            }
-        }
-
-        internal static float Forward {
-            get {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                return controlInputs [KRPC.KRPCServer.Context.RPCClient].forward;
-            }
-            set {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                controlInputs [KRPC.KRPCServer.Context.RPCClient].forward = value.Clamp (-1f, 1f);
-            }
-        }
-
-        internal static float Up {
-            get {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                return controlInputs [KRPC.KRPCServer.Context.RPCClient].up;
-            }
-            set {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                controlInputs [KRPC.KRPCServer.Context.RPCClient].up = value.Clamp (-1f, 1f);
-            }
-        }
-
-        internal static float Right {
-            get {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                return controlInputs [KRPC.KRPCServer.Context.RPCClient].right;
-            }
-            set {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                controlInputs [KRPC.KRPCServer.Context.RPCClient].right = value.Clamp (-1f, 1f);
-            }
-        }
-
-        internal static float WheelThrottle {
-            get {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                return controlInputs [KRPC.KRPCServer.Context.RPCClient].wheelThrottle;
-            }
-            set {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                controlInputs [KRPC.KRPCServer.Context.RPCClient].wheelThrottle = value.Clamp (-1f, 1f);
-            }
-        }
-
-        internal static float WheelSteer {
-            get {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                return controlInputs [KRPC.KRPCServer.Context.RPCClient].wheelSteer;
-            }
-            set {
-                AddClient (KRPC.KRPCServer.Context.RPCClient);
-                controlInputs [KRPC.KRPCServer.Context.RPCClient].wheelSteer = value.Clamp (-1f, 1f);
-            }
-        }
+        static IDictionary<Vessel, IDictionary<IClient, ControlInputs>> controlInputs;
 
         /// <summary>
         /// Wake the addon
         /// </summary>
         public void Awake ()
         {
-            controlInputs = new Dictionary<IClient, ControlInputs> ();
-        }
-
-        /// <summary>
-        /// Update the pilot addon for a current vessel
-        /// </summary>
-        public void FixedUpdate ()
-        {
-            if (controlledVessel == null && FlightGlobals.ActiveVessel != null) {
-                controlledVessel = FlightGlobals.ActiveVessel;
-                AddPilot ();
-            } else if (controlledVessel != null && FlightGlobals.ActiveVessel == null) {
-                RemovePilot ();
-                controlledVessel = null;
-            } else if (controlledVessel != FlightGlobals.ActiveVessel) {
-                RemovePilot ();
-                controlledVessel = FlightGlobals.ActiveVessel;
-                AddPilot ();
-            }
+            controlInputs = new Dictionary<Vessel, IDictionary<IClient, ControlInputs>> ();
         }
 
         /// <summary>
@@ -175,46 +80,59 @@ namespace KRPCSpaceCenter
         /// </summary>
         public void OnDestroy ()
         {
-            if (controlledVessel != null)
-                RemovePilot ();
+            controlInputs.Clear ();
         }
 
-        void AddPilot ()
+        internal static ControlInputs Get (Vessel vessel)
         {
-            if (RemoteTech.IsAvailable && RemoteTech.HasFlightComputer (controlledVessel.id))
-                RemoteTech.AddSanctionedPilot (controlledVessel.id, Fly);
-            else
-                controlledVessel.OnFlyByWire += Fly;
-            Clear ();
+            var client = KRPC.KRPCServer.Context.RPCClient;
+            if (!controlInputs.ContainsKey (vessel))
+                controlInputs [vessel] = new Dictionary<IClient, ControlInputs> ();
+            if (!controlInputs [vessel].ContainsKey (client))
+                controlInputs [vessel] [client] = new ControlInputs ();
+            return controlInputs [vessel] [client];
         }
 
-        void RemovePilot ()
+        /// <summary>
+        /// Remove entries from the controlInputs dictionary for which the client has disconnected
+        /// </summary>
+        static void CheckClients ()
         {
-            if (RemoteTech.IsAvailable && RemoteTech.HasFlightComputer (controlledVessel.id))
-                RemoteTech.RemoveSanctionedPilot (controlledVessel.id, Fly);
-            else
-                controlledVessel.OnFlyByWire -= Fly;
-            Clear ();
+            foreach (var entry in controlInputs) {
+                foreach (var client in entry.Value.Keys.ToList()) {
+                    if (!client.Connected)
+                        entry.Value.Remove (client);
+                }
+            }
         }
 
-        static void Fly (FlightCtrlState state)
+        /// <summary>
+        /// Update the pilot addon
+        /// </summary>
+        public void FixedUpdate ()
         {
-            //TODO: cannot control vessels other than the active vessel
-            if (FlightGlobals.ActiveVessel == null)
-                return;
-
             CheckClients ();
+            foreach (var vessel in FlightGlobals.Vessels) {
+                if (vessel.rootPart != null) { // If the vessel is controllable
+                    Fly (vessel, vessel.ctrlState);
+                }
+            }
+        }
 
-            state.pitch += controlInputs.Sum (x => x.Value.pitch).Clamp (-1f, 1f);
-            state.yaw += controlInputs.Sum (x => x.Value.yaw).Clamp (-1f, 1f);
-            state.roll += controlInputs.Sum (x => x.Value.roll).Clamp (-1f, 1f);
-            state.Z += -controlInputs.Sum (x => x.Value.forward).Clamp (-1f, 1f);
-            state.Y += controlInputs.Sum (x => x.Value.up).Clamp (-1f, 1f);
-            state.X += -controlInputs.Sum (x => x.Value.right).Clamp (-1f, 1f);
-            state.wheelThrottle += controlInputs.Sum (x => x.Value.wheelThrottle).Clamp (-1f, 1f);
-            state.wheelSteer += controlInputs.Sum (x => x.Value.wheelSteer).Clamp (-1f, 1f);
-
-            Services.AutoPilot.Fly (FlightGlobals.ActiveVessel, state);
+        static void Fly (Vessel vessel, FlightCtrlState state)
+        {
+            if (controlInputs.ContainsKey (vessel)) {
+                var inputs = controlInputs [vessel].Values;
+                state.pitch += inputs.Sum (x => x.Pitch).Clamp (-1f, 1f);
+                state.yaw += inputs.Sum (x => x.Yaw).Clamp (-1f, 1f);
+                state.roll += inputs.Sum (x => x.Roll).Clamp (-1f, 1f);
+                state.Z += inputs.Sum (x => x.Forward).Clamp (-1f, 1f);
+                state.Y += inputs.Sum (x => x.Up).Clamp (-1f, 1f);
+                state.X += inputs.Sum (x => x.Right).Clamp (-1f, 1f);
+                state.wheelThrottle += inputs.Sum (x => x.WheelThrottle).Clamp (-1f, 1f);
+                state.wheelSteer += inputs.Sum (x => x.WheelSteer).Clamp (-1f, 1f);
+            }
+            Services.AutoPilot.Fly (vessel, state);
         }
     }
 }
