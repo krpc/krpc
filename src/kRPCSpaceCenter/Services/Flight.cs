@@ -223,7 +223,7 @@ namespace KRPCSpaceCenter.Services
                     CheckFAR ();
                     return (float) FAR.GetActiveControlSys_AirDensity ();
                 } else {
-                    return new CelestialBody (vessel.mainBody).AtmosphereDensityAt ((float) MeanAltitude);
+                    throw new NotImplementedException ();
                 }
             }
         }
@@ -236,8 +236,7 @@ namespace KRPCSpaceCenter.Services
                 var body = new CelestialBody (this.vessel.mainBody);
                 if (!body.HasAtmosphere)
                     return 0f;
-                var vessel = new Vessel (this.vessel);
-                return 0.5f * AtmosphereDensity * (float) Math.Pow (Speed, 2f) * DragCoefficient * vessel.CrossSectionalArea;
+                throw new NotImplementedException ();
             }
         }
 

@@ -150,7 +150,7 @@ namespace KRPCSpaceCenter.Services
                 if (FAR.IsAvailable)
                     return (float)FAR.GetActiveControlSys_RefArea ();
                 else
-                    return FlightGlobals.DragMultiplier * Mass;
+                    throw new NotImplementedException ();
             }
         }
 

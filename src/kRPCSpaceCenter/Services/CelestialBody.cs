@@ -93,39 +93,39 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public bool HasAtmosphere {
-            get { return InternalBody.atmosphere; }
+            get { throw new NotImplementedException (); }
         }
 
         [KRPCProperty]
         public float AtmospherePressure {
-            get { return HasAtmosphere ? InternalBody.atmosphereMultiplier * 101325f : 0f; }
+            get { throw new NotImplementedException (); }
         }
 
         [KRPCProperty]
         public float AtmosphereDensity {
-            get { return HasAtmosphere ? (float) (InternalBody.atmosphereMultiplier * FlightGlobals.getAtmDensity (1f)) : 0f; }
+            get { throw new NotImplementedException (); }
         }
 
         [KRPCProperty]
         public float AtmosphereScaleHeight {
-            get { return HasAtmosphere ? (float) InternalBody.atmosphereScaleHeight * 1000f : 0f; }
+            get { throw new NotImplementedException (); }
         }
 
         [KRPCProperty]
         public float AtmosphereMaxAltitude {
-            get { return HasAtmosphere ? (float) InternalBody.maxAtmosphereAltitude : 0f; }
+            get { throw new NotImplementedException (); }
         }
 
         [KRPCMethod]
         public float AtmospherePressureAt (float altitude)
         {
-            return HasAtmosphere ? (float) (AtmospherePressure * Math.Exp (-altitude / AtmosphereScaleHeight)) : 0f;
+            throw new NotImplementedException ();
         }
 
         [KRPCMethod]
         public float AtmosphereDensityAt (float altitude)
         {
-            return HasAtmosphere ? (float) (AtmosphereDensity * Math.Exp (-altitude / AtmosphereScaleHeight)) : 0f;
+            throw new NotImplementedException ();
         }
 
         [KRPCProperty]
