@@ -148,9 +148,9 @@ namespace KRPCSpaceCenter.Services.Parts
                 if (gimbal == null)
                     throw new ArgumentException ("Engine is not gimballed");
                 else if (value)
-                    gimbal.LockGimbal ();
+                    throw new NotImplementedException ();
                 else
-                    gimbal.FreeGimbal ();
+                    throw new NotImplementedException ();
             }
         }
     }
