@@ -1,6 +1,8 @@
 v0.1.8
 * Server plugin changes:
   * Add support for static class methods (#106)
+* SpaceCenter service changes:
+  * Clean up float/double types (#113)
 * Python client changes:
   * Add support for static class methods (#106)
   * Fix bug with types across multiple connections (#110)
