@@ -53,37 +53,37 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public float Mass {
-            get { return (float) InternalBody.Mass; }
+            get { return (float)InternalBody.Mass; }
         }
 
         [KRPCProperty]
         public float GravitationalParameter {
-            get { return (float) InternalBody.gravParameter; }
+            get { return (float)InternalBody.gravParameter; }
         }
 
         [KRPCProperty]
         public float SurfaceGravity {
-            get { return (float) InternalBody.GeeASL * 9.81f; }
+            get { return (float)InternalBody.GeeASL * 9.81f; }
         }
 
         [KRPCProperty]
         public float RotationalPeriod {
-            get { return (float) InternalBody.rotationPeriod; }
+            get { return (float)InternalBody.rotationPeriod; }
         }
 
         [KRPCProperty]
         public float RotationalSpeed {
-            get { return (float) (2f * Math.PI) / RotationalPeriod; }
+            get { return (float)(2f * Math.PI) / RotationalPeriod; }
         }
 
         [KRPCProperty]
         public float EquatorialRadius {
-            get { return (float) InternalBody.Radius; }
+            get { return (float)InternalBody.Radius; }
         }
 
         [KRPCProperty]
         public float SphereOfInfluence {
-            get { return (float) InternalBody.sphereOfInfluence; }
+            get { return (float)InternalBody.sphereOfInfluence; }
         }
 
         [KRPCProperty]
@@ -93,39 +93,17 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public bool HasAtmosphere {
-            get { throw new NotImplementedException (); }
+            get { return InternalBody.atmosphere; }
         }
 
         [KRPCProperty]
-        public float AtmospherePressure {
-            get { throw new NotImplementedException (); }
+        public float AtmosphereDepth {
+            get { return (float)InternalBody.atmosphereDepth; }
         }
 
         [KRPCProperty]
-        public float AtmosphereDensity {
-            get { throw new NotImplementedException (); }
-        }
-
-        [KRPCProperty]
-        public float AtmosphereScaleHeight {
-            get { throw new NotImplementedException (); }
-        }
-
-        [KRPCProperty]
-        public float AtmosphereMaxAltitude {
-            get { throw new NotImplementedException (); }
-        }
-
-        [KRPCMethod]
-        public float AtmospherePressureAt (float altitude)
-        {
-            throw new NotImplementedException ();
-        }
-
-        [KRPCMethod]
-        public float AtmosphereDensityAt (float altitude)
-        {
-            throw new NotImplementedException ();
+        public bool HasAtmosphericOxygen {
+            get { return InternalBody.atmosphereContainsOxygen; }
         }
 
         [KRPCProperty]
