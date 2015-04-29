@@ -1,8 +1,10 @@
 v0.1.8
+* KSP 1.0 support (#114)
 * Server plugin changes:
   * Add support for static class methods (#106)
 * SpaceCenter service changes:
   * Clean up float/double types (#113)
+  * Remove Vessel.CrossSectionalArea (#114)
 * Python client changes:
   * Add support for static class methods (#106)
   * Fix bug with types across multiple connections (#110)

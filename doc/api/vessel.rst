@@ -101,16 +101,6 @@ Vessel
 
       :rtype: float
 
-   .. attribute:: CrossSectionalArea
-
-      Gets the cross sectional area of the vessel in :math:`m^3`. See
-      :attr:`Flight.Drag`.
-
-      :rtype: float
-
-      .. note:: Calculated using `Ferram Aerospace Research`_ if it is
-         installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
-
    .. attribute:: Thrust
 
       Gets the total thrust currently being produced by the vessel's active

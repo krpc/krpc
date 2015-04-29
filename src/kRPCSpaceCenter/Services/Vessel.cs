@@ -1,14 +1,11 @@
 using System;
 using System.Linq;
-using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 using KRPCSpaceCenter.ExternalAPI;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -141,16 +138,6 @@ namespace KRPCSpaceCenter.Services
         public float DryMass {
             get {
                 return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.DryMass ());
-            }
-        }
-
-        [KRPCProperty]
-        public float CrossSectionalArea {
-            get {
-                if (FAR.IsAvailable)
-                    return (float)FAR.GetActiveControlSys_RefArea ();
-                else
-                    throw new NotImplementedException ();
             }
         }
 
