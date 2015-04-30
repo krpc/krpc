@@ -147,8 +147,11 @@ namespace KRPCSpaceCenter.Services.Parts
             set {
                 if (gimbal == null)
                     throw new ArgumentException ("Engine is not gimballed");
-                var actionValue = (value ? KSPActionType.Activate : KSPActionType.Deactivate);
-                gimbal.LockAction (new KSPActionParam (KSPActionGroup.None, actionValue));
+                if (value && !GimbalLocked) {
+                    gimbal.LockAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
+                } else if (!value && GimbalLocked) {
+                    gimbal.FreeAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
+                }
             }
         }
     }
