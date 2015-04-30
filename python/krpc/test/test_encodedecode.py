@@ -1,21 +1,23 @@
 import unittest
 import sys
-from krpc.encoder import _Encoder as Encoder
-from krpc.decoder import _Decoder as Decoder
-from krpc.types import _Types as Types
+from krpc.encoder import Encoder
+from krpc.decoder import Decoder
+from krpc.types import Types
 import krpc.schema.KRPC
 from krpc.platform import hexlify, unhexlify
 
 class TestEncodeDecode(unittest.TestCase):
 
+    types = Types()
+
     def _run_test_encode_value(self, typ, cases):
         for decoded, encoded in cases:
-            data = Encoder.encode(decoded, Types.as_type(typ))
+            data = Encoder.encode(decoded, self.types.as_type(typ))
             self.assertEqual(encoded, hexlify(data))
 
     def _run_test_decode_value(self, typ, cases):
         for decoded, encoded in cases:
-            value = Decoder.decode(unhexlify(encoded), Types.as_type(typ))
+            value = Decoder.decode(unhexlify(encoded), self.types.as_type(typ))
             if typ in ('float','double'):
                 self.assertEqual(str(decoded)[0:8], str(value)[0:8])
             else:
@@ -81,8 +83,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('uint32', cases)
         self._run_test_decode_value('uint32', cases)
 
-        self.assertRaises(ValueError,Encoder.encode, -1, Types.as_type('uint32'))
-        self.assertRaises(ValueError,Encoder.encode, -849, Types.as_type('uint32'))
+        self.assertRaises(ValueError,Encoder.encode, -1, self.types.as_type('uint32'))
+        self.assertRaises(ValueError,Encoder.encode, -849, self.types.as_type('uint32'))
 
     def test_encode_uint64_value(self):
         cases = [
@@ -95,8 +97,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('uint64', cases)
         self._run_test_decode_value('uint64', cases)
 
-        self.assertRaises(ValueError,Encoder.encode, -1, Types.as_type('uint64'))
-        self.assertRaises(ValueError,Encoder.encode, -849, Types.as_type('uint64'))
+        self.assertRaises(ValueError,Encoder.encode, -1, self.types.as_type('uint64'))
+        self.assertRaises(ValueError,Encoder.encode, -849, self.types.as_type('uint64'))
 
     def test_encode_bool_value(self):
         cases = [

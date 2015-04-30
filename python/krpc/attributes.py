@@ -1,7 +1,6 @@
 import re
 
-
-class _Attributes(object):
+class Attributes(object):
     """ Methods for extracting information from procedure attributes """
 
     @classmethod
