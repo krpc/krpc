@@ -186,7 +186,9 @@ class ServiceBase(DynamicType):
         """ Add a method to a class """
         class_cls = cls._client._types.as_type('Class('+cls._name+'.'+class_name+')').python_type
         param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(procedure)
-        param_names[0] = 'self' #FIXME: hack to rename this -> self
+        # Rename this to self if it doesn't cause a name clash
+        if 'self' not in param_names:
+            param_names[0] = 'self'
         func = _construct_func(cls._client._invoke, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
         build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
         setattr(func, '_build_request', build_request)
@@ -213,7 +215,9 @@ class ServiceBase(DynamicType):
         if getter:
             getter_name = getter.name
             param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(getter)
-            param_names[0] = 'self' #FIXME: hack to rename this -> self
+            # Rename this to self if it doesn't cause a name clash
+            if 'self' not in param_names:
+                param_names[0] = 'self'
             getter = _construct_func(cls._client._invoke, cls._name, getter_name, [], param_names, param_types, [True], [None], return_type)
             build_request = _construct_func(cls._client._build_request, cls._name, getter_name, [], param_names, param_types, [True], [None], return_type)
             setattr(getter, '_build_request', build_request)
