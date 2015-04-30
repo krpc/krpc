@@ -1,15 +1,18 @@
 from google.protobuf.internal import decoder as protobuf_decoder
-from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
+from krpc.types import Types, ValueType, MessageType, ProtobufEnumType, ClassType, EnumType
+from krpc.types import ListType, DictionaryType, SetType, TupleType
 import krpc.platform
 from krpc.platform import hexlify
 
-class _Decoder(object):
+class Decoder(object):
     """ Routines for decoding messages and values from the protocol buffer serialization format """
 
     OK_LENGTH = 2
     OK_MESSAGE = b'\x4F\x4B'
 
     GUID_LENGTH = 16
+
+    _types = Types()
 
     @classmethod
     def guid(cls, data):
@@ -20,27 +23,30 @@ class _Decoder(object):
     @classmethod
     def decode(cls, data, typ):
         """ Given a python type, and serialized data, decode the value """
-        if isinstance(typ, _MessageType):
+        if isinstance(typ, MessageType):
             return cls._decode_message(data, typ)
-        elif isinstance(typ, _EnumType):
-            return cls._decode_value(data, _Types.as_type('int32'))
-        elif isinstance(typ, _ValueType):
+        elif isinstance(typ, EnumType):
+            value = cls._decode_value(data, cls._types.as_type('int32'))
+            return typ.python_type(value)
+        elif isinstance(typ, ProtobufEnumType):
+            return cls._decode_value(data, cls._types.as_type('int32'))
+        elif isinstance(typ, ValueType):
             return cls._decode_value(data, typ)
-        elif isinstance(typ, _ClassType):
-            object_id_typ = _Types.as_type('uint64')
+        elif isinstance(typ, ClassType):
+            object_id_typ = cls._types.as_type('uint64')
             object_id = cls._decode_value(data, object_id_typ)
             return typ.python_type(object_id) if object_id != 0 else None
-        elif isinstance(typ, _ListType):
-            msg = cls._decode_message(data, _Types.as_type('KRPC.List'))
+        elif isinstance(typ, ListType):
+            msg = cls._decode_message(data, cls._types.as_type('KRPC.List'))
             return [cls.decode(item, typ.value_type) for item in msg.items]
-        elif isinstance(typ, _DictionaryType):
-            msg = cls._decode_message(data, _Types.as_type('KRPC.Dictionary'))
+        elif isinstance(typ, DictionaryType):
+            msg = cls._decode_message(data, cls._types.as_type('KRPC.Dictionary'))
             return dict((cls.decode(entry.key, typ.key_type), cls.decode(entry.value, typ.value_type)) for entry in msg.entries)
-        elif isinstance(typ, _SetType):
-            msg = cls._decode_message(data, _Types.as_type('KRPC.Set'))
+        elif isinstance(typ, SetType):
+            msg = cls._decode_message(data, cls._types.as_type('KRPC.Set'))
             return set(cls.decode(item, typ.value_type) for item in msg.items)
-        elif isinstance(typ, _TupleType):
-            msg = cls._decode_message(data, _Types.as_type('KRPC.Tuple'))
+        elif isinstance(typ, TupleType):
+            msg = cls._decode_message(data, cls._types.as_type('KRPC.Tuple'))
             return tuple(cls.decode(item, value_type) for item,value_type in zip(msg.items,typ.value_types))
         else:
             raise RuntimeError ('Cannot decode type %s' % str(typ))
