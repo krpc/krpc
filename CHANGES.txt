@@ -2,6 +2,7 @@ v0.1.8
 * Server plugin changes:
   * Add support for static class methods (#106)
 * Python client changes:
+  * Improved dynamic creation of service methods
   * Add support for static class methods (#106)
   * Improve enums: return an Enum object instead of an int
   * Fix bug with types across multiple connections (#110)
