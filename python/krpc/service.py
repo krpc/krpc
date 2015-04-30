@@ -159,11 +159,9 @@ class ServiceBase(DynamicType):
         """ Add a procedure """
         param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(procedure)
         func = _construct_func(cls._client._invoke, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
-        #setattr(func, '_build_request',
-        #        lambda *args, **kwargs: self._build_request(
-        #            procedure.name, args=args, kwargs=kwargs,
-        #            param_names=param_names, param_types=param_types, return_type=return_type))
-        #setattr(func, '_return_type', return_type)
+        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
+        setattr(func, '_build_request', build_request)
+        setattr(func, '_return_type', return_type)
         name = str(_to_snake_case(procedure.name))
         return cls._add_static_method(name, func, doc=None)
 
@@ -171,17 +169,15 @@ class ServiceBase(DynamicType):
     def _add_service_property(cls, name, getter=None, setter=None):
         """ Add a property """
         if getter:
+            getter_name = getter.name
             _,_,_,_,return_type = cls._parse_procedure(getter)
-            getter = _construct_func(cls._client._invoke, cls._name, getter.name, ['self'], [], [], [], [], return_type)
-            #fget = lambda s: getattr(self, _to_snake_case(getter.name))()
-            #fget_request = lambda s: getattr(self, _to_snake_case(getter.name))._build_request()
-            #fget_return_type = getattr(self, _to_snake_case(getter.name))._return_type
-            #setattr(fget, '_build_request', fget_request)
-            #setattr(fget, '_return_type', fget_return_type)
+            getter = _construct_func(cls._client._invoke, cls._name, getter_name, ['self'], [], [], [], [], return_type)
+            build_request = _construct_func(cls._client._build_request, cls._name, getter_name, ['self'], [], [], [], [], return_type)
+            setattr(getter, '_build_request', build_request)
+            setattr(getter, '_return_type', return_type)
         if setter:
             param_names, param_types, _,_,_ = cls._parse_procedure(setter)
             setter = _construct_func(cls._client._invoke, cls._name, setter.name, ['self'], param_names, param_types, [True], [None], None)
-        #    #fset = lambda s, value: getattr(self, _to_snake_case(setter.name))(value)
         name = str(_to_snake_case(name))
         return cls._add_property(name, getter, setter, doc=None)
 
@@ -192,18 +188,11 @@ class ServiceBase(DynamicType):
         param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(procedure)
         param_names[0] = 'self' #FIXME: hack to rename this -> self
         func = _construct_func(cls._client._invoke, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
+        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
+        setattr(func, '_build_request', build_request)
+        setattr(func, '_return_type', return_type)
         name = str(_to_snake_case(method_name))
         class_cls._add_method(name, func, doc=None)
-
-        #func = lambda s, *args, **kwargs: self._invoke(procedure.name, args=[s] + list(args), kwargs=kwargs,
-        #                                               param_names=param_names, param_types=param_types,
-        #                                               return_type=return_type)
-        #setattr(func, '_build_request',
-        #        lambda s, *args, **kwargs: self._build_request(procedure.name, args=[s] + list(args), kwargs=kwargs,
-        #                                                       param_names=param_names, param_types=param_types,
-        #                                                       return_type=return_type))
-        #setattr(func, '_return_type', return_type)
-        #setattr(cls, _to_snake_case(method_name), func)
 
     @classmethod
     def _add_service_class_static_method(cls, class_name, method_name, procedure):
@@ -211,39 +200,26 @@ class ServiceBase(DynamicType):
         class_cls = cls._client._types.as_type('Class('+cls._name+'.'+class_name+')').python_type
         param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(procedure)
         func = _construct_func(cls._client._invoke, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
+        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
+        setattr(func, '_build_request', build_request)
+        setattr(func, '_return_type', return_type)
         name = str(_to_snake_case(method_name))
         class_cls._add_static_method(name, func, doc=None)
-
-        #setattr(func, '_build_request',
-        #        lambda *args, **kwargs: self._build_request(procedure.name, args=list(args), kwargs=kwargs,
-        #                                                    param_names=param_names, param_types=param_types,
-        #                                                    return_type=return_type))
-        #setattr(func, '_return_type', return_type)
-        #setattr(cls, _to_snake_case(method_name), staticmethod(func))
 
     @classmethod
     def _add_service_class_property(cls, class_name, property_name, getter=None, setter=None):
         """ Add a property to a class """
         class_cls = cls._client._types.as_type('Class('+cls._name+'.'+class_name+')').python_type
         if getter:
+            getter_name = getter.name
             param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(getter)
             param_names[0] = 'self' #FIXME: hack to rename this -> self
-            getter = _construct_func(cls._client._invoke, cls._name, getter.name, [], param_names, param_types, [True], [None], return_type)
-            #setattr(fget, '_build_request',
-            #        lambda s: getattr(s, _to_snake_case(getter.name))._build_request(s))
-            #setattr(fget, '_return_type',
-            #        getattr(getattr(self, class_name), _to_snake_case(getter.name))._return_type)
+            getter = _construct_func(cls._client._invoke, cls._name, getter_name, [], param_names, param_types, [True], [None], return_type)
+            build_request = _construct_func(cls._client._build_request, cls._name, getter_name, [], param_names, param_types, [True], [None], return_type)
+            setattr(getter, '_build_request', build_request)
+            setattr(getter, '_return_type', return_type)
         if setter:
             param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(setter)
             setter = _construct_func(cls._client._invoke, cls._name, setter.name, [], param_names, param_types, [True,True], [None,None], None)
         property_name = str(_to_snake_case(property_name))
         return class_cls._add_property(property_name, getter, setter, doc=None)
-
-    #@classmethod
-    #def _add_enumeration(self, enum):
-    #    """ Add an enumeration to this service """
-    #    name = enum.name
-    #    setattr(self, name, type(str(name), (object,),
-    #        dict((_to_snake_case(x.name), x.value) for x in enum.values)))
-    #
-    #
