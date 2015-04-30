@@ -1,5 +1,5 @@
 from google.protobuf.internal import decoder as protobuf_decoder
-from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
+from krpc.types import Types, ValueType, MessageType, ProtobufEnumType, ClassType, EnumType
 from krpc.types import ListType, DictionaryType, SetType, TupleType
 import krpc.platform
 from krpc.platform import hexlify
@@ -26,6 +26,9 @@ class Decoder(object):
         if isinstance(typ, MessageType):
             return cls._decode_message(data, typ)
         elif isinstance(typ, EnumType):
+            value = cls._decode_value(data, cls._types.as_type('int32'))
+            return typ.python_type(value)
+        elif isinstance(typ, ProtobufEnumType):
             return cls._decode_value(data, cls._types.as_type('int32'))
         elif isinstance(typ, ValueType):
             return cls._decode_value(data, typ)

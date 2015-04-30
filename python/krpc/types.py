@@ -1,5 +1,6 @@
 import re
 import collections
+from enum import Enum
 import krpc.schema
 from krpc.attributes import Attributes
 import importlib
@@ -88,6 +89,8 @@ class Types(object):
             typ = ValueType(type_string)
         elif type_string.startswith('Class(') or type_string == 'Class':
             typ = ClassType(type_string)
+        elif type_string.startswith('Enum(') or type_string == 'Enum':
+            typ = EnumType(type_string)
         elif type_string.startswith('List(') or type_string == 'List':
             typ = ListType(type_string, self)
         elif type_string.startswith('Dictionary(') or type_string == 'Dictionary':
@@ -105,7 +108,7 @@ class Types(object):
             if type_string in PROTOBUF_TO_MESSAGE_TYPE:
                 typ = MessageType(type_string)
             elif type_string in PROTOBUF_TO_ENUM_TYPE:
-                typ = EnumType(type_string)
+                typ = ProtobufEnumType(type_string)
             else:
                 raise ValueError('\'%s\' is not a valid type string' % type_string)
 
@@ -210,16 +213,15 @@ class MessageType(TypeBase):
         typ = PROTOBUF_TO_MESSAGE_TYPE[type_string]
         super(MessageType, self).__init__(type_string, typ)
 
-class EnumType(TypeBase):
-    """ A protocol buffer enumeration type """
+class ProtobufEnumType(TypeBase):
+    """ A protocol buffer enumeration type, represented by an int32 value """
 
     def __init__(self, type_string):
         package,_,_ = type_string.rpartition('.')
         _load_types(package)
         if type_string not in PROTOBUF_TO_ENUM_TYPE:
-            raise ValueError('\'%s\' is not a valid type string for an enum type' % type_string)
-        typ = _create_enum_type()
-        super(EnumType, self).__init__(type_string, typ)
+            raise ValueError('\'%s\' is not a valid type string for a protobuf enumeration type' % type_string)
+        super(ProtobufEnumType, self).__init__(type_string, int)
 
 class ClassType(TypeBase):
     """ A class type, represented by a uint64 identifier """
@@ -232,6 +234,22 @@ class ClassType(TypeBase):
         class_name = match.group(2)
         typ = _create_class_type(service_name, class_name)
         super(ClassType, self).__init__(str(type_string), typ)
+
+class EnumType(TypeBase):
+    """ An enumeration type, represented by an int32 value """
+
+    def __init__(self, type_string):
+        match = re.match(r'Enum\(([^\.]+)\.([^\.]+)\)', type_string)
+        if not match:
+            raise ValueError('\'%s\' is not a valid type string for an enumeration type' % type_string)
+        self._service_name = match.group(1)
+        self._enum_name = match.group(2)
+        # Sets python_type to None, set_values must be called to set the python_type
+        super(EnumType, self).__init__(str(type_string), None)
+
+    def set_values(self, values):
+        """ Set the python type. Creates an Enum class using the given values. """
+        self._python_type = _create_enum_type(self._service_name, self._enum_name, values)
 
 class ListType(TypeBase):
     """ A list collection type, represented by a protobuf message """
@@ -347,9 +365,8 @@ def _create_class_type(service_name, class_name):
     return type(str(class_name), (ClassBase,),
                 {'_service_name': service_name, '_class_name': class_name})
 
-def _create_enum_type():
-    #FIXME: use Enum class, or type from protocol buffer definition file?
-    return int
+def _create_enum_type(service_name, enum_name, values):
+    return Enum(enum_name, values)
 
 class DefaultArgument(object):
     """ A sentinel value for default arguments """

@@ -3,6 +3,7 @@ v0.1.8
   * Add support for static class methods (#106)
 * Python client changes:
   * Add support for static class methods (#106)
+  * Improve enums: return an Enum object instead of an int
   * Fix bug with types across multiple connections (#110)
 
 v0.1.7

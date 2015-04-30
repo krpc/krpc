@@ -134,9 +134,9 @@ class ServiceBase(DynamicType):
     def _add_service_enumeration(cls, enum):
         """ Add an enumeration type """
         name = enum.name
-        #FIXME: use Types() object to create this
-        setattr(cls, name, type(str(name), (object,),
-            dict((_to_snake_case(x.name), x.value) for x in enum.values)))
+        enum_type = cls._client._types.as_type('Enum(' + cls._name + '.' + name + ')')
+        enum_type.set_values(dict((str(_to_snake_case(x.name)), x.value) for x in enum.values))
+        setattr(cls, name, enum_type.python_type)
 
     @classmethod
     def _parse_procedure(cls, procedure):

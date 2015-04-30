@@ -1,6 +1,7 @@
 import unittest
+from enum import Enum
 from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
-from krpc.types import ListType, DictionaryType, SetType, TupleType
+from krpc.types import ListType, DictionaryType, SetType, TupleType, ProtobufEnumType
 from krpc.types import ClassBase
 import krpc.schema.KRPC
 
@@ -45,17 +46,29 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError, MessageType, '.')
         self.assertRaises(ValueError, MessageType, 'foo.bar')
 
-    def test_enum_types(self):
+    def test_protobuf_enum_types(self):
         types = Types()
         typ = types.as_type('Test.TestEnum')
-        self.assertTrue(isinstance(typ, EnumType))
+        self.assertTrue(isinstance(typ, ProtobufEnumType))
         self.assertEqual(int, typ.python_type)
         self.assertEqual('Test.TestEnum', typ.protobuf_type)
         self.assertRaises(ValueError, types.as_type, 'Test.DoesntExist')
-        self.assertRaises(ValueError, EnumType, '')
-        self.assertRaises(ValueError, EnumType, 'invalid')
-        self.assertRaises(ValueError, EnumType, '.')
-        self.assertRaises(ValueError, EnumType, 'foo.bar')
+        self.assertRaises(ValueError, ProtobufEnumType, '')
+        self.assertRaises(ValueError, ProtobufEnumType, 'invalid')
+        self.assertRaises(ValueError, ProtobufEnumType, '.')
+        self.assertRaises(ValueError, ProtobufEnumType, 'foo.bar')
+
+    def test_enum_types(self):
+        types = Types()
+        typ = types.as_type('Enum(ServiceName.EnumName)')
+        self.assertTrue(isinstance(typ, EnumType))
+        self.assertEqual(None, typ.python_type)
+        self.assertTrue('Enum(ServiceName.EnumName)', typ.protobuf_type)
+        typ.set_values({'a': 0, 'b': 42, 'c': 100})
+        self.assertTrue(issubclass(typ.python_type, Enum))
+        self.assertEquals(0, typ.python_type.a.value)
+        self.assertEquals(42, typ.python_type.b.value)
+        self.assertEquals(100, typ.python_type.c.value)
 
     def test_class_types(self):
         types = Types()

@@ -118,7 +118,7 @@ logo.png
 __pycache__
 python/MANIFEST
 python/krpc.egg-info
-python/protobuf-*-py*.egg
+python/*.egg
 python/build
 
 # Java
