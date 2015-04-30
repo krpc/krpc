@@ -1,5 +1,5 @@
-ship = PartsEngines
-version = 0.90.0
+ship = PartsEngine
+version = 1.0.0
 description = 
 type = VAB
 size = 8.297939,22.84933,6.068991
@@ -19,6 +19,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -80,6 +81,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -156,6 +158,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -163,6 +176,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -263,17 +287,6 @@ PART
 			flight = 0
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -311,6 +324,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -330,17 +344,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -379,6 +382,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -456,6 +460,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
+		isJettisoned = True
 		EVENTS
 		{
 			Jettison
@@ -483,36 +488,32 @@ PART
 		name = ModuleGimbal
 		isEnabled = True
 		gimbalLock = False
+		gimbalLimiter = 100
+		gimbalLock_UIFlight
+		{
+			controlEnabled = True
+		}
+		gimbalLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
-			LockGimbal
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Lock Gimbal
-				guiName = Lock Gimbal
-				category = Lock Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			FreeGimbal
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Free Gimbal
-				guiName = Free Gimbal
-				category = Free Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
 		}
 		ACTIONS
 		{
 			ToggleAction
+			{
+				actionGroup = None
+			}
+			LockAction
+			{
+				actionGroup = None
+			}
+			FreeAction
 			{
 				actionGroup = None
 			}
@@ -542,6 +543,17 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleSurfaceFX
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
 		name = ModuleTestSubject
 		isEnabled = True
 		EVENTS
@@ -557,17 +569,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -600,6 +601,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -618,17 +620,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -667,6 +658,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -744,6 +736,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
+		isJettisoned = True
 		EVENTS
 		{
 			Jettison
@@ -790,7 +783,7 @@ PART
 	}
 	MODULE
 	{
-		name = FARBasicDragModel
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -817,7 +810,7 @@ PART
 	pos = -2.52617,17.61467,-0.4900936
 	attPos = 0,0,0
 	attPos0 = -1.428031,-1.213228,1.192093E-07
-	rot = -1.058791E-22,0.7071068,3.705769E-22,0.7071068
+	rot = -2.117582E-22,0.7071068,4.764561E-22,0.7071068
 	attRot = 0,0,0,1
 	attRot0 = -1.256074E-15,0.7071068,1.256074E-15,0.7071068
 	mir = 1,1,1
@@ -826,6 +819,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -846,7 +840,7 @@ PART
 		isEnabled = True
 		scaleFactor = 7.242726
 		height = 18.27482
-		towerRot = 1.058791E-22,-0.7071068,-3.705769E-22,0.7071068
+		towerRot = 2.117582E-22,-0.7071068,-4.764561E-22,0.7071068
 		EVENTS
 		{
 			Release
@@ -938,24 +932,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -973,6 +949,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -998,7 +975,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9900793
+		currentThrottle = 0.297848
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -1084,7 +1061,7 @@ PART
 	}
 	MODULE
 	{
-		name = FARBasicDragModel
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -1120,6 +1097,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1232,24 +1210,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1267,6 +1227,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1285,17 +1246,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -1324,6 +1274,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1340,7 +1291,7 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleEngines
+		name = ModuleEnginesFX
 		isEnabled = True
 		staged = False
 		flameout = False
@@ -1413,36 +1364,32 @@ PART
 		name = ModuleGimbal
 		isEnabled = True
 		gimbalLock = False
+		gimbalLimiter = 100
+		gimbalLock_UIFlight
+		{
+			controlEnabled = True
+		}
+		gimbalLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
-			LockGimbal
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Lock Gimbal
-				guiName = Lock Gimbal
-				category = Lock Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			FreeGimbal
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Free Gimbal
-				guiName = Free Gimbal
-				category = Free Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
 		}
 		ACTIONS
 		{
 			ToggleAction
+			{
+				actionGroup = None
+			}
+			LockAction
+			{
+				actionGroup = None
+			}
+			FreeAction
 			{
 				actionGroup = None
 			}
@@ -1483,7 +1430,7 @@ PART
 	}
 	MODULE
 	{
-		name = FARBasicDragModel
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -1519,6 +1466,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1631,24 +1579,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1666,6 +1596,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1681,17 +1612,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -1730,6 +1650,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1807,6 +1728,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
+		isJettisoned = True
 		EVENTS
 		{
 			Jettison
@@ -1833,6 +1755,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
+		isJettisoned = True
 		EVENTS
 		{
 			Jettison
@@ -1850,46 +1773,6 @@ PART
 		ACTIONS
 		{
 			JettisonAction
-			{
-				actionGroup = None
-			}
-		}
-	}
-	MODULE
-	{
-		name = ModuleGimbal
-		isEnabled = True
-		gimbalLock = False
-		EVENTS
-		{
-			LockGimbal
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Lock Gimbal
-				guiName = Lock Gimbal
-				category = Lock Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			FreeGimbal
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Free Gimbal
-				guiName = Free Gimbal
-				category = Free Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
 			{
 				actionGroup = None
 			}
@@ -1941,7 +1824,7 @@ PART
 	}
 	MODULE
 	{
-		name = FARBasicDragModel
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -1977,6 +1860,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -2029,17 +1913,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = IntakeAir
@@ -2067,6 +1940,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -2083,17 +1957,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -2122,6 +1985,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -2228,17 +2092,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2256,6 +2109,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -2270,17 +2124,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -2309,6 +2152,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2382,17 +2226,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2410,6 +2243,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2423,17 +2257,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{

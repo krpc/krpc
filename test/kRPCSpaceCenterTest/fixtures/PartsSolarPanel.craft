@@ -1,5 +1,5 @@
 ship = PartsSolarPanel
-version = 0.90.0
+version = 1.0.0
 description = 
 type = VAB
 size = 5.891571,17.91153,3.158285
@@ -19,6 +19,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -82,6 +83,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -158,6 +160,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -165,6 +178,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -265,17 +289,6 @@ PART
 			flight = 0
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -313,6 +326,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -330,17 +344,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -379,6 +382,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -492,24 +496,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -527,6 +513,7 @@ PART
 	dstg = 0
 	sidx = 1
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -640,24 +627,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -675,6 +644,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -738,17 +708,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -766,6 +725,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -803,8 +763,8 @@ PART
 			}
 			Retract
 			{
-				active = True
-				guiActive = True
+				active = False
+				guiActive = False
 				guiIcon = Retract Panels
 				guiName = Retract Panels
 				category = Retract Panels
@@ -829,17 +789,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -857,6 +806,7 @@ PART
 	dstg = 1
 	sidx = 0
 	sqor = 1
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -876,7 +826,15 @@ PART
 	{
 		name = ModuleAnchoredDecoupler
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -921,17 +879,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -949,6 +896,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -962,17 +910,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -1011,6 +948,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1072,17 +1010,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }

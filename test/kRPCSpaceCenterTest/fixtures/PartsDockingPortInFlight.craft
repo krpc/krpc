@@ -1,5 +1,5 @@
 ship = PartsDockingPortInFlight
-version = 0.90.0
+version = 1.0.0
 description = 
 type = VAB
 size = 1.596601,7.579721,1.566131
@@ -19,6 +19,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -82,6 +83,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -158,6 +160,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -165,6 +178,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -265,17 +289,6 @@ PART
 			flight = 0
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -313,6 +326,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 1
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -439,43 +453,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = ModuleDockingNodeNamed
-		isEnabled = True
-		portName = Clamp-O-Tron Docking Port
-		initialized = True
-		controlTransformName = 
-		EVENTS
-		{
-			renameDockingPort
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Rename Port
-				guiName = Rename Port
-				category = Rename Port
-				guiActiveUnfocused = True
-				unfocusedRange = 2000
-				externalToEVAOnly = False
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -493,6 +470,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -619,43 +597,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = ModuleDockingNodeNamed
-		isEnabled = True
-		portName = Clamp-O-Tron Docking Port
-		initialized = True
-		controlTransformName = 
-		EVENTS
-		{
-			renameDockingPort
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Rename Port
-				guiName = Rename Port
-				category = Rename Port
-				guiActiveUnfocused = True
-				unfocusedRange = 2000
-				externalToEVAOnly = False
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -673,6 +614,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -735,6 +677,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -811,6 +754,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -818,6 +772,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -918,17 +883,6 @@ PART
 			flight = 0
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -966,6 +920,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -985,17 +940,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -1024,6 +968,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1042,17 +987,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -1091,6 +1025,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1152,17 +1087,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1180,6 +1104,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1233,17 +1158,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -1263,6 +1177,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1316,17 +1231,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -1346,6 +1250,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1401,17 +1306,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1429,6 +1323,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1484,17 +1379,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1512,6 +1396,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1565,17 +1450,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -1595,6 +1469,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1648,17 +1523,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -1678,6 +1542,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1733,17 +1598,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1761,6 +1615,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1816,17 +1671,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1844,6 +1688,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1863,17 +1708,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -1902,6 +1736,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1920,17 +1755,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -1969,6 +1793,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2030,17 +1855,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2058,6 +1872,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2111,17 +1926,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -2141,6 +1945,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2194,17 +1999,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -2224,6 +2018,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2279,17 +2074,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2307,6 +2091,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2362,17 +2147,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2390,6 +2164,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2443,17 +2218,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -2473,6 +2237,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2526,17 +2291,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -2556,6 +2310,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2611,17 +2366,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2639,6 +2383,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 2
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2692,17 +2437,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ship = Parts
-version = 0.90.0
+version = 1.0.0
 description = 
 type = VAB
 size = 6.92598,27.76336,6.749738
@@ -19,6 +19,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -28,7 +29,6 @@ PART
 	link = landingLeg1_4294578972
 	link = landingLeg1_4294578716
 	link = landingLeg1_4294578616
-	link = RTShortAntenna1_4294601328
 	link = SmallGearBay_4294634018
 	attN = bottom,stackSeparatorBig_4294704002
 	attN = top,parachuteLarge_4294621892
@@ -87,6 +87,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -163,6 +164,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -170,6 +182,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -270,17 +293,6 @@ PART
 			flight = 0
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -318,6 +330,7 @@ PART
 	dstg = 1
 	sidx = 0
 	sqor = 1
+	sepI = 1
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -338,7 +351,15 @@ PART
 	{
 		name = ModuleDecouple
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -383,17 +404,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -411,6 +421,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 1
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -420,10 +431,9 @@ PART
 	link = parachuteRadial_4294621002
 	link = parachuteRadial_4294620952
 	link = ksp.r.largeBatteryPack_4294606750
-	link = RTShortDish2_4294601818
 	link = sensorGravimeter_4294600718
 	link = sensorBarometer_4294600460
-	link = longAntenna_4294598190
+	link = longAntenna_4294556948
 	attN = top,stackSeparatorBig_4294704002
 	attN = bottom,liquidEngine2-2_4294690574
 	EVENTS
@@ -434,17 +444,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -483,6 +482,7 @@ PART
 	dstg = 2
 	sidx = 0
 	sqor = 3
+	sepI = 1
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -562,6 +562,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
+		isJettisoned = False
 		EVENTS
 		{
 			Jettison
@@ -589,36 +590,32 @@ PART
 		name = ModuleGimbal
 		isEnabled = True
 		gimbalLock = False
+		gimbalLimiter = 100
+		gimbalLock_UIFlight
+		{
+			controlEnabled = True
+		}
+		gimbalLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
-			LockGimbal
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Lock Gimbal
-				guiName = Lock Gimbal
-				category = Lock Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			FreeGimbal
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Free Gimbal
-				guiName = Free Gimbal
-				category = Free Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
 		}
 		ACTIONS
 		{
 			ToggleAction
+			{
+				actionGroup = None
+			}
+			LockAction
+			{
+				actionGroup = None
+			}
+			FreeAction
 			{
 				actionGroup = None
 			}
@@ -670,7 +667,7 @@ PART
 	}
 	MODULE
 	{
-		name = FARBasicDragModel
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -706,6 +703,7 @@ PART
 	dstg = 3
 	sidx = 1
 	sqor = 3
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -726,7 +724,15 @@ PART
 	{
 		name = ModuleDecouple
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -771,17 +777,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -799,6 +794,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -818,17 +814,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -857,6 +842,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 0
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -876,22 +862,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -958,6 +943,28 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -980,6 +987,7 @@ PART
 	dstg = 1
 	sidx = 0
 	sqor = 2
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1001,22 +1009,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -1083,6 +1090,28 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -1105,6 +1134,7 @@ PART
 	dstg = 1
 	sidx = 1
 	sqor = 2
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1126,22 +1156,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -1208,6 +1237,28 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -1230,6 +1281,7 @@ PART
 	dstg = 1
 	sidx = 2
 	sqor = 2
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1251,22 +1303,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -1338,6 +1389,28 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -1355,6 +1428,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1368,17 +1442,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -1389,193 +1452,6 @@ PART
 		isTweakable = True
 		hideFlow = False
 		flowMode = Both
-	}
-}
-PART
-{
-	part = RTShortDish2_4294601818
-	partName = Part
-	pos = 1.151982,22.91658,-0.7861125
-	attPos = 0,0,0
-	attPos0 = 1.070796,-0.01579666,-0.6182246
-	rot = 0.3535526,0.6123728,-0.6123731,0.3535525
-	attRot = 0,0,0,1
-	attRot0 = 0.3535526,0.6123729,-0.6123731,0.3535525
-	mir = 1,1,1
-	symMethod = Radial
-	istg = 2
-	dstg = 2
-	sidx = -1
-	sqor = -1
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
-	srfN = srfAttach,fuelTank4-2_4294696064
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRTAntenna
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = False
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 0.976296007119933
-		RTOmniRange = 0
-		RTDishRange = 0
-		RTAntennaTarget = 00000000-0000-0000-0000-000000000000
-		EVENTS
-		{
-			EventToggle
-			{
-				active = True
-				guiActive = False
-				guiIcon = 
-				guiName = Toggle
-				category = 
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventTarget
-			{
-				active = True
-				guiActive = True
-				guiIcon = Target
-				guiName = Unknown Target
-				category = Target
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventEditorOpen
-			{
-				active = True
-				guiActive = False
-				guiActiveEditor = True
-				guiIcon = Start deployed
-				guiName = Start deployed
-				category = Start deployed
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventEditorClose
-			{
-				active = True
-				guiActive = False
-				guiIcon = Start retracted
-				guiName = Start retracted
-				category = Start retracted
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventOpen
-			{
-				active = True
-				guiActive = True
-				guiIcon = 
-				guiName = Activate
-				category = 
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventClose
-			{
-				active = False
-				guiActive = False
-				guiIcon = 
-				guiName = Deactivate
-				category = 
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			OverrideTarget
-			{
-				active = True
-				guiActive = False
-				guiIcon = [EVA] Set Target
-				guiName = [EVA] Set Target
-				category = [EVA] Set Target
-				guiActiveUnfocused = True
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-			OverrideOpen
-			{
-				active = True
-				guiActive = False
-				guiIcon = [EVA] Force Open
-				guiName = [EVA] Force Open
-				category = [EVA] Force Open
-				guiActiveUnfocused = True
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-			OverrideClose
-			{
-				active = True
-				guiActive = False
-				guiIcon = [EVA] Force Close
-				guiName = [EVA] Force Close
-				category = [EVA] Force Close
-				guiActiveUnfocused = False
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ActionToggle
-			{
-				actionGroup = None
-			}
-			ActionOpen
-			{
-				actionGroup = None
-			}
-			ActionClose
-			{
-				actionGroup = None
-			}
-		}
-	}
-	MODULE
-	{
-		name = ModuleSPUPassive
-		isEnabled = True
-		IsRTPowered = False
-		IsRTSignalProcessor = True
-		IsRTCommandStation = False
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 }
 PART
@@ -1594,6 +1470,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1687,6 +1564,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -1694,6 +1582,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -1709,17 +1608,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -1739,6 +1627,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1832,6 +1721,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -1839,6 +1739,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -1854,236 +1765,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
-}
-PART
-{
-	part = longAntenna_4294598190
-	partName = Part
-	pos = -0.9680755,22.96424,-0.7736796
-	attPos = 0,0,0
-	attPos0 = -1.049262,0.03186607,-0.6057916
-	rot = -0.3535526,0.6123728,-0.6123731,-0.3535525
-	attRot = 0,0,0,1
-	attRot0 = -0.3535526,0.6123729,-0.6123731,-0.3535525
-	mir = 1,1,1
-	symMethod = Radial
-	istg = 2
-	dstg = 2
-	sidx = -1
-	sqor = -1
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
-	srfN = srfAttach,fuelTank4-2_4294696064
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleAnimateGeneric
-		isEnabled = True
-		status = Locked
-		animSwitch = True
-		animTime = 0
-		animSpeed = 1
-		EVENTS
-		{
-			Toggle
-			{
-				active = True
-				guiActive = False
-				guiActiveEditor = True
-				guiIcon = Toggle
-				guiName = Extend
-				category = Toggle
-				guiActiveUnfocused = True
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ToggleAction
-			{
-				actionGroup = None
-				active = False
-			}
-		}
-	}
-	MODULE
-	{
-		name = ModuleRTAntenna
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = False
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 0
-		RTDishRange = -1
-		RTAntennaTarget = 00000000-0000-0000-0000-000000000000
-		EVENTS
-		{
-			EventToggle
-			{
-				active = True
-				guiActive = False
-				guiIcon = 
-				guiName = Toggle
-				category = 
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventTarget
-			{
-				active = False
-				guiActive = False
-				guiIcon = Target
-				guiName = Unknown Target
-				category = Target
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventEditorOpen
-			{
-				active = True
-				guiActive = False
-				guiActiveEditor = True
-				guiIcon = Start deployed
-				guiName = Start deployed
-				category = Start deployed
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventEditorClose
-			{
-				active = True
-				guiActive = False
-				guiIcon = Start retracted
-				guiName = Start retracted
-				category = Start retracted
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventOpen
-			{
-				active = True
-				guiActive = True
-				guiIcon = 
-				guiName = Activate
-				category = 
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventClose
-			{
-				active = False
-				guiActive = False
-				guiIcon = 
-				guiName = Deactivate
-				category = 
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			OverrideTarget
-			{
-				active = True
-				guiActive = False
-				guiIcon = [EVA] Set Target
-				guiName = [EVA] Set Target
-				category = [EVA] Set Target
-				guiActiveUnfocused = True
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-			OverrideOpen
-			{
-				active = True
-				guiActive = False
-				guiIcon = [EVA] Force Open
-				guiName = [EVA] Force Open
-				category = [EVA] Force Open
-				guiActiveUnfocused = True
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-			OverrideClose
-			{
-				active = True
-				guiActive = False
-				guiIcon = [EVA] Force Close
-				guiName = [EVA] Force Close
-				category = [EVA] Force Close
-				guiActiveUnfocused = False
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ActionToggle
-			{
-				actionGroup = None
-			}
-			ActionOpen
-			{
-				actionGroup = None
-			}
-			ActionClose
-			{
-				actionGroup = None
-			}
-		}
-	}
-	MODULE
-	{
-		name = ModuleSPUPassive
-		isEnabled = True
-		IsRTPowered = False
-		IsRTSignalProcessor = True
-		IsRTCommandStation = False
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -2103,6 +1784,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2211,17 +1893,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -2241,6 +1912,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2351,17 +2023,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2379,6 +2040,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2489,204 +2151,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
-}
-PART
-{
-	part = RTShortAntenna1_4294601328
-	partName = Part
-	pos = 0.5908135,24.28444,-1.050588
-	attPos = 0,0,0
-	attPos0 = 0.5096273,0.2040787,-0.8827002
-	rot = -0.467698,0.6702075,-0.5303382,-0.2254372
-	attRot = 0.7071067,0,0,0.7071067
-	attRot0 = -0.467698,0.6702075,-0.5303382,-0.2254372
-	mir = 1,1,1
-	symMethod = Radial
-	istg = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
-	srfN = srfAttach,Mark1-2Pod_4294710516
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleRTAntenna
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 500000
-		RTDishRange = -1
-		RTAntennaTarget = 00000000-0000-0000-0000-000000000000
-		EVENTS
-		{
-			EventToggle
-			{
-				active = True
-				guiActive = False
-				guiIcon = 
-				guiName = Toggle
-				category = 
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventTarget
-			{
-				active = False
-				guiActive = False
-				guiIcon = Target
-				guiName = Unknown Target
-				category = Target
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventEditorOpen
-			{
-				active = True
-				guiActive = False
-				guiIcon = Start deployed
-				guiName = Start deployed
-				category = Start deployed
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventEditorClose
-			{
-				active = True
-				guiActive = False
-				guiActiveEditor = True
-				guiIcon = Start retracted
-				guiName = Start retracted
-				category = Start retracted
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventOpen
-			{
-				active = False
-				guiActive = False
-				guiIcon = 
-				guiName = Activate
-				category = 
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EventClose
-			{
-				active = True
-				guiActive = True
-				guiIcon = 
-				guiName = Deactivate
-				category = 
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			OverrideTarget
-			{
-				active = True
-				guiActive = False
-				guiIcon = [EVA] Set Target
-				guiName = [EVA] Set Target
-				category = [EVA] Set Target
-				guiActiveUnfocused = True
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-			OverrideOpen
-			{
-				active = True
-				guiActive = False
-				guiIcon = [EVA] Force Open
-				guiName = [EVA] Force Open
-				category = [EVA] Force Open
-				guiActiveUnfocused = False
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-			OverrideClose
-			{
-				active = True
-				guiActive = False
-				guiIcon = [EVA] Force Close
-				guiName = [EVA] Force Close
-				category = [EVA] Force Close
-				guiActiveUnfocused = True
-				unfocusedRange = 5
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			ActionToggle
-			{
-				actionGroup = None
-			}
-			ActionOpen
-			{
-				actionGroup = None
-			}
-			ActionClose
-			{
-				actionGroup = None
-			}
-		}
-	}
-	MODULE
-	{
-		name = ModuleSPUPassive
-		isEnabled = True
-		IsRTPowered = False
-		IsRTSignalProcessor = True
-		IsRTCommandStation = False
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2704,6 +2168,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2767,17 +2232,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2795,6 +2249,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2859,17 +2314,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2887,6 +2331,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2951,17 +2396,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -2979,6 +2413,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -3007,6 +2442,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -3031,17 +2467,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -3059,6 +2484,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -3085,17 +2511,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -3134,6 +2549,7 @@ PART
 	dstg = 4
 	sidx = 0
 	sqor = 4
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -3213,6 +2629,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
+		isJettisoned = False
 		EVENTS
 		{
 			Jettison
@@ -3240,36 +2657,32 @@ PART
 		name = ModuleGimbal
 		isEnabled = True
 		gimbalLock = False
+		gimbalLimiter = 100
+		gimbalLock_UIFlight
+		{
+			controlEnabled = True
+		}
+		gimbalLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
-			LockGimbal
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Lock Gimbal
-				guiName = Lock Gimbal
-				category = Lock Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			FreeGimbal
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Free Gimbal
-				guiName = Free Gimbal
-				category = Free Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
 		}
 		ACTIONS
 		{
 			ToggleAction
+			{
+				actionGroup = None
+			}
+			LockAction
+			{
+				actionGroup = None
+			}
+			FreeAction
 			{
 				actionGroup = None
 			}
@@ -3321,7 +2734,7 @@ PART
 	}
 	MODULE
 	{
-		name = FARBasicDragModel
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -3357,6 +2770,7 @@ PART
 	dstg = 5
 	sidx = 1
 	sqor = 4
+	sepI = 4
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -3377,7 +2791,15 @@ PART
 	{
 		name = ModuleDecouple
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -3422,17 +2844,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -3450,6 +2861,7 @@ PART
 	dstg = 6
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -3471,17 +2883,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -3520,6 +2921,7 @@ PART
 	dstg = 6
 	sidx = 0
 	sqor = 6
+	sepI = 4
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -3597,6 +2999,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
+		isJettisoned = True
 		EVENTS
 		{
 			Jettison
@@ -3624,36 +3027,32 @@ PART
 		name = ModuleGimbal
 		isEnabled = True
 		gimbalLock = False
+		gimbalLimiter = 100
+		gimbalLock_UIFlight
+		{
+			controlEnabled = True
+		}
+		gimbalLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
-			LockGimbal
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Lock Gimbal
-				guiName = Lock Gimbal
-				category = Lock Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			FreeGimbal
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Free Gimbal
-				guiName = Free Gimbal
-				category = Free Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
 		}
 		ACTIONS
 		{
 			ToggleAction
+			{
+				actionGroup = None
+			}
+			LockAction
+			{
+				actionGroup = None
+			}
+			FreeAction
 			{
 				actionGroup = None
 			}
@@ -3683,6 +3082,17 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleSurfaceFX
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
 		name = ModuleTestSubject
 		isEnabled = True
 		EVENTS
@@ -3698,17 +3108,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -3741,6 +3140,7 @@ PART
 	dstg = 7
 	sidx = 0
 	sqor = 5
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3762,7 +3162,15 @@ PART
 	{
 		name = ModuleAnchoredDecoupler
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -3802,17 +3210,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -3835,6 +3232,7 @@ PART
 	dstg = 7
 	sidx = 1
 	sqor = 5
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3856,7 +3254,15 @@ PART
 	{
 		name = ModuleAnchoredDecoupler
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -3896,17 +3302,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -3929,6 +3324,7 @@ PART
 	dstg = 7
 	sidx = 2
 	sqor = 5
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3950,7 +3346,15 @@ PART
 	{
 		name = ModuleAnchoredDecoupler
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -3995,17 +3399,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -4023,6 +3416,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4122,6 +3516,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -4129,6 +3534,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -4144,17 +3560,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -4174,6 +3579,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4273,6 +3679,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -4280,6 +3697,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -4295,17 +3723,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -4325,6 +3742,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4424,6 +3842,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -4431,6 +3860,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -4446,17 +3886,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -4476,6 +3905,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4598,43 +4028,6 @@ PART
 			{
 				actionGroup = None
 			}
-		}
-	}
-	MODULE
-	{
-		name = ModuleDockingNodeNamed
-		isEnabled = True
-		portName = Clamp-O-Tron Docking Port Jr.
-		initialized = True
-		controlTransformName = 
-		EVENTS
-		{
-			renameDockingPort
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Rename Port
-				guiName = Rename Port
-				category = Rename Port
-				guiActiveUnfocused = True
-				unfocusedRange = 2000
-				externalToEVAOnly = False
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
 		}
 	}
 }
@@ -4654,6 +4047,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4778,43 +4172,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = ModuleDockingNodeNamed
-		isEnabled = True
-		portName = Clamp-O-Tron Docking Port
-		initialized = True
-		controlTransformName = 
-		EVENTS
-		{
-			renameDockingPort
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Rename Port
-				guiName = Rename Port
-				category = Rename Port
-				guiActiveUnfocused = True
-				unfocusedRange = 2000
-				externalToEVAOnly = False
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -4832,6 +4189,7 @@ PART
 	dstg = 8
 	sidx = 1
 	sqor = 6
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4858,7 +4216,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9876297
+		currentThrottle = 0.0001968692
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -4968,7 +4326,7 @@ PART
 	}
 	MODULE
 	{
-		name = FARBasicDragModel
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -5004,6 +4362,7 @@ PART
 	dstg = 8
 	sidx = 2
 	sqor = 6
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -5030,7 +4389,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9876297
+		currentThrottle = 0.0001968692
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -5140,7 +4499,7 @@ PART
 	}
 	MODULE
 	{
-		name = FARBasicDragModel
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -5176,6 +4535,7 @@ PART
 	dstg = 8
 	sidx = 3
 	sqor = 6
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -5202,7 +4562,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9876297
+		currentThrottle = 0.0001968692
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -5312,7 +4672,7 @@ PART
 	}
 	MODULE
 	{
-		name = FARBasicDragModel
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -5348,6 +4708,7 @@ PART
 	dstg = 8
 	sidx = -1
 	sqor = -1
+	sepI = 5
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -5364,17 +4725,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 }
 PART
@@ -5393,6 +4743,7 @@ PART
 	dstg = 8
 	sidx = -1
 	sqor = -1
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -5481,17 +4832,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -5509,6 +4849,7 @@ PART
 	dstg = 8
 	sidx = -1
 	sqor = -1
+	sepI = 5
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -5525,17 +4866,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 }
 PART
@@ -5554,6 +4884,7 @@ PART
 	dstg = 8
 	sidx = -1
 	sqor = -1
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -5642,17 +4973,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -5661,7 +4981,7 @@ PART
 	pos = -2.023942,15.95159,1.047509
 	attPos = 0,0,0
 	attPos0 = 1.192088E-07,7.429159,3.439253E-08
-	rot = 2.4869E-14,8.470329E-22,3.819167E-14,-1
+	rot = 1.776357E-14,2.541099E-21,2.398082E-14,-1
 	attRot = 0,-0.8660256,0,-0.5000001
 	attRot0 = -9.033346E-08,-0.4999999,-5.215405E-08,-0.8660254
 	mir = 1,1,1
@@ -5670,6 +4990,7 @@ PART
 	dstg = 8
 	sidx = -1
 	sqor = -1
+	sepI = 5
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -5686,17 +5007,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 }
 PART
@@ -5715,6 +5025,7 @@ PART
 	dstg = 8
 	sidx = -1
 	sqor = -1
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -5803,17 +5114,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -5831,6 +5131,7 @@ PART
 	dstg = 4
 	sidx = 4
 	sqor = 6
+	sepI = 6
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -5945,24 +5246,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -5980,6 +5263,7 @@ PART
 	dstg = 4
 	sidx = 5
 	sqor = 6
+	sepI = 6
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -6094,24 +5378,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -6129,6 +5395,7 @@ PART
 	dstg = 4
 	sidx = 6
 	sqor = 6
+	sepI = 6
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -6243,24 +5510,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -6278,6 +5527,7 @@ PART
 	dstg = 6
 	sidx = 7
 	sqor = 6
+	sepI = 6
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -6392,24 +5642,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -6427,6 +5659,7 @@ PART
 	dstg = 6
 	sidx = 8
 	sqor = 6
+	sepI = 6
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -6541,24 +5774,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -6576,6 +5791,7 @@ PART
 	dstg = 6
 	sidx = 9
 	sqor = 6
+	sepI = 6
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -6690,24 +5906,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -6725,6 +5923,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -6784,6 +5983,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -6843,6 +6043,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -6902,6 +6103,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -6965,23 +6167,12 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
 	part = SmallGearBay_4294634018
 	partName = Part
-	pos = -0.920931,24.56831,0.1006286
+	pos = -0.9209309,24.56831,0.1006286
 	attPos = 0,0,0
 	attPos0 = -1.002117,0.4879398,0.2685165
 	rot = -0.6608672,-0.3368069,-0.5071012,0.4389353
@@ -6993,6 +6184,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -7011,12 +6203,20 @@ PART
 	{
 		name = ModuleLandingGear
 		isEnabled = True
+		BrakeTorque = 12
 		brakesEngaged = False
 		brakesEnabled = True
 		storedGearState = DEPLOYED
 		storedAnimationSpeed = 0
 		storedAnimationTime = 0
 		StartDeployed = True
+		BrakeTorque_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 30
+			stepIncrement = 1
+		}
 		StartDeployed_UIFlight
 		{
 			controlEnabled = True
@@ -7252,12 +6452,97 @@ PART
 		{
 		}
 	}
+}
+PART
+{
+	part = longAntenna_4294556948
+	partName = Part
+	pos = -0.9665352,22.92741,-0.7727902
+	attPos = 0,0,0
+	attPos0 = -1.047721,-0.004962921,-0.6049023
+	rot = -0.3535526,0.6123729,-0.6123731,-0.3535525
+	attRot = 0,0,0,1
+	attRot0 = -0.3535526,0.6123729,-0.6123731,-0.3535525
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 2
+	dstg = 2
+	sidx = -1
+	sqor = -1
+	sepI = 1
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,fuelTank4-2_4294696064
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
 	MODULE
 	{
-		name = FARBasicDragModel
+		name = ModuleAnimateGeneric
+		isEnabled = True
+		status = Locked
+		animSwitch = True
+		animTime = 0
+		animSpeed = 1
+		EVENTS
+		{
+			Toggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiIcon = Toggle
+				guiName = Extend
+				category = Toggle
+				guiActiveUnfocused = True
+				unfocusedRange = 5
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleDataTransmitter
 		isEnabled = True
 		EVENTS
 		{
+			StartTransmission
+			{
+				active = True
+				guiActive = True
+				guiIcon = Transmit Data
+				guiName = Transmit Data
+				category = Transmit Data
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			StopTransmission
+			{
+				active = False
+				guiActive = True
+				guiIcon = Stop Transmitting
+				guiName = Stop Transmitting
+				category = Stop Transmitting
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 		}
 		ACTIONS
 		{

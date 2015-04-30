@@ -1,5 +1,5 @@
 ship = PartsParachute
-version = 0.90.0
+version = 1.0.0
 description = 
 type = VAB
 size = 2.844676,2.366318,2.844676
@@ -19,6 +19,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -92,6 +93,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -168,6 +170,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -175,6 +188,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -275,17 +299,6 @@ PART
 			flight = 0
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -323,6 +336,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 0
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -342,22 +356,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -424,6 +437,28 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -446,6 +481,7 @@ PART
 	dstg = 0
 	sidx = 1
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -468,22 +504,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -550,6 +585,28 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -572,6 +629,7 @@ PART
 	dstg = 0
 	sidx = 2
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -594,22 +652,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -676,6 +733,28 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -698,6 +777,7 @@ PART
 	dstg = 0
 	sidx = 3
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -720,22 +800,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -802,6 +881,28 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -824,6 +925,7 @@ PART
 	dstg = 0
 	sidx = 4
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -846,22 +948,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -933,6 +1034,28 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -950,6 +1073,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1047,17 +1171,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -1090,6 +1203,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1187,17 +1301,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -1230,6 +1333,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1327,17 +1431,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -1370,6 +1463,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1467,17 +1561,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -1510,6 +1593,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1607,17 +1691,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -1650,6 +1723,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1747,17 +1821,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -1790,6 +1853,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1892,17 +1956,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -1930,6 +1983,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2027,17 +2081,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{

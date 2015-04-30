@@ -1,8 +1,8 @@
 ship = PartsDockingPortPreAttachedTo
-version = 0.90.0
+version = 1.0.0
 description = 
 type = VAB
-size = 1.268897,24.19189,5.356769
+size = 1.268897,24.19189,5.356771
 PART
 {
 	part = mk1pod_4294591264
@@ -19,6 +19,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -74,7 +75,7 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
-		stateString = 
+		stateString = Active
 		WheelState = Active
 		EVENTS
 		{
@@ -82,6 +83,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -158,6 +160,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -165,6 +178,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -265,17 +289,6 @@ PART
 			flight = 0
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -313,6 +326,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -439,43 +453,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = ModuleDockingNodeNamed
-		isEnabled = True
-		portName = Clamp-O-Tron Docking Port
-		initialized = True
-		controlTransformName = 
-		EVENTS
-		{
-			renameDockingPort
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Rename Port
-				guiName = Rename Port
-				category = Rename Port
-				guiActiveUnfocused = True
-				unfocusedRange = 2000
-				externalToEVAOnly = False
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -493,6 +470,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -619,43 +597,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = ModuleDockingNodeNamed
-		isEnabled = True
-		portName = Clamp-O-Tron Docking Port
-		initialized = True
-		controlTransformName = 
-		EVENTS
-		{
-			renameDockingPort
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Rename Port
-				guiName = Rename Port
-				category = Rename Port
-				guiActiveUnfocused = True
-				unfocusedRange = 2000
-				externalToEVAOnly = False
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -673,6 +614,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -688,17 +630,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -737,6 +668,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -863,43 +795,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = ModuleDockingNodeNamed
-		isEnabled = True
-		portName = Clamp-O-Tron Docking Port
-		initialized = True
-		controlTransformName = 
-		EVENTS
-		{
-			renameDockingPort
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Rename Port
-				guiName = Rename Port
-				category = Rename Port
-				guiActiveUnfocused = True
-				unfocusedRange = 2000
-				externalToEVAOnly = False
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -917,6 +812,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -932,17 +828,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -981,6 +866,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1107,43 +993,6 @@ PART
 			}
 		}
 	}
-	MODULE
-	{
-		name = ModuleDockingNodeNamed
-		isEnabled = True
-		portName = Clamp-O-Tron Docking Port
-		initialized = True
-		controlTransformName = 
-		EVENTS
-		{
-			renameDockingPort
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Rename Port
-				guiName = Rename Port
-				category = Rename Port
-				guiActiveUnfocused = True
-				unfocusedRange = 2000
-				externalToEVAOnly = False
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1161,6 +1010,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1174,17 +1024,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -1223,6 +1062,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1242,7 +1082,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 8.298174
+		scaleFactor = 8.298173
 		height = 20.93793
 		towerRot = 0.1820218,3.885669E-07,-7.192924E-08,-0.9832945
 		EVENTS
@@ -1336,24 +1176,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1371,6 +1193,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1390,7 +1213,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 8.298174
+		scaleFactor = 8.298173
 		height = 20.93793
 		towerRot = -7.988566E-08,0.9832945,-0.1820218,4.31548E-07
 		EVENTS
@@ -1479,24 +1302,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
