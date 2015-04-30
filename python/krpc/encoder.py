@@ -80,7 +80,6 @@ class Encoder(object):
     def _encode_value(cls, value, typ):
         return getattr(_ValueEncoder, 'encode_' + typ.protobuf_type)(value)
 
-
 class _ValueEncoder(object):
     """ Routines for encoding values in the protocol buffer serialization format """
 
