@@ -27,7 +27,7 @@ class TestPartsSensor(testingtools.TestCase):
         sensor.active = True
         time.sleep(0.1)
         self.assertTrue(sensor.active)
-        self.assertEqual(sensor.value, '0.9809')
+        self.assertTrue(sensor.value.startswith('99.8'))
         self.assertClose(sensor.power_usage, 0)
         sensor.active = False
         time.sleep(0.1)
