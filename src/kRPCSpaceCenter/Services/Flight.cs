@@ -1,13 +1,11 @@
 using System;
-using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPC.Service;
+using KRPCSpaceCenter.ExtensionMethods;
 using KRPCSpaceCenter.ExternalAPI;
 using UnityEngine;
-using KRPCSpaceCenter.ExtensionMethods;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
-using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -87,19 +85,99 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
+        /// Sum of the lift force acting on each part.
+        /// Note this is NOT the force in the vessel's lift direction.
+        /// </summary>
+        Vector3d WorldPartsLift {
+            get {
+                Vector3d lift = Vector3d.zero;
+                foreach (var part in vessel.Parts) {
+                    if (!part.hasLiftModule) {
+                        Vector3 bodyLift = part.transform.rotation * (part.bodyLiftScalar * part.DragCubes.LiftForce);
+                        bodyLift = Vector3.ProjectOnPlane (bodyLift, -part.dragVectorDir);
+                        lift += bodyLift;
+                    }
+                    foreach (var module in part.Modules) {
+                        var wing = module as ModuleLiftingSurface;
+                        if (wing != null)
+                            lift += wing.liftForce;
+                    }
+                }
+                return lift;
+            }
+        }
+
+        /// <summary>
+        /// Sum of the drag force acting on each part.
+        /// Note this is NOT the force in the vessel's drag direction.
+        /// </summary>
+        Vector3d WorldPartsDrag {
+            get {
+                Vector3d drag = Vector3d.zero;
+                foreach (var part in vessel.Parts) {
+                    // Part drag
+                    drag += -part.dragVectorDir * part.dragScalar;
+                    // Lifting surface drag
+                    foreach (var module in part.Modules) {
+                        var wing = module as ModuleLiftingSurface;
+                        if (wing != null)
+                            drag += wing.dragForce;
+                    }
+                }
+                return drag;
+            }
+        }
+
+        /// <summary>
+        /// Total aerodynamic forces acting on vessel in world space.
+        /// </summary>
+        Vector3d WorldAerodynamicForce {
+            get { return WorldPartsLift + WorldPartsDrag; }
+        }
+
+        /// <summary>
+        /// Total lift force acting on vessel (perpendicular to air stream and up wrt roll angle) in world space.
+        /// </summary>
+        Vector3d WorldLift {
+            get {
+                Vector3d direction = -Vector3d.Cross (vessel.transform.right, vessel.srf_velocity.normalized);
+                return Vector3d.Dot (WorldAerodynamicForce, direction) * direction;
+            }
+        }
+
+        /// <summary>
+        /// Total drag force acting on vessel (in opposite direction to air stream) in world space.
+        /// </summary>
+        Vector3d WorldDrag {
+            get {
+                Vector3d direction = -vessel.srf_velocity.normalized;
+                return Vector3d.Dot (WorldAerodynamicForce, direction) * direction;
+            }
+        }
+
+        /// <summary>
         /// Check that FAR is installed and that it is active for the vessel
         /// </summary>
         void CheckFAR ()
         {
             if (!FAR.IsAvailable)
                 throw new InvalidOperationException ("FAR is not available");
-            if (!FAR.ActiveControlSysIsOnVessel (this.vessel))
+            if (!FAR.ActiveControlSysIsOnVessel (vessel))
                 throw new InvalidOperationException ("FAR is not active on this vessel");
+        }
+
+        /// <summary>
+        /// Check that FAR is not installed
+        /// </summary>
+        static void CheckNoFAR ()
+        {
+            if (FAR.IsAvailable)
+                throw new InvalidOperationException ("Not available; FAR is installed");
         }
 
         [KRPCProperty]
         public float GForce {
-            get { return (float) vessel.geeForce; }
+            get { return (float)vessel.geeForce; }
         }
 
         [KRPCProperty]
@@ -173,17 +251,17 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public float Pitch {
-            get { return (float) VesselRotation.PitchHeadingRoll ().x; }
+            get { return (float)VesselRotation.PitchHeadingRoll ().x; }
         }
 
         [KRPCProperty]
         public float Heading {
-            get { return (float) VesselRotation.PitchHeadingRoll ().y; }
+            get { return (float)VesselRotation.PitchHeadingRoll ().y; }
         }
 
         [KRPCProperty]
         public float Roll {
-            get { return (float) VesselRotation.PitchHeadingRoll ().z; }
+            get { return (float)VesselRotation.PitchHeadingRoll ().z; }
         }
 
         [KRPCProperty]
@@ -221,84 +299,146 @@ namespace KRPCSpaceCenter.Services
             get {
                 if (FAR.IsAvailable) {
                     CheckFAR ();
-                    return (float) FAR.GetActiveControlSys_AirDensity ();
+                    return (float)FAR.GetActiveControlSys_AirDensity ();
                 } else {
-                    throw new NotImplementedException ();
+                    return (float)vessel.atmDensity;
                 }
-            }
-        }
-
-        [KRPCProperty]
-        public float Drag {
-            get {
-                if (FAR.IsAvailable)
-                    CheckFAR ();
-                var body = new CelestialBody (this.vessel.mainBody);
-                if (!body.HasAtmosphere)
-                    return 0f;
-                throw new NotImplementedException ();
             }
         }
 
         [KRPCProperty]
         public float DynamicPressure {
             get {
-                CheckFAR ();
-                return (float) FAR.GetActiveControlSys_Q ();
+                if (FAR.IsAvailable) {
+                    CheckFAR ();
+                    return (float)FAR.GetActiveControlSys_Q ();
+                } else {
+                    return (float)(0.5f * vessel.atmDensity * vessel.srf_velocity.sqrMagnitude);
+                }
             }
         }
 
         [KRPCProperty]
-        public float AngleOfAttack {
+        public float StaticPressure {
             get {
-                CheckFAR ();
-                return (float) FAR.GetActiveControlSys_AoA ();
+                CheckNoFAR ();
+                return (float)vessel.staticPressurekPa * 1000f;
             }
         }
 
         [KRPCProperty]
-        public float SideslipAngle {
+        public Tuple3 AerodynamicForce {
             get {
-                CheckFAR ();
-                return (float) FAR.GetActiveControlSys_Sideslip ();
+                CheckNoFAR ();
+                return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicForce).ToTuple ();
             }
         }
 
         [KRPCProperty]
-        public float StallFraction {
+        public Tuple3 Lift {
             get {
-                CheckFAR ();
-                return (float) FAR.GetActiveControlSys_StallFrac ();
+                CheckNoFAR ();
+                return referenceFrame.DirectionFromWorldSpace (WorldLift).ToTuple ();
             }
         }
 
         [KRPCProperty]
-        public float MachNumber {
+        public Tuple3 Drag {
             get {
-                CheckFAR ();
-                return (float) FAR.GetActiveControlSys_MachNumber ();
+                CheckNoFAR ();
+                return referenceFrame.DirectionFromWorldSpace (WorldDrag).ToTuple ();
+            }
+        }
+
+        [KRPCProperty]
+        public float SpeedOfSound {
+            get {
+                CheckNoFAR ();
+                return (float)vessel.speedOfSound;
+            }
+        }
+
+        [KRPCProperty]
+        public float Mach {
+            get {
+                if (FAR.IsAvailable) {
+                    CheckFAR ();
+                    return (float)FAR.GetActiveControlSys_MachNumber ();
+                } else {
+                    return (float)vessel.rootPart.machNumber;
+                }
+            }
+        }
+
+        [KRPCProperty]
+        public float EquivalentAirSpeed {
+            get {
+                CheckNoFAR ();
+                return (float)Math.Sqrt (vessel.srf_velocity.sqrMagnitude * vessel.atmDensity / 1.225d);
             }
         }
 
         [KRPCProperty]
         public float TerminalVelocity {
             get {
+                if (FAR.IsAvailable) {
+                    CheckFAR ();
+                    return (float)FAR.GetActiveControlSys_TermVel ();
+                } else {
+                    //FIXME: this is an estimate
+                    var gravity = Math.Sqrt (vessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (vessel.CoM).magnitude);
+                    return (float)(Math.Sqrt (gravity / WorldDrag.magnitude) * vessel.speed);
+                }
+            }
+        }
+
+        [KRPCProperty]
+        public float AngleOfAttack {
+            get {
+                if (FAR.IsAvailable) {
+                    CheckFAR ();
+                    return (float)FAR.GetActiveControlSys_AoA ();
+                } else {
+                    return (float)(Vector3d.Dot (vessel.transform.forward, vessel.srf_velocity.normalized) * (180d / Math.PI));
+                }
+            }
+        }
+
+        [KRPCProperty]
+        public float SideslipAngle {
+            get {
+                if (FAR.IsAvailable) {
+                    CheckFAR ();
+                    return (float)FAR.GetActiveControlSys_Sideslip ();
+                } else {
+                    return (float)(Vector3d.Dot (vessel.transform.up, Vector3d.Exclude (vessel.transform.forward, vessel.srf_velocity.normalized).normalized) * (180d / Math.PI));
+                }
+            }
+        }
+
+        [KRPCProperty]
+        public float TotalAirTemperature {
+            get { return (float)vessel.externalTemperature; }
+        }
+
+        [KRPCProperty]
+        public float StaticAirTemperature {
+            get { return (float)vessel.atmosphericTemperature; }
+        }
+
+        [KRPCProperty]
+        public float StallFraction {
+            get {
                 CheckFAR ();
-                return (float) FAR.GetActiveControlSys_TermVel ();
+                return (float)FAR.GetActiveControlSys_StallFrac ();
             }
         }
 
         [KRPCProperty]
         public float DragCoefficient {
             get {
-                if (FAR.IsAvailable) {
-                    CheckFAR ();
-                    return (float) FAR.GetActiveControlSys_Cd ();
-                } else {
-                    // Mass-weighted average of max_drag for each part
-                    // Note: Uses Part.mass, so does not include the mass of resources
-                    return vessel.Parts.Sum (p => p.maximum_drag * p.mass) / vessel.Parts.Sum (p => p.mass);
-                }
+                CheckFAR ();
+                return (float)FAR.GetActiveControlSys_Cd ();
             }
         }
 
@@ -306,7 +446,7 @@ namespace KRPCSpaceCenter.Services
         public float LiftCoefficient {
             get {
                 CheckFAR ();
-                return (float) FAR.GetActiveControlSys_Cl ();
+                return (float)FAR.GetActiveControlSys_Cl ();
             }
         }
 
@@ -314,7 +454,7 @@ namespace KRPCSpaceCenter.Services
         public float PitchingMomentCoefficient {
             get {
                 CheckFAR ();
-                return (float) FAR.GetActiveControlSys_Cm ();
+                return (float)FAR.GetActiveControlSys_Cm ();
             }
         }
 
@@ -322,7 +462,7 @@ namespace KRPCSpaceCenter.Services
         public float BallisticCoefficient {
             get {
                 CheckFAR ();
-                return (float) FAR.GetActiveControlSys_BallisticCoeff ();
+                return (float)FAR.GetActiveControlSys_BallisticCoeff ();
             }
         }
 
@@ -330,7 +470,7 @@ namespace KRPCSpaceCenter.Services
         public float ThrustSpecificFuelConsumption {
             get {
                 CheckFAR ();
-                return (float) FAR.GetActiveControlSys_TSFC ();
+                return (float)FAR.GetActiveControlSys_TSFC ();
             }
         }
 
