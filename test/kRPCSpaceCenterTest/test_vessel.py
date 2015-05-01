@@ -57,13 +57,6 @@ class TestVessel(testingtools.TestCase):
         # 2645 kg dry mass
         self.assertEqual(2645, self.vessel.dry_mass)
 
-    def test_cross_sectional_area(self):
-        if not self.far:
-            # Stock aerodynamic model uses: A = 0.008 . m
-            self.assertClose(0.008 * self.vessel.mass, self.vessel.cross_sectional_area)
-        else:
-            self.assertClose(20.722, self.vessel.cross_sectional_area, 0.01)
-
     def test_thrust(self):
         self.assertClose(self.vessel.thrust, 0)
         #TODO: more thorough testing
