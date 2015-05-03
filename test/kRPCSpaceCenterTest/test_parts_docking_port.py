@@ -211,7 +211,7 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
 
             # Move backwards to reengage distance
             vessel.control.rcs = True
-            vessel.control.forward = -0.25
+            vessel.control.forward = -0.5
             time.sleep(0.5)
             vessel.control.forward = 0
             while port1.state == self.state.undocking:
@@ -230,7 +230,7 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
             self.assertEqual(None, port2.undock())
 
             # Move forward
-            vessel.control.forward = 0.25
+            vessel.control.forward = 0.5
             time.sleep(1)
             vessel.control.forward = 0
             vessel.control.rcs = False
