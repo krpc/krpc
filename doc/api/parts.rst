@@ -844,6 +844,15 @@ Engine
 
       :rtype: bool
 
+   .. attribute:: Throttle
+
+      Gets the current throttle setting for the engine. A value between 0
+      and 1. This is not necessarily the same as the vessel's main throttle
+      setting, as some engines take time to adjust their throttle (such as jet
+      engines).
+
+      :rtype: float
+
    .. attribute:: ThrottleLocked
 
       Gets whether the :attr:`Control.Throttle` affects the engine. For example,
