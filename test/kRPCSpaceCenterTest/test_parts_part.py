@@ -13,6 +13,7 @@ class TestPartsPart(testingtools.TestCase):
         cls.conn = krpc.connect(name='TestParts')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
+        cls.expectedAmbientTemperature = 273+20
 
     @classmethod
     def tearDownClass(cls):
@@ -25,9 +26,13 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(3800, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual(None, part.parent)
-        self.assertEqual(
-            ['LT-1 Landing Struts', 'LT-1 Landing Struts', 'LT-1 Landing Struts',
-             'Mk16-XL Parachute', 'Reflectron DP-10', 'Small Gear Bay', 'TR-XL Stack Separator'],
+        self.assertEqual([
+            'LT-1 Landing Struts',
+            'LT-1 Landing Struts',
+            'LT-1 Landing Struts',
+            'LY-10 Small Landing Gear',
+            'Mk16-XL Parachute',
+            'TR-XL Stack Separator'],
             sorted(p.title for p in part.children))
         self.assertTrue(part.axially_attached)
         self.assertFalse(part.radially_attached)
@@ -37,9 +42,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(4120, part.mass)
         self.assertClose(4000, part.dry_mass)
         self.assertEqual(45, part.impact_tolerance)
-        self.assertGreater(part.temperature, 15)
-        self.assertLess(part.temperature, 25)
-        self.assertClose(3400, part.max_temperature, 0.5)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(2400, part.max_temperature, 0.5)
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
@@ -66,7 +70,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(700, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Rockomax Jumbo-64 Fuel Tank', part.parent.title)
-        self.assertEqual(['S1 SRB-KD25k'], [p.title for p in part.children])
+        self.assertEqual(['S1 SRB-KD25k "Kickback" Solid Fuel Booster'], [p.title for p in part.children])
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
         self.assertEqual(5, part.stage)
@@ -75,9 +79,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(50, part.mass)
         self.assertClose(50, part.dry_mass)
         self.assertEqual(8, part.impact_tolerance)
-        self.assertGreater(part.temperature, 15)
-        self.assertLess(part.temperature, 25)
-        self.assertClose(3200, part.max_temperature, 0.5)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(2000, part.max_temperature, 0.5)
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
@@ -104,23 +107,22 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(50, part.mass)
         self.assertClose(50, part.dry_mass)
         self.assertEqual(10, part.impact_tolerance)
-        self.assertGreater(part.temperature, 15)
-        self.assertLess(part.temperature, 25)
-        self.assertClose(3400, part.max_temperature, 0.5)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(2000, part.max_temperature, 0.5)
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
-        modules = ['ModuleDockingNode', 'ModuleDockingNodeNamed']
+        modules = ['ModuleDockingNode']
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.docking_port)
 
     def test_engine(self):
-        part = self.parts.with_title('S1 SRB-KD25k')[0]
+        part = self.parts.with_title('S1 SRB-KD25k "Kickback" Solid Fuel Booster')[0]
         self.assertEqual('MassiveBooster', part.name)
-        self.assertEqual('S1 SRB-KD25k', part.title)
-        self.assertEqual(1800, part.cost)
+        self.assertEqual('S1 SRB-KD25k "Kickback" Solid Fuel Booster', part.title)
+        self.assertEqual(2700, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('TT-70 Radial Decoupler', part.parent.title)
         self.assertEqual(['Aerodynamic Nose Cone'], [p.title for p in part.children])
@@ -129,16 +131,15 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(6, part.stage)
         self.assertEqual(5, part.decouple_stage)
         self.assertFalse(part.massless)
-        self.assertClose(21750, part.mass)
-        self.assertClose(3000, part.dry_mass)
+        self.assertClose(23250, part.mass)
+        self.assertClose(4500, part.dry_mass)
         self.assertEqual(7, part.impact_tolerance)
-        self.assertGreater(part.temperature, 15)
-        self.assertLess(part.temperature, 25)
-        self.assertClose(3900, part.max_temperature, 0.5)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(2200, part.max_temperature, 0.5)
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
-        modules = ['FlagDecal', 'ModuleAnimateHeat', 'ModuleEnginesFX', 'ModuleTestSubject']
+        modules = ['FlagDecal', 'ModuleAnimateHeat', 'ModuleEnginesFX', 'ModuleSurfaceFX', 'ModuleTestSubject']
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
@@ -148,7 +149,7 @@ class TestPartsPart(testingtools.TestCase):
         part = self.parts.with_title('LT-1 Landing Struts')[0]
         self.assertEqual('landingLeg1', part.name)
         self.assertEqual('LT-1 Landing Struts', part.title)
-        self.assertEqual(240, part.cost)
+        self.assertEqual(440, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Mk1-2 Command Pod', part.parent.title)
         self.assertEqual([], [p.title for p in part.children])
@@ -160,9 +161,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(50, part.mass)
         self.assertClose(50, part.dry_mass)
         self.assertEqual(12, part.impact_tolerance)
-        self.assertGreater(part.temperature, 15)
-        self.assertLess(part.temperature, 25)
-        self.assertClose(2900, part.max_temperature, 0.5)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(2000, part.max_temperature, 0.5)
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
@@ -188,9 +188,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(100, part.mass)
         self.assertClose(100, part.dry_mass)
         self.assertEqual(100, part.impact_tolerance)
-        self.assertGreater(part.temperature, 15)
-        self.assertLess(part.temperature, 25)
-        self.assertClose(5000, part.max_temperature, 0.5)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(2000, part.max_temperature, 0.5)
         self.assertFalse(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
@@ -216,9 +215,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(0, part.mass)
         self.assertClose(0, part.dry_mass)
         self.assertEqual(8, part.impact_tolerance)
-        self.assertGreater(part.temperature, 15)
-        self.assertLess(part.temperature, 25)
-        self.assertClose(3200, part.max_temperature, 0.5)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(2000, part.max_temperature, 0.5)
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
@@ -244,13 +242,15 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(300, part.mass)
         self.assertClose(300, part.dry_mass)
         self.assertEqual(12, part.impact_tolerance)
-        self.assertGreater(part.temperature, 15)
-        self.assertLess(part.temperature, 25)
-        self.assertClose(3100, part.max_temperature, 0.5)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(2000, part.max_temperature, 0.5)
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
-        self.assertEqual(['ModuleParachute', 'ModuleTestSubject'], sorted(m.name for m in part.modules))
+        self.assertEqual([
+            'ModuleDragModifier', 'ModuleDragModifier',
+            'ModuleParachute', 'ModuleTestSubject'],
+            sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.parachute)
 
     def test_sensor(self):
@@ -269,9 +269,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(0, part.mass)
         self.assertClose(0, part.dry_mass)
         self.assertEqual(8, part.impact_tolerance)
-        self.assertGreater(part.temperature, 15)
-        self.assertLess(part.temperature, 25)
-        self.assertClose(3200, part.max_temperature, 0.5)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(1200, part.max_temperature, 0.5)
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
@@ -294,12 +293,11 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(-1, part.stage)
         self.assertEqual(3, part.decouple_stage)
         self.assertFalse(part.massless)
-        self.assertClose(350, part.mass)
-        self.assertClose(350, part.dry_mass)
+        self.assertClose(300, part.mass)
+        self.assertClose(300, part.dry_mass)
         self.assertEqual(8, part.impact_tolerance)
-        self.assertGreater(part.temperature, 15)
-        self.assertLess(part.temperature, 25)
-        self.assertClose(3200, part.max_temperature, 0.5)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(1200, part.max_temperature, 0.5)
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
