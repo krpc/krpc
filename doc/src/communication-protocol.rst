@@ -38,7 +38,7 @@ To establish a connection to the RPC server, a client must do the following:
  3. Send a 32 byte message containing a string to identify the new connection.
     This should be a UTF-8 encoded string, up to a maximum of 32 bytes in
     length. If the string is shorter than 32 bytes, it should be padded with
-    zeroes.
+    zeros.
 
  4. Receive a 16 byte unique client identifier. This is sent to the client when
     the connection is granted, for example after the user has clicked accept on
@@ -54,7 +54,7 @@ For example, this python code will connect to the RPC server at address
    rpc_conn.connect(('127.0.0.1', 50000))
    # Send the 12 byte hello message
    rpc_conn.sendall(b'\x48\x45\x4C\x4C\x4F\x2D\x52\x50\x43\x00\x00\x00')
-   # Send the 32 byte client name 'Jeb' padded with zeroes
+   # Send the 32 byte client name 'Jeb' padded with zeros
    name = 'Jeb'.encode('utf-8')
    name += (b'\x00' * (32-len(name)))
    rpc_conn.sendall(name)
