@@ -74,62 +74,18 @@ CelestialBody
 
       :rtype: bool
 
-   .. attribute:: AtmospherePressure
+   .. attribute:: AtmosphereDepth
 
-      Gets the pressure of the atmosphere at sea level, in Pascals. Returns 0 if
-      the body has no atmosphere.
-
-      :rtype: float
-
-      .. note:: Calculated using `KSPs stock aerodynamic model`_.
-
-   .. attribute:: AtmosphereDensity
-
-      Gets the density of the atmosphere at sea level, in :math:`kg/m^3`. Returns 0
-      if the body has no atmosphere.
+      The depth of the atmosphere, in meters.
 
       :rtype: float
 
-      .. note:: Calculated using `KSPs stock aerodynamic model`_.
+   .. attribute:: HasAtmosphericOxygen
 
-   .. attribute:: AtmosphereScaleHeight
+      `True` if there is oxygen in the atmosphere, required for air-breathing
+      engines.
 
-      Gets the `scale height
-      <http://wiki.kerbalspaceprogram.com/wiki/Kerbin#Atmosphere>`_ of the
-      atmosphere, in meters. Returns 0 if the atmosphere has no atmosphere.
-
-      :rtype: float
-
-      .. note:: Calculated using `KSPs stock aerodynamic model`_.
-
-   .. attribute:: AtmosphereMaxAltitude
-
-      Gets the maximum altitude of the atmosphere, in meters. Returns 0 if the body
-      has no atmosphere.
-
-      :rtype: float
-
-      .. note:: Calculated using `KSPs stock aerodynamic model`_.
-
-   .. method:: AtmospherePressureAt (altitude)
-
-      Returns the atmospheric pressure, in Pascals, at the given altitude above sea
-      level, in meters. Returns 0 if the body has no atmosphere.
-
-      :param float altitude:
-      :rtype: float
-
-      .. note:: Calculated using `KSPs stock aerodynamic model`_.
-
-   .. method:: AtmosphereDensityAt (altitude)
-
-      Returns the density of the atmosphere, in :math:`kg/m^3`, at the given
-      altitude above sea level, in meters. Returns 0 if the body has no atmosphere.
-
-      :param float altitude:
-      :rtype: float
-
-      .. note:: Calculated using `KSPs stock aerodynamic model`_.
+      :rtype: bool
 
    .. attribute:: ReferenceFrame
 
@@ -226,5 +182,3 @@ CelestialBody
 
       :param ReferenceFrame referenceFrame:
       :rtype: :class:`Vector3`
-
-.. _KSPs stock aerodynamic model: http://wiki.kerbalspaceprogram.com/wiki/Atmosphere

@@ -101,16 +101,6 @@ Vessel
 
       :rtype: float
 
-   .. attribute:: CrossSectionalArea
-
-      Gets the cross sectional area of the vessel in :math:`m^3`. See
-      :attr:`Flight.Drag`.
-
-      :rtype: float
-
-      .. note:: Calculated using `Ferram Aerospace Research`_ if it is
-         installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
-
    .. attribute:: Thrust
 
       Gets the total thrust currently being produced by the vessel's active
@@ -132,6 +122,14 @@ Vessel
       Gets the total maximum thrust that can be produced by the vessel's active
       engines, in Newtons. This is computed by summing :attr:`Engine.MaxThrust`
       for every active engine.
+
+      :rtype: float
+
+   .. attribute:: MaxVacuumThrust
+
+      Gets the total maximum thrust that can be produced by the vessel's active
+      engines when the vessel is in a vacuum, in Newtons. This is computed by
+      summing :attr:`Engine.MaxVacuumThrust` for every active engine.
 
       :rtype: float
 

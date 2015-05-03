@@ -1,5 +1,5 @@
 ship = Rover
-version = 0.90.0
+version = 1.0.0
 description = 
 type = VAB
 size = 2.666464,1.794697,2.581409
@@ -19,6 +19,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -81,6 +82,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -157,6 +159,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -164,6 +177,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -301,6 +325,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -338,6 +363,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -357,11 +383,19 @@ PART
 	{
 		name = ModuleWheel
 		isEnabled = True
+		brakeTorque = 180
 		brakesEngaged = False
 		steeringLocked = False
 		isDamaged = False
 		invertSteering = False
 		motorEnabled = True
+		brakeTorque_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 30
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			UnLockSteering
@@ -503,6 +537,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -522,11 +557,19 @@ PART
 	{
 		name = ModuleWheel
 		isEnabled = True
+		brakeTorque = 180
 		brakesEngaged = False
 		steeringLocked = False
 		isDamaged = False
 		invertSteering = False
 		motorEnabled = True
+		brakeTorque_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 30
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			UnLockSteering
@@ -668,6 +711,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -687,11 +731,19 @@ PART
 	{
 		name = ModuleWheel
 		isEnabled = True
+		brakeTorque = 180
 		brakesEngaged = False
 		steeringLocked = False
 		isDamaged = False
 		invertSteering = False
 		motorEnabled = True
+		brakeTorque_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 30
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			UnLockSteering
@@ -833,6 +885,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -852,11 +905,19 @@ PART
 	{
 		name = ModuleWheel
 		isEnabled = True
+		brakeTorque = 180
 		brakesEngaged = False
 		steeringLocked = False
 		isDamaged = False
 		invertSteering = False
 		motorEnabled = True
+		brakeTorque_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 30
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			UnLockSteering
@@ -998,6 +1059,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1017,11 +1079,19 @@ PART
 	{
 		name = ModuleWheel
 		isEnabled = True
+		brakeTorque = 180
 		brakesEngaged = False
 		steeringLocked = False
 		isDamaged = False
 		invertSteering = False
 		motorEnabled = True
+		brakeTorque_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 30
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			UnLockSteering
@@ -1163,6 +1233,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1182,11 +1253,19 @@ PART
 	{
 		name = ModuleWheel
 		isEnabled = True
+		brakeTorque = 180
 		brakesEngaged = False
 		steeringLocked = False
 		isDamaged = False
 		invertSteering = False
 		motorEnabled = True
+		brakeTorque_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 30
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			UnLockSteering
@@ -1328,6 +1407,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0

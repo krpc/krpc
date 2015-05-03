@@ -1,16 +1,19 @@
 GAME
 {
-	version = 0.23.5
+	version = 1.0.0
 	Title = test (SANDBOX)
 	Description = No description available.
 	linkURL = 
 	linkCaption = 
-	Mode = 0
+	Mode = SANDBOX
 	Status = 1
-	scene = 5
+	scene = 7
+	editor = None
 	flag = Squad/Flags/default
+	launchID = 1
 	PARAMETERS
 	{
+		preset = Normal
 		FLIGHT
 		{
 			CanQuickSave = True
@@ -59,8 +62,25 @@ GAME
 		}
 		DIFFICULTY
 		{
+			AutoHireCrews = False
 			MissingCrewsRespawn = True
+			BypassEntryPurchaseAfterResearch = True
 			AllowStockVessels = True
+			IndestructibleFacilities = False
+			ResourceAbundance = 1
+			ReentryHeatScale = 1
+		}
+		CAREER
+		{
+			TechTreeUrl = GameData/Squad/Resources/TechTree.cfg
+			StartingFunds = 25000
+			StartingScience = 0
+			StartingReputation = 0
+			FundsGainMultiplier = 1
+			RepGainMultiplier = 1
+			ScienceGainMultiplier = 1
+			FundsLossMultiplier = 1
+			RepLossMultiplier = 1
 		}
 	}
 	SCENARIO
@@ -86,7 +106,24 @@ GAME
 					}
 					crew
 					{
-						crews = 0
+						crews = Jebediah Kerman
+					}
+				}
+			}
+			Eve
+			{
+				reached = 218.700000000038
+				Orbit
+				{
+					completed = 218.700000000038
+					vessel
+					{
+						name = Test
+						flag = Squad/Flags/default
+					}
+					crew
+					{
+						crews = Jebediah Kerman
 					}
 				}
 			}
@@ -94,9 +131,10 @@ GAME
 	}
 	FLIGHTSTATE
 	{
-		version = 0.23.5
-		UT = 218.200000000038
+		version = 1.0.0
+		UT = 223.780000000041
 		activeVessel = 0
+		mapViewFiltering = -1026
 		VESSEL
 		{
 			pid = 465709228ce745d4ba0881ad5c77177b
@@ -106,63 +144,72 @@ GAME
 			landed = False
 			landedAt = 
 			splashed = False
-			met = 207.220000000038
+			met = 212.780000000041
 			lct = 10.9599999999999
 			root = 0
-			lat = -14.3288185194007
-			lon = 368.071559392583
-			alt = 426906.410311805
+			lat = -14.2297055959426
+			lon = 368.799234763804
+			alt = 429035.239203785
 			hgt = -1
-			nrm = -0.2357009,0.3446453,-0.908661
-			rot = -0.4484251,-0.7502118,0.08771981,0.4779148
-			CoM = -0.0001678467,-2.594866,0.0001286864
+			nrm = -0.226314,0.33784,-0.9135898
+			rot = -0.4484157,-0.7501704,0.08775806,0.4779815
+			CoM = -7.236004E-05,-2.595039,0.0001509786
 			stg = 1
 			prst = False
 			ref = 3564429473
-			cPch = 0.2559998
-			cHdg = -3.995996
+			ctrl = True
+			cPch = 0.428
+			cHdg = 2.392
 			cMod = 0
 			ORBIT
 			{
-				SMA = 1074489.40159026
-				ECC = 0.153578471350269
-				INC = 16.204845319278
-				LPE = 180.824537065055
-				LAN = 70.561685958701
-				MNA = 1.74846004639701
-				EPH = 218.200000000038
+				SMA = 1074489.48008079
+				ECC = 0.153577981685176
+				INC = 16.2048459641278
+				LPE = 180.824838448337
+				LAN = 70.5616820244222
+				MNA = 1.76277669610507
+				EPH = 223.780000000041
 				REF = 5
 			}
 			PART
 			{
 				name = mk1pod
+				cid = 0
 				uid = 3564429473
 				mid = 1385213222
+				launchID = 0
 				parent = 0
 				position = 0,0,0
 				rotation = 0,0,0,1
 				mirror = 1,1,1
+				symMethod = Radial
 				istg = 0
 				dstg = 0
 				sqor = -1
+				sepI = 0
 				sidx = -1
 				attm = 0
 				srfN = None, -1
 				attN = bottom, 1
 				attN = None, -1
 				mass = 0.8
-				temp = -200.8566
+				temp = 4.01235221282186
 				expt = 0.5
 				state = 0
 				connected = True
 				attached = True
 				flag = Squad/Flags/default
 				rTrf = mk1pod (Test)
-				crew = 0
+				modCost = 0
+				crew = Jebediah Kerman
 				EVENTS
 				{
 				}
 				ACTIONS
+				{
+				}
+				PARTDATA
 				{
 				}
 				MODULE
@@ -201,20 +248,9 @@ GAME
 				}
 				MODULE
 				{
-					name = ModuleSAS
-					isEnabled = True
-					EVENTS
-					{
-					}
-					ACTIONS
-					{
-					}
-				}
-				MODULE
-				{
 					name = ModuleReactionWheel
 					isEnabled = True
-					stateString = Not enough ElectricCharge
+					stateString = Running
 					WheelState = Active
 					EVENTS
 					{
@@ -222,6 +258,7 @@ GAME
 						{
 							active = True
 							guiActive = True
+							guiActiveEditor = True
 							guiIcon = Toggle Torque
 							guiName = Toggle Torque
 							category = Toggle Torque
@@ -298,6 +335,17 @@ GAME
 							unfocusedRange = 2
 							externalToEVAOnly = True
 						}
+						DeployExperimentExternal
+						{
+							active = True
+							guiActive = False
+							guiIcon = Deploy
+							guiName = Crew Report
+							category = Deploy
+							guiActiveUnfocused = True
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
 						ResetExperimentExternal
 						{
 							active = False
@@ -305,6 +353,17 @@ GAME
 							guiIcon = Reset
 							guiName = Discard Crew Report
 							category = Reset
+							guiActiveUnfocused = True
+							unfocusedRange = 1.5
+							externalToEVAOnly = True
+						}
+						CleanUpExperimentExternal
+						{
+							active = False
+							guiActive = False
+							guiIcon = Restore
+							guiName = Restore
+							category = Restore
 							guiActiveUnfocused = True
 							unfocusedRange = 1.5
 							externalToEVAOnly = True
@@ -400,21 +459,11 @@ GAME
 					ACTIONS
 					{
 					}
-					Surfaced
+					Log
 					{
-					}
-					Flew
-					{
-					}
-					FlewBy
-					{
-					}
-					Orbited
-					{
-						at = Kerbin
-					}
-					SubOrbited
-					{
+						flight = 0
+						0 = Orbit,Kerbin
+						0 = Orbit,Eve
 					}
 				}
 				RESOURCE
@@ -441,32 +490,40 @@ GAME
 			PART
 			{
 				name = fuelTank.long
+				cid = 0
 				uid = 2144810237
 				mid = 1385213222
+				launchID = 0
 				parent = 0
 				position = 0,-2.28003835678101,0
 				rotation = 0,0,0,1
 				mirror = 1,1,1
+				symMethod = Radial
 				istg = 0
 				dstg = 0
 				sqor = -1
+				sepI = 0
 				sidx = -1
 				attm = 0
 				srfN = None, -1
 				attN = top, 0
 				attN = bottom, 2
 				mass = 0.5
-				temp = -201.0811
+				temp = 4.00524059603277
 				expt = 0.5
 				state = 0
 				connected = True
 				attached = True
 				flag = Squad/Flags/default
 				rTrf = fuelTank.long
+				modCost = 0
 				EVENTS
 				{
 				}
 				ACTIONS
+				{
+				}
+				PARTDATA
 				{
 				}
 				RESOURCE
@@ -493,32 +550,40 @@ GAME
 			PART
 			{
 				name = liquidEngine2
+				cid = 0
 				uid = 961303347
 				mid = 1385213222
+				launchID = 0
 				parent = 1
 				position = 0,-5.06936407089233,0
 				rotation = 0,0,0,1
 				mirror = 1,1,1
+				symMethod = Radial
 				istg = 0
 				dstg = 0
 				sqor = -1
+				sepI = 0
 				sidx = -1
 				attm = 0
 				srfN = None, -1
 				attN = top, 1
 				attN = None, -1
 				mass = 1.5
-				temp = -200.3027
+				temp = 4.0131844201662
 				expt = 0.5
 				state = 0
 				connected = True
 				attached = True
 				flag = Squad/Flags/default
 				rTrf = liquidEngine2
+				modCost = 0
 				EVENTS
 				{
 				}
 				ACTIONS
+				{
+				}
+				PARTDATA
 				{
 				}
 				MODULE
@@ -584,11 +649,12 @@ GAME
 				{
 					name = ModuleJettison
 					isEnabled = True
+					isJettisoned = False
 					EVENTS
 					{
 						Jettison
 						{
-							active = False
+							active = True
 							guiActive = True
 							guiIcon = Jettison
 							guiName = Jettison
@@ -611,36 +677,32 @@ GAME
 					name = ModuleGimbal
 					isEnabled = True
 					gimbalLock = False
+					gimbalLimiter = 100
+					gimbalLock_UIFlight
+					{
+						controlEnabled = True
+					}
+					gimbalLimiter_UIFlight
+					{
+						controlEnabled = True
+						minValue = 0
+						maxValue = 100
+						stepIncrement = 1
+					}
 					EVENTS
 					{
-						LockGimbal
-						{
-							active = True
-							guiActive = True
-							guiActiveEditor = True
-							guiIcon = Lock Gimbal
-							guiName = Lock Gimbal
-							category = Lock Gimbal
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						FreeGimbal
-						{
-							active = False
-							guiActive = True
-							guiActiveEditor = True
-							guiIcon = Free Gimbal
-							guiName = Free Gimbal
-							category = Free Gimbal
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
 					}
 					ACTIONS
 					{
 						ToggleAction
+						{
+							actionGroup = None
+						}
+						LockAction
+						{
+							actionGroup = None
+						}
+						FreeAction
 						{
 							actionGroup = None
 						}
@@ -668,6 +730,39 @@ GAME
 					{
 					}
 				}
+				MODULE
+				{
+					name = ModuleSurfaceFX
+					isEnabled = True
+					EVENTS
+					{
+					}
+					ACTIONS
+					{
+					}
+				}
+				MODULE
+				{
+					name = ModuleTestSubject
+					isEnabled = True
+					EVENTS
+					{
+						RunTestEvent
+						{
+							active = False
+							guiActive = True
+							guiIcon = Run Test
+							guiName = Run Test
+							category = Run Test
+							guiActiveUnfocused = False
+							unfocusedRange = 2
+							externalToEVAOnly = True
+						}
+					}
+					ACTIONS
+					{
+					}
+				}
 				RESOURCE
 				{
 					name = ElectricCharge
@@ -682,39 +777,47 @@ GAME
 			PART
 			{
 				name = solarPanels1
+				cid = 0
 				uid = 4100340643
 				mid = 1385213222
+				launchID = 0
 				parent = 1
 				position = 0,-1.0690803527832,-0.619213879108429
 				rotation = 0,0.7071068,0,-0.7071068
 				mirror = 1,1,1
+				symMethod = Radial
 				istg = 0
 				dstg = 0
 				sqor = -1
+				sepI = 0
 				sidx = -1
 				attm = 1
 				sym = 4
 				sym = 5
 				srfN = srfAttach, 1
 				mass = 0.025
-				temp = -200.1428
+				temp = 4.26519934196443
 				expt = 0.5
 				state = 0
 				connected = True
 				attached = True
 				flag = Squad/Flags/default
 				rTrf = solarPanels1
+				modCost = 0
 				EVENTS
 				{
 				}
 				ACTIONS
 				{
 				}
+				PARTDATA
+				{
+				}
 				MODULE
 				{
 					name = ModuleDeployableSolarPanel
 					isEnabled = True
-					currentRotation = (-0.7069713, -0.01438923, 0.0143466, 0.7069502)
+					currentRotation = (-0.706983, -0.01380068, 0.01375437, 0.7069621)
 					stateString = EXTENDED
 					storedAnimationTime = 0
 					storedAnimationSpeed = 0
@@ -763,39 +866,47 @@ GAME
 			PART
 			{
 				name = solarPanels1
+				cid = 0
 				uid = 2765112708
 				mid = 1385213222
+				launchID = 0
 				parent = 1
 				position = -0.5362548828125,-1.0690803527832,0.309607118368149
 				rotation = 0,-0.2588192,0,-0.9659259
 				mirror = 1,1,1
+				symMethod = Radial
 				istg = 0
 				dstg = 0
 				sqor = -1
+				sepI = 0
 				sidx = -1
 				attm = 1
 				sym = 3
 				sym = 5
 				srfN = srfAttach, 1
 				mass = 0.025
-				temp = -199.9292
+				temp = 4.42388975332846
 				expt = 0.5
 				state = 0
 				connected = True
 				attached = True
 				flag = Squad/Flags/default
 				rTrf = solarPanels1
+				modCost = 0
 				EVENTS
 				{
 				}
 				ACTIONS
 				{
 				}
+				PARTDATA
+				{
+				}
 				MODULE
 				{
 					name = ModuleDeployableSolarPanel
 					isEnabled = True
-					currentRotation = (-0.6108076, -0.3562573, 0.3562615, 0.6107968)
+					currentRotation = (-0.6109303, -0.3560472, 0.3560541, 0.6109174)
 					stateString = EXTENDED
 					storedAnimationTime = 0
 					storedAnimationSpeed = 0
@@ -844,39 +955,47 @@ GAME
 			PART
 			{
 				name = solarPanels1
+				cid = 0
 				uid = 102568904
 				mid = 1385213222
+				launchID = 0
 				parent = 1
 				position = 0.536255180835724,-1.0690803527832,0.309606909751892
 				rotation = 0,-0.9659259,0,-0.2588189
 				mirror = 1,1,1
+				symMethod = Radial
 				istg = 0
 				dstg = 0
 				sqor = -1
+				sepI = 0
 				sidx = -1
 				attm = 1
 				sym = 3
 				sym = 4
 				srfN = srfAttach, 1
 				mass = 0.025
-				temp = -199.7169
+				temp = 4.36290266612317
 				expt = 0.5
 				state = 0
 				connected = True
 				attached = True
 				flag = Squad/Flags/default
 				rTrf = solarPanels1
+				modCost = 0
 				EVENTS
 				{
 				}
 				ACTIONS
 				{
 				}
+				PARTDATA
+				{
+				}
 				MODULE
 				{
 					name = ModuleDeployableSolarPanel
 					isEnabled = True
-					currentRotation = (-0.6090443, 0.3592264, -0.3592263, 0.6090797)
+					currentRotation = (-0.6092319, 0.3589071, -0.358907, 0.6092684)
 					stateString = EXTENDED
 					storedAnimationTime = 0
 					storedAnimationSpeed = 0
@@ -955,9 +1074,9 @@ GAME
 			}
 			CTRLSTATE
 			{
-				pitch = 0.001317378
-				yaw = 0.0003902458
-				roll = 3.291095E-05
+				pitch = 0.0008757093
+				yaw = 0.0003093769
+				roll = -1.958588E-05
 				trimPitch = 0
 				trimYaw = 0
 				trimRoll = 0
@@ -967,38 +1086,73 @@ GAME
 	}
 	ROSTER
 	{
-		CREW
+		KERBAL
 		{
 			name = Jebediah Kerman
+			gender = Male
+			type = Crew
 			brave = 0.5
 			dumb = 0.5
 			badS = True
-			state = 1
+			tour = False
+			state = Assigned
 			ToD = 0
 			idx = 0
+			CAREER_LOG
+			{
+				flight = 0
+			}
+			FLIGHT_LOG
+			{
+				flight = 0
+				0 = Orbit,Eve
+			}
 		}
-		CREW
+		KERBAL
 		{
 			name = Bill Kerman
+			gender = Male
+			type = Crew
 			brave = 0.5
 			dumb = 0.8
 			badS = False
-			state = 0
+			tour = False
+			state = Available
 			ToD = 0
 			idx = -1
+			CAREER_LOG
+			{
+				flight = 0
+			}
+			FLIGHT_LOG
+			{
+				flight = 0
+			}
 		}
-		CREW
+		KERBAL
 		{
 			name = Bob Kerman
+			gender = Male
+			type = Crew
 			brave = 0.3
 			dumb = 0.1
 			badS = False
-			state = 0
+			tour = False
+			state = Available
 			ToD = 0
 			idx = -1
+			CAREER_LOG
+			{
+				flight = 0
+			}
+			FLIGHT_LOG
+			{
+				flight = 0
+			}
 		}
-		APPLICANTS
-		{
-		}
+	}
+	MESSAGESYSTEM
+	{
+		flash = False
 	}
 }

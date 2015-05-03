@@ -7,10 +7,12 @@ import time
 class TestComms(testingtools.TestCase):
 
     def setUp(self):
+        self.conn = krpc.connect(name='TestComms')
+        if not self.conn.space_center.remote_tech_available:
+            self.skipTest('RemoteTech not installed')
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('Comms')
         testingtools.remove_other_vessels()
-        self.conn = krpc.connect(name='TestComms')
         self.vessel = self.conn.space_center.active_vessel
 
     def tearDown(self):

@@ -1,14 +1,11 @@
 using System;
 using System.Linq;
-using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 using KRPCSpaceCenter.ExternalAPI;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -145,16 +142,6 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public float CrossSectionalArea {
-            get {
-                if (FAR.IsAvailable)
-                    return (float)FAR.GetActiveControlSys_RefArea ();
-                else
-                    return FlightGlobals.DragMultiplier * Mass;
-            }
-        }
-
-        [KRPCProperty]
         public float Thrust {
             get { return Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust); }
         }
@@ -167,6 +154,11 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float MaxThrust {
             get { return Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust); }
+        }
+
+        [KRPCProperty]
+        public float MaxVacuumThrust {
+            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.MaxVacuumThrust); }
         }
 
         [KRPCProperty]

@@ -41,7 +41,7 @@ class TestPartsParachute(testingtools.TestCase):
 
     def test_parachute_on_descent(self):
         parachutes = self.parts.parachutes
-        alt = 15
+        alt = 30
         for parachute in parachutes:
             parachute.deploy_altitude = alt
 

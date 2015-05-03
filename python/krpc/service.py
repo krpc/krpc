@@ -1,4 +1,5 @@
 import re
+import keyword
 from collections import defaultdict
 from krpc.attributes import Attributes
 from krpc.types import Types, DynamicType, DefaultArgument
@@ -33,9 +34,25 @@ def _as_literal(value, typ):
         return '\''+value+'\''
     return str(value)
 
+def _update_param_names(names):
+    """ Given a list of parameter names, append underscores to reserved keywords
+        without causing parameter names to clash """
+    newnames = []
+    for name in names:
+        if keyword.iskeyword(name):
+            name = name+'_'
+            while name in names:
+                name += '_'
+        newnames.append(name)
+    return newnames
+
 def _construct_func(invoke, service_name, procedure_name, prefix_param_names, param_names,
                     param_types, param_required, param_default, return_type):
     """ Build function to invoke a remote procedure """
+
+    prefix_param_names = _update_param_names(prefix_param_names)
+    param_names = _update_param_names(param_names)
+
     params = []
     for name,required,default,typ in zip(param_names, param_required, param_default, param_types):
         if not required:

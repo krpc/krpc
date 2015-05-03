@@ -166,69 +166,123 @@ Flight
 
       :rtype: float
 
-      .. note:: Calculated using `Ferram Aerospace Research`_ if it is
-         installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
-
-   .. attribute:: Drag
-
-      Gets the aerodynamic drag force currently acting on the vessel, in Newtons.
-
-      :rtype: float
+      .. note:: Calculated using `KSPs stock aerodynamic model`_, or `Ferram
+         Aerospace Research`_ if it is installed.
 
    .. attribute:: DynamicPressure
 
-      Gets the dynamic pressure acting on the vessel. This is a measure of the
-      strength of the aerodynamic forces. It is equal to :math:`\frac{1}{2}
-      . \mbox{air density} .  \mbox{velocity}^2`, and is measured in :math:`kg .
-      m^{-1}s^{-2}`. It is commonly denoted as :math:`Q`.
+      Gets the dynamic pressure acting on the vessel, in Pascals. This is a
+      measure of the strength of the aerodynamic forces. It is equal to
+      :math:`\frac{1}{2} . \mbox{air density} .  \mbox{velocity}^2`. It is
+      commonly denoted as :math:`Q`.
 
       :rtype: float
 
-      .. note:: Requires `Ferram Aerospace Research`_
+      .. note:: Calculated using `KSPs stock aerodynamic model`_, or `Ferram
+         Aerospace Research`_ if it is installed.
+
+   .. attribute:: StaticPressure
+
+      Gets the static atmospheric pressure acting on the vessel, in Pascals.
+
+      :rtype: float
+
+      .. note:: Calculated using `KSPs stock aerodynamic model`_. Not available
+         when `Ferram Aerospace Research`_ if it is installed.
+
+   .. attribute:: Lift
+
+      Gets the `aerodynamic lift
+      <http://en.wikipedia.org/wiki/Aerodynamic_force>`_ currently acting on the
+      vessel, as a vector pointing in the direction of the force, with its
+      magnitude equal to the strength of the force in Newtons.
+
+      :rtype: :class:`Vector3`
+
+   .. attribute:: Drag
+
+      Gets the `aerodynamic drag
+      <http://en.wikipedia.org/wiki/Aerodynamic_force>`_ currently acting on the
+      vessel, as a vector pointing in the direction of the force, with its
+      magnitude equal to the strength of the force in Newtons.
+
+      :rtype: :class:`Vector3`
+
+   .. attribute:: SpeedOfSound
+
+      The speed of sound, in the atmosphere around the vessel, in :math:`m/s`.
+
+      :rtype: float
+
+      .. note:: Not available when `Ferram Aerospace Research`_ if it is
+         installed.
+
+   .. attribute:: Mach
+
+      The speed of the vessel, in multiples of the speed of sound.
+
+      :rtype: float
+
+      .. note:: Calculated using `KSPs stock aerodynamic model`_, or `Ferram
+         Aerospace Research`_ if it is installed.
+
+   .. attribute:: EquivalentAirSpeed
+
+      The `equivalent air speed
+      <http://en.wikipedia.org/wiki/Equivalent_airspeed>`_ of the vessel, in
+      :math:`m/s`.
+
+      :rtype: float
+
+      .. note:: Not available when `Ferram Aerospace Research`_ if it is
+         installed.
+
+   .. attribute:: TerminalVelocity
+
+      The current terminal velocity of the vessel, in :math:`m/s`. This is the
+      speed at which the drag forces cancel out the force of gravity.
+
+      :rtype: float
+
+      .. note:: Calculated using `KSPs stock aerodynamic model`_, or `Ferram
+         Aerospace Research`_ if it is installed.
 
    .. attribute:: AngleOfAttack
 
-      Gets the pitch angle between the orientation of the vessel and its velocity
-      vector, in degrees. (The angle between the mean chord of the wing and the
-      free-stream velocity.)
+      Gets the pitch angle between the orientation of the vessel and its
+      velocity vector, in degrees.
 
       :rtype: float
-
-      .. note:: Requires `Ferram Aerospace Research`_
 
    .. attribute:: SideslipAngle
 
       Gets the yaw angle between the orientation of the vessel and its velocity
-      vector, in degrees. (The angle between the center line of the aircraft or
-      rocket and the free-stream velocity in the lateral plane.)
+      vector, in degrees.
 
       :rtype: float
 
-      .. note:: Requires `Ferram Aerospace Research`_
+   .. attribute:: TotalAirTemperature
+
+      The `total air temperature
+      <http://en.wikipedia.org/wiki/Total_air_temperature>`_ of the atmosphere
+      around the vessel, in Kelvin. This temperature includes the
+      :attr:`StaticAirTemperature` and the vessel's kinetic energy.
+
+      :rtype: float
+
+   .. attribute:: StaticAirTemperature
+
+      The `static (ambient) temperature
+      <http://en.wikipedia.org/wiki/Total_air_temperature>`_ of the atmosphere
+      around the vessel, in Kelvin.
+
+      :rtype: float
 
    .. attribute:: StallFraction
 
       Gets the current amount of stall, between 0 and 1. A value greater than 0.005
       indicates a minor stall and a value greater than 0.5 indicates a large-scale
       stall.
-
-      :rtype: float
-
-      .. note:: Requires `Ferram Aerospace Research`_
-
-   .. attribute:: MachNumber
-
-      Gets the current mach number for the vessel. This is the current velocity
-      divided by the local speed of sound.
-
-      :rtype: float
-
-      .. note:: Requires `Ferram Aerospace Research`_
-
-   .. attribute:: TerminalVelocity
-
-      Gets the terminal velocity of the vessel, in :math:`m/s`. This is the speed
-      at which the drag forces cancel out the force of gravity.
 
       :rtype: float
 
@@ -242,8 +296,7 @@ Flight
 
       :rtype: float
 
-      .. note:: Calculated using `Ferram Aerospace Research`_ if it is
-         installed. Otherwise, calculated using `KSPs stock aerodynamic model`_
+      .. note:: Requires `Ferram Aerospace Research`_
 
    .. attribute:: LiftCoefficient
 

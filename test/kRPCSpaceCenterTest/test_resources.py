@@ -99,7 +99,7 @@ class TestResources(testingtools.TestCase):
 
     def test_vessel_mass(self):
         mass = self.conn.space_center.active_vessel.dry_mass
-        self.assertEquals(28845, mass)
+        self.assertEquals(28595, mass)
         for name in self.r.names:
             amount = sum(self.expected[stage][name][0] for stage in range(self.num_stages))
             if name in self.density:
