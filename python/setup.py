@@ -12,7 +12,7 @@ setup(
     description='Client library for kRPC, a Remote Procedure Call server for Kerbal Space Program',
     long_description=open('README.txt').read(),
     install_requires=[
-        'protobuf >= 3.0.0-alpha-1',
+        'protobuf == 3.0.0-alpha-1',
         'enum34 >= 1.0.4'
     ],
     test_suite='krpc.test',
