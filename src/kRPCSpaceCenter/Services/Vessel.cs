@@ -157,6 +157,11 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public float MaxVacuumThrust {
+            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.MaxVacuumThrust); }
+        }
+
+        [KRPCProperty]
         public float SpecificImpulse {
             get {
                 var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust);

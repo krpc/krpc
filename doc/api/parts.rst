@@ -795,6 +795,15 @@ Engine
 
       :rtype: float
 
+   .. attribute:: MaxVacuumThrust
+
+      Gets the maximum amount of thrust that can be produced by the engine in a
+      vacuum, in Newtons. This is the amount of thrust produced by the engine
+      when activated, :attr:`Engine.ThrustLimit` is set to 100%, the main
+      vessel's throttle is set to 100% and the engine is in a vacuum.
+
+      :rtype: float
+
    .. attribute:: ThrustLimit
 
       Gets or sets the thrust limiter of the engine. A value between 0
@@ -878,6 +887,15 @@ Engine
       attribute has no effect if the engine is not gimballed.
 
       :rtype: bool
+
+   .. attribute:: GimbalLimit
+
+      Gets or sets the gimbal limiter of the engine. A value between 0
+      and 1. Returns 0 if the gimbal is locked or the engine is not
+      gimballed. Setting this attribute has no effect if the engine is not
+      gimballed.
+
+      :rtype: float
 
 Landing Gear
 ^^^^^^^^^^^^

@@ -125,6 +125,14 @@ Vessel
 
       :rtype: float
 
+   .. attribute:: MaxVacuumThrust
+
+      Gets the total maximum thrust that can be produced by the vessel's active
+      engines when the vessel is in a vacuum, in Newtons. This is computed by
+      summing :attr:`Engine.MaxVacuumThrust` for every active engine.
+
+      :rtype: float
+
    .. attribute:: SpecificImpulse
 
       Gets the combined specific impulse of all active engines, in seconds. This

@@ -57,18 +57,37 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
+        /// <summary>
+        /// Get the thrust of the engine with the given throttle and atmospheric conditions in Newtons
+        /// </summary>
+        float GetThrust(float throttle, double pressure) {
+            pressure *= PhysicsGlobals.KpaToAtmospheres;
+            if (engine != null)
+                return 1000f * throttle * engine.maxFuelFlow * engine.g * engine.atmosphereCurve.Evaluate ((float)pressure);
+            else
+                return 1000f * throttle * engineFx.maxFuelFlow * engineFx.g * engineFx.atmosphereCurve.Evaluate ((float)pressure);
+        }
+
         [KRPCProperty]
         public float Thrust {
-            get { return engine != null ? engine.finalThrust * 1000f : engineFx.finalThrust * 1000f; }
+            get {
+                var throttle = engine != null ? engine.currentThrottle : engineFx.currentThrottle;
+                return GetThrust (throttle, part.InternalPart.vessel.staticPressurekPa);
+            }
         }
 
         [KRPCProperty]
         public float AvailableThrust {
-            get { return (engine != null ? engine.maxThrust * (engine.thrustPercentage / 100f) : engineFx.maxThrust * (engineFx.thrustPercentage / 100f)) * 1000f; }
+            get { return GetThrust (ThrustLimit, part.InternalPart.vessel.staticPressurekPa); }
         }
 
         [KRPCProperty]
         public float MaxThrust {
+            get { return GetThrust (1f, part.InternalPart.vessel.staticPressurekPa); }
+        }
+
+        [KRPCProperty]
+        public float MaxVacuumThrust {
             get { return (engine != null ? engine.maxThrust : engineFx.maxThrust) * 1000f; }
         }
 
@@ -117,6 +136,11 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
+        public float Throttle {
+            get { return engine != null ? engine.currentThrottle : engineFx.currentThrottle; }
+        }
+
+        [KRPCProperty]
         public bool ThrottleLocked {
             get { return engine != null ? engine.throttleLocked : engineFx.throttleLocked; }
         }
@@ -152,6 +176,24 @@ namespace KRPCSpaceCenter.Services.Parts
                 } else if (!value && GimbalLocked) {
                     gimbal.FreeAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
                 }
+            }
+        }
+
+        [KRPCProperty]
+        public float GimbalLimit {
+            get {
+                if (gimbal == null)
+                    return 1f;
+                else if (GimbalLocked)
+                    return 0f;
+                else
+                    return gimbal.gimbalLimiter / 100f;
+            }
+            set {
+                if (gimbal == null)
+                    return;
+                value = (value * 100f).Clamp (0f, 100f);
+                gimbal.gimbalLimiter = value;
             }
         }
     }
