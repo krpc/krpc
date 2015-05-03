@@ -1,8 +1,12 @@
 v0.1.8
-* KSP 1.0 support (#114)
+* KSP 1.0.2 support (#114)
 * Server plugin changes:
   * Add support for static class methods (#106)
 * SpaceCenter service changes:
+  * Add Engine.MaxVacuumThrust
+  * Add Engine.Throttle
+  * Add Engine.GimbalLimit
+  * Add Vessel.MaxVacuumThrust
   * Clean up float/double types (#113)
   * Remove Vessel.CrossSectionalArea
   * Remove CelestialBody.AtmospherePressure, AtmosphereDensity, AtmosphereScaleHeight,
