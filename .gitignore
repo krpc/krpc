@@ -154,3 +154,7 @@ doc/src/images/**/*.png
 # Tests
 test/kRPCSpaceCenterTest/env2
 test/kRPCSpaceCenterTest/env3
+
+# KSP configs
+PartDatabase.cfg
+Physics.cfg
