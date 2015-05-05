@@ -10,7 +10,7 @@ connection.
 
 The kRPC download comes with a protocol buffer message definitions file
 `KRPC.proto
-<https://github.com/djungelorm/krpc/blob/latest-version/schema/kRPC/Schema/KRPC.proto>`_
+<https://github.com/djungelorm/krpc/blob/latest-version/src/kRPC/Schema/KRPC.proto>`_
 that describes the structure of these messages. It also includes versions of
 this file compiled for Python, Java and C++ using Google's protocol buffers
 compiler.
