@@ -25,6 +25,10 @@ Using the Makefile
    provided in the apt repositories. The latest version can be installed from
    http://www.monodevelop.com/download/linux/#debian-ubuntu-and-derivatives
 
+   Python dependencies may be installed using pip:
+   
+   ``pip install pyenchant sphinx sphinxcontrib-spelling sphinx_rtd_theme yaml``
+
 2. Set the path to your KSP directory.
 
    The build scripts need to know where your KSP directory is. This is specified
