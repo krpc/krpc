@@ -62,13 +62,26 @@ class TestVesselEngines(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Basic')
+        testingtools.launch_vessel_from_vab('PartsEngine')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect(name='TestVessel')
+        cls.conn = krpc.connect(name='TestVesselEngines')
         cls.vessel = cls.conn.space_center.active_vessel
-        cls.engine = next(iter(cls.vessel.parts.engines))
         cls.control = cls.vessel.control
+
+        cls.engines = []
+        for engine in cls.vessel.parts.engines:
+            if 'IntakeAir' not in engine.propellants and engine.can_shutdown:
+                cls.engines.append(engine)
+
+        thrusts = [200000, 215000, 20000, 2000, 60000]
+        isps = [320, 300, 250, 4200, 800]
+        vac_isps = [320, 300, 250, 4200, 800]
+        msl_isps = [270, 280, 120, 100, 185]
+        cls.thrust = sum(thrusts)
+        cls.combined_isp = sum(thrusts) / sum(t/i for t,i in zip(thrusts, isps))
+        cls.vac_combined_isp = sum(thrusts) / sum(t/i for t,i in zip(thrusts, vac_isps))
+        cls.msl_combined_isp = sum(thrusts) / sum(t/i for t,i in zip(thrusts, msl_isps))
 
     @classmethod
     def tearDownClass(cls):
@@ -76,7 +89,8 @@ class TestVesselEngines(testingtools.TestCase):
 
     def test_inactive(self):
         self.control.throttle = 0
-        self.engine.active = False
+        for engine in self.engines:
+            engine.active = False
         time.sleep(0.5)
         self.assertClose(self.vessel.thrust, 0)
         self.assertClose(self.vessel.available_thrust, 0)
@@ -87,30 +101,34 @@ class TestVesselEngines(testingtools.TestCase):
 
     def test_idle(self):
         self.control.throttle = 0
-        self.engine.active = True
+        for engine in self.engines:
+            engine.active = True
         time.sleep(0.5)
         self.assertClose(self.vessel.thrust, 0, 1)
-        self.assertClose(self.vessel.available_thrust, 200000, 1)
-        self.assertClose(self.vessel.max_thrust, 200000, 1)
-        self.assertClose(self.vessel.specific_impulse, 320, 1)
-        self.assertClose(self.vessel.vacuum_specific_impulse, 320, 1)
-        self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, 270, 1)
-        self.engine.active = False
+        self.assertClose(self.vessel.available_thrust, self.thrust, 1)
+        self.assertClose(self.vessel.max_thrust, self.thrust, 1)
+        self.assertClose(self.vessel.specific_impulse, self.combined_isp, 1)
+        self.assertClose(self.vessel.vacuum_specific_impulse, self.vac_combined_isp, 1)
+        self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, self.msl_combined_isp, 1)
+        for engine in self.engines:
+            engine.active = False
         time.sleep(0.5)
 
     def test_throttle(self):
-        self.engine.active = True
+        for engine in self.engines:
+            engine.active = True
         for throttle in [0.3,0.7,1]:
             self.control.throttle = throttle
             time.sleep(1)
-            self.assertClose(self.vessel.thrust, throttle*200000, 1)
-            self.assertClose(self.vessel.available_thrust, 200000, 1)
-            self.assertClose(self.vessel.max_thrust, 200000, 1)
-            self.assertClose(self.vessel.specific_impulse, 320, 1)
-            self.assertClose(self.vessel.vacuum_specific_impulse, 320, 1)
-            self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, 270, 1)
+            self.assertClose(self.vessel.thrust, throttle*self.thrust, 1)
+            self.assertClose(self.vessel.available_thrust, self.thrust, 1)
+            self.assertClose(self.vessel.max_thrust, self.thrust, 1)
+            self.assertClose(self.vessel.specific_impulse, self.combined_isp, 1)
+            self.assertClose(self.vessel.vacuum_specific_impulse, self.vac_combined_isp, 1)
+            self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, self.msl_combined_isp, 1)
         self.control.throttle = 0
-        self.engine.active = False
+        for engine in self.engines:
+            engine.active = False
         time.sleep(1)
 
 if __name__ == "__main__":
