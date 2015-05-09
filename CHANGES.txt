@@ -1,3 +1,8 @@
+v0.1.9
+* SpaceCenter service changes:
+  * Fix bug with combined specific impulse calculations (#117)
+  * Add Engine.PropellantRatios (#118)
+
 v0.1.8
 * KSP 1.0.2 support (#114)
 * Server plugin changes:
@@ -12,7 +17,6 @@ v0.1.8
   * Remove CelestialBody.AtmospherePressure, AtmosphereDensity, AtmosphereScaleHeight,
     AtmosphereMaxAltitude, AtmospherePressureAt, AtmosphereDensityAt
   * Add CelestialBody.AtmosphereDepth and HasAtmosphericOxygen
-
 * Python client changes:
   * Improved dynamic creation of service methods
   * Add support for static class methods (#106)

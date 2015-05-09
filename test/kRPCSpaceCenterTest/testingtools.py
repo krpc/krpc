@@ -129,6 +129,19 @@ class TestCase(unittest.TestCase):
                         break
             if not ok:
                 return False
+        elif type(expected) == dict:
+            ok = True
+            if set(expected.keys()) != set(actual.keys()):
+                ok = False
+            else:
+                for k in expected.keys():
+                    x = expected[k]
+                    y = actual[k]
+                    if not self._isInRange(x-error, x+error, y):
+                        ok = False
+                        break
+            if not ok:
+                return False
         elif not self._isInRange(expected-error, expected+error, actual):
             return False
         return True
@@ -149,6 +162,9 @@ class TestCase(unittest.TestCase):
         if not self._isClose(expected, actual, error):
             if type(expected) in (list,tuple):
                 args = [str(tuple(x)) for x in (actual,expected)] + [error]
+                self.fail('%s is not close to %s, within an absolute error of %f' % tuple(args))
+            elif type(expected) == dict:
+                args = [str(dict(x)) for x in (actual,expected)] + [error]
                 self.fail('%s is not close to %s, within an absolute error of %f' % tuple(args))
             else:
                 self.fail('%f is not close to %f, within an absolute error of %f' % (actual,expected,error))

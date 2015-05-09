@@ -838,6 +838,13 @@ Engine
 
       :rtype: :class:`List` ( string )
 
+   .. attribute:: PropellantRatios
+
+      Gets a dictionary mapping resource names to the ratios at which they are
+      consumed by the engine.
+
+      :rtype: :class:`Dictionary` ( string, float )
+
    .. attribute:: HasFuel
 
       Gets whether the engine has flamed out, i.e. run out of fuel.

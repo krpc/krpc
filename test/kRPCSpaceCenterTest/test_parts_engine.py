@@ -7,7 +7,7 @@ class EngineTestBase(object):
 
     engine_data = {
         'LV-T30 "Reliant" Liquid Fuel Engine': {
-            'propellants': ['LiquidFuel', 'Oxidizer'],
+            'propellants': {'LiquidFuel': 9./11., 'Oxidizer': 1.},
             'gimballed': False,
             'throttle_locked': False,
             'can_restart': True,
@@ -17,7 +17,7 @@ class EngineTestBase(object):
             'vac_isp': 300
         },
         'LV-T45 "Swivel" Liquid Fuel Engine': {
-            'propellants': ['LiquidFuel', 'Oxidizer'],
+            'propellants': {'LiquidFuel': 9./11., 'Oxidizer': 1.},
             'gimballed': True,
             'gimbal_range': 3,
             'throttle_locked': False,
@@ -28,7 +28,7 @@ class EngineTestBase(object):
             'vac_isp': 320
         },
         'LV-N "Nerv" Atomic Rocket Motor': {
-            'propellants': ['LiquidFuel'],
+            'propellants': {'LiquidFuel': 1.},
             'gimballed': False,
             'throttle_locked': False,
             'can_restart': True,
@@ -38,7 +38,7 @@ class EngineTestBase(object):
             'vac_isp': 800
         },
         'IX-6315 "Dawn" Electric Propulsion System': {
-            'propellants': ['XenonGas', 'ElectricCharge'],
+            'propellants': {'XenonGas': 0.1/1.8, 'ElectricCharge': 1.},
             'gimballed': False,
             'throttle_locked': False,
             'can_restart': True,
@@ -48,7 +48,7 @@ class EngineTestBase(object):
             'vac_isp': 4200
         },
         'O-10 "Puff" MonoPropellant Fuel Engine': {
-            'propellants': ['MonoPropellant'],
+            'propellants': {'MonoPropellant': 1.},
             'gimballed': False,
             'throttle_locked': False,
             'can_restart': True,
@@ -58,7 +58,7 @@ class EngineTestBase(object):
             'vac_isp': 250
         },
         'RT-10 "Hammer" Solid Fuel Booster': {
-            'propellants': ['SolidFuel'],
+            'propellants': {'SolidFuel': 1.},
             'gimballed': False,
             'throttle_locked': True,
             'can_restart': False,
@@ -68,7 +68,7 @@ class EngineTestBase(object):
             'vac_isp': 162
         },
         'J-33 "Wheesley" Basic Jet Engine': {
-            'propellants': ['IntakeAir', 'LiquidFuel'],
+            'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.0434},
             'gimballed': True,
             'gimbal_range': 1,
             'throttle_locked': False,
@@ -110,7 +110,8 @@ class EngineTest(EngineTestBase):
         """ Check engine properties independent of activity/throttle """
         data = self.engine_data[engine.part.title]
         self.assertClose(data['max_vac_thrust'], engine.max_vacuum_thrust)
-        self.assertEqual(set(data['propellants']), set(engine.propellants))
+        self.assertEqual(set(data['propellants'].keys()), set(engine.propellants))
+        self.assertClose(data['propellants'], engine.propellant_ratios)
         self.assertEqual(data['throttle_locked'], engine.throttle_locked)
         self.assertClose(data['msl_isp'], engine.kerbin_sea_level_specific_impulse)
         self.assertClose(data['vac_isp'], engine.vacuum_specific_impulse)

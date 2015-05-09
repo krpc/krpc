@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
@@ -60,7 +61,8 @@ namespace KRPCSpaceCenter.Services.Parts
         /// <summary>
         /// Get the thrust of the engine with the given throttle and atmospheric conditions in Newtons
         /// </summary>
-        float GetThrust(float throttle, double pressure) {
+        float GetThrust (float throttle, double pressure)
+        {
             pressure *= PhysicsGlobals.KpaToAtmospheres;
             if (engine != null)
                 return 1000f * throttle * engine.maxFuelFlow * engine.g * engine.atmosphereCurve.Evaluate ((float)pressure);
@@ -127,6 +129,17 @@ namespace KRPCSpaceCenter.Services.Parts
                 foreach (var propellant in (engine != null ? engine.propellants : engineFx.propellants))
                     propellants.Add (propellant.name);
                 return propellants;
+            }
+        }
+
+        [KRPCProperty]
+        public IDictionary<string, float> PropellantRatios {
+            get {
+                var max = (engine != null ? engine.propellants : engineFx.propellants).Max (p => p.ratio);
+                var ratios = new Dictionary<string, float> ();
+                foreach (var propellant in (engine != null ? engine.propellants : engineFx.propellants))
+                    ratios [propellant.name] = propellant.ratio / max;
+                return ratios;
             }
         }
 
