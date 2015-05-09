@@ -57,29 +57,61 @@ class TestVessel(testingtools.TestCase):
         # 2645 kg dry mass
         self.assertEqual(2645, self.vessel.dry_mass)
 
-    def test_thrust(self):
+class TestVesselEngines(testingtools.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Basic')
+        testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        cls.conn = krpc.connect(name='TestVessel')
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.engine = next(iter(cls.vessel.parts.engines))
+        cls.control = cls.vessel.control
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
+
+    def test_inactive(self):
+        self.control.throttle = 0
+        self.engine.active = False
+        time.sleep(0.5)
         self.assertClose(self.vessel.thrust, 0)
-        #TODO: more thorough testing
-
-    def test_available_thrust(self):
         self.assertClose(self.vessel.available_thrust, 0)
-        #TODO: more thorough testing
-
-    def test_max_thrust(self):
         self.assertClose(self.vessel.max_thrust, 0)
-        #TODO: more thorough testing
-
-    def test_specific_impulse(self):
         self.assertClose(self.vessel.specific_impulse, 0)
-        #TODO: more thorough testing
-
-    def test_vacuum_specific_impulse(self):
         self.assertClose(self.vessel.vacuum_specific_impulse, 0)
-        #TODO: more thorough testing
-
-    def test_kerbin_sea_level_specific_impulse(self):
         self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, 0)
-        #TODO: more thorough testing
+
+    def test_idle(self):
+        self.control.throttle = 0
+        self.engine.active = True
+        time.sleep(0.5)
+        self.assertClose(self.vessel.thrust, 0, 1)
+        self.assertClose(self.vessel.available_thrust, 200000, 1)
+        self.assertClose(self.vessel.max_thrust, 200000, 1)
+        self.assertClose(self.vessel.specific_impulse, 320, 1)
+        self.assertClose(self.vessel.vacuum_specific_impulse, 320, 1)
+        self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, 270, 1)
+        self.engine.active = False
+        time.sleep(0.5)
+
+    def test_throttle(self):
+        self.engine.active = True
+        for throttle in [0.3,0.7,1]:
+            self.control.throttle = throttle
+            time.sleep(1)
+            self.assertClose(self.vessel.thrust, throttle*200000, 1)
+            self.assertClose(self.vessel.available_thrust, 200000, 1)
+            self.assertClose(self.vessel.max_thrust, 200000, 1)
+            self.assertClose(self.vessel.specific_impulse, 320, 1)
+            self.assertClose(self.vessel.vacuum_specific_impulse, 320, 1)
+            self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, 270, 1)
+        self.control.throttle = 0
+        self.engine.active = False
+        time.sleep(1)
 
 if __name__ == "__main__":
     unittest.main()

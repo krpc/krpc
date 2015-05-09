@@ -104,13 +104,13 @@ def set_orbit(body, sma, e, inc, lan, w, mEp, epoch):
     with krpc.connect(name='testingtools.set_orbit') as conn:
         conn.testing_tools.set_orbit(body, sma, e, inc, lan, w, mEp, epoch)
     #TODO: remove sleep
-    time.sleep(1)
+    time.sleep(3)
 
 def set_circular_orbit(body, altitude):
     with krpc.connect(name='testingtools.set_circular_orbit') as conn:
         conn.testing_tools.set_circular_orbit(body, altitude)
     #TODO: remove sleep
-    time.sleep(1)
+    time.sleep(3)
 
 class TestCase(unittest.TestCase):
 

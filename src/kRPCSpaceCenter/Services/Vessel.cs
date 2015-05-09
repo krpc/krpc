@@ -164,8 +164,8 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float SpecificImpulse {
             get {
-                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust);
-                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust / e.SpecificImpulse);
+                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust);
+                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust / e.SpecificImpulse);
                 if (fuelConsumption > 0f)
                     return thrust / fuelConsumption;
                 return 0f;
@@ -175,8 +175,8 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float VacuumSpecificImpulse {
             get {
-                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust);
-                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust / e.VacuumSpecificImpulse);
+                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust);
+                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust / e.VacuumSpecificImpulse);
                 if (fuelConsumption > 0f)
                     return thrust / fuelConsumption;
                 return 0f;
@@ -186,8 +186,8 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float KerbinSeaLevelSpecificImpulse {
             get {
-                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust);
-                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust / e.KerbinSeaLevelSpecificImpulse);
+                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust);
+                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust / e.KerbinSeaLevelSpecificImpulse);
                 if (fuelConsumption > 0f)
                     return thrust / fuelConsumption;
                 return 0f;
