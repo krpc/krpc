@@ -190,6 +190,17 @@ Flight
       .. note:: Calculated using `KSPs stock aerodynamic model`_. Not available
          when `Ferram Aerospace Research`_ if it is installed.
 
+   .. attribute:: AerodynamicForce
+
+      Gets the total aerodynamic forces acting on the vessel, as a vector
+      pointing in the direction of the force, with its magnitude equal to the
+      strength of the force in Newtons.
+
+      :rtype: float
+
+      .. note:: Calculated using `KSPs stock aerodynamic model`_. Not available
+         when `Ferram Aerospace Research`_ if it is installed.
+
    .. attribute:: Lift
 
       Gets the `aerodynamic lift
@@ -199,6 +210,9 @@ Flight
 
       :rtype: :class:`Vector3`
 
+      .. note:: Calculated using `KSPs stock aerodynamic model`_. Not available
+         when `Ferram Aerospace Research`_ if it is installed
+
    .. attribute:: Drag
 
       Gets the `aerodynamic drag
@@ -207,6 +221,9 @@ Flight
       magnitude equal to the strength of the force in Newtons.
 
       :rtype: :class:`Vector3`
+
+      .. note:: Calculated using `KSPs stock aerodynamic model`_. Not available
+         when `Ferram Aerospace Research`_ if it is installed
 
    .. attribute:: SpeedOfSound
 
