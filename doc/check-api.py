@@ -48,7 +48,9 @@ def documented_method(name, params):
     proc = cls+'_'+meth
     if proc not in not_documented:
         raise RuntimeError('%s is documented, but does not exist' % name)
-    check_parameters(proc, ['this']+params)
+    if any(x.startswith('Class.Method') for x in not_documented[proc]['attributes']):
+        params = ['this'] + params
+    check_parameters(proc, params)
     del not_documented[proc]
 
 def documented_property(name):
