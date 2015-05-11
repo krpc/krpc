@@ -16,7 +16,8 @@ machine you like.
 
    getting-started
    tutorials
-   python-api
+   space-center-api
+   infernal-robotics-api
    compiling
    extending
    communication-protocol
