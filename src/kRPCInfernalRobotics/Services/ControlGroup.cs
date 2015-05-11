@@ -61,6 +61,13 @@ namespace KRPCInfernalRobotics.Services
         }
 
         [KRPCMethod]
+        public Servo ServoWithName (string name)
+        {
+            var servo = controlGroup.Servos.FirstOrDefault (x => x.Name == name);
+            return servo != null ? new Servo (servo) : null;
+        }
+
+        [KRPCMethod]
         public void MoveRight ()
         {
             controlGroup.MoveRight ();
