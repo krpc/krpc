@@ -24,49 +24,85 @@ namespace KRPCInfernalRobotics.Services
         }
 
         [KRPCProperty]
-        public string Name { get { return servo.Name; } }
+        public string Name {
+            get { return servo.Name; }
+            set { servo.Name = value; }
+        }
 
         [KRPCProperty]
         public bool Highlight { set { servo.Highlight = value; } }
 
         [KRPCProperty]
-        public float Position { get { return servo.Position; } }
+        public float Position {
+            get { return servo.Position; }
+        }
 
         [KRPCProperty]
-        public float MinConfigPosition { get { return servo.MinConfigPosition; } }
+        public float MinConfigPosition {
+            get { return servo.MinConfigPosition; }
+        }
 
         [KRPCProperty]
-        public float MaxConfigPosition { get { return servo.MaxConfigPosition; } }
+        public float MaxConfigPosition {
+            get { return servo.MaxConfigPosition; }
+        }
 
         [KRPCProperty]
-        public float MinPosition { get { return servo.MinPosition; } }
+        public float MinPosition {
+            get { return servo.MinPosition; }
+            set { servo.MinPosition = value; }
+        }
 
         [KRPCProperty]
-        public float MaxPosition { get { return servo.MaxPosition; } }
+        public float MaxPosition {
+            get { return servo.MaxPosition; }
+            set { servo.MaxPosition = value; }
+        }
 
         [KRPCProperty]
-        public float ConfigSpeed { get { return servo.ConfigSpeed; } }
+        public float ConfigSpeed {
+            get { return servo.ConfigSpeed; }
+        }
 
         [KRPCProperty]
-        public float Speed { get { return servo.Speed; } }
+        public float Speed {
+            get { return servo.Speed; }
+            set { servo.Speed = value; }
+        }
 
         [KRPCProperty]
-        public float CurrentSpeed { get { return servo.CurrentSpeed; } }
+        public float CurrentSpeed {
+            get { return servo.CurrentSpeed; }
+            set { servo.CurrentSpeed = value; }
+        }
 
         [KRPCProperty]
-        public float Acceleration { get { return servo.Acceleration; } }
+        public float Acceleration {
+            get { return servo.Acceleration; }
+            set { servo.Acceleration = value; }
+        }
 
         [KRPCProperty]
-        public bool IsMoving { get { return servo.IsMoving; } }
+        public bool IsMoving {
+            get { return servo.IsMoving; }
+        }
 
         [KRPCProperty]
-        public bool IsFreeMoving { get { return servo.IsFreeMoving; } }
+        public bool IsFreeMoving {
+            get { return servo.IsFreeMoving; }
+        }
 
         [KRPCProperty]
-        public bool IsLocked { get { return servo.IsLocked; } }
+        public bool IsLocked {
+            get { return servo.IsLocked; }
+            set { servo.IsLocked = value; }
+        }
 
         [KRPCProperty]
-        public bool IsAxisInverted { get { return servo.IsAxisInverted; } }
+        public bool IsAxisInverted {
+            get { return servo.IsAxisInverted; }
+            set { servo.IsAxisInverted = value; }
+        }
 
         [KRPCMethod]
         public void MoveRight ()

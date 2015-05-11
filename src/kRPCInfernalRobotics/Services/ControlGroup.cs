@@ -26,19 +26,34 @@ namespace KRPCInfernalRobotics.Services
         }
 
         [KRPCProperty]
-        public string Name { get { return controlGroup.Name; } }
+        public string Name {
+            get { return controlGroup.Name; }
+            set { controlGroup.Name = value; }
+        }
 
         [KRPCProperty]
-        public string ForwardKey { get { return controlGroup.ReverseKey; } }
+        public string ForwardKey {
+            get { return controlGroup.ForwardKey; }
+            set { controlGroup.ForwardKey = value; }
+        }
 
         [KRPCProperty]
-        public string ReverseKey { get { return controlGroup.ForwardKey; } }
+        public string ReverseKey {
+            get { return controlGroup.ReverseKey; }
+            set { controlGroup.ReverseKey = value; }
+        }
 
         [KRPCProperty]
-        public float Speed { get { return controlGroup.Speed; } }
+        public float Speed {
+            get { return controlGroup.Speed; }
+            set { controlGroup.Speed = value; }
+        }
 
         [KRPCProperty]
-        public bool Expanded { get { return controlGroup.Expanded; } }
+        public bool Expanded {
+            get { return controlGroup.Expanded; }
+            set { controlGroup.Expanded = value; }
+        }
 
         [KRPCProperty]
         public IList<Servo> Servos {
