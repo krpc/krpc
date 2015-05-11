@@ -9,6 +9,7 @@ namespace KRPCInfernalRobotics.Services
     [KRPCService (GameScene = GameScene.Flight)]
     public static class InfernalRobotics
     {
+        [KRPCProperty]
         public static IList<ControlGroup> ServoGroups {
             get {
                 if (!IRWrapper.APIReady)
