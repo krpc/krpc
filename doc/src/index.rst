@@ -18,6 +18,7 @@ machine you like.
    tutorials
    space-center-api
    infernal-robotics-api
+   kerbal-alarm-clock-api
    compiling
    extending
    communication-protocol
