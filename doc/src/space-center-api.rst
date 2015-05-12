@@ -11,8 +11,8 @@ SpaceCenter API
    python-api/space-center/flight
    python-api/space-center/orbit
    python-api/space-center/control
-   python-api/space-center/vessel-resources
    python-api/space-center/parts
+   python-api/space-center/resources
    python-api/space-center/node
    python-api/space-center/comms
    python-api/space-center/reference-frame
