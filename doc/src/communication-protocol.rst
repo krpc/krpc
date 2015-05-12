@@ -8,43 +8,43 @@ using `Protocol Buffer messages
 <https://developers.google.com/protocol-buffers/docs/proto>`_ sent over a TCP/IP
 connection.
 
-The kRPC download comes with a protocol buffer message definitions file
-`KRPC.proto
-<https://github.com/djungelorm/krpc/blob/latest-version/src/kRPC/Schema/KRPC.proto>`_
-that describes the structure of these messages. It also includes versions of
-this file compiled for Python, Java and C++ using Google's protocol buffers
-compiler.
+The kRPC `download <https://github.com/djungelorm/krpc/releases>`_ comes with a
+protocol buffer message definitions file (`KRPC.proto
+<https://github.com/djungelorm/krpc/blob/latest-version/src/kRPC/Schema/KRPC.proto>`_)
+that defines the structure of these messages. It also includes versions of this
+file compiled for Python, Java and C++ using `Google's protocol buffers compiler
+<https://github.com/google/protobuf>`_.
 
-Establishing a connection
+Establishing a Connection
 -------------------------
 
-kRPC consists of two servers: an *RPC server* (over which the client sends and
-receives RPCs) and a *Stream server* (over which the client receives
-:ref:`communication-protocol-streams`). A client first connects to the RPC
-server, then the Stream server.
+kRPC consists of two servers: an *RPC Server* (over which clients send and
+receive RPCs) and a *Stream Server* (over which clients receive
+:ref:`communication-protocol-streams`). A client first connects to the *RPC
+Server*, then (optionally) to the *Stream Server*.
 
 .. _communication-protocol-rpc-connect:
 
 Connecting to the RPC Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To establish a connection to the RPC server, a client must do the following:
+To establish a connection to the *RPC Server*, a client must do the following:
 
  1. Open a TCP socket to the server on its RPC port (which defaults to 50000).
 
  2. Send this 12 byte hello message:
     ``0x48 0x45 0x4C 0x4C 0x4F 0x2D 0x52 0x50 0x43 0x00 0x00 0x00``
 
- 3. Send a 32 byte message containing a string to identify the new connection.
-    This should be a UTF-8 encoded string, up to a maximum of 32 bytes in
-    length. If the string is shorter than 32 bytes, it should be padded with
-    zeros.
+ 3. Send a 32 byte message containing a name for the connection, that will be
+    displayed on the in-game server window. This should be a UTF-8 encoded
+    string, up to a maximum of 32 bytes in length. If the string is shorter than
+    32 bytes, it should be padded with zeros.
 
  4. Receive a 16 byte unique client identifier. This is sent to the client when
     the connection is granted, for example after the user has clicked accept on
     the in-game UI.
 
-For example, this python code will connect to the RPC server at address
+For example, this python code will connect to the *RPC Server* at address
 ``127.0.0.1:50000`` using the identifier ``Jeb``:
 
 .. code-block:: python
@@ -54,7 +54,7 @@ For example, this python code will connect to the RPC server at address
    rpc_conn.connect(('127.0.0.1', 50000))
    # Send the 12 byte hello message
    rpc_conn.sendall(b'\x48\x45\x4C\x4C\x4F\x2D\x52\x50\x43\x00\x00\x00')
-   # Send the 32 byte client name 'Jeb' padded with zeros
+   # Send the 32 byte client name 'Jeb' padded with zeroes
    name = 'Jeb'.encode('utf-8')
    name += (b'\x00' * (32-len(name)))
    rpc_conn.sendall(name)
@@ -63,15 +63,15 @@ For example, this python code will connect to the RPC server at address
    while len(identifier) < 16:
        identifier += rpc_conn.recv(16 - len(identifier))
    # Connection successful. Print out a message along with the client identifier.
-   identifier = ''.join('%02x' % ord(c) for c in identifier)
-   print 'Connected to RPC server, client idenfitier = %s' % identifier
+   printable_identifier = ''.join('%02x' % x for x in identifier)
+   print('Connected to RPC server, client idenfitier = %s' % printable_identifier)
 
 Connecting to the Stream Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To establish a connection to the Stream server, a client must first
-:ref:`connect to the RPC server <communication-protocol-rpc-connect>` (as
-above), then do the following.
+To establish a connection to the *Stream Server*, a client must first
+:ref:`connect to the RPC Server <communication-protocol-rpc-connect>` then do
+the following:
 
 1. Open a TCP socket to the server on its Stream port (which defaults to 50001).
 
@@ -79,19 +79,19 @@ above), then do the following.
    ``0x48 0x45 0x4C 0x4C 0x4F 0x2D 0x53 0x54 0x52 0x45 0x41 0x4D``
 
 3. Send a 16 byte message containing the client's unique identifier. This
-   identifier is given to the client after it successfully connects to the RPC
-   server.
+   identifier is given to the client after it successfully connects to the *RPC
+   Server*.
 
-4. Receive a 2 byte OK message: ``0x4F 0x4B``. This indicates a successful
+4. Receive a 2 byte OK message: ``0x4F 0x4B`` This indicates a successful
    connection.
 
 .. note:: Connecting to the Stream Server is optional. If the client doesn't
           require stream functionality, there is no need to connect.
 
-For example, this python code will connect to the Stream server at address
-``127.0.0.1:50001``. (Note that ``identifier`` is the client identifier received
-by :ref:`connecting to the RPC server <communication-protocol-rpc-connect>` (as
-above).
+For example, this python code will connect to the *Stream Server* at address
+``127.0.0.1:50001``. Note that ``identifier`` is the unique client identifier
+received when :ref:`connecting to the RPC server
+<communication-protocol-rpc-connect>`.
 
 .. code-block:: python
 
@@ -107,7 +107,7 @@ above).
    while len(ok_message) < 2:
        ok_message += stream_conn.recv(2 - len(ok_message))
    # Connection successful
-   print 'Connected to stream server'
+   print('Connected to stream server')
 
 Remote Procedures
 -----------------
@@ -120,17 +120,19 @@ Invoking Remote Procedures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Remote procedures are invoked by sending a request message to the RPC server,
-and waiting for a response message. These messages are encoded using Protocol
-Buffers.
+and waiting for a response message. These messages are encoded as Protocol
+Buffer messages.
 
 The request message contains the name of the procedure to invoke, and the values
-of the arguments to pass it. The response message contains the value returned by
-the procedure, or is a blank response if the procedure does not return a value.
+of any arguments to pass it. The response message contains the value returned by
+the procedure (if any) and any errors that were encountered.
 
 Requests are processed in order of receipt. The next request will not be
 processed until the previous one completes and it's response has been received
 by the client. When there are multiple client connections, the requests are
 processed in round-robin order.
+
+.. _communication-protocol-anatomy-of-a-request:
 
 Anatomy of a Request
 ^^^^^^^^^^^^^^^^^^^^
@@ -169,7 +171,9 @@ The ``Argument`` messages have a position field to allow values for default
 arguments to be omitted. See :ref:`communication-protocol-protobuf-encoding` for
 details on how to serialize the argument values.
 
-Anatomy of a response
+.. _communication-protocol-anatomy-of-a-response:
+
+Anatomy of a Response
 ^^^^^^^^^^^^^^^^^^^^^
 
 A response is sent to the client using a ``Response`` Protocol Buffer message
@@ -223,7 +227,7 @@ Example RPC invocation
 
 The following Python script invokes the ``GetStatus`` procedure from the
 :ref:`KRPC service <communication-protocol-krpc-service>` using an already
-established connection to the server (the ``conn`` variable).
+established connection to the server (the ``rpc_conn`` variable).
 
 The ``krpc.schema.KRPC`` package contains the Protocol Buffer message formats
 ``Request``, ``Response`` and ``Status`` compiled to python code using the
@@ -264,7 +268,7 @@ format. Their implementation is omitted for brevity.
 
    # Check for an error response
    if response.HasField('error'):
-       print 'ERROR:', response.error
+       print('ERROR:', response.error)
 
    # Decode the return value as a Status message
    else:
@@ -272,7 +276,7 @@ format. Their implementation is omitted for brevity.
        status.ParseFromString(response.return_value)
 
        # Print out the version string from the Status message
-       print status.version
+       print(status.version)
 
 .. _communication-protocol-protobuf-encoding:
 
@@ -342,12 +346,16 @@ information about each service provided by the server. The content of these
 ``Service`` messages are :ref:`documented below
 <communication-protocol-service-description-message>`.
 
+.. _communication-protocol-add-stream:
+
 AddStream
 ^^^^^^^^^
 
 The ``AddStream`` procedure adds a stream to the server.
 
 TODO
+
+.. _communication-protocol-remove-stream:
 
 RemoveStream
 ^^^^^^^^^^^^
