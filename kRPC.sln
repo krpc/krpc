@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kRPC", "src\kRPC\kRPC.cspro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kRPCSpaceCenter", "src\kRPCSpaceCenter\kRPCSpaceCenter.csproj", "{690C8D5A-B41F-44C4-99B9-B6A3D190447B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kRPCInfernalRobotics", "src\kRPCInfernalRobotics\kRPCInfernalRobotics.csproj", "{1E0F6451-C813-4BC5-8224-DA76E8005DD5}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kRPCTest", "test\kRPCTest\kRPCTest.csproj", "{82D1B716-4129-4253-8B47-D5E38A3775BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "test\TestServer\TestServer.csproj", "{5206E8C0-04DA-4A47-8FD3-B3D9B1E6ADEC}"
@@ -21,6 +23,14 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E0F6451-C813-4BC5-8224-DA76E8005DD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E0F6451-C813-4BC5-8224-DA76E8005DD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E0F6451-C813-4BC5-8224-DA76E8005DD5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1E0F6451-C813-4BC5-8224-DA76E8005DD5}.Debug|x86.Build.0 = Debug|Any CPU
+		{1E0F6451-C813-4BC5-8224-DA76E8005DD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E0F6451-C813-4BC5-8224-DA76E8005DD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E0F6451-C813-4BC5-8224-DA76E8005DD5}.Release|x86.ActiveCfg = Release|Any CPU
+		{1E0F6451-C813-4BC5-8224-DA76E8005DD5}.Release|x86.Build.0 = Release|Any CPU
 		{3582BF17-7FD0-44B7-843D-916AE296280B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3582BF17-7FD0-44B7-843D-916AE296280B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3582BF17-7FD0-44B7-843D-916AE296280B}.Debug|x86.ActiveCfg = Debug|Any CPU
