@@ -3,6 +3,7 @@ v0.1.9
   * Fix bug with combined specific impulse calculations (#117)
   * Add Engine.PropellantRatios (#118)
 * Add support for InfernalRobotics (http://forum.kerbalspaceprogram.com/threads/116064)
+* Add support for Kerbal Alarm Clock (http://forum.kerbalspaceprogram.com/threads/24786)
 
 v0.1.8
 * KSP 1.0.2 support (#114)
