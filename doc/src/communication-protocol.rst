@@ -559,6 +559,8 @@ return values as strings. Type names can be any of the following:
 
  * A KRPCClass, in the format ``Class(ClassName)``
 
+ * A KRPCEnum, in the format ``Enum(ClassName)``
+
  * A Protocol Buffer message type, in the format ``ServiceName.MessageName``
 
  * A Protocol Buffer enumeration type, in the format
