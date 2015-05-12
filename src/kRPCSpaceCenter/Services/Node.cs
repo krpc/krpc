@@ -15,35 +15,38 @@ namespace KRPCSpaceCenter.Services
         /// The x-component is the radial component.
 
         readonly global::Vessel vessel;
-        ManeuverNode node;
 
         internal Node (global::Vessel vessel, double UT, float prograde, float normal, float radial)
         {
             this.vessel = vessel;
-            node = vessel.patchedConicSolver.AddManeuverNode (UT);
-            node.OnGizmoUpdated (new Vector3d (radial, normal, prograde), UT);
+            InternalNode = vessel.patchedConicSolver.AddManeuverNode (UT);
+            InternalNode.OnGizmoUpdated (new Vector3d (radial, normal, prograde), UT);
         }
 
-        internal Node (ManeuverNode node)
+        public Node (ManeuverNode node)
         {
-            this.node = node;
+            InternalNode = node;
         }
+
+        public global::Vessel InternalVessel { get; private set; }
+
+        public ManeuverNode InternalNode { get; private set; }
 
         public override bool Equals (Node obj)
         {
-            return node == obj.node;
+            return InternalNode == obj.InternalNode;
         }
 
         public override int GetHashCode ()
         {
             //TODO: node should not be null, but Remove could set it as null
-            return node == null ? 0 : node.GetHashCode ();
+            return InternalNode == null ? 0 : InternalNode.GetHashCode ();
         }
 
         internal Vector3d WorldBurnVector {
             get {
-                var prograde = node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ().normalized;
-                var normal = node.patch.GetOrbitNormal ().SwapYZ ().normalized;
+                var prograde = InternalNode.patch.getOrbitalVelocityAtUT (InternalNode.UT).SwapYZ ().normalized;
+                var normal = InternalNode.patch.GetOrbitNormal ().SwapYZ ().normalized;
                 var radial = Vector3d.Cross (normal, prograde);
                 return Prograde * prograde + Normal * normal + Radial * radial;
             }
@@ -51,43 +54,43 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public float Prograde {
-            get { return (float) node.DeltaV.z; }
+            get { return (float)InternalNode.DeltaV.z; }
             set {
-                node.DeltaV.z = value;
-                node.OnGizmoUpdated (node.DeltaV, node.UT);
+                InternalNode.DeltaV.z = value;
+                InternalNode.OnGizmoUpdated (InternalNode.DeltaV, InternalNode.UT);
             }
         }
 
         [KRPCProperty]
         public float Normal {
-            get { return (float) node.DeltaV.y; }
+            get { return (float)InternalNode.DeltaV.y; }
             set {
-                node.DeltaV.y = value;
-                node.OnGizmoUpdated (node.DeltaV, node.UT);
+                InternalNode.DeltaV.y = value;
+                InternalNode.OnGizmoUpdated (InternalNode.DeltaV, InternalNode.UT);
             }
         }
 
         [KRPCProperty]
         public float Radial {
-            get { return (float) node.DeltaV.x; }
+            get { return (float)InternalNode.DeltaV.x; }
             set {
-                node.DeltaV.x = value;
-                node.OnGizmoUpdated (node.DeltaV, node.UT);
+                InternalNode.DeltaV.x = value;
+                InternalNode.OnGizmoUpdated (InternalNode.DeltaV, InternalNode.UT);
             }
         }
 
         [KRPCProperty]
         public float DeltaV {
-            get { return (float) node.DeltaV.magnitude; }
+            get { return (float)InternalNode.DeltaV.magnitude; }
             set {
-                var direction = node.DeltaV.normalized;
-                node.OnGizmoUpdated (new Vector3d (direction.x * value, direction.y * value, direction.z * value), node.UT);
+                var direction = InternalNode.DeltaV.normalized;
+                InternalNode.OnGizmoUpdated (new Vector3d (direction.x * value, direction.y * value, direction.z * value), InternalNode.UT);
             }
         }
 
         [KRPCProperty]
         public float RemainingDeltaV {
-            get { return (float) node.GetBurnVector (node.patch).magnitude; }
+            get { return (float)InternalNode.GetBurnVector (InternalNode.patch).magnitude; }
         }
 
         [KRPCMethod]
@@ -103,13 +106,13 @@ namespace KRPCSpaceCenter.Services
         {
             if (referenceFrame == null)
                 referenceFrame = ReferenceFrame.Orbital (vessel);
-            return referenceFrame.DirectionFromWorldSpace (node.GetBurnVector (node.patch)).ToTuple ();
+            return referenceFrame.DirectionFromWorldSpace (InternalNode.GetBurnVector (InternalNode.patch)).ToTuple ();
         }
 
         [KRPCProperty]
         public double UT {
-            get { return node.UT; }
-            set { node.UT = value; }
+            get { return InternalNode.UT; }
+            set { InternalNode.UT = value; }
         }
 
         [KRPCProperty]
@@ -119,31 +122,31 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public Orbit Orbit {
-            get { return new Orbit (node.nextPatch); }
+            get { return new Orbit (InternalNode.nextPatch); }
         }
 
         [KRPCMethod]
         public void Remove ()
         {
-            node.RemoveSelf ();
-            node = null;
+            InternalNode.RemoveSelf ();
+            InternalNode = null;
             // TODO: delete this Node object
         }
 
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return ReferenceFrame.Object (node); }
+            get { return ReferenceFrame.Object (InternalNode); }
         }
 
         [KRPCProperty]
         public ReferenceFrame OrbitalReferenceFrame {
-            get { return ReferenceFrame.Orbital (node); }
+            get { return ReferenceFrame.Orbital (InternalNode); }
         }
 
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.PositionFromWorldSpace (node.patch.getPositionAtUT (node.UT)).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (InternalNode.patch.getPositionAtUT (InternalNode.UT)).ToTuple ();
         }
 
         [KRPCMethod]
