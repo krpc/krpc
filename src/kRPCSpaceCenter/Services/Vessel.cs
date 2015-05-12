@@ -46,7 +46,7 @@ namespace KRPCSpaceCenter.Services
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
             Parts = new Parts.Parts (vessel);
-            Resources = new VesselResources (vessel);
+            Resources = new Resources (vessel);
             if (RemoteTech.IsAvailable)
                 comms = new Comms (vessel);
         }
@@ -113,7 +113,13 @@ namespace KRPCSpaceCenter.Services
         public AutoPilot AutoPilot { get; private set; }
 
         [KRPCProperty]
-        public VesselResources Resources { get; private set; }
+        public Resources Resources { get; private set; }
+
+        [KRPCMethod]
+        public Resources ResourcesInDecoupleStage (int stage, bool cumulative = true)
+        {
+            return new Resources (InternalVessel, stage, cumulative);
+        }
 
         [KRPCProperty]
         public Parts.Parts Parts { get; private set; }

@@ -121,8 +121,8 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
-        public PartResources Resources {
-            get { return new PartResources (part); }
+        public Resources Resources {
+            get { return new Resources (part); }
         }
 
         [KRPCProperty]

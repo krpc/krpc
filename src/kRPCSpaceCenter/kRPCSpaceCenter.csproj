@@ -99,14 +99,13 @@
     <Compile Include="Services\Parts\Parachute.cs" />
     <Compile Include="Services\Parts\Part.cs" />
     <Compile Include="Services\Parts\Parts.cs" />
-    <Compile Include="Services\Parts\PartResources.cs" />
     <Compile Include="Services\Parts\ReactionWheel.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />
     <Compile Include="Services\Parts\SolarPanel.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
+    <Compile Include="Services\Resources.cs" />
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\Vessel.cs" />
-    <Compile Include="Services\VesselResources.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
 </Project>
