@@ -1,20 +1,22 @@
 from setuptools import setup
 import sys
 
+install_requires=['protobuf == 3.0.0-alpha-1']
+
+if sys.version_info < (3, 4):
+    install_requires.append('enum34 >= 1.0.4')
+
 setup(
     name='krpc',
     version='0.1.8',
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
-    packages=['krpc','krpc.schema','krpc.test'],
+    packages=['krpc', 'krpc.test'],
     url='https://djungelorm.github.io/krpc/docs',
     license='GNU GPL v3',
     description='Client library for kRPC, a Remote Procedure Call server for Kerbal Space Program',
     long_description=open('README.txt').read(),
-    install_requires=[
-        'protobuf == 3.0.0-alpha-1',
-        'enum34 >= 1.0.4'
-    ],
+    install_requires=install_requires,
     test_suite='krpc.test',
     use_2to3=True,
     classifiers=[
