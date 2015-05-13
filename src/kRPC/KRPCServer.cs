@@ -227,6 +227,7 @@ namespace KRPC
         {
             // The maximum amount of time to spend executing continuations
             const int maxTime = 10; // milliseconds
+            const int waitTime = 1;
             var yieldedContinuations = new List<RequestContinuation> ();
 
             /* Try to execute continuations in our timeframe of maxTime ms.
@@ -236,37 +237,49 @@ namespace KRPC
 
             Stopwatch timer = Stopwatch.StartNew ();
             // Check for new requests from clients
-            rpcServer.Update ();
-            streamServer.Update ();
-            PollRequests (yieldedContinuations);
-            bool delayToNextCycle = false;
+     
+            do {
+                rpcServer.Update ();
+                streamServer.Update ();
+                PollRequests (yieldedContinuations);
+                bool delayToNextCycle = false;               
 
-            foreach (var continuation in continuations) {
-                // Ignore the continuation if the client has disconnected
-                if (!continuation.Client.Connected)
-                    continue;
+                foreach (var continuation in continuations) {
+                    // Ignore the continuation if the client has disconnected
+                    if (!continuation.Client.Connected)
+                        continue;
 
-                // Update expire field
-                if (!delayToNextCycle && timer.ElapsedMilliseconds > maxTime)
-                    delayToNextCycle = true;
+                    // Update expire field
+                    if (!delayToNextCycle && timer.ElapsedMilliseconds > maxTime)
+                        delayToNextCycle = true;
 
 
-                // Time expired! Delay to next cycle
-                if (delayToNextCycle) {
-                    yieldedContinuations.Add (continuation);
-                    continue;
+                    // Time expired! Delay to next cycle
+                    if (delayToNextCycle) {
+                        yieldedContinuations.Add (continuation);
+                        continue;
+                    }
+
+                    // Execute the continuation
+                    try {
+                        ExecuteContinuation (continuation);
+                    } catch (YieldException e) {
+                        yieldedContinuations.Add ((RequestContinuation)e.Continuation);
+                    }
                 }
 
-                // Execute the continuation
-                try {
-                    ExecuteContinuation (continuation);
-                } catch (YieldException e) {
-                    yieldedContinuations.Add ((RequestContinuation)e.Continuation);
+                // exit if there are no incoming requests or if we are late.
+                // Clients have to wait until the next physics update cycle
+                if(continuations.Count == 0 || delayToNextCycle) {
+                    break;
+                }
+                else {
+                    continuations.Clear();
+                    // We really need this sleep?
+                    Thread.Sleep(waitTime);
                 }
             }
-
-            // Flush continuations (help gc!)
-            continuations.Clear ();
+            while(true);
 
             // Run yielded continuations on the next update
             continuations = yieldedContinuations;
