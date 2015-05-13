@@ -227,45 +227,51 @@ namespace KRPC
         {
             // The maximum amount of time to spend executing continuations
             const int maxTime = 10; // milliseconds
-            // The maximum amount of time to wait after executing continuations to check for new requests
-            const int timeout = 1; // milliseconds
-            var done = false;
-            var waited = false;
             var yieldedContinuations = new List<RequestContinuation> ();
 
+            /* Try to execute continuations in our timeframe of maxTime ms.
+             * Delay the execution to next physics cycle if time is expired
+             * or if the continuation is yielded.
+             */
+
             Stopwatch timer = Stopwatch.StartNew ();
-            do {
-                // Check for new requests from clients
-                rpcServer.Update ();
-                streamServer.Update ();
-                PollRequests (yieldedContinuations);
+            // Check for new requests from clients
+            rpcServer.Update ();
+            streamServer.Update ();
+            PollRequests (yieldedContinuations);
+            bool delayToNextCycle = false;
 
-                // Process pending continuations (client requests)
-                if (continuations.Count > 0) {
-                    foreach (var continuation in continuations) {
-                        // Ignore the continuation if the client has disconnected
-                        if (!continuation.Client.Connected)
-                            continue;
-                        // Execute the continuation
-                        try {
-                            ExecuteContinuation (continuation);
-                        } catch (YieldException e) {
-                            yieldedContinuations.Add ((RequestContinuation)e.Continuation);
-                        }
-                    }
-                    continuations.Clear ();
+            foreach (var continuation in continuations) {
+                // Ignore the continuation if the client has disconnected
+                if (!continuation.Client.Connected)
+                    continue;
+
+                // Update expire field
+                if (!delayToNextCycle && timer.ElapsedMilliseconds > maxTime)
+                    delayToNextCycle = true;
+
+
+                // Time expired! Delay to next cycle
+                if (delayToNextCycle) {
+                    yieldedContinuations.Add (continuation);
+                    continue;
                 }
 
-                if (timer.ElapsedMilliseconds > maxTime) {
-                    done = true;
-                } else if (!waited && continuations.Count == 0) {
-                    Thread.Sleep (timeout);
-                    waited = true;
+                // Execute the continuation
+                try {
+                    ExecuteContinuation (continuation);
+                } catch (YieldException e) {
+                    yieldedContinuations.Add ((RequestContinuation)e.Continuation);
                 }
-            } while (!done);
+            }
+
+            // Flush continuations (help gc!)
+            continuations.Clear ();
 
             // Run yielded continuations on the next update
             continuations = yieldedContinuations;
+            // Cleanups
+            timer.Stop ();
         }
 
         /// <summary>
