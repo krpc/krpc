@@ -62,6 +62,7 @@ namespace KRPC.UI
         const string unknownClientsAllowedText = "Unknown visibility";
         const string autoAcceptingConnectionsText = "auto-accepting new clients";
         const string stringSeparatorText = ", ";
+        const string limitClientRpcText = "Limit clients rpc execution rate";
 
         protected override void Init ()
         {
@@ -222,6 +223,15 @@ namespace KRPC.UI
             }
         }
 
+        void DrawLimitClientRpcToggle ()
+        {
+            bool limitClientRpc = GUILayout.Toggle (Config.LimitClientRpc, limitClientRpcText, toggleStyle, new GUILayoutOption[] { });
+            if (limitClientRpc != Config.LimitClientRpc) {
+                Config.LimitClientRpc = limitClientRpc;
+                Config.Save ();
+            }
+        }
+
         void DrawServerInfo ()
         {
             string info = AllowedClientsString (Server.Address);
@@ -308,6 +318,10 @@ namespace KRPC.UI
 
                 GUILayout.BeginHorizontal ();
                 DrawAutoAcceptConnectionsToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                DrawLimitClientRpcToggle ();
                 GUILayout.EndHorizontal ();
 
                 foreach (var error in Errors)
