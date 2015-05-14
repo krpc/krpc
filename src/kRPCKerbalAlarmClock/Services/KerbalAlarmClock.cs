@@ -45,6 +45,7 @@ namespace KRPCKerbalAlarmClock.Services
         [KRPCProcedure]
         public static Alarm CreateAlarm (AlarmType type, string name, double ut)
         {
+            CheckAPI ();
             var id = KACWrapper.KAC.CreateAlarm (type.FromAlarmType (), name, ut);
             return new Alarm (KACWrapper.KAC.Alarms.First (x => x.ID == id));
         }
