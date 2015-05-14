@@ -2,6 +2,8 @@ v0.1.9
 * SpaceCenter service changes:
   * Fix bug with combined specific impulse calculations (#117)
   * Add Engine.PropellantRatios (#118)
+  * Combined VesselResources and PartResources classes into a single Resources class
+  * Add Resources.Density
 * Add support for InfernalRobotics (http://forum.kerbalspaceprogram.com/threads/116064)
 
 v0.1.8
