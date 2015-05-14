@@ -29,7 +29,7 @@ set to trigger after 10 seconds have passed, and display a message.
        'My New Alarm',
        conn.space_center.ut+10)
 
-   alarm.description('100 seconds have now passed since the alarm was created.')
+   alarm.notes = '10 seconds have now passed since the alarm was created.'
    alarm.action = conn.kerbal_alarm_clock.AlarmAction.message_only
 
 .. _Kerbal Alarm Clock: http://forum.kerbalspaceprogram.com/threads/24786
