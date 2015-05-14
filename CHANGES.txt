@@ -5,6 +5,7 @@ v0.1.9
   * Combined VesselResources and PartResources classes into a single Resources class
   * Add Resources.Density
 * Add support for InfernalRobotics (http://forum.kerbalspaceprogram.com/threads/116064)
+* Add support for Kerbal Alarm Clock (http://forum.kerbalspaceprogram.com/threads/24786)
 
 v0.1.8
 * KSP 1.0.2 support (#114)

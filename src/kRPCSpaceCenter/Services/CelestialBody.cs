@@ -14,7 +14,7 @@ namespace KRPCSpaceCenter.Services
     {
         Orbit orbit;
 
-        internal CelestialBody (global::CelestialBody body)
+        public CelestialBody (global::CelestialBody body)
         {
             InternalBody = body;
             // TODO: better way to check for orbits?
@@ -22,7 +22,7 @@ namespace KRPCSpaceCenter.Services
                 orbit = new Orbit (body);
         }
 
-        internal global::CelestialBody InternalBody { get; private set; }
+        public global::CelestialBody InternalBody { get; private set; }
 
         public override bool Equals (CelestialBody obj)
         {

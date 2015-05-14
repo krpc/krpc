@@ -39,7 +39,7 @@ namespace KRPCSpaceCenter.Services
     {
         Comms comms;
 
-        internal Vessel (global::Vessel vessel)
+        public Vessel (global::Vessel vessel)
         {
             InternalVessel = vessel;
             Orbit = new Orbit (vessel);
@@ -51,7 +51,7 @@ namespace KRPCSpaceCenter.Services
                 comms = new Comms (vessel);
         }
 
-        internal global::Vessel InternalVessel { get; private set; }
+        public global::Vessel InternalVessel { get; private set; }
 
         public override bool Equals (Vessel obj)
         {
