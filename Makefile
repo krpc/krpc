@@ -12,7 +12,7 @@ DIST_LIBS = \
   lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll
 DIST_ICONS = src/kRPC/bin/icons
 
-CSHARP_MAIN_PROJECTS  = kRPC kRPCSpaceCenter kRPCInfernalRobotics
+CSHARP_MAIN_PROJECTS  = kRPC kRPCSpaceCenter kRPCInfernalRobotics kRPCKerbalAlarmClock
 CSHARP_TEST_PROJECTS  = kRPCTest TestServer
 CSHARP_TEST_UTILS_PROJECTS = TestingTools
 CSHARP_CONFIG = Release
