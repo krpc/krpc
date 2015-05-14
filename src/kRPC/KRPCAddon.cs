@@ -30,7 +30,7 @@ namespace KRPC
 
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
-            server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
+            server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort, config.LimitClientRpc);
 
             // Auto-start the server, if required
             if (config.AutoStartServer)
