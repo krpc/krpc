@@ -34,7 +34,7 @@ AlarmType
 
    .. data:: Closest
 
-      An alarm based on the closest approach of this vessel to the targetted
+      An alarm based on the closest approach of this vessel to the targeted
       vessel, some number of orbits into the future.
 
    .. data:: Contract
