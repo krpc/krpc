@@ -13,14 +13,14 @@ namespace KRPCSpaceCenter.Services
         readonly global::Vessel vessel;
         readonly int stage;
         readonly bool cumulative;
-        readonly IList<Part> parts;
+        readonly Part part;
 
         internal Resources (global::Vessel vessel, int stage = -1, bool cumulative = true)
         {
             this.vessel = vessel;
             this.stage = stage;
             this.cumulative = cumulative;
-            parts = new List<Part> ();
+            part = null;
         }
 
         internal Resources (Part part)
@@ -28,42 +28,33 @@ namespace KRPCSpaceCenter.Services
             vessel = null;
             stage = -1;
             cumulative = true;
-            parts = new List<Part> ();
-            parts.Add (part);
-        }
-
-        internal Resources (IList<Part> parts)
-        {
-            vessel = null;
-            stage = -1;
-            cumulative = true;
-            this.parts = parts;
+            this.part = part;
         }
 
         public override bool Equals (Resources obj)
         {
-            return vessel == obj.vessel && stage == obj.stage && cumulative == obj.cumulative && parts.SequenceEqual (obj.parts);
+            return vessel == obj.vessel && stage == obj.stage && cumulative == obj.cumulative && part == obj.part;
         }
 
         public override int GetHashCode ()
         {
-            return vessel.GetHashCode () ^ stage.GetHashCode () ^ cumulative.GetHashCode () ^ parts.GetHashCode ();
+            return (vessel == null ? 0 : vessel.GetHashCode ()) ^ stage.GetHashCode () ^ cumulative.GetHashCode () ^ (part == null ? 0 : part.GetHashCode ());
         }
 
         List<PartResource> GetResources ()
         {
             var resources = new List<PartResource> ();
             if (vessel != null) {
-                foreach (var part in vessel.Parts) {
-                    if (stage < 0 || part.DecoupledAt () + 1 == stage || (cumulative && part.DecoupledAt () < stage)) {
-                        foreach (PartResource resource in part.Resources)
+                foreach (var vesselPart in vessel.Parts) {
+                    if (stage < 0 || vesselPart.DecoupledAt () + 1 == stage || (cumulative && vesselPart.DecoupledAt () < stage)) {
+                        foreach (PartResource resource in vesselPart.Resources)
                             resources.Add (resource);
                     }
                 }
-            } else {
-                foreach (var part in parts)
-                    foreach (PartResource resource in part.Resources)
-                        resources.Add (resource);
+            }
+            if (part != null) {
+                foreach (PartResource resource in part.Resources)
+                    resources.Add (resource);
             }
             return resources;
         }
@@ -99,7 +90,7 @@ namespace KRPCSpaceCenter.Services
             var resource = PartResourceLibrary.Instance.GetDefinition (name);
             if (resource == null)
                 throw new ArgumentException ("Resource not found");
-            return resource.density;
+            return resource.density * 1000f;
         }
     }
 }
