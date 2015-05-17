@@ -16,6 +16,7 @@ machine you like.
 
    getting-started
    tutorials
+   python-client
    space-center-api
    infernal-robotics-api
    kerbal-alarm-clock-api
