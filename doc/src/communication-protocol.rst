@@ -300,7 +300,55 @@ Protocol Buffer serialization format:
 Streams
 -------
 
-TODO
+Streams allow the client to repeatedly execute a Remote Procedure Call on the
+server and receive its results, without needing to repeatedly call the Remote
+Procedure Call directly, avoiding the communication overhead that this would
+involve.
+
+A stream is created on the server by calling
+:ref:`communication-protocol-add-stream` which returns a unique identifier for
+the stream. Once a client is finished with a stream, it can remove it from the
+server by calling :ref:`communication-protocol-remove-stream` with the stream's
+identifier. Streams are automatically removed when the client that created it
+disconnects from the server. Streams are local to each client. There is no way
+to share a stream between clients.
+
+The results of the RPCs for each stream are sent to the client over the Stream
+Server's TCP/IP connection, as repeated *stream messages*. The RPC for each
+stream is invoked every `fixed update
+<http://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_.
+
+Anatomy of a Stream Message
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A stream message is sent to the client using a ``StreamMessage`` Protocol Buffer
+message with the following format:
+
+.. code-block:: protobuf
+
+   message StreamMessage {
+     repeated StreamResponse responses = 1;
+   }
+
+This message contains a list of ``StreamResponse`` messages, one for each stream
+that exists on the server for that client, with the following format:
+
+.. code-block:: protobuf
+
+   message StreamResponse {
+     required uint32 id = 1;
+     required Response response = 2;
+   }
+
+The fields are:
+
+* ``id`` - The identifier of the stream. This is the value returned by
+  :ref:`communication-protocol-add-stream` when the stream is created.
+
+* ``response`` - A ``Response`` message containing the result of the stream's
+  RPC. This is identical to the ``Response`` message returned when calling the
+  RPC directly. See :ref:`communication-protocol-anatomy-of-a-response` for
+  details on the format and contents of this message.
 
 .. _communication-protocol-krpc-service:
 
@@ -351,18 +399,23 @@ information about each service provided by the server. The content of these
 AddStream
 ^^^^^^^^^
 
-The ``AddStream`` procedure adds a stream to the server.
-
-TODO
+The ``AddStream`` procedure adds a new stream to the server. It takes a single
+argument containing the RPC to invoke, encoded as a ``Request`` object. See
+:ref:`communication-protocol-anatomy-of-a-request` for the format and contents
+of this object. See :ref:`communication-protocol-streams` for more information
+on working with streams.
 
 .. _communication-protocol-remove-stream:
 
 RemoveStream
 ^^^^^^^^^^^^
 
-The ``RemoveStream`` procedure removes a stream from the server.
-
-TODO
+The ``RemoveStream`` procedure removes a stream from the server. It takes a
+single argument -- the identifier of the stream to be removed. This is the
+identifier returned when the stream was added by calling
+:ref:`communication-protocol-add-stream`. See
+:ref:`communication-protocol-streams` for more information on working with
+streams.
 
 .. _communication-protocol-service-description-message:
 
