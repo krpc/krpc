@@ -62,6 +62,36 @@ SpaceCenter
 
       :rtype: float
 
+   .. attribute:: RailsWarpFactor
+
+      Gets or sets the time warp rate, using normal (on-rails) time warp. A
+      value between 0 and 7 inclusive. 0 means no time warp. Returns 0 if
+      physical time warp is active.
+
+      :rtype: int
+
+   .. attribute:: PhysicsWarpFactor
+
+      Gets or sets the physical time warp rate. A value between 0 and 3
+      inclusive. 0 means no time warp. Returns 0 if on-rails time warp is
+      active.
+
+      :rtype: int
+
+   .. attribute:: WarpMode
+
+      Gets the current mode of the time warp.
+
+      :rtype: :class:`WarpMode`
+
+   .. attribute:: WarpRate
+
+      Gets the current warp rate. This is the rate at which time is passing for
+      either on-rails or physical time warp. For example, a value of 10 means
+      time is passing 10x faster than normal.
+
+      :rtype: float
+
    .. method:: WarpTo (UT, [maxRate = 100000])
 
       Uses time acceleration to warp to the specified time. Automatically uses
@@ -141,6 +171,22 @@ SpaceCenter
    .. method:: ClearDirections ()
 
       Remove all directions currently being drawn.
+
+.. class:: WarpMode
+
+   Returned by :attr:`SpaceCenter.WarpMode`.
+
+   .. data:: Rails
+
+      Time warp is active, and in normal (on-rails) mode.
+
+   .. data:: Physics
+
+      Time warp is active, and in physical time warp mode.
+
+   .. data:: None
+
+      Time warp is not active.
 
 .. _Ferram Aerospace Research: http://forum.kerbalspaceprogram.com/threads/20451-0-90-Ferram-Aerospace-Research-v0-14-6-12-27-14
 .. _RemoteTech: http://forum.kerbalspaceprogram.com/threads/83305-0-90-0-RemoteTech-v1-6-3-2015-02-06
