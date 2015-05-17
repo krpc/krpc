@@ -1,8 +1,8 @@
 Kerbal Alarm Clock API
 ======================
 
-Provides RPCs to interact with the `Kerbal Alarm Clock`_
-mod. Provides the following classes:
+Provides RPCs to interact with the `Kerbal Alarm Clock`_ mod. Provides the
+following classes:
 
 .. toctree::
    :includehidden:
