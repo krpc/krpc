@@ -1,3 +1,7 @@
+v0.1.10
+* SpaceCenter service changes:
+  * Add SpaceCenter.RailsWarpFactor, PhysicsWarpFactor, WarpMode and WarpRate
+
 v0.1.9
 * SpaceCenter service changes:
   * Fix bug with combined specific impulse calculations (#117)
