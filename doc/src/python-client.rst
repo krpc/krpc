@@ -78,6 +78,30 @@ Interacting with the Server
 
       Closes the connection to the server.
 
+   .. attribute:: krpc
+
+      The built-in KRPC class, providing basic interactions with the server.
+
+      :rtype: :class:`krpc.client.KRPC`
+
+.. class:: KRPC
+
+      This class provides access to the basic server functionality provided by
+      the ``KRPC`` service. An instance can be obtained by calling
+      :attr:`krpc.client.Client.krpc`. Most of this functionality is used
+      internally by the python client (for example to create and remove streams)
+      and therefore does not need to be used directly from application code. The
+      only exception that may be useful is:
+
+      .. method:: get_status()
+
+         Gets a status message from the server. Contains the version string of
+         the server. For example:
+
+         .. code-block:: python
+
+            print('Server version =', conn.krpc.get_status().version)
+
 Streams
 -------
 
