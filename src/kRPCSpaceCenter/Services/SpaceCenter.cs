@@ -11,6 +11,14 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum WarpMode
+    {
+        Rails,
+        Physics,
+        None
+    }
+
     [KRPCService (GameScene = GameScene.Flight)]
     public static class SpaceCenter
     {
@@ -87,6 +95,41 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public static float G {
             get { return 6.673e-11f; }
+        }
+
+        [KRPCProperty]
+        public static int RailsWarpFactor {
+            get { return WarpMode == WarpMode.Rails ? TimeWarp.CurrentRateIndex : 0; }
+            set {
+                TimeWarp.fetch.Mode = TimeWarp.Modes.HIGH;
+                TimeWarp.SetRate (value.Clamp (0, 7), false);
+            }
+        }
+
+        [KRPCProperty]
+        public static int PhysicsWarpFactor {
+            get { return WarpMode == WarpMode.Physics ? TimeWarp.CurrentRateIndex : 0; }
+            set {
+                TimeWarp.fetch.Mode = TimeWarp.Modes.LOW;
+                TimeWarp.SetRate (value.Clamp (0, 3), false);
+            }
+        }
+
+        [KRPCProperty]
+        public static WarpMode WarpMode {
+            get {
+                if (TimeWarp.CurrentRateIndex == 0)
+                    return WarpMode.None;
+                else if (TimeWarp.WarpMode == TimeWarp.Modes.HIGH)
+                    return WarpMode.Rails;
+                else
+                    return WarpMode.Physics;
+            }
+        }
+
+        [KRPCProperty]
+        public static float WarpRate {
+            get { return TimeWarp.CurrentRate; }
         }
 
         [KRPCProcedure]
