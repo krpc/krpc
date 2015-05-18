@@ -135,14 +135,14 @@ Reference
          vessel = conn.space_center.active_vessel
          refframe = vessel.orbit.body.reference_frame
          with conn.stream(vessel.position, refframe) as pos:
-             print('Position =', pos)
+             print('Position =', pos())
 
       Or to stream the property ``conn.space_center.ut``:
 
       .. code-block:: python
 
          with conn.stream(getattr(conn.space_center, 'ut')) as ut:
-             print('Universal Time =', ut)
+             print('Universal Time =', ut())
 
    .. method:: close()
 
