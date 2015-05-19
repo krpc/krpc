@@ -46,6 +46,14 @@ namespace KRPC.Server.Stream
             throw new NotImplementedException ();
         }
 
+        public long BytesRead {
+            get { return stream.BytesRead; }
+        }
+
+        public long BytesWritten {
+            get { return stream.BytesWritten; }
+        }
+
         public void Close ()
         {
             stream.Close ();

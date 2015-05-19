@@ -75,6 +75,14 @@ namespace KRPC.Server.Stream
             }
         }
 
+        public long BytesRead {
+            get { return server.BytesRead; }
+        }
+
+        public long BytesWritten {
+            get { return server.BytesWritten; }
+        }
+
         void HandleClientConnected (object sender, IClientEventArgs<byte,byte> args)
         {
             // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection

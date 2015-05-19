@@ -73,6 +73,14 @@ namespace KRPC.Server.RPC
             throw new NotSupportedException ();
         }
 
+        public long BytesRead {
+            get { return stream.BytesRead; }
+        }
+
+        public long BytesWritten {
+            get { return stream.BytesWritten; }
+        }
+
         /// <summary>
         /// Close the stream.
         /// </summary>

@@ -56,6 +56,8 @@ namespace KRPC.Server.Net
         /// </summary>
         List<TCPClient> pendingClients = new List<TCPClient> ();
         Object pendingClientsLock = new object ();
+        long closedClientsBytesRead;
+        long closedClientsBytesWritten;
 
         /// <summary>
         /// Create a TCP server. After Start() is called, the server will listen for
@@ -185,6 +187,14 @@ namespace KRPC.Server.Net
             }
         }
 
+        public long BytesRead {
+            get { return closedClientsBytesRead + clients.Sum (c => c.Stream.BytesRead); }
+        }
+
+        public long BytesWritten {
+            get { return closedClientsBytesWritten + clients.Sum (c => c.Stream.BytesWritten); }
+        }
+
         /// <summary>
         /// Port number that the server listens on. Server must be restarted for changes to take effect.
         /// </summary>
@@ -231,6 +241,8 @@ namespace KRPC.Server.Net
         void DisconnectClient (IClient<byte,byte> client, bool noEvent = false)
         {
             var clientAddress = client.Address;
+            closedClientsBytesRead += client.Stream.BytesRead;
+            closedClientsBytesWritten += client.Stream.BytesWritten;
             client.Close ();
             if (!noEvent && OnClientDisconnected != null)
                 OnClientDisconnected (this, new ClientDisconnectedArgs<byte,byte> (client));

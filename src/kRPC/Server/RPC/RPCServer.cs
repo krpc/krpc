@@ -26,6 +26,8 @@ namespace KRPC.Server.RPC
         IServer<byte,byte> server;
         Dictionary<IClient<byte,byte>,RPCClient> clients = new Dictionary<IClient<byte, byte>, RPCClient> ();
         Dictionary<IClient<byte,byte>,RPCClient> pendingClients = new Dictionary<IClient<byte, byte>, RPCClient> ();
+        long closedClientsBytesRead;
+        long closedClientsBytesWritten;
 
         public RPCServer (IServer<byte,byte> server)
         {
@@ -75,6 +77,14 @@ namespace KRPC.Server.RPC
             }
         }
 
+        public long BytesRead {
+            get { return closedClientsBytesRead + clients.Values.Sum (c => c.Stream.BytesRead); }
+        }
+
+        public long BytesWritten {
+            get { return closedClientsBytesWritten + clients.Values.Sum (c => c.Stream.BytesWritten); }
+        }
+
         void HandleClientConnected (object sender, IClientEventArgs<byte,byte> args)
         {
             // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
@@ -95,6 +105,8 @@ namespace KRPC.Server.RPC
         void HandleClientDisconnected (object sender, IClientEventArgs<byte,byte> args)
         {
             var client = clients [args.Client];
+            closedClientsBytesRead += client.Stream.BytesRead;
+            closedClientsBytesWritten += client.Stream.BytesWritten;
             clients.Remove (args.Client);
             if (OnClientDisconnected != null) {
                 OnClientDisconnected (this, new ClientDisconnectedArgs<Request,Response> (client));

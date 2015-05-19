@@ -29,12 +29,16 @@ namespace KRPC.Server.Net
 
         public int Read (byte[] buffer, int offset)
         {
-            return stream.Read (buffer, offset, buffer.Length - offset);
+            var size = stream.Read (buffer, offset, buffer.Length - offset);
+            BytesRead += size;
+            return size;
         }
 
         public int Read (byte[] buffer, int offset, int size)
         {
-            return stream.Read (buffer, offset, size);
+            size = stream.Read (buffer, offset, size);
+            BytesRead += size;
+            return size;
         }
 
         public void Write (byte value)
@@ -44,8 +48,14 @@ namespace KRPC.Server.Net
 
         public void Write (byte[] buffer)
         {
-            stream.Write (buffer, 0, buffer.Length);
+            var size = buffer.Length;
+            stream.Write (buffer, 0, size);
+            BytesWritten += size;
         }
+
+        public long BytesRead { get; private set; }
+
+        public long BytesWritten { get; private set; }
 
         public void Close ()
         {

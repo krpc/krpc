@@ -17,7 +17,10 @@ namespace KRPC
         [Persistent] bool autoAcceptConnections = false;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors = false;
-        [Persistent] bool limitClientRpc = false;
+        [Persistent] bool adaptiveRateControl = true;
+        [Persistent] int maxTimePerUpdate = 10;
+        [Persistent] bool blockingRecv = true;
+        [Persistent] int recvTimeout = 1;
 
         public IPAddress Address { get; set; }
 
@@ -51,11 +54,25 @@ namespace KRPC
             set { autoAcceptConnections = value; }
         }
 
-        public bool LimitClientRpc {
-            get { return limitClientRpc; }
-            set { limitClientRpc = value; }
+        public bool AdaptiveRateControl {
+            get { return adaptiveRateControl; }
+            set { adaptiveRateControl = value; }
         }
 
+        public int MaxTimePerUpdate {
+            get { return maxTimePerUpdate; }
+            set { maxTimePerUpdate = value; }
+        }
+
+        public bool BlockingRecv {
+            get { return blockingRecv; }
+            set { blockingRecv = value; }
+        }
+
+        public int RecvTimeout {
+            get { return recvTimeout; }
+            set { recvTimeout = value; }
+        }
 
         public KRPCConfiguration (string filePath) :
             base (filePath)

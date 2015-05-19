@@ -3,7 +3,6 @@ using System.Net;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using KRPC.Server;
 using KRPC.Server.Net;
 using KRPC.Server.RPC;
@@ -24,7 +23,7 @@ namespace KRPC
         readonly TCPServer streamTcpServer;
         readonly RPCServer rpcServer;
         readonly StreamServer streamServer;
-        readonly bool limitClientRpc;
+
         IScheduler<IClient<Request,Response>> clientScheduler;
         IList<RequestContinuation> continuations;
         IDictionary<IClient<byte,StreamMessage>, IList<StreamRequest>> streamRequests;
@@ -102,7 +101,8 @@ namespace KRPC
             }
         }
 
-        internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort, bool limitClientRpc)
+        internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort,
+                             bool adaptiveRateControl = true, int maxTimePerUpdate = 10, bool blockingRecv = true, int recvTimeout = 1)
         {
             rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
@@ -112,7 +112,10 @@ namespace KRPC
             continuations = new List<RequestContinuation> ();
             streamRequests = new Dictionary<IClient<byte,StreamMessage>,IList<StreamRequest>> ();
 
-            this.limitClientRpc = limitClientRpc;
+            AdaptiveRateControl = adaptiveRateControl;
+            MaxTimePerUpdate = maxTimePerUpdate;
+            BlockingRecv = blockingRecv;
+            RecvTimeout = recvTimeout;
 
             // Tie events to underlying server
             rpcServer.OnStarted += (s, e) => {
@@ -160,6 +163,7 @@ namespace KRPC
         {
             rpcServer.Start ();
             streamServer.Start ();
+            ClearStats ();
         }
 
         /// <summary>
@@ -199,6 +203,14 @@ namespace KRPC
             set { streamTcpServer.Port = value; }
         }
 
+        public bool AdaptiveRateControl { get; set; }
+
+        public int MaxTimePerUpdate { get; set; }
+
+        public bool BlockingRecv { get; set; }
+
+        public int RecvTimeout { get; set; }
+
         /// <summary>
         /// Returns true if the server is running
         /// </summary>
@@ -214,65 +226,185 @@ namespace KRPC
             get { return rpcServer.Clients.Select (x => (IClient)x); }
         }
 
+        ExponentialMovingAverage rpcRate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage timePerRPCUpdate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage pollTimePerRPCUpdate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage execTimePerRPCUpdate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage timePerStreamUpdate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage bytesReadRate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage bytesWrittenRate = new ExponentialMovingAverage ();
+
+        Stopwatch updateTimer = Stopwatch.StartNew ();
+
+        void ClearStats ()
+        {
+            RPCsExecuted = 0;
+            RPCRate = 0;
+            TimePerRPCUpdate = 0;
+            ExecTimePerRPCUpdate = 0;
+            PollTimePerRPCUpdate = 0;
+            TimePerStreamUpdate = 0;
+        }
+
+        /// <summary>
+        /// Get the total number of bytes read from the network.
+        /// </summary>
+        public long BytesRead {
+            get { return rpcServer.BytesRead + streamServer.BytesRead; }
+        }
+
+        /// <summary>
+        /// Get the total number of bytes written to the network.
+        /// </summary>
+        public long BytesWritten {
+            get { return rpcServer.BytesWritten + streamServer.BytesWritten; }
+        }
+
+        /// <summary>
+        /// Get the total number of bytes read from the network.
+        /// </summary>
+        public float BytesReadRate {
+            get { return bytesReadRate.Value; }
+            set { bytesReadRate.Update (value); }
+        }
+
+        /// <summary>
+        /// Get the total number of bytes written to the network.
+        /// </summary>
+        public float BytesWrittenRate {
+            get { return bytesWrittenRate.Value; }
+            set { bytesWrittenRate.Update (value); }
+        }
+
+        /// <summary>
+        /// Total number of RPCs executed.
+        /// </summary>
+        public long RPCsExecuted { get; private set; }
+
+        /// <summary>
+        /// Number of RPCs processed per second.
+        /// </summary>
+        public float RPCRate {
+            get { return rpcRate.Value; }
+            set { rpcRate.Update (value); }
+        }
+
+        /// <summary>
+        /// Time taken by the update loop per update, in seconds.
+        /// </summary>
+        public float TimePerRPCUpdate {
+            get { return timePerRPCUpdate.Value; }
+            set { timePerRPCUpdate.Update (value); }
+        }
+
+        /// <summary>
+        /// Time taken polling for new RPCs per update, in seconds.
+        /// </summary>
+        public float PollTimePerRPCUpdate {
+            get { return pollTimePerRPCUpdate.Value; }
+            set { pollTimePerRPCUpdate.Update (value); }
+        }
+
+        /// <summary>
+        /// Time taken polling executing RPCs per update, in seconds.
+        /// </summary>
+        public float ExecTimePerRPCUpdate {
+            get { return execTimePerRPCUpdate.Value; }
+            set { execTimePerRPCUpdate.Update (value); }
+        }
+
+        /// <summary>
+        /// Time taken by the update loop per update, in seconds.
+        /// </summary>
+        public float TimePerStreamUpdate {
+            get { return timePerStreamUpdate.Value; }
+            set { timePerStreamUpdate.Update (value); }
+        }
+
         /// <summary>
         /// Update the server
         /// </summary>
         public void Update ()
         {
+            long startRPCsExecuted = RPCsExecuted;
+            long startBytesRead = BytesRead;
+            long startBytesWritten = BytesWritten;
+
             RPCServerUpdate ();
             StreamServerUpdate ();
+
+            var timeElapsed = updateTimer.ElapsedSeconds ();
+            updateTimer.Reset ();
+            updateTimer.Start ();
+
+            RPCRate = (float)((double)(RPCsExecuted - startRPCsExecuted) / timeElapsed);
+            BytesReadRate = (float)((double)(BytesRead - startBytesRead) / timeElapsed);
+            BytesWrittenRate = (float)((double)(BytesWritten - startBytesWritten) / timeElapsed);
+
+            //FIXME: make this work...
+            if (AdaptiveRateControl) {
+                if (timeElapsed > 1d / 20d) {
+                    if (MaxTimePerUpdate > 1)
+                        MaxTimePerUpdate--;
+                } else {
+                    if (MaxTimePerUpdate < 17)
+                        MaxTimePerUpdate++;
+                }
+            }
         }
 
         /// <summary>
-        /// Update the RPC server
+        /// Update the RPC server, called once every FixedUpdate.
+        /// This method receives and executes RPCs, for up to MaxTimePerUpdate milliseconds.
+        /// RPCs are delayed to the next update if this time expires. If AdaptiveRateControl
+        /// is true, MaxTimePerUpdate will be automatically adjusted to achieve a target framerate.
+        /// If NonBlockingUpdate is false, this call will block waiting for new RPCs for up to
+        /// MaxPollTimePerUpdate milliseconds. If NonBlockingUpdate is true, a single non-blocking call
+        /// will be made to check for new RPCs.
         /// </summary>
         void RPCServerUpdate ()
         {
-            // The maximum amount of time to spend executing continuations
-            const int maxTime = 10; // milliseconds
-            const int waitTime = 2; // time to wait for new rpc incoming requests
+            var timer = Stopwatch.StartNew ();
+            var pollTimeout = new Stopwatch ();
+            var pollTimer = new Stopwatch ();
+            var execTimer = new Stopwatch ();
+            int rpcsExecuted = 0;
+
             var yieldedContinuations = new List<RequestContinuation> ();
+            rpcServer.Update ();
 
-            /* Try to execute continuations in our timeframe of maxTime ms.
-             * Delay the execution to next physics cycle if time is expired
-             * or if the continuation is yielded.
-             * 
-             * The cycle will looking for new incoming client requests until
-             * the maxTime timer is expired. If you think this is a waste
-             * of time with your rpc client or your machine is a bit slow
-             * you can set the limit on mod configuration.
-             * 
-             * When limitClientRpc is true, the mod will perform only one
-             */
+            while (true) {
 
-            Stopwatch timer = Stopwatch.StartNew ();
-            bool delayToNextCycle = false;
-            bool noMorePool = false;
-
-            do {                        
-                // try to obsess the pooling of incoming requests
-                Stopwatch pollTimer = Stopwatch.StartNew ();
-                do {
-                    rpcServer.Update ();
-                    streamServer.Update ();
+                // Poll for RPCs
+                pollTimer.Start ();
+                pollTimeout.Reset ();
+                pollTimeout.Start ();
+                while (true) {
                     PollRequests (yieldedContinuations);
-
-                    // Update expire fields
-                    if (!delayToNextCycle && timer.ElapsedMilliseconds > maxTime)
-                        delayToNextCycle = true;
-                    if (pollTimer.ElapsedMilliseconds > waitTime)
-                        noMorePool = true;
+                    if (!BlockingRecv)
+                        break;
+                    if (pollTimeout.ElapsedMilliseconds > RecvTimeout)
+                        break;
+                    if (timer.ElapsedMilliseconds > MaxTimePerUpdate)
+                        break;
+                    if (continuations.Any ())
+                        break;
                 }
-                while(!limitClientRpc && !delayToNextCycle && !noMorePool && continuations.Count == 0);          
-                pollTimer.Stop();
-            
+                pollTimer.Stop ();
+
+                if (!continuations.Any ())
+                    break;
+
+                // Execute RPCs
+                execTimer.Start ();
                 foreach (var continuation in continuations) {
+
                     // Ignore the continuation if the client has disconnected
                     if (!continuation.Client.Connected)
                         continue;                                    
 
-                    // Time expired! Delay to next cycle
-                    if (delayToNextCycle) {
+                    // Max exec time exceeded, delay to next update
+                    if (timer.ElapsedMilliseconds > MaxTimePerUpdate) {
                         yieldedContinuations.Add (continuation);
                         continue;
                     }
@@ -283,33 +415,35 @@ namespace KRPC
                     } catch (YieldException e) {
                         yieldedContinuations.Add ((RequestContinuation)e.Continuation);
                     }
-
-                    // Update expire field
-                    if (!delayToNextCycle && timer.ElapsedMilliseconds > maxTime)
-                        delayToNextCycle = true;
+                    rpcsExecuted++;
                 }
+                continuations.Clear ();
+                execTimer.Stop ();
 
-                continuations.Clear();
-
-                // exit if there are no incoming requests or if we are late.
-                // Clients have to wait until the next physics update cycle
-                if(delayToNextCycle || limitClientRpc) {
+                // Exit if max exec time exceeded
+                if (timer.ElapsedMilliseconds > MaxTimePerUpdate)
                     break;
-                }
             }
-            while(true);
 
             // Run yielded continuations on the next update
             continuations = yieldedContinuations;
-            // Cleanups
+
             timer.Stop ();
+
+            RPCsExecuted += rpcsExecuted;
+            TimePerRPCUpdate = (float)timer.ElapsedSeconds ();
+            PollTimePerRPCUpdate = (float)pollTimer.ElapsedSeconds ();
+            ExecTimePerRPCUpdate = (float)execTimer.ElapsedSeconds ();
         }
 
         /// <summary>
-        /// Update the Stream server
+        /// Update the Stream server. Executes all streaming RPCs and sends the results to clients.
         /// </summary>
         void StreamServerUpdate ()
         {
+            Stopwatch timer = Stopwatch.StartNew ();
+            int rpcsExecuted = 0;
+
             streamServer.Update ();
 
             // Run streaming requests
@@ -332,9 +466,14 @@ namespace KRPC
                     var streamResponse = request.ResponseBuilder;
                     streamResponse.SetResponse (builtResponse);
                     streamMessage.AddResponses (streamResponse);
+                    rpcsExecuted++;
                 }
                 streamClient.Stream.Write (streamMessage.Build ());
             }
+
+            timer.Stop ();
+            RPCsExecuted += rpcsExecuted;
+            TimePerStreamUpdate = (float)timer.ElapsedSeconds ();
         }
 
         internal uint AddStream (IClient client, Request request)

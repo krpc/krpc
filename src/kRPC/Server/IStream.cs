@@ -14,6 +14,16 @@ namespace KRPC.Server
         /// Close the stream and free its resources.
         /// </summary>
         void Close ();
+
+        /// <summary>
+        /// Gets the total number of bytes read from the stream.
+        /// </summary>
+        long BytesRead { get; }
+
+        /// <summary>
+        /// Gets the total number of bytes written to the stream.
+        /// </summary>
+        long BytesWritten { get; }
     }
 
     /// <summary>

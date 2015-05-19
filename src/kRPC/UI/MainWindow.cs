@@ -33,6 +33,8 @@ namespace KRPC.UI
         List<string> availableAddresses;
         string rpcPort;
         string streamPort;
+        string maxTimePerUpdate;
+        string recvTimeout;
         // Style settings
         readonly Color errorColor = Color.yellow;
         GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, stretchyTextFieldStyle, buttonStyle,
@@ -42,6 +44,10 @@ namespace KRPC.UI
         const int addressMaxLength = 15;
         const float portWidth = 45f;
         const int portMaxLength = 5;
+        const float maxTimePerUpdateWidth = 45f;
+        const int maxTimePerUpdateMaxLength = 5;
+        const float recvTimeoutWidth = 45f;
+        const int recvTimeoutMaxLength = 5;
         // Text strings
         const string startButtonText = "Start server";
         const string stopButtonText = "Stop server";
@@ -52,17 +58,22 @@ namespace KRPC.UI
         const string streamPortLabelText = "Stream port:";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
+        const string adaptiveRateControlText = "Adaptive rate control";
+        const string maxTimePerUpdateText = "Max. time per update";
+        const string blockingRecvText = "Blocking receives";
+        const string recvTimeoutText = "Receive timeout";
         const string noClientsConnectedText = "No clients connected";
         const string unknownClientNameText = "<unknown>";
         const string invalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
         const string invalidRPCPortText = "RPC port must be between 0 and 65535";
         const string invalidStreamPortText = "Stream port must be between 0 and 65535";
+        const string invalidMaxTimePerUpdateText = "Max. time per update must be an integer";
+        const string invalidRecvTimeoutText = "Receive timeout must be an integer";
         const string localClientOnlyText = "Local clients only";
         const string subnetAllowedText = "Subnet {0}";
         const string unknownClientsAllowedText = "Unknown visibility";
         const string autoAcceptingConnectionsText = "auto-accepting new clients";
         const string stringSeparatorText = ", ";
-        const string limitClientRpcText = "Limit clients rpc execution rate";
 
         protected override void Init ()
         {
@@ -115,6 +126,8 @@ namespace KRPC.UI
             address = Config.Address.ToString ();
             rpcPort = Config.RPCPort.ToString ();
             streamPort = Config.StreamPort.ToString ();
+            maxTimePerUpdate = Config.MaxTimePerUpdate.ToString ();
+            recvTimeout = Config.RecvTimeout.ToString ();
 
             // Get list of available addresses for drop down
             var interfaceAddresses = NetworkInformation.GetLocalIPAddresses ().Select (x => x.ToString ()).ToList ();
@@ -223,12 +236,43 @@ namespace KRPC.UI
             }
         }
 
-        void DrawLimitClientRpcToggle ()
+        void DrawAdaptiveRateControlToggle ()
         {
-            bool limitClientRpc = GUILayout.Toggle (Config.LimitClientRpc, limitClientRpcText, toggleStyle, new GUILayoutOption[] { });
-            if (limitClientRpc != Config.LimitClientRpc) {
-                Config.LimitClientRpc = limitClientRpc;
+            bool adaptiveRateControl = GUILayout.Toggle (Config.AdaptiveRateControl, adaptiveRateControlText, toggleStyle, new GUILayoutOption[] { });
+            if (adaptiveRateControl != Config.AdaptiveRateControl) {
+                Config.AdaptiveRateControl = adaptiveRateControl;
                 Config.Save ();
+            }
+        }
+
+        void DrawMaxTimePerUpdate ()
+        {
+            if (Server.Running)
+                GUILayout.Label (maxTimePerUpdateText + " " + Server.MaxTimePerUpdate, labelStyle);
+            else {
+                GUILayout.Label (maxTimePerUpdateText, labelStyle);
+                textFieldStyle.fixedWidth = maxTimePerUpdateWidth;
+                maxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, textFieldStyle);
+            }
+        }
+
+        void DrawBlockingRecvToggle ()
+        {
+            bool blockingUpdate = GUILayout.Toggle (Config.BlockingRecv, blockingRecvText, toggleStyle, new GUILayoutOption[] { });
+            if (blockingUpdate != Config.BlockingRecv) {
+                Config.BlockingRecv = blockingUpdate;
+                Config.Save ();
+            }
+        }
+
+        void DrawRecvTimeout ()
+        {
+            if (Server.Running)
+                GUILayout.Label (recvTimeoutText + " " + Server.RecvTimeout, labelStyle);
+            else {
+                GUILayout.Label (recvTimeoutText, labelStyle);
+                textFieldStyle.fixedWidth = maxTimePerUpdateWidth;
+                recvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, textFieldStyle);
             }
         }
 
@@ -275,6 +319,34 @@ namespace KRPC.UI
             }
         }
 
+        static String BytesToString (long byteCount)
+        {
+            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
+            if (byteCount == 0)
+                return "0" + suf [0];
+            long bytes = Math.Abs (byteCount);
+            int place = Convert.ToInt32 (Math.Floor (Math.Log (bytes, 1024)));
+            double num = Math.Round (bytes / Math.Pow (1024, place), 1);
+            return (Math.Sign (byteCount) * num) + suf [place];
+        }
+
+        void DrawPerformanceStats ()
+        {
+            GUILayout.Label ("Statistics", labelStyle);
+            GUILayout.Label (String.Format ("Data read: {0}", BytesToString (Server.BytesRead)), labelStyle);
+            GUILayout.Label (String.Format ("Data written: {0}", BytesToString (Server.BytesWritten)), labelStyle);
+            GUILayout.Label (String.Format ("Data read rate: {0}/s", BytesToString ((long)Server.BytesReadRate)), labelStyle);
+            GUILayout.Label (String.Format ("Data written rate: {0}/s", BytesToString ((long)Server.BytesWrittenRate)), labelStyle);
+            GUILayout.Label (String.Format ("RPCs executed: {0}", Server.RPCsExecuted), labelStyle);
+            GUILayout.Label (String.Format ("RPC rate: {0} RPC/s", Math.Round (Server.RPCRate)), labelStyle);
+            GUILayout.Label (String.Format ("Time per RPC update: {0:F5} s", Server.TimePerRPCUpdate), labelStyle);
+            GUILayout.Label (String.Format ("Poll time per RPC update: {0:F5} s", Server.PollTimePerRPCUpdate), labelStyle);
+            GUILayout.Label (String.Format ("Exec time per RPC update: {0:F5} s", Server.ExecTimePerRPCUpdate), labelStyle);
+            GUILayout.Label (String.Format ("Time per Stream update: {0:F5} s", Server.TimePerStreamUpdate), labelStyle);
+            if (Server.AdaptiveRateControl)
+                GUILayout.Label (String.Format ("Max time per RPC update: {0} ms", Server.MaxTimePerUpdate), labelStyle);
+        }
+
         protected override void Draw ()
         {
             // Force window to resize to height of content when length of client list changes
@@ -307,10 +379,11 @@ namespace KRPC.UI
                 GUILayout.BeginHorizontal ();
                 DrawServerInfo ();
                 GUILayout.EndHorizontal ();
+                GUILayoutExtensions.Separator (separatorStyle);
+                DrawClientsList ();
 
                 GUILayoutExtensions.Separator (separatorStyle);
-
-                DrawClientsList ();
+                DrawPerformanceStats ();
             } else {
                 GUILayout.BeginHorizontal ();
                 DrawAutoStartServerToggle ();
@@ -321,7 +394,19 @@ namespace KRPC.UI
                 GUILayout.EndHorizontal ();
 
                 GUILayout.BeginHorizontal ();
-                DrawLimitClientRpcToggle ();
+                DrawAdaptiveRateControlToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                DrawMaxTimePerUpdate ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                DrawBlockingRecvToggle ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                DrawRecvTimeout ();
                 GUILayout.EndHorizontal ();
 
                 foreach (var error in Errors)
@@ -336,10 +421,12 @@ namespace KRPC.UI
             // Validate the settings
             Errors.Clear ();
             IPAddress ignoreAddress;
-            ushort ignorePort;
+            ushort ignoreInt;
             bool validAddress = IPAddress.TryParse (address, out ignoreAddress);
-            bool validRPCPort = UInt16.TryParse (rpcPort, out ignorePort);
-            bool validStreamPort = UInt16.TryParse (streamPort, out ignorePort);
+            bool validRPCPort = UInt16.TryParse (rpcPort, out ignoreInt);
+            bool validStreamPort = UInt16.TryParse (streamPort, out ignoreInt);
+            bool validMaxTimePerUpdate = UInt16.TryParse (maxTimePerUpdate, out ignoreInt);
+            bool validRecvTimeout = UInt16.TryParse (recvTimeout, out ignoreInt);
 
             // Display error message if required
             if (!validAddress)
@@ -348,6 +435,10 @@ namespace KRPC.UI
                 Errors.Add (invalidRPCPortText);
             if (!validStreamPort)
                 Errors.Add (invalidStreamPortText);
+            if (!validMaxTimePerUpdate)
+                Errors.Add (invalidMaxTimePerUpdateText);
+            if (!validRecvTimeout)
+                Errors.Add (invalidRecvTimeoutText);
 
             // Save the settings and trigger start server event
             if (Errors.Count == 0) {
@@ -355,6 +446,8 @@ namespace KRPC.UI
                 Config.Address = IPAddress.Parse (address);
                 Config.RPCPort = Convert.ToUInt16 (rpcPort);
                 Config.StreamPort = Convert.ToUInt16 (streamPort);
+                Config.MaxTimePerUpdate = Convert.ToUInt16 (maxTimePerUpdate);
+                Config.RecvTimeout = Convert.ToUInt16 (recvTimeout);
                 Config.Save ();
                 return true;
             }
