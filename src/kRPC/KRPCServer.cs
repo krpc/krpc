@@ -102,7 +102,7 @@ namespace KRPC
         }
 
         internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort,
-                             bool adaptiveRateControl = true, int maxTimePerUpdate = 10, bool blockingRecv = true, int recvTimeout = 1)
+                             bool adaptiveRateControl = true, int maxTimePerUpdate = 5000, bool blockingRecv = true, int recvTimeout = 1000)
         {
             rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
@@ -209,18 +209,17 @@ namespace KRPC
         public bool AdaptiveRateControl { get; set; }
 
         /// <summary>
-        /// Get/set the maximum number of milliseconds to spend in a call to FixedUpdate
+        /// Get/set the maximum number of microseconds to spend in a call to FixedUpdate
         /// </summary>
-        /// <value>The max time per update.</value>
         public int MaxTimePerUpdate { get; set; }
 
         /// <summary>
-        /// Get/set whether FixedUpdate should block for RecvTimeout milliseconds to receive RPCs.
+        /// Get/set whether FixedUpdate should block for RecvTimeout microseconds to receive RPCs.
         /// </summary>
         public bool BlockingRecv { get; set; }
 
         /// <summary>
-        /// Get/set the timeout for blocking for RPCs.
+        /// Get/set the timeout for blocking for RPCs, in microseconds.
         /// </summary>
         public int RecvTimeout { get; set; }
 
@@ -369,11 +368,11 @@ namespace KRPC
 
         /// <summary>
         /// Update the RPC server, called once every FixedUpdate.
-        /// This method receives and executes RPCs, for up to MaxTimePerUpdate milliseconds.
+        /// This method receives and executes RPCs, for up to MaxTimePerUpdate microseconds.
         /// RPCs are delayed to the next update if this time expires. If AdaptiveRateControl
         /// is true, MaxTimePerUpdate will be automatically adjusted to achieve a target framerate.
         /// If NonBlockingUpdate is false, this call will block waiting for new RPCs for up to
-        /// MaxPollTimePerUpdate milliseconds. If NonBlockingUpdate is true, a single non-blocking call
+        /// MaxPollTimePerUpdate microseconds. If NonBlockingUpdate is true, a single non-blocking call
         /// will be made to check for new RPCs.
         /// </summary>
         void RPCServerUpdate ()
@@ -382,6 +381,8 @@ namespace KRPC
             var pollTimeout = new Stopwatch ();
             var pollTimer = new Stopwatch ();
             var execTimer = new Stopwatch ();
+            long maxTimePerUpdateTicks = StopwatchExtensions.MicrosecondsToTicks (MaxTimePerUpdate);
+            long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (RecvTimeout);
             int rpcsExecuted = 0;
 
             var yieldedContinuations = new List<RequestContinuation> ();
@@ -397,9 +398,9 @@ namespace KRPC
                     PollRequests (yieldedContinuations);
                     if (!BlockingRecv)
                         break;
-                    if (pollTimeout.ElapsedMilliseconds > RecvTimeout)
+                    if (pollTimeout.ElapsedTicks > recvTimeoutTicks)
                         break;
-                    if (timer.ElapsedMilliseconds > MaxTimePerUpdate)
+                    if (timer.ElapsedTicks > maxTimePerUpdateTicks)
                         break;
                     if (continuations.Any ())
                         break;
@@ -418,7 +419,7 @@ namespace KRPC
                         continue;                                    
 
                     // Max exec time exceeded, delay to next update
-                    if (timer.ElapsedMilliseconds > MaxTimePerUpdate) {
+                    if (timer.ElapsedTicks > maxTimePerUpdateTicks) {
                         yieldedContinuations.Add (continuation);
                         continue;
                     }
@@ -435,7 +436,7 @@ namespace KRPC
                 execTimer.Stop ();
 
                 // Exit if max exec time exceeded
-                if (timer.ElapsedMilliseconds > MaxTimePerUpdate)
+                if (timer.ElapsedTicks > maxTimePerUpdateTicks)
                     break;
             }
 

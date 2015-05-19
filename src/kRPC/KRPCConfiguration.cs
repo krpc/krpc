@@ -18,9 +18,9 @@ namespace KRPC
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors = false;
         [Persistent] bool adaptiveRateControl = true;
-        [Persistent] int maxTimePerUpdate = 10;
+        [Persistent] int maxTimePerUpdate = 5000;
         [Persistent] bool blockingRecv = true;
-        [Persistent] int recvTimeout = 1;
+        [Persistent] int recvTimeout = 1000;
 
         public IPAddress Address { get; set; }
 
