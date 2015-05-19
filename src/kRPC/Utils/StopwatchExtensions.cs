@@ -4,15 +4,17 @@ namespace KRPC.Utils
 {
     public static class StopwatchExtensions
     {
+        static readonly double ticksToSeconds = 1d / (double)Stopwatch.Frequency;
+        static readonly double microsecondsToTicks = (double)Stopwatch.Frequency / 1000000d;
+
         public static double ElapsedSeconds (this Stopwatch stopwatch)
         {
-            return (double)stopwatch.ElapsedTicks / (double)Stopwatch.Frequency;
+            return (double)stopwatch.ElapsedTicks * ticksToSeconds;
         }
 
         public static long MicrosecondsToTicks (long microseconds)
         {
-            const double mult = (double)Stopwatch.Frequency / 1000000d;
-            return (long)((double)microseconds * mult);
+            return (long)((double)microseconds * microsecondsToTicks);
         }
     }
 }
