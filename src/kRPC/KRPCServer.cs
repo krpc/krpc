@@ -203,12 +203,25 @@ namespace KRPC
             set { streamTcpServer.Port = value; }
         }
 
+        /// <summary>
+        /// Get/set whether MaxTimePerUpdate should be adjusted to achieve a target framerate.
+        /// </summary>
         public bool AdaptiveRateControl { get; set; }
 
+        /// <summary>
+        /// Get/set the maximum number of milliseconds to spend in a call to FixedUpdate
+        /// </summary>
+        /// <value>The max time per update.</value>
         public int MaxTimePerUpdate { get; set; }
 
+        /// <summary>
+        /// Get/set whether FixedUpdate should block for RecvTimeout milliseconds to receive RPCs.
+        /// </summary>
         public bool BlockingRecv { get; set; }
 
+        /// <summary>
+        /// Get/set the timeout for blocking for RPCs.
+        /// </summary>
         public int RecvTimeout { get; set; }
 
         /// <summary>
@@ -226,25 +239,8 @@ namespace KRPC
             get { return rpcServer.Clients.Select (x => (IClient)x); }
         }
 
-        ExponentialMovingAverage rpcRate = new ExponentialMovingAverage ();
-        ExponentialMovingAverage timePerRPCUpdate = new ExponentialMovingAverage ();
-        ExponentialMovingAverage pollTimePerRPCUpdate = new ExponentialMovingAverage ();
-        ExponentialMovingAverage execTimePerRPCUpdate = new ExponentialMovingAverage ();
-        ExponentialMovingAverage timePerStreamUpdate = new ExponentialMovingAverage ();
         ExponentialMovingAverage bytesReadRate = new ExponentialMovingAverage ();
         ExponentialMovingAverage bytesWrittenRate = new ExponentialMovingAverage ();
-
-        Stopwatch updateTimer = Stopwatch.StartNew ();
-
-        void ClearStats ()
-        {
-            RPCsExecuted = 0;
-            RPCRate = 0;
-            TimePerRPCUpdate = 0;
-            ExecTimePerRPCUpdate = 0;
-            PollTimePerRPCUpdate = 0;
-            TimePerStreamUpdate = 0;
-        }
 
         /// <summary>
         /// Get the total number of bytes read from the network.
@@ -275,6 +271,12 @@ namespace KRPC
             get { return bytesWrittenRate.Value; }
             set { bytesWrittenRate.Update (value); }
         }
+
+        ExponentialMovingAverage rpcRate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage timePerRPCUpdate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage pollTimePerRPCUpdate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage execTimePerRPCUpdate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage timePerStreamUpdate = new ExponentialMovingAverage ();
 
         /// <summary>
         /// Total number of RPCs executed.
@@ -320,6 +322,18 @@ namespace KRPC
             get { return timePerStreamUpdate.Value; }
             set { timePerStreamUpdate.Update (value); }
         }
+
+        void ClearStats ()
+        {
+            RPCsExecuted = 0;
+            RPCRate = 0;
+            TimePerRPCUpdate = 0;
+            ExecTimePerRPCUpdate = 0;
+            PollTimePerRPCUpdate = 0;
+            TimePerStreamUpdate = 0;
+        }
+
+        Stopwatch updateTimer = Stopwatch.StartNew ();
 
         /// <summary>
         /// Update the server
@@ -476,6 +490,9 @@ namespace KRPC
             TimePerStreamUpdate = (float)timer.ElapsedSeconds ();
         }
 
+        /// <summary>
+        /// Add a stream to the server
+        /// </summary>
         internal uint AddStream (IClient client, Request request)
         {
             var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
@@ -496,6 +513,9 @@ namespace KRPC
             }
         }
 
+        /// <summary>
+        /// Remove a stream from the server
+        /// </summary>
         internal void RemoveStream (IClient client, uint identifier)
         {
             var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
