@@ -148,7 +148,6 @@
     <Compile Include="Utils\RoundRobinScheduler.cs" />
     <Compile Include="Utils\StopwatchExtensions.cs" />
     <Compile Include="Utils\Tuple.cs" />
-    <Compile Include="Service\Performance.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\Makefile" />
