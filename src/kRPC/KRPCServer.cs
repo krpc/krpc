@@ -347,6 +347,7 @@ namespace KRPC
             StreamServerUpdate ();
 
             var timeElapsed = updateTimer.ElapsedSeconds ();
+            var ticksElapsed = updateTimer.ElapsedTicks;
             updateTimer.Reset ();
             updateTimer.Start ();
 
@@ -354,14 +355,24 @@ namespace KRPC
             BytesReadRate = (float)((double)(BytesRead - startBytesRead) / timeElapsed);
             BytesWrittenRate = (float)((double)(BytesWritten - startBytesWritten) / timeElapsed);
 
-            //FIXME: make this work...
+            // Adjust MaxTimePerUpdate to get a target FixedUpdate rate of 59 FPS. This is slightly smaller
+            // than 60 FPS, so that it pushes against the target 60 FPS for FixedUpdate.
+            // The minimum MaxTimePerUpdate that will be set is 1ms, and the maximum is 25ms.
+            // If very little time is being spent executing RPCs (<1ms), MaxTimePerUpdate is set to 10ms.
+            // This prevents MaxTimePerUpdate from being set to a high value when the server is idle, which would
+            // cause a drop in framerate if a large burst of RPCs are received.
             if (AdaptiveRateControl) {
-                if (timeElapsed > 1d / 20d) {
-                    if (MaxTimePerUpdate > 1)
-                        MaxTimePerUpdate--;
+                var targetTicks = Stopwatch.Frequency / 59;
+                if (ticksElapsed > targetTicks) {
+                    if (MaxTimePerUpdate > 1000)
+                        MaxTimePerUpdate -= 100;
                 } else {
-                    if (MaxTimePerUpdate < 17)
-                        MaxTimePerUpdate++;
+                    if (ExecTimePerRPCUpdate < 0.001) {
+                        MaxTimePerUpdate = 10000;
+                    } else {
+                        if (MaxTimePerUpdate < 25000)
+                            MaxTimePerUpdate += 100;
+                    }
                 }
             }
         }
