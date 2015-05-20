@@ -62,6 +62,30 @@ SpaceCenter
 
       :rtype: float
 
+   .. attribute:: WarpMode
+
+      Gets the current mode of the time warp.
+
+      :rtype: :class:`WarpMode`
+
+   .. attribute:: WarpRate
+
+      Gets the current warp rate. This is the rate at which time is passing for
+      either on-rails or physical time warp. For example, a value of 10 means
+      time is passing 10x faster than normal.
+
+      :rtype: float
+
+   .. attribute:: WarpFactor
+
+      Gets the current warp factor. This is the index of the rate at which time
+      is passing for either on-rails or physical time warp. Returns 0 if time
+      warp is not active. When in on-rails time warp, equal to
+      :attr:`RailsWarpFactor`, and in physics time warp, equal to
+      :attr:`PhysicsWarpFactor`.
+
+      :rtype: int
+
    .. attribute:: RailsWarpFactor
 
       Gets or sets the time warp rate, using normal (on-rails) time warp. A
@@ -78,29 +102,20 @@ SpaceCenter
 
       :rtype: int
 
-   .. attribute:: WarpMode
+   .. method:: WarpTo (UT, [maxRailsRate = 100000], [maxPhysicsRate = 2])
 
-      Gets the current mode of the time warp.
-
-      :rtype: :class:`WarpMode`
-
-   .. attribute:: WarpRate
-
-      Gets the current warp rate. This is the rate at which time is passing for
-      either on-rails or physical time warp. For example, a value of 10 means
-      time is passing 10x faster than normal.
-
-      :rtype: float
-
-   .. method:: WarpTo (UT, [maxRate = 100000])
-
-      Uses time acceleration to warp to the specified time. Automatically uses
-      regular or physical time warp as appropriate. For example, physical time warp
-      is used when the active vessel is traveling through an atmosphere. When
-      using physical time warp, the warp rate is at most 2x.
+      Uses time acceleration to warp forward to a time in the future, specified
+      by universal time *UT*. This call blocks until the desired time is
+      reached. Uses regular "on-rails" or physical time warp as appropriate. For
+      example, physical time warp is used when the active vessel is traveling
+      through an atmosphere. When using regular "on-rails" time warp, the warp
+      rate is limited by *maxRailsRate*, and when using physical time warp, the
+      warp rate is limited by *maxPhysicsRate*.
 
       :param double ut: The universal time to warp to, in seconds
-      :param float maxRate: The maximum warp rate to use
+      :param float maxRailsRate: The maximum warp rate in regular "on-rails"
+                                 time warp
+      :param float maxPhysicsRate: The maximum warp rate in physical time warp
       :returns: When the time warp is complete.
 
    .. method:: TransformPosition (position, from, to)
