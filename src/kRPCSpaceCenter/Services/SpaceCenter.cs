@@ -123,7 +123,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public static int RailsWarpFactor {
             get { return WarpMode == WarpMode.Rails ? TimeWarp.CurrentRateIndex : 0; }
-            set { SetWarpFactor (TimeWarp.Modes.HIGH, value.Clamp (0, 7)); }
+            set { SetWarpFactor (TimeWarp.Modes.HIGH, value.Clamp (0, MaximumRailsWarpFactor)); }
         }
 
         [KRPCProperty]
