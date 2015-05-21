@@ -64,7 +64,9 @@ SpaceCenter
 
    .. attribute:: WarpMode
 
-      Gets the current mode of the time warp.
+      Gets the current time warp mode. Returns :attr:`WarpMode.None` if time
+      warp is not active, :attr:`WarpMode.Rails` if regular "on-rails" time warp
+      is active, or :attr:`WarpMode.Physics` if physical time warp is active.
 
       :rtype: :class:`WarpMode`
 
@@ -72,47 +74,58 @@ SpaceCenter
 
       Gets the current warp rate. This is the rate at which time is passing for
       either on-rails or physical time warp. For example, a value of 10 means
-      time is passing 10x faster than normal.
+      time is passing 10x faster than normal. Returns 1 if time warp is not
+      active.
 
       :rtype: float
 
    .. attribute:: WarpFactor
 
       Gets the current warp factor. This is the index of the rate at which time
-      is passing for either on-rails or physical time warp. Returns 0 if time
-      warp is not active. When in on-rails time warp, equal to
-      :attr:`RailsWarpFactor`, and in physics time warp, equal to
+      is passing for either regular "on-rails" or physical time warp. Returns 0
+      if time warp is not active. When in on-rails time warp, this is equal to
+      :attr:`RailsWarpFactor`, and in physics time warp, this is equal to
       :attr:`PhysicsWarpFactor`.
 
       :rtype: int
 
    .. attribute:: RailsWarpFactor
 
-      Gets or sets the time warp rate, using normal (on-rails) time warp. A
+      Gets or sets the time warp rate, using regular "on-rails" time warp. A
       value between 0 and 7 inclusive. 0 means no time warp. Returns 0 if
       physical time warp is active.
+
+      If requested time warp factor cannot be set, it will be set to the next
+      lowest possible value. For example, if the vessel is too close to a
+      planet. See `the KSP wiki
+      <http://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
 
       :rtype: int
 
    .. attribute:: PhysicsWarpFactor
 
       Gets or sets the physical time warp rate. A value between 0 and 3
-      inclusive. 0 means no time warp. Returns 0 if on-rails time warp is
-      active.
+      inclusive. 0 means no time warp. Returns 0 if regular "on-rails" time warp
+      is active.
 
       :rtype: int
 
    .. method:: CanRailsWarpAt (factor)
 
-      Returns true if we can use normal "on-rails" time warp, at the given warp
-      *factor*.
+      Returns true if regular "on-rails" time warp can be used, at the specified
+      warp *factor*. The maximum time warp rate is limited by various factors --
+      including how close the active vessel is to a planet. See `the KSP wiki
+      <http://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
 
       :param bool factor: The warp factor to check.
       :rtype: bool
 
    .. attribute:: MaximumRailsWarpFactor
 
-      Gets the current maximum normal "on-rails" warp factor that can be set.
+      Gets the current maximum regular "on-rails" warp factor that can be set. A
+      value between 0 and 7 inclusive. See `the KSP wiki
+      <http://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details how the
+      maximum warp factor is limited.
 
       :rtype: int
 
@@ -207,7 +220,7 @@ SpaceCenter
 
    .. data:: Rails
 
-      Time warp is active, and in normal (on-rails) mode.
+      Time warp is active, and in regular "on-rails" mode.
 
    .. data:: Physics
 
