@@ -12,6 +12,7 @@ namespace TestServer
     {
         public static void Main (string[] args)
         {
+            KRPC.Service.Scanner.Scanner.GetServices ();
             var cmdargs = args.ToList ();
             if (cmdargs.Contains ("--debug")) {
                 cmdargs.Remove ("--debug");
