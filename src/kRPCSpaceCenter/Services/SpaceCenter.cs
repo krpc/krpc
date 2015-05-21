@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -132,11 +133,34 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProcedure]
+        public static bool CanRailsWarpAt (int factor = 1)
+        {
+            if (factor < 0 || factor >= TimeWarp.fetch.warpRates.Length)
+                return false;
+            if (factor == 0 || ActiveVessel.InternalVessel.LandedOrSplashed)
+                return true;
+            var altitude = ActiveVessel.InternalVessel.mainBody.GetAltitude (ActiveVessel.InternalVessel.CoM);
+            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, ActiveVessel.InternalVessel.mainBody);
+            return altitude > altitudeLimit;
+        }
+
+        [KRPCProperty]
+        public static int MaximumRailsWarpFactor {
+            get {
+                for (int i = TimeWarp.fetch.warpRates.Length - 1; i > 1; i--) {
+                    if (CanRailsWarpAt (i))
+                        return i;
+                }
+                return 0;
+            }
+        }
+
+        [KRPCProcedure]
         public static void WarpTo (double UT, float maxRate = 100000, float maxPhysicsRate = 2)
         {
             float rate = Mathf.Clamp ((float)(UT - Planetarium.GetUniversalTime ()), 1f, maxRate);
 
-            if (CanRailsWarp ())
+            if (CanRailsWarpAt ())
                 RailsWarpAtRate (rate);
             else
                 PhysicsWarpAtRate (Mathf.Min (rate, Math.Min (maxRate, maxPhysicsRate)));
@@ -159,18 +183,6 @@ namespace KRPCSpaceCenter.Services
         {
             SetWarpMode (mode);
             TimeWarp.SetRate (factor, false);
-        }
-
-        /// <summary>
-        /// Returns true if we can use regular time warp with at the given warp factor.
-        /// </summary>
-        static bool CanRailsWarp (int factor = 1)
-        {
-            if (ActiveVessel.InternalVessel.LandedOrSplashed)
-                return true;
-            var altitude = ActiveVessel.InternalVessel.mainBody.GetAltitude (ActiveVessel.InternalVessel.CoM);
-            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, ActiveVessel.InternalVessel.mainBody);
-            return altitude < altitudeLimit;
         }
 
         /// <summary>

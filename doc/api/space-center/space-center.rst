@@ -102,6 +102,20 @@ SpaceCenter
 
       :rtype: int
 
+   .. method:: CanRailsWarpAt (factor)
+
+      Returns true if we can use normal "on-rails" time warp, at the given warp
+      *factor*.
+
+      :param bool factor: The warp factor to check.
+      :rtype: bool
+
+   .. attribute:: MaximumRailsWarpFactor
+
+      Gets the current maximum normal "on-rails" warp factor that can be set.
+
+      :rtype: int
+
    .. method:: WarpTo (UT, [maxRailsRate = 100000], [maxPhysicsRate = 2])
 
       Uses time acceleration to warp forward to a time in the future, specified

@@ -1,6 +1,7 @@
 v0.1.10
 * SpaceCenter service changes:
-  * Add SpaceCenter.WarpMode, WarpRate, WarpFactor, RailsWarpFactor and PhysicsWarpFactor
+  * Add more time warp functionality: SpaceCenter.WarpMode, WarpRate, WarpFactor,
+    RailsWarpFactor, PhysicsWarpFactor, CanRailsWarpAt and MaximumRailsWarpFactor
   * Implement physical time warp for SpaceCenter.WarpTo (#137)
 
 v0.1.9
