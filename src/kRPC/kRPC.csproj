@@ -127,6 +127,7 @@
     <Compile Include="UI\ClientDisconnectDialog.cs" />
     <Compile Include="UI\GUILayoutExtensions.cs" />
     <Compile Include="UI\Icons.cs" />
+    <Compile Include="UI\InfoWindow.cs" />
     <Compile Include="UI\MainWindow.cs" />
     <Compile Include="UI\OnMovedArgs.cs" />
     <Compile Include="UI\OptionDialog.cs" />

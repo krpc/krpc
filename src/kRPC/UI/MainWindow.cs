@@ -14,6 +14,8 @@ namespace KRPC.UI
 
         public KRPCServer Server { private get; set; }
 
+        public InfoWindow InfoWindow { private get; set; }
+
         public ClientDisconnectDialog ClientDisconnectDialog { private get; set; }
 
         /// <summary>
@@ -33,6 +35,7 @@ namespace KRPC.UI
         List<string> availableAddresses;
         string rpcPort;
         string streamPort;
+        bool advanced;
         string maxTimePerUpdate;
         string recvTimeout;
         // Style settings
@@ -56,6 +59,8 @@ namespace KRPC.UI
         const string addressLabelText = "Address:";
         const string rpcPortLabelText = "RPC port:";
         const string streamPortLabelText = "Stream port:";
+        const string showInfoWindowText = "Show Info";
+        const string advancedText = "Advanced settings";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
         const string adaptiveRateControlText = "Adaptive rate control";
@@ -196,6 +201,13 @@ namespace KRPC.UI
             }
         }
 
+        void DrawShowInfoWindow ()
+        {
+            if (GUILayout.Button (showInfoWindowText, buttonStyle)) {
+                InfoWindow.Visible = true;
+            }
+        }
+
         void DrawRPCPort ()
         {
             if (Server.Running)
@@ -216,6 +228,11 @@ namespace KRPC.UI
                 textFieldStyle.fixedWidth = portWidth;
                 streamPort = GUILayout.TextField (streamPort, portMaxLength, textFieldStyle);
             }
+        }
+
+        void DrawAdvancedToggle ()
+        {
+            advanced = GUILayout.Toggle (advanced, advancedText, toggleStyle, new GUILayoutOption[] { });
         }
 
         void DrawAutoStartServerToggle ()
@@ -247,13 +264,9 @@ namespace KRPC.UI
 
         void DrawMaxTimePerUpdate ()
         {
-            if (Server.Running)
-                GUILayout.Label (maxTimePerUpdateText + " " + Server.MaxTimePerUpdate, labelStyle);
-            else {
-                GUILayout.Label (maxTimePerUpdateText, labelStyle);
-                textFieldStyle.fixedWidth = maxTimePerUpdateWidth;
-                maxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, textFieldStyle);
-            }
+            GUILayout.Label (maxTimePerUpdateText, labelStyle);
+            textFieldStyle.fixedWidth = maxTimePerUpdateWidth;
+            maxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, textFieldStyle);
         }
 
         void DrawBlockingRecvToggle ()
@@ -267,13 +280,9 @@ namespace KRPC.UI
 
         void DrawRecvTimeout ()
         {
-            if (Server.Running)
-                GUILayout.Label (recvTimeoutText + " " + Server.RecvTimeout, labelStyle);
-            else {
-                GUILayout.Label (recvTimeoutText, labelStyle);
-                textFieldStyle.fixedWidth = maxTimePerUpdateWidth;
-                recvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, textFieldStyle);
-            }
+            GUILayout.Label (recvTimeoutText, labelStyle);
+            textFieldStyle.fixedWidth = maxTimePerUpdateWidth;
+            recvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, textFieldStyle);
         }
 
         void DrawServerInfo ()
@@ -319,34 +328,6 @@ namespace KRPC.UI
             }
         }
 
-        static String BytesToString (long byteCount)
-        {
-            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
-            if (byteCount == 0)
-                return "0" + suf [0];
-            long bytes = Math.Abs (byteCount);
-            int place = Convert.ToInt32 (Math.Floor (Math.Log (bytes, 1024)));
-            double num = Math.Round (bytes / Math.Pow (1024, place), 1);
-            return (Math.Sign (byteCount) * num) + suf [place];
-        }
-
-        void DrawPerformanceStats ()
-        {
-            GUILayout.Label ("Statistics", labelStyle);
-            GUILayout.Label (String.Format ("Data read: {0}", BytesToString (Server.BytesRead)), labelStyle);
-            GUILayout.Label (String.Format ("Data written: {0}", BytesToString (Server.BytesWritten)), labelStyle);
-            GUILayout.Label (String.Format ("Data read rate: {0}/s", BytesToString ((long)Server.BytesReadRate)), labelStyle);
-            GUILayout.Label (String.Format ("Data written rate: {0}/s", BytesToString ((long)Server.BytesWrittenRate)), labelStyle);
-            GUILayout.Label (String.Format ("RPCs executed: {0}", Server.RPCsExecuted), labelStyle);
-            GUILayout.Label (String.Format ("RPC rate: {0} RPC/s", Math.Round (Server.RPCRate)), labelStyle);
-            GUILayout.Label (String.Format ("Time per RPC update: {0:F5} s", Server.TimePerRPCUpdate), labelStyle);
-            GUILayout.Label (String.Format ("Poll time per RPC update: {0:F5} s", Server.PollTimePerRPCUpdate), labelStyle);
-            GUILayout.Label (String.Format ("Exec time per RPC update: {0:F5} s", Server.ExecTimePerRPCUpdate), labelStyle);
-            GUILayout.Label (String.Format ("Time per Stream update: {0:F5} s", Server.TimePerStreamUpdate), labelStyle);
-            if (Server.AdaptiveRateControl)
-                GUILayout.Label (String.Format ("Max time per RPC update: {0} ms", Server.MaxTimePerUpdate), labelStyle);
-        }
-
         protected override void Draw ()
         {
             // Force window to resize to height of content when length of client list changes
@@ -367,6 +348,10 @@ namespace KRPC.UI
 
             GUILayout.BeginHorizontal ();
             DrawAddress ();
+            if (Server.Running) {
+                GUILayout.Space (4);
+                DrawShowInfoWindow ();
+            }
             GUILayout.EndHorizontal ();
 
             GUILayout.BeginHorizontal ();
@@ -381,33 +366,36 @@ namespace KRPC.UI
                 GUILayout.EndHorizontal ();
                 GUILayoutExtensions.Separator (separatorStyle);
                 DrawClientsList ();
-
-                GUILayoutExtensions.Separator (separatorStyle);
-                DrawPerformanceStats ();
             } else {
                 GUILayout.BeginHorizontal ();
-                DrawAutoStartServerToggle ();
+                DrawAdvancedToggle ();
                 GUILayout.EndHorizontal ();
 
-                GUILayout.BeginHorizontal ();
-                DrawAutoAcceptConnectionsToggle ();
-                GUILayout.EndHorizontal ();
+                if (advanced) {
+                    GUILayout.BeginHorizontal ();
+                    DrawAutoStartServerToggle ();
+                    GUILayout.EndHorizontal ();
 
-                GUILayout.BeginHorizontal ();
-                DrawAdaptiveRateControlToggle ();
-                GUILayout.EndHorizontal ();
+                    GUILayout.BeginHorizontal ();
+                    DrawAutoAcceptConnectionsToggle ();
+                    GUILayout.EndHorizontal ();
 
-                GUILayout.BeginHorizontal ();
-                DrawMaxTimePerUpdate ();
-                GUILayout.EndHorizontal ();
+                    GUILayout.BeginHorizontal ();
+                    DrawAdaptiveRateControlToggle ();
+                    GUILayout.EndHorizontal ();
 
-                GUILayout.BeginHorizontal ();
-                DrawBlockingRecvToggle ();
-                GUILayout.EndHorizontal ();
+                    GUILayout.BeginHorizontal ();
+                    DrawMaxTimePerUpdate ();
+                    GUILayout.EndHorizontal ();
 
-                GUILayout.BeginHorizontal ();
-                DrawRecvTimeout ();
-                GUILayout.EndHorizontal ();
+                    GUILayout.BeginHorizontal ();
+                    DrawBlockingRecvToggle ();
+                    GUILayout.EndHorizontal ();
+
+                    GUILayout.BeginHorizontal ();
+                    DrawRecvTimeout ();
+                    GUILayout.EndHorizontal ();
+                }
 
                 foreach (var error in Errors)
                     GUILayout.Label (error, errorLabelStyle);

@@ -20,6 +20,7 @@ namespace KRPC
         IButton toolbarButton;
         ApplicationLauncherButton applauncherButton;
         MainWindow mainWindow;
+        InfoWindow infoWindow;
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
 
@@ -68,6 +69,12 @@ namespace KRPC
             // Disconnect client dialog
             clientDisconnectDialog = gameObject.AddComponent<ClientDisconnectDialog> ();
 
+            // Create info window
+            infoWindow = gameObject.AddComponent<InfoWindow> ();
+            infoWindow.Server = server;
+            infoWindow.Closable = true;
+            infoWindow.Visible = true;
+
             // Create main window
             mainWindow = gameObject.AddComponent<MainWindow> ();
             mainWindow.Config = config;
@@ -75,6 +82,7 @@ namespace KRPC
             mainWindow.Visible = config.MainWindowVisible;
             mainWindow.Position = config.MainWindowPosition;
             mainWindow.ClientDisconnectDialog = clientDisconnectDialog;
+            mainWindow.InfoWindow = infoWindow;
 
             // Create new connection dialog
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog> ();

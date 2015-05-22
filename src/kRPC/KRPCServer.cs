@@ -238,8 +238,8 @@ namespace KRPC
             get { return rpcServer.Clients.Select (x => (IClient)x); }
         }
 
-        ExponentialMovingAverage bytesReadRate = new ExponentialMovingAverage ();
-        ExponentialMovingAverage bytesWrittenRate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage bytesReadRate = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage bytesWrittenRate = new ExponentialMovingAverage (0.25);
 
         /// <summary>
         /// Get the total number of bytes read from the network.
@@ -271,11 +271,12 @@ namespace KRPC
             set { bytesWrittenRate.Update (value); }
         }
 
-        ExponentialMovingAverage rpcRate = new ExponentialMovingAverage ();
-        ExponentialMovingAverage timePerRPCUpdate = new ExponentialMovingAverage ();
-        ExponentialMovingAverage pollTimePerRPCUpdate = new ExponentialMovingAverage ();
-        ExponentialMovingAverage execTimePerRPCUpdate = new ExponentialMovingAverage ();
-        ExponentialMovingAverage timePerStreamUpdate = new ExponentialMovingAverage ();
+        ExponentialMovingAverage rpcRate = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage timePerRPCUpdate = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage pollTimePerRPCUpdate = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage execTimePerRPCUpdate = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage streamRPCRate = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage timePerStreamUpdate = new ExponentialMovingAverage (0.25);
 
         /// <summary>
         /// Total number of RPCs executed.
@@ -315,7 +316,25 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Time taken by the update loop per update, in seconds.
+        /// Number of currently active streaming RPCs.
+        /// </summary>
+        public long StreamRPCs { get; private set; }
+
+        /// <summary>
+        /// Total number of streaming RPCs executed.
+        /// </summary>
+        public long StreamRPCsExecuted { get; private set; }
+
+        /// <summary>
+        /// Number of streaming RPCs processed per second.
+        /// </summary>
+        public float StreamRPCRate {
+            get { return streamRPCRate.Value; }
+            set { streamRPCRate.Update (value); }
+        }
+
+        /// <summary>
+        /// Time taken by the stream update loop, in seconds.
         /// </summary>
         public float TimePerStreamUpdate {
             get { return timePerStreamUpdate.Value; }
@@ -329,6 +348,8 @@ namespace KRPC
             TimePerRPCUpdate = 0;
             ExecTimePerRPCUpdate = 0;
             PollTimePerRPCUpdate = 0;
+            StreamRPCs = 0;
+            StreamRPCsExecuted = 0;
             TimePerStreamUpdate = 0;
         }
 
@@ -340,6 +361,7 @@ namespace KRPC
         public void Update ()
         {
             long startRPCsExecuted = RPCsExecuted;
+            long startStreamRPCsExecuted = StreamRPCsExecuted;
             long startBytesRead = BytesRead;
             long startBytesWritten = BytesWritten;
 
@@ -352,6 +374,7 @@ namespace KRPC
             updateTimer.Start ();
 
             RPCRate = (float)((double)(RPCsExecuted - startRPCsExecuted) / timeElapsed);
+            StreamRPCRate = (float)((double)(StreamRPCsExecuted - startStreamRPCsExecuted) / timeElapsed);
             BytesReadRate = (float)((double)(BytesRead - startBytesRead) / timeElapsed);
             BytesWrittenRate = (float)((double)(BytesWritten - startBytesWritten) / timeElapsed);
 
@@ -498,7 +521,8 @@ namespace KRPC
             }
 
             timer.Stop ();
-            RPCsExecuted += rpcsExecuted;
+            StreamRPCs = rpcsExecuted;
+            StreamRPCsExecuted += rpcsExecuted;
             TimePerStreamUpdate = (float)timer.ElapsedSeconds ();
         }
 
