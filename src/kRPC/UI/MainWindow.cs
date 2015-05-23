@@ -29,6 +29,7 @@ namespace KRPC.UI
         Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
         const long lastActivityMillisecondsInterval = 100L;
         int numClientsDisplayed;
+        bool resized;
         // Editable fields
         string address;
         bool manualAddress;
@@ -232,7 +233,11 @@ namespace KRPC.UI
 
         void DrawAdvancedToggle ()
         {
-            advanced = GUILayout.Toggle (advanced, advancedText, toggleStyle, new GUILayoutOption[] { });
+            bool newAdvanced = GUILayout.Toggle (advanced, advancedText, toggleStyle, new GUILayoutOption[] { });
+            if (newAdvanced != advanced) {
+                advanced = newAdvanced;
+                resized = true;
+            }
         }
 
         void DrawAutoStartServerToggle ()
@@ -295,6 +300,11 @@ namespace KRPC.UI
 
         void DrawClientsList ()
         {
+            // Resize window if number of connected clients changes
+            if (Server.Clients.Count () != numClientsDisplayed) {
+                numClientsDisplayed = Server.Clients.Count ();
+                resized = true;
+            }
             // Get list of client descriptions
             IDictionary<IClient,string> clientDescriptions = new Dictionary<IClient,string> ();
             if (Server.Clients.Any ()) {
@@ -330,11 +340,10 @@ namespace KRPC.UI
 
         protected override void Draw ()
         {
-            // Force window to resize to height of content when length of client list changes
-            // TODO: better way to do this?
-            if (Server.Clients.Count () != numClientsDisplayed) {
+            // Force window to resize to height of content
+            if (resized) {
                 Position = new Rect (Position.x, Position.y, Position.width, 0f);
-                numClientsDisplayed = Server.Clients.Count ();
+                resized = false;
             }
 
             GUILayout.BeginVertical ();
@@ -406,6 +415,9 @@ namespace KRPC.UI
 
         bool StartServer ()
         {
+            // Resize the window to the contents
+            resized = true;
+
             // Validate the settings
             Errors.Clear ();
             IPAddress ignoreAddress;

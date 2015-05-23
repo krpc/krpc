@@ -73,7 +73,7 @@ namespace KRPC
             infoWindow = gameObject.AddComponent<InfoWindow> ();
             infoWindow.Server = server;
             infoWindow.Closable = true;
-            infoWindow.Visible = true;
+            infoWindow.Visible = false;
 
             // Create main window
             mainWindow = gameObject.AddComponent<MainWindow> ();

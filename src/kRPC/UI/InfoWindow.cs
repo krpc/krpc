@@ -9,6 +9,8 @@ namespace KRPC.UI
         const float windowWidth = 300f;
         GUIStyle labelStyle, nameLabelStyle, valueLabelStyle, separatorStyle;
 
+        bool running;
+
         const string networkInfoText = "Network Info";
         const string bytesReadText = "Data read";
         const string bytesWrittenText = "Data written";
@@ -86,6 +88,12 @@ namespace KRPC.UI
             update = ((DateTime.Now - lastUpdate).TotalSeconds > updateTime);
             if (update)
                 lastUpdate = DateTime.Now;
+
+            // Force window to resize to height of content
+            if (running != Server.Running) {
+                running = Server.Running;
+                Position = new Rect (Position.x, Position.y, Position.width, 0f);
+            }
 
             GUILayout.BeginVertical ();
 
