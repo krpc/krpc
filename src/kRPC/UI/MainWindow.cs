@@ -41,18 +41,19 @@ namespace KRPC.UI
         string recvTimeout;
         // Style settings
         readonly Color errorColor = Color.yellow;
-        GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, stretchyTextFieldStyle, buttonStyle,
-            toggleStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
+        GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
+            buttonStyle, toggleStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
         const float windowWidth = 288f;
-        const float addressWidth = 106f;
+        const float textFieldWidth = 45f;
+        const float longTextFieldWidth = 90f;
+        const float fixedLabelWidth = 125f;
+        const float indentWidth = 15f;
         const int addressMaxLength = 15;
-        const float portWidth = 45f;
         const int portMaxLength = 5;
-        const float maxTimePerUpdateWidth = 45f;
         const int maxTimePerUpdateMaxLength = 5;
-        const float recvTimeoutWidth = 45f;
         const int recvTimeoutMaxLength = 5;
         // Text strings
+        const string title = "kRPC Server";
         const string startButtonText = "Start server";
         const string stopButtonText = "Stop server";
         const string serverOnlineText = "Server online";
@@ -60,6 +61,8 @@ namespace KRPC.UI
         const string addressLabelText = "Address:";
         const string rpcPortLabelText = "RPC port:";
         const string streamPortLabelText = "Stream port:";
+        const string localhostText = "localhost";
+        const string manualText = "Manual";
         const string showInfoWindowText = "Show Info";
         const string advancedText = "Advanced settings";
         const string autoStartServerText = "Auto-start server";
@@ -83,7 +86,7 @@ namespace KRPC.UI
 
         protected override void Init ()
         {
-            Title = "kRPC Server";
+            Title = title;
 
             Server.OnClientActivity += (s, e) => SawClientActivity (e.Client);
 
@@ -98,8 +101,16 @@ namespace KRPC.UI
             stretchyLabelStyle.margin = new RectOffset (0, 0, 0, 0);
             stretchyLabelStyle.stretchWidth = true;
 
+            fixedLabelStyle = new GUIStyle (skin.label);
+            fixedLabelStyle.fixedWidth = fixedLabelWidth;
+
             textFieldStyle = new GUIStyle (skin.textField);
             textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
+            textFieldStyle.fixedWidth = textFieldWidth;
+
+            longTextFieldStyle = new GUIStyle (skin.textField);
+            longTextFieldStyle.margin = new RectOffset (0, 0, 0, 0);
+            longTextFieldStyle.fixedWidth = longTextFieldWidth;
 
             stretchyTextFieldStyle = new GUIStyle (skin.textField);
             stretchyTextFieldStyle.margin = new RectOffset (0, 0, 0, 0);
@@ -138,9 +149,9 @@ namespace KRPC.UI
             // Get list of available addresses for drop down
             var interfaceAddresses = NetworkInformation.GetLocalIPAddresses ().Select (x => x.ToString ()).ToList ();
             interfaceAddresses.Remove ("127.0.0.1");
-            availableAddresses = new List<string> (new [] { "localhost" });
+            availableAddresses = new List<string> (new [] { localhostText });
             availableAddresses.AddRange (interfaceAddresses);
-            availableAddresses.Add ("Manual");
+            availableAddresses.Add (manualText);
         }
 
         void DrawServerStatus ()
@@ -176,7 +187,6 @@ namespace KRPC.UI
                 GUILayout.Label (addressLabelText + " " + Server.Address, labelStyle);
             else {
                 GUILayout.Label (addressLabelText, labelStyle);
-                textFieldStyle.fixedWidth = addressWidth;
                 // Get the index of the address in the combo box
                 int selected;
                 if (!manualAddress && address == IPAddress.Loopback.ToString ())
@@ -215,7 +225,6 @@ namespace KRPC.UI
                 GUILayout.Label (rpcPortLabelText + " " + Server.RPCPort, labelStyle);
             else {
                 GUILayout.Label (rpcPortLabelText, labelStyle);
-                textFieldStyle.fixedWidth = portWidth;
                 rpcPort = GUILayout.TextField (rpcPort, portMaxLength, textFieldStyle);
             }
         }
@@ -226,7 +235,6 @@ namespace KRPC.UI
                 GUILayout.Label (streamPortLabelText + " " + Server.StreamPort, labelStyle);
             else {
                 GUILayout.Label (streamPortLabelText, labelStyle);
-                textFieldStyle.fixedWidth = portWidth;
                 streamPort = GUILayout.TextField (streamPort, portMaxLength, textFieldStyle);
             }
         }
@@ -269,9 +277,8 @@ namespace KRPC.UI
 
         void DrawMaxTimePerUpdate ()
         {
-            GUILayout.Label (maxTimePerUpdateText, labelStyle);
-            textFieldStyle.fixedWidth = maxTimePerUpdateWidth;
-            maxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, textFieldStyle);
+            GUILayout.Label (maxTimePerUpdateText, fixedLabelStyle);
+            maxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle);
         }
 
         void DrawBlockingRecvToggle ()
@@ -285,9 +292,8 @@ namespace KRPC.UI
 
         void DrawRecvTimeout ()
         {
-            GUILayout.Label (recvTimeoutText, labelStyle);
-            textFieldStyle.fixedWidth = maxTimePerUpdateWidth;
-            recvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, textFieldStyle);
+            GUILayout.Label (recvTimeoutText, fixedLabelStyle);
+            recvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle);
         }
 
         void DrawServerInfo ()
@@ -382,26 +388,32 @@ namespace KRPC.UI
 
                 if (advanced) {
                     GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
                     DrawAutoStartServerToggle ();
                     GUILayout.EndHorizontal ();
 
                     GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
                     DrawAutoAcceptConnectionsToggle ();
                     GUILayout.EndHorizontal ();
 
                     GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
                     DrawAdaptiveRateControlToggle ();
                     GUILayout.EndHorizontal ();
 
                     GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
                     DrawMaxTimePerUpdate ();
                     GUILayout.EndHorizontal ();
 
                     GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
                     DrawBlockingRecvToggle ();
                     GUILayout.EndHorizontal ();
 
                     GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
                     DrawRecvTimeout ();
                     GUILayout.EndHorizontal ();
                 }
