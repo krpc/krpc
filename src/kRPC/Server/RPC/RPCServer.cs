@@ -26,8 +26,8 @@ namespace KRPC.Server.RPC
         IServer<byte,byte> server;
         Dictionary<IClient<byte,byte>,RPCClient> clients = new Dictionary<IClient<byte, byte>, RPCClient> ();
         Dictionary<IClient<byte,byte>,RPCClient> pendingClients = new Dictionary<IClient<byte, byte>, RPCClient> ();
-        long closedClientsBytesRead;
-        long closedClientsBytesWritten;
+        ulong closedClientsBytesRead;
+        ulong closedClientsBytesWritten;
 
         public RPCServer (IServer<byte,byte> server)
         {
@@ -77,12 +77,12 @@ namespace KRPC.Server.RPC
             }
         }
 
-        public long BytesRead {
-            get { return closedClientsBytesRead + clients.Values.Sum (c => c.Stream.BytesRead); }
+        public ulong BytesRead {
+            get { return closedClientsBytesRead + clients.Values.Select(c => c.Stream.BytesRead).SumUnsignedLong(); }
         }
 
-        public long BytesWritten {
-            get { return closedClientsBytesWritten + clients.Values.Sum (c => c.Stream.BytesWritten); }
+        public ulong BytesWritten {
+            get { return closedClientsBytesWritten + clients.Values.Select(c => c.Stream.BytesWritten).SumUnsignedLong(); }
         }
 
         void HandleClientConnected (object sender, IClientEventArgs<byte,byte> args)

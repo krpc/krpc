@@ -32,14 +32,14 @@ namespace KRPCTest.Server
         public int Read (byte[] buffer, int offset)
         {
             var size = read_stream.Read (buffer, offset, buffer.Length - offset);
-            BytesRead += size;
+            BytesRead += (ulong)size;
             return size;
         }
 
         public int Read (byte[] buffer, int offset, int size)
         {
             size = read_stream.Read (buffer, offset, size);
-            BytesRead += size;
+            BytesRead += (ulong)size;
             return size;
         }
 
@@ -52,12 +52,12 @@ namespace KRPCTest.Server
         {
             var size = buffer.Length;
             write_stream.Write (buffer, 0, size);
-            BytesWritten += size;
+            BytesWritten += (ulong)size;
         }
 
-        public long BytesRead { get; private set; }
+        public ulong BytesRead { get; private set; }
 
-        public long BytesWritten { get; private set; }
+        public ulong BytesWritten { get; private set; }
 
         public void Close ()
         {

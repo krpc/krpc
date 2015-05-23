@@ -18,12 +18,12 @@ namespace KRPC.Server
         /// <summary>
         /// Gets the total number of bytes read from the stream.
         /// </summary>
-        long BytesRead { get; }
+        ulong BytesRead { get; }
 
         /// <summary>
         /// Gets the total number of bytes written to the stream.
         /// </summary>
-        long BytesWritten { get; }
+        ulong BytesWritten { get; }
     }
 
     /// <summary>

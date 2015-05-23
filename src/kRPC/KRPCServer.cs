@@ -102,7 +102,7 @@ namespace KRPC
         }
 
         internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort,
-                             bool adaptiveRateControl = true, int maxTimePerUpdate = 5000, bool blockingRecv = true, int recvTimeout = 1000)
+                             bool adaptiveRateControl = true, uint maxTimePerUpdate = 5000, bool blockingRecv = true, uint recvTimeout = 1000)
         {
             rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
@@ -211,7 +211,7 @@ namespace KRPC
         /// <summary>
         /// Get/set the maximum number of microseconds to spend in a call to FixedUpdate
         /// </summary>
-        public int MaxTimePerUpdate { get; set; }
+        public uint MaxTimePerUpdate { get; set; }
 
         /// <summary>
         /// Get/set whether FixedUpdate should block for RecvTimeout microseconds to receive RPCs.
@@ -221,7 +221,7 @@ namespace KRPC
         /// <summary>
         /// Get/set the timeout for blocking for RPCs, in microseconds.
         /// </summary>
-        public int RecvTimeout { get; set; }
+        public uint RecvTimeout { get; set; }
 
         /// <summary>
         /// Returns true if the server is running
@@ -244,14 +244,14 @@ namespace KRPC
         /// <summary>
         /// Get the total number of bytes read from the network.
         /// </summary>
-        public long BytesRead {
+        public ulong BytesRead {
             get { return rpcServer.BytesRead + streamServer.BytesRead; }
         }
 
         /// <summary>
         /// Get the total number of bytes written to the network.
         /// </summary>
-        public long BytesWritten {
+        public ulong BytesWritten {
             get { return rpcServer.BytesWritten + streamServer.BytesWritten; }
         }
 
@@ -281,7 +281,7 @@ namespace KRPC
         /// <summary>
         /// Total number of RPCs executed.
         /// </summary>
-        public long RPCsExecuted { get; private set; }
+        public ulong RPCsExecuted { get; private set; }
 
         /// <summary>
         /// Number of RPCs processed per second.
@@ -318,12 +318,12 @@ namespace KRPC
         /// <summary>
         /// Number of currently active streaming RPCs.
         /// </summary>
-        public long StreamRPCs { get; private set; }
+        public uint StreamRPCs { get; private set; }
 
         /// <summary>
         /// Total number of streaming RPCs executed.
         /// </summary>
-        public long StreamRPCsExecuted { get; private set; }
+        public ulong StreamRPCsExecuted { get; private set; }
 
         /// <summary>
         /// Number of streaming RPCs processed per second.
@@ -360,10 +360,10 @@ namespace KRPC
         /// </summary>
         public void Update ()
         {
-            long startRPCsExecuted = RPCsExecuted;
-            long startStreamRPCsExecuted = StreamRPCsExecuted;
-            long startBytesRead = BytesRead;
-            long startBytesWritten = BytesWritten;
+            ulong startRPCsExecuted = RPCsExecuted;
+            ulong startStreamRPCsExecuted = StreamRPCsExecuted;
+            ulong startBytesRead = BytesRead;
+            ulong startBytesWritten = BytesWritten;
 
             RPCServerUpdate ();
             StreamServerUpdate ();
@@ -417,7 +417,7 @@ namespace KRPC
             var execTimer = new Stopwatch ();
             long maxTimePerUpdateTicks = StopwatchExtensions.MicrosecondsToTicks (MaxTimePerUpdate);
             long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (RecvTimeout);
-            int rpcsExecuted = 0;
+            ulong rpcsExecuted = 0;
 
             var yieldedContinuations = new List<RequestContinuation> ();
             rpcServer.Update ();
@@ -491,7 +491,7 @@ namespace KRPC
         void StreamServerUpdate ()
         {
             Stopwatch timer = Stopwatch.StartNew ();
-            int rpcsExecuted = 0;
+            uint rpcsExecuted = 0;
 
             streamServer.Update ();
 

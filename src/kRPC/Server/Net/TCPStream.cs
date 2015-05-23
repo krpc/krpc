@@ -30,14 +30,14 @@ namespace KRPC.Server.Net
         public int Read (byte[] buffer, int offset)
         {
             var size = stream.Read (buffer, offset, buffer.Length - offset);
-            BytesRead += size;
+            BytesRead += (ulong)size;
             return size;
         }
 
         public int Read (byte[] buffer, int offset, int size)
         {
             size = stream.Read (buffer, offset, size);
-            BytesRead += size;
+            BytesRead += (ulong)size;
             return size;
         }
 
@@ -50,12 +50,12 @@ namespace KRPC.Server.Net
         {
             var size = buffer.Length;
             stream.Write (buffer, 0, size);
-            BytesWritten += size;
+            BytesWritten += (ulong)size;
         }
 
-        public long BytesRead { get; private set; }
+        public ulong BytesRead { get; private set; }
 
-        public long BytesWritten { get; private set; }
+        public ulong BytesWritten { get; private set; }
 
         public void Close ()
         {

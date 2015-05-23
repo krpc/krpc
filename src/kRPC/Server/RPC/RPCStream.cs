@@ -73,11 +73,11 @@ namespace KRPC.Server.RPC
             throw new NotSupportedException ();
         }
 
-        public long BytesRead {
+        public ulong BytesRead {
             get { return stream.BytesRead; }
         }
 
-        public long BytesWritten {
+        public ulong BytesWritten {
             get { return stream.BytesWritten; }
         }
 

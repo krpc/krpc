@@ -34,9 +34,9 @@ namespace KRPC.Server
         /// </summary>
         IEnumerable<IClient> Clients { get; }
 
-        long BytesRead { get; }
+        ulong BytesRead { get; }
 
-        long BytesWritten { get; }
+        ulong BytesWritten { get; }
 
         event EventHandler OnStarted;
         event EventHandler OnStopped;
@@ -81,12 +81,12 @@ namespace KRPC.Server
         /// <summary>
         /// Gets the total number of bytes read from client streams.
         /// </summary>
-        long BytesRead { get; }
+        ulong BytesRead { get; }
 
         /// <summary>
         /// Gets the total number of bytes written to client streams.
         /// </summary>
-        long BytesWritten { get; }
+        ulong BytesWritten { get; }
 
         event EventHandler OnStarted;
         event EventHandler OnStopped;

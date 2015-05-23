@@ -18,9 +18,9 @@ namespace KRPC
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors = false;
         [Persistent] bool adaptiveRateControl = true;
-        [Persistent] int maxTimePerUpdate = 5000;
+        [Persistent] uint maxTimePerUpdate = 5000;
         [Persistent] bool blockingRecv = true;
-        [Persistent] int recvTimeout = 1000;
+        [Persistent] uint recvTimeout = 1000;
 
         public IPAddress Address { get; set; }
 
@@ -59,7 +59,7 @@ namespace KRPC
             set { adaptiveRateControl = value; }
         }
 
-        public int MaxTimePerUpdate {
+        public uint MaxTimePerUpdate {
             get { return maxTimePerUpdate; }
             set { maxTimePerUpdate = value; }
         }
@@ -69,7 +69,7 @@ namespace KRPC
             set { blockingRecv = value; }
         }
 
-        public int RecvTimeout {
+        public uint RecvTimeout {
             get { return recvTimeout; }
             set { recvTimeout = value; }
         }

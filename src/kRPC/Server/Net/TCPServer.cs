@@ -56,8 +56,8 @@ namespace KRPC.Server.Net
         /// </summary>
         List<TCPClient> pendingClients = new List<TCPClient> ();
         Object pendingClientsLock = new object ();
-        long closedClientsBytesRead;
-        long closedClientsBytesWritten;
+        ulong closedClientsBytesRead;
+        ulong closedClientsBytesWritten;
 
         /// <summary>
         /// Create a TCP server. After Start() is called, the server will listen for
@@ -187,12 +187,12 @@ namespace KRPC.Server.Net
             }
         }
 
-        public long BytesRead {
-            get { return closedClientsBytesRead + clients.Sum (c => c.Stream.BytesRead); }
+        public ulong BytesRead {
+            get { return closedClientsBytesRead + clients.Select (c => c.Stream.BytesRead).SumUnsignedLong(); }
         }
 
-        public long BytesWritten {
-            get { return closedClientsBytesWritten + clients.Sum (c => c.Stream.BytesWritten); }
+        public ulong BytesWritten {
+            get { return closedClientsBytesWritten + clients.Select (c => c.Stream.BytesWritten).SumUnsignedLong(); }
         }
 
         /// <summary>

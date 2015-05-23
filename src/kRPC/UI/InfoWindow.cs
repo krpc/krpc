@@ -101,8 +101,8 @@ namespace KRPC.UI
                 GUILayout.Label (networkInfoText, labelStyle);
                 DrawInfo (bytesReadText, BytesToString (Server.BytesRead));
                 DrawInfo (bytesWrittenText, BytesToString (Server.BytesWritten));
-                DrawInfo (bytesReadRateText, BytesToString ((long)Server.BytesReadRate) + "/s");
-                DrawInfo (bytesWrittenRateText, BytesToString ((long)Server.BytesWrittenRate) + "/s");
+                DrawInfo (bytesReadRateText, BytesToString ((ulong)Server.BytesReadRate) + "/s");
+                DrawInfo (bytesWrittenRateText, BytesToString ((ulong)Server.BytesWrittenRate) + "/s");
 
                 GUILayoutExtensions.Separator (separatorStyle);
 
@@ -131,15 +131,14 @@ namespace KRPC.UI
             GUI.DragWindow ();
         }
 
-        static String BytesToString (long byteCount)
+        static String BytesToString (ulong bytes)
         {
-            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
-            if (byteCount == 0)
-                return "0" + suf [0];
-            long bytes = Math.Abs (byteCount);
+            string[] suffix = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
+            if (bytes == 0)
+                return "0" + suffix [0];
             int place = Convert.ToInt32 (Math.Floor (Math.Log (bytes, 1024)));
             double num = Math.Round (bytes / Math.Pow (1024, place), 1);
-            return (Math.Sign (byteCount) * num) + suf [place];
+            return num + suffix [place];
         }
     }
 }

@@ -75,11 +75,11 @@ namespace KRPC.Server.Stream
             }
         }
 
-        public long BytesRead {
+        public ulong BytesRead {
             get { return server.BytesRead; }
         }
 
-        public long BytesWritten {
+        public ulong BytesWritten {
             get { return server.BytesWritten; }
         }
 
