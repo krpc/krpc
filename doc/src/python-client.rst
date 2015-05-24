@@ -165,12 +165,24 @@ Reference
 
       .. method:: get_status()
 
-         Gets a status message from the server. Contains the version string of
-         the server. For example:
+         Gets a status message from the server containing information including
+         the server's version string and performance statistics.
+
+         For example, the following prints out the version string for the
+         server:
 
          .. code-block:: python
 
             print('Server version =', conn.krpc.get_status().version)
+
+         Or to get the rate at which the server is sending and receiving data
+         over the network:
+
+         .. code-block:: python
+
+            status = conn.krpc.get_status()
+            print('Data in =', (status.bytes_read_rate/1024.0), 'KB/s')
+            print('Data out =', (status.bytes_written_rate/1024.0), 'KB/s')
 
 .. module:: krpc.stream
 
