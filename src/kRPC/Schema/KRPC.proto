@@ -94,15 +94,16 @@ message Status {
   required float bytes_written_rate = 5;
   required uint64 rpcs_executed = 6;
   required float rpc_rate = 7;
-  required bool adaptive_rate_control = 8;
+  required bool one_rpc_per_update = 8;
   required uint32 max_time_per_update = 9;
-  required bool blocking_recv = 10;
-  required uint32 recv_timeout = 11;
-  required float time_per_rpc_update = 12;
-  required float poll_time_per_rpc_update = 13;
-  required float exec_time_per_rpc_update = 14;
-  required uint32 stream_rpcs = 15;
-  required uint64 stream_rpcs_executed = 16;
-  required float stream_rpc_rate = 17;
-  required float time_per_stream_update = 18;
+  required bool adaptive_rate_control = 10;
+  required bool blocking_recv = 11;
+  required uint32 recv_timeout = 12;
+  required float time_per_rpc_update = 13;
+  required float poll_time_per_rpc_update = 14;
+  required float exec_time_per_rpc_update = 15;
+  required uint32 stream_rpcs = 16;
+  required uint64 stream_rpcs_executed = 17;
+  required float stream_rpc_rate = 18;
+  required float time_per_stream_update = 19;
 }

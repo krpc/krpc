@@ -67,8 +67,9 @@ namespace KRPC.UI
         const string advancedText = "Advanced settings";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
-        const string adaptiveRateControlText = "Adaptive rate control";
+        const string oneRPCPerUpdateText = "One RPC per update";
         const string maxTimePerUpdateText = "Max. time per update";
+        const string adaptiveRateControlText = "Adaptive rate control";
         const string blockingRecvText = "Blocking receives";
         const string recvTimeoutText = "Receive timeout";
         const string noClientsConnectedText = "No clients connected";
@@ -266,11 +267,11 @@ namespace KRPC.UI
             }
         }
 
-        void DrawAdaptiveRateControlToggle ()
+        void DrawOneRPCPerUpdateToggle ()
         {
-            bool adaptiveRateControl = GUILayout.Toggle (Config.AdaptiveRateControl, adaptiveRateControlText, toggleStyle, new GUILayoutOption[] { });
-            if (adaptiveRateControl != Config.AdaptiveRateControl) {
-                Config.AdaptiveRateControl = adaptiveRateControl;
+            bool oneRPCPerUpdate = GUILayout.Toggle (Config.OneRPCPerUpdate, oneRPCPerUpdateText, toggleStyle, new GUILayoutOption[] { });
+            if (oneRPCPerUpdate != Config.OneRPCPerUpdate) {
+                Config.OneRPCPerUpdate = oneRPCPerUpdate;
                 Config.Save ();
             }
         }
@@ -279,6 +280,15 @@ namespace KRPC.UI
         {
             GUILayout.Label (maxTimePerUpdateText, fixedLabelStyle);
             maxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle);
+        }
+
+        void DrawAdaptiveRateControlToggle ()
+        {
+            bool adaptiveRateControl = GUILayout.Toggle (Config.AdaptiveRateControl, adaptiveRateControlText, toggleStyle, new GUILayoutOption[] { });
+            if (adaptiveRateControl != Config.AdaptiveRateControl) {
+                Config.AdaptiveRateControl = adaptiveRateControl;
+                Config.Save ();
+            }
         }
 
         void DrawBlockingRecvToggle ()
@@ -399,12 +409,17 @@ namespace KRPC.UI
 
                     GUILayout.BeginHorizontal ();
                     GUILayout.Space (indentWidth);
-                    DrawAdaptiveRateControlToggle ();
+                    DrawOneRPCPerUpdateToggle ();
                     GUILayout.EndHorizontal ();
 
                     GUILayout.BeginHorizontal ();
                     GUILayout.Space (indentWidth);
                     DrawMaxTimePerUpdate ();
+                    GUILayout.EndHorizontal ();
+
+                    GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
+                    DrawAdaptiveRateControlToggle ();
                     GUILayout.EndHorizontal ();
 
                     GUILayout.BeginHorizontal ();

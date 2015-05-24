@@ -33,7 +33,8 @@ namespace KRPC
             config.Load ();
             server = new KRPCServer (
                 config.Address, config.RPCPort, config.StreamPort,
-                config.AdaptiveRateControl, config.MaxTimePerUpdate, config.BlockingRecv, config.RecvTimeout);
+                config.OneRPCPerUpdate, config.MaxTimePerUpdate, config.AdaptiveRateControl,
+                config.BlockingRecv, config.RecvTimeout);
 
             // Auto-start the server, if required
             if (config.AutoStartServer)
@@ -173,8 +174,9 @@ namespace KRPC
             server.RPCPort = config.RPCPort;
             server.StreamPort = config.StreamPort;
             server.Address = config.Address;
-            server.AdaptiveRateControl = config.AdaptiveRateControl;
+            server.OneRPCPerUpdate = config.OneRPCPerUpdate;
             server.MaxTimePerUpdate = config.MaxTimePerUpdate;
+            server.AdaptiveRateControl = config.AdaptiveRateControl;
             server.BlockingRecv = config.BlockingRecv;
             server.RecvTimeout = config.RecvTimeout;
             try {

@@ -26,8 +26,9 @@ namespace KRPC.Service
             status.BytesWrittenRate = KRPCServer.Context.Server.BytesWrittenRate;
             status.RpcsExecuted = KRPCServer.Context.Server.RPCsExecuted;
             status.RpcRate = KRPCServer.Context.Server.RPCRate;
-            status.AdaptiveRateControl = KRPCServer.Context.Server.AdaptiveRateControl;
+            status.OneRpcPerUpdate = KRPCServer.Context.Server.OneRPCPerUpdate;
             status.MaxTimePerUpdate = KRPCServer.Context.Server.MaxTimePerUpdate;
+            status.AdaptiveRateControl = KRPCServer.Context.Server.AdaptiveRateControl;
             status.BlockingRecv = KRPCServer.Context.Server.BlockingRecv;
             status.RecvTimeout = KRPCServer.Context.Server.RecvTimeout;
             status.TimePerRpcUpdate = KRPCServer.Context.Server.TimePerRPCUpdate;

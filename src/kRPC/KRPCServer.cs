@@ -102,7 +102,7 @@ namespace KRPC
         }
 
         internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort,
-                             bool adaptiveRateControl = true, uint maxTimePerUpdate = 5000, bool blockingRecv = true, uint recvTimeout = 1000)
+            bool oneRPCPerUpdate = false, uint maxTimePerUpdate = 5000, bool adaptiveRateControl = true, bool blockingRecv = true, uint recvTimeout = 1000)
         {
             rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
@@ -112,8 +112,9 @@ namespace KRPC
             continuations = new List<RequestContinuation> ();
             streamRequests = new Dictionary<IClient<byte,StreamMessage>,IList<StreamRequest>> ();
 
-            AdaptiveRateControl = adaptiveRateControl;
+            OneRPCPerUpdate = oneRPCPerUpdate;
             MaxTimePerUpdate = maxTimePerUpdate;
+            AdaptiveRateControl = adaptiveRateControl;
             BlockingRecv = blockingRecv;
             RecvTimeout = recvTimeout;
 
@@ -204,14 +205,19 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Get/set whether MaxTimePerUpdate should be adjusted to achieve a target framerate.
+        /// Only execute one RPC for each client per update.
         /// </summary>
-        public bool AdaptiveRateControl { get; set; }
+        public bool OneRPCPerUpdate { get; set; }
 
         /// <summary>
         /// Get/set the maximum number of microseconds to spend in a call to FixedUpdate
         /// </summary>
         public uint MaxTimePerUpdate { get; set; }
+
+        /// <summary>
+        /// Get/set whether MaxTimePerUpdate should be adjusted to achieve a target framerate.
+        /// </summary>
+        public bool AdaptiveRateControl { get; set; }
 
         /// <summary>
         /// Get/set whether FixedUpdate should block for RecvTimeout microseconds to receive RPCs.
@@ -468,6 +474,10 @@ namespace KRPC
                 }
                 continuations.Clear ();
                 execTimer.Stop ();
+
+                // Exit if only execute one RPC per update
+                if (OneRPCPerUpdate)
+                    break;
 
                 // Exit if max exec time exceeded
                 if (timer.ElapsedTicks > maxTimePerUpdateTicks)
