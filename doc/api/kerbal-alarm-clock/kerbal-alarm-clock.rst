@@ -3,8 +3,8 @@ KerbalAlarmClock
 
 .. class:: KerbalAlarmClock
 
-   This service provides functionality to interact with the `KerbalAlarmClock
-   <Kerbal Alarm Clock>`_ mod.
+   This service provides functionality to interact with the
+   `Kerbal Alarm Clock`_ mod.
 
    .. attribute:: Alarms
 
@@ -35,4 +35,4 @@ KerbalAlarmClock
       :param double ut: Time of the new alarm.
       :rtype: :class:`Alarm`
 
-.. _KerbalAlarmClock: http://forum.kerbalspaceprogram.com/threads/24786
+.. _Kerbal Alarm Clock: http://forum.kerbalspaceprogram.com/threads/24786
