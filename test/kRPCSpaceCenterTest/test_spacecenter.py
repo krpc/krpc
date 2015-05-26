@@ -109,6 +109,15 @@ class TestSpaceCenter(testingtools.TestCase):
     def test_g(self):
         self.assertClose(6.673e-11, self.sc.g, error=0.0005e-11)
 
+    def test_warp_when_throttled_up(self):
+        self.sc.active_vessel.control.throttle = 1
+        self.sc.active_vessel.control.activate_next_stage()
+        time.sleep(0.1)
+        self.assertEquals(0, self.sc.maximum_rails_warp_factor)
+        self.sc.active_vessel.control.throttle = 0
+        time.sleep(1)
+        self.assertEquals(7, self.sc.maximum_rails_warp_factor)
+
     def test_no_warp(self):
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.assertEqual(0, self.sc.rails_warp_factor)

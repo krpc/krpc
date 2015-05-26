@@ -135,13 +135,20 @@ namespace KRPCSpaceCenter.Services
         [KRPCProcedure]
         public static bool CanRailsWarpAt (int factor = 1)
         {
+            if (factor == 0)
+                return true;
+            // Not a valid factor
             if (factor < 0 || factor >= TimeWarp.fetch.warpRates.Length)
                 return false;
-            if (factor == 0 || ActiveVessel.InternalVessel.LandedOrSplashed)
-                return true;
+            // Below altitude limit, and not landed
             var altitude = ActiveVessel.InternalVessel.mainBody.GetAltitude (ActiveVessel.InternalVessel.CoM);
             var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, ActiveVessel.InternalVessel.mainBody);
-            return altitude > altitudeLimit;
+            if (!ActiveVessel.InternalVessel.LandedOrSplashed && altitude < altitudeLimit)
+                return false;
+            // Throttle is non-zero
+            if (FlightInputHandler.state.mainThrottle > 0f)
+                return false;
+            return true;
         }
 
         [KRPCProperty]
