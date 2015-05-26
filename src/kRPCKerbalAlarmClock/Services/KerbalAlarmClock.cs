@@ -7,7 +7,7 @@ using KRPCKerbalAlarmClock.ExtensionMethods;
 
 namespace KRPCKerbalAlarmClock.Services
 {
-    [KRPCService (GameScene = GameScene.Flight)]
+    [KRPCService (GameScene = GameScene.All)]
     public static class KerbalAlarmClock
     {
         static void CheckAPI ()
