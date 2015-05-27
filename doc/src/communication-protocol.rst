@@ -63,7 +63,7 @@ For example, this python code will connect to the *RPC Server* at address
    while len(identifier) < 16:
        identifier += rpc_conn.recv(16 - len(identifier))
    # Connection successful. Print out a message along with the client identifier.
-   printable_identifier = ''.join('%02x' % x for x in identifier)
+   printable_identifier = ''.join('%02s' % x for x in identifier)
    print('Connected to RPC server, client idenfitier = %s' % printable_identifier)
 
 Connecting to the Stream Server
@@ -233,9 +233,14 @@ The ``krpc.schema.KRPC`` package contains the Protocol Buffer message formats
 ``Request``, ``Response`` and ``Status`` compiled to python code using the
 Protocol Buffer compiler. The ``EncodeVarint`` and ``DecodeVarint`` functions
 are used to encode/decode integers to/from the Protocol Buffer varint
-format. Their implementation is omitted for brevity.
+format.
 
 .. code-block:: python
+
+   def EncodeVarint(value):
+     return krpc.Encoder.encode(value,krpc.types.ValueType("int32"))
+   def DecodeVarint(data) :
+     return krpc.Decoder.decode(data,krpc.types.ValueType("int32"))
 
    # Create Request message
    request = krpc.schema.KRPC.Request()
@@ -252,7 +257,7 @@ format. Their implementation is omitted for brevity.
    while True:
        data += rpc_conn.recv(1)
        try:
-           (size, position) = DecodeVarint(data)
+           size = DecodeVarint(data)
            break
        except IndexError:
            pass
