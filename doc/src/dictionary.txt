@@ -10,6 +10,7 @@ enum
 erm
 gimbal
 gimballed
+hostname
 inkscape
 integration
 Kerbal
