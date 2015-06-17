@@ -10,7 +10,7 @@ Server Performance Settings
 
 kRPC receives RPCs, execute them and returns results when the mod's
 ``FixedUpdate`` method is invoked. kRPC may execute multiple RPCs within a
-single call to ``FixedUpdate`` and this behaviour is controlled by several
+single call to ``FixedUpdate`` and this behavior is controlled by several
 configurable settings:
 
 .. figure:: /images/getting-started/server-window-advanced.png

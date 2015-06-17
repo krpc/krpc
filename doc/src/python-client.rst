@@ -42,7 +42,7 @@ accessible via ``conn.space_center`` and the functionality provided by the
 InfernalRobotics service is accessible via ``conn.infernal_robotics``. To
 explore the functionality provided by a service, you can use the ``help()``
 function from an interactive terminal. For example, running
-``help(conn.space_center)`` will list all of the classes, enums, procedures and
+``help(conn.space_center)`` will list all of the classes, enumerations, procedures and
 properties provides by the SpaceCenter service. Or for a class, such as the
 vessel class provided by the SpaceCenter service by calling
 ``help(conn.space_center.Vessel)``.
@@ -97,7 +97,7 @@ Reference
    communicated with.
 
    :param string address: The address of the server to connect to. Can either be
-                          a hostname or an IPv4 address in dotted decimal
+                          a hostname or an IP address in dotted decimal
                           notation. Defaults to '127.0.0.1'.
    :param int rpc_port: The port number of the RPC Server. Defaults to 50000.
    :param int stream_port: The port number of the Stream Server. Defaults
