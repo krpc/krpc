@@ -6,6 +6,7 @@ namespace KRPCTest.Service
     public class KRPCTest
     {
         [Test]
+        [Ignore]
         public void GetVersion ()
         {
             var status = KRPC.Service.KRPC.GetStatus ();

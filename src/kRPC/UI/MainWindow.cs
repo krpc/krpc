@@ -14,6 +14,8 @@ namespace KRPC.UI
 
         public KRPCServer Server { private get; set; }
 
+        public InfoWindow InfoWindow { private get; set; }
+
         public ClientDisconnectDialog ClientDisconnectDialog { private get; set; }
 
         /// <summary>
@@ -27,22 +29,31 @@ namespace KRPC.UI
         Dictionary<IClient, long> lastClientActivity = new Dictionary<IClient, long> ();
         const long lastActivityMillisecondsInterval = 100L;
         int numClientsDisplayed;
+        bool resized;
         // Editable fields
         string address;
         bool manualAddress;
         List<string> availableAddresses;
         string rpcPort;
         string streamPort;
+        bool advanced;
+        string maxTimePerUpdate;
+        string recvTimeout;
         // Style settings
         readonly Color errorColor = Color.yellow;
-        GUIStyle labelStyle, stretchyLabelStyle, textFieldStyle, stretchyTextFieldStyle, buttonStyle,
-            toggleStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
+        GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
+            buttonStyle, toggleStyle, separatorStyle, lightStyle, errorLabelStyle, comboOptionsStyle, comboOptionStyle;
         const float windowWidth = 288f;
-        const float addressWidth = 106f;
+        const float textFieldWidth = 45f;
+        const float longTextFieldWidth = 90f;
+        const float fixedLabelWidth = 125f;
+        const float indentWidth = 15f;
         const int addressMaxLength = 15;
-        const float portWidth = 45f;
         const int portMaxLength = 5;
+        const int maxTimePerUpdateMaxLength = 5;
+        const int recvTimeoutMaxLength = 5;
         // Text strings
+        const string title = "kRPC Server";
         const string startButtonText = "Start server";
         const string stopButtonText = "Stop server";
         const string serverOnlineText = "Server online";
@@ -50,13 +61,24 @@ namespace KRPC.UI
         const string addressLabelText = "Address:";
         const string rpcPortLabelText = "RPC port:";
         const string streamPortLabelText = "Stream port:";
+        const string localhostText = "localhost";
+        const string manualText = "Manual";
+        const string showInfoWindowText = "Show Info";
+        const string advancedText = "Advanced settings";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
+        const string oneRPCPerUpdateText = "One RPC per update";
+        const string maxTimePerUpdateText = "Max. time per update";
+        const string adaptiveRateControlText = "Adaptive rate control";
+        const string blockingRecvText = "Blocking receives";
+        const string recvTimeoutText = "Receive timeout";
         const string noClientsConnectedText = "No clients connected";
         const string unknownClientNameText = "<unknown>";
         const string invalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
         const string invalidRPCPortText = "RPC port must be between 0 and 65535";
         const string invalidStreamPortText = "Stream port must be between 0 and 65535";
+        const string invalidMaxTimePerUpdateText = "Max. time per update must be an integer";
+        const string invalidRecvTimeoutText = "Receive timeout must be an integer";
         const string localClientOnlyText = "Local clients only";
         const string subnetAllowedText = "Subnet {0}";
         const string unknownClientsAllowedText = "Unknown visibility";
@@ -65,7 +87,7 @@ namespace KRPC.UI
 
         protected override void Init ()
         {
-            Title = "kRPC Server";
+            Title = title;
 
             Server.OnClientActivity += (s, e) => SawClientActivity (e.Client);
 
@@ -80,8 +102,16 @@ namespace KRPC.UI
             stretchyLabelStyle.margin = new RectOffset (0, 0, 0, 0);
             stretchyLabelStyle.stretchWidth = true;
 
+            fixedLabelStyle = new GUIStyle (skin.label);
+            fixedLabelStyle.fixedWidth = fixedLabelWidth;
+
             textFieldStyle = new GUIStyle (skin.textField);
             textFieldStyle.margin = new RectOffset (0, 0, 0, 0);
+            textFieldStyle.fixedWidth = textFieldWidth;
+
+            longTextFieldStyle = new GUIStyle (skin.textField);
+            longTextFieldStyle.margin = new RectOffset (0, 0, 0, 0);
+            longTextFieldStyle.fixedWidth = longTextFieldWidth;
 
             stretchyTextFieldStyle = new GUIStyle (skin.textField);
             stretchyTextFieldStyle.margin = new RectOffset (0, 0, 0, 0);
@@ -114,13 +144,15 @@ namespace KRPC.UI
             address = Config.Address.ToString ();
             rpcPort = Config.RPCPort.ToString ();
             streamPort = Config.StreamPort.ToString ();
+            maxTimePerUpdate = Config.MaxTimePerUpdate.ToString ();
+            recvTimeout = Config.RecvTimeout.ToString ();
 
             // Get list of available addresses for drop down
             var interfaceAddresses = NetworkInformation.GetLocalIPAddresses ().Select (x => x.ToString ()).ToList ();
             interfaceAddresses.Remove ("127.0.0.1");
-            availableAddresses = new List<string> (new [] { "localhost" });
+            availableAddresses = new List<string> (new [] { localhostText });
             availableAddresses.AddRange (interfaceAddresses);
-            availableAddresses.Add ("Manual");
+            availableAddresses.Add (manualText);
         }
 
         void DrawServerStatus ()
@@ -156,7 +188,6 @@ namespace KRPC.UI
                 GUILayout.Label (addressLabelText + " " + Server.Address, labelStyle);
             else {
                 GUILayout.Label (addressLabelText, labelStyle);
-                textFieldStyle.fixedWidth = addressWidth;
                 // Get the index of the address in the combo box
                 int selected;
                 if (!manualAddress && address == IPAddress.Loopback.ToString ())
@@ -182,13 +213,19 @@ namespace KRPC.UI
             }
         }
 
+        void DrawShowInfoWindow ()
+        {
+            if (GUILayout.Button (showInfoWindowText, buttonStyle)) {
+                InfoWindow.Visible = true;
+            }
+        }
+
         void DrawRPCPort ()
         {
             if (Server.Running)
                 GUILayout.Label (rpcPortLabelText + " " + Server.RPCPort, labelStyle);
             else {
                 GUILayout.Label (rpcPortLabelText, labelStyle);
-                textFieldStyle.fixedWidth = portWidth;
                 rpcPort = GUILayout.TextField (rpcPort, portMaxLength, textFieldStyle);
             }
         }
@@ -199,8 +236,16 @@ namespace KRPC.UI
                 GUILayout.Label (streamPortLabelText + " " + Server.StreamPort, labelStyle);
             else {
                 GUILayout.Label (streamPortLabelText, labelStyle);
-                textFieldStyle.fixedWidth = portWidth;
                 streamPort = GUILayout.TextField (streamPort, portMaxLength, textFieldStyle);
+            }
+        }
+
+        void DrawAdvancedToggle ()
+        {
+            bool newAdvanced = GUILayout.Toggle (advanced, advancedText, toggleStyle, new GUILayoutOption[] { });
+            if (newAdvanced != advanced) {
+                advanced = newAdvanced;
+                resized = true;
             }
         }
 
@@ -222,6 +267,45 @@ namespace KRPC.UI
             }
         }
 
+        void DrawOneRPCPerUpdateToggle ()
+        {
+            bool oneRPCPerUpdate = GUILayout.Toggle (Config.OneRPCPerUpdate, oneRPCPerUpdateText, toggleStyle, new GUILayoutOption[] { });
+            if (oneRPCPerUpdate != Config.OneRPCPerUpdate) {
+                Config.OneRPCPerUpdate = oneRPCPerUpdate;
+                Config.Save ();
+            }
+        }
+
+        void DrawMaxTimePerUpdate ()
+        {
+            GUILayout.Label (maxTimePerUpdateText, fixedLabelStyle);
+            maxTimePerUpdate = GUILayout.TextField (maxTimePerUpdate, maxTimePerUpdateMaxLength, longTextFieldStyle);
+        }
+
+        void DrawAdaptiveRateControlToggle ()
+        {
+            bool adaptiveRateControl = GUILayout.Toggle (Config.AdaptiveRateControl, adaptiveRateControlText, toggleStyle, new GUILayoutOption[] { });
+            if (adaptiveRateControl != Config.AdaptiveRateControl) {
+                Config.AdaptiveRateControl = adaptiveRateControl;
+                Config.Save ();
+            }
+        }
+
+        void DrawBlockingRecvToggle ()
+        {
+            bool blockingUpdate = GUILayout.Toggle (Config.BlockingRecv, blockingRecvText, toggleStyle, new GUILayoutOption[] { });
+            if (blockingUpdate != Config.BlockingRecv) {
+                Config.BlockingRecv = blockingUpdate;
+                Config.Save ();
+            }
+        }
+
+        void DrawRecvTimeout ()
+        {
+            GUILayout.Label (recvTimeoutText, fixedLabelStyle);
+            recvTimeout = GUILayout.TextField (recvTimeout, recvTimeoutMaxLength, longTextFieldStyle);
+        }
+
         void DrawServerInfo ()
         {
             string info = AllowedClientsString (Server.Address);
@@ -232,6 +316,11 @@ namespace KRPC.UI
 
         void DrawClientsList ()
         {
+            // Resize window if number of connected clients changes
+            if (Server.Clients.Count () != numClientsDisplayed) {
+                numClientsDisplayed = Server.Clients.Count ();
+                resized = true;
+            }
             // Get list of client descriptions
             IDictionary<IClient,string> clientDescriptions = new Dictionary<IClient,string> ();
             if (Server.Clients.Any ()) {
@@ -267,11 +356,10 @@ namespace KRPC.UI
 
         protected override void Draw ()
         {
-            // Force window to resize to height of content when length of client list changes
-            // TODO: better way to do this?
-            if (Server.Clients.Count () != numClientsDisplayed) {
+            // Force window to resize to height of content
+            if (resized) {
                 Position = new Rect (Position.x, Position.y, Position.width, 0f);
-                numClientsDisplayed = Server.Clients.Count ();
+                resized = false;
             }
 
             GUILayout.BeginVertical ();
@@ -285,6 +373,10 @@ namespace KRPC.UI
 
             GUILayout.BeginHorizontal ();
             DrawAddress ();
+            if (Server.Running) {
+                GUILayout.Space (4);
+                DrawShowInfoWindow ();
+            }
             GUILayout.EndHorizontal ();
 
             GUILayout.BeginHorizontal ();
@@ -297,18 +389,49 @@ namespace KRPC.UI
                 GUILayout.BeginHorizontal ();
                 DrawServerInfo ();
                 GUILayout.EndHorizontal ();
-
                 GUILayoutExtensions.Separator (separatorStyle);
-
                 DrawClientsList ();
             } else {
                 GUILayout.BeginHorizontal ();
-                DrawAutoStartServerToggle ();
+                DrawAdvancedToggle ();
                 GUILayout.EndHorizontal ();
 
-                GUILayout.BeginHorizontal ();
-                DrawAutoAcceptConnectionsToggle ();
-                GUILayout.EndHorizontal ();
+                if (advanced) {
+                    GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
+                    DrawAutoStartServerToggle ();
+                    GUILayout.EndHorizontal ();
+
+                    GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
+                    DrawAutoAcceptConnectionsToggle ();
+                    GUILayout.EndHorizontal ();
+
+                    GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
+                    DrawOneRPCPerUpdateToggle ();
+                    GUILayout.EndHorizontal ();
+
+                    GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
+                    DrawMaxTimePerUpdate ();
+                    GUILayout.EndHorizontal ();
+
+                    GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
+                    DrawAdaptiveRateControlToggle ();
+                    GUILayout.EndHorizontal ();
+
+                    GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
+                    DrawBlockingRecvToggle ();
+                    GUILayout.EndHorizontal ();
+
+                    GUILayout.BeginHorizontal ();
+                    GUILayout.Space (indentWidth);
+                    DrawRecvTimeout ();
+                    GUILayout.EndHorizontal ();
+                }
 
                 foreach (var error in Errors)
                     GUILayout.Label (error, errorLabelStyle);
@@ -319,13 +442,18 @@ namespace KRPC.UI
 
         bool StartServer ()
         {
+            // Resize the window to the contents
+            resized = true;
+
             // Validate the settings
             Errors.Clear ();
             IPAddress ignoreAddress;
-            ushort ignorePort;
+            ushort ignoreInt;
             bool validAddress = IPAddress.TryParse (address, out ignoreAddress);
-            bool validRPCPort = UInt16.TryParse (rpcPort, out ignorePort);
-            bool validStreamPort = UInt16.TryParse (streamPort, out ignorePort);
+            bool validRPCPort = UInt16.TryParse (rpcPort, out ignoreInt);
+            bool validStreamPort = UInt16.TryParse (streamPort, out ignoreInt);
+            bool validMaxTimePerUpdate = UInt16.TryParse (maxTimePerUpdate, out ignoreInt);
+            bool validRecvTimeout = UInt16.TryParse (recvTimeout, out ignoreInt);
 
             // Display error message if required
             if (!validAddress)
@@ -334,6 +462,10 @@ namespace KRPC.UI
                 Errors.Add (invalidRPCPortText);
             if (!validStreamPort)
                 Errors.Add (invalidStreamPortText);
+            if (!validMaxTimePerUpdate)
+                Errors.Add (invalidMaxTimePerUpdateText);
+            if (!validRecvTimeout)
+                Errors.Add (invalidRecvTimeoutText);
 
             // Save the settings and trigger start server event
             if (Errors.Count == 0) {
@@ -341,6 +473,8 @@ namespace KRPC.UI
                 Config.Address = IPAddress.Parse (address);
                 Config.RPCPort = Convert.ToUInt16 (rpcPort);
                 Config.StreamPort = Convert.ToUInt16 (streamPort);
+                Config.MaxTimePerUpdate = Convert.ToUInt16 (maxTimePerUpdate);
+                Config.RecvTimeout = Convert.ToUInt16 (recvTimeout);
                 Config.Save ();
                 return true;
             }

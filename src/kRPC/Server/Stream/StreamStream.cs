@@ -46,6 +46,14 @@ namespace KRPC.Server.Stream
             throw new NotImplementedException ();
         }
 
+        public ulong BytesRead {
+            get { return stream.BytesRead; }
+        }
+
+        public ulong BytesWritten {
+            get { return stream.BytesWritten; }
+        }
+
         public void Close ()
         {
             stream.Close ();

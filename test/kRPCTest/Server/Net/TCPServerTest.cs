@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Linq;
 using NUnit.Framework;
 using KRPC.Server.Net;
+using System;
 
 namespace KRPCTest.Server.Net
 {
@@ -28,6 +29,8 @@ namespace KRPCTest.Server.Net
             Assert.AreEqual (0, server.Clients.Count ());
             Assert.IsTrue (serverStarted);
             Assert.IsTrue (serverStopped);
+            Assert.AreEqual (0, server.BytesRead);
+            Assert.AreEqual (0, server.BytesWritten);
         }
 
         [Test]
@@ -47,6 +50,8 @@ namespace KRPCTest.Server.Net
             }
             Assert.AreEqual (5, serverStarted);
             Assert.AreEqual (5, serverStopped);
+            Assert.AreEqual (0, server.BytesRead);
+            Assert.AreEqual (0, server.BytesWritten);
         }
 
         [Test]
@@ -85,6 +90,9 @@ namespace KRPCTest.Server.Net
             Assert.IsTrue (clientRequestingConnection);
             Assert.IsTrue (clientConnected);
             Assert.IsTrue (clientDisconnected);
+
+            Assert.AreEqual (0, server.BytesRead);
+            Assert.AreEqual (0, server.BytesWritten);
         }
 
         [Test]
@@ -107,6 +115,9 @@ namespace KRPCTest.Server.Net
 
             server.Stop ();
             tcpClient.Close ();
+
+            Assert.AreEqual (0, server.BytesRead);
+            Assert.AreEqual (0, server.BytesWritten);
         }
 
         [Test]
@@ -134,6 +145,9 @@ namespace KRPCTest.Server.Net
             Assert.AreEqual (0, server.Clients.Count ());
 
             tcpClient.Close ();
+
+            Assert.AreEqual (0, server.BytesRead);
+            Assert.AreEqual (0, server.BytesWritten);
         }
 
         delegate bool BooleanPredicate ();
@@ -169,6 +183,8 @@ namespace KRPCTest.Server.Net
             Assert.AreEqual (0, server.Clients.Count ());
             Assert.IsTrue (serverStarted);
             Assert.IsTrue (serverStopped);
+            Assert.AreEqual (0, server.BytesRead);
+            Assert.AreEqual (0, server.BytesWritten);
         }
     }
 }
