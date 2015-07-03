@@ -24,6 +24,7 @@ namespace KRPC
         readonly TCPServer streamTcpServer;
         readonly RPCServer rpcServer;
         readonly StreamServer streamServer;
+        readonly bool limitClientRpc;
         IScheduler<IClient<Request,Response>> clientScheduler;
         IList<RequestContinuation> continuations;
         IDictionary<IClient<byte,StreamMessage>, IList<StreamRequest>> streamRequests;
@@ -101,7 +102,7 @@ namespace KRPC
             }
         }
 
-        internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort)
+        internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort, bool limitClientRpc)
         {
             rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
@@ -110,6 +111,8 @@ namespace KRPC
             clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
             continuations = new List<RequestContinuation> ();
             streamRequests = new Dictionary<IClient<byte,StreamMessage>,IList<StreamRequest>> ();
+
+            this.limitClientRpc = limitClientRpc;
 
             // Tie events to underlying server
             rpcServer.OnStarted += (s, e) => {
@@ -227,45 +230,79 @@ namespace KRPC
         {
             // The maximum amount of time to spend executing continuations
             const int maxTime = 10; // milliseconds
-            // The maximum amount of time to wait after executing continuations to check for new requests
-            const int timeout = 1; // milliseconds
-            var done = false;
-            var waited = false;
+            const int waitTime = 2; // time to wait for new rpc incoming requests
             var yieldedContinuations = new List<RequestContinuation> ();
 
+            /* Try to execute continuations in our timeframe of maxTime ms.
+             * Delay the execution to next physics cycle if time is expired
+             * or if the continuation is yielded.
+             * 
+             * The cycle will looking for new incoming client requests until
+             * the maxTime timer is expired. If you think this is a waste
+             * of time with your rpc client or your machine is a bit slow
+             * you can set the limit on mod configuration.
+             * 
+             * When limitClientRpc is true, the mod will perform only one
+             */
+
             Stopwatch timer = Stopwatch.StartNew ();
-            do {
-                // Check for new requests from clients
-                rpcServer.Update ();
-                streamServer.Update ();
-                PollRequests (yieldedContinuations);
+            bool delayToNextCycle = false;
+            bool noMorePool = false;
 
-                // Process pending continuations (client requests)
-                if (continuations.Count > 0) {
-                    foreach (var continuation in continuations) {
-                        // Ignore the continuation if the client has disconnected
-                        if (!continuation.Client.Connected)
-                            continue;
-                        // Execute the continuation
-                        try {
-                            ExecuteContinuation (continuation);
-                        } catch (YieldException e) {
-                            yieldedContinuations.Add ((RequestContinuation)e.Continuation);
-                        }
+            do {                        
+                // try to obsess the pooling of incoming requests
+                Stopwatch pollTimer = Stopwatch.StartNew ();
+                do {
+                    rpcServer.Update ();
+                    streamServer.Update ();
+                    PollRequests (yieldedContinuations);
+
+                    // Update expire fields
+                    if (!delayToNextCycle && timer.ElapsedMilliseconds > maxTime)
+                        delayToNextCycle = true;
+                    if (pollTimer.ElapsedMilliseconds > waitTime)
+                        noMorePool = true;
+                }
+                while(!limitClientRpc && !delayToNextCycle && !noMorePool && continuations.Count == 0);          
+                pollTimer.Stop();
+            
+                foreach (var continuation in continuations) {
+                    // Ignore the continuation if the client has disconnected
+                    if (!continuation.Client.Connected)
+                        continue;                                    
+
+                    // Time expired! Delay to next cycle
+                    if (delayToNextCycle) {
+                        yieldedContinuations.Add (continuation);
+                        continue;
                     }
-                    continuations.Clear ();
+
+                    // Execute the continuation
+                    try {
+                        ExecuteContinuation (continuation);
+                    } catch (YieldException e) {
+                        yieldedContinuations.Add ((RequestContinuation)e.Continuation);
+                    }
+
+                    // Update expire field
+                    if (!delayToNextCycle && timer.ElapsedMilliseconds > maxTime)
+                        delayToNextCycle = true;
                 }
 
-                if (timer.ElapsedMilliseconds > maxTime) {
-                    done = true;
-                } else if (!waited && continuations.Count == 0) {
-                    Thread.Sleep (timeout);
-                    waited = true;
+                continuations.Clear();
+
+                // exit if there are no incoming requests or if we are late.
+                // Clients have to wait until the next physics update cycle
+                if(delayToNextCycle || limitClientRpc) {
+                    break;
                 }
-            } while (!done);
+            }
+            while(true);
 
             // Run yielded continuations on the next update
             continuations = yieldedContinuations;
+            // Cleanups
+            timer.Stop ();
         }
 
         /// <summary>
