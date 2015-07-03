@@ -20,6 +20,7 @@ namespace KRPC
         IButton toolbarButton;
         ApplicationLauncherButton applauncherButton;
         MainWindow mainWindow;
+        InfoWindow infoWindow;
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
 
@@ -30,7 +31,10 @@ namespace KRPC
 
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
-            server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
+            server = new KRPCServer (
+                config.Address, config.RPCPort, config.StreamPort,
+                config.OneRPCPerUpdate, config.MaxTimePerUpdate, config.AdaptiveRateControl,
+                config.BlockingRecv, config.RecvTimeout);
 
             // Auto-start the server, if required
             if (config.AutoStartServer)
@@ -66,6 +70,12 @@ namespace KRPC
             // Disconnect client dialog
             clientDisconnectDialog = gameObject.AddComponent<ClientDisconnectDialog> ();
 
+            // Create info window
+            infoWindow = gameObject.AddComponent<InfoWindow> ();
+            infoWindow.Server = server;
+            infoWindow.Closable = true;
+            infoWindow.Visible = false;
+
             // Create main window
             mainWindow = gameObject.AddComponent<MainWindow> ();
             mainWindow.Config = config;
@@ -73,6 +83,7 @@ namespace KRPC
             mainWindow.Visible = config.MainWindowVisible;
             mainWindow.Position = config.MainWindowPosition;
             mainWindow.ClientDisconnectDialog = clientDisconnectDialog;
+            mainWindow.InfoWindow = infoWindow;
 
             // Create new connection dialog
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog> ();
@@ -163,6 +174,11 @@ namespace KRPC
             server.RPCPort = config.RPCPort;
             server.StreamPort = config.StreamPort;
             server.Address = config.Address;
+            server.OneRPCPerUpdate = config.OneRPCPerUpdate;
+            server.MaxTimePerUpdate = config.MaxTimePerUpdate;
+            server.AdaptiveRateControl = config.AdaptiveRateControl;
+            server.BlockingRecv = config.BlockingRecv;
+            server.RecvTimeout = config.RecvTimeout;
             try {
                 server.Start ();
             } catch (ServerException exn) {

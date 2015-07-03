@@ -8,8 +8,10 @@ decouplers
 dll
 enum
 erm
+framerate
 gimbal
 gimballed
+hostname
 inkscape
 integration
 Kerbal
@@ -24,6 +26,7 @@ localhost
 mach
 namespacing
 navball
+ns
 NUnit
 Olex
 online

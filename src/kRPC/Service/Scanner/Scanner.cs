@@ -36,6 +36,10 @@ namespace KRPC.Service.Scanner
                 // Add properties
                 foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (serviceType))
                     service.AddProperty (property);
+                // Check for methods
+                var invalidMethod = Reflection.GetMethodsWith<KRPCMethodAttribute> (serviceType).FirstOrDefault ();
+                if (invalidMethod != null)
+                    throw new ServiceException ("Service " + service.Name + " contains a class method " + invalidMethod.Name);
             }
 
             // Scan for classes annotated with KRPCClass

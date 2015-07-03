@@ -46,6 +46,8 @@ namespace KRPCTest.Server.RPC
             var rpcStream = new RPCStream (stream);
             Assert.IsFalse (rpcStream.DataAvailable);
             //rpcStream.Read ();
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (0, rpcStream.BytesRead);
         }
 
         [Test]
@@ -53,11 +55,17 @@ namespace KRPCTest.Server.RPC
         {
             var stream = new TestStream (new MemoryStream (requestBytes), null);
             var rpcStream = new RPCStream (stream);
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (0, rpcStream.BytesRead);
             Assert.IsTrue (rpcStream.DataAvailable);
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (requestBytes.Length, rpcStream.BytesRead);
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
             Assert.AreEqual (expectedRequest.Service, request.Service);
             Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (requestBytes.Length, rpcStream.BytesRead);
         }
 
         [Test]
@@ -80,6 +88,8 @@ namespace KRPCTest.Server.RPC
             // Read part 1
             var rpcStream = new RPCStream (new TestStream (stream, null));
             Assert.IsFalse (rpcStream.DataAvailable);
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (part1.Length, rpcStream.BytesRead);
 
             // Write part 2
             Assert.AreEqual (part1.Length, stream.Position);
@@ -88,6 +98,8 @@ namespace KRPCTest.Server.RPC
 
             // Read part 2
             Assert.IsFalse (rpcStream.DataAvailable);
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (part1.Length + part2.Length, rpcStream.BytesRead);
 
             // Write part 3
             Assert.AreEqual (part1.Length + part2.Length, stream.Position);
@@ -96,8 +108,12 @@ namespace KRPCTest.Server.RPC
 
             // Read part 3
             Assert.IsTrue (rpcStream.DataAvailable);
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (part1.Length + part2.Length + part3.Length, rpcStream.BytesRead);
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (part1.Length + part2.Length + part3.Length, rpcStream.BytesRead);
             Assert.AreEqual (expectedRequest.Service, request.Service);
             Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
         }
@@ -114,6 +130,8 @@ namespace KRPCTest.Server.RPC
             stream.Seek (0, SeekOrigin.Begin);
             var rpcStream = new RPCStream (new TestStream (stream, null));
             Assert.Throws<MalformedRequestException> (() => rpcStream.Read ());
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (stream.Length, rpcStream.BytesRead);
         }
 
         [Test]
@@ -124,6 +142,8 @@ namespace KRPCTest.Server.RPC
             rand.NextBytes (data);
             var rpcStream = new RPCStream (new TestStream (new MemoryStream (data), null));
             Assert.Throws<RequestBufferOverflowException> (() => rpcStream.Read ());
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (data.Length - 1, rpcStream.BytesRead);
         }
 
         [Test]
@@ -134,6 +154,8 @@ namespace KRPCTest.Server.RPC
             rpcStream.Write (expectedResponse);
             byte[] bytes = stream.ToArray ();
             Assert.IsTrue (responseBytes.SequenceEqual (bytes));
+            Assert.AreEqual (bytes.Length, rpcStream.BytesWritten);
+            Assert.AreEqual (0, rpcStream.BytesRead);
         }
     }
 }

@@ -23,5 +23,6 @@ machine you like.
    compiling
    extending
    communication-protocol
+   internals
 
 :ref:`genindex`

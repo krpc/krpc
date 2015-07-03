@@ -10,8 +10,11 @@ namespace TestServer
 {
     class MainClass
     {
+        static KRPCServer server;
+
         public static void Main (string[] args)
         {
+            KRPC.Service.Scanner.Scanner.GetServices ();
             var cmdargs = args.ToList ();
             if (cmdargs.Contains ("--debug")) {
                 cmdargs.Remove ("--debug");
@@ -25,6 +28,8 @@ namespace TestServer
                 Logger.Enabled = true;
                 Logger.Level = Logger.Severity.Info;
             }
+            bool serverDebug = cmdargs.Contains ("--server-debug");
+            cmdargs.Remove ("--server-debug");
             if (args.Contains ("--help") || args.Contains ("-h")) {
                 Help ();
                 return;
@@ -37,20 +42,39 @@ namespace TestServer
                 Help ();
                 return;
             }
-            const int frameTime = 50;
-            var server = new KRPCServer (IPAddress.Loopback, rpcPort, streamPort);
+
+            server = new KRPCServer (IPAddress.Loopback, rpcPort, streamPort);
             KRPCServer.Context.SetGameScene (GameScene.SpaceCenter);
             var timeSpan = new TimeSpan ();
             server.GetUniversalTime = () => timeSpan.TotalSeconds;
             server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
             server.Start ();
+
+            const long targetFPS = 60;
+            long update = 0;
+            long ticksPerUpdate = Stopwatch.Frequency / targetFPS;
+            var timer = new Stopwatch ();
             while (server.Running) {
-                Stopwatch timer = Stopwatch.StartNew ();
+                timer.Reset ();
+                timer.Start ();
+
                 server.Update ();
-                var elapsed = timer.ElapsedMilliseconds;
-                var sleep = frameTime - elapsed;
-                if (sleep > 0)
-                    System.Threading.Thread.Sleep ((int)sleep);
+
+                if (serverDebug && update % targetFPS == 0) {
+                    // Output details about whether server.Update() took too little or too long to execute
+                    var elapsed = timer.ElapsedTicks;
+                    var diffTicks = Math.Abs (ticksPerUpdate - elapsed);
+                    var diffTime = Math.Round ((double)diffTicks / (double)Stopwatch.Frequency * 1000d, 2);
+                    if (elapsed > ticksPerUpdate)
+                        Console.WriteLine ("Slow by " + diffTime + " ms (" + diffTicks + " ticks)");
+                    else
+                        Console.WriteLine ("Fast by " + diffTime + " ms (" + diffTicks + " ticks)");
+                }
+
+                // Wait, to force 60 FPS
+                while (timer.ElapsedTicks < ticksPerUpdate) {
+                }
+                update++;
             }
         }
 

@@ -26,6 +26,8 @@ namespace KRPC.Server.RPC
         IServer<byte,byte> server;
         Dictionary<IClient<byte,byte>,RPCClient> clients = new Dictionary<IClient<byte, byte>, RPCClient> ();
         Dictionary<IClient<byte,byte>,RPCClient> pendingClients = new Dictionary<IClient<byte, byte>, RPCClient> ();
+        ulong closedClientsBytesRead;
+        ulong closedClientsBytesWritten;
 
         public RPCServer (IServer<byte,byte> server)
         {
@@ -75,6 +77,14 @@ namespace KRPC.Server.RPC
             }
         }
 
+        public ulong BytesRead {
+            get { return closedClientsBytesRead + clients.Values.Select(c => c.Stream.BytesRead).SumUnsignedLong(); }
+        }
+
+        public ulong BytesWritten {
+            get { return closedClientsBytesWritten + clients.Values.Select(c => c.Stream.BytesWritten).SumUnsignedLong(); }
+        }
+
         void HandleClientConnected (object sender, IClientEventArgs<byte,byte> args)
         {
             // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
@@ -95,6 +105,8 @@ namespace KRPC.Server.RPC
         void HandleClientDisconnected (object sender, IClientEventArgs<byte,byte> args)
         {
             var client = clients [args.Client];
+            closedClientsBytesRead += client.Stream.BytesRead;
+            closedClientsBytesWritten += client.Stream.BytesWritten;
             clients.Remove (args.Client);
             if (OnClientDisconnected != null) {
                 OnClientDisconnected (this, new ClientDisconnectedArgs<Request,Response> (client));
