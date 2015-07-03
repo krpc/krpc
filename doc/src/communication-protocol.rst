@@ -63,7 +63,7 @@ For example, this python code will connect to the *RPC Server* at address
    while len(identifier) < 16:
        identifier += rpc_conn.recv(16 - len(identifier))
    # Connection successful. Print out a message along with the client identifier.
-   printable_identifier = ''.join('%02x' % x for x in identifier)
+   printable_identifier = ''.join('%02s' % x for x in identifier)
    print('Connected to RPC server, client idenfitier = %s' % printable_identifier)
 
 Connecting to the Stream Server
@@ -233,9 +233,14 @@ The ``krpc.schema.KRPC`` package contains the Protocol Buffer message formats
 ``Request``, ``Response`` and ``Status`` compiled to python code using the
 Protocol Buffer compiler. The ``EncodeVarint`` and ``DecodeVarint`` functions
 are used to encode/decode integers to/from the Protocol Buffer varint
-format. Their implementation is omitted for brevity.
+format.
 
 .. code-block:: python
+
+   def EncodeVarint(value):
+     return krpc.Encoder.encode(value,krpc.types.ValueType("int32"))
+   def DecodeVarint(data) :
+     return krpc.Decoder.decode(data,krpc.types.ValueType("int32"))
 
    # Create Request message
    request = krpc.schema.KRPC.Request()
@@ -252,7 +257,7 @@ format. Their implementation is omitted for brevity.
    while True:
        data += rpc_conn.recv(1)
        try:
-           (size, position) = DecodeVarint(data)
+           size = DecodeVarint(data)
            break
        except IndexError:
            pass
@@ -368,9 +373,27 @@ returns a Protocol Buffer message with the format:
 
    message Status {
      required string version = 1;
+     required uint64 bytes_read = 2;
+     required uint64 bytes_written = 3;
+     required float bytes_read_rate = 4;
+     required float bytes_written_rate = 5;
+     required uint64 rpcs_executed = 6;
+     required float rpc_rate = 7;
+     required bool adaptive_rate_control = 8;
+     required uint32 max_time_per_update = 9;
+     required bool blocking_recv = 10;
+     required uint32 recv_timeout = 11;
+     required float time_per_rpc_update = 12;
+     required float poll_time_per_rpc_update = 13;
+     required float exec_time_per_rpc_update = 14;
+     required uint32 stream_rpcs = 15;
+     required uint64 stream_rpcs_executed = 16;
+     required float stream_rpc_rate = 17;
+     required float time_per_stream_update = 18;
    }
 
-The field ``version`` is the version string of the server.
+The ``version`` field contains the version string of the server. The remaining
+fields contain performance information about the server.
 
 .. _communication-protocol-get-services:
 

@@ -8,6 +8,7 @@ decouplers
 dll
 enum
 erm
+framerate
 gimbal
 gimballed
 hostname
@@ -25,6 +26,7 @@ localhost
 mach
 namespacing
 navball
+ns
 NUnit
 Olex
 online

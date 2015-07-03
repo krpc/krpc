@@ -73,6 +73,14 @@ namespace KRPC.Server.RPC
             throw new NotSupportedException ();
         }
 
+        public ulong BytesRead {
+            get { return stream.BytesRead; }
+        }
+
+        public ulong BytesWritten {
+            get { return stream.BytesWritten; }
+        }
+
         /// <summary>
         /// Close the stream.
         /// </summary>

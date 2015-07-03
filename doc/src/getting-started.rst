@@ -52,11 +52,18 @@ configuration options are:
 2. **RPC and Stream port numbers**: These need to be set to port numbers that
    are available on your machine. In most cases, they can just be left as the
    default.
-3. **Auto-accept new clients**: When enabled, new client connections are
+
+There are also several advanced, which are hidden by default, but can be
+revealed by checking the 'Advanced settings' box:
+
+1. **Auto-start server**: When enabled, the server will start automatically when
+   the game loads.
+2. **Auto-accept new clients**: When enabled, new client connections are
    automatically allowed. When disabled, a pop-up is displayed asking whether
    the new client connection should be allowed.
-4. **Auto-start server**: When enabled, the server will start automatically when
-   the game loads.
+
+The other advanced settings control the performance of the server. For details,
+:ref:`see here <server-performance-settings>`.
 
 The Python Client
 -----------------
