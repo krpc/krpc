@@ -22,7 +22,11 @@ test: protobuf bin
 	#TODO
 
 dist: protobuf bin
-	#TODO
+	rm -rf dist
+	mkdir -p dist/krpc-0.1.0-0
+	mkdir -p dist/krpc-0.1.0-0/lua
+	cp -R krpc dist/krpc-0.1.0-0/lua/
+	(cd dist; tar czvpf krpc-0.1.0-0.tar.gz krpc-0.1.0-0/)
 
 release: protobuf bin
 	#TODO
