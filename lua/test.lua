@@ -9,8 +9,8 @@ local request = schema.Request()
 request.service = "KRPC"
 request.procedure = "GetStatus"
 
-conn:send_request(request)
-response = conn:receive_response()
+conn:_send_request(request)
+response = conn:_receive_response()
 
 if response:HasField('error') then
   print(response.error)
@@ -27,8 +27,8 @@ local request = schema.Request()
 request.service = "KRPC"
 request.procedure = "GetServices"
 
-conn:send_request(request)
-response = conn:receive_response()
+conn:_send_request(request)
+response = conn:_receive_response()
 
 if response:HasField('error') then
   print(response.error)
@@ -36,6 +36,11 @@ else
   services = schema.Services()
   services:ParseFromString(response.return_value)
 
-  --TODO
+  for k,v in ipairs(services.services) do
+    print(v.name)
+    print(v.procedures)
+    print(v.classes)
+    print(v.enumerations)
+  end
 
 end
