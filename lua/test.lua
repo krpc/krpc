@@ -20,3 +20,22 @@ else
 
   print(status.version)
 end
+
+------
+
+local request = schema.Request()
+request.service = "KRPC"
+request.procedure = "GetServices"
+
+conn:send_request(request)
+response = conn:receive_response()
+
+if response:HasField('error') then
+  print(response.error)
+else
+  services = schema.Services()
+  services:ParseFromString(response.return_value)
+
+  --TODO
+
+end
