@@ -19,9 +19,11 @@ function Client.receive_response(self)
   data = ""
   while true do
     data = data .. self.rpc_connection:receive(1)
-    size, position = decoder.varint(data)
-    break
-    -- TODO: read more than one byte??
+    success, result = pcall(decoder.varint, data)
+    if success then
+      size = result
+      break
+    end
   end
 
   data = ""
