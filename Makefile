@@ -32,6 +32,7 @@ PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCSpaceCenter/Sche
 PROTOS_TEST = $(wildcard test/kRPCTest/Schema/*.proto)
 
 PROTOC = protoc
+PROTOC_LUA_PLUGIN = `pwd`/../protoc-gen-lua/plugin/protoc-gen-lua
 PROTOGEN = mono tools/ProtoGen.exe
 MDTOOL = mdtool
 MONODIS = monodis
@@ -101,6 +102,7 @@ clean: protobuf-clean
 	find . -name "*.pyc" -exec rm -rf {} \;
 	-rm -f KSP.log TestResult.xml
 	make -C python clean
+	make -C lua clean
 	make -C doc clean
 
 dist-clean: clean
@@ -158,10 +160,11 @@ cog:
 
 # Protocol Buffers -------------------------------------------------------------
 
-.PHONY: protobuf-csharp protobuf-python protobuf-java protobuf-cpp \
-	      protobuf-clean protobuf-csharp-clean protobuf-python-clean protobuf-java-clean protobuf-cpp-clean
+.PHONY: protobuf-csharp protobuf-python protobuf-java protobuf-cpp protobuf-lua \
+	      protobuf-clean protobuf-csharp-clean protobuf-python-clean protobuf-java-clean \
+        protobuf-cpp-clean protobuf-lua-clean
 
-protobuf: protobuf-csharp protobuf-python protobuf-java protobuf-cpp
+protobuf: protobuf-csharp protobuf-python protobuf-java protobuf-cpp protobuf-lua
 	# Fix for error in output of C# protobuf compiler
 	-git apply krpc-proto.patch
 
@@ -181,7 +184,12 @@ protobuf-cpp: $(PROTOS) $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
 	mkdir -p cpp/src/kRPC/Schema
 	cp $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc) cpp/src/kRPC/Schema/
 
-protobuf-clean: protobuf-csharp-clean protobuf-python-clean protobuf-java-clean protobuf-cpp-clean
+protobuf-lua: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.lua) $(PROTOS_TEST:.proto=.lua)
+	mkdir -p lua/krpc/schema
+	cp $(PROTOS:.proto=.lua) lua/krpc/schema/
+	#cp $(PROTOS_TEST:.proto=.lua) lua/krpc/test/
+
+protobuf-clean: protobuf-csharp-clean protobuf-python-clean protobuf-java-clean protobuf-cpp-clean protobuf-lua-clean
 	rm -rf $(PROTOS:.proto=.protobin) $(PROTOS_TEST:.proto=.protobin)
 
 protobuf-csharp-clean:
@@ -197,6 +205,9 @@ protobuf-java-clean:
 protobuf-cpp-clean:
 	rm -rf cpp
 	rm -rf $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
+
+protobuf-lua-clean:
+	rm -rf $(PROTOS:.proto=.lua) $(PROTOS_TEST:.proto=.lua) lua/krpc/schema lua/krpc/test/Test.lua
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
@@ -222,6 +233,10 @@ JAVATMP:=$(shell mktemp -d)
 
 %.pb.cc: %.proto
 	$(PROTOC) $< --cpp_out=.
+
+%.lua: %.proto
+	$(PROTOC) $< --plugin=$(PROTOC_LUA_PLUGIN) --lua_out=.
+	mv $*_pb.lua $@
 
 # Images -----------------------------------------------------------------------
 

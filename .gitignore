@@ -134,10 +134,13 @@ src/kRPC/Schema/*.py
 src/kRPC/Schema/*.java
 src/kRPC/Schema/*.h
 src/kRPC/Schema/*.cc
+src/kRPC/Schema/*.lua
 python/krpc/schema/
 python/krpc/test/Test.py
+lua/krpc/schema/
 test/kRPCTest/Schema/*.cs
 test/kRPCTest/Schema/*.py
+test/kRPCTest/Schema/*.lua
 
 # Build output
 dist
