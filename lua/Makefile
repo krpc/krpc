@@ -18,8 +18,7 @@ bin:
 	   ./bin/TestServer/
 
 test: protobuf bin
-	lua5.1 test.lua
-	#TODO
+	$(LUA) unittest.lua
 
 dist: protobuf bin
 	rm -rf dist
