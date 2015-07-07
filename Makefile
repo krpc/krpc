@@ -187,7 +187,7 @@ protobuf-cpp: $(PROTOS) $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
 protobuf-lua: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.lua) $(PROTOS_TEST:.proto=.lua)
 	mkdir -p lua/krpc/schema
 	cp $(PROTOS:.proto=.lua) lua/krpc/schema/
-	#cp $(PROTOS_TEST:.proto=.lua) lua/krpc/test/
+	cp $(PROTOS_TEST:.proto=.lua) lua/krpc/test/
 
 protobuf-clean: protobuf-csharp-clean protobuf-python-clean protobuf-java-clean protobuf-cpp-clean protobuf-lua-clean
 	rm -rf $(PROTOS:.proto=.protobin) $(PROTOS_TEST:.proto=.protobin)

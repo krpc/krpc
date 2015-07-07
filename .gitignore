@@ -138,6 +138,7 @@ src/kRPC/Schema/*.lua
 python/krpc/schema/
 python/krpc/test/Test.py
 lua/krpc/schema/
+lua/krpc/test/Test.lua
 test/kRPCTest/Schema/*.cs
 test/kRPCTest/Schema/*.py
 test/kRPCTest/Schema/*.lua

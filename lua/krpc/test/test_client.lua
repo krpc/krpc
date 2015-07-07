@@ -1,12 +1,13 @@
-local TestClient = {}
-TestClient.__index = TestClient
+local luaunit = require 'luaunit'
+local class = require 'pl.class'
+local krpc = require 'krpc.init'
 
-local krpc = require "krpc.init"
+local TestClient = class()
 
 function TestClient:test_version()
   --conn = krpc.connect()
   --status = conn.krpc.get_status()
-  assertEquals('0.1.9', '0.1.9')
+  luaunit.assertEquals('0.1.9', '0.1.9')
 end
 
 return TestClient

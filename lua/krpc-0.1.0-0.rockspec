@@ -9,7 +9,8 @@ description = {
   license = "GNU GPL v3"
 }
 dependencies = {
-  "lua ~> 5.2"
+  "lua ~> 5.2",
+  "penlight"
 }
 build = {
   type = "builtin",
