@@ -43,10 +43,9 @@ function TestEncoder:test_encode_message()
   local request = schema.Request()
   request.service = 'ServiceName'
   request.procedure = 'ProcedureName'
-  --TODO
-  --data = encoder.encode(request, self.types.as_type('KRPC.Request'))
-  --expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
-  --luaunit.assertEqual(platform.hexlify(data), expected)
+  data = encoder.encode(request, types:as_type('KRPC.Request'))
+  expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
+  luaunit.assertEquals(platform.hexlify(data), expected)
 end
 
 function TestEncoder:test_encode_value()
@@ -76,7 +75,6 @@ end
 function TestEncoder:test_encode_class()
   local typ = types:as_type('Class(ServiceName.ClassName)')
   local class_type = typ.lua_type
-  --luaunit.assertTrue(issubclass(class_type, ClassBase))
   local value = class_type(300)
   luaunit.assertEquals(300, value._object_id)
   local data = encoder.encode(value, typ)

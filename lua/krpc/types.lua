@@ -77,7 +77,47 @@ local function _load_types(package)
   end
 end
 
-Types.ClassBase = class()
+local None = class()
+
+function None:_init()
+  self._object_id = 0
+end
+
+function None:__tostring()
+  return 'none'
+end
+
+Types.none = None()
+
+Types.DynamicType = class(class.properties)
+
+--- Add a method
+function Types.DynamicType:_add_method(name, func)
+  self[name] = func
+  return self[name]
+end
+
+--- Add a static method
+function Types.DynamicType:_add_static_method(name, func)
+  self[name] = func
+  return self[name]
+end
+
+--- Add a property
+function Types.DynamicType:_add_property(name, getter, setter)
+  if (not getter) and (not setter) then
+    error('Either getter or setter must be provided')
+  end
+  if getter then
+    self['get_' .. name] = getter
+  end
+  if setter then
+    self['set_' .. name] = setter
+  end
+  return nil --TODO: return the getter??
+end
+
+Types.ClassBase = class(Types.DynamicType)
 
 function Types.ClassBase:_init(object_id)
   self._object_id = object_id
@@ -100,10 +140,14 @@ end
 
 Types.Enum = class()
 
+function Types.Enum:_init(value)
+  self.value = value
+end
+
 local function _create_enum_type(service_name, class_name, values)
   local cls = class(Types.Enum)
   for k,v in pairs(values) do
-     cls[k] = {value=v}
+    cls[k] = cls(v)
   end
   return cls
 end
@@ -152,7 +196,7 @@ function Types.ProtobufEnumType:_init(type_string)
   if not PROTOBUF_TO_ENUM_TYPE[type_string] then
     error('\'' .. type_string .. '\' is not a valid type string for a protobuf enumeration type')
   end
-  self:super(type_string, 'numeric')
+  self:super(type_string, 'number')
 end
 
 Types.ClassType = class(Types.TypeBase)
@@ -289,42 +333,24 @@ end
 --- Coerce a value to the specified type (specified by a type object)
 --  Raises an error if the coercion is not possible """
 function Types:coerce_to(value, typ)
+  if type(typ.lua_type) == 'string' and typ(value) == typ.lua_type then
+    return value
+  elseif type(typ.lua_type) == 'table' and typ.lua_type:class_of(value) then
+    return value
+  end
   -- Types.none can be coerced to a ClassType
   if typ:is_a(Types.ClassType) and value == Types.none then
     return Types.none
   end
   -- Coerce identical class types from different client connections
-  --if typ:is_a(Types.ClassType) and value:is_a(Types.ClassBase) then
-  --  value_type = type(value)
-  --  if typ.python_type._service_name == value_type._service_name and \
-  --    typ.python_type._class_name == value_type._class_name then
-  --    return typ.python_type(value._object_id)
-  --  end
-  --end
-  -- Collection types
-  --try:
-  --    # Coerce tuples to lists
-  --    if isinstance(value, collections.Iterable) and isinstance(typ, ListType):
-  --        return typ.python_type(self.coerce_to(x, typ.value_type) for x in value)
-  --    # Coerce lists (with appropriate number of elements) to tuples
-  --    if isinstance(value, collections.Iterable) and isinstance(typ, TupleType):
-  --        if len(value) != len(typ.value_types):
-  --            raise ValueError
-  --        return typ.python_type([self.coerce_to(x, typ.value_types[i]) for i,x in enumerate(value)])
-  --except ValueError:
-  --    raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) + ' to type ' + str(typ))
-  --# Numeric types
-  --# See http://docs.python.org/2/reference/datamodel.html#coercion-rules
-  --numeric_types = (float, int, long)
-  --if type(value) not in numeric_types or typ.python_type not in numeric_types:
-  --    raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) + ' to type ' + str(typ))
-  --if typ.python_type == float:
-  --    return float(value)
-  --elif typ.python_type == int:
-  --    return int(value)
-  --else:
-  --    return long(value)
-  error('Type coercion failed')
+  if typ:is_a(Types.ClassType) and Types.ClassBase:class_of(value) then
+    --local value_type = type(value)
+    if typ.lua_type._service_name == value._service_name and
+       typ.lua_type._class_name == value._class_name then
+      return typ.lua_type(value._object_id)
+    end
+  end
+  error('Failed to coerce value ' .. tostring(value) .. ' of type ' .. type(value) .. ' to type ' .. tostring(typ))
 end
 
 function Types:get_parameter_type(pos, typ, attrs)
@@ -348,46 +374,5 @@ function Types:get_return_type(typ, attrs)
   end
   return self:as_type(typ)
 end
-
-Types.DynamicType = class(class.properties)
-
---function Types.DynamicType:_add_method(name, func)
---        """ Add a method """
---        func.__name__ = name
---        func.__doc__ = doc
---        setattr(cls, name, func)
---        return getattr(cls, name)
-
---- Add a static method
-function Types.DynamicType:_add_static_method(name, func)
-  self[name] = func
-  return self[name]
-end
-
---- Add a property
-function Types.DynamicType:_add_property(name, getter, setter)
-  if (not getter) and (not setter) then
-    error('Either getter or setter must be provided')
-  end
-  if getter then
-    self['get_' .. name] = getter
-  end
-  if setter then
-    self['set_' .. name] = setter
-  end
-  return nil --TODO: return the getter??
-end
-
-local None = class()
-
-function None:_init()
-  self._object_id = 0
-end
-
-function None:__tostring()
-  return 'none'
-end
-
-Types.none = None()
 
 return Types

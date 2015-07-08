@@ -110,7 +110,7 @@ function Client:_build_request(service, procedure, args, kwargs, param_names, pa
     if type(typ.lua_type) == 'string' then
       valid = typ.lua_type == type(value)
     elseif type(typ.lua_type) == 'table' then
-      valid = value:is_a(typ.lua_type)
+      valid = typ.lua_type:class_of(value)
     end
     if not valid then
       ok,coerced_value = pcall(self._types.coerce_to, self._types, value, typ)

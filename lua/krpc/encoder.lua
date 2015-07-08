@@ -98,7 +98,7 @@ function encoder.encode(x, typ)
   elseif typ:is_a(Types.ValueType) then
     return _encode_value(x, typ)
   elseif typ:is_a(Types.EnumType) then
-    return _encode_value(x, _types:as_type('int32'))
+    return _encode_value(x.value, _types:as_type('int32'))
   elseif typ:is_a(Types.ProtobufEnumType) then
     return _encode_value(x, _types:as_type('int32'))
   elseif typ:is_a(Types.ClassType) then

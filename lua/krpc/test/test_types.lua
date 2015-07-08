@@ -11,7 +11,7 @@ Types.add_search_path('krpc.test')
 local TestTypes = class()
 
 local PROTOBUF_VALUE_TYPES = List{'double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes'}
-local LUA_VALUE_TYPES = List{numeric, boolean, string}
+local LUA_VALUE_TYPES = List{'number', 'boolean', 'string'}
 
 local PROTOBUF_TO_LUA_VALUE_TYPE = Map{
   double = 'number',
@@ -53,7 +53,7 @@ function TestTypes:test_protobuf_enum_types()
   local types = Types()
   local typ = types:as_type('Test.TestEnum')
   luaunit.assertTrue(typ:is_a(Types.ProtobufEnumType))
-  luaunit.assertEquals('numeric', typ.lua_type)
+  luaunit.assertEquals('number', typ.lua_type)
   luaunit.assertEquals('Test.TestEnum', typ.protobuf_type)
   luaunit.assertError(types.as_type, types, 'Test.DoesntExist')
   luaunit.assertError(Types.ProtobufEnumType, '')
@@ -69,7 +69,6 @@ function TestTypes:test_enum_types()
   luaunit.assertEquals(nil, typ.lua_type)
   luaunit.assertTrue('Enum(ServiceName.EnumName)', typ.protobuf_type)
   typ:set_values({a = 0, b = 42, c = 100})
-  --luaunit.assertTrue(typ.lua_type:is_a(Types.Enum))
   luaunit.assertEquals(0, typ.lua_type.a.value)
   luaunit.assertEquals(42, typ.lua_type.b.value)
   luaunit.assertEquals(100, typ.lua_type.c.value)
@@ -79,7 +78,6 @@ function TestTypes:test_class_types()
   local types = Types()
   local typ = types:as_type('Class(ServiceName.ClassName)')
   luaunit.assertTrue(typ:is_a(Types.ClassType))
-  --luaunit.assertTrue(typ.lua_type:is_a(Types.ClassBase))
   luaunit.assertTrue('Class(ServiceName.ClassName)', typ.protobuf_type)
   instance = typ.lua_type(42)
   luaunit.assertEquals(42, instance._object_id)
@@ -199,7 +197,6 @@ function TestTypes.test_get_parameter_type()
   local class_parameter = types:get_parameter_type(1, 'uint64', List{'ParameterType(0).Class(ServiceName.ClassName)'})
   luaunit.assertTrue(types:as_type('Class(ServiceName.ClassName)') == class_parameter)
   luaunit.assertTrue(class_parameter:is_a(Types.ClassType))
-  --luaunit.assertTrue(issubclass(class_parameter.python_type, ClassBase))
   luaunit.assertEquals('Class(ServiceName.ClassName)', class_parameter.protobuf_type)
   luaunit.assertEquals('uint64', types:get_parameter_type(1, 'uint64', List{'ParameterType(1).Class(ServiceName.ClassName)'}).protobuf_type)
   luaunit.assertEquals('Test.TestEnum', types:get_parameter_type(1, 'Test.TestEnum', List{}).protobuf_type)
@@ -214,37 +211,13 @@ function TestTypes.test_get_return_type()
   luaunit.assertEquals('Class(ServiceName.ClassName)', types:get_return_type('uint64', List{'ReturnType.Class(ServiceName.ClassName)'}).protobuf_type)
 end
 
---function test_coerce_to()
---  types = Types()
---  cases = [
---      (42.0, 42,   'double'),
---      (42.0, 42,   'float'),
---      (42,   42.0, 'int32'),
---      (42,   42L,  'int32'),
---      (42L,  42.0, 'int64'),
---      (42L,  42,   'int64'),
---      (42,   42.0, 'uint32'),
---      (42,   42L,  'uint32'),
---      (42L,  42.0, 'uint64'),
---      (42L,  42,   'uint64'),
---      (list(), tuple(), 'List(string)'),
---      ((0,1,2), [0,1,2], 'Tuple(int32,int32,int32)'),
---      ([0,1,2], (0,1,2), 'List(int32)'),
---  ]
---  for expected, value, typ in cases:
---      coerced_value = types.coerce_to(value, types.as_type(typ))
---      self.assertEqual(expected, coerced_value)
---      self.assertEqual(type(expected), type(coerced_value))
---
---  self.assertRaises(ValueError, types.coerce_to, None, types.as_type('float'))
---  self.assertRaises(ValueError, types.coerce_to, '', types.as_type('float'))
---  self.assertRaises(ValueError, types.coerce_to, True, types.as_type('float'))
---
---  self.assertRaises(ValueError, types.coerce_to, list(), types.as_type('Tuple(int32)'))
---  self.assertRaises(ValueError, types.coerce_to, ['foo',2], types.as_type('Tuple(string)'))
---  self.assertRaises(ValueError, types.coerce_to, [1], types.as_type('Tuple(string)'))
---  self.assertRaises(ValueError, types.coerce_to, [1,'a','b'], types.as_type('List(string)'))
---end
+function TestTypes:test_coerce_to()
+  local types = Types()
+  luaunit.assertEquals(List{'foo','bar'}, types:coerce_to(List{'foo','bar'}, types:as_type('Tuple(string)')))
+  luaunit.assertError(types.coerce_to, types, Types.none, types:as_type('float'))
+  luaunit.assertError(types.coerce_to, types, '', types:as_type('float'))
+  luaunit.assertError(types.coerce_to, types, true, types:as_type('float'))
+end
 
 function TestTypes:test_none()
   luaunit.assertEquals(tostring(Types.none), 'none')

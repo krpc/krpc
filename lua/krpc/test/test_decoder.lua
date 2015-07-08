@@ -50,7 +50,7 @@ end
 function TestDecoder:test_decode_class()
   local typ = types:as_type('Class(ServiceName.ClassName)')
   local value = decoder.decode(platform.unhexlify('ac02'), typ)
-  luaunit.assertTrue(value:is_a(typ.lua_type))
+  luaunit.assertTrue(typ.lua_type:class_of(value))
   luaunit.assertEquals(300, value._object_id)
 end
 

@@ -1,9 +1,15 @@
 local luaunit = require 'luaunit'
 local ServerTest = require 'krpc.test.servertest'
 local class = require 'pl.class'
+local seq = require 'pl.seq'
 local stringx = require 'pl.stringx'
+local tablex = require 'pl.tablex'
+local List = require 'pl.List'
+local Map = require 'pl.Map'
+local Set = require 'pl.Set'
 local krpc = require 'krpc.init'
 local Types = require 'krpc.types'
+local schema = require 'krpc.test.Test'
 
 local TestClient = class(ServerTest)
 
@@ -72,57 +78,65 @@ end
 function TestClient:test_class_none_value()
   self.conn.test_service.echo_test_object(Types.none)
   luaunit.assertEquals(self.conn.test_service.echo_test_object(Types.none), Types.none)
-  --obj = self.conn.test_service.create_test_object('bob')
-  --luaunit.assertEquals('bobnull', obj.object_to_string(nil))
-  --self.conn.test_service.object_property = nil
-  --luaunit.assertEquals(self.conn.test_service.object_property, nil)
+  obj = self.conn.test_service.create_test_object('bob')
+  luaunit.assertEquals('bobnull', obj:object_to_string(Types.none))
+  self.conn.test_service.object_property = Types.none
+  luaunit.assertEquals(self.conn.test_service.object_property, Types.none)
 end
 
---def test_class_methods(self):
---    obj = self.conn.test_service.create_test_object('bob')
---    self.assertEqual('value=bob', obj.get_value())
---    self.assertEqual('bob3.14159', obj.float_to_string(3.14159))
---    obj2 = self.conn.test_service.create_test_object('bill')
---    self.assertEqual('bobbill', obj.object_to_string(obj2))
+function TestClient:test_class_methods()
+  local obj = self.conn.test_service.create_test_object('bob')
+  luaunit.assertEquals('value=bob', obj:get_value())
+  luaunit.assertEquals('bob3.14159', obj:float_to_string(3.14159))
+  local obj2 = self.conn.test_service.create_test_object('bill')
+  luaunit.assertEquals('bobbill', obj:object_to_string(obj2))
+end
 
---def test_class_static_methods(self):
---    self.assertEqual('jeb', self.conn.test_service.TestClass.static_method())
---    self.assertEqual('jebbobbill', self.conn.test_service.TestClass.static_method('bob', 'bill'))
+function TestClient:test_class_static_methods()
+  luaunit.assertEquals('jeb', self.conn.test_service.TestClass.static_method())
+  luaunit.assertEquals('jebbobbill', self.conn.test_service.TestClass.static_method('bob', 'bill'))
+end
 
---def test_class_properties(self):
---    obj = self.conn.test_service.create_test_object('jeb')
---    obj.int_property = 0
---    self.assertEqual(0, obj.int_property)
---    obj.int_property = 42
---    self.assertEqual(42, obj.int_property)
---    obj2 = self.conn.test_service.create_test_object('kermin')
---    obj.object_property = obj2
---    self.assertEqual(obj2._object_id, obj.object_property._object_id)
---
+function TestClient:test_class_properties()
+  local obj = self.conn.test_service.create_test_object('jeb')
+  obj:set_int_property(0)
+  luaunit.assertEquals(0, obj:get_int_property())
+  obj.int_property = 0
+  luaunit.assertEquals(0, obj.int_property)
+  obj.int_property = 42
+  luaunit.assertEquals(42, obj.int_property)
+  local obj2 = self.conn.test_service.create_test_object('kermin')
+  obj.object_property = obj2
+  luaunit.assertEquals(obj2._object_id, obj.object_property._object_id)
+end
+
 function TestClient:test_optional_arguments()
   luaunit.assertEquals('jebfoobarbaz', self.conn.test_service.optional_arguments('jeb'))
   luaunit.assertEquals('jebbobbillbaz', self.conn.test_service.optional_arguments('jeb', 'bob', 'bill'))
 end
 
---def test_named_parameters(self):
---    self.assertEqual('1234', self.conn.test_service.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
---    self.assertEqual('2413', self.conn.test_service.optional_arguments(z='1', x='2', another_parameter='3', y='4'))
---    self.assertEqual('1243', self.conn.test_service.optional_arguments('1', '2', another_parameter='3', z='4'))
---    self.assertEqual('123baz', self.conn.test_service.optional_arguments('1', '2', z='3'))
---    self.assertEqual('12bar3', self.conn.test_service.optional_arguments('1', '2', another_parameter='3'))
---    self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', '4', another_parameter='5')
---    self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', y='4')
---    self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', foo='4')
---
---    obj = self.conn.test_service.create_test_object('jeb')
---    self.assertEqual('1234', obj.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
---    self.assertEqual('2413', obj.optional_arguments(z='1', x='2', another_parameter='3', y='4'))
---    self.assertEqual('1243', obj.optional_arguments('1', '2', another_parameter='3', z='4'))
---    self.assertEqual('123baz', obj.optional_arguments('1', '2', z='3'))
---    self.assertEqual('12bar3', obj.optional_arguments('1', '2', another_parameter='3'))
---    self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', another_parameter='5')
---    self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', y='4')
---    self.assertRaises(TypeError, obj.optional_arguments, '1', foo='4')
+function TestClient:test_named_parameters()
+  -- FIXME: Lua doens't support this. Have to pass arguments as a single table
+  --self.conn.test_service.optional_arguments(x='1', y='2', z='3', another_parameter='4')
+  --self.assertEqual('1234', self.conn.test_service.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
+  --self.assertEqual('2413', self.conn.test_service.optional_arguments(z='1', x='2', another_parameter='3', y='4'))
+  --self.assertEqual('1243', self.conn.test_service.optional_arguments('1', '2', another_parameter='3', z='4'))
+  --self.assertEqual('123baz', self.conn.test_service.optional_arguments('1', '2', z='3'))
+  --self.assertEqual('12bar3', self.conn.test_service.optional_arguments('1', '2', another_parameter='3'))
+  --self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', '4', another_parameter='5')
+  --self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', y='4')
+  --self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', foo='4')
+  --
+  --obj = self.conn.test_service.create_test_object('jeb')
+  --self.assertEqual('1234', obj.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
+  --self.assertEqual('2413', obj.optional_arguments(z='1', x='2', another_parameter='3', y='4'))
+  --self.assertEqual('1243', obj.optional_arguments('1', '2', another_parameter='3', z='4'))
+  --self.assertEqual('123baz', obj.optional_arguments('1', '2', z='3'))
+  --self.assertEqual('12bar3', obj.optional_arguments('1', '2', another_parameter='3'))
+  --self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', another_parameter='5')
+  --self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', y='4')
+  --self.assertRaises(TypeError, obj.optional_arguments, '1', foo='4')
+end
 
 function TestClient:test_blocking_procedure()
   luaunit.assertEquals(0, self.conn.test_service.blocking_procedure(0,0))
@@ -142,66 +156,77 @@ function TestClient:test_too_many_arguments()
   --luaunit.assertError(obj.optional_arguments, '1', '2', '3', '4', '5')
 end
 
---def test_client_members(self):
---    self.assertSetEqual(
---        set(['krpc', 'test_service']),
---        set(filter(lambda x: not x.startswith('_'), dir(self.conn))))
+local function filter_private(xs)
+  return seq.copy(seq.filter(
+    xs:iter(),
+    function (x) return not stringx.startswith(x, '_') end)
+  )
+end
 
---def test_krpc_service_members(self):
---    self.assertSetEqual(
---        set(['get_services', 'get_status']),
---        set(filter(lambda x: not x.startswith('_'), dir(self.conn.krpc))))
+function TestClient:test_client_members()
+  luaunit.assertEquals(
+    Set{'krpc', 'test_service'},
+    Set(filter_private(tablex.keys(self.conn)))
+  )
+end
 
---def test_protobuf_enums(self):
---    self.assertEqual(TestSchema.a, self.conn.test_service.enum_return())
---    self.assertEqual(TestSchema.a, self.conn.test_service.enum_echo(TestSchema.a))
---    self.assertEqual(TestSchema.b, self.conn.test_service.enum_echo(TestSchema.b))
---    self.assertEqual(TestSchema.c, self.conn.test_service.enum_echo(TestSchema.c))
---
---    self.assertEqual(TestSchema.a, self.conn.test_service.enum_default_arg(TestSchema.a))
---    self.assertEqual(TestSchema.c, self.conn.test_service.enum_default_arg())
---    self.assertEqual(TestSchema.b, self.conn.test_service.enum_default_arg(TestSchema.b))
+function TestClient:test_protobuf_enums()
+  luaunit.assertEquals(schema.TestEnum.a, self.conn.test_service.enum_return())
+  luaunit.assertEquals(schema.TestEnum.a, self.conn.test_service.enum_echo(schema.TestEnum.a))
+  luaunit.assertEquals(schema.TestEnum.b, self.conn.test_service.enum_echo(schema.TestEnum.b))
+  luaunit.assertEquals(schema.TestEnum.c, self.conn.test_service.enum_echo(schema.TestEnum.c))
 
---def test_enums(self):
---    enum = self.conn.test_service.CSharpEnum
---    self.assertEqual(enum.value_b, self.conn.test_service.c_sharp_enum_return())
---    self.assertEqual(enum.value_a, self.conn.test_service.c_sharp_enum_echo(enum.value_a))
---    self.assertEqual(enum.value_b, self.conn.test_service.c_sharp_enum_echo(enum.value_b))
---    self.assertEqual(enum.value_c, self.conn.test_service.c_sharp_enum_echo(enum.value_c))
---
---    self.assertEqual(enum.value_a, self.conn.test_service.c_sharp_enum_default_arg(enum.value_a))
---    self.assertEqual(enum.value_c, self.conn.test_service.c_sharp_enum_default_arg())
---    self.assertEqual(enum.value_b, self.conn.test_service.c_sharp_enum_default_arg(enum.value_b))
---
---def test_invalid_enum(self):
---    self.assertRaises(ValueError, self.conn.test_service.CSharpEnum, 9999)
---
---def test_collections(self):
---    self.assertEqual([], self.conn.test_service.increment_list([]))
---    self.assertEqual([1,2,3], self.conn.test_service.increment_list([0,1,2]))
---    self.assertEqual({}, self.conn.test_service.increment_dictionary({}))
---    self.assertEqual({'a': 1, 'b': 2, 'c': 3}, self.conn.test_service.increment_dictionary({'a': 0, 'b': 1, 'c': 2}))
---    self.assertEqual(set(), self.conn.test_service.increment_set(set()))
---    self.assertEqual(set([1,2,3]), self.conn.test_service.increment_set(set([0,1,2])))
---    self.assertEqual((2,3), self.conn.test_service.increment_tuple((1,2)))
---    self.assertRaises(TypeError, self.conn.test_service.increment_list, None)
---    self.assertRaises(TypeError, self.conn.test_service.increment_set, None)
---    self.assertRaises(TypeError, self.conn.test_service.increment_dictionary, None)
---
---def test_nested_collections(self):
---    self.assertEqual({}, self.conn.test_service.increment_nested_collection({}))
---    self.assertEqual({'a': [1, 2], 'b': [], 'c': [3]},
---                     self.conn.test_service.increment_nested_collection({'a': [0, 1], 'b': [], 'c': [2]}))
---
---def test_collections_of_objects(self):
---    l = self.conn.test_service.add_to_object_list([], "jeb")
---    self.assertEqual(1, len(l))
---    self.assertEqual("value=jeb", l[0].get_value())
---    l = self.conn.test_service.add_to_object_list(l, "bob")
---    self.assertEqual(2, len(l))
---    self.assertEqual("value=jeb", l[0].get_value())
---    self.assertEqual("value=bob", l[1].get_value())
---
+  luaunit.assertEquals(schema.TestEnum.a, self.conn.test_service.enum_default_arg(schema.TestEnum.a))
+  luaunit.assertEquals(schema.TestEnum.c, self.conn.test_service.enum_default_arg())
+  luaunit.assertEquals(schema.TestEnum.b, self.conn.test_service.enum_default_arg(schema.TestEnum.b))
+end
+
+function TestClient:test_enums()
+  local enum = self.conn.test_service.CSharpEnum
+
+  luaunit.assertEquals(enum.value_b, self.conn.test_service.c_sharp_enum_return())
+  luaunit.assertEquals(enum.value_a, self.conn.test_service.c_sharp_enum_echo(enum.value_a))
+  luaunit.assertEquals(enum.value_b, self.conn.test_service.c_sharp_enum_echo(enum.value_b))
+  luaunit.assertEquals(enum.value_c, self.conn.test_service.c_sharp_enum_echo(enum.value_c))
+
+  luaunit.assertEquals(enum.value_a, self.conn.test_service.c_sharp_enum_default_arg(enum.value_a))
+  luaunit.assertEquals(enum.value_c, self.conn.test_service.c_sharp_enum_default_arg())
+  luaunit.assertEquals(enum.value_b, self.conn.test_service.c_sharp_enum_default_arg(enum.value_b))
+end
+
+function TestClient:test_invalid_enum()
+  luaunit.assertError(ValueError, self.conn.test_service.CSharpEnum, 9999)
+end
+
+function TestClient:test_collections()
+  luaunit.assertEquals(List{}, self.conn.test_service.increment_list(List{}))
+  luaunit.assertEquals(List{1,2,3}, self.conn.test_service.increment_list(List{0,1,2}))
+  luaunit.assertEquals(Map{}, self.conn.test_service.increment_dictionary(Map{}))
+  luaunit.assertEquals(Map{a=1, b=2, c=3}, self.conn.test_service.increment_dictionary(Map{a=0, b=1, c=2}))
+  luaunit.assertEquals(Set{}, self.conn.test_service.increment_set(Set{}))
+  luaunit.assertEquals(Set{1,2,3}, self.conn.test_service.increment_set(Set{0,1,2}))
+  luaunit.assertEquals(List{2,3}, self.conn.test_service.increment_tuple(List{1,2}))
+  luaunit.assertError(self.conn.test_service.increment_list, Types.none)
+  luaunit.assertError(self.conn.test_service.increment_set, Types.none)
+  luaunit.assertError(self.conn.test_service.increment_dictionary, Types.none)
+end
+
+function TestClient:test_nested_collections()
+  luaunit.assertEquals(Map{}, self.conn.test_service.increment_nested_collection(Map{}))
+  luaunit.assertEquals(Map{a=List{1, 2}, b=List{}, c=List{3}},
+                       self.conn.test_service.increment_nested_collection(Map{a=List{0, 1}, b=List{}, c=List{2}}))
+end
+
+function TestClient:test_collections_of_objects()
+  local l = self.conn.test_service.add_to_object_list(List{}, "jeb")
+  luaunit.assertEquals(1, l:len())
+  luaunit.assertEquals("value=jeb", l[1]:get_value())
+  local l = self.conn.test_service.add_to_object_list(l, "bob")
+  luaunit.assertEquals(2, l:len())
+  luaunit.assertEquals("value=jeb", l[1]:get_value())
+  luaunit.assertEquals("value=bob", l[2]:get_value())
+end
+
 --def test_client_members(self):
 --    self.assertSetEqual(
 --        set(['krpc', 'test_service', 'add_stream', 'stream', 'close']),
@@ -304,15 +329,15 @@ function TestClient:test_line_endings()
   end
 end
 
---def test_types_from_different_connections(self):
---    conn1 = self.connect()
---    conn2 = self.connect()
---    self.assertNotEqual(conn1.test_service.TestClass, conn2.test_service.TestClass)
---    obj2 = conn2.test_service.TestClass(0)
---    obj1 = conn1._types.coerce_to(obj2, conn1._types.as_type('Class(TestService.TestClass)'))
---    self.assertEqual(obj1, obj2)
---    self.assertNotEqual(type(obj1), type(obj2))
---    self.assertEqual(type(obj1), conn1.test_service.TestClass)
---    self.assertEqual(type(obj2), conn2.test_service.TestClass)
+function TestClient:test_types_from_different_connections()
+  local conn1 = self:connect()
+  local conn2 = self:connect()
+  luaunit.assertFalse(conn1.test_service.TestClass == conn2.test_service.TestClass)
+  local obj2 = conn2.test_service.TestClass(0)
+  local obj1 = conn1._types:coerce_to(obj2, conn1._types:as_type('Class(TestService.TestClass)'))
+  luaunit.assertEquals(obj1, obj2)
+  luaunit.assertTrue(conn1.test_service.TestClass:class_of(obj1))
+  luaunit.assertTrue(conn2.test_service.TestClass:class_of(obj2))
+end
 
 return TestClient
