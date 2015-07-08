@@ -123,7 +123,7 @@ function decoder.decode(data, typ)
     local msg = _decode_message(data, _types:as_type('KRPC.Set'))
     local result = Set{}
     for _,item in ipairs(msg.items) do
-      result = result + Set{decoder.decode(item, typ.value_type)} --TODO: simpler way of doing this?
+      result[decoder.decode(item, typ.value_type)] = true
     end
     return result
   elseif typ:is_a(Types.TupleType) then

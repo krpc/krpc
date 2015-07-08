@@ -118,8 +118,6 @@ function Client:_build_request(service, procedure, args, kwargs, param_names, pa
         error(string.format('%s.%s() argument %d must be a %s, got a %s', service, procedure, i, typ.lua_type, type(value)))
       end
     end
-    --TODO: type coercion
-    --TODO: type checking correct?
     return encoder.encode(value, typ)
   end
 
@@ -132,7 +130,7 @@ function Client:_build_request(service, procedure, args, kwargs, param_names, pa
   for i,param in ipairs(param_names) do
     local arg
     local add = false
-    if i <= nargs then -- and args[i] ~= Types.DefaultArgument then TODO: implement this
+    if i <= nargs and args[i] ~= nil then
       arg = args[i]
       add = true
     elseif kwargs[param] ~= nil then

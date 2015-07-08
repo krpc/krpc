@@ -63,7 +63,7 @@ local function _load_types(package)
   if _packages_loaded[package] then
     return
   end
-  _packages_loaded = _packages_loaded + Set{package} --TODO: simplify this?
+  _packages_loaded[package] = true
   for path in _package_search_paths:iter() do
     local ok, module = pcall(require, path .. '.' .. package)
     if ok then
@@ -114,7 +114,6 @@ function Types.DynamicType:_add_property(name, getter, setter)
   if setter then
     self['set_' .. name] = setter
   end
-  return nil --TODO: return the getter??
 end
 
 Types.ClassBase = class(Types.DynamicType)
