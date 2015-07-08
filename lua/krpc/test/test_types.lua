@@ -193,16 +193,16 @@ end
 
 function TestTypes.test_get_parameter_type()
   local types = Types()
-  luaunit.assertEquals('number', types:get_parameter_type(0, 'float', List{}).lua_type)
-  luaunit.assertEquals('int32', types:get_parameter_type(0, 'int32', List{}).protobuf_type)
+  luaunit.assertEquals('number', types:get_parameter_type(1, 'float', List{}).lua_type)
+  luaunit.assertEquals('int32', types:get_parameter_type(1, 'int32', List{}).protobuf_type)
   luaunit.assertEquals('KRPC.Response', types:get_parameter_type(1, 'KRPC.Response', List{}).protobuf_type)
-  local class_parameter = types:get_parameter_type(0, 'uint64', List{'ParameterType(0).Class(ServiceName.ClassName)'})
+  local class_parameter = types:get_parameter_type(1, 'uint64', List{'ParameterType(0).Class(ServiceName.ClassName)'})
   luaunit.assertTrue(types:as_type('Class(ServiceName.ClassName)') == class_parameter)
   luaunit.assertTrue(class_parameter:is_a(Types.ClassType))
   --luaunit.assertTrue(issubclass(class_parameter.python_type, ClassBase))
   luaunit.assertEquals('Class(ServiceName.ClassName)', class_parameter.protobuf_type)
-  luaunit.assertEquals('uint64', types:get_parameter_type(0, 'uint64', List{'ParameterType(1).Class(ServiceName.ClassName)'}).protobuf_type)
-  luaunit.assertEquals('Test.TestEnum', types:get_parameter_type(0, 'Test.TestEnum', List{}).protobuf_type)
+  luaunit.assertEquals('uint64', types:get_parameter_type(1, 'uint64', List{'ParameterType(1).Class(ServiceName.ClassName)'}).protobuf_type)
+  luaunit.assertEquals('Test.TestEnum', types:get_parameter_type(1, 'Test.TestEnum', List{}).protobuf_type)
 end
 
 function TestTypes.test_get_return_type()
@@ -245,5 +245,17 @@ end
 --  self.assertRaises(ValueError, types.coerce_to, [1], types.as_type('Tuple(string)'))
 --  self.assertRaises(ValueError, types.coerce_to, [1,'a','b'], types.as_type('List(string)'))
 --end
+
+function TestTypes:test_none()
+  luaunit.assertEquals(tostring(Types.none), 'none')
+  luaunit.assertTrue(Types.none == Types.none)
+  luaunit.assertFalse(Types.none ~= Types.none)
+  luaunit.assertTrue(Types.none ~= nil)
+  luaunit.assertTrue(Types.none ~= true)
+  luaunit.assertTrue(Types.none ~= false)
+  luaunit.assertTrue(Types.none ~= 'foo')
+  luaunit.assertTrue(Types.none ~= {'foo'})
+  luaunit.assertTrue(Types.none ~= class()())
+end
 
 return TestTypes

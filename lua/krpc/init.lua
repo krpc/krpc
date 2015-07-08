@@ -2,8 +2,8 @@
 package.path = package.path .. ';../../protoc-gen-lua/protobuf/?.lua'
 package.cpath = package.cpath .. ';../../protoc-gen-lua/protobuf/?.so'
 
-local socket = require 'socket'
 local Client = require 'krpc.client'
+local Connection = require 'krpc.connection'
 local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
 
@@ -12,8 +12,6 @@ local krpc = {}
 local DEFAULT_ADDRESS = '127.0.0.1'
 local DEFAULT_RPC_PORT = 50000
 local DEFAULT_STREAM_PORT = 50001
-
-local CLIENT_IDENTIFIER_LENGTH = 16
 
 function krpc.connect(address, rpcPort, streamPort, name)
   address = address or DEFAULT_ADDRESS
@@ -24,10 +22,10 @@ function krpc.connect(address, rpcPort, streamPort, name)
   -- assert rpcPort != streamPort
 
   -- Connect to RPC server
-  rpc_connection = socket.tcp()
-  rpc_connection:connect(address, rpcPort)
+  rpc_connection = Connection(address, rpcPort)
+  rpc_connection:connect()
   rpc_connection:send(encoder.RPC_HELLO_MESSAGE .. encoder.client_name(name))
-  client_identifier = rpc_connection:receive(CLIENT_IDENTIFIER_LENGTH)
+  client_identifier = rpc_connection:receive(encoder.CLIENT_IDENTIFIER_LENGTH)
 
   -- Connect to Stream server
   -- TODO

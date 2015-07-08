@@ -80,12 +80,10 @@ function Attributes.get_property_name(attrs)
   -- Return the name of the property handled by a property getter or setter.
   if Attributes.is_a_property_accessor(attrs) then
     for attr in attrs:iter() do
-      local typ = attr:match('^Property%.Get%((.+)%)$')
-      if typ ~= nil then
-        return typ
-      end
-      local typ = attr:match('^Property%.Set%((.+)%)$')
-      if typ ~= nil then
+      local typ =
+        attr:match('^Property%.Get%((.+)%)$') or
+        attr:match('^Property%.Set%((.+)%)$')
+      if typ then
         return typ
       end
     end
@@ -97,24 +95,20 @@ function Attributes.get_service_name(attrs)
   -- Return the name of the service that a class method or property accessor is part of.
   if Attributes.is_a_class_method(attrs) or Attributes.is_a_class_static_method(attrs) then
     for attr in attrs:iter() do
-      local typ = attr:match('^Class%.Method%(([^,%.]+)%.[^,]+,[^,]+%)$')
-      if typ ~= nil then
-        return typ
-      end
-      local typ = attr:match('^Class%.StaticMethod%(([^,%.]+)%.[^,]+,[^,]+%)$')
-      if typ ~= nil then
+      local typ =
+        attr:match('^Class%.Method%(([^,%.]+)%.[^,]+,[^,]+%)$') or
+        attr:match('^Class%.StaticMethod%(([^,%.]+)%.[^,]+,[^,]+%)$')
+      if typ then
         return typ
       end
     end
   end
   if Attributes.is_a_class_property_accessor(attrs) then
     for attr in attrs:iter() do
-      local typ = attr:match('^Class%.Property.Get%(([^,%.]+)%.[^,]+,[^,]+%)$')
-      if typ ~= nil then
-        return typ
-      end
-      local typ = attr:match('^Class%.Property.Set%(([^,%.]+)%.[^,]+,[^,]+%)$')
-      if typ ~= nil then
+      local typ =
+        attr:match('^Class%.Property.Get%(([^,%.]+)%.[^,]+,[^,]+%)$') or
+        attr:match('^Class%.Property.Set%(([^,%.]+)%.[^,]+,[^,]+%)$')
+      if typ then
         return typ
       end
     end
@@ -126,24 +120,20 @@ function Attributes.get_class_name(attrs)
   -- Return the name of the class that a method or property accessor is part of.
   if Attributes.is_a_class_method(attrs) or Attributes.is_a_class_static_method(attrs) then
     for attr in attrs:iter() do
-      local typ = attr:match('^Class%.Method%([^,%.]+%.([^,%.]+),[^,]+%)$')
-      if typ ~= nil then
-        return typ
-      end
-      local typ = attr:match('^Class%.StaticMethod%([^,%.]+%.([^,%.]+),[^,]+%)$')
-      if typ ~= nil then
+      local typ =
+        attr:match('^Class%.Method%([^,%.]+%.([^,%.]+),[^,]+%)$') or
+        attr:match('^Class%.StaticMethod%([^,%.]+%.([^,%.]+),[^,]+%)$')
+      if typ then
         return typ
       end
     end
   end
   if Attributes.is_a_class_property_accessor(attrs) then
     for attr in attrs:iter() do
-      local typ = attr:match('^Class%.Property.Get%([^,%.]+%.([^,]+),[^,]+%)$')
-      if typ ~= nil then
-        return typ
-      end
-      local typ = attr:match('^Class%.Property.Set%([^,%.]+%.([^,]+),[^,]+%)$')
-      if typ ~= nil then
+      local typ =
+        attr:match('^Class%.Property.Get%([^,%.]+%.([^,]+),[^,]+%)$') or
+        attr:match('^Class%.Property.Set%([^,%.]+%.([^,]+),[^,]+%)$')
+      if typ then
         return typ
       end
     end
@@ -155,12 +145,10 @@ function Attributes.get_class_method_name(attrs)
   -- Return the name of a class method.
   if Attributes.is_a_class_method(attrs) or Attributes.is_a_class_static_method(attrs) then
     for attr in attrs:iter() do
-      typ = attr:match('^Class%.Method%([^,]+,([^,]+)%)$')
-      if typ ~= nil then
-        return typ
-      end
-      typ = attr:match('^Class%.StaticMethod%([^,]+,([^,]+)%)$')
-      if typ ~= nil then
+      typ =
+        attr:match('^Class%.Method%([^,]+,([^,]+)%)$') or
+        attr:match('^Class%.StaticMethod%([^,]+,([^,]+)%)$')
+      if typ then
         return typ
       end
     end
@@ -172,12 +160,10 @@ function Attributes.get_class_property_name(attrs)
   -- Return the name of a class property (for a getter or setter procedure).
   if Attributes.is_a_class_property_accessor(attrs) then
     for attr in attrs:iter() do
-      typ = attr:match('^Class%.Property%.Get%([^,]+,([^,]+)%)$')
-      if typ ~= nil then
-        return typ
-      end
-      typ = attr:match('^Class%.Property%.Set%([^,]+,([^,]+)%)$')
-      if typ ~= nil then
+      typ =
+        attr:match('^Class%.Property%.Get%([^,]+,([^,]+)%)$') or
+        attr:match('^Class%.Property%.Set%([^,]+,([^,]+)%)$')
+      if typ then
         return typ
       end
     end
@@ -190,7 +176,7 @@ function Attributes.get_return_type_attrs(attrs)
   local return_type_attrs = List{}
   for attr in attrs:iter() do
     local typ = attr:match('^ReturnType%.(.+)$')
-    if typ ~= nil then
+    if typ then
       return_type_attrs:append(typ)
     end
   end
@@ -201,8 +187,8 @@ function Attributes.get_parameter_type_attrs(pos, attrs)
   -- Return the attributes for a specific parameter of a procedure.
   local parameter_type_attrs = List{}
   for attr in attrs:iter() do
-    local typ = attr:match('^ParameterType%(' .. pos .. '%)%.(.+)$')
-    if typ ~= nil then
+    local typ = attr:match('^ParameterType%(' .. (pos-1) .. '%)%.(.+)$')
+    if typ then
       parameter_type_attrs:append(typ)
     end
   end
