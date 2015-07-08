@@ -3,6 +3,7 @@ local seq = require 'pl.seq'
 local stringx = require 'pl.stringx'
 local bind1 = require 'pl.func'.bind1
 local List = require 'pl.List'
+local Set = require 'pl.Set'
 local Map = require 'pl.Map'
 local Types = require 'krpc.types'
 local Attributes = require 'krpc.attributes'
@@ -33,6 +34,53 @@ local function get_types(types, xs, attrs)
   return result
 end
 
+local KEYWORDS = Set{
+  'and', 'break', 'do', 'else', 'elseif', 'end', 'false', 'for', 'function', 'if', 'in',
+  'local', 'nil', 'not', 'or', 'repeat', 'return', 'then', 'true', 'until', 'while'
+}
+
+--- Given a list of parameter names, append underscores to reserved keywords
+-- without causing parameter names to clash
+local function update_param_names(names)
+  local newnames = List{}
+  for name in names:iter() do
+    if KEYWORDS[name] then
+      name = name .. '_'
+    end
+    while Set(names)[name] do
+      name = name .. '_'
+    end
+    newnames:append(name)
+  end
+  return newnames
+end
+
+local function _construct_func(invoke, service_name, procedure_name, prefix_param_names, param_names,
+                               param_types, param_required, param_default, return_type)
+  prefix_param_names = prefix_param_names or List{}
+  param_names = param_names or List{}
+  prefix_param_names = update_param_names(prefix_param_names)
+  param_names = update_param_names(param_names)
+  local body =
+    'return invoke(' ..
+    stringx.join(
+      ',',
+      {'service_name',
+       'procedure_name',
+       'nil',
+       'Map{'..stringx.join(',', seq.copy(seq.map(function (x) return x..'='..x end, param_names)))..'}',
+       'param_names',
+       'param_types',
+       'return_type'
+      }) ..
+    ')'
+  local func = 'return function (' .. stringx.join(',', prefix_param_names..param_names) .. ') ' .. body .. ' end'
+  local wrapper =
+    'return function (invoke,service_name,procedure_name,param_names,param_types,return_type,Map) ' .. func .. ' end'
+  local callable = assert(loadstring(wrapper, '_construct_func('..service_name..','..procedure_name..')'))()
+  return callable(invoke,service_name,procedure_name,param_names,param_types,return_type,Map)
+end
+
 local ServiceBase = class(Types.DynamicType)
 
 function ServiceBase:_parse_procedure(procedure)
@@ -52,37 +100,6 @@ function ServiceBase:_parse_procedure(procedure)
     return_type = self._client._types:get_return_type(procedure.return_type, List(procedure.attributes))
   end
   return param_names, param_types, param_required, param_default, return_type
-end
-
-local function _construct_func(invoke, service_name, procedure_name, prefix_param_names, param_names,
-                               param_types, param_required, param_default, return_type)
-  prefix_param_names = prefix_param_names or List{}
-  param_names = param_names or List{}
-  local body =
-    'return invoke(' ..
-    stringx.join(
-      ',',
-      {'service_name',
-       'procedure_name',
-       'nil',
-       'Map{'..stringx.join(',', seq.copy(seq.map(function (x) return x..'='..x end, param_names)))..'}',
-       'param_names',
-       'param_types',
-       'return_type'
-      }) ..
-    ')'
-  local func = 'return function (' .. stringx.join(',', prefix_param_names..param_names) .. ') ' .. body .. ' end'
-  local wrapper =
-    'return function (invoke,service_name,procedure_name,param_names,param_types,return_type,Map) ' .. func .. ' end'
-  local callable = assert(loadstring(wrapper, '_construct_func('..service_name..','..procedure_name..')'))()
-  return callable(invoke,service_name,procedure_name,param_names,param_types,return_type,Map)
-
-  --return function (...)
-  --  local skip = prefix_param_names:len() -- ignore prefix parameters
-  --  local args = List(table.pack(...)):slice(skip+1)
-  --  print(args)
-  --  return invoke(service_name, procedure_name, args, nil, param_names, param_types, return_type)
-  --end
 end
 
 --- Add a class type
