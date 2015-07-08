@@ -231,7 +231,6 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError, types.coerce_to, list(), types.as_type('Tuple(int32)'))
         self.assertRaises(ValueError, types.coerce_to, ["foo",2], types.as_type('Tuple(string)'))
         self.assertRaises(ValueError, types.coerce_to, [1], types.as_type('Tuple(string)'))
-        self.assertRaises(ValueError, types.coerce_to, [1,"a","b"], types.as_type('List(string)'))
 
 if __name__ == '__main__':
     unittest.main()
