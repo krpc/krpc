@@ -140,6 +140,8 @@ class Types(object):
     def coerce_to(self, value, typ):
         """ Coerce a value to the specified type (specified by a type object).
             Raises ValueError if the coercion is not possible. """
+        if type(value) == typ.python_type:
+            return value
         # A NoneType can be coerced to a ClassType
         if isinstance(typ, ClassType) and value is None:
             return None

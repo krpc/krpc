@@ -224,6 +224,8 @@ class TestTypes(unittest.TestCase):
             self.assertEqual(expected, coerced_value)
             self.assertEqual(type(expected), type(coerced_value))
 
+        self.assertEqual(['foo','bar'], types.coerce_to(['foo','bar'], types.as_type('List(string)')))
+
         self.assertRaises(ValueError, types.coerce_to, None, types.as_type('float'))
         self.assertRaises(ValueError, types.coerce_to, '', types.as_type('float'))
         self.assertRaises(ValueError, types.coerce_to, True, types.as_type('float'))
