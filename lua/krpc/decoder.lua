@@ -11,6 +11,8 @@ local decoder = {}
 
 local _types = Types()
 
+decoder.OK_MESSAGE = '\x4F\x4B'
+
 local function _decode_varint(data)
   if data == '\xff\xff\xff\xff\xff\xff\xff\xff\x7f' then
     return math.huge
