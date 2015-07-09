@@ -18,7 +18,7 @@ bin:
 	   ./bin/TestServer/
 
 test: protobuf bin
-	$(LUA) unittest.lua
+	$(LUA) krpc/test/init.lua
 
 dist: protobuf bin
 	rm -rf dist
