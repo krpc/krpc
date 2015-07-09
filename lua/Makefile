@@ -1,9 +1,11 @@
-.PHONY: all protobuf bin test dist release clean
+.PHONY: all protobuf bin test rockspec release clean
 
 LUA = lua5.2
 CSHARP_CONFIG = Release
+VERSION = 0.1.9
+DISTDIR = dist/krpc-$(VERSION)-0
 
-all: dist
+all: release
 
 protobuf:
 	make -C .. protobuf-lua
@@ -20,16 +22,16 @@ bin:
 test: protobuf bin
 	$(LUA) krpc/test/init.lua
 
-dist: protobuf bin
-	rm -rf dist
-	mkdir -p dist/krpc-0.1.0-0
-	mkdir -p dist/krpc-0.1.0-0/lua
-	cp -R krpc dist/krpc-0.1.0-0/lua/
-	(cd dist; tar czvpf krpc-0.1.0-0.tar.gz krpc-0.1.0-0/)
+rockspec:
+	mkdir -p dist
+	sed "s/%VERSION%/$(VERSION)/g" krpc.rockspec > dist/krpc-$(VERSION)-0.rockspec
 
-release: protobuf bin
-	#TODO
+release: protobuf bin rockspec
+	mkdir -p $(DISTDIR)
+	mkdir -p $(DISTDIR)/lua
+	cp -R krpc $(DISTDIR)/lua/
+	(cd dist; tar czvpf krpc-$(VERSION)-0.tar.gz krpc-$(VERSION)-0/)
 
 clean:
 	make -C .. protobuf-lua-clean
-	-rm -rf dist build bin/TestServer
+	-rm -rf dist bin
