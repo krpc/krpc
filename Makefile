@@ -32,7 +32,6 @@ PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCSpaceCenter/Sche
 PROTOS_TEST = $(wildcard test/kRPCTest/Schema/*.proto)
 
 PROTOC = protoc
-PROTOC_LUA_PLUGIN = `pwd`/../protoc-gen-lua/plugin/protoc-gen-lua
 PROTOGEN = mono tools/ProtoGen.exe
 MDTOOL = mdtool
 MONODIS = monodis
@@ -235,7 +234,7 @@ JAVATMP:=$(shell mktemp -d)
 	$(PROTOC) $< --cpp_out=.
 
 %.lua: %.proto
-	$(PROTOC) $< --plugin=$(PROTOC_LUA_PLUGIN) --lua_out=.
+	$(PROTOC) $< --lua_out=.
 	mv $*_pb.lua $@
 
 # Images -----------------------------------------------------------------------
