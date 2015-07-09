@@ -64,19 +64,19 @@ class EngineTestBase(object):
             'can_restart': False,
             'can_shutdown': False,
             'max_vac_thrust': 227000,
-            'msl_isp': 150,
-            'vac_isp': 162
+            'msl_isp': 170,
+            'vac_isp': 195
         },
         'J-33 "Wheesley" Basic Jet Engine': {
-            'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.0434},
+            'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.090909},
             'gimballed': True,
             'gimbal_range': 1,
             'throttle_locked': False,
             'can_restart': True,
             'can_shutdown': True,
-            'max_vac_thrust': 115000,
-            'msl_isp': 19200,
-            'vac_isp': 19200
+            'max_vac_thrust': 80000,
+            'msl_isp': 9600,
+            'vac_isp': 9600
         }
     }
 
@@ -289,10 +289,10 @@ class TestPartsEngineMSL(testingtools.TestCase, EngineTest):
             {'max_thrust': 9700, 'isp': 121.2})
         cls.add_engine_data(
             'RT-10 "Hammer" Solid Fuel Booster',
-            {'max_thrust': 210600, 'isp': 150.3})
+            {'max_thrust': 197897, 'isp': 170.4})
         cls.add_engine_data(
             'J-33 "Wheesley" Basic Jet Engine',
-            {'max_thrust': 115000, 'isp': 19200})
+            {'max_thrust': 80000, 'isp': 9600})
 
     @classmethod
     def tearDownClass(cls):
@@ -340,7 +340,7 @@ class TestPartsEngineVacuum(testingtools.TestCase, EngineTest):
             {'max_thrust': 20000, 'isp': 250})
         cls.add_engine_data(
             'RT-10 "Hammer" Solid Fuel Booster',
-            {'max_thrust': 227000, 'isp': 162})
+            {'max_thrust': 227000, 'isp': 195})
 
     @classmethod
     def tearDownClass(cls):

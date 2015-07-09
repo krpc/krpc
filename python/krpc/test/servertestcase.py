@@ -7,7 +7,7 @@ class ServerTestCase(object):
     @classmethod
     def setUpClass(cls):
         cls.server = subprocess.Popen(['bin/TestServer/TestServer.exe', '50011', '50012', '--quiet'])
-        time.sleep(0.25)
+        time.sleep(1)
 
     @classmethod
     def tearDownClass(cls):
