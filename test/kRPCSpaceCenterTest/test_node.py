@@ -112,7 +112,7 @@ class TestNode(testingtools.TestCase):
         GM = self.conn.space_center.bodies['Kerbin'].gravitational_parameter
         vsq = (orbit0.speed + v[0])**2
         r = orbit0.radius
-        self.assertClose (GM / ((2*GM/r) - vsq), orbit1.semi_major_axis, error=0.1)
+        self.assertClose (GM / ((2*GM/r) - vsq), orbit1.semi_major_axis, error=1)
 
         # Check there is no inclination change
         self.assertClose(orbit0.inclination, orbit1.inclination)
