@@ -47,8 +47,9 @@ class TestPartsPart(testingtools.TestCase):
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
-        modules = ['FlagDecal', 'ModuleCommand', 'ModuleReactionWheel',
-                   'ModuleScienceContainer', 'ModuleScienceExperiment', 'ModuleTripLogger']
+        modules = ['FlagDecal', 'ModuleCommand', 'ModuleConductionMultiplier',
+                   'ModuleReactionWheel', 'ModuleScienceContainer',
+                   'ModuleScienceExperiment', 'ModuleTripLogger']
         if self.conn.space_center.far_available:
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
@@ -243,7 +244,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(300, part.dry_mass)
         self.assertEqual(12, part.impact_tolerance)
         self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
-        self.assertClose(2000, part.max_temperature, 0.5)
+        self.assertClose(2500, part.max_temperature, 0.5)
         self.assertTrue(part.crossfeed)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
