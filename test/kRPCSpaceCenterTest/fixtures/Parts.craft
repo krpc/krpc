@@ -1,5 +1,5 @@
 ship = Parts
-version = 1.0.0
+version = 1.0.4
 description = 
 type = VAB
 size = 6.92598,27.76336,6.749738
@@ -273,6 +273,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleConductionMultiplier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -2419,6 +2430,7 @@ PART
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank1-2_4294676294
+	link = foldingRadSmall_4294668398
 	attN = top,RCSTank1-2_4294671790
 	attN = bottom,fuelTank1-2_4294676294
 	EVENTS
@@ -4216,7 +4228,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.0001968692
+		currentThrottle = 0
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -4389,7 +4401,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.0001968692
+		currentThrottle = 0
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -4526,7 +4538,7 @@ PART
 	pos = -2.023944,8.522435,1.04751
 	attPos = 0,0,0
 	attPos0 = -1.252723,0.3939471,5.960464E-08
-	rot = -9.03334E-08,-0.5,-5.215403E-08,0.8660255
+	rot = -9.033342E-08,-0.5,-5.215404E-08,0.8660256
 	attRot = 0,0,0,1
 	attRot0 = 2.001975E-07,0.7071068,2.001975E-07,-0.7071068
 	mir = 1,1,1
@@ -4562,7 +4574,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.0001968692
+		currentThrottle = 0
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -5016,7 +5028,7 @@ PART
 	pos = -1.757418,16.38947,0.8936312
 	attPos = 0,0,0
 	attPos0 = 0.2665243,0.4378796,-0.1538777
-	rot = 0.8150017,-0.1690875,0.4705427,0.2928676
+	rot = 0.8150017,-0.1690875,0.4705428,0.2928676
 	attRot = 0.8433918,0,0,0.5372998
 	attRot0 = -0.8150019,0.1690873,-0.4705422,-0.2928675
 	mir = 1,1,1
@@ -5246,6 +5258,24 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -5373,6 +5403,24 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -5510,6 +5558,24 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -5637,6 +5703,24 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -5774,6 +5858,24 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -5901,6 +6003,24 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -6460,7 +6580,7 @@ PART
 	pos = -0.9665352,22.92741,-0.7727902
 	attPos = 0,0,0
 	attPos0 = -1.047721,-0.004962921,-0.6049023
-	rot = -0.3535526,0.6123729,-0.6123731,-0.3535525
+	rot = -0.3535526,0.6123728,-0.6123731,-0.3535525
 	attRot = 0,0,0,1
 	attRot0 = -0.3535526,0.6123729,-0.6123731,-0.3535525
 	mir = 1,1,1
@@ -6497,7 +6617,7 @@ PART
 			Toggle
 			{
 				active = True
-				guiActive = True
+				guiActive = False
 				guiActiveEditor = True
 				guiIcon = Toggle
 				guiName = Extend
@@ -6512,37 +6632,242 @@ PART
 			ToggleAction
 			{
 				actionGroup = None
+				active = False
 			}
 		}
 	}
 	MODULE
 	{
-		name = ModuleDataTransmitter
+		name = ModuleRTAntenna
 		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = False
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 0
+		RTDishRange = -1
+		RTAntennaTarget = 00000000-0000-0000-0000-000000000000
 		EVENTS
 		{
-			StartTransmission
+			EventToggle
+			{
+				active = True
+				guiActive = False
+				guiIcon = 
+				guiName = Toggle
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			EventTarget
+			{
+				active = False
+				guiActive = False
+				guiIcon = Target
+				guiName = Unknown Target
+				category = Target
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			EventEditorOpen
+			{
+				active = True
+				guiActive = False
+				guiActiveEditor = True
+				guiIcon = Start deployed
+				guiName = Start deployed
+				category = Start deployed
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			EventEditorClose
+			{
+				active = True
+				guiActive = False
+				guiIcon = Start retracted
+				guiName = Start retracted
+				category = Start retracted
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			EventOpen
 			{
 				active = True
 				guiActive = True
-				guiIcon = Transmit Data
-				guiName = Transmit Data
-				category = Transmit Data
+				guiIcon = 
+				guiName = Activate
+				category = 
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-			StopTransmission
+			EventClose
 			{
 				active = False
-				guiActive = True
-				guiIcon = Stop Transmitting
-				guiName = Stop Transmitting
-				category = Stop Transmitting
+				guiActive = False
+				guiIcon = 
+				guiName = Deactivate
+				category = 
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			OverrideTarget
+			{
+				active = True
+				guiActive = False
+				guiIcon = [EVA] Set Target
+				guiName = [EVA] Set Target
+				category = [EVA] Set Target
+				guiActiveUnfocused = True
+				unfocusedRange = 5
+				externalToEVAOnly = True
+			}
+			OverrideOpen
+			{
+				active = True
+				guiActive = False
+				guiIcon = [EVA] Force Open
+				guiName = [EVA] Force Open
+				category = [EVA] Force Open
+				guiActiveUnfocused = True
+				unfocusedRange = 5
+				externalToEVAOnly = True
+			}
+			OverrideClose
+			{
+				active = True
+				guiActive = False
+				guiIcon = [EVA] Force Close
+				guiName = [EVA] Force Close
+				category = [EVA] Force Close
+				guiActiveUnfocused = False
+				unfocusedRange = 5
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ActionToggle
+			{
+				actionGroup = None
+			}
+			ActionOpen
+			{
+				actionGroup = None
+			}
+			ActionClose
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleSPUPassive
+		isEnabled = True
+		IsRTPowered = False
+		IsRTSignalProcessor = True
+		IsRTCommandStation = False
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+}
+PART
+{
+	part = foldingRadSmall_4294668398
+	partName = Part
+	pos = -0.8648451,19.47752,0.7781433
+	attPos = 0,0,0
+	attPos0 = -0.9460313,-0.07373428,0.9460312
+	rot = 3.421452E-08,0.9238795,-8.260113E-08,0.3826835
+	attRot = 0,0,0,1
+	attRot0 = 3.421452E-08,0.9238795,-8.260113E-08,0.3826835
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 4
+	dstg = 4
+	sidx = -1
+	sqor = -1
+	sepI = 3
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,asasmodule1-2_4294547938
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleDeployableRadiator
+		isEnabled = True
+		currentRotation = (0, 0, 0, 0)
+		stateString = RETRACTED
+		storedAnimationTime = 0
+		storedAnimationSpeed = 0
+		EVENTS
+		{
+			Extend
+			{
+				active = True
+				guiActive = True
+				guiIcon = Extend Radiator
+				guiName = Extend Radiator
+				category = Extend Radiator
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+			Retract
+			{
+				active = True
+				guiActive = True
+				guiIcon = Retract Radiator
+				guiName = Retract Radiator
+				category = Retract Radiator
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ExtendPanelsAction
+			{
+				actionGroup = None
+			}
+			ExtendAction
+			{
+				actionGroup = None
+			}
+			RetractAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleActiveRadiator
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{

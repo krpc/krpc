@@ -1,15 +1,15 @@
 ship = PartsDecoupler
-version = 1.0.0
+version = 1.0.4
 description = 
 type = VAB
-size = 3.128053,17.5609,5.893483
+size = 3.128053,13.0835,5.893483
 PART
 {
 	part = mk1pod_4294591094
 	partName = Part
-	pos = 0,15,0
+	pos = 4.015118E-05,10.5226,-0.000126794
 	attPos = 0,0,0
-	attPos0 = 0,15,0
+	attPos0 = 4.015118E-05,10.5226,-0.000126794
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -274,6 +274,17 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleConductionMultiplier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
 		name = ModuleTripLogger
 		isEnabled = True
 		EVENTS
@@ -312,7 +323,7 @@ PART
 {
 	part = fuelTank_4294366504
 	partName = Part
-	pos = 0,13.62927,0
+	pos = 4.015118E-05,9.151872,-0.000126794
 	attPos = 0,0,0
 	attPos0 = 0,-1.370728,0
 	rot = 0,0,0,1
@@ -369,7 +380,7 @@ PART
 {
 	part = radialDecoupler2_4294369258
 	partName = Part
-	pos = -0.5903339,13.71985,3.191716E-08
+	pos = -0.5902937,9.242452,-0.0001267621
 	attPos = 0,0,0
 	attPos0 = -0.5903339,0.09057808,3.191716E-08
 	rot = -7.486785E-23,8.42937E-08,-1.776357E-15,1
@@ -459,7 +470,7 @@ PART
 {
 	part = fuelTank_4294365752
 	partName = Part
-	pos = -1.834104,13.76077,3.83986E-07
+	pos = -1.834064,9.283372,-0.00012641
 	attPos = 0,0,0
 	attPos0 = -1.24377,0.04091454,1.423849E-07
 	rot = -1.507289E-14,1.685874E-07,-1.192093E-07,1
@@ -511,7 +522,7 @@ PART
 {
 	part = stackDecoupler_4294361384
 	partName = Part
-	pos = 0,12.65172,0
+	pos = 4.015118E-05,8.174322,-0.000126794
 	attPos = 0,0,0
 	attPos0 = 0,-0.9775524,0
 	rot = 0,0,0,1
@@ -602,7 +613,7 @@ PART
 {
 	part = fuelTank_4294358142
 	partName = Part
-	pos = 0,11.55304,0
+	pos = 4.015118E-05,7.075642,-0.000126794
 	attPos = 0,0,0
 	attPos0 = 0,-1.098684,0
 	rot = 0,0,0,1
@@ -654,7 +665,7 @@ PART
 {
 	part = launchClamp1_4294350112
 	partName = Part
-	pos = -4.511597E-07,12.42882,-1.428045
+	pos = 3.970002E-05,7.951422,-1.428172
 	attPos = 0,0,0
 	attPos0 = -4.511597E-07,-1.200456,-1.428045
 	rot = 2.980232E-08,-3.132037E-07,-9.334196E-15,-1
@@ -686,8 +697,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 5.187458
-		height = 13.08897
+		scaleFactor = 3.412961
+		height = 8.611572
 		towerRot = -2.980232E-08,3.132037E-07,9.334196E-15,-1
 		EVENTS
 		{
@@ -780,12 +791,30 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = launchClamp1_4294349942
 	partName = Part
-	pos = 5.760033E-07,12.42882,1.428045
+	pos = 4.072718E-05,7.951422,1.427918
 	attPos = 0,0,0
 	attPos0 = 5.760033E-07,-1.200456,1.428045
 	rot = -1.06369E-14,-1,-2.980232E-08,3.569151E-07
@@ -817,8 +846,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 5.187458
-		height = 13.08897
+		scaleFactor = 3.412961
+		height = 8.611572
 		towerRot = 1.06369E-14,1,2.980232E-08,3.569151E-07
 		EVENTS
 		{
@@ -906,6 +935,24 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
 		}
 		ACTIONS
 		{

@@ -1,15 +1,15 @@
 ship = Comms
-version = 0.90.0
+version = 1.0.4
 description = 
 type = VAB
-size = 1.722646,1.592344,1.580947
+size = 1.722646,1.592347,1.580947
 PART
 {
 	part = probeCoreOcto_4294738416
 	partName = Part
-	pos = 0,15,0
+	pos = -0.03667482,1.19901,0.126211
 	attPos = 0,0,0
-	attPos0 = 0,15,0
+	attPos0 = -0.03667482,1.19901,0.126211
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -19,15 +19,16 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
 	link = batteryPack_4294718854
 	link = batteryPack_4294692794
-	link = noseCone_4294627860
 	link = stackDecoupler_4294615240
 	link = RTShortAntenna1_4294609176
+	link = noseCone_4294627860
 	attN = bottom,stackDecoupler_4294615240
 	attN = top,noseCone_4294627860
 	EVENTS
@@ -85,6 +86,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -113,6 +115,11 @@ PART
 	{
 		name = ModuleSAS
 		isEnabled = True
+		standaloneToggle = True
+		standaloneToggle_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
 		}
@@ -168,17 +175,6 @@ PART
 			flight = 0
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -194,7 +190,7 @@ PART
 {
 	part = batteryPack_4294718854
 	partName = Part
-	pos = 3.002658E-08,15.01365,-0.343464
+	pos = -0.03667479,1.21266,-0.217253
 	attPos = 0,0,0
 	attPos0 = 3.002658E-08,0.01364994,-0.343464
 	rot = -1.111274E-07,1.111274E-07,0.7071068,-0.7071068
@@ -206,6 +202,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -220,17 +217,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -247,7 +233,7 @@ PART
 {
 	part = batteryPack_4294692794
 	partName = Part
-	pos = -1.374197E-15,15.01365,0.343464
+	pos = -0.03667482,1.21266,0.469675
 	attPos = 0,0,0
 	attPos0 = -1.374197E-15,0.01364994,0.343464
 	rot = 0.7071068,-0.7071068,8.021879E-08,-8.021879E-08
@@ -259,6 +245,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -274,17 +261,6 @@ PART
 	PARTDATA
 	{
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -298,57 +274,9 @@ PART
 }
 PART
 {
-	part = noseCone_4294627860
-	partName = Part
-	pos = 0,15.18708,0
-	attPos = 0,0,0
-	attPos0 = 0,0.1870813,0
-	rot = 0,0,0,1
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	istg = 0
-	dstg = 0
-	sidx = -1
-	sqor = -1
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
-	link = sepMotor1_4294622252
-	link = sepMotor1_4294553900
-	link = sepMotor1_4294553844
-	link = sepMotor1_4294553788
-	link = sepMotor1_4294553732
-	link = sepMotor1_4294553676
-	attN = bottom01,probeCoreOcto_4294738416
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
-}
-PART
-{
 	part = stackDecoupler_4294615240
 	partName = Part
-	pos = 0,14.74787,0
+	pos = -0.03667482,0.9468802,0.126211
 	attPos = 0,0,0
 	attPos0 = 0,-0.2521334,0
 	rot = 0,0,0,1
@@ -360,6 +288,7 @@ PART
 	dstg = 1
 	sidx = 0
 	sqor = 0
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -380,7 +309,15 @@ PART
 	{
 		name = ModuleDecouple
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -425,23 +362,12 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
 	part = probeCoreOcto_4294630582
 	partName = Part
-	pos = 0,14.42779,0
+	pos = -0.03667482,0.6267995,0.126211
 	attPos = 0,0,0
 	attPos0 = 0,-0.320076,0
 	rot = 0,0,0,1
@@ -453,6 +379,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -516,6 +443,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -544,6 +472,11 @@ PART
 	{
 		name = ModuleSAS
 		isEnabled = True
+		standaloneToggle = True
+		standaloneToggle_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
 		}
@@ -599,17 +532,6 @@ PART
 			flight = 0
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -625,7 +547,7 @@ PART
 {
 	part = batteryPack_4294614966
 	partName = Part
-	pos = -3.010713E-08,14.42938,-0.3443854
+	pos = -0.03667485,0.6283902,-0.2181744
 	attPos = 0,0,0
 	attPos0 = -3.010713E-08,0.001592636,-0.3443854
 	rot = -1.111274E-07,1.111274E-07,0.7071068,-0.7071068
@@ -637,6 +559,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -651,17 +574,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -678,7 +590,7 @@ PART
 {
 	part = batteryPack_4294614550
 	partName = Part
-	pos = 6.021425E-08,14.42938,0.3443854
+	pos = -0.03667476,0.6283902,0.4705964
 	attPos = 0,0,0
 	attPos0 = 6.021425E-08,0.001592636,0.3443854
 	rot = 0.7071068,-0.7071068,8.021879E-08,-8.021879E-08
@@ -690,6 +602,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -704,17 +617,6 @@ PART
 	}
 	PARTDATA
 	{
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
 	}
 	RESOURCE
 	{
@@ -731,7 +633,7 @@ PART
 {
 	part = RTShortAntenna1_4294609390
 	partName = Part
-	pos = -0.4013685,14.43003,1.080239E-08
+	pos = -0.4380433,0.6290396,0.126211
 	attPos = 0,0,0
 	attPos0 = -0.4013685,0.002243042,1.080239E-08
 	rot = -0.7071068,-5.960466E-08,-5.960466E-08,0.7071068
@@ -743,6 +645,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -902,23 +805,12 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
 	part = RTShortAntenna1_4294609176
 	partName = Part
-	pos = -0.4013413,15.01079,1.080076E-08
+	pos = -0.4380161,1.2098,0.126211
 	attPos = 0,0,0
 	attPos0 = -0.4013413,0.01078796,1.080076E-08
 	rot = -0.7071068,-5.960466E-08,-5.960466E-08,0.7071068
@@ -930,6 +822,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1089,23 +982,50 @@ PART
 		{
 		}
 	}
-	MODULE
+}
+PART
+{
+	part = noseCone_4294627860
+	partName = Part
+	pos = -0.03667482,1.386091,0.126211
+	attPos = 0,0,0
+	attPos0 = 0,0.1870813,0
+	rot = 0,0,0,1
+	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = 0
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	link = sepMotor1_4294622252
+	link = sepMotor1_4294553900
+	link = sepMotor1_4294553844
+	link = sepMotor1_4294553788
+	link = sepMotor1_4294553732
+	link = sepMotor1_4294553676
+	attN = bottom01,probeCoreOcto_4294738416
+	EVENTS
 	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
 	}
 }
 PART
 {
 	part = sepMotor1_4294622252
 	partName = Part
-	pos = -0.5020731,15.40081,2.992589E-08
+	pos = -0.5387479,1.599821,0.126211
 	attPos = 0,0,0
 	attPos0 = -0.5020731,0.2137251,2.992589E-08
 	rot = -0.1558681,-0.6897138,-0.1558681,0.6897138
@@ -1117,6 +1037,7 @@ PART
 	dstg = 0
 	sidx = 1
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1212,17 +1133,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -1243,7 +1153,7 @@ PART
 {
 	part = sepMotor1_4294553900
 	partName = Part
-	pos = -0.2510365,15.40081,0.4348081
+	pos = -0.2877113,1.599821,0.5610191
 	attPos = 0,0,0
 	attPos0 = -0.2510365,0.2137251,0.4348081
 	rot = -0.2129198,-0.2524528,-0.05705169,0.9421666
@@ -1255,6 +1165,7 @@ PART
 	dstg = 0
 	sidx = 2
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1350,17 +1261,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -1381,7 +1281,7 @@ PART
 {
 	part = sepMotor1_4294553844
 	partName = Part
-	pos = 0.2510366,15.40081,0.434808
+	pos = 0.2143618,1.599821,0.561019
 	attPos = 0,0,0
 	attPos0 = 0.2510366,0.2137251,0.434808
 	rot = -0.2129198,0.2524528,0.05705168,0.9421666
@@ -1393,6 +1293,7 @@ PART
 	dstg = 0
 	sidx = 3
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1488,17 +1389,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -1519,7 +1409,7 @@ PART
 {
 	part = sepMotor1_4294553788
 	partName = Part
-	pos = 0.5020731,15.40081,-7.381852E-08
+	pos = 0.4653983,1.599821,0.1262109
 	attPos = 0,0,0
 	attPos0 = 0.5020731,0.2137251,-7.381852E-08
 	rot = -0.1558681,0.6897138,0.1558681,0.6897138
@@ -1531,6 +1421,7 @@ PART
 	dstg = 0
 	sidx = 4
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1626,17 +1517,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
@@ -1657,7 +1537,7 @@ PART
 {
 	part = sepMotor1_4294553732
 	partName = Part
-	pos = 0.2510365,15.40081,-0.4348081
+	pos = 0.2143617,1.599821,-0.3085971
 	attPos = 0,0,0
 	attPos0 = 0.2510365,0.2137251,-0.4348081
 	rot = -0.05705168,0.9421666,0.2129198,0.2524528
@@ -1669,6 +1549,7 @@ PART
 	dstg = 0
 	sidx = 5
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1769,17 +1650,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
-		}
-		ACTIONS
-		{
-		}
-	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -1795,7 +1665,7 @@ PART
 {
 	part = sepMotor1_4294553676
 	partName = Part
-	pos = -0.2510365,15.40081,-0.4348081
+	pos = -0.2877113,1.599821,-0.3085971
 	attPos = 0,0,0
 	attPos0 = -0.2510365,0.2137251,-0.4348081
 	rot = 0.05705166,0.9421666,0.2129198,-0.2524527
@@ -1807,6 +1677,7 @@ PART
 	dstg = 0
 	sidx = 6
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1902,17 +1773,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = FARBasicDragModel
-		isEnabled = True
-		EVENTS
-		{
 		}
 		ACTIONS
 		{
