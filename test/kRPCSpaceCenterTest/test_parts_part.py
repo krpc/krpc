@@ -90,7 +90,6 @@ class TestPartsPart(testingtools.TestCase):
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.decoupler)
-        self.assertEqual(None, part.reaction_wheel)
 
     def test_docking_port(self):
         part = self.parts.with_title('Clamp-O-Tron Docking Port')[0]
@@ -196,7 +195,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['LaunchClamp', 'ModuleGenerator', 'ModuleTestSubject']
         if self.conn.space_center.remote_tech_available:
-            modules.append('ModuleRTAntennaPassive')
+            modules.extend(['ModuleRTDataTransmitter', 'ModuleRTAntennaPassive'])
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.launch_clamp)
 
@@ -253,6 +252,31 @@ class TestPartsPart(testingtools.TestCase):
             'ModuleParachute', 'ModuleTestSubject'],
             sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.parachute)
+
+    def test_reaction_wheel(self):
+        part = self.parts.with_title('Advanced Reaction Wheel Module, Large')[0]
+        self.assertEqual('asasmodule1-2', part.name)
+        self.assertEqual('Advanced Reaction Wheel Module, Large', part.title)
+        self.assertEqual(2100, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('FL-R1 RCS Fuel Tank', part.parent.title)
+        self.assertEqual(2, len(part.children))
+        self.assertTrue(part.axially_attached)
+        self.assertFalse(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(3, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertClose(200, part.mass)
+        self.assertClose(200, part.dry_mass)
+        self.assertEqual(9, part.impact_tolerance)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(2000, part.max_temperature, 0.5)
+        self.assertTrue(part.crossfeed)
+        self.assertEqual(0, len(part.fuel_lines_from))
+        self.assertEqual(0, len(part.fuel_lines_to))
+        modules = ['ModuleReactionWheel']
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.reaction_wheel)
 
     def test_sensor(self):
         part = self.parts.with_title('PresMat Barometer')[0]
