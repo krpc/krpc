@@ -1,5 +1,5 @@
-local pb = require 'pb'
-local pb_encoder = require 'encoder'
+local pb = require 'protobuf.pb'
+local pb_encoder = require 'protobuf.encoder'
 local seq = require 'pl.seq'
 local tablex = require 'pl.tablex'
 local Types = require 'krpc.types'

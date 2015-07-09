@@ -1,5 +1,5 @@
-local pb = require 'pb'
-local pb_decoder = require 'decoder'
+local pb = require 'protobuf.pb'
+local pb_decoder = require 'protobuf.decoder'
 local List = require 'pl.List'
 local Set = require 'pl.Set'
 local Map = require 'pl.Map'

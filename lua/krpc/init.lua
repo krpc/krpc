@@ -1,7 +1,3 @@
--- TODO: move this elsewhere
-package.path = package.path .. ';../../protoc-gen-lua/protobuf/?.lua'
-package.cpath = package.cpath .. ';../../protoc-gen-lua/protobuf/?.so'
-
 local Client = require 'krpc.client'
 local Connection = require 'krpc.connection'
 local encoder = require 'krpc.encoder'
