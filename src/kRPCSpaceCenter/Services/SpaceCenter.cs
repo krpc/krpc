@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -140,10 +139,13 @@ namespace KRPCSpaceCenter.Services
             // Not a valid factor
             if (factor < 0 || factor >= TimeWarp.fetch.warpRates.Length)
                 return false;
-            // Below altitude limit, and not landed
+            // Landed
+            if (ActiveVessel.InternalVessel.LandedOrSplashed)
+                return true;
+            // Below altitude limit
             var altitude = ActiveVessel.InternalVessel.mainBody.GetAltitude (ActiveVessel.InternalVessel.CoM);
             var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, ActiveVessel.InternalVessel.mainBody);
-            if (!ActiveVessel.InternalVessel.LandedOrSplashed && altitude < altitudeLimit)
+            if (altitude < altitudeLimit)
                 return false;
             // Throttle is non-zero
             if (FlightInputHandler.state.mainThrottle > 0f)
@@ -174,8 +176,9 @@ namespace KRPCSpaceCenter.Services
 
             if (Planetarium.GetUniversalTime () < UT)
                 throw new YieldException (new ParameterizedContinuationVoid<double,float,float> (WarpTo, UT, maxRate, maxPhysicsRate));
-            else if (TimeWarp.CurrentRateIndex > 0)
-                TimeWarp.SetRate (0, false);
+            else if (TimeWarp.CurrentRateIndex > 0) {
+                SetWarpFactor (TimeWarp.Modes.HIGH, 0);
+            }
         }
 
         static void SetWarpMode (TimeWarp.Modes mode)
@@ -223,16 +226,11 @@ namespace KRPCSpaceCenter.Services
             if (TimeWarp.WarpMode != TimeWarp.Modes.HIGH)
                 throw new InvalidOperationException ("Not in on-rails time warp");
             // Check if we're already warping at the maximum rate
-            if (TimeWarp.CurrentRateIndex + 1 >= TimeWarp.fetch.warpRates.Length)
+            if (TimeWarp.CurrentRateIndex >= MaximumRailsWarpFactor)
                 return;
             // Check that the previous rate update has taken effect
             float currentRate = TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex];
             if (Math.Abs (currentRate - TimeWarp.CurrentRate) > 0.01)
-                return;
-            // Check we don't increase the warp rate beyond the altitude limit
-            var altitude = ActiveVessel.InternalVessel.mainBody.GetAltitude (ActiveVessel.InternalVessel.CoM);
-            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (TimeWarp.CurrentRateIndex + 1, ActiveVessel.InternalVessel.mainBody);
-            if (altitude > altitudeLimit)
                 return;
             // Increase the rate
             TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
