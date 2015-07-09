@@ -203,7 +203,7 @@ namespace KRPCSpaceCenter.Services
             SetWarpMode (TimeWarp.Modes.HIGH);
             if (rate < TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex])
                 DecreaseRailsWarp ();
-            else if (rate > TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex + 1])
+            else if (rate >= TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex + 1])
                 IncreaseRailsWarp ();
         }
 
@@ -244,7 +244,7 @@ namespace KRPCSpaceCenter.Services
             SetWarpMode (TimeWarp.Modes.LOW);
             if (rate < TimeWarp.fetch.physicsWarpRates [TimeWarp.CurrentRateIndex])
                 DecreasePhysicsWarp ();
-            else if (rate > TimeWarp.fetch.physicsWarpRates [TimeWarp.CurrentRateIndex + 1])
+            else if (rate >= TimeWarp.fetch.physicsWarpRates [TimeWarp.CurrentRateIndex + 1])
                 IncreasePhysicsWarp ();
         }
 
