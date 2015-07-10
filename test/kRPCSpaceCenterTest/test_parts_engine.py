@@ -283,7 +283,7 @@ class TestPartsEngineMSL(testingtools.TestCase, EngineTest):
             {'max_thrust': 14300, 'isp': 190.6})
         cls.add_engine_data(
             'IX-6315 "Dawn" Electric Propulsion System',
-            {'max_thrust': 63, 'isp': 132.1})
+            {'max_thrust': 63, 'isp': 128.0})
         cls.add_engine_data(
             'O-10 "Puff" MonoPropellant Fuel Engine',
             {'max_thrust': 9700, 'isp': 121.2})
