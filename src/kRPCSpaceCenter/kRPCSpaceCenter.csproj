@@ -107,5 +107,6 @@
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\Vessel.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="Services\Parts\Radiator.cs" />
   </ItemGroup>
 </Project>

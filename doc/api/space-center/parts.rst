@@ -141,6 +141,12 @@ Parts
 
       :rtype: :class:`List` ( :class:`Parachute` )
 
+   .. attribute:: Radiators
+
+      Gets a list of all radiators in the vessel.
+
+      :rtype: :class:`List` ( :class:`Radiator` )
+
    .. attribute:: ReactionWheels
 
       Gets a list of all reaction wheels in the vessel.
@@ -373,6 +379,12 @@ Part
       A :class:`Parachute` if the part is a parachute, otherwise ``null``.
 
       :rtype: :class:`Parachute`
+
+   .. attribute:: Radiator
+
+      A :class:`Radiator` if the part is a radiator, otherwise ``null``.
+
+      :rtype: :class:`Radiator`
 
    .. attribute:: ReactionWheel
 
@@ -1061,6 +1073,43 @@ Parachute
    .. attribute:: Cut
 
       The parachute has been cut.
+
+Radiator
+^^^^^^^^
+
+.. class:: Radiator
+
+   Obtained by calling :attr:`Part.Radiator`.
+
+   .. attribute:: Part
+
+      Gets the part object for this radiator.
+
+      :rtype: :class:`Part`
+
+   .. attribute:: Deployed
+
+      Gets or sets whether the radiator is extended.
+
+      :rtype: bool
+
+   .. attribute:: State
+
+      Gets the current state of the radiator.
+
+      :rtype: :class:`SolarPanelState`
+
+.. class:: RadiatorState
+
+   .. data:: Extended
+
+   .. data:: Retracted
+
+   .. data:: Extending
+
+   .. data:: Retracting
+
+   .. data:: Broken
 
 Reaction Wheel
 ^^^^^^^^^^^^^^

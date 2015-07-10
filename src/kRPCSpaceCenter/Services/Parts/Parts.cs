@@ -135,6 +135,11 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         [KRPCProperty]
+        public IList<Radiator> Radiators {
+            get { return All.Where (part => part.IsRadiator).Select (part => part.Radiator).ToList (); }
+        }
+
+        [KRPCProperty]
         public IList<ReactionWheel> ReactionWheels {
             get { return All.Where (part => part.IsReactionWheel).Select (part => part.ReactionWheel).ToList (); }
         }

@@ -4,6 +4,7 @@ v0.1.10
   * Add more time warp functionality: SpaceCenter.WarpMode, WarpRate, WarpFactor,
     RailsWarpFactor, PhysicsWarpFactor, CanRailsWarpAt and MaximumRailsWarpFactor (#134)
   * Implement physical time warp for SpaceCenter.WarpTo (#137)
+  * Add support for radiator parts (#154)
 * KerbalAlarmClock service now available in all game scenes (#135)
 * Server plugin changes:
   * Performance improvements (#129,#131,#139)

@@ -60,6 +60,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(None, part.launch_clamp)
         self.assertEqual(None, part.light)
         self.assertEqual(None, part.parachute)
+        self.assertEqual(None, part.radiator)
         self.assertNotEqual(None, part.reaction_wheel)
         self.assertEqual(None, part.sensor)
         self.assertEqual(None, part.solar_panel)
@@ -252,6 +253,31 @@ class TestPartsPart(testingtools.TestCase):
             'ModuleParachute', 'ModuleTestSubject'],
             sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.parachute)
+
+    def test_radiator(self):
+        part = self.parts.with_title('Thermal Control System (small)')[0]
+        self.assertEqual('foldingRadSmall', part.name)
+        self.assertEqual('Thermal Control System (small)', part.title)
+        self.assertEqual(450, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Advanced Reaction Wheel Module, Large', part.parent.title)
+        self.assertEqual(0, len(part.children))
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(3, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertClose(50, part.mass)
+        self.assertClose(50, part.dry_mass)
+        self.assertEqual(12, part.impact_tolerance)
+        self.assertClose(part.temperature, self.expectedAmbientTemperature, 20)
+        self.assertClose(2500, part.max_temperature, 0.5)
+        self.assertTrue(part.crossfeed)
+        self.assertEqual(0, len(part.fuel_lines_from))
+        self.assertEqual(0, len(part.fuel_lines_to))
+        modules = ['ModuleActiveRadiator', 'ModuleDeployableRadiator']
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.radiator)
 
     def test_reaction_wheel(self):
         part = self.parts.with_title('Advanced Reaction Wheel Module, Large')[0]
