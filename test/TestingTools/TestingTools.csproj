@@ -51,6 +51,10 @@
       <Project>{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}</Project>
       <Name>kRPC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\kRPCSpaceCenter\kRPCSpaceCenter.csproj">
+      <Project>{690C8D5A-B41F-44C4-99B9-B6A3D190447B}</Project>
+      <Name>kRPCSpaceCenter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

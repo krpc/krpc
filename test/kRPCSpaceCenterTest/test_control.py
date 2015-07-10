@@ -4,26 +4,7 @@ import krpc
 import time
 from mathtools import normalize
 
-class TestControl(testingtools.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Basic')
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect(name='TestControl')
-        vessel = cls.conn.space_center.active_vessel
-        cls.control = vessel.control
-        cls.auto_pilot = vessel.auto_pilot
-        cls.orbital_flight = vessel.flight(vessel.orbital_reference_frame)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
-
-    def test_equality(self):
-        self.assertEqual(self.conn.space_center.active_vessel.control, self.control)
+class TestControlMixin(object):
 
     def test_special_action_groups(self):
         for name in ['rcs', 'gear', 'lights', 'brakes', 'abort']:
@@ -44,14 +25,8 @@ class TestControl(testingtools.TestCase):
         self.assertRaises(krpc.client.RPCError, self.control.get_action_group, 11)
         self.assertRaises(krpc.client.RPCError, self.control.toggle_action_group, 11)
 
-    def test_maneuver_node_editing(self):
-        node = self.control.add_node(self.conn.space_center.ut + 60, 100, 0, 0)
-        self.assertEqual(100, node.prograde)
-        self.control.remove_nodes()
-
     def test_pitch_control(self):
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        self.conn.testing_tools.clear_rotation()
+        self.conn.testing_tools.clear_rotation(self.vessel)
 
         self.auto_pilot.sas = False
         self.control.pitch = 1
@@ -65,8 +40,7 @@ class TestControl(testingtools.TestCase):
         self.assertGreater(diff, 0)
 
     def test_yaw_control(self):
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        self.conn.testing_tools.clear_rotation()
+        self.conn.testing_tools.clear_rotation(self.vessel)
 
         self.auto_pilot.sas = False
         self.control.yaw = 1
@@ -80,8 +54,7 @@ class TestControl(testingtools.TestCase):
         self.assertGreater(diff, 0)
 
     def test_roll_control(self):
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        self.conn.testing_tools.clear_rotation()
+        self.conn.testing_tools.clear_rotation(self.vessel)
 
         pitch = self.orbital_flight.pitch
         heading = self.orbital_flight.heading
@@ -100,16 +73,69 @@ class TestControl(testingtools.TestCase):
         diff = self.orbital_flight.roll - roll
         self.assertGreater(diff, 0)
 
+class TestControlActiveVessel(testingtools.TestCase, TestControlMixin):
+
+    @classmethod
+    def setUpClass(cls):
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Basic')
+        testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        cls.conn = krpc.connect(name='TestControl')
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.control = cls.vessel.control
+        cls.auto_pilot = cls.vessel.auto_pilot
+        cls.orbital_flight = cls.vessel.flight(cls.vessel.orbital_reference_frame)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
+
+    def test_equality(self):
+        self.assertEqual(self.conn.space_center.active_vessel.control, self.control)
+
+    def test_maneuver_node_editing(self):
+        node = self.control.add_node(self.conn.space_center.ut + 60, 100, 0, 0)
+        self.assertEqual(100, node.prograde)
+        self.control.remove_nodes()
+
     def test_clear_on_disconnect(self):
-        conn = krpc.connect(name='TestControl.test_clear_on_disconnect')
+        conn = krpc.connect(name='TestControlActiveVessel.test_clear_on_disconnect')
         control = conn.space_center.active_vessel.control
         control.pitch = 1
         control.yaw = 1
         control.roll = 1
+        time.sleep(0.5)
         conn.close()
         self.assertEqual(self.control.pitch, 0)
         self.assertEqual(self.control.yaw, 0)
         self.assertEqual(self.control.roll, 0)
+
+class TestControlNonActiveVessel(testingtools.TestCase, TestControlMixin):
+
+    @classmethod
+    def setUpClass(cls):
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Multi')
+        testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        time.sleep(5) #FIXME: remove sleep
+        cls.conn = krpc.connect(name='TestControlOtherVessel')
+        next(iter(cls.conn.space_center.active_vessel.parts.docking_ports)).undock()
+        cls.vessel = next(iter(filter(lambda v: v != cls.conn.space_center.active_vessel, cls.conn.space_center.vessels)))
+        cls.control = cls.vessel.control
+        cls.auto_pilot = cls.vessel.auto_pilot
+        cls.orbital_flight = cls.vessel.flight(cls.vessel.orbital_reference_frame)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
+
+    def test_equality(self):
+        self.assertNotEqual(self.conn.space_center.active_vessel.control, self.control)
+
+    def test_maneuver_node_editing(self):
+        self.assertRaises(krpc.client.RPCError, self.control.add_node, self.conn.space_center.ut + 60, 100, 0, 0)
 
 class TestControlStaging(testingtools.TestCase):
 
