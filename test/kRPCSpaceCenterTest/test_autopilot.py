@@ -8,17 +8,26 @@ from mathtools import vector, rad2deg, normalize
 
 class TestAutoPilot(testingtools.TestCase):
 
-    def setUp(self):
-        load_save('autopilot')
-        self.conn = krpc.connect()
-        self.vessel = self.conn.space_center.active_vessel
-        self.ref = self.conn.space_center.ReferenceFrame
-        self.ap = self.vessel.auto_pilot
-        self.ap.sas = False
-        self.sas_mode = self.conn.space_center.SASMode
+    @classmethod
+    def setUpClass(cls):
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Basic')
+        testingtools.remove_other_vessels()
+        testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        time.sleep(5) #FIXME: remove sleep
+        cls.conn = krpc.connect(name='TestAutoPilot')
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.ref = cls.conn.space_center.ReferenceFrame
+        cls.ap = cls.vessel.auto_pilot
+        cls.ap.sas = False
+        cls.sas_mode = cls.conn.space_center.SASMode
 
-    def tearDown(self):
-        self.conn.close()
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
+
+    def setUp(self):
+        self.conn.testing_tools.clear_rotation()
 
     def test_equality(self):
         self.assertEqual(self.vessel.auto_pilot, self.ap)
@@ -179,23 +188,33 @@ class TestAutoPilot(testingtools.TestCase):
             self.ap.set_direction(direction, roll=roll)
             self.assertClose(abs(set_roll - roll), self.ap.roll_error, 1)
 
-    def test_disengage_on_disconnect(self):
-        self.ap.set_rotation(90,0)
-        self.assertGreater(self.ap.error, 0)
-        self.conn.close()
-        conn = krpc.connect()
-        ap = conn.space_center.active_vessel.auto_pilot
-        self.assertEqual(ap.error, 0)
+        for wheel in self.vessel.parts.reaction_wheels:
+            wheel.active = True
 
 class TestAutoPilotSAS(testingtools.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Basic')
+        testingtools.remove_other_vessels()
+        testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        time.sleep(5) #FIXME: remove sleep
+        cls.conn = krpc.connect()
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.ap = cls.vessel.auto_pilot
+        cls.sas_mode = cls.conn.space_center.SASMode
+        cls.speed_mode = cls.conn.space_center.SpeedMode
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
+
     def setUp(self):
-        load_save('autopilot')
-        self.conn = krpc.connect()
-        self.vessel = self.conn.space_center.active_vessel
-        self.ap = self.vessel.auto_pilot
-        self.sas_mode = self.conn.space_center.SASMode
-        self.speed_mode = self.conn.space_center.SpeedMode
+        self.conn.testing_tools.clear_rotation()
+
+    def setUp(self):
+        self.conn.testing_tools.clear_rotation()
 
     def wait_for_autopilot(self):
         while self.ap.error > 0.25:
@@ -232,11 +251,11 @@ class TestAutoPilotSAS(testingtools.TestCase):
         time.sleep(0.25)
         # No target set, should not change
         # TODO: test with a target set
-        self.ap.sas_mode = self.sas_mode.target
-        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
-        time.sleep(0.25)
-        self.ap.sas_mode = self.sas_mode.anti_target
-        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
+        #self.ap.sas_mode = self.sas_mode.target
+        #self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
+        #time.sleep(0.25)
+        #self.ap.sas_mode = self.sas_mode.anti_target
+        #self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
 
     def test_speed_mode(self):
         self.ap.speed_mode = self.speed_mode.orbit
@@ -247,11 +266,11 @@ class TestAutoPilotSAS(testingtools.TestCase):
         time.sleep(0.25)
         # No target set, should not change
         # TODO: test with a target set
-        self.ap.speed_mode = self.speed_mode.target
-        self.assertEqual(self.ap.speed_mode, self.speed_mode.surface)
-        time.sleep(0.25)
-        self.ap.speed_mode = self.speed_mode.orbit
-        self.assertEqual(self.ap.speed_mode, self.speed_mode.orbit)
+        #self.ap.speed_mode = self.speed_mode.target
+        #self.assertEqual(self.ap.speed_mode, self.speed_mode.surface)
+        #time.sleep(0.25)
+        #self.ap.speed_mode = self.speed_mode.orbit
+        #self.assertEqual(self.ap.speed_mode, self.speed_mode.orbit)
 
     def set_direction(self, direction, roll=float('nan')):
         self.ap.set_direction(direction, roll=roll)
@@ -288,6 +307,33 @@ class TestAutoPilotSAS(testingtools.TestCase):
         self.ap.sas = False
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = True
+
+class TestAutoPilotOtherVessel(testingtools.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Multi')
+        testingtools.remove_other_vessels()
+        testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        #FIXME: remove sleep
+        time.sleep(5)
+        cls.conn = krpc.connect(name='TestAutoPilotOtherVessel')
+        next(iter(cls.conn.space_center.active_vessel.parts.docking_ports)).undock()
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.other_vessel = next(iter(filter(lambda v: v != cls.vessel, cls.conn.space_center.vessels)))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
+
+    def test_autopilot(self):
+        self.conn.testing_tools.clear_rotation()
+        ap = self.other_vessel.auto_pilot
+        ap.set_rotation(90,0)
+        while ap.error > 0.5:
+            time.sleep(0.25)
+        ap.disengage()
 
 if __name__ == "__main__":
     unittest.main()
