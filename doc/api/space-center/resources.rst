@@ -38,3 +38,30 @@ Resources
       Returns the density of the named resource, in kg/l.
 
       :rtype: float
+
+   .. staticmethod:: FlowMode (name)
+
+      Returns the flow mode of the named resource.
+
+      :rtype: ResourceFlowMode
+
+.. class:: ResourceFlowMode
+
+   .. data:: Vessel
+
+      The resource flows to any part in the vessel. For example, electric
+      charge.
+
+   .. data:: Stage
+
+      The resource flows from parts in the first stage, followed by the second,
+      and so on. For example, mono-propellant.
+
+   .. data:: Adjacent
+
+      The resource flows between adjacent parts within the vessel. For example,
+      liquid fuel or oxidizer.
+
+   .. data:: None
+
+      The resource does not flow. For example, solid fuel.

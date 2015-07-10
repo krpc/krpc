@@ -7,6 +7,15 @@ using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
 {
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum ResourceFlowMode
+    {
+        Vessel,
+        Stage,
+        Adjacent,
+        None
+    }
+
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Resources : Equatable<Resources>
     {
@@ -91,6 +100,15 @@ namespace KRPCSpaceCenter.Services
             if (resource == null)
                 throw new ArgumentException ("Resource not found");
             return resource.density * 1000f;
+        }
+
+        [KRPCMethod]
+        public static ResourceFlowMode FlowMode (string name)
+        {
+            var resource = PartResourceLibrary.Instance.GetDefinition (name);
+            if (resource == null)
+                throw new ArgumentException ("Resource not found");
+            return resource.resourceFlowMode.ToResourceFlowMode ();
         }
     }
 }
