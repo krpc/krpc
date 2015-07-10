@@ -210,9 +210,18 @@ SpaceCenter
       :param Vector3 color: The color to use for the line, as an r,g,b color.
       :param float length: The length of the line. Defaults to 10.
 
-   .. method:: ClearDirections ()
+   .. method:: DrawLine (start, end, referenceFrame, color)
 
-      Remove all directions currently being drawn.
+      Draw a line.
+
+      :param Vector3 start: Position of the start of the line.
+      :param Vector3 end: Position of the end of the line.
+      :param ReferenceFrame referenceFrame: Reference frame that the position are in.
+      :param Vector3 color: The color to use for the line, as an r,g,b color.
+
+   .. method:: ClearDrawing ()
+
+      Remove all directions and lines currently being drawn.
 
 .. class:: WarpMode
 

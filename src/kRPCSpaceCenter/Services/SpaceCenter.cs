@@ -320,9 +320,15 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProcedure]
-        public static void ClearDirections ()
+        public static void DrawLine (Tuple3 start, Tuple3 end, ReferenceFrame referenceFrame, Tuple3 color)
         {
-            DrawAddon.ClearDirections ();
+            DrawAddon.AddLine (start.ToVector (), end.ToVector (), referenceFrame, color);
+        }
+
+        [KRPCProcedure]
+        public static void ClearDrawing ()
+        {
+            DrawAddon.ClearDrawing ();
         }
     }
 }

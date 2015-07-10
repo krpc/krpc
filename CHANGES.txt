@@ -8,6 +8,8 @@ v0.1.10
   * Fix Vessel.Thrust, Engine.Thrust and Engine.AvailableThrust when engines have no fuel (#146)
   * Add Resoures.FlowMode
   * Add ability to control vessels other than the active one, when they are within physics range (#61)
+  * Add SpaceCenter.DrawLine to draw arbitrary lines (#150)
+  * Rename SpaceCenter.ClearDirections to SpaceCenter.ClearDrawing
 * KerbalAlarmClock service now available in all game scenes (#135)
 * Server plugin changes:
   * Performance improvements (#129,#131,#139)
