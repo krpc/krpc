@@ -750,7 +750,7 @@ Engine
    .. attribute:: Thrust
 
       Gets the current amount of thrust being produced by the engine, in
-      Newtons. Returns zero if the engine is not active.
+      Newtons. Returns zero if the engine is not active or if it has no fuel.
 
       :rtype: float
 
@@ -759,7 +759,8 @@ Engine
       Gets the maximum available amount of thrust that can be produced by the
       engine, in Newtons. This takes :attr:`Engine.ThrustLimit` into account,
       and is the amount of thrust produced by the engine when activated and the
-      main throttle is set to 100%.
+      main throttle is set to 100%. Returns zero if the engine does not have any
+      fuel.
 
       :rtype: float
 

@@ -74,14 +74,74 @@ class TestVesselEngines(testingtools.TestCase):
             if 'IntakeAir' not in engine.propellants and engine.can_shutdown:
                 cls.engines.append(engine)
 
-        thrusts = [200000, 215000, 20000, 2000, 60000]
-        isps = [320, 300, 250, 4200, 800]
-        vac_isps = [320, 300, 250, 4200, 800]
-        msl_isps = [270, 280, 120, 100, 185]
-        cls.thrust = sum(thrusts)
-        cls.combined_isp = sum(thrusts) / sum(t/i for t,i in zip(thrusts, isps))
-        cls.vac_combined_isp = sum(thrusts) / sum(t/i for t,i in zip(thrusts, vac_isps))
-        cls.msl_combined_isp = sum(thrusts) / sum(t/i for t,i in zip(thrusts, msl_isps))
+        cls.engine_info = {
+            'IX-6315 "Dawn" Electric Propulsion System': {
+                'max_thrust': 2000,
+                'available_thrust': 2000,
+                'isp': 4200,
+                'vac_isp': 4200,
+                'msl_isp': 100
+            },
+            'LV-T45 "Swivel" Liquid Fuel Engine': {
+                'max_thrust': 200000,
+                'available_thrust': 200000,
+                'isp': 320,
+                'vac_isp': 320,
+                'msl_isp': 270
+            },
+            'LV-T30 "Reliant" Liquid Fuel Engine': {
+                'max_thrust': 215000,
+                'available_thrust': 215000,
+                'isp': 300,
+                'vac_isp': 300,
+                'msl_isp': 280
+            },
+            'LV-N "Nerv" Atomic Rocket Motor': {
+                'max_thrust': 60000,
+                'available_thrust': 60000,
+                'isp': 800,
+                'vac_isp': 800,
+                'msl_isp': 185
+            },
+            'O-10 "Puff" MonoPropellant Fuel Engine': {
+                'max_thrust': 20000,
+                'available_thrust': 20000,
+                'isp': 250,
+                'vac_isp': 250,
+                'msl_isp': 120
+            },
+            'RT-10 "Hammer" Solid Fuel Booster': {
+                'max_thrust': 0,
+                'available_thrust': 0,
+                'isp': 195,
+                'vac_isp': 195,
+                'msl_isp': 170
+            },
+            'LV-909 "Terrier" Liquid Fuel Engine': {
+                'max_thrust': 60000,
+                'available_thrust': 0,
+                'isp': 345,
+                'vac_isp': 345,
+                'msl_isp': 85
+            },
+            'J-33 "Wheesley" Basic Jet Engine': {
+                'max_thrust': 0,
+                'available_thrust': 0,
+                'isp': 0,
+                'vac_isp': 0,
+                'msl_isp': 0
+            }
+        }
+        max_thrusts = [x['max_thrust'] for x in cls.engine_info.values()]
+        available_thrusts = [x['available_thrust'] for x in cls.engine_info.values()]
+        isps = [x['isp'] for x in cls.engine_info.values()]
+        vac_isps = [x['vac_isp'] for x in cls.engine_info.values()]
+        msl_isps = [x['msl_isp'] for x in cls.engine_info.values()]
+        cls.max_thrust = sum(max_thrusts)
+        cls.available_thrust = sum(available_thrusts)
+        cls.combined_isp = sum(max_thrusts) / sum(t/i if i > 0 else 0 for t,i in zip(max_thrusts, isps))
+        cls.vac_combined_isp = sum(max_thrusts) / sum(t/i if i > 0 else 0 for t,i in zip(max_thrusts, vac_isps))
+        cls.msl_combined_isp = sum(max_thrusts) / sum(t/i if i > 0 else 0 for t,i in zip(max_thrusts, msl_isps))
 
     @classmethod
     def tearDownClass(cls):
@@ -99,14 +159,44 @@ class TestVesselEngines(testingtools.TestCase):
         self.assertClose(self.vessel.vacuum_specific_impulse, 0)
         self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, 0)
 
-    def test_idle(self):
+    def test_one_idle(self):
+        self.control.throttle = 0
+        title = 'LV-N "Nerv" Atomic Rocket Motor'
+        engine = next(iter(filter(lambda x: x.part.title == title, self.vessel.parts.engines)))
+        engine.active = True
+        time.sleep(0.5)
+
+        #FIXME: need to run the engines to update their has fuel status
+        self.control.throttle = 0.1
+        time.sleep(0.5)
+        self.control.throttle = 0
+        time.sleep(0.5)
+
+        info = self.engine_info[title]
+        self.assertClose(self.vessel.thrust, 0)
+        self.assertClose(self.vessel.available_thrust, info['available_thrust'])
+        self.assertClose(self.vessel.max_thrust, info['max_thrust'])
+        self.assertClose(self.vessel.specific_impulse, info['isp'])
+        self.assertClose(self.vessel.vacuum_specific_impulse, info['vac_isp'])
+        self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, info['msl_isp'])
+        engine.active = False
+        time.sleep(0.5)
+
+    def test_all_idle(self):
         self.control.throttle = 0
         for engine in self.engines:
             engine.active = True
         time.sleep(0.5)
+
+        #FIXME: need to run the engines to update their has fuel status
+        self.control.throttle = 0.1
+        time.sleep(0.5)
+        self.control.throttle = 0
+        time.sleep(0.5)
+
         self.assertClose(self.vessel.thrust, 0, 1)
-        self.assertClose(self.vessel.available_thrust, self.thrust, 1)
-        self.assertClose(self.vessel.max_thrust, self.thrust, 1)
+        self.assertClose(self.vessel.available_thrust, self.available_thrust, 1)
+        self.assertClose(self.vessel.max_thrust, self.max_thrust, 1)
         self.assertClose(self.vessel.specific_impulse, self.combined_isp, 1)
         self.assertClose(self.vessel.vacuum_specific_impulse, self.vac_combined_isp, 1)
         self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, self.msl_combined_isp, 1)
@@ -120,9 +210,9 @@ class TestVesselEngines(testingtools.TestCase):
         for throttle in [0.3,0.7,1]:
             self.control.throttle = throttle
             time.sleep(1)
-            self.assertClose(self.vessel.thrust, throttle*self.thrust, 1)
-            self.assertClose(self.vessel.available_thrust, self.thrust, 1)
-            self.assertClose(self.vessel.max_thrust, self.thrust, 1)
+            self.assertClose(self.vessel.thrust, throttle*self.available_thrust, 1)
+            self.assertClose(self.vessel.available_thrust, self.available_thrust, 1)
+            self.assertClose(self.vessel.max_thrust, self.max_thrust, 1)
             self.assertClose(self.vessel.specific_impulse, self.combined_isp, 1)
             self.assertClose(self.vessel.vacuum_specific_impulse, self.vac_combined_isp, 1)
             self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, self.msl_combined_isp, 1)

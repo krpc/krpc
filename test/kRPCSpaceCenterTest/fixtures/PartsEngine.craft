@@ -2,7 +2,7 @@ ship = PartsEngine
 version = 1.0.4
 description = 
 type = VAB
-size = 8.297939,11.27585,6.068992
+size = 8.297938,11.27585,6.112939
 PART
 {
 	part = mk1pod_4294756890
@@ -391,8 +391,8 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 0
+	sqor = 0
 	sepI = 0
 	attm = 0
 	modCost = 0
@@ -667,8 +667,8 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 1
+	sqor = 0
 	sepI = 0
 	attm = 0
 	modCost = 0
@@ -821,15 +821,15 @@ PART
 	pos = -2.571882,6.041194,-0.3310752
 	attPos = 0,0,0
 	attPos0 = -1.428031,-1.213228,1.192093E-07
-	rot = -2.117582E-22,0.7071068,5.823352E-22,0.7071068
+	rot = -5.293956E-22,0.7071068,7.940934E-22,0.7071068
 	attRot = 0,0,0,1
 	attRot0 = -1.256074E-15,0.7071068,1.256074E-15,0.7071068
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 2
+	sqor = 0
 	sepI = 0
 	attm = 1
 	modCost = 0
@@ -851,7 +851,7 @@ PART
 		isEnabled = True
 		scaleFactor = 2.655895
 		height = 6.701345
-		towerRot = 2.117582E-22,-0.7071068,-5.823352E-22,0.7071068
+		towerRot = 5.293956E-22,-0.7071068,-7.940934E-22,0.7071068
 		EVENTS
 		{
 			Release
@@ -976,8 +976,8 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 3
+	sqor = 0
 	sepI = 0
 	attm = 1
 	modCost = 0
@@ -1004,7 +1004,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.04797865
+		currentThrottle = 0.0002591196
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -1124,8 +1124,8 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 4
+	sqor = 0
 	sepI = 0
 	attm = 1
 	modCost = 0
@@ -1146,7 +1146,7 @@ PART
 		name = LaunchClamp
 		isEnabled = True
 		scaleFactor = 2.709504
-		height = 6.836612
+		height = 6.836613
 		towerRot = 0.002348469,-0.707103,0.002348469,-0.7071028
 		EVENTS
 		{
@@ -1319,8 +1319,8 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 5
+	sqor = 0
 	sepI = 0
 	attm = 0
 	modCost = 0
@@ -1511,8 +1511,8 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 6
+	sqor = 0
 	sepI = 0
 	attm = 1
 	modCost = 0
@@ -1532,7 +1532,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 2.67568
+		scaleFactor = 2.675679
 		height = 6.751266
 		towerRot = 1.39012E-14,-1,2.892517E-08,3.681876E-07
 		EVENTS
@@ -1667,7 +1667,9 @@ PART
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
 	link = nuclearEngine_4294723338
+	link = stackDecoupler_4293758552
 	srfN = srfAttach,fuelTank_4294769072
+	attN = top,stackDecoupler_4293758552
 	attN = bottom,nuclearEngine_4294723338
 	EVENTS
 	{
@@ -1713,8 +1715,8 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 7
+	sqor = 0
 	sepI = 0
 	attm = 0
 	modCost = 0
@@ -2059,8 +2061,8 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 10
+	sqor = 0
 	sepI = 0
 	attm = 0
 	modCost = 0
@@ -2216,7 +2218,7 @@ PART
 {
 	part = omsEngine_4294715156
 	partName = Part
-	pos = -1.445988,8.501424,-0.8543926
+	pos = -1.445988,8.501424,-0.8543925
 	attPos = 0,0,0
 	attPos0 = -0.302137,-0.003995895,-0.5233166
 	rot = -4.008013E-08,0.9659256,-1.495806E-07,-0.2588198
@@ -2226,8 +2228,8 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
-	sqor = -1
+	sidx = 11
+	sqor = 0
 	sepI = 0
 	attm = 1
 	modCost = 0
@@ -2343,5 +2345,294 @@ PART
 		isTweakable = True
 		hideFlow = False
 		flowMode = Both
+	}
+}
+PART
+{
+	part = stackDecoupler_4293758552
+	partName = Part
+	pos = 0.1053984,8.369058,-1.57683
+	attPos = 0,0,0
+	attPos0 = 6.548672E-08,1.098685,1.756491E-14
+	rot = 0,0,0,1
+	attRot = 0,0,0,1
+	attRot0 = -2.107342E-08,-0.7071065,2.107343E-08,-0.7071071
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 0
+	dstg = 1
+	sidx = 9
+	sqor = 0
+	sepI = 0
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	link = liquidEngine3_4293755140
+	attN = bottom,fuelTank_4294720424
+	attN = top,liquidEngine3_4293755140
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleDecouple
+		isEnabled = True
+		ejectionForcePercent = 100
+		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
+		EVENTS
+		{
+			Decouple
+			{
+				active = True
+				guiActive = True
+				guiIcon = Decouple
+				guiName = Decouple
+				category = Decouple
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			DecoupleAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+}
+PART
+{
+	part = liquidEngine3_4293755140
+	partName = Part
+	pos = 0.1053984,8.704732,-1.57683
+	attPos = 0,0,0
+	attPos0 = -5.962773E-16,0.3356743,-1.776352E-15
+	rot = -4.440893E-16,1.776357E-15,-1,3.552714E-15
+	attRot = 0,0,-0.9999999,0
+	attRot0 = 0,0,-1,0
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 0
+	dstg = 2
+	sidx = 8
+	sqor = 0
+	sepI = 0
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	attN = top,stackDecoupler_4293758552
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleEngines
+		isEnabled = True
+		staged = False
+		flameout = False
+		EngineIgnited = False
+		engineShutdown = False
+		currentThrottle = 0
+		thrustPercentage = 100
+		manuallyOverridden = False
+		thrustPercentage_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.5
+		}
+		EVENTS
+		{
+			Activate
+			{
+				active = True
+				guiActive = True
+				guiIcon = Activate Engine
+				guiName = Activate Engine
+				category = Activate Engine
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			Shutdown
+			{
+				active = False
+				guiActive = True
+				guiIcon = Shutdown Engine
+				guiName = Shutdown Engine
+				category = Shutdown Engine
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			OnAction
+			{
+				actionGroup = None
+			}
+			ShutdownAction
+			{
+				actionGroup = None
+			}
+			ActivateAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleGimbal
+		isEnabled = True
+		gimbalLock = False
+		gimbalLimiter = 100
+		gimbalLock_UIFlight
+		{
+			controlEnabled = True
+		}
+		gimbalLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+			LockAction
+			{
+				actionGroup = None
+			}
+			FreeAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleAnimateHeat
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleJettison
+		isEnabled = True
+		isJettisoned = True
+		EVENTS
+		{
+			Jettison
+			{
+				active = False
+				guiActive = True
+				guiIcon = Jettison
+				guiName = Jettison
+				category = Jettison
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			JettisonAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleSurfaceFX
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
 	}
 }

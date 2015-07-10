@@ -112,6 +112,7 @@ class EngineTest(EngineTestBase):
         self.assertClose(data['max_vac_thrust'], engine.max_vacuum_thrust)
         self.assertEqual(set(data['propellants'].keys()), set(engine.propellants))
         self.assertClose(data['propellants'], engine.propellant_ratios)
+        self.assertTrue(engine.has_fuel)
         self.assertEqual(data['throttle_locked'], engine.throttle_locked)
         self.assertClose(data['msl_isp'], engine.kerbin_sea_level_specific_impulse)
         self.assertClose(data['vac_isp'], engine.vacuum_specific_impulse)
@@ -126,14 +127,13 @@ class EngineTest(EngineTestBase):
 
     def check_engine_idle(self, engine):
         """ Check engine properties when engine is deactivated """
-        return
         data = self.engine_data[engine.part.title]
         self.assertFalse(engine.active)
         self.assertClose(engine.thrust_limit, 1)
         self.assertEqual(engine.thrust, 0)
-        self.assertClose(engine.available_thrust, data['max_thrust'])
-        self.assertClose(engine.max_thrust, data['max_thrust'])
-        self.assertClose(engine.specific_impulse, 0)
+        self.assertClose(engine.available_thrust, data['max_thrust'], 500)
+        self.assertClose(engine.max_thrust, data['max_thrust'], 500)
+        self.assertClose(engine.specific_impulse, 0, 1)
         self.assertTrue(engine.has_fuel)
 
     def check_engine_active(self, engine, throttle):
@@ -146,6 +146,7 @@ class EngineTest(EngineTestBase):
         self.assertClose(engine.available_thrust, data['max_thrust'], 500)
         self.assertClose(engine.max_thrust, data['max_thrust'], 500)
         self.assertClose(engine.specific_impulse, data['isp'], 1)
+        self.assertTrue(engine.has_fuel)
 
     def check_engine(self, engine):
         self.set_idle(engine)
@@ -208,6 +209,29 @@ class TestPartsEngine(testingtools.TestCase, EngineTestBase):
     def tearDownClass(cls):
         cls.conn.close()
 
+    def test_has_fuel(self):
+        engine = self.get_engine('LV-T30 "Reliant" Liquid Fuel Engine')
+        self.assertTrue(engine.has_fuel)
+
+    def test_has_no_fuel(self):
+        engine = self.get_engine('LV-909 "Terrier" Liquid Fuel Engine')
+
+        #FIXME: have to run engine to update has fuel status
+        engine.active = True
+        self.vessel.control.throttle = 0.1
+        time.sleep(0.5)
+        engine.active = False
+        self.vessel.control.throttle = 0
+        time.sleep(0.5)
+
+        self.assertFalse(engine.has_fuel)
+        engine.active = True
+        time.sleep(0.1)
+        self.assertFalse(engine.has_fuel)
+        engine.active = False
+        time.sleep(0.1)
+        self.assertFalse(engine.has_fuel)
+
     def test_thrust_limit(self):
         engine = self.get_engine('LV-T30 "Reliant" Liquid Fuel Engine')
         thrust = 201000
@@ -215,6 +239,7 @@ class TestPartsEngine(testingtools.TestCase, EngineTestBase):
         engine.active = False
         engine.thrust_limit = 1
         self.vessel.control.throttle = 1
+        self.assertTrue(engine.has_fuel)
         self.assertEqual(engine.thrust_limit, 1)
         self.assertClose(engine.thrust, 0, 500)
         self.assertClose(engine.available_thrust, thrust, 500)

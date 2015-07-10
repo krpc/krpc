@@ -5,6 +5,7 @@ v0.1.10
     RailsWarpFactor, PhysicsWarpFactor, CanRailsWarpAt and MaximumRailsWarpFactor (#134)
   * Implement physical time warp for SpaceCenter.WarpTo (#137)
   * Add support for radiator parts (#154)
+  * Fix Vessel.Thrust, Engine.Thrust and Engine.AvailableThrust when engines have no fuel (#146)
 * KerbalAlarmClock service now available in all game scenes (#135)
 * Server plugin changes:
   * Performance improvements (#129,#131,#139)
