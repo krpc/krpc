@@ -86,6 +86,7 @@ namespace TestingTools
         public static void ClearRotation (KRPCSpaceCenter.Services.Vessel vessel = null)
         {
             Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
+            internalVessel.GoOnRails ();
             internalVessel.SetRotation (ZeroRotation);
         }
 
