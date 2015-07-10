@@ -192,12 +192,16 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return part.HasModule<ModuleParachute> (); }
         }
 
-        internal bool IsSensor {
-            get { return part.HasModule<ModuleEnviroSensor> (); }
+        internal bool IsRadiator {
+            get { return part.HasModule<ModuleDeployableRadiator> (); }
         }
 
         internal bool IsReactionWheel {
             get { return part.HasModule<ModuleReactionWheel> (); }
+        }
+
+        internal bool IsSensor {
+            get { return part.HasModule<ModuleEnviroSensor> (); }
         }
 
         internal bool IsSolarPanel {
@@ -242,6 +246,11 @@ namespace KRPCSpaceCenter.Services.Parts
         [KRPCProperty]
         public Parachute Parachute {
             get { return IsParachute ? new Parachute (this) : null; }
+        }
+
+        [KRPCProperty]
+        public Radiator Radiator {
+            get { return IsRadiator ? new Radiator (this) : null; }
         }
 
         [KRPCProperty]

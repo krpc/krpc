@@ -1,15 +1,15 @@
 ship = PartsDockingPort
-version = 1.0.0
+version = 1.0.4
 description = 
 type = VAB
-size = 11.00088,18.1203,4.291597
+size = 11.00088,10.38838,4.291597
 PART
 {
 	part = mk1pod_4294757656
 	partName = Part
-	pos = 0.02760239,15.11469,-0.04364251
+	pos = 0.005253602,7.382779,0.02818515
 	attPos = 0,0,0
-	attPos0 = 0.02760239,15.11469,-0.04364251
+	attPos0 = 0.005253602,7.382779,0.02818515
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -276,6 +276,17 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleConductionMultiplier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
 		name = ModuleTripLogger
 		isEnabled = True
 		EVENTS
@@ -314,7 +325,7 @@ PART
 {
 	part = trussPiece1x_4294707260
 	partName = Part
-	pos = 0.02760239,14.15038,-0.04364251
+	pos = 0.005253602,6.418469,0.02818515
 	attPos = 0,0,0
 	attPos0 = 0,-0.9643106,0
 	rot = 0,0,0,1
@@ -350,7 +361,7 @@ PART
 {
 	part = stationHub_4294750608
 	partName = Part
-	pos = 0.02760239,12.67895,-0.04364251
+	pos = 0.005253602,4.94704,0.02818515
 	attPos = 0,0,0
 	attPos0 = 0,-1.471426,0
 	rot = 0,0,0,1
@@ -386,7 +397,7 @@ PART
 {
 	part = dockingPort3_4294741630
 	partName = Part
-	pos = 0.02760239,12.67895,-0.955796
+	pos = 0.005253602,4.94704,-0.8839684
 	attPos = 0,0,0
 	attPos0 = 0,0,-0.9121535
 	rot = -0.7071068,0,0,0.7071068
@@ -528,7 +539,7 @@ PART
 {
 	part = mk2DockingPort_4294738612
 	partName = Part
-	pos = 0.02760239,11.1418,-0.04364251
+	pos = 0.005253602,3.409889,0.02818515
 	attPos = 0,0,0
 	attPos0 = 0,-1.537153,0
 	rot = 0,0.7071068,0,-0.7071068
@@ -724,7 +735,7 @@ PART
 {
 	part = dockingPort1_4294746914
 	partName = Part
-	pos = 0.02760239,15.76237,-0.04364251
+	pos = 0.005253602,8.030459,0.02818515
 	attPos = 0,0,0
 	attPos0 = 0,0.6476841,0
 	rot = 0,0,0,1
@@ -897,7 +908,7 @@ PART
 {
 	part = trussPiece3x_4294708012
 	partName = Part
-	pos = -1.772228,14.1187,-0.04364249
+	pos = -1.794577,6.386789,0.02818516
 	attPos = 0,0,0
 	attPos0 = -1.79983,-0.0316782,1.862645E-08
 	rot = 0.5,-0.5,0.5,0.5
@@ -931,7 +942,7 @@ PART
 {
 	part = launchClamp1_4294747360
 	partName = Part
-	pos = 1.159098,12.78834,-0.04364239
+	pos = 1.136749,5.056429,0.02818527
 	attPos = 0,0,0
 	attPos0 = 1.131496,-1.362036,1.15484E-07
 	rot = 0,0.7071068,0,-0.7071068
@@ -962,8 +973,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 5.329942
-		height = 13.44849
+		scaleFactor = 2.26561
+		height = 5.71658
 		towerRot = 0,-0.7071068,0,-0.7071068
 		EVENTS
 		{
@@ -1056,12 +1067,30 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = strutCube_4294696318
 	partName = Part
-	pos = -2.327482,13.66339,-0.04364249
+	pos = -2.349831,5.931479,0.02818516
 	attPos = 0,0,0
 	attPos0 = 0,0.5552546,0.455307
 	rot = 0.7071068,0,0.7071068,0
@@ -1095,7 +1124,7 @@ PART
 {
 	part = dockingPort2_4294740474
 	partName = Part
-	pos = -2.327482,13.53466,-0.04364249
+	pos = -2.349831,5.80275,0.02818516
 	attPos = 0,0,0
 	attPos0 = 0,0.1287346,-1.534636E-08
 	rot = -1,0,1.192093E-07,0
@@ -1239,7 +1268,7 @@ PART
 {
 	part = dockingPort2_4294689602
 	partName = Part
-	pos = -2.327482,12.96889,-0.04364249
+	pos = -2.349831,5.236979,0.02818516
 	attPos = 0,0,0
 	attPos0 = -6.467588E-08,0.5657673,-9.061797E-10
 	rot = 0,1.192093E-07,0,1
@@ -1382,7 +1411,7 @@ PART
 {
 	part = trussPiece3x_4294650604
 	partName = Part
-	pos = -4.622466,14.09636,-0.004949376
+	pos = -4.644814,6.36445,0.06687828
 	attPos = 0,0,0
 	attPos0 = 0.03869312,2.850238,0.02233982
 	rot = 0.4999999,-0.5000001,0.5000001,0.4999999
@@ -1416,7 +1445,7 @@ PART
 {
 	part = strutCube_4294650578
 	partName = Part
-	pos = -5.17772,13.64105,-0.004949458
+	pos = -5.200068,5.90914,0.0668782
 	attPos = 0,0,0
 	attPos0 = 0,0.5552546,0.455307
 	rot = 0.7071068,1.038162E-08,0.7071068,0
@@ -1450,7 +1479,7 @@ PART
 {
 	part = launchClamp1_4294703550
 	partName = Part
-	pos = -6.804385,12.66042,0.1362255
+	pos = -6.826734,4.92851,0.2080532
 	attPos = 0,0,0
 	attPos0 = 0.1411752,2.181919,1.435945
 	rot = 0,0.7071068,1.038162E-08,0.7071068
@@ -1481,8 +1510,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 5.279244
-		height = 13.32057
+		scaleFactor = 2.214913
+		height = 5.588661
 		towerRot = 0,-0.7071068,-1.038162E-08,0.7071068
 		EVENTS
 		{
@@ -1575,12 +1604,30 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = launchClamp1_4294711084
 	partName = Part
-	pos = -2.327483,11.67078,-1.399679
+	pos = -2.349832,3.938869,-1.327851
 	attPos = 0,0,0
 	attPos0 = -3.850463E-07,-1.298111,-1.356037
 	rot = 0,-2.086163E-07,0,-1
@@ -1611,8 +1658,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.887028
-		height = 12.33093
+		scaleFactor = 1.822696
+		height = 4.59902
 		towerRot = 0,2.086162E-07,0,-1
 		EVENTS
 		{
@@ -1705,12 +1752,30 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = dockingPortLarge_4294463484
 	partName = Part
-	pos = -5.17772,13.51232,-0.004949458
+	pos = -5.200068,5.780409,0.0668782
 	attPos = 0,0,0
 	attPos0 = 0,0.1287346,-1.534636E-08
 	rot = 0,0,-1,0
@@ -1854,7 +1919,7 @@ PART
 {
 	part = dockingPortLateral_4294656828
 	partName = Part
-	pos = 0.02760239,9.941486,-0.04364251
+	pos = 0.005253602,2.209576,0.02818515
 	attPos = 0,0,0
 	attPos0 = 0,-1.200314,0
 	rot = 0,0,0,1
@@ -2027,7 +2092,7 @@ PART
 {
 	part = RCSFuelTank_4294480208
 	partName = Part
-	pos = -5.17772,12.93702,-0.004949462
+	pos = -5.200068,5.20511,0.06687819
 	attPos = 0,0,0
 	attPos0 = 6.013498E-08,0.5753031,4.721219E-09
 	rot = 0,0,0,1
@@ -2070,7 +2135,7 @@ PART
 {
 	part = launchClamp1_4294479826
 	partName = Part
-	pos = -5.17772,11.40608,-1.417651
+	pos = -5.200068,3.674169,-1.345823
 	attPos = 0,0,0
 	attPos0 = -2.69592E-07,-1.530935,-1.412701
 	rot = 1.788139E-07,-1.192093E-07,5.960464E-08,-1
@@ -2101,8 +2166,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.782119
-		height = 12.06623
+		scaleFactor = 1.717789
+		height = 4.33432
 		towerRot = -1.788139E-07,1.192093E-07,-5.960464E-08,-1
 		EVENTS
 		{
@@ -2190,6 +2255,24 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
 		}
 		ACTIONS
 		{

@@ -117,7 +117,7 @@ class Attributes(object):
         """ Return the attributes for the return type of a procedure. """
         return_type_attrs = []
         for attr in attrs:
-            match = re.match(r'^ReturnType.(.+)$', attr)
+            match = re.match(r'^ReturnType\.(.+)$', attr)
             if match:
                 return_type_attrs.append(match.group(1))
         return return_type_attrs
@@ -127,7 +127,7 @@ class Attributes(object):
         """ Return the attributes for a specific parameter of a procedure. """
         parameter_type_attrs = []
         for attr in attrs:
-            match = re.match(r'^ParameterType\(' + str(pos) + '\).(.+)$', attr)
+            match = re.match(r'^ParameterType\(' + str(pos) + '\)\.(.+)$', attr)
             if match:
                 parameter_type_attrs.append(match.group(1))
         return parameter_type_attrs

@@ -1,15 +1,15 @@
 ship = PartsSolarPanel
-version = 1.0.0
+version = 1.0.4
 description = 
 type = VAB
-size = 5.891571,17.91153,3.158285
+size = 5.891571,10.05606,3.158285
 PART
 {
 	part = mk1pod_4294736224
 	partName = Part
-	pos = 0,15,0
+	pos = 0.0004032962,7.144535,-0.001336962
 	attPos = 0,0,0
-	attPos0 = 0,15,0
+	attPos0 = 0.0004032962,7.144535,-0.001336962
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -276,6 +276,17 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleConductionMultiplier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
 		name = ModuleTripLogger
 		isEnabled = True
 		EVENTS
@@ -314,7 +325,7 @@ PART
 {
 	part = fuelTank_4294731188
 	partName = Part
-	pos = 0,13.62927,0
+	pos = 0.0004032962,5.773805,-0.001336962
 	attPos = 0,0,0
 	attPos0 = 0,-1.370728,0
 	rot = 0,0,0,1
@@ -370,7 +381,7 @@ PART
 {
 	part = launchClamp1_4294705978
 	partName = Part
-	pos = -1.427089,12.21688,1.331573E-07
+	pos = -1.426686,4.361415,-0.001336829
 	attPos = 0,0,0
 	attPos0 = -1.427089,-1.412395,1.331573E-07
 	rot = 1.256074E-15,0.7071068,-1.256074E-15,0.7071067
@@ -402,8 +413,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 5.103458
-		height = 12.87703
+		scaleFactor = 1.99016
+		height = 5.021566
 		towerRot = -1.256074E-15,-0.7071068,1.256074E-15,0.7071067
 		EVENTS
 		{
@@ -496,12 +507,30 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = launchClamp1_4294705808
 	partName = Part
-	pos = 1.427089,12.21688,-2.579173E-07
+	pos = 1.427492,4.361415,-0.00133722
 	attPos = 0,0,0
 	attPos0 = 1.427089,-1.412395,-2.579173E-07
 	rot = -1.256074E-15,0.7071066,-1.256074E-15,-0.7071069
@@ -533,8 +562,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 5.103458
-		height = 12.87703
+		scaleFactor = 1.99016
+		height = 5.021566
 		towerRot = 1.256074E-15,-0.7071066,1.256074E-15,-0.7071069
 		EVENTS
 		{
@@ -627,12 +656,30 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
 	part = solarPanels5_4294697490
 	partName = Part
-	pos = -0.03146206,15.62491,0.008430234
+	pos = -0.03105876,7.769445,0.007093272
 	attPos = 0,0,0
 	attPos0 = -0.03146206,0.6249142,0.008430234
 	rot = -0.7071066,3.804917E-08,0,0.7071069
@@ -713,7 +760,7 @@ PART
 {
 	part = solarPanels4_4294523398
 	partName = Part
-	pos = -5.416008E-08,13.05479,-0.6195191
+	pos = 0.000403242,5.199325,-0.620856
 	attPos = 0,0,0
 	attPos0 = -5.416008E-08,-0.5744801,-0.6195191
 	rot = 2.107342E-08,0.7071065,-2.107343E-08,-0.7071071
@@ -794,7 +841,7 @@ PART
 {
 	part = radialDecoupler2_4294514542
 	partName = Part
-	pos = 7.028177E-08,14.58118,-0.5898444
+	pos = 0.0004033665,6.725715,-0.5911814
 	attPos = 0,0,0
 	attPos0 = 7.028177E-08,0.9519129,-0.5898444
 	rot = 2.107342E-08,0.7071065,-2.107343E-08,-0.7071071
@@ -884,7 +931,7 @@ PART
 {
 	part = fuelTank_4294511608
 	partName = Part
-	pos = -4.10348E-07,15.03958,-1.834583
+	pos = 0.0004028859,7.184115,-1.83592
 	attPos = 0,0,0
 	attPos0 = -1.244738,0.4583932,-1.870997E-07
 	rot = -2.107341E-07,0.7071067,2.107342E-07,-0.7071069
@@ -936,7 +983,7 @@ PART
 {
 	part = largeSolarPanel_4294712806
 	partName = Part
-	pos = 0,15.23251,0.4132722
+	pos = 0.0004032962,7.377045,0.4119352
 	attPos = 0,0,0
 	attPos0 = 0,0.2325115,0.4132722
 	rot = -0.5826582,0.5826583,0.4006364,0.4006362

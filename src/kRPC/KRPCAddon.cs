@@ -1,4 +1,3 @@
-using System.Linq;
 using KRPC.Server;
 using KRPC.UI;
 using KRPC.Utils;
@@ -74,7 +73,8 @@ namespace KRPC
             infoWindow = gameObject.AddComponent<InfoWindow> ();
             infoWindow.Server = server;
             infoWindow.Closable = true;
-            infoWindow.Visible = false;
+            infoWindow.Visible = config.InfoWindowVisible;
+            infoWindow.Position = config.InfoWindowPosition;
 
             // Create main window
             mainWindow = gameObject.AddComponent<MainWindow> ();
@@ -108,6 +108,24 @@ namespace KRPC
                 config.Load ();
                 var window = s as MainWindow;
                 config.MainWindowPosition = window.Position;
+                config.Save ();
+            };
+
+            // Info window events
+            infoWindow.OnHide += (s, e) => {
+                config.Load ();
+                config.InfoWindowVisible = false;
+                config.Save ();
+            };
+            infoWindow.OnShow += (s, e) => {
+                config.Load ();
+                config.InfoWindowVisible = true;
+                config.Save ();
+            };
+            infoWindow.OnMoved += (s, e) => {
+                config.Load ();
+                var window = s as InfoWindow;
+                config.InfoWindowPosition = window.Position;
                 config.Save ();
             };
 

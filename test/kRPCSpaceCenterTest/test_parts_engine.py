@@ -64,19 +64,19 @@ class EngineTestBase(object):
             'can_restart': False,
             'can_shutdown': False,
             'max_vac_thrust': 227000,
-            'msl_isp': 150,
-            'vac_isp': 162
+            'msl_isp': 170,
+            'vac_isp': 195
         },
         'J-33 "Wheesley" Basic Jet Engine': {
-            'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.0434},
+            'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.090909},
             'gimballed': True,
             'gimbal_range': 1,
             'throttle_locked': False,
             'can_restart': True,
             'can_shutdown': True,
-            'max_vac_thrust': 115000,
-            'msl_isp': 19200,
-            'vac_isp': 19200
+            'max_vac_thrust': 80000,
+            'msl_isp': 9600,
+            'vac_isp': 9600
         }
     }
 
@@ -112,6 +112,7 @@ class EngineTest(EngineTestBase):
         self.assertClose(data['max_vac_thrust'], engine.max_vacuum_thrust)
         self.assertEqual(set(data['propellants'].keys()), set(engine.propellants))
         self.assertClose(data['propellants'], engine.propellant_ratios)
+        self.assertTrue(engine.has_fuel)
         self.assertEqual(data['throttle_locked'], engine.throttle_locked)
         self.assertClose(data['msl_isp'], engine.kerbin_sea_level_specific_impulse)
         self.assertClose(data['vac_isp'], engine.vacuum_specific_impulse)
@@ -126,14 +127,13 @@ class EngineTest(EngineTestBase):
 
     def check_engine_idle(self, engine):
         """ Check engine properties when engine is deactivated """
-        return
         data = self.engine_data[engine.part.title]
         self.assertFalse(engine.active)
         self.assertClose(engine.thrust_limit, 1)
         self.assertEqual(engine.thrust, 0)
-        self.assertClose(engine.available_thrust, data['max_thrust'])
-        self.assertClose(engine.max_thrust, data['max_thrust'])
-        self.assertClose(engine.specific_impulse, 0)
+        self.assertClose(engine.available_thrust, data['max_thrust'], 500)
+        self.assertClose(engine.max_thrust, data['max_thrust'], 500)
+        self.assertClose(engine.specific_impulse, 0, 1)
         self.assertTrue(engine.has_fuel)
 
     def check_engine_active(self, engine, throttle):
@@ -146,6 +146,7 @@ class EngineTest(EngineTestBase):
         self.assertClose(engine.available_thrust, data['max_thrust'], 500)
         self.assertClose(engine.max_thrust, data['max_thrust'], 500)
         self.assertClose(engine.specific_impulse, data['isp'], 1)
+        self.assertTrue(engine.has_fuel)
 
     def check_engine(self, engine):
         self.set_idle(engine)
@@ -208,6 +209,29 @@ class TestPartsEngine(testingtools.TestCase, EngineTestBase):
     def tearDownClass(cls):
         cls.conn.close()
 
+    def test_has_fuel(self):
+        engine = self.get_engine('LV-T30 "Reliant" Liquid Fuel Engine')
+        self.assertTrue(engine.has_fuel)
+
+    def test_has_no_fuel(self):
+        engine = self.get_engine('LV-909 "Terrier" Liquid Fuel Engine')
+
+        #FIXME: have to run engine to update has fuel status
+        engine.active = True
+        self.vessel.control.throttle = 0.1
+        time.sleep(0.5)
+        engine.active = False
+        self.vessel.control.throttle = 0
+        time.sleep(0.5)
+
+        self.assertFalse(engine.has_fuel)
+        engine.active = True
+        time.sleep(0.1)
+        self.assertFalse(engine.has_fuel)
+        engine.active = False
+        time.sleep(0.1)
+        self.assertFalse(engine.has_fuel)
+
     def test_thrust_limit(self):
         engine = self.get_engine('LV-T30 "Reliant" Liquid Fuel Engine')
         thrust = 201000
@@ -215,6 +239,7 @@ class TestPartsEngine(testingtools.TestCase, EngineTestBase):
         engine.active = False
         engine.thrust_limit = 1
         self.vessel.control.throttle = 1
+        self.assertTrue(engine.has_fuel)
         self.assertEqual(engine.thrust_limit, 1)
         self.assertClose(engine.thrust, 0, 500)
         self.assertClose(engine.available_thrust, thrust, 500)
@@ -283,16 +308,16 @@ class TestPartsEngineMSL(testingtools.TestCase, EngineTest):
             {'max_thrust': 14300, 'isp': 190.6})
         cls.add_engine_data(
             'IX-6315 "Dawn" Electric Propulsion System',
-            {'max_thrust': 63, 'isp': 132.1})
+            {'max_thrust': 63, 'isp': 128.0})
         cls.add_engine_data(
             'O-10 "Puff" MonoPropellant Fuel Engine',
             {'max_thrust': 9700, 'isp': 121.2})
         cls.add_engine_data(
             'RT-10 "Hammer" Solid Fuel Booster',
-            {'max_thrust': 210600, 'isp': 150.3})
+            {'max_thrust': 197897, 'isp': 170.4})
         cls.add_engine_data(
             'J-33 "Wheesley" Basic Jet Engine',
-            {'max_thrust': 115000, 'isp': 19200})
+            {'max_thrust': 80000, 'isp': 9600})
 
     @classmethod
     def tearDownClass(cls):
@@ -340,7 +365,7 @@ class TestPartsEngineVacuum(testingtools.TestCase, EngineTest):
             {'max_thrust': 20000, 'isp': 250})
         cls.add_engine_data(
             'RT-10 "Hammer" Solid Fuel Booster',
-            {'max_thrust': 227000, 'isp': 162})
+            {'max_thrust': 227000, 'isp': 195})
 
     @classmethod
     def tearDownClass(cls):

@@ -1,6 +1,16 @@
 v0.1.10
+* KSP 1.0.4 support (#151)
 * SpaceCenter service changes:
-  * Add SpaceCenter.RailsWarpFactor, PhysicsWarpFactor, WarpMode and WarpRate
+  * Add more time warp functionality: SpaceCenter.WarpMode, WarpRate, WarpFactor,
+    RailsWarpFactor, PhysicsWarpFactor, CanRailsWarpAt and MaximumRailsWarpFactor (#134)
+  * Implement physical time warp for SpaceCenter.WarpTo (#137)
+  * Add support for radiator parts (#154)
+  * Fix Vessel.Thrust, Engine.Thrust and Engine.AvailableThrust when engines have no fuel (#146)
+  * Add Resoures.FlowMode
+* KerbalAlarmClock service now available in all game scenes (#135)
+* Server plugin changes:
+  * Performance improvements (#129,#131,#139)
+  * Fix UI disappearing bug (#133)
 
 v0.1.9
 * SpaceCenter service changes:

@@ -1,5 +1,6 @@
-using KRPC.Schema.KRPC;
+using System;
 using KRPC.Continuations;
+using KRPC.Schema.KRPC;
 using KRPC.Server;
 using KRPC.Service.Scanner;
 
@@ -14,13 +15,18 @@ namespace KRPC.Service
 
         readonly Request request;
         readonly ProcedureSignature procedure;
+        readonly Exception exception;
         readonly IContinuation continuation;
 
         public RequestContinuation (IClient client, Request request)
         {
             Client = client;
             this.request = request;
-            procedure = Services.Instance.GetProcedureSignature (request);
+            try {
+                procedure = Services.Instance.GetProcedureSignature (request);
+            } catch (Exception e) {
+                exception = e;
+            }
         }
 
         RequestContinuation (IClient client, Request request, ProcedureSignature procedure, IContinuation continuation)
@@ -33,6 +39,8 @@ namespace KRPC.Service
 
         public override Response.Builder Run ()
         {
+            if (exception != null)
+                throw exception;
             try {
                 if (continuation == null)
                     return Services.Instance.HandleRequest (procedure, request);

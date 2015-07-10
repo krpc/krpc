@@ -149,7 +149,7 @@ namespace KRPCSpaceCenter.Services
 
         [KRPCProperty]
         public float Thrust {
-            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.Thrust); }
+            get { return Parts.Engines.Sum (e => e.Thrust); }
         }
 
         [KRPCProperty]

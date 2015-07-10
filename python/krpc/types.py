@@ -140,6 +140,8 @@ class Types(object):
     def coerce_to(self, value, typ):
         """ Coerce a value to the specified type (specified by a type object).
             Raises ValueError if the coercion is not possible. """
+        if type(value) == typ.python_type:
+            return value
         # A NoneType can be coerced to a ClassType
         if isinstance(typ, ClassType) and value is None:
             return None
@@ -303,7 +305,7 @@ class TupleType(TypeBase):
     def __init__(self, type_string, types):
         match = re.match(r'^Tuple\((.+)\)$', type_string)
         if not match:
-            raise ValueError('\'%s\' is not a valid type string for a set type' % type_string)
+            raise ValueError('\'%s\' is not a valid type string for a tuple type' % type_string)
 
         self.value_types = []
         typ = match.group(1)
