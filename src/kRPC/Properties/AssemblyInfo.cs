@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright ("djungelorm")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
-[assembly: AssemblyVersion ("0.1.9")]
+[assembly: AssemblyVersion ("0.1.10")]
 [assembly: InternalsVisibleTo ("kRPCTest")]
 [assembly: InternalsVisibleTo ("TestServer")]
 [assembly: InternalsVisibleTo ("DynamicProxyGenAssembly2")]
