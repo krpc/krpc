@@ -15,8 +15,8 @@ class TestResources(testingtools.TestCase, ResourcesTest):
 
     @classmethod
     def setUpClass(cls):
-        #testingtools.new_save()
-        #testingtools.launch_vessel_from_vab('Resources')
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Resources')
         cls.conn = krpc.connect(name='TestResources')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.num_stages = len(cls.expected.keys())
