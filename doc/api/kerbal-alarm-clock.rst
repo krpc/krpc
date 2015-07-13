@@ -8,16 +8,18 @@ following classes:
    :includehidden:
    :maxdepth: 2
 
-   python-api/kerbal-alarm-clock/kerbal-alarm-clock
-   python-api/kerbal-alarm-clock/alarm
-   python-api/kerbal-alarm-clock/alarm-type
-   python-api/kerbal-alarm-clock/alarm-action
+   kerbal-alarm-clock/kerbal-alarm-clock
+   kerbal-alarm-clock/alarm
+   kerbal-alarm-clock/alarm-type
+   kerbal-alarm-clock/alarm-action
 
 Example
 -------
 
 The following example creates a new alarm for the active vessel. The alarm is
 set to trigger after 10 seconds have passed, and display a message.
+
+#if $domain == 'python'
 
 .. code-block:: python
 
@@ -31,5 +33,22 @@ set to trigger after 10 seconds have passed, and display a message.
 
    alarm.notes = '10 seconds have now passed since the alarm was created.'
    alarm.action = conn.kerbal_alarm_clock.AlarmAction.message_only
+
+#else if $domain == 'lua'
+
+.. code-block:: lua
+
+   local krpc = require 'krpc.init'
+   local conn = krpc.connect(nil, nil, nil, 'Kerbal Alarm Clock Example')
+
+   local alarm = conn.kerbal_alarm_clock.create_alarm(
+       conn.kerbal_alarm_clock.AlarmType.raw,
+       'My New Alarm',
+       conn.space_center.ut+10)
+
+   alarm.notes = '10 seconds have now passed since the alarm was created.'
+   alarm.action = conn.kerbal_alarm_clock.AlarmAction.message_only
+
+#end if
 
 .. _Kerbal Alarm Clock: http://forum.kerbalspaceprogram.com/threads/24786

@@ -1,3 +1,7 @@
+#encoding UTF-8
+
+.. default-domain:: #echo $domain
+
 AutoPilot
 =========
 

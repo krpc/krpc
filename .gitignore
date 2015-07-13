@@ -152,7 +152,8 @@ lib/KSP_Data
 # Documentation
 !docs
 doc/build
-doc/src/python-api
+doc/src/python/api
+doc/src/lua/api
 doc/src/images/**/*.png
 
 # Tests

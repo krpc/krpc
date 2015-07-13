@@ -3,6 +3,9 @@
 Getting Started
 ===============
 
+This short guides explains the basics for getting kRPC set up and running, and
+writing a basic Python script to communicate with the game.
+
 The Server Plugin
 -----------------
 

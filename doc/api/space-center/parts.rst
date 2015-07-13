@@ -1,4 +1,6 @@
-.. _api-parts:
+.. default-domain:: #echo $domain
+
+.. _#echo $language #-api-parts:
 
 Parts
 =====
@@ -28,7 +30,7 @@ Parts
 
       :rtype: :class:`Part`
 
-      .. note:: See the discussion on :ref:`api-parts-trees-of-parts`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-trees-of-parts`.
 
    .. attribute:: Controlling
 
@@ -65,7 +67,7 @@ Parts
       :param int32 stage:
       :rtype: :class:`List` ( :class:`Part` )
 
-      .. note:: See the discussion on :ref:`api-parts-staging`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-staging`.
 
    .. method:: InDecoupleStage (stage)
 
@@ -74,7 +76,7 @@ Parts
       :param int32 stage:
       :rtype: :class:`List` ( :class:`Part` )
 
-      .. note:: See the discussion on :ref:`api-parts-staging`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-staging`.
 
    .. method:: ModulesWithName (moduleName)
 
@@ -208,7 +210,7 @@ Part
 
       :rtype: :class:`Part`
 
-      .. note:: See the discussion on :ref:`api-parts-trees-of-parts`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-trees-of-parts`.
 
    .. attribute:: Children
 
@@ -218,7 +220,7 @@ Part
 
       :rtype: :class:`List` ( :class:`Part` )
 
-      .. note:: See the discussion on :ref:`api-parts-trees-of-parts`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-trees-of-parts`.
 
    .. attribute:: AxiallyAttached
 
@@ -227,7 +229,7 @@ Part
 
       :rtype: bool
 
-      .. note:: See the discussion on :ref:`api-parts-attachment-modes`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-attachment-modes`.
 
    .. attribute:: RadiallyAttached
 
@@ -236,7 +238,7 @@ Part
 
       :rtype: bool
 
-      .. note:: See the discussion on :ref:`api-parts-attachment-modes`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-attachment-modes`.
 
    .. attribute:: Stage
 
@@ -245,7 +247,7 @@ Part
 
       :rtype: int32
 
-      .. note:: See the discussion on :ref:`api-parts-staging`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-staging`.
 
    .. attribute:: DecoupleStage
 
@@ -254,7 +256,7 @@ Part
 
       :rtype: int32
 
-      .. note:: See the discussion on :ref:`api-parts-staging`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-staging`.
 
    .. attribute:: Massless
 
@@ -315,7 +317,7 @@ Part
 
       :rtype: bool
 
-      .. note:: See the discussion on :ref:`api-parts-fuel-lines`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-fuel-lines`.
 
    .. attribute:: FuelLinesTo
 
@@ -324,7 +326,7 @@ Part
 
       :rtype: bool
 
-      .. note:: See the discussion on :ref:`api-parts-fuel-lines`.
+      .. note:: See the discussion on :ref:`#echo $language #-api-parts-fuel-lines`.
 
    .. attribute:: Modules
 
@@ -1237,7 +1239,7 @@ Solar Panel
 
    .. data:: Broken
 
-.. _api-parts-trees-of-parts:
+.. _#echo $language #-api-parts-trees-of-parts:
 
 Trees of Parts
 --------------
@@ -1280,6 +1282,8 @@ parent (as is the case for the root part), :attr:`Part.Parent` returns ``null``.
 The following python example uses these attributes to perform a depth-first
 traversal over all of the parts in a vessel:
 
+#if $language == 'python'
+
 .. code-block:: python
 
    root = vessel.parts.root
@@ -1289,6 +1293,22 @@ traversal over all of the parts in a vessel:
        print(' '*depth, part.title)
        for child in part.children:
            stack.append((child, depth+1))
+
+#else if $language == 'lua'
+
+.. code-block:: lua
+
+   local root = vessel.parts.root
+   local stack = {{root,0}}
+   while #stack > 0 do
+     local part,depth = unpack(table.remove(stack))
+     print(string.rep(' ', depth) .. part.title)
+     for _,child in ipairs(part.children) do
+       table.insert(stack, {child, depth+1})
+     end
+   end
+
+#end if
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -1316,7 +1336,7 @@ above, the following is printed out::
        LT-1 Landing Struts
      Mk16 Parachute
 
-.. _api-parts-attachment-modes:
+.. _#echo $language #-api-parts-attachment-modes:
 
 Attachment Modes
 ^^^^^^^^^^^^^^^^
@@ -1335,6 +1355,8 @@ consider to be *axially* attached to nothing.
 The following python example does a depth-first traversal as before, but also
 prints out the attachment mode used by the part:
 
+#if $language == 'python'
+
 .. code-block:: python
 
    root = vessel.parts.root
@@ -1348,6 +1370,28 @@ prints out the attachment mode used by the part:
        print(' '*depth, part.title, '-', attach_mode)
        for child in part.children:
            stack.append((child, depth+1))
+
+#else if $language == 'lua'
+
+.. code-block:: lua
+
+   local root = vessel.parts.root
+   local stack = {{root, 0}}
+   while #stack > 0 do
+     local part,depth = unpack(table.remove(stack))
+     local attach_mode
+     if part.axially_attached then
+       attach_mode = 'axial'
+     else -- radially_attached
+       attach_mode = 'radial'
+     end
+     print(string.rep(' ', depth) .. part.title .. ' - ' .. attach_mode)
+     for _,child in ipairs(part.children) do
+       table.insert(stack, {child, depth+1})
+     end
+   end
+
+#end if
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -1375,7 +1419,7 @@ above, the following is printed out::
     LT-1 Landing Struts - radial
   Mk16 Parachute - axial
 
-.. _api-parts-fuel-lines:
+.. _#echo $language #-api-parts-fuel-lines:
 
 Fuel Lines
 ----------
@@ -1411,7 +1455,7 @@ of parts containing just fuel tank part 9 (the blue part). When
 :attr:`Part.FuelLinesFrom` is called on fuel tank part 9, it will return a list
 containing fuel tank parts 11 and 17 (the parts colored green).
 
-.. _api-parts-staging:
+.. _#echo $language #-api-parts-staging:
 
 Staging
 -------

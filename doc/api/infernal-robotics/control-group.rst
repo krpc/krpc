@@ -1,3 +1,5 @@
+.. default-domain:: #echo $domain
+
 ControlGroup
 ============
 

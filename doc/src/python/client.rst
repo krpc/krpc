@@ -1,3 +1,5 @@
+.. default-domain:: py
+
 Python Client
 =============
 
