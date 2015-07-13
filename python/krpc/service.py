@@ -185,7 +185,11 @@ class ServiceBase(DynamicType):
     @classmethod
     def _add_service_property(cls, name, getter=None, setter=None):
         """ Add a property """
-        doc = getter.documentation
+        doc = None
+        if getter:
+            doc = getter.documentation
+        elif setter:
+            doc = setter.documentation
         if getter:
             getter_name = getter.name
             _,_,_,_,return_type = cls._parse_procedure(getter)
