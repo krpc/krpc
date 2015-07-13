@@ -135,6 +135,7 @@ class TestEncodeDecode(unittest.TestCase):
             ([1,2,3,4], '0a01010a01020a01030a0104')
         ]
         self._run_test_encode_value('List(int32)', cases)
+        self._run_test_decode_value('List(int32)', cases)
 
     def test_encode_dictionary(self):
         cases = [
@@ -143,6 +144,7 @@ class TestEncodeDecode(unittest.TestCase):
             ({'foo': 42, 'bar': 365, 'baz': 3}, '0a0a0a04036261721202ed020a090a040362617a1201030a090a0403666f6f12012a')
         ]
         self._run_test_encode_value('Dictionary(string,int32)', cases)
+        self._run_test_decode_value('Dictionary(string,int32)', cases)
 
     def test_encode_set(self):
         cases = [
@@ -151,10 +153,15 @@ class TestEncodeDecode(unittest.TestCase):
             (set([1,2,3,4]), '0a01010a01020a01030a0104')
         ]
         self._run_test_encode_value('Set(int32)', cases)
+        self._run_test_decode_value('Set(int32)', cases)
 
     def test_encode_tuple(self):
-        self._run_test_encode_value('Tuple(int32)', [((1,), '0a0101')])
-        self._run_test_encode_value('Tuple(int32,string,float)', [((1,'jeb',1.2), '0a01010a04036a65620a049a99993f')])
+        cases = [((1,), '0a0101')]
+        self._run_test_encode_value('Tuple(int32)', cases)
+        self._run_test_decode_value('Tuple(int32)', cases)
+        cases = [((1,'jeb',False), '0a01010a04036a65620a0100')]
+        self._run_test_encode_value('Tuple(int32,string,bool)', cases)
+        self._run_test_decode_value('Tuple(int32,string,bool)', cases)
 
 if __name__ == '__main__':
     unittest.main()

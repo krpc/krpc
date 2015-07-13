@@ -77,6 +77,7 @@ class TestParts(testingtools.TestCase):
              'TT18-A Launch Stability Enhancer',
              'TT18-A Launch Stability Enhancer',
              'TT18-A Launch Stability Enhancer',
+             'Thermal Control System (small)',
              'Z-400 Rechargeable Battery'
          ])
 
@@ -183,6 +184,7 @@ class TestParts(testingtools.TestCase):
             'Rockomax X200-8 Fuel Tank',
             'SP-L 1x6 Photovoltaic Panels',
             'SP-L 1x6 Photovoltaic Panels',
+            'Thermal Control System (small)',
             'Z-400 Rechargeable Battery'],
             sorted([p.title for p in self.parts.in_stage(-1)]))
         self.assertEqual(['Mk16-XL Parachute'], sorted([p.title for p in self.parts.in_stage(0)]))
@@ -274,6 +276,11 @@ class TestParts(testingtools.TestCase):
             ['Mk16-XL Parachute', 'Mk2-R Radial-Mount Parachute',
              'Mk2-R Radial-Mount Parachute', 'Mk2-R Radial-Mount Parachute'],
             sorted(x.part.title for x in self.parts.parachutes))
+
+    def test_radiators(self):
+        self.assertEqual(
+            ['Thermal Control System (small)'],
+            sorted(x.part.title for x in self.parts.radiators))
 
     def test_reaction_wheels(self):
         self.assertEqual(

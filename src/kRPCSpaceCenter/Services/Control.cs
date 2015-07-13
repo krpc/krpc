@@ -4,7 +4,6 @@ using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -63,69 +62,76 @@ namespace KRPCSpaceCenter.Services
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Abort)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.Abort, value); }
         }
-        // FIXME: what if vessel is not the active vessel?
+
         [KRPCProperty]
         public float Throttle {
-            get { return FlightInputHandler.state.mainThrottle; }
-            set { FlightInputHandler.state.mainThrottle = value; }
+            get { return vessel.isActiveVessel ? FlightInputHandler.state.mainThrottle : vessel.ctrlState.mainThrottle; }
+            set {
+                if (vessel.isActiveVessel)
+                    FlightInputHandler.state.mainThrottle = value;
+                else
+                    vessel.ctrlState.mainThrottle = value;
+            }
         }
 
         [KRPCProperty]
         public float Pitch {
-            get { return PilotAddon.Pitch; }
-            set { PilotAddon.Pitch = value; }
+            get { return PilotAddon.Get (vessel).Pitch; }
+            set { PilotAddon.Get (vessel).Pitch = value; }
         }
 
         [KRPCProperty]
         public float Yaw {
-            get { return PilotAddon.Yaw; }
-            set { PilotAddon.Yaw = value; }
+            get { return PilotAddon.Get (vessel).Yaw; }
+            set { PilotAddon.Get (vessel).Yaw = value; }
         }
 
         [KRPCProperty]
         public float Roll {
-            get { return PilotAddon.Roll; }
-            set { PilotAddon.Roll = value; }
+            get { return PilotAddon.Get (vessel).Roll; }
+            set { PilotAddon.Get (vessel).Roll = value; }
         }
 
         [KRPCProperty]
         public float Forward {
-            get { return PilotAddon.Forward; }
-            set { PilotAddon.Forward = value; }
+            get { return PilotAddon.Get (vessel).Forward; }
+            set { PilotAddon.Get (vessel).Forward = value; }
         }
 
         [KRPCProperty]
         public float Up {
-            get { return PilotAddon.Up; }
-            set { PilotAddon.Up = value; }
+            get { return PilotAddon.Get (vessel).Up; }
+            set { PilotAddon.Get (vessel).Up = value; }
         }
 
         [KRPCProperty]
         public float Right {
-            get { return PilotAddon.Right; }
-            set { PilotAddon.Right = value; }
+            get { return PilotAddon.Get (vessel).Right; }
+            set { PilotAddon.Get (vessel).Right = value; }
         }
 
         [KRPCProperty]
         public float WheelThrottle {
-            get { return PilotAddon.WheelThrottle; }
-            set { PilotAddon.WheelThrottle = value; }
+            get { return PilotAddon.Get (vessel).WheelThrottle; }
+            set { PilotAddon.Get (vessel).WheelThrottle = value; }
         }
 
         [KRPCProperty]
         public float WheelSteering {
-            get { return PilotAddon.WheelSteer; }
-            set { PilotAddon.WheelSteer = value; }
+            get { return PilotAddon.Get (vessel).WheelSteer; }
+            set { PilotAddon.Get (vessel).WheelSteer = value; }
         }
 
         [KRPCProperty]
         public int CurrentStage {
-            get { return Staging.CurrentStage; }
+            get { return vessel.currentStage; }
         }
 
         [KRPCMethod]
         public IList<Vessel> ActivateNextStage ()
         {
+            if (!vessel.isActiveVessel)
+                throw new InvalidOperationException ("Cannot activate stage; vessel is not the active vessel");
             if (!Staging.separate_ready)
                 throw new YieldException (new ParameterizedContinuation<IList<Vessel>> (ActivateNextStage));
             var preVessels = FlightGlobals.Vessels.ToArray ();
@@ -168,12 +174,16 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public Node AddNode (double UT, float prograde = 0, float normal = 0, float radial = 0)
         {
+            if (!vessel.isActiveVessel)
+                throw new InvalidOperationException ("Cannot add maneuver node; vessel is not the active vessel");
             return new Node (vessel, UT, prograde, normal, radial);
         }
 
         [KRPCProperty]
         public IList<Node> Nodes {
             get {
+                if (!vessel.isActiveVessel)
+                    throw new InvalidOperationException ("Cannot get maneuver nodes; vessel is not the active vessel");
                 return vessel.patchedConicSolver.maneuverNodes.Select (x => new Node (x)).OrderBy (x => x.UT).ToList ();
             }
         }
@@ -181,6 +191,8 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public void RemoveNodes ()
         {
+            if (!vessel.isActiveVessel)
+                throw new InvalidOperationException ("Cannot remove maneuver ndoes; vessel is not the active vessel");
             var nodes = vessel.patchedConicSolver.maneuverNodes.ToArray ();
             foreach (var node in nodes)
                 node.RemoveSelf ();

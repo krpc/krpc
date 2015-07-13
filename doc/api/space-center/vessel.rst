@@ -115,9 +115,9 @@ Vessel
 
    .. attribute:: Thrust
 
-      Gets the total thrust currently being produced by the vessel's active
-      engines, in Newtons. This is computed by summing :attr:`Engine.Thrust` for
-      every active engine in the vessel.
+      Gets the total thrust currently being produced by the vessel's engines, in
+      Newtons. This is computed by summing :attr:`Engine.Thrust` for every
+      engine in the vessel.
 
       :rtype: float
 

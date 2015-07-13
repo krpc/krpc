@@ -53,7 +53,7 @@ namespace KRPC
             \*-----------------------------------------------*/
             const int compatibleMajor = 1;
             const int compatibleMinor = 0;
-            const int compatibleRevision = 2;
+            const int compatibleRevision = 4;
             return (Versioning.version_major == compatibleMajor) && (Versioning.version_minor == compatibleMinor) && (Versioning.Revision == compatibleRevision);
             /*-----------------------------------------------*\
             | IMPLEMENTERS SHOULD NOT EDIT BEYOND THIS POINT! |

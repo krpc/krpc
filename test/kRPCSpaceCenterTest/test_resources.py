@@ -2,7 +2,16 @@ import unittest
 import testingtools
 import krpc
 
-class TestResources(testingtools.TestCase):
+class ResourcesTest(object):
+
+    density = {
+        'MonoPropellant': 4,
+        'LiquidFuel':     5,
+        'Oxidizer':       5,
+        'SolidFuel':      7.5
+    }
+
+class TestResources(testingtools.TestCase, ResourcesTest):
 
     @classmethod
     def setUpClass(cls):
@@ -15,13 +24,6 @@ class TestResources(testingtools.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
-
-    density = {
-        'MonoPropellant': 4,
-        'LiquidFuel':     5,
-        'Oxidizer':       5,
-        'SolidFuel':      7.5
-    }
 
     expected = {
         0: {
@@ -159,11 +161,35 @@ class TestResources(testingtools.TestCase):
         self.assertEqual(400, resources.amount('Oxidizer'))
         self.assertEqual(880, resources.max('Oxidizer'))
 
+class TestResourcesStaticMethods(testingtools.TestCase, ResourcesTest):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.conn = krpc.connect(name='TestResourcesStaticMethods')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
+
     def test_density(self):
         Resources = self.conn.space_center.Resources
         for name,expected in self.density.items():
             self.assertEqual(expected, Resources.density(name))
         self.assertRaises(krpc.error.RPCError, Resources.density, 'Foo')
+
+    def test_flow_mode(self):
+        Resources = self.conn.space_center.Resources
+        Mode = self.conn.space_center.ResourceFlowMode
+        self.assertEqual(Mode.vessel, Resources.flow_mode('ElectricCharge'))
+        self.assertEqual(Mode.vessel, Resources.flow_mode('IntakeAir'))
+        self.assertEqual(Mode.stage, Resources.flow_mode('MonoPropellant'))
+        self.assertEqual(Mode.stage, Resources.flow_mode('XenonGas'))
+        self.assertEqual(Mode.adjacent, Resources.flow_mode('LiquidFuel'))
+        self.assertEqual(Mode.adjacent, Resources.flow_mode('Oxidizer'))
+        self.assertEqual(Mode.none, Resources.flow_mode('SolidFuel'))
+        self.assertEqual(Mode.vessel, Resources.flow_mode('Ore'))
+        self.assertEqual(Mode.none, Resources.flow_mode('Ablator'))
+        self.assertRaises(krpc.error.RPCError, Resources.flow_mode, 'Foo')
 
 if __name__ == "__main__":
     unittest.main()

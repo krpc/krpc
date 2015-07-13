@@ -73,6 +73,8 @@ namespace KRPCSpaceCenter.Services.Parts
         [KRPCProperty]
         public float Thrust {
             get {
+                if (!Active || !HasFuel)
+                    return 0f;
                 var throttle = engine != null ? engine.currentThrottle : engineFx.currentThrottle;
                 return GetThrust (throttle, part.InternalPart.vessel.staticPressurekPa);
             }
@@ -80,7 +82,11 @@ namespace KRPCSpaceCenter.Services.Parts
 
         [KRPCProperty]
         public float AvailableThrust {
-            get { return GetThrust (ThrustLimit, part.InternalPart.vessel.staticPressurekPa); }
+            get {
+                if (!HasFuel)
+                    return 0f;
+                return GetThrust (ThrustLimit, part.InternalPart.vessel.staticPressurekPa);
+            }
         }
 
         [KRPCProperty]

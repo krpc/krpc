@@ -13,6 +13,8 @@ namespace KRPC
         [Persistent] ushort streamPort = 50001;
         [Persistent] bool mainWindowVisible = true;
         [Persistent] RectStorage mainWindowPosition = new RectStorage ();
+        [Persistent] bool infoWindowVisible = false;
+        [Persistent] RectStorage infoWindowPosition = new RectStorage ();
         [Persistent] bool autoStartServer = false;
         [Persistent] bool autoAcceptConnections = false;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
@@ -43,6 +45,16 @@ namespace KRPC
         public Rect MainWindowPosition {
             get { return mainWindowPosition.AsRect (); }
             set { mainWindowPosition = RectStorage.FromRect (value); }
+        }
+
+        public bool InfoWindowVisible {
+            get { return infoWindowVisible; }
+            set { infoWindowVisible = value; }
+        }
+
+        public Rect InfoWindowPosition {
+            get { return infoWindowPosition.AsRect (); }
+            set { infoWindowPosition = RectStorage.FromRect (value); }
         }
 
         public bool AutoStartServer {

@@ -1,5 +1,5 @@
 ship = Resources
-version = 1.0.0
+version = 1.0.4
 description = 
 type = VAB
 size = 6.272043,32.35985,6.272044
@@ -272,6 +272,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleConductionMultiplier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -1957,7 +1968,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.8723373
+		currentThrottle = 0.6157417
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -2299,7 +2310,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.8723373
+		currentThrottle = 0.6157417
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -2641,7 +2652,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.8723373
+		currentThrottle = 0.6157417
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -2983,7 +2994,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.8723373
+		currentThrottle = 0.6157417
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -3317,6 +3328,24 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -3445,6 +3474,24 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -3583,6 +3630,24 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -3711,6 +3776,24 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -4096,7 +4179,7 @@ PART
 {
 	part = sepMotor1_4294822258
 	partName = Part
-	pos = 2.722633,10.31643,0.13447
+	pos = 2.722633,10.31643,0.1344702
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.09229591,0.09229591,-0.7010574,0.7010574
@@ -4222,7 +4305,7 @@ PART
 {
 	part = sepMotor1_4294822218
 	partName = Part
-	pos = 0.7145202,10.31643,-3.040941
+	pos = 0.7145203,10.31643,-3.040941
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.5609856,0.5609856,-0.4304594,0.4304594
@@ -4348,7 +4431,7 @@ PART
 {
 	part = sepMotor1_4294822178
 	partName = Part
-	pos = -0.4527773,10.31643,2.142584
+	pos = -0.4527774,10.31643,2.142584
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.4304594,0.4304594,0.5609856,-0.5609856
@@ -4474,10 +4557,10 @@ PART
 {
 	part = sepMotor1_4294822138
 	partName = Part
-	pos = -0.4524574,10.30456,-3.040856
+	pos = -0.4524575,10.30456,-3.040856
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = -0.5609856,-0.5609856,0.4304594,0.4304594
+	rot = -0.5609857,-0.5609857,0.4304594,0.4304594
 	attRot = 0,0,-0.7071067,-0.7071067
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
@@ -4852,10 +4935,10 @@ PART
 {
 	part = sepMotor1_4294822018
 	partName = Part
-	pos = 0.7142004,10.30456,2.142498
+	pos = 0.7142005,10.30456,2.142498
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0.4304594,0.4304594,0.5609857,0.5609857
+	rot = 0.4304594,0.4304594,0.5609856,0.5609856
 	attRot = 0,0,-0.7071067,-0.7071067
 	attRot0 = 0,0,0,1
 	mir = 1,1,1

@@ -117,15 +117,15 @@ Reference
 
    .. method:: add_stream(func, *args, **kwargs)
 
-      Create a `stream <streams>`_ for the function *func* called with arguments
-      *args* and *kwargs*. Returns a :class:`krpc.streams.Stream` object.
+      Create a stream for the function *func* called with arguments *args* and
+      *kwargs*. Returns a :class:`krpc.streams.Stream` object.
 
    .. method:: stream(func, *args, **kwargs)
 
-      Allows use of the ``with`` statement to create a `stream <streams>`_ and
-      automatically remove it from the server when it goes out of scope. The
-      function to be streamed should be passed as *func*, and its arguments as
-      *args* and *kwargs*.
+      Allows use of the ``with`` statement to create a stream and automatically
+      remove it from the server when it goes out of scope. The function to be
+      streamed should be passed as *func*, and its arguments as *args* and
+      *kwargs*.
 
       For example, to stream the result of method call
       ``vessel.position(refframe)``:
