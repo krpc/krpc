@@ -1,3 +1,6 @@
+v0.1.11
+* Lua client library (https://luarocks.org/modules/djungelorm/krpc)
+
 v0.1.10
 * KSP 1.0.4 support (#151)
 * SpaceCenter service changes:
