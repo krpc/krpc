@@ -80,10 +80,7 @@ def _construct_func(invoke, service_name, procedure_name, prefix_param_names, pa
 
 def create_service(client, service):
     """ Create a new service type """
-    cls = type(str(service.name), (ServiceBase,), {'_client': client, '_name': service.name})
-
-    if service.HasField('documentation'):
-        cls.__doc__ = service.documentation
+    cls = type(str(service.name), (ServiceBase,), {'_client': client, '_name': service.name, '__doc__': service.documentation})
 
     # Add class types to service
     for cls2 in service.classes:
