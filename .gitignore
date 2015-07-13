@@ -134,10 +134,14 @@ src/kRPC/Schema/*.py
 src/kRPC/Schema/*.java
 src/kRPC/Schema/*.h
 src/kRPC/Schema/*.cc
+src/kRPC/Schema/*.lua
 python/krpc/schema/
 python/krpc/test/Test.py
+lua/krpc/schema/
+lua/krpc/test/Test.lua
 test/kRPCTest/Schema/*.cs
 test/kRPCTest/Schema/*.py
+test/kRPCTest/Schema/*.lua
 
 # Build output
 dist
@@ -148,7 +152,8 @@ lib/KSP_Data
 # Documentation
 !docs
 doc/build
-doc/src/python-api
+doc/src/python/api
+doc/src/lua/api
 doc/src/images/**/*.png
 
 # Tests

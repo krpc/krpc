@@ -1,3 +1,5 @@
+.. default-domain:: #echo $domain
+
 Vessel
 ======
 
@@ -78,7 +80,7 @@ Vessel
 
       :param int32 stage: Get resources for parts that are decoupled in this
                           stage. For details on stage numbering, see the
-                          discussion on :ref:`api-parts-staging`.
+                          discussion on :ref:`#echo $language #-api-parts-staging`.
       :param bool cumulative: When ``false``, returns the resources for parts
                               decoupled in just the given stage. When ``true``
                               returns the resources decoupled in the given stage

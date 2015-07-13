@@ -1,14 +1,14 @@
 Interacting with Parts
 ======================
 
-The following examples demonstrate use of the :ref:`api-parts` functionality to
+The following examples demonstrate use of the :ref:`python-api-parts` functionality to
 achieve various tasks. More details on specific topics can also be found in the
 API documentation:
 
-* :ref:`api-parts-trees-of-parts`
-* :ref:`api-parts-attachment-modes`
-* :ref:`api-parts-fuel-lines`
-* :ref:`api-parts-staging`
+* :ref:`python-api-parts-trees-of-parts`
+* :ref:`python-api-parts-attachment-modes`
+* :ref:`python-api-parts-fuel-lines`
+* :ref:`python-api-parts-staging`
 
 Deploying all Parachutes
 ------------------------

@@ -20,3 +20,9 @@ html_context = { 'css_files': ['_static/custom.css'] }
 todo_include_todos = True
 
 spelling_word_list_filename = 'dictionary.txt'
+
+def setup(app):
+    import sys, os.path
+    sys.path.append(os.path.abspath('../../luadomain'))
+    import luadomain
+    app.add_domain(luadomain.LuaDomain)

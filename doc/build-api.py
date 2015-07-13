@@ -5,9 +5,54 @@
 import sys
 import os
 import re
+from Cheetah.Template import Template
 
-src = sys.argv[1]
-dst = sys.argv[2]
+language = sys.argv[1]
+src = sys.argv[2]
+dst = sys.argv[3]
+
+domains = {'python': 'py', 'lua': 'lua'}
+conf = {
+    'python': {
+        'snake_case': True,
+        'types': {
+            'double': 'float',
+            'int32': 'float',
+            'Dictionary': 'dict',
+            'List': 'list'
+        },
+        'replace': {
+            '``null``': '``None``',
+            '``true``': '``True``',
+            '``false``': '``False``',
+            '``string``': '``str``',
+            '``double``': '``float``',
+            '``int32``': '``int``',
+            ':class:`Dictionary`': '``dict``',
+            ':class:`List`': '``list``'
+        }
+    },
+    'lua': {
+        'snake_case': True,
+        'types': {
+            'double': 'number',
+            'int32': 'number',
+            'Dictionary': 'Map'
+        },
+        'replace': {
+            '``null``': '``nil``',
+            '``true``': '``True``',
+            '``false``': '``False``',
+            '``string``': '``string``',
+            '``double``': '``number``',
+            '``int32``': '``number``',
+            ':class:`Dictionary`': '``Map``',
+            ':class:`List`': '``List``'
+        }
+    }
+}
+
+domain = domains[language]
 
 _regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
 _regex_single_uppercase = re.compile(r'([a-z0-9])([A-Z])')
@@ -23,12 +68,7 @@ def snake_case(name):
         return re.sub(_regex_multi_uppercase, r'\1_\2', result).lower()
 
 def convert_type(name):
-    typs = {
-       'double': 'float',
-       'int32': 'int',
-       'Dictionary': 'dict',
-       'List': 'list'
-    }
+    typs = conf[language]['types']
     if name in typs:
         return typs[name]
     else:
@@ -75,16 +115,7 @@ def process_inline(line):
     return line
 
 def process_inline_types_and_values(line):
-    replacements = {
-        '``null``': '``None``',
-        '``true``': '``True``',
-        '``false``': '``False``',
-        '``string``': '``str``',
-        '``double``': '``float``',
-        '``int32``': '``int``',
-        ':class:`Dictionary`': '``dict``',
-        ':class:`List`': '``list``'
-    }
+    replacements = conf[language]['replace']
     for x,y in replacements.items():
         line = line.replace(x, y)
     return line
@@ -100,22 +131,25 @@ def process_inline_parameters(line):
     return re.sub('([^\*])\*([^\*]+)\*([^\*])', repl, line)
 
 def process_file(path):
-    with open(path, 'r') as f:
-        lines = []
-        for lineno,line in enumerate(f.readlines()):
-            try:
-                line = process_directive(line)
-                line = process_inline(line)
-                line = process_parameters(line)
-                line = process_inline_parameters(line)
-                line = process_inline_types_and_values(line)
-                lines.append(line.rstrip())
-            except Exception, e:
-                print 'Error on line', lineno, 'in', path
-                print line
-                print e
-                exit(1)
-        return '\n'.join(lines)+'\n'
+    print path
+    namespace = {'language': language, 'domain': domain}
+    template = Template(file=path, searchList=[namespace])
+    content = str(template)
+    lines = []
+    for lineno,line in enumerate(content.split('\n')):
+        try:
+            line = process_directive(line)
+            line = process_inline(line)
+            line = process_parameters(line)
+            line = process_inline_parameters(line)
+            line = process_inline_types_and_values(line)
+            lines.append(line.rstrip())
+        except Exception, e:
+            print 'Error on line', lineno, 'in', path
+            print line
+            print e
+            exit(1)
+    return '\n'.join(lines)+'\n'
 
 for dirname,dirnames,filenames in os.walk(src):
     for filename in filenames:

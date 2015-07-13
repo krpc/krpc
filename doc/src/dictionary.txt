@@ -23,6 +23,7 @@ kRPC
 kRPCSpaceCenter
 linux
 localhost
+lua
 mach
 namespacing
 navball
