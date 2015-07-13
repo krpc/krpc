@@ -3,8 +3,9 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
-using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
+using KRPCSpaceCenter.ExternalAPI;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -36,16 +37,21 @@ namespace KRPCSpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Vessel : Equatable<Vessel>
     {
-        internal Vessel (global::Vessel vessel)
+        Comms comms;
+
+        public Vessel (global::Vessel vessel)
         {
             InternalVessel = vessel;
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
+            Parts = new Parts.Parts (vessel);
             Resources = new Resources (vessel);
+            if (RemoteTech.IsAvailable)
+                comms = new Comms (vessel);
         }
 
-        internal global::Vessel InternalVessel { get; private set; }
+        public global::Vessel InternalVessel { get; private set; }
 
         public override bool Equals (Vessel obj)
         {
@@ -87,7 +93,7 @@ namespace KRPCSpaceCenter.Services
         public Flight Flight (ReferenceFrame referenceFrame = null)
         {
             if (referenceFrame == null)
-                referenceFrame = ReferenceFrame.Orbital (InternalVessel);
+                referenceFrame = ReferenceFrame.Surface (InternalVessel);
             return new Flight (InternalVessel, referenceFrame);
         }
 
@@ -109,104 +115,94 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public Resources Resources { get; private set; }
 
+        [KRPCMethod]
+        public Resources ResourcesInDecoupleStage (int stage, bool cumulative = true)
+        {
+            return new Resources (InternalVessel, stage, cumulative);
+        }
+
         [KRPCProperty]
-        public double Mass {
+        public Parts.Parts Parts { get; private set; }
+
+        [KRPCProperty]
+        public Comms Comms {
+            get {
+                if (!RemoteTech.IsAvailable)
+                    throw new InvalidOperationException ("RemoteTech is not installed");
+                return comms;
+            }
+        }
+
+        [KRPCProperty]
+        public float Mass {
             get {
                 return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.TotalMass ());
             }
         }
 
         [KRPCProperty]
-        public double DryMass {
+        public float DryMass {
             get {
                 return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.DryMass ());
             }
         }
 
         [KRPCProperty]
-        public double CrossSectionalArea {
-            get { return FlightGlobals.DragMultiplier * Mass; }
+        public float Thrust {
+            get { return Parts.Engines.Sum (e => e.Thrust); }
         }
 
         [KRPCProperty]
-        public double DragCoefficient {
+        public float AvailableThrust {
+            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.AvailableThrust); }
+        }
+
+        [KRPCProperty]
+        public float MaxThrust {
+            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust); }
+        }
+
+        [KRPCProperty]
+        public float MaxVacuumThrust {
+            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.MaxVacuumThrust); }
+        }
+
+        [KRPCProperty]
+        public float SpecificImpulse {
             get {
-                // Mass-weighted average of max_drag for each part
-                // Note: Uses Part.mass, so does not include the mass of resources
-                return InternalVessel.Parts.Sum (p => p.maximum_drag * p.mass) / InternalVessel.Parts.Sum (p => p.mass);
+                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust);
+                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust / e.SpecificImpulse);
+                if (fuelConsumption > 0f)
+                    return thrust / fuelConsumption;
+                return 0f;
             }
         }
 
-        /// <summary>
-        /// The maximum thrust (in Newtons) of all active engines combined when throttled up to 100%
-        /// </summary>
-        //FIXME: just sums the max thrust of every engine, i.e. assumes all engines are pointing the same direction
         [KRPCProperty]
-        public double Thrust {
+        public float VacuumSpecificImpulse {
             get {
-                double thrust = 0;
-                foreach (var part in InternalVessel.parts) {
-                    foreach (PartModule module in part.Modules) {
-                        if (!module.isEnabled)
-                            continue;
-                        var engine = module as ModuleEngines;
-                        if (engine != null) {
-                            if (!engine.EngineIgnited || engine.getFlameoutState)
-                                continue;
-                            thrust += engine.maxThrust;
-                        }
-                        var engineFx = module as ModuleEnginesFX;
-                        if (engineFx != null) {
-                            if (!engine.EngineIgnited || engine.getFlameoutState)
-                                continue;
-                            thrust += engineFx.maxThrust;
-                        }
-                    }
-                }
-                return thrust * 1000d;
+                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust);
+                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust / e.VacuumSpecificImpulse);
+                if (fuelConsumption > 0f)
+                    return thrust / fuelConsumption;
+                return 0f;
             }
         }
 
-        /// <summary>
-        /// The combined specific impulse (in seconds) of all active engines
-        /// </summary>
         [KRPCProperty]
-        public double SpecificImpulse {
+        public float KerbinSeaLevelSpecificImpulse {
             get {
-                double totalThrust = 0;
-                double totalFlowRate = 0;
-                foreach (var part in InternalVessel.parts) {
-                    foreach (PartModule module in part.Modules) {
-                        if (!module.isEnabled)
-                            continue;
-                        var engine = module as ModuleEngines;
-                        if (engine != null) {
-                            if (!engine.EngineIgnited || engine.getFlameoutState)
-                                continue;
-                            totalThrust += engine.maxThrust;
-                            totalFlowRate += (engine.maxThrust / engine.realIsp);
-                        }
-                        var engineFx = module as ModuleEnginesFX;
-                        if (engineFx != null) {
-                            if (!engine.EngineIgnited || engine.getFlameoutState)
-                                continue;
-                            totalThrust += engine.maxThrust;
-                            totalFlowRate += (engine.maxThrust / engine.realIsp);
-                        }
-                    }
-                }
-                return totalThrust / totalFlowRate;
+                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust);
+                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust / e.KerbinSeaLevelSpecificImpulse);
+                if (fuelConsumption > 0f)
+                    return thrust / fuelConsumption;
+                return 0f;
             }
         }
 
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
             get { return ReferenceFrame.Object (InternalVessel); }
-        }
-
-        [KRPCProperty]
-        public ReferenceFrame NonRotatingReferenceFrame {
-            get { return ReferenceFrame.NonRotating (InternalVessel); }
         }
 
         [KRPCProperty]
@@ -217,6 +213,11 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public ReferenceFrame SurfaceReferenceFrame {
             get { return ReferenceFrame.Surface (InternalVessel); }
+        }
+
+        [KRPCProperty]
+        public ReferenceFrame SurfaceVelocityReferenceFrame {
+            get { return ReferenceFrame.SurfaceVelocity (InternalVessel); }
         }
 
         [KRPCMethod]
@@ -234,13 +235,13 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.RotationFromWorldSpace (InternalVessel.transform.rotation).ToTuple ();
+            return referenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).ToTuple ();
         }
 
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.DirectionFromWorldSpace (InternalVessel.transform.up).ToTuple ();
+            return referenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up).ToTuple ();
         }
 
         [KRPCMethod]

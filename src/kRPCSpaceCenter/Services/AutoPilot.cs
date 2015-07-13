@@ -1,14 +1,39 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using KRPC.Continuations;
+using KRPC.Server;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
+using UnityEngine;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum SASMode
+    {
+        StabilityAssist,
+        Maneuver,
+        Prograde,
+        Retrograde,
+        Normal,
+        AntiNormal,
+        Radial,
+        AntiRadial,
+        Target,
+        AntiTarget
+    }
+
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum SpeedMode
+    {
+        Orbit,
+        Surface,
+        Target
+    }
+
     /// <remarks>
     /// Taken and adapted from MechJeb2/KOS/RemoteTech2/forum discussion; credit goes to the authors of those plugins/posts:
     /// https://github.com/MuMech/MechJeb2
@@ -20,17 +45,18 @@ namespace KRPCSpaceCenter.Services
     public sealed class AutoPilot : Equatable<AutoPilot>
     {
         readonly global::Vessel vessel;
-        static HashSet<AutoPilot> engaged = new HashSet<AutoPilot> ();
+        static IDictionary<global::Vessel, AutoPilot> engaged = new Dictionary<global::Vessel, AutoPilot> ();
+        IClient requestingClient;
         ReferenceFrame referenceFrame;
-        double pitch;
-        double heading;
-        double roll;
-        bool sasSet;
-        int sasUpdate;
+        float pitch;
+        float heading;
+        float roll;
 
         internal AutoPilot (global::Vessel vessel)
         {
             this.vessel = vessel;
+            if (!engaged.ContainsKey (vessel))
+                engaged [vessel] = null;
         }
 
         public override bool Equals (AutoPilot obj)
@@ -43,96 +69,230 @@ namespace KRPCSpaceCenter.Services
             return vessel.GetHashCode ();
         }
 
+        [KRPCProperty]
+        public bool SAS {
+            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
+            set { vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
+        }
+
+        [KRPCProperty]
+        public SASMode SASMode {
+            get { return vessel.Autopilot.Mode.ToSASMode (); }
+            set {
+                var mode = value.FromSASMode ();
+                if (!vessel.Autopilot.CanSetMode (mode))
+                    throw new InvalidOperationException ("Cannot set SAS mode of vessel");
+                vessel.Autopilot.SetMode (mode);
+                // Update the UI buttons
+                var modeIndex = (int)vessel.Autopilot.Mode;
+                var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
+                modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
+            }
+        }
+
+        [KRPCProperty]
+        public SpeedMode SpeedMode {
+            get { return FlightUIController.speedDisplayMode.ToSpeedMode (); }
+            set {
+                var startMode = FlightUIController.speedDisplayMode;
+                var mode = value.FromSpeedMode ();
+                while (FlightUIController.speedDisplayMode != mode) {
+                    FlightUIController.fetch.cycleSpdModes ();
+                    if (FlightUIController.speedDisplayMode == startMode)
+                        break;
+                }
+            }
+        }
+
         [KRPCMethod]
-        public void SetRotation (double pitch, double heading, double roll = Double.NaN, ReferenceFrame referenceFrame = null)
+        public void SetRotation (float pitch, float heading, float roll = float.NaN, ReferenceFrame referenceFrame = null, bool wait = false)
         {
             if (referenceFrame == null)
-                referenceFrame = ReferenceFrame.Orbital (vessel);
+                referenceFrame = ReferenceFrame.Surface (vessel);
             this.referenceFrame = referenceFrame;
             this.pitch = pitch;
             this.heading = heading;
             this.roll = roll;
             Engage ();
+            if (wait)
+                throw new YieldException (new ParameterizedContinuationVoid (Wait));
         }
 
         [KRPCMethod]
-        public void SetDirection (Tuple3 direction, double roll = Double.NaN, ReferenceFrame referenceFrame = null)
+        public void SetDirection (Tuple3 direction, float roll = float.NaN, ReferenceFrame referenceFrame = null, bool wait = false)
         {
             if (referenceFrame == null)
-                referenceFrame = ReferenceFrame.Orbital (vessel);
+                referenceFrame = ReferenceFrame.Surface (vessel);
             this.referenceFrame = referenceFrame;
             QuaternionD rotation = Quaternion.FromToRotation (Vector3d.up, direction.ToVector ());
             var phr = rotation.PitchHeadingRoll ();
-            pitch = phr [0];
-            heading = phr [1];
-            this.roll = roll;
+            pitch = (float) phr [0];
+            heading = (float) phr [1];
+            this.roll = (float) roll;
             Engage ();
+            if (wait)
+                throw new YieldException (new ParameterizedContinuationVoid (Wait));
+        }
+
+        void Wait ()
+        {
+            if (Error > 0.5f)
+                throw new YieldException (new ParameterizedContinuationVoid (Wait));
+            if (vessel.angularVelocity.magnitude > 0.05f)
+                throw new YieldException (new ParameterizedContinuationVoid (Wait));
         }
 
         void Engage ()
         {
-            sasSet = false;
-            sasUpdate = 0;
-            engaged.Add (this);
+            requestingClient = KRPC.KRPCServer.Context.RPCClient;
+            engaged [vessel] = this;
         }
 
         [KRPCMethod]
         public void Disengage ()
         {
-            engaged.Remove (this);
+            requestingClient = null;
+            engaged [vessel] = null;
         }
 
         [KRPCProperty]
-        public double Error {
+        public float Error {
             get {
-                return engaged.Contains (this) ? ComputeError (ComputeTarget ()) : Double.NaN;
+                if (engaged [vessel] == this)
+                    return Vector3.Angle (vessel.ReferenceTransform.up, TargetDirection ());
+                else if (SAS && SASMode != SASMode.StabilityAssist)
+                    return Vector3.Angle (vessel.ReferenceTransform.up, SASTargetDirection ());
+                else
+                    return 0f;
             }
         }
 
-        public static void Clear ()
-        {
-            engaged.Clear ();
+        [KRPCProperty]
+        public float RollError {
+            get {
+                if (engaged [vessel] != this || Double.IsNaN (roll))
+                    return 0f;
+                var currentRoll = referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
+                return (float) Math.Abs (roll - currentRoll);
+            }
         }
 
-        public static void Fly (FlightCtrlState state)
+        /// <summary>
+        /// Gets the direction vector that the SAS autopilot is trying to hold in world space
+        /// </summary>
+        Vector3d SASTargetDirection ()
         {
-            foreach (var autoPilot in engaged) {
-                autoPilot.DoAutoPiloting (state);
+            // Stability assist
+            if (SASMode == SASMode.StabilityAssist)
+                throw new InvalidOperationException ("No target direction in stability assist mode");
+
+            // Maneuver node
+            if (SASMode == SASMode.Maneuver) {
+                var node = vessel.patchedConicSolver.maneuverNodes.OrderBy (x => x.UT).FirstOrDefault ();
+                if (node == null)
+                    throw new InvalidOperationException ("No maneuver node");
+                return new Node (node).WorldBurnVector;
             }
+
+            // Orbital directions, in different speed modes
+            if (SASMode == SASMode.Prograde || SASMode == SASMode.Retrograde ||
+                SASMode == SASMode.Normal || SASMode == SASMode.AntiNormal ||
+                SASMode == SASMode.Radial || SASMode == SASMode.AntiRadial) {
+
+                if (SpeedMode == SpeedMode.Orbit) {
+                    switch (SASMode) {
+                    case SASMode.Prograde:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.up);
+                    case SASMode.Retrograde:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.down);
+                    case SASMode.Normal:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.forward);
+                    case SASMode.AntiNormal:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.back);
+                    case SASMode.Radial:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.left);
+                    case SASMode.AntiRadial:
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.right);
+                    }
+                } else if (SpeedMode == SpeedMode.Surface) {
+                    switch (SASMode) {
+                    case SASMode.Prograde:
+                        return ReferenceFrame.SurfaceVelocity (vessel).DirectionToWorldSpace (Vector3d.up);
+                    case SASMode.Retrograde:
+                        return ReferenceFrame.SurfaceVelocity (vessel).DirectionToWorldSpace (Vector3d.down);
+                    case SASMode.Normal:
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
+                    case SASMode.AntiNormal:
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
+                    case SASMode.Radial:
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.right);
+                    case SASMode.AntiRadial:
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.left);
+                    }
+                } else if (SpeedMode == SpeedMode.Target) {
+                    switch (SASMode) {
+                    case SASMode.Prograde:
+                        return vessel.GetWorldVelocity () - FlightGlobals.fetch.VesselTarget.GetWorldVelocity ();
+                    case SASMode.Retrograde:
+                        return FlightGlobals.fetch.VesselTarget.GetWorldVelocity () - vessel.GetWorldVelocity ();
+                    case SASMode.Normal:
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
+                    case SASMode.AntiNormal:
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
+                    case SASMode.Radial:
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.right);
+                    case SASMode.AntiRadial:
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.left);
+                    }
+                }
+                throw new InvalidOperationException ("Unknown speed mode for orbital direction");
+            }
+
+            // Target and anti-target
+            if (SASMode == SASMode.Target || SASMode == SASMode.AntiTarget) {
+                var target = FlightGlobals.fetch.VesselTarget;
+                if (target == null)
+                    throw new InvalidOperationException ("No target");
+                var direction = target.GetWorldPosition () - vessel.GetWorldPos3D ();
+                if (SASMode == SASMode.AntiTarget)
+                    direction *= -1;
+                return direction;
+            }
+
+            throw new InvalidOperationException ("Unknown SAS mode");
+        }
+
+        internal static void Fly (global::Vessel vessel, FlightCtrlState state)
+        {
+            // Get the auto-pilot object. Do nothing if there is no auto-pilot engaged for this vessel.
+            if (!engaged.ContainsKey (vessel))
+                return;
+            var autoPilot = engaged [vessel];
+            if (autoPilot == null)
+                return;
+            // If the client that engaged the auto-pilot has disconnected, disengage the auto-pilot
+            if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected) {
+                autoPilot.Disengage ();
+                return;
+            }
+            // Run the auto-pilot
+            autoPilot.DoAutoPiloting (state);
         }
 
         void DoAutoPiloting (FlightCtrlState state)
         {
-            // Initialize SAS autopilot
-            if (!sasSet) {
-                vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, true);
-                vessel.Autopilot.SetMode (VesselAutopilot.AutopilotMode.StabilityAssist);
-                sasSet = true;
-            }
-
-            var target = ComputeTarget ();
-            if (ComputeError (target) < 3.0f) {
-                // Update SAS heading when the SAS heading has large error
-                // At most every 5 frames so that the SAS autopilot has a chance to affect the ship heading
-                if (sasUpdate > 5) {
-                    vessel.Autopilot.SAS.LockHeading (target, false);
-                    sasUpdate = 0;
-                } else {
-                    sasUpdate++;
-                }
-            } else {
-                SteerShipToward (target, state, vessel);
-            }
+            SAS = false;
+            SteerShipToward (TargetRotation (), state, vessel);
         }
 
-        Quaternion ComputeTarget ()
+        Quaternion TargetRotation ()
         {
             // Compute world space target rotation from pitch, heading, roll
-            Quaternion rotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (new Vector3d (pitch, heading, Double.IsNaN (roll) ? 0.0f : roll));
+            Quaternion rotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (new Vector3d (pitch, heading, float.IsNaN (roll) ? 0.0f : roll));
             var target = referenceFrame.RotationToWorldSpace (rotation);
 
             // If roll is not specified, re-compute rotation between direction vectors
-            if (Double.IsNaN (roll)) {
+            if (float.IsNaN (roll)) {
                 var from = Vector3.up;
                 var to = target * Vector3.up;
                 target = Quaternion.FromToRotation (from, to);
@@ -141,9 +301,14 @@ namespace KRPCSpaceCenter.Services
             return target;
         }
 
+        Vector3d TargetDirection ()
+        {
+            return TargetRotation () * Vector3.up;
+        }
+
         double ComputeError (Quaternion target)
         {
-            return Math.Abs (Quaternion.Angle (vessel.transform.rotation, target));
+            return Math.Abs (Quaternion.Angle (vessel.ReferenceTransform.rotation, target));
         }
 
         static void SteerShipToward (Quaternion target, FlightCtrlState c, global::Vessel vessel)
@@ -185,7 +350,7 @@ namespace KRPCSpaceCenter.Services
         {
             var centerOfMass = vessel.findWorldCenterOfMass ();
             var momentOfInertia = vessel.findLocalMOI (centerOfMass);
-            var angularVelocity = Quaternion.Inverse (vessel.transform.rotation) * vessel.rigidbody.angularVelocity;
+            var angularVelocity = Quaternion.Inverse (vessel.ReferenceTransform.rotation) * vessel.rigidbody.angularVelocity;
             var angularMomentum = new Vector3d (angularVelocity.x * momentOfInertia.x, angularVelocity.y * momentOfInertia.y, angularVelocity.z * momentOfInertia.z);
 
             var retVar = Vector3d.Scale
@@ -202,7 +367,7 @@ namespace KRPCSpaceCenter.Services
         static Vector3d GetTorque (global::Vessel vessel, float thrust)
         {
             var centerOfMass = vessel.findWorldCenterOfMass ();
-            var rollaxis = vessel.transform.up;
+            var rollaxis = vessel.ReferenceTransform.up;
             rollaxis.Normalize ();
             var pitchaxis = vessel.GetFwdVector ();
             pitchaxis.Normalize ();
@@ -211,10 +376,10 @@ namespace KRPCSpaceCenter.Services
             float yaw = 0.0f;
             float roll = 0.0f;
 
-            foreach (Part part in vessel.parts) {
+            foreach (var part in vessel.parts) {
                 var relCoM = part.Rigidbody.worldCenterOfMass - centerOfMass;
 
-                foreach (PartModule module in part.Modules) {
+                foreach (global::PartModule module in part.Modules) {
                     var wheel = module as ModuleReactionWheel;
                     if (wheel == null)
                         continue;
@@ -224,7 +389,7 @@ namespace KRPCSpaceCenter.Services
                     roll += wheel.RollTorque;
                 }
                 if (vessel.ActionGroups [KSPActionGroup.RCS]) {
-                    foreach (PartModule module in part.Modules) {
+                    foreach (global::PartModule module in part.Modules) {
                         var rcs = module as ModuleRCS;
                         if (rcs == null || !rcs.rcsEnabled)
                             continue;
@@ -248,7 +413,7 @@ namespace KRPCSpaceCenter.Services
             return new Vector3d (pitch, roll, yaw);
         }
 
-        static double GetThrustTorque (Part p, global::Vessel vessel)
+        static double GetThrustTorque (global::Part p, global::Vessel vessel)
         {
             //TODO: implement gimbalthrust Torque calculation
             return 0;

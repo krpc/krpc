@@ -26,6 +26,8 @@ namespace KRPC.Server.RPC
         IServer<byte,byte> server;
         Dictionary<IClient<byte,byte>,RPCClient> clients = new Dictionary<IClient<byte, byte>, RPCClient> ();
         Dictionary<IClient<byte,byte>,RPCClient> pendingClients = new Dictionary<IClient<byte, byte>, RPCClient> ();
+        ulong closedClientsBytesRead;
+        ulong closedClientsBytesWritten;
 
         public RPCServer (IServer<byte,byte> server)
         {
@@ -75,6 +77,14 @@ namespace KRPC.Server.RPC
             }
         }
 
+        public ulong BytesRead {
+            get { return closedClientsBytesRead + clients.Values.Select(c => c.Stream.BytesRead).SumUnsignedLong(); }
+        }
+
+        public ulong BytesWritten {
+            get { return closedClientsBytesWritten + clients.Values.Select(c => c.Stream.BytesWritten).SumUnsignedLong(); }
+        }
+
         void HandleClientConnected (object sender, IClientEventArgs<byte,byte> args)
         {
             // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
@@ -95,6 +105,8 @@ namespace KRPC.Server.RPC
         void HandleClientDisconnected (object sender, IClientEventArgs<byte,byte> args)
         {
             var client = clients [args.Client];
+            closedClientsBytesRead += client.Stream.BytesRead;
+            closedClientsBytesWritten += client.Stream.BytesWritten;
             clients.Remove (args.Client);
             if (OnClientDisconnected != null) {
                 OnClientDisconnected (this, new ClientDisconnectedArgs<Request,Response> (client));
@@ -136,7 +148,7 @@ namespace KRPC.Server.RPC
                 }
                 if (subArgs.Request.ShouldDeny) {
                     args.Request.Deny ();
-                    Logger.WriteLine ("RPCServer: client connection denied");
+                    Logger.WriteLine ("RPCServer: client connection denied", Logger.Severity.Warning);
                 }
                 if (!subArgs.Request.StillPending) {
                     pendingClients.Remove (args.Client);
@@ -158,13 +170,13 @@ namespace KRPC.Server.RPC
         /// </summary>
         string CheckHelloMessage (IClient<byte,byte> client)
         {
-            Logger.WriteLine ("RPCServer: waiting for hello message from client...");
+            Logger.WriteLine ("RPCServer: waiting for hello message from client...", Logger.Severity.Debug);
             var buffer = new byte[expectedHeader.Length + clientNameLength];
             int read = ReadHelloMessage (client.Stream, buffer);
 
             // Failed to read enough bytes in sufficient time, so kill the connection
             if (read != buffer.Length) {
-                Logger.WriteLine ("RPCServer: client connection abandoned; timed out waiting for hello message");
+                Logger.WriteLine ("RPCServer: client connection abandoned; timed out waiting for hello message", Logger.Severity.Warning);
                 return null;
             }
 
@@ -177,7 +189,7 @@ namespace KRPC.Server.RPC
             // Validate header
             if (!CheckHelloMessageHeader (header)) {
                 string hex = ("0x" + BitConverter.ToString (header)).Replace ("-", " 0x");
-                Logger.WriteLine ("RPCServer: client connection abandoned; invalid hello message received (" + hex + ")");
+                Logger.WriteLine ("RPCServer: client connection abandoned; invalid hello message received (" + hex + ")", Logger.Severity.Warning);
                 return null;
             }
 
@@ -185,12 +197,12 @@ namespace KRPC.Server.RPC
             string clientNameString = CheckAndDecodeClientName (clientName);
             if (clientNameString == null) {
                 string hex = ("0x" + BitConverter.ToString (clientName)).Replace ("-", " 0x");
-                Logger.WriteLine ("RPCServer: client connection abandoned; failed to decode UTF-8 client name (" + hex + ")");
+                Logger.WriteLine ("RPCServer: client connection abandoned; failed to decode UTF-8 client name (" + hex + ")", Logger.Severity.Warning);
                 return null;
             }
 
             // Valid header and client name received
-            Logger.WriteLine ("RPCServer: correct hello message received from client '" + client.Guid + "' (" + clientNameString + ")");
+            Logger.WriteLine ("RPCServer: correct hello message received from client '" + client.Guid + "' (" + clientNameString + ")", Logger.Severity.Debug);
             return clientNameString;
         }
 

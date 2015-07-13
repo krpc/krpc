@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2014, Majiir
  * All rights reserved.
  * 
@@ -51,9 +51,9 @@ namespace KRPC
             /*-----------------------------------------------*\
             |    BEGIN IMPLEMENTATION-SPECIFIC EDITS HERE.    |
             \*-----------------------------------------------*/
-            const int compatibleMajor = 0;
-            const int compatibleMinor = 90;
-            const int compatibleRevision = 0;
+            const int compatibleMajor = 1;
+            const int compatibleMinor = 0;
+            const int compatibleRevision = 4;
             return (Versioning.version_major == compatibleMajor) && (Versioning.version_minor == compatibleMinor) && (Versioning.Revision == compatibleRevision);
             /*-----------------------------------------------*\
             | IMPLEMENTERS SHOULD NOT EDIT BEYOND THIS POINT! |

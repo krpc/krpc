@@ -1,11 +1,15 @@
-from krpc.types import _Types
-from krpc.decoder import _Decoder
+from krpc.types import Types
+from krpc.decoder import Decoder
 from krpc.error import RPCError
 import socket
 import threading
 
 _stream_cache = {}
 _stream_cache_lock = threading.Lock()
+
+class StreamExistsError(RuntimeError):
+    def __init__(self, stream_id):
+        self.stream_id = stream_id
 
 class Stream(object):
     """ A streamed request. When invoked, returns the most recent value of the request. """
@@ -37,7 +41,8 @@ class Stream(object):
         # Add the stream to the server and add the initial value to the cache
         with _stream_cache_lock:
             self._stream_id = self._conn.krpc.add_stream(self._request)
-            assert self._stream_id not in _stream_cache
+            if self._stream_id in _stream_cache:
+                raise StreamExistsError(self._stream_id)
             _stream_cache[self._stream_id] = self
 
     def __call__(self):
@@ -52,7 +57,7 @@ class Stream(object):
             if self._stream_id in _stream_cache:
                 self._conn.krpc.remove_stream(self._stream_id)
                 del _stream_cache[self._stream_id]
-                self._value = RuntimeError("Stream has been removed")
+                self._value = RuntimeError('Stream has been removed')
 
     @property
     def return_type(self):
@@ -65,11 +70,14 @@ class Stream(object):
 
 def add_stream(conn, func, *args, **kwargs):
     """ Create a stream and return it """
-    return Stream(conn, func, *args, **kwargs)
+    try:
+        return Stream(conn, func, *args, **kwargs)
+    except StreamExistsError as e:
+        return _stream_cache[e.stream_id]
 
 def update_thread(connection):
-    stream_message_type = _Types().as_type('KRPC.StreamMessage')
-    response_type = _Types().as_type('KRPC.Response')
+    stream_message_type = Types().as_type('KRPC.StreamMessage')
+    response_type = Types().as_type('KRPC.Response')
 
     while True:
 
@@ -78,7 +86,7 @@ def update_thread(connection):
         while True:
             try:
                 data += connection.partial_receive(1)
-                size,position = _Decoder.decode_size_and_position(data)
+                size,position = Decoder.decode_size_and_position(data)
                 break
             except IndexError:
                 pass
@@ -86,8 +94,11 @@ def update_thread(connection):
                 return
 
         # Read and decode the response message
-        data = connection.receive(size)
-        response = _Decoder.decode(data, stream_message_type)
+        try:
+            data = connection.receive(size)
+        except socket.error:
+            return
+        response = Decoder.decode(data, stream_message_type)
 
         # Add the data to the cache
         with _stream_cache_lock:
@@ -103,5 +114,5 @@ def update_thread(connection):
 
                 # Decode the return value and store it in the cache
                 typ = _stream_cache[id].return_type
-                value = _Decoder.decode(response.response.return_value, typ)
+                value = Decoder.decode(response.response.return_value, typ)
                 _stream_cache[id].update(value)

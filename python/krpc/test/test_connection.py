@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import unittest
 import threading
 import socket
@@ -53,11 +51,13 @@ class TestConnection(unittest.TestCase):
         conn.send(b'disconnect')
         self.assertEqual(b'disconnect', conn.receive(10))
         # Wait for the connection to close
-        while conn._socket.recv(1) != '':
+        while conn._socket.recv(1) != b'':
             pass
 
     def connect(self):
-        return Connection('localhost', port)
+        conn = Connection('localhost', port)
+        conn.connect()
+        return conn
 
     def test_send_receive(self):
         conn = self.connect()
@@ -77,12 +77,6 @@ class TestConnection(unittest.TestCase):
         partial = conn.partial_receive(4096)
         self.assertEqual(message[:len(partial)], partial)
         self.assertEqual(message[len(partial):], conn.receive(len(message) - len(partial)))
-
-    def test_send_on_remote_closed_connection(self):
-        conn = self.connect()
-        self.server_close_connection(conn)
-        #FIXME
-        #self.assertRaises(socket.error, conn.send, b'foo')
 
     def test_receive_on_remote_closed_connection(self):
         conn = self.connect()

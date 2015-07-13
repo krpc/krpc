@@ -49,8 +49,12 @@ namespace KRPCTest.Server.Stream
         {
             var stream = new MemoryStream ();
             var streamStream = new StreamStream (new TestStream (null, stream));
+            Assert.AreEqual (0, streamStream.BytesWritten);
+            Assert.AreEqual (0, streamStream.BytesRead);
             streamStream.Write (expectedMessage);
             byte[] bytes = stream.ToArray ();
+            Assert.AreEqual (bytes.Length, streamStream.BytesWritten);
+            Assert.AreEqual (0, streamStream.BytesRead);
             Assert.IsTrue (messageBytes.SequenceEqual (bytes));
         }
     }

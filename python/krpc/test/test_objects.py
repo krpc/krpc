@@ -1,8 +1,8 @@
-#!/usr/bin/env python2
-
 import unittest
-import binascii
 from krpc.test.servertestcase import ServerTestCase
+import krpc.types
+
+krpc.types.add_search_path('krpc.test')
 
 class TestObjects(ServerTestCase, unittest.TestCase):
 
@@ -54,9 +54,8 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         obj1 = self.conn.test_service.create_test_object('jeb')
         obj2 = self.conn.test_service.create_test_object('jeb')
         obj3 = self.conn.test_service.create_test_object('bob')
-        self.assertEquals (obj1._object_id, obj2._object_id)
-        self.assertNotEquals (obj1._object_id, obj3._object_id)
-
+        self.assertEqual(obj1._object_id, obj2._object_id)
+        self.assertNotEqual(obj1._object_id, obj3._object_id)
 
 if __name__ == '__main__':
     unittest.main()

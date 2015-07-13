@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -48,7 +48,7 @@ namespace KRPC.Utils
         public static GameScenes CurrentGameScene { get; set; }
     }
 
-    public class _KSPAddonImproved : KSPAddon, IEquatable<_KSPAddonImproved>
+    class _KSPAddonImproved : KSPAddon, IEquatable<_KSPAddonImproved>
     {
         readonly Type type;
 

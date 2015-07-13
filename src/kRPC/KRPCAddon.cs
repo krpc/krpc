@@ -1,4 +1,3 @@
-using System.Linq;
 using KRPC.Server;
 using KRPC.UI;
 using KRPC.Utils;
@@ -6,6 +5,9 @@ using UnityEngine;
 
 namespace KRPC
 {
+    /// <summary>
+    /// Main KRPC addon. Contains the server instance and UI.
+    /// </summary>
     [KSPAddonImproved (KSPAddonImproved.Startup.RealTime | KSPAddonImproved.Startup.Editor, false)]
     sealed public class KRPCAddon : MonoBehaviour
     {
@@ -17,6 +19,7 @@ namespace KRPC
         IButton toolbarButton;
         ApplicationLauncherButton applauncherButton;
         MainWindow mainWindow;
+        InfoWindow infoWindow;
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
 
@@ -27,19 +30,28 @@ namespace KRPC
 
             config = new KRPCConfiguration ("settings.cfg");
             config.Load ();
-            server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
+            server = new KRPCServer (
+                config.Address, config.RPCPort, config.StreamPort,
+                config.OneRPCPerUpdate, config.MaxTimePerUpdate, config.AdaptiveRateControl,
+                config.BlockingRecv, config.RecvTimeout);
 
             // Auto-start the server, if required
             if (config.AutoStartServer)
                 StartServer ();
         }
 
+        /// <summary>
+        /// Destructor. Stops the server if running.
+        /// </summary>
         ~KRPCAddon ()
         {
             if (server.Running)
                 server.Stop ();
         }
 
+        /// <summary>
+        /// Wake the addon. Creates the server instance and UI.
+        /// </summary>
         public void Awake ()
         {
             if (!ServicesChecker.OK)
@@ -57,6 +69,13 @@ namespace KRPC
             // Disconnect client dialog
             clientDisconnectDialog = gameObject.AddComponent<ClientDisconnectDialog> ();
 
+            // Create info window
+            infoWindow = gameObject.AddComponent<InfoWindow> ();
+            infoWindow.Server = server;
+            infoWindow.Closable = true;
+            infoWindow.Visible = config.InfoWindowVisible;
+            infoWindow.Position = config.InfoWindowPosition;
+
             // Create main window
             mainWindow = gameObject.AddComponent<MainWindow> ();
             mainWindow.Config = config;
@@ -64,6 +83,7 @@ namespace KRPC
             mainWindow.Visible = config.MainWindowVisible;
             mainWindow.Position = config.MainWindowPosition;
             mainWindow.ClientDisconnectDialog = clientDisconnectDialog;
+            mainWindow.InfoWindow = infoWindow;
 
             // Create new connection dialog
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog> ();
@@ -88,6 +108,24 @@ namespace KRPC
                 config.Load ();
                 var window = s as MainWindow;
                 config.MainWindowPosition = window.Position;
+                config.Save ();
+            };
+
+            // Info window events
+            infoWindow.OnHide += (s, e) => {
+                config.Load ();
+                config.InfoWindowVisible = false;
+                config.Save ();
+            };
+            infoWindow.OnShow += (s, e) => {
+                config.Load ();
+                config.InfoWindowVisible = true;
+                config.Save ();
+            };
+            infoWindow.OnMoved += (s, e) => {
+                config.Load ();
+                var window = s as InfoWindow;
+                config.InfoWindowPosition = window.Position;
                 config.Save ();
             };
 
@@ -154,6 +192,11 @@ namespace KRPC
             server.RPCPort = config.RPCPort;
             server.StreamPort = config.StreamPort;
             server.Address = config.Address;
+            server.OneRPCPerUpdate = config.OneRPCPerUpdate;
+            server.MaxTimePerUpdate = config.MaxTimePerUpdate;
+            server.AdaptiveRateControl = config.AdaptiveRateControl;
+            server.BlockingRecv = config.BlockingRecv;
+            server.RecvTimeout = config.RecvTimeout;
             try {
                 server.Start ();
             } catch (ServerException exn) {
@@ -161,10 +204,9 @@ namespace KRPC
             }
         }
 
-        public int NumberOfClients {
-            get { return server == null ? 0 : server.Clients.Count (); }
-        }
-
+        /// <summary>
+        /// Destroy the UI.
+        /// </summary>
         public void OnDestroy ()
         {
             if (!ServicesChecker.OK)
@@ -181,6 +223,9 @@ namespace KRPC
             GUILayoutExtensions.Destroy (gameObject);
         }
 
+        /// <summary>
+        /// Trigger server update
+        /// </summary>
         public void FixedUpdate ()
         {
             if (!ServicesChecker.OK)

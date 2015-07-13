@@ -1,90 +1,138 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using KRPC.Server;
+using KRPCSpaceCenter.ExtensionMethods;
 using UnityEngine;
-using KRPC;
 
 namespace KRPCSpaceCenter
 {
+    /// <summary>
+    /// Addon to update a vessels control inputs
+    /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class PilotAddon : MonoBehaviour
     {
-        Vessel controlledVessel;
+        public class ControlInputs
+        {
+            float pitch;
+            float yaw;
+            float roll;
+            float forward;
+            float up;
+            float right;
+            float wheelThrottle;
+            float wheelSteer;
 
-        public static float Pitch { get; set; }
+            public float Pitch {
+                get { return pitch; }
+                set { pitch = value.Clamp (-1f, 1f); }
+            }
 
-        public static float Roll { get; set; }
+            public float Yaw {
+                get { return yaw; }
+                set { yaw = value.Clamp (-1f, 1f); }
+            }
 
-        public static float Yaw { get; set; }
+            public float Roll {
+                get { return roll; }
+                set { roll = value.Clamp (-1f, 1f); }
+            }
 
-        public static float X { get; set; }
+            public float Forward {
+                get { return forward; }
+                set { forward = value.Clamp (-1f, 1f); }
+            }
 
-        public static float Y { get; set; }
+            public float Up {
+                get { return up; }
+                set { up = value.Clamp (-1f, 1f); }
+            }
 
-        public static float Z { get; set; }
+            public float Right {
+                get { return right; }
+                set { right = value.Clamp (-1f, 1f); }
+            }
 
-        public static float WheelThrottle { get; set; }
+            public float WheelThrottle {
+                get { return wheelThrottle; }
+                set { wheelThrottle = value.Clamp (-1f, 1f); }
+            }
 
-        public static float WheelSteer { get; set; }
+            public float WheelSteer {
+                get { return wheelSteer; }
+                set { wheelSteer = value.Clamp (-1f, 1f); }
+            }
+        };
 
+        static IDictionary<Vessel, IDictionary<IClient, ControlInputs>> controlInputs;
+
+        /// <summary>
+        /// Wake the addon
+        /// </summary>
         public void Awake ()
         {
-            Clear ();
+            controlInputs = new Dictionary<Vessel, IDictionary<IClient, ControlInputs>> ();
         }
 
-        static void Clear ()
-        {
-            Pitch = 0;
-            Roll = 0;
-            Yaw = 0;
-            X = 0;
-            Y = 0;
-            Z = 0;
-            WheelThrottle = 0;
-            WheelSteer = 0;
-        }
-
-        public void FixedUpdate ()
-        {
-            if (controlledVessel == null && FlightGlobals.ActiveVessel != null) {
-                controlledVessel = FlightGlobals.ActiveVessel;
-                controlledVessel.OnFlyByWire += Fly;
-            } else if (controlledVessel != null && FlightGlobals.ActiveVessel == null) {
-                controlledVessel.OnFlyByWire -= Fly;
-                controlledVessel = null;
-            } else if (controlledVessel != FlightGlobals.ActiveVessel) {
-                controlledVessel.OnFlyByWire -= Fly;
-                controlledVessel = FlightGlobals.ActiveVessel;
-                controlledVessel.OnFlyByWire += Fly;
-            }
-        }
-
+        /// <summary>
+        /// Destroy the addon
+        /// </summary>
         public void OnDestroy ()
         {
-            if (controlledVessel != null)
-                controlledVessel.OnFlyByWire -= Fly;
-            Services.AutoPilot.Clear ();
+            controlInputs.Clear ();
         }
 
-        static void Fly (FlightCtrlState state)
+        internal static ControlInputs Get (Vessel vessel)
         {
-            if (FlightGlobals.ActiveVessel == null)
-                return;
+            var client = KRPC.KRPCServer.Context.RPCClient;
+            if (!controlInputs.ContainsKey (vessel))
+                controlInputs [vessel] = new Dictionary<IClient, ControlInputs> ();
+            if (!controlInputs [vessel].ContainsKey (client))
+                controlInputs [vessel] [client] = new ControlInputs ();
+            return controlInputs [vessel] [client];
+        }
 
-            var krpc = Object.FindObjectOfType<KRPCAddon> ();
-            if (krpc != null && krpc.NumberOfClients == 0) {
-                Clear ();
+        /// <summary>
+        /// Remove entries from the controlInputs dictionary for which the client has disconnected
+        /// </summary>
+        static void CheckClients ()
+        {
+            foreach (var entry in controlInputs) {
+                foreach (var client in entry.Value.Keys.ToList()) {
+                    if (!client.Connected)
+                        entry.Value.Remove (client);
+                }
             }
+        }
 
-            // TODO: need to clear these if all clients disconnect, or similar
-            state.pitch += Pitch;
-            state.roll += Roll;
-            state.yaw += Yaw;
-            state.X += X;
-            state.Y += Y;
-            state.Z += Z;
-            state.wheelThrottle += WheelThrottle;
-            state.wheelSteer += WheelSteer;
+        /// <summary>
+        /// Update the pilot addon
+        /// </summary>
+        public void FixedUpdate ()
+        {
+            CheckClients ();
+            foreach (var vessel in FlightGlobals.Vessels) {
+                if (vessel.rootPart != null) { // If the vessel is controllable
+                    Fly (vessel, vessel.ctrlState);
+                }
+            }
+        }
 
-            //FIXME: send appropriate state for each vessel
-            Services.AutoPilot.Fly (state);
+        static void Fly (Vessel vessel, FlightCtrlState state)
+        {
+            if (controlInputs.ContainsKey (vessel)) {
+                var inputs = controlInputs [vessel].Values;
+                state.pitch += inputs.Sum (x => x.Pitch).Clamp (-1f, 1f);
+                state.yaw += inputs.Sum (x => x.Yaw).Clamp (-1f, 1f);
+                state.roll += inputs.Sum (x => x.Roll).Clamp (-1f, 1f);
+                state.Z += inputs.Sum (x => x.Forward).Clamp (-1f, 1f);
+                state.Y += inputs.Sum (x => x.Up).Clamp (-1f, 1f);
+                state.X += inputs.Sum (x => x.Right).Clamp (-1f, 1f);
+                state.wheelThrottle += inputs.Sum (x => x.WheelThrottle).Clamp (-1f, 1f);
+                state.wheelSteer += inputs.Sum (x => x.WheelSteer).Clamp (-1f, 1f);
+            }
+            Services.AutoPilot.Fly (vessel, state);
         }
     }
 }

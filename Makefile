@@ -12,7 +12,7 @@ DIST_LIBS = \
   lib/protobuf-csharp-port-2.4.1.521-release-binaries/Release/cf35/Google.ProtocolBuffers.Serialization.dll
 DIST_ICONS = src/kRPC/bin/icons
 
-CSHARP_MAIN_PROJECTS  = kRPC kRPCSpaceCenter
+CSHARP_MAIN_PROJECTS  = kRPC kRPCSpaceCenter kRPCInfernalRobotics kRPCKerbalAlarmClock
 CSHARP_TEST_PROJECTS  = kRPCTest TestServer
 CSHARP_TEST_UTILS_PROJECTS = TestingTools
 CSHARP_CONFIG = Release
@@ -32,14 +32,14 @@ PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCSpaceCenter/Sche
 PROTOS_TEST = $(wildcard test/kRPCTest/Schema/*.proto)
 
 PROTOC = protoc
-PROTOGEN = tools/ProtoGen.exe
+PROTOGEN = mono tools/ProtoGen.exe
 MDTOOL = mdtool
 MONODIS = monodis
 NUNIT_CONSOLE = nunit-console
 INKSCAPE = inkscape
 
 .PHONY: all configure build dist install release clean dist-clean \
-        test dist-python doc cog protobuf icons logo ksp strip-bom
+        test dist-python doc gh-pages cog protobuf icons logo ksp strip-bom
 
 # Main targets -----------------------------------------------------------------
 
@@ -75,6 +75,13 @@ dist: build doc dist-python
 	# Python client library
 	mkdir $(DIST_DIR)/python-client
 	cp python/dist/krpc-$(PYTHON_CLIENT_VERSION).zip $(DIST_DIR)/python-client/
+	# protobuf source
+	mkdir $(DIST_DIR)/schema
+	echo "See http://djungelorm.github.io/krpc/docs/communication-protocol.html" > $(DIST_DIR)/schema/README.txt
+	cp src/kRPC/Schema/KRPC.proto $(DIST_DIR)/schema/
+	mkdir -p $(DIST_DIR)/schema/python
+	cp -R python/krpc/schema/KRPC.py $(DIST_DIR)/schema/python/
+	cp -R java cpp $(DIST_DIR)/schema/
 	# Documentation
 	cp doc/build/pdf/kRPC.pdf $(DIST_DIR)/
 
@@ -94,6 +101,7 @@ clean: protobuf-clean
 	find . -name "*.pyc" -exec rm -rf {} \;
 	-rm -f KSP.log TestResult.xml
 	make -C python clean
+	make -C lua clean
 	make -C doc clean
 
 dist-clean: clean
@@ -139,6 +147,10 @@ dist-python:
 doc:
 	make -C doc build
 
+gh-pages:
+	make -C doc gh-pages
+	tools/strip-bom.sh
+
 # Cog --------------------------------------------------------------------------
 
 cog:
@@ -147,40 +159,83 @@ cog:
 
 # Protocol Buffers -------------------------------------------------------------
 
-.PHONY: protobuf-csharp protobuf-python protobuf-clean protobuf-csharp-clean protobuf-python-clean
+.PHONY: protobuf-csharp protobuf-python protobuf-java protobuf-cpp protobuf-lua \
+	      protobuf-clean protobuf-csharp-clean protobuf-python-clean protobuf-java-clean \
+        protobuf-cpp-clean protobuf-lua-clean
 
-protobuf: protobuf-csharp protobuf-python
+protobuf: protobuf-csharp protobuf-python protobuf-java protobuf-cpp protobuf-lua
 	# Fix for error in output of C# protobuf compiler
 	-git apply krpc-proto.patch
 
 protobuf-csharp: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
 protobuf-python: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py)
+	mkdir -p python/krpc/schema
 	echo "" > python/krpc/schema/__init__.py
-	test -f python/krpc/test/Test.py || mv python/krpc/schema/Test.py python/krpc/test/Test.py
+	cp $(PROTOS:.proto=.py) python/krpc/schema/
+	cp $(PROTOS_TEST:.proto=.py) python/krpc/test/
 
-protobuf-clean: protobuf-csharp-clean protobuf-python-clean
-	-rm -rf $(PROTOS:.proto=.protobin) $(PROTOS_TEST:.proto=.protobin)
+protobuf-java: $(PROTOS) $(PROTOS:.proto=.java)
+	mkdir -p java/krpc
+	cp $(PROTOS:.proto=.java) java/krpc/
+
+protobuf-cpp: $(PROTOS) $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
+	mkdir -p cpp/src/kRPC/Schema
+	cp $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc) cpp/src/kRPC/Schema/
+
+protobuf-lua: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.lua) $(PROTOS_TEST:.proto=.lua)
+	mkdir -p lua/krpc/schema
+	cp $(PROTOS:.proto=.lua) lua/krpc/schema/
+	cp $(PROTOS_TEST:.proto=.lua) lua/krpc/test/
+
+protobuf-clean: protobuf-csharp-clean protobuf-python-clean protobuf-java-clean protobuf-cpp-clean protobuf-lua-clean
+	rm -rf $(PROTOS:.proto=.protobin) $(PROTOS_TEST:.proto=.protobin)
 
 protobuf-csharp-clean:
-	-rm -rf $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
+	rm -rf $(PROTOS:.proto=.cs) $(PROTOS_TEST:.proto=.cs)
 
 protobuf-python-clean:
-	-rm -rf $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py) python/krpc/schema python/krpc/test/Test.py
+	rm -rf $(PROTOS:.proto=.py) $(PROTOS_TEST:.proto=.py) python/krpc/schema python/krpc/test/Test.py
+
+protobuf-java-clean:
+	rm -rf java
+	rm -rf $(PROTOS:.proto=.java)
+
+protobuf-cpp-clean:
+	rm -rf cpp
+	rm -rf $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
+
+protobuf-lua-clean:
+	rm -rf $(PROTOS:.proto=.lua) $(PROTOS_TEST:.proto=.lua) lua/krpc/schema lua/krpc/test/Test.lua
 
 %.protobin: %.proto
 	$(PROTOC) $*.proto -o$*.protobin --include_imports
-
-%.py: %.proto
-	$(PROTOC) $< --python_out=.
-	mv $*_pb2.py $@
-	mkdir -p python/krpc/schema
-	cp $@ python/krpc/schema/$(notdir $@)
 
 %.cs: %.protobin
 	$(PROTOGEN) \
 		$*.protobin -namespace=KRPC.Schema.$(basename $(notdir $@)) \
 		-umbrella_classname=$(basename $(notdir $@)) -output_directory=$(dir $@)
+
+%.py: %.proto
+	$(PROTOC) $< --python_out=.
+	mv $*_pb2.py $@
+
+JAVATMP:=$(shell mktemp -d)
+
+%.java: %.proto
+	$(PROTOC) $< --java_out=$(JAVATMP)
+	# Following is an ugly hack
+	mv $(JAVATMP)/krpc/KRPC.java $@
+
+%.pb.h: %.proto
+	$(PROTOC) $< --cpp_out=.
+
+%.pb.cc: %.proto
+	$(PROTOC) $< --cpp_out=.
+
+%.lua: %.proto
+	$(PROTOC) $< --lua_out=.
+	mv $*_pb.lua $@
 
 # Images -----------------------------------------------------------------------
 
@@ -192,7 +247,11 @@ logo:
 
 # Tools / Other ----------------------------------------------------------------
 
-ksp: install TestingTools
+ksp: build TestingTools
+	test -d "$(KSP_DIR)/GameData"
+	rm -rf "$(KSP_DIR)/GameData/kRPC"
+	mkdir "$(KSP_DIR)/GameData/kRPC"
+	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(KSP_DIR)/GameData/kRPC/
 	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.dll "$(KSP_DIR)/GameData/"
 	-cp settings.cfg "$(KSP_DIR)/GameData/kRPC/settings.cfg"
 	test "!" -f "$(KSP_DIR)/KSP.x86_64" || "$(KSP_DIR)/KSP.x86_64" &

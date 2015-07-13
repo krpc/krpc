@@ -8,36 +8,43 @@ using `Protocol Buffer messages
 <https://developers.google.com/protocol-buffers/docs/proto>`_ sent over a TCP/IP
 connection.
 
-Establishing a connection
+The kRPC `download <https://github.com/djungelorm/krpc/releases>`_ comes with a
+protocol buffer message definitions file (`KRPC.proto
+<https://github.com/djungelorm/krpc/blob/latest-version/src/kRPC/Schema/KRPC.proto>`_)
+that defines the structure of these messages. It also includes versions of this
+file compiled for Python, Java and C++ using `Google's protocol buffers compiler
+<https://github.com/google/protobuf>`_.
+
+Establishing a Connection
 -------------------------
 
-kRPC consists of two servers: an *RPC server* (over which the client sends and
-receives RPCs) and a *Stream server* (over which the client receives
-:ref:`communication-protocol-streams`). A client first connects to the RPC
-server, then the Stream server.
+kRPC consists of two servers: an *RPC Server* (over which clients send and
+receive RPCs) and a *Stream Server* (over which clients receive
+:ref:`communication-protocol-streams`). A client first connects to the *RPC
+Server*, then (optionally) to the *Stream Server*.
 
 .. _communication-protocol-rpc-connect:
 
 Connecting to the RPC Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To establish a connection to the RPC server, a client must do the following:
+To establish a connection to the *RPC Server*, a client must do the following:
 
  1. Open a TCP socket to the server on its RPC port (which defaults to 50000).
 
  2. Send this 12 byte hello message:
     ``0x48 0x45 0x4C 0x4C 0x4F 0x2D 0x52 0x50 0x43 0x00 0x00 0x00``
 
- 3. Send a 32 byte message containing a string to identify the new connection.
-    This should be a UTF-8 encoded string, up to a maximum of 32 bytes in
-    length. If the string is shorter than 32 bytes, it should be padded with
-    zeroes.
+ 3. Send a 32 byte message containing a name for the connection, that will be
+    displayed on the in-game server window. This should be a UTF-8 encoded
+    string, up to a maximum of 32 bytes in length. If the string is shorter than
+    32 bytes, it should be padded with zeros.
 
  4. Receive a 16 byte unique client identifier. This is sent to the client when
     the connection is granted, for example after the user has clicked accept on
     the in-game UI.
 
-For example, this python code will connect to the RPC server at address
+For example, this python code will connect to the *RPC Server* at address
 ``127.0.0.1:50000`` using the identifier ``Jeb``:
 
 .. code-block:: python
@@ -56,15 +63,15 @@ For example, this python code will connect to the RPC server at address
    while len(identifier) < 16:
        identifier += rpc_conn.recv(16 - len(identifier))
    # Connection successful. Print out a message along with the client identifier.
-   identifier = ''.join('%02x' % ord(c) for c in identifier)
-   print 'Connected to RPC server, client idenfitier = %s' % identifier
+   printable_identifier = ''.join('%02s' % x for x in identifier)
+   print('Connected to RPC server, client idenfitier = %s' % printable_identifier)
 
 Connecting to the Stream Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To establish a connection to the Stream server, a client must first
-:ref:`connect to the RPC server <communication-protocol-rpc-connect>` (as
-above), then do the following.
+To establish a connection to the *Stream Server*, a client must first
+:ref:`connect to the RPC Server <communication-protocol-rpc-connect>` then do
+the following:
 
 1. Open a TCP socket to the server on its Stream port (which defaults to 50001).
 
@@ -72,19 +79,19 @@ above), then do the following.
    ``0x48 0x45 0x4C 0x4C 0x4F 0x2D 0x53 0x54 0x52 0x45 0x41 0x4D``
 
 3. Send a 16 byte message containing the client's unique identifier. This
-   identifier is given to the client after it successfully connects to the RPC
-   server.
+   identifier is given to the client after it successfully connects to the *RPC
+   Server*.
 
-4. Receive a 2 byte OK message: ``0x4F 0x4B``. This indicates a successful
+4. Receive a 2 byte OK message: ``0x4F 0x4B`` This indicates a successful
    connection.
 
 .. note:: Connecting to the Stream Server is optional. If the client doesn't
           require stream functionality, there is no need to connect.
 
-For example, this python code will connect to the Stream server at address
-``127.0.0.1:50001``. (Note that ``identifier`` is the client identifier received
-by :ref:`connecting to the RPC server <communication-protocol-rpc-connect>` (as
-above).
+For example, this python code will connect to the *Stream Server* at address
+``127.0.0.1:50001``. Note that ``identifier`` is the unique client identifier
+received when :ref:`connecting to the RPC server
+<communication-protocol-rpc-connect>`.
 
 .. code-block:: python
 
@@ -100,7 +107,7 @@ above).
    while len(ok_message) < 2:
        ok_message += stream_conn.recv(2 - len(ok_message))
    # Connection successful
-   print 'Connected to stream server'
+   print('Connected to stream server')
 
 Remote Procedures
 -----------------
@@ -113,17 +120,19 @@ Invoking Remote Procedures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Remote procedures are invoked by sending a request message to the RPC server,
-and waiting for a response message. These messages are encoded using Protocol
-Buffers.
+and waiting for a response message. These messages are encoded as Protocol
+Buffer messages.
 
 The request message contains the name of the procedure to invoke, and the values
-of the arguments to pass it. The response message contains the value returned by
-the procedure, or is a blank response if the procedure does not return a value.
+of any arguments to pass it. The response message contains the value returned by
+the procedure (if any) and any errors that were encountered.
 
 Requests are processed in order of receipt. The next request will not be
 processed until the previous one completes and it's response has been received
 by the client. When there are multiple client connections, the requests are
 processed in round-robin order.
+
+.. _communication-protocol-anatomy-of-a-request:
 
 Anatomy of a Request
 ^^^^^^^^^^^^^^^^^^^^
@@ -162,7 +171,9 @@ The ``Argument`` messages have a position field to allow values for default
 arguments to be omitted. See :ref:`communication-protocol-protobuf-encoding` for
 details on how to serialize the argument values.
 
-Anatomy of a response
+.. _communication-protocol-anatomy-of-a-response:
+
+Anatomy of a Response
 ^^^^^^^^^^^^^^^^^^^^^
 
 A response is sent to the client using a ``Response`` Protocol Buffer message
@@ -216,15 +227,20 @@ Example RPC invocation
 
 The following Python script invokes the ``GetStatus`` procedure from the
 :ref:`KRPC service <communication-protocol-krpc-service>` using an already
-established connection to the server (the ``conn`` variable).
+established connection to the server (the ``rpc_conn`` variable).
 
 The ``krpc.schema.KRPC`` package contains the Protocol Buffer message formats
 ``Request``, ``Response`` and ``Status`` compiled to python code using the
 Protocol Buffer compiler. The ``EncodeVarint`` and ``DecodeVarint`` functions
 are used to encode/decode integers to/from the Protocol Buffer varint
-format. Their implementation is omitted for brevity.
+format.
 
 .. code-block:: python
+
+   def EncodeVarint(value):
+     return krpc.Encoder.encode(value,krpc.types.ValueType("int32"))
+   def DecodeVarint(data) :
+     return krpc.Decoder.decode(data,krpc.types.ValueType("int32"))
 
    # Create Request message
    request = krpc.schema.KRPC.Request()
@@ -241,7 +257,7 @@ format. Their implementation is omitted for brevity.
    while True:
        data += rpc_conn.recv(1)
        try:
-           (size, position) = DecodeVarint(data)
+           size = DecodeVarint(data)
            break
        except IndexError:
            pass
@@ -257,7 +273,7 @@ format. Their implementation is omitted for brevity.
 
    # Check for an error response
    if response.HasField('error'):
-       print 'ERROR:', response.error
+       print('ERROR:', response.error)
 
    # Decode the return value as a Status message
    else:
@@ -265,7 +281,7 @@ format. Their implementation is omitted for brevity.
        status.ParseFromString(response.return_value)
 
        # Print out the version string from the Status message
-       print status.version
+       print(status.version)
 
 .. _communication-protocol-protobuf-encoding:
 
@@ -289,7 +305,55 @@ Protocol Buffer serialization format:
 Streams
 -------
 
-TODO
+Streams allow the client to repeatedly execute a Remote Procedure Call on the
+server and receive its results, without needing to repeatedly call the Remote
+Procedure Call directly, avoiding the communication overhead that this would
+involve.
+
+A stream is created on the server by calling
+:ref:`communication-protocol-add-stream` which returns a unique identifier for
+the stream. Once a client is finished with a stream, it can remove it from the
+server by calling :ref:`communication-protocol-remove-stream` with the stream's
+identifier. Streams are automatically removed when the client that created it
+disconnects from the server. Streams are local to each client. There is no way
+to share a stream between clients.
+
+The results of the RPCs for each stream are sent to the client over the Stream
+Server's TCP/IP connection, as repeated *stream messages*. The RPC for each
+stream is invoked every `fixed update
+<http://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_.
+
+Anatomy of a Stream Message
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A stream message is sent to the client using a ``StreamMessage`` Protocol Buffer
+message with the following format:
+
+.. code-block:: protobuf
+
+   message StreamMessage {
+     repeated StreamResponse responses = 1;
+   }
+
+This message contains a list of ``StreamResponse`` messages, one for each stream
+that exists on the server for that client, with the following format:
+
+.. code-block:: protobuf
+
+   message StreamResponse {
+     required uint32 id = 1;
+     required Response response = 2;
+   }
+
+The fields are:
+
+* ``id`` - The identifier of the stream. This is the value returned by
+  :ref:`communication-protocol-add-stream` when the stream is created.
+
+* ``response`` - A ``Response`` message containing the result of the stream's
+  RPC. This is identical to the ``Response`` message returned when calling the
+  RPC directly. See :ref:`communication-protocol-anatomy-of-a-response` for
+  details on the format and contents of this message.
 
 .. _communication-protocol-krpc-service:
 
@@ -309,9 +373,27 @@ returns a Protocol Buffer message with the format:
 
    message Status {
      required string version = 1;
+     required uint64 bytes_read = 2;
+     required uint64 bytes_written = 3;
+     required float bytes_read_rate = 4;
+     required float bytes_written_rate = 5;
+     required uint64 rpcs_executed = 6;
+     required float rpc_rate = 7;
+     required bool adaptive_rate_control = 8;
+     required uint32 max_time_per_update = 9;
+     required bool blocking_recv = 10;
+     required uint32 recv_timeout = 11;
+     required float time_per_rpc_update = 12;
+     required float poll_time_per_rpc_update = 13;
+     required float exec_time_per_rpc_update = 14;
+     required uint32 stream_rpcs = 15;
+     required uint64 stream_rpcs_executed = 16;
+     required float stream_rpc_rate = 17;
+     required float time_per_stream_update = 18;
    }
 
-The field ``version`` is the version string of the server.
+The ``version`` field contains the version string of the server. The remaining
+fields contain performance information about the server.
 
 .. _communication-protocol-get-services:
 
@@ -335,19 +417,28 @@ information about each service provided by the server. The content of these
 ``Service`` messages are :ref:`documented below
 <communication-protocol-service-description-message>`.
 
+.. _communication-protocol-add-stream:
+
 AddStream
 ^^^^^^^^^
 
-The ``AddStream`` procedure adds a stream to the server.
+The ``AddStream`` procedure adds a new stream to the server. It takes a single
+argument containing the RPC to invoke, encoded as a ``Request`` object. See
+:ref:`communication-protocol-anatomy-of-a-request` for the format and contents
+of this object. See :ref:`communication-protocol-streams` for more information
+on working with streams.
 
-TODO
+.. _communication-protocol-remove-stream:
 
 RemoveStream
 ^^^^^^^^^^^^
 
-The ``RemoveStream`` procedure removes a stream from the server.
-
-TODO
+The ``RemoveStream`` procedure removes a stream from the server. It takes a
+single argument -- the identifier of the stream to be removed. This is the
+identifier returned when the stream was added by calling
+:ref:`communication-protocol-add-stream`. See
+:ref:`communication-protocol-streams` for more information on working with
+streams.
 
 .. _communication-protocol-service-description-message:
 
@@ -499,6 +590,11 @@ The following attributes specify what the procedure implements:
    Indicates that the procedure is a method for a class with the given
    ``class-name`` and ``method-name``.
 
+ * ``Class.StaticMethod(class-name,method-name)``
+
+   Indicates that the procedure is a static method for a class with the given
+   ``class-name`` and ``method-name``.
+
  * ``Class.Property.Get(class-name,property-name)``
 
    Indicates that the procedure is a property getter for a class with the given
@@ -538,6 +634,8 @@ return values as strings. Type names can be any of the following:
    ``int64``, ``uint32``, ``uint64``, ``bool``, ``string`` or ``bytes``
 
  * A KRPCClass, in the format ``Class(ClassName)``
+
+ * A KRPCEnum, in the format ``Enum(ClassName)``
 
  * A Protocol Buffer message type, in the format ``ServiceName.MessageName``
 

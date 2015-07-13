@@ -1,17 +1,11 @@
-#!/usr/bin/env python2
-
 import unittest
-from krpc.types import _Types as Types
-from krpc.types import _ValueType as ValueType
-from krpc.types import _MessageType as MessageType
-from krpc.types import _ClassType as ClassType
-from krpc.types import _EnumType as EnumType
-from krpc.types import _ListType as ListType
-from krpc.types import _DictionaryType as DictionaryType
-from krpc.types import _SetType as SetType
-from krpc.types import _TupleType as TupleType
-from krpc.types import _BaseClass as BaseClass
+from enum import Enum
+from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
+from krpc.types import ListType, DictionaryType, SetType, TupleType, ProtobufEnumType
+from krpc.types import ClassBase
 import krpc.schema.KRPC
+
+krpc.types.add_search_path('krpc.test')
 
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
 PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
@@ -38,6 +32,7 @@ class TestTypes(unittest.TestCase):
             self.assertTrue(isinstance(typ, ValueType))
             self.assertEqual(protobuf_typ, typ.protobuf_type)
             self.assertEqual(python_typ, typ.python_type)
+        self.assertRaises(ValueError, ValueType, 'invalid')
 
     def test_message_types(self):
         types = Types()
@@ -45,24 +40,46 @@ class TestTypes(unittest.TestCase):
         self.assertTrue(isinstance(typ, MessageType))
         self.assertEqual(krpc.schema.KRPC.Request, typ.python_type)
         self.assertEqual('KRPC.Request', typ.protobuf_type)
+        self.assertRaises(ValueError, types.as_type, 'KRPC.DoesntExist')
+        self.assertRaises(ValueError, MessageType, '')
+        self.assertRaises(ValueError, MessageType, 'invalid')
+        self.assertRaises(ValueError, MessageType, '.')
+        self.assertRaises(ValueError, MessageType, 'foo.bar')
+
+    def test_protobuf_enum_types(self):
+        types = Types()
+        typ = types.as_type('Test.TestEnum')
+        self.assertTrue(isinstance(typ, ProtobufEnumType))
+        self.assertEqual(int, typ.python_type)
+        self.assertEqual('Test.TestEnum', typ.protobuf_type)
+        self.assertRaises(ValueError, types.as_type, 'Test.DoesntExist')
+        self.assertRaises(ValueError, ProtobufEnumType, '')
+        self.assertRaises(ValueError, ProtobufEnumType, 'invalid')
+        self.assertRaises(ValueError, ProtobufEnumType, '.')
+        self.assertRaises(ValueError, ProtobufEnumType, 'foo.bar')
 
     def test_enum_types(self):
         types = Types()
-        typ = types.as_type('Test.TestEnum')
+        typ = types.as_type('Enum(ServiceName.EnumName)')
         self.assertTrue(isinstance(typ, EnumType))
-        self.assertEqual(int, typ.python_type)
-        self.assertEqual('Test.TestEnum', typ.protobuf_type)
-        # TODO: reenable tests
-        #self.assertRaises(ValueError, types.as_type, 'Test.TestEnumFoo')
+        self.assertEqual(None, typ.python_type)
+        self.assertTrue('Enum(ServiceName.EnumName)', typ.protobuf_type)
+        typ.set_values({'a': 0, 'b': 42, 'c': 100})
+        self.assertTrue(issubclass(typ.python_type, Enum))
+        self.assertEquals(0, typ.python_type.a.value)
+        self.assertEquals(42, typ.python_type.b.value)
+        self.assertEquals(100, typ.python_type.c.value)
 
     def test_class_types(self):
         types = Types()
         typ = types.as_type('Class(ServiceName.ClassName)')
         self.assertTrue(isinstance(typ, ClassType))
-        self.assertTrue(issubclass(typ.python_type, BaseClass))
+        self.assertTrue(issubclass(typ.python_type, ClassBase))
         self.assertTrue('Class(ServiceName.ClassName)', typ.protobuf_type)
         instance = typ.python_type(42)
         self.assertEqual(42, instance._object_id)
+        self.assertEqual('ServiceName', instance._service_name)
+        self.assertEqual('ClassName', instance._class_name)
         typ2 = types.as_type('Class(ServiceName.ClassName)')
         self.assertEqual(typ, typ2)
 
@@ -71,12 +88,11 @@ class TestTypes(unittest.TestCase):
         typ = types.as_type('List(int32)')
         self.assertTrue(isinstance(typ, ListType))
         self.assertEqual(typ.python_type, list)
-        self.assertTrue('List(int32)', typ.protobuf_type)
+        self.assertEqual('List(int32)', typ.protobuf_type)
         self.assertTrue(isinstance(typ.value_type, ValueType))
         self.assertEqual('int32', typ.value_type.protobuf_type)
         self.assertEqual(int, typ.value_type.python_type)
-        # TODO: reenable tests
-        #self.assertRaises(ValueError, types.as_type, 'List')
+        self.assertRaises(ValueError, types.as_type, 'List')
         self.assertRaises(ValueError, types.as_type, 'List(')
         self.assertRaises(ValueError, types.as_type, 'List()')
         self.assertRaises(ValueError, types.as_type, 'List(foo')
@@ -87,15 +103,14 @@ class TestTypes(unittest.TestCase):
         typ = types.as_type('Dictionary(string,int32)')
         self.assertTrue(isinstance(typ, DictionaryType))
         self.assertEqual(typ.python_type, dict)
-        self.assertTrue('Dictionary(string,int32)', typ.protobuf_type)
+        self.assertEqual('Dictionary(string,int32)', typ.protobuf_type)
         self.assertTrue(isinstance(typ.key_type, ValueType))
         self.assertEqual('string', typ.key_type.protobuf_type)
         self.assertEqual(str, typ.key_type.python_type)
         self.assertTrue(isinstance(typ.value_type, ValueType))
         self.assertEqual('int32', typ.value_type.protobuf_type)
         self.assertEqual(int, typ.value_type.python_type)
-        # TODO: reenable tests
-        #self.assertRaises(ValueError, types.as_type, 'Dictionary')
+        self.assertRaises(ValueError, types.as_type, 'Dictionary')
         self.assertRaises(ValueError, types.as_type, 'Dictionary(')
         self.assertRaises(ValueError, types.as_type, 'Dictionary()')
         self.assertRaises(ValueError, types.as_type, 'Dictionary(foo')
@@ -110,12 +125,11 @@ class TestTypes(unittest.TestCase):
         typ = types.as_type('Set(string)')
         self.assertTrue(isinstance(typ, SetType))
         self.assertEqual(typ.python_type, set)
-        self.assertTrue('Set(string)', typ.protobuf_type)
+        self.assertEqual('Set(string)', typ.protobuf_type)
         self.assertTrue(isinstance(typ.value_type, ValueType))
         self.assertEqual('string', typ.value_type.protobuf_type)
         self.assertEqual(str, typ.value_type.python_type)
-        # TODO: reenable tests
-        #self.assertRaises(ValueError, types.as_type, 'Set')
+        self.assertRaises(ValueError, types.as_type, 'Set')
         self.assertRaises(ValueError, types.as_type, 'Set(')
         self.assertRaises(ValueError, types.as_type, 'Set()')
         self.assertRaises(ValueError, types.as_type, 'Set(string,)')
@@ -128,7 +142,7 @@ class TestTypes(unittest.TestCase):
         typ = types.as_type('Tuple(bool)')
         self.assertTrue(isinstance(typ, TupleType))
         self.assertEqual(typ.python_type, tuple)
-        self.assertTrue('Tuple(bool)', typ.protobuf_type)
+        self.assertEqual('Tuple(bool)', typ.protobuf_type)
         self.assertEqual(1, len(typ.value_types))
         self.assertTrue(isinstance(typ.value_types[0], ValueType))
         self.assertEqual('bool', typ.value_types[0].protobuf_type)
@@ -136,7 +150,7 @@ class TestTypes(unittest.TestCase):
         typ = types.as_type('Tuple(int32,string)')
         self.assertTrue(isinstance(typ, TupleType))
         self.assertEqual(typ.python_type, tuple)
-        self.assertTrue('Tuple(int32,string)', typ.protobuf_type)
+        self.assertEqual('Tuple(int32,string)', typ.protobuf_type)
         self.assertEqual(2, len(typ.value_types))
         self.assertTrue(isinstance(typ.value_types[0], ValueType))
         self.assertTrue(isinstance(typ.value_types[1], ValueType))
@@ -147,7 +161,7 @@ class TestTypes(unittest.TestCase):
         typ = types.as_type('Tuple(float,int64,string)')
         self.assertTrue(isinstance(typ, TupleType))
         self.assertEqual(typ.python_type, tuple)
-        self.assertTrue('Tuple(float,int64,string)', typ.protobuf_type)
+        self.assertEqual('Tuple(float,int64,string)', typ.protobuf_type)
         self.assertEqual(3, len(typ.value_types))
         self.assertTrue(isinstance(typ.value_types[0], ValueType))
         self.assertTrue(isinstance(typ.value_types[1], ValueType))
@@ -158,8 +172,7 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(float, typ.value_types[0].python_type)
         self.assertEqual(long, typ.value_types[1].python_type)
         self.assertEqual(str, typ.value_types[2].python_type)
-        # TODO: reenable test
-        #self.assertRaises(ValueError, types.as_type, 'Tuple')
+        self.assertRaises(ValueError, types.as_type, 'Tuple')
         self.assertRaises(ValueError, types.as_type, 'Tuple(')
         self.assertRaises(ValueError, types.as_type, 'Tuple()')
         self.assertRaises(ValueError, types.as_type, 'Tuple(foo')
@@ -176,7 +189,7 @@ class TestTypes(unittest.TestCase):
         class_parameter = types.get_parameter_type(0, 'uint64', ['ParameterType(0).Class(ServiceName.ClassName)'])
         self.assertEqual(types.as_type('Class(ServiceName.ClassName)'), class_parameter)
         self.assertTrue(isinstance(class_parameter, ClassType))
-        self.assertTrue(issubclass(class_parameter.python_type, BaseClass))
+        self.assertTrue(issubclass(class_parameter.python_type, ClassBase))
         self.assertEqual('Class(ServiceName.ClassName)', class_parameter.protobuf_type)
         self.assertEqual('uint64', types.get_parameter_type(0, 'uint64', ['ParameterType(1).Class(ServiceName.ClassName)']).protobuf_type)
         self.assertEqual('Test.TestEnum', types.get_parameter_type(0, 'Test.TestEnum', []).protobuf_type)
@@ -211,6 +224,8 @@ class TestTypes(unittest.TestCase):
             self.assertEqual(expected, coerced_value)
             self.assertEqual(type(expected), type(coerced_value))
 
+        self.assertEqual(['foo','bar'], types.coerce_to(['foo','bar'], types.as_type('List(string)')))
+
         self.assertRaises(ValueError, types.coerce_to, None, types.as_type('float'))
         self.assertRaises(ValueError, types.coerce_to, '', types.as_type('float'))
         self.assertRaises(ValueError, types.coerce_to, True, types.as_type('float'))
@@ -218,7 +233,6 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError, types.coerce_to, list(), types.as_type('Tuple(int32)'))
         self.assertRaises(ValueError, types.coerce_to, ["foo",2], types.as_type('Tuple(string)'))
         self.assertRaises(ValueError, types.coerce_to, [1], types.as_type('Tuple(string)'))
-        self.assertRaises(ValueError, types.coerce_to, [1,"a","b"], types.as_type('List(string)'))
 
 if __name__ == '__main__':
     unittest.main()

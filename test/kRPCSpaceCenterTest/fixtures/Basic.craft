@@ -1,15 +1,15 @@
 ship = Basic
-version = 0.90.0
+version = 1.0.4
 description = 
 type = VAB
-size = 1.506971,4.642548,1.749835
+size = 1.506971,4.761262,1.749835
 PART
 {
 	part = mk1pod_4294866428
 	partName = Part
-	pos = 0,10,0
+	pos = -0.04078429,4.546447,0.1289561
 	attPos = 0,0,0
-	attPos0 = 0,0,0
+	attPos0 = -0.04078429,4.546447,0.1289561
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -19,12 +19,15 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
 	link = fuelTank_4294866334
+	link = dockingPort3_4294740730
 	attN = bottom,fuelTank_4294866334
+	attN = top,dockingPort3_4294740730
 	EVENTS
 	{
 	}
@@ -80,6 +83,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -156,6 +160,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -163,6 +178,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -250,6 +276,17 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleConductionMultiplier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
 		name = ModuleTripLogger
 		isEnabled = True
 		EVENTS
@@ -288,7 +325,7 @@ PART
 {
 	part = fuelTank_4294866334
 	partName = Part
-	pos = 0,8.629272,0
+	pos = -0.04078429,3.175719,0.1289561
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,0,0,1
@@ -300,6 +337,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -346,7 +384,7 @@ PART
 {
 	part = batteryPack_4294866210
 	partName = Part
-	pos = -5.441017E-08,8.136793,-0.6223798
+	pos = -0.04078434,2.68324,-0.4934237
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -4.371139E-08,0,-1,0
@@ -358,6 +396,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -388,7 +427,7 @@ PART
 {
 	part = batteryPack_4294866176
 	partName = Part
-	pos = 1.088203E-07,8.136793,0.6223798
+	pos = -0.04078418,2.68324,0.7513359
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -1,0,8.742278E-08,0
@@ -400,6 +439,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -430,7 +470,7 @@ PART
 {
 	part = solarPanels1_4294866142
 	partName = Part
-	pos = -5.420311E-08,9.179872,-0.6200113
+	pos = -0.04078434,3.726318,-0.4910553
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,0.7071068,0,-0.7071068
@@ -442,6 +482,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -512,7 +553,7 @@ PART
 {
 	part = solarPanels1_4294866032
 	partName = Part
-	pos = -0.5369455,9.179872,0.3100058
+	pos = -0.5777298,3.726318,0.4389619
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,-0.2588192,0,-0.9659259
@@ -524,6 +565,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -594,7 +636,7 @@ PART
 {
 	part = solarPanels1_4294865922
 	partName = Part
-	pos = 0.5369456,9.179872,0.3100056
+	pos = 0.4961613,3.726318,0.4389617
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,-0.9659259,0,-0.2588189
@@ -606,6 +648,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -676,7 +719,7 @@ PART
 {
 	part = liquidEngine2_4294859514
 	partName = Part
-	pos = 0,6.814946,0
+	pos = -0.04078429,1.361393,0.1289561
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0,0,0,1
@@ -688,6 +731,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -765,6 +809,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
+		isJettisoned = True
 		EVENTS
 		{
 			Jettison
@@ -792,36 +837,32 @@ PART
 		name = ModuleGimbal
 		isEnabled = True
 		gimbalLock = False
+		gimbalLimiter = 100
+		gimbalLock_UIFlight
+		{
+			controlEnabled = True
+		}
+		gimbalLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
-			LockGimbal
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Lock Gimbal
-				guiName = Lock Gimbal
-				category = Lock Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			FreeGimbal
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Free Gimbal
-				guiName = Free Gimbal
-				category = Free Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
 		}
 		ACTIONS
 		{
 			ToggleAction
+			{
+				actionGroup = None
+			}
+			LockAction
+			{
+				actionGroup = None
+			}
+			FreeAction
 			{
 				actionGroup = None
 			}
@@ -841,6 +882,17 @@ PART
 	MODULE
 	{
 		name = ModuleAlternator
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -880,5 +932,147 @@ PART
 		isTweakable = False
 		hideFlow = True
 		flowMode = Both
+	}
+}
+PART
+{
+	part = dockingPort3_4294740730
+	partName = Part
+	pos = -0.04078429,5.188827,0.1289561
+	attPos = 0,0,0
+	attPos0 = 0,0.6423759,0
+	rot = 0,0,0,1
+	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = 0
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	attN = bottom,mk1pod_4294866428
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleDockingNode
+		isEnabled = True
+		state = Ready
+		dockUId = 0
+		dockNodeIdx = 0
+		EVENTS
+		{
+			Undock
+			{
+				active = False
+				guiActive = True
+				guiIcon = Undock
+				guiName = Undock
+				category = Undock
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			UndockSameVessel
+			{
+				active = False
+				guiActive = True
+				guiIcon = Undock
+				guiName = Undock
+				category = Undock
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			Decouple
+			{
+				active = False
+				guiActive = True
+				guiIcon = Decouple Node
+				guiName = Decouple Node
+				category = Decouple Node
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			SetAsTarget
+			{
+				active = True
+				guiActive = False
+				guiIcon = Set as Target
+				guiName = Set as Target
+				category = Set as Target
+				guiActiveUnfocused = True
+				unfocusedRange = 200
+				externalToEVAOnly = False
+			}
+			UnsetTarget
+			{
+				active = True
+				guiActive = False
+				guiIcon = Unset Target
+				guiName = Unset Target
+				category = Unset Target
+				guiActiveUnfocused = True
+				unfocusedRange = 200
+				externalToEVAOnly = False
+			}
+			EnableXFeed
+			{
+				active = False
+				guiActive = True
+				guiIcon = Enable Crossfeed
+				guiName = Enable Crossfeed
+				category = Enable Crossfeed
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			DisableXFeed
+			{
+				active = False
+				guiActive = True
+				guiIcon = Disable Crossfeed
+				guiName = Disable Crossfeed
+				category = Disable Crossfeed
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			MakeReferenceTransform
+			{
+				active = True
+				guiActive = True
+				guiIcon = Control from Here
+				guiName = Control from Here
+				category = Control from Here
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			UndockAction
+			{
+				actionGroup = None
+			}
+			DecoupleAction
+			{
+				actionGroup = None
+			}
+		}
 	}
 }

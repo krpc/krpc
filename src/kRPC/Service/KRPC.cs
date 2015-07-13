@@ -19,6 +19,24 @@ namespace KRPC.Service
             var status = Status.CreateBuilder ();
             var version = System.Reflection.Assembly.GetExecutingAssembly ().GetName ().Version;
             status.Version = version.Major + "." + version.Minor + "." + version.Build;
+            status.BytesRead = KRPCServer.Context.Server.BytesRead;
+            status.BytesWritten = KRPCServer.Context.Server.BytesWritten;
+            status.BytesReadRate = KRPCServer.Context.Server.BytesReadRate;
+            status.BytesWrittenRate = KRPCServer.Context.Server.BytesWrittenRate;
+            status.RpcsExecuted = KRPCServer.Context.Server.RPCsExecuted;
+            status.RpcRate = KRPCServer.Context.Server.RPCRate;
+            status.OneRpcPerUpdate = KRPCServer.Context.Server.OneRPCPerUpdate;
+            status.MaxTimePerUpdate = KRPCServer.Context.Server.MaxTimePerUpdate;
+            status.AdaptiveRateControl = KRPCServer.Context.Server.AdaptiveRateControl;
+            status.BlockingRecv = KRPCServer.Context.Server.BlockingRecv;
+            status.RecvTimeout = KRPCServer.Context.Server.RecvTimeout;
+            status.TimePerRpcUpdate = KRPCServer.Context.Server.TimePerRPCUpdate;
+            status.PollTimePerRpcUpdate = KRPCServer.Context.Server.PollTimePerRPCUpdate;
+            status.ExecTimePerRpcUpdate = KRPCServer.Context.Server.ExecTimePerRPCUpdate;
+            status.StreamRpcs = KRPCServer.Context.Server.StreamRPCs;
+            status.StreamRpcsExecuted = KRPCServer.Context.Server.StreamRPCsExecuted;
+            status.StreamRpcRate = KRPCServer.Context.Server.StreamRPCRate;
+            status.TimePerStreamUpdate = KRPCServer.Context.Server.TimePerStreamUpdate;
             return status.Build ();
         }
 

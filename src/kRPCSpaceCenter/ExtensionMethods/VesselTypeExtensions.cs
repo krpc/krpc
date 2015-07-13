@@ -2,7 +2,7 @@ using System;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
-    public static class VesselTypeExtensions
+    static class VesselTypeExtensions
     {
         public static KRPCSpaceCenter.Services.VesselType ToVesselType (this global::VesselType type)
         {

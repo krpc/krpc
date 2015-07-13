@@ -1,10 +1,9 @@
-#!/usr/bin/env python2
-
 import unittest
-import binascii
 import krpc
 import krpc.test.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
+
+krpc.types.add_search_path('krpc.test')
 
 class TestClient(ServerTestCase, unittest.TestCase):
 
@@ -21,8 +20,22 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_version(self):
         status = self.conn.krpc.get_status()
-        version = open('../VERSION.txt').readlines()[0].rstrip()
-        self.assertEqual(version, status.version)
+        with open('../VERSION.txt') as f:
+            version = f.readlines()[0].rstrip()
+            self.assertEqual(version, status.version)
+
+    def test_error(self):
+        self.assertRaises(self.conn.test_service.throw_argument_exception)
+        try:
+            self.conn.test_service.throw_argument_exception()
+        except krpc.client.RPCError as e:
+            self.assertEqual('Invalid argument', str(e))
+
+        self.assertRaises(self.conn.test_service.throw_invalid_operation_exception)
+        try:
+            self.conn.test_service.throw_invalid_operation_exception()
+        except krpc.client.RPCError as e:
+            self.assertEqual('Invalid operation', str(e))
 
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.conn.test_service.float_to_string(float(3.14159)))
@@ -48,7 +61,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRaises(TypeError, self.conn.test_service.add_multiple_values, 0.14159, 'foo', 2)
 
     def test_properties(self):
-        self.conn.test_service.string_property = 'foo';
+        self.conn.test_service.string_property = 'foo'
         self.assertEqual('foo', self.conn.test_service.string_property)
         self.assertEqual('foo', self.conn.test_service.string_property_private_set)
         self.conn.test_service.string_property_private_get = 'foo'
@@ -76,6 +89,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
         obj2 = self.conn.test_service.create_test_object('bill')
         self.assertEqual('bobbill', obj.object_to_string(obj2))
 
+    def test_class_static_methods(self):
+        self.assertEqual('jeb', self.conn.test_service.TestClass.static_method())
+        self.assertEqual('jebbobbill', self.conn.test_service.TestClass.static_method('bob', 'bill'))
+
     def test_class_properties(self):
         obj = self.conn.test_service.create_test_object('jeb')
         obj.int_property = 0
@@ -85,13 +102,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
         obj2 = self.conn.test_service.create_test_object('kermin')
         obj.object_property = obj2
         self.assertEqual(obj2._object_id, obj.object_property._object_id)
-
-    def test_setattr_for_properties(self):
-        # Check that properties are added to the dynamically generated service class,
-        # not the base class krpc.Service
-        self.assertRaises (AttributeError, getattr, krpc.service._Service, 'object_property')
-        # Check following does not throw an exception
-        getattr(self.conn.test_service, 'object_property')
 
     def test_optional_arguments(self):
         self.assertEqual('jebfoobarbaz', self.conn.test_service.optional_arguments('jeb'))
@@ -138,61 +148,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
             set(['get_services', 'get_status']),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.krpc))))
 
-    def test_test_service_service_members(self):
-        self.assertSetEqual(
-            set([
-                'float_to_string',
-                'double_to_string',
-                'int32_to_string',
-                'int64_to_string',
-                'bool_to_string',
-                'string_to_int32',
-                'bytes_to_hex_string',
-                'add_multiple_values',
-
-                'string_property',
-                'get__string_property',
-                'set__string_property',
-
-                'string_property_private_get',
-                'set__string_property_private_get',
-
-                'string_property_private_set',
-                'get__string_property_private_set',
-
-                'create_test_object',
-                'echo_test_object',
-
-                'object_property',
-                'get__object_property',
-                'set__object_property',
-
-                'TestClass',
-
-                'optional_arguments'
-            ]),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service))))
-
-    def test_test_service_test_class_members(self):
-        self.assertSetEqual(
-            set([
-                'get_value',
-                'float_to_string',
-                'object_to_string',
-
-                'int_property',
-                'test_class__get__int_property',
-                'test_class__set__int_property',
-
-                'object_property',
-                'test_class__get__object_property',
-                'test_class__set__object_property',
-
-                'optional_arguments'
-            ]),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestClass))))
-
-    def test_enums(self):
+    def test_protobuf_enums(self):
         self.assertEqual(TestSchema.a, self.conn.test_service.enum_return())
         self.assertEqual(TestSchema.a, self.conn.test_service.enum_echo(TestSchema.a))
         self.assertEqual(TestSchema.b, self.conn.test_service.enum_echo(TestSchema.b))
@@ -202,6 +158,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(TestSchema.c, self.conn.test_service.enum_default_arg())
         self.assertEqual(TestSchema.b, self.conn.test_service.enum_default_arg(TestSchema.b))
 
+    def test_enums(self):
         enum = self.conn.test_service.CSharpEnum
         self.assertEqual(enum.value_b, self.conn.test_service.c_sharp_enum_return())
         self.assertEqual(enum.value_a, self.conn.test_service.c_sharp_enum_echo(enum.value_a))
@@ -213,7 +170,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(enum.value_b, self.conn.test_service.c_sharp_enum_default_arg(enum.value_b))
 
     def test_invalid_enum(self):
-        self.assertRaises(krpc.client.RPCError, self.conn.test_service.c_sharp_enum_echo, 9999)
+        self.assertRaises(ValueError, self.conn.test_service.CSharpEnum, 9999)
 
     def test_collections(self):
         self.assertEqual([], self.conn.test_service.increment_list([]))
@@ -243,7 +200,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_client_members(self):
         self.assertSetEqual(
-            set(['krpc', 'test_service', 'add_stream', 'stream']),
+            set(['krpc', 'test_service', 'add_stream', 'stream', 'close']),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn))))
 
     def test_krpc_service_members(self):
@@ -264,21 +221,15 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'add_multiple_values',
 
                 'string_property',
-                'get__string_property',
-                'set__string_property',
 
                 'string_property_private_get',
-                'set__string_property_private_get',
 
                 'string_property_private_set',
-                'get__string_property_private_set',
 
                 'create_test_object',
                 'echo_test_object',
 
                 'object_property',
-                'get__object_property',
-                'set__object_property',
 
                 'TestClass',
 
@@ -301,7 +252,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'increment_nested_collection',
                 'add_to_object_list',
 
-                'counter'
+                'counter',
+
+                'throw_argument_exception',
+                'throw_invalid_operation_exception'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service))))
 
@@ -313,14 +267,11 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'object_to_string',
 
                 'int_property',
-                'test_class__get__int_property',
-                'test_class__set__int_property',
 
                 'object_property',
-                'test_class__get__object_property',
-                'test_class__set__object_property',
 
-                'optional_arguments'
+                'optional_arguments',
+                'static_method'
             ]),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestClass))))
 
@@ -328,9 +279,9 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertSetEqual(
             set(['value_a','value_b','value_c']),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.CSharpEnum))))
-        self.assertEqual (0, self.conn.test_service.CSharpEnum.value_a)
-        self.assertEqual (1, self.conn.test_service.CSharpEnum.value_b)
-        self.assertEqual (2, self.conn.test_service.CSharpEnum.value_c)
+        self.assertEqual (0, self.conn.test_service.CSharpEnum.value_a.value)
+        self.assertEqual (1, self.conn.test_service.CSharpEnum.value_b.value)
+        self.assertEqual (2, self.conn.test_service.CSharpEnum.value_c.value)
 
     def test_line_endings(self):
         strings = [
@@ -338,15 +289,25 @@ class TestClient(ServerTestCase, unittest.TestCase):
             'foo\rbar',
             'foo\n\rbar',
             'foo\r\nbar',
-            'foo' + b'\x10' + 'bar',
-            'foo' + b'\x13' + 'bar',
-            'foo' + b'\x10\x13' + 'bar',
-            'foo' + b'\x13\x10' + 'bar'
+            'foo\x10bar',
+            'foo\x13bar',
+            'foo\x10\x13bar',
+            'foo\x13\x10bar'
         ]
         for string in strings:
             self.conn.test_service.string_property = string
             self.assertEqual(string, self.conn.test_service.string_property)
 
+    def test_types_from_different_connections(self):
+        conn1 = self.connect()
+        conn2 = self.connect()
+        self.assertNotEqual(conn1.test_service.TestClass, conn2.test_service.TestClass)
+        obj2 = conn2.test_service.TestClass(0)
+        obj1 = conn1._types.coerce_to(obj2, conn1._types.as_type('Class(TestService.TestClass)'))
+        self.assertEqual(obj1, obj2)
+        self.assertNotEqual(type(obj1), type(obj2))
+        self.assertEqual(type(obj1), conn1.test_service.TestClass)
+        self.assertEqual(type(obj2), conn2.test_service.TestClass)
 
 if __name__ == '__main__':
     unittest.main()

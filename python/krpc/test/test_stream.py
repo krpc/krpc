@@ -1,9 +1,10 @@
-#!/usr/bin/env python2
-
 import unittest
 import time
 import krpc.test.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
+import krpc.types
+
+krpc.types.add_search_path('krpc.test')
 
 class TestStream(ServerTestCase, unittest.TestCase):
 
@@ -37,6 +38,12 @@ class TestStream(ServerTestCase, unittest.TestCase):
             for i in range(5):
                 time.sleep(0.1)
                 self.assertEqual('bob3.14159', x())
+
+    def test_class_static_method(self):
+        with self.conn.stream(self.conn.test_service.TestClass.static_method, 'foo') as x:
+            for i in range(5):
+                time.sleep(0.1)
+                self.assertEqual('jebfoo', x())
 
     def test_class_property(self):
         obj = self.conn.test_service.create_test_object('jeb')
@@ -109,6 +116,16 @@ class TestStream(ServerTestCase, unittest.TestCase):
         s.remove()
         self.assertRaises(RuntimeError, s)
 
+    def test_add_stream_twice(self):
+        s0 = self.conn.add_stream(self.conn.test_service.int32_to_string, 42)
+        stream_id = s0._stream_id
+        time.sleep(0.1)
+        self.assertEqual('42', s0())
+
+        s1 = self.conn.add_stream(self.conn.test_service.int32_to_string, 42)
+        self.assertEqual(stream_id, s1._stream_id)
+        time.sleep(0.1)
+        self.assertEqual('42', s1())
 
 if __name__ == '__main__':
     unittest.main()

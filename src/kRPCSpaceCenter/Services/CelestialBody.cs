@@ -14,7 +14,7 @@ namespace KRPCSpaceCenter.Services
     {
         Orbit orbit;
 
-        internal CelestialBody (global::CelestialBody body)
+        public CelestialBody (global::CelestialBody body)
         {
             InternalBody = body;
             // TODO: better way to check for orbits?
@@ -22,7 +22,7 @@ namespace KRPCSpaceCenter.Services
                 orbit = new Orbit (body);
         }
 
-        internal global::CelestialBody InternalBody { get; private set; }
+        public global::CelestialBody InternalBody { get; private set; }
 
         public override bool Equals (CelestialBody obj)
         {
@@ -52,38 +52,38 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double Mass {
-            get { return InternalBody.Mass; }
+        public float Mass {
+            get { return (float)InternalBody.Mass; }
         }
 
         [KRPCProperty]
-        public double GravitationalParameter {
-            get { return InternalBody.gravParameter; }
+        public float GravitationalParameter {
+            get { return (float)InternalBody.gravParameter; }
         }
 
         [KRPCProperty]
-        public double SurfaceGravity {
-            get { return InternalBody.GeeASL * 9.81d; }
+        public float SurfaceGravity {
+            get { return (float)InternalBody.GeeASL * 9.81f; }
         }
 
         [KRPCProperty]
-        public double RotationalPeriod {
-            get { return InternalBody.rotationPeriod; }
+        public float RotationalPeriod {
+            get { return (float)InternalBody.rotationPeriod; }
         }
 
         [KRPCProperty]
-        public double RotationalSpeed {
-            get { return (2d * Math.PI) / RotationalPeriod; }
+        public float RotationalSpeed {
+            get { return (float)(2f * Math.PI) / RotationalPeriod; }
         }
 
         [KRPCProperty]
-        public double EquatorialRadius {
-            get { return InternalBody.Radius; }
+        public float EquatorialRadius {
+            get { return (float)InternalBody.Radius; }
         }
 
         [KRPCProperty]
-        public double SphereOfInfluence {
-            get { return InternalBody.sphereOfInfluence; }
+        public float SphereOfInfluence {
+            get { return (float)InternalBody.sphereOfInfluence; }
         }
 
         [KRPCProperty]
@@ -97,35 +97,13 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
-        public double AtmospherePressure {
-            get { return HasAtmosphere ? InternalBody.atmosphereMultiplier * 101325d : 0d; }
+        public float AtmosphereDepth {
+            get { return (float)InternalBody.atmosphereDepth; }
         }
 
         [KRPCProperty]
-        public double AtmosphereDensity {
-            get { return HasAtmosphere ? InternalBody.atmosphereMultiplier * FlightGlobals.getAtmDensity (1d) : 0d; }
-        }
-
-        [KRPCProperty]
-        public double AtmosphereScaleHeight {
-            get { return HasAtmosphere ? InternalBody.atmosphereScaleHeight * 1000d : 0d; }
-        }
-
-        [KRPCProperty]
-        public double AtmosphereMaxAltitude {
-            get { return HasAtmosphere ? InternalBody.maxAtmosphereAltitude : 0d; }
-        }
-
-        [KRPCMethod]
-        public double AtmospherePressureAt (double altitude)
-        {
-            return HasAtmosphere ? AtmospherePressure * Math.Exp (-altitude / AtmosphereScaleHeight) : 0d;
-        }
-
-        [KRPCMethod]
-        public double AtmosphereDensityAt (double altitude)
-        {
-            return HasAtmosphere ? AtmosphereDensity * Math.Exp (-altitude / AtmosphereScaleHeight) : 0d;
+        public bool HasAtmosphericOxygen {
+            get { return InternalBody.atmosphereContainsOxygen; }
         }
 
         [KRPCProperty]
@@ -141,11 +119,6 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public ReferenceFrame OrbitalReferenceFrame {
             get { return ReferenceFrame.Orbital (InternalBody); }
-        }
-
-        [KRPCProperty]
-        public ReferenceFrame SurfaceReferenceFrame {
-            get { return ReferenceFrame.Surface (InternalBody); }
         }
 
         [KRPCMethod]

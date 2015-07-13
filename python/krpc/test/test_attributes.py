@@ -1,7 +1,5 @@
-#!/usr/bin/env python2
-
 import unittest
-from krpc.attributes import _Attributes as Attributes
+from krpc.attributes import Attributes
 
 class TestTypes(unittest.TestCase):
 
@@ -10,6 +8,7 @@ class TestTypes(unittest.TestCase):
         self.assertFalse(Attributes.is_a_procedure(['Property.Get(PropertyName)']))
         self.assertFalse(Attributes.is_a_procedure(['Property.Set(PropertyName)']))
         self.assertFalse(Attributes.is_a_procedure(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertFalse(Attributes.is_a_procedure(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertFalse(Attributes.is_a_procedure(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertFalse(Attributes.is_a_procedure(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 
@@ -18,6 +17,7 @@ class TestTypes(unittest.TestCase):
         self.assertTrue(Attributes.is_a_property_accessor(['Property.Get(PropertyName)']))
         self.assertTrue(Attributes.is_a_property_accessor(['Property.Set(PropertyName)']))
         self.assertFalse(Attributes.is_a_property_accessor(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertFalse(Attributes.is_a_property_accessor(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertFalse(Attributes.is_a_property_accessor(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertFalse(Attributes.is_a_property_accessor(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 
@@ -26,6 +26,7 @@ class TestTypes(unittest.TestCase):
         self.assertTrue(Attributes.is_a_property_getter(['Property.Get(PropertyName)']))
         self.assertFalse(Attributes.is_a_property_getter(['Property.Set(PropertyName)']))
         self.assertFalse(Attributes.is_a_property_getter(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertFalse(Attributes.is_a_property_getter(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertFalse(Attributes.is_a_property_getter(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertFalse(Attributes.is_a_property_getter(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 
@@ -34,6 +35,7 @@ class TestTypes(unittest.TestCase):
         self.assertFalse(Attributes.is_a_property_setter(['Property.Get(PropertyName)']))
         self.assertTrue(Attributes.is_a_property_setter(['Property.Set(PropertyName)']))
         self.assertFalse(Attributes.is_a_property_setter(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertFalse(Attributes.is_a_property_setter(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertFalse(Attributes.is_a_property_setter(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertFalse(Attributes.is_a_property_setter(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 
@@ -42,6 +44,7 @@ class TestTypes(unittest.TestCase):
         self.assertFalse(Attributes.is_a_class_method(['Property.Get(PropertyName)']))
         self.assertFalse(Attributes.is_a_class_method(['Property.Set(PropertyName)']))
         self.assertTrue(Attributes.is_a_class_method(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertFalse(Attributes.is_a_class_method(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertFalse(Attributes.is_a_class_method(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertFalse(Attributes.is_a_class_method(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 
@@ -50,6 +53,7 @@ class TestTypes(unittest.TestCase):
         self.assertFalse(Attributes.is_a_class_property_accessor(['Property.Get(PropertyName)']))
         self.assertFalse(Attributes.is_a_class_property_accessor(['Property.Set(PropertyName)']))
         self.assertFalse(Attributes.is_a_class_property_accessor(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertFalse(Attributes.is_a_class_property_accessor(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertTrue(Attributes.is_a_class_property_accessor(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertTrue(Attributes.is_a_class_property_accessor(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 
@@ -58,6 +62,7 @@ class TestTypes(unittest.TestCase):
         self.assertFalse(Attributes.is_a_class_property_getter(['Property.Get(PropertyName)']))
         self.assertFalse(Attributes.is_a_class_property_getter(['Property.Set(PropertyName)']))
         self.assertFalse(Attributes.is_a_class_property_getter(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertFalse(Attributes.is_a_class_property_getter(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertTrue(Attributes.is_a_class_property_getter(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertFalse(Attributes.is_a_class_property_getter(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 
@@ -66,6 +71,7 @@ class TestTypes(unittest.TestCase):
         self.assertFalse(Attributes.is_a_class_property_setter(['Property.Get(PropertyName)']))
         self.assertFalse(Attributes.is_a_class_property_setter(['Property.Set(PropertyName)']))
         self.assertFalse(Attributes.is_a_class_property_setter(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertFalse(Attributes.is_a_class_property_setter(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertFalse(Attributes.is_a_class_property_setter(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertTrue(Attributes.is_a_class_property_setter(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 
@@ -74,6 +80,7 @@ class TestTypes(unittest.TestCase):
         self.assertEqual('PropertyName', Attributes.get_property_name(['Property.Get(PropertyName)']))
         self.assertEqual('PropertyName', Attributes.get_property_name(['Property.Set(PropertyName)']))
         self.assertRaises(ValueError, Attributes.get_property_name, ['Class.Method(ServiceName.ClassName,MethodName)'])
+        self.assertRaises(ValueError, Attributes.get_property_name, ['Class.StaticMethod(ServiceName.ClassName,MethodName)'])
         self.assertRaises(ValueError, Attributes.get_property_name, ['Class.Property.Get(ServiceName.ClassName,PropertyName)'])
         self.assertRaises(ValueError, Attributes.get_property_name, ['Class.Property.Set(ServiceName.ClassName,PropertyName)'])
 
@@ -82,6 +89,7 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError, Attributes.get_service_name, ['Property.Get(PropertyName)'])
         self.assertRaises(ValueError, Attributes.get_service_name, ['Property.Set(PropertyName)'])
         self.assertEqual('ServiceName', Attributes.get_service_name(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertEqual('ServiceName', Attributes.get_service_name(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertEqual('ServiceName', Attributes.get_service_name(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertEqual('ServiceName', Attributes.get_service_name(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 
@@ -90,6 +98,7 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError, Attributes.get_class_name, ['Property.Get(PropertyName)'])
         self.assertRaises(ValueError, Attributes.get_class_name, ['Property.Set(PropertyName)'])
         self.assertEqual('ClassName', Attributes.get_class_name(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertEqual('ClassName', Attributes.get_class_name(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertEqual('ClassName', Attributes.get_class_name(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertEqual('ClassName', Attributes.get_class_name(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 
@@ -98,6 +107,7 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError, Attributes.get_class_method_name, ['Property.Get(PropertyName)'])
         self.assertRaises(ValueError, Attributes.get_class_method_name, ['Property.Set(PropertyName)'])
         self.assertEqual('MethodName', Attributes.get_class_method_name(['Class.Method(ServiceName.ClassName,MethodName)']))
+        self.assertEqual('MethodName', Attributes.get_class_method_name(['Class.StaticMethod(ServiceName.ClassName,MethodName)']))
         self.assertRaises(ValueError, Attributes.get_class_method_name, ['Class.Property.Get(ServiceName.ClassName,PropertyName)'])
         self.assertRaises(ValueError, Attributes.get_class_method_name, ['Class.Property.Set(ServiceName.ClassName,PropertyName)'])
 
@@ -106,6 +116,7 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError, Attributes.get_class_property_name, ['Property.Get(PropertyName)'])
         self.assertRaises(ValueError, Attributes.get_class_property_name, ['Property.Set(PropertyName)'])
         self.assertRaises(ValueError, Attributes.get_class_property_name, ['Class.Method(ServiceName.ClassName,MethodName)'])
+        self.assertRaises(ValueError, Attributes.get_class_property_name, ['Class.StaticMethod(ServiceName.ClassName,MethodName)'])
         self.assertEqual('PropertyName', Attributes.get_class_property_name(['Class.Property.Get(ServiceName.ClassName,PropertyName)']))
         self.assertEqual('PropertyName', Attributes.get_class_property_name(['Class.Property.Set(ServiceName.ClassName,PropertyName)']))
 

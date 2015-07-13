@@ -11,6 +11,14 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum WarpMode
+    {
+        Rails,
+        Physics,
+        None
+    }
+
     [KRPCService (GameScene = GameScene.Flight)]
     public static class SpaceCenter
     {
@@ -46,114 +54,281 @@ namespace KRPCSpaceCenter.Services
         }
 
         [KRPCProperty]
+        public static CelestialBody TargetBody {
+            get {
+                var target = FlightGlobals.fetch.VesselTarget;
+                return target is global::CelestialBody ? new CelestialBody (target as global::CelestialBody) : null;
+            }
+            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalBody); }
+        }
+
+        [KRPCProperty]
+        public static Vessel TargetVessel {
+            get {
+                var target = FlightGlobals.fetch.VesselTarget;
+                return target is global::Vessel ? new Vessel (target as global::Vessel) : null;
+            }
+            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalVessel); }
+        }
+
+        [KRPCProperty]
+        public static Parts.DockingPort TargetDockingPort {
+            get {
+                var target = FlightGlobals.fetch.VesselTarget;
+                var part = target is ModuleDockingNode ? new Parts.Part ((target as ModuleDockingNode).part) : null;
+                return part != null ? new Parts.DockingPort (part) : null;
+            }
+            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalPort); }
+        }
+
+        [KRPCProcedure]
+        public static void ClearTarget ()
+        {
+            FlightGlobals.fetch.SetVesselTarget (null);
+        }
+
+        [KRPCProperty]
         public static double UT {
             get { return Planetarium.GetUniversalTime (); }
         }
 
         [KRPCProperty]
-        public static double G {
-            get { return 6.673e-11; }
+        public static float G {
+            get { return 6.673e-11f; }
+        }
+
+        [KRPCProperty]
+        public static WarpMode WarpMode {
+            get {
+                if (TimeWarp.CurrentRateIndex == 0)
+                    return WarpMode.None;
+                else if (TimeWarp.WarpMode == TimeWarp.Modes.HIGH)
+                    return WarpMode.Rails;
+                else
+                    return WarpMode.Physics;
+            }
+        }
+
+        [KRPCProperty]
+        public static float WarpRate {
+            get { return TimeWarp.CurrentRate; }
+        }
+
+        [KRPCProperty]
+        public static float WarpFactor {
+            get { return TimeWarp.CurrentRateIndex; }
+        }
+
+        [KRPCProperty]
+        public static int RailsWarpFactor {
+            get { return WarpMode == WarpMode.Rails ? TimeWarp.CurrentRateIndex : 0; }
+            set { SetWarpFactor (TimeWarp.Modes.HIGH, value.Clamp (0, MaximumRailsWarpFactor)); }
+        }
+
+        [KRPCProperty]
+        public static int PhysicsWarpFactor {
+            get { return WarpMode == WarpMode.Physics ? TimeWarp.CurrentRateIndex : 0; }
+            set { SetWarpFactor (TimeWarp.Modes.LOW, value.Clamp (0, 3)); }
         }
 
         [KRPCProcedure]
-        public static void WarpTo (double UT, double maxRate = 100000)
+        public static bool CanRailsWarpAt (int factor = 1)
         {
-            float rate = Mathf.Clamp ((float)(UT - Planetarium.GetUniversalTime ()), 1f, (float)maxRate);
-
-            var vessel = ActiveVessel;
-            var flight = vessel.Flight (ReferenceFrame.Orbital (vessel.InternalVessel));
-            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (1, vessel.Orbit.Body.InternalBody);
-
-            if (vessel.Situation != VesselSituation.Landed && vessel.Situation != VesselSituation.Splashed && flight.MeanAltitude < altitudeLimit)
-                WarpPhysicsAtRate (vessel, flight, Mathf.Min (rate, 2));
-            else
-                WarpRegularAtRate (vessel, flight, rate);
-
-            if (rate > 1)
-                throw new YieldException (new ParameterizedContinuationVoid<double,double> (WarpTo, UT, maxRate));
-            else
-                TimeWarp.SetRate (0, false);
+            if (factor == 0)
+                return true;
+            // Not a valid factor
+            if (factor < 0 || factor >= TimeWarp.fetch.warpRates.Length)
+                return false;
+            // Landed
+            if (ActiveVessel.InternalVessel.LandedOrSplashed)
+                return true;
+            // Below altitude limit
+            var altitude = ActiveVessel.InternalVessel.mainBody.GetAltitude (ActiveVessel.InternalVessel.CoM);
+            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, ActiveVessel.InternalVessel.mainBody);
+            if (altitude < altitudeLimit)
+                return false;
+            // Throttle is non-zero
+            if (FlightInputHandler.state.mainThrottle > 0f)
+                return false;
+            return true;
         }
 
-        static void WarpPhysicsAtRate (Vessel vessel, Flight flight, float rate)
-        {
-            throw new NotImplementedException ();
+        [KRPCProperty]
+        public static int MaximumRailsWarpFactor {
+            get {
+                for (int i = TimeWarp.fetch.warpRates.Length - 1; i > 1; i--) {
+                    if (CanRailsWarpAt (i))
+                        return i;
+                }
+                return 0;
+            }
         }
 
-        static void WarpRegularAtRate (Vessel vessel, Flight flight, float rate)
+        [KRPCProcedure]
+        public static void WarpTo (double UT, float maxRate = 100000, float maxPhysicsRate = 2)
         {
+            float rate = Mathf.Clamp ((float)(UT - Planetarium.GetUniversalTime ()), 1f, maxRate);
+
+            if (CanRailsWarpAt ())
+                RailsWarpAtRate (rate);
+            else
+                PhysicsWarpAtRate (Mathf.Min (rate, Math.Min (maxRate, maxPhysicsRate)));
+
+            if (Planetarium.GetUniversalTime () < UT)
+                throw new YieldException (new ParameterizedContinuationVoid<double,float,float> (WarpTo, UT, maxRate, maxPhysicsRate));
+            else if (TimeWarp.CurrentRateIndex > 0) {
+                SetWarpFactor (TimeWarp.Modes.HIGH, 0);
+            }
+        }
+
+        static void SetWarpMode (TimeWarp.Modes mode)
+        {
+            if (TimeWarp.WarpMode != mode) {
+                TimeWarp.fetch.Mode = mode;
+                TimeWarp.SetRate (0, true);
+            }
+        }
+
+        static void SetWarpFactor (TimeWarp.Modes mode, int factor)
+        {
+            SetWarpMode (mode);
+            TimeWarp.SetRate (factor, false);
+        }
+
+        /// <summary>
+        /// Warp using regular "on-rails" time warp at the given rate.
+        /// </summary>
+        static void RailsWarpAtRate (float rate)
+        {
+            SetWarpMode (TimeWarp.Modes.HIGH);
             if (rate < TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex])
-                DecreaseRegularWarp ();
-            if (TimeWarp.CurrentRateIndex + 1 < TimeWarp.fetch.warpRates.Length &&
-                rate > TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex + 1])
-                IncreaseRegularWarp (vessel, flight);
+                DecreaseRailsWarp ();
+            else if (rate >= TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex + 1])
+                IncreaseRailsWarp ();
         }
 
-        static void DecreaseRegularWarp ()
+        /// <summary>
+        /// Decrease the regular "on-rails" time warp factor.
+        /// </summary>
+        static void DecreaseRailsWarp ()
         {
-            // Check we aren't warping the minimum amount
-            if (TimeWarp.CurrentRateIndex == 0)
-                return;
-            TimeWarp.SetRate (TimeWarp.CurrentRateIndex - 1, false);
+            if (TimeWarp.WarpMode != TimeWarp.Modes.HIGH)
+                throw new InvalidOperationException ("Not in on-rails time warp");
+            if (TimeWarp.CurrentRateIndex > 0)
+                TimeWarp.SetRate (TimeWarp.CurrentRateIndex - 1, false);
         }
 
-        static double warpIncreaseAttemptTime = 0;
-
-        static void IncreaseRegularWarp (Vessel vessel, Flight flight)
+        /// <summary>
+        /// Increase the regular "on-rails" time warp factor.
+        /// </summary>
+        static void IncreaseRailsWarp ()
         {
+            if (TimeWarp.WarpMode != TimeWarp.Modes.HIGH)
+                throw new InvalidOperationException ("Not in on-rails time warp");
             // Check if we're already warping at the maximum rate
-            if (TimeWarp.CurrentRateIndex + 1 >= TimeWarp.fetch.warpRates.Length)
+            if (TimeWarp.CurrentRateIndex >= MaximumRailsWarpFactor)
                 return;
             // Check that the previous rate update has taken effect
             float currentRate = TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex];
-            if (!(currentRate == TimeWarp.CurrentRate || currentRate <= 1))
+            if (Math.Abs (currentRate - TimeWarp.CurrentRate) > 0.01)
                 return;
-            // Check we don't update the warp rate more than once every 2 seconds
-            if (Math.Abs (Planetarium.GetUniversalTime () - warpIncreaseAttemptTime) < 2)
-                return;
-            // Check we don't increase the warp rate beyond the altitude limit
-            if (flight.MeanAltitude < TimeWarp.fetch.GetAltitudeLimit (TimeWarp.CurrentRateIndex + 1, vessel.Orbit.Body.InternalBody))
-                return;
-            warpIncreaseAttemptTime = Planetarium.GetUniversalTime ();
+            // Increase the rate
             TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
         }
 
         /// <summary>
-        /// Given a position as a vector in reference frame `from`, convert it to a position in reference frame `to`.
+        /// Warp using physics time warp at the given rate.
         /// </summary>
+        static void PhysicsWarpAtRate (float rate)
+        {
+            SetWarpMode (TimeWarp.Modes.LOW);
+            if (rate < TimeWarp.fetch.physicsWarpRates [TimeWarp.CurrentRateIndex])
+                DecreasePhysicsWarp ();
+            else if (rate >= TimeWarp.fetch.physicsWarpRates [TimeWarp.CurrentRateIndex + 1])
+                IncreasePhysicsWarp ();
+        }
+
+        /// <summary>
+        /// Decrease the physics time warp factor.
+        /// </summary>
+        static void DecreasePhysicsWarp ()
+        {
+            if (TimeWarp.WarpMode != TimeWarp.Modes.LOW)
+                throw new InvalidOperationException ("Not in physical time warp");
+            if (TimeWarp.CurrentRateIndex > 0)
+                TimeWarp.SetRate (TimeWarp.CurrentRateIndex - 1, false);
+        }
+
+        /// <summary>
+        /// Decrease the physics time warp factor.
+        /// </summary>
+        static void IncreasePhysicsWarp ()
+        {
+            if (TimeWarp.WarpMode != TimeWarp.Modes.LOW)
+                throw new InvalidOperationException ("Not in physical time warp");
+            // Check if we're already warping at the maximum rate
+            if (TimeWarp.CurrentRateIndex + 1 >= TimeWarp.fetch.physicsWarpRates.Length)
+                return;
+            // Check that the previous rate update has taken effect
+            var currentRate = TimeWarp.fetch.physicsWarpRates [TimeWarp.CurrentRateIndex];
+            if (Math.Abs (currentRate - TimeWarp.CurrentRate) > 0.01)
+                return;
+            // Increase the rate
+            TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
+        }
+
         [KRPCProcedure]
         public static Tuple3 TransformPosition (Tuple3 position, ReferenceFrame from, ReferenceFrame to)
         {
             return to.PositionFromWorldSpace (from.PositionToWorldSpace (position.ToVector ())).ToTuple ();
         }
 
-        /// <summary>
-        /// Given a direction as a 3D unit vector in reference frame `from`, convert it to a unit vector in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple3 TransformDirection (Tuple3 direction, ReferenceFrame from, ReferenceFrame to)
         {
             return to.DirectionFromWorldSpace (from.DirectionToWorldSpace (direction.ToVector ())).ToTuple ();
         }
 
-        /// <summary>
-        /// Given a rotation as a quaternion in reference frame `from`, convert it to a rotation in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple4 TransformRotation (Tuple4 rotation, ReferenceFrame from, ReferenceFrame to)
         {
             return to.RotationFromWorldSpace (from.RotationToWorldSpace (rotation.ToQuaternion ())).ToTuple ();
         }
 
-        /// <summary>
-        /// Given a velocity at a position in reference frame `from`, convert it to a velocity in reference frame `to`.
-        /// </summary>
         [KRPCProcedure]
         public static Tuple3 TransformVelocity (Tuple3 position, Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
         {
             var worldPosition = from.PositionToWorldSpace (position.ToVector ());
             var worldVelocity = from.VelocityToWorldSpace (position.ToVector (), velocity.ToVector ());
             return to.VelocityFromWorldSpace (worldPosition, worldVelocity).ToTuple ();
+        }
+
+        [KRPCProperty]
+        public static bool FARAvailable {
+            get { return ExternalAPI.FAR.IsAvailable; }
+        }
+
+        [KRPCProperty]
+        public static bool RemoteTechAvailable {
+            get { return ExternalAPI.RemoteTech.IsAvailable; }
+        }
+
+        [KRPCProcedure]
+        public static void DrawDirection (Tuple3 direction, ReferenceFrame referenceFrame, Tuple3 color, float length = 10f)
+        {
+            DrawAddon.AddDirection (direction.ToVector (), referenceFrame, color, length);
+        }
+
+        [KRPCProcedure]
+        public static void DrawLine (Tuple3 start, Tuple3 end, ReferenceFrame referenceFrame, Tuple3 color)
+        {
+            DrawAddon.AddLine (start.ToVector (), end.ToVector (), referenceFrame, color);
+        }
+
+        [KRPCProcedure]
+        public static void ClearDrawing ()
+        {
+            DrawAddon.ClearDrawing ();
         }
     }
 }

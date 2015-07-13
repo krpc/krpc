@@ -11,20 +11,27 @@ class TestVessel(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect()
+        cls.conn = krpc.connect(name='TestVessel')
         cls.vtype = cls.conn.space_center.VesselType
         cls.vsituation = cls.conn.space_center.VesselSituation
         cls.vessel = cls.conn.space_center.active_vessel
+        cls.far = cls.conn.space_center.far_available
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     def test_name(self):
         self.assertEqual('Basic', self.vessel.name)
         self.vessel.name = 'Foo Bar Baz';
         self.assertEqual('Foo Bar Baz', self.vessel.name)
+        self.vessel.name = 'Basic';
 
     def test_type(self):
         self.assertEqual(self.vtype.ship, self.vessel.type)
         self.vessel.type = self.vtype.station
         self.assertEqual(self.vtype.station, self.vessel.type)
+        self.vessel.type = self.vtype.ship
 
     def test_situation(self):
         self.assertEqual(self.vsituation.orbiting, self.vessel.situation)
@@ -38,35 +45,181 @@ class TestVessel(testingtools.TestCase):
         self.assertGreater(self.conn.space_center.ut, self.vessel.met)
 
     def test_mass(self):
-        # 2625 kg dry mass
+        # 2645 kg dry mass
         # 10 l of monoprop at 4 kg/l
         # 180 l of LiquidFueld at 5 kg/l
         # 220 l of Oxidizer at 5 kg/l
-        dry_mass = 2625
+        dry_mass = 2645
         resource_mass = 10 * 4 + 180 * 5 + 220 * 5
         self.assertEqual(dry_mass + resource_mass, self.vessel.mass)
 
     def test_dry_mass(self):
-        # 2625 kg dry mass
-        self.assertEqual(2625, self.vessel.dry_mass)
+        # 2645 kg dry mass
+        self.assertEqual(2645, self.vessel.dry_mass)
 
-    def test_cross_sectional_area(self):
-        # Stock aerodynamic model uses: A = 0.008 . m
-        self.assertClose(0.008 * self.vessel.mass, self.vessel.cross_sectional_area)
+class TestVesselEngines(testingtools.TestCase):
 
-    def test_drag_coefficient(self):
-        # Using stock aerodynamic model
-        parts = {
-            'mk1pod': {'n': 1, 'mass': 0.8, 'drag': 0.2},
-            'fuelTank': {'n': 1, 'mass': 0.125, 'drag': 0.2},
-            'batteryPack': {'n': 2, 'mass': 0.01, 'drag': 0.2},
-            'solarPanels1': {'n': 3, 'mass': 0.02, 'drag': 0.25},
-            'liquidEngine2': {'n': 1, 'mass': 1.5, 'drag': 0.2}
+    @classmethod
+    def setUpClass(cls):
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('PartsEngine')
+        testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
+        cls.conn = krpc.connect(name='TestVesselEngines')
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.control = cls.vessel.control
+
+        cls.engines = []
+        for engine in cls.vessel.parts.engines:
+            if 'IntakeAir' not in engine.propellants and engine.can_shutdown:
+                cls.engines.append(engine)
+
+        cls.engine_info = {
+            'IX-6315 "Dawn" Electric Propulsion System': {
+                'max_thrust': 2000,
+                'available_thrust': 2000,
+                'isp': 4200,
+                'vac_isp': 4200,
+                'msl_isp': 100
+            },
+            'LV-T45 "Swivel" Liquid Fuel Engine': {
+                'max_thrust': 200000,
+                'available_thrust': 200000,
+                'isp': 320,
+                'vac_isp': 320,
+                'msl_isp': 270
+            },
+            'LV-T30 "Reliant" Liquid Fuel Engine': {
+                'max_thrust': 215000,
+                'available_thrust': 215000,
+                'isp': 300,
+                'vac_isp': 300,
+                'msl_isp': 280
+            },
+            'LV-N "Nerv" Atomic Rocket Motor': {
+                'max_thrust': 60000,
+                'available_thrust': 60000,
+                'isp': 800,
+                'vac_isp': 800,
+                'msl_isp': 185
+            },
+            'O-10 "Puff" MonoPropellant Fuel Engine': {
+                'max_thrust': 20000,
+                'available_thrust': 20000,
+                'isp': 250,
+                'vac_isp': 250,
+                'msl_isp': 120
+            },
+            'RT-10 "Hammer" Solid Fuel Booster': {
+                'max_thrust': 0,
+                'available_thrust': 0,
+                'isp': 195,
+                'vac_isp': 195,
+                'msl_isp': 170
+            },
+            'LV-909 "Terrier" Liquid Fuel Engine': {
+                'max_thrust': 60000,
+                'available_thrust': 0,
+                'isp': 345,
+                'vac_isp': 345,
+                'msl_isp': 85
+            },
+            'J-33 "Wheesley" Basic Jet Engine': {
+                'max_thrust': 0,
+                'available_thrust': 0,
+                'isp': 0,
+                'vac_isp': 0,
+                'msl_isp': 0
+            }
         }
-        total_mass = sum(x['mass']*x['n'] for x in parts.values())
-        mass_drag_products = sum(x['mass']*x['drag']*x['n'] for x in parts.values())
-        drag_coefficient = mass_drag_products / total_mass
-        self.assertClose(drag_coefficient, self.vessel.drag_coefficient)
+        max_thrusts = [x['max_thrust'] for x in cls.engine_info.values()]
+        available_thrusts = [x['available_thrust'] for x in cls.engine_info.values()]
+        isps = [x['isp'] for x in cls.engine_info.values()]
+        vac_isps = [x['vac_isp'] for x in cls.engine_info.values()]
+        msl_isps = [x['msl_isp'] for x in cls.engine_info.values()]
+        cls.max_thrust = sum(max_thrusts)
+        cls.available_thrust = sum(available_thrusts)
+        cls.combined_isp = sum(max_thrusts) / sum(t/i if i > 0 else 0 for t,i in zip(max_thrusts, isps))
+        cls.vac_combined_isp = sum(max_thrusts) / sum(t/i if i > 0 else 0 for t,i in zip(max_thrusts, vac_isps))
+        cls.msl_combined_isp = sum(max_thrusts) / sum(t/i if i > 0 else 0 for t,i in zip(max_thrusts, msl_isps))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
+
+    def test_inactive(self):
+        self.control.throttle = 0
+        for engine in self.engines:
+            engine.active = False
+        time.sleep(0.5)
+        self.assertClose(self.vessel.thrust, 0)
+        self.assertClose(self.vessel.available_thrust, 0)
+        self.assertClose(self.vessel.max_thrust, 0)
+        self.assertClose(self.vessel.specific_impulse, 0)
+        self.assertClose(self.vessel.vacuum_specific_impulse, 0)
+        self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, 0)
+
+    def test_one_idle(self):
+        self.control.throttle = 0
+        title = 'LV-N "Nerv" Atomic Rocket Motor'
+        engine = next(iter(filter(lambda x: x.part.title == title, self.vessel.parts.engines)))
+        engine.active = True
+        time.sleep(0.5)
+
+        #FIXME: need to run the engines to update their has fuel status
+        self.control.throttle = 0.1
+        time.sleep(0.5)
+        self.control.throttle = 0
+        time.sleep(0.5)
+
+        info = self.engine_info[title]
+        self.assertClose(self.vessel.thrust, 0)
+        self.assertClose(self.vessel.available_thrust, info['available_thrust'])
+        self.assertClose(self.vessel.max_thrust, info['max_thrust'])
+        self.assertClose(self.vessel.specific_impulse, info['isp'])
+        self.assertClose(self.vessel.vacuum_specific_impulse, info['vac_isp'])
+        self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, info['msl_isp'])
+        engine.active = False
+        time.sleep(0.5)
+
+    def test_all_idle(self):
+        self.control.throttle = 0
+        for engine in self.engines:
+            engine.active = True
+        time.sleep(0.5)
+
+        #FIXME: need to run the engines to update their has fuel status
+        self.control.throttle = 0.1
+        time.sleep(0.5)
+        self.control.throttle = 0
+        time.sleep(0.5)
+
+        self.assertClose(self.vessel.thrust, 0, 1)
+        self.assertClose(self.vessel.available_thrust, self.available_thrust, 1)
+        self.assertClose(self.vessel.max_thrust, self.max_thrust, 1)
+        self.assertClose(self.vessel.specific_impulse, self.combined_isp, 1)
+        self.assertClose(self.vessel.vacuum_specific_impulse, self.vac_combined_isp, 1)
+        self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, self.msl_combined_isp, 1)
+        for engine in self.engines:
+            engine.active = False
+        time.sleep(0.5)
+
+    def test_throttle(self):
+        for engine in self.engines:
+            engine.active = True
+        for throttle in [0.3,0.7,1]:
+            self.control.throttle = throttle
+            time.sleep(1)
+            self.assertClose(self.vessel.thrust, throttle*self.available_thrust, 1)
+            self.assertClose(self.vessel.available_thrust, self.available_thrust, 1)
+            self.assertClose(self.vessel.max_thrust, self.max_thrust, 1)
+            self.assertClose(self.vessel.specific_impulse, self.combined_isp, 1)
+            self.assertClose(self.vessel.vacuum_specific_impulse, self.vac_combined_isp, 1)
+            self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, self.msl_combined_isp, 1)
+        self.control.throttle = 0
+        for engine in self.engines:
+            engine.active = False
+        time.sleep(1)
 
 if __name__ == "__main__":
     unittest.main()

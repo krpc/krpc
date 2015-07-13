@@ -10,7 +10,8 @@ Using the Makefile
 1. Install the required dependencies.
 
    You will need to install the MonoDevelop command line tool, Mono runtime and
-   development libraries, the Protocol Buffers compiler and Inkscape.
+   development libraries, the Protocol Buffers compiler (at least version
+   3.0.0-alpha-1) and Inkscape.
 
    On Linux, you should be able to use your package manager. For example on
    Ubuntu:
@@ -23,6 +24,10 @@ Using the Makefile
    On Ubuntu, you may want to use a more recent version of MonoDevelop than that
    provided in the apt repositories. The latest version can be installed from
    http://www.monodevelop.com/download/linux/#debian-ubuntu-and-derivatives
+
+   Python dependencies may be installed using pip:
+   
+   ``pip install pyenchant sphinx sphinxcontrib-spelling sphinx_rtd_theme yaml``
 
 2. Set the path to your KSP directory.
 
@@ -75,7 +80,8 @@ The Python Client Library
 The source code for the python client library can be found in the directory
 ``python``. You can install it from source as follows:
 
-1. Install the Protocol Buffers python package, for example using pip:
+1. Install the Protocol Buffers python package (at least version 3.0.0-alpha-1)
+   for example using pip:
 
    ``pip install protobuf``
 
@@ -94,7 +100,7 @@ Running the Tests
 ^^^^^^^^^^^^^^^^^
 
 The project contains unit tests for the server code (using NUnit) and for the
-python client code (using unittest), and integraton tests to test the
+python client code (using unittest), and integration tests to test the
 SpaceCenter API when a copy of KSP is running. The tests can be run using ``make
 test`` (after compiling everything using ``make build``).
 

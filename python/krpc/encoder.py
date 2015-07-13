@@ -1,14 +1,15 @@
-# TODO: avoid using internals
 from google.protobuf.internal import encoder as protobuf_encoder
-from krpc.types import _Types, _ValueType, _MessageType, _ClassType, _EnumType, _ListType, _DictionaryType, _SetType, _TupleType
-import itertools
+from krpc.types import Types, ValueType, MessageType, ProtobufEnumType, ClassType, EnumType
+from krpc.types import ListType, DictionaryType, SetType, TupleType
+import platform
 
-
-class _Encoder(object):
+class Encoder(object):
     """ Routines for encoding messages and values in the protocol buffer serialization format """
 
     RPC_HELLO_MESSAGE = b'\x48\x45\x4C\x4C\x4F\x2D\x52\x50\x43\x00\x00\x00'
     STREAM_HELLO_MESSAGE = b'\x48\x45\x4C\x4C\x4F\x2D\x53\x54\x52\x45\x41\x4D'
+
+    _types = Types()
 
     @classmethod
     def client_name(cls, name=None):
@@ -27,41 +28,42 @@ class _Encoder(object):
         encoded = string.encode(encoding=encoding)[:length]
         return encoded.decode(encoding, 'ignore')
 
-
     @classmethod
     def encode(cls, x, typ):
         """ Encode a message or value of the given protocol buffer type """
-        if isinstance(typ, _MessageType):
+        if isinstance(typ, MessageType):
             return x.SerializeToString()
-        elif isinstance(typ, _ValueType):
+        elif isinstance(typ, ValueType):
             return cls._encode_value(x, typ)
-        elif isinstance(typ, _EnumType):
-            return cls._encode_value(x, _Types().as_type('int32'))
-        elif isinstance(typ, _ClassType):
+        elif isinstance(typ, EnumType):
+            return cls._encode_value(x.value, cls._types.as_type('int32'))
+        elif isinstance(typ, ProtobufEnumType):
+            return cls._encode_value(x, cls._types.as_type('int32'))
+        elif isinstance(typ, ClassType):
             object_id = x._object_id if x is not None else 0
-            return cls._encode_value(object_id, _Types().as_type('uint64'))
-        elif isinstance(typ, _ListType):
-            msg = _Types().as_type('KRPC.List').python_type()
+            return cls._encode_value(object_id, cls._types.as_type('uint64'))
+        elif isinstance(typ, ListType):
+            msg = cls._types.as_type('KRPC.List').python_type()
             msg.items.extend(cls.encode(item, typ.value_type) for item in x)
             return msg.SerializeToString()
-        elif isinstance(typ, _DictionaryType):
-            msg = _Types().as_type('KRPC.Dictionary').python_type()
-            entry_type = _Types().as_type('KRPC.DictionaryEntry')
+        elif isinstance(typ, DictionaryType):
+            msg = cls._types.as_type('KRPC.Dictionary').python_type()
+            entry_type = cls._types.as_type('KRPC.DictionaryEntry')
             entries = []
-            for key,value in x.items():
+            for key,value in sorted(x.items(), key=lambda i: i[0]):
                 entry = entry_type.python_type()
                 entry.key = cls.encode(key, typ.key_type)
                 entry.value = cls.encode(value, typ.value_type)
                 entries.append(entry)
             msg.entries.extend(entries)
             return msg.SerializeToString()
-        elif isinstance(typ, _SetType):
-            msg = _Types().as_type('KRPC.Set').python_type()
+        elif isinstance(typ, SetType):
+            msg = cls._types.as_type('KRPC.Set').python_type()
             msg.items.extend(cls.encode(item, typ.value_type) for item in x)
             return msg.SerializeToString()
-        elif isinstance(typ, _TupleType):
-            msg = _Types().as_type('KRPC.Tuple').python_type()
-            msg.items.extend(cls.encode(item, value_type) for item,value_type in itertools.izip(x,typ.value_types))
+        elif isinstance(typ, TupleType):
+            msg = cls._types.as_type('KRPC.Tuple').python_type()
+            msg.items.extend(cls.encode(item, value_type) for item,value_type in zip(x,typ.value_types))
             return msg.SerializeToString()
         else:
             raise RuntimeError ('Cannot encode objects of type ' + str(type(x)))
@@ -78,7 +80,6 @@ class _Encoder(object):
     def _encode_value(cls, value, typ):
         return getattr(_ValueEncoder, 'encode_' + typ.protobuf_type)(value)
 
-
 class _ValueEncoder(object):
     """ Routines for encoding values in the protocol buffer serialization format """
 
@@ -87,20 +88,18 @@ class _ValueEncoder(object):
         data = []
         def write(x):
             data.append(x)
-        #TODO: only handles finite values
         encoder = protobuf_encoder.DoubleEncoder(1,False,False)
         encoder(write, value)
-        return ''.join(data[1:]) # strips the tag value
+        return b''.join(data[1:]) # strips the tag value
 
     @classmethod
     def encode_float(cls, value):
         data = []
         def write(x):
             data.append(x)
-        #TODO: only handles finite values
         encoder = protobuf_encoder.FloatEncoder(1,False,False)
         encoder(write, value)
-        return ''.join(data[1:]) # strips the tag value
+        return b''.join(data[1:]) # strips the tag value
 
     @classmethod
     def _encode_varint(cls, value):
@@ -108,7 +107,7 @@ class _ValueEncoder(object):
         def write(x):
             data.append(x)
         protobuf_encoder._VarintEncoder()(write, value)
-        return ''.join(data)
+        return b''.join(data)
 
     @classmethod
     def _encode_signed_varint(cls, value):
@@ -116,7 +115,7 @@ class _ValueEncoder(object):
         def write(x):
             data.append(x)
         protobuf_encoder._SignedVarintEncoder()(write, value)
-        return ''.join(data)
+        return b''.join(data)
 
     @classmethod
     def encode_int32(cls, value):
@@ -144,14 +143,10 @@ class _ValueEncoder(object):
 
     @classmethod
     def encode_string(cls, value):
-        data = []
-        def write(x):
-            data.append(x)
-        encoded = value.encode('utf-8')
-        protobuf_encoder._VarintEncoder()(write, len(encoded))
-        write(encoded)
-        return ''.join(data)
+        size = cls._encode_varint(platform.bytelength(value))
+        data = value.encode('utf-8')
+        return size + data
 
     @classmethod
     def encode_bytes(cls, value):
-        return ''.join([cls._encode_varint(len(value)), value])
+        return b''.join([cls._encode_varint(len(value)), value])

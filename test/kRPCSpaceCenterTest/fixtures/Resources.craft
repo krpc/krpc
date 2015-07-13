@@ -1,5 +1,5 @@
 ship = Resources
-version = 0.90.0
+version = 1.0.4
 description = 
 type = VAB
 size = 6.272043,32.35985,6.272044
@@ -19,6 +19,7 @@ PART
 	dstg = 0
 	sidx = -1
 	sqor = -1
+	sepI = 0
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -85,6 +86,7 @@ PART
 			{
 				active = True
 				guiActive = True
+				guiActiveEditor = True
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
@@ -161,6 +163,17 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+			DeployExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ResetExperimentExternal
 			{
 				active = True
@@ -168,6 +181,17 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CleanUpExperimentExternal
+			{
+				active = True
+				guiActive = False
+				guiIcon = Restore
+				guiName = Restore
+				category = Restore
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -255,6 +279,17 @@ PART
 	}
 	MODULE
 	{
+		name = ModuleConductionMultiplier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
 		name = ModuleTripLogger
 		isEnabled = True
 		EVENTS
@@ -305,6 +340,7 @@ PART
 	dstg = 0
 	sidx = 0
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -326,22 +362,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -408,6 +443,28 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -430,6 +487,7 @@ PART
 	dstg = 0
 	sidx = 1
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -451,22 +509,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -533,6 +590,28 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
 		}
 		ACTIONS
 		{
@@ -555,6 +634,7 @@ PART
 	dstg = 0
 	sidx = 2
 	sqor = 0
+	sepI = 0
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -576,22 +656,21 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
-		deployAltitude = 500
 		minAirPressureToOpen = 0.01
-		staged = False
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
+		deployAltitude = 500
 		minAirPressureToOpen_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0.01
 			maxValue = 0.5
 			stepIncrement = 0.01
+		}
+		deployAltitude_UIFlight
+		{
+			controlEnabled = True
+			minValue = 50
+			maxValue = 5000
+			stepIncrement = 50
 		}
 		EVENTS
 		{
@@ -663,6 +742,28 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDragModifier
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -680,6 +781,7 @@ PART
 	dstg = 1
 	sidx = 0
 	sqor = 1
+	sepI = 1
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -700,7 +802,15 @@ PART
 	{
 		name = ModuleDecouple
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -762,6 +872,7 @@ PART
 	dstg = 1
 	sidx = 0
 	sqor = 3
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -782,7 +893,15 @@ PART
 	{
 		name = ModuleDecouple
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -844,6 +963,7 @@ PART
 	dstg = 2
 	sidx = 1
 	sqor = 3
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -966,6 +1086,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 1
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1022,6 +1143,7 @@ PART
 	dstg = 2
 	sidx = 0
 	sqor = 2
+	sepI = 1
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1101,6 +1223,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
+		isJettisoned = False
 		EVENTS
 		{
 			Jettison
@@ -1128,36 +1251,32 @@ PART
 		name = ModuleGimbal
 		isEnabled = True
 		gimbalLock = False
+		gimbalLimiter = 100
+		gimbalLock_UIFlight
+		{
+			controlEnabled = True
+		}
+		gimbalLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
-			LockGimbal
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Lock Gimbal
-				guiName = Lock Gimbal
-				category = Lock Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			FreeGimbal
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Free Gimbal
-				guiName = Free Gimbal
-				category = Free Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
 		}
 		ACTIONS
 		{
 			ToggleAction
+			{
+				actionGroup = None
+			}
+			LockAction
+			{
+				actionGroup = None
+			}
+			FreeAction
 			{
 				actionGroup = None
 			}
@@ -1207,6 +1326,17 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleSurfaceFX
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = ElectricCharge
@@ -1234,6 +1364,7 @@ PART
 	dstg = 3
 	sidx = 2
 	sqor = 3
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1254,7 +1385,15 @@ PART
 	{
 		name = ModuleDecouple
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -1316,6 +1455,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1369,6 +1509,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1426,6 +1567,7 @@ PART
 	dstg = 4
 	sidx = -1
 	sqor = -1
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1483,6 +1625,7 @@ PART
 	dstg = 4
 	sidx = 0
 	sqor = 5
+	sepI = 3
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1560,6 +1703,7 @@ PART
 	{
 		name = ModuleJettison
 		isEnabled = True
+		isJettisoned = True
 		EVENTS
 		{
 			Jettison
@@ -1587,36 +1731,32 @@ PART
 		name = ModuleGimbal
 		isEnabled = True
 		gimbalLock = False
+		gimbalLimiter = 100
+		gimbalLock_UIFlight
+		{
+			controlEnabled = True
+		}
+		gimbalLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
-			LockGimbal
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Lock Gimbal
-				guiName = Lock Gimbal
-				category = Lock Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			FreeGimbal
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiIcon = Free Gimbal
-				guiName = Free Gimbal
-				category = Free Gimbal
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
 		}
 		ACTIONS
 		{
 			ToggleAction
+			{
+				actionGroup = None
+			}
+			LockAction
+			{
+				actionGroup = None
+			}
+			FreeAction
 			{
 				actionGroup = None
 			}
@@ -1636,6 +1776,17 @@ PART
 	MODULE
 	{
 		name = ModuleAlternator
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleSurfaceFX
 		isEnabled = True
 		EVENTS
 		{
@@ -1693,6 +1844,7 @@ PART
 	dstg = 5
 	sidx = 0
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1715,7 +1867,15 @@ PART
 	{
 		name = ModuleAnchoredDecoupler
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -1777,6 +1937,7 @@ PART
 	dstg = 6
 	sidx = 1
 	sqor = 5
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -1807,7 +1968,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9876223
+		currentThrottle = 0.6157417
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -1891,6 +2052,17 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleSurfaceFX
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -1918,6 +2090,7 @@ PART
 	dstg = 6
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -1952,6 +2125,7 @@ PART
 	dstg = 6
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2012,6 +2186,7 @@ PART
 	dstg = 5
 	sidx = 1
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2034,7 +2209,15 @@ PART
 	{
 		name = ModuleAnchoredDecoupler
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -2096,6 +2279,7 @@ PART
 	dstg = 6
 	sidx = 2
 	sqor = 5
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2126,7 +2310,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9876223
+		currentThrottle = 0.6157417
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -2210,6 +2394,17 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleSurfaceFX
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -2237,6 +2432,7 @@ PART
 	dstg = 6
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -2271,6 +2467,7 @@ PART
 	dstg = 6
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2331,6 +2528,7 @@ PART
 	dstg = 5
 	sidx = 2
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2353,7 +2551,15 @@ PART
 	{
 		name = ModuleAnchoredDecoupler
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -2415,6 +2621,7 @@ PART
 	dstg = 6
 	sidx = 3
 	sqor = 5
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2445,7 +2652,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9876223
+		currentThrottle = 0.6157417
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -2529,6 +2736,17 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleSurfaceFX
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -2556,6 +2774,7 @@ PART
 	dstg = 6
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -2590,6 +2809,7 @@ PART
 	dstg = 6
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2650,6 +2870,7 @@ PART
 	dstg = 5
 	sidx = 3
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2672,7 +2893,15 @@ PART
 	{
 		name = ModuleAnchoredDecoupler
 		isEnabled = True
+		ejectionForcePercent = 100
 		isDecoupled = False
+		ejectionForcePercent_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 1
+		}
 		EVENTS
 		{
 			Decouple
@@ -2734,6 +2963,7 @@ PART
 	dstg = 6
 	sidx = 4
 	sqor = 5
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2764,7 +2994,7 @@ PART
 		flameout = False
 		EngineIgnited = False
 		engineShutdown = False
-		currentThrottle = 0.9876223
+		currentThrottle = 0.6157417
 		thrustPercentage = 100
 		manuallyOverridden = False
 		thrustPercentage_UIFlight
@@ -2848,6 +3078,17 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleSurfaceFX
+		isEnabled = True
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 	RESOURCE
 	{
 		name = SolidFuel
@@ -2875,6 +3116,7 @@ PART
 	dstg = 6
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 0
 	modCost = 0
 	modMass = 0
@@ -2909,6 +3151,7 @@ PART
 	dstg = 6
 	sidx = -1
 	sqor = -1
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -2969,6 +3212,7 @@ PART
 	dstg = 4
 	sidx = 5
 	sqor = 5
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3084,6 +3328,24 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -3101,6 +3363,7 @@ PART
 	dstg = 4
 	sidx = 6
 	sqor = 5
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3216,6 +3479,24 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -3233,6 +3514,7 @@ PART
 	dstg = 4
 	sidx = 7
 	sqor = 5
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3348,6 +3630,24 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -3365,6 +3665,7 @@ PART
 	dstg = 4
 	sidx = 8
 	sqor = 5
+	sepI = 5
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3480,6 +3781,24 @@ PART
 		{
 		}
 	}
+	MODULE
+	{
+		name = ModuleRTAntennaPassive
+		isEnabled = True
+		IsRTAntenna = True
+		IsRTActive = True
+		IsRTPowered = True
+		IsRTBroken = False
+		RTDishCosAngle = 1
+		RTOmniRange = 5000
+		RTDishRange = -1
+		EVENTS
+		{
+		}
+		ACTIONS
+		{
+		}
+	}
 }
 PART
 {
@@ -3497,6 +3816,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3579,6 +3899,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3661,6 +3982,7 @@ PART
 	dstg = 2
 	sidx = -1
 	sqor = -1
+	sepI = 1
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3743,6 +4065,7 @@ PART
 	dstg = 6
 	sidx = 4
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3856,7 +4179,7 @@ PART
 {
 	part = sepMotor1_4294822258
 	partName = Part
-	pos = 2.722633,10.31643,0.1344699
+	pos = 2.722633,10.31643,0.1344702
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.09229591,0.09229591,-0.7010574,0.7010574
@@ -3868,6 +4191,7 @@ PART
 	dstg = 6
 	sidx = 5
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -3981,7 +4305,7 @@ PART
 {
 	part = sepMotor1_4294822218
 	partName = Part
-	pos = 0.7145201,10.31643,-3.040941
+	pos = 0.7145203,10.31643,-3.040941
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.5609856,0.5609856,-0.4304594,0.4304594
@@ -3993,6 +4317,7 @@ PART
 	dstg = 6
 	sidx = 6
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4106,7 +4431,7 @@ PART
 {
 	part = sepMotor1_4294822178
 	partName = Part
-	pos = -0.4527772,10.31643,2.142584
+	pos = -0.4527774,10.31643,2.142584
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.4304594,0.4304594,0.5609856,-0.5609856
@@ -4118,6 +4443,7 @@ PART
 	dstg = 6
 	sidx = 7
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4231,7 +4557,7 @@ PART
 {
 	part = sepMotor1_4294822138
 	partName = Part
-	pos = -0.4524573,10.30456,-3.040856
+	pos = -0.4524575,10.30456,-3.040856
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.5609857,-0.5609857,0.4304594,0.4304594
@@ -4243,6 +4569,7 @@ PART
 	dstg = 6
 	sidx = 8
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4368,6 +4695,7 @@ PART
 	dstg = 6
 	sidx = 9
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4493,6 +4821,7 @@ PART
 	dstg = 6
 	sidx = 10
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0
@@ -4606,7 +4935,7 @@ PART
 {
 	part = sepMotor1_4294822018
 	partName = Part
-	pos = 0.7142003,10.30456,2.142498
+	pos = 0.7142005,10.30456,2.142498
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = 0.4304594,0.4304594,0.5609856,0.5609856
@@ -4618,6 +4947,7 @@ PART
 	dstg = 6
 	sidx = 11
 	sqor = 4
+	sepI = 4
 	attm = 1
 	modCost = 0
 	modMass = 0

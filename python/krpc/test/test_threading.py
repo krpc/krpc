@@ -1,9 +1,10 @@
-#!/usr/bin/env python2
-
 import unittest
 import threading
 import krpc.test.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
+import krpc.types
+
+krpc.types.add_search_path('krpc.test')
 
 def worker_thread(tid, conn):
     for i in range(100):

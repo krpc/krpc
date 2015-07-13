@@ -7,7 +7,7 @@ class TestTestingTools(testingtools.TestCase):
         failed = False
         try:
             f(*args)
-        except AssertionError, e:
+        except AssertionError as e:
             failed = True
         if not failed:
             self.fail('Expected test case to fail, but it passed')
@@ -39,6 +39,14 @@ class TestTestingTools(testingtools.TestCase):
     def test_not_close_iterable(self):
         self.checkFails(self.assertNotClose, (1,2,3), (1,2,3), 0)
         self.assertNotClose((1,2,3), (3,3,4), 1)
+
+    def test_close_dict(self):
+        self.assertClose({'foo': 1, 'bar': 2}, {'foo': 1, 'bar': 2}, 0)
+        self.assertClose({'foo': 1, 'bar': 3}, {'foo': 1, 'bar': 2}, 2)
+
+    def test_not_close_dict(self):
+        self.checkFails(self.assertClose, {'foo': 1, 'bar': 2}, {'baz': 3}, 0)
+        self.assertNotClose({'foo': 1, 'bar': 2}, {'foo': 1, 'bar': 4}, 1)
 
     def test_close_degrees(self):
         self.assertCloseDegrees(0, 0, 0)

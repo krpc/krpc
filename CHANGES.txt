@@ -1,14 +1,109 @@
-v0.1.5
-* Server can now run during more game scenes and does not get restarted when switching vessel
-* Server plugin changes:
-  * Display service errors when KSP loads (#89)
-  * Use a combo box for the server address
+v0.1.11
+* Lua client library (https://luarocks.org/modules/djungelorm/krpc)
+
+v0.1.10
+* KSP 1.0.4 support (#151)
 * SpaceCenter service changes:
-  * Fix Body.AtmospherePressureAt and AtmosphereDensityAt when there is no atmosphere
-  * Rename Flight.NormalNeg to AntiNormal and Flight.RadialNeg to AntiRadial (#90)
-  * Add Flight.Longitude and Latitude
+  * Add more time warp functionality: SpaceCenter.WarpMode, WarpRate, WarpFactor,
+    RailsWarpFactor, PhysicsWarpFactor, CanRailsWarpAt and MaximumRailsWarpFactor (#134)
+  * Implement physical time warp for SpaceCenter.WarpTo (#137)
+  * Add support for radiator parts (#154)
+  * Fix Vessel.Thrust, Engine.Thrust and Engine.AvailableThrust when engines have no fuel (#146)
+  * Add Resoures.FlowMode
+  * Add ability to control vessels other than the active one, when they are within physics range (#61)
+  * Add SpaceCenter.DrawLine to draw arbitrary lines (#150)
+  * Rename SpaceCenter.ClearDirections to SpaceCenter.ClearDrawing
+* KerbalAlarmClock service now available in all game scenes (#135)
+* Server plugin changes:
+  * Performance improvements (#129,#131,#139)
+  * Fix UI disappearing bug (#133)
+
+v0.1.9
+* SpaceCenter service changes:
+  * Fix bug with combined specific impulse calculations (#117)
+  * Add Engine.PropellantRatios (#118)
+  * Combined VesselResources and PartResources classes into a single Resources class
+  * Add Resources.Density
+* Add support for InfernalRobotics (http://forum.kerbalspaceprogram.com/threads/116064)
+* Add support for Kerbal Alarm Clock (http://forum.kerbalspaceprogram.com/threads/24786)
+
+v0.1.8
+* KSP 1.0.2 support (#114)
+* Server plugin changes:
+  * Add support for static class methods (#106)
+* SpaceCenter service changes:
+  * Add Engine.MaxVacuumThrust
+  * Add Engine.Throttle
+  * Add Engine.GimbalLimit
+  * Add Vessel.MaxVacuumThrust
+  * Clean up float/double types (#113)
+  * Remove Vessel.CrossSectionalArea
+  * Remove CelestialBody.AtmospherePressure, AtmosphereDensity, AtmosphereScaleHeight,
+    AtmosphereMaxAltitude, AtmospherePressureAt, AtmosphereDensityAt
+  * Add CelestialBody.AtmosphereDepth and HasAtmosphericOxygen
+* Python client changes:
+  * Improved dynamic creation of service methods
+  * Add support for static class methods (#106)
+  * Improve enums: return an Enum object instead of an int
+  * Fix bug with types across multiple connections (#110)
+
+v0.1.7
+* Fix CKAN install bug on Windows (#105)
+* SpaceCenter service changes:
+  * Add AutoPilot.SAS, SASMode and SpeedMode (#94)
+  * Update AutoPilot.Error to also return SAS error (#94)
+  * Change return types of Vessel.Mass, DryMass, CrossSectionalArea, SpecificImpulse to float
+  * Changes to thrust functions Vessel.Thrust, AvailableThrust and MaxThrust (#103)
+  * Changes to thrust functions Engine.Thrust, Engine.AvailableThrust and MaxThrust (#103)
+  * Fix orientation of docking port reference frames
+  * Rename Engine.Activated to Engine.Active to match other parts
+* Python client changes:
+  * Support for Python 3
+  * Upgrade to Protocol Buffers 3.0.0-alpha-1
+  * Checking of address and port parameters before connecting
+  * Connecting to the stream server is now optional
+  * Improve detection of protobuf message and enum types and improve support for 3rd party types (#38)
+  * Fix unicode decoding/encoding bugs (#104)
+
+v0.1.6
+* Parts
+* Targeting of vessels, bodies and docking ports
+* Remove Orbit.ReferenceFrame
+* Fix AutoPilot.Error and add AutoPilot.RollError (#98)
+* Nicer errors returned to client (#97)
+* Include protobuf source and compiled Python, Java and C++ versions in release (#100)
+
+v0.1.5
+* Server plugin changes:
+  * Server now persists across game scene changes
+  * Services specify during which game scenes they are available
+  * Use a combo box for the server address
+  * Display service errors when KSP loads (#89)
+  * Add KSP compatibility checker
+  * Add logging severity levels
+  * Fix bug where yielded continuations are run more than once per update
+* SpaceCenter service changes:
+  * Add SpaceCenter.DrawDirection and ClearDirections for visual debugging
+  * Add Vessel.Comms to interact with RemoteTech
   * Add Control.WheelThrottle and WheelSteering
-  * Control.ActivateNextStage returns a list of vessels that are jettisoned
+  * Change Control.ActivateNextStage to return a list of jettisoned vessels
+  * Add Flight.Longitude and Latitude
+  * Rename Flight.NormalNeg to AntiNormal and Flight.RadialNeg to AntiRadial (#90)
+  * Add FAR functionality to Vessel.Flight
+  * Fix Body.AtmospherePressureAt and AtmosphereDensityAt when there is no atmosphere
+  * Add Vessel.SurfaceVelocityReferenceFrame
+  * Add Node.OrbitalReferenceFrame
+  * Add Node.RemainingBurnVector
+  * Fix lots of reference frame bugs
+  * Remove Vessel.NonRotatingReferenceFrame
+  * Remove Body.SurfaceReferenceFrame
+  * Change default reference frame to Vessel.SurfaceReferenceFrame for Vessel.Flight and AutoPilot methods
+  * Add wait parameter to AutoPilot methods
+  * AutoPilot and Control inputs reset to 0 when the client that requested them disconnects
+  * Change AutoPilot to set SAS to false when it's disengaged
+
+v0.1.4-hotfix1
+* Fix null reference exception in Vessel.Thrust
 
 v0.1.4
 * General changes:

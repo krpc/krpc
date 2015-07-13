@@ -107,9 +107,11 @@ namespace KRPC.Service.Scanner
         public string AddClass (Type classType)
         {
             TypeUtils.ValidateKRPCClass (classType);
-            // TODO: do we need to check for duplicates?
-            Classes.Add (classType.Name);
-            return classType.Name;
+            var name = classType.Name;
+            if (Classes.Contains (name))
+                throw new ServiceException ("Service " + Name + " contains duplicate classes " + name);
+            Classes.Add (name);
+            return name;
         }
 
         /// <summary>
@@ -123,7 +125,6 @@ namespace KRPC.Service.Scanner
                 throw new ServiceException ("Service " + Name + " contains duplicate enumerations " + name);
             Enums [enumType.Name] = new Dictionary<string, int> ();
             foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static)) {
-                // TODO: assumes raw value can be cast to an int
                 Enums [enumType.Name] [field.Name] = (int)field.GetRawConstantValue ();
             }
             return Enums [enumType.Name];
@@ -136,9 +137,15 @@ namespace KRPC.Service.Scanner
         {
             if (!Classes.Contains (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
-            var handler = new ClassMethodHandler (method);
-            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, method.GetDocumentation (), handler, GameScene,
-                "Class.Method(" + Name + "." + cls + "," + method.Name + ")", "ParameterType(0).Class(" + Name + "." + cls + ")"));
+            if (!method.IsStatic) {
+                var handler = new ClassMethodHandler (method);
+                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, method.GetDocumentation (), handler, GameScene,
+                    "Class.Method(" + Name + "." + cls + "," + method.Name + ")", "ParameterType(0).Class(" + Name + "." + cls + ")"));
+            } else {
+                var handler = new ClassStaticMethodHandler (method);
+                AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, method.GetDocumentation (), handler, GameScene,
+                    "Class.StaticMethod(" + Name + "." + cls + "," + method.Name + ")"));
+            }
         }
 
         /// <summary>
