@@ -9,13 +9,15 @@ local DEFAULT_ADDRESS = '127.0.0.1'
 local DEFAULT_RPC_PORT = 50000
 local DEFAULT_STREAM_PORT = 50001
 
-function krpc.connect(address, rpc_port, stream_port, name)
+function krpc.connect(name, address, rpc_port, stream_port)
+  name = name or ''
   address = address or DEFAULT_ADDRESS
   rpc_port = rpc_port or DEFAULT_RPC_PORT
   stream_port = stream_port or DEFAULT_STREAM_PORT
-  name = name or ''
 
-  -- assert rpcPort != streamPort
+  if rpc_port == stream_port then
+    error('RPC and Stream port are the same')
+  end
 
   -- Connect to RPC server
   local rpc_connection = Connection(address, rpc_port)
