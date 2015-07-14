@@ -10,10 +10,14 @@ namespace KRPCTest.Utils
     public class TestDocumentedClass
     {
         /// <summary>Method docs</summary>
-        public void method () {}
+        public void method ()
+        {
+        }
 
         /// <summary>Static method docs</summary>
-        public static void staticMethod () {}
+        public static void staticMethod ()
+        {
+        }
 
         /// <summary>Property docs</summary>
         public int Property { get; set; }
@@ -22,19 +26,42 @@ namespace KRPCTest.Utils
         public static int StaticProperty { get; set; }
 
         /// <summary>Method arguments docs</summary>
-        public void MethodArguments (int one, string two, KRPC.Utils.Tuple<int,float,string> three, KRPC.Schema.KRPC.Response four, TestDocumentedClass.NestedClass five) {}
-
-        /// <summary>Nested class docs</summary>
-        public class NestedClass {
-            /// <summary>Nested class method docs</summary>
-            public void method () {}
+        public void MethodArguments (int one, string two, KRPC.Utils.Tuple<int,float,string> three, KRPC.Schema.KRPC.Response four, TestDocumentedClass.NestedClass five)
+        {
         }
 
-        public void notDocumented () {}
+        /// <summary>Nested class docs</summary>
+        public class NestedClass
+        {
+            /// <summary>Nested class method docs</summary>
+            public void method ()
+            {
+            }
+        }
+
+        public void notDocumented ()
+        {
+        }
+
+        /// <summary>
+        /// This is the first line.
+        /// And the second.
+        ///
+        /// And the third after a line break.
+        /// </summary>
+        /// <param name="param1">Param1.</param>
+        /// <param name="param2">Param2 <paramref name="param1"/>.</param>
+        /// <returns>Nothing....</returns>
+        public void multiLineDocumentation (string param1, int param2)
+        {
+        }
     }
 
     /// <summary>Static class docs</summary>
-    public static class TestDocumentedStaticClass { }
+    public static class TestDocumentedStaticClass
+    {
+
+    }
 
     [TestFixture]
     public class DocumentationExtentionsTest
@@ -49,6 +76,7 @@ namespace KRPCTest.Utils
         Type nestedClass;
         MethodInfo nestedClassMethod;
         MethodInfo notDocumented;
+        MethodInfo multiLineDocumentation;
 
         [SetUp]
         public void SetUp ()
@@ -63,6 +91,7 @@ namespace KRPCTest.Utils
             nestedClass = typeof(TestDocumentedClass.NestedClass);
             nestedClassMethod = typeof(TestDocumentedClass.NestedClass).GetMethod ("method", BindingFlags.Public | BindingFlags.Instance);
             notDocumented = typeof(TestDocumentedClass).GetMethod ("notDocumented", BindingFlags.Public | BindingFlags.Instance);
+            multiLineDocumentation = typeof(TestDocumentedClass).GetMethod ("multiLineDocumentation", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [Test]
@@ -85,15 +114,32 @@ namespace KRPCTest.Utils
         [Test]
         public void TestGetDocumentation ()
         {
-            Assert.AreEqual ("Class docs", cls.GetDocumentation ());
-            Assert.AreEqual ("Static class docs", staticClass.GetDocumentation ());
-            Assert.AreEqual ("Method docs", method.GetDocumentation ());
-            Assert.AreEqual ("Static method docs", staticMethod.GetDocumentation ());
-            Assert.AreEqual ("Property docs", property.GetDocumentation ());
-            Assert.AreEqual ("Static property docs", staticProperty.GetDocumentation ());
-            Assert.AreEqual ("Method arguments docs", methodArguments.GetDocumentation ());
-            Assert.AreEqual ("Nested class docs", nestedClass.GetDocumentation ());
-            Assert.AreEqual ("Nested class method docs", nestedClassMethod.GetDocumentation ());
+            Assert.AreEqual ("<doc>\n<summary>Class docs</summary>\n</doc>", cls.GetDocumentation ());
+            Assert.AreEqual ("<doc>\n<summary>Static class docs</summary>\n</doc>", staticClass.GetDocumentation ());
+            Assert.AreEqual ("<doc>\n<summary>Method docs</summary>\n</doc>", method.GetDocumentation ());
+            Assert.AreEqual ("<doc>\n<summary>Static method docs</summary>\n</doc>", staticMethod.GetDocumentation ());
+            Assert.AreEqual ("<doc>\n<summary>Property docs</summary>\n</doc>", property.GetDocumentation ());
+            Assert.AreEqual ("<doc>\n<summary>Static property docs</summary>\n</doc>", staticProperty.GetDocumentation ());
+            Assert.AreEqual ("<doc>\n<summary>Method arguments docs</summary>\n</doc>", methodArguments.GetDocumentation ());
+            Assert.AreEqual ("<doc>\n<summary>Nested class docs</summary>\n</doc>", nestedClass.GetDocumentation ());
+            Assert.AreEqual ("<doc>\n<summary>Nested class method docs</summary>\n</doc>", nestedClassMethod.GetDocumentation ());
+        }
+
+        [Test]
+        public void TestGetMultiLineDocumentation ()
+        {
+            Assert.AreEqual (
+                "<doc>\n" +
+                "<summary>\n" +
+                "This is the first line.\n" +
+                "And the second.\n" +
+                "And the third after a line break.\n" +
+                "</summary>\n" +
+                "<param name=\"param1\">Param1.</param>\n" +
+                "<param name=\"param2\">Param2 <paramref name=\"param1\" />.</param>\n" +
+                "<returns>Nothing....</returns>\n" +
+                "</doc>",
+                multiLineDocumentation.GetDocumentation ());
         }
 
         [Test]

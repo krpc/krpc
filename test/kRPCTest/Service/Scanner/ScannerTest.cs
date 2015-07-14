@@ -21,7 +21,7 @@ namespace KRPCTest.Service.Scanner
                     foundServices++;
                     Assert.AreEqual (39, service.ProceduresCount);
                     Assert.IsTrue (service.HasDocumentation);
-                    Assert.AreEqual ("Test service documentation.", service.Documentation);
+                    Assert.AreEqual ("<doc>\n  <summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
                     int foundProcedures = 0;
                     foreach (var method in service.ProceduresList) {
                         if (method.Name == "ProcedureNoArgsNoReturn") {
@@ -29,7 +29,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
                             Assert.IsTrue (method.HasDocumentation);
-                            Assert.AreEqual ("Procedure with no return arguments.", method.Documentation);
+                            Assert.AreEqual ("<doc>\n  <summary>\nProcedure with no return arguments.\n</summary>\n</doc>", method.Documentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureSingleArgNoReturn") {
@@ -40,7 +40,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.IsFalse (method.HasReturnType);
                             Assert.AreEqual (0, method.AttributesCount);
                             Assert.IsTrue (method.HasDocumentation);
-                            Assert.AreEqual ("Procedure with a single return argument.", method.Documentation);
+                            Assert.AreEqual ("<doc>\n  <summary>\nProcedure with a single return argument.\n</summary>\n</doc>", method.Documentation);
                             foundProcedures++;
                         }
                         if (method.Name == "ProcedureThreeArgsNoReturn") {
@@ -536,7 +536,7 @@ namespace KRPCTest.Service.Scanner
                     foundServices++;
                     Assert.AreEqual (2, service.ProceduresCount);
                     Assert.IsTrue (service.HasDocumentation);
-                    Assert.AreEqual ("TestService2 documentation.", service.Documentation);
+                    Assert.AreEqual ("<doc>\n  <summary>\nTestService2 documentation.\n</summary>\n</doc>", service.Documentation);
                     int found = 0;
                     foreach (var method in service.ProceduresList) {
                         if (method.Name == "ClassTypeFromOtherServiceAsParameter") {
@@ -549,7 +549,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (1, method.AttributesCount);
                             Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", method.AttributesList [0]);
                             Assert.IsTrue (method.HasDocumentation);
-                            Assert.AreEqual("TestService2 procedure documentation.", method.Documentation);
+                            Assert.AreEqual ("<doc>\n  <summary>\nTestService2 procedure documentation.\n</summary>\n</doc>", method.Documentation);
                             found++;
                         }
                         if (method.Name == "ClassTypeFromOtherServiceAsReturn") {

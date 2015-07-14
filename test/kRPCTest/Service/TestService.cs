@@ -169,15 +169,15 @@ namespace KRPCTest.Service
         {
             x,
             y,
-            z}
-        ;
+            z
+        }
 
         public enum CSharpEnumWithoutAttribute
         {
             foo,
             bar,
-            baz}
-        ;
+            baz
+        }
 
         [KRPCProcedure]
         public static void ProcedureCSharpEnumArg (CSharpEnum x)
