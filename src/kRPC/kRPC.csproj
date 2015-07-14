@@ -114,6 +114,7 @@
     <Compile Include="Service\Attributes\KRPCServiceAttribute.cs" />
     <Compile Include="Service\ClassMethodHandler.cs" />
     <Compile Include="Service\ClassStaticMethodHandler.cs" />
+    <Compile Include="Service\DocumentationUtils.cs" />
     <Compile Include="Service\GameScene.cs" />
     <Compile Include="Service\IProcedureHandler.cs" />
     <Compile Include="Service\KRPC.cs" />

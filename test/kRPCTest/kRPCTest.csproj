@@ -99,6 +99,7 @@
     <Compile Include="Server\TestClient.cs" />
     <Compile Include="Server\TestStream.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
+    <Compile Include="Service\DocumentationUtilsTest.cs" />
     <Compile Include="Service\ITestService.cs" />
     <Compile Include="Service\KRPCTest.cs" />
     <Compile Include="Service\ObjectStoreTest.cs" />

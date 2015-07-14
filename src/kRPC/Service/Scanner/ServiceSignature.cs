@@ -45,7 +45,7 @@ namespace KRPC.Service.Scanner
         {
             TypeUtils.ValidateKRPCService (type);
             Name = TypeUtils.GetServiceName (type);
-            Documentation = type.GetDocumentation ();
+            Documentation = DocumentationUtils.ResolveCrefs (type.GetDocumentation ());
             Classes = new HashSet<string> ();
             Enums = new Dictionary<string, Dictionary<string, int>> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();

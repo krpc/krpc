@@ -55,6 +55,11 @@ namespace KRPCTest.Utils
         public void multiLineDocumentation (string param1, int param2)
         {
         }
+
+        /// <summary>Foo <see cref="TestDocumentedClass.NestedClass"/> bar.</summary>
+        public void crefDocumentation ()
+        {
+        }
     }
 
     /// <summary>Static class docs</summary>
@@ -77,6 +82,7 @@ namespace KRPCTest.Utils
         MethodInfo nestedClassMethod;
         MethodInfo notDocumented;
         MethodInfo multiLineDocumentation;
+        MethodInfo crefDocumentation;
 
         [SetUp]
         public void SetUp ()
@@ -92,6 +98,7 @@ namespace KRPCTest.Utils
             nestedClassMethod = typeof(TestDocumentedClass.NestedClass).GetMethod ("method", BindingFlags.Public | BindingFlags.Instance);
             notDocumented = typeof(TestDocumentedClass).GetMethod ("notDocumented", BindingFlags.Public | BindingFlags.Instance);
             multiLineDocumentation = typeof(TestDocumentedClass).GetMethod ("multiLineDocumentation", BindingFlags.Public | BindingFlags.Instance);
+            crefDocumentation = typeof(TestDocumentedClass).GetMethod ("crefDocumentation", BindingFlags.Public | BindingFlags.Instance);
         }
 
         [Test]
@@ -140,6 +147,14 @@ namespace KRPCTest.Utils
                 "<returns>Nothing....</returns>\n" +
                 "</doc>",
                 multiLineDocumentation.GetDocumentation ());
+        }
+
+        [Test]
+        public void TestCrefDocumentation ()
+        {
+            Assert.AreEqual (
+                "<doc>\n<summary>Foo <see cref=\"T:KRPCTest.Utils.TestDocumentedClass.NestedClass\" /> bar.</summary>\n</doc>",
+                crefDocumentation.GetDocumentation ());
         }
 
         [Test]

@@ -60,7 +60,7 @@ namespace KRPC.Service.Scanner
         {
             Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;
-            Documentation = documentation;
+            Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Handler = handler;
             GameScene = gameScene;
             Attributes = attributes.ToList ();

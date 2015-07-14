@@ -12,6 +12,12 @@ namespace KRPCTest.Utils
     public class ReflectionTest
     {
         [Test]
+        public void GetTypeByName ()
+        {
+            Assert.AreEqual (typeof(ReflectionTest), Reflection.GetType ("KRPCTest.Utils.ReflectionTest"));
+        }
+
+        [Test]
         public void GetTypesWithAttribute ()
         {
             Assert.AreEqual (4, Reflection.GetTypesWith<KRPCServiceAttribute> ().Count ());

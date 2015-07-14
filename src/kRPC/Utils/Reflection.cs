@@ -6,11 +6,7 @@ namespace KRPC.Utils
 {
     static class Reflection
     {
-        /// <summary>
-        /// Returns all types with the specified attribute, from all assemblies.
-        /// </summary>
-        public static IEnumerable<Type> GetTypesWith<TAttribute> (bool inherit = false)
-            where TAttribute : Attribute
+        static IEnumerable<Type> AllTypes ()
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
                 // Get all types that can be loaded from the assembly
@@ -23,12 +19,34 @@ namespace KRPC.Utils
                     //types = e.Types.Where (x => x != null).ToArray ();
                     types = new Type[] { };
                 }
-
-                // Yield loaded types that have the given attribute
                 foreach (var type in types) {
-                    if (type.IsDefined (typeof(TAttribute), inherit))
-                        yield return type;
+                    yield return type;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Returns the type with the specified full name, from all assemblies, or null if no such type exists.
+        /// </summary>
+        public static Type GetType (string name)
+        {
+            name = name.Replace ('+', '.');
+            foreach (var type in AllTypes()) {
+                if (type.FullName.Replace ('+', '.') == name)
+                    return type;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Returns all types with the specified attribute, from all assemblies.
+        /// </summary>
+        public static IEnumerable<Type> GetTypesWith<TAttribute> (bool inherit = false)
+            where TAttribute : Attribute
+        {
+            foreach (var type in AllTypes()) {
+                if (type.IsDefined (typeof(TAttribute), inherit))
+                    yield return type;
             }
         }
 
