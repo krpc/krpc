@@ -234,7 +234,11 @@ class ServiceBase(DynamicType):
     def _add_service_class_property(cls, class_name, property_name, getter=None, setter=None):
         """ Add a property to a class """
         class_cls = cls._client._types.as_type('Class('+cls._name+'.'+class_name+')').python_type
-        doc = getter.documentation
+        doc = None
+        if getter:
+            doc = getter.documentation
+        elif setter:
+            doc = setter.documentation
         if getter:
             getter_name = getter.name
             param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(getter)
