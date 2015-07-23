@@ -24,6 +24,9 @@ build: spelling html pdf
 clean: clean-images
 	rm -rf $(BUILD_DIR) $(PYTHON_API_DIR) $(LUA_API_DIR) $(GH_PAGES_DIR)
 
+get:
+	PYTHONPATH=../python ./get-api.py >services.json
+
 # Build specific types of doc---------------------------------------------------
 
 .PHONY: html pdf gh-pages
@@ -66,10 +69,10 @@ check-api:
 	./check-api.py $(API_DIR) services.yaml
 
 python-api:
-	./build-api.py python $(API_DIR) $(PYTHON_API_DIR)
+	PYTHONPATH=../python ./build-api.py python $(API_DIR) $(PYTHON_API_DIR)
 
 lua-api:
-	./build-api.py lua $(API_DIR) $(LUA_API_DIR)
+	PYTHONPATH=../python ./build-api.py lua $(API_DIR) $(LUA_API_DIR)
 
 # Sphinx server on localhost ---------------------------------------------------
 
