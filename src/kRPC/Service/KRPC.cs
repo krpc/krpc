@@ -71,18 +71,20 @@ namespace KRPC.Service
                         procedure.SetDocumentation (procedureSignature.Documentation);
                     service.AddProcedures (procedure);
                 }
-                foreach (var clsName in serviceSignature.Classes) {
+                foreach (var clsSignature in serviceSignature.Classes.Values) {
                     var cls = Class.CreateBuilder ();
-                    cls.Name = clsName;
+                    cls.Name = clsSignature.Name;
+                    cls.Documentation = clsSignature.Documentation;
                     service.AddClasses (cls);
                 }
-                foreach (var enumName in serviceSignature.Enums.Keys) {
+                foreach (var enmSignature in serviceSignature.Enums.Values) {
                     var enm = Enumeration.CreateBuilder ();
-                    enm.Name = enumName;
-                    foreach (var enumValueName in serviceSignature.Enums[enumName].Keys) {
+                    enm.Name = enmSignature.Name;
+                    enm.Documentation = enmSignature.Documentation;
+                    foreach (var enmValueSignature in enmSignature.Values) {
                         var enmValue = EnumerationValue.CreateBuilder ();
-                        enmValue.Name = enumValueName;
-                        enmValue.Value = serviceSignature.Enums [enumName] [enumValueName];
+                        enmValue.Name = enmValueSignature.Key;
+                        enmValue.Value = enmValueSignature.Value;
                         enm.AddValues (enmValue);
                     }
                     service.AddEnumerations (enm);

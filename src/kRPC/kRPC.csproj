@@ -123,6 +123,8 @@
     <Compile Include="Service\ProcedureParameter.cs" />
     <Compile Include="Service\RequestContinuation.cs" />
     <Compile Include="Service\RPCException.cs" />
+    <Compile Include="Service\Scanner\ClassSignature.cs" />
+    <Compile Include="Service\Scanner\EnumerationSignature.cs" />
     <Compile Include="Service\Scanner\ParameterSignature.cs" />
     <Compile Include="Service\Scanner\ProcedureSignature.cs" />
     <Compile Include="Service\Scanner\Scanner.cs" />

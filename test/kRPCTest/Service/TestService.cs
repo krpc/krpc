@@ -93,6 +93,9 @@ namespace KRPCTest.Service
             return Service.EchoTestObject (obj);
         }
 
+        /// <summary>
+        /// Documentation for this test class.
+        /// </summary>
         [KRPCClass]
         public class TestClass
         {
@@ -164,6 +167,9 @@ namespace KRPCTest.Service
             return Service.ProcedureEnumReturn ();
         }
 
+        /// <summary>
+        /// Documentation string for CSharpEnum.
+        /// </summary>
         [KRPCEnum]
         public enum CSharpEnum
         {

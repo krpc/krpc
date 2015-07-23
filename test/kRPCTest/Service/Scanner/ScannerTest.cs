@@ -511,10 +511,14 @@ namespace KRPCTest.Service.Scanner
                     Assert.AreEqual (39, foundProcedures);
                     int foundClasses = 0;
                     foreach (var cls in service.ClassesList) {
-                        if (cls.Name == "TestClass")
+                        if (cls.Name == "TestClass") {
                             foundClasses++;
-                        if (cls.Name == "TestTopLevelClass")
+                            Assert.AreEqual ("<doc>\n  <summary>\nDocumentation for this test class.\n</summary>\n</doc>", cls.Documentation);
+                        }
+                        if (cls.Name == "TestTopLevelClass") {
                             foundClasses++;
+                            Assert.AreEqual ("<doc>\n  <summary>\nA class defined at the top level, but included in a service\n</summary>\n</doc>", cls.Documentation);
+                        }
                     }
                     Assert.AreEqual (2, foundClasses);
                     int foundEnums = 0;
@@ -527,6 +531,7 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (1, enm.ValuesList [1].Value);
                             Assert.AreEqual ("z", enm.ValuesList [2].Name);
                             Assert.AreEqual (2, enm.ValuesList [2].Value);
+                            Assert.AreEqual ("<doc>\n  <summary>\nDocumentation string for CSharpEnum.\n</summary>\n</doc>", enm.Documentation);
                             foundEnums++;
                         }
                     }

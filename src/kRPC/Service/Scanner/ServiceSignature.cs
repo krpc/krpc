@@ -25,12 +25,12 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// The names of all classes defined in this service
         /// </summary>
-        public HashSet<string> Classes { get; private set; }
+        public Dictionary<string,ClassSignature> Classes { get; private set; }
 
         /// <summary>
         /// The names of all C# defined enums defined in this service, and their allowed values
         /// </summary>
-        public Dictionary<string,Dictionary<string,int>> Enums { get; private set; }
+        public Dictionary<string,EnumerationSignature> Enums { get; private set; }
 
         /// <summary>
         /// Which game scene(s) the service should be active during
@@ -46,8 +46,8 @@ namespace KRPC.Service.Scanner
             TypeUtils.ValidateKRPCService (type);
             Name = TypeUtils.GetServiceName (type);
             Documentation = DocumentationUtils.ResolveCrefs (type.GetDocumentation ());
-            Classes = new HashSet<string> ();
-            Enums = new Dictionary<string, Dictionary<string, int>> ();
+            Classes = new Dictionary<string, ClassSignature> ();
+            Enums = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
             GameScene = TypeUtils.GetServiceGameScene (type);
         }
@@ -58,7 +58,8 @@ namespace KRPC.Service.Scanner
         public ServiceSignature (string name)
         {
             Name = name;
-            Classes = new HashSet<string> ();
+            Classes = new Dictionary<string, ClassSignature> ();
+            Enums = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
         }
 
@@ -103,31 +104,34 @@ namespace KRPC.Service.Scanner
 
         /// <summary>
         /// Add a class to the service for the given class type annotated with the KRPCClass attribute.
+        /// Returns the name of the class.
         /// </summary>
         public string AddClass (Type classType)
         {
             TypeUtils.ValidateKRPCClass (classType);
             var name = classType.Name;
-            if (Classes.Contains (name))
+            if (Classes.ContainsKey (name))
                 throw new ServiceException ("Service " + Name + " contains duplicate classes " + name);
-            Classes.Add (name);
+            Classes [name] = new ClassSignature (Name, name, classType.GetDocumentation ());
             return name;
         }
 
         /// <summary>
         /// Add an enum to the service for the given enum type annotated with the KRPCEnum attribute.
+        /// Returns the name of the enumeration.
         /// </summary>
-        public IDictionary<string,int> AddEnum (Type enumType)
+        public string AddEnum (Type enumType)
         {
             TypeUtils.ValidateKRPCEnum (enumType);
             var name = enumType.Name;
             if (Enums.ContainsKey (name))
                 throw new ServiceException ("Service " + Name + " contains duplicate enumerations " + name);
-            Enums [enumType.Name] = new Dictionary<string, int> ();
+            var values = new Dictionary<string, int> ();
             foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static)) {
-                Enums [enumType.Name] [field.Name] = (int)field.GetRawConstantValue ();
+                values [field.Name] = (int)field.GetRawConstantValue ();
             }
-            return Enums [enumType.Name];
+            Enums [enumType.Name] = new EnumerationSignature (Name, name, values, enumType.GetDocumentation ());
+            return enumType.Name;
         }
 
         /// <summary>
@@ -135,7 +139,7 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public void AddClassMethod (string cls, MethodInfo method)
         {
-            if (!Classes.Contains (cls))
+            if (!Classes.ContainsKey (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             if (!method.IsStatic) {
                 var handler = new ClassMethodHandler (method);
@@ -153,7 +157,7 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public void AddClassProperty (string cls, PropertyInfo property)
         {
-            if (!Classes.Contains (cls))
+            if (!Classes.ContainsKey (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             if (property.GetGetMethod () != null) {
                 var method = property.GetGetMethod ();
