@@ -93,9 +93,6 @@ namespace KRPCTest.Service
             return Service.EchoTestObject (obj);
         }
 
-        /// <summary>
-        /// Documentation for this test class.
-        /// </summary>
         [KRPCClass]
         public class TestClass
         {
