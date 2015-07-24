@@ -18,14 +18,14 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public string FullyQualifiedName { get; private set; }
 
-        public IDictionary<string, int> Values { get; private set; }
+        public IDictionary<string, EnumerationValueSignature> Values { get; private set; }
 
         /// <summary>
         /// Documentation for the procedure
         /// </summary>
         public string Documentation { get; private set; }
 
-        public EnumerationSignature (string serviceName, string enumName, IDictionary<string, int> values, string documentation)
+        public EnumerationSignature (string serviceName, string enumName, IDictionary<string, EnumerationValueSignature> values, string documentation)
         {
             Name = enumName;
             FullyQualifiedName = serviceName + "." + Name;

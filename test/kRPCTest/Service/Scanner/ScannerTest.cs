@@ -527,10 +527,13 @@ namespace KRPCTest.Service.Scanner
                             Assert.AreEqual (3, enm.ValuesCount);
                             Assert.AreEqual ("x", enm.ValuesList [0].Name);
                             Assert.AreEqual (0, enm.ValuesList [0].Value);
+                            Assert.AreEqual ("<doc>\n  <summary>\nDocumented enum field\n</summary>\n</doc>", enm.ValuesList [0].Documentation);
                             Assert.AreEqual ("y", enm.ValuesList [1].Name);
                             Assert.AreEqual (1, enm.ValuesList [1].Value);
+                            Assert.AreEqual ("", enm.ValuesList [1].Documentation);
                             Assert.AreEqual ("z", enm.ValuesList [2].Name);
                             Assert.AreEqual (2, enm.ValuesList [2].Value);
+                            Assert.AreEqual ("", enm.ValuesList [2].Documentation);
                             Assert.AreEqual ("<doc>\n  <summary>\nDocumentation string for CSharpEnum.\n</summary>\n</doc>", enm.Documentation);
                             foundEnums++;
                         }

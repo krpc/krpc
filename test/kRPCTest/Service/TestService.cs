@@ -173,6 +173,9 @@ namespace KRPCTest.Service
         [KRPCEnum]
         public enum CSharpEnum
         {
+            /// <summary>
+            /// Documented enum field
+            /// </summary>
             x,
             y,
             z

@@ -105,6 +105,10 @@ namespace KRPC.Utils
                 prefix = 'P';
                 break;
 
+            case MemberTypes.Field:
+                prefix = 'F';
+                break;
+
             default:
                 throw new ArgumentException ("Unknown member type");
             }

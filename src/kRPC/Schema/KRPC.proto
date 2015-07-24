@@ -67,6 +67,7 @@ message Enumeration {
 message EnumerationValue {
   required string name = 1;
   required int32 value = 2;
+  optional string documentation = 3;
 }
 
 message List {
