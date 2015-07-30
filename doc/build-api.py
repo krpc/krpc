@@ -310,18 +310,34 @@ class ReturnType(Option):
     def __init__(self, typ, attrs):
         super(ReturnType, self).__init__('rtype', parse_return_type(typ, attrs))
 
+class ReadOnlyProperty(Option):
+    def __init__(self):
+        super(ReadOnlyProperty, self).__init__('Property', 'Read-only, cannot be set')
+
+class WriteOnlyProperty(Option):
+    def __init__(self):
+        super(WriteOnlyProperty, self).__init__('Property', 'Write-only, cannot be read')
+
+class ReadWriteProperty(Option):
+    def __init__(self):
+        super(ReadWriteProperty, self).__init__('Property', 'Can be read or written')
+
 ######## DIRECTIVES ###########################################
 
 def sort_options(options):
     def key_fn(x):
         if isinstance(x, Param):
             return 0
-        elif isinstance(x, Returns):
+        if isinstance(x, ReadOnlyProperty) or \
+           isinstance(x, WriteOnlyProperty) or \
+           isinstance(x, ReadWriteProperty):
             return 1
-        elif isinstance(x, ReturnType):
+        elif isinstance(x, Returns):
             return 2
-        else: #Option
+        elif isinstance(x, ReturnType):
             return 3
+        else: #Option
+            return 4
     return sorted(options, key=key_fn)
 
 class Directive(object):
@@ -381,8 +397,10 @@ class ServiceMember(Directive):
         self.info = info
         super(ServiceMember, self).__init__(directivename, name+args, None, None)
 
-    def __call__(self, indent=0):
+    def __call__(self, indent=0, moreoptions=None):
         description, options = parse_documentation(self.info['documentation'], self.info)
+        if moreoptions:
+            options.extend(moreoptions)
         if self.info['return_type']:
             options.append(ReturnType(self.info['return_type'], self.info['attributes']))
         self.content = description
@@ -397,6 +415,18 @@ class Property(ServiceMember):
         if not self.info['return_type']:
             self.info['return_type'] = other.info['return_type']
         self.info['attributes'].extend(other.info['attributes'])
+
+    def __call__(self, indent=0):
+        getter = Attributes.is_a_property_getter(self.info['attributes'])
+        setter = Attributes.is_a_property_setter(self.info['attributes'])
+        options = []
+        if getter and setter:
+            options = [ReadWriteProperty()]
+        elif getter:
+            options = [ReadOnlyProperty()]
+        elif setter:
+            options = [WriteOnlyProperty()]
+        return super(Property, self).__call__(indent, options)
 
 class StaticMethod(ServiceMember):
     def __init__(self, service_name, name, info):
@@ -449,8 +479,10 @@ class ClassMember(Directive):
         class_name = Attributes.get_class_name(info['attributes'])
         super(ClassMember, self).__init__(directivename, name+args, None, None)
 
-    def __call__(self, indent=0):
+    def __call__(self, indent=0, moreoptions=None):
         description, options = parse_documentation(self.info['documentation'], self.info)
+        if moreoptions:
+            options.extend(moreoptions)
         if self.info['return_type']:
             options.append(ReturnType(self.info['return_type'], self.info['attributes']))
         self.content = description
@@ -465,6 +497,18 @@ class ClassProperty(ClassMember):
         if not self.info['return_type']:
             self.info['return_type'] = other.info['return_type']
         self.info['attributes'].extend(other.info['attributes'])
+
+    def __call__(self, indent=0):
+        getter = Attributes.is_a_class_property_getter(self.info['attributes'])
+        setter = Attributes.is_a_class_property_setter(self.info['attributes'])
+        options = []
+        if getter and setter:
+            options = [ReadWriteProperty()]
+        elif getter:
+            options = [ReadOnlyProperty()]
+        elif setter:
+            options = [WriteOnlyProperty()]
+        return super(ClassProperty, self).__call__(indent, options)
 
 class ClassMethod(ClassMember):
     def __init__(self, service_name, class_name, name, info):
