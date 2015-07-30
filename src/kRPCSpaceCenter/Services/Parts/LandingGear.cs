@@ -5,15 +5,33 @@ using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
+    /// <summary>
+    /// See <see cref="LandingGear.State"/>.
+    /// </summary>
     [KRPCEnum (Service = "SpaceCenter")]
     public enum LandingGearState
     {
+        /// <summary>
+        /// Landing gear is fully deployed.
+        /// </summary>
         Deployed,
+        /// <summary>
+        /// Landing gear is fully retracted.
+        /// </summary>
         Retracted,
+        /// <summary>
+        /// Landing gear is being deployed.
+        /// </summary>
         Deploying,
+        /// <summary>
+        /// Landing gear is being retracted.
+        /// </summary>
         Retracting
     }
 
+    /// <summary>
+    /// Obtained by calling <see cref="Part.LandingGear"/>.
+    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class LandingGear : Equatable<LandingGear>
     {
@@ -38,11 +56,17 @@ namespace KRPCSpaceCenter.Services.Parts
             return part.GetHashCode ();
         }
 
+        /// <summary>
+        /// The part object for this landing gear.
+        /// </summary>
         [KRPCProperty]
         public Part Part {
             get { return part; }
         }
 
+        /// <summary>
+        /// Gets the current state of the landing gear.
+        /// </summary>
         [KRPCProperty]
         public LandingGearState State {
             get {
@@ -61,6 +85,9 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
+        /// <summary>
+        /// Whether the landing gear is deployed.
+        /// </summary>
         [KRPCProperty]
         public bool Deployed {
             get { return State == LandingGearState.Deployed; }

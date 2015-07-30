@@ -1,0 +1,19 @@
+#encoding UTF-8
+
+.. default-domain:: #echo $domain
+
+CelestialBody
+=============
+
+#echo $classes['SpaceCenter.CelestialBody'](members=False)
+#for $member in $classes['SpaceCenter.CelestialBody'].members
+#echo $member(3)
+#if $member.name == 'SpaceCenter.CelestialBody.ReferenceFrame'
+      .. figure:: /images/reference-frames/celestial-body.png
+         :align: center
+
+         Celestial body reference frame origin and axes. The equator is shown in
+         blue, and the prime meridian in red.
+
+#end if
+#end for

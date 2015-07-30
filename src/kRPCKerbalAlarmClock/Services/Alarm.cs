@@ -5,6 +5,12 @@ using KRPCKerbalAlarmClock.ExtensionMethods;
 
 namespace KRPCKerbalAlarmClock.Services
 {
+    /// <summary>
+    /// Represents an alarm. Obtained by calling
+    /// <see cref="KerbalAlarmClock.Alarms"/>,
+    /// <see cref="KerbalAlarmClock.AlarmWithName"/> or
+    /// <see cref="KerbalAlarmClock.AlarmsWithType"/>.
+    /// </summary>
     [KRPCClass (Service = "KerbalAlarmClock")]
     public sealed class Alarm : Equatable<Alarm>
     {
@@ -25,63 +31,96 @@ namespace KRPCKerbalAlarmClock.Services
             return alarm.GetHashCode ();
         }
 
+        /// <summary>
+        /// The action that the alarm triggers.
+        /// </summary>
         [KRPCProperty]
         public AlarmAction Action {
             get { return alarm.AlarmAction.ToAlarmAction (); }
             set { alarm.AlarmAction = value.FromAlarmAction (); }
         }
 
+        /// <summary>
+        /// The number of seconds before the event that the alarm will fire.
+        /// </summary>
         [KRPCProperty]
         public double Margin {
             get { return alarm.AlarmMargin; }
             set { alarm.AlarmMargin = value; }
         }
 
+        /// <summary>
+        /// The time at which the alarm will fire.
+        /// </summary>
         [KRPCProperty]
         public double Time {
             get { return alarm.AlarmTime; }
             set { alarm.AlarmTime = value; }
         }
 
+        /// <summary>
+        /// The type of the alarm.
+        /// </summary>
         [KRPCProperty]
         public AlarmType Type {
             get { return alarm.AlarmType.ToAlarmType (); }
         }
 
+        /// <summary>
+        /// The unique identifier for the alarm.
+        /// </summary>
         [KRPCProperty]
         public string ID {
             get { return alarm.ID; }
         }
 
+        /// <summary>
+        /// The short name of the alarm.
+        /// </summary>
         [KRPCProperty]
         public string Name {
             get { return alarm.Name; }
             set { alarm.Name = value; }
         }
 
+        /// <summary>
+        /// The long description of the alarm.
+        /// </summary>
         [KRPCProperty]
         public string Notes {
             get { return alarm.Notes; }
             set { alarm.Notes = value; }
         }
 
+        /// <summary>
+        /// The number of seconds until the alarm will fire.
+        /// </summary>
         [KRPCProperty]
         public double Remaining {
             get { return alarm.Remaining; }
         }
 
+        /// <summary>
+        /// Whether the alarm will be repeated after it has fired.
+        /// </summary>
         [KRPCProperty]
         public bool Repeat {
             get { return alarm.RepeatAlarm; }
             set { alarm.RepeatAlarm = value; }
         }
 
+        /// <summary>
+        /// The time delay to automatically create an alarm after it has fired.
+        /// </summary>
         [KRPCProperty]
         public double RepeatPeriod {
             get { return alarm.RepeatAlarmPeriod; }
             set { alarm.RepeatAlarmPeriod = value; }
         }
 
+        /// <summary>
+        /// The vessel that the alarm is attached to.
+        /// </summary>
         [KRPCProperty]
         public KRPCSpaceCenter.Services.Vessel Vessel {
             get {
@@ -93,6 +132,9 @@ namespace KRPCKerbalAlarmClock.Services
             }
         }
 
+        /// <summary>
+        /// The celestial body the vessel is departing from.
+        /// </summary>
         [KRPCProperty]
         public KRPCSpaceCenter.Services.CelestialBody XferOriginBody {
             get {
@@ -104,6 +146,9 @@ namespace KRPCKerbalAlarmClock.Services
             }
         }
 
+        /// <summary>
+        /// The celestial body the vessel is arriving at.
+        /// </summary>
         [KRPCProperty]
         public KRPCSpaceCenter.Services.CelestialBody XferTargetBody {
             get {
@@ -115,6 +160,9 @@ namespace KRPCKerbalAlarmClock.Services
             }
         }
 
+        /// <summary>
+        /// Deletes the alarm.
+        /// </summary>
         [KRPCMethod]
         public void Delete ()
         {

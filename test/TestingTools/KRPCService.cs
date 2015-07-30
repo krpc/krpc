@@ -5,9 +5,15 @@ using KRPC.Service.Attributes;
 
 namespace TestingTools
 {
+    /// <summary>
+    /// kRPC testing tools.
+    /// </summary>
     [KRPCService]
     public static class TestingTools
     {
+        /// <summary>
+        /// Get the name of the current save game.
+        /// </summary>
         [KRPCProperty]
         public static string CurrentSave {
             get {
@@ -17,6 +23,9 @@ namespace TestingTools
             }
         }
 
+        /// <summary>
+        /// Load an existing save game.
+        /// </summary>
         [KRPCProcedure]
         public static void LoadSave (string directory, string name)
         {
@@ -29,6 +38,9 @@ namespace TestingTools
             FlightDriver.StartAndFocusVessel (game, 0);
         }
 
+        /// <summary>
+        /// Remove all vessels except the active vessel.
+        /// </summary>
         [KRPCProcedure]
         public static void RemoveOtherVessels ()
         {
@@ -37,6 +49,9 @@ namespace TestingTools
                 vessel.Die ();
         }
 
+        /// <summary>
+        /// Launch a new vessel from the VAB onto the launchpad.
+        /// </summary>
         [KRPCProcedure]
         public static void LaunchVesselFromVAB (string name)
         {
@@ -45,6 +60,9 @@ namespace TestingTools
             FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "LaunchPad", crew);
         }
 
+        /// <summary>
+        /// Launch a new vessel from the SPH onto the runway.
+        /// </summary>
         [KRPCProcedure]
         public static void LaunchVesselFromSPH (string name)
         {
@@ -53,6 +71,11 @@ namespace TestingTools
             FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "Runway", crew);
         }
 
+        /// <summary>
+        /// Set the orbit of the active vessel to a circular orbit.
+        /// </summary>
+        /// <param name="body">Body to orbit.</param>
+        /// <param name="altitude">Altitude to orbit at, in meters above MSL.</param>
         [KRPCProcedure]
         public static void SetCircularOrbit (string body, double altitude)
         {
@@ -61,6 +84,9 @@ namespace TestingTools
             OrbitTools.OrbitDriver.orbit.SetOrbit (OrbitTools.CreateOrbit (celestialBody, semiMajorAxis, 0, 0, 0, 0, 0, 0));
         }
 
+        /// <summary>
+        /// Set the orbit of the active vessel.
+        /// </summary>
         [KRPCProcedure]
         public static void SetOrbit (string body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
         {
@@ -82,6 +108,10 @@ namespace TestingTools
             }
         }
 
+        /// <summary>
+        /// Clear the rotational velocity of the given vessel.
+        /// </summary>
+        /// <param name="vessel">Vessel.</param>
         [KRPCProcedure]
         public static void ClearRotation (KRPCSpaceCenter.Services.Vessel vessel = null)
         {
@@ -90,6 +120,9 @@ namespace TestingTools
             internalVessel.SetRotation (ZeroRotation);
         }
 
+        /// <summary>
+        /// Apply a rotation to the given vessel.
+        /// </summary>
         [KRPCProcedure]
         public static void ApplyRotation (float angle, KRPC.Utils.Tuple<float,float,float> axis, KRPCSpaceCenter.Services.Vessel vessel = null)
         {

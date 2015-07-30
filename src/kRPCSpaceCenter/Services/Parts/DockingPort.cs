@@ -9,17 +9,45 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
+    /// <summary>
+    /// See <see cref="DockingPort.State"/>.
+    /// </summary>
     [KRPCEnum (Service = "SpaceCenter")]
     public enum DockingPortState
     {
+        /// <summary>
+        /// The docking port is ready to dock to another docking port.
+        /// </summary>
         Ready,
+        /// <summary>
+        /// The docking port is docked to another docking port, or docked to
+        /// another part (from the VAB/SPH).
+        /// </summary>
         Docked,
+        /// <summary>
+        /// The docking port is very close to another docking port,
+        /// but has not docked. It is using magnetic force to acquire a solid dock.
+        /// </summary>
         Docking,
+        /// <summary>
+        /// The docking port has just been undocked from another docking port,
+        /// and is disabled until it moves away by a sufficient distance
+        /// (<see cref="DockingPort.ReengageDistance"/>).
+        /// </summary>
         Undocking,
+        /// <summary>
+        /// The docking port has a shield, and the shield is closed.
+        /// </summary>
         Shielded,
+        /// <summary>
+        /// The docking ports shield is currently opening/closing.
+        /// </summary>
         Moving
     }
 
+    /// <summary>
+    /// Obtained by calling <see cref="Part.DockingPort"/>
+    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class DockingPort : Equatable<DockingPort>
     {
@@ -60,11 +88,21 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return port; }
         }
 
+        /// <summary>
+        /// The part object for this docking port.
+        /// </summary>
         [KRPCProperty]
         public Part Part {
             get { return part; }
         }
 
+        /// <summary>
+        /// The port name of the docking port. This is the name of the port that can be set
+        /// in the right click menu, when the
+        /// <a href="http://forum.kerbalspaceprogram.com/threads/43901">Docking Port Alignment Indicator</a>
+        /// mod is installed. If this mod is not installed, returns the title of the part
+        /// (<see cref="Part.Title"/>).
+        /// </summary>
         [KRPCProperty]
         public string Name {
             get { return portNameField == null ? part.Title : portNameField.GetValue (portNameModule).ToString (); }
@@ -75,6 +113,9 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
+        /// <summary>
+        /// The current state of the docking port.
+        /// </summary>
         [KRPCProperty]
         public DockingPortState State {
             get {
@@ -101,6 +142,10 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
+        /// <summary>
+        /// The part that this docking port is docked to. Returns <c>null</c> if this
+        /// docking port is not docked to anything.
+        /// </summary>
         [KRPCProperty]
         public Part DockedPart {
             get {
@@ -109,6 +154,13 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
+        /// <summary>
+        /// Undocks the docking port and returns the vessel that was undocked from.
+        ///
+        /// After undocking, the active vessel may change (<see cref="SpaceCenter.ActiveVessel"/>).
+        /// This method can be called for either docking port in a docked pair - both calls will have the same
+        /// effect. Returns <c>null</c> if the docking port is not docked to anything.
+        /// </summary>
         [KRPCMethod]
         public Vessel Undock ()
         {
@@ -143,16 +195,31 @@ namespace KRPCSpaceCenter.Services.Parts
             return activeVessel == preActiveVessel ? newVessel : new Vessel (preActiveVessel);
         }
 
+        /// <summary>
+        /// The distance a docking port must move away when it undocks before it
+        /// becomes ready to dock with another port, in meters.
+        /// </summary>
         [KRPCProperty]
         public float ReengageDistance {
             get { return port.minDistanceToReEngage; }
         }
 
+        /// <summary>
+        /// Whether the docking port has a shield.
+        /// </summary>
         [KRPCProperty]
         public bool HasShield {
             get { return shield != null; }
         }
 
+        /// <summary>
+        /// The state of the docking ports shield, if it has one.
+        ///
+        /// Returns <c>true</c> if the docking port has a shield, and the shield is
+        /// closed. Otherwise returns <c>false</c>. When set to <c>true</c>, the shield is
+        /// closed, and when set to <c>false</c> the shield is opened. If the docking
+        /// port does not have a shield, setting this attribute has no effect.
+        /// </summary>
         [KRPCProperty]
         public bool Shielded {
             get { return HasShield && State == DockingPortState.Shielded; }
@@ -173,24 +240,48 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
+        /// <summary>
+        /// The position of the docking port in the given reference frame.
+        /// </summary>
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace (port.nodeTransform.position).ToTuple ();
         }
 
+        /// <summary>
+        /// The direction that docking port points in, in the given reference frame.
+        /// </summary>
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
             return referenceFrame.DirectionFromWorldSpace (port.nodeTransform.forward).ToTuple ();
         }
 
+        /// <summary>
+        /// The rotation of the docking port, in the given reference frame.
+        /// </summary>
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
             return referenceFrame.RotationToWorldSpace (port.nodeTransform.rotation).ToTuple ();
         }
 
+        /// <summary>
+        /// The reference frame that is fixed relative to this docking port, and
+        /// oriented with the port.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the position of the docking port.</description></item>
+        /// <item><description>The axes rotate with the docking port.</description></item>
+        /// <item><description>The x-axis points out to the right side of the docking port.</description></item>
+        /// <item><description>The y-axis points in the direction the docking port is facing.</description></item>
+        /// <item><description>The z-axis points out of the bottom off the docking port.</description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// This reference frame is not necessarily equivalent to the reference frame
+        /// for the part, returned by <see cref="Part.ReferenceFrame"/>.
+        /// </remarks>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
             get { return ReferenceFrame.Object (port); }

@@ -11,22 +11,44 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
+    /// <summary>
+    /// Returned by <see cref="SpaceCenter.WarpMode"/>
+    /// </summary>
     [KRPCEnum (Service = "SpaceCenter")]
     public enum WarpMode
     {
+        /// <summary>
+        /// Time warp is active, and in regular "on-rails" mode.
+        /// </summary>
         Rails,
+        /// <summary>
+        /// Time warp is active, and in physical time warp mode.
+        /// </summary>
         Physics,
+        /// <summary>
+        /// Time warp is not active.
+        /// </summary>
         None
     }
 
+    /// <summary>
+    /// Provides functionality to interact with Kerbal Space Program. This includes controlling
+    /// the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
+    /// </summary>
     [KRPCService (GameScene = GameScene.Flight)]
     public static class SpaceCenter
     {
+        /// <summary>
+        /// The currently active vessel.
+        /// </summary>
         [KRPCProperty]
         public static Vessel ActiveVessel {
             get { return new Vessel (FlightGlobals.ActiveVessel); }
         }
 
+        /// <summary>
+        /// A list of all the vessels in the game.
+        /// </summary>
         [KRPCProperty]
         public static IList<Vessel> Vessels {
             get {
@@ -43,6 +65,10 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// A dictionary of all celestial bodies (planets, moons, etc.) in the game,
+        /// keyed by the name of the body.
+        /// </summary>
         [KRPCProperty]
         public static IDictionary<string,CelestialBody> Bodies {
             get {
@@ -53,6 +79,9 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// The currently targeted celestial body.
+        /// </summary>
         [KRPCProperty]
         public static CelestialBody TargetBody {
             get {
@@ -62,6 +91,9 @@ namespace KRPCSpaceCenter.Services
             set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalBody); }
         }
 
+        /// <summary>
+        /// The currently targeted vessel.
+        /// </summary>
         [KRPCProperty]
         public static Vessel TargetVessel {
             get {
@@ -71,6 +103,9 @@ namespace KRPCSpaceCenter.Services
             set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalVessel); }
         }
 
+        /// <summary>
+        /// The currently targeted docking port.
+        /// </summary>
         [KRPCProperty]
         public static Parts.DockingPort TargetDockingPort {
             get {
@@ -81,22 +116,37 @@ namespace KRPCSpaceCenter.Services
             set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalPort); }
         }
 
+        /// <summary>
+        /// Clears the current target.
+        /// </summary>
         [KRPCProcedure]
         public static void ClearTarget ()
         {
             FlightGlobals.fetch.SetVesselTarget (null);
         }
 
+        /// <summary>
+        /// The current universal time in seconds.
+        /// </summary>
         [KRPCProperty]
         public static double UT {
             get { return Planetarium.GetUniversalTime (); }
         }
 
+        /// <summary>
+        /// The value of the <a href="http://en.wikipedia.org/wiki/Gravitational_constant">gravitational constant</a>
+        /// G in <math>N(m/kg)^2</math>.
+        /// </summary>
         [KRPCProperty]
         public static float G {
             get { return 6.673e-11f; }
         }
 
+        /// <summary>
+        /// The current time warp mode. Returns <see cref="WarpMode.None"/> if time
+        /// warp is not active, <see cref="WarpMode.Rails"/> if regular "on-rails" time warp
+        /// is active, or <see cref="WarpMode.Physics"/> if physical time warp is active.
+        /// </summary>
         [KRPCProperty]
         public static WarpMode WarpMode {
             get {
@@ -109,28 +159,62 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// The current warp rate. This is the rate at which time is passing for
+        /// either on-rails or physical time warp. For example, a value of 10 means
+        /// time is passing 10x faster than normal. Returns 1 if time warp is not
+        /// active.
+        /// </summary>
         [KRPCProperty]
         public static float WarpRate {
             get { return TimeWarp.CurrentRate; }
         }
 
+        /// <summary>
+        /// The current warp factor. This is the index of the rate at which time
+        /// is passing for either regular "on-rails" or physical time warp. Returns 0
+        /// if time warp is not active. When in on-rails time warp, this is equal to
+        /// <see cref="RailsWarpFactor"/>, and in physics time warp, this is equal to
+        /// <see cref="PhysicsWarpFactor"/>.
+        /// </summary>
         [KRPCProperty]
         public static float WarpFactor {
             get { return TimeWarp.CurrentRateIndex; }
         }
 
+        /// <summary>
+        /// The time warp rate, using regular "on-rails" time warp. A value between
+        /// 0 and 7 inclusive. 0 means no time warp. Returns 0 if physical time warp
+        /// is active.
+        ///
+        /// If requested time warp factor cannot be set, it will be set to the next
+        /// lowest possible value. For example, if the vessel is too close to a
+        /// planet. See <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">
+        /// the KSP wiki</a> for details.
+        /// </summary>
         [KRPCProperty]
         public static int RailsWarpFactor {
             get { return WarpMode == WarpMode.Rails ? TimeWarp.CurrentRateIndex : 0; }
             set { SetWarpFactor (TimeWarp.Modes.HIGH, value.Clamp (0, MaximumRailsWarpFactor)); }
         }
 
+        /// <summary>
+        /// The physical time warp rate. A value between 0 and 3 inclusive. 0 means
+        /// no time warp. Returns 0 if regular "on-rails" time warp is active.
+        /// </summary>
         [KRPCProperty]
         public static int PhysicsWarpFactor {
             get { return WarpMode == WarpMode.Physics ? TimeWarp.CurrentRateIndex : 0; }
             set { SetWarpFactor (TimeWarp.Modes.LOW, value.Clamp (0, 3)); }
         }
 
+        /// <summary>
+        /// Returns <c>true</c> if regular "on-rails" time warp can be used, at the specified warp
+        /// <paramref name="factor"/>. The maximum time warp rate is limited by various things,
+        /// including how close the active vessel is to a planet. See
+        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a> for details.
+        /// </summary>
+        /// <param name="factor">The warp factor to check.</param>
         [KRPCProcedure]
         public static bool CanRailsWarpAt (int factor = 1)
         {
@@ -153,6 +237,11 @@ namespace KRPCSpaceCenter.Services
             return true;
         }
 
+        /// <summary>
+        /// The current maximum regular "on-rails" warp factor that can be set.
+        /// A value between 0 and 7 inclusive.  See
+        /// <a href="http://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a> for details.
+        /// </summary>
         [KRPCProperty]
         public static int MaximumRailsWarpFactor {
             get {
@@ -164,6 +253,19 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// Uses time acceleration to warp forward to a time in the future, specified
+        /// by universal time <paramref name="UT"/>. This call blocks until the desired
+        /// time is reached. Uses regular "on-rails" or physical time warp as appropriate.
+        /// For example, physical time warp is used when the active vessel is traveling
+        /// through an atmosphere. When using regular "on-rails" time warp, the warp
+        /// rate is limited by <paramref name="maxRailsRate"/>, and when using physical
+        /// time warp, the warp rate is limited by <paramref name="maxPhysicsRate"/>.
+        /// </summary>
+        /// <param name="UT">The universal time to warp to, in seconds.</param>
+        /// <param name="maxRailsRate">The maximum warp rate in regular "on-rails" time warp.</param>
+        /// <param name="maxPhysicsRate">The maximum warp rate in physical time warp.</param>
+        /// <returns>When the time warp is complete.</returns>
         [KRPCProcedure]
         public static void WarpTo (double UT, float maxRate = 100000, float maxPhysicsRate = 2)
         {
@@ -277,24 +379,55 @@ namespace KRPCSpaceCenter.Services
             TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
         }
 
+        /// <summary>
+        /// Converts a position vector from one reference frame to another.
+        /// </summary>
+        /// <param name="position">Position vector in reference frame <paramref name="from"/>.</param>
+        /// <param name="from">The reference frame that the position vector is in.</param>
+        /// <param name="to">The reference frame to covert the position vector to.</param>
+        /// <returns>The corresponding position vector in reference frame <paramref name="to"/>.</returns>
         [KRPCProcedure]
         public static Tuple3 TransformPosition (Tuple3 position, ReferenceFrame from, ReferenceFrame to)
         {
             return to.PositionFromWorldSpace (from.PositionToWorldSpace (position.ToVector ())).ToTuple ();
         }
 
+        /// <summary>
+        /// Converts a direction vector from one reference frame to another.
+        /// </summary>
+        /// <param name="direction">Direction vector in reference frame <paramref name="from"/>.</param>
+        /// <param name="from">The reference frame that the direction vector is in.</param>
+        /// <param name="to">The reference frame to covert the direction vector to.</param>
+        /// <returns>The corresponding direction vector in reference frame <paramref name="to"/>.</returns>
         [KRPCProcedure]
         public static Tuple3 TransformDirection (Tuple3 direction, ReferenceFrame from, ReferenceFrame to)
         {
             return to.DirectionFromWorldSpace (from.DirectionToWorldSpace (direction.ToVector ())).ToTuple ();
         }
 
+        /// <summary>
+        /// Converts a rotation from one reference frame to another.
+        /// </summary>
+        /// <param name="rotation">Rotation in reference frame <paramref name="from"/>.</param>
+        /// <param name="from">The reference frame that the rotation is in.</param>
+        /// <param name="to">The corresponding rotation in reference frame <paramref name="to"/>.</param>
+        /// <returns>The corresponding rotation in reference frame <paramref name="to"/>.</returns>
         [KRPCProcedure]
         public static Tuple4 TransformRotation (Tuple4 rotation, ReferenceFrame from, ReferenceFrame to)
         {
             return to.RotationFromWorldSpace (from.RotationToWorldSpace (rotation.ToQuaternion ())).ToTuple ();
         }
 
+        /// <summary>
+        /// Converts a velocity vector (acting at the specified position vector) from one
+        /// reference frame to another. The position vector is required to take the
+        /// relative angular velocity of the reference frames into account.
+        /// </summary>
+        /// <param name="position">Position vector in reference frame <paramref name="from"/>.</param>
+        /// <param name="velocity">Velocity vector in reference frame <paramref name="from"/>.</param>
+        /// <param name="from">The reference frame that the position and velocity vectors are in.</param>
+        /// <param name="to">The reference frame to covert the velocity vector to.</param>
+        /// <returns>The corresponding velocity in reference frame <paramref name="to"/>.</returns>
         [KRPCProcedure]
         public static Tuple3 TransformVelocity (Tuple3 position, Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
         {
@@ -303,28 +436,51 @@ namespace KRPCSpaceCenter.Services
             return to.VelocityFromWorldSpace (worldPosition, worldVelocity).ToTuple ();
         }
 
+        /// <summary>
+        /// Whether <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
+        /// </summary>
         [KRPCProperty]
         public static bool FARAvailable {
             get { return ExternalAPI.FAR.IsAvailable; }
         }
 
+        /// <summary>
+        /// Whether <a href="http://forum.kerbalspaceprogram.com/threads/83305">RemoteTech</a> is installed.
+        /// </summary>
         [KRPCProperty]
         public static bool RemoteTechAvailable {
             get { return ExternalAPI.RemoteTech.IsAvailable; }
         }
 
+        /// <summary>
+        /// Draw a direction vector on the active vessel.
+        /// </summary>
+        /// <param name="direction">Direction to draw the line in.</param>
+        /// <param name="referenceFrame">Reference frame that the direction is in.</param>
+        /// <param name="color">The color to use for the line, as an RGB color.</param>
+        /// <param name="length">The length of the line. Defaults to 10.</param>
         [KRPCProcedure]
         public static void DrawDirection (Tuple3 direction, ReferenceFrame referenceFrame, Tuple3 color, float length = 10f)
         {
             DrawAddon.AddDirection (direction.ToVector (), referenceFrame, color, length);
         }
 
+        /// <summary>
+        /// Draw a line.
+        /// </summary>
+        /// <param name="start">Position of the start of the line.</param>
+        /// <param name="end">Position of the end of the line.</param>
+        /// <param name="referenceFrame">Reference frame that the position are in.</param>
+        /// <param name="color">The color to use for the line, as an RGB color.</param>
         [KRPCProcedure]
         public static void DrawLine (Tuple3 start, Tuple3 end, ReferenceFrame referenceFrame, Tuple3 color)
         {
             DrawAddon.AddLine (start.ToVector (), end.ToVector (), referenceFrame, color);
         }
 
+        /// <summary>
+        /// Remove all directions and lines currently being drawn.
+        /// </summary>
         [KRPCProcedure]
         public static void ClearDrawing ()
         {

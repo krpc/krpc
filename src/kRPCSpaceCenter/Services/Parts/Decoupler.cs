@@ -5,6 +5,9 @@ using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
+    /// <summary>
+    /// Obtained by calling <see cref="Part.Decoupler"/>
+    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Decoupler : Equatable<Decoupler>
     {
@@ -31,11 +34,17 @@ namespace KRPCSpaceCenter.Services.Parts
             return part.GetHashCode ();
         }
 
+        /// <summary>
+        /// The part object for this decoupler.
+        /// </summary>
         [KRPCProperty]
         public Part Part {
             get { return part; }
         }
 
+        /// <summary>
+        /// Fires the decoupler. Has no effect if the decoupler has already fired.
+        /// </summary>
         [KRPCMethod]
         public void Decouple ()
         {
@@ -45,11 +54,17 @@ namespace KRPCSpaceCenter.Services.Parts
                 anchoredDecoupler.Decouple ();
         }
 
+        /// <summary>
+        /// Whether the decoupler has fired.
+        /// </summary>
         [KRPCProperty]
         public bool Decoupled {
             get { return decoupler != null ? decoupler.isDecoupled : anchoredDecoupler.isDecoupled; }
         }
 
+        /// <summary>
+        /// Rhe impulse that the decoupler imparts when it is fired, in Newton seconds.
+        /// </summary>
         [KRPCProperty]
         public float Impulse {
             get { return (decoupler != null ? decoupler.ejectionForce : anchoredDecoupler.ejectionForce) * 10f; }
