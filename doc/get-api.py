@@ -12,7 +12,7 @@ info = {}
 for service in conn.krpc.get_services().services:
     service_info = {
         'procedures': {},
-        'classes': [],
+        'classes': {},
         'enumerations': {},
         'documentation': service.documentation
     }
@@ -39,11 +39,17 @@ for service in conn.krpc.get_services().services:
             }
             procedure_info['parameters'].append(parameter_info)
     for cls in service.classes:
-        service_info['classes'].append(cls.name)
+        cls_info = {
+            'documentation': cls.documentation
+        }
+        service_info['classes'][cls.name] = cls_info
     for enum in service.enumerations:
-        enum_info = []
+        enum_info = {
+            'values': [
+                {'name': value.name, 'value': value.value, 'documentation': value.documentation}
+                for value in enum.values],
+            'documentation': enum.documentation
+        }
         service_info['enumerations'][enum.name] = enum_info
-        for value in enum.values:
-            enum_info.append({'name': value.name, 'value': value.value})
 
 print json.dumps(info, sort_keys=True, indent=4, separators=(',', ': '))
