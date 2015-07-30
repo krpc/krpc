@@ -500,6 +500,13 @@ scenes.
         ...
      }
 
+Documentation
+-------------
+
+Documentation can be added using
+`C# XML documentation <https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx>`_.
+The documentation will be automatically exported to clients when they connect.
+
 Further Examples
 ----------------
 

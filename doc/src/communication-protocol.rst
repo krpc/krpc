@@ -456,6 +456,7 @@ service are given by a ``Service`` message, with the format:
      repeated Procedure procedures = 2;
      repeated Class classes = 3;
      repeated Enumeration enumerations = 4;
+     optional string documentation = 5;
    }
 
 The fields are:
@@ -470,6 +471,8 @@ The fields are:
 
 * ``enumerations`` - A list of ``Enumeration`` messages, one for each
   :class:`KRPCEnum` defined by the service.
+
+* ``documentation`` - Documentation for the service, as `C# XML documentation`_.
 
 .. note:: See the :ref:`extending` documentation for more details about
           :class:`KRPCClass` and :class:`KRPCEnum`.
@@ -486,6 +489,7 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
      repeated Parameter parameters = 2;
      optional string return_type = 3;
      repeated string attributes = 4;
+     optional string documentation = 5;
    }
 
    message Parameter {
@@ -517,6 +521,8 @@ The fields are:
 * ``attributes`` - The procedure's :ref:`attributes
   <communication-protocol-attributes>`.
 
+* ``documentation`` - Documentation for the procedure, as `C# XML documentation`_.
+
 Classes
 ^^^^^^^
 
@@ -527,11 +533,14 @@ format:
 
    message Class {
      required string name = 1;
+  optional string documentation = 2;
    }
 
 The fields are:
 
 * ``name`` - The name of the class.
+
+* ``documentation`` - Documentation for the class, as `C# XML documentation`_.
 
 Enumerations
 ^^^^^^^^^^^^
@@ -544,11 +553,13 @@ with the format:
    message Enumeration {
      required string name = 1;
      repeated EnumerationValue values = 2;
+     optional string documentation = 3;
    }
 
    message EnumerationValue {
      required string name = 1;
      required int32 value = 2;
+     optional string documentation = 3;
    }
 
 The fields are:
@@ -561,6 +572,10 @@ The fields are:
   * ``name`` - The name associated with the value for the enumeration.
 
   * ``value`` - The possible value for the enumeration as a 32-bit integer.
+
+  * ``documentation`` - Documentation for the enumeration value, as `C# XML documentation`_.
+
+* ``documentation`` - Documentation for the enumeration, as `C# XML documentation`_.
 
 .. _communication-protocol-attributes:
 
@@ -658,3 +673,5 @@ When a procedure returns a proxy object, the procedure will have the attribute
 When a procedure takes a proxy object as a parameter, the procedure will have
 the attribute ``ParameterType(n).Class(ClassName)`` where ``n`` is the position
 of the parameter and ``ClassName`` is the name of the class.
+
+.. _C# XML documentation: https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx
