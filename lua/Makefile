@@ -20,7 +20,9 @@ bin:
 	   ./bin/TestServer/
 
 test: protobuf bin
+	./startserver.sh
 	$(LUA) krpc/test/init.lua
+	./stopserver.sh
 
 rockspec:
 	mkdir -p dist
