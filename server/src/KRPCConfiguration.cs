@@ -3,6 +3,7 @@ using System.Net;
 using UnityEngine;
 using KRPC.Service;
 using KRPC.Utils;
+using KRPC.Service.Scanner;
 
 namespace KRPC
 {
@@ -19,6 +20,7 @@ namespace KRPC
         [Persistent] bool autoAcceptConnections = false;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors = false;
+        [Persistent] bool checkDocumented = false;
         [Persistent] bool oneRPCPerUpdate = false;
         [Persistent] uint maxTimePerUpdate = 5000;
         [Persistent] bool adaptiveRateControl = true;
@@ -98,6 +100,7 @@ namespace KRPC
             Address = IPAddress.Parse (address);
             Logger.Level = (Logger.Severity)Enum.Parse (typeof(Logger.Severity), logLevel);
             RPCException.VerboseErrors = verboseErrors;
+            ServicesChecker.CheckDocumented = checkDocumented;
         }
 
         protected override void BeforeSave ()
@@ -105,6 +108,7 @@ namespace KRPC
             address = Address.ToString ();
             logLevel = Logger.Level.ToString ();
             verboseErrors = RPCException.VerboseErrors;
+            checkDocumented = ServicesChecker.CheckDocumented;
         }
 
         protected override void AfterLoad ()
@@ -126,6 +130,7 @@ namespace KRPC
                 Logger.Level = Logger.Severity.Info;
             }
             RPCException.VerboseErrors = verboseErrors;
+            ServicesChecker.CheckDocumented = checkDocumented;
         }
     }
 }

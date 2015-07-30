@@ -11,6 +11,8 @@ namespace KRPC.Service.Scanner
     {
         public static Assembly CurrentAssembly { get; private set; }
 
+        public static bool CheckDocumented { get; set; }
+
         public static IDictionary<string, ServiceSignature> GetServices ()
         {
             IDictionary<string, ServiceSignature> signatures = new Dictionary<string, ServiceSignature> ();
