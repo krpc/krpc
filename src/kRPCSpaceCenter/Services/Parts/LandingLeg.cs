@@ -5,17 +5,41 @@ using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
+    /// <summary>
+    /// See <see cref="LandingLeg.State"/>.
+    /// </summary>
     [KRPCEnum (Service = "SpaceCenter")]
     public enum LandingLegState
     {
+        /// <summary>
+        /// Landing leg is fully deployed.
+        /// </summary>
         Deployed,
+        /// <summary>
+        /// Landing leg is fully retracted.
+        /// </summary>
         Retracted,
+        /// <summary>
+        /// Landing leg is being deployed.
+        /// </summary>
         Deploying,
+        /// <summary>
+        /// Landing leg is being retracted.
+        /// </summary>
         Retracting,
+        /// <summary>
+        /// Landing leg is broken.
+        /// </summary>
         Broken,
+        /// <summary>
+        /// Landing leg is being repaired.
+        /// </summary>
         Repairing
     }
 
+    /// <summary>
+    /// Obtained by calling <see cref="Part.LandingLeg"/>.
+    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class LandingLeg : Equatable<LandingLeg>
     {
@@ -40,11 +64,17 @@ namespace KRPCSpaceCenter.Services.Parts
             return part.GetHashCode ();
         }
 
+        /// <summary>
+        /// The part object for this landing leg.
+        /// </summary>
         [KRPCProperty]
         public Part Part {
             get { return part; }
         }
 
+        /// <summary>
+        /// The current state of the landing leg.
+        /// </summary>
         [KRPCProperty]
         public LandingLegState State {
             get {
@@ -67,6 +97,9 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
+        /// <summary>
+        /// Whether the landing leg is deployed.
+        /// </summary>
         [KRPCProperty]
         public bool Deployed {
             get { return State == LandingLegState.Deployed; }

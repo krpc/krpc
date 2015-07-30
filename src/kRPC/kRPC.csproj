@@ -19,6 +19,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Release\kRPC.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,9 +30,13 @@
     <WarningLevel>4</WarningLevel>
     <DefineConstants>DEBUG;</DefineConstants>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\Debug\kRPC.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\lib\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -108,6 +114,7 @@
     <Compile Include="Service\Attributes\KRPCServiceAttribute.cs" />
     <Compile Include="Service\ClassMethodHandler.cs" />
     <Compile Include="Service\ClassStaticMethodHandler.cs" />
+    <Compile Include="Service\DocumentationUtils.cs" />
     <Compile Include="Service\GameScene.cs" />
     <Compile Include="Service\IProcedureHandler.cs" />
     <Compile Include="Service\KRPC.cs" />
@@ -116,6 +123,9 @@
     <Compile Include="Service\ProcedureParameter.cs" />
     <Compile Include="Service\RequestContinuation.cs" />
     <Compile Include="Service\RPCException.cs" />
+    <Compile Include="Service\Scanner\ClassSignature.cs" />
+    <Compile Include="Service\Scanner\EnumerationSignature.cs" />
+    <Compile Include="Service\Scanner\EnumerationValueSignature.cs" />
     <Compile Include="Service\Scanner\ParameterSignature.cs" />
     <Compile Include="Service\Scanner\ProcedureSignature.cs" />
     <Compile Include="Service\Scanner\Scanner.cs" />
@@ -136,6 +146,7 @@
     <Compile Include="UI\Window.cs" />
     <Compile Include="Utils\ConfigurationStorage.cs" />
     <Compile Include="Utils\ConfigurationStorageNode.cs" />
+    <Compile Include="Utils\DocumentationExtensions.cs" />
     <Compile Include="Utils\Equatable.cs" />
     <Compile Include="Utils\ExponentialMovingAverage.cs" />
     <Compile Include="Utils\GameScenesExtensions.cs" />

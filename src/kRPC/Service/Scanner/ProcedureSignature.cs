@@ -24,6 +24,11 @@ namespace KRPC.Service.Scanner
         public string FullyQualifiedName { get; private set; }
 
         /// <summary>
+        /// Documentation for the procedure
+        /// </summary>
+        public string Documentation { get; private set; }
+
+        /// <summary>
         /// The method that implements the procedure.
         /// </summary>
         public IProcedureHandler Handler { get; private set; }
@@ -51,10 +56,11 @@ namespace KRPC.Service.Scanner
 
         public List<string> Attributes { get; private set; }
 
-        public ProcedureSignature (string serviceName, string procedureName, IProcedureHandler handler, GameScene gameScene, params string[] attributes)
+        public ProcedureSignature (string serviceName, string procedureName, string documentation, IProcedureHandler handler, GameScene gameScene, params string[] attributes)
         {
             Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;
+            Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Handler = handler;
             GameScene = gameScene;
             Attributes = attributes.ToList ();

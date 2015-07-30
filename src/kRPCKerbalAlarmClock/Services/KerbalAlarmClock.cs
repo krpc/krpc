@@ -7,6 +7,10 @@ using KRPCKerbalAlarmClock.ExtensionMethods;
 
 namespace KRPCKerbalAlarmClock.Services
 {
+    /// <summary>
+    /// This service provides functionality to interact with the
+    /// <a href="http://forum.kerbalspaceprogram.com/threads/24786">Kerbal Alarm Clock</a> mod.
+    /// </summary>
     [KRPCService (GameScene = GameScene.All)]
     public static class KerbalAlarmClock
     {
@@ -16,6 +20,9 @@ namespace KRPCKerbalAlarmClock.Services
                 throw new InvalidOperationException ("Kerbal Alarm Clock is not available");
         }
 
+        /// <summary>
+        /// A list of all the alarms.
+        /// </summary>
         [KRPCProperty]
         public static IList<Alarm> Alarms {
             get {
@@ -24,6 +31,12 @@ namespace KRPCKerbalAlarmClock.Services
             }
         }
 
+        /// <summary>
+        /// Get the alarm with the given <paramref name="name"/>, or <c>null</c>
+        /// if no alarms have that name. If more than one alarm has the name,
+        /// only returns one of them.
+        /// </summary>
+        /// <param name="name">Name of the alarm to search for.</param>
         [KRPCProcedure]
         public static Alarm AlarmWithName (string name)
         {
@@ -32,6 +45,10 @@ namespace KRPCKerbalAlarmClock.Services
             return alarm != null ? new Alarm (alarm) : null;
         }
 
+        /// <summary>
+        /// Get a list of alarms of the specified <paramref name="type"/>.
+        /// </summary>
+        /// <param name="type">Type of alarm to return.</param>
         [KRPCProcedure]
         public static IList<Alarm> AlarmsWithType (AlarmType type)
         {
@@ -42,6 +59,12 @@ namespace KRPCKerbalAlarmClock.Services
                 .ToList ();
         }
 
+        /// <summary>
+        /// Create a new alarm and return it.
+        /// </summary>
+        /// <param name="type">Type of the new alarm.</param>
+        /// <param name="name">Name of the new alarm.</param>
+        /// <param name="ut">Time at which the new alarm should trigger.</param>
         [KRPCProcedure]
         public static Alarm CreateAlarm (AlarmType type, string name, double ut)
         {

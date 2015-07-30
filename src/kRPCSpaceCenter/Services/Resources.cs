@@ -7,15 +7,37 @@ using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
 {
+    /// <summary>
+    /// See <see cref="Resources.FlowMode"/>.
+    /// </summary>
     [KRPCEnum (Service = "SpaceCenter")]
     public enum ResourceFlowMode
     {
+        /// <summary>
+        /// The resource flows to any part in the vessel. For example, electric charge.
+        /// </summary>
         Vessel,
+        /// <summary>
+        /// The resource flows from parts in the first stage, followed by the second,
+        /// and so on. For example, mono-propellant.
+        /// </summary>
         Stage,
+        /// <summary>
+        /// The resource flows between adjacent parts within the vessel. For example,
+        /// liquid fuel or oxidizer.
+        /// </summary>
         Adjacent,
+        /// <summary>
+        /// The resource does not flow. For example, solid fuel.
+        /// </summary>
         None
     }
 
+    /// <summary>
+    /// Created by calling <see cref="Vessel.Resources"/>,
+    /// <see cref="Vessel.ResourcesInDecoupleStage"/> or
+    /// <see cref="Parts.Part.Resources"/>.
+    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Resources : Equatable<Resources>
     {
@@ -68,6 +90,9 @@ namespace KRPCSpaceCenter.Services
             return resources;
         }
 
+        /// <summary>
+        /// A list of resource names that can be stored.
+        /// </summary>
         [KRPCProperty]
         public IList<string> Names {
             get {
@@ -75,24 +100,40 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// Check whether the named resource can be stored.
+        /// </summary>
+        /// <param name="name">The name of the resource.</param>
         [KRPCMethod]
         public bool HasResource (string name)
         {
             return GetResources ().Any (r => r.resourceName == name);
         }
 
+        /// <summary>
+        /// Returns the amount of a resource that can be stored.
+        /// </summary>
+        /// <param name="name">The name of the resource.</param>
         [KRPCMethod]
         public float Max (string name)
         {
             return GetResources ().Where (r => r.resourceName == name).Sum (r => (float)r.maxAmount);
         }
 
+        /// <summary>
+        /// Returns the amount of a resource that is currently stored.
+        /// </summary>
+        /// <param name="name">The name of the resource.</param>
         [KRPCMethod]
         public float Amount (string name)
         {
             return GetResources ().Where (r => r.resourceName == name).Sum (r => (float)r.amount);
         }
 
+        /// <summary>
+        /// Returns the density of a resource, in kg/l.
+        /// </summary>
+        /// <param name="name">The name of the resource.</param>
         [KRPCMethod]
         public static float Density (string name)
         {
@@ -102,6 +143,10 @@ namespace KRPCSpaceCenter.Services
             return resource.density * 1000f;
         }
 
+        /// <summary>
+        /// Returns the flow mode of a resource.
+        /// </summary>
+        /// <param name="name">The name of the resource.</param>
         [KRPCMethod]
         public static ResourceFlowMode FlowMode (string name)
         {

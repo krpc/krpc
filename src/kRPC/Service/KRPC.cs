@@ -5,8 +5,7 @@ using KRPC.Service.Attributes;
 namespace KRPC.Service
 {
     /// <summary>
-    /// Main KRPC service, used by clients to interact with basic server functionality.
-    /// This includes requesting a description of the available services and setting up streams.
+    /// Main kRPC service, used by clients to interact with basic server functionality.
     /// </summary>
     [KRPCService]
     public static class KRPC
@@ -68,24 +67,34 @@ namespace KRPC.Service
                     foreach (var attribute in procedureSignature.Attributes) {
                         procedure.AddAttributes (attribute);
                     }
+                    if (procedureSignature.Documentation != "")
+                        procedure.SetDocumentation (procedureSignature.Documentation);
                     service.AddProcedures (procedure);
                 }
-                foreach (var clsName in serviceSignature.Classes) {
+                foreach (var clsSignature in serviceSignature.Classes.Values) {
                     var cls = Class.CreateBuilder ();
-                    cls.Name = clsName;
+                    cls.Name = clsSignature.Name;
+                    if (clsSignature.Documentation != "")
+                        cls.Documentation = clsSignature.Documentation;
                     service.AddClasses (cls);
                 }
-                foreach (var enumName in serviceSignature.Enums.Keys) {
+                foreach (var enmSignature in serviceSignature.Enums.Values) {
                     var enm = Enumeration.CreateBuilder ();
-                    enm.Name = enumName;
-                    foreach (var enumValueName in serviceSignature.Enums[enumName].Keys) {
+                    enm.Name = enmSignature.Name;
+                    if (enmSignature.Documentation != "")
+                        enm.Documentation = enmSignature.Documentation;
+                    foreach (var enmValueSignature in enmSignature.Values) {
                         var enmValue = EnumerationValue.CreateBuilder ();
-                        enmValue.Name = enumValueName;
-                        enmValue.Value = serviceSignature.Enums [enumName] [enumValueName];
+                        enmValue.Name = enmValueSignature.Key;
+                        enmValue.Value = enmValueSignature.Value.Value;
+                        if (enmValueSignature.Value.Documentation != "")
+                            enmValue.Documentation = enmValueSignature.Value.Documentation;
                         enm.AddValues (enmValue);
                     }
                     service.AddEnumerations (enm);
                 }
+                if (serviceSignature.Documentation != "")
+                    service.SetDocumentation (serviceSignature.Documentation);
                 services.AddServices_ (service);
             }
             Schema.KRPC.Services result = services.Build ();

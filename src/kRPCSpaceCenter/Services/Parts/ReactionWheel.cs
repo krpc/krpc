@@ -5,6 +5,9 @@ using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
+    /// <summary>
+    /// Obtained by calling <see cref="Part.ReactionWheel"/>.
+    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class ReactionWheel : Equatable<ReactionWheel>
     {
@@ -29,11 +32,17 @@ namespace KRPCSpaceCenter.Services.Parts
             return part.GetHashCode ();
         }
 
+        /// <summary>
+        /// The part object for this reaction wheel.
+        /// </summary>
         [KRPCProperty]
         public Part Part {
             get { return part; }
         }
 
+        /// <summary>
+        /// Whether the reaction wheel is active.
+        /// </summary>
         [KRPCProperty]
         public bool Active {
             get { return reactionWheel.State == ModuleReactionWheel.WheelState.Active; }
@@ -43,21 +52,33 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
+        /// <summary>
+        /// Whether the reaction wheel is broken.
+        /// </summary>
         [KRPCProperty]
         public bool Broken {
             get { return reactionWheel.State == ModuleReactionWheel.WheelState.Broken; }
         }
 
+        /// <summary>
+        /// The torque in the pitch axis, in Newton meters.
+        /// </summary>
         [KRPCProperty]
         public float PitchTorque {
             get { return reactionWheel.RollTorque * 1000f; }
         }
 
+        /// <summary>
+        /// The torque in the yaw axis, in Newton meters.
+        /// </summary>
         [KRPCProperty]
         public float YawTorque {
             get { return reactionWheel.YawTorque * 1000f; }
         }
 
+        /// <summary>
+        /// The torque in the roll axis, in Newton meters.
+        /// </summary>
         [KRPCProperty]
         public float RollTorque {
             get { return reactionWheel.PitchTorque * 1000f; }

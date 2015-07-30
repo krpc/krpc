@@ -27,6 +27,7 @@ CSHARP_MAIN_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)
 CSHARP_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll) \
                    $(foreach PROJECT,$(CSHARP_TEST_PROJECTS),test/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll) \
                    $(foreach PROJECT,$(CSHARP_TEST_UTILS_PROJECTS),test/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
+CSHARP_DOCS = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).xml)
 
 PROTOS = $(wildcard src/kRPC/Schema/*.proto) $(wildcard src/kRPCSpaceCenter/Schema/*.proto)
 PROTOS_TEST = $(wildcard test/kRPCTest/Schema/*.proto)
@@ -59,7 +60,7 @@ dist: build doc dist-python
 	mkdir -p $(DIST_DIR)
 	mkdir -p $(DIST_DIR)/GameData/kRPC
 	# Plugin files
-	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
+	cp -r $(CSHARP_MAIN_LIBRARIES) $(CSHARP_DOCS) $(DIST_LIBS) $(DIST_ICONS) $(DIST_DIR)/GameData/kRPC/
 	# Licenses
 	cp LICENSE.txt $(DIST_DIR)/
 	cp lib/protobuf-csharp-port-2.4.1.521-release-binaries/license.txt $(DIST_DIR)/protobuf-csharp-port-license.txt
@@ -251,8 +252,9 @@ ksp: build TestingTools
 	test -d "$(KSP_DIR)/GameData"
 	rm -rf "$(KSP_DIR)/GameData/kRPC"
 	mkdir "$(KSP_DIR)/GameData/kRPC"
-	cp -r $(CSHARP_MAIN_LIBRARIES) $(DIST_LIBS) $(DIST_ICONS) $(KSP_DIR)/GameData/kRPC/
+	cp -r $(CSHARP_MAIN_LIBRARIES) $(CSHARP_DOCS) $(DIST_LIBS) $(DIST_ICONS) $(KSP_DIR)/GameData/kRPC/
 	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.dll "$(KSP_DIR)/GameData/"
+	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.xml "$(KSP_DIR)/GameData/"
 	-cp settings.cfg "$(KSP_DIR)/GameData/kRPC/settings.cfg"
 	test "!" -f "$(KSP_DIR)/KSP.x86_64" || "$(KSP_DIR)/KSP.x86_64" &
 	test "!" -f "$(KSP_DIR)/KSP.exe" || "$(KSP_DIR)/KSP.exe" &

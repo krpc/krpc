@@ -77,7 +77,7 @@ class Types(object):
         # Mapping from protobuf type strings to type objects
         self._types = {}
 
-    def as_type(self, type_string):
+    def as_type(self, type_string, doc=None):
         """ Return a type object given a protocol buffer type string """
         if type_string in self._types:
             return self._types[type_string]
@@ -88,9 +88,9 @@ class Types(object):
         if type_string in PROTOBUF_VALUE_TYPES:
             typ = ValueType(type_string)
         elif type_string.startswith('Class(') or type_string == 'Class':
-            typ = ClassType(type_string)
+            typ = ClassType(type_string, doc)
         elif type_string.startswith('Enum(') or type_string == 'Enum':
-            typ = EnumType(type_string)
+            typ = EnumType(type_string, doc)
         elif type_string.startswith('List(') or type_string == 'List':
             typ = ListType(type_string, self)
         elif type_string.startswith('Dictionary(') or type_string == 'Dictionary':
@@ -228,30 +228,31 @@ class ProtobufEnumType(TypeBase):
 class ClassType(TypeBase):
     """ A class type, represented by a uint64 identifier """
 
-    def __init__(self, type_string):
+    def __init__(self, type_string, doc):
         match = re.match(r'Class\(([^\.]+)\.([^\.]+)\)', type_string)
         if not match:
             raise ValueError('\'%s\' is not a valid type string for a class type' % type_string)
         service_name = match.group(1)
         class_name = match.group(2)
-        typ = _create_class_type(service_name, class_name)
+        typ = _create_class_type(service_name, class_name, doc)
         super(ClassType, self).__init__(str(type_string), typ)
 
 class EnumType(TypeBase):
     """ An enumeration type, represented by an int32 value """
 
-    def __init__(self, type_string):
+    def __init__(self, type_string, doc):
         match = re.match(r'Enum\(([^\.]+)\.([^\.]+)\)', type_string)
         if not match:
             raise ValueError('\'%s\' is not a valid type string for an enumeration type' % type_string)
         self._service_name = match.group(1)
         self._enum_name = match.group(2)
+        self._doc = doc
         # Sets python_type to None, set_values must be called to set the python_type
         super(EnumType, self).__init__(str(type_string), None)
 
     def set_values(self, values):
         """ Set the python type. Creates an Enum class using the given values. """
-        self._python_type = _create_enum_type(self._service_name, self._enum_name, values)
+        self._python_type = _create_enum_type(self._service_name, self._enum_name, values, self._doc)
 
 class ListType(TypeBase):
     """ A list collection type, represented by a protobuf message """
@@ -363,12 +364,14 @@ class ClassBase(DynamicType):
     def __repr__(self):
         return '<%s.%s remote object #%d>' % (self._service_name, self._class_name, self._object_id)
 
-def _create_class_type(service_name, class_name):
+def _create_class_type(service_name, class_name, doc):
     return type(str(class_name), (ClassBase,),
-                {'_service_name': service_name, '_class_name': class_name})
+                {'_service_name': service_name, '_class_name': class_name, '__doc__': doc})
 
-def _create_enum_type(service_name, enum_name, values):
-    return Enum(enum_name, values)
+def _create_enum_type(service_name, enum_name, values, doc):
+    typ = Enum(enum_name, values)
+    setattr(typ, '__doc__', doc)
+    return typ
 
 class DefaultArgument(object):
     """ A sentinel value for default arguments """

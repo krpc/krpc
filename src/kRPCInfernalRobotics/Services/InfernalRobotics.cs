@@ -6,6 +6,10 @@ using KRPC.Service.Attributes;
 
 namespace KRPCInfernalRobotics.Services
 {
+    /// <summary>
+    /// This service provides functionality to interact with the
+    /// <a href="http://forum.kerbalspaceprogram.com/threads/116064">InfernalRobotics</a> mod.
+    /// </summary>
     [KRPCService (GameScene = GameScene.Flight)]
     public static class InfernalRobotics
     {
@@ -15,6 +19,9 @@ namespace KRPCInfernalRobotics.Services
                 throw new InvalidOperationException ("InfernalRobotics is not available");
         }
 
+        /// <summary>
+        /// A list of all the servo groups in the active vessel.
+        /// </summary>
         [KRPCProperty]
         public static IList<ControlGroup> ServoGroups {
             get {
@@ -23,6 +30,11 @@ namespace KRPCInfernalRobotics.Services
             }
         }
 
+        /// <summary>
+        /// Returns the servo group with the given <paramref name="name"/> or <c>null</c> if none
+        /// exists. If multiple servo groups have the same name, only one of them is returned.
+        /// </summary>
+        /// <param name="name">Name of servo group to find.</param>
         [KRPCProcedure]
         public static ControlGroup ServoGroupWithName (string name)
         {
@@ -31,6 +43,11 @@ namespace KRPCInfernalRobotics.Services
             return servoGroup != null ? new ControlGroup (servoGroup) : null;
         }
 
+        /// <summary>
+        /// Returns the servo with the given <paramref name="name"/>, from all servo groups, or
+        /// <c>null</c> if none exists. If multiple servos have the same name, only one of them is returned.
+        /// </summary>
+        /// <param name="name">Name of the servo to find.</param>
         [KRPCProcedure]
         public static Servo ServoWithName (string name)
         {

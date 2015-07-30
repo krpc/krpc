@@ -36,6 +36,7 @@ message Service {
   repeated Procedure procedures = 2;
   repeated Class classes = 3;
   repeated Enumeration enumerations = 4;
+  optional string documentation = 5;
 }
 
 message Procedure {
@@ -43,6 +44,7 @@ message Procedure {
   repeated Parameter parameters = 2;
   optional string return_type = 3;
   repeated string attributes = 4;
+  optional string documentation = 5;
 }
 
 message Parameter {
@@ -53,16 +55,19 @@ message Parameter {
 
 message Class {
   required string name = 1;
+  optional string documentation = 2;
 }
 
 message Enumeration {
   required string name = 1;
   repeated EnumerationValue values = 2;
+  optional string documentation = 3;
 }
 
 message EnumerationValue {
   required string name = 1;
   required int32 value = 2;
+  optional string documentation = 3;
 }
 
 message List {

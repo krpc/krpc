@@ -1,177 +1,264 @@
 #!/usr/bin/env python
 
-# Build Python API docs from generic API docs
+# Build API docs
 
 import sys
 import os
 import re
+import json
+import xml.etree.ElementTree as ElementTree
 from Cheetah.Template import Template
+from krpc.attributes import Attributes
+from krpc.types import Types
+from api.directives import *
+import api.utils
 
 language = sys.argv[1]
 src = sys.argv[2]
 dst = sys.argv[3]
 
-domains = {'python': 'py', 'lua': 'lua'}
-conf = {
-    'python': {
-        'snake_case': True,
-        'types': {
-            'double': 'float',
-            'int32': 'float',
-            'Dictionary': 'dict',
-            'List': 'list'
-        },
-        'replace': {
-            '``null``': '``None``',
-            '``true``': '``True``',
-            '``false``': '``False``',
-            '``string``': '``str``',
-            '``double``': '``float``',
-            '``int32``': '``int``',
-            ':class:`Dictionary`': '``dict``',
-            ':class:`List`': '``list``'
-        }
-    },
-    'lua': {
-        'snake_case': True,
-        'types': {
-            'double': 'number',
-            'int32': 'number',
-            'Dictionary': 'Map'
-        },
-        'replace': {
-            '``null``': '``nil``',
-            '``true``': '``True``',
-            '``false``': '``False``',
-            '``string``': '``string``',
-            '``double``': '``number``',
-            '``int32``': '``number``',
-            ':class:`Dictionary`': '``Map``',
-            ':class:`List`': '``List``'
-        }
-    }
-}
+class Env(object):
 
-domain = domains[language]
+    def __init__(self, language):
+        self.types = Types()
+        self._refs = {}
+        self._currentmodule = None
 
-_regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
-_regex_single_uppercase = re.compile(r'([a-z0-9])([A-Z])')
-_regex_underscores = re.compile(r'(.)_')
+        if language == 'python':
+            from api.python import PythonAPI
+            self._domain = PythonAPI(self)
+        elif language == 'lua':
+            from api.lua import LuaAPI
+            self._domain = LuaAPI(self)
+        else:
+            raise RuntimeError('Unknown language')
 
-def snake_case(name):
-    if '.' in name:
-        cls,name = name.split('.')
-        return cls+'.'+snake_case(name)
-    else:
-        result = re.sub(_regex_underscores, r'\1__', name)
-        result = re.sub(_regex_single_uppercase, r'\1_\2', result)
-        return re.sub(_regex_multi_uppercase, r'\1_\2', result).lower()
+        with open('order.txt', 'r') as f:
+            self._member_ordering = [x.strip() for x in f.readlines()]
 
-def convert_type(name):
-    typs = conf[language]['types']
-    if name in typs:
-        return typs[name]
-    else:
+    @property
+    def domain(self):
+        return self._domain
+
+    @domain.setter
+    def domain(self, domain):
+        self._domain = domain
+
+    def currentmodule(self, name):
+        self._currentmodule = name
+        return '.. currentmodule:: %s\n' % name
+
+    def add_ref(self, name, obj):
+        self._refs[name] = obj
+
+    def get_ref(self, name):
+        if name not in self._refs:
+            raise RuntimeError('Ref not found %s' % name)
+        return self._refs[name]
+
+    def shorten_ref(self, name):
+        if self._currentmodule and name.startswith(self._currentmodule+'.'):
+            return name[len(self._currentmodule)+1:]
         return name
 
-def process_directive(line):
-    global in_class
-    m = re.match('^(\s*)\.\. ([a-z]+):: (.+)$', line)
-    if m is not None:
-        indent = m.group(1)
-        typ = m.group(2)
-        signature = m.group(3)
-        if typ == 'attribute' or typ == 'data':
-            line = '%s.. %s:: %s' % (indent, typ, snake_case(signature))
-        if typ == 'method':
-            m = re.match('^(.+) \((.*)\)$', signature)
-            name = m.group(1)
-            params = m.group(2)
-            name = snake_case(name)
-            params = params.split(',')
-            optional = False
-            for i in range(len(params)):
-                param = params[i].strip()
-                if '=' in param:
-                    optional = True
-                    param,default = param.split('=')
-                    param = param.strip()
-                    default = default.strip()
-                    param = snake_case(param)+'='+snake_case(default)
-                    if not param.startswith('[') or not param.endswith(']'):
-                        raise RuntimeError('Optional parameter not enclosed in [ ... ]')
-                else:
-                    param = snake_case(param)
-                params[i] = param
-            line = '%s.. %s:: %s (%s)' % (indent, typ, name, ', '.join(params))
-    return line
+    def sorted_members(self, members):
+        def key_fn(x):
+            if x.name not in self._member_ordering:
+                print 'Don\'t know how to order member', x.name
+                return float('inf')
+            return self._member_ordering.index(x.name)
+        return sorted(members, key=key_fn)
 
-def process_inline(line):
-    for inline in [':meth:', ':attr:']:
-       if inline in line:
-            def repl(m):
-                return inline+'`'+snake_case(m.group(1))+'`'
-            line = re.sub(inline+'`([^`]+)`', repl, line)
-    return line
+    def parse_documentation(self, xml, info=None):
+        if xml.strip() == '':
+            return '', []
+        parser = ElementTree.XMLParser(encoding='UTF-8')
+        root = ElementTree.XML(xml.encode('UTF-8'), parser=parser)
+        description = ''
+        objs = []
+        for node in root:
+            if node.tag == 'summary':
+                description = self.parse_description(node)
+            elif node.tag == 'param':
+                name = node.attrib['name']
+                desc = self.parse_description(node)
+                pinfo = None
+                for parameter in info['parameters']:
+                    if parameter['name'] == name:
+                        pinfo = parameter
+                pos = filter(lambda x: x[1]['name'] == name, enumerate(info['parameters']))[0][0]
+                objs.append(Param(self, name, desc, pos, pinfo, info['attributes']))
+            elif node.tag == 'returns':
+                objs.append(Returns(self, self.parse_description(node)))
+            elif node.tag == 'remarks':
+                objs.append(Note(self, self.parse_description(node)))
+            else:
+                raise RuntimeError('Unhandled documentation tag type %s' % node.tag)
+        return description, objs
 
-def process_inline_types_and_values(line):
-    replacements = conf[language]['replace']
-    for x,y in replacements.items():
-        line = line.replace(x, y)
-    return line
+    def parse_description_node(self, node):
+        if node.tag == 'see':
+            return env.domain.parse_ref(node.attrib['cref'])
+        elif node.tag == 'paramref':
+            return '*%s*' % env.domain.parse_param(node.attrib['name'])
+        elif node.tag == 'a':
+            return '`%s <%s>`_' % (node.text.replace('\n',''), node.attrib['href'])
+        elif node.tag == 'c':
+            return '``%s``' % env.domain.parse_value(node.text)
+        elif node.tag == 'math':
+            return ':math:`%s`' % node.text
+        elif node.tag == 'list':
+            content = '\n'
+            for item in node:
+                item_content = self.parse_description(item[0])
+                content += '* %s\n' % '\n'.join(api.utils.indent(item_content.split('\n'), 2))[2:].rstrip()
+            return content
+        else:
+            raise RuntimeError('Unhandled node type %s' % node.tag)
 
-def process_parameters(line):
-    def repl(m):
-        return ':param '+convert_type(m.group(1))+' '+snake_case(m.group(2))+':'
-    return re.sub(':param ([^ ]+) (.+):', repl, line)
+    def parse_description(self, node):
+        desc = node.text
+        for child in node:
+            desc += self.parse_description_node(child)
+            if child.tail:
+                desc += child.tail
+        return desc.strip()
 
-def process_inline_parameters(line):
-    def repl(m):
-        return m.group(1)+'*'+snake_case(m.group(2))+'*'+m.group(3)
-    return re.sub('([^\*])\*([^\*]+)\*([^\*])', repl, line)
+    def parse_parameter_type(self, pos, typ, attrs):
+        typ = self.types.get_parameter_type(pos, typ, attrs)
+        return self.domain.parse_type_ref(typ.protobuf_type)
+
+    def parse_return_type(self, typ, attrs):
+        typ = self.types.get_return_type(typ, attrs)
+        return self.domain.parse_type(typ.protobuf_type)
+
+env = Env(language)
+
+with open('services.json', 'r') as f:
+    services_info = json.load(f)
 
 def process_file(path):
-    print path
-    namespace = {'language': language, 'domain': domain}
+
+    services = {}
+    classes = {}
+    enumerations = {}
+
+    for service_name,service_info in services_info.items():
+
+        procedures = {}
+        properties = {}
+        for procedure_name,procedure_info in service_info['procedures'].items():
+            if Attributes.is_a_procedure(procedure_info['attributes']):
+                procedures[procedure_name] = StaticMethod(env, service_name, procedure_name, procedure_info)
+            elif Attributes.is_a_property_accessor(procedure_info['attributes']):
+                name = Attributes.get_property_name(procedure_info['attributes'])
+                if name not in properties:
+                    properties[name] = []
+                properties[name].append(Property(env, service_name, name, procedure_info))
+
+        members = []
+
+        for name,procedure in procedures.items():
+            env.add_ref('M:%s.%s' % (service_name, name), procedure)
+            members.append(procedure)
+
+        for name,props in properties.items():
+            def merge_properties(props):
+                result = props[0]
+                for prop in props[1:]:
+                    result.merge(prop)
+                return result
+            prop = merge_properties(props)
+            env.add_ref('M:%s.%s' % (service_name, name), prop)
+            members.append(prop)
+
+        service = Service(env, service_name, service_info['documentation'], members)
+        services[service_name] = service
+        env.add_ref('T:%s' % service_name, service)
+
+        for class_name,class_info in service_info['classes'].items():
+
+            methods = {}
+            properties = {}
+
+            for procedure_name,procedure_info in service_info['procedures'].items():
+                if Attributes.is_a_class_member(procedure_info['attributes']) and \
+                   Attributes.get_class_name(procedure_info['attributes']) == class_name:
+                    if Attributes.is_a_class_method(procedure_info['attributes']):
+                        name = Attributes.get_class_method_name(procedure_info['attributes'])
+                        methods[name] = ClassMethod(env, service_name, class_name, name, procedure_info)
+                    elif Attributes.is_a_class_static_method(procedure_info['attributes']):
+                        name = Attributes.get_class_method_name(procedure_info['attributes'])
+                        methods[name] = ClassStaticMethod(env, service_name, class_name, name, procedure_info)
+                    elif Attributes.is_a_class_property_accessor(procedure_info['attributes']):
+                        name = Attributes.get_class_property_name(procedure_info['attributes'])
+                        if name not in properties:
+                            properties[name] = []
+                        properties[name].append(ClassProperty(env, service_name, class_name, name, procedure_info))
+
+            members = []
+
+            for name,method in methods.items():
+                env.add_ref('M:%s.%s.%s' % (service_name, class_name, name), method)
+                members.append(method)
+
+            for name,props in properties.items():
+                prop = merge_properties(props)
+                env.add_ref('M:%s.%s.%s' % (service_name, class_name, name), prop)
+                members.append(prop)
+
+            name = 'T:%s.%s' % (service_name, class_name)
+            cls = Class(env, service_name, class_name, class_info['documentation'], members)
+            classes[name[2:]] = cls
+            env.add_ref(name, cls)
+
+        for enum_name,enum_info in service_info['enumerations'].items():
+            values = []
+            for value in enum_info['values']:
+                enum_value = EnumerationValue(env, service_name, enum_name, value['name'], value['documentation'])
+                env.add_ref('M:%s.%s.%s' % (service_name, enum_name, value['name']), enum_value)
+                values.append(enum_value)
+            name = 'T:%s.%s' % (service_name, enum_name)
+            enum = Enumeration(env, service_name, enum_name, enum_info['documentation'], values)
+            enumerations[name[2:]] = enum
+            env.add_ref(name, enum)
+
+    namespace = {
+        'language': language,
+        'domain': env.domain.name,
+        'services': services,
+        'classes': classes,
+        'enumerations': enumerations,
+        'ref': env.domain.parse_ref,
+        'value': env.domain.parse_value,
+        'currentmodule': env.currentmodule
+    }
+    global currentmodule
+    currentmodule = None
     template = Template(file=path, searchList=[namespace])
-    content = str(template)
-    lines = []
-    for lineno,line in enumerate(content.split('\n')):
-        try:
-            line = process_directive(line)
-            line = process_inline(line)
-            line = process_parameters(line)
-            line = process_inline_parameters(line)
-            line = process_inline_types_and_values(line)
-            lines.append(line.rstrip())
-        except Exception, e:
-            print 'Error on line', lineno, 'in', path
-            print line
-            print e
-            exit(1)
-    return '\n'.join(lines)+'\n'
+    result = str(template)
+    currentmodule = None
+    return result
 
 for dirname,dirnames,filenames in os.walk(src):
     for filename in filenames:
-        src_path = os.path.join(dirname, filename)
-        dst_path = os.path.join(dst, src_path[len(src)+1:])
-        try:
+        if filename.endswith('.tmpl'):
+            src_path = os.path.join(dirname, filename)
+            dst_path = os.path.join(dst, src_path[len(src)+1:][:-4]+'rst')
             content = process_file(src_path)
-        except IOError:
-            continue
 
-        # Skip if already up to date
-        if os.path.exists(dst_path):
-            try:
-                old_content = open(dst_path, 'r').read()
-                if content == old_content:
-                    continue
-            except IOError:
-                pass
+            # Skip if already up to date
+            if os.path.exists(dst_path):
+                try:
+                    old_content = open(dst_path, 'r').read()
+                    if content == old_content:
+                        continue
+                except IOError:
+                    pass
 
-        # Update
-        print src_path+' -> '+dst_path
-        if not os.path.exists(os.path.dirname(dst_path)):
-            os.makedirs(os.path.dirname(dst_path))
-        with open(dst_path, 'w') as f:
-            f.write(content)
+            # Update
+            print src_path+' -> '+dst_path
+            if not os.path.exists(os.path.dirname(dst_path)):
+                os.makedirs(os.path.dirname(dst_path))
+            with open(dst_path, 'w') as f:
+                f.write(content)

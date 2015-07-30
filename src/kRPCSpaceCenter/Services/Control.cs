@@ -7,6 +7,16 @@ using KRPC.Utils;
 
 namespace KRPCSpaceCenter.Services
 {
+    /// <summary>
+    /// Used to manipulate the controls of a vessel. This includes adjusting the
+    /// throttle, enabling/disabling systems such as SAS and RCS, or altering the
+    /// direction in which the vessel is pointing.
+    /// </summary>
+    /// <remarks>
+    /// Control input will persist until the client that requested them disconnects.
+    /// If multiple clients set a control input (such as pitch, yaw or roll) they
+    /// are added together and clamped to the range [-1,1].
+    /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Control : Equatable<Control>
     {
@@ -27,42 +37,64 @@ namespace KRPCSpaceCenter.Services
             return vessel.GetHashCode ();
         }
 
+        /// <summary>
+        /// The state of SAS.
+        /// </summary>
+        /// <remarks>Equivalent to <see cref="AutoPilot.SAS"/></remarks>
         [KRPCProperty]
         public bool SAS {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
         }
 
+        /// <summary>
+        /// The state of RCS.
+        /// </summary>
         [KRPCProperty]
         public bool RCS {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.RCS, value); }
         }
 
+        /// <summary>
+        /// The state of the landing gear/legs.
+        /// </summary>
         [KRPCProperty]
         public bool Gear {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Gear)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.Gear, value); }
         }
 
+        /// <summary>
+        /// The state of the lights.
+        /// </summary>
         [KRPCProperty]
         public bool Lights {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Light)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.Light, value); }
         }
 
+        /// <summary>
+        /// The state of the wheel brakes.
+        /// </summary>
         [KRPCProperty]
         public bool Brakes {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Brakes)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.Brakes, value); }
         }
 
+        /// <summary>
+        /// The state of the abort action group.
+        /// </summary>
         [KRPCProperty]
         public bool Abort {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Abort)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.Abort, value); }
         }
 
+        /// <summary>
+        /// The state of the throttle. A value betwen 0 and 1.
+        /// </summary>
         [KRPCProperty]
         public float Throttle {
             get { return vessel.isActiveVessel ? FlightInputHandler.state.mainThrottle : vessel.ctrlState.mainThrottle; }
@@ -74,59 +106,108 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// The state of the pitch control.
+        /// A value between -1 and 1.
+        /// Equivalent to the w and s keys.
+        /// </summary>
         [KRPCProperty]
         public float Pitch {
             get { return PilotAddon.Get (vessel).Pitch; }
             set { PilotAddon.Get (vessel).Pitch = value; }
         }
 
+        /// <summary>
+        /// The state of the yaw control.
+        /// A value between -1 and 1.
+        /// Equivalent to the a and d keys.
+        /// </summary>
         [KRPCProperty]
         public float Yaw {
             get { return PilotAddon.Get (vessel).Yaw; }
             set { PilotAddon.Get (vessel).Yaw = value; }
         }
 
+        /// <summary>
+        /// The state of the roll control.
+        /// A value between -1 and 1.
+        /// Equivalent to the q and e keys.
+        /// </summary>
         [KRPCProperty]
         public float Roll {
             get { return PilotAddon.Get (vessel).Roll; }
             set { PilotAddon.Get (vessel).Roll = value; }
         }
 
+        /// <summary>
+        /// The state of the forward translational control.
+        /// A value between -1 and 1.
+        /// Equivalent to the h and n keys.
+        /// </summary>
         [KRPCProperty]
         public float Forward {
             get { return PilotAddon.Get (vessel).Forward; }
             set { PilotAddon.Get (vessel).Forward = value; }
         }
 
+        /// <summary>
+        /// The state of the up translational control.
+        /// A value between -1 and 1.
+        /// Equivalent to the i and k keys.
+        /// </summary>
         [KRPCProperty]
         public float Up {
             get { return PilotAddon.Get (vessel).Up; }
             set { PilotAddon.Get (vessel).Up = value; }
         }
 
+        /// <summary>
+        /// The state of the right translational control.
+        /// A value between -1 and 1.
+        /// Equivalent to the j and l keys.
+        /// </summary>
         [KRPCProperty]
         public float Right {
             get { return PilotAddon.Get (vessel).Right; }
             set { PilotAddon.Get (vessel).Right = value; }
         }
 
+        /// <summary>
+        /// The state of the wheel throttle.
+        /// A value between -1 and 1.
+        /// A value of 1 rotates the wheels forwards, a value of -1 rotates
+        /// the wheels backwards.
+        /// </summary>
         [KRPCProperty]
         public float WheelThrottle {
             get { return PilotAddon.Get (vessel).WheelThrottle; }
             set { PilotAddon.Get (vessel).WheelThrottle = value; }
         }
 
+        /// <summary>
+        /// The state of the wheel steering.
+        /// A value between -1 and 1.
+        /// A value of 1 steers to the left, and a value of -1 steers to the right.
+        /// </summary>
         [KRPCProperty]
         public float WheelSteering {
             get { return PilotAddon.Get (vessel).WheelSteer; }
             set { PilotAddon.Get (vessel).WheelSteer = value; }
         }
 
+        /// <summary>
+        /// The current stage of the vessel. Corresponds to the stage number in
+        /// the in-game UI.
+        /// </summary>
         [KRPCProperty]
         public int CurrentStage {
             get { return vessel.currentStage; }
         }
 
+        /// <summary>
+        /// Activates the next stage. Equivalent to pressing the space bar in-game.
+        /// </summary>
+        /// <returns>A list of vessel objects that are jettisoned from the active vessel.</returns>
         [KRPCMethod]
         public IList<Vessel> ActivateNextStage ()
         {
@@ -147,6 +228,10 @@ namespace KRPCSpaceCenter.Services
             return postVessels.Except (preVessels).Select (vessel => new Vessel (vessel)).ToList ();
         }
 
+        /// <summary>
+        /// Returns <c>true</c> if the given action group is enabled.
+        /// </summary>
+        /// <param name="group">A number between 0 and 9 inclusive.</param>
         [KRPCMethod]
         public bool GetActionGroup (uint group)
         {
@@ -155,6 +240,12 @@ namespace KRPCSpaceCenter.Services
             return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (Utils.GetActionGroup (group))];
         }
 
+        /// <summary>
+        /// Sets the state of the given action group (a value between 0 and 9
+        /// inclusive).
+        /// </summary>
+        /// <param name="group">A number between 0 and 9 inclusive.</param>
+        /// <param name="state"></param>
         [KRPCMethod]
         public void SetActionGroup (uint group, bool state)
         {
@@ -163,6 +254,10 @@ namespace KRPCSpaceCenter.Services
             vessel.ActionGroups.SetGroup (Utils.GetActionGroup (group), state);
         }
 
+        /// <summary>
+        /// Toggles the state of the given action group.
+        /// </summary>
+        /// <param name="group">A number between 0 and 9 inclusive.</param>
         [KRPCMethod]
         public void ToggleActionGroup (uint group)
         {
@@ -171,6 +266,16 @@ namespace KRPCSpaceCenter.Services
             vessel.ActionGroups.ToggleGroup (Utils.GetActionGroup (group));
         }
 
+        /// <summary>
+        /// Creates a maneuver node at the given universal time, and returns a
+        /// <see cref="Node"/> object that can be used to modify it.
+        /// Optionally sets the magnitude of the delta-v for the maneuver node
+        /// in the prograde, normal and radial directions.
+        /// </summary>
+        /// <param name="UT">Universal time of the maneuver node.</param>
+        /// <param name="prograde">Delta-v in the prograde direction.</param>
+        /// <param name="normal">Delta-v in the normal direction.</param>
+        /// <param name="radial">Delta-v in the radial direction.</param>
         [KRPCMethod]
         public Node AddNode (double UT, float prograde = 0, float normal = 0, float radial = 0)
         {
@@ -179,6 +284,9 @@ namespace KRPCSpaceCenter.Services
             return new Node (vessel, UT, prograde, normal, radial);
         }
 
+        /// <summary>
+        /// Returns a list of all existing maneuver nodes, ordered by time from first to last.
+        /// </summary>
         [KRPCProperty]
         public IList<Node> Nodes {
             get {
@@ -188,6 +296,9 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// Remove all maneuver nodes.
+        /// </summary>
         [KRPCMethod]
         public void RemoveNodes ()
         {

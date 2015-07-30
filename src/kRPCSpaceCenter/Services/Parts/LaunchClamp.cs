@@ -5,6 +5,9 @@ using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
+    /// <summary>
+    /// Obtained by calling <see cref="Part.LaunchClamp"/>.
+    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class LaunchClamp : Equatable<LaunchClamp>
     {
@@ -29,11 +32,17 @@ namespace KRPCSpaceCenter.Services.Parts
             return part.GetHashCode ();
         }
 
+        /// <summary>
+        /// The part object for this launch clamp.
+        /// </summary>
         [KRPCProperty]
         public Part Part {
             get { return part; }
         }
 
+        /// <summary>
+        /// Releases the docking clamp. Has no effect if the clamp has already been released.
+        /// </summary>
         [KRPCMethod]
         public void Release ()
         {

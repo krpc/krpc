@@ -8,9 +8,7 @@ class Attributes(object):
         """ Return true if the attributes are for a plain procedure,
             i.e. not a property accessor, class method etc. """
         return not cls.is_a_property_accessor(attrs) and \
-               not cls.is_a_class_method(attrs) and \
-               not cls.is_a_class_static_method(attrs) and \
-               not cls.is_a_class_property_accessor(attrs)
+               not cls.is_a_class_member(attrs)
 
     @classmethod
     def is_a_property_accessor(cls, attrs):
@@ -26,6 +24,13 @@ class Attributes(object):
     def is_a_property_setter(cls, attrs):
         """ Return true if the attributes are for a property setter. """
         return any(attr.startswith('Property.Set(') for attr in attrs)
+
+    @classmethod
+    def is_a_class_member(cls, attrs):
+        """ Return true if the attributes are for a class member. """
+        return cls.is_a_class_method(attrs) or \
+               cls.is_a_class_static_method(attrs) or \
+               cls.is_a_class_property_accessor(attrs)
 
     @classmethod
     def is_a_class_method(cls, attrs):

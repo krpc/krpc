@@ -11,39 +11,86 @@ using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPCSpaceCenter.Services
 {
+    /// <summary>
+    /// The behavior of the SAS auto-pilot. See <see cref="AutoPilot.SASMode"/>.
+    /// </summary>
     [KRPCEnum (Service = "SpaceCenter")]
     public enum SASMode
     {
+        /// <summary>
+        /// Stability assist mode. Dampen out any rotation.
+        /// </summary>
         StabilityAssist,
+        /// <summary>
+        /// Point in the burn direction of the next maneuver node.
+        /// </summary>
         Maneuver,
+        /// <summary>
+        /// Point in the prograde direction.
+        /// </summary>
         Prograde,
+        /// <summary>
+        /// Point in the retrograde direction.
+        /// </summary>
         Retrograde,
+        /// <summary>
+        /// Point in the orbit normal direction.
+        /// </summary>
         Normal,
+        /// <summary>
+        /// Point in the orbit anti-normal direction.
+        /// </summary>
         AntiNormal,
+        /// <summary>
+        /// Point in the orbit radial direction.
+        /// </summary>
         Radial,
+        /// <summary>
+        /// Point in the orbit anti-radial direction.
+        /// </summary>
         AntiRadial,
+        /// <summary>
+        /// Point in the direction of the current target.
+        /// </summary>
         Target,
+        /// <summary>
+        /// Point away from the current target.
+        /// </summary>
         AntiTarget
     }
 
+    /// <summary>
+    /// See <see cref="AutoPilot.SpeedMode"/>.
+    /// </summary>
     [KRPCEnum (Service = "SpaceCenter")]
     public enum SpeedMode
     {
+        /// <summary>
+        /// Speed is relative to the vessel's orbit.
+        /// </summary>
         Orbit,
+        /// <summary>
+        /// Speed is relative to the surface of the body being orbited.
+        /// </summary>
         Surface,
+        /// <summary>
+        /// Speed is relative to the current target.
+        /// </summary>
         Target
     }
 
-    /// <remarks>
-    /// Taken and adapted from MechJeb2/KOS/RemoteTech2/forum discussion; credit goes to the authors of those plugins/posts:
-    /// https://github.com/MuMech/MechJeb2
-    /// https://github.com/KSP-KOS/KOS
-    /// https://github.com/RemoteTechnologiesGroup/RemoteTech
-    /// http://forum.kerbalspaceprogram.com/threads/69313-WIP-kRPC-A-language-agnostic-Remote-Procedure-Call-server-for-KSP?p=1021721&amp;viewfull=1#post1021721
-    /// </remarks>
+    /// <summary>
+    /// Provides basic auto-piloting utilities for a vessel.
+    /// Created by calling <see cref="Vessel.AutoPilot"/>.
+    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class AutoPilot : Equatable<AutoPilot>
     {
+        // Taken and adapted from MechJeb2/KOS/RemoteTech2/forum discussion; credit goes to the authors of those plugins/posts:
+        // https://github.com/MuMech/MechJeb2
+        // https://github.com/KSP-KOS/KOS
+        // https://github.com/RemoteTechnologiesGroup/RemoteTech
+        // http://forum.kerbalspaceprogram.com/threads/69313?p=1021721&amp;viewfull=1#post1021721
         readonly global::Vessel vessel;
         static IDictionary<global::Vessel, AutoPilot> engaged = new Dictionary<global::Vessel, AutoPilot> ();
         IClient requestingClient;
@@ -69,12 +116,20 @@ namespace KRPCSpaceCenter.Services
             return vessel.GetHashCode ();
         }
 
+        /// <summary>
+        /// The state of SAS.
+        /// </summary>
         [KRPCProperty]
         public bool SAS {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
         }
 
+        /// <summary>
+        /// The current <see cref="SASMode"/>.
+        /// These modes are equivalent to the mode buttons to
+        /// the left of the navball that appear when SAS is enabled.
+        /// </summary>
         [KRPCProperty]
         public SASMode SASMode {
             get { return vessel.Autopilot.Mode.ToSASMode (); }
@@ -90,6 +145,10 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// The current <see cref="SpeedMode"/> of the navball.
+        /// This is the mode displayed next to the speed at the top of the navball.
+        /// </summary>
         [KRPCProperty]
         public SpeedMode SpeedMode {
             get { return FlightUIController.speedDisplayMode.ToSpeedMode (); }
@@ -104,6 +163,27 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// Points the vessel in the specified direction, and holds it there. Setting
+        /// the roll angle is optional.
+        ///
+        /// If wait is <c>false</c> (the default) this method returns immediately, and
+        /// the auto-pilot continues to rotate the vessel. If wait is <c>true</c>, this
+        /// method returns when the auto-pilot has rotated the vessel into the
+        /// requested orientation.
+        ///
+        /// The auto-pilot is disengaged either when <see cref="AutoPilot.Disengage"/> is
+        /// called, or when the client that requested the auto-pilot command disconnects.
+        /// </summary>
+        /// <param name="pitch">The desired pitch above/below the horizon, in degrees.
+        /// A value between -90° and +90° degrees.</param>
+        /// <param name="heading">The desired heading in degrees. A value between 0° and 360°.</param>
+        /// <param name="roll">Optional desired roll angle relative to the horizon, in degrees.
+        /// A value between -180° and +180°.</param>
+        /// <param name="referenceFrame">The reference frame that the pitch, heading and roll are in.
+        /// Defaults to the vessels surface reference frame.</param>
+        /// <param name="wait">If <c>true</c>, this method returns when the auto-pilot has rotated the
+        /// vessel into the requested orientation.</param>
         [KRPCMethod]
         public void SetRotation (float pitch, float heading, float roll = float.NaN, ReferenceFrame referenceFrame = null, bool wait = false)
         {
@@ -118,6 +198,26 @@ namespace KRPCSpaceCenter.Services
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
         }
 
+        /// <summary>
+        /// Points the vessel along the specified direction vector, and holds it
+        /// there. Setting the roll angle is optional.
+        ///
+        /// If wait is <c>false</c> (the default) this method returns immediately, and
+        /// the auto-pilot continues to rotate the vessel. If wait is <c>true</c>, this
+        /// method returns when the auto-pilot has rotated the vessel into the
+        /// requested orientation.
+        ///
+        /// The auto-pilot is disengaged either when <see cref="AutoPilot.Disengage"/>
+        /// is called, or when the client that requested the auto-pilot command
+        /// disconnects.
+        /// </summary>
+        /// <param name="direction">The desired direction (pitch and heading) as a unit vector.</param>
+        /// <param name="roll">Optional desired roll angle relative to the horizon, in degrees.
+        /// A value between -180° and 180°.</param>
+        /// <param name="referenceFrame">The reference frame that the direction vector is in. Defaults
+        /// to the vessels surface reference frame.</param>
+        /// <param name="wait">If true, this method returns when the auto-pilot has rotated the vessel
+        /// into the requested orientation.</param>
         [KRPCMethod]
         public void SetDirection (Tuple3 direction, float roll = float.NaN, ReferenceFrame referenceFrame = null, bool wait = false)
         {
@@ -126,9 +226,9 @@ namespace KRPCSpaceCenter.Services
             this.referenceFrame = referenceFrame;
             QuaternionD rotation = Quaternion.FromToRotation (Vector3d.up, direction.ToVector ());
             var phr = rotation.PitchHeadingRoll ();
-            pitch = (float) phr [0];
-            heading = (float) phr [1];
-            this.roll = (float) roll;
+            pitch = (float)phr [0];
+            heading = (float)phr [1];
+            this.roll = (float)roll;
             Engage ();
             if (wait)
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
@@ -148,6 +248,13 @@ namespace KRPCSpaceCenter.Services
             engaged [vessel] = this;
         }
 
+        /// <summary>
+        /// Disengage the auto-pilot. Has no effect unless <see cref="AutoPilot.SetRotation"/>
+        /// or <see cref="AutoPilot.SetDirection"/> have been called previously.
+        /// </summary>
+        /// <remarks>
+        /// This will disable <see cref="Control.SAS"/>.
+        /// </remarks>
         [KRPCMethod]
         public void Disengage ()
         {
@@ -155,6 +262,11 @@ namespace KRPCSpaceCenter.Services
             engaged [vessel] = null;
         }
 
+        /// <summary>
+        /// The error, in degrees, between the direction the ship has been asked
+        /// to point in and the actual direction it is pointing in. If the auto-pilot
+        /// has not been engaged, returns zero.
+        /// </summary>
         [KRPCProperty]
         public float Error {
             get {
@@ -167,18 +279,22 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// The error, in degrees, between the roll the ship has been asked to be
+        /// in and the actual roll. If the auto-pilot has not been engaged, returns zero.
+        /// </summary>
         [KRPCProperty]
         public float RollError {
             get {
                 if (engaged [vessel] != this || Double.IsNaN (roll))
                     return 0f;
                 var currentRoll = referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                return (float) Math.Abs (roll - currentRoll);
+                return (float)Math.Abs (roll - currentRoll);
             }
         }
 
         /// <summary>
-        /// Gets the direction vector that the SAS autopilot is trying to hold in world space
+        /// The direction vector that the SAS autopilot is trying to hold in world space
         /// </summary>
         Vector3d SASTargetDirection ()
         {

@@ -1,6 +1,7 @@
 import re
 import keyword
 from collections import defaultdict
+import xml.etree.ElementTree as ElementTree
 from krpc.attributes import Attributes
 from krpc.types import Types, DynamicType, DefaultArgument
 from krpc.decoder import Decoder
@@ -78,9 +79,84 @@ def _construct_func(invoke, service_name, procedure_name, prefix_param_names, pa
     }
     return eval(code, context)
 
+def _indent(lines, level):
+    result = []
+    for line in lines:
+        if line:
+            result.append((' '*level)+line)
+        else:
+            result.append(line)
+    return result
+
+def _parse_documentation_node(node):
+    if node.tag == 'see':
+        ref = node.attrib['cref']
+        if ref[0] == 'M':
+            ref = ref.split('.')
+            ref[-1] = _to_snake_case(ref[-1])
+            ref = '.'.join(ref)
+        return ref[2:]
+    elif node.tag == 'paramref':
+        return _to_snake_case(node.attrib['name'])
+    elif node.tag == 'c':
+        replace = {'true': 'True', 'false': 'False', 'null': 'None'}
+        if node.text in replace:
+            return replace[node.text]
+        else:
+            return node.text
+    elif node.tag == 'list':
+        content = '\n'
+        for item in node:
+            item_content = _parse_documentation_content(item[0])
+            content += '* %s\n' % '\n'.join(_indent(item_content.split('\n'), 2))[2:].rstrip()
+        return content
+    else:
+        return node.text
+
+def _parse_documentation_content(node):
+    desc = node.text
+    for child in node:
+        desc += _parse_documentation_node(child)
+        if child.tail:
+            desc += child.tail
+    return desc.strip()
+
+def _parse_documentation(xml):
+    if xml.strip() == '':
+        return ''
+    parser = ElementTree.XMLParser(encoding='UTF-8')
+    root = ElementTree.XML(xml.encode('UTF-8'), parser=parser)
+    summary = ''
+    params = []
+    returns = ''
+    note = ''
+    for node in root:
+        if node.tag == 'summary':
+            summary = _parse_documentation_content(node)
+        elif node.tag == 'param':
+            doc = _parse_documentation_content(node).replace('\n','')
+            params.append('%s: %s' % (_to_snake_case(node.attrib['name']), doc))
+        elif node.tag == 'returns':
+            returns = 'Returns:\n    %s' % _parse_documentation_content(node).replace('\n','')
+        elif node.tag == 'remarks':
+            note = 'Note: %s' % _parse_documentation_content(node)
+    if len(params) > 0:
+        params = 'Args:\n%s' % '\n'.join('    '+x for x in params)
+    else:
+        params = ''
+    return '\n\n'.join(filter(lambda x: x != '', [summary, params, returns, note]))
+
 def create_service(client, service):
     """ Create a new service type """
-    cls = type(str(service.name), (ServiceBase,), {'_client': client, '_name': service.name})
+    cls = type(
+        str(service.name),
+        (ServiceBase,),
+        {
+            '_client': client,
+            '_name': service.name,
+            '__doc__': _parse_documentation(service.documentation)
+        }
+    )
 
     # Add class types to service
     for cls2 in service.classes:
@@ -144,14 +220,14 @@ class ServiceBase(DynamicType):
     def _add_service_class(cls, remote_cls):
         """ Add a class type """
         name = remote_cls.name
-        class_type = cls._client._types.as_type('Class(' + cls._name + '.' + name + ')')
+        class_type = cls._client._types.as_type('Class(' + cls._name + '.' + name + ')', _parse_documentation(remote_cls.documentation))
         setattr(cls, name, class_type.python_type)
 
     @classmethod
     def _add_service_enumeration(cls, enum):
         """ Add an enumeration type """
         name = enum.name
-        enum_type = cls._client._types.as_type('Enum(' + cls._name + '.' + name + ')')
+        enum_type = cls._client._types.as_type('Enum(' + cls._name + '.' + name + ')', _parse_documentation(enum.documentation))
         enum_type.set_values(dict((str(_to_snake_case(x.name)), x.value) for x in enum.values))
         setattr(cls, name, enum_type.python_type)
 
@@ -180,11 +256,16 @@ class ServiceBase(DynamicType):
         setattr(func, '_build_request', build_request)
         setattr(func, '_return_type', return_type)
         name = str(_to_snake_case(procedure.name))
-        return cls._add_static_method(name, func, doc=None)
+        return cls._add_static_method(name, func, doc=_parse_documentation(procedure.documentation))
 
     @classmethod
     def _add_service_property(cls, name, getter=None, setter=None):
         """ Add a property """
+        doc = None
+        if getter:
+            doc = _parse_documentation(getter.documentation)
+        elif setter:
+            doc = _parse_documentation(setter.documentation)
         if getter:
             getter_name = getter.name
             _,_,_,_,return_type = cls._parse_procedure(getter)
@@ -196,7 +277,7 @@ class ServiceBase(DynamicType):
             param_names, param_types, _,_,_ = cls._parse_procedure(setter)
             setter = _construct_func(cls._client._invoke, cls._name, setter.name, ['self'], param_names, param_types, [True], [None], None)
         name = str(_to_snake_case(name))
-        return cls._add_property(name, getter, setter, doc=None)
+        return cls._add_property(name, getter, setter, doc=doc)
 
     @classmethod
     def _add_service_class_method(cls, class_name, method_name, procedure):
@@ -211,7 +292,7 @@ class ServiceBase(DynamicType):
         setattr(func, '_build_request', build_request)
         setattr(func, '_return_type', return_type)
         name = str(_to_snake_case(method_name))
-        class_cls._add_method(name, func, doc=None)
+        class_cls._add_method(name, func, doc=_parse_documentation(procedure.documentation))
 
     @classmethod
     def _add_service_class_static_method(cls, class_name, method_name, procedure):
@@ -223,12 +304,17 @@ class ServiceBase(DynamicType):
         setattr(func, '_build_request', build_request)
         setattr(func, '_return_type', return_type)
         name = str(_to_snake_case(method_name))
-        class_cls._add_static_method(name, func, doc=None)
+        class_cls._add_static_method(name, func, doc=_parse_documentation(procedure.documentation))
 
     @classmethod
     def _add_service_class_property(cls, class_name, property_name, getter=None, setter=None):
         """ Add a property to a class """
         class_cls = cls._client._types.as_type('Class('+cls._name+'.'+class_name+')').python_type
+        doc = None
+        if getter:
+            doc = _parse_documentation(getter.documentation)
+        elif setter:
+            doc = _parse_documentation(setter.documentation)
         if getter:
             getter_name = getter.name
             param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(getter)
@@ -243,4 +329,4 @@ class ServiceBase(DynamicType):
             param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(setter)
             setter = _construct_func(cls._client._invoke, cls._name, setter.name, [], param_names, param_types, [True,True], [None,None], None)
         property_name = str(_to_snake_case(property_name))
-        return class_cls._add_property(property_name, getter, setter, doc=None)
+        return class_cls._add_property(property_name, getter, setter, doc=doc)

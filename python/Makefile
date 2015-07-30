@@ -16,6 +16,8 @@ bin:
 	   ../test/TestServer/bin/$(CSHARP_CONFIG)/kRPC.dll \
 	   ../test/TestServer/bin/$(CSHARP_CONFIG)/Google.ProtocolBuffers.Serialization.dll \
 	   ../test/TestServer/bin/$(CSHARP_CONFIG)/Google.ProtocolBuffers.dll \
+	   ../test/TestServer/bin/$(CSHARP_CONFIG)/kRPC.xml \
+	   ../test/TestServer/bin/$(CSHARP_CONFIG)/TestServer.xml \
 	   ./bin/TestServer/
 
 test: protobuf bin

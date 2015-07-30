@@ -6,6 +6,20 @@ using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
 {
+    /// <summary>
+    /// Represents a reference frame for positions, rotations and
+    /// velocities. Contains:
+    /// <list type="bullet">
+    /// <item><description>The position of the origin.</description></item>
+    /// <item><description>The directions of the x, y and z axes.</description></item>
+    /// <item><description>The linear velocity of the frame.</description></item>
+    /// <item><description>The angular velocity of the frame.</description></item>
+    /// </list>
+    /// </summary>
+    /// <remarks>
+    /// This class does not contain any properties or methods. It is only
+    /// used as a parameter to other functions.
+    /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     public class ReferenceFrame : Equatable<ReferenceFrame>
     {

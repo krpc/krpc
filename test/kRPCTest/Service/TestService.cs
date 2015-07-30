@@ -4,6 +4,9 @@ using KRPC.Service.Attributes;
 
 namespace KRPCTest.Service
 {
+    /// <summary>
+    /// Test service documentation.
+    /// </summary>
     [KRPCService (GameScene = GameScene.Flight)]
     public static class TestService
     {
@@ -13,12 +16,18 @@ namespace KRPCTest.Service
         {
         }
 
+        /// <summary>
+        /// Procedure with no return arguments.
+        /// </summary>
         [KRPCProcedure]
         public static void ProcedureNoArgsNoReturn ()
         {
             Service.ProcedureNoArgsNoReturn ();
         }
 
+        /// <summary>
+        /// Procedure with a single return argument.
+        /// </summary>
         [KRPCProcedure]
         public static void ProcedureSingleArgNoReturn (KRPC.Schema.KRPC.Response data)
         {
@@ -155,20 +164,26 @@ namespace KRPCTest.Service
             return Service.ProcedureEnumReturn ();
         }
 
+        /// <summary>
+        /// Documentation string for CSharpEnum.
+        /// </summary>
         [KRPCEnum]
         public enum CSharpEnum
         {
+            /// <summary>
+            /// Documented enum field
+            /// </summary>
             x,
             y,
-            z}
-        ;
+            z
+        }
 
         public enum CSharpEnumWithoutAttribute
         {
             foo,
             bar,
-            baz}
-        ;
+            baz
+        }
 
         [KRPCProcedure]
         public static void ProcedureCSharpEnumArg (CSharpEnum x)

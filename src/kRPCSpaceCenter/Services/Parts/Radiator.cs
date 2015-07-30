@@ -5,16 +5,37 @@ using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
+    /// <summary>
+    /// <see cref="RadiatorState"/>
+    /// </summary>
     [KRPCEnum (Service = "SpaceCenter")]
     public enum RadiatorState
     {
+        /// <summary>
+        /// Radiator is fully extended.
+        /// </summary>
         Extended,
+        /// <summary>
+        /// Radiator is fully retracted.
+        /// </summary>
         Retracted,
+        /// <summary>
+        /// Radiator is being extended.
+        /// </summary>
         Extending,
+        /// <summary>
+        /// Radiator is being retracted.
+        /// </summary>
         Retracting,
+        /// <summary>
+        /// Radiator is being broken.
+        /// </summary>
         Broken
     }
 
+    /// <summary>
+    /// Obtained by calling <see cref="Part.Radiator"/>.
+    /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Radiator : Equatable<Radiator>
     {
@@ -39,11 +60,17 @@ namespace KRPCSpaceCenter.Services.Parts
             return part.GetHashCode ();
         }
 
+        /// <summary>
+        /// The part object for this radiator.
+        /// </summary>
         [KRPCProperty]
         public Part Part {
             get { return part; }
         }
 
+        /// <summary>
+        /// Whether the radiator is extended.
+        /// </summary>
         [KRPCProperty]
         public bool Deployed {
             get {
@@ -57,6 +84,9 @@ namespace KRPCSpaceCenter.Services.Parts
             }
         }
 
+        /// <summary>
+        /// The current state of the radiator.
+        /// </summary>
         [KRPCProperty]
         public RadiatorState State {
             get {

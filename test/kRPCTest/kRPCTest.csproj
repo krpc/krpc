@@ -21,6 +21,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Debug\kRPCTest.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -29,9 +31,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Release\kRPCTest.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\lib\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -93,6 +99,7 @@
     <Compile Include="Server\TestClient.cs" />
     <Compile Include="Server\TestStream.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
+    <Compile Include="Service\DocumentationUtilsTest.cs" />
     <Compile Include="Service\ITestService.cs" />
     <Compile Include="Service\KRPCTest.cs" />
     <Compile Include="Service\ObjectStoreTest.cs" />
@@ -111,5 +118,6 @@
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
     <Compile Include="Utils\TupleTest.cs" />
+    <Compile Include="Utils\DocumentationExtensionsTest.cs" />
   </ItemGroup>
 </Project>
