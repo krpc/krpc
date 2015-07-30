@@ -227,9 +227,9 @@ namespace KRPCSpaceCenter.Services
             this.referenceFrame = referenceFrame;
             QuaternionD rotation = Quaternion.FromToRotation (Vector3d.up, direction.ToVector ());
             var phr = rotation.PitchHeadingRoll ();
-            pitch = (float) phr [0];
-            heading = (float) phr [1];
-            this.roll = (float) roll;
+            pitch = (float)phr [0];
+            heading = (float)phr [1];
+            this.roll = (float)roll;
             Engage ();
             if (wait)
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
@@ -290,7 +290,7 @@ namespace KRPCSpaceCenter.Services
                 if (engaged [vessel] != this || Double.IsNaN (roll))
                     return 0f;
                 var currentRoll = referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                return (float) Math.Abs (roll - currentRoll);
+                return (float)Math.Abs (roll - currentRoll);
             }
         }
 

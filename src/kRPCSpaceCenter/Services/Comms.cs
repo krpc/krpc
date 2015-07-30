@@ -80,7 +80,8 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         /// <param name="other"></param>
         [KRPCMethod]
-        public double SignalDelayToVessel (Vessel other) {
+        public double SignalDelayToVessel (Vessel other)
+        {
             return RemoteTech.GetSignalDelayToSatellite (vessel.id, other.InternalVessel.id);
         }
     }
