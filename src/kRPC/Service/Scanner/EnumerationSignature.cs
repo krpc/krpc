@@ -14,7 +14,6 @@ namespace KRPC.Service.Scanner
 
         /// <summary>
         /// Name of the enumeration including the service it is in.
-        /// I.e. ServiceName.ClassName
         /// </summary>
         public string FullyQualifiedName { get; private set; }
 

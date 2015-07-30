@@ -13,6 +13,11 @@ namespace KRPC.Service.Scanner
         public string Name { get; private set; }
 
         /// <summary>
+        /// Name of the enumeration value including the service and enum it is in.
+        /// </summary>
+        public string FullyQualifiedName { get; private set; }
+
+        /// <summary>
         /// Integer value of the enumeration value.
         /// </summary>
         public int Value { get; private set; }
@@ -22,9 +27,10 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public string Documentation { get; private set; }
 
-        public EnumerationValueSignature (string name, int value, string documentation)
+        public EnumerationValueSignature (string serviceName, string enumName, string valueName, int value, string documentation)
         {
-            Name = name;
+            Name = valueName;
+            FullyQualifiedName = serviceName + "." + enumName + "." + Name;
             Value = value;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
         }
