@@ -31,6 +31,13 @@ def sorted_members(members):
         return member_ordering.index(x.name)
     return sorted(members, key=key_fn)
 
+currentmodule = None
+
+def set_currentmodule(name):
+    global currentmodule
+    currentmodule = name
+    return '.. currentmodule:: %s\n' % name
+
 domains = {
     'python': 'py',
     'lua': 'lua'
@@ -149,9 +156,9 @@ def parse_type(typ):
     if typ in type_map:
         return '%s' % type_map[typ]
     if typ.startswith('Class('):
-        return ':class:`%s`' % typ[6:-1].split('.')[1]
+        return ':class:`%s`' % shorten_ref(typ[6:-1])
     if typ.startswith('Enum('):
-        return ':class:`%s`' % typ[5:-1].split('.')[1]
+        return ':class:`%s`' % shorten_ref(typ[5:-1])
     if typ.startswith('Tuple('):
         subtyps = [parse_type(x) for x in typ[6:-1].split(',')]
         return 'tuple of (%s)' % ', '.join(subtyps)
@@ -167,9 +174,9 @@ def parse_type_ref(typ):
     if typ in type_map:
         return '%s' % type_map[typ]
     if typ.startswith('Class('):
-        return '%s' % typ[6:-1].split('.')[1]
+        return '%s' % shorten_ref(typ[6:-1])
     if typ.startswith('Enum('):
-        return '%s' % typ[5:-1].split('.')[1]
+        return '%s' % shorten_ref(typ[5:-1])
     if typ.startswith('Tuple('):
         return 'tuple'
     if typ.startswith('Dictionary('):
@@ -188,6 +195,11 @@ def parse_return_type(typ, attrs):
     typ = types.get_return_type(typ, attrs)
     return parse_type(typ.protobuf_type)
 
+def shorten_ref(name):
+    if currentmodule and name.startswith(currentmodule+'.'):
+        return name[len(currentmodule)+1:]
+    return name
+
 def parse_ref(name):
     obj = get_ref(name)
 
@@ -204,11 +216,8 @@ def parse_ref(name):
 
     typ,_,name = name.partition(':')
     name,_,_ = name.partition('(')
-    name = name.split('.')
-    if typ == 'T':
-        name = name[1:]
-    else: # typ == 'M'
-        name = [name[-2],name[-1]]
+    name = shorten_ref(name).split('.')
+    if typ == 'M':
         name[-1] = snake_case(name[-1])
     ref = '.'.join(name)
 
@@ -559,10 +568,15 @@ def process_file(path):
         'classes': classes,
         'enumerations': enumerations,
         'ref': parse_ref,
-        'value': parse_value
+        'value': parse_value,
+        'currentmodule': set_currentmodule
     }
+    global currentmodule
+    currentmodule = None
     template = Template(file=path, searchList=[namespace])
-    return str(template)
+    result = str(template)
+    currentmodule = None
+    return result
 
 for dirname,dirnames,filenames in os.walk(src):
     for filename in filenames:
