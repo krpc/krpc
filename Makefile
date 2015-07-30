@@ -244,7 +244,7 @@ icons:
 	make -C src/kRPC/icons
 
 logo:
-	-$(INKSCAPE) --export-png=logo.png logo.svg
+	-$(INKSCAPE) --export-png=logo.png media/logo.svg
 
 # Tools / Other ----------------------------------------------------------------
 
