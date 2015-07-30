@@ -51,7 +51,7 @@ type_map = {
     'uint32': 'int',
     'uint64': 'long',
     'bool': 'bool',
-    'string': 'str',
+    'string': 'string',
     'bytes': 'bytes',
     'KRPC.Tuple': 'tuple',
     'KRPC.Dictionary': 'dict',
