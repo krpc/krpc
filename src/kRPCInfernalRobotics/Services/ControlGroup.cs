@@ -5,6 +5,7 @@ using KRPC.Utils;
 
 namespace KRPCInfernalRobotics.Services
 {
+    //TODO: rename to ServoGroup to make naming consistent
     /// <summary>
     /// A group of servos, obtained by calling <see cref="InfernalRobotics.ServoGroups"/>
     /// or <see cref="InfernalRobotics.ServoGroupWithName"/>. Represents the "Servo Groups"
