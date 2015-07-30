@@ -119,7 +119,6 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// The state of SAS.
         /// </summary>
-        /// <returns><c>true</c> if SAS is enabled, <c>false</c> if it is not.</returns>
         [KRPCProperty]
         public bool SAS {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
@@ -203,8 +202,8 @@ namespace KRPCSpaceCenter.Services
         /// Points the vessel along the specified direction vector, and holds it
         /// there. Setting the roll angle is optional.
         ///
-        /// If wait is ``false`` (the default) this method returns immediately, and
-        /// the auto-pilot continues to rotate the vessel. If wait is ``true``, this
+        /// If wait is <c>false</c> (the default) this method returns immediately, and
+        /// the auto-pilot continues to rotate the vessel. If wait is <c>true</c>, this
         /// method returns when the auto-pilot has rotated the vessel into the
         /// requested orientation.
         ///
