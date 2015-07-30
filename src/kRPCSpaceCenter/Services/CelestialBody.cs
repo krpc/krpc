@@ -255,7 +255,7 @@ namespace KRPCSpaceCenter.Services
             return referenceFrame.DirectionFromWorldSpace (InternalBody.transform.up).ToTuple ();
         }
 
-        //TODO: default argument value?
+
         /// <summary>
         /// Returns the angular velocity of the body in the specified reference
         /// frame. The magnitude of the vector is the rotational speed of the body, in
