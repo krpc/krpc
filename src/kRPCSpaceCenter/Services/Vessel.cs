@@ -161,7 +161,7 @@ namespace KRPCSpaceCenter.Services
         /// telemetry for the vessel, in the specified reference frame.
         /// </summary>
         /// <param name="referenceFrame">
-        /// Reference frame. Defaults to the vessel's surface reference frame.
+        /// Reference frame. Defaults to the vessel's surface reference frame (<see cref="Vessel.SurfaceReferenceFrame"/>).
         /// </param>
         [KRPCMethod]
         public Flight Flight (ReferenceFrame referenceFrame = null)
