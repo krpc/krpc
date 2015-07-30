@@ -267,17 +267,17 @@ namespace KRPCSpaceCenter.Services
         /// <param name="maxPhysicsRate">The maximum warp rate in physical time warp.</param>
         /// <returns>When the time warp is complete.</returns>
         [KRPCProcedure]
-        public static void WarpTo (double UT, float maxRate = 100000, float maxPhysicsRate = 2)
+        public static void WarpTo (double UT, float maxRailsRate = 100000, float maxPhysicsRate = 2)
         {
-            float rate = Mathf.Clamp ((float)(UT - Planetarium.GetUniversalTime ()), 1f, maxRate);
+            float rate = Mathf.Clamp ((float)(UT - Planetarium.GetUniversalTime ()), 1f, maxRailsRate);
 
             if (CanRailsWarpAt ())
                 RailsWarpAtRate (rate);
             else
-                PhysicsWarpAtRate (Mathf.Min (rate, Math.Min (maxRate, maxPhysicsRate)));
+                PhysicsWarpAtRate (Mathf.Min (rate, Math.Min (maxRailsRate, maxPhysicsRate)));
 
             if (Planetarium.GetUniversalTime () < UT)
-                throw new YieldException (new ParameterizedContinuationVoid<double,float,float> (WarpTo, UT, maxRate, maxPhysicsRate));
+                throw new YieldException (new ParameterizedContinuationVoid<double,float,float> (WarpTo, UT, maxRailsRate, maxPhysicsRate));
             else if (TimeWarp.CurrentRateIndex > 0) {
                 SetWarpFactor (TimeWarp.Modes.HIGH, 0);
             }

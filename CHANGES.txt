@@ -1,5 +1,7 @@
 v0.1.11
 * Lua client library (https://luarocks.org/modules/djungelorm/krpc)
+* SpaceCenter service changes:
+  * Rename maxRate parameter in SpaceCenter.WarpTo to maxRailsRate
 
 v0.1.10
 * KSP 1.0.4 support (#151)
