@@ -92,10 +92,6 @@ class Env(object):
                 objs.append(Returns(self, self.parse_description(node)))
             elif node.tag == 'remarks':
                 objs.append(Note(self, self.parse_description(node)))
-            elif node.tag == 'seealso':
-                #objs.append(Note(self.parse_description(node)))
-                #TODO: implement
-                pass
             else:
                 raise RuntimeError('Unhandled documentation tag type %s' % node.tag)
         return description, objs
