@@ -51,10 +51,10 @@
       <HintPath>..\..\lib\protobuf-csharp-port-2.4.1.521-release-binaries\Release\net35\Google.ProtocolBuffers.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\lib\nunit-2.6.3\nunit.framework.dll</HintPath>
+      <HintPath>..\..\lib\nunit-2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Moq">
-      <HintPath>..\..\lib\moq-4.2.1312.1622\net40\Moq.dll</HintPath>
+      <HintPath>..\..\lib\moq-4.2.1507.0118\net40\Moq.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
