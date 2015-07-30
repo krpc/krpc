@@ -411,7 +411,7 @@ class Enumeration(Directive):
 
     def __call__(self, indent=0):
         desc,_ = parse_documentation(self.desc)
-        self.content = desc + '\n\n' + '\n'.join(x(3) for x in self.values)
+        self.content = desc + '\n\n' + ''.join(x() for x in self.values).rstrip()
         return super(Enumeration, self).__call__(indent)
 
 class EnumerationValue(Directive):
@@ -434,7 +434,9 @@ class Class(Directive):
 
     def __call__(self, indent=0, members=True):
         desc,options = parse_documentation(self.desc)
-        self.content = desc + '\n\n' + '\n'.join(x() for x in options)
+        self.content = desc
+        if len(options) > 0:
+            self.content += '\n\n' + '\n'.join(x() for x in options)
         if members:
             self.content += '\n\n' + '\n'.join(x() for x in self.members)
         return super(Class, self).__call__(indent)
