@@ -8,14 +8,6 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
-    [KRPCEnum (Service = "SpaceCenter")]
-    public enum PartState
-    {
-        Idle,
-        Active,
-        Dead
-    }
-
     /// <summary>
     /// Instances of this class represents a part. A vessel is made of multiple parts.
     /// Instances can be obtained by various methods in <see cref="Parts"/>.
