@@ -60,13 +60,13 @@ class Client(object):
 
         # Create class types
         #TODO: is this needed?!?
-        for service in services:
-            for procedure in service.procedures:
-                try:
-                    name = Attributes.get_class_name(procedure.attributes)
-                    self._types.as_type('Class(' + service.name + '.' + name + ')')
-                except ValueError:
-                    pass
+        #for service in services:
+        #    for procedure in service.procedures:
+        #        try:
+        #            name = Attributes.get_class_name(procedure.attributes)
+        #            self._types.as_type('Class(' + service.name + '.' + name + ')')
+        #        except ValueError:
+        #            pass
 
         # Set up services
         for service in services:
