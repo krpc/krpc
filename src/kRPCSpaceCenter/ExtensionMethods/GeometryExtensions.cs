@@ -100,6 +100,17 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Clamp the elements of a vector to the given range
+        /// </summary>
+        public static Vector3 Clamp (this Vector3 v, float min, float max)
+        {
+            return new Vector3 (
+                Mathf.Clamp (v.x, min, max),
+                Mathf.Clamp (v.y, min, max),
+                Mathf.Clamp (v.z, min, max));
+        }
+
+        /// <summary>
         /// Clamp a value to the given range
         /// </summary>
         public static T Clamp<T> (this T value, T min, T max) where T : IComparable<T>

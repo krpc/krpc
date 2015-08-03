@@ -80,28 +80,99 @@ namespace KRPCSpaceCenter.Services
     }
 
     /// <summary>
+    /// Robust, single parameter, proportional-integral-derivative controller
+    /// http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/
+    /// </summary>
+    class PIDController
+    {
+        float Kp, Ki, Kd;
+        Vector3 Ti;
+        Vector3 lastPosition;
+
+        public PIDController ()
+        {
+            Ti = Vector3.zero;
+            lastPosition = Vector3.zero;
+            SetParams ();
+        }
+
+        public void SetParams (float Kp = 1, float Ki = 0, float Kd = 0, float dt = 1)
+        {
+            this.Kp = Kp;
+            this.Ki = Ki * dt;
+            this.Kd = Kd / dt;
+        }
+
+        public Vector3 Update (Vector3 error, Vector3 position, float minOutput, float maxOutput)
+        {
+            Ti += Ki * error;
+            Ti = Ti.Clamp (minOutput, maxOutput);
+            var dInput = position - lastPosition;
+            var output = Kp * error + Ti - Kd * dInput;
+            output = output.Clamp (minOutput, maxOutput);
+            lastPosition = position;
+            return output;
+        }
+    }
+
+    class RotationRateController
+    {
+        global::Vessel vessel;
+        public readonly PIDController pid = new PIDController ();
+
+        public RotationRateController (global::Vessel vessel)
+        {
+            this.vessel = vessel;
+        }
+
+        public ReferenceFrame ReferenceFrame { get; set; }
+
+        public Vector3 Target { get; set; }
+
+        public Vector3 Error {
+            get {
+                var velocity = ReferenceFrame.AngularVelocityFromWorldSpace (-vessel.rigidbody.angularVelocity);
+                //var velocity = new Vessel (vessel).AngularVelocity (ReferenceFrame).ToVector ();
+                var error = Target - velocity;
+                var pitchAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.right));
+                var yawAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.forward));
+                //var rollAxis = new Vessel (vessel).Direction (ReferenceFrame).ToVector ();
+                var rollAxis = ReferenceFrame.DirectionFromWorldSpace (vessel.ReferenceTransform.up);
+                var pitch = Vector3.Dot (error, pitchAxis);
+                var yaw = Vector3.Dot (error, yawAxis);
+                var roll = Vector3.Dot (error, rollAxis);
+                return new Vector3 (pitch, yaw, roll);
+            }
+        }
+
+        public void Update (FlightCtrlState state)
+        {
+            var output = pid.Update (Error, Target, -1f, 1f);
+            state.pitch = output.x;
+            state.yaw = output.y;
+            state.roll = output.z;
+        }
+    }
+
+    /// <summary>
     /// Provides basic auto-piloting utilities for a vessel.
     /// Created by calling <see cref="Vessel.AutoPilot"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class AutoPilot : Equatable<AutoPilot>
     {
-        // Taken and adapted from MechJeb2/KOS/RemoteTech2/forum discussion; credit goes to the authors of those plugins/posts:
-        // https://github.com/MuMech/MechJeb2
-        // https://github.com/KSP-KOS/KOS
-        // https://github.com/RemoteTechnologiesGroup/RemoteTech
-        // http://forum.kerbalspaceprogram.com/threads/69313?p=1021721&amp;viewfull=1#post1021721
         readonly global::Vessel vessel;
+        readonly RotationRateController rotationRateController;
         static IDictionary<global::Vessel, AutoPilot> engaged = new Dictionary<global::Vessel, AutoPilot> ();
         IClient requestingClient;
         ReferenceFrame referenceFrame;
-        float pitch;
-        float heading;
-        float roll;
+        Vector3 targetDirection;
+        float targetRoll;
 
         internal AutoPilot (global::Vessel vessel)
         {
             this.vessel = vessel;
+            rotationRateController = new RotationRateController (vessel);
             if (!engaged.ContainsKey (vessel))
                 engaged [vessel] = null;
         }
@@ -190,9 +261,9 @@ namespace KRPCSpaceCenter.Services
             if (referenceFrame == null)
                 referenceFrame = ReferenceFrame.Surface (vessel);
             this.referenceFrame = referenceFrame;
-            this.pitch = pitch;
-            this.heading = heading;
-            this.roll = roll;
+            var rotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (new Vector3 (pitch, heading, 0));
+            targetDirection = rotation * Vector3.up;
+            targetRoll = roll;
             Engage ();
             if (wait)
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
@@ -224,11 +295,8 @@ namespace KRPCSpaceCenter.Services
             if (referenceFrame == null)
                 referenceFrame = ReferenceFrame.Surface (vessel);
             this.referenceFrame = referenceFrame;
-            QuaternionD rotation = Quaternion.FromToRotation (Vector3d.up, direction.ToVector ());
-            var phr = rotation.PitchHeadingRoll ();
-            pitch = (float)phr [0];
-            heading = (float)phr [1];
-            this.roll = (float)roll;
+            targetDirection = direction.ToVector ();
+            targetRoll = roll;
             Engage ();
             if (wait)
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
@@ -236,9 +304,7 @@ namespace KRPCSpaceCenter.Services
 
         void Wait ()
         {
-            if (Error > 0.5f)
-                throw new YieldException (new ParameterizedContinuationVoid (Wait));
-            if (vessel.angularVelocity.magnitude > 0.05f)
+            if (Error > 0.5f || RollError > 0.5f || vessel.angularVelocity.magnitude > 0.05f)
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
         }
 
@@ -271,7 +337,7 @@ namespace KRPCSpaceCenter.Services
         public float Error {
             get {
                 if (engaged [vessel] == this)
-                    return Vector3.Angle (vessel.ReferenceTransform.up, TargetDirection ());
+                    return Vector3.Angle (vessel.ReferenceTransform.up, referenceFrame.DirectionToWorldSpace (targetDirection));
                 else if (SAS && SASMode != SASMode.StabilityAssist)
                     return Vector3.Angle (vessel.ReferenceTransform.up, SASTargetDirection ());
                 else
@@ -286,11 +352,23 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float RollError {
             get {
-                if (engaged [vessel] != this || Double.IsNaN (roll))
+                if (engaged [vessel] != this || Double.IsNaN (targetRoll))
                     return 0f;
                 var currentRoll = referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                return (float)Math.Abs (roll - currentRoll);
+                return (float)Math.Abs (targetRoll - currentRoll);
             }
+        }
+
+        /// <summary>
+        /// Set the gain coefficients for the autopilot attitude PID controller.
+        /// </summary>
+        /// <param name="Kp">Proportional gain.</param>
+        /// <param name="Ki">Integral gain.</param>
+        /// <param name="Kd">Derivative gain.</param>
+        [KRPCMethod]
+        public void SetPIDParameters (float Kp, float Ki, float Kd)
+        {
+            rotationRateController.pid.SetParams (Kp, Ki, Kd, 1f);
         }
 
         /// <summary>
@@ -398,165 +476,35 @@ namespace KRPCSpaceCenter.Services
         void DoAutoPiloting (FlightCtrlState state)
         {
             SAS = false;
-            SteerShipToward (TargetRotation (), state, vessel);
-        }
-
-        Quaternion TargetRotation ()
-        {
-            // Compute world space target rotation from pitch, heading, roll
-            Quaternion rotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (new Vector3d (pitch, heading, float.IsNaN (roll) ? 0.0f : roll));
-            var target = referenceFrame.RotationToWorldSpace (rotation);
-
-            // If roll is not specified, re-compute rotation between direction vectors
-            if (float.IsNaN (roll)) {
-                var from = Vector3.up;
-                var to = target * Vector3.up;
-                target = Quaternion.FromToRotation (from, to);
+            var currentDirection = referenceFrame.DirectionFromWorldSpace (vessel.ReferenceTransform.up);
+            //var currentDirection = new Vessel (vessel).Direction (referenceFrame).ToVector ();
+            rotationRateController.ReferenceFrame = referenceFrame;
+            rotationRateController.Target = Vector3.Cross (targetDirection, currentDirection);
+            if (!Double.IsNaN (targetRoll)) {
+                float currentRoll = (float)referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
+                rotationRateController.Target += targetDirection * ((targetRoll - currentRoll) / 90f);
             }
-
-            return target;
+            rotationRateController.Update (state);
+            pitch = state.pitch;
+            yaw = state.yaw;
+            roll = state.roll;
         }
 
-        Vector3d TargetDirection ()
-        {
-            return TargetRotation () * Vector3.up;
+        float pitch, yaw, roll;
+
+        [KRPCProperty]
+        public float Pitch {
+            get { return pitch; }
         }
 
-        double ComputeError (Quaternion target)
-        {
-            return Math.Abs (Quaternion.Angle (vessel.ReferenceTransform.rotation, target));
+        [KRPCProperty]
+        public float Yaw {
+            get { return yaw; }
         }
 
-        static void SteerShipToward (Quaternion target, FlightCtrlState c, global::Vessel vessel)
-        {
-            target = target * Quaternion.Inverse (Quaternion.Euler (90, 0, 0));
-
-            var centerOfMass = vessel.findWorldCenterOfMass ();
-            var momentOfInertia = vessel.findLocalMOI (centerOfMass);
-
-            var vesselRotation = vessel.ReferenceTransform.rotation;
-
-            Quaternion delta = Quaternion.Inverse (Quaternion.Euler (90, 0, 0) * Quaternion.Inverse (vesselRotation) * target);
-
-            Vector3d deltaEuler = ReduceAngles (delta.eulerAngles);
-            deltaEuler.y *= -1;
-
-            Vector3d torque = GetTorque (vessel, c.mainThrottle);
-            Vector3d inertia = GetEffectiveInertia (vessel, torque);
-
-            Vector3d err = deltaEuler * Math.PI / 180.0F;
-            err += new Vector3d (inertia.x, inertia.z, inertia.y);
-
-            Vector3d act = 120.0f * err;
-
-            float precision = Mathf.Clamp ((float)torque.x * 20f / momentOfInertia.magnitude, 0.5f, 10f);
-            float driveLimit = Mathf.Clamp01 ((float)(err.magnitude * 380.0f / precision));
-
-            act.x = Mathf.Clamp ((float)act.x, -driveLimit, driveLimit);
-            act.y = Mathf.Clamp ((float)act.y, -driveLimit, driveLimit);
-            act.z = Mathf.Clamp ((float)act.z, -driveLimit, driveLimit);
-
-            c.roll = Mathf.Clamp ((float)(c.roll + act.z), -driveLimit, driveLimit);
-            c.pitch = Mathf.Clamp ((float)(c.pitch + act.x), -driveLimit, driveLimit);
-            c.yaw = Mathf.Clamp ((float)(c.yaw + act.y), -driveLimit, driveLimit);
-
-        }
-
-        static Vector3d GetEffectiveInertia (global::Vessel vessel, Vector3d torque)
-        {
-            var centerOfMass = vessel.findWorldCenterOfMass ();
-            var momentOfInertia = vessel.findLocalMOI (centerOfMass);
-            var angularVelocity = Quaternion.Inverse (vessel.ReferenceTransform.rotation) * vessel.rigidbody.angularVelocity;
-            var angularMomentum = new Vector3d (angularVelocity.x * momentOfInertia.x, angularVelocity.y * momentOfInertia.y, angularVelocity.z * momentOfInertia.z);
-
-            var retVar = Vector3d.Scale
-                (
-                             Sign (angularMomentum) * 2.0f,
-                             Vector3d.Scale (Pow (angularMomentum, 2), Inverse (Vector3d.Scale (torque, momentOfInertia)))
-                         );
-
-            retVar.y *= 10;
-
-            return retVar;
-        }
-
-        static Vector3d GetTorque (global::Vessel vessel, float thrust)
-        {
-            var centerOfMass = vessel.findWorldCenterOfMass ();
-            var rollaxis = vessel.ReferenceTransform.up;
-            rollaxis.Normalize ();
-            var pitchaxis = vessel.GetFwdVector ();
-            pitchaxis.Normalize ();
-
-            float pitch = 0.0f;
-            float yaw = 0.0f;
-            float roll = 0.0f;
-
-            foreach (var part in vessel.parts) {
-                var relCoM = part.Rigidbody.worldCenterOfMass - centerOfMass;
-
-                foreach (global::PartModule module in part.Modules) {
-                    var wheel = module as ModuleReactionWheel;
-                    if (wheel == null)
-                        continue;
-
-                    pitch += wheel.PitchTorque;
-                    yaw += wheel.YawTorque;
-                    roll += wheel.RollTorque;
-                }
-                if (vessel.ActionGroups [KSPActionGroup.RCS]) {
-                    foreach (global::PartModule module in part.Modules) {
-                        var rcs = module as ModuleRCS;
-                        if (rcs == null || !rcs.rcsEnabled)
-                            continue;
-
-                        bool enoughfuel = rcs.propellants.All (p => (int)(p.totalResourceAvailable) != 0);
-                        if (!enoughfuel)
-                            continue;
-                        foreach (Transform thrustdir in rcs.thrusterTransforms) {
-                            float rcsthrust = rcs.thrusterPower;
-                            //just counting positive contributions in one direction. This is incorrect for asymmetric thruster placements.
-                            roll += Mathf.Max (rcsthrust * Vector3.Dot (Vector3.Cross (relCoM, thrustdir.up), rollaxis), 0.0f);
-                            pitch += Mathf.Max (rcsthrust * Vector3.Dot (Vector3.Cross (Vector3.Cross (relCoM, thrustdir.up), rollaxis), pitchaxis), 0.0f);
-                            yaw += Mathf.Max (rcsthrust * Vector3.Dot (Vector3.Cross (Vector3.Cross (relCoM, thrustdir.up), rollaxis), Vector3.Cross (rollaxis, pitchaxis)), 0.0f);
-                        }
-                    }
-                }
-                pitch += (float)GetThrustTorque (part, vessel) * thrust;
-                yaw += (float)GetThrustTorque (part, vessel) * thrust;
-            }
-
-            return new Vector3d (pitch, roll, yaw);
-        }
-
-        static double GetThrustTorque (global::Part p, global::Vessel vessel)
-        {
-            //TODO: implement gimbalthrust Torque calculation
-            return 0;
-        }
-
-        static Vector3d Pow (Vector3d vector, float exponent)
-        {
-            return new Vector3d (Math.Pow (vector.x, exponent), Math.Pow (vector.y, exponent), Math.Pow (vector.z, exponent));
-        }
-
-        static Vector3d ReduceAngles (Vector3d input)
-        {
-            return new Vector3d (
-                (input.x > 180f) ? (input.x - 360f) : input.x,
-                (input.y > 180f) ? (input.y - 360f) : input.y,
-                (input.z > 180f) ? (input.z - 360f) : input.z
-            );
-        }
-
-        static Vector3d Inverse (Vector3d input)
-        {
-            return new Vector3d (1 / input.x, 1 / input.y, 1 / input.z);
-        }
-
-        static Vector3d Sign (Vector3d vector)
-        {
-            return new Vector3d (Math.Sign (vector.x), Math.Sign (vector.y), Math.Sign (vector.z));
+        [KRPCProperty]
+        public float Roll {
+            get { return roll; }
         }
     }
 }
