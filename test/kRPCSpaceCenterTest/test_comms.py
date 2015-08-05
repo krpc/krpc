@@ -25,6 +25,7 @@ class TestComms(testingtools.TestCase):
 
         comms = self.vessel.comms
 
+        self.assertFalse(comms.has_local_control)
         self.assertTrue(comms.has_flight_computer)
         self.assertTrue(comms.has_connection)
         self.assertTrue(comms.has_connection_to_ground_station)
@@ -37,6 +38,7 @@ class TestComms(testingtools.TestCase):
 
         comms = base.comms
 
+        self.assertFalse(comms.has_local_control)
         self.assertTrue(comms.has_flight_computer)
         self.assertTrue(comms.has_connection)
         self.assertTrue(comms.has_connection_to_ground_station)
