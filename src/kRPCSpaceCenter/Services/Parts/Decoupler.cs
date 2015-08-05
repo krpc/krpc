@@ -63,7 +63,7 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Rhe impulse that the decoupler imparts when it is fired, in Newton seconds.
+        /// The impulse that the decoupler imparts when it is fired, in Newton seconds.
         /// </summary>
         [KRPCProperty]
         public float Impulse {

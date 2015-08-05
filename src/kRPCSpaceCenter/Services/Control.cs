@@ -145,7 +145,7 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
-        /// The state of the throttle. A value betwen 0 and 1.
+        /// The state of the throttle. A value between 0 and 1.
         /// </summary>
         [KRPCProperty]
         public float Throttle {
