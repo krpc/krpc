@@ -59,12 +59,8 @@ positions in this reference frame are relative to the center of the
 planet. Consider the following code prints out the position of the active vessel
 in Kerbin's reference frame:
 
-.. code-block:: python
-
-   import krpc
-   conn = krpc.connect()
-   vessel = conn.space_center.active_vessel
-   print(vessel.position(vessel.orbit.body.reference_frame))
+.. literalinclude:: /scripts/VesselPosition.py
+   :linenos:
 
 For a vessel sat on the launchpad, the magnitude of this position vector will be
 roughly 600,000 meters (equal to the radius of Kerbin). The position vector will
@@ -175,18 +171,8 @@ direction vectors in-game.
 the center of the active vessel. For example, the following code draws the
 direction of the current vessels velocity relative to the surface:
 
-.. code-block:: python
-
-   import krpc
-   conn = krpc.connect(name='Navball directions')
-   vessel = conn.space_center.active_vessel
-
-   ref_frame = vessel.orbit.body.reference_frame
-   velocity = vessel.flight(ref_frame).velocity
-   conn.space_center.draw_direction(velocity, ref_frame, (1,0,0))
-
-   while True:
-      pass
+.. literalinclude:: /scripts/VisualDebugging.py
+   :linenos:
 
 .. note:: The client must remain connected, otherwise kRPC will stop drawing the
           directions, hence the while loop at the end of this example.
@@ -202,21 +188,8 @@ Navball directions
 This example demonstrates how to make the vessel point in various directions on
 the navball:
 
-.. code-block:: python
+.. literalinclude:: /scripts/NavballDirections.py
    :linenos:
-
-   import krpc
-   conn = krpc.connect(name='Navball directions')
-   vessel = conn.space_center.active_vessel
-
-   # Point the vessel north on the navball, with a pitch of 0 degrees
-   vessel.auto_pilot.set_direction((0,1,0), reference_frame=vessel.surface_reference_frame, wait=True)
-
-   # Point the vessel vertically upwards on the navball
-   vessel.auto_pilot.set_direction((1,0,0), reference_frame=vessel.surface_reference_frame, wait=True)
-
-   # Point the vessel west (heading of 270 degrees), with a pitch of 0 degrees
-   vessel.auto_pilot.set_direction((0,0,-1), reference_frame=vessel.surface_reference_frame, wait=True)
 
 The code uses the vessel's surface reference frame
 (:attr:`Vessel.surface_reference_frame`), pictured below:
@@ -224,15 +197,15 @@ The code uses the vessel's surface reference frame
 .. image:: /images/reference-frames/vessel-surface.png
    :align: center
 
-Line 6 instructs the auto-pilot to point in direction ``(0,1,0)`` (i.e. along
+Line 9 instructs the auto-pilot to point in direction ``(0,1,0)`` (i.e. along
 the y-axis) in the vessel's surface reference frame. The y-axis of the reference
 frame points in the north direction, as required.
 
-Line 9 instructs the auto-pilot to point in direction ``(1,0,0)`` (along the
+Line 13 instructs the auto-pilot to point in direction ``(1,0,0)`` (along the
 x-axis) in the vessel's surface reference frame. This x-axis of the reference
 frame points upwards (away from the planet) as required.
 
-Line 12 instructs the auto-pilot to point in direction ``(0,0,-1)`` (along the
+Line 17 instructs the auto-pilot to point in direction ``(0,0,-1)`` (along the
 negative z axis). The z-axis of the reference frame points east, so the
 requested direction points west -- as required.
 
@@ -243,21 +216,8 @@ This example demonstrates how to make the vessel point in the various orbital
 directions, as seen on the navball when it is in 'orbit' mode. It uses
 :attr:`Vessel.orbital_reference_frame`.
 
-.. code-block:: python
+.. literalinclude:: /scripts/OrbitalDirections.py
    :linenos:
-
-   import krpc
-   conn = krpc.connect(name='Orbital directions')
-   vessel = conn.space_center.active_vessel
-
-   # Point the vessel in the prograde direction
-   vessel.auto_pilot.set_direction((0,1,0), reference_frame=vessel.orbital_reference_frame, wait=True)
-
-   # Point the vessel in the orbit normal direction
-   vessel.auto_pilot.set_direction((0,0,1), reference_frame=vessel.orbital_reference_frame, wait=True)
-
-   # Point the vessel in the orbit radial direction
-   vessel.auto_pilot.set_direction((-1,0,0), reference_frame=vessel.orbital_reference_frame, wait=True)
 
 This code uses the vessel's orbital reference frame, pictured below:
 
@@ -271,14 +231,8 @@ This example demonstrates how to point the vessel in the 'prograde' direction on
 the navball, when in 'surface' mode. This is the direction of the vessels
 velocity relative to the surface:
 
-.. code-block:: python
+.. literalinclude:: /scripts/SurfacePrograde.py
    :linenos:
-
-   import krpc
-   conn = krpc.connect(name='Surface prograde')
-   vessel = conn.space_center.active_vessel
-
-   vessel.auto_pilot.set_direction((0,1,0), reference_frame=vessel.surface_velocity_reference_frame, wait=True)
 
 This code uses the :attr:`Vessel.surface_velocity_reference_frame`, pictured
 below:
@@ -294,22 +248,8 @@ to the planet's *non-rotating* reference frame
 (:attr:`CelestialBody.non_rotating_reference_frame`). This reference frame is
 fixed relative to the body, but does not rotate:
 
-.. code-block:: python
+.. literalinclude:: /scripts/OrbitalSpeed.py
    :linenos:
-
-   import krpc, time
-   conn = krpc.connect(name='Orbital speed')
-   vessel = conn.space_center.active_vessel
-
-   while True:
-
-       velocity = vessel.flight(vessel.orbit.body.non_rotating_reference_frame).velocity
-       print('Orbital velocity = (%.1f, %.1f, %.1f)' % velocity)
-
-       speed = vessel.flight(vessel.orbit.body.non_rotating_reference_frame).speed
-       print('Orbital speed = %.1f m/s' % speed)
-
-       time.sleep(1)
 
 Surface speed
 ^^^^^^^^^^^^^
@@ -320,22 +260,8 @@ need to get the velocity relative to the planets reference frame
 body, therefore the rotational velocity of the body is taken into account when
 computing the velocity of the vessel:
 
-.. code-block:: python
+.. literalinclude:: /scripts/SurfaceSpeed.py
    :linenos:
-
-   import krpc, time
-   conn = krpc.connect(name='Surface speed')
-   vessel = conn.space_center.active_vessel
-
-   while True:
-
-       velocity = vessel.flight(vessel.orbit.body.reference_frame).velocity
-       print('Surface velocity = (%.1f, %.1f, %.1f)' % velocity)
-
-       speed = vessel.flight(vessel.orbit.body.reference_frame).speed
-       print('Surface speed = %.1f m/s' % speed)
-
-       time.sleep(1)
 
 Angle of attack
 ^^^^^^^^^^^^^^^
@@ -343,34 +269,8 @@ Angle of attack
 This example computes the angle between the direction the vessel is pointing in,
 and the direction that the vessel is moving in (relative to the surface):
 
-.. code-block:: python
+.. literalinclude:: /scripts/AngleOfAttack.py
    :linenos:
-
-   import krpc, math, time
-   conn = krpc.connect(name='Angle of attack')
-   vessel = conn.space_center.active_vessel
-
-   while True:
-
-       d = vessel.direction(vessel.orbit.body.reference_frame)
-       v = vessel.velocity(vessel.orbit.body.reference_frame)
-
-       # Compute the dot product of d and v
-       dotprod = d[0]*v[0] + d[1]*v[1] + d[2]*v[2]
-
-       # Compute the magnitude of v
-       vmag = math.sqrt(v[0]**2 + v[1]**2 + v[2]**2)
-       # Note: don't need to magnitude of d as it is a unit vector
-
-       # Compute the angle between the vectors
-       if dotprod == 0:
-           angle = 0
-       else:
-           angle = abs(math.acos (dotprod / vmag) * (180. / math.pi))
-
-       print('Angle of attack = %.1f' % angle)
-
-       time.sleep(1)
 
 Note that the orientation of the reference frame used to get the direction and
 velocity vectors (on lines 7 and 8) does not matter, as the angle between two
