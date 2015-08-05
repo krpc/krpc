@@ -11,8 +11,6 @@ namespace KRPCSpaceCenter.ExternalAPI
 
         public static bool IsAvailable { get; private set; }
 
-        public static Func<global::Vessel, bool> ActiveControlSysIsOnVessel { get; internal set; }
-
         public static Func<global::Vessel, double> VesselDynPres { get; internal set; }
 
         public static Func<global::Vessel, double> VesselLiftCoeff { get; internal set; }
