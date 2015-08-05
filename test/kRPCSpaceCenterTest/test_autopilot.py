@@ -14,13 +14,15 @@ class TestAutoPilot(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
         testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        time.sleep(5) #FIXME: remove sleep
         cls.conn = krpc.connect(name='TestAutoPilot')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.ref = cls.conn.space_center.ReferenceFrame
         cls.ap = cls.vessel.auto_pilot
         cls.ap.sas = False
         cls.sas_mode = cls.conn.space_center.SASMode
+        cls.ap.rotation_speed_multiplier = 2
+        cls.ap.roll_speed_multiplier = 2
+        cls.ap.set_pid_parameters(3,0,0)
 
     @classmethod
     def tearDownClass(cls):
@@ -216,12 +218,14 @@ class TestAutoPilotSAS(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
         testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        time.sleep(5) #FIXME: remove sleep
         cls.conn = krpc.connect()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
         cls.sas_mode = cls.conn.space_center.SASMode
         cls.speed_mode = cls.conn.space_center.SpeedMode
+        cls.ap.rotation_speed_multiplier = 2
+        cls.ap.roll_speed_multiplier = 2
+        cls.ap.set_pid_parameters(3,0,0)
 
     @classmethod
     def tearDownClass(cls):
@@ -284,8 +288,6 @@ class TestAutoPilotOtherVessel(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Multi')
         testingtools.remove_other_vessels()
         testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        #FIXME: remove sleep
-        time.sleep(5)
         cls.conn = krpc.connect(name='TestAutoPilotOtherVessel')
         next(iter(cls.conn.space_center.active_vessel.parts.docking_ports)).undock()
         cls.vessel = cls.conn.space_center.active_vessel

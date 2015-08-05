@@ -178,7 +178,6 @@ class TestControlNonActiveVessel(testingtools.TestCase, TestControlMixin):
         testingtools.launch_vessel_from_vab('Multi')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        time.sleep(5) #FIXME: remove sleep
         cls.conn = krpc.connect(name='TestControlOtherVessel')
         next(iter(cls.conn.space_center.active_vessel.parts.docking_ports)).undock()
         cls.vessel = next(iter(filter(lambda v: v != cls.conn.space_center.active_vessel, cls.conn.space_center.vessels)))

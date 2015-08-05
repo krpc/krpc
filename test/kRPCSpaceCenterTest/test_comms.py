@@ -21,7 +21,6 @@ class TestComms(testingtools.TestCase):
     def test_basic(self):
         base = self.vessel.control.activate_next_stage()[0]
         self.vessel = self.conn.space_center.active_vessel
-        time.sleep(3)
 
         comms = self.vessel.comms
 

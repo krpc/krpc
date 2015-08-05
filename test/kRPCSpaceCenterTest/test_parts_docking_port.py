@@ -160,9 +160,6 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('PartsDockingPortInFlight')
         testingtools.set_circular_orbit('Kerbin', 100000)
         testingtools.remove_other_vessels()
-        #FIXME: sleep to prevent undocking tests from running too soon and the undocked vessel
-        #       getting deleted by the previous call
-        time.sleep(1)
         self.conn = krpc.connect(name='TestPartsDockingPortInFlight')
         self.sc = self.conn.space_center
         self.state = self.sc.DockingPortState
