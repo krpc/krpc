@@ -170,8 +170,6 @@ namespace KRPCSpaceCenter.Services
         {
             if (!FAR.IsAvailable)
                 throw new InvalidOperationException ("FAR is not available");
-            if (!FAR.ActiveControlSysIsOnVessel (vessel))
-                throw new InvalidOperationException ("FAR is not active on this vessel");
         }
 
         /// <summary>
@@ -376,19 +374,10 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// The current density of the atmosphere around the vessel, in <math>kg/m^3</math>.
         /// </summary>
-        /// <remarks>
-        /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>, or
-        /// <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> if it is installed.
-        /// </remarks>
         [KRPCProperty]
         public float AtmosphereDensity {
             get {
-                if (FAR.IsAvailable) {
-                    CheckFAR ();
-                    return (float)FAR.GetActiveControlSys_AirDensity ();
-                } else {
-                    return (float)vessel.atmDensity;
-                }
+                return (float)vessel.atmDensity;
             }
         }
 
@@ -405,8 +394,7 @@ namespace KRPCSpaceCenter.Services
         public float DynamicPressure {
             get {
                 if (FAR.IsAvailable) {
-                    CheckFAR ();
-                    return (float)FAR.GetActiveControlSys_Q ();
+                    return (float)FAR.VesselDynPres (vessel);
                 } else {
                     return (float)(0.5f * vessel.atmDensity * vessel.srf_velocity.sqrMagnitude);
                 }
@@ -494,18 +482,13 @@ namespace KRPCSpaceCenter.Services
         /// The speed of the vessel, in multiples of the speed of sound.
         /// </summary>
         /// <remarks>
-        /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>, or
-        /// <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> if it is installed.
+        /// Not available when <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
         /// </remarks>
         [KRPCProperty]
         public float Mach {
             get {
-                if (FAR.IsAvailable) {
-                    CheckFAR ();
-                    return (float)FAR.GetActiveControlSys_MachNumber ();
-                } else {
-                    return (float)vessel.rootPart.machNumber;
-                }
+                CheckNoFAR ();
+                return (float)vessel.rootPart.machNumber;
             }
         }
 
@@ -524,7 +507,8 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
-        /// The current terminal velocity of the vessel, in <math>m/s</math>. This is the speed at which the drag forces cancel out the force of gravity.
+        /// An estimate of the current terminal velocity of the vessel, in <math>m/s</math>.
+        /// This is the speed at which the drag forces cancel out the force of gravity.
         /// </summary>
         /// <remarks>
         /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>, or
@@ -534,10 +518,8 @@ namespace KRPCSpaceCenter.Services
         public float TerminalVelocity {
             get {
                 if (FAR.IsAvailable) {
-                    CheckFAR ();
-                    return (float)FAR.GetActiveControlSys_TermVel ();
+                    return (float)FAR.VesselTermVelEst (vessel);
                 } else {
-                    //FIXME: this is an estimate
                     var gravity = Math.Sqrt (vessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (vessel.CoM).magnitude);
                     return (float)(Math.Sqrt (gravity / WorldDrag.magnitude) * vessel.speed);
                 }
@@ -552,7 +534,7 @@ namespace KRPCSpaceCenter.Services
             get {
                 if (FAR.IsAvailable) {
                     CheckFAR ();
-                    return (float)FAR.GetActiveControlSys_AoA ();
+                    return (float)FAR.VesselAoA (vessel);
                 } else {
                     return (float)(Vector3d.Dot (vessel.transform.forward, vessel.srf_velocity.normalized) * (180d / Math.PI));
                 }
@@ -567,7 +549,7 @@ namespace KRPCSpaceCenter.Services
             get {
                 if (FAR.IsAvailable) {
                     CheckFAR ();
-                    return (float)FAR.GetActiveControlSys_Sideslip ();
+                    return (float)FAR.VesselSideslip (vessel);
                 } else {
                     return (float)(Vector3d.Dot (vessel.transform.up, Vector3d.Exclude (vessel.transform.forward, vessel.srf_velocity.normalized).normalized) * (180d / Math.PI));
                 }
@@ -603,7 +585,7 @@ namespace KRPCSpaceCenter.Services
         public float StallFraction {
             get {
                 CheckFAR ();
-                return (float)FAR.GetActiveControlSys_StallFrac ();
+                return (float)FAR.VesselStallFrac (vessel);
             }
         }
 
@@ -618,7 +600,7 @@ namespace KRPCSpaceCenter.Services
         public float DragCoefficient {
             get {
                 CheckFAR ();
-                return (float)FAR.GetActiveControlSys_Cd ();
+                return (float)FAR.VesselDragCoeff (vessel);
             }
         }
 
@@ -632,21 +614,7 @@ namespace KRPCSpaceCenter.Services
         public float LiftCoefficient {
             get {
                 CheckFAR ();
-                return (float)FAR.GetActiveControlSys_Cl ();
-            }
-        }
-
-        /// <summary>
-        /// Gets the <a href="http://en.wikipedia.org/wiki/Pitching_moment#Coefficient">pitching moment coefficient</a>.
-        /// </summary>
-        /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a>.
-        /// </remarks>
-        [KRPCProperty]
-        public float PitchingMomentCoefficient {
-            get {
-                CheckFAR ();
-                return (float)FAR.GetActiveControlSys_Cm ();
+                return (float)FAR.VesselLiftCoeff (vessel);
             }
         }
 
@@ -660,7 +628,7 @@ namespace KRPCSpaceCenter.Services
         public float BallisticCoefficient {
             get {
                 CheckFAR ();
-                return (float)FAR.GetActiveControlSys_BallisticCoeff ();
+                return (float)FAR.VesselBallisticCoeff (vessel);
             }
         }
 
@@ -676,21 +644,7 @@ namespace KRPCSpaceCenter.Services
         public float ThrustSpecificFuelConsumption {
             get {
                 CheckFAR ();
-                return (float)FAR.GetActiveControlSys_TSFC ();
-            }
-        }
-
-        /// <summary>
-        /// Gets current status message from <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a>.
-        /// </summary>
-        /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a>.
-        /// </remarks>
-        [KRPCProperty]
-        public string FARStatus {
-            get {
-                CheckFAR ();
-                return FAR.GetActiveControlSys_StatusMessage ();
+                return (float)FAR.VesselTSFC (vessel);
             }
         }
     }

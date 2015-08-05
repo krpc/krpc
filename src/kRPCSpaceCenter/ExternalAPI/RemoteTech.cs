@@ -2,7 +2,7 @@ using System;
 
 namespace KRPCSpaceCenter.ExternalAPI
 {
-    internal static class RemoteTech
+    static class RemoteTech
     {
         public static void Load ()
         {
