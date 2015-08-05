@@ -1,3 +1,6 @@
+v0.1.10
+ - Bump version number
+
 v0.1.9:
  - Bump version number
 

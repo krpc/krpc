@@ -4,6 +4,7 @@ using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using KRPCSpaceCenter.ExtensionMethods;
 
 namespace KRPCSpaceCenter.Services
 {
@@ -13,9 +14,8 @@ namespace KRPCSpaceCenter.Services
     /// direction in which the vessel is pointing.
     /// </summary>
     /// <remarks>
-    /// Control input will persist until the client that requested them disconnects.
-    /// If multiple clients set a control input (such as pitch, yaw or roll) they
-    /// are added together and clamped to the range [-1,1].
+    /// Control inputs (such as pitch, yaw and roll) are zeroed when all clients
+    /// that have set one or more of these inputs are no longer connected.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Control : Equatable<Control>
@@ -45,6 +45,18 @@ namespace KRPCSpaceCenter.Services
         public bool SAS {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
             set { vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
+        }
+
+        /// <summary>
+        /// The current <see cref="SASMode"/>.
+        /// These modes are equivalent to the mode buttons to
+        /// the left of the navball that appear when SAS is enabled.
+        /// </summary>
+        /// <remarks>Equivalent to <see cref="AutoPilot.SASMode"/></remarks>
+        [KRPCProperty]
+        public SASMode SASMode {
+            get { return AutoPilot.GetSASMode (vessel); }
+            set { AutoPilot.SetSASMode (vessel, value); }
         }
 
         /// <summary>
@@ -97,13 +109,8 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Throttle {
-            get { return vessel.isActiveVessel ? FlightInputHandler.state.mainThrottle : vessel.ctrlState.mainThrottle; }
-            set {
-                if (vessel.isActiveVessel)
-                    FlightInputHandler.state.mainThrottle = value;
-                else
-                    vessel.ctrlState.mainThrottle = value;
-            }
+            get { return PilotAddon.Get (vessel).Throttle; }
+            set { PilotAddon.Set (vessel).Throttle = value; }
         }
 
         /// <summary>
@@ -114,7 +121,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float Pitch {
             get { return PilotAddon.Get (vessel).Pitch; }
-            set { PilotAddon.Get (vessel).Pitch = value; }
+            set { PilotAddon.Set (vessel).Pitch = value; }
         }
 
         /// <summary>
@@ -125,7 +132,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float Yaw {
             get { return PilotAddon.Get (vessel).Yaw; }
-            set { PilotAddon.Get (vessel).Yaw = value; }
+            set { PilotAddon.Set (vessel).Yaw = value; }
         }
 
         /// <summary>
@@ -136,7 +143,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float Roll {
             get { return PilotAddon.Get (vessel).Roll; }
-            set { PilotAddon.Get (vessel).Roll = value; }
+            set { PilotAddon.Set (vessel).Roll = value; }
         }
 
         /// <summary>
@@ -147,7 +154,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float Forward {
             get { return PilotAddon.Get (vessel).Forward; }
-            set { PilotAddon.Get (vessel).Forward = value; }
+            set { PilotAddon.Set (vessel).Forward = value; }
         }
 
         /// <summary>
@@ -158,7 +165,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float Up {
             get { return PilotAddon.Get (vessel).Up; }
-            set { PilotAddon.Get (vessel).Up = value; }
+            set { PilotAddon.Set (vessel).Up = value; }
         }
 
         /// <summary>
@@ -169,7 +176,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float Right {
             get { return PilotAddon.Get (vessel).Right; }
-            set { PilotAddon.Get (vessel).Right = value; }
+            set { PilotAddon.Set (vessel).Right = value; }
         }
 
         /// <summary>
@@ -181,7 +188,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float WheelThrottle {
             get { return PilotAddon.Get (vessel).WheelThrottle; }
-            set { PilotAddon.Get (vessel).WheelThrottle = value; }
+            set { PilotAddon.Set (vessel).WheelThrottle = value; }
         }
 
         /// <summary>
@@ -192,7 +199,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public float WheelSteering {
             get { return PilotAddon.Get (vessel).WheelSteer; }
-            set { PilotAddon.Get (vessel).WheelSteer = value; }
+            set { PilotAddon.Set (vessel).WheelSteer = value; }
         }
 
         /// <summary>

@@ -11,6 +11,8 @@ namespace KRPCSpaceCenter.ExternalAPI
 
         public static bool IsAvailable { get; private set; }
 
+        public static Func<Guid, bool> HasLocalControl { get; internal set; }
+
         public static Func<Guid, bool> HasFlightComputer { get; internal set; }
 
         public static Action<Guid, Action<FlightCtrlState>> AddSanctionedPilot { get; internal set; }

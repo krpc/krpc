@@ -102,7 +102,7 @@ namespace KRPC
         }
 
         internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort,
-            bool oneRPCPerUpdate = false, uint maxTimePerUpdate = 5000, bool adaptiveRateControl = true, bool blockingRecv = true, uint recvTimeout = 1000)
+                             bool oneRPCPerUpdate = false, uint maxTimePerUpdate = 5000, bool adaptiveRateControl = true, bool blockingRecv = true, uint recvTimeout = 1000)
         {
             rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
@@ -347,8 +347,10 @@ namespace KRPC
             set { timePerStreamUpdate.Update (value); }
         }
 
-        void ClearStats ()
+        public void ClearStats ()
         {
+            rpcServer.ClearStats ();
+            streamServer.ClearStats ();
             RPCsExecuted = 0;
             RPCRate = 0;
             TimePerRPCUpdate = 0;

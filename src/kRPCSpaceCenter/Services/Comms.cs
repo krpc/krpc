@@ -36,6 +36,14 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether the vessel can be controlled locally.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasLocalControl {
+            get { return RemoteTech.HasLocalControl (vessel.id); }
+        }
+
+        /// <summary>
         /// Whether the vessel has a RemoteTech flight computer on board.
         /// </summary>
         [KRPCProperty]

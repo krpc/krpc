@@ -57,6 +57,12 @@ namespace KRPC.Server.Net
 
         public ulong BytesWritten { get; private set; }
 
+        public void ClearStats ()
+        {
+            BytesRead = 0;
+            BytesWritten = 0;
+        }
+
         public void Close ()
         {
             stream.Close ();

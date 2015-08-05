@@ -59,6 +59,12 @@ namespace KRPCTest.Server
 
         public ulong BytesWritten { get; private set; }
 
+        public void ClearStats ()
+        {
+            BytesRead = 0;
+            BytesWritten = 0;
+        }
+
         public void Close ()
         {
             throw new NotSupportedException ();

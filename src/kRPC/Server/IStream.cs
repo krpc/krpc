@@ -24,6 +24,11 @@ namespace KRPC.Server
         /// Gets the total number of bytes written to the stream.
         /// </summary>
         ulong BytesWritten { get; }
+
+        /// <summary>
+        /// Clear the bytes read and bytes written counts.
+        /// </summary>
+        void ClearStats ();
     }
 
     /// <summary>

@@ -145,12 +145,12 @@ namespace KRPCSpaceCenter.Services
             }
         }
 
-        public void Update (FlightCtrlState state)
+        public void Update (PilotAddon.ControlInputs state)
         {
             var output = pid.Update (Error, Target, -1f, 1f);
-            state.pitch = output.x;
-            state.yaw = output.y;
-            state.roll = output.z;
+            state.Pitch = output.x;
+            state.Yaw = output.y;
+            state.Roll = output.z;
         }
     }
 
@@ -190,6 +190,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// The state of SAS.
         /// </summary>
+        /// <remarks>Equivalent to <see cref="Control.SAS"/></remarks>
         [KRPCProperty]
         public bool SAS {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
@@ -201,19 +202,28 @@ namespace KRPCSpaceCenter.Services
         /// These modes are equivalent to the mode buttons to
         /// the left of the navball that appear when SAS is enabled.
         /// </summary>
+        /// <remarks>Equivalent to <see cref="Control.SASMode"/></remarks>
         [KRPCProperty]
         public SASMode SASMode {
-            get { return vessel.Autopilot.Mode.ToSASMode (); }
-            set {
-                var mode = value.FromSASMode ();
-                if (!vessel.Autopilot.CanSetMode (mode))
-                    throw new InvalidOperationException ("Cannot set SAS mode of vessel");
-                vessel.Autopilot.SetMode (mode);
-                // Update the UI buttons
-                var modeIndex = (int)vessel.Autopilot.Mode;
-                var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
-                modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
-            }
+            get { return GetSASMode (vessel); }
+            set { SetSASMode (vessel, value); }
+        }
+
+        internal static SASMode GetSASMode (global::Vessel vessel)
+        {
+            return vessel.Autopilot.Mode.ToSASMode ();
+        }
+
+        internal static void SetSASMode (global::Vessel vessel, SASMode value)
+        {
+            var mode = value.FromSASMode ();
+            if (!vessel.Autopilot.CanSetMode (mode))
+                throw new InvalidOperationException ("Cannot set SAS mode of vessel");
+            vessel.Autopilot.SetMode (mode);
+            // Update the UI buttons
+            var modeIndex = (int)vessel.Autopilot.Mode;
+            var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
+            modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
         }
 
         /// <summary>
@@ -456,24 +466,25 @@ namespace KRPCSpaceCenter.Services
             throw new InvalidOperationException ("Unknown SAS mode");
         }
 
-        internal static void Fly (global::Vessel vessel, FlightCtrlState state)
+        internal static bool Fly (global::Vessel vessel, PilotAddon.ControlInputs state)
         {
             // Get the auto-pilot object. Do nothing if there is no auto-pilot engaged for this vessel.
             if (!engaged.ContainsKey (vessel))
-                return;
+                return false;
             var autoPilot = engaged [vessel];
             if (autoPilot == null)
-                return;
+                return false;
             // If the client that engaged the auto-pilot has disconnected, disengage the auto-pilot
             if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected) {
                 autoPilot.Disengage ();
-                return;
+                return false;
             }
             // Run the auto-pilot
             autoPilot.DoAutoPiloting (state);
+            return true;
         }
 
-        void DoAutoPiloting (FlightCtrlState state)
+        void DoAutoPiloting (PilotAddon.ControlInputs state)
         {
             SAS = false;
             var currentDirection = referenceFrame.DirectionFromWorldSpace (vessel.ReferenceTransform.up);
@@ -485,9 +496,9 @@ namespace KRPCSpaceCenter.Services
                 rotationRateController.Target += targetDirection * ((targetRoll - currentRoll) / 90f);
             }
             rotationRateController.Update (state);
-            pitch = state.pitch;
-            yaw = state.yaw;
-            roll = state.roll;
+            pitch = state.Pitch;
+            yaw = state.Yaw;
+            roll = state.Roll;
         }
 
         float pitch, yaw, roll;
