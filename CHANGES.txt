@@ -3,6 +3,8 @@ v0.1.11
 * Server plugin changes:
   * Documentation returned by calling KRPC.GetServices (#31)
   * Fix bug preventing disconnection of clients from the server window (#161)
+  * Fix clearing bytes read/written statistics when the server is restarted
+  * Add "Clear Statistics" button to server info window
 * Python client:
   * Docstrings generated from documentation returned by KRPC.GetServices (#31)
 * SpaceCenter service changes:

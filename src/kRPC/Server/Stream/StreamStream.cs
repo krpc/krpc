@@ -54,6 +54,11 @@ namespace KRPC.Server.Stream
             get { return stream.BytesWritten; }
         }
 
+        public void ClearStats ()
+        {
+            stream.ClearStats ();
+        }
+
         public void Close ()
         {
             stream.Close ();

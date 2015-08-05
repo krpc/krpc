@@ -7,7 +7,7 @@ namespace KRPC.UI
     sealed class InfoWindow : Window
     {
         const float windowWidth = 300f;
-        GUIStyle labelStyle, nameLabelStyle, valueLabelStyle, separatorStyle;
+        GUIStyle labelStyle, nameLabelStyle, valueLabelStyle, separatorStyle, buttonStyle;
 
         bool running;
 
@@ -41,6 +41,8 @@ namespace KRPC.UI
 
         const string notApplicableText = "n/a";
 
+        const string clearStatisticsText = "Clear Statistics";
+
         public KRPCServer Server { private get; set; }
 
         protected override void Init ()
@@ -66,6 +68,9 @@ namespace KRPC.UI
             separatorStyle.fixedHeight = 2;
             separatorStyle.stretchWidth = true;
             separatorStyle.margin = new RectOffset (2, 2, 3, 3);
+
+            buttonStyle = new GUIStyle (skin.button);
+            buttonStyle.margin = new RectOffset (0, 0, 0, 0);
         }
 
         const float updateTime = 0.2f;
@@ -125,6 +130,14 @@ namespace KRPC.UI
                 DrawInfo (streamingRPCsExecutedText, Server.StreamRPCsExecuted.ToString ());
                 DrawInfo (streamingRPCRateText, Math.Round (Server.StreamRPCRate) + " RPC/s");
                 DrawInfo (timePerStreamUpdateText, String.Format ("{0:F5} s", Server.TimePerStreamUpdate));
+
+                GUILayoutExtensions.Separator (separatorStyle);
+
+                GUILayout.BeginHorizontal ();
+                if (GUILayout.Button (clearStatisticsText, buttonStyle)) {
+                    Server.ClearStats ();
+                }
+                GUILayout.EndHorizontal ();
             } else {
                 GUILayout.Label ("Server not running");
             }

@@ -195,6 +195,14 @@ namespace KRPC.Server.Net
             get { return closedClientsBytesWritten + clients.Select (c => c.Stream.BytesWritten).SumUnsignedLong (); }
         }
 
+        public void ClearStats ()
+        {
+            closedClientsBytesRead = 0;
+            closedClientsBytesWritten = 0;
+            foreach (var client in clients)
+                client.Stream.ClearStats ();
+        }
+
         /// <summary>
         /// Port number that the server listens on. Server must be restarted for changes to take effect.
         /// </summary>

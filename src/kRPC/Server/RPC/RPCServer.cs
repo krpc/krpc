@@ -78,11 +78,19 @@ namespace KRPC.Server.RPC
         }
 
         public ulong BytesRead {
-            get { return closedClientsBytesRead + clients.Values.Select(c => c.Stream.BytesRead).SumUnsignedLong(); }
+            get { return closedClientsBytesRead + clients.Values.Select (c => c.Stream.BytesRead).SumUnsignedLong (); }
         }
 
         public ulong BytesWritten {
-            get { return closedClientsBytesWritten + clients.Values.Select(c => c.Stream.BytesWritten).SumUnsignedLong(); }
+            get { return closedClientsBytesWritten + clients.Values.Select (c => c.Stream.BytesWritten).SumUnsignedLong (); }
+        }
+
+        public void ClearStats ()
+        {
+            closedClientsBytesRead = 0;
+            closedClientsBytesWritten = 0;
+            foreach (var client in clients.Values)
+                client.Stream.ClearStats ();
         }
 
         void HandleClientConnected (object sender, IClientEventArgs<byte,byte> args)

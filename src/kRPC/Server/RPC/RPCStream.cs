@@ -81,6 +81,11 @@ namespace KRPC.Server.RPC
             get { return stream.BytesWritten; }
         }
 
+        public void ClearStats ()
+        {
+            stream.ClearStats ();
+        }
+
         /// <summary>
         /// Close the stream.
         /// </summary>
