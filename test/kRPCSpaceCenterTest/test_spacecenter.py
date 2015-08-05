@@ -19,6 +19,8 @@ class TestSpaceCenter(testingtools.TestCase):
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
         cls.other_vessel = next(iter(filter(lambda v: v != cls.vessel, cls.sc.vessels)))
+        cls.vessel.name = 'Vessel'
+        cls.other_vessel.name = 'OtherVessel'
         cls.ref_vessel = cls.vessel.reference_frame
         bodies = cls.sc.bodies
         cls.sun = bodies['Sun']
@@ -37,9 +39,21 @@ class TestSpaceCenter(testingtools.TestCase):
 
     def test_active_vessel(self):
         active = self.sc.active_vessel
-        active.name = 'Active'
-        self.assertEqual(active.name, 'Active')
-        self.assertEqual(self.sc.active_vessel, active)
+        self.assertEqual(active.name, 'Vessel')
+
+        self.sc.active_vessel = self.other_vessel
+
+        active = self.sc.active_vessel
+        self.assertEqual(active.name, 'OtherVessel')
+
+        other_vessel = next(iter(filter(lambda v: v != active, self.sc.vessels)))
+        self.sc.active_vessel = other_vessel
+
+        active = self.sc.active_vessel
+        self.assertEqual(active.name, 'Vessel')
+
+        self.vessel = active
+        self.other_vessel = next(iter(filter(lambda v: v != active, self.sc.vessels)))
 
     def test_vessels(self):
         active = self.sc.active_vessel

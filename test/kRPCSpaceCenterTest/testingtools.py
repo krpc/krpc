@@ -28,19 +28,6 @@ def new_save(name='test'):
     conn.testing_tools.load_save('test', 'persistent')
     conn.close()
 
-    # Wait until server comes back up
-    time.sleep(1)
-    while True:
-        try:
-            conn = krpc.connect(name='testingtools.new_save')
-            conn.close()
-            break
-        except:
-            time.sleep(0.2)
-
-    #TODO: remove sleep
-    time.sleep(3)
-
 def load_save(name):
     # Copy save file to save directory
     fixtures_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
@@ -53,19 +40,6 @@ def load_save(name):
     conn = krpc.connect(name='testingtools.load_save')
     conn.testing_tools.load_save('test', name)
     conn.close()
-
-    # Wait until server comes back up
-    time.sleep(1)
-    while True:
-        try:
-            conn = krpc.connect(name='testingtools.load_save')
-            conn.close()
-            break
-        except:
-            time.sleep(0.2)
-
-    #TODO: remove sleep
-    time.sleep(3)
 
 def remove_other_vessels():
     with krpc.connect(name='testingtools.remove_other_vessels') as conn:
@@ -87,30 +61,13 @@ def launch_vessel_from_vab(name):
     with krpc.connect(name='testingtools.launch_vessel_from_vab') as conn:
         conn.space_center.launch_vessel_from_vab(name)
 
-    # Wait until server comes back up
-    time.sleep(1)
-    while True:
-        try:
-            conn = krpc.connect(name='testingtools.launch_vessel_from_vab')
-            conn.close()
-            break
-        except:
-            time.sleep(0.2)
-
-    #TODO: remove sleep
-    time.sleep(10)
-
 def set_orbit(body, sma, e, inc, lan, w, mEp, epoch):
     with krpc.connect(name='testingtools.set_orbit') as conn:
         conn.testing_tools.set_orbit(body, sma, e, inc, lan, w, mEp, epoch)
-    #TODO: remove sleep
-    time.sleep(3)
 
 def set_circular_orbit(body, altitude):
     with krpc.connect(name='testingtools.set_circular_orbit') as conn:
         conn.testing_tools.set_circular_orbit(body, altitude)
-    #TODO: remove sleep
-    time.sleep(3)
 
 class TestCase(unittest.TestCase):
 

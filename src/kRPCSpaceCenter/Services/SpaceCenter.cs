@@ -44,6 +44,21 @@ namespace KRPCSpaceCenter.Services
         [KRPCProperty]
         public static Vessel ActiveVessel {
             get { return new Vessel (FlightGlobals.ActiveVessel); }
+            set {
+                FlightGlobals.SetActiveVessel (value.InternalVessel);
+                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            }
+        }
+
+        /// <summary>
+        /// Wait until 10 frames after the active vessel is unpacked.
+        /// </summary>
+        static void WaitForVesselSwitch (int tick)
+        {
+            if (FlightGlobals.ActiveVessel.packed)
+                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            if (tick < 10)
+                throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, tick + 1));
         }
 
         /// <summary>
@@ -135,6 +150,7 @@ namespace KRPCSpaceCenter.Services
             var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/VAB/" + name + ".craft";
             var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
             FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "LaunchPad", crew);
+            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
         }
 
         /// <summary>
@@ -147,6 +163,7 @@ namespace KRPCSpaceCenter.Services
             var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/SPH/" + name + ".craft";
             var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
             FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "Runway", crew);
+            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
         }
 
         /// <summary>
