@@ -15,4 +15,5 @@ sed -i -E 's/AssemblyVersion \(".+"\)/AssemblyVersion \("'$VERSION'\")/' \
 sed -i -E 's/AssemblyVersion \(".+"\)/AssemblyVersion \("'$VERSION'\")/' \
        test/TestServer/Properties/AssemblyInfo.cs
 sed -i -E "s/version='.+'/version='"$VERSION"'/" python/setup.py
+sed -i -E "s/VERSION = .+/VERSION = $VERSION/" lua/Makefile
 sed -i -E "s/release = '.+'/release = '"$VERSION"'/" doc/src/conf.py
