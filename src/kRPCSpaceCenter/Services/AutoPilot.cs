@@ -461,26 +461,6 @@ namespace KRPCSpaceCenter.Services
                 rotationRateController.Target += targetDirection * ((targetRoll - currentRoll) / 90f);
             }
             rotationRateController.Update (state);
-            pitch = state.Pitch;
-            yaw = state.Yaw;
-            roll = state.Roll;
-        }
-
-        float pitch, yaw, roll;
-
-        [KRPCProperty]
-        public float Pitch {
-            get { return pitch; }
-        }
-
-        [KRPCProperty]
-        public float Yaw {
-            get { return yaw; }
-        }
-
-        [KRPCProperty]
-        public float Roll {
-            get { return roll; }
         }
     }
 }
