@@ -7,7 +7,7 @@ namespace KRPCSpaceCenter.Utils
     /// Robust, 3-parameter, proportional-integral-derivative controller
     /// http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/
     /// </summary>
-    public class PIDController
+    class PIDController
     {
         float Kp;
         float Ki;

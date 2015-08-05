@@ -111,6 +111,19 @@ namespace KRPCSpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Clamp the magnitude of a vector to the given range
+        /// </summary>
+        public static Vector3 ClampMagnitude (this Vector3 v, float min, float max)
+        {
+            if (v.sqrMagnitude < min * min)
+                return v.normalized * min;
+            else if (v.sqrMagnitude > max * max)
+                return v.normalized * max;
+            else
+                return v;
+        }
+
+        /// <summary>
         /// Clamp a value to the given range
         /// </summary>
         public static T Clamp<T> (this T value, T min, T max) where T : IComparable<T>

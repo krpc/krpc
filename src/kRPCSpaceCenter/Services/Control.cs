@@ -55,8 +55,48 @@ namespace KRPCSpaceCenter.Services
         /// <remarks>Equivalent to <see cref="AutoPilot.SASMode"/></remarks>
         [KRPCProperty]
         public SASMode SASMode {
-            get { return AutoPilot.GetSASMode (vessel); }
-            set { AutoPilot.SetSASMode (vessel, value); }
+            get { return GetSASMode (vessel); }
+            set { SetSASMode (vessel, value); }
+        }
+
+        internal static SASMode GetSASMode (global::Vessel vessel)
+        {
+            return vessel.Autopilot.Mode.ToSASMode ();
+        }
+
+        internal static void SetSASMode (global::Vessel vessel, SASMode value)
+        {
+            var mode = value.FromSASMode ();
+            if (!vessel.Autopilot.CanSetMode (mode))
+                throw new InvalidOperationException ("Cannot set SAS mode of vessel");
+            vessel.Autopilot.SetMode (mode);
+            // Update the UI buttons
+            var modeIndex = (int)vessel.Autopilot.Mode;
+            var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
+            modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
+        }
+
+        /// <summary>
+        /// The current <see cref="SpeedMode"/> of the navball.
+        /// This is the mode displayed next to the speed at the top of the navball.
+        /// </summary>
+        [KRPCProperty]
+        public SpeedMode SpeedMode {
+            get { return GetSpeedMode (); }
+            set {
+                var startMode = FlightUIController.speedDisplayMode;
+                var mode = value.FromSpeedMode ();
+                while (FlightUIController.speedDisplayMode != mode) {
+                    FlightUIController.fetch.cycleSpdModes ();
+                    if (FlightUIController.speedDisplayMode == startMode)
+                        break;
+                }
+            }
+        }
+
+        internal static SpeedMode GetSpeedMode ()
+        {
+            return FlightUIController.speedDisplayMode.ToSpeedMode ();
         }
 
         /// <summary>
