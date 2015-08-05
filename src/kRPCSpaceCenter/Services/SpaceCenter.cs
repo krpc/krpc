@@ -126,6 +126,30 @@ namespace KRPCSpaceCenter.Services
         }
 
         /// <summary>
+        /// Launch a new vessel from the VAB onto the launchpad.
+        /// </summary>
+        /// <param name="name">Name of the vessel's craft file.</param>
+        [KRPCProcedure]
+        public static void LaunchVesselFromVAB (string name)
+        {
+            var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/VAB/" + name + ".craft";
+            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
+            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "LaunchPad", crew);
+        }
+
+        /// <summary>
+        /// Launch a new vessel from the SPH onto the runway.
+        /// </summary>
+        /// <param name="name">Name of the vessel's craft file.</param>
+        [KRPCProcedure]
+        public static void LaunchVesselFromSPH (string name)
+        {
+            var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/SPH/" + name + ".craft";
+            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
+            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "Runway", crew);
+        }
+
+        /// <summary>
         /// The current universal time in seconds.
         /// </summary>
         [KRPCProperty]

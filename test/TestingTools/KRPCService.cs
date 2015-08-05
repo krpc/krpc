@@ -50,28 +50,6 @@ namespace TestingTools
         }
 
         /// <summary>
-        /// Launch a new vessel from the VAB onto the launchpad.
-        /// </summary>
-        [KRPCProcedure]
-        public static void LaunchVesselFromVAB (string name)
-        {
-            var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/VAB/" + name + ".craft";
-            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
-            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "LaunchPad", crew);
-        }
-
-        /// <summary>
-        /// Launch a new vessel from the SPH onto the runway.
-        /// </summary>
-        [KRPCProcedure]
-        public static void LaunchVesselFromSPH (string name)
-        {
-            var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/SPH/" + name + ".craft";
-            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
-            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "Runway", crew);
-        }
-
-        /// <summary>
         /// Set the orbit of the active vessel to a circular orbit.
         /// </summary>
         /// <param name="body">Body to orbit.</param>

@@ -85,7 +85,7 @@ def launch_vessel_from_vab(name):
 
     # Launch the craft
     with krpc.connect(name='testingtools.launch_vessel_from_vab') as conn:
-        conn.testing_tools.launch_vessel_from_vab(name)
+        conn.space_center.launch_vessel_from_vab(name)
 
     # Wait until server comes back up
     time.sleep(1)
