@@ -2,7 +2,7 @@ using System;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
-    public static class AutoPilotModeExtensions
+    static class AutoPilotModeExtensions
     {
         public static KRPCSpaceCenter.Services.SASMode ToSASMode (this VesselAutopilot.AutopilotMode mode)
         {

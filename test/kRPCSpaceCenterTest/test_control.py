@@ -73,6 +73,64 @@ class TestControlMixin(object):
         diff = self.orbital_flight.roll - roll
         self.assertGreater(diff, 0)
 
+    def test_sas_mode(self):
+        SASMode = self.conn.space_center.SASMode
+        self.control.sas = True
+        self.control.sas_mode = SASMode.stability_assist
+        active = self.vessel == self.conn.space_center.active_vessel
+        if active:
+            self.vessel.control.add_node(self.conn.space_center.ut + 60, 100, 0, 0)
+        self.assertEqual(self.control.sas_mode, SASMode.stability_assist)
+        time.sleep(0.25)
+        if active:
+            self.control.sas_mode = SASMode.maneuver
+            self.assertEqual(self.control.sas_mode, SASMode.maneuver)
+            time.sleep(0.25)
+        self.control.sas_mode = SASMode.prograde
+        self.assertEqual(self.control.sas_mode, SASMode.prograde)
+        time.sleep(0.25)
+        self.control.sas_mode = SASMode.retrograde
+        self.assertEqual(self.control.sas_mode, SASMode.retrograde)
+        time.sleep(0.25)
+        self.control.sas_mode = SASMode.normal
+        self.assertEqual(self.control.sas_mode, SASMode.normal)
+        time.sleep(0.25)
+        self.control.sas_mode = SASMode.anti_normal
+        self.assertEqual(self.control.sas_mode, SASMode.anti_normal)
+        time.sleep(0.25)
+        self.control.sas_mode = SASMode.radial
+        self.assertEqual(self.control.sas_mode, SASMode.radial)
+        time.sleep(0.25)
+        self.control.sas_mode = SASMode.anti_radial
+        self.assertEqual(self.control.sas_mode, SASMode.anti_radial)
+        time.sleep(0.25)
+        # No target set, should not change
+        # TODO: test with a target set
+        #self.control.sas_mode = SASMode.target
+        #self.assertEqual(self.control.sas_mode, SASMode.anti_radial)
+        #time.sleep(0.25)
+        #self.control.sas_mode = SASMode.anti_target
+        #self.assertEqual(self.control.sas_mode, SASMode.anti_radial)
+        #time.sleep(0.25)
+        self.control.sas_mode = SASMode.stability_assist
+        self.control.sas = False
+
+    def test_speed_mode(self):
+        SpeedMode = self.conn.space_center.SpeedMode
+        self.control.speed_mode = SpeedMode.orbit
+        self.assertEqual(self.control.speed_mode, SpeedMode.orbit)
+        time.sleep(0.25)
+        self.control.speed_mode = SpeedMode.surface
+        self.assertEqual(self.control.speed_mode, SpeedMode.surface)
+        time.sleep(0.25)
+        # No target set, should not change
+        # TODO: test with a target set
+        #self.control.speed_mode = SpeedMode.target
+        #self.assertEqual(self.control.speed_mode, SpeedMode.surface)
+        #time.sleep(0.25)
+        #self.control.speed_mode = SpeedMode.orbit
+        #self.assertEqual(self.control.speed_mode, SpeedMode.orbit)
+
 class TestControlActiveVessel(testingtools.TestCase, TestControlMixin):
 
     @classmethod
@@ -107,6 +165,7 @@ class TestControlActiveVessel(testingtools.TestCase, TestControlMixin):
         control.roll = 1
         time.sleep(0.5)
         conn.close()
+        time.sleep(0.5)
         self.assertEqual(self.control.pitch, 0)
         self.assertEqual(self.control.yaw, 0)
         self.assertEqual(self.control.roll, 0)
@@ -158,17 +217,19 @@ class TestControlStaging(testingtools.TestCase):
 
 class TestControlRover(testingtools.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('Rover')
         testingtools.remove_other_vessels()
-        self.conn = krpc.connect(name='TestControlRover')
-        self.vessel = self.conn.space_center.active_vessel
-        self.control = self.vessel.control
-        self.flight = self.vessel.flight(self.vessel.orbit.body.reference_frame)
+        cls.conn = krpc.connect(name='TestControlRover')
+        cls.vessel = cls.conn.space_center.active_vessel
+        cls.control = cls.vessel.control
+        cls.flight = cls.vessel.flight(cls.vessel.orbit.body.reference_frame)
 
-    def tearDown(self):
-        self.conn.close()
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
 
     def test_move_forward(self):
         self.control = self.conn.space_center.active_vessel.control
@@ -187,7 +248,7 @@ class TestControlRover(testingtools.TestCase):
         direction = normalize(self.flight.velocity)
         # In the body's reference frame, y-axis points from CoM to north pole
         # As we are close to the equator, this is very close to the north direction
-        self.assertClose((0,1,0), direction, 0.01)
+        self.assertClose((0,1,0), direction, 0.2)
 
         # Apply brakes
         self.control.wheel_throttle = 0
@@ -214,7 +275,7 @@ class TestControlRover(testingtools.TestCase):
         direction = normalize(self.flight.velocity)
         # In the body's reference frame, y-axis points from CoM to north pole
         # As we are close to the equator, this is very close to the north direction
-        self.assertClose((0,-1,0), direction, 0.01)
+        self.assertClose((0,-1,0), direction, 0.2)
 
         # Apply brakes
         self.control.wheel_throttle = 0
@@ -246,6 +307,15 @@ class TestControlRover(testingtools.TestCase):
             prev_roll = roll
             time.sleep(0.25)
 
+        # Apply brakes
+        self.control.wheel_steering = 0
+        self.control.wheel_throttle = 0
+        self.control.brakes = True
+        time.sleep(5)
+
+        # Check the rover is stopped
+        self.assertClose(self.flight.horizontal_speed, 0)
+
     def test_steer_right(self):
         self.control = self.conn.space_center.active_vessel.control
 
@@ -267,6 +337,15 @@ class TestControlRover(testingtools.TestCase):
             self.assertLess(roll, prev_roll)
             prev_roll = roll
             time.sleep(0.25)
+
+        # Apply brakes
+        self.control.wheel_steering = 0
+        self.control.wheel_throttle = 0
+        self.control.brakes = True
+        time.sleep(5)
+
+        # Check the rover is stopped
+        self.assertClose(self.flight.horizontal_speed, 0)
 
 if __name__ == "__main__":
     unittest.main()

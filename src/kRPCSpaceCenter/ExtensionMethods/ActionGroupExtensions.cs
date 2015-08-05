@@ -1,8 +1,8 @@
 using System;
 
-namespace KRPCSpaceCenter
+namespace KRPCSpaceCenter.ExtensionMethods
 {
-    static class Utils
+    static class ActionGroupExtensions
     {
         /// <summary>
         /// Get the custom action group for a given index (1 through 9)
