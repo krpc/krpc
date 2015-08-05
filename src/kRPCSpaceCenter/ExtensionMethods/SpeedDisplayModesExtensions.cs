@@ -2,7 +2,7 @@ using System;
 
 namespace KRPCSpaceCenter.ExtensionMethods
 {
-    public static class SpeedDisplayModesExtensions
+    static class SpeedDisplayModesExtensions
     {
         public static Services.SpeedMode ToSpeedMode (this FlightUIController.SpeedDisplayModes mode)
         {
