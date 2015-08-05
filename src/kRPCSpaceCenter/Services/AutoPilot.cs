@@ -6,6 +6,7 @@ using KRPC.Server;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
+using KRPCSpaceCenter.Utils;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
@@ -80,87 +81,52 @@ namespace KRPCSpaceCenter.Services
     }
 
     /// <summary>
-    /// Robust, single parameter, proportional-integral-derivative controller
-    /// http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/
-    /// </summary>
-    class PIDController
-    {
-        float Kp, Ki, Kd;
-        Vector3 Ti;
-        Vector3 lastPosition;
-
-        public PIDController ()
-        {
-            Ti = Vector3.zero;
-            lastPosition = Vector3.zero;
-            SetParams ();
-        }
-
-        public void SetParams (float Kp = 1, float Ki = 0, float Kd = 0, float dt = 1)
-        {
-            this.Kp = Kp;
-            this.Ki = Ki * dt;
-            this.Kd = Kd / dt;
-        }
-
-        public Vector3 Update (Vector3 error, Vector3 position, float minOutput, float maxOutput)
-        {
-            Ti += Ki * error;
-            Ti = Ti.Clamp (minOutput, maxOutput);
-            var dInput = position - lastPosition;
-            var output = Kp * error + Ti - Kd * dInput;
-            output = output.Clamp (minOutput, maxOutput);
-            lastPosition = position;
-            return output;
-        }
-    }
-
-    class RotationRateController
-    {
-        global::Vessel vessel;
-        public readonly PIDController pid = new PIDController ();
-
-        public RotationRateController (global::Vessel vessel)
-        {
-            this.vessel = vessel;
-        }
-
-        public ReferenceFrame ReferenceFrame { get; set; }
-
-        public Vector3 Target { get; set; }
-
-        public Vector3 Error {
-            get {
-                var velocity = ReferenceFrame.AngularVelocityFromWorldSpace (-vessel.rigidbody.angularVelocity);
-                //var velocity = new Vessel (vessel).AngularVelocity (ReferenceFrame).ToVector ();
-                var error = Target - velocity;
-                var pitchAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.right));
-                var yawAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.forward));
-                //var rollAxis = new Vessel (vessel).Direction (ReferenceFrame).ToVector ();
-                var rollAxis = ReferenceFrame.DirectionFromWorldSpace (vessel.ReferenceTransform.up);
-                var pitch = Vector3.Dot (error, pitchAxis);
-                var yaw = Vector3.Dot (error, yawAxis);
-                var roll = Vector3.Dot (error, rollAxis);
-                return new Vector3 (pitch, yaw, roll);
-            }
-        }
-
-        public void Update (PilotAddon.ControlInputs state)
-        {
-            var output = pid.Update (Error, Target, -1f, 1f);
-            state.Pitch = output.x;
-            state.Yaw = output.y;
-            state.Roll = output.z;
-        }
-    }
-
-    /// <summary>
     /// Provides basic auto-piloting utilities for a vessel.
     /// Created by calling <see cref="Vessel.AutoPilot"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class AutoPilot : Equatable<AutoPilot>
     {
+        /// <summary>
+        /// Controller that aims to get the vessel to rotate with a target rotational velocity.
+        /// </summary>
+        class RotationRateController
+        {
+            global::Vessel vessel;
+            public readonly PIDController pid = new PIDController ();
+
+            public RotationRateController (global::Vessel vessel)
+            {
+                this.vessel = vessel;
+            }
+
+            public ReferenceFrame ReferenceFrame { get; set; }
+
+            public Vector3 Target { get; set; }
+
+            public Vector3 Error {
+                get {
+                    var velocity = ReferenceFrame.AngularVelocityFromWorldSpace (-vessel.rigidbody.angularVelocity);
+                    var error = Target - velocity;
+                    var pitchAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.right));
+                    var yawAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.forward));
+                    var rollAxis = ReferenceFrame.DirectionFromWorldSpace (vessel.ReferenceTransform.up);
+                    var pitch = Vector3.Dot (error, pitchAxis);
+                    var yaw = Vector3.Dot (error, yawAxis);
+                    var roll = Vector3.Dot (error, rollAxis);
+                    return new Vector3 (pitch, yaw, roll);
+                }
+            }
+
+            public void Update (PilotAddon.ControlInputs state)
+            {
+                var output = pid.Update (Error, Target, -1f, 1f);
+                state.Pitch = output.x;
+                state.Yaw = output.y;
+                state.Roll = output.z;
+            }
+        }
+
         readonly global::Vessel vessel;
         readonly RotationRateController rotationRateController;
         static IDictionary<global::Vessel, AutoPilot> engaged = new Dictionary<global::Vessel, AutoPilot> ();
@@ -378,7 +344,7 @@ namespace KRPCSpaceCenter.Services
         [KRPCMethod]
         public void SetPIDParameters (float Kp, float Ki, float Kd)
         {
-            rotationRateController.pid.SetParams (Kp, Ki, Kd, 1f);
+            rotationRateController.pid.SetParameters (Kp, Ki, Kd, 1f);
         }
 
         /// <summary>
@@ -488,7 +454,6 @@ namespace KRPCSpaceCenter.Services
         {
             SAS = false;
             var currentDirection = referenceFrame.DirectionFromWorldSpace (vessel.ReferenceTransform.up);
-            //var currentDirection = new Vessel (vessel).Direction (referenceFrame).ToVector ();
             rotationRateController.ReferenceFrame = referenceFrame;
             rotationRateController.Target = Vector3.Cross (targetDirection, currentDirection);
             if (!Double.IsNaN (targetRoll)) {

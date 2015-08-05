@@ -244,7 +244,7 @@ namespace KRPCSpaceCenter.Services
         {
             if (group > 9)
                 throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
-            return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (Utils.GetActionGroup (group))];
+            return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (ActionGroupExtensions.GetActionGroup (group))];
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace KRPCSpaceCenter.Services
         {
             if (group > 9)
                 throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
-            vessel.ActionGroups.SetGroup (Utils.GetActionGroup (group), state);
+            vessel.ActionGroups.SetGroup (ActionGroupExtensions.GetActionGroup (group), state);
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace KRPCSpaceCenter.Services
         {
             if (group > 9)
                 throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
-            vessel.ActionGroups.ToggleGroup (Utils.GetActionGroup (group));
+            vessel.ActionGroups.ToggleGroup (ActionGroupExtensions.GetActionGroup (group));
         }
 
         /// <summary>
