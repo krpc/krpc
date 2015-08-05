@@ -188,11 +188,11 @@ namespace KRPC.Server.Net
         }
 
         public ulong BytesRead {
-            get { return closedClientsBytesRead + clients.Select (c => c.Stream.BytesRead).SumUnsignedLong(); }
+            get { return closedClientsBytesRead + clients.Select (c => c.Stream.BytesRead).SumUnsignedLong (); }
         }
 
         public ulong BytesWritten {
-            get { return closedClientsBytesWritten + clients.Select (c => c.Stream.BytesWritten).SumUnsignedLong(); }
+            get { return closedClientsBytesWritten + clients.Select (c => c.Stream.BytesWritten).SumUnsignedLong (); }
         }
 
         /// <summary>
@@ -241,8 +241,11 @@ namespace KRPC.Server.Net
         void DisconnectClient (IClient<byte,byte> client, bool noEvent = false)
         {
             var clientAddress = client.Address;
-            closedClientsBytesRead += client.Stream.BytesRead;
-            closedClientsBytesWritten += client.Stream.BytesWritten;
+            try {
+                closedClientsBytesRead += client.Stream.BytesRead;
+                closedClientsBytesWritten += client.Stream.BytesWritten;
+            } catch (ClientDisconnectedException) {
+            }
             client.Close ();
             if (!noEvent && OnClientDisconnected != null)
                 OnClientDisconnected (this, new ClientDisconnectedArgs<byte,byte> (client));
