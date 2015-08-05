@@ -110,13 +110,16 @@ dist-clean: clean
 
 # Tests ------------------------------------------------------------------------
 
-test: test-csharp test-python test-spacecenter
+test: test-csharp test-python test-lua test-spacecenter
 
 test-csharp: $(CSHARP_TEST_PROJECTS)
 	$(NUNIT_CONSOLE) -nologo -nothread -trace=Off -output=test.log test/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
 
 test-python:
 	make -C python test
+
+test-lua:
+	make -C lua test
 
 test-spacecenter:
 	make -C test/kRPCSpaceCenterTest KSP_DIR="$(KSP_DIR)" test
