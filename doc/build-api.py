@@ -33,6 +33,7 @@ class Env(object):
         else:
             raise RuntimeError('Unknown language')
 
+        self._member_ordering_seen = set()
         with open('order.txt', 'r') as f:
             self._member_ordering = [x.strip() for x in f.readlines()]
 
@@ -66,8 +67,16 @@ class Env(object):
             if x.name not in self._member_ordering:
                 print 'Don\'t know how to order member', x.name
                 return float('inf')
+            self._member_ordering_seen.add(x.name)
             return self._member_ordering.index(x.name)
         return sorted(members, key=key_fn)
+
+    def check_seen_members(self):
+        unseen = set(self._member_ordering).difference(self._member_ordering_seen)
+        if len(unseen) > 0:
+            print 'WARNING: unseen members in order list:'
+            for x in unseen:
+                print '   ', x
 
     def parse_documentation(self, xml, info=None):
         if xml.strip() == '':
@@ -238,6 +247,7 @@ def process_file(path):
     template = Template(file=path, searchList=[namespace])
     result = str(template)
     currentmodule = None
+    env.check_seen_members()
     return result
 
 for dirname,dirnames,filenames in os.walk(src):
