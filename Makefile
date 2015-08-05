@@ -253,8 +253,8 @@ ksp: build TestingTools
 	rm -rf "$(KSP_DIR)/GameData/kRPC"
 	mkdir "$(KSP_DIR)/GameData/kRPC"
 	cp -r $(CSHARP_MAIN_LIBRARIES) $(CSHARP_DOCS) $(DIST_LIBS) $(DIST_ICONS) $(KSP_DIR)/GameData/kRPC/
-	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.dll "$(KSP_DIR)/GameData/"
-	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.xml "$(KSP_DIR)/GameData/"
+	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.dll "$(KSP_DIR)/GameData/kRPC/"
+	cp test/TestingTools/bin/$(CSHARP_CONFIG)/TestingTools.xml "$(KSP_DIR)/GameData/kRPC/"
 	-cp settings.cfg "$(KSP_DIR)/GameData/kRPC/settings.cfg"
 	test "!" -f "$(KSP_DIR)/KSP.x86_64" || "$(KSP_DIR)/KSP.x86_64" &
 	test "!" -f "$(KSP_DIR)/KSP.exe" || "$(KSP_DIR)/KSP.exe" &
