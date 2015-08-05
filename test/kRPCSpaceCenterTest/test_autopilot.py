@@ -33,24 +33,27 @@ class TestAutoPilot(testingtools.TestCase):
         self.assertEqual(self.vessel.auto_pilot, self.ap)
 
     def wait_for_autopilot(self):
-        while self.ap.error > 0.25 or self.ap.roll_error > 0.25:
-            time.sleep(0.25)
-
-    def set_rotation(self, pitch, heading, roll):
-        self.ap.set_rotation(pitch, heading, roll)
-        self.wait_for_autopilot()
+        self.ap.engage()
+        self.ap.wait()
         self.ap.disengage()
 
-    def check_rotation(self, pitch, heading, roll):
-        phr = (pitch,heading,roll)
+    def set_rotation(self, pitch, heading, roll=float('nan')):
+        self.ap.reference_frame = self.vessel.surface_reference_frame
+        self.ap.target_pitch_and_heading(pitch, heading)
+        self.ap.target_roll = roll
+
+    def check_rotation(self, pitch, heading, roll=None):
         flight = self.vessel.flight()
-        actual_phr = (flight.pitch, flight.heading, flight.roll)
-        self.assertClose(phr, actual_phr, error=1)
+        ph = (pitch,heading)
+        actual_ph = (flight.pitch, flight.heading)
+        self.assertClose(ph, actual_ph, error=1)
+        if roll:
+            self.assertClose(roll, flight.roll, error=1)
 
     def set_direction(self, direction, roll=float('nan')):
-        self.ap.set_direction(direction, roll=roll)
-        self.wait_for_autopilot()
-        self.ap.disengage()
+        self.ap.reference_frame = self.vessel.surface_reference_frame
+        self.ap.target_direction = direction
+        self.ap.target_roll = roll
 
     def check_direction(self, direction, roll=None):
         flight = self.vessel.flight()
@@ -65,18 +68,21 @@ class TestAutoPilot(testingtools.TestCase):
         self.assertFalse(self.ap.sas)
 
     def test_set_pitch(self):
-        for pitch in range(-80, 80, 20):
-            self.set_rotation(pitch,90,0)
-            self.check_rotation(pitch,90,0)
+        for pitch in [-90,-60,-30,0,30,60,90]:
+            self.set_rotation(pitch,90)
+            self.wait_for_autopilot()
+            self.check_rotation(pitch,90)
 
     def test_set_heading(self):
-        for heading in range(20, 340, 40):
-            self.set_rotation(0,heading,0)
-            self.check_rotation(0,heading,0)
+        for heading in [20,80,147,340]:
+            self.set_rotation(0,heading)
+            self.wait_for_autopilot()
+            self.check_rotation(0,heading)
 
     def test_set_roll(self):
-        for roll in range(-160, 160, 20):
+        for roll in [-170,-50,0,50,170]:
             self.set_rotation(0,90,roll)
+            self.wait_for_autopilot()
             self.check_rotation(0,90,roll)
 
     def test_set_rotation(self):
@@ -92,6 +98,7 @@ class TestAutoPilot(testingtools.TestCase):
         for phr in cases:
             pitch,heading,roll = phr
             self.set_rotation(pitch,heading,roll)
+            self.wait_for_autopilot()
             self.check_rotation(pitch,heading,roll)
 
     def test_set_direction(self):
@@ -108,6 +115,7 @@ class TestAutoPilot(testingtools.TestCase):
         for direction in cases:
             direction = normalize(direction)
             self.set_direction(direction)
+            self.wait_for_autopilot()
             self.check_direction(direction)
 
     def test_set_direction_and_roll(self):
@@ -124,22 +132,23 @@ class TestAutoPilot(testingtools.TestCase):
         for direction,roll in cases:
             direction = normalize(direction)
             self.set_direction(direction,roll)
+            self.wait_for_autopilot()
             self.check_direction(direction,roll)
 
     def test_orbital_directions(self):
         flight = self.vessel.flight()
-        self.set_direction(flight.prograde)
-        self.check_direction(flight.prograde)
-        self.set_direction(flight.retrograde)
-        self.check_direction(flight.retrograde)
-        self.set_direction(flight.normal)
-        self.check_direction(flight.normal)
-        self.set_direction(flight.anti_normal)
-        self.check_direction(flight.anti_normal)
-        self.set_direction(flight.radial)
-        self.check_direction(flight.radial)
-        self.set_direction(flight.anti_radial)
-        self.check_direction(flight.anti_radial)
+        directions = [
+            flight.prograde,
+            flight.retrograde,
+            flight.normal,
+            flight.anti_normal,
+            flight.radial,
+            flight.anti_radial
+        ]
+        for direction in directions:
+            self.set_direction(direction)
+            self.wait_for_autopilot()
+            self.check_direction(direction)
 
     def test_error(self):
         flight = self.vessel.flight()
@@ -148,27 +157,32 @@ class TestAutoPilot(testingtools.TestCase):
         self.assertClose(0, self.ap.error)
 
         self.set_direction(flight.prograde, roll=27)
+        self.wait_for_autopilot()
         self.ap.sas = True
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = False
 
-        self.ap.set_direction(flight.prograde)
+        self.ap.engage()
+
+        self.ap.target_direction = flight.prograde
         self.assertClose(0, self.ap.error, 1)
 
-        self.ap.set_direction(flight.retrograde)
+        self.ap.target_direction = flight.retrograde
         self.assertClose(180, self.ap.error, 1)
 
-        self.ap.set_direction(flight.normal)
+        self.ap.target_direction = flight.normal
         self.assertClose(90, self.ap.error, 1)
 
-        self.ap.set_direction(flight.anti_normal)
+        self.ap.target_direction = flight.anti_normal
         self.assertClose(90, self.ap.error, 1)
 
-        self.ap.set_direction(flight.radial)
+        self.ap.target_direction = flight.radial
         self.assertClose(90, self.ap.error, 1)
 
-        self.ap.set_direction(flight.anti_radial)
+        self.ap.target_direction = flight.anti_radial
         self.assertClose(90, self.ap.error, 1)
+
+        self.ap.disengage()
 
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = True
@@ -180,13 +194,16 @@ class TestAutoPilot(testingtools.TestCase):
         set_roll = -57
         direction = self.vessel.direction(self.vessel.surface_reference_frame)
         self.set_direction(direction, roll=set_roll)
+        self.wait_for_autopilot()
         self.ap.sas = True
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = False
 
+        self.ap.engage()
         for roll in [0,-54,-90,27,45,90]:
-            self.ap.set_direction(direction, roll=roll)
+            self.ap.target_roll = roll
             self.assertClose(abs(set_roll - roll), self.ap.roll_error, 1)
+        self.ap.disengage()
 
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = True
@@ -217,69 +234,20 @@ class TestAutoPilotSAS(testingtools.TestCase):
         self.conn.testing_tools.clear_rotation()
 
     def wait_for_autopilot(self):
-        while self.ap.error > 0.25:
-            time.sleep(0.25)
-
-            self.ap.sas = False
-
-    def test_sas_mode(self):
-        self.ap.sas = True
-        self.ap.sas_mode = self.sas_mode.stability_assist
-        self.vessel.control.add_node(self.conn.space_center.ut + 60, 100, 0, 0)
-        self.assertEqual(self.ap.sas_mode, self.sas_mode.stability_assist)
-        time.sleep(0.25)
-        self.ap.sas_mode = self.sas_mode.maneuver
-        self.assertEqual(self.ap.sas_mode, self.sas_mode.maneuver)
-        time.sleep(0.25)
-        self.ap.sas_mode = self.sas_mode.prograde
-        self.assertEqual(self.ap.sas_mode, self.sas_mode.prograde)
-        time.sleep(0.25)
-        self.ap.sas_mode = self.sas_mode.retrograde
-        self.assertEqual(self.ap.sas_mode, self.sas_mode.retrograde)
-        time.sleep(0.25)
-        self.ap.sas_mode = self.sas_mode.normal
-        self.assertEqual(self.ap.sas_mode, self.sas_mode.normal)
-        time.sleep(0.25)
-        self.ap.sas_mode = self.sas_mode.anti_normal
-        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_normal)
-        time.sleep(0.25)
-        self.ap.sas_mode = self.sas_mode.radial
-        self.assertEqual(self.ap.sas_mode, self.sas_mode.radial)
-        time.sleep(0.25)
-        self.ap.sas_mode = self.sas_mode.anti_radial
-        self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
-        time.sleep(0.25)
-        # No target set, should not change
-        # TODO: test with a target set
-        #self.ap.sas_mode = self.sas_mode.target
-        #self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
-        #time.sleep(0.25)
-        #self.ap.sas_mode = self.sas_mode.anti_target
-        #self.assertEqual(self.ap.sas_mode, self.sas_mode.anti_radial)
-
-    def test_speed_mode(self):
-        self.ap.speed_mode = self.speed_mode.orbit
-        self.assertEqual(self.ap.speed_mode, self.speed_mode.orbit)
-        time.sleep(0.25)
-        self.ap.speed_mode = self.speed_mode.surface
-        self.assertEqual(self.ap.speed_mode, self.speed_mode.surface)
-        time.sleep(0.25)
-        # No target set, should not change
-        # TODO: test with a target set
-        #self.ap.speed_mode = self.speed_mode.target
-        #self.assertEqual(self.ap.speed_mode, self.speed_mode.surface)
-        #time.sleep(0.25)
-        #self.ap.speed_mode = self.speed_mode.orbit
-        #self.assertEqual(self.ap.speed_mode, self.speed_mode.orbit)
+        self.ap.engage()
+        self.ap.wait()
+        self.ap.disengage()
 
     def set_direction(self, direction, roll=float('nan')):
-        self.ap.set_direction(direction, roll=roll)
-        self.wait_for_autopilot()
-        self.ap.disengage()
+        self.ap.reference_frame = self.vessel.surface_reference_frame
+        self.ap.target_direction = direction
+        self.ap.target_roll = roll
 
     def test_sas_error(self):
         flight = self.vessel.flight()
         self.set_direction(flight.prograde, roll=27)
+        self.wait_for_autopilot()
+
         self.ap.sas = True
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = False
@@ -328,11 +296,10 @@ class TestAutoPilotOtherVessel(testingtools.TestCase):
         cls.conn.close()
 
     def test_autopilot(self):
-        self.conn.testing_tools.clear_rotation()
         ap = self.other_vessel.auto_pilot
-        ap.set_rotation(90,0)
-        while ap.error > 0.5:
-            time.sleep(0.25)
+        ap.target_pitch_and_heading(90,0)
+        ap.engage()
+        ap.wait()
         ap.disengage()
 
 if __name__ == "__main__":
