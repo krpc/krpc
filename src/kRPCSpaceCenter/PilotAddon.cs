@@ -3,76 +3,159 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Server;
 using KRPCSpaceCenter.ExtensionMethods;
+using KRPCSpaceCenter.ExternalAPI;
 using UnityEngine;
 
 namespace KRPCSpaceCenter
 {
     /// <summary>
-    /// Addon to update a vessels control inputs
+    /// Addon to update a vessels control inputs.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class PilotAddon : MonoBehaviour
     {
-        public class ControlInputs
+        internal class ControlInputs
         {
-            float pitch;
-            float yaw;
-            float roll;
-            float forward;
-            float up;
-            float right;
-            float wheelThrottle;
-            float wheelSteer;
+            readonly FlightCtrlState state;
+
+            public ControlInputs ()
+            {
+                state = new FlightCtrlState ();
+                ThrottleUpdated = false;
+            }
+
+            public ControlInputs (FlightCtrlState state)
+            {
+                this.state = state;
+                ThrottleUpdated = false;
+            }
+
+            public float Throttle {
+                get { return state.mainThrottle; }
+                set {
+                    state.mainThrottle = value.Clamp (0f, 1f);
+                    ThrottleUpdated = true;
+                }
+            }
+
+            public bool ThrottleUpdated { get; set; }
 
             public float Pitch {
-                get { return pitch; }
-                set { pitch = value.Clamp (-1f, 1f); }
+                get { return state.pitch; }
+                set { state.pitch = value.Clamp (-1f, 1f); }
             }
 
             public float Yaw {
-                get { return yaw; }
-                set { yaw = value.Clamp (-1f, 1f); }
+                get { return state.yaw; }
+                set { state.yaw = value.Clamp (-1f, 1f); }
             }
 
             public float Roll {
-                get { return roll; }
-                set { roll = value.Clamp (-1f, 1f); }
+                get { return state.roll; }
+                set { state.roll = value.Clamp (-1f, 1f); }
             }
 
             public float Forward {
-                get { return forward; }
-                set { forward = value.Clamp (-1f, 1f); }
+                get { return state.Z; }
+                set { state.Z = value.Clamp (-1f, 1f); }
             }
 
             public float Up {
-                get { return up; }
-                set { up = value.Clamp (-1f, 1f); }
+                get { return state.Y; }
+                set { state.Y = value.Clamp (-1f, 1f); }
             }
 
             public float Right {
-                get { return right; }
-                set { right = value.Clamp (-1f, 1f); }
+                get { return state.Z; }
+                set { state.Z = value.Clamp (-1f, 1f); }
             }
 
             public float WheelThrottle {
-                get { return wheelThrottle; }
-                set { wheelThrottle = value.Clamp (-1f, 1f); }
+                get { return state.wheelThrottle; }
+                set { state.wheelThrottle = value.Clamp (-1f, 1f); }
             }
 
             public float WheelSteer {
-                get { return wheelSteer; }
-                set { wheelSteer = value.Clamp (-1f, 1f); }
+                get { return state.wheelSteer; }
+                set { state.wheelSteer = value.Clamp (-1f, 1f); }
+            }
+
+            public void ClearExceptThrottle ()
+            {
+                state.roll = 0f;
+                state.pitch = 0f;
+                state.yaw = 0f;
+                state.X = 0f;
+                state.Y = 0f;
+                state.Z = 0f;
+                state.wheelThrottle = 0f;
+                state.wheelSteer = 0f;
+            }
+
+            public void Add (ControlInputs other)
+            {
+                if (other.ThrottleUpdated)
+                    state.mainThrottle = other.state.mainThrottle;
+                ThrottleUpdated |= other.ThrottleUpdated;
+                state.pitch += other.state.pitch;
+                state.yaw += other.state.yaw;
+                state.roll += other.state.roll;
+                state.X += other.state.X;
+                state.Y += other.state.Y;
+                state.Z += other.state.Z;
+                state.wheelThrottle += other.state.wheelThrottle;
+                state.wheelSteer += other.state.wheelSteer;
+            }
+
+            public void CopyFrom (ControlInputs other)
+            {
+                state.CopyFrom (other.state);
+                ThrottleUpdated = other.ThrottleUpdated;
             }
         };
 
-        static IDictionary<Vessel, IDictionary<IClient, ControlInputs>> controlInputs;
+        /// <summary>
+        /// The current control inputs that the craft is using.
+        /// </summary>
+        static IDictionary<Vessel, ControlInputs> currentInputs;
+        /// <summary>
+        /// Control inputs that have been manually set.
+        /// </summary>
+        static IDictionary<Vessel, ControlInputs> manualInputs;
+        /// <summary>
+        /// Set of all clients that have set a manual control input.
+        /// </summary>
+        static HashSet<IClient> manualInputClients;
+        /// <summary>
+        /// Flag to determine if manual control inputs have been cleared
+        /// as a result of all clients disconnecting.
+        /// </summary>
+        static bool clearedManualInputs;
+        /// <summary>
+        /// Control inputs that have been set by the auto-pilot.
+        /// </summary>
+        static IDictionary<Vessel, ControlInputs> autoPilotInputs;
+
+        /// <summary>
+        /// FlyByWire callbacks for vessels.
+        /// </summary>
+        static IDictionary<Vessel, Action<FlightCtrlState>> controlDelegates;
+        /// <summary>
+        /// Set of FlyByWire callbacks that have been registered with RemoteTech.
+        /// </summary>
+        static HashSet<Vessel> remoteTechSanctionedDelegates;
 
         /// <summary>
         /// Wake the addon
         /// </summary>
         public void Awake ()
         {
-            controlInputs = new Dictionary<Vessel, IDictionary<IClient, ControlInputs>> ();
+            currentInputs = new Dictionary<Vessel, ControlInputs> ();
+            manualInputs = new Dictionary<Vessel, ControlInputs> ();
+            manualInputClients = new HashSet<IClient> ();
+            autoPilotInputs = new Dictionary<Vessel, ControlInputs> ();
+            controlDelegates = new Dictionary<Vessel, Action<FlightCtrlState>> ();
+            remoteTechSanctionedDelegates = new HashSet<Vessel> ();
         }
 
         /// <summary>
@@ -80,29 +163,45 @@ namespace KRPCSpaceCenter
         /// </summary>
         public void OnDestroy ()
         {
-            controlInputs.Clear ();
+            currentInputs.Clear ();
+            manualInputs.Clear ();
+            manualInputClients.Clear ();
+            autoPilotInputs.Clear ();
+            controlDelegates.Clear ();
+            remoteTechSanctionedDelegates.Clear ();
         }
 
         internal static ControlInputs Get (Vessel vessel)
         {
-            var client = KRPC.KRPCServer.Context.RPCClient;
-            if (!controlInputs.ContainsKey (vessel))
-                controlInputs [vessel] = new Dictionary<IClient, ControlInputs> ();
-            if (!controlInputs [vessel].ContainsKey (client))
-                controlInputs [vessel] [client] = new ControlInputs ();
-            return controlInputs [vessel] [client];
+            if (!currentInputs.ContainsKey (vessel))
+                currentInputs [vessel] = new ControlInputs ();
+            return currentInputs [vessel];
+        }
+
+        internal static ControlInputs Set (Vessel vessel)
+        {
+            manualInputClients.Add (KRPC.KRPCServer.Context.RPCClient);
+            if (!manualInputs.ContainsKey (vessel))
+                manualInputs [vessel] = new ControlInputs ();
+            return manualInputs [vessel];
         }
 
         /// <summary>
-        /// Remove entries from the controlInputs dictionary for which the client has disconnected
+        /// Remove disconnect clients from the manualInputClients set
+        /// and clear manual inputs if no clients are connected.
         /// </summary>
         static void CheckClients ()
         {
-            foreach (var entry in controlInputs) {
-                foreach (var client in entry.Value.Keys.ToList()) {
-                    if (!client.Connected)
-                        entry.Value.Remove (client);
-                }
+            foreach (var client in manualInputClients.ToList()) {
+                if (!client.Connected)
+                    manualInputClients.Remove (client);
+            }
+            if (manualInputClients.Any ())
+                clearedManualInputs = false;
+            else if (!manualInputClients.Any () && !clearedManualInputs) {
+                foreach (var inputs in manualInputs.Values)
+                    inputs.ClearExceptThrottle ();
+                clearedManualInputs = true;
             }
         }
 
@@ -113,26 +212,61 @@ namespace KRPCSpaceCenter
         {
             CheckClients ();
             foreach (var vessel in FlightGlobals.Vessels) {
-                if (vessel.rootPart != null) { // If the vessel is controllable
-                    Fly (vessel, vessel.ctrlState);
-                }
+                // If the vessel is controllable, pilot it
+                if (vessel.rootPart != null)
+                    Fly (vessel);
             }
         }
 
-        static void Fly (Vessel vessel, FlightCtrlState state)
+        static void Fly (Vessel vessel)
         {
-            if (controlInputs.ContainsKey (vessel)) {
-                var inputs = controlInputs [vessel].Values;
-                state.pitch += inputs.Sum (x => x.Pitch).Clamp (-1f, 1f);
-                state.yaw += inputs.Sum (x => x.Yaw).Clamp (-1f, 1f);
-                state.roll += inputs.Sum (x => x.Roll).Clamp (-1f, 1f);
-                state.Z += inputs.Sum (x => x.Forward).Clamp (-1f, 1f);
-                state.Y += inputs.Sum (x => x.Up).Clamp (-1f, 1f);
-                state.X += inputs.Sum (x => x.Right).Clamp (-1f, 1f);
-                state.wheelThrottle += inputs.Sum (x => x.WheelThrottle).Clamp (-1f, 1f);
-                state.wheelSteer += inputs.Sum (x => x.WheelSteer).Clamp (-1f, 1f);
+            if (!controlDelegates.ContainsKey (vessel)) {
+                Action<FlightCtrlState> action = s => OnFlyByWire (vessel, s);
+                controlDelegates [vessel] = action;
+                vessel.OnFlyByWire += new FlightInputCallback (action);
             }
-            Services.AutoPilot.Fly (vessel, state);
+            if (RemoteTech.IsAvailable && !remoteTechSanctionedDelegates.Contains (vessel) && RemoteTech.HasFlightComputer (vessel.id)) {
+                RemoteTech.AddSanctionedPilot (vessel.id, controlDelegates [vessel]);
+                remoteTechSanctionedDelegates.Add (vessel);
+            }
+        }
+
+        static void OnFlyByWire (Vessel vessel, FlightCtrlState state)
+        {
+            var inputs = new ControlInputs (state);
+
+            // Manual inputs
+            if (!manualInputs.ContainsKey (vessel))
+                manualInputs [vessel] = new ControlInputs ();
+            HandleThrottle (vessel, manualInputs [vessel]);
+            inputs.Add (manualInputs [vessel]);
+
+            // Auto-pilot inputs
+            if (!autoPilotInputs.ContainsKey (vessel))
+                autoPilotInputs [vessel] = new ControlInputs ();
+            if (Services.AutoPilot.Fly (vessel, autoPilotInputs [vessel]))
+                inputs.Add (autoPilotInputs [vessel]);
+
+            // Update current inputs
+            if (!currentInputs.ContainsKey (vessel))
+                currentInputs [vessel] = new ControlInputs ();
+            currentInputs [vessel].CopyFrom (inputs);
+        }
+
+        /// <summary>
+        /// Handle throttle quirky operation...
+        /// </summary>
+        static void HandleThrottle (Vessel vessel, ControlInputs inputs)
+        {
+            if (!inputs.ThrottleUpdated)
+                return;
+            if (FlightGlobals.ActiveVessel != vessel)
+                return;
+            if (RemoteTech.IsAvailable && !(RemoteTech.HasLocalControl (vessel.id) || RemoteTech.HasAnyConnection (vessel.id)))
+                return;
+            FlightInputHandler.state.mainThrottle = inputs.Throttle;
+            inputs.Throttle = 0f;
+            inputs.ThrottleUpdated = false;
         }
     }
 }

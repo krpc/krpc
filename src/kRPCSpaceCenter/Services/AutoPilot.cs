@@ -119,6 +119,7 @@ namespace KRPCSpaceCenter.Services
         /// <summary>
         /// The state of SAS.
         /// </summary>
+        /// <remarks>Equivalent to <see cref="Control.SAS"/></remarks>
         [KRPCProperty]
         public bool SAS {
             get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
@@ -130,19 +131,28 @@ namespace KRPCSpaceCenter.Services
         /// These modes are equivalent to the mode buttons to
         /// the left of the navball that appear when SAS is enabled.
         /// </summary>
+        /// <remarks>Equivalent to <see cref="Control.SASMode"/></remarks>
         [KRPCProperty]
         public SASMode SASMode {
-            get { return vessel.Autopilot.Mode.ToSASMode (); }
-            set {
-                var mode = value.FromSASMode ();
-                if (!vessel.Autopilot.CanSetMode (mode))
-                    throw new InvalidOperationException ("Cannot set SAS mode of vessel");
-                vessel.Autopilot.SetMode (mode);
-                // Update the UI buttons
-                var modeIndex = (int)vessel.Autopilot.Mode;
-                var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
-                modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
-            }
+            get { return GetSASMode (vessel); }
+            set { SetSASMode (vessel, value); }
+        }
+
+        internal static SASMode GetSASMode (global::Vessel vessel)
+        {
+            return vessel.Autopilot.Mode.ToSASMode ();
+        }
+
+        internal static void SetSASMode (global::Vessel vessel, SASMode value)
+        {
+            var mode = value.FromSASMode ();
+            if (!vessel.Autopilot.CanSetMode (mode))
+                throw new InvalidOperationException ("Cannot set SAS mode of vessel");
+            vessel.Autopilot.SetMode (mode);
+            // Update the UI buttons
+            var modeIndex = (int)vessel.Autopilot.Mode;
+            var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
+            modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
         }
 
         /// <summary>
@@ -378,27 +388,28 @@ namespace KRPCSpaceCenter.Services
             throw new InvalidOperationException ("Unknown SAS mode");
         }
 
-        internal static void Fly (global::Vessel vessel, FlightCtrlState state)
+        internal static bool Fly (global::Vessel vessel, PilotAddon.ControlInputs state)
         {
             // Get the auto-pilot object. Do nothing if there is no auto-pilot engaged for this vessel.
             if (!engaged.ContainsKey (vessel))
-                return;
+                return false;
             var autoPilot = engaged [vessel];
             if (autoPilot == null)
-                return;
+                return false;
             // If the client that engaged the auto-pilot has disconnected, disengage the auto-pilot
             if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected) {
                 autoPilot.Disengage ();
-                return;
+                return false;
             }
             // Run the auto-pilot
             autoPilot.DoAutoPiloting (state);
+            return true;
         }
 
-        void DoAutoPiloting (FlightCtrlState state)
+        void DoAutoPiloting (PilotAddon.ControlInputs state)
         {
             SAS = false;
-            SteerShipToward (TargetRotation (), state, vessel);
+            SteerShipToward (TargetRotation (), vessel, state);
         }
 
         Quaternion TargetRotation ()
@@ -427,7 +438,7 @@ namespace KRPCSpaceCenter.Services
             return Math.Abs (Quaternion.Angle (vessel.ReferenceTransform.rotation, target));
         }
 
-        static void SteerShipToward (Quaternion target, FlightCtrlState c, global::Vessel vessel)
+        static void SteerShipToward (Quaternion target, global::Vessel vessel, PilotAddon.ControlInputs c)
         {
             target = target * Quaternion.Inverse (Quaternion.Euler (90, 0, 0));
 
@@ -441,7 +452,7 @@ namespace KRPCSpaceCenter.Services
             Vector3d deltaEuler = ReduceAngles (delta.eulerAngles);
             deltaEuler.y *= -1;
 
-            Vector3d torque = GetTorque (vessel, c.mainThrottle);
+            Vector3d torque = GetTorque (vessel, c.Throttle);
             Vector3d inertia = GetEffectiveInertia (vessel, torque);
 
             Vector3d err = deltaEuler * Math.PI / 180.0F;
@@ -456,10 +467,9 @@ namespace KRPCSpaceCenter.Services
             act.y = Mathf.Clamp ((float)act.y, -driveLimit, driveLimit);
             act.z = Mathf.Clamp ((float)act.z, -driveLimit, driveLimit);
 
-            c.roll = Mathf.Clamp ((float)(c.roll + act.z), -driveLimit, driveLimit);
-            c.pitch = Mathf.Clamp ((float)(c.pitch + act.x), -driveLimit, driveLimit);
-            c.yaw = Mathf.Clamp ((float)(c.yaw + act.y), -driveLimit, driveLimit);
-
+            c.Roll = (float)act.z;
+            c.Pitch = (float)act.x;
+            c.Yaw = (float)act.y;
         }
 
         static Vector3d GetEffectiveInertia (global::Vessel vessel, Vector3d torque)
