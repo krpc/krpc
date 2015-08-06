@@ -40,7 +40,7 @@ NUNIT_CONSOLE = nunit-console
 INKSCAPE = inkscape
 
 .PHONY: all configure build dist install release clean dist-clean \
-        test dist-python doc gh-pages cog protobuf icons logo ksp strip-bom
+        test dist-python dist-lua doc gh-pages cog protobuf icons logo ksp strip-bom
 
 # Main targets -----------------------------------------------------------------
 
@@ -55,7 +55,7 @@ configure:
 
 build: configure protobuf cog icons $(CSHARP_MAIN_PROJECTS)
 
-dist: build doc dist-python
+dist: build doc dist-python dist-lua
 	rm -rf $(DIST_DIR)
 	mkdir -p $(DIST_DIR)
 	mkdir -p $(DIST_DIR)/GameData/kRPC
@@ -76,6 +76,9 @@ dist: build doc dist-python
 	# Python client library
 	mkdir $(DIST_DIR)/python-client
 	cp python/dist/krpc-$(PYTHON_CLIENT_VERSION).zip $(DIST_DIR)/python-client/
+	# Lua client library
+	mkdir $(DIST_DIR)/lua-client
+	cp lua/dist/krpc-$(LUA_CLIENT_VERSION)-0.tar.gz $(DIST_DIR)/lua-client/
 	# protobuf source
 	mkdir $(DIST_DIR)/schema
 	echo "See http://djungelorm.github.io/krpc/docs/communication-protocol.html" > $(DIST_DIR)/schema/README.txt
@@ -145,6 +148,11 @@ $(CSHARP_LIBRARIES):
 
 dist-python:
 	make -C python dist
+
+# Lua --------------------------------------------------------------------------
+
+dist-lua:
+	make -C lua dist
 
 # Documentation ----------------------------------------------------------------
 

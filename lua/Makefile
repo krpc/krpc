@@ -28,8 +28,7 @@ rockspec:
 	mkdir -p dist
 	sed "s/%VERSION%/$(VERSION)/g" krpc.rockspec > dist/krpc-$(VERSION)-0.rockspec
 
-release: protobuf bin rockspec
-	mkdir -p $(DISTDIR)
+dist: protobuf bin rockspec
 	mkdir -p $(DISTDIR)/lua
 	cp -R krpc $(DISTDIR)/lua/
 	(cd dist; tar czvpf krpc-$(VERSION)-0.tar.gz krpc-$(VERSION)-0/)
