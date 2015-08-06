@@ -5,6 +5,7 @@ KSP_DIR := $(shell readlink -f "$(KSP_DIR)")
 
 SERVER_VERSION = $(shell cat VERSION.txt)
 PYTHON_CLIENT_VERSION = $(shell grep "version=" python/setup.py | sed "s/\s*version='\(.*\)',/\1/")
+LUA_CLIENT_VERSION = $(shell grep "VERSION = " lua/Makefile | sed "s/VERSION = \(.*\)/\1/")
 
 DIST_DIR = dist
 DIST_LIBS = \
