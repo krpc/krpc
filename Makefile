@@ -86,7 +86,9 @@ dist: build doc dist-python dist-lua
 	cp src/kRPC/Schema/KRPC.proto $(DIST_DIR)/schema/
 	mkdir -p $(DIST_DIR)/schema/python
 	cp -R python/krpc/schema/KRPC.py $(DIST_DIR)/schema/python/
-	cp -R java cpp $(DIST_DIR)/schema/
+	mkdir -p $(DIST_DIR)/schema/cpp
+	cp cpp/include/krpc/KRPC.pb.h cpp/src/KRPC.pb.cc $(DIST_DIR)/schema/cpp/
+	cp -R java $(DIST_DIR)/schema/
 	# Documentation
 	cp doc/build/pdf/kRPC.pdf $(DIST_DIR)/
 
@@ -107,6 +109,7 @@ clean: protobuf-clean
 	-rm -f KSP.log TestResult.xml
 	make -C python clean
 	make -C lua clean
+	make -C cpp clean
 	make -C doc clean
 
 dist-clean: clean
@@ -193,8 +196,9 @@ protobuf-java: $(PROTOS) $(PROTOS:.proto=.java)
 	cp $(PROTOS:.proto=.java) java/krpc/
 
 protobuf-cpp: $(PROTOS) $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
-	mkdir -p cpp/src/kRPC/Schema
-	cp $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc) cpp/src/kRPC/Schema/
+	mkdir -p cpp/include/krpc
+	cp $(PROTOS:.proto=.pb.h) cpp/include/krpc/
+	sed 's/src\/kRPC\/Schema\/KRPC.pb.h/KRPC.pb.h/g' $(PROTOS:.proto=.pb.cc) > cpp/src/KRPC.pb.cc
 
 protobuf-lua: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.lua) $(PROTOS_TEST:.proto=.lua)
 	mkdir -p lua/krpc/schema
@@ -215,7 +219,6 @@ protobuf-java-clean:
 	rm -rf $(PROTOS:.proto=.java)
 
 protobuf-cpp-clean:
-	rm -rf cpp
 	rm -rf $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
 
 protobuf-lua-clean:

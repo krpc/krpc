@@ -1,0 +1,33 @@
+top = '.'
+out = 'build'
+
+def options(opt):
+    opt.load('compiler_cxx boost')
+
+def configure(ctx):
+    ctx.load('compiler_cxx boost')
+    ctx.check_cfg(package='protobuf', args='--cflags --libs', uselib_store='PROTOBUF')
+    #ctx.check_boost(lib='system')
+    ctx.env.LIB_BOOST = ['boost_system', 'boost_thread']
+
+def post(ctx):
+    if ctx.cmd == 'install':
+        ctx.exec_command('/sbin/ldconfig')
+
+def build(ctx):
+    ctx.add_post_fun(post)
+    ctx.shlib(
+        target = 'krpc',
+        source = ['src/krpc.cpp', 'src/client.cpp', 'src/encoder.cpp', 'src/connection.cpp', 'src/KRPC.pb.cc'],
+        includes = ['include', 'include/krpc'], #TODO: second include path is just for KRPC.pb.cc
+        use = ['PROTOBUF', 'BOOST']
+    )
+    #TODO: include generated services headers in install_files
+    ctx.install_files('${PREFIX}/include', ['include/krpc/krpc.hpp', 'include/krpc/KRPC.pb.h'])
+    ctx.program(
+        target = 'test',
+        source = 'test.cpp',
+        use = ['krpc'],
+        includes = ['include'],
+        install_path = None
+    )

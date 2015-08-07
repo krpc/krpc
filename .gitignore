@@ -125,7 +125,12 @@ python/build
 java
 
 # C++
-cpp
+cpp/.waf*
+cpp/.lock*
+cpp/build
+cpp/include/krpc/KRPC.pb.h
+cpp/src/KRPC.pb.cc
+cpp/include/krpc/services
 
 # protobuf
 *.protobin
