@@ -1,4 +1,4 @@
-.PHONY: all protobuf generate build install clean
+.PHONY: all protobuf generate build test install clean
 
 CSHARP_CONFIG=Release
 
@@ -21,7 +21,10 @@ generate: protobuf
 
 build: generate
 	./waf configure
-	./waf build
+	./waf build --notests
+
+test:
+	./waf build --alltests
 
 install:
 	./waf install

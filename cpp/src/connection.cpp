@@ -20,14 +20,14 @@ namespace krpc {
     asio::write(socket, asio::buffer(data, length));
   }
 
-  void Connection::send(const std::vector<char>& data) {
+  void Connection::send(const std::string& data) {
     asio::write(socket, asio::buffer(data));
   }
 
-  std::vector<char> Connection::receive(size_t length) {
-    std::vector<char> data;
+  std::string Connection::receive(size_t length) {
+    std::string data;
     data.resize(length);
-    size_t read_length = asio::read(socket, asio::buffer(data));
+    size_t read_length = asio::read(socket, asio::buffer(&data[0], length));
     assert(length == read_length);
     return data;
   }

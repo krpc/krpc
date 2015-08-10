@@ -25,9 +25,9 @@ namespace krpc {
     void close();
     /** Send data to the connection. Blocks until all data has been sent. */
     void send(const char* data, size_t length);
-    void send(const std::vector<char>& data);
+    void send(const std::string& data);
     /** Receive data from the connection. Blocks until length bytes have been received. */
-    std::vector<char> receive(size_t length);
+    std::string receive(size_t length);
     /**
      * Receive up to length bytes of data from the connection.
      * Blocks until at least 1 byte has been received.

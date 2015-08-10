@@ -1,4 +1,6 @@
 #include "krpc/client.hpp"
+#include "krpc/encoder.hpp"
+#include "krpc/decoder.hpp"
 #include "krpc/KRPC.pb.h"
 #include <google/protobuf/io/coded_stream.h>
 
@@ -13,40 +15,23 @@ namespace krpc {
     Request request;
     request.set_service(service);
     request.set_procedure(procedure);
-
-    {
-      std::string output;
-      request.SerializeToString(&output);
-      std::vector<char> data(output.begin(), output.end());
-
-      int header_length = google::protobuf::io::CodedOutputStream::VarintSize64(data.size());
-      char* header = new char[header_length];
-      google::protobuf::io::CodedOutputStream::WriteVarint64ToArray(data.size(), (unsigned char*)header);
-
-      rpc_connection->send(header, header_length);
-      rpc_connection->send(data);
-    }
+    rpc_connection->send(Encoder::encode_delimited(request));
 
     {
       size_t size = 0;
-      std::stringstream result_header;
-
-      uint64_t response_size;
+      std::string data;
       while (true) {
-        std::vector<char> data = rpc_connection->receive(1);
-        result_header << data[0];
-        size++;
-        google::protobuf::io::CodedInputStream input_stream((unsigned char*)&result_header.str()[0], size);
-        bool result = input_stream.ReadVarint64(&response_size);
-        if (result)
+        try {
+          data += rpc_connection->receive(1); //TODO: partial_receive needed here?
+          size = Decoder::decode_size_and_position(data).first;
           break;
+        } catch (DecodeFailed& e) {
+        }
       }
 
-      std::vector<char> response_data = rpc_connection->receive(response_size);
-
-      Response response;
-      response.ParseFromString(std::string(response_data.begin(), response_data.end()));
-
+      data = rpc_connection->receive(size);
+      krpc::Response response;
+      Decoder::decode(response, data);
       return response.return_value();
     }
   }

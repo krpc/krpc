@@ -2,13 +2,18 @@ top = '.'
 out = 'build'
 
 def options(opt):
-    opt.load('compiler_cxx boost')
+    opt.load('compiler_cxx waf_unit_test boost')
 
 def configure(ctx):
-    ctx.load('compiler_cxx boost')
+    ctx.load('compiler_cxx waf_unit_test boost')
     ctx.check_cfg(package='protobuf', args='--cflags --libs', uselib_store='PROTOBUF')
     #ctx.check_boost(lib='system')
     ctx.env.LIB_BOOST = ['boost_system', 'boost_thread']
+
+    ctx.check(stlib='gtest',      uselib_store='GTEST')
+    ctx.check(stlib='gtest_main', uselib_store='GTEST')
+    ctx.check(stlib='gmock',      uselib_store='GMOCK')
+    ctx.check(stlib='gmock_main', uselib_store='GMOCK')
 
 def post(ctx):
     if ctx.cmd == 'install':
@@ -18,16 +23,27 @@ def build(ctx):
     ctx.add_post_fun(post)
     ctx.shlib(
         target = 'krpc',
-        source = ['src/krpc.cpp', 'src/client.cpp', 'src/encoder.cpp', 'src/connection.cpp', 'src/KRPC.pb.cc'],
+        source = ctx.path.ant_glob('src/*.cpp') + ['src/KRPC.pb.cc'],
         includes = ['include', 'include/krpc'], #TODO: second include path is just for KRPC.pb.cc
         use = ['PROTOBUF', 'BOOST']
     )
     #TODO: include generated services headers in install_files
     ctx.install_files('${PREFIX}/include', ['include/krpc/krpc.hpp', 'include/krpc/KRPC.pb.h'])
-    ctx.program(
-        target = 'test',
-        source = 'test.cpp',
-        use = ['krpc'],
-        includes = ['include'],
-        install_path = None
-    )
+
+    for path in ctx.path.ant_glob('test/**/*.cpp'):
+        if not path.name.startswith('test_'):
+            continue
+        name,_,_ = path.name.rpartition('.')
+        ctx.program(
+          name     = name,
+          target   = name,
+          features = 'cxx cxxprogram test',
+          source   = [path],
+          use      = ['krpc', 'GTEST', 'GMOCK'],
+          includes = ['test', 'include'],
+          rpath    = out,
+          install_path = None
+        )
+
+    from waflib.Tools import waf_unit_test
+    ctx.add_post_fun(waf_unit_test.summary)
