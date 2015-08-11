@@ -1,6 +1,7 @@
 #include "krpc/decoder.hpp"
 #include "krpc/platform.hpp"
 #include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/wire_format_lite.h>
 
 namespace pb = google::protobuf;
 
@@ -21,9 +22,55 @@ namespace krpc {
       platform::hexlify(std::string(data.begin()  + 10, data.end()));
   }
 
+  void Decoder::decode(float& value, const std::string& data) {
+    pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
+    pb::uint32 value2;
+    if (!stream.ReadLittleEndian32(&value2))
+      BOOST_THROW_EXCEPTION(DecodeFailed());
+    value = pb::internal::WireFormatLite::DecodeFloat(value2);
+  }
+
+  void Decoder::decode(double& value, const std::string& data) {
+    pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
+    pb::uint64 value2 = 0;
+    if (!stream.ReadLittleEndian64(&value2))
+      BOOST_THROW_EXCEPTION(DecodeFailed());
+    value = pb::internal::WireFormatLite::DecodeDouble(value2);
+  }
+
+  void Decoder::decode(pb::int32& value, const std::string& data) {
+    pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
+    pb::uint32 value2 = 0;
+    if (!stream.ReadVarint32(&value2))
+      BOOST_THROW_EXCEPTION(DecodeFailed());
+    value = static_cast<pb::int32>(value2);
+  }
+
+  void Decoder::decode(pb::int64& value, const std::string& data) {
+    pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
+    pb::uint64 value2 = 0;
+    if (!stream.ReadVarint64(&value2))
+      BOOST_THROW_EXCEPTION(DecodeFailed());
+    value = static_cast<pb::int64>(value2);
+  }
+
   void Decoder::decode(pb::uint32& value, const std::string& data) {
     pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
     if (!stream.ReadVarint32(&value))
+      BOOST_THROW_EXCEPTION(DecodeFailed());
+  }
+
+  void Decoder::decode(bool& value, const std::string& data) {
+    pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
+    pb::uint64 value2 = 0;
+    if (!stream.ReadVarint64(&value2))
+      BOOST_THROW_EXCEPTION(DecodeFailed());
+    value = (value2 != 0);
+  }
+
+  void Decoder::decode(pb::uint64& value, const std::string& data) {
+    pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
+    if (!stream.ReadVarint64(&value))
       BOOST_THROW_EXCEPTION(DecodeFailed());
   }
 

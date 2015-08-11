@@ -1,5 +1,6 @@
 #include "krpc/encoder.hpp"
 #include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/wire_format_lite.h>
 
 namespace pb = google::protobuf;
 
@@ -19,14 +20,61 @@ namespace krpc {
     0x52, 0x45, 0x41, 0x4D
   };
 
+  static const size_t LITTLE_ENDIAN_32_LENGTH = 4;
+  static const size_t LITTLE_ENDIAN_64_LENGTH = 8;
+
   std::string Encoder::client_name(const std::string& name) {
     std::string result(name);
     result.resize(32);
     return result;
   }
 
+  std::string Encoder::encode(float value) {
+    pb::uint32 value2 = pb::internal::WireFormatLite::EncodeFloat(value);
+    std::string data(LITTLE_ENDIAN_32_LENGTH, 0);
+    pb::io::CodedOutputStream::WriteLittleEndian32ToArray(value2, (pb::uint8*)&data[0]);
+    return data;
+  }
+
+  std::string Encoder::encode(double value) {
+    pb::uint64 value2 = pb::internal::WireFormatLite::EncodeDouble(value);
+    std::string data(LITTLE_ENDIAN_64_LENGTH, 0);
+    pb::io::CodedOutputStream::WriteLittleEndian64ToArray(value2, (pb::uint8*)&data[0]);
+    return data;
+  }
+
+  std::string Encoder::encode(pb::int32 value) {
+    size_t length = pb::io::CodedOutputStream::VarintSize32SignExtended(value);
+    std::string data(length, 0);
+    pb::io::CodedOutputStream::WriteVarint32SignExtendedToArray(value, (pb::uint8*)&data[0]);
+    return data;
+  }
+
+  std::string Encoder::encode(pb::int64 value) {
+    pb::uint64 value2 = static_cast<pb::uint64>(value);
+    size_t length = pb::io::CodedOutputStream::VarintSize64(value2);
+    std::string data(length, 0);
+    pb::io::CodedOutputStream::WriteVarint64ToArray(value2, (pb::uint8*)&data[0]);
+    return data;
+  }
+
   std::string Encoder::encode(pb::uint32 value) {
     size_t length = pb::io::CodedOutputStream::VarintSize32(value);
+    std::string data(length, 0);
+    pb::io::CodedOutputStream::WriteVarint32ToArray(value, (pb::uint8*)&data[0]);
+    return data;
+  }
+
+  std::string Encoder::encode(pb::uint64 value) {
+    size_t length = pb::io::CodedOutputStream::VarintSize64(value);
+    std::string data(length, 0);
+    pb::io::CodedOutputStream::WriteVarint64ToArray(value, (pb::uint8*)&data[0]);
+    return data;
+  }
+
+  std::string Encoder::encode(bool value) {
+    pb::uint32 value2 = (value ? 1 : 0);
+    size_t length = pb::io::CodedOutputStream::VarintSize32(value2);
     std::string data(length, 0);
     pb::io::CodedOutputStream::WriteVarint32ToArray(value, (pb::uint8*)&data[0]);
     return data;
@@ -43,7 +91,8 @@ namespace krpc {
 
   std::string Encoder::encode(const pb::Message& message) {
     std::string data;
-    message.SerializeToString(&data);
+    if (!message.SerializeToString(&data))
+      BOOST_THROW_EXCEPTION(EncodeFailed());
     return data;
   }
 
@@ -70,7 +119,8 @@ namespace krpc {
     size_t header_length = pb::io::CodedOutputStream::VarintSize64(length);
     std::string data(header_length + length, 0);
     pb::io::CodedOutputStream::WriteVarint64ToArray(length, (pb::uint8*)&data[0]);
-    message.SerializeWithCachedSizesToArray((pb::uint8*)&data[header_length]);
+    if (!message.SerializeWithCachedSizesToArray((pb::uint8*)&data[header_length]))
+      BOOST_THROW_EXCEPTION(EncodeFailed());
     return data;
   }
 
