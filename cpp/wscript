@@ -25,7 +25,8 @@ def build(ctx):
         target = 'krpc',
         source = ctx.path.ant_glob('src/*.cpp') + ['src/KRPC.pb.cc'],
         includes = ['include', 'include/krpc'], #TODO: second include path is just for KRPC.pb.cc
-        use = ['PROTOBUF', 'BOOST']
+        use = ['PROTOBUF', 'BOOST'],
+        cxxflags = ['-Wall', '-Werror']
     )
     #TODO: include generated services headers in install_files
     ctx.install_files('${PREFIX}/include', ['include/krpc/krpc.hpp', 'include/krpc/KRPC.pb.h'])
@@ -42,7 +43,8 @@ def build(ctx):
           use      = ['krpc', 'GTEST', 'GMOCK'],
           includes = ['test', 'include'],
           rpath    = out,
-          install_path = None
+          install_path = None,
+          cxxflags = ['-Wall', '-Werror']
         )
 
     from waflib.Tools import waf_unit_test
