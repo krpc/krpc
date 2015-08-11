@@ -3,13 +3,11 @@
 
 #include <string>
 #include <memory>
-#include <boost/exception/all.hpp>
+#include "krpc/error.hpp"
 #include "krpc/client.hpp"
 #include "krpc/connection.hpp"
 
 namespace krpc {
-
-  typedef boost::error_info<struct tag_error_description, std::string> error_description;
 
   /**
    * Connect to a kRPC server on the specified IP address and port numbers. If
