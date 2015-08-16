@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <boost/algorithm/string/predicate.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/test_service.hpp>
 #include <krpc/platform.hpp>
@@ -56,10 +57,10 @@ TEST_F(test_client, test_properties) {
 }
 
 TEST_F(test_client, test_class_as_return_value) {
-  krpc::services::TestService::TestClass obj = test_service.create_test_object("jeb");
+  krpc::services::TestService::TestClass object = test_service.create_test_object("jeb");
   std::stringstream stream;
-  stream << obj;
-  ASSERT_EQ("TestService::TestClass<1>", stream.str());
+  stream << object;
+  ASSERT_TRUE(boost::starts_with(stream.str(), "TestService::TestClass<"));
 }
 
 TEST_F(test_client, test_class_none_value) {
