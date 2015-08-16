@@ -121,11 +121,15 @@ TEST_F(test_client, test_optional_arguments) {
 //    self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', y='4')
 //    self.assertRaises(TypeError, obj.optional_arguments, '1', foo='4')
 
-//def test_blocking_procedure(self):
-//    self.assertEqual(0, self.conn.test_service.blocking_procedure(0,0))
-//    self.assertEqual(1, self.conn.test_service.blocking_procedure(1,0))
-//    self.assertEqual(1+2, self.conn.test_service.blocking_procedure(2))
-//    self.assertEqual(sum(x for x in range(1,43)), self.conn.test_service.blocking_procedure(42))
+TEST_F(test_client, test_blocking_procedure) {
+  ASSERT_EQ(0, test_service.blocking_procedure(0,0));
+  ASSERT_EQ(1, test_service.blocking_procedure(1,0));
+  ASSERT_EQ(1+2, test_service.blocking_procedure(2));
+  int expected = 0;
+  for (int i = 1; i <= 42; i++)
+    expected += i;
+  ASSERT_EQ(expected, test_service.blocking_procedure(42));
+}
 
 //def test_too_many_arguments(self):
 //    self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', '4', '5')
