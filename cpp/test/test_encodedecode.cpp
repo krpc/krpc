@@ -49,8 +49,39 @@ template <typename T> void test_list(const std::vector<T>& decoded, std::string 
   std::vector<T> value;
   krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
   ASSERT_EQ(decoded.size(), value.size());
-  for (unsigned int i = 0; i < decoded.size(); i++)
-    ASSERT_EQ(decoded[i], value[i]);
+  ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
+}
+
+template <typename K, typename V> void test_dictionary(const std::map<K,V>& decoded, std::string encoded) {
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  std::map<K,V> value;
+  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  ASSERT_EQ(decoded.size(), value.size());
+  ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
+}
+
+template <typename T> void test_set(const std::set<T>& decoded, std::string encoded) {
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  std::set<T> value;
+  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  ASSERT_EQ(decoded.size(), value.size());
+  ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
+}
+
+template <typename T1> void test_tuple1(const boost::tuple<T1>& decoded, std::string encoded) {
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  boost::tuple<T1> value;
+  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  ASSERT_EQ(boost::get<0>(decoded), boost::get<0>(value));
+}
+
+template <typename T1, typename T2, typename T3> void test_tuple3(const boost::tuple<T1,T2,T3>& decoded, std::string encoded) {
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  boost::tuple<T1,T2,T3> value;
+  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  ASSERT_EQ(boost::get<0>(decoded), boost::get<0>(value));
+  ASSERT_EQ(boost::get<1>(decoded), boost::get<1>(value));
+  ASSERT_EQ(boost::get<2>(decoded), boost::get<2>(value));
 }
 
 TEST(test_encode_decode, test_double) {
@@ -144,6 +175,40 @@ TEST(test_encode_decode, test_list) {
   }
 }
 
-//test_dictionary
-//test_set
-//test_tuple
+TEST(test_encode_decode, test_dictionary) {
+  test_dictionary(std::map<std::string, int>(), "");
+  {
+    std::map<std::string, int> d;
+    d[""] = 0;
+    test_dictionary(d, "0a060a0100120100");
+  }
+  {
+    std::map<std::string, int> d;
+    d["foo"] = 42;
+    d["bar"] = 365;
+    d["baz"] = 3;
+    test_dictionary(d, "0a0a0a04036261721202ed020a090a040362617a1201030a090a0403666f6f12012a");
+  }
+}
+
+TEST(test_encode_decode, test_set) {
+  test_set(std::set<int>(), "");
+  {
+    std::set<int> s;
+    s.insert(1);
+    test_set(s, "0a0101");
+  }
+  {
+    std::set<int> s;
+    s.insert(1);
+    s.insert(2);
+    s.insert(3);
+    s.insert(4);
+    test_set(s, "0a01010a01020a01030a0104");
+  }
+}
+
+TEST(test_encode_decode, test_tuple) {
+  test_tuple1(boost::tuple<int>(1), "0a0101");
+  test_tuple3(boost::tuple<int,std::string,bool>(1,"jeb",false), "0a01010a04036a65620a0100");
+}

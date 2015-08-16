@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <krpc/client.hpp>
 #include <krpc/encoder.hpp>
 #include <krpc/platform.hpp>
 #include <krpc/KRPC.pb.h>
+#include <krpc/services/test_service.hpp>
 
 TEST(test_encoder, test_rpc_hello_message) {
   std::string message(krpc::Encoder::RPC_HELLO_MESSAGE, krpc::Encoder::RPC_HELLO_MESSAGE_LENGTH);
@@ -41,9 +43,7 @@ TEST(test_encoder, test_encode_message) {
   krpc::schema::Request request;
   request.set_service("ServiceName");
   request.set_procedure("ProcedureName");
-  //data = krpc::Encoder::encode(request, self.types.as_type('KRPC.Request'));
-  std::string data;
-  request.SerializeToString(&data);
+  std::string data = krpc::Encoder::encode(request);
   std::string expected = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
   ASSERT_EQ(expected, krpc::platform::hexlify(data));
 }
@@ -74,19 +74,14 @@ TEST(test_encoder, test_encode_message_delimited) {
   ASSERT_EQ(expected, krpc::platform::hexlify(data));
 }
 
-TEST(test_encoder, test_encode_value_delimited) {
-  std::string data = krpc::Encoder::encode_delimited(300);
-  ASSERT_EQ("02ac02", krpc::platform::hexlify(data));
-}
-
 TEST(test_encoder, test_encode_class) {
   //typ = self.types.as_type('Class(ServiceName.ClassName)')
   //class_type = typ.python_type
   //self.assertTrue(issubclass(class_type, ClassBase))
-  //value = class_type(300)
-  //self.assertEqual(300, value._object_id)
-  //data = Encoder.encode(value, typ)
-  //self.assertEqual('ac02', hexlify(data))
+  krpc::Client client;
+  krpc::services::TestService::TestClass value(client, 300); //TODO: remove conn
+  std::string data = krpc::Encoder::encode(value);
+  ASSERT_EQ("ac02", krpc::platform::hexlify(data));
 }
 
 TEST(test_encoder, test_encode_class_none) {

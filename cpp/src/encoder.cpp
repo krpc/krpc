@@ -80,6 +80,10 @@ namespace krpc {
     return data;
   }
 
+  std::string Encoder::encode(const char* value) {
+    return encode(std::string(value));
+  }
+
   std::string Encoder::encode(const std::string& value) {
     size_t length = value.size();
     size_t header_length = pb::io::CodedOutputStream::VarintSize64(length);
@@ -93,24 +97,6 @@ namespace krpc {
     std::string data;
     if (!message.SerializeToString(&data))
       BOOST_THROW_EXCEPTION(EncodeFailed());
-    return data;
-  }
-
-  std::string Encoder::encode_delimited(pb::uint32 value) {
-    size_t length = pb::io::CodedOutputStream::VarintSize32(value);
-    size_t header_length = pb::io::CodedOutputStream::VarintSize64(length);
-    std::string data(header_length + length, 0);
-    pb::io::CodedOutputStream::WriteVarint64ToArray(length, (pb::uint8*)&data[0]);
-    pb::io::CodedOutputStream::WriteVarint32ToArray(value, (pb::uint8*)&data[header_length]);
-    return data;
-  }
-
-  std::string Encoder::encode_delimited(const std::string& value) {
-    size_t length = value.size();
-    size_t header_length = pb::io::CodedOutputStream::VarintSize64(length);
-    std::string data(header_length + length, 0);
-    pb::io::CodedOutputStream::WriteVarint64ToArray(length, (pb::uint8*)&data[0]);
-    pb::io::CodedOutputStream::WriteStringToArray(value, (pb::uint8*)&data[header_length]);
     return data;
   }
 

@@ -88,16 +88,6 @@ namespace krpc {
       BOOST_THROW_EXCEPTION(DecodeFailed());
   }
 
-  void Decoder::decode_delimited(pb::uint32& value, const std::string& data) {
-    pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
-    pb::uint64 length;
-    if (!stream.ReadVarint64(&length))
-      BOOST_THROW_EXCEPTION(DecodeFailed());
-    if (!stream.ReadVarint32(&value))
-      BOOST_THROW_EXCEPTION(DecodeFailed());
-    //TODO: check that length bytes were read to decode the delimited message
-  }
-
   void Decoder::decode_delimited(pb::Message& message, const std::string& data) {
     pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
     pb::uint64 length;

@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <krpc/client.hpp>
 #include <krpc/decoder.hpp>
 #include <krpc/platform.hpp>
 #include <krpc/KRPC.pb.h>
+#include <krpc/services/test_service.hpp>
 
 namespace pb = google::protobuf;
 
@@ -41,23 +43,18 @@ TEST(test_decoder, test_decode_message_delimited) {
   ASSERT_EQ("ProcedureName", request.procedure());
 }
 
-TEST(test_decoder, test_decode_value_delimited) {
-  pb::uint32 value;
-  krpc::Decoder::decode_delimited(value, krpc::platform::unhexlify("02ac02"));
-  ASSERT_EQ(300, value);
-}
-
 TEST(test_decoder, test_decode_class) {
-  //typ = self.types.as_type('Class(ServiceName.ClassName)')
-  //value = Decoder.decode(unhexlify('ac02'), typ)
-  //self.assertTrue(isinstance(value, typ.python_type))
-  //self.assertEqual(300, value._object_id)
+  krpc::Client client;
+  krpc::services::TestService::TestClass object(client);
+  krpc::Decoder::decode(object, krpc::platform::unhexlify("ac02"));
+  ASSERT_EQ(krpc::services::TestService::TestClass(client, 300), object);
 }
 
 TEST(test_decoder, test_decode_class_none) {
-  //typ = self.types.as_type('Class(ServiceName.ClassName)')
-  //value = Decoder.decode(unhexlify('00'), typ)
-  //self.assertIsNone(value)
+  krpc::Client client;
+  krpc::services::TestService::TestClass object(client);
+  krpc::Decoder::decode(object, krpc::platform::unhexlify("00"));
+  ASSERT_EQ(krpc::services::TestService::TestClass(client), object);
 }
 
 TEST(test_decoder, test_guid) {
