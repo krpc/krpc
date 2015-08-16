@@ -50,9 +50,9 @@ TEST_F(test_client, test_properties) {
   ASSERT_EQ("foo", test_service.string_property());
   ASSERT_EQ("foo", test_service.string_property_private_set());
   test_service.set_string_property_private_get("foo");
-  //obj = self.conn.test_service.create_test_object('bar')
-  //self.conn.test_service.object_property = obj
-  //self.assertEqual (obj, self.conn.test_service.object_property)
+  krpc::services::TestService::TestClass object = test_service.create_test_object("bar");
+  test_service.set_object_property(object);
+  ASSERT_EQ(object, test_service.object_property());
 }
 
 TEST_F(test_client, test_class_as_return_value) {
