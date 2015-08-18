@@ -195,10 +195,12 @@ protobuf-java: $(PROTOS) $(PROTOS:.proto=.java)
 	mkdir -p java/krpc
 	cp $(PROTOS:.proto=.java) java/krpc/
 
-protobuf-cpp: $(PROTOS) $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
+protobuf-cpp: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc) $(PROTOS_TEST:.proto=.pb.h) $(PROTOS_TEST:.proto=.pb.cc)
 	mkdir -p cpp/include/krpc
 	cp $(PROTOS:.proto=.pb.h) cpp/include/krpc/
-	sed 's/src\/kRPC\/Schema\/KRPC.pb.h/KRPC.pb.h/g' $(PROTOS:.proto=.pb.cc) > cpp/src/KRPC.pb.cc
+	cp $(PROTOS_TEST:.proto=.pb.h) cpp/test/
+	sed 's/#include "src\/kRPC\/Schema\//#include "/g' $(PROTOS:.proto=.pb.cc) > cpp/src/KRPC.pb.cc
+	sed 's/#include "test\/kRPCTest\/Schema\//#include "/g' $(PROTOS_TEST:.proto=.pb.cc) > cpp/test/Test.pb.cc
 
 protobuf-lua: $(PROTOS) $(PROTOS_TEST) $(PROTOS:.proto=.lua) $(PROTOS_TEST:.proto=.lua)
 	mkdir -p lua/krpc/schema
@@ -241,7 +243,7 @@ JAVATMP:=$(shell mktemp -d)
 %.java: %.proto
 	$(PROTOC) $< --java_out=$(JAVATMP)
 	# Following is an ugly hack
-	mv $(JAVATMP)/krpc/KRPC.java $@
+	mv $(JAVATMP)/krpc/schema/KRPC.java $@
 
 %.pb.h: %.proto
 	$(PROTOC) $< --cpp_out=.

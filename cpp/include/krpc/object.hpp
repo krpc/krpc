@@ -8,24 +8,20 @@
 
 namespace krpc {
 
-  class Encoder;
-  class Decoder;
-
   template <typename T>
   class Object {
-  protected:
-    Client& client;
+  public: //TODO: make id protected
+    Client* client;
   private:
-    const std::string name;
+    std::string name;
+  public: //TODO: make id private
     google::protobuf::uint64 id;
   public:
-    Object(Client& client, const std::string& name, google::protobuf::uint64 id = 0);
+    Object(Client* client, const std::string& name, google::protobuf::uint64 id = 0);
     template <typename U>
     friend std::ostream& operator<<(std::ostream&, const Object<U>&);
     template <typename U>
     friend bool operator==(const Object<U>&, const Object<U>&);
-    friend Decoder;
-    friend Encoder;
   };
 
   template <typename T>
@@ -34,7 +30,7 @@ namespace krpc {
   std::ostream& operator<<(std::ostream& stream, const Object<T>& object);
 
   template <typename T>
-  inline Object<T>::Object(Client& client, const std::string& name, google::protobuf::uint64 id):
+  inline Object<T>::Object(Client* client, const std::string& name, google::protobuf::uint64 id):
     client(client), name(name), id(id) {}
 
   template <typename T>

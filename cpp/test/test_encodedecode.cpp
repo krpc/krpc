@@ -3,20 +3,22 @@
 #include <krpc/encoder.hpp>
 #include <krpc/decoder.hpp>
 #include <krpc/platform.hpp>
+#include "Test.pb.h"
+#include <krpc/services/test_service.hpp>
 
 namespace pb = google::protobuf;
 
 template<typename T> void test(T decoded, std::string encoded) {
-  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   T value = 0;
-  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   ASSERT_EQ(decoded, value);
 }
 
 void test_float(float decoded, std::string encoded) {
-  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   float value = 0;
-  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   if (!isnan(decoded))
     ASSERT_FLOAT_EQ(decoded, value);
   else
@@ -24,9 +26,9 @@ void test_float(float decoded, std::string encoded) {
 }
 
 void test_double(double decoded, std::string encoded) {
-  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   double value = 0;
-  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   if (!isnan(decoded))
     ASSERT_DOUBLE_EQ(decoded, value);
   else
@@ -34,9 +36,9 @@ void test_double(double decoded, std::string encoded) {
 }
 
 void test_string(std::string decoded, std::string encoded) {
-  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   std::string value;
-  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   ASSERT_EQ(decoded, value);
 }
 
@@ -45,40 +47,40 @@ void test_bytes(std::string decoded, std::string encoded) {
 }
 
 template <typename T> void test_list(const std::vector<T>& decoded, std::string encoded) {
-  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   std::vector<T> value;
-  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   ASSERT_EQ(decoded.size(), value.size());
   ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
 }
 
 template <typename K, typename V> void test_dictionary(const std::map<K,V>& decoded, std::string encoded) {
-  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   std::map<K,V> value;
-  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   ASSERT_EQ(decoded.size(), value.size());
   ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
 }
 
 template <typename T> void test_set(const std::set<T>& decoded, std::string encoded) {
-  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   std::set<T> value;
-  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   ASSERT_EQ(decoded.size(), value.size());
   ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
 }
 
 template <typename T1> void test_tuple1(const boost::tuple<T1>& decoded, std::string encoded) {
-  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   boost::tuple<T1> value;
-  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   ASSERT_EQ(boost::get<0>(decoded), boost::get<0>(value));
 }
 
 template <typename T1, typename T2, typename T3> void test_tuple3(const boost::tuple<T1,T2,T3>& decoded, std::string encoded) {
-  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::Encoder::encode(decoded)));
+  ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   boost::tuple<T1,T2,T3> value;
-  krpc::Decoder::decode(value, krpc::platform::unhexlify(encoded));
+  krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   ASSERT_EQ(boost::get<0>(decoded), boost::get<0>(value));
   ASSERT_EQ(boost::get<1>(decoded), boost::get<1>(value));
   ASSERT_EQ(boost::get<2>(decoded), boost::get<2>(value));
@@ -211,4 +213,15 @@ TEST(test_encode_decode, test_set) {
 TEST(test_encode_decode, test_tuple) {
   test_tuple1(boost::tuple<int>(1), "0a0101");
   test_tuple3(boost::tuple<int,std::string,bool>(1,"jeb",false), "0a01010a04036a65620a0100");
+}
+
+TEST(test_encode_decode, test_list_of_objects) {
+   test_list(std::vector<krpc::services::TestService::TestClass>(), "");
+   {
+     std::vector<krpc::services::TestService::TestClass> l;
+     l.push_back(krpc::services::TestService::TestClass(NULL, 1));
+     l.push_back(krpc::services::TestService::TestClass(NULL, 2));
+     l.push_back(krpc::services::TestService::TestClass(NULL, 3));
+     test_list(l, "0a01010a01020a0103");
+   }
 }

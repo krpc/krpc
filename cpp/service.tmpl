@@ -1,0 +1,144 @@
+#ifndef HEADER_KRPC_SERVICES_{{service_name|upper}}
+#define HEADER_KRPC_SERVICES_{{service_name|upper}}
+
+#include <krpc/service.hpp>
+#include <krpc/encoder.hpp>
+#include <krpc/decoder.hpp>
+
+{%- macro generate_args(parameters) %}
+{% if parameters|length > 0 %}
+std::vector<std::string> args;
+{% for x in parameters %}
+      args.push_back(encoder::encode({{x.name}}));
+{% endfor %}
+{% endif %}
+{% endmacro -%}
+
+{%- macro generate_call(service, procedure, has_return, has_args) %}
+{% if has_return %}std::string data = {% endif -%}
+client->invoke("{{service}}", "{{procedure}}"
+{%- if has_args %}, args{% endif -%}
+);
+{%- endmacro -%}
+
+{%- macro generate_return(type, decode_fn, set_client) %}
+{% if type != 'void' %}
+{{type}} result
+;
+      decoder::{{decode_fn}}(result, data, client);
+      return result;
+{% endif %}
+{% endmacro -%}
+
+{%- macro generate_sig_parameters(parameters) %}
+{% for x in parameters %}
+{{x.type}} {{x.name}}
+{%- if x.default_argument != None %}
+ = {{x.default_argument}}
+{%- endif %}
+{% if not loop.last %}, {% endif %}
+{% endfor %}
+{% endmacro -%}
+
+{%- macro generate_impl_parameters(parameters) %}
+{% for x in parameters %}
+{{x.type}} {{x.name}}
+{%- if not loop.last %}, {% endif %}
+{% endfor %}
+{% endmacro %}
+
+namespace krpc {
+  namespace services{
+
+    class {{service_name}} : public Service {
+    public:
+      {{service_name}}(Client* client);
+
+      // Class forward declarations
+      {% for class_name in classes.keys() %}
+      class {{class_name}};
+      {% endfor %}
+
+      // Enumerations
+      {% for enum_name,values in enumerations.items() %}
+      enum {{enum_name}} {
+        {% for value in values %}
+        {{value.name}} = {{value.value}},
+        {% endfor %}
+      };
+      {% endfor %}
+
+      // Procedures
+      {% for procedure_name,procedure in procedures.items() %}
+      {{procedure.return_type}} {{procedure_name}}({{generate_sig_parameters(procedure.parameters)}});
+      {% endfor %}
+
+      // Properties
+      {% for property_name,property in properties.items() %}
+      {{property.return_type}} {{property_name}}({{generate_sig_parameters(property.parameters)}});
+      {% endfor %}
+
+      // Classes
+      {% for class_name,cls in classes.items() %}
+      class {{class_name}} : public krpc::Object<{{class_name}}> {
+      public:
+          {{class_name}}(Client* client = NULL, google::protobuf::uint64 id = 0);
+
+          // Methods
+          {% for method_name,method in cls.methods.items() %}
+          {{method.return_type}} {{method_name}}({{generate_sig_parameters(method.parameters)}});
+          {% endfor %}
+
+          // Static methods
+          {% for method_name,method in cls.static_methods.items() %}
+          static {{method.return_type}} {{method_name}}(Client& client, {{generate_sig_parameters(method.parameters)}});
+          {% endfor %}
+
+          // Properties
+          {% for property_name,property in cls.properties.items() %}
+          {{property.return_type}} {{property_name}}({{generate_sig_parameters(property.parameters)}});
+          {% endfor %}
+
+      };
+      {% endfor %}
+
+    };
+
+    inline {{service_name}}::{{service_name}}(Client* client):
+      Service(client) {}
+
+    {% for procedure_name,procedure in procedures.items() + properties.items() %}
+    inline {{procedure.return_type}} {{service_name}}::{{procedure_name}}({{generate_impl_parameters(procedure.parameters)}}) {
+      {{generate_args(procedure.parameters)}}
+      {{generate_call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters|length > 0)}}
+      {{generate_return(procedure.return_type, procedure.return_decode_fn, procedure.return_set_client)}}
+    }
+
+    {% endfor %}
+    {% for class_name,cls in classes.items() %}
+    {{service_name}}::{{class_name}}::{{class_name}}(Client* client, google::protobuf::uint64 id):
+      Object(client, "{{service_name}}::{{class_name}}", id) {}
+
+    {% for method_name,method in cls.methods.items() + cls.properties.items() %}
+    inline {{method.return_type}} {{service_name}}::{{class_name}}::{{method_name}}({{generate_impl_parameters(method.parameters)}}) {
+      {{generate_args([{'name': '*this'}] + method.parameters)}}
+      {{generate_call(service_name, method.remote_name, method.return_type != 'void', True)}}
+      {{generate_return(method.return_type, method.return_decode_fn, method.return_set_client)}}
+    }
+    {% endfor %}
+
+    {% for method_name,method in cls.static_methods.items() %}
+    inline {{method.return_type}} {{service_name}}::{{class_name}}::{{method_name}}(Client& client_obj, {{generate_impl_parameters(method.parameters)}}) {
+      Client* client = &client_obj;
+      {{generate_args(method.parameters)}}
+      {{generate_call(service_name, method.remote_name, method.return_type != 'void', True)}}
+      {{generate_return(method.return_type, method.return_decode_fn, method.return_set_client)}}
+    }
+    {% endfor %}
+
+    {% endfor %}
+  }
+
+}
+
+#endif

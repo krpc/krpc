@@ -15,19 +15,19 @@ namespace krpc {
     // Connect to RPC server
     boost::shared_ptr<Connection> rpc_connection(new Connection(address, rpc_port));
     rpc_connection->connect();
-    rpc_connection->send(Encoder::RPC_HELLO_MESSAGE, Encoder::RPC_HELLO_MESSAGE_LENGTH);
-    rpc_connection->send(Encoder::client_name(name));
-    std::string client_identifier = rpc_connection->receive(Decoder::GUID_LENGTH);
+    rpc_connection->send(encoder::RPC_HELLO_MESSAGE, encoder::RPC_HELLO_MESSAGE_LENGTH);
+    rpc_connection->send(encoder::client_name(name));
+    std::string client_identifier = rpc_connection->receive(decoder::GUID_LENGTH);
 
     // Connect to Stream server
     boost::shared_ptr<Connection> stream_connection;
     if (stream_port != 0) {
       stream_connection = boost::shared_ptr<Connection>(new Connection(address, stream_port));
       stream_connection->connect();
-      stream_connection->send(Encoder::STREAM_HELLO_MESSAGE, Encoder::STREAM_HELLO_MESSAGE_LENGTH);
+      stream_connection->send(encoder::STREAM_HELLO_MESSAGE, encoder::STREAM_HELLO_MESSAGE_LENGTH);
       stream_connection->send(client_identifier);
-      std::string ok_message = stream_connection->receive(Decoder::OK_MESSAGE_LENGTH);
-      std::string expected(Decoder::OK_MESSAGE);
+      std::string ok_message = stream_connection->receive(decoder::OK_MESSAGE_LENGTH);
+      std::string expected(decoder::OK_MESSAGE);
       if (!std::equal(ok_message.begin(), ok_message.end(), expected.begin())) {
         BOOST_THROW_EXCEPTION(
           ConnectionFailed()

@@ -2,7 +2,7 @@
 
 namespace krpc {
 
-  Service::Service(Client& client):
+  Service::Service(Client* client):
     client(client) {}
 
 }

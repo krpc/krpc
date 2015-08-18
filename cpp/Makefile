@@ -17,7 +17,7 @@ bin:
 	   ./bin/TestServer/
 
 generate: protobuf
-	#PYTHONPATH=../python ./generate
+	PYTHONPATH=../python ./generate
 
 build: generate
 	./waf configure
@@ -33,5 +33,6 @@ clean:
 	-./waf clean
 	rm -rf include/krpc/KRPC.pb.h src/KRPC.pb.cc
 	rm -rf include/krpc/services
+	rm -rf bin
 	find . -name "*.pyc" -exec rm -rf {} \;
 	rm -rf build

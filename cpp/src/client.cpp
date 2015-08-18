@@ -26,22 +26,22 @@ namespace krpc {
       arg->set_position(i);
       arg->set_value(args[i]);
     }
-    rpc_connection->send(Encoder::encode_delimited(request));
+    rpc_connection->send(encoder::encode_delimited(request));
 
     size_t size = 0;
     std::string data;
     while (true) {
       try {
         data += rpc_connection->receive(1); //TODO: partial_receive needed here?
-        size = Decoder::decode_size_and_position(data).first;
+        size = decoder::decode_size_and_position(data).first;
         break;
-      } catch (DecodeFailed& e) {
+      } catch (decoder::DecodeFailed& e) {
       }
     }
 
     data = rpc_connection->receive(size);
     schema::Response response;
-    Decoder::decode(response, data);
+    decoder::decode(response, data, this);
 
     if (response.has_error()) {
       BOOST_THROW_EXCEPTION(RPCError() << error_description(response.error()));

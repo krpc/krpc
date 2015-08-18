@@ -7,9 +7,9 @@ namespace krpc {
 
   class Service {
   protected:
-    Client& client;
+    Client* client;
   public:
-    Service(Client& client);
+    Service(Client* client);
   };
 
 }

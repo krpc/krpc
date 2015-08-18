@@ -130,6 +130,8 @@ cpp/.lock*
 cpp/build
 cpp/include/krpc/KRPC.pb.h
 cpp/src/KRPC.pb.cc
+cpp/test/Test.pb.h
+cpp/test/Test.pb.cc
 cpp/include/krpc/services
 
 # protobuf
@@ -147,6 +149,8 @@ lua/krpc/test/Test.lua
 test/kRPCTest/Schema/*.cs
 test/kRPCTest/Schema/*.py
 test/kRPCTest/Schema/*.lua
+test/kRPCTest/Schema/*.h
+test/kRPCTest/Schema/*.cc
 
 # Build output
 dist

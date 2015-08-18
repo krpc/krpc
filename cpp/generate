@@ -1,0 +1,455 @@
+#!/usr/bin/env python
+
+import os.path
+import argparse
+import json
+import re
+from krpc.attributes import Attributes
+import krpc.types
+
+krpc.types.add_search_path('krpc.test')
+
+Types = krpc.types.Types()
+
+def main():
+    parser = argparse.ArgumentParser(description='Generate C++ headers for kRPC services')
+    parser.add_argument('--definition-file', action='store', default='services.json',
+                        help='Path to services definition file (default: services.json)')
+    parser.add_argument('service', action='store', nargs='?',
+                        help='Service name (default: all services)')
+    parser.add_argument('--output-dir', action='store', default=os.path.join('include','krpc','services'),
+                        help='Directory to store generated header files')
+    args = parser.parse_args()
+
+    with open(args.definition_file, 'r') as f:
+        services_info = json.load(f)
+
+    service_names = services_info.keys()
+    if args.service:
+        if args.service not in service_names:
+            print 'Service \'%s\' not found' % args.service
+            exit(1)
+        service_names = [args.service]
+
+    if not os.path.exists(args.output_dir):
+        os.makedirs(args.output_dir)
+
+    for service_name in service_names:
+        content = generate_service(service_name, services_info[service_name])
+        header_path = os.path.join(args.output_dir, snake_case(service_name) + '.hpp')
+        with open(header_path, 'w') as f:
+            print header_path
+            f.write(content)
+
+_regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
+_regex_single_uppercase = re.compile(r'([a-z0-9])([A-Z])')
+_regex_underscores = re.compile(r'(.)_')
+
+def snake_case(camel_case):
+    """ Convert camel case to snake case, e.g. GetServices -> get_services """
+    result = re.sub(_regex_underscores, r'\1__', camel_case)
+    result = re.sub(_regex_single_uppercase, r'\1_\2', result)
+    return re.sub(_regex_multi_uppercase, r'\1_\2', result).lower()
+
+def cpp_template_fix(typ):
+    """ Ensure nested templates are separated by spaces for the C++ parser """
+    if typ.endswith('>>'):
+        return typ[:-2] + '> >'
+    else:
+        return typ
+
+def parse_type(typ):
+
+    typ_string = 'void'
+    typ_decode_fn = 'decode'
+    typ_set_client = False
+
+    if isinstance(typ, krpc.types.ValueType):
+        typ = typ.protobuf_type
+        if typ == 'string' or typ == 'bytes':
+            typ_string = 'std::string'
+        elif 'int' in typ:
+            typ_string = 'google::protobuf::%s' % typ
+        else:
+            typ_string = typ
+
+    elif isinstance(typ, krpc.types.MessageType):
+        typ = typ.protobuf_type
+        if typ.startswith('KRPC.'):
+            _,_,x = typ.rpartition('.')
+            typ_string = 'krpc::schema::%s' % x
+        elif typ.startswith('Test.'):
+            _,_,x = typ.rpartition('.')
+            typ_string = 'Test::%s' % x
+
+    elif isinstance(typ, krpc.types.ListType):
+        typ_string = cpp_template_fix('std::vector<%s>' % parse_type(Types.as_type(typ.protobuf_type[5:-1]))[0])
+
+    elif isinstance(typ, krpc.types.SetType):
+        typ_string = cpp_template_fix('std::set<%s>' % parse_type(Types.as_type(typ.protobuf_type[4:-1]))[0])
+
+    elif isinstance(typ, krpc.types.DictionaryType):
+        key_type,value_type = tuple(typ.protobuf_type[11:-1].split(','))
+        typ_string = cpp_template_fix('std::map<%s,%s>' % (parse_type(Types.as_type(key_type))[0], parse_type(Types.as_type(value_type))[0]))
+
+    elif isinstance(typ, krpc.types.TupleType):
+        value_types = typ.protobuf_type[6:-1].split(',')
+        typ_string = cpp_template_fix('boost::tuple<%s>' % ','.join(parse_type(Types.as_type(t))[0] for t in value_types))
+
+    elif isinstance(typ, krpc.types.ClassType):
+        typ_string = typ.protobuf_type[6:-1].replace('.','::')
+        typ_set_client = True
+
+    elif isinstance(typ, krpc.types.ProtobufEnumType):
+        typ_string = typ.protobuf_type.replace('.','::')
+        typ_decode_fn = 'decode_enum'
+
+    elif isinstance(typ, krpc.types.EnumType):
+        typ_string = 'int'; #TODO: fix me
+        typ_decode_fn = 'decode_enum'
+
+    else:
+        print 'Unknown type ', typ
+        exit(1)
+
+    return (typ_string,typ_decode_fn,typ_set_client)
+
+def parse_parameter_name(name):
+    return snake_case(name)
+
+def parse_return_type(typ):
+    return parse_type(typ)
+
+def parse_parameter_type(typ):
+    return parse_type(typ)[0]
+
+def parse_default_argument(value, typ):
+    if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'string':
+        return '"%s"' % value
+    elif isinstance(typ, krpc.types.ProtobufEnumType):
+        return 'static_cast<%s>(%s)' % (typ.protobuf_type.replace('.','::'), value)
+    else:
+        return value
+
+def generate_service(service_name, info):
+
+    procedures = {}
+    properties = {}
+    classes = {}
+    enumerations = {}
+
+    for name,cls in info['classes'].items():
+        classes[name] = {'methods': {}, 'static_methods': {}, 'properties': {}}
+
+    for name,enumeration in info['enumerations'].items():
+        enumerations[name] = [{'name': snake_case(x['name']), 'value': x['value']} for x in enumeration['values']]
+
+    for name,procedure in info['procedures'].items():
+        if Attributes.is_a_procedure(procedure['attributes']):
+            parameters = []
+            for i,parameter in enumerate(procedure['parameters']):
+                typ = Types.get_parameter_type(i, parameter['type'], procedure['attributes'])
+                default_argument = None
+                if parameter['default_argument'] is not None:
+                    default_argument = parse_default_argument(parameter['default_argument'], typ)
+                parameters.append({
+                    'name': parse_parameter_name(parameter['name']),
+                    'type': parse_parameter_type(typ),
+                    'default_argument': default_argument
+                })
+
+            return_type = ''
+            if procedure['return_type'] != '':
+                return_type,return_decode_fn,return_set_client = parse_return_type(Types.get_return_type(procedure['return_type'], procedure['attributes']))
+            else:
+                return_type = 'void'
+                return_decode_fn = 'decode'
+                return_set_client = False
+
+            procedures[snake_case(name)] = {
+                'remote_name': name,
+                'parameters': parameters,
+                'return_type': return_type,
+                'return_decode_fn': return_decode_fn,
+                'return_set_client': return_set_client
+            }
+
+        elif Attributes.is_a_property_getter(procedure['attributes']):
+            property_name = Attributes.get_property_name(procedure['attributes'])
+            if procedure['return_type'] != '':
+                return_type,return_decode_fn,return_set_client = parse_return_type(Types.get_return_type(procedure['return_type'], procedure['attributes']))
+            else:
+                return_type = 'void'
+                return_decode_fn = 'decode'
+                return_set_client = False
+            properties[snake_case(property_name)] = {
+                'remote_name': name,
+                'return_type': return_type,
+                'return_decode_fn': return_decode_fn,
+                'return_set_client': return_set_client,
+                'parameters': []
+            }
+
+        elif Attributes.is_a_property_setter(procedure['attributes']):
+            property_name = Attributes.get_property_name(procedure['attributes'])
+            properties['set_%s' % snake_case(property_name)] = {
+                'remote_name': name,
+                'return_type': 'void',
+                'return_decode_fn': 'decode',
+                'return_set_client': return_set_client,
+                'parameters': [{
+                    'name': 'x',
+                    'type': parse_parameter_type(Types.get_parameter_type(0, procedure['parameters'][0]['type'], procedure['attributes'])),
+                    'default_argument': None
+                }]
+            }
+
+        elif Attributes.is_a_class_method(procedure['attributes']):
+            class_name = Attributes.get_class_name(procedure['attributes'])
+            method_name = snake_case(Attributes.get_class_method_name(procedure['attributes']))
+
+            parameters = []
+            for i,parameter in list(enumerate(procedure['parameters']))[1:]:
+                parameters.append({
+                    'name': parse_parameter_name(parameter['name']),
+                    'type': parse_parameter_type(Types.get_parameter_type(i, parameter['type'], procedure['attributes'])),
+                    'default_argument': None
+                })
+
+            return_type = ''
+            if procedure['return_type'] != '':
+                return_type,return_decode_fn,return_set_client = parse_return_type(Types.get_return_type(procedure['return_type'], procedure['attributes']))
+            else:
+                return_type = 'void'
+                return_decode_fn = 'decode'
+                return_set_client = False
+
+            classes[class_name]['methods'][method_name] = {
+                'remote_name': name,
+                'parameters': parameters,
+                'return_type': return_type,
+                'return_decode_fn': return_decode_fn,
+                'return_set_client': return_set_client
+            }
+
+        elif Attributes.is_a_class_static_method(procedure['attributes']):
+            class_name = Attributes.get_class_name(procedure['attributes'])
+            method_name = snake_case(Attributes.get_class_method_name(procedure['attributes']))
+
+            parameters = []
+            for i,parameter in list(enumerate(procedure['parameters'])):
+                typ = Types.get_parameter_type(i, parameter['type'], procedure['attributes'])
+                default_argument = None
+                if parameter['default_argument'] is not None:
+                    default_argument = parse_default_argument(parameter['default_argument'], typ)
+                parameters.append({
+                    'name': parse_parameter_name(parameter['name']),
+                    'type': parse_parameter_type(typ),
+                    'default_argument': default_argument
+                })
+
+            return_type = ''
+            if procedure['return_type'] != '':
+                return_type,return_decode_fn,return_set_client = parse_return_type(Types.get_return_type(procedure['return_type'], procedure['attributes']))
+            else:
+                return_type = 'void'
+                return_decode_fn = 'decode'
+                return_set_client = False
+
+            classes[class_name]['static_methods'][method_name] = {
+                'remote_name': name,
+                'parameters': parameters,
+                'return_type': return_type,
+                'return_decode_fn': return_decode_fn,
+                'return_set_client': return_set_client
+            }
+
+        elif Attributes.is_a_class_property_getter(procedure['attributes']):
+            property_name = snake_case(Attributes.get_class_property_name(procedure['attributes']))
+            if procedure['return_type'] != '':
+                return_type,return_decode_fn,return_set_client = parse_return_type(Types.get_return_type(procedure['return_type'], procedure['attributes']))
+            else:
+                return_type = 'void'
+                return_decode_fn = 'decode'
+                return_set_client = False
+            classes[class_name]['properties'][property_name] = {
+                'remote_name': name,
+                'return_type': return_type,
+                'return_decode_fn': return_decode_fn,
+                'return_set_client': return_set_client,
+                'parameters': []
+            }
+
+        elif Attributes.is_a_class_property_setter(procedure['attributes']):
+            property_name = 'set_%s' % snake_case(Attributes.get_class_property_name(procedure['attributes']))
+            classes[class_name]['properties'][property_name] = {
+                'remote_name': name,
+                'return_type': 'void',
+                'return_decode_fn': 'decode',
+                'return_set_client': False,
+                'parameters': [{
+                    'name': 'x',
+                    'type': parse_parameter_type(Types.get_parameter_type(1, procedure['parameters'][1]['type'], procedure['attributes'])),
+                    'default_argument': None
+                }]
+            }
+
+    data = {
+        'service_name': service_name,
+        'procedures': procedures,
+        'properties': properties,
+        'classes': classes,
+        'enumerations': enumerations,
+        'snake_case': snake_case
+    }
+    #from mako.template import Template
+    #return Template(filename='service.tmpl').render(**data)
+    import jinja2
+    loader = jinja2.FileSystemLoader(searchpath='./' )
+    env = jinja2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
+    template = env.get_template('service.tmpl')
+    return template.render(data)
+
+if __name__ == '__main__':
+    main()
+
+#print services_info
+
+#class Parameter:
+#    def __init__(self):
+#        self.datatype = ''
+#        self.name = ''
+#        self.position = 0
+#
+#    def generate_paramstring(self):
+#        if self.datatype == 'KRPC.Tuple':
+#            return 'double ' + self.name + '_x, ' + 'double ' + self.name + '_y, ' + 'double ' + self.name + '_z'
+#        elif self.datatype == 'KRPC.List':
+#            return 'std::vector<uint64_t> ' + self.name + '_vector'
+#        elif self.datatype == 'KRPC.Dictionary':
+#            return 'krpc::Dictionary ' + self.name + '_dict'
+#        elif self.datatype == 'KRPC.Request':
+#            self.name = 'input_request'
+#            return 'krpc::Request ' + self.name
+#        elif self.datatype == 'uint64' or self.datatype == 'uint32' or self.datatype == 'int32' or self.datatype == 'int64':
+#            return self.datatype + '_t ' + self.name
+#        elif self.datatype == 'string':
+#            return 'std::' + self.datatype + ' ' + self.name
+#        else:
+#            return self.datatype + ' ' + self.name
+#
+#    def generate_requeststring(self):
+#        if self.datatype == 'KRPC.Tuple':
+#            return self.name + '_x, ' + self.name + '_y, ' + self.name + '_z'
+#        elif self.datatype == 'KRPC.List':
+#            return self.name + '_vector'
+#        elif self.datatype == 'KRPC.Dictionary':
+#            return self.name + '_dict'
+#        elif self.datatype == 'KRPC.Request':
+#            self.name = 'input_request'
+#            return self.name
+#        elif self.datatype == 'uint64' or self.datatype == 'uint32' or self.datatype == 'int32' or self.datatype == 'int64':
+#            return self.name
+#        elif self.datatype == 'string':
+#            return self.name
+#        else:
+#            return self.name
+#
+#class Procedure:
+#    def __init__(self):
+#        self.name = ''
+#        self.parameter_count = 0
+#        self.parameters = []
+#        self.return_type = ''
+#        self.args = ''
+#        self.input_args = ''
+#        self.request_args = ''
+#
+#    def generate_input_args(self):
+#        for parameter in self.parameters:
+#            self.args += parameter.generate_paramstring() + ', '
+#            self.input_args += parameter.generate_paramstring() + ', '
+#            self.request_args += parameter.generate_requeststring() + ', '
+#        self.input_args = self.input_args[:-2]
+#        self.request_args = self.request_args[:-2]
+#
+#    def generate_output_args(self):
+#        if self.return_type == '':
+#            self.args = self.args[:-2]
+#        else:
+#            if self.return_type == 'KRPC.Tuple':
+#                self.args += 'double& x, double& y, double& z'
+#            elif self.return_type == 'KRPC.List':
+#                self.args += 'std::vector<uint64_t>& return_vector'
+#            elif self.return_type == 'KRPC.Dictionary':
+#                self.args += 'krpc::Dictionary& return_dict'
+#            elif self.return_type == 'KRPC.Status':
+#                self.args += 'krpc::Status& return_value'
+#            elif self.return_type == 'KRPC.Services':
+#                self.args += 'krpc::Services& return_value'
+#            elif self.return_type == 'uint64':
+#                self.args += 'uint64_t& return_value'
+#            elif self.return_type == 'uint32':
+#                self.args += 'uint32_t& return_value'
+#            elif self.return_type == 'int32':
+#                self.args += 'int32_t& return_value'
+#            elif self.return_type == 'int64':
+#                self.args += 'int64_t& return_value'
+#            elif self.return_type == 'string':
+#                self.args += 'std::string& return_value'
+#            else:
+#                self.args += self.return_type + '& return_value'
+#
+#    def generate_argstring(self):
+#        self.generate_input_args()
+#        self.generate_output_args()
+#
+#class Service:
+#    def __init__(self):
+#        self.name = ''
+#        self.procedures = []
+#
+#conn = krpc.connect(name=sys.argv[0], address=args.address, rpc_port=args.rpc_port)
+#services = []
+#for service in conn.krpc.get_services().services:
+#    if args.service is not None and service.name != args.service:
+#        continue
+#    new_service = Service()
+#    new_service.name = service.name
+#
+#    for procedure in service.procedures:
+#        new_procedure = Procedure()
+#        new_procedure.name = str(procedure.name)
+#        if procedure.return_type != None:
+#            new_procedure.return_type = str(procedure.return_type)
+#        if len(procedure.parameters) > 0:
+#            new_procedure.parameter_count = procedure.parameters
+#            for i,parameter in enumerate(procedure.parameters):
+#                new_parameter = Parameter()
+#                new_parameter.position = i
+#                new_parameter.datatype = str(parameter.type)
+#                new_parameter.name = parameter.name
+#                if new_parameter.name == 'this':
+#                    new_parameter.name = new_procedure.name.split('_')[0] + '_ID'
+#                if new_parameter.datatype == 'uint64':
+#                    new_parameter.datatype += '_t'
+#                new_procedure.parameters.append(new_parameter)
+#        new_procedure.generate_argstring()
+#        new_service.procedures.append(new_procedure)
+#    services.append(new_service)
+#
+#hpp_namespace = {'hash_include': '#include', 'services': services}
+#template = Template(file='templates/krpci_hpp.tmpl', searchList=[hpp_namespace])
+#hpp_file = str(template)
+#if not os.path.exists('include'):
+#    os.makedirs('include')
+#with open(os.path.join('include', 'krpci.hpp'), 'w') as f:
+#    f.write(hpp_file)
+#
+#cpp_namespace = {'hash_include': '#include', 'services': services}
+#template = Template(file='templates/krpci_cpp.tmpl', searchList=[cpp_namespace])
+#cpp_file = str(template)
+#if not os.path.exists('src'):
+#    os.makedirs('src')
+#with open(os.path.join('src', 'krpci.cpp'), 'w') as f:
+#    f.write(cpp_file)
