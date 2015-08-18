@@ -7,26 +7,26 @@
 
 {%- macro generate_args(parameters) %}
 {% if parameters|length > 0 %}
-std::vector<std::string> args;
+std::vector<std::string> _args;
 {% for x in parameters %}
-      args.push_back(encoder::encode({{x.name}}));
+      _args.push_back(encoder::encode({{x.name}}));
 {% endfor %}
 {% endif %}
 {% endmacro -%}
 
-{%- macro generate_call(service, procedure, has_return, has_args) %}
-{% if has_return %}std::string data = {% endif -%}
-client->invoke("{{service}}", "{{procedure}}"
-{%- if has_args %}, args{% endif -%}
+{%- macro generate_call(service, procedure, has_return, has_args, is_static=False) %}
+{% if has_return %}std::string _data = {% endif -%}
+{% if is_static %}_client.{% else %}this->client->{% endif %}invoke("{{service}}", "{{procedure}}"
+{%- if has_args %}, _args{% endif -%}
 );
 {%- endmacro -%}
 
-{%- macro generate_return(type, decode_fn, set_client) %}
+{%- macro generate_return(type, decode_fn, set_client, is_static) %}
 {% if type != 'void' %}
-{{type}} result
+{{type}} _result
 ;
-      decoder::{{decode_fn}}(result, data, client);
-      return result;
+      decoder::{{decode_fn}}(_result, _data, {% if is_static %}&_client{% else %}this->client{% endif %});
+      return _result;
 {% endif %}
 {% endmacro -%}
 
@@ -128,11 +128,10 @@ namespace krpc {
     {% endfor %}
 
     {% for method_name,method in cls.static_methods.items() %}
-    inline {{method.return_type}} {{service_name}}::{{class_name}}::{{method_name}}(Client& client_obj, {{generate_impl_parameters(method.parameters)}}) {
-      Client* client = &client_obj;
+    inline {{method.return_type}} {{service_name}}::{{class_name}}::{{method_name}}(Client& _client, {{generate_impl_parameters(method.parameters)}}) {
       {{generate_args(method.parameters)}}
-      {{generate_call(service_name, method.remote_name, method.return_type != 'void', True)}}
-      {{generate_return(method.return_type, method.return_decode_fn, method.return_set_client)}}
+      {{generate_call(service_name, method.remote_name, method.return_type != 'void', True, True)}}
+      {{generate_return(method.return_type, method.return_decode_fn, method.return_set_client, True)}}
     }
     {% endfor %}
 
