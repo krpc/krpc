@@ -23,7 +23,7 @@ build: generate
 	./waf configure
 	./waf build --notests
 
-test:
+test: bin
 	./startserver.sh
 	./waf build --alltests
 	./stopserver.sh
