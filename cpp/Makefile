@@ -24,7 +24,9 @@ build: generate
 	./waf build --notests
 
 test:
+	./startserver.sh
 	./waf build --alltests
+	./stopserver.sh
 
 install:
 	./waf install

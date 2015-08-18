@@ -18,7 +18,7 @@ inline server_test::server_test():
   test_service(&conn) {}
 
 inline krpc::Client server_test::connect() {
-  return krpc::connect("TestClient", "localhost", 50000, 50001);
+  return krpc::connect("TestClient", "localhost", 50011, 50012);
 }
 
 #endif
