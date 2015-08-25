@@ -517,10 +517,3 @@ KRPC.AddStream
 KRPC.GetStatus
 KRPC.RemoveStream
 KRPC.GetServices
-TestingTools.SetOrbit
-TestingTools.RemoveOtherVessels
-TestingTools.LoadSave
-TestingTools.ClearRotation
-TestingTools.SetCircularOrbit
-TestingTools.ApplyRotation
-TestingTools.CurrentSave

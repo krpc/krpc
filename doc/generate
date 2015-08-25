@@ -2,7 +2,8 @@
 
 # Build API docs
 
-import sys
+import argparse
+import glob
 import os
 import re
 import json
@@ -13,10 +14,6 @@ from krpc.types import Types
 from api.directives import *
 import api.utils
 
-language = sys.argv[1]
-src = sys.argv[2]
-dst = sys.argv[3]
-
 class Env(object):
 
     def __init__(self, language):
@@ -24,6 +21,7 @@ class Env(object):
         self._refs = {}
         self._currentmodule = None
 
+        self.language = language
         if language == 'python':
             from api.python import PythonAPI
             self._domain = PythonAPI(self)
@@ -107,13 +105,13 @@ class Env(object):
 
     def parse_description_node(self, node):
         if node.tag == 'see':
-            return env.domain.parse_ref(node.attrib['cref'])
+            return self.domain.parse_ref(node.attrib['cref'])
         elif node.tag == 'paramref':
-            return '*%s*' % env.domain.parse_param(node.attrib['name'])
+            return '*%s*' % self.domain.parse_param(node.attrib['name'])
         elif node.tag == 'a':
             return '`%s <%s>`_' % (node.text.replace('\n',''), node.attrib['href'])
         elif node.tag == 'c':
-            return '``%s``' % env.domain.parse_value(node.text)
+            return '``%s``' % self.domain.parse_value(node.text)
         elif node.tag == 'math':
             return ':math:`%s`' % node.text
         elif node.tag == 'list':
@@ -141,12 +139,7 @@ class Env(object):
         typ = self.types.get_return_type(typ, attrs)
         return self.domain.parse_type(typ.protobuf_type)
 
-env = Env(language)
-
-with open('services.json', 'r') as f:
-    services_info = json.load(f)
-
-def process_file(path):
+def process_file(env, services_info, path):
 
     services = {}
     classes = {}
@@ -233,7 +226,7 @@ def process_file(path):
             env.add_ref(name, enum)
 
     namespace = {
-        'language': language,
+        'language': env.language,
         'domain': env.domain.name,
         'services': services,
         'classes': classes,
@@ -250,25 +243,53 @@ def process_file(path):
     env.check_seen_members()
     return result
 
-for dirname,dirnames,filenames in os.walk(src):
-    for filename in filenames:
-        if filename.endswith('.tmpl'):
-            src_path = os.path.join(dirname, filename)
-            dst_path = os.path.join(dst, src_path[len(src)+1:][:-4]+'rst')
-            content = process_file(src_path)
+def main():
+    parser = argparse.ArgumentParser(description='Generate API documentation .rst source files')
+    parser.add_argument('language', choices = ['python', 'lua'],
+                        help='Language to compile')
+    parser.add_argument('source', action='store',
+                        help='Path to source directory')
+    parser.add_argument('destination', action='store',
+                        help='Path to destination directory')
+    parser.add_argument('definitions', nargs='*', default=[],
+                        help='Paths to services definition files')
+    args = parser.parse_args()
 
-            # Skip if already up to date
-            if os.path.exists(dst_path):
-                try:
-                    old_content = open(dst_path, 'r').read()
-                    if content == old_content:
-                        continue
-                except IOError:
-                    pass
+    env = Env(args.language)
 
-            # Update
-            print src_path+' -> '+dst_path
-            if not os.path.exists(os.path.dirname(dst_path)):
-                os.makedirs(os.path.dirname(dst_path))
-            with open(dst_path, 'w') as f:
-                f.write(content)
+    services_info = {}
+    for definition in args.definitions:
+        for path in glob.glob(definition):
+            print 'Loading', path
+            with open(path, 'r') as f:
+                services_info.update(json.load(f))
+
+    if services_info == {}:
+        print 'No services found in services definition files'
+        exit(1)
+
+    for dirname,dirnames,filenames in os.walk(args.source):
+        for filename in filenames:
+            if filename.endswith('.tmpl'):
+                src_path = os.path.join(dirname, filename)
+                dst_path = os.path.join(args.destination, src_path[len(args.source)+1:][:-4]+'rst')
+                content = process_file(env, services_info, src_path)
+
+                # Skip if already up to date
+                if os.path.exists(dst_path):
+                    try:
+                        old_content = open(dst_path, 'r').read()
+                        if content == old_content:
+                            continue
+                    except IOError:
+                        pass
+
+                # Update
+                print src_path+' -> '+dst_path
+                if not os.path.exists(os.path.dirname(dst_path)):
+                    os.makedirs(os.path.dirname(dst_path))
+                with open(dst_path, 'w') as f:
+                    f.write(content)
+
+if __name__ == '__main__':
+    main()

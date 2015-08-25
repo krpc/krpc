@@ -6,6 +6,8 @@ PYTHON_API_DIR = src/python/api
 LUA_API_DIR = src/lua/api
 GH_PAGES_DIR = ../docs
 
+CSHARP_CONFIG=Release
+
 SPHINX_BUILD = sphinx-build
 SPHINX_AUTOBUILD = sphinx-autobuild
 SPHINX_OPTS = -d $(BUILD_DIR)/doctrees $(SRC_DIR)
@@ -24,12 +26,9 @@ build: spelling html pdf
 clean: clean-images
 	rm -rf $(BUILD_DIR) $(PYTHON_API_DIR) $(LUA_API_DIR) $(GH_PAGES_DIR)
 
-get:
-	PYTHONPATH=../python ./get-api.py >services.json
-
 # Build specific types of doc---------------------------------------------------
 
-.PHONY: html pdf gh-pages
+.PHONY: spelling html pdf gh-pages
 
 spelling: images api
 	$(SPHINX_BUILD) -b spelling $(SPHINX_OPTS) $(BUILD_DIR)/spelling
@@ -63,23 +62,20 @@ clean-images:
 
 .PHONY: api python-api lua-api
 
-api: check-api python-api lua-api
-
-check-api:
-	./check-api.py $(API_DIR) services.yaml
+api: python-api lua-api
 
 python-api:
-	PYTHONPATH=../python ./build-api.py python $(API_DIR) $(PYTHON_API_DIR)
+	PYTHONPATH=../python ./generate python $(API_DIR) $(PYTHON_API_DIR) ../src/*/bin/$(CSHARP_CONFIG)/*.json
 
 lua-api:
-	PYTHONPATH=../python ./build-api.py lua $(API_DIR) $(LUA_API_DIR)
+	PYTHONPATH=../python ./generate lua $(API_DIR) $(LUA_API_DIR) ../src/*/bin/$(CSHARP_CONFIG)/*.json
 
 # Sphinx server on localhost ---------------------------------------------------
 
 .PHONY: serve wait-api-changed sphinx-autobuild
 
 serve: html
-	python serve.py
+	./serve
 
 wait-api-changed:
 	inotifywait -r -e modify,move,create,delete $(API_DIR)
