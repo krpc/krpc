@@ -5,6 +5,7 @@ import argparse
 import json
 import jinja2
 import re
+import glob
 from krpc.attributes import Attributes
 import krpc.types
 
@@ -13,16 +14,24 @@ Types = krpc.types.Types()
 
 def main():
     parser = argparse.ArgumentParser(description='Generate C++ headers for kRPC services')
-    parser.add_argument('--definition-file', action='store', default='services.json',
-                        help='Path to services definition file (default: services.json)')
-    parser.add_argument('service', action='store', nargs='?',
-                        help='Service name (default: all services)')
-    parser.add_argument('--output-dir', action='store', default=os.path.join('include','krpc','services'),
+    parser.add_argument('output', action='store',
                         help='Directory to store generated header files')
+    parser.add_argument('definitions', nargs='*', default=[],
+                        help='Paths to services definition files')
+    parser.add_argument('--service', action='store', nargs=1,
+                        help='Service name (default: all services)')
     args = parser.parse_args()
 
-    with open(args.definition_file, 'r') as f:
-        services_info = json.load(f)
+    services_info = {}
+    for definition in args.definitions:
+        for path in glob.glob(definition):
+            print 'Loading', path
+            with open(path, 'r') as f:
+                services_info.update(json.load(f))
+
+    if services_info == {}:
+        print 'No services found in services definition files'
+        exit(1)
 
     service_names = services_info.keys()
     if args.service:
@@ -31,12 +40,12 @@ def main():
             exit(1)
         service_names = [args.service]
 
-    if not os.path.exists(args.output_dir):
-        os.makedirs(args.output_dir)
+    if not os.path.exists(args.output):
+        os.makedirs(args.output)
 
     for service_name in service_names:
         content = generate_service(service_name, services_info[service_name])
-        header_path = os.path.join(args.output_dir, snake_case(service_name) + '.hpp')
+        header_path = os.path.join(args.output, snake_case(service_name) + '.hpp')
         with open(header_path, 'w') as f:
             print header_path
             f.write(content)
@@ -57,6 +66,24 @@ def cpp_template_fix(typ):
         return typ[:-2] + '> >'
     else:
         return typ
+
+KEYWORDS = set([
+    'alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand', 'bitor', 'bool', 'break',
+    'case', 'catch', 'char', 'char16_t', 'char32_t', 'class', 'compl', 'concept', 'const', 'constexpr',
+    'const_cast', 'continue', 'decltype', 'default', 'delete', 'do', 'double', 'dynamic_cast', 'else',
+    'enum', 'explicit', 'export', 'extern', 'false', 'float', 'for', 'friend', 'goto', 'if', 'inline',
+    'int', 'long', 'mutable', 'namespace', 'new', 'noexcept', 'not', 'not_eq', 'nullptr', 'operator',
+    'or', 'or_eq', 'private', 'protected', 'public', 'register', 'reinterpret_cast', 'requires',
+    'return', 'short', 'signed', 'sizeof', 'static', 'static_assert', 'static_cast', 'struct', 'switch',
+    'template', 'this', 'thread_local', 'throw', 'true', 'try', 'typedef', 'typeid', 'typename', 'union',
+    'unsigned', 'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor', 'xor_eq'
+])
+
+def parse_name(name):
+    name = snake_case(name)
+    if name in KEYWORDS:
+        name = '%s_' % name
+    return name
 
 def parse_type(typ):
 
@@ -109,7 +136,6 @@ def parse_type(typ):
 
     elif isinstance(typ, krpc.types.EnumType):
         typ_string = typ.protobuf_type[5:-1].replace('.','::')
-        typ_decode_fn = 'decode_enum'
 
     else:
         print 'Unknown type ', typ
@@ -134,6 +160,11 @@ def parse_parameter_type(typ):
 def parse_default_argument(value, typ):
     if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'string':
         return '"%s"' % value
+    if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'bool':
+        if value:
+            return 'true'
+        else:
+            return 'false'
     elif isinstance(typ, krpc.types.ProtobufEnumType):
         return 'static_cast<%s>(%s)' % (typ.protobuf_type.replace('.','::'), value)
     elif isinstance(typ, krpc.types.EnumType):
@@ -166,13 +197,13 @@ def generate_service(service_name, info):
         classes[name] = {'methods': {}, 'static_methods': {}, 'properties': {}}
 
     for name,enumeration in info['enumerations'].items():
-        enumerations[name] = [{'name': snake_case(x['name']), 'value': x['value']} for x in enumeration['values']]
+        enumerations[name] = [{'name': parse_name(x['name']), 'value': x['value']} for x in enumeration['values']]
 
     for name,procedure in info['procedures'].items():
 
         if Attributes.is_a_procedure(procedure['attributes']):
             return_type,return_decode_fn,return_set_client = parse_return_type(procedure)
-            procedures[snake_case(name)] = {
+            procedures[parse_name(name)] = {
                 'remote_name': name,
                 'parameters': parse_parameters(procedure),
                 'return_type': return_type,
@@ -183,7 +214,7 @@ def generate_service(service_name, info):
         elif Attributes.is_a_property_getter(procedure['attributes']):
             property_name = Attributes.get_property_name(procedure['attributes'])
             return_type,return_decode_fn,return_set_client = parse_return_type(procedure)
-            properties[snake_case(property_name)] = {
+            properties[parse_name(property_name)] = {
                 'remote_name': name,
                 'parameters': [],
                 'return_type': return_type,
@@ -193,17 +224,17 @@ def generate_service(service_name, info):
 
         elif Attributes.is_a_property_setter(procedure['attributes']):
             property_name = Attributes.get_property_name(procedure['attributes'])
-            properties['set_%s' % snake_case(property_name)] = {
+            properties['set_%s' % parse_name(property_name)] = {
                 'remote_name': name,
                 'parameters': parse_parameters(procedure),
                 'return_type': 'void',
                 'return_decode_fn': 'decode',
-                'return_set_client': return_set_client
+                'return_set_client': False
             }
 
         elif Attributes.is_a_class_method(procedure['attributes']):
             class_name = Attributes.get_class_name(procedure['attributes'])
-            method_name = snake_case(Attributes.get_class_method_name(procedure['attributes']))
+            method_name = parse_name(Attributes.get_class_method_name(procedure['attributes']))
             return_type,return_decode_fn,return_set_client = parse_return_type(procedure)
             classes[class_name]['methods'][method_name] = {
                 'remote_name': name,
@@ -215,7 +246,7 @@ def generate_service(service_name, info):
 
         elif Attributes.is_a_class_static_method(procedure['attributes']):
             class_name = Attributes.get_class_name(procedure['attributes'])
-            method_name = snake_case(Attributes.get_class_method_name(procedure['attributes']))
+            method_name = parse_name(Attributes.get_class_method_name(procedure['attributes']))
             return_type,return_decode_fn,return_set_client = parse_return_type(procedure)
             classes[class_name]['static_methods'][method_name] = {
                 'remote_name': name,
@@ -226,7 +257,8 @@ def generate_service(service_name, info):
             }
 
         elif Attributes.is_a_class_property_getter(procedure['attributes']):
-            property_name = snake_case(Attributes.get_class_property_name(procedure['attributes']))
+            class_name = Attributes.get_class_name(procedure['attributes'])
+            property_name = parse_name(Attributes.get_class_property_name(procedure['attributes']))
             return_type,return_decode_fn,return_set_client = parse_return_type(procedure)
             classes[class_name]['properties'][property_name] = {
                 'remote_name': name,
@@ -237,7 +269,8 @@ def generate_service(service_name, info):
             }
 
         elif Attributes.is_a_class_property_setter(procedure['attributes']):
-            property_name = 'set_%s' % snake_case(Attributes.get_class_property_name(procedure['attributes']))
+            class_name = Attributes.get_class_name(procedure['attributes'])
+            property_name = 'set_%s' % parse_name(Attributes.get_class_property_name(procedure['attributes']))
             classes[class_name]['properties'][property_name] = {
                 'remote_name': name,
                 'parameters': [parse_parameters(procedure)[1]],
@@ -251,8 +284,7 @@ def generate_service(service_name, info):
         'procedures': procedures,
         'properties': properties,
         'classes': classes,
-        'enumerations': enumerations,
-        'snake_case': snake_case
+        'enumerations': enumerations
     }
 
     loader = jinja2.FileSystemLoader(searchpath='./' )

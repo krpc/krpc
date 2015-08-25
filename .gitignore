@@ -133,6 +133,7 @@ cpp/src/KRPC.pb.cc
 cpp/test/Test.pb.h
 cpp/test/Test.pb.cc
 cpp/include/krpc/services
+cpp/test/services
 
 # protobuf
 *.protobin

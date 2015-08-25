@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Usage: stop-server
+# Stops the server that was started using start-server
+
+PIDFILE=server.pid
+if [ -f $PIDFILE ];
+then
+  PID=`cat $PIDFILE`
+  kill $PID
+  rm -f $PIDFILE
+  echo "Server stopped"
+else
+  echo "Failed to stop server, pid file does not exist"
+fi

@@ -4,7 +4,7 @@
 #include <krpc/encoder.hpp>
 #include <krpc/platform.hpp>
 #include "Test.pb.h"
-#include <krpc/services/test_service.hpp>
+#include "services/test_service.hpp"
 
 TEST(test_encoder, test_rpc_hello_message) {
   std::string message(krpc::encoder::RPC_HELLO_MESSAGE, krpc::encoder::RPC_HELLO_MESSAGE_LENGTH);

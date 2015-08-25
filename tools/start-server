@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Usage: start-server path/to/executable.exe rpc_port stream_port
+
+PIDFILE=server.pid
+
+if [ -f $PIDFILE ];
+then
+  echo "Failed to start server, pid file exists"
+else
+  $1 $2 $3 --quiet 1>/dev/null &
+  PID=$!
+  echo $PID > $PIDFILE
+  echo "Server started"
+fi

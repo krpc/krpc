@@ -4,7 +4,7 @@
 #include <krpc/decoder.hpp>
 #include <krpc/platform.hpp>
 #include "Test.pb.h"
-#include <krpc/services/test_service.hpp>
+#include "services/test_service.hpp"
 
 namespace pb = google::protobuf;
 

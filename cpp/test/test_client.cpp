@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <boost/algorithm/string/predicate.hpp>
-#include <krpc/services/krpc.hpp>
-#include "Test.pb.h"
-#include <krpc/services/test_service.hpp>
 #include <krpc/platform.hpp>
+#include "Test.pb.h"
+#include "krpc/services/krpc.hpp"
+#include "services/test_service.hpp"
 #include "server_test.hpp"
 
 class test_client: public server_test {
@@ -125,20 +125,20 @@ TEST_F(test_client, test_protobuf_enums) {
 }
 
 TEST_F(test_client, test_enums) {
-  ASSERT_EQ(krpc::services::TestService::value_b,
+  ASSERT_EQ(krpc::services::TestService::CSharpEnum::value_b,
             test_service.c_sharp_enum_return());
-  ASSERT_EQ(krpc::services::TestService::value_a,
-            test_service.c_sharp_enum_echo(krpc::services::TestService::value_a));
-  ASSERT_EQ(krpc::services::TestService::value_b,
-            test_service.c_sharp_enum_echo(krpc::services::TestService::value_b));
-  ASSERT_EQ(krpc::services::TestService::value_c,
-            test_service.c_sharp_enum_echo(krpc::services::TestService::value_c));
-  ASSERT_EQ(krpc::services::TestService::value_a,
-            test_service.c_sharp_enum_default_arg(krpc::services::TestService::value_a));
-  ASSERT_EQ(krpc::services::TestService::value_c,
+  ASSERT_EQ(krpc::services::TestService::CSharpEnum::value_a,
+            test_service.c_sharp_enum_echo(krpc::services::TestService::CSharpEnum::value_a));
+  ASSERT_EQ(krpc::services::TestService::CSharpEnum::value_b,
+            test_service.c_sharp_enum_echo(krpc::services::TestService::CSharpEnum::value_b));
+  ASSERT_EQ(krpc::services::TestService::CSharpEnum::value_c,
+            test_service.c_sharp_enum_echo(krpc::services::TestService::CSharpEnum::value_c));
+  ASSERT_EQ(krpc::services::TestService::CSharpEnum::value_a,
+            test_service.c_sharp_enum_default_arg(krpc::services::TestService::CSharpEnum::value_a));
+  ASSERT_EQ(krpc::services::TestService::CSharpEnum::value_c,
             test_service.c_sharp_enum_default_arg());
-  ASSERT_EQ(krpc::services::TestService::value_b,
-            test_service.c_sharp_enum_default_arg(krpc::services::TestService::value_b));
+  ASSERT_EQ(krpc::services::TestService::CSharpEnum::value_b,
+            test_service.c_sharp_enum_default_arg(krpc::services::TestService::CSharpEnum::value_b));
 }
 
 TEST_F(test_client, test_collections) {
@@ -228,9 +228,9 @@ TEST_F(test_client, test_collections_of_objects) {
 }
 
 TEST_F(test_client, test_test_service_enum_members) {
-  ASSERT_EQ(0, krpc::services::TestService::value_a);
-  ASSERT_EQ(1, krpc::services::TestService::value_b);
-  ASSERT_EQ(2, krpc::services::TestService::value_c);
+  ASSERT_EQ(0, static_cast<int>(krpc::services::TestService::CSharpEnum::value_a));
+  ASSERT_EQ(1, static_cast<int>(krpc::services::TestService::CSharpEnum::value_b));
+  ASSERT_EQ(2, static_cast<int>(krpc::services::TestService::CSharpEnum::value_c));
 }
 
 TEST_F(test_client, test_line_endings) {
