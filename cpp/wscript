@@ -48,4 +48,21 @@ def build(ctx):
         )
 
     from waflib.Tools import waf_unit_test
-    ctx.add_post_fun(waf_unit_test.summary)
+    ctx.add_post_fun(test_results)
+
+def test_results(ctx):
+    from waflib import Logs
+    results = getattr(ctx, 'utest_results', [])
+    if results:
+        passed = filter(lambda x: not x[1], results)
+        failed = filter(lambda x: x[1], results)
+
+        if len(failed) > 0:
+            Logs.pprint('RED', 'Test Failures:')
+            for (f, code, out, err) in failed:
+                if code:
+                    out = '\n'.join('  ' + x for x in out.split('\n'))
+                    Logs.pprint('CYAN', f)
+                    Logs.pprint('NORMAL', out)
+
+        Logs.pprint('BLUE', 'Test Results: %d passed; %d failed; %d total' % (len(passed), len(failed), len(results)))
