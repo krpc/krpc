@@ -1,4 +1,5 @@
 import socket
+import time
 from krpc.error import NetworkError
 
 class Connection(object):
@@ -7,16 +8,21 @@ class Connection(object):
         self._port = port
         self._socket = None
 
-    def connect(self):
+    def connect(self, retries=0, timeout=0):
         try:
             socket.getaddrinfo(self._address, self._port)
         except socket.gaierror as e:
             raise NetworkError(self._address, self._port, str(e))
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            self._socket.connect((self._address, self._port))
-        except socket.error as e:
-            raise NetworkError(self._address, self._port, str(e))
+        while True:
+            try:
+                self._socket.connect((self._address, self._port))
+                break
+            except socket.error as e:
+                if retries <= 0:
+                    raise NetworkError(self._address, self._port, str(e))
+                retries -= 1
+                time.sleep(timeout)
 
     def close(self):
         if self._socket is not None:
