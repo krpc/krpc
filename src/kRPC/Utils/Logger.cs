@@ -19,7 +19,7 @@ namespace KRPC.Utils
         internal static void WriteLine (string line, Severity severity = Severity.Info)
         {
             if (ShouldLog (severity))
-                Console.WriteLine ("[kRPC] " + line);
+                Console.WriteLine ("[kRPC] [" + severity + "] " + line);
         }
 
         internal static bool ShouldLog (Severity severity)

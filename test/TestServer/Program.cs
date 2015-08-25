@@ -14,7 +14,6 @@ namespace TestServer
 
         public static void Main (string[] args)
         {
-            KRPC.Service.Scanner.Scanner.GetServices ();
             var cmdargs = args.ToList ();
             if (cmdargs.Contains ("--debug")) {
                 cmdargs.Remove ("--debug");
@@ -43,6 +42,7 @@ namespace TestServer
                 return;
             }
 
+            KRPC.Service.Scanner.Scanner.GetServices ();
             server = new KRPCServer (IPAddress.Loopback, rpcPort, streamPort);
             KRPCServer.Context.SetGameScene (GameScene.SpaceCenter);
             var timeSpan = new TimeSpan ();
