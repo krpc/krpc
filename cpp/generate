@@ -294,7 +294,12 @@ def generate_service(service_name, info):
     }
 
     loader = jinja2.FileSystemLoader(searchpath='./' )
-    env = jinja2.Environment(loader=loader, trim_blocks=True, lstrip_blocks=True)
+    env = jinja2.Environment(
+        loader=loader,
+        trim_blocks=True,
+        lstrip_blocks=True,
+        undefined=jinja2.StrictUndefined
+    )
     template = env.get_template('generate.tmpl')
     return template.render(data)
 
