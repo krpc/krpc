@@ -8,6 +8,7 @@ import re
 import glob
 from krpc.attributes import Attributes
 import krpc.types
+import krpc.decoder
 
 krpc.types.add_search_path('krpc.test')
 Types = krpc.types.Types()
@@ -158,6 +159,11 @@ def parse_parameter_type(typ):
     return parse_type(typ)[0]
 
 def parse_default_argument(value, typ):
+    #TODO: following is a workaround for decoding EnumType, as set_values has not been called
+    if not isinstance(typ, krpc.types.EnumType):
+        value = krpc.decoder.Decoder.decode(str(bytearray(value)), typ)
+    else:
+        value = krpc.decoder.Decoder.decode(str(bytearray(value)), Types.as_type('int32'))
     if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'string':
         return '"%s"' % value
     if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'bool':
