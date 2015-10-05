@@ -21,7 +21,7 @@ std::vector<std::string> _args;
 );
 {%- endmacro -%}
 
-{%- macro generate_return(type, decode_fn, set_client, is_static) %}
+{%- macro generate_return(type, decode_fn, set_client, is_static=False) %}
 {% if type != 'void' %}
 {{type}} _result;
       decoder::{{decode_fn}}(_result, _data, {% if is_static %}&_client{% else %}this->client{% endif %});
