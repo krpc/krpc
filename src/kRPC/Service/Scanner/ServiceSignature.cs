@@ -127,9 +127,9 @@ namespace KRPC.Service.Scanner
             var name = enumType.Name;
             if (Enumerations.ContainsKey (name))
                 throw new ServiceException ("Service " + Name + " contains duplicate enumerations " + name);
-            var values = new Dictionary<string, EnumerationValueSignature> ();
+            var values = new List<EnumerationValueSignature> ();
             foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static)) {
-                values [field.Name] = new EnumerationValueSignature (Name, name, field.Name, (int)field.GetRawConstantValue (), field.GetDocumentation ());
+                values.Add (new EnumerationValueSignature (Name, name, field.Name, (int)field.GetRawConstantValue (), field.GetDocumentation ()));
             }
             Enumerations [enumType.Name] = new EnumerationSignature (Name, name, values, enumType.GetDocumentation ());
             return enumType.Name;

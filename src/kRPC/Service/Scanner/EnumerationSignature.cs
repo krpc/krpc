@@ -18,14 +18,14 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public string FullyQualifiedName { get; private set; }
 
-        public IDictionary<string, EnumerationValueSignature> Values { get; private set; }
+        public IList<EnumerationValueSignature> Values { get; private set; }
 
         /// <summary>
         /// Documentation for the procedure
         /// </summary>
         public string Documentation { get; private set; }
 
-        public EnumerationSignature (string serviceName, string enumName, IDictionary<string, EnumerationValueSignature> values, string documentation)
+        public EnumerationSignature (string serviceName, string enumName, IList<EnumerationValueSignature> values, string documentation)
         {
             Name = enumName;
             FullyQualifiedName = serviceName + "." + Name;
@@ -36,6 +36,7 @@ namespace KRPC.Service.Scanner
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("documentation", Documentation);
+            info.AddValue ("values", Values);
         }
     }
 }

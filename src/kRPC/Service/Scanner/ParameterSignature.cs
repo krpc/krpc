@@ -59,11 +59,8 @@ namespace KRPC.Service.Scanner
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("name", Name);
-            info.AddValue ("type", Type == null ? "" : TypeUtils.GetTypeName (Type));
-            if (DefaultArgument == null)
-                info.AddValue ("default_argument", "");
-            else
-                info.AddValue ("default_argument", DefaultArgument);
+            info.AddValue ("type", TypeUtils.GetTypeName (Type));
+            info.AddValue ("default_argument", DefaultArgument);
         }
     }
 }

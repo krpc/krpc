@@ -85,10 +85,10 @@ namespace KRPC.Service
                         enm.Documentation = enmSignature.Documentation;
                     foreach (var enmValueSignature in enmSignature.Values) {
                         var enmValue = EnumerationValue.CreateBuilder ();
-                        enmValue.Name = enmValueSignature.Key;
-                        enmValue.Value = enmValueSignature.Value.Value;
-                        if (enmValueSignature.Value.Documentation != "")
-                            enmValue.Documentation = enmValueSignature.Value.Documentation;
+                        enmValue.Name = enmValueSignature.Name;
+                        enmValue.Value = enmValueSignature.Value;
+                        if (enmValueSignature.Documentation != "")
+                            enmValue.Documentation = enmValueSignature.Documentation;
                         enm.AddValues (enmValue);
                     }
                     service.AddEnumerations (enm);
