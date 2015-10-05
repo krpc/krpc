@@ -1,9 +1,11 @@
+using System.Runtime.Serialization;
+
 namespace KRPC.Service.Scanner
 {
     /// <summary>
     /// Signature information for a class, including class name and documentation.
     /// </summary>
-    class ClassSignature
+    class ClassSignature : ISerializable
     {
         /// <summary>
         /// Name of the procedure, not including the service it is in.
@@ -26,6 +28,11 @@ namespace KRPC.Service.Scanner
             Name = className;
             FullyQualifiedName = serviceName + "." + Name;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
+        }
+
+        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue ("documentation", Documentation);
         }
     }
 }

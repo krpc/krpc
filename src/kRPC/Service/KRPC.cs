@@ -78,7 +78,7 @@ namespace KRPC.Service
                         cls.Documentation = clsSignature.Documentation;
                     service.AddClasses (cls);
                 }
-                foreach (var enmSignature in serviceSignature.Enums.Values) {
+                foreach (var enmSignature in serviceSignature.Enumerations.Values) {
                     var enm = Enumeration.CreateBuilder ();
                     enm.Name = enmSignature.Name;
                     if (enmSignature.Documentation != "")

@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace KRPC.Service.Scanner
 {
     /// <summary>
     /// Signature information for an enumeration type, including name, values and documentation.
     /// </summary>
-    class EnumerationSignature
+    class EnumerationSignature : ISerializable
     {
         /// <summary>
         /// Name of the enumeration, not including the service it is in.
@@ -30,6 +31,11 @@ namespace KRPC.Service.Scanner
             FullyQualifiedName = serviceName + "." + Name;
             Values = values;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
+        }
+
+        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue ("documentation", Documentation);
         }
     }
 }

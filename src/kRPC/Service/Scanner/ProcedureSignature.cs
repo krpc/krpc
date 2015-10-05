@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Google.ProtocolBuffers;
 using KRPC.Utils;
+using System.Runtime.Serialization;
 
 namespace KRPC.Service.Scanner
 {
@@ -10,7 +11,7 @@ namespace KRPC.Service.Scanner
     /// Signature information for a procedure, including procedure name,
     /// parameter types and return types.
     /// </summary>
-    class ProcedureSignature
+    class ProcedureSignature : ISerializable
     {
         /// <summary>
         /// Name of the procedure, not including the service it is in.
@@ -99,6 +100,14 @@ namespace KRPC.Service.Scanner
                     }
                 }
             }
+        }
+
+        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue ("parameters", Parameters);
+            info.AddValue ("return_type", ReturnType == null ? "" : TypeUtils.GetTypeName (ReturnType));
+            info.AddValue ("attributes", Attributes);
+            info.AddValue ("documentation", Documentation);
         }
     }
 }

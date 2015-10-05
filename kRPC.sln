@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "test\TestServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingTools", "test\TestingTools\TestingTools.csproj", "{3582BF17-7FD0-44B7-843D-916AE296280B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefinitions", "tools\ServiceDefinitions\ServiceDefinitions.csproj", "{BFC337A7-7BF9-475C-9F29-4948704C537F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,14 @@ Global
 		{82D1B716-4129-4253-8B47-D5E38A3775BA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{82D1B716-4129-4253-8B47-D5E38A3775BA}.Release|x86.ActiveCfg = Release|Any CPU
 		{82D1B716-4129-4253-8B47-D5E38A3775BA}.Release|x86.Build.0 = Release|Any CPU
+		{BFC337A7-7BF9-475C-9F29-4948704C537F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFC337A7-7BF9-475C-9F29-4948704C537F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFC337A7-7BF9-475C-9F29-4948704C537F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BFC337A7-7BF9-475C-9F29-4948704C537F}.Debug|x86.Build.0 = Debug|Any CPU
+		{BFC337A7-7BF9-475C-9F29-4948704C537F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFC337A7-7BF9-475C-9F29-4948704C537F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFC337A7-7BF9-475C-9F29-4948704C537F}.Release|x86.ActiveCfg = Release|Any CPU
+		{BFC337A7-7BF9-475C-9F29-4948704C537F}.Release|x86.Build.0 = Release|Any CPU
 		{EB2EC8C8-1DAC-43D9-94F5-7A1CB64F6838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB2EC8C8-1DAC-43D9-94F5-7A1CB64F6838}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB2EC8C8-1DAC-43D9-94F5-7A1CB64F6838}.Debug|x86.ActiveCfg = Debug|Any CPU

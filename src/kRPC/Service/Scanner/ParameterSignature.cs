@@ -1,13 +1,14 @@
 using System;
 using Google.ProtocolBuffers;
 using KRPC.Utils;
+using System.Runtime.Serialization;
 
 namespace KRPC.Service.Scanner
 {
     /// <summary>
     /// Signature information for a parameter.
     /// </summary>
-    class ParameterSignature
+    class ParameterSignature : ISerializable
     {
         /// <summary>
         /// Name of the parameter.
@@ -53,6 +54,16 @@ namespace KRPC.Service.Scanner
                 else
                     DefaultArgument = ProtocolBuffers.WriteValue (value, Type);
             }
+        }
+
+        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue ("name", Name);
+            info.AddValue ("type", Type == null ? "" : TypeUtils.GetTypeName (Type));
+            if (DefaultArgument == null)
+                info.AddValue ("default_argument", "");
+            else
+                info.AddValue ("default_argument", DefaultArgument);
         }
     }
 }

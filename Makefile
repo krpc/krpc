@@ -14,18 +14,21 @@ DIST_LIBS = \
 DIST_ICONS = src/kRPC/bin/icons
 
 CSHARP_MAIN_PROJECTS  = kRPC kRPCSpaceCenter kRPCInfernalRobotics kRPCKerbalAlarmClock
+CSHARP_TOOL_PROJECTS  = ServiceDefinitions
 CSHARP_TEST_PROJECTS  = kRPCTest TestServer
 CSHARP_TEST_UTILS_PROJECTS = TestingTools
 CSHARP_CONFIG = Release
 
-CSHARP_PROJECTS  = $(CSHARP_MAIN_PROJECTS) $(CSHARP_TEST_PROJECTS) $(CSHARP_TEST_UTILS_PROJECTS)
+CSHARP_PROJECTS  = $(CSHARP_MAIN_PROJECTS) $(CSHARP_TOOL_PROJECTS) $(CSHARP_TEST_PROJECTS) $(CSHARP_TEST_UTILS_PROJECTS)
 CSHARP_PROJECT_DIRS = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)) \
+                      $(foreach PROJECT,$(CSHARP_TOOL_PROJECTS),tools/$(PROJECT)) \
                       $(foreach PROJECT,$(CSHARP_TEST_PROJECTS),test/$(PROJECT)) \
                       $(foreach PROJECT,$(CSHARP_TEST_UTILS_PROJECTS),test/$(PROJECT))
 CSHARP_BINDIRS = $(foreach DIR,$(CSHARP_PROJECT_DIRS),$(DIR)/bin) \
                  $(foreach DIR,$(CSHARP_PROJECT_DIRS),$(DIR)/obj)
 CSHARP_MAIN_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 CSHARP_LIBRARIES = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll) \
+                   $(foreach PROJECT,$(CSHARP_TOOL_PROJECTS),tools/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll) \
                    $(foreach PROJECT,$(CSHARP_TEST_PROJECTS),test/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll) \
                    $(foreach PROJECT,$(CSHARP_TEST_UTILS_PROJECTS),test/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).dll)
 CSHARP_DOCS = $(foreach PROJECT,$(CSHARP_MAIN_PROJECTS),src/$(PROJECT)/bin/$(CSHARP_CONFIG)/$(PROJECT).xml)
@@ -42,7 +45,7 @@ MDTOOL = mdtool
 MONODIS = monodis
 NUNIT_CONSOLE = nunit-console
 INKSCAPE = inkscape
-SERVICE_DEFINITIONS = tools/service-definitions
+SERVICE_DEFINITIONS = tools/ServiceDefinitions/bin/$(CSHARP_CONFIG)/ServiceDefinitions.exe
 START_SERVER = tools/start-server
 STOP_SERVER = tools/stop-server
 
@@ -140,15 +143,13 @@ service-definitions-clean:
 	rm -f test/TestServer/bin/$(CSHARP_CONFIG)/TestServer.json
 
 src/kRPC/bin/$(CSHARP_CONFIG)/kRPC.json:
-	-PYTHONPATH=python $(SERVICE_DEFINITIONS) --service KRPC --out $@
+	$(SERVICE_DEFINITIONS) src/kRPC/bin/$(CSHARP_CONFIG)/kRPC.dll KRPC $@
 
 $(SERVICES_JSON): protobuf-python
-	-PYTHONPATH=python $(SERVICE_DEFINITIONS) --service $(patsubst kRPC%.json,%,$(filter %.json,$(subst /, ,$@))) --out $@
+	$(SERVICE_DEFINITIONS) $(subst .json,.dll,$@) $(patsubst kRPC%.json,%,$(filter %.json,$(subst /, ,$@))) $@
 
 test/TestServer/bin/$(CSHARP_CONFIG)/TestServer.json: TestServer
-	$(START_SERVER) test/TestServer/bin/$(CSHARP_CONFIG)/TestServer.exe 50011 50012
-	PYTHONPATH=python $(SERVICE_DEFINITIONS) --rpc-port 50011 --search-path krpc.test --service TestService --out test/TestServer/bin/$(CSHARP_CONFIG)/TestServer.json
-	$(STOP_SERVER)
+	$(SERVICE_DEFINITIONS)  test/TestServer/bin/$(CSHARP_CONFIG)/TestServer.exe TestService test/TestServer/bin/$(CSHARP_CONFIG)/TestServer.json
 
 # C# projects ------------------------------------------------------------------
 

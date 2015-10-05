@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using KRPC.Utils;
+using System.Runtime.Serialization;
 
 namespace KRPC.Service.Scanner
 {
-    class ServiceSignature
+    class ServiceSignature : ISerializable
     {
         /// <summary>
         /// The name of the service
@@ -30,7 +31,7 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// The names of all C# defined enums defined in this service, and their allowed values
         /// </summary>
-        public Dictionary<string,EnumerationSignature> Enums { get; private set; }
+        public Dictionary<string,EnumerationSignature> Enumerations { get; private set; }
 
         /// <summary>
         /// Which game scene(s) the service should be active during
@@ -47,7 +48,7 @@ namespace KRPC.Service.Scanner
             Name = TypeUtils.GetServiceName (type);
             Documentation = DocumentationUtils.ResolveCrefs (type.GetDocumentation ());
             Classes = new Dictionary<string, ClassSignature> ();
-            Enums = new Dictionary<string, EnumerationSignature> ();
+            Enumerations = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
             GameScene = TypeUtils.GetServiceGameScene (type);
         }
@@ -59,7 +60,7 @@ namespace KRPC.Service.Scanner
         {
             Name = name;
             Classes = new Dictionary<string, ClassSignature> ();
-            Enums = new Dictionary<string, EnumerationSignature> ();
+            Enumerations = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
         }
 
@@ -124,13 +125,13 @@ namespace KRPC.Service.Scanner
         {
             TypeUtils.ValidateKRPCEnum (enumType);
             var name = enumType.Name;
-            if (Enums.ContainsKey (name))
+            if (Enumerations.ContainsKey (name))
                 throw new ServiceException ("Service " + Name + " contains duplicate enumerations " + name);
             var values = new Dictionary<string, EnumerationValueSignature> ();
             foreach (FieldInfo field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static)) {
                 values [field.Name] = new EnumerationValueSignature (Name, name, field.Name, (int)field.GetRawConstantValue (), field.GetDocumentation ());
             }
-            Enums [enumType.Name] = new EnumerationSignature (Name, name, values, enumType.GetDocumentation ());
+            Enumerations [enumType.Name] = new EnumerationSignature (Name, name, values, enumType.GetDocumentation ());
             return enumType.Name;
         }
 
@@ -173,6 +174,14 @@ namespace KRPC.Service.Scanner
                 var parameter_attribute = "ParameterType(0).Class(" + Name + "." + cls + ")";
                 AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, property.GetDocumentation (), handler, GameScene, attribute, parameter_attribute));
             }
+        }
+
+        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue ("documentation", Documentation);
+            info.AddValue ("procedures", Procedures);
+            info.AddValue ("classes", Classes);
+            info.AddValue ("enumerations", Enumerations);
         }
     }
 }
