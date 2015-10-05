@@ -145,8 +145,8 @@ def parse_type(typ):
     return (typ_string, typ_decode_fn, typ_set_client)
 
 def parse_return_type(procedure):
-    return_type = ''
-    if procedure['return_type'] != '':
+    return_type = None
+    if procedure['return_type'] is not None:
         typ = Types.get_return_type(procedure['return_type'], procedure['attributes'])
         return_type,return_decode_fn,return_set_client = parse_type(typ)
     else:

@@ -105,7 +105,7 @@ namespace KRPC.Service.Scanner
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("parameters", Parameters);
-            info.AddValue ("return_type", ReturnType == null ? "" : TypeUtils.GetTypeName (ReturnType));
+            info.AddValue ("return_type", ReturnType == null ? null : TypeUtils.GetTypeName (ReturnType));
             info.AddValue ("attributes", Attributes);
             info.AddValue ("documentation", Documentation);
         }
