@@ -3,6 +3,7 @@
 import os.path
 import argparse
 import json
+import collections
 import jinja2
 import re
 import glob
@@ -286,12 +287,18 @@ def generate_service(service_name, info):
                 'return_set_client': False
             }
 
-    data = {
+    def sort(d):
+        if type(d) == dict:
+            return collections.OrderedDict(sorted([(x,sort(y)) for x,y in d.items()], key=lambda (k,v): k))
+        else:
+            return d
+
+    context = {
         'service_name': service_name,
-        'procedures': procedures,
-        'properties': properties,
-        'classes': classes,
-        'enumerations': enumerations
+        'procedures': sort(procedures),
+        'properties': sort(properties),
+        'classes': sort(classes),
+        'enumerations': sort(enumerations)
     }
 
     loader = jinja2.FileSystemLoader(searchpath='./' )
@@ -302,7 +309,8 @@ def generate_service(service_name, info):
         undefined=jinja2.StrictUndefined
     )
     template = env.get_template('generate.tmpl')
-    return template.render(data)
+    content = template.render(context)
+    return content.rstrip()+'\n'
 
 if __name__ == '__main__':
     main()
