@@ -60,7 +60,8 @@ namespace KRPC.Service.Scanner
         {
             info.AddValue ("name", Name);
             info.AddValue ("type", TypeUtils.GetTypeName (Type));
-            info.AddValue ("default_argument", DefaultArgument);
+            if (DefaultArgument != null)
+                info.AddValue ("default_argument", DefaultArgument);
         }
     }
 }

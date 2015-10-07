@@ -146,7 +146,7 @@ def parse_type(typ):
 
 def parse_return_type(procedure):
     return_type = None
-    if procedure['return_type'] is not None:
+    if 'return_type' in procedure is not None:
         typ = Types.get_return_type(procedure['return_type'], procedure['attributes'])
         return_type,return_decode_fn,return_set_client = parse_type(typ)
     else:
@@ -183,7 +183,7 @@ def parse_parameters(procedure):
     for i,parameter in enumerate(procedure['parameters']):
         typ = Types.get_parameter_type(i, parameter['type'], procedure['attributes'])
         default_argument = None
-        if parameter['default_argument'] is not None:
+        if 'default_argument' in parameter:
             default_argument = parse_default_argument(parameter['default_argument'], typ)
         parameters.append({
             'name': snake_case(parameter['name']),
