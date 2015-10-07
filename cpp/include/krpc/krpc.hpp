@@ -11,7 +11,7 @@ namespace krpc {
 
   /**
    * Connect to a kRPC server on the specified IP address and port numbers. If
-   * stream_port is None, does not connect to the stream server.
+   * stream_port is 0, does not connect to the stream server.
    * Optionally give the kRPC server the supplied name to identify the client (up
    * to 32 bytes of UTF-8 encoded text).
    */
