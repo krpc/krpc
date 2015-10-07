@@ -32,7 +32,7 @@ std::vector<std::string> _args;
 {%- macro generate_sig_parameters(parameters) %}
 {% for x in parameters %}
 {{x.type}} {{x.name}}
-{%- if x.default_argument != None %}
+{%- if 'default_argument' in x %}
  = {{x.default_argument}}
 {%- endif %}
 {% if not loop.last %}, {% endif %}

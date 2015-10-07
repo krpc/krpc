@@ -171,10 +171,12 @@ def parse_default_argument(value, typ):
             return 'true'
         else:
             return 'false'
-    elif isinstance(typ, krpc.types.ProtobufEnumType):
-        return 'static_cast<%s>(%s)' % (typ.protobuf_type.replace('.','::'), value)
+    elif isinstance(typ, krpc.types.ClassType) and value is None:
+        return typ.protobuf_type[6:-1].replace('.','::') + '()'
     elif isinstance(typ, krpc.types.EnumType):
         return 'static_cast<%s>(%s)' % (typ.protobuf_type[5:-1].replace('.','::'), value)
+    elif isinstance(typ, krpc.types.ProtobufEnumType):
+        return 'static_cast<%s>(%s)' % (typ.protobuf_type.replace('.','::'), value)
     else:
         return value
 
@@ -182,14 +184,13 @@ def parse_parameters(procedure):
     parameters = []
     for i,parameter in enumerate(procedure['parameters']):
         typ = Types.get_parameter_type(i, parameter['type'], procedure['attributes'])
-        default_argument = None
-        if 'default_argument' in parameter:
-            default_argument = parse_default_argument(parameter['default_argument'], typ)
-        parameters.append({
+        info = {
             'name': snake_case(parameter['name']),
             'type': parse_parameter_type(typ),
-            'default_argument': default_argument
-        })
+        }
+        if 'default_argument' in parameter:
+            info['default_argument'] = parse_default_argument(parameter['default_argument'], typ)
+        parameters.append(info)
     return parameters
 
 def generate_service(service_name, info):
