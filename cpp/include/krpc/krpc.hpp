@@ -15,7 +15,7 @@ namespace krpc {
    * Optionally give the kRPC server the supplied name to identify the client (up
    * to 32 bytes of UTF-8 encoded text).
    */
-  Client connect(const std::string& name, const std::string& address = "localhost",
+  Client connect(const std::string& name = "", const std::string& address = "localhost",
                  unsigned int rpc_port = 50000, unsigned int stream_port = 50001);
 
 }
