@@ -1,9 +1,8 @@
-#encoding UTF-8
-
-.. default-domain:: #echo $domain
-#echo $currentmodule('InfernalRobotics')
+.. default-domain:: {{ domain.sphinxname }}
+{{ domain.currentmodule('InfernalRobotics') }}
+{% import domain.macros as macros with context %}
 
 InfernalRobotics
 ================
 
-#echo $services['InfernalRobotics']()
+{{ macros.service(services['InfernalRobotics']) }}

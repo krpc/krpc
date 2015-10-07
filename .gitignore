@@ -163,6 +163,7 @@ lib/KSP_Data
 !docs
 doc/build
 doc/src/python/api
+doc/src/cpp/api
 doc/src/lua/api
 doc/src/images/**/*.png
 

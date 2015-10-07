@@ -1,51 +1,43 @@
-#encoding UTF-8
-
-.. default-domain:: #echo $domain
-#echo $currentmodule('SpaceCenter')
+.. default-domain:: {{ domain.sphinxname }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
 
 Vessel
 ======
 
-#echo $classes['SpaceCenter.Vessel'](members=False)
-#for $member in $classes['SpaceCenter.Vessel'].members
-#echo $member(3)
-#if $member.name == 'SpaceCenter.Vessel.ResourcesInDecoupleStage'
-      .. note:: For details on stage numbering, see the
-                discussion on :ref:`#echo $language #-api-parts-staging`.
+{% append services['SpaceCenter'].classes['Vessel'].members['ResourcesInDecoupleStage'] %}
+.. note:: For details on stage numbering, see the
+          discussion on :ref:`{{ domain.name }}-api-parts-staging`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Vessel'].members['ReferenceFrame'] %}
+.. figure:: /images/reference-frames/vessel-aircraft.png
+   :align: center
 
-#else if $member.name == 'SpaceCenter.Vessel.ReferenceFrame'
-      :rtype: :class:`ReferenceFrame`
+   Vessel reference frame origin and axes for the Aeris 3A aircraft
 
-      .. figure:: /images/reference-frames/vessel-aircraft.png
-         :align: center
+.. figure:: /images/reference-frames/vessel-rocket.png
+   :align: center
 
-         Vessel reference frame origin and axes for the Aeris 3A aircraft
+   Vessel reference frame origin and axes for the Kerbal-X rocket
+{% endappend %}
+{% append services['SpaceCenter'].classes['Vessel'].members['OrbitalReferenceFrame'] %}
+.. figure:: /images/reference-frames/vessel-orbital.png
+   :align: center
 
-      .. figure:: /images/reference-frames/vessel-rocket.png
-         :align: center
+   Vessel orbital reference frame origin and axes
+{% endappend %}
+{% append services['SpaceCenter'].classes['Vessel'].members['SurfaceReferenceFrame'] %}
+.. figure:: /images/reference-frames/vessel-surface.png
+   :align: center
 
-         Vessel reference frame origin and axes for the Kerbal-X rocket
+   Vessel surface reference frame origin and axes
+{% endappend %}
+{% append services['SpaceCenter'].classes['Vessel'].members['SurfaceVelocityReferenceFrame'] %}
+.. figure:: /images/reference-frames/vessel-surface-velocity.png
+   :align: center
 
-#else if $member.name == 'SpaceCenter.Vessel.OrbitalReferenceFrame'
-      .. figure:: /images/reference-frames/vessel-orbital.png
-         :align: center
-
-         Vessel orbital reference frame origin and axes
-
-#else if $member.name == 'SpaceCenter.Vessel.SurfaceReferenceFrame'
-      .. figure:: /images/reference-frames/vessel-surface.png
-         :align: center
-
-         Vessel surface reference frame origin and axes
-
-#else if $member.name == 'SpaceCenter.Vessel.SurfaceVelocityReferenceFrame'
-      .. figure:: /images/reference-frames/vessel-surface-velocity.png
-         :align: center
-
-         Vessel surface velocity reference frame origin and axes
-
-#end if
-#end for
-
-#echo $enumerations['SpaceCenter.VesselType']()
-#echo $enumerations['SpaceCenter.VesselSituation']()
+   Vessel surface velocity reference frame origin and axes
+{% endappend %}
+{{ macros.class(services['SpaceCenter'].classes['Vessel']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['VesselType']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['VesselSituation']) }}

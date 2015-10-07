@@ -1,9 +1,8 @@
-#encoding UTF-8
-
-.. default-domain:: #echo $domain
-#echo $currentmodule('KerbalAlarmClock')
+.. default-domain:: {{ domain.sphinxname }}
+{{ domain.currentmodule('KerbalAlarmClock') }}
+{% import domain.macros as macros with context %}
 
 AlarmType
 =========
 
-#echo $enumerations['KerbalAlarmClock.AlarmType']()
+{{ macros.enumeration(services['KerbalAlarmClock'].enumerations['AlarmType']) }}

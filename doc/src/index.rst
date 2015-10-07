@@ -3,7 +3,7 @@ kRPC Documentation
 
 kRPC allows you to control Kerbal Space Program from external scripts running
 outside of the game. It comes with client libraries for :doc:`Python
-<python/client>` and :doc:`Lua <lua/client>`.
+<python/client>`, :doc:`C++ <cpp/client>` and :doc:`Lua <lua/client>`.
 
 kRPC is programming language and runtime agnostic. This means you can interact
 with it from any programming language that can communicate over a TCP
@@ -16,6 +16,7 @@ machine you like.
    getting-started
    tutorials
    python
+   cpp
    lua
    compiling
    extending
