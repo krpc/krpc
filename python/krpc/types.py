@@ -6,7 +6,7 @@ from krpc.attributes import Attributes
 import importlib
 
 def _parse_type_string(typ):
-    """ Given a string, extract a substring up to the first comma. Parses parnetheses.
+    """ Given a string, extract a substring up to the first comma. Parses parentheses.
         Multiple calls can be used to separate a string by commas. """
     if typ == None:
         raise ValueError
