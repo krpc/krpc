@@ -2,7 +2,6 @@
 #include "krpc/encoder.hpp"
 #include "krpc/decoder.hpp"
 #include "krpc/error.hpp"
-#include "krpc/KRPC.pb.h"
 #include <google/protobuf/io/coded_stream.h>
 
 namespace krpc {
@@ -14,10 +13,9 @@ namespace krpc {
     rpc_connection(rpc_connection),
     stream_connection(stream_connection) {}
 
-  std::string Client::invoke(
+  schema::Request Client::request(
     const std::string& service, const std::string& procedure,
     const std::vector<std::string>& args) {
-
     schema::Request request;
     request.set_service(service);
     request.set_procedure(procedure);
@@ -26,6 +24,14 @@ namespace krpc {
       arg->set_position(i);
       arg->set_value(args[i]);
     }
+    return request;
+  }
+
+  std::string Client::invoke(
+    const std::string& service, const std::string& procedure,
+    const std::vector<std::string>& args) {
+
+    schema::Request request = this->request(service, procedure, args);
     rpc_connection->send(encoder::encode_delimited(request));
 
     size_t size = 0;

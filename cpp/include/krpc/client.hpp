@@ -13,6 +13,9 @@ namespace krpc {
     Client();
     Client(const boost::shared_ptr<Connection>& rpc_connection,
            const boost::shared_ptr<Connection>& stream_connection);
+    schema::Request request(
+      const std::string& service, const std::string& procedure,
+      const std::vector<std::string>& args = std::vector<std::string>());
     std::string invoke(
       const std::string& service, const std::string& procedure,
       const std::vector<std::string>& args = std::vector<std::string>());
