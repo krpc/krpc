@@ -1,0 +1,143 @@
+#!/usr/bin/env python
+
+import argparse
+import glob
+import os
+import codecs
+import json
+import jinja2
+from krpc.types import Types
+from lib.utils import snakecase, indent, singleline, lookup_cref
+from lib.python import PythonDomain
+from lib.lua import LuaDomain
+from lib.cpp import CppDomain
+from lib.nodes import Service
+from lib.docparser import DocumentationParser
+from lib.extensions import AppendExtension
+
+def process_file(args, domain, services, path):
+
+    loader = jinja2.FileSystemLoader(searchpath='./' )
+    template_env = jinja2.Environment(
+        loader=loader,
+        trim_blocks=True,
+        lstrip_blocks=True,
+        undefined=jinja2.StrictUndefined,
+        extensions=[AppendExtension]
+    )
+
+    def hasdoc_fn(xml, selector='./summary'):
+        return DocumentationParser(domain, services, xml).has(selector)
+
+    context = {
+        'language': args.language,
+        'domain': domain,
+        'services': services,
+        'hasdoc': hasdoc_fn
+    }
+
+    def return_type_filter(typ):
+        return domain.return_type(typ)
+
+    def parameter_type_filter(typ):
+        return domain.parameter_type(typ)
+
+    def type_description_filter(typ):
+        return domain.type_description(typ)
+
+    def parsedoc_filter(xml, selector='./summary'):
+        return DocumentationParser(domain, services, xml).parse(selector)
+
+    def parsesee_filter(cref):
+        obj = lookup_cref(cref, services)
+        return domain.see(obj)
+
+    def parsecode_filter(value):
+        return domain.code(value)
+
+    template_env.filters['snakecase'] = snakecase
+    template_env.filters['indent'] = indent
+    template_env.filters['singleline'] = singleline
+    template_env.filters['parameter_type'] = parameter_type_filter
+    template_env.filters['return_type'] = return_type_filter
+    template_env.filters['type_description'] = type_description_filter
+    template_env.filters['parsedoc'] = parsedoc_filter
+    template_env.filters['parsesee'] = parsesee_filter
+    template_env.filters['parsecode'] = parsecode_filter
+
+    template = template_env.get_template(path)
+    content = template.render(context)
+    return content.rstrip()+'\n'
+
+def main():
+    parser = argparse.ArgumentParser(description='Generate API documentation from service definitions')
+    parser.add_argument('language', choices = ['python', 'lua', 'cpp'],
+                        help='Language to compile')
+    parser.add_argument('source', action='store',
+                        help='Path to source directory')
+    parser.add_argument('destination', action='store',
+                        help='Path to destination directory')
+    parser.add_argument('definitions', nargs='*', default=[],
+                        help='Paths to service definition files')
+    parser.add_argument('--no-warnings', action='store_true', default=False,
+                        help='Ignore warnings')
+    parser.add_argument('--force', action='store_true', default=False,
+                        help='Overwrite existing files, even when nothing\'s changed')
+    parser.add_argument('--order-file', action='store', default='order.txt',
+                        help='Path to order definition file')
+    args = parser.parse_args()
+
+    if args.language == 'python':
+        domain = PythonDomain()
+    elif args.language == 'cpp':
+        domain = CppDomain()
+    else: # lua
+        domain = LuaDomain()
+
+    if not os.path.exists(args.order_file):
+        raise RuntimeError('Ordering file \'%s\' does not exist' % args.order_file)
+    with open(args.order_file, 'r') as f:
+        ordering = [x.strip() for x in f.readlines()]
+
+    services_info = {}
+    for definition in args.definitions:
+        for path in glob.glob(definition):
+            print 'Loading', path
+            with open(path, 'r') as f:
+                services_info.update(json.load(f))
+
+    if services_info == {}:
+        print 'No services found in services definition files'
+        exit(1)
+
+    services = [Service(name, **info) for name,info in services_info.items()]
+    for service in services:
+        service.sort(ordering)
+    services = dict([(service.name,service) for service in services])
+
+    for dirname,dirnames,filenames in os.walk(args.source):
+        for filename in filenames:
+            if filename.endswith('.tmpl') and not filename.startswith('.'):
+
+                src_path = os.path.join(dirname, filename)
+                dst_path = os.path.join(args.destination, src_path[len(args.source)+1:][:-4]+'rst')
+                content = process_file(args, domain, services, src_path)
+
+                # Skip if already up to date
+                if not args.force and os.path.exists(dst_path):
+                    try:
+                        old_content = codecs.open(dst_path, 'r', encoding='utf8').read()
+                        if content == old_content:
+                            continue
+                    except IOError:
+                        pass
+
+                # Update
+                print src_path+' -> '+dst_path
+                if not os.path.exists(os.path.dirname(dst_path)):
+                    os.makedirs(os.path.dirname(dst_path))
+                with codecs.open(dst_path, 'w', encoding='utf8') as f:
+                    f.write(content)
+
+if __name__ == '__main__':
+    main()

@@ -23,19 +23,7 @@ class TestEncodeDecode(unittest.TestCase):
             else:
                 self.assertEqual(decoded, value)
 
-    def test_encode_double_value(self):
-        cases = [
-            (0.0, '0000000000000000'),
-            (-1.0, '000000000000f0bf'),
-            (3.14159265359, 'ea2e4454fb210940'),
-            (float('inf'), '000000000000f07f'),
-            (-float('inf'), '000000000000f0ff'),
-            (float('nan'), '000000000000f87f')
-        ]
-        self._run_test_encode_value('double', cases)
-        self._run_test_decode_value('double', cases)
-
-    def test_encode_float_value(self):
+    def test_float(self):
         cases = [
             (3.14159265359, 'db0f4940'),
             (-1.0, '000080bf'),
@@ -47,7 +35,19 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('float', cases)
         self._run_test_decode_value('float', cases)
 
-    def test_encode_int32_value(self):
+    def test_double(self):
+        cases = [
+            (0.0, '0000000000000000'),
+            (-1.0, '000000000000f0bf'),
+            (3.14159265359, 'ea2e4454fb210940'),
+            (float('inf'), '000000000000f07f'),
+            (-float('inf'), '000000000000f0ff'),
+            (float('nan'), '000000000000f87f')
+        ]
+        self._run_test_encode_value('double', cases)
+        self._run_test_decode_value('double', cases)
+
+    def test_int32(self):
         cases = [
             (0, '00'),
             (1, '01'),
@@ -60,7 +60,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('int32', cases)
         self._run_test_decode_value('int32', cases)
 
-    def test_encode_int64_value(self):
+    def test_int64(self):
         cases = [
             (0, '00'),
             (1, '01'),
@@ -72,7 +72,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('int64', cases)
         self._run_test_decode_value('int64', cases)
 
-    def test_encode_uint32_value(self):
+    def test_uint32(self):
         cases = [
             (0, '00'),
             (1, '01'),
@@ -86,7 +86,7 @@ class TestEncodeDecode(unittest.TestCase):
         self.assertRaises(ValueError,Encoder.encode, -1, self.types.as_type('uint32'))
         self.assertRaises(ValueError,Encoder.encode, -849, self.types.as_type('uint32'))
 
-    def test_encode_uint64_value(self):
+    def test_uint64(self):
         cases = [
             (0, '00'),
             (1, '01'),
@@ -100,7 +100,7 @@ class TestEncodeDecode(unittest.TestCase):
         self.assertRaises(ValueError,Encoder.encode, -1, self.types.as_type('uint64'))
         self.assertRaises(ValueError,Encoder.encode, -849, self.types.as_type('uint64'))
 
-    def test_encode_bool_value(self):
+    def test_bool(self):
         cases = [
             (True,  '01'),
             (False, '00')
@@ -108,7 +108,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('bool', cases)
         self._run_test_decode_value('bool', cases)
 
-    def test_encode_string_value(self):
+    def test_string(self):
         cases = [
             ('', '00'),
             ('testing', '0774657374696e67'),
@@ -119,7 +119,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('string', cases)
         self._run_test_decode_value('string', cases)
 
-    def test_encode_bytearray_value(self):
+    def test_bytes(self):
         cases = [
             (b'', '00'),
             (b'\xba\xda\x55', '03bada55'),
@@ -128,7 +128,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('bytes', cases)
         self._run_test_decode_value('bytes', cases)
 
-    def test_encode_list(self):
+    def test_list(self):
         cases = [
             ([], ''),
             ([1], '0a0101'),
@@ -137,7 +137,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('List(int32)', cases)
         self._run_test_decode_value('List(int32)', cases)
 
-    def test_encode_dictionary(self):
+    def test_dictionary(self):
         cases = [
             ({}, ''),
             ({'': 0}, '0a060a0100120100'),
@@ -146,7 +146,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('Dictionary(string,int32)', cases)
         self._run_test_decode_value('Dictionary(string,int32)', cases)
 
-    def test_encode_set(self):
+    def test_set(self):
         cases = [
             (set(), ''),
             (set([1]), '0a0101'),
@@ -155,7 +155,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value('Set(int32)', cases)
         self._run_test_decode_value('Set(int32)', cases)
 
-    def test_encode_tuple(self):
+    def test_tuple(self):
         cases = [((1,), '0a0101')]
         self._run_test_encode_value('Tuple(int32)', cases)
         self._run_test_decode_value('Tuple(int32)', cases)

@@ -1,9 +1,8 @@
-#encoding UTF-8
-
-.. default-domain:: #echo $domain
-#echo $currentmodule('SpaceCenter')
+.. default-domain:: {{ domain.sphinxname }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
 
 ReferenceFrame
 ==============
 
-#echo $classes['SpaceCenter.ReferenceFrame']()
+{{ macros.class(services['SpaceCenter'].classes['ReferenceFrame']) }}

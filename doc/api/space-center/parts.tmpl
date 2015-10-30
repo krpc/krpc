@@ -1,9 +1,8 @@
-#encoding UTF-8
+.. default-domain:: {{ domain.sphinxname }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
 
-.. default-domain:: #echo $domain
-#echo $currentmodule('SpaceCenter')
-
-.. _#echo $language #-api-parts:
+.. _{{ domain.name }}-api-parts:
 
 Parts
 =====
@@ -16,52 +15,56 @@ The following classes allow interaction with a vessels individual parts.
 Parts
 -----
 
-#echo $classes['SpaceCenter.Parts'](members=False)
-#for $member in $classes['SpaceCenter.Parts'].members
-#echo $member(3)
-#if $member.name == 'SpaceCenter.Parts.Root'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-trees-of-parts`.
-#else if $member.name == 'SpaceCenter.Parts.InStage'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-staging`.
-#else if $member.name == 'SpaceCenter.Parts.InDecoupleStage'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-staging`.
-#end if
-#end for
+{% append services['SpaceCenter'].classes['Parts'].members['Root'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-trees-of-parts`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Parts'].members['InStage'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-staging`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Parts'].members['InDecoupleStage'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-staging`.
+{% endappend %}
+{{ macros.class(services['SpaceCenter'].classes['Parts']) }}
 
 Part
 ----
 
-#echo $classes['SpaceCenter.Part'](members=False)
-#for $member in $classes['SpaceCenter.Part'].members
-#echo $member(3)
-#if $member.name == 'SpaceCenter.Part.Parent'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-trees-of-parts`.
-#else if $member.name == 'SpaceCenter.Part.Children'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-trees-of-parts`.
-#else if $member.name == 'SpaceCenter.Part.AxiallyAttached'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-attachment-modes`.
-#else if $member.name == 'SpaceCenter.Part.RadiallyAttached'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-attachment-modes`.
-#else if $member.name == 'SpaceCenter.Part.Stage'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-staging`.
-#else if $member.name == 'SpaceCenter.Part.DecoupleStage'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-staging`.
-#else if $member.name == 'SpaceCenter.Part.FuelLinesFrom'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-fuel-lines`.
-#else if $member.name == 'SpaceCenter.Part.FuelLinesTo'
-      .. note:: See the discussion on :ref:`#echo $language #-api-parts-fuel-lines`.
-#else if $member.name == 'SpaceCenter.Part.ReferenceFrame'
-      .. figure:: /images/reference-frames/part.png
-         :align: center
+{% append services['SpaceCenter'].classes['Part'].members['Parent'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-trees-of-parts`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Part'].members['Children'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-trees-of-parts`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Part'].members['AxiallyAttached'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-attachment-modes`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Part'].members['RadiallyAttached'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-attachment-modes`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Part'].members['Stage'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-staging`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Part'].members['DecoupleStage'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-staging`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Part'].members['FuelLinesFrom'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-fuel-lines`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Part'].members['FuelLinesTo'] %}
+.. note:: See the discussion on :ref:`{{ domain.name }}-api-parts-fuel-lines`.
+{% endappend %}
+{% append services['SpaceCenter'].classes['Part'].members['ReferenceFrame'] %}
+.. figure:: /images/reference-frames/part.png
+   :align: center
 
-         Mk1 Command Pod reference frame origin and axes
-#end if
-#end for
+   Mk1 Command Pod reference frame origin and axes
+{% endappend %}
+{{ macros.class(services['SpaceCenter'].classes['Part']) }}
 
 Module
 ------
 
-#echo $classes['SpaceCenter.Module']()
+{{ macros.class(services['SpaceCenter'].classes['Module']) }}
 
 Specific Types of Part
 ----------------------
@@ -74,85 +77,81 @@ The following classes provide functionality for specific types of part.
 Decoupler
 ^^^^^^^^^
 
-#echo $classes['SpaceCenter.Decoupler']()
+{{ macros.class(services['SpaceCenter'].classes['Decoupler']) }}
 
 Docking Port
 ^^^^^^^^^^^^
 
-#echo $classes['SpaceCenter.DockingPort'](members=False)
-#for $member in $classes['SpaceCenter.DockingPort'].members
-#echo $member(3)
-#if $member.name == 'SpaceCenter.DockingPort.ReferenceFrame'
-      .. figure:: /images/reference-frames/docking-port.png
-         :align: center
+{% append services['SpaceCenter'].classes['DockingPort'].members['ReferenceFrame'] %}
+.. figure:: /images/reference-frames/docking-port.png
+   :align: center
 
-         Docking port reference frame origin and axes
+   Docking port reference frame origin and axes
 
-      .. figure:: /images/reference-frames/docking-port-inline.png
-         :align: center
+.. figure:: /images/reference-frames/docking-port-inline.png
+   :align: center
 
-         Inline docking port reference frame origin and axes
-#end if
-#end for
-
-#echo $enumerations['SpaceCenter.DockingPortState']()
+   Inline docking port reference frame origin and axes
+{% endappend %}
+{{ macros.class(services['SpaceCenter'].classes['DockingPort']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['DockingPortState']) }}
 
 Engine
 ^^^^^^
 
-#echo $classes['SpaceCenter.Engine']()
+{{ macros.class(services['SpaceCenter'].classes['Engine']) }}
 
 Landing Gear
 ^^^^^^^^^^^^
 
-#echo $classes['SpaceCenter.LandingGear']()
-#echo $enumerations['SpaceCenter.LandingGearState']()
+{{ macros.class(services['SpaceCenter'].classes['LandingGear']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['LandingGearState']) }}
 
 Landing Leg
 ^^^^^^^^^^^
 
-#echo $classes['SpaceCenter.LandingLeg']()
-#echo $enumerations['SpaceCenter.LandingLegState']()
+{{ macros.class(services['SpaceCenter'].classes['LandingLeg']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['LandingLegState']) }}
 
 Launch Clamp
 ^^^^^^^^^^^^
 
-#echo $classes['SpaceCenter.LaunchClamp']()
+{{ macros.class(services['SpaceCenter'].classes['LaunchClamp']) }}
 
 Light
 ^^^^^
 
-#echo $classes['SpaceCenter.Light']()
+{{ macros.class(services['SpaceCenter'].classes['Light']) }}
 
 Parachute
 ^^^^^^^^^
 
-#echo $classes['SpaceCenter.Parachute']()
-#echo $enumerations['SpaceCenter.ParachuteState']()
+{{ macros.class(services['SpaceCenter'].classes['Parachute']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['ParachuteState']) }}
 
 Radiator
 ^^^^^^^^
 
-#echo $classes['SpaceCenter.Radiator']()
-#echo $enumerations['SpaceCenter.RadiatorState']()
+{{ macros.class(services['SpaceCenter'].classes['Radiator']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['RadiatorState']) }}
 
 Reaction Wheel
 ^^^^^^^^^^^^^^
 
-#echo $classes['SpaceCenter.ReactionWheel']()
+{{ macros.class(services['SpaceCenter'].classes['ReactionWheel']) }}
 
 Sensor
 ^^^^^^
 
-#echo $classes['SpaceCenter.Sensor']()
+{{ macros.class(services['SpaceCenter'].classes['Sensor']) }}
 
 Solar Panel
 ^^^^^^^^^^^
 
-#echo $classes['SpaceCenter.SolarPanel']()
-#echo $enumerations['SpaceCenter.SolarPanelState']()
+{{ macros.class(services['SpaceCenter'].classes['SolarPanel']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['SolarPanelState']) }}
 
-.. _#echo $language #-api-parts-trees-of-parts:
+.. _{{ domain.name }}-api-parts-trees-of-parts:
 
 Trees of Parts
 --------------
@@ -182,48 +181,22 @@ tree of parts in Figure 2. The craft file for this example can also be
 Traversing the Tree
 ^^^^^^^^^^^^^^^^^^^
 
-The tree of parts can be traversed using the attributes #echo $ref('M:SpaceCenter.Parts.Root') #,
-#echo $ref('M:SpaceCenter.Part.Parent') # and #echo $ref('M:SpaceCenter.Part.Children') #.
+The tree of parts can be traversed using the attributes {{ 'M:SpaceCenter.Parts.Root' | parsesee }},
+{{ 'M:SpaceCenter.Part.Parent' | parsesee }} and {{ 'M:SpaceCenter.Part.Children' | parsesee }}.
 
 The root of the tree is the same as the vessels *root part* (part number 1 in
-the example above) and can be obtained by calling #echo $ref('M:SpaceCenter.Parts.Root') #.
-A parts children can be obtained by calling #echo $ref('M:SpaceCenter.Part.Children') #.
-If the part does not have any children, #echo $ref('M:SpaceCenter.Part.Children') #
+the example above) and can be obtained by calling {{ 'M:SpaceCenter.Parts.Root' | parsesee }}.
+A parts children can be obtained by calling {{ 'M:SpaceCenter.Part.Children' | parsesee }}.
+If the part does not have any children, {{ 'M:SpaceCenter.Part.Children' | parsesee }}
 returns an empty list. A parts parent can be obtained by calling
-#echo $ref('M:SpaceCenter.Part.Parent') #. If the part does not have a parent
-(as is the case for the root part), #echo $ref('M:SpaceCenter.Part.Parent') #
-returns ``#echo $value('null') #``.
+{{ 'M:SpaceCenter.Part.Parent' | parsesee }}. If the part does not have a parent
+(as is the case for the root part), {{ 'M:SpaceCenter.Part.Parent' | parsesee }}
+returns {{ 'null' | parsecode }}.
 
-The following #echo $language # example uses these attributes to perform a
+The following {{ domain.prettyname }} example uses these attributes to perform a
 depth-first traversal over all of the parts in a vessel:
 
-#if $language == 'python'
-
-.. code-block:: python
-
-   root = vessel.parts.root
-   stack = [(root, 0)]
-   while len(stack) > 0:
-       part,depth = stack.pop()
-       print(' '*depth, part.title)
-       for child in part.children:
-           stack.append((child, depth+1))
-
-#else if $language == 'lua'
-
-.. code-block:: lua
-
-   local root = vessel.parts.root
-   local stack = {{root,0}}
-   while #stack > 0 do
-     local part,depth = unpack(table.remove(stack))
-     print(string.rep(' ', depth) .. part.title)
-     for _,child in ipairs(part.children) do
-       table.insert(stack, {child, depth+1})
-     end
-   end
-
-#end if
+.. literalinclude:: /scripts/TreeTraversal.{{ domain.codeext }}
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -251,7 +224,7 @@ above, the following is printed out::
        LT-1 Landing Struts
      Mk16 Parachute
 
-.. _#echo $language #-api-parts-attachment-modes:
+.. _{{ domain.name }}-api-parts-attachment-modes:
 
 Attachment Modes
 ^^^^^^^^^^^^^^^^
@@ -267,46 +240,10 @@ The root part of a vessel (for example the command pod -- part 1) does not have
 a parent part, so does not have an attachment mode. However, the part is
 consider to be *axially* attached to nothing.
 
-The following #echo $language # example does a depth-first traversal as before,
+The following {{ domain.prettyname }} example does a depth-first traversal as before,
 but also prints out the attachment mode used by the part:
 
-#if $language == 'python'
-
-.. code-block:: python
-
-   root = vessel.parts.root
-   stack = [(root, 0)]
-   while len(stack) > 0:
-       part,depth = stack.pop()
-       if part.axially_attached:
-           attach_mode = 'axial'
-       else: # radially_attached
-           attach_mode = 'radial'
-       print(' '*depth, part.title, '-', attach_mode)
-       for child in part.children:
-           stack.append((child, depth+1))
-
-#else if $language == 'lua'
-
-.. code-block:: lua
-
-   local root = vessel.parts.root
-   local stack = {{root, 0}}
-   while #stack > 0 do
-     local part,depth = unpack(table.remove(stack))
-     local attach_mode
-     if part.axially_attached then
-       attach_mode = 'axial'
-     else -- radially_attached
-       attach_mode = 'radial'
-     end
-     print(string.rep(' ', depth) .. part.title .. ' - ' .. attach_mode)
-     for _,child in ipairs(part.children) do
-       table.insert(stack, {child, depth+1})
-     end
-   end
-
-#end if
+.. literalinclude:: /scripts/AttachmentModes.{{ domain.codeext }}
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -334,7 +271,7 @@ above, the following is printed out::
     LT-1 Landing Struts - radial
   Mk16 Parachute - axial
 
-.. _#echo $language #-api-parts-fuel-lines:
+.. _{{ domain.name }}-api-parts-fuel-lines:
 
 Fuel Lines
 ----------
@@ -363,17 +300,17 @@ line part 15 (in red) takes fuel from a fuel tank (part 11 -- in green) and
 feeds it into another fuel tank (part 9 -- in blue). The fuel line is therefore
 a child of part 11, but its connection to part 9 is not represented in the tree.
 
-The attributes #echo $ref('M:SpaceCenter.Part.FuelLinesFrom') # and
-#echo $ref('M:SpaceCenter.Part.FuelLinesTo') # can be used to discover these
+The attributes {{ 'M:SpaceCenter.Part.FuelLinesFrom' | parsesee }} and
+{{ 'M:SpaceCenter.Part.FuelLinesTo' | parsesee }} can be used to discover these
 
-connections. In the example in Figure 5, when #echo $ref('M:SpaceCenter.Part.FuelLinesTo') #
+connections. In the example in Figure 5, when {{ 'M:SpaceCenter.Part.FuelLinesTo' | parsesee }}
 is called on fuel tank part 11, it will return a list of parts containing just
 
-fuel tank part 9 (the blue part). When #echo $ref('M:SpaceCenter.Part.FuelLinesFrom') #
+fuel tank part 9 (the blue part). When {{ 'M:SpaceCenter.Part.FuelLinesFrom' | parsesee }}
 is called on fuel tank part 9, it will return a list containing fuel tank parts
 11 and 17 (the parts colored green).
 
-.. _#echo $language #-api-parts-staging:
+.. _{{ domain.name }}-api-parts-staging:
 
 Staging
 -------
@@ -386,11 +323,11 @@ Staging
 
 Each part has two staging numbers associated with it: the stage in which the
 part is *activated* and the stage in which the part is *decoupled*. These values
-can be obtained using #echo $ref('M:SpaceCenter.Part.Stage') # and
-#echo $ref('M:SpaceCenter.Part.DecoupleStage') # respectively. For parts that
-are not activated by staging, #echo $ref('M:SpaceCenter.Part.Stage') # returns
+can be obtained using {{ 'M:SpaceCenter.Part.Stage' | parsesee }} and
+{{ 'M:SpaceCenter.Part.DecoupleStage' | parsesee }} respectively. For parts that
+are not activated by staging, {{ 'M:SpaceCenter.Part.Stage' | parsesee }} returns
 -1. For parts that are never decoupled,
-#echo $ref('M:SpaceCenter.Part.DecoupleStage') # returns a value of -1.
+{{ 'M:SpaceCenter.Part.DecoupleStage' | parsesee }} returns a value of -1.
 
 Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
 stages in which each part of the vessel will be *activated*. Figure 8 shows the

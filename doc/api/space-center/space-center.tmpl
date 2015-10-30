@@ -1,10 +1,9 @@
-#encoding UTF-8
-
-.. default-domain:: #echo $domain
-#echo $currentmodule('SpaceCenter')
+.. default-domain:: {{ domain.sphinxname }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
 
 SpaceCenter
 ===========
 
-#echo $services['SpaceCenter']()
-#echo $enumerations['SpaceCenter.WarpMode']()
+{{ macros.service(services['SpaceCenter']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['WarpMode']) }}

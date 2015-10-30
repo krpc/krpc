@@ -9,7 +9,7 @@ namespace KRPC.Service.Scanner
 {
     static class Scanner
     {
-        static public Assembly CurrentAssembly { get; private set; }
+        public static Assembly CurrentAssembly { get; private set; }
 
         public static IDictionary<string, ServiceSignature> GetServices ()
         {

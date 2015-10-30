@@ -35,20 +35,7 @@ local function _run_test_decode_value(typ, cases)
   end
 end
 
-function TestEncodeDecode:test_encode_double_value()
-  local cases = {
-    {0.0, '0000000000000000'},
-    {-1.0, '000000000000f0bf'},
-    {3.14159265359, 'ea2e4454fb210940'},
-    {math.huge, '000000000000f07f'},
-    {-math.huge, '000000000000f0ff'},
-    {0/0, '000000000000f8ff'} -- should be 000000000000f87f ??
-  }
-  _run_test_encode_value('double', cases)
-  _run_test_decode_value('double', cases)
-end
-
-function TestEncodeDecode:test_encode_float_value()
+function TestEncodeDecode:test_float()
   local cases = {
     {-1.0, '000080bf'},
     {0.0, '00000000'},
@@ -61,7 +48,20 @@ function TestEncodeDecode:test_encode_float_value()
   _run_test_decode_value('float', cases)
 end
 
-function TestEncodeDecode:test_encode_int32_value()
+function TestEncodeDecode:test_double()
+  local cases = {
+    {0.0, '0000000000000000'},
+    {-1.0, '000000000000f0bf'},
+    {3.14159265359, 'ea2e4454fb210940'},
+    {math.huge, '000000000000f07f'},
+    {-math.huge, '000000000000f0ff'},
+    {0/0, '000000000000f8ff'} -- should be 000000000000f87f ??
+  }
+  _run_test_encode_value('double', cases)
+  _run_test_decode_value('double', cases)
+end
+
+function TestEncodeDecode:test_int32()
   local cases = {
     {0, '00'},
     {1, '01'},
@@ -75,7 +75,7 @@ function TestEncodeDecode:test_encode_int32_value()
   _run_test_decode_value('int32', cases)
 end
 
-function TestEncodeDecode:test_encode_int64_value()
+function TestEncodeDecode:test_int64()
   local cases = {
     {0, '00'},
     {1, '01'},
@@ -88,7 +88,7 @@ function TestEncodeDecode:test_encode_int64_value()
   _run_test_decode_value('int64', cases)
 end
 
-function TestEncodeDecode:test_encode_uint32_value()
+function TestEncodeDecode:test_uint32()
   local cases = {
     {0, '00'},
     {1, '01'},
@@ -103,7 +103,7 @@ function TestEncodeDecode:test_encode_uint32_value()
   luaunit.assertError(encoder.encode, -849, types:as_type('uint32'))
 end
 
-function TestEncodeDecode:test_encode_uint64_value()
+function TestEncodeDecode:test_uint64()
   local cases = {
     {0, '00'},
     {1, '01'},
@@ -118,7 +118,7 @@ function TestEncodeDecode:test_encode_uint64_value()
   luaunit.assertError(encoder.encode, -849, types:as_type('uint64'))
 end
 
-function TestEncodeDecode:test_encode_bool_value()
+function TestEncodeDecode:test_bool()
   local cases = {
     {true, '01'},
     {false, '00'}
@@ -127,7 +127,7 @@ function TestEncodeDecode:test_encode_bool_value()
   _run_test_decode_value('bool', cases)
 end
 
-function test_encode_string_value()
+function TestEncodeDecode:test_string()
   local cases = {
     {'', '00'},
     {'testing', '0774657374696e67'},
@@ -139,7 +139,7 @@ function test_encode_string_value()
   _run_test_decode_value('string', cases)
 end
 
-function TestEncodeDecode:test_encode_bytearray_value()
+function TestEncodeDecode:test_bytes()
   local cases = {
     {'', '00'},
     {'\xba\xda\x55', '03bada55'},
@@ -149,7 +149,7 @@ function TestEncodeDecode:test_encode_bytearray_value()
   _run_test_decode_value('bytes', cases)
 end
 
-function TestEncodeDecode:test_encode_list()
+function TestEncodeDecode:test_list()
   local cases = {
     {List{}, ''},
     {List{1}, '0a0101'},
@@ -159,7 +159,7 @@ function TestEncodeDecode:test_encode_list()
   _run_test_decode_value('List(int32)', cases)
 end
 
-function TestEncodeDecode:test_encode_dictionary()
+function TestEncodeDecode:test_dictionary()
   local x = Map{}
   x[''] = 0
   local cases = {
@@ -171,7 +171,7 @@ function TestEncodeDecode:test_encode_dictionary()
   _run_test_decode_value('Dictionary(string,int32)', cases)
 end
 
-function TestEncodeDecode:test_encode_set()
+function TestEncodeDecode:test_set()
   local cases = {
     {Set{}, ''},
     {Set{1}, '0a0101'},
@@ -181,7 +181,7 @@ function TestEncodeDecode:test_encode_set()
   _run_test_decode_value('Set(int32)', cases)
 end
 
-function TestEncodeDecode:test_encode_tuple()
+function TestEncodeDecode:test_tuple()
   local cases = {{List{1}, '0a0101'}}
   _run_test_encode_value('Tuple(int32)', cases)
   _run_test_decode_value('Tuple(int32)', cases)

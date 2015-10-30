@@ -79,17 +79,17 @@ namespace KRPC.Service
                         cls.Documentation = clsSignature.Documentation;
                     service.AddClasses (cls);
                 }
-                foreach (var enmSignature in serviceSignature.Enums.Values) {
+                foreach (var enmSignature in serviceSignature.Enumerations.Values) {
                     var enm = Enumeration.CreateBuilder ();
                     enm.Name = enmSignature.Name;
                     if (enmSignature.Documentation != "")
                         enm.Documentation = enmSignature.Documentation;
                     foreach (var enmValueSignature in enmSignature.Values) {
                         var enmValue = EnumerationValue.CreateBuilder ();
-                        enmValue.Name = enmValueSignature.Key;
-                        enmValue.Value = enmValueSignature.Value.Value;
-                        if (enmValueSignature.Value.Documentation != "")
-                            enmValue.Documentation = enmValueSignature.Value.Documentation;
+                        enmValue.Name = enmValueSignature.Name;
+                        enmValue.Value = enmValueSignature.Value;
+                        if (enmValueSignature.Documentation != "")
+                            enmValue.Documentation = enmValueSignature.Documentation;
                         enm.AddValues (enmValue);
                     }
                     service.AddEnumerations (enm);

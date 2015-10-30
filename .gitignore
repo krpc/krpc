@@ -125,7 +125,15 @@ python/build
 java
 
 # C++
-cpp
+cpp/.waf*
+cpp/.lock*
+cpp/build
+cpp/include/krpc/KRPC.pb.h
+cpp/src/KRPC.pb.cc
+cpp/test/Test.pb.h
+cpp/test/Test.pb.cc
+cpp/include/krpc/services
+cpp/test/services
 
 # protobuf
 *.protobin
@@ -142,6 +150,8 @@ lua/krpc/test/Test.lua
 test/kRPCTest/Schema/*.cs
 test/kRPCTest/Schema/*.py
 test/kRPCTest/Schema/*.lua
+test/kRPCTest/Schema/*.h
+test/kRPCTest/Schema/*.cc
 
 # Build output
 dist
@@ -153,6 +163,7 @@ lib/KSP_Data
 !docs
 doc/build
 doc/src/python/api
+doc/src/cpp/api
 doc/src/lua/api
 doc/src/images/**/*.png
 

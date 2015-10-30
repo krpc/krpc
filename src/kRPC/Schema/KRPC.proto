@@ -1,5 +1,5 @@
 syntax = "proto2";
-package krpc;
+package krpc.schema;
 
 message Request {
   required string service = 1;
