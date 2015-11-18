@@ -169,19 +169,19 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
-        public static KRPC.Schema.Test.TestEnum EnumReturn ()
+        public static Test.TestEnum EnumReturn ()
         {
-            return KRPC.Schema.Test.TestEnum.a;
+            return Test.TestEnum.a;
         }
 
         [KRPCProcedure]
-        public static KRPC.Schema.Test.TestEnum EnumEcho (KRPC.Schema.Test.TestEnum x)
+        public static Test.TestEnum EnumEcho (Test.TestEnum x)
         {
             return x;
         }
 
         [KRPCProcedure]
-        public static KRPC.Schema.Test.TestEnum EnumDefaultArg (KRPC.Schema.Test.TestEnum x = KRPC.Schema.Test.TestEnum.c)
+        public static Test.TestEnum EnumDefaultArg (Test.TestEnum x = Test.TestEnum.c)
         {
             return x;
         }

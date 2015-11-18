@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EB2EC8C8-1DAC-43D9-94F5-7A1CB64F6838}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>KRPCKerbalAlarmClock</RootNamespace>
+    <AssemblyName>kRPCKerbalAlarmClock</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <CodePage>65001</CodePage>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\Debug\kRPCKerbalAlarmClock.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Release\kRPCKerbalAlarmClock.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.IO">
+      <HintPath>..\..\..\..\..\..\..\usr\lib\mono\4.5\Facades\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime">
+      <HintPath>..\..\..\..\..\..\..\usr\lib\mono\4.5\Facades\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\build\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\build\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\build\TDx.TDxInput.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\build\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\lib\protobuf-v3.0.0-beta-1-bzl-fix\Google.Protobuf.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\kRPC\kRPC.csproj">
+      <Project>{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}</Project>
+      <Name>kRPC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\kRPCSpaceCenter\kRPCSpaceCenter.csproj">
+      <Project>{690C8D5A-B41F-44C4-99B9-B6A3D190447B}</Project>
+      <Name>kRPCSpaceCenter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="ExtensionMethods\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Addon.cs" />
+    <Compile Include="KACWrapper.cs" />
+    <Compile Include="Services\Alarm.cs" />
+    <Compile Include="Services\KerbalAlarmClock.cs" />
+    <Compile Include="Services\AlarmType.cs" />
+    <Compile Include="ExtensionMethods\AlarmTypeExtensions.cs" />
+    <Compile Include="Services\AlarmAction.cs" />
+    <Compile Include="ExtensionMethods\AlarmActionExtensions.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,17 @@
+def options(ctx):
+    pass
+
+def configure(ctx):
+    ctx.load('inkscape')
+
+def build(ctx):
+    for image in ctx.path.ant_glob('src/images/**/*.svg'):
+        ctx(source = image, target = image.change_ext('.png'))
+
+    service_definitions = ctx.path.ant_glob('../src/*/bin/Release/*.json')
+    print service_definitions
+
+    for language in ('python', 'cpp', 'lua'):
+        pass
+        # PYTHONPATH=../python ./generate language api src/language/api ../src/*/bin/$(CSHARP_CONFIG)/*.json
+

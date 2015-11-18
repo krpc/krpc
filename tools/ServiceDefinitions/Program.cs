@@ -10,10 +10,10 @@ namespace ServiceDefinitions
     {
         public static void Main (string[] args)
         {
-            var inputPath = args [0];
-            var service = args [1];
-            var outputPath = args [2];
-            Assembly.LoadFrom (inputPath);
+            var service = args [0];
+            var outputPath = args [1];
+            for (var i = 2; i < args.Count (); i++)
+                Assembly.LoadFrom (args[i]);
             var services = KRPC.Service.Scanner.Scanner.GetServices ();
             foreach (var key in services.Keys.ToList()) {
                 if (key != service) {

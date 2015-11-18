@@ -99,7 +99,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = kRPC\kRPC.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
@@ -264,5 +263,6 @@ Global
 		$33.inheritsSet = Mono
 		$33.inheritsScope = application/xml
 		$33.scope = application/xml
+		StartupItem = kRPC\kRPC.csproj
 	EndGlobalSection
 EndGlobal
