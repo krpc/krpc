@@ -1,4 +1,4 @@
-v0.0.12
+v0.1.12
  - Server connection method now retries 10 times every 0.1 seconds
 
 v0.1.11
