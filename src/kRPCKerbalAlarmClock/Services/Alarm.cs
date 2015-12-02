@@ -161,10 +161,10 @@ namespace KRPCKerbalAlarmClock.Services
         }
 
         /// <summary>
-        /// Deletes the alarm.
+        /// Removes the alarm.
         /// </summary>
         [KRPCMethod]
-        public void Delete ()
+        public void Remove ()
         {
             // TODO: delete this object
             KACWrapper.KAC.DeleteAlarm (alarm.ID);
