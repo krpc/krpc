@@ -19,7 +19,7 @@ class DocumentationParser(object):
 
     def has(self, path='./summary'):
         node = self.root.find(path)
-        return node is not None and node.text.strip() != ''
+        return node is not None and node.text is not None and node.text.strip() != ''
 
     def _parse(self, node):
         content = node.text
