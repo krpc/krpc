@@ -488,7 +488,7 @@ KerbalAlarmClock.Alarm.RepeatPeriod
 KerbalAlarmClock.Alarm.Vessel
 KerbalAlarmClock.Alarm.XferOriginBody
 KerbalAlarmClock.Alarm.XferTargetBody
-KerbalAlarmClock.Alarm.Delete
+KerbalAlarmClock.Alarm.Remove
 KerbalAlarmClock.AlarmType.Raw
 KerbalAlarmClock.AlarmType.Maneuver
 KerbalAlarmClock.AlarmType.ManeuverAuto
