@@ -1,3 +1,9 @@
+v0.1.12
+* C++ client
+* Built for KSP 1.0.5
+* Kerbal Alarm Clock service changes:
+  * Renamed Alarm.Delete to Alarm.Remove (to not clash with C++ keyword)
+
 v0.1.11
 * Lua client library (https://luarocks.org/modules/djungelorm/krpc)
 * Server plugin changes:
