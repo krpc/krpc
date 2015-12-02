@@ -1,6 +1,6 @@
 project = 'kRPC'
 version = '0.1'
-release = '0.1.11'
+release = '0.1.12'
 copyright = '2015, djungelorm'
 
 master_doc = 'index'

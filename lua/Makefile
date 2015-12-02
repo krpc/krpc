@@ -2,7 +2,7 @@
 
 LUA = lua5.2
 CSHARP_CONFIG = Release
-VERSION = 0.1.11
+VERSION = 0.1.12
 DISTDIR = dist/krpc-$(VERSION)-0
 
 all: release
