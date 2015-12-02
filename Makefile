@@ -121,12 +121,12 @@ dist-clean: clean
 
 .PHONY: test test-csharp test-spacecenter
 
-test: test-csharp test-python test-cpp test-lua test-spacecenter
+test: csharp-test python-test cpp-test lua-test spacecenter-test
 
-test-csharp: $(CSHARP_TEST_PROJECTS)
+csharp-test: $(CSHARP_TEST_PROJECTS)
 	$(NUNIT_CONSOLE) -nologo -nothread -trace=Off -output=test.log test/kRPCTest/bin/$(CSHARP_CONFIG)/kRPCTest.dll
 
-test-spacecenter:
+spacecenter-test:
 	make -C test/kRPCSpaceCenterTest KSP_DIR="$(KSP_DIR)" test
 
 # KRPC service definition files ------------------------------------------------
