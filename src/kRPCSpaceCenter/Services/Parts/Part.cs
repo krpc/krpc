@@ -5,6 +5,7 @@ using KRPC.Utils;
 using KRPCSpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
+using System;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
@@ -193,7 +194,7 @@ namespace KRPCSpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double ExternalTemperature {
-            get { return part.skinUnexposedExternalTemp; }
+            get { throw new NotImplementedException (); }
         }
 
         /// <summary>
