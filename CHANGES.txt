@@ -1,6 +1,8 @@
 v0.1.12
-* C++ client
+* Added C++ client
 * Built for KSP 1.0.5
+* Python client:
+  * Server connection method now retries 10 times every 0.1 seconds
 * Kerbal Alarm Clock service changes:
   * Renamed Alarm.Delete to Alarm.Remove (to not clash with C++ keyword)
 
