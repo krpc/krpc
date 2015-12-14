@@ -154,7 +154,7 @@ class Client(object):
                 arg = args[i]
                 add = True
             elif param in kwargs:
-                arg = args[param]
+                arg = kwargs[param]
                 add = True
             if add:
                 argument = krpc.schema.KRPC.Argument()
