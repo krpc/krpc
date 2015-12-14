@@ -260,7 +260,7 @@ namespace KRPCSpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double HorizontalSpeed {
-            get { return Speed - Math.Abs (VerticalSpeed); }
+            get {return Math.Sqrt (Math.Pow(Speed,2) - Math.Pow(VerticalSpeed,2));}
         }
 
         /// <summary>
