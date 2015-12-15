@@ -51,10 +51,15 @@ namespace KRPCSpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public int Count {
-            get {
-                return converters.Count;
-            }
+            get { return converters.Count;}
         }
+
+        /// <summary>
+        /// Returns True if Converter is activated
+        /// </summary>
+        [KRPCMethod]
+        public bool Active(int c) { return converters [c].IsActivated; }
+       
 
 
         /// <summary>

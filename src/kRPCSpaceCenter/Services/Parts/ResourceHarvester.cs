@@ -43,6 +43,23 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Returns True if the harvester is deployed and ready to drill, or currently drilling.
+        /// </summary>
+        [KRPCProperty]
+        public bool deployed {
+            get { return animator.isDeployed; }
+        }
+
+        /// <summary>
+        /// Returns True if the harvester is deployed and ready to drill, or currently drilling.
+        /// </summary>
+        [KRPCProperty]
+        public bool active {
+            get { return harvester.IsActivated; }
+        }
+
+
+        /// <summary>
         /// Deploys the Harvester.  Has no effect if already deployed.
         /// </summary>
         [KRPCMethod]
