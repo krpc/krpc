@@ -335,6 +335,10 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return part.HasModule<ModuleDockingNode> (); }
         }
 
+        internal bool IsResourceConverter {
+            get { return part.HasModule<ModuleResourceConverter> (); }
+        }
+            
         internal bool IsEngine {
             get { return part.HasModule<ModuleEngines> () || part.HasModule<ModuleEnginesFX> (); }
         }
@@ -375,6 +379,10 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return part.HasModule<ModuleDeployableSolarPanel> (); }
         }
 
+        internal bool IsResourceHarvester {
+            get { return part.HasModule<ModuleResourceHarvester> (); }
+        }
+
         /// <summary>
         /// A <see cref="Decoupler"/> if the part is a decoupler, otherwise <c>null</c>.
         /// </summary>
@@ -390,6 +398,11 @@ namespace KRPCSpaceCenter.Services.Parts
         public DockingPort DockingPort {
             get { return IsDockingPort ? new DockingPort (this) : null; }
         }
+
+        [KRPCProperty]
+        public ResourceConverter ResourceConverter {
+           get { return IsResourceConverter ? new ResourceConverter (this) : null; }
+       }
 
         /// <summary>
         /// An <see cref="Engine"/> if the part is an engine, otherwise <c>null</c>.
@@ -470,6 +483,15 @@ namespace KRPCSpaceCenter.Services.Parts
         public SolarPanel SolarPanel {
             get { return IsSolarPanel ? new SolarPanel (this) : null; }
         }
+
+        /// <summary>
+        /// A <see cref="ResourceHarvester"/> if the part is a Resource Harvester, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public ResourceHarvester ResourceHarvester {
+            get { return IsResourceHarvester ? new ResourceHarvester (this) : null; }
+        }
+
 
         /// <summary>
         /// The position of the part in the given reference frame.
