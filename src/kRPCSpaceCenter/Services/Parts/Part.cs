@@ -399,6 +399,9 @@ namespace KRPCSpaceCenter.Services.Parts
             get { return IsDockingPort ? new DockingPort (this) : null; }
         }
 
+        /// <summary>
+        /// A <see cref="ResourceConverter"/> if the part is a resource converter, otherwise <c>null</c>.
+        /// </summary>
         [KRPCProperty]
         public ResourceConverter ResourceConverter {
            get { return IsResourceConverter ? new ResourceConverter (this) : null; }

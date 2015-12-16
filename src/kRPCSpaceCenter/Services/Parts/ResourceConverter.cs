@@ -38,7 +38,7 @@ namespace KRPCSpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The part object for this harvester;
+        /// The part object for this harvester
         /// </summary>
         [KRPCProperty]
         public Part Part {
@@ -58,68 +58,86 @@ namespace KRPCSpaceCenter.Services.Parts
         /// Returns True if Converter is activated
         /// </summary>
         [KRPCMethod]
-        public bool Active(int c) { return converters [c].IsActivated; }
+        public bool Active(int c) {
+            if(c<=converters.Count) return converters [c].IsActivated;
+            else throw new ArgumentException ("Requested resource_converter does not exist in this part");
+        }
        
 
 
         /// <summary>
-        /// Grabs the name of the specified converter
+        /// Returns the name of the specified converter
         /// </summary>
         [KRPCMethod]
-        public string Name(int c) { return converters [c].ConverterName; }
+        public string Name(int c) {
+            if(c<=converters.Count) return converters [c].ConverterName; 
+            else throw new ArgumentException ("Requested resource_converter does not exist in this part");
+        }
 
         /// <summary>
         /// Starts the specified converter
         /// </summary>
         [KRPCMethod]
         public void Start (int c)
-        { converters [c].StartResourceConverter (); }
+        { 
+            if(c<=converters.Count) converters [c].StartResourceConverter (); 
+            else throw new ArgumentException ("Requested resource_converter does not exist in this part");
+        }
 
         /// <summary>
         /// Stops the specified converter
         /// </summary>
         [KRPCMethod]
         public void Stop (int c)
-        { converters [c].StopResourceConverter (); }
+        {
+            if(c<=converters.Count) converters [c].StopResourceConverter (); 
+            else throw new ArgumentException ("Requested resource_converter does not exist in this part");
+        }
 
         /// <summary>
         /// Gets status of specified converter
         /// </summary>
         [KRPCMethod]
         public string Status (int c)
-        {return converters [c].status; }
-
-        /// <summary>
-        /// Gets csv list of input resources
-        /// </summary>
-        [KRPCMethod]
-        public string Inputs (int c)
         {
-            string holder = "";
-            foreach (ResourceRatio r in converters [c].inputList) {
-                if (holder != "") {holder += ",";}
-                holder += r.ResourceName;
-            }
-
-            return holder;
+            if(c<=converters.Count) return converters [c].status; 
+            else throw new ArgumentException ("Requested resource_converter does not exist in this part");
         }
 
         /// <summary>
-        /// Gets csv list of output resources
+        /// Gets list<string> of input resources
         /// </summary>
         [KRPCMethod]
-        public string Outputs (int c)
+        public IList<string> Inputs (int c)
         {
-            string holder = "";
-            foreach (ResourceRatio r in converters [c].outputList) {
-                if (holder != "") {holder += ",";}
-                holder += r.ResourceName;
-            }
+            if (c <= converters.Count) {
+                List<string> holder=new List<string>();
+                foreach (ResourceRatio r in converters [c].inputList) {
+                    holder.Add (r.ResourceName);
+                }
 
-            return holder;
+                return holder;
+            }
+            else throw new ArgumentException ("Requested resource_converter does not exist in this part");
         }
 
+        /// <summary>
+        /// Gets list<string>  of output resources
+        /// </summary>
+        [KRPCMethod]
+        public IList<string> Outputs (int c)
+        {
+            if (c <= converters.Count) {
+                List<string> holder=new List<string>();
+                foreach (ResourceRatio r in converters [c].outputList) {
+                    holder.Add(r.ResourceName);
+                }
 
+                return holder;
+            }
+            else throw new ArgumentException ("Requested resource_converter does not exist in this part");
+
+        }
     }
 }
 
