@@ -6,6 +6,34 @@ using System.Collections.Generic;
 
 namespace KRPCSpaceCenter.Services.Parts
 {
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum ResourceConverterState{
+        /// <summary>
+        /// Converter is running
+        /// </summary>
+        Running,
+        /// <summary>
+        /// Converter is idle
+        /// </summary>
+        Idle,
+        /// <summary>
+        /// Converter is missing a required resource
+        /// </summary>
+        MissingResource,
+        /// <summary>
+        /// No Available Storage for output resource
+        /// </summary>
+        StorageFull,
+        /// <summary>
+        /// At preset resource capacity
+        /// </summary>
+        Capacity,
+        /// <summary>
+        /// Unknown State (possible with modified resource converters) - check status_string for more information
+        /// </summary>
+        Unknown
+    }
+        
     /// <summary>
     /// Obtained by calling <see cref="Part.ResourceConverter"/>
     /// </summary>
@@ -94,11 +122,36 @@ namespace KRPCSpaceCenter.Services.Parts
             else throw new ArgumentException ("Requested resource_converter does not exist in this part");
         }
 
+
         /// <summary>
         /// Gets status of specified converter
         /// </summary>
         [KRPCMethod]
-        public string Status (int c)
+        public ResourceConverterState Status (int c)
+        {
+            if(c>converters.Count) throw new ArgumentException ("Requested resource_converter does not exist in this part"); 
+            else {
+                if (converters[c].status.Contains("load"))
+                    return ResourceConverterState.Running;
+                if (converters [c].status.Contains ("Inactive"))
+                    return ResourceConverterState.Idle;
+                else if (converters [c].status.Contains ("missing"))
+                    return ResourceConverterState.MissingResource;
+                else if (converters [c].status.Contains ("full"))
+                    return ResourceConverterState.StorageFull;
+                else if (converters [c].status.Contains ("cap"))
+                    return ResourceConverterState.Capacity;
+                else {
+                    return ResourceConverterState.Unknown;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets status string for specified converter
+        /// </summary>
+        [KRPCMethod]
+        public string StatusString (int c)
         {
             if(c<=converters.Count) return converters [c].status; 
             else throw new ArgumentException ("Requested resource_converter does not exist in this part");
