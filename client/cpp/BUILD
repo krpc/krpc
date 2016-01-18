@@ -92,7 +92,7 @@ cc_binary(
     copts = ['-Iexternal/gtest/include', '-Iexternal/gmock/include',
              '-Ibazel-out/local_linux-fastbuild/bin/client/cpp/include', #TODO: fix includes
              '-Ibazel-out/local_linux-fastbuild/bin/client/cpp'],
-    deps = [':krpc', '@gtest//:main']
+    deps = [':krpc', '@gmock//:main']
 )
 
 #TODO: use targets in //protobuf:... instead of the following

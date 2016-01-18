@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include <boost/algorithm/string/predicate.hpp>
 #include <krpc/platform.hpp>
 #include "Test.pb.hpp"
@@ -11,7 +12,7 @@ class test_client: public server_test {
 
 TEST_F(test_client, test_version) {
   krpc::schema::Status status = krpc.get_status();
-  ASSERT_EQ("0.1.12", status.version());
+  ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
 }
 
 TEST_F(test_client, test_error) {

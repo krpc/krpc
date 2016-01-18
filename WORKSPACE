@@ -131,11 +131,11 @@ http_archive(
 )
 
 new_http_archive(
-    name = 'gtest',
-    build_file = 'tools/build/gtest.BUILD',
-    url = 'https://googletest.googlecode.com/files/gtest-1.7.0.zip',
-    strip_prefix = 'gtest-1.7.0',
-    sha256 = '247ca18dd83f53deb1328be17e4b1be31514cedfc1e3424f672bf11fd7e0d60d'
+    name = 'gmock',
+    build_file = 'tools/build/gmock.BUILD',
+    url = 'https://googlemock.googlecode.com/files/gmock-1.7.0.zip',
+    strip_prefix = 'gmock-1.7.0',
+    sha256 = '26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b'
 )
 
 new_http_archive(
