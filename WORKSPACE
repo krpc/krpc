@@ -112,15 +112,33 @@ new_http_archive(
 )
 
 http_file(
+    name = 'lua.luaunit',
+    url = 'https://raw.githubusercontent.com/bluebird75/luaunit/LUAUNIT_V3_1/luaunit.lua',
+    sha256 = '77e00531fb9c1a54fc6d8a8a55691328f18f4f0cde0da0a49a00272ceae67dd0'
+)
+
+http_file(
     name = 'lua.protobuf',
     url = 'https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.1/protobuf-1.1.1-0.src.rock',
-    sha256 = '140e6a208820aa5c6ccffd802acf40792a892df7c332003d024b3a678a61f2d9'
+    sha256 = '316953c0999fcc21469b1904a07aac2fdbedfa1ebfea96f8d74275bc5bd54c2f'
+)
+
+http_file(
+    name = 'lua.luasocket',
+    url = 'https://luarocks.org/manifests/luarocks/luasocket-3.0rc1-2.src.rock',
+    sha256 = '3882f2a1e1c6145ceb43ead385b861b97fa2f8d487e8669ec5b747406ab251c7'
 )
 
 http_file(
     name = 'lua.luafilesystem',
     url = 'https://luarocks.org/manifests/hisham/luafilesystem-1.6.3-1.src.rock',
     sha256 = '70121e78b8ef9365265b85027729d0520c1163f5609abfa9554b215a672f4e7a'
+)
+
+http_file(
+    name = 'lua.penlight',
+    url = 'http://luarocks.org/repositories/rocks/penlight-1.3.1-1.src.rock',
+    sha256 = '13c6fcc5058a998505ddc4b52496f591d7d37ed2efa9a46a2c39db6183f38783'
 )
 
 http_archive(
