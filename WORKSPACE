@@ -1,23 +1,147 @@
 new_http_archive(
     name = 'csharp.nunit',
-    build_file = 'tools/build/dotnet/nunit.BUILD',
-    sha256 = '1bd925514f31e7729ccde40a38a512c2accd86895f93465f3dfe6d0b593d7170',
-    type = 'zip',
+    build_file = 'tools/build/nunit.BUILD',
     url = 'https://github.com/nunit/nunitv2/releases/download/2.6.4/NUnit-2.6.4.zip',
+    sha256 = '1bd925514f31e7729ccde40a38a512c2accd86895f93465f3dfe6d0b593d7170'
 )
 
 new_http_archive(
     name = 'csharp.moq',
-    build_file = 'tools/build/dotnet/moq.BUILD',
-    sha256 = '1f4978e0a3f5b8d82b41635eff8201e5e7021b1fc1aceae4d9caeb79506f3804',
-    type = 'zip',
+    build_file = 'tools/build/moq.BUILD',
     url = 'http://www.nuget.org/api/v2/package/Moq/4.2.1510.2205',
+    type = 'zip',
+    sha256 = '1f4978e0a3f5b8d82b41635eff8201e5e7021b1fc1aceae4d9caeb79506f3804'
 )
 
 new_http_archive(
     name = 'csharp.json',
-    build_file = 'tools/build/dotnet/json.BUILD',
-    sha256 = 'd8705b95e460a0c6b760ed22c9cac47b40bfbbc8c0f1c0827edf94b0aee0da76',
-    type = 'zip',
+    build_file = 'tools/build/json.BUILD',
     url = 'https://github.com/JamesNK/Newtonsoft.Json/releases/download/7.0.1/Json70r1.zip',
+    sha256 = 'd8705b95e460a0c6b760ed22c9cac47b40bfbbc8c0f1c0827edf94b0aee0da76'
+)
+
+http_file(
+    name = 'python.protobuf',
+    url = 'https://pypi.python.org/packages/source/p/protobuf/protobuf-3.0.0a3.tar.gz',
+    sha256 = 'b61622de5048415bfd3f2d812ad64606438ac9e25009ae84191405fe58e522c1'
+)
+
+http_file(
+    name = 'python.jinja2',
+    url = 'https://pypi.python.org/packages/source/J/Jinja2/Jinja2-2.8.tar.gz',
+    sha256 = 'bc1ff2ff88dbfacefde4ddde471d1417d3b304e8df103a7a9437d47269201bf4'
+)
+
+http_file(
+    name = 'python.sphinx',
+    url = 'https://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.3.3.tar.gz',
+    sha256 = '4077bff351d96bd3ebc89daa6f897f3ddcbbca055f427b36f72b75d7310270d8'
+)
+
+http_file(
+    name = 'python.sphinx_rtd_theme',
+    url = 'https://pypi.python.org/packages/source/s/sphinx_rtd_theme/sphinx_rtd_theme-0.1.9.tar.gz',
+    sha256 = '273846f8aacac32bf9542365a593b495b68d8035c2e382c9ccedcac387c9a0a1'
+)
+
+http_file(
+    name = 'python.alabaster',
+    url = 'https://pypi.python.org/packages/source/a/alabaster/alabaster-0.7.6.tar.gz',
+    sha256 = '309d33e0282c8209f792f3527f41ec04e508ff837c61fc1906dde988a256deeb'
+)
+
+http_file(
+    name = 'python.babel',
+    url = 'https://pypi.python.org/packages/source/B/Babel/Babel-2.1.1.tar.gz',
+    sha256 = '7fb6d50effe88a087feb2036cb972fd7a893bf338361516f1a55a820bf7b5248'
+)
+
+http_file(
+    name = 'python.snowballstemmer',
+    url = 'https://pypi.python.org/packages/source/s/snowballstemmer/snowballstemmer-1.2.0.tar.gz',
+    sha256 = '6d54f350e7a0e48903a4e3b6b2cabd1b43e23765fbc975065402893692954191'
+)
+
+http_file(
+    name = 'python.docutils',
+    url = 'https://pypi.python.org/packages/source/d/docutils/docutils-0.12.tar.gz',
+    sha256 = 'c7db717810ab6965f66c8cf0398a98c9d8df982da39b4cd7f162911eb89596fa'
+)
+
+http_file(
+    name = 'python.pygments',
+    url = 'https://pypi.python.org/packages/source/P/Pygments/Pygments-2.0.2.tar.gz',
+    sha256 = '7320919084e6dac8f4540638a46447a3bd730fca172afc17d2c03eed22cf4f51'
+)
+
+http_file(
+    name = 'python.pytz',
+    url = 'https://pypi.python.org/packages/source/p/pytz/pytz-2015.7.tar.bz2',
+    sha256 = 'fbd26746772c24cb93c8b97cbdad5cb9e46c86bbdb1b9d8a743ee00e2fb1fc5d'
+)
+
+http_file(
+    name = 'python.sphinxcontrib-spelling',
+    url = 'https://pypi.python.org/packages/source/s/sphinxcontrib-spelling/sphinxcontrib-spelling-2.1.2.tar.gz',
+    sha256='c5ac488141408564cb60f355c50efd90b826a9fc7723738a07ab907a0384f086'
+)
+
+http_file(
+    name = 'python.pbr',
+    url = 'https://pypi.python.org/packages/source/p/pbr/pbr-1.8.1.tar.gz',
+    sha256 = 'e2127626a91e6c885db89668976db31020f0af2da728924b56480fc7ccf09649'
+)
+
+http_file(
+    name = 'python.pyenchant',
+    url = 'https://pypi.python.org/packages/source/p/pyenchant/pyenchant-1.6.6.tar.gz',
+    sha256 = '25c9d2667d512f8fc4410465fdd2e868377ca07eb3d56e2b6e534a86281d64d3'
+)
+
+http_file(
+    name = 'python.sphinx-lua',
+    url = 'https://s3.amazonaws.com/krpc/sphinx-lua-0.1.1-1-g0508.tar.gz',
+    sha256 = 'e1f1695189fade6bc10c8852da55752d890de0a0f86ff28cb972a2d9bfb01ee9'
+)
+
+new_http_archive(
+    name = 'protoc-lua',
+    build_file = 'tools/build/protobuf/protoc-lua.BUILD',
+    url = 'https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.0/protobuf-1.1.0-0.tar.gz',
+    sha256 = '4312ca3b7f120c101bab974eb81752dac608f737bee0ab28ecc31e9ff26fc854'
+)
+
+http_file(
+    name = 'lua.protobuf',
+    url = 'https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.1/protobuf-1.1.1-0.src.rock',
+    sha256 = '140e6a208820aa5c6ccffd802acf40792a892df7c332003d024b3a678a61f2d9'
+)
+
+http_file(
+    name = 'lua.luafilesystem',
+    url = 'https://luarocks.org/manifests/hisham/luafilesystem-1.6.3-1.src.rock',
+    sha256 = '70121e78b8ef9365265b85027729d0520c1163f5609abfa9554b215a672f4e7a'
+)
+
+http_archive(
+    name = 'protobuf',
+    url = 'https://github.com/google/protobuf/archive/v3.0.0-beta-2.tar.gz',
+    strip_prefix = 'protobuf-3.0.0-beta-2',
+    sha256 = 'be224d07ce87f12e362cff3df02851107bf92a4e4604349b1d7a4b1f0c3bfd86'
+)
+
+new_http_archive(
+    name = 'gtest',
+    build_file = 'tools/build/gtest.BUILD',
+    url = 'https://googletest.googlecode.com/files/gtest-1.7.0.zip',
+    strip_prefix = 'gtest-1.7.0',
+    sha256 = '247ca18dd83f53deb1328be17e4b1be31514cedfc1e3424f672bf11fd7e0d60d'
+)
+
+new_http_archive(
+    name = 'boost',
+    build_file = 'tools/build/boost.BUILD',
+    url = 'http://sourceforge.net/projects/boost/files/boost/1.58.0/boost_1_58_0.tar.gz',
+    strip_prefix = 'boost_1_58_0',
+    sha256 = 'a004d9b3fa95e956383693b86fce1b68805a6f71c2e68944fa813de0fb8c8102'
 )
