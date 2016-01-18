@@ -3,14 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3582BF17-7FD0-44B7-843D-916AE296280B}</ProjectGuid>
+    <ProjectGuid>{D0F002FB-E12F-4EE3-9A95-AC3AC08086A9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>TestingTools</RootNamespace>
     <AssemblyName>TestingTools</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <CodePage>65001</CodePage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -18,63 +15,49 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\Debug\TestingTools.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>bin\Release\TestingTools.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\src\kRPC\kRPC.csproj">
-      <Project>{7AFEDBF8-2224-4D6C-BA8B-D24ABF2D2BDE}</Project>
-      <Name>kRPC</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\kRPCSpaceCenter\kRPCSpaceCenter.csproj">
-      <Project>{690C8D5A-B41F-44C4-99B9-B6A3D190447B}</Project>
-      <Name>kRPCSpaceCenter</Name>
-    </ProjectReference>
+    <Reference Include="System" />
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\build\protobuf\csharp\Google.Protobuf.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\..\server\src\kRPC.csproj">
+      <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
+      <Name>kRPC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\service\SpaceCenter\kRPCSpaceCenter.csproj">
+      <Project>{48205F2E-3CEE-4480-873A-DEAFCD291407}</Project>
+      <Name>kRPCSpaceCenter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoLoadPersistentSaveOnStartup.cs" />
     <Compile Include="KRPCService.cs" />
     <Compile Include="OrbitTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\lib\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Protobuf">
-      <HintPath>..\..\lib\protobuf-v3.0.0-beta-1-bzl-fix\Google.Protobuf.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO">
-      <HintPath>..\..\..\..\..\..\..\usr\lib\mono\4.5\Facades\System.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime">
-      <HintPath>..\..\..\..\..\..\..\usr\lib\mono\4.5\Facades\System.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\lib\KSP_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\lib\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>

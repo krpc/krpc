@@ -1,32 +1,113 @@
 load('/tools/build/package', 'package_archive')
+load('/config', 'version')
 
-version = '0.1.11'
+exports_files(['COPYING', 'COPYING.LESSER'])
+
+license_text = """This license (LGPL v3) applies to all parts of kRPC except for the following:
+
+  - GameData/kRPC/kRPCSpaceCenter.* is under the GPLv3 license.
+    See LICENSE.kRPCSpaceCenter
+
+  - GameData/kRPC/Google.Protobuf.dll is a binary from Google's protobuf project.
+    See LICENSE.Google.Protobuf
+
+  - schema/* is under the MIT license. See schema/LICENSE
+
+Copyright 2015 djungelorm
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the Lesser GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+Lesser GNU General Public License for more details.
+
+You should have received a copy of the Lesser GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+genrule(
+    name = 'license',
+    outs = ['LICENSE'],
+    cmd = 'echo "%s" > "$@"' % license_text
+)
+
+genrule(
+    name = 'readme',
+    srcs = ['README.md'],
+    outs = ['README.txt'],
+    cmd = 'cp $(location //:README.md) "$@"',
+    visibility = ['//visibility:public']
+)
+
+genrule(
+    name = 'version',
+    outs = ['VERSION.txt'],
+    cmd = 'echo "%s" > "$@"' % version,
+    visibility = ['//visibility:public']
+)
 
 package_archive(
-    name = 'krpc-'+version,
+    name = 'krpc',
+    out = 'krpc-%s.zip' % version,
     files = [
-        'README.md',
-        'VERSION.txt',
-        'LICENSE.txt',
-        '//lib:protobuf/LICENSE.txt',
-        '//lib:protobuf/Google.Protobuf.dll',
-        '//server:kRPC',
-        '//server:icons',
-        '//server:ServiceDefinitions',
-        '//service:SpaceCenter',
-        '//service:KerbalAlarmClock',
-        '//service:InfernalRobotics'
+        ':readme',
+        ':license',
+        ':version',
+        'COPYING',
+        'COPYING.LESSER',
+        # Server
+        '//server',
+        '//service/SpaceCenter',
+        '//service/KerbalAlarmClock',
+        '//service/InfernalRobotics',
+        '//tools/build/protobuf:Google.Protobuf',
+        '//tools/build/protobuf:LICENSE',
+        # Clients
+        '//client/python',
+        '//client/cpp',
+        '//client/lua',
+        # Schema
+        '//protobuf:krpc.proto',
+        '//protobuf:csharp',
+        '//protobuf:py',
+        '//protobuf:cpp',
+        '//protobuf:lua',
+        # TODO: add java
+        '//protobuf:LICENSE',
+        # Docs
+        '//doc:latex',
     ],
     path_map = {
-        'README.md': 'GameData/kRPC/README.txt',
-        'VERSION.txt': 'GameData/kRPC/VERSION.txt',
-        'LICENSE.txt': 'GameData/kRPC/LICENSE.txt',
+        # Server
         'server/': 'GameData/kRPC/',
-        'lib/protobuf/': 'GameData/kRPC/',
-        'lib/protobuf/LICENSE.txt': 'GameData/kRPC/LICENSE.protobuf.txt',
         'server/src/icons': 'GameData/kRPC/icons',
         'service/SpaceCenter/': 'GameData/kRPC/',
         'service/KerbalAlarmClock/': 'GameData/kRPC/',
-        'service/InfernalRobotics/': 'GameData/kRPC/'
+        'service/InfernalRobotics/': 'GameData/kRPC/',
+        'tools/build/protobuf/': 'GameData/kRPC/',
+        'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
+        'service/SpaceCenter/LICENSE': 'LICENSE.kRPCSpaceCenter',
+        # Clients
+        'client/python/': 'client/',
+        'client/cpp/': 'client/',
+        'client/lua/': 'client/',
+        # Schema
+        'protobuf/': 'schema/',
+        # Docs
+        'doc/latex.pdf': 'kRPC.pdf',
     }
+)
+
+test_suite(
+    name = 'test',
+    tests = [
+        '//server:kRPCTest',
+        '//client/python:test',
+        '//client/cpp:test',
+        '//client/lua:test'
+    ]
 )

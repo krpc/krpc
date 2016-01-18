@@ -1,5 +1,5 @@
 v0.1.13
-* 
+* Bazel build system
 
 v0.1.12
 * Added C++ client
