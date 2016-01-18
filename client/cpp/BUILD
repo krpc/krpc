@@ -74,7 +74,8 @@ client_test(
     server_executable = '//tools/TestServer',
     rpc_port = '50010',
     stream_port = '50011',
-    tags = ['requires-network']
+    tags = ['requires-network'],
+    size = 'small'
 )
 
 cc_binary(

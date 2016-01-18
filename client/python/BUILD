@@ -31,5 +31,6 @@ py_test(
     name = 'test',
     src = ':python',
     pkg = 'krpc-'+version,
-    deps = ['@python.protobuf//file']
+    deps = ['@python.protobuf//file'],
+    size = 'small'
 )

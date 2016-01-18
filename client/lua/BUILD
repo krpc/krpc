@@ -17,5 +17,6 @@ package_archive(
 lua_test(
     name = 'test',
     src = ':lua',
-    deps = ['@lua.luafilesystem//file', '@lua.protobuf//file']
+    deps = ['@lua.luafilesystem//file', '@lua.protobuf//file'],
+    size = 'small'
 )
