@@ -1,4 +1,5 @@
 bazel-*
+lib/ksp
 docs
 tools/autobuild-docs.pid
 kRPC.userprefs
