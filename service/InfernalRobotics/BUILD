@@ -4,7 +4,7 @@ load('/config', 'version', 'copyright')
 
 filegroup(
     name = 'InfernalRobotics',
-    srcs = [':kRPCInfernalRobotics', ':ServiceDefinitions'],
+    srcs = [':kRPCInfernalRobotics', ':ServiceDefinitions', 'CHANGES.txt'],
     visibility = ['//:__pkg__']
 )
 

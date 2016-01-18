@@ -4,7 +4,7 @@ load('/config', 'version', 'copyright')
 
 filegroup(
     name = 'SpaceCenter',
-    srcs = [':kRPCSpaceCenter', ':ServiceDefinitions', 'LICENSE'],
+    srcs = [':kRPCSpaceCenter', ':ServiceDefinitions', 'LICENSE', 'CHANGES.txt'],
     visibility = ['//:__pkg__']
 )
 

@@ -4,7 +4,7 @@ load('/config', 'version', 'copyright')
 
 filegroup(
     name = 'KerbalAlarmClock',
-    srcs = [':kRPCKerbalAlarmClock', ':ServiceDefinitions'],
+    srcs = [':kRPCKerbalAlarmClock', ':ServiceDefinitions', 'CHANGES.txt'],
     visibility = ['//:__pkg__']
 )
 

@@ -85,6 +85,9 @@ package_archive(
         # Server
         'server/': 'GameData/kRPC/',
         'server/src/icons': 'GameData/kRPC/icons',
+        'service/SpaceCenter/CHANGES.txt': 'GameData/kRPC/CHANGES.SpaceCenter.txt',
+        'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
+        'service/InfernalRobotics/CHANGES.txt': 'GameData/kRPC/CHANGES.InfernalRobotics.txt',
         'service/SpaceCenter/': 'GameData/kRPC/',
         'service/KerbalAlarmClock/': 'GameData/kRPC/',
         'service/InfernalRobotics/': 'GameData/kRPC/',
