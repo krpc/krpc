@@ -140,7 +140,7 @@ namespace krpc {
 
     {% endfor %}
     {% for class_name,cls in classes.items() %}
-    {{ service_name }}::{{ class_name }}::{{ class_name }}(Client* client, google::protobuf::uint64 id):
+    inline {{ service_name }}::{{ class_name }}::{{ class_name }}(Client* client, google::protobuf::uint64 id):
       Object(client, "{{ service_name }}::{{ class_name }}", id) {}
 
     {% for method_name,method in cls.methods.items() + cls.properties.items() %}
