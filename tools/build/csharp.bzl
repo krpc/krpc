@@ -134,6 +134,23 @@ def _nunit_impl(ctx):
         runfiles = runfiles
     )
 
+def _assembly_info_impl(ctx):
+    content = ['using System.Reflection;']
+    if len(ctx.attr.internals_visible_to) > 0:
+        content.append('using System.Runtime.CompilerServices;')
+    content.append('[assembly: AssemblyTitle ("%s")]' % ctx.attr.title)
+    content.append('[assembly: AssemblyDescription ("%s")]' % ctx.attr.description)
+    content.append('[assembly: AssemblyCopyright ("%s")]' % ctx.attr.copyright)
+    content.append('[assembly: AssemblyVersion ("%s")]' % ctx.attr.version)
+
+    for pkg in ctx.attr.internals_visible_to:
+        content.append('[assembly: InternalsVisibleTo ("%s")]' % pkg)
+
+    ctx.file_action(
+        output = ctx.outputs.out,
+        content = '\n'.join(content)
+    )
+
 _COMMON_ATTRS = {
     'csc': attr.string(default=_MCS),
     'deps': attr.label_list(providers=['out', 'lib', 'target_type']),
@@ -172,4 +189,16 @@ csharp_nunit_test = rule(
     },
     outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml'},
     test = True
+)
+
+csharp_assembly_info = rule(
+    implementation = _assembly_info_impl,
+    attrs= {
+        'title': attr.string(mandatory=True),
+        'description': attr.string(),
+        'copyright': attr.string(mandatory=True),
+        'version': attr.string(mandatory=True),
+        'internals_visible_to': attr.string_list()
+    },
+    outputs = {'out': '%{name}.cs'}
 )

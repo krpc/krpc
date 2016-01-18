@@ -1,10 +1,18 @@
-load('/tools/build/csharp', 'csharp_binary', 'csharp_library')
+load('/tools/build/csharp', 'csharp_binary', 'csharp_library', 'csharp_assembly_info')
 load('/tools/build/protobuf/csharp', 'protobuf_csharp')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
+load('/config', 'version', 'copyright')
+
+csharp_assembly_info(
+    name = 'AssemblyInfo',
+    title = 'TestServer',
+    version = version,
+    copyright = copyright
+)
 
 csharp_binary(
     name = 'TestServer',
-    srcs = glob(['**/*.cs']) + ['//protobuf:csharp-test'],
+    srcs = glob(['**/*.cs']) + [':AssemblyInfo', '//protobuf:csharp-test'],
     deps = [
         '//server:kRPC',
         '//tools/build/protobuf:Google.Protobuf',

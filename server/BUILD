@@ -1,7 +1,7 @@
-load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test')
+load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assembly_info')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
 load('/tools/build/inkscape', 'png_images')
-load('/config', 'version')
+load('/config', 'version', 'copyright')
 
 filegroup(
     name = 'server',
@@ -15,9 +15,18 @@ genrule(
     cmd = 'echo "%s" > "$@"' % version
 )
 
+csharp_assembly_info(
+    name = 'AssemblyInfo',
+    title = 'kRPC',
+    description = 'RPC server for Kerbal Space Program',
+    copyright = copyright,
+    version = version,
+    internals_visible_to = ['kRPCTest', 'TestServer', 'ServiceDefinitions', 'DynamicProxyGenAssembly2']
+)
+
 csharp_library(
     name = 'kRPC',
-    srcs = glob(['src/**/*.cs']) + ['//protobuf:csharp'],
+    srcs = glob(['src/**/*.cs']) + [':AssemblyInfo', '//protobuf:csharp'],
     deps = [
         '//tools/build/protobuf:Google.Protobuf',
         '//lib:UnityEngine', '//lib:Assembly-CSharp', '//lib:Assembly-CSharp-firstpass', '//lib:TDx.TDxInput',

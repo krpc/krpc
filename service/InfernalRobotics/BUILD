@@ -1,5 +1,6 @@
-load('/tools/build/csharp', 'csharp_library')
+load('/tools/build/csharp', 'csharp_library', 'csharp_assembly_info')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
+load('/config', 'version', 'copyright')
 
 filegroup(
     name = 'InfernalRobotics',
@@ -7,9 +8,17 @@ filegroup(
     visibility = ['//:__pkg__']
 )
 
+csharp_assembly_info(
+    name = 'AssemblyInfo',
+    title = 'kRPCInfernalRobotics',
+    description = 'Infernal Robotics service for kRPC',
+    version = version,
+    copyright = copyright
+)
+
 csharp_library(
     name = 'kRPCInfernalRobotics',
-    srcs = glob(['**/*.cs']),
+    srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
     deps = [
         '//server:kRPC',
         '//service/SpaceCenter:kRPCSpaceCenter',

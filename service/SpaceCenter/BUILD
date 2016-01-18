@@ -1,5 +1,6 @@
-load('/tools/build/csharp', 'csharp_library')
+load('/tools/build/csharp', 'csharp_library', 'csharp_assembly_info')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
+load('/config', 'version', 'copyright')
 
 filegroup(
     name = 'SpaceCenter',
@@ -7,9 +8,18 @@ filegroup(
     visibility = ['//:__pkg__']
 )
 
+csharp_assembly_info(
+    name = 'AssemblyInfo',
+    title = 'kRPCSpaceCenter',
+    description = 'Basic services for kRPC',
+    version = version,
+    copyright = copyright,
+    internals_visible_to = ['TestingTools']
+)
+
 csharp_library(
     name = 'kRPCSpaceCenter',
-    srcs = glob(['**/*.cs']),
+    srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
     deps = [
         '//server:kRPC',
         '//tools/build/protobuf:Google.Protobuf',
