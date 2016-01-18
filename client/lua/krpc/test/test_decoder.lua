@@ -24,7 +24,7 @@ end
 
 function TestDecoder:test_decode_unicode_string()
   local value = decoder.decode(platform.unhexlify('03e284a2'), types:as_type('string'))
-  luaunit.assertEquals(value, '\xe2\x84\xa2')
+  luaunit.assertEquals(value, '\226\132\162')
 end
 
 function TestDecoder:test_decode_size_and_position()

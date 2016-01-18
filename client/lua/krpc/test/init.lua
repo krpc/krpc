@@ -1,5 +1,3 @@
-#!/usr/bin/env lua5.2
-
 local luaunit = require 'luaunit'
 
 TestAttributes = require 'krpc.test.test_attributes'

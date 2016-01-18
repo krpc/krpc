@@ -132,8 +132,8 @@ function TestEncodeDecode:test_string()
     {'', '00'},
     {'testing', '0774657374696e67'},
     {'One small step for Kerbal-kind!', '1f4f6e6520736d616c6c207374657020666f72204b657262616c2d6b696e6421'},
-    {'\xe2\x84\xa2', '03e284a2'},
-    {'Mystery Goo\xe2\x84\xa2 Containment Unit', '1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974'}
+    {'\226\132\162', '03e284a2'},
+    {'Mystery Goo\226\132\162 Containment Unit', '1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974'}
   }
   _run_test_encode_value('string', cases)
   _run_test_decode_value('string', cases)
@@ -142,8 +142,8 @@ end
 function TestEncodeDecode:test_bytes()
   local cases = {
     {'', '00'},
-    {'\xba\xda\x55', '03bada55'},
-    {'\xde\xad\xbe\xef', '04deadbeef'}
+    {'\186\218\85', '03bada55'},
+    {'\222\173\190\239', '04deadbeef'}
   }
   _run_test_encode_value('bytes', cases)
   _run_test_decode_value('bytes', cases)

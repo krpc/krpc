@@ -8,8 +8,8 @@ local encoder = {}
 
 local _types = Types()
 
-encoder.RPC_HELLO_MESSAGE = '\x48\x45\x4C\x4C\x4F\x2D\x52\x50\x43\x00\x00\x00'
-encoder.STREAM_HELLO_MESSAGE = '\x48\x45\x4C\x4C\x4F\x2D\x53\x54\x52\x45\x41\x4D'
+encoder.RPC_HELLO_MESSAGE = '\72\69\76\76\79\45\82\80\67\0\0\0'
+encoder.STREAM_HELLO_MESSAGE = '\72\69\76\76\79\45\83\84\82\69\65\77'
 
 encoder.CLIENT_NAME_LENGTH = 32
 encoder.CLIENT_IDENTIFIER_LENGTH = 16
@@ -18,7 +18,7 @@ local function _encode_varint(x)
   if x < 0 then
     error('Value must be non-negative, got ' .. x)
   elseif x == math.huge then
-    return '\xff\xff\xff\xff\xff\xff\xff\xff\x7f'
+    return '\255\255\255\255\255\255\255\255\127'
   else
     local data = ''
     local function write(y)
@@ -31,9 +31,9 @@ end
 
 local function _encode_signed_varint(x)
   if x == math.huge then
-    return '\xff\xff\xff\xff\xff\xff\xff\xff\x7f'
+    return '\255\255\255\255\255\255\255\255\127'
   elseif x == -math.huge then
-    return '\x80\x80\x80\x80\x80\x80\x80\x80\x80\x01'
+    return '\128\128\128\128\128\128\128\128\128\1'
   else
     local data = ''
     local function write(y)
@@ -89,7 +89,7 @@ end
 function encoder.client_name(name)
   name = name or ''
   name = name:sub(1, encoder.CLIENT_NAME_LENGTH)
-  return name .. string.rep('\x00', encoder.CLIENT_NAME_LENGTH - name:len())
+  return name .. string.rep('\0', encoder.CLIENT_NAME_LENGTH - name:len())
 end
 
 function encoder.encode(x, typ)

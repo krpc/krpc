@@ -54,7 +54,7 @@ function TestEncoder:test_encode_value()
 end
 
 function TestEncoder:test_encode_unicode_string()
-  local data = encoder.encode('\xe2\x84\xa2', types:as_type('string'))
+  local data = encoder.encode('\226\132\162', types:as_type('string'))
   luaunit.assertEquals('03e284a2', platform.hexlify(data))
 end
 

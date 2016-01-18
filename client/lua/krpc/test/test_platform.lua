@@ -7,20 +7,20 @@ local TestPlatform = class()
 function TestPlatform:test_bytelength()
   luaunit.assertEquals(0, (''):len())
   luaunit.assertEquals(3, ('foo'):len())
-  luaunit.assertEquals(3, ('\xe2\x84\xa2'):len())
+  luaunit.assertEquals(3, ('\226\132\162'):len())
   --luaunit.assertEquals(3, ('\u2122'):len())
 end
 
 function TestPlatform:test_hexlify()
   luaunit.assertEquals(platform.hexlify(''), '')
-  luaunit.assertEquals(platform.hexlify('\x00\x01\x02'), '000102')
-  luaunit.assertEquals(platform.hexlify('\xFF'), 'ff')
+  luaunit.assertEquals(platform.hexlify('\0\1\2'), '000102')
+  luaunit.assertEquals(platform.hexlify('\255'), 'ff')
 end
 
 function TestPlatform:test_unhexlify()
   luaunit.assertEquals(platform.unhexlify(''), '')
-  luaunit.assertEquals(platform.unhexlify('000102'), '\x00\x01\x02')
-  luaunit.assertEquals(platform.unhexlify('ff'), '\xFF')
+  luaunit.assertEquals(platform.unhexlify('000102'), '\0\1\2')
+  luaunit.assertEquals(platform.unhexlify('ff'), '\255')
 end
 
 return TestPlatform

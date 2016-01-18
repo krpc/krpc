@@ -32,7 +32,7 @@ function TestClient:test_value_parameters()
   luaunit.assertEquals('True', self.conn.test_service.bool_to_string(true))
   luaunit.assertEquals('False', self.conn.test_service.bool_to_string(false))
   luaunit.assertEquals(12345, self.conn.test_service.string_to_int32('12345'))
-  luaunit.assertEquals('deadbeef', self.conn.test_service.bytes_to_hex_string('\xde\xad\xbe\xef'))
+  luaunit.assertEquals('deadbeef', self.conn.test_service.bytes_to_hex_string('\222\173\190\239'))
 end
 
 function TestClient:test_multiple_value_parameters()
@@ -318,10 +318,10 @@ function TestClient:test_line_endings()
     'foo\rbar',
     'foo\n\rbar',
     'foo\r\nbar',
-    'foo\x10bar',
-    'foo\x13bar',
-    'foo\x10\x13bar',
-    'foo\x13\x10bar'
+    'foo\16bar',
+    'foo\19bar',
+    'foo\16\19bar',
+    'foo\19\16bar'
   }
   for _,s in ipairs(strings) do
     self.conn.test_service.string_property = s

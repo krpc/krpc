@@ -11,10 +11,10 @@ local decoder = {}
 
 local _types = Types()
 
-decoder.OK_MESSAGE = '\x4F\x4B'
+decoder.OK_MESSAGE = '\79\75'
 
 local function _decode_varint(data)
-  if data == '\xff\xff\xff\xff\xff\xff\xff\xff\x7f' then
+  if data == '\255\255\255\255\255\255\255\255\127' then
     return math.huge
   else
     return pb.varint_decoder(data, 0)
@@ -22,9 +22,9 @@ local function _decode_varint(data)
 end
 
 local function _decode_signed_varint(data)
-  if data == '\xff\xff\xff\xff\xff\xff\xff\xff\x7f' then
+  if data == '\255\255\255\255\255\255\255\255\127' then
     return math.huge
-  elseif data == '\x80\x80\x80\x80\x80\x80\x80\x80\x80\x01' then
+  elseif data == '\128\128\128\128\128\128\128\128\128\1' then
     return -math.huge
   else
     return pb.signed_varint_decoder(data, 0)
