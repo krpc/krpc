@@ -2,7 +2,7 @@ import unittest
 from krpc.test.servertestcase import ServerTestCase
 import krpc.types
 
-krpc.types.add_search_path('krpc.test')
+krpc.types.add_search_path('krpc.test.schema')
 
 class TestObjects(ServerTestCase, unittest.TestCase):
 

@@ -108,7 +108,7 @@ def update_thread(connection):
                     continue
 
                 # Check for an error response
-                if response.response.HasField('error'):
+                if response.response.has_error:
                     _stream_cache[id].value = RPCError(response.response.error)
                     continue
 

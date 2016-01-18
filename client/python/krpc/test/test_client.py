@@ -1,9 +1,9 @@
 import unittest
 import krpc
-import krpc.test.Test as TestSchema
+import krpc.test.schema.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
 
-krpc.types.add_search_path('krpc.test')
+krpc.types.add_search_path('krpc.test.schema')
 
 class TestClient(ServerTestCase, unittest.TestCase):
 
@@ -18,11 +18,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def setUp(self):
         super(TestClient, self).setUp()
 
-    def test_version(self):
+    def test_get_status(self):
         status = self.conn.krpc.get_status()
-        with open('../VERSION.txt') as f:
-            version = f.readlines()[0].rstrip()
-            self.assertEqual(version, status.version)
+        self.assertRegexpMatches (status.version, '^[0-9]+\.[0-9]+\.[0-9]+$')
+        self.assertGreater(status.bytes_read, 0)
 
     def test_error(self):
         self.assertRaises(self.conn.test_service.throw_argument_exception)

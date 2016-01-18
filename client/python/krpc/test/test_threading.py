@@ -1,10 +1,10 @@
 import unittest
 import threading
-import krpc.test.Test as TestSchema
+import krpc.test.schema.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
 import krpc.types
 
-krpc.types.add_search_path('krpc.test')
+krpc.types.add_search_path('krpc.test.schema')
 
 def worker_thread(tid, conn):
     for i in range(100):

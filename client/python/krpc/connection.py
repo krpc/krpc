@@ -42,6 +42,8 @@ class Connection(object):
 
     def receive(self, length):
         """ Receive data from the connection. Blocks until length bytes have been received. """
+        if length == 0:
+            return b''
         assert length > 0
         data = b''
         while len(data) < length:

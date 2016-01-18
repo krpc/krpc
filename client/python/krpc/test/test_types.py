@@ -5,7 +5,7 @@ from krpc.types import ListType, DictionaryType, SetType, TupleType, ProtobufEnu
 from krpc.types import ClassBase
 import krpc.schema.KRPC
 
-krpc.types.add_search_path('krpc.test')
+krpc.types.add_search_path('krpc.test.schema')
 
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
 PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]

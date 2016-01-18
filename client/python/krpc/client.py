@@ -118,7 +118,7 @@ class Client(object):
             response = self._receive_response()
 
         # Check for an error response
-        if response.HasField('error'):
+        if response.has_error:
             raise RPCError(response.error)
 
         # Decode the response and return the (optional) result

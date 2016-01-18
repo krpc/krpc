@@ -369,7 +369,7 @@ def _create_class_type(service_name, class_name, doc):
                 {'_service_name': service_name, '_class_name': class_name, '__doc__': doc})
 
 def _create_enum_type(service_name, enum_name, values, doc):
-    typ = Enum(enum_name, values)
+    typ = Enum(str(enum_name), values)
     setattr(typ, '__doc__', doc)
     return typ
 

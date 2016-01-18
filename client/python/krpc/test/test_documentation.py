@@ -3,10 +3,10 @@
 import unittest
 import binascii
 import krpc
-import krpc.test.Test as TestSchema
+import krpc.test.schema.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
 
-krpc.types.add_search_path('krpc.test')
+krpc.types.add_search_path('krpc.test.schema')
 
 class TestDocumentation(ServerTestCase, unittest.TestCase):
 

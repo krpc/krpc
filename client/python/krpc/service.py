@@ -235,15 +235,15 @@ class ServiceBase(DynamicType):
     def _parse_procedure(cls, procedure):
         param_names = [_to_snake_case(param.name) for param in procedure.parameters]
         param_types = [cls._client._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
-        param_required = [not param.HasField('default_argument') for param in procedure.parameters]
+        param_required = [not param.has_default_argument for param in procedure.parameters]
         param_default = []
         for param,typ in zip(procedure.parameters, param_types):
-            if param.HasField('default_argument'):
+            if param.has_default_argument:
                 param_default.append(Decoder.decode(param.default_argument, typ))
             else:
                 param_default.append(None)
         return_type = None
-        if procedure.HasField('return_type'):
+        if procedure.has_return_type:
             return_type = cls._client._types.get_return_type(procedure.return_type, procedure.attributes)
         return param_names, param_types, param_required, param_default, return_type
 
