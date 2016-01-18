@@ -57,7 +57,7 @@ def _test_impl(ctx):
         'rm -rf lua-src',
         'unzip -q %s -d lua-src' % ctx.file.srcrock.short_path,
         'CWD=`pwd`',
-        '(cd lua-src/krpc-0.1.12-0; luarocks --tree=$CWD/lua-tree make $CWD/%s)' % ctx.file.rockspec.short_path,
+        '(cd lua-src/*/; luarocks --tree=$CWD/lua-tree make $CWD/%s)' % ctx.file.rockspec.short_path,
         'ln -f -s %s luaunit.lua' % ctx.file._luaunit.short_path,
         'LUA_PATH="lua-tree/share/lua/'+_LUA_VERSION+'/?.lua;lua-tree/share/lua/'+_LUA_VERSION+'/?/init.lua;;" ' + \
         'LUA_CPATH="lua-tree/lib/lua/'+_LUA_VERSION+'/?.so;lua-tree/lib/lua/'+_LUA_VERSION+'/?/init.so;;" ' + \
