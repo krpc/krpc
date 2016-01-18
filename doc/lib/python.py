@@ -7,7 +7,6 @@ class PythonDomain(object):
     prettyname = 'Python'
     sphinxname = 'py'
     codeext = 'py'
-    macros = 'lib/python.tmpl'
 
     _value_map = {
         'null': 'None',
@@ -15,8 +14,9 @@ class PythonDomain(object):
         'false': 'False'
     }
 
-    def __init__(self):
+    def __init__(self, args):
         self._currentmodule = None
+        self.macros = args.python_macros
 
     def currentmodule(self, name):
         self._currentmodule = name

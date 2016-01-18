@@ -27,6 +27,10 @@ class LuaDomain(PythonDomain):
         'false': 'False'
     }
 
+    def __init__(self, args):
+        self._currentmodule = None
+        self.macros = args.lua_macros
+
     def type(self, typ):
         if isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type]
