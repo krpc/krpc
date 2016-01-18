@@ -1,5 +1,5 @@
 load('/tools/build/python', 'py_sdist', 'py_test')
-load('/version', 'version')
+load('/config', 'version')
 
 py_sdist(
     name = 'python',

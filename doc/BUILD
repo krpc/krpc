@@ -1,7 +1,7 @@
 load('/tools/build/inkscape', 'png_images')
 load('/tools/build/sphinx', 'sphinx_html', 'sphinx_latex')
 load('/doc/generate', 'generate', 'generate_multiple')
-load('/version', 'version')
+load('/config', 'version')
 
 filegroup(
     name = 'doc',

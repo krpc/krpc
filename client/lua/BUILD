@@ -1,6 +1,6 @@
 load('/tools/build/package', 'package_archive')
 load('/tools/build/lua', 'lua_test')
-load('/version', 'version')
+load('/config', 'version')
 
 package_archive(
     name = 'lua',

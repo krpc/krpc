@@ -1,7 +1,7 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
 load('/tools/build/inkscape', 'png_images')
-load('/version', 'version')
+load('/config', 'version')
 
 filegroup(
     name = 'server',
