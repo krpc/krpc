@@ -91,10 +91,6 @@ package_archive(
         'tools/build/protobuf/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
         'service/SpaceCenter/LICENSE': 'LICENSE.kRPCSpaceCenter',
-        # Clients
-        'client/python/': 'client/',
-        'client/cpp/': 'client/',
-        'client/lua/': 'client/',
         # Schema
         'protobuf/': 'schema/',
         # Docs
