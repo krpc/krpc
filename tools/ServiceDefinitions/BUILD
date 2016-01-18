@@ -1,8 +1,9 @@
-load('/tools/build/csharp', 'csharp_binary')
+load('/tools/build/csharp', 'csharp_binary', 'csharp_assembly_info')
+load('/config', 'version', 'copyright')
 
 csharp_binary(
     name = 'ServiceDefinitions',
-    srcs = glob(['**/*.cs']),
+    srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
     deps = [
        '//server:kRPC',
        '//tools/build/protobuf:Google.Protobuf',
@@ -13,4 +14,11 @@ csharp_binary(
     ],
     warn = 1, #TODO: relax this
     visibility = ['//visibility:public']
+)
+
+csharp_assembly_info(
+    name = 'AssemblyInfo',
+    title = 'ServiceDefinitions',
+    version = version,
+    copyright = copyright
 )

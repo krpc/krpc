@@ -1,8 +1,9 @@
-load('/tools/build/csharp', 'csharp_library')
+load('/tools/build/csharp', 'csharp_library', 'csharp_assembly_info')
+load('/config', 'version', 'copyright')
 
 csharp_library(
     name = 'TestingTools',
-    srcs = glob(['**/*.cs']),
+    srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
     deps = [
         '//server:kRPC',
         '//service/SpaceCenter:kRPCSpaceCenter',
@@ -12,4 +13,11 @@ csharp_library(
     ],
     warn = 1, #TODO: relax this
     visibility = ['//visibility:public']
+)
+
+csharp_assembly_info(
+    name = 'AssemblyInfo',
+    title = 'TestingTools',
+    version = version,
+    copyright = copyright
 )
