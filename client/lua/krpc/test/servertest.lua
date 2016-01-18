@@ -13,7 +13,7 @@ function ServerTest:tearDown()
 end
 
 function ServerTest:connect()
-  return krpc.connect('TestClient', 'localhost', 50011, 50012)
+  return krpc.connect('TestClient', 'localhost', 50010, 50011)
 end
 
 return ServerTest
