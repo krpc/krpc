@@ -1,9 +1,8 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include <krpc/client.hpp>
 #include <krpc/encoder.hpp>
 #include <krpc/platform.hpp>
-#include "Test.pb.h"
+#include "Test.pb.hpp"
 #include "services/test_service.hpp"
 
 TEST(test_encoder, test_rpc_hello_message) {

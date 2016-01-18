@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
 #include <krpc/services/kerbal_alarm_clock.hpp>

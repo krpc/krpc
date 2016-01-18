@@ -1,14 +1,13 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include <krpc/encoder.hpp>
 #include <krpc/decoder.hpp>
 #include <krpc/platform.hpp>
-#include "Test.pb.h"
+#include "Test.pb.hpp"
 #include "services/test_service.hpp"
 
 namespace pb = google::protobuf;
 
-template<typename T> void test(T decoded, std::string encoded) {
+template<typename T> void test_value(T decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   T value = 0;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
@@ -107,43 +106,43 @@ TEST(test_encode_decode, test_float) {
 }
 
 TEST(test_encode_decode, test_int32) {
-  test<pb::int32>(0, "00");
-  test<pb::int32>(1, "01");
-  test<pb::int32>(42, "2a");
-  test<pb::int32>(300, "ac02");
-  test<pb::int32>(-33, "dfffffffffffffffff01");
-  test<pb::int32>(std::numeric_limits<pb::int32>::max(), "ffffffff07"); //should be ffffffffffffffff7f ?
-  test<pb::int32>(std::numeric_limits<pb::int32>::min(), "80808080f8ffffffff01"); //should be 80808080808080808001 ?
+  test_value<pb::int32>(0, "00");
+  test_value<pb::int32>(1, "01");
+  test_value<pb::int32>(42, "2a");
+  test_value<pb::int32>(300, "ac02");
+  test_value<pb::int32>(-33, "dfffffffffffffffff01");
+  test_value<pb::int32>(std::numeric_limits<pb::int32>::max(), "ffffffff07"); //should be ffffffffffffffff7f ?
+  test_value<pb::int32>(std::numeric_limits<pb::int32>::min(), "80808080f8ffffffff01"); //should be 80808080808080808001 ?
 }
 
 TEST(test_encode_decode, test_int64) {
-  test<pb::int64>(0, "00");
-  test<pb::int64>(1, "01");
-  test<pb::int64>(42, "2a");
-  test<pb::int64>(300, "ac02");
-  test<pb::int64>(1234567890000L, "d088ec8ff723");
-  test<pb::int64>(-33, "dfffffffffffffffff01");
+  test_value<pb::int64>(0, "00");
+  test_value<pb::int64>(1, "01");
+  test_value<pb::int64>(42, "2a");
+  test_value<pb::int64>(300, "ac02");
+  test_value<pb::int64>(1234567890000L, "d088ec8ff723");
+  test_value<pb::int64>(-33, "dfffffffffffffffff01");
 }
 
 TEST(test_encode_decode, test_uint32) {
-  test<pb::uint32>(0, "00");
-  test<pb::uint32>(1, "01");
-  test<pb::uint32>(42, "2a");
-  test<pb::uint32>(300, "ac02");
-  test<pb::uint32>(std::numeric_limits<pb::uint32>::max(), "ffffffff0f"); //should be ffffffffffffffff7f ?
+  test_value<pb::uint32>(0, "00");
+  test_value<pb::uint32>(1, "01");
+  test_value<pb::uint32>(42, "2a");
+  test_value<pb::uint32>(300, "ac02");
+  test_value<pb::uint32>(std::numeric_limits<pb::uint32>::max(), "ffffffff0f"); //should be ffffffffffffffff7f ?
 }
 
 TEST(test_encode_decode, test_uint64) {
-  test<pb::uint64>(0, "00");
-  test<pb::uint64>(1, "01");
-  test<pb::uint64>(42, "2a");
-  test<pb::uint64>(300, "ac02");
-  test<pb::uint64>(1234567890000L, "d088ec8ff723");
+  test_value<pb::uint64>(0, "00");
+  test_value<pb::uint64>(1, "01");
+  test_value<pb::uint64>(42, "2a");
+  test_value<pb::uint64>(300, "ac02");
+  test_value<pb::uint64>(1234567890000L, "d088ec8ff723");
 }
 
 TEST(test_encode_decode, test_bool) {
-  test<bool>(true,  "01");
-  test<bool>(false, "00");
+  test_value<bool>(true,  "01");
+  test_value<bool>(false, "00");
 }
 
 TEST(test_encode_decode, test_string) {

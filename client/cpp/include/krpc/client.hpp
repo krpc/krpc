@@ -1,6 +1,7 @@
 #ifndef HEADER_KRPC_CLIENT
 #define HEADER_KRPC_CLIENT
 
+#include "krpc/krpc.pb.hpp"
 #include "krpc/connection.hpp"
 #include <boost/shared_ptr.hpp>
 

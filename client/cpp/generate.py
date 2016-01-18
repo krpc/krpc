@@ -11,23 +11,24 @@ from krpc.attributes import Attributes
 import krpc.types
 import krpc.decoder
 
-krpc.types.add_search_path('krpc.test')
+krpc.types.add_search_path('krpc.test.schema')
 Types = krpc.types.Types()
 
 def main():
     parser = argparse.ArgumentParser(description='Generate C++ headers for kRPC services')
+    parser.add_argument('template', action='store',
+                        help='Path to template file')
+    parser.add_argument('service', action='store',
+                        help='Name of service to generate')
     parser.add_argument('output', action='store',
-                        help='Directory to store generated header files')
+                        help='Path to output C++ header file to')
     parser.add_argument('definitions', nargs='*', default=[],
                         help='Paths to services definition files')
-    parser.add_argument('--service', action='store', nargs=1,
-                        help='Service name (default: all services)')
     args = parser.parse_args()
 
     services_info = {}
     for definition in args.definitions:
         for path in glob.glob(definition):
-            print 'Loading', path
             with open(path, 'r') as f:
                 services_info.update(json.load(f))
 
@@ -35,22 +36,13 @@ def main():
         print 'No services found in services definition files'
         exit(1)
 
-    service_names = services_info.keys()
-    if args.service:
-        if args.service not in service_names:
-            print 'Service \'%s\' not found' % args.service
-            exit(1)
-        service_names = [args.service]
+    if args.service not in services_info.keys():
+        print 'Service \'%s\' not found' % args.service
+        exit(1)
 
-    if not os.path.exists(args.output):
-        os.makedirs(args.output)
-
-    for service_name in service_names:
-        content = generate_service(service_name, services_info[service_name])
-        header_path = os.path.join(args.output, snake_case(service_name) + '.hpp')
-        with open(header_path, 'w') as f:
-            print header_path
-            f.write(content)
+    content = generate_service(args.template, args.service, services_info[args.service])
+    with open(args.output, 'w') as f:
+        f.write(content)
 
 _regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
 _regex_single_uppercase = re.compile(r'([a-z0-9])([A-Z])')
@@ -134,6 +126,8 @@ def parse_type(typ):
 
     elif isinstance(typ, krpc.types.ProtobufEnumType):
         typ_string = typ.protobuf_type.replace('.','::')
+        x,_,y = typ_string.partition('::')
+        typ_string = x.lower() + '::' + y
         typ_decode_fn = 'decode_enum'
 
     elif isinstance(typ, krpc.types.EnumType):
@@ -173,11 +167,11 @@ def parse_default_argument(value, typ):
         else:
             return 'false'
     elif isinstance(typ, krpc.types.ClassType) and value is None:
-        return typ.protobuf_type[6:-1].replace('.','::') + '()'
+        return parse_parameter_type(typ) + '()'
     elif isinstance(typ, krpc.types.EnumType):
-        return 'static_cast<%s>(%s)' % (typ.protobuf_type[5:-1].replace('.','::'), value)
+        return 'static_cast<%s>(%s)' % (parse_parameter_type(typ), value)
     elif isinstance(typ, krpc.types.ProtobufEnumType):
-        return 'static_cast<%s>(%s)' % (typ.protobuf_type.replace('.','::'), value)
+        return 'static_cast<%s>(%s)' % (parse_parameter_type(typ), value)
     else:
         return value
 
@@ -194,7 +188,7 @@ def parse_parameters(procedure):
         parameters.append(info)
     return parameters
 
-def generate_service(service_name, info):
+def generate_service(template_file, service_name, info):
 
     procedures = {}
     properties = {}
@@ -308,7 +302,7 @@ def generate_service(service_name, info):
         lstrip_blocks=True,
         undefined=jinja2.StrictUndefined
     )
-    template = env.get_template('generate.tmpl')
+    template = env.get_template(template_file)
     content = template.render(context)
     return content.rstrip()+'\n'
 

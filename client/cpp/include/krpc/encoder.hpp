@@ -1,7 +1,7 @@
 #ifndef HEADER_KRPC_ENCODER
 #define HEADER_KRPC_ENCODER
 
-#include "krpc/KRPC.pb.h"
+#include "krpc/krpc.pb.hpp"
 #include "krpc/object.hpp"
 #include <boost/exception/all.hpp>
 #include <google/protobuf/message.h>

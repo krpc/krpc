@@ -2,7 +2,7 @@
 #define HEADER_KRPC_TEST_SERVER_TEST
 
 #include <krpc/krpc.hpp>
-#include "Test.pb.h"
+#include "Test.pb.hpp"
 #include "services/test_service.hpp"
 
 class server_test: public ::testing::Test {
@@ -20,7 +20,7 @@ inline server_test::server_test():
   test_service(&conn) {}
 
 inline krpc::Client server_test::connect() {
-  return krpc::connect("TestClient", "localhost", 50011, 50012);
+  return krpc::connect("TestClient", "127.0.0.1", 50010, 50011);
 }
 
 #endif

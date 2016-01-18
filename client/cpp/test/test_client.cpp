@@ -1,8 +1,7 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include <boost/algorithm/string/predicate.hpp>
 #include <krpc/platform.hpp>
-#include "Test.pb.h"
+#include "Test.pb.hpp"
 #include "krpc/services/krpc.hpp"
 #include "services/test_service.hpp"
 #include "server_test.hpp"
@@ -12,7 +11,7 @@ class test_client: public server_test {
 
 TEST_F(test_client, test_version) {
   krpc::schema::Status status = krpc.get_status();
-  ASSERT_EQ("0.1.11", status.version());
+  ASSERT_EQ("0.1.12", status.version());
 }
 
 TEST_F(test_client, test_error) {
@@ -114,14 +113,14 @@ TEST_F(test_client, test_blocking_procedure) {
 }
 
 TEST_F(test_client, test_protobuf_enums) {
-  ASSERT_EQ(::Test::a, test_service.enum_return());
-  ASSERT_EQ(::Test::a, test_service.enum_echo(::Test::a));
-  ASSERT_EQ(::Test::b, test_service.enum_echo(::Test::b));
-  ASSERT_EQ(::Test::c, test_service.enum_echo(::Test::c));
+  ASSERT_EQ(::test::a, test_service.enum_return());
+  ASSERT_EQ(::test::a, test_service.enum_echo(::test::a));
+  ASSERT_EQ(::test::b, test_service.enum_echo(::test::b));
+  ASSERT_EQ(::test::c, test_service.enum_echo(::test::c));
 
-  ASSERT_EQ(::Test::a, test_service.enum_default_arg(::Test::a));
-  ASSERT_EQ(::Test::c, test_service.enum_default_arg());
-  ASSERT_EQ(::Test::b, test_service.enum_default_arg(::Test::b));
+  ASSERT_EQ(::test::a, test_service.enum_default_arg(::test::a));
+  ASSERT_EQ(::test::c, test_service.enum_default_arg());
+  ASSERT_EQ(::test::b, test_service.enum_default_arg(::test::b));
 }
 
 TEST_F(test_client, test_enums) {
