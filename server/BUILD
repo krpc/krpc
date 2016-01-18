@@ -9,6 +9,12 @@ filegroup(
     visibility = ['//:__pkg__']
 )
 
+filegroup(
+    name = 'test',
+    srcs = [':kRPCTest'],
+    visibility = ['//:__pkg__']
+)
+
 genrule(
     name = 'version',
     outs = ['VERSION.txt'],
@@ -62,6 +68,5 @@ csharp_nunit_test(
         '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
     ],
     warn = 1, #TODO: relax this
-    visibility = ['//visibility:public'],
     size = 'small'
 )

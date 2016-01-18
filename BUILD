@@ -116,7 +116,7 @@ filegroup(
     name = 'csproj',
     srcs = [
         '//server',
-        '//server:kRPCTest',
+        '//server:test',
         '//service/SpaceCenter',
         '//service/InfernalRobotics',
         '//service/KerbalAlarmClock',
