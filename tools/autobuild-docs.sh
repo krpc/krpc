@@ -1,30 +1,24 @@
 #!/bin/bash
 
-root=`pwd`
-pidfile=tools/autobuild-docs.pid
+# Usage tools/autobuild-docs.sh PORT
+
+set -e
+
+port=$1
 
 trap ctrl_c INT
 function ctrl_c() {
-    if [ -f $pidfile ]; then
-        kill `cat $pidfile`
-    fi
+    pkill -f "python -m SimpleHTTPServer $port" || true
     exit 0
 }
 
-if [ -f $pidfile ]; then
-    kill `cat $pidfile`
-fi
-
 while [ true ] ; do
-    bazel build //doc:html
-    rm -rf docs
-    unzip -q bazel-bin/doc/html.zip -d docs
-    cd docs
-    python -m SimpleHTTPServer &
-    cd $root
-    serverpid=$!
-    echo $serverpid > $pidfile
+    sleep 0.2
+    if bazel build //doc:html ; then
+        rm -rf docs
+        unzip -q bazel-bin/doc/html.zip -d docs
+    fi
+    (cd docs; python -m SimpleHTTPServer $port &)
     inotifywait -r -e modify,move,create,delete doc --exclude='/\.'
-    kill $serverpid
-    rm $pidfile
+    pkill -f "python -m SimpleHTTPServer $port"
 done
