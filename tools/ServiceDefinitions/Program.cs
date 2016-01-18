@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Reflection;
 using System.IO;
+using KRPC.Utils;
 
 namespace ServiceDefinitions
 {
@@ -10,6 +11,8 @@ namespace ServiceDefinitions
     {
         public static void Main (string[] args)
         {
+            Logger.Enabled = true;
+            Logger.Level = Logger.Severity.Warning;
             var service = args [0];
             var outputPath = args [1];
             for (var i = 2; i < args.Count (); i++)
