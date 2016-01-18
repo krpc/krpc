@@ -41,6 +41,9 @@ end
 
 function Connection:receive(length)
   -- Receive data from the connection. Blocks until length bytes have been received.
+  if length == 0 then
+    return ''
+  end
   data, err = self._socket:receive(length)
   if data == nil then
     error('Socket error: ' .. err)

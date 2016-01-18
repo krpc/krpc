@@ -5,9 +5,9 @@ local schema = require 'krpc.test.Test'
 local TestEnum = class()
 
 function TestEnum:test_enums()
-  luaunit.assertEquals(schema.TestEnum.a, 1)
-  luaunit.assertEquals(schema.TestEnum.b, 2)
-  luaunit.assertEquals(schema.TestEnum.c, 3)
+  luaunit.assertEquals(schema.TestEnum.a, 0)
+  luaunit.assertEquals(schema.TestEnum.b, 1)
+  luaunit.assertEquals(schema.TestEnum.c, 2)
 end
 
 return TestEnum

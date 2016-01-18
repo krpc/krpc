@@ -15,8 +15,7 @@ local TestClient = class(ServerTest)
 
 function TestClient:test_version()
   status = self.conn.krpc:get_status()
-  local version = stringx.rstrip(io.open('../VERSION.txt', 'r'):read('*all'))
-  luaunit.assertEquals(version, status.version)
+  luaunit.assertStrMatches(status.version, '%d+.%d+.%d+')
 end
 
 function TestClient:test_error()
