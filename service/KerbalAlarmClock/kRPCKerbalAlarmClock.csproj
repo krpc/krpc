@@ -56,6 +56,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\bazel-bin\service\KerbalAlarmClock\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="ExtensionMethods\AlarmActionExtensions.cs" />
     <Compile Include="ExtensionMethods\AlarmTypeExtensions.cs" />
@@ -64,6 +67,5 @@
     <Compile Include="Services\AlarmAction.cs" />
     <Compile Include="Services\AlarmType.cs" />
     <Compile Include="Services\KerbalAlarmClock.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>

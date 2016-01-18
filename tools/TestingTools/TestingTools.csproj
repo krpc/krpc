@@ -55,9 +55,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\bazel-bin\tools\TestingTools\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AutoLoadPersistentSaveOnStartup.cs" />
     <Compile Include="KRPCService.cs" />
     <Compile Include="OrbitTools.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>

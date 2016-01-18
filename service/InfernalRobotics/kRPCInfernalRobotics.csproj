@@ -52,11 +52,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\bazel-bin\service\InfernalRobotics\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="IRWrapper.cs" />
     <Compile Include="Services\ControlGroup.cs" />
     <Compile Include="Services\InfernalRobotics.cs" />
     <Compile Include="Services\Servo.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>

@@ -111,3 +111,17 @@ test_suite(
         '//client/lua:test'
     ]
 )
+
+filegroup(
+    name = 'csproj',
+    srcs = [
+        '//server',
+        '//server:kRPCTest',
+        '//service/SpaceCenter',
+        '//service/InfernalRobotics',
+        '//service/KerbalAlarmClock',
+        '//tools/ServiceDefinitions',
+        '//tools/TestingTools',
+        '//tools/TestServer'
+    ]
+)

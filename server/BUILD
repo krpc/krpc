@@ -61,5 +61,6 @@ csharp_nunit_test(
         '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
         '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
     ],
-    warn = 1 #TODO: relax this
+    warn = 1, #TODO: relax this
+    visibility = ['//visibility:public']
 )
