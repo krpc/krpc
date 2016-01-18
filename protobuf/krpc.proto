@@ -1,5 +1,6 @@
 syntax = "proto3";
-package krpc;
+package krpc.schema;
+option csharp_namespace = 'KRPC.Schema.KRPC';
 
 message Request {
   string service = 1;
@@ -14,8 +15,10 @@ message Argument {
 
 message Response {
   double time = 1;
-  string error = 2;
-  bytes return_value = 3;
+  bool has_error = 2;
+  string error = 3;
+  bool has_return_value = 4;
+  bytes return_value = 5;
 }
 
 message StreamMessage {
@@ -42,15 +45,17 @@ message Service {
 message Procedure {
   string name = 1;
   repeated Parameter parameters = 2;
-  string return_type = 3;
-  repeated string attributes = 4;
-  string documentation = 5;
+  bool has_return_type = 3;
+  string return_type = 4;
+  repeated string attributes = 5;
+  string documentation = 6;
 }
 
 message Parameter {
   string name = 1;
   string type = 2;
-  bytes default_argument = 3;
+  bool has_default_argument = 3;
+  bytes default_argument = 4;
 }
 
 message Class {
