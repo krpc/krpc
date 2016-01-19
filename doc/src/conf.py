@@ -1,7 +1,7 @@
 project = 'kRPC'
 version = ''
 release = version
-copyright = '2015, djungelorm'
+copyright = '2015-2016, djungelorm'
 
 master_doc = 'index'
 source_suffix = '.rst'
