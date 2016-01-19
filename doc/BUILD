@@ -1,4 +1,4 @@
-load('/tools/build/inkscape', 'png_images')
+load('/tools/build/image', 'png_images')
 load('/tools/build/sphinx', 'sphinx_html', 'sphinx_latex')
 load('/doc/generate', 'generate', 'generate_multiple')
 load('/config', 'version')

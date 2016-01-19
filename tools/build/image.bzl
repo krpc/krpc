@@ -5,8 +5,7 @@ def _impl(ctx):
         inputs = [input],
         outputs = [output],
         progress_message = 'Generating PNG image %s' % output.short_path,
-        #TODO: need quiet flag for inkscape. Don't want to have to pipe output to /dev/null
-        command = 'inkscape --without-gui --export-png=%s %s 1>/dev/null 2>/dev/null' % (output.path, input.path)
+        command = 'rsvg --format=png %s %s' % (input.path, output.path)
     )
 
 png_image = rule(

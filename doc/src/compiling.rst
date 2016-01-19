@@ -8,14 +8,14 @@ kRPC. However the following will need to be installed on your system:
 
  * `Mono C# compiler and runtime <http://www.mono-project.com/download/>`_
  * Python, including virtualenv and pip
- * Inkscape
- * Latex
+ * pdflatex
+ * RSVG for converting SVGs to PNGs
 
 To install these dependencies on Ubuntu, follow the instructions on the `Mono
 website
 <http://www.mono-project.com/docs/getting-started/install/linux/#debian-ubuntu-and-derivatives>`_
 and install the required packages using:
-``sudo apt-get install mono-complete python-virtualenv python-pip inkscape texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra``
+``sudo apt-get install mono-complete python-virtualenv python-pip texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra librsvg2-bin``
 
 Before building kRPC you need to make ``lib/ksp`` point to a directory
 containing Kerbal Space Program. For example on Linux, if your KSP directory is

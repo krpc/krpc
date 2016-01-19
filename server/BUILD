@@ -1,6 +1,6 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assembly_info')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
-load('/tools/build/inkscape', 'png_images')
+load('/tools/build/image', 'png_images')
 load('/config', 'version', 'copyright')
 
 filegroup(
