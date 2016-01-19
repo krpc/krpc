@@ -8,6 +8,7 @@ def _impl(ctx):
         'virtualenv env --quiet --relocatable',
         'env/bin/pip install --quiet --no-deps %s' % ctx.file._python_client.path,
         'env/bin/pip install --quiet --no-deps %s' % ctx.file._protobuf_library.path,
+        'env/bin/pip install --quiet --no-deps %s' % ctx.file._markupsafe_library.path,
         'env/bin/pip install --quiet --no-deps %s' % ctx.file._jinja2_library.path,
         'env/bin/python %s "$@"' % ctx.file._generate_tool.path
     ]
@@ -25,7 +26,8 @@ def _impl(ctx):
             ctx.file._generate_template,
             ctx.file._python_client,
             ctx.file._protobuf_library,
-            ctx.file._jinja2_library
+            ctx.file._jinja2_library,
+            ctx.file._markupsafe_library
         ] + srcs,
         outputs = [out],
         progress_message = 'Generating C++ header for %s service' % service,
@@ -49,6 +51,8 @@ generate = rule(
         '_protobuf_library': attr.label(default=Label('@python.protobuf//file'),
                                         allow_files=True, single_file=True),
         '_jinja2_library': attr.label(default=Label('@python.jinja2//file'),
-                                      allow_files=True, single_file=True)
+                                      allow_files=True, single_file=True),
+        '_markupsafe_library': attr.label(default=Label('@python.markupsafe//file'),
+                                          allow_files=True, single_file=True)
     }
 )

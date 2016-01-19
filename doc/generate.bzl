@@ -21,6 +21,7 @@ def _impl(ctx):
         'env/bin/pip install --quiet --no-deps %s' % ctx.file._python_client.path,
         'env/bin/pip install --quiet --no-deps %s' % ctx.file._protobuf_library.path,
         'env/bin/pip install --quiet --no-deps %s' % ctx.file._jinja2_library.path,
+        'env/bin/pip install --quiet --no-deps %s' % ctx.file._markupsafe_library.path,
         'tar -cf %s env' % generate_env.path
     ]
     ctx.file_action(
@@ -34,7 +35,8 @@ def _impl(ctx):
         inputs = [
             ctx.file._python_client,
             ctx.file._protobuf_library,
-            ctx.file._jinja2_library
+            ctx.file._jinja2_library,
+            ctx.file._markupsafe_library
         ] + ctx.files._generate_library,
         outputs = [generate_env],
         progress_message = 'Creating documentation generator',
@@ -102,7 +104,9 @@ generate = rule(
         '_protobuf_library': attr.label(default=Label('@python.protobuf//file'),
                                         allow_files=True, single_file=True),
         '_jinja2_library': attr.label(default=Label('@python.jinja2//file'),
-                                      allow_files=True, single_file=True)
+                                      allow_files=True, single_file=True),
+        '_markupsafe_library': attr.label(default=Label('@python.markupsafe//file'),
+                                          allow_files=True, single_file=True)
     },
     outputs = _outputs
 )

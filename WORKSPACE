@@ -33,6 +33,12 @@ http_file(
 )
 
 http_file(
+    name = 'python.markupsafe',
+    url = 'https://pypi.python.org/packages/source/M/MarkupSafe/MarkupSafe-0.23.tar.gz',
+    sha256 = 'a4ec1aff59b95a14b45eb2e23761a0179e98319da5a7eb76b56ea8cdc7b871c3'
+)
+
+http_file(
     name = 'python.sphinx',
     url = 'https://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.3.3.tar.gz',
     sha256 = '4077bff351d96bd3ebc89daa6f897f3ddcbbca055f427b36f72b75d7310270d8'
