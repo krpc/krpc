@@ -26,7 +26,7 @@ namespace KRPC.Test.Server.Net
         [Test]
         public void StopTcpListener ()
         {
-            var listener = new TcpListener (IPAddress.Loopback, 50010);
+            var listener = new TcpListener (IPAddress.Loopback, 50020);
             listener.Start ();
             listener.Stop ();
             Assert.Throws<InvalidOperationException> (() => listener.AcceptTcpClient ());
