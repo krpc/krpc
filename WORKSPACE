@@ -143,7 +143,7 @@ new_http_archive(
 http_file(
     name = 'lua.protobuf',
     url = 'https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.1/protobuf-1.1.1-0.src.rock',
-    sha256 = '316953c0999fcc21469b1904a07aac2fdbedfa1ebfea96f8d74275bc5bd54c2f'
+    sha256 = '88de9e68e587dcca7043a7117f76d0391cfbb1222502b0bab8f224093e6402a8'
 )
 
 http_file(
