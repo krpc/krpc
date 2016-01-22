@@ -35,7 +35,8 @@ def _impl(ctx, builder):
         ctx.file._pytz,
         ctx.file._sphinxcontrib_spelling,
         ctx.file._pyenchant,
-        ctx.file._sphinx_lua
+        ctx.file._sphinx_lua,
+        ctx.file._sphinx_csharp
     ]
 
     subcommands = ['virtualenv env --quiet --system-site-packages']
@@ -135,7 +136,9 @@ _SPHINX_ATTRS = {
     '_pyenchant': attr.label(default=Label('@python.pyenchant//file'),
                              allow_files=True, single_file=True),
     '_sphinx_lua': attr.label(default=Label('@python.sphinx-lua//file'),
-                              allow_files=True, single_file=True)
+                              allow_files=True, single_file=True),
+    '_sphinx_csharp': attr.label(default=Label('@python.sphinx-csharp//file'),
+                                 allow_files=True, single_file=True)
 }
 
 sphinx_html = rule(

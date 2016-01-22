@@ -6,9 +6,10 @@ import json
 import jinja2
 from krpc.types import Types
 from lib.utils import snakecase, indent, singleline, lookup_cref
-from lib.python import PythonDomain
-from lib.lua import LuaDomain
 from lib.cpp import CppDomain
+from lib.csharp import CsharpDomain
+from lib.lua import LuaDomain
+from lib.python import PythonDomain
 from lib.nodes import Service
 from lib.docparser import DocumentationParser
 from lib.extensions import AppendExtension
@@ -74,7 +75,7 @@ def process_file(args, domain, services, path):
 
 def main():
     parser = argparse.ArgumentParser(description='Generate API documentation from service definitions')
-    parser.add_argument('language', choices = ['python', 'lua', 'cpp'],
+    parser.add_argument('language', choices = ['cpp', 'csharp', 'lua', 'python'],
                         help='Language to compile')
     parser.add_argument('source', action='store',
                         help='Path to source file')
@@ -88,20 +89,24 @@ def main():
                         help='Overwrite existing files, even when nothing\'s changed')
     parser.add_argument('--order-file', action='store', default='order.txt',
                         help='Path to order definition file')
-    parser.add_argument('--python-macros', action='store', default='lib/python.tmpl',
-                        help='Path to Python macros template file')
     parser.add_argument('--cpp-macros', action='store', default='lib/cpp.tmpl',
                         help='Path to C++ macros template file')
+    parser.add_argument('--csharp-macros', action='store', default='lib/csharp.tmpl',
+                        help='Path to C# macros template file')
     parser.add_argument('--lua-macros', action='store', default='lib/lua.tmpl',
                         help='Path to Lua macros template file')
+    parser.add_argument('--python-macros', action='store', default='lib/python.tmpl',
+                        help='Path to Python macros template file')
     args = parser.parse_args()
 
-    if args.language == 'python':
-        domain = PythonDomain(args)
-    elif args.language == 'cpp':
+    if args.language == 'cpp':
         domain = CppDomain(args)
-    else: # lua
+    elif args.language == 'csharp':
+        domain = CsharpDomain(args)
+    elif args.language == 'lua':
         domain = LuaDomain(args)
+    else: # python
+        domain = PythonDomain(args)
 
     if not os.path.exists(args.order_file):
         raise RuntimeError('Ordering file \'%s\' does not exist' % args.order_file)

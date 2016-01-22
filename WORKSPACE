@@ -80,6 +80,12 @@ http_file(
 )
 
 http_file(
+    name = 'python.sphinx-csharp',
+    url = 'https://github.com/djungelorm/sphinx-csharp/releases/download/v1.0.0/sphinx-csharp-1.0.0.tar.gz',
+    sha256 = 'bb03996b2f6826b67d7a451f781d684fd9ff9d48d33462beaaff492a070bf81b'
+)
+
+http_file(
     name = 'python.alabaster',
     url = 'https://pypi.python.org/packages/source/a/alabaster/alabaster-0.7.6.tar.gz',
     sha256 = '309d33e0282c8209f792f3527f41ec04e508ff837c61fc1906dde988a256deeb'

@@ -19,9 +19,10 @@ doc_srcs = [
     ':rst',
     ':images',
     ':scripts',
-    ':python-api',
     ':cpp-api',
-    ':lua-api'
+    ':csharp-api',
+    ':lua-api',
+    ':python-api'
 ]
 
 sphinx_html(
@@ -62,9 +63,10 @@ filegroup(
     name = 'scripts',
     srcs = glob([
         'src/crafts/*.craft',
-        'src/scripts/*.py',
         'src/scripts/*.cpp',
-        'src/scripts/*.lua'
+        'src/scripts/*.cs',
+        'src/scripts/*.lua',
+        'src/scripts/*.py'
     ])
 )
 
@@ -76,14 +78,6 @@ defs = [
 ]
 
 generate_multiple(
-    name = 'python-api',
-    outdir = 'src/python',
-    language = 'python',
-    srcs = glob(['api/**/*.tmpl']),
-    defs = defs
-)
-
-generate_multiple(
     name = 'cpp-api',
     outdir = 'src/cpp',
     language = 'cpp',
@@ -92,9 +86,25 @@ generate_multiple(
 )
 
 generate_multiple(
+    name = 'csharp-api',
+    outdir = 'src/csharp',
+    language = 'csharp',
+    srcs = glob(['api/**/*.tmpl']),
+    defs = defs
+)
+
+generate_multiple(
     name = 'lua-api',
     outdir = 'src/lua',
     language = 'lua',
+    srcs = glob(['api/**/*.tmpl']),
+    defs = defs
+)
+
+generate_multiple(
+    name = 'python-api',
+    outdir = 'src/python',
+    language = 'python',
     srcs = glob(['api/**/*.tmpl']),
     defs = defs
 )

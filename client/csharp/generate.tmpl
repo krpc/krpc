@@ -1,0 +1,136 @@
+using Google.Protobuf;
+using System;
+using System.Collections.Generic;
+{% macro args(parameters) %}
+var _args = new ByteString[] {
+{% for x in parameters %}
+    global::KRPC.Client.Encoder.Encode ({{x.name}}, typeof({{x.type}})){% if not loop.last %},{% endif %}
+
+{% endfor %}
+};
+{% endmacro %}
+{% macro call(service, procedure, has_return, has_args, is_static=False) %}
+{% if has_return %}ByteString _data = {% endif %}{% if is_static %}_connection{% else %}this.connection{% endif %}.Invoke ("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+{% endmacro %}
+{% macro return(type, set_client, is_static=False) %}
+return ({{type}})global::KRPC.Client.Encoder.Decode (_data, typeof({{type}}), {% if is_static %}_connection{% else %}this.connection{% endif %});
+{% endmacro %}
+{% macro sig_parameters(parameters) %}
+{% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_argument' in x %} = {{x.default_argument}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endmacro %}
+
+namespace KRPC.Client.Services.{{ service_name }}
+{
+    public static class {{ service_name }}Extensions
+    {
+        public static global::KRPC.Client.Services.{{ service_name }}.Service {{ service_name }} (this global::KRPC.Client.Connection connection)
+        {
+            return new global::KRPC.Client.Services.{{ service_name }}.Service (connection);
+        }
+    }
+
+    public class Service
+    {
+        global::KRPC.Client.Connection connection;
+
+        public Service (global::KRPC.Client.Connection connection)
+        {
+            this.connection = connection;
+        }
+
+        {% for procedure_name,procedure in procedures.items() %}
+        public {{ procedure.return_type }} {{ procedure_name }} ({{ sig_parameters(procedure.parameters) }})
+        {
+            {% if procedure.parameters | length > 0 %}            {{ args(procedure.parameters) | indent(width=12) }}
+            {% endif %}
+            {{ call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters | length > 0) | indent(width=12) }}
+{% if procedure.return_type != 'void' %}            {{ return(procedure.return_type, procedure.return_set_client) | indent(width=12) }}
+            {% endif %}
+        }
+
+        {% endfor %}
+
+        {% for property_name,property in properties.items() %}
+        public {{ property.type }} {{ property_name }} {
+        {% if property.getter %}
+            get {
+                {{ call(service_name, property.getter, true, false) | indent(width=16) }}
+                {{ return(property.type, false) | indent(width=16) }}
+            }
+        {% endif %}
+        {% if property.setter %}
+            set {
+                {{ args([{'name': 'value', 'type': property.type}]) | indent(width=16) }}
+                {{ call(service_name, property.setter, false, true) | indent(width=16) }}
+            }
+        {% endif %}
+        }
+
+        {% endfor %}
+
+    }
+
+    {% for enum_name,values in enumerations.items() %}
+    public enum {{ enum_name }}
+    {
+        {% for value in values %}
+        {{ value.name }} = {{ value.value }}{% if not loop.last %},{% endif %}
+
+        {% endfor %}
+    }
+
+    {% endfor %}
+
+    {% for class_name,cls in classes.items() %}
+    public class {{ class_name }} : global::KRPC.Client.Object
+    {
+        public {{ class_name }} (global::KRPC.Client.Connection connection, UInt64 id) : base (connection, id)
+        {
+        }
+
+        {% for method_name,method in cls.methods.items() %}
+        public {{ method.return_type }} {{ method_name }} ({{ sig_parameters(method.parameters) }})
+        {
+            {{ args([{'name': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
+            {{ call(service_name, method.remote_name, method.return_type != 'void', true) | indent(width=12) }}
+{% if method.return_type != 'void' %}            {{ return(method.return_type, method.return_set_client) | indent(width=12) }}
+            {% endif %}
+        }
+
+        {% endfor %}
+
+        {% for method_name,method in cls.static_methods.items() %}
+        public static {{ method.return_type }} {{ method_name }} (Connection _connection, {{ sig_parameters(method.parameters) }})
+        {
+            {% if method.parameters | length > 0 %}            {{ args(method.parameters) | indent(width=12) }}
+            {% endif %}
+            {{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, true) | indent(width=12) }}
+{% if method.return_type != 'void' %}            {{ return(method.return_type, method.return_set_client, true) | indent(width=12) }}
+            {% endif %}
+        }
+
+        {% endfor %}
+
+        {% for property_name,property in cls.properties.items() %}
+        public {{ property.type }} {{ property_name }} {
+        {% if property.getter %}
+            get {
+                {{ args([{'name': 'this', 'type': service_name+'.'+class_name }]) | indent(width=16) }}
+                {{ call(service_name, property.getter, true, true) | indent(width=16) }}
+                {{ return(property.type, false) | indent(width=16) }}
+            }
+        {% endif %}
+        {% if property.setter %}
+            set {
+                {{ args([{'name': 'this', 'type': service_name+'.'+class_name }, {'name': 'value', 'type': property.type}]) | indent(width=16) }}
+                {{ call(service_name, property.setter, false, true) | indent(width=16) }}
+            }
+        {% endif %}
+        }
+
+        {% endfor %}
+    }
+
+    {% endfor %}
+
+}
