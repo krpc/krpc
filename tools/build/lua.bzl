@@ -61,7 +61,7 @@ def _test_impl(ctx):
         'ln -f -s %s luaunit.lua' % ctx.file._luaunit.short_path,
         'LUA_PATH="lua-tree/share/lua/'+_LUA_VERSION+'/?.lua;lua-tree/share/lua/'+_LUA_VERSION+'/?/init.lua;;" ' + \
         'LUA_CPATH="lua-tree/lib/lua/'+_LUA_VERSION+'/?.so;lua-tree/lib/lua/'+_LUA_VERSION+'/?/init.so;;" ' + \
-        'lua'+_LUA_VERSION+' lua-tree/share/lua/5.1/krpc/test/init.lua -v'
+        'lua'+_LUA_VERSION+' lua-tree/share/lua/'+_LUA_VERSION+'/krpc/test/init.lua -v'
     ])
     ctx.file_action(
         output = ctx.outputs.executable,
