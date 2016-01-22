@@ -75,8 +75,8 @@ http_file(
 
 http_file(
     name = 'python.sphinx-lua',
-    url = 'https://s3.amazonaws.com/krpc/sphinx-lua-0.1.1-1-g0508.tar.gz',
-    sha256 = 'e1f1695189fade6bc10c8852da55752d890de0a0f86ff28cb972a2d9bfb01ee9'
+    url = 'https://github.com/djungelorm/sphinx-lua/releases/download/0.1.2/sphinx-lua-0.1.2.tar.gz',
+    sha256 = '6907a309d6d71046222edde1e8cec683b875d7adc478edb97aeb2570c36b145f'
 )
 
 http_file(
