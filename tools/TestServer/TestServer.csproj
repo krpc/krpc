@@ -7,7 +7,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>TestServer</RootNamespace>
     <AssemblyName>TestServer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -31,9 +31,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\server\src\kRPC.csproj">
+    <ProjectReference Include="..\..\server\src\KRPC.csproj">
       <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
-      <Name>kRPC</Name>
+      <Name>KRPC</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

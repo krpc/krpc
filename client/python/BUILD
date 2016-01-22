@@ -11,7 +11,7 @@ py_sdist(
         '//protobuf:py',
         '//protobuf:py-test',
         '//tools/TestServer:TestServer',
-        '//server:kRPC',
+        '//server:KRPC',
         '//tools/build/protobuf:Google.Protobuf',
         '//tools/build/protobuf:LICENSE'
     ] + glob(['krpc/**/*']),

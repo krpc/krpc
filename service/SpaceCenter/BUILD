@@ -4,13 +4,13 @@ load('/config', 'version', 'copyright')
 
 filegroup(
     name = 'SpaceCenter',
-    srcs = [':kRPCSpaceCenter', ':ServiceDefinitions', 'LICENSE', 'CHANGES.txt'],
+    srcs = [':KRPC.SpaceCenter', ':ServiceDefinitions', 'LICENSE', 'CHANGES.txt'],
     visibility = ['//:__pkg__']
 )
 
 csharp_assembly_info(
     name = 'AssemblyInfo',
-    title = 'kRPCSpaceCenter',
+    title = 'KRPC.SpaceCenter',
     description = 'Basic services for kRPC',
     version = version,
     copyright = copyright,
@@ -18,14 +18,15 @@ csharp_assembly_info(
 )
 
 csharp_library(
-    name = 'kRPCSpaceCenter',
+    name = 'KRPC.SpaceCenter',
     srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
     deps = [
-        '//server:kRPC',
+        '//server:KRPC',
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib:UnityEngine', '//lib:Assembly-CSharp', '//lib:Assembly-CSharp-firstpass', '//lib:TDx.TDxInput',
-        '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
-        '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
+        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
+        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
+        '//lib-ksp:mscorlib', '//lib-ksp:System', '//lib-ksp:System.Core',
+        '//lib-ksp:System.Xml', '//lib-ksp:System.Xml.Linq'
     ],
     warn = 1, #TODO: relax this
     visibility = ['//visibility:public']
@@ -33,8 +34,8 @@ csharp_library(
 
 service_definitions(
     name = 'ServiceDefinitions',
-    assemblies = [':kRPCSpaceCenter'],
+    assemblies = [':KRPC.SpaceCenter'],
     service = 'SpaceCenter',
-    out = 'kRPCSpaceCenter.json',
+    out = 'KRPC.SpaceCenter.json',
     visibility = ['//visibility:public']
 )

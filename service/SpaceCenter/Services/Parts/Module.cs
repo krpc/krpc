@@ -3,7 +3,7 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
-namespace KRPCSpaceCenter.Services.Parts
+namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
     /// In KSP, each part has zero or more

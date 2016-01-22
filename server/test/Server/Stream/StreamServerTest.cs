@@ -6,7 +6,7 @@ using Moq;
 using KRPC.Server;
 using KRPC.Server.Stream;
 
-namespace KRPCTest.Server.Stream
+namespace KRPC.Test.Server.Stream
 {
     [TestFixture]
     public class StreamServerTest

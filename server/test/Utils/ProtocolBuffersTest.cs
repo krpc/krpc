@@ -1,10 +1,10 @@
 using System;
 using Google.Protobuf;
 using KRPC.Utils;
-using KRPCTest.Service;
+using KRPC.Test.Service;
 using NUnit.Framework;
 
-namespace KRPCTest.Utils
+namespace KRPC.Test.Utils
 {
     [TestFixture]
     public class ProtocolBuffersTest
@@ -14,7 +14,7 @@ namespace KRPCTest.Utils
         {
             Assert.AreEqual ("KRPC.Request", ProtocolBuffers.GetMessageTypeName (typeof(KRPC.Schema.KRPC.Request)));
             Assert.AreEqual ("KRPC.Response", ProtocolBuffers.GetMessageTypeName (typeof(KRPC.Schema.KRPC.Response)));
-            Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetMessageTypeName (typeof(Test.TestEnum)));
+            Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetMessageTypeName (typeof(global::Test.TestEnum)));
             Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetMessageTypeName (null));
             Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetMessageTypeName (typeof(string)));
             Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetMessageTypeName (typeof(ProtocolBuffersTest)));
@@ -23,7 +23,7 @@ namespace KRPCTest.Utils
         [Test]
         public void GetEnumTypeName ()
         {
-            Assert.AreEqual ("Test.TestEnum", ProtocolBuffers.GetEnumTypeName (typeof(Test.TestEnum)));
+            Assert.AreEqual ("Test.TestEnum", ProtocolBuffers.GetEnumTypeName (typeof(global::Test.TestEnum)));
             Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetEnumTypeName (typeof(KRPC.Schema.KRPC.Request)));
             Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetEnumTypeName (null));
             Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetEnumTypeName (typeof(string)));
@@ -50,7 +50,7 @@ namespace KRPCTest.Utils
             Assert.AreEqual ("bytes", ProtocolBuffers.GetValueTypeName (typeof(byte[])));
             Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetValueTypeName (typeof(KRPC.Schema.KRPC.Request)));
             Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetValueTypeName (typeof(KRPC.Schema.KRPC.Response)));
-            Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetValueTypeName (typeof(Test.TestEnum)));
+            Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetValueTypeName (typeof(global::Test.TestEnum)));
             Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetValueTypeName (null));
             Assert.Throws<ArgumentException> (() => ProtocolBuffers.GetValueTypeName (typeof(ProtocolBuffersTest)));
         }
@@ -60,7 +60,7 @@ namespace KRPCTest.Utils
         {
             Assert.IsTrue (ProtocolBuffers.IsAMessageType (typeof(KRPC.Schema.KRPC.Request)));
             Assert.IsTrue (ProtocolBuffers.IsAMessageType (typeof(KRPC.Schema.KRPC.Response)));
-            Assert.IsFalse (ProtocolBuffers.IsAMessageType (typeof(Test.TestEnum)));
+            Assert.IsFalse (ProtocolBuffers.IsAMessageType (typeof(global::Test.TestEnum)));
             Assert.IsFalse (ProtocolBuffers.IsAMessageType (null));
             Assert.IsFalse (ProtocolBuffers.IsAMessageType (typeof(string)));
             Assert.IsFalse (ProtocolBuffers.IsAMessageType (typeof(ProtocolBuffersTest)));
@@ -71,7 +71,7 @@ namespace KRPCTest.Utils
         {
             Assert.IsFalse (ProtocolBuffers.IsAnEnumType (typeof(KRPC.Schema.KRPC.Request)));
             Assert.IsFalse (ProtocolBuffers.IsAnEnumType (typeof(KRPC.Schema.KRPC.Response)));
-            Assert.IsTrue (ProtocolBuffers.IsAnEnumType (typeof(Test.TestEnum)));
+            Assert.IsTrue (ProtocolBuffers.IsAnEnumType (typeof(global::Test.TestEnum)));
             Assert.IsFalse (ProtocolBuffers.IsAnEnumType (typeof(TestService.CSharpEnumWithoutAttribute)));
             Assert.IsFalse (ProtocolBuffers.IsAnEnumType (null));
             Assert.IsFalse (ProtocolBuffers.IsAnEnumType (typeof(string)));
@@ -92,7 +92,7 @@ namespace KRPCTest.Utils
             Assert.IsTrue (ProtocolBuffers.IsAValueType (typeof(byte[])));
             Assert.IsFalse (ProtocolBuffers.IsAValueType (typeof(KRPC.Schema.KRPC.Request)));
             Assert.IsFalse (ProtocolBuffers.IsAValueType (typeof(KRPC.Schema.KRPC.Response)));
-            Assert.IsFalse (ProtocolBuffers.IsAValueType (typeof(Test.TestEnum)));
+            Assert.IsFalse (ProtocolBuffers.IsAValueType (typeof(global::Test.TestEnum)));
             Assert.IsFalse (ProtocolBuffers.IsAValueType (null));
             Assert.IsFalse (ProtocolBuffers.IsAValueType (typeof(ProtocolBuffersTest)));
         }
@@ -102,7 +102,7 @@ namespace KRPCTest.Utils
         {
             Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof(KRPC.Schema.KRPC.Request)));
             Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof(KRPC.Schema.KRPC.Response)));
-            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof(Test.TestEnum)));
+            Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof(global::Test.TestEnum)));
             Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof(double)));
             Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof(float)));
             Assert.IsTrue (ProtocolBuffers.IsAValidType (typeof(int)));

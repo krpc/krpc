@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using KRPC.Utils;
-using KRPCSpaceCenter.Services;
+using KRPC.SpaceCenter.Services;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using System.Linq;
 
-namespace KRPCSpaceCenter
+namespace KRPC.SpaceCenter
 {
     using Direction = Tuple<KRPC.Server.IClient, GameObject, LineRenderer, Vector3, float, ReferenceFrame>;
     using Line = Tuple<KRPC.Server.IClient, GameObject, LineRenderer, Vector3, Vector3, ReferenceFrame>;

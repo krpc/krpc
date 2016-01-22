@@ -14,9 +14,10 @@ csharp_binary(
     name = 'TestServer',
     srcs = glob(['**/*.cs']) + [':AssemblyInfo', '//protobuf:csharp-test'],
     deps = [
-        '//server:kRPC',
+        '//server:KRPC',
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib:UnityEngine', '//lib:Assembly-CSharp', '//lib:Assembly-CSharp-firstpass', '//lib:TDx.TDxInput',
+        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
+        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
         '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
         '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq',
         '//lib:Newtonsoft.Json'
@@ -30,9 +31,10 @@ csharp_library(
     name = 'TestService',
     srcs = glob(['Services/*.cs', 'Properties/*.cs']) + ['//protobuf:csharp-test'],
     deps = [
-        '//server:kRPC',
+        '//server:KRPC',
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib:UnityEngine', '//lib:Assembly-CSharp', '//lib:Assembly-CSharp-firstpass', '//lib:TDx.TDxInput',
+        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
+        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
         '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
         '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
     ],

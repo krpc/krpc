@@ -6,8 +6,8 @@
     <ProjectGuid>{3707639F-5EA3-461B-B939-587E51A25CCA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>KRPC</RootNamespace>
-    <AssemblyName>kRPC</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AssemblyName>KRPC</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -18,7 +18,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>bin\Debug\kRPC.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\KRPC.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -28,7 +28,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>bin\Release\kRPC.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\KRPC.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -41,16 +41,16 @@
       <HintPath>..\..\tools\build\protobuf\csharp\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

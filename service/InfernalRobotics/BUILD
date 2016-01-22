@@ -4,28 +4,29 @@ load('/config', 'version', 'copyright')
 
 filegroup(
     name = 'InfernalRobotics',
-    srcs = [':kRPCInfernalRobotics', ':ServiceDefinitions', 'CHANGES.txt'],
+    srcs = [':KRPC.InfernalRobotics', ':ServiceDefinitions', 'CHANGES.txt'],
     visibility = ['//:__pkg__']
 )
 
 csharp_assembly_info(
     name = 'AssemblyInfo',
-    title = 'kRPCInfernalRobotics',
+    title = 'KRPC.InfernalRobotics',
     description = 'Infernal Robotics service for kRPC',
     version = version,
     copyright = copyright
 )
 
 csharp_library(
-    name = 'kRPCInfernalRobotics',
+    name = 'KRPC.InfernalRobotics',
     srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
     deps = [
-        '//server:kRPC',
-        '//service/SpaceCenter:kRPCSpaceCenter',
+        '//server:KRPC',
+        '//service/SpaceCenter:KRPC.SpaceCenter',
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib:UnityEngine', '//lib:Assembly-CSharp', '//lib:Assembly-CSharp-firstpass', '//lib:TDx.TDxInput',
-        '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
-        '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
+        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
+        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
+        '//lib-ksp:mscorlib', '//lib-ksp:System', '//lib-ksp:System.Core',
+        '//lib-ksp:System.Xml', '//lib-ksp:System.Xml.Linq'
     ],
     warn = 1, #TODO: relax this
     visibility = ['//visibility:public']
@@ -33,8 +34,8 @@ csharp_library(
 
 service_definitions(
     name = 'ServiceDefinitions',
-    assemblies = [':kRPCInfernalRobotics'],
+    assemblies = [':KRPC.InfernalRobotics'],
     service = 'InfernalRobotics',
-    out = 'kRPCInfernalRobotics.json',
+    out = 'KRPC.InfernalRobotics.json',
     visibility = ['//visibility:public']
 )

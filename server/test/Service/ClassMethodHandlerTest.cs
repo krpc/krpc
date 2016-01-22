@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using KRPC.Service;
 
-namespace KRPCTest.Service
+namespace KRPC.Test.Service
 {
     [TestFixture]
     public class ClassMethodHandlerTest

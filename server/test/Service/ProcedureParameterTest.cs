@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using KRPC.Service;
 
-namespace KRPCTest.Service
+namespace KRPC.Test.Service
 {
     [TestFixture]
     public class ProcedureParameterTest

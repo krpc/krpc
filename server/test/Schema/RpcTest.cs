@@ -5,7 +5,7 @@ using NUnit.Framework;
 using KRPC.Schema.KRPC;
 using Test;
 
-namespace KRPCTest.Schema
+namespace KRPC.Test.Schema
 {
     [TestFixture]
     public class RpcTest

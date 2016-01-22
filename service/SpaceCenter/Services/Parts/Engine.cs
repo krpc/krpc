@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCSpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExtensionMethods;
 
-namespace KRPCSpaceCenter.Services.Parts
+namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
     /// Obtained by calling <see cref="Part.Engine"/>.

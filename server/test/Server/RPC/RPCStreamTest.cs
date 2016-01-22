@@ -6,7 +6,7 @@ using KRPC.Server.RPC;
 using KRPC.Schema.KRPC;
 using Google.Protobuf;
 
-namespace KRPCTest.Server.RPC
+namespace KRPC.Test.Server.RPC
 {
     [TestFixture]
     public class RPCStreamTest

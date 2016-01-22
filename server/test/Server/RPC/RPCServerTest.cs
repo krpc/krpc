@@ -7,7 +7,7 @@ using Moq;
 using KRPC.Server;
 using KRPC.Server.RPC;
 
-namespace KRPCTest.Server.RPC
+namespace KRPC.Test.Server.RPC
 {
     [TestFixture]
     public class RPCServerTest

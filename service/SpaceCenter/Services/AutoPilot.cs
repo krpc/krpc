@@ -5,12 +5,12 @@ using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCSpaceCenter.ExtensionMethods;
-using KRPCSpaceCenter.Utils;
+using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.Utils;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
-namespace KRPCSpaceCenter.Services
+namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// Provides basic auto-piloting utilities for a vessel.

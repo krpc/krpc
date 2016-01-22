@@ -1,9 +1,9 @@
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCKerbalAlarmClock.ExtensionMethods;
+using KRPC.KerbalAlarmClock.ExtensionMethods;
 
-namespace KRPCKerbalAlarmClock.Services
+namespace KRPC.KerbalAlarmClock.Services
 {
     /// <summary>
     /// Represents an alarm. Obtained by calling
@@ -122,10 +122,10 @@ namespace KRPCKerbalAlarmClock.Services
         /// The vessel that the alarm is attached to.
         /// </summary>
         [KRPCProperty]
-        public KRPCSpaceCenter.Services.Vessel Vessel {
+        public KRPC.SpaceCenter.Services.Vessel Vessel {
             get {
                 var vessel = FlightGlobals.Vessels.First (x => x.id.ToString () == alarm.VesselID);
-                return new KRPCSpaceCenter.Services.Vessel (vessel);
+                return new KRPC.SpaceCenter.Services.Vessel (vessel);
             }
             set {
                 alarm.VesselID = value.InternalVessel.id.ToString ();
@@ -136,10 +136,10 @@ namespace KRPCKerbalAlarmClock.Services
         /// The celestial body the vessel is departing from.
         /// </summary>
         [KRPCProperty]
-        public KRPCSpaceCenter.Services.CelestialBody XferOriginBody {
+        public KRPC.SpaceCenter.Services.CelestialBody XferOriginBody {
             get {
                 var body = FlightGlobals.Bodies.First (x => alarm.XferOriginBodyName == x.bodyName);
-                return new KRPCSpaceCenter.Services.CelestialBody (body);
+                return new KRPC.SpaceCenter.Services.CelestialBody (body);
             }
             set {
                 alarm.XferOriginBodyName = value.InternalBody.bodyName;
@@ -150,10 +150,10 @@ namespace KRPCKerbalAlarmClock.Services
         /// The celestial body the vessel is arriving at.
         /// </summary>
         [KRPCProperty]
-        public KRPCSpaceCenter.Services.CelestialBody XferTargetBody {
+        public KRPC.SpaceCenter.Services.CelestialBody XferTargetBody {
             get {
                 var body = FlightGlobals.Bodies.First (x => alarm.XferTargetBodyName == x.bodyName);
-                return new KRPCSpaceCenter.Services.CelestialBody (body);
+                return new KRPC.SpaceCenter.Services.CelestialBody (body);
             }
             set {
                 alarm.XferTargetBodyName = value.InternalBody.bodyName;

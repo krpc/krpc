@@ -4,9 +4,9 @@ using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCSpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExtensionMethods;
 
-namespace KRPCSpaceCenter.Services
+namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// Used to manipulate the controls of a vessel. This includes adjusting the

@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using NUnit.Framework;
 
-namespace KRPCTest.Server.Net
+namespace KRPC.Test.Server.Net
 {
     [TestFixture]
     public class AssumptionsTest

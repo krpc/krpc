@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System;
 using KRPC.Utils;
 
-namespace KRPCTest.Utils
+namespace KRPC.Test.Utils
 {
     [TestFixture]
     public class RoundRobinSchedulerTest

@@ -1,6 +1,6 @@
 using KRPC.Service.Attributes;
 
-namespace KRPCKerbalAlarmClock.Services
+namespace KRPC.KerbalAlarmClock.Services
 {
     /// <summary>
     /// The type of an alarm.

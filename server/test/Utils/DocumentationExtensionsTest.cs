@@ -5,7 +5,7 @@ using KRPC.Utils;
 using KRPC.Schema.KRPC;
 using NUnit.Framework;
 
-namespace KRPCTest.Utils
+namespace KRPC.Test.Utils
 {
     /// <summary>Class docs</summary>
     public class TestDocumentedClass
@@ -105,18 +105,18 @@ namespace KRPCTest.Utils
         [Test]
         public void TestGetDocumentationName ()
         {
-            Assert.AreEqual ("T:KRPCTest.Utils.TestDocumentedClass", DocumentationExtensions.GetDocumentationName (cls));
-            Assert.AreEqual ("T:KRPCTest.Utils.TestDocumentedStaticClass", DocumentationExtensions.GetDocumentationName (staticClass));
-            Assert.AreEqual ("M:KRPCTest.Utils.TestDocumentedClass.method", DocumentationExtensions.GetDocumentationName (method));
-            Assert.AreEqual ("M:KRPCTest.Utils.TestDocumentedClass.staticMethod", DocumentationExtensions.GetDocumentationName (staticMethod));
-            Assert.AreEqual ("P:KRPCTest.Utils.TestDocumentedClass.Property", DocumentationExtensions.GetDocumentationName (property));
+            Assert.AreEqual ("T:KRPC.Test.Utils.TestDocumentedClass", DocumentationExtensions.GetDocumentationName (cls));
+            Assert.AreEqual ("T:KRPC.Test.Utils.TestDocumentedStaticClass", DocumentationExtensions.GetDocumentationName (staticClass));
+            Assert.AreEqual ("M:KRPC.Test.Utils.TestDocumentedClass.method", DocumentationExtensions.GetDocumentationName (method));
+            Assert.AreEqual ("M:KRPC.Test.Utils.TestDocumentedClass.staticMethod", DocumentationExtensions.GetDocumentationName (staticMethod));
+            Assert.AreEqual ("P:KRPC.Test.Utils.TestDocumentedClass.Property", DocumentationExtensions.GetDocumentationName (property));
             Assert.AreEqual (
-                "M:KRPCTest.Utils.TestDocumentedClass.MethodArguments(" +
-                "System.Int32,System.String,KRPC.Utils.Tuple{System.Int32,System.Single,System.String},KRPC.Schema.KRPC.Response,KRPCTest.Utils.TestDocumentedClass.NestedClass" +
+                "M:KRPC.Test.Utils.TestDocumentedClass.MethodArguments(" +
+                "System.Int32,System.String,KRPC.Utils.Tuple{System.Int32,System.Single,System.String},KRPC.Schema.KRPC.Response,KRPC.Test.Utils.TestDocumentedClass.NestedClass" +
                 ")", DocumentationExtensions.GetDocumentationName (methodArguments));
-            Assert.AreEqual ("T:KRPCTest.Utils.TestDocumentedClass.NestedClass", DocumentationExtensions.GetDocumentationName (nestedClass));
-            Assert.AreEqual ("M:KRPCTest.Utils.TestDocumentedClass.NestedClass.method", DocumentationExtensions.GetDocumentationName (nestedClassMethod));
-            Assert.AreEqual ("P:KRPCTest.Utils.TestDocumentedClass.StaticProperty", DocumentationExtensions.GetDocumentationName (staticProperty));
+            Assert.AreEqual ("T:KRPC.Test.Utils.TestDocumentedClass.NestedClass", DocumentationExtensions.GetDocumentationName (nestedClass));
+            Assert.AreEqual ("M:KRPC.Test.Utils.TestDocumentedClass.NestedClass.method", DocumentationExtensions.GetDocumentationName (nestedClassMethod));
+            Assert.AreEqual ("P:KRPC.Test.Utils.TestDocumentedClass.StaticProperty", DocumentationExtensions.GetDocumentationName (staticProperty));
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace KRPCTest.Utils
         public void TestCrefDocumentation ()
         {
             Assert.AreEqual (
-                "<doc>\n<summary>Foo <see cref=\"T:KRPCTest.Utils.TestDocumentedClass.NestedClass\" /> bar.</summary>\n</doc>",
+                "<doc>\n<summary>Foo <see cref=\"T:KRPC.Test.Utils.TestDocumentedClass.NestedClass\" /> bar.</summary>\n</doc>",
                 crefDocumentation.GetDocumentation ());
         }
 

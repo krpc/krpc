@@ -1,6 +1,6 @@
 using System;
 
-namespace KRPCSpaceCenter.ExtensionMethods
+namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class ActionGroupExtensions
     {

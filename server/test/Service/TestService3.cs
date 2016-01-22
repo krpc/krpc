@@ -1,7 +1,7 @@
 using KRPC.Service.Attributes;
 using KRPC.Service;
 
-namespace KRPCTest.Service
+namespace KRPC.Test.Service
 {
     [KRPCService (Name = "TestService3Name", GameScene = GameScene.Editor)]
     public static class TestService3

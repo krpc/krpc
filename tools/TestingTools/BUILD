@@ -5,11 +5,12 @@ csharp_library(
     name = 'TestingTools',
     srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
     deps = [
-        '//server:kRPC',
-        '//service/SpaceCenter:kRPCSpaceCenter',
-        '//lib:UnityEngine', '//lib:Assembly-CSharp', '//lib:Assembly-CSharp-firstpass', '//lib:TDx.TDxInput',
-        '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
-        '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
+        '//server:KRPC',
+        '//service/SpaceCenter:KRPC.SpaceCenter',
+        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
+        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
+        '//lib-ksp:mscorlib', '//lib-ksp:System', '//lib-ksp:System.Core',
+        '//lib-ksp:System.Xml', '//lib-ksp:System.Xml.Linq'
     ],
     warn = 1, #TODO: relax this
     visibility = ['//visibility:public']

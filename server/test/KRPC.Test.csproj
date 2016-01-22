@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>KRPCTest</RootNamespace>
-    <AssemblyName>kRPCTest</AssemblyName>
+    <RootNamespace>KRPC.Test</RootNamespace>
+    <AssemblyName>KRPC.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,7 +17,7 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>bin\Debug\kRPCTest.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\KRPC.Test.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -25,32 +25,32 @@
     <OutputPath>bin\Release</OutputPath>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>bin\Release\kRPCTest.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\KRPC.Test.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\src\kRPC.csproj">
+    <ProjectReference Include="..\src\KRPC.csproj">
       <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
-      <Name>kRPC</Name>
+      <Name>KRPC</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\tools\build\protobuf\csharp\Google.Protobuf.dll</HintPath>
-    </Reference>
-    <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\bazel-krpc\external\csharp.nunit\NUnit-2.6.4\bin\framework\nunit.framework.dll</HintPath>

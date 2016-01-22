@@ -1,6 +1,6 @@
 using System;
 
-namespace KRPCSpaceCenter.ExternalAPI
+namespace KRPC.SpaceCenter.ExternalAPI
 {
     static class FAR
     {

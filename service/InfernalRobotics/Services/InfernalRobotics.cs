@@ -4,7 +4,7 @@ using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 
-namespace KRPCInfernalRobotics.Services
+namespace KRPC.InfernalRobotics.Services
 {
     /// <summary>
     /// This service provides functionality to interact with the

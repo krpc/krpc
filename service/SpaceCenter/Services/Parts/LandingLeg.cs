@@ -1,9 +1,9 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCSpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExtensionMethods;
 
-namespace KRPCSpaceCenter.Services.Parts
+namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
     /// See <see cref="LandingLeg.State"/>.

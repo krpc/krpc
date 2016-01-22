@@ -3,7 +3,7 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
-namespace KRPCInfernalRobotics.Services
+namespace KRPC.InfernalRobotics.Services
 {
     //TODO: rename to ServoGroup to make naming consistent
     /// <summary>

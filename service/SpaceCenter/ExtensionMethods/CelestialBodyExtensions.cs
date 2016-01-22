@@ -1,4 +1,4 @@
-namespace KRPCSpaceCenter.ExtensionMethods
+namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class CelestialBodyExtensions
     {

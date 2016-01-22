@@ -2,7 +2,7 @@ using NUnit.Framework;
 using KRPC.Utils;
 using System.Linq;
 
-namespace KRPCTest.Utils
+namespace KRPC.Test.Utils
 {
     [TestFixture]
     public class IEnumerableExtensionsTest

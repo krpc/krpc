@@ -1,7 +1,7 @@
-using KRPCSpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExtensionMethods;
 using UnityEngine;
 
-namespace KRPCSpaceCenter.Utils
+namespace KRPC.SpaceCenter.Utils
 {
     /// <summary>
     /// Robust, 3-parameter, proportional-integral-derivative controller

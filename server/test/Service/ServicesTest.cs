@@ -10,7 +10,7 @@ using KRPC.Utils;
 using Moq;
 using NUnit.Framework;
 
-namespace KRPCTest.Service
+namespace KRPC.Test.Service
 {
     [TestFixture]
     public class ServicesTest
@@ -584,15 +584,15 @@ namespace KRPCTest.Service
         [Test]
         public void HandleRequestSingleEnumArgNoReturn ()
         {
-            var arg = Test.TestEnum.b;
+            var arg = global::Test.TestEnum.b;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureEnumArg (It.IsAny<Test.TestEnum> ()))
-                .Callback ((Test.TestEnum x) => Assert.AreEqual (Test.TestEnum.b, x));
+            mock.Setup (x => x.ProcedureEnumArg (It.IsAny<global::Test.TestEnum> ()))
+                .Callback ((global::Test.TestEnum x) => Assert.AreEqual (global::Test.TestEnum.b, x));
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureEnumArg",
                               Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
             Run (request);
-            mock.Verify (x => x.ProcedureEnumArg (It.IsAny<Test.TestEnum> ()), Times.Once ());
+            mock.Verify (x => x.ProcedureEnumArg (It.IsAny<global::Test.TestEnum> ()), Times.Once ());
         }
 
         /// <summary>
@@ -602,12 +602,12 @@ namespace KRPCTest.Service
         public void HandleRequestNoArgEnumReturn ()
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureEnumReturn ()).Returns (Test.TestEnum.c);
+            mock.Setup (x => x.ProcedureEnumReturn ()).Returns (global::Test.TestEnum.c);
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "ProcedureEnumReturn"));
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (ProtocolBuffers.WriteValue ((int)Test.TestEnum.c, typeof(int)), response.ReturnValue);
+            Assert.AreEqual (ProtocolBuffers.WriteValue ((int)global::Test.TestEnum.c, typeof(int)), response.ReturnValue);
             mock.Verify (x => x.ProcedureEnumReturn (), Times.Once ());
         }
 

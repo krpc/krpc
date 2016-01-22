@@ -5,7 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using KRPC.Server.Net;
 
-namespace KRPCTest.Server.Net
+namespace KRPC.Test.Server.Net
 {
     [TestFixture]
     public class NetworkInformationTest

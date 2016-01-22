@@ -4,28 +4,29 @@ load('/config', 'version', 'copyright')
 
 filegroup(
     name = 'KerbalAlarmClock',
-    srcs = [':kRPCKerbalAlarmClock', ':ServiceDefinitions', 'CHANGES.txt'],
+    srcs = [':KRPC.KerbalAlarmClock', ':ServiceDefinitions', 'CHANGES.txt'],
     visibility = ['//:__pkg__']
 )
 
 csharp_assembly_info(
     name = 'AssemblyInfo',
-    title = 'kRPCKerbalAlarmClock',
+    title = 'KRPC.KerbalAlarmClock',
     description = 'Kerbal Alarm Clock service for kRPC',
     version = version,
     copyright = copyright
 )
 
 csharp_library(
-    name = 'kRPCKerbalAlarmClock',
+    name = 'KRPC.KerbalAlarmClock',
     srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
     deps = [
-        '//server:kRPC',
-        '//service/SpaceCenter:kRPCSpaceCenter',
+        '//server:KRPC',
+        '//service/SpaceCenter:KRPC.SpaceCenter',
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib:UnityEngine', '//lib:Assembly-CSharp', '//lib:Assembly-CSharp-firstpass', '//lib:TDx.TDxInput',
-        '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
-        '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
+        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
+        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
+        '//lib-ksp:mscorlib', '//lib-ksp:System', '//lib-ksp:System.Core',
+        '//lib-ksp:System.Xml', '//lib-ksp:System.Xml.Linq'
     ],
     warn = 1, #TODO: relax this
     visibility = ['//visibility:public']
@@ -33,8 +34,8 @@ csharp_library(
 
 service_definitions(
     name = 'ServiceDefinitions',
-    assemblies = ['//service/SpaceCenter:kRPCSpaceCenter', ':kRPCKerbalAlarmClock'],
+    assemblies = ['//service/SpaceCenter:KRPC.SpaceCenter', ':KRPC.KerbalAlarmClock'],
     service = 'KerbalAlarmClock',
-    out = 'kRPCKerbalAlarmClock.json',
+    out = 'KRPC.KerbalAlarmClock.json',
     visibility = ['//visibility:public']
 )

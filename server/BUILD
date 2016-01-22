@@ -5,13 +5,13 @@ load('/config', 'version', 'copyright')
 
 filegroup(
     name = 'server',
-    srcs = [':version', 'CHANGES.txt', ':kRPC', ':ServiceDefinitions', ':icons'],
+    srcs = [':version', 'CHANGES.txt', ':KRPC', ':ServiceDefinitions', ':icons'],
     visibility = ['//:__pkg__']
 )
 
 filegroup(
     name = 'test',
-    srcs = [':kRPCTest'],
+    srcs = [':KRPC.Test'],
     visibility = ['//:__pkg__']
 )
 
@@ -23,21 +23,22 @@ genrule(
 
 csharp_assembly_info(
     name = 'AssemblyInfo',
-    title = 'kRPC',
+    title = 'KRPC',
     description = 'RPC server for Kerbal Space Program',
     copyright = copyright,
     version = version,
-    internals_visible_to = ['kRPCTest', 'TestServer', 'ServiceDefinitions', 'DynamicProxyGenAssembly2']
+    internals_visible_to = ['KRPC.Test', 'TestServer', 'ServiceDefinitions', 'DynamicProxyGenAssembly2']
 )
 
 csharp_library(
-    name = 'kRPC',
+    name = 'KRPC',
     srcs = glob(['src/**/*.cs']) + [':AssemblyInfo', '//protobuf:csharp'],
     deps = [
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib:UnityEngine', '//lib:Assembly-CSharp', '//lib:Assembly-CSharp-firstpass', '//lib:TDx.TDxInput',
-        '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
-        '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
+        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
+        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
+        '//lib-ksp:mscorlib', '//lib-ksp:System', '//lib-ksp:System.Core',
+        '//lib-ksp:System.Xml', '//lib-ksp:System.Xml.Linq'
     ],
     warn = 1, #TODO: relax this,
     visibility = ['//visibility:public']
@@ -45,9 +46,9 @@ csharp_library(
 
 service_definitions(
     name = 'ServiceDefinitions',
-    assemblies = [':kRPC'],
+    assemblies = [':KRPC'],
     service = 'KRPC',
-    out = 'kRPC.json',
+    out = 'KRPC.json',
     visibility = ['//visibility:public']
 )
 
@@ -57,13 +58,14 @@ png_images(
 )
 
 csharp_nunit_test(
-    name = 'kRPCTest',
+    name = 'KRPC.Test',
     srcs = glob(['test/**/*.cs']) + ['//protobuf:csharp-test'],
     deps = [
-        '//server:kRPC',
+        '//server:KRPC',
         '//lib:Moq',
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib:UnityEngine', '//lib:Assembly-CSharp', '//lib:Assembly-CSharp-firstpass', '//lib:TDx.TDxInput',
+        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
+        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
         '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
         '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
     ],

@@ -1,6 +1,6 @@
 using KRPC.Service.Attributes;
 
-namespace KRPCSpaceCenter.Services
+namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// The behavior of the SAS auto-pilot. See <see cref="AutoPilot.SASMode"/>.

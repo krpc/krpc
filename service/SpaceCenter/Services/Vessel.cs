@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCSpaceCenter.ExtensionMethods;
-using KRPCSpaceCenter.ExternalAPI;
+using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExternalAPI;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
-namespace KRPCSpaceCenter.Services
+namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// See <see cref="Vessel.Type"/>.

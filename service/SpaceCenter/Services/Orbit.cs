@@ -1,9 +1,9 @@
 using System;
 using KRPC.Service.Attributes;
-using KRPCSpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 
-namespace KRPCSpaceCenter.Services
+namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// Describes an orbit. For example, the orbit of a vessel, obtained by calling

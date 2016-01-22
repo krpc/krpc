@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCSpaceCenter.ExtensionMethods;
-using KRPCSpaceCenter.Services.Parts;
+using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.Services.Parts;
 
-namespace KRPCSpaceCenter.Services.Parts
+namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
     /// Instances of this class are used to interact with the parts of a vessel.

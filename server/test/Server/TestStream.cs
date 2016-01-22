@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using KRPC.Server;
 
-namespace KRPCTest.Server
+namespace KRPC.Test.Server
 {
     public class TestStream : IStream<byte,byte>
     {

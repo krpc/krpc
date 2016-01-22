@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using KRPC.Continuations;
 
-namespace KRPCTest.Continuations
+namespace KRPC.Test.Continuations
 {
     [TestFixture]
     public class ParameterizedContinuationTest

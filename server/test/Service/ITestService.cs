@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using KRPC.Schema.KRPC;
 using Test;
 
-namespace KRPCTest.Service
+namespace KRPC.Test.Service
 {
     public interface ITestService
     {
@@ -36,9 +36,9 @@ namespace KRPCTest.Service
 
         void ProcedureOptionalNullArg (TestService.TestClass x);
 
-        void ProcedureEnumArg (Test.TestEnum x);
+        void ProcedureEnumArg (global::Test.TestEnum x);
 
-        Test.TestEnum ProcedureEnumReturn ();
+        global::Test.TestEnum ProcedureEnumReturn ();
 
         void ProcedureCSharpEnumArg (TestService.CSharpEnum x);
 

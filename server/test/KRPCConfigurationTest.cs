@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System.Net;
 using KRPC;
 
-namespace KRPCTest
+namespace KRPC.Test
 {
     [TestFixture]
     public class KRPCConfigurationTest

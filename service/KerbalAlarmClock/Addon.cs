@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace KRPCKerbalAlarmClock
+namespace KRPC.KerbalAlarmClock
 {
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class Addon : MonoBehaviour

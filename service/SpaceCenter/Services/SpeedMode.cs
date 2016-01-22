@@ -1,6 +1,6 @@
 using KRPC.Service.Attributes;
 
-namespace KRPCSpaceCenter.Services
+namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// See <see cref="Control.SpeedMode"/>.

@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace KRPCTest.Utils
+namespace KRPC.Test.Utils
 {
     class MyEquatable : KRPC.Utils.Equatable<MyEquatable>
     {

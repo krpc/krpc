@@ -1,8 +1,8 @@
 using System;
-using KRPCSpaceCenter.Services;
+using KRPC.SpaceCenter.Services;
 using UnityEngine;
 
-namespace KRPCSpaceCenter.Utils
+namespace KRPC.SpaceCenter.Utils
 {
     /// <summary>
     /// Controller that aims to get the vessel to rotate with a target rotational velocity.

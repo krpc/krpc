@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using KRPC.Schema.KRPC;
 
-namespace KRPCTest.Service
+namespace KRPC.Test.Service
 {
     [TestFixture]
     public class KRPCTest

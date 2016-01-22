@@ -1,7 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
 
-namespace KRPCTest.Service.Scanner
+namespace KRPC.Test.Service.Scanner
 {
     [TestFixture]
     public class ScannerTest

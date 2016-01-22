@@ -5,8 +5,8 @@ exports_files(['COPYING', 'COPYING.LESSER'])
 
 license_text = """This license (LGPL v3) applies to all parts of kRPC except for the following:
 
-  - GameData/kRPC/kRPCSpaceCenter.* is under the GPLv3 license.
-    See LICENSE.kRPCSpaceCenter
+  - GameData/kRPC/KRPC.SpaceCenter.* is under the GPLv3 license.
+    See LICENSE.KRPC.SpaceCenter
 
   - GameData/kRPC/Google.Protobuf.dll is a binary from Google's protobuf project.
     See LICENSE.Google.Protobuf
@@ -93,7 +93,7 @@ package_archive(
         'service/InfernalRobotics/': 'GameData/kRPC/',
         'tools/build/protobuf/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
-        'service/SpaceCenter/LICENSE': 'LICENSE.kRPCSpaceCenter',
+        'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
         # Schema
         'protobuf/': 'schema/',
         # Docs
@@ -104,7 +104,7 @@ package_archive(
 test_suite(
     name = 'test',
     tests = [
-        '//server:kRPCTest',
+        '//server:KRPC.Test',
         '//client/python:test',
         '//client/cpp:test',
         '//client/lua:test'

@@ -1,7 +1,7 @@
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
-namespace KRPCInfernalRobotics.Services
+namespace KRPC.InfernalRobotics.Services
 {
     /// <summary>
     /// Represents a servo. Obtained using

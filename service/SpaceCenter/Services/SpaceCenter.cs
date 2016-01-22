@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
-using KRPCSpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExtensionMethods;
 using UnityEngine;
 using Tuple2 = KRPC.Utils.Tuple<double, double>;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
-namespace KRPCSpaceCenter.Services
+namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// Returned by <see cref="SpaceCenter.WarpMode"/>

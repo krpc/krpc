@@ -2,9 +2,9 @@ using System;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCSpaceCenter.ExternalAPI;
+using KRPC.SpaceCenter.ExternalAPI;
 
-namespace KRPCSpaceCenter.Services
+namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// Used to interact with RemoteTech.

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace KRPCInfernalRobotics
+namespace KRPC.InfernalRobotics
 {
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class Addon : MonoBehaviour

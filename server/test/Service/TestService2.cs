@@ -1,6 +1,6 @@
 using KRPC.Service.Attributes;
 
-namespace KRPCTest.Service
+namespace KRPC.Test.Service
 {
     /// <summary>
     /// TestService2 documentation.

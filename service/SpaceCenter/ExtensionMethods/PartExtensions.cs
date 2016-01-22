@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace KRPCSpaceCenter.ExtensionMethods
+namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class PartExtensions
     {

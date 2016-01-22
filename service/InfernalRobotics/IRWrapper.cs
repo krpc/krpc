@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace KRPCInfernalRobotics
+namespace KRPC.InfernalRobotics
 {
     public class IRWrapper
     {

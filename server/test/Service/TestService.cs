@@ -3,7 +3,7 @@ using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Schema.KRPC;
 
-namespace KRPCTest.Service
+namespace KRPC.Test.Service
 {
     /// <summary>
     /// Test service documentation.
@@ -153,13 +153,13 @@ namespace KRPCTest.Service
         }
 
         [KRPCProcedure]
-        public static void ProcedureEnumArg (Test.TestEnum x)
+        public static void ProcedureEnumArg (global::Test.TestEnum x)
         {
             Service.ProcedureEnumArg (x);
         }
 
         [KRPCProcedure]
-        public static Test.TestEnum ProcedureEnumReturn ()
+        public static global::Test.TestEnum ProcedureEnumReturn ()
         {
             return Service.ProcedureEnumReturn ();
         }

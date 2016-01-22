@@ -3,18 +3,18 @@ using System.Linq;
 using NUnit.Framework;
 using KRPC.Utils;
 using KRPC.Service.Attributes;
-using KRPCTest.Service;
+using KRPC.Test.Service;
 
-namespace KRPCTest.Utils
+namespace KRPC.Test.Utils
 {
-    // TODO: relies on test fixtures from KRPCTest.Service, so these tests are not self contained
+    // TODO: relies on test fixtures from KRPC.Test.Service, so these tests are not self contained
     [TestFixture]
     public class ReflectionTest
     {
         [Test]
         public void GetTypeByName ()
         {
-            Assert.AreEqual (typeof(ReflectionTest), Reflection.GetType ("KRPCTest.Utils.ReflectionTest"));
+            Assert.AreEqual (typeof(ReflectionTest), Reflection.GetType ("KRPC.Test.Utils.ReflectionTest"));
         }
 
         [Test]

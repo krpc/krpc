@@ -1,9 +1,9 @@
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCSpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
-namespace KRPCSpaceCenter.Services
+namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// Represents a maneuver node. Can be created using <see cref="Control.AddNode"/>.

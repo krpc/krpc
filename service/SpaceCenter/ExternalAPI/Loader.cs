@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace KRPCSpaceCenter.ExternalAPI
+namespace KRPC.SpaceCenter.ExternalAPI
 {
     /// <summary>
     /// Addon to load external APIs

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Server;
-using KRPCSpaceCenter.ExtensionMethods;
-using KRPCSpaceCenter.ExternalAPI;
+using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExternalAPI;
 using UnityEngine;
 
-namespace KRPCSpaceCenter
+namespace KRPC.SpaceCenter
 {
     /// <summary>
     /// Addon to update a vessels control inputs.

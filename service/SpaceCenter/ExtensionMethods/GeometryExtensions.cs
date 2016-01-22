@@ -3,7 +3,7 @@ using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
-namespace KRPCSpaceCenter.ExtensionMethods
+namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class GeometryExtensions
     {

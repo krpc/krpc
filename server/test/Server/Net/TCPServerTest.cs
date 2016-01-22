@@ -5,7 +5,7 @@ using NUnit.Framework;
 using KRPC.Server.Net;
 using System;
 
-namespace KRPCTest.Server.Net
+namespace KRPC.Test.Server.Net
 {
     [TestFixture]
     public class TCPServerTest

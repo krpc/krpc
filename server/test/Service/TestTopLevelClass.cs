@@ -1,6 +1,6 @@
 using KRPC.Service.Attributes;
 
-namespace KRPCTest.Service
+namespace KRPC.Test.Service
 {
     /// <summary>
     /// A class defined at the top level, but included in a service

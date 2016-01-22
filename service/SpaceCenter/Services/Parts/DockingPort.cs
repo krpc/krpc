@@ -3,11 +3,11 @@ using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPCSpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
-namespace KRPCSpaceCenter.Services.Parts
+namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
     /// See <see cref="DockingPort.State"/>.
