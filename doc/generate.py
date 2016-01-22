@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import argparse
 import glob
 import os
@@ -89,7 +87,7 @@ def main():
                         help='Path to Python macros template file')
     parser.add_argument('--cpp-macros', action='store', default='lib/cpp.tmpl',
                         help='Path to C++ macros template file')
-    parser.add_argument('--lua-macros', action='store', default='lib/python.tmpl',
+    parser.add_argument('--lua-macros', action='store', default='lib/lua.tmpl',
                         help='Path to Lua macros template file')
     args = parser.parse_args()
 

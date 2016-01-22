@@ -95,7 +95,7 @@ generate = rule(
                                               allow_files=True, single_file=True),
         '_generate_cpp_macros': attr.label(default=Label('//doc:lib/cpp.tmpl'),
                                            allow_files=True, single_file=True),
-        '_generate_lua_macros': attr.label(default=Label('//doc:lib/python.tmpl'),
+        '_generate_lua_macros': attr.label(default=Label('//doc:lib/lua.tmpl'),
                                            allow_files=True, single_file=True),
         '_generate_order': attr.label(default=Label('//doc:order.txt'),
                                       allow_files=True, single_file=True),
