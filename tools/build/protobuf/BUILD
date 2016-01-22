@@ -22,13 +22,13 @@ filegroup(
 
 java_import(
     name = 'protobuf',
-    jars = ['protobuf/protobuf-java-3.0.0-alpha-3.jar'],
+    jars = ['protobuf-java-3.0.0-beta-2.jar'],
 )
 
 # For bootstrapping JavaBuilder
 filegroup(
     name = 'protobuf-jars',
-    srcs = ['protobuf/protobuf-java-3.0.0-alpha-3.jar'],
+    srcs = ['protobuf-java-3.0.0-beta-2.jar'],
 )
 
 config_setting(

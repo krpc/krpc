@@ -1,0 +1,2 @@
+Google.Protobuf.dll was modified to build with .NET 3.5 support
+Source code is at http://github.com/djungelorm/protobuf
