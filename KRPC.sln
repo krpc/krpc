@@ -17,20 +17,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefinitions", "tools
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Test", "server\test\KRPC.Test.csproj", "{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Client", "client\csharp\src\KRPC.Client.csproj", "{5D390973-8F07-4B28-827F-FB3A1E739FD7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Client.Test", "client\csharp\test\KRPC.Client.Test.csproj", "{2E186057-56B2-499B-BFE8-C414FF24E55F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2E186057-56B2-499B-BFE8-C414FF24E55F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E186057-56B2-499B-BFE8-C414FF24E55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E186057-56B2-499B-BFE8-C414FF24E55F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E186057-56B2-499B-BFE8-C414FF24E55F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3707639F-5EA3-461B-B939-587E51A25CCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3707639F-5EA3-461B-B939-587E51A25CCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3707639F-5EA3-461B-B939-587E51A25CCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -43,10 +35,6 @@ Global
 		{48205F2E-3CEE-4480-873A-DEAFCD291407}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48205F2E-3CEE-4480-873A-DEAFCD291407}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48205F2E-3CEE-4480-873A-DEAFCD291407}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D390973-8F07-4B28-827F-FB3A1E739FD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D390973-8F07-4B28-827F-FB3A1E739FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D390973-8F07-4B28-827F-FB3A1E739FD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D390973-8F07-4B28-827F-FB3A1E739FD7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
