@@ -40,8 +40,8 @@ client_test(
     name = 'test',
     test_executable = ':luatest',
     server_executable = '//tools/TestServer',
-    rpc_port = '50010',
-    stream_port = '50011',
+    rpc_port = '50014',
+    stream_port = '50015',
     tags = ['requires-network'],
     size = 'small'
 )
@@ -56,5 +56,6 @@ lua_test(
         '@lua.penlight//file',
         '@lua.protobuf//file'
     ],
+    tags = ['requires-network'],
     size = 'small'
 )

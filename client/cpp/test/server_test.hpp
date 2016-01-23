@@ -20,7 +20,7 @@ inline server_test::server_test():
   test_service(&conn) {}
 
 inline krpc::Client server_test::connect() {
-  return krpc::connect("TestClient", "127.0.0.1", 50010, 50011);
+  return krpc::connect("C++ClientTest", "localhost", 50016, 50017);
 }
 
 #endif

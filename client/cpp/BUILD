@@ -72,8 +72,8 @@ client_test(
     name = 'test',
     test_executable = ':cpptest',
     server_executable = '//tools/TestServer',
-    rpc_port = '50010',
-    stream_port = '50011',
+    rpc_port = '50016',
+    stream_port = '50017',
     tags = ['requires-network'],
     size = 'small'
 )
