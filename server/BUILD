@@ -9,9 +9,9 @@ filegroup(
     visibility = ['//:__pkg__']
 )
 
-filegroup(
+test_suite(
     name = 'test',
-    srcs = [':KRPC.Test'],
+    tests = [':KRPC.Test'],
     visibility = ['//:__pkg__']
 )
 

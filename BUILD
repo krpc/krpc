@@ -104,7 +104,7 @@ package_archive(
 test_suite(
     name = 'test',
     tests = [
-        '//server:KRPC.Test',
+        '//server:test',
         '//client/python:test',
         '//client/cpp:test',
         '//client/lua:test'
