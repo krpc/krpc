@@ -47,7 +47,7 @@ staging of the active vessel:
        public static class LaunchControl {
 
            [KRPCProperty]
-           public static void Throttle {
+           public static float Throttle {
                get { return FlightInputHandler.state.mainThrottle; }
                set { FlightInputHandler.state.mainThrottle = value; }
            }

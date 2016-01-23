@@ -93,6 +93,8 @@
     <Compile Include="Services\Parts\Parts.cs" />
     <Compile Include="Services\Parts\Radiator.cs" />
     <Compile Include="Services\Parts\ReactionWheel.cs" />
+    <Compile Include="Services\Parts\ResourceConverter.cs" />
+    <Compile Include="Services\Parts\ResourceHarvester.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />
     <Compile Include="Services\Parts\SolarPanel.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />

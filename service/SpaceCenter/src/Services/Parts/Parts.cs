@@ -144,6 +144,22 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all resource converters in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<ResourceConverter> ResourceConverters {
+            get { return All.Where (part => part.IsResourceConverter).Select (part => part.ResourceConverter).ToList (); }
+        }
+
+        /// <summary>
+        /// A list of all resource harvesters in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<ResourceHarvester> ResourceHarvesters {
+            get { return All.Where (part => part.IsResourceHarvester).Select (part => part.ResourceHarvester).ToList (); }
+        }
+
+        /// <summary>
         /// The first docking port in the vessel with the given port name, as returned by <see cref="DockingPort.Name"/>.
         /// Returns <c>null</c> if there are no such docking ports.
         /// </summary>
