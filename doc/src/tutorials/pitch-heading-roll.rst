@@ -1,3 +1,5 @@
+.. currentmodule:: SpaceCenter
+
 Pitch, Heading and Roll
 =======================
 
