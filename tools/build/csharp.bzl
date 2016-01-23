@@ -75,16 +75,16 @@ def _bin_impl(ctx):
         command = '%s %s' % (cmd, ' '.join(args))
     )
 
-    content = 'mkdir -p $0.runfiles\n'
-    for dep in ctx.files.deps:
-        content += 'ln -f -s %s $0.runfiles/%s\n' % (dep.short_path, dep.basename)
-    content += 'ln -f -s ../%s $0.runfiles/%s\n' % (bin_output.basename, bin_output.basename)
-    content += '/usr/bin/mono $0.runfiles/%s "$@" %s\n' % (bin_output.basename, ' '.join(ctx.attr.runargs))
+    runfiles = outputs + ctx.files.deps
+    sub_commands = ['mkdir -p $0.runfiles']
+    for dep in runfiles:
+        sub_commands.append('ln -f -s %s $0.runfiles/%s' % (dep.short_path, dep.basename))
+    sub_commands.append('/usr/bin/mono $0.runfiles/%s "$@" %s' % (bin_output.basename, ' '.join(ctx.attr.runargs)))
     ctx.file_action(
         ctx.outputs.executable,
-        content
+        ' && \\\n'.join(sub_commands)+'\n'
     )
-    runfiles = ctx.runfiles(files = ctx.files.deps)
+    runfiles = ctx.runfiles(files = runfiles)
 
     return struct(
         name = ctx.label.name,
