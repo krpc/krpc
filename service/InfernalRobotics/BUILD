@@ -23,10 +23,15 @@ csharp_library(
         '//server:KRPC',
         '//service/SpaceCenter:KRPC.SpaceCenter',
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
-        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
-        '//lib-ksp:mscorlib', '//lib-ksp:System', '//lib-ksp:System.Core',
-        '//lib-ksp:System.Xml', '//lib-ksp:System.Xml.Linq'
+        '//tools/build/ksp:Assembly-CSharp',
+        '//tools/build/ksp:Assembly-CSharp-firstpass',
+        '//tools/build/ksp:UnityEngine',
+        '//tools/build/ksp:TDx.TDxInput',
+        '//tools/build/ksp:mscorlib',
+        '//tools/build/ksp:System',
+        '//tools/build/ksp:System.Core',
+        '//tools/build/ksp:System.Xml',
+        '//tools/build/ksp:System.Xml.Linq'
     ],
     warn = 1, #TODO: relax this
     visibility = ['//visibility:public']

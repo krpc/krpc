@@ -16,11 +16,18 @@ csharp_binary(
     deps = [
         '//server:KRPC',
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
-        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
-        '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
-        '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq',
-        '//lib:Newtonsoft.Json'
+        '//tools/build/ksp:Assembly-CSharp',
+        '//tools/build/ksp:Assembly-CSharp-firstpass',
+        '//tools/build/ksp:UnityEngine',
+        '//tools/build/ksp:TDx.TDxInput',
+        '//tools/build/mono-4.5:mscorlib',
+        '//tools/build/mono-4.5:System',
+        '//tools/build/mono-4.5:System.Core',
+        '//tools/build/mono-4.5:System.Runtime',
+        '//tools/build/mono-4.5:System.IO',
+        '//tools/build/mono-4.5:System.Xml',
+        '//tools/build/mono-4.5:System.Xml.Linq',
+        '//tools/build/mono-4.5:Newtonsoft.Json'
     ],
     warn = 1, #TODO: relax this
     runargs = ['50000', '50001', '--debug'],
@@ -33,10 +40,17 @@ csharp_library(
     deps = [
         '//server:KRPC',
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
-        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
-        '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
-        '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
+        '//tools/build/ksp:Assembly-CSharp',
+        '//tools/build/ksp:Assembly-CSharp-firstpass',
+        '//tools/build/ksp:UnityEngine',
+        '//tools/build/ksp:TDx.TDxInput',
+        '//tools/build/mono-4.5:mscorlib',
+        '//tools/build/mono-4.5:System',
+        '//tools/build/mono-4.5:System.Core',
+        '//tools/build/mono-4.5:System.Runtime',
+        '//tools/build/mono-4.5:System.IO',
+        '//tools/build/mono-4.5:System.Xml',
+        '//tools/build/mono-4.5:System.Xml.Linq'
     ],
     warn = 1, #TODO: relax this
 )

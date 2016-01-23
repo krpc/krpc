@@ -35,10 +35,15 @@ csharp_library(
     srcs = glob(['src/**/*.cs']) + [':AssemblyInfo', '//protobuf:csharp'],
     deps = [
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
-        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
-        '//lib-ksp:mscorlib', '//lib-ksp:System', '//lib-ksp:System.Core',
-        '//lib-ksp:System.Xml', '//lib-ksp:System.Xml.Linq'
+        '//tools/build/ksp:Assembly-CSharp',
+        '//tools/build/ksp:Assembly-CSharp-firstpass',
+        '//tools/build/ksp:UnityEngine',
+        '//tools/build/ksp:TDx.TDxInput',
+        '//tools/build/ksp:mscorlib',
+        '//tools/build/ksp:System',
+        '//tools/build/ksp:System.Core',
+        '//tools/build/ksp:System.Xml',
+        '//tools/build/ksp:System.Xml.Linq'
     ],
     warn = 1, #TODO: relax this,
     visibility = ['//visibility:public']
@@ -62,12 +67,19 @@ csharp_nunit_test(
     srcs = glob(['test/**/*.cs']) + ['//protobuf:csharp-test'],
     deps = [
         '//server:KRPC',
-        '//lib:Moq',
+        '//tools/build/mono-4.5:Moq',
         '//tools/build/protobuf:Google.Protobuf',
-        '//lib-ksp:Assembly-CSharp', '//lib-ksp:Assembly-CSharp-firstpass',
-        '//lib-ksp:UnityEngine', '//lib-ksp:TDx.TDxInput',
-        '//lib:mscorlib', '//lib:System', '//lib:System.Core', '//lib:System.Runtime',
-        '//lib:System.IO', '//lib:System.Xml', '//lib:System.Xml.Linq'
+        '//tools/build/ksp:Assembly-CSharp',
+        '//tools/build/ksp:Assembly-CSharp-firstpass',
+        '//tools/build/ksp:UnityEngine',
+        '//tools/build/ksp:TDx.TDxInput',
+        '//tools/build/mono-4.5:mscorlib',
+        '//tools/build/mono-4.5:System',
+        '//tools/build/mono-4.5:System.Core',
+        '//tools/build/mono-4.5:System.Runtime',
+        '//tools/build/mono-4.5:System.IO',
+        '//tools/build/mono-4.5:System.Xml',
+        '//tools/build/mono-4.5:System.Xml.Linq'
     ],
     warn = 1, #TODO: relax this
     size = 'small'

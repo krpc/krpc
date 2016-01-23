@@ -1,14 +1,20 @@
-load('/tools/build/csharp', 'csharp_reference')
+exports_files ([
+    'mono-4.5/mscorlib.dll',
+    'mono-4.5/System.dll',
+    'mono-4.5/System.Core.dll',
+    'mono-4.5/Facades/System.Runtime.dll',
+    'mono-4.5/Facades/System.IO.dll',
+    'mono-4.5/System.Xml.dll',
+    'mono-4.5/System.Xml.Linq.dll',
 
-package(default_visibility = ['//visibility:public'])
+    'ksp/KSP_Data/Managed/UnityEngine.dll',
+    'ksp/KSP_Data/Managed/Assembly-CSharp.dll',
+    'ksp/KSP_Data/Managed/Assembly-CSharp-firstpass.dll',
+    'ksp/KSP_Data/Managed/TDx.TDxInput.dll',
 
-csharp_reference(name = 'mscorlib', file = ':mono-4.5/mscorlib.dll')
-csharp_reference(name = 'System', file = ':mono-4.5/System.dll')
-csharp_reference(name = 'System.Core', file = ':mono-4.5/System.Core.dll')
-csharp_reference(name = 'System.Runtime', file = ':mono-4.5/Facades/System.Runtime.dll')
-csharp_reference(name = 'System.IO', file = ':mono-4.5/Facades/System.IO.dll')
-csharp_reference(name = 'System.Xml', file = ':mono-4.5/System.Xml.dll')
-csharp_reference(name = 'System.Xml.Linq', file = ':mono-4.5/System.Xml.Linq.dll')
-
-csharp_reference(name = 'Newtonsoft.Json', file = '@csharp.json//:Bin/Net40/Newtonsoft.Json.dll')
-csharp_reference(name = 'Moq', file = '@csharp.moq//:lib/net40/Moq.dll')
+    'ksp/KSP_Data/Managed/mscorlib.dll',
+    'ksp/KSP_Data/Managed/System.dll',
+    'ksp/KSP_Data/Managed/System.Core.dll',
+    'ksp/KSP_Data/Managed/System.Xml.dll',
+    'ksp/KSP_Data/Managed/System.Xml.Linq.dll'
+])
