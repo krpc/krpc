@@ -117,5 +117,7 @@
     <Compile Include="Services\Parts\Radiator.cs" />
     <Compile Include="Utils\PIDController.cs" />
     <Compile Include="Utils\RotationRateController.cs" />
+    <Compile Include="Services\Parts\ResourceConverter.cs" />
+    <Compile Include="Services\Parts\ResourceHarvester.cs" />
   </ItemGroup>
 </Project>
