@@ -6,10 +6,14 @@ from krpc.decoder import Decoder
 
 types = Types()
 
+sort_members_failed = []
+
 def sort_members(members, ordering):
     def key_fn((name,member)):
         if member.fullname not in ordering:
-            raise RuntimeError('Don\'t know how to order %s' % member.fullname)
+            global sort_members_failed
+            sort_members_failed.append(member.fullname)
+            return 0
         else:
             return ordering.index(member.fullname)
     return collections.OrderedDict(sorted(members.items(), key=key_fn))

@@ -65,6 +65,11 @@ def process_file(args, domain, services, path):
 
     template = template_env.get_template(path)
     content = template.render(context)
+
+    import lib.nodes
+    if len(lib.nodes.sort_members_failed) > 0:
+        raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(lib.nodes.sort_members_failed))
+
     return content.rstrip()+'\n'
 
 def main():
