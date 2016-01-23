@@ -148,8 +148,9 @@ http_file(
 new_http_archive(
     name = 'protoc-lua',
     build_file = 'tools/build/protobuf/protoc-lua.BUILD',
-    url = 'https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.0/protobuf-1.1.0-0.tar.gz',
-    sha256 = '4312ca3b7f120c101bab974eb81752dac608f737bee0ab28ecc31e9ff26fc854'
+    url = 'https://github.com/djungelorm/protobuf-lua/archive/v1.1.1.tar.gz',
+    sha256 = '23717344de36c804aadf0cbfee478e2782861e80d9f110f108e3fb01b8bee54e',
+    strip_prefix = 'protobuf-lua-1.1.1'
 )
 
 http_file(
