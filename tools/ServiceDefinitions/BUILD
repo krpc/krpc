@@ -20,7 +20,6 @@ csharp_binary(
         '//tools/build/mono-4.5:System.Xml.Linq',
         '//tools/build/mono-4.5:Newtonsoft.Json'
     ],
-    warn = 1, #TODO: relax this
     visibility = ['//visibility:public']
 )
 

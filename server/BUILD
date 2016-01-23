@@ -45,7 +45,6 @@ csharp_library(
         '//tools/build/ksp:System.Xml',
         '//tools/build/ksp:System.Xml.Linq'
     ],
-    warn = 1, #TODO: relax this,
     visibility = ['//visibility:public']
 )
 
@@ -81,6 +80,5 @@ csharp_nunit_test(
         '//tools/build/mono-4.5:System.Xml',
         '//tools/build/mono-4.5:System.Xml.Linq'
     ],
-    warn = 1, #TODO: relax this
     size = 'small'
 )

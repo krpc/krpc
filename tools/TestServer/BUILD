@@ -29,7 +29,6 @@ csharp_binary(
         '//tools/build/mono-4.5:System.Xml.Linq',
         '//tools/build/mono-4.5:Newtonsoft.Json'
     ],
-    warn = 1, #TODO: relax this
     runargs = ['50000', '50001', '--debug'],
     visibility = ['//visibility:public']
 )
@@ -51,8 +50,7 @@ csharp_library(
         '//tools/build/mono-4.5:System.IO',
         '//tools/build/mono-4.5:System.Xml',
         '//tools/build/mono-4.5:System.Xml.Linq'
-    ],
-    warn = 1, #TODO: relax this
+    ]
 )
 
 service_definitions(

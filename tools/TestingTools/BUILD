@@ -17,7 +17,6 @@ csharp_library(
         '//tools/build/ksp:System.Xml',
         '//tools/build/ksp:System.Xml.Linq'
     ],
-    warn = 1, #TODO: relax this
     visibility = ['//visibility:public']
 )
 
