@@ -50,7 +50,7 @@ Interacting with the Server
 Interaction with the server is performed via a client object (of type
 :class:`krpc::Client`) returned by calling :func:`krpc::connect`.
 
-Functionality for services are defined in the heading files in
+Functionality for services are defined in the header files in
 ``krpc/services/...``. For example, all of the functionality provided by the
 SpaceCenter service is contained in the header file
 ``krpc/services/space_center.hpp`` and the functionality provided by the
