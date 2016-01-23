@@ -8,7 +8,6 @@ class CppDomain(PythonDomain):
     prettyname = 'C++'
     sphinxname = 'cpp'
     codeext = 'cpp'
-    macros = 'lib/cpp.tmpl'
 
     _type_map = {
         'string': 'std::string',
@@ -18,6 +17,10 @@ class CppDomain(PythonDomain):
     _value_map = {
         'null': 'NULL'
     }
+
+    def __init__(self, args):
+        self._currentmodule = None
+        self.macros = args.cpp_macros
 
     def currentmodule(self, name):
         self._currentmodule = name

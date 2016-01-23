@@ -1,0 +1,63 @@
+using System.Collections.Generic;
+using KRPC.Schema.KRPC;
+using Test;
+
+namespace KRPC.Test.Service
+{
+    public interface ITestService
+    {
+        void ProcedureNoArgsNoReturn ();
+
+        void ProcedureSingleArgNoReturn (Response data);
+
+        void ProcedureThreeArgsNoReturn (Response x, Request y, Response z);
+
+        Response ProcedureNoArgsReturns ();
+
+        Response ProcedureSingleArgReturns (Response data);
+
+        int ProcedureWithValueTypes (float x, string y, byte[] z);
+
+        string PropertyWithGetAndSet { get; set; }
+
+        string PropertyWithGet { get; }
+
+        string PropertyWithSet { set; }
+
+        TestService.TestClass CreateTestObject (string value);
+
+        void DeleteTestObject (TestService.TestClass obj);
+
+        TestService.TestClass EchoTestObject (TestService.TestClass obj);
+
+        void ProcedureSingleOptionalArgNoReturn (string x);
+
+        void ProcedureThreeOptionalArgsNoReturn (float x, string y, int z);
+
+        void ProcedureOptionalNullArg (TestService.TestClass x);
+
+        void ProcedureEnumArg (global::Test.TestEnum x);
+
+        global::Test.TestEnum ProcedureEnumReturn ();
+
+        void ProcedureCSharpEnumArg (TestService.CSharpEnum x);
+
+        TestService.CSharpEnum ProcedureCSharpEnumReturn ();
+
+        void BlockingProcedureNoReturn (int n);
+
+        int BlockingProcedureReturns (int n, int sum);
+
+        IList<string> EchoList (IList<string> l);
+
+        IDictionary<int,string> EchoDictionary (IDictionary<int,string> d);
+
+        HashSet<int> EchoSet (HashSet<int> h);
+
+        KRPC.Utils.Tuple<int,bool> EchoTuple (KRPC.Utils.Tuple<int,bool> t);
+
+        IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c);
+
+        IList<TestService.TestClass> EchoListOfObjects (IList<TestService.TestClass> l);
+    }
+}

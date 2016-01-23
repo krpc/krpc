@@ -1,12 +1,11 @@
 project = 'kRPC'
-version = '0.1'
-release = '0.1.12'
-copyright = '2015, djungelorm'
+version = ''
+release = version
+copyright = '2015-2016, djungelorm'
 
 master_doc = 'index'
 source_suffix = '.rst'
-exclude_patterns = ['**/.#*']
-extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo']
+extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo', 'redjack.sphinx.lua']
 templates_path = ['_templates']
 
 pygments_style = 'sphinx'
@@ -20,9 +19,3 @@ html_context = { 'css_files': ['_static/custom.css'] }
 todo_include_todos = True
 
 spelling_word_list_filename = 'dictionary.txt'
-
-def setup(app):
-    import sys, os.path
-    sys.path.append(os.path.abspath('../../luadomain'))
-    import luadomain
-    app.add_domain(luadomain.LuaDomain)

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{48205F2E-3CEE-4480-873A-DEAFCD291407}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>KRPC.SpaceCenter</RootNamespace>
+    <AssemblyName>KRPC.SpaceCenter</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Debug\KRPC.SpaceCenter.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DebugType>full</DebugType>
+    <DocumentationFile>bin\Release\KRPC.SpaceCenter.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
+      <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
+      <Name>KRPC</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\..\tools\build\protobuf\csharp\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="TDx.TDxInput">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\bazel-bin\service\SpaceCenter\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="DrawAddon.cs" />
+    <Compile Include="ExtensionMethods\ActionGroupExtensions.cs" />
+    <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
+    <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
+    <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
+    <Compile Include="ExtensionMethods\ITargetableExtensions.cs" />
+    <Compile Include="ExtensionMethods\PartExtensions.cs" />
+    <Compile Include="ExtensionMethods\ResourceFlowModeExtensions.cs" />
+    <Compile Include="ExtensionMethods\SpeedDisplayModesExtensions.cs" />
+    <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
+    <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
+    <Compile Include="ExternalAPI\FAR.cs" />
+    <Compile Include="ExternalAPI\Loader.cs" />
+    <Compile Include="ExternalAPI\RemoteTech.cs" />
+    <Compile Include="PilotAddon.cs" />
+    <Compile Include="Services\AutoPilot.cs" />
+    <Compile Include="Services\CelestialBody.cs" />
+    <Compile Include="Services\Comms.cs" />
+    <Compile Include="Services\Control.cs" />
+    <Compile Include="Services\Flight.cs" />
+    <Compile Include="Services\Node.cs" />
+    <Compile Include="Services\Orbit.cs" />
+    <Compile Include="Services\Parts\Decoupler.cs" />
+    <Compile Include="Services\Parts\DockingPort.cs" />
+    <Compile Include="Services\Parts\Engine.cs" />
+    <Compile Include="Services\Parts\LandingGear.cs" />
+    <Compile Include="Services\Parts\LandingLeg.cs" />
+    <Compile Include="Services\Parts\LaunchClamp.cs" />
+    <Compile Include="Services\Parts\Light.cs" />
+    <Compile Include="Services\Parts\Module.cs" />
+    <Compile Include="Services\Parts\Parachute.cs" />
+    <Compile Include="Services\Parts\Part.cs" />
+    <Compile Include="Services\Parts\Parts.cs" />
+    <Compile Include="Services\Parts\Radiator.cs" />
+    <Compile Include="Services\Parts\ReactionWheel.cs" />
+    <Compile Include="Services\Parts\ResourceConverter.cs" />
+    <Compile Include="Services\Parts\ResourceHarvester.cs" />
+    <Compile Include="Services\Parts\Sensor.cs" />
+    <Compile Include="Services\Parts\SolarPanel.cs" />
+    <Compile Include="Services\ReferenceFrame.cs" />
+    <Compile Include="Services\Resources.cs" />
+    <Compile Include="Services\SASMode.cs" />
+    <Compile Include="Services\SpaceCenter.cs" />
+    <Compile Include="Services\SpeedMode.cs" />
+    <Compile Include="Services\Vessel.cs" />
+    <Compile Include="Utils\PIDController.cs" />
+    <Compile Include="Utils\RotationRateController.cs" />
+  </ItemGroup>
+</Project>

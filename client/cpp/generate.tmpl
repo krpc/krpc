@@ -1,0 +1,170 @@
+#ifndef HEADER_KRPC_SERVICES_{{ service_name | upper }}
+#define HEADER_KRPC_SERVICES_{{ service_name | upper }}
+{% macro args(parameters) %}
+std::vector<std::string> _args;
+{% for x in parameters %}
+_args.push_back(encoder::encode({{x.name}}));
+{% endfor %}
+{% endmacro %}
+{% macro call(service, procedure, has_return, has_args, is_static=False) %}
+{% if has_return %}std::string _data = {% endif %}{% if is_static %}_client.{% else %}this->client->{% endif %}invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+{% endmacro %}
+{% macro return(type, decode_fn, set_client, is_static=False) %}
+{{type}} _result;
+decoder::{{decode_fn}}(_result, _data, {% if is_static %}&_client{% else %}this->client{% endif %});
+return _result;
+{% endmacro %}
+{% macro sig_parameters(parameters) %}
+{% for x in parameters %}{{x.type}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endmacro %}
+{% macro impl_parameters(parameters) %}
+{% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_argument' in x %} = {{x.default_argument}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endmacro %}
+
+#include <krpc/service.hpp>
+#include <krpc/encoder.hpp>
+#include <krpc/decoder.hpp>
+
+namespace krpc {
+  namespace services {
+
+    class {{ service_name }} : public Service {
+    public:
+      {{ service_name }}(Client* client);
+
+      {% if classes | length > 0 %}
+      // Class forward declarations
+      {% for class_name in classes.keys() %}
+      class {{ class_name }};
+      {% endfor %}
+
+      {% endif %}
+      {% if enumerations | length > 0 %}
+      // Enumerations
+      {% for enum_name,values in enumerations.items() %}
+      enum struct {{ enum_name }} {
+        {% for value in values %}
+        {{ value.name }} = {{ value.value }}{% if not loop.last %},{% endif %}
+
+        {% endfor %}
+      };
+
+      {% endfor %}
+      {% endif %}
+      {% if procedures | length > 0 %}
+      // Procedures
+      {% for procedure_name,procedure in procedures.items() %}
+      {{ procedure.return_type }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }});
+      {% endfor %}
+      {% endif %}
+
+      {% if properties | length > 0 %}
+      // Properties
+      {% for property_name,property in properties.items() %}
+      {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
+      {% endfor %}
+
+      {% endif %}
+      {% if classes | length > 0 %}
+      // Classes
+      {% for class_name,cls in classes.items() %}
+      class {{ class_name }} : public krpc::Object<{{ class_name }}> {
+      public:
+          {{ class_name }}(Client* client = NULL, google::protobuf::uint64 id = 0);
+          {% if cls.methods|length > 0 %}
+
+          // Methods
+          {% for method_name,method in cls.methods.items() %}
+          {{ method.return_type }} {{ method_name }}({{ sig_parameters(method.parameters) }});
+          {% endfor %}
+          {% endif %}
+          {% if cls.static_methods | length > 0 %}
+
+          // Static methods
+          {% for method_name,method in cls.static_methods.items() %}
+          static {{ method.return_type }} {{ method_name }}(Client& client, {{ sig_parameters(method.parameters) }});
+          {% endfor %}
+          {% endif %}
+          {% if cls.properties | length > 0 %}
+
+          // Properties
+          {% for property_name,property in cls.properties.items() %}
+          {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
+          {% endfor %}
+          {% endif %}
+      };
+
+      {% endfor %}
+      {% endif %}
+    };
+
+  }
+  {% if enumerations | length > 0 %}
+
+  namespace encoder {
+
+    {% for enum_name,values in enumerations.items() %}
+    inline std::string encode(const services::{{ service_name }}::{{ enum_name }}& value) {
+      return krpc::encoder::encode(static_cast<google::protobuf::int32>(value));
+    }
+
+    {% endfor %}
+  }
+
+  namespace decoder {
+
+    {% for enum_name,values in enumerations.items() %}
+    inline void decode(services::{{ service_name }}::{{ enum_name }}& value, const std::string& data, Client* client) {
+      google::protobuf::int32 x;
+      decode(x, data, client);
+      value = static_cast<services::{{ service_name }}::{{ enum_name }}>(x);
+    }
+
+    {% endfor %}
+  }
+  {% endif %}
+
+  namespace services {
+
+    inline {{ service_name }}::{{ service_name }}(Client* client):
+      Service(client) {}
+
+    {% for procedure_name,procedure in procedures.items() + properties.items() %}
+    inline {{ procedure.return_type }} {{ service_name }}::{{ procedure_name }}({{ impl_parameters(procedure.parameters) }}) {
+{% if procedure.parameters | length > 0 %}      {{ args(procedure.parameters) | indent(width=6) }}
+      {% endif %}
+      {{ call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters | length > 0) | indent(width=6) }}
+{% if procedure.return_type != 'void' %}      {{ return(procedure.return_type, procedure.return_decode_fn, procedure.return_set_client) | indent(width=6) }}
+      {% endif %}
+    }
+
+    {% endfor %}
+    {% for class_name,cls in classes.items() %}
+    inline {{ service_name }}::{{ class_name }}::{{ class_name }}(Client* client, google::protobuf::uint64 id):
+      Object(client, "{{ service_name }}::{{ class_name }}", id) {}
+
+    {% for method_name,method in cls.methods.items() + cls.properties.items() %}
+    inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters(method.parameters) }}) {
+      {{ args([{'name': '*this'}] + method.parameters) | indent(width=6) }}
+      {{ call(service_name, method.remote_name, method.return_type != 'void', True) | indent(width=6) }}
+{% if method.return_type != 'void' %}      {{ return(method.return_type, method.return_decode_fn, method.return_set_client) | indent(width=6) }}
+      {% endif %}
+    }
+
+    {% endfor %}
+    {% for method_name,method in cls.static_methods.items() %}
+    inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}(Client& _client, {{ impl_parameters(method.parameters) }}) {
+{% if method.parameters | length > 0 %}      {{ args(method.parameters) | indent(width=6) }}
+      {% endif %}
+      {{ call(service_name, method.remote_name, method.return_type != 'void', True, True) | indent(width=6) }}
+{% if method.return_type != 'void' %}      {{ return(method.return_type, method.return_decode_fn, method.return_set_client, True) | indent(width=6) }}
+      {% endif %}
+    }
+
+    {% endfor %}
+    {% endfor %}
+  }
+
+}
+
+#endif

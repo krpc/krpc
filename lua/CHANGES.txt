@@ -1,5 +1,0 @@
-v0.1.12
- * None, bumped version number
-
-v0.1.11
- * Initial version

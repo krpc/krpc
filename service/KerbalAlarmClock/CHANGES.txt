@@ -1,0 +1,14 @@
+v0.1.13
+ * None
+
+v0.1.12
+ * Renamed Alarm.Delete to Alarm.Remove (to not clash with C++ keyword)
+
+v0.1.11
+ * None
+
+v0.1.10
+ * Service now available in all game scenes (#135)
+
+v0.1.9
+ * Initial version - API for Kerbal Alarm Clock (http://forum.kerbalspaceprogram.com/threads/24786)

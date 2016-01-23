@@ -4,7 +4,7 @@ Communication Protocol
 ======================
 
 Clients invoke Remote Procedure Calls (RPCs) by communicating with the server
-using `Protocol Buffer messages
+using `Protocol Buffer v3 messages
 <https://developers.google.com/protocol-buffers/docs/proto>`_ sent over a TCP/IP
 connection.
 
@@ -143,14 +143,14 @@ the following format:
 .. code-block:: protobuf
 
    message Request {
-     required string service = 1;
-     required string procedure = 2;
+     string service = 1;
+     string procedure = 2;
      repeated Argument arguments = 3;
    }
 
    message Argument {
-     required uint32 position = 1;
-     required bytes value = 2;
+     uint32 position = 1;
+     bytes value = 2;
    }
 
 The fields are:
@@ -182,9 +182,11 @@ with the following format:
 .. code-block:: protobuf
 
    message Response {
-     required double time = 1;
-     optional string error = 2;
-     optional bytes return_value = 3;
+     double time = 1;
+     bool has_error = 2;
+     string error = 3;
+     bool has_return_value = 4;
+     bytes return_value = 5;
    }
 
 The fields are:
@@ -192,12 +194,15 @@ The fields are:
 * ``time`` - The universal time (in seconds) when the request completed
   processing.
 
-* ``error`` - Blank if the remote procedure completed successfully, otherwise
-  contains a description of the error encountered.
+* ``has_error`` - True if there was an error executing the remote procedure.
 
-* ``return_value`` - The value returned by the remote procedure encoded in
-  protocol buffer format, or blank if the procedure does not return a value or
-  an error occurred.
+* ``error`` - If ``has_error`` is true, contains a description of the error.
+
+* ``has_return_value`` - True if the remote procedure returned a value.
+
+* ``return_value`` - If ``has_return_value`` is true and ``has_error`` is false,
+  contains the value returned by the remote procedure, encoded in protocol
+  buffer format.
 
 See :ref:`communication-protocol-protobuf-encoding` for details on how to
 unserialize the return value.
@@ -272,12 +277,13 @@ format.
    response.ParseFromString(data)
 
    # Check for an error response
-   if response.HasField('error'):
+   if response.has_error:
        print('ERROR:', response.error)
 
    # Decode the return value as a Status message
    else:
        status = krpc.schema.KRPC.Status()
+       assert response.has_return_value
        status.ParseFromString(response.return_value)
 
        # Print out the version string from the Status message
@@ -341,8 +347,8 @@ that exists on the server for that client, with the following format:
 .. code-block:: protobuf
 
    message StreamResponse {
-     required uint32 id = 1;
-     required Response response = 2;
+     uint32 id = 1;
+     Response response = 2;
    }
 
 The fields are:
@@ -372,24 +378,25 @@ returns a Protocol Buffer message with the format:
 .. code-block:: protobuf
 
    message Status {
-     required string version = 1;
-     required uint64 bytes_read = 2;
-     required uint64 bytes_written = 3;
-     required float bytes_read_rate = 4;
-     required float bytes_written_rate = 5;
-     required uint64 rpcs_executed = 6;
-     required float rpc_rate = 7;
-     required bool adaptive_rate_control = 8;
-     required uint32 max_time_per_update = 9;
-     required bool blocking_recv = 10;
-     required uint32 recv_timeout = 11;
-     required float time_per_rpc_update = 12;
-     required float poll_time_per_rpc_update = 13;
-     required float exec_time_per_rpc_update = 14;
-     required uint32 stream_rpcs = 15;
-     required uint64 stream_rpcs_executed = 16;
-     required float stream_rpc_rate = 17;
-     required float time_per_stream_update = 18;
+     string version = 1;
+     uint64 bytes_read = 2;
+     uint64 bytes_written = 3;
+     float bytes_read_rate = 4;
+     float bytes_written_rate = 5;
+     uint64 rpcs_executed = 6;
+     float rpc_rate = 7;
+     bool one_rpc_per_update = 8;
+     uint32 max_time_per_update = 9;
+     bool adaptive_rate_control = 10;
+     bool blocking_recv = 11;
+     uint32 recv_timeout = 12;
+     float time_per_rpc_update = 13;
+     float poll_time_per_rpc_update = 14;
+     float exec_time_per_rpc_update = 15;
+     uint32 stream_rpcs = 16;
+     uint64 stream_rpcs_executed = 17;
+     float stream_rpc_rate = 18;
+     float time_per_stream_update = 19;
    }
 
 The ``version`` field contains the version string of the server. The remaining
@@ -452,11 +459,11 @@ service are given by a ``Service`` message, with the format:
 .. code-block:: protobuf
 
    message Service {
-     required string name = 1;
+     string name = 1;
      repeated Procedure procedures = 2;
      repeated Class classes = 3;
      repeated Enumeration enumerations = 4;
-     optional string documentation = 5;
+     string documentation = 5;
    }
 
 The fields are:
@@ -485,17 +492,19 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
 .. code-block:: protobuf
 
    message Procedure {
-     required string name = 1;
+     string name = 1;
      repeated Parameter parameters = 2;
-     optional string return_type = 3;
-     repeated string attributes = 4;
-     optional string documentation = 5;
+     bool has_return_type = 3;
+     string return_type = 4;
+     repeated string attributes = 5;
+     string documentation = 6;
    }
 
    message Parameter {
-     required string name = 1;
-     required string type = 2;
-     optional bytes default_argument = 3;
+     string name = 1;
+     string type = 2;
+     bool has_default_argument = 3;
+     bytes default_argument = 4;
    }
 
 The fields are:
@@ -510,13 +519,16 @@ The fields are:
    * ``type`` - The :ref:`type <communication-protocol-type-names>` of the
      parameter.
 
-   * ``default_argument`` - The value of the default value of the parameter,
-     :ref:`encoded using Protocol Buffer format
-     <communication-protocol-protobuf-encoding>`, or blank if the parameter has no
-     default value.
+   * ``has_default_argument`` - True if the parameter has a default value.
 
-* ``return_type`` - The :ref:`return type <communication-protocol-type-names>`
-  of the procedure.
+   * ``default_argument`` - If ``has_default_argument`` is true, contains the
+     value of the default value of the parameter, :ref:`encoded using Protocol
+     Buffer format <communication-protocol-protobuf-encoding>`.
+
+* ``has_return_type`` - True if the procedure returns a value.
+
+* ``return_type`` - If ``has_return_type`` is true, contains the :ref:`return
+  type <communication-protocol-type-names>` of the procedure.
 
 * ``attributes`` - The procedure's :ref:`attributes
   <communication-protocol-attributes>`.
@@ -532,8 +544,8 @@ format:
 .. code-block:: protobuf
 
    message Class {
-     required string name = 1;
-  optional string documentation = 2;
+     string name = 1;
+     string documentation = 2;
    }
 
 The fields are:
@@ -551,15 +563,15 @@ with the format:
 .. code-block:: protobuf
 
    message Enumeration {
-     required string name = 1;
+     string name = 1;
      repeated EnumerationValue values = 2;
-     optional string documentation = 3;
+     string documentation = 3;
    }
 
    message EnumerationValue {
-     required string name = 1;
-     required int32 value = 2;
-     optional string documentation = 3;
+     string name = 1;
+     int32 value = 2;
+     string documentation = 3;
    }
 
 The fields are:

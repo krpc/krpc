@@ -1,0 +1,53 @@
+v0.1.13
+ * Update protobuf 3.0.0-beta-2
+ * Fix bug in keyword arg handling (#168)
+ * Removed TestServer.exe and associated binaries from release archive
+
+v0.1.12
+ * Server connection method now retries 10 times every 0.1 seconds
+
+v0.1.11
+ * Docstrings generated from documentation returned by KRPC.GetServices (#31)
+
+v0.1.10
+ * Bump version number
+
+v0.1.9:
+ * Bump version number
+
+v0.1.8:
+ * Improved dynamic creation of service methods
+ * Support for static class methods (#106)
+ * Improve enums: return an Enum object instead of an int
+ * Fix bug with types across multiple connections (#110)
+
+v0.1.7
+ * Support for Python 3
+ * Upgrade to Protocol Buffers 3.0.0-alpha-1
+ * Checking of address and port parameters before connecting
+ * Connecting to the stream server is now optional
+ * Improve detection of protobuf message and enum types and improve support for 3rd party types (#38)
+ * Fix unicode decoding/encoding bugs (#104)
+
+v0.1.6
+ * None, bumped version to match server version
+
+v0.1.5
+ * Add Client.close()
+
+v0.1.4
+ * Improved network code to fix bugs and make it more robust
+ * Add python version checks
+ * Make connections thread safe
+
+v0.1.3
+ * Fix bug with encoding/decoding of infinities and NaNs
+
+v0.1.2
+ * Convert parameter names to snake_case
+
+v0.1.1
+ * Update example script
+
+v0.1.0
+ * Initial pre-release
