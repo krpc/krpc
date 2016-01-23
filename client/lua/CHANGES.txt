@@ -1,5 +1,5 @@
 v0.1.13
- * Update to protobuf 3
+ * Update to protobuf 3.0.0-beta-2
 
 v0.1.12
  * None, bumped version number

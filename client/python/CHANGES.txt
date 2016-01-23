@@ -1,5 +1,6 @@
 v0.1.13
- * Update protobuf 3
+ * Update protobuf 3.0.0-beta-2
+ * Removed TestServer.exe and associated binaries from release archive
 
 v0.1.12
  * Server connection method now retries 10 times every 0.1 seconds
