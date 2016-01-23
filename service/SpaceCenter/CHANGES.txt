@@ -1,5 +1,5 @@
 v0.1.13
- * None
+ * Fix SpaceCenter.HorizontalSpeed calculation
 
 v0.1.12
  * Built for KSP 1.0.5
