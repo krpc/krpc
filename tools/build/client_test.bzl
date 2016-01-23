@@ -1,32 +1,31 @@
 def _impl(ctx):
 
-    test_executable_runfiles = \
-        list(ctx.attr.test_executable.default_runfiles.files) + \
-        list(ctx.attr.test_executable.files)
+    test_executable_runfiles = list(ctx.attr.test_executable.default_runfiles.files)
+    server_executable_runfiles = list(ctx.attr.server_executable.default_runfiles.files)
 
-    server_executable_runfiles = \
-        list(ctx.attr.server_executable.default_runfiles.files) + \
-        list(ctx.attr.server_executable.files)
+    sub_commands = [
+        'mkdir -p `dirname test-executable.runfiles/%s`' % ctx.executable.test_executable.short_path,
+        'ln -f -r -s %s test-executable.runfiles/%s' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.short_path),
+        'mkdir -p `dirname server-executable.runfiles/%s`' % ctx.executable.server_executable.short_path,
+        'ln -f -r -s %s server-executable.runfiles/%s' % (ctx.executable.server_executable.short_path, ctx.executable.server_executable.short_path),
+    ]
 
-    runfiles = ctx.runfiles(files = [ctx.executable.test_executable, ctx.executable.server_executable] + test_executable_runfiles + server_executable_runfiles)
-
-    sub_commands = []
+    test_runfiles_dir = 'test-executable.runfiles/' + ctx.executable.test_executable.short_path + '.runfiles'
+    server_runfiles_dir = 'server-executable.runfiles/' + ctx.executable.server_executable.short_path + '.runfiles'
 
     for f in test_executable_runfiles:
-        sub_commands.append('mkdir -p `dirname %s`' % (ctx.executable.test_executable.short_path+'.runfiles/' + f.short_path))
-        sub_commands.append('ln -f -r -s %s %s' % (f.short_path, ctx.executable.test_executable.short_path+'.runfiles/' + f.short_path))
-        sub_commands.append('file %s' % ctx.executable.test_executable.short_path+'.runfiles/' + f.short_path)
+        sub_commands.append('mkdir -p `dirname %s`' % (test_runfiles_dir + '/' + f.short_path))
+        sub_commands.append('ln -f -r -s %s %s' % (f.short_path, test_runfiles_dir + '/' + f.short_path))
 
     for f in server_executable_runfiles:
-        sub_commands.append('mkdir -p `dirname %s`' % (ctx.executable.server_executable.short_path+'.runfiles/' + f.short_path))
-        sub_commands.append('ln -f -r -s %s %s' % (f.short_path, ctx.executable.server_executable.short_path+'.runfiles/' + f.short_path))
+        sub_commands.append('mkdir -p `dirname %s`' % (server_runfiles_dir + '/' + f.short_path))
+        sub_commands.append('ln -f -r -s %s %s' % (f.short_path, server_runfiles_dir + '/' + f.short_path))
 
     sub_commands.extend([
         'pkill TestServer.exe',
-        '%s %s %s &' % (ctx.executable.server_executable.short_path, ctx.attr.rpc_port, ctx.attr.stream_port),
-        '(cd %s.runfiles ; ../%s)' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.basename),
+        '(cd server-executable.runfiles; %s %s %s) &' % (ctx.executable.server_executable.short_path, ctx.attr.rpc_port, ctx.attr.stream_port),
+        '(cd test-executable.runfiles/%s.runfiles; ../%s)' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.basename),
         'RESULT=$?',
-        'pgrep TestServer.exe',
         'pkill TestServer.exe',
         'exit $RESULT'
     ])
@@ -39,7 +38,7 @@ def _impl(ctx):
     return struct(
         name = ctx.label.name,
         out = ctx.outputs.executable,
-        runfiles = runfiles
+        runfiles = ctx.runfiles(files = [ctx.executable.test_executable, ctx.executable.server_executable] + test_executable_runfiles + server_executable_runfiles)
     )
 
 client_test = rule(
