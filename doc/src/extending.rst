@@ -7,7 +7,7 @@ The kRPC Architecture
 ---------------------
 
 kRPC consists of two components: a server and a client. The server plugin
-(provided by ``kRPC.dll``) runs inside KSP. It provides a collection of
+(provided by ``KRPC.dll``) runs inside KSP. It provides a collection of
 *procedures* that clients can run. These procedures are arranged in groups
 called *services* to keep things organized. It also provides an in-game user
 interface that can be used to start/stop the server, change settings and monitor
@@ -15,17 +15,14 @@ active clients.
 
 Clients run outside of KSP. This gives you the freedom to run scripts in
 whatever environment you want. A client communicates with the server to run
-procedures. kRPC comes with a `Python client library
-<https://pypi.python.org/pypi/krpc>`_ that implements the :ref:`communication
-protocol <communication-protocol>`, making it easy to write Python scripts that
-can talk to the server. Client libraries for other languages may be added in the
-future. kRPC supports multiple concurrent clients.
+procedures. kRPC comes several client libraries that implement the
+:ref:`communication protocol <communication-protocol>`, making it easy to write
+programs for these languages that can talk to the server.
 
 kRPC comes with a collection of standard functionality for interacting with
-craft, contained in a service called :class:`SpaceCenter`. This service provides
-procedures for things like getting flight/orbital data and controlling the
-active vessel. This service is provided by
-``kRPCSpaceCenter.dll``.
+vessels, contained in a service called :class:`SpaceCenter`. This service
+provides procedures for things like getting flight/orbital data and controlling
+the active vessel. This service is provided by ``KRPC.SpaceCenter.dll``.
 
 Service API
 -----------
