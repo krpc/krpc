@@ -9,7 +9,7 @@ def _ref_impl(ctx):
         mnemonic = 'CSharpReference',
         inputs = [input],
         outputs = [output],
-        command = 'ln -f -r -s %s %s' % (input.path, output.path) # TODO: use symlinks
+        command = 'ln -f -r -s %s %s' % (input.path, output.path)
     )
 
     return struct(
