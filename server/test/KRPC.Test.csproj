@@ -38,16 +38,16 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\tools\build\protobuf\csharp\Google.Protobuf.dll</HintPath>
@@ -60,6 +60,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\bazel-bin\protobuf\Test.cs">
+      <Link>Test.cs</Link>
+    </Compile>
     <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
     <Compile Include="KRPCConfigurationTest.cs" />
     <Compile Include="Schema\RpcTest.cs" />
@@ -95,8 +98,5 @@
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
     <Compile Include="Utils\TupleTest.cs" />
-    <Compile Include="..\..\bazel-bin\protobuf\Test.cs">
-      <Link>Test.cs</Link>
-    </Compile>
   </ItemGroup>
 </Project>

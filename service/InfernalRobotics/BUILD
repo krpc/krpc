@@ -18,7 +18,7 @@ csharp_assembly_info(
 
 csharp_library(
     name = 'KRPC.InfernalRobotics',
-    srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
+    srcs = glob(['src/**/*.cs']) + [':AssemblyInfo'],
     deps = [
         '//server:KRPC',
         '//service/SpaceCenter:KRPC.SpaceCenter',

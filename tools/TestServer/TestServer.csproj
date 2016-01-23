@@ -46,10 +46,10 @@
     <Compile Include="..\..\bazel-bin\tools\TestServer\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Services\TestService.cs" />
     <Compile Include="..\..\bazel-bin\protobuf\Test.cs">
       <Link>Test.cs</Link>
     </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Services\TestService.cs" />
   </ItemGroup>
 </Project>

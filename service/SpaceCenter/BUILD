@@ -19,7 +19,7 @@ csharp_assembly_info(
 
 csharp_library(
     name = 'KRPC.SpaceCenter',
-    srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
+    srcs = glob(['src/**/*.cs']) + [':AssemblyInfo'],
     deps = [
         '//server:KRPC',
         '//tools/build/protobuf:Google.Protobuf',

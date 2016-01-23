@@ -41,21 +41,24 @@
       <HintPath>..\..\tools\build\protobuf\csharp\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\bazel-bin\server\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\bazel-bin\protobuf\KRPC.cs">
+      <Link>KRPC.cs</Link>
     </Compile>
     <Compile Include="CompatibilityChecker.cs" />
     <Compile Include="Continuations\Continuation.cs" />
@@ -145,8 +148,5 @@
     <Compile Include="Utils\RoundRobinScheduler.cs" />
     <Compile Include="Utils\StopwatchExtensions.cs" />
     <Compile Include="Utils\Tuple.cs" />
-    <Compile Include="..\..\bazel-bin\protobuf\KRPC.cs">
-      <Link>KRPC.cs</Link>
-    </Compile>
   </ItemGroup>
 </Project>

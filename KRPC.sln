@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC", "server\src\KRPC.csproj", "{3707639F-5EA3-461B-B939-587E51A25CCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.SpaceCenter", "service\SpaceCenter\KRPC.SpaceCenter.csproj", "{48205F2E-3CEE-4480-873A-DEAFCD291407}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Test", "server\test\KRPC.Test.csproj", "{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.InfernalRobotics", "service\InfernalRobotics\KRPC.InfernalRobotics.csproj", "{AA218C22-7832-4E2F-9F32-870DC2D5B4B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.SpaceCenter", "service\SpaceCenter\src\KRPC.SpaceCenter.csproj", "{48205F2E-3CEE-4480-873A-DEAFCD291407}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.KerbalAlarmClock", "service\KerbalAlarmClock\KRPC.KerbalAlarmClock.csproj", "{BC3C589C-91A8-472F-B312-3E5512F77CA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.InfernalRobotics", "service\InfernalRobotics\src\KRPC.InfernalRobotics.csproj", "{AA218C22-7832-4E2F-9F32-870DC2D5B4B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.KerbalAlarmClock", "service\KerbalAlarmClock\src\KRPC.KerbalAlarmClock.csproj", "{BC3C589C-91A8-472F-B312-3E5512F77CA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefinitions", "tools\ServiceDefinitions\ServiceDefinitions.csproj", "{3F97909B-0ABE-49F2-8CA0-100F4286E03F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "tools\TestServer\TestServer.csproj", "{A75677CB-9D81-4C3F-8B53-C99110B4F124}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingTools", "tools\TestingTools\TestingTools.csproj", "{D0F002FB-E12F-4EE3-9A95-AC3AC08086A9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefinitions", "tools\ServiceDefinitions\ServiceDefinitions.csproj", "{3F97909B-0ABE-49F2-8CA0-100F4286E03F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Test", "server\test\KRPC.Test.csproj", "{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

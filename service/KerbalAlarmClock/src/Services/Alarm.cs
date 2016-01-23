@@ -122,7 +122,7 @@ namespace KRPC.KerbalAlarmClock.Services
         /// The vessel that the alarm is attached to.
         /// </summary>
         [KRPCProperty]
-        public KRPC.SpaceCenter.Services.Vessel Vessel {
+        public global::KRPC.SpaceCenter.Services.Vessel Vessel {
             get {
                 var vessel = FlightGlobals.Vessels.First (x => x.id.ToString () == alarm.VesselID);
                 return new KRPC.SpaceCenter.Services.Vessel (vessel);
@@ -136,7 +136,7 @@ namespace KRPC.KerbalAlarmClock.Services
         /// The celestial body the vessel is departing from.
         /// </summary>
         [KRPCProperty]
-        public KRPC.SpaceCenter.Services.CelestialBody XferOriginBody {
+        public global::KRPC.SpaceCenter.Services.CelestialBody XferOriginBody {
             get {
                 var body = FlightGlobals.Bodies.First (x => alarm.XferOriginBodyName == x.bodyName);
                 return new KRPC.SpaceCenter.Services.CelestialBody (body);

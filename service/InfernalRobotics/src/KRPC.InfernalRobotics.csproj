@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AA218C22-7832-4E2F-9F32-870DC2D5B4B3}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>KRPCInfernalRobotics</RootNamespace>
-    <AssemblyName>KRPCInfernalRobotics</AssemblyName>
+    <RootNamespace>KRPC.InfernalRobotics</RootNamespace>
+    <AssemblyName>KRPC.InfernalRobotics</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,7 +31,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\server\src\KRPC.csproj">
+    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
       <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
       <Name>KRPC</Name>
     </ProjectReference>
@@ -39,20 +39,20 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\lib-ksp\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\bazel-bin\service\InfernalRobotics\AssemblyInfo.cs">
+    <Compile Include="..\..\..\bazel-bin\service\InfernalRobotics\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Addon.cs" />
