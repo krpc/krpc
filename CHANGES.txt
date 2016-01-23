@@ -1,3 +1,7 @@
+v0.1.13
+* SpaceCenter service changes:
+  * Added support for resource harvesters and converters (#166,#182)
+
 v0.1.12
 * Added C++ client
 * Built for KSP 1.0.5
