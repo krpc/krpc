@@ -1,4 +1,5 @@
-load('/tools/build/python', 'py_sdist', 'py_test')
+load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test')
+load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
 
 py_sdist(
@@ -9,28 +10,56 @@ py_sdist(
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
         'setup.py', 'MANIFEST.in',
         '//protobuf:py',
-        '//protobuf:py-test',
-        '//tools/TestServer:TestServer',
-        '//server:KRPC',
-        '//tools/build/protobuf:Google.Protobuf',
-        '//tools/build/protobuf:LICENSE'
+        '//protobuf:py-test'
     ] + glob(['krpc/**/*']),
     path_map = {
         'client/python/': '',
         'protobuf/': 'krpc/schema/',
-        'protobuf/Test.py': 'krpc/test/schema/Test.py',
-        'tools/TestServer/': 'bin/TestServer/',
-        'server/': 'bin/TestServer/',
-        'tools/build/protobuf/': 'bin/TestServer/',
-        'tools/build/protobuf/LICENSE': 'bin/TestServer/LICENSE.Google.Protobuf'
+        'protobuf/Test.py': 'krpc/test/schema/Test.py'
     },
     visibility = ['//visibility:public']
 )
 
-py_test(
+test_suite(
     name = 'test',
+    tests = [':test2', ':test3']
+)
+
+client_test(
+    name = 'test2',
+    test_executable = ':py2test',
+    server_executable = '//tools/TestServer',
+    rpc_port = '50010',
+    stream_port = '50011',
+    tags = ['requires-network'],
+    size = 'small'
+)
+
+client_test(
+    name = 'test3',
+    test_executable = ':py3test',
+    server_executable = '//tools/TestServer',
+    rpc_port = '50010',
+    stream_port = '50011',
+    tags = ['requires-network'],
+    size = 'small'
+)
+
+py_test(
+    name = 'py2test',
     src = ':python',
     pkg = 'krpc-'+version,
-    deps = ['@python.protobuf//file'],
+    deps = ['@python.six//file', '@python.protobuf//file', '@python.enum34//file'],
+    tags = ['requires-network'],
+    size = 'small'
+)
+
+py3_test(
+    name = 'py3test',
+    src = ':python',
+    pkg = 'krpc-'+version,
+    #use3 = True,
+    deps = ['@python.six//file', '@python.protobuf//file'],
+    tags = ['requires-network'],
     size = 'small'
 )

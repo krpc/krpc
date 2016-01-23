@@ -45,8 +45,8 @@ new_http_archive(
 
 http_file(
     name = 'python.protobuf',
-    url = 'https://pypi.python.org/packages/source/p/protobuf/protobuf-3.0.0a3.tar.gz',
-    sha256 = 'b61622de5048415bfd3f2d812ad64606438ac9e25009ae84191405fe58e522c1'
+    url = 'https://pypi.python.org/packages/source/p/protobuf/protobuf-3.0.0b2.tar.gz',
+    sha256 = 'd5b560bbc4b7d97cc2455c05cad9299d9db02d7bd11193b05684e3a86303c229'
 )
 
 http_file(
@@ -98,6 +98,12 @@ http_file(
 )
 
 http_file(
+    name = 'python.enum34',
+    url = 'https://pypi.python.org/packages/source/e/enum34/enum34-1.1.2.tar.gz',
+    sha256 = '2475d7fcddf5951e92ff546972758802de5260bf409319a9f1934e6bbc8b1dc7'
+)
+
+http_file(
     name = 'python.markupsafe',
     url = 'https://pypi.python.org/packages/source/M/MarkupSafe/MarkupSafe-0.23.tar.gz',
     sha256 = 'a4ec1aff59b95a14b45eb2e23761a0179e98319da5a7eb76b56ea8cdc7b871c3'
@@ -125,6 +131,12 @@ http_file(
     name = 'python.pytz',
     url = 'https://pypi.python.org/packages/source/p/pytz/pytz-2015.7.tar.bz2',
     sha256 = 'fbd26746772c24cb93c8b97cbdad5cb9e46c86bbdb1b9d8a743ee00e2fb1fc5d'
+)
+
+http_file(
+    name = 'python.six',
+    url = 'https://pypi.python.org/packages/source/s/six/six-1.10.0.tar.gz',
+    sha256 = '105f8d68616f8248e24bf0e9372ef04d3cc10104f1980f54d57b2ce73a5ad56a'
 )
 
 http_file(

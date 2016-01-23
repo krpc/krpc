@@ -8,7 +8,7 @@ del os.link
 
 dirpath = os.path.dirname(os.path.realpath(__file__))
 
-install_requires=['protobuf == 3.0.0a3']
+install_requires=['protobuf == 3.0.0b2']
 if sys.version_info < (3, 4):
     install_requires.append('enum34 >= 0.9')
 

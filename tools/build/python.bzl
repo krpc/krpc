@@ -54,20 +54,20 @@ py_sdist = rule(
     }
 )
 
-def _test_impl(ctx):
+def _test_impl(ctx, pyexe='python2'):
     sub_commands = [
-        'virtualenv env --quiet --system-site-packages',
-        'virtualenv env --quiet --relocatable'
+        'virtualenv env --system-site-packages --python=%s' % pyexe,
+        'sed -i "1s/.*/#!env\\/bin\\/python/" env/bin/pip'
     ]
     for dep in ctx.files.deps:
-        sub_commands.append('env/bin/pip install --quiet --no-deps %s' % dep.path)
+        sub_commands.append('env/bin/pip install --no-deps %s' % dep.path)
     sub_commands.extend([
         'unzip -o %s' % (ctx.file.src.short_path), #TODO: install the package then run the tests??
         '(cd %s ; ../env/bin/python setup.py test)' % ctx.attr.pkg
     ])
     ctx.file_action(
         output = ctx.outputs.executable,
-        content = ' &&\n'.join(sub_commands)+'\n',
+        content = '&& \\\n'.join(sub_commands)+'\n',
         executable = True
     )
 
@@ -81,6 +81,19 @@ def _test_impl(ctx):
 
 py_test = rule(
     implementation = _test_impl,
+    attrs = {
+        'src': attr.label(allow_files=True, single_file=True),
+        'pkg': attr.string(mandatory=True),
+        'deps': attr.label_list(allow_files=True)
+    },
+    test = True
+)
+
+def _test3_impl(ctx):
+    return _test_impl(ctx, pyexe='python3')
+
+py3_test = rule(
+    implementation = _test3_impl,
     attrs = {
         'src': attr.label(allow_files=True, single_file=True),
         'pkg': attr.string(mandatory=True),

@@ -1,17 +1,9 @@
 import subprocess
 import time
 import krpc
+import sys
 
 class ServerTestCase(object):
-
-    @classmethod
-    def setUpClass(cls):
-        cls.server = subprocess.Popen(['mono', 'bin/TestServer/TestServer.exe', '50010', '50011', '--quiet'])
-        time.sleep(1)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.server.kill()
 
     def setUp(self):
         self.conn = self.connect()

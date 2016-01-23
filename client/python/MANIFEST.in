@@ -2,7 +2,3 @@ include LICENSE
 include COPYING
 include COPYING.LESSER
 include *.txt
-include bin/TestServer/*.exe
-include bin/TestServer/*.dll
-include bin/TestServer/*.xml
-include bin/TestServer/LICENSE*
