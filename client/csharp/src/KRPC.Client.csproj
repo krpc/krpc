@@ -33,8 +33,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\tools\build\protobuf\csharp\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\..\bazel-krpc\external\csharp.protobuf\lib\dotnet\Google.Protobuf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

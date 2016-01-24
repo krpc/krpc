@@ -24,7 +24,7 @@ csharp_library(
         ':AssemblyInfo', '//protobuf:csharp',
         ':services-krpc', ':services-spacecenter', ':services-infernalrobotics', ':services-kerbalalarmclock'],
     deps = [
-        '//tools/build/protobuf:Google.Protobuf',
+        '//tools/build/mono-4.5:Google.Protobuf',
         '//tools/build/mono-4.5:mscorlib',
         '//tools/build/mono-4.5:System',
         '//tools/build/mono-4.5:System.Core',
@@ -81,7 +81,7 @@ csharp_nunit_test(
     deps = [
         ':KRPC.Client',
         '//tools/build/mono-4.5:Moq',
-        '//tools/build/protobuf:Google.Protobuf',
+        '//tools/build/mono-4.5:Google.Protobuf',
         '//tools/build/mono-4.5:mscorlib',
         '//tools/build/mono-4.5:System',
         '//tools/build/mono-4.5:System.Core',

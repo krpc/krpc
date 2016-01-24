@@ -29,14 +29,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\tools\build\protobuf\csharp\Google.Protobuf.dll</HintPath>
-    </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\..\bazel-krpc\external\csharp.moq\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\bazel-krpc\external\csharp.nunit\NUnit-2.6.4\bin\framework\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\..\bazel-krpc\external\csharp.protobuf\lib\dotnet\Google.Protobuf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
