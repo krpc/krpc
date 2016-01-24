@@ -22,7 +22,7 @@ csharp_library(
     deps = [
         '//server:KRPC',
         '//service/SpaceCenter:KRPC.SpaceCenter',
-        '//tools/build/protobuf:Google.Protobuf',
+        '//tools/build/ksp:Google.Protobuf',
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
         '//tools/build/ksp:UnityEngine',

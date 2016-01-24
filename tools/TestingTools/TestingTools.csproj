@@ -41,7 +41,7 @@
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\build\protobuf\csharp\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\bazel-krpc\external\csharp.protobuf.net35\Google.Protobuf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

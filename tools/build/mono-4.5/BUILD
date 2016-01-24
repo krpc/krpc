@@ -10,5 +10,6 @@ csharp_reference(name = 'System.IO', file = '//lib:mono-4.5/Facades/System.IO.dl
 csharp_reference(name = 'System.Xml', file = '//lib:mono-4.5/System.Xml.dll')
 csharp_reference(name = 'System.Xml.Linq', file = '//lib:mono-4.5/System.Xml.Linq.dll')
 
+csharp_reference(name = 'Google.Protobuf', file = '@csharp.protobuf//:lib/dotnet/Google.Protobuf.dll')
 csharp_reference(name = 'Newtonsoft.Json', file = '@csharp.json//:Bin/Net40/Newtonsoft.Json.dll')
 csharp_reference(name = 'Moq', file = '@csharp.moq//:lib/net40/Moq.dll')

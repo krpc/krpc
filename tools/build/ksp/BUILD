@@ -12,3 +12,5 @@ csharp_reference(name = 'System', file = '//lib:ksp/KSP_Data/Managed/System.dll'
 csharp_reference(name = 'System.Core', file = '//lib:ksp/KSP_Data/Managed/System.Core.dll')
 csharp_reference(name = 'System.Xml', file = '//lib:ksp/KSP_Data/Managed/System.Xml.dll')
 csharp_reference(name = 'System.Xml.Linq', file = '//lib:ksp/KSP_Data/Managed/System.Xml.Linq.dll')
+
+csharp_reference(name = 'Google.Protobuf', file = '@csharp.protobuf.net35//file')

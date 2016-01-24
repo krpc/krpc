@@ -64,7 +64,7 @@ package_archive(
         '//service/SpaceCenter',
         '//service/KerbalAlarmClock',
         '//service/InfernalRobotics',
-        '//tools/build/protobuf:Google.Protobuf',
+        '//tools/build/ksp:Google.Protobuf',
         '//tools/build/protobuf:LICENSE',
         # Clients
         '//client/python',
