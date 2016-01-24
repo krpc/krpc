@@ -67,7 +67,7 @@ csharp_nunit_test(
     deps = [
         '//server:KRPC',
         '//tools/build/mono-4.5:Moq',
-        '//tools/build/mono-4.5:Google.Protobuf',
+        '//tools/build/ksp:Google.Protobuf',
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
         '//tools/build/ksp:UnityEngine',
