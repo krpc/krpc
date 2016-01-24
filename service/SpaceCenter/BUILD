@@ -22,7 +22,7 @@ csharp_library(
     srcs = glob(['src/**/*.cs']) + [':AssemblyInfo'],
     deps = [
         '//server:KRPC',
-        '//tools/build/protobuf:Google.Protobuf',
+        '//tools/build/ksp:Google.Protobuf',
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
         '//tools/build/ksp:UnityEngine',

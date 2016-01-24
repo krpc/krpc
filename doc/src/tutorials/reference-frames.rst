@@ -1,5 +1,7 @@
 .. _tutorial-reference-frames:
 
+.. currentmodule:: SpaceCenter
+
 Reference Frames
 ================
 
@@ -137,17 +139,17 @@ Available Reference Frames
 
 kRPC provides the following reference frames:
 
-* :meth:`Vessel.reference_frame`
-* :meth:`Vessel.orbital_reference_frame`
-* :meth:`Vessel.surface_reference_frame`
-* :meth:`Vessel.surface_velocity_reference_frame`
-* :meth:`CelestialBody.reference_frame`
-* :meth:`CelestialBody.non_rotating_reference_frame`
-* :meth:`CelestialBody.orbital_reference_frame`
-* :meth:`Node.reference_frame`
-* :meth:`Node.orbital_reference_frame`
-* :meth:`Part.reference_frame`
-* :meth:`DockingPort.reference_frame`
+* :attr:`Vessel.reference_frame`
+* :attr:`Vessel.orbital_reference_frame`
+* :attr:`Vessel.surface_reference_frame`
+* :attr:`Vessel.surface_velocity_reference_frame`
+* :attr:`CelestialBody.reference_frame`
+* :attr:`CelestialBody.non_rotating_reference_frame`
+* :attr:`CelestialBody.orbital_reference_frame`
+* :attr:`Node.reference_frame`
+* :attr:`Node.orbital_reference_frame`
+* :attr:`Part.reference_frame`
+* :attr:`DockingPort.reference_frame`
 
 Converting Between Reference Frames
 -----------------------------------

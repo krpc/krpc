@@ -4,8 +4,6 @@ exports_files(['LICENSE'])
 
 package(default_visibility = ['//visibility:public'])
 
-csharp_reference(name = 'Google.Protobuf', file = ':csharp/Google.Protobuf.dll')
-
 filegroup(
     name = 'protoc',
     srcs = select({

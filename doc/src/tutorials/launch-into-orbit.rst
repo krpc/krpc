@@ -1,3 +1,5 @@
+.. currentmodule:: SpaceCenter
+
 Launch into Orbit
 =================
 

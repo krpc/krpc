@@ -37,9 +37,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="Google.Protobuf">
-      <HintPath>..\..\tools\build\protobuf\csharp\Google.Protobuf.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -51,6 +48,9 @@
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\bazel-krpc\external\csharp.protobuf.net35\Google.Protobuf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

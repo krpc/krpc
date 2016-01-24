@@ -22,6 +22,20 @@ new_http_archive(
 )
 
 new_http_archive(
+    name = 'csharp.protobuf',
+    build_file = 'tools/build/csharp.protobuf.BUILD',
+    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.0.0-beta2',
+    type = 'zip',
+    sha256 = 'b306912a12c68b9231c29d53a6593e2b1f68572d43d0470218a318d19a89b4e7'
+)
+
+http_file(
+    name = 'csharp.protobuf.net35',
+    url = 'https://github.com/djungelorm/protobuf/releases/download/v3.0.0-beta-2-net35/Google.Protobuf.dll',
+    sha256 = 'd796cb4e88df89c13296d118dc62dbbf08bbebd001110f07694c6720ffbfa2b8'
+)
+
+new_http_archive(
     name = 'csharp.nunit',
     build_file = 'tools/build/nunit.BUILD',
     url = 'https://github.com/nunit/nunitv2/releases/download/2.6.4/NUnit-2.6.4.zip',

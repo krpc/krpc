@@ -1,3 +1,5 @@
+.. currentmodule:: SpaceCenter
+
 Interacting with Parts
 ======================
 
