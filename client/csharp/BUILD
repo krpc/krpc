@@ -1,4 +1,4 @@
-load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assembly_info')
+load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assembly_info', 'nuget_package')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version', 'copyright')
 load('generate', 'generate')
@@ -7,6 +7,28 @@ filegroup(
     name = 'csharp',
     srcs = [':KRPC.Client', 'CHANGES.txt'],
     visibility = ['//visibility:public']
+)
+
+nuget_package(
+    name = 'nuget',
+    assembly = ':KRPC.Client',
+    id = 'KRPC.Client',
+    version = version+'-beta2', #TODO: remove beta version number when Google.Protobuf is released
+    copyright = copyright,
+    description = 'C# client for kRPC',
+    project_url = 'https://github.com/djungelorm/krpc',
+    license_url = 'https://github.com/djungelorm/krpc/blob/master/LICENSE',
+    framework_deps = [
+        'System',
+        'System.Core',
+        'System.Runtime',
+        'System.IO',
+        'System.Xml',
+        'System.Xml.Linq'
+    ],
+    deps = {
+        'Google.Protobuf': '3.0.0-beta2'
+    }
 )
 
 csharp_assembly_info(

@@ -21,6 +21,12 @@ new_http_archive(
     sha256 = '26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b'
 )
 
+http_file(
+    name = 'csharp.nuget',
+    url = 'https://dist.nuget.org/win-x86-commandline/v3.3.0/nuget.exe',
+    sha256 = 'af8ee5c2299a7d71f4bfefe046701af551c348b8c9f6c10302598262f16d42aa'
+)
+
 new_http_archive(
     name = 'csharp.protobuf',
     build_file = 'tools/build/csharp.protobuf.BUILD',
