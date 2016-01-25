@@ -337,23 +337,23 @@ namespace KRPC.Client.Test
         [Test]
         public void TupleCollection1 ()
         {
-            var value = new KRPC.Client.Tuple<Int32> (1);
+            var value = new Tuple<Int32> (1);
             var data = "0a0101";
             var encodeResult = Encoder.Encode (value, value.GetType ());
             Assert.AreEqual (data, Hexlify (encodeResult));
-            KRPC.Client.Tuple<Int32> decodeResult = (KRPC.Client.Tuple<Int32>)Encoder.Decode (Unhexlify (data), value.GetType (), null);
-            Assert.AreEqual (value.Item1, decodeResult.Item1); //TODO: add equality comparisons for Tuple
+            Tuple<Int32> decodeResult = (Tuple<Int32>)Encoder.Decode (Unhexlify (data), value.GetType (), null);
+            Assert.AreEqual (value, decodeResult);
         }
 
         [Test]
         public void TupleCollection2 ()
         {
-            var value = new KRPC.Client.Tuple<Int32,String,Boolean> (1, "jeb", false);
+            var value = new Tuple<Int32,String,Boolean> (1, "jeb", false);
             var data = "0a01010a04036a65620a0100";
             var encodeResult = Encoder.Encode (value, value.GetType ());
             Assert.AreEqual (data, Hexlify (encodeResult));
-            KRPC.Client.Tuple<Int32,String,Boolean> decodeResult = (KRPC.Client.Tuple<Int32,String,Boolean>)Encoder.Decode (Unhexlify (data), value.GetType (), null);
-            Assert.AreEqual (value.Item1, decodeResult.Item1); //TODO: add equality comparisons for Tuple
+            Tuple<Int32,String,Boolean> decodeResult = (Tuple<Int32,String,Boolean>)Encoder.Decode (Unhexlify (data), value.GetType (), null);
+            Assert.AreEqual (value, decodeResult);
         }
     }
 }

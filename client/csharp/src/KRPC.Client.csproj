@@ -32,12 +32,15 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\..\bazel-krpc\external\csharp.protobuf\lib\dotnet\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.IO">
+      <HintPath>..\..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime">
+      <HintPath>..\..\..\bazel-krpc\lib\mono-4.5\Facades\System.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -47,7 +50,6 @@
     <Compile Include="Object.cs" />
     <Compile Include="RPCException.cs" />
     <Compile Include="Encoder.cs" />
-    <Compile Include="Tuple.cs" />
     <Compile Include="..\..\..\bazel-bin\protobuf\KRPC.cs">
       <Link>KRPC.cs</Link>
     </Compile>
