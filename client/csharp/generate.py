@@ -92,18 +92,18 @@ def parse_type(typ):
             exit(1)
 
     elif isinstance(typ, krpc.types.ListType):
-        typ_string = 'IList<%s>' % parse_type(Types.as_type(typ.protobuf_type[5:-1]))[0]
+        typ_string = 'global::System.Collections.Generic.IList<%s>' % parse_type(Types.as_type(typ.protobuf_type[5:-1]))[0]
 
     elif isinstance(typ, krpc.types.SetType):
-        typ_string = 'ISet<%s>' % parse_type(Types.as_type(typ.protobuf_type[4:-1]))[0]
+        typ_string = 'global::System.Collections.Generic.ISet<%s>' % parse_type(Types.as_type(typ.protobuf_type[4:-1]))[0]
 
     elif isinstance(typ, krpc.types.DictionaryType):
         key_type,value_type = tuple(typ.protobuf_type[11:-1].split(','))
-        typ_string = 'IDictionary<%s,%s>' % (parse_type(Types.as_type(key_type))[0], parse_type(Types.as_type(value_type))[0])
+        typ_string = 'global::System.Collections.Generic.IDictionary<%s,%s>' % (parse_type(Types.as_type(key_type))[0], parse_type(Types.as_type(value_type))[0])
 
     elif isinstance(typ, krpc.types.TupleType):
         value_types = typ.protobuf_type[6:-1].split(',')
-        typ_string = 'Tuple<%s>' % ','.join(parse_type(Types.as_type(t))[0] for t in value_types)
+        typ_string = 'global::System.Tuple<%s>' % ','.join(parse_type(Types.as_type(t))[0] for t in value_types)
 
     elif isinstance(typ, krpc.types.ClassType):
         typ_string = 'global::KRPC.Client.Services.%s' % typ.protobuf_type[6:-1]
