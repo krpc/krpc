@@ -18,14 +18,6 @@ nuget_package(
     description = 'C# client for kRPC',
     project_url = 'https://github.com/djungelorm/krpc',
     license_url = 'https://github.com/djungelorm/krpc/blob/master/LICENSE',
-    framework_deps = [
-        'System',
-        'System.Core',
-        'System.Runtime',
-        'System.IO',
-        'System.Xml',
-        'System.Xml.Linq'
-    ],
     deps = {
         'Google.Protobuf': '3.0.0-beta2'
     }
