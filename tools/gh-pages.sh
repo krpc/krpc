@@ -12,7 +12,8 @@ bazel build //doc:html
 rm -rf docs
 unzip -q bazel-bin/doc/html.zip -d docs
 
-git add docs
-git commit -m "gh-pages"
+git add -f docs
+git rm lib/mono-4.5
+git commit -m "update"
 git push origin gh-pages -f
 git checkout master
