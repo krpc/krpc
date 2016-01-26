@@ -5,7 +5,7 @@ C# Client
 =========
 
 The ``KRPC.Client.dll`` assembly provides functionality to interact with a kRPC
-server from C#.
+server from C#. It is `available on NuGet <http://nuget.com/packages/KRPC.Client>`_.
 
 Connecting to the Server
 ------------------------
