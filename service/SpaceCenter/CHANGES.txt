@@ -1,6 +1,7 @@
-v0.1.13
+v0.2.0
  * Fix SpaceCenter.HorizontalSpeed calculation
  * Added support for resource harvesters and converters (#166,#182)
+ * Fix bug with Flight.SideslipAngle (#189)
 
 v0.1.12
  * Built for KSP 1.0.5

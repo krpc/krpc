@@ -1,4 +1,4 @@
-v0.1.13
+v0.2.0
  * Update protobuf 3.0.0-beta-2
  * Fix bug in keyword arg handling (#168)
  * Removed TestServer.exe and associated binaries from release archive
