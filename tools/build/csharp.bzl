@@ -220,7 +220,7 @@ def _nuget_package_impl(ctx):
         '<metadata>',
         '  <id>%s</id>' % ctx.attr.id,
         '  <version>%s</version>' % ctx.attr.version,
-        '  <authors>%s</authors>' % ctx.attr.copyright,
+        '  <authors>%s</authors>' % ctx.attr.author,
         '  <description>%s</description>' % ctx.attr.description
     ]
     if ctx.attr.project_url:
@@ -274,7 +274,7 @@ nuget_package = rule(
         'id': attr.string(mandatory=True),
         'assembly': attr.label(providers=['out', 'lib', 'doc', 'target_type']),
         'version': attr.string(mandatory=True),
-        'copyright': attr.string(mandatory=True),
+        'author': attr.string(mandatory=True),
         'project_url': attr.string(),
         'license_url': attr.string(),
         'description': attr.string(mandatory=True),
