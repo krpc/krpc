@@ -120,4 +120,14 @@ the name of the vessel. You should see something like the following:
 .. image:: /images/getting-started/hello-world.png
 
 Congratulations! You've written your first script that communicates with KSP.
-For some more interesting examples, check out the :doc:`tutorials <tutorials>`.
+
+Going further...
+----------------
+
+ * For some more interesting examples of what you can do with kRPC, check out
+   the :doc:`tutorials <tutorials>`.
+ * Client libraries are available for other languages too, including
+   :doc:`C++ <cpp>`, :doc:`C# <csharp>` and :doc:`Lua <lua>`.
+ * It is also easy to communicate with the server manually from any language you
+   like -- as long as it can do network I/O.
+   :doc:`See here for details <communication-protocol>`.
