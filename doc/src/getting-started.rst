@@ -80,7 +80,7 @@ On Windows
    make sure that pip is installed as well.
 
 2. Install the kRPC python module, by opening command prompt and running the
-   following command: ``pip install krpc``
+   following command: ``C:\Python27\Scripts\pip.exe install krpc``
 
 3. Run Python IDLE (or your favorite editor) and start coding!
 
