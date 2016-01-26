@@ -26,7 +26,7 @@ setup(
     test_suite='krpc.test',
     use_2to3=True,
     classifiers=[
-        'Development Status :: 3 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
         'Natural Language :: English',
