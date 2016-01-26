@@ -1,6 +1,6 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_assembly_info')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
-load('/config', 'version', 'copyright')
+load('/config', 'version', 'author')
 
 filegroup(
     name = 'InfernalRobotics',
@@ -13,7 +13,7 @@ csharp_assembly_info(
     title = 'KRPC.InfernalRobotics',
     description = 'Infernal Robotics service for kRPC',
     version = version,
-    copyright = copyright
+    copyright = author
 )
 
 csharp_library(

@@ -1,13 +1,13 @@
 load('/tools/build/csharp', 'csharp_binary', 'csharp_library', 'csharp_assembly_info')
 load('/tools/build/protobuf/csharp', 'protobuf_csharp')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
-load('/config', 'version', 'copyright')
+load('/config', 'version', 'author')
 
 csharp_assembly_info(
     name = 'AssemblyInfo',
     title = 'TestServer',
     version = version,
-    copyright = copyright
+    copyright = author
 )
 
 csharp_binary(

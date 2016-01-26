@@ -1,5 +1,5 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_assembly_info')
-load('/config', 'version', 'copyright')
+load('/config', 'version', 'author')
 
 csharp_library(
     name = 'TestingTools',
@@ -25,5 +25,5 @@ csharp_assembly_info(
     name = 'AssemblyInfo',
     title = 'TestingTools',
     version = version,
-    copyright = copyright
+    copyright = author
 )

@@ -1,5 +1,5 @@
 load('/tools/build/csharp', 'csharp_binary', 'csharp_assembly_info')
-load('/config', 'version', 'copyright')
+load('/config', 'version', 'author')
 
 csharp_binary(
     name = 'ServiceDefinitions',
@@ -27,5 +27,5 @@ csharp_assembly_info(
     name = 'AssemblyInfo',
     title = 'ServiceDefinitions',
     version = version,
-    copyright = copyright
+    copyright = author
 )

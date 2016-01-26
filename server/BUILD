@@ -1,7 +1,7 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assembly_info')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
 load('/tools/build/image', 'png_images')
-load('/config', 'version', 'copyright')
+load('/config', 'version', 'author')
 
 filegroup(
     name = 'server',
@@ -25,7 +25,7 @@ csharp_assembly_info(
     name = 'AssemblyInfo',
     title = 'KRPC',
     description = 'RPC server for Kerbal Space Program',
-    copyright = copyright,
+    copyright = author,
     version = version,
     internals_visible_to = ['KRPC.Test', 'TestServer', 'ServiceDefinitions', 'DynamicProxyGenAssembly2']
 )
