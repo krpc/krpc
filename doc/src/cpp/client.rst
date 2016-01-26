@@ -5,7 +5,7 @@ C++ Client
 
 The ``krpc`` library provides functionality to interact with a kRPC server from
 C++. The headers and source can be
-`downloaded from github <https://github.com/djungelorm/krpc/tree/v0.1.13/cpp>`_.
+`downloaded from github <https://github.com/djungelorm/krpc/releases>`_.
 
 Connecting to the Server
 ------------------------
