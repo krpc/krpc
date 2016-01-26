@@ -99,9 +99,11 @@ namespace KRPC.Client
                 return EncodeSet (value, type); //TODO: ugly checking for set types
             else if (value != null && value.GetType ().IsGenericType &&
                      (value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<>) ||
-                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,>) ||
-                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,>) ||
-                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,>))) //TODO: support more than 4D tuples
+                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,>) ||
+                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,>) ||
+                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,>) ||
+                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,>) ||
+                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,,>)))
                 return EncodeTuple (value, type); //TODO: ugly checking for tuple types
             else
                 throw new ArgumentException (type + " is not a serializable type");
@@ -145,10 +147,9 @@ namespace KRPC.Client
 
         private static ByteString EncodeTuple (object value, Type type)
         {
-            // TODO: this is ugly
             var encodedTuple = new KRPC.Schema.KRPC.Tuple ();
             var valueTypes = type.GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("KRPC.Client.Tuple`" + valueTypes.Length);
+            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
             var tupleType = genericType.MakeGenericType (valueTypes);
             for (int i = 0; i < valueTypes.Length; i++) {
                 var property = tupleType.GetProperty ("Item" + (i + 1));
@@ -200,10 +201,12 @@ namespace KRPC.Client
                 return DecodeSet (value, type, client);
             else if (type.IsGenericType &&
                      (type.GetGenericTypeDefinition () == typeof(Tuple<>) ||
-                     type.GetGenericTypeDefinition () == typeof(Tuple<,>) ||
-                     type.GetGenericTypeDefinition () == typeof(Tuple<,,>) ||
-                     type.GetGenericTypeDefinition () == typeof(Tuple<,,,>))) //TODO: support more than 3D tuples
-                return DecodeTuple (value, type, client);
+                      type.GetGenericTypeDefinition () == typeof(Tuple<,>) ||
+                      type.GetGenericTypeDefinition () == typeof(Tuple<,,>) ||
+                      type.GetGenericTypeDefinition () == typeof(Tuple<,,,>) ||
+                      type.GetGenericTypeDefinition () == typeof(Tuple<,,,,>) ||
+                      type.GetGenericTypeDefinition () == typeof(Tuple<,,,,,>)))
+                return DecodeTuple (value, type, client); // TODO: ugly handing of tuple types
             throw new ArgumentException (type + " is not a serializable type");
         }
 
@@ -251,10 +254,9 @@ namespace KRPC.Client
 
         private static object DecodeTuple (ByteString value, Type type, Connection client)
         {
-            // TODO: this is ugly
             var encodedTuple = KRPC.Schema.KRPC.Tuple.Parser.ParseFrom (value);
             var valueTypes = type.GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("KRPC.Client.Tuple`" + valueTypes.Length);
+            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
             System.Object[] values = new System.Object[valueTypes.Length];
             for (int j = 0; j < valueTypes.Length; j++) {
                 var item = encodedTuple.Items [j];
