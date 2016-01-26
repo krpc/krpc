@@ -69,6 +69,7 @@ package_archive(
         # Clients
         '//client/python',
         '//client/cpp',
+        '//client/csharp',
         '//client/lua',
         # Schema
         '//protobuf:krpc.proto',
@@ -107,7 +108,8 @@ test_suite(
         '//server:test',
         '//client/python:test',
         '//client/cpp:test',
-        '//client/lua:test'
+        '//client/lua:test',
+        '//client/csharp:test'
     ]
 )
 
@@ -119,6 +121,8 @@ filegroup(
         '//service/SpaceCenter',
         '//service/InfernalRobotics',
         '//service/KerbalAlarmClock',
+        '//client/csharp',
+        '//client/csharp:test',
         '//tools/ServiceDefinitions',
         '//tools/TestingTools',
         '//tools/TestServer'

@@ -5,7 +5,8 @@ copyright = '2015-2016, djungelorm'
 
 master_doc = 'index'
 source_suffix = '.rst'
-extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo', 'redjack.sphinx.lua']
+extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo',
+              'redjack.sphinx.lua', 'sphinx_csharp.csharp']
 templates_path = ['_templates']
 
 pygments_style = 'sphinx'

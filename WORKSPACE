@@ -21,6 +21,12 @@ new_http_archive(
     sha256 = '26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b'
 )
 
+http_file(
+    name = 'csharp.nuget',
+    url = 'https://dist.nuget.org/win-x86-commandline/v3.3.0/nuget.exe',
+    sha256 = 'af8ee5c2299a7d71f4bfefe046701af551c348b8c9f6c10302598262f16d42aa'
+)
+
 new_http_archive(
     name = 'csharp.protobuf',
     build_file = 'tools/build/csharp.protobuf.BUILD',
@@ -91,6 +97,12 @@ http_file(
     name = 'python.sphinx-lua',
     url = 'https://github.com/djungelorm/sphinx-lua/releases/download/0.1.2/sphinx-lua-0.1.2.tar.gz',
     sha256 = '6907a309d6d71046222edde1e8cec683b875d7adc478edb97aeb2570c36b145f'
+)
+
+http_file(
+    name = 'python.sphinx-csharp',
+    url = 'https://github.com/djungelorm/sphinx-csharp/releases/download/v1.0.0/sphinx-csharp-1.0.0.tar.gz',
+    sha256 = 'bb03996b2f6826b67d7a451f781d684fd9ff9d48d33462beaaff492a070bf81b'
 )
 
 http_file(

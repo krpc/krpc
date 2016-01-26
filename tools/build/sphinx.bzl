@@ -139,7 +139,9 @@ _SPHINX_ATTRS = {
     '_six': attr.label(default=Label('@python.six//file'),
                        allow_files=True, single_file=True),
     '_sphinx_lua': attr.label(default=Label('@python.sphinx-lua//file'),
-                              allow_files=True, single_file=True)
+                              allow_files=True, single_file=True),
+    '_sphinx_csharp': attr.label(default=Label('@python.sphinx-csharp//file'),
+                                 allow_files=True, single_file=True)
 }
 
 sphinx_html = rule(

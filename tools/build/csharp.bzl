@@ -55,6 +55,7 @@ def _lib_impl(ctx):
         name = ctx.label.name,
         target_type = ctx.attr._target_type,
         lib = lib_output,
+        doc = doc_output,
         out = outputs
     )
 
@@ -203,4 +204,83 @@ csharp_assembly_info = rule(
         'internals_visible_to': attr.string_list()
     },
     outputs = {'out': '%{name}.cs'}
+)
+
+def _nuget_package_out(attr):
+    return {'out': '%s.%s.nupkg' % (attr.id, attr.version)}
+
+def _nuget_package_impl(ctx):
+    assembly = ctx.attr.assembly.lib
+    doc = ctx.attr.assembly.doc
+    nuspec = ctx.new_file(assembly, assembly.basename.replace('.dll','.nuspec'))
+
+    nuspec_contents = [
+        '<?xml version="1.0"?>',
+        '<package>',
+        '<metadata>',
+        '  <id>%s</id>' % ctx.attr.id,
+        '  <version>%s</version>' % ctx.attr.version,
+        '  <authors>%s</authors>' % ctx.attr.author,
+        '  <description>%s</description>' % ctx.attr.description
+    ]
+    if ctx.attr.project_url:
+        nuspec_contents.append('  <projectUrl>%s</projectUrl>' % ctx.attr.project_url)
+    if ctx.attr.project_url:
+        nuspec_contents.append('  <licenseUrl>%s</licenseUrl>' % ctx.attr.license_url)
+    nuspec_contents.extend([
+        '  <frameworkAssemblies>'
+    ])
+    nuspec_contents.extend(['    <frameworkAssembly assemblyName="%s" targetFramework="net40"/>' % x for x in ctx.attr.framework_deps])
+    nuspec_contents.extend([
+        '  </frameworkAssemblies>',
+        '  <dependencies>'
+    ])
+    nuspec_contents.extend(['    <dependency id="%s" version="%s"/>' % x for x in ctx.attr.deps.items()])
+    nuspec_contents.extend([
+        '  </dependencies>',
+        '</metadata>',
+        '<files>',
+        '  <file src="%s" target="lib/net40" />' % assembly.basename,
+        '  <file src="%s" target="lib/net40" />' % doc.basename,
+        '</files>',
+        '</package>'
+    ])
+
+    ctx.file_action(
+        output = nuspec,
+        content = '\n'.join(nuspec_contents)
+    )
+
+    tmpdir = '%s.nuget-package-tmp' % assembly.basename
+    sub_commands = [
+        'mkdir -p %s' % tmpdir,
+        'cp %s %s' % (nuspec.path, tmpdir),
+        'cp %s %s' % (assembly.path, tmpdir),
+        'cp %s %s' % (doc.path, tmpdir),
+        'mono %s pack %s -BasePath %s' % (ctx.file._nuget_exe.path, tmpdir+'/'+nuspec.basename, tmpdir),
+        'cp %s %s' % (ctx.outputs.out.basename, ctx.outputs.out.path)
+    ]
+
+    ctx.action(
+        mnemonic = 'NuGetPackage',
+        inputs = [ctx.file._nuget_exe, assembly, doc, nuspec],
+        outputs = [ctx.outputs.out],
+        command = ' && '.join(sub_commands)
+    )
+
+nuget_package = rule(
+    implementation = _nuget_package_impl,
+    attrs = {
+        'id': attr.string(mandatory=True),
+        'assembly': attr.label(providers=['out', 'lib', 'doc', 'target_type']),
+        'version': attr.string(mandatory=True),
+        'author': attr.string(mandatory=True),
+        'project_url': attr.string(),
+        'license_url': attr.string(),
+        'description': attr.string(mandatory=True),
+        'framework_deps': attr.string_list(),
+        'deps': attr.string_dict(),
+        '_nuget_exe': attr.label(default=Label('@csharp.nuget//file'), allow_files=True, single_file=True)
+    },
+    outputs = _nuget_package_out
 )

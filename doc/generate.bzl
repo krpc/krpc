@@ -60,9 +60,10 @@ def _impl(ctx):
         inputs = generate_tool_files + ctx.files.defs + [
             src,
             ctx.file._generate_order,
-            ctx.file._generate_python_macros,
             ctx.file._generate_cpp_macros,
-            ctx.file._generate_lua_macros
+            ctx.file._generate_csharp_macros,
+            ctx.file._generate_lua_macros,
+            ctx.file._generate_python_macros
         ],
         outputs = [out],
         progress_message = 'Generating %s documentation %s' % (language, out.short_path),
@@ -73,9 +74,10 @@ def _impl(ctx):
             out.path,
         ] + [f.path for f in ctx.files.defs] + [
             '--order-file=%s' % ctx.file._generate_order.path,
-            '--python-macros=%s' % ctx.file._generate_python_macros.path,
             '--cpp-macros=%s' % ctx.file._generate_cpp_macros.path,
-            '--lua-macros=%s' % ctx.file._generate_lua_macros.path
+            '--csharp-macros=%s' % ctx.file._generate_csharp_macros.path,
+            '--lua-macros=%s' % ctx.file._generate_lua_macros.path,
+            '--python-macros=%s' % ctx.file._generate_python_macros.path
         ],
         use_default_shell_env = True
     )
@@ -91,12 +93,14 @@ generate = rule(
                                      executable=True, allow_files=True, single_file=True),
         '_generate_library': attr.label(default=Label('//doc:generate_lib'),
                                         allow_files=True),
-        '_generate_python_macros': attr.label(default=Label('//doc:lib/python.tmpl'),
-                                              allow_files=True, single_file=True),
         '_generate_cpp_macros': attr.label(default=Label('//doc:lib/cpp.tmpl'),
                                            allow_files=True, single_file=True),
+        '_generate_csharp_macros': attr.label(default=Label('//doc:lib/csharp.tmpl'),
+                                              allow_files=True, single_file=True),
         '_generate_lua_macros': attr.label(default=Label('//doc:lib/lua.tmpl'),
                                            allow_files=True, single_file=True),
+        '_generate_python_macros': attr.label(default=Label('//doc:lib/python.tmpl'),
+                                              allow_files=True, single_file=True),
         '_generate_order': attr.label(default=Label('//doc:order.txt'),
                                       allow_files=True, single_file=True),
         '_python_client': attr.label(default=Label('//client/python'),
