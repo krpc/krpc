@@ -551,7 +551,7 @@ namespace KRPCSpaceCenter.Services
                     CheckFAR ();
                     return (float)FAR.VesselSideslip (vessel);
                 } else {
-                    return (float)(Vector3d.Dot (vessel.transform.up, Vector3d.Exclude (vessel.transform.forward, vessel.srf_velocity.normalized).normalized) * (180d / Math.PI));
+                    return (float)(Vector3d.Dot (vessel.transform.right, vessel.srf_velocity.normalized) * (180d / Math.PI));
                 }
             }
         }
