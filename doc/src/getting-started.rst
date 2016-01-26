@@ -3,7 +3,7 @@
 Getting Started
 ===============
 
-This short guides explains the basics for getting kRPC set up and running, and
+This short guide explains the basics for getting kRPC set up and running, and
 writing a basic Python script to communicate with the game.
 
 The Server Plugin
@@ -17,8 +17,7 @@ Installation
  * `KerbalStuff <https://kerbalstuff.com/mod/636>`_
  * `Curse <http://www.curse.com/project/220219>`_
  * `Github <https://github.com/djungelorm/krpc/releases>`_
- * Or the plugin can be obtained via `CKAN
-   <http://forum.kerbalspaceprogram.com/threads/100067-The-Comprehensive-Kerbal-Archive-Network-%28CKAN%29-Package-Manager-v1-6-5-6-Mar-2015>`_
+ * Or the plugin can be obtained via `CKAN <http://forum.kerbalspaceprogram.com/threads/100067>`_
 
 2. Extract the GameData folder from the archive into your KSP directory.
 
@@ -56,8 +55,8 @@ configuration options are:
    are available on your machine. In most cases, they can just be left as the
    default.
 
-There are also several advanced, which are hidden by default, but can be
-revealed by checking the 'Advanced settings' box:
+There are also several advanced settings, which are hidden by default, but can
+be revealed by checking the 'Advanced settings' box:
 
 1. **Auto-start server**: When enabled, the server will start automatically when
    the game loads.
