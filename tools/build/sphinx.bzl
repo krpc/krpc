@@ -35,12 +35,14 @@ def _impl(ctx, builder):
         ctx.file._pytz,
         ctx.file._sphinxcontrib_spelling,
         ctx.file._pyenchant,
-        ctx.file._sphinx_lua
+        ctx.file._six,
+        ctx.file._sphinx_lua,
+        ctx.file._sphinx_csharp
     ]
 
-    subcommands = ['virtualenv env --quiet --system-site-packages']
+    subcommands = ['virtualenv env --quiet --no-site-packages']
     for lib in pylibs:
-        subcommands.append('env/bin/pip install --quiet --no-deps %s' % lib.path)
+        subcommands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % lib.path)
     subcommands.append('tar -cf %s env' % sphinx_env.path)
     ctx.file_action(
         output = sphinx_setup,
@@ -58,7 +60,7 @@ def _impl(ctx, builder):
 
     subcommands = [
         'tar -xf %s' % sphinx_env.path,
-        'env/bin/sphinx-build -b %s -a -E -W -N -q "$1" "$2.files" $3' % builder # -j32
+        'env/bin/python env/bin/sphinx-build -b %s -a -E -W -N -q "$1" "$2.files" $3' % builder # -j32
     ]
     if builder == 'html':
         subcommands.append('(CWD=`pwd` && cd "$2.files" && zip --quiet -r $CWD/$2 ./)')
@@ -134,6 +136,8 @@ _SPHINX_ATTRS = {
                        allow_files=True, single_file=True),
     '_pyenchant': attr.label(default=Label('@python.pyenchant//file'),
                              allow_files=True, single_file=True),
+    '_six': attr.label(default=Label('@python.six//file'),
+                       allow_files=True, single_file=True),
     '_sphinx_lua': attr.label(default=Label('@python.sphinx-lua//file'),
                               allow_files=True, single_file=True)
 }
