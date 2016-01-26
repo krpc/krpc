@@ -1,7 +1,7 @@
 ifndef KSP_DIR
 $(error KSP_DIR is not set. See https://github.com/djungelorm/krpc/wiki/Compiling for details)
 endif
-KSP_DIR := /home/art/.local/share/Steam/steamapps/common/Kerbal Space Program
+KSP_DIR := $(shell readlink -f "$(KSP_DIR)")
 
 SERVER_VERSION = $(shell cat VERSION.txt)
 PYTHON_CLIENT_VERSION = $(shell grep "version=" python/setup.py | sed "s/\s*version='\(.*\)',/\1/")
