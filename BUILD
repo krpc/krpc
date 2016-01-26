@@ -92,7 +92,7 @@ package_archive(
         'service/SpaceCenter/': 'GameData/kRPC/',
         'service/KerbalAlarmClock/': 'GameData/kRPC/',
         'service/InfernalRobotics/': 'GameData/kRPC/',
-        'tools/build/protobuf/': 'GameData/kRPC/',
+        'tools/build/ksp/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
         'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
         # Schema

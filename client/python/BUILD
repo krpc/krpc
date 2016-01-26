@@ -4,7 +4,7 @@ load('/config', 'version')
 
 py_sdist(
     name = 'python',
-    out = 'krpc-python-%s.zip' % version,
+    out = 'krpc-%s.zip' % version,
     files = [
         '//:readme', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',

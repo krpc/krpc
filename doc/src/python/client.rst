@@ -4,7 +4,7 @@ Python Client
 =============
 
 The ``krpc`` module provides functionality to interact with a kRPC server from
-python.
+python. It can be `installed from pypi <https://pypi.python.org/pypi/krpc>`_.
 
 Connecting to the Server
 ------------------------
