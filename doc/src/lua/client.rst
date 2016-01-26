@@ -4,7 +4,8 @@ Lua Client
 ==========
 
 The ``krpc`` module provides functionality to interact with a kRPC server from
-lua.
+lua. It can be installed
+`using luarocks <https://luarocks.org/modules/djungelorm/krpc>`_.
 
 Connecting to the Server
 ------------------------
