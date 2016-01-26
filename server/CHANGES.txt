@@ -3,7 +3,6 @@ v0.1.13
 
 v0.1.12
  * Built for KSP 1.0.5
- * Kerbal Alarm Clock service changes:
 
 v0.1.11
  * Documentation returned by calling KRPC.GetServices (#31)
@@ -26,7 +25,6 @@ v0.1.8
 
 v0.1.7
  * Fix CKAN install bug on Windows (#105)
- * SpaceCenter service changes:
 
 v0.1.6
  * Nicer errors returned to client (#97)
