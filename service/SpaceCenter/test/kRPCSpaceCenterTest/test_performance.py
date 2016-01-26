@@ -8,7 +8,7 @@ class TestFlight(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        cls.conn = krpc.connect()
+        cls.conn = testingtools.connect()
         cls.control = cls.conn.space_center.active_vessel.control
 
     def test_performance(self):

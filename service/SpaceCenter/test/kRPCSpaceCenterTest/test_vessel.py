@@ -11,7 +11,7 @@ class TestVessel(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect(name='TestVessel')
+        cls.conn = testingtools.connect(name='TestVessel')
         cls.vtype = cls.conn.space_center.VesselType
         cls.vsituation = cls.conn.space_center.VesselSituation
         cls.vessel = cls.conn.space_center.active_vessel
@@ -65,7 +65,7 @@ class TestVesselEngines(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('PartsEngine')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect(name='TestVesselEngines')
+        cls.conn = testingtools.connect(name='TestVesselEngines')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
 

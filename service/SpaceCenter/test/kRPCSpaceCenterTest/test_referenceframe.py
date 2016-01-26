@@ -13,7 +13,7 @@ class TestReferenceFrame(testingtools.TestCase):
     def setUpClass(cls):
         testingtools.new_save()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect(name='TestReferenceFrame')
+        cls.conn = testingtools.connect(name='TestReferenceFrame')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.conn.space_center.active_vessel
         cls.bodies = cls.conn.space_center.bodies

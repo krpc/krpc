@@ -1,11 +1,12 @@
 import unittest
 import os
+import testingtools
 
 def main():
     # Check that a kRPC server is running
     import krpc
     try:
-        conn = krpc.connect()
+        conn = testingtools.connect()
     except:
         print('kRPC server not running; skipping tests')
         exit(0)

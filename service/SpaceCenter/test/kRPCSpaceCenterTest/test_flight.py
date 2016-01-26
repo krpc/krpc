@@ -11,7 +11,7 @@ class TestFlight(testingtools.TestCase):
     def setUpClass(cls):
         testingtools.new_save()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect()
+        cls.conn = testingtools.connect()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.clear_rotation()
         cls.conn.testing_tools.apply_rotation(116, (0,0,-1))
@@ -177,7 +177,7 @@ class TestFlightVerticalSpeed(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        cls.conn = krpc.connect(name='TestFlightVerticalSpeed')
+        cls.conn = testingtools.connect(name='TestFlightVerticalSpeed')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.remove_other_vessels()
 
@@ -235,7 +235,7 @@ class TestFlightAtLaunchpad(testingtools.TestCase):
     def setUpClass(cls):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('Basic')
-        cls.conn = krpc.connect(name='TestFlightAtLaunchpad')
+        cls.conn = testingtools.connect(name='TestFlightAtLaunchpad')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.remove_other_vessels()
         cls.far = cls.conn.space_center.far_available

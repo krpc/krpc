@@ -11,7 +11,7 @@ class TestPartsDockingPort(testingtools.TestCase):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('PartsDockingPort')
         testingtools.remove_other_vessels()
-        cls.conn = krpc.connect(name='TestPartsDockingPort')
+        cls.conn = testingtools.connect(name='TestPartsDockingPort')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.state = cls.conn.space_center.DockingPortState
@@ -160,7 +160,7 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('PartsDockingPortInFlight')
         testingtools.set_circular_orbit('Kerbin', 100000)
         testingtools.remove_other_vessels()
-        self.conn = krpc.connect(name='TestPartsDockingPortInFlight')
+        self.conn = testingtools.connect(name='TestPartsDockingPortInFlight')
         self.sc = self.conn.space_center
         self.state = self.sc.DockingPortState
 
@@ -258,7 +258,7 @@ class TestPartsDockingPortPreAttachedTo(testingtools.TestCase):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('PartsDockingPortPreAttachedTo')
         testingtools.remove_other_vessels()
-        cls.conn = krpc.connect(name='TestPartsDockingPortPreAttachedTo')
+        cls.conn = testingtools.connect(name='TestPartsDockingPortPreAttachedTo')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.state = cls.conn.space_center.DockingPortState
 

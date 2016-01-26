@@ -7,7 +7,7 @@ import time
 class TestComms(testingtools.TestCase):
 
     def setUp(self):
-        self.conn = krpc.connect(name='TestComms')
+        self.conn = testingtools.connect(name='TestComms')
         if not self.conn.space_center.remote_tech_available:
             self.skipTest('RemoteTech not installed')
         testingtools.new_save()

@@ -14,7 +14,7 @@ class TestAutoPilot(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
         testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        cls.conn = krpc.connect(name='TestAutoPilot')
+        cls.conn = testingtools.connect(name='TestAutoPilot')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.ref = cls.conn.space_center.ReferenceFrame
         cls.ap = cls.vessel.auto_pilot
@@ -218,7 +218,7 @@ class TestAutoPilotSAS(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
         testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        cls.conn = krpc.connect()
+        cls.conn = testingtools.connect()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
         cls.sas_mode = cls.conn.space_center.SASMode
@@ -288,7 +288,7 @@ class TestAutoPilotOtherVessel(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Multi')
         testingtools.remove_other_vessels()
         testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        cls.conn = krpc.connect(name='TestAutoPilotOtherVessel')
+        cls.conn = testingtools.connect(name='TestAutoPilotOtherVessel')
         next(iter(cls.conn.space_center.active_vessel.parts.docking_ports)).undock()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.other_vessel = next(iter(filter(lambda v: v != cls.vessel, cls.conn.space_center.vessels)))

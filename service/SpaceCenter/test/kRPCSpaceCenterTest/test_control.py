@@ -139,7 +139,7 @@ class TestControlActiveVessel(testingtools.TestCase, TestControlMixin):
         testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect(name='TestControl')
+        cls.conn = testingtools.connect(name='TestControl')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
         cls.auto_pilot = cls.vessel.auto_pilot
@@ -158,7 +158,7 @@ class TestControlActiveVessel(testingtools.TestCase, TestControlMixin):
         self.control.remove_nodes()
 
     def test_clear_on_disconnect(self):
-        conn = krpc.connect(name='TestControlActiveVessel.test_clear_on_disconnect')
+        conn = testingtools.connect(name='TestControlActiveVessel.test_clear_on_disconnect')
         control = conn.space_center.active_vessel.control
         control.pitch = 1
         control.yaw = 1
@@ -178,7 +178,7 @@ class TestControlNonActiveVessel(testingtools.TestCase, TestControlMixin):
         testingtools.launch_vessel_from_vab('Multi')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect(name='TestControlOtherVessel')
+        cls.conn = testingtools.connect(name='TestControlOtherVessel')
         next(iter(cls.conn.space_center.active_vessel.parts.docking_ports)).undock()
         cls.vessel = next(iter(filter(lambda v: v != cls.conn.space_center.active_vessel, cls.conn.space_center.vessels)))
         cls.control = cls.vessel.control
@@ -201,7 +201,7 @@ class TestControlStaging(testingtools.TestCase):
         testingtools.launch_vessel_from_vab('Staging')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        self.conn = krpc.connect(name='TestStaging')
+        self.conn = testingtools.connect(name='TestStaging')
 
     def tearDown(self):
         self.conn.close()
@@ -221,7 +221,7 @@ class TestControlRover(testingtools.TestCase):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('Rover')
         testingtools.remove_other_vessels()
-        cls.conn = krpc.connect(name='TestControlRover')
+        cls.conn = testingtools.connect(name='TestControlRover')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
         cls.flight = cls.vessel.flight(cls.vessel.orbit.body.reference_frame)

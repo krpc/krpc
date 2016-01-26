@@ -5,14 +5,17 @@ import os
 import shutil
 import itertools
 
+def connect(name=''):
+    return krpc.connect(name=name, address='10.0.2.2')
+
 def get_ksp_dir():
-    path = os.getenv('KSP_DIR')
-    if path == None or not os.path.exists(path):
-        raise RuntimeError ('KSP_DIR not found at %s' % path)
+    path = os.path.abspath('../../../../lib/ksp')
+    if not os.path.exists(path):
+        raise RuntimeError ('KSP dir not found at %s' % path)
     return path
 
 def new_save(name='test'):
-    conn = krpc.connect(name='testingtools.new_save')
+    conn = connect(name='testingtools.new_save')
 
     # Return if the save is already running
     if conn.testing_tools.current_save == name:
@@ -37,17 +40,17 @@ def load_save(name):
     shutil.copy(os.path.join(fixtures_path, name + '.sfs'), os.path.join(save_path, name + '.sfs'))
 
     # Load the save file
-    conn = krpc.connect(name='testingtools.load_save')
+    conn = connect(name='testingtools.load_save')
     conn.testing_tools.load_save('test', name)
     conn.close()
 
 def remove_other_vessels():
-    with krpc.connect(name='testingtools.remove_other_vessels') as conn:
+    with connect(name='testingtools.remove_other_vessels') as conn:
         conn.testing_tools.remove_other_vessels()
 
 def launch_vessel_from_vab(name):
     # Copy craft file to save directory
-    with krpc.connect(name='testingtools.launch_vessel_from_vab') as conn:
+    with connect(name='testingtools.launch_vessel_from_vab') as conn:
        fixtures_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
        save_path = os.path.join(get_ksp_dir(), 'saves', conn.testing_tools.current_save)
        if not os.path.exists(save_path):
@@ -58,15 +61,15 @@ def launch_vessel_from_vab(name):
        shutil.copy(os.path.join(fixtures_path, name + '.craft'), os.path.join(ships_path, name + '.craft'))
 
     # Launch the craft
-    with krpc.connect(name='testingtools.launch_vessel_from_vab') as conn:
+    with connect(name='testingtools.launch_vessel_from_vab') as conn:
         conn.space_center.launch_vessel_from_vab(name)
 
 def set_orbit(body, sma, e, inc, lan, w, mEp, epoch):
-    with krpc.connect(name='testingtools.set_orbit') as conn:
+    with connect(name='testingtools.set_orbit') as conn:
         conn.testing_tools.set_orbit(body, sma, e, inc, lan, w, mEp, epoch)
 
 def set_circular_orbit(body, altitude):
-    with krpc.connect(name='testingtools.set_circular_orbit') as conn:
+    with connect(name='testingtools.set_circular_orbit') as conn:
         conn.testing_tools.set_circular_orbit(body, altitude)
 
 class TestCase(unittest.TestCase):

@@ -10,7 +10,7 @@ class TestPartsRadiator(testingtools.TestCase):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('PartsRadiator')
         testingtools.remove_other_vessels()
-        cls.conn = krpc.connect(name='TestPartsRadiator')
+        cls.conn = testingtools.connect(name='TestPartsRadiator')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.state = cls.conn.space_center.RadiatorState

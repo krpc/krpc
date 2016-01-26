@@ -12,7 +12,7 @@ class TestOrbit(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        cls.conn = krpc.connect(name='TestOrbit')
+        cls.conn = testingtools.connect(name='TestOrbit')
 
     @classmethod
     def tearDownClass(cls):

@@ -7,11 +7,11 @@ class TestPartsLandingGear(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if krpc.connect().space_center.active_vessel.name != 'Parts':
+        if testingtools.connect().space_center.active_vessel.name != 'Parts':
             testingtools.new_save()
             testingtools.launch_vessel_from_vab('Parts')
             testingtools.remove_other_vessels()
-        cls.conn = krpc.connect(name='TestPartsLandingGear')
+        cls.conn = testingtools.connect(name='TestPartsLandingGear')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.state = cls.conn.space_center.LandingGearState

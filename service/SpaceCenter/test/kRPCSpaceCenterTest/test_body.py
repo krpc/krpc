@@ -8,7 +8,7 @@ class TestBody(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.conn = krpc.connect(name='TestBody')
+        cls.conn = testingtools.connect(name='TestBody')
 
     @classmethod
     def tearDownClass(cls):

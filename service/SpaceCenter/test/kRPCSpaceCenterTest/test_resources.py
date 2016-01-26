@@ -17,7 +17,7 @@ class TestResources(testingtools.TestCase, ResourcesTest):
     def setUpClass(cls):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('Resources')
-        cls.conn = krpc.connect(name='TestResources')
+        cls.conn = testingtools.connect(name='TestResources')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.num_stages = len(cls.expected.keys())
 
@@ -165,7 +165,7 @@ class TestResourcesStaticMethods(testingtools.TestCase, ResourcesTest):
 
     @classmethod
     def setUpClass(cls):
-        cls.conn = krpc.connect(name='TestResourcesStaticMethods')
+        cls.conn = testingtools.connect(name='TestResourcesStaticMethods')
 
     @classmethod
     def tearDownClass(cls):

@@ -201,7 +201,7 @@ class TestPartsEngine(testingtools.TestCase, EngineTestBase):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('PartsEngine')
         testingtools.remove_other_vessels()
-        cls.conn = krpc.connect(name='TestPartsEngine')
+        cls.conn = testingtools.connect(name='TestPartsEngine')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
 
@@ -294,7 +294,7 @@ class TestPartsEngineMSL(testingtools.TestCase, EngineTest):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('PartsEngine')
         testingtools.remove_other_vessels()
-        cls.conn = krpc.connect(name='TestPartsEngineMSL')
+        cls.conn = testingtools.connect(name='TestPartsEngineMSL')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.add_engine_data(
@@ -345,7 +345,7 @@ class TestPartsEngineVacuum(testingtools.TestCase, EngineTest):
         testingtools.launch_vessel_from_vab('PartsEngine')
         testingtools.remove_other_vessels()
         testingtools.set_circular_orbit('Kerbin', 250000)
-        cls.conn = krpc.connect(name='TestPartsEngineMSL')
+        cls.conn = testingtools.connect(name='TestPartsEngineMSL')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.add_engine_data(

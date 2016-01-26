@@ -9,7 +9,7 @@ class TestNode(testingtools.TestCase):
     def setUpClass(cls):
         testingtools.new_save()
         testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpc.connect(name='TestNode')
+        cls.conn = testingtools.connect(name='TestNode')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
         for node in cls.control.nodes:

@@ -9,7 +9,7 @@ class TestPartsParachute(testingtools.TestCase):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('PartsParachute')
         testingtools.remove_other_vessels()
-        self.conn = krpc.connect(name='TestPartsParachute')
+        self.conn = testingtools.connect(name='TestPartsParachute')
         self.vessel = self.conn.space_center.active_vessel
         self.parts = self.vessel.parts
         self.state = self.conn.space_center.ParachuteState

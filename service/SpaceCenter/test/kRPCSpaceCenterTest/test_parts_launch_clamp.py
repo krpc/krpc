@@ -10,7 +10,7 @@ class TestPartsLaunchClamp(testingtools.TestCase):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('PartsSolarPanel')
         testingtools.remove_other_vessels()
-        cls.conn = krpc.connect(name='TestPartsLaunchClamp')
+        cls.conn = testingtools.connect(name='TestPartsLaunchClamp')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
 
