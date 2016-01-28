@@ -63,6 +63,7 @@ namespace KRPC.UI
         const string streamPortLabelText = "Stream port:";
         const string localhostText = "localhost";
         const string manualText = "Manual";
+        const string anyText = "Any";
         const string showInfoWindowText = "Show Info";
         const string advancedText = "Advanced settings";
         const string autoStartServerText = "Auto-start server";
@@ -80,6 +81,7 @@ namespace KRPC.UI
         const string invalidMaxTimePerUpdateText = "Max. time per update must be an integer";
         const string invalidRecvTimeoutText = "Receive timeout must be an integer";
         const string localClientOnlyText = "Local clients only";
+        const string anyClientText = "Any client";
         const string subnetAllowedText = "Subnet {0}";
         const string unknownClientsAllowedText = "Unknown visibility";
         const string autoAcceptingConnectionsText = "auto-accepting new clients";
@@ -149,8 +151,9 @@ namespace KRPC.UI
 
             // Get list of available addresses for drop down
             var interfaceAddresses = NetworkInformation.GetLocalIPAddresses ().Select (x => x.ToString ()).ToList ();
-            interfaceAddresses.Remove ("127.0.0.1");
-            availableAddresses = new List<string> (new [] { localhostText });
+            interfaceAddresses.Remove (IPAddress.Loopback.ToString ());
+            interfaceAddresses.Remove (IPAddress.Any.ToString ());
+            availableAddresses = new List<string> (new [] { localhostText, anyText });
             availableAddresses.AddRange (interfaceAddresses);
             availableAddresses.Add (manualText);
         }
@@ -192,6 +195,8 @@ namespace KRPC.UI
                 int selected;
                 if (!manualAddress && address == IPAddress.Loopback.ToString ())
                     selected = 0;
+                else if (!manualAddress && address == IPAddress.Any.ToString ())
+                    selected = 1;
                 else if (!manualAddress && availableAddresses.Contains (address))
                     selected = availableAddresses.IndexOf (address);
                 else
@@ -201,6 +206,9 @@ namespace KRPC.UI
                 // Get the address from the combo box selection
                 if (selected == 0) {
                     address = IPAddress.Loopback.ToString ();
+                    manualAddress = false;
+                } else if (selected == 1) {
+                    address = IPAddress.Any.ToString ();
                     manualAddress = false;
                 } else if (selected < availableAddresses.Count () - 1) {
                     address = availableAddresses [selected];
@@ -499,6 +507,8 @@ namespace KRPC.UI
         {
             if (IPAddress.IsLoopback (localAddress))
                 return localClientOnlyText;
+            else if (localAddress == IPAddress.Any)
+                return anyClientText;
             try {
                 var subnet = NetworkInformation.GetSubnetMask (localAddress);
                 return String.Format (subnetAllowedText, subnet);
