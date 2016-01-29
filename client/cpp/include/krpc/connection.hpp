@@ -1,22 +1,26 @@
 #ifndef HEADER_KRPC_CONNECTION
 #define HEADER_KRPC_CONNECTION
 
-#include <boost/asio.hpp>
-#include <boost/exception/all.hpp>
+#define ASIO_STANDALONE
+#include <asio.hpp>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
 namespace krpc {
 
-  struct ConnectionFailed : virtual boost::exception, virtual std::exception {};
+  class ConnectionFailed: public std::runtime_error {
+  public:
+    ConnectionFailed(const std::string& msg): std::runtime_error(msg) {}
+  };
 
   class Connection {
 
-    boost::asio::io_service io_service;
-    boost::asio::ip::tcp::socket socket;
+    asio::io_service io_service;
+    asio::ip::tcp::socket socket;
     const std::string address;
     const unsigned int port;
-    boost::asio::ip::tcp::resolver resolver;
+    asio::ip::tcp::resolver resolver;
 
   public:
 

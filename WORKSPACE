@@ -6,11 +6,11 @@ http_archive(
 )
 
 new_http_archive(
-    name = 'boost',
-    build_file = 'tools/build/boost.BUILD',
-    url = 'http://sourceforge.net/projects/boost/files/boost/1.58.0/boost_1_58_0.tar.gz',
-    strip_prefix = 'boost_1_58_0',
-    sha256 = 'a004d9b3fa95e956383693b86fce1b68805a6f71c2e68944fa813de0fb8c8102'
+    name = 'asio',
+    build_file = 'tools/build/asio.BUILD',
+    url = 'http://downloads.sourceforge.net/project/asio/asio/1.10.6%20%28Stable%29/asio-1.10.6.tar.gz',
+    strip_prefix = 'asio-1.10.6',
+    sha256 = '70345ca9e372a119c361be5e7f846643ee90997da8f88ec73f7491db96e24bbe'
 )
 
 new_http_archive(

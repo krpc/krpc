@@ -82,7 +82,7 @@ namespace krpc {
     std::string encode(const pb::Message& message) {
       std::string data;
       if (!message.SerializeToString(&data))
-        BOOST_THROW_EXCEPTION(EncodeFailed());
+        throw EncodeFailed("Failed to encode message");
       return data;
     }
 
@@ -92,7 +92,7 @@ namespace krpc {
       std::string data(header_length + length, 0);
       pb::io::CodedOutputStream::WriteVarint64ToArray(length, (pb::uint8*)&data[0]);
       if (!message.SerializeWithCachedSizesToArray((pb::uint8*)&data[header_length]))
-        BOOST_THROW_EXCEPTION(EncodeFailed());
+        throw EncodeFailed("Failed to encode delimited message");
       return data;
     }
   }

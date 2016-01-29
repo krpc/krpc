@@ -1,3 +1,7 @@
+v0.2.1
+ * Remove dependency on boost
+ * Use standalone ASIO library for network communication
+
 v0.2.0
  * Update to protobuf 3.0.0-beta-2
 

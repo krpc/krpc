@@ -10,7 +10,7 @@ namespace krpc {
 
     std::string guid(const std::string& data) {
       if (data.size() != 16)
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("GUID is not 16 characters");
       return
         platform::hexlify(std::string(data.rbegin() + 12, data.rend()))        + "-" +
         platform::hexlify(std::string(data.rbegin() + 10, data.rbegin() + 12)) + "-" +
@@ -23,7 +23,7 @@ namespace krpc {
       pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
       pb::uint32 value2;
       if (!stream.ReadLittleEndian32(&value2))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode float");
       value = pb::internal::WireFormatLite::DecodeFloat(value2);
     }
 
@@ -31,7 +31,7 @@ namespace krpc {
       pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
       pb::uint64 value2 = 0;
       if (!stream.ReadLittleEndian64(&value2))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode double");
       value = pb::internal::WireFormatLite::DecodeDouble(value2);
     }
 
@@ -39,7 +39,7 @@ namespace krpc {
       pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
       pb::uint32 value2 = 0;
       if (!stream.ReadVarint32(&value2))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode int32");
       value = static_cast<pb::int32>(value2);
     }
 
@@ -47,51 +47,51 @@ namespace krpc {
       pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
       pb::uint64 value2 = 0;
       if (!stream.ReadVarint64(&value2))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode int64");
       value = static_cast<pb::int64>(value2);
     }
 
     void decode(pb::uint32& value, const std::string& data, Client* client) {
       pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
       if (!stream.ReadVarint32(&value))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode uint32");
     }
 
     void decode(bool& value, const std::string& data, Client* client) {
       pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
       pb::uint64 value2 = 0;
       if (!stream.ReadVarint64(&value2))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode bool");
       value = (value2 != 0);
     }
 
     void decode(pb::uint64& value, const std::string& data, Client* client) {
       pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
       if (!stream.ReadVarint64(&value))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode uint64");
     }
 
     void decode(std::string& value, const std::string& data, Client* client) {
       pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
       pb::uint64 length;
       if (!stream.ReadVarint64(&length))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode string (length)");
       if (!stream.ReadString(&value, length))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode string");
     }
 
     void decode(google::protobuf::Message& message, const std::string& data, Client* client) {
       if (!message.ParseFromString(data))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode message");
     }
 
     void decode_delimited(pb::Message& message, const std::string& data) {
       pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
       pb::uint64 length;
       if (!stream.ReadVarint64(&length))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode delimited message (length)");
       if (!message.ParseFromCodedStream(&stream))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode delimited message");
       //TODO: check that length bytes were read to decode the delimited message
     }
 
@@ -99,7 +99,7 @@ namespace krpc {
       std::pair<pb::uint32, pb::uint32> result;
       pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
       if (!stream.ReadVarint32(&(result.first)))
-        BOOST_THROW_EXCEPTION(DecodeFailed());
+        throw DecodeFailed("Failed to decode size");
       result.second = stream.CurrentPosition();
       return result;
     }

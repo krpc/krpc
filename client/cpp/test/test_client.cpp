@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <boost/algorithm/string/predicate.hpp>
 #include <krpc/platform.hpp>
 #include "Test.pb.hpp"
 #include "krpc/services/krpc.hpp"
@@ -19,16 +18,14 @@ TEST_F(test_client, test_error) {
   ASSERT_THROW(test_service.throw_argument_exception(), krpc::RPCError);
   try {
     test_service.throw_argument_exception();
-  } catch(boost::exception& e) {
-    std::string msg = *boost::get_error_info<krpc::error_description>(e);
-    ASSERT_EQ("Invalid argument", msg);
+  } catch(krpc::RPCError& e) {
+    ASSERT_EQ("Invalid argument", std::string(e.what()));
   }
   ASSERT_THROW(test_service.throw_invalid_operation_exception(), krpc::RPCError);
   try {
     test_service.throw_invalid_operation_exception();
-  } catch(boost::exception& e) {
-    std::string msg = *boost::get_error_info<krpc::error_description>(e);
-    ASSERT_EQ("Invalid operation", msg);
+  } catch(krpc::RPCError& e) {
+    ASSERT_EQ("Invalid operation", std::string(e.what()));
   }
 }
 
@@ -61,7 +58,8 @@ TEST_F(test_client, test_class_as_return_value) {
   krpc::services::TestService::TestClass object = test_service.create_test_object("jeb");
   std::stringstream stream;
   stream << object;
-  ASSERT_TRUE(boost::starts_with(stream.str(), "TestService::TestClass<"));
+  std::string prefix("TestService::TestClass<");
+  ASSERT_TRUE(!stream.str().compare(0, prefix.size(), prefix));
   ASSERT_EQ("value=jeb", object.get_value());
 }
 
@@ -185,8 +183,8 @@ TEST_F(test_client, test_collections) {
     ASSERT_EQ(s2, test_service.increment_set(s1));
   }
   {
-    boost::tuple<int,int> t1(1,2);
-    boost::tuple<int,int> t2(2,3);
+    std::tuple<int,int> t1(1,2);
+    std::tuple<int,int> t2(2,3);
     ASSERT_EQ(t2, test_service.increment_tuple(t1));
   }
 }

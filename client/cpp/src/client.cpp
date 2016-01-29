@@ -8,8 +8,8 @@ namespace krpc {
 
   Client::Client() {}
 
-  Client::Client(const boost::shared_ptr<Connection>& rpc_connection,
-                 const boost::shared_ptr<Connection>& stream_connection):
+  Client::Client(const std::shared_ptr<Connection>& rpc_connection,
+                 const std::shared_ptr<Connection>& stream_connection):
     rpc_connection(rpc_connection),
     stream_connection(stream_connection) {}
 
@@ -49,9 +49,8 @@ namespace krpc {
     schema::Response response;
     decoder::decode(response, data, this);
 
-    if (response.has_error()) {
-      BOOST_THROW_EXCEPTION(RPCError() << error_description(response.error()));
-    }
+    if (response.has_error())
+      throw RPCError(response.error());
 
     return response.return_value();
   }

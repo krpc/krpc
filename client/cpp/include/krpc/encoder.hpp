@@ -3,16 +3,17 @@
 
 #include "krpc/krpc.pb.hpp"
 #include "krpc/object.hpp"
-#include <boost/exception/all.hpp>
 #include <google/protobuf/message.h>
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
 #include <string>
+#include <tuple>
 
 namespace krpc {
   namespace encoder {
 
-    struct EncodeFailed : virtual boost::exception, virtual std::exception {};
+    class EncodeFailed: std::runtime_error {
+    public:
+      EncodeFailed(const std::string& msg): std::runtime_error(msg) {}
+    };
 
     const char RPC_HELLO_MESSAGE[] = {
       0x48, 0x45, 0x4C, 0x4C,
@@ -45,15 +46,15 @@ namespace krpc {
     template <typename T> std::string encode(const std::set<T>& set);
 
     template <typename T0>
-    std::string encode(const boost::tuple<T0>& tuple);
+    std::string encode(const std::tuple<T0>& tuple);
     template <typename T0, typename T1>
-    std::string encode(const boost::tuple<T0,T1>& tuple);
+    std::string encode(const std::tuple<T0,T1>& tuple);
     template <typename T0, typename T1, typename T2>
-    std::string encode(const boost::tuple<T0,T1,T2>& tuple);
+    std::string encode(const std::tuple<T0,T1,T2>& tuple);
     template <typename T0, typename T1, typename T2, typename T3>
-    std::string encode(const boost::tuple<T0,T1,T2,T3>& tuple);
+    std::string encode(const std::tuple<T0,T1,T2,T3>& tuple);
     template <typename T0, typename T1, typename T2, typename T3, typename T4>
-    std::string encode(const boost::tuple<T0,T1,T2,T3,T4>& tuple);
+    std::string encode(const std::tuple<T0,T1,T2,T3,T4>& tuple);
 
     std::string encode_delimited(const google::protobuf::Message& message);
 
@@ -90,47 +91,47 @@ namespace krpc {
     }
 
     template <typename T0>
-    inline std::string encode(const boost::tuple<T0>& tuple) {
+    inline std::string encode(const std::tuple<T0>& tuple) {
       krpc::schema::Tuple tupleMessage;
-      tupleMessage.add_items(encode(boost::get<0>(tuple)));
+      tupleMessage.add_items(encode(std::get<0>(tuple)));
       return encode(tupleMessage);
     }
 
     template <typename T0, typename T1>
-    inline std::string encode(const boost::tuple<T0,T1>& tuple) {
+    inline std::string encode(const std::tuple<T0,T1>& tuple) {
       krpc::schema::Tuple tupleMessage;
-      tupleMessage.add_items(encode(boost::get<0>(tuple)));
-      tupleMessage.add_items(encode(boost::get<1>(tuple)));
+      tupleMessage.add_items(encode(std::get<0>(tuple)));
+      tupleMessage.add_items(encode(std::get<1>(tuple)));
       return encode(tupleMessage);
     }
 
     template <typename T0, typename T1, typename T2>
-    inline std::string encode(const boost::tuple<T0,T1,T2>& tuple) {
+    inline std::string encode(const std::tuple<T0,T1,T2>& tuple) {
       krpc::schema::Tuple tupleMessage;
-      tupleMessage.add_items(encode(boost::get<0>(tuple)));
-      tupleMessage.add_items(encode(boost::get<1>(tuple)));
-      tupleMessage.add_items(encode(boost::get<2>(tuple)));
+      tupleMessage.add_items(encode(std::get<0>(tuple)));
+      tupleMessage.add_items(encode(std::get<1>(tuple)));
+      tupleMessage.add_items(encode(std::get<2>(tuple)));
       return encode(tupleMessage);
     }
 
     template <typename T0, typename T1, typename T2, typename T3>
-    inline std::string encode(const boost::tuple<T0,T1,T2,T3>& tuple) {
+    inline std::string encode(const std::tuple<T0,T1,T2,T3>& tuple) {
       krpc::schema::Tuple tupleMessage;
-      tupleMessage.add_items(encode(boost::get<0>(tuple)));
-      tupleMessage.add_items(encode(boost::get<1>(tuple)));
-      tupleMessage.add_items(encode(boost::get<2>(tuple)));
-      tupleMessage.add_items(encode(boost::get<3>(tuple)));
+      tupleMessage.add_items(encode(std::get<0>(tuple)));
+      tupleMessage.add_items(encode(std::get<1>(tuple)));
+      tupleMessage.add_items(encode(std::get<2>(tuple)));
+      tupleMessage.add_items(encode(std::get<3>(tuple)));
       return encode(tupleMessage);
     }
 
     template <typename T0, typename T1, typename T2, typename T3, typename T4>
-    inline std::string encode(const boost::tuple<T0,T1,T2,T3,T4>& tuple) {
+    inline std::string encode(const std::tuple<T0,T1,T2,T3,T4>& tuple) {
       krpc::schema::Tuple tupleMessage;
-      tupleMessage.add_items(encode(boost::get<0>(tuple)));
-      tupleMessage.add_items(encode(boost::get<1>(tuple)));
-      tupleMessage.add_items(encode(boost::get<2>(tuple)));
-      tupleMessage.add_items(encode(boost::get<3>(tuple)));
-      tupleMessage.add_items(encode(boost::get<4>(tuple)));
+      tupleMessage.add_items(encode(std::get<0>(tuple)));
+      tupleMessage.add_items(encode(std::get<1>(tuple)));
+      tupleMessage.add_items(encode(std::get<2>(tuple)));
+      tupleMessage.add_items(encode(std::get<3>(tuple)));
+      tupleMessage.add_items(encode(std::get<4>(tuple)));
       return encode(tupleMessage);
     }
 

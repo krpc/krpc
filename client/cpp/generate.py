@@ -118,7 +118,7 @@ def parse_type(typ):
 
     elif isinstance(typ, krpc.types.TupleType):
         value_types = typ.protobuf_type[6:-1].split(',')
-        typ_string = cpp_template_fix('boost::tuple<%s>' % ','.join(parse_type(Types.as_type(t))[0] for t in value_types))
+        typ_string = cpp_template_fix('std::tuple<%s>' % ','.join(parse_type(Types.as_type(t))[0] for t in value_types))
 
     elif isinstance(typ, krpc.types.ClassType):
         typ_string = typ.protobuf_type[6:-1].replace('.','::')

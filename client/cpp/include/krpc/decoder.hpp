@@ -3,16 +3,17 @@
 
 #include "krpc/krpc.pb.hpp"
 #include "krpc/object.hpp"
-#include <boost/exception/all.hpp>
 #include <google/protobuf/message.h>
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
 #include <string>
+#include <tuple>
 
 namespace krpc {
   namespace decoder {
 
-    struct DecodeFailed : virtual boost::exception, virtual std::exception {};
+    class DecodeFailed: public std::runtime_error {
+    public:
+      DecodeFailed(const std::string& msg): std::runtime_error(msg) {}
+    };
 
     const char OK_MESSAGE[] = { 0x4F, 0x4B };
     const size_t OK_MESSAGE_LENGTH = 2;
@@ -35,11 +36,11 @@ namespace krpc {
     template <typename K, typename V> void decode(std::map<K,V>& dictionary, const std::string& data, Client* client = NULL);
     template <typename T> void decode(std::set<T>& set, const std::string& data, Client* client = NULL);
 
-    template <typename T0> void decode(boost::tuple<T0>& tuple, const std::string& data, Client* client = NULL);
-    template <typename T0, typename T1> void decode(boost::tuple<T0,T1>& tuple, const std::string& data, Client* client = NULL);
-    template <typename T0, typename T1, typename T2> void decode(boost::tuple<T0,T1,T2>& tuple, const std::string& data, Client* client = NULL);
-    template <typename T0, typename T1, typename T2, typename T3> void decode(boost::tuple<T0,T1,T2,T3>& tuple, const std::string& data, Client* client = NULL);
-    template <typename T0, typename T1, typename T2, typename T3, typename T4> void decode(boost::tuple<T0,T1,T2,T3,T4>& tuple, const std::string& data, Client* client = NULL);
+    template <typename T0> void decode(std::tuple<T0>& tuple, const std::string& data, Client* client = NULL);
+    template <typename T0, typename T1> void decode(std::tuple<T0,T1>& tuple, const std::string& data, Client* client = NULL);
+    template <typename T0, typename T1, typename T2> void decode(std::tuple<T0,T1,T2>& tuple, const std::string& data, Client* client = NULL);
+    template <typename T0, typename T1, typename T2, typename T3> void decode(std::tuple<T0,T1,T2,T3>& tuple, const std::string& data, Client* client = NULL);
+    template <typename T0, typename T1, typename T2, typename T3, typename T4> void decode(std::tuple<T0,T1,T2,T3,T4>& tuple, const std::string& data, Client* client = NULL);
 
     template <typename T> void decode_enum(T& value, const std::string& data, Client* client);
 
@@ -95,48 +96,48 @@ namespace krpc {
     }
 
     template <typename T0>
-    inline void decode(boost::tuple<T0>& tuple, const std::string& data, Client* client) {
+    inline void decode(std::tuple<T0>& tuple, const std::string& data, Client* client) {
       krpc::schema::Tuple tupleMessage;
       tupleMessage.ParseFromString(data);
-      decode(boost::get<0>(tuple), tupleMessage.items(0), client);
+      decode(std::get<0>(tuple), tupleMessage.items(0), client);
     }
 
     template <typename T0, typename T1>
-    inline void decode(boost::tuple<T0,T1>& tuple, const std::string& data, Client* client) {
+    inline void decode(std::tuple<T0,T1>& tuple, const std::string& data, Client* client) {
       krpc::schema::Tuple tupleMessage;
       tupleMessage.ParseFromString(data);
-      decode(boost::get<0>(tuple), tupleMessage.items(0), client);
-      decode(boost::get<1>(tuple), tupleMessage.items(1), client);
+      decode(std::get<0>(tuple), tupleMessage.items(0), client);
+      decode(std::get<1>(tuple), tupleMessage.items(1), client);
     }
 
     template <typename T0, typename T1, typename T2>
-    inline void decode(boost::tuple<T0,T1,T2>& tuple, const std::string& data, Client* client) {
+    inline void decode(std::tuple<T0,T1,T2>& tuple, const std::string& data, Client* client) {
       krpc::schema::Tuple tupleMessage;
       tupleMessage.ParseFromString(data);
-      decode(boost::get<0>(tuple), tupleMessage.items(0), client);
-      decode(boost::get<1>(tuple), tupleMessage.items(1), client);
-      decode(boost::get<2>(tuple), tupleMessage.items(2), client);
+      decode(std::get<0>(tuple), tupleMessage.items(0), client);
+      decode(std::get<1>(tuple), tupleMessage.items(1), client);
+      decode(std::get<2>(tuple), tupleMessage.items(2), client);
     }
 
     template <typename T0, typename T1, typename T2, typename T3>
-    inline void decode(boost::tuple<T0,T1,T2,T3>& tuple, const std::string& data, Client* client) {
+    inline void decode(std::tuple<T0,T1,T2,T3>& tuple, const std::string& data, Client* client) {
       krpc::schema::Tuple tupleMessage;
       tupleMessage.ParseFromString(data);
-      decode(boost::get<0>(tuple), tupleMessage.items(0), client);
-      decode(boost::get<1>(tuple), tupleMessage.items(1), client);
-      decode(boost::get<2>(tuple), tupleMessage.items(2), client);
-      decode(boost::get<3>(tuple), tupleMessage.items(3), client);
+      decode(std::get<0>(tuple), tupleMessage.items(0), client);
+      decode(std::get<1>(tuple), tupleMessage.items(1), client);
+      decode(std::get<2>(tuple), tupleMessage.items(2), client);
+      decode(std::get<3>(tuple), tupleMessage.items(3), client);
     }
 
     template <typename T0, typename T1, typename T2, typename T3, typename T4>
-    inline void decode(boost::tuple<T0,T1,T2,T3,T4>& tuple, const std::string& data, Client* client) {
+    inline void decode(std::tuple<T0,T1,T2,T3,T4>& tuple, const std::string& data, Client* client) {
       krpc::schema::Tuple tupleMessage;
       tupleMessage.ParseFromString(data);
-      decode(boost::get<0>(tuple), tupleMessage.items(0), client);
-      decode(boost::get<1>(tuple), tupleMessage.items(1), client);
-      decode(boost::get<2>(tuple), tupleMessage.items(2), client);
-      decode(boost::get<3>(tuple), tupleMessage.items(3), client);
-      decode(boost::get<4>(tuple), tupleMessage.items(4), client);
+      decode(std::get<0>(tuple), tupleMessage.items(0), client);
+      decode(std::get<1>(tuple), tupleMessage.items(1), client);
+      decode(std::get<2>(tuple), tupleMessage.items(2), client);
+      decode(std::get<3>(tuple), tupleMessage.items(3), client);
+      decode(std::get<4>(tuple), tupleMessage.items(4), client);
     }
 
     template <typename T>
