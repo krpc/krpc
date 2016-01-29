@@ -4,7 +4,8 @@ import os
 
 # Dirty hack to make setuptools use file copies instead of hardlinks which do not play well with Bazel
 # http://bugs.python.org/issue8876
-del os.link
+if os.getenv('BAZEL_BUILD') and hasattr(os, 'link'):
+    del os.link
 
 dirpath = os.path.dirname(os.path.realpath(__file__))
 

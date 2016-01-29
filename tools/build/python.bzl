@@ -35,7 +35,7 @@ def _sdist_impl(ctx):
 
     # Run setup.py sdist from the staging directory
     sub_commands = [
-        '(cd %s ; python setup.py --quiet sdist --formats=zip)' % staging_dir_path,
+        '(cd %s ; BAZEL_BUILD=1 python setup.py --quiet sdist --formats=zip)' % staging_dir_path,
         'cp %s/dist/*.zip %s' % (staging_dir_path, output.path)
     ]
     ctx.action(
