@@ -4,8 +4,11 @@ import argparse
 import re
 
 def main():
+    current_version = re.match('version\s*=\s*\'(.+)\'', ''.join(open('config.bzl', 'r').readlines()), re.MULTILINE).group(1)
+
     parser = argparse.ArgumentParser()
     parser.add_argument('site', choices=('github', 'kerbalstuff', 'curse'))
+    parser.add_argument('version', nargs='?', default=current_version)
     args = parser.parse_args()
 
     data = [
@@ -16,43 +19,37 @@ def main():
         ('Python client', get_changes('client/python/CHANGES.txt')),
         ('C++ client', get_changes('client/cpp/CHANGES.txt')),
         ('C# client', get_changes('client/csharp/CHANGES.txt')),
-        ('Lua client', get_changes('client/lua/CHANGES.txt'))
+        ('Lua client', get_changes('client/lua/CHANGES.txt')),
+        ('krpcgen', get_changes('tools/krpcgen/CHANGES.txt'))
     ]
 
-    version = re.match('version\s*=\s*\'(.+)\'', ''.join(open('config.bzl', 'r').readlines()), re.MULTILINE).group(1)
+    changelist = []
+    for name,changes in data:
+        if args.version in changes and (len(changes[args.version]) > 1 or changes[args.version][0] != 'None'):
+            changelist.append((name, changes[args.version]))
 
     if args.site == 'github':
-        print ''.join(open('tools/dist/github-changes.tmpl', 'r').readlines()).replace('%VERSION%', version)
+        print ''.join(open('tools/dist/github-changes.tmpl', 'r').readlines()).replace('%VERSION%', args.version)
         print '### Changes ###\n'
-        for name,changes in data:
-            if len(changes[version]) == 1 and changes[version][0] == 'None':
-	        continue
+        for name,items in changelist:
             print '####', name, '####\n'
-            for item in changes[version]:
+            for item in items:
                 print '*', item
             print
     elif args.site == 'kerbalstuff':
-        for name,changes in data:
-            if len(changes[version]) == 1 and changes[version][0] == 'None':
-                continue
+        for name,items in changelist:
             print '*', name
-            for item in changes[version]:
+            for item in items:
                 print '  *', item
     else: # curse
         print '<ul>'
-        for name,changes in data:
-            if len(changes[version]) == 1 and changes[version][0] == 'None':
-                continue
-            print '<li>'
-            print name
-            print '<ul>'
-            for item in changes[version]:
-                print '<li>'
-                print item
-                print '</li>'
-            print '</ul>'
-            print '</li>'
+        for name,items in changelist:
+            print '<li>'+name+'<ul>'
+            for item in items:
+                print '<li>'+item+'</li>'
+            print '</ul></li>'
         print '</ul>'
+
 def get_changes(path):
     changes = {}
     with open(path, 'r') as f:
@@ -75,9 +72,6 @@ def get_changes(path):
                 print line
                 exit(1)
     return changes
-
-def sort_changes(changes):
-    return sorted(changes.items(), key=lambda (v,_): [-int(x) for x in v.split('.')])
 
 if __name__ == '__main__':
     main()
