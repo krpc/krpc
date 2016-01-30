@@ -2,13 +2,20 @@ load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
 
+genrule(
+    name = 'version',
+    outs = ['krpc/version.py'],
+    cmd = 'echo "__version__ = \'%s\'" > "$@"' % version,
+    visibility = ['//visibility:public']
+)
+
 py_sdist(
     name = 'python',
     out = 'krpc-%s.zip' % version,
     files = [
         '//:readme', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-        'setup.py', 'MANIFEST.in',
+        'setup.py', 'MANIFEST.in', ':version',
         '//protobuf:py',
         '//protobuf:py-test'
     ] + glob(['krpc/**/*']),

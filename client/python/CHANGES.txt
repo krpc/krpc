@@ -1,5 +1,6 @@
 v0.2.1
  * Fix bug with setup.py on Windows
+ * Add version number to python module
 
 v0.2.0
  * Update protobuf 3.0.0-beta-2

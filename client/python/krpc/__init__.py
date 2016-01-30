@@ -3,6 +3,9 @@ from krpc.connection import Connection
 from krpc.client import Client
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
+from pkg_resources import resource_string
+
+from krpc.version import __version__
 
 DEFAULT_ADDRESS = '127.0.0.1'
 DEFAULT_RPC_PORT = 50000
