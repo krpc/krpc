@@ -13,7 +13,7 @@ namespace ServiceDefinitions
         public static int Main (string[] args)
         {
             if (args.Length < 2) {
-                Console.Error.WriteLine ("Not enough arguments.\nUsage: ServiceDefinitions.exe SERVICE OUTPUT");
+                Console.Error.WriteLine ("Not enough arguments.\nUsage: ServiceDefinitions.exe SERVICE OUTPUT ASSEMBLYPATH...");
                 return 1;
             }
             Logger.Enabled = true;
