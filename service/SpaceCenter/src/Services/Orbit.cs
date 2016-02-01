@@ -123,7 +123,7 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public double Speed {
-            get { return InternalOrbit.orbitalSpeed; }
+            get { return InternalOrbit.vel.magnitude; }
         }
 
         /// <summary>
