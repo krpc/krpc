@@ -17,4 +17,4 @@ test --test_strategy=standalone
 
 # Single threaded build and test
 build -j 1
-test -j 1
+test -j 1 --test_output=streamed
