@@ -5,9 +5,9 @@ def _impl(ctx):
 
     sub_commands = [
         'mkdir -p `dirname test-executable.runfiles/%s`' % ctx.executable.test_executable.short_path,
-        'ln -f -r -s %s test-executable.runfiles/%s' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.short_path),
+        'ln -f -s `pwd`/%s `pwd`/test-executable.runfiles/%s' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.short_path),
         'mkdir -p `dirname server-executable.runfiles/%s`' % ctx.executable.server_executable.short_path,
-        'ln -f -r -s %s server-executable.runfiles/%s' % (ctx.executable.server_executable.short_path, ctx.executable.server_executable.short_path),
+        'ln -f -s `pwd`/%s `pwd`/server-executable.runfiles/%s' % (ctx.executable.server_executable.short_path, ctx.executable.server_executable.short_path),
     ]
 
     test_runfiles_dir = 'test-executable.runfiles/' + ctx.executable.test_executable.short_path + '.runfiles'
