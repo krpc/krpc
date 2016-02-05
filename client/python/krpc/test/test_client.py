@@ -24,17 +24,13 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertGreater(status.bytes_read, 0)
 
     def test_error(self):
-        self.assertRaises(self.conn.test_service.throw_argument_exception)
-        try:
+        with self.assertRaises(krpc.client.RPCError) as cm:
             self.conn.test_service.throw_argument_exception()
-        except krpc.client.RPCError as e:
-            self.assertEqual('Invalid argument', str(e))
+        self.assertEqual('Invalid argument', str(cm.exception))
 
-        self.assertRaises(self.conn.test_service.throw_invalid_operation_exception)
-        try:
+        with self.assertRaises(krpc.client.RPCError) as cm:
             self.conn.test_service.throw_invalid_operation_exception()
-        except krpc.client.RPCError as e:
-            self.assertEqual('Invalid operation', str(e))
+        self.assertEqual('Invalid operation', str(cm.exception))
 
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.conn.test_service.float_to_string(float(3.14159)))
