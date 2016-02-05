@@ -2,6 +2,8 @@ This license (LGPL v3) applies to all parts of kRPC except for the following:
 
   - service/SpaceCenter/* is under the GPLv3 license.
 
+  - tools/krpcgen/* is under the GPLv3 license.
+
   - tools/build/protobuf/* contains binaries from Google's protobuf project.
     See tools/build/protobuf/LICENSE
 

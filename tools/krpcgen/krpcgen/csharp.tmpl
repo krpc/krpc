@@ -12,7 +12,7 @@ var _args = new ByteString[] {
 {% macro call(service, procedure, has_return, has_args, is_static=False) %}
 {% if has_return %}ByteString _data = {% endif %}{% if is_static %}_connection{% else %}this.connection{% endif %}.Invoke ("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
 {% endmacro %}
-{% macro return(type, set_client, is_static=False) %}
+{% macro return(type, is_static=False) %}
 return ({{type}})global::KRPC.Client.Encoder.Decode (_data, typeof({{type}}), {% if is_static %}_connection{% else %}this.connection{% endif %});
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
@@ -44,7 +44,7 @@ namespace KRPC.Client.Services.{{ service_name }}
             {% if procedure.parameters | length > 0 %}            {{ args(procedure.parameters) | indent(width=12) }}
             {% endif %}
             {{ call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters | length > 0) | indent(width=12) }}
-{% if procedure.return_type != 'void' %}            {{ return(procedure.return_type, procedure.return_set_client) | indent(width=12) }}
+{% if procedure.return_type != 'void' %}            {{ return(procedure.return_type) | indent(width=12) }}
             {% endif %}
         }
 
@@ -54,14 +54,14 @@ namespace KRPC.Client.Services.{{ service_name }}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}
             get {
-                {{ call(service_name, property.getter, true, false) | indent(width=16) }}
+                {{ call(service_name, property.getter.remote_name, true, false) | indent(width=16) }}
                 {{ return(property.type, false) | indent(width=16) }}
             }
         {% endif %}
         {% if property.setter %}
             set {
                 {{ args([{'name': 'value', 'type': property.type}]) | indent(width=16) }}
-                {{ call(service_name, property.setter, false, true) | indent(width=16) }}
+                {{ call(service_name, property.setter.remote_name, false, true) | indent(width=16) }}
             }
         {% endif %}
         }
@@ -93,7 +93,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {
             {{ args([{'name': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
             {{ call(service_name, method.remote_name, method.return_type != 'void', true) | indent(width=12) }}
-{% if method.return_type != 'void' %}            {{ return(method.return_type, method.return_set_client) | indent(width=12) }}
+{% if method.return_type != 'void' %}            {{ return(method.return_type) | indent(width=12) }}
             {% endif %}
         }
 
@@ -105,7 +105,7 @@ namespace KRPC.Client.Services.{{ service_name }}
             {% if method.parameters | length > 0 %}            {{ args(method.parameters) | indent(width=12) }}
             {% endif %}
             {{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, true) | indent(width=12) }}
-{% if method.return_type != 'void' %}            {{ return(method.return_type, method.return_set_client, true) | indent(width=12) }}
+{% if method.return_type != 'void' %}            {{ return(method.return_type, true) | indent(width=12) }}
             {% endif %}
         }
 
@@ -116,14 +116,14 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% if property.getter %}
             get {
                 {{ args([{'name': 'this', 'type': service_name+'.'+class_name }]) | indent(width=16) }}
-                {{ call(service_name, property.getter, true, true) | indent(width=16) }}
+                {{ call(service_name, property.getter.remote_name, true, true) | indent(width=16) }}
                 {{ return(property.type, false) | indent(width=16) }}
             }
         {% endif %}
         {% if property.setter %}
             set {
                 {{ args([{'name': 'this', 'type': service_name+'.'+class_name }, {'name': 'value', 'type': property.type}]) | indent(width=16) }}
-                {{ call(service_name, property.setter, false, true) | indent(width=16) }}
+                {{ call(service_name, property.setter.remote_name, false, true) | indent(width=16) }}
             }
         {% endif %}
         }

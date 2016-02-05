@@ -1,8 +1,8 @@
 load('/tools/build/package', 'package_archive')
 load('/tools/build/protobuf/cpp', 'protobuf_cpp')
 load('/tools/build/client_test', 'client_test')
+load('/tools/krpcgen/build', 'krpcgen_cpp')
 load('/config', 'version')
-load('generate', 'generate')
 
 package_archive(
     name = 'cpp',
@@ -24,38 +24,38 @@ package_archive(
     visibility = ['//:__pkg__']
 )
 
-generate(
+krpcgen_cpp(
     name = 'services-krpc',
     service = 'KRPC',
-    srcs = ['//server:ServiceDefinitions'],
+    defs = '//server:ServiceDefinitions',
     out = 'include/krpc/services/krpc.hpp'
 )
 
-generate(
+krpcgen_cpp(
     name = 'services-spacecenter',
     service = 'SpaceCenter',
-    srcs = ['//service/SpaceCenter:ServiceDefinitions'],
+    defs = '//service/SpaceCenter:ServiceDefinitions',
     out = 'include/krpc/services/space_center.hpp'
 )
 
-generate(
+krpcgen_cpp(
     name = 'services-kerbalalarmclock',
     service = 'KerbalAlarmClock',
-    srcs = ['//service/KerbalAlarmClock:ServiceDefinitions'],
+    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
     out = 'include/krpc/services/kerbal_alarm_clock.hpp'
 )
 
-generate(
+krpcgen_cpp(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
-    srcs = ['//service/InfernalRobotics:ServiceDefinitions'],
+    defs = '//service/InfernalRobotics:ServiceDefinitions',
     out = 'include/krpc/services/infernal_robotics.hpp'
 )
 
-generate(
+krpcgen_cpp(
     name = 'services-test-service',
     service = 'TestService',
-    srcs = ['//tools/TestServer:ServiceDefinitions'],
+    defs = '//tools/TestServer:ServiceDefinitions',
     out = 'include/services/test_service.hpp'
 )
 
