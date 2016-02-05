@@ -3,7 +3,6 @@ from krpc.connection import Connection
 from krpc.client import Client
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
-from pkg_resources import resource_string
 
 from krpc.version import __version__
 
