@@ -1,2 +1,5 @@
+v0.2.1
+ * Add documentation to generated service code
+
 v0.2.0
  * Initial version

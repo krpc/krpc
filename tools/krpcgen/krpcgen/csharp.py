@@ -117,5 +117,11 @@ class CsharpGenerator(Generator):
         else:
             return value
 
+    def parse_documentation(self, documentation):
+        return documentation.replace('<doc>', '').replace('</doc>','').strip()
+
+    def filter_doc(self, doc):
+        return '\n'.join('/// '+line.strip() for line in doc.split('\n'))
+
     def parse_context(self, context):
         return context

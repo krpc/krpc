@@ -41,9 +41,9 @@ namespace krpc {
       {% endif %}
       {% if enumerations | length > 0 %}
       // Enumerations
-      {% for enum_name,values in enumerations.items() %}
+      {% for enum_name,enm in enumerations.items() %}
       enum struct {{ enum_name }} {
-        {% for value in values %}
+        {% for value in enm['values'] %}
         {{ value.name }} = {{ value.value }}{% if not loop.last %},{% endif %}
 
         {% endfor %}

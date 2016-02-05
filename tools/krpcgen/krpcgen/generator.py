@@ -1,5 +1,5 @@
 import argparse
-import imp
+import codecs
 import os.path
 import json
 import collections
@@ -22,18 +22,19 @@ class Generator(object):
 
     def generate_file(self, path):
         content = self.generate()
-        with open(path, 'w') as f:
+        with codecs.open(path, 'w', encoding='utf8') as f:
             f.write(content)
 
     def generate(self):
         context = self.parse_context(self.generate_context())
-        loader = jinja2.FileSystemLoader(searchpath='./' )
+        loader = jinja2.FileSystemLoader(searchpath='./')
         env = jinja2.Environment(
             loader=loader,
             trim_blocks=True,
             lstrip_blocks=True,
             undefined=jinja2.StrictUndefined
         )
+        env.filters['doc'] = self.filter_doc
         template = env.from_string(self._macro_template)
         content = template.render(context)
         return content.rstrip()+'\n'
@@ -58,11 +59,22 @@ class Generator(object):
         enumerations = {}
 
         for name,cls in self._defs['classes'].items():
-            classes[name] = {'methods': {}, 'static_methods': {}, 'properties': {}}
+            classes[name] = {
+                'methods': {},
+                'static_methods': {},
+                'properties': {},
+                'documentation': self.parse_documentation(cls['documentation'])
+            }
 
         for name,enumeration in self._defs['enumerations'].items():
-            enumerations[name] = [{'name': self.parse_name(x['name']),
-                                   'value': x['value']} for x in enumeration['values']]
+            enumerations[name] = {
+                'values': [{
+                    'name': self.parse_name(x['name']),
+                    'value': x['value'],
+                    'documentation': self.parse_documentation(x['documentation'])
+                } for x in enumeration['values']],
+                'documentation': self.parse_documentation(enumeration['documentation'])
+            }
 
         for name,procedure in self._defs['procedures'].items():
 
@@ -71,7 +83,8 @@ class Generator(object):
                     'procedure': procedure,
                     'remote_name': name,
                     'parameters': self.generate_context_parameters(procedure),
-                    'return_type': self.parse_return_type(procedure)
+                    'return_type': self.parse_return_type(procedure),
+                    'documentation': self.parse_documentation(procedure['documentation'])
                 }
 
             elif Attributes.is_a_property_getter(procedure['attributes']):
@@ -80,7 +93,8 @@ class Generator(object):
                     properties[property_name] = {
                         'type': self.parse_return_type(procedure),
                         'getter': None,
-                        'setter': None
+                        'setter': None,
+                        'documentation': self.parse_documentation(procedure['documentation'])
                     }
                 properties[property_name]['getter'] = {
                     'procedure': procedure,
@@ -93,7 +107,8 @@ class Generator(object):
                     properties[property_name] = {
                         'type': self.generate_context_parameters(procedure)[0]['type'],
                         'getter': None,
-                        'setter': None
+                        'setter': None,
+                        'documentation': self.parse_documentation(procedure['documentation'])
                     }
                 properties[property_name]['setter'] = {
                     'procedure': procedure,
@@ -107,7 +122,8 @@ class Generator(object):
                     'procedure': procedure,
                     'remote_name': name,
                     'parameters': self.generate_context_parameters(procedure)[1:],
-                    'return_type': self.parse_return_type(procedure)
+                    'return_type': self.parse_return_type(procedure),
+                    'documentation': self.parse_documentation(procedure['documentation'])
                 }
 
             elif Attributes.is_a_class_static_method(procedure['attributes']):
@@ -117,7 +133,8 @@ class Generator(object):
                     'procedure': procedure,
                     'remote_name': name,
                     'parameters': self.generate_context_parameters(procedure),
-                    'return_type': self.parse_return_type(procedure)
+                    'return_type': self.parse_return_type(procedure),
+                    'documentation': self.parse_documentation(procedure['documentation'])
                 }
 
             elif Attributes.is_a_class_property_getter(procedure['attributes']):
@@ -127,7 +144,8 @@ class Generator(object):
                     classes[class_name]['properties'][property_name] = {
                         'type': self.parse_return_type(procedure),
                         'getter': None,
-                        'setter': None
+                        'setter': None,
+                        'documentation': self.parse_documentation(procedure['documentation'])
                     }
                 classes[class_name]['properties'][property_name]['getter'] = {
                     'procedure': procedure,
@@ -141,7 +159,8 @@ class Generator(object):
                     classes[class_name]['properties'][property_name] = {
                         'type': self.generate_context_parameters(procedure)[1]['type'],
                         'getter': None,
-                        'setter': None
+                        'setter': None,
+                        'documentation': self.parse_documentation(procedure['documentation'])
                     }
                 classes[class_name]['properties'][property_name]['setter'] = {
                     'procedure': procedure,

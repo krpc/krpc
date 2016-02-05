@@ -23,12 +23,18 @@ namespace KRPC.Client.Services.{{ service_name }}
 {
     public static class {{ service_name }}Extensions
     {
+        /// <summary>
+        /// Create an instance of the {{ service_name }} service.
+        /// </summary>
         public static global::KRPC.Client.Services.{{ service_name }}.Service {{ service_name }} (this global::KRPC.Client.Connection connection)
         {
             return new global::KRPC.Client.Services.{{ service_name }}.Service (connection);
         }
     }
 
+    /// <summary>
+    /// {{ service_name }} service.
+    /// </summary>
     public class Service
     {
         global::KRPC.Client.Connection connection;
@@ -39,6 +45,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         }
 
         {% for procedure_name,procedure in procedures.items() %}
+        {{ procedure.documentation | doc | indent(width=8) }}
         public {{ procedure.return_type }} {{ procedure_name }} ({{ sig_parameters(procedure.parameters) }})
         {
             {% if procedure.parameters | length > 0 %}            {{ args(procedure.parameters) | indent(width=12) }}
@@ -51,6 +58,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% endfor %}
 
         {% for property_name,property in properties.items() %}
+        {{ property.documentation | doc | indent(width=8) }}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}
             get {
@@ -70,10 +78,12 @@ namespace KRPC.Client.Services.{{ service_name }}
 
     }
 
-    {% for enum_name,values in enumerations.items() %}
+    {% for enum_name,enm in enumerations.items() %}
+    {{ enm.documentation | doc | indent(width=4) }}
     public enum {{ enum_name }}
     {
-        {% for value in values %}
+        {% for value in enm['values'] %}
+        {{ value.documentation | doc | indent(width=8) }}
         {{ value.name }} = {{ value.value }}{% if not loop.last %},{% endif %}
 
         {% endfor %}
@@ -82,6 +92,7 @@ namespace KRPC.Client.Services.{{ service_name }}
     {% endfor %}
 
     {% for class_name,cls in classes.items() %}
+    {{ cls.documentation | doc | indent(width=4) }}
     public class {{ class_name }} : global::KRPC.Client.Object
     {
         public {{ class_name }} (global::KRPC.Client.Connection connection, UInt64 id) : base (connection, id)
@@ -89,6 +100,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         }
 
         {% for method_name,method in cls.methods.items() %}
+        {{ method.documentation | doc | indent(width=8) }}
         public {{ method.return_type }} {{ method_name }} ({{ sig_parameters(method.parameters) }})
         {
             {{ args([{'name': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
@@ -100,6 +112,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% endfor %}
 
         {% for method_name,method in cls.static_methods.items() %}
+        {{ method.documentation | doc | indent(width=8) }}
         public static {{ method.return_type }} {{ method_name }} (Connection _connection, {{ sig_parameters(method.parameters) }})
         {
             {% if method.parameters | length > 0 %}            {{ args(method.parameters) | indent(width=12) }}
@@ -112,6 +125,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% endfor %}
 
         {% for property_name,property in cls.properties.items() %}
+        {{ property.documentation | doc | indent(width=8) }}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}
             get {

@@ -40,6 +40,9 @@ class CppGenerator(Generator):
             'unsigned', 'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor', 'xor_eq'
         ])
 
+    def filter_doc(self, s):
+        return ''
+
     def parse_name(self, name):
         name = to_snake_case(name)
         if name in self.keywords():
@@ -134,6 +137,9 @@ class CppGenerator(Generator):
 
     def parse_set_client(self, procedure):
         return isinstance(self.get_return_type(procedure), krpc.types.ClassType)
+
+    def parse_documentation(self, documentation):
+        return None
 
     def parse_context(self, context):
         for info in context['procedures'].values():
