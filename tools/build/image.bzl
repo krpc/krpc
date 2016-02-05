@@ -5,7 +5,7 @@ def _impl(ctx):
         inputs = [input],
         outputs = [output],
         progress_message = 'Generating PNG image %s' % output.short_path,
-        command = 'rsvg --format=png %s %s' % (input.path, output.path)
+        command = 'rsvg-convert --format=png -o %s %s' % (output.path, input.path)
     )
 
 png_image = rule(
