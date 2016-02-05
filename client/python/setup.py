@@ -2,12 +2,16 @@ from setuptools import setup
 import sys
 import os
 
+dirpath = os.path.dirname(os.path.realpath(__file__))
+
 # Dirty hack to make setuptools use file copies instead of hardlinks which do not play well with Bazel
 # http://bugs.python.org/issue8876
 if os.getenv('BAZEL_BUILD') and hasattr(os, 'link'):
     del os.link
 
-dirpath = os.path.dirname(os.path.realpath(__file__))
+# Fix dirpath when running Bazel in standalone mode
+if os.getenv('BAZEL_BUILD') and not os.path.exists(os.path.join(dirpath, 'VERSION.txt')):
+    dirpath = os.getcwd()
 
 install_requires=['protobuf == 3.0.0b2']
 if sys.version_info < (3, 4):

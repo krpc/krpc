@@ -2,13 +2,15 @@ from setuptools import setup
 import sys
 import os
 
+dirpath = os.path.dirname(os.path.realpath(__file__))
+
 # Dirty hack to make setuptools use file copies instead of hardlinks which do not play well with Bazel
 # http://bugs.python.org/issue8876
 if os.getenv('BAZEL_BUILD') and hasattr(os, 'link'):
     del os.link
 
-dirpath = os.path.dirname(os.path.realpath(__file__))
-if not os.path.exists(os.path.join(dirpath, 'VERSION.txt')):
+# Fix dirpath when running Bazel in standalone mode
+if os.getenv('BAZEL_BUILD') and not os.path.exists(os.path.join(dirpath, 'VERSION.txt')):
     dirpath = os.getcwd()
 
 install_requires=['krpc', 'jinja2']
