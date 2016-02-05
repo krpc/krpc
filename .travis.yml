@@ -23,13 +23,21 @@ addons:
       - texlive-latex-extra
       - librsvg2-bin
       - lua5.1
-      - luarocks
 
 language: csharp
 mono:
   - latest
 
 before_install:
+  # Luarocks
+  - wget http://keplerproject.github.io/luarocks/releases/luarocks-2.2.0.tar.gz
+  - tar -xf luarocks-2.2.0.tar.gz
+  - cd luarocks-2.2.0
+  - ./configure
+  - make build
+  - sudo make install
+  - cd ..
+  - rm -rf luarocks-2.2.0 luarocks-2.2.0.tar.gz
   # Bazel
   - wget 'https://github.com/bazelbuild/bazel/releases/download/0.1.4/bazel-0.1.4-jdk7-installer-linux-x86_64.sh'
   - chmod +x bazel-0.1.4-jdk7-installer-linux-x86_64.sh
