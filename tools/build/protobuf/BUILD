@@ -1,4 +1,5 @@
 load('/tools/build/csharp', 'csharp_reference')
+load('/tools/build/protobuf/lua', 'protoc_lua_env')
 
 exports_files(['LICENSE'])
 
@@ -68,3 +69,6 @@ config_setting(
     name = 'freebsd',
     values = {'host_cpu': 'freebsd'}
 )
+
+# python env for running protoc-lua plugin
+protoc_lua_env(name = 'protoc-lua-env')
