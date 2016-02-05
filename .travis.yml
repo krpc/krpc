@@ -23,7 +23,7 @@ addons:
       - texlive-latex-extra
       - librsvg2-bin
       - lua5.1
-      - lua5.1-dev
+      - liblua5.1-0-dev
 
 language: csharp
 mono:
