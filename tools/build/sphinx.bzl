@@ -10,6 +10,26 @@ def _apply_path_map(path_map, path):
                 matchlen = len(x)
     return match
 
+def _create_py_env(out, install):
+    tmp = out+'.tmp-create-py-env'
+    cmds = [
+        'rm -rf %s' % tmp,
+        'virtualenv %s --quiet --no-site-packages' % tmp
+    ]
+    for lib in install:
+        cmds.append('%s/bin/python %s/bin/pip install --quiet --no-deps %s' % (tmp, tmp, lib.path))
+    cmds.extend([
+        '(CWD=`pwd`; cd %s; tar -c -f $CWD/%s *)' % (tmp, out)
+    ])
+    return cmds
+
+def _extract_py_env(env, path):
+    return [
+        'rm -rf %s' % path,
+        'mkdir -p %s' % path,
+        '(CWD=`pwd`; cd %s; tar -xf $CWD/%s)' % (path, env)
+    ]
+
 def _impl(ctx, builder):
     inputs = ctx.files.srcs
     output = ctx.outputs.out
@@ -40,13 +60,9 @@ def _impl(ctx, builder):
         ctx.file._sphinx_csharp
     ]
 
-    subcommands = ['virtualenv env --quiet --no-site-packages']
-    for lib in pylibs:
-        subcommands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % lib.path)
-    subcommands.append('tar -cf %s env' % sphinx_env.path)
     ctx.file_action(
         output = sphinx_setup,
-        content = ' &&\n'.join(subcommands)+'\n',
+        content = ' && \\\n'.join(_create_py_env(sphinx_env.path, pylibs))+'\n',
         executable = True
     )
 
@@ -58,10 +74,11 @@ def _impl(ctx, builder):
         use_default_shell_env = True
     )
 
-    subcommands = [
-        'tar -xf %s' % sphinx_env.path,
-        'env/bin/python env/bin/sphinx-build -b %s -a -E -W -N -q "$1" "$2.files" $3' % builder # -j32
-    ]
+    pyenv = sphinx_build.path+'.tmp-py-env'
+    subcommands = _extract_py_env(sphinx_env.path, pyenv)
+    subcommands.extend([
+        '%s/bin/python %s/bin/sphinx-build -b %s -a -E -W -N -q "$1" "$2.files" $3' % (pyenv, pyenv, builder) #-j32
+    ])
     if builder == 'html':
         subcommands.append('(CWD=`pwd` && cd "$2.files" && zip --quiet -r $CWD/$2 ./)')
     else:
