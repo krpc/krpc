@@ -19,6 +19,7 @@ namespace TestServer
                 cmdargs.Remove ("--debug");
                 Logger.Enabled = true;
                 Logger.Level = Logger.Severity.Debug;
+				RPCException.VerboseErrors = true;
             } else if (cmdargs.Contains ("--quiet")) {
                 cmdargs.Remove ("--quiet");
                 Logger.Enabled = true;
