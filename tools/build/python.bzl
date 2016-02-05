@@ -10,6 +10,26 @@ def _apply_path_map(path_map, path):
                 matchlen = len(x)
     return match
 
+def _create_py_env(out, install):
+    tmp = out+'.tmp-create-py-env'
+    cmds = [
+        'rm -rf %s' % tmp,
+        'virtualenv %s --quiet --no-site-packages' % tmp
+    ]
+    for lib in install:
+        cmds.append('%s/bin/python %s/bin/pip install --quiet --no-deps %s' % (tmp, tmp, lib.path))
+    cmds.extend([
+        '(CWD=`pwd`; cd %s; tar -c -f $CWD/%s *)' % (tmp, out)
+    ])
+    return cmds
+
+def _extract_py_env(env, path):
+    return [
+        'rm -rf %s' % path,
+        'mkdir -p %s' % path,
+        '(CWD=`pwd`; cd %s; tar -xf $CWD/%s)' % (path, env)
+    ]
+
 def _sdist_impl(ctx):
     output = ctx.outputs.out
     inputs = ctx.files.files
@@ -52,6 +72,50 @@ py_sdist = rule(
         'path_map': attr.string_dict(),
         'out': attr.output(mandatory=True)
     }
+)
+
+def _script_impl(ctx):
+    script_setup = ctx.new_file(ctx.configuration.genfiles_dir, 'py_script-setup-%s' % ctx.attr.script)
+    script_env = ctx.new_file(ctx.configuration.genfiles_dir, 'py_script-env-%s' % ctx.attr.script)
+    script_run = ctx.outputs.executable
+
+    ctx.file_action(
+        output = script_setup,
+        content = '&& \\\n'.join(_create_py_env(script_env.path, install = ctx.files.deps + [ctx.file.pkg]))+'\n',
+        executable = True
+    )
+
+    ctx.action(
+        inputs = [ctx.file.pkg] + ctx.files.deps,
+        outputs = [script_env],
+        progress_message = 'Setting up python script %s' % ctx.attr.script,
+        executable = script_setup,
+        use_default_shell_env = True
+    )
+
+    env = ctx.attr.script+'.py_script-env'
+    sub_commands = _extract_py_env('$0.runfiles/%s' % script_env.short_path, env)
+    sub_commands.append('%s/bin/python %s/bin/%s "$@"' % (env, env, ctx.attr.script))
+    ctx.file_action(
+        output = script_run,
+        content = ' && \\\n'.join(sub_commands)+'\n',
+        executable = True
+    )
+
+    return struct(
+        name = ctx.label.name,
+        out = script_run,
+        runfiles = ctx.runfiles(files = [script_env])
+    )
+
+py_script = rule(
+    implementation = _script_impl,
+    attrs = {
+        'script': attr.string(mandatory=True),
+        'pkg': attr.label(allow_files=True, single_file=True),
+        'deps': attr.label_list(allow_files=True)
+    },
+    executable = True
 )
 
 def _test_impl(ctx, pyexe='python2'):
