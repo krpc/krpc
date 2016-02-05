@@ -44,31 +44,36 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Attributes\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\..\..\bazel-bin\client\csharp\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Object.cs" />
-    <Compile Include="RPCException.cs" />
+    <Compile Include="Attributes\RPCAttribute.cs" />
+    <Compile Include="Connection.cs" />
     <Compile Include="Encoder.cs" />
+    <Compile Include="ExpressionUtils.cs" />
+    <Compile Include="RemoteObject.cs" />
+    <Compile Include="RPCException.cs" />
+    <Compile Include="Stream.cs" />
+    <Compile Include="StreamManager.cs" />
     <Compile Include="..\..\..\bazel-bin\protobuf\KRPC.cs">
       <Link>KRPC.cs</Link>
     </Compile>
     <Compile Include="..\..\..\bazel-bin\client\csharp\Services\KRPC.cs">
       <Link>Services\KRPC.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\InfernalRobotics.cs">
-      <Link>Services\InfernalRobotics.cs</Link>
+    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\SpaceCenter.cs">
+      <Link>Services\SpaceCenter.cs</Link>
     </Compile>
     <Compile Include="..\..\..\bazel-bin\client\csharp\Services\KerbalAlarmClock.cs">
       <Link>Services\KerbalAlarmClock.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\SpaceCenter.cs">
-      <Link>Services\SpaceCenter.cs</Link>
+    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\InfernalRobotics.cs">
+      <Link>Services\InfernalRobotics.cs</Link>
     </Compile>
-    <Compile Include="Connection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
 </Project>

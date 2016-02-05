@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
-using KRPC.Client;
+﻿using KRPC.Client;
 using KRPC.Client.Services;
 using KRPC.Client.Services.KRPC;
 using KRPC.Client.Services.TestService;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 

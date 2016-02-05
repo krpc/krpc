@@ -28,7 +28,6 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
     <Reference Include="Moq">
       <HintPath>..\..\..\bazel-krpc\external\csharp.moq\lib\net40\Moq.dll</HintPath>
     </Reference>
@@ -38,6 +37,7 @@
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\..\bazel-krpc\external\csharp.protobuf\lib\dotnet\Google.Protobuf.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.IO">
       <HintPath>..\..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
     </Reference>
@@ -45,27 +45,28 @@
       <HintPath>..\..\..\bazel-krpc\lib\mono-4.5\Facades\System.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Compile Include="EncoderTest.cs" />
-    <Compile Include="ObjectTest.cs" />
-    <Compile Include="PerformanceTest.cs" />
-    <Compile Include="ServerTestCase.cs" />
-    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\TestService.cs">
-      <Link>Services\TestService.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\bazel-bin\protobuf\Test.cs">
-      <Link>Test.cs</Link>
-    </Compile>
-    <Compile Include="ConnectionTest.cs" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\KRPC.Client.csproj">
       <Project>{5D390973-8F07-4B28-827F-FB3A1E739FD7}</Project>
       <Name>KRPC.Client</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConnectionTest.cs" />
+    <Compile Include="EncoderTest.cs" />
+    <Compile Include="ObjectTest.cs" />
+    <Compile Include="PerformanceTest.cs" />
+    <Compile Include="ServerTestCase.cs" />
+    <Compile Include="StreamTest.cs" />
+    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\TestService.cs">
+      <Link>Services\TestService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\bazel-bin\protobuf\Test.cs">
+      <Link>Test.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>

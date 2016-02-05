@@ -1,6 +1,6 @@
-using NUnit.Framework;
 using KRPC.Client.Services;
 using KRPC.Client.Services.TestService;
+using NUnit.Framework;
 using System;
 using System.Diagnostics;
 

@@ -70,4 +70,38 @@ outputs the name of the active vessel:
 Streaming Data from the Server
 ------------------------------
 
-Streams are not yet supported by the C# client.
+A stream repeatedly executes a function on the server, with a fixed set of
+argument values. It provides a more efficient way of repeatedly getting the
+result of calling function on the server, without having to invoke it directly
+-- which incurs communication overheads.
+
+For example, consider the following loop that continuously prints out the
+position of the active vessel. This loop incurs significant communication
+overheads, as the :meth:`Vessel.Position` method is called repeatedly.
+
+.. code-block:: csharp
+
+   var vessel = connection.SpaceCenter().ActiveVessel;
+   var refframe = vessel.Orbit.Body.ReferenceFrame;
+   while (True)
+       Console.Out.WriteLine(vessel.Position(refframe));
+
+The following code achieves the same thing, but is far more efficient. It makes
+a single call to :meth:`Connection.AddStream` to create the stream, which avoids
+the communication overhead in the previous example.
+
+.. code-block:: csharp
+
+   var vessel = connection.SpaceCenter().ActiveVessel;
+   var refframe = vessel.Orbit.Body.ReferenceFrame;
+   var position = conn.AddStream(() => vessel.Position(refframe));
+   while (True)
+       Console.Out.WriteLine(position.Get());
+
+Streams are created by calling :meth:`Connection.AddStream` and passing it a
+lambda expression. It returns an instance of the :class:`KRPC.Client.Stream`
+class from which the latest value can be obtained by calling
+:meth:`KRPC.Client.Stream.Get`.
+
+The lambda expression passed to :meth:`Connection.AddStream` must take zero
+arguments and be either a method call expression or a parameter call expression.

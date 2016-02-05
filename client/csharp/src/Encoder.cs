@@ -1,8 +1,8 @@
-﻿using System;
-using Google.Protobuf;
-using System.IO;
+﻿using Google.Protobuf;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -99,11 +99,11 @@ namespace KRPC.Client
                 return EncodeSet (value, type); //TODO: ugly checking for set types
             else if (value != null && value.GetType ().IsGenericType &&
                      (value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<>) ||
-                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,>) ||
-                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,>) ||
-                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,>) ||
-                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,>) ||
-                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,,>)))
+                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,>) ||
+                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,>) ||
+                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,>) ||
+                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,>) ||
+                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,,>)))
                 return EncodeTuple (value, type); //TODO: ugly checking for tuple types
             else
                 throw new ArgumentException (type + " is not a serializable type");
@@ -201,11 +201,11 @@ namespace KRPC.Client
                 return DecodeSet (value, type, client);
             else if (type.IsGenericType &&
                      (type.GetGenericTypeDefinition () == typeof(Tuple<>) ||
-                      type.GetGenericTypeDefinition () == typeof(Tuple<,>) ||
-                      type.GetGenericTypeDefinition () == typeof(Tuple<,,>) ||
-                      type.GetGenericTypeDefinition () == typeof(Tuple<,,,>) ||
-                      type.GetGenericTypeDefinition () == typeof(Tuple<,,,,>) ||
-                      type.GetGenericTypeDefinition () == typeof(Tuple<,,,,,>)))
+                     type.GetGenericTypeDefinition () == typeof(Tuple<,>) ||
+                     type.GetGenericTypeDefinition () == typeof(Tuple<,,>) ||
+                     type.GetGenericTypeDefinition () == typeof(Tuple<,,,>) ||
+                     type.GetGenericTypeDefinition () == typeof(Tuple<,,,,>) ||
+                     type.GetGenericTypeDefinition () == typeof(Tuple<,,,,,>)))
                 return DecodeTuple (value, type, client); // TODO: ugly handing of tuple types
             throw new ArgumentException (type + " is not a serializable type");
         }
