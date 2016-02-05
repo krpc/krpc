@@ -1,5 +1,5 @@
-from .python import PythonDomain
-from .utils import snakecase
+from krpcdocgen.python import PythonDomain
+from krpcdocgen.utils import snakecase
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class LuaDomain(PythonDomain):
@@ -27,9 +27,9 @@ class LuaDomain(PythonDomain):
         'false': 'False'
     }
 
-    def __init__(self, args):
+    def __init__(self, macros):
         self._currentmodule = None
-        self.macros = args.lua_macros
+        self.macros = macros
 
     def type(self, typ):
         if isinstance(typ, ValueType):

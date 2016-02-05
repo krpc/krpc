@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ElementTree
-from .utils import indent, lookup_cref
+from krpcdocgen.utils import indent, lookup_cref
 
 class DocumentationParser(object):
     def __init__(self, domain, services, xml):

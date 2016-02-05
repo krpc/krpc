@@ -1,5 +1,5 @@
-from .nodes import *
-from .utils import snakecase
+from krpcdocgen.nodes import *
+from krpcdocgen.utils import snakecase
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class PythonDomain(object):
@@ -14,9 +14,9 @@ class PythonDomain(object):
         'false': 'False'
     }
 
-    def __init__(self, args):
+    def __init__(self, macros):
         self._currentmodule = None
-        self.macros = args.python_macros
+        self.macros = macros
 
     def currentmodule(self, name):
         self._currentmodule = name

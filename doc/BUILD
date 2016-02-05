@@ -1,6 +1,6 @@
 load('/tools/build/image', 'png_images')
 load('/tools/build/sphinx', 'sphinx_html', 'sphinx_latex')
-load('/doc/generate', 'generate', 'generate_multiple')
+load('/doc/gen/build', 'generate', 'generate_multiple')
 load('/config', 'version')
 
 filegroup(
@@ -107,10 +107,4 @@ generate_multiple(
     language = 'python',
     srcs = glob(['api/**/*.tmpl']),
     defs = defs
-)
-
-# TODO move elsewhere
-filegroup(
-    name = 'generate_lib',
-    srcs = glob(['lib/*.py', 'lib/*.tmpl'])
 )

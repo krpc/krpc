@@ -1,5 +1,5 @@
 import collections
-from .docparser import DocumentationParser
+from krpcdocgen.docparser import DocumentationParser
 from krpc.attributes import Attributes
 from krpc.types import Types
 from krpc.decoder import Decoder

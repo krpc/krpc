@@ -1,4 +1,4 @@
-from .nodes import *
+from krpcdocgen.nodes import *
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CsharpDomain(object):
@@ -7,9 +7,9 @@ class CsharpDomain(object):
     sphinxname = 'cs'
     codeext = 'cs'
 
-    def __init__(self, args):
+    def __init__(self, macros):
         self._currentmodule = None
-        self.macros = args.csharp_macros
+        self.macros = macros
 
     def currentmodule(self, name):
         self._currentmodule = name

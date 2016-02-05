@@ -4,19 +4,20 @@ import os
 import codecs
 import json
 import jinja2
+from pkg_resources import resource_filename
 from krpc.types import Types
-from lib.utils import snakecase, indent, singleline, lookup_cref
-from lib.cpp import CppDomain
-from lib.csharp import CsharpDomain
-from lib.lua import LuaDomain
-from lib.python import PythonDomain
-from lib.nodes import Service
-from lib.docparser import DocumentationParser
-from lib.extensions import AppendExtension
+from krpcdocgen.utils import snakecase, indent, singleline, lookup_cref
+from krpcdocgen.cpp import CppDomain
+from krpcdocgen.csharp import CsharpDomain
+from krpcdocgen.lua import LuaDomain
+from krpcdocgen.python import PythonDomain
+from krpcdocgen.nodes import Service
+from krpcdocgen.docparser import DocumentationParser
+from krpcdocgen.extensions import AppendExtension
 
 def process_file(args, domain, services, path):
 
-    loader = jinja2.FileSystemLoader(searchpath='./')
+    loader = jinja2.FileSystemLoader(searchpath=['./','/'])
     template_env = jinja2.Environment(
         loader=loader,
         trim_blocks=True,
@@ -67,46 +68,36 @@ def process_file(args, domain, services, path):
     template = template_env.get_template(path)
     content = template.render(context)
 
-    import lib.nodes
-    if len(lib.nodes.sort_members_failed) > 0:
-        raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(lib.nodes.sort_members_failed))
+    import krpcdocgen.nodes
+    if len(krpcdocgen.nodes.sort_members_failed) > 0:
+        raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(krpcdocgen.nodes.sort_members_failed))
 
     return content.rstrip()+'\n'
 
 def main():
     parser = argparse.ArgumentParser(description='Generate API documentation from service definitions')
-    parser.add_argument('language', choices = ['cpp', 'csharp', 'lua', 'python'],
-                        help='Language to compile')
-    parser.add_argument('source', action='store',
-                        help='Path to source file')
-    parser.add_argument('destination', action='store',
-                        help='Path to destination file')
-    parser.add_argument('definitions', nargs='*', default=[],
-                        help='Paths to service definition files')
-    parser.add_argument('--no-warnings', action='store_true', default=False,
-                        help='Ignore warnings')
-    parser.add_argument('--force', action='store_true', default=False,
-                        help='Overwrite existing files, even when nothing\'s changed')
-    parser.add_argument('--order-file', action='store', default='order.txt',
-                        help='Path to order definition file')
-    parser.add_argument('--cpp-macros', action='store', default='lib/cpp.tmpl',
-                        help='Path to C++ macros template file')
-    parser.add_argument('--csharp-macros', action='store', default='lib/csharp.tmpl',
-                        help='Path to C# macros template file')
-    parser.add_argument('--lua-macros', action='store', default='lib/lua.tmpl',
-                        help='Path to Lua macros template file')
-    parser.add_argument('--python-macros', action='store', default='lib/python.tmpl',
-                        help='Path to Python macros template file')
+    parser.add_argument('language', choices = ['cpp', 'csharp', 'lua', 'python'], help='Language to compile')
+    parser.add_argument('source', action='store', help='Path to source file')
+    parser.add_argument('order_file', action='store', default='order.txt', help='Path to order definition file')
+    parser.add_argument('destination', action='store', help='Path to destination file')
+    parser.add_argument('definitions', nargs='*', default=[], help='Paths to service definition files')
+    parser.add_argument('--no-warnings', action='store_true', default=False, help='Ignore warnings')
+    parser.add_argument('--force', action='store_true', default=False, help='Always overwrite existing files')
+    parser.add_argument('--macros', action='store', default=None, help='Path to macros template file')
     args = parser.parse_args()
 
+    macros = args.macros
+    if macros == None:
+        macros = resource_filename(__name__, '%s.tmpl' % args.language).decode('utf-8')
+
     if args.language == 'cpp':
-        domain = CppDomain(args)
+        domain = CppDomain(macros)
     elif args.language == 'csharp':
-        domain = CsharpDomain(args)
+        domain = CsharpDomain(macros)
     elif args.language == 'lua':
-        domain = LuaDomain(args)
+        domain = LuaDomain(macros)
     else: # python
-        domain = PythonDomain(args)
+        domain = PythonDomain(macros)
 
     if not os.path.exists(args.order_file):
         raise RuntimeError('Ordering file \'%s\' does not exist' % args.order_file)

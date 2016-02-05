@@ -1,6 +1,6 @@
-from .python import PythonDomain
-from .nodes import *
-from .utils import snakecase
+from krpcdocgen.python import PythonDomain
+from krpcdocgen.nodes import *
+from krpcdocgen.utils import snakecase
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CppDomain(PythonDomain):
@@ -18,9 +18,9 @@ class CppDomain(PythonDomain):
         'null': 'NULL'
     }
 
-    def __init__(self, args):
+    def __init__(self, macros):
         self._currentmodule = None
-        self.macros = args.cpp_macros
+        self.macros = macros
 
     def currentmodule(self, name):
         self._currentmodule = name
