@@ -57,6 +57,10 @@ namespace KRPC.Client
             return "0x" + BitConverter.ToString (data).Replace ("-", " 0x");
         }
 
+        /// <summary>
+        /// Encode a value of the given type.
+        /// Should not be called directly. This interface is used by service client stubs.
+        /// </summary>
         public static ByteString Encode (object value, Type type)
         {
             var stream = new MemoryStream ();
@@ -159,6 +163,10 @@ namespace KRPC.Client
             return Encode (encodedTuple, typeof(KRPC.Schema.KRPC.Tuple));
         }
 
+        /// <summary>
+        /// Decode a value of the given type.
+        /// Should not be called directly. This interface is used by service client stubs.
+        /// </summary>
         public static object Decode (ByteString value, Type type, Connection client)
         {
             var stream = new CodedInputStream (value.ToByteArray ());

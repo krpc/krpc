@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace KRPC.Client
 {
+    /// <summary>
+    /// Thrown when a error occurs executing a remote procedure.
+    /// </summary>
     [Serializable ()]
     public class RPCException : Exception
     {

@@ -12,6 +12,9 @@ using System.Reflection;
 
 namespace KRPC.Client
 {
+    /// <summary>
+    /// A connection to the kRPC server. All interaction with kRPC is performed via an instance of this class.
+    /// </summary>
     public class Connection
     {
         private TcpClient rpcClient;
@@ -21,11 +24,11 @@ namespace KRPC.Client
             private set;
         }
 
-        /**
-         * Connect to a kRPC server on the specified IP address and port numbers. If
-         * streamPort is 0, does not connect to the stream server.
-         * Passes an optional name to the server to identify the client (up to 32 bytes of UTF-8 encoded text).
-         */
+        /// <summary>
+        /// Connect to a kRPC server on the specified IP address and port numbers. If
+        /// streamPort is 0, does not connect to the stream server.
+        /// Passes an optional name to the server to identify the client (up to 32 bytes of UTF-8 encoded text).
+        /// </summary>
         public Connection (string name = "", IPAddress address = null, int rpcPort = 50000, int streamPort = 50001)
         {
             if (address == null)
@@ -64,6 +67,10 @@ namespace KRPC.Client
             return AddStream<TResult> ((LambdaExpression)expression);
         }
 
+        /// <summary>
+        /// Invoke a remote procedure.
+        /// Should not be called directly. This interface is used by service client stubs.
+        /// </summary>
         public ByteString Invoke (string service, string procedure, IList<ByteString> arguments = null)
         {
             return Invoke (BuildRequest (service, procedure, arguments));
