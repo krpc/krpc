@@ -83,11 +83,11 @@ namespace KRPC.Client
                 encoder.WriteBytes (ByteString.CopyFrom ((byte[])value));
             else if (value != null && value is Enum)
                 encoder.WriteInt32 ((int)value);
-            else if (type.IsSubclassOf (typeof(KRPC.Client.Object))) {
+            else if (type.IsSubclassOf (typeof(RemoteObject))) {
                 if (value == null)
                     encoder.WriteUInt64 (0);
                 else
-                    encoder.WriteUInt64 (((KRPC.Client.Object)value)._ID);
+                    encoder.WriteUInt64 (((RemoteObject)value)._ID);
             } else if (value != null && value is IMessage) {
                 ((IMessage)value).WriteTo (stream);
                 return ByteString.CopyFrom (stream.ToArray ());
@@ -182,13 +182,13 @@ namespace KRPC.Client
                 return stream.ReadBytes ().ToByteArray ();
             else if (type.IsEnum)
                 return stream.ReadInt32 ();
-            else if (typeof(KRPC.Client.Object).IsAssignableFrom (type)) {
+            else if (typeof(RemoteObject).IsAssignableFrom (type)) {
                 if (client == null)
                     throw new ArgumentException ("Client not passed when decoding remote object");
                 var id = stream.ReadUInt64 ();
                 if (id == 0)
                     return null;
-                return (KRPC.Client.Object)Activator.CreateInstance (type, client, id);
+                return (RemoteObject)Activator.CreateInstance (type, client, id);
             } else if (typeof(IMessage).IsAssignableFrom (type)) {
                 IMessage message = (IMessage)Activator.CreateInstance (type);
                 message.MergeFrom (stream);
@@ -257,7 +257,7 @@ namespace KRPC.Client
             var encodedTuple = KRPC.Schema.KRPC.Tuple.Parser.ParseFrom (value);
             var valueTypes = type.GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
-            System.Object[] values = new System.Object[valueTypes.Length];
+            Object[] values = new Object[valueTypes.Length];
             for (int j = 0; j < valueTypes.Length; j++) {
                 var item = encodedTuple.Items [j];
                 values [j] = Decode (item, valueTypes [j], client);

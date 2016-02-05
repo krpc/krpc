@@ -93,7 +93,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 
     {% for class_name,cls in classes.items() %}
     {{ cls.documentation | doc | indent(width=4) }}
-    public class {{ class_name }} : global::KRPC.Client.Object
+    public class {{ class_name }} : global::KRPC.Client.RemoteObject
     {
         public {{ class_name }} (global::KRPC.Client.Connection connection, UInt64 id) : base (connection, id)
         {
