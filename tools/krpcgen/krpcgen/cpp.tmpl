@@ -129,7 +129,7 @@ namespace krpc {
     inline {{ service_name }}::{{ service_name }}(Client* client):
       Service(client) {}
 
-    {% for procedure_name,procedure in procedures.items() + properties.items() %}
+    {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
     inline {{ procedure.return_type }} {{ service_name }}::{{ procedure_name }}({{ impl_parameters(procedure.parameters) }}) {
 {% if procedure.parameters | length > 0 %}      {{ args(procedure.parameters) | indent(width=6) }}
       {% endif %}
@@ -143,7 +143,7 @@ namespace krpc {
     inline {{ service_name }}::{{ class_name }}::{{ class_name }}(Client* client, google::protobuf::uint64 id):
       Object(client, "{{ service_name }}::{{ class_name }}", id) {}
 
-    {% for method_name,method in cls.methods.items() + cls.properties.items() %}
+    {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
     inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters(method.parameters) }}) {
       {{ args([{'name': '*this'}] + method.parameters) | indent(width=6) }}
       {{ call(service_name, method.remote_name, method.return_type != 'void', True) | indent(width=6) }}
