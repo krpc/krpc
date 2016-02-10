@@ -1,13 +1,20 @@
 load('/tools/build/python', 'py_sdist', 'py_script')
 load('/config', 'version')
 
+genrule(
+    name = 'version',
+    outs = ['krpcgen/version.py'],
+    cmd = 'echo "__version__ = \'%s\'" > "$@"' % version,
+    visibility = ['//visibility:public']
+)
+
 py_sdist(
     name = 'krpcgen',
     out = 'krpcgen-%s.zip' % version,
     files = [
         'README.txt', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING',
-        'setup.py', 'MANIFEST.in',
+        'setup.py', 'MANIFEST.in', ':version',
         '//tools/ServiceDefinitions',
         '//server:KRPC',
         '//tools/build/ksp:Google.Protobuf.dll',

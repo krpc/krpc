@@ -12,7 +12,7 @@ from krpcgen.csharp import CsharpGenerator
 def main():
     version = krpcgen.__version__
     parser = argparse.ArgumentParser(description='Generate source code for kRPC services')
-    parser.add_argument('-v,--version', action='version', version='krpcgen version %s' % version)
+    parser.add_argument('-v', action='version', version='krpcgen version %s' % version)
     parser.add_argument('language', choices=('cpp', 'csharp'), help='Language to generate')
     parser.add_argument('service', help='Name of service to generate')
     parser.add_argument('input', help='Path to service definition JSON file or assembly DLL')
