@@ -15,7 +15,7 @@ active clients.
 
 Clients run outside of KSP. This gives you the freedom to run scripts in
 whatever environment you want. A client communicates with the server to run
-procedures. kRPC comes several client libraries that implement the
+procedures. kRPC comes with several client libraries that implement the
 :ref:`communication protocol <communication-protocol>`, making it easy to write
 programs for these languages that can talk to the server.
 
@@ -30,11 +30,12 @@ Service API
 Third party mods can add functionality to kRPC using the *Service API*. This is
 done by adding :ref:`attributes <service-api-attributes>` to your own classes,
 methods and properties to make them visible through the server. When the kRPC
-server starts, it scans all loaded assemblies looking for classes, methods and
-properties with these attributes.
+server starts, it scans all the assemblies loaded by the game, looking for
+classes, methods and properties with these attributes.
 
 The following example implements a service that can control the throttle and
-staging of the active vessel:
+staging of the active vessel. To add this to the server, compile the code and
+place the DLL in your GameData directory.
 
 .. code-block:: csharp
 
@@ -60,7 +61,7 @@ staging of the active vessel:
        }
    }
 
-The following example shows how this service can be used from a python client:
+The following example shows how this service can then be used from a python client:
 
 .. code-block:: python
 
@@ -68,6 +69,12 @@ The following example shows how this service can be used from a python client:
    conn = krpc.connect()
    conn.launch_control.throttle = 1
    conn.launch_control.activate_stage()
+
+Some of the client libraries automatically pick up changes to the functionality
+provided by the server, including the Python and Lua clients. However, some
+clients require stub code to be generated from the service assembly so that they
+can interact with new or changed functionality. See :ref:`krpcgen <service-api-krpcgen>`
+for details on how to generate these stubs.
 
 .. _service-api-attributes:
 
@@ -510,3 +517,82 @@ Further Examples
 See the `SpaceCenter service implementation
 <https://github.com/djungelorm/krpc/tree/latest-version/src/kRPCSpaceCenter/Services>`_
 for more extensive examples.
+
+.. _service-api-krpcgen:
+
+Generating Service Code for Static Clients
+------------------------------------------
+
+Some of the client libraries dynamically construct the code necessary to
+interact with the server when they connect. This means that these libraries will
+automatically pick up changes to service code. Such client libraries include
+those for Python and Lua.
+
+Other client libraries required code to be generated and compiled into them
+statically. They do not automatically pick up changes to service code. Such
+client libraries include those for C++ and C#.
+
+Code for these 'static' libraries is generated using the `krpcgen` tool. This is
+provided as `a Python script on PyPi
+<https://pypi.python.org/pypi/krpcgen>`_. It can be installed using pip:
+
+``python pip install krpcgen``
+
+You can then run the script from the command line:
+
+.. code-block:: bash
+
+   $ krpcgen --help
+   usage: krpcgen [-h] [-v] [--ksp KSP] [--output-defs OUTPUT_DEFS]
+                  {cpp,csharp} service input output
+
+   Generate source code for kRPC services
+
+   positional arguments:
+     {cpp,csharp}          Language to generate
+     service               Name of service to generate
+     input                 Path to service definition JSON file or assembly DLL
+     output                Path to output source file to
+
+   optional arguments:
+     -h, --help            show this help message and exit
+     -v                    show program's version number and exit
+     --ksp KSP             Path to Kerbal Space Program directory -- required
+                           when reading from a DLL
+     --output-defs OUTPUT_DEFS
+                           When generting client code from a DLL, output the
+                           service definitions to the given JSON file
+
+Client code can be generated either directly from an assembly DLL containing the
+service, or from a JSON file that has previously been generated from an
+assembly DLL (using the ``--output-defs`` flag).
+
+Generating client code from an assembly DLL requires a copy of Kerbal Space
+Program and a C# runtime to be available on the machine. In contrast, generating
+client code from a JSON file does not have these requirements and so is more
+portable.
+
+Example
+^^^^^^^
+
+The following demonstrates how to generate code for the C++ and C# clients to
+interact with the LaunchControl service, given in an example previously.
+
+krpcgen expects to be passed the location of your copy of Kerbal Space Program,
+the name of the language to generate, the name of the service (from the
+:class:`KRPCService` attribute), a path to the assembly containing the service
+and the path to write the generated code to.
+
+For C++, run the following:
+
+``krpcgen --ksp=/path/to/ksp cpp LaunchControl LaunchControl.dll launch_control.hpp``
+
+To then use the LaunchControl service from C++, you need to link your code
+against the C++ client library, and include `launch_control.hpp`.
+
+For C#, run the following:
+
+``krpcgen --ksp=/path/to/ksp csharp LaunchControl LaunchControl.dll LaunchControl.cs``
+
+To then use the LaunchControl service from a C# client, you need to reference
+the `KRPC.Client.dll` and include `LaunchControl.cs` in your project.
