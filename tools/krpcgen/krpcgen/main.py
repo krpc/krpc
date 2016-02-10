@@ -35,7 +35,7 @@ def main():
         try:
             defs = generate_defs(args)
         except RuntimeError, e:
-            sys.stderr.write('Exn:'+str(e)+'\n')
+            sys.stderr.write(str(e)+'\n')
             return 1
         if args.output_defs:
             with open(args.output_defs, 'w') as f:
