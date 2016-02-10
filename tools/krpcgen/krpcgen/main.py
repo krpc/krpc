@@ -15,7 +15,7 @@ def main():
     parser.add_argument('-v', '--version', action='version', version='krpcgen version %s' % version)
     parser.add_argument('language', choices=('cpp', 'csharp'), help='Language to generate')
     parser.add_argument('service', help='Name of service to generate')
-    parser.add_argument('input', nargs='*', help='Path to service definition JSON file or assembly DLL(s)')
+    parser.add_argument('input', nargs='+', help='Path to service definition JSON file or assembly DLL(s)')
     parser.add_argument('-o', '--output', help='Path to write source code to. If not specified, writes source code to standard output.')
     parser.add_argument('--ksp', help='Path to Kerbal Space Program directory. Required when reading from an assembly DLL(s)')
     parser.add_argument('--output-defs', help='When generting client code from a DLL, output the service definitions to the given JSON file')
