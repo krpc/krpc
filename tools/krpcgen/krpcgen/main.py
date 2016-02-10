@@ -19,7 +19,6 @@ def main():
     parser.add_argument('output', help='Path to output source file to')
     parser.add_argument('--ksp', help='Path to Kerbal Space Program directory -- required when reading from a DLL')
     parser.add_argument('--output-defs', help='When generting client code from a DLL, output the service definitions to the given JSON file')
-    parser.add_argument('--mono', action='store_true', help='Run service definitions generator using mono') #TODO: remove hack
     args = parser.parse_args()
 
     if not os.path.exists(args.input):
