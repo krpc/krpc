@@ -30,11 +30,14 @@ def main():
         with open(args.input, 'r') as f:
             defs.update(json.load(f))
     elif args.input.endswith('.dll'):
-        defs = generate_defs(args)
         if not args.ksp:
             print('KSP directory not set. You must pass --ksp when generating code from an assembly DLL.')
         if not os.path.exists(args.ksp):
             print('KSP directory does not exist. Check the path passed to --ksp')
+        defs = generate_defs(args)
+        if args.output_defs:
+            with open(args.output_defs, 'w') as f:
+                json.dump(defs, f)
     else:
         print('Failed to read service definitions from \'%s\'. Not a JSON file or assembly DLL.' % args.input)
     if len(defs.keys()) == 0:
