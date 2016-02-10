@@ -1,0 +1,53 @@
+sudo: required
+dist: trusty
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.8
+      - g++-4.8
+      - wget
+      - openjdk-7-jdk
+      - openjdk-7-source
+      - pkg-config
+      - zip
+      - zlib1g-dev
+      - python
+      - python-virtualenv
+      - python-pip
+      - texlive-latex-base
+      - texlive-latex-recommended
+      - texlive-fonts-recommended
+      - texlive-latex-extra
+      - librsvg2-bin
+      - lua5.1
+      - liblua5.1-0-dev
+
+language: csharp
+mono:
+  - latest
+
+before_install:
+  # Luarocks
+  - wget http://keplerproject.github.io/luarocks/releases/luarocks-2.2.0.tar.gz
+  - tar -xf luarocks-2.2.0.tar.gz
+  - cd luarocks-2.2.0
+  - ./configure
+  - make build
+  - sudo make install
+  - cd ..
+  - rm -rf luarocks-2.2.0 luarocks-2.2.0.tar.gz
+  # Bazel
+  - wget 'https://github.com/bazelbuild/bazel/releases/download/0.1.4/bazel-0.1.4-jdk7-installer-linux-x86_64.sh'
+  - chmod +x bazel-0.1.4-jdk7-installer-linux-x86_64.sh
+  - ./bazel-0.1.4-jdk7-installer-linux-x86_64.sh --user
+  - cat tools/travis-ci/.bazelrc >> .bazelrc
+  # KSP binaries
+  - mkdir lib/ksp
+  - wget --quiet -O lib/ksp/ksp-lib.zip https://s3.amazonaws.com/krpc/ksp-lib-$KEY1.zip
+  - (cd lib/ksp; unzip -P $KEY2 ksp-lib.zip)
+
+script:
+  - bazel build //:krpc && bazel test //:test
