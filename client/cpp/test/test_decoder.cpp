@@ -44,7 +44,7 @@ TEST(test_decoder, test_decode_message_delimited) {
 TEST(test_decoder, test_decode_class) {
   krpc::services::TestService::TestClass object;
   krpc::decoder::decode(object, krpc::platform::unhexlify("ac02"));
-  ASSERT_EQ(krpc::services::TestService::TestClass(NULL, 300), object);
+  ASSERT_EQ(krpc::services::TestService::TestClass(nullptr, 300), object);
 }
 
 TEST(test_decoder, test_decode_class_none) {

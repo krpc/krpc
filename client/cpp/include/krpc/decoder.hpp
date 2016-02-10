@@ -21,26 +21,26 @@ namespace krpc {
 
     std::string guid(const std::string& data);
 
-    void decode(float& value, const std::string& data, Client* client = NULL);
-    void decode(double& value, const std::string& data, Client* client = NULL);
-    void decode(google::protobuf::int32& value, const std::string& data, Client* client = NULL);
-    void decode(google::protobuf::int64& value, const std::string& data, Client* client = NULL);
-    void decode(google::protobuf::uint32& value, const std::string& data, Client* client = NULL);
-    void decode(google::protobuf::uint64& value, const std::string& data, Client* client = NULL);
-    void decode(bool& value, const std::string& data, Client* client = NULL);
-    void decode(std::string& value, const std::string& data, Client* client = NULL);
-    void decode(google::protobuf::Message& message, const std::string& data, Client* client = NULL);
-    template <typename T> void decode(Object<T>& object, const std::string& data, Client* client = NULL);
+    void decode(float& value, const std::string& data, Client* client = nullptr);
+    void decode(double& value, const std::string& data, Client* client = nullptr);
+    void decode(google::protobuf::int32& value, const std::string& data, Client* client = nullptr);
+    void decode(google::protobuf::int64& value, const std::string& data, Client* client = nullptr);
+    void decode(google::protobuf::uint32& value, const std::string& data, Client* client = nullptr);
+    void decode(google::protobuf::uint64& value, const std::string& data, Client* client = nullptr);
+    void decode(bool& value, const std::string& data, Client* client = nullptr);
+    void decode(std::string& value, const std::string& data, Client* client = nullptr);
+    void decode(google::protobuf::Message& message, const std::string& data, Client* client = nullptr);
+    template <typename T> void decode(Object<T>& object, const std::string& data, Client* client = nullptr);
 
-    template <typename T> void decode(std::vector<T>& list, const std::string& data, Client* client = NULL);
-    template <typename K, typename V> void decode(std::map<K,V>& dictionary, const std::string& data, Client* client = NULL);
-    template <typename T> void decode(std::set<T>& set, const std::string& data, Client* client = NULL);
+    template <typename T> void decode(std::vector<T>& list, const std::string& data, Client* client = nullptr);
+    template <typename K, typename V> void decode(std::map<K,V>& dictionary, const std::string& data, Client* client = nullptr);
+    template <typename T> void decode(std::set<T>& set, const std::string& data, Client* client = nullptr);
 
-    template <typename T0> void decode(std::tuple<T0>& tuple, const std::string& data, Client* client = NULL);
-    template <typename T0, typename T1> void decode(std::tuple<T0,T1>& tuple, const std::string& data, Client* client = NULL);
-    template <typename T0, typename T1, typename T2> void decode(std::tuple<T0,T1,T2>& tuple, const std::string& data, Client* client = NULL);
-    template <typename T0, typename T1, typename T2, typename T3> void decode(std::tuple<T0,T1,T2,T3>& tuple, const std::string& data, Client* client = NULL);
-    template <typename T0, typename T1, typename T2, typename T3, typename T4> void decode(std::tuple<T0,T1,T2,T3,T4>& tuple, const std::string& data, Client* client = NULL);
+    template <typename T0> void decode(std::tuple<T0>& tuple, const std::string& data, Client* client = nullptr);
+    template <typename T0, typename T1> void decode(std::tuple<T0,T1>& tuple, const std::string& data, Client* client = nullptr);
+    template <typename T0, typename T1, typename T2> void decode(std::tuple<T0,T1,T2>& tuple, const std::string& data, Client* client = nullptr);
+    template <typename T0, typename T1, typename T2, typename T3> void decode(std::tuple<T0,T1,T2,T3>& tuple, const std::string& data, Client* client = nullptr);
+    template <typename T0, typename T1, typename T2, typename T3, typename T4> void decode(std::tuple<T0,T1,T2,T3,T4>& tuple, const std::string& data, Client* client = nullptr);
 
     template <typename T> void decode_enum(T& value, const std::string& data, Client* client);
 

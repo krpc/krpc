@@ -74,7 +74,7 @@ TEST(test_encoder, test_encode_message_delimited) {
 }
 
 TEST(test_encoder, test_encode_class) {
-  krpc::services::TestService::TestClass value(NULL, 300);
+  krpc::services::TestService::TestClass value(nullptr, 300);
   std::string data = krpc::encoder::encode(value);
   ASSERT_EQ("ac02", krpc::platform::hexlify(data));
 }

@@ -218,9 +218,9 @@ TEST(test_encode_decode, test_list_of_objects) {
    test_list(std::vector<krpc::services::TestService::TestClass>(), "");
    {
      std::vector<krpc::services::TestService::TestClass> l;
-     l.push_back(krpc::services::TestService::TestClass(NULL, 1));
-     l.push_back(krpc::services::TestService::TestClass(NULL, 2));
-     l.push_back(krpc::services::TestService::TestClass(NULL, 3));
+     l.push_back(krpc::services::TestService::TestClass(nullptr, 1));
+     l.push_back(krpc::services::TestService::TestClass(nullptr, 2));
+     l.push_back(krpc::services::TestService::TestClass(nullptr, 3));
      test_list(l, "0a01010a01020a0103");
    }
 }
