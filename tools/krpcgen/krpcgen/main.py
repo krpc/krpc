@@ -1,9 +1,10 @@
-import os
 import argparse
 import json
-import subprocess
-import tempfile
+import os
 import shutil
+import subprocess
+import sys
+import tempfile
 from pkg_resources import Requirement, resource_filename, resource_string
 import krpcgen
 from krpcgen.cpp import CppGenerator
@@ -23,7 +24,7 @@ def main():
 
     for path in args.input:
         if not os.path.exists(path):
-            print('Input \'%s\' not found' % path)
+            sys.stderr.write('Input \'%s\' not found\n' % path)
             return 1
 
     defs = {}
@@ -34,19 +35,19 @@ def main():
         try:
             defs = generate_defs(args)
         except RuntimeError, e:
-            print e
+            sys.stderr.write('Exn:'+str(e)+'\n')
             return 1
         if args.output_defs:
             with open(args.output_defs, 'w') as f:
                 json.dump(defs, f)
     else:
-        print('Failed to read service definitions from \'%s\'. Expected a single JSON file, or one or more assembly DLLs.' % '\,\''.join(args.input))
+        sys.stderr.write('Failed to read service definitions from \'%s\'. Expected a single JSON file, or one or more assembly DLLs.\n' % '\,\''.join(args.input))
         return 1
     if len(defs.keys()) == 0:
-        print('No services found in input')
+        sys.stderr.write('No services found in input\n')
         return 1
     if args.service not in defs.keys():
-        print('Service \'%s\' not found in input' % args.service)
+        sys.stderr.write('Service \'%s\' not found in input\n' % args.service)
         return 1
 
     if args.language == 'cpp':
@@ -60,7 +61,7 @@ def main():
     if args.output:
         g.generate_file(args.output)
     else:
-        print g.generate()
+        print(g.generate())
 
 def generate_defs(args):
     if not args.ksp:
