@@ -9,7 +9,7 @@ def _impl(ctx):
         outputs = [output],
         progress_message = 'Generating %s code for %s service' % (language, service),
         executable = ctx.file._krpcgen,
-        arguments = [language, service, defs.path, output.path]
+        arguments = [language, service, defs.path, '--output=%s' % output.path]
     )
 
 krpcgen = rule(

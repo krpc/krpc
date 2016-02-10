@@ -11,40 +11,42 @@ from krpcgen.csharp import CsharpGenerator
 
 def main():
     version = krpcgen.__version__
-    parser = argparse.ArgumentParser(description='Generate source code for kRPC services')
-    parser.add_argument('-v', action='version', version='krpcgen version %s' % version)
+    parser = argparse.ArgumentParser(prog='krpcgen', description='Generate client source code for kRPC services.')
+    parser.add_argument('-v', '--version', action='version', version='krpcgen version %s' % version)
     parser.add_argument('language', choices=('cpp', 'csharp'), help='Language to generate')
     parser.add_argument('service', help='Name of service to generate')
-    parser.add_argument('input', help='Path to service definition JSON file or assembly DLL')
-    parser.add_argument('output', help='Path to output source file to')
-    parser.add_argument('--ksp', help='Path to Kerbal Space Program directory -- required when reading from a DLL')
+    parser.add_argument('input', nargs='*', help='Path to service definition JSON file or assembly DLL(s)')
+    parser.add_argument('-o', '--output', help='Path to write source code to. If not specified, writes source code to standard output.')
+    parser.add_argument('--ksp', help='Path to Kerbal Space Program directory. Required when reading from an assembly DLL(s)')
     parser.add_argument('--output-defs', help='When generting client code from a DLL, output the service definitions to the given JSON file')
     args = parser.parse_args()
 
-    if not os.path.exists(args.input):
-        print('Input not found')
-        return 1
+    for path in args.input:
+        if not os.path.exists(path):
+            print('Input \'%s\' not found' % path)
+            return 1
 
     defs = {}
-    if args.input.endswith('.json'):
-        with open(args.input, 'r') as f:
+    if len(args.input) == 1 and args.input[0].endswith('.json'):
+        with open(args.input[0], 'r') as f:
             defs.update(json.load(f))
-    elif args.input.endswith('.dll'):
-        if not args.ksp:
-            print('KSP directory not set. You must pass --ksp when generating code from an assembly DLL.')
-        if not os.path.exists(args.ksp):
-            print('KSP directory does not exist. Check the path passed to --ksp')
-        defs = generate_defs(args)
+    elif all(path.endswith('.dll') for path in args.input):
+        try:
+            defs = generate_defs(args)
+        except RuntimeError, e:
+            print e
+            return 1
         if args.output_defs:
             with open(args.output_defs, 'w') as f:
                 json.dump(defs, f)
     else:
-        print('Failed to read service definitions from \'%s\'. Not a JSON file or assembly DLL.' % args.input)
+        print('Failed to read service definitions from \'%s\'. Expected a single JSON file, or one or more assembly DLLs.' % '\,\''.join(args.input))
+        return 1
     if len(defs.keys()) == 0:
-        print('No services found in services definition files')
+        print('No services found in input')
         return 1
     if args.service not in defs.keys():
-        print('Service \'%s\' not found' % args.service)
+        print('Service \'%s\' not found in input' % args.service)
         return 1
 
     if args.language == 'cpp':
@@ -54,10 +56,21 @@ def main():
 
     macro_template = resource_string(__name__, args.language+'.tmpl').decode('utf-8')
 
-    generator(macro_template, args.service, defs[args.service]).generate_file(args.output)
+    g = generator(macro_template, args.service, defs[args.service])
+    if args.output:
+        g.generate_file(args.output)
+    else:
+        print g.generate()
 
 def generate_defs(args):
-    assembly = os.path.abspath(args.input) #TODO: process path more intelligently (e.g. expand ~)
+    if not args.ksp:
+        raise RuntimeError ('KSP directory not set. You must pass --ksp when generating code from an assembly DLL.')
+
+    if not os.path.exists(args.ksp):
+        raise RuntimeError ('KSP directory does not exist. Check the path passed to --ksp')
+
+    #TODO: process path more intelligently (e.g. expand ~)
+    assemblies = [os.path.abspath(path) for path in args.input]
     bindir = tempfile.mkdtemp(prefix='krpcgen-') #TODO: delete when done
     tmpout = bindir+'/defs.json'
 
@@ -80,7 +93,10 @@ def generate_defs(args):
         shutil.copy(args.ksp+'/KSP_Data/Managed/'+dll, bindir)
 
     # Generate the service definitions
-    subprocess.check_call([bindir+'/ServiceDefinitions.exe', args.service, tmpout, assembly])
+    try:
+        subprocess.check_output([bindir+'/ServiceDefinitions.exe', args.service, tmpout] + assemblies)
+    except subprocess.CalledProcessError, e:
+        raise RuntimeError (e.output)
 
     if args.output_defs:
         shutil.copy(tmpout, args.output_defs)

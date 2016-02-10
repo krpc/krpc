@@ -543,22 +543,25 @@ You can then run the script from the command line:
 .. code-block:: bash
 
    $ krpcgen --help
-   usage: krpcgen [-h] [-v] [--ksp KSP] [--output-defs OUTPUT_DEFS]
-                  {cpp,csharp} service input output
+   usage: krpcgen [-h] [-v] [-o OUTPUT] [--ksp KSP] [--output-defs OUTPUT_DEFS]
+                  {cpp,csharp} service [input [input ...]]
 
-   Generate source code for kRPC services
+   Generate client source code for kRPC services.
 
    positional arguments:
      {cpp,csharp}          Language to generate
      service               Name of service to generate
-     input                 Path to service definition JSON file or assembly DLL
-     output                Path to output source file to
+     input                 Path to service definition JSON file or assembly
+                           DLL(s)
 
    optional arguments:
      -h, --help            show this help message and exit
-     -v                    show program's version number and exit
-     --ksp KSP             Path to Kerbal Space Program directory -- required
-                           when reading from a DLL
+     -v, --version         show program's version number and exit
+     -o OUTPUT, --output OUTPUT
+                           Path to write source code to. If not specified, writes
+                           source code to standard output.
+     --ksp KSP             Path to Kerbal Space Program directory. Required when
+                           reading from an assembly DLL(s)
      --output-defs OUTPUT_DEFS
                            When generting client code from a DLL, output the
                            service definitions to the given JSON file
