@@ -22,18 +22,24 @@ def main():
     parser.add_argument('--output-defs', help='When generting client code from a DLL, output the service definitions to the given JSON file')
     args = parser.parse_args()
 
+    # Check and expand input paths
+    inputs = []
     for path in args.input:
+        path = os.path.abspath(os.path.expanduser(os.path.expandvars(path)))
         if not os.path.exists(path):
             sys.stderr.write('Input \'%s\' not found\n' % path)
             return 1
+        inputs.append(path)
 
     defs = {}
-    if len(args.input) == 1 and args.input[0].endswith('.json'):
-        with open(args.input[0], 'r') as f:
+    if len(inputs) == 1 and inputs[0].endswith('.json'):
+        # Load definitions from .json input
+        with open(inputs[0], 'r') as f:
             defs.update(json.load(f))
-    elif all(path.endswith('.dll') for path in args.input):
+    elif all(path.endswith('.dll') for path in inputs):
+        # Get definitions from .dll input(s)
         try:
-            defs = generate_defs(args)
+            defs = generate_defs(args, inputs)
         except RuntimeError, e:
             sys.stderr.write(str(e)+'\n')
             return 1
@@ -41,8 +47,11 @@ def main():
             with open(args.output_defs, 'w') as f:
                 json.dump(defs, f)
     else:
-        sys.stderr.write('Failed to read service definitions from \'%s\'. Expected a single JSON file, or one or more assembly DLLs.\n' % '\,\''.join(args.input))
+        # No valid inputs found
+        sys.stderr.write('Failed to read service definitions from \'%s\'. Expected a single JSON file, or one or more assembly DLLs.\n' % '\,\''.join(inputs))
         return 1
+
+    # Check loaded definitions
     if len(defs.keys()) == 0:
         sys.stderr.write('No services found in input\n')
         return 1
@@ -50,28 +59,27 @@ def main():
         sys.stderr.write('Service \'%s\' not found in input\n' % args.service)
         return 1
 
+    # Generate code
     if args.language == 'cpp':
         generator = CppGenerator
     else:
         generator = CsharpGenerator
-
     macro_template = resource_string(__name__, args.language+'.tmpl').decode('utf-8')
-
     g = generator(macro_template, args.service, defs[args.service])
     if args.output:
         g.generate_file(args.output)
     else:
         print(g.generate())
 
-def generate_defs(args):
+def generate_defs(args, assemblies):
+    """ Generate service definitions from assembly DLLs using ServiceDefinitions.exe """
+
     if not args.ksp:
         raise RuntimeError ('KSP directory not set. You must pass --ksp when generating code from an assembly DLL.')
 
     if not os.path.exists(args.ksp):
         raise RuntimeError ('KSP directory does not exist. Check the path passed to --ksp')
 
-    #TODO: process path more intelligently (e.g. expand ~)
-    assemblies = [os.path.abspath(path) for path in args.input]
     bindir = tempfile.mkdtemp(prefix='krpcgen-') #TODO: delete when done
     tmpout = bindir+'/defs.json'
 
