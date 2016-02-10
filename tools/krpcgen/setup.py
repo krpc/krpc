@@ -21,7 +21,7 @@ setup(
     author_email='djungelorm@users.noreply.github.com',
     url='https://djungelorm.github.io/krpc/docs',
     license='GNU GPL v3',
-    description='Tool for generating service code for kRPC clients',
+    description='Generate client source code for kRPC services.',
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),
     packages=['krpcgen'],
     entry_points={'console_scripts': ['krpcgen = krpcgen.main:main']},

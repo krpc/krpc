@@ -1,6 +1,39 @@
 load('/tools/build/python', 'py_sdist', 'py_script')
 load('/config', 'version')
 
+license_text = """This license (GPL v3) applies to all parts of krpcgen except for the following:
+
+  - krpcgen/bin/{mscorlib.dll,System.*.dll} are from the Mono project
+    See http://www.mono-project.com/docs/faq/licensing/
+
+  - krpcgen/bin/Newtonsoft.Json.dll is a binary from Newtonsoft's Json project, under the MIT license.
+    See https://www.nuget.org/packages/Newtonsoft.Json/
+
+  - krpcgen/bin/Google.Protobuf.dll is a binary from Google's protobuf project.
+    See https://github.com/google/protobuf
+
+Copyright 2015-2016 djungelorm
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+genrule(
+    name = 'license',
+    outs = ['LICENSE'],
+    cmd = 'echo "%s" > "$@"' % license_text
+)
+
 genrule(
     name = 'version',
     outs = ['krpcgen/version.py'],
@@ -13,7 +46,7 @@ py_sdist(
     out = 'krpcgen-%s.zip' % version,
     files = [
         'README.txt', '//:version', 'CHANGES.txt',
-        'LICENSE', '//:COPYING',
+        ':license', '//:COPYING',
         'setup.py', 'MANIFEST.in', ':version',
         '//tools/ServiceDefinitions',
         '//tools/ServiceDefinitions:KRPC',
