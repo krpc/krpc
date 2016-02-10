@@ -27,12 +27,20 @@ csharp_assembly_info(
     description = 'RPC server for Kerbal Space Program',
     copyright = author,
     version = version,
-    internals_visible_to = ['KRPC.Test', 'TestServer', 'ServiceDefinitions', 'DynamicProxyGenAssembly2']
+    internals_visible_to = ['KRPC.Test', 'TestServer', 'ServiceDefinitions', 'DynamicProxyGenAssembly2'],
+    visibility = ['//tools/ServiceDefinitions:__pkg__'] # Make visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
+)
+
+# Make sources visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
+filegroup(
+    name = 'KRPC-src',
+    srcs = glob(['src/**/*.cs']),
+    visibility = ['//tools/ServiceDefinitions:__pkg__']
 )
 
 csharp_library(
     name = 'KRPC',
-    srcs = glob(['src/**/*.cs']) + [':AssemblyInfo', '//protobuf:csharp'],
+    srcs = [':KRPC-src', ':AssemblyInfo', '//protobuf:csharp'],
     deps = [
         '//tools/build/ksp:Google.Protobuf',
         '//tools/build/ksp:Assembly-CSharp',

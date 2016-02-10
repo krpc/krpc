@@ -16,16 +16,17 @@ py_sdist(
         'LICENSE', '//:COPYING',
         'setup.py', 'MANIFEST.in', ':version',
         '//tools/ServiceDefinitions',
-        '//server:KRPC',
+        '//tools/ServiceDefinitions:KRPC',
         '//tools/build/ksp:Google.Protobuf.dll',
         '//tools/build/mono-4.5:Newtonsoft.Json.dll' #TODO: include licenses for binaries
     ] + glob(['krpcgen/*.py', 'krpcgen/*.tmpl']),
     path_map = {
         'tools/krpcgen/': '',
         'tools/ServiceDefinitions/ServiceDefinitions.exe': 'krpcgen/bin/ServiceDefinitions.exe',
+        'tools/ServiceDefinitions/KRPC.dll': 'krpcgen/bin/KRPC.dll',
+        'tools/ServiceDefinitions/KRPC.xml': 'krpcgen/bin/KRPC.xml',
         'tools/build/mono-4.5/': 'krpcgen/bin/',
-        'tools/build/ksp/': 'krpcgen/bin/',
-        'server/': 'krpcgen/bin/'
+        'tools/build/ksp/': 'krpcgen/bin/'
     }
 )
 
