@@ -110,6 +110,81 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The height of the surface relative to mean sea level at the given position,
+        /// in meters. When over water this is equal to 0.
+        /// </summary>
+        /// <param name="latitude">Latitude in degrees</param>
+        /// <param name="longitude">Longitude in degrees</param>
+        [KRPCMethod]
+        public double SurfaceHeight (double latitude, double longitude)
+        {
+            return Math.Max (0, BedrockHeight (latitude, longitude));
+        }
+
+        /// <summary>
+        /// The height of the surface relative to mean sea level at the given position,
+        /// in meters. When over water, this is the height of the sea-bed and is therefore a
+        /// negative value.
+        /// </summary>
+        /// <param name="latitude">Latitude in degrees</param>
+        /// <param name="longitude">Longitude in degrees</param>
+        [KRPCMethod]
+        public double BedrockHeight (double latitude, double longitude)
+        {
+            if (InternalBody.pqsController == null)
+                return 0;
+            var cosLatitude = Math.Cos ((Math.PI / 180) * latitude);
+            var sinLatitude = Math.Sin ((Math.PI / 180) * latitude);
+            var cosLongitude = Math.Cos ((Math.PI / 180) * longitude);
+            var sinLongitude = Math.Sin ((Math.PI / 180) * longitude);
+            var position = new Vector3d (cosLatitude * cosLongitude, sinLatitude, cosLatitude * sinLongitude);
+            return InternalBody.pqsController.GetSurfaceHeight (position) - InternalBody.pqsController.radius;
+        }
+
+        /// <summary>
+        /// The position at mean sea level at the given latitude and longitude, in the given reference frame.
+        /// </summary>
+        /// <param name="latitude">Latitude in degrees</param>
+        /// <param name="longitude">Longitude in degrees</param>
+        /// <param name="referenceFrame">Reference frame for the returned position vector</param>
+        [KRPCMethod]
+        public Tuple3 MSLPosition (double latitude, double longitude, ReferenceFrame referenceFrame)
+        {
+            var position = InternalBody.GetWorldSurfacePosition (latitude, longitude, 0);
+            return referenceFrame.PositionFromWorldSpace (position).ToTuple ();
+        }
+
+        /// <summary>
+        /// The position of the surface at the given latitude and longitude, in the given
+        /// reference frame. When over water, this is the position of the surface of the water.
+        /// </summary>
+        /// <param name="latitude">Latitude in degrees</param>
+        /// <param name="longitude">Longitude in degrees</param>
+        /// <param name="referenceFrame">Reference frame for the returned position vector</param>
+        [KRPCMethod]
+        public Tuple3 SurfacePosition (double latitude, double longitude, ReferenceFrame referenceFrame)
+        {
+            var altitude = SurfaceHeight (latitude, longitude);
+            var position = InternalBody.GetWorldSurfacePosition (latitude, longitude, altitude);
+            return referenceFrame.PositionFromWorldSpace (position).ToTuple ();
+        }
+
+        /// <summary>
+        /// The position of the surface at the given latitude and longitude, in the given
+        /// reference frame. When over water, this is the position at the bottom of the sea-bed.
+        /// </summary>
+        /// <param name="latitude">Latitude in degrees</param>
+        /// <param name="longitude">Longitude in degrees</param>
+        /// <param name="referenceFrame">Reference frame for the returned position vector</param>
+        [KRPCMethod]
+        public Tuple3 BedrockPosition (double latitude, double longitude, ReferenceFrame referenceFrame)
+        {
+            var altitude = BedrockHeight (latitude, longitude);
+            var position = InternalBody.GetWorldSurfacePosition (latitude, longitude, altitude);
+            return referenceFrame.PositionFromWorldSpace (position).ToTuple ();
+        }
+
+        /// <summary>
         /// The radius of the sphere of influence of the body, in meters.
         /// </summary>
         [KRPCProperty]

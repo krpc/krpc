@@ -1,5 +1,6 @@
 v0.2.1
  * Fix Orbit.Speed always returning 0
+ * Add CelestialBody.SurfaceHeight, BedrockHeight, MSLPosition, SurfacePosition, BedrockPosition (#186)
 
 v0.2.0
  * Fix SpaceCenter.HorizontalSpeed calculation
