@@ -1,21 +1,27 @@
 load('/tools/build/python', 'py_sdist', 'py_script')
 load('/config', 'version')
 
+genrule(
+    name = 'version',
+    outs = ['krpc/docgen/version.py'],
+    cmd = 'echo "__version__ = \'%s\'" > "$@"' % version
+)
+
 py_sdist(
-    name = 'krpcdocgen',
-    out = 'krpcdocgen-%s.zip' % version,
+    name = 'krpc.docgen',
+    out = 'krpc.docgen-%s.zip' % version,
     files = [
-        'setup.py', 'MANIFEST.in', 'README.txt', '//:version'
-    ] + glob(['krpcdocgen/*.py', 'krpcdocgen/*.tmpl']),
+        'setup.py', 'MANIFEST.in', 'README.txt', '//:version', ':version'
+    ] + glob(['krpc/docgen/*.py', 'krpc/docgen/*.tmpl']),
     path_map = {
-        'doc/gen/': ''
+        'tools/docgen/': ''
     }
 )
 
 py_script(
     name = 'script',
-    script = 'krpcdocgen',
-    pkg = ':krpcdocgen',
+    script = 'krpc-docgen',
+    pkg = ':krpc.docgen',
     deps = [
         '//client/python',
         '@python.protobuf//file',

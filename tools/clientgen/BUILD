@@ -40,8 +40,7 @@ genrule(
 genrule(
     name = 'version',
     outs = ['krpc/clientgen/version.py'],
-    cmd = 'echo "__version__ = \'%s\'" > "$@"' % version,
-    visibility = ['//visibility:public']
+    cmd = 'echo "__version__ = \'%s\'" > "$@"' % version
 )
 
 py_sdist(

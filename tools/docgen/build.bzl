@@ -18,29 +18,29 @@ def _impl(ctx):
         inputs = ctx.files.defs + [src, ctx.file._order],
         outputs = [out],
         progress_message = 'Generating %s documentation %s' % (language, out.path),
-        executable = ctx.file._generate,
+        executable = ctx.file._docgen,
         arguments = args
     )
 
-generate = rule(
+docgen = rule(
     implementation = _impl,
     attrs = {
         'outdir': attr.string(mandatory=True),
         'language': attr.string(mandatory=True),
         'src': attr.label(allow_files=True, single_file=True),
         'defs': attr.label_list(allow_files=True, mandatory=True, non_empty=True),
-        '_generate': attr.label(default=Label('//doc/gen:script'), executable=True, allow_files=True, single_file=True),
+        '_docgen': attr.label(default=Label('//tools/docgen:script'), executable=True, allow_files=True, single_file=True),
         '_order': attr.label(default=Label('//doc:order.txt'), allow_files=True, single_file=True)
     },
     outputs = _outputs
 )
 
-def generate_multiple(name, outdir, language, srcs, defs):
+def docgen_multiple(name, outdir, language, srcs, defs):
     names = []
     for src in srcs:
         subname = name + src
         names.append(subname)
-        generate(
+        docgen(
             name = subname,
             outdir = outdir,
             language = language,

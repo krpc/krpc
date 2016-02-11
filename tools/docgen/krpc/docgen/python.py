@@ -1,5 +1,5 @@
-from krpcdocgen.nodes import *
-from krpcdocgen.utils import snakecase
+from krpc.docgen.nodes import *
+from krpc.docgen.utils import snakecase
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class PythonDomain(object):

@@ -6,14 +6,14 @@ import json
 import jinja2
 from pkg_resources import resource_filename
 from krpc.types import Types
-from krpcdocgen.utils import snakecase, indent, singleline, lookup_cref
-from krpcdocgen.cpp import CppDomain
-from krpcdocgen.csharp import CsharpDomain
-from krpcdocgen.lua import LuaDomain
-from krpcdocgen.python import PythonDomain
-from krpcdocgen.nodes import Service
-from krpcdocgen.docparser import DocumentationParser
-from krpcdocgen.extensions import AppendExtension
+from krpc.docgen.utils import snakecase, indent, singleline, lookup_cref
+from krpc.docgen.cpp import CppDomain
+from krpc.docgen.csharp import CsharpDomain
+from krpc.docgen.lua import LuaDomain
+from krpc.docgen.python import PythonDomain
+from krpc.docgen.nodes import Service
+from krpc.docgen.docparser import DocumentationParser
+from krpc.docgen.extensions import AppendExtension
 
 def process_file(args, domain, services, path):
 
@@ -68,9 +68,9 @@ def process_file(args, domain, services, path):
     template = template_env.get_template(path)
     content = template.render(context)
 
-    import krpcdocgen.nodes
-    if len(krpcdocgen.nodes.sort_members_failed) > 0:
-        raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(krpcdocgen.nodes.sort_members_failed))
+    import krpc.docgen.nodes
+    if len(krpc.docgen.nodes.sort_members_failed) > 0:
+        raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(krpc.docgen.nodes.sort_members_failed))
 
     return content.rstrip()+'\n'
 

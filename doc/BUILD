@@ -1,6 +1,6 @@
 load('/tools/build/image', 'png_images')
 load('/tools/build/sphinx', 'sphinx_html', 'sphinx_latex')
-load('/doc/gen/build', 'generate', 'generate_multiple')
+load('/tools/docgen/build', 'docgen_multiple')
 load('/config', 'version')
 
 filegroup(
@@ -77,7 +77,7 @@ defs = [
     '//service/InfernalRobotics:ServiceDefinitions'
 ]
 
-generate_multiple(
+docgen_multiple(
     name = 'cpp-api',
     outdir = 'src/cpp',
     language = 'cpp',
@@ -85,7 +85,7 @@ generate_multiple(
     defs = defs
 )
 
-generate_multiple(
+docgen_multiple(
     name = 'csharp-api',
     outdir = 'src/csharp',
     language = 'csharp',
@@ -93,7 +93,7 @@ generate_multiple(
     defs = defs
 )
 
-generate_multiple(
+docgen_multiple(
     name = 'lua-api',
     outdir = 'src/lua',
     language = 'lua',
@@ -101,7 +101,7 @@ generate_multiple(
     defs = defs
 )
 
-generate_multiple(
+docgen_multiple(
     name = 'python-api',
     outdir = 'src/python',
     language = 'python',

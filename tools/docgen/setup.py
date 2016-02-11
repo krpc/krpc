@@ -2,26 +2,28 @@ from setuptools import setup
 import sys
 import os
 
+dirpath = os.path.dirname(os.path.realpath(__file__))
+
 # Dirty hack to make setuptools use file copies instead of hardlinks which do not play well with Bazel
 # http://bugs.python.org/issue8876
 if os.getenv('BAZEL_BUILD') and hasattr(os, 'link'):
     del os.link
 
-dirpath = os.path.dirname(os.path.realpath(__file__))
-if not os.path.exists(os.path.join(dirpath, 'VERSION.txt')):
+# Fix dirpath when running Bazel in standalone mode
+if os.getenv('BAZEL_BUILD') and not os.path.exists(os.path.join(dirpath, 'VERSION.txt')):
     dirpath = os.getcwd()
 
 install_requires=['krpc', 'jinja2']
 setup(
-    name='krpcdocgen',
+    name='krpc.docgen',
     version=open(os.path.join(dirpath, 'VERSION.txt')).read().strip(),
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     url='https://djungelorm.github.io/krpc/docs',
     license='GNU GPL v3',
     description='Tool for generating documentation for kRPC',
-    packages=['krpcdocgen'],
-    entry_points={'console_scripts': ['krpcdocgen = krpcdocgen.main:main']},
+    packages=['krpc.docgen'],
+    entry_points={'console_scripts': ['krpc-docgen = krpc.docgen.main:main']},
     package_data={'': ['*.txt', '*.tmpl']},
     install_requires=install_requires,
     use_2to3=True,

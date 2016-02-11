@@ -1,6 +1,6 @@
-from krpcdocgen.python import PythonDomain
-from krpcdocgen.nodes import *
-from krpcdocgen.utils import snakecase
+from krpc.docgen.python import PythonDomain
+from krpc.docgen.nodes import *
+from krpc.docgen.utils import snakecase
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CppDomain(PythonDomain):
