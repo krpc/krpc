@@ -60,7 +60,7 @@
 .. function:: {{ x.type | return_type }} {{ x.name | snakecase }}()
 {% endif %}
 {% if x.setter != None %}
-.. function:: {{ x.type | return_type }} set_{{ x.name | snakecase }}({{ x.type | parameter_type }} value)
+.. function:: void set_{{ x.name | snakecase }}({{ x.type | parameter_type }} value)
 {% endif %}
 
 {{ x.documentation | parsedoc | indent }}
