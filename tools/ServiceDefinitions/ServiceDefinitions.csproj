@@ -35,10 +35,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\bazel-krpc\external\csharp.json\Bin\Net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\bazel-krpc\external\csharp_json\Bin\Net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
-      <HintPath>..\..\bazel-krpc\external\csharp.options\lib\NDesk.Options.dll</HintPath>
+      <HintPath>..\..\bazel-krpc\external\csharp_options\lib\NDesk.Options.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

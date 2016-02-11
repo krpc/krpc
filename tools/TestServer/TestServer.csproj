@@ -39,10 +39,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\bazel-krpc\external\csharp.protobuf.net35\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\bazel-krpc\external\csharp_protobuf_net35\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
-      <HintPath>..\..\bazel-krpc\external\csharp.options\lib\NDesk.Options.dll</HintPath>
+      <HintPath>..\..\bazel-krpc\external\csharp_options\lib\NDesk.Options.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
