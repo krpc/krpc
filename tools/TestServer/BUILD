@@ -27,9 +27,8 @@ csharp_binary(
         '//tools/build/mono-4.5:System.IO',
         '//tools/build/mono-4.5:System.Xml',
         '//tools/build/mono-4.5:System.Xml.Linq',
-        '//tools/build/mono-4.5:Newtonsoft.Json'
+        '//tools/build/mono-4.5:NDesk.Options'
     ],
-    runargs = ['50000', '50001', '--quiet'],
     visibility = ['//visibility:public']
 )
 

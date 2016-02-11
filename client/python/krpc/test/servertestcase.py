@@ -2,6 +2,7 @@ import subprocess
 import time
 import krpc
 import sys
+import os
 
 class ServerTestCase(object):
 
@@ -12,7 +13,6 @@ class ServerTestCase(object):
         self.conn.close()
 
     def connect(self):
-        if sys.version_info < (3, 0):
-            return krpc.connect(name='Python2ClientTest', address='localhost', rpc_port=50010, stream_port=50011)
-        else:
-            return krpc.connect(name='Python3ClientTest', address='localhost', rpc_port=50012, stream_port=50013)
+        return krpc.connect(name='Python2ClientTest', address='localhost',
+                            rpc_port=int(os.getenv('RPC_PORT', 50000)),
+                            stream_port=int(os.getenv('STREAM_PORT', 50001)))

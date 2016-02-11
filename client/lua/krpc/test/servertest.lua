@@ -13,7 +13,15 @@ function ServerTest:tearDown()
 end
 
 function ServerTest:connect()
-  return krpc.connect('LuaClientTest', 'localhost', 50014, 50015)
+  local rpc_port = os.getenv('RPC_PORT')
+  local stream_port = os.getenv('STREAM_PORT')
+  if rpc_port == nil then
+    rpc_port = 50000
+  end
+  if stream_port == nil then
+    stream_port = 50001
+  end
+  return krpc.connect('LuaClientTest', 'localhost', rpc_port, stream_port)
 end
 
 return ServerTest

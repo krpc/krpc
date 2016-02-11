@@ -63,6 +63,14 @@ new_http_archive(
     sha256 = 'd8705b95e460a0c6b760ed22c9cac47b40bfbbc8c0f1c0827edf94b0aee0da76'
 )
 
+new_http_archive(
+    name = 'csharp.options',
+    build_file = 'tools/build/options.BUILD',
+    url = 'https://www.nuget.org/api/v2/package/NDesk.Options/0.2.1',
+    type = 'zip',
+    sha256 = 'f7cad7f76b9a738930496310ea47888529fbfd0a39896bdfd3cfd17fd385f53b'
+)
+
 http_file(
     name = 'python.protobuf',
     url = 'https://pypi.python.org/packages/source/p/protobuf/protobuf-3.0.0b2.tar.gz',

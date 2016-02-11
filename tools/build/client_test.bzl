@@ -21,10 +21,17 @@ def _impl(ctx):
         sub_commands.append('mkdir -p `dirname %s`' % (server_runfiles_dir + '/' + f.short_path))
         sub_commands.append('ln -f -r -s %s %s' % (f.short_path, server_runfiles_dir + '/' + f.short_path))
 
+    ports_file = 'ports/'+ctx.executable.test_executable.basename
+
     sub_commands.extend([
         'pkill TestServer.exe',
-        '(cd server-executable.runfiles; %s %s %s) &' % (ctx.executable.server_executable.short_path, ctx.attr.rpc_port, ctx.attr.stream_port),
-        '(cd test-executable.runfiles/%s.runfiles; ../%s)' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.basename),
+        'mkdir server-executable.runfiles/ports',
+        '(cd server-executable.runfiles; %s --quiet --write-ports=%s) &' % (ctx.executable.server_executable.short_path, ports_file),
+        'inotifywait -t 3 -e create -e moved_to server-executable.runfiles/ports',
+        'RPC_PORT=`sed -n \'1p\' server-executable.runfiles/%s`' % ports_file,
+        'STREAM_PORT=`sed -n \'2p\' server-executable.runfiles/%s`' % ports_file,
+        'echo "Server started, rpc port = $RPC_PORT, stream port = $STREAM_PORT"',
+        '(cd test-executable.runfiles/%s.runfiles; RPC_PORT=$RPC_PORT STREAM_PORT=$STREAM_PORT ../%s)' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.basename),
         'RESULT=$?',
         'pkill TestServer.exe',
         'exit $RESULT'
@@ -45,9 +52,7 @@ client_test = rule(
     implementation = _impl,
     attrs = {
         'test_executable': attr.label(executable=True),
-        'server_executable': attr.label(executable=True),
-        'rpc_port': attr.string(mandatory=True),
-        'stream_port': attr.string(mandatory=True)
+        'server_executable': attr.label(executable=True)
     },
     test = True
 )

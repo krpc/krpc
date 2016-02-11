@@ -82,8 +82,6 @@ client_test(
     name = 'test',
     test_executable = ':KRPC.Client.Test',
     server_executable = '//tools/TestServer',
-    rpc_port = '50018',
-    stream_port = '50019',
     tags = ['requires-network'],
     size = 'small',
     visibility = ['//:__pkg__']

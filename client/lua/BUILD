@@ -40,8 +40,6 @@ client_test(
     name = 'test',
     test_executable = ':luatest',
     server_executable = '//tools/TestServer',
-    rpc_port = '50014',
-    stream_port = '50015',
     tags = ['requires-network'],
     size = 'small'
 )

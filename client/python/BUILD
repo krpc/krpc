@@ -36,8 +36,6 @@ client_test(
     name = 'test2',
     test_executable = ':py2test',
     server_executable = '//tools/TestServer',
-    rpc_port = '50010',
-    stream_port = '50011',
     tags = ['requires-network'],
     size = 'small'
 )
@@ -46,8 +44,6 @@ client_test(
     name = 'test3',
     test_executable = ':py3test',
     server_executable = '//tools/TestServer',
-    rpc_port = '50012',
-    stream_port = '50013',
     tags = ['requires-network'],
     size = 'small'
 )
