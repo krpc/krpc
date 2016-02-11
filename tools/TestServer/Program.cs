@@ -38,36 +38,41 @@ namespace TestServer
             ushort rpcPort = 0;
             ushort streamPort = 0;
 
-            var options = new OptionSet ()
-            {
-                { "h|help", "show this help message and exit", v => showHelp = v != null },
-                { "v|version", "show program's version number and exit", v => showVersion = v != null },
-                { "rpc-port=", "Port number to use for the RPC server. If unspecified, use an ephemeral port.",
-                  (ushort v) => rpcPort = v },
-                { "stream-port=", "Port number to use for the stream server. If unspecified, use an ephemeral port.",
-                  (ushort v) => streamPort = v },
-                { "debug", "Set log level to 'debug', defaults to 'info'", v =>
-                    {
-                        if (v != null)
-                        {
+            var options = new OptionSet () { {
+                    "h|help", "show this help message and exit",
+                    v => showHelp = v != null
+                }, {
+                    "v|version", "show program's version number and exit",
+                    v => showVersion = v != null
+                }, {
+                    "rpc-port=", "Port number to use for the RPC server. If unspecified, use an ephemeral port.",
+                    (ushort v) => rpcPort = v
+                }, {
+                    "stream-port=", "Port number to use for the stream server. If unspecified, use an ephemeral port.",
+                    (ushort v) => streamPort = v
+                }, {
+                    "debug", "Set log level to 'debug', defaults to 'info'",
+                    v => {
+                        if (v != null) {
                             Logger.Enabled = true;
                             Logger.Level = Logger.Severity.Debug;
                             RPCException.VerboseErrors = true;
                         }
                     }
-                },
-                { "quiet", "Set log level to 'warning'", v =>
-                    {
-                        if (v != null)
-                        {
+                }, { "quiet", "Set log level to 'warning'",
+                    v => {
+                        if (v != null) {
                             Logger.Enabled = true;
                             Logger.Level = Logger.Severity.Warning;
                             RPCException.VerboseErrors = false;
                         }
                     }
+                }, {
+                    "server-debug", "Output debug information about the server",
+                    v => serverDebug = v != null
+                }, { "write-ports=", "Write the server's port numbers to the given {FILE}",
+                    v => writePortsPath = v
                 },
-                { "server-debug", "Output debug information about the server", v => serverDebug = v != null },
-                { "write-ports=", "Write the server's port numbers to the given {FILE}", v => writePortsPath = v },
             };
             options.Parse (args);
 
@@ -77,9 +82,9 @@ namespace TestServer
             }
 
             if (showVersion) {
-                var assembly = Assembly.GetEntryAssembly();
+                var assembly = Assembly.GetEntryAssembly ();
                 var info = FileVersionInfo.GetVersionInfo (assembly.Location);
-                var version = String.Format("{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
+                var version = String.Format ("{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
                 Console.WriteLine ("TestServer.exe version " + version);
                 return;
             }
@@ -93,7 +98,7 @@ namespace TestServer
             server.Start ();
 
             if (writePortsPath != null)
-                System.IO.File.WriteAllText (writePortsPath, server.RPCPort.ToString()+"\n"+server.StreamPort.ToString()+"\n");
+                System.IO.File.WriteAllText (writePortsPath, server.RPCPort.ToString () + "\n" + server.StreamPort.ToString () + "\n");
 
             const long targetFPS = 60;
             long update = 0;

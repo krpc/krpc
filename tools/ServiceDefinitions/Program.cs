@@ -30,11 +30,16 @@ namespace ServiceDefinitions
             bool showVersion = false;
             String outputPath = null;
 
-            var options = new OptionSet ()
-            {
-                { "h|help", "show this help message and exit", v => showHelp = v != null },
-                { "v|version", "show program's version number and exit", v => showVersion = v != null },
-                { "o|output=", "{PATH} to write the service definitions to. If unspecified, the output is written to stanadard output.", (String v) => outputPath = v }
+            var options = new OptionSet () { {
+                    "h|help", "show this help message and exit",
+                    v => showHelp = v != null
+                }, {
+                    "v|version", "show program's version number and exit",
+                    v => showVersion = v != null
+                }, {
+                    "o|output=", "{PATH} to write the service definitions to. If unspecified, the output is written to stanadard output.",
+                    (String v) => outputPath = v
+                }
             };
             List<string> positionalArgs = options.Parse (args);
 
@@ -44,15 +49,14 @@ namespace ServiceDefinitions
             }
 
             if (showVersion) {
-                var assembly = Assembly.GetEntryAssembly();
+                var assembly = Assembly.GetEntryAssembly ();
                 var info = FileVersionInfo.GetVersionInfo (assembly.Location);
-                var version = String.Format("{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
+                var version = String.Format ("{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
                 Console.Error.WriteLine ("ServiceDefinitions.exe version " + version);
                 return 0;
             }
 
-            if (positionalArgs.Count < 2)
-            {
+            if (positionalArgs.Count < 2) {
                 Console.Error.WriteLine ("Not enough arguments");
                 return 1;
             }
@@ -61,37 +65,27 @@ namespace ServiceDefinitions
             Logger.Level = Logger.Severity.Warning;
             var service = positionalArgs [0];
             for (var i = 1; i < positionalArgs.Count; i++) {
-                var path = positionalArgs[i];
+                var path = positionalArgs [i];
 
                 try {
                     Assembly.LoadFrom (path);
-                }
-                catch (FileNotFoundException)
-                {
-                    Console.Error.WriteLine ("Assembly '"+ path +"' not found.");
+                } catch (FileNotFoundException) {
+                    Console.Error.WriteLine ("Assembly '" + path + "' not found.");
                     return 1;
-                }
-                catch (FileLoadException e)
-                {
-                    Console.Error.WriteLine ("Failed to load assembly '"+ path +"'.");
+                } catch (FileLoadException e) {
+                    Console.Error.WriteLine ("Failed to load assembly '" + path + "'.");
                     Console.Error.WriteLine (e.Message);
                     if (e.InnerException != null)
                         Console.Error.WriteLine (e.InnerException.Message);
                     return 1;
-                }
-                catch (BadImageFormatException)
-                {
-                    Console.Error.WriteLine ("Failed to load assembly '"+ path +"'. Bad image format.");
+                } catch (BadImageFormatException) {
+                    Console.Error.WriteLine ("Failed to load assembly '" + path + "'. Bad image format.");
                     return 1;
-                }
-                catch (SecurityException)
-                {
-                    Console.Error.WriteLine ("Failed to load assembly '"+ path +"'. Security exception.");
+                } catch (SecurityException) {
+                    Console.Error.WriteLine ("Failed to load assembly '" + path + "'. Security exception.");
                     return 1;
-                }
-                catch (PathTooLongException)
-                {
-                    Console.Error.WriteLine ("Failed to load assembly '"+ path +"'. File name too long.");
+                } catch (PathTooLongException) {
+                    Console.Error.WriteLine ("Failed to load assembly '" + path + "'. File name too long.");
                     return 1;
                 }
             }

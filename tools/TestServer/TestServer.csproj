@@ -41,6 +41,9 @@
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\bazel-krpc\external\csharp.protobuf.net35\Google.Protobuf.dll</HintPath>
     </Reference>
+    <Reference Include="NDesk.Options">
+      <HintPath>..\..\bazel-krpc\external\csharp.options\lib\NDesk.Options.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\bazel-bin\tools\TestServer\AssemblyInfo.cs">
