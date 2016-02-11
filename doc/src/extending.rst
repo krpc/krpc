@@ -536,7 +536,7 @@ Code for these 'static' libraries is generated using the `krpc-clientgen` tool. 
 provided as `a Python script on PyPi
 <https://pypi.python.org/pypi/krpc.clientgen>`_. It can be installed using pip:
 
-``python pip install krpc.clientgen``
+``pip install krpc.clientgen``
 
 You can then run the script from the command line:
 
