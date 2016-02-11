@@ -3,7 +3,7 @@
 set -e
 
 MONO=mono
-NUGET=bazel-krpc/external/csharp.nuget/file/nuget.exe
+NUGET=bazel-krpc/external/csharp_nuget/file/nuget.exe
 VERSION=`tools/get-version.sh`
 
 bazel build //client/csharp:nuget
