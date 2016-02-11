@@ -24,6 +24,7 @@ addons:
       - librsvg2-bin
       - lua5.1
       - liblua5.1-0-dev
+      - inotify-tools
 
 language: csharp
 mono:
