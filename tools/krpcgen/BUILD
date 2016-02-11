@@ -3,13 +3,16 @@ load('/config', 'version')
 
 license_text = """This license (GPL v3) applies to all parts of krpcgen except for the following:
 
-  - krpcgen/bin/{mscorlib.dll,System.*.dll} are from the Mono project
+  - krpcgen/bin/{mscorlib.dll,System.*.dll} are from the Mono project.
     See http://www.mono-project.com/docs/faq/licensing/
 
-  - krpcgen/bin/Newtonsoft.Json.dll is a binary from Newtonsoft's Json project, under the MIT license.
+  - krpcgen/bin/Newtonsoft.Json.dll is under the MIT license.
     See https://www.nuget.org/packages/Newtonsoft.Json/
 
-  - krpcgen/bin/Google.Protobuf.dll is a binary from Google's protobuf project.
+  - krpcgen/bin/NDesk.Options.dll is under the MIT license.
+    See https://www.nuget.org/packages/NDesk.Options/
+
+  - krpcgen/bin/Google.Protobuf.dll is from Google's protobuf project.
     See https://github.com/google/protobuf
 
 Copyright 2015-2016 djungelorm
@@ -51,7 +54,8 @@ py_sdist(
         '//tools/ServiceDefinitions',
         '//tools/ServiceDefinitions:KRPC',
         '//tools/build/ksp:Google.Protobuf.dll',
-        '//tools/build/mono-4.5:Newtonsoft.Json.dll', #TODO: include licenses for binaries
+        '//tools/build/mono-4.5:Newtonsoft.Json.dll',
+        '//tools/build/mono-4.5:NDesk.Options.dll',
         '//tools/build/mono-4.5:mscorlib',
         '//tools/build/mono-4.5:System',
         '//tools/build/mono-4.5:System.Core',

@@ -1,5 +1,5 @@
 def _impl(ctx):
-    args = [ctx.attr.service, ctx.outputs.out.path] + [x.lib.path for x in ctx.attr.assemblies]
+    args = ['--output=%s' % ctx.outputs.out.path, ctx.attr.service] + [x.lib.path for x in ctx.attr.assemblies]
     ctx.action(
         inputs = ctx.files.assemblies,
         outputs = [ctx.outputs.out],

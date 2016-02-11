@@ -103,7 +103,7 @@ def generate_defs(args, assemblies):
 
     # Generate the service definitions
     try:
-        subprocess.check_output([bindir+'/ServiceDefinitions.exe', args.service, tmpout] + assemblies)
+        subprocess.check_output([bindir+'/ServiceDefinitions.exe', '--output=%s' % tmpout, args.service] + assemblies)
     except subprocess.CalledProcessError, e:
         raise RuntimeError (e.output)
 

@@ -1,28 +1,68 @@
-using System;
+using KRPC.Utils;
+using NDesk.Options;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.IO;
-using System.Collections.Generic;
 using System.Security;
-using KRPC.Utils;
+using System.Diagnostics;
 
 namespace ServiceDefinitions
 {
     class MainClass
     {
+        static void Help (OptionSet options)
+        {
+            Console.Error.WriteLine ("usage: ServiceDefinitions.exe [-h] [-v] [--output=PATH] service assembly...");
+            Console.Error.WriteLine ("");
+            Console.Error.WriteLine ("Generate service definitions JSON file for a kRPC service");
+            Console.Error.WriteLine ("");
+            options.WriteOptionDescriptions (Console.Error);
+            Console.Error.WriteLine ("  service                    Name of service to generate");
+            Console.Error.WriteLine ("  assembly...                Path(s) to assembly DLL(s) to load");
+        }
+
         public static int Main (string[] args)
         {
-            if (args.Length < 2) {
-                Console.Error.WriteLine ("Not enough arguments.\nUsage: ServiceDefinitions.exe SERVICE OUTPUT ASSEMBLYPATH...");
+            bool showHelp = false;
+            bool showVersion = false;
+            String outputPath = null;
+
+            var options = new OptionSet ()
+            {
+                { "h|help", "show this help message and exit", v => showHelp = v != null },
+                { "v|version", "show program's version number and exit", v => showVersion = v != null },
+                { "o|output=", "{PATH} to write the service definitions to. If unspecified, the output is written to stanadard output.", (String v) => outputPath = v }
+            };
+            List<string> positionalArgs = options.Parse (args);
+
+            if (showHelp) {
+                Help (options);
+                return 0;
+            }
+
+            if (showVersion) {
+                var assembly = Assembly.GetEntryAssembly();
+                var info = FileVersionInfo.GetVersionInfo (assembly.Location);
+                var version = String.Format("{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
+                Console.Error.WriteLine ("ServiceDefinitions.exe version " + version);
+                return 0;
+            }
+
+            if (positionalArgs.Count < 2)
+            {
+                Console.Error.WriteLine ("Not enough arguments");
                 return 1;
             }
+
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Warning;
-            var service = args [0];
-            var outputPath = args [1];
-            for (var i = 2; i < args.Count (); i++) {
-                var path = args[i];
+            var service = positionalArgs [0];
+            for (var i = 1; i < positionalArgs.Count; i++) {
+                var path = positionalArgs[i];
+
                 try {
                     Assembly.LoadFrom (path);
                 }
@@ -62,7 +102,10 @@ namespace ServiceDefinitions
             }
             services = new Dictionary<string,KRPC.Service.Scanner.ServiceSignature> { { service, services [service] } };
             string output = JsonConvert.SerializeObject (services, Formatting.Indented);
-            File.WriteAllText (outputPath, output);
+            if (outputPath != null)
+                File.WriteAllText (outputPath, output);
+            else
+                Console.Write (output);
             return 0;
         }
     }
