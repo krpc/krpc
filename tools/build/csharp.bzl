@@ -186,9 +186,9 @@ csharp_binary = rule(
 csharp_nunit_test = rule(
     implementation = _nunit_impl,
     attrs = _COMMON_ATTRS + {
-        '_nunit_exe': attr.label(default=Label('@csharp.nunit//:nunit_exe'), allow_files=True, single_file=True),
-        '_nunit_exe_libs': attr.label(default=Label('@csharp.nunit//:nunit_exe_libs'), allow_files=True),
-        '_nunit_framework': attr.label(default=Label('@csharp.nunit//:nunit_framework'), allow_files=True)
+        '_nunit_exe': attr.label(default=Label('@csharp_nunit//:nunit_exe'), allow_files=True, single_file=True),
+        '_nunit_exe_libs': attr.label(default=Label('@csharp_nunit//:nunit_exe_libs'), allow_files=True),
+        '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
     },
     outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml'},
     test = True
@@ -280,7 +280,7 @@ nuget_package = rule(
         'description': attr.string(mandatory=True),
         'framework_deps': attr.string_list(),
         'deps': attr.string_dict(),
-        '_nuget_exe': attr.label(default=Label('@csharp.nuget//file'), allow_files=True, single_file=True)
+        '_nuget_exe': attr.label(default=Label('@csharp_nuget//file'), allow_files=True, single_file=True)
     },
     outputs = _nuget_package_out
 )

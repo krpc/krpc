@@ -64,9 +64,9 @@ cc_library(
     srcs = glob(['src/*.cpp']) + [':protobuf'],
     hdrs = glob(['include/krpc/*.hpp']) + [':protobuf'],
     includes = ['include'],
-    copts = ['-Iexternal/asio/include',
+    copts = ['-Iexternal/cpp_asio/include',
              '-Ibazel-out/local_linux-fastbuild/bin/client/cpp/include'], #TODO: fix include path to generated files
-    deps = ['@protobuf//:protobuf', '@asio//:asio']
+    deps = ['@protobuf//:protobuf', '@cpp_asio//:asio']
 )
 
 client_test(
@@ -89,10 +89,10 @@ cc_binary(
         'test/server_test.hpp'
     ],
     includes = ['test'],
-    copts = ['-Iexternal/asio/include', '-Iexternal/gtest/include' ,'-Iexternal/gmock/include',
+    copts = ['-Iexternal/cpp_asio/include' ,'-Iexternal/cpp_gmock/include',
              '-Ibazel-out/local_linux-fastbuild/bin/client/cpp/include', #TODO: fix includes
              '-Ibazel-out/local_linux-fastbuild/bin/client/cpp'],
-    deps = [':krpc', '@gmock//:main']
+    deps = [':krpc', '@cpp_gmock//:main']
 )
 
 #TODO: use targets in //protobuf:... instead of the following

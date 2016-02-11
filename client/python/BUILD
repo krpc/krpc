@@ -51,7 +51,7 @@ py_test(
     name = 'py2test',
     src = ':python',
     pkg = 'krpc-'+version,
-    deps = ['@python.six//file', '@python.protobuf//file', '@python.enum34//file'],
+    deps = ['@python_six//file', '@python_protobuf//file', '@python_enum34//file'],
     tags = ['requires-network'],
     size = 'small'
 )
@@ -61,7 +61,7 @@ py3_test(
     src = ':python',
     pkg = 'krpc-'+version,
     #use3 = True,
-    deps = ['@python.six//file', '@python.protobuf//file'],
+    deps = ['@python_six//file', '@python_protobuf//file'],
     tags = ['requires-network'],
     size = 'small'
 )

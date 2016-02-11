@@ -95,7 +95,7 @@ lua_test = rule(
         'rockspec': attr.label(allow_files=True, single_file=True),
         'srcrock': attr.label(allow_files=True, single_file=True),
         'deps': attr.label_list(allow_files=True),
-        '_luaunit': attr.label(default=Label('@lua.luaunit//file'), allow_files=True, single_file=True)
+        '_luaunit': attr.label(default=Label('@lua_luaunit//file'), allow_files=True, single_file=True)
     },
     test = True
 )

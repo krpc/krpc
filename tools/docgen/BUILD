@@ -24,11 +24,11 @@ py_script(
     pkg = ':krpc.docgen',
     deps = [
         '//client/python',
-        '@python.protobuf//file',
-        '@python.enum34//file',
-        '@python.six//file',
-        '@python.jinja2//file',
-        '@python.markupsafe//file'
+        '@python_protobuf//file',
+        '@python_enum34//file',
+        '@python_six//file',
+        '@python_jinja2//file',
+        '@python_markupsafe//file'
     ],
     visibility = ['//visibility:public']
 )

@@ -49,10 +49,10 @@ lua_test(
     rockspec = ':rockspec',
     srcrock = ':client',
     deps = [
-        '@lua.luafilesystem//file',
-        '@lua.luasocket//file',
-        '@lua.penlight//file',
-        '@lua.protobuf//file'
+        '@lua_luafilesystem//file',
+        '@lua_luasocket//file',
+        '@lua_penlight//file',
+        '@lua_protobuf//file'
     ],
     tags = ['requires-network'],
     size = 'small'
