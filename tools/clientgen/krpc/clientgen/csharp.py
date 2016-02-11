@@ -1,4 +1,4 @@
-from krpcgen.generator import Generator
+from krpc.clientgen.generator import Generator
 import krpc.types
 
 krpc.types.add_search_path('krpc.test.schema')

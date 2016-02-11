@@ -1,18 +1,18 @@
 load('/tools/build/python', 'py_sdist', 'py_script')
 load('/config', 'version')
 
-license_text = """This license (GPL v3) applies to all parts of krpcgen except for the following:
+license_text = """This license (GPL v3) applies to all parts of krpc.clientgen except for the following:
 
-  - krpcgen/bin/{mscorlib.dll,System.*.dll} are from the Mono project.
+  - krpc.clientgen/bin/{mscorlib.dll,System.*.dll} are from the Mono project.
     See http://www.mono-project.com/docs/faq/licensing/
 
-  - krpcgen/bin/Newtonsoft.Json.dll is under the MIT license.
+  - krpc.clientgen/bin/Newtonsoft.Json.dll is under the MIT license.
     See https://www.nuget.org/packages/Newtonsoft.Json/
 
-  - krpcgen/bin/NDesk.Options.dll is under the MIT license.
+  - krpc.clientgen/bin/NDesk.Options.dll is under the MIT license.
     See https://www.nuget.org/packages/NDesk.Options/
 
-  - krpcgen/bin/Google.Protobuf.dll is from Google's protobuf project.
+  - krpc.clientgen/bin/Google.Protobuf.dll is from Google's protobuf project.
     See https://github.com/google/protobuf
 
 Copyright 2015-2016 djungelorm
@@ -39,14 +39,14 @@ genrule(
 
 genrule(
     name = 'version',
-    outs = ['krpcgen/version.py'],
+    outs = ['krpc/clientgen/version.py'],
     cmd = 'echo "__version__ = \'%s\'" > "$@"' % version,
     visibility = ['//visibility:public']
 )
 
 py_sdist(
-    name = 'krpcgen',
-    out = 'krpcgen-%s.zip' % version,
+    name = 'krpc.clientgen',
+    out = 'krpc.clientgen-%s.zip' % version,
     files = [
         'README.txt', '//:version', 'CHANGES.txt',
         ':license', '//:COPYING',
@@ -63,21 +63,21 @@ py_sdist(
         '//tools/build/mono-4.5:System.IO',
         '//tools/build/mono-4.5:System.Xml',
         '//tools/build/mono-4.5:System.Xml.Linq'
-    ] + glob(['krpcgen/*.py', 'krpcgen/*.tmpl']),
+    ] + glob(['krpc/clientgen/*.py', 'krpc/clientgen/*.tmpl']),
     path_map = {
-        'tools/krpcgen/': '',
-        'tools/ServiceDefinitions/ServiceDefinitions.exe': 'krpcgen/bin/ServiceDefinitions.exe',
-        'tools/ServiceDefinitions/KRPC.dll': 'krpcgen/bin/KRPC.dll',
-        'tools/ServiceDefinitions/KRPC.xml': 'krpcgen/bin/KRPC.xml',
-        'tools/build/mono-4.5/': 'krpcgen/bin/',
-        'tools/build/ksp/': 'krpcgen/bin/'
+        'tools/clientgen/': '',
+        'tools/ServiceDefinitions/ServiceDefinitions.exe': 'krpc/clientgen/bin/ServiceDefinitions.exe',
+        'tools/ServiceDefinitions/KRPC.dll': 'krpc/clientgen/bin/KRPC.dll',
+        'tools/ServiceDefinitions/KRPC.xml': 'krpc/clientgen/bin/KRPC.xml',
+        'tools/build/mono-4.5/': 'krpc/clientgen/bin/',
+        'tools/build/ksp/': 'krpc/clientgen/bin/'
     }
 )
 
 py_script(
     name = 'script',
-    script = 'krpcgen',
-    pkg = ':krpcgen',
+    script = 'krpc-clientgen',
+    pkg = ':krpc.clientgen',
     deps = [
         '//client/python',
         '@python.protobuf//file',

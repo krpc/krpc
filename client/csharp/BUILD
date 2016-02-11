@@ -1,6 +1,6 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assembly_info', 'nuget_package')
 load('/tools/build/client_test', 'client_test')
-load('/tools/krpcgen/build', 'krpcgen_csharp')
+load('/tools/clientgen/build', 'clientgen_csharp')
 load('/config', 'version', 'author')
 
 filegroup(
@@ -50,28 +50,28 @@ csharp_library(
     visibility = ['//visibility:public']
 )
 
-krpcgen_csharp(
+clientgen_csharp(
     name = 'services-krpc',
     service = 'KRPC',
     defs = '//server:ServiceDefinitions',
     out = 'Services/KRPC.cs'
 )
 
-krpcgen_csharp(
+clientgen_csharp(
     name = 'services-spacecenter',
     service = 'SpaceCenter',
     defs = '//service/SpaceCenter:ServiceDefinitions',
     out = 'Services/SpaceCenter.cs'
 )
 
-krpcgen_csharp(
+clientgen_csharp(
     name = 'services-kerbalalarmclock',
     service = 'KerbalAlarmClock',
     defs = '//service/KerbalAlarmClock:ServiceDefinitions',
     out = 'Services/KerbalAlarmClock.cs'
 )
 
-krpcgen_csharp(
+clientgen_csharp(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
@@ -106,7 +106,7 @@ csharp_nunit_test(
     tags = ['requires-network']
 )
 
-krpcgen_csharp(
+clientgen_csharp(
     name = 'services-testservice',
     service = 'TestService',
     defs = '//tools/TestServer:ServiceDefinitions',

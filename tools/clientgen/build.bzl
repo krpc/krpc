@@ -8,23 +8,23 @@ def _impl(ctx):
         inputs = [defs],
         outputs = [output],
         progress_message = 'Generating %s code for %s service' % (language, service),
-        executable = ctx.file._krpcgen,
+        executable = ctx.file._clientgen,
         arguments = [language, service, defs.path, '--output=%s' % output.path]
     )
 
-krpcgen = rule(
+clientgen = rule(
     implementation = _impl,
     attrs = {
         'service': attr.string(mandatory=True),
         'defs': attr.label(allow_files=True, single_file=True),
         'out': attr.output(mandatory=True),
         'language': attr.string(mandatory=True),
-        '_krpcgen': attr.label(default=Label('//tools/krpcgen:script'), executable=True, allow_files=True, single_file=True)
+        '_clientgen': attr.label(default=Label('//tools/clientgen:script'), executable=True, allow_files=True, single_file=True)
     }
 )
 
-def krpcgen_cpp(name, service, defs, out):
-    krpcgen(
+def clientgen_cpp(name, service, defs, out):
+    clientgen(
         name = name,
         service = service,
         defs = defs,
@@ -32,8 +32,8 @@ def krpcgen_cpp(name, service, defs, out):
         language = 'cpp'
     )
 
-def krpcgen_csharp(name, service, defs, out):
-    krpcgen(
+def clientgen_csharp(name, service, defs, out):
+    clientgen(
         name = name,
         service = service,
         defs = defs,

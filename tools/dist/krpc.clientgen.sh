@@ -8,6 +8,6 @@ set -e
 TWINE=twine
 VERSION=`tools/get-version.sh`
 
-bazel build //tools/krpcgen
+bazel build //tools/clientgen
 
-$TWINE upload bazel-bin/tools/krpcgen/krpcgen-$VERSION.zip
+$TWINE upload bazel-bin/tools/clientgen/krpc.clientgen-$VERSION.zip

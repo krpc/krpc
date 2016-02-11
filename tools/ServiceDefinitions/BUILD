@@ -50,5 +50,5 @@ csharp_library(
         '//tools/build/mono-4.5:System.Runtime',
         '//tools/build/mono-4.5:System.IO'
     ],
-    visibility = ['//tools/krpcgen:__pkg__'] # Make visible to krpcgen so it can reference this version of KRPC.dll
+    visibility = ['//tools/clientgen:__pkg__'] # Make visible to clientgen so it can reference this version of KRPC.dll
 )

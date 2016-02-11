@@ -20,7 +20,7 @@ def main():
         ('C++ client', get_changes('client/cpp/CHANGES.txt')),
         ('C# client', get_changes('client/csharp/CHANGES.txt')),
         ('Lua client', get_changes('client/lua/CHANGES.txt')),
-        ('krpcgen', get_changes('tools/krpcgen/CHANGES.txt'))
+        ('krpc-clientgen', get_changes('tools/clientgen/CHANGES.txt'))
     ]
 
     changelist = []

@@ -73,7 +73,7 @@ The following example shows how this service can then be used from a python clie
 Some of the client libraries automatically pick up changes to the functionality
 provided by the server, including the Python and Lua clients. However, some
 clients require stub code to be generated from the service assembly so that they
-can interact with new or changed functionality. See :ref:`krpcgen <service-api-krpcgen>`
+can interact with new or changed functionality. See :ref:`clientgen <service-api-clientgen>`
 for details on how to generate these stubs.
 
 .. _service-api-attributes:
@@ -518,7 +518,7 @@ See the `SpaceCenter service implementation
 <https://github.com/djungelorm/krpc/tree/latest-version/src/kRPCSpaceCenter/Services>`_
 for more extensive examples.
 
-.. _service-api-krpcgen:
+.. _service-api-clientgen:
 
 Generating Service Code for Static Clients
 ------------------------------------------
@@ -532,19 +532,20 @@ Other client libraries required code to be generated and compiled into them
 statically. They do not automatically pick up changes to service code. Such
 client libraries include those for C++ and C#.
 
-Code for these 'static' libraries is generated using the `krpcgen` tool. This is
+Code for these 'static' libraries is generated using the `krpc-clientgen` tool. This is
 provided as `a Python script on PyPi
-<https://pypi.python.org/pypi/krpcgen>`_. It can be installed using pip:
+<https://pypi.python.org/pypi/krpc.clientgen>`_. It can be installed using pip:
 
-``python pip install krpcgen``
+``python pip install krpc.clientgen``
 
 You can then run the script from the command line:
 
 .. code-block:: bash
 
-   $ krpcgen --help
-   usage: krpcgen [-h] [-v] [-o OUTPUT] [--ksp KSP] [--output-defs OUTPUT_DEFS]
-                  {cpp,csharp} service [input [input ...]]
+   $ krpc-clientgen --help
+   usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--ksp KSP]
+                         [--output-defs OUTPUT_DEFS]
+                         {cpp,csharp} service input [input ...]
 
    Generate client source code for kRPC services.
 
@@ -581,21 +582,21 @@ Example
 The following demonstrates how to generate code for the C++ and C# clients to
 interact with the LaunchControl service, given in an example previously.
 
-krpcgen expects to be passed the location of your copy of Kerbal Space Program,
+krpc-clientgen expects to be passed the location of your copy of Kerbal Space Program,
 the name of the language to generate, the name of the service (from the
 :class:`KRPCService` attribute), a path to the assembly containing the service
 and the path to write the generated code to.
 
 For C++, run the following:
 
-``krpcgen --ksp=/path/to/ksp cpp LaunchControl LaunchControl.dll launch_control.hpp``
+``krpc-clientgen --ksp=/path/to/ksp cpp LaunchControl LaunchControl.dll launch_control.hpp``
 
 To then use the LaunchControl service from C++, you need to link your code
 against the C++ client library, and include `launch_control.hpp`.
 
 For C#, run the following:
 
-``krpcgen --ksp=/path/to/ksp csharp LaunchControl LaunchControl.dll LaunchControl.cs``
+``krpc-clientgen --ksp=/path/to/ksp csharp LaunchControl LaunchControl.dll LaunchControl.cs``
 
 To then use the LaunchControl service from a C# client, you need to reference
 the `KRPC.Client.dll` and include `LaunchControl.cs` in your project.
