@@ -87,6 +87,17 @@ Streams are created by calling :meth:`Client.add_stream` or using the ``with``
 statement applied to :meth:`Client.stream`. Both of these methods return an
 instance of the :class:`krpc.stream.Stream` class.
 
+Both methods and attributes can be streamed. The example given above
+demonstrates how to stream methods. The following example shows how to stream
+an attribute (in this case ``vessel.control.abort``):
+
+.. code-block:: python
+
+   abort = conn.add_stream(getattr, vessel.control, 'abort')
+   while not abort():
+       ...
+
+
 Reference
 ---------
 
