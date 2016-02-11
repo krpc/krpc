@@ -22,12 +22,17 @@ namespace KRPC.Client.Test
             Thread.Sleep (100);
         }
 
+        void Wait ()
+        {
+            Thread.Sleep (25);
+        }
+
         [Test]
         public void Method ()
         {
             var x = connection.AddStream (() => connection.TestService ().FloatToString (3.14159f));
             for (int i = 0; i < 5; i++) {
-                Thread.Sleep (100);
+                Wait ();
                 Assert.AreEqual ("3.14159", x.Get ());
             }
         }
@@ -38,7 +43,7 @@ namespace KRPC.Client.Test
             connection.TestService ().StringProperty = "foo";
             var x = connection.AddStream (() => connection.TestService ().StringProperty);
             for (int i = 0; i < 5; i++) {
-                Thread.Sleep (100);
+                Wait ();
                 Assert.AreEqual ("foo", x.Get ());
             }
         }
@@ -49,7 +54,7 @@ namespace KRPC.Client.Test
             var obj = connection.TestService ().CreateTestObject ("bob");
             var x = connection.AddStream (() => obj.FloatToString (3.14159f));
             for (int i = 0; i < 5; i++) {
-                Thread.Sleep (100);
+                Wait ();
                 Assert.AreEqual ("bob3.14159", x.Get ());
             }
         }
@@ -60,7 +65,7 @@ namespace KRPC.Client.Test
             // FIXME: have to specify optional parameter ""
             var x = connection.AddStream (() => TestClass.StaticMethod (connection, "foo", ""));
             for (int i = 0; i < 5; i++) {
-                Thread.Sleep (100);
+                Wait ();
                 Assert.AreEqual ("jebfoo", x.Get ());
             }
         }
@@ -72,7 +77,7 @@ namespace KRPC.Client.Test
             obj.IntProperty = 42;
             var x = connection.AddStream (() => obj.IntProperty);
             for (int i = 0; i < 5; i++) {
-                Thread.Sleep (100);
+                Wait ();
                 Assert.AreEqual (42, x.Get ());
             }
         }
@@ -83,7 +88,7 @@ namespace KRPC.Client.Test
             var count = 0;
             var x = connection.AddStream (() => connection.TestService ().Counter ());
             for (int i = 0; i < 5; i++) {
-                Thread.Sleep (100);
+                Wait ();
                 Assert.IsTrue (count < x.Get ());
                 count = x.Get ();
             }
@@ -95,7 +100,7 @@ namespace KRPC.Client.Test
             var x0 = connection.AddStream (() => connection.TestService ().FloatToString (0.123f));
             var x1 = connection.AddStream (() => connection.TestService ().FloatToString (1.234f));
             for (int i = 0; i < 5; i++) {
-                Thread.Sleep (100);
+                Wait ();
                 Assert.AreEqual ("0.123", x0.Get ());
                 Assert.AreEqual ("1.234", x1.Get ());
             }
@@ -105,33 +110,33 @@ namespace KRPC.Client.Test
         public void Inerleaved ()
         {
             var s0 = connection.AddStream (() => connection.TestService ().Int32ToString (0));
-            Thread.Sleep (100);
+            Wait ();
             Assert.AreEqual ("0", s0.Get ());
 
             var s1 = connection.AddStream (() => connection.TestService ().Int32ToString (1));
-            Thread.Sleep (100);
+            Wait ();
             Assert.AreEqual ("0", s0.Get ());
             Assert.AreEqual ("1", s1.Get ());
 
             s1.Remove ();
-            Thread.Sleep (100);
+            Wait ();
             Assert.AreEqual ("0", s0.Get ());
             Assert.Throws<InvalidOperationException> (() => s1.Get ());
 
             var s2 = connection.AddStream (() => connection.TestService ().Int32ToString (2));
-            Thread.Sleep (100);
+            Wait ();
             Assert.AreEqual ("0", s0.Get ());
             Assert.Throws<InvalidOperationException> (() => s1.Get ());
             Assert.AreEqual ("2", s2.Get ());
 
             s0.Remove ();
-            Thread.Sleep (100);
+            Wait ();
             Assert.Throws<InvalidOperationException> (() => s0.Get ());
             Assert.Throws<InvalidOperationException> (() => s1.Get ());
             Assert.AreEqual ("2", s2.Get ());
 
             s2.Remove ();
-            Thread.Sleep (100);
+            Wait ();
             Assert.Throws<InvalidOperationException> (() => s0.Get ());
             Assert.Throws<InvalidOperationException> (() => s1.Get ());
             Assert.Throws<InvalidOperationException> (() => s2.Get ());
@@ -141,7 +146,7 @@ namespace KRPC.Client.Test
         public void RemoveStreamTwice ()
         {
             var s = connection.AddStream (() => connection.TestService ().Int32ToString (0));
-            Thread.Sleep (100);
+            Wait ();
             Assert.AreEqual ("0", s.Get ());
             s.Remove ();
             Assert.Throws<InvalidOperationException> (() => s.Get ());
@@ -154,12 +159,12 @@ namespace KRPC.Client.Test
         {
             var s0 = connection.AddStream (() => connection.TestService ().Int32ToString (42));
             var streamId = s0.Id;
-            Thread.Sleep (100);
+            Wait ();
             Assert.AreEqual ("42", s0.Get ());
 
             var s1 = connection.AddStream (() => connection.TestService ().Int32ToString (42));
             Assert.AreEqual (streamId, s1.Id);
-            Thread.Sleep (100);
+            Wait ();
             Assert.AreEqual ("42", s1.Get ());
         }
     }
