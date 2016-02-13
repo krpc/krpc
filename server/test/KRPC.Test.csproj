@@ -56,7 +56,7 @@
       <HintPath>..\..\bazel-krpc\external\csharp_moq\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\bazel-krpc\external\csharp_protobuf_net35\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\bazel-krpc\external\csharp_protobuf_net35\file\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
