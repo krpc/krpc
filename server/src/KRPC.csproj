@@ -33,10 +33,18 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Xml.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -51,6 +59,9 @@
     </Reference>
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\bazel-krpc\external\csharp_protobuf_net35\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
