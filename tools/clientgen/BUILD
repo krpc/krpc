@@ -52,7 +52,7 @@ py_sdist(
         'setup.py', 'MANIFEST.in', ':version',
         '//tools/ServiceDefinitions',
         '//tools/ServiceDefinitions:KRPC',
-        '//tools/build/ksp:Google.Protobuf.dll',
+        '//tools/build/mono-4.5:Google.Protobuf.dll',
         '//tools/build/mono-4.5:Newtonsoft.Json.dll',
         '//tools/build/mono-4.5:NDesk.Options.dll',
         '//tools/build/mono-4.5:mscorlib',
@@ -68,8 +68,7 @@ py_sdist(
         'tools/ServiceDefinitions/ServiceDefinitions.exe': 'krpc/clientgen/bin/ServiceDefinitions.exe',
         'tools/ServiceDefinitions/KRPC.dll': 'krpc/clientgen/bin/KRPC.dll',
         'tools/ServiceDefinitions/KRPC.xml': 'krpc/clientgen/bin/KRPC.xml',
-        'tools/build/mono-4.5/': 'krpc/clientgen/bin/',
-        'tools/build/ksp/': 'krpc/clientgen/bin/'
+        'tools/build/mono-4.5/': 'krpc/clientgen/bin/'
     }
 )
 

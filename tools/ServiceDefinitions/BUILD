@@ -37,7 +37,7 @@ csharp_library(
     name = 'KRPC',
     srcs = ['//server:KRPC-src', '//server:AssemblyInfo', '//protobuf:csharp'],
     deps = [
-        '//tools/build/ksp:Google.Protobuf',
+        '//tools/build/mono-4.5:Google.Protobuf',
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
         '//tools/build/ksp:UnityEngine',
@@ -50,5 +50,5 @@ csharp_library(
         '//tools/build/mono-4.5:System.Runtime',
         '//tools/build/mono-4.5:System.IO'
     ],
-    visibility = ['//tools/clientgen:__pkg__'] # Make visible to clientgen so it can reference this version of KRPC.dll
+    visibility = ['//tools/clientgen:__pkg__', '//tools/TestServer:__pkg__']
 )

@@ -14,8 +14,8 @@ csharp_binary(
     name = 'TestServer',
     srcs = glob(['**/*.cs']) + [':AssemblyInfo', '//protobuf:csharp-test'],
     deps = [
-        '//server:KRPC',
-        '//tools/build/ksp:Google.Protobuf',
+        '//tools/ServiceDefinitions:KRPC',
+        '//tools/build/mono-4.5:Google.Protobuf',
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
         '//tools/build/ksp:UnityEngine',
@@ -36,8 +36,8 @@ csharp_library(
     name = 'TestService',
     srcs = glob(['Services/*.cs', 'Properties/*.cs']) + ['//protobuf:csharp-test'],
     deps = [
-        '//server:KRPC',
-        '//tools/build/ksp:Google.Protobuf',
+        '//tools/ServiceDefinitions:KRPC',
+        '//tools/build/mono-4.5:Google.Protobuf',
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
         '//tools/build/ksp:UnityEngine',
