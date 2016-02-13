@@ -1,5 +1,5 @@
 from google.protobuf.internal import encoder as protobuf_encoder
-from krpc.types import Types, ValueType, MessageType, ProtobufEnumType, ClassType, EnumType
+from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
 from krpc.types import ListType, DictionaryType, SetType, TupleType
 import platform
 
@@ -37,8 +37,6 @@ class Encoder(object):
             return cls._encode_value(x, typ)
         elif isinstance(typ, EnumType):
             return cls._encode_value(x.value, cls._types.as_type('int32'))
-        elif isinstance(typ, ProtobufEnumType):
-            return cls._encode_value(x, cls._types.as_type('int32'))
         elif isinstance(typ, ClassType):
             object_id = x._object_id if x is not None else 0
             return cls._encode_value(object_id, cls._types.as_type('uint64'))

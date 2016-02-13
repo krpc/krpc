@@ -1,12 +1,7 @@
-#!/usr/bin/env python2
-
 import unittest
 import binascii
 import krpc
-import krpc.test.schema.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
-
-krpc.types.add_search_path('krpc.test.schema')
 
 class TestDocumentation(ServerTestCase, unittest.TestCase):
 
@@ -22,6 +17,7 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
         super(TestDocumentation, self).setUp()
 
     def test_basic(self):
+        #TODO: fix tests
         self.assertEqual('Service documentation string.', self.conn.test_service.__doc__)
         self.assertEqual('Procedure documentation string.', self.conn.test_service.float_to_string.__doc__)
         #self.assertEqual('Property documentation string.', self.conn.test_service.string_property.__doc__)

@@ -7,7 +7,6 @@ local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
 local platform = require 'krpc.platform'
 local Types = require 'krpc.types'
-local schema = require 'krpc.schema.KRPC'
 
 local TestEncodeDecode = class()
 

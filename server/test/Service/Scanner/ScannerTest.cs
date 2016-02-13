@@ -28,7 +28,7 @@ namespace KRPC.Test.Service.Scanner
         public void TestService ()
         {
             var service = services.Services_.First (x => x.Name == "TestService");
-            Assert.AreEqual (39, service.Procedures.Count);
+            Assert.AreEqual (37, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
             Assert.AreEqual ("<doc>\n  <summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
@@ -392,36 +392,19 @@ namespace KRPC.Test.Service.Scanner
                 if (proc.Name == "ProcedureEnumArg") {
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("x", proc.Parameters [0].Name);
-                    Assert.AreEqual ("Test.TestEnum", proc.Parameters [0].Type);
+                    Assert.AreEqual ("int32", proc.Parameters [0].Type);
                     Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
                     Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
+                    Assert.AreEqual (1, proc.Attributes.Count);
+                    Assert.AreEqual ("ParameterType(0).Enum(TestService.TestEnum)", proc.Attributes [0]);
                     Assert.AreEqual ("", proc.Documentation);
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureEnumReturn") {
                     Assert.AreEqual (0, proc.Parameters.Count);
-                    Assert.AreEqual ("Test.TestEnum", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("", proc.Documentation);
-                    foundProcedures++;
-                }
-                if (proc.Name == "ProcedureCSharpEnumArg") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("x", proc.Parameters [0].Name);
-                    Assert.AreEqual ("int32", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).Enum(TestService.CSharpEnum)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
-                    foundProcedures++;
-                }
-                if (proc.Name == "ProcedureCSharpEnumReturn") {
-                    Assert.AreEqual (0, proc.Parameters.Count);
                     Assert.AreEqual ("int32", proc.ReturnType);
                     Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("ReturnType.Enum(TestService.CSharpEnum)", proc.Attributes [0]);
+                    Assert.AreEqual ("ReturnType.Enum(TestService.TestEnum)", proc.Attributes [0]);
                     Assert.AreEqual ("", proc.Documentation);
                     foundProcedures++;
                 }
@@ -512,8 +495,8 @@ namespace KRPC.Test.Service.Scanner
                     foundProcedures++;
                 }
             }
-            Assert.AreEqual (39, foundProcedures);
-            Assert.AreEqual (39, service.Procedures.Count);
+            Assert.AreEqual (37, foundProcedures);
+            Assert.AreEqual (37, service.Procedures.Count);
         }
 
         [Test]
@@ -541,8 +524,8 @@ namespace KRPC.Test.Service.Scanner
             var service = services.Services_.First (x => x.Name == "TestService");
             int foundEnumerations = 0;
             foreach (var enm in service.Enumerations) {
-                if (enm.Name == "CSharpEnum") {
-                    Assert.AreEqual ("<doc>\n  <summary>\nDocumentation string for CSharpEnum.\n</summary>\n</doc>", enm.Documentation);
+                if (enm.Name == "TestEnum") {
+                    Assert.AreEqual ("<doc>\n  <summary>\nDocumentation string for TestEnum.\n</summary>\n</doc>", enm.Documentation);
                     Assert.AreEqual (3, enm.Values.Count);
                     Assert.AreEqual ("x", enm.Values [0].Name);
                     Assert.AreEqual (0, enm.Values [0].Value);

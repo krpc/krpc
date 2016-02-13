@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using KRPC.Schema.KRPC;
-using Test;
 
 namespace KRPC.Test.Service
 {
@@ -36,13 +35,9 @@ namespace KRPC.Test.Service
 
         void ProcedureOptionalNullArg (TestService.TestClass x);
 
-        void ProcedureEnumArg (global::Test.TestEnum x);
+        void ProcedureEnumArg (TestService.TestEnum x);
 
-        global::Test.TestEnum ProcedureEnumReturn ();
-
-        void ProcedureCSharpEnumArg (TestService.CSharpEnum x);
-
-        TestService.CSharpEnum ProcedureCSharpEnumReturn ();
+        TestService.TestEnum ProcedureEnumReturn ();
 
         void BlockingProcedureNoReturn (int n);
 

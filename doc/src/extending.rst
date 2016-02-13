@@ -426,8 +426,6 @@ serialize it. The following types are serializable:
 * The C# types ``double``, ``float``, ``int``, ``long``, ``uint``, ``ulong``,
   ``bool``, ``string`` and ``byte[]``
 
-* Any protocol buffer message type
-
 * Any type annotated with :class:`KRPCClass`
 
 * Any type annotated with :class:`KRPCEnum`
@@ -443,6 +441,8 @@ serialize it. The following types are serializable:
   * ``System.Collections.HashSet<V>`` where ``V`` is a serializable type
 
 * Return types can be ``void``
+
+* Protocol buffer message types from namespace ``KRPC.Schema.KRPC``
 
 .. _service-api-game-scenes:
 

@@ -152,23 +152,11 @@ namespace KRPC.Test.Service
             Service.ProcedureOptionalNullArg (x);
         }
 
-        [KRPCProcedure]
-        public static void ProcedureEnumArg (global::Test.TestEnum x)
-        {
-            Service.ProcedureEnumArg (x);
-        }
-
-        [KRPCProcedure]
-        public static global::Test.TestEnum ProcedureEnumReturn ()
-        {
-            return Service.ProcedureEnumReturn ();
-        }
-
         /// <summary>
-        /// Documentation string for CSharpEnum.
+        /// Documentation string for TestEnum.
         /// </summary>
         [KRPCEnum]
-        public enum CSharpEnum
+        public enum TestEnum
         {
             /// <summary>
             /// Documented enum field
@@ -178,7 +166,7 @@ namespace KRPC.Test.Service
             z
         }
 
-        public enum CSharpEnumWithoutAttribute
+        public enum TestEnumWithoutAttribute
         {
             foo,
             bar,
@@ -186,15 +174,15 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
-        public static void ProcedureCSharpEnumArg (CSharpEnum x)
+        public static void ProcedureEnumArg (TestEnum x)
         {
-            Service.ProcedureCSharpEnumArg (x);
+            Service.ProcedureEnumArg (x);
         }
 
         [KRPCProcedure]
-        public static CSharpEnum ProcedureCSharpEnumReturn ()
+        public static TestEnum ProcedureEnumReturn ()
         {
-            return Service.ProcedureCSharpEnumReturn ();
+            return Service.ProcedureEnumReturn ();
         }
 
         [KRPCProcedure]

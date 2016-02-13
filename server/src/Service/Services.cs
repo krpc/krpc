@@ -157,7 +157,7 @@ namespace KRPC.Service
                 return DecodeCollection (procedure, i, type, value);
             } else if (ProtocolBuffers.IsAMessageType (type)) {
                 return ProtocolBuffers.ParseFrom (type, value);
-            } else if (ProtocolBuffers.IsAnEnumType (type) || TypeUtils.IsAnEnumType (type)) {
+            } else if (TypeUtils.IsAnEnumType (type)) {
                 // TODO: Assumes it's underlying type is int
                 var enumValue = ProtocolBuffers.ReadValue (value, typeof(int));
                 if (!Enum.IsDefined (type, enumValue))
@@ -260,7 +260,7 @@ namespace KRPC.Service
                 return EncodeCollection (type, value);
             else if (ProtocolBuffers.IsAMessageType (type))
                 return ProtocolBuffers.WriteMessage (value as IMessage);
-            else if (ProtocolBuffers.IsAnEnumType (type) || TypeUtils.IsAnEnumType (type)) {
+            else if (TypeUtils.IsAnEnumType (type)) {
                 // TODO: Assumes it's underlying type is int
                 return ProtocolBuffers.WriteValue ((int)value, typeof(int));
             } else

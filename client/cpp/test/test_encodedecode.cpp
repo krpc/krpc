@@ -2,7 +2,6 @@
 #include <krpc/encoder.hpp>
 #include <krpc/decoder.hpp>
 #include <krpc/platform.hpp>
-#include "Test.pb.hpp"
 #include "services/test_service.hpp"
 
 namespace pb = google::protobuf;

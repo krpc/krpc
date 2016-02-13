@@ -579,82 +579,49 @@ namespace KRPC.Test.Service
         }
 
         /// <summary>
-        /// Test calling a service method with an argument that is a .proto enumeration
+        /// Test calling a service method with an argument that is a C# enumeration
         /// </summary>
         [Test]
         public void HandleRequestSingleEnumArgNoReturn ()
         {
-            var arg = global::Test.TestEnum.b;
+            var arg = TestService.TestEnum.y;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureEnumArg (It.IsAny<global::Test.TestEnum> ()))
-                .Callback ((global::Test.TestEnum x) => Assert.AreEqual (global::Test.TestEnum.b, x));
+            mock.Setup (x => x.ProcedureEnumArg (It.IsAny<TestService.TestEnum> ()))
+                .Callback ((TestService.TestEnum x) => Assert.AreEqual (TestService.TestEnum.y, x));
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureEnumArg",
                               Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
             Run (request);
-            mock.Verify (x => x.ProcedureEnumArg (It.IsAny<global::Test.TestEnum> ()), Times.Once ());
-        }
-
-        /// <summary>
-        /// Test calling a service method that returns a .proto enumeration
-        /// </summary>
-        [Test]
-        public void HandleRequestNoArgEnumReturn ()
-        {
-            var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureEnumReturn ()).Returns (global::Test.TestEnum.c);
-            TestService.Service = mock.Object;
-            var response = Run (Req ("TestService", "ProcedureEnumReturn"));
-            response.Time = 0;
-            Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (ProtocolBuffers.WriteValue ((int)global::Test.TestEnum.c, typeof(int)), response.ReturnValue);
-            mock.Verify (x => x.ProcedureEnumReturn (), Times.Once ());
-        }
-
-        /// <summary>
-        /// Test calling a service method with an argument that is a C# enumeration
-        /// </summary>
-        [Test]
-        public void HandleRequestSingleCSharpEnumArgNoReturn ()
-        {
-            var arg = TestService.CSharpEnum.y;
-            var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureCSharpEnumArg (It.IsAny<TestService.CSharpEnum> ()))
-                .Callback ((TestService.CSharpEnum x) => Assert.AreEqual (TestService.CSharpEnum.y, x));
-            TestService.Service = mock.Object;
-            var request = Req ("TestService", "ProcedureCSharpEnumArg",
-                              Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
-            Run (request);
-            mock.Verify (x => x.ProcedureCSharpEnumArg (It.IsAny<TestService.CSharpEnum> ()), Times.Once ());
+            mock.Verify (x => x.ProcedureEnumArg (It.IsAny<TestService.TestEnum> ()), Times.Once ());
         }
 
         /// <summary>
         /// Test calling a service method that returns a C# enumeration
         /// </summary>
         [Test]
-        public void HandleRequestNoArgCSharpEnumReturn ()
+        public void HandleRequestNoArgEnumReturn ()
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureCSharpEnumReturn ()).Returns (TestService.CSharpEnum.z);
+            mock.Setup (x => x.ProcedureEnumReturn ()).Returns (TestService.TestEnum.z);
             TestService.Service = mock.Object;
-            var response = Run (Req ("TestService", "ProcedureCSharpEnumReturn"));
+            var response = Run (Req ("TestService", "ProcedureEnumReturn"));
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (ProtocolBuffers.WriteValue ((int)TestService.CSharpEnum.z, typeof(int)), response.ReturnValue);
-            mock.Verify (x => x.ProcedureCSharpEnumReturn (), Times.Once ());
+            Assert.AreEqual (ProtocolBuffers.WriteValue ((int)TestService.TestEnum.z, typeof(int)), response.ReturnValue);
+            mock.Verify (x => x.ProcedureEnumReturn (), Times.Once ());
         }
 
         /// <summary>
         /// Test calling a service method with an argument that is an invalid value for a C# enumeration
         /// </summary>
         [Test]
-        public void HandleRequestSingleInvalidCSharpEnumArgNoReturn ()
+        public void HandleRequestSingleInvalidEnumArgNoReturn ()
         {
             const int arg = 9999;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureCSharpEnumArg (It.IsAny<TestService.CSharpEnum> ()));
+            mock.Setup (x => x.ProcedureEnumArg (It.IsAny<TestService.TestEnum> ()));
             TestService.Service = mock.Object;
-            var request = Req ("TestService", "ProcedureCSharpEnumArg",
+            var request = Req ("TestService", "ProcedureTestEnumArg",
                               Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
             Assert.Throws<RPCException> (() => Run (request));
         }

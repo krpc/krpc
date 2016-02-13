@@ -12,7 +12,7 @@ csharp_assembly_info(
 
 csharp_binary(
     name = 'TestServer',
-    srcs = glob(['**/*.cs']) + [':AssemblyInfo', '//protobuf:csharp-test'],
+    srcs = glob(['**/*.cs']) + [':AssemblyInfo'],
     deps = [
         '//tools/ServiceDefinitions:KRPC',
         '//tools/build/mono-4.5:Google.Protobuf',
@@ -34,7 +34,7 @@ csharp_binary(
 
 csharp_library(
     name = 'TestService',
-    srcs = glob(['Services/*.cs', 'Properties/*.cs']) + ['//protobuf:csharp-test'],
+    srcs = glob(['Services/*.cs', 'Properties/*.cs']),
     deps = [
         '//tools/ServiceDefinitions:KRPC',
         '//tools/build/mono-4.5:Google.Protobuf',

@@ -22,10 +22,9 @@ local PROTOBUF_TO_LUA_VALUE_TYPE = Map{
   bytes = 'string'
 }
 local PROTOBUF_TO_MESSAGE_TYPE = Map{}
-local PROTOBUF_TO_ENUM_TYPE = Map{}
 
 local _packages_loaded = Set{}
-local _package_search_paths = List{'krpc.schema'}
+local _package_search_path = 'krpc.schema'
 
 local function _parse_type_string(typ)
   -- Given a string, extract a substring up to the first comma. Parses parnetheses.
@@ -64,15 +63,10 @@ local function _load_types(package)
     return
   end
   _packages_loaded[package] = true
-  for path in _package_search_paths:iter() do
-    local ok, module = pcall(require, path .. '.' .. package)
-    if ok then
-      for k,name in ipairs(module.MESSAGE_TYPES) do
-        PROTOBUF_TO_MESSAGE_TYPE[package .. '.' .. name] = module[name]
-      end
-      for k,name in ipairs(module.ENUM_TYPES) do
-        PROTOBUF_TO_ENUM_TYPE[package .. '.' .. name] = true
-      end
+  local ok, module = pcall(require, _package_search_path .. '.' .. package)
+  if ok then
+    for k,name in ipairs(module.MESSAGE_TYPES) do
+      PROTOBUF_TO_MESSAGE_TYPE[package .. '.' .. name] = module[name]
     end
   end
 end
@@ -151,10 +145,6 @@ local function _create_enum_type(service_name, class_name, values)
   return cls
 end
 
-function Types.add_search_path(path)
-  _package_search_paths:append(path)
-end
-
 Types.TypeBase = class()
 
 function Types.TypeBase:_init(protobuf_type, lua_type)
@@ -185,17 +175,6 @@ function Types.MessageType:_init(type_string)
   end
   typ = PROTOBUF_TO_MESSAGE_TYPE[type_string]
   self:super(type_string, typ)
-end
-
-Types.ProtobufEnumType = class(Types.TypeBase)
-
-function Types.ProtobufEnumType:_init(type_string)
-  package,_,_ = stringx.rpartition(type_string, '.')
-  _load_types(package)
-  if not PROTOBUF_TO_ENUM_TYPE[type_string] then
-    error('\'' .. type_string .. '\' is not a valid type string for a protobuf enumeration type')
-  end
-  self:super(type_string, 'number')
 end
 
 Types.ClassType = class(Types.TypeBase)
@@ -310,7 +289,7 @@ function Types:as_type(type_string)
   elseif stringx.startswith(type_string, 'Tuple(') or type_string == 'Tuple' then
     typ = Types.TupleType(type_string, self)
   else
-    -- A message or enumeration type
+    -- A message type
     if not type_string:match('[A-Za-z0-9_\\.]+') then
       error('\'' .. type_string .. '\' is not a valid type string')
     end
@@ -318,8 +297,6 @@ function Types:as_type(type_string)
     _load_types(package)
     if PROTOBUF_TO_MESSAGE_TYPE[type_string] then
       typ = Types.MessageType(type_string)
-    elseif PROTOBUF_TO_ENUM_TYPE[type_string] then
-      typ = Types.ProtobufEnumType(type_string)
     else
       error('\'' .. type_string .. '\' is not a valid type string')
     end

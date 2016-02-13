@@ -60,9 +60,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\bazel-bin\protobuf\Test.cs">
-      <Link>Test.cs</Link>
-    </Compile>
     <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
     <Compile Include="KRPCConfigurationTest.cs" />
     <Compile Include="Schema\RpcTest.cs" />

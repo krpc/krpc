@@ -42,31 +42,23 @@ PROTOBUF_TO_PYTHON_VALUE_TYPE = {
     'bytes': bytes
 }
 PROTOBUF_TO_MESSAGE_TYPE = {}
-PROTOBUF_TO_ENUM_TYPE = {}
 
 _packages_loaded = set()
-_package_search_paths = ['krpc.schema']
-
-def add_search_path(path):
-    """ Add a python package to the list of search locations for finding Protocol Buffer message and enum types """
-    _package_search_paths.append(path)
+_package_search_path = 'krpc.schema'
 
 def _load_types(package):
     """ Load all message and enum types from the given package,
-        and populate PROTOBUF_TO_MESSAGE_TYPE and PROTOBUF_TO_ENUM_TYPE """
+        and populate PROTOBUF_TO_MESSAGE_TYPE """
     if package in _packages_loaded:
         return
     _packages_loaded.add(package)
-    for path in _package_search_paths:
-        try:
-            module = importlib.import_module(path + '.' + package)
-            if hasattr(module, 'DESCRIPTOR'):
-               for name in module.DESCRIPTOR.message_types_by_name.keys():
-                   PROTOBUF_TO_MESSAGE_TYPE[package+'.'+name] = getattr(module, name)
-               for name in module.DESCRIPTOR.enum_types_by_name.keys():
-                   PROTOBUF_TO_ENUM_TYPE[package+'.'+name] = getattr(module, name)
-        except (KeyError, ImportError, AttributeError, ValueError):
-            pass
+    try:
+        module = importlib.import_module(_package_search_path + '.' + package)
+        if hasattr(module, 'DESCRIPTOR'):
+           for name in module.DESCRIPTOR.message_types_by_name.keys():
+               PROTOBUF_TO_MESSAGE_TYPE[package+'.'+name] = getattr(module, name)
+    except (KeyError, ImportError, AttributeError, ValueError):
+        pass
 
 class Types(object):
     """ A type store. Used to obtain type objects from protocol buffer type strings,
@@ -100,15 +92,13 @@ class Types(object):
         elif type_string.startswith('Tuple(') or type_string == 'Tuple':
             typ = TupleType(type_string, self)
         else:
-            # A message or enumeration type
+            # A message type
             if not re.match(r'^[A-Za-z0-9_\.]+$', type_string):
                 raise ValueError('\'%s\' is not a valid type string' % type_string)
             package,_,_ = type_string.rpartition('.')
             _load_types(package)
             if type_string in PROTOBUF_TO_MESSAGE_TYPE:
                 typ = MessageType(type_string)
-            elif type_string in PROTOBUF_TO_ENUM_TYPE:
-                typ = ProtobufEnumType(type_string)
             else:
                 raise ValueError('\'%s\' is not a valid type string' % type_string)
 
@@ -214,16 +204,6 @@ class MessageType(TypeBase):
             raise ValueError('\'%s\' is not a valid type string for a message type' % type_string)
         typ = PROTOBUF_TO_MESSAGE_TYPE[type_string]
         super(MessageType, self).__init__(type_string, typ)
-
-class ProtobufEnumType(TypeBase):
-    """ A protocol buffer enumeration type, represented by an int32 value """
-
-    def __init__(self, type_string):
-        package,_,_ = type_string.rpartition('.')
-        _load_types(package)
-        if type_string not in PROTOBUF_TO_ENUM_TYPE:
-            raise ValueError('\'%s\' is not a valid type string for a protobuf enumeration type' % type_string)
-        super(ProtobufEnumType, self).__init__(type_string, int)
 
 class ClassType(TypeBase):
     """ A class type, represented by a uint64 identifier """

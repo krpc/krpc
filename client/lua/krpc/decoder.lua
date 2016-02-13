@@ -93,8 +93,6 @@ function decoder.decode(data, typ)
     return _decode_message(data, typ)
   elseif typ:is_a(Types.EnumType) then
     return typ.lua_type(_decode_value(data, _types:as_type('int32')))
-  elseif typ:is_a(Types.ProtobufEnumType) then
-    return _decode_value(data, _types:as_type('int32'))
   elseif typ:is_a(Types.ValueType) then
     return _decode_value(data, typ)
   elseif typ:is_a(Types.ClassType) then

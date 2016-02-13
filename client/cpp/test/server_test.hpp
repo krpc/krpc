@@ -2,7 +2,6 @@
 #define HEADER_KRPC_TEST_SERVER_TEST
 
 #include <krpc/krpc.hpp>
-#include "Test.pb.hpp"
 #include "services/test_service.hpp"
 
 class server_test: public ::testing::Test {

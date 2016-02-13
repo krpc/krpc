@@ -2,7 +2,6 @@ from krpc.clientgen.generator import Generator
 import krpc.types
 import re
 
-krpc.types.add_search_path('krpc.test.schema')
 Types = krpc.types.Types()
 
 _regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
@@ -81,9 +80,6 @@ class CppGenerator(Generator):
                 ','.join(self.parse_type(Types.as_type(t)) for t in value_types))
         elif isinstance(typ, krpc.types.ClassType):
             return typ.protobuf_type[6:-1].replace('.','::')
-        elif isinstance(typ, krpc.types.ProtobufEnumType):
-            x,_,y = typ.protobuf_type.partition('.')
-            return x.lower() + '::' + y
         elif isinstance(typ, krpc.types.EnumType):
             return typ.protobuf_type[5:-1].replace('.','::')
         raise RuntimeError('Unknown type ' + typ)
@@ -125,15 +121,8 @@ class CppGenerator(Generator):
             return self.parse_parameter_type(typ) + '()'
         elif isinstance(typ, krpc.types.EnumType):
             return 'static_cast<%s>(%s)' % (self.parse_parameter_type(typ), value)
-        elif isinstance(typ, krpc.types.ProtobufEnumType):
-            return 'static_cast<%s>(%s)' % (self.parse_parameter_type(typ), value)
         else:
             return value
-
-    def parse_decode_fn(self, procedure):
-        if isinstance(self.get_return_type(procedure), krpc.types.ProtobufEnumType):
-            return 'decode_enum'
-        return 'decode'
 
     def parse_set_client(self, procedure):
         return isinstance(self.get_return_type(procedure), krpc.types.ClassType)
@@ -143,7 +132,6 @@ class CppGenerator(Generator):
 
     def parse_context(self, context):
         for info in context['procedures'].values():
-            info['return_decode_fn'] = self.parse_decode_fn(info['procedure'])
             info['return_set_client'] = self.parse_set_client(info['procedure'])
 
         properties = {}
@@ -153,7 +141,6 @@ class CppGenerator(Generator):
                     'remote_name': info['getter']['remote_name'],
                     'parameters': [],
                     'return_type': info['type'],
-                    'return_decode_fn': self.parse_decode_fn(info['getter']['procedure']),
                     'return_set_client': self.parse_set_client(info['getter']['procedure'])
                 }
             if info['setter']:
@@ -167,11 +154,9 @@ class CppGenerator(Generator):
 
         for class_name,class_info in context['classes'].items():
             for info in class_info['methods'].values():
-                info['return_decode_fn'] = self.parse_decode_fn(info['procedure'])
                 info['return_set_client'] = self.parse_set_client(info['procedure'])
 
             for info in class_info['static_methods'].values():
-                info['return_decode_fn'] = self.parse_decode_fn(info['procedure'])
                 info['return_set_client'] = self.parse_set_client(info['procedure'])
 
             class_properties = {}
@@ -181,7 +166,6 @@ class CppGenerator(Generator):
                         'remote_name': info['getter']['remote_name'],
                         'parameters': [],
                         'return_type': info['type'],
-                        'return_decode_fn': self.parse_decode_fn(info['getter']['procedure']),
                         'return_set_client_fn': self.parse_set_client(info['getter']['procedure'])
                     }
                 if info['setter']:

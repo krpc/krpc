@@ -10,7 +10,6 @@ from krpc.attributes import Attributes
 import krpc.types
 import krpc.decoder
 
-krpc.types.add_search_path('krpc.test.schema')
 Types = krpc.types.Types()
 
 class Generator(object):

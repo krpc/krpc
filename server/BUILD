@@ -71,7 +71,7 @@ png_images(
 
 csharp_nunit_test(
     name = 'KRPC.Test',
-    srcs = glob(['test/**/*.cs']) + ['//protobuf:csharp-test'],
+    srcs = glob(['test/**/*.cs']),
     deps = [
         '//server:KRPC',
         '//tools/build/mono-4.5:Moq',

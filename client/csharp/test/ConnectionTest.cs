@@ -6,7 +6,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 
-using CSharpEnum = KRPC.Client.Services.TestService.CSharpEnum;
+using TestEnum = KRPC.Client.Services.TestService.TestEnum;
 
 namespace KRPC.Client.Test
 {
@@ -130,27 +130,17 @@ namespace KRPC.Client.Test
             Assert.AreEqual (Enumerable.Range (1, 42).Sum (), connection.TestService ().BlockingProcedure (42));
         }
 
-        //    def test_protobuf_enums(self):
-        //        Assert.AreEqual (TestSchema.a, self.conn.test_service.enum_return())
-        //        Assert.AreEqual (TestSchema.a, self.conn.test_service.enum_echo(TestSchema.a))
-        //        Assert.AreEqual (TestSchema.b, self.conn.test_service.enum_echo(TestSchema.b))
-        //        Assert.AreEqual (TestSchema.c, self.conn.test_service.enum_echo(TestSchema.c))
-        //
-        //        Assert.AreEqual (TestSchema.a, self.conn.test_service.enum_default_arg(TestSchema.a))
-        //        Assert.AreEqual (TestSchema.c, self.conn.test_service.enum_default_arg())
-        //        Assert.AreEqual (TestSchema.b, self.conn.test_service.enum_default_arg(TestSchema.b))
-
         [Test]
         public void Enums ()
         {
-            Assert.AreEqual (CSharpEnum.ValueB, connection.TestService ().CSharpEnumReturn ());
-            Assert.AreEqual (CSharpEnum.ValueA, connection.TestService ().CSharpEnumEcho (CSharpEnum.ValueA));
-            Assert.AreEqual (CSharpEnum.ValueB, connection.TestService ().CSharpEnumEcho (CSharpEnum.ValueB));
-            Assert.AreEqual (CSharpEnum.ValueC, connection.TestService ().CSharpEnumEcho (CSharpEnum.ValueC));
+            Assert.AreEqual (TestEnum.ValueB, connection.TestService ().EnumReturn ());
+            Assert.AreEqual (TestEnum.ValueA, connection.TestService ().EnumEcho (TestEnum.ValueA));
+            Assert.AreEqual (TestEnum.ValueB, connection.TestService ().EnumEcho (TestEnum.ValueB));
+            Assert.AreEqual (TestEnum.ValueC, connection.TestService ().EnumEcho (TestEnum.ValueC));
 
-            Assert.AreEqual (CSharpEnum.ValueA, connection.TestService ().CSharpEnumDefaultArg (CSharpEnum.ValueA));
-            Assert.AreEqual (CSharpEnum.ValueC, connection.TestService ().CSharpEnumDefaultArg ());
-            Assert.AreEqual (CSharpEnum.ValueB, connection.TestService ().CSharpEnumDefaultArg (CSharpEnum.ValueB));
+            Assert.AreEqual (TestEnum.ValueA, connection.TestService ().EnumDefaultArg (TestEnum.ValueA));
+            Assert.AreEqual (TestEnum.ValueC, connection.TestService ().EnumDefaultArg ());
+            Assert.AreEqual (TestEnum.ValueB, connection.TestService ().EnumDefaultArg (TestEnum.ValueB));
         }
 
         [Test]

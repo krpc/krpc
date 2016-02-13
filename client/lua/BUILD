@@ -17,14 +17,13 @@ lua_rock(
     srcs = glob(['krpc/**/*.lua']) + [
         '//:readme', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-        '//protobuf:lua', '//protobuf:lua-test'
+        '//protobuf:lua'
     ],
     path_map = {
         'client/lua/CHANGES.txt': 'CHANGES.txt',
         'client/lua/LICENSE': 'LICENSE',
         'client/': '',
-        'protobuf/KRPC.lua': 'lua/krpc/schema/KRPC.lua',
-        'protobuf/Test.lua': 'lua/krpc/test/Test.lua'
+        'protobuf/KRPC.lua': 'lua/krpc/schema/KRPC.lua'
     }
 )
 

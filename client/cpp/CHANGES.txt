@@ -1,3 +1,6 @@
+v0.2.2
+ * Remove support for protobuf enumeration and custom protobuf messages
+
 v0.2.1
  * Remove dependency on boost
  * Use standalone ASIO library for network communication

@@ -9,7 +9,6 @@ local Map = require 'pl.Map'
 local Set = require 'pl.Set'
 local krpc = require 'krpc.init'
 local Types = require 'krpc.types'
-local schema = require 'krpc.test.Test'
 
 local TestClient = class(ServerTest)
 
@@ -169,32 +168,21 @@ function TestClient:test_client_members()
   )
 end
 
-function TestClient:test_protobuf_enums()
-  luaunit.assertEquals(schema.TestEnum.a, self.conn.test_service.enum_return())
-  luaunit.assertEquals(schema.TestEnum.a, self.conn.test_service.enum_echo(schema.TestEnum.a))
-  luaunit.assertEquals(schema.TestEnum.b, self.conn.test_service.enum_echo(schema.TestEnum.b))
-  luaunit.assertEquals(schema.TestEnum.c, self.conn.test_service.enum_echo(schema.TestEnum.c))
-
-  luaunit.assertEquals(schema.TestEnum.a, self.conn.test_service.enum_default_arg(schema.TestEnum.a))
-  luaunit.assertEquals(schema.TestEnum.c, self.conn.test_service.enum_default_arg())
-  luaunit.assertEquals(schema.TestEnum.b, self.conn.test_service.enum_default_arg(schema.TestEnum.b))
-end
-
 function TestClient:test_enums()
-  local enum = self.conn.test_service.CSharpEnum
+  local enum = self.conn.test_service.TestEnum
 
-  luaunit.assertEquals(enum.value_b, self.conn.test_service.c_sharp_enum_return())
-  luaunit.assertEquals(enum.value_a, self.conn.test_service.c_sharp_enum_echo(enum.value_a))
-  luaunit.assertEquals(enum.value_b, self.conn.test_service.c_sharp_enum_echo(enum.value_b))
-  luaunit.assertEquals(enum.value_c, self.conn.test_service.c_sharp_enum_echo(enum.value_c))
+  luaunit.assertEquals(enum.value_b, self.conn.test_service.enum_return())
+  luaunit.assertEquals(enum.value_a, self.conn.test_service.enum_echo(enum.value_a))
+  luaunit.assertEquals(enum.value_b, self.conn.test_service.enum_echo(enum.value_b))
+  luaunit.assertEquals(enum.value_c, self.conn.test_service.enum_echo(enum.value_c))
 
-  luaunit.assertEquals(enum.value_a, self.conn.test_service.c_sharp_enum_default_arg(enum.value_a))
-  luaunit.assertEquals(enum.value_c, self.conn.test_service.c_sharp_enum_default_arg())
-  luaunit.assertEquals(enum.value_b, self.conn.test_service.c_sharp_enum_default_arg(enum.value_b))
+  luaunit.assertEquals(enum.value_a, self.conn.test_service.enum_default_arg(enum.value_a))
+  luaunit.assertEquals(enum.value_c, self.conn.test_service.enum_default_arg())
+  luaunit.assertEquals(enum.value_b, self.conn.test_service.enum_default_arg(enum.value_b))
 end
 
 function TestClient:test_invalid_enum()
-  luaunit.assertError(ValueError, self.conn.test_service.CSharpEnum, 9999)
+  luaunit.assertError(ValueError, self.conn.test_service.TestEnum, 9999)
 end
 
 function TestClient:test_collections()
@@ -226,6 +214,7 @@ function TestClient:test_collections_of_objects()
   luaunit.assertEquals("value=bob", l[2]:get_value())
 end
 
+-- FIXME: enable tests
 --def test_client_members(self):
 --    self.assertSetEqual(
 --        set(['krpc', 'test_service', 'add_stream', 'stream', 'close']),
@@ -263,13 +252,10 @@ end
 --
 --            'optional_arguments',
 --
+--            'TestEnum',
 --            'enum_return',
 --            'enum_echo',
 --            'enum_default_arg',
---            'CSharpEnum',
---            'c_sharp_enum_return',
---            'c_sharp_enum_echo',
---            'c_sharp_enum_default_arg',
 --
 --            'blocking_procedure',
 --
@@ -306,10 +292,10 @@ end
 --def test_test_service_enum_members(self):
 --    self.assertSetEqual(
 --        set(['value_a','value_b','value_c']),
---        set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.CSharpEnum))))
---    self.assertEqual (0, self.conn.test_service.CSharpEnum.value_a.value)
---    self.assertEqual (1, self.conn.test_service.CSharpEnum.value_b.value)
---    self.assertEqual (2, self.conn.test_service.CSharpEnum.value_c.value)
+--        set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestEnum))))
+--    self.assertEqual (0, self.conn.test_service.TestEnum.value_a.value)
+--    self.assertEqual (1, self.conn.test_service.TestEnum.value_b.value)
+--    self.assertEqual (2, self.conn.test_service.TestEnum.value_c.value)
 
 function TestClient:test_line_endings()
   local strings = {

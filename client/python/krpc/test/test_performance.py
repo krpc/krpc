@@ -1,9 +1,6 @@
 import unittest
 import timeit
 from krpc.test.servertestcase import ServerTestCase
-import krpc.types
-
-krpc.types.add_search_path('krpc.test.schema')
 
 class TestPerformance(ServerTestCase, unittest.TestCase):
 

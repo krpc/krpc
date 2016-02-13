@@ -4,9 +4,6 @@ local List = require 'pl.List'
 local Set = require 'pl.Set'
 local Map = require 'pl.Map'
 local Types = require 'krpc.types'
-local schema = require 'krpc.schema.KRPC'
-
-Types.add_search_path('krpc.test')
 
 local TestTypes = class()
 
@@ -47,19 +44,6 @@ function TestTypes:test_message_types()
   luaunit.assertError(Types.MessageType, 'invalid')
   luaunit.assertError(Types.MessageType, '.')
   luaunit.assertError(Types.MessageType, 'foo.bar')
-end
-
-function TestTypes:test_protobuf_enum_types()
-  local types = Types()
-  local typ = types:as_type('Test.TestEnum')
-  luaunit.assertTrue(typ:is_a(Types.ProtobufEnumType))
-  luaunit.assertEquals('number', typ.lua_type)
-  luaunit.assertEquals('Test.TestEnum', typ.protobuf_type)
-  luaunit.assertError(types.as_type, types, 'Test.DoesntExist')
-  luaunit.assertError(Types.ProtobufEnumType, '')
-  luaunit.assertError(Types.ProtobufEnumType, 'invalid')
-  luaunit.assertError(Types.ProtobufEnumType, '.')
-  luaunit.assertError(Types.ProtobufEnumType, 'foo.bar')
 end
 
 function TestTypes:test_enum_types()
@@ -199,7 +183,6 @@ function TestTypes.test_get_parameter_type()
   luaunit.assertTrue(class_parameter:is_a(Types.ClassType))
   luaunit.assertEquals('Class(ServiceName.ClassName)', class_parameter.protobuf_type)
   luaunit.assertEquals('uint64', types:get_parameter_type(1, 'uint64', List{'ParameterType(1).Class(ServiceName.ClassName)'}).protobuf_type)
-  luaunit.assertEquals('Test.TestEnum', types:get_parameter_type(1, 'Test.TestEnum', List{}).protobuf_type)
 end
 
 function TestTypes.test_get_return_type()
@@ -207,7 +190,6 @@ function TestTypes.test_get_return_type()
   luaunit.assertEquals('float', types:get_return_type('float', List{}).protobuf_type)
   luaunit.assertEquals('int32', types:get_return_type( 'int32', List{}).protobuf_type)
   luaunit.assertEquals('KRPC.Response', types:get_return_type('KRPC.Response', List{}).protobuf_type)
-  luaunit.assertEquals('Test.TestEnum', types:get_return_type('Test.TestEnum', List{}).protobuf_type)
   luaunit.assertEquals('Class(ServiceName.ClassName)', types:get_return_type('uint64', List{'ReturnType.Class(ServiceName.ClassName)'}).protobuf_type)
 end
 

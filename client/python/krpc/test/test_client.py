@@ -1,9 +1,6 @@
 import unittest
 import krpc
-import krpc.test.schema.Test as TestSchema
 from krpc.test.servertestcase import ServerTestCase
-
-krpc.types.add_search_path('krpc.test.schema')
 
 class TestClient(ServerTestCase, unittest.TestCase):
 
@@ -143,29 +140,19 @@ class TestClient(ServerTestCase, unittest.TestCase):
             set(['get_services', 'get_status']),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.krpc))))
 
-    def test_protobuf_enums(self):
-        self.assertEqual(TestSchema.a, self.conn.test_service.enum_return())
-        self.assertEqual(TestSchema.a, self.conn.test_service.enum_echo(TestSchema.a))
-        self.assertEqual(TestSchema.b, self.conn.test_service.enum_echo(TestSchema.b))
-        self.assertEqual(TestSchema.c, self.conn.test_service.enum_echo(TestSchema.c))
-
-        self.assertEqual(TestSchema.a, self.conn.test_service.enum_default_arg(TestSchema.a))
-        self.assertEqual(TestSchema.c, self.conn.test_service.enum_default_arg())
-        self.assertEqual(TestSchema.b, self.conn.test_service.enum_default_arg(TestSchema.b))
-
     def test_enums(self):
-        enum = self.conn.test_service.CSharpEnum
-        self.assertEqual(enum.value_b, self.conn.test_service.c_sharp_enum_return())
-        self.assertEqual(enum.value_a, self.conn.test_service.c_sharp_enum_echo(enum.value_a))
-        self.assertEqual(enum.value_b, self.conn.test_service.c_sharp_enum_echo(enum.value_b))
-        self.assertEqual(enum.value_c, self.conn.test_service.c_sharp_enum_echo(enum.value_c))
+        enum = self.conn.test_service.TestEnum
+        self.assertEqual(enum.value_b, self.conn.test_service.enum_return())
+        self.assertEqual(enum.value_a, self.conn.test_service.enum_echo(enum.value_a))
+        self.assertEqual(enum.value_b, self.conn.test_service.enum_echo(enum.value_b))
+        self.assertEqual(enum.value_c, self.conn.test_service.enum_echo(enum.value_c))
 
-        self.assertEqual(enum.value_a, self.conn.test_service.c_sharp_enum_default_arg(enum.value_a))
-        self.assertEqual(enum.value_c, self.conn.test_service.c_sharp_enum_default_arg())
-        self.assertEqual(enum.value_b, self.conn.test_service.c_sharp_enum_default_arg(enum.value_b))
+        self.assertEqual(enum.value_a, self.conn.test_service.enum_default_arg(enum.value_a))
+        self.assertEqual(enum.value_c, self.conn.test_service.enum_default_arg())
+        self.assertEqual(enum.value_b, self.conn.test_service.enum_default_arg(enum.value_b))
 
     def test_invalid_enum(self):
-        self.assertRaises(ValueError, self.conn.test_service.CSharpEnum, 9999)
+        self.assertRaises(ValueError, self.conn.test_service.TestEnum, 9999)
 
     def test_collections(self):
         self.assertEqual([], self.conn.test_service.increment_list([]))
@@ -230,13 +217,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
                 'optional_arguments',
 
+                'TestEnum',
                 'enum_return',
                 'enum_echo',
                 'enum_default_arg',
-                'CSharpEnum',
-                'c_sharp_enum_return',
-                'c_sharp_enum_echo',
-                'c_sharp_enum_default_arg',
 
                 'blocking_procedure',
 
@@ -273,10 +257,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def test_test_service_enum_members(self):
         self.assertSetEqual(
             set(['value_a','value_b','value_c']),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.CSharpEnum))))
-        self.assertEqual (0, self.conn.test_service.CSharpEnum.value_a.value)
-        self.assertEqual (1, self.conn.test_service.CSharpEnum.value_b.value)
-        self.assertEqual (2, self.conn.test_service.CSharpEnum.value_c.value)
+            set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestEnum))))
+        self.assertEqual (0, self.conn.test_service.TestEnum.value_a.value)
+        self.assertEqual (1, self.conn.test_service.TestEnum.value_b.value)
+        self.assertEqual (2, self.conn.test_service.TestEnum.value_c.value)
 
     def test_line_endings(self):
         strings = [

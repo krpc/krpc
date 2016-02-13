@@ -42,8 +42,6 @@ namespace krpc {
     template <typename T0, typename T1, typename T2, typename T3> void decode(std::tuple<T0,T1,T2,T3>& tuple, const std::string& data, Client* client = nullptr);
     template <typename T0, typename T1, typename T2, typename T3, typename T4> void decode(std::tuple<T0,T1,T2,T3,T4>& tuple, const std::string& data, Client* client = nullptr);
 
-    template <typename T> void decode_enum(T& value, const std::string& data, Client* client);
-
     void decode_delimited(google::protobuf::Message& message, const std::string& data);
 
     std::pair<google::protobuf::uint32, google::protobuf::uint32> decode_size_and_position(const std::string& data);
@@ -138,13 +136,6 @@ namespace krpc {
       decode(std::get<2>(tuple), tupleMessage.items(2), client);
       decode(std::get<3>(tuple), tupleMessage.items(3), client);
       decode(std::get<4>(tuple), tupleMessage.items(4), client);
-    }
-
-    template <typename T>
-    inline void decode_enum(T& value, const std::string& data, Client* client) {
-      google::protobuf::int32 x;
-      decode(x, data, client);
-      value = static_cast<T>(x);
     }
 
   }

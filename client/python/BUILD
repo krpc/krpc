@@ -15,13 +15,11 @@ py_sdist(
         '//:readme', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
         'setup.py', 'MANIFEST.in', ':version',
-        '//protobuf:py',
-        '//protobuf:py-test'
+        '//protobuf:py'
     ] + glob(['krpc/**/*']),
     path_map = {
         'client/python/': '',
-        'protobuf/': 'krpc/schema/',
-        'protobuf/Test.py': 'krpc/test/schema/Test.py'
+        'protobuf/': 'krpc/schema/'
     },
     visibility = ['//visibility:public']
 )

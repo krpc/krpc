@@ -3,7 +3,6 @@ using System.IO;
 using Google.Protobuf;
 using NUnit.Framework;
 using KRPC.Schema.KRPC;
-using Test;
 
 namespace KRPC.Test.Schema
 {

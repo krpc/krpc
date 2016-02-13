@@ -9,9 +9,9 @@ _args.push_back(encoder::encode({{x.name}}));
 {% macro call(service, procedure, has_return, has_args, is_static=False) %}
 {% if has_return %}std::string _data = {% endif %}{% if is_static %}_client.{% else %}this->client->{% endif %}invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
 {% endmacro %}
-{% macro return(type, decode_fn, set_client, is_static=False) %}
+{% macro return(type, set_client, is_static=False) %}
 {{type}} _result;
-decoder::{{decode_fn}}(_result, _data, {% if is_static %}&_client{% else %}this->client{% endif %});
+decoder::decode(_result, _data, {% if is_static %}&_client{% else %}this->client{% endif %});
 return _result;
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
@@ -134,7 +134,7 @@ namespace krpc {
 {% if procedure.parameters | length > 0 %}      {{ args(procedure.parameters) | indent(width=6) }}
       {% endif %}
       {{ call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters | length > 0) | indent(width=6) }}
-{% if procedure.return_type != 'void' %}      {{ return(procedure.return_type, procedure.return_decode_fn, procedure.return_set_client) | indent(width=6) }}
+{% if procedure.return_type != 'void' %}      {{ return(procedure.return_type, procedure.return_set_client) | indent(width=6) }}
       {% endif %}
     }
 
@@ -147,7 +147,7 @@ namespace krpc {
     inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters(method.parameters) }}) {
       {{ args([{'name': '*this'}] + method.parameters) | indent(width=6) }}
       {{ call(service_name, method.remote_name, method.return_type != 'void', True) | indent(width=6) }}
-{% if method.return_type != 'void' %}      {{ return(method.return_type, method.return_decode_fn, method.return_set_client) | indent(width=6) }}
+{% if method.return_type != 'void' %}      {{ return(method.return_type, method.return_set_client) | indent(width=6) }}
       {% endif %}
     }
 
@@ -157,7 +157,7 @@ namespace krpc {
 {% if method.parameters | length > 0 %}      {{ args(method.parameters) | indent(width=6) }}
       {% endif %}
       {{ call(service_name, method.remote_name, method.return_type != 'void', True, True) | indent(width=6) }}
-{% if method.return_type != 'void' %}      {{ return(method.return_type, method.return_decode_fn, method.return_set_client, True) | indent(width=6) }}
+{% if method.return_type != 'void' %}      {{ return(method.return_type, method.return_set_client, True) | indent(width=6) }}
       {% endif %}
     }
 

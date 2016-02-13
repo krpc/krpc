@@ -5,7 +5,7 @@ load('/tools/build/protobuf/lua', 'protobuf_lua')
 
 package(default_visibility = ['//visibility:public'])
 
-exports_files(['krpc.proto', 'test.proto', 'LICENSE'])
+exports_files(['krpc.proto', 'LICENSE'])
 
 protobuf_csharp(
     name = 'csharp',
@@ -31,22 +31,4 @@ protobuf_lua(
     name = 'lua',
     out = 'KRPC.lua',
     src = 'krpc.proto'
-)
-
-protobuf_csharp(
-    name = 'csharp-test',
-    out = 'Test.cs',
-    src = 'test.proto'
-)
-
-protobuf_py(
-    name = 'py-test',
-    out = 'Test.py',
-    src = 'test.proto'
-)
-
-protobuf_lua(
-    name = 'lua-test',
-    out = 'Test.lua',
-    src = 'test.proto'
 )

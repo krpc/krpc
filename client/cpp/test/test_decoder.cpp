@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <krpc/decoder.hpp>
 #include <krpc/platform.hpp>
-#include "Test.pb.hpp"
 #include "services/test_service.hpp"
 
 namespace pb = google::protobuf;

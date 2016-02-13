@@ -80,7 +80,6 @@ client_test(
 cc_binary(
     name = 'cpptest',
     srcs = glob(['test/test_*.cpp']) + [
-        ':protobuf-test',
         ':services-krpc',
         ':services-spacecenter',
         ':services-kerbalalarmclock',
@@ -102,12 +101,4 @@ protobuf_cpp(
     source = 'src/krpc.pb.cpp',
     include = 'krpc/krpc.pb.hpp',
     src = '//protobuf:krpc.proto'
-)
-
-protobuf_cpp(
-    name = 'protobuf-test',
-    header = 'Test.pb.hpp',
-    source = 'Test.pb.cpp',
-    include = 'Test.pb.hpp',
-    src = '//protobuf:test.proto'
 )

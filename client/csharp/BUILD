@@ -89,7 +89,7 @@ client_test(
 
 csharp_nunit_test(
     name = 'KRPC.Client.Test',
-    srcs = glob(['test/**/*.cs']) + [':services-testservice', '//protobuf:csharp-test'],
+    srcs = glob(['test/**/*.cs']) + [':services-testservice'],
     deps = [
         ':KRPC.Client',
         '//tools/build/mono-4.5:Moq',

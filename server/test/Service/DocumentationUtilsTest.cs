@@ -19,11 +19,11 @@ namespace KRPC.Test.Service
                 "<see cref=\"M:TestService.PropertyWithGetAndSet\" />",
                 DocumentationUtils.ResolveCrefs ("<see cref=\"P:KRPC.Test.Service.TestService.PropertyWithGetAndSet\" />"));
             Assert.AreEqual (
-                "<see cref=\"T:TestService.CSharpEnum\" />",
-                DocumentationUtils.ResolveCrefs ("<see cref=\"T:KRPC.Test.Service.TestService.CSharpEnum\" />"));
+                "<see cref=\"T:TestService.TestEnum\" />",
+                DocumentationUtils.ResolveCrefs ("<see cref=\"T:KRPC.Test.Service.TestService.TestEnum\" />"));
             Assert.AreEqual (
-                "<see cref=\"M:TestService.CSharpEnum.x\" />",
-                DocumentationUtils.ResolveCrefs ("<see cref=\"F:KRPC.Test.Service.TestService.CSharpEnum.x\" />"));
+                "<see cref=\"M:TestService.TestEnum.x\" />",
+                DocumentationUtils.ResolveCrefs ("<see cref=\"F:KRPC.Test.Service.TestService.TestEnum.x\" />"));
             Assert.AreEqual (
                 "<see cref=\"T:TestService.TestClass\" />",
                 DocumentationUtils.ResolveCrefs ("<see cref=\"T:KRPC.Test.Service.TestService+TestClass\" />"));

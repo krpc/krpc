@@ -1,7 +1,6 @@
 from krpc.clientgen.generator import Generator
 import krpc.types
 
-krpc.types.add_search_path('krpc.test.schema')
 Types = krpc.types.Types()
 
 class CsharpGenerator(Generator):
@@ -73,8 +72,6 @@ class CsharpGenerator(Generator):
             return 'global::System.Tuple<%s>' % ','.join(self.parse_type(Types.as_type(t)) for t in value_types)
         elif isinstance(typ, krpc.types.ClassType):
             return 'global::KRPC.Client.Services.%s' % typ.protobuf_type[6:-1]
-        elif isinstance(typ, krpc.types.ProtobufEnumType):
-            return 'global::%s' % typ.protobuf_type
         elif isinstance(typ, krpc.types.EnumType):
             return 'global::KRPC.Client.Services.%s' % typ.protobuf_type[5:-1]
         raise RuntimeError('Unknown type ' + typ)
@@ -112,8 +109,6 @@ class CsharpGenerator(Generator):
             return 'null'
         elif isinstance(typ, krpc.types.EnumType):
             return '(global::KRPC.Client.Services.%s)%s' % (typ.protobuf_type[5:-1], value)
-        elif isinstance(typ, krpc.types.ProtobufEnumType):
-            return '(global::%s)%s' % (typ.protobuf_type, value)
         else:
             return value
 

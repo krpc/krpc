@@ -664,10 +664,8 @@ return values as strings. Type names can be any of the following:
 
  * A KRPCEnum, in the format ``Enum(ClassName)``
 
- * A Protocol Buffer message type, in the format ``ServiceName.MessageName``
-
- * A Protocol Buffer enumeration type, in the format
-   ``ServiceName.EnumerationName``
+ * A Protocol Buffer message type, in the format ``KRPC.MessageType``. Only
+   message types defined in ``krpc.proto`` are permitted.
 
 .. _communication-protocol-proxy-objects:
 

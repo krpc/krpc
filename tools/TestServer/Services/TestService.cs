@@ -168,26 +168,8 @@ namespace TestServer.Services
             return x + y + z + anotherParameter;
         }
 
-        [KRPCProcedure]
-        public static Test.TestEnum EnumReturn ()
-        {
-            return Test.TestEnum.a;
-        }
-
-        [KRPCProcedure]
-        public static Test.TestEnum EnumEcho (Test.TestEnum x)
-        {
-            return x;
-        }
-
-        [KRPCProcedure]
-        public static Test.TestEnum EnumDefaultArg (Test.TestEnum x = Test.TestEnum.c)
-        {
-            return x;
-        }
-
         [KRPCEnum]
-        public enum CSharpEnum
+        public enum TestEnum
         {
             ValueA,
             ValueB,
@@ -195,19 +177,19 @@ namespace TestServer.Services
         ;
 
         [KRPCProcedure]
-        public static CSharpEnum CSharpEnumReturn ()
+        public static TestEnum EnumReturn ()
         {
-            return CSharpEnum.ValueB;
+            return TestEnum.ValueB;
         }
 
         [KRPCProcedure]
-        public static CSharpEnum CSharpEnumEcho (CSharpEnum x)
+        public static TestEnum EnumEcho (TestEnum x)
         {
             return x;
         }
 
         [KRPCProcedure]
-        public static CSharpEnum CSharpEnumDefaultArg (CSharpEnum x = CSharpEnum.ValueC)
+        public static TestEnum EnumDefaultArg (TestEnum x = TestEnum.ValueC)
         {
             return x;
         }
