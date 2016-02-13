@@ -68,8 +68,5 @@
     <Compile Include="..\..\..\bazel-bin\client\csharp\Services\TestService.cs">
       <Link>Services\TestService.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-bin\protobuf\Test.cs">
-      <Link>Test.cs</Link>
-    </Compile>
   </ItemGroup>
 </Project>
