@@ -36,14 +36,17 @@ Before a service can be used it must first be instantiated. The following
 example connects to the server, instantiates the SpaceCenter service, and
 outputs the name of the active vessel:
 
-.. code-block:: csharp
+.. code-block:: java
 
+   import java.io.IOException;
+   import krpc.client.Connection;
+   import krpc.client.RPCException;
    import krpc.client.services.SpaceCenter;
    import krpc.client.services.SpaceCenter.Vessel;
 
    public class Program
    {
-       public static void main (String[] args)
+       public static void main (String[] args) throws IOException, RPCException
        {
            Connection connection = Connection.newInstance("Vessel Name");
            SpaceCenter sc = SpaceCenter.newInstance(connection);
