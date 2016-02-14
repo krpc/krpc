@@ -18,25 +18,22 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.protobuf.ByteString;
 
-import krpc.client.Encoder;
-import krpc.client.TypeSpecification;
-
 @RunWith(Parameterized.class)
 public class EncoderDictionaryCollectionTest {
     @SuppressWarnings({ "serial" })
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { new HashMap<String, Integer>(), "" }, { new HashMap<String, Integer>() {
-            {
+        return Arrays.asList(new Object[][] {
+            { new HashMap<String, Integer>(), "" },
+            { new HashMap<String, Integer>() {{
                 put("", 0);
-            }
-        }, "0a060a0100120100" }, { new HashMap<String, Integer>() {
-            {
+            }}, "0a060a0100120100" },
+            { new HashMap<String, Integer>() {{
                 put("foo", 42);
                 put("bar", 365);
                 put("baz", 3);
-            }
-        }, "0a0a0a04036261721202ed020a090a0403666f6f12012a0a090a040362617a120103" } });
+            }}, "0a0a0a04036261721202ed020a090a0403666f6f12012a0a090a040362617a120103" }
+        });
     }
 
     @Parameter(value = 0)

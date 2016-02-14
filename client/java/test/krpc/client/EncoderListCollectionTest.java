@@ -5,6 +5,7 @@ import static krpc.client.TestUtils.unhexlify;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -17,15 +18,15 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.protobuf.ByteString;
 
-import krpc.client.Encoder;
-import krpc.client.TypeSpecification;
-
 @RunWith(Parameterized.class)
 public class EncoderListCollectionTest {
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { Arrays.asList(), "" }, { Arrays.asList(1), "0a0101" },
-                { Arrays.asList(1, 2, 3, 4), "0a01010a01020a01030a0104" } });
+        return Arrays.asList(new Object[][] {
+            { new ArrayList<Integer>(), "" },
+            { Arrays.asList(1), "0a0101" },
+            { Arrays.asList(1, 2, 3, 4), "0a01010a01020a01030a0104" }
+        });
     }
 
     @Parameter(value = 0)

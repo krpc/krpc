@@ -18,16 +18,15 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.protobuf.ByteString;
 
-import krpc.client.Encoder;
-import krpc.client.TypeSpecification;
-
 @RunWith(Parameterized.class)
 public class EncoderSetCollectionTest {
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { new HashSet<Integer>(Arrays.asList()), "" },
-                { new HashSet<Integer>(Arrays.asList(1)), "0a0101" },
-                { new HashSet<Integer>(Arrays.asList(1, 2, 3, 4)), "0a01010a01020a01030a0104" } });
+        return Arrays.asList(new Object[][] {
+            { new HashSet<Integer>(), "" },
+            { new HashSet<Integer>(Arrays.asList(1)), "0a0101" },
+            { new HashSet<Integer>(Arrays.asList(1, 2, 3, 4)), "0a01010a01020a01030a0104" }
+        });
     }
 
     @Parameter(value = 0)
