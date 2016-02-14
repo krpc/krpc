@@ -114,6 +114,30 @@ http_file(
 )
 
 http_file(
+    name = 'python_sphinx_java',
+    url = 'https://pypi.python.org/packages/source/j/javasphinx/javasphinx-0.9.13.tar.gz',
+    sha256 = '49de72c304271c7e1efb3e12e5a8f5535e1d485797a78e2e27bd402d0f92bd27'
+)
+
+http_file(
+    name = 'python_javalang',
+    url = 'https://pypi.python.org/packages/source/j/javalang/javalang-0.10.0.tar.gz',
+    sha256 = 'f18095855f8b8ed90907c1900197eea54020db3f20aa5a16d5cb0276a751c87b'
+)
+
+http_file(
+    name = 'python_lxml',
+    url = 'https://pypi.python.org/packages/source/l/lxml/lxml-3.5.0.tar.gz',
+    sha256 = '349f93e3a4b09cc59418854ab8013d027d246757c51744bf20069bc89016f578'
+)
+
+http_file(
+    name = 'python_beautifulsoup4',
+    url = 'https://pypi.python.org/packages/source/b/beautifulsoup4/beautifulsoup4-4.4.1.tar.gz',
+    sha256 = '87d4013d0625d4789a4f56b8d79a04d5ce6db1152bb65f1d39744f7709a366b4'
+)
+
+http_file(
     name = 'python_alabaster',
     url = 'https://pypi.python.org/packages/source/a/alabaster/alabaster-0.7.6.tar.gz',
     sha256 = '309d33e0282c8209f792f3527f41ec04e508ff837c61fc1906dde988a256deeb'
