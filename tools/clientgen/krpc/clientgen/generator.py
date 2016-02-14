@@ -52,7 +52,6 @@ class Generator(object):
             lstrip_blocks=True,
             undefined=jinja2.StrictUndefined
         )
-        env.filters['doc'] = self.filter_doc
         template = env.from_string(self._macro_template)
         content = template.render(context)
         return content.rstrip()+'\n'

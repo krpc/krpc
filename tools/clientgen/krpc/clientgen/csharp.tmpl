@@ -45,7 +45,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         }
 
         {% for procedure_name,procedure in procedures.items() %}
-        {{ procedure.documentation | doc | indent(width=8) }}
+        {{ procedure.documentation | indent(width=8) }}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ procedure_name }}")]
         public {{ procedure.return_type }} {{ procedure_name }} ({{ sig_parameters(procedure.parameters) }})
         {
@@ -59,7 +59,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% endfor %}
 
         {% for property_name,property in properties.items() %}
-        {{ property.documentation | doc | indent(width=8) }}
+        {{ property.documentation | indent(width=8) }}
         {% if property.getter %}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}")]
         {% endif %}
@@ -83,11 +83,11 @@ namespace KRPC.Client.Services.{{ service_name }}
     }
 
     {% for enum_name,enm in enumerations.items() %}
-    {{ enm.documentation | doc | indent(width=4) }}
+    {{ enm.documentation | indent(width=4) }}
     public enum {{ enum_name }}
     {
         {% for value in enm['values'] %}
-        {{ value.documentation | doc | indent(width=8) }}
+        {{ value.documentation | indent(width=8) }}
         {{ value.name }} = {{ value.value }}{% if not loop.last %},{% endif %}
 
         {% endfor %}
@@ -96,7 +96,7 @@ namespace KRPC.Client.Services.{{ service_name }}
     {% endfor %}
 
     {% for class_name,cls in classes.items() %}
-    {{ cls.documentation | doc | indent(width=4) }}
+    {{ cls.documentation | indent(width=4) }}
     public class {{ class_name }} : global::KRPC.Client.RemoteObject
     {
         public {{ class_name }} (global::KRPC.Client.Connection connection, UInt64 id) : base (connection, id)
@@ -104,7 +104,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         }
 
         {% for method_name,method in cls.methods.items() %}
-        {{ method.documentation | doc | indent(width=8) }}
+        {{ method.documentation | indent(width=8) }}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
         public {{ method.return_type }} {{ method_name }} ({{ sig_parameters(method.parameters) }})
         {
@@ -117,7 +117,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% endfor %}
 
         {% for method_name,method in cls.static_methods.items() %}
-        {{ method.documentation | doc | indent(width=8) }}
+        {{ method.documentation | indent(width=8) }}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
         public static {{ method.return_type }} {{ method_name }} (Connection _connection, {{ sig_parameters(method.parameters) }})
         {
@@ -131,7 +131,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% endfor %}
 
         {% for property_name,property in cls.properties.items() %}
-        {{ property.documentation | doc | indent(width=8) }}
+        {{ property.documentation | indent(width=8) }}
         {% if property.getter %}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}")]
         {% endif %}

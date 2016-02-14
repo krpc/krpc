@@ -28,9 +28,6 @@ class CppGenerator(Generator):
             'unsigned', 'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor', 'xor_eq'
         ])
 
-    def filter_doc(self, s):
-        return ''
-
     def parse_name(self, name):
         name = self.to_snake_case(name)
         if name in self.keywords():

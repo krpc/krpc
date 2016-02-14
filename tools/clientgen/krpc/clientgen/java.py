@@ -1,4 +1,5 @@
 from krpc.clientgen.generator import Generator
+from krpc.clientgen.docparser import DocParser
 import krpc.types
 import hashlib
 
@@ -148,10 +149,9 @@ class JavaGenerator(Generator):
         return None
 
     def parse_documentation(self, documentation):
-        return documentation.replace('<doc>', '').replace('</doc>','').strip()
-
-    def filter_doc(self, doc):
-        return '\n'.join('/// '+line.strip() for line in doc.split('\n'))
+        documentation = JavaDocParser().parse(documentation)
+        lines = ['/**'] + [' * ' + line.strip() for line in documentation.split('\n')] + [' */']
+        return '\n'.join(lines)
 
     def parse_context(self, context):
         # Expand service properties into get and set methods
@@ -162,14 +162,16 @@ class JavaGenerator(Generator):
                     'procedure': info['getter']['procedure'],
                     'remote_name': info['getter']['remote_name'],
                     'parameters': [],
-                    'return_type': info['type']
+                    'return_type': info['type'],
+                    'documentation': info['documentation']
                 }
             if info['setter']:
                 properties['set'+self.to_upper_camel_case(name)] = {
                     'procedure': info['setter']['procedure'],
                     'remote_name': info['setter']['remote_name'],
                     'parameters': self.generate_context_parameters(info['setter']['procedure']),
-                    'return_type': 'void'
+                    'return_type': 'void',
+                    'documentation': info['documentation']
                 }
         context['properties'] = properties
 
@@ -182,14 +184,16 @@ class JavaGenerator(Generator):
                         'procedure': info['getter']['procedure'],
                         'remote_name': info['getter']['remote_name'],
                         'parameters': [],
-                        'return_type': info['type']
+                        'return_type': info['type'],
+                        'documentation': info['documentation']
                     }
                 if info['setter']:
                     class_properties['set'+self.to_upper_camel_case(name)] = {
                         'procedure': info['setter']['procedure'],
                         'remote_name': info['setter']['remote_name'],
                         'parameters': [self.generate_context_parameters(info['setter']['procedure'])[1]],
-                        'return_type': 'void'
+                        'return_type': 'void',
+                        'documentation': info['documentation']
                     }
             class_info['properties'] = class_properties
 
@@ -233,3 +237,46 @@ class JavaGenerator(Generator):
             cls['serial_version_uid'] = int(hashlib.sha1('bada55'+class_name).hexdigest(), 16) % (10 ** 18)
 
         return context
+
+class JavaDocParser(DocParser):
+    def parse_summary(self, node):
+        return self.parse_node(node)
+
+    def parse_remarks(self, node):
+        return self.parse_node(node)
+
+    def parse_param(self, node):
+        return '@param %s %s' % (node.attrib['name'], self.parse_node(node).strip())
+
+    def parse_returns(self, node):
+        return '@return %s' % self.parse_node(node).strip()
+
+    def parse_see(self, node):
+        return '{@link %s}' % self.parse_cref(node.attrib['cref'])
+
+    def parse_paramref(self, node):
+        return node.attrib['name']
+
+    def parse_a(self, node):
+        return '<a href="%s">%s</a>' % (node.attrib['href'], node.text)
+
+    def parse_c(self, node):
+        return '{@code %s}' % node.text
+
+    def parse_math(self, node):
+        return node.text
+
+    def parse_list(self, node):
+        content = ['<li>%s\n' % self.parse_node(item[0], indent=2)[2:].rstrip() for item in node]
+        return '<p><ul>'+'\n'+''.join(content)+'</ul></p>'
+
+    def parse_cref(self, cref):
+        if cref[0] == 'M':
+            cref = cref[2:].split('.')
+            member = cref[-1][0].lower() + cref[-1][1:]
+            del cref[-1]
+            return '.'.join(cref)+'#'+member
+        elif cref[0] == 'T':
+            return cref[2:]
+        else:
+            raise RuntimeError('Unknown cref \'%s\'' % cref)
