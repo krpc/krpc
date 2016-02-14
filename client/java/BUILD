@@ -1,16 +1,17 @@
 load('/tools/clientgen/build', 'clientgen_java')
 load('/tools/build/client_test', 'client_test')
+load('/config', 'version')
 
 copts = ['-Werror', '-Xlint:all']
 
 filegroup(
     name = 'java',
-    srcs = [':krpc'],
+    srcs = [':krpc-'+version],
     visibility = ['//visibility:public']
 )
 
 java_library(
-    name = 'krpc',
+    name = 'krpc-'+version,
     srcs = glob(['src/krpc/**/*.java']) + [
         '//protobuf:java',
         ':services-krpc',
@@ -37,14 +38,24 @@ java_import(
 java_library(
     name = 'testlib',
     srcs = glob(['test/**/*.java']) + [':services-testservice'],
-    deps = [':krpc', '//tools/build/protobuf:protobuf', ':junit', '@java_javatuples//:jar'],
+    deps = [
+        ':krpc-'+version,
+        '//tools/build/protobuf:protobuf',
+        ':junit',
+        '@java_javatuples//:jar'],
     javacopts = copts
 )
 
 java_test(
     name = 'testexe',
     main_class = 'krpc.client.TestSuite',
-    runtime_deps = [':krpc', ':testlib', '//tools/build/protobuf:protobuf', ':junit', '@java_javatuples//:jar'],
+    runtime_deps = [
+        ':krpc-'+version,
+        ':testlib',
+        '//tools/build/protobuf:protobuf',
+        ':junit',
+        '@java_javatuples//:jar'
+    ],
     size = 'small',
     tags = ['requires-network']
 )
