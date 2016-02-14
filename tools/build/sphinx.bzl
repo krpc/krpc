@@ -57,7 +57,11 @@ def _impl(ctx, builder):
         ctx.file._pyenchant,
         ctx.file._six,
         ctx.file._sphinx_lua,
-        ctx.file._sphinx_csharp
+        ctx.file._sphinx_csharp,
+        ctx.file._sphinx_java,
+        ctx.file._javalang,
+        ctx.file._lxml,
+        ctx.file._beautifulsoup4
     ]
 
     ctx.file_action(
@@ -142,7 +146,11 @@ _SPHINX_ATTRS = {
     '_pyenchant': attr.label(default=Label('@python_pyenchant//file'), allow_files=True, single_file=True),
     '_six': attr.label(default=Label('@python_six//file'), allow_files=True, single_file=True),
     '_sphinx_lua': attr.label(default=Label('@python_sphinx_lua//file'), allow_files=True, single_file=True),
-    '_sphinx_csharp': attr.label(default=Label('@python_sphinx_csharp//file'), allow_files=True, single_file=True)
+    '_sphinx_csharp': attr.label(default=Label('@python_sphinx_csharp//file'), allow_files=True, single_file=True),
+    '_sphinx_java': attr.label(default=Label('@python_sphinx_java//file'), allow_files=True, single_file=True),
+    '_javalang': attr.label(default=Label('@python_javalang//file'), allow_files=True, single_file=True),
+    '_lxml': attr.label(default=Label('@python_lxml//file'), allow_files=True, single_file=True),
+    '_beautifulsoup4': attr.label(default=Label('@python_beautifulsoup4//file'), allow_files=True, single_file=True)
 }
 
 sphinx_html = rule(

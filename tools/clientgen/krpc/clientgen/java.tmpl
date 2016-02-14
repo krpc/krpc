@@ -1,0 +1,129 @@
+package krpc.client.services;
+{% macro args(parameters) %}
+ByteString[] _args = new ByteString[] {
+{% for x in parameters %}
+    Encoder.encode({{x.name}}){% if not loop.last %},{% endif %}
+
+{% endfor %}
+};
+{% endmacro %}
+{% macro call(service, procedure, has_return, has_args, is_static=False) %}
+{% if has_return %}ByteString _data = {% endif %}{% if is_static %}_connection{% else %}this._connection{% endif %}.invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+{% endmacro %}
+{% macro return(type, is_static=False) %}
+return ({{type.name}}) Encoder.decode(_data, {{type.spec}}, {% if is_static %}_connection{% else %}this._connection{% endif %});
+{% endmacro %}
+{% macro sig_parameters(parameters) %}
+{% for x in parameters %}{{x.type.name}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endmacro %}
+
+import java.io.IOException;
+
+import com.google.protobuf.ByteString;
+
+import krpc.client.Connection;
+import krpc.client.Encoder;
+import krpc.client.RemoteEnum;
+import krpc.client.RemoteObject;
+import krpc.client.RPCException;
+import krpc.client.TypeSpecification;
+
+public class {{ service_name }} {
+
+    public static {{ service_name }} newInstance(Connection connection) {
+        return new {{ service_name }}(connection);
+    }
+
+    private Connection _connection;
+
+    private {{ service_name }}(Connection connection) {
+        this._connection = connection;
+    }
+
+    {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
+    {{ procedure.documentation | indent(width=4) }}
+    @SuppressWarnings({ "unchecked" })
+    public {{ procedure.return_type.name }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }}) throws RPCException, IOException {
+        {% if procedure.parameters | length > 0 %}        {{ args(procedure.parameters) | indent(width=8) }}
+        {% endif %}
+        {{ call(service_name, procedure.remote_name, procedure.return_type.name != 'void', procedure.parameters | length > 0) | indent(width=8) }}
+{% if procedure.return_type.name != 'void' %}        {{ return(procedure.return_type) | indent(width=8) }}
+        {% endif %}
+    }
+
+    {% endfor %}
+
+    {% for enum_name,enm in enumerations.items() %}
+    {{ enm.documentation | indent(width=4) }}
+    public enum {{ enum_name }} implements RemoteEnum {
+        {% for value in enm['values'] %}
+        {{ value.documentation | indent(width=8) }}
+        {{ value.name }}({{ value.value }}){% if not loop.last %},{% else %};{% endif %}
+
+        {% endfor %}
+
+        private final int value;
+
+        private {{ enum_name }} (int value) {
+            this.value = value;
+        }
+
+        @Override
+        public int getValue() {
+            return value;
+        }
+
+        public static {{ enum_name }} fromValue(int value) {
+            switch (value) {
+            {% for value in enm['values'] %}
+            case {{ value.value }}:
+                 return {{ value.name }};
+            {% endfor %}
+            }
+            return null;
+        }
+    }
+
+    {% endfor %}
+
+    {% for class_name,cls in classes.items() %}
+    {{ cls.documentation | indent(width=4) }}
+    public static class {{ class_name }} extends RemoteObject {
+
+        private static final long serialVersionUID = {{ cls.serial_version_uid }}L;
+
+        public {{ class_name }}(Connection connection, long id) {
+            super(connection, id);
+        }
+
+        {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
+        {{ method.documentation | indent(width=8) }}
+        @SuppressWarnings({ "unchecked" })
+        public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }}) throws RPCException, IOException
+        {
+            {{ args([{'name': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
+            {{ call(service_name, method.remote_name, method.return_type.name != 'void', true) | indent(width=12) }}
+{% if method.return_type.name != 'void' %}            {{ return(method.return_type) | indent(width=12) }}
+            {% endif %}
+        }
+
+        {% endfor %}
+
+        {% for method_name,method in cls.static_methods.items() %}
+        {{ method.documentation | indent(width=8) }}
+        @SuppressWarnings({ "unchecked" })
+        public static {{ method.return_type.name }} {{ method_name }}(Connection _connection, {{ sig_parameters(method.parameters) }}) throws RPCException, IOException
+        {
+            {% if method.parameters | length > 0 %}            {{ args(method.parameters) | indent(width=12) }}
+            {% endif %}
+            {{ call(service_name, method.remote_name, method.return_type.name != 'void', method.parameters | length > 0, true) | indent(width=12) }}
+{% if method.return_type.name != 'void' %}            {{ return(method.return_type, true) | indent(width=12) }}
+            {% endif %}
+        }
+
+        {% endfor %}
+    }
+
+    {% endfor %}
+
+}

@@ -9,12 +9,13 @@ from pkg_resources import Requirement, resource_filename, resource_string
 import krpc.clientgen
 from krpc.clientgen.cpp import CppGenerator
 from krpc.clientgen.csharp import CsharpGenerator
+from krpc.clientgen.java import JavaGenerator
 
 def main():
     version = krpc.clientgen.__version__
     parser = argparse.ArgumentParser(prog='krpc-clientgen', description='Generate client source code for kRPC services.')
     parser.add_argument('-v', '--version', action='version', version='krpc-clientgen version %s' % version)
-    parser.add_argument('language', choices=('cpp', 'csharp'), help='Language to generate')
+    parser.add_argument('language', choices=('cpp', 'csharp', 'java'), help='Language to generate')
     parser.add_argument('service', help='Name of service to generate')
     parser.add_argument('input', nargs='+', help='Path to service definition JSON file or assembly DLL(s)')
     parser.add_argument('-o', '--output', help='Path to write source code to. If not specified, writes source code to standard output.')
@@ -62,8 +63,10 @@ def main():
     # Generate code
     if args.language == 'cpp':
         generator = CppGenerator
-    else:
+    elif args.language == 'csharp':
         generator = CsharpGenerator
+    else:
+        generator = JavaGenerator
     macro_template = resource_string(__name__, args.language+'.tmpl').decode('utf-8')
     g = generator(macro_template, args.service, defs[args.service])
     if args.output:

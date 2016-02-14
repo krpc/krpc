@@ -11,6 +11,7 @@ from krpc.docgen.cpp import CppDomain
 from krpc.docgen.csharp import CsharpDomain
 from krpc.docgen.lua import LuaDomain
 from krpc.docgen.python import PythonDomain
+from krpc.docgen.java import JavaDomain
 from krpc.docgen.nodes import Service
 from krpc.docgen.docparser import DocumentationParser
 from krpc.docgen.extensions import AppendExtension
@@ -76,7 +77,7 @@ def process_file(args, domain, services, path):
 
 def main():
     parser = argparse.ArgumentParser(description='Generate API documentation from service definitions')
-    parser.add_argument('language', choices = ['cpp', 'csharp', 'lua', 'python'], help='Language to compile')
+    parser.add_argument('language', choices = ['cpp', 'csharp', 'lua', 'python', 'java'], help='Language to compile')
     parser.add_argument('source', action='store', help='Path to source file')
     parser.add_argument('order_file', action='store', default='order.txt', help='Path to order definition file')
     parser.add_argument('destination', action='store', help='Path to destination file')
@@ -96,8 +97,10 @@ def main():
         domain = CsharpDomain(macros)
     elif args.language == 'lua':
         domain = LuaDomain(macros)
-    else: # python
+    elif args.language == 'python':
         domain = PythonDomain(macros)
+    else: # java
+        domain = JavaDomain(macros)
 
     if not os.path.exists(args.order_file):
         raise RuntimeError('Ordering file \'%s\' does not exist' % args.order_file)

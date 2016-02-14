@@ -22,7 +22,8 @@ doc_srcs = [
     ':cpp-api',
     ':csharp-api',
     ':lua-api',
-    ':python-api'
+    ':python-api',
+    ':java-api'
 ]
 
 sphinx_html(
@@ -66,7 +67,8 @@ filegroup(
         'src/scripts/*.cpp',
         'src/scripts/*.cs',
         'src/scripts/*.lua',
-        'src/scripts/*.py'
+        'src/scripts/*.py',
+        'src/scripts/*.java'
     ])
 )
 
@@ -105,6 +107,14 @@ docgen_multiple(
     name = 'python-api',
     outdir = 'src/python',
     language = 'python',
+    srcs = glob(['api/**/*.tmpl']),
+    defs = defs
+)
+
+docgen_multiple(
+    name = 'java-api',
+    outdir = 'src/java',
+    language = 'java',
     srcs = glob(['api/**/*.tmpl']),
     defs = defs
 )

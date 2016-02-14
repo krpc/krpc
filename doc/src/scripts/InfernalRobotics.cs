@@ -8,7 +8,7 @@ class InfernalRoboticsExample
 {
     public static void Main ()
     {
-        var connection = new KRPC.Client.Connection (name: "InfernalRobotics Example", address: IPAddress.Parse ("10.0.2.2"));
+        var connection = new KRPC.Client.Connection (name: "InfernalRobotics Example");
         var ir = connection.InfernalRobotics ();
 
         var group = ir.ServoGroupWithName ("MyGroup");

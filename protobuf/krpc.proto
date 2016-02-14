@@ -1,6 +1,8 @@
 syntax = "proto3";
 package krpc.schema;
 option csharp_namespace = 'KRPC.Schema.KRPC';
+option java_package = 'krpc.schema';
+option java_outer_classname = 'KRPC';
 
 message Request {
   string service = 1;

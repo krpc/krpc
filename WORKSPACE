@@ -114,6 +114,30 @@ http_file(
 )
 
 http_file(
+    name = 'python_sphinx_java',
+    url = 'https://pypi.python.org/packages/source/j/javasphinx/javasphinx-0.9.13.tar.gz',
+    sha256 = '49de72c304271c7e1efb3e12e5a8f5535e1d485797a78e2e27bd402d0f92bd27'
+)
+
+http_file(
+    name = 'python_javalang',
+    url = 'https://pypi.python.org/packages/source/j/javalang/javalang-0.10.0.tar.gz',
+    sha256 = 'f18095855f8b8ed90907c1900197eea54020db3f20aa5a16d5cb0276a751c87b'
+)
+
+http_file(
+    name = 'python_lxml',
+    url = 'https://pypi.python.org/packages/source/l/lxml/lxml-3.5.0.tar.gz',
+    sha256 = '349f93e3a4b09cc59418854ab8013d027d246757c51744bf20069bc89016f578'
+)
+
+http_file(
+    name = 'python_beautifulsoup4',
+    url = 'https://pypi.python.org/packages/source/b/beautifulsoup4/beautifulsoup4-4.4.1.tar.gz',
+    sha256 = '87d4013d0625d4789a4f56b8d79a04d5ce6db1152bb65f1d39744f7709a366b4'
+)
+
+http_file(
     name = 'python_alabaster',
     url = 'https://pypi.python.org/packages/source/a/alabaster/alabaster-0.7.6.tar.gz',
     sha256 = '309d33e0282c8209f792f3527f41ec04e508ff837c61fc1906dde988a256deeb'
@@ -215,4 +239,24 @@ http_file(
     name = 'lua_luaunit',
     url = 'https://raw.githubusercontent.com/bluebird75/luaunit/LUAUNIT_V3_1/luaunit.lua',
     sha256 = '77e00531fb9c1a54fc6d8a8a55691328f18f4f0cde0da0a49a00272ceae67dd0'
+)
+
+http_file(
+    name = 'java_junit',
+    url ='https://github.com/junit-team/junit/releases/download/r4.12/junit-4.12.jar',
+    sha256 = '59721f0805e223d84b90677887d9ff567dc534d7c502ca903c0c2b17f05c116a'
+)
+
+http_file(
+    name = 'java_hamcrest',
+    url = 'http://central.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar',
+    sha256 = '66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9'
+)
+
+new_http_archive(
+    name = 'java_javatuples',
+    build_file = 'tools/build/java_javatuples.BUILD',
+    url = 'https://github.com/downloads/javatuples/javatuples/javatuples-1.2-dist.zip',
+    strip_prefix = 'javatuples-1.2',
+    sha256 = 'f5477fb3bb3ed400a69b9227aa1d792c9e5e19fb4b76621b0db5df8112540a84'
 )

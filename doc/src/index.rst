@@ -16,10 +16,11 @@ machine you like.
 
    getting-started
    tutorials
-   python
-   cpp
    csharp
+   cpp
+   java
    lua
+   python
    compiling
    extending
    communication-protocol

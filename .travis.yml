@@ -25,6 +25,9 @@ addons:
       - lua5.1
       - liblua5.1-0-dev
       - inotify-tools
+      - python-dev
+      - libxml2-dev
+      - libxslt1-dev
 
 language: csharp
 mono:
