@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import com.google.protobuf.ByteString;
 
-import krpc.client.Connection;
-
 public class TestUtils {
 
     public static Connection Connect() throws IOException {

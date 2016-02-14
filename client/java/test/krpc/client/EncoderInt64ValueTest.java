@@ -16,8 +16,6 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.protobuf.ByteString;
 
-import krpc.client.Encoder;
-
 @RunWith(Parameterized.class)
 public class EncoderInt64ValueTest {
     @Parameters
