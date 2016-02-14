@@ -71,13 +71,14 @@ package_archive(
         '//client/cpp',
         '//client/csharp',
         '//client/lua',
+        '//client/java',
         # Schema
         '//protobuf:krpc.proto',
         '//protobuf:csharp',
         '//protobuf:py',
         '//protobuf:cpp',
         '//protobuf:lua',
-        # TODO: add java
+        '//protobuf:java',
         '//protobuf:LICENSE',
         # Docs
         '//doc:latex',

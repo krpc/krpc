@@ -18,10 +18,46 @@ java_library(
         ':services-kerbalalarmclock',
         ':services-infernalrobotics'
     ],
-    deps = ['//tools/build/protobuf:protobuf', '@java_javatuples//:jar'],
-    javacopts = copts,
-    visibility = ['//visibility:public']
+    resources = [
+        '//:readme', '//:version', 'CHANGES.txt',
+        'LICENSE', '//:COPYING', '//:COPYING.LESSER',
+    ],
+    deps = [
+        '//tools/build/protobuf:protobuf',
+        '@java_javatuples//:jar'
+    ],
+    javacopts = copts
 )
+
+java_import(
+    name = 'junit',
+    jars = ['@java_junit//file', '@java_hamcrest//file']
+)
+
+java_library(
+    name = 'testlib',
+    srcs = glob(['test/**/*.java']) + [':services-testservice'],
+    deps = [':krpc', '//tools/build/protobuf:protobuf', ':junit', '@java_javatuples//:jar'],
+    javacopts = copts
+)
+
+java_test(
+    name = 'testexe',
+    main_class = 'krpc.client.TestSuite',
+    runtime_deps = [':krpc', ':testlib', '//tools/build/protobuf:protobuf', ':junit', '@java_javatuples//:jar'],
+    size = 'small',
+    tags = ['requires-network']
+)
+
+client_test(
+    name = 'test',
+    test_executable = ':testexe',
+    server_executable = '//tools/TestServer',
+    tags = ['requires-network'],
+    size = 'small',
+    visibility = ['//:__pkg__']
+)
+
 
 clientgen_java(
     name = 'services-krpc',
@@ -51,38 +87,9 @@ clientgen_java(
     out = 'services/InfernalRobotics.java'
 )
 
-java_import(
-    name = 'junit',
-    jars = ['@java_junit//file', '@java_hamcrest//file']
-)
-
-java_library(
-    name = 'testlib',
-    srcs = glob(['test/**/*.java']) + [':services-testservice'],
-    deps = [':krpc', '//tools/build/protobuf:protobuf', ':junit', '@java_javatuples//:jar'],
-    javacopts = copts
-)
-
 clientgen_java(
     name = 'services-testservice',
     service = 'TestService',
     defs = '//tools/TestServer:ServiceDefinitions',
     out = 'services/TestService.java'
-)
-
-java_test(
-    name = 'testexe',
-    main_class = 'krpc.client.TestSuite',
-    runtime_deps = [':krpc', ':testlib', '//tools/build/protobuf:protobuf', ':junit', '@java_javatuples//:jar'],
-    size = 'small',
-    tags = ['requires-network']
-)
-
-client_test(
-    name = 'test',
-    test_executable = ':testexe',
-    server_executable = '//tools/TestServer',
-    tags = ['requires-network'],
-    size = 'small',
-    visibility = ['//:__pkg__']
 )
