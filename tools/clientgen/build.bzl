@@ -40,3 +40,12 @@ def clientgen_csharp(name, service, defs, out):
         out = out,
         language = 'csharp'
     )
+
+def clientgen_java(name, service, defs, out):
+    clientgen(
+        name = name,
+        service = service,
+        defs = defs,
+        out = out,
+        language = 'java'
+    )

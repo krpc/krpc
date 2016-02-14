@@ -109,7 +109,8 @@ test_suite(
         '//client/python:test',
         '//client/cpp:test',
         '//client/lua:test',
-        '//client/csharp:test'
+        '//client/csharp:test',
+        '//client/java:test'
     ]
 )
 

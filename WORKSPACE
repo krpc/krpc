@@ -216,3 +216,23 @@ http_file(
     url = 'https://raw.githubusercontent.com/bluebird75/luaunit/LUAUNIT_V3_1/luaunit.lua',
     sha256 = '77e00531fb9c1a54fc6d8a8a55691328f18f4f0cde0da0a49a00272ceae67dd0'
 )
+
+http_file(
+    name = 'java_junit',
+    url ='https://github.com/junit-team/junit/releases/download/r4.12/junit-4.12.jar',
+    sha256 = '59721f0805e223d84b90677887d9ff567dc534d7c502ca903c0c2b17f05c116a'
+)
+
+http_file(
+    name = 'java_hamcrest',
+    url = 'http://central.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar',
+    sha256 = '66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9'
+)
+
+new_http_archive(
+    name = 'java_javatuples',
+    build_file = 'tools/build/java_javatuples.BUILD',
+    url = 'https://github.com/downloads/javatuples/javatuples/javatuples-1.2-dist.zip',
+    strip_prefix = 'javatuples-1.2',
+    sha256 = 'f5477fb3bb3ed400a69b9227aa1d792c9e5e19fb4b76621b0db5df8112540a84'
+)
