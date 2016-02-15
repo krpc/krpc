@@ -24,13 +24,15 @@ class TestParts(testingtools.TestCase):
         part_titles = sorted(p.title for p in parts)
         self.assertEqual(
             part_titles,
-            ['Advanced Reaction Wheel Module, Large',
+            ['\'Drill-O-Matic Junior\' Mining Excavator',
+             'Advanced Reaction Wheel Module, Large',
              'Aerodynamic Nose Cone',
              'Aerodynamic Nose Cone',
              'Aerodynamic Nose Cone',
              'Clamp-O-Tron Docking Port',
              'Clamp-O-Tron Docking Port Jr.',
              'Communotron 16',
+             'Convert-O-Tron 250',
              'EAS-4 Strut Connector',
              'EAS-4 Strut Connector',
              'EAS-4 Strut Connector',
@@ -155,11 +157,13 @@ class TestParts(testingtools.TestCase):
         def part_titles_in_stage(s):
             return sorted([p.title for p in self.parts.in_stage(s)])
         self.assertEqual(
-            ['Advanced Reaction Wheel Module, Large',
+            ['\'Drill-O-Matic Junior\' Mining Excavator',
+             'Advanced Reaction Wheel Module, Large',
              'Aerodynamic Nose Cone',
              'Aerodynamic Nose Cone',
              'Aerodynamic Nose Cone',
              'Communotron 16',
+             'Convert-O-Tron 250',
              'EAS-4 Strut Connector',
              'EAS-4 Strut Connector',
              'EAS-4 Strut Connector',
@@ -309,6 +313,16 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(
             ['Advanced Reaction Wheel Module, Large', 'Mk1-2 Command Pod'],
             sorted(x.part.title for x in self.parts.reaction_wheels))
+
+    def test_resource_converters(self):
+        self.assertEqual(
+            ['Convert-O-Tron 250'],
+            sorted(x.part.title for x in self.parts.resource_converters))
+
+    def test_resource_harvesters(self):
+        self.assertEqual(
+            ['\'Drill-O-Matic Junior\' Mining Excavator'],
+            sorted(x.part.title for x in self.parts.resource_harvesters))
 
     def test_sensors(self):
         self.assertEqual(
