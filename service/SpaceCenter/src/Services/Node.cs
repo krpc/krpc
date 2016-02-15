@@ -26,20 +26,35 @@ namespace KRPC.SpaceCenter.Services
             InternalNode.OnGizmoUpdated (new Vector3d (radial, normal, prograde), UT);
         }
 
+        /// <summary>
+        /// Construct a node from a KSP node.
+        /// </summary>
         public Node (ManeuverNode node)
         {
             InternalNode = node;
         }
 
+        /// <summary>
+        /// The KSP vessel.
+        /// </summary>
         public global::Vessel InternalVessel { get; private set; }
 
+        /// <summary>
+        /// The KSP node.
+        /// </summary>
         public ManeuverNode InternalNode { get; private set; }
 
+        /// <summary>
+        /// Check the nodes are the same.
+        /// </summary>
         public override bool Equals (Node obj)
         {
             return InternalNode == obj.InternalNode;
         }
 
+        /// <summary>
+        /// Hash the node.
+        /// </summary>
         public override int GetHashCode ()
         {
             //TODO: node should not be null, but Remove could set it as null

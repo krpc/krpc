@@ -22,11 +22,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a LaunchClamp PartModule");
         }
 
+        /// <summary>
+        /// Check if the launch clamps are equal.
+        /// </summary>
         public override bool Equals (LaunchClamp obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the launch clamp.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

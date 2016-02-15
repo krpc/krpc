@@ -46,11 +46,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleLandingGear PartModule");
         }
 
+        /// <summary>
+        /// Check the landing gear are equal.
+        /// </summary>
         public override bool Equals (LandingGear obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the landing gear.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

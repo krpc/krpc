@@ -29,6 +29,7 @@ csharp_binary(
         '//tools/build/mono-4.5:System.Xml.Linq',
         '//tools/build/mono-4.5:NDesk.Options'
     ],
+    nowarn = ['1591'],
     visibility = ['//visibility:public']
 )
 
@@ -49,7 +50,8 @@ csharp_library(
         '//tools/build/mono-4.5:System.IO',
         '//tools/build/mono-4.5:System.Xml',
         '//tools/build/mono-4.5:System.Xml.Linq'
-    ]
+    ],
+    nowarn = ['1591']
 )
 
 service_definitions(

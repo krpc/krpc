@@ -17,11 +17,17 @@ namespace KRPC.Client
             this._ID = id;
         }
 
+        /// <summary>
+        /// Check if remote objects are equivalent.
+        /// </summary>
         public bool Equals (RemoteObject other)
         {
             return this._ID == other._ID;
         }
 
+        /// <summary>
+        /// Check if this remote object is equivalent to the given object.
+        /// </summary>
         public override bool Equals (Object obj)
         {
             if (obj == null)
@@ -33,11 +39,17 @@ namespace KRPC.Client
                 return Equals (obj2);
         }
 
+        /// <summary>
+        /// Hash the remote object.
+        /// </summary>
         public override int GetHashCode ()
         {
             return this._ID.GetHashCode ();
         }
 
+        /// <summary>
+        /// Check if two remote objects are equivalent.
+        /// </summary>
         public static bool operator == (RemoteObject lhs, RemoteObject rhs)
         {
             if (((object)lhs) == null || ((object)rhs) == null)
@@ -45,6 +57,9 @@ namespace KRPC.Client
             return lhs.Equals (rhs);
         }
 
+        /// <summary>
+        /// Check if two remote objects are not equivalent.
+        /// </summary>
         public static bool operator != (RemoteObject lhs, RemoteObject rhs)
         {
             if (((object)lhs) == null || ((object)rhs) == null)

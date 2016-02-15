@@ -22,11 +22,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleLight PartModule");
         }
 
+        /// <summary>
+        /// Check if the lights are equal.
+        /// </summary>
         public override bool Equals (Light obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the light.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

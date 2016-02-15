@@ -114,6 +114,8 @@ class CsharpGenerator(Generator):
 
     def parse_documentation(self, documentation):
         documentation = documentation.replace('<doc>', '').replace('</doc>','').strip()
+        if documentation == '':
+            return ''
         return '\n'.join('/// '+line.strip() for line in documentation.split('\n'))
 
     def parse_context(self, context):

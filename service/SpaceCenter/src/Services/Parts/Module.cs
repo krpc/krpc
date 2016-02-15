@@ -27,11 +27,17 @@ namespace KRPC.SpaceCenter.Services.Parts
             this.module = module;
         }
 
+        /// <summary>
+        /// Check if the modules are equal.
+        /// </summary>
         public override bool Equals (Module obj)
         {
             return part == obj.part && module == obj.module;
         }
 
+        /// <summary>
+        /// Hash the module.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode () ^ module.GetHashCode ();

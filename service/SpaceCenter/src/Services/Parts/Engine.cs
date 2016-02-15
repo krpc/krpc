@@ -28,11 +28,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleEngines or ModuleEnginexFX PartModule");
         }
 
+        /// <summary>
+        /// Check the engines are equal.
+        /// </summary>
         public override bool Equals (Engine obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the engine.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

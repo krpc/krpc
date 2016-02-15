@@ -40,11 +40,17 @@ namespace KRPC.SpaceCenter.Services
             MaxRotationSpeed = 1f;
         }
 
+        /// <summary>
+        /// Check the auto-pilots are for the same vessel.
+        /// </summary>
         public override bool Equals (AutoPilot obj)
         {
             return vessel == obj.vessel;
         }
 
+        /// <summary>
+        /// Hash the auto-pilot.
+        /// </summary>
         public override int GetHashCode ()
         {
             return vessel.GetHashCode ();

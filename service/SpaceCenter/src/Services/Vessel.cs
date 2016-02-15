@@ -94,6 +94,9 @@ namespace KRPC.SpaceCenter.Services
     {
         Comms comms;
 
+        /// <summary>
+        /// Construct from a KSP vessel object.
+        /// </summary>
         public Vessel (global::Vessel vessel)
         {
             InternalVessel = vessel;
@@ -106,13 +109,22 @@ namespace KRPC.SpaceCenter.Services
                 comms = new Comms (vessel);
         }
 
+        /// <summary>
+        /// The KSP vessel object.
+        /// </summary>
         public global::Vessel InternalVessel { get; private set; }
 
+        /// <summary>
+        /// Check if vessels are equal.
+        /// </summary>
         public override bool Equals (Vessel obj)
         {
             return InternalVessel == obj.InternalVessel;
         }
 
+        /// <summary>
+        /// Hash the vessel.
+        /// </summary>
         public override int GetHashCode ()
         {
             return InternalVessel.GetHashCode ();

@@ -27,11 +27,17 @@ namespace KRPC.SpaceCenter.Services
             this.vessel = vessel;
         }
 
+        /// <summary>
+        /// Check that the control objects are for the same vessel.
+        /// </summary>
         public override bool Equals (Control obj)
         {
             return vessel == obj.vessel;
         }
 
+        /// <summary>
+        /// Hash the control object.
+        /// </summary>
         public override int GetHashCode ()
         {
             return vessel.GetHashCode ();

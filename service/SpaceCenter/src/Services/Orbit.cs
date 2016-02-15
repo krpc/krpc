@@ -26,11 +26,17 @@ namespace KRPC.SpaceCenter.Services
             InternalOrbit = body.GetOrbit ();
         }
 
+        /// <summary>
+        /// Construct a an orbit from a KSP orbit object.
+        /// </summary>
         public Orbit (global::Orbit orbit)
         {
             InternalOrbit = orbit;
         }
 
+        /// <summary>
+        /// The KSP orbit object.
+        /// </summary>
         public global::Orbit InternalOrbit { get; private set; }
 
         //TODO: make equatable? add hashcode???

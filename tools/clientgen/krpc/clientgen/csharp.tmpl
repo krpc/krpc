@@ -21,6 +21,9 @@ return ({{type}})global::KRPC.Client.Encoder.Decode (_data, typeof({{type}}), {%
 
 namespace KRPC.Client.Services.{{ service_name }}
 {
+    /// <summary>
+    /// Extension methods for {{ service_name }} service.
+    /// </summary>
     public static class {{ service_name }}Extensions
     {
         /// <summary>
@@ -99,6 +102,9 @@ namespace KRPC.Client.Services.{{ service_name }}
     {{ cls.documentation | indent(width=4) }}
     public class {{ class_name }} : global::KRPC.Client.RemoteObject
     {
+        /// <summary>
+        /// Construct an instance of this remote object. Should not be called directly. This interface is intended for internal decoding.
+        /// </summary>
         public {{ class_name }} (global::KRPC.Client.Connection connection, UInt64 id) : base (connection, id)
         {
         }
@@ -118,6 +124,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 
         {% for method_name,method in cls.static_methods.items() %}
         {{ method.documentation | indent(width=8) }}
+        /// <param name="_connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
         public static {{ method.return_type }} {{ method_name }} (Connection _connection, {{ sig_parameters(method.parameters) }})
         {

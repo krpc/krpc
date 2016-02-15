@@ -29,11 +29,17 @@ namespace KRPC.SpaceCenter.Services
             this.referenceFrame = referenceFrame;
         }
 
+        /// <summary>
+        /// Check that the flight objects are the same vessel and reference frame.
+        /// </summary>
         public override bool Equals (Flight obj)
         {
             return vessel == obj.vessel && referenceFrame == obj.referenceFrame;
         }
 
+        /// <summary>
+        /// Hash the flight object.
+        /// </summary>
         public override int GetHashCode ()
         {
             return vessel.GetHashCode () ^ referenceFrame.GetHashCode ();
@@ -263,7 +269,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 var speed = Speed;
                 var verticalSpeed = VerticalSpeed;
-                return Math.Sqrt (Speed*Speed - VerticalSpeed*VerticalSpeed);
+                return Math.Sqrt (Speed * Speed - VerticalSpeed * VerticalSpeed);
             }
         }
 

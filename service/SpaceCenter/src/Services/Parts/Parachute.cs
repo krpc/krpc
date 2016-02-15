@@ -51,11 +51,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleParachute PartModule");
         }
 
+        /// <summary>
+        /// Check if the parachutes are equal.
+        /// </summary>
         public override bool Equals (Parachute obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the parachute.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

@@ -21,11 +21,17 @@ namespace KRPC.InfernalRobotics.Services
             this.controlGroup = controlGroup;
         }
 
+        /// <summary>
+        /// Check if control groups are equivalent.
+        /// </summary>
         public override bool Equals (ControlGroup obj)
         {
             return controlGroup == obj.controlGroup;
         }
 
+        /// <summary>
+        /// Hash the control group.
+        /// </summary>
         public override int GetHashCode ()
         {
             return controlGroup.GetHashCode ();

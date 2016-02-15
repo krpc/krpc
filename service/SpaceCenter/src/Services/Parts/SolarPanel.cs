@@ -50,11 +50,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleDeployableSolarPanel PartModule");
         }
 
+        /// <summary>
+        /// Check if solar panels are equal.
+        /// </summary>
         public override bool Equals (SolarPanel obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the solar panel.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

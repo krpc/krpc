@@ -54,11 +54,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleLandingLeg PartModule");
         }
 
+        /// <summary>
+        /// Check if the landing legs are equal.
+        /// </summary>
         public override bool Equals (LandingLeg obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the landing leg.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

@@ -22,11 +22,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleReactionWheel PartModule");
         }
 
+        /// <summary>
+        /// Check if reaction wheels are equal.
+        /// </summary>
         public override bool Equals (ReactionWheel obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the reaction wheel.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

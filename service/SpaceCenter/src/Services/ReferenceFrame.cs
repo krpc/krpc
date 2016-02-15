@@ -57,11 +57,17 @@ namespace KRPC.SpaceCenter.Services
             this.dockingPort = dockingPort;
         }
 
+        /// <summary>
+        /// Check if reference frames are equal.
+        /// </summary>
         public override bool Equals (ReferenceFrame obj)
         {
             return type == obj.type && body == obj.body && vessel == obj.vessel && node == obj.node && part == obj.part && dockingPort == obj.dockingPort;
         }
 
+        /// <summary>
+        /// Hash the reference frame.
+        /// </summary>
         public override int GetHashCode ()
         {
             var hash = type.GetHashCode ();

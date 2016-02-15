@@ -21,11 +21,17 @@ namespace KRPC.KerbalAlarmClock.Services
             this.alarm = alarm;
         }
 
+        /// <summary>
+        /// Check if two alarms are equal.
+        /// </summary>
         public override bool Equals (Alarm obj)
         {
             return alarm == obj.alarm;
         }
 
+        /// <summary>
+        /// Hash the alarm.
+        /// </summary>
         public override int GetHashCode ()
         {
             return alarm.GetHashCode ();

@@ -50,11 +50,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleDeployableRadiator PartModule");
         }
 
+        /// <summary>
+        /// Check if radiators are equal.
+        /// </summary>
         public override bool Equals (Radiator obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the radiator.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

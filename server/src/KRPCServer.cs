@@ -348,6 +348,9 @@ namespace KRPC
             set { timePerStreamUpdate.Update (value); }
         }
 
+        /// <summary>
+        /// Clear the server statistics.
+        /// </summary>
         public void ClearStats ()
         {
             rpcServer.ClearStats ();

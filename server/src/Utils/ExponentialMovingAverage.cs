@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace KRPC.Utils
 {
-    public class ExponentialMovingAverage
+    class ExponentialMovingAverage
     {
         double value;
         readonly double W;

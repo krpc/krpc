@@ -25,11 +25,17 @@ namespace KRPC.SpaceCenter.Services
             this.vessel = vessel;
         }
 
+        /// <summary>
+        /// Check that the comms are for the same vessel.
+        /// </summary>
         public override bool Equals (Comms obj)
         {
             return vessel == obj.vessel;
         }
 
+        /// <summary>
+        /// Hash the comms.
+        /// </summary>
         public override int GetHashCode ()
         {
             return vessel.GetHashCode ();

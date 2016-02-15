@@ -14,10 +14,9 @@ namespace KRPC.Server.Net
         public event EventHandler OnStopped;
         public event EventHandler<ClientRequestingConnectionArgs<byte,byte>> OnClientRequestingConnection;
         public event EventHandler<ClientConnectedArgs<byte,byte>> OnClientConnected;
-        /// <summary>
-        /// Does not trigger this event.
-        /// </summary>
+        #pragma warning disable 0067
         public event EventHandler<ClientActivityArgs<byte,byte>> OnClientActivity;
+        #pragma warning restore 0067
         public event EventHandler<ClientDisconnectedArgs<byte,byte>> OnClientDisconnected;
 
         /// <summary>

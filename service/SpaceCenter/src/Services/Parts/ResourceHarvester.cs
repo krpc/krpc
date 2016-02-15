@@ -24,11 +24,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part has no Resource Harvester Module");
         }
 
+        /// <summary>
+        /// Check if resource harvesters are equal.
+        /// </summary>
         public override bool Equals (ResourceHarvester obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the resource harvester.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

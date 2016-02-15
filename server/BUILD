@@ -88,5 +88,6 @@ csharp_nunit_test(
         '//tools/build/mono-4.5:System.Xml',
         '//tools/build/mono-4.5:System.Xml.Linq'
     ],
+    nowarn = ['1591'],
     size = 'small'
 )

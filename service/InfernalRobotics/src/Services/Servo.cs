@@ -19,11 +19,17 @@ namespace KRPC.InfernalRobotics.Services
             this.servo = servo;
         }
 
+        /// <summary>
+        /// Check if servos are equivalent.
+        /// </summary>
         public override bool Equals (Servo obj)
         {
             return servo == obj.servo;
         }
 
+        /// <summary>
+        /// Hash the servo.
+        /// </summary>
         public override int GetHashCode ()
         {
             return servo.GetHashCode ();

@@ -24,11 +24,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleDecouple or ModuleAnchoredDecouple PartModule");
         }
 
+        /// <summary>
+        /// Check the decouplers are equal.
+        /// </summary>
         public override bool Equals (Decoupler obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the decoupler.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

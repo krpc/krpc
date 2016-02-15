@@ -45,16 +45,6 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public GameScene GameScene { get; private set; }
 
-        /// <summary>
-        /// Protocol buffer builder objects, used to deserialize parameter values.
-        /// </summary>
-        //public IList<IBuilder> ParameterBuilders { get; private set; }
-
-        /// <summary>
-        /// Protocol buffer builder objects, used to serialize the return value.
-        /// </summary>
-        //public IBuilder ReturnBuilder { get; private set; }
-
         public List<string> Attributes { get; private set; }
 
         public ProcedureSignature (string serviceName, string procedureName, string documentation, IProcedureHandler handler, GameScene gameScene, params string[] attributes)

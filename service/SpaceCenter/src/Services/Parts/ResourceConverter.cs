@@ -55,11 +55,17 @@ namespace KRPC.SpaceCenter.Services.Parts
             converters = part.Modules.OfType<ModuleResourceConverter> ().ToList ();
         }
 
+        /// <summary>
+        /// Check if resource converters are equal.
+        /// </summary>
         public override bool Equals (ResourceConverter obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the resource converter.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

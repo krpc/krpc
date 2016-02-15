@@ -1,3 +1,5 @@
+#pragma warning disable 1591
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -62,7 +64,6 @@ namespace KRPC.KerbalAlarmClock
         /// <summary>
         /// This method will set up the KAC object and wrap all the methods/functions
         /// </summary>
-        /// <param name="Force">This option will force the Init function to rebind everything</param>
         /// <returns></returns>
         public static Boolean InitKACWrapper ()
         {
@@ -338,7 +339,6 @@ namespace KRPC.KerbalAlarmClock
             /// <summary>
             /// Delete an Alarm
             /// </summary>
-            /// <param name="AlarmID">Unique ID of the alarm</param>
             /// <returns>Success of the deletion</returns>
             internal Boolean DrawAlarmActionChoice (ref AlarmActionEnum Choice, String LabelText, Int32 LabelWidth, Int32 ButtonWidth)
             {

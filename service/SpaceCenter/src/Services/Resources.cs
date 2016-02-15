@@ -62,11 +62,17 @@ namespace KRPC.SpaceCenter.Services
             this.part = part;
         }
 
+        /// <summary>
+        /// Check if resources objects are equal.
+        /// </summary>
         public override bool Equals (Resources obj)
         {
             return vessel == obj.vessel && stage == obj.stage && cumulative == obj.cumulative && part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the resources object.
+        /// </summary>
         public override int GetHashCode ()
         {
             return (vessel == null ? 0 : vessel.GetHashCode ()) ^ stage.GetHashCode () ^ cumulative.GetHashCode () ^ (part == null ? 0 : part.GetHashCode ());

@@ -74,11 +74,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleDockingNode PartModule");
         }
 
+        /// <summary>
+        /// Check the docking ports are equal.
+        /// </summary>
         public override bool Equals (DockingPort obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the docking ports.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

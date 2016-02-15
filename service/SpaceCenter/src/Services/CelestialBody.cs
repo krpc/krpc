@@ -17,6 +17,9 @@ namespace KRPC.SpaceCenter.Services
     {
         Orbit orbit;
 
+        /// <summary>
+        /// Construct from a KSP celestial body object.
+        /// </summary>
         public CelestialBody (global::CelestialBody body)
         {
             InternalBody = body;
@@ -25,13 +28,22 @@ namespace KRPC.SpaceCenter.Services
                 orbit = new Orbit (body);
         }
 
+        /// <summary>
+        /// The KSP celestial body object.
+        /// </summary>
         public global::CelestialBody InternalBody { get; private set; }
 
+        /// <summary>
+        /// Check that the celestial bodies are equal.
+        /// </summary>
         public override bool Equals (CelestialBody obj)
         {
             return InternalBody == obj.InternalBody;
         }
 
+        /// <summary>
+        /// Hash the celestial body.
+        /// </summary>
         public override int GetHashCode ()
         {
             return InternalBody.GetHashCode ();

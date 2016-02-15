@@ -23,11 +23,17 @@ namespace KRPC.SpaceCenter.Services.Parts
             this.part = part;
         }
 
+        /// <summary>
+        /// Check if the parts are equal.
+        /// </summary>
         public override bool Equals (Part obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the part.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();
@@ -404,7 +410,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public ResourceConverter ResourceConverter {
-           get { return IsResourceConverter ? new ResourceConverter (this) : null; }
+            get { return IsResourceConverter ? new ResourceConverter (this) : null; }
         }
 
         /// <summary>

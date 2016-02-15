@@ -22,11 +22,17 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part does not have a ModuleEnviroSensor PartModule");
         }
 
+        /// <summary>
+        /// Check if sensors are equal.
+        /// </summary>
         public override bool Equals (Sensor obj)
         {
             return part == obj.part;
         }
 
+        /// <summary>
+        /// Hash the sensor.
+        /// </summary>
         public override int GetHashCode ()
         {
             return part.GetHashCode ();

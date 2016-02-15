@@ -2,12 +2,17 @@ using UnityEngine;
 
 namespace TestingTools
 {
-    // Loads a save called "default" and switches to the first active vessel
+    /// <summary>
+    /// Addon that loads a save called "default" and switches to the first active vessel.
+    /// </summary>
     [KSPAddon (KSPAddon.Startup.MainMenu, false)]
     public class AutoLoadPersistentSaveOnStartup : MonoBehaviour
     {
         static bool hasRun = false;
 
+        /// <summary>
+        /// Start the addon.
+        /// </summary>
         public void Start ()
         {
             if (!hasRun) {

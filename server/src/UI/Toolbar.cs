@@ -1,3 +1,4 @@
+#pragma warning disable 1591
 /*
 Copyright (c) 2013-2014, Maik Schreiber
 All rights reserved.

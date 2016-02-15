@@ -21,11 +21,17 @@ namespace KRPC.SpaceCenter.Services.Parts
             this.vessel = vessel;
         }
 
+        /// <summary>
+        /// Check if the parts objects are for the same vessel.
+        /// </summary>
         public override bool Equals (Parts obj)
         {
             return vessel == obj.vessel;
         }
 
+        /// <summary>
+        /// Hash the parts object.
+        /// </summary>
         public override int GetHashCode ()
         {
             return vessel.GetHashCode ();
