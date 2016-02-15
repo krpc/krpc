@@ -150,8 +150,10 @@ class JavaGenerator(Generator):
 
     def parse_documentation(self, documentation):
         documentation = JavaDocParser().parse(documentation)
-        lines = ['/**'] + [' * ' + line.strip() for line in documentation.split('\n')] + [' */']
-        return '\n'.join(lines)
+        if documentation == '':
+            return ''
+        lines = ['/**'] + [' * ' + line for line in documentation.split('\n')] + [' */']
+        return '\n'.join(line.rstrip() for line in lines)
 
     def parse_context(self, context):
         # Expand service properties into get and set methods
@@ -240,16 +242,16 @@ class JavaGenerator(Generator):
 
 class JavaDocParser(DocParser):
     def parse_summary(self, node):
-        return self.parse_node(node)
+        return self.parse_node(node).strip()
 
     def parse_remarks(self, node):
-        return self.parse_node(node)
+        return '\n\n'+self.parse_node(node).strip()
 
     def parse_param(self, node):
-        return '@param %s %s' % (node.attrib['name'], self.parse_node(node).strip())
+        return '\n@param %s %s' % (node.attrib['name'], self.parse_node(node).strip())
 
     def parse_returns(self, node):
-        return '@return %s' % self.parse_node(node).strip()
+        return '\n@return %s' % self.parse_node(node).strip()
 
     def parse_see(self, node):
         return '{@link %s}' % self.parse_cref(node.attrib['cref'])
@@ -273,7 +275,7 @@ class JavaDocParser(DocParser):
     def parse_cref(self, cref):
         if cref[0] == 'M':
             cref = cref[2:].split('.')
-            member = cref[-1][0].lower() + cref[-1][1:]
+            member = Generator.to_lower_camel_case(cref[-1])
             del cref[-1]
             return '.'.join(cref)+'#'+member
         elif cref[0] == 'T':

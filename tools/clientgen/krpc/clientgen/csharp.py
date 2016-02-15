@@ -116,7 +116,12 @@ class CsharpGenerator(Generator):
         documentation = documentation.replace('<doc>', '').replace('</doc>','').strip()
         if documentation == '':
             return ''
-        return '\n'.join('/// '+line.strip() for line in documentation.split('\n'))
+        lines = ['/// '+line for line in documentation.split('\n')]
+        content = '\n'.join(line.rstrip() for line in lines)
+        content = content.replace('  <param', '<param')
+        content = content.replace('  <returns', '<returns')
+        content = content.replace('  <remarks', '<remarks')
+        return content
 
     def parse_context(self, context):
         return context

@@ -1,4 +1,5 @@
 from krpc.clientgen.generator import Generator
+from krpc.clientgen.docparser import DocParser
 import krpc.types
 
 Types = krpc.types.Types()
@@ -114,7 +115,11 @@ class CppGenerator(Generator):
         return isinstance(self.get_return_type(procedure), krpc.types.ClassType)
 
     def parse_documentation(self, documentation):
-        return None
+        documentation = CppDocParser().parse(documentation)
+        if documentation == '':
+            return ''
+        lines = ['/**'] + [' * ' + line for line in documentation.split('\n')] + [' */']
+        return '\n'.join(line.rstrip() for line in lines)
 
     def parse_context(self, context):
         for info in context['procedures'].values():
@@ -127,15 +132,16 @@ class CppGenerator(Generator):
                     'remote_name': info['getter']['remote_name'],
                     'parameters': [],
                     'return_type': info['type'],
-                    'return_set_client': self.parse_set_client(info['getter']['procedure'])
+                    'return_set_client': self.parse_set_client(info['getter']['procedure']),
+                    'documentation': info['documentation']
                 }
             if info['setter']:
                 properties['set_'+name] = {
                     'remote_name': info['setter']['remote_name'],
                     'parameters': self.generate_context_parameters(info['setter']['procedure']),
                     'return_type': 'void',
-                    'return_decode_fn': 'decode',
-                    'return_set_client': False
+                    'return_set_client': False,
+                    'documentation': info['documentation']
                 }
 
         for class_name,class_info in context['classes'].items():
@@ -152,17 +158,61 @@ class CppGenerator(Generator):
                         'remote_name': info['getter']['remote_name'],
                         'parameters': [],
                         'return_type': info['type'],
-                        'return_set_client_fn': self.parse_set_client(info['getter']['procedure'])
+                        'return_set_client_fn': self.parse_set_client(info['getter']['procedure']),
+                        'documentation': info['documentation']
                     }
                 if info['setter']:
                     class_properties['set_'+name] = {
                         'remote_name': info['setter']['remote_name'],
                         'parameters': [self.generate_context_parameters(info['setter']['procedure'])[1]],
                         'return_type': 'void',
-                        'return_decode_fn': 'decode',
-                        'return_set_client': False
+                        'return_set_client': False,
+                        'documentation': info['documentation']
                     }
             class_info['properties'] = class_properties
 
         context['properties'] = properties
         return context
+
+class CppDocParser(DocParser):
+    def parse_summary(self, node):
+        return self.parse_node(node).strip()
+
+    def parse_remarks(self, node):
+        return '\n\n'+self.parse_node(node).strip()
+
+    def parse_param(self, node):
+        return '\n@param %s %s' % (node.attrib['name'], self.parse_node(node).strip())
+
+    def parse_returns(self, node):
+        return '\n@return %s' % self.parse_node(node).strip()
+
+    def parse_see(self, node):
+        return self.parse_cref(node.attrib['cref'])
+
+    def parse_paramref(self, node):
+        return node.attrib['name']
+
+    def parse_a(self, node):
+        return '<a href="%s">%s</a>' % (node.attrib['href'], node.text)
+
+    def parse_c(self, node):
+        return node.text
+
+    def parse_math(self, node):
+        return node.text
+
+    def parse_list(self, node):
+        content = ['- %s\n' % self.parse_node(item[0], indent=2)[2:].rstrip() for item in node]
+        return '\n'+''.join(content)
+
+    def parse_cref(self, cref):
+        if cref[0] == 'M':
+            cref = cref[2:].split('.')
+            member = Generator.to_snake_case(cref[-1])
+            del cref[-1]
+            return '::'.join(cref)+'::'+member
+        elif cref[0] == 'T':
+            return cref[2:].replace('.','::')
+        else:
+            raise RuntimeError('Unknown cref \'%s\'' % cref)

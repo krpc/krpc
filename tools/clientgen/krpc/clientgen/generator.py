@@ -24,18 +24,21 @@ class Generator(object):
     _snake_case_regex_underscores = re.compile(r'(.)_')
     _camel_case_regex = re.compile(r'([a-z]+|[A-Z][^A-Z]*)')
 
-    def to_snake_case(self, camel_case):
+    @classmethod
+    def to_snake_case(cls, camel_case):
         """ Convert camel case to snake case, e.g. GetServices -> get_services """
-        result = re.sub(self._snake_case_regex_underscores, r'\1__', camel_case)
-        result = re.sub(self._snake_case_regex_single_uppercase, r'\1_\2', result)
-        return re.sub(self._snake_case_regex_multi_uppercase, r'\1_\2', result).lower()
+        result = re.sub(cls._snake_case_regex_underscores, r'\1__', camel_case)
+        result = re.sub(cls._snake_case_regex_single_uppercase, r'\1_\2', result)
+        return re.sub(cls._snake_case_regex_multi_uppercase, r'\1_\2', result).lower()
 
-    def to_lower_camel_case(self, camel_case):
-        parts = re.findall(self._camel_case_regex, camel_case)
+    @classmethod
+    def to_lower_camel_case(cls, camel_case):
+        parts = re.findall(cls._camel_case_regex, camel_case)
         parts[0] = parts[0].lower()
         return ''.join(parts)
 
-    def to_upper_camel_case(self, lower_camel_case):
+    @classmethod
+    def to_upper_camel_case(cls, lower_camel_case):
         return lower_camel_case[0].upper() + lower_camel_case[1:]
 
     def generate_file(self, path):

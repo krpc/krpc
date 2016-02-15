@@ -40,10 +40,11 @@ namespace krpc {
 
       {% endif %}
       {% if enumerations | length > 0 %}
-      // Enumerations
       {% for enum_name,enm in enumerations.items() %}
+      {{ enm.documentation | indent(width=6) }}
       enum struct {{ enum_name }} {
         {% for value in enm['values'] %}
+        {{ value.documentation | indent(width=8) }}
         {{ value.name }} = {{ value.value }}{% if not loop.last %},{% endif %}
 
         {% endfor %}
@@ -52,46 +53,47 @@ namespace krpc {
       {% endfor %}
       {% endif %}
       {% if procedures | length > 0 %}
-      // Procedures
       {% for procedure_name,procedure in procedures.items() %}
+      {{ procedure.documentation | indent(width=6) }}
       {{ procedure.return_type }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }});
+
       {% endfor %}
       {% endif %}
-
       {% if properties | length > 0 %}
-      // Properties
       {% for property_name,property in properties.items() %}
+      {{ property.documentation | indent(width=6) }}
       {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
-      {% endfor %}
 
+      {% endfor %}
       {% endif %}
       {% if classes | length > 0 %}
-      // Classes
       {% for class_name,cls in classes.items() %}
+      {{ cls.documentation | indent(width=6) }}
       class {{ class_name }} : public krpc::Object<{{ class_name }}> {
       public:
-          {{ class_name }}(Client* client = NULL, google::protobuf::uint64 id = 0);
-          {% if cls.methods|length > 0 %}
+        {{ class_name }}(Client* client = NULL, google::protobuf::uint64 id = 0);
 
-          // Methods
-          {% for method_name,method in cls.methods.items() %}
-          {{ method.return_type }} {{ method_name }}({{ sig_parameters(method.parameters) }});
-          {% endfor %}
-          {% endif %}
-          {% if cls.static_methods | length > 0 %}
+        {% if cls.methods|length > 0 %}
+        {% for method_name,method in cls.methods.items() %}
+        {{ method.documentation | indent(width=8) }}
+        {{ method.return_type }} {{ method_name }}({{ sig_parameters(method.parameters) }});
 
-          // Static methods
-          {% for method_name,method in cls.static_methods.items() %}
-          static {{ method.return_type }} {{ method_name }}(Client& client, {{ sig_parameters(method.parameters) }});
-          {% endfor %}
-          {% endif %}
-          {% if cls.properties | length > 0 %}
+        {% endfor %}
+        {% endif %}
+        {% if cls.static_methods | length > 0 %}
+        {% for method_name,method in cls.static_methods.items() %}
+        {{ method.documentation | indent(width=8) }}
+        static {{ method.return_type }} {{ method_name }}(Client& client, {{ sig_parameters(method.parameters) }});
 
-          // Properties
-          {% for property_name,property in cls.properties.items() %}
-          {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
-          {% endfor %}
-          {% endif %}
+{% endfor %}
+        {% endif %}
+        {% if cls.properties | length > 0 %}
+        {% for property_name,property in cls.properties.items() %}
+        {{ property.documentation | indent(width=8) }}
+        {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
+
+        {% endfor %}
+        {% endif %}
       };
 
       {% endfor %}
