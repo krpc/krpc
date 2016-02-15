@@ -59,6 +59,6 @@ class Connection(object):
             Blocks until at least 1 byte has been received. """
         assert length > 0
         data = self._socket.recv(length)
-        if len(data) == 0:
+        if data == None or len(data) == 0:
             raise socket.error("Connection closed")
         return data
