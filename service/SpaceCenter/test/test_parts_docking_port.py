@@ -9,8 +9,8 @@ class TestPartsDockingPort(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsDockingPort')
         testingtools.remove_other_vessels()
+        testingtools.launch_vessel_from_vab('PartsDockingPort')
         cls.conn = testingtools.connect(name='TestPartsDockingPort')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
@@ -120,7 +120,7 @@ class TestPartsDockingPort(testingtools.TestCase):
         self.assertEqual(top_port.docked_part, None)
         distance = norm(top_port.position(bottom_port.reference_frame))
         self.assertGreater(distance, top_port.reengage_distance)
-        self.assertLess(distance, top_port.reengage_distance*1.5)
+        self.assertLess(distance, top_port.reengage_distance*2)
 
     def test_pre_attached_port_and_part(self):
         """ Test a port and part that were pre-attached in the VAB """
@@ -158,8 +158,8 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
     def setUp(self):
         testingtools.new_save()
         testingtools.launch_vessel_from_vab('PartsDockingPortInFlight')
-        testingtools.set_circular_orbit('Kerbin', 100000)
         testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
         self.conn = testingtools.connect(name='TestPartsDockingPortInFlight')
         self.sc = self.conn.space_center
         self.state = self.sc.DockingPortState
@@ -182,11 +182,10 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
         for i in range(2):
 
             # Kill rotation
-            if i > 0:
-                vessel.control.sas = True
-                time.sleep(3)
-                vessel.control.sas = False
-                time.sleep(1)
+            vessel.control.sas = True
+            time.sleep(3)
+            vessel.control.sas = False
+            time.sleep(1)
 
             self.assertEqual(self.state.docked, port1.state)
             self.assertEqual(self.state.docked, port2.state)
@@ -208,7 +207,7 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
 
             # Move backwards to reengage distance
             vessel.control.rcs = True
-            vessel.control.forward = -0.5
+            vessel.control.forward = 0.5
             time.sleep(0.5)
             vessel.control.forward = 0
             while port1.state == self.state.undocking:
@@ -219,7 +218,7 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
             self.assertEqual(None, port1.docked_part)
             distance = norm(port1.position(port2.reference_frame))
             self.assertGreater(distance, port1.reengage_distance)
-            self.assertLess(distance, port1.reengage_distance*1.05)
+            self.assertLess(distance, port1.reengage_distance*1.1)
             time.sleep(0.5)
 
             # Check undocking when not docked
@@ -227,7 +226,7 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
             self.assertEqual(None, port2.undock())
 
             # Move forward
-            vessel.control.forward = 0.5
+            vessel.control.forward = -0.5
             time.sleep(1)
             vessel.control.forward = 0
             vessel.control.rcs = False
@@ -256,8 +255,8 @@ class TestPartsDockingPortPreAttachedTo(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsDockingPortPreAttachedTo')
         testingtools.remove_other_vessels()
+        testingtools.launch_vessel_from_vab('PartsDockingPortPreAttachedTo')
         cls.conn = testingtools.connect(name='TestPartsDockingPortPreAttachedTo')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.state = cls.conn.space_center.DockingPortState
