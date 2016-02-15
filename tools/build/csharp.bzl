@@ -257,7 +257,7 @@ def _nuget_package_impl(ctx):
         'cp %s %s' % (nuspec.path, tmpdir),
         'cp %s %s' % (assembly.path, tmpdir),
         'cp %s %s' % (doc.path, tmpdir),
-        'mono %s pack %s -BasePath %s' % (ctx.file._nuget_exe.path, tmpdir+'/'+nuspec.basename, tmpdir),
+        'mono %s pack %s -BasePath %s -Verbosity quiet' % (ctx.file._nuget_exe.path, tmpdir+'/'+nuspec.basename, tmpdir),
         'cp %s %s' % (ctx.outputs.out.basename, ctx.outputs.out.path)
     ]
 
