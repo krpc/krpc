@@ -11,8 +11,8 @@ class TestAutoPilot(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
+        testingtools.launch_vessel_from_vab('Basic')
         testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
         cls.conn = testingtools.connect(name='TestAutoPilot')
         cls.vessel = cls.conn.space_center.active_vessel
@@ -70,7 +70,7 @@ class TestAutoPilot(testingtools.TestCase):
         self.assertFalse(self.ap.sas)
 
     def test_set_pitch(self):
-        for pitch in [-90,-60,-30,0,30,60,90]:
+        for pitch in [-60,-30,0,30,60]:
             self.set_rotation(pitch,90)
             self.wait_for_autopilot()
             self.check_rotation(pitch,90)
@@ -215,8 +215,8 @@ class TestAutoPilotSAS(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Basic')
         testingtools.remove_other_vessels()
+        testingtools.launch_vessel_from_vab('Basic')
         testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
         cls.conn = testingtools.connect()
         cls.vessel = cls.conn.space_center.active_vessel
@@ -285,8 +285,8 @@ class TestAutoPilotOtherVessel(testingtools.TestCase):
     @classmethod
     def setUpClass(cls):
         testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Multi')
         testingtools.remove_other_vessels()
+        testingtools.launch_vessel_from_vab('Multi')
         testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
         cls.conn = testingtools.connect(name='TestAutoPilotOtherVessel')
         next(iter(cls.conn.space_center.active_vessel.parts.docking_ports)).undock()
