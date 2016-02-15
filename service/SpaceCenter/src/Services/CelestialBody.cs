@@ -98,7 +98,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The rotational period of the body, in seconds.
+        /// The sidereal rotational period of the body, in seconds.
         /// </summary>
         [KRPCProperty]
         public float RotationalPeriod {
