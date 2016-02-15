@@ -314,13 +314,12 @@ a child of part 11, but its connection to part 9 is not represented in the tree.
 
 The attributes {{ 'M:SpaceCenter.Part.FuelLinesFrom' | parsesee }} and
 {{ 'M:SpaceCenter.Part.FuelLinesTo' | parsesee }} can be used to discover these
-
-connections. In the example in Figure 5, when {{ 'M:SpaceCenter.Part.FuelLinesTo' | parsesee }}
-is called on fuel tank part 11, it will return a list of parts containing just
-
-fuel tank part 9 (the blue part). When {{ 'M:SpaceCenter.Part.FuelLinesFrom' | parsesee }}
-is called on fuel tank part 9, it will return a list containing fuel tank parts
-11 and 17 (the parts colored green).
+connections. In the example in Figure 5, when
+{{ 'M:SpaceCenter.Part.FuelLinesTo' | parsesee }} is called on fuel tank part
+11, it will return a list of parts containing just fuel tank part 9 (the blue
+part). When {{ 'M:SpaceCenter.Part.FuelLinesFrom' | parsesee }} is called on
+fuel tank part 9, it will return a list containing fuel tank parts 11 and 17
+(the parts colored green).
 
 .. _{{ domain.name }}-api-parts-staging:
 
