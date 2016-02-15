@@ -8,7 +8,7 @@ using System.Linq;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="ResourceConverter.State"/>.
+    /// See <see cref="ResourceConverter.Status"/>.
     /// </summary>
     [KRPCEnum (Service = "SpaceCenter")]
     public enum ResourceConverterState
@@ -47,12 +47,12 @@ namespace KRPC.SpaceCenter.Services.Parts
     public sealed class ResourceConverter: Equatable<ResourceConverter>
     {
         readonly Part part;
-        readonly List<ModuleResourceConverter> converters;
+        readonly IList<ModuleResourceConverter> converters;
 
         internal ResourceConverter (Part part)
         {
             this.part = part;
-            converters = part.Modules.OfType<ModuleResourceConverter> ();
+            converters = part.Modules.OfType<ModuleResourceConverter> ().ToList ();
         }
 
         public override bool Equals (ResourceConverter obj)
@@ -81,7 +81,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return converters.Count; }
         }
 
-        void CheckConverterExists (uint index)
+        void CheckConverterExists (int index)
         {
             if (index >= Count)
                 throw new ArgumentException ("No resource converter found with index " + index);
@@ -92,7 +92,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="index">Index of the converter.</param>
         [KRPCMethod]
-        public bool Active (uint index)
+        public bool Active (int index)
         {
             CheckConverterExists (index);
             return converters [index].IsActivated;
@@ -103,7 +103,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="index">Index of the converter.</param>
         [KRPCMethod]
-        public string Name (uint index)
+        public string Name (int index)
         {
             CheckConverterExists (index);
             return converters [index].ConverterName;
@@ -114,7 +114,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="index">Index of the converter.</param>
         [KRPCMethod]
-        public void Start (uint index)
+        public void Start (int index)
         { 
             CheckConverterExists (index);
             converters [index].StartResourceConverter ();
@@ -125,7 +125,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="index">Index of the converter.</param>
         [KRPCMethod]
-        public void Stop (uint index)
+        public void Stop (int index)
         {
             CheckConverterExists (index);
             converters [index].StopResourceConverter ();
@@ -173,7 +173,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<string> Inputs (int index)
         {
             CheckConverterExists (index);
-            return converters [index].inputList.Select (x => x.ResourceName);
+            return converters [index].inputList.Select (x => x.ResourceName).ToList ();
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<string> Outputs (int index)
         {
             CheckConverterExists (index);
-            return converters [index].outputList.Select (x => x.ResourceName);
+            return converters [index].outputList.Select (x => x.ResourceName).ToList ();
         }
     }
 }
