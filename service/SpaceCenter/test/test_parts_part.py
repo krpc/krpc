@@ -42,6 +42,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(4000, part.dry_mass)
         self.assertEqual(45, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = [
@@ -106,6 +107,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(50, part.dry_mass)
         self.assertEqual(8, part.impact_tolerance)
         self.assertFalse(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['ModuleAnchoredDecoupler', 'ModuleTestSubject', 'ModuleToggleCrossfeed']
@@ -131,6 +133,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(50, part.dry_mass)
         self.assertEqual(10, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['ModuleDockingNode']
@@ -156,6 +159,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(4500, part.dry_mass)
         self.assertEqual(7, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['FXModuleAnimateThrottle', 'ModuleEnginesFX', 'ModuleSurfaceFX', 'ModuleTestSubject']
@@ -181,6 +185,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(50, part.dry_mass)
         self.assertEqual(12, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['ModuleLandingLeg']
@@ -206,6 +211,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(100, part.dry_mass)
         self.assertEqual(100, part.impact_tolerance)
         self.assertFalse(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['LaunchClamp', 'ModuleGenerator', 'ModuleTestSubject']
@@ -231,6 +237,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(0, part.dry_mass)
         self.assertEqual(8, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['ModuleLight']
@@ -256,6 +263,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(300, part.dry_mass)
         self.assertEqual(12, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         self.assertEqual([
@@ -281,6 +289,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(50, part.dry_mass)
         self.assertEqual(12, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['ModuleActiveRadiator', 'ModuleDeployableRadiator']
@@ -304,6 +313,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(200, part.dry_mass)
         self.assertEqual(9, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['ModuleReactionWheel']
@@ -327,6 +337,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(4250, part.dry_mass)
         self.assertEqual(7, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['ModuleAnimationGroup',
@@ -353,6 +364,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(250, part.dry_mass)
         self.assertEqual(7, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = [
@@ -382,6 +394,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(0, part.dry_mass)
         self.assertEqual(8, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['ModuleEnviroSensor', 'ModuleScienceExperiment']
@@ -407,6 +420,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(300, part.dry_mass)
         self.assertEqual(8, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
         modules = ['ModuleDeployableSolarPanel']

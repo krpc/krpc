@@ -258,6 +258,7 @@ SpaceCenter.Part.ThermalInternalFlux
 SpaceCenter.Part.ThermalSkinToInternalFlux
 SpaceCenter.Part.Resources
 SpaceCenter.Part.Crossfeed
+SpaceCenter.Part.IsFuelLine
 SpaceCenter.Part.FuelLinesFrom
 SpaceCenter.Part.FuelLinesTo
 SpaceCenter.Part.Modules
