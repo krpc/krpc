@@ -7,7 +7,7 @@ def main():
     current_version = re.match('version\s*=\s*\'(.+)\'', ''.join(open('config.bzl', 'r').readlines()), re.MULTILINE).group(1)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('site', choices=('github', 'kerbalstuff', 'curse'))
+    parser.add_argument('site', choices=('github', 'curse'))
     parser.add_argument('version', nargs='?', default=current_version)
     args = parser.parse_args()
 
@@ -37,11 +37,6 @@ def main():
             for item in items:
                 print '*', item
             print
-    elif args.site == 'kerbalstuff':
-        for name,items in changelist:
-            print '*', name
-            for item in items:
-                print '  *', item
     else: # curse
         print '<ul>'
         for name,items in changelist:
