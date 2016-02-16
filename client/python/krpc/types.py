@@ -338,6 +338,26 @@ class ClassBase(DynamicType):
     def __ne__(self, other):
         return not isinstance(other, ClassBase) or self._object_id != other._object_id
 
+    def __lt__(self, other):
+        if not isinstance(other, ClassBase):
+            raise NotImplemented
+        return self._object_id < other._object_id
+
+    def __le__(self, other):
+        if not isinstance(other, ClassBase):
+            raise NotImplemented
+        return self._object_id <= other._object_id
+
+    def __gt__(self, other):
+        if not isinstance(other, ClassBase):
+            raise NotImplemented
+        return self._object_id > other._object_id
+
+    def __ge__(self, other):
+        if not isinstance(other, ClassBase):
+            raise NotImplemented
+        return self._object_id >= other._object_id
+
     def __hash__(self):
         return hash(self._object_id)
 

@@ -1,5 +1,6 @@
 v0.2.2
  * Remove support for protobuf enumeration and custom protobuf messages
+ * Add comparison methods to remote objects so that they are sortable
 
 v0.2.1
  * Fix bug with setup.py on Windows
