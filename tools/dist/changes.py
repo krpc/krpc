@@ -7,7 +7,7 @@ def main():
     current_version = re.match('version\s*=\s*\'(.+)\'', ''.join(open('config.bzl', 'r').readlines()), re.MULTILINE).group(1)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('site', choices=('github', 'curse'))
+    parser.add_argument('site', choices=('github', 'spacedock', 'curse'))
     parser.add_argument('version', nargs='?', default=current_version)
     args = parser.parse_args()
 
@@ -32,6 +32,7 @@ def main():
     if args.site == 'github':
         print ''.join(open('tools/dist/github-changes.tmpl', 'r').readlines()).replace('%VERSION%', args.version)
         print '### Changes ###\n'
+    if args.site == 'github' or args.site == 'spacedock':
         for name,items in changelist:
             print '####', name, '####\n'
             for item in items:

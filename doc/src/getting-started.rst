@@ -15,6 +15,7 @@ Installation
 1. Download the kRPC server plugin from one of these locations:
 
  * `Github <https://github.com/djungelorm/krpc/releases>`_
+ * `SpaceDock <http://spacedock.info/mod/69/kRPC>`_
  * `Curse <http://www.curse.com/project/220219>`_
  * Or the plugin can be obtained via `CKAN <http://forum.kerbalspaceprogram.com/threads/100067>`_
 
