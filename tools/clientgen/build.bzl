@@ -20,7 +20,8 @@ clientgen = rule(
         'out': attr.output(mandatory=True),
         'language': attr.string(mandatory=True),
         '_clientgen': attr.label(default=Label('//tools/clientgen:script'), executable=True, allow_files=True, single_file=True)
-    }
+    },
+    output_to_genfiles = True
 )
 
 def clientgen_cpp(name, service, defs, out):

@@ -64,8 +64,6 @@ cc_library(
     srcs = glob(['src/*.cpp']) + [':protobuf'],
     hdrs = glob(['include/krpc/*.hpp']) + [':protobuf'],
     includes = ['include'],
-    copts = ['-Iexternal/cpp_asio/include',
-             '-Ibazel-out/local_linux-fastbuild/bin/client/cpp/include'], #TODO: fix include path to generated files
     deps = ['@protobuf//:protobuf', '@cpp_asio//:asio']
 )
 
@@ -88,9 +86,6 @@ cc_binary(
         'test/server_test.hpp'
     ],
     includes = ['test'],
-    copts = ['-Iexternal/cpp_asio/include' ,'-Iexternal/cpp_gmock/include',
-             '-Ibazel-out/local_linux-fastbuild/bin/client/cpp/include', #TODO: fix includes
-             '-Ibazel-out/local_linux-fastbuild/bin/client/cpp'],
     deps = [':krpc', '@cpp_gmock//:main']
 )
 

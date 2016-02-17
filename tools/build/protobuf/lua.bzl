@@ -52,7 +52,8 @@ protobuf_lua = rule(
         '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_files=True, single_file=True),
         '_protoc_lua': attr.label(default=Label('@protoc_lua//:plugin'), allow_files=True),
         '_protoc_lua_env': attr.label(default=Label('//tools/build/protobuf:protoc-lua-env'), allow_files=True, single_file=True)
-    }
+    },
+    output_to_genfiles = True
 )
 
 def _env_impl(ctx):
@@ -77,5 +78,6 @@ protoc_lua_env = rule(
         '_protobuf': attr.label(default=Label('@python_protobuf//file'), allow_files=True, single_file=True),
         '_six': attr.label(default=Label('@python_six//file'), allow_files=True, single_file=True)
     },
-    outputs = {'out': '%{name}.tar'}
+    outputs = {'out': '%{name}.tar'},
+    output_to_genfiles = True
 )
