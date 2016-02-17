@@ -1,0 +1,44 @@
+Installing the kRPC C++ client library
+======================================
+
+To compile and install the library using the configure script execute the
+following:
+
+    ./configure
+    make
+    sudo make install
+
+To compile and install using CMake:
+
+    cmake .
+    make
+    sudo make install
+
+
+Installing to a custom location
+-------------------------------
+
+To install to a different location, pass the --prefix argument to the configure
+script. For example:
+
+    ./configure --prefix=/install/path
+    make
+    make install
+
+Or set CMAKE_INSTALL_PREFIX when using CMake:
+
+    cmake . -DCMAKE_INSTALL_PREFIX=/install/path
+    make
+    make install
+
+
+Rebuilding the autotools scripts
+--------------------------------
+
+If you have a need to change configure.ac or Makefile.am files, and you have a
+reasonably up-to-date set of tools, run the following:
+
+    autoreconf --force --install
+    ./configure
+    make
+    make install
