@@ -1,0 +1,24 @@
+project(kRPC)
+cmake_minimum_required(VERSION 2.8)
+
+set(VERSION_NUMBER %VERSION%)
+set(CMAKE_BUILD_TYPE "Release")
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+
+include_directories(include include/krpc) #TODO: shouldn't need include/krpc
+
+file(GLOB SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+add_library(krpc SHARED ${SRC})
+
+set_target_properties(
+  krpc PROPERTIES VERSION   ${VERSION_NUMBER}
+                  SOVERSION ${VERSION_NUMBER}
+                  INSTALL_NAME_DIR lib)
+
+install(TARGETS krpc
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+
+install(DIRECTORY include DESTINATION . FILES_MATCHING PATTERN "*.hpp")

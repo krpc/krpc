@@ -260,3 +260,15 @@ new_http_archive(
     strip_prefix = 'javatuples-1.2',
     sha256 = 'f5477fb3bb3ed400a69b9227aa1d792c9e5e19fb4b76621b0db5df8112540a84'
 )
+
+http_file(
+    name = 'm4_stdcxx',
+    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx.m4',
+    sha256 = '884666123ad2cacfabff2a4e4e43ddf1c6a0a242f882864efde5d01624d5e2b4'
+)
+
+http_file(
+    name = 'm4_stdcxx_11',
+    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx_11.m4',
+    sha256 = 'f0a338ceffe1cd39278edf1552b56f346f2606f103ed270a129454176266059b'
+)

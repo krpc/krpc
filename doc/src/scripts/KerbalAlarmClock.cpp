@@ -1,4 +1,4 @@
-#include <krpc/krpc.hpp>
+#include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
 #include <krpc/services/kerbal_alarm_clock.hpp>
 #include <iostream>
