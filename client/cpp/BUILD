@@ -1,15 +1,17 @@
-load('/tools/build/package', 'package_archive')
+load('/tools/build/autotools', 'autotools_dist')
 load('/tools/build/protobuf/cpp', 'protobuf_cpp')
 load('/tools/build/client_test', 'client_test')
 load('/tools/clientgen/build', 'clientgen_cpp')
 load('/config', 'version')
 
-package_archive(
+autotools_dist(
     name = 'cpp',
     out = 'krpc-cpp-%s.zip' % version,
-    files = glob(['include/krpc/*.hpp', 'src/*.cpp']) + [
-        '//:readme', '//:version', 'CHANGES.txt',
+    files = glob(['include/krpc/*.hpp', 'src/*.cpp', '**/Makefile.am']) + [
+        '//:readme', '//:version', 'CHANGES.txt', 'INSTALL.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
+        ':autotools', '@m4_stdcxx//file', '@m4_stdcxx_11//file',
+        ':cmake',
         '//protobuf:cpp',
         ':services-krpc',
         ':services-spacecenter',
@@ -17,11 +19,27 @@ package_archive(
         ':services-infernalrobotics'
     ],
     path_map = {
-        'client/cpp': '',
+        'client/cpp/': '',
         'protobuf/krpc.pb.hpp': 'include/krpc/krpc.pb.hpp',
-        'protobuf/krpc.pb.cpp': 'src/krpc.pb.cpp'
+        'protobuf/krpc.pb.cpp': 'src/krpc.pb.cpp',
+        'external/m4_stdcxx/file/gitweb': 'm4/ax_cxx_compile_stdcxx.m4',
+        'external/m4_stdcxx_11/file/gitweb': 'm4/ax_cxx_compile_stdcxx_11.m4'
     },
     visibility = ['//:__pkg__']
+)
+
+genrule(
+    name = 'autotools',
+    srcs = ['configure.ac.tmpl'],
+    outs = ['configure.ac'],
+    cmd = 'sed \'s/%VERSION%/'+version+'/g\' "$<" > "$@"'
+)
+
+genrule(
+    name = 'cmake',
+    srcs = ['CMakeLists.txt.tmpl'],
+    outs = ['CMakeLists.txt'],
+    cmd = 'sed \'s/%VERSION%/'+version+'/g\' "$<" > "$@"'
 )
 
 clientgen_cpp(

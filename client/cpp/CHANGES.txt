@@ -1,5 +1,6 @@
 v0.2.2
  * Add documentation to service header files
+ * Add autotools and cmake build scripts
  * Remove support for protobuf enumeration and custom protobuf messages
 
 v0.2.1
