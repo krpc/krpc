@@ -47,6 +47,22 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         obj1a = self.conn.test_service.object_property
         self.assertEqual(hash(obj1), hash(obj1a))
 
+    def test_sorting(self):
+        obj1 = self.conn.test_service.create_test_object('object_sorting_1')
+        obj2 = self.conn.test_service.create_test_object('object_sorting_2')
+        obj3 = self.conn.test_service.create_test_object('object_sorting_3')
+        self.assertEqual([obj1, obj2, obj3], sorted([obj2, obj3, obj1]))
+        self.assertTrue(obj1 < obj2)
+        self.assertTrue(obj2 < obj3)
+        self.assertTrue(obj1 <= obj1)
+        self.assertTrue(obj1 <= obj2)
+        self.assertTrue(obj2 <= obj3)
+        self.assertTrue(obj2 > obj1)
+        self.assertTrue(obj3 > obj2)
+        self.assertTrue(obj2 >= obj1)
+        self.assertTrue(obj3 >= obj2)
+        self.assertTrue(obj1 >= obj1)
+
     def test_memory_allocation(self):
         obj1 = self.conn.test_service.create_test_object('jeb')
         obj2 = self.conn.test_service.create_test_object('jeb')

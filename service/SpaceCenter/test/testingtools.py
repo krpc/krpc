@@ -9,7 +9,7 @@ def connect(name=''):
     return krpc.connect(name=name, address='10.0.2.2')
 
 def get_ksp_dir():
-    path = os.path.abspath('../../../../lib/ksp')
+    path = os.path.abspath('../../../lib/ksp')
     if not os.path.exists(path):
         raise RuntimeError ('KSP dir not found at %s' % path)
     return path

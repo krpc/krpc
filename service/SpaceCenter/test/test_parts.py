@@ -24,13 +24,15 @@ class TestParts(testingtools.TestCase):
         part_titles = sorted(p.title for p in parts)
         self.assertEqual(
             part_titles,
-            ['Advanced Reaction Wheel Module, Large',
+            ['\'Drill-O-Matic Junior\' Mining Excavator',
+             'Advanced Reaction Wheel Module, Large',
              'Aerodynamic Nose Cone',
              'Aerodynamic Nose Cone',
              'Aerodynamic Nose Cone',
              'Clamp-O-Tron Docking Port',
              'Clamp-O-Tron Docking Port Jr.',
              'Communotron 16',
+             'Convert-O-Tron 250',
              'EAS-4 Strut Connector',
              'EAS-4 Strut Connector',
              'EAS-4 Strut Connector',
@@ -152,73 +154,98 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(len(parts), 0)
 
     def test_parts_in_stage(self):
-        self.assertEqual([
-            'Advanced Reaction Wheel Module, Large',
-            'Aerodynamic Nose Cone',
-            'Aerodynamic Nose Cone',
-            'Aerodynamic Nose Cone',
-            'Clamp-O-Tron Docking Port',
-            'Clamp-O-Tron Docking Port Jr.',
-            'Communotron 16',
-            'EAS-4 Strut Connector',
-            'EAS-4 Strut Connector',
-            'EAS-4 Strut Connector',
-            'FL-R1 RCS Fuel Tank',
-            'GRAVMAX Negative Gravioli Detector',
-            'Gigantor XL Solar Array',
-            'Illuminator Mk1',
-            'Illuminator Mk1',
-            'Illuminator Mk1',
-            'LT-1 Landing Struts',
-            'LT-1 Landing Struts',
-            'LT-1 Landing Struts',
-            'LY-10 Small Landing Gear',
-            'Mk1-2 Command Pod',
-            u'Mystery Goo\u2122 Containment Unit',
-            u'Mystery Goo\u2122 Containment Unit',
-            u'Mystery Goo\u2122 Containment Unit',
-            'OX-STAT Photovoltaic Panels',
-            'PresMat Barometer',
-            'Rockomax Jumbo-64 Fuel Tank',
-            'Rockomax X200-32 Fuel Tank',
-            'Rockomax X200-8 Fuel Tank',
-            'SP-L 1x6 Photovoltaic Panels',
-            'SP-L 1x6 Photovoltaic Panels',
-            'Thermal Control System (small)',
-            'Z-400 Rechargeable Battery'],
-            sorted([p.title for p in self.parts.in_stage(-1)]))
-        self.assertEqual(['Mk16-XL Parachute'], sorted([p.title for p in self.parts.in_stage(0)]))
-        self.assertEqual(['TR-XL Stack Separator'], sorted([p.title for p in self.parts.in_stage(1)]))
-        self.assertEqual(['Mk2-R Radial-Mount Parachute']*3, sorted([p.title for p in self.parts.in_stage(2)]))
-        self.assertEqual(['RE-L10 "Poodle" Liquid Fuel Engine', 'TR-XL Stack Separator'],
-                         sorted([p.title for p in self.parts.in_stage(3)]))
-        self.assertEqual(['RE-I5 "Skipper" Liquid Fuel Engine', 'TR-XL Stack Separator'],
-                         sorted([p.title for p in self.parts.in_stage(4)]))
-        self.assertEqual(['TT-70 Radial Decoupler']*3, sorted([p.title for p in self.parts.in_stage(5)]))
-        self.assertEqual(['RE-M3 "Mainsail" Liquid Engine'] + \
-                         ['S1 SRB-KD25k "Kickback" Solid Fuel Booster']*3 + \
-                         ['TT18-A Launch Stability Enhancer']*6,
-                         sorted([p.title for p in self.parts.in_stage(6)]))
-        self.assertEqual(len(self.parts.in_stage(7)), 0)
+        def part_titles_in_stage(s):
+            return sorted([p.title for p in self.parts.in_stage(s)])
+        self.assertEqual(
+            ['\'Drill-O-Matic Junior\' Mining Excavator',
+             'Advanced Reaction Wheel Module, Large',
+             'Aerodynamic Nose Cone',
+             'Aerodynamic Nose Cone',
+             'Aerodynamic Nose Cone',
+             'Communotron 16',
+             'Convert-O-Tron 250',
+             'EAS-4 Strut Connector',
+             'EAS-4 Strut Connector',
+             'EAS-4 Strut Connector',
+             'FL-R1 RCS Fuel Tank',
+             'GRAVMAX Negative Gravioli Detector',
+             'Gigantor XL Solar Array',
+             'Illuminator Mk1',
+             'Illuminator Mk1',
+             'Illuminator Mk1',
+             'LT-1 Landing Struts',
+             'LT-1 Landing Struts',
+             'LT-1 Landing Struts',
+             'LY-10 Small Landing Gear',
+             'Mk1-2 Command Pod',
+             u'Mystery Goo\u2122 Containment Unit',
+             u'Mystery Goo\u2122 Containment Unit',
+             u'Mystery Goo\u2122 Containment Unit',
+             'OX-STAT Photovoltaic Panels',
+             'PresMat Barometer',
+             'Rockomax Jumbo-64 Fuel Tank',
+             'Rockomax X200-32 Fuel Tank',
+             'Rockomax X200-8 Fuel Tank',
+             'SP-L 1x6 Photovoltaic Panels',
+             'SP-L 1x6 Photovoltaic Panels',
+             'Thermal Control System (small)',
+             'Z-400 Rechargeable Battery'],
+            part_titles_in_stage(-1))
+        self.assertEqual(
+            ['Mk16-XL Parachute'],
+            part_titles_in_stage(0))
+        self.assertEqual(
+            ['TR-XL Stack Separator'],
+            part_titles_in_stage(1))
+        self.assertEqual(
+            ['Mk2-R Radial-Mount Parachute']*3,
+            part_titles_in_stage(2))
+        self.assertEqual(
+            ['RE-L10 "Poodle" Liquid Fuel Engine',
+             'TR-XL Stack Separator'],
+            part_titles_in_stage(3))
+        self.assertEqual(
+            #TODO: why are docking ports activated in a stage?
+            [u'Clamp-O-Tron Docking Port',
+             u'Clamp-O-Tron Docking Port Jr.',
+             'RE-I5 "Skipper" Liquid Fuel Engine',
+             'TR-XL Stack Separator'],
+            part_titles_in_stage(4))
+        self.assertEqual(
+            ['TT-70 Radial Decoupler']*3,
+            part_titles_in_stage(5))
+        self.assertEqual(
+            ['RE-M3 "Mainsail" Liquid Engine'] + \
+            ['S1 SRB-KD25k "Kickback" Solid Fuel Booster']*3 + \
+            ['TT18-A Launch Stability Enhancer']*6,
+            part_titles_in_stage(6))
+        self.assertEqual([], part_titles_in_stage(7))
 
     def test_parts_in_decouple_stage(self):
-        self.assertEqual(['LT-1 Landing Struts', 'LT-1 Landing Struts', 'LT-1 Landing Struts',
-                          'LY-10 Small Landing Gear', 'Mk1-2 Command Pod', 'Mk16-XL Parachute'],
-                         sorted([p.title for p in self.parts.in_decouple_stage(-1)]))
-        self.assertEqual(len(self.parts.in_decouple_stage(0)), 0)
-        self.assertEqual(['RE-M3 "Mainsail" Liquid Engine', 'Rockomax Jumbo-64 Fuel Tank',
-                          'TR-XL Stack Separator'],
-                         sorted([p.title for p in self.parts.in_decouple_stage(4)]))
-        self.assertEqual(['Aerodynamic Nose Cone', 'Aerodynamic Nose Cone',
-                          'Aerodynamic Nose Cone', 'Illuminator Mk1',
-                          'Illuminator Mk1', 'Illuminator Mk1',
-                          'S1 SRB-KD25k "Kickback" Solid Fuel Booster',
-                          'S1 SRB-KD25k "Kickback" Solid Fuel Booster',
-                          'S1 SRB-KD25k "Kickback" Solid Fuel Booster', 'TT-70 Radial Decoupler',
-                          'TT-70 Radial Decoupler', 'TT-70 Radial Decoupler'],
-                         sorted([p.title for p in self.parts.in_decouple_stage(5)]))
-        self.assertEqual(['TT18-A Launch Stability Enhancer']*6, sorted([p.title for p in self.parts.in_decouple_stage(6)]))
-        self.assertEqual(len(self.parts.in_stage(7)), 0)
+        def part_titles_in_decouple_stage(s):
+            return sorted([p.title for p in self.parts.in_decouple_stage(s)])
+        self.assertEqual(
+            ['LT-1 Landing Struts']*3 + \
+            ['LY-10 Small Landing Gear',
+             'Mk1-2 Command Pod',
+             'Mk16-XL Parachute'],
+            part_titles_in_decouple_stage(-1))
+        self.assertEqual([], part_titles_in_decouple_stage(0))
+        self.assertEqual(
+            ['RE-M3 "Mainsail" Liquid Engine',
+             'Rockomax Jumbo-64 Fuel Tank',
+             'TR-XL Stack Separator'],
+            part_titles_in_decouple_stage(4))
+        self.assertEqual(
+            ['Aerodynamic Nose Cone']*3 + \
+            ['Illuminator Mk1']*3 + \
+            ['S1 SRB-KD25k "Kickback" Solid Fuel Booster']*3 + \
+            ['TT-70 Radial Decoupler']*3,
+            part_titles_in_decouple_stage(5))
+        self.assertEqual(
+            ['TT18-A Launch Stability Enhancer']*6,
+            part_titles_in_decouple_stage(6))
+        self.assertEqual([], part_titles_in_decouple_stage(7))
 
     def test_modules_with_name(self):
         modules = self.parts.modules_with_name('ModuleLight')
@@ -286,6 +313,16 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(
             ['Advanced Reaction Wheel Module, Large', 'Mk1-2 Command Pod'],
             sorted(x.part.title for x in self.parts.reaction_wheels))
+
+    def test_resource_converters(self):
+        self.assertEqual(
+            ['Convert-O-Tron 250'],
+            sorted(x.part.title for x in self.parts.resource_converters))
+
+    def test_resource_harvesters(self):
+        self.assertEqual(
+            ['\'Drill-O-Matic Junior\' Mining Excavator'],
+            sorted(x.part.title for x in self.parts.resource_harvesters))
 
     def test_sensors(self):
         self.assertEqual(

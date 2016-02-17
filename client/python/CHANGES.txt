@@ -1,6 +1,7 @@
 v0.2.2
  * Fix exception when stream thread shuts down (#197)
  * Remove support for protobuf enumeration and custom protobuf messages
+ * Add comparison methods to remote objects so that they are sortable
 
 v0.2.1
  * Fix bug with setup.py on Windows

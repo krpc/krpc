@@ -12,12 +12,16 @@ class DocumentationParser(object):
             self.root = ElementTree.XML(xml.encode('UTF-8'), parser=parser)
 
     def parse(self, path='./summary'):
+        if self.root is None:
+            return ''
         node = self.root.find(path)
         if node is None:
             return ''
         return self._parse(node)
 
     def has(self, path='./summary'):
+        if self.root is None:
+            return False
         node = self.root.find(path)
         return node is not None and node.text is not None and node.text.strip() != ''
 

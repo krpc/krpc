@@ -6,6 +6,7 @@ using KRPC.SpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 using System;
+using CompoundParts;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -295,11 +296,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether this part is a fuel line.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsFuelLine {
+            get { return part.HasModule<CModuleFuelLine> (); }
+        }
+
+        /// <summary>
         /// The parts that are connected to this part via fuel lines, where the direction of the fuel line is into this part.
         /// </summary>
         [KRPCProperty]
         public IList<Part> FuelLinesFrom {
-            get { return part.fuelLookupTargets.Select (x => new Part (x.parent)).ToList (); }
+            get {
+                if (IsFuelLine)
+                    throw new ArgumentException ("Part is a fuel line");
+                return part.fuelLookupTargets.Select (x => new Part (x.parent)).ToList ();
+            }
         }
 
         /// <summary>
@@ -308,14 +321,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public IList<Part> FuelLinesTo {
             get {
-                var result = new HashSet<global::Part> ();
+                if (IsFuelLine)
+                    throw new ArgumentException ("Part is a fuel line");
+                var result = new List<global::Part> ();
                 foreach (var otherPart in part.vessel.parts) {
-                    foreach (var target in otherPart.fuelLookupTargets) {
+                    foreach (var target in otherPart.fuelLookupTargets.Select (x => x.parent)) {
                         if (target == part)
-                            result.Add (target);
+                            result.Add (otherPart);
                     }
                 }
-                //TODO: need to get parent? part of the fuel line
                 return result.Select (x => new Part (x)).ToList ();
             }
         }
@@ -343,6 +357,10 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal bool IsResourceConverter {
             get { return part.HasModule<ModuleResourceConverter> (); }
+        }
+
+        internal bool IsResourceHarvester {
+            get { return part.HasModule<ModuleResourceHarvester> (); }
         }
 
         internal bool IsEngine {
@@ -385,10 +403,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return part.HasModule<ModuleDeployableSolarPanel> (); }
         }
 
-        internal bool IsResourceHarvester {
-            get { return part.HasModule<ModuleResourceHarvester> (); }
-        }
-
         /// <summary>
         /// A <see cref="Decoupler"/> if the part is a decoupler, otherwise <c>null</c>.
         /// </summary>
@@ -411,6 +425,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public ResourceConverter ResourceConverter {
             get { return IsResourceConverter ? new ResourceConverter (this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="ResourceHarvester"/> if the part is a resource harvester, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public ResourceHarvester ResourceHarvester {
+            get { return IsResourceHarvester ? new ResourceHarvester (this) : null; }
         }
 
         /// <summary>
@@ -491,14 +513,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public SolarPanel SolarPanel {
             get { return IsSolarPanel ? new SolarPanel (this) : null; }
-        }
-
-        /// <summary>
-        /// A <see cref="ResourceHarvester"/> if the part is a resource harvester, otherwise <c>null</c>.
-        /// </summary>
-        [KRPCProperty]
-        public ResourceHarvester ResourceHarvester {
-            get { return IsResourceHarvester ? new ResourceHarvester (this) : null; }
         }
 
         /// <summary>

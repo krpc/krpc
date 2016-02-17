@@ -1,3 +1,8 @@
+v0.2.2
+ * Add Part.IsFuelLine
+ * Fix bug with Part.FuelLinesTo (#193)
+ * Part.FuelLinesTo and FuelLinesFrom now return an error if called on a fuel line part
+
 v0.2.1
  * Fix Orbit.Speed always returning 0
  * Add CelestialBody.SurfaceHeight, BedrockHeight, MSLPosition, SurfacePosition, BedrockPosition (#186)
