@@ -4,8 +4,58 @@ C++ Client
 ==========
 
 The ``krpc`` library provides functionality to interact with a kRPC server from
-C++. The headers and source can be
-`downloaded from github <https://github.com/djungelorm/krpc/releases>`_.
+C++.
+
+Compiling and Installing the Library
+------------------------------------
+
+The source archive can be `downloaded from github <https://github.com/djungelorm/krpc/releases/latest>`_.
+
+To compile and install the library using the configure script, extract the
+archive and execute the following commands:
+
+.. code-block:: bash
+
+   ./configure
+   make
+   sudo make install
+
+Alternatively, you can use CMake:
+
+.. code-block:: bash
+
+   cmake .
+   make
+   sudo make install
+
+
+Installing to a Custom Location
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To install the library to a different location, pass the ``--prefix`` argument to
+the configure script. For example:
+
+.. code-block:: bash
+
+   ./configure --prefix=/install/path
+   make
+   make install
+
+Or set ``CMAKE_INSTALL_PREFIX`` when using CMake:
+
+.. code-block:: bash
+
+   cmake . -DCMAKE_INSTALL_PREFIX=/install/path
+   make
+   make install
+
+Using the Library
+^^^^^^^^^^^^^^^^^
+
+To use the library, simply include the main ``krpc.hpp`` header file, and the
+header files for the services that you would like to use. For example,
+``krpc/services/space_center.hpp``. Then link against `libkrpc.so` when
+compiling your application.
 
 Connecting to the Server
 ------------------------
