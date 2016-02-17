@@ -22,7 +22,7 @@ def _ref_impl(ctx):
 def _csc_args(srcs, deps, exe=None, lib=None, doc=None, warn=4, nowarn=[]):
     if exe: target_type = 'exe'
     if lib: target_type = 'library'
-    args = ['-target:%s' % target_type]
+    args = ['-optimize+', '-debug-', '-target:%s' % target_type]
     args.extend(_MCS_FLAGS)
     if exe: args.append('-out:%s' % exe.path)
     if lib: args.append('-out:%s' % lib.path)
