@@ -1,6 +1,7 @@
 v0.2.2
  * Add documentation to service header files
  * Add autotools and cmake build scripts
+ * Move header file krpc/krpc.hpp -> krpc.hpp
  * Remove support for protobuf enumeration and custom protobuf messages
 
 v0.2.1

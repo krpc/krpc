@@ -16,7 +16,7 @@ connect to a server running on the local machine:
 
 .. code-block:: cpp
 
-   #include <krpc/krpc.hpp>
+   #include <krpc.hpp>
    #include <krpc/services/krpc.hpp>
    #include <iostream>
 
@@ -33,7 +33,7 @@ to connect to. For example:
 
 .. code-block:: cpp
 
-   #include <krpc/krpc.hpp>
+   #include <krpc.hpp>
    #include <krpc/services/krpc.hpp>
    #include <iostream>
 
@@ -67,7 +67,7 @@ service, and outputs the name of the active vessel:
 
 .. code-block:: cpp
 
-   #include <krpc/krpc.hpp>
+   #include <krpc.hpp>
    #include <krpc/services/space_center.hpp>
    #include <iostream>
 
@@ -141,7 +141,7 @@ Reference
 
          .. code-block:: cpp
 
-            #include <krpc/krpc.hpp>
+            #include <krpc.hpp>
             #include <krpc/services/krpc.hpp>
             #include <iostream>
 
@@ -158,7 +158,7 @@ Reference
 
          .. code-block:: cpp
 
-            #include <krpc/krpc.hpp>
+            #include <krpc.hpp>
             #include <krpc/services/krpc.hpp>
             #include <iostream>
 

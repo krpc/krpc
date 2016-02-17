@@ -1,4 +1,4 @@
-#include "krpc/krpc.hpp"
+#include "krpc.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/decoder.hpp"
 

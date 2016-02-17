@@ -7,7 +7,7 @@ load('/config', 'version')
 autotools_dist(
     name = 'cpp',
     out = 'krpc-cpp-%s.zip' % version,
-    files = glob(['include/krpc/*.hpp', 'src/*.cpp', '**/Makefile.am']) + [
+    files = glob(['include/**/*.hpp', 'src/*.cpp', '**/Makefile.am']) + [
         '//:readme', '//:version', 'CHANGES.txt', 'INSTALL.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
         ':autotools', '@m4_stdcxx//file', '@m4_stdcxx_11//file',
@@ -80,7 +80,7 @@ clientgen_cpp(
 cc_library(
     name = 'krpc',
     srcs = glob(['src/*.cpp']) + [':protobuf'],
-    hdrs = glob(['include/krpc/*.hpp']) + [':protobuf'],
+    hdrs = glob(['include/**/*.hpp']) + [':protobuf'],
     includes = ['include'],
     deps = ['@protobuf//:protobuf', '@cpp_asio//:asio']
 )
