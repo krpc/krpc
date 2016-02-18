@@ -38,7 +38,7 @@ namespace krpc {
     std::string data;
     while (true) {
       try {
-        data += rpc_connection->receive(1); //TODO: partial_receive needed here?
+        data += rpc_connection->receive(1);
         size = decoder::decode_size_and_position(data).first;
         break;
       } catch (decoder::DecodeFailed& e) {
