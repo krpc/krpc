@@ -3,6 +3,7 @@ using System.Net;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Google.Protobuf;
 using KRPC.Server;
 using KRPC.Server.Net;
 using KRPC.Server.RPC;
@@ -11,6 +12,7 @@ using KRPC.Service;
 using KRPC.Continuations;
 using KRPC.Utils;
 using KRPC.Schema.KRPC;
+
 
 namespace KRPC
 {
@@ -27,6 +29,7 @@ namespace KRPC
         IScheduler<IClient<Request,Response>> clientScheduler;
         IList<RequestContinuation> continuations;
         IDictionary<IClient<byte,StreamMessage>, IList<StreamRequest>> streamRequests;
+        IDictionary<uint, ByteString> streamResultCache = new Dictionary<uint, ByteString> ();
 
         internal delegate double UniversalTimeFunction ();
 
@@ -502,7 +505,7 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Update the Stream server. Executes all streaming RPCs and sends the results to clients.
+        /// Update the Stream server. Executes all streaming RPCs and sends the results to clients (if they have changed).
         /// </summary>
         void StreamServerUpdate ()
         {
@@ -519,6 +522,7 @@ namespace KRPC
                     continue;
                 var streamMessage = new StreamMessage ();
                 foreach (var request in requests) {
+                    // Run the RPC
                     Response response;
                     try {
                         response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
@@ -527,11 +531,16 @@ namespace KRPC
                         response.HasError = true;
                         response.Error = e.ToString ();
                     }
+                    rpcsExecuted++;
+                    // Don't send an update if it is the previous one
+                    if (response.ReturnValue == streamResultCache [request.Identifier])
+                        continue;
+                    // Add the update to the response message
+                    streamResultCache [request.Identifier] = response.ReturnValue;
                     response.Time = GetUniversalTime ();
                     var streamResponse = request.Response;
                     streamResponse.Response = response;
                     streamMessage.Responses.Add (streamResponse);
-                    rpcsExecuted++;
                 }
                 streamClient.Stream.Write (streamMessage);
             }
@@ -561,6 +570,7 @@ namespace KRPC
             {
                 var streamRequest = new StreamRequest (request);
                 streamRequests [streamClient].Add (streamRequest);
+                streamResultCache [streamRequest.Identifier] = null;
                 return streamRequest.Identifier;
             }
         }
@@ -575,6 +585,7 @@ namespace KRPC
             if (!requests.Any ())
                 return;
             streamRequests [streamClient].Remove (requests.Single ());
+            streamResultCache.Remove (identifier);
         }
 
         /// <summary>

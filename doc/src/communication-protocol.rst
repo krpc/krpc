@@ -327,7 +327,9 @@ to share a stream between clients.
 The results of the RPCs for each stream are sent to the client over the Stream
 Server's TCP/IP connection, as repeated *stream messages*. The RPC for each
 stream is invoked every `fixed update
-<http://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_.
+<http://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_. Updates
+are sent to clients when the value returned by the RPC changes to minimize
+network traffic.
 
 Anatomy of a Stream Message
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

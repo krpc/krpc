@@ -1,4 +1,5 @@
 v0.2.2
+ * Stream updates are only sent to clients when the result changes (#170)
  * Removed support for protobuf enumerations and custom protobuf messages as RPC parameter/return values.
    Note: these features were not used anywhere, and only cause complications for client libraries
 
