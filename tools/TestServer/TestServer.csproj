@@ -56,9 +56,6 @@
     <Reference Include="mscorlib">
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
     </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\bazel-bin\tools\TestServer\AssemblyInfo.cs">
