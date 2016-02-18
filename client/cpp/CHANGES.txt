@@ -3,6 +3,7 @@ v0.2.2
  * Add autotools and cmake build scripts
  * Move header file krpc/krpc.hpp -> krpc.hpp
  * Remove support for protobuf enumeration and custom protobuf messages
+ * Add comparison operations for remote objects
 
 v0.2.1
  * Remove dependency on boost

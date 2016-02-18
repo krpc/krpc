@@ -21,6 +21,7 @@ namespace krpc {
     Object(Client* client, const std::string& name, google::protobuf::uint64 id = 0);
     template <typename U> friend std::ostream& operator<<(std::ostream&, const Object<U>&);
     template <typename U> friend bool operator==(const Object<U>&, const Object<U>&);
+    template <typename U> friend bool operator<(const Object<U>&, const Object<U>&);
   };
 
   template <typename T>
@@ -33,16 +34,42 @@ namespace krpc {
     _client(client), _name(name), _id(id) {}
 
   template <typename T>
+  inline std::ostream& operator<<(std::ostream& stream, const Object<T>& object)
+  {
+    stream << object._name << "<" << object._id << ">";
+    return stream;
+  }
+
+  template <typename T>
   inline bool operator==(const Object<T>& lhs, const Object<T>& rhs)
   {
     return lhs._id == rhs._id;
   }
 
   template <typename T>
-  inline std::ostream& operator<<(std::ostream& stream, const Object<T>& object)
+  inline bool operator!=(const Object<T>& lhs, const Object<T>& rhs) {
+    return !operator==(lhs,rhs);
+  }
+
+  template <typename T>
+  inline bool operator<(const Object<T>& lhs, const Object<T>& rhs)
   {
-    stream << object._name << "<" << object._id << ">";
-    return stream;
+    return lhs._id < rhs._id;
+  }
+
+  template <typename T>
+  inline bool operator> (const Object<T>& lhs, const Object<T>& rhs) {
+    return  operator<(rhs,lhs);
+  }
+
+  template <typename T>
+  inline bool operator<=(const Object<T>& lhs, const Object<T>& rhs) {
+    return !operator>(lhs,rhs);
+  }
+
+  template <typename T>
+  inline bool operator>=(const Object<T>& lhs, const Object<T>& rhs) {
+    return !operator<(lhs,rhs);
   }
 
 }
