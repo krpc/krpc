@@ -92,7 +92,8 @@ namespace krpc {
         throw DecodeFailed("Failed to decode delimited message (length)");
       if (!message.ParseFromCodedStream(&stream))
         throw DecodeFailed("Failed to decode delimited message");
-      //TODO: check that length bytes were read to decode the delimited message
+      if (!stream.ExpectAtEnd())
+        throw DecodeFailed("Failed to decode delimited message (did not consume entire buffer)");
     }
 
     std::pair<pb::uint32, pb::uint32> decode_size_and_position(const std::string& data) {
