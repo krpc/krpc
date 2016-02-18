@@ -58,7 +58,47 @@ outputs the name of the active vessel:
 Streaming Data from the Server
 ------------------------------
 
-Not yet supported.
+A stream repeatedly executes a function on the server, with a fixed set of
+argument values. It provides a more efficient way of repeatedly getting the
+result of calling function on the server, without having to invoke it directly
+-- which incurs communication overheads.
+
+For example, consider the following loop that continuously prints out the
+position of the active vessel. This loop incurs significant communication
+overheads, as the ``vessel.position()`` function is called repeatedly.
+
+.. code-block:: java
+
+   Vessel vessel = spaceCenter.getActiveVessel();
+   ReferenceFrame refframe = vessel.getOrbit().getBody().getReferenceFrame();
+   while (true)
+       System.out.println(vessel.position(refframe));
+
+The following code achieves the same thing, but is far more efficient. It makes
+a single call to :meth:`Connection.addStream` to create the stream, which avoids
+the communication overhead in the previous example.
+
+.. code-block:: java
+
+   Vessel vessel = spaceCenter.getActiveVessel();
+   ReferenceFrame refframe = vessel.getOrbit().getBody().getReferenceFrame();
+   Stream<Triplet<Double,Double,Double>> vessel_stream = connection.addStream(vessel, "position", refframe);
+   while (true)
+       System.out.println(vessel_stream.get());;
+
+Streams are created by calling :meth:`Connection.addStream` and passing it
+information about which method to stream. The example above passes a remote
+object, the name of the method to call, followed by the arguments to pass to the
+method (if any). The most recent value for the stream can be obtained by calling
+:meth:`Stream.get`.
+
+Streams can also be added for static methods as follows:
+
+.. code-block:: java
+
+   Stream<Double> time_stream = connection.addStream(SpaceCenter.class, "getUt");
+
+A stream can be removed by calling :meth:`Stream.remove()`.
 
 Reference
 ---------
@@ -88,6 +128,30 @@ Reference
       :param int stream_port: The port number of the Stream Server. Defaults
                               to 50001.
 
-   .. method:: void close()
+  .. method:: void close()
 
       Close the connection.
+
+  .. method:: Stream<T> addStream(Class<?> clazz, String method, Object... args)
+
+     Create a stream for a static method call to the given class.
+
+  .. method:: Stream<T> addStream(RemoteObject instance, String method, Object... args)
+
+     Create a stream for a method call to the given remote object.
+
+.. type:: class Stream<T>
+
+   A stream object.
+
+   .. method:: T get()
+
+      Get the most recent value for the stream.
+
+   .. method:: void remove()
+
+      Remove the stream from the server.
+
+.. type:: abstract class RemoteObject
+
+   The abstract base class for all remote objects.

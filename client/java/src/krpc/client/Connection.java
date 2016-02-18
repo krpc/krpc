@@ -1,6 +1,9 @@
 package krpc.client;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Arrays;
@@ -14,10 +17,9 @@ import krpc.schema.KRPC;
 public class Connection {
 
     private Socket rpcSocket;
-    private Socket streamSocket;
-
     private CodedOutputStream rpcOutputStream;
     private CodedInputStream rpcInputStream;
+    private StreamManager streamManager;
 
     private static String EMPTY_NAME = "";
     private static InetAddress DEFAULT_ADDRESS = InetAddress.getLoopbackAddress();
@@ -130,16 +132,6 @@ public class Connection {
         return new Connection(name, InetAddress.getByName(address), rpcPort, streamPort);
     }
 
-    /**
-     * Close the connection.
-     * 
-     * @throws IOException
-     */
-    public void close() throws IOException {
-        rpcSocket.close();
-        streamSocket.close();
-    }
-
     private Connection(String name, InetAddress address, int rpcPort, int streamPort) throws IOException {
         rpcSocket = new Socket(address, rpcPort);
         rpcSocket.getOutputStream().write(Encoder.RPC_HELLO_MESSAGE);
@@ -150,7 +142,7 @@ public class Connection {
         while (read < Encoder.CLIENT_IDENTIFIER_LENGTH)
             read += rpcSocket.getInputStream().read(clientIdentifier, read, Encoder.CLIENT_IDENTIFIER_LENGTH - read);
 
-        streamSocket = new Socket(address, streamPort);
+        Socket streamSocket = new Socket(address, streamPort);
         streamSocket.getOutputStream().write(Encoder.STREAM_HELLO_MESSAGE);
         streamSocket.getOutputStream().write(clientIdentifier);
         streamSocket.getOutputStream().flush();
@@ -162,6 +154,17 @@ public class Connection {
 
         rpcOutputStream = CodedOutputStream.newInstance(rpcSocket.getOutputStream());
         rpcInputStream = CodedInputStream.newInstance(rpcSocket.getInputStream());
+        streamManager = new StreamManager(this, streamSocket);
+    }
+
+    /**
+     * Close the connection.
+     * 
+     * @throws IOException
+     */
+    public void close() throws IOException {
+        rpcSocket.close();
+        streamManager.close();
     }
 
     /**
@@ -169,6 +172,21 @@ public class Connection {
      * interface is for generated service code.
      */
     public ByteString invoke(String service, String procedure, ByteString... arguments) throws RPCException, IOException {
+        return invoke(request(service, procedure, arguments));
+    }
+
+    ByteString invoke(KRPC.Request request) throws RPCException, IOException {
+        rpcOutputStream.writeMessageNoTag(request);
+        rpcOutputStream.flush();
+        int size = rpcInputStream.readRawVarint32();
+        byte[] data = rpcInputStream.readRawBytes(size);
+        KRPC.Response response = KRPC.Response.parseFrom(data);
+        if (response.getHasError())
+            throw new RPCException(response.getError());
+        return response.getHasReturnValue() ? response.getReturnValue() : null;
+    }
+
+    KRPC.Request request(String service, String procedure, ByteString... arguments) throws IOException {
         KRPC.Request.Builder requestBuilder = KRPC.Request.newBuilder();
         requestBuilder.setService(service);
         requestBuilder.setProcedure(procedure);
@@ -181,15 +199,104 @@ public class Connection {
                 position++;
             }
         }
-
-        rpcOutputStream.writeMessageNoTag(requestBuilder.build());
-        rpcOutputStream.flush();
-
-        int size = rpcInputStream.readRawVarint32();
-        byte[] data = rpcInputStream.readRawBytes(size);
-        KRPC.Response response = KRPC.Response.parseFrom(data);
-        if (response.getHasError())
-            throw new RPCException(response.getError());
-        return response.getHasReturnValue() ? response.getReturnValue() : null;
+        return requestBuilder.build();
     }
+
+    private KRPC.Request request(Method method, Object... args) throws IOException {
+        RPCInfo info = method.getAnnotation(RPCInfo.class);
+        String service = info.service();
+        String procedure = info.procedure();
+        ByteString[] encodedArgs = new ByteString[args.length];
+        int position = 0;
+        for (Object arg : args) {
+            encodedArgs[position] = Encoder.encode(arg);
+            position++;
+        }
+        return request(service, procedure, encodedArgs);
+    }
+
+    /**
+     * Create a stream for a static method call.
+     * 
+     * @param clazz
+     *            The class containing the static method.
+     * @param method
+     *            The name of the static method.
+     * @param args
+     *            The arguments to pass to the method.
+     * 
+     * @return A stream object.
+     * @throws StreamException
+     * @throws IOException
+     */
+    public <T> Stream<T> addStream(Class<?> clazz, String method, Object... args) throws StreamException, RPCException, IOException {
+        return internalAddStream(clazz, null, method, args);
+    }
+
+    /**
+     * Create a stream for a method call on an object.
+     * 
+     * @param instance
+     *            An instance of the object.
+     * @param method
+     *            The name of the method.
+     * @param args
+     *            The arguments to pass to the method.
+     * 
+     * @return A stream object.
+     * @throws StreamException
+     * @throws IOException
+     */
+    public <T> Stream<T> addStream(RemoteObject instance, String method, Object... args) throws StreamException, RPCException, IOException {
+        return internalAddStream(instance.getClass(), instance, method, args);
+    }
+
+    private <T> Stream<T> internalAddStream(Class<?> clazz, Object instance, String methodName, Object... args) throws StreamException, RPCException, IOException {
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods) {
+            if (method.getName() == methodName) {
+                Class<?>[] paramTypes = method.getParameterTypes();
+                if (args.length != paramTypes.length)
+                    continue;
+                for (int i = 0; i < args.length; i++)
+                    if (!paramTypes[i].isAssignableFrom(args.getClass()))
+                        continue;
+                return internalAddStream(method, instance, args);
+            }
+        }
+        String[] params = new String[args.length];
+        for (int i = 0; i < args.length; i++)
+            params[i] = args[i].getClass().toString();
+        throw new StreamException("Failed to add stream. Method " + clazz.getName() + "." + methodName + "(" + String.join(",", params) + ") not found.");
+    }
+
+    private <T> Stream<T> internalAddStream(Method method, Object instance, Object... args) throws StreamException, RPCException, IOException {
+        if (instance == null && Modifier.isStatic(method.getModifiers())) {
+            // Remove connection parameter for static methods
+            args = Arrays.copyOfRange(args, 1, args.length);
+        } else if (instance != null) {
+            // Add instance parameter for remote object methods
+            Object[] newArgs = new Object[args.length + 1];
+            newArgs[0] = instance;
+            System.arraycopy(args, 0, newArgs, 1, args.length);
+            args = newArgs;
+        }
+        KRPC.Request request = request(method, args);
+        RPCInfo info = method.getAnnotation(RPCInfo.class);
+        if (info == null)
+            throw new StreamException("Failed to add stream. Method is not an RPC.");
+        TypeSpecification returnTypeSpec;
+        try {
+            Method getReturnTypeSpec = info.returnTypeSpec().getMethod("get", String.class);
+            returnTypeSpec = (TypeSpecification) getReturnTypeSpec.invoke(null, info.procedure());
+        } catch (NoSuchMethodException e) {
+            throw new StreamException("Failed to add stream. NoSuchMethodException when getting return type spec.");
+        } catch (IllegalAccessException e) {
+            throw new StreamException("Failed to add stream. IllegalAccessException when getting return type spec.");
+        } catch (InvocationTargetException e) {
+            throw new StreamException("Failed to add stream. InvocationTargetException when getting return type spec.");
+        }
+        return streamManager.add(request, returnTypeSpec);
+    }
+
 }

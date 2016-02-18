@@ -25,6 +25,7 @@ import krpc.client.Connection;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
 import krpc.client.RemoteObject;
+import krpc.client.RPCInfo;
 import krpc.client.RPCException;
 import krpc.client.TypeSpecification;
 
@@ -40,9 +41,32 @@ public class {{ service_name }} {
         this._connection = connection;
     }
 
+    public static class _ReturnTypeSpec {
+        public static TypeSpecification get(String procedure) {
+            switch (procedure) {
+            {% for procedure in procedures.values()|list + properties.values()|list %}
+            {% if procedure.return_type.name != 'void' %}
+            case "{{ procedure.remote_name }}":
+                return {{ procedure.return_type.spec }};
+            {% endif %}
+            {% endfor %}
+            {% for cls in classes.values() %}
+            {% for procedure in cls.methods.values()|list + cls.static_methods.values()|list + cls.properties.values()|list %}
+            {% if procedure.return_type.name != 'void' %}
+            case "{{ procedure.remote_name }}":
+                return {{ procedure.return_type.spec }};
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+            }
+            throw new IllegalArgumentException("No type specification found for '" + procedure +"'");
+        }
+    }
+
     {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
     {{ procedure.documentation | indent(width=4) }}
     @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "{{ service_name }}", procedure = "{{ procedure.remote_name }}", returnTypeSpec = _ReturnTypeSpec.class)
     public {{ procedure.return_type.name }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }}) throws RPCException, IOException {
         {% if procedure.parameters | length > 0 %}        {{ args(procedure.parameters) | indent(width=8) }}
         {% endif %}
@@ -99,6 +123,7 @@ public class {{ service_name }} {
         {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
         {{ method.documentation | indent(width=8) }}
         @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", returnTypeSpec = _ReturnTypeSpec.class)
         public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }}) throws RPCException, IOException
         {
             {{ args([{'name': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
@@ -112,6 +137,7 @@ public class {{ service_name }} {
         {% for method_name,method in cls.static_methods.items() %}
         {{ method.documentation | indent(width=8) }}
         @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", returnTypeSpec = _ReturnTypeSpec.class)
         public static {{ method.return_type.name }} {{ method_name }}(Connection _connection, {{ sig_parameters(method.parameters) }}) throws RPCException, IOException
         {
             {% if method.parameters | length > 0 %}            {{ args(method.parameters) | indent(width=12) }}
