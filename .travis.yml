@@ -54,4 +54,4 @@ before_install:
   - (cd lib/ksp; unzip -P $KEY2 ksp-lib.zip)
 
 script:
-  - bazel build //:krpc && bazel test //:test
+  - bazel build //:krpc //doc:html && bazel test //:test
