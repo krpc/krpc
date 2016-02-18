@@ -7,11 +7,11 @@ _args.push_back(encoder::encode({{x.name}}));
 {% endfor %}
 {% endmacro %}
 {% macro call(service, procedure, has_return, has_args, is_static=False) %}
-{% if has_return %}std::string _data = {% endif %}{% if is_static %}_client.{% else %}this->client->{% endif %}invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+{% if has_return %}std::string _data = {% endif %}{% if is_static %}_client.{% else %}this->_client->{% endif %}invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
 {% endmacro %}
 {% macro return(type, set_client, is_static=False) %}
 {{type}} _result;
-decoder::decode(_result, _data, {% if is_static %}&_client{% else %}this->client{% endif %});
+decoder::decode(_result, _data, {% if is_static %}&_client{% else %}this->_client{% endif %});
 return _result;
 {% endmacro %}
 {% macro sig_parameters(parameters) %}

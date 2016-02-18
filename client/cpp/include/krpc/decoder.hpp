@@ -50,8 +50,8 @@ namespace krpc {
     inline void decode(Object<T>& object, const std::string& data, Client* client) {
       google::protobuf::uint64 id;
       decode(id, data, client);
-      object.client = client;
-      object.id = id;
+      object._client = client;
+      object._id = id;
     }
 
     template <typename T>

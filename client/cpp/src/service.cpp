@@ -3,6 +3,6 @@
 namespace krpc {
 
   Service::Service(Client* client):
-    client(client) {}
+    _client(client) {}
 
 }

@@ -60,7 +60,7 @@ namespace krpc {
 
     template <typename T>
     inline std::string encode(const Object<T>& object) {
-      return encode(object.id);
+      return encode(object._id);
     }
 
     template <typename T>
