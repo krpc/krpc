@@ -11,11 +11,10 @@ namespace krpc {
   Client::Client(const std::shared_ptr<Connection>& rpc_connection,
                  const std::shared_ptr<Connection>& stream_connection):
     rpc_connection(rpc_connection),
-    stream_connection(stream_connection) {}
+    stream_manager(this, stream_connection) {}
 
   schema::Request Client::request(
-    const std::string& service, const std::string& procedure,
-    const std::vector<std::string>& args) {
+    const std::string& service, const std::string& procedure, const std::vector<std::string>& args) {
     schema::Request request;
     request.set_service(service);
     request.set_procedure(procedure);
@@ -27,11 +26,7 @@ namespace krpc {
     return request;
   }
 
-  std::string Client::invoke(
-    const std::string& service, const std::string& procedure,
-    const std::vector<std::string>& args) {
-
-    schema::Request request = this->request(service, procedure, args);
+  std::string Client::invoke(const schema::Request& request) {
     rpc_connection->send(encoder::encode_delimited(request));
 
     size_t size = 0;
@@ -55,4 +50,20 @@ namespace krpc {
     return response.return_value();
   }
 
+  std::string Client::invoke(
+    const std::string& service, const std::string& procedure, const std::vector<std::string>& args) {
+    return this->invoke (this->request(service, procedure, args));
+  }
+
+  google::protobuf::uint64 Client::add_stream(const schema::Request& request) {
+    return stream_manager.add_stream(request);
+  }
+
+  void Client::remove_stream(google::protobuf::uint64 id) {
+    stream_manager.remove_stream(id);
+  }
+
+  std::string Client::get_stream(google::protobuf::uint64 id) {
+    return stream_manager.get(id);
+  }
 }

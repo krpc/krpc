@@ -10,6 +10,11 @@ namespace krpc {
     RPCError(const std::string& msg): std::runtime_error(msg) {}
   };
 
+  class StreamError: public std::runtime_error {
+  public:
+    StreamError(const std::string& msg): std::runtime_error(msg) {}
+  };
+
 }
 
 #endif

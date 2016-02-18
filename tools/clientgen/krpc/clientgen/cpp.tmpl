@@ -14,6 +14,9 @@ _args.push_back(encoder::encode({{x.name}}));
 decoder::decode(_result, _data, {% if is_static %}&_client{% else %}this->_client{% endif %});
 return _result;
 {% endmacro %}
+{% macro stream(service, procedure, type, has_args, is_static=False) %}
+return ::krpc::Stream<{{ type }}>({% if is_static %}&_client{% else %}this->_client{% endif %}, {% if is_static %}_client.{% else %}this->_client->{% endif %}request("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %}));
+{% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}
@@ -24,6 +27,7 @@ return _result;
 #include <krpc/service.hpp>
 #include <krpc/encoder.hpp>
 #include <krpc/decoder.hpp>
+#include <krpc/stream.hpp>
 
 namespace krpc {
   namespace services {
@@ -39,7 +43,6 @@ namespace krpc {
       {% endfor %}
 
       {% endif %}
-      {% if enumerations | length > 0 %}
       {% for enum_name,enm in enumerations.items() %}
       {{ enm.documentation | indent(width=6) }}
       enum struct {{ enum_name }} {
@@ -51,53 +54,70 @@ namespace krpc {
       };
 
       {% endfor %}
-      {% endif %}
-      {% if procedures | length > 0 %}
       {% for procedure_name,procedure in procedures.items() %}
       {{ procedure.documentation | indent(width=6) }}
       {{ procedure.return_type }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }});
 
       {% endfor %}
-      {% endif %}
-      {% if properties | length > 0 %}
       {% for property_name,property in properties.items() %}
       {{ property.documentation | indent(width=6) }}
       {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
 
       {% endfor %}
+      {% for procedure_name,procedure in procedures.items() %}
+      {% if procedure.return_type != 'void' %}
+      ::krpc::Stream<{{ procedure.return_type }}> {{ procedure_name }}_stream({{ sig_parameters(procedure.parameters) }});
+
       {% endif %}
-      {% if classes | length > 0 %}
+      {% endfor %}
+      {% for property_name,property in properties.items() %}
+      {% if property.return_type != 'void' %}
+      ::krpc::Stream<{{ property.return_type }}> {{ property_name }}_stream({{ sig_parameters(property.parameters) }});
+
+      {% endif %}
+      {% endfor %}
       {% for class_name,cls in classes.items() %}
       {{ cls.documentation | indent(width=6) }}
       class {{ class_name }} : public krpc::Object<{{ class_name }}> {
       public:
         {{ class_name }}(Client* client = NULL, google::protobuf::uint64 id = 0);
 
-        {% if cls.methods|length > 0 %}
         {% for method_name,method in cls.methods.items() %}
         {{ method.documentation | indent(width=8) }}
         {{ method.return_type }} {{ method_name }}({{ sig_parameters(method.parameters) }});
 
         {% endfor %}
-        {% endif %}
-        {% if cls.static_methods | length > 0 %}
         {% for method_name,method in cls.static_methods.items() %}
         {{ method.documentation | indent(width=8) }}
         static {{ method.return_type }} {{ method_name }}(Client& client, {{ sig_parameters(method.parameters) }});
 
-{% endfor %}
-        {% endif %}
-        {% if cls.properties | length > 0 %}
+        {% endfor %}
         {% for property_name,property in cls.properties.items() %}
         {{ property.documentation | indent(width=8) }}
         {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
 
         {% endfor %}
+        {% for method_name,method in cls.methods.items() %}
+        {% if method.return_type != 'void' %}
+        ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters(method.parameters) }});
+
         {% endif %}
+        {% endfor %}
+        {% for method_name,method in cls.static_methods.items() %}
+        {% if method.return_type != 'void' %}
+        static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream(Client& client, {{ sig_parameters(method.parameters) }});
+
+        {% endif %}
+        {% endfor %}
+        {% for property_name,property in cls.properties.items() %}
+        {% if property.return_type != 'void' %}
+        ::krpc::Stream<{{ property.return_type }}> {{ property_name }}_stream({{ sig_parameters(property.parameters) }});
+
+        {% endif %}
+        {% endfor %}
       };
 
       {% endfor %}
-      {% endif %}
     };
 
   }
@@ -141,6 +161,16 @@ namespace krpc {
     }
 
     {% endfor %}
+    {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
+    {% if procedure.return_type != 'void' %}
+    inline ::krpc::Stream<{{ procedure.return_type }}> {{ service_name }}::{{ procedure_name }}_stream({{ impl_parameters(procedure.parameters) }}) {
+{% if procedure.parameters | length > 0 %}      {{ args(procedure.parameters) | indent(width=6) }}
+      {% endif %}
+      {{ stream(service_name, procedure.remote_name, procedure.return_type, procedure.parameters | length > 0) | indent(width=6) }}
+    }
+
+    {% endif %}
+    {% endfor %}
     {% for class_name,cls in classes.items() %}
     inline {{ service_name }}::{{ class_name }}::{{ class_name }}(Client* client, google::protobuf::uint64 id):
       Object(client, "{{ service_name }}::{{ class_name }}", id) {}
@@ -163,6 +193,25 @@ namespace krpc {
       {% endif %}
     }
 
+    {% endfor %}
+    {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
+    {% if method.return_type != 'void' %}
+    inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream({{ impl_parameters(method.parameters) }}) {
+      {{ args([{'name': '*this'}] + method.parameters) | indent(width=6) }}
+      {{ stream(service_name, method.remote_name, method.return_type, True) | indent(width=6) }}
+    }
+
+    {% endif %}
+    {% endfor %}
+    {% for method_name,method in cls.static_methods.items() %}
+    {% if method.return_type != 'void' %}
+    inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream(Client& _client, {{ impl_parameters(method.parameters) }}) {
+{% if method.parameters | length > 0 %}      {{ args(method.parameters) | indent(width=6) }}
+      {% endif %}
+      {{ stream(service_name, method.remote_name, method.return_type, True, True) | indent(width=6) }}
+    }
+
+    {% endif %}
     {% endfor %}
     {% endfor %}
   }

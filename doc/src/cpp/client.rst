@@ -133,7 +133,50 @@ service, and outputs the name of the active vessel:
 Streaming Data from the Server
 ------------------------------
 
-Streams are not yet supported by the C++ client.
+A stream repeatedly executes a function on the server, with a fixed set of
+argument values. It provides a more efficient way of repeatedly getting the
+result of calling function on the server, without having to invoke it directly
+-- which incurs communication overheads.
+
+For example, consider the following loop that continuously prints out the
+position of the active vessel. This loop incurs significant communication
+overheads, as the ``vessel.position()`` function is called repeatedly.
+
+.. code-block:: cpp
+
+   krpc::services::SpaceCenter::Vessel vessel = sc.active_vessel();
+   krpc::services::SpaceCenter::ReferenceFrame refframe = vessel.orbit().body().reference_frame();
+   while (true) {
+       std::tuple<double,double,double> pos = vessel.position(refframe);
+       std::cout << std::get<0>(pos) << ","
+                 << std::get<1>(pos) < ","
+                 << std::get<2>(pos) << std::endl;
+   }
+
+The following code achieves the same thing, but is far more efficient. It calls
+``vessel.position_stream`` once at the start of the program to create a stream,
+and then repeatedly gets the position from the stream. This avoids the
+communication overhead in the previous example.
+
+.. code-block:: cpp
+
+   krpc::services::SpaceCenter::Vessel vessel = sc.active_vessel();
+   krpc::services::SpaceCenter::ReferenceFrame refframe = vessel.orbit().body().reference_frame();
+   krpc::Stream<std::tuple<double,double,double>> pos_stream = vessel.position_stream(refframe);
+   while (true) {
+       std::tuple<double,double,double> pos = pos_stream();
+       std::cout << std::get<0>(pos) << ","
+                 << std::get<1>(pos) < ","
+                 << std::get<2>(pos) << std::endl;
+   }
+
+A stream can be created for a function call by adding ``_stream`` to the end of
+the function's name. This returns a stream object of type
+:class:`krpc::Stream<T>`, where ``T`` is the return type of the original
+function. The most recent value of the stream can be obtained by calling
+:class:`Stream<T>::operator()`. A stream can be stopped by calling
+:func:`krpc::Stream<T>::remove` on the stream object. All streams are
+automatically stopped when the connection is terminated.
 
 Reference
 ---------
@@ -221,3 +264,16 @@ Reference
               std::cout << "Data in = " << (status.bytes_read_rate()/1024.0) << " KB/s" << std::endl;
               std::cout << "Data out = " << (status.bytes_written_rate()/1024.0) << " KB/s" << std::endl;
             }
+
+.. class:: AddStream<T>
+
+   A stream object. Streams are created by calling a function with ``_stream``
+   appended to its name.
+
+   .. function:: T operator()()
+
+      Get the most recently received value from the stream.
+
+   .. function:: void remove()
+
+      Remove the stream from the server.

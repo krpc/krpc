@@ -1,4 +1,5 @@
 v0.2.2
+ * Add support for streams (#175)
  * Add documentation to service header files
  * Add autotools and cmake build scripts
  * Move header file krpc/krpc.hpp -> krpc.hpp

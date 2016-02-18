@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <chrono>
 
 namespace krpc {
 
@@ -32,11 +33,8 @@ namespace krpc {
     void send(const std::string& data);
     /** Receive data from the connection. Blocks until length bytes have been received. */
     std::string receive(size_t length);
-    /**
-     * Receive up to length bytes of data from the connection.
-     * Blocks until at least 1 byte has been received.
-     */
-    char* partial_receive();
+    /** Receive up to length bytes of data from the connection. */
+    std::string partial_receive(size_t length, std::chrono::milliseconds timeout = std::chrono::milliseconds(10));
   };
 
 }
