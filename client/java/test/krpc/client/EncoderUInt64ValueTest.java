@@ -20,10 +20,14 @@ import com.google.protobuf.ByteString;
 public class EncoderUInt64ValueTest {
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { 0, "00" }, { 1, "01" }, { 42, "2a" }, { 300, "ac02" },
-                { 1234567890000L, "d088ec8ff723" }
-                // { Long.MAX_VALUE, "????"},
-                // { Long.MIN_VALUE, "????" }
+        return Arrays.asList(new Object[][] {
+            { 0, "00" },
+            { 1, "01" },
+            { 42, "2a" },
+            { 300, "ac02" },
+            { 1234567890000L, "d088ec8ff723" }
+            // { Long.MAX_VALUE, "????"},
+            // { Long.MIN_VALUE, "????" }
         });
     }
 

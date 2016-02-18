@@ -20,9 +20,13 @@ import com.google.protobuf.ByteString;
 public class EncoderUInt32ValueTest {
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { 0, "00" }, { 1, "01" }, { 42, "2a" }, { 300, "ac02" }
-                // { Integer.MAX_VALUE, "ffffffffffffffff7f"},
-                // { Integer.MIN_VALUE, "808080808080808001" }
+        return Arrays.asList(new Object[][] {
+            { 0, "00" },
+            { 1, "01" },
+            { 42, "2a" },
+            { 300, "ac02" }
+            // { Integer.MAX_VALUE, "ffffffffffffffff7f"},
+            // { Integer.MIN_VALUE, "808080808080808001" }
         });
     }
 

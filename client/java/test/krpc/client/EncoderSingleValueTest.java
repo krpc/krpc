@@ -20,9 +20,14 @@ import com.google.protobuf.ByteString;
 public class EncoderSingleValueTest {
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { 3.14159265359f, "db0f4940" }, { -1.0f, "000080bf" },
-                { 0.0f, "00000000" }, { Float.POSITIVE_INFINITY, "0000807f" }, { Float.NEGATIVE_INFINITY, "000080ff" },
-                { Float.NaN, "0000c07f" } });
+        return Arrays.asList(new Object[][] {
+            { 3.14159265359f, "db0f4940" },
+            { -1.0f, "000080bf" },
+            { 0.0f, "00000000" },
+            { Float.POSITIVE_INFINITY, "0000807f" },
+            { Float.NEGATIVE_INFINITY, "000080ff" },
+            { Float.NaN, "0000c07f" }
+        });
     }
 
     @Parameter(value = 0)

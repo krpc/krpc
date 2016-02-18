@@ -24,9 +24,9 @@ import krpc.schema.KRPC.Status;
 
 public class ConnectionTest {
 
-    Connection connection;
-    KRPC krpc;
-    TestService testService;
+    private Connection connection;
+    private KRPC krpc;
+    private TestService testService;
 
     @Before
     public void setup() throws IOException {

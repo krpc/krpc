@@ -50,8 +50,7 @@ public class EncoderDictionaryCollectionTest {
     @SuppressWarnings({ "unchecked" })
     @Test
     public void testDecode() throws IOException {
-        TypeSpecification typeSpec = new TypeSpecification(Map.class, new TypeSpecification(String.class),
-                new TypeSpecification(Integer.class));
+        TypeSpecification typeSpec = new TypeSpecification(Map.class, new TypeSpecification(String.class), new TypeSpecification(Integer.class));
         Map<String, Integer> decodeResult = (Map<String, Integer>) Encoder.decode(unhexlify(data), typeSpec, null);
         assertEquals(value, decodeResult);
     }

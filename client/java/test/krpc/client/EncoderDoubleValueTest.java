@@ -20,9 +20,14 @@ import com.google.protobuf.ByteString;
 public class EncoderDoubleValueTest {
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { 0.0, "0000000000000000" }, { -1.0, "000000000000f0bf" },
-                { 3.14159265359, "ea2e4454fb210940" }, { Double.POSITIVE_INFINITY, "000000000000f07f" },
-                { Double.NEGATIVE_INFINITY, "000000000000f0ff" }, { Double.NaN, "000000000000f87f" } });
+        return Arrays.asList(new Object[][] {
+                { 0.0, "0000000000000000" },
+                { -1.0, "000000000000f0bf" },
+                { 3.14159265359, "ea2e4454fb210940" },
+                { Double.POSITIVE_INFINITY, "000000000000f07f" },
+                { Double.NEGATIVE_INFINITY, "000000000000f0ff" },
+                { Double.NaN, "000000000000f87f" }
+        });
     }
 
     @Parameter(value = 0)

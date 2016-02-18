@@ -29,8 +29,7 @@ public class TestUtils {
         int length = data.length();
         byte[] result = new byte[length / 2];
         for (int i = 0; i < length; i += 2)
-            result[i / 2] = (byte) ((Character.digit(data.charAt(i), 16) << 4)
-                    + Character.digit(data.charAt(i + 1), 16));
+            result[i / 2] = (byte) ((Character.digit(data.charAt(i), 16) << 4) + Character.digit(data.charAt(i + 1), 16));
         return ByteString.copyFrom(result);
     }
 

@@ -9,8 +9,8 @@ import krpc.client.services.TestService;
 
 public class PerformanceTest {
 
-    Connection connection;
-    TestService testService;
+    private Connection connection;
+    private TestService testService;
 
     @Before
     public void setup() throws IOException {

@@ -10,19 +10,16 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import krpc.client.services.KRPC;
 import krpc.client.services.TestService;
 
 public class RemoteObjectTest {
 
-    Connection connection;
-    KRPC krpc;
-    TestService testService;
+    private Connection connection;
+    private TestService testService;
 
     @Before
     public void setup() throws IOException {
         connection = TestUtils.Connect();
-        krpc = KRPC.newInstance(connection);
         testService = TestService.newInstance(connection);
     }
 
