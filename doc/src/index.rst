@@ -1,15 +1,28 @@
 kRPC Documentation
 ==================
 
-kRPC allows you to control Kerbal Space Program from external scripts running
-outside of the game. It comes with client libraries for :doc:`Python
-<python/client>`, :doc:`C++ <cpp/client>`, :doc:`C# <csharp/client>` and
+kRPC allows you to control Kerbal Space Program from scripts running outside of
+the game.
+It has client libraries for many popular languages including
+:doc:`Python <python/client>`,
+:doc:`C++ <cpp/client>`,
+:doc:`C# <csharp/client>`,
+:doc:`Java <java/client>`,
 :doc:`Lua <lua/client>`.
+A `Ruby <http://github.com/TeWu/krpc-rb>`_ client has also been implemented (by
+`TeWu <http://github.com/TeWu>`_).
 
-kRPC is programming language and runtime agnostic. This means you can interact
-with it from any programming language that can communicate over a TCP
-connection, and you can run your program using any compiler/interpreter/virtual
-machine you like.
+ * :doc:`Getting Started Guide <getting-started>`
+ * :doc:`Tutorials and Examples <tutorials>`
+
+The mod exposes most of KSPs API and includes support for Kerbal Alarm Clock and
+Infernal Robotics. This functionality is provided to client programs via a
+Remote Procedure Call server, using protocol buffers for serialization. The
+server component sets up a TCP/IP server that remote scripts can connect
+to. This communication could be on the local machine only, over a local network,
+or even over the wider internet if configured correctly. The server is also
+extensible. Additional remote procedures (grouped into "services") can be added
+to the server using the "Service API".
 
 .. toctree::
    :hidden:
