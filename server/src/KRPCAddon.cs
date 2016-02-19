@@ -41,15 +41,6 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Destructor. Stops the server if running.
-        /// </summary>
-        ~KRPCAddon ()
-        {
-            if (server.Running)
-                server.Stop ();
-        }
-
-        /// <summary>
         /// Wake the addon. Creates the server instance and UI.
         /// </summary>
         public void Awake ()
@@ -221,6 +212,15 @@ namespace KRPC
             Object.Destroy (mainWindow);
             Object.Destroy (clientConnectingDialog);
             GUILayoutExtensions.Destroy (gameObject);
+        }
+
+        /// <summary>
+        /// Stop the server if running
+        /// </summary>
+        public void OnApplicationQuit ()
+        {
+            if (server.Running)
+                server.Stop ();
         }
 
         /// <summary>
