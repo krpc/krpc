@@ -48,10 +48,15 @@ before_install:
   - chmod +x bazel-0.1.4-jdk7-installer-linux-x86_64.sh
   - ./bazel-0.1.4-jdk7-installer-linux-x86_64.sh --user
   - cat tools/travis-ci/.bazelrc >> .bazelrc
-  # KSP binaries
+  # KSP libraries
   - mkdir lib/ksp
-  - wget --quiet -O lib/ksp/ksp-lib.zip https://s3.amazonaws.com/krpc/ksp-lib-$KEY1.zip
-  - (cd lib/ksp; unzip -P $KEY2 ksp-lib.zip)
+  - wget --quiet -O lib/ksp/ksp-lib-1.0.5.tar.gpg https://s3.amazonaws.com/krpc/ksp-lib-1.0.5.tar.gpg
+  - (cd lib/ksp; gpg --no-tty --batch --yes --passphrase $KSP_LIB_1_0_5_KEY ksp-lib-1.0.5.tar.gpg)
+  - (cd lib/ksp; tar -xf ksp-lib-1.0.5.tar)
 
 script:
   - bazel build //:krpc //doc:html && bazel test //:test
+
+after_script:
+  # Remove KSP libraries
+  - rm -rf lib/ksp
