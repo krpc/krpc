@@ -8,9 +8,9 @@ using `Protocol Buffer v3 messages
 <https://developers.google.com/protocol-buffers/docs/proto>`_ sent over a TCP/IP
 connection.
 
-The kRPC `download <https://github.com/djungelorm/krpc/releases>`_ comes with a
+The kRPC `download <https://github.com/krpc/krpc/releases/latest>`_ comes with a
 protocol buffer message definitions file (`KRPC.proto
-<https://github.com/djungelorm/krpc/blob/latest-version/src/kRPC/Schema/KRPC.proto>`_)
+<https://github.com/krpc/krpc/blob/latest-version/protobuf/krpc.proto>`_)
 that defines the structure of these messages. It also includes versions of this
 file compiled for Python, Java and C++ using `Google's protocol buffers compiler
 <https://github.com/google/protobuf>`_.

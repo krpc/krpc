@@ -23,7 +23,7 @@ setup(
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     packages=['krpc', 'krpc.schema', 'krpc.test', 'krpc.test.schema'],
-    url='https://djungelorm.github.io/krpc/docs',
+    url='https://krpc.github.io/krpc/docs',
     license='GNU LGPL v3',
     description='Client library for kRPC, a Remote Procedure Call server for Kerbal Space Program',
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),

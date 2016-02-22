@@ -19,7 +19,7 @@ setup(
     version=open(os.path.join(dirpath, 'VERSION.txt')).read().strip(),
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
-    url='https://djungelorm.github.io/krpc/docs',
+    url='https://krpc.github.io/krpc/docs',
     license='GNU GPL v3',
     description='Generate client source code for kRPC services.',
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),

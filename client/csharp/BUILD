@@ -16,8 +16,8 @@ nuget_package(
     version = version+'-beta1', #TODO: remove beta version number when Google.Protobuf is released
     author = author,
     description = 'C# client for kRPC',
-    project_url = 'https://github.com/djungelorm/krpc',
-    license_url = 'https://github.com/djungelorm/krpc/blob/master/LICENSE',
+    project_url = 'https://github.com/krpc/krpc',
+    license_url = 'https://github.com/krpc/krpc/blob/master/LICENSE',
     deps = {
         'Google.Protobuf': '3.0.0-beta2'
     }

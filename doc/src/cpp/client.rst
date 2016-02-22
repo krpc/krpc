@@ -9,7 +9,7 @@ C++.
 Compiling and Installing the Library
 ------------------------------------
 
-The source archive can be `downloaded from github <https://github.com/djungelorm/krpc/releases/latest>`_.
+The source archive can be `downloaded from github <https://github.com/krpc/krpc/releases/latest>`_.
 
 To compile and install the library using the configure script, extract the
 archive and execute the following commands:
