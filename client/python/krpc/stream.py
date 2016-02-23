@@ -75,7 +75,7 @@ def add_stream(conn, func, *args, **kwargs):
     except StreamExistsError as e:
         return _stream_cache[e.stream_id]
 
-def update_thread(connection):
+def update_thread(connection, stop):
     stream_message_type = Types().as_type('KRPC.StreamMessage')
     response_type = Types().as_type('KRPC.Response')
 
@@ -90,14 +90,12 @@ def update_thread(connection):
                 break
             except IndexError:
                 pass
-            except socket.error:
+            if stop.is_set():
+                connection.close()
                 return
 
         # Read and decode the response message
-        try:
-            data = connection.receive(size)
-        except socket.error:
-            return
+        data = connection.receive(size)
         response = Decoder.decode(data, stream_message_type)
 
         # Add the data to the cache

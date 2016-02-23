@@ -1,4 +1,5 @@
 import socket
+import select
 import time
 from krpc.error import NetworkError
 
@@ -54,11 +55,13 @@ class Connection(object):
             data += result
         return data
 
-    def partial_receive(self, length):
-        """ Receive up to length bytes of data from the connection.
-            Blocks until at least 1 byte has been received. """
+    def partial_receive(self, length, timeout=0.01):
+        """ Receive up to length bytes of data from the connection. """
         assert length > 0
-        data = self._socket.recv(length)
-        if data == None or len(data) == 0:
+        try:
+            ready = select.select([self._socket], [], [], timeout)
+        except ValueError:
             raise socket.error("Connection closed")
-        return data
+        if ready[0]:
+            return self._socket.recv(length)
+        return b''

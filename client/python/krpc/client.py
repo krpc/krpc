@@ -75,7 +75,9 @@ class Client(object):
 
         # Set up stream update thread
         if stream_connection is not None:
-            self._stream_thread = threading.Thread(target=krpc.stream.update_thread, args=(stream_connection,))
+            self._stream_thread_stop = threading.Event()
+            self._stream_thread = threading.Thread(target=krpc.stream.update_thread,
+                                                   args=(stream_connection,self._stream_thread_stop))
             self._stream_thread.daemon = True
             self._stream_thread.start()
         else:
@@ -83,8 +85,9 @@ class Client(object):
 
     def close(self):
         self._rpc_connection.close()
-        if self._stream_connection is not None:
-            self._stream_connection.close()
+        if self._stream_thread is not None:
+            self._stream_thread_stop.set()
+            self._stream_thread.join()
 
     def __enter__(self):
         return self
