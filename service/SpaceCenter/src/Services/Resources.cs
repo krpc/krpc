@@ -67,11 +67,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Resources obj)
         {
-            return
-                ((vessel == null && obj.vessel == null) || vessel.id == obj.vessel.id) &&
-                stage == obj.stage &&
-                cumulative == obj.cumulative &&
-                part.flightID == obj.part.flightID;
+            if ((vessel == null ^ obj.vessel == null) || (vessel != null && vessel.id != obj.vessel.id))
+                return false;
+            if ((part == null ^ obj.part == null) || (part != null && part.flightID != obj.part.flightID))
+                return false;
+            return stage == obj.stage && cumulative == obj.cumulative;
         }
 
         /// <summary>

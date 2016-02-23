@@ -62,13 +62,16 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (ReferenceFrame obj)
         {
-            return
-                type == obj.type &&
-                body.name == obj.body.name &&
-                vessel.id == obj.vessel.id &&
-                node == obj.node && //TODO: is this correct?
-                part.flightID == obj.part.flightID &&
-                dockingPort == obj.dockingPort; //TODO: is this correct?
+            if ((body == null ^ obj.body == null) || (body != null && body.name != obj.body.name))
+                return false;
+            if ((vessel == null ^ obj.vessel == null) || (vessel != null && vessel.id != obj.vessel.id))
+                return false;
+            if ((node == null ^ obj.node == null) || (node != null && node != obj.node))
+                return false;
+            if ((part == null ^ obj.part == null) || (part != null && part.flightID != obj.part.flightID))
+                return false;
+            //TODO: is this comparison of node and Docking port objects correct?
+            return type == obj.type && node == obj.node && dockingPort == obj.dockingPort;
         }
 
         /// <summary>
