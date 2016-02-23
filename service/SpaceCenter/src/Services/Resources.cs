@@ -67,7 +67,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Resources obj)
         {
-            return vessel == obj.vessel && stage == obj.stage && cumulative == obj.cumulative && part == obj.part;
+            return
+                ((vessel == null && obj.vessel == null) || vessel.id == obj.vessel.id) &&
+                stage == obj.stage &&
+                cumulative == obj.cumulative &&
+                part.flightID == obj.part.flightID;
         }
 
         /// <summary>
@@ -75,7 +79,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return (vessel == null ? 0 : vessel.GetHashCode ()) ^ stage.GetHashCode () ^ cumulative.GetHashCode () ^ (part == null ? 0 : part.GetHashCode ());
+            int hash = (vessel == null ? 0 : vessel.id.GetHashCode ());
+            hash ^= stage.GetHashCode ();
+            hash ^= cumulative.GetHashCode ();
+            hash ^= (part == null ? 0 : part.flightID.GetHashCode ());
+            return hash;
         }
 
         List<PartResource> GetResources ()

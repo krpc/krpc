@@ -45,7 +45,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (AutoPilot obj)
         {
-            return vessel == obj.vessel;
+            return vessel.id == obj.vessel.id;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vessel.GetHashCode ();
+            return vessel.id.GetHashCode ();
         }
 
         /// <summary>

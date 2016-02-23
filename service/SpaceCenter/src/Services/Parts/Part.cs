@@ -29,7 +29,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Part obj)
         {
-            return part == obj.part;
+            return part.flightID == obj.part.flightID;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            return part.flightID.GetHashCode ();
         }
 
         internal global::Part InternalPart {

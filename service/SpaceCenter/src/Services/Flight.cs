@@ -34,7 +34,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Flight obj)
         {
-            return vessel == obj.vessel && referenceFrame == obj.referenceFrame;
+            return vessel.id == obj.vessel.id && referenceFrame == obj.referenceFrame;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vessel.GetHashCode () ^ referenceFrame.GetHashCode ();
+            return vessel.id.GetHashCode () ^ referenceFrame.GetHashCode ();
         }
 
         /// <summary>
