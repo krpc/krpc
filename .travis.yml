@@ -55,7 +55,7 @@ before_install:
   - (cd lib/ksp; tar -xf ksp-lib-1.0.5.tar)
 
 script:
-  - bazel build //:krpc //doc:html
+  - bazel build //:krpc //doc:html //:csproj
   - xbuild KRPC.sln
   - bazel test //:test
 
