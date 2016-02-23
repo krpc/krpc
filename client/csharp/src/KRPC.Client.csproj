@@ -62,19 +62,19 @@
     <Compile Include="RPCException.cs" />
     <Compile Include="Stream.cs" />
     <Compile Include="StreamManager.cs" />
-    <Compile Include="..\..\..\bazel-bin\protobuf\KRPC.cs">
+    <Compile Include="..\..\..\bazel-genfiles\protobuf\KRPC.cs">
       <Link>KRPC.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\KRPC.cs">
+    <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\KRPC.cs">
       <Link>Services\KRPC.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\SpaceCenter.cs">
+    <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\SpaceCenter.cs">
       <Link>Services\SpaceCenter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\KerbalAlarmClock.cs">
+    <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\KerbalAlarmClock.cs">
       <Link>Services\KerbalAlarmClock.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\InfernalRobotics.cs">
+    <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\InfernalRobotics.cs">
       <Link>Services\InfernalRobotics.cs</Link>
     </Compile>
   </ItemGroup>
