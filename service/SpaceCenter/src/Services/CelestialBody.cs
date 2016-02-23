@@ -23,8 +23,7 @@ namespace KRPC.SpaceCenter.Services
         public CelestialBody (global::CelestialBody body)
         {
             InternalBody = body;
-            // TODO: better way to check for orbits?
-            if (body.name != "Sun")
+            if (body.name != Planetarium.fetch.Sun.name)
                 orbit = new Orbit (body);
         }
 
