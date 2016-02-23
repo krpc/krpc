@@ -56,7 +56,7 @@ before_install:
 
 script:
   - bazel build //:krpc //doc:html
-  - mdtool build KRPC.sln
+  - xbuild KRPC.sln
   - bazel test //:test
 
 after_script:
