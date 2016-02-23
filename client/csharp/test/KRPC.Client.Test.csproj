@@ -65,7 +65,7 @@
     <Compile Include="PerformanceTest.cs" />
     <Compile Include="ServerTestCase.cs" />
     <Compile Include="StreamTest.cs" />
-    <Compile Include="..\..\..\bazel-bin\client\csharp\Services\TestService.cs">
+    <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\TestService.cs">
       <Link>Services\TestService.cs</Link>
     </Compile>
   </ItemGroup>
