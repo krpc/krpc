@@ -1,6 +1,7 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 
 namespace KRPC.SpaceCenter.Services
@@ -10,9 +11,8 @@ namespace KRPC.SpaceCenter.Services
     /// <see cref="Vessel.Orbit"/>, or a celestial body, obtained by calling
     /// <see cref="CelestialBody.Orbit"/>.
     /// </summary>
-    //FIXME: should extend equatable interface?
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Orbit
+    public sealed class Orbit : Equatable<Orbit>
     {
         internal Orbit (global::Vessel vessel)
         {
@@ -39,7 +39,23 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public global::Orbit InternalOrbit { get; private set; }
 
-        //TODO: make equatable? add hashcode???
+        /// <summary>
+        /// Check that the orbits are equal.
+        /// </summary>
+        public override bool Equals (Orbit obj)
+        {
+            //TODO: is this correct?
+            return InternalOrbit == obj.InternalOrbit;
+        }
+
+        /// <summary>
+        /// Hash the orbit.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            //TODO: is this correct?
+            return InternalOrbit.GetHashCode ();
+        }
 
         /// <summary>
         /// The celestial body (e.g. planet or moon) around which the object is orbiting.

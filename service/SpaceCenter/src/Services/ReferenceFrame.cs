@@ -62,7 +62,16 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (ReferenceFrame obj)
         {
-            return type == obj.type && body == obj.body && vessel == obj.vessel && node == obj.node && part == obj.part && dockingPort == obj.dockingPort;
+            if ((body == null ^ obj.body == null) || (body != null && body.name != obj.body.name))
+                return false;
+            if ((vessel == null ^ obj.vessel == null) || (vessel != null && vessel.id != obj.vessel.id))
+                return false;
+            if ((node == null ^ obj.node == null) || (node != null && node != obj.node))
+                return false;
+            if ((part == null ^ obj.part == null) || (part != null && part.flightID != obj.part.flightID))
+                return false;
+            //TODO: is this comparison of node and Docking port objects correct?
+            return type == obj.type && node == obj.node && dockingPort == obj.dockingPort;
         }
 
         /// <summary>
@@ -72,15 +81,15 @@ namespace KRPC.SpaceCenter.Services
         {
             var hash = type.GetHashCode ();
             if (body != null)
-                hash ^= body.GetHashCode ();
+                hash ^= body.name.GetHashCode ();
             if (vessel != null)
-                hash ^= vessel.GetHashCode ();
+                hash ^= vessel.id.GetHashCode ();
             if (node != null)
-                hash ^= node.GetHashCode ();
+                hash ^= node.GetHashCode (); //TODO: is this correct?
             if (part != null)
-                hash ^= part.GetHashCode ();
+                hash ^= part.flightID.GetHashCode ();
             if (dockingPort != null)
-                hash ^= dockingPort.GetHashCode ();
+                hash ^= dockingPort.GetHashCode (); //TODO: is this correct?
             return hash;
         }
 

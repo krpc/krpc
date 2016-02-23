@@ -92,6 +92,7 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Vessel : Equatable<Vessel>
     {
+        Guid vesselId;
         Comms comms;
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public Vessel (global::Vessel vessel)
         {
-            InternalVessel = vessel;
+            vesselId = vessel.id;
             Orbit = new Orbit (vessel);
             Control = new Control (vessel);
             AutoPilot = new AutoPilot (vessel);
@@ -112,14 +113,19 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The KSP vessel object.
         /// </summary>
-        public global::Vessel InternalVessel { get; private set; }
+        public global::Vessel InternalVessel {
+            get {
+                //FIXME: this will be inefficient if there are lots of vessels. Is there a better way to do this?
+                return FlightGlobals.Vessels.Where (v => v.id == vesselId).Single ();
+            }
+        }
 
         /// <summary>
         /// Check if vessels are equal.
         /// </summary>
         public override bool Equals (Vessel obj)
         {
-            return InternalVessel == obj.InternalVessel;
+            return vesselId == obj.vesselId;
         }
 
         /// <summary>
@@ -127,7 +133,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return InternalVessel.GetHashCode ();
+            return vesselId.GetHashCode ();
         }
 
         /// <summary>

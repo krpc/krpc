@@ -37,7 +37,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (CelestialBody obj)
         {
-            return InternalBody == obj.InternalBody;
+            return InternalBody.name == obj.InternalBody.name;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return InternalBody.GetHashCode ();
+            return InternalBody.name.GetHashCode ();
         }
 
         /// <summary>

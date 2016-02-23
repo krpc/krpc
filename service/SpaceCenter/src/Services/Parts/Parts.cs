@@ -26,7 +26,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Parts obj)
         {
-            return vessel == obj.vessel;
+            return vessel.id == obj.vessel.id;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return vessel.GetHashCode ();
+            return vessel.id.GetHashCode ();
         }
 
         /// <summary>

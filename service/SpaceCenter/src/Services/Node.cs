@@ -49,6 +49,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Node obj)
         {
+             //TODO: is this correct?
             return InternalNode == obj.InternalNode;
         }
 
@@ -57,7 +58,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            //TODO: node should not be null, but Remove could set it as null
+            //TODO: node should not be null, but Remove could set it to null
+            //TODO: is this hash code correct?
             return InternalNode == null ? 0 : InternalNode.GetHashCode ();
         }
 

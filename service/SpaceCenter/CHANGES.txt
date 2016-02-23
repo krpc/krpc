@@ -2,6 +2,7 @@ v0.2.2
  * Add Part.IsFuelLine
  * Fix bug with Part.FuelLinesTo (#193)
  * Part.FuelLinesTo and FuelLinesFrom now return an error if called on a fuel line part
+ * Fix bug with equality testing of objects. For example, vessel objects now persist between vessel switches (#201)
 
 v0.2.1
  * Fix Orbit.Speed always returning 0

@@ -32,6 +32,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Module obj)
         {
+            //TODO: is this correct?
             return part == obj.part && module == obj.module;
         }
 
@@ -40,6 +41,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
+            //TODO: is this correct?
             return part.GetHashCode () ^ module.GetHashCode ();
         }
 
