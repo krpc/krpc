@@ -68,7 +68,7 @@
     <Compile Include="..\..\bazel-bin\server\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\bazel-bin\protobuf\KRPC.cs">
+    <Compile Include="..\..\bazel-genfiles\protobuf\KRPC.cs">
       <Link>KRPC.cs</Link>
     </Compile>
     <Compile Include="CompatibilityChecker.cs" />

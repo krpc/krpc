@@ -62,7 +62,7 @@
     <Compile Include="RPCException.cs" />
     <Compile Include="Stream.cs" />
     <Compile Include="StreamManager.cs" />
-    <Compile Include="..\..\..\bazel-bin\protobuf\KRPC.cs">
+    <Compile Include="..\..\..\bazel-genfiles\protobuf\KRPC.cs">
       <Link>KRPC.cs</Link>
     </Compile>
     <Compile Include="..\..\..\bazel-bin\client\csharp\Services\KRPC.cs">
