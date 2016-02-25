@@ -1,6 +1,6 @@
-from krpc.docgen.domain import Domain
-from krpc.docgen.nodes import *
-from krpc.docgen.utils import snakecase
+from .domain import Domain
+from .nodes import *
+from .utils import snakecase
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CppDomain(Domain):

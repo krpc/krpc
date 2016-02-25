@@ -1,5 +1,5 @@
-from krpc.docgen.domain import Domain
-from krpc.docgen.nodes import *
+from .domain import Domain
+from .nodes import *
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CsharpDomain(Domain):

@@ -1,6 +1,6 @@
 load('/tools/build/image', 'png_images')
 load('/tools/build/sphinx', 'sphinx_html', 'sphinx_latex')
-load('/tools/docgen/build', 'docgen_multiple')
+load('/tools/krpctools/docgen', 'docgen_multiple')
 load('/config', 'version')
 
 filegroup(

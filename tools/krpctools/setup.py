@@ -23,10 +23,16 @@ setup(
     license='GNU GPL v3',
     description='Development tools and scripts for kRPC.',
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),
-    packages=['krpctools', 'krpctools.clientgen', 'krpctools.servicedefs'],
+    packages=[
+        'krpctools',
+        'krpctools.clientgen',
+        'krpctools.docgen',
+        'krpctools.servicedefs'
+    ],
     entry_points={
         'console_scripts': [
             'krpc-clientgen = krpctools.clientgen:main',
+            'krpc-docgen = krpctools.docgen:main',
             'krpc-servicedefs = krpctools.servicedefs:main'
         ]
     },

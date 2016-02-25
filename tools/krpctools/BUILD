@@ -72,17 +72,27 @@ py_sdist(
     }
 )
 
+deps = [
+    '//client/python',
+    '@python_protobuf//file',
+    '@python_enum34//file',
+    '@python_six//file',
+    '@python_jinja2//file',
+    '@python_markupsafe//file'
+]
+
 py_script(
     name = 'clientgen',
     script = 'krpc-clientgen',
     pkg = ':krpctools',
-    deps = [
-        '//client/python',
-        '@python_protobuf//file',
-        '@python_enum34//file',
-        '@python_six//file',
-        '@python_jinja2//file',
-        '@python_markupsafe//file'
-    ],
+    deps = deps,
+    visibility = ['//visibility:public']
+)
+
+py_script(
+    name = 'docgen',
+    script = 'krpc-docgen',
+    pkg = ':krpctools',
+    deps = deps,
     visibility = ['//visibility:public']
 )
