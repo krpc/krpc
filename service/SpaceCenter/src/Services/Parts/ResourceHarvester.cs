@@ -2,9 +2,38 @@
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using System.Text.RegularExpressions;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
+    /// <summary>
+    /// See <see cref="ResourceHarvester.State"/>.
+    /// </summary>
+    [KRPCEnum (Service = "SpaceCenter")]
+    public enum ResourceHarvesterState
+    {
+        /// <summary>
+        /// The drill is deploying.
+        /// </summary>
+        Deploying,
+        /// <summary>
+        /// The drill is deployed and ready.
+        /// </summary>
+        Deployed,
+        /// <summary>
+        /// The drill is retracting.
+        /// </summary>
+        Retracting,
+        /// <summary>
+        /// The drill is retracted.
+        /// </summary>
+        Retracted,
+        /// <summary>
+        /// The drill is running.
+        /// </summary>
+        Active
+    }
+
     /// <summary>
     /// Obtained by calling <see cref="Part.ResourceHarvester"/>.
     /// </summary>
@@ -14,6 +43,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleResourceHarvester harvester;
         readonly ModuleAnimationGroup animator;
+        readonly Regex numberRegex = new Regex (@"(\d+(\.\d+)?)");
 
         internal ResourceHarvester (Part part)
         {
@@ -21,7 +51,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             harvester = part.InternalPart.Module<ModuleResourceHarvester> ();
             animator = part.InternalPart.Module<ModuleAnimationGroup> ();
             if (harvester == null)
-                throw new ArgumentException ("Part has no Resource Harvester Module");
+                throw new ArgumentException ("Part has no ModuleResourceHarvester");
+            if (animator == null)
+                throw new ArgumentException ("Part has no ModuleAnimationGroup");
         }
 
         /// <summary>
@@ -49,57 +81,100 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// True if the harvester is deployed and ready to drill, or currently drilling.
+        /// The state of the harvester.
+        /// </summary>
+        [KRPCProperty]
+        public ResourceHarvesterState State {
+            get {
+                if (harvester.IsActivated)
+                    return ResourceHarvesterState.Active;
+                else if (animator.ActiveAnimation.isPlaying)
+                    return animator.isDeployed ? ResourceHarvesterState.Deploying : ResourceHarvesterState.Retracting;
+                else if (animator.isDeployed)
+                    return ResourceHarvesterState.Deployed;
+                else
+                    return ResourceHarvesterState.Retracted;
+            }
+        }
+
+        /// <summary>
+        /// Whether the harvester is deployed.
         /// </summary>
         [KRPCProperty]
         public bool Deployed {
-            get { return animator.isDeployed; }
+            get { return State == ResourceHarvesterState.Deployed || State == ResourceHarvesterState.Active; }
+            set {
+                if (value && !animator.isDeployed)
+                    animator.DeployModule ();
+                if (!value && animator.isDeployed)
+                    animator.RetractModule ();
+            }
         }
 
         /// <summary>
-        /// True if the harvester is active.
+        /// Whether the harvester is actively drilling.
         /// </summary>
         [KRPCProperty]
         public bool Active {
-            get { return harvester.IsActivated; }
+            get { return State == ResourceHarvesterState.Active; }
+            set {
+                if (!Deployed)
+                    return;
+                if (value && !harvester.IsActivated)
+                    harvester.StartResourceConverter ();
+                if (!value && harvester.IsActivated)
+                    harvester.StopResourceConverter ();
+            }
         }
 
         /// <summary>
-        /// Deploy the harvester. Has no effect if the harvester is already deployed.
+        /// The rate at which the drill is extracting ore, in units per second.
         /// </summary>
-        [KRPCMethod]
-        public void Deploy ()
-        {
-            if (animator != null)
-                animator.DeployModule ();
+        [KRPCProperty]
+        public float ExtractionRate {
+            get {
+                if (!Deployed || !Active)
+                    return 0;
+                var status = harvester.ResourceStatus;
+                Match match = numberRegex.Match (status);
+                if (!match.Success)
+                    return 0;
+                return Single.Parse (match.Groups [1].Value);
+            }
         }
 
         /// <summary>
-        /// Retracts the harvester. Has no effect if the harvester iis already retracted.
+        /// The thermal efficiency of the drill, as a percentage of its maximum.
         /// </summary>
-        [KRPCMethod]
-        public void Retract ()
-        {
-            if (animator != null)
-                animator.RetractModule ();
+        [KRPCProperty]
+        public float ThermalEfficiency {
+            get {
+                if (!Deployed || !Active)
+                    return 0;
+                var status = harvester.status;
+                if (!status.Contains ("load"))
+                    return 0;
+                Match match = numberRegex.Match (status);
+                if (!match.Success)
+                    return 0;
+                return Single.Parse (match.Groups [1].Value);
+            }
         }
 
         /// <summary>
-        /// Start the harvester.
+        /// The core temperature of the drill, in Kelvin.
         /// </summary>
-        [KRPCMethod]
-        public void Start ()
-        {
-            harvester.StartResourceConverter ();
+        [KRPCProperty]
+        public float CoreTemperature {
+            get { return (float)harvester.GetCoreTemperature (); }
         }
 
         /// <summary>
-        /// Stop the harvester.
+        /// The core temperature at which the drill will operate with peak efficiency, in Kelvin.
         /// </summary>
-        [KRPCMethod]
-        public void Stop ()
-        {
-            harvester.StopResourceConverter ();
+        [KRPCProperty]
+        public float OptimumCoreTemperature {
+            get { return (float)harvester.GetGoalTemperature (); }
         }
     }
 }

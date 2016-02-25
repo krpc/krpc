@@ -2,14 +2,14 @@ ship = PartsHarvester
 version = 1.0.5
 description = 
 type = VAB
-size = 3.588535,11.02624,7.131657
+size = 4.138865,10.48562,7.12181
 PART
 {
 	part = Mark1-2Pod_4294407840
 	partName = Part
-	pos = 0.7239233,7.862837,0.09771071
+	pos = 0.7092841,7.322214,0.1356606
 	attPos = 0,0,0
-	attPos0 = 0.7239233,7.862837,0.09771071
+	attPos0 = 0.7092841,7.322214,0.1356606
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -24,8 +24,8 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
-	link = ISRU_4294398978
-	attN = bottom,ISRU_4294398978
+	link = fuelTank4-2_4293135428
+	attN = bottom,fuelTank4-2_4293135428
 	EVENTS
 	{
 	}
@@ -464,11 +464,113 @@ PART
 }
 PART
 {
+	part = fuelTank4-2_4293135428
+	partName = Part
+	pos = 0.7092841,6.374224,0.1356606
+	attPos = 0,0,0
+	attPos0 = 0,-0.9479899,0
+	rot = 0,0,0,1
+	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = 0
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	link = rcsTankRadialLong_4293133634
+	link = ISRU_4294398978
+	link = RadialOreTank_4293099976
+	link = MiniDrill_4293091858
+	attN = top,Mark1-2Pod_4294407840
+	attN = bottom,ISRU_4294398978
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	RESOURCE
+	{
+		name = LiquidFuel
+		amount = 0
+		maxAmount = 360
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
+	}
+	RESOURCE
+	{
+		name = Oxidizer
+		amount = 0
+		maxAmount = 440
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
+	}
+}
+PART
+{
+	part = rcsTankRadialLong_4293133634
+	partName = Part
+	pos = -0.187894,6.349607,0.1356607
+	attPos = 0,0,0
+	attPos0 = -0.8971781,-0.0246172,1.117587E-07
+	rot = -0.5,0.5,-0.5,0.5
+	attRot = 0,0,-0.7071067,0.7071067
+	attRot0 = -0.5,0.5,-0.5,0.5
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = 0
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,fuelTank4-2_4293135428
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	RESOURCE
+	{
+		name = MonoPropellant
+		amount = 0
+		maxAmount = 150
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
+	}
+}
+PART
+{
 	part = ISRU_4294398978
 	partName = Part
-	pos = 0.7239233,5.883596,0.09771071
+	pos = 0.7092841,4.405474,0.1356606
 	attPos = 0,0,0
-	attPos0 = 0,-1.97924,0
+	attPos0 = 0,-1.96875,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -484,7 +586,7 @@ PART
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
 	link = batteryBankLarge_4294375044
-	attN = top,Mark1-2Pod_4294407840
+	attN = top,fuelTank4-2_4293135428
 	attN = bottom,batteryBankLarge_4294375044
 	EVENTS
 	{
@@ -855,7 +957,7 @@ PART
 {
 	part = batteryBankLarge_4294375044
 	partName = Part
-	pos = 0.7239233,4.273597,0.09771071
+	pos = 0.7092841,2.795475,0.1356606
 	attPos = 0,0,0
 	attPos0 = 0,-1.61,0
 	rot = 0,0,0,1
@@ -873,8 +975,6 @@ PART
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
 	link = batteryBankLarge_4294374796
-	link = launchClamp1_4294369322
-	link = launchClamp1_4294369132
 	attN = top,ISRU_4294398978
 	attN = bottom,batteryBankLarge_4294374796
 	EVENTS
@@ -902,7 +1002,7 @@ PART
 {
 	part = batteryBankLarge_4294374796
 	partName = Part
-	pos = 0.7239233,4.038597,0.09771071
+	pos = 0.7092841,2.560475,0.1356606
 	attPos = 0,0,0
 	attPos0 = 0,-0.2349997,0
 	rot = 0,0,0,1
@@ -920,6 +1020,8 @@ PART
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
 	link = RadialDrill_4294383500
+	link = launchClamp1_4294369322
+	link = launchClamp1_4293091152
 	attN = top,batteryBankLarge_4294375044
 	EVENTS
 	{
@@ -946,7 +1048,7 @@ PART
 {
 	part = RadialDrill_4294383500
 	partName = Part
-	pos = -0.6105942,4.036711,0.09771079
+	pos = -0.6252334,2.558589,0.1356607
 	attPos = 0,0,0
 	attPos0 = -1.334517,-0.001886368,7.358298E-08
 	rot = 2.512148E-15,0,6.102114E-08,1
@@ -1212,11 +1314,362 @@ PART
 }
 PART
 {
+	part = RadialOreTank_4293099976
+	partName = Part
+	pos = 0.7092839,6.371188,-1.073901
+	attPos = 0,0,0
+	attPos0 = -1.192093E-07,-0.003036022,-1.209562
+	rot = -0.7071068,0.7071068,-1.071077E-07,-1.071077E-07
+	attRot = 0,0,-0.7071068,0.7071068
+	attRot0 = -0.7071068,0.7071068,-1.071077E-07,-1.071077E-07
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = 0
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,fuelTank4-2_4293135428
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleFuelJettison
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+			FuelJettison
+			{
+				active = True
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Jettison Tank Contents
+				guiName = Jettison Tank Contents
+				category = Jettison Tank Contents
+				guiActiveUnfocused = True
+				unfocusedRange = 5
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			FuelJettisonAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	RESOURCE
+	{
+		name = Ore
+		amount = 0
+		maxAmount = 75
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
+	}
+}
+PART
+{
+	part = MiniDrill_4293091858
+	partName = Part
+	pos = 2.126986,6.346884,0.1356607
+	attPos = 0,0,0
+	attPos0 = 1.417701,-0.02733946,7.450581E-08
+	rot = 0,1,0,0
+	attRot = 0,0,0,1
+	attRot0 = 0,1,0,0
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 0
+	dstg = 0
+	sidx = -1
+	sqor = -1
+	sepI = 0
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,fuelTank4-2_4293135428
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleOverheatDisplay
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleResourceHarvester
+		isEnabled = True
+		DirtyFlag = True
+		EfficiencyBonus = 1
+		IsActivated = False
+		stagingEnabled = True
+		lastUpdateTime = 0
+		EVENTS
+		{
+			StartResourceConverter
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Start Converter
+				guiName = Start Converter
+				category = Start Converter
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			StopResourceConverter
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Stop Converter
+				guiName = Stop Converter
+				category = Stop Converter
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			StopResourceConverterAction
+			{
+				actionGroup = None
+			}
+			StartResourceConverterAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleAsteroidDrill
+		isEnabled = True
+		DirectAttach = False
+		DirtyFlag = True
+		EfficiencyBonus = 1
+		IsActivated = False
+		stagingEnabled = True
+		lastUpdateTime = 0
+		EVENTS
+		{
+			StartResourceConverter
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Start Converter
+				guiName = Start Converter
+				category = Start Converter
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			StopResourceConverter
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Stop Converter
+				guiName = Stop Converter
+				category = Stop Converter
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			StopResourceConverterAction
+			{
+				actionGroup = None
+			}
+			StartResourceConverterAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleAnimationGroup
+		isEnabled = True
+		_isActive = False
+		isDeployed = False
+		stagingEnabled = True
+		EVENTS
+		{
+			DeployModule
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Deploy
+				guiName = Deploy Drill
+				category = Deploy
+				guiActiveUnfocused = True
+				unfocusedRange = 3
+				externalToEVAOnly = True
+			}
+			RetractModule
+			{
+				active = False
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Retract
+				guiName = Retract Drill
+				category = Retract
+				guiActiveUnfocused = True
+				unfocusedRange = 3
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			DeployModuleAction
+			{
+				actionGroup = None
+			}
+			RetractModuleAction
+			{
+				actionGroup = None
+			}
+			ToggleModuleAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleCoreHeat
+		isEnabled = True
+		CoreTempGoalAdjustment = 0
+		CoreThermalEnergy = 0
+		stagingEnabled = True
+		lastUpdateTime = 0
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+}
+PART
+{
 	part = launchClamp1_4294369322
 	partName = Part
-	pos = 0.7239231,2.840944,-1.949421
+	pos = 0.7092839,1.30614,-1.906547
 	attPos = 0,0,0
-	attPos0 = -1.851108E-07,-1.432652,-2.047131
+	attPos0 = -1.788139E-07,-1.254334,-2.042208
 	rot = 2.277333E-07,-4.751904E-08,-1.082167E-14,-1
 	attRot = 0,0,0,1
 	attRot0 = 2.277333E-07,-4.751904E-08,-1.082167E-14,-1
@@ -1231,8 +1684,8 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
-	sym = launchClamp1_4294369132
-	srfN = srfAttach,batteryBankLarge_4294375044
+	sym = launchClamp1_4293091152
+	srfN = srfAttach,batteryBankLarge_4294374796
 	EVENTS
 	{
 	}
@@ -1246,8 +1699,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.387563
-		height = 3.501095
+		scaleFactor = 0.7792856
+		height = 1.966291
 		stagingEnabled = True
 		towerRot = -2.277333E-07,4.751904E-08,1.082167E-14,-1
 		EVENTS
@@ -1417,11 +1870,11 @@ PART
 }
 PART
 {
-	part = launchClamp1_4294369132
+	part = launchClamp1_4293091152
 	partName = Part
-	pos = 0.7239237,2.840944,2.144842
+	pos = 0.7092844,1.30614,2.177868
 	attPos = 0,0,0
-	attPos0 = 3.640767E-07,-1.432652,2.047131
+	attPos0 = 3.576279E-07,-1.254334,2.042208
 	rot = -2.077621E-14,-1,-2.277333E-07,9.123043E-08
 	attRot = 0,0,0,1
 	attRot0 = -2.077621E-14,-1,-2.277333E-07,9.123043E-08
@@ -1437,7 +1890,7 @@ PART
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
 	sym = launchClamp1_4294369322
-	srfN = srfAttach,batteryBankLarge_4294375044
+	srfN = srfAttach,batteryBankLarge_4294374796
 	EVENTS
 	{
 	}
@@ -1451,8 +1904,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.387563
-		height = 3.501095
+		scaleFactor = 0.7792856
+		height = 1.966291
 		stagingEnabled = True
 		towerRot = 2.077621E-14,1,2.277333E-07,9.123043E-08
 		EVENTS
