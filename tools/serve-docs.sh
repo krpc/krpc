@@ -4,7 +4,7 @@
 
 set -e
 
-port=$1
+port=${1:-8080}
 
 bazel build //doc:html
 rm -rf docs
