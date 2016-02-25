@@ -60,7 +60,7 @@
 
 {{ x.documentation | parsedoc | indent }}
 
-   :Property: {% if x.getter != None and x.setter != None %}Can be read or written{% elif x.getter != None %}Read-only, cannot be set{% else %}Write-only, cannot be read{% endif %}
+   :Attribute: {% if x.getter != None and x.setter != None %}Can be read or written{% elif x.getter != None %}Read-only, cannot be set{% else %}Write-only, cannot be read{% endif %}
 
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}

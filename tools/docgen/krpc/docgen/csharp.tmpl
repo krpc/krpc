@@ -34,18 +34,12 @@
 {% endmacro %}
 
 {% macro procedure(x) %}
-.. staticmethod:: {{ x.name }}({{ parameters(x.parameters) }})
+.. method:: {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters) }})
 
 {{ x.documentation | parsedoc | indent }}
 
-{% for p in x.parameters %}
-   :param {{ p.type | parameter_type }} {{ p.name }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
-
-{% endfor %}
+{{ parameters_description(x.parameters) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
-{% endif %}
-{% if x.return_type != None %}
-   :rtype: {{ x.return_type | type_description }}
 {% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -56,15 +50,12 @@
 {% endmacro %}
 
 {% macro property(x) %}
-.. attribute:: {{ x.name }}
+.. property:: {{ x.type | return_type }} {{ x.name }} {{'{'}}{% if x.getter != None %} get;{% endif %}{% if x.setter != None %} set;{% endif %} {{'}'}}
 
 {{ x.documentation | parsedoc | indent }}
 
-   :Property: {% if x.getter != None and x.setter != None %}Can be read or written{% elif x.getter != None %}Read-only, cannot be set{% else %}Write-only, cannot be read{% endif %}
-
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
-   :rtype: {{ x.type | type_description }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -74,18 +65,12 @@
 {% endmacro %}
 
 {% macro class_method(x) %}
-.. method:: {{ x.name }}({{ parameters(x.parameters[1:]) }})
+.. method:: {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters[1:]) }})
 
 {{ x.documentation | parsedoc | indent }}
 
-{% for p in x.parameters[1:] %}
-   :param {{ p.type | parameter_type }} {{ p.name }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
-
-{% endfor %}
+{{ parameters_description(x.parameters[1:]) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
-{% endif %}
-{% if x.return_type != None %}
-   :rtype: {{ x.return_type | type_description }}
 {% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -96,18 +81,12 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}
-.. staticmethod:: {{ x.name }}({{ parameters(x.parameters) }})
+.. method:: static {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters) }})
 
 {{ x.documentation | parsedoc | indent }}
 
-{% for p in x.parameters %}
-   :param {{ p.type | parameter_type }} {{ p.name }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
-
-{% endfor %}
+{{ parameters_description(x.parameters) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
-{% endif %}
-{% if x.return_type != None %}
-   :rtype: {{ x.return_type | type_description }}
 {% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -122,13 +101,13 @@
 {% endmacro %}
 
 {% macro enumeration(x) %}
-.. class:: {{ x.name }}
+.. enum:: {{ x.name }}
 
 {{ x.documentation | parsedoc | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for value in x.values.values() %}
-   .. data:: {{ value.name }}
+   .. value:: {{ value.name }}
 
 {{ value.documentation | parsedoc | indent(width=6) }}
 
@@ -142,10 +121,21 @@
 
 {% macro parameter(x) %}
 {% if not x.has_default_argument -%}
-{{ x.name }}
+{{ x.type | parameter_type }} {{ x.name }}
 {%- else -%}
-[{{ x.name }} = {{ x.default_argument }}]
+{{ x.type | parameter_type }} {{ x.name }} = {{ x.default_argument }}
 {%- endif %}
+{% endmacro %}
+
+{% macro parameters_description(x) %}
+{% if x | length > 0 %}
+   :parameters:
+
+   {% for p in x %}
+   {% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %}    * **{{ p.name }}** -- {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+
+   {% endfor %}
+{% endif %}
 {% endmacro %}
 
 {% macro returns(x) %}

@@ -84,6 +84,7 @@ def _impl(ctx, builder):
         '%s/bin/python %s/bin/sphinx-build -b %s -a -E -W -N -q "$1" "$2.files" $3' % (pyenv, pyenv, builder) #-j32
     ])
     if builder == 'html':
+        subcommands.append('rm -r "$2.files/.doctrees"')
         subcommands.append('(CWD=`pwd` && cd "$2.files" && zip --quiet -r $CWD/$2 ./)')
     else:
         subcommands.append('make -C "$2.files" 1>/dev/null')

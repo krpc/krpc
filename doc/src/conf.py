@@ -20,3 +20,7 @@ html_context = { 'css_files': ['_static/custom.css'] }
 todo_include_todos = True
 
 spelling_word_list_filename = 'dictionary.txt'
+
+javadoc_url_map = {
+    'org.javatuples' : ('http://www.javatuples.org/apidocs/', 'javadoc')
+}

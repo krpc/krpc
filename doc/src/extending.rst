@@ -540,7 +540,7 @@ provided as `a Python script on PyPi
 
 You can then run the script from the command line:
 
-.. code-block:: bash
+.. code-block:: console
 
    $ krpc-clientgen --help
    usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--ksp KSP]

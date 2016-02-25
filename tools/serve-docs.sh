@@ -4,9 +4,9 @@
 
 set -e
 
-port=$1
-
+port=${1:-8080}
+dir=bazel-bin/doc/html
 bazel build //doc:html
-rm -rf docs
-unzip -q bazel-bin/doc/html.zip -d docs
-cd docs; python -m SimpleHTTPServer $port
+rm -rf $dir
+unzip -q bazel-bin/doc/html.zip -d $dir
+(cd $dir; python -m SimpleHTTPServer $port)

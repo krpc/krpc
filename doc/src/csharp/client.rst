@@ -1,4 +1,4 @@
-.. default-domain:: cs
+.. default-domain:: csharp
 .. highlight:: csharp
 
 C# Client
@@ -24,7 +24,7 @@ Installing the Client
 Connecting to the Server
 ------------------------
 
-To connect to a server, create a :class:`KRPC.Client.Connection` object. For
+To connect to a server, create a :type:`KRPC.Client.Connection` object. For
 example to connect to a server running on the local machine:
 
 .. code-block:: csharp
@@ -113,7 +113,7 @@ the communication overhead in the previous example.
        Console.Out.WriteLine(position.Get());
 
 Streams are created by calling :meth:`Connection.AddStream` and passing it a
-lambda expression. It returns an instance of the :class:`KRPC.Client.Stream`
+lambda expression. It returns an instance of the :type:`KRPC.Client.Stream`
 class from which the latest value can be obtained by calling
 :meth:`KRPC.Client.Stream.Get`.
 

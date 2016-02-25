@@ -141,10 +141,10 @@
 
 {% macro parameters_description(x) %}
 {% if x | length > 0 %}
-   :parameters:
+   :Parameters:
 
    {% for p in x %}
-      * **{{ p.name | snakecase }}** (*{{ p.type | parameter_type }}*){% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} -- {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+   {% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %}    * **{{ p.name | snakecase }}** -- {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
 
    {% endfor %}
 {% endif %}
