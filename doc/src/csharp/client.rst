@@ -4,8 +4,22 @@
 C# Client
 =========
 
-The ``KRPC.Client.dll`` assembly provides functionality to interact with a kRPC
-server from C#. It is `available on NuGet <https://www.nuget.com/packages/KRPC.Client>`_.
+The ``KRPC.Client.dll`` library provides functionality to interact with a kRPC
+server from C#.
+
+Installing the Client
+---------------------
+
+``KRPC.Client.dll`` is `available on NuGet
+<https://www.nuget.com/packages/KRPC.Client/>`_. You also need to get
+``Google.Protobuf.dll``, which is `also available on NuGet
+<https://www.nuget.org/packages/Google.Protobuf/>`_.
+
+.. note::
+
+   The copy of ``Google.Protobuf.dll`` in the GameData folder shipped with kRPC
+   should be *avoided*. It is a modified version to work within KSP.
+   `See here for more details. <https://github.com/djungelorm/protobuf/releases/tag/v3.0.0-beta-2-net35>`_
 
 Connecting to the Server
 ------------------------
