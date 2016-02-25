@@ -1,6 +1,5 @@
 bazel-*
 lib/ksp
-docs
 KRPC.userprefs
 bin
 obj
