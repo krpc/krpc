@@ -33,26 +33,10 @@ language: csharp
 mono:
   - latest
 
-before_install:
-  # Luarocks
-  - wget http://keplerproject.github.io/luarocks/releases/luarocks-2.2.0.tar.gz
-  - tar -xf luarocks-2.2.0.tar.gz
-  - cd luarocks-2.2.0
-  - ./configure
-  - make build
-  - sudo make install
-  - cd ..
-  - rm -rf luarocks-2.2.0 luarocks-2.2.0.tar.gz
-  # Bazel
-  - wget 'https://github.com/bazelbuild/bazel/releases/download/0.1.4/bazel-0.1.4-jdk7-installer-linux-x86_64.sh'
-  - chmod +x bazel-0.1.4-jdk7-installer-linux-x86_64.sh
-  - ./bazel-0.1.4-jdk7-installer-linux-x86_64.sh --user
-  - cat tools/travis-ci/.bazelrc >> .bazelrc
-  # KSP libraries
-  - mkdir lib/ksp
-  - wget --quiet -O lib/ksp/ksp-lib-1.0.5.tar.gpg https://s3.amazonaws.com/krpc/ksp-lib-1.0.5.tar.gpg
-  - (cd lib/ksp; gpg --no-tty --batch --yes --passphrase $KSP_LIB_1_0_5_KEY ksp-lib-1.0.5.tar.gpg)
-  - (cd lib/ksp; tar -xf ksp-lib-1.0.5.tar)
+install:
+  ./tools/travis-ci/install-luarocks.sh
+  ./tools/tracis-ci/install-bazel.sh
+  ./tools/travis-ci/install-ksp-libs.sh
 
 script:
   - bazel build //:krpc //doc:html //:csproj
@@ -60,5 +44,4 @@ script:
   - bazel test //:test
 
 after_script:
-  # Remove KSP libraries
   - rm -rf lib/ksp
