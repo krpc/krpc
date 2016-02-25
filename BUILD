@@ -3,6 +3,12 @@ load('/config', 'version')
 
 exports_files(['COPYING', 'COPYING.LESSER'])
 
+readme_text = """
+Documentation: https://krpc.github.io/krpc
+Forum release thread: http://forum.kerbalspaceprogram.com/index.php?/topic/130742-105-krpc-remote-control-your-ships-using-python-c-c-lua-v021-10th-feb-2016/
+Forum development thread: http://forum.kerbalspaceprogram.com/threads/69313
+"""
+
 license_text = """This license (LGPL v3) applies to all parts of kRPC except for the following:
 
   - GameData/kRPC/KRPC.SpaceCenter.* is under the GPLv3 license.
@@ -37,9 +43,8 @@ genrule(
 
 genrule(
     name = 'readme',
-    srcs = ['README.md'],
     outs = ['README.txt'],
-    cmd = 'cp $(location //:README.md) "$@"',
+    cmd = 'echo "%s" > "$@"' % readme_text,
     visibility = ['//visibility:public']
 )
 
