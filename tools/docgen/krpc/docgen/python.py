@@ -1,25 +1,25 @@
+from krpc.docgen.domain import Domain
 from krpc.docgen.nodes import *
 from krpc.docgen.utils import snakecase
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
-class PythonDomain(object):
+class PythonDomain(Domain):
     name = 'python'
     prettyname = 'Python'
     sphinxname = 'py'
     codeext = 'py'
 
-    _value_map = {
+    value_map = {
         'null': 'None',
         'true': 'True',
         'false': 'False'
     }
 
     def __init__(self, macros):
-        self._currentmodule = None
-        self.macros = macros
+        super(PythonDomain, self).__init__(macros)
 
     def currentmodule(self, name):
-        self._currentmodule = name
+        super(PythonDomain, self).currentmodule(name)
         return '.. currentmodule:: %s' % name
 
     def type(self, typ):
@@ -40,12 +40,6 @@ class PythonDomain(object):
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
-    def return_type(self, typ):
-        return self.type(typ)
-
-    def parameter_type(self, typ):
-        return self.type(typ)
-
     def type_description(self, typ):
         if isinstance(typ, ValueType):
             return typ.python_type.__name__
@@ -64,9 +58,6 @@ class PythonDomain(object):
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
-    def value(self, value):
-        return self._value_map.get(value, value)
-
     def ref(self, obj):
         name = obj.fullname
         if isinstance(obj, Procedure) or isinstance(obj, Property) or \
@@ -76,12 +67,6 @@ class PythonDomain(object):
             name[-1] = snakecase(name[-1])
             name = '.'.join(name)
         return self.shorten_ref(name)
-
-    def shorten_ref(self, name):
-        name = name.split('.')
-        if name[0] == self._currentmodule:
-            del name[0]
-        return '.'.join(name)
 
     def see(self, obj):
         if isinstance(obj, Property) or isinstance(obj, ClassProperty) or isinstance(obj, EnumerationValue):
@@ -95,10 +80,4 @@ class PythonDomain(object):
         return ':%s:`%s`' % (prefix, self.ref(obj))
 
     def paramref(self, name):
-        return '*%s*' % snakecase(name)
-
-    def code(self, value):
-        return '``%s``' % self.value(value)
-
-    def math(self, value):
-        return ':math:`%s`' % value
+        return super(PythonDomain, self).paramref(snakecase(name))

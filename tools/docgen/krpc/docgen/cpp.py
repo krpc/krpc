@@ -1,36 +1,31 @@
-from krpc.docgen.python import PythonDomain
+from krpc.docgen.domain import Domain
 from krpc.docgen.nodes import *
 from krpc.docgen.utils import snakecase
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
-class CppDomain(PythonDomain):
+class CppDomain(Domain):
     name = 'cpp'
     prettyname = 'C++'
     sphinxname = 'cpp'
     codeext = 'cpp'
 
-    _type_map = {
+    type_map = {
         'string': 'std::string',
         'bytes': 'std::string',
     }
 
-    _value_map = {
+    value_map = {
         'null': 'NULL'
     }
 
     def __init__(self, macros):
-        self._currentmodule = None
-        self.macros = macros
-
-    def currentmodule(self, name):
-        self._currentmodule = name
-        return ''
+        super(CppDomain, self).__init__(macros)
 
     def type(self, typ):
         if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
-            return self._type_map.get(typ.protobuf_type, typ.protobuf_type)
+            return self.type_map.get(typ.protobuf_type, typ.protobuf_type)
         elif isinstance(typ, ClassType):
             return self.shorten_ref(typ.protobuf_type[6:-1]).replace('.', '::')
         elif isinstance(typ, EnumType):
@@ -40,13 +35,13 @@ class CppDomain(PythonDomain):
         elif isinstance(typ, DictionaryType):
             return 'std::map<%s,%s>' % (self.type(typ.key_type), self.type(typ.value_type))
         elif isinstance(typ, SetType):
-            raise RuntimeError('not supported')
+            return 'std::set<%s>' % self.type(typ.value_type)
         elif isinstance(typ, TupleType):
             return 'std::tuple<%s>' % ', '.join(self.type(typ) for typ in typ.value_types)
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
-    def typedesc(self, typ):
+    def type_description(self, typ):
         if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
@@ -56,13 +51,13 @@ class CppDomain(PythonDomain):
         elif isinstance(typ, EnumType):
             return ':class:`%s`' % self.type(typ)
         elif isinstance(typ, ListType):
-            return 'std::vector<%s>' % self.typedesc(typ.value_type)
+            return 'std::vector<%s>' % self.type_description(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'std::map<%s,%s>' % (self.typedesc(typ.key_type), self.typedesc(typ.value_type))
+            return 'std::map<%s,%s>' % (self.type_description(typ.key_type), self.type_description(typ.value_type))
         elif isinstance(typ, SetType):
-            raise RuntimeError('not supported')
+            return 'std::set<%s>' % self.type_description(typ.value_type)
         elif isinstance(typ, TupleType):
-            return 'std::tuple<%s>' % ', '.join(self.typedesc(typ) for typ in typ.value_types)
+            return 'std::tuple<%s>' % ', '.join(self.type_description(typ) for typ in typ.value_types)
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
@@ -75,9 +70,6 @@ class CppDomain(PythonDomain):
             name[-1] = snakecase(name[-1])
             name = '.'.join(name)
         return self.shorten_ref(name).replace('.', '::')
-
-    def shorten_ref(self, name):
-        return name
 
     def see(self, obj):
         if isinstance(obj, Property) or isinstance(obj, ClassProperty):
@@ -93,3 +85,6 @@ class CppDomain(PythonDomain):
         else:
             raise RuntimeError(str(obj))
         return ':%s:`%s`' % (prefix, self.ref(obj))
+
+    def paramref(self, name):
+        return super(CppDomain, self).paramref(snakecase(name))

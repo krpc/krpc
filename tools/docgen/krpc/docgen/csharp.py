@@ -1,25 +1,18 @@
+from krpc.docgen.domain import Domain
 from krpc.docgen.nodes import *
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
-class CsharpDomain(object):
+class CsharpDomain(Domain):
     name = 'csharp'
     prettyname = 'C#'
-    sphinxname = 'cs'
+    sphinxname = 'csharp'
     codeext = 'cs'
 
-    def __init__(self, macros):
-        self._currentmodule = None
-        self.macros = macros
-
-    def currentmodule(self, name):
-        self._currentmodule = name
-        return '' #return '.. currentmodule:: %s' % name
-
-    _type_map = {
+    type_map = {
         'int32': 'int',
-        'int64': 'Int64',
-        'uint32': 'UInt32',
-        'uint64': 'UInt64',
+        'int64': 'long',
+        'uint32': 'uint',
+        'uint64': 'ulong',
         'bytes': 'byte[]',
         'string': 'string',
         'float': 'float',
@@ -27,76 +20,38 @@ class CsharpDomain(object):
         'bool': 'bool'
     }
 
+    def __init__(self, macros):
+        super(CsharpDomain, self).__init__(macros)
+
     def type(self, typ):
-        if isinstance(typ, ValueType):
-            return self._type_map[typ.protobuf_type]
+        if typ == None:
+            return 'void'
+        elif isinstance(typ, ValueType):
+            return self.type_map[typ.protobuf_type]
         elif isinstance(typ, ClassType):
             return self.shorten_ref(typ.protobuf_type[6:-1])
         elif isinstance(typ, EnumType):
             return self.shorten_ref(typ.protobuf_type[5:-1])
         elif isinstance(typ, ListType):
-            return 'IList'
+            return 'System.Collections.Generic.IList<%s>' % self.type(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'IDictionary'
+            return 'System.Collections.Generic.IDictionary<%s,%s>' % (self.type(typ.key_type), self.type(typ.value_type))
         elif isinstance(typ, SetType):
-            return 'ISet'
+            return 'System.Collections.Generic.ISet<%s>' % self.type(typ.value_type)
         elif isinstance(typ, TupleType):
-            return 'Tuple'
+            return 'System.Tuple<%s>' % ','.join(self.type(typ) for typ in typ.value_types)
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
-
-    def return_type(self, typ):
-        return self.type(typ)
-
-    def parameter_type(self, typ):
-        return self.type(typ)
-
-    def type_description(self, typ):
-        if isinstance(typ, ValueType):
-            return self.type(typ)
-        elif isinstance(typ, ClassType):
-            return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, EnumType):
-            return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, ListType):
-            return 'IList<%s>' % self.type_description(typ.value_type)
-        elif isinstance(typ, DictionaryType):
-            return 'IDictionary<%s, %s>' % (self.type_description(typ.key_type), self.type_description(typ.value_type))
-        elif isinstance(typ, SetType):
-            return 'ISet<%s>' % self.type_description(typ.value_type)
-        elif isinstance(typ, TupleType):
-            return 'Tuple<%s>' % ','.join(self.type_description(typ) for typ in typ.value_types)
-        else:
-            raise RuntimeError('Unknown type \'%s\'' % str(typ))
-
-    def value(self, value):
-        return value
-
-    def ref(self, obj):
-        return self.shorten_ref(obj.fullname)
-
-    def shorten_ref(self, name):
-        name = name.split('.')
-        if name[0] == self._currentmodule:
-            del name[0]
-        return '.'.join(name)
 
     def see(self, obj):
-        if isinstance(obj, Property) or isinstance(obj, ClassProperty) or isinstance(obj, EnumerationValue):
-            prefix = 'attr'
+        if isinstance(obj, Property) or isinstance(obj, ClassProperty):
+            prefix = 'prop'
+        elif isinstance(obj, EnumerationValue):
+            prefix = 'enum'
         elif isinstance(obj, Procedure) or isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod):
             prefix = 'meth'
         elif isinstance(obj, Class) or isinstance(obj, Enumeration):
-            prefix = 'class'
+            prefix = 'type'
         else:
             raise RuntimeError(str(obj))
         return ':%s:`%s`' % (prefix, self.ref(obj))
-
-    def paramref(self, name):
-        return '*%s*' % name
-
-    def code(self, value):
-        return '``%s``' % self.value(value)
-
-    def math(self, value):
-        return ':math:`%s`' % value
