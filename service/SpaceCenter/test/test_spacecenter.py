@@ -336,6 +336,11 @@ class TestWarpOnLaunchpad(testingtools.TestCase, WarpTestBase):
     def tearDownClass(cls):
         cls.conn.close()
 
+    def test_warp_to_long(self):
+        t = self.sc.ut + (100*60*60) # 100 hours in future
+        self.sc.warp_to(t)
+        self.assertClose(t, self.sc.ut, error=2)
+
 class TestWarpInOrbit(testingtools.TestCase, WarpTestBase):
 
     @classmethod
