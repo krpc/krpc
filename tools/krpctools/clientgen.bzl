@@ -19,7 +19,7 @@ clientgen = rule(
         'defs': attr.label(allow_files=True, single_file=True),
         'out': attr.output(mandatory=True),
         'language': attr.string(mandatory=True),
-        '_clientgen': attr.label(default=Label('//tools/clientgen:script'), executable=True, allow_files=True, single_file=True)
+        '_clientgen': attr.label(default=Label('//tools/krpctools:clientgen'), executable=True, allow_files=True, single_file=True)
     },
     output_to_genfiles = True
 )

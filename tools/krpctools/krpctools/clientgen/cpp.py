@@ -1,5 +1,5 @@
-from krpc.clientgen.generator import Generator
-from krpc.clientgen.docparser import DocParser
+from .generator import Generator
+from .docparser import DocParser
 import krpc.types
 
 Types = krpc.types.Types()

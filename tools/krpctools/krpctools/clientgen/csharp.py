@@ -1,4 +1,4 @@
-from krpc.clientgen.generator import Generator
+from .generator import Generator
 import krpc.types
 
 Types = krpc.types.Types()

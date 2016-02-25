@@ -1,6 +1,6 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assembly_info', 'nuget_package')
 load('/tools/build/client_test', 'client_test')
-load('/tools/clientgen/build', 'clientgen_csharp')
+load('/tools/krpctools/clientgen', 'clientgen_csharp')
 load('/config', 'version', 'author')
 
 filegroup(

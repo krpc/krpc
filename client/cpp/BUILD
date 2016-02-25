@@ -1,7 +1,7 @@
 load('/tools/build/autotools', 'autotools_dist')
 load('/tools/build/protobuf/cpp', 'protobuf_cpp')
 load('/tools/build/client_test', 'client_test')
-load('/tools/clientgen/build', 'clientgen_cpp')
+load('/tools/krpctools/clientgen', 'clientgen_cpp')
 load('/config', 'version')
 
 autotools_dist(
