@@ -45,7 +45,8 @@ new_http_archive(
     name = 'csharp_nunit',
     build_file = 'tools/build/csharp_nunit.BUILD',
     url = 'https://github.com/nunit/nunitv2/releases/download/2.6.4/NUnit-2.6.4.zip',
-    sha256 = '1bd925514f31e7729ccde40a38a512c2accd86895f93465f3dfe6d0b593d7170'
+    sha256 = '1bd925514f31e7729ccde40a38a512c2accd86895f93465f3dfe6d0b593d7170',
+    strip_prefix = 'NUnit-2.6.4'
 )
 
 new_http_archive(
@@ -59,8 +60,8 @@ new_http_archive(
 new_http_archive(
     name = 'csharp_json',
     build_file = 'tools/build/csharp_json.BUILD',
-    url = 'https://github.com/JamesNK/Newtonsoft.Json/releases/download/7.0.1/Json70r1.zip',
-    sha256 = 'd8705b95e460a0c6b760ed22c9cac47b40bfbbc8c0f1c0827edf94b0aee0da76'
+    url = 'https://github.com/JamesNK/Newtonsoft.Json/releases/download/8.0.2/Json80r2.zip',
+    sha256 = '68922c9bef0e2a856e755dd4889556785b347ce8b98b98b5e9b3f5e83f801362'
 )
 
 new_http_archive(
@@ -85,8 +86,8 @@ http_file(
 
 http_file(
     name = 'python_sphinx',
-    url = 'https://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.3.3.tar.gz',
-    sha256 = '4077bff351d96bd3ebc89daa6f897f3ddcbbca055f427b36f72b75d7310270d8'
+    url = 'https://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.3.5.tar.gz',
+    sha256 = 'b7d133bb4990d010a2ad934c319b52d8a2156cb0491484f5e2a558619bc9ae04'
 )
 
 http_file(
@@ -139,14 +140,14 @@ http_file(
 
 http_file(
     name = 'python_alabaster',
-    url = 'https://pypi.python.org/packages/source/a/alabaster/alabaster-0.7.6.tar.gz',
-    sha256 = '309d33e0282c8209f792f3527f41ec04e508ff837c61fc1906dde988a256deeb'
+    url = 'https://pypi.python.org/packages/source/a/alabaster/alabaster-0.7.7.tar.gz',
+    sha256 = 'f416a84e0d0ddbc288f6b8f2c276d10b40ca1238562cd9ed5a751292ec647b71'
 )
 
 http_file(
     name = 'python_babel',
-    url = 'https://pypi.python.org/packages/source/B/Babel/Babel-2.1.1.tar.gz',
-    sha256 = '7fb6d50effe88a087feb2036cb972fd7a893bf338361516f1a55a820bf7b5248'
+    url = 'https://pypi.python.org/packages/source/B/Babel/Babel-2.2.0.tar.gz',
+    sha256 = 'd8cb4c0e78148aee89560f9fe21587aa57739c975bb89ff66b1e842cc697428f'
 )
 
 http_file(
@@ -181,8 +182,8 @@ http_file(
 
 http_file(
     name = 'python_pygments',
-    url = 'https://pypi.python.org/packages/source/P/Pygments/Pygments-2.0.2.tar.gz',
-    sha256 = '7320919084e6dac8f4540638a46447a3bd730fca172afc17d2c03eed22cf4f51'
+    url = 'https://pypi.python.org/packages/source/P/Pygments/Pygments-2.1.1.tar.gz',
+    sha256 = '2df7d9a85b56e54c7c021dc98fc877bd216ead652c10da170779c004fb59c01b'
 )
 
 http_file(
@@ -199,8 +200,8 @@ http_file(
 
 http_file(
     name = 'python_snowballstemmer',
-    url = 'https://pypi.python.org/packages/source/s/snowballstemmer/snowballstemmer-1.2.0.tar.gz',
-    sha256 = '6d54f350e7a0e48903a4e3b6b2cabd1b43e23765fbc975065402893692954191'
+    url = 'https://pypi.python.org/packages/source/s/snowballstemmer/snowballstemmer-1.2.1.tar.gz',
+    sha256 = '919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128'
 )
 
 new_http_archive(
