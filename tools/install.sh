@@ -23,7 +23,7 @@ cp -R \
     bazel-bin/service/**/*.dll \
     bazel-bin/service/**/*.xml \
     bazel-bin/service/**/*.json \
-    bazel-krpc/external/csharp_protobuf_net35/file/Google.Protobuf.dll \
+    bazel-krpc/external/csharp_protobuf_net35/Google.Protobuf.dll \
     bazel-bin/tools/TestingTools/TestingTools.dll \
     $GAMEDATA/
 
