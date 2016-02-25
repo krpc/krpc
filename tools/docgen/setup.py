@@ -19,7 +19,7 @@ setup(
     version=open(os.path.join(dirpath, 'VERSION.txt')).read().strip(),
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
-    url='https://krpc.github.io/krpc/docs',
+    url='https://krpc.github.io/krpc',
     license='GNU GPL v3',
     description='Tool for generating documentation for kRPC',
     packages=['krpc.docgen'],
