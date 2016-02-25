@@ -34,9 +34,9 @@ mono:
   - latest
 
 install:
-  ./tools/travis-ci/install-luarocks.sh
-  ./tools/tracis-ci/install-bazel.sh
-  ./tools/travis-ci/install-ksp-libs.sh
+  - ./tools/travis-ci/install-luarocks.sh
+  - ./tools/tracis-ci/install-bazel.sh
+  - ./tools/travis-ci/install-ksp-libs.sh
 
 script:
   - bazel build //:krpc //doc:html //:csproj
