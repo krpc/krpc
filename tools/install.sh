@@ -18,13 +18,12 @@ mkdir -p $GAMEDATA
 cp -R \
     bazel-bin/server/KRPC.dll \
     bazel-bin/server/KRPC.xml \
-    bazel-bin/server/KRPC.json \
     bazel-bin/server/src/icons \
     bazel-bin/service/**/*.dll \
     bazel-bin/service/**/*.xml \
-    bazel-bin/service/**/*.json \
     bazel-krpc/external/csharp_protobuf_net35/Google.Protobuf.dll \
     bazel-bin/tools/TestingTools/TestingTools.dll \
+    bazel-bin/tools/TestingTools/TestingTools.xml \
     tools/settings.cfg \
     $GAMEDATA/
 
