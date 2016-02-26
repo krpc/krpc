@@ -383,12 +383,12 @@ SpaceCenter.ReactionWheel.YawTorque
 SpaceCenter.ReactionWheel.RollTorque
 SpaceCenter.ResourceConverter.Part
 SpaceCenter.ResourceConverter.Count
-SpaceCenter.ResourceConverter.Active
 SpaceCenter.ResourceConverter.Name
+SpaceCenter.ResourceConverter.Active
 SpaceCenter.ResourceConverter.Start
 SpaceCenter.ResourceConverter.Stop
-SpaceCenter.ResourceConverter.Status
-SpaceCenter.ResourceConverter.StatusString
+SpaceCenter.ResourceConverter.State
+SpaceCenter.ResourceConverter.StatusInfo
 SpaceCenter.ResourceConverter.Inputs
 SpaceCenter.ResourceConverter.Outputs
 SpaceCenter.ResourceConverterState.Running
