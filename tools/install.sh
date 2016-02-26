@@ -25,6 +25,7 @@ cp -R \
     bazel-bin/service/**/*.json \
     bazel-krpc/external/csharp_protobuf_net35/Google.Protobuf.dll \
     bazel-bin/tools/TestingTools/TestingTools.dll \
+    tools/settings.cfg \
     $GAMEDATA/
 
 find $GAMEDATA -type f -exec chmod 644 {} \;
