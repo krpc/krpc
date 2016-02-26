@@ -8,7 +8,7 @@ using System.Linq;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="ResourceConverter.Status"/>.
+    /// See <see cref="ResourceConverter.State"/>.
     /// </summary>
     [KRPCEnum (Service = "SpaceCenter")]
     public enum ResourceConverterState
@@ -35,7 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         Capacity,
         /// <summary>
         /// Unknown state. Possible with modified resource converters.
-        /// In this case, check <see cref="ResourceConverter.StatusString"/> for more information.
+        /// In this case, check <see cref="ResourceConverter.StatusInfo"/> for more information.
         /// </summary>
         Unknown
     }
@@ -52,7 +52,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal ResourceConverter (Part part)
         {
             this.part = part;
-            converters = part.Modules.OfType<ModuleResourceConverter> ().ToList ();
+            converters = part.InternalPart.Modules.OfType<ModuleResourceConverter> ().ToList ();
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The number of converter modules in the part.
+        /// The number of converters in the part.
         /// </summary>
         [KRPCProperty]
         public int Count {
@@ -89,8 +89,8 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         void CheckConverterExists (int index)
         {
-            if (index >= Count)
-                throw new ArgumentException ("No resource converter found with index " + index);
+            if (index < 0 || Count <= index)
+                throw new ArgumentException ("Converter not found with index " + index);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <param name="index">Index of the converter.</param>
         [KRPCMethod]
         public void Start (int index)
-        { 
+        {
             CheckConverterExists (index);
             converters [index].StartResourceConverter ();
         }
@@ -138,11 +138,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The status of specified converter.
+        /// The state of the specified converter.
         /// </summary>
         /// <param name="index">Index of the converter.</param>
         [KRPCMethod]
-        public ResourceConverterState Status (int index)
+        public ResourceConverterState State (int index)
         {
             CheckConverterExists (index);
             var status = converters [index].status;
@@ -161,18 +161,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Status string for the specified converter.
+        /// Status information for the specified converter.
+        /// This is the full status message shown in the in-game UI.
         /// </summary>
         /// <param name="index">Index of the converter.</param>
         [KRPCMethod]
-        public string StatusString (int index)
+        public string StatusInfo (int index)
         {
             CheckConverterExists (index);
             return converters [index].status;
         }
 
         /// <summary>
-        /// List of input resources for the specified converter.
+        /// List of the names of resources consumed by the specified converter.
         /// </summary>
         /// <param name="index">Index of the converter.</param>
         [KRPCMethod]
@@ -183,7 +184,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// List of output resources for the specified converter.
+        /// List of the names of resources produced by the specified converter.
         /// </summary>
         /// <param name="index">Index of the converter.</param>
         [KRPCMethod]
