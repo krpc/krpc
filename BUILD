@@ -35,6 +35,23 @@ You should have received a copy of the Lesser GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+version_parts = version.split('.')
+ksp_avc_version = """{
+  "NAME": "kRPC",
+  "URL": "http://ksp-avc.cybutek.net/version.php?id=254",
+  "DOWNLOAD": "https://github.com/krpc/krpc/releases/latest",
+  "VERSION": {
+    "MAJOR": %s,
+    "MINOR": %s,
+    "PATCH": %s
+  },
+  "KSP_VERSION": {
+    "MAJOR": 1,
+    "MINOR": 0,
+    "PATCH": 5
+  }
+}""" % (version_parts[0], version_parts[1], version_parts[2])
+
 genrule(
     name = 'license',
     outs = ['LICENSE'],
@@ -55,6 +72,12 @@ genrule(
     visibility = ['//visibility:public']
 )
 
+genrule(
+    name = 'ksp-avc-version',
+    outs = ['kRPC.version'],
+    cmd = 'echo \'%s\' > "$@"' % ksp_avc_version
+)
+
 package_archive(
     name = 'krpc',
     out = 'krpc-%s.zip' % version,
@@ -62,6 +85,7 @@ package_archive(
         ':readme',
         ':license',
         ':version',
+        ':ksp-avc-version',
         'COPYING',
         'COPYING.LESSER',
         # Server
@@ -89,6 +113,7 @@ package_archive(
         '//doc:latex',
     ],
     path_map = {
+        'kRPC.version': 'GameData/kRPC/kRPC.version',
         # Server
         'server/': 'GameData/kRPC/',
         'server/src/icons': 'GameData/kRPC/icons',

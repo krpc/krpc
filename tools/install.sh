@@ -7,6 +7,7 @@ GAMEDATA=$KSP/GameData/kRPC
 VERSION=`tools/get-version.sh`
 
 bazel build \
+    //:ksp-avc-version \
     //server \
     //service/SpaceCenter \
     //service/KerbalAlarmClock \
@@ -16,6 +17,7 @@ bazel build \
 rm -rf $GAMEDATA
 mkdir -p $GAMEDATA
 cp -R \
+    bazel-genfiles/kRPC.version \
     bazel-bin/server/KRPC.dll \
     bazel-bin/server/KRPC.xml \
     bazel-bin/server/src/icons \
