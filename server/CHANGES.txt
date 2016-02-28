@@ -3,6 +3,7 @@ v0.2.2
  * Removed support for protobuf enumerations and custom protobuf messages as RPC parameter/return values.
    Note: these features were not used anywhere, and only cause complications for client libraries
  * Fix bug where KSP hangs if the game is quit whilst the server is running
+ * Remove support for blizzy's toolbar, in favour of using the stock applauncher
 
 v0.2.1
  * Add "Any" option to server address drop down
