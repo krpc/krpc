@@ -17,11 +17,11 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Part : Equatable<Part>
     {
-        readonly global::Part part;
+        readonly uint partFlightId;
 
         internal Part (global::Part part)
         {
-            this.part = part;
+            this.partFlightId = part.flightID;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Part obj)
         {
-            return part.flightID == obj.part.flightID;
+            return partFlightId == obj.partFlightId;
         }
 
         /// <summary>
@@ -37,11 +37,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.flightID.GetHashCode ();
+            return partFlightId.GetHashCode ();
         }
 
-        internal global::Part InternalPart {
-            get { return part; }
+        /// <summary>
+        /// The KSP part.
+        /// </summary>
+        public global::Part InternalPart {
+            get { return FlightGlobals.FindPartByID (partFlightId); }
         }
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return part.partInfo.name; }
+            get { return InternalPart.partInfo.name; }
         }
 
         /// <summary>
@@ -59,7 +62,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public string Title {
-            get { return part.partInfo.title; }
+            get { return InternalPart.partInfo.title; }
         }
 
         /// <summary>
@@ -67,7 +70,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double Cost {
-            get { return part.partInfo.cost; }
+            get { return InternalPart.partInfo.cost; }
         }
 
         /// <summary>
@@ -75,7 +78,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Vessel Vessel {
-            get { return new Vessel (part.vessel); }
+            get { return new Vessel (InternalPart.vessel); }
         }
 
         /// <summary>
@@ -84,7 +87,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Part Parent {
-            get { return part.parent == null ? null : new Part (part.parent); }
+            get { return InternalPart.parent == null ? null : new Part (InternalPart.parent); }
         }
 
         /// <summary>
@@ -93,7 +96,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Part> Children {
-            get { return part.children.Select (p => new Part (p)).ToList (); }
+            get { return InternalPart.children.Select (p => new Part (p)).ToList (); }
         }
 
         /// <summary>
@@ -102,7 +105,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool AxiallyAttached {
-            get { return part.parent == null || part.attachMode == AttachModes.STACK; }
+            get { return InternalPart.parent == null || InternalPart.attachMode == AttachModes.STACK; }
         }
 
         /// <summary>
@@ -111,7 +114,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool RadiallyAttached {
-            get { return part.parent != null && part.attachMode == AttachModes.SRF_ATTACH; }
+            get { return InternalPart.parent != null && InternalPart.attachMode == AttachModes.SRF_ATTACH; }
         }
 
         /// <summary>
@@ -119,7 +122,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public int Stage {
-            get { return part.hasStagingIcon ? part.inverseStage : -1; }
+            get { return InternalPart.hasStagingIcon ? InternalPart.inverseStage : -1; }
         }
 
         /// <summary>
@@ -127,7 +130,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public int DecoupleStage {
-            get { return part.DecoupledAt (); }
+            get { return InternalPart.DecoupledAt (); }
         }
 
         /// <summary>
@@ -135,7 +138,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Massless {
-            get { return part.physicalSignificance == global::Part.PhysicalSignificance.NONE; }
+            get { return InternalPart.physicalSignificance == global::Part.PhysicalSignificance.NONE; }
         }
 
         /// <summary>
@@ -144,7 +147,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double Mass {
-            get { return Massless ? 0f : (part.mass + part.GetResourceMass ()) * 1000f; }
+            get { return Massless ? 0f : (InternalPart.mass + InternalPart.GetResourceMass ()) * 1000f; }
         }
 
         /// <summary>
@@ -152,7 +155,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double DryMass {
-            get { return Massless ? 0f : part.mass * 1000f; }
+            get { return Massless ? 0f : InternalPart.mass * 1000f; }
         }
 
         /// <summary>
@@ -160,7 +163,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double ImpactTolerance {
-            get { return part.crashTolerance; }
+            get { return InternalPart.crashTolerance; }
         }
 
         /// <summary>
@@ -168,7 +171,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double Temperature {
-            get { return part.temperature; }
+            get { return InternalPart.temperature; }
         }
 
         /// <summary>
@@ -176,7 +179,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double SkinTemperature {
-            get { return part.skinTemperature; }
+            get { return InternalPart.skinTemperature; }
         }
 
         /// <summary>
@@ -184,7 +187,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double MaxTemperature {
-            get { return part.maxTemp; }
+            get { return InternalPart.maxTemp; }
         }
 
         /// <summary>
@@ -192,7 +195,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double MaxSkinTemperature {
-            get { return part.skinMaxTemp; }
+            get { return InternalPart.skinMaxTemp; }
         }
 
         /// <summary>
@@ -209,7 +212,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double ThermalMass {
-            get { return part.thermalMass; }
+            get { return InternalPart.thermalMass; }
         }
 
         /// <summary>
@@ -217,7 +220,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double ThermalSkinMass {
-            get { return part.skinThermalMass; }
+            get { return InternalPart.skinThermalMass; }
         }
 
         /// <summary>
@@ -225,7 +228,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double ThermalResourceMass {
-            get { return part.resourceThermalMass; }
+            get { return InternalPart.resourceThermalMass; }
         }
 
         /// <summary>
@@ -236,7 +239,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double ThermalConductionFlux {
-            get { return part.thermalConductionFlux; }
+            get { return InternalPart.thermalConductionFlux; }
         }
 
         /// <summary>
@@ -247,7 +250,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double ThermalConvectionFlux {
-            get { return part.thermalConvectionFlux; }
+            get { return InternalPart.thermalConvectionFlux; }
         }
 
         /// <summary>
@@ -257,7 +260,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double ThermalRadiationFlux {
-            get { return part.thermalRadiationFlux; }
+            get { return InternalPart.thermalRadiationFlux; }
         }
 
         /// <summary>
@@ -268,7 +271,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double ThermalInternalFlux {
-            get { return part.thermalInternalFlux; }
+            get { return InternalPart.thermalInternalFlux; }
         }
 
         /// <summary>
@@ -276,7 +279,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double ThermalSkinToInternalFlux {
-            get { return part.skinToInternalFlux; }
+            get { return InternalPart.skinToInternalFlux; }
         }
 
         /// <summary>
@@ -284,7 +287,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Resources Resources {
-            get { return new Resources (part); }
+            get { return new Resources (InternalPart); }
         }
 
         /// <summary>
@@ -292,7 +295,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Crossfeed {
-            get { return part.fuelCrossFeed; }
+            get { return InternalPart.fuelCrossFeed; }
         }
 
         /// <summary>
@@ -300,7 +303,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool IsFuelLine {
-            get { return part.HasModule<CModuleFuelLine> (); }
+            get { return InternalPart.HasModule<CModuleFuelLine> (); }
         }
 
         /// <summary>
@@ -311,7 +314,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (IsFuelLine)
                     throw new ArgumentException ("Part is a fuel line");
-                return part.fuelLookupTargets.Select (x => new Part (x.parent)).ToList ();
+                return InternalPart.fuelLookupTargets.Select (x => new Part (x.parent)).ToList ();
             }
         }
 
@@ -324,9 +327,9 @@ namespace KRPC.SpaceCenter.Services.Parts
                 if (IsFuelLine)
                     throw new ArgumentException ("Part is a fuel line");
                 var result = new List<global::Part> ();
-                foreach (var otherPart in part.vessel.parts) {
+                foreach (var otherPart in InternalPart.vessel.parts) {
                     foreach (var target in otherPart.fuelLookupTargets.Select (x => x.parent)) {
-                        if (target == part)
+                        if (target.flightID == partFlightId)
                             result.Add (otherPart);
                     }
                 }
@@ -341,66 +344,66 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<Module> Modules {
             get {
                 IList<Module> modules = new List<Module> ();
-                foreach (PartModule partModule in part.Modules)
+                foreach (PartModule partModule in InternalPart.Modules)
                     modules.Add (new Module (this, partModule));
                 return modules;
             }
         }
 
         internal bool IsDecoupler {
-            get { return part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> (); }
+            get { return InternalPart.HasModule<ModuleDecouple> () || InternalPart.HasModule<ModuleAnchoredDecoupler> (); }
         }
 
         internal bool IsDockingPort {
-            get { return part.HasModule<ModuleDockingNode> (); }
+            get { return InternalPart.HasModule<ModuleDockingNode> (); }
         }
 
         internal bool IsResourceConverter {
-            get { return part.HasModule<ModuleResourceConverter> (); }
+            get { return InternalPart.HasModule<ModuleResourceConverter> (); }
         }
 
         internal bool IsResourceHarvester {
-            get { return part.HasModule<ModuleResourceHarvester> (); }
+            get { return InternalPart.HasModule<ModuleResourceHarvester> (); }
         }
 
         internal bool IsEngine {
-            get { return part.HasModule<ModuleEngines> () || part.HasModule<ModuleEnginesFX> (); }
+            get { return InternalPart.HasModule<ModuleEngines> () || InternalPart.HasModule<ModuleEnginesFX> (); }
         }
 
         internal bool IsLandingGear {
-            get { return part.HasModule<ModuleLandingGear> (); }
+            get { return InternalPart.HasModule<ModuleLandingGear> (); }
         }
 
         internal bool IsLandingLeg {
-            get { return part.HasModule<ModuleLandingLeg> (); }
+            get { return InternalPart.HasModule<ModuleLandingLeg> (); }
         }
 
         internal bool IsLaunchClamp {
-            get { return part.HasModule<global::LaunchClamp> (); }
+            get { return InternalPart.HasModule<global::LaunchClamp> (); }
         }
 
         internal bool IsLight {
-            get { return part.HasModule<ModuleLight> (); }
+            get { return InternalPart.HasModule<ModuleLight> (); }
         }
 
         internal bool IsParachute {
-            get { return part.HasModule<ModuleParachute> (); }
+            get { return InternalPart.HasModule<ModuleParachute> (); }
         }
 
         internal bool IsRadiator {
-            get { return part.HasModule<ModuleDeployableRadiator> (); }
+            get { return InternalPart.HasModule<ModuleDeployableRadiator> (); }
         }
 
         internal bool IsReactionWheel {
-            get { return part.HasModule<ModuleReactionWheel> (); }
+            get { return InternalPart.HasModule<ModuleReactionWheel> (); }
         }
 
         internal bool IsSensor {
-            get { return part.HasModule<ModuleEnviroSensor> (); }
+            get { return InternalPart.HasModule<ModuleEnviroSensor> (); }
         }
 
         internal bool IsSolarPanel {
-            get { return part.HasModule<ModuleDeployableSolarPanel> (); }
+            get { return InternalPart.HasModule<ModuleDeployableSolarPanel> (); }
         }
 
         /// <summary>
@@ -522,7 +525,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.PositionFromWorldSpace (part.transform.position).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (InternalPart.transform.position).ToTuple ();
         }
 
         /// <summary>
@@ -532,7 +535,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.DirectionFromWorldSpace (part.transform.up).ToTuple ();
+            return referenceFrame.DirectionFromWorldSpace (InternalPart.transform.up).ToTuple ();
         }
 
         /// <summary>
@@ -542,7 +545,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.VelocityFromWorldSpace (part.transform.position, part.orbit.GetVel ()).ToTuple ();
+            return referenceFrame.VelocityFromWorldSpace (InternalPart.transform.position, InternalPart.orbit.GetVel ()).ToTuple ();
         }
 
         /// <summary>
@@ -552,7 +555,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.RotationToWorldSpace (part.transform.rotation).ToTuple ();
+            return referenceFrame.RotationToWorldSpace (InternalPart.transform.rotation).ToTuple ();
         }
 
         /// <summary>
@@ -569,7 +572,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </remarks>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return ReferenceFrame.Object (part); }
+            get { return ReferenceFrame.Object (InternalPart); }
         }
     }
 }

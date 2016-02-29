@@ -29,7 +29,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Decoupler obj)
         {
-            return part == obj.part;
+            return part == obj.part && decoupler == obj.decoupler && anchoredDecoupler == obj.anchoredDecoupler;
         }
 
         /// <summary>
@@ -37,7 +37,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            int hash = part.GetHashCode ();
+            if (decoupler != null)
+                hash ^= decoupler.GetHashCode ();
+            if (anchoredDecoupler != null)
+                hash ^= anchoredDecoupler.GetHashCode ();
+            return hash;
         }
 
         /// <summary>

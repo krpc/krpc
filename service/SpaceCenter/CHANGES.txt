@@ -2,7 +2,7 @@ v0.2.2
  * Add Part.IsFuelLine
  * Fix bug with Part.FuelLinesTo (#193)
  * Part.FuelLinesTo and FuelLinesFrom now return an error if called on a fuel line part
- * Fix bug with equality testing of objects. For example, vessel objects now persist between vessel switches (#201)
+ * Fix bugs with equality testing of objects. For example, vessel and part objects now persist correctly when reverting to launch (#201,#210)
  * Fix array index out of range error in SpaceCenter.WarpTo (#169)
 
 v0.2.1

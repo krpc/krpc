@@ -55,7 +55,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (SolarPanel obj)
         {
-            return part == obj.part;
+            return part == obj.part && panel == obj.panel;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            return part.GetHashCode () ^ panel.GetHashCode ();
         }
 
         /// <summary>

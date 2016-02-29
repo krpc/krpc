@@ -141,7 +141,6 @@
     <Compile Include="UI\OnMovedArgs.cs" />
     <Compile Include="UI\OptionDialog.cs" />
     <Compile Include="UI\Skin.cs" />
-    <Compile Include="UI\Toolbar.cs" />
     <Compile Include="UI\Window.cs" />
     <Compile Include="Utils\ConfigurationStorage.cs" />
     <Compile Include="Utils\ConfigurationStorageNode.cs" />

@@ -27,7 +27,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ReactionWheel obj)
         {
-            return part == obj.part;
+            return part == obj.part && reactionWheel == obj.reactionWheel;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            return part.GetHashCode () ^ reactionWheel.GetHashCode ();
         }
 
         /// <summary>

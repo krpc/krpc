@@ -1,6 +1,7 @@
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using System;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services
@@ -17,11 +18,11 @@ namespace KRPC.SpaceCenter.Services
         /// The y-component is the normal component.
         /// The x-component is the radial component.
 
-        readonly global::Vessel vessel;
+        readonly Guid vesselId;
 
         internal Node (global::Vessel vessel, double UT, float prograde, float normal, float radial)
         {
-            this.vessel = vessel;
+            vesselId = vessel.id;
             InternalNode = vessel.patchedConicSolver.AddManeuverNode (UT);
             InternalNode.OnGizmoUpdated (new Vector3d (radial, normal, prograde), UT);
         }
@@ -29,15 +30,18 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Construct a node from a KSP node.
         /// </summary>
-        public Node (ManeuverNode node)
+        public Node (global::Vessel vessel, ManeuverNode node)
         {
+            vesselId = vessel.id;
             InternalNode = node;
         }
 
         /// <summary>
         /// The KSP vessel.
         /// </summary>
-        public global::Vessel InternalVessel { get; private set; }
+        public global::Vessel InternalVessel {
+            get { return FlightGlobalsExtensions.GetVesselById (vesselId); }
+        }
 
         /// <summary>
         /// The KSP node.
@@ -49,8 +53,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Node obj)
         {
-             //TODO: is this correct?
-            return InternalNode == obj.InternalNode;
+            return vesselId == obj.vesselId && InternalNode == obj.InternalNode;
         }
 
         /// <summary>
@@ -58,9 +61,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            //TODO: node should not be null, but Remove could set it to null
-            //TODO: is this hash code correct?
-            return InternalNode == null ? 0 : InternalNode.GetHashCode ();
+            int hash = vesselId.GetHashCode ();
+            //TODO: InternalNode should not be null, but Remove could set it to null
+            if (InternalNode != null)
+                hash ^= InternalNode.GetHashCode ();
+            return hash;
         }
 
         internal Vector3d WorldBurnVector {
@@ -144,7 +149,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 BurnVector (ReferenceFrame referenceFrame = null)
         {
             if (referenceFrame == null)
-                referenceFrame = ReferenceFrame.Orbital (vessel);
+                referenceFrame = ReferenceFrame.Orbital (InternalVessel);
             return referenceFrame.DirectionFromWorldSpace (WorldBurnVector).ToTuple ();
         }
 
@@ -157,7 +162,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 RemainingBurnVector (ReferenceFrame referenceFrame = null)
         {
             if (referenceFrame == null)
-                referenceFrame = ReferenceFrame.Orbital (vessel);
+                referenceFrame = ReferenceFrame.Orbital (InternalVessel);
             return referenceFrame.DirectionFromWorldSpace (InternalNode.GetBurnVector (InternalNode.patch)).ToTuple ();
         }
 
@@ -207,7 +212,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return ReferenceFrame.Object (InternalNode); }
+            get { return ReferenceFrame.Object (InternalVessel, InternalNode); }
         }
 
         /// <summary>
@@ -226,7 +231,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public ReferenceFrame OrbitalReferenceFrame {
-            get { return ReferenceFrame.Orbital (InternalNode); }
+            get { return ReferenceFrame.Orbital (InternalVessel, InternalNode); }
         }
 
         /// <summary>

@@ -16,13 +16,13 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Comms : Equatable<Comms>
     {
-        readonly global::Vessel vessel;
+        readonly Guid vesselId;
 
         internal Comms (global::Vessel vessel)
         {
             if (!RemoteTech.IsAvailable)
                 throw new InvalidOperationException ("RemoteTech is not installed");
-            this.vessel = vessel;
+            vesselId = vessel.id;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Comms obj)
         {
-            return vessel.id == obj.vessel.id;
+            return vesselId == obj.vesselId;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vessel.id.GetHashCode ();
+            return vesselId.GetHashCode ();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool HasLocalControl {
-            get { return RemoteTech.HasLocalControl (vessel.id); }
+            get { return RemoteTech.HasLocalControl (vesselId); }
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool HasFlightComputer {
-            get { return RemoteTech.HasFlightComputer (vessel.id); }
+            get { return RemoteTech.HasFlightComputer (vesselId); }
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool HasConnection {
-            get { return RemoteTech.HasAnyConnection (vessel.id); }
+            get { return RemoteTech.HasAnyConnection (vesselId); }
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool HasConnectionToGroundStation {
-            get { return RemoteTech.HasConnectionToKSC (vessel.id); }
+            get { return RemoteTech.HasConnectionToKSC (vesselId); }
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double SignalDelay {
-            get { return RemoteTech.GetShortestSignalDelay (vessel.id); }
+            get { return RemoteTech.GetShortestSignalDelay (vesselId); }
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double SignalDelayToGroundStation {
-            get { return RemoteTech.GetSignalDelayToKSC (vessel.id); }
+            get { return RemoteTech.GetSignalDelayToKSC (vesselId); }
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double SignalDelayToVessel (Vessel other)
         {
-            return RemoteTech.GetSignalDelayToSatellite (vessel.id, other.InternalVessel.id);
+            return RemoteTech.GetSignalDelayToSatellite (vesselId, other.Id);
         }
     }
 }

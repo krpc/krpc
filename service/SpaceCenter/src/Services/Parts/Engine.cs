@@ -33,7 +33,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Engine obj)
         {
-            return part == obj.part;
+            return part == obj.part && engine == obj.engine && engineFx == obj.engineFx && gimbal == obj.gimbal;
         }
 
         /// <summary>
@@ -41,7 +41,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            int hash = part.GetHashCode ();
+            if (engine != null)
+                hash ^= engine.GetHashCode ();
+            if (engineFx != null)
+                hash ^= engineFx.GetHashCode ();
+            if (gimbal != null)
+                hash ^= gimbal.GetHashCode ();
+            return hash;
         }
 
         /// <summary>
