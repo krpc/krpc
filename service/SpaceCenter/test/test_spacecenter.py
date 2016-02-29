@@ -59,7 +59,7 @@ class TestSpaceCenter(testingtools.TestCase):
         active = self.sc.active_vessel
         active.name = 'Active'
         vessels = self.sc.vessels
-        self.assertEqual(['Active', 'Basic'], sorted(v.name for v in vessels))
+        self.assertEqual(['Active', 'OtherVessel'], sorted(v.name for v in vessels))
         self.assertEqual(self.sc.vessels, vessels)
 
     def test_bodies(self):
