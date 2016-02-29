@@ -92,32 +92,12 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Vessel : Equatable<Vessel>
     {
-        Guid vesselId;
-        Comms comms;
-
         /// <summary>
         /// Construct from a KSP vessel object.
         /// </summary>
         public Vessel (global::Vessel vessel)
         {
-            vesselId = vessel.id;
-            Orbit = new Orbit (vessel);
-            Control = new Control (vessel);
-            AutoPilot = new AutoPilot (vessel);
-            Parts = new Parts.Parts (vessel);
-            Resources = new Resources (vessel);
-            if (RemoteTech.IsAvailable)
-                comms = new Comms (vessel);
-        }
-
-        /// <summary>
-        /// The KSP vessel object.
-        /// </summary>
-        public global::Vessel InternalVessel {
-            get {
-                //FIXME: this will be inefficient if there are lots of vessels. Is there a better way to do this?
-                return FlightGlobals.Vessels.Where (v => v.id == vesselId).Single ();
-            }
+            Id = vessel.id;
         }
 
         /// <summary>
@@ -125,7 +105,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Vessel obj)
         {
-            return vesselId == obj.vesselId;
+            return Id == obj.Id;
         }
 
         /// <summary>
@@ -133,7 +113,19 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vesselId.GetHashCode ();
+            return Id.GetHashCode ();
+        }
+
+        /// <summary>
+        /// The KSP vessel id.
+        /// </summary>
+        public Guid Id { get; private set; }
+
+        /// <summary>
+        /// The KSP vessel object.
+        /// </summary>
+        public global::Vessel InternalVessel {
+            get { return FlightGlobalsExtensions.GetVesselById (Id); }
         }
 
         /// <summary>
@@ -150,12 +142,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public VesselType Type {
-            get {
-                return InternalVessel.vesselType.ToVesselType ();
-            }
-            set {
-                InternalVessel.vesselType = value.FromVesselType ();
-            }
+            get { return InternalVessel.vesselType.ToVesselType (); }
+            set { InternalVessel.vesselType = value.FromVesselType (); }
         }
 
         /// <summary>
@@ -203,7 +191,9 @@ namespace KRPC.SpaceCenter.Services
         /// The current orbit of the vessel.
         /// </summary>
         [KRPCProperty]
-        public Orbit Orbit { get; private set; }
+        public Orbit Orbit {
+            get { return new Orbit (InternalVessel); }
+        }
 
         /// <summary>
         /// Returns a <see cref="Control"/> object that can be used to manipulate
@@ -211,21 +201,27 @@ namespace KRPC.SpaceCenter.Services
         /// RCS and thrust.
         /// </summary>
         [KRPCProperty]
-        public Control Control { get; private set; }
+        public Control Control {
+            get { return new Control (InternalVessel); }
+        }
 
         /// <summary>
         /// An <see cref="AutoPilot"/> object, that can be used to perform
         /// simple auto-piloting of the vessel.
         /// </summary>
         [KRPCProperty]
-        public AutoPilot AutoPilot { get; private set; }
+        public AutoPilot AutoPilot {
+            get { return new AutoPilot (InternalVessel); }
+        }
 
         /// <summary>
         /// A <see cref="Resources"/> object, that can used to get information
         /// about resources stored in the vessel.
         /// </summary>
         [KRPCProperty]
-        public Resources Resources { get; private set; }
+        public Resources Resources {
+            get { return new Resources (InternalVessel); }
+        }
 
         /// <summary>
         /// Returns a <see cref="Resources"/> object, that can used to get
@@ -245,7 +241,9 @@ namespace KRPC.SpaceCenter.Services
         /// A <see cref="Parts.Parts"/> object, that can used to interact with the parts that make up this vessel.
         /// </summary>
         [KRPCProperty]
-        public Parts.Parts Parts { get; private set; }
+        public Parts.Parts Parts {
+            get { return new Parts.Parts (InternalVessel); }
+        }
 
         /// <summary>
         /// A <see cref="Comms"/> object, that can used to interact with RemoteTech for this vessel.
@@ -258,7 +256,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (!RemoteTech.IsAvailable)
                     throw new InvalidOperationException ("RemoteTech is not installed");
-                return comms;
+                return new Comms (InternalVessel);
             }
         }
 
@@ -267,9 +265,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Mass {
-            get {
-                return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.TotalMass ());
-            }
+            get { return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.TotalMass ()); }
         }
 
         /// <summary>
@@ -277,9 +273,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float DryMass {
-            get {
-                return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.DryMass ());
-            }
+            get { return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.DryMass ()); }
         }
 
         /// <summary>

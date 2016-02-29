@@ -27,7 +27,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (LaunchClamp obj)
         {
-            return part == obj.part;
+            return part == obj.part && launchClamp == obj.launchClamp;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            return part.GetHashCode () ^ launchClamp.GetHashCode ();
         }
 
         /// <summary>

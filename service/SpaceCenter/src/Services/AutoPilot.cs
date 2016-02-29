@@ -19,17 +19,17 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class AutoPilot : Equatable<AutoPilot>
     {
-        static IDictionary<global::Vessel, AutoPilot> engaged = new Dictionary<global::Vessel, AutoPilot> ();
-        readonly global::Vessel vessel;
+        static IDictionary<Guid, AutoPilot> engaged = new Dictionary<Guid, AutoPilot> ();
+        readonly Guid vesselId;
         readonly RotationRateController rotationRateController;
         IClient requestingClient;
         Vector3d targetDirection;
 
         internal AutoPilot (global::Vessel vessel)
         {
-            if (!engaged.ContainsKey (vessel))
-                engaged [vessel] = null;
-            this.vessel = vessel;
+            if (!engaged.ContainsKey (vessel.id))
+                engaged [vessel.id] = null;
+            vesselId = vessel.id;
             rotationRateController = new RotationRateController (vessel);
             ReferenceFrame = ReferenceFrame.Surface (vessel);
             TargetDirection = null;
@@ -45,7 +45,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (AutoPilot obj)
         {
-            return vessel.id == obj.vessel.id;
+            return vesselId == obj.vesselId;
         }
 
         /// <summary>
@@ -53,7 +53,14 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vessel.id.GetHashCode ();
+            return vesselId.GetHashCode ();
+        }
+
+        /// <summary>
+        /// The KSP vessel.
+        /// </summary>
+        public global::Vessel InternalVessel {
+            get { return FlightGlobalsExtensions.GetVesselById (vesselId); }
         }
 
         /// <summary>
@@ -63,7 +70,7 @@ namespace KRPC.SpaceCenter.Services
         public void Engage ()
         {
             requestingClient = KRPC.KRPCServer.Context.RPCClient;
-            engaged [vessel] = this;
+            engaged [vesselId] = this;
         }
 
         /// <summary>
@@ -73,7 +80,7 @@ namespace KRPC.SpaceCenter.Services
         public void Disengage ()
         {
             requestingClient = null;
-            engaged [vessel] = null;
+            engaged [vesselId] = null;
         }
 
         /// <summary>
@@ -82,7 +89,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Wait ()
         {
-            if (Error > 0.5f || RollError > 0.5f || vessel.angularVelocity.magnitude > 0.05f)
+            if (Error > 0.5f || RollError > 0.5f || InternalVessel.angularVelocity.magnitude > 0.05f)
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
         }
 
@@ -95,10 +102,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float Error {
             get {
-                if (engaged [vessel] == this && targetDirection != Vector3d.zero)
-                    return Vector3.Angle (vessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (targetDirection));
-                else if (engaged [vessel] != this && SAS && SASMode != SASMode.StabilityAssist)
-                    return Vector3.Angle (vessel.ReferenceTransform.up, SASTargetDirection ());
+                if (engaged [vesselId] == this && targetDirection != Vector3d.zero)
+                    return Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (targetDirection));
+                else if (engaged [vesselId] != this && SAS && SASMode != SASMode.StabilityAssist)
+                    return Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ());
                 else
                     return 0f;
             }
@@ -112,9 +119,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float RollError {
             get {
-                if (engaged [vessel] != this || Double.IsNaN (TargetRoll))
+                if (engaged [vesselId] != this || Double.IsNaN (TargetRoll))
                     return 0f;
-                var currentRoll = ReferenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
+                var currentRoll = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
                 return (float)Math.Abs (TargetRoll - currentRoll);
             }
         }
@@ -158,8 +165,8 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>Equivalent to <see cref="Control.SAS"/></remarks>
         [KRPCProperty]
         public bool SAS {
-            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
-            set { vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
+            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
+            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
         }
 
         /// <summary>
@@ -170,8 +177,8 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>Equivalent to <see cref="Control.SASMode"/></remarks>
         [KRPCProperty]
         public SASMode SASMode {
-            get { return Control.GetSASMode (vessel); }
-            set { Control.SetSASMode (vessel, value); }
+            get { return Control.GetSASMode (InternalVessel); }
+            set { Control.SetSASMode (InternalVessel, value); }
         }
 
         /// <summary>
@@ -221,10 +228,10 @@ namespace KRPC.SpaceCenter.Services
 
             // Maneuver node
             if (SASMode == SASMode.Maneuver) {
-                var node = vessel.patchedConicSolver.maneuverNodes.OrderBy (x => x.UT).FirstOrDefault ();
+                var node = InternalVessel.patchedConicSolver.maneuverNodes.OrderBy (x => x.UT).FirstOrDefault ();
                 if (node == null)
                     throw new InvalidOperationException ("No maneuver node");
-                return new Node (node).WorldBurnVector;
+                return new Node (InternalVessel, node).WorldBurnVector;
             }
 
             // Orbital directions, in different speed modes
@@ -235,47 +242,47 @@ namespace KRPC.SpaceCenter.Services
                 if (Control.GetSpeedMode () == SpeedMode.Orbit) {
                     switch (SASMode) {
                     case SASMode.Prograde:
-                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.up);
+                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.up);
                     case SASMode.Retrograde:
-                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.down);
+                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.down);
                     case SASMode.Normal:
-                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.forward);
+                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.forward);
                     case SASMode.AntiNormal:
-                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.back);
+                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.back);
                     case SASMode.Radial:
-                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.left);
+                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.left);
                     case SASMode.AntiRadial:
-                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.right);
+                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.right);
                     }
                 } else if (Control.GetSpeedMode () == SpeedMode.Surface) {
                     switch (SASMode) {
                     case SASMode.Prograde:
-                        return ReferenceFrame.SurfaceVelocity (vessel).DirectionToWorldSpace (Vector3d.up);
+                        return ReferenceFrame.SurfaceVelocity (InternalVessel).DirectionToWorldSpace (Vector3d.up);
                     case SASMode.Retrograde:
-                        return ReferenceFrame.SurfaceVelocity (vessel).DirectionToWorldSpace (Vector3d.down);
+                        return ReferenceFrame.SurfaceVelocity (InternalVessel).DirectionToWorldSpace (Vector3d.down);
                     case SASMode.Normal:
-                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
+                        return ReferenceFrame.Object (InternalVessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
                     case SASMode.AntiNormal:
-                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
+                        return ReferenceFrame.Object (InternalVessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
                     case SASMode.Radial:
-                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.right);
+                        return ReferenceFrame.Surface (InternalVessel).DirectionToWorldSpace (Vector3d.right);
                     case SASMode.AntiRadial:
-                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.left);
+                        return ReferenceFrame.Surface (InternalVessel).DirectionToWorldSpace (Vector3d.left);
                     }
                 } else if (Control.GetSpeedMode () == SpeedMode.Target) {
                     switch (SASMode) {
                     case SASMode.Prograde:
-                        return vessel.GetWorldVelocity () - FlightGlobals.fetch.VesselTarget.GetWorldVelocity ();
+                        return InternalVessel.GetWorldVelocity () - FlightGlobals.fetch.VesselTarget.GetWorldVelocity ();
                     case SASMode.Retrograde:
-                        return FlightGlobals.fetch.VesselTarget.GetWorldVelocity () - vessel.GetWorldVelocity ();
+                        return FlightGlobals.fetch.VesselTarget.GetWorldVelocity () - InternalVessel.GetWorldVelocity ();
                     case SASMode.Normal:
-                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
+                        return ReferenceFrame.Object (InternalVessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
                     case SASMode.AntiNormal:
-                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
+                        return ReferenceFrame.Object (InternalVessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
                     case SASMode.Radial:
-                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.right);
+                        return ReferenceFrame.Surface (InternalVessel).DirectionToWorldSpace (Vector3d.right);
                     case SASMode.AntiRadial:
-                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.left);
+                        return ReferenceFrame.Surface (InternalVessel).DirectionToWorldSpace (Vector3d.left);
                     }
                 }
                 throw new InvalidOperationException ("Unknown speed mode for orbital direction");
@@ -286,7 +293,7 @@ namespace KRPC.SpaceCenter.Services
                 var target = FlightGlobals.fetch.VesselTarget;
                 if (target == null)
                     throw new InvalidOperationException ("No target");
-                var direction = target.GetWorldPosition () - vessel.GetWorldPos3D ();
+                var direction = target.GetWorldPosition () - InternalVessel.GetWorldPos3D ();
                 if (SASMode == SASMode.AntiTarget)
                     direction *= -1;
                 return direction;
@@ -298,9 +305,9 @@ namespace KRPC.SpaceCenter.Services
         internal static bool Fly (global::Vessel vessel, PilotAddon.ControlInputs state)
         {
             // Get the auto-pilot object. Do nothing if there is no auto-pilot engaged for this vessel.
-            if (!engaged.ContainsKey (vessel))
+            if (!engaged.ContainsKey (vessel.id))
                 return false;
-            var autoPilot = engaged [vessel];
+            var autoPilot = engaged [vessel.id];
             if (autoPilot == null)
                 return false;
             // If the client that engaged the auto-pilot has disconnected, disengage the auto-pilot
@@ -316,13 +323,13 @@ namespace KRPC.SpaceCenter.Services
         void DoAutoPiloting (PilotAddon.ControlInputs state)
         {
             SAS = false;
-            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (vessel.ReferenceTransform.up);
+            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up);
             rotationRateController.ReferenceFrame = ReferenceFrame;
             var targetRotation = Vector3d.zero;
             if (targetDirection != Vector3d.zero)
                 targetRotation += (Vector3.Cross (targetDirection, currentDirection) * RotationSpeedMultiplier).ClampMagnitude (0f, MaxRotationSpeed);
             if (!Double.IsNaN (TargetRoll)) {
-                float currentRoll = (float)ReferenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
+                float currentRoll = (float)ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
                 var rollError = GeometryExtensions.NormAngle (TargetRoll - currentRoll) * (Math.PI / 180f);
                 targetRotation += targetDirection * (rollError * RollSpeedMultiplier).Clamp (-MaxRollSpeed, MaxRollSpeed);
             }

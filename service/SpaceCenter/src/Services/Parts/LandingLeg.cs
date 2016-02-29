@@ -59,7 +59,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (LandingLeg obj)
         {
-            return part == obj.part;
+            return part == obj.part && leg == obj.leg;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            return part.GetHashCode () ^ leg.GetHashCode ();
         }
 
         /// <summary>
