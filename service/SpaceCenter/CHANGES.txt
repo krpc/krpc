@@ -4,6 +4,7 @@ v0.2.2
  * Part.FuelLinesTo and FuelLinesFrom now return an error if called on a fuel line part
  * Fix bugs with equality testing of objects. For example, vessel and part objects now persist correctly when reverting to launch (#201,#210)
  * Fix array index out of range error in SpaceCenter.WarpTo (#169)
+ * Fix bug with vessel's surface velocity reference frame (#194)
 
 v0.2.1
  * Fix Orbit.Speed always returning 0

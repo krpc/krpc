@@ -209,7 +209,7 @@ namespace KRPC.SpaceCenter.Services
                 Vector3d forward = ForwardNotNormalized;
                 // Check that the up and forward directions are roughly perpendicular
                 if (Math.Abs (Vector3d.Dot (up.normalized, forward.normalized)) > 0.1)
-                    throw new ArithmeticException ("forward and up directions are not close to perpendicular");
+                    throw new ArithmeticException ("Forward and up directions are not close to perpendicular, got " + up + " and " + forward);
                 GeometryExtensions.OrthoNormalize2 (ref forward, ref up);
                 return GeometryExtensions.LookRotation2 (forward, up);
             }
@@ -319,7 +319,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.VesselSurfaceVelocity:
                     {
                         // Compute orthogonal vector to vessels velocity, in the horizon plane
-                        var up = InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position;
+                        var up = (InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position).normalized;
                         var velocity = InternalVessel.srf_velocity;
                         var proj = GeometryExtensions.ProjectVectorOntoPlane (up, velocity);
                         return Vector3d.Cross (up, proj);
