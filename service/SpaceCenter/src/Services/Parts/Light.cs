@@ -27,7 +27,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Light obj)
         {
-            return part == obj.part;
+            return part == obj.part && light == obj.light;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            return part.GetHashCode () ^ light.GetHashCode ();
         }
 
         /// <summary>

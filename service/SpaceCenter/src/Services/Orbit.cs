@@ -44,7 +44,6 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Orbit obj)
         {
-            //TODO: is this correct?
             return InternalOrbit == obj.InternalOrbit;
         }
 
@@ -53,7 +52,6 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            //TODO: is this correct?
             return InternalOrbit.GetHashCode ();
         }
 

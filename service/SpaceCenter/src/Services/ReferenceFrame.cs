@@ -40,9 +40,9 @@ namespace KRPC.SpaceCenter.Services
 
         readonly Type type;
         readonly global::CelestialBody body;
-        readonly global::Vessel vessel;
+        readonly Guid vesselId;
         readonly ManeuverNode node;
-        readonly Part part;
+        readonly uint partId;
         readonly ModuleDockingNode dockingPort;
 
         ReferenceFrame (
@@ -51,9 +51,10 @@ namespace KRPC.SpaceCenter.Services
         {
             this.type = type;
             this.body = body;
-            this.vessel = vessel;
+            this.vesselId = vessel != null ? vessel.id : Guid.Empty;
             this.node = node;
-            this.part = part;
+            //TODO: is it safe to use a part id of 0 to mean no part?
+            this.partId = part != null ? part.flightID : 0;
             this.dockingPort = dockingPort;
         }
 
@@ -62,16 +63,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (ReferenceFrame obj)
         {
-            if ((body == null ^ obj.body == null) || (body != null && body.name != obj.body.name))
-                return false;
-            if ((vessel == null ^ obj.vessel == null) || (vessel != null && vessel.id != obj.vessel.id))
-                return false;
-            if ((node == null ^ obj.node == null) || (node != null && node != obj.node))
-                return false;
-            if ((part == null ^ obj.part == null) || (part != null && part.flightID != obj.part.flightID))
-                return false;
-            //TODO: is this comparison of node and Docking port objects correct?
-            return type == obj.type && node == obj.node && dockingPort == obj.dockingPort;
+            return type == obj.type && body == obj.body && vesselId == obj.vesselId && node == obj.node && partId == obj.partId && dockingPort == obj.dockingPort;
         }
 
         /// <summary>
@@ -82,15 +74,35 @@ namespace KRPC.SpaceCenter.Services
             var hash = type.GetHashCode ();
             if (body != null)
                 hash ^= body.name.GetHashCode ();
-            if (vessel != null)
-                hash ^= vessel.id.GetHashCode ();
+            hash ^= vesselId.GetHashCode ();
             if (node != null)
-                hash ^= node.GetHashCode (); //TODO: is this correct?
-            if (part != null)
-                hash ^= part.flightID.GetHashCode ();
+                hash ^= node.GetHashCode ();
+            hash ^= partId.GetHashCode ();
             if (dockingPort != null)
-                hash ^= dockingPort.GetHashCode (); //TODO: is this correct?
+                hash ^= dockingPort.GetHashCode ();
             return hash;
+        }
+
+        /// <summary>
+        /// The KSP vessel.
+        /// </summary>
+        public global::Vessel InternalVessel {
+            get {
+                if (vesselId == Guid.Empty)
+                    throw new InvalidOperationException ("Reference frame has no vessel");
+                return FlightGlobalsExtensions.GetVesselById (vesselId);
+            }
+        }
+
+        /// <summary>
+        /// The KSP part.
+        /// </summary>
+        public global::Part InternalPart {
+            get {
+                if (partId == 0)
+                    throw new InvalidOperationException ("Reference frame has no part");
+                return FlightGlobals.FindPartByID (partId);
+            }
         }
 
         internal static ReferenceFrame Object (global::CelestialBody body)
@@ -130,14 +142,14 @@ namespace KRPC.SpaceCenter.Services
             return new ReferenceFrame (Type.VesselSurfaceVelocity, vessel: vessel);
         }
 
-        internal static ReferenceFrame Object (ManeuverNode node)
+        internal static ReferenceFrame Object (global::Vessel vessel, ManeuverNode node)
         {
-            return new ReferenceFrame (Type.Maneuver, node: node);
+            return new ReferenceFrame (Type.Maneuver, vessel: vessel, node: node);
         }
 
-        internal static ReferenceFrame Orbital (ManeuverNode node)
+        internal static ReferenceFrame Orbital (global::Vessel vessel, ManeuverNode node)
         {
-            return new ReferenceFrame (Type.ManeuverOrbital, node: node);
+            return new ReferenceFrame (Type.ManeuverOrbital, vessel: vessel, node: node);
         }
 
         internal static ReferenceFrame Object (Part part)
@@ -164,7 +176,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                 case Type.VesselSurfaceVelocity:
-                    return vessel.GetWorldPos3D ();
+                    return InternalVessel.GetWorldPos3D ();
                 case Type.Maneuver:
                 case Type.ManeuverOrbital:
                     {
@@ -177,7 +189,7 @@ namespace KRPC.SpaceCenter.Services
                         return vesselPos - vesselOrbitPos + nodeOrbitPos;
                     }
                 case Type.Part:
-                    return part.transform.position;
+                    return InternalPart.transform.position;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.position;
                 default:
@@ -252,22 +264,22 @@ namespace KRPC.SpaceCenter.Services
                 case Type.CelestialBodyOrbital:
                     return body.orbit.GetVel () - body.orbit.referenceBody.GetWorldVelocity ();
                 case Type.Vessel:
-                    return vessel.ReferenceTransform.up;
+                    return InternalVessel.ReferenceTransform.up;
                 case Type.VesselOrbital:
-                    return vessel.GetOrbit ().GetVel ();
+                    return InternalVessel.GetOrbit ().GetVel ();
                 case Type.VesselSurface:
                     {
-                        var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
-                        return Vector3d.Exclude (right, ToNorthPole (vessel).normalized);
+                        var right = InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position;
+                        return Vector3d.Exclude (right, ToNorthPole (InternalVessel).normalized);
                     }
                 case Type.VesselSurfaceVelocity:
-                    return vessel.srf_velocity;
+                    return InternalVessel.srf_velocity;
                 case Type.Maneuver:
-                    return new Node (node).WorldBurnVector;
+                    return new Node (InternalVessel, node).WorldBurnVector;
                 case Type.ManeuverOrbital:
                     return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
                 case Type.Part:
-                    return part.transform.up;
+                    return InternalPart.transform.up;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.forward;
                 default:
@@ -295,20 +307,20 @@ namespace KRPC.SpaceCenter.Services
                         return Vector3d.Cross (radial, up);
                     }
                 case Type.Vessel:
-                    return vessel.ReferenceTransform.forward;
+                    return InternalVessel.ReferenceTransform.forward;
                 case Type.VesselOrbital:
-                    return vessel.GetOrbit ().GetOrbitNormal ().SwapYZ ();
+                    return InternalVessel.GetOrbit ().GetOrbitNormal ().SwapYZ ();
                 case Type.VesselSurface:
                     {
-                        var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
-                        var northPole = ToNorthPole (vessel).normalized;
+                        var right = InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position;
+                        var northPole = ToNorthPole (InternalVessel).normalized;
                         return Vector3d.Cross (right, northPole);
                     }
                 case Type.VesselSurfaceVelocity:
                     {
                         // Compute orthogonal vector to vessels velocity, in the horizon plane
-                        var up = vessel.GetWorldPos3D () - vessel.mainBody.position;
-                        var velocity = vessel.srf_velocity;
+                        var up = InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position;
+                        var velocity = InternalVessel.srf_velocity;
                         var proj = GeometryExtensions.ProjectVectorOntoPlane (up, velocity);
                         return Vector3d.Cross (up, proj);
                     }
@@ -326,7 +338,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                     return node.patch.GetOrbitNormal ().SwapYZ ();
                 case Type.Part:
-                    return part.transform.forward;
+                    return InternalPart.transform.forward;
                 case Type.DockingPort:
                     return -dockingPort.nodeTransform.up;
                 default:
@@ -349,12 +361,12 @@ namespace KRPC.SpaceCenter.Services
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                 case Type.VesselSurfaceVelocity:
-                    return vessel.GetOrbit ().GetVel ();
+                    return InternalVessel.GetOrbit ().GetVel ();
                 case Type.Maneuver:
                 case Type.ManeuverOrbital:
                     return Vector3d.zero; //TODO: check this
                 case Type.Part:
-                    return part.vessel.GetOrbit ().GetVel ();
+                    return InternalPart.vessel.GetOrbit ().GetVel ();
                 case Type.DockingPort:
                     return dockingPort.vessel.GetOrbit ().GetVel ();
                 default:
@@ -378,7 +390,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.CelestialBodyOrbital:
                     return Vector3d.zero; //TODO: check this
                 case Type.Vessel:
-                    return vessel.angularVelocity;
+                    return InternalVessel.angularVelocity;
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                 case Type.VesselSurfaceVelocity:

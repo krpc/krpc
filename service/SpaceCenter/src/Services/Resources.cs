@@ -41,25 +41,25 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Resources : Equatable<Resources>
     {
-        readonly global::Vessel vessel;
+        readonly Guid vesselId;
         readonly int stage;
         readonly bool cumulative;
-        readonly Part part;
+        readonly uint partId;
 
         internal Resources (global::Vessel vessel, int stage = -1, bool cumulative = true)
         {
-            this.vessel = vessel;
+            this.vesselId = vessel.id;
             this.stage = stage;
             this.cumulative = cumulative;
-            part = null;
+            this.partId = 0;
         }
 
-        internal Resources (Part part)
+        internal Resources (global::Part part)
         {
-            vessel = null;
-            stage = -1;
-            cumulative = true;
-            this.part = part;
+            this.vesselId = Guid.Empty;
+            this.stage = -1;
+            this.cumulative = true;
+            this.partId = part.flightID;
         }
 
         /// <summary>
@@ -67,11 +67,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Resources obj)
         {
-            if ((vessel == null ^ obj.vessel == null) || (vessel != null && vessel.id != obj.vessel.id))
-                return false;
-            if ((part == null ^ obj.part == null) || (part != null && part.flightID != obj.part.flightID))
-                return false;
-            return stage == obj.stage && cumulative == obj.cumulative;
+            return vesselId == obj.vesselId && stage == obj.stage && cumulative == obj.cumulative && partId == obj.partId;
         }
 
         /// <summary>
@@ -79,26 +75,44 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = (vessel == null ? 0 : vessel.id.GetHashCode ());
-            hash ^= stage.GetHashCode ();
-            hash ^= cumulative.GetHashCode ();
-            hash ^= (part == null ? 0 : part.flightID.GetHashCode ());
-            return hash;
+            return vesselId.GetHashCode () ^ stage.GetHashCode () ^ cumulative.GetHashCode () ^ partId.GetHashCode ();
+        }
+
+        /// <summary>
+        /// The KSP vessel.
+        /// </summary>
+        public global::Vessel InternalVessel {
+            get {
+                if (vesselId == Guid.Empty)
+                    throw new InvalidOperationException ("Resources object has no vessel");
+                return FlightGlobalsExtensions.GetVesselById (vesselId);
+            }
+        }
+
+        /// <summary>
+        /// The KSP part.
+        /// </summary>
+        public global::Part InternalPart {
+            get { 
+                if (partId == 0)
+                    throw new InvalidOperationException ("Resources object has no part");
+                return FlightGlobals.FindPartByID (partId);
+            }
         }
 
         List<PartResource> GetResources ()
         {
             var resources = new List<PartResource> ();
-            if (vessel != null) {
-                foreach (var vesselPart in vessel.Parts) {
+            if (vesselId != Guid.Empty) {
+                foreach (var vesselPart in InternalVessel.Parts) {
                     if (stage < 0 || vesselPart.DecoupledAt () + 1 == stage || (cumulative && vesselPart.DecoupledAt () < stage)) {
                         foreach (PartResource resource in vesselPart.Resources)
                             resources.Add (resource);
                     }
                 }
             }
-            if (part != null) {
-                foreach (PartResource resource in part.Resources)
+            if (partId != 0) {
+                foreach (PartResource resource in InternalPart.Resources)
                     resources.Add (resource);
             }
             return resources;

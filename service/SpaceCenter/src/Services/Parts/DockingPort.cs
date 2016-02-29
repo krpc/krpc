@@ -79,7 +79,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (DockingPort obj)
         {
-            return part == obj.part;
+            return part == obj.part && port == obj.port && shield == obj.shield && portNameModule == obj.portNameModule && portNameField == obj.portNameField;
         }
 
         /// <summary>
@@ -87,7 +87,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            int hash = part.GetHashCode () ^ port.GetHashCode ();
+            if (shield != null)
+                hash ^= shield.GetHashCode ();
+            if (portNameModule != null)
+                hash ^= portNameModule.GetHashCode ();
+            if (portNameField != null)
+                hash ^= portNameField.GetHashCode ();
+            return hash;
         }
 
         internal ModuleDockingNode InternalPort {

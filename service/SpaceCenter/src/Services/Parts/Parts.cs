@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
@@ -14,11 +15,11 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Parts : Equatable<Parts>
     {
-        readonly global::Vessel vessel;
+        readonly Guid vesselId;
 
         internal Parts (global::Vessel vessel)
         {
-            this.vessel = vessel;
+            vesselId = vessel.id;
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Parts obj)
         {
-            return vessel.id == obj.vessel.id;
+            return vesselId == obj.vesselId;
         }
 
         /// <summary>
@@ -34,7 +35,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return vessel.id.GetHashCode ();
+            return vesselId.GetHashCode ();
+        }
+
+        /// <summary>
+        /// The KSP vessel.
+        /// </summary>
+        public global::Vessel InternalVessel {
+            get { return FlightGlobalsExtensions.GetVesselById (vesselId); }
         }
 
         /// <summary>
@@ -42,7 +50,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Part> All {
-            get { return vessel.parts.Select (x => new Part (x)).ToList (); }
+            get { return InternalVessel.parts.Select (x => new Part (x)).ToList (); }
         }
 
         /// <summary>
@@ -50,7 +58,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Part Root {
-            get { return new Part (vessel.rootPart); }
+            get { return new Part (InternalVessel.rootPart); }
         }
 
         /// <summary>
@@ -58,7 +66,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Part Controlling {
-            get { return new Part (vessel.GetReferenceTransformPart () ?? vessel.rootPart); }
+            get { return new Part (InternalVessel.GetReferenceTransformPart () ?? InternalVessel.rootPart); }
             set {
                 var part = value.InternalPart;
                 if (part.HasModule <ModuleCommand> ()) {

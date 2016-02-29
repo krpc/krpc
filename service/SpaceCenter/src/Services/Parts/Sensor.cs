@@ -27,7 +27,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Sensor obj)
         {
-            return part == obj.part;
+            return part == obj.part && sensor == obj.sensor;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            return part.GetHashCode () ^ sensor.GetHashCode ();
         }
 
         /// <summary>

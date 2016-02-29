@@ -60,7 +60,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ResourceConverter obj)
         {
-            return part == obj.part;
+            return part == obj.part && converters.SequenceEqual (obj.converters);
         }
 
         /// <summary>
@@ -68,7 +68,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            int hash = part.GetHashCode ();
+            foreach (var converter in converters)
+                hash ^= converter.GetHashCode ();
+            return hash;
         }
 
         /// <summary>
