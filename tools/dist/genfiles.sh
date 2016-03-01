@@ -19,7 +19,6 @@ zip $FILE \
     bazel-krpc/external/csharp_protobuf/Google.Protobuf.nuspec \
     bazel-krpc/external/csharp_protobuf/lib/dotnet/Google.Protobuf.* \
     bazel-krpc/external/csharp_protobuf_net35/Google.Protobuf.* \
-    bazel-krpc/external/csharp_protobuf_net35/file/Google.Protobuf.* \
     bazel-krpc/external/csharp_nunit/license.txt \
     bazel-krpc/external/csharp_nunit/bin/framework/nunit.framework.* \
     bazel-krpc/external/csharp_moq/Moq.nuspec \
