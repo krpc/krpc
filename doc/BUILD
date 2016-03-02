@@ -12,7 +12,7 @@ filegroup(
 )
 
 doc_srcs = [
-    'src/conf.py',
+    ':conf',
     'src/_static/custom.css',
     'src/_templates/layout.html',
     'src/dictionary.txt',
@@ -43,6 +43,13 @@ sphinx_latex(
     },
     opts = {'version': version},
     visibility = ['//:__pkg__']
+)
+
+genrule(
+    name = 'conf',
+    srcs = ['conf.py.tmpl'],
+    outs = ['src/conf.py'],
+    cmd = 'sed \'s/%VERSION%/'+version+'/g\' "$<" > "$@"'
 )
 
 filegroup(

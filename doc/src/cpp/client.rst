@@ -3,24 +3,29 @@
 C++ Client
 ==========
 
-The ``krpc`` library provides functionality to interact with a kRPC server from
-C++.
+The ``libkrpc`` and associated header files provide functionality to interact
+with a kRPC server from C++. The source archive can be
+:github-download-zip:`downloaded from github <krpc-cpp>`.
 
-Compiling and Installing the Library
-------------------------------------
+Installing the Library
+----------------------
 
-The source archive can be `downloaded from github <https://github.com/krpc/krpc/releases/latest>`_.
+Using the configure script
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To compile and install the library using the configure script, extract the
-archive and execute the following commands:
+Download the source archive, extract it and execute the following commands:
 
 .. code-block:: bash
 
    ./configure
    make
    sudo make install
+   sudo ldconfig
 
-Alternatively, you can use CMake:
+Using CMake
+^^^^^^^^^^^
+
+Download the source archive, extract it and execute the following commands:
 
 .. code-block:: bash
 

@@ -1,11 +1,11 @@
 project = 'kRPC'
-version = ''
+version = '%VERSION%'
 release = version
 copyright = '2015-2016, djungelorm'
 
 master_doc = 'index'
 source_suffix = '.rst'
-extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo',
+extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo', 'sphinx.ext.extlinks',
               'redjack.sphinx.lua', 'sphinx_csharp.csharp', 'javasphinx']
 templates_path = ['_templates']
 
@@ -23,4 +23,9 @@ spelling_word_list_filename = 'dictionary.txt'
 
 javadoc_url_map = {
     'org.javatuples' : ('http://www.javatuples.org/apidocs/', 'javadoc')
+}
+
+extlinks = {
+    'github-download-zip': ('https://github.com/krpc/krpc/releases/download/v'+version+'/%s-'+version+'.zip', None),
+    'github-download-jar': ('https://github.com/krpc/krpc/releases/download/v'+version+'/%s-'+version+'.jar', None)
 }

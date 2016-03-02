@@ -3,8 +3,9 @@
 Java Client
 ===========
 
-The ``krpc.client`` package provides functionality to interact with a kRPC server from
-Java.
+The ``krpc.client`` package provides functionality to interact with a kRPC
+server from Java. The JAR containing this package can be
+:github-download-jar:`downloaded from github <libkrpc>`.
 
 Connecting to the Server
 ------------------------
