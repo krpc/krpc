@@ -27,7 +27,8 @@ java_library(
         '//tools/build/protobuf:protobuf',
         '@java_javatuples//:jar'
     ],
-    javacopts = copts
+    javacopts = copts,
+    visibility = ['//visibility:public']
 )
 
 java_import(

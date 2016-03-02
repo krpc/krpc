@@ -1,0 +1,38 @@
+load('/tools/build/csharp', 'csharp_binary')
+
+def cc_binary_multiple(name, srcs, deps):
+    names = []
+    for src in srcs:
+        subname = name + '/' + src
+        names.append(subname)
+        native.cc_binary(
+            name = subname,
+            srcs = [src],
+            deps = deps
+        )
+    native.filegroup(name=name, srcs=names)
+
+def csharp_binary_multiple(name, srcs, deps):
+    names = []
+    for src in srcs:
+        subname = name + '/' + src
+        names.append(subname)
+        csharp_binary(
+            name = subname,
+            srcs = [src],
+            deps = deps
+        )
+    native.filegroup(name=name, srcs=names)
+
+def java_binary_multiple(name, srcs, deps):
+    names = []
+    for src in srcs:
+        subname = name + '/' + src
+        names.append(subname)
+        native.java_binary(
+            name = subname,
+            main_class = src.rpartition('/')[2].rpartition('.')[0],
+            srcs = [src],
+            deps = deps
+        )
+    native.filegroup(name=name, srcs=names)

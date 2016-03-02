@@ -2,6 +2,7 @@ load('/tools/build/image', 'png_images')
 load('/tools/build/sphinx', 'sphinx_html', 'sphinx_latex')
 load('/tools/docgen/build', 'docgen_multiple')
 load('/config', 'version')
+load('macros', 'cc_binary_multiple', 'csharp_binary_multiple', 'java_binary_multiple')
 
 filegroup(
     name = 'doc',
@@ -124,4 +125,41 @@ docgen_multiple(
     language = 'java',
     srcs = glob(['api/**/*.tmpl']),
     defs = defs
+)
+
+filegroup(
+    name = 'compile-scripts',
+    srcs = [
+        ':compile-scripts-cpp',
+        ':compile-scripts-csharp',
+        ':compile-scripts-java'
+    ]
+)
+
+cc_binary_multiple(
+    name = 'compile-scripts-cpp',
+    srcs = glob(['src/scripts/*.cpp']),
+    deps = ['//client/cpp:krpc']
+)
+
+csharp_binary_multiple(
+    name = 'compile-scripts-csharp',
+    srcs = glob(['src/scripts/*.cs']),
+    deps = [
+        '//client/csharp:KRPC.Client',
+        '//tools/build/mono-4.5:Google.Protobuf',
+        '//tools/build/mono-4.5:mscorlib',
+        '//tools/build/mono-4.5:System',
+        '//tools/build/mono-4.5:System.Core',
+        '//tools/build/mono-4.5:System.Runtime',
+        '//tools/build/mono-4.5:System.IO',
+        '//tools/build/mono-4.5:System.Xml',
+        '//tools/build/mono-4.5:System.Xml.Linq'
+    ]
+)
+
+java_binary_multiple(
+    name = 'compile-scripts-java',
+    srcs = glob(['src/scripts/*.java']),
+    deps = ['//client/java:krpc-'+version, '@java_javatuples//:jar']
 )
