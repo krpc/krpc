@@ -4,11 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 
-class AttachmentModes
-{
-    public static void Main ()
-    {
-        var connection = new KRPC.Client.Connection ();
+class AttachmentModes {
+    public static void Main () {
+        var connection = new Connection ();
         var vessel = connection.SpaceCenter ().ActiveVessel;
         var root = vessel.Parts.Root;
         var stack = new Stack<Tuple<Part,int>> ();

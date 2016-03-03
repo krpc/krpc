@@ -1,14 +1,15 @@
 using KRPC.Client;
 using KRPC.Client.Services.SpaceCenter;
 using System;
-using System.Net;
 
-class QuaternionExample {
+class Program {
     public static void Main () {
         var connection = new Connection ();
         var spaceCenter = connection.SpaceCenter ();
         var vessel = spaceCenter.ActiveVessel;
-        Tuple<double,double,double,double> q = vessel.Flight ().Rotation;
-        Console.WriteLine (q.Item1 + "," + q.Item2 + "," + q.Item3 + "," + q.Item4);
+        var refframe = vessel.Orbit.Body.ReferenceFrame;
+        var position = connection.AddStream(() => vessel.Position(refframe));
+        while (true)
+            Console.Out.WriteLine(position.Get());
     }
 }
