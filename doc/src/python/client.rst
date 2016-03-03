@@ -1,10 +1,42 @@
 .. default-domain:: py
+.. highlight:: py
 
 Python Client
 =============
 
-The ``krpc`` module provides functionality to interact with a kRPC server from
-python. It can be `installed from pypi <https://pypi.python.org/pypi/krpc>`_.
+This client provides functionality to interact with a kRPC server from programs
+written in Python. It can be `installed using PyPI
+<https://pypi.python.org/pypi/krpc>`_ or :github-download-zip:`downloaded from
+GitHub <krpc-python>`.
+
+Installing the Library
+----------------------
+
+The python client and all of its dependencies can be installed using pip with a
+single command. It supports Python 2.7+ and 3.x
+
+On linux:
+
+.. code-block:: bash
+
+   pip install krpc
+
+On Windows:
+
+.. code-block:: none
+
+   C:\Python27\Scripts\pip.exe install krpc
+
+Using the Library
+-----------------
+
+Once it's installed, simply ``import krpc`` and you are good to go! You can
+check what version you have installed by running the following script:
+
+.. code-block:: python
+
+   import krpc
+   print(krpc.__version__)
 
 Connecting to the Server
 ------------------------
@@ -13,20 +45,12 @@ To connect to a server, use the :func:`krpc.connect` function. This returns a
 connection object through which you can interact with the server. For example to
 connect to a server running on the local machine:
 
-.. code-block:: python
-
-   import krpc
-   conn = krpc.connect(name='Example')
-   print(conn.krpc.get_status().version)
+.. literalinclude:: /scripts/Basic.py
 
 This function also accepts arguments that specify what address and port numbers
 to connect to. For example:
 
-.. code-block:: python
-
-   import krpc
-   conn = krpc.connect(address='my.domain.name', rpc_port=1000, stream_port=1001, name = 'Remote example')
-   print(conn.krpc.get_status().version)
+.. literalinclude:: /scripts/Connecting.py
 
 Interacting with the Server
 ---------------------------
@@ -44,9 +68,9 @@ accessible via ``conn.space_center`` and the functionality provided by the
 InfernalRobotics service is accessible via ``conn.infernal_robotics``. To
 explore the functionality provided by a service, you can use the ``help()``
 function from an interactive terminal. For example, running
-``help(conn.space_center)`` will list all of the classes, enumerations, procedures and
-properties provides by the SpaceCenter service. Or for a class, such as the
-vessel class provided by the SpaceCenter service by calling
+``help(conn.space_center)`` will list all of the classes, enumerations,
+procedures and properties provides by the SpaceCenter service. Or for a class,
+such as the vessel class provided by the SpaceCenter service by calling
 ``help(conn.space_center.Vessel)``.
 
 Calling methods, getting or setting properties, etc. are mapped to remote
@@ -57,49 +81,33 @@ Streaming Data from the Server
 
 A stream repeatedly executes a function on the server, with a fixed set of
 argument values. It provides a more efficient way of repeatedly getting the
-result of calling function on the server, without having to invoke it directly
--- which incurs communication overheads.
+result of a function, avoiding the network overhead of having to invoke it
+directly.
 
 For example, consider the following loop that continuously prints out the
 position of the active vessel. This loop incurs significant communication
 overheads, as the ``vessel.position`` function is called repeatedly.
 
-.. code-block:: python
+.. literalinclude:: /scripts/Streaming.py
 
-   vessel = conn.space_center.active_vessel
-   refframe = vessel.orbit.body.reference_frame
-   while True:
-       print vessel.position(refframe)
+The following code achieves the same thing, but is far more efficient. It calls
+:meth:`Client.add_stream` once at the start of the program to create a stream,
+and then repeatedly gets the position from the stream.
 
-The following code achieves the same thing, but is far more efficient. It makes
-a single call to :meth:`Client.add_stream` to create the stream, which avoids
-the communication overhead in the previous example.
+.. literalinclude:: /scripts/Streaming2.py
 
-.. code-block:: python
-
-   vessel = conn.space_center.active_vessel
-   refframe = vessel.orbit.body.reference_frame
-   position = conn.add_stream(vessel.position, refframe)
-   while True:
-       print position()
-
-Streams are created by calling :meth:`Client.add_stream` or using the ``with``
-statement applied to :meth:`Client.stream`. Both of these methods return an
-instance of the :class:`krpc.stream.Stream` class.
+A stream can be created by calling :meth:`Client.add_stream` or using the
+``with`` statement applied to :meth:`Client.stream`. Both of these approaches
+return an instance of the :class:`krpc.stream.Stream` class.
 
 Both methods and attributes can be streamed. The example given above
-demonstrates how to stream methods. The following example shows how to stream
-an attribute (in this case ``vessel.control.abort``):
+demonstrates how to stream methods. The following example shows how to stream an
+attribute (in this case ``vessel.control.abort``):
 
-.. code-block:: python
+.. literalinclude:: /scripts/Streaming3.py
 
-   abort = conn.add_stream(getattr, vessel.control, 'abort')
-   while not abort():
-       ...
-
-
-Reference
----------
+Client API Reference
+--------------------
 
 .. module:: krpc
 
@@ -143,19 +151,11 @@ Reference
       For example, to stream the result of method call
       ``vessel.position(refframe)``:
 
-      .. code-block:: python
-
-         vessel = conn.space_center.active_vessel
-         refframe = vessel.orbit.body.reference_frame
-         with conn.stream(vessel.position, refframe) as pos:
-             print('Position =', pos())
+      .. literalinclude:: /scripts/Streaming4.py
 
       Or to stream the property ``conn.space_center.ut``:
 
-      .. code-block:: python
-
-         with conn.stream(getattr(conn.space_center, 'ut')) as ut:
-             print('Universal Time =', ut())
+      .. literalinclude:: /scripts/Streaming5.py
 
    .. method:: close()
 
@@ -184,18 +184,12 @@ Reference
          For example, the following prints out the version string for the
          server:
 
-         .. code-block:: python
-
-            print('Server version =', conn.krpc.get_status().version)
+         .. literalinclude:: /scripts/ServerVersion.py
 
          Or to get the rate at which the server is sending and receiving data
          over the network:
 
-         .. code-block:: python
-
-            status = conn.krpc.get_status()
-            print('Data in =', (status.bytes_read_rate/1024.0), 'KB/s')
-            print('Data out =', (status.bytes_written_rate/1024.0), 'KB/s')
+         .. literalinclude:: /scripts/ServerStats.py
 
 .. module:: krpc.stream
 
