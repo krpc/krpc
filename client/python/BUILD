@@ -8,8 +8,16 @@ genrule(
     cmd = 'echo "__version__ = \'%s\'" > "$@"' % version
 )
 
-py_sdist(
+genrule(
     name = 'python',
+    srcs = [':python-pypi'],
+    outs = ['krpc-python-%s.zip' % version],
+    cmd = 'ln -f -r -s "$<" "$@"',
+    output_to_bindir = True
+)
+
+py_sdist(
+    name = 'python-pypi',
     out = 'krpc-%s.zip' % version,
     files = [
         '//:readme', '//:version', 'CHANGES.txt',
