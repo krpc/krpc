@@ -1,4 +1,3 @@
-load('/tools/build/package', 'package_archive')
 load('/tools/build/lua', 'lua_rock', 'lua_test')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
