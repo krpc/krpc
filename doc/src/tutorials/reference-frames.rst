@@ -242,6 +242,8 @@ below:
 .. image:: /images/reference-frames/vessel-surface-velocity.png
    :align: center
 
+.. _tutorial-reference-frames-orbital-speed:
+
 Orbital speed
 ^^^^^^^^^^^^^
 
@@ -252,6 +254,8 @@ fixed relative to the body, but does not rotate:
 
 .. literalinclude:: /scripts/OrbitalSpeed.py
    :linenos:
+
+.. _tutorial-reference-frames-surface-speed:
 
 Surface speed
 ^^^^^^^^^^^^^
