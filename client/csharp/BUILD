@@ -1,11 +1,16 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assembly_info', 'nuget_package')
 load('/tools/build/client_test', 'client_test')
+load('/tools/build/pkg', 'pkg_zip')
 load('/tools/clientgen/build', 'clientgen_csharp')
 load('/config', 'version', 'author')
 
-filegroup(
+pkg_zip(
     name = 'csharp',
-    srcs = [':KRPC.Client', 'CHANGES.txt'],
+    out = 'krpc-csharp-%s.zip' % version,
+    files = ['//:readme', '//:version', 'CHANGES.txt',
+             'LICENSE', '//:COPYING', '//:COPYING.LESSER',
+             ':KRPC.Client'],
+    path_map = {'client/csharp/': ''},
     visibility = ['//visibility:public']
 )
 
