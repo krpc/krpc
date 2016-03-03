@@ -20,6 +20,29 @@ if(NOT HAVE_ASIO)
   message(FATAL_ERROR "asio.hpp not found")
 endif()
 
+if(WIN32)
+  add_definitions(-D_SCL_SECURE_NO_WARNINGS)
+  # set _WIN32_WINNT for ASIO
+  if (CMAKE_SYSTEM_VERSION)
+    set(winver ${CMAKE_SYSTEM_VERSION})
+    string(REPLACE "." "" winver ${winver})
+    string(REGEX REPLACE "([0-9])" "0\\1" winver ${winver})
+    set(winver "0x${winver}")
+  endif()
+  add_definitions(-D_WIN32_WINNT=${winver})
+endif()
+
+if(MSVC)
+  # protobuf statically links against MT, so need to compile with /MT not /MD
+  foreach(var
+        CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+        CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+      if(${var} MATCHES "/MD")
+        string(REGEX REPLACE "/MD" "/MT" ${var} "${${var}}")
+      endif()
+    endforeach()
+endif()
+
 include_directories(include include/krpc ${PROTOBUF_INCLUDE_DIRS})
 
 file(GLOB SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
