@@ -13,7 +13,8 @@ genrule(
     srcs = [':python-pypi'],
     outs = ['krpc-python-%s.zip' % version],
     cmd = 'ln -f -r -s "$<" "$@"',
-    output_to_bindir = True
+    output_to_bindir = True,
+    visibility = ['//visibility:public']
 )
 
 py_sdist(
@@ -28,8 +29,7 @@ py_sdist(
     path_map = {
         'client/python/': '',
         'protobuf/': 'krpc/schema/'
-    },
-    visibility = ['//visibility:public']
+    }
 )
 
 test_suite(
