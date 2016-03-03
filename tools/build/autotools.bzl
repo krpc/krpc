@@ -42,15 +42,19 @@ def _impl(ctx):
             'cp %s %s' % (input.path, staging_path),
             'chmod %s %s' % (mode, staging_path)
         ])
-    sub_commands.append('(CWD=`pwd` && cd %s && autoreconf --force --install --warnings=error)' % staging_dir)
-    sub_commands.append('(CWD=`pwd` && cd %s && rm -rf autom4te.cache )' % staging_dir)
-    sub_commands.append('(CWD=`pwd` && cd %s && zip --quiet -r $CWD/%s ./)' % (staging_dir, output.path))
 
-    # Generate a zip file from the staging directory
+    sub_commands.extend([
+        'CWD=`pwd`',
+        'cd %s' % staging_dir,
+        'autoreconf --force --install --warnings=error 2>/dev/null 1>&2',
+        'rm -rf autom4te.cache',
+        'zip --quiet -r $CWD/%s ./' % output.path
+    ])
+
     ctx.action(
         inputs = inputs + macros,
         outputs = [output],
-        progress_message = 'Running autotools and packaging files into %s' % output.short_path,
+        progress_message = 'Running autotools and creating package %s' % output.short_path,
         command = '\n'.join(sub_commands)
     )
 
