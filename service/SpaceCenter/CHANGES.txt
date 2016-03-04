@@ -16,6 +16,7 @@ v0.2.3
    * ThrustReferenceFrame - a reference frame oriented with the initial thrust direction
    * GimbalRotation - current rotation of the gimbal (if any)
  * Combined ReactionWheel.PitchTorque, YawTorque and RollTorque into a single Torque method
+ * Fix bug with vessel center of mass calculations (#218)
 
 v0.2.2
  * Add Part.IsFuelLine
