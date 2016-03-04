@@ -19,14 +19,14 @@ from ..version import __version__
 
 def main():
     prog = 'krpc-docgen'
-    parser = argparse.ArgumentParser(prog=prog, description='Generate API for a kRPC service')
+    parser = argparse.ArgumentParser(prog=prog, description='Generate API documentation for a kRPC service')
     parser.add_argument('-v', '--version', action='version', version='%s version %s' % (prog, __version__))
     parser.add_argument('language', choices=('cpp', 'csharp', 'lua', 'python', 'java'), help='Language to generate')
     parser.add_argument('source', action='store', help='Path to source reStructuredText file')
-    parser.add_argument('order_file', action='store', default='order.txt', help='Path to order definition file')
-    parser.add_argument('output', action='store', help='Path to output reStructuredText file')
-    parser.add_argument('definitions', nargs='*', default=[], help='Paths to service definition JSON files')
-    parser.add_argument('--no-warnings', action='store_true', default=False, help='Ignore warnings')
+    parser.add_argument('order_file', action='store', default='order.txt', help='Path to ordering file')
+    parser.add_argument('output', action='store', help='Path to write output to')
+    parser.add_argument('definitions', nargs='*', default=[], help='Paths to service definition files')
+    parser.add_argument('--no-warnings', action='store_true', default=False, help='Suppress warnings')
     parser.add_argument('--force', action='store_true', default=False, help='Always overwrite existing files')
     parser.add_argument('--macros', action='store', default=None, help='Path to macros template file')
     args = parser.parse_args()

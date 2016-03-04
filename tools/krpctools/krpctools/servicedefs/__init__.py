@@ -10,12 +10,14 @@ from ..version import __version__
 
 def main():
     prog = 'krpc-servicedefs'
-    parser = argparse.ArgumentParser(prog=prog, description='Generate a service definitions file from a kRPC service assembly DLL.')
+    parser = argparse.ArgumentParser(prog=prog, description='Generate a service definition file for a kRPC service.')
     parser.add_argument('-v', '--version', action='version', version='%s version %s' % (prog, __version__))
     parser.add_argument('ksp', help='Path to Kerbal Space Program directory')
     parser.add_argument('service', help='Name of service')
-    parser.add_argument('assemblies', nargs='+', help='Path to assembly DLL(s) to load')
-    parser.add_argument('-o', '--output', help='Path to write output JSON file to. If not specified, service definitions are written to standard output.')
+    parser.add_argument('assemblies', nargs='+',
+                        help='Paths to assemblies containing the service and any dependencies required to load it')
+    parser.add_argument('-o', '--output',
+                        help='Path to write output to. If not specified, output is written to standard output.')
     args = parser.parse_args()
 
     try:
