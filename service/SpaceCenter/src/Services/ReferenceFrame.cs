@@ -55,7 +55,7 @@ namespace KRPC.SpaceCenter.Services
         ReferenceFrame (
             Type type, global::CelestialBody body = null, global::Vessel vessel = null,
             ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null,
-            ModuleEngines engine = null , ModuleEnginesFX engineFx = null,
+            ModuleEngines engine = null, ModuleEnginesFX engineFx = null,
             ModuleRCS rcs = null, Transform rcsThrustTransform = null)
         {
             this.type = type;
@@ -78,15 +78,15 @@ namespace KRPC.SpaceCenter.Services
         {
             return
                 type == obj.type &&
-                body == obj.body &&
-                vesselId == obj.vesselId &&
-                node == obj.node &&
-                partId == obj.partId &&
-                dockingPort == obj.dockingPort &&
-                engine == obj.engine &&
-                engineFx == obj.engineFx &&
-                rcs == obj.rcs &&
-                rcsThrustTransform == obj.rcsThrustTransform;
+            body == obj.body &&
+            vesselId == obj.vesselId &&
+            node == obj.node &&
+            partId == obj.partId &&
+            dockingPort == obj.dockingPort &&
+            engine == obj.engine &&
+            engineFx == obj.engineFx &&
+            rcs == obj.rcs &&
+            rcsThrustTransform == obj.rcsThrustTransform;
         }
 
         /// <summary>
@@ -222,14 +222,14 @@ namespace KRPC.SpaceCenter.Services
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                 case Type.VesselSurfaceVelocity:
-                    return InternalVessel.GetWorldPos3D ();
+                    return InternalVessel.findWorldCenterOfMass ();
                 case Type.Maneuver:
                 case Type.ManeuverOrbital:
                     {
                         //TODO: is there a better way to do this?
                         // node.patch.getPositionAtUT (node.UT) appears to return a position vector
                         // in a different space to vessel.GetWorldPos3D()
-                        var vesselPos = FlightGlobals.ActiveVessel.GetWorldPos3D ();
+                        var vesselPos = FlightGlobals.ActiveVessel.findWorldCenterOfMass ();
                         var vesselOrbitPos = FlightGlobals.ActiveVessel.orbit.getPositionAtUT (Planetarium.GetUniversalTime ());
                         var nodeOrbitPos = node.patch.getPositionAtUT (node.UT);
                         return vesselPos - vesselOrbitPos + nodeOrbitPos;
@@ -287,7 +287,7 @@ namespace KRPC.SpaceCenter.Services
         static Vector3d ToNorthPole (global::Vessel vessel)
         {
             var parent = vessel.mainBody;
-            return parent.position + ((Vector3d)parent.transform.up) * parent.Radius - (vessel.GetWorldPos3D ());
+            return parent.position + ((Vector3d)parent.transform.up) * parent.Radius - (vessel.findWorldCenterOfMass ());
         }
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace KRPC.SpaceCenter.Services
                     return InternalVessel.GetOrbit ().GetVel ();
                 case Type.VesselSurface:
                     {
-                        var right = InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position;
+                        var right = InternalVessel.findWorldCenterOfMass () - InternalVessel.mainBody.position;
                         return Vector3d.Exclude (right, ToNorthPole (InternalVessel).normalized);
                     }
                 case Type.VesselSurfaceVelocity:
@@ -366,14 +366,14 @@ namespace KRPC.SpaceCenter.Services
                     return InternalVessel.GetOrbit ().GetOrbitNormal ().SwapYZ ();
                 case Type.VesselSurface:
                     {
-                        var right = InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position;
+                        var right = InternalVessel.findWorldCenterOfMass () - InternalVessel.mainBody.position;
                         var northPole = ToNorthPole (InternalVessel).normalized;
                         return Vector3d.Cross (right, northPole);
                     }
                 case Type.VesselSurfaceVelocity:
                     {
                         // Compute orthogonal vector to vessels velocity, in the horizon plane
-                        var up = (InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position).normalized;
+                        var up = (InternalVessel.findWorldCenterOfMass () - InternalVessel.mainBody.position).normalized;
                         var velocity = InternalVessel.srf_velocity;
                         var proj = GeometryExtensions.ProjectVectorOntoPlane (up, velocity);
                         return Vector3d.Cross (up, proj);
