@@ -22,10 +22,10 @@ def main():
     parser = argparse.ArgumentParser(prog=prog, description='Generate API for a kRPC service')
     parser.add_argument('-v', '--version', action='version', version='%s version %s' % (prog, __version__))
     parser.add_argument('language', choices=('cpp', 'csharp', 'lua', 'python', 'java'), help='Language to generate')
-    parser.add_argument('source', action='store', help='Path to source file')
+    parser.add_argument('source', action='store', help='Path to source reStructuredText file')
     parser.add_argument('order_file', action='store', default='order.txt', help='Path to order definition file')
-    parser.add_argument('destination', action='store', help='Path to destination file')
-    parser.add_argument('definitions', nargs='*', default=[], help='Paths to service definition files')
+    parser.add_argument('output', action='store', help='Path to output reStructuredText file')
+    parser.add_argument('definitions', nargs='*', default=[], help='Paths to service definition JSON files')
     parser.add_argument('--no-warnings', action='store_true', default=False, help='Ignore warnings')
     parser.add_argument('--force', action='store_true', default=False, help='Always overwrite existing files')
     parser.add_argument('--macros', action='store', default=None, help='Path to macros template file')
@@ -52,10 +52,9 @@ def main():
         ordering = [x.strip() for x in f.readlines()]
 
     services_info = {}
-    for definition in args.definitions:
-        for path in glob.glob(definition):
-            with open(path, 'r') as f:
-                services_info.update(json.load(f))
+    for path in args.definitions:
+        with open(path, 'r') as f:
+            services_info.update(json.load(f))
 
     if services_info == {}:
         print 'No services found in services definition files'
@@ -77,9 +76,10 @@ def main():
         raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(sort_failed))
 
     content = process_file(args, domain, services, args.source)
-    if not os.path.exists(os.path.dirname(args.destination)):
-        os.makedirs(os.path.dirname(args.destination))
-    with codecs.open(args.destination, 'w', encoding='utf8') as f:
+    output = os.path.abspath(os.path.expanduser(os.path.expandvars(args.output)))
+    if not os.path.exists(os.path.dirname(output)):
+        os.makedirs(os.path.dirname(output))
+    with codecs.open(output, 'w', encoding='utf8') as f:
         f.write(content)
 
 def process_file(args, domain, services, path):
