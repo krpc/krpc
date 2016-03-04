@@ -28,12 +28,9 @@ def main():
     parser.add_argument('definitions', nargs='*', default=[], help='Paths to service definition files')
     parser.add_argument('--no-warnings', action='store_true', default=False, help='Suppress warnings')
     parser.add_argument('--force', action='store_true', default=False, help='Always overwrite existing files')
-    parser.add_argument('--macros', action='store', default=None, help='Path to macros template file')
     args = parser.parse_args()
 
-    macros = args.macros
-    if macros == None:
-        macros = resource_filename(__name__, '%s.tmpl' % args.language).decode('utf-8')
+    macros = resource_filename(__name__, '%s.tmpl' % args.language).decode('utf-8')
 
     if args.language == 'cpp':
         domain = CppDomain(macros)
