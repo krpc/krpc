@@ -1,4 +1,4 @@
-{% macro service(x) %}
+{% macro service(x) %}{{ mark_documented(x) }}
 .. namespace:: krpc::services
 .. class:: {{ x.name }} : public krpc::Service
 
@@ -18,7 +18,7 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro class(x) %}
+{% macro class(x) %}{{ mark_documented(x) }}
 .. namespace:: krpc::services::{{ x.service_name }}
 .. class:: {{ x.name }}
 
@@ -39,7 +39,7 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro procedure(x) %}
+{% macro procedure(x) %}{{ mark_documented(x) }}
 .. function:: {{ x.return_type | return_type }} {{ x.name | snakecase }}({{ parameters(x.parameters) }})
 
 {{ x.documentation | parsedoc | indent }}
@@ -55,7 +55,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro property(x) %}
+{% macro property(x) %}{{ mark_documented(x) }}
 {% if x.getter != None %}
 .. function:: {{ x.type | return_type }} {{ x.name | snakecase }}()
 {% endif %}
@@ -75,7 +75,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro class_method(x) %}
+{% macro class_method(x) %}{{ mark_documented(x) }}
 .. function:: {{ x.return_type | return_type }} {{ x.name | snakecase }}({{ parameters(x.parameters[1:]) }})
 
 {{ x.documentation | parsedoc | indent }}
@@ -91,7 +91,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro class_static_method(x) %}
+{% macro class_static_method(x) %}{{ mark_documented(x) }}
 .. function:: static {{ x.return_type | return_type }} {{ x.name | snakecase }}({{ parameters(x.parameters) }})
 
 {{ x.documentation | parsedoc | indent }}
@@ -107,18 +107,18 @@
 {% endif %}
 {% endmacro %}
 
-{% macro class_property(x) %}
+{% macro class_property(x) %}{{ mark_documented(x) }}
 {{ property(x) }}
 {% endmacro %}
 
-{% macro enumeration(x) %}
+{% macro enumeration(x) %}{{ mark_documented(x) }}
 .. namespace:: krpc::services::{{ x.service_name }}
 .. enum-struct:: {{ x.name }}
 
 {{ x.documentation | parsedoc | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
-{% for value in x.values.values() %}
+{% for value in x.values.values() %}{{ mark_documented(value) }}
    .. enumerator:: {{ value.name | snakecase }}
 
 {{ value.documentation | parsedoc | indent(width=6) }}

@@ -28,6 +28,7 @@ def main():
     parser.add_argument('definitions', nargs='*', default=[], help='Paths to service definition files')
     parser.add_argument('--no-warnings', action='store_true', default=False, help='Suppress warnings')
     parser.add_argument('--force', action='store_true', default=False, help='Always overwrite existing files')
+    parser.add_argument('--documented', action='store', help='Path to output a list of documented members')
     args = parser.parse_args()
 
     macros = resource_filename(__name__, '%s.tmpl' % args.language).decode('utf-8')
@@ -72,12 +73,20 @@ def main():
     if len(sort_failed) > 0:
         raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(sort_failed))
 
-    content = process_file(args, domain, services, args.source)
+    content,documented = process_file(args, domain, services, args.source)
+
     output = os.path.abspath(os.path.expanduser(os.path.expandvars(args.output)))
     if not os.path.exists(os.path.dirname(output)):
         os.makedirs(os.path.dirname(output))
     with codecs.open(output, 'w', encoding='utf8') as f:
         f.write(content)
+
+    if args.documented:
+        documented_path = os.path.abspath(os.path.expanduser(os.path.expandvars(args.documented)))
+        if not os.path.exists(os.path.dirname(documented_path)):
+            os.makedirs(os.path.dirname(documented_path))
+        with open(documented_path, 'w') as f:
+            f.write('\n'.join(documented)+'\n')
 
 def process_file(args, domain, services, path):
 
@@ -90,14 +99,20 @@ def process_file(args, domain, services, path):
         extensions=[AppendExtension]
     )
 
-    def hasdoc_fn(xml, selector='./summary'):
+    def hasdoc(xml, selector='./summary'):
         return DocumentationParser(domain, services, xml).has(selector)
+
+    documented = set()
+    def mark_documented(x):
+        documented.add(x.fullname)
+        return ''
 
     context = {
         'language': args.language,
         'domain': domain,
         'services': services,
-        'hasdoc': hasdoc_fn
+        'hasdoc': hasdoc,
+        'mark_documented': mark_documented
     }
 
     def return_type_filter(typ):
@@ -132,7 +147,7 @@ def process_file(args, domain, services, path):
     template = template_env.get_template(path)
     content = template.render(context)
 
-    return content.rstrip()+'\n'
+    return (content.rstrip()+'\n', sorted(documented))
 
 if __name__ == '__main__':
     main()

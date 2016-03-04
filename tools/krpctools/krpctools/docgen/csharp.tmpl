@@ -1,4 +1,4 @@
-{% macro service(x) %}
+{% macro service(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
 {{ x.documentation | parsedoc | indent }}
@@ -13,7 +13,7 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro class(x) %}
+{% macro class(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
 {{ x.documentation | parsedoc | indent }}
@@ -33,7 +33,7 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro procedure(x) %}
+{% macro procedure(x) %}{{ mark_documented(x) }}
 .. method:: {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters) }})
 
 {{ x.documentation | parsedoc | indent }}
@@ -49,7 +49,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro property(x) %}
+{% macro property(x) %}{{ mark_documented(x) }}
 .. property:: {{ x.type | return_type }} {{ x.name }} {{'{'}}{% if x.getter != None %} get;{% endif %}{% if x.setter != None %} set;{% endif %} {{'}'}}
 
 {{ x.documentation | parsedoc | indent }}
@@ -64,7 +64,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro class_method(x) %}
+{% macro class_method(x) %}{{ mark_documented(x) }}
 .. method:: {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters[1:]) }})
 
 {{ x.documentation | parsedoc | indent }}
@@ -80,7 +80,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro class_static_method(x) %}
+{% macro class_static_method(x) %}{{ mark_documented(x) }}
 .. method:: static {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters) }})
 
 {{ x.documentation | parsedoc | indent }}
@@ -96,17 +96,17 @@
 {% endif %}
 {% endmacro %}
 
-{% macro class_property(x) %}
+{% macro class_property(x) %}{{ mark_documented(x) }}
 {{ property(x) }}
 {% endmacro %}
 
-{% macro enumeration(x) %}
+{% macro enumeration(x) %}{{ mark_documented(x) }}
 .. enum:: {{ x.name }}
 
 {{ x.documentation | parsedoc | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
-{% for value in x.values.values() %}
+{% for value in x.values.values() %}{{ mark_documented(value) }}
    .. value:: {{ value.name }}
 
 {{ value.documentation | parsedoc | indent(width=6) }}

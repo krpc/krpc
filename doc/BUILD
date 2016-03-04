@@ -3,6 +3,7 @@ load('/tools/build/pkg', 'stage_files')
 load('/tools/build/python', 'py_script')
 load('/tools/build/image', 'png_images')
 load('/tools/krpctools/docgen', 'docgen_multiple')
+load('/doc/test', 'check_documented_test')
 load('/config', 'version')
 
 filegroup(
@@ -69,14 +70,6 @@ py_script(
     visibility = ['//visibility:public']
 )
 
-sphinx_spelling_test(
-    name = 'test',
-    srcs = [':srcs'],
-    sphinx_build = ':sphinx-build',
-    opts = {'version': version},
-    size = 'small'
-)
-
 sphinx_build(
     name = 'html',
     srcs = [':srcs'],
@@ -107,6 +100,14 @@ defs = [
 ]
 
 docgen_multiple(
+    name = 'csharp-api',
+    outdir = 'src/csharp',
+    language = 'csharp',
+    srcs = glob(['api/**/*.tmpl']),
+    defs = defs
+)
+
+docgen_multiple(
     name = 'cpp-api',
     outdir = 'src/cpp',
     language = 'cpp',
@@ -115,9 +116,9 @@ docgen_multiple(
 )
 
 docgen_multiple(
-    name = 'csharp-api',
-    outdir = 'src/csharp',
-    language = 'csharp',
+    name = 'java-api',
+    outdir = 'src/java',
+    language = 'java',
     srcs = glob(['api/**/*.tmpl']),
     defs = defs
 )
@@ -138,10 +139,61 @@ docgen_multiple(
     defs = defs
 )
 
-docgen_multiple(
-    name = 'java-api',
-    outdir = 'src/java',
-    language = 'java',
-    srcs = glob(['api/**/*.tmpl']),
-    defs = defs
+test_suite(
+    name = 'test',
+    tests = ['spelling', 'check-documented']
+)
+
+sphinx_spelling_test(
+    name = 'spelling',
+    srcs = [':srcs'],
+    sphinx_build = ':sphinx-build',
+    opts = {'version': version},
+    size = 'small'
+)
+
+test_suite(
+    name = 'check-documented',
+    tests = [
+        ':check-documented-csharp',
+        ':check-documented-cpp',
+        ':check-documented-java',
+        ':check-documented-lua',
+        ':check-documented-python'
+    ]
+)
+
+check_documented_test(
+    name = 'check-documented-csharp',
+    srcs = [':csharp-api'],
+    members = 'order.txt',
+    size = 'small'
+)
+
+check_documented_test(
+    name = 'check-documented-cpp',
+    srcs = [':cpp-api'],
+    members = 'order.txt',
+    size = 'small'
+)
+
+check_documented_test(
+    name = 'check-documented-java',
+    srcs = [':java-api'],
+    members = 'order.txt',
+    size = 'small'
+)
+
+check_documented_test(
+    name = 'check-documented-lua',
+    srcs = [':lua-api'],
+    members = 'order.txt',
+    size = 'small'
+)
+
+check_documented_test(
+    name = 'check-documented-python',
+    srcs = [':python-api'],
+    members = 'order.txt',
+    size = 'small'
 )

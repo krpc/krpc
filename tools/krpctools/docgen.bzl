@@ -1,12 +1,17 @@
 def _outputs(attr):
-    return {'out': attr.outdir + '/' + attr.src.name.replace('.tmpl','.rst')}
+    return {
+        'out': attr.outdir + '/' + attr.src.name.replace('.tmpl','.rst'),
+        'documented': attr.outdir + '/' + attr.src.name.replace('.tmpl','.documented.txt')
+    }
 
 def _impl(ctx):
     language = ctx.attr.language
     src = ctx.file.src
     out = ctx.outputs.out
+    documented = ctx.outputs.documented
 
     args = [
+        '--documented=%s' % documented.path,
         language,
         src.path,
         ctx.file._order.path,
@@ -16,7 +21,7 @@ def _impl(ctx):
 
     ctx.action(
         inputs = ctx.files.defs + [src, ctx.file._order],
-        outputs = [out],
+        outputs = [out, documented],
         progress_message = 'Generating %s documentation %s' % (language, out.path),
         executable = ctx.file._docgen,
         arguments = args
