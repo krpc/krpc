@@ -61,10 +61,20 @@ def main():
         print 'No services found in services definition files'
         exit(1)
 
-    services = [Service(name, **info) for name,info in services_info.items()]
-    for service in services:
-        service.sort(ordering)
-    services = dict([(service.name,service) for service in services])
+    sort_failed = []
+
+    def sort(member):
+        if member.fullname not in ordering:
+            sort_failed.append(member.fullname)
+            return 0
+        else:
+            return ordering.index(member.fullname)
+
+    services = [Service(name, sort=sort, **info) for name,info in services_info.iteritems()]
+    services = {service.name: service for service in services}
+
+    if len(sort_failed) > 0:
+        raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(sort_failed))
 
     content = process_file(args, domain, services, args.source)
     if not os.path.exists(os.path.dirname(args.destination)):
@@ -124,10 +134,6 @@ def process_file(args, domain, services, path):
 
     template = template_env.get_template(path)
     content = template.render(context)
-
-    import krpctools.docgen.nodes
-    if len(krpctools.docgen.nodes.sort_members_failed) > 0:
-        raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(krpctools.docgen.nodes.sort_members_failed))
 
     return content.rstrip()+'\n'
 

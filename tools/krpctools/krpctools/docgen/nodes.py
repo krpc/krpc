@@ -1,22 +1,10 @@
-import collections
+from collections import OrderedDict, defaultdict
 from .docparser import DocumentationParser
 from krpc.attributes import Attributes
 from krpc.types import Types
 from krpc.decoder import Decoder
 
 types = Types()
-
-sort_members_failed = []
-
-def sort_members(members, ordering):
-    def key_fn((name,member)):
-        if member.fullname not in ordering:
-            global sort_members_failed
-            sort_members_failed.append(member.fullname)
-            return 0
-        else:
-            return ordering.index(member.fullname)
-    return collections.OrderedDict(sorted(members.items(), key=key_fn))
 
 class Appendable(object):
 
@@ -31,50 +19,43 @@ class Appendable(object):
         return '\n\n'.join(self._appended)
 
 class Service(Appendable):
-    def __init__(self, name, procedures, classes, enumerations, documentation):
+    def __init__(self, name, procedures, classes, enumerations, documentation, sort):
         super(Service, self).__init__()
         self.name = name
         self.fullname = name
         self.documentation = documentation
         self.cref = 'T:%s' % name
 
-        self.members = {}
-        for pname,info in procedures.items():
-            if Attributes.is_a_procedure(info['attributes']):
-                proc = Procedure(name, pname, **info)
-                self.members[proc.name] = proc
+        members = []
+        cprocedures = defaultdict(lambda: dict())
+        properties = defaultdict(lambda: dict())
 
-        properties = {}
-        for pname,info in procedures.items():
-            if Attributes.is_a_property_accessor(info['attributes']):
+        for pname,info in procedures.iteritems():
+
+            if Attributes.is_a_procedure(info['attributes']):
+                members.append(Procedure(name, pname, **info))
+
+            elif Attributes.is_a_property_accessor(info['attributes']):
                 propname = Attributes.get_property_name(info['attributes'])
-                if propname not in properties:
-                    properties[propname] = {}
                 if Attributes.is_a_property_getter(info['attributes']):
                     properties[propname]['getter'] = Procedure(name, pname, **info)
                 else:
                     properties[propname]['setter'] = Procedure(name, pname, **info)
-        for propname,prop in properties.items():
-            prop = Property(name, propname, **prop)
-            self.members[prop.name] = prop
 
-        self.classes = {}
-        for cname,cinfo in classes.items():
-            cprocedures = dict(filter(
-                lambda (name,info): Attributes.is_a_class_member(info['attributes']) and \
-                Attributes.get_class_name(info['attributes']) == cname, procedures.items()))
-            self.classes[cname] = Class(name, cname, cprocedures, **cinfo)
+            elif Attributes.is_a_class_member(info['attributes']):
+                cname = Attributes.get_class_name(info['attributes'])
+                cprocedures[cname][pname] = info
 
-        self.enumerations = dict([(ename,Enumeration(name, ename, **einfo)) for ename,einfo in enumerations.items()])
-    def sort(self, ordering):
-        self.members = sort_members(self.members, ordering)
-        for cls in self.classes.values():
-            cls.sort(ordering)
-        for enm in self.enumerations.values():
-            enm.sort(ordering)
+        for propname,prop in properties.iteritems():
+            members.append(Property(name, propname, **prop))
+
+        self.classes = {cname: Class(name, cname, cprocedures[cname], sort=sort, **cinfo) for (cname,cinfo) in classes.iteritems()}
+        self.enumerations = {ename: Enumeration(name, ename, sort=sort, **einfo) for (ename,einfo) in enumerations.iteritems()}
+
+        self.members = OrderedDict((member.name, member) for member in sorted(members, key=sort))
 
 class Class(Appendable):
-    def __init__(self, service_name, name, procedures, documentation):
+    def __init__(self, service_name, name, procedures, documentation, sort):
         super(Class, self).__init__()
         self.service_name = service_name
         self.name = name
@@ -82,34 +63,32 @@ class Class(Appendable):
         self.documentation = documentation
         self.cref = 'T:%s.%s' % (service_name, name)
 
-        self.members = {}
-        for pname,pinfo in procedures.items():
-            if Attributes.is_a_class_member(pinfo['attributes']) and \
-               Attributes.get_class_name(pinfo['attributes']) == name:
-                if Attributes.is_a_class_method(pinfo['attributes']):
-                    member = ClassMethod(service_name, name, pname, **pinfo)
-                elif Attributes.is_a_class_static_method(pinfo['attributes']):
-                    member = ClassStaticMethod(service_name, name, pname, **pinfo)
-                else:
-                    continue
-                self.members[member.name] = member
+        members = []
+        properties = defaultdict(lambda: dict())
 
-        properties = {}
-        for pname,pinfo in procedures.items():
-            if Attributes.is_a_class_property_accessor(pinfo['attributes']):
+        for pname,pinfo in procedures.iteritems():
+
+            #assert(Attributes.is_a_class_member(pinfo['attributes']))
+            #assert(Attributes.get_class_name(pinfo['attributes']) == name)
+
+            if Attributes.is_a_class_method(pinfo['attributes']):
+                members.append(ClassMethod(service_name, name, pname, **pinfo))
+
+            elif Attributes.is_a_class_static_method(pinfo['attributes']):
+                members.append(ClassStaticMethod(service_name, name, pname, **pinfo))
+
+            elif Attributes.is_a_class_property_accessor(pinfo['attributes']):
                 propname = Attributes.get_class_property_name(pinfo['attributes'])
-                if propname not in properties:
-                    properties[propname] = {}
+                proc = Procedure(service_name, pname, **pinfo)
                 if Attributes.is_a_class_property_getter(pinfo['attributes']):
-                    properties[propname]['getter'] = Procedure(service_name, pname, **pinfo)
+                    properties[propname]['getter'] = proc
                 else:
-                    properties[propname]['setter'] = Procedure(service_name, pname, **pinfo)
-        for propname,prop in properties.items():
-            prop = ClassProperty(service_name, name, propname, **prop)
-            self.members[prop.name] = prop
+                    properties[propname]['setter'] = proc
 
-    def sort(self, ordering):
-        self.members = sort_members(self.members, ordering)
+        for propname,prop in properties.iteritems():
+            members.append(ClassProperty(service_name, name, propname, **prop))
+
+        self.members = OrderedDict((member.name, member) for member in sorted(members, key=sort))
 
 class Parameter(Appendable):
     def __init__(self, name, position, type, attributes, documentation, default_argument=None):
@@ -216,20 +195,15 @@ class ClassProperty(Appendable):
         self.cref = 'M:%s.%s.%s' % (service_name, class_name, name)
 
 class Enumeration(Appendable):
-    def __init__(self, service_name, name, values, documentation):
+    def __init__(self, service_name, name, values, documentation, sort):
         super(Enumeration, self).__init__()
         self.service_name = service_name
         self.name = name
         self.fullname = service_name+'.'+name
-        self.values = {}
-        for value in values:
-            enm = EnumerationValue(service_name, name, **value)
-            self.values[enm.name] = enm
+        values = (EnumerationValue(service_name, name, **value) for value in values)
+        self.values = OrderedDict((v.name, v) for v in sorted(values, key=sort))
         self.documentation = documentation
         self.cref = 'T:%s.%s' % (service_name, name)
-
-    def sort(self, ordering):
-        self.values = sort_members(self.values, ordering)
 
 class EnumerationValue(Appendable):
     def __init__(self, service_name, enum_name, name, value, documentation):
