@@ -140,6 +140,7 @@ test_suite(
     name = 'test',
     tests = [
         '//server:test',
+        '//doc:test',
         '//client/python:test',
         '//client/cpp:test',
         '//client/lua:test',

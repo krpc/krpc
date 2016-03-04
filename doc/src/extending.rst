@@ -532,25 +532,26 @@ Other client libraries required code to be generated and compiled into them
 statically. They do not automatically pick up changes to service code. Such
 client libraries include those for C++ and C#.
 
-Code for these 'static' libraries is generated using the `krpc-clientgen` tool. This is
-provided as `a Python script on PyPi
-<https://pypi.python.org/pypi/krpc.clientgen>`_. It can be installed using pip:
+Code for these 'static' libraries is generated using the krpc-clientgen
+tool. This is provided as part of the `krpctools python package
+<https://pypi.python.org/pypi/krpctools>`_. It can be installed using pip:
 
-``pip install krpc.clientgen``
+``pip install krpctools``
 
 You can then run the script from the command line:
 
 .. code-block:: console
 
    $ krpc-clientgen --help
+
    usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--ksp KSP]
                          [--output-defs OUTPUT_DEFS]
-                         {cpp,csharp} service input [input ...]
+                         {cpp,csharp,java} service input [input ...]
 
    Generate client source code for kRPC services.
 
    positional arguments:
-     {cpp,csharp}          Language to generate
+     {cpp,csharp,java}     Language to generate
      service               Name of service to generate
      input                 Path to service definition JSON file or assembly
                            DLL(s)

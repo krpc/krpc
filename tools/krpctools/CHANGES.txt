@@ -1,0 +1,6 @@
+v0.2.2
+ * Refactor into 'krpctools' package containing 'krpc-clientgen', 'krpc-docgen' and 'krpc-servicedefs'.
+ * Fixes caused by removal of support for protobuf enumeration and custom protobuf messages from server and clients
+
+v0.2.1
+ * Initial version

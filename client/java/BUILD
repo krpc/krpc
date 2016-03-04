@@ -1,4 +1,4 @@
-load('/tools/clientgen/build', 'clientgen_java')
+load('/tools/krpctools/clientgen', 'clientgen_java')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
 
