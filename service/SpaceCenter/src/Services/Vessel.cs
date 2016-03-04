@@ -363,6 +363,93 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The moment of inertia of the vessel around its center of mass in the coordinate axes, in $kg.m^2$.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 MomentOfInertia {
+            get {
+                throw new NotImplementedException ();
+            }
+        }
+
+        /// <summary>
+        /// The maximum torque that the vessel can generate.
+        /// This includes contributions from active reaction wheels, RCS thrusters, engines
+        /// and aerodynamic control surfaces.
+        /// Returns a vector of torques around the pitch, yaw and roll axes of the vessel, in <math>N.m</math>.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 Torque {
+            get {
+                return (ComputeReactionWheelTorque () +
+                ComputeRCSTorque () +
+                ComputeEngineTorque () +
+                ComputeControlSurfaceTorque ()).ToTuple ();
+            }
+        }
+
+        /// <summary>
+        /// The maximum torque that the currently active and powered reaction wheels can generate.
+        /// Returns a vector of torques around the pitch, yaw and roll axes of the vessel, in <math>N.m</math>.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 ReactionWheelTorque {
+            get { return ComputeReactionWheelTorque ().ToTuple (); }
+        }
+
+        /// <summary>
+        /// The maximum torque that the active RCS thrusters can generate.
+        /// Returns a vector of torques around the pitch, yaw and roll axes of the vessel, in <math>N.m</math>.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 RCSTorque {
+            get { return ComputeRCSTorque ().ToTuple (); }
+        }
+
+        /// <summary>
+        /// The maximum torque that the active gimballed engines can generate.
+        /// Returns a vector of torques around the pitch, yaw and roll axes of the vessel, in <math>N.m</math>.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 EngineTorque {
+            get { return ComputeEngineTorque ().ToTuple (); }
+        }
+
+        /// <summary>
+        /// The maximum torque that the aerodynamic control surfaces can provide.
+        /// Returns a vector of torques around the pitch, yaw and roll axes of the vessel, in <math>N.m</math>.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 ControlSurfaceTorque {
+            get { return ComputeControlSurfaceTorque ().ToTuple (); }
+        }
+
+        Vector3d ComputeReactionWheelTorque ()
+        {
+            throw new NotImplementedException ();
+        }
+
+        Vector3d ComputeRCSTorque ()
+        {
+            throw new NotImplementedException ();
+        }
+
+        Vector3d ComputeEngineTorque ()
+        {
+            throw new NotImplementedException ();
+        }
+
+        Vector3d ComputeControlSurfaceTorque ()
+        {
+            throw new NotImplementedException ();
+        }
+
+        /// <summary>
         /// The reference frame that is fixed relative to the vessel, and orientated with the vessel.
         /// <list type="bullet">
         /// <item><description>The origin is at the center of mass of the vessel.</description></item>

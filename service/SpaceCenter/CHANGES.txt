@@ -1,3 +1,22 @@
+v0.2.3
+ * Added the following to the Vessel class:
+   * MomentOfInertia - MoI of the vessel around it's CoM in the pitch/yaw/roll axes
+   * Torque - available torque around the CoM in the pitch/yaw/roll axes
+   * ReactionWheelTorque - available torque from reaction wheels
+   * RCSTorque - available torque from RCS
+   * EngineTorque - available torque from gimballed engines
+   * ControlSurfaceTorque - available torque from aerodynamic control surfaces
+ * Added support for RCS parts, with the following properties and methods:
+   * RCS.Active - is the RCS block active?
+   * RCS.Thrusters - returns a list of Engine objects, one for each thruster in the RCS block
+ * Added the following to the Engine class:
+   * ThrustPosition - position at which the engine produces thrust
+   * ThrustDirection - direction of thrust, including the current gimbal rotation
+   * InitialThrustDirection - direction of thrust, without the current gimbal rotation
+   * ThrustReferenceFrame - a reference frame oriented with the initial thrust direction
+   * GimbalRotation - current rotation of the gimbal (if any)
+ * Combined ReactionWheel.PitchTorque, YawTorque and RollTorque into a single Torque method
+
 v0.2.2
  * Add Part.IsFuelLine
  * Fix bug with Part.FuelLinesTo (#193)

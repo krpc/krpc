@@ -241,6 +241,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all RCS blocks/thrusters in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<RCS> RCS {
+            get { return All.Where (part => part.IsRCS).Select (part => part.RCS).ToList (); }
+        }
+
+        /// <summary>
         /// A list of all reaction wheels in the vessel.
         /// </summary>
         [KRPCProperty]

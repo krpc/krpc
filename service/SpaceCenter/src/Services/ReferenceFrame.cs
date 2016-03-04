@@ -35,7 +35,10 @@ namespace KRPC.SpaceCenter.Services
             Maneuver,
             ManeuverOrbital,
             Part,
-            DockingPort
+            DockingPort,
+            ThrustEngine,
+            ThrustEngineFx,
+            ThrustRCS
         }
 
         readonly Type type;
@@ -44,10 +47,16 @@ namespace KRPC.SpaceCenter.Services
         readonly ManeuverNode node;
         readonly uint partId;
         readonly ModuleDockingNode dockingPort;
+        readonly ModuleEngines engine;
+        readonly ModuleEnginesFX engineFx;
+        readonly ModuleRCS rcs;
+        readonly Transform rcsThrustTransform;
 
         ReferenceFrame (
             Type type, global::CelestialBody body = null, global::Vessel vessel = null,
-            ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null)
+            ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null,
+            ModuleEngines engine = null , ModuleEnginesFX engineFx = null,
+            ModuleRCS rcs = null, Transform rcsThrustTransform = null)
         {
             this.type = type;
             this.body = body;
@@ -56,6 +65,10 @@ namespace KRPC.SpaceCenter.Services
             //TODO: is it safe to use a part id of 0 to mean no part?
             this.partId = part != null ? part.flightID : 0;
             this.dockingPort = dockingPort;
+            this.engine = engine;
+            this.engineFx = engineFx;
+            this.rcs = rcs;
+            this.rcsThrustTransform = rcsThrustTransform;
         }
 
         /// <summary>
@@ -63,7 +76,17 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (ReferenceFrame obj)
         {
-            return type == obj.type && body == obj.body && vesselId == obj.vesselId && node == obj.node && partId == obj.partId && dockingPort == obj.dockingPort;
+            return
+                type == obj.type &&
+                body == obj.body &&
+                vesselId == obj.vesselId &&
+                node == obj.node &&
+                partId == obj.partId &&
+                dockingPort == obj.dockingPort &&
+                engine == obj.engine &&
+                engineFx == obj.engineFx &&
+                rcs == obj.rcs &&
+                rcsThrustTransform == obj.rcsThrustTransform;
         }
 
         /// <summary>
@@ -80,6 +103,14 @@ namespace KRPC.SpaceCenter.Services
             hash ^= partId.GetHashCode ();
             if (dockingPort != null)
                 hash ^= dockingPort.GetHashCode ();
+            if (engine != null)
+                hash ^= engine.GetHashCode ();
+            if (engineFx != null)
+                hash ^= engineFx.GetHashCode ();
+            if (rcs != null)
+                hash ^= rcs.GetHashCode ();
+            if (rcsThrustTransform != null)
+                hash ^= rcsThrustTransform.GetHashCode ();
             return hash;
         }
 
@@ -162,6 +193,21 @@ namespace KRPC.SpaceCenter.Services
             return new ReferenceFrame (Type.DockingPort, dockingPort: dockingPort);
         }
 
+        internal static ReferenceFrame Thrust (Part part, ModuleEngines engine)
+        {
+            return new ReferenceFrame (Type.ThrustEngine, part: part, engine: engine);
+        }
+
+        internal static ReferenceFrame Thrust (Part part, ModuleEnginesFX engineFx)
+        {
+            return new ReferenceFrame (Type.ThrustEngineFx, part: part, engineFx: engineFx);
+        }
+
+        internal static ReferenceFrame Thrust (Part part, ModuleRCS rcs, Transform rcsThrustTransform)
+        {
+            return new ReferenceFrame (Type.ThrustRCS, part: part, rcs: rcs, rcsThrustTransform: rcsThrustTransform);
+        }
+
         /// <summary>
         /// Returns the position of the origin of the reference frame in world-space.
         /// </summary>
@@ -192,6 +238,10 @@ namespace KRPC.SpaceCenter.Services
                     return InternalPart.transform.position;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.position;
+                case Type.ThrustEngine:
+                case Type.ThrustEngineFx:
+                case Type.ThrustRCS:
+                    throw new NotImplementedException ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -282,6 +332,10 @@ namespace KRPC.SpaceCenter.Services
                     return InternalPart.transform.up;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.forward;
+                case Type.ThrustEngine:
+                case Type.ThrustEngineFx:
+                case Type.ThrustRCS:
+                    throw new NotImplementedException ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -341,6 +395,10 @@ namespace KRPC.SpaceCenter.Services
                     return InternalPart.transform.forward;
                 case Type.DockingPort:
                     return -dockingPort.nodeTransform.up;
+                case Type.ThrustEngine:
+                case Type.ThrustEngineFx:
+                case Type.ThrustRCS:
+                    throw new NotImplementedException ();
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -366,6 +424,9 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                     return Vector3d.zero; //TODO: check this
                 case Type.Part:
+                case Type.ThrustEngine:
+                case Type.ThrustEngineFx:
+                case Type.ThrustRCS:
                     return InternalPart.vessel.GetOrbit ().GetVel ();
                 case Type.DockingPort:
                     return dockingPort.vessel.GetOrbit ().GetVel ();
@@ -398,6 +459,9 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                 case Type.Part:
                 case Type.DockingPort:
+                case Type.ThrustEngine:
+                case Type.ThrustEngineFx:
+                case Type.ThrustRCS:
                     return Vector3d.zero; //TODO: check this
                 default:
                     throw new ArgumentException ("No such reference frame");

@@ -54,6 +54,12 @@ SpaceCenter.Vessel.MaxVacuumThrust
 SpaceCenter.Vessel.SpecificImpulse
 SpaceCenter.Vessel.VacuumSpecificImpulse
 SpaceCenter.Vessel.KerbinSeaLevelSpecificImpulse
+SpaceCenter.Vessel.MomentOfInertia
+SpaceCenter.Vessel.Torque
+SpaceCenter.Vessel.ReactionWheelTorque
+SpaceCenter.Vessel.RCSTorque
+SpaceCenter.Vessel.EngineTorque
+SpaceCenter.Vessel.ControlSurfaceTorque
 SpaceCenter.Vessel.ReferenceFrame
 SpaceCenter.Vessel.OrbitalReferenceFrame
 SpaceCenter.Vessel.SurfaceReferenceFrame
@@ -236,6 +242,7 @@ SpaceCenter.Parts.LaunchClamps
 SpaceCenter.Parts.Lights
 SpaceCenter.Parts.Parachutes
 SpaceCenter.Parts.Radiators
+SpaceCenter.Parts.RCS
 SpaceCenter.Parts.ResourceConverters
 SpaceCenter.Parts.ResourceHarvesters
 SpaceCenter.Parts.ReactionWheels
@@ -284,6 +291,7 @@ SpaceCenter.Part.LaunchClamp
 SpaceCenter.Part.Light
 SpaceCenter.Part.Parachute
 SpaceCenter.Part.Radiator
+SpaceCenter.Part.RCS
 SpaceCenter.Part.ReactionWheel
 SpaceCenter.Part.ResourceConverter
 SpaceCenter.Part.ResourceHarvester
@@ -339,6 +347,10 @@ SpaceCenter.Engine.AvailableThrust
 SpaceCenter.Engine.MaxThrust
 SpaceCenter.Engine.MaxVacuumThrust
 SpaceCenter.Engine.ThrustLimit
+SpaceCenter.Engine.ThrustPosition
+SpaceCenter.Engine.ThrustDirection
+SpaceCenter.Engine.InitialThrustDirection
+SpaceCenter.Engine.ThrustReferenceFrame
 SpaceCenter.Engine.SpecificImpulse
 SpaceCenter.Engine.VacuumSpecificImpulse
 SpaceCenter.Engine.KerbinSeaLevelSpecificImpulse
@@ -353,6 +365,7 @@ SpaceCenter.Engine.Gimballed
 SpaceCenter.Engine.GimbalRange
 SpaceCenter.Engine.GimbalLocked
 SpaceCenter.Engine.GimbalLimit
+SpaceCenter.Engine.GimbalRotation
 SpaceCenter.LandingGear
 SpaceCenter.LandingGear.Part
 SpaceCenter.LandingGear.State
@@ -410,6 +423,14 @@ SpaceCenter.ReactionWheel.Broken
 SpaceCenter.ReactionWheel.PitchTorque
 SpaceCenter.ReactionWheel.YawTorque
 SpaceCenter.ReactionWheel.RollTorque
+SpaceCenter.RCS
+SpaceCenter.RCS.Part
+SpaceCenter.RCS.Active
+SpaceCenter.RCS.Thrusters
+SpaceCenter.ReactionWheel.Part
+SpaceCenter.ReactionWheel.Active
+SpaceCenter.ReactionWheel.Broken
+SpaceCenter.ReactionWheel.Torque
 SpaceCenter.ResourceConverter
 SpaceCenter.ResourceConverter.Part
 SpaceCenter.ResourceConverter.Count

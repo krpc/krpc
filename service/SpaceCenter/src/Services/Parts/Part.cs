@@ -394,6 +394,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return InternalPart.HasModule<ModuleDeployableRadiator> (); }
         }
 
+        internal bool IsRCS {
+            get { return InternalPart.HasModule<ModuleRCS> (); }
+        }
+
         internal bool IsReactionWheel {
             get { return InternalPart.HasModule<ModuleReactionWheel> (); }
         }
@@ -492,6 +496,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public Radiator Radiator {
             get { return IsRadiator ? new Radiator (this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="RCS"/> if the part is an RCS block/thruster, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public RCS RCS {
+            get { return IsRCS ? new RCS (this) : null; }
         }
 
         /// <summary>
