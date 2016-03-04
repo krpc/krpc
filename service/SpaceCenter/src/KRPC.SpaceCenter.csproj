@@ -65,7 +65,7 @@
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.Linq.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_protobuf_net35\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\..\bazel-krpc\external\csharp_protobuf_net35\file\Google.Protobuf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +77,7 @@
     <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
     <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
+    <Compile Include="ExtensionMethods\FlightGlobalsExtensions.cs" />
     <Compile Include="ExtensionMethods\ITargetableExtensions.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
     <Compile Include="ExtensionMethods\ResourceFlowModeExtensions.cs" />

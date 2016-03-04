@@ -59,7 +59,7 @@ class TestSpaceCenter(testingtools.TestCase):
         active = self.sc.active_vessel
         active.name = 'Active'
         vessels = self.sc.vessels
-        self.assertEqual(['Active', 'Basic'], sorted(v.name for v in vessels))
+        self.assertEqual(['Active', 'OtherVessel'], sorted(v.name for v in vessels))
         self.assertEqual(self.sc.vessels, vessels)
 
     def test_bodies(self):
@@ -335,6 +335,11 @@ class TestWarpOnLaunchpad(testingtools.TestCase, WarpTestBase):
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
+
+    def test_warp_to_long(self):
+        t = self.sc.ut + (100*60*60) # 100 hours in future
+        self.sc.warp_to(t)
+        self.assertClose(t, self.sc.ut, error=2)
 
 class TestWarpInOrbit(testingtools.TestCase, WarpTestBase):
 

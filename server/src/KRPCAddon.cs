@@ -16,7 +16,6 @@ namespace KRPC
         static Texture textureOnline;
         static Texture textureOffline;
 
-        IButton toolbarButton;
         ApplicationLauncherButton applauncherButton;
         MainWindow mainWindow;
         InfoWindow infoWindow;
@@ -128,37 +127,23 @@ namespace KRPC
                     clientConnectingDialog.OnClientRequestingConnection (s, e);
             };
 
-            // Add show/hide window button
-            if (ToolbarManager.ToolbarAvailable) {
-                // Add a button to the Toolbar plugin if it's available
-                mainWindow.Closable = true;
-                toolbarButton = ToolbarManager.Instance.add ("kRPC", "ToggleMainWindow");
-                toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
-                toolbarButton.ToolTip = "kRPC Server";
-                toolbarButton.Visibility = new GameScenesVisibility (GameScenes.SPACECENTER, GameScenes.FLIGHT, GameScenes.TRACKSTATION, GameScenes.EDITOR);
-                toolbarButton.OnClick += e => mainWindow.Visible = !mainWindow.Visible;
-                server.OnStarted += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-online";
-                server.OnStopped += (s, e) => toolbarButton.TexturePath = "kRPC/icons/toolbar-offline";
-                applauncherButton = null;
-            } else {
-                // Otherwise add a button to the stock KSP applauncher
-                mainWindow.Closable = true;
-                textureOnline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-online", false);
-                textureOffline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-offline", false);
-                GameEvents.onGUIApplicationLauncherReady.Add (OnGUIApplicationLauncherReady);
-                GameEvents.onGUIApplicationLauncherDestroyed.Add (OnGUIApplicationLauncherDestroyed);
-                server.OnStarted += (s, e) => {
-                    if (applauncherButton != null) {
-                        applauncherButton.SetTexture (textureOnline);
-                    }
-                };
-                server.OnStopped += (s, e) => {
-                    if (applauncherButton != null) {
-                        applauncherButton.SetTexture (textureOffline);
-                    }
-                };
-                toolbarButton = null;
-            }
+
+            // Add a button to the applauncher
+            mainWindow.Closable = true;
+            textureOnline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-online", false);
+            textureOffline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-offline", false);
+            GameEvents.onGUIApplicationLauncherReady.Add (OnGUIApplicationLauncherReady);
+            GameEvents.onGUIApplicationLauncherDestroyed.Add (OnGUIApplicationLauncherDestroyed);
+            server.OnStarted += (s, e) => {
+                if (applauncherButton != null) {
+                    applauncherButton.SetTexture (textureOnline);
+                }
+            };
+            server.OnStopped += (s, e) => {
+                if (applauncherButton != null) {
+                    applauncherButton.SetTexture (textureOffline);
+                }
+            };
         }
 
         void OnGUIApplicationLauncherReady ()
@@ -202,11 +187,8 @@ namespace KRPC
         {
             if (!ServicesChecker.OK)
                 return;
-            if (toolbarButton != null)
-                toolbarButton.Destroy ();
-            if (applauncherButton != null) {
+            if (applauncherButton != null)
                 OnGUIApplicationLauncherDestroyed ();
-            }
             GameEvents.onGUIApplicationLauncherReady.Remove (OnGUIApplicationLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Remove (OnGUIApplicationLauncherDestroyed);
             Object.Destroy (mainWindow);

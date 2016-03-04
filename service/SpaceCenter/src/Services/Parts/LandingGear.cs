@@ -51,7 +51,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (LandingGear obj)
         {
-            return part == obj.part;
+            return part == obj.part && gear == obj.gear;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            return part.GetHashCode () ^ gear.GetHashCode ();
         }
 
         /// <summary>

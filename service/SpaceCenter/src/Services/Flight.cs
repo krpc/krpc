@@ -20,12 +20,12 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Flight : Equatable<Flight>
     {
-        readonly global::Vessel vessel;
+        readonly Guid vesselId;
         readonly ReferenceFrame referenceFrame;
 
         internal Flight (global::Vessel vessel, ReferenceFrame referenceFrame)
         {
-            this.vessel = vessel;
+            vesselId = vessel.id;
             this.referenceFrame = referenceFrame;
         }
 
@@ -34,7 +34,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Flight obj)
         {
-            return vessel.id == obj.vessel.id && referenceFrame == obj.referenceFrame;
+            return vesselId == obj.vesselId && referenceFrame == obj.referenceFrame;
         }
 
         /// <summary>
@@ -42,28 +42,35 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vessel.id.GetHashCode () ^ referenceFrame.GetHashCode ();
+            return vesselId.GetHashCode () ^ referenceFrame.GetHashCode ();
+        }
+
+        /// <summary>
+        /// The KSP vessel.
+        /// </summary>
+        public global::Vessel InternalVessel {
+            get { return FlightGlobalsExtensions.GetVesselById (vesselId); }
         }
 
         /// <summary>
         /// Velocity of the vessel in world space
         /// </summary>
         Vector3d WorldVelocity {
-            get { return vessel.GetOrbit ().GetVel (); }
+            get { return InternalVessel.GetOrbit ().GetVel (); }
         }
 
         /// <summary>
         /// Position of the vessels center of mass in world space
         /// </summary>
         Vector3d WorldCoM {
-            get { return vessel.findWorldCenterOfMass (); }
+            get { return InternalVessel.findWorldCenterOfMass (); }
         }
 
         /// <summary>
         /// Direction the vessel is pointing in in world space
         /// </summary>
         Vector3d WorldDirection {
-            get { return vessel.ReferenceTransform.up; }
+            get { return InternalVessel.ReferenceTransform.up; }
         }
 
         /// <summary>
@@ -71,14 +78,14 @@ namespace KRPC.SpaceCenter.Services
         /// Rotation * Vector3d.up gives the direction vector in which the vessel points, in reference frame space.
         /// </summary>
         QuaternionD VesselRotation {
-            get { return referenceFrame.RotationFromWorldSpace (vessel.ReferenceTransform.rotation); }
+            get { return referenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation); }
         }
 
         /// <summary>
         /// Orbit prograde direction in world space
         /// </summary>
         Vector3d WorldPrograde {
-            get { return vessel.GetOrbit ().GetVel ().normalized; }
+            get { return InternalVessel.GetOrbit ().GetVel ().normalized; }
         }
 
         /// <summary>
@@ -87,7 +94,7 @@ namespace KRPC.SpaceCenter.Services
         Vector3d WorldNormal {
             get {
                 // Note: y and z components of normal vector are swapped
-                return vessel.GetOrbit ().GetOrbitNormal ().SwapYZ ().normalized;
+                return InternalVessel.GetOrbit ().GetOrbitNormal ().SwapYZ ().normalized;
             }
         }
 
@@ -105,7 +112,7 @@ namespace KRPC.SpaceCenter.Services
         Vector3d WorldPartsLift {
             get {
                 Vector3d lift = Vector3d.zero;
-                foreach (var part in vessel.Parts) {
+                foreach (var part in InternalVessel.Parts) {
                     if (!part.hasLiftModule) {
                         Vector3 bodyLift = part.transform.rotation * (part.bodyLiftScalar * part.DragCubes.LiftForce);
                         bodyLift = Vector3.ProjectOnPlane (bodyLift, -part.dragVectorDir);
@@ -128,7 +135,7 @@ namespace KRPC.SpaceCenter.Services
         Vector3d WorldPartsDrag {
             get {
                 Vector3d drag = Vector3d.zero;
-                foreach (var part in vessel.Parts) {
+                foreach (var part in InternalVessel.Parts) {
                     // Part drag
                     drag += -part.dragVectorDir * part.dragScalar;
                     // Lifting surface drag
@@ -154,7 +161,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         Vector3d WorldLift {
             get {
-                Vector3d direction = -Vector3d.Cross (vessel.transform.right, vessel.srf_velocity.normalized);
+                Vector3d direction = -Vector3d.Cross (InternalVessel.transform.right, InternalVessel.srf_velocity.normalized);
                 return Vector3d.Dot (WorldAerodynamicForce, direction) * direction;
             }
         }
@@ -164,7 +171,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         Vector3d WorldDrag {
             get {
-                Vector3d direction = -vessel.srf_velocity.normalized;
+                Vector3d direction = -InternalVessel.srf_velocity.normalized;
                 return Vector3d.Dot (WorldAerodynamicForce, direction) * direction;
             }
         }
@@ -192,7 +199,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float GForce {
-            get { return (float)vessel.geeForce; }
+            get { return (float)InternalVessel.geeForce; }
         }
 
         /// <summary>
@@ -200,7 +207,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double MeanAltitude {
-            get { return vessel.mainBody.GetAltitude (vessel.CoM); }
+            get { return InternalVessel.mainBody.GetAltitude (InternalVessel.CoM); }
         }
 
         /// <summary>
@@ -225,7 +232,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Elevation {
-            get { return vessel.terrainAltitude; }
+            get { return InternalVessel.terrainAltitude; }
         }
 
         /// <summary>
@@ -233,7 +240,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Latitude {
-            get { return vessel.mainBody.GetLatitude (WorldCoM); }
+            get { return InternalVessel.mainBody.GetLatitude (WorldCoM); }
         }
 
         /// <summary>
@@ -241,7 +248,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Longitude {
-            get { return GeometryExtensions.ClampAngle180 (vessel.mainBody.GetLongitude (WorldCoM)); }
+            get { return GeometryExtensions.ClampAngle180 (InternalVessel.mainBody.GetLongitude (WorldCoM)); }
         }
 
         /// <summary>
@@ -280,7 +287,7 @@ namespace KRPC.SpaceCenter.Services
         public double VerticalSpeed {
             get {
                 var velocity = referenceFrame.VelocityFromWorldSpace (WorldCoM, WorldVelocity);
-                var up = referenceFrame.DirectionFromWorldSpace ((WorldCoM - vessel.orbit.referenceBody.position).normalized);
+                var up = referenceFrame.DirectionFromWorldSpace ((WorldCoM - InternalVessel.orbit.referenceBody.position).normalized);
                 return Vector3d.Dot (velocity, up);
             }
         }
@@ -387,7 +394,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float AtmosphereDensity {
             get {
-                return (float)vessel.atmDensity;
+                return (float)InternalVessel.atmDensity;
             }
         }
 
@@ -404,9 +411,9 @@ namespace KRPC.SpaceCenter.Services
         public float DynamicPressure {
             get {
                 if (FAR.IsAvailable) {
-                    return (float)FAR.VesselDynPres (vessel);
+                    return (float)FAR.VesselDynPres (InternalVessel);
                 } else {
-                    return (float)(0.5f * vessel.atmDensity * vessel.srf_velocity.sqrMagnitude);
+                    return (float)(0.5f * InternalVessel.atmDensity * InternalVessel.srf_velocity.sqrMagnitude);
                 }
             }
         }
@@ -422,7 +429,7 @@ namespace KRPC.SpaceCenter.Services
         public float StaticPressure {
             get {
                 CheckNoFAR ();
-                return (float)vessel.staticPressurekPa * 1000f;
+                return (float)InternalVessel.staticPressurekPa * 1000f;
             }
         }
 
@@ -484,7 +491,7 @@ namespace KRPC.SpaceCenter.Services
         public float SpeedOfSound {
             get {
                 CheckNoFAR ();
-                return (float)vessel.speedOfSound;
+                return (float)InternalVessel.speedOfSound;
             }
         }
 
@@ -498,7 +505,7 @@ namespace KRPC.SpaceCenter.Services
         public float Mach {
             get {
                 CheckNoFAR ();
-                return (float)vessel.rootPart.machNumber;
+                return (float)InternalVessel.rootPart.machNumber;
             }
         }
 
@@ -512,7 +519,7 @@ namespace KRPC.SpaceCenter.Services
         public float EquivalentAirSpeed {
             get {
                 CheckNoFAR ();
-                return (float)Math.Sqrt (vessel.srf_velocity.sqrMagnitude * vessel.atmDensity / 1.225d);
+                return (float)Math.Sqrt (InternalVessel.srf_velocity.sqrMagnitude * InternalVessel.atmDensity / 1.225d);
             }
         }
 
@@ -528,10 +535,10 @@ namespace KRPC.SpaceCenter.Services
         public float TerminalVelocity {
             get {
                 if (FAR.IsAvailable) {
-                    return (float)FAR.VesselTermVelEst (vessel);
+                    return (float)FAR.VesselTermVelEst (InternalVessel);
                 } else {
-                    var gravity = Math.Sqrt (vessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (vessel.CoM).magnitude);
-                    return (float)(Math.Sqrt (gravity / WorldDrag.magnitude) * vessel.speed);
+                    var gravity = Math.Sqrt (InternalVessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (InternalVessel.CoM).magnitude);
+                    return (float)(Math.Sqrt (gravity / WorldDrag.magnitude) * InternalVessel.speed);
                 }
             }
         }
@@ -544,9 +551,9 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (FAR.IsAvailable) {
                     CheckFAR ();
-                    return (float)FAR.VesselAoA (vessel);
+                    return (float)FAR.VesselAoA (InternalVessel);
                 } else {
-                    return (float)(Vector3d.Dot (vessel.transform.forward, vessel.srf_velocity.normalized) * (180d / Math.PI));
+                    return (float)(Vector3d.Dot (InternalVessel.transform.forward, InternalVessel.srf_velocity.normalized) * (180d / Math.PI));
                 }
             }
         }
@@ -559,9 +566,9 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (FAR.IsAvailable) {
                     CheckFAR ();
-                    return (float)FAR.VesselSideslip (vessel);
+                    return (float)FAR.VesselSideslip (InternalVessel);
                 } else {
-                    return (float)(Vector3d.Dot (vessel.transform.right, vessel.srf_velocity.normalized) * (180d / Math.PI));
+                    return (float)(Vector3d.Dot (InternalVessel.transform.right, InternalVessel.srf_velocity.normalized) * (180d / Math.PI));
                 }
             }
         }
@@ -572,7 +579,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float TotalAirTemperature {
-            get { return (float)vessel.externalTemperature; }
+            get { return (float)InternalVessel.externalTemperature; }
         }
 
         /// <summary>
@@ -581,7 +588,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float StaticAirTemperature {
-            get { return (float)vessel.atmosphericTemperature; }
+            get { return (float)InternalVessel.atmosphericTemperature; }
         }
 
         /// <summary>
@@ -595,7 +602,7 @@ namespace KRPC.SpaceCenter.Services
         public float StallFraction {
             get {
                 CheckFAR ();
-                return (float)FAR.VesselStallFrac (vessel);
+                return (float)FAR.VesselStallFrac (InternalVessel);
             }
         }
 
@@ -610,7 +617,7 @@ namespace KRPC.SpaceCenter.Services
         public float DragCoefficient {
             get {
                 CheckFAR ();
-                return (float)FAR.VesselDragCoeff (vessel);
+                return (float)FAR.VesselDragCoeff (InternalVessel);
             }
         }
 
@@ -624,7 +631,7 @@ namespace KRPC.SpaceCenter.Services
         public float LiftCoefficient {
             get {
                 CheckFAR ();
-                return (float)FAR.VesselLiftCoeff (vessel);
+                return (float)FAR.VesselLiftCoeff (InternalVessel);
             }
         }
 
@@ -638,7 +645,7 @@ namespace KRPC.SpaceCenter.Services
         public float BallisticCoefficient {
             get {
                 CheckFAR ();
-                return (float)FAR.VesselBallisticCoeff (vessel);
+                return (float)FAR.VesselBallisticCoeff (InternalVessel);
             }
         }
 
@@ -654,7 +661,7 @@ namespace KRPC.SpaceCenter.Services
         public float ThrustSpecificFuelConsumption {
             get {
                 CheckFAR ();
-                return (float)FAR.VesselTSFC (vessel);
+                return (float)FAR.VesselTSFC (InternalVessel);
             }
         }
     }

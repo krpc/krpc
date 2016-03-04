@@ -22,7 +22,8 @@ bazel build //doc:html
 git co gh-pages
 git rm -rf .
 printf "bazel-*\nlib\n" > .gitignore
-git add .gitignore
+echo "" > .nojekyll
+git add .gitignore .nojekyll
 git clean -df
 unzip -q bazel-bin/doc/html.zip
 git add .

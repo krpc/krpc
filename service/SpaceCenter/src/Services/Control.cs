@@ -20,11 +20,11 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Control : Equatable<Control>
     {
-        readonly global::Vessel vessel;
+        readonly Guid vesselId;
 
         internal Control (global::Vessel vessel)
         {
-            this.vessel = vessel;
+            this.vesselId = vessel.id;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Control obj)
         {
-            return vessel.id == obj.vessel.id;
+            return vesselId == obj.vesselId;
         }
 
         /// <summary>
@@ -40,7 +40,14 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vessel.id.GetHashCode ();
+            return vesselId.GetHashCode ();
+        }
+
+        /// <summary>
+        /// The KSP vessel.
+        /// </summary>
+        public global::Vessel InternalVessel {
+            get { return FlightGlobalsExtensions.GetVesselById (vesselId); }
         }
 
         /// <summary>
@@ -49,8 +56,8 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>Equivalent to <see cref="AutoPilot.SAS"/></remarks>
         [KRPCProperty]
         public bool SAS {
-            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
-            set { vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
+            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)]; }
+            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value); }
         }
 
         /// <summary>
@@ -61,8 +68,8 @@ namespace KRPC.SpaceCenter.Services
         /// <remarks>Equivalent to <see cref="AutoPilot.SASMode"/></remarks>
         [KRPCProperty]
         public SASMode SASMode {
-            get { return GetSASMode (vessel); }
-            set { SetSASMode (vessel, value); }
+            get { return GetSASMode (InternalVessel); }
+            set { SetSASMode (InternalVessel, value); }
         }
 
         internal static SASMode GetSASMode (global::Vessel vessel)
@@ -110,8 +117,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool RCS {
-            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)]; }
-            set { vessel.ActionGroups.SetGroup (KSPActionGroup.RCS, value); }
+            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)]; }
+            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.RCS, value); }
         }
 
         /// <summary>
@@ -119,8 +126,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool Gear {
-            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Gear)]; }
-            set { vessel.ActionGroups.SetGroup (KSPActionGroup.Gear, value); }
+            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Gear)]; }
+            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.Gear, value); }
         }
 
         /// <summary>
@@ -128,8 +135,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool Lights {
-            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Light)]; }
-            set { vessel.ActionGroups.SetGroup (KSPActionGroup.Light, value); }
+            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Light)]; }
+            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.Light, value); }
         }
 
         /// <summary>
@@ -137,8 +144,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool Brakes {
-            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Brakes)]; }
-            set { vessel.ActionGroups.SetGroup (KSPActionGroup.Brakes, value); }
+            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Brakes)]; }
+            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.Brakes, value); }
         }
 
         /// <summary>
@@ -146,8 +153,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool Abort {
-            get { return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Abort)]; }
-            set { vessel.ActionGroups.SetGroup (KSPActionGroup.Abort, value); }
+            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Abort)]; }
+            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.Abort, value); }
         }
 
         /// <summary>
@@ -155,8 +162,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Throttle {
-            get { return PilotAddon.Get (vessel).Throttle; }
-            set { PilotAddon.Set (vessel).Throttle = value; }
+            get { return PilotAddon.Get (InternalVessel).Throttle; }
+            set { PilotAddon.Set (InternalVessel).Throttle = value; }
         }
 
         /// <summary>
@@ -166,8 +173,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Pitch {
-            get { return PilotAddon.Get (vessel).Pitch; }
-            set { PilotAddon.Set (vessel).Pitch = value; }
+            get { return PilotAddon.Get (InternalVessel).Pitch; }
+            set { PilotAddon.Set (InternalVessel).Pitch = value; }
         }
 
         /// <summary>
@@ -177,8 +184,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Yaw {
-            get { return PilotAddon.Get (vessel).Yaw; }
-            set { PilotAddon.Set (vessel).Yaw = value; }
+            get { return PilotAddon.Get (InternalVessel).Yaw; }
+            set { PilotAddon.Set (InternalVessel).Yaw = value; }
         }
 
         /// <summary>
@@ -188,8 +195,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Roll {
-            get { return PilotAddon.Get (vessel).Roll; }
-            set { PilotAddon.Set (vessel).Roll = value; }
+            get { return PilotAddon.Get (InternalVessel).Roll; }
+            set { PilotAddon.Set (InternalVessel).Roll = value; }
         }
 
         /// <summary>
@@ -199,8 +206,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Forward {
-            get { return PilotAddon.Get (vessel).Forward; }
-            set { PilotAddon.Set (vessel).Forward = value; }
+            get { return PilotAddon.Get (InternalVessel).Forward; }
+            set { PilotAddon.Set (InternalVessel).Forward = value; }
         }
 
         /// <summary>
@@ -210,8 +217,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Up {
-            get { return PilotAddon.Get (vessel).Up; }
-            set { PilotAddon.Set (vessel).Up = value; }
+            get { return PilotAddon.Get (InternalVessel).Up; }
+            set { PilotAddon.Set (InternalVessel).Up = value; }
         }
 
         /// <summary>
@@ -221,8 +228,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Right {
-            get { return PilotAddon.Get (vessel).Right; }
-            set { PilotAddon.Set (vessel).Right = value; }
+            get { return PilotAddon.Get (InternalVessel).Right; }
+            set { PilotAddon.Set (InternalVessel).Right = value; }
         }
 
         /// <summary>
@@ -233,8 +240,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float WheelThrottle {
-            get { return PilotAddon.Get (vessel).WheelThrottle; }
-            set { PilotAddon.Set (vessel).WheelThrottle = value; }
+            get { return PilotAddon.Get (InternalVessel).WheelThrottle; }
+            set { PilotAddon.Set (InternalVessel).WheelThrottle = value; }
         }
 
         /// <summary>
@@ -244,8 +251,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float WheelSteering {
-            get { return PilotAddon.Get (vessel).WheelSteer; }
-            set { PilotAddon.Set (vessel).WheelSteer = value; }
+            get { return PilotAddon.Get (InternalVessel).WheelSteer; }
+            set { PilotAddon.Set (InternalVessel).WheelSteer = value; }
         }
 
         /// <summary>
@@ -254,7 +261,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public int CurrentStage {
-            get { return vessel.currentStage; }
+            get { return InternalVessel.currentStage; }
         }
 
         /// <summary>
@@ -264,7 +271,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public IList<Vessel> ActivateNextStage ()
         {
-            if (!vessel.isActiveVessel)
+            if (vesselId != FlightGlobals.ActiveVessel.id)
                 throw new InvalidOperationException ("Cannot activate stage; vessel is not the active vessel");
             if (!Staging.separate_ready)
                 throw new YieldException (new ParameterizedContinuation<IList<Vessel>> (ActivateNextStage));
@@ -290,7 +297,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (group > 9)
                 throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
-            return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (ActionGroupExtensions.GetActionGroup (group))];
+            return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (ActionGroupExtensions.GetActionGroup (group))];
         }
 
         /// <summary>
@@ -304,7 +311,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (group > 9)
                 throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
-            vessel.ActionGroups.SetGroup (ActionGroupExtensions.GetActionGroup (group), state);
+            InternalVessel.ActionGroups.SetGroup (ActionGroupExtensions.GetActionGroup (group), state);
         }
 
         /// <summary>
@@ -316,7 +323,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (group > 9)
                 throw new ArgumentException ("Action group must be between 0 and 9 inclusive");
-            vessel.ActionGroups.ToggleGroup (ActionGroupExtensions.GetActionGroup (group));
+            InternalVessel.ActionGroups.ToggleGroup (ActionGroupExtensions.GetActionGroup (group));
         }
 
         /// <summary>
@@ -332,9 +339,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Node AddNode (double UT, float prograde = 0, float normal = 0, float radial = 0)
         {
-            if (!vessel.isActiveVessel)
+            if (vesselId != FlightGlobals.ActiveVessel.id)
                 throw new InvalidOperationException ("Cannot add maneuver node; vessel is not the active vessel");
-            return new Node (vessel, UT, prograde, normal, radial);
+            return new Node (InternalVessel, UT, prograde, normal, radial);
         }
 
         /// <summary>
@@ -343,9 +350,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public IList<Node> Nodes {
             get {
-                if (!vessel.isActiveVessel)
+                if (vesselId != FlightGlobals.ActiveVessel.id)
                     throw new InvalidOperationException ("Cannot get maneuver nodes; vessel is not the active vessel");
-                return vessel.patchedConicSolver.maneuverNodes.Select (x => new Node (x)).OrderBy (x => x.UT).ToList ();
+                return FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.Select (x => new Node (FlightGlobals.ActiveVessel, x)).OrderBy (x => x.UT).ToList ();
             }
         }
 
@@ -355,9 +362,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void RemoveNodes ()
         {
-            if (!vessel.isActiveVessel)
+            if (vesselId != FlightGlobals.ActiveVessel.id)
                 throw new InvalidOperationException ("Cannot remove maneuver ndoes; vessel is not the active vessel");
-            var nodes = vessel.patchedConicSolver.maneuverNodes.ToArray ();
+            var nodes = FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.ToArray ();
             foreach (var node in nodes)
                 node.RemoveSelf ();
             // TODO: delete the Node objects

@@ -55,7 +55,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Radiator obj)
         {
-            return part == obj.part;
+            return part == obj.part && radiator == obj.radiator;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            return part.GetHashCode () ^ radiator.GetHashCode ();
         }
 
         /// <summary>

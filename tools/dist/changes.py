@@ -16,11 +16,11 @@ def main():
         ('SpaceCenter service', get_changes('service/SpaceCenter/CHANGES.txt')),
         ('KerbalAlarmClock service', get_changes('service/KerbalAlarmClock/CHANGES.txt')),
         ('InfernalRobotics service', get_changes('service/InfernalRobotics/CHANGES.txt')),
-        ('Python client', get_changes('client/python/CHANGES.txt')),
         ('C++ client', get_changes('client/cpp/CHANGES.txt')),
         ('C# client', get_changes('client/csharp/CHANGES.txt')),
-        ('Lua client', get_changes('client/lua/CHANGES.txt')),
         ('Java client', get_changes('client/java/CHANGES.txt')),
+        ('Lua client', get_changes('client/lua/CHANGES.txt')),
+        ('Python client', get_changes('client/python/CHANGES.txt')),
         ('krpctools', get_changes('tools/krpctools/CHANGES.txt'))
     ]
 

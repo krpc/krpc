@@ -90,6 +90,9 @@ def update_thread(connection, stop):
                 break
             except IndexError:
                 pass
+            except:
+                #TODO: is there a better way to catch exceptions when the thread is forcibly stopped (e.g. by CTRL+c)?
+                return
             if stop.is_set():
                 connection.close()
                 return

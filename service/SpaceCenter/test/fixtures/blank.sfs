@@ -1,2715 +1,2016 @@
 GAME
 {
-	version = 1.0.5
-	Title = test (SANDBOX)
-	Description = No description available.
-	linkURL = 
-	linkCaption = 
-	Mode = SANDBOX
-	Status = 1
-	scene = 7
-	editor = None
-	flag = Squad/Flags/default
-	launchID = 2
-	PARAMETERS
-	{
-		preset = Custom
-		FLIGHT
-		{
-			CanQuickSave = True
-			CanQuickLoad = True
-			CanAutoSave = True
-			CanUseMap = True
-			CanSwitchVesselsNear = True
-			CanSwitchVesselsFar = True
-			CanTimeWarpHigh = True
-			CanTimeWarpLow = True
-			CanEVA = True
-			CanIVA = True
-			CanBoard = True
-			CanRestart = True
-			CanLeaveToEditor = True
-			CanLeaveToTrackingStation = True
-			CanLeaveToSpaceCenter = True
-			CanLeaveToMainMenu = False
-		}
-		EDITOR
-		{
-			CanSave = True
-			CanLoad = True
-			CanStartNew = True
-			CanLaunch = True
-			CanLeaveToSpaceCenter = True
-			CanLeaveToMainMenu = False
-			startUpMode = 0
-			craftFileToLoad = 
-		}
-		TRACKINGSTATION
-		{
-			CanFlyVessel = True
-			CanAbortVessel = True
-			CanLeaveToSpaceCenter = True
-			CanLeaveToMainMenu = False
-		}
-		SPACECENTER
-		{
-			CanGoInVAB = True
-			CanGoInSPH = True
-			CanGoInTrackingStation = True
-			CanLaunchAtPad = True
-			CanLaunchAtRunway = True
-			CanLeaveToMainMenu = True
-		}
-		DIFFICULTY
-		{
-			AutoHireCrews = True
-			MissingCrewsRespawn = True
-			BypassEntryPurchaseAfterResearch = True
-			AllowStockVessels = True
-			IndestructibleFacilities = False
-			ResourceAbundance = 1
-			ReentryHeatScale = 1
-		}
-		CAREER
-		{
-			TechTreeUrl = GameData/Squad/Resources/TechTree.cfg
-			StartingFunds = 25000
-			StartingScience = 0
-			StartingReputation = 0
-			FundsGainMultiplier = 1
-			RepGainMultiplier = 1
-			ScienceGainMultiplier = 1
-			FundsLossMultiplier = 1
-			RepLossMultiplier = 1
-			RepLossDeclined = 1
-		}
-	}
-	SCENARIO
-	{
-		name = ProgressTracking
-		scene = 7, 8, 5
-		Progress
-		{
-			RecordsAltitude
-			{
-				reached = 12.2799999999999
-				record = 76.3598873383598
-			}
-			RecordsSpeed
-			{
-				reached = 12.3399999999999
-				record = 0.586423671579307
-			}
-			RecordsDistance
-			{
-				reached = 74.7800000000023
-				record = 756.406433989481
-			}
-		}
-	}
-	SCENARIO
-	{
-		name = VesselRecovery
-		scene = 5, 7, 8, 6
-	}
-	SCENARIO
-	{
-		name = ScenarioDestructibles
-		scene = 5, 7, 6, 8
-		SpaceCenter/Administration/Facility/mainBuilding
-		{
-			intact = True
-		}
-		SpaceCenter/AstronautComplex/Facility/building
-		{
-			intact = True
-		}
-		SpaceCenter/LaunchPad/Facility/LaunchPadMedium/KSCFlagPoleLaunchPad
-		{
-			intact = True
-		}
-		SpaceCenter/LaunchPad/Facility/LaunchPadMedium/ksp_pad_waterTower
-		{
-			intact = True
-		}
-		SpaceCenter/LaunchPad/Facility/LaunchPadMedium/ksp_pad_sphereTank
-		{
-			intact = True
-		}
-		SpaceCenter/LaunchPad/Facility/LaunchPadMedium/ksp_pad_launchPad
-		{
-			intact = True
-		}
-		SpaceCenter/LaunchPad/Facility/LaunchPadMedium/ksp_pad_cylTank
-		{
-			intact = True
-		}
-		SpaceCenter/MissionControl/Facility/building
-		{
-			intact = True
-		}
-		SpaceCenter/ResearchAndDevelopment/Facility/SideLab
-		{
-			intact = True
-		}
-		SpaceCenter/ResearchAndDevelopment/Facility/Observatory
-		{
-			intact = True
-		}
-		SpaceCenter/ResearchAndDevelopment/Facility/WindTunnel
-		{
-			intact = True
-		}
-		SpaceCenter/ResearchAndDevelopment/Facility/CornerLab
-		{
-			intact = True
-		}
-		SpaceCenter/ResearchAndDevelopment/Facility/MainBuilding
-		{
-			intact = True
-		}
-		SpaceCenter/ResearchAndDevelopment/Facility/CentralBuilding
-		{
-			intact = True
-		}
-		SpaceCenter/ResearchAndDevelopment/Facility/SmallLab
-		{
-			intact = True
-		}
-		SpaceCenter/ResearchAndDevelopment/Facility/ksp_pad_cylTank
-		{
-			intact = True
-		}
-		SpaceCenter/Runway/Facility/Section4
-		{
-			intact = True
-		}
-		SpaceCenter/Runway/Facility/Section3
-		{
-			intact = True
-		}
-		SpaceCenter/Runway/Facility/Section2
-		{
-			intact = True
-		}
-		SpaceCenter/Runway/Facility/Section1
-		{
-			intact = True
-		}
-		SpaceCenter/Runway/Facility/End27
-		{
-			intact = True
-		}
-		SpaceCenter/Runway/Facility/End09
-		{
-			intact = True
-		}
-		SpaceCenter/Runway/Facility/model_runway_new_v43/runway_light_SW
-		{
-			intact = True
-		}
-		SpaceCenter/Runway/Facility/model_runway_new_v43/runway_light_NW
-		{
-			intact = True
-		}
-		SpaceCenter/Runway/Facility/model_runway_new_v43/runway_light_NE
-		{
-			intact = True
-		}
-		SpaceCenter/Runway/Facility/model_runway_new_v43/runway_light_SE
-		{
-			intact = True
-		}
-		SpaceCenter/SpaceplaneHangar/Facility/mainBuilding
-		{
-			intact = True
-		}
-		SpaceCenter/SpaceplaneHangar/Facility/ksp_pad_waterTower
-		{
-			intact = True
-		}
-		SpaceCenter/SpaceplaneHangar/Facility/ksp_pad_cylTank
-		{
-			intact = True
-		}
-		SpaceCenter/SpaceplaneHangar/Facility/Tank
-		{
-			intact = True
-		}
-		SpaceCenter/TrackingStation/Facility/MainBuilding
-		{
-			intact = True
-		}
-		SpaceCenter/TrackingStation/Facility/dish_array/dish_east
-		{
-			intact = True
-		}
-		SpaceCenter/TrackingStation/Facility/dish_array/dish_north
-		{
-			intact = True
-		}
-		SpaceCenter/TrackingStation/Facility/dish_array/dish_south
-		{
-			intact = True
-		}
-		SpaceCenter/VehicleAssemblyBuilding/Facility/PodMemorial
-		{
-			intact = True
-		}
-		SpaceCenter/VehicleAssemblyBuilding/Facility/mainBuilding
-		{
-			intact = True
-		}
-		SpaceCenter/VehicleAssemblyBuilding/Facility/Tank
-		{
-			intact = True
-		}
-		SpaceCenter/VehicleAssemblyBuilding/Facility/ksp_pad_cylTank
-		{
-			intact = True
-		}
-		SpaceCenter/FlagPole/Facility
-		{
-			intact = True
-		}
-		SpaceCenter/LaunchPad/Facility/Flag
-		{
-			intact = True
-		}
-		SpaceCenter/TrackingStation/Facility/OuterDish
-		{
-			intact = True
-		}
-		SpaceCenter/TrackingStation/Facility/building
-		{
-			intact = True
-		}
-		SpaceCenter/VehicleAssemblyBuilding/Facility/VAB2
-		{
-			intact = True
-		}
-		SpaceCenter/MissionControl/Facility/mainBuilding
-		{
-			intact = True
-		}
-	}
-	SCENARIO
-	{
-		name = ScenarioDiscoverableObjects
-		scene = 7, 8, 5
-		lastSeed = 1997473105
-		sizeCurve
-		{
-			key = 0 0 1.5 1.5
-			key = 0.3 0.45 0.875 0.875
-			key = 0.7 0.55 0.875 0.875
-			key = 1 1 1.5 1.5
-		}
-	}
-	SCENARIO
-	{
-		name = ResourceScenario
-		scene = 5, 7, 6
-		RESOURCE_SETTINGS
-		{
-			GameSeed = 593090427
-			MaxDeltaTime = 21600
-		}
-	}
-	FLIGHTSTATE
-	{
-		version = 1.0.5
-		UT = 79.3200000000014
-		activeVessel = 0
-		mapViewFiltering = -1026
-		VESSEL
-		{
-			pid = 36e6c17353c54672bace0efbbeefb8ab
-			name = Basic
-			type = Ship
-			sit = PRELAUNCH
-			landed = True
-			landedAt = KSC_LaunchPad_Platform
-			splashed = False
-			met = 0
-			lct = 79.3000000000014
-			lastUT = 79.3200000000014
-			root = 0
-			lat = -0.0972077859299433
-			lon = 285.442327940445
-			alt = 76.3082278012298
-			hgt = 3.834531
-			nrm = 0.0001039046,1,1.091169E-05
-			rot = -0.7009963,-0.09217387,-0.09723686,0.7004665
-			CoM = -5.886819E-06,-1.688145,-2.794394E-06
-			stg = 1
-			prst = False
-			ref = 78736978
-			ctrl = True
-			cPch = 0.2
-			cHdg = 0.3
-			cMod = 0
-			ORBIT
-			{
-				SMA = 300819.671758061
-				ECC = 0.994798467022474
-				INC = 0.0972077842718865
-				LPE = 89.9983978271324
-				LAN = 106.769365302817
-				MNA = 3.14159265358979
-				EPH = 79.3200000000014
-				REF = 1
-			}
-			PART
-			{
-				name = mk1pod
-				cid = 4294866428
-				uid = 78736978
-				mid = 453587174
-				launchID = 1
-				parent = 0
-				position = 0,0,0
-				rotation = 0,0,0,1
-				mirror = 1,1,1
-				symMethod = Radial
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sepI = 0
-				sidx = -1
-				attm = 0
-				srfN = , -1
-				attN = bottom, 1
-				attN = top, 8
-				mass = 0.8
-				temp = 312.190360916081
-				tempExt = 312.147314284983
-				tempExtUnexp = 312.147471212083
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = mk1pod (Basic)
-				modCost = 0
-				crew = Jebediah Kerman
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				PARTDATA
-				{
-				}
-				MODULE
-				{
-					name = ModuleCommand
-					isEnabled = True
-					controlSrcStatusText = Operational
-					stagingEnabled = True
-					EVENTS
-					{
-						MakeReference
-						{
-							active = True
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Control From Here
-							guiName = Control From Here
-							category = Control From Here
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						RenameVessel
-						{
-							active = True
-							guiActive = True
-							guiActiveUncommand = True
-							guiIcon = Rename Vessel
-							guiName = Rename Vessel
-							category = Rename Vessel
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-					}
-				}
-				MODULE
-				{
-					name = ModuleReactionWheel
-					isEnabled = True
-					stateString = Idle
-					stagingEnabled = True
-					WheelState = Active
-					EVENTS
-					{
-						OnToggle
-						{
-							active = True
-							guiActive = True
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = Toggle Torque
-							guiName = Toggle Torque
-							category = Toggle Torque
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						Activate
-						{
-							actionGroup = None
-						}
-						Deactivate
-						{
-							actionGroup = None
-						}
-						Toggle
-						{
-							actionGroup = None
-						}
-					}
-				}
-				MODULE
-				{
-					name = ModuleScienceExperiment
-					isEnabled = True
-					Deployed = False
-					Inoperable = False
-					stagingEnabled = True
-					EVENTS
-					{
-						DeployExperiment
-						{
-							active = True
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Deploy
-							guiName = Crew Report
-							category = Deploy
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						CollectDataExternalEvent
-						{
-							active = False
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = 
-							guiName = Take Data
-							category = 
-							guiActiveUnfocused = True
-							unfocusedRange = 1.5
-							externalToEVAOnly = True
-						}
-						ReviewDataEvent
-						{
-							active = False
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Review Data
-							guiName = Review Report
-							category = Review Data
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ResetExperiment
-						{
-							active = False
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Reset
-							guiName = Discard Crew Report
-							category = Reset
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						DeployExperimentExternal
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Deploy
-							guiName = Crew Report
-							category = Deploy
-							guiActiveUnfocused = True
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ResetExperimentExternal
-						{
-							active = False
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Reset
-							guiName = Discard Crew Report
-							category = Reset
-							guiActiveUnfocused = True
-							unfocusedRange = 1.5
-							externalToEVAOnly = True
-						}
-						CleanUpExperimentExternal
-						{
-							active = False
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Restore
-							guiName = Restore
-							category = Restore
-							guiActiveUnfocused = True
-							unfocusedRange = 1.5
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						DeployAction
-						{
-							actionGroup = None
-						}
-						ResetAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-				MODULE
-				{
-					name = ModuleScienceContainer
-					isEnabled = True
-					stagingEnabled = True
-					EVENTS
-					{
-						StoreDataExternalEvent
-						{
-							active = False
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = 
-							guiName = Store Experiments (0)
-							category = 
-							guiActiveUnfocused = True
-							unfocusedRange = 1.3
-							externalToEVAOnly = True
-						}
-						CollectDataExternalEvent
-						{
-							active = False
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = 
-							guiName = Take Data (0)
-							category = 
-							guiActiveUnfocused = True
-							unfocusedRange = 1.3
-							externalToEVAOnly = True
-						}
-						ReviewDataEvent
-						{
-							active = False
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Review Data
-							guiName = Review Stored Data (0)
-							category = Review Data
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-					}
-				}
-				MODULE
-				{
-					name = FlagDecal
-					isEnabled = True
-					flagDisplayed = True
-					stagingEnabled = True
-					EVENTS
-					{
-						ToggleFlag
-						{
-							active = True
-							guiActive = False
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = ToggleFlag
-							guiName = ToggleFlag
-							category = ToggleFlag
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-					}
-				}
-				MODULE
-				{
-					name = ModuleConductionMultiplier
-					isEnabled = True
-					stagingEnabled = True
-					EVENTS
-					{
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-					}
-				}
-				MODULE
-				{
-					name = MechJebCore
-					isEnabled = True
-					running = True
-					stagingEnabled = True
-					running_UIFlight
-					{
-						controlEnabled = True
-					}
-					EVENTS
-					{
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						OnOrbitProgradeAction
-						{
-							actionGroup = None
-						}
-						OnOrbitRetrogradeAction
-						{
-							actionGroup = None
-						}
-						OnOrbitNormalAction
-						{
-							actionGroup = None
-						}
-						OnOrbitAntinormalAction
-						{
-							actionGroup = None
-						}
-						OnOrbitRadialInAction
-						{
-							actionGroup = None
-						}
-						OnOrbitRadialOutAction
-						{
-							actionGroup = None
-						}
-						OnKillRotationAction
-						{
-							actionGroup = None
-						}
-						OnDeactivateSmartASSAction
-						{
-							actionGroup = None
-						}
-						OnPanicAction
-						{
-							actionGroup = None
-						}
-						OnTranslatronOffAction
-						{
-							actionGroup = None
-						}
-						OnTranslatronKeepVertAction
-						{
-							actionGroup = None
-						}
-						OnTranslatronZeroSpeedAction
-						{
-							actionGroup = None
-						}
-						OnTranslatronPlusOneSpeedAction
-						{
-							actionGroup = None
-						}
-						OnTranslatronMinusOneSpeedAction
-						{
-							actionGroup = None
-						}
-						OnTranslatronToggleHSAction
-						{
-							actionGroup = None
-						}
-					}
-					MechJebLocalSettings
-					{
-						MechJebModuleMenu
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleRoverWindow
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleAttitudeAdjustment
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleAscentNavBall
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleRCSBalancerWindow
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleRoverController
-						{
-							ControlHeading = False
-							ControlSpeed = False
-							BrakeOnEject = False
-							BrakeOnEnergyDepletion = False
-							WarpToDaylight = True
-							StabilityControl = False
-							LimitAcceleration = False
-							unlockParts = 
-							unlockTechs = 
-							heading
-							{
-								_val = 0
-								_text = 0
-							}
-							speed
-							{
-								_val = 10
-								_text = 10
-							}
-						}
-						MechJebModuleSpaceplaneGuidance
-						{
-							runwayIndex = 0
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleInfoItems
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleSmartRcs
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleSpaceplaneAutopilot
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleDockingGuidance
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleSettings
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleAscentPathEditor
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleDebugArrows
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleSmartASS
-						{
-							mode = ORBITAL
-							target = OFF
-							advReference = INERTIAL
-							advDirection = FORWARD
-							forceRol = False
-							forcePitch = True
-							forceYaw = True
-							unlockParts = 
-							unlockTechs = 
-							srfHdg
-							{
-								_val = 90
-								_text = 90
-							}
-							srfPit
-							{
-								_val = 90
-								_text = 90
-							}
-							srfRol
-							{
-								_val = 0
-								_text = 0
-							}
-							srfVelYaw
-							{
-								_val = 0
-								_text = 0
-							}
-							srfVelPit
-							{
-								_val = 0
-								_text = 0
-							}
-							srfVelRol
-							{
-								_val = 0
-								_text = 0
-							}
-							rol
-							{
-								_val = 0
-								_text = 0
-							}
-						}
-						MechJebModuleDockingAutopilot
-						{
-							forceRol = False
-							overrideSafeDistance = False
-							overrideTargetSize = False
-							unlockParts = 
-							unlockTechs = 
-							rol
-							{
-								_val = 0
-								_text = 0
-							}
-						}
-						ModExtensionDemo
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleThrustWindow
-						{
-							autostageSavedState = False
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleWarpHelper
-						{
-							unlockParts = 
-							unlockTechs = 
-							phaseAngle
-							{
-								_val = 0
-								_text = 0
-							}
-						}
-						MechJebModuleCustomWindowEditor
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleAscentAutopilot
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleRendezvousAutopilotWindow
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleNodeExecutor
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleNodeEditor
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleLandingAutopilot
-						{
-							deployGears = True
-							deployChutes = True
-							rcsAdjustment = True
-							unlockParts = 
-							unlockTechs = 
-							touchdownSpeed
-							{
-								_val = 0.5
-								_text = 0.5
-							}
-							limitGearsStage
-							{
-								val = 0
-								_text = 0
-							}
-							limitChutesStage
-							{
-								val = 0
-								_text = 0
-							}
-						}
-						MechJebModuleLandingGuidance
-						{
-							landingSiteIdx = 0
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleLandingPredictions
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleTranslatron
-						{
-							unlockParts = 
-							unlockTechs = 
-							trans_spd
-							{
-								_val = 0
-								_text = 0
-							}
-						}
-						MechJebModuleAscentGuidance
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleRendezvousAutopilot
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleWaypointWindow
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleWaypointHelpWindow
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleTargetController
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleManeuverPlanner
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleStageStats
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleRendezvousGuidance
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleCustomInfoWindow
-						{
-						}
-						MechJebModuleCustomInfoWindow
-						{
-						}
-						MechJebModuleCustomInfoWindow
-						{
-						}
-						MechJebModuleCustomInfoWindow
-						{
-						}
-						MechJebModuleWarpController
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleSolarPanelController
-						{
-							prev_ShouldOpenSolarPanels = False
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleThrustController
-						{
-							limitThrottle = False
-							limiterMinThrottle = False
-							electricThrottle = False
-							unlockParts = 
-							unlockTechs = 
-							maxThrottle
-							{
-								_val = 1
-								_text = 100
-							}
-							minThrottle
-							{
-								_val = 0.05
-								_text = 5
-							}
-							electricThrottleLo
-							{
-								_val = 0.05
-								_text = 5
-							}
-							electricThrottleHi
-							{
-								_val = 0.15
-								_text = 15
-							}
-						}
-						MechJebModuleRCSController
-						{
-							unlockParts = 
-							unlockTechs = 
-							Tf
-							{
-								_val = 1
-								_text = 1
-							}
-						}
-						MechJebModuleRCSBalancer
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleAttitudeController
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleStagingController
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleFlightRecorder
-						{
-							markUT = 79.3200000000014
-							deltaVExpended = 0
-							dragLosses = 0
-							gravityLosses = 0
-							steeringLosses = 0
-							markLAN = 106.765477890354
-							markLatitude = -0.0972077853510024
-							markLongitude = -74.5576719232904
-							markAltitude = 74.620455990755
-							markBodyIndex = 1
-							maxDragGees = 0
-							unlockParts = 
-							unlockTechs = 
-						}
-						MechJebModuleFlightRecorderGraph
-						{
-							unlockParts = 
-							unlockTechs = 
-						}
-					}
-				}
-				MODULE
-				{
-					name = ModuleTripLogger
-					isEnabled = True
-					stagingEnabled = True
-					EVENTS
-					{
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-					}
-					Log
-					{
-						flight = 0
-					}
-				}
-				MODULE
-				{
-					name = TransferDialogSpawner
-					isEnabled = True
-					stagingEnabled = True
-					EVENTS
-					{
-						SpawnDialog
-						{
-							active = True
-							guiActive = True
-							guiActiveUncommand = True
-							guiIcon = Transfer Crew
-							guiName = Transfer Crew
-							category = Transfer Crew
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-					}
-				}
-				RESOURCE
-				{
-					name = ElectricCharge
-					amount = 50
-					maxAmount = 50
-					flowState = True
-					isTweakable = True
-					hideFlow = False
-					isVisible = True
-					flowMode = Both
-				}
-				RESOURCE
-				{
-					name = MonoPropellant
-					amount = 10
-					maxAmount = 10
-					flowState = True
-					isTweakable = True
-					hideFlow = False
-					isVisible = True
-					flowMode = Both
-				}
-			}
-			PART
-			{
-				name = fuelTank
-				cid = 4294866334
-				uid = 4024515811
-				mid = 453587174
-				launchID = 1
-				parent = 0
-				position = 0,-1.3707275390625,0
-				rotation = 0,0,0,1
-				mirror = 1,1,1
-				symMethod = Radial
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sepI = 0
-				sidx = -1
-				attm = 0
-				srfN = srfAttach, -1
-				attN = top, 0
-				attN = bottom, 7
-				mass = 0.25
-				temp = 312.189824795885
-				tempExt = 312.119215498557
-				tempExtUnexp = 312.119339772951
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = fuelTank
-				modCost = 0
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				PARTDATA
-				{
-				}
-				RESOURCE
-				{
-					name = LiquidFuel
-					amount = 180
-					maxAmount = 180
-					flowState = True
-					isTweakable = True
-					hideFlow = False
-					isVisible = True
-					flowMode = Both
-				}
-				RESOURCE
-				{
-					name = Oxidizer
-					amount = 220
-					maxAmount = 220
-					flowState = True
-					isTweakable = True
-					hideFlow = False
-					isVisible = True
-					flowMode = Both
-				}
-			}
-			PART
-			{
-				name = batteryPack
-				cid = 4294866210
-				uid = 2474303271
-				mid = 453587174
-				launchID = 1
-				parent = 1
-				position = -5.44101688149112E-08,-1.86320686340332,-0.622379779815674
-				rotation = -4.371139E-08,0,-1,0
-				mirror = 1,1,1
-				symMethod = Radial
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sepI = 0
-				sidx = -1
-				attm = 1
-				sym = 3
-				srfN = srfAttach, 1
-				mass = 0.005
-				temp = 312.183342655479
-				tempExt = 312.132386819665
-				tempExtUnexp = 312.132469906602
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = batteryPack
-				modCost = 0
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				PARTDATA
-				{
-				}
-				RESOURCE
-				{
-					name = ElectricCharge
-					amount = 100
-					maxAmount = 100
-					flowState = True
-					isTweakable = True
-					hideFlow = False
-					isVisible = True
-					flowMode = Both
-				}
-			}
-			PART
-			{
-				name = batteryPack
-				cid = 4294866176
-				uid = 2394862115
-				mid = 453587174
-				launchID = 1
-				parent = 1
-				position = 1.08820302102686E-07,-1.86320686340332,0.622379779815674
-				rotation = -1,0,8.742278E-08,0
-				mirror = 1,1,1
-				symMethod = Radial
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sepI = 0
-				sidx = -1
-				attm = 1
-				sym = 2
-				srfN = srfAttach, 1
-				mass = 0.005
-				temp = 312.183341657557
-				tempExt = 312.132382525065
-				tempExtUnexp = 312.132465519336
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = batteryPack
-				modCost = 0
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				PARTDATA
-				{
-				}
-				RESOURCE
-				{
-					name = ElectricCharge
-					amount = 100
-					maxAmount = 100
-					flowState = True
-					isTweakable = True
-					hideFlow = False
-					isVisible = True
-					flowMode = Both
-				}
-			}
-			PART
-			{
-				name = solarPanels1
-				cid = 4294866142
-				uid = 3756933275
-				mid = 453587174
-				launchID = 1
-				parent = 1
-				position = -5.42031095562834E-08,-0.820128440856934,-0.620011329650879
-				rotation = 0,0.7071068,0,-0.7071068
-				mirror = 1,1,1
-				symMethod = Radial
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sepI = 0
-				sidx = -1
-				attm = 1
-				sym = 5
-				sym = 6
-				srfN = srfAttach, 1
-				mass = 0.025
-				temp = 312.188213366214
-				tempExt = 312.046644713662
-				tempExtUnexp = 312.046853749802
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = solarPanels1
-				modCost = 0
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				PARTDATA
-				{
-				}
-				MODULE
-				{
-					name = ModuleDeployableSolarPanel
-					isEnabled = True
-					currentRotation = (-0.7071068, 0, 0, 0.7071068)
-					stateString = RETRACTED
-					storedAnimationTime = 0
-					storedAnimationSpeed = 1
-					efficiencyMult = 1
-					launchUT = 79.3200000000014
-					stagingEnabled = True
-					EVENTS
-					{
-						Extend
-						{
-							active = True
-							guiActive = True
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = Extend Panels
-							guiName = Extend Panels
-							category = Extend Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-						Retract
-						{
-							active = False
-							guiActive = True
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = Retract Panels
-							guiName = Retract Panels
-							category = Retract Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						ExtendPanelsAction
-						{
-							actionGroup = None
-						}
-						ExtendAction
-						{
-							actionGroup = Custom01
-						}
-						RetractAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-			}
-			PART
-			{
-				name = solarPanels1
-				cid = 4294866032
-				uid = 3632688059
-				mid = 453587174
-				launchID = 1
-				parent = 1
-				position = -0.536945521831512,-0.820128440856934,0.310005813837051
-				rotation = 0,-0.2588192,0,-0.9659259
-				mirror = 1,1,1
-				symMethod = Radial
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sepI = 0
-				sidx = -1
-				attm = 1
-				sym = 4
-				sym = 6
-				srfN = srfAttach, 1
-				mass = 0.025
-				temp = 312.188213712575
-				tempExt = 312.046666450825
-				tempExtUnexp = 312.046875690308
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = solarPanels1
-				modCost = 0
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				PARTDATA
-				{
-				}
-				MODULE
-				{
-					name = ModuleDeployableSolarPanel
-					isEnabled = True
-					currentRotation = (-0.7071068, 0, 0, 0.7071068)
-					stateString = RETRACTED
-					storedAnimationTime = 0
-					storedAnimationSpeed = 1
-					efficiencyMult = 1
-					launchUT = 79.3200000000014
-					stagingEnabled = True
-					EVENTS
-					{
-						Extend
-						{
-							active = True
-							guiActive = True
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = Extend Panels
-							guiName = Extend Panels
-							category = Extend Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-						Retract
-						{
-							active = False
-							guiActive = True
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = Retract Panels
-							guiName = Retract Panels
-							category = Retract Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						ExtendPanelsAction
-						{
-							actionGroup = None
-						}
-						ExtendAction
-						{
-							actionGroup = Custom01
-						}
-						RetractAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-			}
-			PART
-			{
-				name = solarPanels1
-				cid = 4294865922
-				uid = 2550125106
-				mid = 453587174
-				launchID = 1
-				parent = 1
-				position = 0.536945581436157,-0.820128440856934,0.310005605220795
-				rotation = 0,-0.9659259,0,-0.2588189
-				mirror = 1,1,1
-				symMethod = Radial
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sepI = 0
-				sidx = -1
-				attm = 1
-				sym = 4
-				sym = 5
-				srfN = srfAttach, 1
-				mass = 0.025
-				temp = 312.188213366214
-				tempExt = 312.046644713662
-				tempExtUnexp = 312.046853749802
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = solarPanels1
-				modCost = 0
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				PARTDATA
-				{
-				}
-				MODULE
-				{
-					name = ModuleDeployableSolarPanel
-					isEnabled = True
-					currentRotation = (-0.7071068, 0, 0, 0.7071068)
-					stateString = RETRACTED
-					storedAnimationTime = 0
-					storedAnimationSpeed = 1
-					efficiencyMult = 1
-					launchUT = 79.3200000000014
-					stagingEnabled = True
-					EVENTS
-					{
-						Extend
-						{
-							active = True
-							guiActive = True
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = Extend Panels
-							guiName = Extend Panels
-							category = Extend Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-						Retract
-						{
-							active = False
-							guiActive = True
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = Retract Panels
-							guiName = Retract Panels
-							category = Retract Panels
-							guiActiveUnfocused = True
-							unfocusedRange = 4
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						ExtendPanelsAction
-						{
-							actionGroup = None
-						}
-						ExtendAction
-						{
-							actionGroup = Custom01
-						}
-						RetractAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-			}
-			PART
-			{
-				name = liquidEngine2
-				cid = 4294859514
-				uid = 3156872640
-				mid = 453587174
-				launchID = 1
-				parent = 1
-				position = 0,-3.18505382537842,0
-				rotation = 0,0,0,1
-				mirror = 1,1,1
-				symMethod = Radial
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sepI = 0
-				sidx = -1
-				attm = 0
-				srfN = , -1
-				attN = top, 1
-				attN = bottom, -1
-				mass = 1.5
-				temp = 312.189154070544
-				tempExt = 312.097716298814
-				tempExtUnexp = 312.09778481866
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = liquidEngine2
-				modCost = 0
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				PARTDATA
-				{
-				}
-				MODULE
-				{
-					name = ModuleEngines
-					isEnabled = True
-					staged = False
-					flameout = False
-					EngineIgnited = False
-					engineShutdown = False
-					currentThrottle = 0
-					thrustPercentage = 100
-					manuallyOverridden = False
-					stagingEnabled = True
-					thrustPercentage_UIFlight
-					{
-						controlEnabled = True
-						minValue = 0
-						maxValue = 100
-						stepIncrement = 0.5
-					}
-					EVENTS
-					{
-						Activate
-						{
-							active = True
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Activate Engine
-							guiName = Activate Engine
-							category = Activate Engine
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						Shutdown
-						{
-							active = False
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Shutdown Engine
-							guiName = Shutdown Engine
-							category = Shutdown Engine
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						OnAction
-						{
-							actionGroup = None
-						}
-						ShutdownAction
-						{
-							actionGroup = None
-						}
-						ActivateAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-				MODULE
-				{
-					name = ModuleJettison
-					isEnabled = True
-					isJettisoned = True
-					shroudHideOverride = False
-					stagingEnabled = True
-					shroudHideOverride_UIFlight
-					{
-						controlEnabled = True
-					}
-					EVENTS
-					{
-						Jettison
-						{
-							active = False
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Jettison
-							guiName = Jettison
-							category = Jettison
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						JettisonAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-				MODULE
-				{
-					name = ModuleGimbal
-					isEnabled = True
-					gimbalLock = False
-					gimbalLimiter = 100
-					gimbalActive = False
-					stagingEnabled = True
-					gimbalLock_UIFlight
-					{
-						controlEnabled = True
-					}
-					gimbalLimiter_UIFlight
-					{
-						controlEnabled = True
-						minValue = 0
-						maxValue = 100
-						stepIncrement = 1
-					}
-					EVENTS
-					{
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						ToggleAction
-						{
-							actionGroup = None
-						}
-						LockAction
-						{
-							actionGroup = None
-						}
-						FreeAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-				MODULE
-				{
-					name = FXModuleAnimateThrottle
-					isEnabled = True
-					stagingEnabled = True
-					EVENTS
-					{
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-					}
-				}
-				MODULE
-				{
-					name = ModuleAlternator
-					isEnabled = True
-					stagingEnabled = True
-					EVENTS
-					{
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-					}
-				}
-				MODULE
-				{
-					name = ModuleSurfaceFX
-					isEnabled = True
-					stagingEnabled = True
-					EVENTS
-					{
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-					}
-				}
-				MODULE
-				{
-					name = ModuleTestSubject
-					isEnabled = True
-					stagingEnabled = True
-					EVENTS
-					{
-						RunTestEvent
-						{
-							active = False
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Run Test
-							guiName = Run Test
-							category = Run Test
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Disable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-					}
-				}
-				RESOURCE
-				{
-					name = ElectricCharge
-					amount = 0
-					maxAmount = 0.12
-					flowState = True
-					isTweakable = False
-					hideFlow = True
-					isVisible = True
-					flowMode = Both
-				}
-			}
-			PART
-			{
-				name = dockingPort3
-				cid = 4294740730
-				uid = 1019105058
-				mid = 453587174
-				launchID = 1
-				parent = 0
-				position = 0,0.642379760742188,0
-				rotation = 0,0,0,1
-				mirror = 1,1,1
-				symMethod = Radial
-				istg = 0
-				dstg = 0
-				sqor = -1
-				sepI = 1
-				sidx = -1
-				attm = 0
-				srfN = srfAttach, -1
-				attN = top, -1
-				attN = bottom, 0
-				mass = 0.02
-				temp = 312.190726054865
-				tempExt = 312.164551356
-				tempExtUnexp = 312.16472138023
-				expt = 0.5
-				state = 0
-				connected = True
-				attached = True
-				flag = Squad/Flags/default
-				rTrf = dockingPort3
-				modCost = 0
-				EVENTS
-				{
-				}
-				ACTIONS
-				{
-				}
-				PARTDATA
-				{
-				}
-				MODULE
-				{
-					name = ModuleDockingNode
-					isEnabled = True
-					crossfeed = True
-					stagingEnabled = False
-					state = Ready
-					dockUId = 0
-					dockNodeIdx = 0
-					EVENTS
-					{
-						Undock
-						{
-							active = False
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Undock
-							guiName = Undock
-							category = Undock
-							guiActiveUnfocused = True
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						UndockSameVessel
-						{
-							active = False
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Undock
-							guiName = Undock
-							category = Undock
-							guiActiveUnfocused = True
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						Decouple
-						{
-							active = False
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Decouple Node
-							guiName = Decouple Node
-							category = Decouple Node
-							guiActiveUnfocused = True
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						SetAsTarget
-						{
-							active = True
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Set as Target
-							guiName = Set as Target
-							category = Set as Target
-							guiActiveUnfocused = True
-							unfocusedRange = 200
-							externalToEVAOnly = False
-						}
-						UnsetTarget
-						{
-							active = False
-							guiActive = False
-							guiActiveUncommand = False
-							guiIcon = Unset Target
-							guiName = Unset Target
-							category = Unset Target
-							guiActiveUnfocused = True
-							unfocusedRange = 200
-							externalToEVAOnly = False
-						}
-						EnableXFeed
-						{
-							active = False
-							guiActive = True
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = Enable Crossfeed
-							guiName = Enable Crossfeed
-							category = Enable Crossfeed
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						DisableXFeed
-						{
-							active = True
-							guiActive = True
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = Disable Crossfeed
-							guiName = Disable Crossfeed
-							category = Disable Crossfeed
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						MakeReferenceTransform
-						{
-							active = True
-							guiActive = True
-							guiActiveUncommand = False
-							guiIcon = Control from Here
-							guiName = Control from Here
-							category = Control from Here
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-						ToggleStaging
-						{
-							active = True
-							guiActive = False
-							guiActiveEditor = True
-							guiActiveUncommand = False
-							guiIcon = Disable Staging
-							guiName = Port: Enable Staging
-							category = Disable Staging
-							guiActiveUnfocused = False
-							unfocusedRange = 2
-							externalToEVAOnly = True
-						}
-					}
-					ACTIONS
-					{
-						UndockAction
-						{
-							actionGroup = None
-						}
-						DecoupleAction
-						{
-							actionGroup = None
-						}
-						EnableXFeedAction
-						{
-							actionGroup = None
-						}
-						DisableXFeedAction
-						{
-							actionGroup = None
-						}
-						ToggleXFeedAction
-						{
-							actionGroup = None
-						}
-					}
-				}
-			}
-			ACTIONGROUPS
-			{
-				Stage = False, 0
-				Gear = True, 0
-				Light = False, 0
-				RCS = False, 0
-				SAS = False, 0
-				Brakes = False, 0
-				Abort = False, 0
-				Custom01 = False, 0
-				Custom02 = False, 0
-				Custom03 = False, 0
-				Custom04 = False, 0
-				Custom05 = False, 0
-				Custom06 = False, 0
-				Custom07 = False, 0
-				Custom08 = False, 0
-				Custom09 = False, 0
-				Custom10 = False, 0
-			}
-			DISCOVERY
-			{
-				state = -1
-				lastObservedTime = 0
-				lifetime = Infinity
-				refTime = Infinity
-				size = 2
-			}
-			FLIGHTPLAN
-			{
-			}
-			CTRLSTATE
-			{
-				pitch = 0
-				yaw = 0
-				roll = 0
-				trimPitch = 0
-				trimYaw = 0
-				trimRoll = 0
-				mainThrottle = 0.5
-			}
-		}
-		VESSEL
-		{
-			pid = 6e7af60f627c4b8cb4b0373b124e86c8
-			name = Ast. EWH-015
-			type = SpaceObject
-			sit = ORBITING
-			landed = False
-			landedAt = 
-			splashed = False
-			met = 73.3000000000026
-			lct = 73.3000000000026
-			lastUT = -1
-			root = 0
-			lat = 0.828089682460216
-			lon = 178.777691007295
-			alt = 13216781009.9966
-			hgt = -1
-			nrm = 0,1,0
-			rot = 0.8087141,0.2847443,0.0956483,0.5057209
-			CoM = 0,0,0
-			stg = 0
-			prst = False
-			ref = 0
-			ctrl = False
-			ORBIT
-			{
-				SMA = 13774119788.1567
-				ECC = 0.0214765184523956
-				INC = 0.927592089557871
-				LPE = 118.153597683298
-				LAN = 62.0551420649952
-				MNA = 0.860746784574856
-				EPH = 1319464.95039063
-				REF = 0
-			}
-			PART
-			{
-				name = PotatoRoid
-				cid = 0
-				uid = 1997473105
-				mid = 1997473105
-				launchID = 0
-				parent = 0
-				position = 0,0,0
-				rotation = 0,0,0,1
-				mirror = 1,1,1
-				symMethod = Radial
-				istg = 0
-				dstg = 0
-				sqor = 0
-				sepI = 0
-				sidx = 0
-				attm = 0
-				srfN = None, -1
-				mass = 150
-				temp = -1
-				tempExt = 0
-				tempExtUnexp = 0
-				expt = 0.1
-				state = 0
-				connected = True
-				attached = True
-				flag = 
-				rTrf = 
-				modCost = 0
-			}
-			ACTIONGROUPS
-			{
-			}
-			DISCOVERY
-			{
-				state = 1
-				lastObservedTime = 73.3000000000026
-				lifetime = 1252596.64306641
-				refTime = 1728000
-				size = 4
-			}
-			FLIGHTPLAN
-			{
-			}
-			CTRLSTATE
-			{
-			}
-		}
-	}
-	ROSTER
-	{
-		KERBAL
-		{
-			name = Jebediah Kerman
-			gender = Male
-			type = Crew
-			trait = Pilot
-			brave = 0.5
-			dumb = 0.5
-			badS = True
-			tour = False
-			state = Assigned
-			ToD = 0
-			idx = 0
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Bill Kerman
-			gender = Male
-			type = Crew
-			trait = Engineer
-			brave = 0.5
-			dumb = 0.8
-			badS = False
-			tour = False
-			state = Available
-			ToD = 0
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Bob Kerman
-			gender = Male
-			type = Crew
-			trait = Scientist
-			brave = 0.3
-			dumb = 0.1
-			badS = False
-			tour = False
-			state = Available
-			ToD = 0
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Valentina Kerman
-			gender = Female
-			type = Crew
-			trait = Pilot
-			brave = 0.55
-			dumb = 0.4
-			badS = True
-			tour = False
-			state = Available
-			ToD = 0
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Lagertrix Kerman
-			gender = Female
-			type = Applicant
-			trait = Engineer
-			brave = 0.3084412
-			dumb = 0.9328412
-			badS = False
-			tour = False
-			state = Available
-			ToD = 191840.287261963
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Jessie Kerman
-			gender = Female
-			type = Applicant
-			trait = Engineer
-			brave = 0.5356458
-			dumb = 0.5142433
-			badS = True
-			tour = False
-			state = Available
-			ToD = 149487.868743896
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Julella Kerman
-			gender = Female
-			type = Applicant
-			trait = Pilot
-			brave = 0.390117
-			dumb = 0.8186207
-			badS = False
-			tour = False
-			state = Available
-			ToD = 201960.652404785
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Gregul Kerman
-			gender = Male
-			type = Applicant
-			trait = Engineer
-			brave = 0.3282281
-			dumb = 0.2073086
-			badS = True
-			tour = False
-			state = Available
-			ToD = 117507.251220703
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Obemy Kerman
-			gender = Male
-			type = Applicant
-			trait = Pilot
-			brave = 0.1150081
-			dumb = 0.219199
-			badS = False
-			tour = False
-			state = Available
-			ToD = 127965.05456543
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Sunie Kerman
-			gender = Female
-			type = Applicant
-			trait = Pilot
-			brave = 0.4418451
-			dumb = 0.5076302
-			badS = False
-			tour = False
-			state = Available
-			ToD = 243499.807983398
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Jengrid Kerman
-			gender = Female
-			type = Applicant
-			trait = Engineer
-			brave = 0.9117717
-			dumb = 0.8142688
-			badS = False
-			tour = False
-			state = Available
-			ToD = 123677.214294434
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-		KERBAL
-		{
-			name = Tanemy Kerman
-			gender = Male
-			type = Applicant
-			trait = Scientist
-			brave = 0.8970538
-			dumb = 0.3160404
-			badS = False
-			tour = False
-			state = Available
-			ToD = 217864.598327637
-			idx = -1
-			CAREER_LOG
-			{
-				flight = 0
-			}
-			FLIGHT_LOG
-			{
-				flight = 0
-			}
-		}
-	}
-	MESSAGESYSTEM
-	{
-		flash = False
-	}
+  version = 1.0.5
+  Title = test (SANDBOX)
+  Description = No description available.
+  linkURL =
+  linkCaption =
+  Mode = SANDBOX
+  Status = 1
+  scene = 7
+  editor = None
+  flag = Squad/Flags/default
+  launchID = 2
+  PARAMETERS
+  {
+    preset = Normal
+    FLIGHT
+    {
+      CanQuickSave = True
+      CanQuickLoad = True
+      CanAutoSave = True
+      CanUseMap = True
+      CanSwitchVesselsNear = True
+      CanSwitchVesselsFar = True
+      CanTimeWarpHigh = True
+      CanTimeWarpLow = True
+      CanEVA = True
+      CanIVA = True
+      CanBoard = True
+      CanRestart = True
+      CanLeaveToEditor = True
+      CanLeaveToTrackingStation = True
+      CanLeaveToSpaceCenter = True
+      CanLeaveToMainMenu = False
+    }
+    EDITOR
+    {
+      CanSave = True
+      CanLoad = True
+      CanStartNew = True
+      CanLaunch = True
+      CanLeaveToSpaceCenter = True
+      CanLeaveToMainMenu = False
+      startUpMode = 0
+      craftFileToLoad =
+    }
+    TRACKINGSTATION
+    {
+      CanFlyVessel = True
+      CanAbortVessel = True
+      CanLeaveToSpaceCenter = True
+      CanLeaveToMainMenu = False
+    }
+    SPACECENTER
+    {
+      CanGoInVAB = True
+      CanGoInSPH = True
+      CanGoInTrackingStation = True
+      CanLaunchAtPad = True
+      CanLaunchAtRunway = True
+      CanLeaveToMainMenu = True
+    }
+    DIFFICULTY
+    {
+      AutoHireCrews = True
+      MissingCrewsRespawn = True
+      BypassEntryPurchaseAfterResearch = True
+      AllowStockVessels = True
+      IndestructibleFacilities = False
+      ResourceAbundance = 1
+      ReentryHeatScale = 1
+    }
+    CAREER
+    {
+      TechTreeUrl = GameData/Squad/Resources/TechTree.cfg
+      StartingFunds = 25000
+      StartingScience = 0
+      StartingReputation = 0
+      FundsGainMultiplier = 1
+      RepGainMultiplier = 1
+      ScienceGainMultiplier = 1
+      FundsLossMultiplier = 1
+      RepLossMultiplier = 1
+      RepLossDeclined = 1
+    }
+  }
+  SCENARIO
+  {
+    name = ScenarioNewGameIntro
+    scene = 5, 6, 8
+    kscComplete = True
+    editorComplete = True
+    tsComplete = True
+  }
+  SCENARIO
+  {
+    name = ProgressTracking
+    scene = 7, 8, 5
+    Progress
+    {
+      RecordsAltitude
+      {
+        reached = 2.5
+        record = 76.3299865119625
+      }
+      RecordsSpeed
+      {
+        reached = 2.58
+        record = 0.78154338421537
+      }
+      RecordsDistance
+      {
+        reached = 2.58
+        record = 756.294364321203
+      }
+    }
+  }
+  SCENARIO
+  {
+    name = VesselRecovery
+    scene = 5, 7, 8, 6
+  }
+  SCENARIO
+  {
+    name = ScenarioDestructibles
+    scene = 5, 7, 6, 8
+    SpaceCenter/VehicleAssemblyBuilding/Facility/VAB2
+    {
+      intact = True
+    }
+    SpaceCenter/TrackingStation/Facility/OuterDish
+    {
+      intact = True
+    }
+    SpaceCenter/TrackingStation/Facility/building
+    {
+      intact = True
+    }
+    SpaceCenter/SpaceplaneHangar/Facility/Building
+    {
+      intact = True
+    }
+    SpaceCenter/ResearchAndDevelopment/Facility/ForeverAlone
+    {
+      intact = True
+    }
+    SpaceCenter/ResearchAndDevelopment/Facility/mainBuilding
+    {
+      intact = True
+    }
+    SpaceCenter/MissionControl/Facility/mainBuilding
+    {
+      intact = True
+    }
+    SpaceCenter/LaunchPad/Facility/Flag
+    {
+      intact = True
+    }
+    SpaceCenter/AstronautComplex/Facility/mainBuilding
+    {
+      intact = True
+    }
+    SpaceCenter/FlagPole/Facility
+    {
+      intact = True
+    }
+    SpaceCenter/Administration/Facility/Building
+    {
+      intact = True
+    }
+    SpaceCenter/VehicleAssemblyBuilding/Facility/ksp_pad_cylTank
+    {
+      intact = True
+    }
+    SpaceCenter/VehicleAssemblyBuilding/Facility/Tank
+    {
+      intact = True
+    }
+    SpaceCenter/VehicleAssemblyBuilding/Facility/mainBuilding
+    {
+      intact = True
+    }
+    SpaceCenter/VehicleAssemblyBuilding/Facility/PodMemorial
+    {
+      intact = True
+    }
+    SpaceCenter/TrackingStation/Facility/dish_array/dish_south
+    {
+      intact = True
+    }
+    SpaceCenter/TrackingStation/Facility/dish_array/dish_north
+    {
+      intact = True
+    }
+    SpaceCenter/TrackingStation/Facility/dish_array/dish_east
+    {
+      intact = True
+    }
+    SpaceCenter/TrackingStation/Facility/MainBuilding
+    {
+      intact = True
+    }
+    SpaceCenter/SpaceplaneHangar/Facility/Tank
+    {
+      intact = True
+    }
+    SpaceCenter/SpaceplaneHangar/Facility/ksp_pad_cylTank
+    {
+      intact = True
+    }
+    SpaceCenter/SpaceplaneHangar/Facility/ksp_pad_waterTower
+    {
+      intact = True
+    }
+    SpaceCenter/SpaceplaneHangar/Facility/mainBuilding
+    {
+      intact = True
+    }
+    SpaceCenter/Runway/Facility/model_runway_new_v43/runway_light_SE
+    {
+      intact = True
+    }
+    SpaceCenter/Runway/Facility/model_runway_new_v43/runway_light_NE
+    {
+      intact = True
+    }
+    SpaceCenter/Runway/Facility/model_runway_new_v43/runway_light_NW
+    {
+      intact = True
+    }
+    SpaceCenter/Runway/Facility/model_runway_new_v43/runway_light_SW
+    {
+      intact = True
+    }
+    SpaceCenter/Runway/Facility/End09
+    {
+      intact = True
+    }
+    SpaceCenter/Runway/Facility/End27
+    {
+      intact = True
+    }
+    SpaceCenter/Runway/Facility/Section1
+    {
+      intact = True
+    }
+    SpaceCenter/Runway/Facility/Section2
+    {
+      intact = True
+    }
+    SpaceCenter/Runway/Facility/Section3
+    {
+      intact = True
+    }
+    SpaceCenter/Runway/Facility/Section4
+    {
+      intact = True
+    }
+    SpaceCenter/ResearchAndDevelopment/Facility/ksp_pad_cylTank
+    {
+      intact = True
+    }
+    SpaceCenter/ResearchAndDevelopment/Facility/SmallLab
+    {
+      intact = True
+    }
+    SpaceCenter/ResearchAndDevelopment/Facility/CentralBuilding
+    {
+      intact = True
+    }
+    SpaceCenter/ResearchAndDevelopment/Facility/MainBuilding
+    {
+      intact = True
+    }
+    SpaceCenter/ResearchAndDevelopment/Facility/CornerLab
+    {
+      intact = True
+    }
+    SpaceCenter/ResearchAndDevelopment/Facility/WindTunnel
+    {
+      intact = True
+    }
+    SpaceCenter/ResearchAndDevelopment/Facility/Observatory
+    {
+      intact = True
+    }
+    SpaceCenter/ResearchAndDevelopment/Facility/SideLab
+    {
+      intact = True
+    }
+    SpaceCenter/MissionControl/Facility/building
+    {
+      intact = True
+    }
+    SpaceCenter/LaunchPad/Facility/LaunchPadMedium/ksp_pad_cylTank
+    {
+      intact = True
+    }
+    SpaceCenter/LaunchPad/Facility/LaunchPadMedium/ksp_pad_launchPad
+    {
+      intact = True
+    }
+    SpaceCenter/LaunchPad/Facility/LaunchPadMedium/ksp_pad_sphereTank
+    {
+      intact = True
+    }
+    SpaceCenter/LaunchPad/Facility/LaunchPadMedium/ksp_pad_waterTower
+    {
+      intact = True
+    }
+    SpaceCenter/LaunchPad/Facility/LaunchPadMedium/KSCFlagPoleLaunchPad
+    {
+      intact = True
+    }
+    SpaceCenter/AstronautComplex/Facility/building
+    {
+      intact = True
+    }
+    SpaceCenter/Administration/Facility/mainBuilding
+    {
+      intact = True
+    }
+  }
+  SCENARIO
+  {
+    name = ScenarioDiscoverableObjects
+    scene = 7, 8, 5
+    lastSeed = 559298752
+    sizeCurve
+    {
+      key = 0 0 1.5 1.5
+      key = 0.3 0.45 0.875 0.875
+      key = 0.7 0.55 0.875 0.875
+      key = 1 1 1.5 1.5
+    }
+  }
+  SCENARIO
+  {
+    name = ResourceScenario
+    scene = 5, 7, 6
+    RESOURCE_SETTINGS
+    {
+      GameSeed = 325438398
+      MaxDeltaTime = 21600
+    }
+  }
+  FLIGHTSTATE
+  {
+    version = 1.0.5
+    UT = 4.83999999999998
+    activeVessel = 1
+    mapViewFiltering = -1026
+    VESSEL
+    {
+      pid = ba8c9102bc9a4abeba0f31a0a1521264
+      name = Basic
+      type = Ship
+      sit = PRELAUNCH
+      landed = True
+      landedAt = KSC_LaunchPad_Platform
+      splashed = False
+      met = 0
+      lct = 4.81999999999998
+      lastUT = 4.83999999999998
+      root = 0
+      lat = -0.0971954398978083
+      lon = 285.442322412835
+      alt = 76.2800512022804
+      hgt = 3.834547
+      nrm = 0.0001533895,1,-3.466864E-05
+      rot = -0.7009831,-0.09216226,-0.0972138,0.7004843
+      CoM = -1.16718E-05,-1.688148,3.304896E-06
+      stg = 1
+      prst = False
+      ref = 2323095571
+      ctrl = True
+      cPch = 0.2
+      cHdg = 0.3
+      cMod = 0
+      ORBIT
+      {
+        SMA = 300819.657405239
+        ECC = 0.994798468523525
+        INC = 0.0971954450229109
+        LPE = 89.9990318759153
+        LAN = 105.52447907748
+        MNA = 3.14159265358979
+        EPH = 4.83999999999998
+        REF = 1
+      }
+      PART
+      {
+        name = mk1pod
+        cid = 4294866428
+        uid = 2323095571
+        mid = 3255892644
+        launchID = 1
+        parent = 0
+        position = 0,0,0
+        rotation = 0,0,0,1
+        mirror = 1,1,1
+        symMethod = Radial
+        istg = 0
+        dstg = 0
+        sqor = -1
+        sepI = 0
+        sidx = -1
+        attm = 0
+        srfN = , -1
+        attN = bottom, 1
+        attN = top, 8
+        mass = 0.8
+        temp = 312.123204067559
+        tempExt = 312.130544702667
+        tempExtUnexp = 312.131285410449
+        expt = 0.5
+        state = 0
+        connected = True
+        attached = True
+        flag = Squad/Flags/default
+        rTrf = mk1pod
+        modCost = 0
+        crew = Jebediah Kerman
+        EVENTS
+        {
+        }
+        ACTIONS
+        {
+        }
+        PARTDATA
+        {
+        }
+        MODULE
+        {
+          name = ModuleCommand
+          isEnabled = True
+          controlSrcStatusText = Operational
+          stagingEnabled = True
+          EVENTS
+          {
+            MakeReference
+            {
+              active = True
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Control From Here
+              guiName = Control From Here
+              category = Control From Here
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            RenameVessel
+            {
+              active = True
+              guiActive = True
+              guiActiveUncommand = True
+              guiIcon = Rename Vessel
+              guiName = Rename Vessel
+              category = Rename Vessel
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+          }
+        }
+        MODULE
+        {
+          name = ModuleReactionWheel
+          isEnabled = True
+          stateString = Idle
+          stagingEnabled = True
+          WheelState = Active
+          EVENTS
+          {
+            OnToggle
+            {
+              active = True
+              guiActive = True
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Toggle Torque
+              guiName = Toggle Torque
+              category = Toggle Torque
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+            Activate
+            {
+              actionGroup = None
+            }
+            Deactivate
+            {
+              actionGroup = None
+            }
+            Toggle
+            {
+              actionGroup = None
+            }
+          }
+        }
+        MODULE
+        {
+          name = ModuleScienceExperiment
+          isEnabled = True
+          Deployed = False
+          Inoperable = False
+          stagingEnabled = True
+          EVENTS
+          {
+            DeployExperiment
+            {
+              active = True
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Deploy
+              guiName = Crew Report
+              category = Deploy
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            CollectDataExternalEvent
+            {
+              active = False
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon =
+              guiName = Take Data
+              category =
+              guiActiveUnfocused = True
+              unfocusedRange = 1.5
+              externalToEVAOnly = True
+            }
+            ReviewDataEvent
+            {
+              active = False
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Review Data
+              guiName = Review Report
+              category = Review Data
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ResetExperiment
+            {
+              active = False
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Reset
+              guiName = Discard Crew Report
+              category = Reset
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            DeployExperimentExternal
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Deploy
+              guiName = Crew Report
+              category = Deploy
+              guiActiveUnfocused = True
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ResetExperimentExternal
+            {
+              active = False
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Reset
+              guiName = Discard Crew Report
+              category = Reset
+              guiActiveUnfocused = True
+              unfocusedRange = 1.5
+              externalToEVAOnly = True
+            }
+            CleanUpExperimentExternal
+            {
+              active = False
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Restore
+              guiName = Restore
+              category = Restore
+              guiActiveUnfocused = True
+              unfocusedRange = 1.5
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+            DeployAction
+            {
+              actionGroup = None
+            }
+            ResetAction
+            {
+              actionGroup = None
+            }
+          }
+        }
+        MODULE
+        {
+          name = ModuleScienceContainer
+          isEnabled = True
+          stagingEnabled = True
+          EVENTS
+          {
+            StoreDataExternalEvent
+            {
+              active = False
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon =
+              guiName = Store Experiments (0)
+              category =
+              guiActiveUnfocused = True
+              unfocusedRange = 1.3
+              externalToEVAOnly = True
+            }
+            CollectDataExternalEvent
+            {
+              active = False
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon =
+              guiName = Take Data (0)
+              category =
+              guiActiveUnfocused = True
+              unfocusedRange = 1.3
+              externalToEVAOnly = True
+            }
+            ReviewDataEvent
+            {
+              active = False
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Review Data
+              guiName = Review Stored Data (0)
+              category = Review Data
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+          }
+        }
+        MODULE
+        {
+          name = FlagDecal
+          isEnabled = True
+          flagDisplayed = True
+          stagingEnabled = True
+          EVENTS
+          {
+            ToggleFlag
+            {
+              active = True
+              guiActive = False
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = ToggleFlag
+              guiName = ToggleFlag
+              category = ToggleFlag
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+          }
+        }
+        MODULE
+        {
+          name = ModuleConductionMultiplier
+          isEnabled = True
+          stagingEnabled = True
+          EVENTS
+          {
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+          }
+        }
+        MODULE
+        {
+          name = ModuleTripLogger
+          isEnabled = True
+          stagingEnabled = True
+          EVENTS
+          {
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+          }
+          Log
+          {
+            flight = 0
+          }
+        }
+        MODULE
+        {
+          name = TransferDialogSpawner
+          isEnabled = True
+          stagingEnabled = True
+          EVENTS
+          {
+            SpawnDialog
+            {
+              active = True
+              guiActive = True
+              guiActiveUncommand = True
+              guiIcon = Transfer Crew
+              guiName = Transfer Crew
+              category = Transfer Crew
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+          }
+        }
+        RESOURCE
+        {
+          name = ElectricCharge
+          amount = 50
+          maxAmount = 50
+          flowState = True
+          isTweakable = True
+          hideFlow = False
+          isVisible = True
+          flowMode = Both
+        }
+        RESOURCE
+        {
+          name = MonoPropellant
+          amount = 10
+          maxAmount = 10
+          flowState = True
+          isTweakable = True
+          hideFlow = False
+          isVisible = True
+          flowMode = Both
+        }
+      }
+      PART
+      {
+        name = fuelTank
+        cid = 4294866334
+        uid = 487805897
+        mid = 3255892644
+        launchID = 1
+        parent = 0
+        position = 0,-1.37072777748108,0
+        rotation = 0,0,0,1
+        mirror = 1,1,1
+        symMethod = Radial
+        istg = 0
+        dstg = 0
+        sqor = -1
+        sepI = 0
+        sidx = -1
+        attm = 0
+        srfN = srfAttach, -1
+        attN = top, 0
+        attN = bottom, 7
+        mass = 0.25
+        temp = 312.122792180313
+        tempExt = 312.07449066979
+        tempExtUnexp = 312.074735086334
+        expt = 0.5
+        state = 0
+        connected = True
+        attached = True
+        flag = Squad/Flags/default
+        rTrf = fuelTank
+        modCost = 0
+        EVENTS
+        {
+        }
+        ACTIONS
+        {
+        }
+        PARTDATA
+        {
+        }
+        RESOURCE
+        {
+          name = LiquidFuel
+          amount = 180
+          maxAmount = 180
+          flowState = True
+          isTweakable = True
+          hideFlow = False
+          isVisible = True
+          flowMode = Both
+        }
+        RESOURCE
+        {
+          name = Oxidizer
+          amount = 220
+          maxAmount = 220
+          flowState = True
+          isTweakable = True
+          hideFlow = False
+          isVisible = True
+          flowMode = Both
+        }
+      }
+      PART
+      {
+        name = batteryPack
+        cid = 4294866210
+        uid = 1587079173
+        mid = 3255892644
+        launchID = 1
+        parent = 1
+        position = -5.21540641784668E-08,-1.86320686340332,-0.622379779815674
+        rotation = -4.371139E-08,0,-1,0
+        mirror = 1,1,1
+        symMethod = Radial
+        istg = 0
+        dstg = 0
+        sqor = -1
+        sepI = 0
+        sidx = -1
+        attm = 1
+        sym = 3
+        srfN = srfAttach, 1
+        mass = 0.005
+        temp = 312.118936241169
+        tempExt = 312.076008901813
+        tempExtUnexp = 312.076131349708
+        expt = 0.5
+        state = 0
+        connected = True
+        attached = True
+        flag = Squad/Flags/default
+        rTrf = batteryPack
+        modCost = 0
+        EVENTS
+        {
+        }
+        ACTIONS
+        {
+        }
+        PARTDATA
+        {
+        }
+        RESOURCE
+        {
+          name = ElectricCharge
+          amount = 100
+          maxAmount = 100
+          flowState = True
+          isTweakable = True
+          hideFlow = False
+          isVisible = True
+          flowMode = Both
+        }
+      }
+      PART
+      {
+        name = batteryPack
+        cid = 4294866176
+        uid = 4108440915
+        mid = 3255892644
+        launchID = 1
+        parent = 1
+        position = 1.08033418655396E-07,-1.86320686340332,0.622379839420319
+        rotation = -1,0,8.742278E-08,0
+        mirror = 1,1,1
+        symMethod = Radial
+        istg = 0
+        dstg = 0
+        sqor = -1
+        sepI = 0
+        sidx = -1
+        attm = 1
+        sym = 2
+        srfN = srfAttach, 1
+        mass = 0.005
+        temp = 312.118936241169
+        tempExt = 312.076008901813
+        tempExtUnexp = 312.076131349708
+        expt = 0.5
+        state = 0
+        connected = True
+        attached = True
+        flag = Squad/Flags/default
+        rTrf = batteryPack
+        modCost = 0
+        EVENTS
+        {
+        }
+        ACTIONS
+        {
+        }
+        PARTDATA
+        {
+        }
+        RESOURCE
+        {
+          name = ElectricCharge
+          amount = 100
+          maxAmount = 100
+          flowState = True
+          isTweakable = True
+          hideFlow = False
+          isVisible = True
+          flowMode = Both
+        }
+      }
+      PART
+      {
+        name = solarPanels1
+        cid = 4294866142
+        uid = 2076375597
+        mid = 3255892644
+        launchID = 1
+        parent = 1
+        position = -5.21540641784668E-08,-0.820128917694092,-0.620011389255524
+        rotation = 0,0.7071068,0,-0.7071068
+        mirror = 1,1,1
+        symMethod = Radial
+        istg = 0
+        dstg = 0
+        sqor = -1
+        sepI = 0
+        sidx = -1
+        attm = 1
+        sym = 5
+        sym = 6
+        srfN = srfAttach, 1
+        mass = 0.025
+        temp = 312.122055264283
+        tempExt = 312.012167475064
+        tempExtUnexp = 312.012508336573
+        expt = 0.5
+        state = 0
+        connected = True
+        attached = True
+        flag = Squad/Flags/default
+        rTrf = solarPanels1
+        modCost = 0
+        EVENTS
+        {
+        }
+        ACTIONS
+        {
+        }
+        PARTDATA
+        {
+        }
+        MODULE
+        {
+          name = ModuleDeployableSolarPanel
+          isEnabled = True
+          currentRotation = (-0.7071068, 0, 0, 0.7071068)
+          stateString = RETRACTED
+          storedAnimationTime = 0
+          storedAnimationSpeed = 1
+          efficiencyMult = 1
+          launchUT = 4.83999999999998
+          stagingEnabled = True
+          EVENTS
+          {
+            Extend
+            {
+              active = True
+              guiActive = True
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Extend Panels
+              guiName = Extend Panels
+              category = Extend Panels
+              guiActiveUnfocused = True
+              unfocusedRange = 4
+              externalToEVAOnly = True
+            }
+            Retract
+            {
+              active = False
+              guiActive = True
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Retract Panels
+              guiName = Retract Panels
+              category = Retract Panels
+              guiActiveUnfocused = True
+              unfocusedRange = 4
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+            ExtendPanelsAction
+            {
+              actionGroup = None
+            }
+            ExtendAction
+            {
+              actionGroup = Custom01
+            }
+            RetractAction
+            {
+              actionGroup = None
+            }
+          }
+        }
+      }
+      PART
+      {
+        name = solarPanels1
+        cid = 4294866032
+        uid = 1101965857
+        mid = 3255892644
+        launchID = 1
+        parent = 1
+        position = -0.536945521831512,-0.820128917694092,0.310005784034729
+        rotation = 0,-0.2588192,0,-0.9659259
+        mirror = 1,1,1
+        symMethod = Radial
+        istg = 0
+        dstg = 0
+        sqor = -1
+        sepI = 0
+        sidx = -1
+        attm = 1
+        sym = 4
+        sym = 6
+        srfN = srfAttach, 1
+        mass = 0.025
+        temp = 312.122055264283
+        tempExt = 312.012167475064
+        tempExtUnexp = 312.012508336573
+        expt = 0.5
+        state = 0
+        connected = True
+        attached = True
+        flag = Squad/Flags/default
+        rTrf = solarPanels1
+        modCost = 0
+        EVENTS
+        {
+        }
+        ACTIONS
+        {
+        }
+        PARTDATA
+        {
+        }
+        MODULE
+        {
+          name = ModuleDeployableSolarPanel
+          isEnabled = True
+          currentRotation = (-0.7071068, 0, 0, 0.7071068)
+          stateString = RETRACTED
+          storedAnimationTime = 0
+          storedAnimationSpeed = 1
+          efficiencyMult = 1
+          launchUT = 4.83999999999998
+          stagingEnabled = True
+          EVENTS
+          {
+            Extend
+            {
+              active = True
+              guiActive = True
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Extend Panels
+              guiName = Extend Panels
+              category = Extend Panels
+              guiActiveUnfocused = True
+              unfocusedRange = 4
+              externalToEVAOnly = True
+            }
+            Retract
+            {
+              active = False
+              guiActive = True
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Retract Panels
+              guiName = Retract Panels
+              category = Retract Panels
+              guiActiveUnfocused = True
+              unfocusedRange = 4
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+            ExtendPanelsAction
+            {
+              actionGroup = None
+            }
+            ExtendAction
+            {
+              actionGroup = Custom01
+            }
+            RetractAction
+            {
+              actionGroup = None
+            }
+          }
+        }
+      }
+      PART
+      {
+        name = solarPanels1
+        cid = 4294865922
+        uid = 145513644
+        mid = 3255892644
+        launchID = 1
+        parent = 1
+        position = 0.536945581436157,-0.820128917694092,0.310005605220795
+        rotation = 0,-0.9659259,0,-0.2588189
+        mirror = 1,1,1
+        symMethod = Radial
+        istg = 0
+        dstg = 0
+        sqor = -1
+        sepI = 0
+        sidx = -1
+        attm = 1
+        sym = 4
+        sym = 5
+        srfN = srfAttach, 1
+        mass = 0.025
+        temp = 312.122055264283
+        tempExt = 312.012167475064
+        tempExtUnexp = 312.012508336573
+        expt = 0.5
+        state = 0
+        connected = True
+        attached = True
+        flag = Squad/Flags/default
+        rTrf = solarPanels1
+        modCost = 0
+        EVENTS
+        {
+        }
+        ACTIONS
+        {
+        }
+        PARTDATA
+        {
+        }
+        MODULE
+        {
+          name = ModuleDeployableSolarPanel
+          isEnabled = True
+          currentRotation = (-0.7071068, 0, 0, 0.7071068)
+          stateString = RETRACTED
+          storedAnimationTime = 0
+          storedAnimationSpeed = 1
+          efficiencyMult = 1
+          launchUT = 4.83999999999998
+          stagingEnabled = True
+          EVENTS
+          {
+            Extend
+            {
+              active = True
+              guiActive = True
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Extend Panels
+              guiName = Extend Panels
+              category = Extend Panels
+              guiActiveUnfocused = True
+              unfocusedRange = 4
+              externalToEVAOnly = True
+            }
+            Retract
+            {
+              active = False
+              guiActive = True
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Retract Panels
+              guiName = Retract Panels
+              category = Retract Panels
+              guiActiveUnfocused = True
+              unfocusedRange = 4
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+            ExtendPanelsAction
+            {
+              actionGroup = None
+            }
+            ExtendAction
+            {
+              actionGroup = Custom01
+            }
+            RetractAction
+            {
+              actionGroup = None
+            }
+          }
+        }
+      }
+      PART
+      {
+        name = liquidEngine2
+        cid = 4294859514
+        uid = 3905903202
+        mid = 3255892644
+        launchID = 1
+        parent = 1
+        position = 0,-3.18505382537842,0
+        rotation = 0,0,0,1
+        mirror = 1,1,1
+        symMethod = Radial
+        istg = 0
+        dstg = 0
+        sqor = -1
+        sepI = 0
+        sidx = -1
+        attm = 0
+        srfN = , -1
+        attN = top, 1
+        attN = bottom, -1
+        mass = 1.5
+        temp = 312.122430532624
+        tempExt = 312.042144081301
+        tempExtUnexp = 312.042258734747
+        expt = 0.5
+        state = 0
+        connected = True
+        attached = True
+        flag = Squad/Flags/default
+        rTrf = liquidEngine2
+        modCost = 0
+        EVENTS
+        {
+        }
+        ACTIONS
+        {
+        }
+        PARTDATA
+        {
+        }
+        MODULE
+        {
+          name = ModuleEngines
+          isEnabled = True
+          staged = False
+          flameout = False
+          EngineIgnited = False
+          engineShutdown = False
+          currentThrottle = 0
+          thrustPercentage = 100
+          manuallyOverridden = False
+          stagingEnabled = True
+          thrustPercentage_UIFlight
+          {
+            controlEnabled = True
+            minValue = 0
+            maxValue = 100
+            stepIncrement = 0.5
+          }
+          EVENTS
+          {
+            Activate
+            {
+              active = True
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Activate Engine
+              guiName = Activate Engine
+              category = Activate Engine
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            Shutdown
+            {
+              active = False
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Shutdown Engine
+              guiName = Shutdown Engine
+              category = Shutdown Engine
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+            OnAction
+            {
+              actionGroup = None
+            }
+            ShutdownAction
+            {
+              actionGroup = None
+            }
+            ActivateAction
+            {
+              actionGroup = None
+            }
+          }
+        }
+        MODULE
+        {
+          name = ModuleJettison
+          isEnabled = True
+          isJettisoned = True
+          shroudHideOverride = False
+          stagingEnabled = True
+          shroudHideOverride_UIFlight
+          {
+            controlEnabled = True
+          }
+          EVENTS
+          {
+            Jettison
+            {
+              active = False
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Jettison
+              guiName = Jettison
+              category = Jettison
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+            JettisonAction
+            {
+              actionGroup = None
+            }
+          }
+        }
+        MODULE
+        {
+          name = ModuleGimbal
+          isEnabled = True
+          gimbalLock = False
+          gimbalLimiter = 100
+          gimbalActive = False
+          stagingEnabled = True
+          gimbalLock_UIFlight
+          {
+            controlEnabled = True
+          }
+          gimbalLimiter_UIFlight
+          {
+            controlEnabled = True
+            minValue = 0
+            maxValue = 100
+            stepIncrement = 1
+          }
+          EVENTS
+          {
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+            ToggleAction
+            {
+              actionGroup = None
+            }
+            LockAction
+            {
+              actionGroup = None
+            }
+            FreeAction
+            {
+              actionGroup = None
+            }
+          }
+        }
+        MODULE
+        {
+          name = FXModuleAnimateThrottle
+          isEnabled = True
+          stagingEnabled = True
+          EVENTS
+          {
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+          }
+        }
+        MODULE
+        {
+          name = ModuleAlternator
+          isEnabled = True
+          stagingEnabled = True
+          EVENTS
+          {
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+          }
+        }
+        MODULE
+        {
+          name = ModuleSurfaceFX
+          isEnabled = True
+          stagingEnabled = True
+          EVENTS
+          {
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+          }
+        }
+        MODULE
+        {
+          name = ModuleTestSubject
+          isEnabled = True
+          stagingEnabled = True
+          EVENTS
+          {
+            RunTestEvent
+            {
+              active = False
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Run Test
+              guiName = Run Test
+              category = Run Test
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Disable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+          }
+        }
+        RESOURCE
+        {
+          name = ElectricCharge
+          amount = 0
+          maxAmount = 0.12
+          flowState = True
+          isTweakable = False
+          hideFlow = True
+          isVisible = True
+          flowMode = Both
+        }
+      }
+      PART
+      {
+        name = dockingPort3
+        cid = 4294740730
+        uid = 3067176938
+        mid = 3255892644
+        launchID = 1
+        parent = 0
+        position = 0,0.642380237579346,0
+        rotation = 0,0,0,1
+        mirror = 1,1,1
+        symMethod = Radial
+        istg = 0
+        dstg = 0
+        sqor = -1
+        sepI = 1
+        sidx = -1
+        attm = 0
+        srfN = srfAttach, -1
+        attN = top, -1
+        attN = bottom, 0
+        mass = 0.02
+        temp = 312.126421760974
+        tempExt = 312.158804070142
+        tempExtUnexp = 312.159796844542
+        expt = 0.5
+        state = 0
+        connected = True
+        attached = True
+        flag = Squad/Flags/default
+        rTrf = dockingPort3
+        modCost = 0
+        EVENTS
+        {
+        }
+        ACTIONS
+        {
+        }
+        PARTDATA
+        {
+        }
+        MODULE
+        {
+          name = ModuleDockingNode
+          isEnabled = True
+          crossfeed = True
+          stagingEnabled = False
+          state = Ready
+          dockUId = 0
+          dockNodeIdx = 0
+          EVENTS
+          {
+            Undock
+            {
+              active = False
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Undock
+              guiName = Undock
+              category = Undock
+              guiActiveUnfocused = True
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            UndockSameVessel
+            {
+              active = False
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Undock
+              guiName = Undock
+              category = Undock
+              guiActiveUnfocused = True
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            Decouple
+            {
+              active = False
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Decouple Node
+              guiName = Decouple Node
+              category = Decouple Node
+              guiActiveUnfocused = True
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            SetAsTarget
+            {
+              active = True
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Set as Target
+              guiName = Set as Target
+              category = Set as Target
+              guiActiveUnfocused = True
+              unfocusedRange = 200
+              externalToEVAOnly = False
+            }
+            UnsetTarget
+            {
+              active = False
+              guiActive = False
+              guiActiveUncommand = False
+              guiIcon = Unset Target
+              guiName = Unset Target
+              category = Unset Target
+              guiActiveUnfocused = True
+              unfocusedRange = 200
+              externalToEVAOnly = False
+            }
+            EnableXFeed
+            {
+              active = False
+              guiActive = True
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Enable Crossfeed
+              guiName = Enable Crossfeed
+              category = Enable Crossfeed
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            DisableXFeed
+            {
+              active = True
+              guiActive = True
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Disable Crossfeed
+              guiName = Disable Crossfeed
+              category = Disable Crossfeed
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            MakeReferenceTransform
+            {
+              active = True
+              guiActive = True
+              guiActiveUncommand = False
+              guiIcon = Control from Here
+              guiName = Control from Here
+              category = Control from Here
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+            ToggleStaging
+            {
+              active = True
+              guiActive = False
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Disable Staging
+              guiName = Port: Enable Staging
+              category = Disable Staging
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
+          }
+          ACTIONS
+          {
+            UndockAction
+            {
+              actionGroup = None
+            }
+            DecoupleAction
+            {
+              actionGroup = None
+            }
+            EnableXFeedAction
+            {
+              actionGroup = None
+            }
+            DisableXFeedAction
+            {
+              actionGroup = None
+            }
+            ToggleXFeedAction
+            {
+              actionGroup = None
+            }
+          }
+        }
+      }
+      ACTIONGROUPS
+      {
+        Stage = False, 0
+        Gear = True, 0
+        Light = False, 0
+        RCS = False, 0
+        SAS = False, 0
+        Brakes = False, 0
+        Abort = False, 0
+        Custom01 = False, 0
+        Custom02 = False, 0
+        Custom03 = False, 0
+        Custom04 = False, 0
+        Custom05 = False, 0
+        Custom06 = False, 0
+        Custom07 = False, 0
+        Custom08 = False, 0
+        Custom09 = False, 0
+        Custom10 = False, 0
+      }
+      DISCOVERY
+      {
+        state = -1
+        lastObservedTime = 0
+        lifetime = Infinity
+        refTime = Infinity
+        size = 2
+      }
+      FLIGHTPLAN
+      {
+      }
+      CTRLSTATE
+      {
+        pitch = 0
+        yaw = 0
+        roll = 0
+        trimPitch = 0
+        trimYaw = 0
+        trimRoll = 0
+        mainThrottle = 0.5
+      }
+    }
+  }
+  ROSTER
+  {
+    KERBAL
+    {
+      name = Jebediah Kerman
+      gender = Male
+      type = Crew
+      trait = Pilot
+      brave = 0.5
+      dumb = 0.5
+      badS = True
+      tour = False
+      state = Assigned
+      ToD = 0
+      idx = 0
+      CAREER_LOG
+      {
+        flight = 0
+      }
+      FLIGHT_LOG
+      {
+        flight = 0
+      }
+    }
+    KERBAL
+    {
+      name = Bill Kerman
+      gender = Male
+      type = Crew
+      trait = Engineer
+      brave = 0.5
+      dumb = 0.8
+      badS = False
+      tour = False
+      state = Available
+      ToD = 0
+      idx = -1
+      CAREER_LOG
+      {
+        flight = 0
+      }
+      FLIGHT_LOG
+      {
+        flight = 0
+      }
+    }
+    KERBAL
+    {
+      name = Bob Kerman
+      gender = Male
+      type = Crew
+      trait = Scientist
+      brave = 0.3
+      dumb = 0.1
+      badS = False
+      tour = False
+      state = Available
+      ToD = 0
+      idx = -1
+      CAREER_LOG
+      {
+        flight = 0
+      }
+      FLIGHT_LOG
+      {
+        flight = 0
+      }
+    }
+    KERBAL
+    {
+      name = Valentina Kerman
+      gender = Female
+      type = Crew
+      trait = Pilot
+      brave = 0.55
+      dumb = 0.4
+      badS = True
+      tour = False
+      state = Available
+      ToD = 0
+      idx = -1
+      CAREER_LOG
+      {
+        flight = 0
+      }
+      FLIGHT_LOG
+      {
+        flight = 0
+      }
+    }
+  }
+  MESSAGESYSTEM
+  {
+    flash = False
+  }
 }

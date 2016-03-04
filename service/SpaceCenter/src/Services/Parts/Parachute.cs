@@ -56,7 +56,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Parachute obj)
         {
-            return part == obj.part;
+            return part == obj.part && parachute == obj.parachute;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode ();
+            return part.GetHashCode () ^ parachute.GetHashCode ();
         }
 
         /// <summary>

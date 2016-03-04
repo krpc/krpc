@@ -134,7 +134,7 @@ namespace KRPC.KerbalAlarmClock.Services
                 return new KRPC.SpaceCenter.Services.Vessel (vessel);
             }
             set {
-                alarm.VesselID = value.InternalVessel.id.ToString ();
+                alarm.VesselID = value.Id.ToString ();
             }
         }
 

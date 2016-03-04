@@ -110,8 +110,8 @@ http_file(
 
 http_file(
     name = 'python_sphinx_csharp',
-    url = 'https://github.com/djungelorm/sphinx-csharp/releases/download/v0.1.0/sphinx-csharp-0.1.0.tar.gz',
-    sha256 = '077cd0a4acdc83072fe1e903736e62da2984907a7a520dcb6ba358eefcf0b866'
+    url = 'https://pypi.python.org/packages/source/s/sphinx-csharp/sphinx-csharp-0.1.0.tar.gz',
+    sha256 = 'cf37338a391d59d277b2e3b9b629c66b999e053a87e31229e237f4feb8112eaf'
 )
 
 http_file(
@@ -264,12 +264,12 @@ new_http_archive(
 
 http_file(
     name = 'm4_stdcxx',
-    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx.m4',
-    sha256 = '884666123ad2cacfabff2a4e4e43ddf1c6a0a242f882864efde5d01624d5e2b4'
+    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx.m4;hb=9e5ef8a7fa6f32dce37a9a340cef793254d2396b',
+    sha256 = 'f40695388506c57124ca4f3945a9ad9d682e491dd077057390579aa58922527e'
 )
 
 http_file(
     name = 'm4_stdcxx_11',
-    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx_11.m4',
-    sha256 = 'f0a338ceffe1cd39278edf1552b56f346f2606f103ed270a129454176266059b'
+    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx_11.m4;hb=9e5ef8a7fa6f32dce37a9a340cef793254d2396b',
+    sha256 = '928e25217046d800194cfbb39ba1acbb5b445aee971699d61a39e9c4e1ae99d0'
 )
