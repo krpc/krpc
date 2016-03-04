@@ -21,7 +21,7 @@ def _get_mode(mode_map, path):
                 matchlen = len(x)
     return match
 
-def _impl(ctx):
+def _pkg_zip_impl(ctx):
     output = ctx.outputs.out
     inputs = ctx.files.files
     path_map = ctx.attr.path_map
@@ -51,8 +51,8 @@ def _impl(ctx):
         command = '\n'.join(sub_commands)
     )
 
-package_archive = rule(
-    implementation = _impl,
+pkg_zip = rule(
+    implementation = _pkg_zip_impl,
     attrs = {
         'files': attr.label_list(allow_files=True, mandatory=True, non_empty=True),
         'path_map': attr.string_dict(),

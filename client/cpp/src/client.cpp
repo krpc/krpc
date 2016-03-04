@@ -36,7 +36,7 @@ namespace krpc {
         data += rpc_connection->receive(1);
         size = decoder::decode_size_and_position(data).first;
         break;
-      } catch (decoder::DecodeFailed& e) {
+      } catch (decoder::DecodeFailed&) {
       }
     }
 

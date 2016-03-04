@@ -1,3 +1,8 @@
+v0.2.3
+ * Add checks for asio.hpp and protobuf library to cmake script
+ * Add Windows with MSVC support to cmake script
+ * Fix compiler warnings reported by MSVC
+
 v0.2.2
  * Add support for streams (#175)
  * Add documentation to service header files

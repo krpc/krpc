@@ -11,7 +11,7 @@ namespace krpc {
 
     // Connect to RPC server
     std::shared_ptr<Connection> rpc_connection(new Connection(address, rpc_port));
-    rpc_connection->connect(10, 0.1);
+    rpc_connection->connect(10, 0.1f);
     rpc_connection->send(encoder::RPC_HELLO_MESSAGE, encoder::RPC_HELLO_MESSAGE_LENGTH);
     rpc_connection->send(encoder::client_name(name));
     std::string client_identifier = rpc_connection->receive(decoder::GUID_LENGTH);
@@ -20,7 +20,7 @@ namespace krpc {
     std::shared_ptr<Connection> stream_connection;
     if (stream_port != 0) {
       stream_connection = std::shared_ptr<Connection>(new Connection(address, stream_port));
-      stream_connection->connect(10, 0.1);
+      stream_connection->connect(10, 0.1f);
       stream_connection->send(encoder::STREAM_HELLO_MESSAGE, encoder::STREAM_HELLO_MESSAGE_LENGTH);
       stream_connection->send(client_identifier);
       std::string ok_message = stream_connection->receive(decoder::OK_MESSAGE_LENGTH);
