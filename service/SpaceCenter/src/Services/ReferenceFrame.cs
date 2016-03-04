@@ -69,6 +69,9 @@ namespace KRPC.SpaceCenter.Services
             this.engineFx = engineFx;
             this.rcs = rcs;
             this.rcsThrustTransform = rcsThrustTransform;
+            // TODO: do we need to handle engines with more than one thrust transform?
+            if ((engine != null && engine.thrustTransforms.Count > 1) || (engineFx != null && engineFx.thrustTransforms.Count > 1))
+                throw new InvalidOperationException ("Engine has more than one thrust transform");
         }
 
         /// <summary>
@@ -239,7 +242,9 @@ namespace KRPC.SpaceCenter.Services
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.position;
                 case Type.ThrustEngine:
+                    return engine.thrustTransforms [0].position;
                 case Type.ThrustEngineFx:
+                    return engineFx.thrustTransforms [0].position;
                 case Type.ThrustRCS:
                     throw new NotImplementedException ();
                 default:
@@ -333,7 +338,9 @@ namespace KRPC.SpaceCenter.Services
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.forward;
                 case Type.ThrustEngine:
+                    return engine.thrustTransforms [0].rotation * Vector3d.back;
                 case Type.ThrustEngineFx:
+                    return engineFx.thrustTransforms [0].rotation * Vector3d.back;
                 case Type.ThrustRCS:
                     throw new NotImplementedException ();
                 default:
@@ -396,7 +403,9 @@ namespace KRPC.SpaceCenter.Services
                 case Type.DockingPort:
                     return -dockingPort.nodeTransform.up;
                 case Type.ThrustEngine:
+                    return engine.thrustTransforms [0].rotation * Vector3d.up;
                 case Type.ThrustEngineFx:
+                    return engineFx.thrustTransforms [0].rotation * Vector3d.up;
                 case Type.ThrustRCS:
                     throw new NotImplementedException ();
                 default:

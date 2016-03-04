@@ -11,9 +11,8 @@ v0.2.3
    * RCS.Thrusters - returns a list of Engine objects, one for each thruster in the RCS block
  * Added the following to the Engine class:
    * ThrustPosition - position at which the engine produces thrust
-   * ThrustDirection - direction of thrust, including the current gimbal rotation
-   * InitialThrustDirection - direction of thrust, without the current gimbal rotation
-   * ThrustReferenceFrame - a reference frame oriented with the initial thrust direction
+   * ThrustDirection - direction of thrust, including gimballing
+   * ThrustReferenceFrame - a reference frame oriented with the thrust direction
    * GimbalRotation - current rotation of the gimbal (if any)
  * Combined ReactionWheel.PitchTorque, YawTorque and RollTorque into a single Torque method
  * Fix bug with vessel center of mass calculations (#218)
