@@ -8,8 +8,17 @@ genrule(
     cmd = 'echo "__version__ = \'%s\'" > "$@"' % version
 )
 
-py_sdist(
+genrule(
     name = 'python',
+    srcs = [':python-pypi'],
+    outs = ['krpc-python-%s.zip' % version],
+    cmd = 'ln -f -r -s "$<" "$@"',
+    output_to_bindir = True,
+    visibility = ['//visibility:public']
+)
+
+py_sdist(
+    name = 'python-pypi',
     out = 'krpc-%s.zip' % version,
     files = [
         '//:readme', '//:version', 'CHANGES.txt',
@@ -20,8 +29,7 @@ py_sdist(
     path_map = {
         'client/python/': '',
         'protobuf/': 'krpc/schema/'
-    },
-    visibility = ['//visibility:public']
+    }
 )
 
 test_suite(

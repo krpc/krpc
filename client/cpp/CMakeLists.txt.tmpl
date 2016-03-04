@@ -3,11 +3,47 @@ cmake_minimum_required(VERSION 2.8)
 
 set(VERSION_NUMBER %VERSION%)
 set(CMAKE_BUILD_TYPE "Release")
+
 if(CMAKE_COMPILER_IS_GNUCXX)
+  # Enable C++ 2011 when building with gcc
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
-include_directories(include include/krpc) #TODO: shouldn't need include/krpc
+# Check for protobuf
+find_package(Protobuf REQUIRED)
+
+# Check for ASIO headers
+find_path(HAVE_ASIO asio.hpp)
+message(${HAVE_ASIO})
+if(NOT HAVE_ASIO)
+  unset(HAVE_ASIO CACHE)
+  message(FATAL_ERROR "asio.hpp not found")
+endif()
+
+if(WIN32)
+  add_definitions(-D_SCL_SECURE_NO_WARNINGS)
+  # set _WIN32_WINNT for ASIO
+  if (CMAKE_SYSTEM_VERSION)
+    set(winver ${CMAKE_SYSTEM_VERSION})
+    string(REPLACE "." "" winver ${winver})
+    string(REGEX REPLACE "([0-9])" "0\\1" winver ${winver})
+    set(winver "0x${winver}")
+  endif()
+  add_definitions(-D_WIN32_WINNT=${winver})
+endif()
+
+if(MSVC)
+  # protobuf statically links against MT, so need to compile with /MT not /MD
+  foreach(var
+        CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+        CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+      if(${var} MATCHES "/MD")
+        string(REGEX REPLACE "/MD" "/MT" ${var} "${${var}}")
+      endif()
+    endforeach()
+endif()
+
+include_directories(include include/krpc ${PROTOBUF_INCLUDE_DIRS})
 
 file(GLOB SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_library(krpc SHARED ${SRC})
@@ -16,6 +52,8 @@ set_target_properties(
   krpc PROPERTIES VERSION   ${VERSION_NUMBER}
                   SOVERSION ${VERSION_NUMBER}
                   INSTALL_NAME_DIR lib)
+
+target_link_libraries(krpc ${PROTOBUF_LIBRARIES})
 
 install(TARGETS krpc
         LIBRARY DESTINATION lib
