@@ -521,7 +521,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The current rotation of the gimbal, in the given reference frame.
-        /// This is a quarternion describing the rotation engine nozzel away from it's initial position.
+        /// This is a quaternion describing the rotation engine nozzel away from it's initial position.
         /// To get the gimbal rotation relative to the initial direction of the engine,
         /// use <see cref="Engine.ThrustReferenceFrame" />.
         /// </summary>
