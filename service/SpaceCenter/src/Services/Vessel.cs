@@ -368,7 +368,18 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
             get {
-                throw new NotImplementedException ();
+                Vector3d MoI = Vector3d.zero;
+                var CoM = InternalVessel.findWorldCenterOfMass ();
+                foreach (var part in InternalVessel.parts) {
+                    if (part.rb != null) {
+                        var position = part.rb.position - CoM;
+                        var sqRadius = new Vector3d (position.y * position.y + position.z * position.z,
+                                           position.x * position.x + position.z * position.z,
+                                           position.x * position.x + position.y * position.y);
+                        MoI += part.rb.mass * sqRadius;
+                    }
+                }
+                return MoI.ToTuple ();
             }
         }
 
