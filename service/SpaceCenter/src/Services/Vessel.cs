@@ -372,7 +372,7 @@ namespace KRPC.SpaceCenter.Services
                 var CoM = InternalVessel.findWorldCenterOfMass ();
                 foreach (var part in InternalVessel.parts) {
                     if (part.rb != null) {
-                        var position = part.rb.position - CoM;
+                        var position = InternalVessel.GetTransform ().InverseTransformDirection (part.rb.position - CoM);
                         var sqRadius = new Vector3d (position.y * position.y + position.z * position.z,
                                            position.x * position.x + position.z * position.z,
                                            position.x * position.x + position.y * position.y);
