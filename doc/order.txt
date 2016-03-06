@@ -349,7 +349,6 @@ SpaceCenter.Engine.MaxVacuumThrust
 SpaceCenter.Engine.ThrustLimit
 SpaceCenter.Engine.ThrustPosition
 SpaceCenter.Engine.ThrustDirection
-SpaceCenter.Engine.InitialThrustDirection
 SpaceCenter.Engine.ThrustReferenceFrame
 SpaceCenter.Engine.SpecificImpulse
 SpaceCenter.Engine.VacuumSpecificImpulse
@@ -420,9 +419,7 @@ SpaceCenter.ReactionWheel
 SpaceCenter.ReactionWheel.Part
 SpaceCenter.ReactionWheel.Active
 SpaceCenter.ReactionWheel.Broken
-SpaceCenter.ReactionWheel.PitchTorque
-SpaceCenter.ReactionWheel.YawTorque
-SpaceCenter.ReactionWheel.RollTorque
+SpaceCenter.ReactionWheel.Torque
 SpaceCenter.RCS
 SpaceCenter.RCS.Part
 SpaceCenter.RCS.Active
