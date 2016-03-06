@@ -56,3 +56,5 @@ deploy:
   acl: public_read
   skip_cleanup: true
   local_dir: bazel-bin
+  on:
+    all_branches: true
