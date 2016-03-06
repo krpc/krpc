@@ -1,3 +1,6 @@
+v0.2.3
+ * Fix null pointer exception in autopilot when switching scenes (#220)
+
 v0.2.2
  * Add Part.IsFuelLine
  * Fix bug with Part.FuelLinesTo (#193)
