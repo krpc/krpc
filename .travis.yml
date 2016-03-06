@@ -45,7 +45,3 @@ script:
 
 after_script:
   - rm -rf lib/ksp
-
-branches:
-  except:
-    - gh-pages
