@@ -208,7 +208,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double MeanAltitude {
-            get { return InternalVessel.mainBody.GetAltitude (InternalVessel.findWorldCenterOfMass ()); }
+            get { return InternalVessel.mainBody.GetAltitude (WorldCoM); }
         }
 
         /// <summary>
@@ -540,7 +540,7 @@ namespace KRPC.SpaceCenter.Services
                 if (FAR.IsAvailable) {
                     return (float)FAR.VesselTermVelEst (InternalVessel);
                 } else {
-                    var gravity = Math.Sqrt (InternalVessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (InternalVessel.findWorldCenterOfMass ()).magnitude);
+                    var gravity = Math.Sqrt (InternalVessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (WorldCoM).magnitude);
                     return (float)(Math.Sqrt (gravity / WorldDrag.magnitude) * InternalVessel.speed);
                 }
             }
