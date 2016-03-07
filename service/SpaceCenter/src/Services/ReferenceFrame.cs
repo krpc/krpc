@@ -36,6 +36,7 @@ namespace KRPC.SpaceCenter.Services
             Maneuver,
             ManeuverOrbital,
             Part,
+            PartCenterOfMass,
             DockingPort,
             Thrust
         }
@@ -170,6 +171,11 @@ namespace KRPC.SpaceCenter.Services
             return new ReferenceFrame (Type.Part, part: part);
         }
 
+        internal static ReferenceFrame ObjectCenterOfMass (Part part)
+        {
+            return new ReferenceFrame (Type.PartCenterOfMass, part: part);
+        }
+
         internal static ReferenceFrame Object (ModuleDockingNode dockingPort)
         {
             return new ReferenceFrame (Type.DockingPort, dockingPort: dockingPort);
@@ -208,6 +214,8 @@ namespace KRPC.SpaceCenter.Services
                     }
                 case Type.Part:
                     return InternalPart.transform.position;
+                case Type.PartCenterOfMass:
+                    return InternalPart.CenterOfMass ();
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.position;
                 case Type.Thrust:
@@ -299,6 +307,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                     return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
                 case Type.Part:
+                case Type.PartCenterOfMass:
                     return InternalPart.transform.up;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.forward;
@@ -360,6 +369,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                     return node.patch.GetOrbitNormal ().SwapYZ ();
                 case Type.Part:
+                case Type.PartCenterOfMass:
                     return InternalPart.transform.forward;
                 case Type.DockingPort:
                     return -dockingPort.nodeTransform.up;

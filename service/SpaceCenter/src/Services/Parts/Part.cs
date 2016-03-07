@@ -538,11 +538,27 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The position of the part in the given reference frame.
         /// </summary>
+        /// <remarks>
+        /// This is a fixed position in the part, defined by the parts model.
+        /// It s not necessarily the same as the parts center of mass.
+        /// Use <see cref="CenterOfMass"/> to get the parts center of mass.
+        /// </remarks>
         /// <param name="referenceFrame"></param>
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace (InternalPart.transform.position).ToTuple ();
+        }
+
+        /// <summary>
+        /// The position of the parts center of mass in the given reference frame.
+        /// If the part is physicsless, this is equivalent to <see cref="Position"/>.
+        /// </summary>
+        /// <param name="referenceFrame"></param>
+        [KRPCMethod]
+        public Tuple3 CenterOfMass (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.PositionFromWorldSpace (InternalPart.CenterOfMass ()).ToTuple ();
         }
 
         /// <summary>
@@ -576,9 +592,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The reference frame that is fixed relative to this part.
+        /// The reference frame that is fixed relative to this part, and centered on a fixed position within the part, defined by the parts model.
         /// <list type="bullet">
-        /// <item><description>The origin is at the position of the part.</description></item>
+        /// <item><description>The origin is at the position of the part, as returned by <see cref="Position"/>.</description></item>
         /// <item><description>The axes rotate with the part.</description></item>
         /// <item><description>The x, y and z axis directions depend on the design of the part.</description></item>
         /// </list>
@@ -590,6 +606,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
             get { return ReferenceFrame.Object (InternalPart); }
+        }
+
+        /// <summary>
+        /// The reference frame that is fixed relative to this part, and centered on its center of mass.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the center of mass of the part, as returned by <see cref="CenterOfMass"/>.</description></item>
+        /// <item><description>The axes rotate with the part.</description></item>
+        /// <item><description>The x, y and z axis directions depend on the design of the part.</description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// For docking port parts, this reference frame is not necessarily equivalent to the reference frame
+        /// for the docking port, returned by <see cref="DockingPort.ReferenceFrame"/>.
+        /// </remarks>
+        [KRPCProperty]
+        public ReferenceFrame CenterOfMassReferenceFrame {
+            get { return ReferenceFrame.ObjectCenterOfMass (InternalPart); }
         }
     }
 }

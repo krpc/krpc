@@ -10,6 +10,7 @@ v0.2.3
  * Part object additions:
    * CenterOfMass - center of mass of the part
    * InertiaTensor - inertia tensor for the part
+   * CenterOfMassReferenceFrame - reference frame whose origin is the parts center of mass
  * Added Thruster objects:
    * Represents, for example a rocket nozzel or RCS thruster
    * Can be used to get the position and direction of thrust
