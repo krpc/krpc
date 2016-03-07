@@ -343,9 +343,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The current rotation of the gimbal, in the given reference frame.
         /// This is a quaternion describing the rotation engine's nozzels away from their initial position.
         /// To get the gimbal rotation relative to the initial direction of one of the engine's thrusters,
-        /// use <see cref="Thruster.ThrustReferenceFrame" />.
+        /// use <see cref="Thruster.ReferenceFrame" />.
         /// </summary>
-        /// <param name="referenceFrame">Reference frame of the resulting direction vector.</param>
+        /// <param name="referenceFrame"></param>
         [KRPCMethod]
         public Tuple4 GimbalRotation (ReferenceFrame referenceFrame)
         {

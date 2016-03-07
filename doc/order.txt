@@ -483,9 +483,9 @@ SpaceCenter.SolarPanelState.Extending
 SpaceCenter.SolarPanelState.Retracting
 SpaceCenter.SolarPanelState.Broken
 SpaceCenter.Thruster.Part
-SpaceCenter.Thruster.ThrustPosition
-SpaceCenter.Thruster.ThrustDirection
-SpaceCenter.Thruster.ThrustReferenceFrame
+SpaceCenter.Thruster.Position
+SpaceCenter.Thruster.Direction
+SpaceCenter.Thruster.ReferenceFrame
 SpaceCenter.Resources
 SpaceCenter.Resources.Names
 SpaceCenter.Resources.HasResource

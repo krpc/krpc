@@ -106,7 +106,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="referenceFrame"></param>
         [KRPCMethod]
-        public Tuple3 ThrustPosition (ReferenceFrame referenceFrame)
+        public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace (WorldThrustPosition).ToTuple ();
         }
@@ -118,18 +118,18 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <param name="referenceFrame"></param>
         [KRPCMethod]
-        public Tuple3 ThrustDirection (ReferenceFrame referenceFrame)
+        public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
             return referenceFrame.DirectionFromWorldSpace (WorldThrustDirection).ToTuple ();
         }
 
         /// <summary>
         /// The reference frame that is fixed relative to the thruster, and orientated with
-        /// its thrust direction (<see cref="ThrustDirection"/>).
+        /// its thrust direction (<see cref="Direction"/>).
         /// For gimballed engines, this takes into account the current rotation of the gimbal.
         /// <list type="bullet">
         /// <item><description>
-        /// The origin is at the position of thrust for this thruster (<see cref="ThrustPosition"/>).
+        /// The origin is at the position of thrust for this thruster (<see cref="Position"/>).
         /// </description></item>
         /// <item><description>
         /// The axes rotate with the thrust direction.
@@ -140,7 +140,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </list>
         /// </summary>
         [KRPCProperty]
-        public ReferenceFrame ThrustReferenceFrame {
+        public ReferenceFrame ReferenceFrame {
             get { return ReferenceFrame.Thrust (this); }
         }
     }
