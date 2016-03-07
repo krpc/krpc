@@ -1,3 +1,6 @@
+v0.2.3
+ * Fix bug with translation inputs in Control class (#223)
+
 v0.2.2
  * Add Part.IsFuelLine
  * Fix bug with Part.FuelLinesTo (#193)
