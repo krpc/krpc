@@ -66,13 +66,59 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A list of engine objects, one of each thruster in the RCS.
+        /// Whether the RCS thruster will fire when pitch control input is given.
         /// </summary>
         [KRPCProperty]
-        public IList<Engine> Thrusters {
-            get {
-                return rcs.thrusterTransforms.Select (transform => new Engine (part, transform)).ToList ();
-            }
+        public bool PitchEnabled {
+            get { return rcs.enablePitch; }
+        }
+
+        /// <summary>
+        /// Whether the RCS thruster will fire when yaw control input is given.
+        /// </summary>
+        [KRPCProperty]
+        public bool YawEnabled {
+            get { return rcs.enableYaw; }
+        }
+
+        /// <summary>
+        /// Whether the RCS thruster will fire when roll control input is given.
+        /// </summary>
+        [KRPCProperty]
+        public bool RollEnabled {
+            get { return rcs.enableRoll; }
+        }
+
+        /// <summary>
+        /// Whether the RCS thruster will fire when pitch control input is given.
+        /// </summary>
+        [KRPCProperty]
+        public bool ForwardEnabled {
+            get { return rcs.enableZ; }
+        }
+
+        /// <summary>
+        /// Whether the RCS thruster will fire when yaw control input is given.
+        /// </summary>
+        [KRPCProperty]
+        public bool UpEnabled {
+            get { return rcs.enableY; }
+        }
+
+        /// <summary>
+        /// Whether the RCS thruster will fire when roll control input is given.
+        /// </summary>
+        [KRPCProperty]
+        public bool RightEnabled {
+            get { return rcs.enableX; }
+        }
+
+        /// <summary>
+        /// A list of thrusters, one of each thruster in the RCS.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Thruster> Thrusters {
+            get { return Enumerable.Range (0, rcs.thrusterTransforms.Count).Select (i => new Thruster (part, rcs, i)).ToList (); }
         }
     }
 }

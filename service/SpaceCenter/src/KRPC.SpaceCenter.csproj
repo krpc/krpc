@@ -113,6 +113,7 @@
     <Compile Include="Services\Parts\ResourceHarvester.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />
     <Compile Include="Services\Parts\SolarPanel.cs" />
+    <Compile Include="Services\Parts\Thruster.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
     <Compile Include="Services\Resources.cs" />
     <Compile Include="Services\SASMode.cs" />

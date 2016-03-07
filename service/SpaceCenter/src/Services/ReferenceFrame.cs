@@ -3,6 +3,7 @@ using UnityEngine;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.Services.Parts;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -36,9 +37,7 @@ namespace KRPC.SpaceCenter.Services
             ManeuverOrbital,
             Part,
             DockingPort,
-            ThrustEngine,
-            ThrustEngineFx,
-            ThrustRCS
+            Thrust
         }
 
         readonly Type type;
@@ -47,16 +46,11 @@ namespace KRPC.SpaceCenter.Services
         readonly ManeuverNode node;
         readonly uint partId;
         readonly ModuleDockingNode dockingPort;
-        readonly ModuleEngines engine;
-        readonly ModuleEnginesFX engineFx;
-        readonly ModuleRCS rcs;
-        readonly Transform rcsThrustTransform;
+        readonly Thruster thruster;
 
         ReferenceFrame (
             Type type, global::CelestialBody body = null, global::Vessel vessel = null,
-            ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null,
-            ModuleEngines engine = null, ModuleEnginesFX engineFx = null,
-            ModuleRCS rcs = null, Transform rcsThrustTransform = null)
+            ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null, Thruster thruster = null)
         {
             this.type = type;
             this.body = body;
@@ -65,13 +59,7 @@ namespace KRPC.SpaceCenter.Services
             //TODO: is it safe to use a part id of 0 to mean no part?
             this.partId = part != null ? part.flightID : 0;
             this.dockingPort = dockingPort;
-            this.engine = engine;
-            this.engineFx = engineFx;
-            this.rcs = rcs;
-            this.rcsThrustTransform = rcsThrustTransform;
-            // TODO: do we need to handle engines with more than one thrust transform?
-            if ((engine != null && engine.thrustTransforms.Count > 1) || (engineFx != null && engineFx.thrustTransforms.Count > 1))
-                throw new InvalidOperationException ("Engine has more than one thrust transform");
+            this.thruster = thruster;
         }
 
         /// <summary>
@@ -86,10 +74,7 @@ namespace KRPC.SpaceCenter.Services
             node == obj.node &&
             partId == obj.partId &&
             dockingPort == obj.dockingPort &&
-            engine == obj.engine &&
-            engineFx == obj.engineFx &&
-            rcs == obj.rcs &&
-            rcsThrustTransform == obj.rcsThrustTransform;
+            thruster == obj.thruster;
         }
 
         /// <summary>
@@ -106,14 +91,8 @@ namespace KRPC.SpaceCenter.Services
             hash ^= partId.GetHashCode ();
             if (dockingPort != null)
                 hash ^= dockingPort.GetHashCode ();
-            if (engine != null)
-                hash ^= engine.GetHashCode ();
-            if (engineFx != null)
-                hash ^= engineFx.GetHashCode ();
-            if (rcs != null)
-                hash ^= rcs.GetHashCode ();
-            if (rcsThrustTransform != null)
-                hash ^= rcsThrustTransform.GetHashCode ();
+            if (thruster != null)
+                hash ^= thruster.GetHashCode ();
             return hash;
         }
 
@@ -196,19 +175,9 @@ namespace KRPC.SpaceCenter.Services
             return new ReferenceFrame (Type.DockingPort, dockingPort: dockingPort);
         }
 
-        internal static ReferenceFrame Thrust (Part part, ModuleEngines engine)
+        internal static ReferenceFrame Thrust (Thruster thruster)
         {
-            return new ReferenceFrame (Type.ThrustEngine, part: part, engine: engine);
-        }
-
-        internal static ReferenceFrame Thrust (Part part, ModuleEnginesFX engineFx)
-        {
-            return new ReferenceFrame (Type.ThrustEngineFx, part: part, engineFx: engineFx);
-        }
-
-        internal static ReferenceFrame Thrust (Part part, ModuleRCS rcs, Transform rcsThrustTransform)
-        {
-            return new ReferenceFrame (Type.ThrustRCS, part: part, rcs: rcs, rcsThrustTransform: rcsThrustTransform);
+            return new ReferenceFrame (Type.Thrust, part: thruster.Part.InternalPart, thruster: thruster);
         }
 
         /// <summary>
@@ -241,12 +210,8 @@ namespace KRPC.SpaceCenter.Services
                     return InternalPart.transform.position;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.position;
-                case Type.ThrustEngine:
-                    return engine.thrustTransforms [0].position;
-                case Type.ThrustEngineFx:
-                    return engineFx.thrustTransforms [0].position;
-                case Type.ThrustRCS:
-                    throw new NotImplementedException ();
+                case Type.Thrust:
+                    return thruster.WorldThrustPosition;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -337,12 +302,8 @@ namespace KRPC.SpaceCenter.Services
                     return InternalPart.transform.up;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.forward;
-                case Type.ThrustEngine:
-                    return engine.thrustTransforms [0].rotation * Vector3d.back;
-                case Type.ThrustEngineFx:
-                    return engineFx.thrustTransforms [0].rotation * Vector3d.back;
-                case Type.ThrustRCS:
-                    throw new NotImplementedException ();
+                case Type.Thrust:
+                    return thruster.WorldThrustDirection;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -402,12 +363,8 @@ namespace KRPC.SpaceCenter.Services
                     return InternalPart.transform.forward;
                 case Type.DockingPort:
                     return -dockingPort.nodeTransform.up;
-                case Type.ThrustEngine:
-                    return engine.thrustTransforms [0].rotation * Vector3d.up;
-                case Type.ThrustEngineFx:
-                    return engineFx.thrustTransforms [0].rotation * Vector3d.up;
-                case Type.ThrustRCS:
-                    throw new NotImplementedException ();
+                case Type.Thrust:
+                    return thruster.WorldThrustPerpendicularDirection;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -433,9 +390,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                     return Vector3d.zero; //TODO: check this
                 case Type.Part:
-                case Type.ThrustEngine:
-                case Type.ThrustEngineFx:
-                case Type.ThrustRCS:
+                case Type.Thrust:
                     return InternalPart.vessel.GetOrbit ().GetVel ();
                 case Type.DockingPort:
                     return dockingPort.vessel.GetOrbit ().GetVel ();
@@ -468,9 +423,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                 case Type.Part:
                 case Type.DockingPort:
-                case Type.ThrustEngine:
-                case Type.ThrustEngineFx:
-                case Type.ThrustRCS:
+                case Type.Thrust:
                     return Vector3d.zero; //TODO: check this
                 default:
                     throw new ArgumentException ("No such reference frame");

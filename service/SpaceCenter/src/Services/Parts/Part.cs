@@ -445,6 +445,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// An <see cref="Engine"/> if the part is an engine, otherwise <c>null</c>.
         /// </summary>
+        /// <remarks>
+        /// This includes any part that generates thrust. This covers many different types of engine,
+        /// including liquid fuel rockets, solid rocket boosters and jet engines.
+        /// For RCS thrusters see <see cref="RCS"/>.
+        /// </remarks>
         [KRPCProperty]
         public Engine Engine {
             get { return IsEngine ? new Engine (this) : null; }

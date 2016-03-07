@@ -347,9 +347,7 @@ SpaceCenter.Engine.AvailableThrust
 SpaceCenter.Engine.MaxThrust
 SpaceCenter.Engine.MaxVacuumThrust
 SpaceCenter.Engine.ThrustLimit
-SpaceCenter.Engine.ThrustPosition
-SpaceCenter.Engine.ThrustDirection
-SpaceCenter.Engine.ThrustReferenceFrame
+SpaceCenter.Engine.Thrusters
 SpaceCenter.Engine.SpecificImpulse
 SpaceCenter.Engine.VacuumSpecificImpulse
 SpaceCenter.Engine.KerbinSeaLevelSpecificImpulse
@@ -423,6 +421,12 @@ SpaceCenter.ReactionWheel.Torque
 SpaceCenter.RCS
 SpaceCenter.RCS.Part
 SpaceCenter.RCS.Active
+SpaceCenter.RCS.PitchEnabled
+SpaceCenter.RCS.YawEnabled
+SpaceCenter.RCS.RollEnabled
+SpaceCenter.RCS.ForwardEnabled
+SpaceCenter.RCS.UpEnabled
+SpaceCenter.RCS.RightEnabled
 SpaceCenter.RCS.Thrusters
 SpaceCenter.ReactionWheel.Part
 SpaceCenter.ReactionWheel.Active
@@ -478,6 +482,10 @@ SpaceCenter.SolarPanelState.Retracted
 SpaceCenter.SolarPanelState.Extending
 SpaceCenter.SolarPanelState.Retracting
 SpaceCenter.SolarPanelState.Broken
+SpaceCenter.Thruster.Part
+SpaceCenter.Thruster.ThrustPosition
+SpaceCenter.Thruster.ThrustDirection
+SpaceCenter.Thruster.ThrustReferenceFrame
 SpaceCenter.Resources
 SpaceCenter.Resources.Names
 SpaceCenter.Resources.HasResource
