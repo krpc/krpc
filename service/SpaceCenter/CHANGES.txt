@@ -23,6 +23,7 @@ v0.2.3
  * ReactionWheel object changes:
    * Combined ReactionWheel.PitchTorque, YawTorque and RollTorque into a single Torque method
  * Fix bug with vessel center of mass calculations (#218)
+ * Fix bug with translation inputs in Control class (#223)
 
 v0.2.2
  * Add Part.IsFuelLine
