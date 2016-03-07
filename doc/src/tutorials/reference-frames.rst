@@ -150,6 +150,7 @@ kRPC provides the following reference frames:
 * :attr:`Node.orbital_reference_frame`
 * :attr:`Part.reference_frame`
 * :attr:`DockingPort.reference_frame`
+* :attr:`Thruster.reference_frame`
 
 Converting Between Reference Frames
 -----------------------------------
