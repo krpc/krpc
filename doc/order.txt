@@ -514,6 +514,14 @@ SpaceCenter.Thruster.Part
 SpaceCenter.Thruster.Position
 SpaceCenter.Thruster.Direction
 SpaceCenter.Thruster.ReferenceFrame
+SpaceCenter.Thruster.ThrustPosition
+SpaceCenter.Thruster.ThrustDirection
+SpaceCenter.Thruster.ThrustReferenceFrame
+SpaceCenter.Thruster.Gimballed
+SpaceCenter.Thruster.GimbalPosition
+SpaceCenter.Thruster.GimbalAngle
+SpaceCenter.Thruster.InitialThrustPosition
+SpaceCenter.Thruster.InitialThrustDirection
 SpaceCenter.Resources
 SpaceCenter.Resources.Names
 SpaceCenter.Resources.HasResource
