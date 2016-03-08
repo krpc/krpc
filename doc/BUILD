@@ -72,6 +72,7 @@ py_script(
 
 sphinx_build(
     name = 'html',
+    out = 'html.zip',
     srcs = [':srcs'],
     sphinx_build = ':sphinx-build',
     builder = 'html',
@@ -80,6 +81,7 @@ sphinx_build(
 
 sphinx_build(
     name = 'latex',
+    out = 'kRPC.pdf',
     srcs = [':srcs'],
     sphinx_build = ':sphinx-build',
     builder = 'latex',
