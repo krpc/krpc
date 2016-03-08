@@ -129,6 +129,12 @@ pkg_zip(
         'tools/build/ksp/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
         'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
+        # Clients
+        'client/python/': 'client/',
+        'client/cpp/': 'client/',
+        'client/csharp/': 'client/',
+        'client/lua/': 'client/',
+        'client/java/': 'client/',
         # Schema
         'protobuf/': 'schema/',
         # Docs

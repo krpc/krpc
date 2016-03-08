@@ -64,9 +64,9 @@ sphinx_build = rule(
         'srcs': attr.label_list(allow_files=True),
         'sphinx_build': attr.label(executable=True, mandatory=True),
         'builder': attr.string(mandatory=True),
-        'opts': attr.string_dict()
-    },
-    outputs = {'out': '%{name}.zip'}
+        'opts': attr.string_dict(),
+        'out': attr.output(mandatory=True)
+    }
 )
 
 def _spelling_impl(ctx):
