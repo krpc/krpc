@@ -4,8 +4,8 @@ Bazel
 circularization
 clickable
 clientgen
-comms
 CMake
+comms
 crossfeed
 decouplers
 dll
@@ -38,12 +38,14 @@ namespaces
 namespacing
 navball
 nozzel
+nozzels
 ns
 NUnit
 Olex
 online
 pdflatex
 periapsis
+physicsless
 plugin
 prograde
 proto
