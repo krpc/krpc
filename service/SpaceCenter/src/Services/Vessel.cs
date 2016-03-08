@@ -368,18 +368,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
             get {
-                Vector3d MoI = Vector3d.zero;
-                var CoM = InternalVessel.findWorldCenterOfMass ();
-                foreach (var part in InternalVessel.parts) {
-                    if (part.rb != null) {
-                        var position = part.rb.position - CoM;
-                        var sqRadius = new Vector3d (position.y * position.y + position.z * position.z,
-                                           position.x * position.x + position.z * position.z,
-                                           position.x * position.x + position.y * position.y);
-                        MoI += part.rb.mass * sqRadius;
-                    }
-                }
-                return MoI.ToTuple ();
+              var inertiaTensor = ComputeInertiaTensor ();
+              return inertiaTensor.Diag ().ToTuple ();
             }
         }
 
@@ -438,6 +428,45 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 ControlSurfaceTorque {
             get { return ComputeControlSurfaceTorque ().ToTuple (); }
+        }
+
+        /// <summary>
+        /// Computes the full inertia tensor of the vessel.  This applies the parallel axis theorem to
+        /// sum up all the contributions to the inertia tensor from every part.  It (ab)uses the Matrix4x4
+        /// class in order to do 3x3 matrix operations in the hope that the Matrix4x4 class winds up
+        /// running on the GPU.
+        /// </summary>
+        Matrix4x4 ComputeInertiaTensor ()
+        {
+            Matrix4x4 inertiaTensor = Matrix4x4.zero;
+            Vector3 CoM = InternalVessel.findWorldCenterOfMass ();
+            // Use the part ReferenceTransform because we want roll/pitch/yaw relative to controlling part
+            Transform vesselTransform = InternalVessel.GetTransform ();
+
+            foreach (var part in InternalVessel.parts) {
+                if (part.rb != null) {
+                    Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
+
+                    // translate:  inertiaTensor frame to part frame, part frame to world frame, world frame to vessel frame
+                    Quaternion rot = Quaternion.Inverse(vesselTransform.rotation) * part.transform.rotation * part.rb.inertiaTensorRotation;
+                    Quaternion inv = Quaternion.Inverse(rot);
+
+                    Matrix4x4 rotMatrix = Matrix4x4.TRS(Vector3.zero, rot, Vector3.one);
+                    Matrix4x4 invMatrix = Matrix4x4.TRS(Vector3.zero, inv, Vector3.one);
+
+                    // add the part inertiaTensor to the ship inertiaTensor
+                    inertiaTensor.Add(rotMatrix * partTensor * invMatrix);
+
+                    Vector3 position = vesselTransform.InverseTransformDirection(part.rb.position - CoM);
+
+                    // add the part mass to the ship inertiaTensor
+                    inertiaTensor.Add((part.rb.mass * position.sqrMagnitude).ToDiagonalMatrix ());
+
+                    // add the part distance offset to the ship inertiaTensor
+                    inertiaTensor.Add(position.OuterProduct(-part.rb.mass * position));
+                }
+            }
+            return inertiaTensor;
         }
 
         Vector3d ComputeReactionWheelTorque ()

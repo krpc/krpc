@@ -293,5 +293,69 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         {
             return v - normal * Vector3d.Dot (normal, v);
         }
+
+        /// <summary>
+        /// Add a 4x4 Matrix into another one (does not allocate)
+        /// </summary>
+        public static void Add (this Matrix4x4 left, Matrix4x4 right) {
+            for(int i = 0; i < 4; i++) {
+                left.SetColumn(i, left.GetColumn(i) + right.GetColumn(i));
+            }
+        }
+
+        /// <summary>
+        /// Subtract a 4x4 Matrix from another one (does not allocate)
+        /// </summary>
+        public static void Subtract (this Matrix4x4 left, Matrix4x4 right) {
+            for(int i = 0; i < 4; i++) {
+                left.SetColumn(i, left.GetColumn(i) - right.GetColumn(i));
+            }
+        }
+
+        /// <summary>
+        /// Returns the diagonal 3-vector from the 4x4 matrix (simulating 3x3 matrix)
+        /// </summary>
+        public static Vector3d Diag (this Matrix4x4 m) {
+            Vector3d v = Vector3d.zero;
+            for (int i = 0; i < 3; i++) {
+                v[i] = m[i, i];
+            }
+            return v;
+        }
+
+        /// <summary>
+        /// Constructs diagonal matrix from a float (Identity * val)
+        /// </summary>
+        public static Matrix4x4 ToDiagonalMatrix(this float v) {
+            Matrix4x4 m = Matrix4x4.identity;
+            for (int i = 0; i < 4; i++) {
+                m[i,i] = v;
+            }
+            return m;
+        }
+
+        /// <summary>
+        /// Constructs diagonal matrix from a 3-vector (simulating 3x3 matrix)
+        /// </summary>
+        public static Matrix4x4 ToDiagonalMatrix(this Vector3 v) {
+            Matrix4x4 m = Matrix4x4.identity;
+            for (int i = 0; i < 3; i++) {
+                m[i,i] = v[i];
+            }
+            return m;
+        }
+
+        /// <summary>
+        /// Construct the outer product of two 3-vectors as a 4x4 matrix
+        /// </summary>
+        public static Matrix4x4 OuterProduct(this Vector3 left, Vector3 right) {
+            Matrix4x4 m = Matrix4x4.identity;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    m[i, j] = left[i] * right[j];
+                }
+            }
+            return m;
+        }
     }
 }
