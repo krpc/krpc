@@ -219,7 +219,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.position;
                 case Type.Thrust:
-                    return thruster.WorldThrustPosition;
+                    return thruster.WorldTransform.position;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }

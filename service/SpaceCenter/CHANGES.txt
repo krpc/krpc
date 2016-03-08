@@ -13,10 +13,11 @@ v0.2.3
    * CenterOfMassReferenceFrame - reference frame whose origin is the parts center of mass
  * Added Thruster objects:
    * Represents, for example a rocket nozzel or RCS thruster
-   * Can be used to get the position and direction of thrust
+   * Get the position and direction of thrust
+   * Get a reference frame fixed to the thrust vector
+   * Get the gimbal position and current angles
  * Engine object additions:
    * Thrusters - list of thrusters that make up the engine (e.g. corresponds to individual rocket nozzels)
-   * GimbalRotation - current rotation of the gimbal (if any)
  * Added RCS objects:
    * Active - is it active?
    * Thrusters - a list of Thruster objects, one for each RCS nozzel

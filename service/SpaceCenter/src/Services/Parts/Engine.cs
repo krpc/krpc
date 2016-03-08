@@ -4,7 +4,6 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
-using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -33,9 +32,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (engine == null && engineFx == null)
                 throw new ArgumentException ("Part does not have a ModuleEngines or ModuleEnginexFX PartModule");
             if (engine != null)
-                Thrusters = Enumerable.Range (0, engine.thrustTransforms.Count).Select (i => new Thruster (part, engine, i)).ToList ();
+                Thrusters = Enumerable.Range (0, engine.thrustTransforms.Count).Select (i => new Thruster (part, engine, gimbal, i)).ToList ();
             else
-                Thrusters = Enumerable.Range (0, engineFx.thrustTransforms.Count).Select (i => new Thruster (part, engineFx, i)).ToList ();
+                Thrusters = Enumerable.Range (0, engineFx.thrustTransforms.Count).Select (i => new Thruster (part, engineFx, gimbal, i)).ToList ();
         }
 
         /// <summary>
@@ -283,7 +282,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the engine nozzle is gimballed, i.e. can provide a turning force.
+        /// Whether the engine is gimballed.
         /// </summary>
         [KRPCProperty]
         public bool Gimballed {
@@ -337,19 +336,6 @@ namespace KRPC.SpaceCenter.Services.Parts
                 value = (value * 100f).Clamp (0f, 100f);
                 gimbal.gimbalLimiter = value;
             }
-        }
-
-        /// <summary>
-        /// The current rotation of the gimbal, in the given reference frame.
-        /// This is a quaternion describing the rotation engine's nozzels away from their initial position.
-        /// To get the gimbal rotation relative to the initial direction of one of the engine's thrusters,
-        /// use <see cref="Thruster.ReferenceFrame" />.
-        /// </summary>
-        /// <param name="referenceFrame"></param>
-        [KRPCMethod]
-        public Tuple4 GimbalRotation (ReferenceFrame referenceFrame)
-        {
-            throw new NotImplementedException ();
         }
     }
 }
