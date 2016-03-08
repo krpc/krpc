@@ -132,7 +132,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Gets the maximum amount of thrust that can be produced by the engine, in
+        /// The maximum amount of thrust that can be produced by the engine, in
         /// Newtons. This is the amount of thrust produced by the engine when
         /// activated, <see cref="Engine.ThrustLimit"/> is set to 100% and the main vessel's
         /// throttle is set to 100%.
@@ -273,7 +273,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Gets whether the engine can be shutdown once activated. For example, this is
+        /// Whether the engine can be shutdown once activated. For example, this is
         /// <c>true</c> for liquid fueled rockets and <c>false</c> for solid rocket boosters.
         /// </summary>
         [KRPCProperty]
