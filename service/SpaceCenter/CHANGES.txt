@@ -8,11 +8,11 @@ v0.2.3
    * EngineTorque - available torque from gimballed engines
    * ControlSurfaceTorque - available torque from aerodynamic control surfaces
  * Part object additions:
-   * Shielded - true if the part is shielded from the outside, e.g. by a fairing
    * CenterOfMass - center of mass of the part
    * InertiaTensor - inertia tensor for the part
    * CenterOfMassReferenceFrame - reference frame whose origin is the parts center of mass
- * Added Thruster objects:
+   * Aerodynamic properties: Shielded, DynamicPressure
+* Added Thruster objects:
    * Represents, for example a rocket nozzel or RCS thruster
    * Get the position and direction of thrust
    * Get a reference frame fixed to the thrust vector

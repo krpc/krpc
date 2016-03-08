@@ -118,14 +118,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the part is shielded from the exterior of the vessel, for example by a fairing.
-        /// </summary>
-        [KRPCProperty]
-        public bool Shielded {
-            get { return InternalPart.ShieldedFromAirstream; }
-        }
-
-        /// <summary>
         /// The stage in which this part will be activated. Returns -1 if the part is not activated by staging.
         /// </summary>
         [KRPCProperty]
@@ -164,6 +156,22 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public double DryMass {
             get { return Massless ? 0f : InternalPart.mass * 1000f; }
+        }
+
+        /// <summary>
+        /// Whether the part is shielded from the exterior of the vessel, for example by a fairing.
+        /// </summary>
+        [KRPCProperty]
+        public bool Shielded {
+            get { return InternalPart.ShieldedFromAirstream; }
+        }
+
+        /// <summary>
+        /// The dynamic pressure acting on the part, in Pascals.
+        /// </summary>
+        [KRPCProperty]
+        public float DynamicPressure {
+            get { return (float)InternalPart.dynamicPressurekPa * 1000f; }
         }
 
         /// <summary>

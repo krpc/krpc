@@ -258,12 +258,13 @@ SpaceCenter.Part.Parent
 SpaceCenter.Part.Children
 SpaceCenter.Part.AxiallyAttached
 SpaceCenter.Part.RadiallyAttached
-SpaceCenter.Part.Shielded
 SpaceCenter.Part.Stage
 SpaceCenter.Part.DecoupleStage
 SpaceCenter.Part.Massless
 SpaceCenter.Part.Mass
 SpaceCenter.Part.DryMass
+SpaceCenter.Part.Shielded
+SpaceCenter.Part.DynamicPressure
 SpaceCenter.Part.ImpactTolerance
 SpaceCenter.Part.Temperature
 SpaceCenter.Part.SkinTemperature
