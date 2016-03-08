@@ -226,10 +226,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 var propellants = (engine != null ? engine.propellants : engineFx.propellants);
                 var max = propellants.Max (p => p.ratio);
-                var ratios = new Dictionary<string, float> ();
-                foreach (var propellant in propellants)
-                    ratios [propellant.name] = propellant.ratio / max;
-                return ratios;
+                return propellants.ToDictionary (p => p.name, p => p.ratio / max);
             }
         }
 

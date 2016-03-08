@@ -118,6 +118,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the part is shielded from the exterior of the vessel, for example by a fairing.
+        /// </summary>
+        [KRPCProperty]
+        public bool Shielded {
+            get { return InternalPart.ShieldedFromAirstream; }
+        }
+
+        /// <summary>
         /// The stage in which this part will be activated. Returns -1 if the part is not activated by staging.
         /// </summary>
         [KRPCProperty]

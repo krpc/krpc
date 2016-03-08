@@ -114,11 +114,114 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A list of thrusters, one of each thruster in the RCS.
+        /// The current amount of thrust being produced by the RCS, in
+        /// Newtons. Returns zero if the thrusters are not active or if there is no RCS fuel.
+        /// </summary>
+        [KRPCProperty]
+        public float Thrust {
+            get { throw new NotImplementedException (); }
+        }
+
+        /// <summary>
+        /// The maximum available amount of thrust that can be produced by the
+        /// RCS, in Newtons. This takes <see cref="Engine.ThrustLimit"/> into account,
+        /// and is the amount of thrust produced by the RCS when activated.
+        /// Returns zero if there is no RCS fuel.
+        /// </summary>
+        [KRPCProperty]
+        public float AvailableThrust {
+            get { throw new NotImplementedException (); }
+        }
+
+        /// <summary>
+        /// The maximum amount of thrust that can be produced by the RCS, in
+        /// Newtons. This is the amount of thrust produced by the RCS when
+        /// activated and <see cref="Engine.ThrustLimit"/>.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxThrust {
+            get { throw new NotImplementedException (); }
+        }
+
+        /// <summary>
+        /// The maximum amount of thrust that can be produced by the RCS in a
+        /// vacuum, in Newtons. This is the amount of thrust produced by the RCS
+        /// when activated, <see cref="Engine.ThrustLimit"/> is set to 100%,
+        /// and the RCS is in a vacuum.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxVacuumThrust {
+            get { throw new NotImplementedException (); }
+        }
+
+        /// <summary>
+        /// The thrust limiter of the RCS. A value between 0 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float ThrustLimit {
+            get { throw new NotImplementedException (); }
+            set { throw new NotImplementedException (); }
+        }
+
+        /// <summary>
+        /// A list of thrusters, one of each nozzel in the RCS part.
         /// </summary>
         [KRPCProperty]
         public IList<Thruster> Thrusters {
             get { return Enumerable.Range (0, rcs.thrusterTransforms.Count).Select (i => new Thruster (part, rcs, i)).ToList (); }
+        }
+
+        /// <summary>
+        /// The current specific impulse of the RCS, in seconds. Returns zero
+        /// if the RCS is not active.
+        /// </summary>
+        [KRPCProperty]
+        public float SpecificImpulse {
+            get { return rcs.realISP; }
+        }
+
+        /// <summary>
+        /// The vacuum specific impulse of the RCS, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public float VacuumSpecificImpulse {
+            get { return rcs.atmosphereCurve.Evaluate (0); }
+        }
+
+        /// <summary>
+        /// The specific impulse of the RCS at sea level on Kerbin, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public float KerbinSeaLevelSpecificImpulse {
+            get { return rcs.atmosphereCurve.Evaluate (1); }
+        }
+
+        /// <summary>
+        /// The names of resources that the RCS consumes.
+        /// </summary>
+        [KRPCProperty]
+        public IList<string> Propellants {
+            get { return rcs.propellants.Select (x => x.name).ToList (); }
+        }
+
+        /// <summary>
+        /// The ratios of resources that the RCS consumes. A dictionary mapping resource names
+        /// to the ratios at which they are consumed by the RCS.
+        /// </summary>
+        [KRPCProperty]
+        public IDictionary<string, float> PropellantRatios {
+            get {
+                var max = rcs.propellants.Max (p => p.ratio);
+                return rcs.propellants.ToDictionary (p => p.name, p => p.ratio / max);
+            }
+        }
+
+        /// <summary>
+        /// Whether the RCS has fuel available.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasFuel {
+            get { throw new NotImplementedException (); }
         }
     }
 }

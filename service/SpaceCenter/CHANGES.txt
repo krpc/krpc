@@ -8,6 +8,7 @@ v0.2.3
    * EngineTorque - available torque from gimballed engines
    * ControlSurfaceTorque - available torque from aerodynamic control surfaces
  * Part object additions:
+   * Shielded - true if the part is shielded from the outside, e.g. by a fairing
    * CenterOfMass - center of mass of the part
    * InertiaTensor - inertia tensor for the part
    * CenterOfMassReferenceFrame - reference frame whose origin is the parts center of mass
@@ -18,10 +19,9 @@ v0.2.3
    * Get the gimbal position and current angles
  * Engine object additions:
    * Thrusters - list of thrusters that make up the engine (e.g. corresponds to individual rocket nozzels)
- * Added RCS objects:
-   * Active - is it active?
+ * Added RCS objects, with functionality including:
+   * Properties for thrust/isp, whether it's active, whther it's active in pitch/roll/yaw/x/y/z directions
    * Thrusters - a list of Thruster objects, one for each RCS nozzel
-   * And others
  * ReactionWheel object changes:
    * Combined ReactionWheel.PitchTorque, YawTorque and RollTorque into a single Torque method
  * Fix bug with vessel center of mass calculations (#218)
