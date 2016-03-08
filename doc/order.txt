@@ -232,6 +232,7 @@ SpaceCenter.Parts.WithModule
 SpaceCenter.Parts.InStage
 SpaceCenter.Parts.InDecoupleStage
 SpaceCenter.Parts.ModulesWithName
+SpaceCenter.Parts.ControlSurfaces
 SpaceCenter.Parts.Decouplers
 SpaceCenter.Parts.DockingPorts
 SpaceCenter.Parts.DockingPortWithName
@@ -283,6 +284,7 @@ SpaceCenter.Part.IsFuelLine
 SpaceCenter.Part.FuelLinesFrom
 SpaceCenter.Part.FuelLinesTo
 SpaceCenter.Part.Modules
+SpaceCenter.Part.ControlSurface
 SpaceCenter.Part.Decoupler
 SpaceCenter.Part.DockingPort
 SpaceCenter.Part.Engine
@@ -317,6 +319,17 @@ SpaceCenter.Module.TriggerEvent
 SpaceCenter.Module.Actions
 SpaceCenter.Module.HasAction
 SpaceCenter.Module.SetAction
+SpaceCenter.ControlSurface
+SpaceCenter.ControlSurface.Part
+SpaceCenter.ControlSurface.PitchEnabled
+SpaceCenter.ControlSurface.YawEnabled
+SpaceCenter.ControlSurface.RollEnabled
+SpaceCenter.ControlSurface.SurfaceArea
+SpaceCenter.ControlSurface.Rotation
+SpaceCenter.ControlSurface.MaxPositiveRotation
+SpaceCenter.ControlSurface.MaxNegativeRotation
+SpaceCenter.ControlSurface.PositiveTorque
+SpaceCenter.ControlSurface.NegativeTorque
 SpaceCenter.Decoupler
 SpaceCenter.Decoupler.Part
 SpaceCenter.Decoupler.Decouple

@@ -358,6 +358,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
+        internal bool IsControlSurface {
+            get { return InternalPart.HasModule<ModuleControlSurface> (); }
+        }
+
         internal bool IsDecoupler {
             get { return InternalPart.HasModule<ModuleDecouple> () || InternalPart.HasModule<ModuleAnchoredDecoupler> (); }
         }
@@ -416,6 +420,14 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal bool IsSolarPanel {
             get { return InternalPart.HasModule<ModuleDeployableSolarPanel> (); }
+        }
+
+        /// <summary>
+        /// A <see cref="ControlSurface"/> if the part is an aerodynamic control surface, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public ControlSurface ControlSurface {
+            get { return IsControlSurface ? new ControlSurface (this) : null; }
         }
 
         /// <summary>

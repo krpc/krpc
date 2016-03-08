@@ -24,6 +24,9 @@ v0.2.3
    * Thrusters - a list of Thruster objects, one for each RCS nozzel
  * ReactionWheel object changes:
    * Combined ReactionWheel.PitchTorque, YawTorque and RollTorque into a single Torque method
+ * Added ControlSurface objects, with functionality including:
+   * Current rotation of the control surface
+   * Available positive and negative torques
  * Fix bug with vessel center of mass calculations (#218)
  * Fix bug with translation inputs in Control class (#223)
 

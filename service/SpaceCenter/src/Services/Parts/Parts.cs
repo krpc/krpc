@@ -142,6 +142,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all control surfaces in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<ControlSurface> ControlSurfaces {
+            get { return All.Where (part => part.IsControlSurface).Select (part => part.ControlSurface).ToList (); }
+        }
+
+        /// <summary>
         /// A list of all decouplers in the vessel.
         /// </summary>
         [KRPCProperty]
