@@ -475,16 +475,16 @@ The fields are:
 * ``procedures`` - A list of ``Procedure`` messages, one for each procedure
   defined by the service.
 
-* ``classes`` - A list of ``Class`` messages, one for each :class:`KRPCClass`
+* ``classes`` - A list of ``Class`` messages, one for each :csharp:attr:`KRPCClass`
   defined by the service.
 
 * ``enumerations`` - A list of ``Enumeration`` messages, one for each
-  :class:`KRPCEnum` defined by the service.
+  :csharp:attr:`KRPCEnum` defined by the service.
 
 * ``documentation`` - Documentation for the service, as `C# XML documentation`_.
 
 .. note:: See the :ref:`extending` documentation for more details about
-          :class:`KRPCClass` and :class:`KRPCEnum`.
+          :csharp:attr:`KRPCClass` and :csharp:attr:`KRPCEnum`.
 
 Procedures
 ^^^^^^^^^^
@@ -540,8 +540,8 @@ The fields are:
 Classes
 ^^^^^^^
 
-Details about each :class:`KRPCClass` are specified in a ``Class`` message, with the
-format:
+Details about each :csharp:attr:`KRPCClass` are specified in a ``Class``
+message, with the format:
 
 .. code-block:: protobuf
 
@@ -559,8 +559,8 @@ The fields are:
 Enumerations
 ^^^^^^^^^^^^
 
-Details about each :class:`KRPCEnum` are specified in an ``Enumeration`` message,
-with the format:
+Details about each :csharp:attr:`KRPCEnum` are specified in an ``Enumeration``
+message, with the format:
 
 .. code-block:: protobuf
 
@@ -662,9 +662,9 @@ return values as strings. Type names can be any of the following:
  * A Protocol Buffer value type. One of ``double``, ``float``, ``int32``,
    ``int64``, ``uint32``, ``uint64``, ``bool``, ``string`` or ``bytes``
 
- * A KRPCClass, in the format ``Class(ClassName)``
+ * A :csharp:attr:`KRPCClass`, in the format ``Class(ClassName)``
 
- * A KRPCEnum, in the format ``Enum(ClassName)``
+ * A :csharp:attr:`KRPCEnum`, in the format ``Enum(ClassName)``
 
  * A Protocol Buffer message type, in the format ``KRPC.MessageType``. Only
    message types defined in ``krpc.proto`` are permitted.
