@@ -21,7 +21,6 @@ namespace KRPC.SpaceCenter.Services.Parts
     {
         readonly Part part;
         readonly ModuleEngines engine;
-        readonly ModuleEnginesFX engineFx;
         readonly ModuleRCS rcs;
         readonly ModuleGimbal gimbal;
         readonly int transformIndex;
@@ -30,14 +29,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             this.part = part;
             this.engine = engine;
-            this.gimbal = gimbal;
-            this.transformIndex = transformIndex;
-        }
-
-        internal Thruster (Part part, ModuleEnginesFX engineFx, ModuleGimbal gimbal, int transformIndex)
-        {
-            this.part = part;
-            this.engineFx = engineFx;
             this.gimbal = gimbal;
             this.transformIndex = transformIndex;
         }
@@ -193,14 +184,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Transform of the thrust vector in world space
         /// </summary>
         internal Transform WorldTransform {
-            get {
-                if (engine != null)
-                    return engine.thrustTransforms [transformIndex];
-                else if (engine != null)
-                    return engineFx.thrustTransforms [transformIndex];
-                else
-                    return rcs.thrusterTransforms [transformIndex];
-            }
+            get { return (engine != null ? engine.thrustTransforms : rcs.thrusterTransforms) [transformIndex]; }
         }
 
         /// <summary>
