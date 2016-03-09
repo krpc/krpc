@@ -20,7 +20,7 @@ second. If kRPC were to only execute one RPC per FixedUpdate, it would only be
 able to execute at most 60 RPCs per second. In order to achieve a higher RPC
 throughput, it can execute multiple RPCs per FixedUpdate. However, if it is
 allowed to process too many RPCs per FixedUpdate, the game's framerate would be
-adversely affected. The following settings control this behaviour, and the
+adversely affected. The following settings control this behavior, and the
 resulting tradeoff between RPC throughput and game FPS:
 
 1. **One RPC per update**. When this is enabled, the server will execute at most

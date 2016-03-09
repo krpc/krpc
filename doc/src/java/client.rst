@@ -13,7 +13,7 @@ Using the Library
 
 The kRPC client library depends on the `protobuf
 <https://github.com/google/protobuf/tree/master/java>`_ and `javatuples
-<http://www.javatuples.org>`_ libraries. A pre-built jar for protobuf is
+<http://www.javatuples.org>`_ libraries. A prebuilt jar for protobuf is
 available via `Maven
 <http://search.maven.org/#search|ga|1|g%3A%22com.google.protobuf%22%20a%3A%22protobuf-java%22>`_. Note
 that you need protobuf version 3. Version 2 is not compatible with kRPC.
@@ -68,8 +68,8 @@ overheads, as the ``vessel.position()`` function is called repeatedly.
 
 .. literalinclude:: /scripts/Streaming.java
 
-The following code achieves the same thing, but is far more efficient. It
-calls:meth:`Connection.addStream` once at the start of the program to create a
+The following code achieves the same thing, but is far more efficient. It calls
+:meth:`Connection.addStream` once at the start of the program to create a
 stream, and then repeatedly gets the position from the stream.
 
 .. literalinclude:: /scripts/Streaming2.java
