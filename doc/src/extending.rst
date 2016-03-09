@@ -20,9 +20,9 @@ procedures. kRPC comes with several client libraries that implement the
 programs for these languages that can talk to the server.
 
 kRPC comes with a collection of standard functionality for interacting with
-vessels, contained in a service called :class:`SpaceCenter`. This service
-provides procedures for things like getting flight/orbital data and controlling
-the active vessel. This service is provided by ``KRPC.SpaceCenter.dll``.
+vessels, contained in a service called ``SpaceCenter``. This service provides
+procedures for things like getting flight/orbital data and controlling the
+active vessel. This service is provided by ``KRPC.SpaceCenter.dll``.
 
 Service API
 -----------

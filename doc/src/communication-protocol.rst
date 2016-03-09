@@ -5,15 +5,15 @@ Communication Protocol
 
 Clients invoke Remote Procedure Calls (RPCs) by communicating with the server
 using `Protocol Buffer v3 messages
-<https://developers.google.com/protocol-buffers/docs/proto>`_ sent over a TCP/IP
+<https://developers.google.com/protocol-buffers/docs/proto3>`_ sent over a TCP/IP
 connection.
 
 The kRPC `download <https://github.com/krpc/krpc/releases/latest>`_ comes with a
-protocol buffer message definitions file (`KRPC.proto
-<https://github.com/krpc/krpc/blob/latest-version/protobuf/krpc.proto>`_)
-that defines the structure of these messages. It also includes versions of this
-file compiled for Python, Java and C++ using `Google's protocol buffers compiler
-<https://github.com/google/protobuf>`_.
+protocol buffer message definitions file (`schema/krpc.proto
+<https://github.com/krpc/krpc/blob/latest-version/protobuf/krpc.proto>`_) that
+defines the structure of these messages. It also contains versions of this file
+for C#, C++, Java, Lua and Python, compiled using `Google's protocol buffers
+compiler <https://github.com/google/protobuf>`_.
 
 Establishing a Connection
 -------------------------
