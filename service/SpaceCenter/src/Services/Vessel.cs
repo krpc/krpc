@@ -368,8 +368,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
             get {
-              var inertiaTensor = ComputeInertiaTensor ();
-              return inertiaTensor.Diag ().ToTuple ();
+                return ComputeInertiaTensor ().Diag ().ToTuple ();
             }
         }
 
@@ -436,11 +435,13 @@ namespace KRPC.SpaceCenter.Services
         /// class in order to do 3x3 matrix operations in the hope that the Matrix4x4 class winds up
         /// running on the GPU.
         /// </summary>
+        ///
+        /// FIXME: units
         Matrix4x4 ComputeInertiaTensor ()
         {
             Matrix4x4 inertiaTensor = Matrix4x4.zero;
             Vector3 CoM = InternalVessel.findWorldCenterOfMass ();
-            // Use the part ReferenceTransform because we want roll/pitch/yaw relative to controlling part
+            // Use the part ReferenceTransform because we want pitch/roll/yaw relative to controlling part
             Transform vesselTransform = InternalVessel.GetTransform ();
 
             foreach (var part in InternalVessel.parts) {
@@ -469,9 +470,18 @@ namespace KRPC.SpaceCenter.Services
             return inertiaTensor;
         }
 
+        /// <summary>
+        /// Computes the sum of the available reaction wheel torque in the vessel pitch, roll, yaw frame.
+        /// </summary>
+        ///
+        /// FIXME: units
         Vector3d ComputeReactionWheelTorque ()
         {
-            throw new NotImplementedException ();
+            reactionWheelTorque = new Vector3d.zero;
+            foreach (var rw in Parts.ReactionWheels.Where (e => e.Active)) {
+                reactionWheelTorque += rw.Torque;
+            }
+            return reactionWheelTorque;
         }
 
         Vector3d ComputeRCSTorque ()
