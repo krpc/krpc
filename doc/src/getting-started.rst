@@ -3,8 +3,8 @@
 Getting Started
 ===============
 
-This short guide explains the basics for getting kRPC set up and running, and
-writing a basic Python script to communicate with the game.
+This short guide explains the basics for getting the kRPC server set up and
+running, and writing a basic Python script to interact with the game.
 
 The Server Plugin
 -----------------
@@ -12,29 +12,26 @@ The Server Plugin
 Installation
 ^^^^^^^^^^^^
 
-1. Download the kRPC server plugin from one of these locations:
+1. Download and install the kRPC server plugin from one of these locations:
 
  * `Github <https://github.com/krpc/krpc/releases/latest>`_
  * `SpaceDock <http://spacedock.info/mod/69/kRPC>`_
  * `Curse <http://www.curse.com/project/220219>`_
- * Or the plugin can be obtained via `CKAN <http://forum.kerbalspaceprogram.com/threads/100067>`_
+ * Or the install it using `CKAN <http://forum.kerbalspaceprogram.com/threads/100067>`_
 
-2. Extract the GameData folder from the archive into your KSP directory.
+2. Start up KSP and load a save game.
 
-3. Start up KSP and load a save game.
-
-4. You should be greeted by the server window:
+3. You should be greeted by the server window:
 
    .. image:: /images/getting-started/server-window-offline.png
 
-5. Click "Start server" to, erm... start the server! If all goes well, the light
+4. Click "Start server" to, erm... start the server! If all goes well, the light
    should turn a happy green color:
 
    .. image:: /images/getting-started/server-window-online.png
 
-6. You can hide the window by clicking the close button in the top right, or
-   show/hide the window by clicking on the kRPC icon in the application
-   launcher:
+5. You can hide the window by clicking the close button in the top right.  The
+   window can also be shown/hidden by clicking on the icon in the top right:
 
    .. image:: /images/getting-started/applauncher.png
 
@@ -43,12 +40,11 @@ Installation
 Configuration
 ^^^^^^^^^^^^^
 
-The server can be configured using the window displayed in-game. The
-configuration options are:
+The server is configured using the window displayed in-game:
 
 1. **Address**: this is the IP address that the server will listen on. To only
    allow connections from the local machine, select 'localhost' (the
-   default). To allow connections over the network, either select the local IP
+   default). To allow connections over a network, either select the local IP
    address of your machine, or choose 'Manual' and enter the local IP address
    manually.
 2. **RPC and Stream port numbers**: These need to be set to port numbers that
@@ -64,8 +60,8 @@ be revealed by checking the 'Advanced settings' box:
    automatically allowed. When disabled, a pop-up is displayed asking whether
    the new client connection should be allowed.
 
-The other advanced settings control the performance of the server. For details,
-:ref:`see here <server-performance-settings>`.
+The other advanced settings control the :ref:`performance of the server
+<server-performance-settings>`.
 
 The Python Client
 -----------------
@@ -80,7 +76,9 @@ On Windows
    make sure that pip is installed as well.
 
 2. Install the kRPC python module, by opening command prompt and running the
-   following command: ``C:\Python27\Scripts\pip.exe install krpc``
+   following command: ``C:\Python27\Scripts\pip.exe install krpc`` You might
+   need to replace ``C:\Python27`` with the location of your python
+   installation.
 
 3. Run Python IDLE (or your favorite editor) and start coding!
 
@@ -95,15 +93,15 @@ On Linux
    here: https://pypi.python.org/pypi/pip
 
 3. Install the kRPC python module by running the following from a terminal:
-   ``pip install krpc``
+   ``sudo pip install krpc``
 
 4. Start coding!
 
 'Hello World' Script
 --------------------
 
-Run KSP and start the server with the default settings. Then execute the
-following python script:
+Run KSP and start the server with the default settings. Then run the following
+python script:
 
 .. code-block:: python
    :linenos:
@@ -128,6 +126,6 @@ Going further...
    the :doc:`tutorials <tutorials>`.
  * Client libraries are available for other languages too, including
    :doc:`C++ <cpp>`, :doc:`C# <csharp>`, :doc:`Java <java>` and :doc:`Lua <lua>`.
- * It is also easy to communicate with the server manually from any language you
-   like -- as long as it can do network I/O.
-   :doc:`See here for details <communication-protocol>`.
+ * It is also possible to :doc:`communicate with the server manually
+   <communication-protocol>` from any language you like -- as long as it can do
+   network I/O.
