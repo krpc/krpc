@@ -457,15 +457,15 @@ namespace KRPC.SpaceCenter.Services
                     Matrix4x4 invMatrix = Matrix4x4.TRS(Vector3.zero, inv, Vector3.one);
 
                     // add the part inertiaTensor to the ship inertiaTensor
-                    inertiaTensor.Add(rotMatrix * partTensor * invMatrix);
+                    inertiaTensor = inertiaTensor.Add(rotMatrix * partTensor * invMatrix);
 
                     Vector3 position = vesselTransform.InverseTransformDirection(part.rb.position - CoM);
 
                     // add the part mass to the ship inertiaTensor
-                    inertiaTensor.Add((part.rb.mass * position.sqrMagnitude).ToDiagonalMatrix ());
+                    inertiaTensor = inertiaTensor.Add((part.rb.mass * position.sqrMagnitude).ToDiagonalMatrix ());
 
                     // add the part distance offset to the ship inertiaTensor
-                    inertiaTensor.Add(position.OuterProduct(-part.rb.mass * position));
+                    inertiaTensor = inertiaTensor.Add(position.OuterProduct(-part.rb.mass * position));
                 }
             }
             return inertiaTensor;

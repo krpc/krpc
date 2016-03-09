@@ -297,19 +297,23 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Add a 4x4 Matrix into another one (does not allocate)
         /// </summary>
-        public static void Add (this Matrix4x4 left, Matrix4x4 right) {
+        public static Matrix4x4 Add (this Matrix4x4 left, Matrix4x4 right) {
+            Matrix4x4 m = Matrix4x4.zero;
             for(int i = 0; i < 4; i++) {
-                left.SetColumn(i, left.GetColumn(i) + right.GetColumn(i));
+                m.SetColumn(i, left.GetColumn(i) + right.GetColumn(i));
             }
+            return m;
         }
 
         /// <summary>
         /// Subtract a 4x4 Matrix from another one (does not allocate)
         /// </summary>
-        public static void Subtract (this Matrix4x4 left, Matrix4x4 right) {
+        public static Matrix4x4 Subtract (this Matrix4x4 left, Matrix4x4 right) {
+            Matrix4x4 m = Matrix4x4.zero;
             for(int i = 0; i < 4; i++) {
-                left.SetColumn(i, left.GetColumn(i) - right.GetColumn(i));
+                m.SetColumn(i, left.GetColumn(i) - right.GetColumn(i));
             }
+            return m;
         }
 
         /// <summary>
