@@ -87,9 +87,9 @@ functionality to the kRPC server.
 
 .. class:: KRPCService ([Name], [GameScene])
 
-   :param string Name: Optional name for the service. If omitted, the service
-                       name is set to the name of the class this attribute is
-                       applied to.
+   :param str Name: Optional name for the service. If omitted, the service
+                    name is set to the name of the class this attribute is
+                    applied to.
    :param GameScene GameScene: The game scenes in which the services procedures
                                are available.
 
@@ -199,9 +199,9 @@ functionality to the kRPC server.
 
 .. class:: KRPCClass ([Service])
 
-   :param string Service: Optional name of the service to add this class to. If
-                          omitted, the class is added to the service that
-                          contains its definition.
+   :param str Service: Optional name of the service to add this class to. If
+                       omitted, the class is added to the service that
+                       contains its definition.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is
    applied to non-static classes. It adds the class to the server, so that
@@ -353,9 +353,9 @@ functionality to the kRPC server.
 
 .. class:: KRPCEnum ([Service])
 
-   :param string Service: Optional name of the service to add this enum to. If
-                          omitted, the enum is added to the service that
-                          contains its definition.
+   :param str Service: Optional name of the service to add this enum to. If
+                       omitted, the enum is added to the service that
+                       contains its definition.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is
    applied to enumeration types. It adds the enumeration and its permissible
