@@ -1,12 +1,14 @@
 load('/tools/build/autotools', 'autotools_dist')
 load('/tools/build/protobuf/cpp', 'protobuf_cpp')
 load('/tools/build/client_test', 'client_test')
-load('/tools/clientgen/build', 'clientgen_cpp')
+load('/tools/krpctools/clientgen', 'clientgen_cpp')
 load('/config', 'version')
+
+name = 'krpc-cpp-%s' % version
 
 autotools_dist(
     name = 'cpp',
-    out = 'krpc-cpp-%s.zip' % version,
+    out = '%s.zip' % name,
     files = glob(['include/**/*.hpp', 'src/*.cpp', '**/Makefile.am']) + [
         '//:readme', '//:version', 'CHANGES.txt', 'INSTALL.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
@@ -19,11 +21,16 @@ autotools_dist(
         ':services-infernalrobotics'
     ],
     path_map = {
-        'client/cpp/': '',
-        'protobuf/krpc.pb.hpp': 'include/krpc/krpc.pb.hpp',
-        'protobuf/krpc.pb.cpp': 'src/krpc.pb.cpp',
-        'external/m4_stdcxx/file/gitweb': 'm4/ax_cxx_compile_stdcxx.m4',
-        'external/m4_stdcxx_11/file/gitweb': 'm4/ax_cxx_compile_stdcxx_11.m4'
+        'client/cpp/': '%s/' % name,
+        'COPYING': '%s/COPYING' % name,
+        'COPYING.LESSER': '%s/COPYING.LESSER' % name,
+        'README.txt': '%s/README.txt' % name,
+        'VERSION.txt': '%s/VERSION.txt' % name,
+        'client/cpp/': '%s/' % name,
+        'protobuf/krpc.pb.hpp': '%s/include/krpc/krpc.pb.hpp' % name,
+        'protobuf/krpc.pb.cpp': '%s/src/krpc.pb.cpp' % name,
+        'external/m4_stdcxx/file/gitweb': '%s/m4/ax_cxx_compile_stdcxx.m4' % name,
+        'external/m4_stdcxx_11/file/gitweb': '%s/m4/ax_cxx_compile_stdcxx_11.m4' % name
     },
     visibility = ['//:__pkg__']
 )

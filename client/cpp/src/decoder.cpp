@@ -76,7 +76,7 @@ namespace krpc {
       pb::uint64 length;
       if (!stream.ReadVarint64(&length))
         throw DecodeFailed("Failed to decode string (length)");
-      if (!stream.ReadString(&value, length))
+      if (!stream.ReadString(&value, (int)length))
         throw DecodeFailed("Failed to decode string");
     }
 

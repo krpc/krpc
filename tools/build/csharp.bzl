@@ -19,7 +19,7 @@ def _ref_impl(ctx):
         out = output
     )
 
-def _csc_args(srcs, deps, exe=None, lib=None, doc=None, warn=4, nowarn=[]):
+def _csc_args(srcs, deps, exe=None, lib=None, doc=None, warn=4, nowarn=[], warnaserror=True):
     if exe: target_type = 'exe'
     if lib: target_type = 'library'
     args = ['-optimize+', '-debug-', '-target:%s' % target_type]
@@ -28,6 +28,7 @@ def _csc_args(srcs, deps, exe=None, lib=None, doc=None, warn=4, nowarn=[]):
     if lib: args.append('-out:%s' % lib.path)
     if doc: args.append('-doc:%s' % doc.path)
     args.append('-warn:%d' % warn)
+    if warnaserror: args.append('-warnaserror+')
     if len(nowarn) > 0: args.append('-nowarn:%s' % ','.join(nowarn))
     args.extend([x.path for x in srcs])
     args.extend(['-reference:%s' % x.path for x in deps])
@@ -42,7 +43,9 @@ def _lib_impl(ctx):
     inputs = srcs + deps
 
     cmd = ctx.attr.csc
-    args = _csc_args(srcs, deps, lib=lib_output, doc=doc_output, warn=ctx.attr.warn, nowarn=ctx.attr.nowarn)
+    args = _csc_args(
+        srcs, deps, lib=lib_output, doc=doc_output,
+        warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror)
 
     ctx.action(
         mnemonic = 'CSharpCompile',
@@ -68,7 +71,9 @@ def _bin_impl(ctx):
     inputs = srcs + deps
 
     cmd = ctx.attr.csc
-    args = _csc_args(srcs, deps, exe=bin_output, doc=doc_output, warn=ctx.attr.warn, nowarn=ctx.attr.nowarn)
+    args = _csc_args(
+        srcs, deps, exe=bin_output, doc=doc_output,
+        warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror)
 
     ctx.action(
         mnemonic = 'CSharpCompile',
@@ -106,7 +111,9 @@ def _nunit_impl(ctx):
     nunit_files = [ctx.file._nunit_exe] + ctx.files._nunit_exe_libs + ctx.files._nunit_framework
 
     cmd = ctx.attr.csc
-    args = _csc_args(srcs, deps, lib=lib_output, doc=doc_output, warn=ctx.attr.warn, nowarn=ctx.attr.nowarn)
+    args = _csc_args(
+        srcs, deps, lib=lib_output, doc=doc_output,
+        warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror)
 
     ctx.action(
         mnemonic = 'CSharpCompile',
@@ -158,7 +165,8 @@ _COMMON_ATTRS = {
     'deps': attr.label_list(providers=['out', 'lib', 'target_type']),
     'srcs': attr.label_list(allow_files=FileType(['.cs'])),
     'warn': attr.int(default=4),
-    'nowarn': attr.string_list()
+    'nowarn': attr.string_list(),
+    'warnaserror': attr.bool(default=True)
 }
 
 csharp_reference = rule(

@@ -1,4 +1,4 @@
-load('/tools/clientgen/build', 'clientgen_java')
+load('/tools/krpctools/clientgen', 'clientgen_java')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
 
@@ -6,12 +6,21 @@ copts = ['-Werror', '-Xlint:all']
 
 filegroup(
     name = 'java',
-    srcs = [':krpc-'+version],
+    srcs = [':krpc-jar'],
+    visibility = ['//visibility:public']
+)
+
+genrule(
+    name = 'krpc-jar',
+    srcs = [':krpc'],
+    outs = ['krpc-java-%s.jar' % version],
+    cmd = 'ln -f -r -s "$<" "$@"',
+    output_to_bindir = True,
     visibility = ['//visibility:public']
 )
 
 java_library(
-    name = 'krpc-'+version,
+    name = 'krpc',
     srcs = glob(['src/krpc/**/*.java']) + [
         '//protobuf:java',
         ':services-krpc',
@@ -40,7 +49,7 @@ java_library(
     name = 'testlib',
     srcs = glob(['test/**/*.java']) + [':services-testservice'],
     deps = [
-        ':krpc-'+version,
+        ':krpc',
         '//tools/build/protobuf:protobuf',
         ':junit',
         '@java_javatuples//:jar'],
@@ -51,7 +60,7 @@ java_test(
     name = 'testexe',
     main_class = 'krpc.client.TestSuite',
     runtime_deps = [
-        ':krpc-'+version,
+        ':krpc',
         ':testlib',
         '//tools/build/protobuf:protobuf',
         ':junit',

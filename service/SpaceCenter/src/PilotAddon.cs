@@ -56,8 +56,8 @@ namespace KRPC.SpaceCenter
             }
 
             public float Forward {
-                get { return state.Z; }
-                set { state.Z = value.Clamp (-1f, 1f); }
+                get { return -state.Z; }
+                set { state.Z = -value.Clamp (-1f, 1f); }
             }
 
             public float Up {
@@ -66,8 +66,8 @@ namespace KRPC.SpaceCenter
             }
 
             public float Right {
-                get { return state.Z; }
-                set { state.Z = value.Clamp (-1f, 1f); }
+                get { return -state.X; }
+                set { state.X = -value.Clamp (-1f, 1f); }
             }
 
             public float WheelThrottle {

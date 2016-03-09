@@ -1,4 +1,4 @@
-load('/tools/build/package', 'package_archive')
+load('/tools/build/pkg', 'pkg_zip')
 load('/config', 'version')
 
 exports_files(['COPYING', 'COPYING.LESSER'])
@@ -81,7 +81,7 @@ genrule(
     cmd = 'echo \'%s\' > "$@"' % ksp_avc_version
 )
 
-package_archive(
+pkg_zip(
     name = 'krpc',
     out = 'krpc-%s.zip' % version,
     files = [
@@ -129,6 +129,12 @@ package_archive(
         'tools/build/ksp/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
         'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
+        # Clients
+        'client/python/': 'client/',
+        'client/cpp/': 'client/',
+        'client/csharp/': 'client/',
+        'client/lua/': 'client/',
+        'client/java/': 'client/',
         # Schema
         'protobuf/': 'schema/',
         # Docs
@@ -140,6 +146,7 @@ test_suite(
     name = 'test',
     tests = [
         '//server:test',
+        '//doc:test',
         '//client/python:test',
         '//client/cpp:test',
         '//client/lua:test',

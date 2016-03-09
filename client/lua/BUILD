@@ -1,16 +1,23 @@
-load('/tools/build/package', 'package_archive')
 load('/tools/build/lua', 'lua_rock', 'lua_test')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
 
 filegroup(
     name = 'lua',
-    srcs = [':client', ':rockspec'],
+    srcs = [':zip'],
     visibility = ['//visibility:public']
 )
 
+genrule(
+    name = 'zip',
+    srcs = [':rock'],
+    outs = ['krpc-lua-%s.zip' % version],
+    cmd = 'ln -f -r -s "$<" "$@"',
+    output_to_bindir = True
+)
+
 lua_rock(
-    name = 'client',
+    name = 'rock',
     pkg = 'krpc',
     version = '%s-0' % version,
     rockspec = ':rockspec',
@@ -46,7 +53,7 @@ client_test(
 lua_test(
     name = 'luatest',
     rockspec = ':rockspec',
-    srcrock = ':client',
+    srcrock = ':rock',
     deps = [
         '@lua_luafilesystem//file',
         '@lua_luasocket//file',

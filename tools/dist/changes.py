@@ -21,7 +21,7 @@ def main():
         ('Java client', get_changes('client/java/CHANGES.txt')),
         ('Lua client', get_changes('client/lua/CHANGES.txt')),
         ('Python client', get_changes('client/python/CHANGES.txt')),
-        ('krpc-clientgen', get_changes('tools/clientgen/CHANGES.txt'))
+        ('krpctools', get_changes('tools/krpctools/CHANGES.txt'))
     ]
 
     changelist = []

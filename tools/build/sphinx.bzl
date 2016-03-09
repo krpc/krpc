@@ -1,175 +1,117 @@
-def _apply_path_map(path_map, path):
-    """ Apply the path mappings to a path.
-        Replaces the longest prefix match from the mapping. """
-    matchlen = 0
-    match = path
-    for x,y in path_map.items():
-        if path.startswith(x):
-            if len(x) > matchlen:
-                match = y + path[len(x):]
-                matchlen = len(x)
-    return match
+def _get_src_dir(srcs, short_path=False):
+    """ Given a list of input files, get the path of the src dir,
+    based on the location of conf.py """
+    for src in srcs:
+        if src.basename == 'conf.py':
+            if short_path:
+                return src.short_path.rpartition('/')[0]
+            else:
+                return src.dirname
+    return None
 
-def _create_py_env(out, install):
-    tmp = out+'.tmp-create-py-env'
-    cmds = [
-        'rm -rf %s' % tmp,
-        'virtualenv %s --quiet --no-site-packages' % tmp
-    ]
-    for lib in install:
-        cmds.append('%s/bin/python %s/bin/pip install --quiet --no-deps %s' % (tmp, tmp, lib.path))
-    cmds.extend([
-        '(CWD=`pwd`; cd %s; tar -c -f $CWD/%s *)' % (tmp, out)
+def _add_runfile(sub_commands, path, runfile_path):
+    sub_commands.extend([
+        'mkdir -p `dirname %s`' % runfile_path,
+        'ln -f -r -s %s %s' % (path, runfile_path)
     ])
-    return cmds
 
-def _extract_py_env(env, path):
-    return [
-        'rm -rf %s' % path,
-        'mkdir -p %s' % path,
-        '(CWD=`pwd`; cd %s; tar -xf $CWD/%s)' % (path, env)
-    ]
-
-def _impl(ctx, builder):
-    inputs = ctx.files.srcs
-    output = ctx.outputs.out
-    opts = ctx.attr.opts
-    path_map = ctx.attr.path_map
-
-    # TODO: make the following builder independent - don't want to install sphinx twice for html and latex
-    sphinx_setup = ctx.new_file(ctx.configuration.genfiles_dir, 'sphinx-setup-%s' % builder)
-    sphinx_env = ctx.new_file(ctx.configuration.genfiles_dir, 'sphinx-env-%s' % builder)
-    sphinx_build = ctx.new_file(ctx.configuration.genfiles_dir, 'sphinx-build-%s' % builder)
-
-    pylibs = [
-        ctx.file._pbr,
-        ctx.file._sphinx,
-        ctx.file._sphinx_rtd_theme,
-        ctx.file._alabaster,
-        ctx.file._babel,
-        ctx.file._docutils,
-        ctx.file._jinja2,
-        ctx.file._markupsafe,
-        ctx.file._snowballstemmer,
-        ctx.file._pygments,
-        ctx.file._pytz,
-        ctx.file._sphinxcontrib_spelling,
-        ctx.file._pyenchant,
-        ctx.file._six,
-        ctx.file._sphinx_lua,
-        ctx.file._sphinx_csharp,
-        ctx.file._sphinx_java,
-        ctx.file._javalang,
-        ctx.file._lxml,
-        ctx.file._beautifulsoup4
-    ]
-
-    ctx.file_action(
-        output = sphinx_setup,
-        content = ' && \\\n'.join(_create_py_env(sphinx_env.path, pylibs))+'\n',
-        executable = True
-    )
-
-    ctx.action(
-        inputs = pylibs,
-        outputs = [sphinx_env],
-        progress_message = 'Setting up sphinx',
-        executable = sphinx_setup,
-        use_default_shell_env = True
-    )
-
-    pyenv = sphinx_build.path+'.tmp-py-env'
-    subcommands = _extract_py_env(sphinx_env.path, pyenv)
-    subcommands.extend([
-        '%s/bin/python %s/bin/sphinx-build -b %s -a -E -W -N -q "$1" "$2.files" $3' % (pyenv, pyenv, builder) #-j32
-    ])
-    if builder == 'html':
-        subcommands.append('rm -r "$2.files/.doctrees"')
-        subcommands.append('(CWD=`pwd` && cd "$2.files" && zip --quiet -r $CWD/$2 ./)')
-    else:
-        subcommands.append('make -C "$2.files" 1>/dev/null')
-        subcommands.append('find "$2.files" -name *.pdf -exec cp {} $2 \;')
-        subcommands.append('rm -rf "$2.files"')
-    ctx.file_action(
-        output = sphinx_build,
-        content = ' &&\n'.join(subcommands)+'\n',
-        executable = True
-    )
-
-    staging_dir = output.basename + '.sphinx-build-tmp'
-    staging_dir_path = output.path.replace(
-        ctx.configuration.bin_dir.path, ctx.configuration.genfiles_dir.path) + '.sphinx-build-tmp'
-    staging_inputs = []
-    for input in inputs:
-        staging_path = staging_dir + '/' + _apply_path_map(path_map, input.short_path)
-        staging_file = ctx.new_file(ctx.configuration.genfiles_dir, staging_path)
-
-        ctx.action(
-            mnemonic = 'StageDocFile',
-            inputs = [input],
-            outputs = [staging_file],
-            command = 'ln -f -r -s %s %s' % (input.path, staging_file.path)
-        )
-        staging_inputs.append(staging_file)
-
+def _build_impl(ctx):
+    srcs = ctx.files.srcs
+    src_dir = _get_src_dir(srcs)
+    out = ctx.outputs.out
+    out_dir = out.path+'.sphinx-build-out'
+    sphinx_build = ctx.executable.sphinx_build
+    sphinx_build_runfiles = list(ctx.attr.sphinx_build.default_runfiles.files)
+    builder = ctx.attr.builder
+    opts = ' '.join(['-D%s=%s' % x for x in ctx.attr.opts.items()])
     exec_reqs = {}
-    if builder == 'latex':
-        exec_reqs = {'local': ''} # pdflatex fails to run from the sandbox
+    sub_commands = []
+
+    runfiles_dir = out.path + '.runfiles'
+    sub_commands.append('rm -rf %s' % runfiles_dir)
+    _add_runfile(sub_commands, sphinx_build.path, runfiles_dir + '/' + sphinx_build.basename)
+    for f in sphinx_build_runfiles:
+        _add_runfile(sub_commands, f.path, runfiles_dir+ '/' + sphinx_build.basename + '.runfiles/' + f.short_path)
+
+    sub_commands.append('%s/%s -b %s -E -W -N -q %s %s %s' % (runfiles_dir, sphinx_build.basename, builder, src_dir, out_dir, opts))
+
+    if builder == 'html':
+        sub_commands.extend([
+            'rm -r %s/.doctrees' % out_dir,
+            '(CWD=`pwd` && cd %s && zip --quiet -r $CWD/%s ./)' % (out_dir, out.path)
+        ])
+
+    elif builder == 'latex':
+        exec_reqs['local'] = '' # pdflatex fails to run from the sandbox
+        sub_commands.extend([
+            'make -C %s 1>/dev/null' % out_dir,
+            'find %s -name *.pdf -exec cp {} %s \;' % (out_dir, out.path),
+            'rm -rf %s' % out_dir
+        ])
+
     ctx.action(
-        inputs = staging_inputs + [sphinx_env],
-        outputs = [output],
+        inputs = [sphinx_build] + sphinx_build_runfiles + srcs,
+        outputs = [out],
         progress_message = 'Generating %s documentation' % builder,
-        executable = sphinx_build,
-        arguments = [staging_dir_path, output.path, ' '.join(['-D%s=%s' % x for x in opts.items()])],
+        command = ' && \\\n'.join(sub_commands),
         use_default_shell_env = True,
         execution_requirements = exec_reqs
     )
 
-def _impl_html(ctx):
-    _impl(ctx, 'html')
-
-def _impl_latex(ctx):
-    _impl(ctx, 'latex')
-
-_SPHINX_ATTRS = {
-    '_sphinx': attr.label(default=Label('@python_sphinx//file'), allow_files=True, single_file=True),
-    '_sphinx_rtd_theme': attr.label(default=Label('@python_sphinx_rtd_theme//file'), allow_files=True, single_file=True),
-    '_alabaster': attr.label(default=Label('@python_alabaster//file'), allow_files=True, single_file=True),
-    '_babel': attr.label(default=Label('@python_babel//file'), allow_files=True, single_file=True),
-    '_docutils': attr.label(default=Label('@python_docutils//file'), allow_files=True, single_file=True),
-    '_jinja2': attr.label(default=Label('@python_jinja2//file'), allow_files=True, single_file=True),
-    '_markupsafe': attr.label(default=Label('@python_markupsafe//file'), allow_files=True, single_file=True),
-    '_snowballstemmer': attr.label(default=Label('@python_snowballstemmer//file'), allow_files=True, single_file=True),
-    '_pygments': attr.label(default=Label('@python_pygments//file'), allow_files=True, single_file=True),
-    '_pytz': attr.label(default=Label('@python_pytz//file'), allow_files=True, single_file=True),
-    '_sphinxcontrib_spelling': attr.label(default=Label('@python_sphinxcontrib_spelling//file'), allow_files=True, single_file=True),
-    '_pbr': attr.label(default=Label('@python_pbr//file'), allow_files=True, single_file=True),
-    '_pyenchant': attr.label(default=Label('@python_pyenchant//file'), allow_files=True, single_file=True),
-    '_six': attr.label(default=Label('@python_six//file'), allow_files=True, single_file=True),
-    '_sphinx_lua': attr.label(default=Label('@python_sphinx_lua//file'), allow_files=True, single_file=True),
-    '_sphinx_csharp': attr.label(default=Label('@python_sphinx_csharp//file'), allow_files=True, single_file=True),
-    '_sphinx_java': attr.label(default=Label('@python_sphinx_java//file'), allow_files=True, single_file=True),
-    '_javalang': attr.label(default=Label('@python_javalang//file'), allow_files=True, single_file=True),
-    '_lxml': attr.label(default=Label('@python_lxml//file'), allow_files=True, single_file=True),
-    '_beautifulsoup4': attr.label(default=Label('@python_beautifulsoup4//file'), allow_files=True, single_file=True)
-}
-
-sphinx_html = rule(
-    implementation = _impl_html,
+sphinx_build = rule(
+    implementation = _build_impl,
     attrs = {
         'srcs': attr.label_list(allow_files=True),
-        'path_map': attr.string_dict(),
-        'opts': attr.string_dict()
-    } + _SPHINX_ATTRS,
-    outputs = {'out': '%{name}.zip'}
+        'sphinx_build': attr.label(executable=True, mandatory=True),
+        'builder': attr.string(mandatory=True),
+        'opts': attr.string_dict(),
+        'out': attr.output(mandatory=True)
+    }
 )
 
-sphinx_latex = rule(
-    implementation = _impl_latex,
+def _spelling_impl(ctx):
+    srcs = ctx.files.srcs
+    src_dir = _get_src_dir(srcs, short_path=True)
+    out = ctx.outputs.executable
+    sphinx_build = ctx.executable.sphinx_build
+    sphinx_build_runfiles = list(ctx.attr.sphinx_build.default_runfiles.files)
+    opts = ' '.join(['-D%s=%s' % x for x in ctx.attr.opts.items()])
+    sub_commands = []
+
+    _add_runfile(sub_commands, sphinx_build.short_path, sphinx_build.basename + '.runfiles/' + sphinx_build.short_path)
+    for f in sphinx_build_runfiles:
+        _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/' + sphinx_build.short_path + '.runfiles/' + f.short_path)
+
+    sphinx_commands = [
+        'pwd',
+        'echo $0',
+        '(cd %s.runfiles; %s -b spelling -E -W -N ../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
+        'ret=$?',
+        'lines=`cat %s.runfiles/out/output.txt | wc -l`' % sphinx_build.basename,
+        'echo "Spelling checker messages ($lines lines):"',
+        'cat %s.runfiles/out/output.txt' % sphinx_build.basename,
+        'if [ $ret -ne 0 ]; then exit 1; fi'
+    ]
+    sub_commands.append('('+'; '.join(sphinx_commands)+')')
+
+    ctx.file_action(
+        output = out,
+        content = ' &&\n'.join(sub_commands)+'\n',
+        executable = True
+    )
+
+    return struct(
+        name = ctx.label.name,
+        out = out,
+        runfiles = ctx.runfiles(files = [sphinx_build] + sphinx_build_runfiles + srcs)
+    )
+
+sphinx_spelling_test = rule(
+    implementation = _spelling_impl,
     attrs = {
         'srcs': attr.label_list(allow_files=True),
-        'path_map': attr.string_dict(),
+        'sphinx_build': attr.label(executable=True, single_file=True, allow_files=True, mandatory=True),
         'opts': attr.string_dict()
-    } + _SPHINX_ATTRS,
-    outputs = {'out': '%{name}.pdf'}
+    },
+    test = True
 )

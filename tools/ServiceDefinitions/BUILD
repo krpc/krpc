@@ -50,5 +50,5 @@ csharp_library(
         '//tools/build/mono-4.5:System.Runtime',
         '//tools/build/mono-4.5:System.IO'
     ],
-    visibility = ['//tools/clientgen:__pkg__', '//tools/TestServer:__pkg__']
+    visibility = ['//tools/krpctools:__pkg__', '//tools/TestServer:__pkg__']
 )

@@ -367,7 +367,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         internal bool IsEngine {
-            get { return InternalPart.HasModule<ModuleEngines> () || InternalPart.HasModule<ModuleEnginesFX> (); }
+            get { return InternalPart.HasModule<ModuleEngines> (); }
         }
 
         internal bool IsLandingGear {

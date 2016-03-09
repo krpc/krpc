@@ -1,0 +1,161 @@
+{% macro service(x) %}{{ mark_documented(x) }}
+.. namespace:: krpc::services
+.. class:: {{ x.name }} : public krpc::Service
+
+{{ x.documentation | parsedoc | indent }}
+
+   .. function:: {{ x.name }}(krpc::Client* client)
+
+      Construct an instance of this service.
+
+{% for member in x.members.values() %}
+{% if member.member_type == 'procedure' %}
+{{ procedure(member) | indent }}
+{% elif member.member_type == 'property' %}
+{{ property(member) | indent }}
+{% endif %}
+
+{% endfor %}
+{% endmacro %}
+
+{% macro class(x) %}{{ mark_documented(x) }}
+.. namespace:: krpc::services::{{ x.service_name }}
+.. class:: {{ x.name }}
+
+{{ x.documentation | parsedoc | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% for member in x.members.values() %}
+{% if member.member_type == 'class_method' %}
+{{ class_method(member) | indent }}
+{% elif member.member_type == 'class_static_method' %}
+{{ class_static_method(member) | indent }}
+{% elif member.member_type == 'class_property' %}
+{{ class_property(member) | indent }}
+{% endif %}
+
+{% endfor %}
+{% endmacro %}
+
+{% macro procedure(x) %}{{ mark_documented(x) }}
+.. function:: {{ x.return_type | return_type }} {{ x.name | snakecase }}({{ parameters(x.parameters) }})
+
+{{ x.documentation | parsedoc | indent }}
+
+{{ parameters_description(x.parameters) }}
+{% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
+{% endif %}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% if x.appended != '' %}{{ x.appended | indent }}
+{% endif %}
+{% endmacro %}
+
+{% macro property(x) %}{{ mark_documented(x) }}
+{% if x.getter != None %}
+.. function:: {{ x.type | return_type }} {{ x.name | snakecase }}()
+{% endif %}
+{% if x.setter != None %}
+.. function:: void set_{{ x.name | snakecase }}({{ x.type | parameter_type }} value)
+{% endif %}
+
+{{ x.documentation | parsedoc | indent }}
+
+{% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
+{% endif %}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% if x.appended != '' %}{{ x.appended | indent }}
+{% endif %}
+{% endmacro %}
+
+{% macro class_method(x) %}{{ mark_documented(x) }}
+.. function:: {{ x.return_type | return_type }} {{ x.name | snakecase }}({{ parameters(x.parameters[1:]) }})
+
+{{ x.documentation | parsedoc | indent }}
+
+{{ parameters_description(x.parameters[1:]) }}
+{% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
+{% endif %}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% if x.appended != '' %}{{ x.appended | indent }}
+{% endif %}
+{% endmacro %}
+
+{% macro class_static_method(x) %}{{ mark_documented(x) }}
+.. function:: static {{ x.return_type | return_type }} {{ x.name | snakecase }}({{ parameters(x.parameters) }})
+
+{{ x.documentation | parsedoc | indent }}
+
+{{ parameters_description(x.parameters) }}
+{% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
+{% endif %}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% if x.appended != '' %}{{ x.appended | indent }}
+{% endif %}
+{% endmacro %}
+
+{% macro class_property(x) %}{{ mark_documented(x) }}
+{{ property(x) }}
+{% endmacro %}
+
+{% macro enumeration(x) %}{{ mark_documented(x) }}
+.. namespace:: krpc::services::{{ x.service_name }}
+.. enum-struct:: {{ x.name }}
+
+{{ x.documentation | parsedoc | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% for value in x.values.values() %}{{ mark_documented(value) }}
+   .. enumerator:: {{ value.name | snakecase }}
+
+{{ value.documentation | parsedoc | indent(width=6) }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent(width=6) }}{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro parameters(x) %}
+{% for p in x %}{{ parameter(p) }}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endmacro %}
+
+{% macro parameter(x) %}
+{% if not x.has_default_argument -%}
+{{ x.type | parameter_type }} {{ x.name | snakecase }}
+{%- else -%}
+{{ x.type | parameter_type }} {{ x.name | snakecase }} = {{ x.default_argument }}
+{%- endif %}
+{% endmacro %}
+
+{% macro parameters_description(x) %}
+{% if x | length > 0 %}
+   :Parameters:
+
+   {% for p in x %}
+   {% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %}    * **{{ p.name | snakecase }}** -- {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+
+   {% endfor %}
+{% endif %}
+{% endmacro %}
+
+{% macro returns(x) %}
+:returns: {{ x | parsedoc('./returns') | singleline }}
+{% endmacro %}
+
+{% macro remarks(x) %}
+.. note::
+
+{{ x | parsedoc('./remarks') | indent }}
+{% endmacro %}
