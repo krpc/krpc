@@ -1,3 +1,7 @@
 .clearer {
     clear: both;
 }
+
+.rst-content code.literal {
+    color: #404040;
+}
