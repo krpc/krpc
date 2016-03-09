@@ -298,6 +298,7 @@ SpaceCenter.Part.ResourceHarvester
 SpaceCenter.Part.Sensor
 SpaceCenter.Part.SolarPanel
 SpaceCenter.Part.Position
+SpaceCenter.Part.CenterOfMass
 SpaceCenter.Part.Direction
 SpaceCenter.Part.Velocity
 SpaceCenter.Part.Rotation

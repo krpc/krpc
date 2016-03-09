@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using UnityEngine;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -382,10 +383,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 Torque {
             get {
-                return (ComputeReactionWheelTorque () +
-                ComputeRCSTorque () +
-                ComputeEngineTorque () +
-                ComputeControlSurfaceTorque ()).ToTuple ();
+              return (ComputeReactionWheelTorque () +
+                  ComputeRCSTorque () +
+                  ComputeEngineTorque () +
+                  ComputeControlSurfaceTorque ()).ToTuple ();
             }
         }
 
@@ -477,9 +478,9 @@ namespace KRPC.SpaceCenter.Services
         /// FIXME: units
         Vector3d ComputeReactionWheelTorque ()
         {
-            reactionWheelTorque = new Vector3d.zero;
-            foreach (var rw in Parts.ReactionWheels.Where (e => e.Active)) {
-                reactionWheelTorque += rw.Torque;
+            Vector3d reactionWheelTorque = Vector3d.zero;
+            foreach (var rw in Parts.ReactionWheels.Where (e => e.Active && !e.Broken)) {
+                reactionWheelTorque += rw.TorqueVector ();
             }
             return reactionWheelTorque;
         }

@@ -551,17 +551,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The position of the part.
-        /// Measured from the center of mass of the vessel to the center of mass of the part.
-        /// </summary>
-        /// <param name="referenceFrame"></param>
-        [KRPCMethod]
-        public Tuple3 CenterOfMassPosition (ReferenceFrame referenceFrame)
-        {
-            return referenceFrame.DirectionFromWorldSpace (InternalPart.rigidbody.worldCenterOfMass - InternalPart.vessel.findWorldCenterOfMass ()).ToTuple ();
-        }
-
-        /// <summary>
         /// The direction of the part in the given reference frame.
         /// </summary>
         /// <param name="referenceFrame"></param>
