@@ -20,21 +20,16 @@ namespace KRPC.SpaceCenter.Services.Parts
     {
         readonly Part part;
         readonly ModuleEngines engine;
-        readonly ModuleEnginesFX engineFx;
         readonly ModuleGimbal gimbal;
 
         internal Engine (Part part)
         {
             this.part = part;
             engine = part.InternalPart.Module<ModuleEngines> ();
-            engineFx = part.InternalPart.Module<ModuleEnginesFX> ();
             gimbal = part.InternalPart.Module<ModuleGimbal> ();
-            if (engine == null && engineFx == null)
-                throw new ArgumentException ("Part does not have a ModuleEngines or ModuleEnginexFX PartModule");
-            if (engine != null)
-                Thrusters = Enumerable.Range (0, engine.thrustTransforms.Count).Select (i => new Thruster (part, engine, gimbal, i)).ToList ();
-            else
-                Thrusters = Enumerable.Range (0, engineFx.thrustTransforms.Count).Select (i => new Thruster (part, engineFx, gimbal, i)).ToList ();
+            if (engine == null)
+                throw new ArgumentException ("Part does not have a ModuleEngines PartModule");
+            Thrusters = Enumerable.Range (0, engine.thrustTransforms.Count).Select (i => new Thruster (part, engine, gimbal, i)).ToList ();
         }
 
         /// <summary>
@@ -42,7 +37,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Engine obj)
         {
-            return part == obj.part && engine == obj.engine && engineFx == obj.engineFx && gimbal == obj.gimbal;
+            return part == obj.part && engine == obj.engine && gimbal == obj.gimbal;
         }
 
         /// <summary>
@@ -53,8 +48,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             int hash = part.GetHashCode ();
             if (engine != null)
                 hash ^= engine.GetHashCode ();
-            if (engineFx != null)
-                hash ^= engineFx.GetHashCode ();
             if (gimbal != null)
                 hash ^= gimbal.GetHashCode ();
             return hash;
@@ -74,19 +67,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Active {
-            get { return engine != null ? engine.EngineIgnited : engineFx.EngineIgnited; }
+            get { return engine.EngineIgnited; }
             set {
-                if (value) {
-                    if (engine != null)
-                        engine.Activate ();
-                    else
-                        engineFx.Activate ();
-                } else {
-                    if (engine != null)
-                        engine.Shutdown ();
-                    else
-                        engineFx.Shutdown ();
-                }
+                if (value)
+                    engine.Activate ();
+                else
+                    engine.Shutdown ();
             }
         }
 
@@ -96,10 +82,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         float GetThrust (float throttle, double pressure)
         {
             pressure *= PhysicsGlobals.KpaToAtmospheres;
-            if (engine != null)
-                return 1000f * throttle * engine.maxFuelFlow * engine.g * engine.atmosphereCurve.Evaluate ((float)pressure);
-            else
-                return 1000f * throttle * engineFx.maxFuelFlow * engineFx.g * engineFx.atmosphereCurve.Evaluate ((float)pressure);
+            return 1000f * throttle * engine.maxFuelFlow * engine.g * engine.atmosphereCurve.Evaluate ((float)pressure);
         }
 
         /// <summary>
@@ -111,8 +94,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active || !HasFuel)
                     return 0f;
-                var throttle = engine != null ? engine.currentThrottle : engineFx.currentThrottle;
-                return GetThrust (throttle, part.InternalPart.vessel.staticPressurekPa);
+                return GetThrust (engine.currentThrottle, part.InternalPart.vessel.staticPressurekPa);
             }
         }
 
@@ -150,7 +132,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float MaxVacuumThrust {
-            get { return (engine != null ? engine.maxThrust : engineFx.maxThrust) * 1000f; }
+            get { return engine.maxThrust * 1000f; }
         }
 
         /// <summary>
@@ -161,14 +143,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float ThrustLimit {
             get {
-                return (engine != null ? engine.thrustPercentage : engineFx.thrustPercentage) / 100f;
+                return engine.thrustPercentage / 100f;
             }
             set {
-                value = (value * 100f).Clamp (0f, 100f);
-                if (engine != null)
-                    engine.thrustPercentage = value;
-                else
-                    engineFx.thrustPercentage = value;
+                engine.thrustPercentage = (value * 100f).Clamp (0f, 100f);
             }
         }
 
@@ -190,7 +168,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float SpecificImpulse {
-            get { return engine != null ? engine.realIsp : engineFx.realIsp; }
+            get { return engine.realIsp; }
         }
 
         /// <summary>
@@ -198,7 +176,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float VacuumSpecificImpulse {
-            get { return (engine != null ? engine.atmosphereCurve : engineFx.atmosphereCurve).Evaluate (0); }
+            get { return engine.atmosphereCurve.Evaluate (0); }
         }
 
         /// <summary>
@@ -206,7 +184,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float KerbinSeaLevelSpecificImpulse {
-            get { return (engine != null ? engine.atmosphereCurve : engineFx.atmosphereCurve).Evaluate (1); }
+            get { return engine.atmosphereCurve.Evaluate (1); }
         }
 
         /// <summary>
@@ -214,7 +192,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<string> Propellants {
-            get { return (engine != null ? engine.propellants : engineFx.propellants).Select (x => x.name).ToList (); }
+            get { return engine.propellants.Select (x => x.name).ToList (); }
         }
 
         /// <summary>
@@ -224,9 +202,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public IDictionary<string, float> PropellantRatios {
             get {
-                var propellants = (engine != null ? engine.propellants : engineFx.propellants);
-                var max = propellants.Max (p => p.ratio);
-                return propellants.ToDictionary (p => p.name, p => p.ratio / max);
+                var max = engine.propellants.Max (p => p.ratio);
+                return engine.propellants.ToDictionary (p => p.name, p => p.ratio / max);
             }
         }
 
@@ -235,7 +212,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool HasFuel {
-            get { return !(engine != null ? engine.flameout : engineFx.flameout); }
+            get { return !engine.flameout; }
         }
 
         /// <summary>
@@ -246,7 +223,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float Throttle {
-            get { return engine != null ? engine.currentThrottle : engineFx.currentThrottle; }
+            get { return engine.currentThrottle; }
         }
 
         /// <summary>
@@ -256,7 +233,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool ThrottleLocked {
-            get { return engine != null ? engine.throttleLocked : engineFx.throttleLocked; }
+            get { return engine.throttleLocked; }
         }
 
         /// <summary>
@@ -266,7 +243,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool CanRestart {
-            get { return CanShutdown && (engine != null ? engine.allowRestart : engineFx.allowRestart); }
+            get { return CanShutdown && engine.allowRestart; }
         }
 
         /// <summary>
@@ -275,7 +252,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool CanShutdown {
-            get { return engine != null ? engine.allowShutdown : engineFx.allowShutdown; }
+            get { return engine.allowShutdown; }
         }
 
         /// <summary>
