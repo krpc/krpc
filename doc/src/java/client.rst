@@ -102,8 +102,8 @@ Client API Reference
    .. method:: static Connection newInstance(String name)
    .. method:: static Connection newInstance(String name, String address)
    .. method:: static Connection newInstance(String name, String address, int rpcPort, int streamPort)
-   .. method:: static Connection newInstance(String name, InetAddress address)
-   .. method:: static Connection newInstance(String name, InetAddress address, int rpcPort, int streamPort)
+   .. method:: static Connection newInstance(String name, java.net.InetAddress address)
+   .. method:: static Connection newInstance(String name, java.net.InetAddress address, int rpcPort, int streamPort)
 
       Create a connection to the server, using the given connection details.
 
@@ -111,8 +111,8 @@ Client API Reference
                           the server and appears, for example, in the client
                           connection dialog on the in-game server window.
       :param String address: The address of the server to connect to. Can either be
-                             a hostname, an IP address as a string or an
-                             InetAddress object. Defaults to '127.0.0.1'.
+                             a hostname, an IP address as a string or a
+                             :ref:`java.net.InetAddress` object. Defaults to "127.0.0.1".
       :param int rpc_port: The port number of the RPC Server. Defaults to 50000.
       :param int stream_port: The port number of the Stream Server. Defaults
                               to 50001.

@@ -78,9 +78,9 @@ Reference
    :param string address: The address of the server to connect to. Can either be
                           a hostname or an IP address in dotted decimal
                           notation. Defaults to '127.0.0.1'.
-   :param int rpc_port: The port number of the RPC Server. Defaults to 50000.
-   :param int stream_port: The port number of the Stream Server. Defaults
-                           to 50001.
+   :param number rpc_port: The port number of the RPC Server. Defaults to 50000.
+   :param number stream_port: The port number of the Stream Server. Defaults
+                              to 50001.
 
 .. class:: Client
 

@@ -4,11 +4,16 @@ from .utils import snakecase
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class LuaDomain(Domain):
-
     name = 'lua'
     prettyname = 'Lua'
     sphinxname = 'lua'
     codeext = 'lua'
+
+    value_map = {
+        'null': 'nil',
+        'true': 'True',
+        'false': 'False'
+    }
 
     type_map = {
         'double': 'number',
@@ -20,12 +25,6 @@ class LuaDomain(Domain):
         'bool': 'boolean',
         'string': 'string',
         'bytes': 'string'
-    }
-
-    value_map = {
-        'null': 'nil',
-        'true': 'True',
-        'false': 'False'
     }
 
     def __init__(self, macros):
@@ -80,6 +79,10 @@ class LuaDomain(Domain):
             name[-1] = snakecase(name[-1])
             name = '.'.join(name)
         return self.shorten_ref(name)
+
+    # FIXME: reference shortening does not work with sphinx-lua
+    def shorten_ref(self, name):
+        return name
 
     def see(self, obj):
         if isinstance(obj, Property) or isinstance(obj, ClassProperty) or isinstance(obj, EnumerationValue):

@@ -91,14 +91,14 @@ overheads, as the ``vessel.position`` function is called repeatedly.
 .. literalinclude:: /scripts/Streaming.py
 
 The following code achieves the same thing, but is far more efficient. It calls
-:meth:`Client.add_stream` once at the start of the program to create a stream,
-and then repeatedly gets the position from the stream.
+:meth:`krpc.client.Client.add_stream` once at the start of the program to create
+a stream, and then repeatedly gets the position from the stream.
 
 .. literalinclude:: /scripts/Streaming2.py
 
-A stream can be created by calling :meth:`Client.add_stream` or using the
-``with`` statement applied to :meth:`Client.stream`. Both of these approaches
-return an instance of the :class:`krpc.stream.Stream` class.
+A stream can be created by calling :meth:`krpc.client.Client.add_stream` or
+using the ``with`` statement applied to :meth:`krpc.client.Client.stream`. Both
+of these approaches return an instance of the :class:`krpc.stream.Stream` class.
 
 Both methods and attributes can be streamed. The example given above
 demonstrates how to stream methods. The following example shows how to stream an
@@ -117,15 +117,15 @@ Client API Reference
    :class:`krpc.client.Client` object, through which the server can be
    communicated with.
 
-   :param string address: The address of the server to connect to. Can either be
-                          a hostname or an IP address in dotted decimal
-                          notation. Defaults to '127.0.0.1'.
+   :param str address: The address of the server to connect to. Can either be a
+                       hostname or an IP address in dotted decimal
+                       notation. Defaults to '127.0.0.1'.
    :param int rpc_port: The port number of the RPC Server. Defaults to 50000.
    :param int stream_port: The port number of the Stream Server. Defaults
                            to 50001.
-   :param string name: A descriptive name for the connection. This is passed to
-                       the server and appears, for example, in the client
-                       connection dialog on the in-game server window.
+   :param str name: A descriptive name for the connection. This is passed to the
+                    server and appears, for example, in the client connection
+                    dialog on the in-game server window.
 
 .. module:: krpc.client
 
@@ -139,7 +139,7 @@ Client API Reference
    .. method:: add_stream(func, *args, **kwargs)
 
       Create a stream for the function *func* called with arguments *args* and
-      *kwargs*. Returns a :class:`krpc.streams.Stream` object.
+      *kwargs*. Returns a :class:`krpc.stream.Stream` object.
 
    .. method:: stream(func, *args, **kwargs)
 

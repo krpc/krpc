@@ -27,8 +27,8 @@ NuGet <https://www.nuget.org/packages/Google.Protobuf>`_.
 Connecting to the Server
 ------------------------
 
-To connect to a server, create a :type:`KRPC.Client.Connection` object. For
-example to connect to a server running on the local machine:
+To connect to a server, create a :type:`Connection` object. For example to
+connect to a server running on the local machine:
 
 .. literalinclude:: /scripts/Basic.cs
 
@@ -72,11 +72,11 @@ stream, and then repeatedly gets the position from the stream.
 Streams are created for any method call by calling :meth:`Connection.AddStream`
 and passing it a lambda expression calling the desired method. This lambda
 expression must take zero arguments and be either a method call expression or a
-parameter call expression. It returns an instance of the
-:type:`KRPC.Client.Stream` class from which the latest value can be obtained by
-calling :meth:`KRPC.Client.Stream.Get`. A stream can be stopped and removed from
-the server by calling :meth:`KRPC.Client.Stream.Remove` on the stream
-object. All of a clients streams are automatically stopped when it disconnects.
+parameter call expression. It returns an instance of the :type:`Stream` class
+from which the latest value can be obtained by calling :meth:`Stream.Get`. A
+stream can be stopped and removed from the server by calling
+:meth:`Stream.Remove` on the stream object. All of a clients streams are
+automatically stopped when it disconnects.
 
 Client API Reference
 --------------------
@@ -93,9 +93,9 @@ Client API Reference
       name to the server to identify the client (up to 32 bytes of UTF-8 encoded
       text).
 
-   .. method:: Stream<TResult> AddStream<TResult> (LambdaExpression expression)
+   .. method:: Stream<ReturnType> AddStream<ReturnType> (LambdaExpression expression)
 
-      Create a new stream from the given lambda expression.  Returns a stream
+      Create a new stream from the given lambda expression. Returns a stream
       object that can be used to obtain the latest value of the stream.
 
 .. class:: Stream<ReturnType>

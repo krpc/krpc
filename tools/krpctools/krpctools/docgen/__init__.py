@@ -6,7 +6,7 @@ import json
 import jinja2
 from pkg_resources import resource_filename
 from krpc.types import Types
-from .utils import snakecase, indent, singleline, lookup_cref
+from .utils import snakecase, lower_camelcase, indent, singleline, lookup_cref
 from .cpp import CppDomain
 from .csharp import CsharpDomain
 from .lua import LuaDomain
@@ -135,6 +135,7 @@ def process_file(args, domain, services, path):
         return domain.code(value)
 
     template_env.filters['snakecase'] = snakecase
+    template_env.filters['lower_camelcase'] = lower_camelcase
     template_env.filters['indent'] = indent
     template_env.filters['singleline'] = singleline
     template_env.filters['parameter_type'] = parameter_type_filter

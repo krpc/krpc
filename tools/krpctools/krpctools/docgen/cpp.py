@@ -10,8 +10,10 @@ class CppDomain(Domain):
     codeext = 'cpp'
 
     type_map = {
+        'int32': 'int32_t',
+        'uint32': 'uint32_t',
         'string': 'std::string',
-        'bytes': 'std::string',
+        'bytes': 'std::string'
     }
 
     value_map = {
@@ -27,9 +29,9 @@ class CppDomain(Domain):
         elif isinstance(typ, ValueType):
             return self.type_map.get(typ.protobuf_type, typ.protobuf_type)
         elif isinstance(typ, ClassType):
-            return self.shorten_ref(typ.protobuf_type[6:-1]).replace('.', '::')
+            return self.shorten_ref('krpc::services::'+typ.protobuf_type[6:-1]).replace('.', '::')
         elif isinstance(typ, EnumType):
-            return self.shorten_ref(typ.protobuf_type[5:-1]).replace('.', '::')
+            return self.shorten_ref('krpc::services::'+typ.protobuf_type[5:-1]).replace('.', '::')
         elif isinstance(typ, ListType):
             return 'std::vector<%s>' % self.type(typ.value_type)
         elif isinstance(typ, DictionaryType):
@@ -62,14 +64,12 @@ class CppDomain(Domain):
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
     def ref(self, obj):
-        name = obj.fullname
+        name = obj.fullname.split('.')
         if isinstance(obj, Procedure) or isinstance(obj, Property) or \
            isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod) or isinstance(obj, ClassProperty) or \
            isinstance(obj, EnumerationValue):
-            name = name.split('.')
             name[-1] = snakecase(name[-1])
-            name = '.'.join(name)
-        return self.shorten_ref(name).replace('.', '::')
+        return 'krpc::services::' + self.shorten_ref('.'.join(name)).replace('.', '::')
 
     def see(self, obj):
         if isinstance(obj, Property) or isinstance(obj, ClassProperty):
@@ -88,3 +88,6 @@ class CppDomain(Domain):
 
     def paramref(self, name):
         return super(CppDomain, self).paramref(snakecase(name))
+
+    def shorten_ref(self, name, obj=None):
+        return name
