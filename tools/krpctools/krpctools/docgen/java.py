@@ -1,6 +1,7 @@
 from .domain import Domain
 from .nodes import *
-from .utils import lower_camelcase, snakecase
+from ..utils import lower_camel_case
+from krpc.utils import snake_case
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class JavaDomain(Domain):
@@ -90,7 +91,7 @@ class JavaDomain(Domain):
             if isinstance(obj, ClassMethod):
                 parameters = parameters[1:]
             name = name.split('.')
-            name[-1] = lower_camelcase(name[-1])+'('+', '.join(parameters)+')'
+            name[-1] = lower_camel_case(name[-1])+'('+', '.join(parameters)+')'
             name = '.'.join(name)
         elif isinstance(obj, Property) or isinstance(obj, ClassProperty):
             name = name.split('.')
@@ -98,7 +99,7 @@ class JavaDomain(Domain):
             name = '.'.join(name)
         elif isinstance(obj, EnumerationValue):
             name = name.split('.')
-            name[-1] = snakecase(name[-1]).upper()
+            name[-1] = snake_case(name[-1]).upper()
             name = '.'.join(name)
         return self.shorten_ref(name)
 

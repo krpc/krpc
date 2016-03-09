@@ -1,6 +1,6 @@
 from .domain import Domain
 from .nodes import *
-from .utils import snakecase
+from krpc.utils import snake_case
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class LuaDomain(Domain):
@@ -76,7 +76,7 @@ class LuaDomain(Domain):
            isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod) or isinstance(obj, ClassProperty) or \
            isinstance(obj, EnumerationValue):
             name = name.split('.')
-            name[-1] = snakecase(name[-1])
+            name[-1] = snake_case(name[-1])
             name = '.'.join(name)
         return self.shorten_ref(name)
 
@@ -96,4 +96,4 @@ class LuaDomain(Domain):
         return ':%s:`%s`' % (prefix, self.ref(obj))
 
     def paramref(self, name):
-        return super(LuaDomain, self).paramref(snakecase(name))
+        return super(LuaDomain, self).paramref(snake_case(name))
