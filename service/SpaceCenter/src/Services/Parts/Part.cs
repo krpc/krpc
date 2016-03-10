@@ -199,15 +199,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Temperature of the atmosphere/vacuum surrounding the part, in Kelvin.
-        /// This does not include heating from direct sunlight.
-        /// </summary>
-        [KRPCProperty]
-        public double ExternalTemperature {
-            get { throw new NotImplementedException (); }
-        }
-
-        /// <summary>
         /// How much it takes to heat up the part.
         /// </summary>
         [KRPCProperty]
