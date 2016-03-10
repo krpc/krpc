@@ -14,7 +14,8 @@ class EngineTestBase(object):
             'can_shutdown': True,
             'max_vac_thrust': 215000,
             'msl_isp': 280,
-            'vac_isp': 300
+            'vac_isp': 300,
+            'modes': None
         },
         'LV-T45 "Swivel" Liquid Fuel Engine': {
             'propellants': {'LiquidFuel': 9./11., 'Oxidizer': 1.},
@@ -25,7 +26,8 @@ class EngineTestBase(object):
             'can_shutdown': True,
             'max_vac_thrust': 200000,
             'msl_isp': 270,
-            'vac_isp': 320
+            'vac_isp': 320,
+            'modes': None
         },
         'LV-N "Nerv" Atomic Rocket Motor': {
             'propellants': {'LiquidFuel': 1.},
@@ -35,7 +37,8 @@ class EngineTestBase(object):
             'can_shutdown': True,
             'max_vac_thrust': 60000,
             'msl_isp': 185,
-            'vac_isp': 800
+            'vac_isp': 800,
+            'modes': None
         },
         'IX-6315 "Dawn" Electric Propulsion System': {
             'propellants': {'XenonGas': 0.1/1.8, 'ElectricCharge': 1.},
@@ -45,7 +48,8 @@ class EngineTestBase(object):
             'can_shutdown': True,
             'max_vac_thrust': 2000,
             'msl_isp': 100,
-            'vac_isp': 4200
+            'vac_isp': 4200,
+            'modes': None
         },
         'O-10 "Puff" MonoPropellant Fuel Engine': {
             'propellants': {'MonoPropellant': 1.},
@@ -55,7 +59,8 @@ class EngineTestBase(object):
             'can_shutdown': True,
             'max_vac_thrust': 20000,
             'msl_isp': 120,
-            'vac_isp': 250
+            'vac_isp': 250,
+            'modes': None
         },
         'RT-10 "Hammer" Solid Fuel Booster': {
             'propellants': {'SolidFuel': 1.},
@@ -65,7 +70,8 @@ class EngineTestBase(object):
             'can_shutdown': False,
             'max_vac_thrust': 227000,
             'msl_isp': 170,
-            'vac_isp': 195
+            'vac_isp': 195,
+            'modes': None
         },
         'J-33 "Wheesley" Basic Jet Engine': {
             'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.090909},
@@ -76,7 +82,20 @@ class EngineTestBase(object):
             'can_shutdown': True,
             'max_vac_thrust': 80000,
             'msl_isp': 9600,
-            'vac_isp': 9600
+            'vac_isp': 9600,
+            'modes': None
+        },
+        'CR-7 R.A.P.I.E.R. Engine': {
+            'propellants': {'IntakeAir': 1., 'LiquidFuel': 0.166666},
+            'gimballed': True,
+            'gimbal_range': 3,
+            'throttle_locked': False,
+            'can_restart': True,
+            'can_shutdown': True,
+            'max_vac_thrust': 105000,
+            'msl_isp': 3200,
+            'vac_isp': 3200,
+            'modes': ['AirBreathing', 'ClosedCycle']
         }
     }
 
@@ -118,11 +137,15 @@ class EngineTest(EngineTestBase):
         self.assertClose(data['vac_isp'], engine.vacuum_specific_impulse)
         self.assertEqual(data['can_restart'], engine.can_restart)
         self.assertEqual(data['can_shutdown'], engine.can_shutdown)
+        self.assertEqual(data['modes'] is not None, engine.has_modes)
+        if data['modes'] is not None:
+            self.assertEqual(data['modes'], sorted(engine.modes.keys()))
+            self.assertTrue(engine.mode in data['modes'])
         self.assertEqual(data['gimballed'], engine.gimballed)
-        self.assertFalse(engine.gimbal_locked)
         if not data['gimballed']:
             self.assertClose(engine.gimbal_range, 0)
         else:
+            self.assertFalse(engine.gimbal_locked)
             self.assertClose(engine.gimbal_range, data['gimbal_range'])
 
     def check_engine_idle(self, engine):
@@ -260,6 +283,22 @@ class TestPartsEngine(testingtools.TestCase, EngineTestBase):
         engine.thrust_limit = 1
         self.assertClose(engine.thrust_limit, 1)
 
+    def test_set_mode(self):
+        engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
+        engine.mode = 'ClosedCycle'
+        time.sleep(0.1)
+        self.assertEqual('ClosedCycle', engine.mode)
+        engine.mode = 'AirBreathing'
+
+    def test_auto_mode_switch(self):
+        engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
+        engine.auto_mode_switch = True
+        time.sleep(0.1) #TODO: need to sleep for the auto mode switch setting to take effect
+        self.assertTrue(engine.auto_mode_switch)
+        engine.auto_mode_switch = False
+        time.sleep(0.1)
+        self.assertFalse(engine.auto_mode_switch)
+
     def test_gimbal_lock(self):
         engine = self.get_engine('LV-T45 "Swivel" Liquid Fuel Engine')
         self.assertTrue(engine.gimballed)
@@ -318,6 +357,9 @@ class TestPartsEngineMSL(testingtools.TestCase, EngineTest):
         cls.add_engine_data(
             'J-33 "Wheesley" Basic Jet Engine',
             {'max_thrust': 80000, 'isp': 9600})
+        cls.add_engine_data(
+            'CR-7 R.A.P.I.E.R. Engine',
+            {'max_thrust': 105000, 'isp': 3200})
 
     @classmethod
     def tearDownClass(cls):
@@ -325,6 +367,21 @@ class TestPartsEngineMSL(testingtools.TestCase, EngineTest):
 
     def test_jet_engine(self):
         engine = self.get_engine('J-33 "Wheesley" Basic Jet Engine')
+        self.set_idle(engine)
+        self.check_engine_properties(engine)
+        self.check_engine_idle(engine)
+        engine.active = True
+        for throttle in [1,0.6,0.2]:
+            self.vessel.control.throttle = throttle
+            while abs(engine.throttle - throttle) > 0.1:
+                time.sleep(1)
+            self.check_engine_properties(engine)
+            self.check_engine_active(engine, engine.throttle)
+        engine.active = False
+
+    def test_multi_mode_engine(self):
+        engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
+        engine.mode = 'AirBreathing'
         self.set_idle(engine)
         self.check_engine_properties(engine)
         self.check_engine_idle(engine)
@@ -366,10 +423,29 @@ class TestPartsEngineVacuum(testingtools.TestCase, EngineTest):
         cls.add_engine_data(
             'RT-10 "Hammer" Solid Fuel Booster',
             {'max_thrust': 227000, 'isp': 195})
+        cls.add_engine_data(
+            'CR-7 R.A.P.I.E.R. Engine',
+            {'propellants': {'Oxidizer': 1., 'LiquidFuel': 0.818181},
+             'gimballed': True,
+             'gimbal_range': 3,
+             'throttle_locked': False,
+             'can_restart': True,
+             'can_shutdown': True,
+             'max_vac_thrust': 180000,
+             'msl_isp': 275,
+             'vac_isp': 305,
+             'modes': ['AirBreathing', 'ClosedCycle'],
+             'max_thrust': 180000,
+             'isp': 305})
 
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
+
+    def test_multi_mode_engine(self):
+        engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
+        engine.mode = 'ClosedCycle'
+        self.check_engine(engine)
 
 if __name__ == "__main__":
     unittest.main()
