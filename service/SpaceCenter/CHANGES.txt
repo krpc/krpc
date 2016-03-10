@@ -1,4 +1,5 @@
 v0.2.3
+ * Add support for engine mode switching (#219)
  * Fix bug with translation inputs in Control class (#223)
 
 v0.2.2

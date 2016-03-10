@@ -349,6 +349,11 @@ SpaceCenter.Engine.Throttle
 SpaceCenter.Engine.ThrottleLocked
 SpaceCenter.Engine.CanRestart
 SpaceCenter.Engine.CanShutdown
+SpaceCenter.Engine.HasModes
+SpaceCenter.Engine.Mode
+SpaceCenter.Engine.Modes
+SpaceCenter.Engine.ToggleMode
+SpaceCenter.Engine.AutoModeSwitch
 SpaceCenter.Engine.Gimballed
 SpaceCenter.Engine.GimbalRange
 SpaceCenter.Engine.GimbalLocked

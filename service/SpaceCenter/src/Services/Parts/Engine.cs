@@ -14,16 +14,25 @@ namespace KRPC.SpaceCenter.Services.Parts
     public sealed class Engine : Equatable<Engine>
     {
         readonly Part part;
-        readonly ModuleEngines engine;
+        readonly IList<ModuleEngines> engines;
+        readonly MultiModeEngine multiModeEngine;
         readonly ModuleGimbal gimbal;
 
         internal Engine (Part part)
         {
             this.part = part;
-            engine = part.InternalPart.Module<ModuleEngines> ();
+            engines = part.InternalPart.Modules.OfType<ModuleEngines> ().ToList ();
+            multiModeEngine = part.InternalPart.Module<MultiModeEngine> ();
             gimbal = part.InternalPart.Module<ModuleGimbal> ();
-            if (engine == null)
-                throw new ArgumentException ("Part does not have a ModuleEngines PartModule");
+            if (engines.Count == 0)
+                throw new ArgumentException ("Part does not have any ModuleEngines PartModules");
+        }
+
+        Engine (ModuleEngines engine)
+        {
+            part = new Part (engine.part);
+            multiModeEngine = null;
+            gimbal = part.InternalPart.Module<ModuleGimbal> ();
         }
 
         /// <summary>
@@ -31,7 +40,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Engine obj)
         {
-            return part == obj.part && engine == obj.engine && gimbal == obj.gimbal;
+            return part == obj.part && engines.SequenceEqual (obj.engines) && multiModeEngine == obj.multiModeEngine && gimbal == obj.gimbal;
         }
 
         /// <summary>
@@ -40,11 +49,22 @@ namespace KRPC.SpaceCenter.Services.Parts
         public override int GetHashCode ()
         {
             int hash = part.GetHashCode ();
-            if (engine != null)
+            hash ^= engines.GetHashCode ();
+            foreach (var engine in engines)
                 hash ^= engine.GetHashCode ();
+            if (multiModeEngine != null)
+                hash ^= multiModeEngine.GetHashCode ();
             if (gimbal != null)
                 hash ^= gimbal.GetHashCode ();
             return hash;
+        }
+
+        /// <summary>
+        /// Get the currently active ModuleEngines part module. For a single-mode engine, this is just the
+        /// ModulesEngine for the part. For multi-mode engines, this is the ModulesEngine for the current mode.
+        /// </summary>
+        ModuleEngines CurrentEngine {
+            get { return engines [(multiModeEngine == null || multiModeEngine.runningPrimary) ? 0 : 1]; }
         }
 
         /// <summary>
@@ -61,12 +81,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Active {
-            get { return engine.EngineIgnited; }
+            get { return CurrentEngine.EngineIgnited; }
             set {
                 if (value)
-                    engine.Activate ();
+                    CurrentEngine.Activate ();
                 else
-                    engine.Shutdown ();
+                    CurrentEngine.Shutdown ();
             }
         }
 
@@ -75,6 +95,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         float GetThrust (float throttle, double pressure)
         {
+            var engine = CurrentEngine;
             pressure *= PhysicsGlobals.KpaToAtmospheres;
             return 1000f * throttle * engine.maxFuelFlow * engine.g * engine.atmosphereCurve.Evaluate ((float)pressure);
         }
@@ -88,7 +109,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active || !HasFuel)
                     return 0f;
-                return GetThrust (engine.currentThrottle, part.InternalPart.vessel.staticPressurekPa);
+                return GetThrust (CurrentEngine.currentThrottle, part.InternalPart.vessel.staticPressurekPa);
             }
         }
 
@@ -126,7 +147,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float MaxVacuumThrust {
-            get { return engine.maxThrust * 1000f; }
+            get { return CurrentEngine.maxThrust * 1000f; }
         }
 
         /// <summary>
@@ -136,12 +157,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float ThrustLimit {
-            get {
-                return engine.thrustPercentage / 100f;
-            }
-            set {
-                engine.thrustPercentage = (value * 100f).Clamp (0f, 100f);
-            }
+            get { return CurrentEngine.thrustPercentage / 100f; }
+            set { CurrentEngine.thrustPercentage = (value * 100f).Clamp (0f, 100f); }
         }
 
         /// <summary>
@@ -150,7 +167,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float SpecificImpulse {
-            get { return engine.realIsp; }
+            get { return CurrentEngine.realIsp; }
         }
 
         /// <summary>
@@ -158,7 +175,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float VacuumSpecificImpulse {
-            get { return engine.atmosphereCurve.Evaluate (0); }
+            get { return CurrentEngine.atmosphereCurve.Evaluate (0); }
         }
 
         /// <summary>
@@ -166,7 +183,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float KerbinSeaLevelSpecificImpulse {
-            get { return engine.atmosphereCurve.Evaluate (1); }
+            get { return CurrentEngine.atmosphereCurve.Evaluate (1); }
         }
 
         /// <summary>
@@ -174,7 +191,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<string> Propellants {
-            get { return engine.propellants.Select (x => x.name).ToList (); }
+            get { return CurrentEngine.propellants.Select (x => x.name).ToList (); }
         }
 
         /// <summary>
@@ -184,6 +201,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public IDictionary<string, float> PropellantRatios {
             get {
+                var engine = CurrentEngine;
                 var max = engine.propellants.Max (p => p.ratio);
                 return engine.propellants.ToDictionary (p => p.name, p => p.ratio / max);
             }
@@ -194,7 +212,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool HasFuel {
-            get { return !engine.flameout; }
+            get { return !CurrentEngine.flameout; }
         }
 
         /// <summary>
@@ -205,7 +223,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float Throttle {
-            get { return engine.currentThrottle; }
+            get { return CurrentEngine.currentThrottle; }
         }
 
         /// <summary>
@@ -215,7 +233,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool ThrottleLocked {
-            get { return engine.throttleLocked; }
+            get { return CurrentEngine.throttleLocked; }
         }
 
         /// <summary>
@@ -225,7 +243,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool CanRestart {
-            get { return CanShutdown && engine.allowRestart; }
+            get { return CanShutdown && CurrentEngine.allowRestart; }
         }
 
         /// <summary>
@@ -234,7 +252,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool CanShutdown {
-            get { return engine.allowShutdown; }
+            get { return CurrentEngine.allowShutdown; }
         }
 
         /// <summary>
@@ -291,6 +309,89 @@ namespace KRPC.SpaceCenter.Services.Parts
                     return;
                 value = (value * 100f).Clamp (0f, 100f);
                 gimbal.gimbalLimiter = value;
+            }
+        }
+
+        void CheckMultiMode ()
+        {
+            if (multiModeEngine == null)
+                throw new InvalidOperationException ("The engine only has a single mode");
+        }
+
+        void CheckHasMode (string id)
+        {
+            CheckMultiMode ();
+            if (multiModeEngine.primaryEngineID != id && multiModeEngine.secondaryEngineID != id)
+                throw new InvalidOperationException ("The engine does not have the given mode");
+        }
+
+        /// <summary>
+        /// Whether the engine has multiple modes of operation.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasModes {
+            get { return multiModeEngine != null; }
+        }
+
+        /// <summary>
+        /// The name of the current engine mode.
+        /// </summary>
+        [KRPCProperty]
+        public string Mode {
+            get {
+                CheckMultiMode ();
+                return multiModeEngine.mode;
+            }
+            set {
+                CheckHasMode (value);
+                if (value == multiModeEngine.mode)
+                    return;
+                multiModeEngine.Invoke ("ModeEvent", 0);
+            }
+        }
+
+        /// <summary>
+        /// The available modes for the engine.
+        /// A dictionary mapping mode names to <see cref="Engine" /> objects.
+        /// </summary>
+        [KRPCProperty]
+        public IDictionary<string,Engine> Modes {
+            get {
+                CheckMultiMode ();
+                var result = new Dictionary<string,Engine> ();
+                result [multiModeEngine.primaryEngineID] = new Engine (engines [0]);
+                result [multiModeEngine.secondaryEngineID] = new Engine (engines [1]);
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Toggle the current engine mode.
+        /// </summary>
+        [KRPCMethod]
+        public void ToggleMode ()
+        {
+            CheckMultiMode ();
+            multiModeEngine.Invoke ("ModeEvent", 0);
+        }
+
+        /// <summary>
+        /// Whether the engine will automatically switch modes.
+        /// </summary>
+        [KRPCProperty]
+        public bool AutoModeSwitch {
+            get {
+                CheckMultiMode ();
+                return multiModeEngine.autoSwitch;
+            }
+            set {
+                CheckMultiMode ();
+                if (value == multiModeEngine.autoSwitch)
+                    return;
+                if (value)
+                    multiModeEngine.Invoke ("EnableAutoSwitch", 0);
+                else
+                    multiModeEngine.Invoke ("DisableAutoSwitch", 0);
             }
         }
     }
