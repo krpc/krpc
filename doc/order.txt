@@ -260,7 +260,6 @@ SpaceCenter.Part.Temperature
 SpaceCenter.Part.SkinTemperature
 SpaceCenter.Part.MaxTemperature
 SpaceCenter.Part.MaxSkinTemperature
-SpaceCenter.Part.ExternalTemperature
 SpaceCenter.Part.ThermalMass
 SpaceCenter.Part.ThermalSkinMass
 SpaceCenter.Part.ThermalResourceMass
