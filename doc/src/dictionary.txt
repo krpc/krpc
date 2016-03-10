@@ -4,6 +4,7 @@ Bazel
 circularization
 clickable
 clientgen
+combusting
 comms
 CMake
 crossfeed
