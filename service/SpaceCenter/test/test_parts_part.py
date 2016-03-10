@@ -78,8 +78,6 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(300, part.skin_temperature, error=50)
         self.assertEqual(1400, part.max_temperature)
         self.assertEqual(2400, part.max_skin_temperature)
-        #TODO: not implemented. see issue #174
-        #self.assertClose(300, part.external_temperature, error=50)
         self.assertClose(3546.5, part.thermal_mass, error=0.1)
         self.assertClose(13.5, part.thermal_skin_mass, error=0.1)
         self.assertClose(360, part.thermal_resource_mass, error=0.1)
