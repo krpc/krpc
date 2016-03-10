@@ -75,10 +75,20 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public Tuple3 Torque {
             get {
-                if (!Active || Broken)
-                    return Vector3d.zero.ToTuple ();
-                return (new Vector3d (reactionWheel.PitchTorque, reactionWheel.YawTorque, reactionWheel.RollTorque) * 1000f).ToTuple ();
+                return TorqueVector ().ToTuple ();
             }
+        }
+
+        /// <summary>
+        /// The available torque in the pitch, yaw and roll axes of the vessel, in Newton meters.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// Returns zero if the reaction wheel is inactive or broken.
+        /// </summary>
+        public Vector3d TorqueVector ()
+        {
+            if (!Active || Broken)
+                return Vector3d.zero;
+            return (new Vector3d (reactionWheel.PitchTorque, reactionWheel.YawTorque, reactionWheel.RollTorque) * 1000f);
         }
     }
 }

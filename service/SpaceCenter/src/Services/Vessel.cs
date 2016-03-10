@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using UnityEngine;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -367,20 +368,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
-            get {
-                Vector3d MoI = Vector3d.zero;
-                var CoM = InternalVessel.findWorldCenterOfMass ();
-                foreach (var part in InternalVessel.parts) {
-                    if (part.rb != null) {
-                        var position = InternalVessel.GetTransform ().InverseTransformDirection (part.rb.position - CoM);
-                        var sqRadius = new Vector3d (position.y * position.y + position.z * position.z,
-                                           position.x * position.x + position.z * position.z,
-                                           position.x * position.x + position.y * position.y);
-                        MoI += part.rb.mass * sqRadius;
-                    }
-                }
-                return MoI.ToTuple ();
-            }
+            get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
         }
 
         /// <summary>
@@ -393,10 +381,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 Torque {
             get {
-                return (ComputeReactionWheelTorque () +
-                ComputeRCSTorque () +
-                ComputeEngineTorque () +
-                ComputeControlSurfaceTorque ()).ToTuple ();
+              return (ComputeReactionWheelTorque () +
+                  ComputeRCSTorque () +
+                  ComputeEngineTorque () +
+                  ComputeControlSurfaceTorque ()).ToTuple ();
             }
         }
 
@@ -440,9 +428,59 @@ namespace KRPC.SpaceCenter.Services
             get { return ComputeControlSurfaceTorque ().ToTuple (); }
         }
 
+        /// <summary>
+        /// Computes the full inertia tensor of the vessel.  This applies the parallel axis theorem to
+        /// sum up all the contributions to the inertia tensor from every part.  It (ab)uses the Matrix4x4
+        /// class in order to do 3x3 matrix operations in the hope that the Matrix4x4 class winds up
+        /// running on the GPU.
+        /// </summary>
+        ///
+        /// FIXME: units
+        Matrix4x4 ComputeInertiaTensor ()
+        {
+            Matrix4x4 inertiaTensor = Matrix4x4.zero;
+            Vector3 CoM = InternalVessel.findWorldCenterOfMass ();
+            // Use the part ReferenceTransform because we want pitch/roll/yaw relative to controlling part
+            Transform vesselTransform = InternalVessel.GetTransform ();
+
+            foreach (var part in InternalVessel.parts) {
+                if (part.rb != null) {
+                    Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
+
+                    // translate:  inertiaTensor frame to part frame, part frame to world frame, world frame to vessel frame
+                    Quaternion rot = Quaternion.Inverse(vesselTransform.rotation) * part.transform.rotation * part.rb.inertiaTensorRotation;
+                    Quaternion inv = Quaternion.Inverse(rot);
+
+                    Matrix4x4 rotMatrix = Matrix4x4.TRS(Vector3.zero, rot, Vector3.one);
+                    Matrix4x4 invMatrix = Matrix4x4.TRS(Vector3.zero, inv, Vector3.one);
+
+                    // add the part inertiaTensor to the ship inertiaTensor
+                    inertiaTensor = inertiaTensor.Add(rotMatrix * partTensor * invMatrix);
+
+                    Vector3 position = vesselTransform.InverseTransformDirection(part.rb.position - CoM);
+
+                    // add the part mass to the ship inertiaTensor
+                    inertiaTensor = inertiaTensor.Add((part.rb.mass * position.sqrMagnitude).ToDiagonalMatrix ());
+
+                    // add the part distance offset to the ship inertiaTensor
+                    inertiaTensor = inertiaTensor.Add(position.OuterProduct(-part.rb.mass * position));
+                }
+            }
+            return inertiaTensor;
+        }
+
+        /// <summary>
+        /// Computes the sum of the available reaction wheel torque in the vessel pitch, roll, yaw frame.
+        /// </summary>
+        ///
+        /// FIXME: units
         Vector3d ComputeReactionWheelTorque ()
         {
-            throw new NotImplementedException ();
+            Vector3d reactionWheelTorque = Vector3d.zero;
+            foreach (var rw in Parts.ReactionWheels.Where (e => e.Active && !e.Broken)) {
+                reactionWheelTorque += rw.TorqueVector ();
+            }
+            return reactionWheelTorque;
         }
 
         Vector3d ComputeRCSTorque ()
