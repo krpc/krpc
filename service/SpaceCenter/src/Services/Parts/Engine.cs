@@ -255,63 +255,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return CurrentEngine.allowShutdown; }
         }
 
-        /// <summary>
-        /// Whether the engine nozzle is gimballed, i.e. can provide a turning force.
-        /// </summary>
-        [KRPCProperty]
-        public bool Gimballed {
-            get { return gimbal != null; }
-        }
-
-        /// <summary>
-        /// The range over which the gimbal can move, in degrees.
-        /// </summary>
-        [KRPCProperty]
-        public float GimbalRange {
-            get { return gimbal != null && !gimbal.gimbalLock ? gimbal.gimbalRange : 0f; }
-        }
-
-        /// <summary>
-        /// Whether the engines gimbal is locked in place. Setting this attribute has
-        /// no effect if the engine is not gimballed.
-        /// </summary>
-        [KRPCProperty]
-        public bool GimbalLocked {
-            get { return gimbal != null && gimbal.gimbalLock; }
-            set {
-                if (gimbal == null)
-                    throw new ArgumentException ("Engine is not gimballed");
-                if (value && !GimbalLocked) {
-                    gimbal.LockAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
-                } else if (!value && GimbalLocked) {
-                    gimbal.FreeAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
-                }
-            }
-        }
-
-        /// <summary>
-        /// The gimbal limiter of the engine. A value between 0 and 1. Returns 0 if the
-        /// gimbal is locked or the engine is not gimballed. Setting this attribute has
-        /// no effect if the engine is not gimballed.
-        /// </summary>
-        [KRPCProperty]
-        public float GimbalLimit {
-            get {
-                if (gimbal == null)
-                    return 1f;
-                else if (GimbalLocked)
-                    return 0f;
-                else
-                    return gimbal.gimbalLimiter / 100f;
-            }
-            set {
-                if (gimbal == null)
-                    return;
-                value = (value * 100f).Clamp (0f, 100f);
-                gimbal.gimbalLimiter = value;
-            }
-        }
-
         void CheckMultiMode ()
         {
             if (multiModeEngine == null)
@@ -392,6 +335,65 @@ namespace KRPC.SpaceCenter.Services.Parts
                     multiModeEngine.Invoke ("EnableAutoSwitch", 0);
                 else
                     multiModeEngine.Invoke ("DisableAutoSwitch", 0);
+            }
+        }
+
+        void CheckGimballed ()
+        {
+            if (gimbal == null)
+                throw new InvalidOperationException ("Engine is not gimballed");
+        }
+
+        /// <summary>
+        /// Whether the engine nozzle is gimballed, i.e. can provide a turning force.
+        /// </summary>
+        [KRPCProperty]
+        public bool Gimballed {
+            get { return gimbal != null; }
+        }
+
+        /// <summary>
+        /// The range over which the gimbal can move, in degrees.
+        /// Returns 0 if the engine is not gimaballed.
+        /// </summary>
+        [KRPCProperty]
+        public float GimbalRange {
+            get { return gimbal != null && !gimbal.gimbalLock ? gimbal.gimbalRange : 0f; }
+        }
+
+        /// <summary>
+        /// Whether the engines gimbal is locked in place. Setting this attribute has
+        /// no effect if the engine is not gimballed.
+        /// </summary>
+        [KRPCProperty]
+        public bool GimbalLocked {
+            get {
+                CheckGimballed ();
+                return gimbal.gimbalLock;
+            }
+            set {
+                CheckGimballed ();
+                if (value && !GimbalLocked) {
+                    gimbal.LockAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
+                } else if (!value && GimbalLocked) {
+                    gimbal.FreeAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
+                }
+            }
+        }
+
+        /// <summary>
+        /// The gimbal limiter of the engine. A value between 0 and 1.
+        /// Returns 0 if the gimbal is locked.
+        /// </summary>
+        [KRPCProperty]
+        public float GimbalLimit {
+            get {
+                CheckGimballed ();
+                return GimbalLocked ? 0f : gimbal.gimbalLimiter / 100f;
+            }
+            set {
+                CheckGimballed ();
+                gimbal.gimbalLimiter = (value * 100f).Clamp (0f, 100f);
             }
         }
     }
