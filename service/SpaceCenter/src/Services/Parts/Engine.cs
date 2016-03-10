@@ -31,6 +31,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         Engine (ModuleEngines engine)
         {
             part = new Part (engine.part);
+            engines = new List<ModuleEngines> ();
+            engines.Add (engine);
             multiModeEngine = null;
             gimbal = part.InternalPart.Module<ModuleGimbal> ();
         }
