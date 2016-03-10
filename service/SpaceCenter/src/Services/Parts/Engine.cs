@@ -356,7 +356,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The range over which the gimbal can move, in degrees.
-        /// Returns 0 if the engine is not gimaballed.
+        /// Returns 0 if the engine is not gimballed.
         /// </summary>
         [KRPCProperty]
         public float GimbalRange {
