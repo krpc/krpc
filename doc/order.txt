@@ -400,6 +400,7 @@ SpaceCenter.ParachuteState.Deployed
 SpaceCenter.ParachuteState.Cut
 SpaceCenter.Radiator
 SpaceCenter.Radiator.Part
+SpaceCenter.Radiator.Deployable
 SpaceCenter.Radiator.Deployed
 SpaceCenter.Radiator.State
 SpaceCenter.RadiatorState

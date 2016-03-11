@@ -388,7 +388,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         internal bool IsRadiator {
-            get { return InternalPart.HasModule<ModuleDeployableRadiator> (); }
+            get {
+                return
+                    InternalPart.HasModule<ModuleActiveRadiator> () ||
+                    InternalPart.HasModule<ModuleDeployableRadiator> ();
+            }
         }
 
         internal bool IsReactionWheel {
