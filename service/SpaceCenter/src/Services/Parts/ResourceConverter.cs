@@ -8,39 +8,6 @@ using System.Linq;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="ResourceConverter.State"/>.
-    /// </summary>
-    [KRPCEnum (Service = "SpaceCenter")]
-    public enum ResourceConverterState
-    {
-        /// <summary>
-        /// Converter is running.
-        /// </summary>
-        Running,
-        /// <summary>
-        /// Converter is idle.
-        /// </summary>
-        Idle,
-        /// <summary>
-        /// Converter is missing a required resource.
-        /// </summary>
-        MissingResource,
-        /// <summary>
-        /// No available storage for output resource.
-        /// </summary>
-        StorageFull,
-        /// <summary>
-        /// At preset resource capacity.
-        /// </summary>
-        Capacity,
-        /// <summary>
-        /// Unknown state. Possible with modified resource converters.
-        /// In this case, check <see cref="ResourceConverter.StatusInfo"/> for more information.
-        /// </summary>
-        Unknown
-    }
-
-    /// <summary>
     /// Obtained by calling <see cref="Part.ResourceConverter"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
