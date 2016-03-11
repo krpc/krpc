@@ -360,6 +360,7 @@ SpaceCenter.Engine.GimbalLimit
 SpaceCenter.LandingGear
 SpaceCenter.LandingGear.Part
 SpaceCenter.LandingGear.State
+SpaceCenter.LandingGear.Deployable
 SpaceCenter.LandingGear.Deployed
 SpaceCenter.LandingGearState
 SpaceCenter.LandingGearState.Deployed
