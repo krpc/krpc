@@ -15,13 +15,20 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly ModuleActiveRadiator activeRadiator;
         readonly ModuleDeployableRadiator deployableRadiator;
 
+        internal static bool Is (Part part)
+        {
+            return
+                part.InternalPart.HasModule<ModuleActiveRadiator> () ||
+                part.InternalPart.HasModule<ModuleDeployableRadiator> ();
+        }
+
         internal Radiator (Part part)
         {
             this.part = part;
             activeRadiator = part.InternalPart.Module<ModuleActiveRadiator> ();
             deployableRadiator = part.InternalPart.Module<ModuleDeployableRadiator> ();
             if (activeRadiator == null && deployableRadiator == null)
-                throw new ArgumentException ("Part does not have a ModuleActiveRadiator or ModuleDeployableRadiator PartModule");
+                throw new ArgumentException ("Part is not a radiator");
         }
 
         /// <summary>

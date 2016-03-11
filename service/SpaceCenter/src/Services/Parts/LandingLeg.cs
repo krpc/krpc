@@ -14,12 +14,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleLandingLeg leg;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleLandingLeg> ();
+        }
+
         internal LandingLeg (Part part)
         {
             this.part = part;
             leg = part.InternalPart.Module<ModuleLandingLeg> ();
             if (leg == null)
-                throw new ArgumentException ("Part does not have a ModuleLandingLeg PartModule");
+                throw new ArgumentException ("Part is not a landing leg");
         }
 
         /// <summary>

@@ -17,15 +17,20 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly ModuleAnimationGroup animator;
         readonly Regex numberRegex = new Regex (@"(\d+(\.\d+)?)");
 
+        internal static bool Is (Part part)
+        {
+            return
+                part.InternalPart.HasModule<ModuleResourceHarvester> () &&
+                part.InternalPart.HasModule<ModuleAnimationGroup> ();
+        }
+
         internal ResourceHarvester (Part part)
         {
             this.part = part;
             harvester = part.InternalPart.Module<ModuleResourceHarvester> ();
             animator = part.InternalPart.Module<ModuleAnimationGroup> ();
-            if (harvester == null)
-                throw new ArgumentException ("Part has no ModuleResourceHarvester");
-            if (animator == null)
-                throw new ArgumentException ("Part has no ModuleAnimationGroup");
+            if (harvester == null || animator == null)
+                throw new ArgumentException ("Part is not a resource harvester");
         }
 
         /// <summary>

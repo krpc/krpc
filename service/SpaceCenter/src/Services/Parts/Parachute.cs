@@ -14,12 +14,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleParachute parachute;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleParachute> ();
+        }
+
         internal Parachute (Part part)
         {
             this.part = part;
             parachute = part.InternalPart.Module<ModuleParachute> ();
             if (parachute == null)
-                throw new ArgumentException ("Part does not have a ModuleParachute PartModule");
+                throw new ArgumentException ("Part is not a parachute");
         }
 
         /// <summary>

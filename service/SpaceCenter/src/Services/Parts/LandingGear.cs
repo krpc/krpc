@@ -16,6 +16,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly ModuleAdvancedLandingGear advGear;
         readonly ModuleLandingGearFixed fixedGear;
 
+        internal static bool Is (Part part)
+        {
+            return
+                part.InternalPart.HasModule<ModuleLandingGear> () ||
+                part.InternalPart.HasModule<ModuleAdvancedLandingGear> () ||
+                part.InternalPart.HasModule<ModuleLandingGearFixed> ();
+        }
+
         internal LandingGear (Part part)
         {
             this.part = part;
@@ -23,7 +31,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             advGear = part.InternalPart.Module<ModuleAdvancedLandingGear> ();
             fixedGear = part.InternalPart.Module<ModuleLandingGearFixed> ();
             if (gear == null && advGear == null && fixedGear == null)
-                throw new ArgumentException ("Part does not have a ModuleLandingGear, ModuleLandingGearFixed or ModuleAdvancedLandingGear PartModule");
+                throw new ArgumentException ("Part is not landing gear");
         }
 
         /// <summary>

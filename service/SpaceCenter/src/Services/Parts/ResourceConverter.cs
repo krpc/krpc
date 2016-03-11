@@ -16,10 +16,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly IList<ModuleResourceConverter> converters;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleResourceConverter> ();
+        }
+
         internal ResourceConverter (Part part)
         {
             this.part = part;
             converters = part.InternalPart.Modules.OfType<ModuleResourceConverter> ().ToList ();
+            if (converters.Count == 0)
+                throw new ArgumentException ("Part is does not contain any resource converters");
         }
 
         /// <summary>

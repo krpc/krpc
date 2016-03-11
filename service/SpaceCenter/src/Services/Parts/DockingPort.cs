@@ -22,6 +22,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly PartModule portNameModule;
         readonly BaseField portNameField;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleDockingNode> ();
+        }
+
         internal DockingPort (Part part)
         {
             this.part = part;
@@ -35,7 +40,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 }
             }
             if (port == null)
-                throw new ArgumentException ("Part does not have a ModuleDockingNode PartModule");
+                throw new ArgumentException ("Part is not a docking port");
         }
 
         /// <summary>

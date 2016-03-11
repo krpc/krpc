@@ -236,9 +236,9 @@ SpaceCenter.Parts.LaunchClamps
 SpaceCenter.Parts.Lights
 SpaceCenter.Parts.Parachutes
 SpaceCenter.Parts.Radiators
+SpaceCenter.Parts.ReactionWheels
 SpaceCenter.Parts.ResourceConverters
 SpaceCenter.Parts.ResourceHarvesters
-SpaceCenter.Parts.ReactionWheels
 SpaceCenter.Parts.Sensors
 SpaceCenter.Parts.SolarPanels
 SpaceCenter.Part
