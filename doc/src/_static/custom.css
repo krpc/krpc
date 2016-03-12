@@ -5,3 +5,8 @@
 .rst-content code.literal {
     color: #404040;
 }
+
+.rst-content dl:not(.docutils) .property {
+    display: inline;
+    padding-right: 0;
+}
