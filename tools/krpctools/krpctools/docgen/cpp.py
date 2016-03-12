@@ -29,9 +29,9 @@ class CppDomain(Domain):
         elif isinstance(typ, ValueType):
             return self.type_map.get(typ.protobuf_type, typ.protobuf_type)
         elif isinstance(typ, ClassType):
-            return self.shorten_ref('krpc::services::'+typ.protobuf_type[6:-1]).replace('.', '::')
+            return self.shorten_ref(typ.protobuf_type[6:-1]).replace('.', '::')
         elif isinstance(typ, EnumType):
-            return self.shorten_ref('krpc::services::'+typ.protobuf_type[5:-1]).replace('.', '::')
+            return self.shorten_ref(typ.protobuf_type[5:-1]).replace('.', '::')
         elif isinstance(typ, ListType):
             return 'std::vector<%s>' % self.type(typ.value_type)
         elif isinstance(typ, DictionaryType):
@@ -69,7 +69,7 @@ class CppDomain(Domain):
            isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod) or isinstance(obj, ClassProperty) or \
            isinstance(obj, EnumerationValue):
             name[-1] = snake_case(name[-1])
-        return 'krpc::services::' + self.shorten_ref('.'.join(name)).replace('.', '::')
+        return self.shorten_ref('.'.join(name)).replace('.', '::')
 
     def see(self, obj):
         if isinstance(obj, Property) or isinstance(obj, ClassProperty):
