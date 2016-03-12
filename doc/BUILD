@@ -11,7 +11,7 @@ filegroup(
     name = 'doc',
     srcs = [
         ':html',
-        ':latex'
+        ':pdf'
     ]
 )
 
@@ -88,7 +88,7 @@ sphinx_build(
 )
 
 sphinx_build(
-    name = 'latex',
+    name = 'pdf',
     out = 'kRPC.pdf',
     srcs = [':srcs'],
     sphinx_build = ':sphinx-build',
