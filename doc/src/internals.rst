@@ -8,7 +8,6 @@ Internals of kRPC
 Server Performance Settings
 ---------------------------
 
-
 .. figure:: /images/getting-started/server-window-advanced.png
    :align: right
 

@@ -57,9 +57,9 @@ for Kerbin has the following properties:
 
 This means that the reference frame is *fixed* relative to Kerbin -- it moves
 with the center of the planet, and also rotates with the planet. Therefore,
-positions in this reference frame are relative to the center of the
-planet. Consider the following code prints out the position of the active vessel
-in Kerbin's reference frame:
+positions in this reference frame are relative to the center of the planet. The
+following code prints out the position of the active vessel in Kerbin's
+reference frame:
 
 .. literalinclude:: /scripts/VesselPosition.py
    :linenos:
@@ -80,8 +80,8 @@ Vessel Orbital Reference Frame
 
 Another example is the orbital reference frame for a vessel, obtained by calling
 :attr:`Vessel.orbital_reference_frame`. This is fixed to the vessel (the origin
-moves with the vessel) and it is orientated so that the axes point in the
-orbital prograde/normal/radial directions.
+moves with the vessel) and is orientated so that the axes point in the orbital
+prograde/normal/radial directions.
 
 * The origin is at the center of mass of the vessel,
 
@@ -154,7 +154,7 @@ kRPC provides the following reference frames:
 Converting Between Reference Frames
 -----------------------------------
 
-kRPC provides a utility methods to convert positions, directions, rotations and
+kRPC provides utility methods to convert positions, directions, rotations and
 velocities between the different reference frames:
 
 * :meth:`SpaceCenter.transform_position`
@@ -170,8 +170,8 @@ in itself. To aid debugging, kRPC provides some methods with which you can draw
 direction vectors in-game.
 
 :meth:`SpaceCenter.draw_direction` will draw a direction vector, starting from
-the center of the active vessel. For example, the following code draws the
-direction of the current vessels velocity relative to the surface:
+the center of mass of the active vessel. For example, the following code draws
+the direction of the current vessels velocity relative to the surface:
 
 .. literalinclude:: /scripts/VisualDebugging.py
    :linenos:

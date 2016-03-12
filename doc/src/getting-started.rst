@@ -14,7 +14,7 @@ Installation
 
 1. Download and install the kRPC server plugin from one of these locations:
 
- * `Github <https://github.com/krpc/krpc/releases/latest>`_
+ * :github-download-zip:`Github <krpc>`
  * `SpaceDock <http://spacedock.info/mod/69/kRPC>`_
  * `Curse <http://www.curse.com/project/220219>`_
  * Or the install it using `CKAN <http://forum.kerbalspaceprogram.com/threads/100067>`_
@@ -30,7 +30,7 @@ Installation
 
    .. image:: /images/getting-started/server-window-online.png
 
-5. You can hide the window by clicking the close button in the top right.  The
+5. You can hide the window by clicking the close button in the top right. The
    window can also be shown/hidden by clicking on the icon in the top right:
 
    .. image:: /images/getting-started/applauncher.png

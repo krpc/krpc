@@ -15,9 +15,9 @@ active clients.
 
 Clients run outside of KSP. This gives you the freedom to run scripts in
 whatever environment you want. A client communicates with the server to run
-procedures. kRPC comes with several client libraries that implement the
-:ref:`communication protocol <communication-protocol>`, making it easy to write
-programs for these languages that can talk to the server.
+procedures using a :ref:`communication protocol <communication-protocol>`.  kRPC
+comes with several client libraries that implement this communication protocol,
+making it easier to write programs in these languages.
 
 kRPC comes with a collection of standard functionality for interacting with
 vessels, contained in a service called ``SpaceCenter``. This service provides
@@ -37,44 +37,17 @@ The following example implements a service that can control the throttle and
 staging of the active vessel. To add this to the server, compile the code and
 place the DLL in your GameData directory.
 
-.. code-block:: csharp
-
-   using KRPC.Service;
-   using KRPC.Service.Attributes;
-
-   namespace LaunchControl {
-
-       [KRPCService (GameScene = GameScene.Flight)]
-       public static class LaunchControl {
-
-           [KRPCProperty]
-           public static float Throttle {
-               get { return FlightInputHandler.state.mainThrottle; }
-               set { FlightInputHandler.state.mainThrottle = value; }
-           }
-
-           [KRPCProcedure]
-           public static void ActivateStage ()
-           {
-               Staging.ActivateNextStage ();
-           }
-       }
-   }
+.. literalinclude:: /scripts/ServiceAPIExample.lib.cs
 
 The following example shows how this service can then be used from a python client:
 
-.. code-block:: python
-
-   import krpc
-   conn = krpc.connect()
-   conn.launch_control.throttle = 1
-   conn.launch_control.activate_stage()
+.. literalinclude:: /scripts/ServiceAPIExample.py
 
 Some of the client libraries automatically pick up changes to the functionality
 provided by the server, including the Python and Lua clients. However, some
-clients require stub code to be generated from the service assembly so that they
-can interact with new or changed functionality. See :ref:`clientgen <service-api-clientgen>`
-for details on how to generate these stubs.
+clients require code to be generated from the service assembly so that they can
+interact with new or changed functionality. See :ref:`clientgen
+<service-api-clientgen>` for details on how to generate this code.
 
 .. _service-api-attributes:
 

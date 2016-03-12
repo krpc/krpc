@@ -5,7 +5,7 @@ load('/tools/build/image', 'png_images')
 load('/tools/krpctools/docgen', 'docgen_multiple')
 load('/doc/test', 'check_documented_test')
 load('/config', 'version')
-load('macros', 'cc_binary_multiple', 'csharp_binary_multiple', 'java_binary_multiple')
+load('macros', 'cc_binary_multiple', 'csharp_binary_multiple', 'csharp_library_multiple', 'java_binary_multiple')
 
 filegroup(
     name = 'doc',
@@ -223,9 +223,17 @@ cc_binary_multiple(
     deps = ['//client/cpp:krpc']
 )
 
-csharp_binary_multiple(
+filegroup(
     name = 'compile-scripts-csharp',
-    srcs = glob(['src/scripts/*.cs']),
+    srcs = [
+        ':compile-scripts-csharp-exes',
+        ':compile-scripts-csharp-libs'
+    ]
+)
+
+csharp_binary_multiple(
+    name = 'compile-scripts-csharp-exes',
+    srcs = glob(['src/scripts/*.cs'], exclude=['src/scripts/*.lib.cs']),
     deps = [
         '//client/csharp:KRPC.Client',
         '//tools/build/mono-4.5:Google.Protobuf',
@@ -236,6 +244,24 @@ csharp_binary_multiple(
         '//tools/build/mono-4.5:System.IO',
         '//tools/build/mono-4.5:System.Xml',
         '//tools/build/mono-4.5:System.Xml.Linq'
+    ]
+)
+
+csharp_library_multiple(
+    name = 'compile-scripts-csharp-libs',
+    srcs = glob(['src/scripts/*.lib.cs']),
+    deps = [
+        '//server:KRPC',
+        '//tools/build/ksp:Google.Protobuf',
+        '//tools/build/ksp:Assembly-CSharp',
+        '//tools/build/ksp:Assembly-CSharp-firstpass',
+        '//tools/build/ksp:UnityEngine',
+        '//tools/build/ksp:TDx.TDxInput',
+        '//tools/build/ksp:mscorlib',
+        '//tools/build/ksp:System',
+        '//tools/build/ksp:System.Core',
+        '//tools/build/ksp:System.Xml',
+        '//tools/build/ksp:System.Xml.Linq'
     ]
 )
 
