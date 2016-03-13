@@ -110,8 +110,8 @@ http_file(
 
 http_file(
     name = 'python_sphinx_csharp',
-    url = 'https://pypi.python.org/packages/source/s/sphinx-csharp/sphinx-csharp-0.1.0.tar.gz',
-    sha256 = 'cf37338a391d59d277b2e3b9b629c66b999e053a87e31229e237f4feb8112eaf'
+    url = 'https://pypi.python.org/packages/source/s/sphinx-csharp/sphinx-csharp-0.1.2.tar.gz',
+    sha256 = 'b3b7548d673892f56db648b896ab35495e850e9a4888a1bc16c771ff1ad71b2e'
 )
 
 http_file(

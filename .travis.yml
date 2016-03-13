@@ -39,7 +39,7 @@ install:
   - ./tools/travis-ci/install-ksp-libs.sh
 
 script:
-  - bazel build //:krpc //doc:html //:csproj
+  - bazel build //:krpc //doc:html //doc:compile-scripts //:csproj
   - xbuild KRPC.sln
   - bazel test //:test
 

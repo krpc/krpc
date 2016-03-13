@@ -15,14 +15,14 @@ active clients.
 
 Clients run outside of KSP. This gives you the freedom to run scripts in
 whatever environment you want. A client communicates with the server to run
-procedures. kRPC comes with several client libraries that implement the
-:ref:`communication protocol <communication-protocol>`, making it easy to write
-programs for these languages that can talk to the server.
+procedures using a :ref:`communication protocol <communication-protocol>`.  kRPC
+comes with several client libraries that implement this communication protocol,
+making it easier to write programs in these languages.
 
 kRPC comes with a collection of standard functionality for interacting with
-vessels, contained in a service called :class:`SpaceCenter`. This service
-provides procedures for things like getting flight/orbital data and controlling
-the active vessel. This service is provided by ``KRPC.SpaceCenter.dll``.
+vessels, contained in a service called ``SpaceCenter``. This service provides
+procedures for things like getting flight/orbital data and controlling the
+active vessel. This service is provided by ``KRPC.SpaceCenter.dll``.
 
 Service API
 -----------
@@ -37,44 +37,17 @@ The following example implements a service that can control the throttle and
 staging of the active vessel. To add this to the server, compile the code and
 place the DLL in your GameData directory.
 
-.. code-block:: csharp
-
-   using KRPC.Service;
-   using KRPC.Service.Attributes;
-
-   namespace LaunchControl {
-
-       [KRPCService (GameScene = GameScene.Flight)]
-       public static class LaunchControl {
-
-           [KRPCProperty]
-           public static float Throttle {
-               get { return FlightInputHandler.state.mainThrottle; }
-               set { FlightInputHandler.state.mainThrottle = value; }
-           }
-
-           [KRPCProcedure]
-           public static void ActivateStage ()
-           {
-               Staging.ActivateNextStage ();
-           }
-       }
-   }
+.. literalinclude:: /scripts/ServiceAPIExample.lib.cs
 
 The following example shows how this service can then be used from a python client:
 
-.. code-block:: python
-
-   import krpc
-   conn = krpc.connect()
-   conn.launch_control.throttle = 1
-   conn.launch_control.activate_stage()
+.. literalinclude:: /scripts/ServiceAPIExample.py
 
 Some of the client libraries automatically pick up changes to the functionality
 provided by the server, including the Python and Lua clients. However, some
-clients require stub code to be generated from the service assembly so that they
-can interact with new or changed functionality. See :ref:`clientgen <service-api-clientgen>`
-for details on how to generate these stubs.
+clients require code to be generated from the service assembly so that they can
+interact with new or changed functionality. See :ref:`clientgen
+<service-api-clientgen>` for details on how to generate this code.
 
 .. _service-api-attributes:
 
@@ -85,13 +58,15 @@ The following `C# attributes
 <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ can be used to add
 functionality to the kRPC server.
 
-.. class:: KRPCService ([Name], [GameScene])
+.. csharp:attribute:: KRPCService (string Name, GameScene GameScene)
 
-   :param string Name: Optional name for the service. If omitted, the service
-                       name is set to the name of the class this attribute is
-                       applied to.
-   :param GameScene GameScene: The game scenes in which the services procedures
-                               are available.
+   :parameters:
+
+    * **Name** -- Optional name for the service. If omitted, the service name is
+      set to the name of the class this attribute is applied to.
+
+    * **GameScene** -- The game scenes in which the services procedures are
+      available.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is
    applied to a static class, to indicate that all methods, properties and
@@ -114,7 +89,7 @@ functionality to the kRPC server.
      valid :ref:`kRPC identifier <service-api-identifiers>`.
 
    * The class must not be declared within another class that has the
-     :class:`KRPCService` attribute. Nesting of services is not permitted.
+     :csharp:attr:`KRPCService` attribute. Nesting of services is not permitted.
 
    Services are configured to be available in specific :ref:`game scenes
    <service-api-game-scenes>` via the ``GameScene`` parameter. If the
@@ -153,7 +128,7 @@ functionality to the kRPC server.
             ...
         }
 
-.. class:: KRPCProcedure
+.. csharp:attribute:: KRPCProcedure
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is
    applied to static methods, to add them to the server as procedures.
@@ -166,7 +141,7 @@ functionality to the kRPC server.
    * The name of the method must be a valid :ref:`kRPC identifier
      <service-api-identifiers>`.
 
-   * The method must be declared inside a class that is a :class:`KRPCService`.
+   * The method must be declared inside a class that is a :csharp:attr:`KRPCService`.
 
    * The parameter types and return type must be :ref:`types that kRPC knows how
      to serialize <service-api-serializable-types>`.
@@ -197,24 +172,25 @@ functionality to the kRPC server.
       conn = krpc.connect()
       flag = conn.eva.plant_flag('Landing Site', 'One small step for Kerbal-kind')
 
-.. class:: KRPCClass ([Service])
+.. csharp:attribute:: KRPCClass (string Service)
 
-   :param string Service: Optional name of the service to add this class to. If
-                          omitted, the class is added to the service that
-                          contains its definition.
+   :parameters:
+
+    * **Service** -- Optional name of the service to add this class to. If
+      omitted, the class is added to the service that contains its definition.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is
    applied to non-static classes. It adds the class to the server, so that
    references to instances of the class can be passed between client and server.
 
-   A :class:`KRPCClass` must be part of a service, just like a
-   :class:`KRPCProcedure`. However, it would be restrictive if the class had to
-   be declared as a nested class inside a class with the :class:`KRPCService`
-   attribute. Therefore, a :class:`KRPCClass` can be declared outside of any
-   service if it has the ``Service`` parameter set to the name of the service
-   that it is part of. Also, the service that the ``Service`` parameter refers
-   to does not have to exist. If it does not exist, a service with the given
-   name is created.
+   A :csharp:attr:`KRPCClass` must be part of a service, just like a
+   :csharp:attr:`KRPCProcedure`. However, it would be restrictive if the class
+   had to be declared as a nested class inside a class with the
+   :csharp:attr:`KRPCService` attribute. Therefore, a :csharp:attr:`KRPCClass`
+   can be declared outside of any service if it has the ``Service`` parameter
+   set to the name of the service that it is part of. Also, the service that the
+   ``Service`` parameter refers to does not have to exist. If it does not exist,
+   a service with the given name is created.
 
    The class to which this attribute is applied must satisfy the following
    criteria:
@@ -225,8 +201,8 @@ functionality to the kRPC server.
      <service-api-identifiers>`.
 
    * The class must either be declared inside a class that is a
-     :class:`KRPCService`, or have its ``Service`` parameter set to the name of
-     the service it is part of.
+     :csharp:attr:`KRPCService`, or have its ``Service`` parameter set to the
+     name of the service it is part of.
 
    **Examples**
 
@@ -252,11 +228,11 @@ functionality to the kRPC server.
             ...
         }
 
-.. class:: KRPCMethod
+.. csharp:attribute:: KRPCMethod
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is
-   applied to methods inside a :class:`KRPCClass`. This allows a client to call
-   methods on an instance, or static methods in the class.
+   applied to methods inside a :csharp:attr:`KRPCClass`. This allows a client
+   to call methods on an instance, or static methods in the class.
 
    The method to which this attribute is applied must satisfy the following
    criteria:
@@ -266,7 +242,7 @@ functionality to the kRPC server.
    * The name of the method must be a valid :ref:`kRPC identifier
      <service-api-identifiers>`.
 
-   * The method must be declared in a :class:`KRPCClass`.
+   * The method must be declared in a :csharp:attr:`KRPCClass`.
 
    * The parameter types and return type must be :ref:`types that kRPC can
      serialize <service-api-serializable-types>`.
@@ -288,13 +264,13 @@ functionality to the kRPC server.
           }
       }
 
-.. class:: KRPCProperty
+.. csharp:class:: KRPCProperty
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is
    applied to class properties, and comes in two flavors:
 
-   1. Applied to static properties in a :class:`KRPCService`. In this case, the
-      property must satisfy the following criteria:
+   1. Applied to static properties in a :csharp:attr:`KRPCService`. In this
+      case, the property must satisfy the following criteria:
 
       * Must be ``public static`` and have at least one publicly accessible
         getter or setter.
@@ -302,10 +278,10 @@ functionality to the kRPC server.
       * The name of the property must be a valid :ref:`kRPC identifier
         <service-api-identifiers>`.
 
-      * Must be declared inside a :class:`KRPCService`.
+      * Must be declared inside a :csharp:attr:`KRPCService`.
 
-   2. Applied to non-static properties in a :class:`KRPCClass`. In this case,
-      the property must satisfy the following criteria:
+   2. Applied to non-static properties in a :csharp:attr:`KRPCClass`. In this
+      case, the property must satisfy the following criteria:
 
       * Must be ``public`` and *not* ``static``, and have at least one publicly
         accessible getter or setter.
@@ -313,7 +289,7 @@ functionality to the kRPC server.
       * The name of the property must be a valid :ref:`kRPC identifier
         <service-api-identifiers>`.
 
-      * Must be declared inside a :class:`KRPCClass`.
+      * Must be declared inside a :csharp:attr:`KRPCClass`.
 
    **Examples**
 
@@ -351,21 +327,22 @@ functionality to the kRPC server.
             public void Description { get; set; }
         }
 
-.. class:: KRPCEnum ([Service])
+.. csharp:attribute:: KRPCEnum (string Service)
 
-   :param string Service: Optional name of the service to add this enum to. If
-                          omitted, the enum is added to the service that
-                          contains its definition.
+   :parameters:
+
+    * **Service** -- Optional name of the service to add this enum to. If
+      omitted, the enum is added to the service that contains its definition.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is
    applied to enumeration types. It adds the enumeration and its permissible
-   values to the server. This attribute works similarly to :class:`KRPCClass`,
-   but is applied to enumeration types.
+   values to the server. This attribute works similarly to
+   :csharp:attr:`KRPCClass`, but is applied to enumeration types.
 
-   A :class:`KRPCEnum` must be part of a service, just like a
-   :class:`KRPCClass`. Similarly, a :class:`KRPCEnum` can be declared outside of
-   a service if it has its ``Service`` parameter set to the name of the service
-   that it is part of.
+   A :csharp:attr:`KRPCEnum` must be part of a service, just like a
+   :csharp:attr:`KRPCClass`. Similarly, a :csharp:attr:`KRPCEnum` can be
+   declared outside of a service if it has its ``Service`` parameter set to the
+   name of the service that it is part of.
 
    The enumeration type to which this attribute is applied must satisfy the
    following criteria:
@@ -375,8 +352,9 @@ functionality to the kRPC server.
    * The name of the enumeration must be a valid :ref:`kRPC identifier
      <service-api-identifiers>`.
 
-   * The enumeration must either be declared inside a :class:`KRPCService`, or
-     have it's ``Service`` parameter set to the name of the service it is part of.
+   * The enumeration must either be declared inside a
+     :csharp:attr:`KRPCService`, or have it's ``Service`` parameter set to the
+     name of the service it is part of.
 
    * The `underlying C# type
      <https://msdn.microsoft.com/en-gb/library/sbbt4032.aspx>`_ must be an
@@ -426,9 +404,9 @@ serialize it. The following types are serializable:
 * The C# types ``double``, ``float``, ``int``, ``long``, ``uint``, ``ulong``,
   ``bool``, ``string`` and ``byte[]``
 
-* Any type annotated with :class:`KRPCClass`
+* Any type annotated with :csharp:attr:`KRPCClass`
 
-* Any type annotated with :class:`KRPCEnum`
+* Any type annotated with :csharp:attr:`KRPCEnum`
 
 * Collections of serializable types:
 
@@ -452,40 +430,40 @@ Game Scenes
 Each service is configured to be available from a particular game scene, or
 scenes.
 
-.. class:: GameScene
+.. csharp:enum:: GameScene
 
-   .. attribute:: SpaceCenter
+   .. csharp:value:: SpaceCenter
 
       The game scene showing the Kerbal Space Center buildings.
 
-   .. attribute:: Flight
+   .. csharp:value:: Flight
 
       The game scene showing a vessel in flight (or on the launchpad/runway).
 
-   .. attribute:: TrackingStation
+   .. csharp:value:: TrackingStation
 
       The tracking station.
 
-   .. attribute:: EditorVAB
+   .. csharp:value:: EditorVAB
 
       The Vehicle Assembly Building.
 
-   .. attribute:: EditorSPH
+   .. csharp:value:: EditorSPH
 
       The Space Plane Hangar.
 
-   .. attribute:: Editor
+   .. csharp:value:: Editor
 
       Either the VAB or the SPH.
 
-   .. attribute:: All
+   .. csharp:value:: All
 
       All game scenes.
 
 **Examples**
 
-* Declare a service that is available in the :attr:`GameScene.Flight` game
-  scene:
+* Declare a service that is available in the :csharp:enum:`GameScene.Flight`
+  game scene:
 
   .. code-block:: csharp
 
@@ -494,8 +472,8 @@ scenes.
         ...
      }
 
-* Declare a service that is available in the :attr:`GameScene.Flight` and
-  :attr:`GameScene.Editor` game scenes:
+* Declare a service that is available in the :csharp:enum:`GameScene.Flight` and
+  :csharp:enum:`GameScene.Editor` game scenes:
 
   .. code-block:: csharp
 
@@ -583,10 +561,10 @@ Example
 The following demonstrates how to generate code for the C++ and C# clients to
 interact with the LaunchControl service, given in an example previously.
 
-krpc-clientgen expects to be passed the location of your copy of Kerbal Space Program,
-the name of the language to generate, the name of the service (from the
-:class:`KRPCService` attribute), a path to the assembly containing the service
-and the path to write the generated code to.
+krpc-clientgen expects to be passed the location of your copy of Kerbal Space
+Program, the name of the language to generate, the name of the service (from the
+:csharp:attr:`KRPCService` attribute), a path to the assembly containing the
+service and the path to write the generated code to.
 
 For C++, run the following:
 

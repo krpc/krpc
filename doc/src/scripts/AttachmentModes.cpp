@@ -3,11 +3,10 @@
 #include <iostream>
 #include <stack>
 
-using namespace krpc;
 using namespace krpc::services;
 
 int main() {
-  Client conn = krpc::connect("");
+  auto conn = krpc::connect("");
   SpaceCenter sc(&conn);
   auto vessel = sc.active_vessel();
 
@@ -26,8 +25,8 @@ int main() {
     }
     std::cout << std::string(depth, ' ') << part.title() << " - " << attach_mode << std::endl;
     auto children = part.children();
-    for (std::vector<SpaceCenter::Part>::iterator child = children.begin(); child != children.end(); child++) {
-      stack.push(std::pair<SpaceCenter::Part,int>(*child, depth+1));
+    for (auto child : children) {
+      stack.push(std::pair<SpaceCenter::Part,int>(child, depth+1));
     }
   }
 }

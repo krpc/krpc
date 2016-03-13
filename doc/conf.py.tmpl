@@ -1,0 +1,107 @@
+project = 'kRPC'
+version = '%VERSION%'
+release = version
+copyright = '2015-2016, djungelorm'
+
+master_doc = 'index'
+source_suffix = '.rst'
+extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo', 'sphinx.ext.extlinks',
+              'redjack.sphinx.lua', 'sphinx_csharp.csharp', 'javasphinx']
+templates_path = ['_templates']
+
+pygments_style = 'sphinx'
+import sphinx_rtd_theme
+html_theme = 'sphinx_rtd_theme'
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+htmlhelp_basename = 'krpc-doc'
+html_static_path = ['crafts','scripts','_static']
+html_context = { 'css_files': ['_static/custom.css'] }
+
+todo_include_todos = True
+
+spelling_word_list_filename = 'dictionary.txt'
+
+javadoc_url_map = {
+    'org.javatuples' : ('http://www.javatuples.org/apidocs/', 'javadoc')
+}
+
+extlinks = {
+    'github-download-zip': ('https://github.com/krpc/krpc/releases/download/v'+version+'/%s-'+version+'.zip', None),
+    'github-download-jar': ('https://github.com/krpc/krpc/releases/download/v'+version+'/%s-'+version+'.jar', None)
+}
+
+add_module_names = False
+
+nitpick_ignore = [
+    ('py:obj', 'str'),
+    ('py:obj', 'int'),
+    ('py:obj', 'bool'),
+    ('py:obj', 'float'),
+    ('py:obj', 'tuple'),
+    ('py:obj', 'list of str'),
+    ('py:obj', 'tuple of (float, float, float)'),
+    ('py:obj', 'tuple of (float, float, float, float)'),
+    ('py:obj', 'dict from str to str'),
+    ('py:obj', 'dict from str to float'),
+
+    ('lua:obj', 'string'),
+    ('lua:obj', 'number'),
+    ('lua:obj', 'boolean'),
+    ('lua:obj', 'Tuple'),
+
+    ('java:type', 'int'),
+    ('java:type', 'boolean'),
+    ('java:type', 'float'),
+    ('java:type', 'double'),
+    ('java:type', 'Single'),
+    ('java:type', 'T'),
+    ('java:type', 'org'),
+    ('java:type', 'java'),
+    ('java:type', 'org.javatuples'),
+
+    ('csharp:type', 'void'),
+    ('csharp:type', 'ReturnType'),
+    ('csharp:type', 'LambdaExpression'),
+
+    ('cpp:type', 'T'),
+    ('cpp:class', 'T'),
+    ('cpp:type', 'int32_t'),
+    ('cpp:type', 'uint32_t'),
+    ('cpp:type', 'std'),
+    ('cpp:type', 'std::string'),
+    ('cpp:type', 'std::tuple<double, double, double>'),
+    ('cpp:type', 'std::tuple<double, double, double, double>'),
+    ('cpp:type', 'std::vector<std::string>'),
+    ('cpp:type', 'std::map<std::string, float>'),
+    ('cpp:type', 'std::map<std::string, std::string>'),
+    ('cpp:type', 'krpc'),
+    ('cpp:type', 'krpc::schema'),
+    ('cpp:type', 'krpc::schema::Status'),
+    ('cpp:type', 'krpc::services'),
+    # TODO: shouldn't need to add ignores for the following... but it seems that you do
+    ('cpp:type', 'std::vector<InfernalRobotics::Servo>'),
+    ('cpp:type', 'std::vector<InfernalRobotics::ControlGroup>'),
+    ('cpp:type', 'std::vector<KerbalAlarmClock::Alarm>'),
+    ('cpp:type', 'std::vector<KerbalAlarmClock::Alarm>'),
+    ('cpp:type', 'std::vector<SpaceCenter::CelestialBody>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Vessel>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Node>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Part>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Module>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Decoupler>'),
+    ('cpp:type', 'std::vector<SpaceCenter::DockingPort>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Engine>'),
+    ('cpp:type', 'std::vector<SpaceCenter::LandingGear>'),
+    ('cpp:type', 'std::vector<SpaceCenter::LandingLeg>'),
+    ('cpp:type', 'std::vector<SpaceCenter::LaunchClamp>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Light>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Parachute>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Radiator>'),
+    ('cpp:type', 'std::vector<SpaceCenter::ResourceConverter>'),
+    ('cpp:type', 'std::vector<SpaceCenter::ResourceHarvester>'),
+    ('cpp:type', 'std::vector<SpaceCenter::ReactionWheel>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Sensor>'),
+    ('cpp:type', 'std::vector<SpaceCenter::SolarPanel>'),
+    ('cpp:type', 'std::vector<SpaceCenter::Module>'),
+    ('cpp:type', 'std::map<std::string, SpaceCenter::CelestialBody>')
+]

@@ -1,14 +1,13 @@
 import java.io.IOException;
-
 import krpc.client.Connection;
 import krpc.client.RPCException;
+import krpc.client.services.SpaceCenter;
 import krpc.client.services.KerbalAlarmClock;
 import krpc.client.services.KerbalAlarmClock.Alarm;
 import krpc.client.services.KerbalAlarmClock.AlarmAction;
 import krpc.client.services.KerbalAlarmClock.AlarmType;
-import krpc.client.services.SpaceCenter;
 
-public class KerbalAlarmClockExample {
+public class KAC {
     public static void main(String[] args) throws IOException, RPCException {
         Connection connection = Connection.newInstance("Kerbal Alarm Clock Example", "10.0.2.2");
         KerbalAlarmClock kac = KerbalAlarmClock.newInstance(connection);

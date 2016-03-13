@@ -1,0 +1,3 @@
+abort = conn.add_stream(getattr, vessel.control, 'abort')
+while not abort():
+    ...

@@ -1,8 +1,9 @@
 from krpc.types import Types, DefaultArgument
-from krpc.service import create_service, _to_snake_case
+from krpc.service import create_service
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
 from krpc.attributes import Attributes
+from krpc.utils import snake_case
 from krpc.error import RPCError
 import krpc.stream
 import krpc.schema.KRPC
@@ -71,7 +72,7 @@ class Client(object):
         # Set up services
         for service in services:
             if service.name != 'KRPC':
-                setattr(self, _to_snake_case(service.name), create_service(self, service))
+                setattr(self, snake_case(service.name), create_service(self, service))
 
         # Set up stream update thread
         if stream_connection is not None:
