@@ -228,18 +228,19 @@ public class ConnectionTest {
         int threadCount = 4;
         CountDownLatch latch = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {
-            new Thread(() -> {
-                try {
-                    for (int j = 0; j < 1000; j++) {
-                        assertEquals("False", testService.boolToString(false));
-                        assertEquals(12345, testService.stringToInt32("12345"));
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        for (int j = 0; j < 1000; j++) {
+                            assertEquals("False", testService.boolToString(false));
+                            assertEquals(12345, testService.stringToInt32("12345"));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        fail();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    fail();
+                    latch.countDown();
                 }
-                latch.countDown();
-
             }).start();
         }
         assertTrue(latch.await(10, TimeUnit.SECONDS));
