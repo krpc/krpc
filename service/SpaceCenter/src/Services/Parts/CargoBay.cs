@@ -18,7 +18,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal static bool Is (Part part)
         {
-            return part.InternalPart.HasModule<ModuleCargoBay> ();
+            return part.InternalPart.HasModule<ModuleCargoBay> () && !part.InternalPart.HasModule<ModuleProceduralFairing> ();
         }
 
         internal CargoBay (Part part)
