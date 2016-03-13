@@ -375,6 +375,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A <see cref="Fairing"/> if the part is a fairing, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public Fairing Fairing {
+            get { return Fairing.Is (this) ? new Fairing (this) : null; }
+        }
+
+        /// <summary>
         /// A <see cref="LandingGear"/> if the part is a landing gear , otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty]

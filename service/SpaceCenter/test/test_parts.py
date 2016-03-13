@@ -25,6 +25,7 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(
             part_titles,
             ['\'Drill-O-Matic Junior\' Mining Excavator',
+             'AE-FF1 Airstream Protective Shell (1.25m)',
              'Advanced Reaction Wheel Module, Large',
              'Aerodynamic Nose Cone',
              'Aerodynamic Nose Cone',
@@ -47,7 +48,6 @@ class TestParts(testingtools.TestCase):
              'LT-1 Landing Struts',
              'LY-10 Small Landing Gear',
              'Mk1-2 Command Pod',
-             'Mk16-XL Parachute',
              'Mk2-R Radial-Mount Parachute',
              'Mk2-R Radial-Mount Parachute',
              'Mk2-R Radial-Mount Parachute',
@@ -194,7 +194,7 @@ class TestParts(testingtools.TestCase):
              'Z-400 Rechargeable Battery'],
             part_titles_in_stage(-1))
         self.assertEqual(
-            ['Mk16-XL Parachute'],
+            ['AE-FF1 Airstream Protective Shell (1.25m)'],
             part_titles_in_stage(0))
         self.assertEqual(
             ['TR-XL Stack Separator'],
@@ -227,10 +227,10 @@ class TestParts(testingtools.TestCase):
         def part_titles_in_decouple_stage(s):
             return sorted([p.title for p in self.parts.in_decouple_stage(s)])
         self.assertEqual(
+            ['AE-FF1 Airstream Protective Shell (1.25m)'] + \
             ['LT-1 Landing Struts']*3 + \
             ['LY-10 Small Landing Gear',
-             'Mk1-2 Command Pod',
-             'Mk16-XL Parachute'],
+             'Mk1-2 Command Pod'],
             part_titles_in_decouple_stage(-1))
         self.assertEqual([], part_titles_in_decouple_stage(0))
         self.assertEqual(
@@ -291,6 +291,9 @@ class TestParts(testingtools.TestCase):
              'S1 SRB-KD25k "Kickback" Solid Fuel Booster', 'S1 SRB-KD25k "Kickback" Solid Fuel Booster'],
             sorted(x.part.title for x in self.parts.engines))
 
+    def test_fairings(self):
+        self.assertEqual(['AE-FF1 Airstream Protective Shell (1.25m)'], sorted(x.part.title for x in self.parts.fairings))
+
     def test_landing_gear(self):
         self.assertEqual(['LY-10 Small Landing Gear'], sorted(x.part.title for x in self.parts.landing_gear))
 
@@ -305,8 +308,7 @@ class TestParts(testingtools.TestCase):
 
     def test_parachutes(self):
         self.assertEqual(
-            ['Mk16-XL Parachute', 'Mk2-R Radial-Mount Parachute',
-             'Mk2-R Radial-Mount Parachute', 'Mk2-R Radial-Mount Parachute'],
+            ['Mk2-R Radial-Mount Parachute']*3,
             sorted(x.part.title for x in self.parts.parachutes))
 
     def test_radiators(self):

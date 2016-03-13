@@ -231,6 +231,7 @@ SpaceCenter.Parts.Decouplers
 SpaceCenter.Parts.DockingPorts
 SpaceCenter.Parts.DockingPortWithName
 SpaceCenter.Parts.Engines
+SpaceCenter.Parts.Fairings
 SpaceCenter.Parts.LandingGear
 SpaceCenter.Parts.LandingLegs
 SpaceCenter.Parts.LaunchClamps
@@ -279,6 +280,7 @@ SpaceCenter.Part.CargoBay
 SpaceCenter.Part.Decoupler
 SpaceCenter.Part.DockingPort
 SpaceCenter.Part.Engine
+SpaceCenter.Part.Fairing
 SpaceCenter.Part.LandingGear
 SpaceCenter.Part.LandingLeg
 SpaceCenter.Part.LaunchClamp
@@ -368,6 +370,10 @@ SpaceCenter.Engine.Gimballed
 SpaceCenter.Engine.GimbalRange
 SpaceCenter.Engine.GimbalLocked
 SpaceCenter.Engine.GimbalLimit
+SpaceCenter.Fairing
+SpaceCenter.Fairing.Part
+SpaceCenter.Fairing.Jettison
+SpaceCenter.Fairing.Jettisoned
 SpaceCenter.LandingGear
 SpaceCenter.LandingGear.Part
 SpaceCenter.LandingGear.State

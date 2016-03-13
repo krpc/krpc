@@ -26,11 +26,11 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual(None, part.parent)
         self.assertEqual([
+            'AE-FF1 Airstream Protective Shell (1.25m)',
             'LT-1 Landing Struts',
             'LT-1 Landing Struts',
             'LT-1 Landing Struts',
             'LY-10 Small Landing Gear',
-            'Mk16-XL Parachute',
             'TR-XL Stack Separator'],
             sorted(p.title for p in part.children))
         self.assertTrue(part.axially_attached)
@@ -62,6 +62,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(None, part.decoupler)
         self.assertEqual(None, part.docking_port)
         self.assertEqual(None, part.engine)
+        self.assertEqual(None, part.fairing)
         self.assertEqual(None, part.landing_leg)
         self.assertEqual(None, part.launch_clamp)
         self.assertEqual(None, part.light)
@@ -192,6 +193,32 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.engine)
 
+    def test_fairing(self):
+        part = self.parts.with_title('AE-FF1 Airstream Protective Shell (1.25m)')[0]
+        self.assertEqual('fairingSize1', part.name)
+        self.assertEqual('AE-FF1 Airstream Protective Shell (1.25m)', part.title)
+        self.assertEqual(900, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Mk1-2 Command Pod', part.parent.title)
+        self.assertEqual(0, len(part.children))
+        self.assertTrue(part.axially_attached)
+        self.assertFalse(part.radially_attached)
+        self.assertEqual(0, part.stage)
+        self.assertEqual(-1, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertClose(121.73880, part.mass)
+        self.assertClose(121.73880, part.dry_mass)
+        self.assertEqual(9, part.impact_tolerance)
+        self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
+        self.assertEqual(0, len(part.fuel_lines_from))
+        self.assertEqual(0, len(part.fuel_lines_to))
+        modules = ['ModuleCargoBay', 'ModuleProceduralFairing', 'ModuleTestSubject']
+        if self.conn.space_center.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.fairing)
+
     def test_landing_leg(self):
         part = self.parts.with_title('LT-1 Landing Struts')[0]
         self.assertEqual('landingLeg1', part.name)
@@ -271,20 +298,20 @@ class TestPartsPart(testingtools.TestCase):
         self.assertNotEqual(None, part.light)
 
     def test_parachute(self):
-        part = self.parts.with_title('Mk16-XL Parachute')[0]
-        self.assertEqual('parachuteLarge', part.name)
-        self.assertEqual('Mk16-XL Parachute', part.title)
-        self.assertEqual(850, part.cost)
+        part = self.parts.with_title('Mk2-R Radial-Mount Parachute')[0]
+        self.assertEqual('parachuteRadial', part.name)
+        self.assertEqual('Mk2-R Radial-Mount Parachute', part.title)
+        self.assertEqual(400, part.cost)
         self.assertEqual(self.vessel, part.vessel)
-        self.assertEqual('Mk1-2 Command Pod', part.parent.title)
+        self.assertEqual('Rockomax X200-8 Fuel Tank', part.parent.title)
         self.assertEqual(0, len(part.children))
-        self.assertTrue(part.axially_attached)
-        self.assertFalse(part.radially_attached)
-        self.assertEqual(0, part.stage)
-        self.assertEqual(-1, part.decouple_stage)
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEqual(2, part.stage)
+        self.assertEqual(1, part.decouple_stage)
         self.assertFalse(part.massless)
-        self.assertClose(300, part.mass)
-        self.assertClose(300, part.dry_mass)
+        self.assertClose(100, part.mass)
+        self.assertClose(100, part.dry_mass)
         self.assertEqual(12, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)

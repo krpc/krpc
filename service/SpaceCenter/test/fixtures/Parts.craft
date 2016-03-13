@@ -2,7 +2,7 @@ ship = Parts
 version = 1.0.5
 description = 
 type = VAB
-size = 6.92598,29.07816,6.749738
+size = 6.92598,29.91623,6.749738
 PART
 {
 	part = Mark1-2Pod_4294710516
@@ -25,13 +25,13 @@ PART
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
 	link = stackSeparatorBig_4294704002
-	link = parachuteLarge_4294621892
 	link = landingLeg1_4294578972
 	link = landingLeg1_4294578716
 	link = landingLeg1_4294578616
 	link = SmallGearBay_4294634018
+	link = fairingSize1_4294698076
 	attN = bottom,stackSeparatorBig_4294704002
-	attN = top,parachuteLarge_4294621892
+	attN = top,fairingSize1_4294698076
 	EVENTS
 	{
 	}
@@ -699,219 +699,6 @@ PART
 		hideFlow = False
 		isVisible = True
 		flowMode = Both
-	}
-}
-PART
-{
-	part = parachuteLarge_4294621892
-	partName = Part
-	pos = 0.08118621,25.27562,-0.1678879
-	attPos = 0,0,0
-	attPos0 = 0,1.195255,0
-	rot = 0,0,0,1
-	attRot = 0,0,0,1
-	attRot0 = 0,0,0,1
-	mir = 1,1,1
-	symMethod = Radial
-	istg = 0
-	dstg = 0
-	sidx = 0
-	sqor = 0
-	sepI = 0
-	attm = 0
-	modCost = 0
-	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
-	attN = bottom,Mark1-2Pod_4294710516
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	MODULE
-	{
-		name = ModuleParachute
-		isEnabled = True
-		persistentState = STOWED
-		minAirPressureToOpen = 0.01
-		deployAltitude = 500
-		stagingEnabled = True
-		minAirPressureToOpen_UIFlight
-		{
-			controlEnabled = True
-			minValue = 0.01
-			maxValue = 0.5
-			stepIncrement = 0.01
-		}
-		deployAltitude_UIFlight
-		{
-			controlEnabled = True
-			minValue = 50
-			maxValue = 5000
-			stepIncrement = 50
-		}
-		EVENTS
-		{
-			Deploy
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Deploy Chute
-				guiName = Deploy Chute
-				category = Deploy Chute
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			CutParachute
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Cut Parachute
-				guiName = Cut Parachute
-				category = Cut Parachute
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Repack
-			{
-				active = False
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Repack Chute
-				guiName = Repack Chute
-				category = Repack Chute
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			Disarm
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Disarm
-				guiName = Disarm
-				category = Disarm
-				guiActiveUnfocused = True
-				unfocusedRange = 4
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-			DeployAction
-			{
-				actionGroup = None
-			}
-			CutAction
-			{
-				actionGroup = None
-			}
-		}
-	}
-	MODULE
-	{
-		name = ModuleTestSubject
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			RunTestEvent
-			{
-				active = False
-				guiActive = True
-				guiActiveUncommand = False
-				guiIcon = Run Test
-				guiName = Run Test
-				category = Run Test
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleDragModifier
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
 	}
 }
 PART
@@ -2856,7 +2643,7 @@ PART
 				guiActive = True
 				guiActiveUncommand = False
 				guiIcon = Toggle Transmit Incomplete
-				guiName = Toggle Transmit Incomplete
+				guiName = Require Complete
 				category = Toggle Transmit Incomplete
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -6678,7 +6465,7 @@ PART
 	pos = 2.186316,4.222435,1.04751
 	attPos = 0,0,0
 	attPos0 = -1.252723,0.3939471,5.960464E-08
-	rot = -9.033342E-08,0.5000002,5.215402E-08,0.8660254
+	rot = -9.033334E-08,0.5000002,5.215398E-08,0.8660254
 	attRot = 0,0,0,1
 	attRot0 = 2.001975E-07,0.7071068,2.001975E-07,-0.7071068
 	mir = 1,1,1
@@ -6883,7 +6670,7 @@ PART
 	pos = 2.186315,11.65159,1.047509
 	attPos = 0,0,0
 	attPos0 = -1.192098E-07,7.429159,3.43921E-08
-	rot = -3.825397E-15,-0.8660254,-4.590064E-14,-0.5000001
+	rot = -2.905887E-15,-0.8660254,-4.93323E-14,-0.5000001
 	attRot = 0,-0.8660256,0,-0.5000001
 	attRot0 = -9.033346E-08,-0.4999999,-5.215406E-08,-0.8660254
 	mir = 1,1,1
@@ -8567,7 +8354,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.481259
+		scaleFactor = 4.48126
 		height = 11.3071
 		stagingEnabled = True
 		towerRot = 0,-0.6087614,0,0.7933534
@@ -8742,7 +8529,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.481259
+		scaleFactor = 4.48126
 		height = 11.3071
 		stagingEnabled = True
 		towerRot = 0,-0.9914449,0,-0.1305262
@@ -8917,7 +8704,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.481259
+		scaleFactor = 4.48126
 		height = 11.3071
 		stagingEnabled = True
 		towerRot = 0,-0.3826834,0,-0.9238796
@@ -9681,6 +9468,193 @@ PART
 				actionGroup = None
 				active = False
 			}
+		}
+	}
+}
+PART
+{
+	part = fairingSize1_4294698076
+	partName = Part
+	pos = 0.08118621,25.47356,-0.1678879
+	attPos = 0,0,0
+	attPos0 = 0,1.39319,0
+	rot = 0,0,0,1
+	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 0
+	dstg = 1
+	sidx = 0
+	sqor = 0
+	sepI = 0
+	attm = 0
+	modCost = 18.69755
+	modMass = 0.04674388
+	modSize = (0.0, 0.0, 0.0)
+	attN = bottom,Mark1-2Pod_4294710516
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleProceduralFairing
+		isEnabled = True
+		stagingEnabled = True
+		fsm = st_idle
+		EVENTS
+		{
+			DeleteFairing
+			{
+				active = True
+				guiActive = False
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Delete Fairing
+				guiName = Delete Fairing
+				category = Delete Fairing
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			EditFairing
+			{
+				active = True
+				guiActive = False
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Edit Fairing
+				guiName = Edit Fairing
+				category = Edit Fairing
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			BuildFairing
+			{
+				active = False
+				guiActive = False
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Build Fairing
+				guiName = Build Fairing
+				category = Build Fairing
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			DeployFairing
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Deploy
+				guiName = Deploy
+				category = Deploy
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			DeployFairingAction
+			{
+				actionGroup = None
+			}
+		}
+		XSECTION
+		{
+			h = 0
+			r = 0.625
+		}
+		XSECTION
+		{
+			h = 0.7082405
+			r = 0.4045787
+		}
+		XSECTION
+		{
+			h = 0.921627
+			r = 0.2
+		}
+	}
+	MODULE
+	{
+		name = ModuleCargoBay
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleTestSubject
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
 		}
 	}
 }

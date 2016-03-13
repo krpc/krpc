@@ -185,6 +185,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all fairings in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Fairing> Fairings {
+            get { return All.Where (part => Fairing.Is (part)).Select (part => new Fairing (part)).ToList (); }
+        }
+
+        /// <summary>
         /// A list of all landing gear attached to the vessel.
         /// </summary>
         [KRPCProperty]
