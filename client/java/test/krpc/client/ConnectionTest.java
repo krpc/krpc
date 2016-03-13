@@ -226,7 +226,7 @@ public class ConnectionTest {
     @Test
     public void testConcurrentConnections() throws Exception {
         int threadCount = 4;
-        CountDownLatch latch = new CountDownLatch(threadCount);
+        final CountDownLatch latch = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {
             new Thread(new Runnable() {
                 public void run() {
