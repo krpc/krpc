@@ -3,6 +3,7 @@ package krpc.client;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.javatuples.Pair;
@@ -218,5 +221,27 @@ public class ConnectionTest {
             testService.setStringProperty(string);
             assertEquals(string, testService.getStringProperty());
         }
+    }
+
+    @Test
+    public void testConcurrentConnections() throws Exception {
+        int threadCount = 4;
+        CountDownLatch latch = new CountDownLatch(threadCount);
+        for (int i = 0; i < threadCount; i++) {
+            new Thread(() -> {
+                try {
+                    for (int j = 0; j < 1000; j++) {
+                        assertEquals("False", testService.boolToString(false));
+                        assertEquals(12345, testService.stringToInt32("12345"));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    fail();
+                }
+                latch.countDown();
+
+            }).start();
+        }
+        assertTrue(latch.await(10, TimeUnit.SECONDS));
     }
 }
