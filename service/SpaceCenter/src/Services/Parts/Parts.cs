@@ -142,6 +142,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all cargo bays in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<CargoBay> CargoBays {
+            get { return All.Where (part => CargoBay.Is (part)).Select (part => new CargoBay (part)).ToList (); }
+        }
+
+        /// <summary>
         /// A list of all decouplers in the vessel.
         /// </summary>
         [KRPCProperty]

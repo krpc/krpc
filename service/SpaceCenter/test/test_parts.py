@@ -67,6 +67,7 @@ class TestParts(testingtools.TestCase):
              'S1 SRB-KD25k "Kickback" Solid Fuel Booster',
              'SP-L 1x6 Photovoltaic Panels',
              'SP-L 1x6 Photovoltaic Panels',
+             'Service Bay (2.5m)',
              'TR-XL Stack Separator',
              'TR-XL Stack Separator',
              'TR-XL Stack Separator',
@@ -188,6 +189,7 @@ class TestParts(testingtools.TestCase):
              'Rockomax X200-8 Fuel Tank',
              'SP-L 1x6 Photovoltaic Panels',
              'SP-L 1x6 Photovoltaic Panels',
+             'Service Bay (2.5m)',
              'Thermal Control System (small)',
              'Z-400 Rechargeable Battery'],
             part_titles_in_stage(-1))
@@ -252,6 +254,9 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(['ModuleLight']*4, [m.name for m in modules])
         modules = self.parts.modules_with_name('DoesntExist')
         self.assertEqual(len(modules), 0)
+
+    def test_cargo_bays(self):
+        self.assertEqual(['Service Bay (2.5m)'], sorted(x.part.title for x in self.parts.cargo_bays))
 
     def test_decouplers(self):
         self.assertEqual(

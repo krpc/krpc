@@ -343,6 +343,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A <see cref="CargoBay"/> if the part is a cargo bay, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public CargoBay CargoBay {
+            get { return CargoBay.Is (this) ? new CargoBay (this) : null; }
+        }
+
+        /// <summary>
         /// A <see cref="Decoupler"/> if the part is a decoupler, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty]

@@ -58,6 +58,7 @@ class TestPartsPart(testingtools.TestCase):
         if self.conn.space_center.far_available:
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertEqual(None, part.cargo_bay)
         self.assertEqual(None, part.decoupler)
         self.assertEqual(None, part.docking_port)
         self.assertEqual(None, part.engine)
@@ -86,6 +87,32 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(0, part.thermal_radiation_flux, error=0.01)
         self.assertClose(0, part.thermal_internal_flux, error=0.01)
         self.assertClose(0, part.thermal_skin_to_internal_flux, error=0.01)
+
+    def test_cargo_bay(self):
+        part = self.parts.with_title('Service Bay (2.5m)')[0]
+        self.assertEqual('ServiceBay.250', part.name)
+        self.assertEqual('Service Bay (2.5m)', part.title)
+        self.assertEqual(500, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Rockomax X200-8 Fuel Tank', part.parent.title)
+        self.assertEqual(['RE-L10 "Poodle" Liquid Fuel Engine'], [p.title for p in part.children])
+        self.assertTrue(part.axially_attached)
+        self.assertFalse(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(1, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertClose(300, part.mass)
+        self.assertClose(300, part.dry_mass)
+        self.assertEqual(14, part.impact_tolerance)
+        self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
+        self.assertEqual(0, len(part.fuel_lines_from))
+        self.assertEqual(0, len(part.fuel_lines_to))
+        modules = ['ModuleAnimateGeneric', 'ModuleCargoBay', 'ModuleConductionMultiplier', 'ModuleSeeThroughObject']
+        if self.conn.space_center.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.cargo_bay)
 
     def test_decoupler(self):
         part = self.parts.with_title('TT-70 Radial Decoupler')[0]

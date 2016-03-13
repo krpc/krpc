@@ -1,8 +1,10 @@
 v0.2.3
  * Add support for engine mode switching (#219)
  * Engine.GimbalLimit and GimbalLocked now return an error if the engine is not gimballed
- * Add support for fixed and 'advanced' langing gear to LandingGear class
- * Add support for 'active' radiators (#156)
+ * Parts:
+  * Add cargo bays
+  * Add support for fixed and 'advanced' langing gear to LandingGear class
+  * Add support for 'active' (non-deployable) radiators to Radiator class (#156)
  * Remove Part.ExternalTemperature (#206,#174)
  * Fix units returned by thermal mass and flux methods in Part class (#174)
  * Fix bug with translation inputs in Control class (#223)

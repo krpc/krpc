@@ -95,6 +95,8 @@
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\Node.cs" />
     <Compile Include="Services\Orbit.cs" />
+    <Compile Include="Services\Parts\CargoBay.cs" />
+    <Compile Include="Services\Parts\CargoBayState.cs" />
     <Compile Include="Services\Parts\Decoupler.cs" />
     <Compile Include="Services\Parts\DockingPort.cs" />
     <Compile Include="Services\Parts\DockingPortState.cs" />

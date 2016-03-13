@@ -226,6 +226,7 @@ SpaceCenter.Parts.WithModule
 SpaceCenter.Parts.InStage
 SpaceCenter.Parts.InDecoupleStage
 SpaceCenter.Parts.ModulesWithName
+SpaceCenter.Parts.CargoBays
 SpaceCenter.Parts.Decouplers
 SpaceCenter.Parts.DockingPorts
 SpaceCenter.Parts.DockingPortWithName
@@ -274,6 +275,7 @@ SpaceCenter.Part.IsFuelLine
 SpaceCenter.Part.FuelLinesFrom
 SpaceCenter.Part.FuelLinesTo
 SpaceCenter.Part.Modules
+SpaceCenter.Part.CargoBay
 SpaceCenter.Part.Decoupler
 SpaceCenter.Part.DockingPort
 SpaceCenter.Part.Engine
@@ -305,6 +307,15 @@ SpaceCenter.Module.TriggerEvent
 SpaceCenter.Module.Actions
 SpaceCenter.Module.HasAction
 SpaceCenter.Module.SetAction
+SpaceCenter.CargoBay
+SpaceCenter.CargoBay.Part
+SpaceCenter.CargoBay.State
+SpaceCenter.CargoBay.Open
+SpaceCenter.CargoBayState
+SpaceCenter.CargoBayState.Open
+SpaceCenter.CargoBayState.Closed
+SpaceCenter.CargoBayState.Opening
+SpaceCenter.CargoBayState.Closing
 SpaceCenter.Decoupler
 SpaceCenter.Decoupler.Part
 SpaceCenter.Decoupler.Decouple
