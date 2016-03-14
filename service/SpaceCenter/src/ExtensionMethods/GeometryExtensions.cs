@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
@@ -37,6 +38,18 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static QuaternionD ToQuaternion (this Tuple4 t)
         {
             return new QuaternionD (t.Item1, t.Item2, t.Item3, t.Item4);
+        }
+
+        /// <summary>
+        /// Convert a Matrix4x4 (simulating a Matrix3x3) to a tuple of tuples
+        /// </summary>
+        public static IList<double> ToList (this Matrix4x4 m)
+        {
+            return new List<double> (new double[] {
+                m [0, 0], m [0, 1], m [0, 2],
+                m [1, 0], m [1, 1], m [1, 2],
+                m [2, 0], m [2, 1], m [2, 2]
+            });
         }
 
         /// <summary>

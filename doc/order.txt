@@ -55,6 +55,7 @@ SpaceCenter.Vessel.SpecificImpulse
 SpaceCenter.Vessel.VacuumSpecificImpulse
 SpaceCenter.Vessel.KerbinSeaLevelSpecificImpulse
 SpaceCenter.Vessel.MomentOfInertia
+SpaceCenter.Vessel.InertiaTensor
 SpaceCenter.Vessel.Torque
 SpaceCenter.Vessel.ReactionWheelTorque
 SpaceCenter.Vessel.RCSTorque

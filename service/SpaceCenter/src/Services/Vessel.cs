@@ -7,6 +7,7 @@ using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
+using System.Collections.Generic;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -369,6 +370,14 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
             get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
+        }
+
+        /// <summary>
+        /// The inertia tensor of the vessel. Returns a 3x3 matrix as a list of elements, in row-major order.
+        /// </summary>
+        [KRPCProperty]
+        public IList<double> InertiaTensor {
+            get { return ComputeInertiaTensor ().ToList (); }
         }
 
         /// <summary>
