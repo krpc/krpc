@@ -63,6 +63,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(None, part.docking_port)
         self.assertEqual(None, part.engine)
         self.assertEqual(None, part.fairing)
+        self.assertEqual(None, part.intake)
         self.assertEqual(None, part.landing_leg)
         self.assertEqual(None, part.launch_clamp)
         self.assertEqual(None, part.light)
@@ -218,6 +219,32 @@ class TestPartsPart(testingtools.TestCase):
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.fairing)
+
+    def test_intake(self):
+        part = self.parts.with_title('XM-G50 Radial Air Intake')[0]
+        self.assertEqual('airScoop', part.name)
+        self.assertEqual('XM-G50 Radial Air Intake', part.title)
+        self.assertEqual(250, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Rockomax X200-8 Fuel Tank', part.parent.title)
+        self.assertEqual(0, len(part.children))
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(1, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertClose(30, part.mass)
+        self.assertClose(20, part.dry_mass) #TODO: why is the dry mass != total mass, part doens't have any resources!?
+        self.assertEqual(10, part.impact_tolerance)
+        self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
+        self.assertEqual(0, len(part.fuel_lines_from))
+        self.assertEqual(0, len(part.fuel_lines_to))
+        modules = ['ModuleResourceIntake']
+        if self.conn.space_center.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.intake)
 
     def test_landing_leg(self):
         part = self.parts.with_title('LT-1 Landing Struts')[0]

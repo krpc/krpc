@@ -667,6 +667,7 @@ PART
 	link = sensorBarometer_4294600460
 	link = longAntenna_4294556948
 	link = ServiceBay.250_4294675190
+	link = airScoop_4294672794
 	attN = top,stackSeparatorBig_4294704002
 	attN = bottom,ServiceBay.250_4294675190
 	EVENTS
@@ -3357,6 +3358,7 @@ PART
 	link = solarPanels2_4294559372
 	link = asasmodule1-2_4294547938
 	link = solarPanels5_4294709308
+	link = IntakeRadialLong_4294676558
 	attN = top,stackSeparatorBig_4294682968
 	attN = bottom,asasmodule1-2_4294547938
 	EVENTS
@@ -6465,7 +6467,7 @@ PART
 	pos = 2.186316,4.222435,1.04751
 	attPos = 0,0,0
 	attPos0 = -1.252723,0.3939471,5.960464E-08
-	rot = -9.033334E-08,0.5000002,5.215398E-08,0.8660254
+	rot = -9.033332E-08,0.5000002,5.215397E-08,0.8660254
 	attRot = 0,0,0,1
 	attRot0 = 2.001975E-07,0.7071068,2.001975E-07,-0.7071068
 	mir = 1,1,1
@@ -6670,7 +6672,7 @@ PART
 	pos = 2.186315,11.65159,1.047509
 	attPos = 0,0,0
 	attPos0 = -1.192098E-07,7.429159,3.43921E-08
-	rot = -2.905887E-15,-0.8660254,-4.93323E-14,-0.5000001
+	rot = -1.663252E-14,-0.8660254,-5.301033E-14,-0.5000001
 	attRot = 0,-0.8660256,0,-0.5000001
 	attRot0 = -9.033346E-08,-0.4999999,-5.215406E-08,-0.8660254
 	mir = 1,1,1
@@ -8876,8 +8878,8 @@ PART
 	{
 		tgt = 4294477800
 		pos = -0.7247481,-4.051068,0.0131602
-		rot = 0,0.0007991516,-6.556497E-07,0.9999997
-		dir = -0.1761059,-0.9843661,0.003197785
+		rot = -3.498079E-15,0.0007991465,-6.5565E-07,1
+		dir = -0.176106,-0.9843661,0.003197786
 	}
 	MODULE
 	{
@@ -8961,9 +8963,9 @@ PART
 	PARTDATA
 	{
 		tgt = 4294478774
-		pos = -0.7247477,-4.051068,0.01316021
-		rot = 0,0.0007994187,-6.556494E-07,0.9999997
-		dir = -0.1761059,-0.9843661,0.003197785
+		pos = -0.7247483,-4.051068,0.0131602
+		rot = -1.284549E-14,0.0007993994,-6.556496E-07,1
+		dir = -0.1761061,-0.9843661,0.003197788
 	}
 	MODULE
 	{
@@ -9047,9 +9049,9 @@ PART
 	PARTDATA
 	{
 		tgt = 4294477872
-		pos = -0.7247491,-4.051082,0.01316026
-		rot = 0,0.0007990335,-6.556495E-07,0.9999997
-		dir = -0.1761059,-0.9843661,0.003197785
+		pos = -0.7247494,-4.051082,0.01316026
+		rot = 1.870362E-14,0.0007990622,-6.556497E-07,0.9999999
+		dir = -0.1761057,-0.9843661,0.003197792
 	}
 	MODULE
 	{
@@ -9656,5 +9658,197 @@ PART
 		ACTIONS
 		{
 		}
+	}
+}
+PART
+{
+	part = IntakeRadialLong_4294676558
+	partName = Part
+	pos = 1.292949,19.20197,-0.1678878
+	attPos = 0,0,0
+	attPos0 = 1.211763,0.2007198,7.450581E-08
+	rot = -0.5,0.5,0.5,0.5
+	attRot = 0,0,0,1
+	attRot0 = -0.5,0.5,0.5,0.5
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 4
+	dstg = 4
+	sidx = -1
+	sqor = -1
+	sepI = 3
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,RCSTank1-2_4294671790
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleResourceIntake
+		isEnabled = True
+		intakeEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+			Deactivate
+			{
+				active = True
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Close Intake
+				guiName = Close Intake
+				category = Close Intake
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			Activate
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Open Intake
+				guiName = Open Intake
+				category = Open Intake
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	RESOURCE
+	{
+		name = IntakeAir
+		amount = 0.5
+		maxAmount = 0.5
+		flowState = True
+		isTweakable = False
+		hideFlow = False
+		isVisible = False
+		flowMode = Both
+	}
+}
+PART
+{
+	part = airScoop_4294672794
+	partName = Part
+	pos = 1.193673,23.22657,-1.280375
+	attPos = 0,0,0
+	attPos0 = 1.112487,0.2942009,-1.112487
+	rot = -0.2705981,0.6532816,0.6532814,0.2705981
+	attRot = 0,0,0,1
+	attRot0 = -0.2705981,0.6532816,0.6532814,0.2705981
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 2
+	dstg = 2
+	sidx = -1
+	sqor = -1
+	sepI = 1
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,fuelTank4-2_4294696064
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleResourceIntake
+		isEnabled = True
+		intakeEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+			Deactivate
+			{
+				active = True
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Close Intake
+				guiName = Close Intake
+				category = Close Intake
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			Activate
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Open Intake
+				guiName = Open Intake
+				category = Open Intake
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+	RESOURCE
+	{
+		name = IntakeAir
+		amount = 2
+		maxAmount = 2
+		flowState = True
+		isTweakable = False
+		hideFlow = False
+		isVisible = False
+		flowMode = Both
 	}
 }

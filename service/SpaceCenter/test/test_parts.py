@@ -26,6 +26,7 @@ class TestParts(testingtools.TestCase):
             part_titles,
             ['\'Drill-O-Matic Junior\' Mining Excavator',
              'AE-FF1 Airstream Protective Shell (1.25m)',
+             'Adjustable Ramp Intake (Radial)',
              'Advanced Reaction Wheel Module, Large',
              'Aerodynamic Nose Cone',
              'Aerodynamic Nose Cone',
@@ -81,6 +82,7 @@ class TestParts(testingtools.TestCase):
              'TT18-A Launch Stability Enhancer',
              'TT18-A Launch Stability Enhancer',
              'Thermal Control System (small)',
+             'XM-G50 Radial Air Intake',
              'Z-400 Rechargeable Battery'
          ])
 
@@ -159,6 +161,7 @@ class TestParts(testingtools.TestCase):
             return sorted([p.title for p in self.parts.in_stage(s)])
         self.assertEqual(
             ['\'Drill-O-Matic Junior\' Mining Excavator',
+             'Adjustable Ramp Intake (Radial)',
              'Advanced Reaction Wheel Module, Large',
              'Aerodynamic Nose Cone',
              'Aerodynamic Nose Cone',
@@ -191,6 +194,7 @@ class TestParts(testingtools.TestCase):
              'SP-L 1x6 Photovoltaic Panels',
              'Service Bay (2.5m)',
              'Thermal Control System (small)',
+             'XM-G50 Radial Air Intake',
              'Z-400 Rechargeable Battery'],
             part_titles_in_stage(-1))
         self.assertEqual(
@@ -293,6 +297,9 @@ class TestParts(testingtools.TestCase):
 
     def test_fairings(self):
         self.assertEqual(['AE-FF1 Airstream Protective Shell (1.25m)'], sorted(x.part.title for x in self.parts.fairings))
+
+    def test_intakes(self):
+        self.assertEqual(['Adjustable Ramp Intake (Radial)', 'XM-G50 Radial Air Intake'], sorted(x.part.title for x in self.parts.intakes))
 
     def test_landing_gear(self):
         self.assertEqual(['LY-10 Small Landing Gear'], sorted(x.part.title for x in self.parts.landing_gear))

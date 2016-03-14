@@ -102,6 +102,7 @@
     <Compile Include="Services\Parts\DockingPortState.cs" />
     <Compile Include="Services\Parts\Engine.cs" />
     <Compile Include="Services\Parts\Fairing.cs" />
+    <Compile Include="Services\Parts\Intake.cs" />
     <Compile Include="Services\Parts\LandingGear.cs" />
     <Compile Include="Services\Parts\LandingGearState.cs" />
     <Compile Include="Services\Parts\LandingLeg.cs" />

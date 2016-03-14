@@ -193,6 +193,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all intakes in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Intake> Intakes {
+            get { return All.Where (part => Intake.Is (part)).Select (part => new Intake (part)).ToList (); }
+        }
+
+        /// <summary>
         /// A list of all landing gear attached to the vessel.
         /// </summary>
         [KRPCProperty]

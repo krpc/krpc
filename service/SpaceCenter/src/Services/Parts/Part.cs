@@ -383,6 +383,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// An <see cref="Intake"/> if the part is an intake, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public Intake Intake {
+            get { return Intake.Is (this) ? new Intake (this) : null; }
+        }
+
+        /// <summary>
         /// A <see cref="LandingGear"/> if the part is a landing gear , otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty]
