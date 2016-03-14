@@ -84,7 +84,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
         /// Returns zero if the reaction wheel is inactive or broken.
         /// </summary>
-        public Vector3d TorqueVector ()
+        internal Vector3d TorqueVector ()
         {
             if (!Active || Broken)
                 return Vector3d.zero;
