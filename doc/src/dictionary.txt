@@ -5,6 +5,7 @@ circularization
 clickable
 clientgen
 CMake
+combusting
 comms
 crossfeed
 decouplers
@@ -20,6 +21,7 @@ hostname
 inkscape
 integration
 internet
+javac
 Kerbal
 Kerbals
 Kerbin
@@ -32,6 +34,7 @@ libxslt
 linux
 localhost
 lua
+luarocks
 mach
 namespace
 namespaces
@@ -47,11 +50,15 @@ pdflatex
 periapsis
 physicsless
 plugin
+prebuilt
 prograde
 proto
+protobuf
 py
 serializable
+streamPort
 symlink
+tradeoff
 Tron
 uint
 undocked

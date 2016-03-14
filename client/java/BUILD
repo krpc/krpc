@@ -15,7 +15,8 @@ genrule(
     srcs = [':krpc'],
     outs = ['krpc-java-%s.jar' % version],
     cmd = 'ln -f -r -s "$<" "$@"',
-    output_to_bindir = True
+    output_to_bindir = True,
+    visibility = ['//visibility:public']
 )
 
 java_library(
@@ -35,7 +36,8 @@ java_library(
         '//tools/build/protobuf:protobuf',
         '@java_javatuples//:jar'
     ],
-    javacopts = copts
+    javacopts = copts,
+    visibility = ['//visibility:public']
 )
 
 java_import(

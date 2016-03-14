@@ -4,11 +4,9 @@ using System;
 using System.Threading;
 using System.Net;
 
-class InfernalRoboticsExample
-{
-    public static void Main ()
-    {
-        var connection = new KRPC.Client.Connection (name: "InfernalRobotics Example");
+class IR {
+    public static void Main () {
+        var connection = new Connection (name: "InfernalRobotics Example");
         var ir = connection.InfernalRobotics ();
 
         var group = ir.ServoGroupWithName ("MyGroup");

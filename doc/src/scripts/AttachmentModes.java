@@ -1,9 +1,7 @@
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
-
 import org.javatuples.Pair;
-
 import krpc.client.Connection;
 import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;

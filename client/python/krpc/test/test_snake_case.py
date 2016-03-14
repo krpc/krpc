@@ -1,5 +1,5 @@
 import unittest
-from krpc.service import _to_snake_case as t
+from krpc.utils import snake_case as t
 
 class TestSnakeCase(unittest.TestCase):
 

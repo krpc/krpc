@@ -34,7 +34,7 @@
 {% endmacro %}
 
 {% macro procedure(x) %}{{ mark_documented(x) }}
-.. method:: {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters) }})
+.. method:: {{ x.return_type | return_type }} {{ x.name | lower_camelcase  }}({{ parameters(x.parameters) }})
 
 {{ x.documentation | parsedoc | indent }}
 
@@ -74,7 +74,7 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. method:: {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters[1:]) }})
+.. method:: {{ x.return_type | return_type }} {{ x.name | lower_camelcase }}({{ parameters(x.parameters[1:]) }})
 
 {{ x.documentation | parsedoc | indent }}
 
@@ -93,7 +93,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. method:: {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters) }})
+.. method:: {{ x.return_type | return_type }} {{ x.name | lower_camelcase }}({{ parameters(x.parameters) }})
 
 {{ x.documentation | parsedoc | indent }}
 
@@ -122,7 +122,7 @@
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
-   .. field:: public {{ x.name }} {{ value.name }}
+   .. field:: public {{ x.name }} {{ value.name | snakecase | upper }}
 
 {{ value.documentation | parsedoc | indent(width=6) }}
 

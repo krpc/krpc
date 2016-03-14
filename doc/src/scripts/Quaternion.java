@@ -1,7 +1,5 @@
 import java.io.IOException;
-
 import org.javatuples.Quartet;
-
 import krpc.client.Connection;
 import krpc.client.RPCException;
 import krpc.client.services.SpaceCenter;

@@ -78,17 +78,14 @@ class TestPartsPart(testingtools.TestCase):
         self.assertClose(300, part.skin_temperature, error=50)
         self.assertEqual(1400, part.max_temperature)
         self.assertEqual(2400, part.max_skin_temperature)
-        #TODO: not implemented. see issue #174
-        #self.assertClose(300, part.external_temperature, error=50)
-        self.assertClose(3546.5, part.thermal_mass, error=0.1)
-        self.assertClose(13.5, part.thermal_skin_mass, error=0.1)
-        self.assertClose(360, part.thermal_resource_mass, error=0.1)
-        #TODO: add these property tests
-        #part.thermal_conduction_flux
-        #part.thermal_convection_flux
-        #part.thermal_radiation_flux
-        #part.thermal_internal_flux
-        #part.thermal_skin_to_internal_flux
+        self.assertClose(3.55, part.thermal_mass, error=0.01)
+        self.assertClose(0.02, part.thermal_skin_mass, error=0.01)
+        self.assertClose(0.36, part.thermal_resource_mass, error=0.01)
+        self.assertClose(0, part.thermal_conduction_flux, error=0.01)
+        self.assertClose(0, part.thermal_convection_flux, error=0.01)
+        self.assertClose(0, part.thermal_radiation_flux, error=0.01)
+        self.assertClose(0, part.thermal_internal_flux, error=0.01)
+        self.assertClose(0, part.thermal_skin_to_internal_flux, error=0.01)
 
     def test_decoupler(self):
         part = self.parts.with_title('TT-70 Radial Decoupler')[0]

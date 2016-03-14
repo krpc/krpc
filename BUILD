@@ -106,14 +106,14 @@ pkg_zip(
         '//client/java',
         # Schema
         '//protobuf:krpc.proto',
-        '//protobuf:csharp',
-        '//protobuf:py',
         '//protobuf:cpp',
-        '//protobuf:lua',
+        '//protobuf:csharp',
         '//protobuf:java',
+        '//protobuf:lua',
+        '//protobuf:python',
         '//protobuf:LICENSE',
         # Docs
-        '//doc:latex',
+        '//doc:pdf',
     ],
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
@@ -130,15 +130,15 @@ pkg_zip(
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
         'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
         # Clients
-        'client/python/': 'client/',
         'client/cpp/': 'client/',
         'client/csharp/': 'client/',
-        'client/lua/': 'client/',
         'client/java/': 'client/',
+        'client/lua/': 'client/',
+        'client/python/': 'client/',
         # Schema
         'protobuf/': 'schema/',
         # Docs
-        'doc/latex.pdf': 'kRPC.pdf',
+        'doc/kRPC.pdf': 'kRPC.pdf',
     }
 )
 

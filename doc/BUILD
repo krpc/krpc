@@ -5,12 +5,13 @@ load('/tools/build/image', 'png_images')
 load('/tools/krpctools/docgen', 'docgen_multiple')
 load('/doc/test', 'check_documented_test')
 load('/config', 'version')
+load('macros', 'cc_binary_multiple', 'csharp_binary_multiple', 'csharp_library_multiple', 'java_binary_multiple')
 
 filegroup(
     name = 'doc',
     srcs = [
         ':html',
-        ':latex'
+        ':pdf'
     ]
 )
 
@@ -26,7 +27,7 @@ stage_files(
         'src/scripts/*.py',
         'src/scripts/*.java'
     ]) + [
-        'src/conf.py',
+        ':conf',
         'src/_static/custom.css',
         'src/_templates/layout.html',
         'src/dictionary.txt',
@@ -70,6 +71,13 @@ py_script(
     visibility = ['//visibility:public']
 )
 
+genrule(
+    name = 'conf',
+    srcs = ['conf.py.tmpl'],
+    outs = ['src/conf.py'],
+    cmd = 'sed \'s/%VERSION%/'+version+'/g\' "$<" > "$@"'
+)
+
 sphinx_build(
     name = 'html',
     out = 'html.zip',
@@ -80,7 +88,7 @@ sphinx_build(
 )
 
 sphinx_build(
-    name = 'latex',
+    name = 'pdf',
     out = 'kRPC.pdf',
     srcs = [':srcs'],
     sphinx_build = ':sphinx-build',
@@ -198,4 +206,71 @@ check_documented_test(
     srcs = [':python-api'],
     members = 'order.txt',
     size = 'small'
+)
+
+filegroup(
+    name = 'compile-scripts',
+    srcs = [
+        ':compile-scripts-cpp',
+        ':compile-scripts-csharp',
+        ':compile-scripts-java'
+    ]
+)
+
+cc_binary_multiple(
+    name = 'compile-scripts-cpp',
+    srcs = glob(['src/scripts/*.cpp']),
+    deps = ['//client/cpp:krpc']
+)
+
+filegroup(
+    name = 'compile-scripts-csharp',
+    srcs = [
+        ':compile-scripts-csharp-exes',
+        ':compile-scripts-csharp-libs'
+    ]
+)
+
+csharp_binary_multiple(
+    name = 'compile-scripts-csharp-exes',
+    srcs = glob(['src/scripts/*.cs'], exclude=['src/scripts/*.lib.cs']),
+    deps = [
+        '//client/csharp:KRPC.Client',
+        '//tools/build/mono-4.5:Google.Protobuf',
+        '//tools/build/mono-4.5:mscorlib',
+        '//tools/build/mono-4.5:System',
+        '//tools/build/mono-4.5:System.Core',
+        '//tools/build/mono-4.5:System.Runtime',
+        '//tools/build/mono-4.5:System.IO',
+        '//tools/build/mono-4.5:System.Xml',
+        '//tools/build/mono-4.5:System.Xml.Linq'
+    ]
+)
+
+csharp_library_multiple(
+    name = 'compile-scripts-csharp-libs',
+    srcs = glob(['src/scripts/*.lib.cs']),
+    deps = [
+        '//server:KRPC',
+        '//tools/build/ksp:Google.Protobuf',
+        '//tools/build/ksp:Assembly-CSharp',
+        '//tools/build/ksp:Assembly-CSharp-firstpass',
+        '//tools/build/ksp:UnityEngine',
+        '//tools/build/ksp:TDx.TDxInput',
+        '//tools/build/ksp:mscorlib',
+        '//tools/build/ksp:System',
+        '//tools/build/ksp:System.Core',
+        '//tools/build/ksp:System.Xml',
+        '//tools/build/ksp:System.Xml.Linq'
+    ]
+)
+
+java_binary_multiple(
+    name = 'compile-scripts-java',
+    srcs = glob(['src/scripts/*.java']),
+    deps = [
+        '//client/java:krpc-jar',
+        '//tools/build/protobuf:protobuf',
+        '@java_javatuples//:jar'
+    ]
 )

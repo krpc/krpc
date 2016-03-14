@@ -16,6 +16,8 @@ import krpc.schema.KRPC;
 
 public class Connection {
 
+    private final Object connectionLock = new Object();
+
     private Socket rpcSocket;
     private CodedOutputStream rpcOutputStream;
     private CodedInputStream rpcInputStream;
@@ -163,7 +165,9 @@ public class Connection {
      * @throws IOException
      */
     public void close() throws IOException {
-        rpcSocket.close();
+        synchronized (connectionLock) {
+            rpcSocket.close();
+        }
         streamManager.close();
     }
 
@@ -176,10 +180,13 @@ public class Connection {
     }
 
     ByteString invoke(KRPC.Request request) throws RPCException, IOException {
-        rpcOutputStream.writeMessageNoTag(request);
-        rpcOutputStream.flush();
-        int size = rpcInputStream.readRawVarint32();
-        byte[] data = rpcInputStream.readRawBytes(size);
+        byte[] data;
+        synchronized (connectionLock) {
+            rpcOutputStream.writeMessageNoTag(request);
+            rpcOutputStream.flush();
+            int size = rpcInputStream.readRawVarint32();
+            data = rpcInputStream.readRawBytes(size);
+        }
         KRPC.Response response = KRPC.Response.parseFrom(data);
         if (response.getHasError())
             throw new RPCException(response.getError());
