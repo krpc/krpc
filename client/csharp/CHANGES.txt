@@ -1,3 +1,6 @@
+v0.2.3
+ * Make client thread safe
+
 v0.2.2
  * Remove support for protobuf enumeration and custom protobuf messages
 
