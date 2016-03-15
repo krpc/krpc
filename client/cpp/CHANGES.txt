@@ -1,4 +1,5 @@
 v0.2.3
+ * Make client thread safe
  * Add checks for asio.hpp and protobuf library to cmake script
  * Add Windows with MSVC support to cmake script
  * Fix compiler warnings reported by MSVC
