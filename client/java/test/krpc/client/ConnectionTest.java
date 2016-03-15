@@ -226,7 +226,7 @@ public class ConnectionTest {
     @Test
     public void testThreadSafe() throws InterruptedException {
         int threadCount = 4;
-        int repeats = 1000;
+        final int repeats = 1000;
         final CountDownLatch latch = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {
             new Thread(new Runnable() {
