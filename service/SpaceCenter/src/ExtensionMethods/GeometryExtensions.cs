@@ -330,6 +330,19 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Multiply a 4x4 Matrix by a scalar (simulating 3x3 matrix) (does not allocate)
+        /// </summary>
+        public static Matrix4x4 MultiplyScalar (this Matrix4x4 left, float right)
+        {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    left [i, j] = left [i, j] * right;
+                }
+            }
+            return left;
+        }
+
+        /// <summary>
         /// Returns the diagonal 3-vector from the 4x4 matrix (simulating 3x3 matrix)
         /// </summary>
         public static Vector3d Diag (this Matrix4x4 m) {

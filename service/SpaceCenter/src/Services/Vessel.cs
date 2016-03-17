@@ -475,14 +475,12 @@ namespace KRPC.SpaceCenter.Services
                     inertiaTensor = inertiaTensor.Add(position.OuterProduct(-part.rb.mass * position));
                 }
             }
-            return inertiaTensor;
+            return inertiaTensor.MultiplyScalar (1000f);
         }
 
         /// <summary>
         /// Computes the sum of the available reaction wheel torque in the vessel pitch, roll, yaw frame.
         /// </summary>
-        ///
-        /// FIXME: units
         Vector3d ComputeReactionWheelTorque ()
         {
             Vector3d reactionWheelTorque = Vector3d.zero;
