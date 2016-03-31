@@ -27,7 +27,7 @@ namespace KRPC
             } catch (ServiceException e) {
                 OK = false;
                 var path = (e.Assembly == null ? "unknown" : e.Assembly.Location);
-                PopupDialog.SpawnPopupDialog ("kRPC service error - plugin disabled", e.Message + "\n\n" + path, "OK", true, HighLogic.Skin);
+                PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "kRPC service error - plugin disabled", e.Message + "\n\n" + path, "OK", true, HighLogic.UISkin);
             }
         }
 
@@ -42,7 +42,7 @@ namespace KRPC
                     msg += "\n" + notDocumented [i];
                 if (n > 10)
                     msg += "\n...";
-                PopupDialog.SpawnPopupDialog ("kRPC service warning", msg, "OK", true, HighLogic.Skin);
+                PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "kRPC service warning", msg, "OK", true, HighLogic.UISkin);
             }
         }
 
