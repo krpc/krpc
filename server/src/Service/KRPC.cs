@@ -124,5 +124,57 @@ namespace KRPC.Service
         {
             KRPCServer.Context.Server.RemoveStream (KRPCServer.Context.RPCClient, id);
         }
+
+        /// <summary>
+        /// KSP game scene.
+        /// </summary>
+        [KRPCEnum]
+        public enum GameScene
+        {
+            /// <summary>
+            /// Space center.
+            /// </summary>
+            SpaceCenter,
+            /// <summary>
+            /// Flight.
+            /// </summary>
+            Flight,
+            /// <summary>
+            /// Tracking station.
+            /// </summary>
+            TrackingStation,
+            /// <summary>
+            /// Vehicle assembly building.
+            /// </summary>
+            EditorVAB,
+            /// <summary>
+            /// Space plane hangar.
+            /// </summary>
+            EditorSPH
+        };
+
+        /// <summary>
+        /// Get the current game scene.
+        /// </summary>
+        [KRPCProperty]
+        public static GameScene CurrentGameScene
+        {
+            get {
+                switch (KRPCServer.Context.GameScene) {
+                case global::KRPC.Service.GameScene.SpaceCenter:
+                    return GameScene.SpaceCenter;
+                case global::KRPC.Service.GameScene.Flight:
+                    return GameScene.Flight;
+                case global::KRPC.Service.GameScene.TrackingStation:
+                    return GameScene.TrackingStation;
+                case global::KRPC.Service.GameScene.EditorVAB:
+                    return GameScene.EditorVAB;
+                case global::KRPC.Service.GameScene.EditorSPH:
+                    return GameScene.EditorSPH;
+                default:
+                    throw new InvalidOperationException ("Unknown game scene");
+                }
+            }
+        }
     }
 }

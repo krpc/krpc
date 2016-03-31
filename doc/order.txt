@@ -609,3 +609,10 @@ KRPC.AddStream
 KRPC.GetStatus
 KRPC.RemoveStream
 KRPC.GetServices
+KRPC.CurrentGameScene
+KRPC.GameScene
+KRPC.GameScene.SpaceCenter
+KRPC.GameScene.Flight
+KRPC.GameScene.TrackingStation
+KRPC.GameScene.EditorVAB
+KRPC.GameScene.EditorSPH
