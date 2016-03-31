@@ -87,7 +87,7 @@ namespace KRPC.SpaceCenter.Services
             // Update the UI buttons
             var modeIndex = (int)vessel.Autopilot.Mode;
             var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
-            modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
+            modeButtons [modeIndex].SetState (true);
         }
 
         /// <summary>
