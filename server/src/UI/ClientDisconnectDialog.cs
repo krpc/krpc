@@ -9,12 +9,11 @@ namespace KRPC.UI
         protected override void Init ()
         {
             Title = "kRPC";
-            Skin = UI.Skin.DefaultSkin;
-            Options.Add (new DialogOption ("Yes, disconnect the client", () => {
+            Options.Add (new DialogGUIButton ("Yes, disconnect the client", () => {
                 client.Close ();
                 Close ();
             }));
-            Options.Add (new DialogOption ("No, don't disconnect the client", Close));
+            Options.Add (new DialogGUIButton ("No, don't disconnect the client", Close));
         }
 
         protected override void Opened ()

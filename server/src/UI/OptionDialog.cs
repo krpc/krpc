@@ -13,9 +13,9 @@ namespace KRPC.UI
 
         protected string Message { get; set; }
 
-        protected GUISkin Skin { get; set; }
+        protected UISkinDef Skin { get; set; }
 
-        protected List<DialogOption> Options { get; private set; }
+        protected List<DialogGUIButton> Options { get; private set; }
 
         public event EventHandler OnOpen;
         public event EventHandler OnClose;
@@ -24,7 +24,7 @@ namespace KRPC.UI
 
         protected OptionDialog ()
         {
-            Options = new List<DialogOption> ();
+            Options = new List<DialogGUIButton> ();
         }
 
         public void Awake ()
@@ -47,7 +47,7 @@ namespace KRPC.UI
         {
             if (!Visible) {
                 if (Skin == null)
-                    Skin = UI.Skin.DefaultSkin;
+                    Skin = HighLogic.UISkin;
                 Visible = true;
                 Opened ();
                 if (OnOpen != null)
