@@ -97,15 +97,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public SpeedMode SpeedMode {
             get { return GetSpeedMode (); }
-            set {
-                var startMode = FlightUIController.speedDisplayMode;
-                var mode = value.FromSpeedMode ();
-                while (FlightUIController.speedDisplayMode != mode) {
-                    FlightUIController.fetch.cycleSpdModes ();
-                    if (FlightUIController.speedDisplayMode == startMode)
-                        break;
-                }
-            }
+            set { throw new NotImplementedException (); }
         }
 
         internal static SpeedMode GetSpeedMode ()
