@@ -3,8 +3,10 @@ using KRPC.Client.Services;
 using KRPC.Client.Services.KRPC;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 using GameScene = KRPC.Client.Services.KRPC.GameScene;
 using TestEnum = KRPC.Client.Services.TestService.TestEnum;
@@ -252,5 +254,24 @@ namespace KRPC.Client.Test
         //self.assertNotEqual(type(obj1), type(obj2))
         //self.assertEqual(type(obj1), conn1.test_service.TestClass)
         //self.assertEqual(type(obj2), conn2.test_service.TestClass)
+
+        [Test]
+        public void ThreadSafe ()
+        {
+            int threadCount = 4;
+            int repeats = 1000;
+            var counter = new CountdownEvent (threadCount);
+            for (int i = 0; i < threadCount; i++) {
+                new Thread (() => {
+                    for (int j = 0; j < repeats; j++) {
+                        Assert.AreEqual ("False", connection.TestService ().BoolToString (false));
+                        Assert.AreEqual (12345, connection.TestService ().StringToInt32 ("12345"));
+                    }
+                    counter.Signal ();
+                }).Start ();
+            }
+            counter.Wait (10 * 1000);
+            Assert.IsTrue (counter.IsSet);
+        }
     }
 }
