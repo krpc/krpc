@@ -25,9 +25,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static bool IsPhysicallySignificant (this Part part)
         {
-            return (!part.HasModule<ModuleLandingGear> ()) &&
-            (!part.HasModule<LaunchClamp> ()) &&
-            (part.physicalSignificance != Part.PhysicalSignificance.NONE);
+            return !part.HasModule<LaunchClamp> () && part.physicalSignificance != Part.PhysicalSignificance.NONE;
         }
 
         /// <summary>
