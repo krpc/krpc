@@ -13,6 +13,11 @@ TEST_F(test_client, test_version) {
   ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
 }
 
+TEST_F(test_client, test_current_game_scene) {
+  krpc::services::KRPC::GameScene scene = krpc.current_game_scene();
+  ASSERT_EQ(krpc::services::KRPC::GameScene::space_center, scene);
+}
+
 TEST_F(test_client, test_error) {
   ASSERT_THROW(test_service.throw_argument_exception(), krpc::RPCError);
   try {
@@ -233,4 +238,30 @@ TEST_F(test_client, test_line_endings) {
     test_service.set_string_property(*i);
     ASSERT_EQ(*i, test_service.string_property());
   }
+}
+
+TEST_F(test_client, test_thread_safe) {
+  const int thread_count = 2;
+  const int repeats = 1000;
+
+  std::atomic_int count;
+  count = thread_count;
+
+  std::vector<std::thread> threads;
+  for (int i = 0; i < thread_count; i++)
+    threads.push_back(
+      std::thread(
+        [this](std::atomic_int* count) {
+          for (int j = 0; j < repeats; j++)
+          {
+            ASSERT_EQ("False", test_service.bool_to_string(false));
+            ASSERT_EQ(12345, test_service.string_to_int32("12345"));
+          }
+          (*count)--;
+        },
+        &count));
+
+  for (auto& t : threads)
+    t.join();
+  ASSERT_EQ(count, 0);
 }

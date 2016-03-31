@@ -55,3 +55,11 @@ class CsharpDomain(Domain):
         else:
             raise RuntimeError(str(obj))
         return ':%s:`%s`' % (prefix, self.ref(obj))
+
+    def shorten_ref(self, name, obj=None):
+        # TODO: Drop service name from all non-service members.
+        # TODO: This will cause issues if there a a name clash is introduced between services.
+        if obj and (isinstance(obj, Procedure) or isinstance(obj, Property)):
+            return name
+        _,_,name = name.partition('.')
+        return name

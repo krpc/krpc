@@ -9,7 +9,7 @@ file for the rocket can be :download:`downloaded here
 here </scripts/LaunchIntoOrbit.py>`.
 
 The following code connects to the server, gets the active vessel, sets up a
-bunch streams to get flight telemetry then prepares the rocket for launch.
+bunch of streams to get flight telemetry then prepares the rocket for launch.
 
 .. literalinclude:: /scripts/LaunchIntoOrbit.py
    :lines: 1-30

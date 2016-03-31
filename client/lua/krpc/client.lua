@@ -10,28 +10,6 @@ local service = require 'krpc.service'
 local to_snake_case = service.to_snake_case
 local create_service = service.create_service
 
-local KRPC = class()
-
-function KRPC:_init(client)
-  self._client = client
-end
-
-function KRPC:get_status()
-  return self._client:_invoke('KRPC', 'GetStatus', nil, nil, nil, nil, self._client._types:as_type('KRPC.Status'))
-end
-
-function KRPC:get_services()
-  return self._client:_invoke('KRPC', 'GetServices', nil, nil, nil, nil, self._client._types:as_type('KRPC.Services'))
-end
-
-function KRPC:add_stream()
-  error('Not implemented')
-end
-
-function KRPC:get_stream()
-  error('Not implemented')
-end
-
 local Client = class()
 
 function Client:_init(rpc_connection, stream_connection)
@@ -42,25 +20,11 @@ function Client:_init(rpc_connection, stream_connection)
   self._response_type = self._types:as_type('KRPC.Response')
 
   -- Set up the main KRPC service
-  self.krpc = KRPC(self)
-
-  local services = self.krpc:get_services().services
-
-  -- Create class types
-  for _,service in ipairs(services) do
-    for _,procedure in ipairs(service.procedures) do
-      local ok,name = pcall(Attributes.get_class_name, procedure.attributes)
-      if ok then
-        self._types:as_type('Class(' + service.name + '.' + name + ')')
-      end
-    end
-  end
+  local services = self:_invoke('KRPC', 'GetServices', nil, nil, nil, nil, self._types:as_type('KRPC.Services')).services
 
   -- Set up services
   for _,service in ipairs(services) do
-    if service.name ~= 'KRPC' then
-      self[to_snake_case(service.name)] = create_service(self, service)
-    end
+    self[to_snake_case(service.name)] = create_service(self, service)
   end
 end
 

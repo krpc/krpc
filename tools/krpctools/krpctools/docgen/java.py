@@ -1,5 +1,7 @@
 from .domain import Domain
 from .nodes import *
+from ..utils import lower_camel_case
+from krpc.utils import snake_case
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class JavaDomain(Domain):
@@ -81,6 +83,31 @@ class JavaDomain(Domain):
             return ':class:`org.javatuples.%s<%s>`' % (name, ','.join(self.type(typ, True) for typ in typ.value_types))
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
+
+    def ref(self, obj):
+        name = obj.fullname
+        if isinstance(obj, Procedure) or isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod):
+            parameters = [self.type(p.type) for p in obj.parameters]
+            if isinstance(obj, ClassMethod):
+                parameters = parameters[1:]
+            name = name.split('.')
+            name[-1] = lower_camel_case(name[-1])+'('+', '.join(parameters)+')'
+            name = '.'.join(name)
+        elif isinstance(obj, Property) or isinstance(obj, ClassProperty):
+            name = name.split('.')
+            name[-1] = 'get'+name[-1]+'()'
+            name = '.'.join(name)
+        elif isinstance(obj, EnumerationValue):
+            name = name.split('.')
+            name[-1] = snake_case(name[-1]).upper()
+            name = '.'.join(name)
+        return self.shorten_ref(name)
+
+    def shorten_ref(self, name):
+        # TODO: Drop service name from all members.
+        # TODO: This will cause issues if there a a name clash is introduced between services.
+        _,_,name = name.partition('.')
+        return name
 
     def see(self, obj):
         if isinstance(obj, Procedure) or isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod) or \

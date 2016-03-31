@@ -1,13 +1,13 @@
 {% macro service(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. module:: {{ x.name }}
 
-{{ x.documentation | parsedoc | indent }}
+{{ x.documentation | parsedoc }}
 
 {% for member in x.members.values() %}
 {% if member.member_type == 'procedure' %}
-{{ procedure(member) | indent }}
+{{ procedure(member) }}
 {% elif member.member_type == 'property' %}
-{{ property(member) | indent }}
+{{ property(member) }}
 {% endif %}
 
 {% endfor %}

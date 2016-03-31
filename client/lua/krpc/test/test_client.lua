@@ -17,6 +17,10 @@ function TestClient:test_version()
   luaunit.assertStrMatches(status.version, '%d+.%d+.%d+')
 end
 
+function TestClient:test_current_game_scene()
+  luaunit.assertEquals(self.conn.krpc.GameScene.space_center, self.conn.krpc:get_current_game_scene())
+end
+
 function TestClient:test_error()
   luaunit.assertErrorMsgContains('Invalid argument', self.conn.test_service.throw_argument_exception)
   luaunit.assertErrorMsgContains('Invalid operation', self.conn.test_service.throw_invalid_operation_exception)

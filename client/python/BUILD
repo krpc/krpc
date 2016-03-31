@@ -24,7 +24,7 @@ py_sdist(
         '//:readme', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
         'setup.py', 'MANIFEST.in', ':version',
-        '//protobuf:py'
+        '//protobuf:python'
     ] + glob(['krpc/**/*']),
     path_map = {
         'client/python/': '',

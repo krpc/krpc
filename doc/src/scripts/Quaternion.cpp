@@ -2,12 +2,14 @@
 #include <krpc/services/space_center.hpp>
 #include <iostream>
 
-using namespace krpc;
 using namespace krpc::services;
 
 int main() {
-  Client conn = krpc::connect();
+  krpc::Client conn = krpc::connect();
   SpaceCenter sc(&conn);
-  auto q = sc.active_vessel().flight().rotation();
-  std::cout << q.get<0>() << " " << q.get<1>() << " " << q.get<2>() << " " << q.get<3>() << std::endl;
+  std::tuple<double,double,double,double> q = sc.active_vessel().flight().rotation();
+  std::cout << std::get<0>(q) << " "
+            << std::get<1>(q) << " "
+            << std::get<2>(q) << " "
+            << std::get<3>(q) << std::endl;
 }

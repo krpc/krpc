@@ -1,14 +1,19 @@
 from .domain import Domain
 from .nodes import *
-from .utils import snakecase
+from krpc.utils import snake_case
 from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class LuaDomain(Domain):
-
     name = 'lua'
     prettyname = 'Lua'
     sphinxname = 'lua'
     codeext = 'lua'
+
+    value_map = {
+        'null': 'nil',
+        'true': 'True',
+        'false': 'False'
+    }
 
     type_map = {
         'double': 'number',
@@ -20,12 +25,6 @@ class LuaDomain(Domain):
         'bool': 'boolean',
         'string': 'string',
         'bytes': 'string'
-    }
-
-    value_map = {
-        'null': 'nil',
-        'true': 'True',
-        'false': 'False'
     }
 
     def __init__(self, macros):
@@ -77,9 +76,13 @@ class LuaDomain(Domain):
            isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod) or isinstance(obj, ClassProperty) or \
            isinstance(obj, EnumerationValue):
             name = name.split('.')
-            name[-1] = snakecase(name[-1])
+            name[-1] = snake_case(name[-1])
             name = '.'.join(name)
         return self.shorten_ref(name)
+
+    # FIXME: reference shortening does not work with sphinx-lua
+    def shorten_ref(self, name):
+        return name
 
     def see(self, obj):
         if isinstance(obj, Property) or isinstance(obj, ClassProperty) or isinstance(obj, EnumerationValue):
@@ -93,4 +96,4 @@ class LuaDomain(Domain):
         return ':%s:`%s`' % (prefix, self.ref(obj))
 
     def paramref(self, name):
-        return super(LuaDomain, self).paramref(snakecase(name))
+        return super(LuaDomain, self).paramref(snake_case(name))

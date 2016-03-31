@@ -12,6 +12,7 @@ namespace krpc {
   private:
     std::shared_ptr<Connection> rpc_connection;
     StreamManager stream_manager;
+    std::shared_ptr<std::mutex> lock;
   public:
 
     Client();
