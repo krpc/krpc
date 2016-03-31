@@ -23,7 +23,7 @@ namespace KRPC.SpaceCenter.Utils
 
         public Vector3 Error {
             get {
-                var velocity = ReferenceFrame.AngularVelocityFromWorldSpace (-vessel.rigidbody.angularVelocity);
+                var velocity = ReferenceFrame.AngularVelocityFromWorldSpace (-vessel.angularVelocity);
                 var error = Target - velocity;
                 var pitchAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.right));
                 var yawAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.forward));
