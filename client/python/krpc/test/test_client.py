@@ -20,6 +20,9 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRegexpMatches (status.version, '^[0-9]+\.[0-9]+\.[0-9]+$')
         self.assertGreater(status.bytes_read, 0)
 
+    def test_current_game_scene(self):
+        self.assertEqual(self.conn.krpc.GameScene.space_center, self.conn.krpc.current_game_scene)
+
     def test_error(self):
         with self.assertRaises(krpc.client.RPCError) as cm:
             self.conn.test_service.throw_argument_exception()
@@ -130,16 +133,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object('jeb')
         self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', '5')
 
-    def test_client_members(self):
-        self.assertSetEqual(
-            set(['krpc', 'test_service']),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn))))
-
-    def test_krpc_service_members(self):
-        self.assertSetEqual(
-            set(['get_services', 'get_status']),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn.krpc))))
-
     def test_enums(self):
         enum = self.conn.test_service.TestEnum
         self.assertEqual(enum.value_b, self.conn.test_service.enum_return())
@@ -187,7 +180,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_krpc_service_members(self):
         self.assertSetEqual(
-            set(['get_services', 'get_status', 'add_stream', 'remove_stream']),
+            set(['get_services', 'get_status', 'add_stream', 'remove_stream', 'current_game_scene', 'GameScene']),
             set(filter(lambda x: not x.startswith('_'), dir(self.conn.krpc))))
 
     def test_test_service_service_members(self):
