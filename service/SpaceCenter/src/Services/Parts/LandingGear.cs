@@ -26,7 +26,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Landing gear is being retracted.
         /// </summary>
-        Retracting
+        Retracting,
+        /// <summary>
+        /// Landing gear is broken.
+        /// </summary>
+        Broken
     }
 
     /// <summary>
@@ -36,14 +40,16 @@ namespace KRPC.SpaceCenter.Services.Parts
     public sealed class LandingGear : Equatable<LandingGear>
     {
         readonly Part part;
-        readonly ModuleLandingGear gear;
+        readonly ModuleWheels.ModuleWheelDeployment deployment;
+        readonly ModuleWheels.ModuleWheelDamage damage;
 
         internal LandingGear (Part part)
         {
             this.part = part;
-            gear = part.InternalPart.Module<ModuleLandingGear> ();
-            if (gear == null)
-                throw new ArgumentException ("Part does not have a ModuleLandingGear PartModule");
+            deployment = part.InternalPart.Module<ModuleWheels.ModuleWheelDeployment> ();
+            damage = part.InternalPart.Module<ModuleWheels.ModuleWheelDamage> ();
+            if (deployment == null || damage == null)
+                throw new ArgumentException ("Part does not have a ModuleWheelDeployment and ModuleWheelDamage PartModules");
         }
 
         /// <summary>
@@ -51,7 +57,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (LandingGear obj)
         {
-            return part == obj.part && gear == obj.gear;
+            return part == obj.part && deployment == obj.deployment && damage == obj.damage;
         }
 
         /// <summary>
@@ -59,7 +65,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ gear.GetHashCode ();
+            return part.GetHashCode () ^ deployment.GetHashCode () ^ damage.GetHashCode ();
         }
 
         /// <summary>
@@ -76,18 +82,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public LandingGearState State {
             get {
-                switch (gear.gearState) {
-                case ModuleLandingGear.GearStates.DEPLOYED:
-                    return LandingGearState.Deployed;
-                case ModuleLandingGear.GearStates.RETRACTED:
-                    return LandingGearState.Retracted;
-                case ModuleLandingGear.GearStates.DEPLOYING:
-                    return LandingGearState.Deploying;
-                case ModuleLandingGear.GearStates.RETRACTING:
-                    return LandingGearState.Retracting;
-                default:
-                    throw new ArgumentException ("Unknown landing gear state");
-                }
+                throw new NotImplementedException ();
             }
         }
 
@@ -98,10 +93,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Deployed {
             get { return State == LandingGearState.Deployed; }
             set {
-                if (value)
-                    gear.LowerLandingGear ();
-                else
-                    gear.RaiseLandingGear ();
+                throw new NotImplementedException ();
             }
         }
     }

@@ -201,14 +201,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A list of all landing legs attached to the vessel.
-        /// </summary>
-        [KRPCProperty]
-        public IList<LandingLeg> LandingLegs {
-            get { return All.Where (part => part.IsLandingLeg).Select (part => part.LandingLeg).ToList (); }
-        }
-
-        /// <summary>
         /// A list of all launch clamps attached to the vessel.
         /// </summary>
         [KRPCProperty]

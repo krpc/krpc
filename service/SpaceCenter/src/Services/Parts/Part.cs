@@ -363,11 +363,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         internal bool IsLandingGear {
-            get { return InternalPart.HasModule<ModuleLandingGear> (); }
-        }
-
-        internal bool IsLandingLeg {
-            get { return InternalPart.HasModule<ModuleLandingLeg> (); }
+            get { return InternalPart.HasModule<ModuleWheels.ModuleWheelDeployment> () && InternalPart.HasModule<ModuleWheels.ModuleWheelDamage> (); }
         }
 
         internal bool IsLaunchClamp {
@@ -444,14 +440,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public LandingGear LandingGear {
             get { return IsLandingGear ? new LandingGear (this) : null; }
-        }
-
-        /// <summary>
-        /// A <see cref="LandingLeg"/> if the part is a landing leg, otherwise <c>null</c>.
-        /// </summary>
-        [KRPCProperty]
-        public LandingLeg LandingLeg {
-            get { return IsLandingLeg ? new LandingLeg (this) : null; }
         }
 
         /// <summary>

@@ -231,7 +231,6 @@ SpaceCenter.Parts.DockingPorts
 SpaceCenter.Parts.DockingPortWithName
 SpaceCenter.Parts.Engines
 SpaceCenter.Parts.LandingGear
-SpaceCenter.Parts.LandingLegs
 SpaceCenter.Parts.LaunchClamps
 SpaceCenter.Parts.Lights
 SpaceCenter.Parts.Parachutes
@@ -278,7 +277,6 @@ SpaceCenter.Part.Decoupler
 SpaceCenter.Part.DockingPort
 SpaceCenter.Part.Engine
 SpaceCenter.Part.LandingGear
-SpaceCenter.Part.LandingLeg
 SpaceCenter.Part.LaunchClamp
 SpaceCenter.Part.Light
 SpaceCenter.Part.Parachute
@@ -366,17 +364,7 @@ SpaceCenter.LandingGearState.Deployed
 SpaceCenter.LandingGearState.Retracted
 SpaceCenter.LandingGearState.Deploying
 SpaceCenter.LandingGearState.Retracting
-SpaceCenter.LandingLeg
-SpaceCenter.LandingLeg.Part
-SpaceCenter.LandingLeg.State
-SpaceCenter.LandingLeg.Deployed
-SpaceCenter.LandingLegState
-SpaceCenter.LandingLegState.Deployed
-SpaceCenter.LandingLegState.Retracted
-SpaceCenter.LandingLegState.Deploying
-SpaceCenter.LandingLegState.Retracting
-SpaceCenter.LandingLegState.Broken
-SpaceCenter.LandingLegState.Repairing
+SpaceCenter.LandingGearState.Broken
 SpaceCenter.LaunchClamp
 SpaceCenter.LaunchClamp.Part
 SpaceCenter.LaunchClamp.Release

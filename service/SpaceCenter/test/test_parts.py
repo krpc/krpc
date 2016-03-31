@@ -287,10 +287,7 @@ class TestParts(testingtools.TestCase):
             sorted(x.part.title for x in self.parts.engines))
 
     def test_landing_gear(self):
-        self.assertEqual(['LY-10 Small Landing Gear'], sorted(x.part.title for x in self.parts.landing_gear))
-
-    def test_landing_legs(self):
-        self.assertEqual(['LT-1 Landing Struts']*3, sorted(x.part.title for x in self.parts.landing_legs))
+        self.assertEqual(['LY-10 Small Landing Gear'] + ['LT-1 Landing Struts']*3, sorted(x.part.title for x in self.parts.landing_gear))
 
     def test_launch_clamps(self):
         self.assertEqual(['TT18-A Launch Stability Enhancer']*6, sorted(x.part.title for x in self.parts.launch_clamps))
