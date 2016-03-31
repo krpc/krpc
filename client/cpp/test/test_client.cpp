@@ -13,6 +13,11 @@ TEST_F(test_client, test_version) {
   ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
 }
 
+TEST_F(test_client, test_current_game_scene) {
+  krpc::services::KRPC::GameScene scene = krpc.current_game_scene();
+  ASSERT_EQ(krpc::services::KRPC::GameScene::space_center, scene);
+}
+
 TEST_F(test_client, test_error) {
   ASSERT_THROW(test_service.throw_argument_exception(), krpc::RPCError);
   try {

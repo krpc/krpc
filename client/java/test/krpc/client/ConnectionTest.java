@@ -45,6 +45,11 @@ public class ConnectionTest {
         assertTrue(status.getBytesRead() > 0);
     }
 
+    @Test
+    public void testCurrentGameScene() throws RPCException, IOException {
+        assertEquals(KRPC.GameScene.SPACE_CENTER, krpc.getCurrentGameScene());
+    }
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 

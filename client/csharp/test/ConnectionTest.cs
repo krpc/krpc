@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 
+using GameScene = KRPC.Client.Services.KRPC.GameScene;
 using TestEnum = KRPC.Client.Services.TestService.TestEnum;
 
 namespace KRPC.Client.Test
@@ -19,6 +20,12 @@ namespace KRPC.Client.Test
             var status = connection.KRPC ().GetStatus ();
             StringAssert.IsMatch ("^[0-9]+\\.[0-9]+\\.[0-9]+$", status.Version);
             Assert.Greater (status.BytesRead, 0);
+        }
+
+        [Test]
+        public void CurrentGameScene ()
+        {
+            Assert.AreEqual (GameScene.SpaceCenter, connection.KRPC ().CurrentGameScene);
         }
 
         [Test]
