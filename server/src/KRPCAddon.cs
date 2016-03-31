@@ -2,6 +2,7 @@ using KRPC.Server;
 using KRPC.UI;
 using KRPC.Utils;
 using UnityEngine;
+using KSP.UI.Screens;
 
 namespace KRPC
 {
