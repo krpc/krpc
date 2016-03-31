@@ -207,6 +207,14 @@ namespace KRPC
         }
 
         /// <summary>
+        /// GUI update
+        /// </summary>
+        public void OnGUI ()
+        {
+            GUILayoutExtensions.OnGUI ();
+        }
+
+        /// <summary>
         /// Trigger server update
         /// </summary>
         public void FixedUpdate ()

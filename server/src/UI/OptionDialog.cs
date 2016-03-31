@@ -27,21 +27,11 @@ namespace KRPC.UI
             Options = new List<DialogGUIButton> ();
         }
 
-        public void Awake ()
-        {
-            RenderingManager.AddToPostDrawQueue (1, UpdateGUI);
-        }
-
         protected abstract void Init ();
 
         protected abstract void Opened ();
 
         protected abstract void Closed ();
-
-        public void OnDestroy ()
-        {
-            RenderingManager.RemoveFromPostDrawQueue (1, UpdateGUI);
-        }
 
         public void Open ()
         {
@@ -67,14 +57,14 @@ namespace KRPC.UI
             }
         }
 
-        void UpdateGUI ()
+        void OnGUI ()
         {
             if (!hasInit) {
                 Init ();
                 hasInit = true;
             }
             if (Visible) {
-                dialog.DrawWindow ();
+                dialog.Update ();
             }
         }
     }
