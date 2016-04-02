@@ -2,7 +2,7 @@ load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assem
 load('/tools/build/client_test', 'client_test')
 load('/tools/krpctools/clientgen', 'clientgen_csharp')
 load('/tools/build/pkg', 'pkg_zip')
-load('/config', 'version', 'author')
+load('/config', 'version', 'assembly_version', 'nuget_version', 'author')
 
 pkg_zip(
     name = 'csharp',
@@ -18,7 +18,7 @@ nuget_package(
     name = 'nuget',
     assembly = ':KRPC.Client',
     id = 'KRPC.Client',
-    version = version+'-beta1', #TODO: remove beta version number when Google.Protobuf is released
+    version = nuget_version,
     author = author,
     description = 'C# client for kRPC',
     project_url = 'https://github.com/krpc/krpc',
@@ -33,7 +33,7 @@ csharp_assembly_info(
     title = 'KRPC.Client',
     description = 'C# client for kRPC',
     copyright = author,
-    version = version,
+    version = assembly_version,
     internals_visible_to = ['KRPC.Client.Test']
 )
 

@@ -9,6 +9,7 @@ name = 'krpc-cpp-%s' % version
 autotools_dist(
     name = 'cpp',
     out = '%s.zip' % name,
+    source_dir = name,
     files = glob(['include/**/*.hpp', 'src/*.cpp', '**/Makefile.am']) + [
         '//:readme', '//:version', 'CHANGES.txt', 'INSTALL.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
