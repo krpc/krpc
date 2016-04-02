@@ -125,11 +125,15 @@
     <Compile Include="Services\Parts\SolarPanel.cs" />
     <Compile Include="Services\Parts\SolarPanelState.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
+    <Compile Include="Services\ResourceFlowMode.cs" />
     <Compile Include="Services\Resources.cs" />
     <Compile Include="Services\SASMode.cs" />
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\SpeedMode.cs" />
     <Compile Include="Services\Vessel.cs" />
+    <Compile Include="Services\VesselSituation.cs" />
+    <Compile Include="Services\VesselType.cs" />
+    <Compile Include="Services\WarpMode.cs" />
     <Compile Include="Utils\PIDController.cs" />
     <Compile Include="Utils\RotationRateController.cs" />
   </ItemGroup>
