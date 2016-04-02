@@ -6,7 +6,7 @@ import shutil
 import itertools
 
 def connect(name=''):
-    return krpc.connect(name=name, address='10.0.2.2')
+    return krpc.connect(name=name)
 
 def get_ksp_dir():
     path = os.path.abspath('../../../lib/ksp')
