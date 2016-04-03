@@ -271,10 +271,13 @@ public class Connection {
                 return internalAddStream(method, instance, args);
             }
         }
-        String[] params = new String[args.length];
-        for (int i = 0; i < args.length; i++)
-            params[i] = args[i].getClass().toString();
-        throw new StreamException("Failed to add stream. Method " + clazz.getName() + "." + methodName + "(" + String.join(",", params) + ") not found.");
+        String params = "";
+        for (int i = 0; i < args.length; i++) {
+            if (i > 0)
+                params += ",";
+            params += args[i].getClass().toString();
+        }
+        throw new StreamException("Failed to add stream. Method " + clazz.getName() + "." + methodName + "(" + params + ") not found.");
     }
 
     private <T> Stream<T> internalAddStream(Method method, Object instance, Object... args) throws StreamException, RPCException, IOException {
