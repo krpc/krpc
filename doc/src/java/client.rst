@@ -7,6 +7,7 @@ Java Client
 This client provides functionality to interact with a kRPC server from programs
 written in Java. A jar containing the ``krpc.client`` package can be
 :github-download-jar:`downloaded from GitHub <libkrpc>`.
+It requires Java version 1.7.
 
 Using the Library
 ----------------------
