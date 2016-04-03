@@ -2,7 +2,7 @@ load('/tools/krpctools/clientgen', 'clientgen_java')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
 
-copts = ['-Werror', '-Xlint:all']
+copts = ['-Werror', '-Xlint:all', '-target 1.7', '-source 1.7']
 
 filegroup(
     name = 'java',
@@ -66,6 +66,7 @@ java_test(
         ':junit',
         '@java_javatuples//:jar'
     ],
+    javacopts = copts,
     size = 'small',
     tags = ['requires-network']
 )
