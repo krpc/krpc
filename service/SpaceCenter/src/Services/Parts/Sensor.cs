@@ -14,12 +14,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleEnviroSensor sensor;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleEnviroSensor> ();
+        }
+
         internal Sensor (Part part)
         {
             this.part = part;
             sensor = part.InternalPart.Module<ModuleEnviroSensor> ();
             if (sensor == null)
-                throw new ArgumentException ("Part does not have a ModuleEnviroSensor PartModule");
+                throw new ArgumentException ("Part is not a sensor");
         }
 
         /// <summary>

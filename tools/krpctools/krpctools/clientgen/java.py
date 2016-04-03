@@ -1,5 +1,7 @@
 from .generator import Generator
 from .docparser import DocParser
+from ..utils import lower_camel_case, upper_camel_case
+from krpc.utils import snake_case
 import krpc.types
 import hashlib
 
@@ -26,14 +28,14 @@ class JavaGenerator(Generator):
 
 
     def parse_name(self, name):
-        name = self.to_lower_camel_case(name)
+        name = lower_camel_case(name)
         if name in self.keywords():
             return '%s_' % name
         else:
             return name
 
     def parse_const_name(self, name):
-        return self.to_snake_case(name).upper()
+        return snake_case(name).upper()
 
     def parse_type(self, typ, in_collection=False):
         if not in_collection and isinstance(typ, krpc.types.ValueType):
@@ -160,7 +162,7 @@ class JavaGenerator(Generator):
         properties = {}
         for name,info in context['properties'].items():
             if info['getter']:
-                properties['get'+self.to_upper_camel_case(name)] = {
+                properties['get'+upper_camel_case(name)] = {
                     'procedure': info['getter']['procedure'],
                     'remote_name': info['getter']['remote_name'],
                     'parameters': [],
@@ -168,7 +170,7 @@ class JavaGenerator(Generator):
                     'documentation': info['documentation']
                 }
             if info['setter']:
-                properties['set'+self.to_upper_camel_case(name)] = {
+                properties['set'+upper_camel_case(name)] = {
                     'procedure': info['setter']['procedure'],
                     'remote_name': info['setter']['remote_name'],
                     'parameters': self.generate_context_parameters(info['setter']['procedure']),
@@ -182,7 +184,7 @@ class JavaGenerator(Generator):
             class_properties = {}
             for name,info in class_info['properties'].items():
                 if info['getter']:
-                    class_properties['get'+self.to_upper_camel_case(name)] = {
+                    class_properties['get'+upper_camel_case(name)] = {
                         'procedure': info['getter']['procedure'],
                         'remote_name': info['getter']['remote_name'],
                         'parameters': [],
@@ -190,7 +192,7 @@ class JavaGenerator(Generator):
                         'documentation': info['documentation']
                     }
                 if info['setter']:
-                    class_properties['set'+self.to_upper_camel_case(name)] = {
+                    class_properties['set'+upper_camel_case(name)] = {
                         'procedure': info['setter']['procedure'],
                         'remote_name': info['setter']['remote_name'],
                         'parameters': [self.generate_context_parameters(info['setter']['procedure'])[1]],
@@ -275,7 +277,7 @@ class JavaDocParser(DocParser):
     def parse_cref(self, cref):
         if cref[0] == 'M':
             cref = cref[2:].split('.')
-            member = Generator.to_lower_camel_case(cref[-1])
+            member = lower_camel_case(cref[-1])
             del cref[-1]
             return '.'.join(cref)+'#'+member
         elif cref[0] == 'T':

@@ -1,6 +1,7 @@
 from .generator import Generator
 from .docparser import DocParser
 import krpc.types
+from krpc.utils import snake_case
 
 Types = krpc.types.Types()
 
@@ -30,7 +31,7 @@ class CppGenerator(Generator):
         ])
 
     def parse_name(self, name):
-        name = self.to_snake_case(name)
+        name = snake_case(name)
         if name in self.keywords():
             return '%s_' % name
         else:
@@ -209,7 +210,7 @@ class CppDocParser(DocParser):
     def parse_cref(self, cref):
         if cref[0] == 'M':
             cref = cref[2:].split('.')
-            member = Generator.to_snake_case(cref[-1])
+            member = snake_case(cref[-1])
             del cref[-1]
             return '::'.join(cref)+'::'+member
         elif cref[0] == 'T':

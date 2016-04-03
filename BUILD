@@ -1,5 +1,7 @@
 load('/tools/build/pkg', 'pkg_zip')
 load('/config', 'version')
+load('/config', 'avc_version')
+load('/config', 'ksp_avc_version')
 
 exports_files(['COPYING', 'COPYING.LESSER'])
 
@@ -38,23 +40,6 @@ You should have received a copy of the Lesser GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-version_parts = version.split('.')
-ksp_avc_version = """{
-  "NAME": "kRPC",
-  "URL": "http://ksp-avc.cybutek.net/version.php?id=254",
-  "DOWNLOAD": "https://github.com/krpc/krpc/releases/latest",
-  "VERSION": {
-    "MAJOR": %s,
-    "MINOR": %s,
-    "PATCH": %s
-  },
-  "KSP_VERSION": {
-    "MAJOR": 1,
-    "MINOR": 0,
-    "PATCH": 5
-  }
-}""" % (version_parts[0], version_parts[1], version_parts[2])
-
 genrule(
     name = 'license',
     outs = ['LICENSE'],
@@ -74,6 +59,14 @@ genrule(
     cmd = 'echo "%s" > "$@"' % version,
     visibility = ['//visibility:public']
 )
+
+ksp_avc_version = """{
+  "NAME": "kRPC",
+  "URL": "http://ksp-avc.cybutek.net/version.php?id=254",
+  "DOWNLOAD": "https://github.com/krpc/krpc/releases/latest",
+  "VERSION": { %s },
+  "KSP_VERSION": { %s }
+}""" % (avc_version, ksp_avc_version)
 
 genrule(
     name = 'ksp-avc-version',
@@ -106,14 +99,14 @@ pkg_zip(
         '//client/java',
         # Schema
         '//protobuf:krpc.proto',
-        '//protobuf:csharp',
-        '//protobuf:py',
         '//protobuf:cpp',
-        '//protobuf:lua',
+        '//protobuf:csharp',
         '//protobuf:java',
+        '//protobuf:lua',
+        '//protobuf:python',
         '//protobuf:LICENSE',
         # Docs
-        '//doc:latex',
+        '//doc:pdf',
     ],
     path_map = {
         'kRPC.version': 'GameData/kRPC/kRPC.version',
@@ -129,10 +122,16 @@ pkg_zip(
         'tools/build/ksp/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
         'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
+        # Clients
+        'client/cpp/': 'client/',
+        'client/csharp/': 'client/',
+        'client/java/': 'client/',
+        'client/lua/': 'client/',
+        'client/python/': 'client/',
         # Schema
         'protobuf/': 'schema/',
         # Docs
-        'doc/latex.pdf': 'kRPC.pdf',
+        'doc/kRPC.pdf': 'kRPC.pdf',
     }
 )
 

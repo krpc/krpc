@@ -78,14 +78,19 @@ namespace KRPC.Client
 
         internal ByteString Invoke (Request request)
         {
-            var outStream = new CodedOutputStream (rpcClient.GetStream ());
-            outStream.WriteLength (request.CalculateSize ());
-            request.WriteTo (outStream);
-            outStream.Flush ();
-
-            var inStream = new CodedInputStream (rpcClient.GetStream ());
             var response = new Response ();
-            inStream.ReadMessage (response);
+
+            lock (rpcClient)
+            {
+                var outStream = new CodedOutputStream (rpcClient.GetStream ());
+                outStream.WriteLength (request.CalculateSize ());
+                request.WriteTo (outStream);
+                outStream.Flush ();
+
+                var inStream = new CodedInputStream (rpcClient.GetStream ());
+                inStream.ReadMessage (response);
+            }
+
             if (response.HasError)
                 throw new RPCException (response.Error);
             return response.HasReturnValue ? response.ReturnValue : null;

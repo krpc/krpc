@@ -16,6 +16,8 @@ import krpc.schema.KRPC;
 
 public class Connection {
 
+    private final Object connectionLock = new Object();
+
     private Socket rpcSocket;
     private CodedOutputStream rpcOutputStream;
     private CodedInputStream rpcInputStream;
@@ -163,7 +165,9 @@ public class Connection {
      * @throws IOException
      */
     public void close() throws IOException {
-        rpcSocket.close();
+        synchronized (connectionLock) {
+            rpcSocket.close();
+        }
         streamManager.close();
     }
 
@@ -176,10 +180,13 @@ public class Connection {
     }
 
     ByteString invoke(KRPC.Request request) throws RPCException, IOException {
-        rpcOutputStream.writeMessageNoTag(request);
-        rpcOutputStream.flush();
-        int size = rpcInputStream.readRawVarint32();
-        byte[] data = rpcInputStream.readRawBytes(size);
+        byte[] data;
+        synchronized (connectionLock) {
+            rpcOutputStream.writeMessageNoTag(request);
+            rpcOutputStream.flush();
+            int size = rpcInputStream.readRawVarint32();
+            data = rpcInputStream.readRawBytes(size);
+        }
         KRPC.Response response = KRPC.Response.parseFrom(data);
         if (response.getHasError())
             throw new RPCException(response.getError());
@@ -264,10 +271,13 @@ public class Connection {
                 return internalAddStream(method, instance, args);
             }
         }
-        String[] params = new String[args.length];
-        for (int i = 0; i < args.length; i++)
-            params[i] = args[i].getClass().toString();
-        throw new StreamException("Failed to add stream. Method " + clazz.getName() + "." + methodName + "(" + String.join(",", params) + ") not found.");
+        String params = "";
+        for (int i = 0; i < args.length; i++) {
+            if (i > 0)
+                params += ",";
+            params += args[i].getClass().toString();
+        }
+        throw new StreamException("Failed to add stream. Method " + clazz.getName() + "." + methodName + "(" + params + ") not found.");
     }
 
     private <T> Stream<T> internalAddStream(Method method, Object instance, Object... args) throws StreamException, RPCException, IOException {

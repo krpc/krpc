@@ -3,11 +3,10 @@
 #include <iostream>
 #include <stack>
 
-using namespace krpc;
 using namespace krpc::services;
 
 int main() {
-  Client conn = krpc::connect("");
+  krpc::Client conn = krpc::connect("");
   SpaceCenter sc(&conn);
   auto vessel = sc.active_vessel();
 

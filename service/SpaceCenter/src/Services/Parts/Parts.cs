@@ -142,11 +142,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all cargo bays in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<CargoBay> CargoBays {
+            get { return All.Where (part => CargoBay.Is (part)).Select (part => new CargoBay (part)).ToList (); }
+        }
+
+        /// <summary>
         /// A list of all decouplers in the vessel.
         /// </summary>
         [KRPCProperty]
         public IList<Decoupler> Decouplers {
-            get { return All.Where (part => part.IsDecoupler).Select (part => part.Decoupler).ToList (); }
+            get { return All.Where (part => Decoupler.Is (part)).Select (part => new Decoupler (part)).ToList (); }
         }
 
         /// <summary>
@@ -154,23 +162,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<DockingPort> DockingPorts {
-            get { return All.Where (part => part.IsDockingPort).Select (part => part.DockingPort).ToList (); }
-        }
-
-        /// <summary>
-        /// A list of all resource converters in the vessel.
-        /// </summary>
-        [KRPCProperty]
-        public IList<ResourceConverter> ResourceConverters {
-            get { return All.Where (part => part.IsResourceConverter).Select (part => part.ResourceConverter).ToList (); }
-        }
-
-        /// <summary>
-        /// A list of all resource harvesters in the vessel.
-        /// </summary>
-        [KRPCProperty]
-        public IList<ResourceHarvester> ResourceHarvesters {
-            get { return All.Where (part => part.IsResourceHarvester).Select (part => part.ResourceHarvester).ToList (); }
+            get { return All.Where (part => DockingPort.Is (part)).Select (part => new DockingPort (part)).ToList (); }
         }
 
         /// <summary>
@@ -181,7 +173,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public DockingPort DockingPortWithName (string name)
         {
-            return All.Where (part => part.IsDockingPort).Select (part => part.DockingPort).FirstOrDefault (port => port.Name == name);
+            return All.Where (part => DockingPort.Is (part)).Select (part => new DockingPort (part)).FirstOrDefault (port => port.Name == name);
         }
 
         /// <summary>
@@ -189,7 +181,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Engine> Engines {
-            get { return All.Where (part => part.IsEngine).Select (part => part.Engine).ToList (); }
+            get { return All.Where (part => Engine.Is (part)).Select (part => new Engine (part)).ToList (); }
+        }
+
+        /// <summary>
+        /// A list of all fairings in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Fairing> Fairings {
+            get { return All.Where (part => Fairing.Is (part)).Select (part => new Fairing (part)).ToList (); }
+        }
+
+        /// <summary>
+        /// A list of all intakes in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Intake> Intakes {
+            get { return All.Where (part => Intake.Is (part)).Select (part => new Intake (part)).ToList (); }
         }
 
         /// <summary>
@@ -197,7 +205,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<LandingGear> LandingGear {
-            get { return All.Where (part => part.IsLandingGear).Select (part => part.LandingGear).ToList (); }
+            get { return All.Where (part => Services.Parts.LandingGear.Is (part)).Select (part => new LandingGear (part)).ToList (); }
         }
 
         /// <summary>
@@ -205,7 +213,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<LandingLeg> LandingLegs {
-            get { return All.Where (part => part.IsLandingLeg).Select (part => part.LandingLeg).ToList (); }
+            get { return All.Where (part => LandingLeg.Is (part)).Select (part => new LandingLeg (part)).ToList (); }
         }
 
         /// <summary>
@@ -213,7 +221,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<LaunchClamp> LaunchClamps {
-            get { return All.Where (part => part.IsLaunchClamp).Select (part => part.LaunchClamp).ToList (); }
+            get { return All.Where (part => LaunchClamp.Is (part)).Select (part => new LaunchClamp (part)).ToList (); }
         }
 
         /// <summary>
@@ -221,7 +229,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Light> Lights {
-            get { return All.Where (part => part.IsLight).Select (part => part.Light).ToList (); }
+            get { return All.Where (part => Light.Is (part)).Select (part => new Light (part)).ToList (); }
         }
 
         /// <summary>
@@ -229,7 +237,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Parachute> Parachutes {
-            get { return All.Where (part => part.IsParachute).Select (part => part.Parachute).ToList (); }
+            get { return All.Where (part => Parachute.Is (part)).Select (part => new Parachute (part)).ToList (); }
         }
 
         /// <summary>
@@ -237,7 +245,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Radiator> Radiators {
-            get { return All.Where (part => part.IsRadiator).Select (part => part.Radiator).ToList (); }
+            get { return All.Where (part => Radiator.Is (part)).Select (part => new Radiator (part)).ToList (); }
         }
 
         /// <summary>
@@ -245,7 +253,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<ReactionWheel> ReactionWheels {
-            get { return All.Where (part => part.IsReactionWheel).Select (part => part.ReactionWheel).ToList (); }
+            get { return All.Where (part => ReactionWheel.Is (part)).Select (part => new ReactionWheel (part)).ToList (); }
+        }
+
+        /// <summary>
+        /// A list of all resource converters in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<ResourceConverter> ResourceConverters {
+            get { return All.Where (part => ResourceConverter.Is (part)).Select (part => new ResourceConverter (part)).ToList (); }
+        }
+
+        /// <summary>
+        /// A list of all resource harvesters in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<ResourceHarvester> ResourceHarvesters {
+            get { return All.Where (part => ResourceHarvester.Is (part)).Select (part => new ResourceHarvester (part)).ToList (); }
         }
 
         /// <summary>
@@ -253,7 +277,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Sensor> Sensors {
-            get { return All.Where (part => part.IsSensor).Select (part => part.Sensor).ToList (); }
+            get { return All.Where (part => Sensor.Is (part)).Select (part => new Sensor (part)).ToList (); }
         }
 
         /// <summary>
@@ -261,7 +285,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<SolarPanel> SolarPanels {
-            get { return All.Where (part => part.IsSolarPanel).Select (part => part.SolarPanel).ToList (); }
+            get { return All.Where (part => SolarPanel.Is (part)).Select (part => new SolarPanel (part)).ToList (); }
         }
     }
 }

@@ -1,17 +1,25 @@
 load('/tools/build/lua', 'lua_rock', 'lua_test')
 load('/tools/build/client_test', 'client_test')
-load('/config', 'version')
+load('/config', 'version', 'lua_version')
 
 filegroup(
     name = 'lua',
-    srcs = [':client', ':rockspec'],
+    srcs = [':zip'],
     visibility = ['//visibility:public']
 )
 
+genrule(
+    name = 'zip',
+    srcs = [':rock'],
+    outs = ['krpc-lua-%s.zip' % version],
+    cmd = 'ln -f -r -s "$<" "$@"',
+    output_to_bindir = True
+)
+
 lua_rock(
-    name = 'client',
+    name = 'rock',
     pkg = 'krpc',
-    version = '%s-0' % version,
+    version = lua_version,
     rockspec = ':rockspec',
     srcs = glob(['krpc/**/*.lua']) + [
         '//:readme', '//:version', 'CHANGES.txt',
@@ -29,8 +37,8 @@ lua_rock(
 genrule(
     name = 'rockspec',
     srcs = ['rockspec.tmpl'],
-    outs = ['krpc-'+version+'-0.rockspec'],
-    cmd = 'sed \'s/%VERSION%/'+version+'/g\' $(locations :rockspec.tmpl) > $@',
+    outs = ['krpc-'+lua_version+'.rockspec'],
+    cmd = 'sed \'s/%VERSION%/'+lua_version+'/g\' $(locations :rockspec.tmpl) > $@',
     output_to_bindir = True
 )
 
@@ -45,7 +53,7 @@ client_test(
 lua_test(
     name = 'luatest',
     rockspec = ':rockspec',
-    srcrock = ':client',
+    srcrock = ':rock',
     deps = [
         '@lua_luafilesystem//file',
         '@lua_luasocket//file',

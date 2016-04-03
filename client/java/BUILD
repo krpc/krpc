@@ -2,7 +2,7 @@ load('/tools/krpctools/clientgen', 'clientgen_java')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
 
-copts = ['-Werror', '-Xlint:all']
+copts = ['-Werror', '-Xlint:all', '-target 1.7', '-source 1.7']
 
 filegroup(
     name = 'java',
@@ -15,7 +15,8 @@ genrule(
     srcs = [':krpc'],
     outs = ['krpc-java-%s.jar' % version],
     cmd = 'ln -f -r -s "$<" "$@"',
-    output_to_bindir = True
+    output_to_bindir = True,
+    visibility = ['//visibility:public']
 )
 
 java_library(
@@ -35,7 +36,8 @@ java_library(
         '//tools/build/protobuf:protobuf',
         '@java_javatuples//:jar'
     ],
-    javacopts = copts
+    javacopts = copts,
+    visibility = ['//visibility:public']
 )
 
 java_import(
@@ -64,6 +66,7 @@ java_test(
         ':junit',
         '@java_javatuples//:jar'
     ],
+    javacopts = copts,
     size = 'small',
     tags = ['requires-network']
 )

@@ -6,34 +6,6 @@ using KRPC.SpaceCenter.ExtensionMethods;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="SolarPanel.State"/>.
-    /// </summary>
-    [KRPCEnum (Service = "SpaceCenter")]
-    public enum SolarPanelState
-    {
-        /// <summary>
-        /// Solar panel is fully extended.
-        /// </summary>
-        Extended,
-        /// <summary>
-        /// Solar panel is fully retracted.
-        /// </summary>
-        Retracted,
-        /// <summary>
-        /// Solar panel is being extended.
-        /// </summary>
-        Extending,
-        /// <summary>
-        /// Solar panel is being retracted.
-        /// </summary>
-        Retracting,
-        /// <summary>
-        /// Solar panel is broken.
-        /// </summary>
-        Broken
-    }
-
-    /// <summary>
     /// Obtained by calling <see cref="Part.SolarPanel"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
@@ -42,12 +14,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleDeployableSolarPanel panel;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleDeployableSolarPanel> ();
+        }
+
         internal SolarPanel (Part part)
         {
             this.part = part;
             panel = part.InternalPart.Module<ModuleDeployableSolarPanel> ();
             if (panel == null)
-                throw new ArgumentException ("Part does not have a ModuleDeployableSolarPanel PartModule");
+                throw new ArgumentException ("Part is not a solar panel");
         }
 
         /// <summary>

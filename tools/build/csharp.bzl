@@ -157,7 +157,7 @@ def _assembly_info_impl(ctx):
 
     ctx.file_action(
         output = ctx.outputs.out,
-        content = '\n'.join(content)
+        content = '\n'.join(content)+'\n'
     )
 
 _COMMON_ATTRS = {

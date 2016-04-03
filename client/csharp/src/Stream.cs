@@ -22,7 +22,7 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Get the most recent version of the stream.
+        /// Get the most recent value of the stream.
         /// </summary>
         public ReturnType Get ()
         {

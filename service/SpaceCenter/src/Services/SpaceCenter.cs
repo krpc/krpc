@@ -12,26 +12,6 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
-    /// Returned by <see cref="SpaceCenter.WarpMode"/>
-    /// </summary>
-    [KRPCEnum (Service = "SpaceCenter")]
-    public enum WarpMode
-    {
-        /// <summary>
-        /// Time warp is active, and in regular "on-rails" mode.
-        /// </summary>
-        Rails,
-        /// <summary>
-        /// Time warp is active, and in physical time warp mode.
-        /// </summary>
-        Physics,
-        /// <summary>
-        /// Time warp is not active.
-        /// </summary>
-        None
-    }
-
-    /// <summary>
     /// Provides functionality to interact with Kerbal Space Program. This includes controlling
     /// the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
     /// </summary>

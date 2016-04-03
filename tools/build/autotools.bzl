@@ -25,6 +25,7 @@ def _impl(ctx):
     output = ctx.outputs.out
     inputs = ctx.files.files
     macros = ctx.files.macros
+    source_dir = ctx.attr.source_dir
     path_map = ctx.attr.path_map
     mode_map = ctx.attr.mode_map
 
@@ -46,8 +47,8 @@ def _impl(ctx):
     sub_commands.extend([
         'CWD=`pwd`',
         'cd %s' % staging_dir,
-        'autoreconf --force --install --warnings=error 2>/dev/null 1>&2',
-        'rm -rf autom4te.cache',
+        '(cd %s; autoreconf --force --install --warnings=error 2>/dev/null 1>&2)' % source_dir,
+        'rm -rf %s/autom4te.cache' % source_dir,
         'zip --quiet -r $CWD/%s ./' % output.path
     ])
 
@@ -55,7 +56,7 @@ def _impl(ctx):
         inputs = inputs + macros,
         outputs = [output],
         progress_message = 'Running autotools and creating package %s' % output.short_path,
-        command = '\n'.join(sub_commands)
+        command = ' &&\\\n'.join(sub_commands)
     )
 
 autotools_dist = rule(
@@ -63,6 +64,7 @@ autotools_dist = rule(
     attrs = {
         'files': attr.label_list(allow_files=True, mandatory=True, non_empty=True),
         'macros': attr.label_list(allow_files=True),
+        'source_dir': attr.string(mandatory=True),
         'path_map': attr.string_dict(),
         'mode_map': attr.string_dict(),
         'out': attr.output(mandatory=True)

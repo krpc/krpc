@@ -12,4 +12,4 @@ Links for Developers
 
 * [Forum development thread](http://forum.kerbalspaceprogram.com/threads/69313)
 * [Travis CI page](https://travis-ci.org/krpc/krpc)
-* [Travis CI build outputs](http://krpc.s3-website-us-east-1.amazonaws.com/deploy)
+* [Travis CI build outputs](http://krpc.s3-website-us-east-1.amazonaws.com/deploy/)

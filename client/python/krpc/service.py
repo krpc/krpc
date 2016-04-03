@@ -1,20 +1,10 @@
-import re
 import keyword
 from collections import defaultdict
 import xml.etree.ElementTree as ElementTree
 from krpc.attributes import Attributes
 from krpc.types import Types, DynamicType, DefaultArgument
 from krpc.decoder import Decoder
-
-_regex_multi_uppercase = re.compile(r'([A-Z]+)([A-Z][a-z0-9])')
-_regex_single_uppercase = re.compile(r'([a-z0-9])([A-Z])')
-_regex_underscores = re.compile(r'(.)_')
-
-def _to_snake_case(camel_case):
-    """ Convert camel case to snake case, e.g. GetServices -> get_services """
-    result = re.sub(_regex_underscores, r'\1__', camel_case)
-    result = re.sub(_regex_single_uppercase, r'\1_\2', result)
-    return re.sub(_regex_multi_uppercase, r'\1_\2', result).lower()
+from krpc.utils import snake_case
 
 def _signature(param_types, return_type):
     """ Generate a signature for a procedure that can be used as its docstring """
@@ -93,11 +83,11 @@ def _parse_documentation_node(node):
         ref = node.attrib['cref']
         if ref[0] == 'M':
             ref = ref.split('.')
-            ref[-1] = _to_snake_case(ref[-1])
+            ref[-1] = snake_case(ref[-1])
             ref = '.'.join(ref)
         return ref[2:]
     elif node.tag == 'paramref':
-        return _to_snake_case(node.attrib['name'])
+        return snake_case(node.attrib['name'])
     elif node.tag == 'c':
         replace = {'true': 'True', 'false': 'False', 'null': 'None'}
         if node.text in replace:
@@ -135,7 +125,7 @@ def _parse_documentation(xml):
             summary = _parse_documentation_content(node)
         elif node.tag == 'param':
             doc = _parse_documentation_content(node).replace('\n','')
-            params.append('%s: %s' % (_to_snake_case(node.attrib['name']), doc))
+            params.append('%s: %s' % (snake_case(node.attrib['name']), doc))
         elif node.tag == 'returns':
             returns = 'Returns:\n    %s' % _parse_documentation_content(node).replace('\n','')
         elif node.tag == 'remarks':
@@ -228,12 +218,12 @@ class ServiceBase(DynamicType):
         """ Add an enumeration type """
         name = enum.name
         enum_type = cls._client._types.as_type('Enum(' + cls._name + '.' + name + ')', _parse_documentation(enum.documentation))
-        enum_type.set_values(dict((str(_to_snake_case(x.name)), x.value) for x in enum.values))
+        enum_type.set_values(dict((str(snake_case(x.name)), x.value) for x in enum.values))
         setattr(cls, name, enum_type.python_type)
 
     @classmethod
     def _parse_procedure(cls, procedure):
-        param_names = [_to_snake_case(param.name) for param in procedure.parameters]
+        param_names = [snake_case(param.name) for param in procedure.parameters]
         param_types = [cls._client._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
         param_required = [not param.has_default_argument for param in procedure.parameters]
         param_default = []
@@ -255,7 +245,7 @@ class ServiceBase(DynamicType):
         build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
         setattr(func, '_build_request', build_request)
         setattr(func, '_return_type', return_type)
-        name = str(_to_snake_case(procedure.name))
+        name = str(snake_case(procedure.name))
         return cls._add_static_method(name, func, doc=_parse_documentation(procedure.documentation))
 
     @classmethod
@@ -276,7 +266,7 @@ class ServiceBase(DynamicType):
         if setter:
             param_names, param_types, _,_,_ = cls._parse_procedure(setter)
             setter = _construct_func(cls._client._invoke, cls._name, setter.name, ['self'], param_names, param_types, [True], [None], None)
-        name = str(_to_snake_case(name))
+        name = str(snake_case(name))
         return cls._add_property(name, getter, setter, doc=doc)
 
     @classmethod
@@ -291,7 +281,7 @@ class ServiceBase(DynamicType):
         build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
         setattr(func, '_build_request', build_request)
         setattr(func, '_return_type', return_type)
-        name = str(_to_snake_case(method_name))
+        name = str(snake_case(method_name))
         class_cls._add_method(name, func, doc=_parse_documentation(procedure.documentation))
 
     @classmethod
@@ -303,7 +293,7 @@ class ServiceBase(DynamicType):
         build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
         setattr(func, '_build_request', build_request)
         setattr(func, '_return_type', return_type)
-        name = str(_to_snake_case(method_name))
+        name = str(snake_case(method_name))
         class_cls._add_static_method(name, func, doc=_parse_documentation(procedure.documentation))
 
     @classmethod
@@ -328,5 +318,5 @@ class ServiceBase(DynamicType):
         if setter:
             param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(setter)
             setter = _construct_func(cls._client._invoke, cls._name, setter.name, [], param_names, param_types, [True,True], [None,None], None)
-        property_name = str(_to_snake_case(property_name))
+        property_name = str(snake_case(property_name))
         return class_cls._add_property(property_name, getter, setter, doc=doc)

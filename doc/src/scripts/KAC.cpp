@@ -3,11 +3,10 @@
 #include <krpc/services/kerbal_alarm_clock.hpp>
 #include <iostream>
 
-using namespace krpc;
 using namespace krpc::services;
 
 int main() {
-  Client conn = krpc::connect("Kerbal Alarm Clock Example");
+  krpc::Client conn = krpc::connect("Kerbal Alarm Clock Example");
   SpaceCenter sc(&conn);
   KerbalAlarmClock kac(&conn);
 

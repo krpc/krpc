@@ -14,12 +14,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleLight light;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleLight> ();
+        }
+
         internal Light (Part part)
         {
             this.part = part;
             light = part.InternalPart.Module<ModuleLight> ();
             if (light == null)
-                throw new ArgumentException ("Part does not have a ModuleLight PartModule");
+                throw new ArgumentException ("Part is not a light");
         }
 
         /// <summary>

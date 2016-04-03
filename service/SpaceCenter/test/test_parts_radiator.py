@@ -19,14 +19,15 @@ class TestPartsRadiator(testingtools.TestCase):
     def tearDownClass(cls):
         cls.conn.close()
 
-    @unittest.skip('fixed radiators have no part modules (#156)')
     def test_fixed_radiator(self):
         radiator = next(iter(filter(lambda e: e.part.title == 'Radiator Panel (small)', self.parts.radiators)))
-        self.assertTrue(panel.deployed)
-        self.assertEqual(panel.state, self.state.extended)
+        self.assertFalse(radiator.deployable)
+        self.assertTrue(radiator.deployed)
+        self.assertEqual(radiator.state, self.state.extended)
 
     def test_extendable_radiator(self):
         radiator = next(iter(filter(lambda e: e.part.title == 'Thermal Control System (medium)', self.parts.radiators)))
+        self.assertTrue(radiator.deployable)
         self.assertFalse(radiator.deployed)
         self.assertEqual(radiator.state, self.state.retracted)
 

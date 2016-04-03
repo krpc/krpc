@@ -6,48 +6,29 @@ using KRPC.SpaceCenter.ExtensionMethods;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// <see cref="RadiatorState"/>
-    /// </summary>
-    [KRPCEnum (Service = "SpaceCenter")]
-    public enum RadiatorState
-    {
-        /// <summary>
-        /// Radiator is fully extended.
-        /// </summary>
-        Extended,
-        /// <summary>
-        /// Radiator is fully retracted.
-        /// </summary>
-        Retracted,
-        /// <summary>
-        /// Radiator is being extended.
-        /// </summary>
-        Extending,
-        /// <summary>
-        /// Radiator is being retracted.
-        /// </summary>
-        Retracting,
-        /// <summary>
-        /// Radiator is being broken.
-        /// </summary>
-        Broken
-    }
-
-    /// <summary>
     /// Obtained by calling <see cref="Part.Radiator"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Radiator : Equatable<Radiator>
     {
         readonly Part part;
-        readonly ModuleDeployableRadiator radiator;
+        readonly ModuleActiveRadiator activeRadiator;
+        readonly ModuleDeployableRadiator deployableRadiator;
+
+        internal static bool Is (Part part)
+        {
+            return
+                part.InternalPart.HasModule<ModuleActiveRadiator> () ||
+                part.InternalPart.HasModule<ModuleDeployableRadiator> ();
+        }
 
         internal Radiator (Part part)
         {
             this.part = part;
-            radiator = part.InternalPart.Module<ModuleDeployableRadiator> ();
-            if (radiator == null)
-                throw new ArgumentException ("Part does not have a ModuleDeployableRadiator PartModule");
+            activeRadiator = part.InternalPart.Module<ModuleActiveRadiator> ();
+            deployableRadiator = part.InternalPart.Module<ModuleDeployableRadiator> ();
+            if (activeRadiator == null && deployableRadiator == null)
+                throw new ArgumentException ("Part is not a radiator");
         }
 
         /// <summary>
@@ -55,7 +36,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Radiator obj)
         {
-            return part == obj.part && radiator == obj.radiator;
+            return part == obj.part && activeRadiator == obj.activeRadiator && deployableRadiator == obj.deployableRadiator;
         }
 
         /// <summary>
@@ -63,7 +44,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ radiator.GetHashCode ();
+            int hash = part.GetHashCode ();
+            if (activeRadiator != null)
+                hash ^= activeRadiator.GetHashCode ();
+            if (deployableRadiator != null)
+                hash ^= deployableRadiator.GetHashCode ();
+            return hash;
         }
 
         /// <summary>
@@ -75,28 +61,47 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the radiator is extended.
+        /// Whether the radiator is deployable.
+        /// </summary>
+        [KRPCProperty]
+        public bool Deployable {
+            get { return deployableRadiator != null; }
+        }
+
+        /// <summary>
+        /// For a deployable radiator, <c>true</c> if the radiator is extended.
+        /// If the radiator is not deployable, this is always <c>true</c>.
         /// </summary>
         [KRPCProperty]
         public bool Deployed {
             get {
-                return radiator.panelState == ModuleDeployableRadiator.panelStates.EXTENDED || radiator.panelState == ModuleDeployableRadiator.panelStates.EXTENDING;
+                if (!Deployable)
+                    return true;
+                return deployableRadiator.panelState == ModuleDeployableRadiator.panelStates.EXTENDED ||
+                deployableRadiator.panelState == ModuleDeployableRadiator.panelStates.EXTENDING;
             }
             set {
+                if (!Deployable)
+                    throw new InvalidOperationException ("Radiator is not deployable");
                 if (value)
-                    radiator.Extend ();
+                    deployableRadiator.Extend ();
                 else
-                    radiator.Retract ();
+                    deployableRadiator.Retract ();
             }
         }
 
         /// <summary>
         /// The current state of the radiator.
         /// </summary>
+        /// <remarks>
+        /// A fixed radiator is always <see cref="RadiatorState.Extended" />.
+        /// </remarks>
         [KRPCProperty]
         public RadiatorState State {
             get {
-                switch (radiator.panelState) {
+                if (!Deployable)
+                    return RadiatorState.Extended;
+                switch (deployableRadiator.panelState) {
                 case ModuleDeployableRadiator.panelStates.EXTENDED:
                     return RadiatorState.Extended;
                 case ModuleDeployableRadiator.panelStates.RETRACTED:
@@ -108,7 +113,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 case ModuleDeployableRadiator.panelStates.BROKEN:
                     return RadiatorState.Broken;
                 default:
-                    throw new ArgumentException ("Unsupported solar radiator state");
+                    throw new ArgumentException ("Unsupported radiator state");
                 }
             }
         }

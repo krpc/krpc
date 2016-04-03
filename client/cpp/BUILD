@@ -9,6 +9,7 @@ name = 'krpc-cpp-%s' % version
 autotools_dist(
     name = 'cpp',
     out = '%s.zip' % name,
+    source_dir = name,
     files = glob(['include/**/*.hpp', 'src/*.cpp', '**/Makefile.am']) + [
         '//:readme', '//:version', 'CHANGES.txt', 'INSTALL.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
@@ -87,9 +88,16 @@ clientgen_cpp(
 cc_library(
     name = 'krpc',
     srcs = glob(['src/*.cpp']) + [':protobuf'],
-    hdrs = glob(['include/**/*.hpp']) + [':protobuf'],
+    hdrs = glob(['include/**/*.hpp']) + [
+        ':protobuf',
+        ':services-krpc',
+        ':services-spacecenter',
+        ':services-kerbalalarmclock',
+        ':services-infernalrobotics'
+    ],
     includes = ['include'],
-    deps = ['@protobuf//:protobuf', '@cpp_asio//:asio']
+    deps = ['@protobuf//:protobuf', '@cpp_asio//:asio'],
+    visibility = ['//visibility:public']
 )
 
 client_test(
@@ -103,10 +111,6 @@ client_test(
 cc_binary(
     name = 'cpptest',
     srcs = glob(['test/test_*.cpp']) + [
-        ':services-krpc',
-        ':services-spacecenter',
-        ':services-kerbalalarmclock',
-        ':services-infernalrobotics',
         ':services-test-service',
         'test/server_test.hpp'
     ],

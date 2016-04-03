@@ -33,13 +33,10 @@ def _build_impl(ctx):
     for f in sphinx_build_runfiles:
         _add_runfile(sub_commands, f.path, runfiles_dir+ '/' + sphinx_build.basename + '.runfiles/' + f.short_path)
 
-    sub_commands.append('%s/%s -b %s -E -W -N -q %s %s %s' % (runfiles_dir, sphinx_build.basename, builder, src_dir, out_dir, opts))
+    sub_commands.append('%s/%s -b %s -E -d /tmp/bazel-sphinx-build-%s -W -n -N -q %s %s %s' % (runfiles_dir, sphinx_build.basename, builder, builder, src_dir, out_dir, opts))
 
     if builder == 'html':
-        sub_commands.extend([
-            'rm -r %s/.doctrees' % out_dir,
-            '(CWD=`pwd` && cd %s && zip --quiet -r $CWD/%s ./)' % (out_dir, out.path)
-        ])
+        sub_commands.append('(CWD=`pwd` && cd %s && zip --quiet -r $CWD/%s ./)' % (out_dir, out.path))
 
     elif builder == 'latex':
         exec_reqs['local'] = '' # pdflatex fails to run from the sandbox
@@ -64,9 +61,9 @@ sphinx_build = rule(
         'srcs': attr.label_list(allow_files=True),
         'sphinx_build': attr.label(executable=True, mandatory=True),
         'builder': attr.string(mandatory=True),
-        'opts': attr.string_dict()
-    },
-    outputs = {'out': '%{name}.zip'}
+        'opts': attr.string_dict(),
+        'out': attr.output(mandatory=True)
+    }
 )
 
 def _spelling_impl(ctx):

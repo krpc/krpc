@@ -1,42 +1,14 @@
 from krpc.types import Types, DefaultArgument
-from krpc.service import create_service, _to_snake_case
+from krpc.service import create_service
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
 from krpc.attributes import Attributes
+from krpc.utils import snake_case
 from krpc.error import RPCError
 import krpc.stream
 import krpc.schema.KRPC
 from contextlib import contextmanager
 import threading
-
-class KRPC(object):
-    """ Core kRPC service, e.g. for querying for the available services """
-
-    def __init__(self, client):
-        self._client = client
-
-    def get_status(self):
-        """ Get status message from the server, including the version number  """
-        return self._client._invoke('KRPC', 'GetStatus',
-                                    return_type=self._client._types.as_type('KRPC.Status'))
-
-    def get_services(self):
-        """ Get available services and procedures """
-        return self._client._invoke('KRPC', 'GetServices',
-                                    return_type=self._client._types.as_type('KRPC.Services'))
-
-    def add_stream(self, request):
-        """ Add a streaming request. Returns its identifier. """
-        return self._client._invoke('KRPC', 'AddStream', args=[request],
-                                    param_names=['request'],
-                                    param_types=[self._client._types.as_type('KRPC.Request')],
-                                    return_type=self._client._types.as_type('uint32'))
-
-    def remove_stream(self, stream_id):
-        """ Remove a streaming request """
-        return self._client._invoke('KRPC', 'RemoveStream', args=[stream_id],
-                                    param_names=['id'],
-                                    param_types=[self._client._types.as_type('uint32')])
 
 class Client(object):
     """
@@ -53,25 +25,12 @@ class Client(object):
         self._request_type = self._types.as_type('KRPC.Request')
         self._response_type = self._types.as_type('KRPC.Response')
 
-        # Set up the main KRPC service
-        self.krpc = KRPC(self)
-
-        services = self.krpc.get_services().services
-
-        # Create class types
-        #TODO: is this needed?!?
-        #for service in services:
-        #    for procedure in service.procedures:
-        #        try:
-        #            name = Attributes.get_class_name(procedure.attributes)
-        #            self._types.as_type('Class(' + service.name + '.' + name + ')')
-        #        except ValueError:
-        #            pass
+        # Get the services
+        services = self._invoke('KRPC', 'GetServices', return_type=self._types.as_type('KRPC.Services')).services
 
         # Set up services
         for service in services:
-            if service.name != 'KRPC':
-                setattr(self, _to_snake_case(service.name), create_service(self, service))
+            setattr(self, snake_case(service.name), create_service(self, service))
 
         # Set up stream update thread
         if stream_connection is not None:
