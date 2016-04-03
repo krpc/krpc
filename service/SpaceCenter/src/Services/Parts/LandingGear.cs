@@ -60,7 +60,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Deployable {
-            get { return fixedGear == null; }
+            get { return deployment == null; }
         }
 
         /// <summary>
