@@ -7,6 +7,7 @@ v0.2.3
   * Add support for 'active' (non-deployable) radiators to Radiator class (#156)
  * Remove Part.ExternalTemperature (#206,#174)
  * Fix units returned by thermal mass and flux methods in Part class (#174)
+ * Fix null pointer exception in autopilot when switching scenes (#220)
  * Fix bug with translation inputs in Control class (#223)
 
 v0.2.2
