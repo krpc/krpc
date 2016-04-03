@@ -1,6 +1,6 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_assembly_info')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
-load('/config', 'version', 'author')
+load('/config', 'assembly_version', 'author')
 
 filegroup(
     name = 'SpaceCenter',
@@ -12,7 +12,7 @@ csharp_assembly_info(
     name = 'AssemblyInfo',
     title = 'KRPC.SpaceCenter',
     description = 'Basic services for kRPC',
-    version = version,
+    version = assembly_version,
     copyright = author,
     internals_visible_to = ['TestingTools']
 )

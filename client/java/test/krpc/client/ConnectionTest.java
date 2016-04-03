@@ -45,6 +45,11 @@ public class ConnectionTest {
         assertTrue(status.getBytesRead() > 0);
     }
 
+    @Test
+    public void testCurrentGameScene() throws RPCException, IOException {
+        assertEquals(KRPC.GameScene.SPACE_CENTER, krpc.getCurrentGameScene());
+    }
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -224,14 +229,15 @@ public class ConnectionTest {
     }
 
     @Test
-    public void testConcurrentConnections() throws Exception {
+    public void testThreadSafe() throws InterruptedException {
         int threadCount = 4;
+        final int repeats = 1000;
         final CountDownLatch latch = new CountDownLatch(threadCount);
         for (int i = 0; i < threadCount; i++) {
             new Thread(new Runnable() {
                 public void run() {
                     try {
-                        for (int j = 0; j < 1000; j++) {
+                        for (int j = 0; j < repeats; j++) {
                             assertEquals("False", testService.boolToString(false));
                             assertEquals(12345, testService.stringToInt32("12345"));
                         }

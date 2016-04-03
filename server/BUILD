@@ -1,7 +1,7 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assembly_info')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
 load('/tools/build/image', 'png_images')
-load('/config', 'version', 'author')
+load('/config', 'version', 'assembly_version', 'author')
 
 filegroup(
     name = 'server',
@@ -26,7 +26,7 @@ csharp_assembly_info(
     title = 'KRPC',
     description = 'RPC server for Kerbal Space Program',
     copyright = author,
-    version = version,
+    version = assembly_version,
     internals_visible_to = ['KRPC.Test', 'TestServer', 'ServiceDefinitions', 'DynamicProxyGenAssembly2'],
     visibility = ['//tools/ServiceDefinitions:__pkg__'] # Make visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
 )

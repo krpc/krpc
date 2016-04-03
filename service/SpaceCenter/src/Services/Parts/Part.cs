@@ -342,56 +342,12 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
-        internal bool IsDecoupler {
-            get { return InternalPart.HasModule<ModuleDecouple> () || InternalPart.HasModule<ModuleAnchoredDecoupler> (); }
-        }
-
-        internal bool IsDockingPort {
-            get { return InternalPart.HasModule<ModuleDockingNode> (); }
-        }
-
-        internal bool IsResourceConverter {
-            get { return InternalPart.HasModule<ModuleResourceConverter> (); }
-        }
-
-        internal bool IsResourceHarvester {
-            get { return InternalPart.HasModule<ModuleResourceHarvester> (); }
-        }
-
-        internal bool IsEngine {
-            get { return InternalPart.HasModule<ModuleEngines> (); }
-        }
-
-        internal bool IsLandingGear {
-            get { return InternalPart.HasModule<ModuleWheels.ModuleWheelDeployment> () && InternalPart.HasModule<ModuleWheels.ModuleWheelDamage> (); }
-        }
-
-        internal bool IsLaunchClamp {
-            get { return InternalPart.HasModule<global::LaunchClamp> (); }
-        }
-
-        internal bool IsLight {
-            get { return InternalPart.HasModule<ModuleLight> (); }
-        }
-
-        internal bool IsParachute {
-            get { return InternalPart.HasModule<ModuleParachute> (); }
-        }
-
-        internal bool IsRadiator {
-            get { return InternalPart.HasModule<ModuleDeployableRadiator> (); }
-        }
-
-        internal bool IsReactionWheel {
-            get { return InternalPart.HasModule<ModuleReactionWheel> (); }
-        }
-
-        internal bool IsSensor {
-            get { return InternalPart.HasModule<ModuleEnviroSensor> (); }
-        }
-
-        internal bool IsSolarPanel {
-            get { return InternalPart.HasModule<ModuleDeployableSolarPanel> (); }
+        /// <summary>
+        /// A <see cref="CargoBay"/> if the part is a cargo bay, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public CargoBay CargoBay {
+            get { return CargoBay.Is (this) ? new CargoBay (this) : null; }
         }
 
         /// <summary>
@@ -399,7 +355,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Decoupler Decoupler {
-            get { return IsDecoupler ? new Decoupler (this) : null; }
+            get { return Decoupler.Is (this) ? new Decoupler (this) : null; }
         }
 
         /// <summary>
@@ -407,23 +363,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public DockingPort DockingPort {
-            get { return IsDockingPort ? new DockingPort (this) : null; }
-        }
-
-        /// <summary>
-        /// A <see cref="ResourceConverter"/> if the part is a resource converter, otherwise <c>null</c>.
-        /// </summary>
-        [KRPCProperty]
-        public ResourceConverter ResourceConverter {
-            get { return IsResourceConverter ? new ResourceConverter (this) : null; }
-        }
-
-        /// <summary>
-        /// A <see cref="ResourceHarvester"/> if the part is a resource harvester, otherwise <c>null</c>.
-        /// </summary>
-        [KRPCProperty]
-        public ResourceHarvester ResourceHarvester {
-            get { return IsResourceHarvester ? new ResourceHarvester (this) : null; }
+            get { return DockingPort.Is (this) ? new DockingPort (this) : null; }
         }
 
         /// <summary>
@@ -431,7 +371,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Engine Engine {
-            get { return IsEngine ? new Engine (this) : null; }
+            get { return Engine.Is (this) ? new Engine (this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="Fairing"/> if the part is a fairing, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public Fairing Fairing {
+            get { return Fairing.Is (this) ? new Fairing (this) : null; }
+        }
+
+        /// <summary>
+        /// An <see cref="Intake"/> if the part is an intake, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public Intake Intake {
+            get { return Intake.Is (this) ? new Intake (this) : null; }
         }
 
         /// <summary>
@@ -439,7 +395,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public LandingGear LandingGear {
-            get { return IsLandingGear ? new LandingGear (this) : null; }
+            get { return LandingGear.Is (this) ? new LandingGear (this) : null; }
         }
 
         /// <summary>
@@ -447,7 +403,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public LaunchClamp LaunchClamp {
-            get { return IsLaunchClamp ? new LaunchClamp (this) : null; }
+            get { return LaunchClamp.Is (this) ? new LaunchClamp (this) : null; }
         }
 
         /// <summary>
@@ -455,7 +411,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Light Light {
-            get { return IsLight ? new Light (this) : null; }
+            get { return Light.Is (this) ? new Light (this) : null; }
         }
 
         /// <summary>
@@ -463,7 +419,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Parachute Parachute {
-            get { return IsParachute ? new Parachute (this) : null; }
+            get { return Parachute.Is (this) ? new Parachute (this) : null; }
         }
 
         /// <summary>
@@ -471,7 +427,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Radiator Radiator {
-            get { return IsRadiator ? new Radiator (this) : null; }
+            get { return Radiator.Is (this) ? new Radiator (this) : null; }
         }
 
         /// <summary>
@@ -479,7 +435,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public ReactionWheel ReactionWheel {
-            get { return IsReactionWheel ? new ReactionWheel (this) : null; }
+            get { return ReactionWheel.Is (this) ? new ReactionWheel (this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="ResourceConverter"/> if the part is a resource converter, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public ResourceConverter ResourceConverter {
+            get { return ResourceConverter.Is (this) ? new ResourceConverter (this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="ResourceHarvester"/> if the part is a resource harvester, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public ResourceHarvester ResourceHarvester {
+            get { return ResourceHarvester.Is (this) ? new ResourceHarvester (this) : null; }
         }
 
         /// <summary>
@@ -487,7 +459,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Sensor Sensor {
-            get { return IsSensor ? new Sensor (this) : null; }
+            get { return Sensor.Is (this) ? new Sensor (this) : null; }
         }
 
         /// <summary>
@@ -495,7 +467,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public SolarPanel SolarPanel {
-            get { return IsSolarPanel ? new SolarPanel (this) : null; }
+            get { return SolarPanel.Is (this) ? new SolarPanel (this) : null; }
         }
 
         /// <summary>

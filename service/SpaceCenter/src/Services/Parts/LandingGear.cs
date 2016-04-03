@@ -6,34 +6,6 @@ using KRPC.SpaceCenter.ExtensionMethods;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="LandingGear.State"/>.
-    /// </summary>
-    [KRPCEnum (Service = "SpaceCenter")]
-    public enum LandingGearState
-    {
-        /// <summary>
-        /// Landing gear is fully deployed.
-        /// </summary>
-        Deployed,
-        /// <summary>
-        /// Landing gear is fully retracted.
-        /// </summary>
-        Retracted,
-        /// <summary>
-        /// Landing gear is being deployed.
-        /// </summary>
-        Deploying,
-        /// <summary>
-        /// Landing gear is being retracted.
-        /// </summary>
-        Retracting,
-        /// <summary>
-        /// Landing gear is broken.
-        /// </summary>
-        Broken
-    }
-
-    /// <summary>
     /// Obtained by calling <see cref="Part.LandingGear"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
@@ -42,6 +14,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleWheels.ModuleWheelDeployment deployment;
         readonly ModuleWheels.ModuleWheelDamage damage;
+
+        internal static bool Is (Part part)
+        {
+            return
+                part.InternalPart.HasModule<ModuleWheels.ModuleWheelDeployment> () ||
+                part.InternalPart.HasModule<ModuleWheels.ModuleWheelDamage> ();
+        }
 
         internal LandingGear (Part part)
         {
@@ -77,8 +56,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the landing gear is deployable.
+        /// </summary>
+        [KRPCProperty]
+        public bool Deployable {
+            get { return fixedGear == null; }
+        }
+
+        /// <summary>
         /// Gets the current state of the landing gear.
         /// </summary>
+        /// <remarks>
+        /// Fixed landing gear are always deployed.
+        /// </remarks>
         [KRPCProperty]
         public LandingGearState State {
             get {
@@ -89,6 +79,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the landing gear is deployed.
         /// </summary>
+        /// <remarks>
+        /// Fixed landing gear are always deployed.
+        /// Returns an error if you try to deploy fixed landing gear.
+        /// </remarks>
         [KRPCProperty]
         public bool Deployed {
             get { return State == LandingGearState.Deployed; }

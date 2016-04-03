@@ -15,13 +15,20 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly ModuleDecouple decoupler;
         readonly ModuleAnchoredDecoupler anchoredDecoupler;
 
+        internal static bool Is (Part part)
+        {
+            return
+                part.InternalPart.HasModule<ModuleDecouple> () ||
+                part.InternalPart.HasModule<ModuleAnchoredDecoupler> ();
+        }
+
         internal Decoupler (Part part)
         {
             this.part = part;
             decoupler = part.InternalPart.Module<ModuleDecouple> ();
             anchoredDecoupler = part.InternalPart.Module<ModuleAnchoredDecoupler> ();
             if (decoupler == null && anchoredDecoupler == null)
-                throw new ArgumentException ("Part does not have a ModuleDecouple or ModuleAnchoredDecouple PartModule");
+                throw new ArgumentException ("Part is not a decoupler");
         }
 
         /// <summary>

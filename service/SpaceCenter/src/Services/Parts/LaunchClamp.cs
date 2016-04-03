@@ -14,12 +14,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly global::LaunchClamp launchClamp;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<global::LaunchClamp> ();
+        }
+
         internal LaunchClamp (Part part)
         {
             this.part = part;
             launchClamp = part.InternalPart.Module<global::LaunchClamp> ();
             if (launchClamp == null)
-                throw new ArgumentException ("Part does not have a LaunchClamp PartModule");
+                throw new ArgumentException ("Part is not a launch clamp");
         }
 
         /// <summary>
