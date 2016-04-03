@@ -9,12 +9,12 @@ namespace KRPC.SpaceCenter.Utils
     /// </summary>
     class RotationRateController
     {
-        global::Vessel vessel;
+        Guid vesselId;
         public readonly PIDController pid = new PIDController ();
 
         public RotationRateController (global::Vessel vessel)
         {
-            this.vessel = vessel;
+            this.vesselId = vessel.id;
         }
 
         public ReferenceFrame ReferenceFrame { get; set; }
@@ -23,6 +23,7 @@ namespace KRPC.SpaceCenter.Utils
 
         public Vector3 Error {
             get {
+                var vessel = FlightGlobalsExtensions.GetVesselById (vesselId);
                 var velocity = ReferenceFrame.AngularVelocityFromWorldSpace (-vessel.angularVelocity);
                 var error = Target - velocity;
                 var pitchAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.right));
