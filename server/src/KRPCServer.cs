@@ -625,12 +625,18 @@ namespace KRPC
                 response = continuation.Run ();
             } catch (YieldException) {
                 throw;
-            } catch (Exception e) {
+            } catch (RPCException e) {
                 response = new Response ();
                 response.HasError = true;
                 response.Error = e.Message;
                 if (Logger.ShouldLog (Logger.Severity.Debug))
                     Logger.WriteLine (e.Message, Logger.Severity.Debug);
+            } catch (Exception e) {
+                response = new Response ();
+                response.HasError = true;
+                response.Error = e.Message + "\n" + e.StackTrace;
+                if (Logger.ShouldLog (Logger.Severity.Debug))
+                    Logger.WriteLine (e.Message + "\n" + e.StackTrace, Logger.Severity.Debug);
             } finally {
                 Context.Clear ();
             }
