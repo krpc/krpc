@@ -23,7 +23,7 @@ namespace KRPC.Service
             Client = client;
             this.request = request;
             try {
-                procedure = Services.Instance.GetProcedureSignature (request);
+                procedure = Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
             } catch (Exception e) {
                 exception = e;
             }

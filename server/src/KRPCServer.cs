@@ -12,6 +12,7 @@ using KRPC.Service.Messages;
 using KRPC.Continuations;
 using KRPC.Utils;
 using KRPC.ProtoBuf;
+using Google.Protobuf;
 
 namespace KRPC
 {
@@ -28,7 +29,7 @@ namespace KRPC
         IScheduler<IClient<Schema.KRPC.Request,Schema.KRPC.Response>> clientScheduler;
         IList<RequestContinuation> continuations;
         IDictionary<IClient<byte,Schema.KRPC.StreamMessage>, IList<StreamRequest>> streamRequests;
-        IDictionary<uint, byte[]> streamResultCache = new Dictionary<uint, byte[]> ();
+        IDictionary<uint, ByteString> streamResultCache = new Dictionary<uint, ByteString> ();
 
         internal delegate double UniversalTimeFunction ();
 
@@ -531,11 +532,12 @@ namespace KRPC
                         response.Error = e.ToString ();
                     }
                     rpcsExecuted++;
+                    var encodedReturnValue = ProtoBuf.Encoder.Encode (response.ReturnValue);
                     // Don't send an update if it is the previous one
-                    if (response.ReturnValue == streamResultCache [request.Identifier])
+                    if (encodedReturnValue == streamResultCache [request.Identifier])
                         continue;
                     // Add the update to the response message
-                    streamResultCache [request.Identifier] = response.ReturnValue;
+                    streamResultCache [request.Identifier] = encodedReturnValue;
                     response.Time = GetUniversalTime ();
                     var streamResponse = request.Response;
                     streamResponse.Response = response;
@@ -558,8 +560,8 @@ namespace KRPC
             var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
 
             // Check for an existing stream for the request
-            var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request);
-            var arguments = KRPC.Service.Services.Instance.DecodeArguments (procedure, request);
+            var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
+            var arguments = KRPC.Service.Services.Instance.GetArguments (procedure, request.Arguments);
             foreach (var streamRequest in streamRequests[streamClient]) {
                 if (streamRequest.Procedure == procedure && streamRequest.Arguments.SequenceEqual (arguments))
                     return streamRequest.Identifier;

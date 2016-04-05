@@ -21,7 +21,7 @@ namespace KRPC.ProtoBuf
         {
             var result = new Schema.KRPC.Argument ();
             result.Position = argument.Position;
-            result.Value = ByteString.CopyFrom (argument.Value);
+            result.Value = Encoder.Encode (argument.Value);
             return result;
         }
 
@@ -33,7 +33,7 @@ namespace KRPC.ProtoBuf
             result.Error = response.Error;
             result.HasReturnValue = response.HasReturnValue;
             if (response.HasReturnValue)
-                result.ReturnValue = ByteString.CopyFrom (response.ReturnValue);
+                result.ReturnValue = Encoder.Encode (response.ReturnValue);
             return result;
         }
 
@@ -74,7 +74,7 @@ namespace KRPC.ProtoBuf
             result.Type = parameter.Type;
             result.HasDefaultArgument = parameter.HasDefaultArgument;
             if (result.HasDefaultArgument)
-                result.DefaultArgument = ByteString.CopyFrom (parameter.DefaultArgument);
+                result.DefaultArgument = Encoder.Encode (parameter.DefaultArgument);
             return result;
         }
 
@@ -107,8 +107,7 @@ namespace KRPC.ProtoBuf
         public static Schema.KRPC.StreamMessage ToProtobufStreamMessage (this StreamMessage streamMessage)
         {
             var result = new Schema.KRPC.StreamMessage ();
-            foreach (var response in streamMessage.Responses)
-                result.Responses.Add (response.ToProtobufStreamResponse ());
+            result.Responses.Add (streamMessage.Responses.Select (ToProtobufStreamResponse));
             return result;
         }
 
@@ -147,11 +146,22 @@ namespace KRPC.ProtoBuf
 
         public static Request ToRequest (this Schema.KRPC.Request request)
         {
+            var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
             var result = new Request ();
             result.Service = request.Service;
             result.Procedure = request.Procedure;
-            foreach (var argument in request.Arguments)
-                result.Arguments.Add (argument.ToArgument ());
+            foreach (var argument in request.Arguments) {
+                var type = procedureSignature.Parameters [(int)argument.Position].Type;
+                result.Arguments.Add (argument.ToArgument (type));
+            }
+            return result;
+        }
+
+        public static Argument ToArgument (this Schema.KRPC.Argument argument, Type type)
+        {
+            var result = new Argument ();
+            result.Position = argument.Position;
+            result.Value = Encoder.Decode (argument.Value, type);
             return result;
         }
 
@@ -162,15 +172,7 @@ namespace KRPC.ProtoBuf
             result.HasError = response.HasError;
             result.Error = response.Error;
             result.HasReturnValue = response.HasError;
-            result.ReturnValue = response.ReturnValue.ToByteArray ();
-            return result;
-        }
-
-        public static Argument ToArgument (this Schema.KRPC.Argument argument)
-        {
-            var result = new Argument ();
-            result.Position = argument.Position;
-            result.Value = argument.Value.ToByteArray ();
+            result.ReturnValue = Encoder.Encode (response.ReturnValue);
             return result;
         }
 
@@ -194,9 +196,8 @@ namespace KRPC.ProtoBuf
             result.Name = parameter.Name;
             result.Type = parameter.Type;
             result.HasDefaultArgument = parameter.HasDefaultArgument;
-            result.DefaultArgument = parameter.DefaultArgument.ToByteArray ();
+            result.DefaultArgument = Encoder.Encode (parameter.DefaultArgument);
             return result;
         }
     }
 }
-

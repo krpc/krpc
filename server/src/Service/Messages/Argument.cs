@@ -4,6 +4,6 @@
     public class Argument : IMessage
     {
         public uint Position;
-        public byte[] Value;
+        public object Value;
     }
 }

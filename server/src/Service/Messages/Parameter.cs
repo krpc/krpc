@@ -6,6 +6,6 @@
         public string Name = "";
         public string Type = "";
         public bool HasDefaultArgument;
-        public byte[] DefaultArgument;
+        public object DefaultArgument;
     }
 }

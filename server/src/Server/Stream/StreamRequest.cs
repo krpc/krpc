@@ -19,8 +19,8 @@ namespace KRPC.Server.Stream
         {
             Identifier = nextIdentifier;
             nextIdentifier++;
-            Procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request);
-            Arguments = KRPC.Service.Services.Instance.DecodeArguments (Procedure, request);
+            Procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
+            Arguments = KRPC.Service.Services.Instance.GetArguments (Procedure, request.Arguments);
             Response = new StreamResponse ();
             Response.Id = Identifier;
         }

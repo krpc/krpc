@@ -32,15 +32,14 @@ namespace KRPC.Service
             Signatures = Scanner.Scanner.GetServices ();
         }
 
-        public ProcedureSignature GetProcedureSignature (Request request)
+        public ProcedureSignature GetProcedureSignature (string service, string procedure)
         {
-            if (!Signatures.ContainsKey (request.Service))
-                throw new RPCException ("Service " + request.Service + " not found");
-            var service = Signatures [request.Service];
-            if (!service.Procedures.ContainsKey (request.Procedure))
-                throw new RPCException ("Procedure " + request.Procedure + " not found, " +
-                "in Service " + request.Service);
-            return service.Procedures [request.Procedure];
+            if (!Signatures.ContainsKey (service))
+                throw new RPCException ("Service " + service + " not found");
+            var serviceSignature = Signatures [service];
+            if (!serviceSignature.Procedures.ContainsKey (procedure))
+                throw new RPCException ("Procedure " + procedure + " not found, in Service " + service);
+            return serviceSignature.Procedures [procedure];
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace KRPC.Service
         /// </summary>
         public Response HandleRequest (ProcedureSignature procedure, Request request)
         {
-            return HandleRequest (procedure, DecodeArguments (procedure, request.Arguments));
+            return HandleRequest (procedure, GetArguments (procedure, request.Arguments));
         }
 
         /// <summary>
@@ -73,7 +72,8 @@ namespace KRPC.Service
             var response = new Response ();
             if (procedure.HasReturnType) {
                 response.HasReturnValue = true;
-                response.ReturnValue = EncodeReturnValue (procedure, returnValue);
+                CheckReturnValue (procedure, returnValue);
+                response.ReturnValue = returnValue;
             }
             return response;
         }
@@ -96,76 +96,69 @@ namespace KRPC.Service
             var response = new Response ();
             if (procedure.HasReturnType) {
                 response.HasReturnValue = true;
-                response.ReturnValue = EncodeReturnValue (procedure, returnValue);
+                CheckReturnValue (procedure, returnValue);
+                response.ReturnValue = returnValue;
             }
             return response;
         }
 
         /// <summary>
-        /// Decode the arguments for a request
+        /// Get the arguments for a procedure from a list of argument messages.
         /// </summary>
-        public object[] DecodeArguments (ProcedureSignature procedure, Request request)
+        public object[] GetArguments (ProcedureSignature procedure, IList<Argument> arguments)
         {
-            return DecodeArguments (procedure, request.Arguments);
-        }
+            // TODO: this could probably be optimized
 
-        /// <summary>
-        /// Decode the arguments for a procedure from a serialized request
-        /// </summary>
-        object[] DecodeArguments (ProcedureSignature procedure, IList<Argument> arguments)
-        {
-            // Rearrange argument values
-            var argumentValues = new ByteString [procedure.Parameters.Count];
-            foreach (var argument in arguments)
-                argumentValues [argument.Position] = ByteString.CopyFrom (argument.Value);
+            // Re-order arguments
+            var argumentValues = new object [procedure.Parameters.Count];
+            var argumentSet = new bool [procedure.Parameters.Count];
+            foreach (var argument in arguments) {
+                argumentValues [argument.Position] = argument.Value;
+                argumentSet [argument.Position] = true;
+            }
 
-            var decodedArgumentValues = new object[procedure.Parameters.Count];
+            // Build arguments array, including default argument values and check the types of the argument values
+            var completeArgumentValues = new object [procedure.Parameters.Count];
             for (int i = 0; i < procedure.Parameters.Count; i++) {
-                var type = procedure.Parameters [i].Type;
                 var value = argumentValues [i];
-                if (value == null) {
-                    // Handle default arguments
+                var type = procedure.Parameters [i].Type;
+                if (!argumentSet [i]) {
                     if (!procedure.Parameters [i].HasDefaultArgument)
                         throw new RPCException (procedure, "Argument not specified for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". ");
-                    decodedArgumentValues [i] = Type.Missing;
-                } else {
-                    // Decode argument
-                    try {
-                        decodedArgumentValues [i] = ProtoBuf.Encoder.Decode (value.ToByteArray (), type);
-                    } catch (Exception e) {
-                        throw new RPCException (
-                            procedure,
-                            "Failed to decode argument for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". " +
-                            "Expected an argument of type " + TypeUtils.GetTypeName (type) + ". " +
-                            e.GetType ().Name + ": " + e.Message);
-                    }
+                    value = Type.Missing;
+                } else if (value != null && !type.IsAssignableFrom (value.GetType ())) {
+                    throw new RPCException (
+                        procedure,
+                        "Incorrect argument type for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". " +
+                        "Expected an argument of type " + type + ", got " + value.GetType ());
+                } else if (value == null && !TypeUtils.IsAClassType (type)) {
+                    throw new RPCException (
+                        procedure,
+                        "Incorrect argument type for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". " +
+                        "Expected an argument of type " + type + ", got null");
                 }
+                completeArgumentValues [i] = value;
             }
-            return decodedArgumentValues;
+            return completeArgumentValues;
         }
 
         /// <summary>
-        /// Encodes the value returned by a procedure handler into a ByteString
+        /// Check the value returned by a procedure handler.
         /// </summary>
-        byte[] EncodeReturnValue (ProcedureSignature procedure, object returnValue)
+        void CheckReturnValue (ProcedureSignature procedure, object returnValue)
         {
-            // Check the return value is missing
-            if (returnValue == null && !TypeUtils.IsAClassType (procedure.ReturnType)) {
+            // Check if the type of the return value is valid
+            if (returnValue != null && !procedure.ReturnType.IsAssignableFrom (returnValue.GetType ())) {
                 throw new RPCException (
                     procedure,
-                    procedure.FullyQualifiedName + " returned null. " +
-                    "Expected an object of type " + procedure.ReturnType);
-            }
-
-            // Check if the return value is of a valid type
-            if (!TypeUtils.IsAValidType (procedure.ReturnType)) {
+                    "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
+                    "Expected a value of type " + procedure.ReturnType + ", got " + returnValue.GetType ());
+            } else if (returnValue == null && !TypeUtils.IsAClassType (procedure.ReturnType)) {
                 throw new RPCException (
                     procedure,
-                    procedure.FullyQualifiedName + " returned an object of an invalid type. " +
-                    "Expected " + procedure.ReturnType + "; got " + returnValue.GetType ());
+                    "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
+                    "Expected a value of type " + procedure.ReturnType + ", got null");
             }
-
-            return ProtoBuf.Encoder.Encode (returnValue, procedure.ReturnType);
         }
     }
 }

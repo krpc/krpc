@@ -7,6 +7,6 @@
         public bool HasError;
         public string Error = "";
         public bool HasReturnValue;
-        public byte[] ReturnValue;
+        public object ReturnValue;
     }
 }
