@@ -2,6 +2,7 @@ from .generator import Generator
 from .docparser import DocParser
 import krpc.types
 from krpc.utils import snake_case
+import base64
 
 Types = krpc.types.Types()
 
@@ -89,6 +90,7 @@ class CppGenerator(Generator):
         return self.parse_type(typ)
 
     def parse_default_argument(self, value, typ):
+        value = base64.b64decode(value)
         # Note: following is a workaround for decoding EnumType, as set_values has not been called
         if krpc.platform.PY2:
             value = str(bytearray(value))

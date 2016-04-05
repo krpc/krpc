@@ -3,6 +3,7 @@ from .docparser import DocumentationParser
 from krpc.attributes import Attributes
 from krpc.types import Types
 from krpc.decoder import Decoder
+import base64
 
 types = Types()
 
@@ -96,7 +97,7 @@ class Parameter(Appendable):
         self.type = types.get_parameter_type(position, type, attributes)
         self.has_default_argument = default_argument is not None
         if default_argument is not None:
-            default_argument = Decoder.decode(str(bytearray(default_argument)), self.type)
+            default_argument = Decoder.decode(str(bytearray(base64.b64decode(default_argument))), self.type)
         self.default_argument = default_argument
         self.documentation = documentation
 

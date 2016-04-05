@@ -1,5 +1,6 @@
 from .generator import Generator
 import krpc.types
+import base64
 
 Types = krpc.types.Types()
 
@@ -87,6 +88,7 @@ class CsharpGenerator(Generator):
         return self.parse_type(typ)
 
     def parse_default_argument(self, value, typ):
+        value = base64.b64decode(value)
         #TODO: following is a workaround for decoding EnumType, as set_values has not been called
         if krpc.platform.PY2:
             value = str(bytearray(value))
