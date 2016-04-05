@@ -57,6 +57,19 @@ namespace KRPC.Client
             return "0x" + BitConverter.ToString (data).Replace ("-", " 0x");
         }
 
+        static bool IsGenericType (Type type, Type genericType)
+        {
+            while (type != null) {
+                if (type.IsGenericType && type.GetGenericTypeDefinition () == genericType)
+                    return true;
+                foreach (var intType in type.GetInterfaces())
+                    if (IsGenericType (intType, genericType))
+                        return true;
+                type = type.BaseType;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Encode a value of the given type.
         /// Should not be called directly. This interface is used by service client stubs.
@@ -99,15 +112,17 @@ namespace KRPC.Client
                 return EncodeList (value, type);
             else if (value != null && value is IDictionary)
                 return EncodeDictionary (value, type);
-            else if (value != null && value.GetType ().IsGenericType && value.GetType ().GetGenericTypeDefinition () == typeof(HashSet<>))
-                return EncodeSet (value, type); //TODO: ugly checking for set types
+            else if (value != null && IsGenericType (value.GetType (), typeof(ISet<>)))
+                return EncodeSet (value, type);
             else if (value != null && value.GetType ().IsGenericType &&
                      (value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<>) ||
                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,>) ||
                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,>) ||
                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,>) ||
                      value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,>) ||
-                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,,>)))
+                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,,>) ||
+                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,,,>) ||
+                     value.GetType ().GetGenericTypeDefinition () == typeof(Tuple<,,,,,,,>)))
                 return EncodeTuple (value, type); //TODO: ugly checking for tuple types
             else
                 throw new ArgumentException (type + " is not a serializable type");
