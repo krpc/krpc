@@ -1,6 +1,7 @@
 using System;
 using KRPC.Service.Attributes;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
+using KRPC.Utils;
 
 namespace KRPC.Service
 {
@@ -46,17 +47,16 @@ namespace KRPC.Service
         /// Can be used by client libraries to automatically create functionality such as stubs.
         /// </summary>
         [KRPCProcedure]
-        public static Schema.KRPC.Services GetServices ()
+        public static Messages.Services GetServices ()
         {
-            var services = new Schema.KRPC.Services ();
+            var services = new Messages.Services ();
             foreach (var serviceSignature in Services.Instance.Signatures.Values) {
-                var service = new Schema.KRPC.Service ();
+                var service = new Messages.Service ();
                 service.Name = serviceSignature.Name;
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
                     var procedure = new Procedure ();
                     procedure.Name = procedureSignature.Name;
-                    if (procedureSignature.HasReturnType)
-                    {
+                    if (procedureSignature.HasReturnType) {
                         procedure.HasReturnType = true;
                         procedure.ReturnType = TypeUtils.GetTypeName (procedureSignature.ReturnType);
                     }
@@ -64,10 +64,9 @@ namespace KRPC.Service
                         var parameter = new Parameter ();
                         parameter.Name = parameterSignature.Name;
                         parameter.Type = TypeUtils.GetTypeName (parameterSignature.Type);
-                        if (parameterSignature.HasDefaultArgument)
-                        {
+                        if (parameterSignature.HasDefaultArgument) {
                             parameter.HasDefaultArgument = true;
-                            parameter.DefaultArgument = parameterSignature.DefaultArgument;
+                            parameter.DefaultArgument = ProtocolBuffers.Encode (parameterSignature.DefaultArgument, parameterSignature.Type);
                         }
                         procedure.Parameters.Add (parameter);
                     }
@@ -151,14 +150,13 @@ namespace KRPC.Service
             /// Space plane hangar.
             /// </summary>
             EditorSPH
-        };
+        }
 
         /// <summary>
         /// Get the current game scene.
         /// </summary>
         [KRPCProperty]
-        public static GameScene CurrentGameScene
-        {
+        public static GameScene CurrentGameScene {
             get {
                 switch (KRPCServer.Context.GameScene) {
                 case global::KRPC.Service.GameScene.SpaceCenter:

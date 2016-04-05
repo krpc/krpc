@@ -1,5 +1,5 @@
 using KRPC.Service.Scanner;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
 
 namespace KRPC.Server.Stream
 {
@@ -15,7 +15,7 @@ namespace KRPC.Server.Stream
 
         public StreamResponse Response { get; private set; }
 
-        public StreamRequest (Request request)
+        public StreamRequest (Service.Messages.Request request)
         {
             Identifier = nextIdentifier;
             nextIdentifier++;

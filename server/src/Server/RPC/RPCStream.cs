@@ -5,12 +5,12 @@ using KRPC.Schema.KRPC;
 
 namespace KRPC.Server.RPC
 {
-    sealed class RPCStream : IStream<Request,Response>
+    sealed class RPCStream : IStream<Schema.KRPC.Request,Schema.KRPC.Response>
     {
         // 1MB buffer
         internal const int bufferSize = 1 * 1024 * 1024;
         readonly IStream<byte,byte> stream;
-        Request bufferedRequest;
+        Schema.KRPC.Request bufferedRequest;
         byte[] buffer = new byte[bufferSize];
         int offset;
 
@@ -40,7 +40,7 @@ namespace KRPC.Server.RPC
         /// Throws NoRequestException if there is no request.
         /// Throws MalformedRequestException if malformed data is received.
         /// </summary>
-        public Request Read ()
+        public Schema.KRPC.Request Read ()
         {
             Poll ();
             var request = bufferedRequest;
@@ -48,12 +48,12 @@ namespace KRPC.Server.RPC
             return request;
         }
 
-        public int Read (Request[] buffer, int offset)
+        public int Read (Schema.KRPC.Request[] buffer, int offset)
         {
             throw new NotSupportedException ();
         }
 
-        public int Read (Request[] buffer, int offset, int size)
+        public int Read (Schema.KRPC.Request[] buffer, int offset, int size)
         {
             throw new NotSupportedException ();
         }
@@ -61,7 +61,7 @@ namespace KRPC.Server.RPC
         /// <summary>
         /// Write a response to the client.
         /// </summary>
-        public void Write (Response value)
+        public void Write (Schema.KRPC.Response value)
         {
             var memoryStream = new MemoryStream ();
             var codedStream = new CodedOutputStream (memoryStream);
@@ -71,7 +71,7 @@ namespace KRPC.Server.RPC
             stream.Write (memoryStream.ToArray ());
         }
 
-        public void Write (Response[] value)
+        public void Write (Schema.KRPC.Response[] value)
         {
             throw new NotSupportedException ();
         }
@@ -120,7 +120,7 @@ namespace KRPC.Server.RPC
             try {
                 //TODO: do something with the size that is read?
                 codedStream.ReadUInt32 ();
-                bufferedRequest = Request.Parser.ParseFrom (codedStream);
+                bufferedRequest = Schema.KRPC.Request.Parser.ParseFrom (codedStream);
             } catch (InvalidProtocolBufferException) {
                 // Failed to deserialize a request
                 if (offset >= buffer.Length) {

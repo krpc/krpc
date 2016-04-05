@@ -79,6 +79,9 @@
     <Compile Include="KRPCAddon.cs" />
     <Compile Include="KRPCConfiguration.cs" />
     <Compile Include="KRPCServer.cs" />
+    <Compile Include="ProtoBuf\Encoder.cs" />
+    <Compile Include="ProtoBuf\MessageExtensions.cs" />
+    <Compile Include="ProtoBuf\ProtocolBuffers.cs" />
     <Compile Include="Server\ClientActivityArgs.cs" />
     <Compile Include="Server\ClientConnectedArgs.cs" />
     <Compile Include="Server\ClientConnectionRequest.cs" />
@@ -166,7 +169,6 @@
     <Compile Include="Utils\IScheduler.cs" />
     <Compile Include="Utils\KSPAddonImproved.cs" />
     <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Utils\ProtocolBuffers.cs" />
     <Compile Include="Utils\RectStorage.cs" />
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\RoundRobinScheduler.cs" />

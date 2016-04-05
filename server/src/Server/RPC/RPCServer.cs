@@ -7,7 +7,7 @@ using KRPC.Schema.KRPC;
 
 namespace KRPC.Server.RPC
 {
-    sealed class RPCServer : IServer<Request,Response>
+    sealed class RPCServer : IServer<Schema.KRPC.Request,Schema.KRPC.Response>
     {
         const double defaultTimeout = 0.1;
         byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x52, 0x50, 0x43, 0x00, 0x00, 0x00 };
@@ -15,13 +15,13 @@ namespace KRPC.Server.RPC
 
         public event EventHandler OnStarted;
         public event EventHandler OnStopped;
-        public event EventHandler<ClientRequestingConnectionArgs<Request,Response>> OnClientRequestingConnection;
-        public event EventHandler<ClientConnectedArgs<Request,Response>> OnClientConnected;
+        public event EventHandler<ClientRequestingConnectionArgs<Schema.KRPC.Request,Schema.KRPC.Response>> OnClientRequestingConnection;
+        public event EventHandler<ClientConnectedArgs<Schema.KRPC.Request,Schema.KRPC.Response>> OnClientConnected;
         /// <summary>
         /// Does not trigger this event, unless the underlying server does.
         /// </summary>
-        public event EventHandler<ClientActivityArgs<Request,Response>> OnClientActivity;
-        public event EventHandler<ClientDisconnectedArgs<Request,Response>> OnClientDisconnected;
+        public event EventHandler<ClientActivityArgs<Schema.KRPC.Request,Schema.KRPC.Response>> OnClientActivity;
+        public event EventHandler<ClientDisconnectedArgs<Schema.KRPC.Request,Schema.KRPC.Response>> OnClientDisconnected;
 
         IServer<byte,byte> server;
         Dictionary<IClient<byte,byte>,RPCClient> clients = new Dictionary<IClient<byte, byte>, RPCClient> ();
@@ -69,7 +69,7 @@ namespace KRPC.Server.RPC
             get { return server.Running; }
         }
 
-        public IEnumerable<IClient<Request,Response>> Clients {
+        public IEnumerable<IClient<Schema.KRPC.Request,Schema.KRPC.Response>> Clients {
             get {
                 foreach (var client in clients.Values) {
                     yield return client;
@@ -98,7 +98,7 @@ namespace KRPC.Server.RPC
             // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
             if (OnClientConnected != null) {
                 var client = clients [args.Client];
-                OnClientConnected (this, new ClientConnectedArgs<Request,Response> (client));
+                OnClientConnected (this, new ClientConnectedArgs<Schema.KRPC.Request,Schema.KRPC.Response> (client));
             }
         }
 
@@ -106,7 +106,7 @@ namespace KRPC.Server.RPC
         {
             if (OnClientActivity != null) {
                 var client = clients [args.Client];
-                OnClientActivity (this, new ClientActivityArgs<Request,Response> (client));
+                OnClientActivity (this, new ClientActivityArgs<Schema.KRPC.Request,Schema.KRPC.Response> (client));
             }
         }
 
@@ -117,7 +117,7 @@ namespace KRPC.Server.RPC
             closedClientsBytesWritten += client.Stream.BytesWritten;
             clients.Remove (args.Client);
             if (OnClientDisconnected != null) {
-                OnClientDisconnected (this, new ClientDisconnectedArgs<Request,Response> (client));
+                OnClientDisconnected (this, new ClientDisconnectedArgs<Schema.KRPC.Request,Schema.KRPC.Response> (client));
             }
         }
 
@@ -146,7 +146,7 @@ namespace KRPC.Server.RPC
             // Invoke connection request events.
             if (OnClientRequestingConnection != null) {
                 var client = pendingClients [args.Client];
-                var subArgs = new ClientRequestingConnectionArgs<Request,Response> (client);
+                var subArgs = new ClientRequestingConnectionArgs<Schema.KRPC.Request,Schema.KRPC.Response> (client);
                 OnClientRequestingConnection (this, subArgs);
                 if (subArgs.Request.ShouldAllow) {
                     args.Request.Allow ();

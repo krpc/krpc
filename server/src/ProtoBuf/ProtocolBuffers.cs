@@ -2,82 +2,39 @@ using System;
 using System.IO;
 using System.Reflection;
 using Google.Protobuf;
+using System.Collections.Generic;
+using KRPC.Service.Messages;
+using KRPC.Service;
 
 namespace KRPC.Utils
 {
     static class ProtocolBuffers
     {
-        /// <summary>
-        /// Return the string name of the Protocol Buffer message type (with the package name prefixing it).
-        /// E.g. "KRPC.Request"
-        /// </summary>
-        public static string GetMessageTypeName (Type type)
+        public static byte[] Encode (object value, Type type)
         {
-            if (type == null)
-                throw new ArgumentException ("null is not a Protocol Buffer message type");
-            if (!IsAMessageType (type))
-                throw new ArgumentException (type + " is not a Protocol Buffer message type");
-            return type.FullName.Replace ("KRPC.Schema.", "");
-        }
-
-        /// <summary>
-        /// Return the string name of the Protocol Buffer message type corresponding to the given type.
-        /// E.g. "uint32" for uint
-        /// </summary>
-        public static string GetValueTypeName (Type type)
-        {
-            // Note: C# has no equivalent types for sint32, sint64, fixed32, fixed64, sfixed32 or sfixed64
-            if (type == typeof(double))
-                return "double";
-            else if (type == typeof(float))
-                return "float";
-            else if (type == typeof(int))
-                return "int32";
-            else if (type == typeof(long))
-                return "int64";
-            else if (type == typeof(uint))
-                return "uint32";
-            else if (type == typeof(ulong))
-                return "uint64";
-            else if (type == typeof(bool))
-                return "bool";
-            else if (type == typeof(string))
-                return "string";
-            else if (type == typeof(byte[]))
-                return "bytes";
-            else {
-                if (type == null)
-                    throw new ArgumentException ("null is not a Protocol Buffer value type");
-                else
-                    throw new ArgumentException (type + " is not a Protocol Buffer value type");
-            }
-        }
-
-        /// <summary>
-        /// Return the string name of the Protocol Buffer message or value type.
-        /// </summary>
-        public static string GetTypeName (Type type)
-        {
-            if (IsAMessageType (type))
-                return GetMessageTypeName (type);
-            else if (IsAValueType (type))
-                return GetValueTypeName (type);
+            if (TypeUtils.IsAClassType (type))
+                return ProtocolBuffers.WriteValue (ObjectStore.Instance.AddInstance (value), typeof(ulong)).ToByteArray ();
+            else if (TypeUtils.IsAnEnumType (type)) {
+                // TODO: Assumes it's underlying type is int
+                return ProtocolBuffers.WriteValue ((int)value, typeof(int)).ToByteArray ();
+            } else if (ProtocolBuffers.IsAMessageType (type))
+                return ProtocolBuffers.WriteMessage (value as Google.Protobuf.IMessage).ToByteArray ();
             else
-                throw new ArgumentException (type + " is not a Protocol Buffer message or value type");
+                return ProtocolBuffers.WriteValue (value, type).ToByteArray ();
         }
 
         /// <summary>
         /// Parse the given data into a message object of the given type.
         /// The type must be derived from IMessage.
         /// </summary>
-        public static IMessage ParseFrom (Type type, ByteString value)
+        public static Google.Protobuf.IMessage ParseFrom (Type type, ByteString value)
         {
             if (type == null)
                 throw new ArgumentException ("null is not a Protocol Buffer message type");
             if (!IsAMessageType (type))
                 throw new ArgumentException (type + " is not a Protocol Buffer message type");
-            var stream = new CodedInputStream (value.ToByteArray());
-            var message = (IMessage)Activator.CreateInstance(type);
+            var stream = new CodedInputStream (value.ToByteArray ());
+            var message = (Google.Protobuf.IMessage)Activator.CreateInstance (type);
             message.MergeFrom (stream);
             return message;
         }
@@ -87,7 +44,7 @@ namespace KRPC.Utils
         /// </summary>
         public static bool IsAMessageType (Type type)
         {
-            return typeof(IMessage).IsAssignableFrom (type);
+            return typeof(Google.Protobuf.IMessage).IsAssignableFrom (type);
         }
 
         /// <summary>
@@ -96,7 +53,7 @@ namespace KRPC.Utils
         public static bool IsAValueType (Type type)
         {
             return
-                type == typeof(double) ||
+            type == typeof(double) ||
             type == typeof(float) ||
             type == typeof(int) ||
             type == typeof(long) ||
@@ -118,7 +75,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Convert a Protocol Buffer message to a byte string.
         /// </summary>
-        public static ByteString WriteMessage (IMessage message)
+        public static ByteString WriteMessage (Google.Protobuf.IMessage message)
         {
             byte[] returnBytes;
             using (var stream = new MemoryStream ()) {
@@ -153,7 +110,7 @@ namespace KRPC.Utils
             } else if (type == typeof(string)) {
                 return stream.ReadString ();
             } else if (type == typeof(byte[])) {
-                return stream.ReadBytes ().ToByteArray();
+                return stream.ReadBytes ().ToByteArray ();
             }
             throw new ArgumentException (type + " is not a Protocol Buffer value type");
         }

@@ -3,16 +3,15 @@ using System.Net;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Google.Protobuf;
 using KRPC.Server;
 using KRPC.Server.Net;
 using KRPC.Server.RPC;
 using KRPC.Server.Stream;
 using KRPC.Service;
+using KRPC.Service.Messages;
 using KRPC.Continuations;
 using KRPC.Utils;
-using KRPC.Schema.KRPC;
-
+using KRPC.ProtoBuf;
 
 namespace KRPC
 {
@@ -26,10 +25,10 @@ namespace KRPC
         readonly RPCServer rpcServer;
         readonly StreamServer streamServer;
 
-        IScheduler<IClient<Request,Response>> clientScheduler;
+        IScheduler<IClient<Schema.KRPC.Request,Schema.KRPC.Response>> clientScheduler;
         IList<RequestContinuation> continuations;
-        IDictionary<IClient<byte,StreamMessage>, IList<StreamRequest>> streamRequests;
-        IDictionary<uint, ByteString> streamResultCache = new Dictionary<uint, ByteString> ();
+        IDictionary<IClient<byte,Schema.KRPC.StreamMessage>, IList<StreamRequest>> streamRequests;
+        IDictionary<uint, byte[]> streamResultCache = new Dictionary<uint, byte[]> ();
 
         internal delegate double UniversalTimeFunction ();
 
@@ -112,9 +111,9 @@ namespace KRPC
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
             rpcServer = new RPCServer (rpcTcpServer);
             streamServer = new StreamServer (streamTcpServer);
-            clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
+            clientScheduler = new RoundRobinScheduler<IClient<Schema.KRPC.Request,Schema.KRPC.Response>> ();
             continuations = new List<RequestContinuation> ();
-            streamRequests = new Dictionary<IClient<byte,StreamMessage>,IList<StreamRequest>> ();
+            streamRequests = new Dictionary<IClient<byte,Schema.KRPC.StreamMessage>,IList<StreamRequest>> ();
 
             OneRPCPerUpdate = oneRPCPerUpdate;
             MaxTimePerUpdate = maxTimePerUpdate;
@@ -542,7 +541,7 @@ namespace KRPC
                     streamResponse.Response = response;
                     streamMessage.Responses.Add (streamResponse);
                 }
-                streamClient.Stream.Write (streamMessage);
+                streamClient.Stream.Write (streamMessage.ToProtobufStreamMessage ());
             }
 
             timer.Stop ();
@@ -554,7 +553,7 @@ namespace KRPC
         /// <summary>
         /// Add a stream to the server
         /// </summary>
-        internal uint AddStream (IClient client, Request request)
+        internal uint AddStream (IClient client, Service.Messages.Request request)
         {
             var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
 
@@ -599,12 +598,12 @@ namespace KRPC
             currentClients.AddRange (yieldedContinuations.Select (((c) => c.Client)));
             foreach (var client in clientScheduler) {
                 if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
-                    Request request = client.Stream.Read ();
+                    Schema.KRPC.Request request = client.Stream.Read ();
                     if (OnClientActivity != null)
                         OnClientActivity (this, new ClientActivityArgs (client));
                     if (Logger.ShouldLog (Logger.Severity.Debug))
                         Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")", Logger.Severity.Debug);
-                    continuations.Add (new RequestContinuation (client, request));
+                    continuations.Add (new RequestContinuation (client, request.ToRequest ()));
                 }
             }
         }
@@ -643,7 +642,7 @@ namespace KRPC
 
             // Send response to the client
             response.Time = GetUniversalTime ();
-            ((RPCClient)client).Stream.Write (response);
+            ((RPCClient)client).Stream.Write (response.ToProtobufResponse ());
             if (Logger.ShouldLog (Logger.Severity.Debug)) {
                 if (response.HasError)
                     Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);

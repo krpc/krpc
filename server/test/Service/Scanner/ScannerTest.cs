@@ -1,12 +1,14 @@
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using KRPC.Service.Messages;
 
 namespace KRPC.Test.Service.Scanner
 {
     [TestFixture]
     public class ScannerTest
     {
-        KRPC.Schema.KRPC.Services services;
+        Services services;
 
         [SetUp]
         public void SetUp ()
@@ -71,7 +73,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("data", proc.Parameters [0].Name);
                     Assert.AreEqual ("KRPC.Response", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("", proc.ReturnType);
                     Assert.AreEqual (0, proc.Attributes.Count);
                     Assert.AreEqual ("<doc>\n  <summary>\nProcedure with a single return argument.\n</summary>\n</doc>", proc.Documentation);
@@ -85,9 +87,9 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual ("KRPC.Response", proc.Parameters [0].Type);
                     Assert.AreEqual ("KRPC.Request", proc.Parameters [1].Type);
                     Assert.AreEqual ("KRPC.Response", proc.Parameters [2].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [2].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
+                    Assert.IsNull (proc.Parameters [1].DefaultArgument);
+                    Assert.IsNull (proc.Parameters [2].DefaultArgument);
                     Assert.AreEqual ("", proc.ReturnType);
                     Assert.AreEqual (0, proc.Attributes.Count);
                     Assert.AreEqual ("", proc.Documentation);
@@ -104,7 +106,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("data", proc.Parameters [0].Name);
                     Assert.AreEqual ("KRPC.Response", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("KRPC.Response", proc.ReturnType);
                     Assert.AreEqual (0, proc.Attributes.Count);
                     Assert.AreEqual ("", proc.Documentation);
@@ -118,9 +120,9 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual ("float", proc.Parameters [0].Type);
                     Assert.AreEqual ("string", proc.Parameters [1].Type);
                     Assert.AreEqual ("bytes", proc.Parameters [2].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [2].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
+                    Assert.IsNull (proc.Parameters [1].DefaultArgument);
+                    Assert.IsNull (proc.Parameters [2].DefaultArgument);
                     Assert.AreEqual ("int32", proc.ReturnType);
                     Assert.AreEqual (0, proc.Attributes.Count);
                     Assert.AreEqual ("", proc.Documentation);
@@ -138,7 +140,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("value", proc.Parameters [0].Name);
                     Assert.AreEqual ("string", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("", proc.ReturnType);
                     Assert.AreEqual (1, proc.Attributes.Count);
                     Assert.AreEqual ("Property.Set(PropertyWithGetAndSet)", proc.Attributes [0]);
@@ -157,7 +159,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("value", proc.Parameters [0].Name);
                     Assert.AreEqual ("string", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("", proc.ReturnType);
                     Assert.AreEqual (1, proc.Attributes.Count);
                     Assert.AreEqual ("Property.Set(PropertyWithSet)", proc.Attributes [0]);
@@ -168,7 +170,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("value", proc.Parameters [0].Name);
                     Assert.AreEqual ("string", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("uint64", proc.ReturnType);
                     Assert.AreEqual (1, proc.Attributes.Count);
                     Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", proc.Attributes [0]);
@@ -179,7 +181,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("obj", proc.Parameters [0].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("", proc.ReturnType);
                     Assert.AreEqual (1, proc.Attributes.Count);
                     Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [0]);
@@ -190,7 +192,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("obj", proc.Parameters [0].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("uint64", proc.ReturnType);
                     Assert.AreEqual (2, proc.Attributes.Count);
                     Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [0]);
@@ -204,8 +206,8 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual ("x", proc.Parameters [1].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
                     Assert.AreEqual ("float", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
+                    Assert.IsNull (proc.Parameters [1].DefaultArgument);
                     Assert.AreEqual ("string", proc.ReturnType);
                     Assert.AreEqual (2, proc.Attributes.Count);
                     Assert.AreEqual ("Class.Method(TestService.TestClass,FloatToString)", proc.Attributes [0]);
@@ -219,8 +221,8 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual ("other", proc.Parameters [1].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
                     Assert.AreEqual ("uint64", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
+                    Assert.IsNull (proc.Parameters [1].DefaultArgument);
                     Assert.AreEqual ("string", proc.ReturnType);
                     Assert.AreEqual (3, proc.Attributes.Count);
                     Assert.AreEqual ("Class.Method(TestService.TestClass,ObjectToString)", proc.Attributes [0]);
@@ -235,8 +237,8 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual ("x", proc.Parameters [1].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
                     Assert.AreEqual ("int32", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual (new byte[] { 0x2a }, proc.Parameters [1].DefaultArgument.ToByteArray ());
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
+                    Assert.AreEqual (new byte[] { 0x2a }, proc.Parameters [1].DefaultArgument);
                     Assert.AreEqual ("string", proc.ReturnType);
                     Assert.AreEqual (2, proc.Attributes.Count);
                     Assert.AreEqual ("Class.Method(TestService.TestClass,IntToString)", proc.Attributes [0]);
@@ -248,7 +250,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("this", proc.Parameters [0].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("int32", proc.ReturnType);
                     Assert.AreEqual (2, proc.Attributes.Count);
                     Assert.AreEqual ("Class.Property.Get(TestService.TestClass,IntProperty)", proc.Attributes [0]);
@@ -262,8 +264,8 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual ("value", proc.Parameters [1].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
                     Assert.AreEqual ("int32", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
+                    Assert.IsNull (proc.Parameters [1].DefaultArgument);
                     Assert.AreEqual ("", proc.ReturnType);
                     Assert.AreEqual (2, proc.Attributes.Count);
                     Assert.AreEqual ("Class.Property.Set(TestService.TestClass,IntProperty)", proc.Attributes [0]);
@@ -275,7 +277,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("this", proc.Parameters [0].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("uint64", proc.ReturnType);
                     Assert.AreEqual (3, proc.Attributes.Count);
                     Assert.AreEqual ("Class.Property.Get(TestService.TestClass,ObjectProperty)", proc.Attributes [0]);
@@ -290,8 +292,8 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual ("value", proc.Parameters [1].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
                     Assert.AreEqual ("uint64", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
+                    Assert.IsNull (proc.Parameters [1].DefaultArgument);
                     Assert.AreEqual ("", proc.ReturnType);
                     Assert.AreEqual (3, proc.Attributes.Count);
                     Assert.AreEqual ("Class.Property.Set(TestService.TestClass,ObjectProperty)", proc.Attributes [0]);
@@ -316,8 +318,8 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual ("x", proc.Parameters [1].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
                     Assert.AreEqual ("int32", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
+                    Assert.IsNull (proc.Parameters [1].DefaultArgument);
                     Assert.AreEqual ("string", proc.ReturnType);
                     Assert.AreEqual (2, proc.Attributes.Count);
                     Assert.AreEqual ("Class.Method(TestService.TestTopLevelClass,AMethod)", proc.Attributes [0]);
@@ -329,7 +331,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("this", proc.Parameters [0].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("string", proc.ReturnType);
                     Assert.AreEqual (2, proc.Attributes.Count);
                     Assert.AreEqual ("Class.Property.Get(TestService.TestTopLevelClass,AProperty)", proc.Attributes [0]);
@@ -343,8 +345,8 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual ("value", proc.Parameters [1].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
                     Assert.AreEqual ("string", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
+                    Assert.IsNull (proc.Parameters [1].DefaultArgument);
                     Assert.AreEqual ("", proc.ReturnType);
                     Assert.AreEqual (2, proc.Attributes.Count);
                     Assert.AreEqual ("Class.Property.Set(TestService.TestTopLevelClass,AProperty)", proc.Attributes [0]);
@@ -370,7 +372,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual ("float", proc.Parameters [0].Type);
                     Assert.AreEqual ("string", proc.Parameters [1].Type);
                     Assert.AreEqual ("int32", proc.Parameters [2].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual (new byte[] { 0x03, 0x6a, 0x65, 0x62 }, proc.Parameters [1].DefaultArgument);
                     Assert.AreEqual (new byte[] { 0x2a }, proc.Parameters [2].DefaultArgument);
                     Assert.AreEqual ("", proc.ReturnType);
@@ -393,7 +395,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("x", proc.Parameters [0].Name);
                     Assert.AreEqual ("int32", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("", proc.ReturnType);
                     Assert.AreEqual (1, proc.Attributes.Count);
                     Assert.AreEqual ("ParameterType(0).Enum(TestService.TestEnum)", proc.Attributes [0]);
@@ -553,7 +555,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("obj", proc.Parameters [0].Name);
                     Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("int32", proc.ReturnType);
                     Assert.AreEqual (1, proc.Attributes.Count);
                     Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [0]);
@@ -564,7 +566,7 @@ namespace KRPC.Test.Service.Scanner
                     Assert.AreEqual (1, proc.Parameters.Count);
                     Assert.AreEqual ("value", proc.Parameters [0].Name);
                     Assert.AreEqual ("string", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
+                    Assert.IsNull (proc.Parameters [0].DefaultArgument);
                     Assert.AreEqual ("uint64", proc.ReturnType);
                     Assert.AreEqual (1, proc.Attributes.Count);
                     Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", proc.Attributes [0]);
@@ -577,4 +579,3 @@ namespace KRPC.Test.Service.Scanner
         }
     }
 }
-

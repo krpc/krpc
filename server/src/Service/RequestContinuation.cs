@@ -2,7 +2,7 @@ using System;
 using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service.Scanner;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
 
 namespace KRPC.Service
 {

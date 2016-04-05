@@ -119,5 +119,21 @@ namespace KRPC.Utils
         {
             return (property.GetGetMethod () == null || property.GetGetMethod ().IsPublic) && (property.GetSetMethod () == null || property.GetSetMethod ().IsPublic);
         }
+
+        /// <summary>
+        /// Returns true if the given type is an instance of the given generic type.
+        /// </summary>
+        public static bool IsGenericType (Type type, Type genericType)
+        {
+            while (type != null) {
+                if (type.IsGenericType && type.GetGenericTypeDefinition () == genericType)
+                    return true;
+                foreach (var intType in type.GetInterfaces())
+                    if (IsGenericType (intType, genericType))
+                        return true;
+                type = type.BaseType;
+            }
+            return false;
+        }
     }
 }

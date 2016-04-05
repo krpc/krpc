@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using KRPC.Service;
+using KRPC.Service.Messages;
 
 namespace KRPC.Test.Service
 {
@@ -24,6 +25,7 @@ namespace KRPC.Test.Service
         {
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(string)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(long)));
+            Assert.IsTrue (TypeUtils.IsAValidType (typeof(Status)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(TestService.TestClass)));
             Assert.IsTrue (TypeUtils.IsAValidType (typeof(TestService.TestEnum)));
             Assert.IsFalse (TypeUtils.IsAValidType (typeof(TestService.TestEnumWithoutAttribute)));
@@ -55,6 +57,7 @@ namespace KRPC.Test.Service
             Assert.IsTrue (TypeUtils.IsAValidKeyType (typeof(bool)));
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(float)));
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(double)));
+            Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(Status)));
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(TestService.TestClass)));
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(TestService.TestEnum)));
             Assert.IsFalse (TypeUtils.IsAValidKeyType (typeof(TestService.TestEnumWithoutAttribute)));
@@ -79,6 +82,7 @@ namespace KRPC.Test.Service
         {
             Assert.IsFalse (TypeUtils.IsAClassType (typeof(string)));
             Assert.IsFalse (TypeUtils.IsAClassType (typeof(long)));
+            Assert.IsFalse (TypeUtils.IsAClassType (typeof(Status)));
             Assert.IsTrue (TypeUtils.IsAClassType (typeof(TestService.TestClass)));
             Assert.IsFalse (TypeUtils.IsAClassType (typeof(TestService.TestEnum)));
             Assert.IsFalse (TypeUtils.IsAClassType (typeof(TestService.TestEnumWithoutAttribute)));
@@ -96,6 +100,7 @@ namespace KRPC.Test.Service
         {
             Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(string)));
             Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(long)));
+            Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(Status)));
             Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(TestService.TestClass)));
             Assert.IsTrue (TypeUtils.IsAnEnumType (typeof(TestService.TestEnum)));
             Assert.IsFalse (TypeUtils.IsAnEnumType (typeof(TestService.TestEnumWithoutAttribute)));
@@ -113,6 +118,7 @@ namespace KRPC.Test.Service
         {
             Assert.IsFalse (TypeUtils.IsACollectionType (typeof(string)));
             Assert.IsFalse (TypeUtils.IsACollectionType (typeof(long)));
+            Assert.IsFalse (TypeUtils.IsACollectionType (typeof(Status)));
             Assert.IsFalse (TypeUtils.IsACollectionType (typeof(TestService.TestClass)));
             Assert.IsFalse (TypeUtils.IsACollectionType (typeof(TestService.TestEnum)));
             Assert.IsFalse (TypeUtils.IsACollectionType (typeof(TestService.TestEnumWithoutAttribute)));
@@ -138,6 +144,7 @@ namespace KRPC.Test.Service
             //FIXME: enable tests
 //            Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(string)));
 //            Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(long)));
+//            Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(Status)));
 //            Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(TestService.TestClass)));
 //            Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(TestService.TestEnum)));
 //            Assert.IsFalse (TypeUtils.IsAListCollectionType (typeof(TestService.TestEnumWithoutAttribute)));
@@ -162,6 +169,7 @@ namespace KRPC.Test.Service
         {
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(string)));
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(long)));
+            Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(Status)));
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(TestService.TestClass)));
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(TestService.TestEnum)));
             Assert.IsFalse (TypeUtils.IsADictionaryCollectionType (typeof(TestService.TestEnumWithoutAttribute)));
@@ -186,6 +194,7 @@ namespace KRPC.Test.Service
         {
             Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(string)));
             Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(long)));
+            Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(Status)));
             Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(TestService.TestClass)));
             Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(TestService.TestEnum)));
             Assert.IsFalse (TypeUtils.IsATupleCollectionType (typeof(TestService.TestEnumWithoutAttribute)));
@@ -210,6 +219,7 @@ namespace KRPC.Test.Service
         {
             Assert.AreEqual ("string", TypeUtils.GetTypeName (typeof(string)));
             Assert.AreEqual ("int64", TypeUtils.GetTypeName (typeof(long)));
+            Assert.AreEqual ("KRPC.Status", TypeUtils.GetTypeName (typeof(Status)));
             Assert.AreEqual ("uint64", TypeUtils.GetTypeName (typeof(TestService.TestClass)));
             Assert.AreEqual ("int32", TypeUtils.GetTypeName (typeof(TestService.TestEnum)));
             Assert.AreEqual ("KRPC.List", TypeUtils.GetTypeName (typeof(IList<string>)));
@@ -227,24 +237,25 @@ namespace KRPC.Test.Service
         }
 
         [Test]
-        public void GetKRPCTypeName ()
+        public void GetFullTypeName ()
         {
-            Assert.AreEqual ("string", TypeUtils.GetKRPCTypeName (typeof(string)));
-            Assert.AreEqual ("int64", TypeUtils.GetKRPCTypeName (typeof(long)));
-            Assert.AreEqual ("Class(TestService.TestClass)", TypeUtils.GetKRPCTypeName (typeof(TestService.TestClass)));
-            Assert.AreEqual ("Enum(TestService.TestEnum)", TypeUtils.GetKRPCTypeName (typeof(TestService.TestEnum)));
-            Assert.AreEqual ("List(string)", TypeUtils.GetKRPCTypeName (typeof(IList<string>)));
-            Assert.AreEqual ("Dictionary(int32,string)", TypeUtils.GetKRPCTypeName (typeof(IDictionary<int,string>)));
-            Assert.AreEqual ("Set(int64)", TypeUtils.GetKRPCTypeName (typeof(HashSet<long>)));
-            Assert.AreEqual ("Tuple(int64)", TypeUtils.GetKRPCTypeName (typeof(KRPC.Utils.Tuple<long>)));
-            Assert.AreEqual ("Tuple(int64,int32)", TypeUtils.GetKRPCTypeName (typeof(KRPC.Utils.Tuple<long,int>)));
-            Assert.AreEqual ("Tuple(int64,int32,string)", TypeUtils.GetKRPCTypeName (typeof(KRPC.Utils.Tuple<long,int,string>)));
-            Assert.AreEqual ("List(Dictionary(int32,string))", TypeUtils.GetKRPCTypeName (typeof(IList<IDictionary<int,string>>)));
-            Assert.AreEqual ("List(Class(TestService.TestClass))", TypeUtils.GetKRPCTypeName (typeof(IList<TestService.TestClass>)));
-            Assert.AreEqual ("List(Enum(TestService.TestEnum))", TypeUtils.GetKRPCTypeName (typeof(IList<TestService.TestEnum>)));
-            Assert.Throws<ArgumentException> (() => TypeUtils.GetKRPCTypeName (typeof(TestService.TestEnumWithoutAttribute)));
-            Assert.Throws<ArgumentException> (() => TypeUtils.GetKRPCTypeName (typeof(TestService)));
-            Assert.Throws<ArgumentException> (() => TypeUtils.GetKRPCTypeName (typeof(IDictionary<double,string>)));
+            Assert.AreEqual ("string", TypeUtils.GetFullTypeName (typeof(string)));
+            Assert.AreEqual ("int64", TypeUtils.GetFullTypeName (typeof(long)));
+            Assert.AreEqual ("KRPC.Status", TypeUtils.GetFullTypeName (typeof(Status)));
+            Assert.AreEqual ("Class(TestService.TestClass)", TypeUtils.GetFullTypeName (typeof(TestService.TestClass)));
+            Assert.AreEqual ("Enum(TestService.TestEnum)", TypeUtils.GetFullTypeName (typeof(TestService.TestEnum)));
+            Assert.AreEqual ("List(string)", TypeUtils.GetFullTypeName (typeof(IList<string>)));
+            Assert.AreEqual ("Dictionary(int32,string)", TypeUtils.GetFullTypeName (typeof(IDictionary<int,string>)));
+            Assert.AreEqual ("Set(int64)", TypeUtils.GetFullTypeName (typeof(HashSet<long>)));
+            Assert.AreEqual ("Tuple(int64)", TypeUtils.GetFullTypeName (typeof(KRPC.Utils.Tuple<long>)));
+            Assert.AreEqual ("Tuple(int64,int32)", TypeUtils.GetFullTypeName (typeof(KRPC.Utils.Tuple<long,int>)));
+            Assert.AreEqual ("Tuple(int64,int32,string)", TypeUtils.GetFullTypeName (typeof(KRPC.Utils.Tuple<long,int,string>)));
+            Assert.AreEqual ("List(Dictionary(int32,string))", TypeUtils.GetFullTypeName (typeof(IList<IDictionary<int,string>>)));
+            Assert.AreEqual ("List(Class(TestService.TestClass))", TypeUtils.GetFullTypeName (typeof(IList<TestService.TestClass>)));
+            Assert.AreEqual ("List(Enum(TestService.TestEnum))", TypeUtils.GetFullTypeName (typeof(IList<TestService.TestEnum>)));
+            Assert.Throws<ArgumentException> (() => TypeUtils.GetFullTypeName (typeof(TestService.TestEnumWithoutAttribute)));
+            Assert.Throws<ArgumentException> (() => TypeUtils.GetFullTypeName (typeof(TestService)));
+            Assert.Throws<ArgumentException> (() => TypeUtils.GetFullTypeName (typeof(IDictionary<double,string>)));
         }
 
         [Test]
