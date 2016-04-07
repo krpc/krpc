@@ -1,10 +1,11 @@
 load('/tools/build/pkg', 'pkg_zip')
 load('/config', 'version')
+load('/config', 'avc_version')
+load('/config', 'ksp_avc_version')
 
 exports_files(['COPYING', 'COPYING.LESSER'])
 
-readme_text = """
-Documentation: https://krpc.github.io/krpc
+readme_text = """Documentation: https://krpc.github.io/krpc
 
 Forum release thread: http://forum.kerbalspaceprogram.com/index.php?/topic/130742-105-krpc-remote-control-your-ships-using-python-c-c-lua-v021-10th-feb-2016/
 
@@ -38,23 +39,6 @@ You should have received a copy of the Lesser GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-version_parts = version.split('.')
-ksp_avc_version = """{
-  "NAME": "kRPC",
-  "URL": "http://ksp-avc.cybutek.net/version.php?id=254",
-  "DOWNLOAD": "https://github.com/krpc/krpc/releases/latest",
-  "VERSION": {
-    "MAJOR": %s,
-    "MINOR": %s,
-    "PATCH": %s
-  },
-  "KSP_VERSION": {
-    "MAJOR": 1,
-    "MINOR": 0,
-    "PATCH": 5
-  }
-}""" % (version_parts[0], version_parts[1], version_parts[2])
-
 genrule(
     name = 'license',
     outs = ['LICENSE'],
@@ -75,6 +59,14 @@ genrule(
     visibility = ['//visibility:public']
 )
 
+ksp_avc_version = """{
+  "NAME": "kRPC",
+  "URL": "http://ksp-avc.cybutek.net/version.php?id=254",
+  "DOWNLOAD": "https://github.com/krpc/krpc/releases/latest",
+  "VERSION": { %s },
+  "KSP_VERSION": { %s }
+}""" % (avc_version, ksp_avc_version)
+
 genrule(
     name = 'ksp-avc-version',
     outs = ['kRPC.version'],
@@ -94,8 +86,8 @@ pkg_zip(
         # Server
         '//server',
         '//service/SpaceCenter',
-        '//service/KerbalAlarmClock',
         '//service/InfernalRobotics',
+        '//service/KerbalAlarmClock',
         '//tools/build/ksp:Google.Protobuf',
         '//tools/build/protobuf:LICENSE',
         # Clients
@@ -121,17 +113,17 @@ pkg_zip(
         'server/': 'GameData/kRPC/',
         'server/src/icons': 'GameData/kRPC/icons',
         'service/SpaceCenter/CHANGES.txt': 'GameData/kRPC/CHANGES.SpaceCenter.txt',
-        'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
         'service/InfernalRobotics/CHANGES.txt': 'GameData/kRPC/CHANGES.InfernalRobotics.txt',
+        'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
         'service/SpaceCenter/': 'GameData/kRPC/',
-        'service/KerbalAlarmClock/': 'GameData/kRPC/',
         'service/InfernalRobotics/': 'GameData/kRPC/',
+        'service/KerbalAlarmClock/': 'GameData/kRPC/',
         'tools/build/ksp/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
         'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
         # Clients
-        'client/cpp/': 'client/',
         'client/csharp/': 'client/',
+        'client/cpp/': 'client/',
         'client/java/': 'client/',
         'client/lua/': 'client/',
         'client/python/': 'client/',
@@ -147,11 +139,11 @@ test_suite(
     tests = [
         '//server:test',
         '//doc:test',
-        '//client/python:test',
-        '//client/cpp:test',
-        '//client/lua:test',
         '//client/csharp:test',
-        '//client/java:test'
+        '//client/cpp:test',
+        '//client/java:test',
+        '//client/lua:test',
+        '//client/python:test'
     ]
 )
 

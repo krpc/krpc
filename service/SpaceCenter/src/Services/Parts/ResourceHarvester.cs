@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -6,34 +6,6 @@ using System.Text.RegularExpressions;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
-    /// <summary>
-    /// See <see cref="ResourceHarvester.State"/>.
-    /// </summary>
-    [KRPCEnum (Service = "SpaceCenter")]
-    public enum ResourceHarvesterState
-    {
-        /// <summary>
-        /// The drill is deploying.
-        /// </summary>
-        Deploying,
-        /// <summary>
-        /// The drill is deployed and ready.
-        /// </summary>
-        Deployed,
-        /// <summary>
-        /// The drill is retracting.
-        /// </summary>
-        Retracting,
-        /// <summary>
-        /// The drill is retracted.
-        /// </summary>
-        Retracted,
-        /// <summary>
-        /// The drill is running.
-        /// </summary>
-        Active
-    }
-
     /// <summary>
     /// Obtained by calling <see cref="Part.ResourceHarvester"/>.
     /// </summary>
@@ -45,15 +17,20 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly ModuleAnimationGroup animator;
         readonly Regex numberRegex = new Regex (@"(\d+(\.\d+)?)");
 
+        internal static bool Is (Part part)
+        {
+            return
+                part.InternalPart.HasModule<ModuleResourceHarvester> () &&
+                part.InternalPart.HasModule<ModuleAnimationGroup> ();
+        }
+
         internal ResourceHarvester (Part part)
         {
             this.part = part;
             harvester = part.InternalPart.Module<ModuleResourceHarvester> ();
             animator = part.InternalPart.Module<ModuleAnimationGroup> ();
-            if (harvester == null)
-                throw new ArgumentException ("Part has no ModuleResourceHarvester");
-            if (animator == null)
-                throw new ArgumentException ("Part has no ModuleAnimationGroup");
+            if (harvester == null || animator == null)
+                throw new ArgumentException ("Part is not a resource harvester");
         }
 
         /// <summary>

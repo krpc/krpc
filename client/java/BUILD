@@ -2,7 +2,7 @@ load('/tools/krpctools/clientgen', 'clientgen_java')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
 
-copts = ['-Werror', '-Xlint:all']
+copts = ['-Werror', '-Xlint:all', '-target 1.7', '-source 1.7']
 
 filegroup(
     name = 'java',
@@ -19,14 +19,24 @@ genrule(
     visibility = ['//visibility:public']
 )
 
+java_import(
+    name = 'javatuples',
+    jars = ['@java_javatuples//file']
+)
+
+java_import(
+    name = 'junit',
+    jars = ['@java_junit//file', '@java_hamcrest//file']
+)
+
 java_library(
     name = 'krpc',
     srcs = glob(['src/krpc/**/*.java']) + [
         '//protobuf:java',
         ':services-krpc',
         ':services-spacecenter',
-        ':services-kerbalalarmclock',
-        ':services-infernalrobotics'
+        ':services-infernalrobotics',
+        ':services-kerbalalarmclock'
     ],
     resources = [
         '//:readme', '//:version', 'CHANGES.txt',
@@ -34,15 +44,10 @@ java_library(
     ],
     deps = [
         '//tools/build/protobuf:protobuf',
-        '@java_javatuples//:jar'
+        ':javatuples'
     ],
     javacopts = copts,
     visibility = ['//visibility:public']
-)
-
-java_import(
-    name = 'junit',
-    jars = ['@java_junit//file', '@java_hamcrest//file']
 )
 
 java_library(
@@ -52,7 +57,7 @@ java_library(
         ':krpc',
         '//tools/build/protobuf:protobuf',
         ':junit',
-        '@java_javatuples//:jar'],
+        ':javatuples'],
     javacopts = copts
 )
 
@@ -64,8 +69,9 @@ java_test(
         ':testlib',
         '//tools/build/protobuf:protobuf',
         ':junit',
-        '@java_javatuples//:jar'
+        ':javatuples'
     ],
+    javacopts = copts,
     size = 'small',
     tags = ['requires-network']
 )
@@ -95,17 +101,17 @@ clientgen_java(
 )
 
 clientgen_java(
-    name = 'services-kerbalalarmclock',
-    service = 'KerbalAlarmClock',
-    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
-    out = 'services/KerbalAlarmClock.java'
-)
-
-clientgen_java(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
     out = 'services/InfernalRobotics.java'
+)
+
+clientgen_java(
+    name = 'services-kerbalalarmclock',
+    service = 'KerbalAlarmClock',
+    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
+    out = 'services/KerbalAlarmClock.java'
 )
 
 clientgen_java(

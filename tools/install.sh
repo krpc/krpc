@@ -10,8 +10,8 @@ bazel build \
     //:ksp-avc-version \
     //server \
     //service/SpaceCenter \
-    //service/KerbalAlarmClock \
     //service/InfernalRobotics \
+    //service/KerbalAlarmClock \
     //tools/TestingTools
 
 rm -rf $GAMEDATA
@@ -23,7 +23,7 @@ cp -R \
     bazel-bin/server/src/icons \
     bazel-bin/service/**/*.dll \
     bazel-bin/service/**/*.xml \
-    bazel-krpc/external/csharp_protobuf_net35/file/Google.Protobuf.dll \
+    bazel-krpc/external/csharp_protobuf_net35/Google.Protobuf.dll \
     bazel-bin/tools/TestingTools/TestingTools.dll \
     bazel-bin/tools/TestingTools/TestingTools.xml \
     tools/settings.cfg \

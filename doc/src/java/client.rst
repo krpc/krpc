@@ -7,6 +7,7 @@ Java Client
 This client provides functionality to interact with a kRPC server from programs
 written in Java. A jar containing the ``krpc.client`` package can be
 :github-download-jar:`downloaded from GitHub <libkrpc>`.
+It requires Java version 1.7.
 
 Using the Library
 ----------------------
@@ -53,6 +54,8 @@ connects to the server, instantiates the SpaceCenter service, and outputs the
 name of the active vessel:
 
 .. literalinclude:: /scripts/Interacting.java
+
+.. _java-client-streams:
 
 Streaming Data from the Server
 ------------------------------

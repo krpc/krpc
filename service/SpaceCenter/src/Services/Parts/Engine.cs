@@ -23,6 +23,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly MultiModeEngine multiModeEngine;
         readonly ModuleGimbal gimbal;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleEngines> ();
+        }
+
         internal Engine (Part part)
         {
             this.part = part;
@@ -30,7 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             multiModeEngine = part.InternalPart.Module<MultiModeEngine> ();
             gimbal = part.InternalPart.Module<ModuleGimbal> ();
             if (engines.Count == 0)
-                throw new ArgumentException ("Part does not have any ModuleEngines PartModules");
+                throw new ArgumentException ("Part is not an engine");
         }
 
         Engine (ModuleEngines engine)

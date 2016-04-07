@@ -55,8 +55,7 @@ namespace KRPC.Service
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
                     var procedure = new Procedure ();
                     procedure.Name = procedureSignature.Name;
-                    if (procedureSignature.HasReturnType)
-                    {
+                    if (procedureSignature.HasReturnType) {
                         procedure.HasReturnType = true;
                         procedure.ReturnType = TypeUtils.GetTypeName (procedureSignature.ReturnType);
                     }
@@ -64,8 +63,7 @@ namespace KRPC.Service
                         var parameter = new Parameter ();
                         parameter.Name = parameterSignature.Name;
                         parameter.Type = TypeUtils.GetTypeName (parameterSignature.Type);
-                        if (parameterSignature.HasDefaultArgument)
-                        {
+                        if (parameterSignature.HasDefaultArgument) {
                             parameter.HasDefaultArgument = true;
                             parameter.DefaultArgument = parameterSignature.DefaultArgument;
                         }
@@ -105,6 +103,57 @@ namespace KRPC.Service
                 services.Services_.Add (service);
             }
             return services;
+        }
+
+        /// <summary>
+        /// The game scene. See <see cref="CurrentGameScene"/>.
+        /// </summary>
+        [KRPCEnum]
+        public enum GameScene
+        {
+            /// <summary>
+            /// The game scene showing the Kerbal Space Center buildings.
+            /// </summary>
+            SpaceCenter,
+            /// <summary>
+            /// The game scene showing a vessel in flight (or on the launchpad/runway).
+            /// </summary>
+            Flight,
+            /// <summary>
+            /// The tracking station.
+            /// </summary>
+            TrackingStation,
+            /// <summary>
+            /// The Vehicle Assembly Building.
+            /// </summary>
+            EditorVAB,
+            /// <summary>
+            /// The Space Plane Hangar.
+            /// </summary>
+            EditorSPH
+        }
+
+        /// <summary>
+        /// Get the current game scene.
+        /// </summary>
+        [KRPCProperty]
+        public static GameScene CurrentGameScene {
+            get {
+                switch (KRPCServer.Context.GameScene) {
+                case global::KRPC.Service.GameScene.SpaceCenter:
+                    return GameScene.SpaceCenter;
+                case global::KRPC.Service.GameScene.Flight:
+                    return GameScene.Flight;
+                case global::KRPC.Service.GameScene.TrackingStation:
+                    return GameScene.TrackingStation;
+                case global::KRPC.Service.GameScene.EditorVAB:
+                    return GameScene.EditorVAB;
+                case global::KRPC.Service.GameScene.EditorSPH:
+                    return GameScene.EditorSPH;
+                default:
+                    throw new InvalidOperationException ("Unknown game scene");
+                }
+            }
         }
 
         /// <summary>

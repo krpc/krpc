@@ -20,6 +20,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleControlSurface controlSurface;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleControlSurface> ();
+        }
+
         internal ControlSurface (Part part)
         {
             this.part = part;
@@ -89,7 +94,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// and the given reference frame.
         /// </summary>
         [KRPCMethod]
-        public Tuple4 MaxPositiveRotation (ReferenceFrame referenceFrame) {
+        public Tuple4 MaxPositiveRotation (ReferenceFrame referenceFrame)
+        {
             return referenceFrame.RotationFromWorldSpace (WorldMaxRotation).ToTuple ();
         }
 
@@ -98,8 +104,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// and the given reference frame.
         /// </summary>
         [KRPCMethod]
-        public Tuple4 MaxNegativeRotation (ReferenceFrame referenceFrame) {
-            return referenceFrame.RotationFromWorldSpace (WorldMaxRotation.Inverse()).ToTuple ();
+        public Tuple4 MaxNegativeRotation (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.RotationFromWorldSpace (WorldMaxRotation.Inverse ()).ToTuple ();
         }
 
         /// <summary>
@@ -108,8 +115,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// in the pitch, yaw and roll axes, in <math>N.m</math>
         /// </summary>
         [KRPCProperty]
-        public Tuple3 PositiveTorque
-        {
+        public Tuple3 PositiveTorque {
             get { return ComputeTorque (true).ToTuple (); }
         }
 
@@ -119,8 +125,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// in the pitch, yaw and roll axes, in <math>N.m</math>
         /// </summary>
         [KRPCProperty]
-        public Tuple3 NegativeTorque
-        {
+        public Tuple3 NegativeTorque {
             get { return ComputeTorque (false).ToTuple (); }
         }
 
@@ -128,7 +133,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Current rotation of the control surface in the given reference frame.
         /// </summary>
         [KRPCMethod]
-        public Tuple3 Rotation (ReferenceFrame referenceFrame) {
+        public Tuple3 Rotation (ReferenceFrame referenceFrame)
+        {
             throw new NotImplementedException ();
         }
 
@@ -161,7 +167,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 var displacement = CoMDisplacement;
                 float inverted = displacement.y > 0.01 ? -1 : 1;
-                return new Vector3(
+                return new Vector3 (
                     controlSurface.ignorePitch ? 0 : inverted * (displacement.x < 0.01 ? -1 : 1),
                     controlSurface.ignoreRoll ? 0 : inverted,
                     controlSurface.ignoreYaw ? 0 : inverted * (displacement.z < 0.01 ? -1 : 1));
@@ -183,7 +189,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Max torque. In the positive direction if positive is true, otherwise in the negative direction.
         /// </summary>
-        internal Vector3d ComputeTorque (bool positive) {
+        internal Vector3d ComputeTorque (bool positive)
+        {
             Vector3 nVel;
             Vector3 liftVector;
             float liftDot;
@@ -192,14 +199,14 @@ namespace KRPC.SpaceCenter.Services.Parts
 
             var partCoM = part.InternalPart.rigidbody.position;
 
-            var maxRotation = positive ? WorldMaxRotation : WorldMaxRotation.Inverse();
+            var maxRotation = positive ? WorldMaxRotation : WorldMaxRotation.Inverse ();
             var deflection = maxRotation * liftVector;
             liftDot = Vector3.Dot (nVel, deflection);
             absDot = Mathf.Abs (liftDot);
 
-            var liftForce = controlSurface.GetLiftVector(deflection, liftDot, absDot, part.DynamicPressure, MachNumber) * SurfaceArea;
-            var torque = part.InternalPart.vessel.GetTransform().InverseTransformDirection(Vector3.Cross(partCoM, liftForce));
-            return Vector3d.Scale(torque, CoMRelativePosition);
+            var liftForce = controlSurface.GetLiftVector (deflection, liftDot, absDot, part.DynamicPressure, MachNumber) * SurfaceArea;
+            var torque = part.InternalPart.vessel.GetTransform ().InverseTransformDirection (Vector3.Cross (partCoM, liftForce));
+            return Vector3d.Scale (torque, CoMRelativePosition);
         }
     }
 }

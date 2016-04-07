@@ -6,35 +6,6 @@ using KRPC.SpaceCenter.ExtensionMethods;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="Parachute.State"/>.
-    /// </summary>
-    [KRPCEnum (Service = "SpaceCenter")]
-    public enum ParachuteState
-    {
-        /// <summary>
-        /// The parachute is still stowed, but ready to semi-deploy.
-        /// </summary>
-        Active,
-        /// <summary>
-        /// The parachute has been cut.
-        /// </summary>
-        Cut,
-        /// <summary>
-        /// The parachute is fully deployed.
-        /// </summary>
-        Deployed,
-        /// <summary>
-        /// The parachute has been deployed and is providing some drag,
-        /// but is not fully deployed yet.
-        /// </summary>
-        SemiDeployed,
-        /// <summary>
-        /// The parachute is safely tucked away inside its housing.
-        /// </summary>
-        Stowed
-    }
-
-    /// <summary>
     /// Obtained by calling <see cref="Part.Parachute"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
@@ -43,12 +14,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleParachute parachute;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleParachute> ();
+        }
+
         internal Parachute (Part part)
         {
             this.part = part;
             parachute = part.InternalPart.Module<ModuleParachute> ();
             if (parachute == null)
-                throw new ArgumentException ("Part does not have a ModuleParachute PartModule");
+                throw new ArgumentException ("Part is not a parachute");
         }
 
         /// <summary>

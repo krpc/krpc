@@ -15,12 +15,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleReactionWheel reactionWheel;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleReactionWheel> ();
+        }
+
         internal ReactionWheel (Part part)
         {
             this.part = part;
             reactionWheel = part.InternalPart.Module<ModuleReactionWheel> ();
             if (reactionWheel == null)
-                throw new ArgumentException ("Part does not have a ModuleReactionWheel PartModule");
+                throw new ArgumentException ("Part is not a reaction wheel");
         }
 
         /// <summary>

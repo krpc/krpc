@@ -17,6 +17,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly Part part;
         readonly ModuleRCS rcs;
 
+        internal static bool Is (Part part)
+        {
+            return part.InternalPart.HasModule<ModuleRCS> () && !part.InternalPart.HasModule<ModuleProceduralFairing> ();
+        }
+
         internal RCS (Part part)
         {
             this.part = part;

@@ -9,11 +9,11 @@ from krpc.types import Types
 from krpc.utils import snake_case
 from ..utils import lower_camel_case, indent, single_line
 from .utils import lookup_cref
-from .cpp import CppDomain
 from .csharp import CsharpDomain
+from .cpp import CppDomain
+from .java import JavaDomain
 from .lua import LuaDomain
 from .python import PythonDomain
-from .java import JavaDomain
 from .nodes import Service
 from .docparser import DocumentationParser
 from .extensions import AppendExtension
@@ -23,7 +23,7 @@ def main():
     prog = 'krpc-docgen'
     parser = argparse.ArgumentParser(prog=prog, description='Generate API documentation for a kRPC service')
     parser.add_argument('-v', '--version', action='version', version='%s version %s' % (prog, __version__))
-    parser.add_argument('language', choices=('cpp', 'csharp', 'lua', 'python', 'java'), help='Language to generate')
+    parser.add_argument('language', choices=('csharp', 'cpp', 'java', 'lua', 'python'), help='Language to generate')
     parser.add_argument('source', action='store', help='Path to source reStructuredText file')
     parser.add_argument('order_file', action='store', default='order.txt', help='Path to ordering file')
     parser.add_argument('output', action='store', help='Path to write output to')
@@ -35,16 +35,16 @@ def main():
 
     macros = resource_filename(__name__, '%s.tmpl' % args.language).decode('utf-8')
 
-    if args.language == 'cpp':
-        domain = CppDomain(macros)
-    elif args.language == 'csharp':
+    if args.language == 'csharp':
         domain = CsharpDomain(macros)
+    elif args.language == 'cpp':
+        domain = CppDomain(macros)
+    elif args.language == 'java':
+        domain = JavaDomain(macros)
     elif args.language == 'lua':
         domain = LuaDomain(macros)
-    elif args.language == 'python':
+    else: #python
         domain = PythonDomain(macros)
-    else: # java
-        domain = JavaDomain(macros)
 
     if not os.path.exists(args.order_file):
         raise RuntimeError('Ordering file \'%s\' does not exist' % args.order_file)
