@@ -5,22 +5,6 @@ http_archive(
     sha256 = 'be224d07ce87f12e362cff3df02851107bf92a4e4604349b1d7a4b1f0c3bfd86'
 )
 
-new_http_archive(
-    name = 'cpp_asio',
-    build_file = 'tools/build/cpp_asio.BUILD',
-    url = 'http://downloads.sourceforge.net/project/asio/asio/1.10.6%20%28Stable%29/asio-1.10.6.tar.gz',
-    strip_prefix = 'asio-1.10.6',
-    sha256 = '70345ca9e372a119c361be5e7f846643ee90997da8f88ec73f7491db96e24bbe'
-)
-
-new_http_archive(
-    name = 'cpp_gmock',
-    build_file = 'tools/build/cpp_gmock.BUILD',
-    url = 'https://googlemock.googlecode.com/files/gmock-1.7.0.zip',
-    strip_prefix = 'gmock-1.7.0',
-    sha256 = '26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b'
-)
-
 http_file(
     name = 'csharp_nuget',
     url = 'https://dist.nuget.org/win-x86-commandline/v3.3.0/nuget.exe',
@@ -70,6 +54,92 @@ new_http_archive(
     url = 'https://www.nuget.org/api/v2/package/NDesk.Options/0.2.1',
     type = 'zip',
     sha256 = 'f7cad7f76b9a738930496310ea47888529fbfd0a39896bdfd3cfd17fd385f53b'
+)
+
+new_http_archive(
+    name = 'cpp_asio',
+    build_file = 'tools/build/cpp_asio.BUILD',
+    url = 'http://downloads.sourceforge.net/project/asio/asio/1.10.6%20%28Stable%29/asio-1.10.6.tar.gz',
+    strip_prefix = 'asio-1.10.6',
+    sha256 = '70345ca9e372a119c361be5e7f846643ee90997da8f88ec73f7491db96e24bbe'
+)
+
+new_http_archive(
+    name = 'cpp_gmock',
+    build_file = 'tools/build/cpp_gmock.BUILD',
+    url = 'https://googlemock.googlecode.com/files/gmock-1.7.0.zip',
+    strip_prefix = 'gmock-1.7.0',
+    sha256 = '26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b'
+)
+
+http_file(
+    name = 'm4_stdcxx',
+    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx.m4;hb=9e5ef8a7fa6f32dce37a9a340cef793254d2396b',
+    sha256 = 'f40695388506c57124ca4f3945a9ad9d682e491dd077057390579aa58922527e'
+)
+
+http_file(
+    name = 'm4_stdcxx_11',
+    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx_11.m4;hb=9e5ef8a7fa6f32dce37a9a340cef793254d2396b',
+    sha256 = '928e25217046d800194cfbb39ba1acbb5b445aee971699d61a39e9c4e1ae99d0'
+)
+
+http_file(
+    name = 'java_junit',
+    url ='https://github.com/junit-team/junit/releases/download/r4.12/junit-4.12.jar',
+    sha256 = '59721f0805e223d84b90677887d9ff567dc534d7c502ca903c0c2b17f05c116a'
+)
+
+http_file(
+    name = 'java_hamcrest',
+    url = 'http://central.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar',
+    sha256 = '66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9'
+)
+
+new_http_archive(
+    name = 'java_javatuples',
+    build_file = 'tools/build/java_javatuples.BUILD',
+    url = 'https://github.com/downloads/javatuples/javatuples/javatuples-1.2-dist.zip',
+    strip_prefix = 'javatuples-1.2',
+    sha256 = 'f5477fb3bb3ed400a69b9227aa1d792c9e5e19fb4b76621b0db5df8112540a84'
+)
+
+new_http_archive(
+    name = 'protoc_lua',
+    build_file = 'tools/build/protobuf/protoc_lua.BUILD',
+    url = 'https://github.com/djungelorm/protobuf-lua/archive/v1.1.1.tar.gz',
+    sha256 = 'bccdd9c65970c42fd29b87084db83777cad75780a67c5107b68f96603b5788a8',
+    strip_prefix = 'protobuf-lua-1.1.1'
+)
+
+http_file(
+    name = 'lua_protobuf',
+    url = 'https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.1/protobuf-1.1.1-0.src.rock',
+    sha256 = 'eec6a738cd6acbf0ae695c95bac6f89036cd37f23335272cb3717b01834f1dbb'
+)
+
+http_file(
+    name = 'lua_luasocket',
+    url = 'https://luarocks.org/manifests/luarocks/luasocket-3.0rc1-2.src.rock',
+    sha256 = '3882f2a1e1c6145ceb43ead385b861b97fa2f8d487e8669ec5b747406ab251c7'
+)
+
+http_file(
+    name = 'lua_luafilesystem',
+    url = 'https://luarocks.org/manifests/hisham/luafilesystem-1.6.3-1.src.rock',
+    sha256 = '70121e78b8ef9365265b85027729d0520c1163f5609abfa9554b215a672f4e7a'
+)
+
+http_file(
+    name = 'lua_penlight',
+    url = 'http://luarocks.org/repositories/rocks/penlight-1.3.1-1.src.rock',
+    sha256 = '13c6fcc5058a998505ddc4b52496f591d7d37ed2efa9a46a2c39db6183f38783'
+)
+
+http_file(
+    name = 'lua_luaunit',
+    url = 'https://raw.githubusercontent.com/bluebird75/luaunit/LUAUNIT_V3_1/luaunit.lua',
+    sha256 = '77e00531fb9c1a54fc6d8a8a55691328f18f4f0cde0da0a49a00272ceae67dd0'
 )
 
 http_file(
@@ -202,74 +272,4 @@ http_file(
     name = 'python_snowballstemmer',
     url = 'https://pypi.python.org/packages/source/s/snowballstemmer/snowballstemmer-1.2.1.tar.gz',
     sha256 = '919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128'
-)
-
-new_http_archive(
-    name = 'protoc_lua',
-    build_file = 'tools/build/protobuf/protoc_lua.BUILD',
-    url = 'https://github.com/djungelorm/protobuf-lua/archive/v1.1.1.tar.gz',
-    sha256 = 'bccdd9c65970c42fd29b87084db83777cad75780a67c5107b68f96603b5788a8',
-    strip_prefix = 'protobuf-lua-1.1.1'
-)
-
-http_file(
-    name = 'lua_protobuf',
-    url = 'https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.1/protobuf-1.1.1-0.src.rock',
-    sha256 = 'eec6a738cd6acbf0ae695c95bac6f89036cd37f23335272cb3717b01834f1dbb'
-)
-
-http_file(
-    name = 'lua_luasocket',
-    url = 'https://luarocks.org/manifests/luarocks/luasocket-3.0rc1-2.src.rock',
-    sha256 = '3882f2a1e1c6145ceb43ead385b861b97fa2f8d487e8669ec5b747406ab251c7'
-)
-
-http_file(
-    name = 'lua_luafilesystem',
-    url = 'https://luarocks.org/manifests/hisham/luafilesystem-1.6.3-1.src.rock',
-    sha256 = '70121e78b8ef9365265b85027729d0520c1163f5609abfa9554b215a672f4e7a'
-)
-
-http_file(
-    name = 'lua_penlight',
-    url = 'http://luarocks.org/repositories/rocks/penlight-1.3.1-1.src.rock',
-    sha256 = '13c6fcc5058a998505ddc4b52496f591d7d37ed2efa9a46a2c39db6183f38783'
-)
-
-http_file(
-    name = 'lua_luaunit',
-    url = 'https://raw.githubusercontent.com/bluebird75/luaunit/LUAUNIT_V3_1/luaunit.lua',
-    sha256 = '77e00531fb9c1a54fc6d8a8a55691328f18f4f0cde0da0a49a00272ceae67dd0'
-)
-
-http_file(
-    name = 'java_junit',
-    url ='https://github.com/junit-team/junit/releases/download/r4.12/junit-4.12.jar',
-    sha256 = '59721f0805e223d84b90677887d9ff567dc534d7c502ca903c0c2b17f05c116a'
-)
-
-http_file(
-    name = 'java_hamcrest',
-    url = 'http://central.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar',
-    sha256 = '66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9'
-)
-
-new_http_archive(
-    name = 'java_javatuples',
-    build_file = 'tools/build/java_javatuples.BUILD',
-    url = 'https://github.com/downloads/javatuples/javatuples/javatuples-1.2-dist.zip',
-    strip_prefix = 'javatuples-1.2',
-    sha256 = 'f5477fb3bb3ed400a69b9227aa1d792c9e5e19fb4b76621b0db5df8112540a84'
-)
-
-http_file(
-    name = 'm4_stdcxx',
-    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx.m4;hb=9e5ef8a7fa6f32dce37a9a340cef793254d2396b',
-    sha256 = 'f40695388506c57124ca4f3945a9ad9d682e491dd077057390579aa58922527e'
-)
-
-http_file(
-    name = 'm4_stdcxx_11',
-    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx_11.m4;hb=9e5ef8a7fa6f32dce37a9a340cef793254d2396b',
-    sha256 = '928e25217046d800194cfbb39ba1acbb5b445aee971699d61a39e9c4e1ae99d0'
 )

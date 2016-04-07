@@ -10,8 +10,8 @@ bazel build \
     //:ksp-avc-version \
     //server \
     //service/SpaceCenter \
-    //service/KerbalAlarmClock \
     //service/InfernalRobotics \
+    //service/KerbalAlarmClock \
     //tools/TestingTools
 
 rm -rf $GAMEDATA

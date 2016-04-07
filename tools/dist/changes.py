@@ -19,10 +19,10 @@ def main():
     data = [
         ('Server', get_changes('server/CHANGES.txt')),
         ('SpaceCenter service', get_changes('service/SpaceCenter/CHANGES.txt')),
-        ('KerbalAlarmClock service', get_changes('service/KerbalAlarmClock/CHANGES.txt')),
         ('InfernalRobotics service', get_changes('service/InfernalRobotics/CHANGES.txt')),
-        ('C++ client', get_changes('client/cpp/CHANGES.txt')),
+        ('KerbalAlarmClock service', get_changes('service/KerbalAlarmClock/CHANGES.txt')),
         ('C# client', get_changes('client/csharp/CHANGES.txt')),
+        ('C++ client', get_changes('client/cpp/CHANGES.txt')),
         ('Java client', get_changes('client/java/CHANGES.txt')),
         ('Lua client', get_changes('client/lua/CHANGES.txt')),
         ('Python client', get_changes('client/python/CHANGES.txt')),

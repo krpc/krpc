@@ -87,8 +87,8 @@ pkg_zip(
         # Server
         '//server',
         '//service/SpaceCenter',
-        '//service/KerbalAlarmClock',
         '//service/InfernalRobotics',
+        '//service/KerbalAlarmClock',
         '//tools/build/ksp:Google.Protobuf',
         '//tools/build/protobuf:LICENSE',
         # Clients
@@ -114,17 +114,17 @@ pkg_zip(
         'server/': 'GameData/kRPC/',
         'server/src/icons': 'GameData/kRPC/icons',
         'service/SpaceCenter/CHANGES.txt': 'GameData/kRPC/CHANGES.SpaceCenter.txt',
-        'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
         'service/InfernalRobotics/CHANGES.txt': 'GameData/kRPC/CHANGES.InfernalRobotics.txt',
+        'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
         'service/SpaceCenter/': 'GameData/kRPC/',
-        'service/KerbalAlarmClock/': 'GameData/kRPC/',
         'service/InfernalRobotics/': 'GameData/kRPC/',
+        'service/KerbalAlarmClock/': 'GameData/kRPC/',
         'tools/build/ksp/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
         'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
         # Clients
-        'client/cpp/': 'client/',
         'client/csharp/': 'client/',
+        'client/cpp/': 'client/',
         'client/java/': 'client/',
         'client/lua/': 'client/',
         'client/python/': 'client/',
@@ -140,11 +140,11 @@ test_suite(
     tests = [
         '//server:test',
         '//doc:test',
-        '//client/python:test',
-        '//client/cpp:test',
-        '//client/lua:test',
         '//client/csharp:test',
-        '//client/java:test'
+        '//client/cpp:test',
+        '//client/java:test',
+        '//client/lua:test',
+        '//client/python:test'
     ]
 )
 

@@ -5,7 +5,7 @@ load('/tools/build/image', 'png_images')
 load('/tools/krpctools/docgen', 'docgen_multiple')
 load('/doc/test', 'check_documented_test')
 load('/config', 'version')
-load('macros', 'cc_binary_multiple', 'csharp_binary_multiple', 'csharp_library_multiple', 'java_binary_multiple')
+load('macros', 'csharp_binary_multiple', 'csharp_library_multiple', 'cc_binary_multiple', 'java_binary_multiple')
 
 filegroup(
     name = 'doc',
@@ -21,22 +21,22 @@ stage_files(
         'src/**/*.rst',
         'src/images/**/*.png',
         'src/crafts/*.craft',
-        'src/scripts/*.cpp',
         'src/scripts/*.cs',
+        'src/scripts/*.cpp',
+        'src/scripts/*.java',
         'src/scripts/*.lua',
-        'src/scripts/*.py',
-        'src/scripts/*.java'
+        'src/scripts/*.py'
     ]) + [
         ':conf',
         'src/_static/custom.css',
         'src/_templates/layout.html',
         'src/dictionary.txt',
         ':images',
-        ':cpp-api',
         ':csharp-api',
+        ':cpp-api',
+        ':java-api',
         ':lua-api',
-        ':python-api',
-        ':java-api'
+        ':python-api'
     ],
     path_map = {
         'doc/src/': ''
@@ -105,8 +105,8 @@ png_images(
 defs = [
     '//server:ServiceDefinitions',
     '//service/SpaceCenter:ServiceDefinitions',
-    '//service/KerbalAlarmClock:ServiceDefinitions',
-    '//service/InfernalRobotics:ServiceDefinitions'
+    '//service/InfernalRobotics:ServiceDefinitions',
+    '//service/KerbalAlarmClock:ServiceDefinitions'
 ]
 
 docgen_multiple(
@@ -211,16 +211,10 @@ check_documented_test(
 filegroup(
     name = 'compile-scripts',
     srcs = [
-        ':compile-scripts-cpp',
         ':compile-scripts-csharp',
+        ':compile-scripts-cpp',
         ':compile-scripts-java'
     ]
-)
-
-cc_binary_multiple(
-    name = 'compile-scripts-cpp',
-    srcs = glob(['src/scripts/*.cpp']),
-    deps = ['//client/cpp:krpc']
 )
 
 filegroup(
@@ -263,6 +257,12 @@ csharp_library_multiple(
         '//tools/build/ksp:System.Xml',
         '//tools/build/ksp:System.Xml.Linq'
     ]
+)
+
+cc_binary_multiple(
+    name = 'compile-scripts-cpp',
+    srcs = glob(['src/scripts/*.cpp']),
+    deps = ['//client/cpp:krpc']
 )
 
 java_binary_multiple(

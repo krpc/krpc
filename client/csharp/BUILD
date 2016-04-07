@@ -70,17 +70,17 @@ clientgen_csharp(
 )
 
 clientgen_csharp(
-    name = 'services-kerbalalarmclock',
-    service = 'KerbalAlarmClock',
-    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
-    out = 'Services/KerbalAlarmClock.cs'
-)
-
-clientgen_csharp(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
     out = 'Services/InfernalRobotics.cs'
+)
+
+clientgen_csharp(
+    name = 'services-kerbalalarmclock',
+    service = 'KerbalAlarmClock',
+    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
+    out = 'Services/KerbalAlarmClock.cs'
 )
 
 client_test(

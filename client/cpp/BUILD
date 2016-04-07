@@ -18,8 +18,8 @@ autotools_dist(
         '//protobuf:cpp',
         ':services-krpc',
         ':services-spacecenter',
-        ':services-kerbalalarmclock',
-        ':services-infernalrobotics'
+        ':services-infernalrobotics',
+        ':services-kerbalalarmclock'
     ],
     path_map = {
         'client/cpp/': '%s/' % name,
@@ -65,17 +65,17 @@ clientgen_cpp(
 )
 
 clientgen_cpp(
-    name = 'services-kerbalalarmclock',
-    service = 'KerbalAlarmClock',
-    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
-    out = 'include/krpc/services/kerbal_alarm_clock.hpp'
-)
-
-clientgen_cpp(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
     out = 'include/krpc/services/infernal_robotics.hpp'
+)
+
+clientgen_cpp(
+    name = 'services-kerbalalarmclock',
+    service = 'KerbalAlarmClock',
+    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
+    out = 'include/krpc/services/kerbal_alarm_clock.hpp'
 )
 
 clientgen_cpp(
@@ -92,8 +92,8 @@ cc_library(
         ':protobuf',
         ':services-krpc',
         ':services-spacecenter',
-        ':services-kerbalalarmclock',
-        ':services-infernalrobotics'
+        ':services-infernalrobotics',
+        ':services-kerbalalarmclock'
     ],
     includes = ['include'],
     deps = ['@protobuf//:protobuf', '@cpp_asio//:asio'],
