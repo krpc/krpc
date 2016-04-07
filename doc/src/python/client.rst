@@ -76,6 +76,8 @@ such as the vessel class provided by the SpaceCenter service by calling
 Calling methods, getting or setting properties, etc. are mapped to remote
 procedure calls and passed to the server by the python client.
 
+.. _python-client-streams:
+
 Streaming Data from the Server
 ------------------------------
 

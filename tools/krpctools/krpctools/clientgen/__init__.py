@@ -4,8 +4,8 @@ import os
 import sys
 import tempfile
 from pkg_resources import Requirement, resource_filename, resource_string
-from .cpp import CppGenerator
 from .csharp import CsharpGenerator
+from .cpp import CppGenerator
 from .java import JavaGenerator
 from ..version import __version__
 from ..servicedefs import servicedefs
@@ -14,7 +14,7 @@ def main():
     prog = 'krpc-clientgen'
     parser = argparse.ArgumentParser(prog=prog, description='Generate client source code for kRPC services.')
     parser.add_argument('-v', '--version', action='version', version='%s version %s' % (prog, __version__))
-    parser.add_argument('language', choices=('cpp', 'csharp', 'java'), help='Language to generate')
+    parser.add_argument('language', choices=('csharp', 'cpp', 'java'), help='Language to generate')
     parser.add_argument('service', help='Name of service to generate')
     parser.add_argument('input', nargs='+', help='Path to service definition JSON file or assembly DLL(s)')
     parser.add_argument('-o', '--output', help='Path to write source code to. If not specified, writes source code to standard output.')
@@ -62,10 +62,10 @@ def main():
             raise RuntimeError('Service \'%s\' not found in input.' % args.service)
 
         # Generate code
-        if args.language == 'cpp':
-            generator = CppGenerator
-        elif args.language == 'csharp':
+        if args.language == 'csharp':
             generator = CsharpGenerator
+        elif args.language == 'cpp':
+            generator = CppGenerator
         else:
             generator = JavaGenerator
         macro_template = resource_string(__name__, args.language+'.tmpl').decode('utf-8')

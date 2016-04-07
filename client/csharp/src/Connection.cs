@@ -1,4 +1,4 @@
-﻿using Google.Protobuf;
+using Google.Protobuf;
 using KRPC.Schema.KRPC;
 using KRPC.Client.Attributes;
 using System;

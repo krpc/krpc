@@ -1,18 +1,6 @@
 load('/tools/build/csharp', 'csharp_binary')
 load('/tools/build/csharp', 'csharp_library')
 
-def cc_binary_multiple(name, srcs, deps):
-    names = []
-    for src in srcs:
-        subname = name + '/' + src
-        names.append(subname)
-        native.cc_binary(
-            name = subname,
-            srcs = [src],
-            deps = deps
-        )
-    native.filegroup(name=name, srcs=names)
-
 def csharp_binary_multiple(name, srcs, deps):
     names = []
     for src in srcs:
@@ -31,6 +19,18 @@ def csharp_library_multiple(name, srcs, deps):
         subname = name + '/' + src
         names.append(subname)
         csharp_library(
+            name = subname,
+            srcs = [src],
+            deps = deps
+        )
+    native.filegroup(name=name, srcs=names)
+
+def cc_binary_multiple(name, srcs, deps):
+    names = []
+    for src in srcs:
+        subname = name + '/' + src
+        names.append(subname)
+        native.cc_binary(
             name = subname,
             srcs = [src],
             deps = deps

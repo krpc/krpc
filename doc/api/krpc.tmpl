@@ -1,0 +1,24 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.name }}
+{{ domain.currentmodule('KRPC') }}
+{% import domain.macros as macros with context %}
+
+KRPC API
+========
+
+{% append services['KRPC'].members['AddStream'] %}
+{% if domain.name == 'lua' %}
+.. note:: Streams are not supported by the Lua client.
+{% else %}
+.. note:: Do not call this method from client code. Use :rst:ref:`streams <{{ domain.name }}-client-streams>` provided by the {{ domain.prettyname }} client library.
+{% endif %}
+{% endappend %}
+{% append services['KRPC'].members['RemoveStream'] %}
+{% if domain.name == 'lua' %}
+.. note:: Streams are not supported by the Lua client.
+{% else %}
+.. note:: Do not call this method from client code. Use :rst:ref:`streams <{{ domain.name }}-client-streams>` provided by the {{ domain.prettyname }} client library.
+{% endif %}
+{% endappend %}
+{{ macros.service(services['KRPC']) }}
+{{ macros.enumeration(services['KRPC'].enumerations['GameScene']) }}
