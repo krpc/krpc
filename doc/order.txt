@@ -1,3 +1,4 @@
+KRPC
 KRPC.GetStatus
 KRPC.GetServices
 KRPC.CurrentGameScene

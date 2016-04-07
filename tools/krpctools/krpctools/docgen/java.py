@@ -2,7 +2,7 @@ from .domain import Domain
 from .nodes import *
 from ..utils import lower_camel_case
 from krpc.utils import snake_case
-from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
+from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class JavaDomain(Domain):
     name = 'java'
@@ -49,6 +49,8 @@ class JavaDomain(Domain):
             return self.type_map[typ.protobuf_type]
         elif generic and isinstance(typ, ValueType):
             return self.boxed_type_map[typ.protobuf_type]
+        elif isinstance(typ, MessageType):
+            return 'krpc.schema.%s' % typ.protobuf_type
         elif isinstance(typ, ClassType):
             return self.shorten_ref(typ.protobuf_type[6:-1])
         elif isinstance(typ, EnumType):
@@ -68,6 +70,8 @@ class JavaDomain(Domain):
     def type_description(self, typ):
         if isinstance(typ, ValueType):
             return self.type(typ)
+        elif isinstance(typ, MessageType):
+            return ':type:`krpc.schema.%s`' % typ.protobuf_type
         elif isinstance(typ, ClassType):
             return ':type:`%s`' % self.type(typ)
         elif isinstance(typ, EnumType):

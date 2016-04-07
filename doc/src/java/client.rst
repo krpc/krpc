@@ -55,6 +55,8 @@ name of the active vessel:
 
 .. literalinclude:: /scripts/Interacting.java
 
+.. _java-client-streams:
+
 Streaming Data from the Server
 ------------------------------
 

@@ -55,8 +55,7 @@ namespace KRPC.Service
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
                     var procedure = new Procedure ();
                     procedure.Name = procedureSignature.Name;
-                    if (procedureSignature.HasReturnType)
-                    {
+                    if (procedureSignature.HasReturnType) {
                         procedure.HasReturnType = true;
                         procedure.ReturnType = TypeUtils.GetTypeName (procedureSignature.ReturnType);
                     }
@@ -64,8 +63,7 @@ namespace KRPC.Service
                         var parameter = new Parameter ();
                         parameter.Name = parameterSignature.Name;
                         parameter.Type = TypeUtils.GetTypeName (parameterSignature.Type);
-                        if (parameterSignature.HasDefaultArgument)
-                        {
+                        if (parameterSignature.HasDefaultArgument) {
                             parameter.HasDefaultArgument = true;
                             parameter.DefaultArgument = parameterSignature.DefaultArgument;
                         }
@@ -108,57 +106,38 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Add a streaming request and return its identifier.
-        /// </summary>
-        [KRPCProcedure]
-        public static uint AddStream (Request request)
-        {
-            return KRPCServer.Context.Server.AddStream (KRPCServer.Context.RPCClient, request);
-        }
-
-        /// <summary>
-        /// Remove a streaming request.
-        /// </summary>
-        [KRPCProcedure]
-        public static void RemoveStream (uint id)
-        {
-            KRPCServer.Context.Server.RemoveStream (KRPCServer.Context.RPCClient, id);
-        }
-
-        /// <summary>
-        /// KSP game scene.
+        /// The game scene. See <see cref="CurrentGameScene"/>.
         /// </summary>
         [KRPCEnum]
         public enum GameScene
         {
             /// <summary>
-            /// Space center.
+            /// The game scene showing the Kerbal Space Center buildings.
             /// </summary>
             SpaceCenter,
             /// <summary>
-            /// Flight.
+            /// The game scene showing a vessel in flight (or on the launchpad/runway).
             /// </summary>
             Flight,
             /// <summary>
-            /// Tracking station.
+            /// The tracking station.
             /// </summary>
             TrackingStation,
             /// <summary>
-            /// Vehicle assembly building.
+            /// The Vehicle Assembly Building.
             /// </summary>
             EditorVAB,
             /// <summary>
-            /// Space plane hangar.
+            /// The Space Plane Hangar.
             /// </summary>
             EditorSPH
-        };
+        }
 
         /// <summary>
         /// Get the current game scene.
         /// </summary>
         [KRPCProperty]
-        public static GameScene CurrentGameScene
-        {
+        public static GameScene CurrentGameScene {
             get {
                 switch (KRPCServer.Context.GameScene) {
                 case global::KRPC.Service.GameScene.SpaceCenter:
@@ -175,6 +154,24 @@ namespace KRPC.Service
                     throw new InvalidOperationException ("Unknown game scene");
                 }
             }
+        }
+
+        /// <summary>
+        /// Add a streaming request and return its identifier.
+        /// </summary>
+        [KRPCProcedure]
+        public static uint AddStream (Request request)
+        {
+            return KRPCServer.Context.Server.AddStream (KRPCServer.Context.RPCClient, request);
+        }
+
+        /// <summary>
+        /// Remove a streaming request.
+        /// </summary>
+        [KRPCProcedure]
+        public static void RemoveStream (uint id)
+        {
+            KRPCServer.Context.Server.RemoveStream (KRPCServer.Context.RPCClient, id);
         }
     }
 }
