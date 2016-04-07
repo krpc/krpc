@@ -1,6 +1,6 @@
 from .domain import Domain
 from .nodes import *
-from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
+from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CsharpDomain(Domain):
     name = 'csharp'
@@ -28,6 +28,8 @@ class CsharpDomain(Domain):
             return 'void'
         elif isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type]
+        elif isinstance(typ, MessageType):
+            return 'KRPC.Schema.%s' % typ.protobuf_type
         elif isinstance(typ, ClassType):
             return self.shorten_ref(typ.protobuf_type[6:-1])
         elif isinstance(typ, EnumType):

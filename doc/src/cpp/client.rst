@@ -123,6 +123,8 @@ SpaceCenter service and outputs the name of the active vessel:
 
 .. literalinclude:: /scripts/Interacting.cpp
 
+.. _cpp-client-streams:
+
 Streaming Data from the Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

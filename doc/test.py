@@ -5,7 +5,6 @@ import json
 
 with open(sys.argv[1], 'r') as f:
     expected = set(x.strip() for x in f.readlines() if x.strip() != '')
-    expected = set(filter(lambda x: not x.startswith('KRPC.'), expected))
 
 with open(sys.argv[2], 'r') as f:
     actual = set(x.strip() for x in f.readlines() if x.strip() != '')

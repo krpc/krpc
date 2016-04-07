@@ -36,6 +36,9 @@ nitpick_ignore = [
     ('csharp:type', 'void'),
     ('csharp:type', 'ReturnType'),
     ('csharp:type', 'LambdaExpression'),
+    ('csharp:type', 'KRPC.Schema.KRPC.Request'),
+    ('csharp:type', 'KRPC.Schema.KRPC.Services'),
+    ('csharp:type', 'KRPC.Schema.KRPC.Status'),
 
     ('cpp:type', 'T'),
     ('cpp:class', 'T'),
@@ -50,6 +53,8 @@ nitpick_ignore = [
     ('cpp:type', 'std::map<std::string, std::string>'),
     ('cpp:type', 'krpc'),
     ('cpp:type', 'krpc::schema'),
+    ('cpp:type', 'krpc::schema::Request'),
+    ('cpp:type', 'krpc::schema::Services'),
     ('cpp:type', 'krpc::schema::Status'),
     ('cpp:type', 'krpc::services'),
     # TODO: shouldn't need to add ignores for the following... but it seems that you do
@@ -92,11 +97,20 @@ nitpick_ignore = [
     ('java:type', 'org'),
     ('java:type', 'java'),
     ('java:type', 'org.javatuples'),
+    ('java:type', 'krpc'),
+    ('java:type', 'krpc.schema'),
+    ('java:type', 'krpc.schema.KRPC'),
+    ('java:type', 'krpc.schema.KRPC.Request'),
+    ('java:type', 'krpc.schema.KRPC.Services'),
+    ('java:type', 'krpc.schema.KRPC.Status'),
 
     ('lua:obj', 'string'),
     ('lua:obj', 'number'),
     ('lua:obj', 'boolean'),
     ('lua:obj', 'Tuple'),
+    ('lua:obj', 'krpc.schema.KRPC.Request'),
+    ('lua:class', 'krpc.schema.KRPC.Services'),
+    ('lua:class', 'krpc.schema.KRPC.Status'),
 
     ('py:obj', 'str'),
     ('py:obj', 'int'),
@@ -107,5 +121,8 @@ nitpick_ignore = [
     ('py:obj', 'tuple of (float, float, float)'),
     ('py:obj', 'tuple of (float, float, float, float)'),
     ('py:obj', 'dict from str to str'),
-    ('py:obj', 'dict from str to float')
+    ('py:obj', 'dict from str to float'),
+    ('py:obj', 'krpc.schema.KRPC.Request'),
+    ('py:class', 'krpc.schema.KRPC.Services'),
+    ('py:class', 'krpc.schema.KRPC.Status')
 ]
