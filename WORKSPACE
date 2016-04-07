@@ -44,8 +44,9 @@ new_http_archive(
 new_http_archive(
     name = 'csharp_json',
     build_file = 'tools/build/csharp_json.BUILD',
-    url = 'https://github.com/JamesNK/Newtonsoft.Json/releases/download/8.0.2/Json80r2.zip',
-    sha256 = '68922c9bef0e2a856e755dd4889556785b347ce8b98b98b5e9b3f5e83f801362'
+    url = 'https://www.nuget.org/api/v2/package/Newtonsoft.Json/8.0.3',
+    type = 'zip',
+    sha256 = '210e42a1bad0928188ef35e1ecdc9e0f3468b8f9153db268cdaa2c2d5c9b2197'
 )
 
 new_http_archive(
@@ -74,19 +75,19 @@ new_http_archive(
 
 http_file(
     name = 'm4_stdcxx',
-    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx.m4;hb=9e5ef8a7fa6f32dce37a9a340cef793254d2396b',
-    sha256 = 'f40695388506c57124ca4f3945a9ad9d682e491dd077057390579aa58922527e'
+    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx.m4;hb=34104ea9e635fae5551fd1d6495a80f8041c4adc',
+    sha256 = 'a6f7cdef49579d995976baece6e605aca1f2c8b0cb771bbae4d7b816710dcb4c'
 )
 
 http_file(
     name = 'm4_stdcxx_11',
-    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx_11.m4;hb=9e5ef8a7fa6f32dce37a9a340cef793254d2396b',
-    sha256 = '928e25217046d800194cfbb39ba1acbb5b445aee971699d61a39e9c4e1ae99d0'
+    url = 'http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_cxx_compile_stdcxx_11.m4;hb=34104ea9e635fae5551fd1d6495a80f8041c4adc',
+    sha256 = '98a0053e6b3fda3243cca0a40e7d7b496cb05ce4716cf6f1663e86c8ad36f1e8'
 )
 
 http_file(
     name = 'java_junit',
-    url ='https://github.com/junit-team/junit/releases/download/r4.12/junit-4.12.jar',
+    url = 'http://central.maven.org/maven2/junit/junit/4.12/junit-4.12.jar',
     sha256 = '59721f0805e223d84b90677887d9ff567dc534d7c502ca903c0c2b17f05c116a'
 )
 
@@ -96,12 +97,10 @@ http_file(
     sha256 = '66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9'
 )
 
-new_http_archive(
+http_file(
     name = 'java_javatuples',
-    build_file = 'tools/build/java_javatuples.BUILD',
-    url = 'https://github.com/downloads/javatuples/javatuples/javatuples-1.2-dist.zip',
-    strip_prefix = 'javatuples-1.2',
-    sha256 = 'f5477fb3bb3ed400a69b9227aa1d792c9e5e19fb4b76621b0db5df8112540a84'
+    url = 'http://central.maven.org/maven2/org/javatuples/javatuples/1.2/javatuples-1.2.jar',
+    sha256 = '2eda5b19d9820e1cc2f69fcd01639a715a673c11f8507e3d1ed593cf765d5e0a'
 )
 
 new_http_archive(
@@ -198,8 +197,8 @@ http_file(
 
 http_file(
     name = 'python_lxml',
-    url = 'https://pypi.python.org/packages/source/l/lxml/lxml-3.5.0.tar.gz',
-    sha256 = '349f93e3a4b09cc59418854ab8013d027d246757c51744bf20069bc89016f578'
+    url = 'https://pypi.python.org/packages/source/l/lxml/lxml-3.6.0.tar.gz',
+    sha256 = '9c74ca28a7f0c30dca8872281b3c47705e21217c8bc63912d95c9e2a7cac6bdf'
 )
 
 http_file(
@@ -252,14 +251,14 @@ http_file(
 
 http_file(
     name = 'python_pygments',
-    url = 'https://pypi.python.org/packages/source/P/Pygments/Pygments-2.1.1.tar.gz',
-    sha256 = '2df7d9a85b56e54c7c021dc98fc877bd216ead652c10da170779c004fb59c01b'
+    url = 'https://pypi.python.org/packages/source/P/Pygments/Pygments-2.1.3.tar.gz',
+    sha256 = '88e4c8a91b2af5962bfa5ea2447ec6dd357018e86e94c7d14bd8cacbc5b55d81'
 )
 
 http_file(
     name = 'python_pytz',
-    url = 'https://pypi.python.org/packages/source/p/pytz/pytz-2015.7.tar.bz2',
-    sha256 = 'fbd26746772c24cb93c8b97cbdad5cb9e46c86bbdb1b9d8a743ee00e2fb1fc5d'
+    url = 'https://pypi.python.org/packages/source/p/pytz/pytz-2016.3.tar.bz2',
+    sha256 = 'c193dfa167ac32c8cb96f26cbcd92972591b22bda0bac3effdbdb04de6cc55d6'
 )
 
 http_file(

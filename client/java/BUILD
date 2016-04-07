@@ -19,6 +19,16 @@ genrule(
     visibility = ['//visibility:public']
 )
 
+java_import(
+    name = 'javatuples',
+    jars = ['@java_javatuples//file']
+)
+
+java_import(
+    name = 'junit',
+    jars = ['@java_junit//file', '@java_hamcrest//file']
+)
+
 java_library(
     name = 'krpc',
     srcs = glob(['src/krpc/**/*.java']) + [
@@ -34,15 +44,10 @@ java_library(
     ],
     deps = [
         '//tools/build/protobuf:protobuf',
-        '@java_javatuples//:jar'
+        ':javatuples'
     ],
     javacopts = copts,
     visibility = ['//visibility:public']
-)
-
-java_import(
-    name = 'junit',
-    jars = ['@java_junit//file', '@java_hamcrest//file']
 )
 
 java_library(
@@ -52,7 +57,7 @@ java_library(
         ':krpc',
         '//tools/build/protobuf:protobuf',
         ':junit',
-        '@java_javatuples//:jar'],
+        ':javatuples'],
     javacopts = copts
 )
 
@@ -64,7 +69,7 @@ java_test(
         ':testlib',
         '//tools/build/protobuf:protobuf',
         ':junit',
-        '@java_javatuples//:jar'
+        ':javatuples'
     ],
     javacopts = copts,
     size = 'small',

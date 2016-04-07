@@ -265,12 +265,17 @@ cc_binary_multiple(
     deps = ['//client/cpp:krpc']
 )
 
+java_import(
+    name = 'javatuples',
+    jars = ['@java_javatuples//file']
+)
+
 java_binary_multiple(
     name = 'compile-scripts-java',
     srcs = glob(['src/scripts/*.java']),
     deps = [
         '//client/java:krpc-jar',
         '//tools/build/protobuf:protobuf',
-        '@java_javatuples//:jar'
+        ':javatuples'
     ]
 )
