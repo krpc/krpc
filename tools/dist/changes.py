@@ -4,7 +4,12 @@ import argparse
 import re
 
 def main():
-    current_version = re.match('version\s*=\s*\'(.+)\'', ''.join(open('config.bzl', 'r').readlines()), re.MULTILINE).group(1)
+    config = ''.join(open('config.bzl', 'r').readlines())
+    m = re.search('^version\s*=\s*\'(.+)\'$', config, re.MULTILINE)
+    if not m:
+        print('Failed to get version from config.bzl')
+        return 1
+    current_version = m.group(1)
 
     parser = argparse.ArgumentParser()
     parser.add_argument('site', choices=('github', 'spacedock', 'curse'))
@@ -30,22 +35,22 @@ def main():
             changelist.append((name, changes[args.version]))
 
     if args.site == 'github':
-        print ''.join(open('tools/dist/github-changes.tmpl', 'r').readlines()).replace('%VERSION%', args.version)
-        print '### Changes ###\n'
+        print(''.join(open('tools/dist/github-changes.tmpl', 'r').readlines()).replace('%VERSION%', args.version))
+        print('### Changes ###\n')
     if args.site == 'github' or args.site == 'spacedock':
         for name,items in changelist:
-            print '####', name, '####\n'
+            print('#### '+ name + ' ####\n')
             for item in items:
-                print '*', item
-            print
+                print('* ' + item)
+            print('')
     else: # curse
-        print '<ul>'
+        print('<ul>')
         for name,items in changelist:
-            print '<li>'+name+'<ul>'
+            print('<li>'+name+'<ul>')
             for item in items:
-                print '<li>'+item+'</li>'
-            print '</ul></li>'
-        print '</ul>'
+                print('<li>'+item+'</li>')
+            print('</ul></li>')
+        print('</ul>')
 
 def get_changes(path):
     changes = {}
@@ -65,8 +70,8 @@ def get_changes(path):
             elif line.startswith('   '):
                 changes[version][0] += line[2:]
             else:
-                print 'Invalid line:'
-                print line
+                print('Invalid line in ' + path + ':')
+                print(line)
                 exit(1)
     return changes
 
