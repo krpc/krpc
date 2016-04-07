@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;

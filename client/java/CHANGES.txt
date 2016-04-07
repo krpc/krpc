@@ -1,5 +1,6 @@
 v0.2.3
  * Make client thread safe
+ * Support JDK 1.7+
 
 v0.2.2
  * Initial version

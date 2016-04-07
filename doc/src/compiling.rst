@@ -52,8 +52,8 @@ them using ``bazel build <target>``:
 * ``//server`` builds the server plugin and associated files
 * Targets for building individual clients:
 
-  * ``//client/cpp``
   * ``//client/csharp``
+  * ``//client/cpp``
   * ``//client/java``
   * ``//client/lua``
   * ``//client/python``
@@ -61,14 +61,14 @@ them using ``bazel build <target>``:
 * Targets for building individual services:
 
   * ``//service/SpaceCenter``
-  * ``//service/KerbalAlarmClock``
   * ``//service/InfernalRobotics``
+  * ``//service/KerbalAlarmClock``
 
 * Targets for building protobuf definitions for individual languages:
 
-  * ``//protobuf/cpp``
   * ``//protobuf/csharp``
-  * ``//protobuf/protobufjava``
+  * ``//protobuf/cpp``
+  * ``//protobuf/java``
   * ``//protobuf/lua``
   * ``//protobuf/python``
 

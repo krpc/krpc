@@ -10,7 +10,7 @@ result=`git diff --cached | grep $'\xEF\xBB\xBF'`
 
 if [ "$result" ]; then
   echo "error: UTF-16 byte order mark(s) found in commit."
-  echo "hint: Remove them using 'make strip-bom' and try again."
+  echo "hint: Remove them using 'tools/strip-bom.sh' and try again."
   exit 1
 fi
 

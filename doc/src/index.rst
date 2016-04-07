@@ -4,8 +4,8 @@ kRPC Documentation
 kRPC allows you to control Kerbal Space Program from scripts running outside of
 the game.
 It comes with client libraries for many popular languages including
-:doc:`C++ <cpp/client>`,
 :doc:`C# <csharp/client>`,
+:doc:`C++ <cpp/client>`,
 :doc:`Java <java/client>`,
 :doc:`Lua <lua/client>` and
 :doc:`Python <python/client>`.

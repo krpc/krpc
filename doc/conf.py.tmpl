@@ -33,32 +33,6 @@ extlinks = {
 add_module_names = False
 
 nitpick_ignore = [
-    ('py:obj', 'str'),
-    ('py:obj', 'int'),
-    ('py:obj', 'bool'),
-    ('py:obj', 'float'),
-    ('py:obj', 'tuple'),
-    ('py:obj', 'list of str'),
-    ('py:obj', 'tuple of (float, float, float)'),
-    ('py:obj', 'tuple of (float, float, float, float)'),
-    ('py:obj', 'dict from str to str'),
-    ('py:obj', 'dict from str to float'),
-
-    ('lua:obj', 'string'),
-    ('lua:obj', 'number'),
-    ('lua:obj', 'boolean'),
-    ('lua:obj', 'Tuple'),
-
-    ('java:type', 'int'),
-    ('java:type', 'boolean'),
-    ('java:type', 'float'),
-    ('java:type', 'double'),
-    ('java:type', 'Single'),
-    ('java:type', 'T'),
-    ('java:type', 'org'),
-    ('java:type', 'java'),
-    ('java:type', 'org.javatuples'),
-
     ('csharp:type', 'void'),
     ('csharp:type', 'ReturnType'),
     ('csharp:type', 'LambdaExpression'),
@@ -107,5 +81,31 @@ nitpick_ignore = [
     ('cpp:type', 'std::vector<SpaceCenter::SolarPanel>'),
     ('cpp:type', 'std::vector<SpaceCenter::Module>'),
     ('cpp:type', 'std::map<std::string, SpaceCenter::Engine>'),
-    ('cpp:type', 'std::map<std::string, SpaceCenter::CelestialBody>')
+    ('cpp:type', 'std::map<std::string, SpaceCenter::CelestialBody>'),
+
+    ('java:type', 'int'),
+    ('java:type', 'boolean'),
+    ('java:type', 'float'),
+    ('java:type', 'double'),
+    ('java:type', 'Single'),
+    ('java:type', 'T'),
+    ('java:type', 'org'),
+    ('java:type', 'java'),
+    ('java:type', 'org.javatuples'),
+
+    ('lua:obj', 'string'),
+    ('lua:obj', 'number'),
+    ('lua:obj', 'boolean'),
+    ('lua:obj', 'Tuple'),
+
+    ('py:obj', 'str'),
+    ('py:obj', 'int'),
+    ('py:obj', 'bool'),
+    ('py:obj', 'float'),
+    ('py:obj', 'tuple'),
+    ('py:obj', 'list of str'),
+    ('py:obj', 'tuple of (float, float, float)'),
+    ('py:obj', 'tuple of (float, float, float, float)'),
+    ('py:obj', 'dict from str to str'),
+    ('py:obj', 'dict from str to float')
 ]

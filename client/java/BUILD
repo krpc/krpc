@@ -25,8 +25,8 @@ java_library(
         '//protobuf:java',
         ':services-krpc',
         ':services-spacecenter',
-        ':services-kerbalalarmclock',
-        ':services-infernalrobotics'
+        ':services-infernalrobotics',
+        ':services-kerbalalarmclock'
     ],
     resources = [
         '//:readme', '//:version', 'CHANGES.txt',
@@ -96,17 +96,17 @@ clientgen_java(
 )
 
 clientgen_java(
-    name = 'services-kerbalalarmclock',
-    service = 'KerbalAlarmClock',
-    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
-    out = 'services/KerbalAlarmClock.java'
-)
-
-clientgen_java(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
     out = 'services/InfernalRobotics.java'
+)
+
+clientgen_java(
+    name = 'services-kerbalalarmclock',
+    service = 'KerbalAlarmClock',
+    defs = '//service/KerbalAlarmClock:ServiceDefinitions',
+    out = 'services/KerbalAlarmClock.java'
 )
 
 clientgen_java(
