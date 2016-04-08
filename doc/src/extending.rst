@@ -493,7 +493,7 @@ Further Examples
 ----------------
 
 See the `SpaceCenter service implementation
-<https://github.com/krpc/krpc/tree/latest-version/src/kRPCSpaceCenter/Services>`_
+<https://github.com/krpc/krpc/tree/latest-version/service/SpaceCenter/src/Services>`_
 for more extensive examples.
 
 .. _service-api-clientgen:
