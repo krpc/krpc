@@ -89,6 +89,8 @@
     <Compile Include="ExternalAPI\RemoteTech.cs" />
     <Compile Include="PilotAddon.cs" />
     <Compile Include="Services\AutoPilot.cs" />
+    <Compile Include="Services\Camera.cs" />
+    <Compile Include="Services\CameraMode.cs" />
     <Compile Include="Services\CelestialBody.cs" />
     <Compile Include="Services\Comms.cs" />
     <Compile Include="Services\Control.cs" />

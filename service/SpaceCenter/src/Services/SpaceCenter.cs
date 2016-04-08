@@ -147,6 +147,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// An object that can be used to control the camera.
+        /// </summary>
+        [KRPCProperty]
+        public static Camera Camera {
+            get { return new Camera (); }
+        }
+
+        /// <summary>
         /// The current universal time in seconds.
         /// </summary>
         [KRPCProperty]
