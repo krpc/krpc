@@ -18,7 +18,7 @@ namespace TestServer
         static void Help (OptionSet options)
         {
             Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--rpc_port=VALUE] [--stream_port=VALUE]");
-            Console.WriteLine ("                      [--debug] [--quiet] [--server-debug] [--write-ports PATH]");
+            Console.WriteLine ("                      [--debug] [--quiet] [--server-debug]");
             Console.WriteLine ("");
             Console.WriteLine ("A kRPC test server for the client library unit tests");
             Console.WriteLine ("");
@@ -34,7 +34,6 @@ namespace TestServer
             Logger.Level = Logger.Severity.Info;
             RPCException.VerboseErrors = false;
             bool serverDebug = false;
-            String writePortsPath = null;
             ushort rpcPort = 0;
             ushort streamPort = 0;
 
@@ -70,8 +69,6 @@ namespace TestServer
                 }, {
                     "server-debug", "Output debug information about the server",
                     v => serverDebug = v != null
-                }, { "write-ports=", "Write the server's port numbers to the given {FILE}",
-                    v => writePortsPath = v
                 },
             };
             options.Parse (args);
@@ -95,10 +92,12 @@ namespace TestServer
             var timeSpan = new TimeSpan ();
             server.GetUniversalTime = () => timeSpan.TotalSeconds;
             server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
-            server.Start ();
 
-            if (writePortsPath != null)
-                System.IO.File.WriteAllText (writePortsPath, server.RPCPort.ToString () + "\n" + server.StreamPort.ToString () + "\n");
+            Console.WriteLine ("Starting server...");
+            server.Start ();
+            Console.WriteLine ("rpc_port = " + server.RPCPort);
+            Console.WriteLine ("stream_port = " + server.StreamPort);
+            Console.WriteLine ("Server started successfully");
 
             const long targetFPS = 60;
             long update = 0;
