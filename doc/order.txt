@@ -560,7 +560,11 @@ SpaceCenter.AutoPilot.MaxRollSpeed
 SpaceCenter.AutoPilot.SetPIDParameters
 SpaceCenter.Camera
 SpaceCenter.Camera.Mode
+SpaceCenter.Camera.Pitch
+SpaceCenter.Camera.Heading
 SpaceCenter.Camera.Distance
+SpaceCenter.Camera.MinPitch
+SpaceCenter.Camera.MaxPitch
 SpaceCenter.Camera.MinDistance
 SpaceCenter.Camera.MaxDistance
 SpaceCenter.Camera.DefaultDistance

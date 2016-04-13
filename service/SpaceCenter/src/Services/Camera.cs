@@ -3,6 +3,8 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -12,6 +14,13 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Camera : Equatable<Camera>
     {
+        /// <summary>
+        /// Create a camera object.
+        /// </summary>
+        public Camera ()
+        {
+        }
+
         /// <summary>
         /// Check if cameras are equal.
         /// Note: there is only one camera object.
@@ -94,48 +103,137 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The pitch of the camera, in degrees.
+        /// A value between <see cref="MinPitch"/> and <see cref="MaxPitch"/>
+        /// </summary>
+        [KRPCProperty]
+        public float Pitch {
+            get {
+                switch (Mode) {
+                case CameraMode.Map:
+                    return PlanetariumCamera.fetch.getPitch ();
+                case CameraMode.IVA:
+                    throw new NotImplementedException ();
+                default:
+                    return FlightCamera.fetch.getPitch ();
+                }
+            }
+            set {
+                switch (Mode) {
+                case CameraMode.Map:
+                    {
+                        var camera = PlanetariumCamera.fetch;
+                        camera.camPitch = GeometryExtensions.ToRadians (value).Clamp (camera.minPitch, camera.maxPitch);
+                        break;
+                    }
+                case CameraMode.IVA:
+                    throw new NotImplementedException ();
+                default:
+                    {
+                        var camera = FlightCamera.fetch;
+                        camera.camPitch = GeometryExtensions.ToRadians (value).Clamp (camera.minPitch, camera.maxPitch);
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// The heading of the camera, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public float Heading {
+            get {
+                switch (Mode) {
+                case CameraMode.Map:
+                    return PlanetariumCamera.fetch.getYaw ();
+                case CameraMode.IVA:
+                    throw new NotImplementedException ();
+                default:
+                    return FlightCamera.fetch.getYaw ();
+                }
+            }
+            set {
+                switch (Mode) {
+                case CameraMode.Map:
+                    PlanetariumCamera.fetch.camHdg = GeometryExtensions.ToRadians (value);
+                    break;
+                case CameraMode.IVA:
+                    throw new NotImplementedException ();
+                default:
+                    FlightCamera.fetch.camHdg = GeometryExtensions.ToRadians (value);
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
         /// The distance from the camera to the subject.
         /// A value between <see cref="MinDistance"/> and <see cref="MaxDistance"/>.
         /// </summary>
         [KRPCProperty]
         public float Distance {
             get {
-                if (MapView.MapIsEnabled)
+                switch (Mode) {
+                case CameraMode.Map:
                     return PlanetariumCamera.fetch.Distance;
-                var mode = CameraManager.Instance.currentCameraMode;
-                if (mode == CameraManager.CameraMode.Flight)
-                    return FlightCamera.fetch.Distance;
-                else if (mode == CameraManager.CameraMode.IVA)
+                case CameraMode.IVA:
                     throw new NotImplementedException ();
-                throw new InvalidOperationException ("Unknown camera mode " + mode);
+                default:
+                    return FlightCamera.fetch.Distance;
+                }
             }
             set {
-                if (MapView.MapIsEnabled)
-                    PlanetariumCamera.fetch.SetDistance (value.Clamp (MinDistance, MaxDistance));
-                var mode = CameraManager.Instance.currentCameraMode;
-                if (mode == CameraManager.CameraMode.Flight)
-                    FlightCamera.fetch.SetDistance (value.Clamp (MinDistance, MaxDistance));
-                else if (mode == CameraManager.CameraMode.IVA)
+                switch (Mode) {
+                case CameraMode.Map:
+                    {
+                        var camera = PlanetariumCamera.fetch;
+                        camera.SetDistance (value.Clamp (camera.minDistance, camera.maxDistance));
+                        break;
+                    }
+                case CameraMode.IVA:
                     throw new NotImplementedException ();
-                else
-                    throw new InvalidOperationException ("Unknown camera mode " + mode);
+                default:
+                    {
+                        var camera = FlightCamera.fetch;
+                        camera.SetDistance (value.Clamp (camera.minDistance, camera.maxDistance));
+                        break;
+                    }
+                }
             }
         }
 
         /// <summary>
-        /// Maximum distance from the camera to the subject.
+        /// The minimum pitch of the camera.
         /// </summary>
         [KRPCProperty]
-        public float MaxDistance {
+        public float MinPitch {
             get {
-                if (MapView.MapIsEnabled)
-                    return PlanetariumCamera.fetch.maxDistance;
-                var mode = CameraManager.Instance.currentCameraMode;
-                if (mode == CameraManager.CameraMode.Flight)
-                    return FlightCamera.fetch.maxDistance;
-                else if (mode == CameraManager.CameraMode.IVA)
-                    throw new NotImplementedException ();
-                throw new InvalidOperationException ("Unknown camera mode " + mode);
+                switch (Mode) {
+                case CameraMode.Map:
+                    return GeometryExtensions.ToDegrees (PlanetariumCamera.fetch.minPitch);
+                case CameraMode.IVA:
+                    return InternalCamera.Instance.minPitch;
+                default:
+                    return GeometryExtensions.ToDegrees (FlightCamera.fetch.minPitch);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The maximum pitch of the camera.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxPitch {
+            get {
+                switch (Mode) {
+                case CameraMode.Map:
+                    return GeometryExtensions.ToDegrees (PlanetariumCamera.fetch.maxPitch);
+                case CameraMode.IVA:
+                    return InternalCamera.Instance.maxPitch;
+                default:
+                    return GeometryExtensions.ToDegrees (FlightCamera.fetch.maxPitch);
+                }
             }
         }
 
@@ -145,14 +243,31 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float MinDistance {
             get {
-                if (MapView.MapIsEnabled)
+                switch (Mode) {
+                case CameraMode.Map:
                     return PlanetariumCamera.fetch.minDistance;
-                var mode = CameraManager.Instance.currentCameraMode;
-                if (mode == CameraManager.CameraMode.Flight)
+                case CameraMode.IVA:
+                    return InternalCamera.Instance.maxZoom;
+                default:
                     return FlightCamera.fetch.minDistance;
-                else if (mode == CameraManager.CameraMode.IVA)
-                    throw new NotImplementedException ();
-                throw new InvalidOperationException ("Unknown camera mode " + mode);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Maximum distance from the camera to the subject.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxDistance {
+            get {
+                switch (Mode) {
+                case CameraMode.Map:
+                    return PlanetariumCamera.fetch.maxDistance;
+                case CameraMode.IVA:
+                    return InternalCamera.Instance.minZoom;
+                default:
+                    return FlightCamera.fetch.maxDistance;
+                }
             }
         }
 
@@ -162,14 +277,14 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float DefaultDistance {
             get {
-                if (MapView.MapIsEnabled)
+                switch (Mode) {
+                case CameraMode.Map:
                     return PlanetariumCamera.fetch.startDistance;
-                var mode = CameraManager.Instance.currentCameraMode;
-                if (mode == CameraManager.CameraMode.Flight)
-                    return FlightCamera.fetch.startDistance;
-                else if (mode == CameraManager.CameraMode.IVA)
+                case CameraMode.IVA:
                     throw new NotImplementedException ();
-                throw new InvalidOperationException ("Unknown camera mode " + mode);
+                default:
+                    return FlightCamera.fetch.startDistance;
+                }
             }
         }
 
