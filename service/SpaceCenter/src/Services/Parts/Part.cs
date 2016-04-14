@@ -1,12 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using CompoundParts;
+using UnityEngine;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
-using System;
-using CompoundParts;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -569,6 +570,48 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
             return referenceFrame.RotationToWorldSpace (InternalPart.transform.rotation).ToTuple ();
+        }
+
+        /// <summary>
+        /// The moment of inertia of the part in <math>kg.m^2</math> around its center of mass
+        /// in the parts reference frame (<see cref="ReferenceFrame"/>).
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 MomentOfInertia
+        {
+            get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
+        }
+
+        /// <summary>
+        /// The inertia tensor of the part in the parts reference frame (<see cref="ReferenceFrame"/>).
+        /// Returns the 3x3 matrix as a list of elements, in row-major order.
+        /// </summary>
+        [KRPCProperty]
+        public IList<double> InertiaTensor
+        {
+            get { return ComputeInertiaTensor ().ToList (); }
+        }
+
+        /// <summary>
+        /// Computes the inertia tensor of the part in the parts reference frame.
+        /// </summary>
+        Matrix4x4 ComputeInertiaTensor ()
+        {
+            var part = InternalPart;
+            if (part.rb == null)
+                return Matrix4x4.zero;
+
+            Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
+
+            // translate: inertiaTensor frame to part frame
+            Quaternion rot = part.rb.inertiaTensorRotation;
+            Quaternion inv = Quaternion.Inverse(rot);
+
+            Matrix4x4 rotMatrix = Matrix4x4.TRS(Vector3.zero, rot, Vector3.one);
+            Matrix4x4 invMatrix = Matrix4x4.TRS(Vector3.zero, inv, Vector3.one);
+
+            var inertiaTensor = rotMatrix * partTensor * invMatrix;
+            return inertiaTensor.MultiplyScalar (1000f);
         }
 
         /// <summary>
