@@ -20,6 +20,10 @@ SpaceCenter.TargetDockingPort
 SpaceCenter.ClearTarget
 SpaceCenter.LaunchVesselFromVAB
 SpaceCenter.LaunchVesselFromSPH
+SpaceCenter.Save
+SpaceCenter.Load
+SpaceCenter.Quicksave
+SpaceCenter.Quickload
 SpaceCenter.UT
 SpaceCenter.G
 SpaceCenter.WarpMode

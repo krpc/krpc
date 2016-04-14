@@ -1,3 +1,6 @@
+v0.2.4
+ * Add saving and loading games using SpaceCenter.Save, Load, Quicksave and Quickload (#247)
+
 v0.2.3
  * Vessel object additions:
    * MomentOfInertia - MoI of the vessel around it's CoM in the pitch/yaw/roll axes

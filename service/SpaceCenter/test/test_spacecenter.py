@@ -115,6 +115,15 @@ class TestSpaceCenter(testingtools.TestCase):
         self.assertEqual(None, self.sc.target_vessel)
         self.assertEqual(None, self.sc.target_docking_port)
 
+    def test_save_and_load(self):
+        name = self.vessel.name
+        self.sc.save('test_save_and_load')
+        self.vessel.name = 'vessel_name_before_load'
+        time.sleep(0.1)
+        self.assertEqual(self.vessel.name, 'vessel_name_before_load')
+        self.sc.load('test_save_and_load')
+        self.assertEqual(self.vessel.name, name)
+
     def test_ut(self):
         ut = self.sc.ut
         time.sleep(1)

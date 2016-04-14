@@ -147,6 +147,56 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Save the game with a given name.
+        /// This will create a save file called <c>name.sfs</c> in the folder of the current save game.
+        /// </summary>
+        [KRPCProcedure]
+        public static void Save (string name)
+        {
+            GamePersistence.SaveGame (name, HighLogic.SaveFolder, SaveMode.OVERWRITE);
+        }
+
+        /// <summary>
+        /// Load the game with the given name.
+        /// This will create a load a save file called <c>name.sfs</c> from the folder of the current save game.
+        /// </summary>
+        [KRPCProcedure]
+        public static void Load (string name)
+        {
+            var game = GamePersistence.LoadGame (name, HighLogic.SaveFolder, true, false);
+            if (game == null || game.flightState == null || !game.compatible)
+                throw new ArgumentException ("Failed to load " + name);
+            if (game.flightState.protoVessels.Count == 0)
+                throw new ArgumentException ("Failed to load vessel id 0 from " + name);
+            FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
+            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+        }
+
+        /// <summary>
+        /// Save a quicksave.
+        /// </summary>
+        /// <remarks>
+        /// This is the same as calling <see cref="Save"/> with the name "quicksave".
+        /// </remarks>
+        [KRPCProcedure]
+        public static void Quicksave ()
+        {
+            Save ("quicksave");
+        }
+
+        /// <summary>
+        /// Load a quicksave.
+        /// </summary>
+        /// <remarks>
+        /// This is the same as calling <see cref="Load"/> with the name "quicksave".
+        /// </remarks>
+        [KRPCProcedure]
+        public static void Quickload ()
+        {
+            Load ("quicksave");
+        }
+
+        /// <summary>
         /// The current universal time in seconds.
         /// </summary>
         [KRPCProperty]

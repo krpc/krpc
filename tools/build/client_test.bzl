@@ -21,15 +21,13 @@ def _impl(ctx):
         sub_commands.append('mkdir -p `dirname %s`' % (server_runfiles_dir + '/' + f.short_path))
         sub_commands.append('ln -f -r -s %s %s' % (f.short_path, server_runfiles_dir + '/' + f.short_path))
 
-    ports_file = 'ports/'+ctx.executable.test_executable.basename
-
+    stdout = 'server-executable.runfiles/stdout'
     sub_commands.extend([
         'pkill TestServer.exe',
-        'mkdir server-executable.runfiles/ports',
-        '(cd server-executable.runfiles; %s --quiet --write-ports=%s) &' % (ctx.executable.server_executable.short_path, ports_file),
-        'inotifywait -t 3 -e create -e moved_to server-executable.runfiles/ports',
-        'RPC_PORT=`sed -n \'1p\' server-executable.runfiles/%s`' % ports_file,
-        'STREAM_PORT=`sed -n \'2p\' server-executable.runfiles/%s`' % ports_file,
+        '(cd server-executable.runfiles; %s --quiet >stdout) &' % (ctx.executable.server_executable.short_path),
+        'while ! grep "Server started successfully" %s >/dev/null 2>&1; do sleep 0.1 ; done' % stdout,
+        'RPC_PORT=`awk \'/rpc_port = /{print $NF}\' %s`' % stdout,
+        'STREAM_PORT=`awk \'/stream_port = /{print $NF}\' %s`' % stdout,
         'echo "Server started, rpc port = $RPC_PORT, stream port = $STREAM_PORT"',
         '(cd test-executable.runfiles/%s.runfiles; RPC_PORT=$RPC_PORT STREAM_PORT=$STREAM_PORT ../%s)' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.basename),
         'RESULT=$?',
