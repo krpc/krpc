@@ -473,11 +473,6 @@ SpaceCenter.RadiatorState.Retracted
 SpaceCenter.RadiatorState.Extending
 SpaceCenter.RadiatorState.Retracting
 SpaceCenter.RadiatorState.Broken
-SpaceCenter.ReactionWheel
-SpaceCenter.ReactionWheel.Part
-SpaceCenter.ReactionWheel.Active
-SpaceCenter.ReactionWheel.Broken
-SpaceCenter.ReactionWheel.Torque
 SpaceCenter.RCS
 SpaceCenter.RCS.Part
 SpaceCenter.RCS.Active
@@ -499,6 +494,7 @@ SpaceCenter.RCS.KerbinSeaLevelSpecificImpulse
 SpaceCenter.RCS.Propellants
 SpaceCenter.RCS.PropellantRatios
 SpaceCenter.RCS.HasFuel
+SpaceCenter.ReactionWheel
 SpaceCenter.ReactionWheel.Part
 SpaceCenter.ReactionWheel.Active
 SpaceCenter.ReactionWheel.Broken
