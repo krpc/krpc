@@ -12,7 +12,7 @@ genrule(
     name = 'zip',
     srcs = [':rock'],
     outs = ['krpc-lua-%s.zip' % version],
-    cmd = 'ln -f -r -s "$<" "$@"',
+    cmd = 'ln -f -s "`pwd`/$<" "`pwd`/$@"',
     output_to_bindir = True
 )
 
