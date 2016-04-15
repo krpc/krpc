@@ -519,6 +519,10 @@ SpaceCenter.ResourceFlowMode.Vessel
 SpaceCenter.ResourceFlowMode.Stage
 SpaceCenter.ResourceFlowMode.Adjacent
 SpaceCenter.ResourceFlowMode.None
+SpaceCenter.ResourceTransfer
+SpaceCenter.ResourceTransfer.Start
+SpaceCenter.ResourceTransfer.Amount
+SpaceCenter.ResourceTransfer.Complete
 SpaceCenter.Node
 SpaceCenter.Node.Prograde
 SpaceCenter.Node.Normal

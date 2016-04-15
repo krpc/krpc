@@ -1,5 +1,6 @@
 v0.2.4
  * Add saving and loading games using SpaceCenter.Save, Load, Quicksave and Quickload (#247)
+ * Add resource transfers
 
 v0.2.3
  * Add support for engine mode switching (#219)

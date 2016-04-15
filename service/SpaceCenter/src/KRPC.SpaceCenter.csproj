@@ -85,6 +85,7 @@
     <Compile Include="ExternalAPI\Loader.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
     <Compile Include="PilotAddon.cs" />
+    <Compile Include="ResourceTransferAddon.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\CelestialBody.cs" />
     <Compile Include="Services\Comms.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Services\ReferenceFrame.cs" />
     <Compile Include="Services\ResourceFlowMode.cs" />
     <Compile Include="Services\Resources.cs" />
+    <Compile Include="Services\ResourceTransfer.cs" />
     <Compile Include="Services\SASMode.cs" />
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\SpeedMode.cs" />
