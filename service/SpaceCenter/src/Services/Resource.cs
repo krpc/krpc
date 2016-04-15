@@ -8,7 +8,7 @@ using KRPC.SpaceCenter.ExtensionMethods;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
-    /// An resource within an individual part.
+    /// A resource stored within a part.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Resource : Equatable<Resource>
@@ -46,7 +46,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The KSP part.
+        /// The KSP part resource.
         /// </summary>
         public PartResource InternalResource {
             get { return InternalPart.Resources.Get (resourceId); }
