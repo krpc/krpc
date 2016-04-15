@@ -12,7 +12,7 @@ def _get_src_dir(srcs, short_path=False):
 def _add_runfile(sub_commands, path, runfile_path):
     sub_commands.extend([
         'mkdir -p `dirname %s`' % runfile_path,
-        'ln -f -r -s %s %s' % (path, runfile_path)
+        'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (path, runfile_path)
     ])
 
 def _build_impl(ctx):

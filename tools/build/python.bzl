@@ -49,7 +49,7 @@ def _sdist_impl(ctx):
             mnemonic = 'PackageFile',
             inputs = [input],
             outputs = [staging_file],
-            command = 'ln -f -r -s %s %s' % (input.path, staging_file.path)
+            command = 'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (input.path, staging_file.path)
         )
         staging_inputs.append(staging_file)
 

@@ -5,9 +5,9 @@ def _impl(ctx):
 
     sub_commands = [
         'mkdir -p `dirname test-executable.runfiles/%s`' % ctx.executable.test_executable.short_path,
-        'ln -f -r -s %s test-executable.runfiles/%s' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.short_path),
+        'ln -f -s "`pwd`/%s" "`pwd`/test-executable.runfiles/%s"' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.short_path),
         'mkdir -p `dirname server-executable.runfiles/%s`' % ctx.executable.server_executable.short_path,
-        'ln -f -r -s %s server-executable.runfiles/%s' % (ctx.executable.server_executable.short_path, ctx.executable.server_executable.short_path),
+        'ln -f -s "`pwd`/%s" "`pwd`/server-executable.runfiles/%s"' % (ctx.executable.server_executable.short_path, ctx.executable.server_executable.short_path),
     ]
 
     test_runfiles_dir = 'test-executable.runfiles/' + ctx.executable.test_executable.short_path + '.runfiles'
@@ -15,11 +15,11 @@ def _impl(ctx):
 
     for f in test_executable_runfiles:
         sub_commands.append('mkdir -p `dirname %s`' % (test_runfiles_dir + '/' + f.short_path))
-        sub_commands.append('ln -f -r -s %s %s' % (f.short_path, test_runfiles_dir + '/' + f.short_path))
+        sub_commands.append('ln -f -s "`pwd`/%s" "`pwd`/%s"' % (f.short_path, test_runfiles_dir + '/' + f.short_path))
 
     for f in server_executable_runfiles:
         sub_commands.append('mkdir -p `dirname %s`' % (server_runfiles_dir + '/' + f.short_path))
-        sub_commands.append('ln -f -r -s %s %s' % (f.short_path, server_runfiles_dir + '/' + f.short_path))
+        sub_commands.append('ln -f -s "`pwd`/%s" "`pwd`/%s"' % (f.short_path, server_runfiles_dir + '/' + f.short_path))
 
     stdout = 'server-executable.runfiles/stdout'
     sub_commands.extend([
