@@ -492,7 +492,6 @@ SpaceCenter.RCS.Thrust
 SpaceCenter.RCS.AvailableThrust
 SpaceCenter.RCS.MaxThrust
 SpaceCenter.RCS.MaxVacuumThrust
-SpaceCenter.RCS.ThrustLimit
 SpaceCenter.RCS.Thrusters
 SpaceCenter.RCS.SpecificImpulse
 SpaceCenter.RCS.VacuumSpecificImpulse

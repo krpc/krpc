@@ -141,7 +141,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The maximum amount of thrust that can be produced by the RCS, in
         /// Newtons. This is the amount of thrust produced by the RCS when
-        /// activated and <see cref="Engine.ThrustLimit"/>.
+        /// activated.
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
@@ -157,15 +157,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float MaxVacuumThrust {
             get { throw new NotImplementedException (); }
-        }
-
-        /// <summary>
-        /// The thrust limiter of the RCS. A value between 0 and 1.
-        /// </summary>
-        [KRPCProperty]
-        public float ThrustLimit {
-            get { throw new NotImplementedException (); }
-            set { throw new NotImplementedException (); }
         }
 
         /// <summary>
