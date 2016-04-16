@@ -92,7 +92,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Whether the engine is active. Setting this attribute may have no effect,
-        /// depending on <see cref="Engine.CanShutdown"/> and <see cref="Engine.CanRestart"/>.
+        /// depending on <see cref="CanShutdown"/> and <see cref="CanRestart"/>.
         /// </summary>
         [KRPCProperty]
         public bool Active {
@@ -130,7 +130,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The maximum available amount of thrust that can be produced by the
-        /// engine, in Newtons. This takes <see cref="Engine.ThrustLimit"/> into account,
+        /// engine, in Newtons. This takes <see cref="ThrustLimit"/> into account,
         /// and is the amount of thrust produced by the engine when activated and the
         /// main throttle is set to 100%. Returns zero if the engine does not have any fuel.
         /// </summary>
@@ -146,7 +146,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The maximum amount of thrust that can be produced by the engine, in
         /// Newtons. This is the amount of thrust produced by the engine when
-        /// activated, <see cref="Engine.ThrustLimit"/> is set to 100% and the main vessel's
+        /// activated, <see cref="ThrustLimit"/> is set to 100% and the main vessel's
         /// throttle is set to 100%.
         /// </summary>
         [KRPCProperty]
@@ -157,7 +157,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The maximum amount of thrust that can be produced by the engine in a
         /// vacuum, in Newtons. This is the amount of thrust produced by the engine
-        /// when activated, <see cref="Engine.ThrustLimit"/> is set to 100%, the main
+        /// when activated, <see cref="ThrustLimit"/> is set to 100%, the main
         /// vessel's throttle is set to 100% and the engine is in a vacuum.
         /// </summary>
         [KRPCProperty]
