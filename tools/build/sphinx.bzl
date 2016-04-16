@@ -80,8 +80,6 @@ def _spelling_impl(ctx):
         _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/' + sphinx_build.short_path + '.runfiles/' + f.short_path)
 
     sphinx_commands = [
-        'pwd',
-        'echo $0',
         '(cd %s.runfiles; %s -b spelling -E -W -N ../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
         'ret=$?',
         'lines=`cat %s.runfiles/out/output.txt | wc -l`' % sphinx_build.basename,
