@@ -1,4 +1,4 @@
-load('/tools/build/sphinx', 'sphinx_build', 'sphinx_spelling_test')
+load('/tools/build/sphinx', 'sphinx_build', 'sphinx_spelling_test', 'sphinx_linkcheck_test')
 load('/tools/build/pkg', 'stage_files')
 load('/tools/build/python', 'py_script')
 load('/tools/build/image', 'png_images')
@@ -151,7 +151,11 @@ docgen_multiple(
 
 test_suite(
     name = 'test',
-    tests = ['spelling', 'check-documented']
+    tests = [
+        'spelling',
+        #'linkcheck',
+        'check-documented'
+    ]
 )
 
 sphinx_spelling_test(
@@ -160,6 +164,14 @@ sphinx_spelling_test(
     sphinx_build = ':sphinx-build',
     opts = {'version': version},
     size = 'small'
+)
+
+sphinx_linkcheck_test(
+    name = 'linkcheck',
+    srcs = [':srcs'],
+    sphinx_build = ':sphinx-build',
+    opts = {'version': version},
+    tags = ['requires-network']
 )
 
 test_suite(
@@ -250,7 +262,6 @@ csharp_library_multiple(
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
         '//tools/build/ksp:UnityEngine',
-        '//tools/build/ksp:TDx.TDxInput',
         '//tools/build/ksp:mscorlib',
         '//tools/build/ksp:System',
         '//tools/build/ksp:System.Core',
