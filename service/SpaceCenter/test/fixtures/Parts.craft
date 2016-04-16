@@ -668,6 +668,7 @@ PART
 	link = longAntenna_4294556948
 	link = ServiceBay.250_4294675190
 	link = airScoop_4294672794
+	link = RCSBlock_4294690250
 	attN = top,stackSeparatorBig_4294704002
 	attN = bottom,ServiceBay.250_4294675190
 	EVENTS
@@ -4315,6 +4316,7 @@ PART
 	link = strutConnector_4294469892
 	link = strutConnector_4294469828
 	link = MiniDrill_4293830772
+	link = winglet3_4294684678
 	attN = top,ISRU_4293824222
 	attN = bottom,engineLargeSkipper_4294668238
 	EVENTS
@@ -6467,7 +6469,7 @@ PART
 	pos = 2.186316,4.222435,1.04751
 	attPos = 0,0,0
 	attPos0 = -1.252723,0.3939471,5.960464E-08
-	rot = -9.033332E-08,0.5000002,5.215397E-08,0.8660254
+	rot = -9.033329E-08,0.5000002,5.215395E-08,0.8660254
 	attRot = 0,0,0,1
 	attRot0 = 2.001975E-07,0.7071068,2.001975E-07,-0.7071068
 	mir = 1,1,1
@@ -9850,5 +9852,199 @@ PART
 		hideFlow = False
 		isVisible = False
 		flowMode = Both
+	}
+}
+PART
+{
+	part = RCSBlock_4294690250
+	partName = Part
+	pos = -1.182736,22.94587,-0.1671456
+	attPos = 0,0,0
+	attPos0 = -1.263922,0.01349831,0.000742346
+	rot = 0,0,0,1
+	attRot = 0,0,0,1
+	attRot0 = 0,0,0,1
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 2
+	dstg = 2
+	sidx = -1
+	sqor = -1
+	sepI = 1
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,fuelTank4-2_4294696064
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleRCS
+		isEnabled = True
+		rcsEnabled = True
+		thrustPercentage = 100
+		enableYaw = True
+		enablePitch = True
+		enableRoll = True
+		enableX = True
+		enableY = True
+		enableZ = True
+		stagingEnabled = True
+		thrustPercentage_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.5
+		}
+		EVENTS
+		{
+			Disable
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Disable RCS Port
+				guiName = Disable RCS Port
+				category = Disable RCS Port
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			Enable
+			{
+				active = False
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Enable RCS Port
+				guiName = Enable RCS Port
+				category = Enable RCS Port
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+	}
+}
+PART
+{
+	part = winglet3_4294684678
+	partName = Part
+	pos = -1.126172,13.88804,-1.375246
+	attPos = 0,0,0
+	attPos0 = -1.207358,0.7617884,-1.207358
+	rot = -3.688405E-07,0.3826834,8.904598E-07,-0.9238796
+	attRot = 0,0,0,1
+	attRot0 = -3.688405E-07,0.3826834,8.904598E-07,-0.9238796
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 4
+	dstg = 4
+	sidx = -1
+	sqor = -1
+	sepI = 3
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,fuelTank1-2_4294676294
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	MODULE
+	{
+		name = ModuleControlSurface
+		isEnabled = True
+		ignorePitch = False
+		ignoreYaw = False
+		ignoreRoll = False
+		deploy = False
+		deployInvert = False
+		stagingEnabled = True
+		ignorePitch_UIFlight
+		{
+			controlEnabled = True
+		}
+		ignoreYaw_UIFlight
+		{
+			controlEnabled = True
+		}
+		ignoreRoll_UIFlight
+		{
+			controlEnabled = True
+		}
+		deploy_UIFlight
+		{
+			controlEnabled = True
+		}
+		deployInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ActionToggle
+			{
+				actionGroup = None
+			}
+			ActionExtend
+			{
+				actionGroup = None
+			}
+			ActionRetract
+			{
+				actionGroup = None
+			}
+		}
 	}
 }
