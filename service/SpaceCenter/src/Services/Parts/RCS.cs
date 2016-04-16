@@ -128,17 +128,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The maximum available amount of thrust that can be produced by the
-        /// RCS, in Newtons. This takes <see cref="Engine.ThrustLimit"/> into account,
-        /// and is the amount of thrust produced by the RCS when activated.
-        /// Returns zero if there is no RCS fuel.
-        /// </summary>
-        [KRPCProperty]
-        public float AvailableThrust {
-            get { throw new NotImplementedException (); }
-        }
-
-        /// <summary>
         /// The maximum amount of thrust that can be produced by the RCS, in
         /// Newtons. This is the amount of thrust produced by the RCS when
         /// activated.
