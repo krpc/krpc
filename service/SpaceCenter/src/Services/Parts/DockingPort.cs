@@ -81,7 +81,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The port name of the docking port. This is the name of the port that can be set
         /// in the right click menu, when the
-        /// <a href="http://forum.kerbalspaceprogram.com/threads/43901">Docking Port Alignment Indicator</a>
+        /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/40423-11-docking-port-alignment-indicator-version-621-beta-updated-04122016/">Docking Port Alignment Indicator</a>
         /// mod is installed. If this mod is not installed, returns the title of the part
         /// (<see cref="Part.Title"/>).
         /// </summary>
