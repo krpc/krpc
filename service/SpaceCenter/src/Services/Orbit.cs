@@ -171,7 +171,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Orbital_eccentricity">eccentricity</a> of the orbit.
+        /// The <a href="https://en.wikipedia.org/wiki/Orbital_eccentricity">eccentricity</a> of the orbit.
         /// </summary>
         [KRPCProperty]
         public double Eccentricity {
@@ -179,7 +179,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Orbital_inclination">inclination</a> of the orbit, in radians.
+        /// The <a href="https://en.wikipedia.org/wiki/Orbital_inclination">inclination</a> of the orbit,
+        /// in radians.
         /// </summary>
         [KRPCProperty]
         public double Inclination {
@@ -187,7 +188,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Longitude_of_the_ascending_node">longitude of the ascending node</a>, in radians.
+        /// The <a href="https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node">longitude of the
+        /// ascending node</a>, in radians.
         /// </summary>
         [KRPCProperty]
         public double LongitudeOfAscendingNode {
@@ -195,7 +197,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Argument_of_periapsis">argument of periapsis</a>, in radians.
+        /// The <a href="https://en.wikipedia.org/wiki/Argument_of_periapsis">argument of periapsis</a>, in radians.
         /// </summary>
         [KRPCProperty]
         public double ArgumentOfPeriapsis {
@@ -203,7 +205,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>.
+        /// The <a href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>.
         /// </summary>
         [KRPCProperty]
         public double MeanAnomalyAtEpoch {
@@ -212,7 +214,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The time since the epoch (the point at which the
-        /// <a href="http://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a> was measured, in seconds.
+        /// <a href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a> was measured, in seconds.
         /// </summary>
         [KRPCProperty]
         public double Epoch {
@@ -220,7 +222,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly</a>.
+        /// The <a href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly</a>.
         /// </summary>
         [KRPCProperty]
         public double MeanAnomaly {
@@ -228,7 +230,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Eccentric_anomaly">eccentric anomaly</a>.
+        /// The <a href="https://en.wikipedia.org/wiki/Eccentric_anomaly">eccentric anomaly</a>.
         /// </summary>
         [KRPCProperty]
         public double EccentricAnomaly {

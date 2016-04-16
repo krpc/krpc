@@ -7,8 +7,8 @@ using KRPC.Service.Attributes;
 namespace KRPC.InfernalRobotics.Services
 {
     /// <summary>
-    /// This service provides functionality to interact with the
-    /// <a href="http://forum.kerbalspaceprogram.com/threads/116064">InfernalRobotics</a> mod.
+    /// This service provides functionality to interact with
+    /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/104535-105-magic-smoke-industries-infernal-robotics-0214/">Infernal Robotics</a>.
     /// </summary>
     [KRPCService (GameScene = GameScene.Flight)]
     public static class InfernalRobotics
@@ -16,7 +16,7 @@ namespace KRPC.InfernalRobotics.Services
         static void CheckAPI ()
         {
             if (!IRWrapper.APIReady)
-                throw new InvalidOperationException ("InfernalRobotics is not available");
+                throw new InvalidOperationException ("Infernal Robotics is not available");
         }
 
         /// <summary>

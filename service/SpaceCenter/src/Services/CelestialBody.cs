@@ -80,7 +80,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Standard_gravitational_parameter">standard
+        /// The <a href="https://en.wikipedia.org/wiki/Standard_gravitational_parameter">standard
         /// gravitational parameter</a> of the body in <math>m^3s^{-2}</math>.
         /// </summary>
         [KRPCProperty]

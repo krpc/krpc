@@ -387,7 +387,7 @@ Identifiers
 
 An identifier must only contain alphanumeric characters and underscores. An
 identifier must not start with an underscore. Identifiers should follow
-`CamelCase <http://en.wikipedia.org/wiki/CamelCase>`_ capitalization
+`CamelCase <https://en.wikipedia.org/wiki/CamelCase>`_ capitalization
 conventions.
 
 .. note:: Although underscores are permitted, they should be avoided as they are

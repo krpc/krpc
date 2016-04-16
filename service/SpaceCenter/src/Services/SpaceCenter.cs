@@ -155,7 +155,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The value of the <a href="http://en.wikipedia.org/wiki/Gravitational_constant">gravitational constant</a>
+        /// The value of the <a href="https://en.wikipedia.org/wiki/Gravitational_constant">gravitational constant</a>
         /// G in <math>N(m/kg)^2</math>.
         /// </summary>
         [KRPCProperty]
@@ -460,7 +460,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
+        /// Whether <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
         /// </summary>
         [KRPCProperty]
         public static bool FARAvailable {
@@ -468,7 +468,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether <a href="http://forum.kerbalspaceprogram.com/threads/83305">RemoteTech</a> is installed.
+        /// Whether <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/75245-11-remotetech-v1610-2016-04-12/">RemoteTech</a> is installed.
         /// </summary>
         [KRPCProperty]
         public static bool RemoteTechAvailable {
