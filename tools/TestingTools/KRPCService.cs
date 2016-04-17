@@ -36,9 +36,7 @@ namespace TestingTools
             var game = GamePersistence.LoadGame (name, HighLogic.SaveFolder, true, false);
             if (game == null || game.flightState == null || !game.compatible)
                 throw new ArgumentException ("Failed to load save '" + name + "'");
-            if (game.flightState.protoVessels.Count == 0)
-                throw new ArgumentException ("Failed to load vessel id 0 from save '" + name + "'");
-            FlightDriver.StartAndFocusVessel (game, 0);
+            FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
             throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
         }
 
