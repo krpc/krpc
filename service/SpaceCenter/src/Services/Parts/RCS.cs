@@ -218,11 +218,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the RCS has fuel available.
         /// </summary>
+        /// <remarks>
+        /// The RCS thruster must be activated for this property to update correctly.
+        /// </remarks>
+        //FIXME: should not have to enable the RCS thruster for this to update
         [KRPCProperty]
         public bool HasFuel {
             get {
                 foreach (var propellant in rcs.propellants)
-                    if (propellant.isDeprived)
+                    if (propellant.isDeprived && !propellant.ignoreForIsp)
                         return false;
                 return true;
             }
