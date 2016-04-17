@@ -166,8 +166,6 @@ namespace KRPC.SpaceCenter.Services
             var game = GamePersistence.LoadGame (name, HighLogic.SaveFolder, true, false);
             if (game == null || game.flightState == null || !game.compatible)
                 throw new ArgumentException ("Failed to load " + name);
-            if (game.flightState.protoVessels.Count == 0)
-                throw new ArgumentException ("Failed to load vessel id 0 from " + name);
             FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
             throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
         }
