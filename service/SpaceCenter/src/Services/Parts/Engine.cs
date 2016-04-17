@@ -235,11 +235,20 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the engine has run out of fuel (or flamed out).
+        /// Whether the engine has any fuel available.
         /// </summary>
+        /// <remarks>
+        /// The engine must be activated for this property to update correctly.
+        /// </remarks>
+        //FIXME: should not have to enable the RCS thruster for this to update
         [KRPCProperty]
         public bool HasFuel {
-            get { return !CurrentEngine.flameout; }
+            get {
+                foreach (var propellant in CurrentEngine.propellants)
+                    if (propellant.isDeprived && !propellant.ignoreForIsp)
+                        return false;
+                return true;
+            }
         }
 
         /// <summary>
