@@ -63,6 +63,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool PitchEnabled {
             get { return !controlSurface.ignorePitch; }
+            set { controlSurface.ignorePitch = !value; }
         }
 
         /// <summary>
@@ -71,6 +72,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool YawEnabled {
             get { return !controlSurface.ignoreYaw; }
+            set { controlSurface.ignoreYaw = !value; }
         }
 
         /// <summary>
@@ -79,6 +81,25 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool RollEnabled {
             get { return !controlSurface.ignoreRoll; }
+            set { controlSurface.ignoreRoll = !value; }
+        }
+
+        /// <summary>
+        /// Whether the control surface movement is inverted.
+        /// </summary>
+        [KRPCProperty]
+        public bool Inverted {
+            get { return controlSurface.deployInvert; }
+            set { controlSurface.deployInvert = value; }
+        }
+
+        /// <summary>
+        /// Whether the control surface has been fully deployed.
+        /// </summary>
+        [KRPCProperty]
+        public bool Deployed {
+            get { return controlSurface.deploy; }
+            set { controlSurface.deploy = value; }
         }
 
         /// <summary>
@@ -115,7 +136,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// in the pitch, yaw and roll axes, in <math>N.m</math>
         /// </summary>
         [KRPCProperty]
-        public Tuple3 PositiveTorque {
+        public Tuple3 MaxPositiveTorque {
             get { return ComputeTorque (true).ToTuple (); }
         }
 
@@ -125,7 +146,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// in the pitch, yaw and roll axes, in <math>N.m</math>
         /// </summary>
         [KRPCProperty]
-        public Tuple3 NegativeTorque {
+        public Tuple3 MaxNegativeTorque {
             get { return ComputeTorque (false).ToTuple (); }
         }
 
