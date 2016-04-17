@@ -61,6 +61,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The part containing the resource.
+        /// </summary>
+        [KRPCProperty]
+        public Parts.Part Part {
+            get { return new Parts.Part (InternalPart); }
+        }
+
+        /// <summary>
         /// The total amount of the resource that can be stored in the part.
         /// </summary>
         [KRPCProperty]
