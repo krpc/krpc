@@ -484,6 +484,7 @@ SpaceCenter.RadiatorState.Broken
 SpaceCenter.RCS
 SpaceCenter.RCS.Part
 SpaceCenter.RCS.Active
+SpaceCenter.RCS.Enabled
 SpaceCenter.RCS.PitchEnabled
 SpaceCenter.RCS.YawEnabled
 SpaceCenter.RCS.RollEnabled
