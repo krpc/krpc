@@ -46,9 +46,6 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="TDx.TDxInput">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\TDx.TDxInput.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -88,6 +85,7 @@
     <Compile Include="ExternalAPI\Loader.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
     <Compile Include="PilotAddon.cs" />
+    <Compile Include="ResourceTransferAddon.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\Camera.cs" />
     <Compile Include="Services\CameraMode.cs" />
@@ -127,8 +125,10 @@
     <Compile Include="Services\Parts\SolarPanel.cs" />
     <Compile Include="Services\Parts\SolarPanelState.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
+    <Compile Include="Services\Resource.cs" />
     <Compile Include="Services\ResourceFlowMode.cs" />
     <Compile Include="Services\Resources.cs" />
+    <Compile Include="Services\ResourceTransfer.cs" />
     <Compile Include="Services\SASMode.cs" />
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\SpeedMode.cs" />

@@ -26,7 +26,6 @@ csharp_library(
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
         '//tools/build/ksp:UnityEngine',
-        '//tools/build/ksp:TDx.TDxInput',
         '//tools/build/ksp:mscorlib',
         '//tools/build/ksp:System',
         '//tools/build/ksp:System.Core',

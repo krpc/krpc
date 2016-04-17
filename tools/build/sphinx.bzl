@@ -12,7 +12,7 @@ def _get_src_dir(srcs, short_path=False):
 def _add_runfile(sub_commands, path, runfile_path):
     sub_commands.extend([
         'mkdir -p `dirname %s`' % runfile_path,
-        'ln -f -r -s %s %s' % (path, runfile_path)
+        'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (path, runfile_path)
     ])
 
 def _build_impl(ctx):
@@ -80,8 +80,6 @@ def _spelling_impl(ctx):
         _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/' + sphinx_build.short_path + '.runfiles/' + f.short_path)
 
     sphinx_commands = [
-        'pwd',
-        'echo $0',
         '(cd %s.runfiles; %s -b spelling -E -W -N ../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
         'ret=$?',
         'lines=`cat %s.runfiles/out/output.txt | wc -l`' % sphinx_build.basename,
@@ -105,6 +103,51 @@ def _spelling_impl(ctx):
 
 sphinx_spelling_test = rule(
     implementation = _spelling_impl,
+    attrs = {
+        'srcs': attr.label_list(allow_files=True),
+        'sphinx_build': attr.label(executable=True, single_file=True, allow_files=True, mandatory=True),
+        'opts': attr.string_dict()
+    },
+    test = True
+)
+
+def _linkcheck_impl(ctx):
+    srcs = ctx.files.srcs
+    src_dir = _get_src_dir(srcs, short_path=True)
+    out = ctx.outputs.executable
+    sphinx_build = ctx.executable.sphinx_build
+    sphinx_build_runfiles = list(ctx.attr.sphinx_build.default_runfiles.files)
+    opts = ' '.join(['-D%s=%s' % x for x in ctx.attr.opts.items()])
+    sub_commands = []
+
+    _add_runfile(sub_commands, sphinx_build.short_path, sphinx_build.basename + '.runfiles/' + sphinx_build.short_path)
+    for f in sphinx_build_runfiles:
+        _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/' + sphinx_build.short_path + '.runfiles/' + f.short_path)
+
+    sphinx_commands = [
+        '(cd %s.runfiles; %s -b linkcheck -E -N ../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
+        'ret=$?',
+        'lines=`cat %s.runfiles/out/output.txt | wc -l`' % sphinx_build.basename,
+        'echo "Link checker messages ($lines lines):"',
+        'cat %s.runfiles/out/output.txt' % sphinx_build.basename,
+        'if [ $ret -ne 0 ]; then exit 1; fi'
+    ]
+    sub_commands.append('('+'; '.join(sphinx_commands)+')')
+
+    ctx.file_action(
+        output = out,
+        content = ' &&\n'.join(sub_commands)+'\n',
+        executable = True
+    )
+
+    return struct(
+        name = ctx.label.name,
+        out = out,
+        runfiles = ctx.runfiles(files = [sphinx_build] + sphinx_build_runfiles + srcs)
+    )
+
+sphinx_linkcheck_test = rule(
+    implementation = _linkcheck_impl,
     attrs = {
         'srcs': attr.label_list(allow_files=True),
         'sphinx_build': attr.label(executable=True, single_file=True, allow_files=True, mandatory=True),

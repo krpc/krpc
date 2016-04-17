@@ -53,8 +53,7 @@ def servicedefs(ksp, service, assemblies):
     ksp_dlls = [
         'Assembly-CSharp.dll',
         'Assembly-CSharp-firstpass.dll',
-        'UnityEngine.dll',
-        'TDx.TDxInput.dll'
+        'UnityEngine.dll'
     ]
     for dll in ksp_dlls:
         shutil.copy(ksp+'/KSP_Data/Managed/'+dll, bindir)

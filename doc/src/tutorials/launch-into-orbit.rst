@@ -31,9 +31,9 @@ the rocket has left Kerbin's atmosphere.
 
 It is now time to plan the circularization burn. First, we calculate the delta-v
 required to circularize the orbit using the `vis-viva equation
-<http://en.wikipedia.org/wiki/Vis-viva_equation>`_. We then calculate the burn
+<https://en.wikipedia.org/wiki/Vis-viva_equation>`_. We then calculate the burn
 time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
-<http://en.wikipedia.org/wiki/Tsiolkovsky_rocket_equation>`_.
+<https://en.wikipedia.org/wiki/Tsiolkovsky_rocket_equation>`_.
 
 .. literalinclude:: /scripts/LaunchIntoOrbit.py
    :lines: 74-91

@@ -51,6 +51,7 @@ prograde
 proto
 protobuf
 py
+quicksave
 serializable
 streamPort
 symlink

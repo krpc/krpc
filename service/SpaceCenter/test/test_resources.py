@@ -15,8 +15,9 @@ class TestResources(testingtools.TestCase, ResourcesTest):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Resources')
+        if testingtools.connect().space_center.active_vessel.name != 'Resources':
+            testingtools.new_save()
+            testingtools.launch_vessel_from_vab('Resources')
         cls.conn = testingtools.connect(name='TestResources')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.num_stages = len(cls.expected.keys())
@@ -143,6 +144,7 @@ class TestResources(testingtools.TestCase, ResourcesTest):
         self.assertEquals(mass, self.vessel.mass)
 
     def test_part_resources(self):
+        Mode = self.conn.space_center.ResourceFlowMode
         resources = next(iter(self.vessel.parts.with_title('BACC "Thumper" Solid Fuel Booster'))).resources
         self.assertEqual(set(['SolidFuel']), set(resources.names))
         self.assertTrue(resources.has_resource('SolidFuel'))
@@ -150,6 +152,16 @@ class TestResources(testingtools.TestCase, ResourcesTest):
         self.assertEqual(set(['SolidFuel']), set(resources.names))
         self.assertEqual(300, resources.amount('SolidFuel'))
         self.assertEqual(850, resources.max('SolidFuel'))
+
+        part_resources = resources.all
+        self.assertEqual(1, len(part_resources))
+        r = part_resources[0]
+        self.assertEqual('SolidFuel', r.name)
+        self.assertEqual(300, r.amount)
+        self.assertEqual(850, r.max)
+        self.assertEqual(self.density['SolidFuel'], r.density)
+        self.assertEqual(Mode.none, r.flow_mode)
+        self.assertTrue(r.enabled)
 
         resources = next(iter(self.vessel.parts.with_title('Rockomax X200-16 Fuel Tank'))).resources
         self.assertEqual(set(['LiquidFuel','Oxidizer']), set(resources.names))
@@ -160,6 +172,28 @@ class TestResources(testingtools.TestCase, ResourcesTest):
         self.assertEqual(720, resources.max('LiquidFuel'))
         self.assertEqual(400, resources.amount('Oxidizer'))
         self.assertEqual(880, resources.max('Oxidizer'))
+
+        part_resources = resources.all
+        self.assertEqual(2, len(part_resources))
+        for r in part_resources:
+            if r.name == 'LiquidFuel':
+                self.assertEqual('LiquidFuel', r.name)
+                self.assertEqual(300, r.amount)
+                self.assertEqual(720, r.max)
+                self.assertEqual(self.density['LiquidFuel'], r.density)
+                self.assertEqual(Mode.adjacent, r.flow_mode)
+                self.assertTrue(r.enabled)
+            else:
+                self.assertEqual('Oxidizer', r.name)
+                self.assertEqual(400, r.amount)
+                self.assertEqual(880, r.max)
+                self.assertEqual(self.density['Oxidizer'], r.density)
+                self.assertEqual(Mode.adjacent, r.flow_mode)
+                self.assertTrue(r.enabled)
+
+        part_resources = resources.with_resource('LiquidFuel')
+        self.assertEqual(1, len(part_resources))
+        self.assertEqual('LiquidFuel', part_resources[0].name)
 
 class TestResourcesStaticMethods(testingtools.TestCase, ResourcesTest):
 
