@@ -16,6 +16,10 @@ namespace KRPC.SpaceCenter.Services
     /// Provides basic auto-piloting utilities for a vessel.
     /// Created by calling <see cref="Vessel.AutoPilot"/>.
     /// </summary>
+    /// <remarks>
+    /// If a client engages the auto-pilot and then closes its connection to the server,
+    /// the auto-pilot will be disengaged and its target reference frame, direction and roll reset to default.
+    /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class AutoPilot : Equatable<AutoPilot>
     {
@@ -310,8 +314,11 @@ namespace KRPC.SpaceCenter.Services
             var autoPilot = engaged [vessel.id];
             if (autoPilot == null)
                 return false;
-            // If the client that engaged the auto-pilot has disconnected, disengage the auto-pilot
+            // If the client that engaged the auto-pilot has disconnected, disengage and reset the auto-pilot
             if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected) {
+                autoPilot.ReferenceFrame = ReferenceFrame.Surface (vessel);
+                autoPilot.TargetDirection = null;
+                autoPilot.TargetRoll = float.NaN;
                 autoPilot.Disengage ();
                 return false;
             }

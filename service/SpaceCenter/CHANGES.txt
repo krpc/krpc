@@ -4,6 +4,7 @@ v0.2.4
  * Add resource transfers
  * Add resource objects, representing an individual resource stored in a part
  * Fix bug where Engine.HasFuel requires the engine to be throttled up
+ * Change autopilot so that the target reference frame, direction and roll are cleared when the client disconnects and the autopilot is engaged (#248)
 
 v0.2.3
  * Add support for engine mode switching (#219)
