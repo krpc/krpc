@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.name }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
+
+Camera
+======
+
+{{ macros.class(services['SpaceCenter'].classes['Camera']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['CameraMode']) }}

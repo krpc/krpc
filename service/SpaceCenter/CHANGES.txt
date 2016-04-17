@@ -1,4 +1,5 @@
 v0.2.4
+ * Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)
  * Add saving and loading games using SpaceCenter.Save, Load, Quicksave and Quickload (#247)
  * Add resource transfers
  * Add resource objects, representing an individual resource stored in a part
