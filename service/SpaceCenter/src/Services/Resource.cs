@@ -105,8 +105,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool Enabled {
-            get { return InternalResource.flowMode != PartResource.FlowMode.None; }
-            set { InternalResource.flowMode = (value ? PartResource.FlowMode.Both : PartResource.FlowMode.None); }
+            get { return InternalResource.flowState; }
+            set { InternalResource.flowState = value; }
         }
     }
 }
