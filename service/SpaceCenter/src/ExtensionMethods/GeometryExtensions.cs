@@ -387,5 +387,21 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             }
             return m;
         }
+
+        /// <summary>
+        /// Convert radians to degrees.
+        /// </summary>
+        public static float ToDegrees (float radians)
+        {
+            return radians * (180f / (float)Math.PI);
+        }
+
+        /// <summary>
+        /// Convert degrees to radians.
+        /// </summary>
+        public static float ToRadians (float degrees)
+        {
+            return degrees * ((float)Math.PI / 180f);
+        }
     }
 }

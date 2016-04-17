@@ -12,6 +12,7 @@ decouplers
 dll
 enum
 erm
+focussed
 framerate
 fuelled
 gimbal

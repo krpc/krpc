@@ -1,8 +1,10 @@
 v0.2.4
+ * Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)
  * Add saving and loading games using SpaceCenter.Save, Load, Quicksave and Quickload (#247)
  * Add resource transfers
  * Add resource objects, representing an individual resource stored in a part
  * Fix bug where Engine.HasFuel requires the engine to be throttled up
+ * Change autopilot so that the target reference frame, direction and roll are cleared when the client disconnects and the autopilot is engaged (#248)
 
 v0.2.3
  * Vessel object additions:
