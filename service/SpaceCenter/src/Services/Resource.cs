@@ -61,6 +61,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The part containing the resource.
+        /// </summary>
+        [KRPCProperty]
+        public Parts.Part Part {
+            get { return new Parts.Part (InternalPart); }
+        }
+
+        /// <summary>
         /// The total amount of the resource that can be stored in the part.
         /// </summary>
         [KRPCProperty]
@@ -97,8 +105,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool Enabled {
-            get { return InternalResource.flowMode != PartResource.FlowMode.None; }
-            set { InternalResource.flowMode = (value ? PartResource.FlowMode.Both : PartResource.FlowMode.None); }
+            get { return InternalResource.flowState; }
+            set { InternalResource.flowState = value; }
         }
     }
 }
