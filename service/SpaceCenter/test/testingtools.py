@@ -4,6 +4,7 @@ import unittest
 import os
 import shutil
 import itertools
+import math
 
 def connect(name=''):
     return krpc.connect(name=name)
@@ -149,3 +150,22 @@ class TestCase(unittest.TestCase):
             return
 
         self.fail('Angle %.2f is not close to %.2f, within an absolute error of %f' % (actual, expected, error))
+
+    def assertIsNaN(self, value):
+        """ Check that the value is nan """
+        msg = '%s is not nan' % str(value)
+        try:
+            if not math.isnan(value):
+                self.fail(msg)
+        except TypeError:
+            print e
+            self.fail(msg)
+
+    def assertIsNotNaN(self, value):
+        """ Check that the value is nan """
+        msg = '%s is nan' % str(value)
+        try:
+            if math.isnan(value):
+                self.fail(msg)
+        except TypeError:
+            self.fail(msg)

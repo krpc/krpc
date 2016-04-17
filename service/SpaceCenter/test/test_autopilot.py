@@ -210,6 +210,49 @@ class TestAutoPilot(testingtools.TestCase):
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = True
 
+    def test_reset_on_disconnect(self):
+        conn = testingtools.connect(name='TestAutoPilot.test_reset_on_disconnect')
+        vessel = conn.space_center.active_vessel
+        ap = vessel.auto_pilot
+        ap.reference_frame = vessel.orbital_reference_frame
+        ap.target_pitch_and_heading(10, 20)
+        ap.target_roll = 30
+        ap.engage()
+        conn.close()
+
+        time.sleep(0.1)
+
+        conn = testingtools.connect(name='TestAutoPilot.test_reset_on_disconnect')
+        vessel = conn.space_center.active_vessel
+        ap = vessel.auto_pilot
+        self.assertEqual(ap.reference_frame, vessel.surface_reference_frame)
+        #FIXME: tuples returned from server cannot be null
+        #self.assertEqual(None, ap.target_direction)
+        self.assertIsNaN(ap.target_roll)
+        conn.close()
+
+    def test_dont_reset_on_clean_disconnect(self):
+        conn = testingtools.connect(name='TestAutoPilot.test_dont_reset_on_clean_disconnect')
+        vessel = conn.space_center.active_vessel
+        ap = vessel.auto_pilot
+        ap.reference_frame = vessel.orbital_reference_frame
+        ap.target_pitch_and_heading(10, 20)
+        ap.target_roll = 30
+        ap.engage()
+        time.sleep(0.1)
+        ap.disengage()
+        conn.close()
+
+        time.sleep(0.1)
+
+        conn = testingtools.connect(name='TestAutoPilot.test_dont_reset_on_clean_disconnect')
+        vessel = conn.space_center.active_vessel
+        ap = vessel.auto_pilot
+        self.assertEqual(ap.reference_frame, vessel.orbital_reference_frame)
+        self.assertNotEqual(None, ap.target_direction)
+        self.assertEqual(30, ap.target_roll)
+        conn.close()
+
 class TestAutoPilotSAS(testingtools.TestCase):
 
     @classmethod
