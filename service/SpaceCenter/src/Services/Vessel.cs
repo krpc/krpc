@@ -25,6 +25,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Construct from a KSP vessel id.
+        /// </summary>
+        public Vessel (Guid id)
+        {
+            Id = id;
+        }
+
+        /// <summary>
         /// Check if vessels are equal.
         /// </summary>
         public override bool Equals (Vessel obj)
@@ -102,16 +110,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The target vessel. <c>null</c> if there is no target. When
-        /// setting the target, the target cannot be the current vessel.
-        /// </summary>
-        [KRPCProperty]
-        public Vessel Target {
-            get { throw new NotImplementedException (); }
-            set { throw new NotImplementedException (); }
-        }
-
-        /// <summary>
         /// The current orbit of the vessel.
         /// </summary>
         [KRPCProperty]
@@ -173,7 +171,7 @@ namespace KRPC.SpaceCenter.Services
         /// A <see cref="Comms"/> object, that can used to interact with RemoteTech for this vessel.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/threads/83305">RemoteTech</a> to be installed.
+        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/75245-11-remotetech-v1610-2016-04-12/">RemoteTech</a> to be installed.
         /// </remarks>
         [KRPCProperty]
         public Comms Comms {
@@ -326,14 +324,14 @@ namespace KRPC.SpaceCenter.Services
         /// <list type="bullet">
         /// <item><description>The origin is at the center of mass of the vessel.</description></item>
         /// <item><description>The axes rotate with the north and up directions on the surface of the body.</description></item>
-        /// <item><description>The x-axis points in the <a href="http://en.wikipedia.org/wiki/Zenith">zenith</a>
+        /// <item><description>The x-axis points in the <a href="https://en.wikipedia.org/wiki/Zenith">zenith</a>
         /// direction (upwards, normal to the body being orbited, from the center of the body towards the center of
         /// mass of the vessel).</description></item>
         /// <item><description>The y-axis points northwards towards the
-        /// <a href="http://en.wikipedia.org/wiki/Horizon">astronomical horizon</a> (north, and tangential to the
+        /// <a href="https://en.wikipedia.org/wiki/Horizon">astronomical horizon</a> (north, and tangential to the
         /// surface of the body -- the direction in which a compass would point when on the surface).</description></item>
         /// <item><description>The z-axis points eastwards towards the
-        /// <a href="http://en.wikipedia.org/wiki/Horizon">astronomical horizon</a> (east, and tangential to the
+        /// <a href="https://en.wikipedia.org/wiki/Horizon">astronomical horizon</a> (east, and tangential to the
         /// surface of the body -- east on a compass when on the surface).</description></item>
         /// </list>
         /// </summary>
@@ -354,7 +352,7 @@ namespace KRPC.SpaceCenter.Services
         /// <item><description>The y-axis points in the direction of the vessel's velocity vector,
         /// relative to the surface of the body being orbited.</description></item>
         /// <item><description>The z-axis is in the plane of the
-        /// <a href="http://en.wikipedia.org/wiki/Horizon">astronomical horizon</a>.</description></item>
+        /// <a href="https://en.wikipedia.org/wiki/Horizon">astronomical horizon</a>.</description></item>
         /// <item><description>The x-axis is orthogonal to the other two axes.</description></item>
         /// </list>
         /// </summary>

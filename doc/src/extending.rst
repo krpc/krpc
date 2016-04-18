@@ -387,7 +387,7 @@ Identifiers
 
 An identifier must only contain alphanumeric characters and underscores. An
 identifier must not start with an underscore. Identifiers should follow
-`CamelCase <http://en.wikipedia.org/wiki/CamelCase>`_ capitalization
+`CamelCase <https://en.wikipedia.org/wiki/CamelCase>`_ capitalization
 conventions.
 
 .. note:: Although underscores are permitted, they should be avoided as they are
@@ -493,7 +493,7 @@ Further Examples
 ----------------
 
 See the `SpaceCenter service implementation
-<https://github.com/krpc/krpc/tree/latest-version/src/kRPCSpaceCenter/Services>`_
+<https://github.com/krpc/krpc/tree/latest-version/service/SpaceCenter/src/Services>`_
 for more extensive examples.
 
 .. _service-api-clientgen:

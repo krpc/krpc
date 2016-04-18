@@ -12,7 +12,7 @@ genrule(
     name = 'python',
     srcs = [':python-pypi'],
     outs = ['krpc-python-%s.zip' % version],
-    cmd = 'ln -f -r -s "$<" "$@"',
+    cmd = 'ln -f -s "`pwd`/$<" "`pwd`/$@"',
     output_to_bindir = True,
     visibility = ['//visibility:public']
 )

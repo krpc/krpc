@@ -12,6 +12,7 @@ decouplers
 dll
 enum
 erm
+focussed
 framerate
 gimbal
 gimballed
@@ -50,6 +51,7 @@ prograde
 proto
 protobuf
 py
+quicksave
 serializable
 streamPort
 symlink

@@ -1,5 +1,15 @@
 v0.2.4
- * Merge landing legs and landing gear into single landing gear class
+ * Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)
+ * Add saving and loading games using SpaceCenter.Save, Load, Quicksave and Quickload (#247)
+ * Add resource transfers
+ * Add resource objects, representing an individual resource stored in a part
+ * DockingPort.Undock() now returns the newly created vessel, instead of the 'undocked vessel'
+ * DockingPort.Undock() now throws an exception (instead of returning null) if the port is not docked
+ * Return newly created vessels from Decoupler.Decouple() (#214)
+ * Removed Vessel.Target, as this functionality is provided by SpaceCenter.TargetVessel (#206)
+ * Fix bug where Engine.HasFuel requires the engine to be throttled up
+ * Change autopilot so that the target reference frame, direction and roll are cleared when the client disconnects and the autopilot is engaged (#248)
+ * KSP 1.1: Merge landing legs and landing gear into single landing gear class
 
 v0.2.3
  * Add support for engine mode switching (#219)

@@ -93,7 +93,6 @@ class TestPartsDockingPort(testingtools.TestCase):
         # Undock
         mass_before = self.vessel.mass
         undocked = top_port.undock()
-        self.vessel = self.conn.space_center.active_vessel
         mass_after = self.vessel.mass
 
         self.assertEqual(bottom_port.docked_part, None)
@@ -134,7 +133,6 @@ class TestPartsDockingPort(testingtools.TestCase):
         # Undock
         mass_before = self.vessel.mass
         undocked = port.undock()
-        self.vessel = self.conn.space_center.active_vessel
         mass_after = self.vessel.mass
 
         self.assertEqual(port.docked_part, None)
@@ -195,7 +193,6 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
             # Undock
             mass_before = vessel.mass
             undocked = port1.undock()
-            vessel = self.sc.active_vessel
             self.assertNotEqual(vessel, undocked)
             self.assertEqual(self.state.undocking, port1.state)
             self.assertEqual(self.state.undocking, port2.state)
@@ -207,7 +204,7 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
 
             # Move backwards to reengage distance
             vessel.control.rcs = True
-            vessel.control.forward = 0.5
+            vessel.control.forward = -0.5
             time.sleep(0.5)
             vessel.control.forward = 0
             while port1.state == self.state.undocking:
@@ -222,11 +219,15 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
             time.sleep(0.5)
 
             # Check undocking when not docked
-            self.assertEqual(None, port1.undock())
-            self.assertEqual(None, port2.undock())
+            with self.assertRaises(krpc.error.RPCError) as cm:
+                port1.undock()
+            self.assertTrue('The docking port is not docked' in str(cm.exception))
+            with self.assertRaises(krpc.error.RPCError) as cm:
+                port2.undock()
+            self.assertTrue('The docking port is not docked' in str(cm.exception))
 
             # Move forward
-            vessel.control.forward = -0.5
+            vessel.control.forward = 0.5
             time.sleep(1)
             vessel.control.forward = 0
             vessel.control.rcs = False
