@@ -6,6 +6,7 @@ v0.2.4
  * DockingPort.Undock() now returns the newly created vessel, instead of the 'undocked vessel'
  * DockingPort.Undock() now throws an exception (instead of returning null) if the port is not docked
  * Return newly created vessels from Decoupler.Decouple() (#214)
+ * Removed Vessel.Target, as this functionality is provided by SpaceCenter.TargetVessel (#206)
  * Fix bug where Engine.HasFuel requires the engine to be throttled up
  * Change autopilot so that the target reference frame, direction and roll are cleared when the client disconnects and the autopilot is engaged (#248)
 

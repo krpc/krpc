@@ -54,7 +54,6 @@ SpaceCenter.Vessel.Type
 SpaceCenter.Vessel.Situation
 SpaceCenter.Vessel.MET
 SpaceCenter.Vessel.Flight
-SpaceCenter.Vessel.Target
 SpaceCenter.Vessel.Orbit
 SpaceCenter.Vessel.Control
 SpaceCenter.Vessel.AutoPilot
