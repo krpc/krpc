@@ -9,7 +9,7 @@ namespace KRPC
     /// <summary>
     /// Main KRPC addon. Contains the server instance and UI.
     /// </summary>
-    [KSPAddonImproved (KSPAddonImproved.Startup.RealTime | KSPAddonImproved.Startup.Editor, false)]
+    [KSPAddonImproved (KSPAddonImproved.Startup.All, false)]
     sealed public class KRPCAddon : MonoBehaviour
     {
         static KRPCServer server;
@@ -34,14 +34,11 @@ namespace KRPC
                 config.Address, config.RPCPort, config.StreamPort,
                 config.OneRPCPerUpdate, config.MaxTimePerUpdate, config.AdaptiveRateControl,
                 config.BlockingRecv, config.RecvTimeout);
-
-            // Auto-start the server, if required
-            if (config.AutoStartServer)
-                StartServer ();
         }
 
         /// <summary>
-        /// Wake the addon. Creates the server instance and UI.
+        /// Called whenever a scene change occurs. Ensures the server has been initialized,
+        /// (re)creates the UI, and shuts down the server in the main menu.
         /// </summary>
         public void Awake ()
         {
@@ -52,22 +49,40 @@ namespace KRPC
 
             KRPCServer.Context.SetGameScene (KSPAddonImproved.CurrentGameScene.ToGameScene ());
             Logger.WriteLine ("Game scene switched to " + KRPCServer.Context.GameScene);
-
-            GUILayoutExtensions.Init (gameObject);
-
             server.GetUniversalTime = Planetarium.GetUniversalTime;
+
+            // If a game is not loaded, ensure the server is stopped and then exit
+            if (KSPAddonImproved.CurrentGameScene != GameScenes.EDITOR &&
+                KSPAddonImproved.CurrentGameScene != GameScenes.FLIGHT &&
+                KSPAddonImproved.CurrentGameScene != GameScenes.SPACECENTER &&
+                KSPAddonImproved.CurrentGameScene != GameScenes.TRACKSTATION) {
+                if (server.Running)
+                    server.Stop ();
+                return;
+            }
+
+            // Auto-start the server, if required
+            if (config.AutoStartServer && !server.Running) {
+                Logger.WriteLine ("Auto-starting server");
+                StartServer ();
+            }
+
+            // (Re)create the UI
+
+            // Layout extensions
+            GUILayoutExtensions.Init (gameObject);
 
             // Disconnect client dialog
             clientDisconnectDialog = gameObject.AddComponent<ClientDisconnectDialog> ();
 
-            // Create info window
+            // Info window
             infoWindow = gameObject.AddComponent<InfoWindow> ();
             infoWindow.Server = server;
             infoWindow.Closable = true;
             infoWindow.Visible = config.InfoWindowVisible;
             infoWindow.Position = config.InfoWindowPosition;
 
-            // Create main window
+            // Main window
             mainWindow = gameObject.AddComponent<MainWindow> ();
             mainWindow.Config = config;
             mainWindow.Server = server;
@@ -76,7 +91,7 @@ namespace KRPC
             mainWindow.ClientDisconnectDialog = clientDisconnectDialog;
             mainWindow.InfoWindow = infoWindow;
 
-            // Create new connection dialog
+            // New connection dialog
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog> ();
 
             // Main window events
@@ -128,8 +143,7 @@ namespace KRPC
                     clientConnectingDialog.OnClientRequestingConnection (s, e);
             };
 
-
-            // Add a button to the applauncher
+            // Add button to the applauncher
             mainWindow.Closable = true;
             textureOnline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-online", false);
             textureOffline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-offline", false);
@@ -188,6 +202,8 @@ namespace KRPC
         {
             if (!ServicesChecker.OK)
                 return;
+
+            // Destroy the UI
             if (applauncherButton != null)
                 OnGUIApplicationLauncherDestroyed ();
             GameEvents.onGUIApplicationLauncherReady.Remove (OnGUIApplicationLauncherReady);
