@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using KRPC.Continuations;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -19,7 +22,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             return
                 part.InternalPart.HasModule<ModuleDecouple> () ||
-                part.InternalPart.HasModule<ModuleAnchoredDecoupler> ();
+            part.InternalPart.HasModule<ModuleAnchoredDecoupler> ();
         }
 
         internal Decoupler (Part part)
@@ -61,15 +64,34 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Fires the decoupler. Has no effect if the decoupler has already fired.
+        /// Fires the decoupler. Returns the new vessel created when the decoupler fires.
+        /// Throws an exception if the decoupler has already fired.
         /// </summary>
         [KRPCMethod]
-        public void Decouple ()
+        public Vessel Decouple ()
         {
+            if (Decoupled)
+                throw new InvalidOperationException ("Decoupler has already fired");
+
+            var preVesselIds = FlightGlobals.Vessels.Select (v => v.id).ToList ();
+
+            // Fire the decoupler
             if (decoupler != null)
                 decoupler.Decouple ();
             else
                 anchoredDecoupler.Decouple ();
+
+            return PostDecouple (preVesselIds);
+        }
+
+        Vessel PostDecouple (IList<Guid> preVesselIds, int wait = 0)
+        {
+            //FIXME: sometimes after decoupling, KSP changes it's mind as to what the active vessel is, so we wait for 10 frames before getting the active vessel
+            // Wait while the decoupler hasn't fired
+            if (wait < 10 || !Decoupled)
+                throw new YieldException (new ParameterizedContinuation<Vessel, IList<Guid>, int> (PostDecouple, preVesselIds, wait + 1));
+            // Return the newly created vessel
+            return new Vessel (FlightGlobals.Vessels.Select (v => v.id).Except (preVesselIds).Single ());
         }
 
         /// <summary>
