@@ -59,7 +59,7 @@ class TestParts(testingtools.TestCase):
              'PresMat Barometer',
              'RE-I5 "Skipper" Liquid Fuel Engine',
              'RE-L10 "Poodle" Liquid Fuel Engine',
-             'RE-M3 "Mainsail" Liquid Engine',
+             'RE-M3 "Mainsail" Liquid Fuel Engine',
              'Rockomax Jumbo-64 Fuel Tank',
              'Rockomax X200-32 Fuel Tank',
              'Rockomax X200-8 Fuel Tank',
@@ -221,7 +221,7 @@ class TestParts(testingtools.TestCase):
             ['TT-70 Radial Decoupler']*3,
             part_titles_in_stage(5))
         self.assertEqual(
-            ['RE-M3 "Mainsail" Liquid Engine'] + \
+            ['RE-M3 "Mainsail" Liquid Fuel Engine'] + \
             ['S1 SRB-KD25k "Kickback" Solid Fuel Booster']*3 + \
             ['TT18-A Launch Stability Enhancer']*6,
             part_titles_in_stage(6))
@@ -238,7 +238,7 @@ class TestParts(testingtools.TestCase):
             part_titles_in_decouple_stage(-1))
         self.assertEqual([], part_titles_in_decouple_stage(0))
         self.assertEqual(
-            ['RE-M3 "Mainsail" Liquid Engine',
+            ['RE-M3 "Mainsail" Liquid Fuel Engine',
              'Rockomax Jumbo-64 Fuel Tank',
              'TR-XL Stack Separator'],
             part_titles_in_decouple_stage(4))
@@ -291,7 +291,7 @@ class TestParts(testingtools.TestCase):
     def test_engines(self):
         self.assertEqual(
             ['RE-I5 "Skipper" Liquid Fuel Engine', 'RE-L10 "Poodle" Liquid Fuel Engine',
-             'RE-M3 "Mainsail" Liquid Engine', 'S1 SRB-KD25k "Kickback" Solid Fuel Booster',
+             'RE-M3 "Mainsail" Liquid Fuel Engine', 'S1 SRB-KD25k "Kickback" Solid Fuel Booster',
              'S1 SRB-KD25k "Kickback" Solid Fuel Booster', 'S1 SRB-KD25k "Kickback" Solid Fuel Booster'],
             sorted(x.part.title for x in self.parts.engines))
 
