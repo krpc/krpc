@@ -492,7 +492,6 @@ SpaceCenter.RCS.RollEnabled
 SpaceCenter.RCS.ForwardEnabled
 SpaceCenter.RCS.UpEnabled
 SpaceCenter.RCS.RightEnabled
-SpaceCenter.RCS.Thrust
 SpaceCenter.RCS.MaxThrust
 SpaceCenter.RCS.MaxVacuumThrust
 SpaceCenter.RCS.Thrusters
