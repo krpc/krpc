@@ -2,14 +2,14 @@ ship = PartsDecoupler
 version = 1.0.5
 description = 
 type = VAB
-size = 3.128053,13.0835,5.893483
+size = 3.128053,7.226616,5.893483
 PART
 {
 	part = mk1pod_4294591094
 	partName = Part
-	pos = 4.015118E-05,10.5226,-0.000126794
+	pos = -0.1391897,4.66572,0.4756251
 	attPos = 0,0,0
-	attPos0 = 4.015118E-05,10.5226,-0.000126794
+	attPos0 = -0.1391897,4.66572,0.4756251
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -466,7 +466,7 @@ PART
 {
 	part = fuelTank_4294366504
 	partName = Part
-	pos = 4.015118E-05,9.151872,-0.000126794
+	pos = -0.1391897,3.294991,0.4756251
 	attPos = 0,0,0
 	attPos0 = 0,-1.370728,0
 	rot = 0,0,0,1
@@ -525,7 +525,7 @@ PART
 {
 	part = radialDecoupler2_4294369258
 	partName = Part
-	pos = -0.5902937,9.242452,-0.0001267621
+	pos = -0.7295235,3.385571,0.4756251
 	attPos = 0,0,0
 	attPos0 = -0.5903339,0.09057808,3.191716E-08
 	rot = -7.486785E-23,8.42937E-08,-1.776357E-15,1
@@ -694,7 +694,7 @@ PART
 {
 	part = fuelTank_4294365752
 	partName = Part
-	pos = -1.834064,9.283372,-0.00012641
+	pos = -1.973294,3.426492,0.4756255
 	attPos = 0,0,0
 	attPos0 = -1.24377,0.04091454,1.423849E-07
 	rot = -1.507289E-14,1.685874E-07,-1.192093E-07,1
@@ -711,7 +711,9 @@ PART
 	modCost = 0
 	modMass = 0
 	modSize = (0.0, 0.0, 0.0)
+	link = fuelTank_4294542216
 	srfN = srfAttach,radialDecoupler2_4294369258
+	attN = bottom,fuelTank_4294542216
 	EVENTS
 	{
 	}
@@ -748,7 +750,7 @@ PART
 {
 	part = stackDecoupler_4294361384
 	partName = Part
-	pos = 4.015118E-05,8.174322,-0.000126794
+	pos = -0.1391897,2.317442,0.4756251
 	attPos = 0,0,0
 	attPos0 = 0,-0.9775524,0
 	rot = 0,0,0,1
@@ -918,7 +920,7 @@ PART
 {
 	part = fuelTank_4294358142
 	partName = Part
-	pos = 4.015118E-05,7.075642,-0.000126794
+	pos = -0.1391897,1.218762,0.4756251
 	attPos = 0,0,0
 	attPos0 = 0,-1.098684,0
 	rot = 0,0,0,1
@@ -972,7 +974,7 @@ PART
 {
 	part = launchClamp1_4294350112
 	partName = Part
-	pos = 3.970002E-05,7.951422,-1.428172
+	pos = -0.1391901,2.094542,-0.9524201
 	attPos = 0,0,0
 	attPos0 = -4.511597E-07,-1.200456,-1.428045
 	rot = 2.980232E-08,-3.132037E-07,-9.334196E-15,-1
@@ -1004,8 +1006,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 3.412961
-		height = 8.611573
+		scaleFactor = 1.091747
+		height = 2.754693
 		stagingEnabled = True
 		towerRot = -2.980232E-08,3.132037E-07,9.334196E-15,-1
 		EVENTS
@@ -1146,7 +1148,7 @@ PART
 {
 	part = launchClamp1_4294349942
 	partName = Part
-	pos = 4.072718E-05,7.951422,1.427918
+	pos = -0.1391891,2.094542,1.90367
 	attPos = 0,0,0
 	attPos0 = 5.760033E-07,-1.200456,1.428045
 	rot = -1.06369E-14,-1,-2.980232E-08,3.569151E-07
@@ -1178,8 +1180,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 3.412961
-		height = 8.611573
+		scaleFactor = 1.091747
+		height = 2.754693
 		stagingEnabled = True
 		towerRot = 1.06369E-14,1,2.980232E-08,3.569151E-07
 		EVENTS
@@ -1314,5 +1316,60 @@ PART
 		ACTIONS
 		{
 		}
+	}
+}
+PART
+{
+	part = fuelTank_4294542216
+	partName = Part
+	pos = -1.973294,1.548302,0.4756255
+	attPos = 0,0,0
+	attPos0 = 2.093769E-07,-1.87819,3.434188E-09
+	rot = -5.754562E-22,6.232395E-37,-1.776357E-15,1
+	attRot = 0,0,0,1
+	attRot0 = 1.507289E-14,-1.685874E-07,1.192093E-07,1
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 2
+	dstg = 2
+	sidx = -1
+	sqor = -1
+	sepI = 0
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,radialDecoupler2_4294369258
+	attN = top,fuelTank_4294365752
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	RESOURCE
+	{
+		name = LiquidFuel
+		amount = 180
+		maxAmount = 180
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
+	}
+	RESOURCE
+	{
+		name = Oxidizer
+		amount = 220
+		maxAmount = 220
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
 	}
 }

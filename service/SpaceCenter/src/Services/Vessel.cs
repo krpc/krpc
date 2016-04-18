@@ -25,6 +25,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Construct from a KSP vessel id.
+        /// </summary>
+        public Vessel (Guid id)
+        {
+            Id = id;
+        }
+
+        /// <summary>
         /// Check if vessels are equal.
         /// </summary>
         public override bool Equals (Vessel obj)
