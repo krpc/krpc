@@ -110,16 +110,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The target vessel. <c>null</c> if there is no target. When
-        /// setting the target, the target cannot be the current vessel.
-        /// </summary>
-        [KRPCProperty]
-        public Vessel Target {
-            get { throw new NotImplementedException (); }
-            set { throw new NotImplementedException (); }
-        }
-
-        /// <summary>
         /// The current orbit of the vessel.
         /// </summary>
         [KRPCProperty]
