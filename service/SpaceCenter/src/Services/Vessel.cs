@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using UnityEngine;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -410,7 +411,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.AngularVelocityFromWorldSpace (-InternalVessel.angularVelocity).ToTuple ();
+            //FIXME: finding the rigidbody is expensive - cache it
+            return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.GetComponent<Rigidbody> ().angularVelocity).ToTuple ();
         }
     }
 }
