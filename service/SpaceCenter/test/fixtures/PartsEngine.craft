@@ -1,15 +1,15 @@
 ship = PartsEngine
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
-size = 8.297938,13.52759,6.112939
+size = 8.297939,12.89818,6.112939
 PART
 {
 	part = mk1pod_4294756890
 	partName = Part
-	pos = 0.1053987,8.714953,-0.3310757
+	pos = 0.01556367,8.085545,-0.2157839
 	attPos = 0,0,0
-	attPos0 = 0.1053987,8.714953,-0.3310757
+	attPos0 = 0.01556367,8.085545,-0.2157839
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -90,9 +90,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -143,6 +149,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -236,7 +243,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -468,7 +475,7 @@ PART
 {
 	part = fuelTank_4294769072
 	partName = Part
-	pos = 0.1053987,7.344224,-0.3310757
+	pos = 0.01556367,6.714815,-0.2157839
 	attPos = 0,0,0
 	attPos0 = 0,-1.370729,0
 	rot = 0,0,0,1
@@ -528,7 +535,7 @@ PART
 {
 	part = liquidEngine2_4294764816
 	partName = Part
-	pos = 0.1053987,5.529895,-0.3310757
+	pos = 0.01556367,4.900486,-0.2157839
 	attPos = 0,0,0
 	attPos0 = 0,-1.814327,0
 	rot = 0,0,0,1
@@ -660,7 +667,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Shroud: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -681,6 +688,10 @@ PART
 		isEnabled = True
 		gimbalLock = False
 		gimbalLimiter = 100
+		currentShowToggles = False
+		enableYaw = True
+		enablePitch = True
+		enableRoll = True
 		gimbalActive = False
 		stagingEnabled = True
 		gimbalLock_UIFlight
@@ -694,8 +705,33 @@ PART
 			maxValue = 100
 			stepIncrement = 1
 		}
+		enableYaw_UIFlight
+		{
+			controlEnabled = True
+		}
+		enablePitch_UIFlight
+		{
+			controlEnabled = True
+		}
+		enableRoll_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
+			ToggleToggles
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Actuation Toggles
+				guiName = Show Actuation Toggles
+				category = Actuation Toggles
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -720,6 +756,18 @@ PART
 				actionGroup = None
 			}
 			FreeAction
+			{
+				actionGroup = None
+			}
+			TogglePitchAction
+			{
+				actionGroup = None
+			}
+			ToggleYawAction
+			{
+				actionGroup = None
+			}
+			ToggleRollAction
 			{
 				actionGroup = None
 			}
@@ -841,7 +889,7 @@ PART
 		flowState = True
 		isTweakable = False
 		hideFlow = True
-		isVisible = True
+		isVisible = False
 		flowMode = Both
 	}
 }
@@ -849,7 +897,7 @@ PART
 {
 	part = fuelTank_4294761946
 	partName = Part
-	pos = -1.143851,7.254424,-0.3310756
+	pos = -1.233686,6.625015,-0.2157838
 	attPos = 0,0,0
 	attPos0 = -1.24925,-0.08979416,1.490116E-07
 	rot = -7.486785E-23,8.42937E-08,-1.776357E-15,1
@@ -908,10 +956,10 @@ PART
 {
 	part = liquidEngine_4294765214
 	partName = Part
-	pos = -1.143851,5.440095,-0.3310756
+	pos = -1.233686,4.810686,-0.2157838
 	attPos = 0,0,0
 	attPos0 = 6.445786E-15,-1.814327,2.881491E-22
-	rot = -6.352214E-24,-0.1305262,-7.960602E-24,0.9914449
+	rot = 0,-0.1305262,-9.772218E-24,0.9914449
 	attRot = 0,0,0,1
 	attRot0 = 2.318612E-16,-0.1305263,1.76116E-15,0.9914449
 	mir = 1,1,1
@@ -1040,7 +1088,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Shroud: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -1135,7 +1183,7 @@ PART
 		flowState = True
 		isTweakable = False
 		hideFlow = True
-		isVisible = True
+		isVisible = False
 		flowMode = Both
 	}
 }
@@ -1143,10 +1191,10 @@ PART
 {
 	part = launchClamp1_4294744832
 	partName = Part
-	pos = -2.571882,6.041194,-0.3310752
+	pos = -2.661717,5.411785,-0.2157834
 	attPos = 0,0,0
 	attPos0 = -1.428031,-1.213228,1.192093E-07
-	rot = -5.384785E-22,0.7071068,7.502369E-22,0.7071068
+	rot = -6.352747E-22,0.7071068,7.940934E-22,0.7071068
 	attRot = 0,0,0,1
 	attRot0 = -1.256074E-15,0.7071068,1.256074E-15,0.7071068
 	mir = 1,1,1
@@ -1174,10 +1222,10 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 2.655895
-		height = 6.701345
+		scaleFactor = 2.406446
+		height = 6.071936
 		stagingEnabled = True
-		towerRot = 5.384785E-22,-0.7071068,-7.502369E-22,0.7071068
+		towerRot = 6.352747E-22,-0.7071068,-7.940934E-22,0.7071068
 		EVENTS
 		{
 			Release
@@ -1316,7 +1364,7 @@ PART
 {
 	part = solidBooster_4294750942
 	partName = Part
-	pos = 1.350458,6.951613,-0.3310758
+	pos = 1.260623,6.322204,-0.215784
 	attPos = 0,0,0
 	attPos0 = 1.245059,-0.392601,-5.960464E-08
 	rot = 1.256074E-15,0.7071068,-1.256074E-15,0.7071068
@@ -1520,7 +1568,7 @@ PART
 {
 	part = launchClamp1_4294746662
 	partName = Part
-	pos = 2.697063,6.170175,-0.3310757
+	pos = 2.607228,5.540766,-0.2157839
 	attPos = 0,0,0
 	attPos0 = -2.384186E-07,-0.7814483,1.346605
 	rot = -0.002348469,0.7071031,-0.002348469,-0.7071028
@@ -1551,10 +1599,10 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 2.709504
-		height = 6.836613
+		scaleFactor = 2.460055
+		height = 6.207204
 		stagingEnabled = True
-		towerRot = 0.002348469,-0.7071031,0.002348469,-0.7071028
+		towerRot = 0.002348469,-0.707103,0.002348469,-0.7071028
 		EVENTS
 		{
 			Release
@@ -1693,7 +1741,7 @@ PART
 {
 	part = MK1Fuselage_4294729502
 	partName = Part
-	pos = 0.1053988,7.334575,0.9260117
+	pos = 0.01556377,6.705166,1.041303
 	attPos = 0,0,0
 	attPos0 = 5.960464E-08,-0.009645462,1.257087
 	rot = -2.980232E-08,4.371139E-08,1.302701E-15,1
@@ -1741,7 +1789,7 @@ PART
 {
 	part = JetEngine_4294736848
 	partName = Part
-	pos = 0.1053988,5.424193,0.9260117
+	pos = 0.01556377,4.794784,1.041303
 	attPos = 0,0,0
 	attPos0 = 0,-1.910376,-1.138673E-07
 	rot = 0,0,0,1
@@ -1872,6 +1920,10 @@ PART
 		isEnabled = True
 		gimbalLock = False
 		gimbalLimiter = 100
+		currentShowToggles = False
+		enableYaw = True
+		enablePitch = True
+		enableRoll = True
 		gimbalActive = False
 		stagingEnabled = True
 		gimbalLock_UIFlight
@@ -1885,8 +1937,33 @@ PART
 			maxValue = 100
 			stepIncrement = 1
 		}
+		enableYaw_UIFlight
+		{
+			controlEnabled = True
+		}
+		enablePitch_UIFlight
+		{
+			controlEnabled = True
+		}
+		enableRoll_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
+			ToggleToggles
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Actuation Toggles
+				guiName = Show Actuation Toggles
+				category = Actuation Toggles
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -1911,6 +1988,18 @@ PART
 				actionGroup = None
 			}
 			FreeAction
+			{
+				actionGroup = None
+			}
+			TogglePitchAction
+			{
+				actionGroup = None
+			}
+			ToggleYawAction
+			{
+				actionGroup = None
+			}
+			ToggleRollAction
 			{
 				actionGroup = None
 			}
@@ -2008,7 +2097,7 @@ PART
 		flowState = True
 		isTweakable = False
 		hideFlow = True
-		isVisible = True
+		isVisible = False
 		flowMode = Both
 	}
 }
@@ -2016,7 +2105,7 @@ PART
 {
 	part = launchClamp1_4294744524
 	partName = Part
-	pos = 0.1053982,6.091115,2.349699
+	pos = 0.01556318,5.461706,2.464991
 	attPos = 0,0,0
 	attPos0 = -6.609045E-07,-1.24346,1.423687
 	rot = -1.39012E-14,1,-2.892517E-08,3.681876E-07
@@ -2047,8 +2136,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 2.675679
-		height = 6.751266
+		scaleFactor = 2.42623
+		height = 6.121857
 		stagingEnabled = True
 		towerRot = 1.39012E-14,-1,2.892517E-08,3.681876E-07
 		EVENTS
@@ -2189,7 +2278,7 @@ PART
 {
 	part = fuelTank_4294720424
 	partName = Part
-	pos = 0.1053984,7.270373,-1.57683
+	pos = 0.01556338,6.640964,-1.461538
 	attPos = 0,0,0
 	attPos0 = -2.831221E-07,-0.07384109,-1.245754
 	rot = 2.107342E-08,0.7071065,-2.107343E-08,-0.7071071
@@ -2247,7 +2336,7 @@ PART
 {
 	part = nuclearEngine_4294723338
 	partName = Part
-	pos = 0.1053984,4.954043,-1.57683
+	pos = 0.01556338,4.324634,-1.461538
 	attPos = 0,0,0
 	attPos0 = -1.38064E-07,-2.31633,0
 	rot = 0,0,0,1
@@ -2379,7 +2468,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Shroud: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -2425,7 +2514,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Shroud: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -2556,7 +2645,7 @@ PART
 		flowState = True
 		isTweakable = False
 		hideFlow = True
-		isVisible = True
+		isVisible = False
 		flowMode = Both
 	}
 }
@@ -2564,7 +2653,7 @@ PART
 {
 	part = CircularIntake_4294701156
 	partName = Part
-	pos = 0.1053988,8.272075,0.9260117
+	pos = 0.01556377,7.642666,1.041303
 	attPos = 0,0,0
 	attPos0 = 0,0.9375,5.587935E-08
 	rot = 0,0,0,1
@@ -2684,7 +2773,7 @@ PART
 {
 	part = xenonTank_4294695328
 	partName = Part
-	pos = 1.350458,8.373923,-0.3310758
+	pos = 1.260623,7.744514,-0.215784
 	attPos = 0,0,0
 	attPos0 = -3.011846E-22,1.422304,-5.053039E-15
 	rot = 0,0,0,1
@@ -2730,7 +2819,7 @@ PART
 {
 	part = ionEngine_4294715648
 	partName = Part
-	pos = 1.350458,8.727944,-0.3310758
+	pos = 1.260623,8.098536,-0.215784
 	attPos = 0,0,0
 	attPos0 = -1.058791E-22,0.354023,1.499346E-22
 	rot = -1.577722E-30,0,-1,0
@@ -2740,7 +2829,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 10
+	sidx = 8
 	sqor = 0
 	sepI = 0
 	attm = 0
@@ -2896,7 +2985,7 @@ PART
 {
 	part = RCSFuelTank_4294686558
 	partName = Part
-	pos = -1.143851,8.505424,-0.3310756
+	pos = -1.233686,7.876015,-0.2157838
 	attPos = 0,0,0
 	attPos0 = -4.444423E-15,1.250994,-1.873184E-22
 	rot = 0,0,0,1
@@ -2940,7 +3029,7 @@ PART
 {
 	part = omsEngine_4294715156
 	partName = Part
-	pos = -1.445988,8.501424,-0.8543925
+	pos = -1.535823,7.872015,-0.7391008
 	attPos = 0,0,0
 	attPos0 = -0.302137,-0.003995895,-0.5233166
 	rot = -4.008013E-08,0.9659256,-1.495806E-07,-0.2588198
@@ -2950,7 +3039,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 11
+	sidx = 9
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -3046,7 +3135,7 @@ PART
 {
 	part = batteryPack_4294656478
 	partName = Part
-	pos = 1.642807,8.470294,-0.3310758
+	pos = 1.552972,7.840885,-0.215784
 	attPos = 0,0,0
 	attPos0 = 0.2923487,0.09637451,2.980233E-08
 	rot = 6.280376E-16,0.7071069,6.280376E-16,-0.7071069
@@ -3089,7 +3178,7 @@ PART
 {
 	part = stackDecoupler_4293758552
 	partName = Part
-	pos = 0.1053984,8.369058,-1.57683
+	pos = 0.01556338,7.739649,-1.461538
 	attPos = 0,0,0
 	attPos0 = 6.548672E-08,1.098685,1.756491E-14
 	rot = 0,0,0,1
@@ -3099,7 +3188,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 1
-	sidx = 9
+	sidx = 10
 	sqor = 0
 	sepI = 0
 	attm = 0
@@ -3259,17 +3348,17 @@ PART
 {
 	part = liquidEngine3_4293755140
 	partName = Part
-	pos = 0.1053984,8.704732,-1.57683
+	pos = 0.01556338,8.075323,-1.461538
 	attPos = 0,0,0
 	attPos0 = -5.962773E-16,0.3356743,-1.776352E-15
-	rot = -9.710124E-23,1.256076E-15,-1,3.768221E-15
+	rot = -4.440893E-16,1.776357E-15,-1,3.552714E-15
 	attRot = 0,0,-0.9999999,0
 	attRot0 = 0,0,-1,0
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 0
 	dstg = 2
-	sidx = 8
+	sidx = 11
 	sqor = 0
 	sepI = 0
 	attm = 0
@@ -3366,6 +3455,10 @@ PART
 		isEnabled = True
 		gimbalLock = False
 		gimbalLimiter = 100
+		currentShowToggles = False
+		enableYaw = True
+		enablePitch = True
+		enableRoll = True
 		gimbalActive = False
 		stagingEnabled = True
 		gimbalLock_UIFlight
@@ -3379,8 +3472,33 @@ PART
 			maxValue = 100
 			stepIncrement = 1
 		}
+		enableYaw_UIFlight
+		{
+			controlEnabled = True
+		}
+		enablePitch_UIFlight
+		{
+			controlEnabled = True
+		}
+		enableRoll_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
+			ToggleToggles
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Actuation Toggles
+				guiName = Show Actuation Toggles
+				category = Actuation Toggles
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -3405,6 +3523,18 @@ PART
 				actionGroup = None
 			}
 			FreeAction
+			{
+				actionGroup = None
+			}
+			TogglePitchAction
+			{
+				actionGroup = None
+			}
+			ToggleYawAction
+			{
+				actionGroup = None
+			}
+			ToggleRollAction
 			{
 				actionGroup = None
 			}
@@ -3465,7 +3595,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Shroud: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -3545,7 +3675,7 @@ PART
 {
 	part = fuelTankSmall_4294687852
 	partName = Part
-	pos = 0.1053987,9.91258,-0.3310757
+	pos = 0.01556367,9.283171,-0.2157839
 	attPos = 0,0,0
 	attPos0 = 0,1.197626,0
 	rot = 0,0,0,1
@@ -3601,7 +3731,7 @@ PART
 {
 	part = RAPIER_4294681790
 	partName = Part
-	pos = 0.1053987,11.39476,-0.3310757
+	pos = 0.01556367,10.76535,-0.2157839
 	attPos = 0,0,0
 	attPos0 = 0,1.482182,0
 	rot = 0,0,-1,0
@@ -3611,7 +3741,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
+	sidx = 12
 	sqor = -1
 	sepI = 0
 	attm = 0
@@ -3890,6 +4020,10 @@ PART
 		isEnabled = True
 		gimbalLock = False
 		gimbalLimiter = 100
+		currentShowToggles = False
+		enableYaw = True
+		enablePitch = True
+		enableRoll = True
 		gimbalActive = False
 		stagingEnabled = True
 		gimbalLock_UIFlight
@@ -3903,8 +4037,33 @@ PART
 			maxValue = 100
 			stepIncrement = 1
 		}
+		enableYaw_UIFlight
+		{
+			controlEnabled = True
+		}
+		enablePitch_UIFlight
+		{
+			controlEnabled = True
+		}
+		enableRoll_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
+			ToggleToggles
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Actuation Toggles
+				guiName = Show Actuation Toggles
+				category = Actuation Toggles
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -3929,6 +4088,18 @@ PART
 				actionGroup = None
 			}
 			FreeAction
+			{
+				actionGroup = None
+			}
+			TogglePitchAction
+			{
+				actionGroup = None
+			}
+			ToggleYawAction
+			{
+				actionGroup = None
+			}
+			ToggleRollAction
 			{
 				actionGroup = None
 			}
