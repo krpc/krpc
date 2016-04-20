@@ -391,11 +391,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A <see cref="LandingGear"/> if the part is a landing gear , otherwise <c>null</c>.
+        /// A <see cref="LandingGear"/> if the part is a landing gear, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty]
         public LandingGear LandingGear {
             get { return LandingGear.Is (this) ? new LandingGear (this) : null; }
+        }
+
+        /// <summary>
+        /// A <see cref="LandingLeg"/> if the part is a landing leg, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public LandingLeg LandingLeg {
+            get { return LandingLeg.Is (this) ? new LandingLeg (this) : null; }
         }
 
         /// <summary>

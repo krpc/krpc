@@ -250,6 +250,7 @@ SpaceCenter.Parts.Engines
 SpaceCenter.Parts.Fairings
 SpaceCenter.Parts.Intakes
 SpaceCenter.Parts.LandingGear
+SpaceCenter.Parts.LandingLegs
 SpaceCenter.Parts.LaunchClamps
 SpaceCenter.Parts.Lights
 SpaceCenter.Parts.Parachutes
@@ -299,6 +300,7 @@ SpaceCenter.Part.Engine
 SpaceCenter.Part.Fairing
 SpaceCenter.Part.Intake
 SpaceCenter.Part.LandingGear
+SpaceCenter.Part.LandingLeg
 SpaceCenter.Part.LaunchClamp
 SpaceCenter.Part.Light
 SpaceCenter.Part.Parachute
@@ -407,6 +409,14 @@ SpaceCenter.LandingGearState.Retracted
 SpaceCenter.LandingGearState.Deploying
 SpaceCenter.LandingGearState.Retracting
 SpaceCenter.LandingGearState.Broken
+SpaceCenter.LandingLeg.Part
+SpaceCenter.LandingLeg.State
+SpaceCenter.LandingLeg.Deployed
+SpaceCenter.LandingLegState.Deployed
+SpaceCenter.LandingLegState.Retracted
+SpaceCenter.LandingLegState.Deploying
+SpaceCenter.LandingLegState.Retracting
+SpaceCenter.LandingLegState.Broken
 SpaceCenter.LaunchClamp
 SpaceCenter.LaunchClamp.Part
 SpaceCenter.LaunchClamp.Release

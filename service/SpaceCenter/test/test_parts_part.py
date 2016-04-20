@@ -65,6 +65,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(None, part.fairing)
         self.assertEqual(None, part.intake)
         self.assertEqual(None, part.landing_gear)
+        self.assertEqual(None, part.landing_leg)
         self.assertEqual(None, part.launch_clamp)
         self.assertEqual(None, part.light)
         self.assertEqual(None, part.parachute)
@@ -247,6 +248,44 @@ class TestPartsPart(testingtools.TestCase):
         self.assertNotEqual(None, part.intake)
 
     def test_landing_gear(self):
+        part = self.parts.with_title('LY-10 Small Landing Gear')[0]
+        self.assertEqual('SmallGearBay', part.name)
+        self.assertEqual('LY-10 Small Landing Gear', part.title)
+        self.assertEqual(600, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Mk1-2 Command Pod', part.parent.title)
+        self.assertEqual([], [p.title for p in part.children])
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(-1, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertClose(45, part.mass)
+        self.assertClose(45, part.dry_mass)
+        self.assertEqual(50, part.impact_tolerance)
+        self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
+        self.assertEqual(0, len(part.fuel_lines_from))
+        self.assertEqual(0, len(part.fuel_lines_to))
+        modules = [
+            'FXModuleConstrainPosition',
+            'FXModuleLookAtConstraint',
+            'ModuleLight',
+            'ModuleStatusLight',
+            'ModuleTestSubject',
+            'ModuleWheelBase',
+            'ModuleWheelBrakes',
+            'ModuleWheelDamage',
+            'ModuleWheelDeployment',
+            'ModuleWheelSteering',
+            'ModuleWheelSuspension'
+        ]
+        if self.conn.space_center.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.landing_gear)
+
+    def test_landing_leg(self):
         part = self.parts.with_title('LT-1 Landing Struts')[0]
         self.assertEqual('landingLeg1', part.name)
         self.assertEqual('LT-1 Landing Struts', part.title)
@@ -266,11 +305,18 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
-        modules = ['ModuleWheels.ModuleWheelDeployment', 'ModuleWheels.ModuleWheelDamage']
+        modules = [
+            'ModuleWheelBase',
+            'ModuleWheelBogey',
+            'ModuleWheelDamage',
+            'ModuleWheelDeployment',
+            'ModuleWheelLock',
+            'ModuleWheelSuspension'
+        ]
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
-        self.assertNotEqual(None, part.landing_gear)
+        self.assertNotEqual(None, part.landing_leg)
 
     def test_launch_clamp(self):
         part = self.parts.with_title('TT18-A Launch Stability Enhancer')[0]

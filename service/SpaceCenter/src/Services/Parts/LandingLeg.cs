@@ -7,10 +7,10 @@ using KRPC.SpaceCenter.ExtensionMethods;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.LandingGear"/>.
+    /// Obtained by calling <see cref="Part.LandingLeg"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class LandingGear : Equatable<LandingGear>
+    public sealed class LandingLeg : Equatable<LandingLeg>
     {
         readonly Part part;
         readonly ModuleWheels.ModuleWheelDeployment deployment;
@@ -18,29 +18,28 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal static bool Is (Part part)
         {
-            //TODO: is WheelType.FREE correct? Landing gear are the only stock parts with this wheel type. Rover wheels are WheelType.MOTORIZED
-            return part.InternalPart.HasModule<ModuleWheelBase> () && part.InternalPart.Module<ModuleWheelBase> ().wheelType == WheelType.FREE;
+            return part.InternalPart.HasModule<ModuleWheelBase> () && part.InternalPart.Module<ModuleWheelBase> ().wheelType == WheelType.LEG;
         }
 
-        internal LandingGear (Part part)
+        internal LandingLeg (Part part)
         {
             if (!Is (part))
-                throw new ArgumentException ("Part is not landing gear");
+                throw new ArgumentException ("Part is not a landing leg");
             this.part = part;
             deployment = part.InternalPart.Module<ModuleWheels.ModuleWheelDeployment> ();
             damage = part.InternalPart.Module<ModuleWheels.ModuleWheelDamage> ();
         }
 
         /// <summary>
-        /// Check the landing gear are equal.
+        /// Check if the landing legs are equal.
         /// </summary>
-        public override bool Equals (LandingGear obj)
+        public override bool Equals (LandingLeg obj)
         {
             return part == obj.part && deployment == obj.deployment && damage == obj.damage;
         }
 
         /// <summary>
-        /// Hash the landing gear.
+        /// Hash the landing leg.
         /// </summary>
         public override int GetHashCode ()
         {
@@ -53,7 +52,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The part object for this landing gear.
+        /// The part object for this landing leg.
         /// </summary>
         [KRPCProperty]
         public Part Part {
@@ -61,49 +60,38 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the landing gear is deployable.
+        /// The current state of the landing leg.
         /// </summary>
         [KRPCProperty]
-        public bool Deployable {
-            get { return deployment != null; }
-        }
-
-        /// <summary>
-        /// Gets the current state of the landing gear.
-        /// </summary>
-        /// <remarks>
-        /// Fixed landing gear are always deployed.
-        /// </remarks>
-        [KRPCProperty]
-        public LandingGearState State {
+        public LandingLegState State {
             get {
                 if (damage != null && damage.isDamaged)
-                    return LandingGearState.Broken;
+                    return LandingLegState.Broken;
                 if (deployment != null) {
                     if (deployment.stateString.Contains ("Deployed"))
-                        return LandingGearState.Deployed;
+                        return LandingLegState.Deployed;
                     else if (deployment.stateString.Contains ("Retracted"))
-                        return LandingGearState.Retracted;
+                        return LandingLegState.Retracted;
                     else if (deployment.stateString.Contains ("Deploying"))
-                        return LandingGearState.Deploying;
+                        return LandingLegState.Deploying;
                     else if (deployment.stateString.Contains ("Retracting"))
-                        return LandingGearState.Retracting;
+                        return LandingLegState.Retracting;
                     throw new ArgumentException ("Unknown landing leg state");
                 }
-                return LandingGearState.Deployed;
+                return LandingLegState.Deployed;
             }
         }
 
         /// <summary>
-        /// Whether the landing gear is deployed.
+        /// Whether the landing leg is deployed.
         /// </summary>
         /// <remarks>
-        /// Fixed landing gear are always deployed.
+        /// Fixed landing legs are always deployed.
         /// Returns an error if you try to deploy fixed landing gear.
         /// </remarks>
         [KRPCProperty]
         public bool Deployed {
-            get { return State == LandingGearState.Deployed; }
+            get { return State == LandingLegState.Deployed; }
             set {
                 if (deployment == null)
                     throw new InvalidOperationException ("Landing gear is not deployable");

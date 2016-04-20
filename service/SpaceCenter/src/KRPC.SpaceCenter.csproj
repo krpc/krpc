@@ -111,6 +111,8 @@
     <Compile Include="Services\Parts\Intake.cs" />
     <Compile Include="Services\Parts\LandingGear.cs" />
     <Compile Include="Services\Parts\LandingGearState.cs" />
+    <Compile Include="Services\Parts\LandingLeg.cs" />
+    <Compile Include="Services\Parts\LandingLegState.cs" />
     <Compile Include="Services\Parts\LaunchClamp.cs" />
     <Compile Include="Services\Parts\Light.cs" />
     <Compile Include="Services\Parts\Module.cs" />
