@@ -3,7 +3,7 @@
 set -e
 
 LUAROCKS=luarocks
-VERSION=`tools/get-version.sh`
+VERSION=`tools/krpc-version.sh`
 
 bazel build //client/lua
 bazel test //client/lua:test --cache_test_results=no

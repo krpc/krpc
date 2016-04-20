@@ -8,7 +8,7 @@ else
     NAME=$TRAVIS_BRANCH
 fi
 DEPLOYPATH=deploy/$NAME/$TRAVIS_JOB_NUMBER
-VERSION=`tools/get-version.sh`
+VERSION=`tools/krpc-version.sh`
 mkdir -p $DEPLOYPATH
 cp bazel-bin/krpc-$VERSION.zip $DEPLOYPATH/
 (cd $DEPLOYPATH; unzip *.zip)
