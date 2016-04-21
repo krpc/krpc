@@ -166,17 +166,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The current gimbal angle in the pitch, yaw and roll axes.
+        /// The current gimbal angle in the pitch, roll and yaw axes.
         /// </summary>
         [KRPCProperty]
         public Tuple3 GimbalAngle {
             get {
                 CheckGimballed ();
-                return new Vector3d (
-                    gimbal.gimbalAnglePitch,
-                    gimbal.gimbalAngleYaw,
-                    gimbal.gimbalAngleRoll)
-                        .ToTuple ();
+                return gimbal.actuation.ToTuple ();
             }
         }
 

@@ -17,6 +17,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Convert a vector to a tuple
+        /// </summary>
+        public static Tuple3 ToTuple (this Vector3 v)
+        {
+            return new Tuple3 (v.x, v.y, v.z);
+        }
+
+        /// <summary>
         /// Convert a tuple to a vector
         /// </summary>
         public static Vector3d ToVector (this Tuple3 t)
