@@ -60,7 +60,7 @@ class TestParts(testingtools.TestCase):
              'PresMat Barometer',
              'RE-I5 "Skipper" Liquid Fuel Engine',
              'RE-L10 "Poodle" Liquid Fuel Engine',
-             'RE-M3 "Mainsail" Liquid Engine',
+             'RE-M3 "Mainsail" Liquid Fuel Engine',
              'RV-105 RCS Thruster Block',
              'Rockomax Jumbo-64 Fuel Tank',
              'Rockomax X200-32 Fuel Tank',

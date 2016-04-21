@@ -2,7 +2,7 @@ ship = Parts
 version = 1.1.0
 description = 
 type = VAB
-size = 6.92598,34.02875,6.749738
+size = 6.925979,34.02875,6.749739
 PART
 {
 	part = Mark1-2Pod_4294710516
@@ -4900,6 +4900,7 @@ PART
 	link = strutConnector_4294469828
 	link = MiniDrill_4293830772
 	link = winglet3_4294684678
+	link = winglet3_4294504982
 	attN = top,ISRU_4293824222
 	attN = bottom,engineLargeSkipper_4294668238
 	EVENTS
@@ -6307,10 +6308,10 @@ PART
 {
 	part = spotLight1_4294475422
 	partName = Part
-	pos = 0.09209659,17.51679,-2.32546
+	pos = 0.0920966,17.51679,-2.32546
 	attPos = 0,0,0
 	attPos0 = 0.2665243,0.4378796,-0.1538777
-	rot = -8.340322E-07,-0.3381745,0.9410836,-1.735465E-07
+	rot = -7.744275E-07,-0.3381745,0.9410836,-1.437442E-07
 	attRot = 0.8433918,0,0,0.5372998
 	attRot0 = -0.8150019,0.1690873,-0.4705422,-0.2928675
 	mir = 1,1,1
@@ -6429,7 +6430,7 @@ PART
 {
 	part = radialDecoupler2_4294642842
 	partName = Part
-	pos = -0.9281433,9.255806,0.3866137
+	pos = -0.9281434,9.255806,0.3866137
 	attPos = 0,0,0
 	attPos0 = -1.02024,-1.097759,0.5890359
 	rot = -4.628047E-08,-0.2588191,-1.72721E-07,-0.9659259
@@ -6603,7 +6604,7 @@ PART
 	pos = -2.013033,9.649752,1.012976
 	attPos = 0,0,0
 	attPos0 = -1.252723,0.3939471,5.960464E-08
-	rot = -9.033342E-08,-0.5,-5.215404E-08,0.8660256
+	rot = -9.03334E-08,-0.5,-5.215403E-08,0.8660255
 	attRot = 0,0,0,1
 	attRot0 = 2.001975E-07,0.7071068,2.001975E-07,-0.7071068
 	mir = 1,1,1
@@ -6808,7 +6809,7 @@ PART
 	pos = -2.013031,17.07891,1.012975
 	attPos = 0,0,0
 	attPos0 = 1.192088E-07,7.429159,3.439253E-08
-	rot = 2.4869E-14,8.470329E-22,3.819167E-14,-1
+	rot = 1.065814E-14,-1.694066E-21,4.174439E-14,-1
 	attRot = 0,-0.8660256,0,-0.5000001
 	attRot0 = -9.033346E-08,-0.4999999,-5.215405E-08,-0.8660254
 	mir = 1,1,1
@@ -6843,7 +6844,7 @@ PART
 	pos = -1.746508,17.51679,0.8590969
 	attPos = 0,0,0
 	attPos0 = 0.2665243,0.4378796,-0.1538777
-	rot = 0.8150017,-0.1690875,0.4705428,0.2928676
+	rot = 0.8150017,-0.1690875,0.4705427,0.2928676
 	attRot = 0.8433918,0,0,0.5372998
 	attRot0 = -0.8150019,0.1690873,-0.4705422,-0.2928675
 	mir = 1,1,1
@@ -7373,7 +7374,7 @@ PART
 {
 	part = spotLight1_4294476562
 	partName = Part
-	pos = 1.930701,17.51679,0.8590962
+	pos = 1.930701,17.51679,0.8590963
 	attPos = 0,0,0
 	attPos0 = 0.2665243,0.4378796,-0.1538777
 	rot = 0.8150027,0.169087,-0.4705412,0.2928677
@@ -7528,7 +7529,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.794511
+		scaleFactor = 4.794513
 		height = 12.0975
 		stagingEnabled = True
 		towerRot = -1.430695E-07,0.3826835,5.926132E-08,-0.9238796
@@ -7703,7 +7704,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.794511
+		scaleFactor = 4.794513
 		height = 12.0975
 		stagingEnabled = True
 		towerRot = -2.021292E-08,0.9914449,1.535325E-07,-0.1305261
@@ -7878,7 +7879,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 4.794511
+		scaleFactor = 4.794513
 		height = 12.0975
 		stagingEnabled = True
 		towerRot = 1.228566E-07,0.6087614,9.427114E-08,0.7933534
@@ -8434,7 +8435,7 @@ PART
 {
 	part = GooExperiment_4294599232
 	partName = Part
-	pos = 1.130318,19.5226,0.07576822
+	pos = 1.130318,19.5226,0.07576823
 	attPos = 0,0,0
 	attPos0 = 1.03822,0.9690323,0.2781905
 	rot = 6.712727E-07,-0.7933534,8.748196E-07,0.6087614
@@ -9032,7 +9033,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 6.632229
+		scaleFactor = 6.632231
 		height = 16.73442
 		stagingEnabled = True
 		towerRot = 0,-0.6087614,0,0.7933534
@@ -9207,7 +9208,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 6.632229
+		scaleFactor = 6.632231
 		height = 16.73442
 		stagingEnabled = True
 		towerRot = 0,-0.9914449,0,-0.1305262
@@ -9382,7 +9383,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 6.632229
+		scaleFactor = 6.632231
 		height = 16.73442
 		stagingEnabled = True
 		towerRot = 0,-0.3826834,0,-0.9238796
@@ -10595,12 +10596,15 @@ PART
 		isEnabled = True
 		rcsEnabled = True
 		thrustPercentage = 100
+		currentShowToggles = False
 		enableYaw = True
 		enablePitch = True
 		enableRoll = True
 		enableX = True
 		enableY = True
 		enableZ = True
+		useThrottle = False
+		fullThrust = False
 		stagingEnabled = True
 		thrustPercentage_UIFlight
 		{
@@ -10609,8 +10613,53 @@ PART
 			maxValue = 100
 			stepIncrement = 0.5
 		}
+		enableYaw_UIFlight
+		{
+			controlEnabled = True
+		}
+		enablePitch_UIFlight
+		{
+			controlEnabled = True
+		}
+		enableRoll_UIFlight
+		{
+			controlEnabled = True
+		}
+		enableX_UIFlight
+		{
+			controlEnabled = True
+		}
+		enableY_UIFlight
+		{
+			controlEnabled = True
+		}
+		enableZ_UIFlight
+		{
+			controlEnabled = True
+		}
+		useThrottle_UIFlight
+		{
+			controlEnabled = True
+		}
+		fullThrust_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
+			ToggleToggles
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Actuation Toggles
+				guiName = Show Actuation Toggles
+				category = Actuation Toggles
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			Disable
 			{
 				active = True
@@ -10643,7 +10692,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = RCS: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -10694,11 +10743,15 @@ PART
 	{
 		name = ModuleControlSurface
 		isEnabled = True
+		mirrorDeploy = False
+		usesMirrorDeploy = True
 		ignorePitch = False
 		ignoreYaw = False
 		ignoreRoll = False
 		deploy = False
 		deployInvert = False
+		partDeployInvert = False
+		authorityLimiter = 100
 		stagingEnabled = True
 		ignorePitch_UIFlight
 		{
@@ -10719,6 +10772,17 @@ PART
 		deployInvert_UIFlight
 		{
 			controlEnabled = True
+		}
+		partDeployInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		authorityLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = -150
+			maxValue = 150
+			stepIncrement = 0.1
 		}
 		EVENTS
 		{
@@ -10747,8 +10811,4 @@ PART
 			}
 			ActionRetract
 			{
-				actionGroup = None
-			}
-		}
-	}
-}
+				actionGr
