@@ -1,41 +1,21 @@
-v0.2.4
+v0.3.0
  * Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)
  * Add saving and loading games using SpaceCenter.Save, Load, Quicksave and Quickload (#247)
  * Add resource transfers
  * Add resource objects, representing an individual resource stored in a part
- * Fix bug where Engine.HasFuel requires the engine to be throttled up
+ * Add Vessel.MomentOfInertia, Add Vessel.InteriaTensor and Part.InertiaTensor
+ * Add Vessel.Torque and Vessel.ReactionWheelTorque
+ * Merged ReactionWheel.PitchTorque, YawTorque and RollTorque into a single ReactionWheel.Torque method
+ * Add Part.CenterOfMass and Part.CenterOfMassReferenceFrame
+ * Add Part.Shielded and Part.DynamicPressure
+ * Add RCS objects.
+ * Add Thruster objects, which represent individual rocket nozzels or RCS thrusters.
+ * Added ControlSurface objects.
  * Change autopilot so that the target reference frame, direction and roll are cleared when the client disconnects and the autopilot is engaged (#248)
+ * Fix bug where Engine.HasFuel requires the engine to be throttled up
+ * Fix bug with vessel center of mass calculations (#218)
 
 v0.2.3
- * Vessel object additions:
-   * MomentOfInertia - MoI of the vessel around it's CoM in the pitch/yaw/roll axes
-   * InteriaTensor - inertia tensor for the vessel
-   * Torque - available torque around the CoM in the pitch/yaw/roll axes
-   * ReactionWheelTorque - available torque from reaction wheels
-   * RCSTorque - available torque from RCS
-   * EngineTorque - available torque from gimballed engines
-   * ControlSurfaceTorque - available torque from aerodynamic control surfaces
- * Part object additions:
-   * CenterOfMass - center of mass of the part
-   * InertiaTensor - inertia tensor for the part
-   * CenterOfMassReferenceFrame - reference frame whose origin is the parts center of mass
-   * Aerodynamic properties: Shielded, DynamicPressure
-* Added Thruster objects:
-   * Represents, for example a rocket nozzel or RCS thruster
-   * Get the position and direction of thrust
-   * Get a reference frame fixed to the thrust vector
-   * Get the gimbal position and current angles
- * Engine object additions:
-   * Thrusters - list of thrusters that make up the engine (e.g. corresponds to individual rocket nozzels)
- * Added RCS objects, with functionality including:
-   * Properties for thrust/isp, whether it's active, whther it's active in pitch/roll/yaw/x/y/z directions
-   * Thrusters - a list of Thruster objects, one for each RCS nozzel
- * ReactionWheel object changes:
-   * Combined ReactionWheel.PitchTorque, YawTorque and RollTorque into a single Torque method
- * Added ControlSurface objects, with functionality including:
-   * Current rotation of the control surface
-   * Available positive and negative torques
- * Fix bug with vessel center of mass calculations (#218)
  * Add support for engine mode switching (#219)
  * Engine.GimbalLimit and GimbalLocked now return an error if the engine is not gimballed
  * Add cargo bays, fairings and intakes
