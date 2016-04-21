@@ -266,6 +266,9 @@ class TestParts(testingtools.TestCase):
     def test_cargo_bays(self):
         self.assertEqual(['Service Bay (2.5m)'], sorted(x.part.title for x in self.parts.cargo_bays))
 
+    def test_control_surfaces(self):
+        self.assertEqual(['Delta-Deluxe Winglet'], sorted(x.part.title for x in self.parts.control_surfaces))
+
     def test_decouplers(self):
         self.assertEqual(
             ['TR-XL Stack Separator', 'TR-XL Stack Separator', 'TR-XL Stack Separator',
@@ -326,6 +329,9 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(
             ['Thermal Control System (small)'],
             sorted(x.part.title for x in self.parts.radiators))
+
+    def test_rcs(self):
+        self.assertEqual(['RV-105 RCS Thruster Block'], sorted(x.part.title for x in self.parts.rcs))
 
     def test_reaction_wheels(self):
         self.assertEqual(
