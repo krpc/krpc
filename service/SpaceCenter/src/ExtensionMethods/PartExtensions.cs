@@ -47,7 +47,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static Vector3d CenterOfMass (this Part part)
         {
-            return part.rigidbody != null ? part.rigidbody.worldCenterOfMass : part.transform.position;
+            return part.rb != null ? part.rb.worldCenterOfMass : part.transform.position;
         }
 
         /// <summary>
