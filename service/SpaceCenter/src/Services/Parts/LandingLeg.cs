@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -12,19 +13,21 @@ namespace KRPC.SpaceCenter.Services.Parts
     public sealed class LandingLeg : Equatable<LandingLeg>
     {
         readonly Part part;
-        readonly ModuleLandingLeg leg;
+        readonly ModuleWheels.ModuleWheelDeployment deployment;
+        readonly ModuleWheels.ModuleWheelDamage damage;
 
         internal static bool Is (Part part)
         {
-            return part.InternalPart.HasModule<ModuleLandingLeg> ();
+            return part.InternalPart.HasModule<ModuleWheelBase> () && part.InternalPart.Module<ModuleWheelBase> ().wheelType == WheelType.LEG;
         }
 
         internal LandingLeg (Part part)
         {
-            this.part = part;
-            leg = part.InternalPart.Module<ModuleLandingLeg> ();
-            if (leg == null)
+            if (!Is (part))
                 throw new ArgumentException ("Part is not a landing leg");
+            this.part = part;
+            deployment = part.InternalPart.Module<ModuleWheels.ModuleWheelDeployment> ();
+            damage = part.InternalPart.Module<ModuleWheels.ModuleWheelDamage> ();
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (LandingLeg obj)
         {
-            return part == obj.part && leg == obj.leg;
+            return part == obj.part && deployment == obj.deployment && damage == obj.damage;
         }
 
         /// <summary>
@@ -40,7 +43,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ leg.GetHashCode ();
+            var hash = part.GetHashCode ();
+            if (deployment != null)
+                hash ^= deployment.GetHashCode ();
+            if (damage != null)
+                hash ^= damage.GetHashCode ();
+            return hash;
         }
 
         /// <summary>
@@ -57,36 +65,45 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public LandingLegState State {
             get {
-                switch (leg.legState) {
-                case ModuleLandingLeg.LegStates.DEPLOYED:
-                    return LandingLegState.Deployed;
-                case ModuleLandingLeg.LegStates.RETRACTED:
-                    return LandingLegState.Retracted;
-                case ModuleLandingLeg.LegStates.DEPLOYING:
-                    return LandingLegState.Deploying;
-                case ModuleLandingLeg.LegStates.RETRACTING:
-                    return LandingLegState.Retracting;
-                case ModuleLandingLeg.LegStates.BROKEN:
+                if (damage != null && damage.isDamaged)
                     return LandingLegState.Broken;
-                case ModuleLandingLeg.LegStates.REPAIRING:
-                    return LandingLegState.Repairing;
-                default:
+                if (deployment != null) {
+                    if (deployment.stateString.Contains ("Deployed"))
+                        return LandingLegState.Deployed;
+                    else if (deployment.stateString.Contains ("Retracted"))
+                        return LandingLegState.Retracted;
+                    else if (deployment.stateString.Contains ("Deploying"))
+                        return LandingLegState.Deploying;
+                    else if (deployment.stateString.Contains ("Retracting"))
+                        return LandingLegState.Retracting;
                     throw new ArgumentException ("Unknown landing leg state");
                 }
+                return LandingLegState.Deployed;
             }
         }
 
         /// <summary>
         /// Whether the landing leg is deployed.
         /// </summary>
+        /// <remarks>
+        /// Fixed landing legs are always deployed.
+        /// Returns an error if you try to deploy fixed landing gear.
+        /// </remarks>
         [KRPCProperty]
         public bool Deployed {
             get { return State == LandingLegState.Deployed; }
             set {
-                if (value)
-                    leg.LowerLeg ();
-                else
-                    leg.RaiseLeg ();
+                if (deployment == null)
+                    throw new InvalidOperationException ("Landing gear is not deployable");
+                if (value) {
+                    var extend = deployment.Events.FirstOrDefault (x => x.guiName == "Extend");
+                    if (extend != null)
+                        extend.Invoke ();
+                } else {
+                    var retract = deployment.Events.FirstOrDefault (x => x.guiName == "Retract");
+                    if (retract != null)
+                        retract.Invoke ();
+                }
             }
         }
     }

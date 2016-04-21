@@ -1,9 +1,8 @@
-
 ship = ResourceTransfer
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
-size = 4.020114,8.751135,5.889442
+size = 4.020115,8.751136,5.889442
 PART
 {
 	part = mk1pod_4294689466
@@ -91,9 +90,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -144,6 +149,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -237,7 +243,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -575,7 +581,7 @@ PART
 	pos = -0.2186576,5.043352,-0.9752549
 	attPos = 0,0,0
 	attPos0 = -0.728889,0.840538,-0.4208241
-	rot = -7.410686E-09,0.5000003,4.278565E-09,0.8660253
+	rot = -7.410685E-09,0.5000003,4.278565E-09,0.8660253
 	attRot = 0,0,0,1
 	attRot0 = -7.410686E-09,0.5000003,4.278565E-09,0.8660253
 	mir = 1,1,1
@@ -799,7 +805,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 1
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -1029,7 +1035,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 1
-	sidx = 2
+	sidx = 1
 	sqor = 0
 	sepI = 0
 	attm = 0

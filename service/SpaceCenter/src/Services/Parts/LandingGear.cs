@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -12,26 +13,22 @@ namespace KRPC.SpaceCenter.Services.Parts
     public sealed class LandingGear : Equatable<LandingGear>
     {
         readonly Part part;
-        readonly ModuleLandingGear gear;
-        readonly ModuleAdvancedLandingGear advGear;
-        readonly ModuleLandingGearFixed fixedGear;
+        readonly ModuleWheels.ModuleWheelDeployment deployment;
+        readonly ModuleWheels.ModuleWheelDamage damage;
 
         internal static bool Is (Part part)
         {
-            return
-                part.InternalPart.HasModule<ModuleLandingGear> () ||
-                part.InternalPart.HasModule<ModuleAdvancedLandingGear> () ||
-                part.InternalPart.HasModule<ModuleLandingGearFixed> ();
+            //TODO: is WheelType.FREE correct? Landing gear are the only stock parts with this wheel type. Rover wheels are WheelType.MOTORIZED
+            return part.InternalPart.HasModule<ModuleWheelBase> () && part.InternalPart.Module<ModuleWheelBase> ().wheelType == WheelType.FREE;
         }
 
         internal LandingGear (Part part)
         {
-            this.part = part;
-            gear = part.InternalPart.Module<ModuleLandingGear> ();
-            advGear = part.InternalPart.Module<ModuleAdvancedLandingGear> ();
-            fixedGear = part.InternalPart.Module<ModuleLandingGearFixed> ();
-            if (gear == null && advGear == null && fixedGear == null)
+            if (!Is (part))
                 throw new ArgumentException ("Part is not landing gear");
+            this.part = part;
+            deployment = part.InternalPart.Module<ModuleWheels.ModuleWheelDeployment> ();
+            damage = part.InternalPart.Module<ModuleWheels.ModuleWheelDamage> ();
         }
 
         /// <summary>
@@ -39,7 +36,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (LandingGear obj)
         {
-            return part == obj.part && gear == obj.gear && advGear == obj.advGear && fixedGear == obj.fixedGear;
+            return part == obj.part && deployment == obj.deployment && damage == obj.damage;
         }
 
         /// <summary>
@@ -47,13 +44,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = part.GetHashCode ();
-            if (gear != null)
-                hash ^= gear.GetHashCode ();
-            if (advGear != null)
-                hash ^= advGear.GetHashCode ();
-            if (fixedGear != null)
-                hash ^= fixedGear.GetHashCode ();
+            var hash = part.GetHashCode ();
+            if (deployment != null)
+                hash ^= deployment.GetHashCode ();
+            if (damage != null)
+                hash ^= damage.GetHashCode ();
             return hash;
         }
 
@@ -70,7 +65,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Deployable {
-            get { return fixedGear == null; }
+            get { return deployment != null; }
         }
 
         /// <summary>
@@ -82,32 +77,20 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public LandingGearState State {
             get {
-                if (gear != null) {
-                    switch (gear.gearState) {
-                    case ModuleLandingGear.GearStates.DEPLOYED:
+                if (damage != null && damage.isDamaged)
+                    return LandingGearState.Broken;
+                if (deployment != null) {
+                    if (deployment.stateString.Contains ("Deployed"))
                         return LandingGearState.Deployed;
-                    case ModuleLandingGear.GearStates.RETRACTED:
+                    else if (deployment.stateString.Contains ("Retracted"))
                         return LandingGearState.Retracted;
-                    case ModuleLandingGear.GearStates.DEPLOYING:
+                    else if (deployment.stateString.Contains ("Deploying"))
                         return LandingGearState.Deploying;
-                    case ModuleLandingGear.GearStates.RETRACTING:
+                    else if (deployment.stateString.Contains ("Retracting"))
                         return LandingGearState.Retracting;
-                    }
-                } else if (advGear != null) {
-                    switch (advGear.gearState) {
-                    case ModuleAdvancedLandingGear.GearStates.DEPLOYED:
-                        return LandingGearState.Deployed;
-                    case ModuleAdvancedLandingGear.GearStates.RETRACTED:
-                        return LandingGearState.Retracted;
-                    case ModuleAdvancedLandingGear.GearStates.DEPLOYING:
-                        return LandingGearState.Deploying;
-                    case ModuleAdvancedLandingGear.GearStates.RETRACTING:
-                        return LandingGearState.Retracting;
-                    }
-                } else if (fixedGear != null) {
-                    return LandingGearState.Deployed;
+                    throw new ArgumentException ("Unknown landing leg state");
                 }
-                throw new ArgumentException ("Unknown landing gear state");
+                return LandingGearState.Deployed;
             }
         }
 
@@ -122,16 +105,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Deployed {
             get { return State == LandingGearState.Deployed; }
             set {
-                if (fixedGear != null)
-                    throw new InvalidOperationException ("Gear is not deployable");
-                if (gear != null && value)
-                    gear.LowerLandingGear ();
-                else if (gear != null && !value)
-                    gear.RaiseLandingGear ();
-                else if (advGear != null && value)
-                    advGear.LowerLandingGear ();
-                else if (advGear != null && !value)
-                    advGear.RaiseLandingGear ();
+                if (deployment == null)
+                    throw new InvalidOperationException ("Landing gear is not deployable");
+                if (value) {
+                    var extend = deployment.Events.FirstOrDefault (x => x.guiName == "Extend");
+                    if (extend != null)
+                        extend.Invoke ();
+                } else {
+                    var retract = deployment.Events.FirstOrDefault (x => x.guiName == "Retract");
+                    if (retract != null)
+                        retract.Invoke ();
+                }
             }
         }
     }

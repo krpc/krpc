@@ -52,8 +52,8 @@ namespace KRPC
             |    BEGIN IMPLEMENTATION-SPECIFIC EDITS HERE.    |
             \*-----------------------------------------------*/
             const int compatibleMajor = 1;
-            const int compatibleMinor = 0;
-            const int compatibleRevision = 5;
+            const int compatibleMinor = 1;
+            const int compatibleRevision = 0;
             return (Versioning.version_major == compatibleMajor) && (Versioning.version_minor == compatibleMinor) && (Versioning.Revision == compatibleRevision);
             /*-----------------------------------------------*\
             | IMPLEMENTERS SHOULD NOT EDIT BEYOND THIS POINT! |
@@ -151,7 +151,7 @@ namespace KRPC
             }
 
             if ((incompatible.Length > 0) || (incompatibleUnity.Length > 0)) {
-                PopupDialog.SpawnPopupDialog ("Incompatible Mods Detected", message, "OK", true, HighLogic.Skin);
+                PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "Incompatible Mods Detected", message, "OK", true, HighLogic.UISkin);
             }
         }
 

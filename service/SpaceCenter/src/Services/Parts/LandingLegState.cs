@@ -27,10 +27,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Landing leg is broken.
         /// </summary>
-        Broken,
-        /// <summary>
-        /// Landing leg is being repaired.
-        /// </summary>
-        Repairing
+        Broken
     }
 }

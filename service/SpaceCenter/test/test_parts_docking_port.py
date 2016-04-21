@@ -93,7 +93,6 @@ class TestPartsDockingPort(testingtools.TestCase):
         # Undock
         mass_before = self.vessel.mass
         undocked = top_port.undock()
-        self.vessel = self.conn.space_center.active_vessel
         mass_after = self.vessel.mass
 
         self.assertEqual(bottom_port.docked_part, None)
@@ -110,7 +109,7 @@ class TestPartsDockingPort(testingtools.TestCase):
 
         # Drop the port
         launch_clamp.release()
-        while top_port.state == self.state.undocking:
+        while top_port.state == self.state.undocking or bottom_port.state == self.state.undocking:
             pass
 
         # Undocked
@@ -120,7 +119,7 @@ class TestPartsDockingPort(testingtools.TestCase):
         self.assertEqual(top_port.docked_part, None)
         distance = norm(top_port.position(bottom_port.reference_frame))
         self.assertGreater(distance, top_port.reengage_distance)
-        self.assertLess(distance, top_port.reengage_distance*2)
+        self.assertLess(distance, top_port.reengage_distance+1)
 
     def test_pre_attached_port_and_part(self):
         """ Test a port and part that were pre-attached in the VAB """
@@ -134,7 +133,6 @@ class TestPartsDockingPort(testingtools.TestCase):
         # Undock
         mass_before = self.vessel.mass
         undocked = port.undock()
-        self.vessel = self.conn.space_center.active_vessel
         mass_after = self.vessel.mass
 
         self.assertEqual(port.docked_part, None)
@@ -195,7 +193,6 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
             # Undock
             mass_before = vessel.mass
             undocked = port1.undock()
-            vessel = self.sc.active_vessel
             self.assertNotEqual(vessel, undocked)
             self.assertEqual(self.state.undocking, port1.state)
             self.assertEqual(self.state.undocking, port2.state)
@@ -207,10 +204,10 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
 
             # Move backwards to reengage distance
             vessel.control.rcs = True
-            vessel.control.forward = 0.5
+            vessel.control.forward = -0.5
             time.sleep(0.5)
             vessel.control.forward = 0
-            while port1.state == self.state.undocking:
+            while port1.state == self.state.undocking or port2.state == self.state.undocking:
                 pass
             self.assertEqual(self.state.ready, port1.state)
             self.assertEqual(self.state.ready, port2.state)
@@ -218,25 +215,29 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
             self.assertEqual(None, port1.docked_part)
             distance = norm(port1.position(port2.reference_frame))
             self.assertGreater(distance, port1.reengage_distance)
-            self.assertLess(distance, port1.reengage_distance*1.1)
+            self.assertLess(distance, port1.reengage_distance+1)
             time.sleep(0.5)
 
             # Check undocking when not docked
-            self.assertEqual(None, port1.undock())
-            self.assertEqual(None, port2.undock())
+            with self.assertRaises(krpc.error.RPCError) as cm:
+                port1.undock()
+            self.assertTrue('The docking port is not docked' in str(cm.exception))
+            with self.assertRaises(krpc.error.RPCError) as cm:
+                port2.undock()
+            self.assertTrue('The docking port is not docked' in str(cm.exception))
 
             # Move forward
-            vessel.control.forward = -0.5
+            vessel.control.forward = 0.5
             time.sleep(1)
             vessel.control.forward = 0
             vessel.control.rcs = False
-            while port1.state == self.state.ready:
+            while port1.state == self.state.ready or port2.state == self.state.ready:
                 pass
 
             # Docking
             self.assertEqual(self.state.docking, port1.state)
             self.assertEqual(self.state.docking, port2.state)
-            while port1.state == self.state.docking:
+            while port1.state == self.state.docking or port2.state == self.state.docking:
                 pass
 
             # Docked

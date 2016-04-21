@@ -6,7 +6,7 @@
 set -e
 
 TWINE=twine
-VERSION=`tools/get-version.sh`
+VERSION=`tools/krpc-version.sh`
 
 bazel build //client/python
 bazel test //client/python:test --cache_test_results=no

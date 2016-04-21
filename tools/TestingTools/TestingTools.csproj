@@ -39,6 +39,12 @@
     <Reference Include="UnityEngine">
       <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="KSPUtil">
+      <HintPath>..\..\lib\ksp\KSP_Data\Managed\KSPUtil.dll</HintPath>
+    </Reference>
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\bazel-krpc\external\csharp_protobuf_net35\file\Google.Protobuf.dll</HintPath>
     </Reference>

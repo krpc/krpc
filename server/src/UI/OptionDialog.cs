@@ -13,9 +13,9 @@ namespace KRPC.UI
 
         protected string Message { get; set; }
 
-        protected GUISkin Skin { get; set; }
+        protected UISkinDef Skin { get; set; }
 
-        protected List<DialogOption> Options { get; private set; }
+        protected List<DialogGUIButton> Options { get; private set; }
 
         public event EventHandler OnOpen;
         public event EventHandler OnClose;
@@ -24,12 +24,7 @@ namespace KRPC.UI
 
         protected OptionDialog ()
         {
-            Options = new List<DialogOption> ();
-        }
-
-        public void Awake ()
-        {
-            RenderingManager.AddToPostDrawQueue (1, UpdateGUI);
+            Options = new List<DialogGUIButton> ();
         }
 
         protected abstract void Init ();
@@ -38,16 +33,11 @@ namespace KRPC.UI
 
         protected abstract void Closed ();
 
-        public void OnDestroy ()
-        {
-            RenderingManager.RemoveFromPostDrawQueue (1, UpdateGUI);
-        }
-
         public void Open ()
         {
             if (!Visible) {
                 if (Skin == null)
-                    Skin = UI.Skin.DefaultSkin;
+                    Skin = HighLogic.UISkin;
                 Visible = true;
                 Opened ();
                 if (OnOpen != null)
@@ -67,14 +57,14 @@ namespace KRPC.UI
             }
         }
 
-        void UpdateGUI ()
+        void OnGUI ()
         {
             if (!hasInit) {
                 Init ();
                 hasInit = true;
             }
             if (Visible) {
-                dialog.DrawWindow ();
+                dialog.Update ();
             }
         }
     }

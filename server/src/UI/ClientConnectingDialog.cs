@@ -11,9 +11,8 @@ namespace KRPC.UI
         protected override void Init ()
         {
             Title = "kRPC";
-            Skin = UI.Skin.DefaultSkin;
-            Options.Add (new DialogOption ("Allow", () => args.Request.Allow ()));
-            Options.Add (new DialogOption ("Deny", () => args.Request.Deny ()));
+            Options.Add (new DialogGUIButton ("Allow", () => args.Request.Allow ()));
+            Options.Add (new DialogGUIButton ("Deny", () => args.Request.Deny ()));
         }
 
         protected override void Opened ()

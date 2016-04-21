@@ -4,7 +4,7 @@ set -e
 
 KSP=lib/ksp
 GAMEDATA=$KSP/GameData/kRPC
-VERSION=`tools/get-version.sh`
+VERSION=`tools/krpc-version.sh`
 
 bazel build \
     //:ksp-avc-version \

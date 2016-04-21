@@ -1,15 +1,15 @@
 ship = PartsHarvester
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
-size = 4.138865,10.48562,7.12181
+size = 4.198865,9.848873,7.121809
 PART
 {
 	part = Mark1-2Pod_4294407840
 	partName = Part
-	pos = 0.7092841,7.322214,0.1356606
+	pos = 0.7066724,6.685471,0.1443543
 	attPos = 0,0,0
-	attPos0 = 0.7092841,7.322214,0.1356606
+	attPos0 = 0.7066724,6.685471,0.1443543
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -88,9 +88,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -141,6 +147,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -234,7 +241,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -466,7 +473,7 @@ PART
 {
 	part = fuelTank4-2_4293135428
 	partName = Part
-	pos = 0.7092841,6.374224,0.1356606
+	pos = 0.7066724,5.737481,0.1443543
 	attPos = 0,0,0
 	attPos0 = 0,-0.9479899,0
 	rot = 0,0,0,1
@@ -525,7 +532,7 @@ PART
 {
 	part = rcsTankRadialLong_4293133634
 	partName = Part
-	pos = -0.187894,6.349607,0.1356607
+	pos = -0.1905057,5.712864,0.1443544
 	attPos = 0,0,0
 	attPos0 = -0.8971781,-0.0246172,1.117587E-07
 	rot = -0.5,0.5,-0.5,0.5
@@ -568,7 +575,7 @@ PART
 {
 	part = ISRU_4294398978
 	partName = Part
-	pos = 0.7092841,4.405474,0.1356606
+	pos = 0.7066724,3.768731,0.1443543
 	attPos = 0,0,0
 	attPos0 = 0,-1.96875,0
 	rot = 0,0,0,1
@@ -679,6 +686,10 @@ PART
 			{
 				actionGroup = None
 			}
+			ToggleResourceConverterAction
+			{
+				actionGroup = None
+			}
 		}
 	}
 	MODULE
@@ -736,6 +747,10 @@ PART
 				actionGroup = None
 			}
 			StartResourceConverterAction
+			{
+				actionGroup = None
+			}
+			ToggleResourceConverterAction
 			{
 				actionGroup = None
 			}
@@ -799,6 +814,10 @@ PART
 			{
 				actionGroup = None
 			}
+			ToggleResourceConverterAction
+			{
+				actionGroup = None
+			}
 		}
 	}
 	MODULE
@@ -856,6 +875,10 @@ PART
 				actionGroup = None
 			}
 			StartResourceConverterAction
+			{
+				actionGroup = None
+			}
+			ToggleResourceConverterAction
 			{
 				actionGroup = None
 			}
@@ -957,7 +980,7 @@ PART
 {
 	part = batteryBankLarge_4294375044
 	partName = Part
-	pos = 0.7092841,2.795475,0.1356606
+	pos = 0.7066724,2.158732,0.1443543
 	attPos = 0,0,0
 	attPos0 = 0,-1.61,0
 	rot = 0,0,0,1
@@ -1002,7 +1025,7 @@ PART
 {
 	part = batteryBankLarge_4294374796
 	partName = Part
-	pos = 0.7092841,2.560475,0.1356606
+	pos = 0.7066724,1.923732,0.1443543
 	attPos = 0,0,0
 	attPos0 = 0,-0.2349997,0
 	rot = 0,0,0,1
@@ -1048,7 +1071,7 @@ PART
 {
 	part = RadialDrill_4294383500
 	partName = Part
-	pos = -0.6252334,2.558589,0.1356607
+	pos = -0.627845,1.921846,0.1443544
 	attPos = 0,0,0
 	attPos0 = -1.334517,-0.001886368,7.358298E-08
 	rot = 2.512148E-15,0,6.102114E-08,1
@@ -1157,6 +1180,10 @@ PART
 			{
 				actionGroup = None
 			}
+			ToggleResourceConverterAction
+			{
+				actionGroup = None
+			}
 		}
 	}
 	MODULE
@@ -1215,6 +1242,10 @@ PART
 				actionGroup = None
 			}
 			StartResourceConverterAction
+			{
+				actionGroup = None
+			}
+			ToggleResourceConverterAction
 			{
 				actionGroup = None
 			}
@@ -1316,7 +1347,7 @@ PART
 {
 	part = RadialOreTank_4293099976
 	partName = Part
-	pos = 0.7092839,6.371188,-1.073901
+	pos = 0.7066722,5.734445,-1.065207
 	attPos = 0,0,0
 	attPos0 = -1.192093E-07,-0.003036022,-1.209562
 	rot = -0.7071068,0.7071068,-1.071077E-07,-1.071077E-07
@@ -1399,7 +1430,7 @@ PART
 {
 	part = MiniDrill_4293091858
 	partName = Part
-	pos = 2.126986,6.346884,0.1356607
+	pos = 2.124374,5.710141,0.1443544
 	attPos = 0,0,0
 	attPos0 = 1.417701,-0.02733946,7.450581E-08
 	rot = 0,1,0,0
@@ -1467,7 +1498,7 @@ PART
 				guiActive = True
 				guiActiveUncommand = False
 				guiIcon = Start Converter
-				guiName = Start Converter
+				guiName = Start Surface Harvester
 				category = Start Converter
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -1479,7 +1510,7 @@ PART
 				guiActive = True
 				guiActiveUncommand = False
 				guiIcon = Stop Converter
-				guiName = Stop Converter
+				guiName = Stop Surface Harvester
 				category = Stop Converter
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -1505,6 +1536,10 @@ PART
 				actionGroup = None
 			}
 			StartResourceConverterAction
+			{
+				actionGroup = None
+			}
+			ToggleResourceConverterAction
 			{
 				actionGroup = None
 			}
@@ -1528,7 +1563,7 @@ PART
 				guiActive = True
 				guiActiveUncommand = False
 				guiIcon = Start Converter
-				guiName = Start Converter
+				guiName = Start Asteroid Harvester
 				category = Start Converter
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -1540,7 +1575,7 @@ PART
 				guiActive = True
 				guiActiveUncommand = False
 				guiIcon = Stop Converter
-				guiName = Stop Converter
+				guiName = Stop Asteroid Harvester
 				category = Stop Converter
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -1566,6 +1601,10 @@ PART
 				actionGroup = None
 			}
 			StartResourceConverterAction
+			{
+				actionGroup = None
+			}
+			ToggleResourceConverterAction
 			{
 				actionGroup = None
 			}
@@ -1667,7 +1706,7 @@ PART
 {
 	part = launchClamp1_4294369322
 	partName = Part
-	pos = 0.7092839,1.30614,-1.906547
+	pos = 0.7066722,0.6693969,-1.897853
 	attPos = 0,0,0
 	attPos0 = -1.788139E-07,-1.254334,-2.042208
 	rot = 2.277333E-07,-4.751904E-08,-1.082167E-14,-1
@@ -1677,7 +1716,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
+	sidx = 0
 	sqor = -1
 	sepI = 0
 	attm = 1
@@ -1699,8 +1738,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 0.7792856
-		height = 1.966291
+		scaleFactor = 0.5269297
+		height = 1.329547
 		stagingEnabled = True
 		towerRot = -2.277333E-07,4.751904E-08,1.082167E-14,-1
 		EVENTS
@@ -1836,43 +1875,12 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
 	part = launchClamp1_4293091152
 	partName = Part
-	pos = 0.7092844,1.30614,2.177868
+	pos = 0.7066727,0.6693969,2.186562
 	attPos = 0,0,0
 	attPos0 = 3.576279E-07,-1.254334,2.042208
 	rot = -2.077621E-14,-1,-2.277333E-07,9.123043E-08
@@ -1882,7 +1890,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
+	sidx = 0
 	sqor = -1
 	sepI = 0
 	attm = 1
@@ -1904,8 +1912,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 0.7792856
-		height = 1.966291
+		scaleFactor = 0.5269297
+		height = 1.329547
 		stagingEnabled = True
 		towerRot = 2.077621E-14,1,2.277333E-07,9.123043E-08
 		EVENTS
@@ -2024,37 +2032,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		stagingEnabled = True
-		EVENTS
-		{
 			ToggleStaging
 			{
 				active = True

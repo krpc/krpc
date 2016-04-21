@@ -17,6 +17,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Convert a vector to a tuple
+        /// </summary>
+        public static Tuple3 ToTuple (this Vector3 v)
+        {
+            return new Tuple3 (v.x, v.y, v.z);
+        }
+
+        /// <summary>
         /// Convert a tuple to a vector
         /// </summary>
         public static Vector3d ToVector (this Tuple3 t)
@@ -310,10 +318,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Add a 4x4 Matrix into another one (does not allocate)
         /// </summary>
-        public static Matrix4x4 Add (this Matrix4x4 left, Matrix4x4 right) {
+        public static Matrix4x4 Add (this Matrix4x4 left, Matrix4x4 right)
+        {
             Matrix4x4 m = Matrix4x4.zero;
-            for(int i = 0; i < 4; i++) {
-                m.SetColumn(i, left.GetColumn(i) + right.GetColumn(i));
+            for (int i = 0; i < 4; i++) {
+                m.SetColumn (i, left.GetColumn (i) + right.GetColumn (i));
             }
             return m;
         }
@@ -321,10 +330,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Subtract a 4x4 Matrix from another one (does not allocate)
         /// </summary>
-        public static Matrix4x4 Subtract (this Matrix4x4 left, Matrix4x4 right) {
+        public static Matrix4x4 Subtract (this Matrix4x4 left, Matrix4x4 right)
+        {
             Matrix4x4 m = Matrix4x4.zero;
-            for(int i = 0; i < 4; i++) {
-                m.SetColumn(i, left.GetColumn(i) - right.GetColumn(i));
+            for (int i = 0; i < 4; i++) {
+                m.SetColumn (i, left.GetColumn (i) - right.GetColumn (i));
             }
             return m;
         }
@@ -345,10 +355,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Returns the diagonal 3-vector from the 4x4 matrix (simulating 3x3 matrix)
         /// </summary>
-        public static Vector3d Diag (this Matrix4x4 m) {
+        public static Vector3d Diag (this Matrix4x4 m)
+        {
             Vector3d v = Vector3d.zero;
             for (int i = 0; i < 3; i++) {
-                v[i] = m[i, i];
+                v [i] = m [i, i];
             }
             return v;
         }
@@ -356,10 +367,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Constructs diagonal matrix from a float (Identity * val)
         /// </summary>
-        public static Matrix4x4 ToDiagonalMatrix(this float v) {
+        public static Matrix4x4 ToDiagonalMatrix (this float v)
+        {
             Matrix4x4 m = Matrix4x4.identity;
             for (int i = 0; i < 4; i++) {
-                m[i,i] = v;
+                m [i, i] = v;
             }
             return m;
         }
@@ -367,10 +379,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Constructs diagonal matrix from a 3-vector (simulating 3x3 matrix)
         /// </summary>
-        public static Matrix4x4 ToDiagonalMatrix(this Vector3 v) {
+        public static Matrix4x4 ToDiagonalMatrix (this Vector3 v)
+        {
             Matrix4x4 m = Matrix4x4.identity;
             for (int i = 0; i < 3; i++) {
-                m[i,i] = v[i];
+                m [i, i] = v [i];
             }
             return m;
         }
@@ -378,11 +391,12 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Construct the outer product of two 3-vectors as a 4x4 matrix
         /// </summary>
-        public static Matrix4x4 OuterProduct(this Vector3 left, Vector3 right) {
+        public static Matrix4x4 OuterProduct (this Vector3 left, Vector3 right)
+        {
             Matrix4x4 m = Matrix4x4.identity;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    m[i, j] = left[i] * right[j];
+                    m [i, j] = left [i] * right [j];
                 }
             }
             return m;

@@ -54,7 +54,6 @@ SpaceCenter.Vessel.Type
 SpaceCenter.Vessel.Situation
 SpaceCenter.Vessel.MET
 SpaceCenter.Vessel.Flight
-SpaceCenter.Vessel.Target
 SpaceCenter.Vessel.Orbit
 SpaceCenter.Vessel.Control
 SpaceCenter.Vessel.AutoPilot
@@ -73,11 +72,7 @@ SpaceCenter.Vessel.VacuumSpecificImpulse
 SpaceCenter.Vessel.KerbinSeaLevelSpecificImpulse
 SpaceCenter.Vessel.MomentOfInertia
 SpaceCenter.Vessel.InertiaTensor
-SpaceCenter.Vessel.Torque
 SpaceCenter.Vessel.ReactionWheelTorque
-SpaceCenter.Vessel.RCSTorque
-SpaceCenter.Vessel.EngineTorque
-SpaceCenter.Vessel.ControlSurfaceTorque
 SpaceCenter.Vessel.ReferenceFrame
 SpaceCenter.Vessel.OrbitalReferenceFrame
 SpaceCenter.Vessel.SurfaceReferenceFrame
@@ -362,11 +357,6 @@ SpaceCenter.ControlSurface.RollEnabled
 SpaceCenter.ControlSurface.Inverted
 SpaceCenter.ControlSurface.Deployed
 SpaceCenter.ControlSurface.SurfaceArea
-SpaceCenter.ControlSurface.Rotation
-SpaceCenter.ControlSurface.MaxPositiveRotation
-SpaceCenter.ControlSurface.MaxNegativeRotation
-SpaceCenter.ControlSurface.MaxPositiveTorque
-SpaceCenter.ControlSurface.MaxNegativeTorque
 SpaceCenter.Decoupler
 SpaceCenter.Decoupler.Part
 SpaceCenter.Decoupler.Decouple
@@ -440,6 +430,7 @@ SpaceCenter.LandingGearState.Deployed
 SpaceCenter.LandingGearState.Retracted
 SpaceCenter.LandingGearState.Deploying
 SpaceCenter.LandingGearState.Retracting
+SpaceCenter.LandingGearState.Broken
 SpaceCenter.LandingLeg
 SpaceCenter.LandingLeg.Part
 SpaceCenter.LandingLeg.State
@@ -450,7 +441,6 @@ SpaceCenter.LandingLegState.Retracted
 SpaceCenter.LandingLegState.Deploying
 SpaceCenter.LandingLegState.Retracting
 SpaceCenter.LandingLegState.Broken
-SpaceCenter.LandingLegState.Repairing
 SpaceCenter.LaunchClamp
 SpaceCenter.LaunchClamp.Part
 SpaceCenter.LaunchClamp.Release

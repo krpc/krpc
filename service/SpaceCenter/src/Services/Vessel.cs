@@ -27,6 +27,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Construct from a KSP vessel id.
+        /// </summary>
+        public Vessel (Guid id)
+        {
+            Id = id;
+        }
+
+        /// <summary>
         /// Check if vessels are equal.
         /// </summary>
         public override bool Equals (Vessel obj)
@@ -101,16 +109,6 @@ namespace KRPC.SpaceCenter.Services
             if (referenceFrame == null)
                 referenceFrame = ReferenceFrame.Surface (InternalVessel);
             return new Flight (InternalVessel, referenceFrame);
-        }
-
-        /// <summary>
-        /// The target vessel. <c>null</c> if there is no target. When
-        /// setting the target, the target cannot be the current vessel.
-        /// </summary>
-        [KRPCProperty]
-        public Vessel Target {
-            get { throw new NotImplementedException (); }
-            set { throw new NotImplementedException (); }
         }
 
         /// <summary>
@@ -294,7 +292,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
-            get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
+            get { return InternalVessel.MOI.ToTuple (); }
         }
 
         /// <summary>
@@ -307,23 +305,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The maximum torque that the vessel can generate, including contributions from reaction wheels,
-        /// RCS thrusters, engines and aerodynamic control surfaces.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
-        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
-        /// </summary>
-        [KRPCProperty]
-        public Tuple3 Torque {
-            get {
-                return (ComputeReactionWheelTorque () +
-                ComputeRCSTorque () +
-                ComputeEngineTorque () +
-                ComputeControlSurfaceTorque ()).ToTuple ();
-            }
-        }
-
-        /// <summary>
         /// The maximum torque that the currently active and powered reaction wheels can generate.
         /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
@@ -332,39 +313,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 ReactionWheelTorque {
             get { return ComputeReactionWheelTorque ().ToTuple (); }
-        }
-
-        /// <summary>
-        /// The maximum torque that the active RCS thrusters can generate.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
-        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
-        /// </summary>
-        [KRPCProperty]
-        public Tuple3 RCSTorque {
-            get { return ComputeRCSTorque ().ToTuple (); }
-        }
-
-        /// <summary>
-        /// The maximum torque that the active gimballed engines can generate.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
-        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
-        /// </summary>
-        [KRPCProperty]
-        public Tuple3 EngineTorque {
-            get { return ComputeEngineTorque ().ToTuple (); }
-        }
-
-        /// <summary>
-        /// The maximum torque that the aerodynamic control surfaces can provide.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
-        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
-        /// </summary>
-        [KRPCProperty]
-        public Tuple3 ControlSurfaceTorque {
-            get { return ComputeControlSurfaceTorque ().ToTuple (); }
         }
 
         /// <summary>
@@ -567,7 +515,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.AngularVelocityFromWorldSpace (-InternalVessel.rigidbody.angularVelocity).ToTuple ();
+            //FIXME: finding the rigidbody is expensive - cache it
+            return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.GetComponent<Rigidbody> ().angularVelocity).ToTuple ();
         }
     }
 }

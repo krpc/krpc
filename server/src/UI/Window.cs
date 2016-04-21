@@ -50,21 +50,11 @@ namespace KRPC.UI
             }
         }
 
-        public void Awake ()
-        {
-            RenderingManager.AddToPostDrawQueue (1, UpdateGUI);
-        }
-
         protected abstract void Init ();
 
         protected abstract void Draw ();
 
-        public void OnDestroy ()
-        {
-            RenderingManager.RemoveFromPostDrawQueue (1, UpdateGUI);
-        }
-
-        void UpdateGUI ()
+        void OnGUI ()
         {
             if (!hasInit) {
                 Style = new GUIStyle (Skin.DefaultSkin.window);
