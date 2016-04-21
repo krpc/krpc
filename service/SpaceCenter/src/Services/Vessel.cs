@@ -515,7 +515,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.AngularVelocityFromWorldSpace (-InternalVessel.rigidbody.angularVelocity).ToTuple ();
+            //FIXME: finding the rigidbody is expensive - cache it
+            return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.GetComponent<Rigidbody> ().angularVelocity).ToTuple ();
         }
     }
 }

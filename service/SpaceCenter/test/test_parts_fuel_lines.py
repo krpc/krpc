@@ -58,10 +58,10 @@ class TestPartsFuelLines(testingtools.TestCase):
         part = self.parts.with_title('FTX-2 External Fuel Duct')[0]
         with self.assertRaises(krpc.error.RPCError) as cm:
             part.fuel_lines_to
-        self.assertEqual(str(cm.exception), 'Part is a fuel line')
+        self.assertTrue('Part is a fuel line' in str(cm.exception))
         with self.assertRaises(krpc.error.RPCError) as cm:
             part.fuel_lines_from
-        self.assertEqual(str(cm.exception), 'Part is a fuel line')
+        self.assertTrue('Part is a fuel line' in str(cm.exception))
 
 if __name__ == "__main__":
     unittest.main()

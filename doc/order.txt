@@ -430,6 +430,7 @@ SpaceCenter.LandingGearState.Deployed
 SpaceCenter.LandingGearState.Retracted
 SpaceCenter.LandingGearState.Deploying
 SpaceCenter.LandingGearState.Retracting
+SpaceCenter.LandingGearState.Broken
 SpaceCenter.LandingLeg
 SpaceCenter.LandingLeg.Part
 SpaceCenter.LandingLeg.State
@@ -440,7 +441,6 @@ SpaceCenter.LandingLegState.Retracted
 SpaceCenter.LandingLegState.Deploying
 SpaceCenter.LandingLegState.Retracting
 SpaceCenter.LandingLegState.Broken
-SpaceCenter.LandingLegState.Repairing
 SpaceCenter.LaunchClamp
 SpaceCenter.LaunchClamp.Part
 SpaceCenter.LaunchClamp.Release

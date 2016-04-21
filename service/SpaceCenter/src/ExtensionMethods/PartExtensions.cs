@@ -25,9 +25,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static bool IsPhysicallySignificant (this Part part)
         {
-            return (!part.HasModule<ModuleLandingGear> ()) &&
-            (!part.HasModule<LaunchClamp> ()) &&
-            (part.physicalSignificance != Part.PhysicalSignificance.NONE);
+            return !part.HasModule<LaunchClamp> () && part.physicalSignificance != Part.PhysicalSignificance.NONE;
         }
 
         /// <summary>
@@ -49,7 +47,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static Vector3d CenterOfMass (this Part part)
         {
-            return part.rigidbody != null ? part.rigidbody.worldCenterOfMass : part.transform.position;
+            return part.rb != null ? part.rb.worldCenterOfMass : part.transform.position;
         }
 
         /// <summary>

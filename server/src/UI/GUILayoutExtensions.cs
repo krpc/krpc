@@ -8,17 +8,15 @@ namespace KRPC.UI
     {
         public static void Init (GameObject gameObject)
         {
-            RenderingManager.AddToPostDrawQueue (1, UpdateGUI);
             ComboBoxWindow.MainInit (gameObject);
         }
 
         public static void Destroy (GameObject gameObject)
         {
-            RenderingManager.RemoveFromPostDrawQueue (1, UpdateGUI);
             ComboBoxWindow.MainDestroy (gameObject);
         }
 
-        static void UpdateGUI ()
+        public static void OnGUI ()
         {
             ComboBoxWindow.MainUpdateGUI ();
         }
@@ -161,6 +159,8 @@ namespace KRPC.UI
 
             public static void MainUpdateGUI ()
             {
+                if (!Instance)
+                    return;
                 if (Event.current.type == EventType.MouseDown && !Instance.Position.Contains (Event.current.mousePosition))
                     Instance.Hide ();
             }

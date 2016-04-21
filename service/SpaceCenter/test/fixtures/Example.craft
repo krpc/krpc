@@ -1,5 +1,5 @@
 ship = Example
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
 size = 6.272043,27.75843,6.272045
@@ -93,9 +93,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -146,6 +152,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -239,7 +246,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -505,6 +512,7 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
+		animTime = 0
 		minAirPressureToOpen = 0.01
 		deployAltitude = 500
 		stagingEnabled = True
@@ -696,7 +704,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 1
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -720,6 +728,7 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
+		animTime = 0
 		minAirPressureToOpen = 0.01
 		deployAltitude = 500
 		stagingEnabled = True
@@ -911,7 +920,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 2
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -935,6 +944,7 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
+		animTime = 0
 		minAirPressureToOpen = 0.01
 		deployAltitude = 500
 		stagingEnabled = True
@@ -1802,7 +1812,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Shroud: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -1823,6 +1833,10 @@ PART
 		isEnabled = True
 		gimbalLock = False
 		gimbalLimiter = 100
+		currentShowToggles = False
+		enableYaw = True
+		enablePitch = True
+		enableRoll = True
 		gimbalActive = False
 		stagingEnabled = True
 		gimbalLock_UIFlight
@@ -1836,8 +1850,33 @@ PART
 			maxValue = 100
 			stepIncrement = 1
 		}
+		enableYaw_UIFlight
+		{
+			controlEnabled = True
+		}
+		enablePitch_UIFlight
+		{
+			controlEnabled = True
+		}
+		enableRoll_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
+			ToggleToggles
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Actuation Toggles
+				guiName = Show Actuation Toggles
+				category = Actuation Toggles
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -1862,6 +1901,18 @@ PART
 				actionGroup = None
 			}
 			FreeAction
+			{
+				actionGroup = None
+			}
+			TogglePitchAction
+			{
+				actionGroup = None
+			}
+			ToggleYawAction
+			{
+				actionGroup = None
+			}
+			ToggleRollAction
 			{
 				actionGroup = None
 			}
@@ -1983,7 +2034,7 @@ PART
 		flowState = True
 		isTweakable = False
 		hideFlow = True
-		isVisible = True
+		isVisible = False
 		flowMode = Both
 	}
 }
@@ -2347,7 +2398,7 @@ PART
 	symMethod = Radial
 	istg = 5
 	dstg = 4
-	sidx = 0
+	sidx = 2
 	sqor = 5
 	sepI = 3
 	attm = 0
@@ -2469,7 +2520,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Shroud: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -2490,6 +2541,10 @@ PART
 		isEnabled = True
 		gimbalLock = False
 		gimbalLimiter = 100
+		currentShowToggles = False
+		enableYaw = True
+		enablePitch = True
+		enableRoll = True
 		gimbalActive = False
 		stagingEnabled = True
 		gimbalLock_UIFlight
@@ -2503,8 +2558,33 @@ PART
 			maxValue = 100
 			stepIncrement = 1
 		}
+		enableYaw_UIFlight
+		{
+			controlEnabled = True
+		}
+		enablePitch_UIFlight
+		{
+			controlEnabled = True
+		}
+		enableRoll_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
+			ToggleToggles
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Actuation Toggles
+				guiName = Show Actuation Toggles
+				category = Actuation Toggles
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -2529,6 +2609,18 @@ PART
 				actionGroup = None
 			}
 			FreeAction
+			{
+				actionGroup = None
+			}
+			TogglePitchAction
+			{
+				actionGroup = None
+			}
+			ToggleYawAction
+			{
+				actionGroup = None
+			}
+			ToggleRollAction
 			{
 				actionGroup = None
 			}
@@ -2650,7 +2742,7 @@ PART
 		flowState = True
 		isTweakable = False
 		hideFlow = True
-		isVisible = True
+		isVisible = False
 		flowMode = Both
 	}
 }
@@ -2840,7 +2932,7 @@ PART
 	symMethod = Radial
 	istg = 5
 	dstg = 6
-	sidx = 1
+	sidx = 0
 	sqor = 5
 	sepI = 4
 	attm = 1
@@ -3077,7 +3169,7 @@ PART
 	pos = 1.930674,8.058376,-0.360408
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = -0.004361896,-0.0002935107,0.06716909,-0.9977321
+	rot = -0.004361898,-0.0002935231,0.06716909,-0.9977322
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
@@ -3171,7 +3263,7 @@ PART
 	symMethod = Radial
 	istg = 4
 	dstg = 5
-	sidx = 1
+	sidx = 0
 	sqor = 4
 	sepI = 4
 	attm = 1
@@ -3336,14 +3428,14 @@ PART
 	pos = 0.1056487,4.44211,-2.795783
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0,1,0,-8.42937E-08
+	rot = 0,1,0,-1.192093E-07
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 5
 	dstg = 6
-	sidx = 2
+	sidx = 0
 	sqor = 5
 	sepI = 4
 	attm = 1
@@ -3545,7 +3637,7 @@ PART
 	pos = 0.1056487,8.381607,-2.795783
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0,-2.528811E-07,0,1
+	rot = 0,-2.384186E-07,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
@@ -3580,7 +3672,7 @@ PART
 	pos = 0.1056488,8.058376,-2.185434
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0.04441142,-0.7057109,0.0505801,-0.7052957
+	rot = 0.04441142,-0.7057108,0.0505801,-0.7052956
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
@@ -3674,7 +3766,7 @@ PART
 	symMethod = Radial
 	istg = 4
 	dstg = 5
-	sidx = 2
+	sidx = 0
 	sqor = 4
 	sepI = 4
 	attm = 1
@@ -3846,7 +3938,7 @@ PART
 	symMethod = Radial
 	istg = 5
 	dstg = 6
-	sidx = 3
+	sidx = 0
 	sqor = 5
 	sepI = 4
 	attm = 1
@@ -4083,7 +4175,7 @@ PART
 	pos = -1.719378,8.058376,-0.3604079
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0.0671692,-0.9977321,0.004361927,0.0002934278
+	rot = 0.0671692,-0.997732,0.004361928,0.0002933581
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
@@ -4177,7 +4269,7 @@ PART
 	symMethod = Radial
 	istg = 4
 	dstg = 5
-	sidx = 3
+	sidx = 0
 	sqor = 4
 	sepI = 4
 	attm = 1
@@ -4342,14 +4434,14 @@ PART
 	pos = 0.1056487,4.44211,2.074966
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0,-8.42937E-08,0,-1
+	rot = 0,-1.192093E-07,0,-1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 5
 	dstg = 6
-	sidx = 4
+	sidx = 0
 	sqor = 5
 	sepI = 4
 	attm = 1
@@ -4551,7 +4643,7 @@ PART
 	pos = 0.1056487,8.381607,2.074966
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0,1,0,2.528811E-07
+	rot = 0,1,0,2.384186E-07
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
@@ -4586,7 +4678,7 @@ PART
 	pos = 0.1056487,8.058376,1.464618
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0.0505801,-0.7052957,-0.04441142,0.7057109
+	rot = 0.0505801,-0.7052956,-0.04441142,0.7057108
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
@@ -4680,7 +4772,7 @@ PART
 	symMethod = Radial
 	istg = 5
 	dstg = 4
-	sidx = 5
+	sidx = 1
 	sqor = 5
 	sepI = 5
 	attm = 1
@@ -4856,7 +4948,7 @@ PART
 	symMethod = Radial
 	istg = 5
 	dstg = 4
-	sidx = 6
+	sidx = 1
 	sqor = 5
 	sepI = 5
 	attm = 1
@@ -5032,7 +5124,7 @@ PART
 	symMethod = Radial
 	istg = 5
 	dstg = 4
-	sidx = 7
+	sidx = 1
 	sqor = 5
 	sepI = 5
 	attm = 1
@@ -5208,7 +5300,7 @@ PART
 	symMethod = Radial
 	istg = 5
 	dstg = 4
-	sidx = 8
+	sidx = 1
 	sqor = 5
 	sepI = 5
 	attm = 1
@@ -5683,14 +5775,14 @@ PART
 	pos = -2.486114,5.715007,-0.9440551
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = -0.7010574,0.7010574,0.09229595,-0.09229595
+	rot = -0.7010574,0.7010574,0.09229594,-0.09229594
 	attRot = 0,0,-0.7071068,0.7071068
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 4
 	dstg = 6
-	sidx = 4
+	sidx = 1
 	sqor = 4
 	sepI = 4
 	attm = 1
@@ -5836,7 +5928,7 @@ PART
 {
 	part = sepMotor1_4294822258
 	partName = Part
-	pos = 2.69741,5.715007,0.2232411
+	pos = 2.69741,5.715007,0.2232412
 	attPos = 0,0,0
 	attPos0 = 0,0,0
 	rot = -0.09229591,0.09229591,-0.7010574,0.7010574
@@ -5846,7 +5938,7 @@ PART
 	symMethod = Radial
 	istg = 4
 	dstg = 6
-	sidx = 5
+	sidx = 1
 	sqor = 4
 	sepI = 4
 	attm = 1
@@ -5992,17 +6084,17 @@ PART
 {
 	part = sepMotor1_4294822218
 	partName = Part
-	pos = 0.6892975,5.715007,-2.95217
+	pos = 0.6892976,5.715007,-2.95217
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = -0.5609857,0.5609857,-0.4304594,0.4304594
+	rot = -0.5609856,0.5609856,-0.4304594,0.4304594
 	attRot = 0,0,-0.7071068,0.7071068
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 4
 	dstg = 6
-	sidx = 6
+	sidx = 1
 	sqor = 4
 	sepI = 4
 	attm = 1
@@ -6148,17 +6240,17 @@ PART
 {
 	part = sepMotor1_4294822178
 	partName = Part
-	pos = -0.4780002,5.715007,2.231355
+	pos = -0.4780003,5.715007,2.231355
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = -0.4304594,0.4304594,0.5609857,-0.5609857
+	rot = -0.4304594,0.4304594,0.5609856,-0.5609856
 	attRot = 0,0,-0.7071068,0.7071068
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 4
 	dstg = 6
-	sidx = 7
+	sidx = 1
 	sqor = 4
 	sepI = 4
 	attm = 1
@@ -6304,17 +6396,17 @@ PART
 {
 	part = sepMotor1_4294822138
 	partName = Part
-	pos = -0.4776803,5.703136,-2.952085
+	pos = -0.4776804,5.703136,-2.952085
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = -0.5609857,-0.5609857,0.4304594,0.4304594
+	rot = -0.5609856,-0.5609856,0.4304594,0.4304594
 	attRot = 0,0,-0.7071067,-0.7071067
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 4
 	dstg = 6
-	sidx = 8
+	sidx = 2
 	sqor = 4
 	sepI = 4
 	attm = 1
@@ -6460,17 +6552,17 @@ PART
 {
 	part = sepMotor1_4294822098
 	partName = Part
-	pos = 2.697325,5.703136,-0.9437363
+	pos = 2.697325,5.703136,-0.9437364
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = -0.7010574,-0.7010574,-0.09229612,-0.09229612
+	rot = -0.7010574,-0.7010574,-0.09229615,-0.09229615
 	attRot = 0,0,-0.7071067,-0.7071067
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 4
 	dstg = 6
-	sidx = 9
+	sidx = 2
 	sqor = 4
 	sepI = 4
 	attm = 1
@@ -6619,14 +6711,14 @@ PART
 	pos = -2.486029,5.703136,0.2229202
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = -0.09229604,-0.09229604,0.7010574,0.7010574
+	rot = -0.09229609,-0.09229609,0.7010574,0.7010574
 	attRot = 0,0,-0.7071067,-0.7071067
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 4
 	dstg = 6
-	sidx = 10
+	sidx = 2
 	sqor = 4
 	sepI = 4
 	attm = 1
@@ -6772,17 +6864,17 @@ PART
 {
 	part = sepMotor1_4294822018
 	partName = Part
-	pos = 0.6889778,5.703136,2.231269
+	pos = 0.6889779,5.703136,2.231269
 	attPos = 0,0,0
 	attPos0 = 0,0,0
-	rot = 0.4304594,0.4304594,0.5609856,0.5609856
+	rot = 0.4304594,0.4304594,0.5609857,0.5609857
 	attRot = 0,0,-0.7071067,-0.7071067
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
 	istg = 4
 	dstg = 6
-	sidx = 11
+	sidx = 2
 	sqor = 4
 	sepI = 4
 	attm = 1

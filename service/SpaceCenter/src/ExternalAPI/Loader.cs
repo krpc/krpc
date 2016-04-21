@@ -71,7 +71,7 @@ namespace KRPC.SpaceCenter.ExternalAPI
         static void error (string message)
         {
             log (message);
-            PopupDialog.SpawnPopupDialog ("kRPCSpaceCenter error - LoadAPI", message, "OK", true, HighLogic.Skin);
+            PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "kRPCSpaceCenter error - LoadAPI", message, "OK", true, HighLogic.UISkin);
         }
     }
 }

@@ -1,8 +1,8 @@
 ship = PartsControlSurface
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
-size = 4.321621,8.864961,7.048415
+size = 4.321621,8.567087,7.048415
 PART
 {
 	part = mk1pod_4294682792
@@ -89,9 +89,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -142,6 +148,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -235,7 +242,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -534,7 +541,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
+	sidx = 0
 	sqor = -1
 	sepI = 0
 	attm = 1
@@ -555,7 +562,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 2.223766
+		scaleFactor = 2.223765
 		height = 5.610998
 		stagingEnabled = True
 		towerRot = 2.027891E-08,-0.9832945,0.1820219,-1.095481E-07
@@ -729,11 +736,15 @@ PART
 	{
 		name = ModuleControlSurface
 		isEnabled = True
+		mirrorDeploy = False
+		usesMirrorDeploy = True
 		ignorePitch = False
 		ignoreYaw = True
 		ignoreRoll = False
 		deploy = False
 		deployInvert = False
+		partDeployInvert = False
+		authorityLimiter = 100
 		stagingEnabled = True
 		ignorePitch_UIFlight
 		{
@@ -754,6 +765,17 @@ PART
 		deployInvert_UIFlight
 		{
 			controlEnabled = True
+		}
+		partDeployInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		authorityLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = -150
+			maxValue = 150
+			stepIncrement = 0.1
 		}
 		EVENTS
 		{
@@ -823,11 +845,15 @@ PART
 	{
 		name = ModuleControlSurface
 		isEnabled = True
+		mirrorDeploy = False
+		usesMirrorDeploy = True
 		ignorePitch = False
 		ignoreYaw = True
 		ignoreRoll = False
 		deploy = False
 		deployInvert = False
+		partDeployInvert = False
+		authorityLimiter = 100
 		stagingEnabled = True
 		ignorePitch_UIFlight
 		{
@@ -848,6 +874,17 @@ PART
 		deployInvert_UIFlight
 		{
 			controlEnabled = True
+		}
+		partDeployInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		authorityLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = -150
+			maxValue = 150
+			stepIncrement = 0.1
 		}
 		EVENTS
 		{
@@ -888,7 +925,7 @@ PART
 	pos = -1.353885,3.17833,0.2755494
 	attPos = 0,0,0
 	attPos0 = -5.420715E-08,-0.04096508,-0.6200575
-	rot = 1.210161E-08,0.7071066,-1.210162E-08,-0.7071071
+	rot = 1.210161E-08,0.7071065,-1.210162E-08,-0.7071071
 	attRot = 0,0,0,1
 	attRot0 = 1.210161E-08,0.7071066,-1.210162E-08,-0.7071071
 	mir = 1,1,1
@@ -973,11 +1010,15 @@ PART
 	{
 		name = ModuleControlSurface
 		isEnabled = True
+		mirrorDeploy = False
+		usesMirrorDeploy = True
 		ignorePitch = True
 		ignoreYaw = False
 		ignoreRoll = True
 		deploy = False
 		deployInvert = False
+		partDeployInvert = False
+		authorityLimiter = 100
 		stagingEnabled = True
 		ignorePitch_UIFlight
 		{
@@ -998,6 +1039,17 @@ PART
 		deployInvert_UIFlight
 		{
 			controlEnabled = True
+		}
+		partDeployInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		authorityLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = -150
+			maxValue = 150
+			stepIncrement = 0.1
 		}
 		EVENTS
 		{

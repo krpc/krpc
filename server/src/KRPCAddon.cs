@@ -2,6 +2,7 @@ using KRPC.Server;
 using KRPC.UI;
 using KRPC.Utils;
 using UnityEngine;
+using KSP.UI.Screens;
 
 namespace KRPC
 {
@@ -219,6 +220,14 @@ namespace KRPC
         {
             if (server.Running)
                 server.Stop ();
+        }
+
+        /// <summary>
+        /// GUI update
+        /// </summary>
+        public void OnGUI ()
+        {
+            GUILayoutExtensions.OnGUI ();
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 GAME
 {
-  version = 1.0.5
+  version = 1.1.0
   Title = test (SANDBOX)
   Description = No description available.
   linkURL =
@@ -11,6 +11,7 @@ GAME
   editor = None
   flag = Squad/Flags/default
   launchID = 2
+  envInfo =  - Environment Info - Win32NT 7FFFFFFFFFFFFFFF  Args: KSP_x64.exe  -
   PARAMETERS
   {
     preset = Normal
@@ -58,6 +59,11 @@ GAME
       CanGoInTrackingStation = True
       CanLaunchAtPad = True
       CanLaunchAtRunway = True
+      CanGoToAdmin = True
+      CanGoToAstronautC = True
+      CanGoToMissionControl = True
+      CanGoToRnD = True
+      CanSelectFlag = True
       CanLeaveToMainMenu = True
     }
     DIFFICULTY
@@ -100,18 +106,18 @@ GAME
     {
       RecordsAltitude
       {
-        reached = 2.5
-        record = 76.3299865119625
+        reached = 6.47999999999995
+        record = 76.6841331762262
       }
       RecordsSpeed
       {
-        reached = 2.58
-        record = 0.78154338421537
+        reached = 6.21999999999995
+        record = 3.87658064242984
       }
       RecordsDistance
       {
-        reached = 2.58
-        record = 756.294364321203
+        reached = 7.43999999999992
+        record = 756.685718658011
       }
     }
   }
@@ -337,39 +343,44 @@ GAME
   SCENARIO
   {
     name = ResourceScenario
-    scene = 5, 7, 6
+    scene = 7, 8, 5, 6
     RESOURCE_SETTINGS
     {
       GameSeed = 325438398
       MaxDeltaTime = 21600
     }
   }
+  SCENARIO
+  {
+    name = ScenarioAchievements
+    scene = 7, 8, 5, 6
+  }
   FLIGHTSTATE
   {
-    version = 1.0.5
-    UT = 4.83999999999998
-    activeVessel = 1
+    version = 1.1.0
+    UT = 15.9799999999997
+    activeVessel = 0
     mapViewFiltering = -1026
     VESSEL
     {
       pid = ba8c9102bc9a4abeba0f31a0a1521264
       name = Basic
       type = Ship
-      sit = PRELAUNCH
+      sit = LANDED
       landed = True
       landedAt = KSC_LaunchPad_Platform
       splashed = False
-      met = 0
-      lct = 4.81999999999998
-      lastUT = 4.83999999999998
+      met = 9.73999999999979
+      lct = 6.21999999999995
+      lastUT = 15.9799999999997
       root = 0
-      lat = -0.0971954398978083
-      lon = 285.442322412835
-      alt = 76.2800512022804
-      hgt = 3.834547
-      nrm = 0.0001533895,1,-3.466864E-05
-      rot = -0.7009831,-0.09216226,-0.0972138,0.7004843
-      CoM = -1.16718E-05,-1.688148,3.304896E-06
+      lat = -0.0972000805132257
+      lon = 285.442338069324
+      alt = 76.3769521070644
+      hgt = 3.884526
+      nrm = 7.259846E-05,1,-1.598708E-05
+      rot = -0.7010553,-0.09269003,-0.09674206,0.7004079
+      CoM = -2.861023E-06,-1.688145,1.874054E-06
       stg = 1
       prst = False
       ref = 2323095571
@@ -379,13 +390,13 @@ GAME
       cMod = 0
       ORBIT
       {
-        SMA = 300819.657405239
-        ECC = 0.994798468523525
-        INC = 0.0971954450229109
-        LPE = 89.9990318759153
-        LAN = 105.52447907748
+        SMA = 300819.707005982
+        ECC = 0.994798461740682
+        INC = 0.0972000833428447
+        LPE = 90.0074279848256
+        LAN = 105.702201008153
         MNA = 3.14159265358979
-        EPH = 4.83999999999998
+        EPH = 15.9799999999997
         REF = 1
       }
       PART
@@ -410,15 +421,15 @@ GAME
         attN = bottom, 1
         attN = top, 8
         mass = 0.8
-        temp = 312.123204067559
-        tempExt = 312.130544702667
-        tempExtUnexp = 312.131285410449
+        temp = 312.129324439675
+        tempExt = 312.137203248021
+        tempExtUnexp = 312.137748838386
         expt = 0.5
         state = 0
         connected = True
         attached = True
         flag = Squad/Flags/default
-        rTrf = mk1pod
+        rTrf = mk1pod (Basic)
         modCost = 0
         crew = Jebediah Kerman
         EVENTS
@@ -483,9 +494,15 @@ GAME
         {
           name = ModuleReactionWheel
           isEnabled = True
+          actuatorModeCycle = 0
           stateString = Idle
           stagingEnabled = True
           WheelState = Active
+          actuatorModeCycle_UIFlight
+          {
+            controlEnabled = True
+            stateNames = Normal, SAS Only, Pilot Only
+          }
           EVENTS
           {
             OnToggle
@@ -536,6 +553,7 @@ GAME
           isEnabled = True
           Deployed = False
           Inoperable = False
+          cooldownToGo = 0
           stagingEnabled = True
           EVENTS
           {
@@ -596,7 +614,7 @@ GAME
               guiName = Crew Report
               category = Deploy
               guiActiveUnfocused = True
-              unfocusedRange = 2
+              unfocusedRange = 1.5
               externalToEVAOnly = True
             }
             ResetExperimentExternal
@@ -629,7 +647,7 @@ GAME
               guiActive = False
               guiActiveUncommand = False
               guiIcon = Disable Staging
-              guiName = Disable Staging
+              guiName = Experiment: Disable Staging
               category = Disable Staging
               guiActiveUnfocused = False
               unfocusedRange = 2
@@ -796,6 +814,8 @@ GAME
           Log
           {
             flight = 0
+            0 = Flight,Kerbin
+            0 = Land,Kerbin
           }
         }
         MODULE
@@ -879,9 +899,9 @@ GAME
         attN = top, 0
         attN = bottom, 7
         mass = 0.25
-        temp = 312.122792180313
-        tempExt = 312.07449066979
-        tempExtUnexp = 312.074735086334
+        temp = 312.120768751342
+        tempExt = 312.037632475348
+        tempExtUnexp = 312.037662511816
         expt = 0.5
         state = 0
         connected = True
@@ -942,9 +962,9 @@ GAME
         sym = 3
         srfN = srfAttach, 1
         mass = 0.005
-        temp = 312.118936241169
-        tempExt = 312.076008901813
-        tempExtUnexp = 312.076131349708
+        temp = 312.110435097198
+        tempExt = 312.057334284292
+        tempExtUnexp = 312.057337629643
         expt = 0.5
         state = 0
         connected = True
@@ -994,9 +1014,9 @@ GAME
         sym = 2
         srfN = srfAttach, 1
         mass = 0.005
-        temp = 312.118936241169
-        tempExt = 312.076008901813
-        tempExtUnexp = 312.076131349708
+        temp = 312.110435097198
+        tempExt = 312.057334284292
+        tempExtUnexp = 312.057337629643
         expt = 0.5
         state = 0
         connected = True
@@ -1047,9 +1067,9 @@ GAME
         sym = 6
         srfN = srfAttach, 1
         mass = 0.025
-        temp = 312.122055264283
-        tempExt = 312.012167475064
-        tempExtUnexp = 312.012508336573
+        temp = 312.111947505358
+        tempExt = 311.947343339676
+        tempExtUnexp = 311.947380140687
         expt = 0.5
         state = 0
         connected = True
@@ -1075,7 +1095,7 @@ GAME
           storedAnimationTime = 0
           storedAnimationSpeed = 1
           efficiencyMult = 1
-          launchUT = 4.83999999999998
+          launchUT = 6.21999999999995
           stagingEnabled = True
           EVENTS
           {
@@ -1157,9 +1177,9 @@ GAME
         sym = 6
         srfN = srfAttach, 1
         mass = 0.025
-        temp = 312.122055264283
-        tempExt = 312.012167475064
-        tempExtUnexp = 312.012508336573
+        temp = 312.111947505358
+        tempExt = 311.947343339676
+        tempExtUnexp = 311.947380140687
         expt = 0.5
         state = 0
         connected = True
@@ -1185,7 +1205,7 @@ GAME
           storedAnimationTime = 0
           storedAnimationSpeed = 1
           efficiencyMult = 1
-          launchUT = 4.83999999999998
+          launchUT = 6.21999999999995
           stagingEnabled = True
           EVENTS
           {
@@ -1267,9 +1287,9 @@ GAME
         sym = 5
         srfN = srfAttach, 1
         mass = 0.025
-        temp = 312.122055264283
-        tempExt = 312.012167475064
-        tempExtUnexp = 312.012508336573
+        temp = 312.111947505358
+        tempExt = 311.947343339676
+        tempExtUnexp = 311.947380140687
         expt = 0.5
         state = 0
         connected = True
@@ -1295,7 +1315,7 @@ GAME
           storedAnimationTime = 0
           storedAnimationSpeed = 1
           efficiencyMult = 1
-          launchUT = 4.83999999999998
+          launchUT = 6.21999999999995
           stagingEnabled = True
           EVENTS
           {
@@ -1371,15 +1391,15 @@ GAME
         dstg = 0
         sqor = -1
         sepI = 0
-        sidx = -1
+        sidx = 0
         attm = 0
         srfN = , -1
         attN = top, 1
         attN = bottom, -1
         mass = 1.5
-        temp = 312.122430532624
-        tempExt = 312.042144081301
-        tempExtUnexp = 312.042258734747
+        temp = 312.116809032296
+        tempExt = 312.011176477353
+        tempExtUnexp = 312.011186653019
         expt = 0.5
         state = 0
         connected = True
@@ -1501,7 +1521,7 @@ GAME
               guiActive = False
               guiActiveUncommand = False
               guiIcon = Disable Staging
-              guiName = Disable Staging
+              guiName = Shroud: Disable Staging
               category = Disable Staging
               guiActiveUnfocused = False
               unfocusedRange = 2
@@ -1522,6 +1542,10 @@ GAME
           isEnabled = True
           gimbalLock = False
           gimbalLimiter = 100
+          currentShowToggles = False
+          enableYaw = True
+          enablePitch = True
+          enableRoll = True
           gimbalActive = False
           stagingEnabled = True
           gimbalLock_UIFlight
@@ -1535,8 +1559,33 @@ GAME
             maxValue = 100
             stepIncrement = 1
           }
+          enableYaw_UIFlight
+          {
+            controlEnabled = True
+          }
+          enablePitch_UIFlight
+          {
+            controlEnabled = True
+          }
+          enableRoll_UIFlight
+          {
+            controlEnabled = True
+          }
           EVENTS
           {
+            ToggleToggles
+            {
+              active = True
+              guiActive = True
+              guiActiveEditor = True
+              guiActiveUncommand = False
+              guiIcon = Actuation Toggles
+              guiName = Show Actuation Toggles
+              category = Actuation Toggles
+              guiActiveUnfocused = False
+              unfocusedRange = 2
+              externalToEVAOnly = True
+            }
             ToggleStaging
             {
               active = True
@@ -1561,6 +1610,18 @@ GAME
               actionGroup = None
             }
             FreeAction
+            {
+              actionGroup = None
+            }
+            TogglePitchAction
+            {
+              actionGroup = None
+            }
+            ToggleYawAction
+            {
+              actionGroup = None
+            }
+            ToggleRollAction
             {
               actionGroup = None
             }
@@ -1682,7 +1743,7 @@ GAME
           flowState = True
           isTweakable = False
           hideFlow = True
-          isVisible = True
+          isVisible = False
           flowMode = Both
         }
       }
@@ -1708,9 +1769,9 @@ GAME
         attN = top, -1
         attN = bottom, 0
         mass = 0.02
-        temp = 312.126421760974
-        tempExt = 312.158804070142
-        tempExtUnexp = 312.159796844542
+        temp = 312.130420902225
+        tempExt = 312.140904087004
+        tempExtUnexp = 312.141409979602
         expt = 0.5
         state = 0
         connected = True
@@ -1916,6 +1977,12 @@ GAME
         trimRoll = 0
         mainThrottle = 0.5
       }
+      VESSELMODULES
+      {
+        FlightIntegrator
+        {
+        }
+      }
     }
   }
   ROSTER
@@ -1940,6 +2007,8 @@ GAME
       FLIGHT_LOG
       {
         flight = 0
+        0 = Flight,Kerbin
+        0 = Land,Kerbin
       }
     }
     KERBAL

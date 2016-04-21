@@ -1,15 +1,15 @@
 ship = PartsSolarPanel
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
-size = 5.891571,10.05606,3.158285
+size = 5.891571,8.97013,3.158285
 PART
 {
 	part = mk1pod_4294736224
 	partName = Part
-	pos = 0.0004032962,7.144535,-0.001336962
+	pos = 0.0006532542,6.058604,-0.002078997
 	attPos = 0,0,0
-	attPos0 = 0.0004032962,7.144535,-0.001336962
+	attPos0 = 0.0006532542,6.058604,-0.002078997
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -90,9 +90,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -143,6 +149,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -236,7 +243,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -468,7 +475,7 @@ PART
 {
 	part = fuelTank_4294731188
 	partName = Part
-	pos = 0.0004032962,5.773805,-0.001336962
+	pos = 0.0006532542,4.687874,-0.002078997
 	attPos = 0,0,0
 	attPos0 = 0,-1.370728,0
 	rot = 0,0,0,1
@@ -526,7 +533,7 @@ PART
 {
 	part = launchClamp1_4294705978
 	partName = Part
-	pos = -1.426686,4.361415,-0.001336829
+	pos = -1.426436,3.275484,-0.002078864
 	attPos = 0,0,0
 	attPos0 = -1.427089,-1.412395,1.331573E-07
 	rot = 1.256074E-15,0.7071068,-1.256074E-15,0.7071068
@@ -558,8 +565,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.99016
-		height = 5.021566
+		scaleFactor = 1.559781
+		height = 3.935635
 		stagingEnabled = True
 		towerRot = -1.256074E-15,-0.7071068,1.256074E-15,0.7071068
 		EVENTS
@@ -700,7 +707,7 @@ PART
 {
 	part = launchClamp1_4294705808
 	partName = Part
-	pos = 1.427492,4.361415,-0.00133722
+	pos = 1.427742,3.275484,-0.002079254
 	attPos = 0,0,0
 	attPos0 = 1.427089,-1.412395,-2.579173E-07
 	rot = -1.256074E-15,0.7071066,-1.256074E-15,-0.7071069
@@ -710,7 +717,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 1
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -732,8 +739,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.99016
-		height = 5.021566
+		scaleFactor = 1.559781
+		height = 3.935635
 		stagingEnabled = True
 		towerRot = 1.256074E-15,-0.7071066,1.256074E-15,-0.7071069
 		EVENTS
@@ -874,7 +881,7 @@ PART
 {
 	part = solarPanels5_4294697490
 	partName = Part
-	pos = -0.03105876,7.769445,0.007093272
+	pos = -0.0308088,6.683514,0.006351238
 	attPos = 0,0,0
 	attPos0 = -0.03146206,0.6249142,0.008430234
 	rot = -0.7071066,3.804917E-08,0,0.7071069
@@ -977,7 +984,7 @@ PART
 {
 	part = solarPanels4_4294523398
 	partName = Part
-	pos = 0.000403242,5.199325,-0.6208559
+	pos = 0.0006532,4.113394,-0.621598
 	attPos = 0,0,0
 	attPos0 = -5.416008E-08,-0.5744801,-0.6195191
 	rot = 2.107342E-08,0.7071065,-2.107343E-08,-0.7071071
@@ -1079,7 +1086,7 @@ PART
 {
 	part = radialDecoupler2_4294514542
 	partName = Part
-	pos = 0.0004033665,6.725715,-0.5911814
+	pos = 0.0006533245,5.639784,-0.5919235
 	attPos = 0,0,0
 	attPos0 = 7.028177E-08,0.9519129,-0.5898444
 	rot = 2.107342E-08,0.7071065,-2.107343E-08,-0.7071071
@@ -1248,7 +1255,7 @@ PART
 {
 	part = fuelTank_4294511608
 	partName = Part
-	pos = 0.0004028859,7.184115,-1.83592
+	pos = 0.0006528439,6.098184,-1.836662
 	attPos = 0,0,0
 	attPos0 = -1.244738,0.4583932,-1.870997E-07
 	rot = -2.107341E-07,0.7071067,2.107342E-07,-0.7071069
@@ -1302,7 +1309,7 @@ PART
 {
 	part = largeSolarPanel_4294712806
 	partName = Part
-	pos = 0.0004032962,7.377045,0.4119352
+	pos = 0.0006532542,6.291114,0.4111932
 	attPos = 0,0,0
 	attPos0 = 0,0.2325115,0.4132722
 	rot = -0.5826582,0.5826583,0.4006364,0.4006362

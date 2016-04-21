@@ -1,8 +1,8 @@
 ship = Rover
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
-size = 2.666464,1.794698,2.581409
+size = 2.666838,1.968962,2.581408
 PART
 {
 	part = landerCabinSmall_4294446268
@@ -89,9 +89,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -142,6 +148,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -235,7 +242,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -511,92 +518,245 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleWheel
+		name = ModuleWheelBase
 		isEnabled = True
-		brakeTorque = 180
-		brakesEngaged = False
-		steeringLocked = False
-		isDamaged = False
-		invertSteering = False
-		motorEnabled = True
+		wheelType = MOTORIZED
+		isGrounded = False
+		autoFriction = True
+		frictionMultiplier = 1
+		suspensionEnabled = True
 		stagingEnabled = True
-		brakeTorque_UIFlight
+		frictionMultiplier_UIFlight
 		{
 			controlEnabled = True
-			minValue = 0
-			maxValue = 600
-			stepIncrement = 1
+			minValue = 0.01
+			maxValue = 5
+			stepIncrement = 0.01
+		}
+		suspensionEnabled_UIFlight
+		{
+			controlEnabled = True
 		}
 		EVENTS
 		{
-			UnLockSteering
+			EvtAutoFrictionToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Friction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			EnableSuspension
+			{
+				actionGroup = None
+			}
+			DisableSuspension
+			{
+				actionGroup = None
+			}
+			ActAutoFrictionToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSuspension
+		isEnabled = True
+		suspensionPos = (-1, -1, -1)
+		autoBoost = 0
+		stagingEnabled = True
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSteering
+		isEnabled = True
+		steeringEnabled = True
+		steeringInvert = False
+		stagingEnabled = True
+		steeringEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		steeringInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelMotor
+		isEnabled = True
+		autoTorque = True
+		motorEnabled = True
+		motorInverted = False
+		driveLimiter = 100
+		tractionControlScale = 1
+		stagingEnabled = True
+		motorEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		motorInverted_UIFlight
+		{
+			controlEnabled = True
+		}
+		driveLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		tractionControlScale_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 5
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			EvtAutoTorqueToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Traction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ActAutoTorqueToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelBrakes
+		isEnabled = True
+		brakeTweak = 100
+		brakeInput = 0
+		stagingEnabled = True
+		brakeTweak_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			BrakeAction
+			{
+				actionGroup = Brakes
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelDamage
+		isEnabled = True
+		isDamaged = False
+		stagingEnabled = True
+		EVENTS
+		{
+			EventRepairExternal
 			{
 				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Unlock Steering
-				guiName = Unlock Steering
-				category = Unlock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			LockSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Lock Steering
-				guiName = Lock Steering
-				category = Lock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EnableMotor
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Enable Motor
-				guiName = Enable Motor
-				category = Enable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DisableMotor
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Disable Motor
-				guiName = Disable Motor
-				category = Disable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			InvertSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Invert Steering
-				guiName = Invert Steering
-				category = Invert Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			RepairWheel
-			{
-				active = True
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Repair Wheel
@@ -621,30 +781,6 @@ PART
 		}
 		ACTIONS
 		{
-			InvertSteeringAction
-			{
-				actionGroup = None
-			}
-			LockSteeringAction
-			{
-				actionGroup = None
-			}
-			UnlockSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleMotorAction
-			{
-				actionGroup = None
-			}
-			BrakesAction
-			{
-				actionGroup = Brakes
-			}
 		}
 	}
 	MODULE
@@ -673,11 +809,23 @@ PART
 	}
 	MODULE
 	{
-		name = FXModuleConstrainPosition
+		name = ModuleTestSubject
 		isEnabled = True
 		stagingEnabled = True
 		EVENTS
 		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -730,92 +878,245 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleWheel
+		name = ModuleWheelBase
 		isEnabled = True
-		brakeTorque = 180
-		brakesEngaged = False
-		steeringLocked = False
-		isDamaged = False
-		invertSteering = False
-		motorEnabled = True
+		wheelType = MOTORIZED
+		isGrounded = False
+		autoFriction = True
+		frictionMultiplier = 1
+		suspensionEnabled = True
 		stagingEnabled = True
-		brakeTorque_UIFlight
+		frictionMultiplier_UIFlight
 		{
 			controlEnabled = True
-			minValue = 0
-			maxValue = 600
-			stepIncrement = 1
+			minValue = 0.01
+			maxValue = 5
+			stepIncrement = 0.01
+		}
+		suspensionEnabled_UIFlight
+		{
+			controlEnabled = True
 		}
 		EVENTS
 		{
-			UnLockSteering
+			EvtAutoFrictionToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Friction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			EnableSuspension
+			{
+				actionGroup = None
+			}
+			DisableSuspension
+			{
+				actionGroup = None
+			}
+			ActAutoFrictionToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSuspension
+		isEnabled = True
+		suspensionPos = (-1, -1, -1)
+		autoBoost = 0
+		stagingEnabled = True
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSteering
+		isEnabled = True
+		steeringEnabled = True
+		steeringInvert = False
+		stagingEnabled = True
+		steeringEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		steeringInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelMotor
+		isEnabled = True
+		autoTorque = True
+		motorEnabled = True
+		motorInverted = False
+		driveLimiter = 100
+		tractionControlScale = 1
+		stagingEnabled = True
+		motorEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		motorInverted_UIFlight
+		{
+			controlEnabled = True
+		}
+		driveLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		tractionControlScale_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 5
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			EvtAutoTorqueToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Traction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ActAutoTorqueToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelBrakes
+		isEnabled = True
+		brakeTweak = 100
+		brakeInput = 0
+		stagingEnabled = True
+		brakeTweak_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			BrakeAction
+			{
+				actionGroup = Brakes
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelDamage
+		isEnabled = True
+		isDamaged = False
+		stagingEnabled = True
+		EVENTS
+		{
+			EventRepairExternal
 			{
 				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Unlock Steering
-				guiName = Unlock Steering
-				category = Unlock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			LockSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Lock Steering
-				guiName = Lock Steering
-				category = Lock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EnableMotor
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Enable Motor
-				guiName = Enable Motor
-				category = Enable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DisableMotor
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Disable Motor
-				guiName = Disable Motor
-				category = Disable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			InvertSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Invert Steering
-				guiName = Invert Steering
-				category = Invert Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			RepairWheel
-			{
-				active = True
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Repair Wheel
@@ -840,30 +1141,6 @@ PART
 		}
 		ACTIONS
 		{
-			InvertSteeringAction
-			{
-				actionGroup = None
-			}
-			LockSteeringAction
-			{
-				actionGroup = None
-			}
-			UnlockSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleMotorAction
-			{
-				actionGroup = None
-			}
-			BrakesAction
-			{
-				actionGroup = Brakes
-			}
 		}
 	}
 	MODULE
@@ -892,11 +1169,23 @@ PART
 	}
 	MODULE
 	{
-		name = FXModuleConstrainPosition
+		name = ModuleTestSubject
 		isEnabled = True
 		stagingEnabled = True
 		EVENTS
 		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -949,92 +1238,245 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleWheel
+		name = ModuleWheelBase
 		isEnabled = True
-		brakeTorque = 180
-		brakesEngaged = False
-		steeringLocked = False
-		isDamaged = False
-		invertSteering = False
-		motorEnabled = True
+		wheelType = MOTORIZED
+		isGrounded = False
+		autoFriction = True
+		frictionMultiplier = 1
+		suspensionEnabled = True
 		stagingEnabled = True
-		brakeTorque_UIFlight
+		frictionMultiplier_UIFlight
 		{
 			controlEnabled = True
-			minValue = 0
-			maxValue = 600
-			stepIncrement = 1
+			minValue = 0.01
+			maxValue = 5
+			stepIncrement = 0.01
+		}
+		suspensionEnabled_UIFlight
+		{
+			controlEnabled = True
 		}
 		EVENTS
 		{
-			UnLockSteering
+			EvtAutoFrictionToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Friction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			EnableSuspension
+			{
+				actionGroup = None
+			}
+			DisableSuspension
+			{
+				actionGroup = None
+			}
+			ActAutoFrictionToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSuspension
+		isEnabled = True
+		suspensionPos = (-1, -1, -1)
+		autoBoost = 0
+		stagingEnabled = True
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSteering
+		isEnabled = True
+		steeringEnabled = True
+		steeringInvert = False
+		stagingEnabled = True
+		steeringEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		steeringInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelMotor
+		isEnabled = True
+		autoTorque = True
+		motorEnabled = True
+		motorInverted = False
+		driveLimiter = 100
+		tractionControlScale = 1
+		stagingEnabled = True
+		motorEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		motorInverted_UIFlight
+		{
+			controlEnabled = True
+		}
+		driveLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		tractionControlScale_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 5
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			EvtAutoTorqueToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Traction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ActAutoTorqueToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelBrakes
+		isEnabled = True
+		brakeTweak = 100
+		brakeInput = 0
+		stagingEnabled = True
+		brakeTweak_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			BrakeAction
+			{
+				actionGroup = Brakes
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelDamage
+		isEnabled = True
+		isDamaged = False
+		stagingEnabled = True
+		EVENTS
+		{
+			EventRepairExternal
 			{
 				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Unlock Steering
-				guiName = Unlock Steering
-				category = Unlock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			LockSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Lock Steering
-				guiName = Lock Steering
-				category = Lock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EnableMotor
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Enable Motor
-				guiName = Enable Motor
-				category = Enable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DisableMotor
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Disable Motor
-				guiName = Disable Motor
-				category = Disable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			InvertSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Invert Steering
-				guiName = Invert Steering
-				category = Invert Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			RepairWheel
-			{
-				active = True
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Repair Wheel
@@ -1059,30 +1501,6 @@ PART
 		}
 		ACTIONS
 		{
-			InvertSteeringAction
-			{
-				actionGroup = None
-			}
-			LockSteeringAction
-			{
-				actionGroup = None
-			}
-			UnlockSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleMotorAction
-			{
-				actionGroup = None
-			}
-			BrakesAction
-			{
-				actionGroup = Brakes
-			}
 		}
 	}
 	MODULE
@@ -1111,11 +1529,23 @@ PART
 	}
 	MODULE
 	{
-		name = FXModuleConstrainPosition
+		name = ModuleTestSubject
 		isEnabled = True
 		stagingEnabled = True
 		EVENTS
 		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -1168,92 +1598,245 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleWheel
+		name = ModuleWheelBase
 		isEnabled = True
-		brakeTorque = 180
-		brakesEngaged = False
-		steeringLocked = False
-		isDamaged = False
-		invertSteering = False
-		motorEnabled = True
+		wheelType = MOTORIZED
+		isGrounded = False
+		autoFriction = True
+		frictionMultiplier = 1
+		suspensionEnabled = True
 		stagingEnabled = True
-		brakeTorque_UIFlight
+		frictionMultiplier_UIFlight
 		{
 			controlEnabled = True
-			minValue = 0
-			maxValue = 600
-			stepIncrement = 1
+			minValue = 0.01
+			maxValue = 5
+			stepIncrement = 0.01
+		}
+		suspensionEnabled_UIFlight
+		{
+			controlEnabled = True
 		}
 		EVENTS
 		{
-			UnLockSteering
+			EvtAutoFrictionToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Friction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			EnableSuspension
+			{
+				actionGroup = None
+			}
+			DisableSuspension
+			{
+				actionGroup = None
+			}
+			ActAutoFrictionToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSuspension
+		isEnabled = True
+		suspensionPos = (-1, -1, -1)
+		autoBoost = 0
+		stagingEnabled = True
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSteering
+		isEnabled = True
+		steeringEnabled = True
+		steeringInvert = False
+		stagingEnabled = True
+		steeringEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		steeringInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelMotor
+		isEnabled = True
+		autoTorque = True
+		motorEnabled = True
+		motorInverted = False
+		driveLimiter = 100
+		tractionControlScale = 1
+		stagingEnabled = True
+		motorEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		motorInverted_UIFlight
+		{
+			controlEnabled = True
+		}
+		driveLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		tractionControlScale_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 5
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			EvtAutoTorqueToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Traction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ActAutoTorqueToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelBrakes
+		isEnabled = True
+		brakeTweak = 100
+		brakeInput = 0
+		stagingEnabled = True
+		brakeTweak_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			BrakeAction
+			{
+				actionGroup = Brakes
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelDamage
+		isEnabled = True
+		isDamaged = False
+		stagingEnabled = True
+		EVENTS
+		{
+			EventRepairExternal
 			{
 				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Unlock Steering
-				guiName = Unlock Steering
-				category = Unlock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			LockSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Lock Steering
-				guiName = Lock Steering
-				category = Lock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EnableMotor
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Enable Motor
-				guiName = Enable Motor
-				category = Enable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DisableMotor
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Disable Motor
-				guiName = Disable Motor
-				category = Disable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			InvertSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Invert Steering
-				guiName = Invert Steering
-				category = Invert Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			RepairWheel
-			{
-				active = True
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Repair Wheel
@@ -1278,30 +1861,6 @@ PART
 		}
 		ACTIONS
 		{
-			InvertSteeringAction
-			{
-				actionGroup = None
-			}
-			LockSteeringAction
-			{
-				actionGroup = None
-			}
-			UnlockSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleMotorAction
-			{
-				actionGroup = None
-			}
-			BrakesAction
-			{
-				actionGroup = Brakes
-			}
 		}
 	}
 	MODULE
@@ -1330,11 +1889,23 @@ PART
 	}
 	MODULE
 	{
-		name = FXModuleConstrainPosition
+		name = ModuleTestSubject
 		isEnabled = True
 		stagingEnabled = True
 		EVENTS
 		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -1387,92 +1958,245 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleWheel
+		name = ModuleWheelBase
 		isEnabled = True
-		brakeTorque = 180
-		brakesEngaged = False
-		steeringLocked = False
-		isDamaged = False
-		invertSteering = False
-		motorEnabled = True
+		wheelType = MOTORIZED
+		isGrounded = False
+		autoFriction = True
+		frictionMultiplier = 1
+		suspensionEnabled = True
 		stagingEnabled = True
-		brakeTorque_UIFlight
+		frictionMultiplier_UIFlight
 		{
 			controlEnabled = True
-			minValue = 0
-			maxValue = 600
-			stepIncrement = 1
+			minValue = 0.01
+			maxValue = 5
+			stepIncrement = 0.01
+		}
+		suspensionEnabled_UIFlight
+		{
+			controlEnabled = True
 		}
 		EVENTS
 		{
-			UnLockSteering
+			EvtAutoFrictionToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Friction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			EnableSuspension
+			{
+				actionGroup = None
+			}
+			DisableSuspension
+			{
+				actionGroup = None
+			}
+			ActAutoFrictionToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSuspension
+		isEnabled = True
+		suspensionPos = (-1, -1, -1)
+		autoBoost = 0
+		stagingEnabled = True
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSteering
+		isEnabled = True
+		steeringEnabled = True
+		steeringInvert = False
+		stagingEnabled = True
+		steeringEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		steeringInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelMotor
+		isEnabled = True
+		autoTorque = True
+		motorEnabled = True
+		motorInverted = False
+		driveLimiter = 100
+		tractionControlScale = 1
+		stagingEnabled = True
+		motorEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		motorInverted_UIFlight
+		{
+			controlEnabled = True
+		}
+		driveLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		tractionControlScale_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 5
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			EvtAutoTorqueToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Traction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ActAutoTorqueToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelBrakes
+		isEnabled = True
+		brakeTweak = 100
+		brakeInput = 0
+		stagingEnabled = True
+		brakeTweak_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			BrakeAction
+			{
+				actionGroup = Brakes
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelDamage
+		isEnabled = True
+		isDamaged = False
+		stagingEnabled = True
+		EVENTS
+		{
+			EventRepairExternal
 			{
 				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Unlock Steering
-				guiName = Unlock Steering
-				category = Unlock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			LockSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Lock Steering
-				guiName = Lock Steering
-				category = Lock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EnableMotor
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Enable Motor
-				guiName = Enable Motor
-				category = Enable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DisableMotor
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Disable Motor
-				guiName = Disable Motor
-				category = Disable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			InvertSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Invert Steering
-				guiName = Invert Steering
-				category = Invert Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			RepairWheel
-			{
-				active = True
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Repair Wheel
@@ -1497,30 +2221,6 @@ PART
 		}
 		ACTIONS
 		{
-			InvertSteeringAction
-			{
-				actionGroup = None
-			}
-			LockSteeringAction
-			{
-				actionGroup = None
-			}
-			UnlockSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleMotorAction
-			{
-				actionGroup = None
-			}
-			BrakesAction
-			{
-				actionGroup = Brakes
-			}
 		}
 	}
 	MODULE
@@ -1549,11 +2249,23 @@ PART
 	}
 	MODULE
 	{
-		name = FXModuleConstrainPosition
+		name = ModuleTestSubject
 		isEnabled = True
 		stagingEnabled = True
 		EVENTS
 		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -1606,92 +2318,245 @@ PART
 	}
 	MODULE
 	{
-		name = ModuleWheel
+		name = ModuleWheelBase
 		isEnabled = True
-		brakeTorque = 180
-		brakesEngaged = False
-		steeringLocked = False
-		isDamaged = False
-		invertSteering = False
-		motorEnabled = True
+		wheelType = MOTORIZED
+		isGrounded = False
+		autoFriction = True
+		frictionMultiplier = 1
+		suspensionEnabled = True
 		stagingEnabled = True
-		brakeTorque_UIFlight
+		frictionMultiplier_UIFlight
 		{
 			controlEnabled = True
-			minValue = 0
-			maxValue = 600
-			stepIncrement = 1
+			minValue = 0.01
+			maxValue = 5
+			stepIncrement = 0.01
+		}
+		suspensionEnabled_UIFlight
+		{
+			controlEnabled = True
 		}
 		EVENTS
 		{
-			UnLockSteering
+			EvtAutoFrictionToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Friction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			EnableSuspension
+			{
+				actionGroup = None
+			}
+			DisableSuspension
+			{
+				actionGroup = None
+			}
+			ActAutoFrictionToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSuspension
+		isEnabled = True
+		suspensionPos = (-1, -1, -1)
+		autoBoost = 0
+		stagingEnabled = True
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelSteering
+		isEnabled = True
+		steeringEnabled = True
+		steeringInvert = False
+		stagingEnabled = True
+		steeringEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		steeringInvert_UIFlight
+		{
+			controlEnabled = True
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelMotor
+		isEnabled = True
+		autoTorque = True
+		motorEnabled = True
+		motorInverted = False
+		driveLimiter = 100
+		tractionControlScale = 1
+		stagingEnabled = True
+		motorEnabled_UIFlight
+		{
+			controlEnabled = True
+		}
+		motorInverted_UIFlight
+		{
+			controlEnabled = True
+		}
+		driveLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		tractionControlScale_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 5
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			EvtAutoTorqueToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = 
+				guiName = Traction Control: Auto
+				category = 
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ActAutoTorqueToggle
+			{
+				actionGroup = None
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelBrakes
+		isEnabled = True
+		brakeTweak = 100
+		brakeInput = 0
+		stagingEnabled = True
+		brakeTweak_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
+		}
+		EVENTS
+		{
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			BrakeAction
+			{
+				actionGroup = Brakes
+			}
+		}
+	}
+	MODULE
+	{
+		name = ModuleWheelDamage
+		isEnabled = True
+		isDamaged = False
+		stagingEnabled = True
+		EVENTS
+		{
+			EventRepairExternal
 			{
 				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Unlock Steering
-				guiName = Unlock Steering
-				category = Unlock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			LockSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Lock Steering
-				guiName = Lock Steering
-				category = Lock Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			EnableMotor
-			{
-				active = False
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Enable Motor
-				guiName = Enable Motor
-				category = Enable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			DisableMotor
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Disable Motor
-				guiName = Disable Motor
-				category = Disable Motor
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			InvertSteering
-			{
-				active = True
-				guiActive = True
-				guiActiveEditor = True
-				guiActiveUncommand = False
-				guiIcon = Invert Steering
-				guiName = Invert Steering
-				category = Invert Steering
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			RepairWheel
-			{
-				active = True
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Repair Wheel
@@ -1716,30 +2581,6 @@ PART
 		}
 		ACTIONS
 		{
-			InvertSteeringAction
-			{
-				actionGroup = None
-			}
-			LockSteeringAction
-			{
-				actionGroup = None
-			}
-			UnlockSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleSteeringAction
-			{
-				actionGroup = None
-			}
-			ToggleMotorAction
-			{
-				actionGroup = None
-			}
-			BrakesAction
-			{
-				actionGroup = Brakes
-			}
 		}
 	}
 	MODULE
@@ -1768,11 +2609,23 @@ PART
 	}
 	MODULE
 	{
-		name = FXModuleConstrainPosition
+		name = ModuleTestSubject
 		isEnabled = True
 		stagingEnabled = True
 		EVENTS
 		{
+			RunTestEvent
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Run Test
+				guiName = Run Test
+				category = Run Test
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True

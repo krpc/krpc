@@ -309,7 +309,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 return DockingPortState.Ready;
             else if (state.StartsWith ("Docked") || state == "PreAttached")
                 return DockingPortState.Docked;
-            else if (state == "Acquire")
+            else if (state.Contains ("Acquire"))
                 return DockingPortState.Docking;
             else if (state == "Disengage")
                 return DockingPortState.Undocking;

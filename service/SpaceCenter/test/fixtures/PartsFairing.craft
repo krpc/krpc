@@ -1,15 +1,15 @@
 ship = PartsFairing
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
-size = 4.335434,9.623516,2.479582
+size = 4.335434,8.250533,2.479582
 PART
 {
 	part = Mark1-2Pod_4294723380
 	partName = Part
-	pos = -1.28354,3.488571,1.185876
+	pos = -2.062799,2.115588,1.566109
 	attPos = 0,0,0
-	attPos0 = -1.28354,3.488571,1.185876
+	attPos0 = -2.062799,2.115588,1.566109
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -89,9 +89,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -142,6 +148,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -235,7 +242,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -467,7 +474,7 @@ PART
 {
 	part = fairingSize1_4294642750
 	partName = Part
-	pos = -1.28354,4.881762,1.185876
+	pos = -2.062799,3.508779,1.566109
 	attPos = 0,0,0
 	attPos0 = 0,1.39319,0
 	rot = 0,0,0,1
@@ -498,8 +505,30 @@ PART
 	{
 		name = ModuleProceduralFairing
 		isEnabled = True
+		interstageCraftID = 0
+		nArcs = 2
+		ejectionForce = 100
+		useClamshell = False
 		stagingEnabled = True
 		fsm = st_idle
+		nArcs_UIEditor
+		{
+			controlEnabled = True
+			minValue = 2
+			maxValue = 6
+			stepIncrement = 1
+		}
+		ejectionForce_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 1000
+			stepIncrement = 5
+		}
+		useClamshell_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
 			DeleteFairing
@@ -654,7 +683,7 @@ PART
 {
 	part = launchClamp1_4294638038
 	partName = Part
-	pos = -3.421317,2.78613,1.758692
+	pos = -4.200576,1.413147,2.138925
 	attPos = 0,0,0
 	attPos0 = -2.137777,-0.7024412,0.5728155
 	rot = 0.1204163,0.7776777,-0.1569295,0.5967332
@@ -664,7 +693,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = -1
+	sidx = 1
 	sqor = -1
 	sepI = 0
 	attm = 1
@@ -685,8 +714,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.472815
-		height = 3.716203
+		scaleFactor = 0.9286714
+		height = 2.343221
 		stagingEnabled = True
 		towerRot = -0.1204163,-0.7776777,0.1569295,0.5967332
 		EVENTS

@@ -225,7 +225,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<LandingLeg> LandingLegs {
-            get { return All.Where (part => LandingLeg.Is (part)).Select (part => new LandingLeg (part)).ToList (); }
+            get { return All.Where (part => Services.Parts.LandingLeg.Is (part)).Select (part => new LandingLeg (part)).ToList (); }
         }
 
         /// <summary>

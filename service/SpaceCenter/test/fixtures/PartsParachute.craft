@@ -1,5 +1,5 @@
 ship = PartsParachute
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
 size = 2.844676,2.366318,2.844676
@@ -100,9 +100,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -153,6 +159,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -246,7 +253,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -488,7 +495,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 0
+	sidx = 1
 	sqor = 0
 	sepI = 0
 	attm = 0
@@ -510,6 +517,7 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
+		animTime = 0
 		minAirPressureToOpen = 0.01
 		deployAltitude = 500
 		stagingEnabled = True
@@ -701,7 +709,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 1
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -726,6 +734,7 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
+		animTime = 0
 		minAirPressureToOpen = 0.01
 		deployAltitude = 500
 		stagingEnabled = True
@@ -917,7 +926,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 2
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -942,6 +951,7 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
+		animTime = 0
 		minAirPressureToOpen = 0.01
 		deployAltitude = 500
 		stagingEnabled = True
@@ -1133,7 +1143,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 3
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -1158,6 +1168,7 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
+		animTime = 0
 		minAirPressureToOpen = 0.01
 		deployAltitude = 500
 		stagingEnabled = True
@@ -1349,7 +1360,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 4
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -1374,6 +1385,7 @@ PART
 		name = ModuleParachute
 		isEnabled = True
 		persistentState = STOWED
+		animTime = 0
 		minAirPressureToOpen = 0.01
 		deployAltitude = 500
 		stagingEnabled = True

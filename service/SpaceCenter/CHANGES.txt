@@ -1,4 +1,5 @@
 v0.3.0
+ * Support for KSP 1.1
  * Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)
  * Add saving and loading games using SpaceCenter.Save, Load, Quicksave and Quickload (#247)
  * Add ResourceTransfer object
@@ -16,6 +17,8 @@ v0.3.0
  * Return newly created vessels from Decoupler.Decouple() (#214)
  * Removed Vessel.Target, as this functionality is provided by SpaceCenter.TargetVessel (#206)
  * Change autopilot so that the target reference frame, direction and roll are cleared when the client disconnects and the autopilot is engaged (#248)
+ * Removed LandingLegState.Repairing
+ * Added LandingGearState.Broken
  * Fix bug where Engine.HasFuel requires the engine to be throttled up
  * Fix bug with vessel center of mass calculations (#218)
 
