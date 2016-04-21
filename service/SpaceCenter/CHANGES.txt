@@ -2,16 +2,25 @@ v0.3.0
  * Support for KSP 1.1
  * Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)
  * Add saving and loading games using SpaceCenter.Save, Load, Quicksave and Quickload (#247)
- * Add resource transfers
- * Add resource objects, representing an individual resource stored in a part
+ * Add ResourceTransfer object
+ * Add Resource objects, representing an individual resource stored in a part
+ * Add Vessel.MomentOfInertia, Add Vessel.InteriaTensor and Part.InertiaTensor
+ * Add Vessel.Torque and Vessel.ReactionWheelTorque
+ * Merged ReactionWheel.PitchTorque, YawTorque and RollTorque into a single ReactionWheel.Torque method
+ * Add Part.CenterOfMass and Part.CenterOfMassReferenceFrame
+ * Add Part.Shielded and Part.DynamicPressure
+ * Add RCS objects.
+ * Add Thruster objects, which represent individual rocket nozzels or RCS thrusters.
+ * Added ControlSurface objects.
  * DockingPort.Undock() now returns the newly created vessel, instead of the 'undocked vessel'
  * DockingPort.Undock() now throws an exception (instead of returning null) if the port is not docked
  * Return newly created vessels from Decoupler.Decouple() (#214)
  * Removed Vessel.Target, as this functionality is provided by SpaceCenter.TargetVessel (#206)
- * Fix bug where Engine.HasFuel requires the engine to be throttled up
  * Change autopilot so that the target reference frame, direction and roll are cleared when the client disconnects and the autopilot is engaged (#248)
  * Removed LandingLegState.Repairing
  * Added LandingGearState.Broken
+ * Fix bug where Engine.HasFuel requires the engine to be throttled up
+ * Fix bug with vessel center of mass calculations (#218)
 
 v0.2.3
  * Add support for engine mode switching (#219)

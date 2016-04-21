@@ -90,7 +90,7 @@ namespace KRPC.SpaceCenter
             // Render directions on the active vessel
             var vessel = FlightGlobals.ActiveVessel;
             if (vessel != null) {
-                var origin = vessel.CoM;
+                var origin = vessel.findWorldCenterOfMass ();
                 foreach (var direction in directions) {
                     direction.Item3.SetPosition (0, origin);
                     direction.Item3.SetPosition (1, origin + (direction.Item6.DirectionToWorldSpace (direction.Item4) * direction.Item5));

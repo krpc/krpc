@@ -2,6 +2,7 @@ using System;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -72,27 +73,27 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The torque in the pitch axis, in Newton meters.
+        /// The available torque in the pitch, roll and yaw axes of the vessel, in Newton meters.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// Returns zero if the reaction wheel is inactive or broken.
         /// </summary>
         [KRPCProperty]
-        public float PitchTorque {
-            get { return reactionWheel.RollTorque * 1000f; }
+        public Tuple3 Torque {
+            get {
+                return TorqueVector ().ToTuple ();
+            }
         }
 
         /// <summary>
-        /// The torque in the yaw axis, in Newton meters.
+        /// The available torque in the pitch, yaw and roll axes of the vessel, in Newton meters.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// Returns zero if the reaction wheel is inactive or broken.
         /// </summary>
-        [KRPCProperty]
-        public float YawTorque {
-            get { return reactionWheel.YawTorque * 1000f; }
-        }
-
-        /// <summary>
-        /// The torque in the roll axis, in Newton meters.
-        /// </summary>
-        [KRPCProperty]
-        public float RollTorque {
-            get { return reactionWheel.PitchTorque * 1000f; }
+        internal Vector3d TorqueVector ()
+        {
+            if (!Active || Broken)
+                return Vector3d.zero;
+            return new Vector3d (reactionWheel.PitchTorque, reactionWheel.RollTorque, reactionWheel.YawTorque) * 1000f;
         }
     }
 }

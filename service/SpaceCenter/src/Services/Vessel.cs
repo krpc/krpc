@@ -7,6 +7,7 @@ using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
+using System.Collections.Generic;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -286,6 +287,109 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The moment of inertia of the vessel in <math>kg.m^2</math> around its center of mass
+        /// in vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 MomentOfInertia {
+            get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
+        }
+
+        /// <summary>
+        /// The inertia tensor of the vessel in the vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// Returns the 3x3 matrix as a list of elements, in row-major order.
+        /// </summary>
+        [KRPCProperty]
+        public IList<double> InertiaTensor {
+            get { return ComputeInertiaTensor ().ToList (); }
+        }
+
+        /// <summary>
+        /// The maximum torque that the currently active and powered reaction wheels can generate.
+        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 ReactionWheelTorque {
+            get { return ComputeReactionWheelTorque ().ToTuple (); }
+        }
+
+        /// <summary>
+        /// Computes the inertia tensor of the vessel. Uses the parallel axis theorem to
+        /// sum the contributions to the inertia tensor from every part in the vessel.
+        /// It (ab)uses the Matrix4x4 class in order to do 3x3 matrix operations.
+        /// </summary>
+        /// TODO: verify this use of the Matrix4x4 is beneficial for performance
+        Matrix4x4 ComputeInertiaTensor ()
+        {
+            Matrix4x4 inertiaTensor = Matrix4x4.zero;
+            Vector3 CoM = InternalVessel.findWorldCenterOfMass ();
+            // Use the part ReferenceTransform because we want pitch/roll/yaw relative to controlling part
+            Transform vesselTransform = InternalVessel.GetTransform ();
+
+            foreach (var part in InternalVessel.parts) {
+                if (part.rb != null) {
+                    Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
+
+                    // translate:  inertiaTensor frame to part frame, part frame to world frame, world frame to vessel frame
+                    Quaternion rot = Quaternion.Inverse(vesselTransform.rotation) * part.transform.rotation * part.rb.inertiaTensorRotation;
+                    Quaternion inv = Quaternion.Inverse(rot);
+
+                    Matrix4x4 rotMatrix = Matrix4x4.TRS(Vector3.zero, rot, Vector3.one);
+                    Matrix4x4 invMatrix = Matrix4x4.TRS(Vector3.zero, inv, Vector3.one);
+
+                    // add the part inertiaTensor to the ship inertiaTensor
+                    inertiaTensor = inertiaTensor.Add(rotMatrix * partTensor * invMatrix);
+
+                    Vector3 position = vesselTransform.InverseTransformDirection(part.rb.position - CoM);
+
+                    // add the part mass to the ship inertiaTensor
+                    inertiaTensor = inertiaTensor.Add((part.rb.mass * position.sqrMagnitude).ToDiagonalMatrix ());
+
+                    // add the part distance offset to the ship inertiaTensor
+                    inertiaTensor = inertiaTensor.Add(position.OuterProduct(-part.rb.mass * position));
+                }
+            }
+            return inertiaTensor.MultiplyScalar (1000f);
+        }
+
+        /// <summary>
+        /// Computes the total torque available from reaction wheels, in the pitch, roll and yaw axes.
+        /// </summary>
+        Vector3d ComputeReactionWheelTorque ()
+        {
+            Vector3d reactionWheelTorque = Vector3d.zero;
+            foreach (var rw in Parts.ReactionWheels.Where (e => e.Active && !e.Broken))
+                reactionWheelTorque += rw.TorqueVector ();
+            return reactionWheelTorque;
+        }
+
+        /// <summary>
+        /// Computes the total torque available from RCS thrusters, in the pitch, roll and yaw axes.
+        /// </summary>
+        Vector3d ComputeRCSTorque ()
+        {
+            throw new NotImplementedException ();
+        }
+
+        /// <summary>
+        /// Computes the total torque available from gimballed engines, in the pitch, roll and yaw axes.
+        /// </summary>
+        Vector3d ComputeEngineTorque ()
+        {
+            throw new NotImplementedException ();
+        }
+
+        /// <summary>
+        /// Computes the total torque available from aerodynamic control surfaces, in the pitch, roll and yaw axes.
+        /// </summary>
+        Vector3d ComputeControlSurfaceTorque ()
+        {
+            throw new NotImplementedException ();
+        }
+
+        /// <summary>
         /// The reference frame that is fixed relative to the vessel, and orientated with the vessel.
         /// <list type="bullet">
         /// <item><description>The origin is at the center of mass of the vessel.</description></item>
@@ -369,7 +473,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.PositionFromWorldSpace (InternalVessel.GetWorldPos3D ()).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (InternalVessel.findWorldCenterOfMass ()).ToTuple ();
         }
 
         /// <summary>
@@ -379,7 +483,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.VelocityFromWorldSpace (InternalVessel.CoM, InternalVessel.GetOrbit ().GetVel ()).ToTuple ();
+            return referenceFrame.VelocityFromWorldSpace (InternalVessel.findWorldCenterOfMass (), InternalVessel.GetOrbit ().GetVel ()).ToTuple ();
         }
 
         /// <summary>
