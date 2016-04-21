@@ -73,11 +73,7 @@ SpaceCenter.Vessel.VacuumSpecificImpulse
 SpaceCenter.Vessel.KerbinSeaLevelSpecificImpulse
 SpaceCenter.Vessel.MomentOfInertia
 SpaceCenter.Vessel.InertiaTensor
-SpaceCenter.Vessel.Torque
 SpaceCenter.Vessel.ReactionWheelTorque
-SpaceCenter.Vessel.RCSTorque
-SpaceCenter.Vessel.EngineTorque
-SpaceCenter.Vessel.ControlSurfaceTorque
 SpaceCenter.Vessel.ReferenceFrame
 SpaceCenter.Vessel.OrbitalReferenceFrame
 SpaceCenter.Vessel.SurfaceReferenceFrame
@@ -362,11 +358,6 @@ SpaceCenter.ControlSurface.RollEnabled
 SpaceCenter.ControlSurface.Inverted
 SpaceCenter.ControlSurface.Deployed
 SpaceCenter.ControlSurface.SurfaceArea
-SpaceCenter.ControlSurface.Rotation
-SpaceCenter.ControlSurface.MaxPositiveRotation
-SpaceCenter.ControlSurface.MaxNegativeRotation
-SpaceCenter.ControlSurface.MaxPositiveTorque
-SpaceCenter.ControlSurface.MaxNegativeTorque
 SpaceCenter.Decoupler
 SpaceCenter.Decoupler.Part
 SpaceCenter.Decoupler.Decouple
