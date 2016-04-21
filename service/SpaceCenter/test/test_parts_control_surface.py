@@ -2,7 +2,6 @@ import unittest
 import testingtools
 import krpc
 import time
-from mathtools import axis_angle_quaternion, norm
 
 class TestPartsControlSurface(testingtools.TestCase):
 
