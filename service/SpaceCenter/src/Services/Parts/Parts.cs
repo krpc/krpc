@@ -142,6 +142,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all control surfaces in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<ControlSurface> ControlSurfaces {
+            get { return All.Where (part => ControlSurface.Is (part)).Select (part => new ControlSurface (part)).ToList (); }
+        }
+
+        /// <summary>
         /// A list of all cargo bays in the vessel.
         /// </summary>
         [KRPCProperty]
@@ -179,6 +187,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A list of all engines in the vessel.
         /// </summary>
+        /// <remarks>
+        /// This includes any part that generates thrust. This covers many different types of engine,
+        /// including liquid fuel rockets, solid rocket boosters, jet engines and RCS thrusters.
+        /// </remarks>
         [KRPCProperty]
         public IList<Engine> Engines {
             get { return All.Where (part => Engine.Is (part)).Select (part => new Engine (part)).ToList (); }
@@ -246,6 +258,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public IList<Radiator> Radiators {
             get { return All.Where (part => Radiator.Is (part)).Select (part => new Radiator (part)).ToList (); }
+        }
+
+        /// <summary>
+        /// A list of all RCS blocks/thrusters in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<RCS> RCS {
+            get { return All.Where (part => Services.Parts.RCS.Is (part)).Select (part => new Services.Parts.RCS (part)).ToList (); }
         }
 
         /// <summary>

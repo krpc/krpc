@@ -3,6 +3,7 @@ using UnityEngine;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.Services.Parts;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -35,7 +36,9 @@ namespace KRPC.SpaceCenter.Services
             Maneuver,
             ManeuverOrbital,
             Part,
-            DockingPort
+            PartCenterOfMass,
+            DockingPort,
+            Thrust
         }
 
         readonly Type type;
@@ -44,10 +47,11 @@ namespace KRPC.SpaceCenter.Services
         readonly ManeuverNode node;
         readonly uint partId;
         readonly ModuleDockingNode dockingPort;
+        readonly Thruster thruster;
 
         ReferenceFrame (
             Type type, global::CelestialBody body = null, global::Vessel vessel = null,
-            ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null)
+            ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null, Thruster thruster = null)
         {
             this.type = type;
             this.body = body;
@@ -56,6 +60,7 @@ namespace KRPC.SpaceCenter.Services
             //TODO: is it safe to use a part id of 0 to mean no part?
             this.partId = part != null ? part.flightID : 0;
             this.dockingPort = dockingPort;
+            this.thruster = thruster;
         }
 
         /// <summary>
@@ -63,7 +68,14 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (ReferenceFrame obj)
         {
-            return type == obj.type && body == obj.body && vesselId == obj.vesselId && node == obj.node && partId == obj.partId && dockingPort == obj.dockingPort;
+            return
+                type == obj.type &&
+            body == obj.body &&
+            vesselId == obj.vesselId &&
+            node == obj.node &&
+            partId == obj.partId &&
+            dockingPort == obj.dockingPort &&
+            thruster == obj.thruster;
         }
 
         /// <summary>
@@ -80,6 +92,8 @@ namespace KRPC.SpaceCenter.Services
             hash ^= partId.GetHashCode ();
             if (dockingPort != null)
                 hash ^= dockingPort.GetHashCode ();
+            if (thruster != null)
+                hash ^= thruster.GetHashCode ();
             return hash;
         }
 
@@ -157,9 +171,19 @@ namespace KRPC.SpaceCenter.Services
             return new ReferenceFrame (Type.Part, part: part);
         }
 
+        internal static ReferenceFrame ObjectCenterOfMass (Part part)
+        {
+            return new ReferenceFrame (Type.PartCenterOfMass, part: part);
+        }
+
         internal static ReferenceFrame Object (ModuleDockingNode dockingPort)
         {
             return new ReferenceFrame (Type.DockingPort, dockingPort: dockingPort);
+        }
+
+        internal static ReferenceFrame Thrust (Thruster thruster)
+        {
+            return new ReferenceFrame (Type.Thrust, part: thruster.Part.InternalPart, thruster: thruster);
         }
 
         /// <summary>
@@ -176,22 +200,26 @@ namespace KRPC.SpaceCenter.Services
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                 case Type.VesselSurfaceVelocity:
-                    return InternalVessel.GetWorldPos3D ();
+                    return InternalVessel.findWorldCenterOfMass ();
                 case Type.Maneuver:
                 case Type.ManeuverOrbital:
                     {
                         //TODO: is there a better way to do this?
                         // node.patch.getPositionAtUT (node.UT) appears to return a position vector
                         // in a different space to vessel.GetWorldPos3D()
-                        var vesselPos = FlightGlobals.ActiveVessel.GetWorldPos3D ();
+                        var vesselPos = FlightGlobals.ActiveVessel.findWorldCenterOfMass ();
                         var vesselOrbitPos = FlightGlobals.ActiveVessel.orbit.getPositionAtUT (Planetarium.GetUniversalTime ());
                         var nodeOrbitPos = node.patch.getPositionAtUT (node.UT);
                         return vesselPos - vesselOrbitPos + nodeOrbitPos;
                     }
                 case Type.Part:
                     return InternalPart.transform.position;
+                case Type.PartCenterOfMass:
+                    return InternalPart.CenterOfMass ();
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.position;
+                case Type.Thrust:
+                    return thruster.WorldTransform.position;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -237,7 +265,7 @@ namespace KRPC.SpaceCenter.Services
         static Vector3d ToNorthPole (global::Vessel vessel)
         {
             var parent = vessel.mainBody;
-            return parent.position + ((Vector3d)parent.transform.up) * parent.Radius - (vessel.GetWorldPos3D ());
+            return parent.position + ((Vector3d)parent.transform.up) * parent.Radius - (vessel.findWorldCenterOfMass ());
         }
 
         /// <summary>
@@ -269,7 +297,7 @@ namespace KRPC.SpaceCenter.Services
                     return InternalVessel.GetOrbit ().GetVel ();
                 case Type.VesselSurface:
                     {
-                        var right = InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position;
+                        var right = InternalVessel.findWorldCenterOfMass () - InternalVessel.mainBody.position;
                         return Vector3d.Exclude (right, ToNorthPole (InternalVessel).normalized);
                     }
                 case Type.VesselSurfaceVelocity:
@@ -279,9 +307,12 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                     return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
                 case Type.Part:
+                case Type.PartCenterOfMass:
                     return InternalPart.transform.up;
                 case Type.DockingPort:
                     return dockingPort.nodeTransform.forward;
+                case Type.Thrust:
+                    return thruster.WorldThrustDirection;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -312,14 +343,14 @@ namespace KRPC.SpaceCenter.Services
                     return InternalVessel.GetOrbit ().GetOrbitNormal ().SwapYZ ();
                 case Type.VesselSurface:
                     {
-                        var right = InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position;
+                        var right = InternalVessel.findWorldCenterOfMass () - InternalVessel.mainBody.position;
                         var northPole = ToNorthPole (InternalVessel).normalized;
                         return Vector3d.Cross (right, northPole);
                     }
                 case Type.VesselSurfaceVelocity:
                     {
                         // Compute orthogonal vector to vessels velocity, in the horizon plane
-                        var up = (InternalVessel.GetWorldPos3D () - InternalVessel.mainBody.position).normalized;
+                        var up = (InternalVessel.findWorldCenterOfMass () - InternalVessel.mainBody.position).normalized;
                         var velocity = InternalVessel.srf_velocity;
                         var proj = GeometryExtensions.ProjectVectorOntoPlane (up, velocity);
                         return Vector3d.Cross (up, proj);
@@ -338,9 +369,12 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                     return node.patch.GetOrbitNormal ().SwapYZ ();
                 case Type.Part:
+                case Type.PartCenterOfMass:
                     return InternalPart.transform.forward;
                 case Type.DockingPort:
                     return -dockingPort.nodeTransform.up;
+                case Type.Thrust:
+                    return thruster.WorldThrustPerpendicularDirection;
                 default:
                     throw new ArgumentException ("No such reference frame");
                 }
@@ -366,6 +400,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                     return Vector3d.zero; //TODO: check this
                 case Type.Part:
+                case Type.Thrust:
                     return InternalPart.vessel.GetOrbit ().GetVel ();
                 case Type.DockingPort:
                     return dockingPort.vessel.GetOrbit ().GetVel ();
@@ -398,6 +433,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.ManeuverOrbital:
                 case Type.Part:
                 case Type.DockingPort:
+                case Type.Thrust:
                     return Vector3d.zero; //TODO: check this
                 default:
                     throw new ArgumentException ("No such reference frame");

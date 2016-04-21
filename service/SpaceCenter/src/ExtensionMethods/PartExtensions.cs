@@ -45,6 +45,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Returns the position in world space of the center of mass of the part, or the parts transform position if it has no mass.
+        /// </summary>
+        public static Vector3d CenterOfMass (this Part part)
+        {
+            return part.rigidbody != null ? part.rigidbody.worldCenterOfMass : part.transform.position;
+        }
+
+        /// <summary>
         /// Returns the total mass of the part and any resources it contains, in kg.
         /// </summary>
         public static float TotalMass (this Part part)

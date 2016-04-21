@@ -204,14 +204,16 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The altitude above sea level, in meters.
+        /// Measured from the center of mass of the vessel.
         /// </summary>
         [KRPCProperty]
         public double MeanAltitude {
-            get { return InternalVessel.mainBody.GetAltitude (InternalVessel.CoM); }
+            get { return InternalVessel.mainBody.GetAltitude (WorldCoM); }
         }
 
         /// <summary>
         /// The altitude above the surface of the body or sea level, whichever is closer, in meters.
+        /// Measured from the center of mass of the vessel.
         /// </summary>
         [KRPCProperty]
         public double SurfaceAltitude {
@@ -220,6 +222,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The altitude above the surface of the body, in meters. When over water, this is the altitude above the sea floor.
+        /// Measured from the center of mass of the vessel.
         /// </summary>
         [KRPCProperty]
         public double BedrockAltitude {
@@ -537,7 +540,7 @@ namespace KRPC.SpaceCenter.Services
                 if (FAR.IsAvailable) {
                     return (float)FAR.VesselTermVelEst (InternalVessel);
                 } else {
-                    var gravity = Math.Sqrt (InternalVessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (InternalVessel.CoM).magnitude);
+                    var gravity = Math.Sqrt (InternalVessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (WorldCoM).magnitude);
                     return (float)(Math.Sqrt (gravity / WorldDrag.magnitude) * InternalVessel.speed);
                 }
             }

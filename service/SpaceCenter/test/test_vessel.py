@@ -7,10 +7,10 @@ class TestVessel(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Basic')
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 100000)
+        if testingtools.connect().space_center.active_vessel.name != 'Basic':
+            testingtools.new_save()
+            testingtools.remove_other_vessels()
+            testingtools.set_circular_orbit('Kerbin', 100000)
         cls.conn = testingtools.connect(name='TestVessel')
         cls.vtype = cls.conn.space_center.VesselType
         cls.vsituation = cls.conn.space_center.VesselSituation
@@ -56,6 +56,24 @@ class TestVessel(testingtools.TestCase):
     def test_dry_mass(self):
         # 2645 kg dry mass
         self.assertEqual(2645, self.vessel.dry_mass)
+
+    def test_moment_of_inertia(self):
+        self.assertClose((7696, 928, 7675), self.vessel.moment_of_inertia, error=1)
+
+    def test_inertia_tensor(self):
+        self.assertClose(
+            [7696, 0, 0,
+             0, 928, 0,
+             0, 0, 7675],
+            self.vessel.inertia_tensor, error=1)
+
+    def test_reaction_wheel_torque(self):
+        self.assertEqual((5000,5000,5000), self.vessel.reaction_wheel_torque)
+        for rw in self.vessel.parts.reaction_wheels:
+            rw.active = False
+        self.assertEqual((0,0,0), self.vessel.reaction_wheel_torque)
+        for rw in self.vessel.parts.reaction_wheels:
+            rw.active = True
 
 class TestVesselEngines(testingtools.TestCase):
 

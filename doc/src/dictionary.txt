@@ -14,8 +14,10 @@ enum
 erm
 focussed
 framerate
+fuelled
 gimbal
 gimballed
+gimballing
 hostname
 inkscape
 integration
@@ -39,12 +41,15 @@ namespace
 namespaces
 namespacing
 navball
+nozzel
+nozzels
 ns
 NUnit
 Olex
 online
 pdflatex
 periapsis
+physicsless
 plugin
 prebuilt
 prograde
