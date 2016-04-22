@@ -96,7 +96,6 @@
     <Compile Include="Server\IClientEventArgs.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IStream.cs" />
-    <Compile Include="Server\RPC\MalformedRequestException.cs" />
     <Compile Include="Server\RPC\NoRequestException.cs" />
     <Compile Include="Server\RPC\RequestBufferOverflowException.cs" />
     <Compile Include="Server\RPC\RPCClient.cs" />
