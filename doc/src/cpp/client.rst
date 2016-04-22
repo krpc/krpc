@@ -28,7 +28,7 @@ Alternatively it can be downloaded `via the ASIO website
 <http://think-async.com/Asio/Download>`_.
 
 Protobuf version 3 is also required, and can be `downloaded from GitHub
-<https://github.com/google/protobuf/releases/latest>`_. Installation
+<https://github.com/google/protobuf/releases>`_. Installation
 instructions `can be found here
 <https://github.com/google/protobuf/blob/master/src/README.md>`_.
 
@@ -122,6 +122,8 @@ constructor. The following example connects to the server, instantiates the
 SpaceCenter service and outputs the name of the active vessel:
 
 .. literalinclude:: /scripts/Interacting.cpp
+
+.. _cpp-client-streams:
 
 Streaming Data from the Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

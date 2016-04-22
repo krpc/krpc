@@ -4,14 +4,14 @@ set -e
 
 KSP=lib/ksp
 GAMEDATA=$KSP/GameData/kRPC
-VERSION=`tools/get-version.sh`
+VERSION=`tools/krpc-version.sh`
 
 bazel build \
     //:ksp-avc-version \
     //server \
     //service/SpaceCenter \
-    //service/KerbalAlarmClock \
     //service/InfernalRobotics \
+    //service/KerbalAlarmClock \
     //tools/TestingTools
 
 rm -rf $GAMEDATA

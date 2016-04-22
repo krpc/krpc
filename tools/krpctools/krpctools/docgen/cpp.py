@@ -1,7 +1,7 @@
 from .domain import Domain
 from .nodes import *
 from krpc.utils import snake_case
-from krpc.types import ValueType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
+from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CppDomain(Domain):
     name = 'cpp'
@@ -28,6 +28,8 @@ class CppDomain(Domain):
             return 'void'
         elif isinstance(typ, ValueType):
             return self.type_map.get(typ.protobuf_type, typ.protobuf_type)
+        elif isinstance(typ, MessageType):
+            return 'krpc::schema::%s' % typ.protobuf_type.split('.')[1]
         elif isinstance(typ, ClassType):
             return self.shorten_ref(typ.protobuf_type[6:-1]).replace('.', '::')
         elif isinstance(typ, EnumType):
@@ -48,6 +50,8 @@ class CppDomain(Domain):
             return 'void'
         elif isinstance(typ, ValueType):
             return typ.python_type.__name__
+        elif isinstance(typ, MessageType):
+            return ':class:`krpc::schema::%s`' % typ.protobuf_type.split('.')[1]
         elif isinstance(typ, ClassType):
             return ':class:`%s`' % self.type(typ)
         elif isinstance(typ, EnumType):

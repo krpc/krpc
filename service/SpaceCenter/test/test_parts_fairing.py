@@ -19,7 +19,6 @@ class TestPartsFairing(testingtools.TestCase):
         cls.conn.close()
 
     def test_jettison(self):
-        print [p.title for p in self.parts.all]
         fairing = next(iter(filter(lambda e: e.part.title == 'AE-FF1 Airstream Protective Shell (1.25m)', self.parts.fairings)))
         self.assertFalse(fairing.jettisoned)
         fairing.jettison()

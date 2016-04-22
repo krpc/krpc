@@ -21,7 +21,7 @@ class TestPartsLandingGear(testingtools.TestCase):
         cls.conn.close()
 
     def test_deploy_and_retract(self):
-        gear = next(iter(filter(lambda e: e.part.title == 'LY-99 Large Landing Gear', self.parts.landing_gear)))
+        gear = next(iter(filter(lambda e: e.part.title == 'LY-99 Extra Large Landing Gear', self.parts.landing_gear)))
         self.assertTrue(gear.deployable)
         self.assertEqual(self.state.deployed, gear.state)
         self.assertTrue(gear.deployed)

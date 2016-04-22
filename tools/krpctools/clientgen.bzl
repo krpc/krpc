@@ -24,15 +24,6 @@ clientgen = rule(
     output_to_genfiles = True
 )
 
-def clientgen_cpp(name, service, defs, out):
-    clientgen(
-        name = name,
-        service = service,
-        defs = defs,
-        out = out,
-        language = 'cpp'
-    )
-
 def clientgen_csharp(name, service, defs, out):
     clientgen(
         name = name,
@@ -40,6 +31,15 @@ def clientgen_csharp(name, service, defs, out):
         defs = defs,
         out = out,
         language = 'csharp'
+    )
+
+def clientgen_cpp(name, service, defs, out):
+    clientgen(
+        name = name,
+        service = service,
+        defs = defs,
+        out = out,
+        language = 'cpp'
     )
 
 def clientgen_java(name, service, defs, out):

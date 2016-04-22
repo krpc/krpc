@@ -36,9 +36,7 @@ namespace TestingTools
             var game = GamePersistence.LoadGame (name, HighLogic.SaveFolder, true, false);
             if (game == null || game.flightState == null || !game.compatible)
                 throw new ArgumentException ("Failed to load save '" + name + "'");
-            if (game.flightState.protoVessels.Count == 0)
-                throw new ArgumentException ("Failed to load vessel id 0 from save '" + name + "'");
-            FlightDriver.StartAndFocusVessel (game, 0);
+            FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
             throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
         }
 
@@ -81,8 +79,9 @@ namespace TestingTools
         static Quaternion ZeroRotation {
             get {
                 var vessel = FlightGlobals.ActiveVessel;
-                var right = vessel.GetWorldPos3D () - vessel.mainBody.position;
-                var northPole = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - (vessel.GetWorldPos3D ());
+                var vesselCoM = vessel.findWorldCenterOfMass ();
+                var right = vesselCoM - vessel.mainBody.position;
+                var northPole = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - vesselCoM;
                 northPole.Normalize ();
                 var up = Vector3.Exclude (right, northPole);
                 var forward = Vector3.Cross (right, northPole);
@@ -100,7 +99,6 @@ namespace TestingTools
         public static void ClearRotation (KRPC.SpaceCenter.Services.Vessel vessel = null)
         {
             Vessel internalVessel = vessel == null ? FlightGlobals.ActiveVessel : vessel.InternalVessel;
-            internalVessel.GoOnRails ();
             internalVessel.SetRotation (ZeroRotation);
         }
 

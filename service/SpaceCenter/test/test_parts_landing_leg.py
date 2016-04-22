@@ -40,5 +40,5 @@ class TestPartsLandingLeg(testingtools.TestCase):
         self.assertEqual(self.state.retracted, self.leg.state)
         self.assertFalse(self.leg.deployed)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

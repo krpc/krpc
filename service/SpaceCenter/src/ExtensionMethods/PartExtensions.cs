@@ -25,9 +25,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static bool IsPhysicallySignificant (this Part part)
         {
-            return (!part.HasModule<ModuleLandingGear> ()) &&
-            (!part.HasModule<LaunchClamp> ()) &&
-            (part.physicalSignificance != Part.PhysicalSignificance.NONE);
+            return !part.HasModule<LaunchClamp> () && part.physicalSignificance != Part.PhysicalSignificance.NONE;
         }
 
         /// <summary>
@@ -42,6 +40,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 part = part.parent;
             } while (part != null);
             return -1;
+        }
+
+        /// <summary>
+        /// Returns the position in world space of the center of mass of the part, or the parts transform position if it has no mass.
+        /// </summary>
+        public static Vector3d CenterOfMass (this Part part)
+        {
+            return part.rb != null ? part.rb.worldCenterOfMass : part.transform.position;
         }
 
         /// <summary>

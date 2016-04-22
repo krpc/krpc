@@ -1,15 +1,15 @@
 ship = PartsDockingPortPreAttachedTo
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
-size = 1.268897,9.01206,5.356771
+size = 1.268897,7.118069,5.356771
 PART
 {
 	part = mk1pod_4294591264
 	partName = Part
-	pos = -0.1378931,5.642439,0.5067878
+	pos = -0.1922534,4.046319,0.572296
 	attPos = 0,0,0
-	attPos0 = -0.1378931,5.642439,0.5067878
+	attPos0 = -0.1922534,4.046319,0.572296
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -90,9 +90,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -143,6 +149,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -236,7 +243,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -468,7 +475,7 @@ PART
 {
 	part = dockingPort2_4294575426
 	partName = Part
-	pos = -0.1378931,5.237401,0.5067878
+	pos = -0.1922534,3.641282,0.572296
 	attPos = 0,0,0
 	attPos0 = 0,-0.4050388,0
 	rot = -1,0,0,0
@@ -649,7 +656,7 @@ PART
 {
 	part = dockingPort2_4294574992
 	partName = Part
-	pos = -0.1378931,4.671629,0.5067878
+	pos = -0.1922534,3.07551,0.572296
 	attPos = 0,0,0
 	attPos0 = 0,0.5657654,0
 	rot = 0,0,0,1
@@ -830,7 +837,7 @@ PART
 {
 	part = fuelTankSmallFlat_4294579702
 	partName = Part
-	pos = -0.1378931,4.359129,0.5067878
+	pos = -0.1922534,2.76301,0.572296
 	attPos = 0,0,0
 	attPos0 = 0,-0.3125,0
 	rot = 0,0,0,1
@@ -886,7 +893,7 @@ PART
 {
 	part = dockingPort2_4294574270
 	partName = Part
-	pos = -0.1378931,3.763751,0.5067878
+	pos = -0.1922534,2.167632,0.572296
 	attPos = 0,0,0
 	attPos0 = 0,-0.5953827,0
 	rot = 0,0,0,1
@@ -1067,7 +1074,7 @@ PART
 {
 	part = fuelTankSmallFlat_4294579994
 	partName = Part
-	pos = -0.1378931,3.451251,0.5067878
+	pos = -0.1922534,1.855132,0.572296
 	attPos = 0,0,0
 	attPos0 = 0,-0.3125,0
 	rot = 0,0,0,1
@@ -1123,7 +1130,7 @@ PART
 {
 	part = dockingPort2_4294573786
 	partName = Part
-	pos = -0.1378931,3.138751,0.5067878
+	pos = -0.1922534,1.542632,0.572296
 	attPos = 0,0,0
 	attPos0 = 0,-0.3125,0
 	rot = -1,0,0,0
@@ -1304,7 +1311,7 @@ PART
 {
 	part = fuelTankSmallFlat_4294570504
 	partName = Part
-	pos = -0.1378931,2.54337,0.5067878
+	pos = -0.1922534,0.9472506,0.572296
 	attPos = 0,0,0
 	attPos0 = 0,0.5953827,0
 	rot = 0,0,0,1
@@ -1358,7 +1365,7 @@ PART
 {
 	part = launchClamp1_4294564370
 	partName = Part
-	pos = -0.1378942,4.841259,-1.167426
+	pos = -0.1922545,3.24514,-1.101918
 	attPos = 0,0,0
 	attPos0 = -1.013279E-06,-0.8011761,-1.674214
 	rot = -0.1820218,-3.885669E-07,7.192924E-08,-0.9832945
@@ -1390,8 +1397,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 2.282065
-		height = 5.758099
+		scaleFactor = 1.649487
+		height = 4.16198
 		stagingEnabled = True
 		towerRot = 0.1820218,3.885669E-07,-7.192924E-08,-0.9832945
 		EVENTS
@@ -1532,7 +1539,7 @@ PART
 {
 	part = launchClamp1_4294569760
 	partName = Part
-	pos = -0.137892,4.841259,2.181002
+	pos = -0.1922523,3.24514,2.24651
 	attPos = 0,0,0
 	attPos0 = 1.162291E-06,-0.8011761,1.674214
 	rot = 7.988566E-08,-0.9832945,0.1820218,4.31548E-07
@@ -1542,7 +1549,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 1
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -1564,8 +1571,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 2.282065
-		height = 5.758099
+		scaleFactor = 1.649487
+		height = 4.16198
 		stagingEnabled = True
 		towerRot = -7.988566E-08,0.9832945,-0.1820218,4.31548E-07
 		EVENTS

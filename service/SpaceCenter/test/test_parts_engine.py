@@ -238,22 +238,11 @@ class TestPartsEngine(testingtools.TestCase, EngineTestBase):
 
     def test_has_no_fuel(self):
         engine = self.get_engine('LV-909 "Terrier" Liquid Fuel Engine')
-
-        #FIXME: have to run engine to update has fuel status
-        engine.active = True
-        self.vessel.control.throttle = 0.1
-        time.sleep(0.5)
-        engine.active = False
-        self.vessel.control.throttle = 0
-        time.sleep(0.5)
-
-        self.assertFalse(engine.has_fuel)
+        #FIXME: have to activate engine for this to work
         engine.active = True
         time.sleep(0.1)
         self.assertFalse(engine.has_fuel)
         engine.active = False
-        time.sleep(0.1)
-        self.assertFalse(engine.has_fuel)
 
     def test_thrust_limit(self):
         engine = self.get_engine('LV-T30 "Reliant" Liquid Fuel Engine')

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
@@ -81,7 +82,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The port name of the docking port. This is the name of the port that can be set
         /// in the right click menu, when the
-        /// <a href="http://forum.kerbalspaceprogram.com/threads/43901">Docking Port Alignment Indicator</a>
+        /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/40423-11-docking-port-alignment-indicator-version-621-beta-updated-04122016/">Docking Port Alignment Indicator</a>
         /// mod is installed. If this mod is not installed, returns the title of the part
         /// (<see cref="Part.Title"/>).
         /// </summary>
@@ -137,44 +138,42 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Undocks the docking port and returns the vessel that was undocked from.
-        ///
-        /// After undocking, the active vessel may change (<see cref="SpaceCenter.ActiveVessel"/>).
-        /// This method can be called for either docking port in a docked pair - both calls will have the same
-        /// effect. Returns <c>null</c> if the docking port is not docked to anything.
+        /// Undocks the docking port and returns the new <see cref="Vessel" /> that is created.
+        /// This method can be called for either docking port in a docked pair.
+        /// Throws an exception if the docking port is not docked to anything.
         /// </summary>
+        /// <remarks>
+        /// After undocking, the active vessel may change. See <see cref="SpaceCenter.ActiveVessel"/>.
+        /// </remarks>
         [KRPCMethod]
         public Vessel Undock ()
         {
-            // Don't do anything if we're not docked
+            // Error if we're not docked
             if (State != DockingPortState.Docked)
-                return null;
+                throw new InvalidOperationException ("The docking port is not docked");
 
             var dockedPart = GetDockedPart;
             var dockedPort = dockedPart != null ? dockedPart.Module<ModuleDockingNode> () : null;
-            var preActiveVessel = FlightGlobals.ActiveVessel;
-            var preVessels = FlightGlobals.Vessels.ToArray ();
+            var preVesselIds = FlightGlobals.Vessels.Select (v => v.id).ToList ();
 
             // Try calling "Decouple Node" or "Undock" on this part and on the port we are docked to, if any
             if (InvokeEvent (port, "Decouple Node") || InvokeEvent (port, "Undock") ||
                 (dockedPort != null && (InvokeEvent (dockedPort, "Decouple Node") || InvokeEvent (dockedPort, "Undock")))) {
-                return PostUndock (preActiveVessel, preVessels);
+                return PostUndock (preVesselIds);
             }
 
             // Failed to undock
             throw new InvalidOperationException ("Failed to undock, a suitable event to trigger was not found");
         }
 
-        Vessel PostUndock (global::Vessel preActiveVessel, global::Vessel[] preVessels, int wait = 0)
+        Vessel PostUndock (IList<Guid> preVesselIds, int wait = 0)
         {
             //FIXME: sometimes after undocking, KSP changes it's mind as to what the active vessel is, so we wait for 10 frames before getting the active vessel
             // Wait while the port is docked
             if (wait < 10 || State == DockingPortState.Docked)
-                throw new YieldException (new ParameterizedContinuation<Vessel, global::Vessel, global::Vessel[], int> (PostUndock, preActiveVessel, preVessels, wait + 1));
-            // Return the vessel that was undocked from
-            var activeVessel = FlightGlobals.ActiveVessel;
-            var newVessel = FlightGlobals.Vessels.Except (preVessels).Select (vessel => new Vessel (vessel)).Single ();
-            return activeVessel == preActiveVessel ? newVessel : new Vessel (preActiveVessel);
+                throw new YieldException (new ParameterizedContinuation<Vessel, IList<Guid>, int> (PostUndock, preVesselIds, wait + 1));
+            // Return the newly created vessel
+            return new Vessel (FlightGlobals.Vessels.Select (v => v.id).Except (preVesselIds).Single ());
         }
 
         /// <summary>
@@ -310,7 +309,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 return DockingPortState.Ready;
             else if (state.StartsWith ("Docked") || state == "PreAttached")
                 return DockingPortState.Docked;
-            else if (state == "Acquire")
+            else if (state.Contains ("Acquire"))
                 return DockingPortState.Docking;
             else if (state == "Disengage")
                 return DockingPortState.Undocking;

@@ -5,6 +5,7 @@ using KRPC.Continuations;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KSP.UI.Screens;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -86,7 +87,7 @@ namespace KRPC.SpaceCenter.Services
             // Update the UI buttons
             var modeIndex = (int)vessel.Autopilot.Mode;
             var modeButtons = UnityEngine.Object.FindObjectOfType<VesselAutopilotUI> ().modeButtons;
-            modeButtons.ElementAt<RUIToggleButton> (modeIndex).SetTrue (true, true);
+            modeButtons [modeIndex].SetState (true);
         }
 
         /// <summary>
@@ -96,15 +97,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public SpeedMode SpeedMode {
             get { return GetSpeedMode (); }
-            set {
-                var startMode = FlightUIController.speedDisplayMode;
-                var mode = value.FromSpeedMode ();
-                while (FlightUIController.speedDisplayMode != mode) {
-                    FlightUIController.fetch.cycleSpdModes ();
-                    if (FlightUIController.speedDisplayMode == startMode)
-                        break;
-                }
-            }
+            set { throw new NotImplementedException (); }
         }
 
         internal static SpeedMode GetSpeedMode ()
@@ -273,16 +266,16 @@ namespace KRPC.SpaceCenter.Services
         {
             if (vesselId != FlightGlobals.ActiveVessel.id)
                 throw new InvalidOperationException ("Cannot activate stage; vessel is not the active vessel");
-            if (!Staging.separate_ready)
+            if (!StageManager.CanSeparate)
                 throw new YieldException (new ParameterizedContinuation<IList<Vessel>> (ActivateNextStage));
             var preVessels = FlightGlobals.Vessels.ToArray ();
-            Staging.ActivateNextStage ();
+            StageManager.ActivateNextStage ();
             return PostActivateStage (preVessels);
         }
 
         IList<Vessel> PostActivateStage (global::Vessel[] preVessels)
         {
-            if (!Staging.separate_ready)
+            if (!StageManager.CanSeparate)
                 throw new YieldException (new ParameterizedContinuation<IList<Vessel>, global::Vessel[]> (PostActivateStage, preVessels));
             var postVessels = FlightGlobals.Vessels;
             return postVessels.Except (preVessels).Select (vessel => new Vessel (vessel)).ToList ();

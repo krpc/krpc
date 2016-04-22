@@ -185,6 +185,14 @@ class TestControlNonActiveVessel(testingtools.TestCase, TestControlMixin):
         cls.auto_pilot = cls.vessel.auto_pilot
         cls.orbital_flight = cls.vessel.flight(cls.vessel.orbital_reference_frame)
 
+        # Move the vessels apart
+        cls.control.rcs = True
+        cls.control.forward = -1
+        time.sleep(1)
+        cls.control.rcs = False
+        cls.control.forward = 0
+        time.sleep(1)
+
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
@@ -234,7 +242,7 @@ class TestControlRover(testingtools.TestCase):
         self.control = self.conn.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertClose(0, self.flight.horizontal_speed)
+        self.assertClose(0, self.flight.horizontal_speed, error=0.01)
 
         # Forward throttle for 1 second
         self.control.wheel_steer = 0
@@ -252,16 +260,16 @@ class TestControlRover(testingtools.TestCase):
         # Apply brakes
         self.control.wheel_throttle = 0
         self.control.brakes = True
-        time.sleep(5)
 
-        # Check the rover is stopped
-        self.assertClose(self.flight.horizontal_speed, 0)
+        # Wait until the rover has stopped
+        while self.flight.horizontal_speed > 0.01:
+            time.sleep(0.1)
 
     def test_move_backward(self):
         self.control = self.conn.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertClose(0, self.flight.horizontal_speed)
+        self.assertClose(0, self.flight.horizontal_speed, error=0.01)
 
         # Reverse throttle for 1 second
         self.control.wheel_steer = 0
@@ -279,19 +287,19 @@ class TestControlRover(testingtools.TestCase):
         # Apply brakes
         self.control.wheel_throttle = 0
         self.control.brakes = True
-        time.sleep(5)
 
-        # Check the rover is stopped
-        self.assertClose(self.flight.horizontal_speed, 0)
+        # Wait until the rover has stopped
+        while self.flight.horizontal_speed > 0.01:
+            time.sleep(0.1)
 
     def test_steer_left(self):
         self.control = self.conn.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertClose(0, self.flight.horizontal_speed)
+        self.assertClose(0, self.flight.horizontal_speed, error=0.01)
 
         # Forward throttle and steering
-        self.control.wheel_steering = 1
+        self.control.wheel_steering = -1
         self.control.wheel_throttle = 0.5
         self.control.brakes = False
         time.sleep(1)
@@ -300,7 +308,7 @@ class TestControlRover(testingtools.TestCase):
         self.assertGreater(self.flight.horizontal_speed, 0)
         prev_roll = self.flight.roll
         time.sleep(0.25)
-        for i in range(5):
+        for i in range(3):
             roll = self.flight.roll
             self.assertGreater(roll, prev_roll)
             prev_roll = roll
@@ -310,28 +318,28 @@ class TestControlRover(testingtools.TestCase):
         self.control.wheel_steering = 0
         self.control.wheel_throttle = 0
         self.control.brakes = True
-        time.sleep(5)
 
-        # Check the rover is stopped
-        self.assertClose(self.flight.horizontal_speed, 0)
+        # Wait until the rover has stopped
+        while self.flight.horizontal_speed > 0.01:
+            time.sleep(0.1)
 
     def test_steer_right(self):
         self.control = self.conn.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertClose(0, self.flight.horizontal_speed)
+        self.assertClose(0, self.flight.horizontal_speed, error=0.01)
 
         # Forward throttle and steering
-        self.control.wheel_steering = -1
+        self.control.wheel_steering = 1
         self.control.wheel_throttle = 0.5
         self.control.brakes = False
-        time.sleep(1)
+        time.sleep(0.5)
 
         # Check the rover is moving in a clockwise circle
         self.assertGreater(self.flight.horizontal_speed, 0)
         prev_roll = self.flight.roll
         time.sleep(0.25)
-        for i in range(5):
+        for i in range(3):
             roll = self.flight.roll
             self.assertLess(roll, prev_roll)
             prev_roll = roll
@@ -341,10 +349,10 @@ class TestControlRover(testingtools.TestCase):
         self.control.wheel_steering = 0
         self.control.wheel_throttle = 0
         self.control.brakes = True
-        time.sleep(5)
 
-        # Check the rover is stopped
-        self.assertClose(self.flight.horizontal_speed, 0)
+        # Wait until the rover has stopped
+        while self.flight.horizontal_speed > 0.01:
+            time.sleep(0.1)
 
 if __name__ == "__main__":
     unittest.main()

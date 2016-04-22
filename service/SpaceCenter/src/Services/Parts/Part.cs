@@ -1,12 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using CompoundParts;
+using UnityEngine;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
-using System;
-using CompoundParts;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -156,6 +157,22 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public double DryMass {
             get { return Massless ? 0f : InternalPart.mass * 1000f; }
+        }
+
+        /// <summary>
+        /// Whether the part is shielded from the exterior of the vessel, for example by a fairing.
+        /// </summary>
+        [KRPCProperty]
+        public bool Shielded {
+            get { return InternalPart.ShieldedFromAirstream; }
+        }
+
+        /// <summary>
+        /// The dynamic pressure acting on the part, in Pascals.
+        /// </summary>
+        [KRPCProperty]
+        public float DynamicPressure {
+            get { return (float)InternalPart.dynamicPressurekPa * 1000f; }
         }
 
         /// <summary>
@@ -351,6 +368,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A <see cref="ControlSurface"/> if the part is an aerodynamic control surface, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public ControlSurface ControlSurface {
+            get { return ControlSurface.Is (this) ? new ControlSurface (this) : null; }
+        }
+
+        /// <summary>
         /// A <see cref="Decoupler"/> if the part is a decoupler, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty]
@@ -385,13 +410,18 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// An <see cref="Intake"/> if the part is an intake, otherwise <c>null</c>.
         /// </summary>
+        /// <remarks>
+        /// This includes any part that generates thrust. This covers many different types of engine,
+        /// including liquid fuel rockets, solid rocket boosters and jet engines.
+        /// For RCS thrusters see <see cref="RCS"/>.
+        /// </remarks>
         [KRPCProperty]
         public Intake Intake {
             get { return Intake.Is (this) ? new Intake (this) : null; }
         }
 
         /// <summary>
-        /// A <see cref="LandingGear"/> if the part is a landing gear , otherwise <c>null</c>.
+        /// A <see cref="LandingGear"/> if the part is a landing gear, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty]
         public LandingGear LandingGear {
@@ -439,6 +469,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A <see cref="RCS"/> if the part is an RCS block/thruster, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public RCS RCS {
+            get { return RCS.Is (this) ? new RCS (this) : null; }
+        }
+
+        /// <summary>
         /// A <see cref="ReactionWheel"/> if the part is a reaction wheel, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty]
@@ -481,11 +519,27 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The position of the part in the given reference frame.
         /// </summary>
+        /// <remarks>
+        /// This is a fixed position in the part, defined by the parts model.
+        /// It s not necessarily the same as the parts center of mass.
+        /// Use <see cref="CenterOfMass"/> to get the parts center of mass.
+        /// </remarks>
         /// <param name="referenceFrame"></param>
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace (InternalPart.transform.position).ToTuple ();
+        }
+
+        /// <summary>
+        /// The position of the parts center of mass in the given reference frame.
+        /// If the part is physicsless, this is equivalent to <see cref="Position"/>.
+        /// </summary>
+        /// <param name="referenceFrame"></param>
+        [KRPCMethod]
+        public Tuple3 CenterOfMass (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.PositionFromWorldSpace (InternalPart.CenterOfMass ()).ToTuple ();
         }
 
         /// <summary>
@@ -519,9 +573,51 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The reference frame that is fixed relative to this part.
+        /// The moment of inertia of the part in <math>kg.m^2</math> around its center of mass
+        /// in the parts reference frame (<see cref="ReferenceFrame"/>).
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 MomentOfInertia
+        {
+            get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
+        }
+
+        /// <summary>
+        /// The inertia tensor of the part in the parts reference frame (<see cref="ReferenceFrame"/>).
+        /// Returns the 3x3 matrix as a list of elements, in row-major order.
+        /// </summary>
+        [KRPCProperty]
+        public IList<double> InertiaTensor
+        {
+            get { return ComputeInertiaTensor ().ToList (); }
+        }
+
+        /// <summary>
+        /// Computes the inertia tensor of the part in the parts reference frame.
+        /// </summary>
+        Matrix4x4 ComputeInertiaTensor ()
+        {
+            var part = InternalPart;
+            if (part.rb == null)
+                return Matrix4x4.zero;
+
+            Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
+
+            // translate: inertiaTensor frame to part frame
+            Quaternion rot = part.rb.inertiaTensorRotation;
+            Quaternion inv = Quaternion.Inverse(rot);
+
+            Matrix4x4 rotMatrix = Matrix4x4.TRS(Vector3.zero, rot, Vector3.one);
+            Matrix4x4 invMatrix = Matrix4x4.TRS(Vector3.zero, inv, Vector3.one);
+
+            var inertiaTensor = rotMatrix * partTensor * invMatrix;
+            return inertiaTensor.MultiplyScalar (1000f);
+        }
+
+        /// <summary>
+        /// The reference frame that is fixed relative to this part, and centered on a fixed position within the part, defined by the parts model.
         /// <list type="bullet">
-        /// <item><description>The origin is at the position of the part.</description></item>
+        /// <item><description>The origin is at the position of the part, as returned by <see cref="Position"/>.</description></item>
         /// <item><description>The axes rotate with the part.</description></item>
         /// <item><description>The x, y and z axis directions depend on the design of the part.</description></item>
         /// </list>
@@ -533,6 +629,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
             get { return ReferenceFrame.Object (InternalPart); }
+        }
+
+        /// <summary>
+        /// The reference frame that is fixed relative to this part, and centered on its center of mass.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the center of mass of the part, as returned by <see cref="CenterOfMass"/>.</description></item>
+        /// <item><description>The axes rotate with the part.</description></item>
+        /// <item><description>The x, y and z axis directions depend on the design of the part.</description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// For docking port parts, this reference frame is not necessarily equivalent to the reference frame
+        /// for the docking port, returned by <see cref="DockingPort.ReferenceFrame"/>.
+        /// </remarks>
+        [KRPCProperty]
+        public ReferenceFrame CenterOfMassReferenceFrame {
+            get { return ReferenceFrame.ObjectCenterOfMass (InternalPart); }
         }
     }
 }

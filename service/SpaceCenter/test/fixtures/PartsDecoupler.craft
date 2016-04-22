@@ -1,15 +1,15 @@
 ship = PartsDecoupler
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
-size = 3.128053,13.0835,5.893483
+size = 3.12746,7.13848,5.893483
 PART
 {
 	part = mk1pod_4294591094
 	partName = Part
-	pos = 4.015118E-05,10.5226,-0.000126794
+	pos = -0.3090248,4.577583,0.5354807
 	attPos = 0,0,0
-	attPos0 = 4.015118E-05,10.5226,-0.000126794
+	attPos0 = -0.3090248,4.577583,0.5354807
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -88,9 +88,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -141,6 +147,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -234,7 +241,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -466,7 +473,7 @@ PART
 {
 	part = fuelTank_4294366504
 	partName = Part
-	pos = 4.015118E-05,9.151872,-0.000126794
+	pos = -0.3090248,3.206854,0.5354807
 	attPos = 0,0,0
 	attPos0 = 0,-1.370728,0
 	rot = 0,0,0,1
@@ -525,7 +532,7 @@ PART
 {
 	part = radialDecoupler2_4294369258
 	partName = Part
-	pos = -0.5902937,9.242452,-0.0001267621
+	pos = -0.8993585,3.297434,0.5354807
 	attPos = 0,0,0
 	attPos0 = -0.5903339,0.09057808,3.191716E-08
 	rot = -7.486785E-23,8.42937E-08,-1.776357E-15,1
@@ -535,7 +542,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 1
-	sidx = 0
+	sidx = 1
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -692,63 +699,9 @@ PART
 }
 PART
 {
-	part = fuelTank_4294365752
-	partName = Part
-	pos = -1.834064,9.283372,-0.00012641
-	attPos = 0,0,0
-	attPos0 = -1.24377,0.04091454,1.423849E-07
-	rot = -1.507289E-14,1.685874E-07,-1.192093E-07,1
-	attRot = 0,0,0,1
-	attRot0 = -5.024299E-15,8.42937E-08,-1.192093E-07,1
-	mir = 1,1,1
-	symMethod = Radial
-	istg = 2
-	dstg = 2
-	sidx = -1
-	sqor = -1
-	sepI = 0
-	attm = 1
-	modCost = 0
-	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
-	srfN = srfAttach,radialDecoupler2_4294369258
-	EVENTS
-	{
-	}
-	ACTIONS
-	{
-	}
-	PARTDATA
-	{
-	}
-	RESOURCE
-	{
-		name = LiquidFuel
-		amount = 180
-		maxAmount = 180
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
-	RESOURCE
-	{
-		name = Oxidizer
-		amount = 220
-		maxAmount = 220
-		flowState = True
-		isTweakable = True
-		hideFlow = False
-		isVisible = True
-		flowMode = Both
-	}
-}
-PART
-{
 	part = stackDecoupler_4294361384
 	partName = Part
-	pos = 4.015118E-05,8.174322,-0.000126794
+	pos = -0.3090248,2.229305,0.5354807
 	attPos = 0,0,0
 	attPos0 = 0,-0.9775524,0
 	rot = 0,0,0,1
@@ -758,7 +711,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 1
-	sidx = 1
+	sidx = 2
 	sqor = 0
 	sepI = 0
 	attm = 0
@@ -918,7 +871,7 @@ PART
 {
 	part = fuelTank_4294358142
 	partName = Part
-	pos = 4.015118E-05,7.075642,-0.000126794
+	pos = -0.3090248,1.130625,0.5354807
 	attPos = 0,0,0
 	attPos0 = 0,-1.098684,0
 	rot = 0,0,0,1
@@ -972,7 +925,7 @@ PART
 {
 	part = launchClamp1_4294350112
 	partName = Part
-	pos = 3.970002E-05,7.951422,-1.428172
+	pos = -0.3090251,2.006405,-0.8925646
 	attPos = 0,0,0
 	attPos0 = -4.511597E-07,-1.200456,-1.428045
 	rot = 2.980232E-08,-3.132037E-07,-9.334196E-15,-1
@@ -982,7 +935,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 2
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -1004,8 +957,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 3.412961
-		height = 8.611573
+		scaleFactor = 1.056816
+		height = 2.666556
 		stagingEnabled = True
 		towerRot = -2.980232E-08,3.132037E-07,9.334196E-15,-1
 		EVENTS
@@ -1146,7 +1099,7 @@ PART
 {
 	part = launchClamp1_4294349942
 	partName = Part
-	pos = 4.072718E-05,7.951422,1.427918
+	pos = -0.3090242,2.006405,1.963526
 	attPos = 0,0,0
 	attPos0 = 5.760033E-07,-1.200456,1.428045
 	rot = -1.06369E-14,-1,-2.980232E-08,3.569151E-07
@@ -1156,7 +1109,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 3
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -1178,8 +1131,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 3.412961
-		height = 8.611573
+		scaleFactor = 1.056816
+		height = 2.666556
 		stagingEnabled = True
 		towerRot = 1.06369E-14,1,2.980232E-08,3.569151E-07
 		EVENTS
@@ -1314,5 +1267,116 @@ PART
 		ACTIONS
 		{
 		}
+	}
+}
+PART
+{
+	part = fuelTank_4294365752
+	partName = Part
+	pos = -2.142536,3.183953,0.535481
+	attPos = 0,0,0
+	attPos0 = -1.243178,-0.1134808,1.480437E-07
+	rot = 1.004859E-14,1.685874E-07,8.940697E-08,1
+	attRot = 0,0,0,1
+	attRot0 = 2.512148E-15,8.42937E-08,8.940697E-08,1
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 2
+	dstg = 2
+	sidx = -1
+	sqor = -1
+	sepI = 0
+	attm = 1
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	link = fuelTank_4294542216
+	srfN = srfAttach,radialDecoupler2_4294369258
+	attN = bottom,fuelTank_4294542216
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	RESOURCE
+	{
+		name = LiquidFuel
+		amount = 180
+		maxAmount = 180
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
+	}
+	RESOURCE
+	{
+		name = Oxidizer
+		amount = 220
+		maxAmount = 220
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
+	}
+}
+PART
+{
+	part = fuelTank_4294542216
+	partName = Part
+	pos = -2.142536,1.305763,0.535481
+	attPos = 0,0,0
+	attPos0 = 2.093769E-07,-1.87819,3.434188E-09
+	rot = 6.029156E-14,-6.024338E-29,2.086163E-07,1
+	attRot = 0,0,0,1
+	attRot0 = 1.507289E-14,-1.685874E-07,1.192093E-07,1
+	mir = 1,1,1
+	symMethod = Radial
+	istg = 2
+	dstg = 2
+	sidx = -1
+	sqor = -1
+	sepI = 0
+	attm = 0
+	modCost = 0
+	modMass = 0
+	modSize = (0.0, 0.0, 0.0)
+	srfN = srfAttach,radialDecoupler2_4294369258
+	attN = top,fuelTank_4294365752
+	EVENTS
+	{
+	}
+	ACTIONS
+	{
+	}
+	PARTDATA
+	{
+	}
+	RESOURCE
+	{
+		name = LiquidFuel
+		amount = 180
+		maxAmount = 180
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
+	}
+	RESOURCE
+	{
+		name = Oxidizer
+		amount = 220
+		maxAmount = 220
+		flowState = True
+		isTweakable = True
+		hideFlow = False
+		isVisible = True
+		flowMode = Both
 	}
 }

@@ -35,6 +35,7 @@ class TestParts(testingtools.TestCase):
              'Clamp-O-Tron Docking Port Jr.',
              'Communotron 16',
              'Convert-O-Tron 250',
+             'Delta-Deluxe Winglet',
              'EAS-4 Strut Connector',
              'EAS-4 Strut Connector',
              'EAS-4 Strut Connector',
@@ -59,7 +60,8 @@ class TestParts(testingtools.TestCase):
              'PresMat Barometer',
              'RE-I5 "Skipper" Liquid Fuel Engine',
              'RE-L10 "Poodle" Liquid Fuel Engine',
-             'RE-M3 "Mainsail" Liquid Engine',
+             'RE-M3 "Mainsail" Liquid Fuel Engine',
+             'RV-105 RCS Thruster Block',
              'Rockomax Jumbo-64 Fuel Tank',
              'Rockomax X200-32 Fuel Tank',
              'Rockomax X200-8 Fuel Tank',
@@ -168,6 +170,7 @@ class TestParts(testingtools.TestCase):
              'Aerodynamic Nose Cone',
              'Communotron 16',
              'Convert-O-Tron 250',
+             'Delta-Deluxe Winglet',
              'EAS-4 Strut Connector',
              'EAS-4 Strut Connector',
              'EAS-4 Strut Connector',
@@ -187,6 +190,7 @@ class TestParts(testingtools.TestCase):
              u'Mystery Goo\u2122 Containment Unit',
              'OX-STAT Photovoltaic Panels',
              'PresMat Barometer',
+             'RV-105 RCS Thruster Block',
              'Rockomax Jumbo-64 Fuel Tank',
              'Rockomax X200-32 Fuel Tank',
              'Rockomax X200-8 Fuel Tank',
@@ -221,7 +225,7 @@ class TestParts(testingtools.TestCase):
             ['TT-70 Radial Decoupler']*3,
             part_titles_in_stage(5))
         self.assertEqual(
-            ['RE-M3 "Mainsail" Liquid Engine'] + \
+            ['RE-M3 "Mainsail" Liquid Fuel Engine'] + \
             ['S1 SRB-KD25k "Kickback" Solid Fuel Booster']*3 + \
             ['TT18-A Launch Stability Enhancer']*6,
             part_titles_in_stage(6))
@@ -238,7 +242,7 @@ class TestParts(testingtools.TestCase):
             part_titles_in_decouple_stage(-1))
         self.assertEqual([], part_titles_in_decouple_stage(0))
         self.assertEqual(
-            ['RE-M3 "Mainsail" Liquid Engine',
+            ['RE-M3 "Mainsail" Liquid Fuel Engine',
              'Rockomax Jumbo-64 Fuel Tank',
              'TR-XL Stack Separator'],
             part_titles_in_decouple_stage(4))
@@ -261,6 +265,9 @@ class TestParts(testingtools.TestCase):
 
     def test_cargo_bays(self):
         self.assertEqual(['Service Bay (2.5m)'], sorted(x.part.title for x in self.parts.cargo_bays))
+
+    def test_control_surfaces(self):
+        self.assertEqual(['Delta-Deluxe Winglet'], sorted(x.part.title for x in self.parts.control_surfaces))
 
     def test_decouplers(self):
         self.assertEqual(
@@ -291,7 +298,7 @@ class TestParts(testingtools.TestCase):
     def test_engines(self):
         self.assertEqual(
             ['RE-I5 "Skipper" Liquid Fuel Engine', 'RE-L10 "Poodle" Liquid Fuel Engine',
-             'RE-M3 "Mainsail" Liquid Engine', 'S1 SRB-KD25k "Kickback" Solid Fuel Booster',
+             'RE-M3 "Mainsail" Liquid Fuel Engine', 'S1 SRB-KD25k "Kickback" Solid Fuel Booster',
              'S1 SRB-KD25k "Kickback" Solid Fuel Booster', 'S1 SRB-KD25k "Kickback" Solid Fuel Booster'],
             sorted(x.part.title for x in self.parts.engines))
 
@@ -322,6 +329,9 @@ class TestParts(testingtools.TestCase):
         self.assertEqual(
             ['Thermal Control System (small)'],
             sorted(x.part.title for x in self.parts.radiators))
+
+    def test_rcs(self):
+        self.assertEqual(['RV-105 RCS Thruster Block'], sorted(x.part.title for x in self.parts.rcs))
 
     def test_reaction_wheels(self):
         self.assertEqual(

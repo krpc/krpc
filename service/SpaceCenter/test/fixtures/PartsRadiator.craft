@@ -1,15 +1,15 @@
 ship = PartsRadiator
-version = 1.0.5
+version = 1.1.0
 description = 
 type = VAB
-size = 5.891571,10.18825,3.638967
+size = 5.891572,9.09779,3.638967
 PART
 {
 	part = mk1pod_4294736224
 	partName = Part
-	pos = 0.0004032962,7.144535,-0.001336962
+	pos = -0.1673615,6.054074,0.2354757
 	attPos = 0,0,0
-	attPos0 = 0.0004032962,7.144535,-0.001336962
+	attPos0 = -0.1673615,6.054074,0.2354757
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
@@ -90,9 +90,15 @@ PART
 	{
 		name = ModuleReactionWheel
 		isEnabled = True
+		actuatorModeCycle = 0
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
+		actuatorModeCycle_UIFlight
+		{
+			controlEnabled = True
+			stateNames = Normal, SAS Only, Pilot Only
+		}
 		EVENTS
 		{
 			OnToggle
@@ -143,6 +149,7 @@ PART
 		isEnabled = True
 		Deployed = False
 		Inoperable = False
+		cooldownToGo = 0
 		stagingEnabled = True
 		EVENTS
 		{
@@ -236,7 +243,7 @@ PART
 				guiActive = False
 				guiActiveUncommand = False
 				guiIcon = Disable Staging
-				guiName = Disable Staging
+				guiName = Experiment: Disable Staging
 				category = Disable Staging
 				guiActiveUnfocused = False
 				unfocusedRange = 2
@@ -468,7 +475,7 @@ PART
 {
 	part = fuelTank_4294731188
 	partName = Part
-	pos = 0.0004032962,5.773805,-0.001336962
+	pos = -0.1673615,4.683344,0.2354757
 	attPos = 0,0,0
 	attPos0 = 0,-1.370728,0
 	rot = 0,0,0,1
@@ -526,7 +533,7 @@ PART
 {
 	part = launchClamp1_4294705978
 	partName = Part
-	pos = -1.426686,4.361415,-0.001336829
+	pos = -1.594451,3.270954,0.2354758
 	attPos = 0,0,0
 	attPos0 = -1.427089,-1.412395,1.331573E-07
 	rot = 1.256074E-15,0.7071068,-1.256074E-15,0.7071068
@@ -558,8 +565,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.99016
-		height = 5.021566
+		scaleFactor = 1.557986
+		height = 3.931105
 		stagingEnabled = True
 		towerRot = -1.256074E-15,-0.7071068,1.256074E-15,0.7071068
 		EVENTS
@@ -700,7 +707,7 @@ PART
 {
 	part = launchClamp1_4294705808
 	partName = Part
-	pos = 1.427492,4.361415,-0.00133722
+	pos = 1.259727,3.270954,0.2354754
 	attPos = 0,0,0
 	attPos0 = 1.427089,-1.412395,-2.579173E-07
 	rot = -1.256074E-15,0.7071066,-1.256074E-15,-0.7071069
@@ -710,7 +717,7 @@ PART
 	symMethod = Radial
 	istg = 0
 	dstg = 0
-	sidx = 1
+	sidx = 0
 	sqor = 0
 	sepI = 0
 	attm = 1
@@ -732,8 +739,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.99016
-		height = 5.021566
+		scaleFactor = 1.557986
+		height = 3.931105
 		stagingEnabled = True
 		towerRot = 1.256074E-15,-0.7071066,1.256074E-15,-0.7071069
 		EVENTS
@@ -874,7 +881,7 @@ PART
 {
 	part = radialDecoupler2_4294514542
 	partName = Part
-	pos = 0.0004033665,6.725715,-0.5911814
+	pos = -0.1673614,5.635254,-0.3543688
 	attPos = 0,0,0
 	attPos0 = 7.028177E-08,0.9519129,-0.5898444
 	rot = 2.107342E-08,0.7071065,-2.107343E-08,-0.7071071
@@ -1043,7 +1050,7 @@ PART
 {
 	part = fuelTank_4294511608
 	partName = Part
-	pos = 0.0004028859,7.184115,-1.83592
+	pos = -0.1673619,6.093654,-1.599107
 	attPos = 0,0,0
 	attPos0 = -1.244738,0.4583932,-1.870997E-07
 	rot = -2.107341E-07,0.7071067,2.107342E-07,-0.7071069
@@ -1097,7 +1104,7 @@ PART
 {
 	part = foldingRadMed_4294632424
 	partName = Part
-	pos = 0.0004033287,7.16322,0.6011174
+	pos = -0.1673614,6.072759,0.83793
 	attPos = 0,0,0
 	attPos0 = 3.253808E-08,0.01868534,0.6024543
 	rot = -3.171857E-08,0.9832945,-0.1820219,-1.713458E-07
@@ -1194,9 +1201,36 @@ PART
 	{
 		name = ModuleActiveRadiator
 		isEnabled = True
+		IsCooling = False
 		stagingEnabled = True
 		EVENTS
 		{
+			Activate
+			{
+				active = False
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Activate Radiator
+				guiName = Activate Radiator
+				category = Activate Radiator
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+			Shutdown
+			{
+				active = False
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Shutdown Radiator
+				guiName = Shutdown Radiator
+				category = Shutdown Radiator
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -1212,6 +1246,21 @@ PART
 		}
 		ACTIONS
 		{
+			ToggleRadiatorAction
+			{
+				actionGroup = None
+				active = False
+			}
+			ActivateAction
+			{
+				actionGroup = None
+				active = False
+			}
+			ShutdownAction
+			{
+				actionGroup = None
+				active = False
+			}
 		}
 	}
 }
@@ -1219,7 +1268,7 @@ PART
 {
 	part = foldingRadSmall_4294630724
 	partName = Part
-	pos = 0.0004032877,5.109672,-0.7207031
+	pos = -0.1673615,4.019211,-0.4838905
 	attPos = 0,0,0
 	attPos0 = -8.498318E-09,-0.6641335,-0.7193663
 	rot = 2.980232E-08,-3.132037E-07,-9.334196E-15,-1
@@ -1316,9 +1365,36 @@ PART
 	{
 		name = ModuleActiveRadiator
 		isEnabled = True
+		IsCooling = False
 		stagingEnabled = True
 		EVENTS
 		{
+			Activate
+			{
+				active = False
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Activate Radiator
+				guiName = Activate Radiator
+				category = Activate Radiator
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+			Shutdown
+			{
+				active = False
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Shutdown Radiator
+				guiName = Shutdown Radiator
+				category = Shutdown Radiator
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -1334,6 +1410,21 @@ PART
 		}
 		ACTIONS
 		{
+			ToggleRadiatorAction
+			{
+				actionGroup = None
+				active = False
+			}
+			ActivateAction
+			{
+				actionGroup = None
+				active = False
+			}
+			ShutdownAction
+			{
+				actionGroup = None
+				active = False
+			}
 		}
 	}
 }
@@ -1341,7 +1432,7 @@ PART
 {
 	part = radPanelSm_4294620374
 	partName = Part
-	pos = -0.432402,7.331316,-0.001336936
+	pos = -0.6001668,6.240855,0.2354757
 	attPos = 0,0,0
 	attPos0 = -0.4328052,0.1867814,2.58442E-08
 	rot = 0.1287088,0.6952944,-0.1287089,0.695294
@@ -1372,9 +1463,36 @@ PART
 	{
 		name = ModuleActiveRadiator
 		isEnabled = True
+		IsCooling = False
 		stagingEnabled = True
 		EVENTS
 		{
+			Activate
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Activate Radiator
+				guiName = Activate Radiator
+				category = Activate Radiator
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
+			Shutdown
+			{
+				active = False
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Shutdown Radiator
+				guiName = Shutdown Radiator
+				category = Shutdown Radiator
+				guiActiveUnfocused = True
+				unfocusedRange = 4
+				externalToEVAOnly = True
+			}
 			ToggleStaging
 			{
 				active = True
@@ -1390,6 +1508,18 @@ PART
 		}
 		ACTIONS
 		{
+			ToggleRadiatorAction
+			{
+				actionGroup = None
+			}
+			ActivateAction
+			{
+				actionGroup = None
+			}
+			ShutdownAction
+			{
+				actionGroup = None
+			}
 		}
 	}
 }

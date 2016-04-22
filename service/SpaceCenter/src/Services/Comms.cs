@@ -11,7 +11,7 @@ namespace KRPC.SpaceCenter.Services
     /// Created using a call to <see cref="Vessel.Comms"/>.
     /// </summary>
     /// <remarks>
-    /// This class requires <a href="http://forum.kerbalspaceprogram.com/threads/83305">RemoteTech</a> to be installed.
+    /// This class requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/75245-11-remotetech-v1610-2016-04-12/">RemoteTech</a> to be installed.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Comms : Equatable<Comms>

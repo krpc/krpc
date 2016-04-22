@@ -204,14 +204,16 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The altitude above sea level, in meters.
+        /// Measured from the center of mass of the vessel.
         /// </summary>
         [KRPCProperty]
         public double MeanAltitude {
-            get { return InternalVessel.mainBody.GetAltitude (InternalVessel.CoM); }
+            get { return InternalVessel.mainBody.GetAltitude (WorldCoM); }
         }
 
         /// <summary>
         /// The altitude above the surface of the body or sea level, whichever is closer, in meters.
+        /// Measured from the center of mass of the vessel.
         /// </summary>
         [KRPCProperty]
         public double SurfaceAltitude {
@@ -220,6 +222,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The altitude above the surface of the body, in meters. When over water, this is the altitude above the sea floor.
+        /// Measured from the center of mass of the vessel.
         /// </summary>
         [KRPCProperty]
         public double BedrockAltitude {
@@ -236,7 +239,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Latitude">latitude</a> of the vessel for the body being orbited, in degrees.
+        /// The <a href="https://en.wikipedia.org/wiki/Latitude">latitude</a> of the vessel for the body being orbited, in degrees.
         /// </summary>
         [KRPCProperty]
         public double Latitude {
@@ -244,7 +247,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Longitude">longitude</a> of the vessel for the body being orbited, in degrees.
+        /// The <a href="https://en.wikipedia.org/wiki/Longitude">longitude</a> of the vessel for the body being orbited, in degrees.
         /// </summary>
         [KRPCProperty]
         public double Longitude {
@@ -405,7 +408,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>, or
-        /// <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> if it is installed.
+        /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> if it is installed.
         /// </remarks>
         [KRPCProperty]
         public float DynamicPressure {
@@ -423,7 +426,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>.
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
+        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
         /// </remarks>
         [KRPCProperty]
         public float StaticPressure {
@@ -439,7 +442,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>.
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
+        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 AerodynamicForce {
@@ -450,12 +453,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic lift</a> currently acting on the vessel,
+        /// The <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic lift</a> currently acting on the vessel,
         /// as a vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
         /// </summary>
         /// <remarks>
         /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>.
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
+        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 Lift {
@@ -466,12 +469,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic drag</a> currently acting on the vessel,
+        /// The <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic drag</a> currently acting on the vessel,
         /// as a vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
         /// </summary>
         /// <remarks>
         /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>.
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
+        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 Drag {
@@ -485,7 +488,7 @@ namespace KRPC.SpaceCenter.Services
         /// The speed of sound, in the atmosphere around the vessel, in <math>m/s</math>.
         /// </summary>
         /// <remarks>
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
+        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
         /// </remarks>
         [KRPCProperty]
         public float SpeedOfSound {
@@ -499,7 +502,7 @@ namespace KRPC.SpaceCenter.Services
         /// The speed of the vessel, in multiples of the speed of sound.
         /// </summary>
         /// <remarks>
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
+        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
         /// </remarks>
         [KRPCProperty]
         public float Mach {
@@ -510,10 +513,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Equivalent_airspeed">equivalent air speed</a> of the vessel, in <math>m/s</math>.
+        /// The <a href="https://en.wikipedia.org/wiki/Equivalent_airspeed">equivalent air speed</a> of the vessel, in <math>m/s</math>.
         /// </summary>
         /// <remarks>
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
+        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
         /// </remarks>
         [KRPCProperty]
         public float EquivalentAirSpeed {
@@ -529,7 +532,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>, or
-        /// <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> if it is installed.
+        /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> if it is installed.
         /// </remarks>
         [KRPCProperty]
         public float TerminalVelocity {
@@ -537,7 +540,7 @@ namespace KRPC.SpaceCenter.Services
                 if (FAR.IsAvailable) {
                     return (float)FAR.VesselTermVelEst (InternalVessel);
                 } else {
-                    var gravity = Math.Sqrt (InternalVessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (InternalVessel.CoM).magnitude);
+                    var gravity = Math.Sqrt (InternalVessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (WorldCoM).magnitude);
                     return (float)(Math.Sqrt (gravity / WorldDrag.magnitude) * InternalVessel.speed);
                 }
             }
@@ -574,7 +577,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Total_air_temperature">total air temperature</a> of the atmosphere
+        /// The <a href="https://en.wikipedia.org/wiki/Total_air_temperature">total air temperature</a> of the atmosphere
         /// around the vessel, in Kelvin. This temperature includes the <see cref="StaticAirTemperature"/> and the vessel's kinetic energy.
         /// </summary>
         [KRPCProperty]
@@ -583,7 +586,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The <a href="http://en.wikipedia.org/wiki/Total_air_temperature">static (ambient) temperature</a> of the
+        /// The <a href="https://en.wikipedia.org/wiki/Total_air_temperature">static (ambient) temperature</a> of the
         /// atmosphere around the vessel, in Kelvin.
         /// </summary>
         [KRPCProperty]
@@ -596,7 +599,7 @@ namespace KRPC.SpaceCenter.Services
         /// and a value greater than 0.5 indicates a large-scale stall.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a>.
+        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float StallFraction {
@@ -611,7 +614,7 @@ namespace KRPC.SpaceCenter.Services
         /// air density and wing area.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a>.
+        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float DragCoefficient {
@@ -625,7 +628,7 @@ namespace KRPC.SpaceCenter.Services
         /// Gets the coefficient of lift. This is the amount of lift produced by the vessel, and depends on air speed, air density and wing area.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a>.
+        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float LiftCoefficient {
@@ -636,10 +639,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the <a href="http://en.wikipedia.org/wiki/Ballistic_coefficient">ballistic coefficient</a>.
+        /// Gets the <a href="https://en.wikipedia.org/wiki/Ballistic_coefficient">ballistic coefficient</a>.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a>.
+        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float BallisticCoefficient {
@@ -655,7 +658,7 @@ namespace KRPC.SpaceCenter.Services
         /// number of Newtons of fuel that are burned, per hour, to product one newton of thrust.
         /// </summary>
         /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a>.
+        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
         /// </remarks>
         [KRPCProperty]
         public float ThrustSpecificFuelConsumption {

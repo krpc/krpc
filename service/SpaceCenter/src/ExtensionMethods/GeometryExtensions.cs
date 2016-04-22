@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
@@ -11,6 +12,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// Convert a vector to a tuple
         /// </summary>
         public static Tuple3 ToTuple (this Vector3d v)
+        {
+            return new Tuple3 (v.x, v.y, v.z);
+        }
+
+        /// <summary>
+        /// Convert a vector to a tuple
+        /// </summary>
+        public static Tuple3 ToTuple (this Vector3 v)
         {
             return new Tuple3 (v.x, v.y, v.z);
         }
@@ -37,6 +46,18 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static QuaternionD ToQuaternion (this Tuple4 t)
         {
             return new QuaternionD (t.Item1, t.Item2, t.Item3, t.Item4);
+        }
+
+        /// <summary>
+        /// Convert a Matrix4x4 (simulating a Matrix3x3) to a tuple of tuples
+        /// </summary>
+        public static IList<double> ToList (this Matrix4x4 m)
+        {
+            return new List<double> (new double[] {
+                m [0, 0], m [0, 1], m [0, 2],
+                m [1, 0], m [1, 1], m [1, 2],
+                m [2, 0], m [2, 1], m [2, 2]
+            });
         }
 
         /// <summary>
@@ -292,6 +313,109 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static Vector3d ProjectVectorOntoPlane (Vector3d normal, Vector3d v)
         {
             return v - normal * Vector3d.Dot (normal, v);
+        }
+
+        /// <summary>
+        /// Add a 4x4 Matrix into another one (does not allocate)
+        /// </summary>
+        public static Matrix4x4 Add (this Matrix4x4 left, Matrix4x4 right)
+        {
+            Matrix4x4 m = Matrix4x4.zero;
+            for (int i = 0; i < 4; i++) {
+                m.SetColumn (i, left.GetColumn (i) + right.GetColumn (i));
+            }
+            return m;
+        }
+
+        /// <summary>
+        /// Subtract a 4x4 Matrix from another one (does not allocate)
+        /// </summary>
+        public static Matrix4x4 Subtract (this Matrix4x4 left, Matrix4x4 right)
+        {
+            Matrix4x4 m = Matrix4x4.zero;
+            for (int i = 0; i < 4; i++) {
+                m.SetColumn (i, left.GetColumn (i) - right.GetColumn (i));
+            }
+            return m;
+        }
+
+        /// <summary>
+        /// Multiply a 4x4 Matrix by a scalar (simulating 3x3 matrix) (does not allocate)
+        /// </summary>
+        public static Matrix4x4 MultiplyScalar (this Matrix4x4 left, float right)
+        {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    left [i, j] = left [i, j] * right;
+                }
+            }
+            return left;
+        }
+
+        /// <summary>
+        /// Returns the diagonal 3-vector from the 4x4 matrix (simulating 3x3 matrix)
+        /// </summary>
+        public static Vector3d Diag (this Matrix4x4 m)
+        {
+            Vector3d v = Vector3d.zero;
+            for (int i = 0; i < 3; i++) {
+                v [i] = m [i, i];
+            }
+            return v;
+        }
+
+        /// <summary>
+        /// Constructs diagonal matrix from a float (Identity * val)
+        /// </summary>
+        public static Matrix4x4 ToDiagonalMatrix (this float v)
+        {
+            Matrix4x4 m = Matrix4x4.identity;
+            for (int i = 0; i < 4; i++) {
+                m [i, i] = v;
+            }
+            return m;
+        }
+
+        /// <summary>
+        /// Constructs diagonal matrix from a 3-vector (simulating 3x3 matrix)
+        /// </summary>
+        public static Matrix4x4 ToDiagonalMatrix (this Vector3 v)
+        {
+            Matrix4x4 m = Matrix4x4.identity;
+            for (int i = 0; i < 3; i++) {
+                m [i, i] = v [i];
+            }
+            return m;
+        }
+
+        /// <summary>
+        /// Construct the outer product of two 3-vectors as a 4x4 matrix
+        /// </summary>
+        public static Matrix4x4 OuterProduct (this Vector3 left, Vector3 right)
+        {
+            Matrix4x4 m = Matrix4x4.identity;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    m [i, j] = left [i] * right [j];
+                }
+            }
+            return m;
+        }
+
+        /// <summary>
+        /// Convert radians to degrees.
+        /// </summary>
+        public static float ToDegrees (float radians)
+        {
+            return radians * (180f / (float)Math.PI);
+        }
+
+        /// <summary>
+        /// Convert degrees to radians.
+        /// </summary>
+        public static float ToRadians (float degrees)
+        {
+            return degrees * ((float)Math.PI / 180f);
         }
     }
 }

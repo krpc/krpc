@@ -40,6 +40,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(4120, part.mass)
         self.assertClose(4000, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(45, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -59,16 +61,19 @@ class TestPartsPart(testingtools.TestCase):
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertEqual(None, part.cargo_bay)
+        self.assertEqual(None, part.control_surface)
         self.assertEqual(None, part.decoupler)
         self.assertEqual(None, part.docking_port)
         self.assertEqual(None, part.engine)
         self.assertEqual(None, part.fairing)
         self.assertEqual(None, part.intake)
+        self.assertEqual(None, part.landing_gear)
         self.assertEqual(None, part.landing_leg)
         self.assertEqual(None, part.launch_clamp)
         self.assertEqual(None, part.light)
         self.assertEqual(None, part.parachute)
         self.assertEqual(None, part.radiator)
+        self.assertEqual(None, part.rcs)
         self.assertEqual(None, part.resource_converter)
         self.assertEqual(None, part.resource_harvester)
         self.assertNotEqual(None, part.reaction_wheel)
@@ -116,6 +121,34 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.cargo_bay)
 
+    def test_control_surface(self):
+        part = self.parts.with_title('Delta-Deluxe Winglet')[0]
+        self.assertEqual('winglet3', part.name)
+        self.assertEqual('Delta-Deluxe Winglet', part.title)
+        self.assertEqual(600, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Rockomax X200-32 Fuel Tank', part.parent.title)
+        self.assertEqual(0, len(part.children))
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(3, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertClose(78, part.mass)
+        self.assertClose(78, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
+        self.assertEqual(12, part.impact_tolerance)
+        self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
+        self.assertEqual(0, len(part.fuel_lines_from))
+        self.assertEqual(0, len(part.fuel_lines_to))
+        modules = ['ModuleControlSurface']
+        if self.conn.space_center.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.control_surface)
+
     def test_decoupler(self):
         part = self.parts.with_title('TT-70 Radial Decoupler')[0]
         self.assertEqual('radialDecoupler2', part.name)
@@ -131,6 +164,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(50, part.mass)
         self.assertClose(50, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(8, part.impact_tolerance)
         self.assertFalse(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -149,7 +184,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(280, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Rockomax X200-32 Fuel Tank', part.parent.title)
-        self.assertEqual([], [p.title for p in part.children])
+        self.assertEqual(0, len(part.children))
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
         self.assertEqual(4, part.stage) #TODO: why is this not -1? Docking ports aren't activated in stages?
@@ -157,6 +192,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(50, part.mass)
         self.assertClose(50, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(10, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -183,6 +220,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(23250, part.mass)
         self.assertClose(4500, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(7, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -246,11 +285,11 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.intake)
 
-    def test_landing_leg(self):
-        part = self.parts.with_title('LT-1 Landing Struts')[0]
-        self.assertEqual('landingLeg1', part.name)
-        self.assertEqual('LT-1 Landing Struts', part.title)
-        self.assertEqual(440, part.cost)
+    def test_landing_gear(self):
+        part = self.parts.with_title('LY-10 Small Landing Gear')[0]
+        self.assertEqual('SmallGearBay', part.name)
+        self.assertEqual('LY-10 Small Landing Gear', part.title)
+        self.assertEqual(600, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Mk1-2 Command Pod', part.parent.title)
         self.assertEqual([], [p.title for p in part.children])
@@ -259,14 +298,61 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(-1, part.stage)
         self.assertEqual(-1, part.decouple_stage)
         self.assertFalse(part.massless)
+        self.assertClose(45, part.mass)
+        self.assertClose(45, part.dry_mass)
+        self.assertEqual(50, part.impact_tolerance)
+        self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
+        self.assertEqual(0, len(part.fuel_lines_from))
+        self.assertEqual(0, len(part.fuel_lines_to))
+        modules = [
+            'FXModuleConstrainPosition',
+            'FXModuleLookAtConstraint',
+            'ModuleLight',
+            'ModuleStatusLight',
+            'ModuleTestSubject',
+            'ModuleWheelBase',
+            'ModuleWheelBrakes',
+            'ModuleWheelDamage',
+            'ModuleWheelDeployment',
+            'ModuleWheelSteering',
+            'ModuleWheelSuspension'
+        ]
+        if self.conn.space_center.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.landing_gear)
+
+    def test_landing_leg(self):
+        part = self.parts.with_title('LT-1 Landing Struts')[0]
+        self.assertEqual('landingLeg1', part.name)
+        self.assertEqual('LT-1 Landing Struts', part.title)
+        self.assertEqual(440, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Mk1-2 Command Pod', part.parent.title)
+        self.assertEqual(0, len(part.children))
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(-1, part.decouple_stage)
+        self.assertFalse(part.massless)
         self.assertClose(50, part.mass)
         self.assertClose(50, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(12, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
         self.assertEqual(0, len(part.fuel_lines_from))
         self.assertEqual(0, len(part.fuel_lines_to))
-        modules = ['ModuleLandingLeg']
+        modules = [
+            'ModuleWheelBase',
+            'ModuleWheelBogey',
+            'ModuleWheelDamage',
+            'ModuleWheelDeployment',
+            'ModuleWheelLock',
+            'ModuleWheelSuspension'
+        ]
         if self.conn.space_center.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
@@ -279,7 +365,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(200, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Rockomax Jumbo-64 Fuel Tank', part.parent.title)
-        self.assertEqual(len(part.children), 0)
+        self.assertEqual(0, len(part.children))
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
         self.assertEqual(6, part.stage)
@@ -287,6 +373,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(100, part.mass)
         self.assertClose(100, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(100, part.impact_tolerance)
         self.assertFalse(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -313,6 +401,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertTrue(part.massless)
         self.assertClose(0, part.mass)
         self.assertClose(0, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(8, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -339,6 +429,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(100, part.mass)
         self.assertClose(100, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(12, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -365,6 +457,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(50, part.mass)
         self.assertClose(50, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(12, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -374,6 +468,32 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
         self.assertNotEqual(None, part.radiator)
 
+    def test_rcs(self):
+        part = self.parts.with_title('RV-105 RCS Thruster Block')[0]
+        self.assertEqual('RCSBlock', part.name)
+        self.assertEqual('RV-105 RCS Thruster Block', part.title)
+        self.assertEqual(620, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Rockomax X200-8 Fuel Tank', part.parent.title)
+        self.assertEqual(0, len(part.children))
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(1, part.decouple_stage)
+        self.assertTrue(part.massless)
+        self.assertClose(0, part.mass)
+        self.assertClose(0, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
+        self.assertEqual(15, part.impact_tolerance)
+        self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
+        self.assertEqual(0, len(part.fuel_lines_from))
+        self.assertEqual(0, len(part.fuel_lines_to))
+        modules = ['ModuleRCS']
+        self.assertEqual(sorted(modules), sorted(m.name for m in part.modules))
+        self.assertNotEqual(None, part.rcs)
+
     def test_reaction_wheel(self):
         part = self.parts.with_title('Advanced Reaction Wheel Module, Large')[0]
         self.assertEqual('asasmodule1-2', part.name)
@@ -381,7 +501,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(2100, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('FL-R1 RCS Fuel Tank', part.parent.title)
-        self.assertEqual(2, len(part.children))
+        self.assertEqual(['Thermal Control System (small)', 'Convert-O-Tron 250'],
+                         [p.title for p in part.children])
         self.assertTrue(part.axially_attached)
         self.assertFalse(part.radially_attached)
         self.assertEqual(-1, part.stage)
@@ -389,6 +510,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(200, part.mass)
         self.assertClose(200, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(9, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -405,7 +528,7 @@ class TestPartsPart(testingtools.TestCase):
         self.assertEqual(8000, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Advanced Reaction Wheel Module, Large', part.parent.title)
-        self.assertEqual(1, len(part.children))
+        self.assertEqual(['Rockomax X200-32 Fuel Tank'], [p.title for p in part.children])
         self.assertTrue(part.axially_attached)
         self.assertFalse(part.radially_attached)
         self.assertEqual(-1, part.stage)
@@ -413,6 +536,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(4250, part.mass)
         self.assertClose(4250, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(7, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -440,6 +565,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(250, part.mass)
         self.assertClose(250, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(7, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -470,6 +597,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertTrue(part.massless)
         self.assertClose(0, part.mass)
         self.assertClose(0, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(8, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
@@ -496,6 +625,8 @@ class TestPartsPart(testingtools.TestCase):
         self.assertFalse(part.massless)
         self.assertClose(300, part.mass)
         self.assertClose(300, part.dry_mass)
+        self.assertFalse(part.shielded)
+        self.assertClose(0, part.dynamic_pressure)
         self.assertEqual(8, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)

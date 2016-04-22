@@ -23,6 +23,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Landing gear is being retracted.
         /// </summary>
-        Retracting
+        Retracting,
+        /// <summary>
+        /// Landing gear is broken.
+        /// </summary>
+        Broken
     }
 }

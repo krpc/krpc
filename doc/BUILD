@@ -1,11 +1,11 @@
-load('/tools/build/sphinx', 'sphinx_build', 'sphinx_spelling_test')
+load('/tools/build/sphinx', 'sphinx_build', 'sphinx_spelling_test', 'sphinx_linkcheck_test')
 load('/tools/build/pkg', 'stage_files')
 load('/tools/build/python', 'py_script')
 load('/tools/build/image', 'png_images')
 load('/tools/krpctools/docgen', 'docgen_multiple')
 load('/doc/test', 'check_documented_test')
 load('/config', 'version')
-load('macros', 'cc_binary_multiple', 'csharp_binary_multiple', 'csharp_library_multiple', 'java_binary_multiple')
+load('macros', 'csharp_binary_multiple', 'csharp_library_multiple', 'cc_binary_multiple', 'java_binary_multiple')
 
 filegroup(
     name = 'doc',
@@ -21,22 +21,22 @@ stage_files(
         'src/**/*.rst',
         'src/images/**/*.png',
         'src/crafts/*.craft',
-        'src/scripts/*.cpp',
         'src/scripts/*.cs',
+        'src/scripts/*.cpp',
+        'src/scripts/*.java',
         'src/scripts/*.lua',
-        'src/scripts/*.py',
-        'src/scripts/*.java'
+        'src/scripts/*.py'
     ]) + [
         ':conf',
         'src/_static/custom.css',
         'src/_templates/layout.html',
         'src/dictionary.txt',
         ':images',
-        ':cpp-api',
         ':csharp-api',
+        ':cpp-api',
+        ':java-api',
         ':lua-api',
-        ':python-api',
-        ':java-api'
+        ':python-api'
     ],
     path_map = {
         'doc/src/': ''
@@ -105,8 +105,8 @@ png_images(
 defs = [
     '//server:ServiceDefinitions',
     '//service/SpaceCenter:ServiceDefinitions',
-    '//service/KerbalAlarmClock:ServiceDefinitions',
-    '//service/InfernalRobotics:ServiceDefinitions'
+    '//service/InfernalRobotics:ServiceDefinitions',
+    '//service/KerbalAlarmClock:ServiceDefinitions'
 ]
 
 docgen_multiple(
@@ -151,7 +151,11 @@ docgen_multiple(
 
 test_suite(
     name = 'test',
-    tests = ['spelling', 'check-documented']
+    tests = [
+        'spelling',
+        #'linkcheck',
+        'check-documented'
+    ]
 )
 
 sphinx_spelling_test(
@@ -160,6 +164,14 @@ sphinx_spelling_test(
     sphinx_build = ':sphinx-build',
     opts = {'version': version},
     size = 'small'
+)
+
+sphinx_linkcheck_test(
+    name = 'linkcheck',
+    srcs = [':srcs'],
+    sphinx_build = ':sphinx-build',
+    opts = {'version': version},
+    tags = ['requires-network']
 )
 
 test_suite(
@@ -211,16 +223,10 @@ check_documented_test(
 filegroup(
     name = 'compile-scripts',
     srcs = [
-        ':compile-scripts-cpp',
         ':compile-scripts-csharp',
+        ':compile-scripts-cpp',
         ':compile-scripts-java'
     ]
-)
-
-cc_binary_multiple(
-    name = 'compile-scripts-cpp',
-    srcs = glob(['src/scripts/*.cpp']),
-    deps = ['//client/cpp:krpc']
 )
 
 filegroup(
@@ -256,7 +262,8 @@ csharp_library_multiple(
         '//tools/build/ksp:Assembly-CSharp',
         '//tools/build/ksp:Assembly-CSharp-firstpass',
         '//tools/build/ksp:UnityEngine',
-        '//tools/build/ksp:TDx.TDxInput',
+        '//tools/build/ksp:UnityEngine.UI',
+        '//tools/build/ksp:KSPUtil',
         '//tools/build/ksp:mscorlib',
         '//tools/build/ksp:System',
         '//tools/build/ksp:System.Core',
@@ -265,12 +272,23 @@ csharp_library_multiple(
     ]
 )
 
+cc_binary_multiple(
+    name = 'compile-scripts-cpp',
+    srcs = glob(['src/scripts/*.cpp']),
+    deps = ['//client/cpp:krpc']
+)
+
+java_import(
+    name = 'javatuples',
+    jars = ['@java_javatuples//file']
+)
+
 java_binary_multiple(
     name = 'compile-scripts-java',
     srcs = glob(['src/scripts/*.java']),
     deps = [
         '//client/java:krpc-jar',
         '//tools/build/protobuf:protobuf',
-        '@java_javatuples//:jar'
+        ':javatuples'
     ]
 )

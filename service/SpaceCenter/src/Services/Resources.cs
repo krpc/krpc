@@ -67,7 +67,7 @@ namespace KRPC.SpaceCenter.Services
         /// The KSP part.
         /// </summary>
         public global::Part InternalPart {
-            get { 
+            get {
                 if (partId == 0)
                     throw new InvalidOperationException ("Resources object has no part");
                 return FlightGlobals.FindPartByID (partId);
@@ -90,6 +90,23 @@ namespace KRPC.SpaceCenter.Services
                     resources.Add (resource);
             }
             return resources;
+        }
+
+        /// <summary>
+        /// All the individual resources that can be stored.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Resource> All {
+            get { return GetResources ().Select (r => new Resource (r)).ToList (); }
+        }
+
+        /// <summary>
+        /// All the individual resources with the given name that can be stored.
+        /// </summary>
+        [KRPCMethod]
+        public IList<Resource> WithResource (string name)
+        {
+            return GetResources ().Where (r => r.resourceName == name).Select (r => new Resource (r)).ToList ();
         }
 
         /// <summary>

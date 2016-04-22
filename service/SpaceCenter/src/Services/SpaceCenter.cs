@@ -147,6 +147,62 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Save the game with a given name.
+        /// This will create a save file called <c>name.sfs</c> in the folder of the current save game.
+        /// </summary>
+        [KRPCProcedure]
+        public static void Save (string name)
+        {
+            GamePersistence.SaveGame (name, HighLogic.SaveFolder, SaveMode.OVERWRITE);
+        }
+
+        /// <summary>
+        /// Load the game with the given name.
+        /// This will create a load a save file called <c>name.sfs</c> from the folder of the current save game.
+        /// </summary>
+        [KRPCProcedure]
+        public static void Load (string name)
+        {
+            var game = GamePersistence.LoadGame (name, HighLogic.SaveFolder, true, false);
+            if (game == null || game.flightState == null || !game.compatible)
+                throw new ArgumentException ("Failed to load " + name);
+            FlightDriver.StartAndFocusVessel (game, game.flightState.activeVesselIdx);
+            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+        }
+
+        /// <summary>
+        /// Save a quicksave.
+        /// </summary>
+        /// <remarks>
+        /// This is the same as calling <see cref="Save"/> with the name "quicksave".
+        /// </remarks>
+        [KRPCProcedure]
+        public static void Quicksave ()
+        {
+            Save ("quicksave");
+        }
+
+        /// <summary>
+        /// Load a quicksave.
+        /// </summary>
+        /// <remarks>
+        /// This is the same as calling <see cref="Load"/> with the name "quicksave".
+        /// </remarks>
+        [KRPCProcedure]
+        public static void Quickload ()
+        {
+            Load ("quicksave");
+        }
+
+        /// <summary>
+        /// An object that can be used to control the camera.
+        /// </summary>
+        [KRPCProperty]
+        public static Camera Camera {
+            get { return new Camera (); }
+        }
+
+        /// <summary>
         /// The current universal time in seconds.
         /// </summary>
         [KRPCProperty]
@@ -155,7 +211,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The value of the <a href="http://en.wikipedia.org/wiki/Gravitational_constant">gravitational constant</a>
+        /// The value of the <a href="https://en.wikipedia.org/wiki/Gravitational_constant">gravitational constant</a>
         /// G in <math>N(m/kg)^2</math>.
         /// </summary>
         [KRPCProperty]
@@ -248,7 +304,7 @@ namespace KRPC.SpaceCenter.Services
             if (ActiveVessel.InternalVessel.LandedOrSplashed)
                 return true;
             // Below altitude limit
-            var altitude = ActiveVessel.InternalVessel.mainBody.GetAltitude (ActiveVessel.InternalVessel.CoM);
+            var altitude = ActiveVessel.InternalVessel.mainBody.GetAltitude (ActiveVessel.InternalVessel.findWorldCenterOfMass ());
             var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, ActiveVessel.InternalVessel.mainBody);
             if (altitude < altitudeLimit)
                 return false;
@@ -460,7 +516,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether <a href="http://forum.kerbalspaceprogram.com/threads/20451">Ferram Aerospace Research</a> is installed.
+        /// Whether <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
         /// </summary>
         [KRPCProperty]
         public static bool FARAvailable {
@@ -468,7 +524,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether <a href="http://forum.kerbalspaceprogram.com/threads/83305">RemoteTech</a> is installed.
+        /// Whether <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/75245-11-remotetech-v1610-2016-04-12/">RemoteTech</a> is installed.
         /// </summary>
         [KRPCProperty]
         public static bool RemoteTechAvailable {

@@ -9,7 +9,7 @@ page, please feel free to ask `on the forum
 Clients
 -------
 
- * `Ruby client <http://github.com/TeWu/krpc-rb>`_ by `TeWu <http://github.com/TeWu>`_
+ * `Ruby client <https://github.com/TeWu/krpc-rb>`_ by `TeWu <https://github.com/TeWu>`_
 
 Services
 --------

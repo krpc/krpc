@@ -49,6 +49,8 @@ name of the active vessel:
 
 .. literalinclude:: /scripts/Interacting.cs
 
+.. _csharp-client-streams:
+
 Streaming Data from the Server
 ------------------------------
 

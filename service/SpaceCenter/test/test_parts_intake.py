@@ -22,7 +22,7 @@ class TestPartsIntake(testingtools.TestCase):
     def test_properties(self):
         intake = next(iter(filter(lambda e: e.part.title == 'XM-G50 Radial Air Intake', self.parts.intakes)))
         self.assertEqual(15, intake.speed)
-        self.assertClose(4.14, intake.flow, error=0.01)
+        self.assertClose(4.14, intake.flow, error=0.05)
         self.assertClose(0.0031, intake.area)
 
     def test_open_and_close(self):

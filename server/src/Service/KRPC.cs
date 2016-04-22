@@ -107,47 +107,29 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Add a streaming request and return its identifier.
-        /// </summary>
-        [KRPCProcedure]
-        public static uint AddStream (Request request)
-        {
-            return KRPCServer.Context.Server.AddStream (KRPCServer.Context.RPCClient, request);
-        }
-
-        /// <summary>
-        /// Remove a streaming request.
-        /// </summary>
-        [KRPCProcedure]
-        public static void RemoveStream (uint id)
-        {
-            KRPCServer.Context.Server.RemoveStream (KRPCServer.Context.RPCClient, id);
-        }
-
-        /// <summary>
-        /// KSP game scene.
+        /// The game scene. See <see cref="CurrentGameScene"/>.
         /// </summary>
         [KRPCEnum]
         public enum GameScene
         {
             /// <summary>
-            /// Space center.
+            /// The game scene showing the Kerbal Space Center buildings.
             /// </summary>
             SpaceCenter,
             /// <summary>
-            /// Flight.
+            /// The game scene showing a vessel in flight (or on the launchpad/runway).
             /// </summary>
             Flight,
             /// <summary>
-            /// Tracking station.
+            /// The tracking station.
             /// </summary>
             TrackingStation,
             /// <summary>
-            /// Vehicle assembly building.
+            /// The Vehicle Assembly Building.
             /// </summary>
             EditorVAB,
             /// <summary>
-            /// Space plane hangar.
+            /// The Space Plane Hangar.
             /// </summary>
             EditorSPH
         }
@@ -173,6 +155,24 @@ namespace KRPC.Service
                     throw new InvalidOperationException ("Unknown game scene");
                 }
             }
+        }
+
+        /// <summary>
+        /// Add a streaming request and return its identifier.
+        /// </summary>
+        [KRPCProcedure]
+        public static uint AddStream (Request request)
+        {
+            return KRPCServer.Context.Server.AddStream (KRPCServer.Context.RPCClient, request);
+        }
+
+        /// <summary>
+        /// Remove a streaming request.
+        /// </summary>
+        [KRPCProcedure]
+        public static void RemoveStream (uint id)
+        {
+            KRPCServer.Context.Server.RemoveStream (KRPCServer.Context.RPCClient, id);
         }
     }
 }

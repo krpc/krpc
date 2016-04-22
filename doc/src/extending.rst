@@ -58,7 +58,7 @@ The following `C# attributes
 <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ can be used to add
 functionality to the kRPC server.
 
-.. csharp:attribute:: KRPCService (string Name, GameScene GameScene)
+.. csharp:attribute:: KRPCService (string Name, KRPC.Service.GameScene GameScene)
 
    :parameters:
 
@@ -387,7 +387,7 @@ Identifiers
 
 An identifier must only contain alphanumeric characters and underscores. An
 identifier must not start with an underscore. Identifiers should follow
-`CamelCase <http://en.wikipedia.org/wiki/CamelCase>`_ capitalization
+`CamelCase <https://en.wikipedia.org/wiki/CamelCase>`_ capitalization
 conventions.
 
 .. note:: Although underscores are permitted, they should be avoided as they are
@@ -430,7 +430,7 @@ Game Scenes
 Each service is configured to be available from a particular game scene, or
 scenes.
 
-.. csharp:enum:: GameScene
+.. csharp:enum:: KRPC.Service.GameScene
 
    .. csharp:value:: SpaceCenter
 
@@ -462,7 +462,7 @@ scenes.
 
 **Examples**
 
-* Declare a service that is available in the :csharp:enum:`GameScene.Flight`
+* Declare a service that is available in the :csharp:enum:`KRPC.Service.GameScene.Flight`
   game scene:
 
   .. code-block:: csharp
@@ -472,8 +472,8 @@ scenes.
         ...
      }
 
-* Declare a service that is available in the :csharp:enum:`GameScene.Flight` and
-  :csharp:enum:`GameScene.Editor` game scenes:
+* Declare a service that is available in the :csharp:enum:`KRPC.Service.GameScene.Flight` and
+  :csharp:enum:`KRPC.Service.GameScene.Editor` game scenes:
 
   .. code-block:: csharp
 
@@ -493,7 +493,7 @@ Further Examples
 ----------------
 
 See the `SpaceCenter service implementation
-<https://github.com/krpc/krpc/tree/latest-version/src/kRPCSpaceCenter/Services>`_
+<https://github.com/krpc/krpc/tree/latest-version/service/SpaceCenter/src/Services>`_
 for more extensive examples.
 
 .. _service-api-clientgen:
