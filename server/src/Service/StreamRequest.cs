@@ -1,7 +1,7 @@
-using KRPC.Service.Scanner;
 using KRPC.Service.Messages;
+using KRPC.Service.Scanner;
 
-namespace KRPC.Server.Stream
+namespace KRPC.Service
 {
     class StreamRequest
     {
@@ -19,11 +19,10 @@ namespace KRPC.Server.Stream
         {
             Identifier = nextIdentifier;
             nextIdentifier++;
-            Procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
-            Arguments = KRPC.Service.Services.Instance.GetArguments (Procedure, request.Arguments);
+            Procedure = Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
+            Arguments = Services.Instance.GetArguments (Procedure, request.Arguments);
             Response = new StreamResponse ();
             Response.Id = Identifier;
         }
     }
 }
-

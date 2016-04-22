@@ -103,7 +103,6 @@
     <Compile Include="Server\RPC\RPCStream.cs" />
     <Compile Include="Server\ServerException.cs" />
     <Compile Include="Server\Stream\StreamClient.cs" />
-    <Compile Include="Server\Stream\StreamRequest.cs" />
     <Compile Include="Server\Stream\StreamServer.cs" />
     <Compile Include="Server\Stream\StreamStream.cs" />
     <Compile Include="Server\TCP\NetworkInformation.cs" />
@@ -152,6 +151,7 @@
     <Compile Include="Service\Scanner\ServiceSignature.cs" />
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Services.cs" />
+    <Compile Include="Service\StreamRequest.cs" />
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="UI\ClientConnectingDialog.cs" />
     <Compile Include="UI\ClientDisconnectDialog.cs" />
