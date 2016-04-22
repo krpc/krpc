@@ -4,7 +4,7 @@ using System.Linq;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
-namespace KRPC.Server.Stream
+namespace KRPC.Server.ProtocolBuffers.Stream
 {
     sealed class StreamServer : IServer<NoMessage,StreamMessage>
     {

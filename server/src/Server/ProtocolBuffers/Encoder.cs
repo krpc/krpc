@@ -7,9 +7,9 @@ using System.Linq;
 using System.Reflection;
 using KRPC.Service.Scanner;
 using KRPC.Service.Messages;
-using KRPC.Server.RPC;
+using KRPC.Server.ProtocolBuffers.RPC;
 
-namespace KRPC.ProtoBuf
+namespace KRPC.Server.ProtocolBuffers
 {
     internal static class Encoder
     {

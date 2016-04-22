@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using KRPC.Service.Messages;
-using KRPC.ProtoBuf;
+using KRPC.Server.ProtocolBuffers;
 
-namespace KRPC.Server.Stream
+namespace KRPC.Server.ProtocolBuffers.Stream
 {
     sealed class StreamStream : IStream<NoMessage,StreamMessage>
     {

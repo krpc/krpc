@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using KRPC.Continuations;
 using KRPC.Server;
-using KRPC.Server.Stream;
+using KRPC.Server.ProtocolBuffers.Stream;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Utils;

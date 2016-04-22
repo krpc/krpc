@@ -4,7 +4,7 @@ using Google.Protobuf;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace KRPC.ProtoBuf
+namespace KRPC.Server.ProtocolBuffers
 {
     internal static class MessageExtensions
     {

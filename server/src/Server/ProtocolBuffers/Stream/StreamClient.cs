@@ -1,30 +1,30 @@
 using System;
 using KRPC.Service.Messages;
 
-namespace KRPC.Server.RPC
+namespace KRPC.Server.ProtocolBuffers.Stream
 {
-    sealed class RPCClient : IClient<Request,Response>
+    sealed class StreamClient : IClient<NoMessage,StreamMessage>
     {
         readonly IClient<byte,byte> client;
 
-        public RPCClient (string name, IClient<byte,byte> client)
+        public StreamClient (IClient<byte,byte> client, Guid guid)
         {
-            Name = name;
             this.client = client;
-            Stream = new RPCStream (client.Stream);
+            Guid = guid;
+            Stream = new StreamStream (client.Stream);
         }
 
-        public string Name { get; private set; }
-
-        public Guid Guid {
-            get { return client.Guid; }
+        public string Name {
+            get { return client.Name; }
         }
+
+        public Guid Guid { get; private set; }
 
         public string Address {
             get { return client.Address; }
         }
 
-        public IStream<Request,Response> Stream { get; private set; }
+        public IStream<NoMessage,StreamMessage> Stream { get; private set; }
 
         public bool Connected {
             get { return client.Connected; }
@@ -37,14 +37,14 @@ namespace KRPC.Server.RPC
 
         public override bool Equals (Object obj)
         {
-            return obj != null && Equals (obj as RPCClient);
+            return obj != null && Equals (obj as StreamClient);
         }
 
-        public bool Equals (IClient<Request,Response> other)
+        public bool Equals (IClient<NoMessage,StreamMessage> other)
         {
             if ((object)other == null)
                 return false;
-            var otherClient = other as RPCClient;
+            var otherClient = other as StreamClient;
             if ((object)otherClient == null)
                 return false;
             return client == otherClient.client;
@@ -55,7 +55,7 @@ namespace KRPC.Server.RPC
             return client.GetHashCode ();
         }
 
-        public static bool operator == (RPCClient lhs, RPCClient rhs)
+        public static bool operator == (StreamClient lhs, StreamClient rhs)
         {
             if (Object.ReferenceEquals (lhs, rhs))
                 return true;
@@ -64,10 +64,9 @@ namespace KRPC.Server.RPC
             return lhs.Equals (rhs);
         }
 
-        public static bool operator != (RPCClient lhs, RPCClient rhs)
+        public static bool operator != (StreamClient lhs, StreamClient rhs)
         {
             return !(lhs == rhs);
         }
     }
 }
-

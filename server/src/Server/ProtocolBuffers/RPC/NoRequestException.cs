@@ -1,6 +1,6 @@
 using System;
 
-namespace KRPC.Server.RPC
+namespace KRPC.Server.ProtocolBuffers.RPC
 {
     class NoRequestException : Exception
     {

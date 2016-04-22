@@ -75,13 +75,12 @@
   <ItemGroup>
     <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
     <Compile Include="KRPCConfigurationTest.cs" />
-    <Compile Include="ProtoBuf\ProtocolBuffersTest.cs" />
     <Compile Include="Schema\RpcTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
-    <Compile Include="Server\RPC\RPCServerTest.cs" />
-    <Compile Include="Server\RPC\RPCStreamTest.cs" />
-    <Compile Include="Server\Stream\StreamServerTest.cs" />
-    <Compile Include="Server\Stream\StreamStreamTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPC\RPCServerTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPC\RPCStreamTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\Stream\StreamServerTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\Stream\StreamStreamTest.cs" />
     <Compile Include="Server\TCP\AssumptionsTest.cs" />
     <Compile Include="Server\TCP\NetworkInformationTest.cs" />
     <Compile Include="Server\TCP\TCPClientTest.cs" />
