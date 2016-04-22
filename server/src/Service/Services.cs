@@ -123,7 +123,7 @@ namespace KRPC.Service
                 var value = argumentValues [i];
                 var type = procedure.Parameters [i].Type;
                 if (!argumentSet [i]) {
-                    if (!procedure.Parameters [i].HasDefaultArgument)
+                    if (!procedure.Parameters [i].HasDefaultValue)
                         throw new RPCException (procedure, "Argument not specified for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". ");
                     value = Type.Missing;
                 } else if (value != null && !type.IsAssignableFrom (value.GetType ())) {

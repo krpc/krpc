@@ -27,18 +27,18 @@ namespace KRPC.Test.Service.Scanner
             var parameter = procedure.Parameters [position];
             Assert.AreEqual (type, parameter.Type);
             Assert.AreEqual (name, parameter.Name);
-            Assert.IsFalse (parameter.HasDefaultArgument);
-            Assert.IsNull (parameter.DefaultArgument);
+            Assert.IsFalse (parameter.HasDefaultValue);
+            Assert.IsNull (parameter.DefaultValue);
         }
 
-        void AssertHasParameterWithDefault (Procedure procedure, int position, string type, string name, object defaultArgument)
+        void AssertHasParameterWithDefaultValue (Procedure procedure, int position, string type, string name, object defaultValue)
         {
             Assert.Less (position, procedure.Parameters.Count);
             var parameter = procedure.Parameters [position];
             Assert.AreEqual (type, parameter.Type);
             Assert.AreEqual (name, parameter.Name);
-            Assert.IsTrue (parameter.HasDefaultArgument);
-            Assert.AreEqual (defaultArgument, parameter.DefaultArgument);
+            Assert.IsTrue (parameter.HasDefaultValue);
+            Assert.AreEqual (defaultValue, parameter.DefaultValue);
         }
 
         void AssertHasNoReturnType (Procedure procedure)
@@ -269,7 +269,7 @@ namespace KRPC.Test.Service.Scanner
                 if (proc.Name == "TestClass_IntToString") {
                     AssertHasParameters (proc, 2);
                     AssertHasParameter (proc, 0, "uint64", "this");
-                    AssertHasParameterWithDefault (proc, 1, "int32", "x", 42);
+                    AssertHasParameterWithDefaultValue (proc, 1, "int32", "x", 42);
                     AssertHasReturnType (proc, "string");
                     AssertHasAttributes (proc, 2);
                     AssertHasAttribute (proc, 0, "Class.Method(TestService.TestClass,IntToString)");
@@ -323,7 +323,7 @@ namespace KRPC.Test.Service.Scanner
                 }
                 if (proc.Name == "TestClass_StaticMethod") {
                     AssertHasParameters (proc, 1);
-                    AssertHasParameterWithDefault (proc, 0, "string", "a", "");
+                    AssertHasParameterWithDefaultValue (proc, 0, "string", "a", "");
                     AssertHasReturnType (proc, "string");
                     AssertHasAttributes (proc, 1);
                     AssertHasAttribute (proc, 0, "Class.StaticMethod(TestService.TestClass,StaticMethod)");
@@ -363,7 +363,7 @@ namespace KRPC.Test.Service.Scanner
                 }
                 if (proc.Name == "ProcedureSingleOptionalArgNoReturn") {
                     AssertHasParameters (proc, 1);
-                    AssertHasParameterWithDefault (proc, 0, "string", "x", "foo");
+                    AssertHasParameterWithDefaultValue (proc, 0, "string", "x", "foo");
                     AssertHasNoReturnType (proc);
                     AssertHasNoAttributes (proc);
                     AssertHasNoDocumentation (proc);
@@ -372,8 +372,8 @@ namespace KRPC.Test.Service.Scanner
                 if (proc.Name == "ProcedureThreeOptionalArgsNoReturn") {
                     AssertHasParameters (proc, 3);
                     AssertHasParameter (proc, 0, "float", "x");
-                    AssertHasParameterWithDefault (proc, 1, "string", "y", "jeb");
-                    AssertHasParameterWithDefault (proc, 2, "int32", "z", 42);
+                    AssertHasParameterWithDefaultValue (proc, 1, "string", "y", "jeb");
+                    AssertHasParameterWithDefaultValue (proc, 2, "int32", "z", 42);
                     AssertHasNoReturnType (proc);
                     AssertHasNoAttributes (proc);
                     AssertHasNoDocumentation (proc);
@@ -381,7 +381,7 @@ namespace KRPC.Test.Service.Scanner
                 }
                 if (proc.Name == "ProcedureOptionalNullArg") {
                     AssertHasParameters (proc, 1);
-                    AssertHasParameterWithDefault (proc, 0, "uint64", "x", null);
+                    AssertHasParameterWithDefaultValue (proc, 0, "uint64", "x", null);
                     AssertHasNoReturnType (proc);
                     AssertHasAttributes (proc, 1);
                     AssertHasAttribute (proc, 0, "ParameterType(0).Class(TestService.TestClass)");
@@ -416,7 +416,7 @@ namespace KRPC.Test.Service.Scanner
                 if (proc.Name == "BlockingProcedureReturns") {
                     AssertHasParameters (proc, 2);
                     AssertHasParameter (proc, 0, "int32", "n");
-                    AssertHasParameterWithDefault (proc, 1, "int32", "sum", 0);
+                    AssertHasParameterWithDefaultValue (proc, 1, "int32", "sum", 0);
                     AssertHasReturnType (proc, "int32");
                     AssertHasNoAttributes (proc);
                     AssertHasNoDocumentation (proc);

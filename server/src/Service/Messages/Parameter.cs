@@ -5,7 +5,7 @@
     {
         public string Name = "";
         public string Type = "";
-        public bool HasDefaultArgument;
-        public object DefaultArgument;
+        public bool HasDefaultValue;
+        public object DefaultValue;
     }
 }

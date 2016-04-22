@@ -21,7 +21,7 @@ return ::krpc::Stream<{{ type }}>({% if is_static %}&_client{% else %}this->_cli
 {% for x in parameters %}{{x.type}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}
 {% macro impl_parameters(parameters) %}
-{% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_argument' in x %} = {{x.default_argument}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+{% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_value' in x %} = {{x.default_value}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}
 
 #include <krpc/service.hpp>

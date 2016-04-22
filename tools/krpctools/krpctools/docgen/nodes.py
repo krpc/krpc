@@ -92,13 +92,13 @@ class Class(Appendable):
         self.members = OrderedDict((member.name, member) for member in sorted(members, key=sort))
 
 class Parameter(Appendable):
-    def __init__(self, name, position, type, attributes, documentation, default_argument=None):
+    def __init__(self, name, position, type, attributes, documentation, default_value=None):
         self.name = name
         self.type = types.get_parameter_type(position, type, attributes)
-        self.has_default_argument = default_argument is not None
-        if default_argument is not None:
-            default_argument = Decoder.decode(str(bytearray(base64.b64decode(default_argument))), self.type)
-        self.default_argument = default_argument
+        self.has_default_value = default_value is not None
+        if default_value is not None:
+            default_value = Decoder.decode(str(bytearray(base64.b64decode(default_value))), self.type)
+        self.default_value = default_value
         self.documentation = documentation
 
 class Procedure(Appendable):

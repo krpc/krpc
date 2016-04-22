@@ -22,12 +22,12 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// True if this parameter is optional and has a default argument.
         /// </summary>
-        public bool HasDefaultArgument { get; private set; }
+        public bool HasDefaultValue { get; private set; }
 
         /// <summary>
-        /// Default argument, if <see cref="HasDefaultArgument"/> is true.
+        /// Default argument, if <see cref="HasDefaultValue"/> is true.
         /// </summary>
-        public object DefaultArgument { get; private set; }
+        public object DefaultValue { get; private set; }
 
         public ParameterSignature (string fullProcedureName, ProcedureParameter parameter)
         {
@@ -38,17 +38,17 @@ namespace KRPC.Service.Scanner
             if (!TypeUtils.IsAValidType (Type))
                 throw new ServiceException (Type + " is not a valid Procedure parameter type, in " + fullProcedureName);
 
-            HasDefaultArgument = parameter.HasDefaultValue;
+            HasDefaultValue = parameter.HasDefaultValue;
             if (parameter.HasDefaultValue)
-                DefaultArgument = parameter.DefaultValue;
+                DefaultValue = parameter.DefaultValue;
         }
 
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("name", Name);
             info.AddValue ("type", TypeUtils.GetTypeName (Type));
-            if (HasDefaultArgument)
-                info.AddValue ("default_argument", global::KRPC.ProtoBuf.ProtocolBuffers.Encode (DefaultArgument, Type));
+            if (HasDefaultValue)
+                info.AddValue ("default_value", global::KRPC.ProtoBuf.ProtocolBuffers.Encode (DefaultValue, Type));
         }
     }
 }

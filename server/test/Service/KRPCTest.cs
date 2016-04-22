@@ -45,7 +45,7 @@ namespace KRPC.Test.Service
                             Assert.AreEqual (1, method.Parameters.Count);
                             Assert.AreEqual ("request", method.Parameters [0].Name);
                             Assert.AreEqual ("KRPC.Request", method.Parameters [0].Type);
-                            Assert.IsNull (method.Parameters [0].DefaultArgument);
+                            Assert.IsNull (method.Parameters [0].DefaultValue);
                             Assert.AreEqual (0, method.Attributes.Count);
                             Assert.AreNotEqual ("", method.Documentation);
                             found++;
@@ -55,7 +55,7 @@ namespace KRPC.Test.Service
                             Assert.AreEqual (1, method.Parameters.Count);
                             Assert.AreEqual ("id", method.Parameters [0].Name);
                             Assert.AreEqual ("uint32", method.Parameters [0].Type);
-                            Assert.IsNull (method.Parameters [0].DefaultArgument);
+                            Assert.IsNull (method.Parameters [0].DefaultValue);
                             Assert.AreEqual (0, method.Attributes.Count);
                             Assert.AreNotEqual ("", method.Documentation);
                             found++;

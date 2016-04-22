@@ -72,9 +72,9 @@ namespace KRPC.ProtoBuf
             var result = new Schema.KRPC.Parameter ();
             result.Name = parameter.Name;
             result.Type = parameter.Type;
-            result.HasDefaultArgument = parameter.HasDefaultArgument;
-            if (result.HasDefaultArgument)
-                result.DefaultArgument = Encoder.Encode (parameter.DefaultArgument);
+            result.HasDefaultValue = parameter.HasDefaultValue;
+            if (result.HasDefaultValue)
+                result.DefaultValue = Encoder.Encode (parameter.DefaultValue);
             return result;
         }
 
@@ -195,8 +195,8 @@ namespace KRPC.ProtoBuf
             var result = new Parameter ();
             result.Name = parameter.Name;
             result.Type = parameter.Type;
-            result.HasDefaultArgument = parameter.HasDefaultArgument;
-            result.DefaultArgument = Encoder.Encode (parameter.DefaultArgument);
+            result.HasDefaultValue = parameter.HasDefaultValue;
+            result.DefaultValue = Encoder.Encode (parameter.DefaultValue);
             return result;
         }
     }

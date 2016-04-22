@@ -146,7 +146,7 @@ class JavaGenerator(Generator):
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
 
-    def parse_default_argument(self, value, typ):
+    def parse_default_value(self, value, typ):
         # No default arguments in Java
         return None
 

@@ -16,7 +16,7 @@ var _args = new ByteString[] {
 return ({{type}})global::KRPC.Client.Encoder.Decode (_data, typeof({{type}}), {% if is_static %}_connection{% else %}this.connection{% endif %});
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
-{% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_argument' in x %} = {{x.default_argument}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+{% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_value' in x %} = {{x.default_value}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}
 
 namespace KRPC.Client.Services.{{ service_name }}

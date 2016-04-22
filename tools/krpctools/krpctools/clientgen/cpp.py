@@ -89,7 +89,7 @@ class CppGenerator(Generator):
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
 
-    def parse_default_argument(self, value, typ):
+    def parse_default_value(self, value, typ):
         value = base64.b64decode(value)
         # Note: following is a workaround for decoding EnumType, as set_values has not been called
         if krpc.platform.PY2:

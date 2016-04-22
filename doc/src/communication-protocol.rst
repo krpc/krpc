@@ -430,8 +430,8 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
    message Parameter {
      string name = 1;
      string type = 2;
-     bool has_default_argument = 3;
-     bytes default_argument = 4;
+     bool has_default_value = 3;
+     bytes default_value = 4;
    }
 
 The fields are:
@@ -446,9 +446,9 @@ The fields are:
    * ``type`` - The :ref:`type <communication-protocol-type-names>` of the
      parameter.
 
-   * ``has_default_argument`` - True if the parameter has a default value.
+   * ``has_default_value`` - True if the parameter has a default value.
 
-   * ``default_argument`` - If ``has_default_argument`` is true, contains the
+   * ``default_value`` - If ``has_default_value`` is true, contains the
      value of the default value of the parameter, :ref:`encoded using Protocol
      Buffer format <communication-protocol-protobuf-encoding>`.
 

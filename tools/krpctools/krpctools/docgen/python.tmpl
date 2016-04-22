@@ -141,10 +141,10 @@
 {% endmacro %}
 
 {% macro parameter(x) %}
-{% if not x.has_default_argument -%}
+{% if not x.has_default_value -%}
 {{ x.name | snakecase }}
 {%- else -%}
-[{{ x.name | snakecase }} = {{ x.default_argument }}]
+[{{ x.name | snakecase }} = {{ x.default_value }}]
 {%- endif %}
 {% endmacro %}
 

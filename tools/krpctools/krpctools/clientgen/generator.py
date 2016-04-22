@@ -44,8 +44,8 @@ class Generator(object):
                 'name': self.parse_name(parameter['name']),
                 'type': self.parse_parameter_type(typ),
             }
-            if 'default_argument' in parameter:
-                info['default_argument'] = self.parse_default_argument(parameter['default_argument'], typ)
+            if 'default_value' in parameter:
+                info['default_value'] = self.parse_default_value(parameter['default_value'], typ)
             parameters.append(info)
         return parameters
 
