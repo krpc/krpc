@@ -1,9 +1,9 @@
 using System;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
 
 namespace KRPC.Server.RPC
 {
-    sealed class RPCClient : IClient<Schema.KRPC.Request,Schema.KRPC.Response>
+    sealed class RPCClient : IClient<Request,Response>
     {
         readonly IClient<byte,byte> client;
 
@@ -24,7 +24,7 @@ namespace KRPC.Server.RPC
             get { return client.Address; }
         }
 
-        public IStream<Schema.KRPC.Request,Schema.KRPC.Response> Stream { get; private set; }
+        public IStream<Request,Response> Stream { get; private set; }
 
         public bool Connected {
             get { return client.Connected; }
@@ -40,7 +40,7 @@ namespace KRPC.Server.RPC
             return obj != null && Equals (obj as RPCClient);
         }
 
-        public bool Equals (IClient<Schema.KRPC.Request,Schema.KRPC.Response> other)
+        public bool Equals (IClient<Request,Response> other)
         {
             if ((object)other == null)
                 return false;

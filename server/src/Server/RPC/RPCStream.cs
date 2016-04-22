@@ -1,16 +1,16 @@
 using System;
 using System.IO;
-using Google.Protobuf;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
+using KRPC.ProtoBuf;
 
 namespace KRPC.Server.RPC
 {
-    sealed class RPCStream : IStream<Schema.KRPC.Request,Schema.KRPC.Response>
+    sealed class RPCStream : IStream<Request,Response>
     {
         // 1MB buffer
         internal const int bufferSize = 1 * 1024 * 1024;
         readonly IStream<byte,byte> stream;
-        Schema.KRPC.Request bufferedRequest;
+        Request bufferedRequest;
         byte[] buffer = new byte[bufferSize];
         int offset;
 
@@ -40,7 +40,7 @@ namespace KRPC.Server.RPC
         /// Throws NoRequestException if there is no request.
         /// Throws MalformedRequestException if malformed data is received.
         /// </summary>
-        public Schema.KRPC.Request Read ()
+        public Request Read ()
         {
             Poll ();
             var request = bufferedRequest;
@@ -48,12 +48,12 @@ namespace KRPC.Server.RPC
             return request;
         }
 
-        public int Read (Schema.KRPC.Request[] buffer, int offset)
+        public int Read (Request[] buffer, int offset)
         {
             throw new NotSupportedException ();
         }
 
-        public int Read (Schema.KRPC.Request[] buffer, int offset, int size)
+        public int Read (Request[] buffer, int offset, int size)
         {
             throw new NotSupportedException ();
         }
@@ -61,17 +61,12 @@ namespace KRPC.Server.RPC
         /// <summary>
         /// Write a response to the client.
         /// </summary>
-        public void Write (Schema.KRPC.Response value)
+        public void Write (Response value)
         {
-            var memoryStream = new MemoryStream ();
-            var codedStream = new CodedOutputStream (memoryStream);
-            codedStream.WriteUInt32 ((uint)value.CalculateSize ());
-            value.WriteTo (codedStream);
-            codedStream.Flush ();
-            stream.Write (memoryStream.ToArray ());
+            stream.Write (ProtoBuf.Encoder.EncodeResponse (value));
         }
 
-        public void Write (Schema.KRPC.Response[] value)
+        public void Write (Response[] value)
         {
             throw new NotSupportedException ();
         }
@@ -115,28 +110,8 @@ namespace KRPC.Server.RPC
             // Read as much data as we can from the client into the buffer, up to the buffer size
             offset += stream.Read (buffer, offset);
 
-            // Attempt to deserialize a request from the buffered data
-            var codedStream = new CodedInputStream (buffer, 0, offset);
-            try {
-                //TODO: do something with the size that is read?
-                codedStream.ReadUInt32 ();
-                bufferedRequest = Schema.KRPC.Request.Parser.ParseFrom (codedStream);
-            } catch (InvalidProtocolBufferException) {
-                // Failed to deserialize a request
-                if (offset >= buffer.Length) {
-                    // And the buffer is full
-                    throw new RequestBufferOverflowException ();
-                }
-                // And the buffer not yet full
-                // TODO: can we detect if the partial data received is a subset of a valid request?
-                // And we read to the end, so we have a valid part of a request
-                throw new NoRequestException ();
-            }
-
-            // Partial request is not complete, so some required fields weren't set
-            //if (!bufferedRequest.IsInitialized) {
-            //    throw new MalformedRequestException ();
-            //}
+            // Try decoding the request
+            bufferedRequest = ProtoBuf.Encoder.DecodeRequest (buffer, 0, offset);
 
             // Valid request received, reset the buffer
             offset = 0;

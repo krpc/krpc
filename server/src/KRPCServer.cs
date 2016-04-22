@@ -11,8 +11,6 @@ using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Continuations;
 using KRPC.Utils;
-using KRPC.ProtoBuf;
-using Google.Protobuf;
 
 namespace KRPC
 {
@@ -26,10 +24,10 @@ namespace KRPC
         readonly RPCServer rpcServer;
         readonly StreamServer streamServer;
 
-        IScheduler<IClient<Schema.KRPC.Request,Schema.KRPC.Response>> clientScheduler;
+        IScheduler<IClient<Request,Response>> clientScheduler;
         IList<RequestContinuation> continuations;
-        IDictionary<IClient<byte,Schema.KRPC.StreamMessage>, IList<StreamRequest>> streamRequests;
-        IDictionary<uint, ByteString> streamResultCache = new Dictionary<uint, ByteString> ();
+        IDictionary<IClient<byte,StreamMessage>, IList<StreamRequest>> streamRequests;
+        IDictionary<uint, object> streamResultCache = new Dictionary<uint, object> ();
 
         internal delegate double UniversalTimeFunction ();
 
@@ -112,9 +110,9 @@ namespace KRPC
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
             rpcServer = new RPCServer (rpcTcpServer);
             streamServer = new StreamServer (streamTcpServer);
-            clientScheduler = new RoundRobinScheduler<IClient<Schema.KRPC.Request,Schema.KRPC.Response>> ();
+            clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
             continuations = new List<RequestContinuation> ();
-            streamRequests = new Dictionary<IClient<byte,Schema.KRPC.StreamMessage>,IList<StreamRequest>> ();
+            streamRequests = new Dictionary<IClient<byte,StreamMessage>,IList<StreamRequest>> ();
 
             OneRPCPerUpdate = oneRPCPerUpdate;
             MaxTimePerUpdate = maxTimePerUpdate;
@@ -532,18 +530,18 @@ namespace KRPC
                         response.Error = e.ToString ();
                     }
                     rpcsExecuted++;
-                    var encodedReturnValue = ProtoBuf.Encoder.Encode (response.ReturnValue);
                     // Don't send an update if it is the previous one
-                    if (encodedReturnValue == streamResultCache [request.Identifier])
+                    //FIXME: does the following comparison work?!? The objects have not been serialized
+                    if (response.ReturnValue == streamResultCache [request.Identifier])
                         continue;
                     // Add the update to the response message
-                    streamResultCache [request.Identifier] = encodedReturnValue;
+                    streamResultCache [request.Identifier] = response.ReturnValue;
                     response.Time = GetUniversalTime ();
                     var streamResponse = request.Response;
                     streamResponse.Response = response;
                     streamMessage.Responses.Add (streamResponse);
                 }
-                streamClient.Stream.Write (streamMessage.ToProtobufStreamMessage ());
+                streamClient.Stream.Write (streamMessage);
             }
 
             timer.Stop ();
@@ -600,12 +598,12 @@ namespace KRPC
             currentClients.AddRange (yieldedContinuations.Select (((c) => c.Client)));
             foreach (var client in clientScheduler) {
                 if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
-                    Schema.KRPC.Request request = client.Stream.Read ();
+                    Request request = client.Stream.Read ();
                     if (OnClientActivity != null)
                         OnClientActivity (this, new ClientActivityArgs (client));
                     if (Logger.ShouldLog (Logger.Severity.Debug))
                         Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")", Logger.Severity.Debug);
-                    continuations.Add (new RequestContinuation (client, request.ToRequest ()));
+                    continuations.Add (new RequestContinuation (client, request));
                 }
             }
         }
@@ -644,7 +642,7 @@ namespace KRPC
 
             // Send response to the client
             response.Time = GetUniversalTime ();
-            ((RPCClient)client).Stream.Write (response.ToProtobufResponse ());
+            ((RPCClient)client).Stream.Write (response);
             if (Logger.ShouldLog (Logger.Severity.Debug)) {
                 if (response.HasError)
                     Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);

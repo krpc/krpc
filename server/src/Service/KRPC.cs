@@ -66,7 +66,7 @@ namespace KRPC.Service
                         parameter.Type = TypeUtils.GetTypeName (parameterSignature.Type);
                         if (parameterSignature.HasDefaultArgument) {
                             parameter.HasDefaultArgument = true;
-                            parameter.DefaultArgument = ProtocolBuffers.Encode (parameterSignature.DefaultArgument, parameterSignature.Type);
+                            parameter.DefaultArgument = parameterSignature.DefaultArgument;
                         }
                         procedure.Parameters.Add (parameter);
                     }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using KRPC.Service.Messages;
 using KRPC.Service;
 
-namespace KRPC.Utils
+namespace KRPC.ProtoBuf
 {
     static class ProtocolBuffers
     {

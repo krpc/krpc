@@ -1,7 +1,7 @@
 using System;
 using System.IO;
-using KRPC.Schema.KRPC;
-using Google.Protobuf;
+using KRPC.Service.Messages;
+using KRPC.ProtoBuf;
 
 namespace KRPC.Server.Stream
 {
@@ -37,9 +37,7 @@ namespace KRPC.Server.Stream
 
         public void Write (StreamMessage value)
         {
-            var bufferStream = new MemoryStream ();
-            value.WriteDelimitedTo (bufferStream);
-            stream.Write (bufferStream.ToArray ());
+            stream.Write (Encoder.EncodeStreamMessage (value));
         }
 
         public void Write (StreamMessage[] value)

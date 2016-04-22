@@ -1,5 +1,6 @@
 using System;
 using Google.Protobuf;
+using KRPC.ProtoBuf;
 using KRPC.Utils;
 using KRPC.Test.Service;
 using NUnit.Framework;

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Service.Messages;
 using KRPC.Utils;
-using KRPC.Schema.KRPC;
 
 namespace KRPC.Server.Stream
 {

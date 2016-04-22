@@ -2,7 +2,8 @@ using NUnit.Framework;
 using System.IO;
 using System.Linq;
 using KRPC.Server.Stream;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
+using KRPC.ProtoBuf;
 using Google.Protobuf;
 
 namespace KRPC.Test.Server.Stream
@@ -40,7 +41,7 @@ namespace KRPC.Test.Server.Stream
 
             expectedMessage = streamMessage;
             using (var stream = new MemoryStream ()) {
-                expectedMessage.WriteDelimitedTo (stream);
+                expectedMessage.ToProtobufStreamMessage ().WriteDelimitedTo (stream);
                 messageBytes = stream.ToArray ();
             }
         }

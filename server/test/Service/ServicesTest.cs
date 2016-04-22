@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Google.Protobuf;
 using KRPC;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Utils;
-using KRPC.ProtoBuf;
 using Moq;
 using NUnit.Framework;
 
@@ -46,54 +44,6 @@ namespace KRPC.Test.Service
         {
             var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
             return KRPC.Service.Services.Instance.HandleRequest (procedure, request);
-        }
-
-        static byte[] ToBytes<T> (T x) where T : Google.Protobuf.IMessage
-        {
-            using (var stream = new MemoryStream ()) {
-                x.WriteTo (stream);
-                return stream.ToArray ();
-            }
-        }
-
-        static byte[] ToBytes (Request x)
-        {
-            return ToBytes (x.ToProtobufRequest ());
-        }
-
-        static byte[] ToBytes (Response x)
-        {
-            return ToBytes (x.ToProtobufResponse ());
-        }
-
-        static byte[] ToBytes (float x)
-        {
-            using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteFloat (x);
-                codedStream.Flush ();
-                return stream.ToArray ();
-            }
-        }
-
-        static byte[] ToBytes (string x)
-        {
-            using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteString (x);
-                codedStream.Flush ();
-                return stream.ToArray ();
-            }
-        }
-
-        static byte[] ToBytes (byte[] x)
-        {
-            using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteBytes (ByteString.CopyFrom (x));
-                codedStream.Flush ();
-                return stream.ToArray ();
-            }
         }
 
         [SetUp]
@@ -582,8 +532,7 @@ namespace KRPC.Test.Service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureEnumArg (It.IsAny<TestService.TestEnum> ()));
             TestService.Service = mock.Object;
-            var request = Req ("TestService", "ProcedureTestEnumArg",
-                              Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int)).ToByteArray ()));
+            var request = Req ("TestService", "ProcedureTestEnumArg", Arg (0, arg));
             Assert.Throws<RPCException> (() => Run (request));
         }
 

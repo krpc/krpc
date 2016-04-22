@@ -1,5 +1,5 @@
 using System;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
 
 namespace KRPC.Server.Stream
 {

@@ -3,8 +3,9 @@ using System;
 using System.IO;
 using System.Linq;
 using KRPC.Server.RPC;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
 using Google.Protobuf;
+using KRPC.ProtoBuf;
 
 namespace KRPC.Test.Server.RPC
 {
@@ -25,8 +26,8 @@ namespace KRPC.Test.Server.RPC
             expectedRequest.Procedure = "SomeMethodName";
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteInt32 (expectedRequest.CalculateSize ());
-                expectedRequest.WriteTo (codedStream);
+                codedStream.WriteInt32 (expectedRequest.ToProtobufRequest ().CalculateSize ());
+                expectedRequest.ToProtobufRequest ().WriteTo (codedStream);
                 codedStream.Flush ();
                 requestBytes = stream.ToArray ();
             }
@@ -37,8 +38,8 @@ namespace KRPC.Test.Server.RPC
             expectedResponse.Time = 42;
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteInt32 (expectedResponse.CalculateSize ());
-                expectedResponse.WriteTo (codedStream);
+                codedStream.WriteInt32 (expectedResponse.ToProtobufResponse ().CalculateSize ());
+                expectedResponse.ToProtobufResponse ().WriteTo (codedStream);
                 codedStream.Flush ();
                 responseBytes = stream.ToArray ();
             }

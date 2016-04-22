@@ -48,7 +48,7 @@ namespace KRPC.Service.Scanner
             info.AddValue ("name", Name);
             info.AddValue ("type", TypeUtils.GetTypeName (Type));
             if (HasDefaultArgument)
-                info.AddValue ("default_argument", ProtocolBuffers.Encode (DefaultArgument, Type));
+                info.AddValue ("default_argument", global::KRPC.ProtoBuf.ProtocolBuffers.Encode (DefaultArgument, Type));
         }
     }
 }
