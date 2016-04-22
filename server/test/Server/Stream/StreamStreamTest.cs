@@ -25,6 +25,7 @@ namespace KRPC.Test.Server.Stream
 
             var streamResponse1 = new StreamResponse ();
             streamResponse1.Id = 1263;
+            streamResponse1.Response = response1;
 
             var response2 = new Response ();
             response2.Time = 123;
