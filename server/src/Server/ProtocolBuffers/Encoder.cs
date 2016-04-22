@@ -11,6 +11,8 @@ using KRPC.Server.ProtocolBuffers.RPC;
 
 namespace KRPC.Server.ProtocolBuffers
 {
+    //FIXME: a lot of this code is very similar to the C# client. Should only implement this stuff once.
+    //FIXME: this is not tested
     internal static class Encoder
     {
         public static Request DecodeRequest (byte[] buffer, int offset, int length)
