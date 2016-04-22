@@ -2,10 +2,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Linq;
 using NUnit.Framework;
-using KRPC.Server.Net;
+using KRPC.Server.TCP;
 using System;
 
-namespace KRPC.Test.Server.Net
+namespace KRPC.Test.Server.TCP
 {
     [TestFixture]
     public class TCPServerTest

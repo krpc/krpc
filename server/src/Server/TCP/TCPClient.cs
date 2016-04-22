@@ -2,7 +2,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace KRPC.Server.Net
+namespace KRPC.Server.TCP
 {
     sealed class TCPClient : IClient<byte,byte>
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Net.Sockets;
 
-namespace KRPC.Server.Net
+namespace KRPC.Server.TCP
 {
     sealed class TCPStream : IStream<byte,byte>
     {

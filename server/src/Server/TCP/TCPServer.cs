@@ -6,7 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using KRPC.Utils;
 
-namespace KRPC.Server.Net
+namespace KRPC.Server.TCP
 {
     sealed class TCPServer : IServer<byte,byte>
     {

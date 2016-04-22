@@ -54,6 +54,7 @@
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\bazel-krpc\external\csharp_nunit\NUnit-2.6.4\bin\framework\nunit.framework.dll</HintPath>
+      <Package>nunit</Package>
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\bazel-krpc\external\csharp_moq\lib\net40\Moq.dll</HintPath>
@@ -77,14 +78,14 @@
     <Compile Include="ProtoBuf\ProtocolBuffersTest.cs" />
     <Compile Include="Schema\RpcTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
-    <Compile Include="Server\Net\AssumptionsTest.cs" />
-    <Compile Include="Server\Net\NetworkInformationTest.cs" />
-    <Compile Include="Server\Net\TCPClientTest.cs" />
-    <Compile Include="Server\Net\TCPServerTest.cs" />
     <Compile Include="Server\RPC\RPCServerTest.cs" />
     <Compile Include="Server\RPC\RPCStreamTest.cs" />
     <Compile Include="Server\Stream\StreamServerTest.cs" />
     <Compile Include="Server\Stream\StreamStreamTest.cs" />
+    <Compile Include="Server\TCP\AssumptionsTest.cs" />
+    <Compile Include="Server\TCP\NetworkInformationTest.cs" />
+    <Compile Include="Server\TCP\TCPClientTest.cs" />
+    <Compile Include="Server\TCP\TCPServerTest.cs" />
     <Compile Include="Server\TestClient.cs" />
     <Compile Include="Server\TestStream.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />

@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace KRPC.Server.Net
+namespace KRPC.Server.TCP
 {
     static class NetworkInformation
     {

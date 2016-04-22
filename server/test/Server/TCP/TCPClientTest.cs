@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using KRPC.Server.Net;
+using KRPC.Server.TCP;
 
-namespace KRPC.Test.Server.Net
+namespace KRPC.Test.Server.TCP
 {
     [TestFixture]
     public class ClientTest

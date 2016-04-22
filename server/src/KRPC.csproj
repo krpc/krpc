@@ -96,10 +96,6 @@
     <Compile Include="Server\IClientEventArgs.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IStream.cs" />
-    <Compile Include="Server\Net\NetworkInformation.cs" />
-    <Compile Include="Server\Net\TCPClient.cs" />
-    <Compile Include="Server\Net\TCPServer.cs" />
-    <Compile Include="Server\Net\TCPStream.cs" />
     <Compile Include="Server\RPC\MalformedRequestException.cs" />
     <Compile Include="Server\RPC\NoRequestException.cs" />
     <Compile Include="Server\RPC\RequestBufferOverflowException.cs" />
@@ -111,6 +107,10 @@
     <Compile Include="Server\Stream\StreamRequest.cs" />
     <Compile Include="Server\Stream\StreamServer.cs" />
     <Compile Include="Server\Stream\StreamStream.cs" />
+    <Compile Include="Server\TCP\NetworkInformation.cs" />
+    <Compile Include="Server\TCP\TCPClient.cs" />
+    <Compile Include="Server\TCP\TCPServer.cs" />
+    <Compile Include="Server\TCP\TCPStream.cs" />
     <Compile Include="ServicesChecker.cs" />
     <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
