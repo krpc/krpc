@@ -22,7 +22,7 @@ namespace KRPC
 
         internal IServer<Request,Response> RPCServer { get; private set; }
 
-        internal IServer<byte,StreamMessage> StreamServer { get; private set; }
+        internal IServer<NoMessage,StreamMessage> StreamServer { get; private set; }
 
         /// <summary>
         /// Event triggered when the server starts

@@ -21,7 +21,7 @@ namespace KRPC
         IList<KRPCServer> servers = new List<KRPCServer> ();
         IScheduler<IClient<Request,Response>> clientScheduler;
         IList<RequestContinuation> continuations;
-        IDictionary<IClient<byte,StreamMessage>, IList<StreamRequest>> streamRequests;
+        IDictionary<IClient<NoMessage,StreamMessage>, IList<StreamRequest>> streamRequests;
         IDictionary<uint, object> streamResultCache = new Dictionary<uint, object> ();
 
         internal delegate double UniversalTimeFunction ();
@@ -62,14 +62,14 @@ namespace KRPC
                 OnRPCClientDisconnected (this, new ClientDisconnectedArgs (client));
         }
 
-        internal void StreamClientConnected (IClient<byte,StreamMessage> client)
+        internal void StreamClientConnected (IClient<NoMessage,StreamMessage> client)
         {
             streamRequests [client] = new List<StreamRequest> ();
             if (OnStreamClientConnected != null)
                 OnStreamClientConnected (this, new ClientConnectedArgs (client));
         }
 
-        internal void StreamClientDisconnected (IClient<byte,StreamMessage> client)
+        internal void StreamClientDisconnected (IClient<NoMessage,StreamMessage> client)
         {
             streamRequests.Remove (client);
             if (OnStreamClientDisconnected != null)
@@ -130,7 +130,7 @@ namespace KRPC
         {
             clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
             continuations = new List<RequestContinuation> ();
-            streamRequests = new Dictionary<IClient<byte,StreamMessage>,IList<StreamRequest>> ();
+            streamRequests = new Dictionary<IClient<NoMessage,StreamMessage>,IList<StreamRequest>> ();
 
             OneRPCPerUpdate = false;
             MaxTimePerUpdate = 5000;
@@ -468,7 +468,7 @@ namespace KRPC
                     streamMessage.Responses.Add (streamResponse);
                 }
                 //FIXME: this cast won't work for generic clients
-                ((IClient<byte,StreamMessage>)streamClient).Stream.Write (streamMessage);
+                ((IClient<NoMessage,StreamMessage>)streamClient).Stream.Write (streamMessage);
             }
 
             timer.Stop ();
@@ -477,10 +477,10 @@ namespace KRPC
             TimePerStreamUpdate = (float)timer.ElapsedSeconds ();
         }
 
-        IClient<byte,StreamMessage> GetStreamClient (IClient rpcClient)
+        IClient<NoMessage,StreamMessage> GetStreamClient (IClient rpcClient)
         {
             // Find stream client corresponding to the RPC client
-            IClient<byte,StreamMessage> streamClient = null;
+            IClient<NoMessage,StreamMessage> streamClient = null;
             foreach (var server in servers) {
                 streamClient = server.StreamServer.Clients.SingleOrDefault (c => c.Guid == rpcClient.Guid);
                 if (streamClient != null)

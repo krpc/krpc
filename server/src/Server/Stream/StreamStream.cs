@@ -5,7 +5,7 @@ using KRPC.ProtoBuf;
 
 namespace KRPC.Server.Stream
 {
-    sealed class StreamStream : IStream<byte,StreamMessage>
+    sealed class StreamStream : IStream<NoMessage,StreamMessage>
     {
         readonly IStream<byte,byte> stream;
 
@@ -20,17 +20,17 @@ namespace KRPC.Server.Stream
             }
         }
 
-        public byte Read ()
+        public NoMessage Read ()
         {
             throw new NotImplementedException ();
         }
 
-        public int Read (byte[] buffer, int offset)
+        public int Read (NoMessage[] buffer, int offset)
         {
             throw new NotImplementedException ();
         }
 
-        public int Read (byte[] buffer, int offset, int size)
+        public int Read (NoMessage[] buffer, int offset, int size)
         {
             throw new NotImplementedException ();
         }

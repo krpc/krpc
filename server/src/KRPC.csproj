@@ -129,6 +129,7 @@
     <Compile Include="Service\Messages\Enumeration.cs" />
     <Compile Include="Service\Messages\EnumerationValue.cs" />
     <Compile Include="Service\Messages\IMessage.cs" />
+    <Compile Include="Service\Messages\NoMessage.cs" />
     <Compile Include="Service\Messages\Parameter.cs" />
     <Compile Include="Service\Messages\Procedure.cs" />
     <Compile Include="Service\Messages\Response.cs" />

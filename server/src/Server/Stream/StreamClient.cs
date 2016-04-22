@@ -3,7 +3,7 @@ using KRPC.Service.Messages;
 
 namespace KRPC.Server.Stream
 {
-    sealed class StreamClient : IClient<byte,StreamMessage>
+    sealed class StreamClient : IClient<NoMessage,StreamMessage>
     {
         readonly IClient<byte,byte> client;
 
@@ -24,7 +24,7 @@ namespace KRPC.Server.Stream
             get { return client.Address; }
         }
 
-        public IStream<byte,StreamMessage> Stream { get; private set; }
+        public IStream<NoMessage,StreamMessage> Stream { get; private set; }
 
         public bool Connected {
             get { return client.Connected; }
@@ -40,7 +40,7 @@ namespace KRPC.Server.Stream
             return obj != null && Equals (obj as StreamClient);
         }
 
-        public bool Equals (IClient<byte,StreamMessage> other)
+        public bool Equals (IClient<NoMessage,StreamMessage> other)
         {
             if ((object)other == null)
                 return false;
@@ -70,4 +70,3 @@ namespace KRPC.Server.Stream
         }
     }
 }
-
