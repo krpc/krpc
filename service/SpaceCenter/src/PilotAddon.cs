@@ -180,7 +180,7 @@ namespace KRPC.SpaceCenter
 
         internal static ControlInputs Set (Vessel vessel)
         {
-            manualInputClients.Add (KRPC.KRPCServer.Context.RPCClient);
+            manualInputClients.Add (KRPC.KRPCCore.Context.RPCClient);
             if (!manualInputs.ContainsKey (vessel))
                 manualInputs [vessel] = new ControlInputs ();
             return manualInputs [vessel];

@@ -59,8 +59,8 @@ namespace KRPC.Service
         /// </summary>
         public Response HandleRequest (ProcedureSignature procedure, object[] arguments)
         {
-            if ((KRPCServer.Context.GameScene & procedure.GameScene) == 0)
-                throw new RPCException (procedure, "Procedure not available in game scene '" + KRPCServer.Context.GameScene + "'");
+            if ((KRPCCore.Context.GameScene & procedure.GameScene) == 0)
+                throw new RPCException (procedure, "Procedure not available in game scene '" + KRPCCore.Context.GameScene + "'");
             object returnValue;
             try {
                 returnValue = procedure.Handler.Invoke (arguments);

@@ -49,7 +49,7 @@ namespace KRPC.Test.Service
         [SetUp]
         public void SetUp ()
         {
-            KRPCServer.Context.SetGameScene (GameScene.Flight);
+            KRPCCore.Context.SetGameScene (GameScene.Flight);
         }
 
         [Test]
@@ -738,7 +738,7 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestWrongGameMode ()
         {
-            KRPCServer.Context.SetGameScene (GameScene.TrackingStation);
+            KRPCCore.Context.SetGameScene (GameScene.TrackingStation);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureNoArgsNoReturn ());
             TestService.Service = mock.Object;

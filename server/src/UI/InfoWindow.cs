@@ -9,8 +9,6 @@ namespace KRPC.UI
         const float windowWidth = 300f;
         GUIStyle labelStyle, nameLabelStyle, valueLabelStyle, separatorStyle, buttonStyle;
 
-        bool running;
-
         const string networkInfoText = "Network Info";
         const string bytesReadText = "Data read";
         const string bytesWrittenText = "Data written";
@@ -42,8 +40,6 @@ namespace KRPC.UI
         const string notApplicableText = "n/a";
 
         const string clearStatisticsText = "Clear Statistics";
-
-        public KRPCServer Server { private get; set; }
 
         protected override void Init ()
         {
@@ -95,52 +91,43 @@ namespace KRPC.UI
             if (update)
                 lastUpdate = DateTime.Now;
 
-            // Force window to resize to height of content
-            if (running != Server.Running) {
-                running = Server.Running;
-                Position = new Rect (Position.x, Position.y, Position.width, 0f);
-            }
-
             GUILayout.BeginVertical ();
 
-            if (Server.Running) {
-                GUILayout.Label (networkInfoText, labelStyle);
-                DrawInfo (bytesReadText, BytesToString (Server.BytesRead));
-                DrawInfo (bytesWrittenText, BytesToString (Server.BytesWritten));
-                DrawInfo (bytesReadRateText, BytesToString ((ulong)Server.BytesReadRate) + "/s");
-                DrawInfo (bytesWrittenRateText, BytesToString ((ulong)Server.BytesWrittenRate) + "/s");
+            GUILayout.Label (networkInfoText, labelStyle);
+            DrawInfo (bytesReadText, BytesToString (KRPCCore.Instance.BytesRead));
+            DrawInfo (bytesWrittenText, BytesToString (KRPCCore.Instance.BytesWritten));
+            DrawInfo (bytesReadRateText, BytesToString ((ulong)KRPCCore.Instance.BytesReadRate) + "/s");
+            DrawInfo (bytesWrittenRateText, BytesToString ((ulong)KRPCCore.Instance.BytesWrittenRate) + "/s");
 
-                GUILayoutExtensions.Separator (separatorStyle);
+            GUILayoutExtensions.Separator (separatorStyle);
 
-                GUILayout.Label (rpcInfoText, labelStyle);
-                DrawInfo (rpcsExecutedText, Server.RPCsExecuted.ToString ());
-                DrawInfo (rpcRateText, Math.Round (Server.RPCRate) + " RPC/s");
-                DrawInfo (rpcExecutionMode, Server.OneRPCPerUpdate ? singleRPCModeText : (Server.AdaptiveRateControl ? adaptiveModeText : staticModeText));
-                DrawInfo (maxTimePerUpdateText, Server.OneRPCPerUpdate ? notApplicableText : Server.MaxTimePerUpdate + " ns");
-                DrawInfo (rpcReceiveModeText, Server.BlockingRecv ? blockingModeText : nonBlockingModeText);
-                DrawInfo (recvTimeoutText, Server.BlockingRecv ? Server.RecvTimeout + " ns" : notApplicableText);
-                DrawInfo (timePerRPCUpdateText, String.Format ("{0:F5} s", Server.TimePerRPCUpdate));
-                DrawInfo (pollTimePerRPCUpdateText, String.Format ("{0:F5} s", Server.PollTimePerRPCUpdate));
-                DrawInfo (execTimePerRPCUpdateText, String.Format ("{0:F5} s", Server.ExecTimePerRPCUpdate));
+            GUILayout.Label (rpcInfoText, labelStyle);
+            DrawInfo (rpcsExecutedText, KRPCCore.Instance.RPCsExecuted.ToString ());
+            DrawInfo (rpcRateText, Math.Round (KRPCCore.Instance.RPCRate) + " RPC/s");
+            DrawInfo (rpcExecutionMode, KRPCCore.Instance.OneRPCPerUpdate ? singleRPCModeText : (KRPCCore.Instance.AdaptiveRateControl ? adaptiveModeText : staticModeText));
+            DrawInfo (maxTimePerUpdateText, KRPCCore.Instance.OneRPCPerUpdate ? notApplicableText : KRPCCore.Instance.MaxTimePerUpdate + " ns");
+            DrawInfo (rpcReceiveModeText, KRPCCore.Instance.BlockingRecv ? blockingModeText : nonBlockingModeText);
+            DrawInfo (recvTimeoutText, KRPCCore.Instance.BlockingRecv ? KRPCCore.Instance.RecvTimeout + " ns" : notApplicableText);
+            DrawInfo (timePerRPCUpdateText, String.Format ("{0:F5} s", KRPCCore.Instance.TimePerRPCUpdate));
+            DrawInfo (pollTimePerRPCUpdateText, String.Format ("{0:F5} s", KRPCCore.Instance.PollTimePerRPCUpdate));
+            DrawInfo (execTimePerRPCUpdateText, String.Format ("{0:F5} s", KRPCCore.Instance.ExecTimePerRPCUpdate));
 
-                GUILayoutExtensions.Separator (separatorStyle);
+            GUILayoutExtensions.Separator (separatorStyle);
 
-                GUILayout.Label (streamInfoText, labelStyle);
-                DrawInfo (streamingRPCsText, Server.StreamRPCs.ToString ());
-                DrawInfo (streamingRPCsExecutedText, Server.StreamRPCsExecuted.ToString ());
-                DrawInfo (streamingRPCRateText, Math.Round (Server.StreamRPCRate) + " RPC/s");
-                DrawInfo (timePerStreamUpdateText, String.Format ("{0:F5} s", Server.TimePerStreamUpdate));
+            GUILayout.Label (streamInfoText, labelStyle);
+            DrawInfo (streamingRPCsText, KRPCCore.Instance.StreamRPCs.ToString ());
+            DrawInfo (streamingRPCsExecutedText, KRPCCore.Instance.StreamRPCsExecuted.ToString ());
+            DrawInfo (streamingRPCRateText, Math.Round (KRPCCore.Instance.StreamRPCRate) + " RPC/s");
+            DrawInfo (timePerStreamUpdateText, String.Format ("{0:F5} s", KRPCCore.Instance.TimePerStreamUpdate));
 
-                GUILayoutExtensions.Separator (separatorStyle);
+            GUILayoutExtensions.Separator (separatorStyle);
 
-                GUILayout.BeginHorizontal ();
-                if (GUILayout.Button (clearStatisticsText, buttonStyle)) {
-                    Server.ClearStats ();
-                }
-                GUILayout.EndHorizontal ();
-            } else {
-                GUILayout.Label ("Server not running");
+            GUILayout.BeginHorizontal ();
+            if (GUILayout.Button (clearStatisticsText, buttonStyle)) {
+                KRPCCore.Instance.ClearStats ();
             }
+            GUILayout.EndHorizontal ();
+
             GUILayout.EndVertical ();
             GUI.DragWindow ();
         }

@@ -11,14 +11,14 @@ namespace KRPC.Service
     /// </summary>
     class RequestContinuation : Continuation<Response>
     {
-        public IClient Client { get; private set; }
+        public IClient<Request,Response> Client { get; private set; }
 
         readonly Request request;
         readonly ProcedureSignature procedure;
         readonly Exception exception;
         readonly IContinuation continuation;
 
-        public RequestContinuation (IClient client, Request request)
+        public RequestContinuation (IClient<Request,Response> client, Request request)
         {
             Client = client;
             this.request = request;
@@ -29,7 +29,7 @@ namespace KRPC.Service
             }
         }
 
-        RequestContinuation (IClient client, Request request, ProcedureSignature procedure, IContinuation continuation)
+        RequestContinuation (IClient<Request,Response> client, Request request, ProcedureSignature procedure, IContinuation continuation)
         {
             Client = client;
             this.request = request;

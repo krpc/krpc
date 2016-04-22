@@ -13,8 +13,6 @@ namespace TestServer
 {
     class MainClass
     {
-        static KRPCServer server;
-
         static void Help (OptionSet options)
         {
             Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--rpc_port=VALUE] [--stream_port=VALUE]");
@@ -87,10 +85,13 @@ namespace TestServer
             }
 
             KRPC.Service.Scanner.Scanner.GetServices ();
-            server = new KRPCServer (IPAddress.Loopback, rpcPort, streamPort);
-            KRPCServer.Context.SetGameScene (GameScene.SpaceCenter);
+
+            var core = KRPCCore.Instance;
+            KRPCCore.Context.SetGameScene (GameScene.SpaceCenter);
             var timeSpan = new TimeSpan ();
-            server.GetUniversalTime = () => timeSpan.TotalSeconds;
+            KRPCCore.Instance.GetUniversalTime = () => timeSpan.TotalSeconds;
+
+            var server = new KRPCServer (IPAddress.Loopback, rpcPort, streamPort);
             server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
 
             Console.WriteLine ("Starting server...");
@@ -107,7 +108,7 @@ namespace TestServer
                 timer.Reset ();
                 timer.Start ();
 
-                server.Update ();
+                core.Update ();
 
                 if (serverDebug && update % targetFPS == 0) {
                     // Output details about whether server.Update() took too little or too long to execute

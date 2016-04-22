@@ -73,7 +73,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Engage ()
         {
-            requestingClient = KRPC.KRPCServer.Context.RPCClient;
+            requestingClient = KRPC.KRPCCore.Context.RPCClient;
             engaged [vesselId] = this;
         }
 

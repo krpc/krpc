@@ -81,6 +81,7 @@
     <Compile Include="Continuations\YieldException.cs" />
     <Compile Include="KRPCAddon.cs" />
     <Compile Include="KRPCConfiguration.cs" />
+    <Compile Include="KRPCCore.cs" />
     <Compile Include="KRPCServer.cs" />
     <Compile Include="ProtoBuf\Encoder.cs" />
     <Compile Include="ProtoBuf\MessageExtensions.cs" />
