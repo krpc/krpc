@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using KRPC.Service.Messages;
 using Google.Protobuf;
 using System.Collections.Generic;

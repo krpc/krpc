@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Google.Protobuf;
 using KRPC.Service;
