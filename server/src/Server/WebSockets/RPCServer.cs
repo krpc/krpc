@@ -28,9 +28,7 @@ namespace KRPC.Server.WebSockets
         {
             try {
                 var request = ReadRequest (args.Client.Stream);
-                var clientName = "unknown";
-                if (request.Headers.ContainsKey ("Origin"))
-                    clientName = request.Headers ["Origin"];            
+                var clientName = GetClientName (request);
                 clientKeys [args.Client] = request.Headers ["Sec-WebSocket-Key"];
                 return new RPCClient (clientName, args.Client);
             } catch (HandshakeException e) {
@@ -110,6 +108,18 @@ namespace KRPC.Server.WebSockets
 
             // Note: Sec-WebSocket-Protocol and Sec-WebSocket-Extensions fields are ignored
             return request;
+        }
+
+        /// <summary>
+        /// Get the client name from a connection request
+        /// </summary>
+        public static string GetClientName (HTTPRequest request)
+        {
+            var query = request.URI.Query;
+            //FIXME: make this more robust to arbitrary query arguments
+            if (query.StartsWith ("?name="))
+                return query.Substring ("?name=".Length);
+            return request.Headers.ContainsKey ("Origin") ? request.Headers ["Origin"] : "unknown";
         }
     }
 }
