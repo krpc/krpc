@@ -93,16 +93,16 @@
     <Compile Include="Server\IClientEventArgs.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IStream.cs" />
+    <Compile Include="Server\NoRequestException.cs" />
     <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
-    <Compile Include="Server\ProtocolBuffers\RPC\NoRequestException.cs" />
-    <Compile Include="Server\ProtocolBuffers\RPC\RequestBufferOverflowException.cs" />
-    <Compile Include="Server\ProtocolBuffers\RPC\RPCClient.cs" />
-    <Compile Include="Server\ProtocolBuffers\RPC\RPCServer.cs" />
-    <Compile Include="Server\ProtocolBuffers\RPC\RPCStream.cs" />
-    <Compile Include="Server\ProtocolBuffers\Stream\StreamClient.cs" />
-    <Compile Include="Server\ProtocolBuffers\Stream\StreamServer.cs" />
-    <Compile Include="Server\ProtocolBuffers\Stream\StreamStream.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPCClient.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPCServer.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPCStream.cs" />
+    <Compile Include="Server\ProtocolBuffers\StreamClient.cs" />
+    <Compile Include="Server\ProtocolBuffers\StreamServer.cs" />
+    <Compile Include="Server\ProtocolBuffers\StreamStream.cs" />
+    <Compile Include="Server\RequestBufferOverflowException.cs" />
     <Compile Include="Server\ServerException.cs" />
     <Compile Include="Server\TCP\NetworkInformation.cs" />
     <Compile Include="Server\TCP\TCPClient.cs" />
@@ -177,5 +177,11 @@
     <Compile Include="Utils\RoundRobinScheduler.cs" />
     <Compile Include="Utils\StopwatchExtensions.cs" />
     <Compile Include="Utils\Tuple.cs" />
+    <Compile Include="Server\WebSockets\Frame.cs" />
+    <Compile Include="Server\WebSockets\Header.cs" />
+    <Compile Include="Server\WebSockets\RPCClient.cs" />
+    <Compile Include="Server\WebSockets\RPCServer.cs" />
+    <Compile Include="Server\WebSockets\RPCStream.cs" />
+    <Compile Include="Server\WebSockets\Utils.cs" />
   </ItemGroup>
 </Project>

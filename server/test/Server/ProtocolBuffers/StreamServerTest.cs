@@ -4,9 +4,9 @@ using System.Linq;
 using NUnit.Framework;
 using Moq;
 using KRPC.Server;
-using KRPC.Server.ProtocolBuffers.Stream;
+using KRPC.Server.ProtocolBuffers;
 
-namespace KRPC.Test.Server.ProtocolBuffers.Stream
+namespace KRPC.Test.Server.ProtocolBuffers
 {
     [TestFixture]
     public class StreamServerTest

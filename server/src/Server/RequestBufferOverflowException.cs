@@ -1,6 +1,6 @@
 using System;
 
-namespace KRPC.Server.ProtocolBuffers.RPC
+namespace KRPC.Server
 {
     class RequestBufferOverflowException : Exception
     {

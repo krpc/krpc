@@ -3,7 +3,7 @@ using System.IO;
 using KRPC.Service.Messages;
 using KRPC.Server.ProtocolBuffers;
 
-namespace KRPC.Server.ProtocolBuffers.Stream
+namespace KRPC.Server.ProtocolBuffers
 {
     sealed class StreamStream : IStream<NoMessage,StreamMessage>
     {

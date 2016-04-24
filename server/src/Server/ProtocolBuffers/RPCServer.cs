@@ -5,7 +5,7 @@ using System.Text;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
-namespace KRPC.Server.ProtocolBuffers.RPC
+namespace KRPC.Server.ProtocolBuffers
 {
     sealed class RPCServer : IServer<Request,Response>
     {

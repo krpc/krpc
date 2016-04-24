@@ -77,10 +77,10 @@
     <Compile Include="KRPCConfigurationTest.cs" />
     <Compile Include="Schema\RpcTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
-    <Compile Include="Server\ProtocolBuffers\RPC\RPCServerTest.cs" />
-    <Compile Include="Server\ProtocolBuffers\RPC\RPCStreamTest.cs" />
-    <Compile Include="Server\ProtocolBuffers\Stream\StreamServerTest.cs" />
-    <Compile Include="Server\ProtocolBuffers\Stream\StreamStreamTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPCServerTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPCStreamTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\StreamServerTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\StreamStreamTest.cs" />
     <Compile Include="Server\TCP\AssumptionsTest.cs" />
     <Compile Include="Server\TCP\NetworkInformationTest.cs" />
     <Compile Include="Server\TCP\TCPClientTest.cs" />

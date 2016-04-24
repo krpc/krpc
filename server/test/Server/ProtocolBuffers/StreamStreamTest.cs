@@ -1,12 +1,11 @@
 using NUnit.Framework;
 using System.IO;
 using System.Linq;
-using KRPC.Server.ProtocolBuffers.Stream;
-using KRPC.Service.Messages;
 using KRPC.Server.ProtocolBuffers;
+using KRPC.Service.Messages;
 using Google.Protobuf;
 
-namespace KRPC.Test.Server.ProtocolBuffers.Stream
+namespace KRPC.Test.Server.ProtocolBuffers
 {
     [TestFixture]
     public class StreamStreamTest

@@ -5,9 +5,9 @@ using System.Text;
 using NUnit.Framework;
 using Moq;
 using KRPC.Server;
-using KRPC.Server.ProtocolBuffers.RPC;
+using KRPC.Server.ProtocolBuffers;
 
-namespace KRPC.Test.Server.ProtocolBuffers.RPC
+namespace KRPC.Test.Server.ProtocolBuffers
 {
     [TestFixture]
     public class RPCServerTest

@@ -1,7 +1,7 @@
 using System;
 using KRPC.Service.Messages;
 
-namespace KRPC.Server.ProtocolBuffers.RPC
+namespace KRPC.Server.ProtocolBuffers
 {
     sealed class RPCClient : IClient<Request,Response>
     {

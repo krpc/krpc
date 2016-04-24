@@ -5,9 +5,7 @@ using KRPC.Service;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
-using KRPC.Service.Scanner;
 using KRPC.Service.Messages;
-using KRPC.Server.ProtocolBuffers.RPC;
 
 namespace KRPC.Server.ProtocolBuffers
 {
