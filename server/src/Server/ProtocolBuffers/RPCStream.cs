@@ -13,7 +13,7 @@ namespace KRPC.Server.ProtocolBuffers
             Stream.Write (Encoder.EncodeResponse (value));
         }
 
-        protected override Request Decode (byte[] data, int start, int length)
+        protected override Request Decode (byte[] data, int start, int length, ref int read)
         {
             return Encoder.DecodeRequest (data, start, length);
         }

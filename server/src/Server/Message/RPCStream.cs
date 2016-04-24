@@ -8,7 +8,9 @@ namespace KRPC.Server.Message
         // 1MB buffer
         internal const int bufferSize = 1 * 1024 * 1024;
         Request bufferedRequest;
+        //FIXME: use a circular buffer, so that when index advances forward the space preceeding it can be used
         byte[] buffer = new byte[bufferSize];
+        int index;
         int offset;
 
         protected RPCStream (IStream<byte,byte> stream)
@@ -18,7 +20,16 @@ namespace KRPC.Server.Message
 
         protected IStream<byte,byte> Stream { get; private set; }
 
-        protected abstract Request Decode (byte[] data, int start, int length);
+        /// <summary>
+        /// Attempt to decode a request object from the given data.
+        /// If the decoding fails to decode a message, a NoRequestException is thrown.
+        /// If the decoding failed to read a message, but bytes were consumed, the number of
+        /// bytes consumed is set in <paramref name="read"/>.
+        /// If the decoding succeeds, <paramref name="read"/> is assumed to have been set to length,
+        /// i.e. length bytes must have been consumed when decoding the request.
+        /// </summary>
+        //FIXME: this interface is a bit gnarly - can we do better?
+        protected abstract Request Decode (byte[] data, int start, int length, ref int read);
 
         /// <summary>
         /// Returns true if there is a request waiting to be read. A Call to Read() will
@@ -109,9 +120,16 @@ namespace KRPC.Server.Message
             offset += Stream.Read (buffer, offset);
 
             // Try decoding the request
-            bufferedRequest = Decode (buffer, 0, offset);
+            int read = 0;
+            try {
+                bufferedRequest = Decode (buffer, index, offset, ref read);
+            } catch (NoRequestException e) {
+                index += read;
+                throw e;
+            }
 
             // Valid request received, reset the buffer
+            index = 0;
             offset = 0;
         }
     }
