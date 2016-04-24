@@ -1,7 +1,7 @@
-﻿using System;
-using System.Text;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace KRPC.Server.HTTP
 {
@@ -11,7 +11,7 @@ namespace KRPC.Server.HTTP
 
         public string Method { get; private set; }
 
-        public string URI { get; private set; }
+        public Uri URI { get; private set; }
 
         public string Protocol { get; private set; }
 
@@ -19,7 +19,11 @@ namespace KRPC.Server.HTTP
 
         public static HTTPRequest FromBytes (byte[] data, int index, int count)
         {
-            var content = Encoding.ASCII.GetString (data, index, count);
+            return FromString (Encoding.ASCII.GetString (data, index, count));
+        }
+
+        public static HTTPRequest FromString (string content)
+        {
             var request = new HTTPRequest ();
             var line = content.Split (new [] { NEWLINE }, StringSplitOptions.None).AsEnumerable ().GetEnumerator ();
 
@@ -29,8 +33,17 @@ namespace KRPC.Server.HTTP
             var requestLineParts = line.Current.Split (' ');
             if (requestLineParts.Length != 3)
                 throw new MalformedRequest ("Request line malformed");
+            if (requestLineParts [0] == "")
+                throw new MalformedRequest ("Invalid or unsupported method");
             request.Method = requestLineParts [0];
-            request.URI = requestLineParts [1];
+            try {
+                var baseUri = new Uri ("http://localhost/");
+                request.URI = new Uri (baseUri, requestLineParts [1]);
+            } catch (UriFormatException) {
+                throw new MalformedRequest ("URI is malformed");
+            }
+            if (requestLineParts [2] == "")
+                throw new MalformedRequest ("Invalid or unsupported protocol");
             request.Protocol = requestLineParts [2];
 
             // Parse header fields
@@ -46,18 +59,17 @@ namespace KRPC.Server.HTTP
                 if (key == "")
                     throw new MalformedRequest ("Header field key empty");
                 if (value == "")
-                    throw new MalformedRequest ("Header field value empty, for " + key);
+                    throw new MalformedRequest ("Header field value empty");
+                if (request.Headers.ContainsKey (key))
+                    throw new MalformedRequest ("Header field repeated");
                 request.Headers [key] = value;
                 if (!line.MoveNext ())
                     throw new MalformedRequest ("Request ended early");
             }
 
             // End of request
-            if (line.Current != "")
+            if (line.Current != "" || !line.MoveNext () || line.Current != "")
                 throw new MalformedRequest ("Request ended early: ");
-            //FIXME: how many blank lines are allowed at the end?
-            while (line.Current == "" && line.MoveNext ())
-                continue;
             if (line.MoveNext ())
                 throw new MalformedRequest ("Request too long");
 

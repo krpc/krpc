@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using KRPC.Server.HTTP;
 using KRPC.Service.Messages;
-using System.Collections.Generic;
 using KRPC.Utils;
+using System.Linq;
+using System;
 
 namespace KRPC.Server.WebSockets
 {
@@ -58,9 +60,9 @@ namespace KRPC.Server.WebSockets
                 var clientKey = clientKeys [args.Client];
                 var returnKey = System.Convert.ToBase64String (sha1.ComputeHash (Encoding.ASCII.GetBytes (clientKey + WEB_SOCKETS_KEY)));
                 var response = new HTTPResponse (101, "Switching Protocols");
-                response.AddAttribute ("Upgrade", "websocket");
-                response.AddAttribute ("Connection", "Upgrade");
-                response.AddAttribute ("Sec-WebSocket-Accept", returnKey);
+                response.AddHeaderField ("Upgrade", "websocket");
+                response.AddHeaderField ("Connection", "Upgrade");
+                response.AddHeaderField ("Sec-WebSocket-Accept", returnKey);
                 args.Client.Stream.Write (response.ToBytes ());
             }
         }
@@ -75,7 +77,7 @@ namespace KRPC.Server.WebSockets
             var request = HTTPRequest.FromBytes (buffer, 0, count);
             if (request.Protocol != "HTTP/1.1")
                 throw new HandshakeException (HTTPResponse.HTTPVersionNotSupported);
-            if (request.URI != "/")
+            if (request.URI.AbsolutePath != "/")
                 throw new HandshakeException (HTTPResponse.NotFound);
             if (request.Method != "GET")
                 throw new HandshakeException (HTTPResponse.MethodNotAllowed);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 
 namespace KRPC.Server.HTTP
@@ -40,15 +40,22 @@ namespace KRPC.Server.HTTP
 
         public string Body { get; set; }
 
-        public HTTPResponse (uint code, string type)
+        public HTTPResponse (uint status, string reason)
         {
-            contents.Append (PROTOCOL + " " + code + " " + type + NEWLINE);
+            if (reason.Trim () == "" || reason.Contains ("\r") || reason.Contains ("\n"))
+                throw new ArgumentException ("Type is malformed");
+            contents.Append (PROTOCOL + " " + status + " " + reason + NEWLINE);
             Body = "";
         }
 
-        public void AddAttribute (string key, string value)
+        public void AddHeaderField (string key, string value)
         {
-            contents.Append (key + ": " + value + NEWLINE);
+            if (key.Trim () == "" || value.Trim () == "")
+                throw new ArgumentException ("Attribute is malformed");
+            string field = key + ": " + value;
+            if (field.Contains ("\r") || field.Contains ("\n"))
+                throw new ArgumentException ("Attribute is malformed");
+            contents.Append (field + NEWLINE);
         }
 
         public override string ToString ()
