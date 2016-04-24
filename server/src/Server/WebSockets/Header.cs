@@ -37,7 +37,7 @@ namespace KRPC.Server.WebSockets
         public int HeaderLength {
             get {
                 var length = 2;
-                if (126 <= Length && Length <= (ulong)Int16.MaxValue)
+                if (126 <= Length && Length <= (ulong)UInt16.MaxValue)
                     length += 2;
                 else if ((ulong)Int16.MaxValue < Length)
                     length += 8;
@@ -75,7 +75,7 @@ namespace KRPC.Server.WebSockets
         {
             if (Masked)
                 throw new NotImplementedException ();
-            
+
             var bytes = new byte[HeaderLength];
 
             if (FinalFragment)
@@ -90,17 +90,18 @@ namespace KRPC.Server.WebSockets
 
             if (Length < 126) {
                 bytes [1] = (byte)Length;
-            } else if (Length <= (ulong)Int16.MaxValue) {
+            } else if (Length <= (ulong)UInt16.MaxValue) {
                 bytes [1] = 126;
                 byte[] size = BitConverter.GetBytes ((Int16)Length);
                 bytes [2] = size [1];
                 bytes [3] = size [0];
-            } else if (Length <= (ulong)Int32.MaxValue) {
+            } else if (Length <= UInt64.MaxValue / 2L) {
                 bytes [1] = 127;
                 byte[] size = BitConverter.GetBytes ((Int64)Length);
                 for (int i = 0; i < 8; i++)
-                    bytes [2 + i] = size [8 - i];
-            }
+                    bytes [2 + i] = size [7 - i];
+            } else
+                throw new FramingException ();
 
             return bytes;
         }
@@ -140,7 +141,7 @@ namespace KRPC.Server.WebSockets
                     throw new MalformedHeaderException ();
                 var lengthBytes = new byte[8];
                 for (int i = 0; i < 8; i++)
-                    lengthBytes [i] = data [index + 11 - i];
+                    lengthBytes [i] = data [index + 9 - i];
                 header.Length = BitConverter.ToUInt64 (lengthBytes, 0);
                 extPayloadLengthSize = 8;
             } else
