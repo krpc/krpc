@@ -1,5 +1,6 @@
 using KRPC;
 using KRPC.Service;
+using KRPC.Server.TCP;
 using KRPC.Utils;
 using NDesk.Options;
 using System;
@@ -16,7 +17,7 @@ namespace TestServer
         static void Help (OptionSet options)
         {
             Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--rpc_port=VALUE] [--stream_port=VALUE]");
-            Console.WriteLine ("                      [--debug] [--quiet] [--server-debug]");
+            Console.WriteLine ("                      [--type=TYPE] [--debug] [--quiet] [--server-debug]");
             Console.WriteLine ("");
             Console.WriteLine ("A kRPC test server for the client library unit tests");
             Console.WriteLine ("");
@@ -34,6 +35,7 @@ namespace TestServer
             bool serverDebug = false;
             ushort rpcPort = 0;
             ushort streamPort = 0;
+            string type = "protobuf";
 
             var options = new OptionSet () { {
                     "h|help", "show this help message and exit",
@@ -47,6 +49,9 @@ namespace TestServer
                 }, {
                     "stream-port=", "Port number to use for the stream server. If unspecified, use an ephemeral port.",
                     (ushort v) => streamPort = v
+                }, {
+                    "type=", "Type of server to run. Either protobuf or websockets.",
+                    (string v) => type = v
                 }, {
                     "debug", "Set log level to 'debug', defaults to 'info'",
                     v => {
@@ -91,13 +96,28 @@ namespace TestServer
             var timeSpan = new TimeSpan ();
             KRPCCore.Instance.GetUniversalTime = () => timeSpan.TotalSeconds;
 
-            var server = new KRPCServer (IPAddress.Loopback, rpcPort, streamPort);
+            var rpcTcpServer = new TCPServer ("RPCServer", IPAddress.Loopback, rpcPort);
+            var streamTcpServer = new TCPServer ("StreamServer", IPAddress.Loopback, streamPort);
+            KRPCServer server;
+            if (type == "protobuf") {
+                var rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcTcpServer);
+                var streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer);
+                server = new KRPCServer (rpcServer, streamServer);
+            } else if (type == "websockets") {
+                var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
+                var streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer); //FIXME: uses protobuf for now
+                server = new KRPCServer (rpcServer, streamServer);
+            } else {
+                Console.WriteLine ("Server type '" + type + "' not supported");
+                return;
+            }
             server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
 
             Console.WriteLine ("Starting server...");
             server.Start ();
-            Console.WriteLine ("rpc_port = " + server.RPCPort);
-            Console.WriteLine ("stream_port = " + server.StreamPort);
+            Console.WriteLine ("type = " + type);
+            Console.WriteLine ("rpc_port = " + rpcTcpServer.Port);
+            Console.WriteLine ("stream_port = " + streamTcpServer.Port);
             Console.WriteLine ("Server started successfully");
 
             const long targetFPS = 60;
