@@ -2,173 +2,43 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using KRPC.Server.Message;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
 namespace KRPC.Server.ProtocolBuffers
 {
-    sealed class RPCServer : IServer<Request,Response>
+    sealed class RPCServer : Message.RPCServer
     {
-        const double defaultTimeout = 0.1;
         byte[] expectedHeader = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x52, 0x50, 0x43, 0x00, 0x00, 0x00 };
         const int clientNameLength = 32;
 
-        public event EventHandler OnStarted;
-        public event EventHandler OnStopped;
-        public event EventHandler<ClientRequestingConnectionArgs<Request,Response>> OnClientRequestingConnection;
-        public event EventHandler<ClientConnectedArgs<Request,Response>> OnClientConnected;
-        /// <summary>
-        /// Does not trigger this event, unless the underlying server does.
-        /// </summary>
-        public event EventHandler<ClientActivityArgs<Request,Response>> OnClientActivity;
-        public event EventHandler<ClientDisconnectedArgs<Request,Response>> OnClientDisconnected;
-
-        IServer<byte,byte> server;
-        Dictionary<IClient<byte,byte>,RPCClient> clients = new Dictionary<IClient<byte, byte>, RPCClient> ();
-        Dictionary<IClient<byte,byte>,RPCClient> pendingClients = new Dictionary<IClient<byte, byte>, RPCClient> ();
-        ulong closedClientsBytesRead;
-        ulong closedClientsBytesWritten;
-
-        public RPCServer (IServer<byte,byte> server)
+        public RPCServer (IServer<byte,byte> server) : base (server)
         {
-            this.server = server;
-            server.OnStarted += (s, e) => {
-                if (OnStarted != null)
-                    OnStarted (this, EventArgs.Empty);
-            };
-            server.OnStopped += (s, e) => {
-                if (OnStopped != null)
-                    OnStopped (this, EventArgs.Empty);
-            };
-            server.OnClientRequestingConnection += HandleClientRequestingConnection;
-            server.OnClientConnected += HandleClientConnected;
-            server.OnClientConnected += HandleClientActivity;
-            server.OnClientDisconnected += HandleClientDisconnected;
-        }
-
-        public IServer<byte,byte> Server {
-            get { return server; }
-        }
-
-        public void Start ()
-        {
-            server.Start ();
-        }
-
-        public void Stop ()
-        {
-            server.Stop ();
-        }
-
-        public void Update ()
-        {
-            server.Update ();
-        }
-
-        public bool Running {
-            get { return server.Running; }
-        }
-
-        public IEnumerable<IClient<Request,Response>> Clients {
-            get {
-                foreach (var client in clients.Values) {
-                    yield return client;
-                }
-            }
-        }
-
-        public ulong BytesRead {
-            get { return closedClientsBytesRead + clients.Values.Select (c => c.Stream.BytesRead).SumUnsignedLong (); }
-        }
-
-        public ulong BytesWritten {
-            get { return closedClientsBytesWritten + clients.Values.Select (c => c.Stream.BytesWritten).SumUnsignedLong (); }
-        }
-
-        public void ClearStats ()
-        {
-            closedClientsBytesRead = 0;
-            closedClientsBytesWritten = 0;
-            foreach (var client in clients.Values)
-                client.Stream.ClearStats ();
-        }
-
-        void HandleClientConnected (object sender, IClientEventArgs<byte,byte> args)
-        {
-            // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
-            if (OnClientConnected != null) {
-                var client = clients [args.Client];
-                OnClientConnected (this, new ClientConnectedArgs<Request,Response> (client));
-            }
-        }
-
-        void HandleClientActivity (object sender, IClientEventArgs<byte,byte> args)
-        {
-            if (OnClientActivity != null) {
-                var client = clients [args.Client];
-                OnClientActivity (this, new ClientActivityArgs<Request,Response> (client));
-            }
-        }
-
-        void HandleClientDisconnected (object sender, IClientEventArgs<byte,byte> args)
-        {
-            var client = clients [args.Client];
-            closedClientsBytesRead += client.Stream.BytesRead;
-            closedClientsBytesWritten += client.Stream.BytesWritten;
-            clients.Remove (args.Client);
-            if (OnClientDisconnected != null) {
-                OnClientDisconnected (this, new ClientDisconnectedArgs<Request,Response> (client));
-            }
         }
 
         /// <summary>
-        /// When a client requests a connection, check and parse the hello message (which should
-        /// consist of a header and a client name), then trigger RPCServer.OnClientRequestingConnection
-        /// to get response of delegates
+        /// When a client requests a connection, check and parse the hello message
+        /// (which should consist of a header and a client name)
         /// </summary>
-        public void HandleClientRequestingConnection (object sender, ClientRequestingConnectionArgs<byte,byte> args)
+        protected override IClient<Request,Response> CreateClient (object sender, ClientRequestingConnectionArgs<byte,byte> args)
         {
-            if (!pendingClients.ContainsKey (args.Client)) {
-                // A new client connection attempt. Verify the hello message.
-                string clientName = CheckHelloMessage (args.Client);
-                if (clientName != null) {
-                    // Hello message OK, add it to the pending clients
-                    var client = new RPCClient (clientName, args.Client);
-                    pendingClients [args.Client] = client;
-                } else {
-                    // Deny the connection, don't add it to pending clients
-                    args.Request.Deny ();
-                    return;
-                }
-            }
+            string clientName = CheckHelloMessage (args.Client);
+            if (clientName != null)
+                return new RPCClient (clientName, args.Client);
+            else
+                args.Request.Deny ();
+            return null;
+        }
 
-            // Client is in pending clients and passed hello message verification.
-            // Invoke connection request events.
-            if (OnClientRequestingConnection != null) {
-                var client = pendingClients [args.Client];
-                var subArgs = new ClientRequestingConnectionArgs<Request,Response> (client);
-                OnClientRequestingConnection (this, subArgs);
-                if (subArgs.Request.ShouldAllow) {
-                    args.Request.Allow ();
-                    clients [args.Client] = client;
-                    args.Client.Stream.Write (client.Guid.ToByteArray ());
-                    Logger.WriteLine ("RPCServer: client connection allowed");
-                }
-                if (subArgs.Request.ShouldDeny) {
-                    args.Request.Deny ();
-                    Logger.WriteLine ("RPCServer: client connection denied", Logger.Severity.Warning);
-                }
-                if (!subArgs.Request.StillPending) {
-                    pendingClients.Remove (args.Client);
-                }
-            } else {
-                // No events configured, so allow the connection
-                args.Request.Allow ();
-                clients [args.Client] = pendingClients [args.Client];
+        /// <summary>
+        /// When a client requests a connection, and is successful, send the clients guid
+        /// </summary>
+        public override void HandleClientRequestingConnection (object sender, ClientRequestingConnectionArgs<byte,byte> args)
+        {
+            base.HandleClientRequestingConnection (sender, args);
+            if (args.Request.ShouldAllow)
                 args.Client.Stream.Write (args.Client.Guid.ToByteArray ());
-                Logger.WriteLine ("RPCServer: client connection allowed");
-                pendingClients.Remove (args.Client);
-            }
         }
 
         /// <summary>
