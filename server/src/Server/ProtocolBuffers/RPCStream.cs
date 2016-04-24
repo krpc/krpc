@@ -1,7 +1,5 @@
 using System;
-using System.IO;
 using KRPC.Service.Messages;
-using KRPC.Server.ProtocolBuffers;
 
 namespace KRPC.Server.ProtocolBuffers
 {
@@ -63,7 +61,7 @@ namespace KRPC.Server.ProtocolBuffers
         /// </summary>
         public void Write (Response value)
         {
-            stream.Write (Server.ProtocolBuffers.Encoder.EncodeResponse (value));
+            stream.Write (Encoder.EncodeResponse (value));
         }
 
         public void Write (Response[] value)
@@ -111,7 +109,7 @@ namespace KRPC.Server.ProtocolBuffers
             offset += stream.Read (buffer, offset);
 
             // Try decoding the request
-            bufferedRequest = Server.ProtocolBuffers.Encoder.DecodeRequest (buffer, 0, offset);
+            bufferedRequest = Encoder.DecodeRequest (buffer, 0, offset);
 
             // Valid request received, reset the buffer
             offset = 0;

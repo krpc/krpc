@@ -1,7 +1,6 @@
 using System;
-using System.IO;
-using KRPC.Service.Messages;
 using KRPC.Server.ProtocolBuffers;
+using KRPC.Service.Messages;
 
 namespace KRPC.Server.ProtocolBuffers
 {

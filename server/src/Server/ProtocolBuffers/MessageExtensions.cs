@@ -1,12 +1,10 @@
 using System;
-using KRPC.Service.Messages;
-using Google.Protobuf;
-using System.Collections.Generic;
 using System.Linq;
+using KRPC.Service.Messages;
 
 namespace KRPC.Server.ProtocolBuffers
 {
-    internal static class MessageExtensions
+    static class MessageExtensions
     {
         public static Schema.KRPC.Request ToProtobufRequest (this Request request)
         {
