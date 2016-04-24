@@ -22,7 +22,7 @@ namespace KRPC.Test.Server.TCP
             server.Start ();
             Assert.IsTrue (server.Running);
             Assert.AreEqual (0, server.Clients.Count ());
-            Assert.AreEqual (IPAddress.Loopback, server.Address);
+            Assert.AreEqual (IPAddress.Loopback, server.ListenAddress);
             Assert.IsTrue (server.Port > 0);
             server.Stop ();
             Assert.IsFalse (server.Running);
@@ -71,7 +71,7 @@ namespace KRPC.Test.Server.TCP
 
             server.Start ();
 
-            var tcpClient = new TcpClient (server.Address.ToString (), server.Port);
+            var tcpClient = new TcpClient (server.ListenAddress.ToString (), server.Port);
             UpdateUntil (server, () => clientConnected);
 
             Assert.IsTrue (tcpClient.Connected);
@@ -107,7 +107,7 @@ namespace KRPC.Test.Server.TCP
 
             server.Start ();
 
-            var tcpClient = new TcpClient (server.Address.ToString (), server.Port);
+            var tcpClient = new TcpClient (server.ListenAddress.ToString (), server.Port);
             UpdateUntil (server, () => clientRequestingConnection);
 
             Assert.IsTrue (clientRequestingConnection);
@@ -133,7 +133,7 @@ namespace KRPC.Test.Server.TCP
 
             server.Start ();
 
-            var tcpClient = new TcpClient (server.Address.ToString (), server.Port);
+            var tcpClient = new TcpClient (server.ListenAddress.ToString (), server.Port);
             UpdateUntil (server, () => clientConnected);
 
             Assert.IsFalse (clientDisconnected);
@@ -176,7 +176,7 @@ namespace KRPC.Test.Server.TCP
             server.Start ();
             Assert.IsTrue (server.Running);
             Assert.AreEqual (0, server.Clients.Count ());
-            Assert.AreEqual (IPAddress.Any, server.Address);
+            Assert.AreEqual (IPAddress.Any, server.ListenAddress);
             Assert.IsTrue (server.Port > 0);
             server.Stop ();
             Assert.IsFalse (server.Running);
