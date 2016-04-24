@@ -8,9 +8,9 @@ namespace KRPC.Server.ProtocolBuffers
         {
         }
 
-        protected override byte[] Encode (Response response)
+        public override void Write (Response value)
         {
-            return Encoder.EncodeResponse (response);
+            Stream.Write (Encoder.EncodeResponse (value));
         }
 
         protected override Request Decode (byte[] data, int start, int length)

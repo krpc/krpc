@@ -7,17 +7,16 @@ namespace KRPC.Server.Message
     {
         // 1MB buffer
         internal const int bufferSize = 1 * 1024 * 1024;
-        readonly IStream<byte,byte> stream;
         Request bufferedRequest;
         byte[] buffer = new byte[bufferSize];
         int offset;
 
         protected RPCStream (IStream<byte,byte> stream)
         {
-            this.stream = stream;
+            Stream = stream;
         }
 
-        protected abstract byte[] Encode (Response response);
+        protected IStream<byte,byte> Stream { get; private set; }
 
         protected abstract Request Decode (byte[] data, int start, int length);
 
@@ -63,10 +62,7 @@ namespace KRPC.Server.Message
         /// <summary>
         /// Write a response to the client.
         /// </summary>
-        public void Write (Response value)
-        {
-            stream.Write (Encode (value));
-        }
+        public abstract void Write (Response value);
 
         public void Write (Response[] value)
         {
@@ -74,16 +70,16 @@ namespace KRPC.Server.Message
         }
 
         public ulong BytesRead {
-            get { return stream.BytesRead; }
+            get { return Stream.BytesRead; }
         }
 
         public ulong BytesWritten {
-            get { return stream.BytesWritten; }
+            get { return Stream.BytesWritten; }
         }
 
         public void ClearStats ()
         {
-            stream.ClearStats ();
+            Stream.ClearStats ();
         }
 
         /// <summary>
@@ -93,7 +89,7 @@ namespace KRPC.Server.Message
         {
             buffer = null;
             bufferedRequest = null;
-            stream.Close ();
+            Stream.Close ();
         }
 
         /// Returns quietly if there is a message in bufferedRequest
@@ -106,11 +102,11 @@ namespace KRPC.Server.Message
                 return;
 
             // If there's no further data, we won't be able to deserialize a request
-            if (!stream.DataAvailable)
+            if (!Stream.DataAvailable)
                 throw new NoRequestException ();
 
             // Read as much data as we can from the client into the buffer, up to the buffer size
-            offset += stream.Read (buffer, offset);
+            offset += Stream.Read (buffer, offset);
 
             // Try decoding the request
             bufferedRequest = Decode (buffer, 0, offset);

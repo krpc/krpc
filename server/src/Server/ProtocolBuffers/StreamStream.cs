@@ -1,4 +1,3 @@
-using System;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service.Messages;
 
