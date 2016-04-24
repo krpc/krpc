@@ -1,4 +1,4 @@
-﻿namespace KRPC
+namespace KRPC
 {
     enum OpCode
     {

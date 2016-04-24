@@ -37,10 +37,10 @@ namespace KRPC.Server.WebSockets
         public int HeaderLength {
             get {
                 var length = 2;
-                if (126 <= Length && Length <= (ulong)UInt16.MaxValue)
-                    length += 2;
-                else if ((ulong)Int16.MaxValue < Length)
+                if (Length > 0xffff)
                     length += 8;
+                else if (Length > 125)
+                    length += 2;
                 if (Masked)
                     length += 4;
                 return length;
@@ -88,22 +88,26 @@ namespace KRPC.Server.WebSockets
                 bytes [0] |= RSV3_MASK;
             bytes [0] |= (byte)OpCode;
 
-            if (Length < 126) {
+            if (Length <= 125) {
                 bytes [1] = (byte)Length;
-            } else if (Length <= (ulong)UInt16.MaxValue) {
+            } else if (Length <= 0xffff) {
                 bytes [1] = 126;
                 byte[] size = BitConverter.GetBytes ((Int16)Length);
                 bytes [2] = size [1];
                 bytes [3] = size [0];
-            } else if (Length <= UInt64.MaxValue / 2L) {
+            } else {
                 bytes [1] = 127;
                 byte[] size = BitConverter.GetBytes ((Int64)Length);
                 for (int i = 0; i < 8; i++)
                     bytes [2 + i] = size [7 - i];
-            } else
-                throw new FramingException ();
+            }
 
             return bytes;
+        }
+
+        public static Header FromBytes (byte[] data)
+        {
+            return FromBytes (data, 0, data.Length);
         }
 
         public static Header FromBytes (byte[] data, int index, int count)
