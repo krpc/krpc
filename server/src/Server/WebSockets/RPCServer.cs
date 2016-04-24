@@ -104,7 +104,7 @@ namespace KRPC.Server.WebSockets
             // Check version field
             if (!request.Headers.ContainsKey ("Sec-WebSocket-Version") || request.Headers ["Sec-WebSocket-Version"] != "13") {
                 var response = HTTPResponse.UpgradeRequired;
-                response.AddAttribute ("Sec-WebSocket-Version", "13");
+                response.AddHeaderField ("Sec-WebSocket-Version", "13");
                 throw new HandshakeException (response);
             }
 
