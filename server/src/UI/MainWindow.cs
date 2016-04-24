@@ -231,7 +231,7 @@ namespace KRPC.UI
         void DrawRPCPort ()
         {
             if (Server.Running)
-                GUILayout.Label (rpcPortLabelText + " " + Server.RPCPort, labelStyle);
+                GUILayout.Label (rpcPortLabelText + " n/a", labelStyle);
             else {
                 GUILayout.Label (rpcPortLabelText, labelStyle);
                 rpcPort = GUILayout.TextField (rpcPort, portMaxLength, textFieldStyle);
@@ -241,10 +241,10 @@ namespace KRPC.UI
         void DrawStreamPort ()
         {
             if (Server.Running)
-                GUILayout.Label (streamPortLabelText + " " + Server.StreamPort, labelStyle);
+                GUILayout.Label (streamPortLabelText + " n/a", labelStyle);
             else {
-                GUILayout.Label (streamPortLabelText, labelStyle);
-                streamPort = GUILayout.TextField (streamPort, portMaxLength, textFieldStyle);
+                //GUILayout.Label (streamPortLabelText, labelStyle);
+                //streamPort = GUILayout.TextField (streamPort, portMaxLength, textFieldStyle);
             }
         }
 
@@ -316,7 +316,8 @@ namespace KRPC.UI
 
         void DrawServerInfo ()
         {
-            string info = AllowedClientsString (Server.Address);
+            //string info = AxllowedClientsString (Server.Address);
+            var info = "???";
             if (Config.AutoAcceptConnections)
                 info = info + stringSeparatorText + autoAcceptingConnectionsText;
             GUILayout.Label (info, labelStyle);

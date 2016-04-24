@@ -25,6 +25,12 @@ namespace KRPC.Server
         void Update ();
 
         /// <summary>
+        /// The servers address.
+        /// </summary>
+        /// <value>The address.</value>
+        string Address { get; }
+
+        /// <summary>
         /// Returns true if the server is running and accepting client connections.
         /// </summary>
         bool Running { get; }
@@ -78,6 +84,12 @@ namespace KRPC.Server
         /// of new client connections and other functionality.
         /// </summary>
         void Update ();
+
+        /// <summary>
+        /// The servers address.
+        /// </summary>
+        /// <value>The address.</value>
+        string Address { get; }
 
         /// <summary>
         /// Returns true if the server is running and accepting client connections.

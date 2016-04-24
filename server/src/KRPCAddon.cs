@@ -1,4 +1,5 @@
 using KRPC.Server;
+using KRPC.Server.TCP;
 using KRPC.UI;
 using KRPC.Utils;
 using UnityEngine;
@@ -15,6 +16,10 @@ namespace KRPC
         static KRPCConfiguration config;
         static KRPCCore core;
         static KRPCServer server;
+        static TCPServer rpcTcpServer;
+        static TCPServer streamTcpServer;
+        static KRPC.Server.WebSockets.RPCServer rpcServer;
+        static KRPC.Server.ProtocolBuffers.StreamServer streamServer;
         static Texture textureOnline;
         static Texture textureOffline;
 
@@ -42,7 +47,11 @@ namespace KRPC
             core.RecvTimeout = config.RecvTimeout;
 
             // Set up server
-            server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
+            rpcTcpServer = new TCPServer ("RPCServer", config.Address, config.RPCPort);
+            streamTcpServer = new TCPServer ("StreamServer", config.Address, config.StreamPort);
+            rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
+            streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer);
+            server = new KRPCServer (rpcServer, streamServer);
         }
 
         /// <summary>
@@ -188,9 +197,10 @@ namespace KRPC
         void StartServer ()
         {
             config.Load ();
-            server.RPCPort = config.RPCPort;
-            server.StreamPort = config.StreamPort;
-            server.Address = config.Address;
+            rpcTcpServer.ListenAddress = config.Address;
+            rpcTcpServer.Port = config.RPCPort;
+            streamTcpServer.ListenAddress = config.Address;
+            streamTcpServer.Port = config.StreamPort;
             core.OneRPCPerUpdate = config.OneRPCPerUpdate;
             core.MaxTimePerUpdate = config.MaxTimePerUpdate;
             core.AdaptiveRateControl = config.AdaptiveRateControl;

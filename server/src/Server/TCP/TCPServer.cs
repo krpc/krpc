@@ -65,7 +65,7 @@ namespace KRPC.Server.TCP
         public TCPServer (String name, IPAddress address, ushort port)
         {
             this.name = name;
-            Address = address;
+            ListenAddress = address;
             this.port = port;
         }
 
@@ -76,7 +76,7 @@ namespace KRPC.Server.TCP
                 return;
             }
             Logger.WriteLine ("TCPServer(" + name + "): starting", Logger.Severity.Debug);
-            tcpListener = new TcpListener (Address, port);
+            tcpListener = new TcpListener (ListenAddress, port);
             try {
                 tcpListener.Start ();
             } catch (SocketException exn) {
@@ -175,6 +175,10 @@ namespace KRPC.Server.TCP
             }
         }
 
+        public string Address {
+            get { return ListenAddress + ":" + Port; }
+        }
+
         public bool Running {
             get { return running; }
         }
@@ -213,7 +217,7 @@ namespace KRPC.Server.TCP
         /// <summary>
         /// Local address that the server listens on. Server must be restarted for changes to take effect.
         /// </summary>
-        public IPAddress Address { get; set; }
+        public IPAddress ListenAddress { get; set; }
 
         void ListenerThread ()
         {
