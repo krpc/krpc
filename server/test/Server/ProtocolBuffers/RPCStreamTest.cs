@@ -1,11 +1,10 @@
-using NUnit.Framework;
 using System;
 using System.IO;
 using System.Linq;
 using Google.Protobuf;
-using KRPC.Server;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service.Messages;
+using NUnit.Framework;
 
 namespace KRPC.Test.Server.ProtocolBuffers
 {
@@ -22,8 +21,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
         {
             // Create a request object and get the binary representation of it
             expectedRequest = new Request ();
-            expectedRequest.Service = "SomeServiceName";
-            expectedRequest.Procedure = "SomeMethodName";
+            expectedRequest.Service = "TestService";
+            expectedRequest.Procedure = "ProcedureNoArgsNoReturn";
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream);
                 codedStream.WriteInt32 (expectedRequest.ToProtobufRequest ().CalculateSize ());
@@ -56,7 +55,6 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (0, rpcStream.BytesRead);
         }
 
-        [Ignore]
         [Test]
         public void ReadSingleRequest ()
         {
@@ -75,7 +73,32 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (requestBytes.Length, rpcStream.BytesRead);
         }
 
-        [Ignore]
+        [Test]
+        public void ReadMultipleRequests ()
+        {
+            var multipleRequestBytes = new byte[ requestBytes.Length * 5];
+            for (int i = 0; i < 5; i++)
+                Array.Copy (requestBytes, 0, multipleRequestBytes, i * requestBytes.Length, requestBytes.Length);
+            var stream = new TestStream (new MemoryStream (multipleRequestBytes), null);
+            var rpcStream = new RPCStream (stream);
+            Assert.AreEqual (0, rpcStream.BytesWritten);
+            Assert.AreEqual (0, rpcStream.BytesRead);
+            for (int i = 0; i < 5; i++) {
+                Assert.IsTrue (rpcStream.DataAvailable);
+                Assert.AreEqual (0, rpcStream.BytesWritten);
+                Assert.AreEqual (multipleRequestBytes.Length, rpcStream.BytesRead);
+                Request request = rpcStream.Read ();
+                if (i < 4)
+                    Assert.IsTrue (rpcStream.DataAvailable);
+                else
+                    Assert.IsFalse (rpcStream.DataAvailable);
+                Assert.AreEqual (expectedRequest.Service, request.Service);
+                Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
+                Assert.AreEqual (0, rpcStream.BytesWritten);
+                Assert.AreEqual (multipleRequestBytes.Length, rpcStream.BytesRead);
+            }
+        }
+
         [Test]
         public void ReadSingleRequestInParts ()
         {
@@ -129,11 +152,11 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void ReadGarbage ()
         {
-            var data = new byte[RPCStream.bufferSize + 1];
+            var data = new byte[KRPC.Server.Message.RPCStream.MAX_BUFFER_SIZE + 1];
             var rand = new Random (42);
             rand.NextBytes (data);
             var rpcStream = new RPCStream (new TestStream (new MemoryStream (data), null));
-            Assert.Throws<RequestBufferOverflowException> (() => rpcStream.Read ());
+            Assert.Throws<MalformedRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (data.Length - 1, rpcStream.BytesRead);
         }
