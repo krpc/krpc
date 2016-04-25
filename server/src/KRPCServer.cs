@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using KRPC.Server;
-using KRPC.Server.ProtocolBuffers;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Utils;
