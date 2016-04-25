@@ -5,8 +5,8 @@ startup --batch
 test --ram_utilization_factor=10
 
 # Verbose output
-build --curses=no --show_progress_rate_limit=0 --verbose_failures --subcommands
-test --curses=no --show_progress_rate_limit=0 --verbose_failures --subcommands
+build --curses=no --show_progress_rate_limit=0 --verbose_failures
+test --curses=no --show_progress_rate_limit=0 --verbose_failures
 
 # Use a recent GCC version when building
 build --crosstool_top //tools/travis-ci/custom_crosstool:CROSSTOOL
