@@ -70,7 +70,7 @@ namespace KRPC.Server.WebSockets
             if (frame.Header.Length > 0) {
                 // Payload must be masked
                 if (!frame.Header.Masked)
-                    throw new FramingException ();
+                    throw new FramingException ("Payload is not masked");
                 // Unmask the payload
                 frame.Payload = new byte[frame.Header.Length];
                 //TODO: is there a more efficient way to do this?
