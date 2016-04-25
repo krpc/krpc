@@ -23,12 +23,11 @@ namespace KRPC.Server.WebSockets
             Stream.Write (frame.Payload);
         }
 
-        protected override Request Decode (byte[] data, int start, int length, ref int read)
+        protected override int Read (ref Request request, byte[] data, int offset, int length)
         {
             Frame frame;
             try {
-                frame = Frame.FromBytes (data, start, length);
-                read = frame.Length;
+                frame = Frame.FromBytes (data, offset, length);
             } catch (FramingException) {
                 //FIXME: Close the connection
                 throw new NotImplementedException ();
@@ -37,13 +36,13 @@ namespace KRPC.Server.WebSockets
             case OpCode.Binary:
                 // Decode binary message as a protocol buffer request message
                 try {
-                    return Schema.KRPC.Request.Parser.ParseFrom (frame.Payload).ToRequest ();
+                    request = Schema.KRPC.Request.Parser.ParseFrom (frame.Payload).ToRequest ();
                 } catch (InvalidProtocolBufferException) {
                     // Incomplete request, send a close frame with a protocol error
                     Stream.Write (Frame.Close (1002, "Malformed protocol buffer message").ToBytes ());
                     //FIXME: Close the connection
-                    throw new NoRequestException ();
                 }
+                break;
             case OpCode.Ping:
                 // Send pong with copy of ping's payload
                 Stream.Write (new Frame (OpCode.Pong, frame.Payload).ToBytes ());
@@ -62,7 +61,7 @@ namespace KRPC.Server.WebSockets
                 //FIXME: Close the connection
                 break;
             }
-            throw new NoRequestException ();
+            return (int)frame.Header.Length;
         }
     }
 }
