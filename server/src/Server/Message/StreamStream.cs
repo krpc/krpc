@@ -5,14 +5,12 @@ namespace KRPC.Server.Message
 {
     abstract class StreamStream : IStream<NoMessage,StreamMessage>
     {
-        readonly IStream<byte,byte> stream;
-
         protected StreamStream (IStream<byte,byte> stream)
         {
-            this.stream = stream;
+            Stream = stream;
         }
 
-        protected abstract byte[] Encode (StreamMessage response);
+        protected IStream<byte,byte> Stream { get; private set; }
 
         public bool DataAvailable {
             get { throw new NotImplementedException (); }
@@ -33,10 +31,10 @@ namespace KRPC.Server.Message
             throw new NotImplementedException ();
         }
 
-        public void Write (StreamMessage value)
-        {
-            stream.Write (Encode (value));
-        }
+        /// <summary>
+        /// Write a stream message to the client.
+        /// </summary>
+        public abstract void Write (StreamMessage value);
 
         public void Write (StreamMessage[] value)
         {
@@ -44,21 +42,21 @@ namespace KRPC.Server.Message
         }
 
         public ulong BytesRead {
-            get { return stream.BytesRead; }
+            get { return Stream.BytesRead; }
         }
 
         public ulong BytesWritten {
-            get { return stream.BytesWritten; }
+            get { return Stream.BytesWritten; }
         }
 
         public void ClearStats ()
         {
-            stream.ClearStats ();
+            Stream.ClearStats ();
         }
 
         public void Close ()
         {
-            stream.Close ();
+            Stream.Close ();
         }
     }
 }

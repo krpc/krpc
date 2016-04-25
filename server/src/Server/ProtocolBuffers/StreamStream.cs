@@ -1,3 +1,5 @@
+using System.IO;
+using Google.Protobuf;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service.Messages;
 
@@ -9,9 +11,12 @@ namespace KRPC.Server.ProtocolBuffers
         {
         }
 
-        protected override byte[] Encode (StreamMessage response)
+        public override void Write (StreamMessage value)
         {
-            return Encoder.EncodeStreamMessage (response);
+            var message = value.ToProtobufStreamMessage ();
+            var data = new MemoryStream ();
+            message.WriteDelimitedTo (data);
+            Stream.Write (data.ToArray ());
         }
     }
 }

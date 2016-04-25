@@ -13,48 +13,6 @@ namespace KRPC.Server.ProtocolBuffers
     //FIXME: this is not tested
     static class Encoder
     {
-        public static Request DecodeRequest (byte[] buffer, int offset, int length)
-        {
-            // Attempt to deserialize a request from the buffered data
-            var codedStream = new CodedInputStream (buffer, offset, length);
-            try {
-                //TODO: do something with the size that is read?
-                codedStream.ReadUInt32 ();
-                return Schema.KRPC.Request.Parser.ParseFrom (codedStream).ToRequest ();
-            } catch (InvalidProtocolBufferException) {
-                // Failed to deserialize a request
-                if (length >= buffer.Length) {
-                    // And the buffer is full
-                    throw new RequestBufferOverflowException ();
-                }
-                // And the buffer not yet full
-                // TODO: can we detect if the partial data received is a subset of a valid request?
-                // And we read to the end, so we have a valid part of a request
-                throw new NoRequestException ();
-            }
-
-            // Partial request is not complete, so some required fields weren't set
-            //if (!bufferedRequest.IsInitialized) {
-            //    throw new MalformedRequestException ();
-            //}
-        }
-
-        public static byte[] EncodeResponse (Response response)
-        {
-            var message = response.ToProtobufResponse ();
-            var bufferStream = new MemoryStream ();
-            message.WriteDelimitedTo (bufferStream);
-            return bufferStream.ToArray ();
-        }
-
-        public static byte[] EncodeStreamMessage (StreamMessage streamMessage)
-        {
-            var message = streamMessage.ToProtobufStreamMessage ();
-            var bufferStream = new MemoryStream ();
-            message.WriteDelimitedTo (bufferStream);
-            return bufferStream.ToArray ();
-        }
-
         /// <summary>
         /// Encode a value of the given type.
         /// </summary>

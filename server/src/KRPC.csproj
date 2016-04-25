@@ -113,13 +113,15 @@
     <Compile Include="Server\IClientEventArgs.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IStream.cs" />
+    <Compile Include="Server\Message\MalformedRequestException.cs" />
+    <Compile Include="Server\Message\NoRequestException.cs" />
+    <Compile Include="Server\Message\RequestBufferOverflowException.cs" />
     <Compile Include="Server\Message\RPCClient.cs" />
     <Compile Include="Server\Message\RPCServer.cs" />
     <Compile Include="Server\Message\RPCStream.cs" />
     <Compile Include="Server\Message\StreamClient.cs" />
     <Compile Include="Server\Message\StreamServer.cs" />
     <Compile Include="Server\Message\StreamStream.cs" />
-    <Compile Include="Server\NoRequestException.cs" />
     <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCClient.cs" />
@@ -128,7 +130,6 @@
     <Compile Include="Server\ProtocolBuffers\StreamClient.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamServer.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamStream.cs" />
-    <Compile Include="Server\RequestBufferOverflowException.cs" />
     <Compile Include="Server\ServerException.cs" />
     <Compile Include="Server\TCP\NetworkInformation.cs" />
     <Compile Include="Server\TCP\TCPClient.cs" />

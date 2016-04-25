@@ -5,13 +5,11 @@ namespace KRPC.Server.Message
 {
     abstract class RPCStream : IStream<Request,Response>
     {
-        // 1MB buffer
-        internal const int bufferSize = 1 * 1024 * 1024;
+        internal const int MAX_BUFFER_SIZE = 1 * 1024 * 1024;
         Request bufferedRequest;
         //FIXME: use a circular buffer, so that when index advances forward the space preceeding it can be used
-        byte[] buffer = new byte[bufferSize];
-        int index;
-        int offset;
+        byte[] buffer = new byte[MAX_BUFFER_SIZE];
+        int size;
 
         protected RPCStream (IStream<byte,byte> stream)
         {
@@ -21,15 +19,17 @@ namespace KRPC.Server.Message
         protected IStream<byte,byte> Stream { get; private set; }
 
         /// <summary>
-        /// Attempt to decode a request object from the given data.
-        /// If the decoding fails to decode a message, a NoRequestException is thrown.
-        /// If the decoding failed to read a message, but bytes were consumed, the number of
-        /// bytes consumed is set in <paramref name="read"/>.
-        /// If the decoding succeeds, <paramref name="read"/> is assumed to have been set to length,
-        /// i.e. length bytes must have been consumed when decoding the request.
+        /// Read a request. Implementors shoulld try to decode <paramref name="length"/> bytes
+        /// from <paramref name="data"/> starting at <paramref name="offset"/>.
+        /// If a request is successfully decoded, write it to <paramref name="request"/> and return
+        /// the number of bytes read. If no message, or a partial message, is found, don't set
+        /// <paramref name="request"/>. The read will be retried when more data has arrived.
+        /// When <paramref name="request"/> is left unset, a non-zero number of bytes read can be returned.
+        /// This allows non-message bytes to be consumed, for example for control traffic not
+        /// related to the RPC server. Implementors should throw a MalformedRequestException if malformed
+        /// data is received.
         /// </summary>
-        //FIXME: this interface is a bit gnarly - can we do better?
-        protected abstract Request Decode (byte[] data, int start, int length, ref int read);
+        protected abstract int Read (ref Request request, byte[] data, int offset, int length);
 
         /// <summary>
         /// Returns true if there is a request waiting to be read. A Call to Read() will
@@ -112,25 +112,28 @@ namespace KRPC.Server.Message
             if (bufferedRequest != null)
                 return;
 
-            // If there's no further data, we won't be able to deserialize a request
-            if (!Stream.DataAvailable)
+            if (size == 0 && !Stream.DataAvailable)
                 throw new NoRequestException ();
 
-            // Read as much data as we can from the client into the buffer, up to the buffer size
-            offset += Stream.Read (buffer, offset);
+            // Read as much data as we can from the client
+            size += Stream.Read (buffer, size);
 
-            // Try decoding the request
-            int read = 0;
-            try {
-                bufferedRequest = Decode (buffer, index, offset, ref read);
-            } catch (NoRequestException e) {
-                index += read;
-                throw e;
-            }
+            // Try decoding a request
+            int read = Read (ref bufferedRequest, buffer, 0, size);
 
-            // Valid request received, reset the buffer
-            index = 0;
-            offset = 0;
+            // Update the buffer
+            // Note: copying should happen rarely as Read will usually consume the whole buffer
+            size -= read;
+            if (read > 0 && size > 0)
+                Array.Copy (buffer, read, buffer, 0, size);
+
+            // If no message was decoded and we have filled the buffer then fail
+            if (bufferedRequest == null && size == MAX_BUFFER_SIZE)
+                throw new RequestBufferOverflowException ();
+
+            // No request decoded
+            if (bufferedRequest == null)
+                throw new NoRequestException ();
         }
     }
 }
