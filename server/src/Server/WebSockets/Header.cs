@@ -73,9 +73,6 @@ namespace KRPC.Server.WebSockets
 
         public byte[] ToBytes ()
         {
-            if (Masked)
-                throw new NotImplementedException ();
-
             var bytes = new byte[HeaderLength];
 
             if (FinalFragment)
@@ -87,20 +84,25 @@ namespace KRPC.Server.WebSockets
             if (Rsv3)
                 bytes [0] |= RSV3_MASK;
             bytes [0] |= (byte)OpCode;
+            if (Masked)
+                bytes [1] |= MASK_MASK;
 
             if (Length <= 125) {
-                bytes [1] = (byte)Length;
+                bytes [1] |= (byte)Length;
             } else if (Length <= 0xffff) {
-                bytes [1] = 126;
+                bytes [1] |= 126;
                 byte[] size = BitConverter.GetBytes ((Int16)Length);
                 bytes [2] = size [1];
                 bytes [3] = size [0];
             } else {
-                bytes [1] = 127;
+                bytes [1] |= 127;
                 byte[] size = BitConverter.GetBytes ((Int64)Length);
                 for (int i = 0; i < 8; i++)
                     bytes [2 + i] = size [7 - i];
             }
+
+            if (Masked)
+                Array.Copy (MaskingKey, 0, bytes, bytes.Length - 4, 4);
 
             return bytes;
         }

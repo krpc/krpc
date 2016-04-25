@@ -8,6 +8,18 @@ namespace KRPC.Server.WebSockets
 
         public byte[] Payload { get; private set; }
 
+        public byte[] MaskedPayload {
+            get {
+                if (!Header.Masked || Payload == null)
+                    return Payload;
+                var bytes = new byte[Payload.Length];
+                Array.Copy (Payload, bytes, Payload.Length);
+                for (int i = 0; i < Payload.Length; i++)
+                    bytes [i] = (byte)(bytes [i] ^ Header.MaskingKey [i % 4]);
+                return bytes;
+            }
+        }
+
         /// <summary>
         /// Lenghth of the frame (including header and payload) in bytes.
         /// </summary>
@@ -37,8 +49,13 @@ namespace KRPC.Server.WebSockets
                 return header;
             byte[] bytes = new byte[header.Length + Payload.Length];
             Array.Copy (header, bytes, header.Length);
-            Array.Copy (Payload, 0, bytes, header.Length, Payload.Length);
+            Array.Copy (MaskedPayload, 0, bytes, header.Length, Payload.Length);
             return bytes;
+        }
+
+        public static Frame FromBytes (byte[] data)
+        {
+            return FromBytes (data, 0, data.Length);
         }
 
         public static Frame FromBytes (byte[] data, int index, int count)
@@ -50,13 +67,13 @@ namespace KRPC.Server.WebSockets
             if ((int)frame.Header.Length < count)
                 // Entire payload has not been received
                 throw new NoRequestException ();
-            // Payload must be masked
-            if (!frame.Header.Masked)
-                throw new FramingException ();
-            // Unmask the payload
-            //TODO: is there a more efficient way to do this?
             if (frame.Header.Length > 0) {
+                // Payload must be masked
+                if (!frame.Header.Masked)
+                    throw new FramingException ();
+                // Unmask the payload
                 frame.Payload = new byte[frame.Header.Length];
+                //TODO: is there a more efficient way to do this?
                 for (int i = 0; i < frame.Payload.Length; i++)
                     frame.Payload [i] = (byte)(data [index + i] ^ frame.Header.MaskingKey [i % 4]);
             }
