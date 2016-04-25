@@ -1,8 +1,11 @@
-using System;
+using KRPC.Server;
 
 namespace KRPC
 {
-    class FramingException : Exception
+    class FramingException : ServerException
     {
+        public FramingException (string message) : base (message)
+        {
+        }
     }
 }
