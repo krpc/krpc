@@ -39,6 +39,7 @@ install:
   - ./tools/travis-ci/install-ksp-libs.sh
 
 script:
+  - stty cols 120
   - ./tools/travis-ci/set-version.sh
   - bazel build //:krpc //doc:html //doc:compile-scripts //:csproj
   - xbuild KRPC.sln
