@@ -22,8 +22,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
         {
             // Create a request object and get the binary representation of it
             expectedRequest = new Request ();
-            expectedRequest.Service = "SomeServiceName";
-            expectedRequest.Procedure = "SomeMethodName";
+            expectedRequest.Service = "TestService";
+            expectedRequest.Procedure = "ProcedureNoArgsNoReturn";
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream);
                 codedStream.WriteInt32 (expectedRequest.ToProtobufRequest ().CalculateSize ());
@@ -56,7 +56,6 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (0, rpcStream.BytesRead);
         }
 
-        [Ignore]
         [Test]
         public void ReadSingleRequest ()
         {
@@ -75,7 +74,6 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (requestBytes.Length, rpcStream.BytesRead);
         }
 
-        [Ignore]
         [Test]
         public void ReadSingleRequestInParts ()
         {
