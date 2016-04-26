@@ -23,7 +23,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var guid = CheckHelloMessage (args.Client);
             if (guid != Guid.Empty)
-                return new StreamClient (args.Client, guid);
+                return new StreamClient (guid, args.Client);
             else
                 args.Request.Deny ();
             return null;

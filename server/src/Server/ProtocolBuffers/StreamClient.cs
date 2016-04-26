@@ -4,8 +4,8 @@ namespace KRPC.Server.ProtocolBuffers
 {
     class StreamClient : Message.StreamClient
     {
-        public StreamClient (IClient<byte,byte> client, Guid guid) :
-            base (client, guid, new StreamStream (client.Stream))
+        public StreamClient (Guid guid, IClient<byte,byte> client) :
+            base (guid, client, new StreamStream (client.Stream))
         {
         }
     }
