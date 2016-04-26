@@ -7,7 +7,6 @@ namespace KRPC.Server.Message
     {
         internal const int MAX_BUFFER_SIZE = 1 * 1024 * 1024;
         Request bufferedRequest;
-        //FIXME: use a circular buffer, so that when index advances forward the space preceeding it can be used
         byte[] buffer = new byte[MAX_BUFFER_SIZE];
         int size;
 
