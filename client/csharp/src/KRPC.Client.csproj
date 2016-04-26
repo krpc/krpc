@@ -58,6 +58,7 @@
     <Compile Include="Connection.cs" />
     <Compile Include="Encoder.cs" />
     <Compile Include="ExpressionUtils.cs" />
+    <Compile Include="IConnection.cs" />
     <Compile Include="RemoteObject.cs" />
     <Compile Include="RPCException.cs" />
     <Compile Include="Stream.cs" />

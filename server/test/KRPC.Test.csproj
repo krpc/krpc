@@ -77,6 +77,7 @@
     <Compile Include="KRPCConfigurationTest.cs" />
     <Compile Include="Schema\RpcTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\EncoderTest.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCServerTest.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCStreamTest.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamServerTest.cs" />

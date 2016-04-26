@@ -29,7 +29,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         /// <summary>
         /// Create an instance of the {{ service_name }} service.
         /// </summary>
-        public static global::KRPC.Client.Services.{{ service_name }}.Service {{ service_name }} (this global::KRPC.Client.Connection connection)
+        public static global::KRPC.Client.Services.{{ service_name }}.Service {{ service_name }} (this global::KRPC.Client.IConnection connection)
         {
             return new global::KRPC.Client.Services.{{ service_name }}.Service (connection);
         }
@@ -40,9 +40,9 @@ namespace KRPC.Client.Services.{{ service_name }}
     /// </summary>
     public class Service
     {
-        global::KRPC.Client.Connection connection;
+        global::KRPC.Client.IConnection connection;
 
-        internal Service (global::KRPC.Client.Connection connection)
+        internal Service (global::KRPC.Client.IConnection connection)
         {
             this.connection = connection;
         }
@@ -105,7 +105,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         /// <summary>
         /// Construct an instance of this remote object. Should not be called directly. This interface is intended for internal decoding.
         /// </summary>
-        public {{ class_name }} (global::KRPC.Client.Connection connection, UInt64 id) : base (connection, id)
+        public {{ class_name }} (global::KRPC.Client.IConnection connection, UInt64 id) : base (connection, id)
         {
         }
 
@@ -126,7 +126,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {{ method.documentation | indent(width=8) }}
         /// <param name="_connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
-        public static {{ method.return_type }} {{ method_name }} (Connection _connection, {{ sig_parameters(method.parameters) }})
+        public static {{ method.return_type }} {{ method_name }} (IConnection _connection, {{ sig_parameters(method.parameters) }})
         {
             {% if method.parameters | length > 0 %}            {{ args(method.parameters) | indent(width=12) }}
             {% endif %}
