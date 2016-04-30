@@ -1,6 +1,6 @@
 author = 'djungelorm'
 #FIXME: need to set the version using git describe, but not currently possible using Bazel
-version = '0.3.1'
+version = '0.3.2'
 ksp_version = '1.1.2.1260'
 ksp_version_parts = ksp_version.split('.')
 
