@@ -1,5 +1,5 @@
 ship = SubOrbitalFlight
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
 size = 6.291409,15.34142,6.292645
@@ -1239,37 +1239,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1445,37 +1414,6 @@ PART
 		{
 		}
 	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		stagingEnabled = True
-		EVENTS
-		{
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
 }
 PART
 {
@@ -1634,37 +1572,6 @@ PART
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
-		{
-		}
-	}
-	MODULE
-	{
-		name = ModuleRTAntennaPassive
-		isEnabled = True
-		IsRTAntenna = True
-		IsRTActive = True
-		IsRTPowered = True
-		IsRTBroken = False
-		RTDishCosAngle = 1
-		RTOmniRange = 5000
-		RTDishRange = -1
-		stagingEnabled = True
-		EVENTS
-		{
 			ToggleStaging
 			{
 				active = True
@@ -2075,7 +1982,7 @@ PART
 	pos = -1.639466,6.205261,-0.3207556
 	attPos = 0,0,0
 	attPos0 = -0.7993376,0.239802,-1.490116E-07
-	rot = 4.535349E-09,-0.7933534,5.910577E-09,0.6087615
+	rot = 4.535349E-09,-0.7933533,5.910576E-09,0.6087615
 	attRot = 0,0,0,1
 	attRot0 = 5.268035E-09,-0.7071069,5.26803E-09,0.7071068
 	mir = 1,1,1
@@ -2280,7 +2187,7 @@ PART
 	pos = -1.639466,10.12526,-0.3207562
 	attPos = 0,0,0
 	attPos0 = -1.490195E-07,3.92,-1.341421E-07
-	rot = -1.020488E-07,1.490116E-08,3.808468E-07,1
+	rot = -1.020488E-07,-1.490116E-08,3.808468E-07,1
 	attRot = 0,0,0,1
 	attRot0 = 2.354878E-07,0.7933536,3.068947E-07,0.6087611
 	mir = 1,1,1
