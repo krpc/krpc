@@ -80,7 +80,7 @@ class Client(object):
             response = self._receive_response()
 
         # Check for an error response
-        if response.has_error:
+        if response.error:
             raise RPCError(response.error)
 
         # Decode the response and return the (optional) result

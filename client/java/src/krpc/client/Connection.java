@@ -33,7 +33,7 @@ public class Connection {
      * address {@value #DEFAULT_ADDRESS}, RPC port number
      * {@value #DEFAULT_RPC_PORT} and stream port number
      * {@value #DEFAULT_STREAM_PORT}.
-     * 
+     *
      * @return A connection to the kRPC server.
      * @throws IOException
      */
@@ -46,7 +46,7 @@ public class Connection {
      * address {@value #DEFAULT_ADDRESS}, RPC port number
      * {@value #DEFAULT_RPC_PORT} and stream port number
      * {@value #DEFAULT_STREAM_PORT}.
-     * 
+     *
      * @param name
      *            The name of the client.
      * @return A connection to the kRPC server.
@@ -60,12 +60,12 @@ public class Connection {
      * Connect to a kRPC server using the given client name, on the given
      * address, RPC port number {@value #DEFAULT_RPC_PORT} and stream port
      * number {@value #DEFAULT_STREAM_PORT}.
-     * 
+     *
      * @param name
      *            The name of the client.
      * @param address
      *            The server address to connect to.
-     * 
+     *
      * @return A connection to the kRPC server.
      * @throws IOException
      */
@@ -76,7 +76,7 @@ public class Connection {
     /**
      * Connect to a kRPC server using the given client name, on the given
      * address, RPC port number and stream port.
-     * 
+     *
      * @param name
      *            The name of the client.
      * @param address
@@ -85,7 +85,7 @@ public class Connection {
      *            The RPC port to connect to.
      * @param streamPort
      *            The stream port to connect to.
-     * 
+     *
      * @return A connection to the kRPC server.
      * @throws IOException
      */
@@ -97,14 +97,14 @@ public class Connection {
      * Connect to a kRPC server using the given client name, on the given
      * address, RPC port number {@value #DEFAULT_RPC_PORT} and stream port
      * number {@value #DEFAULT_STREAM_PORT}.
-     * 
+     *
      * @param name
      *            The name of the client.
      * @param address
      *            The server address to connect to. Can be either the name of
      *            the host or a textual representation of its IP address. See
      *            {@link InetAddress.getByName}.
-     * 
+     *
      * @return A connection to the kRPC server.
      * @throws IOException
      */
@@ -115,7 +115,7 @@ public class Connection {
     /**
      * Connect to a kRPC server using the given client name, on the given
      * address, RPC port number and stream port.
-     * 
+     *
      * @param name
      *            The name of the client.
      * @param address
@@ -126,7 +126,7 @@ public class Connection {
      *            The RPC port to connect to.
      * @param streamPort
      *            The stream port to connect to.
-     * 
+     *
      * @return A connection to the kRPC server.
      * @throws IOException
      */
@@ -161,7 +161,7 @@ public class Connection {
 
     /**
      * Close the connection.
-     * 
+     *
      * @throws IOException
      */
     public void close() throws IOException {
@@ -188,7 +188,7 @@ public class Connection {
             data = rpcInputStream.readRawBytes(size);
         }
         KRPC.Response response = KRPC.Response.parseFrom(data);
-        if (response.getHasError())
+        if (!response.getError().isEmpty())
             throw new RPCException(response.getError());
         return response.getHasReturnValue() ? response.getReturnValue() : null;
     }
@@ -224,14 +224,14 @@ public class Connection {
 
     /**
      * Create a stream for a static method call.
-     * 
+     *
      * @param clazz
      *            The class containing the static method.
      * @param method
      *            The name of the static method.
      * @param args
      *            The arguments to pass to the method.
-     * 
+     *
      * @return A stream object.
      * @throws StreamException
      * @throws IOException
@@ -242,14 +242,14 @@ public class Connection {
 
     /**
      * Create a stream for a method call on an object.
-     * 
+     *
      * @param instance
      *            An instance of the object.
      * @param method
      *            The name of the method.
      * @param args
      *            The arguments to pass to the method.
-     * 
+     *
      * @return A stream object.
      * @throws StreamException
      * @throws IOException

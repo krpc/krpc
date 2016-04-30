@@ -528,8 +528,8 @@ namespace KRPC
                         response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
                     } catch (Exception e) {
                         response = new Response ();
-                        response.HasError = true;
-                        response.Error = e.ToString ();
+                        var error = e.ToString ();
+                        response.Error = (error.Length > 0) ? error : "Unknown error";
                     }
                     rpcsExecuted++;
                     // Don't send an update if it is the previous one
@@ -627,8 +627,8 @@ namespace KRPC
                 throw;
             } catch (Exception e) {
                 response = new Response ();
-                response.HasError = true;
-                response.Error = e.Message;
+                var error = e.Message;
+                response.Error = (error.Length > 0) ? error : "Unknown error";
                 if (Logger.ShouldLog (Logger.Severity.Debug))
                     Logger.WriteLine (e.Message, Logger.Severity.Debug);
             } finally {
@@ -639,7 +639,7 @@ namespace KRPC
             response.Time = GetUniversalTime ();
             ((RPCClient)client).Stream.Write (response);
             if (Logger.ShouldLog (Logger.Severity.Debug)) {
-                if (response.HasError)
+                if (response.Error.Length > 0)
                     Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
                 else
                     Logger.WriteLine ("Sent response to client " + client.Address, Logger.Severity.Debug);

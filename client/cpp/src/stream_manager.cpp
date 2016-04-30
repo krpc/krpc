@@ -30,6 +30,8 @@ namespace krpc {
       schema::StreamMessage message;
       decoder::decode(message, data, client);
 
+      //TODO: check for errors in stream responses
+
       for (auto response : message.responses())
         stream_manager->update(response.id(), response.response());
     }
