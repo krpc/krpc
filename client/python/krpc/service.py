@@ -233,7 +233,7 @@ class ServiceBase(DynamicType):
             else:
                 param_default.append(None)
         return_type = None
-        if procedure.has_return_type:
+        if procedure.return_type:
             return_type = cls._client._types.get_return_type(procedure.return_type, procedure.attributes)
         return param_names, param_types, param_required, param_default, return_type
 

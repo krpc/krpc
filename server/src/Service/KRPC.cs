@@ -55,10 +55,8 @@ namespace KRPC.Service
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
                     var procedure = new Procedure ();
                     procedure.Name = procedureSignature.Name;
-                    if (procedureSignature.HasReturnType) {
-                        procedure.HasReturnType = true;
+                    if (procedureSignature.HasReturnType)
                         procedure.ReturnType = TypeUtils.GetTypeName (procedureSignature.ReturnType);
-                    }
                     foreach (var parameterSignature in procedureSignature.Parameters) {
                         var parameter = new Parameter ();
                         parameter.Name = parameterSignature.Name;
