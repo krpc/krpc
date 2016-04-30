@@ -139,20 +139,20 @@ namespace KRPC.Service
         [KRPCProperty]
         public static GameScene CurrentGameScene {
             get {
-                switch (KRPCServer.Context.GameScene) {
-                case global::KRPC.Service.GameScene.SpaceCenter:
+                var scene = KRPCServer.Context.GameScene;
+                if ((scene & global::KRPC.Service.GameScene.SpaceCenter) != 0)
                     return GameScene.SpaceCenter;
-                case global::KRPC.Service.GameScene.Flight:
+                else if ((scene & global::KRPC.Service.GameScene.Flight) != 0)
                     return GameScene.Flight;
-                case global::KRPC.Service.GameScene.TrackingStation:
+                else if ((scene & global::KRPC.Service.GameScene.TrackingStation) != 0)
                     return GameScene.TrackingStation;
-                case global::KRPC.Service.GameScene.EditorVAB:
-                    return GameScene.EditorVAB;
-                case global::KRPC.Service.GameScene.EditorSPH:
-                    return GameScene.EditorSPH;
-                default:
-                    throw new InvalidOperationException ("Unknown game scene");
+                else if ((scene & global::KRPC.Service.GameScene.Editor) != 0) {
+                    if (EditorDriver.editorFacility == EditorFacility.VAB)
+                        return GameScene.EditorVAB;
+                    else if (EditorDriver.editorFacility == EditorFacility.SPH)
+                        return GameScene.EditorSPH;
                 }
+                throw new InvalidOperationException ("Unknown game scene");
             }
         }
 
