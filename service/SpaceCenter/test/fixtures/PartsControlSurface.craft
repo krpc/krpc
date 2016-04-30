@@ -1,5 +1,5 @@
 ship = PartsControlSurface
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
 size = 4.321621,8.567087,7.048415
@@ -542,7 +542,7 @@ PART
 	istg = 0
 	dstg = 0
 	sidx = 0
-	sqor = -1
+	sqor = 0
 	sepI = 0
 	attm = 1
 	modCost = 0

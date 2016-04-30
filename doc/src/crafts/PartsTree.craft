@@ -1,8 +1,8 @@
 ship = PartsTree
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
-size = 1.398102,17.83241,9.556708
+size = 1.398102,17.83241,9.556709
 PART
 {
 	part = mk1pod_4294552794
@@ -952,7 +952,6 @@ PART
 		isGrounded = False
 		autoFriction = False
 		frictionMultiplier = 1
-		suspensionEnabled = True
 		stagingEnabled = True
 		frictionMultiplier_UIFlight
 		{
@@ -960,10 +959,6 @@ PART
 			minValue = 0.01
 			maxValue = 5
 			stepIncrement = 0.01
-		}
-		suspensionEnabled_UIFlight
-		{
-			controlEnabled = True
 		}
 		EVENTS
 		{
@@ -994,14 +989,6 @@ PART
 		}
 		ACTIONS
 		{
-			EnableSuspension
-			{
-				actionGroup = None
-			}
-			DisableSuspension
-			{
-				actionGroup = None
-			}
 			ActAutoFrictionToggle
 			{
 				actionGroup = None
@@ -1012,9 +999,25 @@ PART
 	{
 		name = ModuleWheelSuspension
 		isEnabled = True
+		springTweakable = 1
+		damperTweakable = 1
 		suspensionPos = (-1, -1, -1)
 		autoBoost = 0
 		stagingEnabled = True
+		springTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
+		damperTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
 		EVENTS
 		{
 			ToggleStaging
@@ -1202,7 +1205,6 @@ PART
 		isGrounded = False
 		autoFriction = False
 		frictionMultiplier = 1
-		suspensionEnabled = True
 		stagingEnabled = True
 		frictionMultiplier_UIFlight
 		{
@@ -1210,10 +1212,6 @@ PART
 			minValue = 0.01
 			maxValue = 5
 			stepIncrement = 0.01
-		}
-		suspensionEnabled_UIFlight
-		{
-			controlEnabled = True
 		}
 		EVENTS
 		{
@@ -1244,14 +1242,6 @@ PART
 		}
 		ACTIONS
 		{
-			EnableSuspension
-			{
-				actionGroup = None
-			}
-			DisableSuspension
-			{
-				actionGroup = None
-			}
 			ActAutoFrictionToggle
 			{
 				actionGroup = None
@@ -1262,9 +1252,25 @@ PART
 	{
 		name = ModuleWheelSuspension
 		isEnabled = True
+		springTweakable = 1
+		damperTweakable = 1
 		suspensionPos = (-1, -1, -1)
 		autoBoost = 0
 		stagingEnabled = True
+		springTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
+		damperTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
 		EVENTS
 		{
 			ToggleStaging
@@ -2143,7 +2149,7 @@ PART
 {
 	part = fuelTank_4294515822
 	partName = Part
-	pos = 6.199947E-07,9.042857,1.832793
+	pos = 6.199948E-07,9.042857,1.832793
 	attPos = 0,0,0
 	attPos0 = -1.243289,0.08037464,1.860882E-07
 	rot = -2.107342E-07,0.707107,-2.107341E-07,0.7071066
@@ -2203,10 +2209,10 @@ PART
 {
 	part = noseCone_4294509608
 	partName = Part
-	pos = 6.199946E-07,10.00855,1.832793
+	pos = 6.199947E-07,10.00855,1.832793
 	attPos = 0,0,0
 	attPos0 = -2.796174E-07,0.9656896,-2.964948E-14
-	rot = -4.352074E-14,-8.205632E-22,-2.753353E-14,1
+	rot = -6.394885E-14,-8.205632E-22,-2.664535E-14,1
 	attRot = 0,0,0,1
 	attRot0 = 2.107342E-07,-0.707107,2.107341E-07,0.7071066
 	mir = 1,1,1
@@ -2235,10 +2241,10 @@ PART
 {
 	part = liquidEngine3_4294506336
 	partName = Part
-	pos = 6.19995E-07,7.859735,1.832794
+	pos = 6.199951E-07,7.859735,1.832794
 	attPos = 0,0,0
 	attPos0 = 3.862908E-08,-1.183122,-2.401535E-15
-	rot = -4.352074E-14,-8.205632E-22,-2.753353E-14,1
+	rot = -6.394885E-14,-8.205632E-22,-2.664535E-14,1
 	attRot = 0,0,0,1
 	attRot0 = 2.107342E-07,-0.707107,2.107341E-07,0.7071066
 	mir = 1,1,1
@@ -2878,7 +2884,7 @@ PART
 	pos = -5.188244E-07,9.953293,-1.834451
 	attPos = 0,0,0
 	attPos0 = -2.75528E-07,0.9656906,1.401493E-13
-	rot = -3.641532E-14,9.529121E-22,3.197442E-14,1
+	rot = -5.595524E-14,1.561717E-21,5.240253E-14,1
 	attRot = 0,0,0,1
 	attRot0 = 2.107341E-07,-0.7071067,-2.107342E-07,-0.7071069
 	mir = 1,1,1
@@ -2907,10 +2913,10 @@ PART
 {
 	part = liquidEngine3_4294475454
 	partName = Part
-	pos = -5.188246E-07,7.80448,-1.834453
+	pos = -5.188247E-07,7.80448,-1.834453
 	attPos = 0,0,0
 	attPos0 = -1.77959E-07,-1.183123,5.053851E-14
-	rot = -3.641532E-14,9.529121E-22,3.197442E-14,1
+	rot = -5.595524E-14,1.561717E-21,5.240253E-14,1
 	attRot = 0,0,0,1
 	attRot0 = 2.107341E-07,-0.7071067,-2.107342E-07,-0.7071069
 	mir = 1,1,1

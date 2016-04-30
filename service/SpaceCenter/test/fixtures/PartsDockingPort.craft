@@ -1,5 +1,5 @@
 ship = PartsDockingPort
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
 size = 11.00088,9.65366,4.291596
@@ -2732,8 +2732,8 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.426602
-		height = 3.599596
+		scaleFactor = 1.426601
+		height = 3.599595
 		stagingEnabled = True
 		towerRot = -1.788139E-07,1.192093E-07,-5.960464E-08,-1
 		EVENTS
