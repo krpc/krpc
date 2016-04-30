@@ -72,10 +72,7 @@ namespace KRPC.Service
             }
             var response = new Response ();
             if (procedure.HasReturnType)
-            {
-                response.HasReturnValue = true;
                 response.ReturnValue = EncodeReturnValue (procedure, returnValue);
-            }
             return response;
         }
 
@@ -96,10 +93,7 @@ namespace KRPC.Service
             }
             var response = new Response ();
             if (procedure.HasReturnType)
-            {
-                response.HasReturnValue = true;
                 response.ReturnValue = EncodeReturnValue (procedure, returnValue);
-            }
             return response;
         }
 

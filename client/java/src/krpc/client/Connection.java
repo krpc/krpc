@@ -190,7 +190,7 @@ public class Connection {
         KRPC.Response response = KRPC.Response.parseFrom(data);
         if (!response.getError().isEmpty())
             throw new RPCException(response.getError());
-        return response.getHasReturnValue() ? response.getReturnValue() : null;
+        return response.getReturnValue();
     }
 
     KRPC.Request request(String service, String procedure, ByteString... arguments) throws IOException {
