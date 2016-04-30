@@ -64,18 +64,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteMessage (object value, CodedOutputStream stream)
         {
-            Type type = value.GetType ();
-            Google.Protobuf.IMessage message;
-            if (type == typeof(Status))
-                message = ((Status)value).ToProtobufStatus ();
-            else if (type == typeof(Request))
-                message = ((Request)value).ToProtobufRequest ();
-            else if (type == typeof(Response))
-                message = ((Response)value).ToProtobufResponse ();
-            else if (type == typeof(Service.Messages.Services))
-                message = ((Service.Messages.Services)value).ToProtobufServices ();
-            else
-                throw new NotImplementedException (type + " is not supported");
+            Google.Protobuf.IMessage message = ((Service.Messages.IMessage)value).ToProtobufMessage ();
             message.WriteTo (stream);
         }
 
@@ -170,13 +159,9 @@ namespace KRPC.Server.ProtocolBuffers
             if (type == typeof(Request)) {
                 var message = new Schema.KRPC.Request ();
                 message.MergeFrom (stream);
-                return message.ToRequest ();
-            } else if (type == typeof(Response)) {
-                var message = new Schema.KRPC.Response ();
-                message.MergeFrom (stream);
-                return message.ToResponse ();
+                return message.ToMessage ();
             }
-            throw new NotImplementedException ("Cannot decode protobuf messages of type " + type);
+            throw new ArgumentException ("Cannot decode protocol buffer messages of type " + type);
         }
 
         static object DecodeList (CodedInputStream stream, Type type)

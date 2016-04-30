@@ -25,8 +25,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
             expectedRequest.Procedure = "ProcedureNoArgsNoReturn";
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteInt32 (expectedRequest.ToProtobufRequest ().CalculateSize ());
-                expectedRequest.ToProtobufRequest ().WriteTo (codedStream);
+                codedStream.WriteInt32 (expectedRequest.ToProtobufMessage ().CalculateSize ());
+                expectedRequest.ToProtobufMessage ().WriteTo (codedStream);
                 codedStream.Flush ();
                 requestBytes = stream.ToArray ();
             }
@@ -37,8 +37,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
             expectedResponse.Time = 42;
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteInt32 (expectedResponse.ToProtobufResponse ().CalculateSize ());
-                expectedResponse.ToProtobufResponse ().WriteTo (codedStream);
+                codedStream.WriteInt32 (expectedResponse.ToProtobufMessage ().CalculateSize ());
+                expectedResponse.ToProtobufMessage ().WriteTo (codedStream);
                 codedStream.Flush ();
                 responseBytes = stream.ToArray ();
             }

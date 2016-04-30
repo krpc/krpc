@@ -2,10 +2,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
-using Moq;
 using KRPC.Server;
 using KRPC.Server.ProtocolBuffers;
+using Moq;
+using NUnit.Framework;
 
 namespace KRPC.Test.Server.ProtocolBuffers
 {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf;
 using KRPC.Server.ProtocolBuffers;
-using NUnit.Framework;
 using KRPC.Service.Messages;
+using NUnit.Framework;
 
 namespace KRPC.Test.Server.ProtocolBuffers
 {
