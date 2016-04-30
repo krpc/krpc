@@ -1,8 +1,8 @@
 ship = PartsRadiator
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
-size = 5.891572,9.09779,3.638967
+size = 5.891571,9.09779,3.638966
 PART
 {
 	part = mk1pod_4294736224

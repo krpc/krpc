@@ -1,5 +1,5 @@
 ship = PartsRCS
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
 size = 3.522712,5.626163,1.270908
@@ -1034,7 +1034,7 @@ PART
 	istg = 0
 	dstg = 0
 	sidx = 0
-	sqor = -1
+	sqor = 0
 	sepI = 0
 	attm = 1
 	modCost = 0

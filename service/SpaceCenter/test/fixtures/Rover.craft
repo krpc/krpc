@@ -1,5 +1,5 @@
 ship = Rover
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
 size = 2.666838,1.968962,2.581408
@@ -524,7 +524,6 @@ PART
 		isGrounded = False
 		autoFriction = True
 		frictionMultiplier = 1
-		suspensionEnabled = True
 		stagingEnabled = True
 		frictionMultiplier_UIFlight
 		{
@@ -532,10 +531,6 @@ PART
 			minValue = 0.01
 			maxValue = 5
 			stepIncrement = 0.01
-		}
-		suspensionEnabled_UIFlight
-		{
-			controlEnabled = True
 		}
 		EVENTS
 		{
@@ -567,14 +562,6 @@ PART
 		}
 		ACTIONS
 		{
-			EnableSuspension
-			{
-				actionGroup = None
-			}
-			DisableSuspension
-			{
-				actionGroup = None
-			}
 			ActAutoFrictionToggle
 			{
 				actionGroup = None
@@ -585,9 +572,25 @@ PART
 	{
 		name = ModuleWheelSuspension
 		isEnabled = True
+		springTweakable = 1
+		damperTweakable = 1
 		suspensionPos = (-1, -1, -1)
 		autoBoost = 0
 		stagingEnabled = True
+		springTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
+		damperTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
 		EVENTS
 		{
 			ToggleStaging
@@ -713,15 +716,15 @@ PART
 	{
 		name = ModuleWheelBrakes
 		isEnabled = True
-		brakeTweak = 100
+		brakeTweakable = 100
 		brakeInput = 0
 		stagingEnabled = True
-		brakeTweak_UIFlight
+		brakeTweakable_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.1
+			maxValue = 200
+			stepIncrement = 5
 		}
 		EVENTS
 		{
@@ -884,7 +887,6 @@ PART
 		isGrounded = False
 		autoFriction = True
 		frictionMultiplier = 1
-		suspensionEnabled = True
 		stagingEnabled = True
 		frictionMultiplier_UIFlight
 		{
@@ -892,10 +894,6 @@ PART
 			minValue = 0.01
 			maxValue = 5
 			stepIncrement = 0.01
-		}
-		suspensionEnabled_UIFlight
-		{
-			controlEnabled = True
 		}
 		EVENTS
 		{
@@ -927,14 +925,6 @@ PART
 		}
 		ACTIONS
 		{
-			EnableSuspension
-			{
-				actionGroup = None
-			}
-			DisableSuspension
-			{
-				actionGroup = None
-			}
 			ActAutoFrictionToggle
 			{
 				actionGroup = None
@@ -945,9 +935,25 @@ PART
 	{
 		name = ModuleWheelSuspension
 		isEnabled = True
+		springTweakable = 1
+		damperTweakable = 1
 		suspensionPos = (-1, -1, -1)
 		autoBoost = 0
 		stagingEnabled = True
+		springTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
+		damperTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
 		EVENTS
 		{
 			ToggleStaging
@@ -1073,15 +1079,15 @@ PART
 	{
 		name = ModuleWheelBrakes
 		isEnabled = True
-		brakeTweak = 100
+		brakeTweakable = 100
 		brakeInput = 0
 		stagingEnabled = True
-		brakeTweak_UIFlight
+		brakeTweakable_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.1
+			maxValue = 200
+			stepIncrement = 5
 		}
 		EVENTS
 		{
@@ -1244,7 +1250,6 @@ PART
 		isGrounded = False
 		autoFriction = True
 		frictionMultiplier = 1
-		suspensionEnabled = True
 		stagingEnabled = True
 		frictionMultiplier_UIFlight
 		{
@@ -1252,10 +1257,6 @@ PART
 			minValue = 0.01
 			maxValue = 5
 			stepIncrement = 0.01
-		}
-		suspensionEnabled_UIFlight
-		{
-			controlEnabled = True
 		}
 		EVENTS
 		{
@@ -1287,14 +1288,6 @@ PART
 		}
 		ACTIONS
 		{
-			EnableSuspension
-			{
-				actionGroup = None
-			}
-			DisableSuspension
-			{
-				actionGroup = None
-			}
 			ActAutoFrictionToggle
 			{
 				actionGroup = None
@@ -1305,9 +1298,25 @@ PART
 	{
 		name = ModuleWheelSuspension
 		isEnabled = True
+		springTweakable = 1
+		damperTweakable = 1
 		suspensionPos = (-1, -1, -1)
 		autoBoost = 0
 		stagingEnabled = True
+		springTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
+		damperTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
 		EVENTS
 		{
 			ToggleStaging
@@ -1433,15 +1442,15 @@ PART
 	{
 		name = ModuleWheelBrakes
 		isEnabled = True
-		brakeTweak = 100
+		brakeTweakable = 100
 		brakeInput = 0
 		stagingEnabled = True
-		brakeTweak_UIFlight
+		brakeTweakable_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.1
+			maxValue = 200
+			stepIncrement = 5
 		}
 		EVENTS
 		{
@@ -1604,7 +1613,6 @@ PART
 		isGrounded = False
 		autoFriction = True
 		frictionMultiplier = 1
-		suspensionEnabled = True
 		stagingEnabled = True
 		frictionMultiplier_UIFlight
 		{
@@ -1612,10 +1620,6 @@ PART
 			minValue = 0.01
 			maxValue = 5
 			stepIncrement = 0.01
-		}
-		suspensionEnabled_UIFlight
-		{
-			controlEnabled = True
 		}
 		EVENTS
 		{
@@ -1647,14 +1651,6 @@ PART
 		}
 		ACTIONS
 		{
-			EnableSuspension
-			{
-				actionGroup = None
-			}
-			DisableSuspension
-			{
-				actionGroup = None
-			}
 			ActAutoFrictionToggle
 			{
 				actionGroup = None
@@ -1665,9 +1661,25 @@ PART
 	{
 		name = ModuleWheelSuspension
 		isEnabled = True
+		springTweakable = 1
+		damperTweakable = 1
 		suspensionPos = (-1, -1, -1)
 		autoBoost = 0
 		stagingEnabled = True
+		springTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
+		damperTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
 		EVENTS
 		{
 			ToggleStaging
@@ -1793,15 +1805,15 @@ PART
 	{
 		name = ModuleWheelBrakes
 		isEnabled = True
-		brakeTweak = 100
+		brakeTweakable = 100
 		brakeInput = 0
 		stagingEnabled = True
-		brakeTweak_UIFlight
+		brakeTweakable_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.1
+			maxValue = 200
+			stepIncrement = 5
 		}
 		EVENTS
 		{
@@ -1964,7 +1976,6 @@ PART
 		isGrounded = False
 		autoFriction = True
 		frictionMultiplier = 1
-		suspensionEnabled = True
 		stagingEnabled = True
 		frictionMultiplier_UIFlight
 		{
@@ -1972,10 +1983,6 @@ PART
 			minValue = 0.01
 			maxValue = 5
 			stepIncrement = 0.01
-		}
-		suspensionEnabled_UIFlight
-		{
-			controlEnabled = True
 		}
 		EVENTS
 		{
@@ -2007,14 +2014,6 @@ PART
 		}
 		ACTIONS
 		{
-			EnableSuspension
-			{
-				actionGroup = None
-			}
-			DisableSuspension
-			{
-				actionGroup = None
-			}
 			ActAutoFrictionToggle
 			{
 				actionGroup = None
@@ -2025,9 +2024,25 @@ PART
 	{
 		name = ModuleWheelSuspension
 		isEnabled = True
+		springTweakable = 1
+		damperTweakable = 1
 		suspensionPos = (-1, -1, -1)
 		autoBoost = 0
 		stagingEnabled = True
+		springTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
+		damperTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
 		EVENTS
 		{
 			ToggleStaging
@@ -2153,15 +2168,15 @@ PART
 	{
 		name = ModuleWheelBrakes
 		isEnabled = True
-		brakeTweak = 100
+		brakeTweakable = 100
 		brakeInput = 0
 		stagingEnabled = True
-		brakeTweak_UIFlight
+		brakeTweakable_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.1
+			maxValue = 200
+			stepIncrement = 5
 		}
 		EVENTS
 		{
@@ -2324,7 +2339,6 @@ PART
 		isGrounded = False
 		autoFriction = True
 		frictionMultiplier = 1
-		suspensionEnabled = True
 		stagingEnabled = True
 		frictionMultiplier_UIFlight
 		{
@@ -2332,10 +2346,6 @@ PART
 			minValue = 0.01
 			maxValue = 5
 			stepIncrement = 0.01
-		}
-		suspensionEnabled_UIFlight
-		{
-			controlEnabled = True
 		}
 		EVENTS
 		{
@@ -2367,14 +2377,6 @@ PART
 		}
 		ACTIONS
 		{
-			EnableSuspension
-			{
-				actionGroup = None
-			}
-			DisableSuspension
-			{
-				actionGroup = None
-			}
 			ActAutoFrictionToggle
 			{
 				actionGroup = None
@@ -2385,9 +2387,25 @@ PART
 	{
 		name = ModuleWheelSuspension
 		isEnabled = True
+		springTweakable = 1
+		damperTweakable = 1
 		suspensionPos = (-1, -1, -1)
 		autoBoost = 0
 		stagingEnabled = True
+		springTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
+		damperTweakable_UIEditor
+		{
+			controlEnabled = True
+			minValue = 0.05
+			maxValue = 2
+			stepIncrement = 0.05
+		}
 		EVENTS
 		{
 			ToggleStaging
@@ -2513,15 +2531,15 @@ PART
 	{
 		name = ModuleWheelBrakes
 		isEnabled = True
-		brakeTweak = 100
+		brakeTweakable = 100
 		brakeInput = 0
 		stagingEnabled = True
-		brakeTweak_UIFlight
+		brakeTweakable_UIFlight
 		{
 			controlEnabled = True
 			minValue = 0
-			maxValue = 100
-			stepIncrement = 0.1
+			maxValue = 200
+			stepIncrement = 5
 		}
 		EVENTS
 		{
