@@ -63,10 +63,8 @@ namespace KRPC.Service
                         var parameter = new Parameter ();
                         parameter.Name = parameterSignature.Name;
                         parameter.Type = TypeUtils.GetTypeName (parameterSignature.Type);
-                        if (parameterSignature.HasDefaultArgument) {
-                            parameter.HasDefaultArgument = true;
+                        if (parameterSignature.HasDefaultArgument)
                             parameter.DefaultArgument = parameterSignature.DefaultArgument;
-                        }
                         procedure.Parameters.Add (parameter);
                     }
                     foreach (var attribute in procedureSignature.Attributes) {
