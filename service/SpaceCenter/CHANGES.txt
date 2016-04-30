@@ -1,3 +1,6 @@
+v0.3.2
+ * Fix Control.SpeedMode (#258)
+
 v0.3.0
  * Support for KSP 1.1
  * Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)
