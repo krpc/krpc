@@ -4,6 +4,7 @@ using System.Reflection;
 using KRPC.Continuations;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
+using System.Collections.Specialized;
 
 namespace KRPC.Service
 {
@@ -104,48 +105,49 @@ namespace KRPC.Service
         /// </summary>
         public object[] GetArguments (ProcedureSignature procedure, IList<Argument> arguments)
         {
-            // TODO: this could probably be optimized
-
-            // Re-order arguments
+            // Get list of supplied argument values and whether they were set
             var argumentValues = new object [procedure.Parameters.Count];
-            var argumentSet = new bool [procedure.Parameters.Count];
+            var argumentSet = new BitVector32 (0);
             foreach (var argument in arguments) {
                 argumentValues [argument.Position] = argument.Value;
-                argumentSet [argument.Position] = true;
+                argumentSet [1 << (int)argument.Position] = true;
             }
 
-            // Build arguments array, including default argument values and check the types of the argument values
-            var completeArgumentValues = new object [procedure.Parameters.Count];
+            var mask = BitVector32.CreateMask ();
             for (int i = 0; i < procedure.Parameters.Count; i++) {
                 var value = argumentValues [i];
-                var type = procedure.Parameters [i].Type;
-                if (!argumentSet [i]) {
-                    if (!procedure.Parameters [i].HasDefaultValue)
-                        throw new RPCException (procedure, "Argument not specified for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". ");
-                    value = Type.Missing;
-                } else if (value != null && !type.IsAssignableFrom (value.GetType ())) {
+                var parameter = procedure.Parameters [i];
+                var type = parameter.Type;
+                if (!argumentSet [mask]) {
+                    // If the argument is not set, set it to the default value
+                    if (!parameter.HasDefaultValue)
+                        throw new RPCException (procedure, "Argument not specified for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". ");
+                    argumentValues [i] = parameter.DefaultValue;
+                } else if (value != null && !type.IsInstanceOfType (value)) {
+                    // Check the type of the non-null argument value
                     throw new RPCException (
                         procedure,
-                        "Incorrect argument type for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". " +
+                        "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got " + value.GetType ());
                 } else if (value == null && !TypeUtils.IsAClassType (type)) {
+                    // Check the type of the null argument value
                     throw new RPCException (
                         procedure,
-                        "Incorrect argument type for parameter " + procedure.Parameters [i].Name + " in " + procedure.FullyQualifiedName + ". " +
+                        "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got null");
                 }
-                completeArgumentValues [i] = value;
+                mask = BitVector32.CreateMask (mask);
             }
-            return completeArgumentValues;
+            return argumentValues;
         }
 
         /// <summary>
         /// Check the value returned by a procedure handler.
         /// </summary>
-        void CheckReturnValue (ProcedureSignature procedure, object returnValue)
+        static void CheckReturnValue (ProcedureSignature procedure, object returnValue)
         {
             // Check if the type of the return value is valid
-            if (returnValue != null && !procedure.ReturnType.IsAssignableFrom (returnValue.GetType ())) {
+            if (returnValue != null && !procedure.ReturnType.IsInstanceOfType (returnValue)) {
                 throw new RPCException (
                     procedure,
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
