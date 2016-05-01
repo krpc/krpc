@@ -102,6 +102,7 @@
     <Compile Include="Service\TestService3.cs" />
     <Compile Include="Service\TestTopLevelClass.cs" />
     <Compile Include="Service\TypeUtilsTest.cs" />
+    <Compile Include="TestingTools.cs" />
     <Compile Include="Utils\DocumentationExtensionsTest.cs" />
     <Compile Include="Utils\EquatableTest.cs" />
     <Compile Include="Utils\IEnumerableExtensionsTest.cs" />
