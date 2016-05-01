@@ -47,8 +47,8 @@ namespace KRPC.Server.Message
         }
 
         /// <summary>
-        /// Read a request from the client. Blocks until a request is available.
-        /// Throws NoRequestException if there is no request.
+        /// Read a request from the client.
+        /// Throws NoRequestException if there is no available request.
         /// Throws MalformedRequestException if malformed data is received.
         /// </summary>
         public Request Read ()
