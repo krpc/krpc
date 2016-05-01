@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using KRPC.Server;
-using KRPC.Server.TCP;
 using KRPC.Server.ProtocolBuffers;
+using KRPC.Server.TCP;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Utils;
@@ -85,24 +85,16 @@ namespace KRPC
             };
 
             // Add/remove clients from the scheduler
-            RPCServer.OnClientConnected += (s, e) => {
-                KRPCCore.Instance.RPCClientConnected (e.Client);
-            };
-            RPCServer.OnClientDisconnected += (s, e) => {
-                KRPCCore.Instance.RPCClientDisconnected (e.Client);
-            };
+            RPCServer.OnClientConnected += (s, e) => KRPCCore.Instance.RPCClientConnected (e.Client);
+            RPCServer.OnClientDisconnected += (s, e) => KRPCCore.Instance.RPCClientDisconnected (e.Client);
 
             // Add/remove clients from the list of stream requests
-            StreamServer.OnClientConnected += (s, e) => {
-                KRPCCore.Instance.StreamClientConnected (e.Client);
-            };
-            StreamServer.OnClientDisconnected += (s, e) => {
-                KRPCCore.Instance.StreamClientDisconnected (e.Client);
-            };
+            StreamServer.OnClientConnected += (s, e) => KRPCCore.Instance.StreamClientConnected (e.Client);
+            StreamServer.OnClientDisconnected += (s, e) => KRPCCore.Instance.StreamClientDisconnected (e.Client);
 
             // Validate stream client identifiers
             StreamServer.OnClientRequestingConnection += (s, e) => {
-                if (RPCServer.Clients.Where (c => c.Guid == e.Client.Guid).Any ())
+                if (RPCServer.Clients.Any (c => c.Guid == e.Client.Guid))
                     e.Request.Allow ();
                 else
                     e.Request.Deny ();
@@ -177,7 +169,7 @@ namespace KRPC
         /// not be connected to the server.
         /// </summary>
         public IEnumerable<IClient> Clients {
-            get { return RPCServer.Clients.Select (x => (IClient)x); }
+            get { return RPCServer.Clients.Cast <IClient> (); }
         }
 
         ExponentialMovingAverage bytesReadRate = new ExponentialMovingAverage (0.25);

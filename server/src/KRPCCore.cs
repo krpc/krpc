@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using KRPC.Continuations;
 using KRPC.Server;
-using KRPC.Server.ProtocolBuffers;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Utils;
@@ -467,8 +466,7 @@ namespace KRPC
                     streamResponse.Response = response;
                     streamMessage.Responses.Add (streamResponse);
                 }
-                //FIXME: this cast won't work for generic clients
-                ((IClient<NoMessage,StreamMessage>)streamClient).Stream.Write (streamMessage);
+                streamClient.Stream.Write (streamMessage);
             }
 
             timer.Stop ();
@@ -480,7 +478,7 @@ namespace KRPC
         IClient<NoMessage,StreamMessage> GetStreamClient (IClient rpcClient)
         {
             // Find stream client corresponding to the RPC client
-            IClient<NoMessage,StreamMessage> streamClient = null;
+            IClient<NoMessage,StreamMessage> streamClient;
             foreach (var server in servers) {
                 streamClient = server.StreamServer.Clients.SingleOrDefault (c => c.Guid == rpcClient.Guid);
                 if (streamClient != null)
@@ -492,7 +490,7 @@ namespace KRPC
         /// <summary>
         /// Add a stream to the server
         /// </summary>
-        internal uint AddStream (IClient rpcClient, Service.Messages.Request request)
+        internal uint AddStream (IClient rpcClient, Request request)
         {   
             var streamClient = GetStreamClient (rpcClient);
 
@@ -533,8 +531,8 @@ namespace KRPC
         /// </summary>
         void PollRequests (IEnumerable<RequestContinuation> yieldedContinuations)
         {
-            var currentClients = continuations.Select (((c) => c.Client)).ToList ();
-            currentClients.AddRange (yieldedContinuations.Select (((c) => c.Client)));
+            var currentClients = continuations.Select ((c => c.Client)).ToList ();
+            currentClients.AddRange (yieldedContinuations.Select ((c => c.Client)));
             foreach (var client in clientScheduler) {
                 if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
                     Request request = client.Stream.Read ();
