@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using KRPC.Server.TCP;
+using NUnit.Framework;
 
 namespace KRPC.Test.Server.TCP
 {

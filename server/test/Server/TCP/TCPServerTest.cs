@@ -1,9 +1,8 @@
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Linq;
-using NUnit.Framework;
 using KRPC.Server.TCP;
-using System;
+using NUnit.Framework;
 
 namespace KRPC.Test.Server.TCP
 {
@@ -153,7 +152,7 @@ namespace KRPC.Test.Server.TCP
         delegate bool BooleanPredicate ();
         // Calls server.Update repeatedly every 50 ms, until predicate is true
         // or up to a maximum number of iterations, after which point the test fails
-        void UpdateUntil (KRPC.Server.IServer<byte, byte> server, BooleanPredicate predicate, int iterations = 10)
+        static void UpdateUntil (KRPC.Server.IServer<byte, byte> server, BooleanPredicate predicate, int iterations = 10)
         {
             for (int i = 0; i < iterations; i++) {
                 server.Update ();
