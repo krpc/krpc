@@ -14,6 +14,15 @@ namespace KRPC.Server.WebSockets
 
         public OpCode OpCode { get; private set; }
 
+        public bool IsControl {
+            get {
+                return
+                OpCode == OpCode.Ping ||
+                OpCode == OpCode.Pong ||
+                OpCode == OpCode.Close;
+            }
+        }
+
         public bool Masked { get; private set; }
 
         public byte[] MaskingKey {
@@ -112,13 +121,12 @@ namespace KRPC.Server.WebSockets
             return FromBytes (data, 0, data.Length);
         }
 
-        public static Header FromBytes (byte[] data, int index, int count)
+        public static Header FromBytes (byte[] data, int index, int length)
         {
-            var length = count - index;
             var header = new Header ();
             var headerLength = 2;
             if (length < headerLength)
-                throw new MalformedHeaderException ();
+                throw new NoRequestException ();
 
             byte firstByte = data [index];
             byte secondByte = data [index + 1];
@@ -127,7 +135,14 @@ namespace KRPC.Server.WebSockets
             header.Rsv1 = ((firstByte & RSV1_MASK) != 0);
             header.Rsv2 = ((firstByte & RSV2_MASK) != 0);
             header.Rsv3 = ((firstByte & RSV3_MASK) != 0);
+
+            if (!Enum.IsDefined (typeof(OpCode), firstByte & OP_CODE_MASK))
+                throw new FramingException (1002, "Invalid op code");
             header.OpCode = (OpCode)(firstByte & OP_CODE_MASK);
+
+            if (!header.FinalFragment && header.IsControl)
+                throw new FramingException (1002, "Control frames must not be fragmented");
+
             var isMasked = ((secondByte & MASK_MASK) != 0);
             byte payloadLength = (byte)(secondByte & PAYLOAD_MASK);
             var extPayloadLengthSize = 0;
@@ -135,7 +150,7 @@ namespace KRPC.Server.WebSockets
             if (payloadLength == 126) {
                 headerLength += 2;
                 if (length < headerLength)
-                    throw new MalformedHeaderException ();
+                    throw new NoRequestException ();
                 var thirdByte = data [index + 2];
                 var fourthByte = data [index + 3];
                 byte[] lengthBytes = { fourthByte, thirdByte };
@@ -144,7 +159,7 @@ namespace KRPC.Server.WebSockets
             } else if (payloadLength == 127) {
                 headerLength += 8;
                 if (length < headerLength)
-                    throw new MalformedHeaderException ();
+                    throw new NoRequestException ();
                 var lengthBytes = new byte[8];
                 for (int i = 0; i < 8; i++)
                     lengthBytes [i] = data [index + 9 - i];
@@ -153,10 +168,13 @@ namespace KRPC.Server.WebSockets
             } else
                 header.Length = payloadLength;
 
+            if (header.IsControl && header.Length >= 126)
+                throw new FramingException (1002, "Control frame payload must not exceed 125 bytes");
+
             if (isMasked) {
                 headerLength += 4;
                 if (length < headerLength)
-                    throw new MalformedHeaderException ();
+                    throw new NoRequestException ();
                 var mask = new byte[4];
                 Array.Copy (data, index + 2 + extPayloadLengthSize, mask, 0, 4);
                 header.MaskingKey = mask;

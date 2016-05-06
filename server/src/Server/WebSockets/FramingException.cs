@@ -4,8 +4,11 @@ namespace KRPC
 {
     class FramingException : ServerException
     {
-        public FramingException (string message) : base (message)
+        public FramingException (ushort status, string message) : base (message)
         {
+            Status = status;
         }
+
+        public ushort Status { get; private set; }
     }
 }

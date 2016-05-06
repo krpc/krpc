@@ -1,26 +1,12 @@
-using System;
 using KRPC.Server.WebSockets;
 using NUnit.Framework;
-using System.Linq;
+using KRPC.Server;
 
 namespace KRPC.Test.Server.WebSockets
 {
     [TestFixture]
     public class HeaderTest
     {
-        static string ToHex (byte[] data)
-        {
-            return BitConverter.ToString (data).Replace ("-", "").ToLower ();
-        }
-
-        static byte[] FromHex (string data)
-        {
-            return Enumerable.Range (0, data.Length)
-                    .Where (x => x % 2 == 0)
-                    .Select (x => Convert.ToByte (data.Substring (x, 2), 16))
-                    .ToArray ();
-        }
-
         /// <summary>
         /// Decode a header from the given bytes (starting at index), check it decodes the expected length,
         /// and encode it again and compare it to canonicalData (expected shortest version of the header
@@ -28,7 +14,7 @@ namespace KRPC.Test.Server.WebSockets
         /// </summary>
         static void CheckBytes (string data, ulong expectedLength, string canonicalData, int index = 0)
         {
-            var header = Header.FromBytes (FromHex (data), index, data.Length - index);
+            var header = Header.FromBytes (data.ToBytes (), index, data.Length - index);
             Assert.IsTrue (header.FinalFragment);
             Assert.IsFalse (header.Rsv1);
             Assert.IsFalse (header.Rsv2);
@@ -37,7 +23,7 @@ namespace KRPC.Test.Server.WebSockets
             Assert.IsNull (header.MaskingKey);
             Assert.AreEqual (expectedLength, header.Length);
             Assert.AreEqual (canonicalData.Length / 2, header.HeaderLength);
-            Assert.AreEqual (canonicalData, ToHex (header.ToBytes ()));
+            Assert.AreEqual (canonicalData, header.ToBytes ().ToHexString ());
         }
 
         /// <summary>
@@ -120,6 +106,15 @@ namespace KRPC.Test.Server.WebSockets
         }
 
         [Test]
+        public void FromBytesTruncated ()
+        {
+            Assert.Throws<NoRequestException> (() => Header.FromBytes ("82".ToBytes ()));
+            Assert.Throws<NoRequestException> (() => Header.FromBytes ("827f".ToBytes ()));
+            Assert.Throws<NoRequestException> (() => Header.FromBytes ("827f12".ToBytes ()));
+            Assert.Throws<NoRequestException> (() => Header.FromBytes ("827f1234".ToBytes ()));
+        }
+
+        [Test]
         public void FromBytesWithTrailingData ()
         {
             CheckBytes ("8212ffff", 18, "8212");
@@ -133,18 +128,18 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void OpCodeToBytes ()
         {
-            Assert.AreEqual ("8800", ToHex (new Header (OpCode.Close, 0).ToBytes ()));
-            Assert.AreEqual ("8900", ToHex (new Header (OpCode.Ping, 0).ToBytes ()));
-            Assert.AreEqual ("8a00", ToHex (new Header (OpCode.Pong, 0).ToBytes ()));
-            Assert.AreEqual ("8200", ToHex (new Header (OpCode.Binary, 0).ToBytes ()));
-            Assert.AreEqual ("8100", ToHex (new Header (OpCode.Text, 0).ToBytes ()));
-            Assert.AreEqual ("8000", ToHex (new Header (OpCode.Continue, 0).ToBytes ()));
+            Assert.AreEqual ("8800", new Header (OpCode.Close, 0).ToBytes ().ToHexString ());
+            Assert.AreEqual ("8900", new Header (OpCode.Ping, 0).ToBytes ().ToHexString ());
+            Assert.AreEqual ("8a00", new Header (OpCode.Pong, 0).ToBytes ().ToHexString ());
+            Assert.AreEqual ("8200", new Header (OpCode.Binary, 0).ToBytes ().ToHexString ());
+            Assert.AreEqual ("8100", new Header (OpCode.Text, 0).ToBytes ().ToHexString ());
+            Assert.AreEqual ("8000", new Header (OpCode.Continue, 0).ToBytes ().ToHexString ());
         }
 
         [Test]
         public void FinalFragment ()
         {
-            var request1 = Header.FromBytes (FromHex ("a212"));
+            var request1 = Header.FromBytes ("a212".ToBytes ());
             Assert.IsTrue (request1.FinalFragment);
             Assert.IsFalse (request1.Rsv1);
             Assert.IsTrue (request1.Rsv2);
@@ -153,7 +148,7 @@ namespace KRPC.Test.Server.WebSockets
             Assert.AreEqual (18, request1.Length);
             Assert.AreEqual (2, request1.HeaderLength);
 
-            var request2 = Header.FromBytes (FromHex ("2212"));
+            var request2 = Header.FromBytes ("2212".ToBytes ());
             Assert.IsFalse (request2.FinalFragment);
             Assert.IsFalse (request2.Rsv1);
             Assert.IsTrue (request2.Rsv2);
@@ -166,7 +161,7 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void WithReservations ()
         {
-            var request1 = Header.FromBytes (FromHex ("f212"));
+            var request1 = Header.FromBytes ("f212".ToBytes ());
             Assert.IsTrue (request1.FinalFragment);
             Assert.IsTrue (request1.Rsv1);
             Assert.IsTrue (request1.Rsv2);
@@ -175,7 +170,7 @@ namespace KRPC.Test.Server.WebSockets
             Assert.AreEqual (18, request1.Length);
             Assert.AreEqual (2, request1.HeaderLength);
 
-            var request2 = Header.FromBytes (FromHex ("a212"));
+            var request2 = Header.FromBytes ("a212".ToBytes ());
             Assert.IsTrue (request2.FinalFragment);
             Assert.IsFalse (request2.Rsv1);
             Assert.IsTrue (request2.Rsv2);
@@ -188,7 +183,7 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void WithMaskingKey ()
         {
-            var request = Header.FromBytes (FromHex ("828012345678"));
+            var request = Header.FromBytes ("828012345678".ToBytes ());
             Assert.IsTrue (request.Masked);
             Assert.AreEqual (new byte[] { 0x12, 0x34, 0x56, 0x78 }, request.MaskingKey);
             Assert.IsTrue (request.FinalFragment);
@@ -202,7 +197,7 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void MissingMaskingKey ()
         {
-            Assert.Throws<MalformedHeaderException> (() => Header.FromBytes (FromHex ("8280")));
+            Assert.Throws<NoRequestException> (() => Header.FromBytes ("8280".ToBytes ()));
         }
     }
 }

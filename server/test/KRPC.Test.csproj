@@ -90,7 +90,10 @@
     <Compile Include="Server\TCP\TCPServerTest.cs" />
     <Compile Include="Server\TestClient.cs" />
     <Compile Include="Server\TestStream.cs" />
+    <Compile Include="Server\WebSockets\FrameTest.cs" />
     <Compile Include="Server\WebSockets\HeaderTest.cs" />
+    <Compile Include="Server\WebSockets\RPCServerTest.cs" />
+    <Compile Include="Server\WebSockets\RPCStreamTest.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
     <Compile Include="Service\DocumentationUtilsTest.cs" />
     <Compile Include="Service\ITestService.cs" />
