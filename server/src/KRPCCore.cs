@@ -534,13 +534,18 @@ namespace KRPC
             var currentClients = continuations.Select ((c => c.Client)).ToList ();
             currentClients.AddRange (yieldedContinuations.Select ((c => c.Client)));
             foreach (var client in clientScheduler) {
-                if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
-                    Request request = client.Stream.Read ();
-                    if (OnClientActivity != null)
-                        OnClientActivity (this, new ClientActivityArgs (client));
-                    if (Logger.ShouldLog (Logger.Severity.Debug))
-                        Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")", Logger.Severity.Debug);
-                    continuations.Add (new RequestContinuation (client, request));
+                try {
+                    if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
+                        Request request = client.Stream.Read ();
+                        if (OnClientActivity != null)
+                            OnClientActivity (this, new ClientActivityArgs (client));
+                        if (Logger.ShouldLog (Logger.Severity.Debug))
+                            Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")", Logger.Severity.Debug);
+                        continuations.Add (new RequestContinuation (client, request));
+                    }
+                } catch (ServerException e) {
+                    Logger.WriteLine ("Error receiving request from client " + client.Address + ": " + e.Message, Logger.Severity.Error);
+                    continue;
                 }
             }
         }
