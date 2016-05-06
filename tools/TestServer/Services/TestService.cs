@@ -102,7 +102,7 @@ namespace TestServer.Services
         [KRPCClass]
         public class TestClass : KRPC.Utils.Equatable<TestClass>
         {
-            readonly string value;
+            internal readonly string value;
 
             public TestClass (string value)
             {
@@ -140,9 +140,9 @@ namespace TestServer.Services
             public TestClass ObjectProperty { get; set; }
 
             [KRPCMethod]
-            public string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
+            public string OptionalArguments (string x, string y = "foo", string z = "bar", TestClass obj = null)
             {
-                return x + y + z + anotherParameter;
+                return x + y + z + (obj == null ? "null" : obj.value);
             }
 
             [KRPCMethod]
@@ -163,9 +163,9 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
-        public static string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
+        public static string OptionalArguments (string x, string y = "foo", string z = "bar", TestClass obj = null)
         {
-            return x + y + z + anotherParameter;
+            return x + y + z + (obj == null ? "null" : obj.value);
         }
 
         [KRPCEnum]

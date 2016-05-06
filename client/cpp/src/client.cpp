@@ -50,7 +50,7 @@ namespace krpc {
     schema::Response response;
     decoder::decode(response, data, this);
 
-    if (response.has_error())
+    if (!response.error().empty())
       throw RPCError(response.error());
 
     return response.return_value();

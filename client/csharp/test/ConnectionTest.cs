@@ -126,8 +126,10 @@ namespace KRPC.Client.Test
         [Test]
         public void OptionalArguments ()
         {
-            Assert.AreEqual ("jebfoobarbaz", connection.TestService ().OptionalArguments ("jeb"));
-            Assert.AreEqual ("jebbobbillbaz", connection.TestService ().OptionalArguments ("jeb", "bob", "bill"));
+            Assert.AreEqual ("jebfoobarnull", connection.TestService ().OptionalArguments ("jeb"));
+            Assert.AreEqual ("jebbobbillnull", connection.TestService ().OptionalArguments ("jeb", "bob", "bill"));
+            var obj = connection.TestService ().CreateTestObject ("kermin");
+            Assert.AreEqual ("jebbobbillkermin", connection.TestService ().OptionalArguments ("jeb", "bob", "bill", obj));
         }
 
         [Test]

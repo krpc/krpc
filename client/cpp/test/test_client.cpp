@@ -101,8 +101,10 @@ TEST_F(test_client, test_class_properties) {
 }
 
 TEST_F(test_client, test_optional_arguments) {
-  ASSERT_EQ("jebfoobarbaz", test_service.optional_arguments("jeb"));
-  ASSERT_EQ("jebbobbillbaz", test_service.optional_arguments("jeb", "bob", "bill"));
+  ASSERT_EQ("jebfoobarnull", test_service.optional_arguments("jeb"));
+  ASSERT_EQ("jebbobbillnull", test_service.optional_arguments("jeb", "bob", "bill"));
+  krpc::services::TestService::TestClass obj = test_service.create_test_object("kermin");
+  ASSERT_EQ("jebbobbillkermin", test_service.optional_arguments("jeb", "bob", "bill", obj));
 }
 
 TEST_F(test_client, test_blocking_procedure) {

@@ -91,9 +91,9 @@ namespace KRPC.Client
                 inStream.ReadMessage (response);
             }
 
-            if (response.HasError)
+            if (response.Error.Length > 0)
                 throw new RPCException (response.Error);
-            return response.HasReturnValue ? response.ReturnValue : null;
+            return response.ReturnValue;
         }
 
         internal Request BuildRequest (string service, string procedure, IList<ByteString> arguments = null)

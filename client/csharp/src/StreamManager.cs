@@ -67,7 +67,7 @@ namespace KRPC.Client
             lock (accessLock) {
                 if (!streamData.ContainsKey (id))
                     throw new ArgumentException ("Stream does not exist");
-                if (response.HasError)
+                if (response.Error.Length > 0)
                     return; //TODO: do something with the error
                 var data = response.ReturnValue;
                 streamData [id] = data;
