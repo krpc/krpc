@@ -1,5 +1,5 @@
 ship = PartsDecoupler
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
 size = 3.12746,7.13848,5.893483
@@ -957,7 +957,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.056816
+		scaleFactor = 1.056817
 		height = 2.666556
 		stagingEnabled = True
 		towerRot = -2.980232E-08,3.132037E-07,9.334196E-15,-1
@@ -1131,7 +1131,7 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 1.056816
+		scaleFactor = 1.056817
 		height = 2.666556
 		stagingEnabled = True
 		towerRot = 1.06369E-14,1,2.980232E-08,3.569151E-07

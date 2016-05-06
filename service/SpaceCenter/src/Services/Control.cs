@@ -97,12 +97,12 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public SpeedMode SpeedMode {
             get { return GetSpeedMode (); }
-            set { throw new NotImplementedException (); }
+            set { FlightGlobals.SetSpeedMode (value.FromSpeedMode ()); }
         }
 
         internal static SpeedMode GetSpeedMode ()
         {
-            return FlightUIController.speedDisplayMode.ToSpeedMode ();
+            return FlightGlobals.speedDisplayMode.ToSpeedMode ();
         }
 
         /// <summary>

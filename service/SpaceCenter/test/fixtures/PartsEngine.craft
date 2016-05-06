@@ -1,5 +1,5 @@
 ship = PartsEngine
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
 size = 8.297939,12.89818,6.112939
@@ -1194,7 +1194,7 @@ PART
 	pos = -2.661717,5.411785,-0.2157834
 	attPos = 0,0,0
 	attPos0 = -1.428031,-1.213228,1.192093E-07
-	rot = -6.352747E-22,0.7071068,7.940934E-22,0.7071068
+	rot = -7.411538E-22,0.7071068,7.940935E-22,0.7071068
 	attRot = 0,0,0,1
 	attRot0 = -1.256074E-15,0.7071068,1.256074E-15,0.7071068
 	mir = 1,1,1
@@ -1225,7 +1225,7 @@ PART
 		scaleFactor = 2.406446
 		height = 6.071936
 		stagingEnabled = True
-		towerRot = 6.352747E-22,-0.7071068,-7.940934E-22,0.7071068
+		towerRot = 7.411538E-22,-0.7071068,-7.940935E-22,0.7071068
 		EVENTS
 		{
 			Release
@@ -1600,7 +1600,7 @@ PART
 		name = LaunchClamp
 		isEnabled = True
 		scaleFactor = 2.460055
-		height = 6.207204
+		height = 6.207203
 		stagingEnabled = True
 		towerRot = 0.002348469,-0.707103,0.002348469,-0.7071028
 		EVENTS
@@ -3742,7 +3742,7 @@ PART
 	istg = 0
 	dstg = 0
 	sidx = 12
-	sqor = -1
+	sqor = 0
 	sepI = 0
 	attm = 0
 	modCost = 0

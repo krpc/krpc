@@ -1,8 +1,8 @@
 ship = PartsFairing
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
-size = 4.335434,8.250533,2.479582
+size = 4.335433,8.250533,2.479583
 PART
 {
 	part = Mark1-2Pod_4294723380
@@ -694,7 +694,7 @@ PART
 	istg = 0
 	dstg = 0
 	sidx = 1
-	sqor = -1
+	sqor = 0
 	sepI = 0
 	attm = 1
 	modCost = 0
