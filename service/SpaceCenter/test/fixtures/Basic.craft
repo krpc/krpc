@@ -1,5 +1,5 @@
 ship = Basic
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
 size = 1.506971,4.761263,1.749835
@@ -941,7 +941,7 @@ PART
 	istg = 0
 	dstg = 0
 	sidx = 0
-	sqor = -1
+	sqor = 0
 	sepI = 0
 	attm = 0
 	modCost = 0

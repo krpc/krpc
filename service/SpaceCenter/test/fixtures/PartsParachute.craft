@@ -1,5 +1,5 @@
 ship = PartsParachute
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
 size = 2.844676,2.366318,2.844676
@@ -1714,7 +1714,7 @@ PART
 	RESOURCE
 	{
 		name = SolidFuel
-		amount = 3.20000004768372
+		amount = 4.80000019073486
 		maxAmount = 8
 		flowState = True
 		isTweakable = True
@@ -1874,7 +1874,7 @@ PART
 	RESOURCE
 	{
 		name = SolidFuel
-		amount = 3.20000004768372
+		amount = 4.80000019073486
 		maxAmount = 8
 		flowState = True
 		isTweakable = True
@@ -2034,7 +2034,7 @@ PART
 	RESOURCE
 	{
 		name = SolidFuel
-		amount = 3.20000004768372
+		amount = 4.80000019073486
 		maxAmount = 8
 		flowState = True
 		isTweakable = True
@@ -2194,7 +2194,7 @@ PART
 	RESOURCE
 	{
 		name = SolidFuel
-		amount = 3.20000004768372
+		amount = 4.80000019073486
 		maxAmount = 8
 		flowState = True
 		isTweakable = True
@@ -2354,7 +2354,7 @@ PART
 	RESOURCE
 	{
 		name = SolidFuel
-		amount = 3.20000004768372
+		amount = 4.80000019073486
 		maxAmount = 8
 		flowState = True
 		isTweakable = True
@@ -2514,7 +2514,7 @@ PART
 	RESOURCE
 	{
 		name = SolidFuel
-		amount = 3.20000004768372
+		amount = 4.80000019073486
 		maxAmount = 8
 		flowState = True
 		isTweakable = True
@@ -2674,7 +2674,7 @@ PART
 	RESOURCE
 	{
 		name = SolidFuel
-		amount = 3.20000004768372
+		amount = 4.80000019073486
 		maxAmount = 8
 		flowState = True
 		isTweakable = True
@@ -2834,7 +2834,7 @@ PART
 	RESOURCE
 	{
 		name = SolidFuel
-		amount = 3.20000004768372
+		amount = 4.80000019073486
 		maxAmount = 8
 		flowState = True
 		isTweakable = True

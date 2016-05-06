@@ -155,6 +155,9 @@ def _assembly_info_impl(ctx):
     for pkg in ctx.attr.internals_visible_to:
         content.append('[assembly: InternalsVisibleTo ("%s")]' % pkg)
 
+    for k,v in ctx.attr.custom.items():
+        content.append('[assembly: Assembly%s ("%s")]' % (k,v))
+
     ctx.file_action(
         output = ctx.outputs.out,
         content = '\n'.join(content)+'\n'
@@ -209,6 +212,7 @@ csharp_assembly_info = rule(
         'description': attr.string(),
         'copyright': attr.string(mandatory=True),
         'version': attr.string(mandatory=True),
+        'custom': attr.string_dict(),
         'internals_visible_to': attr.string_list()
     },
     outputs = {'out': '%{name}.cs'}
