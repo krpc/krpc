@@ -26,7 +26,7 @@ namespace KRPC.Server.ProtocolBuffers
                 int totalSize = (int)codedStream.Position + size;
                 // Check if enough data is available, if not then delay the decoding
                 if (length < totalSize)
-                    throw new NoRequestException ();
+                    return 0;
                 // Decode the request
                 request = Schema.KRPC.Request.Parser.ParseFrom (codedStream).ToMessage ();
                 return totalSize;
