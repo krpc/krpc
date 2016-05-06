@@ -1,14 +1,12 @@
-using KRPC;
-using KRPC.Service;
-using KRPC.Server.TCP;
-using KRPC.Utils;
-using NDesk.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Diagnostics;
 using System.Net;
 using System.Reflection;
+using KRPC;
+using KRPC.Server.TCP;
+using KRPC.Service;
+using KRPC.Utils;
+using NDesk.Options;
 
 namespace TestServer
 {
@@ -50,8 +48,8 @@ namespace TestServer
                     "stream-port=", "Port number to use for the stream server. If unspecified, use an ephemeral port.",
                     (ushort v) => streamPort = v
                 }, {
-                    "type=", "Type of server to run. Either protobuf or websockets.",
-                    (string v) => type = v
+                    "type=", "Type of server to run. Either protobuf, websockets or websockets-echo.",
+                    v => type = v
                 }, {
                     "debug", "Set log level to 'debug', defaults to 'info'",
                     v => {
@@ -105,7 +103,11 @@ namespace TestServer
                 server = new KRPCServer (rpcServer, streamServer);
             } else if (type == "websockets") {
                 var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
-                var streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer); //FIXME: uses protobuf for now
+                var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
+                server = new KRPCServer (rpcServer, streamServer);
+            } else if (type == "websockets-echo") {
+                var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer, echo: true);
+                var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
                 server = new KRPCServer (rpcServer, streamServer);
             } else {
                 Console.WriteLine ("Server type '" + type + "' not supported");
