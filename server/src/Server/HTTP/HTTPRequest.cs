@@ -29,49 +29,49 @@ namespace KRPC.Server.HTTP
 
             // Parse request line
             if (!line.MoveNext ())
-                throw new MalformedRequest ("No request line");
+                throw new MalformedHTTPRequestException ("No request line");
             var requestLineParts = line.Current.Split (' ');
             if (requestLineParts.Length != 3)
-                throw new MalformedRequest ("Request line malformed");
+                throw new MalformedHTTPRequestException ("Request line malformed");
             if (requestLineParts [0] == "")
-                throw new MalformedRequest ("Invalid or unsupported method");
+                throw new MalformedHTTPRequestException ("Invalid or unsupported method");
             request.Method = requestLineParts [0];
             try {
                 var baseUri = new Uri ("http://localhost/");
                 request.URI = new Uri (baseUri, requestLineParts [1]);
             } catch (UriFormatException) {
-                throw new MalformedRequest ("URI is malformed");
+                throw new MalformedHTTPRequestException ("URI is malformed");
             }
             if (requestLineParts [2] == "")
-                throw new MalformedRequest ("Invalid or unsupported protocol");
+                throw new MalformedHTTPRequestException ("Invalid or unsupported protocol");
             request.Protocol = requestLineParts [2];
 
             // Parse header fields
             if (!line.MoveNext ())
-                throw new MalformedRequest ("Request ended early");
+                throw new MalformedHTTPRequestException ("Request ended early");
             request.Headers = new Dictionary<string, string> ();
             while (line.Current != "") {
                 var i = line.Current.IndexOf (':');
                 if (i == -1)
-                    throw new MalformedRequest ("Header field malformed");
+                    throw new MalformedHTTPRequestException ("Header field malformed");
                 var key = line.Current.Substring (0, i).Trim ();
                 var value = line.Current.Substring (i + 1).Trim ();
                 if (key == "")
-                    throw new MalformedRequest ("Header field key empty");
+                    throw new MalformedHTTPRequestException ("Header field key empty");
                 if (value == "")
-                    throw new MalformedRequest ("Header field value empty");
+                    throw new MalformedHTTPRequestException ("Header field value empty");
                 if (request.Headers.ContainsKey (key))
-                    throw new MalformedRequest ("Header field repeated");
+                    throw new MalformedHTTPRequestException ("Header field repeated");
                 request.Headers [key] = value;
                 if (!line.MoveNext ())
-                    throw new MalformedRequest ("Request ended early");
+                    throw new MalformedHTTPRequestException ("Request ended early");
             }
 
             // End of request
             if (line.Current != "" || !line.MoveNext () || line.Current != "")
-                throw new MalformedRequest ("Request ended early: ");
+                throw new MalformedHTTPRequestException ("Request ended early: ");
             if (line.MoveNext ())
-                throw new MalformedRequest ("Request too long");
+                throw new MalformedHTTPRequestException ("Request too long");
 
             return request;
         }

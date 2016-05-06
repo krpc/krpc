@@ -31,28 +31,28 @@ namespace KRPC.Test.Server.HTTP
         [Test]
         public void MalformedRequestLine ()
         {
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString ("GET HTTP/1.1\r\n\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString ("GET HTTP/1.1\r\n\r\n"));
         }
 
         [Test]
         public void MalformedMethod ()
         {
             Assert.DoesNotThrow (() => HTTPRequest.FromString ("GET / HTTP/1.1\r\n\r\n"));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (" / HTTP/1.1\r\n\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (" / HTTP/1.1\r\n\r\n"));
         }
 
         [Test]
         public void MalformedURI ()
         {
             Assert.DoesNotThrow (() => HTTPRequest.FromString ("GET / HTTP/1.1\r\n\r\n"));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString ("GET /////\\\\\\\\ HTTP/1.1\r\n\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString ("GET /////\\\\\\\\ HTTP/1.1\r\n\r\n"));
         }
 
         [Test]
         public void MalformedProtocol ()
         {
             Assert.DoesNotThrow (() => HTTPRequest.FromString ("GET / HTTP/1.1\r\n\r\n"));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString ("GET / \r\n\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString ("GET / \r\n\r\n"));
         }
 
         [Test]
@@ -61,26 +61,26 @@ namespace KRPC.Test.Server.HTTP
             const string requestString = "GET / HTTP/1.1\r\n";
             Assert.DoesNotThrow (() => HTTPRequest.FromString (requestString + "Key: Value\r\n\r\n"));
             Assert.DoesNotThrow (() => HTTPRequest.FromString (requestString + "Key:Value\r\n\r\n"));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (requestString + "Key Value\r\n\r\n"));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (requestString + "Key:\r\n\r\n"));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (requestString + ":Value\r\n\r\n"));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (requestString + "Key: Value\r\nKey: Value\r\n\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (requestString + "Key Value\r\n\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (requestString + "Key:\r\n\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (requestString + ":Value\r\n\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (requestString + "Key: Value\r\nKey: Value\r\n\r\n"));
         }
 
         [Test]
         public void EmptyRequest ()
         {
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (""));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (""));
         }
 
         [Test]
         public void TruncatedRequest ()
         {
             const string requestString = "GET / HTTP/1.1";
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (requestString));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (requestString + "\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (requestString));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (requestString + "\r\n"));
             Assert.DoesNotThrow (() => HTTPRequest.FromString (requestString + "\r\n\r\n"));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (requestString + "\r\nField: Value\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (requestString + "\r\nField: Value\r\n"));
             Assert.DoesNotThrow (() => HTTPRequest.FromString (requestString + "\r\nField: Value\r\n\r\n"));
         }
 
@@ -89,8 +89,8 @@ namespace KRPC.Test.Server.HTTP
         {
             const string requestString = "GET / HTTP/1.1\r\nField: Value\r\n\r\n";
             Assert.DoesNotThrow (() => HTTPRequest.FromString (requestString));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (requestString + "\r\n"));
-            Assert.Throws <MalformedRequest> (() => HTTPRequest.FromString (requestString + "foo"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (requestString + "\r\n"));
+            Assert.Throws <MalformedHTTPRequestException> (() => HTTPRequest.FromString (requestString + "foo"));
         }
     }
 }

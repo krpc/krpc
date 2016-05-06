@@ -111,7 +111,7 @@
     <Compile Include="Server\ClientRequestingConnectionArgs.cs" />
     <Compile Include="Server\HTTP\HTTPRequest.cs" />
     <Compile Include="Server\HTTP\HTTPResponse.cs" />
-    <Compile Include="Server\HTTP\MalformedRequest.cs" />
+    <Compile Include="Server\HTTP\MalformedHTTPRequestException.cs" />
     <Compile Include="Server\IClient.cs" />
     <Compile Include="Server\IClientEventArgs.cs" />
     <Compile Include="Server\IServer.cs" />
