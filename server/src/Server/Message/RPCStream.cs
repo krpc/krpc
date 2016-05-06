@@ -5,9 +5,10 @@ namespace KRPC.Server.Message
 {
     abstract class RPCStream : IStream<Request,Response>
     {
-        internal const int MAX_BUFFER_SIZE = 1 * 1024 * 1024;
         Request bufferedRequest;
-        byte[] buffer = new byte[MAX_BUFFER_SIZE];
+        const int BUFFER_INITIAL_SIZE = 4 * 1024 * 1024;
+        const int BUFFER_INCREASE_SIZE = 1 * 1024 * 1024;
+        byte[] buffer = new byte [BUFFER_INITIAL_SIZE];
         int size;
 
         protected RPCStream (IStream<byte,byte> stream)
@@ -102,38 +103,64 @@ namespace KRPC.Server.Message
             Stream.Close ();
         }
 
-        /// Returns quietly if there is a message in bufferedRequest
-        /// Throws NoRequestException if not
-        /// Throws MalformedRequestException if malformed data received
-        /// Throws RequestBufferOverflowException if buffer full but complete request not received
+        /// Returns quietly if there is a buffered message.
+        /// Otherwise attempts to receive a new message.
+        /// Throws NoRequestException if no message could be received.
+        /// Closes the stream and throws MalformedRequestException if a malformed message is received.
         void Poll ()
         {
+            // Check if the stream is closed
+            if (buffer == null)
+                throw new NoRequestException ();
+
+            // If there is already a request, don't need to poll for another one
             if (bufferedRequest != null)
                 return;
 
+            // No data is available, so there is no request to receive
             if (size == 0 && !Stream.DataAvailable)
                 throw new NoRequestException ();
 
             // Read as much data as we can from the client
-            size += Stream.Read (buffer, size);
+            while (Stream.DataAvailable) {
+                // Increase the size of the buffer if the remaining space is low
+                if (buffer.Length - size < BUFFER_INCREASE_SIZE) {
+                    var newBuffer = new byte [buffer.Length + BUFFER_INCREASE_SIZE];
+                    Array.Copy (buffer, newBuffer, size);
+                    buffer = newBuffer;
+                }
+                size += Stream.Read (buffer, size);
+            }
 
             // Try decoding a request
-            int read = Read (ref bufferedRequest, buffer, 0, size);
+            int read;
+            try {
+                read = Read (ref bufferedRequest, buffer, 0, size);
+            } catch (NoRequestException e) {
+                throw new InvalidOperationException ("Read should not throw NoRequestException", e);
+            } catch (MalformedRequestException e) {
+                Close ();
+                throw e;
+            }
+
+            // Sanity check the bytes read by the class implementing Read()
+            if (read > size) {
+                Close ();
+                throw new InvalidOperationException ("Read too many bytes");
+            }
 
             // Update the buffer
-            // Note: copying should happen rarely as Read will usually consume the whole buffer
-            size -= read;
-            if (read > 0 && size > 0)
-                Array.Copy (buffer, read, buffer, 0, size);
+            // Note: shuffling the buffer by copying should happen rarely as Read() usually consumes the entire buffer
+            if (read == size)
+                size = 0;
+            else if (read > 0 && size > 0) {
+                Array.Copy (buffer, read, buffer, 0, size - read);
+                size -= read;
+            }
 
-            // If no message was decoded and we have filled the buffer then fail
-            if (bufferedRequest == null && size == MAX_BUFFER_SIZE)
-                throw new RequestBufferOverflowException ();
-
-            // No request decoded
+            // Check if a request was not decoded
             if (bufferedRequest == null)
                 throw new NoRequestException ();
         }
     }
 }
-
