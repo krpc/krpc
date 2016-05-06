@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net.Sockets;
 
 namespace KRPC.Server.TCP
@@ -29,16 +30,28 @@ namespace KRPC.Server.TCP
 
         public int Read (byte[] buffer, int offset)
         {
-            var size = stream.Read (buffer, offset, buffer.Length - offset);
-            BytesRead += (ulong)size;
-            return size;
+            try {
+                var size = stream.Read (buffer, offset, buffer.Length - offset);
+                BytesRead += (ulong)size;
+                return size;
+            } catch (IOException e) {
+                throw new ServerException (e.Message);
+            } catch (ObjectDisposedException) {
+                throw new ServerException ("Connection closed");
+            }
         }
 
         public int Read (byte[] buffer, int offset, int size)
         {
-            size = stream.Read (buffer, offset, size);
-            BytesRead += (ulong)size;
-            return size;
+            try {
+                size = stream.Read (buffer, offset, size);
+                BytesRead += (ulong)size;
+                return size;
+            } catch (IOException e) {
+                throw new ServerException (e.Message);
+            } catch (ObjectDisposedException) {
+                throw new ServerException ("Connection closed");
+            }
         }
 
         public void Write (byte value)
@@ -49,8 +62,14 @@ namespace KRPC.Server.TCP
         public void Write (byte[] buffer)
         {
             var size = buffer.Length;
-            stream.Write (buffer, 0, size);
-            BytesWritten += (ulong)size;
+            try {
+                stream.Write (buffer, 0, size);
+                BytesWritten += (ulong)size;
+            } catch (IOException e) {
+                throw new ServerException (e.Message);
+            } catch (ObjectDisposedException) {
+                throw new ServerException ("Connection closed");
+            }
         }
 
         public ulong BytesRead { get; private set; }

@@ -26,7 +26,7 @@ namespace KRPC.Server.WebSockets
 
         public override void Write (Response value)
         {
-            var message = value.ToProtobufResponse ();
+            var message = value.ToProtobufMessage ();
             var bufferStream = new MemoryStream ();
             message.WriteTo (bufferStream);
             var payload = bufferStream.ToArray ();
@@ -71,7 +71,7 @@ namespace KRPC.Server.WebSockets
             switch (opCode) {
             case OpCode.Binary:
                 try {
-                    request = Schema.KRPC.Request.Parser.ParseFrom (frame.Payload).ToRequest ();
+                    request = Schema.KRPC.Request.Parser.ParseFrom (frame.Payload).ToMessage ();
                 } catch (InvalidProtocolBufferException) {
                     // Incomplete request, send a close frame with a protocol error
                     Stream.Write (Frame.Close (1002, "Malformed protocol buffer message").ToBytes ());

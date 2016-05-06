@@ -1,9 +1,9 @@
 using System;
-using System.Net;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using System.Net;
 using KRPC.Server.TCP;
+using NUnit.Framework;
 
 namespace KRPC.Test.Server.TCP
 {

@@ -7,11 +7,11 @@ namespace KRPC.Client
     /// </summary>
     public class RemoteObject : IEquatable<RemoteObject>
     {
-        internal Connection connection;
+        internal IConnection connection;
 
         internal UInt64 _ID { get; private set; }
 
-        internal RemoteObject (Connection connection, UInt64 id = 0)
+        internal RemoteObject (IConnection connection, UInt64 id = 0)
         {
             this.connection = connection;
             this._ID = id;

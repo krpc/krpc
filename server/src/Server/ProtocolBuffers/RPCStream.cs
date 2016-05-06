@@ -12,9 +12,8 @@ namespace KRPC.Server.ProtocolBuffers
 
         public override void Write (Response value)
         {
-            var message = value.ToProtobufResponse ();
             var bufferStream = new MemoryStream ();
-            message.WriteDelimitedTo (bufferStream);
+            value.ToProtobufMessage ().WriteDelimitedTo (bufferStream);
             Stream.Write (bufferStream.ToArray ());
         }
 
@@ -27,9 +26,9 @@ namespace KRPC.Server.ProtocolBuffers
                 int totalSize = (int)codedStream.Position + size;
                 // Check if enough data is available, if not then delay the decoding
                 if (length < totalSize)
-                    throw new NoRequestException ();
+                    return 0;
                 // Decode the request
-                request = Schema.KRPC.Request.Parser.ParseFrom (codedStream).ToRequest ();
+                request = Schema.KRPC.Request.Parser.ParseFrom (codedStream).ToMessage ();
                 return totalSize;
             } catch (InvalidProtocolBufferException e) {
                 throw new MalformedRequestException (e.Message);

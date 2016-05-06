@@ -13,9 +13,8 @@ namespace KRPC.Server.ProtocolBuffers
 
         public override void Write (StreamMessage value)
         {
-            var message = value.ToProtobufStreamMessage ();
             var data = new MemoryStream ();
-            message.WriteDelimitedTo (data);
+            value.ToProtobufMessage ().WriteDelimitedTo (data);
             Stream.Write (data.ToArray ());
         }
     }

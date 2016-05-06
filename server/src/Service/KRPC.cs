@@ -1,7 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
-using KRPC.Utils;
 
 namespace KRPC.Service
 {

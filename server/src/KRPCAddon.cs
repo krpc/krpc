@@ -29,7 +29,7 @@ namespace KRPC
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
 
-        void Init ()
+        static void Init ()
         {
             if (config != null)
                 return;

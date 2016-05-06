@@ -15,7 +15,7 @@ namespace KRPC.Service
 
         public StreamResponse Response { get; private set; }
 
-        public StreamRequest (Service.Messages.Request request)
+        public StreamRequest (Request request)
         {
             Identifier = nextIdentifier;
             nextIdentifier++;

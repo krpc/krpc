@@ -2,10 +2,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
-using Moq;
 using KRPC.Server;
 using KRPC.Server.ProtocolBuffers;
+using Moq;
+using NUnit.Framework;
 
 namespace KRPC.Test.Server.ProtocolBuffers
 {
@@ -29,9 +29,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void ValidHelloMessageWithNoName ()
         {
-            for (int i = 12; i < helloMessage.Length; i++) {
+            for (int i = 12; i < helloMessage.Length; i++)
                 helloMessage [i] = 0x00;
-            }
 
             var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (helloMessage), responseStream);

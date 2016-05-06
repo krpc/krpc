@@ -9,83 +9,75 @@ using KRPC.Service.Messages;
 
 namespace KRPC.Server.ProtocolBuffers
 {
-    //FIXME: a lot of this code is very similar to the C# client. Should only implement this stuff once.
-    //FIXME: this is not tested
     static class Encoder
     {
         /// <summary>
-        /// Encode a value of the given type.
+        /// Encode an object using the protocol buffer encoding scheme.
         /// </summary>
         public static ByteString Encode (object value)
         {
-            var stream = new MemoryStream ();
-            var encoder = new CodedOutputStream (stream);
+            var buffer = new MemoryStream ();
+            var stream = new CodedOutputStream (buffer);
             if (value == null) {
-                encoder.WriteUInt64 (ObjectStore.Instance.AddInstance (value));
-                encoder.Flush ();
-                return ByteString.CopyFrom (stream.ToArray ());
+                stream.WriteUInt64 (0);
+                stream.Flush ();
+                return ByteString.CopyFrom (buffer.ToArray ());
             }
             Type type = value.GetType ();
-            if (type == typeof(Double))
-                encoder.WriteDouble ((Double)value);
-            else if (type == typeof(Single))
-                encoder.WriteFloat ((Single)value);
-            else if (type == typeof(Int32))
-                encoder.WriteInt32 ((Int32)value);
-            else if (type == typeof(Int64))
-                encoder.WriteInt64 ((Int64)value);
-            else if (type == typeof(UInt32))
-                encoder.WriteUInt32 ((UInt32)value);
-            else if (type == typeof(UInt64))
-                encoder.WriteUInt64 ((UInt64)value);
-            else if (type == typeof(Boolean))
-                encoder.WriteBool ((Boolean)value);
-            else if (type == typeof(String))
-                encoder.WriteString ((String)value);
+            if (type == typeof(double))
+                stream.WriteDouble ((double)value);
+            else if (type == typeof(float))
+                stream.WriteFloat ((float)value);
+            else if (type == typeof(int))
+                stream.WriteInt32 ((int)value);
+            else if (type == typeof(long))
+                stream.WriteInt64 ((long)value);
+            else if (type == typeof(uint))
+                stream.WriteUInt32 ((uint)value);
+            else if (type == typeof(ulong))
+                stream.WriteUInt64 ((ulong)value);
+            else if (type == typeof(bool))
+                stream.WriteBool ((bool)value);
+            else if (type == typeof(string))
+                stream.WriteString ((string)value);
             else if (type == typeof(byte[]))
-                encoder.WriteBytes (ByteString.CopyFrom ((byte[])value));
+                stream.WriteBytes (ByteString.CopyFrom ((byte[])value));
             else if (value is Enum)
-                encoder.WriteInt32 ((int)value);
+                stream.WriteInt32 ((int)value);
             else if (TypeUtils.IsAClassType (type))
-                encoder.WriteUInt64 (ObjectStore.Instance.AddInstance (value));
+                stream.WriteUInt64 (ObjectStore.Instance.AddInstance (value));
             else if (TypeUtils.IsAMessageType (type)) {
-                Google.Protobuf.IMessage message;
-                if (type == typeof(Status))
-                    message = ((Status)value).ToProtobufStatus ();
-                else if (type == typeof(Request))
-                    message = ((Request)value).ToProtobufRequest ();
-                else if (type == typeof(Response))
-                    message = ((Response)value).ToProtobufResponse ();
-                else if (type == typeof(Service.Messages.Services))
-                    message = ((Service.Messages.Services)value).ToProtobufServices ();
-                else
-                    throw new NotImplementedException (type + " is not supported");
-                message.WriteTo (stream);
-                return ByteString.CopyFrom (stream.ToArray ());
+                WriteMessage (value, stream);
             } else if (TypeUtils.IsAListCollectionType (type))
-                return EncodeList (value, type);
+                WriteList (value, stream);
             else if (TypeUtils.IsADictionaryCollectionType (type))
-                return EncodeDictionary (value, type);
+                WriteDictionary (value, stream);
             else if (TypeUtils.IsASetCollectionType (type))
-                return EncodeSet (value, type);
+                WriteSet (value, stream);
             else if (TypeUtils.IsATupleCollectionType (type))
-                return EncodeTuple (value, type);
+                WriteTuple (value, stream);
             else
                 throw new ArgumentException (type + " is not a serializable type");
-            encoder.Flush ();
-            return ByteString.CopyFrom (stream.ToArray ());
+            stream.Flush ();
+            return ByteString.CopyFrom (buffer.ToArray ());
         }
 
-        static ByteString EncodeList (object value, Type type)
+        static void WriteMessage (object value, CodedOutputStream stream)
+        {
+            Google.Protobuf.IMessage message = ((Service.Messages.IMessage)value).ToProtobufMessage ();
+            message.WriteTo (stream);
+        }
+
+        static void WriteList (object value, CodedOutputStream stream)
         {
             var encodedList = new KRPC.Schema.KRPC.List ();
             var list = (IList)value;
             foreach (var item in list)
                 encodedList.Items.Add (Encode (item));
-            return encodedList.ToByteString ();
+            encodedList.WriteTo (stream);
         }
 
-        static ByteString EncodeDictionary (object value, Type type)
+        static void WriteDictionary (object value, CodedOutputStream stream)
         {
             var encodedDictionary = new KRPC.Schema.KRPC.Dictionary ();
             foreach (DictionaryEntry entry in (IDictionary) value) {
@@ -94,22 +86,22 @@ namespace KRPC.Server.ProtocolBuffers
                 encodedEntry.Value = Encode (entry.Value);
                 encodedDictionary.Entries.Add (encodedEntry);
             }
-            return encodedDictionary.ToByteString ();
+            encodedDictionary.WriteTo (stream);
         }
 
-        static ByteString EncodeSet (object value, Type type)
+        static void WriteSet (object value, CodedOutputStream stream)
         {
             var encodedSet = new KRPC.Schema.KRPC.Set ();
             var set = (IEnumerable)value;
             foreach (var item in set)
                 encodedSet.Items.Add (Encode (item));
-            return encodedSet.ToByteString ();
+            encodedSet.WriteTo (stream);
         }
 
-        static ByteString EncodeTuple (object value, Type type)
+        static void WriteTuple (object value, CodedOutputStream stream)
         {
             var encodedTuple = new KRPC.Schema.KRPC.Tuple ();
-            var valueTypes = type.GetGenericArguments ().ToArray ();
+            var valueTypes = value.GetType ().GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
             var tupleType = genericType.MakeGenericType (valueTypes);
             for (int i = 0; i < valueTypes.Length; i++) {
@@ -117,7 +109,7 @@ namespace KRPC.Server.ProtocolBuffers
                 var item = property.GetGetMethod ().Invoke (value, null);
                 encodedTuple.Items.Add (Encode (item));
             }
-            return encodedTuple.ToByteString ();
+            encodedTuple.WriteTo (stream);
         }
 
         /// <summary>
@@ -150,32 +142,31 @@ namespace KRPC.Server.ProtocolBuffers
             else if (TypeUtils.IsAClassType (type))
                 return ObjectStore.Instance.GetInstance (stream.ReadUInt64 ());
             else if (TypeUtils.IsAMessageType (type)) {
-                if (type == typeof(Request)) {
-                    var message = new Schema.KRPC.Request ();
-                    message.MergeFrom (stream);
-                    return message.ToRequest ();
-                } else if (type == typeof(Response)) {
-                    var message = new Schema.KRPC.Response ();
-                    message.MergeFrom (stream);
-                    return message.ToResponse ();
-                } else
-                    throw new NotImplementedException ("Cannot decode protobuf message for " + type);
-
+                return DecodeMessage (stream, type);
             } else if (TypeUtils.IsAListCollectionType (type))
-                return DecodeList (value, type);
+                return DecodeList (stream, type);
             else if (TypeUtils.IsADictionaryCollectionType (type))
-                return DecodeDictionary (value, type);
+                return DecodeDictionary (stream, type);
             else if (TypeUtils.IsASetCollectionType (type))
-                return DecodeSet (value, type);
-            // TODO: ugly handing of tuple types
+                return DecodeSet (stream, type);
             else if (TypeUtils.IsATupleCollectionType (type))
-                return DecodeTuple (value, type);
+                return DecodeTuple (stream, type);
             throw new ArgumentException (type + " is not a serializable type");
         }
 
-        static object DecodeList (ByteString value, Type type)
+        static object DecodeMessage (CodedInputStream stream, Type type)
         {
-            var encodedList = KRPC.Schema.KRPC.List.Parser.ParseFrom (value);
+            if (type == typeof(Request)) {
+                var message = new Schema.KRPC.Request ();
+                message.MergeFrom (stream);
+                return message.ToMessage ();
+            }
+            throw new ArgumentException ("Cannot decode protocol buffer messages of type " + type);
+        }
+
+        static object DecodeList (CodedInputStream stream, Type type)
+        {
+            var encodedList = KRPC.Schema.KRPC.List.Parser.ParseFrom (stream);
             var list = (IList)(typeof(System.Collections.Generic.List<>)
                 .MakeGenericType (type.GetGenericArguments ().Single ())
                 .GetConstructor (Type.EmptyTypes)
@@ -185,24 +176,24 @@ namespace KRPC.Server.ProtocolBuffers
             return list;
         }
 
-        static object DecodeDictionary (ByteString value, Type type)
+        static object DecodeDictionary (CodedInputStream stream, Type type)
         {
-            var encodedDictionary = KRPC.Schema.KRPC.Dictionary.Parser.ParseFrom (value);
+            var encodedDictionary = KRPC.Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
             var dictionary = (IDictionary)(typeof(System.Collections.Generic.Dictionary<,>)
                 .MakeGenericType (type.GetGenericArguments () [0], type.GetGenericArguments () [1])
                 .GetConstructor (Type.EmptyTypes)
                 .Invoke (null));
             foreach (var entry in encodedDictionary.Entries) {
-                var k = Decode (entry.Key, type.GetGenericArguments () [0]);
-                var v = Decode (entry.Value, type.GetGenericArguments () [1]);
-                dictionary [k] = v;
+                var key = Decode (entry.Key, type.GetGenericArguments () [0]);
+                var value = Decode (entry.Value, type.GetGenericArguments () [1]);
+                dictionary [key] = value;
             }
             return dictionary;
         }
 
-        static object DecodeSet (ByteString value, Type type)
+        static object DecodeSet (CodedInputStream stream, Type type)
         {
-            var encodedSet = KRPC.Schema.KRPC.Set.Parser.ParseFrom (value);
+            var encodedSet = KRPC.Schema.KRPC.Set.Parser.ParseFrom (stream);
             var set = (IEnumerable)(typeof(System.Collections.Generic.HashSet<>)
                 .MakeGenericType (type.GetGenericArguments ().Single ())
                 .GetConstructor (Type.EmptyTypes)
@@ -215,15 +206,15 @@ namespace KRPC.Server.ProtocolBuffers
             return set;
         }
 
-        static object DecodeTuple (ByteString value, Type type)
+        static object DecodeTuple (CodedInputStream stream, Type type)
         {
-            var encodedTuple = KRPC.Schema.KRPC.Tuple.Parser.ParseFrom (value);
+            var encodedTuple = KRPC.Schema.KRPC.Tuple.Parser.ParseFrom (stream);
             var valueTypes = type.GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
             var values = new Object[valueTypes.Length];
-            for (int j = 0; j < valueTypes.Length; j++) {
-                var item = encodedTuple.Items [j];
-                values [j] = Decode (item, valueTypes [j]);
+            for (int i = 0; i < valueTypes.Length; i++) {
+                var item = encodedTuple.Items [i];
+                values [i] = Decode (item, valueTypes [i]);
             }
             var tuple = genericType
                 .MakeGenericType (valueTypes)

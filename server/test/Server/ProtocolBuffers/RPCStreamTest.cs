@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Google.Protobuf;
+using KRPC.Server;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service.Messages;
 using NUnit.Framework;
@@ -25,8 +26,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
             expectedRequest.Procedure = "ProcedureNoArgsNoReturn";
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteInt32 (expectedRequest.ToProtobufRequest ().CalculateSize ());
-                expectedRequest.ToProtobufRequest ().WriteTo (codedStream);
+                codedStream.WriteInt32 (expectedRequest.ToProtobufMessage ().CalculateSize ());
+                expectedRequest.ToProtobufMessage ().WriteTo (codedStream);
                 codedStream.Flush ();
                 requestBytes = stream.ToArray ();
             }
@@ -37,8 +38,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
             expectedResponse.Time = 42;
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteInt32 (expectedResponse.ToProtobufResponse ().CalculateSize ());
-                expectedResponse.ToProtobufResponse ().WriteTo (codedStream);
+                codedStream.WriteInt32 (expectedResponse.ToProtobufMessage ().CalculateSize ());
+                expectedResponse.ToProtobufMessage ().WriteTo (codedStream);
                 codedStream.Flush ();
                 responseBytes = stream.ToArray ();
             }
@@ -47,19 +48,20 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void Empty ()
         {
-            var stream = new TestStream (new MemoryStream (), null);
-            var rpcStream = new RPCStream (stream);
+            var byteStream = new TestStream (new MemoryStream ());
+            var rpcStream = new RPCStream (byteStream);
             Assert.IsFalse (rpcStream.DataAvailable);
-            //rpcStream.Read ();
+            Assert.Throws<NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (0, rpcStream.BytesRead);
+            Assert.IsFalse (byteStream.Closed);
         }
 
         [Test]
         public void ReadSingleRequest ()
         {
-            var stream = new TestStream (new MemoryStream (requestBytes), null);
-            var rpcStream = new RPCStream (stream);
+            var byteStream = new TestStream (requestBytes);
+            var rpcStream = new RPCStream (byteStream);
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (0, rpcStream.BytesRead);
             Assert.IsTrue (rpcStream.DataAvailable);
@@ -67,20 +69,22 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (requestBytes.Length, rpcStream.BytesRead);
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
+            Assert.Throws<NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (expectedRequest.Service, request.Service);
             Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (requestBytes.Length, rpcStream.BytesRead);
+            Assert.IsFalse (byteStream.Closed);
         }
 
         [Test]
         public void ReadMultipleRequests ()
         {
-            var multipleRequestBytes = new byte[ requestBytes.Length * 5];
+            var multipleRequestBytes = new byte [requestBytes.Length * 5];
             for (int i = 0; i < 5; i++)
                 Array.Copy (requestBytes, 0, multipleRequestBytes, i * requestBytes.Length, requestBytes.Length);
-            var stream = new TestStream (new MemoryStream (multipleRequestBytes), null);
-            var rpcStream = new RPCStream (stream);
+            var byteStream = new TestStream (multipleRequestBytes);
+            var rpcStream = new RPCStream (byteStream);
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (0, rpcStream.BytesRead);
             for (int i = 0; i < 5; i++) {
@@ -90,13 +94,16 @@ namespace KRPC.Test.Server.ProtocolBuffers
                 Request request = rpcStream.Read ();
                 if (i < 4)
                     Assert.IsTrue (rpcStream.DataAvailable);
-                else
+                else {
                     Assert.IsFalse (rpcStream.DataAvailable);
+                    Assert.Throws<NoRequestException> (() => rpcStream.Read ());
+                }
                 Assert.AreEqual (expectedRequest.Service, request.Service);
                 Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
                 Assert.AreEqual (0, rpcStream.BytesWritten);
                 Assert.AreEqual (multipleRequestBytes.Length, rpcStream.BytesRead);
             }
+            Assert.IsFalse (byteStream.Closed);
         }
 
         [Test]
@@ -117,8 +124,10 @@ namespace KRPC.Test.Server.ProtocolBuffers
             stream.Seek (0, SeekOrigin.Begin);
 
             // Read part 1
-            var rpcStream = new RPCStream (new TestStream (stream, null));
+            var byteStream = new TestStream (stream);
+            var rpcStream = new RPCStream (byteStream);
             Assert.IsFalse (rpcStream.DataAvailable);
+            Assert.Throws<NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (part1.Length, rpcStream.BytesRead);
 
@@ -129,6 +138,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
 
             // Read part 2
             Assert.IsFalse (rpcStream.DataAvailable);
+            Assert.Throws<NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (part1.Length + part2.Length, rpcStream.BytesRead);
 
@@ -143,34 +153,39 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (part1.Length + part2.Length + part3.Length, rpcStream.BytesRead);
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
+            Assert.Throws<NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (part1.Length + part2.Length + part3.Length, rpcStream.BytesRead);
             Assert.AreEqual (expectedRequest.Service, request.Service);
             Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
+            Assert.IsFalse (byteStream.Closed);
         }
 
         [Test]
         public void ReadGarbage ()
         {
-            var data = new byte[KRPC.Server.Message.RPCStream.MAX_BUFFER_SIZE + 1];
+            var data = new byte [4000];
             var rand = new Random (42);
             rand.NextBytes (data);
-            var rpcStream = new RPCStream (new TestStream (new MemoryStream (data), null));
+            var byteStream = new TestStream (data);
+            var rpcStream = new RPCStream (byteStream);
             Assert.Throws<MalformedRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
-            Assert.AreEqual (data.Length - 1, rpcStream.BytesRead);
+            Assert.AreEqual (data.Length, rpcStream.BytesRead);
+            Assert.IsTrue (byteStream.Closed);
         }
 
         [Test]
         public void WriteSingleResponse ()
         {
             var stream = new MemoryStream ();
-            var rpcStream = new RPCStream (new TestStream (null, stream));
+            var byteStream = new TestStream (null, stream);
+            var rpcStream = new RPCStream (byteStream);
             rpcStream.Write (expectedResponse);
-            byte[] bytes = stream.ToArray ();
-            Assert.IsTrue (responseBytes.SequenceEqual (bytes));
-            Assert.AreEqual (bytes.Length, rpcStream.BytesWritten);
+            Assert.AreEqual (responseBytes.ToHexString (), stream.ToArray ().ToHexString ());
+            Assert.AreEqual (responseBytes.Length, rpcStream.BytesWritten);
             Assert.AreEqual (0, rpcStream.BytesRead);
+            Assert.IsFalse (byteStream.Closed);
         }
     }
 }

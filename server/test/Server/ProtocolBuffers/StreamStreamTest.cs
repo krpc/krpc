@@ -1,9 +1,8 @@
-using NUnit.Framework;
 using System.IO;
-using System.Linq;
+using Google.Protobuf;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service.Messages;
-using Google.Protobuf;
+using NUnit.Framework;
 
 namespace KRPC.Test.Server.ProtocolBuffers
 {
@@ -40,7 +39,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
 
             expectedMessage = streamMessage;
             using (var stream = new MemoryStream ()) {
-                expectedMessage.ToProtobufStreamMessage ().WriteDelimitedTo (stream);
+                expectedMessage.ToProtobufMessage ().WriteDelimitedTo (stream);
                 messageBytes = stream.ToArray ();
             }
         }
@@ -53,10 +52,9 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (0, streamStream.BytesWritten);
             Assert.AreEqual (0, streamStream.BytesRead);
             streamStream.Write (expectedMessage);
-            byte[] bytes = stream.ToArray ();
-            Assert.AreEqual (bytes.Length, streamStream.BytesWritten);
+            Assert.AreEqual (messageBytes.Length, streamStream.BytesWritten);
             Assert.AreEqual (0, streamStream.BytesRead);
-            Assert.IsTrue (messageBytes.SequenceEqual (bytes));
+            Assert.AreEqual (messageBytes.ToHexString (), stream.ToArray ().ToHexString ());
         }
     }
 }

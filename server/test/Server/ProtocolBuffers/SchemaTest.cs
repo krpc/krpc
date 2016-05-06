@@ -1,13 +1,12 @@
 using System;
-using System.IO;
 using Google.Protobuf;
-using NUnit.Framework;
 using KRPC.Schema.KRPC;
+using NUnit.Framework;
 
-namespace KRPC.Test.Schema
+namespace KRPC.Test.Server.ProtocolBuffers
 {
     [TestFixture]
-    public class RpcTest
+    public class SchemaTest
     {
         [Test]
         public void SimpleProtobufUsage ()
@@ -41,8 +40,7 @@ namespace KRPC.Test.Schema
             var buffer = new byte [2];
             var codedStream = new CodedOutputStream (buffer);
             codedStream.WriteUInt32 (value);
-            string hex = ("0x" + BitConverter.ToString (buffer)).Replace ("-", " 0x");
-            Assert.AreEqual ("0xAC 0x02", hex);
+            Assert.AreEqual ("ac02", buffer.ToHexString ());
         }
 
         [Test]
