@@ -100,7 +100,7 @@ namespace KRPC.Server.TCP
             if (OnStarted != null)
                 OnStarted (this, EventArgs.Empty);
             Logger.WriteLine ("TCPServer(" + name + "): started successfully");
-            if (Address.ToString () == "0.0.0.0")
+            if (ListenAddress.ToString () == "0.0.0.0")
                 Logger.WriteLine ("TCPServer(" + name + "): listening on all local network interfaces", Logger.Severity.Debug);
             else
                 Logger.WriteLine ("TCPServer(" + name + "): listening on local address " + Address, Logger.Severity.Debug);
