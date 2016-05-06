@@ -62,7 +62,7 @@ namespace KRPC.Server.HTTP
         {
             var result = contents + NEWLINE;
             if (Body.Trim () != "")
-                result += Body.Trim () + NEWLINE;
+                result += Body.Trim ();
             return result;
         }
 
