@@ -3,7 +3,7 @@ using KRPC.Server;
 
 namespace KRPC.Test.Server
 {
-    // TODO: This is only required due to mocking not preforming equality testing. Is there a better way to do this?
+    // TODO: This is only required due to mocking not performing equality testing. Is there a better way to do this?
     class TestClient : IClient<byte,byte>
     {
         readonly Guid guid;

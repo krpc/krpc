@@ -20,7 +20,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             helloMessage = new byte[12 + 16];
             byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x53, 0x54, 0x52, 0x45, 0x41, 0x4D };
             Array.Copy (header, helloMessage, header.Length);
-            clientGuid = Guid.NewGuid ();
+            clientGuid = new Guid ("1234567890abcdef1234567890abcdef".ToBytes ());
             byte[] identifier = clientGuid.ToByteArray ();
             Array.Copy (identifier, 0, helloMessage, header.Length, identifier.Length);
         }

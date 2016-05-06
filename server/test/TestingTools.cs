@@ -16,13 +16,18 @@ namespace KRPC.Test
             return ToHexString (data.ToByteArray ());
         }
 
-        public static ByteString ToByteString (this string data)
+        public static byte[] ToBytes (this string data)
         {
-            return ByteString.CopyFrom (
-                Enumerable.Range (0, data.Length)
+            return Enumerable
+                .Range (0, data.Length)
                 .Where (x => x % 2 == 0)
                 .Select (x => Convert.ToByte (data.Substring (x, 2), 16))
-                .ToArray ());
+                .ToArray ();
+        }
+
+        public static ByteString ToByteString (this string data)
+        {
+            return ByteString.CopyFrom (data.ToBytes ());
         }
     }
 }
