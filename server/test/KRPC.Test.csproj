@@ -94,6 +94,8 @@
     <Compile Include="Server\WebSockets\HeaderTest.cs" />
     <Compile Include="Server\WebSockets\RPCServerTest.cs" />
     <Compile Include="Server\WebSockets\RPCStreamTest.cs" />
+    <Compile Include="Server\WebSockets\StreamServerTest.cs" />
+    <Compile Include="Server\WebSockets\StreamStreamTest.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
     <Compile Include="Service\DocumentationUtilsTest.cs" />
     <Compile Include="Service\ITestService.cs" />

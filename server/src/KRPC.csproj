@@ -146,6 +146,9 @@
     <Compile Include="Server\WebSockets\RPCClient.cs" />
     <Compile Include="Server\WebSockets\RPCServer.cs" />
     <Compile Include="Server\WebSockets\RPCStream.cs" />
+    <Compile Include="Server\WebSockets\StreamClient.cs" />
+    <Compile Include="Server\WebSockets\StreamServer.cs" />
+    <Compile Include="Server\WebSockets\StreamStream.cs" />
     <Compile Include="ServicesChecker.cs" />
     <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
