@@ -1,8 +1,7 @@
 using System;
-using KRPC.Service;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExternalAPI;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services
 {

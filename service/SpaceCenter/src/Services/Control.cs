@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 using KSP.UI.Screens;
 
 namespace KRPC.SpaceCenter.Services

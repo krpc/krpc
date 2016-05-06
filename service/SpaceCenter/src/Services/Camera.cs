@@ -3,8 +3,6 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
-using System.Reflection;
-using System.Collections.Generic;
 
 namespace KRPC.SpaceCenter.Services
 {

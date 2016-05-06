@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using KRPC.SpaceCenter.Services;
+using UnityEngine;
 
 namespace KRPC.SpaceCenter
 {

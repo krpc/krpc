@@ -1,8 +1,8 @@
 using System;
+using System.Text.RegularExpressions;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
-using System.Text.RegularExpressions;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
