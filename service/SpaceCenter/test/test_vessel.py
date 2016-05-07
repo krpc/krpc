@@ -67,11 +67,11 @@ class TestVessel(testingtools.TestCase):
              0, 0, 7675],
             self.vessel.inertia_tensor, error=1)
 
-    def test_reaction_wheel_torque(self):
-        self.assertEqual((5000,5000,5000), self.vessel.reaction_wheel_torque)
+    def test_available_reaction_wheel_torque(self):
+        self.assertEqual((5000,5000,5000), self.vessel.available_reaction_wheel_torque)
         for rw in self.vessel.parts.reaction_wheels:
             rw.active = False
-        self.assertEqual((0,0,0), self.vessel.reaction_wheel_torque)
+        self.assertEqual((0,0,0), self.vessel.available_reaction_wheel_torque)
         for rw in self.vessel.parts.reaction_wheels:
             rw.active = True
 

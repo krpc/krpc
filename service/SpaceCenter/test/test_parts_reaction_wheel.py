@@ -22,7 +22,7 @@ class TestPartsReactionWheel(testingtools.TestCase):
     def test_reaction_wheel(self):
         wheel = next(iter(filter(lambda e: e.part.title == 'Advanced Reaction Wheel Module, Large', self.parts.reaction_wheels)))
         self.assertFalse(wheel.broken)
-        self.assertEqual((30000, 30000, 30000), wheel.torque)
+        self.assertEqual((30000, 30000, 30000), wheel.max_torque)
         self.assertTrue(wheel.active)
         time.sleep(0.1)
         wheel.active = False

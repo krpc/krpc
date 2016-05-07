@@ -4,6 +4,7 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -135,6 +136,24 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool RightEnabled {
             get { return rcs.enableX; }
             set { rcs.enableX = value; }
+        }
+
+        /// <summary>
+        /// The available torque in the pitch, roll and yaw axes of the vessel, in Newton meters.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// Returns zero if the RCS is inactive.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 AvailableTorque {
+            get { return AvailableTorqueVector.ToTuple (); }
+        }
+
+        internal Vector3d AvailableTorqueVector {
+            get {
+                if (!Active)
+                    return Vector3d.zero;
+                return rcs.GetPotentialTorque () * 1000f;
+            }
         }
 
         /// <summary>
