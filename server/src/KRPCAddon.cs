@@ -237,7 +237,7 @@ namespace KRPC
         {
             if (!ServicesChecker.OK)
                 return;
-            if (server.Running)
+            if (server != null && server.Running)
                 server.Update ();
         }
     }

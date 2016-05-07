@@ -1,3 +1,9 @@
+v0.3.3
+ * Fix popup dialogs not displaying (#266)
+
+v0.3.2
+ * Fix KRPC.CurrentGameScene (#262)
+
 v0.2.4
  * Shut down server when switching to main menu (or any other non-game scene)
 

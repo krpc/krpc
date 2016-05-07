@@ -4,31 +4,31 @@ namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class SpeedDisplayModesExtensions
     {
-        public static Services.SpeedMode ToSpeedMode (this FlightUIController.SpeedDisplayModes mode)
+        public static Services.SpeedMode ToSpeedMode (this FlightGlobals.SpeedDisplayModes mode)
         {
             switch (mode) {
-            case FlightUIController.SpeedDisplayModes.Orbit:
+            case FlightGlobals.SpeedDisplayModes.Orbit:
                 return Services.SpeedMode.Orbit;
-            case FlightUIController.SpeedDisplayModes.Surface:
+            case FlightGlobals.SpeedDisplayModes.Surface:
                 return Services.SpeedMode.Surface;
-            case FlightUIController.SpeedDisplayModes.Target:
+            case FlightGlobals.SpeedDisplayModes.Target:
                 return Services.SpeedMode.Target;
             default:
                 throw new ArgumentException ("Unsupported speed display mode");
             }
         }
 
-        public static FlightUIController.SpeedDisplayModes FromSpeedMode (this Services.SpeedMode mode)
+        public static FlightGlobals.SpeedDisplayModes FromSpeedMode (this Services.SpeedMode mode)
         {
             switch (mode) {
             case Services.SpeedMode.Orbit:
-                return FlightUIController.SpeedDisplayModes.Orbit;
+                return FlightGlobals.SpeedDisplayModes.Orbit;
             case Services.SpeedMode.Surface:
-                return FlightUIController.SpeedDisplayModes.Surface;
+                return FlightGlobals.SpeedDisplayModes.Surface;
             case Services.SpeedMode.Target:
-                return FlightUIController.SpeedDisplayModes.Target;
+                return FlightGlobals.SpeedDisplayModes.Target;
             default:
-                throw new ArgumentException ("Unsupported speed mode");
+                throw new ArgumentException ("Unsupported speed display mode");
             }
         }
     }

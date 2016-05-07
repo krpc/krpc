@@ -1,8 +1,8 @@
 ship = PartsHarvester
-version = 1.1.0
+version = 1.1.2
 description = 
 type = VAB
-size = 4.198865,9.848873,7.121809
+size = 4.198864,9.848873,7.121809
 PART
 {
 	part = Mark1-2Pod_4294407840
@@ -1717,7 +1717,7 @@ PART
 	istg = 0
 	dstg = 0
 	sidx = 0
-	sqor = -1
+	sqor = 0
 	sepI = 0
 	attm = 1
 	modCost = 0
@@ -1891,7 +1891,7 @@ PART
 	istg = 0
 	dstg = 0
 	sidx = 0
-	sqor = -1
+	sqor = 0
 	sepI = 0
 	attm = 1
 	modCost = 0

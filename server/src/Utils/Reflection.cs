@@ -10,6 +10,9 @@ namespace KRPC.Utils
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
                 // Get all types that can be loaded from the assembly
+                // FIXME: manually skip inspecting Assembly-CSharp as it causes a crash when running nunit tests
+                if (assembly.FullName.Contains ("Assembly-CSharp"))
+                    continue;
                 Type[] types;
                 try {
                     types = assembly.GetTypes ();
