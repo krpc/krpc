@@ -189,7 +189,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Mass {
-            get { return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.TotalMass ()); }
+            get { return InternalVessel.parts.Where (PartExtensions.IsPhysicallySignificant).Sum (PartExtensions.TotalMass); }
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float DryMass {
-            get { return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.DryMass ()); }
+            get { return InternalVessel.parts.Where (PartExtensions.IsPhysicallySignificant).Sum (PartExtensions.TotalMass); }
         }
 
         /// <summary>
