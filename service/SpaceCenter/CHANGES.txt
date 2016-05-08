@@ -1,7 +1,7 @@
 v0.3.3
  * Add AvailableTorque properties to vessels, reaction wheels, RCS, engines and control surfaces
  * Rename ReactionWheel.Torque to ReactionWheel.MaxTorque
- * Fix units for Vessel.MomentOfInertia
+ * Fix Vessel.MomentOfInertia - use custom inertia tensor calculations to avoid issues with KSPs Vessel.MoI and Vessel.findLocalMoI
 
 v0.3.2
  * Fix Control.SpeedMode (#258)

@@ -287,16 +287,17 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The moment of inertia of the vessel in <math>kg.m^2</math> around its center of mass
-        /// in vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// The moment of inertia of the vessel around its center of mass in <math>kg.m^2</math>.
+        /// The inertia values are around the pitch, roll and yaw directions respectively.
+        /// This corresponds to the vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
-            get { return (InternalVessel.MOI * 1000f).ToTuple (); }
+            get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
         }
 
         /// <summary>
-        /// The inertia tensor of the vessel in the vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// The inertia tensor of the vessel around its center of mass, in the vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
         /// Returns the 3x3 matrix as a list of elements, in row-major order.
         /// </summary>
         [KRPCProperty]

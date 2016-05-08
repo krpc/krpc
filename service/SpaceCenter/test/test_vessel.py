@@ -58,11 +58,9 @@ class TestVessel(testingtools.TestCase):
         self.assertEqual(3082, self.vessel.dry_mass)
 
     def test_moment_of_inertia(self):
-        #FIXME: this doesn't agree with the full inertia tensor
-        self.assertClose((13619, 17710, 12232), self.vessel.moment_of_inertia, error=10)
+        self.assertClose((13411, 2219, 13366), self.vessel.moment_of_inertia, error=10)
 
     def test_inertia_tensor(self):
-        #FIXME: this doesn't agree with the vessel's MoI
         self.assertClose(
             [13411, 0, 0,
              0, 2219, 0,
