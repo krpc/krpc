@@ -15,7 +15,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Create a camera object.
         /// </summary>
-        public Camera ()
+        internal Camera ()
         {
         }
 
