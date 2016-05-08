@@ -11,7 +11,7 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class ResourceTransfer : Equatable<ResourceTransfer>
     {
-        static ulong nextId = 0;
+        static ulong nextId;
         readonly ulong id;
         readonly Part fromPart;
         readonly Part toPart;
