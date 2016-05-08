@@ -31,9 +31,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             case 0:
                 return KSPActionGroup.Custom10;
             default:
-                throw new ArgumentException ("Action group index must be betwee 0 and 9 inclusive");
+                throw new ArgumentOutOfRangeException ("index", "Action group index must be betwee 0 and 9 inclusive");
             }
         }
     }
 }
-
