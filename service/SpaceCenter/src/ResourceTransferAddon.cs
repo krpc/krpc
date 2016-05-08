@@ -13,7 +13,7 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// The transfers currently in progress.
         /// </summary>
-        static List<ResourceTransfer> transfers = new List<ResourceTransfer> ();
+        static readonly List<ResourceTransfer> transfers = new List<ResourceTransfer> ();
 
         /// <summary>
         /// Destroy the addon
