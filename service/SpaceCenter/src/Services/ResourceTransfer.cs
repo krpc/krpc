@@ -116,8 +116,7 @@ namespace KRPC.SpaceCenter.Services
             fromPart.TransferResource (resource.id, -amountToTransfer);
             toPart.TransferResource (resource.id, amountToTransfer);
             Amount += amountToTransfer;
-            if (amountToTransfer < 0.0001f)
-                Complete = true;
+            Complete |= amountToTransfer < 0.0001f;
         }
     }
 }

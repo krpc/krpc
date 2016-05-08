@@ -296,9 +296,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 CheckCameraFocus ();
                 var body = PlanetariumCamera.fetch.target.celestialBody;
-                if (body == null)
-                    return null;
-                return new CelestialBody (body);
+                return body == null ? null : new CelestialBody (body);
             }
             set {
                 CheckCameraFocus ();
@@ -316,9 +314,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 CheckCameraFocus ();
                 var vessel = PlanetariumCamera.fetch.target.vessel;
-                if (vessel == null)
-                    return null;
-                return new Vessel (vessel);
+                return vessel == null ? null : new Vessel (vessel);
             }
             set {
                 CheckCameraFocus ();
@@ -338,9 +334,7 @@ namespace KRPC.SpaceCenter.Services
                 CheckCameraFocus ();
                 var vessel = PlanetariumCamera.fetch.target.vessel;
                 var node = PlanetariumCamera.fetch.target.maneuverNode;
-                if (vessel == null || node == null)
-                    return null;
-                return new Node (vessel, node);
+                return (vessel == null || node == null) ? null : new Node (vessel, node);
             }
             set {
                 CheckCameraFocus ();
