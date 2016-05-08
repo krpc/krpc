@@ -84,5 +84,9 @@ class TestPartsControlSurface(testingtools.TestCase):
         ctrlsrf = next(iter(filter(lambda e: e.part.title == 'Delta-Deluxe Winglet', self.parts.control_surfaces)))
         self.assertClose(0.2, ctrlsrf.surface_area)
 
+    def test_available_torque(self):
+        ctrlsrf = next(iter(filter(lambda e: e.part.title == 'FAT-455 Aeroplane Control Surface', self.parts.control_surfaces)))
+        self.assertClose((0,0,0), ctrlsrf.available_torque)
+
 if __name__ == "__main__":
     unittest.main()
