@@ -577,8 +577,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// in the parts reference frame (<see cref="ReferenceFrame"/>).
         /// </summary>
         [KRPCProperty]
-        public Tuple3 MomentOfInertia
-        {
+        public Tuple3 MomentOfInertia {
             get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
         }
 
@@ -587,8 +586,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns the 3x3 matrix as a list of elements, in row-major order.
         /// </summary>
         [KRPCProperty]
-        public IList<double> InertiaTensor
-        {
+        public IList<double> InertiaTensor {
             get { return ComputeInertiaTensor ().ToList (); }
         }
 
@@ -605,10 +603,10 @@ namespace KRPC.SpaceCenter.Services.Parts
 
             // translate: inertiaTensor frame to part frame
             Quaternion rot = part.rb.inertiaTensorRotation;
-            Quaternion inv = Quaternion.Inverse(rot);
+            Quaternion inv = Quaternion.Inverse (rot);
 
-            Matrix4x4 rotMatrix = Matrix4x4.TRS(Vector3.zero, rot, Vector3.one);
-            Matrix4x4 invMatrix = Matrix4x4.TRS(Vector3.zero, inv, Vector3.one);
+            Matrix4x4 rotMatrix = Matrix4x4.TRS (Vector3.zero, rot, Vector3.one);
+            Matrix4x4 invMatrix = Matrix4x4.TRS (Vector3.zero, inv, Vector3.one);
 
             var inertiaTensor = rotMatrix * partTensor * invMatrix;
             return inertiaTensor.MultiplyScalar (1000f);

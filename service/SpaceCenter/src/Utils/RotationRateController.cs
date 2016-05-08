@@ -24,7 +24,7 @@ namespace KRPC.SpaceCenter.Utils
         public Vector3 Error {
             get {
                 var vessel = FlightGlobalsExtensions.GetVesselById (vesselId);
-		//FIXME: finding the rigidbody is expensive - cache it
+                //FIXME: finding the rigidbody is expensive - cache it
                 var velocity = ReferenceFrame.AngularVelocityFromWorldSpace (-vessel.GetComponent<Rigidbody> ().angularVelocity);
                 var error = Target - velocity;
                 var pitchAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.right));

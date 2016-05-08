@@ -18,8 +18,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal static bool Is (Part part)
         {
             return
-                part.InternalPart.HasModule<ModuleActiveRadiator> () ||
-                part.InternalPart.HasModule<ModuleDeployableRadiator> ();
+            part.InternalPart.HasModule<ModuleActiveRadiator> () ||
+            part.InternalPart.HasModule<ModuleDeployableRadiator> ();
         }
 
         internal Radiator (Part part)

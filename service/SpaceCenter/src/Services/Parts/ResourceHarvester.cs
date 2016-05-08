@@ -20,8 +20,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal static bool Is (Part part)
         {
             return
-                part.InternalPart.HasModule<ModuleResourceHarvester> () &&
-                part.InternalPart.HasModule<ModuleAnimationGroup> ();
+            part.InternalPart.HasModule<ModuleResourceHarvester> () &&
+            part.InternalPart.HasModule<ModuleAnimationGroup> ();
         }
 
         internal ResourceHarvester (Part part)
