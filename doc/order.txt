@@ -72,7 +72,11 @@ SpaceCenter.Vessel.VacuumSpecificImpulse
 SpaceCenter.Vessel.KerbinSeaLevelSpecificImpulse
 SpaceCenter.Vessel.MomentOfInertia
 SpaceCenter.Vessel.InertiaTensor
-SpaceCenter.Vessel.ReactionWheelTorque
+SpaceCenter.Vessel.AvailableTorque
+SpaceCenter.Vessel.AvailableReactionWheelTorque
+SpaceCenter.Vessel.AvailableRCSTorque
+SpaceCenter.Vessel.AvailableEngineTorque
+SpaceCenter.Vessel.AvailableControlSurfaceTorque
 SpaceCenter.Vessel.ReferenceFrame
 SpaceCenter.Vessel.OrbitalReferenceFrame
 SpaceCenter.Vessel.SurfaceReferenceFrame
@@ -357,6 +361,7 @@ SpaceCenter.ControlSurface.RollEnabled
 SpaceCenter.ControlSurface.Inverted
 SpaceCenter.ControlSurface.Deployed
 SpaceCenter.ControlSurface.SurfaceArea
+SpaceCenter.ControlSurface.AvailableTorque
 SpaceCenter.Decoupler
 SpaceCenter.Decoupler.Part
 SpaceCenter.Decoupler.Decouple
@@ -410,6 +415,7 @@ SpaceCenter.Engine.Gimballed
 SpaceCenter.Engine.GimbalRange
 SpaceCenter.Engine.GimbalLocked
 SpaceCenter.Engine.GimbalLimit
+SpaceCenter.Engine.AvailableTorque
 SpaceCenter.Fairing
 SpaceCenter.Fairing.Part
 SpaceCenter.Fairing.Jettison
@@ -482,6 +488,7 @@ SpaceCenter.RCS.RollEnabled
 SpaceCenter.RCS.ForwardEnabled
 SpaceCenter.RCS.UpEnabled
 SpaceCenter.RCS.RightEnabled
+SpaceCenter.RCS.AvailableTorque
 SpaceCenter.RCS.MaxThrust
 SpaceCenter.RCS.MaxVacuumThrust
 SpaceCenter.RCS.Thrusters
@@ -495,7 +502,8 @@ SpaceCenter.ReactionWheel
 SpaceCenter.ReactionWheel.Part
 SpaceCenter.ReactionWheel.Active
 SpaceCenter.ReactionWheel.Broken
-SpaceCenter.ReactionWheel.Torque
+SpaceCenter.ReactionWheel.AvailableTorque
+SpaceCenter.ReactionWheel.MaxTorque
 SpaceCenter.ResourceConverter
 SpaceCenter.ResourceConverter.Part
 SpaceCenter.ResourceConverter.Count

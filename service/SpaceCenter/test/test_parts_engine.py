@@ -154,22 +154,27 @@ class EngineTest(EngineTestBase):
         self.assertFalse(engine.active)
         self.assertClose(engine.thrust_limit, 1)
         self.assertEqual(engine.thrust, 0)
-        self.assertClose(engine.available_thrust, data['max_thrust'], 500)
-        self.assertClose(engine.max_thrust, data['max_thrust'], 500)
-        self.assertClose(engine.specific_impulse, 0, 1)
+        self.assertClose(engine.available_thrust, data['max_thrust'], error=500)
+        self.assertClose(engine.max_thrust, data['max_thrust'], error=500)
+        self.assertClose(engine.specific_impulse, 0, error=5)
         self.assertTrue(engine.has_fuel)
+        self.assertClose(engine.available_torque, (0,0,0))
 
     def check_engine_active(self, engine, throttle):
         """ Check engine properties when engine is activated """
         data = self.engine_data[engine.part.title]
         self.assertTrue(engine.active)
         self.assertClose(throttle, engine.throttle)
-        self.assertClose(engine.thrust_limit, 1)
-        self.assertClose(engine.thrust, data['max_thrust'] * throttle, 500)
-        self.assertClose(engine.available_thrust, data['max_thrust'], 500)
-        self.assertClose(engine.max_thrust, data['max_thrust'], 500)
-        self.assertClose(engine.specific_impulse, data['isp'], 1)
+        self.assertClose(engine.thrust_limit, error=1)
+        self.assertClose(engine.thrust, data['max_thrust'] * throttle, error=500)
+        self.assertClose(engine.available_thrust, data['max_thrust'], error=500)
+        self.assertClose(engine.max_thrust, data['max_thrust'], error=500)
+        self.assertClose(engine.specific_impulse, data['isp'], error=5)
         self.assertTrue(engine.has_fuel)
+        if data['gimballed'] and throttle > 0:
+            self.assertGreater(engine.available_torque, (100,100,100))
+        else:
+            self.assertClose(engine.available_torque, (0,0,0))
 
     def check_engine(self, engine):
         self.set_idle(engine)

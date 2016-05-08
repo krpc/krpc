@@ -7,10 +7,10 @@ class TestVessel(testingtools.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'Basic':
-            testingtools.new_save()
-            testingtools.remove_other_vessels()
-            testingtools.set_circular_orbit('Kerbin', 100000)
+        testingtools.new_save()
+        testingtools.launch_vessel_from_vab('Vessel')
+        testingtools.remove_other_vessels()
+        testingtools.set_circular_orbit('Kerbin', 100000)
         cls.conn = testingtools.connect(name='TestVessel')
         cls.vtype = cls.conn.space_center.VesselType
         cls.vsituation = cls.conn.space_center.VesselSituation
@@ -22,10 +22,10 @@ class TestVessel(testingtools.TestCase):
         cls.conn.close()
 
     def test_name(self):
-        self.assertEqual('Basic', self.vessel.name)
+        self.assertEqual('Vessel', self.vessel.name)
         self.vessel.name = 'Foo Bar Baz';
         self.assertEqual('Foo Bar Baz', self.vessel.name)
-        self.vessel.name = 'Basic';
+        self.vessel.name = 'Vessel';
 
     def test_type(self):
         self.assertEqual(self.vtype.ship, self.vessel.type)
@@ -46,34 +46,52 @@ class TestVessel(testingtools.TestCase):
 
     def test_mass(self):
         # 2645 kg dry mass
-        # 10 l of monoprop at 4 kg/l
+        # 260 l of monoprop at 4 kg/l
         # 180 l of LiquidFueld at 5 kg/l
         # 220 l of Oxidizer at 5 kg/l
-        dry_mass = 2645
-        resource_mass = 10 * 4 + 180 * 5 + 220 * 5
+        dry_mass = 3082
+        resource_mass = 260 * 4 + 180 * 5 + 220 * 5
         self.assertEqual(dry_mass + resource_mass, self.vessel.mass)
 
     def test_dry_mass(self):
         # 2645 kg dry mass
-        self.assertEqual(2645, self.vessel.dry_mass)
+        self.assertEqual(3082, self.vessel.dry_mass)
 
     def test_moment_of_inertia(self):
-        self.assertClose((7696, 928, 7675), self.vessel.moment_of_inertia, error=1)
+        self.assertClose((13411, 2219, 13366), self.vessel.moment_of_inertia, error=10)
 
     def test_inertia_tensor(self):
         self.assertClose(
-            [7696, 0, 0,
-             0, 928, 0,
-             0, 0, 7675],
-            self.vessel.inertia_tensor, error=1)
+            [13411, 0, 0,
+             0, 2219, 0,
+             0, 0, 13366],
+            self.vessel.inertia_tensor, error=10)
 
-    def test_reaction_wheel_torque(self):
-        self.assertEqual((5000,5000,5000), self.vessel.reaction_wheel_torque)
+    def test_available_torque(self):
+        self.assertClose((5000,5000,5000), self.vessel.available_torque, error=1)
+
+    def test_available_reaction_wheel_torque(self):
+        self.assertClose((5000,5000,5000), self.vessel.available_reaction_wheel_torque)
         for rw in self.vessel.parts.reaction_wheels:
             rw.active = False
-        self.assertEqual((0,0,0), self.vessel.reaction_wheel_torque)
+        self.assertClose((0,0,0), self.vessel.available_reaction_wheel_torque)
         for rw in self.vessel.parts.reaction_wheels:
             rw.active = True
+
+    def test_available_rcs_torque(self):
+        self.assertClose((0,0,0), self.vessel.available_rcs_torque)
+        self.vessel.control.rcs = True
+        time.sleep(0.1)
+        self.assertClose((6005,5575,6005), self.vessel.available_rcs_torque, error=1)
+        self.vessel.control.rcs = False
+        time.sleep(0.1)
+        self.assertClose((0,0,0), self.vessel.available_rcs_torque)
+
+    def test_available_engine_torque(self):
+        self.assertClose((0,0,0), self.vessel.available_engine_torque)
+
+    def test_available_control_surface_torque(self):
+        self.assertClose((0,0,0), self.vessel.available_control_surface_torque)
 
 class TestVesselEngines(testingtools.TestCase):
 
@@ -176,6 +194,7 @@ class TestVesselEngines(testingtools.TestCase):
         self.assertClose(self.vessel.specific_impulse, 0)
         self.assertClose(self.vessel.vacuum_specific_impulse, 0)
         self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, 0)
+        self.assertClose((0,0,0), self.vessel.available_engine_torque)
 
     def test_one_idle(self):
         self.control.throttle = 0
@@ -197,6 +216,7 @@ class TestVesselEngines(testingtools.TestCase):
         self.assertClose(self.vessel.specific_impulse, info['isp'])
         self.assertClose(self.vessel.vacuum_specific_impulse, info['vac_isp'])
         self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, info['msl_isp'])
+        self.assertClose((0,0,0), self.vessel.available_engine_torque)
         engine.active = False
         time.sleep(0.5)
 
@@ -218,6 +238,7 @@ class TestVesselEngines(testingtools.TestCase):
         self.assertClose(self.vessel.specific_impulse, self.combined_isp, 1)
         self.assertClose(self.vessel.vacuum_specific_impulse, self.vac_combined_isp, 1)
         self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, self.msl_combined_isp, 1)
+        self.assertClose((0,0,0), self.vessel.available_engine_torque)
         for engine in self.engines:
             engine.active = False
         time.sleep(0.5)
@@ -234,6 +255,7 @@ class TestVesselEngines(testingtools.TestCase):
             self.assertClose(self.vessel.specific_impulse, self.combined_isp, 1)
             self.assertClose(self.vessel.vacuum_specific_impulse, self.vac_combined_isp, 1)
             self.assertClose(self.vessel.kerbin_sea_level_specific_impulse, self.msl_combined_isp, 1)
+            self.assertGreater(self.vessel.available_engine_torque, (0,0,0))
         self.control.throttle = 0
         for engine in self.engines:
             engine.active = False

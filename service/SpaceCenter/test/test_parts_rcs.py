@@ -55,7 +55,8 @@ class RCSTest(RCSTestBase):
         self.assertTrue(rcs.forward_enabled)
         self.assertTrue(rcs.up_enabled)
         self.assertTrue(rcs.right_enabled)
-        self.assertClose(data['max_thrust'], rcs.max_thrust, 1)
+        self.assertClose(data['torque'], rcs.available_torque, error=10)
+        self.assertClose(data['max_thrust'], rcs.max_thrust, error=1)
         self.assertEqual(data['max_vac_thrust'], rcs.max_vacuum_thrust)
         self.assertEqual(data['thrusters'], len(rcs.thrusters))
         self.assertClose(data['isp'], rcs.specific_impulse, error=0.1)
@@ -68,16 +69,16 @@ class RCSTest(RCSTestBase):
         time.sleep(0.1)
 
     def test_rcs_single(self):
-        engine = self.get_rcs('Place-Anywhere 7 Linear RCS Port')
-        self.check_properties(engine)
+        rcs = self.get_rcs('Place-Anywhere 7 Linear RCS Port')
+        self.check_properties(rcs)
 
     def test_rcs_block(self):
-        engine = self.get_rcs('RV-105 RCS Thruster Block')
-        self.check_properties(engine)
+        rcs = self.get_rcs('RV-105 RCS Thruster Block')
+        self.check_properties(rcs)
 
     def test_vernor_engine(self):
-        engine = self.get_rcs('Vernor Engine')
-        self.check_properties(engine)
+        rcs = self.get_rcs('Vernor Engine')
+        self.check_properties(rcs)
 
 class TestPartsRCS(testingtools.TestCase, RCSTestBase):
 
@@ -161,15 +162,15 @@ class TestPartsRCSMSL(testingtools.TestCase, RCSTest):
         cls.parts = cls.vessel.parts
         cls.add_rcs_data(
             'Place-Anywhere 7 Linear RCS Port',
-            {'max_thrust': 842, 'isp': 101}
+            {'max_thrust': 842, 'isp': 101, 'torque': (1260,360,2460)}
         )
         cls.add_rcs_data(
             'RV-105 RCS Thruster Block',
-            {'max_thrust': 420, 'isp': 101}
+            {'max_thrust': 420, 'isp': 101, 'torque': (1020,470,805)}
         )
         cls.add_rcs_data(
             'Vernor Engine',
-            {'max_thrust': 6503, 'isp': 140.9}
+            {'max_thrust': 6503, 'isp': 140.9, 'torque': (7400,320,7570)}
         )
 
     @classmethod
@@ -190,15 +191,15 @@ class TestPartsRCSVacuum(testingtools.TestCase, RCSTest):
         cls.parts = cls.vessel.parts
         cls.add_rcs_data(
             'Place-Anywhere 7 Linear RCS Port',
-            {'max_thrust': 2000, 'isp': 240}
+            {'max_thrust': 2000, 'isp': 240, 'torque': (1210,325,2360)}
         )
         cls.add_rcs_data(
             'RV-105 RCS Thruster Block',
-            {'max_thrust': 1000, 'isp': 240}
+            {'max_thrust': 1000, 'isp': 240, 'torque': (960,510,820)}
         )
         cls.add_rcs_data(
             'Vernor Engine',
-            {'max_thrust': 12000, 'isp': 260}
+            {'max_thrust': 12000, 'isp': 260, 'torque': (6900,1,6900)}
         )
 
     @classmethod
