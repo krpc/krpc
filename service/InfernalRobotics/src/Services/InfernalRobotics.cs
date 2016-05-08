@@ -23,10 +23,10 @@ namespace KRPC.InfernalRobotics.Services
         /// A list of all the servo groups in the active vessel.
         /// </summary>
         [KRPCProperty]
-        public static IList<ControlGroup> ServoGroups {
+        public static IList<ServoGroup> ServoGroups {
             get {
                 CheckAPI ();
-                return IRWrapper.IRController.ServoGroups.Select (x => new ControlGroup (x)).ToList ();
+                return IRWrapper.IRController.ServoGroups.Select (x => new ServoGroup (x)).ToList ();
             }
         }
 
@@ -36,11 +36,11 @@ namespace KRPC.InfernalRobotics.Services
         /// </summary>
         /// <param name="name">Name of servo group to find.</param>
         [KRPCProcedure]
-        public static ControlGroup ServoGroupWithName (string name)
+        public static ServoGroup ServoGroupWithName (string name)
         {
             CheckAPI ();
             var servoGroup = IRWrapper.IRController.ServoGroups.FirstOrDefault (x => x.Name == name);
-            return servoGroup != null ? new ControlGroup (servoGroup) : null;
+            return servoGroup != null ? new ServoGroup (servoGroup) : null;
         }
 
         /// <summary>

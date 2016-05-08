@@ -5,18 +5,17 @@ using KRPC.Utils;
 
 namespace KRPC.InfernalRobotics.Services
 {
-    //TODO: rename to ServoGroup to make naming consistent
     /// <summary>
     /// A group of servos, obtained by calling <see cref="InfernalRobotics.ServoGroups"/>
     /// or <see cref="InfernalRobotics.ServoGroupWithName"/>. Represents the "Servo Groups"
     /// in the InfernalRobotics UI.
     /// </summary>
     [KRPCClass (Service = "InfernalRobotics")]
-    public sealed class ControlGroup : Equatable<ControlGroup>
+    public sealed class ServoGroup : Equatable<ServoGroup>
     {
         readonly IRWrapper.IControlGroup controlGroup;
 
-        internal ControlGroup (IRWrapper.IControlGroup controlGroup)
+        internal ServoGroup (IRWrapper.IControlGroup controlGroup)
         {
             this.controlGroup = controlGroup;
         }
@@ -24,7 +23,7 @@ namespace KRPC.InfernalRobotics.Services
         /// <summary>
         /// Check if control groups are equivalent.
         /// </summary>
-        public override bool Equals (ControlGroup obj)
+        public override bool Equals (ServoGroup obj)
         {
             return controlGroup == obj.controlGroup;
         }
