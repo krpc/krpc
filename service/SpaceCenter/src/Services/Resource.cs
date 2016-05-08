@@ -14,8 +14,8 @@ namespace KRPC.SpaceCenter.Services
 
         internal Resource (PartResource resource)
         {
-            this.partId = resource.part.flightID;
-            this.resourceId = resource.info.id;
+            partId = resource.part.flightID;
+            resourceId = resource.info.id;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The KSP part.
         /// </summary>
-        public global::Part InternalPart {
+        public Part InternalPart {
             get { return FlightGlobals.FindPartByID (partId); }
         }
 

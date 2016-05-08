@@ -12,9 +12,9 @@ namespace KRPC.SpaceCenter.Utils
         Guid vesselId;
         public readonly PIDController PID = new PIDController ();
 
-        public RotationRateController (global::Vessel vessel)
+        public RotationRateController (Vessel vessel)
         {
-            this.vesselId = vessel.id;
+            vesselId = vessel.id;
         }
 
         public ReferenceFrame ReferenceFrame { get; set; }

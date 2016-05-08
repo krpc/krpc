@@ -31,7 +31,7 @@ namespace KRPC.SpaceCenter
             line.SetPosition (1, Vector3d.zero);
             var rgbColor = new Color ((float)color.Item1, (float)color.Item2, (float)color.Item3);
             line.SetColors (rgbColor, rgbColor);
-            directions.Add (new Direction (KRPC.KRPCServer.Context.RPCClient, obj, line, direction, length, referenceFrame));
+            directions.Add (new Direction (KRPCServer.Context.RPCClient, obj, line, direction, length, referenceFrame));
         }
 
         internal static void AddLine (Vector3 start, Vector3 end, ReferenceFrame referenceFrame, Tuple3 color)
@@ -46,7 +46,7 @@ namespace KRPC.SpaceCenter
             line.SetPosition (1, Vector3d.zero);
             var rgbColor = new Color ((float)color.Item1, (float)color.Item2, (float)color.Item3);
             line.SetColors (rgbColor, rgbColor);
-            lines.Add (new Line (KRPC.KRPCServer.Context.RPCClient, obj, line, start, end, referenceFrame));
+            lines.Add (new Line (KRPCServer.Context.RPCClient, obj, line, start, end, referenceFrame));
         }
 
         internal static void ClearDrawing ()

@@ -25,7 +25,7 @@ namespace KRPC.SpaceCenter.Services
 
         internal Control (global::Vessel vessel)
         {
-            this.vesselId = vessel.id;
+            vesselId = vessel.id;
         }
 
         /// <summary>

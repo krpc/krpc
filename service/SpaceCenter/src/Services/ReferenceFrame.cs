@@ -55,10 +55,10 @@ namespace KRPC.SpaceCenter.Services
         {
             this.type = type;
             this.body = body;
-            this.vesselId = vessel != null ? vessel.id : Guid.Empty;
+            vesselId = vessel != null ? vessel.id : Guid.Empty;
             this.node = node;
             //TODO: is it safe to use a part id of 0 to mean no part?
-            this.partId = part != null ? part.flightID : 0;
+            partId = part != null ? part.flightID : 0;
             this.dockingPort = dockingPort;
             this.thruster = thruster;
         }
@@ -111,7 +111,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The KSP part.
         /// </summary>
-        public global::Part InternalPart {
+        public Part InternalPart {
             get {
                 if (partId == 0)
                     throw new InvalidOperationException ("Reference frame has no part");

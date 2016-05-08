@@ -22,7 +22,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal Part (global::Part part)
         {
-            this.partFlightId = part.flightID;
+            partFlightId = part.flightID;
         }
 
         /// <summary>
