@@ -1,8 +1,6 @@
-using Google.Protobuf;
-using KRPC.Client;
-using KRPC.Client.Services.KRPC;
-using KRPC.Schema.KRPC;
 using System;
+using KRPC.Client;
+using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
 {

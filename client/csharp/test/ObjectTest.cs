@@ -1,4 +1,3 @@
-using KRPC.Client.Services;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;
 

@@ -1,12 +1,12 @@
-using Google.Protobuf;
-using KRPC.Client.Services.KRPC;
-using KRPC.Schema.KRPC;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using Google.Protobuf;
+using KRPC.Client.Services.KRPC;
+using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
 {
