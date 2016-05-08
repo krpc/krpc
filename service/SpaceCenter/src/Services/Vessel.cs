@@ -292,7 +292,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
-            get { return InternalVessel.MOI.ToTuple (); }
+            get { return (InternalVessel.MOI * 1000f).ToTuple (); }
         }
 
         /// <summary>
