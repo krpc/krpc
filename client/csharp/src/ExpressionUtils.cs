@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace KRPC.Client
 {
-    internal static class ExpressionUtils
+    static class ExpressionUtils
     {
         internal static bool IsAClassMethod (MethodCallExpression expression)
         {

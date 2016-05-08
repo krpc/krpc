@@ -9,7 +9,7 @@ namespace KRPC.Client
     /// </summary>
     public class Stream<ReturnType>
     {
-        StreamManager streamManager;
+        readonly StreamManager streamManager;
 
         internal UInt32 Id { get; private set; }
 
