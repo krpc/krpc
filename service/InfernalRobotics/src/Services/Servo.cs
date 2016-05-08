@@ -5,8 +5,8 @@ namespace KRPC.InfernalRobotics.Services
 {
     /// <summary>
     /// Represents a servo. Obtained using
-    /// <see cref="ControlGroup.Servos"/>,
-    /// <see cref="ControlGroup.ServoWithName"/>
+    /// <see cref="ServoGroup.Servos"/>,
+    /// <see cref="ServoGroup.ServoWithName"/>
     /// or <see cref="InfernalRobotics.ServoWithName"/>.
     /// </summary>
     [KRPCClass (Service = "InfernalRobotics")]
