@@ -78,7 +78,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float Flow {
-            get { return Open ? (float)intake.airFlow : 0f; }
+            get { return Open ? intake.airFlow : 0f; }
         }
 
         /// <summary>

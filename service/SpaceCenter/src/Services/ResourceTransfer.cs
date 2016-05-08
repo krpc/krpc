@@ -109,10 +109,10 @@ namespace KRPC.SpaceCenter.Services
         {
             if (Complete)
                 return;
-            var resourceAvailable = fromPart.Resources.GetAll (resource.id).Sum (r => r.amount);
-            var storageAvailable = toPart.Resources.GetAll (resource.id).Sum (r => r.maxAmount - r.amount);
-            var available = (float)Math.Min (resourceAvailable, storageAvailable);
-            var amountToTransfer = (float)Math.Min (available, Math.Min (amount - Amount, transferRate * deltaTime));
+            var resourceAvailable = (float)fromPart.Resources.GetAll (resource.id).Sum (r => r.amount);
+            var storageAvailable = (float)toPart.Resources.GetAll (resource.id).Sum (r => r.maxAmount - r.amount);
+            var available = Math.Min (resourceAvailable, storageAvailable);
+            var amountToTransfer = Math.Min (available, Math.Min (amount - Amount, transferRate * deltaTime));
             fromPart.TransferResource (resource.id, -amountToTransfer);
             toPart.TransferResource (resource.id, amountToTransfer);
             Amount += amountToTransfer;
