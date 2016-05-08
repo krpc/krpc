@@ -99,11 +99,11 @@ namespace KRPC.Client
                 client = new TcpClient ();
                 client.Connect (address, port);
                 stream = client.GetStream ();
-                stream.Write (Encoder.streamHelloMessage, 0, Encoder.streamHelloMessage.Length);
+                stream.Write (Encoder.StreamHelloMessage, 0, Encoder.StreamHelloMessage.Length);
                 stream.Write (clientIdentifier, 0, clientIdentifier.Length);
-                var recvOkMessage = new byte [Encoder.okMessage.Length];
-                stream.Read (recvOkMessage, 0, Encoder.okMessage.Length);
-                if (recvOkMessage.Equals (Encoder.okMessage))
+                var recvOkMessage = new byte [Encoder.OkMessage.Length];
+                stream.Read (recvOkMessage, 0, Encoder.OkMessage.Length);
+                if (recvOkMessage.Equals (Encoder.OkMessage))
                     throw new Exception ("Invalid hello message received from stream server. " +
                     "Got " + Encoder.ToHexString (recvOkMessage));
                 this.codedStream = new CodedInputStream (stream);

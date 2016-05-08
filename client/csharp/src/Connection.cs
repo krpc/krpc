@@ -3,8 +3,6 @@ using KRPC.Schema.KRPC;
 using KRPC.Client.Attributes;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
@@ -15,9 +13,9 @@ namespace KRPC.Client
     /// <summary>
     /// A connection to the kRPC server. All interaction with kRPC is performed via an instance of this class.
     /// </summary>
-    public class Connection
+    public class Connection : IConnection
     {
-        private TcpClient rpcClient;
+        TcpClient rpcClient;
 
         internal StreamManager StreamManager {
             get;
@@ -37,11 +35,11 @@ namespace KRPC.Client
             rpcClient = new TcpClient ();
             rpcClient.Connect (address, rpcPort);
             var rpcStream = rpcClient.GetStream ();
-            rpcStream.Write (Encoder.rpcHelloMessage, 0, Encoder.rpcHelloMessage.Length);
+            rpcStream.Write (Encoder.RPCHelloMessage, 0, Encoder.RPCHelloMessage.Length);
             var clientName = Encoder.EncodeClientName (name);
             rpcStream.Write (clientName, 0, clientName.Length);
-            var clientIdentifier = new byte[Encoder.clientIdentifierLength];
-            rpcStream.Read (clientIdentifier, 0, Encoder.clientIdentifierLength);
+            var clientIdentifier = new byte[Encoder.ClientIdentifierLength];
+            rpcStream.Read (clientIdentifier, 0, Encoder.ClientIdentifierLength);
 
             if (streamPort == 0)
                 StreamManager = null;
@@ -80,8 +78,7 @@ namespace KRPC.Client
         {
             var response = new Response ();
 
-            lock (rpcClient)
-            {
+            lock (rpcClient) {
                 var outStream = new CodedOutputStream (rpcClient.GetStream ());
                 outStream.WriteLength (request.CalculateSize ());
                 request.WriteTo (outStream);
