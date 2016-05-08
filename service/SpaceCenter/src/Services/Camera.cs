@@ -349,7 +349,7 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
-        void CheckCameraFocus ()
+        static void CheckCameraFocus ()
         {
             if (!MapView.MapIsEnabled)
                 throw new InvalidOperationException ("There is no camera focus when the camera is not in map mode.");

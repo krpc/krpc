@@ -179,7 +179,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Check that FAR is installed and that it is active for the vessel
         /// </summary>
-        void CheckFAR ()
+        static void CheckFAR ()
         {
             if (!FAR.IsAvailable)
                 throw new InvalidOperationException ("FAR is not available");
