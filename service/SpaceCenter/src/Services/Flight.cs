@@ -279,7 +279,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 var speed = Speed;
                 var verticalSpeed = VerticalSpeed;
-                return Math.Sqrt (Speed * Speed - VerticalSpeed * VerticalSpeed);
+                return Math.Sqrt (speed * speed - verticalSpeed * verticalSpeed);
             }
         }
 
