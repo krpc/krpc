@@ -66,7 +66,7 @@ namespace KRPC.Client
         {
             lock (accessLock) {
                 if (!streamData.ContainsKey (id))
-                    throw new ArgumentException ("Stream does not exist");
+                    throw new InvalidOperationException ("Stream does not exist or has been closed");
                 if (response.HasError)
                     return; //TODO: do something with the error
                 var data = response.ReturnValue;
@@ -117,6 +117,8 @@ namespace KRPC.Client
                     }
                 } catch (IOException) {
                     // Exit when the connection closes
+                } catch (InvalidOperationException) {
+                    // Exit when a stream update fails - connection has been closed
                 }
             }
         }
