@@ -7,10 +7,15 @@ import itertools
 import math
 
 def connect(name=''):
-    return krpc.connect(name=name)
+    address = '127.0.0.1'
+    if 'KRPC_ADDRESS' in os.environ:
+        address = os.environ['KRPC_ADDRESS']
+    return krpc.connect(name=name, address=address)
 
 def get_ksp_dir():
     path = os.path.abspath('../../../lib/ksp')
+    if 'KSP_DIR' in os.environ:
+         path = os.environ['KSP_DIR']
     if not os.path.exists(path):
         raise RuntimeError ('KSP dir not found at %s' % path)
     return path
