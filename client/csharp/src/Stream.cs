@@ -1,8 +1,6 @@
-using Google.Protobuf;
-using KRPC.Client;
-using KRPC.Client.Services.KRPC;
-using KRPC.Schema.KRPC;
 using System;
+using KRPC.Client;
+using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
 {
@@ -11,7 +9,7 @@ namespace KRPC.Client
     /// </summary>
     public class Stream<ReturnType>
     {
-        StreamManager streamManager;
+        readonly StreamManager streamManager;
 
         internal UInt32 Id { get; private set; }
 

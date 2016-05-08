@@ -33,6 +33,7 @@
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\bazel-krpc\external\csharp_nunit\NUnit-2.6.4\bin\framework\nunit.framework.dll</HintPath>
+      <Package>nunit</Package>
     </Reference>
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\..\bazel-krpc\external\csharp_protobuf\lib\dotnet\Google.Protobuf.dll</HintPath>
@@ -65,6 +66,7 @@
     <Compile Include="PerformanceTest.cs" />
     <Compile Include="ServerTestCase.cs" />
     <Compile Include="StreamTest.cs" />
+    <Compile Include="TestingTools.cs" />
     <Compile Include="..\..\..\bazel-genfiles\client\csharp\Services\TestService.cs">
       <Link>Services\TestService.cs</Link>
     </Compile>

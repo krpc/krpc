@@ -1,23 +1,23 @@
-using Google.Protobuf;
-using KRPC.Client.Services.KRPC;
-using KRPC.Schema.KRPC;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using Google.Protobuf;
+using KRPC.Client.Services.KRPC;
+using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
 {
-    internal class StreamManager
+    class StreamManager
     {
-        Connection connection;
-        Object accessLock = new Object ();
-        IDictionary<UInt32, Type> streamTypes = new Dictionary<UInt32, Type> ();
-        IDictionary<UInt32, ByteString> streamData = new Dictionary<UInt32, ByteString> ();
-        IDictionary<UInt32, Object> streamValues = new Dictionary<UInt32, Object> ();
-        Thread updateThread;
+        readonly Connection connection;
+        readonly Object accessLock = new Object ();
+        readonly IDictionary<UInt32, Type> streamTypes = new Dictionary<UInt32, Type> ();
+        readonly IDictionary<UInt32, ByteString> streamData = new Dictionary<UInt32, ByteString> ();
+        readonly IDictionary<UInt32, Object> streamValues = new Dictionary<UInt32, Object> ();
+        readonly Thread updateThread;
 
         internal StreamManager (Connection connection, IPAddress address, int port, byte[] clientIdentifier)
         {
@@ -28,11 +28,11 @@ namespace KRPC.Client
 
         internal UInt32 AddStream (Request request, Type type)
         {
-            var id = this.connection.KRPC ().AddStream (request);
+            var id = connection.KRPC ().AddStream (request);
             lock (accessLock) {
                 if (!streamTypes.ContainsKey (id)) {
                     streamTypes [id] = type;
-                    streamData [id] = this.connection.Invoke (request);
+                    streamData [id] = connection.Invoke (request);
                 }
             }
             return id;
@@ -40,7 +40,7 @@ namespace KRPC.Client
 
         internal void RemoveStream (UInt32 id)
         {
-            this.connection.KRPC ().RemoveStream (id);
+            connection.KRPC ().RemoveStream (id);
             lock (accessLock) {
                 streamTypes.Remove (id);
                 streamData.Remove (id);
@@ -56,17 +56,17 @@ namespace KRPC.Client
                     throw new InvalidOperationException ("Stream does not exist or has been closed");
                 if (streamValues.ContainsKey (id))
                     return streamValues [id];
-                streamValues [id] = Encoder.Decode (streamData [id], streamTypes [id], this.connection);
+                streamValues [id] = Encoder.Decode (streamData [id], streamTypes [id], connection);
                 result = streamValues [id];
             }
             return result;
         }
 
-        void Update (UInt32 id, KRPC.Schema.KRPC.Response response)
+        void Update (UInt32 id, Response response)
         {
             lock (accessLock) {
                 if (!streamData.ContainsKey (id))
-                    throw new ArgumentException ("Stream does not exist");
+                    throw new InvalidOperationException ("Stream does not exist or has been closed");
                 if (response.HasError)
                     return; //TODO: do something with the error
                 var data = response.ReturnValue;
@@ -77,10 +77,10 @@ namespace KRPC.Client
 
         class UpdateThread
         {
-            StreamManager manager;
-            IPAddress address;
-            int port;
-            byte[] clientIdentifier;
+            readonly StreamManager manager;
+            readonly IPAddress address;
+            readonly int port;
+            readonly byte[] clientIdentifier;
 
             TcpClient client;
             Stream stream;
@@ -99,14 +99,14 @@ namespace KRPC.Client
                 client = new TcpClient ();
                 client.Connect (address, port);
                 stream = client.GetStream ();
-                stream.Write (Encoder.streamHelloMessage, 0, Encoder.streamHelloMessage.Length);
+                stream.Write (Encoder.StreamHelloMessage, 0, Encoder.StreamHelloMessage.Length);
                 stream.Write (clientIdentifier, 0, clientIdentifier.Length);
-                var recvOkMessage = new byte [Encoder.okMessage.Length];
-                stream.Read (recvOkMessage, 0, Encoder.okMessage.Length);
-                if (recvOkMessage.Equals (Encoder.okMessage))
+                var recvOkMessage = new byte [Encoder.OkMessage.Length];
+                stream.Read (recvOkMessage, 0, Encoder.OkMessage.Length);
+                if (recvOkMessage.Equals (Encoder.OkMessage))
                     throw new Exception ("Invalid hello message received from stream server. " +
                     "Got " + Encoder.ToHexString (recvOkMessage));
-                this.codedStream = new CodedInputStream (stream);
+                codedStream = new CodedInputStream (stream);
 
                 try {
                     while (true) {
@@ -117,6 +117,8 @@ namespace KRPC.Client
                     }
                 } catch (IOException) {
                     // Exit when the connection closes
+                } catch (InvalidOperationException) {
+                    // Exit when a stream update fails - connection has been closed
                 }
             }
         }
