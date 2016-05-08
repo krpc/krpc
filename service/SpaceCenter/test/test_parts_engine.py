@@ -158,6 +158,7 @@ class EngineTest(EngineTestBase):
         self.assertClose(engine.max_thrust, data['max_thrust'], 500)
         self.assertClose(engine.specific_impulse, 0, 1)
         self.assertTrue(engine.has_fuel)
+        self.assertClose(engine.available_torque, (0,0,0))
 
     def check_engine_active(self, engine, throttle):
         """ Check engine properties when engine is activated """
@@ -170,6 +171,10 @@ class EngineTest(EngineTestBase):
         self.assertClose(engine.max_thrust, data['max_thrust'], 500)
         self.assertClose(engine.specific_impulse, data['isp'], 1)
         self.assertTrue(engine.has_fuel)
+        if data['gimballed'] and throttle > 0:
+            self.assertGreater(engine.available_torque, (100,100,100))
+        else:
+            self.assertClose(engine.available_torque, (0,0,0))
 
     def check_engine(self, engine):
         self.set_idle(engine)
