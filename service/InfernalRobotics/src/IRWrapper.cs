@@ -22,6 +22,8 @@ namespace KRPC.InfernalRobotics
 
         protected internal static Type IRServoMechanismType { get; set; }
 
+        protected internal static Type IRServoMotorType { get; set; }
+
         protected internal static object ActualServoController { get; set; }
 
         internal static IRAPI IRController { get; set; }
@@ -51,12 +53,22 @@ namespace KRPC.InfernalRobotics
             LogFormatted ("IR Version:{0}", IRServoControllerType.Assembly.GetName ().Version.ToString ());
 
             IRServoMechanismType = AssemblyLoader.loadedAssemblies
-                .Select (a => a.assembly.GetExportedTypes ())
-                .SelectMany (t => t)
-                .FirstOrDefault (t => t.FullName == "InfernalRobotics.Control.IMechanism");
+               .Select (a => a.assembly.GetExportedTypes ())
+               .SelectMany (t => t)
+               .FirstOrDefault (t => t.FullName == "InfernalRobotics.Control.IMechanism");
 
             if (IRServoMechanismType == null) {
                 LogFormatted ("[IR Wrapper] Failed to grab Mechanism Type");
+                return false;
+            }
+
+            IRServoMotorType = AssemblyLoader.loadedAssemblies
+                .Select (a => a.assembly.GetExportedTypes ())
+                .SelectMany (t => t)
+                .FirstOrDefault (t => t.FullName == "InfernalRobotics.Control.IServoMotor");
+
+            if (IRServoMotorType == null) {
+                LogFormatted ("[IR Wrapper] Failed to grab ServoMotor Type");
                 return false;
             }
 
@@ -118,7 +130,7 @@ namespace KRPC.InfernalRobotics
             }
 
             LogFormatted ("Got Instance, Creating Wrapper Objects");
-            IRController = new InfernalRoboticsAPI (ActualServoController);
+            IRController = new InfernalRoboticsAPI ();
             isWrapped = true;
             return true;
         }
@@ -130,21 +142,21 @@ namespace KRPC.InfernalRobotics
             private PropertyInfo apiReady;
             private object actualServoGroups;
 
-            public InfernalRoboticsAPI (object irServoController)
+            public InfernalRoboticsAPI ()
             {
                 DetermineReady ();
-                BuildServoGroups (irServoController);
+                BuildServoGroups ();
             }
 
-            private void BuildServoGroups (object irServoController)
+            private void BuildServoGroups ()
             {
-                LogFormatted ("Getting ServoGroups Object");
                 var servoGroupsField = IRServoControllerType.GetField ("ServoGroups");
                 if (servoGroupsField == null)
                     LogFormatted ("Failed Getting ServoGroups fieldinfo");
-                else {
-                    actualServoGroups = servoGroupsField.GetValue (irServoController);
-                    LogFormatted ("Success: " + (actualServoGroups != null));
+                else if (IRWrapper.ActualServoController == null) {
+                    LogFormatted ("ServoController Instance not found");
+                } else {
+                    actualServoGroups = servoGroupsField.GetValue (IRWrapper.ActualServoController);
                 }
             }
 
@@ -157,7 +169,7 @@ namespace KRPC.InfernalRobotics
 
             public bool Ready {
                 get {
-                    if (apiReady == null)
+                    if (apiReady == null || actualServoGroups == null)
                         return false;
 
                     return (bool)apiReady.GetValue (null, null);
@@ -166,6 +178,7 @@ namespace KRPC.InfernalRobotics
 
             public IList<IControlGroup> ServoGroups {
                 get {
+                    BuildServoGroups ();
                     return ExtractServoGroups (actualServoGroups);
                 }
             }
@@ -194,6 +207,7 @@ namespace KRPC.InfernalRobotics
             private readonly object actualControlGroup;
 
             private PropertyInfo nameProperty;
+            private PropertyInfo vesselProperty;
             private PropertyInfo forwardKeyProperty;
             private PropertyInfo expandedProperty;
             private PropertyInfo speedProperty;
@@ -216,6 +230,7 @@ namespace KRPC.InfernalRobotics
             private void FindProperties ()
             {
                 nameProperty = IRControlGroupType.GetProperty ("Name");
+                vesselProperty = IRControlGroupType.GetProperty ("Vessel");
                 forwardKeyProperty = IRControlGroupType.GetProperty ("ForwardKey");
                 reverseKeyProperty = IRControlGroupType.GetProperty ("ReverseKey");
                 speedProperty = IRControlGroupType.GetProperty ("Speed");
@@ -238,6 +253,10 @@ namespace KRPC.InfernalRobotics
             public string Name {
                 get { return (string)nameProperty.GetValue (actualControlGroup, null); }
                 set { nameProperty.SetValue (actualControlGroup, value, null); }
+            }
+
+            public Vessel Vessel {
+                get { return vesselProperty != null ? (Vessel)vesselProperty.GetValue (actualControlGroup, null) : null; }
             }
 
             public string ForwardKey {
@@ -326,6 +345,7 @@ namespace KRPC.InfernalRobotics
         public class IRServo : IServo
         {
             private object actualServoMechanism;
+            private object actualServoMotor;
 
             private PropertyInfo maxConfigPositionProperty;
             private PropertyInfo minPositionProperty;
@@ -344,6 +364,7 @@ namespace KRPC.InfernalRobotics
             private PropertyInfo minConfigPositionProperty;
 
             private PropertyInfo UIDProperty;
+            private PropertyInfo HostPartProperty;
 
             private MethodInfo moveRightMethod;
             private MethodInfo moveLeftMethod;
@@ -366,9 +387,13 @@ namespace KRPC.InfernalRobotics
                 nameProperty = IRServoPartType.GetProperty ("Name");
                 highlightProperty = IRServoPartType.GetProperty ("Highlight");
                 UIDProperty = IRServoPartType.GetProperty ("UID");
+                HostPartProperty = IRServoPartType.GetProperty ("HostPart");
 
                 var mechanismProperty = IRServoType.GetProperty ("Mechanism");
                 actualServoMechanism = mechanismProperty.GetValue (actualServo, null);
+
+                var motorProperty = IRServoType.GetProperty ("Motor");
+                actualServoMotor = motorProperty.GetValue (actualServo, null);
 
                 positionProperty = IRServoMechanismType.GetProperty ("Position");
                 minPositionProperty = IRServoMechanismType.GetProperty ("MinPositionLimit");
@@ -377,25 +402,26 @@ namespace KRPC.InfernalRobotics
                 minConfigPositionProperty = IRServoMechanismType.GetProperty ("MinPosition");
                 maxConfigPositionProperty = IRServoMechanismType.GetProperty ("MaxPosition");
 
-                speedProperty = IRServoMechanismType.GetProperty ("SpeedLimit");
-                configSpeedProperty = IRServoMechanismType.GetProperty ("DefaultSpeed");
-                currentSpeedProperty = IRServoMechanismType.GetProperty ("CurrentSpeed");
-                accelerationProperty = IRServoMechanismType.GetProperty ("AccelerationLimit");
                 isMovingProperty = IRServoMechanismType.GetProperty ("IsMoving");
                 isFreeMovingProperty = IRServoMechanismType.GetProperty ("IsFreeMoving");
                 isLockedProperty = IRServoMechanismType.GetProperty ("IsLocked");
-                isAxisInvertedProperty = IRServoMechanismType.GetProperty ("IsAxisInverted");
+
+                speedProperty = IRServoMotorType.GetProperty ("SpeedLimit");
+                configSpeedProperty = IRServoMotorType.GetProperty ("DefaultSpeed");
+                currentSpeedProperty = IRServoMotorType.GetProperty ("CurrentSpeed");
+                accelerationProperty = IRServoMotorType.GetProperty ("AccelerationLimit");
+                isAxisInvertedProperty = IRServoMotorType.GetProperty ("IsAxisInverted");
             }
 
             private void FindMethods ()
             {
-                moveRightMethod = IRServoMechanismType.GetMethod ("MoveRight", BindingFlags.Public | BindingFlags.Instance);
-                moveLeftMethod = IRServoMechanismType.GetMethod ("MoveLeft", BindingFlags.Public | BindingFlags.Instance);
-                moveCenterMethod = IRServoMechanismType.GetMethod ("MoveCenter", BindingFlags.Public | BindingFlags.Instance);
-                moveNextPresetMethod = IRServoMechanismType.GetMethod ("MoveNextPreset", BindingFlags.Public | BindingFlags.Instance);
-                movePrevPresetMethod = IRServoMechanismType.GetMethod ("MovePrevPreset", BindingFlags.Public | BindingFlags.Instance);
-                stopMethod = IRServoMechanismType.GetMethod ("Stop", BindingFlags.Public | BindingFlags.Instance);
-                moveToMethod = IRServoMechanismType.GetMethod ("MoveTo", new[] { typeof(float), typeof(float) });
+                moveRightMethod = IRServoMotorType.GetMethod ("MoveRight", BindingFlags.Public | BindingFlags.Instance);
+                moveLeftMethod = IRServoMotorType.GetMethod ("MoveLeft", BindingFlags.Public | BindingFlags.Instance);
+                moveCenterMethod = IRServoMotorType.GetMethod ("MoveCenter", BindingFlags.Public | BindingFlags.Instance);
+                moveNextPresetMethod = IRServoMotorType.GetMethod ("MoveNextPreset", BindingFlags.Public | BindingFlags.Instance);
+                movePrevPresetMethod = IRServoMotorType.GetMethod ("MovePrevPreset", BindingFlags.Public | BindingFlags.Instance);
+                stopMethod = IRServoMotorType.GetMethod ("Stop", BindingFlags.Public | BindingFlags.Instance);
+                moveToMethod = IRServoMotorType.GetMethod ("MoveTo", new[] { typeof(float), typeof(float) });
             }
 
             private readonly object actualServo;
@@ -408,6 +434,10 @@ namespace KRPC.InfernalRobotics
 
             public uint UID {
                 get { return (uint)UIDProperty.GetValue (actualServo, null); }
+            }
+
+            public Part HostPart {
+                get { return (Part)HostPartProperty.GetValue (actualServo, null); }
             }
 
             public bool Highlight {
@@ -438,22 +468,22 @@ namespace KRPC.InfernalRobotics
             }
 
             public float ConfigSpeed {
-                get { return (float)configSpeedProperty.GetValue (actualServoMechanism, null); }
+                get { return (float)configSpeedProperty.GetValue (actualServoMotor, null); }
             }
 
             public float Speed {
-                get { return (float)speedProperty.GetValue (actualServoMechanism, null); }
-                set { speedProperty.SetValue (actualServoMechanism, value, null); }
+                get { return (float)speedProperty.GetValue (actualServoMotor, null); }
+                set { speedProperty.SetValue (actualServoMotor, value, null); }
             }
 
             public float CurrentSpeed {
-                get { return (float)currentSpeedProperty.GetValue (actualServoMechanism, null); }
-                set { currentSpeedProperty.SetValue (actualServoMechanism, value, null); }
+                get { return (float)currentSpeedProperty.GetValue (actualServoMotor, null); }
+                set { currentSpeedProperty.SetValue (actualServoMotor, value, null); }
             }
 
             public float Acceleration {
-                get { return (float)accelerationProperty.GetValue (actualServoMechanism, null); }
-                set { accelerationProperty.SetValue (actualServoMechanism, value, null); }
+                get { return (float)accelerationProperty.GetValue (actualServoMotor, null); }
+                set { accelerationProperty.SetValue (actualServoMotor, value, null); }
             }
 
             public bool IsMoving {
@@ -470,43 +500,43 @@ namespace KRPC.InfernalRobotics
             }
 
             public bool IsAxisInverted {
-                get { return (bool)isAxisInvertedProperty.GetValue (actualServoMechanism, null); }
-                set { isAxisInvertedProperty.SetValue (actualServoMechanism, value, null); }
+                get { return (bool)isAxisInvertedProperty.GetValue (actualServoMotor, null); }
+                set { isAxisInvertedProperty.SetValue (actualServoMotor, value, null); }
             }
 
             public void MoveRight ()
             {
-                moveRightMethod.Invoke (actualServoMechanism, new object[] { });
+                moveRightMethod.Invoke (actualServoMotor, new object[] { });
             }
 
             public void MoveLeft ()
             {
-                moveLeftMethod.Invoke (actualServoMechanism, new object[] { });
+                moveLeftMethod.Invoke (actualServoMotor, new object[] { });
             }
 
             public void MoveCenter ()
             {
-                moveCenterMethod.Invoke (actualServoMechanism, new object[] { });
+                moveCenterMethod.Invoke (actualServoMotor, new object[] { });
             }
 
             public void MoveNextPreset ()
             {
-                moveNextPresetMethod.Invoke (actualServoMechanism, new object[] { });
+                moveNextPresetMethod.Invoke (actualServoMotor, new object[] { });
             }
 
             public void MovePrevPreset ()
             {
-                movePrevPresetMethod.Invoke (actualServoMechanism, new object[] { });
+                movePrevPresetMethod.Invoke (actualServoMotor, new object[] { });
             }
 
             public void MoveTo (float position, float speed)
             {
-                moveToMethod.Invoke (actualServoMechanism, new object[] { position, speed });
+                moveToMethod.Invoke (actualServoMotor, new object[] { position, speed });
             }
 
             public void Stop ()
             {
-                stopMethod.Invoke (actualServoMechanism, new object[] { });
+                stopMethod.Invoke (actualServoMotor, new object[] { });
             }
 
             public bool Equals (IServo other)
@@ -557,6 +587,9 @@ namespace KRPC.InfernalRobotics
         {
             string Name { get; set; }
 
+            //can only be used in Flight, null checking is mandatory
+            Vessel Vessel { get; }
+
             string ForwardKey { get; set; }
 
             string ReverseKey { get; set; }
@@ -583,6 +616,10 @@ namespace KRPC.InfernalRobotics
         public interface IServo : IEquatable<IServo>
         {
             string Name { get; set; }
+
+            uint UID { get; }
+
+            Part HostPart { get; }
 
             bool Highlight { set; }
 
