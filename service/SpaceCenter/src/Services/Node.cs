@@ -20,11 +20,11 @@ namespace KRPC.SpaceCenter.Services
 
         readonly Guid vesselId;
 
-        internal Node (global::Vessel vessel, double UT, float prograde, float normal, float radial)
+        internal Node (global::Vessel vessel, double ut, float prograde, float normal, float radial)
         {
             vesselId = vessel.id;
-            InternalNode = vessel.patchedConicSolver.AddManeuverNode (UT);
-            InternalNode.OnGizmoUpdated (new Vector3d (radial, normal, prograde), UT);
+            InternalNode = vessel.patchedConicSolver.AddManeuverNode (ut);
+            InternalNode.OnGizmoUpdated (new Vector3d (radial, normal, prograde), ut);
         }
 
         /// <summary>

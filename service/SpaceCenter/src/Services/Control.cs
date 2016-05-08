@@ -325,16 +325,16 @@ namespace KRPC.SpaceCenter.Services
         /// Optionally sets the magnitude of the delta-v for the maneuver node
         /// in the prograde, normal and radial directions.
         /// </summary>
-        /// <param name="UT">Universal time of the maneuver node.</param>
+        /// <param name="ut">Universal time of the maneuver node.</param>
         /// <param name="prograde">Delta-v in the prograde direction.</param>
         /// <param name="normal">Delta-v in the normal direction.</param>
         /// <param name="radial">Delta-v in the radial direction.</param>
         [KRPCMethod]
-        public Node AddNode (double UT, float prograde = 0, float normal = 0, float radial = 0)
+        public Node AddNode (double ut, float prograde = 0, float normal = 0, float radial = 0)
         {
             if (vesselId != FlightGlobals.ActiveVessel.id)
                 throw new InvalidOperationException ("Cannot add maneuver node; vessel is not the active vessel");
-            return new Node (InternalVessel, UT, prograde, normal, radial);
+            return new Node (InternalVessel, ut, prograde, normal, radial);
         }
 
         /// <summary>

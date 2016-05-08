@@ -332,29 +332,29 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Uses time acceleration to warp forward to a time in the future, specified
-        /// by universal time <paramref name="UT"/>. This call blocks until the desired
+        /// by universal time <paramref name="ut"/>. This call blocks until the desired
         /// time is reached. Uses regular "on-rails" or physical time warp as appropriate.
         /// For example, physical time warp is used when the active vessel is traveling
         /// through an atmosphere. When using regular "on-rails" time warp, the warp
         /// rate is limited by <paramref name="maxRailsRate"/>, and when using physical
         /// time warp, the warp rate is limited by <paramref name="maxPhysicsRate"/>.
         /// </summary>
-        /// <param name="UT">The universal time to warp to, in seconds.</param>
+        /// <param name="ut">The universal time to warp to, in seconds.</param>
         /// <param name="maxRailsRate">The maximum warp rate in regular "on-rails" time warp.</param>
         /// <param name="maxPhysicsRate">The maximum warp rate in physical time warp.</param>
         /// <returns>When the time warp is complete.</returns>
         [KRPCProcedure]
-        public static void WarpTo (double UT, float maxRailsRate = 100000, float maxPhysicsRate = 2)
+        public static void WarpTo (double ut, float maxRailsRate = 100000, float maxPhysicsRate = 2)
         {
-            float rate = Mathf.Clamp ((float)(UT - Planetarium.GetUniversalTime ()), 1f, maxRailsRate);
+            float rate = Mathf.Clamp ((float)(ut - Planetarium.GetUniversalTime ()), 1f, maxRailsRate);
 
             if (CanRailsWarpAt ())
                 RailsWarpAtRate (rate);
             else
                 PhysicsWarpAtRate (Mathf.Min (rate, Math.Min (maxRailsRate, maxPhysicsRate)));
 
-            if (Planetarium.GetUniversalTime () < UT)
-                throw new YieldException (new ParameterizedContinuationVoid<double,float,float> (WarpTo, UT, maxRailsRate, maxPhysicsRate));
+            if (Planetarium.GetUniversalTime () < ut)
+                throw new YieldException (new ParameterizedContinuationVoid<double,float,float> (WarpTo, ut, maxRailsRate, maxPhysicsRate));
             else if (TimeWarp.CurrentRateIndex > 0) {
                 SetWarpFactor (TimeWarp.Modes.HIGH, 0);
             }
