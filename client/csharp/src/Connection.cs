@@ -41,10 +41,7 @@ namespace KRPC.Client
             var clientIdentifier = new byte[Encoder.ClientIdentifierLength];
             rpcStream.Read (clientIdentifier, 0, Encoder.ClientIdentifierLength);
 
-            if (streamPort == 0)
-                StreamManager = null;
-            else
-                StreamManager = new StreamManager (this, address, streamPort, clientIdentifier);
+            StreamManager = streamPort == 0 ? null : new StreamManager (this, address, streamPort, clientIdentifier);
         }
 
         /// <summary>
