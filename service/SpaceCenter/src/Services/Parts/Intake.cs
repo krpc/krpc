@@ -1,7 +1,7 @@
 using System;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -78,7 +78,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float Flow {
-            get { return Open ? (float)intake.airFlow : 0f; }
+            get { return Open ? intake.airFlow : 0f; }
         }
 
         /// <summary>

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -22,18 +22,18 @@ namespace KRPC.SpaceCenter.Services
 
         internal Resources (global::Vessel vessel, int stage = -1, bool cumulative = true)
         {
-            this.vesselId = vessel.id;
+            vesselId = vessel.id;
             this.stage = stage;
             this.cumulative = cumulative;
-            this.partId = 0;
+            partId = 0;
         }
 
-        internal Resources (global::Part part)
+        internal Resources (Part part)
         {
-            this.vesselId = Guid.Empty;
-            this.stage = -1;
-            this.cumulative = true;
-            this.partId = part.flightID;
+            vesselId = Guid.Empty;
+            stage = -1;
+            cumulative = true;
+            partId = part.flightID;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The KSP part.
         /// </summary>
-        public global::Part InternalPart {
+        public Part InternalPart {
             get {
                 if (partId == 0)
                     throw new InvalidOperationException ("Resources object has no part");

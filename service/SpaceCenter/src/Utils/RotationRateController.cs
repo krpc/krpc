@@ -10,11 +10,11 @@ namespace KRPC.SpaceCenter.Utils
     class RotationRateController
     {
         Guid vesselId;
-        public readonly PIDController pid = new PIDController ();
+        public readonly PIDController PID = new PIDController ();
 
-        public RotationRateController (global::Vessel vessel)
+        public RotationRateController (Vessel vessel)
         {
-            this.vesselId = vessel.id;
+            vesselId = vessel.id;
         }
 
         public ReferenceFrame ReferenceFrame { get; set; }
@@ -24,7 +24,7 @@ namespace KRPC.SpaceCenter.Utils
         public Vector3 Error {
             get {
                 var vessel = FlightGlobalsExtensions.GetVesselById (vesselId);
-		//FIXME: finding the rigidbody is expensive - cache it
+                //FIXME: finding the rigidbody is expensive - cache it
                 var velocity = ReferenceFrame.AngularVelocityFromWorldSpace (-vessel.GetComponent<Rigidbody> ().angularVelocity);
                 var error = Target - velocity;
                 var pitchAxis = ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.Object (vessel).DirectionToWorldSpace (Vector3.right));
@@ -39,7 +39,7 @@ namespace KRPC.SpaceCenter.Utils
 
         public void Update (PilotAddon.ControlInputs state)
         {
-            var output = pid.Update (Error, Target, -1f, 1f);
+            var output = PID.Update (Error, Target, -1f, 1f);
             state.Pitch = output.x;
             state.Yaw = output.y;
             state.Roll = output.z;

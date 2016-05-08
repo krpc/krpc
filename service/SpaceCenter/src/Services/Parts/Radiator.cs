@@ -1,7 +1,7 @@
 using System;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -18,8 +18,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal static bool Is (Part part)
         {
             return
-                part.InternalPart.HasModule<ModuleActiveRadiator> () ||
-                part.InternalPart.HasModule<ModuleDeployableRadiator> ();
+            part.InternalPart.HasModule<ModuleActiveRadiator> () ||
+            part.InternalPart.HasModule<ModuleDeployableRadiator> ();
         }
 
         internal Radiator (Part part)
