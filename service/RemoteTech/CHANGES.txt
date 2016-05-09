@@ -1,2 +1,4 @@
 v0.3.3
  * Moved from SpaceCenter to separate service
+ * Add individual Antenna objects
+ * Add support for getting and setting an antennas target
