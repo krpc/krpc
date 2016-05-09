@@ -751,6 +751,7 @@ RemoteTech.Antenna.Target
 RemoteTech.Antenna.TargetBody
 RemoteTech.Antenna.TargetGroundStation
 RemoteTech.Antenna.TargetVessel
+RemoteTech.Target
 RemoteTech.Target.ActiveVessel
 RemoteTech.Target.CelestialBody
 RemoteTech.Target.GroundStation
