@@ -40,7 +40,6 @@ SpaceCenter.TransformDirection
 SpaceCenter.TransformRotation
 SpaceCenter.TransformVelocity
 SpaceCenter.FARAvailable
-SpaceCenter.RemoteTechAvailable
 SpaceCenter.DrawDirection
 SpaceCenter.DrawLine
 SpaceCenter.ClearDrawing
