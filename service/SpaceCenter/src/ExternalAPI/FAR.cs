@@ -1,4 +1,5 @@
 using System;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.ExternalAPI
 {
@@ -6,7 +7,7 @@ namespace KRPC.SpaceCenter.ExternalAPI
     {
         public static void Load ()
         {
-            IsAvailable = Loader.LoadAPI (typeof(FAR), "FerramAerospaceResearch", "FerramAerospaceResearch.FARAPI", new Version (0, 15));
+            IsAvailable = APILoader.Load (typeof(FAR), "FerramAerospaceResearch", "FerramAerospaceResearch.FARAPI", new Version (0, 15));
         }
 
         public static bool IsAvailable { get; private set; }

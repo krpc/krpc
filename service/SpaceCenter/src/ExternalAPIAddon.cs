@@ -1,19 +1,20 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace KRPC.InfernalRobotics
+namespace KRPC.SpaceCenter
 {
     /// <summary>
-    /// kRPC InfernalRobotics addon.
+    /// Addon to load external APIs.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class Addon : MonoBehaviour
     {
         /// <summary>
-        /// Load the InfernalRobotics API.
+        /// Load external APIs.
         /// </summary>
         public void Start ()
         {
-            IRWrapper.InitWrapper ();
+            ExternalAPI.FAR.Load ();
+            ExternalAPI.RemoteTech.Load ();
         }
     }
 }

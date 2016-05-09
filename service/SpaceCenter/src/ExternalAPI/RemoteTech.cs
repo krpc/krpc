@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.ExternalAPI
 {
@@ -7,7 +8,7 @@ namespace KRPC.SpaceCenter.ExternalAPI
     {
         public static void Load ()
         {
-            IsAvailable = Loader.LoadAPI (typeof(RemoteTech), "RemoteTech", "RemoteTech.API.API", new Version (1, 6));
+            IsAvailable = APILoader.Load (typeof(RemoteTech), "RemoteTech", "RemoteTech.API.API", new Version (1, 7));
         }
 
         public static bool IsAvailable { get; private set; }

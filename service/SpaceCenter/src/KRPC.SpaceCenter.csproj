@@ -87,8 +87,8 @@
     <Compile Include="ExtensionMethods\SpeedDisplayModesExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
+    <Compile Include="ExternalAPIAddon.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
-    <Compile Include="ExternalAPI\Loader.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
     <Compile Include="PilotAddon.cs" />
     <Compile Include="ResourceTransferAddon.cs" />
@@ -96,7 +96,6 @@
     <Compile Include="Services\Camera.cs" />
     <Compile Include="Services\CameraMode.cs" />
     <Compile Include="Services\CelestialBody.cs" />
-    <Compile Include="Services\Comms.cs" />
     <Compile Include="Services\Control.cs" />
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\Node.cs" />
