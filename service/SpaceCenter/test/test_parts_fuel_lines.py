@@ -1,16 +1,16 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 
-class TestPartsFuelLines(testingtools.TestCase):
+class TestPartsFuelLines(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'PartsFuelLines':
-            testingtools.new_save()
-            testingtools.launch_vessel_from_vab('PartsFuelLines')
-            testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsFuelLines')
+        if krpctest.connect().space_center.active_vessel.name != 'PartsFuelLines':
+            krpctest.new_save()
+            krpctest.launch_vessel_from_vab('PartsFuelLines')
+            krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestPartsFuelLines')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
 

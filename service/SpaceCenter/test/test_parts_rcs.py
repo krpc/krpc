@@ -1,5 +1,5 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
@@ -80,15 +80,15 @@ class RCSTest(RCSTestBase):
         rcs = self.get_rcs('Vernor Engine')
         self.check_properties(rcs)
 
-class TestPartsRCS(testingtools.TestCase, RCSTestBase):
+class TestPartsRCS(krpctest.TestCase, RCSTestBase):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'PartsRCS':
-            testingtools.new_save()
-            testingtools.launch_vessel_from_vab('PartsRCS')
-            testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsRCS')
+        if krpctest.connect().space_center.active_vessel.name != 'PartsRCS':
+            krpctest.new_save()
+            krpctest.launch_vessel_from_vab('PartsRCS')
+            krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestPartsRCS')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
@@ -149,14 +149,14 @@ class TestPartsRCS(testingtools.TestCase, RCSTestBase):
         self.assertFalse(rcs.has_fuel)
         self.set_fuel_enabled(True)
 
-class TestPartsRCSMSL(testingtools.TestCase, RCSTest):
+class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsRCS')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsRCSMSL')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsRCS')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestPartsRCSMSL')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
@@ -177,15 +177,15 @@ class TestPartsRCSMSL(testingtools.TestCase, RCSTest):
     def tearDownClass(cls):
         cls.conn.close()
 
-class TestPartsRCSVacuum(testingtools.TestCase, RCSTest):
+class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsRCS')
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 250000)
-        cls.conn = testingtools.connect(name='TestPartsRCSVacuum')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsRCS')
+        krpctest.remove_other_vessels()
+        krpctest.set_circular_orbit('Kerbin', 250000)
+        cls.conn = krpctest.connect(name='TestPartsRCSVacuum')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts

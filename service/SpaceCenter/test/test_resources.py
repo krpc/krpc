@@ -1,5 +1,5 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 
 class ResourcesTest(object):
@@ -11,14 +11,14 @@ class ResourcesTest(object):
         'SolidFuel':      7.5
     }
 
-class TestResources(testingtools.TestCase, ResourcesTest):
+class TestResources(krpctest.TestCase, ResourcesTest):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'Resources':
-            testingtools.new_save()
-            testingtools.launch_vessel_from_vab('Resources')
-        cls.conn = testingtools.connect(name='TestResources')
+        if krpctest.connect().space_center.active_vessel.name != 'Resources':
+            krpctest.new_save()
+            krpctest.launch_vessel_from_vab('Resources')
+        cls.conn = krpctest.connect(name='TestResources')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.num_stages = len(cls.expected.keys())
 
@@ -195,11 +195,11 @@ class TestResources(testingtools.TestCase, ResourcesTest):
         self.assertEqual(1, len(part_resources))
         self.assertEqual('LiquidFuel', part_resources[0].name)
 
-class TestResourcesStaticMethods(testingtools.TestCase, ResourcesTest):
+class TestResourcesStaticMethods(krpctest.TestCase, ResourcesTest):
 
     @classmethod
     def setUpClass(cls):
-        cls.conn = testingtools.connect(name='TestResourcesStaticMethods')
+        cls.conn = krpctest.connect(name='TestResourcesStaticMethods')
 
     @classmethod
     def tearDownClass(cls):

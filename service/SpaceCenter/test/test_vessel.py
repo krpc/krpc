@@ -1,17 +1,17 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
-class TestVessel(testingtools.TestCase):
+class TestVessel(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Vessel')
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = testingtools.connect(name='TestVessel')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('Vessel')
+        krpctest.remove_other_vessels()
+        krpctest.set_circular_orbit('Kerbin', 100000)
+        cls.conn = krpctest.connect(name='TestVessel')
         cls.vtype = cls.conn.space_center.VesselType
         cls.vsituation = cls.conn.space_center.VesselSituation
         cls.vessel = cls.conn.space_center.active_vessel
@@ -93,15 +93,15 @@ class TestVessel(testingtools.TestCase):
     def test_available_control_surface_torque(self):
         self.assertClose((0,0,0), self.vessel.available_control_surface_torque)
 
-class TestVesselEngines(testingtools.TestCase):
+class TestVesselEngines(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsEngine')
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = testingtools.connect(name='TestVesselEngines')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsEngine')
+        krpctest.remove_other_vessels()
+        krpctest.set_circular_orbit('Kerbin', 100000)
+        cls.conn = krpctest.connect(name='TestVesselEngines')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
 

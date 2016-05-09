@@ -1,20 +1,19 @@
 import unittest
-import testingtools
-from testingtools import load_save
+import krpctest
 import krpc
 import time
 import math
-from mathtools import vector, rad2deg, normalize
+from krpctest.geometry import vector, rad2deg, normalize
 
-class TestAutoPilot(testingtools.TestCase):
+class TestAutoPilot(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.remove_other_vessels()
-        testingtools.launch_vessel_from_vab('Basic')
-        testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        cls.conn = testingtools.connect(name='TestAutoPilot')
+        krpctest.new_save()
+        krpctest.remove_other_vessels()
+        krpctest.launch_vessel_from_vab('Basic')
+        krpctest.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        cls.conn = krpctest.connect(name='TestAutoPilot')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.ref = cls.conn.space_center.ReferenceFrame
         cls.ap = cls.vessel.auto_pilot
@@ -211,7 +210,7 @@ class TestAutoPilot(testingtools.TestCase):
             wheel.active = True
 
     def test_reset_on_disconnect(self):
-        conn = testingtools.connect(name='TestAutoPilot.test_reset_on_disconnect')
+        conn = krpctest.connect(name='TestAutoPilot.test_reset_on_disconnect')
         vessel = conn.space_center.active_vessel
         ap = vessel.auto_pilot
         ap.reference_frame = vessel.orbital_reference_frame
@@ -222,7 +221,7 @@ class TestAutoPilot(testingtools.TestCase):
 
         time.sleep(0.1)
 
-        conn = testingtools.connect(name='TestAutoPilot.test_reset_on_disconnect')
+        conn = krpctest.connect(name='TestAutoPilot.test_reset_on_disconnect')
         vessel = conn.space_center.active_vessel
         ap = vessel.auto_pilot
         self.assertEqual(ap.reference_frame, vessel.surface_reference_frame)
@@ -232,7 +231,7 @@ class TestAutoPilot(testingtools.TestCase):
         conn.close()
 
     def test_dont_reset_on_clean_disconnect(self):
-        conn = testingtools.connect(name='TestAutoPilot.test_dont_reset_on_clean_disconnect')
+        conn = krpctest.connect(name='TestAutoPilot.test_dont_reset_on_clean_disconnect')
         vessel = conn.space_center.active_vessel
         ap = vessel.auto_pilot
         ap.reference_frame = vessel.orbital_reference_frame
@@ -245,7 +244,7 @@ class TestAutoPilot(testingtools.TestCase):
 
         time.sleep(0.1)
 
-        conn = testingtools.connect(name='TestAutoPilot.test_dont_reset_on_clean_disconnect')
+        conn = krpctest.connect(name='TestAutoPilot.test_dont_reset_on_clean_disconnect')
         vessel = conn.space_center.active_vessel
         ap = vessel.auto_pilot
         self.assertEqual(ap.reference_frame, vessel.orbital_reference_frame)
@@ -253,15 +252,15 @@ class TestAutoPilot(testingtools.TestCase):
         self.assertEqual(30, ap.target_roll)
         conn.close()
 
-class TestAutoPilotSAS(testingtools.TestCase):
+class TestAutoPilotSAS(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.remove_other_vessels()
-        testingtools.launch_vessel_from_vab('Basic')
-        testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        cls.conn = testingtools.connect()
+        krpctest.new_save()
+        krpctest.remove_other_vessels()
+        krpctest.launch_vessel_from_vab('Basic')
+        krpctest.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        cls.conn = krpctest.connect()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
         cls.sas_mode = cls.conn.space_center.SASMode
@@ -323,15 +322,15 @@ class TestAutoPilotSAS(testingtools.TestCase):
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = True
 
-class TestAutoPilotOtherVessel(testingtools.TestCase):
+class TestAutoPilotOtherVessel(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.remove_other_vessels()
-        testingtools.launch_vessel_from_vab('Multi')
-        testingtools.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        cls.conn = testingtools.connect(name='TestAutoPilotOtherVessel')
+        krpctest.new_save()
+        krpctest.remove_other_vessels()
+        krpctest.launch_vessel_from_vab('Multi')
+        krpctest.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        cls.conn = krpctest.connect(name='TestAutoPilotOtherVessel')
         next(iter(cls.conn.space_center.active_vessel.parts.docking_ports)).undock()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.other_vessel = next(iter(filter(lambda v: v != cls.vessel, cls.conn.space_center.vessels)))

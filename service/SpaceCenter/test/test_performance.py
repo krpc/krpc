@@ -1,14 +1,14 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import timeit
 
-class TestFlight(testingtools.TestCase):
+class TestFlight(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        cls.conn = testingtools.connect()
+        krpctest.new_save()
+        cls.conn = krpctest.connect()
         cls.control = cls.conn.space_center.active_vessel.control
 
     def test_performance(self):

@@ -1,15 +1,15 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
-class TestPartsParachute(testingtools.TestCase):
+class TestPartsParachute(krpctest.TestCase):
 
     def setUp(self):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsParachute')
-        testingtools.remove_other_vessels()
-        self.conn = testingtools.connect(name='TestPartsParachute')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsParachute')
+        krpctest.remove_other_vessels()
+        self.conn = krpctest.connect(name='TestPartsParachute')
         self.vessel = self.conn.space_center.active_vessel
         self.parts = self.vessel.parts
         self.state = self.conn.space_center.ParachuteState

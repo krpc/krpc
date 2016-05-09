@@ -1,17 +1,17 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
-from mathtools import dot
+from krpctest.geometry import dot
 
-class TestParts(testingtools.TestCase):
+class TestParts(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'Parts':
-            testingtools.new_save()
-            testingtools.launch_vessel_from_vab('Parts')
-            testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestParts')
+        if krpctest.connect().space_center.active_vessel.name != 'Parts':
+            krpctest.new_save()
+            krpctest.launch_vessel_from_vab('Parts')
+            krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestParts')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
 

@@ -1,16 +1,16 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
-class TestResourceTransfer(testingtools.TestCase):
+class TestResourceTransfer(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('ResourceTransfer')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestResourceTransfer')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('ResourceTransfer')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestResourceTransfer')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
         cls.vessel.parts.decouplers[0].decouple()

@@ -1,17 +1,17 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
-from mathtools import norm
+from krpctest.geometry import norm
 
-class TestPartsDockingPort(testingtools.TestCase):
+class TestPartsDockingPort(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.remove_other_vessels()
-        testingtools.launch_vessel_from_vab('PartsDockingPort')
-        cls.conn = testingtools.connect(name='TestPartsDockingPort')
+        krpctest.new_save()
+        krpctest.remove_other_vessels()
+        krpctest.launch_vessel_from_vab('PartsDockingPort')
+        cls.conn = krpctest.connect(name='TestPartsDockingPort')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.state = cls.conn.space_center.DockingPortState
@@ -149,16 +149,16 @@ class TestPartsDockingPort(testingtools.TestCase):
         self.assertClose((0,1,0), self.port2.direction(self.vessel.reference_frame))
         self.assertClose((1,0,0), self.port3.direction(self.vessel.reference_frame))
 
-class TestPartsDockingPortInFlight(testingtools.TestCase):
+class TestPartsDockingPortInFlight(krpctest.TestCase):
     """ Test docking and undocking of ports that have been docked
         in flight (as opposed to pre-attached in the VAB)"""
 
     def setUp(self):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsDockingPortInFlight')
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        self.conn = testingtools.connect(name='TestPartsDockingPortInFlight')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsDockingPortInFlight')
+        krpctest.remove_other_vessels()
+        krpctest.set_circular_orbit('Kerbin', 100000)
+        self.conn = krpctest.connect(name='TestPartsDockingPortInFlight')
         self.sc = self.conn.space_center
         self.state = self.sc.DockingPortState
 
@@ -250,15 +250,15 @@ class TestPartsDockingPortInFlight(testingtools.TestCase):
             vessel = self.sc.active_vessel
 
 
-class TestPartsDockingPortPreAttachedTo(testingtools.TestCase):
+class TestPartsDockingPortPreAttachedTo(krpctest.TestCase):
     """ Test ports that are pre-attached (connected in VAB) """
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.remove_other_vessels()
-        testingtools.launch_vessel_from_vab('PartsDockingPortPreAttachedTo')
-        cls.conn = testingtools.connect(name='TestPartsDockingPortPreAttachedTo')
+        krpctest.new_save()
+        krpctest.remove_other_vessels()
+        krpctest.launch_vessel_from_vab('PartsDockingPortPreAttachedTo')
+        cls.conn = krpctest.connect(name='TestPartsDockingPortPreAttachedTo')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.state = cls.conn.space_center.DockingPortState
 

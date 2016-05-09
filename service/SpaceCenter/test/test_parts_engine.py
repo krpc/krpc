@@ -1,5 +1,5 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
@@ -222,14 +222,14 @@ class EngineTest(EngineTestBase):
         self.check_engine_active(engine, 1)
         self.set_idle(engine)
 
-class TestPartsEngine(testingtools.TestCase, EngineTestBase):
+class TestPartsEngine(krpctest.TestCase, EngineTestBase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsEngine')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsEngine')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsEngine')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestPartsEngine')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
 
@@ -320,14 +320,14 @@ class TestPartsEngine(testingtools.TestCase, EngineTestBase):
         engine.gimbal_locked = False
         self.assertEqual(1, engine.gimbal_limit)
 
-class TestPartsEngineMSL(testingtools.TestCase, EngineTest):
+class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsEngine')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsEngineMSL')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsEngine')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestPartsEngineMSL')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.add_engine_data(
@@ -388,15 +388,15 @@ class TestPartsEngineMSL(testingtools.TestCase, EngineTest):
             self.check_engine_active(engine, engine.throttle)
         engine.active = False
 
-class TestPartsEngineVacuum(testingtools.TestCase, EngineTest):
+class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsEngine')
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 250000)
-        cls.conn = testingtools.connect(name='TestPartsEngineMSL')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsEngine')
+        krpctest.remove_other_vessels()
+        krpctest.set_circular_orbit('Kerbin', 250000)
+        cls.conn = krpctest.connect(name='TestPartsEngineMSL')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.add_engine_data(

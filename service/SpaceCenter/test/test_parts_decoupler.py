@@ -1,16 +1,16 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
-class TestPartsDecoupler(testingtools.TestCase):
+class TestPartsDecoupler(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsDecoupler')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsDecoupler')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsDecoupler')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestPartsDecoupler')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
         cls.parts = cls.vessel.parts

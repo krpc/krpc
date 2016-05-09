@@ -1,18 +1,17 @@
 import unittest
-import testingtools
-from mathtools import vector, norm, dot
-from geometrytools import compute_position
+import krpctest
+from krpctest.geometry import vector, norm, dot, compute_position
 import math
 import krpc
 import time
 
 #TODO: fix commented out test cases
-class TestOrbit(testingtools.TestCase):
+class TestOrbit(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        cls.conn = testingtools.connect(name='TestOrbit')
+        krpctest.new_save()
+        cls.conn = krpctest.connect(name='TestOrbit')
 
     @classmethod
     def tearDownClass(cls):
@@ -55,7 +54,7 @@ class TestOrbit(testingtools.TestCase):
         self.assertClose(time_to_periapsis, orbit.time_to_periapsis, error=1)
 
     def test_fix(self):
-        testingtools.set_circular_orbit('Kerbin', 100000)
+        krpctest.set_circular_orbit('Kerbin', 100000)
         vessel = self.conn.space_center.active_vessel
         orbit = vessel.orbit
         self.assertClose(0, orbit.eccentricity, error=0.1)
@@ -66,7 +65,7 @@ class TestOrbit(testingtools.TestCase):
         #self.assertClose(0, orbit.epoch, error=0.1)
 
     def test_vessel_orbiting_kerbin(self):
-        testingtools.set_circular_orbit('Kerbin', 100000)
+        krpctest.set_circular_orbit('Kerbin', 100000)
         vessel = self.conn.space_center.active_vessel
         orbit = vessel.orbit
         self.assertEqual('Kerbin', orbit.body.name)
@@ -91,7 +90,7 @@ class TestOrbit(testingtools.TestCase):
         #self.assertEqual(None, orbit.next_orbit)
 
     def test_vessel_orbiting_bop(self):
-        testingtools.set_orbit('Bop', 320000, 0.18, 27, 38, 241, 2.3, 0)
+        krpctest.set_orbit('Bop', 320000, 0.18, 27, 38, 241, 2.3, 0)
         vessel = self.conn.space_center.active_vessel
         orbit = vessel.orbit
         self.assertEqual('Bop', orbit.body.name)
@@ -116,7 +115,7 @@ class TestOrbit(testingtools.TestCase):
         #self.assertEqual(None, orbit.next_orbit)
 
     def test_vessel_orbiting_mun_on_escape_soi(self):
-        testingtools.set_orbit('Mun', 1800000, 0.52, 0, 13, 67, 6.25, 0)
+        krpctest.set_orbit('Mun', 1800000, 0.52, 0, 13, 67, 6.25, 0)
         vessel = self.conn.space_center.active_vessel
         orbit = vessel.orbit
         self.assertEqual('Mun', orbit.body.name)
@@ -144,7 +143,7 @@ class TestOrbit(testingtools.TestCase):
         self.assertEqual('Kerbin', orbit.body.name)
 
     def test_vessel_orbiting_minmus_on_parabolic_arc(self):
-        testingtools.set_orbit('Minmus', 80000, 3, 0, 0, 0, 0, 0)
+        krpctest.set_orbit('Minmus', 80000, 3, 0, 0, 0, 0, 0)
         vessel = self.conn.space_center.active_vessel
         orbit = vessel.orbit
         self.assertEqual('Minmus', orbit.body.name)

@@ -1,15 +1,15 @@
 import unittest
-import testingtools
-from mathtools import vector, norm, normalize
+import krpctest
+from krpctest.geometry import vector, norm, normalize
 import krpc
 
-class TestNode(testingtools.TestCase):
+class TestNode(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = testingtools.connect(name='TestNode')
+        krpctest.new_save()
+        krpctest.set_circular_orbit('Kerbin', 100000)
+        cls.conn = krpctest.connect(name='TestNode')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
         for node in cls.control.nodes:

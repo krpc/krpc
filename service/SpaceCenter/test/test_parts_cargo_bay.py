@@ -1,17 +1,17 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
-class TestPartsCargoBay(testingtools.TestCase):
+class TestPartsCargoBay(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'PartsCargoBay':
-            testingtools.new_save()
-            testingtools.launch_vessel_from_vab('PartsCargoBay')
-            testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='PartsCargoBay')
+        if krpctest.connect().space_center.active_vessel.name != 'PartsCargoBay':
+            krpctest.new_save()
+            krpctest.launch_vessel_from_vab('PartsCargoBay')
+            krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='PartsCargoBay')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.state = cls.conn.space_center.CargoBayState

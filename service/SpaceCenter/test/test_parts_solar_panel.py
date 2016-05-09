@@ -1,16 +1,16 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
-class TestPartsSolarPanel(testingtools.TestCase):
+class TestPartsSolarPanel(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsSolarPanel')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsSolarPanel')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsSolarPanel')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestPartsSolarPanel')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.state = cls.conn.space_center.SolarPanelState
