@@ -3,7 +3,8 @@
 {{ domain.currentmodule('RemoteTech') }}
 {% import domain.macros as macros with context %}
 
-RemoteTech
-==========
+Antenna
+=======
 
-{{ macros.service(services['RemoteTech']) }}
+{{ macros.class(services['RemoteTech'].classes['Antenna']) }}
+{{ macros.enumeration(services['RemoteTech'].enumerations['Target']) }}
