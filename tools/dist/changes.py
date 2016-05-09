@@ -21,6 +21,7 @@ def main():
         ('SpaceCenter service', get_changes('service/SpaceCenter/CHANGES.txt')),
         ('InfernalRobotics service', get_changes('service/InfernalRobotics/CHANGES.txt')),
         ('KerbalAlarmClock service', get_changes('service/KerbalAlarmClock/CHANGES.txt')),
+        ('RemoteTech service', get_changes('service/RemoteTech/CHANGES.txt')),
         ('C# client', get_changes('client/csharp/CHANGES.txt')),
         ('C++ client', get_changes('client/cpp/CHANGES.txt')),
         ('Java client', get_changes('client/java/CHANGES.txt')),

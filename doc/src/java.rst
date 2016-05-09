@@ -8,3 +8,4 @@ Java
    java/api/space-center
    java/api/infernal-robotics
    java/api/kerbal-alarm-clock
+   java/api/remote-tech

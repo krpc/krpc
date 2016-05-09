@@ -19,7 +19,8 @@ autotools_dist(
         ':services-krpc',
         ':services-spacecenter',
         ':services-infernalrobotics',
-        ':services-kerbalalarmclock'
+        ':services-kerbalalarmclock',
+        ':services-remotetech'
     ],
     path_map = {
         'client/cpp/': '%s/' % name,
@@ -79,6 +80,13 @@ clientgen_cpp(
 )
 
 clientgen_cpp(
+    name = 'services-remotetech',
+    service = 'RemoteTech',
+    defs = '//service/RemoteTech:ServiceDefinitions',
+    out = 'include/krpc/services/remote_tech.hpp'
+)
+
+clientgen_cpp(
     name = 'services-test-service',
     service = 'TestService',
     defs = '//tools/TestServer:ServiceDefinitions',
@@ -93,7 +101,8 @@ cc_library(
         ':services-krpc',
         ':services-spacecenter',
         ':services-infernalrobotics',
-        ':services-kerbalalarmclock'
+        ':services-kerbalalarmclock',
+        ':services-remotetech'
     ],
     includes = ['include'],
     deps = ['@protobuf//:protobuf', '@cpp_asio//:asio'],
