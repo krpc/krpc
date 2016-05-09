@@ -1,9 +1,9 @@
 import unittest
-import testingtools
-from mathtools import *
+import krpctest
+from krpc.geometry import *
 import math
 
-class TestMathTools(testingtools.TestCase):
+class TestMathTools(krpctest.TestCase):
 
     def test_quaternion_axis_angle(self):
         self.assertEqual((0,0,0,1), quaternion_axis_angle((1,0,0), 0))

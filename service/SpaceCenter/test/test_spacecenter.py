@@ -1,21 +1,21 @@
 import unittest
-import testingtools
-from mathtools import norm, normalize
+import krpctest
+from krpctest.geometry import norm, normalize
 import krpc
 import time
 import itertools
 
-class TestSpaceCenter(testingtools.TestCase):
+class TestSpaceCenter(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Basic')
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 1000000)
-        testingtools.launch_vessel_from_vab('Basic')
-        testingtools.set_circular_orbit('Kerbin', 1010000)
-        cls.conn = testingtools.connect(name='TestSpaceCenter')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('Basic')
+        krpctest.remove_other_vessels()
+        krpctest.set_circular_orbit('Kerbin', 1000000)
+        krpctest.launch_vessel_from_vab('Basic')
+        krpctest.set_circular_orbit('Kerbin', 1010000)
+        cls.conn = krpctest.connect(name='TestSpaceCenter')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
         cls.other_vessel = next(iter(filter(lambda v: v != cls.vessel, cls.sc.vessels)))
@@ -328,14 +328,14 @@ class WarpTestBase(object):
         self.sc.warp_to(t)
         self.assertClose(t, self.sc.ut, error=2)
 
-class TestWarpOnLaunchpad(testingtools.TestCase, WarpTestBase):
+class TestWarpOnLaunchpad(krpctest.TestCase, WarpTestBase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Basic')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestWarpOnLaunchpad')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('Basic')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestWarpOnLaunchpad')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 7
@@ -350,15 +350,15 @@ class TestWarpOnLaunchpad(testingtools.TestCase, WarpTestBase):
         self.sc.warp_to(t)
         self.assertClose(t, self.sc.ut, error=2)
 
-class TestWarpInOrbit(testingtools.TestCase, WarpTestBase):
+class TestWarpInOrbit(krpctest.TestCase, WarpTestBase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Basic')
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 200000)
-        cls.conn = testingtools.connect(name='TestWarpInOrbit')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('Basic')
+        krpctest.remove_other_vessels()
+        krpctest.set_circular_orbit('Kerbin', 200000)
+        cls.conn = krpctest.connect(name='TestWarpInOrbit')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 4
@@ -368,15 +368,15 @@ class TestWarpInOrbit(testingtools.TestCase, WarpTestBase):
     def tearDownClass(cls):
         cls.conn.close()
 
-class TestWarpInSpace(testingtools.TestCase, WarpTestBase):
+class TestWarpInSpace(krpctest.TestCase, WarpTestBase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('Basic')
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 700000)
-        cls.conn = testingtools.connect(name='TestWarpInOrbit')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('Basic')
+        krpctest.remove_other_vessels()
+        krpctest.set_circular_orbit('Kerbin', 700000)
+        cls.conn = krpctest.connect(name='TestWarpInOrbit')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 7

@@ -1,17 +1,17 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
-class TestPartsResourceHarvester(testingtools.TestCase):
+class TestPartsResourceHarvester(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'PartsHarvester':
-            testingtools.new_save()
-            testingtools.launch_vessel_from_vab('PartsHarvester')
-            testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsResourceHarvester')
+        if krpctest.connect().space_center.active_vessel.name != 'PartsHarvester':
+            krpctest.new_save()
+            krpctest.launch_vessel_from_vab('PartsHarvester')
+            krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestPartsResourceHarvester')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.state = cls.conn.space_center.ResourceHarvesterState

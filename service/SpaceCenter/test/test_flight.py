@@ -1,18 +1,18 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 import math
-from mathtools import rad2deg, norm, normalize, dot, cross, vector
+from krpctest.geometry import rad2deg, norm, normalize, dot, cross, vector
 
-class TestFlight(testingtools.TestCase):
+class TestFlight(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.remove_other_vessels()
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = testingtools.connect()
+        krpctest.new_save()
+        krpctest.remove_other_vessels()
+        krpctest.set_circular_orbit('Kerbin', 100000)
+        cls.conn = krpctest.connect()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.clear_rotation()
         cls.conn.testing_tools.apply_rotation(116, (0,0,-1))
@@ -172,13 +172,13 @@ class TestFlight(testingtools.TestCase):
             longitude = flight.longitude
             time.sleep(1)
 
-class TestFlightVerticalSpeed(testingtools.TestCase):
+class TestFlightVerticalSpeed(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestFlightVerticalSpeed')
+        krpctest.new_save()
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestFlightVerticalSpeed')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.remove_other_vessels()
 
@@ -199,21 +199,21 @@ class TestFlightVerticalSpeed(testingtools.TestCase):
         self.assertClose(horizontal_speed, flight.horizontal_speed, error=0.5)
 
     def test_vertical_speed_positive(self):
-        testingtools.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, 0, 0)
+        krpctest.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, 0, 0)
         ref = self.vessel.orbit.body.reference_frame
         flight = self.vessel.flight(ref)
         self.assertGreater(flight.vertical_speed, 0)
         self.check_speed(flight, ref)
 
     def test_vertical_speed_negative(self):
-        testingtools.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, 2, 0)
+        krpctest.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, 2, 0)
         ref = self.vessel.orbit.body.reference_frame
         flight = self.vessel.flight(ref)
         self.assertGreater(0, flight.vertical_speed)
         self.check_speed(flight, ref)
 
     def test_surface_speed(self):
-        testingtools.set_circular_orbit('Kerbin', 100000)
+        krpctest.set_circular_orbit('Kerbin', 100000)
         ref = self.vessel.orbit.body.reference_frame
         flight = self.vessel.flight(ref)
         self.check_speed(flight, ref)
@@ -222,7 +222,7 @@ class TestFlightVerticalSpeed(testingtools.TestCase):
         self.assertClose(0, flight.vertical_speed, error=0.1)
 
     def test_orbital_speed(self):
-        testingtools.set_circular_orbit('Kerbin', 100000)
+        krpctest.set_circular_orbit('Kerbin', 100000)
         ref = self.vessel.orbit.body.non_rotating_reference_frame
         flight = self.vessel.flight(ref)
         self.check_speed(flight, ref)
@@ -230,14 +230,14 @@ class TestFlightVerticalSpeed(testingtools.TestCase):
         self.assertClose(2246.1, flight.horizontal_speed, error=0.1)
         self.assertClose(0, flight.vertical_speed, error=0.1)
 
-class TestFlightAtLaunchpad(testingtools.TestCase):
+class TestFlightAtLaunchpad(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.remove_other_vessels()
-        testingtools.launch_vessel_from_vab('Basic')
-        cls.conn = testingtools.connect(name='TestFlightAtLaunchpad')
+        krpctest.new_save()
+        krpctest.remove_other_vessels()
+        krpctest.launch_vessel_from_vab('Basic')
+        cls.conn = krpctest.connect(name='TestFlightAtLaunchpad')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.remove_other_vessels()
         cls.far = cls.conn.space_center.far_available

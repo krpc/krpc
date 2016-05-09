@@ -1,17 +1,17 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
-class TestPartsLandingGear(testingtools.TestCase):
+class TestPartsLandingGear(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'PartsLandingGear':
-            testingtools.new_save()
-            testingtools.launch_vessel_from_vab('PartsLandingGear')
-            testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsLandingGear')
+        if krpctest.connect().space_center.active_vessel.name != 'PartsLandingGear':
+            krpctest.new_save()
+            krpctest.launch_vessel_from_vab('PartsLandingGear')
+            krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestPartsLandingGear')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.state = cls.conn.space_center.LandingGearState

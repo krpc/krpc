@@ -1,7 +1,7 @@
 import unittest
-import testingtools
+import krpctest
 
-class TestTestingTools(testingtools.TestCase):
+class TestTestingTools(krpctest.TestCase):
 
     def checkFails(self, f, *args):
         failed = False

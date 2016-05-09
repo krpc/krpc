@@ -1,16 +1,16 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
-class TestPartsFairing(testingtools.TestCase):
+class TestPartsFairing(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsFairing')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsFairing')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsFairing')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestPartsFairing')
         cls.vessel = cls.conn.space_center.active_vessel
         cls.parts = cls.vessel.parts
 

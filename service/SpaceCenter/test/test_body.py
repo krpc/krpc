@@ -1,14 +1,14 @@
 import unittest
-import testingtools
-from mathtools import norm, normalize, dot
+import krpctest
+from krpctest.geometry import norm, normalize, dot
 import krpc
 import math
 
-class TestBody(testingtools.TestCase):
+class TestBody(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.conn = testingtools.connect(name='TestBody')
+        cls.conn = krpctest.connect(name='TestBody')
 
     @classmethod
     def tearDownClass(cls):

@@ -2,8 +2,7 @@
 
 set -e
 
-KSP=lib/ksp
-GAMEDATA=$KSP/GameData/kRPC
+GAMEDATA=${KSP_DIR:-lib/ksp}/GameData/kRPC
 VERSION=`tools/krpc-version.sh`
 
 bazel build \

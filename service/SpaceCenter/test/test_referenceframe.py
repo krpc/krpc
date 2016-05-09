@@ -1,19 +1,18 @@
 import unittest
-import testingtools
-from mathtools import *
-from geometrytools import compute_position
+import krpctest
+from krpctest.geometry import compute_position, norm, dot
 import krpc
 import time
 import itertools
 import math
 
-class TestReferenceFrame(testingtools.TestCase):
+class TestReferenceFrame(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = testingtools.connect(name='TestReferenceFrame')
+        krpctest.new_save()
+        krpctest.set_circular_orbit('Kerbin', 100000)
+        cls.conn = krpctest.connect(name='TestReferenceFrame')
         cls.sc = cls.conn.space_center
         cls.vessel = cls.conn.space_center.active_vessel
         cls.bodies = cls.conn.space_center.bodies
