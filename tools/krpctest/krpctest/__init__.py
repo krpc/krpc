@@ -1,10 +1,7 @@
 import krpc
-import time
 import unittest
 import os
 import shutil
-import itertools
-import math
 
 def connect(name=''):
     address = '127.0.0.1'
@@ -29,7 +26,7 @@ def new_save(name='test'):
         return
 
     # Load a new save using template from fixtures directory
-    fixtures_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
+    fixtures_path = os.path.abspath('fixtures')
     save_path = os.path.join(get_ksp_dir(), 'saves', name)
     if not os.path.exists(save_path):
         os.makedirs(save_path)
@@ -57,7 +54,7 @@ def remove_other_vessels():
 def launch_vessel_from_vab(name):
     # Copy craft file to save directory
     with connect(name='testingtools.launch_vessel_from_vab') as conn:
-        fixtures_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
+        fixtures_path = os.path.abspath('fixtures')
         save_path = os.path.join(get_ksp_dir(), 'saves', conn.testing_tools.current_save)
         if not os.path.exists(save_path):
             os.makedirs(save_path)
