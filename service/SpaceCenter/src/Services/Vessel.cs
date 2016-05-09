@@ -170,21 +170,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// A <see cref="Comms"/> object, that can used to interact with RemoteTech for this vessel.
-        /// </summary>
-        /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/75245-11-remotetech-v1610-2016-04-12/">RemoteTech</a> to be installed.
-        /// </remarks>
-        [KRPCProperty]
-        public Comms Comms {
-            get {
-                if (!RemoteTech.IsAvailable)
-                    throw new InvalidOperationException ("RemoteTech is not installed");
-                return new Comms (InternalVessel);
-            }
-        }
-
-        /// <summary>
         /// The total mass of the vessel, including resources, in kg.
         /// </summary>
         [KRPCProperty]
