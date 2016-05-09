@@ -1,16 +1,16 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 import time
 
-class TestInfernalRobotics(testingtools.TestCase):
+class TestInfernalRobotics(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('InfernalRobotics')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestInfernalRobotics')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('InfernalRobotics')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(name='TestInfernalRobotics')
         cls.ir = cls.conn.infernal_robotics
 
     @classmethod
