@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using KRPC.Utils;
 
-namespace KRPC.SpaceCenter.ExternalAPI
+namespace KRPC.RemoteTech
 {
-    static class RemoteTech
+    static class API
     {
+        public static Boolean IsAvailable { get; private set; }
+
         public static void Load ()
         {
-            IsAvailable = APILoader.Load (typeof(RemoteTech), "RemoteTech", "RemoteTech.API.API", new Version (1, 7));
+            IsAvailable = APILoader.Load (typeof(API), "RemoteTech", "RemoteTech.API.API", new Version (1, 7));
         }
-
-        public static bool IsAvailable { get; private set; }
 
         public static Func<Guid, bool> HasLocalControl { get; internal set; }
 

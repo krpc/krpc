@@ -40,8 +40,14 @@ csharp_assembly_info(
 csharp_library(
     name = 'KRPC.Client',
     srcs = glob(['src/**/*.cs']) + [
-        ':AssemblyInfo', '//protobuf:csharp',
-        ':services-krpc', ':services-spacecenter', ':services-infernalrobotics', ':services-kerbalalarmclock'],
+        ':AssemblyInfo',
+        '//protobuf:csharp',
+        ':services-krpc',
+        ':services-spacecenter',
+        ':services-infernalrobotics',
+        ':services-kerbalalarmclock',
+        ':services-remotetech'
+    ],
     deps = [
         '//tools/build/mono-4.5:Google.Protobuf',
         '//tools/build/mono-4.5:mscorlib',
@@ -81,6 +87,13 @@ clientgen_csharp(
     service = 'KerbalAlarmClock',
     defs = '//service/KerbalAlarmClock:ServiceDefinitions',
     out = 'Services/KerbalAlarmClock.cs'
+)
+
+clientgen_csharp(
+    name = 'services-remotetech',
+    service = 'RemoteTech',
+    defs = '//service/RemoteTech:ServiceDefinitions',
+    out = 'Services/RemoteTech.cs'
 )
 
 client_test(

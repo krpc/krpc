@@ -36,7 +36,8 @@ java_library(
         ':services-krpc',
         ':services-spacecenter',
         ':services-infernalrobotics',
-        ':services-kerbalalarmclock'
+        ':services-kerbalalarmclock',
+        ':services-remotetech'
     ],
     resources = [
         '//:readme', '//:version', 'CHANGES.txt',
@@ -112,6 +113,13 @@ clientgen_java(
     service = 'KerbalAlarmClock',
     defs = '//service/KerbalAlarmClock:ServiceDefinitions',
     out = 'services/KerbalAlarmClock.java'
+)
+
+clientgen_java(
+    name = 'services-remotetech',
+    service = 'RemoteTech',
+    defs = '//service/RemoteTech:ServiceDefinitions',
+    out = 'services/RemoteTech.java'
 )
 
 clientgen_java(

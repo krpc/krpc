@@ -106,7 +106,8 @@ defs = [
     '//server:ServiceDefinitions',
     '//service/SpaceCenter:ServiceDefinitions',
     '//service/InfernalRobotics:ServiceDefinitions',
-    '//service/KerbalAlarmClock:ServiceDefinitions'
+    '//service/KerbalAlarmClock:ServiceDefinitions',
+    '//service/RemoteTech:ServiceDefinitions'
 ]
 
 docgen_multiple(

@@ -63,6 +63,7 @@ them using ``bazel build <target>``:
   * ``//service/SpaceCenter``
   * ``//service/InfernalRobotics``
   * ``//service/KerbalAlarmClock``
+  * ``//service/RemoteTech``
 
 * Targets for building protobuf definitions for individual languages:
 

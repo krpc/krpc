@@ -524,14 +524,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/75245-11-remotetech-v1610-2016-04-12/">RemoteTech</a> is installed.
-        /// </summary>
-        [KRPCProperty]
-        public static bool RemoteTechAvailable {
-            get { return ExternalAPI.RemoteTech.IsAvailable; }
-        }
-
-        /// <summary>
         /// Draw a direction vector on the active vessel.
         /// </summary>
         /// <param name="direction">Direction to draw the line in.</param>

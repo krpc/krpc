@@ -1,9 +1,9 @@
 .. default-domain:: {{ domain.sphinxname }}
 .. highlight:: {{ domain.name }}
-{{ domain.currentmodule('SpaceCenter') }}
+{{ domain.currentmodule('RemoteTech') }}
 {% import domain.macros as macros with context %}
 
-Comms
-=====
+RemoteTech
+==========
 
-{{ macros.class(services['SpaceCenter'].classes['Comms']) }}
+{{ macros.service(services['RemoteTech']) }}
