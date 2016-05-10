@@ -85,12 +85,13 @@ pkg_zip(
         'COPYING.LESSER',
         # Server
         '//server',
+        '//tools/build/ksp:Google.Protobuf',
+        '//tools/build/protobuf:LICENSE',
+        # Services
         '//service/SpaceCenter',
         '//service/InfernalRobotics',
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
-        '//tools/build/ksp:Google.Protobuf',
-        '//tools/build/protobuf:LICENSE',
         # Clients
         '//client/python',
         '//client/cpp',
@@ -113,17 +114,18 @@ pkg_zip(
         # Server
         'server/': 'GameData/kRPC/',
         'server/src/icons': 'GameData/kRPC/icons',
-        'service/SpaceCenter/CHANGES.txt': 'GameData/kRPC/CHANGES.SpaceCenter.txt',
-        'service/InfernalRobotics/CHANGES.txt': 'GameData/kRPC/CHANGES.InfernalRobotics.txt',
-        'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
-        'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
-        'service/SpaceCenter/': 'GameData/kRPC/',
-        'service/InfernalRobotics/': 'GameData/kRPC/',
-        'service/KerbalAlarmClock/': 'GameData/kRPC/',
-        'service/RemoteTech/': 'GameData/kRPC/',
         'tools/build/ksp/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
+        # Services
+        'service/SpaceCenter/': 'GameData/kRPC/',
+        'service/SpaceCenter/CHANGES.txt': 'GameData/kRPC/CHANGES.SpaceCenter.txt',
         'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
+        'service/InfernalRobotics/': 'GameData/kRPC/',
+        'service/InfernalRobotics/CHANGES.txt': 'GameData/kRPC/CHANGES.InfernalRobotics.txt',
+        'service/KerbalAlarmClock/': 'GameData/kRPC/',
+        'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
+        'service/RemoteTech/': 'GameData/kRPC/',
+        'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
         # Clients
         'client/csharp/': 'client/',
         'client/cpp/': 'client/',
