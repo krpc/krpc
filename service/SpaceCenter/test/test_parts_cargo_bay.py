@@ -1,7 +1,6 @@
 import unittest
-import krpctest
-import krpc
 import time
+import krpctest
 
 class TestPartsCargoBay(krpctest.TestCase):
 
@@ -11,9 +10,8 @@ class TestPartsCargoBay(krpctest.TestCase):
             krpctest.new_save()
             krpctest.launch_vessel_from_vab('PartsCargoBay')
             krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(name='PartsCargoBay')
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.parts = cls.vessel.parts
+        cls.conn = krpctest.connect(cls)
+        cls.cargo_bays = cls.conn.space_center.active_vessel.parts.cargo_bays
         cls.state = cls.conn.space_center.CargoBayState
 
     @classmethod
@@ -21,7 +19,7 @@ class TestPartsCargoBay(krpctest.TestCase):
         cls.conn.close()
 
     def test_open_close(self):
-        for bay in self.parts.cargo_bays:
+        for bay in self.cargo_bays:
 
             self.assertFalse(bay.open)
             self.assertEqual(bay.state, self.state.closed)
@@ -52,5 +50,5 @@ class TestPartsCargoBay(krpctest.TestCase):
             self.assertFalse(bay.open)
             self.assertEqual(bay.state, self.state.closed)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

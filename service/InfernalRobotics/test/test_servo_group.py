@@ -1,7 +1,5 @@
 import unittest
 import krpctest
-import krpc
-import time
 
 class TestServoGroup(krpctest.TestCase):
 
@@ -10,7 +8,7 @@ class TestServoGroup(krpctest.TestCase):
         krpctest.new_save()
         krpctest.launch_vessel_from_vab('InfernalRobotics')
         krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(name='TestServoGroup')
+        cls.conn = krpctest.connect(cls)
         cls.ir = cls.conn.infernal_robotics
 
     @classmethod
@@ -29,7 +27,7 @@ class TestServoGroup(krpctest.TestCase):
         group = self.ir.servo_group_with_name('Group1')
         servo = group.servo_with_name('Rotatron')
         self.assertEqual(servo.name, 'Rotatron')
-        self.assertIsNone (group.servo_with_name('Foo'))
+        self.assertIsNone(group.servo_with_name('Foo'))
 
 if __name__ == '__main__':
     unittest.main()

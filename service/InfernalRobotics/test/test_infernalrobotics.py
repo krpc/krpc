@@ -1,7 +1,5 @@
 import unittest
 import krpctest
-import krpc
-import time
 
 class TestInfernalRobotics(krpctest.TestCase):
 
@@ -10,7 +8,7 @@ class TestInfernalRobotics(krpctest.TestCase):
         krpctest.new_save()
         krpctest.launch_vessel_from_vab('InfernalRobotics')
         krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(name='TestInfernalRobotics')
+        cls.conn = krpctest.connect(cls)
         cls.ir = cls.conn.infernal_robotics
 
     @classmethod
@@ -19,8 +17,7 @@ class TestInfernalRobotics(krpctest.TestCase):
 
     def test_servo_groups(self):
         groups = self.ir.servo_groups
-        self.assertEqual(2, len(groups))
-        self.assertEqual(['Group1','Group2'], sorted(g.name for g in groups))
+        self.assertEqual(['Group1', 'Group2'], sorted(g.name for g in groups))
 
     def test_servo_group_with_name(self):
         group1 = self.ir.servo_group_with_name('Group1')

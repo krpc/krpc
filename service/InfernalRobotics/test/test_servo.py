@@ -1,7 +1,6 @@
 import unittest
-import krpctest
-import krpc
 import time
+import krpctest
 
 class TestServo(krpctest.TestCase):
 
@@ -10,7 +9,7 @@ class TestServo(krpctest.TestCase):
         krpctest.new_save()
         krpctest.launch_vessel_from_vab('InfernalRobotics')
         krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(name='TestServo')
+        cls.conn = krpctest.connect(cls)
         cls.ir = cls.conn.infernal_robotics
 
     @classmethod

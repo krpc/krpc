@@ -1,7 +1,5 @@
 import unittest
 import krpctest
-import krpc
-import time
 
 class TestPartsLandingGear(krpctest.TestCase):
 
@@ -11,41 +9,39 @@ class TestPartsLandingGear(krpctest.TestCase):
             krpctest.new_save()
             krpctest.launch_vessel_from_vab('PartsLandingGear')
             krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(name='TestPartsLandingGear')
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.parts = cls.vessel.parts
-        cls.state = cls.conn.space_center.LandingGearState
+        cls.conn = krpctest.connect(cls)
+        parts = cls.conn.space_center.active_vessel.parts
+        cls.gear = parts.with_title('LY-99 Extra Large Landing Gear')[0].landing_gear
+        cls.fixed_gear = parts.with_title('LY-01 Fixed Landing Gear')[0].landing_gear
+        cls.State = cls.conn.space_center.LandingGearState
 
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
 
     def test_deploy_and_retract(self):
-        gear = next(iter(filter(lambda e: e.part.title == 'LY-99 Extra Large Landing Gear', self.parts.landing_gear)))
-        self.assertTrue(gear.deployable)
-        self.assertEqual(self.state.deployed, gear.state)
-        self.assertTrue(gear.deployed)
-        gear.deployed = False
-        self.assertEqual(self.state.retracting, gear.state)
-        self.assertFalse(gear.deployed)
-        while gear.state == self.state.retracting:
+        self.assertTrue(self.gear.deployable)
+        self.assertEqual(self.State.deployed, self.gear.state)
+        self.assertTrue(self.gear.deployed)
+        self.gear.deployed = False
+        self.assertEqual(self.State.retracting, self.gear.state)
+        self.assertFalse(self.gear.deployed)
+        while self.gear.state == self.State.retracting:
             pass
-        self.assertEqual(self.state.retracted, gear.state)
-        self.assertFalse(gear.deployed)
-        time.sleep(0.1)
-        gear.deployed = True
-        self.assertEqual(self.state.deploying, gear.state)
-        self.assertFalse(gear.deployed)
-        while gear.state == self.state.deploying:
+        self.assertEqual(self.State.retracted, self.gear.state)
+        self.assertFalse(self.gear.deployed)
+        self.gear.deployed = True
+        self.assertEqual(self.State.deploying, self.gear.state)
+        self.assertFalse(self.gear.deployed)
+        while self.gear.state == self.State.deploying:
             pass
-        self.assertEqual(self.state.deployed, gear.state)
-        self.assertTrue(gear.deployed)
+        self.assertEqual(self.State.deployed, self.gear.state)
+        self.assertTrue(self.gear.deployed)
 
     def test_fixed_gear(self):
-        gear = next(iter(filter(lambda e: e.part.title == 'LY-01 Fixed Landing Gear', self.parts.landing_gear)))
-        self.assertFalse(gear.deployable)
-        self.assertEqual(self.state.deployed, gear.state)
-        self.assertTrue(gear.deployed)
+        self.assertFalse(self.fixed_gear.deployable)
+        self.assertEqual(self.State.deployed, self.fixed_gear.state)
+        self.assertTrue(self.fixed_gear.deployed)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
