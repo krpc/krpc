@@ -23,8 +23,9 @@ setup(
     license='GNU GPL v3',
     description='Utilities for running service tests for kRPC.',
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),
-    packages=['krpctest'],
+    packages=['krpctest', 'krpctest.test'],
     install_requires=install_requires,
+    test_suite='krpctest.test',
     use_2to3=True,
     classifiers=[
         'Development Status :: 5 - Production/Stable',

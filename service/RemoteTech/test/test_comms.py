@@ -8,7 +8,7 @@ class TestComms(krpctest.TestCase):
         krpctest.new_save()
         krpctest.launch_vessel_from_vab('RemoteTech')
         krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(name='TestComms')
+        cls.conn = krpctest.connect(cls)
         cls.other_vessel = next(iter(cls.conn.space_center.active_vessel.parts.decouplers)).decouple()
         cls.rt = cls.conn.remote_tech
         cls.comms = cls.rt.comms(cls.conn.space_center.active_vessel)

@@ -1,8 +1,7 @@
 import unittest
-import krpctest
-import krpc
-import time
 import math
+import time
+import krpctest
 from krpctest.geometry import rad2deg, norm, normalize, dot, cross, vector
 
 class TestFlight(krpctest.TestCase):
@@ -15,9 +14,9 @@ class TestFlight(krpctest.TestCase):
         cls.conn = krpctest.connect()
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.clear_rotation()
-        cls.conn.testing_tools.apply_rotation(116, (0,0,-1))
-        cls.conn.testing_tools.apply_rotation(27, (-1,0,0))
-        cls.conn.testing_tools.apply_rotation(40, (0,-1,0))
+        cls.conn.testing_tools.apply_rotation(116, (0, 0, -1))
+        cls.conn.testing_tools.apply_rotation(27, (-1, 0, 0))
+        cls.conn.testing_tools.apply_rotation(40, (0, -1, 0))
         cls.far = cls.conn.space_center.far_available
 
     def test_equality(self):
@@ -27,28 +26,30 @@ class TestFlight(krpctest.TestCase):
     def check_properties_not_affected_by_reference_frame(self, flight):
         """ Verify flight properties that aren't affected by reference frames """
         self.assertClose(100000, flight.mean_altitude, error=10)
-        self.assertClose(flight.mean_altitude - max(0, flight.elevation), flight.surface_altitude, error=10)
-        self.assertClose(flight.mean_altitude - flight.elevation, flight.bedrock_altitude, error=10)
+        self.assertClose(100000 - max(0, flight.elevation), flight.surface_altitude, error=10)
+        self.assertClose(100000 - flight.elevation, flight.bedrock_altitude, error=10)
 
     def check_directions(self, flight):
         """ Check flight.direction against flight.heading and flight.pitch """
-        direction       = vector(flight.direction)
-        up_direction    = (1,0,0)
-        north_direction = (0,1,0)
+        direction = vector(flight.direction)
+        up_direction = (1, 0, 0)
+        north_direction = (0, 1, 0)
         self.assertClose(1, norm(direction))
 
         # Check vessel direction vector agrees with pitch angle
         pitch = 90 - rad2deg(math.acos(dot(up_direction, direction)))
-        self.assertClose(flight.pitch, pitch, error=2)
+        self.assertClose(pitch, flight.pitch, error=2)
 
         # Check vessel direction vector agrees with heading angle
         up_component = dot(direction, up_direction) * vector(up_direction)
         north_component = normalize(vector(direction) - up_component)
-        self.assertCloseDegrees(flight.heading, rad2deg(math.acos(dot(north_component, north_direction))), error=1)
+        self.assertCloseDegrees(
+            rad2deg(math.acos(dot(north_component, north_direction))),
+            flight.heading, error=1)
 
     def check_speeds(self, flight):
         """ Check flight.velocity agrees with flight.*_speed """
-        up_direction = (0,1,0)
+        up_direction = (0, 1, 0)
         velocity = vector(flight.velocity)
         vertical_speed = dot(velocity, up_direction)
         horizontal_speed = norm(velocity) - vertical_speed
@@ -58,11 +59,11 @@ class TestFlight(krpctest.TestCase):
 
     def check_orbital_vectors(self, flight):
         """ Check orbital direction vectors """
-        prograde    = vector(flight.prograde)
-        retrograde  = vector(flight.retrograde)
-        normal      = vector(flight.normal)
+        prograde = vector(flight.prograde)
+        retrograde = vector(flight.retrograde)
+        normal = vector(flight.normal)
         anti_normal = vector(flight.anti_normal)
-        radial      = vector(flight.radial)
+        radial = vector(flight.radial)
         anti_radial = vector(flight.anti_radial)
         self.assertClose(1, norm(prograde))
         self.assertClose(1, norm(retrograde))
@@ -81,7 +82,7 @@ class TestFlight(krpctest.TestCase):
         flight = self.vessel.flight(self.vessel.reference_frame)
         self.check_properties_not_affected_by_reference_frame(flight)
 
-        self.assertClose((0,0,0), flight.velocity, error=0.5)
+        self.assertClose((0, 0, 0), flight.velocity, error=0.5)
         self.assertClose(0, flight.speed, error=0.5)
         self.assertClose(0, flight.horizontal_speed, error=0.5)
         self.assertClose(0, flight.vertical_speed, error=0.5)
@@ -98,7 +99,7 @@ class TestFlight(krpctest.TestCase):
         flight = self.vessel.flight(ref)
         self.check_properties_not_affected_by_reference_frame(flight)
 
-        self.assertClose((0,0,0), flight.velocity, error=0.5)
+        self.assertClose((0, 0, 0), flight.velocity, error=0.5)
         self.assertClose(0, flight.speed, error=0.5)
         self.assertClose(0, flight.horizontal_speed, error=0.5)
         self.assertClose(0, flight.vertical_speed, error=0.5)
@@ -111,7 +112,7 @@ class TestFlight(krpctest.TestCase):
         flight = self.vessel.flight(ref)
         self.check_properties_not_affected_by_reference_frame(flight)
 
-        self.assertClose((0,0,0), flight.velocity, error=0.5)
+        self.assertClose((0, 0, 0), flight.velocity, error=0.5)
         self.assertClose(0, flight.speed, error=0.5)
         self.assertClose(0, flight.horizontal_speed, error=0.5)
         self.assertClose(0, flight.vertical_speed, error=0.5)
@@ -131,7 +132,7 @@ class TestFlight(krpctest.TestCase):
         speed = 2042.5
         self.assertClose(speed, norm(flight.velocity), error=0.5)
         position = self.vessel.position(ref)
-        direction = vector(cross(normalize(position), (0,1,0)))
+        direction = vector(cross(normalize(position), (0, 1, 0)))
         velocity = tuple(direction * speed)
         self.assertClose(velocity, flight.velocity, error=0.5)
         self.assertClose(speed, flight.speed, error=0.5)
@@ -149,7 +150,7 @@ class TestFlight(krpctest.TestCase):
         speed = 2246.1
         self.assertClose(speed, norm(flight.velocity), error=0.5)
         position = self.vessel.position(ref)
-        direction = vector(cross(normalize(position), (0,1,0)))
+        direction = vector(cross(normalize(position), (0, 1, 0)))
         velocity = direction * speed
         self.assertClose(velocity, flight.velocity, error=2)
         self.assertClose(speed, flight.speed, error=0.5)
@@ -166,7 +167,7 @@ class TestFlight(krpctest.TestCase):
         flight = self.vessel.flight()
         longitude = flight.longitude
         time.sleep(1)
-        for i in range(5):
+        for _ in range(5):
             self.assertClose(0, flight.latitude, 0.001)
             self.assertLess(longitude, flight.longitude)
             longitude = flight.longitude
@@ -178,7 +179,7 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
     def setUpClass(cls):
         krpctest.new_save()
         krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(name='TestFlightVerticalSpeed')
+        cls.conn = krpctest.connect(cls)
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.remove_other_vessels()
 
@@ -187,7 +188,8 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
         cls.conn.close()
 
     def check_speed(self, flight, ref):
-        up = normalize(vector(self.vessel.position(ref)) - vector(self.vessel.orbit.body.position(ref)))
+        up = normalize(vector(self.vessel.position(ref))
+                       - vector(self.vessel.orbit.body.position(ref)))
         v = self.vessel.velocity(ref)
 
         speed = norm(v)
@@ -237,7 +239,7 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
         krpctest.new_save()
         krpctest.remove_other_vessels()
         krpctest.launch_vessel_from_vab('Basic')
-        cls.conn = krpctest.connect(name='TestFlightAtLaunchpad')
+        cls.conn = krpctest.connect(cls)
         cls.vessel = cls.conn.space_center.active_vessel
         cls.conn.testing_tools.remove_other_vessels()
         cls.far = cls.conn.space_center.far_available
@@ -290,5 +292,5 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
     #        drag_coefficient = mass_drag_products / total_mass
     #        self.assertClose(drag_coefficient, self.vessel.flight().drag_coefficient)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

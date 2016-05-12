@@ -148,7 +148,8 @@ test_suite(
         '//client/cpp:test',
         '//client/java:test',
         '//client/lua:test',
-        '//client/python:test'
+        '//client/python:test',
+        '//tools/krpctest:test'
     ]
 )
 

@@ -121,7 +121,7 @@ py_script = rule(
 def _test_impl(ctx, pyexe='python2'):
     sub_commands = ['virtualenv env --quiet --no-site-packages --python=%s' % pyexe]
     for dep in ctx.files.deps:
-        sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.path)
+        sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
     sub_commands.extend([
         'unzip -o %s' % (ctx.file.src.short_path), #TODO: install the package then run the tests??
         '(cd %s ; ../env/bin/python setup.py test)' % ctx.attr.pkg

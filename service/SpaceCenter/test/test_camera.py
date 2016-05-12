@@ -1,8 +1,6 @@
 import unittest
-import krpctest
-import krpc
 import time
-import math
+import krpctest
 
 class TestCamera(krpctest.TestCase):
 
@@ -12,7 +10,7 @@ class TestCamera(krpctest.TestCase):
         krpctest.launch_vessel_from_vab('Basic')
         krpctest.remove_other_vessels()
         krpctest.set_circular_orbit('Kerbin', 1000000)
-        cls.conn = krpctest.connect(name='TestCamera')
+        cls.conn = krpctest.connect(cls)
         cls.camera = cls.conn.space_center.camera
         cls.mode = cls.conn.space_center.CameraMode
 
@@ -97,15 +95,15 @@ class TestCameraFlight(krpctest.TestCase, CameraTestBase):
         krpctest.launch_vessel_from_vab('Basic')
         krpctest.remove_other_vessels()
         krpctest.set_circular_orbit('Kerbin', 1000000)
-        cls.conn = krpctest.connect(name='TestCameraFlight')
+        cls.conn = krpctest.connect(cls)
         cls.camera = cls.conn.space_center.camera
         cls.mode = cls.conn.space_center.CameraMode
         if cls.camera.mode != cls.mode.automatic:
             cls.camera.mode = cls.mode.automatic
         time.sleep(5)
-        cls.pitches = range(-90,90,5)
-        cls.headings = range(0,360,5)
-        cls.distances = (1,5,10,20)
+        cls.pitches = range(-90, 90, 5)
+        cls.headings = range(0, 360, 5)
+        cls.distances = (1, 5, 10, 20)
 
     @classmethod
     def tearDownClass(cls):
@@ -116,14 +114,14 @@ class TestCameraIVA(krpctest.TestCase, CameraTestBase):
     @classmethod
     def setUpClass(cls):
         krpctest.new_save()
-        cls.conn = krpctest.connect(name='TestCameraMap')
+        cls.conn = krpctest.connect(cls)
         cls.camera = cls.conn.space_center.camera
         cls.mode = cls.conn.space_center.CameraMode
         if cls.camera.mode != cls.mode.iva:
             cls.camera.mode = cls.mode.iva
         time.sleep(5)
-        cls.pitches = range(-30,30,5)
-        cls.headings = range(-60,60,5)
+        cls.pitches = range(-30, 30, 5)
+        cls.headings = range(-60, 60, 5)
 
     @classmethod
     def tearDownClass(cls):
@@ -137,19 +135,19 @@ class TestCameraMap(krpctest.TestCase, CameraTestBase):
         krpctest.launch_vessel_from_vab('Basic')
         krpctest.remove_other_vessels()
         krpctest.set_circular_orbit('Kerbin', 1000000)
-        cls.conn = krpctest.connect(name='TestCameraMap')
+        cls.conn = krpctest.connect(cls)
         cls.camera = cls.conn.space_center.camera
         cls.mode = cls.conn.space_center.CameraMode
         if cls.camera.mode != cls.mode.map:
             cls.camera.mode = cls.mode.map
         time.sleep(5)
-        cls.pitches = range(-90,90,5)
-        cls.headings = range(0,360,5)
-        cls.distances = (100,1000,10000)
+        cls.pitches = range(-90, 90, 5)
+        cls.headings = range(0, 360, 5)
+        cls.distances = (100, 1000, 10000)
 
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

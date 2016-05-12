@@ -1,14 +1,12 @@
 import unittest
 import krpctest
-import krpc
-import time
 
 class TestRemoteTech(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         krpctest.new_save()
-        cls.conn = krpctest.connect(name='TestRemoteTech')
+        cls.conn = krpctest.connect(cls)
         cls.rt = cls.conn.remote_tech
 
     @classmethod

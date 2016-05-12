@@ -1,7 +1,6 @@
 import unittest
-import krpctest
-import krpc
 import time
+import krpctest
 
 class TestPartsControlSurface(krpctest.TestCase):
 
@@ -11,82 +10,77 @@ class TestPartsControlSurface(krpctest.TestCase):
             krpctest.new_save()
             krpctest.launch_vessel_from_vab('PartsControlSurface')
             krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(name='TestPartsControlSurface')
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.parts = cls.vessel.parts
+        cls.conn = krpctest.connect(cls)
+        parts = cls.conn.space_center.active_vessel.parts
+        cls.ctrlsrf = parts.with_title('FAT-455 Aeroplane Control Surface')[0].control_surface
+        cls.winglets = [x.control_surface for x in parts.with_title('Delta-Deluxe Winglet')]
+        cls.winglet = cls.winglets[0]
 
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
 
     def test_get_pyr_enabled(self):
-        ctrlsrf = next(iter(filter(lambda e: e.part.title == 'FAT-455 Aeroplane Control Surface', self.parts.control_surfaces)))
-        self.assertFalse(ctrlsrf.pitch_enabled)
-        self.assertTrue(ctrlsrf.yaw_enabled)
-        self.assertFalse(ctrlsrf.roll_enabled)
-        wings = filter(lambda e: e.part.title == 'Delta-Deluxe Winglet', self.parts.control_surfaces)
-        for wing in wings:
-            self.assertTrue(wing.pitch_enabled)
-            self.assertFalse(wing.yaw_enabled)
-            self.assertTrue(wing.roll_enabled)
+        self.assertFalse(self.ctrlsrf.pitch_enabled)
+        self.assertTrue(self.ctrlsrf.yaw_enabled)
+        self.assertFalse(self.ctrlsrf.roll_enabled)
+        for winglet in self.winglets:
+            self.assertTrue(winglet.pitch_enabled)
+            self.assertFalse(winglet.yaw_enabled)
+            self.assertTrue(winglet.roll_enabled)
 
     def test_toggle_pyr_enabled(self):
-        ctrlsrf = next(iter(filter(lambda e: e.part.title == 'FAT-455 Aeroplane Control Surface', self.parts.control_surfaces)))
-        self.assertFalse(ctrlsrf.pitch_enabled)
-        self.assertTrue(ctrlsrf.yaw_enabled)
-        self.assertFalse(ctrlsrf.roll_enabled)
-        ctrlsrf.pitch_enabled = True
+        self.assertFalse(self.ctrlsrf.pitch_enabled)
+        self.assertTrue(self.ctrlsrf.yaw_enabled)
+        self.assertFalse(self.ctrlsrf.roll_enabled)
+        self.ctrlsrf.pitch_enabled = True
         time.sleep(0.1)
-        self.assertTrue(ctrlsrf.pitch_enabled)
-        self.assertTrue(ctrlsrf.yaw_enabled)
-        self.assertFalse(ctrlsrf.roll_enabled)
-        ctrlsrf.yaw_enabled = False
+        self.assertTrue(self.ctrlsrf.pitch_enabled)
+        self.assertTrue(self.ctrlsrf.yaw_enabled)
+        self.assertFalse(self.ctrlsrf.roll_enabled)
+        self.ctrlsrf.yaw_enabled = False
         time.sleep(0.1)
-        self.assertTrue(ctrlsrf.pitch_enabled)
-        self.assertFalse(ctrlsrf.yaw_enabled)
-        self.assertFalse(ctrlsrf.roll_enabled)
-        ctrlsrf.roll_enabled = True
+        self.assertTrue(self.ctrlsrf.pitch_enabled)
+        self.assertFalse(self.ctrlsrf.yaw_enabled)
+        self.assertFalse(self.ctrlsrf.roll_enabled)
+        self.ctrlsrf.roll_enabled = True
         time.sleep(0.1)
-        self.assertTrue(ctrlsrf.pitch_enabled)
-        self.assertFalse(ctrlsrf.yaw_enabled)
-        self.assertTrue(ctrlsrf.roll_enabled)
-        ctrlsrf.pitch_enabled = False
-        ctrlsrf.yaw_enabled = True
-        ctrlsrf.roll_enabled = False
+        self.assertTrue(self.ctrlsrf.pitch_enabled)
+        self.assertFalse(self.ctrlsrf.yaw_enabled)
+        self.assertTrue(self.ctrlsrf.roll_enabled)
+        self.ctrlsrf.pitch_enabled = False
+        self.ctrlsrf.yaw_enabled = True
+        self.ctrlsrf.roll_enabled = False
         time.sleep(0.1)
-        self.assertFalse(ctrlsrf.pitch_enabled)
-        self.assertTrue(ctrlsrf.yaw_enabled)
-        self.assertFalse(ctrlsrf.roll_enabled)
+        self.assertFalse(self.ctrlsrf.pitch_enabled)
+        self.assertTrue(self.ctrlsrf.yaw_enabled)
+        self.assertFalse(self.ctrlsrf.roll_enabled)
 
     def test_inverted(self):
-        ctrlsrf = next(iter(filter(lambda e: e.part.title == 'FAT-455 Aeroplane Control Surface', self.parts.control_surfaces)))
-        self.assertFalse(ctrlsrf.inverted)
-        ctrlsrf.inverted = True
+        self.assertFalse(self.ctrlsrf.inverted)
+        self.ctrlsrf.inverted = True
         time.sleep(0.1)
-        self.assertTrue(ctrlsrf.inverted)
-        ctrlsrf.inverted = False
+        self.assertTrue(self.ctrlsrf.inverted)
+        self.ctrlsrf.inverted = False
         time.sleep(0.1)
-        self.assertFalse(ctrlsrf.inverted)
+        self.assertFalse(self.ctrlsrf.inverted)
 
     def test_deployed(self):
-        ctrlsrf = next(iter(filter(lambda e: e.part.title == 'FAT-455 Aeroplane Control Surface', self.parts.control_surfaces)))
-        self.assertFalse(ctrlsrf.deployed)
-        ctrlsrf.deployed = True
+        self.assertFalse(self.ctrlsrf.deployed)
+        self.ctrlsrf.deployed = True
         time.sleep(0.1)
-        self.assertTrue(ctrlsrf.deployed)
-        ctrlsrf.deployed = False
+        self.assertTrue(self.ctrlsrf.deployed)
+        self.ctrlsrf.deployed = False
         time.sleep(0.1)
-        self.assertFalse(ctrlsrf.deployed)
+        self.assertFalse(self.ctrlsrf.deployed)
 
     def test_surface_area(self):
-        ctrlsrf = next(iter(filter(lambda e: e.part.title == 'FAT-455 Aeroplane Control Surface', self.parts.control_surfaces)))
-        self.assertClose(1, ctrlsrf.surface_area)
-        ctrlsrf = next(iter(filter(lambda e: e.part.title == 'Delta-Deluxe Winglet', self.parts.control_surfaces)))
-        self.assertClose(0.2, ctrlsrf.surface_area)
+        self.assertClose(1, self.ctrlsrf.surface_area)
+        self.assertClose(0.2, self.winglet.surface_area)
 
     def test_available_torque(self):
-        ctrlsrf = next(iter(filter(lambda e: e.part.title == 'FAT-455 Aeroplane Control Surface', self.parts.control_surfaces)))
-        self.assertClose((0,0,0), ctrlsrf.available_torque)
+        self.assertClose((0, 0, 0), self.ctrlsrf.available_torque)
+        self.assertClose((0, 0, 0), self.winglet.available_torque)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
