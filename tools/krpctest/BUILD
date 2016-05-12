@@ -1,4 +1,4 @@
-load('/tools/build/python', 'py_sdist')
+load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test')
 load('/config', 'version')
 
 genrule(
@@ -18,4 +18,34 @@ py_sdist(
     path_map = {
         'tools/krpctest/': ''
     }
+)
+
+test_suite(
+    name = 'test',
+    tests = [':test2', ':test3']
+)
+
+py_test(
+    name = 'test2',
+    src = ':krpctest',
+    pkg = 'krpctest-'+version,
+    deps = [
+        '//client/python',
+        '@python_six//file',
+        '@python_protobuf//file',
+        '@python_enum34//file'
+    ],
+    size = 'small'
+)
+
+py3_test(
+    name = 'test3',
+    src = ':krpctest',
+    pkg = 'krpctest-'+version,
+    deps = [
+        '//client/python',
+        '@python_six//file',
+        '@python_protobuf//file'
+    ],
+    size = 'small'
 )

@@ -1,7 +1,7 @@
 import unittest
-import krpctest
+from krpctest import TestCase
 
-class TestTestingTools(krpctest.TestCase):
+class TestTestCase(TestCase):
 
     def checkFails(self, f, *args):
         failed = False
@@ -65,5 +65,5 @@ class TestTestingTools(krpctest.TestCase):
         self.checkFails(self.assertCloseDegrees, 0, 358, 1)
         self.checkFails(self.assertCloseDegrees, 358, 0, 1)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
