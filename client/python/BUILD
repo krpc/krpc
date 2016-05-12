@@ -66,7 +66,6 @@ py3_test(
     name = 'py3test',
     src = ':python',
     pkg = 'krpc-'+version,
-    #use3 = True,
     deps = ['@python_six//file', '@python_protobuf//file'],
     tags = ['requires-network'],
     size = 'small'
