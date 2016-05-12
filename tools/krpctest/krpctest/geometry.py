@@ -102,14 +102,9 @@ class Vector(object):
 
 def compute_position(obj, ref):
     """ Compute the objects position in the given reference frame (in Mm) from it's orbital elements """
-    #TODO: uncomment lines
     orbit = obj.orbit
-
     major_axis = orbit.semi_major_axis / 1000000
     minor_axis = orbit.semi_minor_axis / 1000000
-
-    #eccentricity = orbit.eccentricity
-    #mean_anomaly = orbit.mean_anomaly
     eccentric_anomaly = orbit.eccentric_anomaly
 
     x = major_axis * math.cos(eccentric_anomaly)
@@ -128,11 +123,7 @@ def compute_position(obj, ref):
     rotation = quaternion_axis_angle((0, 1, 0), -angle)
     pos = quaternion_vector_mult(rotation, pos)
 
-    #reference_normal = orbit.reference_plane_normal(ref)
-    #self.assertClose((0,1,0), reference_normal)
     reference_direction = orbit.reference_plane_direction(ref)
     reference_angle = math.acos(dot((1, 0, 0), reference_direction))
     reference_rotation = quaternion_axis_angle((0, 1, 0), reference_angle)
-    #x_rotated = quaternion_vector_mult(reference_rotation, (1, 0, 0))
-    #self.assertClose(x_rotated, reference_direction)
     return quaternion_vector_mult(reference_rotation, pos)
