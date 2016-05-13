@@ -1,4 +1,4 @@
-load('/tools/build/python', 'py_sdist', 'py_script')
+load('/tools/build/python', 'py_sdist', 'py_script', 'py_lint_test')
 load('/config', 'version')
 
 license_text = """This license (GPL v3) applies to all parts of krpc.clientgen except for the following:
@@ -95,4 +95,18 @@ py_script(
     pkg = ':krpctools',
     deps = deps,
     visibility = ['//visibility:public']
+)
+
+test_suite(
+    name = 'test',
+    tests = [':lint']
+)
+
+py_lint_test(
+    name = 'lint',
+    src = ':krpctools',
+    pkg = 'krpctools',
+    deps = deps,
+    rcfile = 'pylint.rc',
+    size = 'small'
 )

@@ -1,25 +1,25 @@
 import re
 
-_camel_case_regex = re.compile(r'([a-z]+|[A-Z][^A-Z]*)')
+_CAMEL_CASE_REGEX = re.compile(r'([a-z]+|[A-Z][^A-Z]*)')
 
-def lower_camel_case(camel_case):
+def lower_camel_case(string):
     """ Convert from CamelCase to lowerCamelCase """
-    parts = re.findall(_camel_case_regex, camel_case)
+    parts = re.findall(_CAMEL_CASE_REGEX, string)
     parts[0] = parts[0].lower()
     return ''.join(parts)
 
-def upper_camel_case(lower_camel_case):
+def upper_camel_case(string):
     """ Convert from lowerCamelCase to CamelCase """
-    return lower_camel_case[0].upper() + lower_camel_case[1:]
+    return string[0].upper() + string[1:]
 
-def indent(s, width=3):
+def indent(string, width=3):
     """ Indent the lines in the given string with width spaces """
-    lines = s.split('\n')
-    for i in range(len(lines)):
-        if len(lines[i].strip()) > 0:
-            lines[i] = (' '*width) + lines[i]
+    lines = string.split('\n')
+    for i, line in enumerate(lines):
+        if len(line.strip()) > 0:
+            lines[i] = (' '*width) + line
     return '\n'.join(lines).strip('\n')
 
-def single_line(s):
+def single_line(string):
     """ Convert the given string into a single line """
-    return ' '.join(line.strip() for line in s.split('\n'))
+    return ' '.join(line.strip() for line in string.split('\n'))

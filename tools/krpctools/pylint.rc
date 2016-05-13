@@ -1,0 +1,19 @@
+[BASIC]
+good-names=i,j,k,ex,Run,_,u,v,q,r,g,x,y,z,w
+variable-rgx=[a-z_][a-z0-9_]{1,30}$
+
+[FORMAT]
+max-line-length=116
+
+[DESIGN]
+max-args=10
+max-locals=20
+max-attributes=10
+max-returns=25
+max-branches=25
+
+[MESSAGES CONTROL]
+disable=no-member,missing-docstring,similarities,locally-disabled,locally-enabled,fixme
+
+[REPORTS]
+reports=no

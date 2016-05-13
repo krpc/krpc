@@ -1,4 +1,4 @@
-load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test')
+load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test', 'py_lint_test')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
 
@@ -34,7 +34,7 @@ py_sdist(
 
 test_suite(
     name = 'test',
-    tests = [':test2', ':test3']
+    tests = [':test2', ':test3', ':lint']
 )
 
 client_test(
@@ -53,11 +53,13 @@ client_test(
     size = 'small'
 )
 
+deps = ['@python_six//file', '@python_protobuf//file']
+
 py_test(
     name = 'py2test',
     src = ':python',
     pkg = 'krpc-'+version,
-    deps = ['@python_six//file', '@python_protobuf//file', '@python_enum34//file'],
+    deps = deps + ['@python_enum34//file'],
     tags = ['requires-network'],
     size = 'small'
 )
@@ -66,7 +68,16 @@ py3_test(
     name = 'py3test',
     src = ':python',
     pkg = 'krpc-'+version,
-    deps = ['@python_six//file', '@python_protobuf//file'],
+    deps = deps,
     tags = ['requires-network'],
+    size = 'small'
+)
+
+py_lint_test(
+    name = 'lint',
+    src = ':python',
+    pkg = 'krpc',
+    deps = deps + ['@python_enum34//file'],
+    rcfile = 'pylint.rc',
     size = 'small'
 )

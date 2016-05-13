@@ -10,7 +10,8 @@ from ..version import __version__
 
 def main():
     prog = 'krpc-servicedefs'
-    parser = argparse.ArgumentParser(prog=prog, description='Generate a service definition file for a kRPC service.')
+    parser = argparse.ArgumentParser(prog=prog,
+                                     description='Generate a service definition file for a kRPC service.')
     parser.add_argument('-v', '--version', action='version', version='%s version %s' % (prog, __version__))
     parser.add_argument('ksp', help='Path to Kerbal Space Program directory')
     parser.add_argument('service', help='Name of service')
@@ -22,31 +23,31 @@ def main():
 
     try:
         defs = servicedefs(args.ksp, args.service, args.assemblies)
-    except RuntimeError, e:
-        sys.stderr.write("Error: %s\n" % str(e))
+    except RuntimeError, ex:
+        sys.stderr.write("Error: %s\n" % str(ex))
         return 1
 
     if args.output:
-        with open(args.output, 'w') as f:
-            f.write(defs)
+        with open(args.output, 'w') as fp:
+            fp.write(defs)
     else:
-        print(defs)
+        print defs
 
 def servicedefs(ksp, service, assemblies):
     """ Generate service definitions from assembly DLLs using ServiceDefinitions.exe """
 
     if not os.path.exists(ksp):
-        raise RuntimeError ('Kerbal Space Program directory does not exist.')
+        raise RuntimeError('Kerbal Space Program directory does not exist.')
 
     bindir = tempfile.mkdtemp(prefix='krpc-servicedefs-') #TODO: delete when done
     tmpout = bindir+'/out.json'
 
     # Copy binaries to the tmp dir
-    binpath = resource_filename(Requirement.parse('krpctools'),'krpctools/bin')
+    binpath = resource_filename(Requirement.parse('krpctools'), 'krpctools/bin')
     files = os.listdir(binpath)
     for filename in files:
         filename = os.path.join(binpath, filename)
-        if (os.path.isfile(filename)):
+        if os.path.isfile(filename):
             shutil.copy(filename, bindir)
 
     # Copy KSP DLLs to the tmp dir
@@ -63,11 +64,11 @@ def servicedefs(ksp, service, assemblies):
         subprocess.check_output(
             [bindir+'/ServiceDefinitions.exe', '--output=%s' % tmpout, service] + assemblies,
             stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError, e:
-        raise RuntimeError (e.output)
+    except subprocess.CalledProcessError, ex:
+        raise RuntimeError(ex.output)
 
-    with open(tmpout, 'r') as f:
-        return f.read()
+    with open(tmpout, 'r') as fp:
+        return fp.read()
 
 if __name__ == '__main__':
     main()

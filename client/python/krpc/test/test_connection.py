@@ -4,13 +4,10 @@ import socket
 import time
 from krpc.connection import Connection
 
-port = None
-
 def server_thread(started):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind(('', 0))
-    global port
-    port = sock.getsockname()[1]
+    server_thread.port = sock.getsockname()[1]
     sock.listen(1)
     time.sleep(1)
     started.set()
@@ -18,7 +15,7 @@ def server_thread(started):
     while True:
 
         # Wait for a connection
-        connection, client_address = sock.accept()
+        connection, _ = sock.accept()
 
         # Client connected
         disconnect = False
@@ -37,6 +34,8 @@ def server_thread(started):
             connection.close()
             sock.settimeout(None)
 
+server_thread.port = None
+
 class TestConnection(unittest.TestCase):
 
     @classmethod
@@ -54,8 +53,9 @@ class TestConnection(unittest.TestCase):
         while conn._socket.recv(1) != b'':
             pass
 
-    def connect(self):
-        conn = Connection('localhost', port)
+    @staticmethod
+    def connect():
+        conn = Connection('localhost', server_thread.port)
         conn.connect()
         return conn
 

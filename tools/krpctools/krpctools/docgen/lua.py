@@ -1,5 +1,6 @@
 from .domain import Domain
-from .nodes import *
+from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
+from .nodes import Enumeration, EnumerationValue
 from krpc.utils import snake_case
 from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
@@ -66,7 +67,8 @@ class LuaDomain(Domain):
         elif isinstance(typ, ListType):
             return 'List of %s' % self.type_description(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'Map from %s to %s' % (self.type_description(typ.key_type), self.type_description(typ.value_type))
+            return 'Map from %s to %s' % (self.type_description(typ.key_type),
+                                          self.type_description(typ.value_type))
         elif isinstance(typ, SetType):
             return 'Set of %s' % self.type_description(typ.value_type)
         elif isinstance(typ, TupleType):
@@ -76,16 +78,15 @@ class LuaDomain(Domain):
 
     def ref(self, obj):
         name = obj.fullname
-        if isinstance(obj, Procedure) or isinstance(obj, Property) or \
-           isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod) or isinstance(obj, ClassProperty) or \
-           isinstance(obj, EnumerationValue):
+        if any(isinstance(obj, cls) for cls in
+               (Procedure, Property, ClassMethod, ClassStaticMethod, ClassProperty, EnumerationValue)):
             name = name.split('.')
             name[-1] = snake_case(name[-1])
             name = '.'.join(name)
         return self.shorten_ref(name)
 
     # FIXME: reference shortening does not work with sphinx-lua
-    def shorten_ref(self, name):
+    def shorten_ref(self, name, obj=None):
         return name
 
     def see(self, obj):

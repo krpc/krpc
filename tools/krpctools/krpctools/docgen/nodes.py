@@ -1,15 +1,14 @@
 from collections import OrderedDict, defaultdict
-from .docparser import DocumentationParser
 from krpc.attributes import Attributes
 from krpc.types import Types
 from krpc.decoder import Decoder
-
-types = Types()
 
 class Appendable(object):
 
     def __init__(self):
         self._appended = []
+
+    types = Types()
 
     def append(self, value):
         self._appended.append(value)
@@ -27,10 +26,10 @@ class Service(Appendable):
         self.cref = 'T:%s' % name
 
         members = []
-        cprocedures = defaultdict(lambda: dict())
-        properties = defaultdict(lambda: dict())
+        cprocedures = defaultdict(dict)
+        properties = defaultdict(dict)
 
-        for pname,info in procedures.iteritems():
+        for pname, info in procedures.iteritems():
 
             if Attributes.is_a_procedure(info['attributes']):
                 members.append(Procedure(name, pname, **info))
@@ -46,11 +45,13 @@ class Service(Appendable):
                 cname = Attributes.get_class_name(info['attributes'])
                 cprocedures[cname][pname] = info
 
-        for propname,prop in properties.iteritems():
+        for propname, prop in properties.iteritems():
             members.append(Property(name, propname, **prop))
 
-        self.classes = {cname: Class(name, cname, cprocedures[cname], sort=sort, **cinfo) for (cname,cinfo) in classes.iteritems()}
-        self.enumerations = {ename: Enumeration(name, ename, sort=sort, **einfo) for (ename,einfo) in enumerations.iteritems()}
+        self.classes = {cname: Class(name, cname, cprocedures[cname], sort=sort, **cinfo)
+                        for (cname, cinfo) in classes.iteritems()}
+        self.enumerations = {ename: Enumeration(name, ename, sort=sort, **einfo)
+                             for (ename, einfo) in enumerations.iteritems()}
 
         self.members = OrderedDict((member.name, member) for member in sorted(members, key=sort))
 
@@ -64,9 +65,9 @@ class Class(Appendable):
         self.cref = 'T:%s.%s' % (service_name, name)
 
         members = []
-        properties = defaultdict(lambda: dict())
+        properties = defaultdict(dict)
 
-        for pname,pinfo in procedures.iteritems():
+        for pname, pinfo in procedures.iteritems():
 
             #assert(Attributes.is_a_class_member(pinfo['attributes']))
             #assert(Attributes.get_class_name(pinfo['attributes']) == name)
@@ -85,15 +86,16 @@ class Class(Appendable):
                 else:
                     properties[propname]['setter'] = proc
 
-        for propname,prop in properties.iteritems():
+        for propname, prop in properties.iteritems():
             members.append(ClassProperty(service_name, name, propname, **prop))
 
         self.members = OrderedDict((member.name, member) for member in sorted(members, key=sort))
 
 class Parameter(Appendable):
-    def __init__(self, name, position, type, attributes, documentation, default_argument=None):
+    def __init__(self, name, position, type, attributes, documentation, default_argument=None): #pylint: disable=redefined-builtin
+        super(Parameter, self).__init__()
         self.name = name
-        self.type = types.get_parameter_type(position, type, attributes)
+        self.type = self.types.get_parameter_type(position, type, attributes)
         self.has_default_argument = default_argument is not None
         if default_argument is not None:
             default_argument = Decoder.decode(str(bytearray(default_argument)), self.type)
@@ -109,10 +111,11 @@ class Procedure(Appendable):
         self.name = name
         self.fullname = service_name+'.'+name
         if return_type is not None:
-            self.return_type = types.get_return_type(return_type, attributes)
+            self.return_type = self.types.get_return_type(return_type, attributes)
         else:
             self.return_type = None
-        self.parameters = [Parameter(position=i, attributes=attributes, documentation=documentation, **info) for i,info in enumerate(parameters)]
+        self.parameters = [Parameter(position=i, attributes=attributes, documentation=documentation, **info)
+                           for i, info in enumerate(parameters)]
         self.attributes = attributes
         self.documentation = documentation
         self.cref = 'M:%s.%s' % (service_name, name)
@@ -146,10 +149,11 @@ class ClassMethod(Appendable):
         self.name = name
         self.fullname = service_name+'.'+class_name+'.'+name
         if return_type is not None:
-            self.return_type = types.get_return_type(return_type, attributes)
+            self.return_type = self.types.get_return_type(return_type, attributes)
         else:
             self.return_type = None
-        self.parameters = [Parameter(position=i, attributes=attributes, documentation=documentation, **info) for i,info in enumerate(parameters)]
+        self.parameters = [Parameter(position=i, attributes=attributes, documentation=documentation, **info)
+                           for i, info in enumerate(parameters)]
         self.attributes = attributes
         self.documentation = documentation
         self.cref = 'M:%s.%s.%s' % (service_name, class_name, name)
@@ -165,10 +169,11 @@ class ClassStaticMethod(Appendable):
         self.name = name
         self.fullname = service_name+'.'+class_name+'.'+name
         if return_type is not None:
-            self.return_type = types.get_return_type(return_type, attributes)
+            self.return_type = self.types.get_return_type(return_type, attributes)
         else:
             self.return_type = None
-        self.parameters = [Parameter(position=i, attributes=attributes, documentation=documentation, **info) for i,info in enumerate(parameters)]
+        self.parameters = [Parameter(position=i, attributes=attributes, documentation=documentation, **info)
+                           for i, info in enumerate(parameters)]
         self.attributes = attributes
         self.documentation = documentation
         self.cref = 'M:%s.%s.%s' % (service_name, class_name, name)

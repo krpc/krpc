@@ -272,3 +272,27 @@ http_file(
     url = 'https://pypi.python.org/packages/source/s/snowballstemmer/snowballstemmer-1.2.1.tar.gz',
     sha256 = '919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128'
 )
+
+http_file(
+    name = 'python_pylint',
+    url = 'https://pypi.python.org/packages/source/p/pylint/pylint-1.5.5.tar.gz',
+    sha256 = '15e949bbeda6c0a66799f34f720ab15e38d0a128e752cff5e74168527e5399c7'
+)
+
+http_file(
+    name = 'python_astroid',
+    url = 'https://pypi.python.org/packages/source/a/astroid/astroid-1.4.5.tar.gz',
+    sha256 = '729b986aa59fb77af533707c385021b04e60d136b5f21cc766618556d0816cf6'
+)
+
+http_file(
+    name = 'python_wrapt',
+    url = 'https://pypi.python.org/packages/source/w/wrapt/wrapt-1.10.8.tar.gz',
+    sha256 = '4ea17e814e39883c6cf1bb9b0835d316b2f69f0f0882ffe7dad1ede66ba82c73'
+)
+
+http_file(
+    name = 'python_lazy_object_proxy',
+    url = 'https://pypi.python.org/packages/source/l/lazy-object-proxy/lazy-object-proxy-1.2.2.tar.gz',
+    sha256 = 'ddd4cf1c74279c349cb7b9c54a2efa5105854f57de5f2d35829ee93631564268'
+)

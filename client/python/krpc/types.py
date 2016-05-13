@@ -1,14 +1,13 @@
 import re
 import collections
-from enum import Enum
-import krpc.schema
-from krpc.attributes import Attributes
 import importlib
+from enum import Enum
+from krpc.attributes import Attributes
 
 def _parse_type_string(typ):
     """ Given a string, extract a substring up to the first comma. Parses parentheses.
         Multiple calls can be used to separate a string by commas. """
-    if typ == None:
+    if typ is None:
         raise ValueError
     result = ''
     level = 0
@@ -43,22 +42,21 @@ PROTOBUF_TO_PYTHON_VALUE_TYPE = {
 }
 PROTOBUF_TO_MESSAGE_TYPE = {}
 
-_packages_loaded = set()
-_package_search_path = 'krpc.schema'
-
 def _load_types(package):
     """ Load all message and enum types from the given package,
         and populate PROTOBUF_TO_MESSAGE_TYPE """
-    if package in _packages_loaded:
+    if package in _load_types.loaded:
         return
-    _packages_loaded.add(package)
+    _load_types.loaded.add(package)
     try:
-        module = importlib.import_module(_package_search_path + '.' + package)
+        module = importlib.import_module('krpc.schema.' + package)
         if hasattr(module, 'DESCRIPTOR'):
-           for name in module.DESCRIPTOR.message_types_by_name.keys():
-               PROTOBUF_TO_MESSAGE_TYPE[package+'.'+name] = getattr(module, name)
+            for name in module.DESCRIPTOR.message_types_by_name.keys():
+                PROTOBUF_TO_MESSAGE_TYPE[package+'.'+name] = getattr(module, name)
     except (KeyError, ImportError, AttributeError, ValueError):
         pass
+
+_load_types.loaded = set()
 
 class Types(object):
     """ A type store. Used to obtain type objects from protocol buffer type strings,
@@ -77,6 +75,7 @@ class Types(object):
         # TODO: add enumeration types
         # Update kRPC server to attach type attributes to parameters/return types etc. that are of type KRPCEnum
         # Will allow proper type checking of enum values passed to procedures
+        #pylint: disable=redefined-variable-type
         if type_string in PROTOBUF_VALUE_TYPES:
             typ = ValueType(type_string)
         elif type_string.startswith('Class(') or type_string == 'Class':
@@ -95,12 +94,13 @@ class Types(object):
             # A message type
             if not re.match(r'^[A-Za-z0-9_\.]+$', type_string):
                 raise ValueError('\'%s\' is not a valid type string' % type_string)
-            package,_,_ = type_string.rpartition('.')
+            package, _, _ = type_string.rpartition('.')
             _load_types(package)
             if type_string in PROTOBUF_TO_MESSAGE_TYPE:
                 typ = MessageType(type_string)
             else:
                 raise ValueError('\'%s\' is not a valid type string' % type_string)
+        #pylint: enable=redefined-variable-type
 
         self._types[type_string] = typ
         return typ
@@ -130,7 +130,7 @@ class Types(object):
     def coerce_to(self, value, typ):
         """ Coerce a value to the specified type (specified by a type object).
             Raises ValueError if the coercion is not possible. """
-        if type(value) == typ.python_type:
+        if isinstance(value, typ.python_type):
             return value
         # A NoneType can be coerced to a ClassType
         if isinstance(typ, ClassType) and value is None:
@@ -150,14 +150,17 @@ class Types(object):
             if isinstance(value, collections.Iterable) and isinstance(typ, TupleType):
                 if len(value) != len(typ.value_types):
                     raise ValueError
-                return typ.python_type([self.coerce_to(x, typ.value_types[i]) for i,x in enumerate(value)])
+                return typ.python_type([self.coerce_to(x, typ.value_types[i]) for i, x in enumerate(value)])
         except ValueError:
-            raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) + ' to type ' + str(typ))
+            raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) +
+                             ' to type ' + str(typ))
         # Numeric types
         # See http://docs.python.org/2/reference/datamodel.html#coercion-rules
         numeric_types = (float, int, long)
-        if type(value) not in numeric_types or typ.python_type not in numeric_types:
-            raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) + ' to type ' + str(typ))
+        if isinstance(value, bool) or not any(isinstance(value, t) for t in numeric_types) or \
+           typ.python_type not in numeric_types:
+            raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) +
+                             ' to type ' + str(typ))
         if typ.python_type == float:
             return float(value)
         elif typ.python_type == int:
@@ -198,7 +201,7 @@ class MessageType(TypeBase):
     """ A protocol buffer message type """
 
     def __init__(self, type_string):
-        package,_,_ = type_string.rpartition('.')
+        package, _, _ = type_string.rpartition('.')
         _load_types(package)
         if type_string not in PROTOBUF_TO_MESSAGE_TYPE:
             raise ValueError('\'%s\' is not a valid type string for a message type' % type_string)
@@ -232,7 +235,7 @@ class EnumType(TypeBase):
 
     def set_values(self, values):
         """ Set the python type. Creates an Enum class using the given values. """
-        self._python_type = _create_enum_type(self._service_name, self._enum_name, values, self._doc)
+        self._python_type = _create_enum_type(self._enum_name, values, self._doc)
 
 class ListType(TypeBase):
     """ A list collection type, represented by a protobuf message """
@@ -340,22 +343,22 @@ class ClassBase(DynamicType):
 
     def __lt__(self, other):
         if not isinstance(other, ClassBase):
-            raise NotImplemented
+            raise NotImplementedError
         return self._object_id < other._object_id
 
     def __le__(self, other):
         if not isinstance(other, ClassBase):
-            raise NotImplemented
+            raise NotImplementedError
         return self._object_id <= other._object_id
 
     def __gt__(self, other):
         if not isinstance(other, ClassBase):
-            raise NotImplemented
+            raise NotImplementedError
         return self._object_id > other._object_id
 
     def __ge__(self, other):
         if not isinstance(other, ClassBase):
-            raise NotImplemented
+            raise NotImplementedError
         return self._object_id >= other._object_id
 
     def __hash__(self):
@@ -368,7 +371,7 @@ def _create_class_type(service_name, class_name, doc):
     return type(str(class_name), (ClassBase,),
                 {'_service_name': service_name, '_class_name': class_name, '__doc__': doc})
 
-def _create_enum_type(service_name, enum_name, values, doc):
+def _create_enum_type(enum_name, values, doc):
     typ = Enum(str(enum_name), values)
     setattr(typ, '__doc__', doc)
     return typ

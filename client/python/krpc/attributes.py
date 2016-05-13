@@ -1,14 +1,14 @@
 import re
 
-re_property_name = re.compile(r'^Property\.(Get|Set)\((.+)\)$')
-re_service_name_from_class_method = re.compile(r'^Class\.(Static)?Method\(([^,\.]+)\.[^,]+,[^,]+\)$')
-re_service_name_from_class_property = re.compile(r'^Class\.Property.(Get|Set)\(([^,\.]+)\.[^,]+,[^,]+\)$')
-re_class_name_from_class_method = re.compile(r'^Class\.(Static)?Method\([^,\.]+\.([^,\.]+),[^,]+\)$')
-re_class_name_from_class_property = re.compile(r'^Class\.Property.(Get|Set)\([^,\.]+\.([^,]+),[^,]+\)$')
-re_class_method_name = re.compile(r'^Class\.(Static)?Method\([^,]+,([^,]+)\)$')
-re_class_property_name = re.compile(r'^Class\.Property\.(Get|Set)\([^,]+,([^,]+)\)$')
-re_return_type = re.compile(r'^ReturnType\.(.+)$')
-re_parameter_type = re.compile(r'^ParameterType\((\d+)\)\.(.+)$')
+_RE_PROPERTY_NAME = re.compile(r'^Property\.(Get|Set)\((.+)\)$')
+_RE_SERVICE_NAME_FROM_CLASS_METHOD = re.compile(r'^Class\.(Static)?Method\(([^,\.]+)\.[^,]+,[^,]+\)$')
+_RE_SERVICE_NAME_FROM_CLASS_PROPERTY = re.compile(r'^Class\.Property.(Get|Set)\(([^,\.]+)\.[^,]+,[^,]+\)$')
+_RE_CLASS_NAME_FROM_CLASS_METHOD = re.compile(r'^Class\.(Static)?Method\([^,\.]+\.([^,\.]+),[^,]+\)$')
+_RE_CLASS_NAME_FROM_CLASS_PROPERTY = re.compile(r'^Class\.Property.(Get|Set)\([^,\.]+\.([^,]+),[^,]+\)$')
+_RE_CLASS_METHOD_NAME = re.compile(r'^Class\.(Static)?Method\([^,]+,([^,]+)\)$')
+_RE_CLASS_PROPERTY_NAME = re.compile(r'^Class\.Property\.(Get|Set)\([^,]+,([^,]+)\)$')
+_RE_RETURN_TYPE = re.compile(r'^ReturnType\.(.+)$')
+_RE_PARAMETER_TYPE = re.compile(r'^ParameterType\((\d+)\)\.(.+)$')
 
 class Attributes(object):
     """ Methods for extracting information from procedure attributes """
@@ -72,7 +72,7 @@ class Attributes(object):
         """ Return the name of the property handled by a property getter or setter. """
         if cls.is_a_property_accessor(attrs):
             for attr in attrs:
-                match = re_property_name.match(attr)
+                match = _RE_PROPERTY_NAME.match(attr)
                 if match:
                     return match.group(2)
         raise ValueError('Procedure attributes are not a property accessor')
@@ -82,12 +82,12 @@ class Attributes(object):
         """ Return the name of the service that a class method or property accessor is part of. """
         if cls.is_a_class_method(attrs) or cls.is_a_class_static_method(attrs):
             for attr in attrs:
-                match = re_service_name_from_class_method.match(attr)
+                match = _RE_SERVICE_NAME_FROM_CLASS_METHOD.match(attr)
                 if match:
                     return match.group(2)
         if cls.is_a_class_property_accessor(attrs):
             for attr in attrs:
-                match = re_service_name_from_class_property.match(attr)
+                match = _RE_SERVICE_NAME_FROM_CLASS_PROPERTY.match(attr)
                 if match:
                     return match.group(2)
         raise ValueError('Procedure attributes are not a class method or property accessor')
@@ -97,12 +97,12 @@ class Attributes(object):
         """ Return the name of the class that a method or property accessor is part of. """
         if cls.is_a_class_method(attrs) or cls.is_a_class_static_method(attrs):
             for attr in attrs:
-                match = re_class_name_from_class_method.match(attr)
+                match = _RE_CLASS_NAME_FROM_CLASS_METHOD.match(attr)
                 if match:
                     return match.group(2)
         if cls.is_a_class_property_accessor(attrs):
             for attr in attrs:
-                match = re_class_name_from_class_property.match(attr)
+                match = _RE_CLASS_NAME_FROM_CLASS_PROPERTY.match(attr)
                 if match:
                     return match.group(2)
         raise ValueError('Procedure attributes are not a class method or property accessor')
@@ -112,7 +112,7 @@ class Attributes(object):
         """ Return the name of a class method. """
         if cls.is_a_class_method(attrs) or cls.is_a_class_static_method(attrs):
             for attr in attrs:
-                match = re_class_method_name.match(attr)
+                match = _RE_CLASS_METHOD_NAME.match(attr)
                 if match:
                     return match.group(2)
         raise ValueError('Procedure attributes are not a class method')
@@ -122,7 +122,7 @@ class Attributes(object):
         """ Return the name of a class property (for a getter or setter procedure). """
         if cls.is_a_class_property_accessor(attrs):
             for attr in attrs:
-                match = re_class_property_name.match(attr)
+                match = _RE_CLASS_PROPERTY_NAME.match(attr)
                 if match:
                     return match.group(2)
         raise ValueError('Procedure attributes are not a class property accessor')
@@ -132,7 +132,7 @@ class Attributes(object):
         """ Return the attributes for the return type of a procedure. """
         return_type_attrs = []
         for attr in attrs:
-            match = re_return_type.match(attr)
+            match = _RE_RETURN_TYPE.match(attr)
             if match:
                 return_type_attrs.append(match.group(1))
         return return_type_attrs
@@ -142,7 +142,7 @@ class Attributes(object):
         """ Return the attributes for a specific parameter of a procedure. """
         parameter_type_attrs = []
         for attr in attrs:
-            match = re_parameter_type.match(attr)
+            match = _RE_PARAMETER_TYPE.match(attr)
             if match and int(match.group(1)) == pos:
                 parameter_type_attrs.append(match.group(2))
         return parameter_type_attrs

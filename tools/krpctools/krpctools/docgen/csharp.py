@@ -1,5 +1,6 @@
 from .domain import Domain
-from .nodes import *
+from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
+from .nodes import Enumeration, EnumerationValue
 from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CsharpDomain(Domain):
@@ -24,7 +25,7 @@ class CsharpDomain(Domain):
         super(CsharpDomain, self).__init__(macros)
 
     def type(self, typ):
-        if typ == None:
+        if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type]
@@ -37,7 +38,8 @@ class CsharpDomain(Domain):
         elif isinstance(typ, ListType):
             return 'System.Collections.Generic.IList<%s>' % self.type(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'System.Collections.Generic.IDictionary<%s,%s>' % (self.type(typ.key_type), self.type(typ.value_type))
+            return 'System.Collections.Generic.IDictionary<%s,%s>' % (self.type(typ.key_type),
+                                                                      self.type(typ.value_type))
         elif isinstance(typ, SetType):
             return 'System.Collections.Generic.ISet<%s>' % self.type(typ.value_type)
         elif isinstance(typ, TupleType):
@@ -63,5 +65,5 @@ class CsharpDomain(Domain):
         # TODO: This will cause issues if there a a name clash is introduced between services.
         if obj and (isinstance(obj, Procedure) or isinstance(obj, Property)):
             return name
-        _,_,name = name.partition('.')
+        _, _, name = name.partition('.')
         return name

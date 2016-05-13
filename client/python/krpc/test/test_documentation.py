@@ -1,6 +1,4 @@
 import unittest
-import binascii
-import krpc
 from krpc.test.servertestcase import ServerTestCase
 
 class TestDocumentation(ServerTestCase, unittest.TestCase):

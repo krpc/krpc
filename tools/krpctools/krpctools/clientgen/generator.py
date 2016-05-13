@@ -1,15 +1,9 @@
-import argparse
 import codecs
-import os.path
-import json
 import collections
 import jinja2
-import glob
 from krpc.attributes import Attributes
 import krpc.types
 import krpc.decoder
-
-Types = krpc.types.Types()
 
 class Generator(object):
 
@@ -18,10 +12,12 @@ class Generator(object):
         self._service = service
         self._defs = definitions
 
+    types = krpc.types.Types()
+
     def generate_file(self, path):
         content = self.generate()
-        with codecs.open(path, 'w', encoding='utf8') as f:
-            f.write(content)
+        with codecs.open(path, 'w', encoding='utf8') as fp:
+            fp.write(content)
 
     def generate(self):
         context = self.parse_context(self.generate_context())
@@ -38,8 +34,8 @@ class Generator(object):
 
     def generate_context_parameters(self, procedure):
         parameters = []
-        for i,parameter in enumerate(procedure['parameters']):
-            typ = Types.get_parameter_type(i, parameter['type'], procedure['attributes'])
+        for i, parameter in enumerate(procedure['parameters']):
+            typ = self.types.get_parameter_type(i, parameter['type'], procedure['attributes'])
             info = {
                 'name': self.parse_name(parameter['name']),
                 'type': self.parse_parameter_type(typ),
@@ -55,7 +51,7 @@ class Generator(object):
         classes = {}
         enumerations = {}
 
-        for name,cls in self._defs['classes'].items():
+        for name, cls in self._defs['classes'].items():
             classes[name] = {
                 'methods': {},
                 'static_methods': {},
@@ -63,7 +59,7 @@ class Generator(object):
                 'documentation': self.parse_documentation(cls['documentation'])
             }
 
-        for name,enumeration in self._defs['enumerations'].items():
+        for name, enumeration in self._defs['enumerations'].items():
             enumerations[name] = {
                 'values': [{
                     'name': self.parse_name(x['name']),
@@ -73,7 +69,7 @@ class Generator(object):
                 'documentation': self.parse_documentation(enumeration['documentation'])
             }
 
-        for name,procedure in self._defs['procedures'].items():
+        for name, procedure in self._defs['procedures'].items():
 
             if Attributes.is_a_procedure(procedure['attributes']):
                 procedures[self.parse_name(name)] = {
@@ -164,11 +160,11 @@ class Generator(object):
                     'remote_name': name
                 }
 
-        def sort(d):
-            if type(d) == dict:
-                return collections.OrderedDict(sorted([(x,sort(y)) for x,y in d.items()], key=lambda x: x[0]))
+        def sort(objs):
+            if isinstance(objs, dict):
+                return collections.OrderedDict(sorted([(x, sort(y)) for x, y in objs.items()], key=lambda x: x[0]))
             else:
-                return d
+                return objs
 
         return {
             'service_name': self._service,

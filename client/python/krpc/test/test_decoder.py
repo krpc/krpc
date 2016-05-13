@@ -1,15 +1,13 @@
 import unittest
 from krpc.decoder import Decoder
 from krpc.types import Types
-from krpc.platform import hexlify, unhexlify
-import krpc.schema.KRPC
+from krpc.platform import unhexlify
 
 class TestDecoder(unittest.TestCase):
 
     types = Types()
 
     def test_decode_message(self):
-        typ = krpc.schema.KRPC.Request
         message = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         request = Decoder.decode(unhexlify(message), self.types.as_type('KRPC.Request'))
         self.assertEqual('ServiceName', request.service)
@@ -25,12 +23,11 @@ class TestDecoder(unittest.TestCase):
 
     def test_decode_size_and_position(self):
         message = '1c'
-        size,position = Decoder.decode_size_and_position(unhexlify(message))
+        size, position = Decoder.decode_size_and_position(unhexlify(message))
         self.assertEqual(28, size)
         self.assertEqual(1, position)
 
     def test_decode_message_delimited(self):
-        typ = krpc.schema.KRPC.Request
         message = '1c'+'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         request = Decoder.decode_delimited(unhexlify(message), self.types.as_type('KRPC.Request'))
         self.assertEqual('ServiceName', request.service)
@@ -52,7 +49,8 @@ class TestDecoder(unittest.TestCase):
         self.assertIsNone(value)
 
     def test_guid(self):
-        self.assertEqual('6f271b39-00dd-4de4-9732-f0d3a68838df', Decoder.guid(unhexlify('391b276fdd00e44d9732f0d3a68838df')))
+        self.assertEqual('6f271b39-00dd-4de4-9732-f0d3a68838df',
+                         Decoder.guid(unhexlify('391b276fdd00e44d9732f0d3a68838df')))
 
 if __name__ == '__main__':
     unittest.main()

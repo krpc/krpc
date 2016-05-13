@@ -40,7 +40,7 @@ class DocumentationParser(object):
         elif node.tag == 'paramref':
             return self.domain.paramref(node.attrib['name'])
         elif node.tag == 'a':
-            return '`%s <%s>`_' % (node.text.replace('\n',' ').strip(), node.attrib['href'])
+            return '`%s <%s>`_' % (node.text.replace('\n', ' ').strip(), node.attrib['href'])
         elif node.tag == 'c':
             return self.domain.code(node.text)
         elif node.tag == 'math':
