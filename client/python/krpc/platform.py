@@ -6,12 +6,12 @@ POS_INF = 1e10000
 NEG_INF = -POS_INF
 NAN = POS_INF * 0
 
-def bytelength(s):
+def bytelength(string):
     """ Get the number of bytes in a string """
-    if PY2 and type(s) == str:
-        return len(s)
+    if PY2 and isinstance(string, str):
+        return len(string)
     else:
-        return len(s.encode('utf-8'))
+        return len(string.encode('utf-8'))
 
 def hexlify(value):
     if PY2:

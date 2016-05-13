@@ -39,15 +39,16 @@ class Decoder(object):
             return [cls.decode(item, typ.value_type) for item in msg.items]
         elif isinstance(typ, DictionaryType):
             msg = cls._decode_message(data, cls._types.as_type('KRPC.Dictionary'))
-            return dict((cls.decode(entry.key, typ.key_type), cls.decode(entry.value, typ.value_type)) for entry in msg.entries)
+            return dict((cls.decode(entry.key, typ.key_type), cls.decode(entry.value, typ.value_type))
+                        for entry in msg.entries)
         elif isinstance(typ, SetType):
             msg = cls._decode_message(data, cls._types.as_type('KRPC.Set'))
             return set(cls.decode(item, typ.value_type) for item in msg.items)
         elif isinstance(typ, TupleType):
             msg = cls._decode_message(data, cls._types.as_type('KRPC.Tuple'))
-            return tuple(cls.decode(item, value_type) for item,value_type in zip(msg.items,typ.value_types))
+            return tuple(cls.decode(item, value_type) for item, value_type in zip(msg.items, typ.value_types))
         else:
-            raise RuntimeError ('Cannot decode type %s' % str(typ))
+            raise RuntimeError('Cannot decode type %s' % str(typ))
 
     @classmethod
     def decode_size_and_position(cls, data):
@@ -58,7 +59,7 @@ class Decoder(object):
     def decode_delimited(cls, data, typ):
         """ Decode a message or value with size information
             (used in a delimited communication stream) """
-        (size, position) = cls.decode_size_and_position(data)
+        size, position = cls.decode_size_and_position(data)
         return cls.decode(data[position:position+size], typ)
 
     @classmethod

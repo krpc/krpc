@@ -28,10 +28,8 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         obj1a = self.conn.test_service.object_property
         self.assertEqual(obj1, obj1a)
 
-        self.assertFalse(obj1 == None)
-        self.assertTrue(obj1 != None)
-        self.assertFalse(None == obj1)
-        self.assertTrue(None != obj1)
+        self.assertFalse(obj1.__eq__(None))
+        self.assertTrue(obj1.__ne__(None))
 
     def test_hash(self):
         obj1 = self.conn.test_service.create_test_object('jeb')

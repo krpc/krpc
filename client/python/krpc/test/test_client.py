@@ -18,7 +18,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_get_status(self):
         status = self.conn.krpc.get_status()
-        self.assertRegexpMatches (status.version, '^[0-9]+\.[0-9]+\.[0-9]+$')
+        self.assertRegexpMatches(status.version, r'^[0-9]+\.[0-9]+\.[0-9]+$')
         self.assertGreater(status.bytes_read, 0)
 
     def test_current_game_scene(self):
@@ -63,7 +63,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.conn.test_service.string_property_private_get = 'foo'
         obj = self.conn.test_service.create_test_object('bar')
         self.conn.test_service.object_property = obj
-        self.assertEqual (obj, self.conn.test_service.object_property)
+        self.assertEqual(obj, self.conn.test_service.object_property)
 
     def test_class_as_return_value(self):
         obj = self.conn.test_service.create_test_object('jeb')
@@ -73,10 +73,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertIsNone(self.conn.test_service.echo_test_object(None))
         obj = self.conn.test_service.create_test_object('bob')
         self.assertEqual('bobnull', obj.object_to_string(None))
-        # Check following doesn't throw an exception
-        self.conn.test_service.object_property
         self.conn.test_service.object_property = None
-        self.assertIsNone (self.conn.test_service.object_property)
+        self.assertIsNone(self.conn.test_service.object_property)
 
     def test_class_methods(self):
         obj = self.conn.test_service.create_test_object('bob')
@@ -104,14 +102,22 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual('jebbobbillbaz', self.conn.test_service.optional_arguments('jeb', 'bob', 'bill'))
 
     def test_named_parameters(self):
-        self.assertEqual('1234', self.conn.test_service.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
-        self.assertEqual('2413', self.conn.test_service.optional_arguments(z='1', x='2', another_parameter='3', y='4'))
-        self.assertEqual('1243', self.conn.test_service.optional_arguments('1', '2', another_parameter='3', z='4'))
-        self.assertEqual('123baz', self.conn.test_service.optional_arguments('1', '2', z='3'))
-        self.assertEqual('12bar3', self.conn.test_service.optional_arguments('1', '2', another_parameter='3'))
-        self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', '4', another_parameter='5')
-        self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', y='4')
-        self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', foo='4')
+        self.assertEqual('1234',
+                         self.conn.test_service.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
+        self.assertEqual('2413',
+                         self.conn.test_service.optional_arguments(z='1', x='2', another_parameter='3', y='4'))
+        self.assertEqual('1243',
+                         self.conn.test_service.optional_arguments('1', '2', another_parameter='3', z='4'))
+        self.assertEqual('123baz',
+                         self.conn.test_service.optional_arguments('1', '2', z='3'))
+        self.assertEqual('12bar3',
+                         self.conn.test_service.optional_arguments('1', '2', another_parameter='3'))
+        self.assertRaises(TypeError,
+                          self.conn.test_service.optional_arguments, '1', '2', '3', '4', another_parameter='5')
+        self.assertRaises(TypeError,
+                          self.conn.test_service.optional_arguments, '1', '2', '3', y='4')
+        self.assertRaises(TypeError,
+                          self.conn.test_service.optional_arguments, '1', foo='4')
 
         obj = self.conn.test_service.create_test_object('jeb')
         self.assertEqual('1234', obj.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
@@ -124,10 +130,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRaises(TypeError, obj.optional_arguments, '1', foo='4')
 
     def test_blocking_procedure(self):
-        self.assertEqual(0, self.conn.test_service.blocking_procedure(0,0))
-        self.assertEqual(1, self.conn.test_service.blocking_procedure(1,0))
+        self.assertEqual(0, self.conn.test_service.blocking_procedure(0, 0))
+        self.assertEqual(1, self.conn.test_service.blocking_procedure(1, 0))
         self.assertEqual(1+2, self.conn.test_service.blocking_procedure(2))
-        self.assertEqual(sum(x for x in range(1,43)), self.conn.test_service.blocking_procedure(42))
+        self.assertEqual(sum(x for x in range(1, 43)), self.conn.test_service.blocking_procedure(42))
 
     def test_too_many_arguments(self):
         self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', '4', '5')
@@ -150,12 +156,13 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_collections(self):
         self.assertEqual([], self.conn.test_service.increment_list([]))
-        self.assertEqual([1,2,3], self.conn.test_service.increment_list([0,1,2]))
+        self.assertEqual([1, 2, 3], self.conn.test_service.increment_list([0, 1, 2]))
         self.assertEqual({}, self.conn.test_service.increment_dictionary({}))
-        self.assertEqual({'a': 1, 'b': 2, 'c': 3}, self.conn.test_service.increment_dictionary({'a': 0, 'b': 1, 'c': 2}))
+        self.assertEqual({'a': 1, 'b': 2, 'c': 3},
+                         self.conn.test_service.increment_dictionary({'a': 0, 'b': 1, 'c': 2}))
         self.assertEqual(set(), self.conn.test_service.increment_set(set()))
-        self.assertEqual(set([1,2,3]), self.conn.test_service.increment_set(set([0,1,2])))
-        self.assertEqual((2,3), self.conn.test_service.increment_tuple((1,2)))
+        self.assertEqual(set([1, 2, 3]), self.conn.test_service.increment_set(set([0, 1, 2])))
+        self.assertEqual((2, 3), self.conn.test_service.increment_tuple((1, 2)))
         self.assertRaises(TypeError, self.conn.test_service.increment_list, None)
         self.assertRaises(TypeError, self.conn.test_service.increment_set, None)
         self.assertRaises(TypeError, self.conn.test_service.increment_dictionary, None)
@@ -166,23 +173,23 @@ class TestClient(ServerTestCase, unittest.TestCase):
                          self.conn.test_service.increment_nested_collection({'a': [0, 1], 'b': [], 'c': [2]}))
 
     def test_collections_of_objects(self):
-        l = self.conn.test_service.add_to_object_list([], "jeb")
-        self.assertEqual(1, len(l))
-        self.assertEqual("value=jeb", l[0].get_value())
-        l = self.conn.test_service.add_to_object_list(l, "bob")
-        self.assertEqual(2, len(l))
-        self.assertEqual("value=jeb", l[0].get_value())
-        self.assertEqual("value=bob", l[1].get_value())
+        objs = self.conn.test_service.add_to_object_list([], "jeb")
+        self.assertEqual(1, len(objs))
+        self.assertEqual("value=jeb", objs[0].get_value())
+        objs = self.conn.test_service.add_to_object_list(objs, "bob")
+        self.assertEqual(2, len(objs))
+        self.assertEqual("value=jeb", objs[0].get_value())
+        self.assertEqual("value=bob", objs[1].get_value())
 
     def test_client_members(self):
         self.assertSetEqual(
             set(['krpc', 'test_service', 'add_stream', 'stream', 'close']),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn))))
+            set(x for x in dir(self.conn) if not x.startswith('_')))
 
     def test_krpc_service_members(self):
         self.assertSetEqual(
             set(['get_services', 'get_status', 'add_stream', 'remove_stream', 'current_game_scene', 'GameScene']),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn.krpc))))
+            set(x for x in dir(self.conn.krpc) if not x.startswith('_')))
 
     def test_test_service_service_members(self):
         self.assertSetEqual(
@@ -230,7 +237,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'throw_argument_exception',
                 'throw_invalid_operation_exception'
             ]),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service))))
+            set(x for x in dir(self.conn.test_service) if not x.startswith('_')))
 
     def test_test_service_test_class_members(self):
         self.assertSetEqual(
@@ -246,15 +253,15 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 'optional_arguments',
                 'static_method'
             ]),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestClass))))
+            set(x for x in dir(self.conn.test_service.TestClass) if not x.startswith('_')))
 
     def test_test_service_enum_members(self):
         self.assertSetEqual(
-            set(['value_a','value_b','value_c']),
-            set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestEnum))))
-        self.assertEqual (0, self.conn.test_service.TestEnum.value_a.value)
-        self.assertEqual (1, self.conn.test_service.TestEnum.value_b.value)
-        self.assertEqual (2, self.conn.test_service.TestEnum.value_c.value)
+            set(['value_a', 'value_b', 'value_c']),
+            set(x for x in dir(self.conn.test_service.TestEnum) if not x.startswith('_')))
+        self.assertEqual(0, self.conn.test_service.TestEnum.value_a.value)
+        self.assertEqual(1, self.conn.test_service.TestEnum.value_b.value)
+        self.assertEqual(2, self.conn.test_service.TestEnum.value_c.value)
 
     def test_line_endings(self):
         strings = [
@@ -297,15 +304,15 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 if latch[1] <= 0:
                     latch[0].notifyAll()
 
-        for i in range(thread_count):
-            t = threading.Thread(target=thread_main, args=(latch,))
-            t.daemon = True
-            t.start()
+        for _ in range(thread_count):
+            thread = threading.Thread(target=thread_main, args=(latch,))
+            thread.daemon = True
+            thread.start()
 
         with latch[0]:
             while latch[1] > 0:
                 latch[0].wait(10)
-        self.assertEqual(0, latch[1]);
+        self.assertEqual(0, latch[1])
 
 if __name__ == '__main__':
     unittest.main()

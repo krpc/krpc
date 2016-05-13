@@ -2,13 +2,13 @@ import keyword
 from collections import defaultdict
 import xml.etree.ElementTree as ElementTree
 from krpc.attributes import Attributes
-from krpc.types import Types, DynamicType, DefaultArgument
+from krpc.types import DynamicType, DefaultArgument
 from krpc.decoder import Decoder
 from krpc.utils import snake_case
 
 def _signature(param_types, return_type):
     """ Generate a signature for a procedure that can be used as its docstring """
-    if len(param_types) == 0 and return_type == None:
+    if len(param_types) == 0 and return_type is None:
         return ''
     types = [x.python_type.__name__ for x in param_types]
     sig = ','.join(types)
@@ -45,9 +45,9 @@ def _construct_func(invoke, service_name, procedure_name, prefix_param_names, pa
     param_names = _update_param_names(param_names)
 
     params = []
-    for name,required,default,typ in zip(param_names, param_required, param_default, param_types):
+    for name, required, default, typ in zip(param_names, param_required, param_default, param_types):
         if not required:
-            name += ' = DefaultArgument('+repr(_as_literal(default,typ))+')'
+            name += ' = DefaultArgument('+repr(_as_literal(default, typ))+')'
         params.append(name)
 
     invoke_args = [
@@ -67,7 +67,7 @@ def _construct_func(invoke, service_name, procedure_name, prefix_param_names, pa
         'param_types': param_types,
         'return_type': return_type
     }
-    return eval(code, context)
+    return eval(code, context) #pylint: disable=eval-used
 
 def _indent(lines, level):
     result = []
@@ -124,17 +124,17 @@ def _parse_documentation(xml):
         if node.tag == 'summary':
             summary = _parse_documentation_content(node)
         elif node.tag == 'param':
-            doc = _parse_documentation_content(node).replace('\n','')
+            doc = _parse_documentation_content(node).replace('\n', '')
             params.append('%s: %s' % (snake_case(node.attrib['name']), doc))
         elif node.tag == 'returns':
-            returns = 'Returns:\n    %s' % _parse_documentation_content(node).replace('\n','')
+            returns = 'Returns:\n    %s' % _parse_documentation_content(node).replace('\n', '')
         elif node.tag == 'remarks':
             note = 'Note: %s' % _parse_documentation_content(node)
     if len(params) > 0:
-        params = 'Args:\n%s' % '\n'.join('    '+x for x in params)
+        params_str = 'Args:\n%s' % '\n'.join('    '+x for x in params)
     else:
-        params = ''
-    return '\n\n'.join(filter(lambda x: x != '', [summary, params, returns, note]))
+        params_str = ''
+    return '\n\n'.join(x for x in (summary, params_str, returns, note) if x != '')
 
 def create_service(client, service):
     """ Create a new service type """
@@ -162,7 +162,7 @@ def create_service(client, service):
             cls._add_service_procedure(procedure)
 
     # Add properties
-    properties = defaultdict(lambda: [None,None])
+    properties = defaultdict(lambda: [None, None])
     for procedure in service.procedures:
         if Attributes.is_a_property_accessor(procedure.attributes):
             name = Attributes.get_property_name(procedure.attributes)
@@ -188,7 +188,7 @@ def create_service(client, service):
             cls._add_service_class_static_method(class_name, method_name, procedure)
 
     # Add class properties
-    properties = defaultdict(lambda: [None,None])
+    properties = defaultdict(lambda: [None, None])
     for procedure in service.procedures:
         if Attributes.is_a_class_property_accessor(procedure.attributes):
             class_name = Attributes.get_class_name(procedure.attributes)
@@ -210,24 +210,27 @@ class ServiceBase(DynamicType):
     def _add_service_class(cls, remote_cls):
         """ Add a class type """
         name = remote_cls.name
-        class_type = cls._client._types.as_type('Class(' + cls._name + '.' + name + ')', _parse_documentation(remote_cls.documentation))
+        class_type = cls._client._types.as_type('Class(' + cls._name + '.' + name + ')',
+                                                _parse_documentation(remote_cls.documentation))
         setattr(cls, name, class_type.python_type)
 
     @classmethod
     def _add_service_enumeration(cls, enum):
         """ Add an enumeration type """
         name = enum.name
-        enum_type = cls._client._types.as_type('Enum(' + cls._name + '.' + name + ')', _parse_documentation(enum.documentation))
+        enum_type = cls._client._types.as_type('Enum(' + cls._name + '.' + name + ')',
+                                               _parse_documentation(enum.documentation))
         enum_type.set_values(dict((str(snake_case(x.name)), x.value) for x in enum.values))
         setattr(cls, name, enum_type.python_type)
 
     @classmethod
     def _parse_procedure(cls, procedure):
         param_names = [snake_case(param.name) for param in procedure.parameters]
-        param_types = [cls._client._types.get_parameter_type(i, param.type, procedure.attributes) for i,param in enumerate(procedure.parameters)]
+        param_types = [cls._client._types.get_parameter_type(i, param.type, procedure.attributes)
+                       for i, param in enumerate(procedure.parameters)]
         param_required = [not param.has_default_argument for param in procedure.parameters]
         param_default = []
-        for param,typ in zip(procedure.parameters, param_types):
+        for param, typ in zip(procedure.parameters, param_types):
             if param.has_default_argument:
                 param_default.append(Decoder.decode(param.default_argument, typ))
             else:
@@ -241,8 +244,10 @@ class ServiceBase(DynamicType):
     def _add_service_procedure(cls, procedure):
         """ Add a procedure """
         param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(procedure)
-        func = _construct_func(cls._client._invoke, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
-        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
+        func = _construct_func(cls._client._invoke, cls._name, procedure.name, [],
+                               param_names, param_types, param_required, param_default, return_type)
+        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [],
+                                        param_names, param_types, param_required, param_default, return_type)
         setattr(func, '_build_request', build_request)
         setattr(func, '_return_type', return_type)
         name = str(snake_case(procedure.name))
@@ -258,14 +263,17 @@ class ServiceBase(DynamicType):
             doc = _parse_documentation(setter.documentation)
         if getter:
             getter_name = getter.name
-            _,_,_,_,return_type = cls._parse_procedure(getter)
-            getter = _construct_func(cls._client._invoke, cls._name, getter_name, ['self'], [], [], [], [], return_type)
-            build_request = _construct_func(cls._client._build_request, cls._name, getter_name, ['self'], [], [], [], [], return_type)
+            _, _, _, _, return_type = cls._parse_procedure(getter)
+            getter = _construct_func(cls._client._invoke, cls._name, getter_name, ['self'],
+                                     [], [], [], [], return_type)
+            build_request = _construct_func(cls._client._build_request, cls._name, getter_name, ['self'],
+                                            [], [], [], [], return_type)
             setattr(getter, '_build_request', build_request)
             setattr(getter, '_return_type', return_type)
         if setter:
-            param_names, param_types, _,_,_ = cls._parse_procedure(setter)
-            setter = _construct_func(cls._client._invoke, cls._name, setter.name, ['self'], param_names, param_types, [True], [None], None)
+            param_names, param_types, _, _, _ = cls._parse_procedure(setter)
+            setter = _construct_func(cls._client._invoke, cls._name, setter.name, ['self'],
+                                     param_names, param_types, [True], [None], None)
         name = str(snake_case(name))
         return cls._add_property(name, getter, setter, doc=doc)
 
@@ -277,8 +285,10 @@ class ServiceBase(DynamicType):
         # Rename this to self if it doesn't cause a name clash
         if 'self' not in param_names:
             param_names[0] = 'self'
-        func = _construct_func(cls._client._invoke, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
-        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
+        func = _construct_func(cls._client._invoke, cls._name, procedure.name, [],
+                               param_names, param_types, param_required, param_default, return_type)
+        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [],
+                                        param_names, param_types, param_required, param_default, return_type)
         setattr(func, '_build_request', build_request)
         setattr(func, '_return_type', return_type)
         name = str(snake_case(method_name))
@@ -289,8 +299,10 @@ class ServiceBase(DynamicType):
         """ Add a static method to a class """
         class_cls = cls._client._types.as_type('Class('+cls._name+'.'+class_name+')').python_type
         param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(procedure)
-        func = _construct_func(cls._client._invoke, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
-        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [], param_names, param_types, param_required, param_default, return_type)
+        func = _construct_func(cls._client._invoke, cls._name, procedure.name, [],
+                               param_names, param_types, param_required, param_default, return_type)
+        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [],
+                                        param_names, param_types, param_required, param_default, return_type)
         setattr(func, '_build_request', build_request)
         setattr(func, '_return_type', return_type)
         name = str(snake_case(method_name))
@@ -307,16 +319,19 @@ class ServiceBase(DynamicType):
             doc = _parse_documentation(setter.documentation)
         if getter:
             getter_name = getter.name
-            param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(getter)
+            param_names, param_types, _, _, return_type = cls._parse_procedure(getter)
             # Rename this to self if it doesn't cause a name clash
             if 'self' not in param_names:
                 param_names[0] = 'self'
-            getter = _construct_func(cls._client._invoke, cls._name, getter_name, [], param_names, param_types, [True], [None], return_type)
-            build_request = _construct_func(cls._client._build_request, cls._name, getter_name, [], param_names, param_types, [True], [None], return_type)
+            getter = _construct_func(cls._client._invoke, cls._name, getter_name, [],
+                                     param_names, param_types, [True], [None], return_type)
+            build_request = _construct_func(cls._client._build_request, cls._name, getter_name, [],
+                                            param_names, param_types, [True], [None], return_type)
             setattr(getter, '_build_request', build_request)
             setattr(getter, '_return_type', return_type)
         if setter:
-            param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(setter)
-            setter = _construct_func(cls._client._invoke, cls._name, setter.name, [], param_names, param_types, [True,True], [None,None], None)
+            param_names, param_types, _, _, return_type = cls._parse_procedure(setter)
+            setter = _construct_func(cls._client._invoke, cls._name, setter.name, [],
+                                     param_names, param_types, [True, True], [None, None], None)
         property_name = str(snake_case(property_name))
         return class_cls._add_property(property_name, getter, setter, doc=doc)
