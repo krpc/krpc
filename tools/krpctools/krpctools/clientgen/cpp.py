@@ -1,3 +1,4 @@
+import array
 from .generator import Generator
 from .docparser import DocParser
 import krpc.types
@@ -88,10 +89,7 @@ class CppGenerator(Generator):
 
     def parse_default_argument(self, value, typ):
         # Note: following is a workaround for decoding EnumType, as set_values has not been called
-        if krpc.platform.PY2:
-            value = str(bytearray(value))
-        else:
-            value = bytearray(value)
+        value = array.array('B', value).tostring()
         if not isinstance(typ, krpc.types.EnumType):
             value = krpc.decoder.Decoder.decode(value, typ)
         else:
