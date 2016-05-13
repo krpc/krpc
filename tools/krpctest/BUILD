@@ -1,4 +1,4 @@
-load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test')
+load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test', 'py_lint_test')
 load('/config', 'version')
 
 genrule(
@@ -17,24 +17,26 @@ py_sdist(
     ] + glob(['krpctest/**/*.py']),
     path_map = {
         'tools/krpctest/': ''
-    }
+    },
+    visibility = ['//visibility:public']
 )
 
 test_suite(
     name = 'test',
-    tests = [':test2', ':test3']
+    tests = [':test2', ':test3', ':lint']
 )
+
+deps = [
+    '//client/python',
+    '@python_six//file',
+    '@python_protobuf//file'
+]
 
 py_test(
     name = 'test2',
     src = ':krpctest',
     pkg = 'krpctest-'+version,
-    deps = [
-        '//client/python',
-        '@python_six//file',
-        '@python_protobuf//file',
-        '@python_enum34//file'
-    ],
+    deps = deps + ['@python_enum34//file'],
     size = 'small'
 )
 
@@ -42,10 +44,15 @@ py3_test(
     name = 'test3',
     src = ':krpctest',
     pkg = 'krpctest-'+version,
-    deps = [
-        '//client/python',
-        '@python_six//file',
-        '@python_protobuf//file'
-    ],
+    deps = deps,
+    size = 'small'
+)
+
+py_lint_test(
+    name = 'lint',
+    src = ':krpctest',
+    pkg = 'krpctest',
+    deps = deps + ['@python_enum34//file'],
+    rcfile = 'pylint.rc',
     size = 'small'
 )

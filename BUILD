@@ -143,13 +143,17 @@ test_suite(
     name = 'test',
     tests = [
         '//server:test',
-        '//doc:test',
+        '//service/SpaceCenter:test',
+        '//service/InfernalRobotics:test',
+        '//service/RemoteTech:test',
         '//client/csharp:test',
         '//client/cpp:test',
         '//client/java:test',
         '//client/lua:test',
         '//client/python:test',
-        '//tools/krpctest:test'
+        '//tools/krpctest:test',
+        '//tools/krpctools:test',
+        '//doc:test'
     ]
 )
 

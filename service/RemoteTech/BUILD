@@ -1,4 +1,5 @@
 load('/tools/build/csharp', 'csharp_library', 'csharp_assembly_info')
+load('/tools/build/python', 'py_lint_test')
 load('/tools/ServiceDefinitions/build', 'service_definitions')
 load('/config', 'assembly_version', 'author')
 
@@ -43,4 +44,17 @@ service_definitions(
     service = 'RemoteTech',
     out = 'KRPC.RemoteTech.json',
     visibility = ['//visibility:public']
+)
+
+test_suite(
+    name = 'test',
+    tests = [':lint']
+)
+
+py_lint_test(
+    name = 'lint',
+    srcs = glob(['test/*.py']),
+    rcfile = 'pylint.rc',
+    deps = ['//client/python', '//tools/krpctest'],
+    size = 'small'
 )
