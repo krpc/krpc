@@ -1,27 +1,24 @@
 from .generator import Generator
 import krpc.types
 
-Types = krpc.types.Types()
-
 class CsharpGenerator(Generator):
 
     def __init__(self, macro_template, service, definition_files):
         super(CsharpGenerator, self).__init__(macro_template, service, definition_files)
 
-    def keywords(self):
-        return [
-            'abstract', 'as', 'base', 'bool', 'break', 'byte', 'case', 'catch', 'char', 'checked', 'class',
-            'const', 'continue', 'decimal', 'default', 'delegate', 'do', 'double', 'else', 'enum', 'event',
-            'explicit', 'extern', 'false', 'finally', 'fixed', 'float', 'for', 'foreach', 'goto', 'if',
-            'implicit', 'in', 'int', 'interface', 'internal', 'is', 'lock', 'long', 'namespace', 'new',
-            'null', 'object', 'operator', 'out', 'override', 'params', 'private', 'protected', 'public',
-            'readonly', 'ref', 'return', 'sbyte', 'sealed', 'short', 'sizeof', 'stackalloc', 'static',
-            'string', 'struct', 'switch', 'this', 'throw', 'true', 'try', 'typeof', 'uint', 'ulong',
-            'unchecked', 'unsafe', 'ushort', 'using', 'virtual', 'void', 'volatile', 'while'
-        ]
+    _keywords = set([
+        'abstract', 'as', 'base', 'bool', 'break', 'byte', 'case', 'catch', 'char', 'checked', 'class',
+        'const', 'continue', 'decimal', 'default', 'delegate', 'do', 'double', 'else', 'enum', 'event',
+        'explicit', 'extern', 'false', 'finally', 'fixed', 'float', 'for', 'foreach', 'goto', 'if',
+        'implicit', 'in', 'int', 'interface', 'internal', 'is', 'lock', 'long', 'namespace', 'new',
+        'null', 'object', 'operator', 'out', 'override', 'params', 'private', 'protected', 'public',
+        'readonly', 'ref', 'return', 'sbyte', 'sealed', 'short', 'sizeof', 'stackalloc', 'static',
+        'string', 'struct', 'switch', 'this', 'throw', 'true', 'try', 'typeof', 'uint', 'ulong',
+        'unchecked', 'unsafe', 'ushort', 'using', 'virtual', 'void', 'volatile', 'while'
+    ])
 
     def parse_name(self, name):
-        if name in self.keywords():
+        if name in self._keywords:
             return '%s_' % name
         else:
             return name
@@ -52,24 +49,25 @@ class CsharpGenerator(Generator):
         elif isinstance(typ, krpc.types.MessageType):
             typ = typ.protobuf_type
             if typ.startswith('KRPC.'):
-                _,_,x = typ.rpartition('.')
+                _, _, x = typ.rpartition('.')
                 return 'global::KRPC.Schema.KRPC.%s' % x
             elif typ.startswith('Test.'):
-                _,_,x = typ.rpartition('.')
+                _, _, x = typ.rpartition('.')
                 return 'global::Test.%s' % x
         elif isinstance(typ, krpc.types.ListType):
             return 'global::System.Collections.Generic.IList<%s>' % \
-                self.parse_type(Types.as_type(typ.protobuf_type[5:-1]))
+                self.parse_type(self.types.as_type(typ.protobuf_type[5:-1]))
         elif isinstance(typ, krpc.types.SetType):
             return 'global::System.Collections.Generic.ISet<%s>' % \
-                self.parse_type(Types.as_type(typ.protobuf_type[4:-1]))
+                self.parse_type(self.types.as_type(typ.protobuf_type[4:-1]))
         elif isinstance(typ, krpc.types.DictionaryType):
-            key_type,value_type = tuple(typ.protobuf_type[11:-1].split(','))
+            key_type, value_type = tuple(typ.protobuf_type[11:-1].split(','))
             return 'global::System.Collections.Generic.IDictionary<%s,%s>' % \
-                (self.parse_type(Types.as_type(key_type)), self.parse_type(Types.as_type(value_type)))
+                (self.parse_type(self.types.as_type(key_type)), self.parse_type(self.types.as_type(value_type)))
         elif isinstance(typ, krpc.types.TupleType):
             value_types = typ.protobuf_type[6:-1].split(',')
-            return 'global::System.Tuple<%s>' % ','.join(self.parse_type(Types.as_type(t)) for t in value_types)
+            return 'global::System.Tuple<%s>' % ','.join(self.parse_type(self.types.as_type(t))
+                                                         for t in value_types)
         elif isinstance(typ, krpc.types.ClassType):
             return 'global::KRPC.Client.Services.%s' % typ.protobuf_type[6:-1]
         elif isinstance(typ, krpc.types.EnumType):
@@ -78,7 +76,7 @@ class CsharpGenerator(Generator):
 
     def parse_return_type(self, procedure):
         if 'return_type' in procedure is not None:
-            typ = Types.get_return_type(procedure['return_type'], procedure['attributes'])
+            typ = self.types.get_return_type(procedure['return_type'], procedure['attributes'])
             return self.parse_type(typ)
         else:
             return 'void'
@@ -95,7 +93,7 @@ class CsharpGenerator(Generator):
         if not isinstance(typ, krpc.types.EnumType):
             value = krpc.decoder.Decoder.decode(value, typ)
         else:
-            value = krpc.decoder.Decoder.decode(value, Types.as_type('int32'))
+            value = krpc.decoder.Decoder.decode(value, self.types.as_type('int32'))
         if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'string':
             return '"%s"' % value
         if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'bool':
@@ -112,8 +110,9 @@ class CsharpGenerator(Generator):
         else:
             return value
 
-    def parse_documentation(self, documentation):
-        documentation = documentation.replace('<doc>', '').replace('</doc>','').strip()
+    @staticmethod
+    def parse_documentation(documentation):
+        documentation = documentation.replace('<doc>', '').replace('</doc>', '').strip()
         if documentation == '':
             return ''
         lines = ['/// '+line for line in documentation.split('\n')]
@@ -123,5 +122,6 @@ class CsharpGenerator(Generator):
         content = content.replace('  <remarks', '<remarks')
         return content
 
-    def parse_context(self, context):
+    @staticmethod
+    def parse_context(context):
         return context

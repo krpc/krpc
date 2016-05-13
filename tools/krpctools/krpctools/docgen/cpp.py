@@ -1,5 +1,6 @@
 from .domain import Domain
-from .nodes import *
+from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
+from .nodes import Enumeration, EnumerationValue
 from krpc.utils import snake_case
 from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
@@ -69,9 +70,8 @@ class CppDomain(Domain):
 
     def ref(self, obj):
         name = obj.fullname.split('.')
-        if isinstance(obj, Procedure) or isinstance(obj, Property) or \
-           isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod) or isinstance(obj, ClassProperty) or \
-           isinstance(obj, EnumerationValue):
+        if any(isinstance(obj, cls) for cls in
+               (Procedure, Property, ClassMethod, ClassStaticMethod, ClassProperty, EnumerationValue)):
             name[-1] = snake_case(name[-1])
         return self.shorten_ref('.'.join(name)).replace('.', '::')
 

@@ -35,6 +35,7 @@ def main():
 
     macros = resource_filename(__name__, '%s.tmpl' % args.language).decode('utf-8')
 
+    #pylint: disable=redefined-variable-type
     if args.language == 'csharp':
         domain = CsharpDomain(macros)
     elif args.language == 'cpp':
@@ -45,16 +46,17 @@ def main():
         domain = LuaDomain(macros)
     else: #python
         domain = PythonDomain(macros)
+    #pylint: enable=redefined-variable-type
 
     if not os.path.exists(args.order_file):
         raise RuntimeError('Ordering file \'%s\' does not exist' % args.order_file)
-    with open(args.order_file, 'r') as f:
-        ordering = [x.strip() for x in f.readlines()]
+    with open(args.order_file, 'r') as fp:
+        ordering = [x.strip() for x in fp.readlines()]
 
     services_info = {}
     for path in args.definitions:
-        with open(path, 'r') as f:
-            services_info.update(json.load(f))
+        with open(path, 'r') as fp:
+            services_info.update(json.load(fp))
 
     if services_info == {}:
         print 'No services found in services definition files'
@@ -69,30 +71,30 @@ def main():
         else:
             return ordering.index(member.fullname)
 
-    services = [Service(name, sort=sort, **info) for name,info in services_info.iteritems()]
+    services = [Service(name, sort=sort, **info) for name, info in services_info.iteritems()]
     services = {service.name: service for service in services}
 
     if len(sort_failed) > 0:
-        raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(sort_failed))
+        raise RuntimeError('Don\'t know how to order:\n'+'\n'.join(sort_failed))
 
-    content,documented = process_file(args, domain, services, args.source)
+    content, documented = process_file(args, domain, services, args.source)
 
     output = os.path.abspath(os.path.expanduser(os.path.expandvars(args.output)))
     if not os.path.exists(os.path.dirname(output)):
         os.makedirs(os.path.dirname(output))
-    with codecs.open(output, 'w', encoding='utf8') as f:
-        f.write(content)
+    with codecs.open(output, 'w', encoding='utf8') as fp:
+        fp.write(content)
 
     if args.documented:
         documented_path = os.path.abspath(os.path.expanduser(os.path.expandvars(args.documented)))
         if not os.path.exists(os.path.dirname(documented_path)):
             os.makedirs(os.path.dirname(documented_path))
-        with open(documented_path, 'w') as f:
-            f.write('\n'.join(documented)+'\n')
+        with open(documented_path, 'w') as fp:
+            fp.write('\n'.join(documented)+'\n')
 
 def process_file(args, domain, services, path):
 
-    loader = jinja2.FileSystemLoader(searchpath=['./','/'])
+    loader = jinja2.FileSystemLoader(searchpath=['./', '/'])
     template_env = jinja2.Environment(
         loader=loader,
         trim_blocks=True,
