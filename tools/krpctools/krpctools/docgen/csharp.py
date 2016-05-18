@@ -68,4 +68,4 @@ class CsharpDomain(Domain):
         # Only drop service name for non-service members
         if obj and (isinstance(obj, Procedure) or isinstance(obj, Property)):
             return name
-        return super(CsharpDomain, self).shorten_ref (name, obj)
+        return super(CsharpDomain, self).shorten_ref(name, obj)
