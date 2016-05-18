@@ -284,12 +284,17 @@ java_import(
     jars = ['@java_javatuples//file']
 )
 
+java_import(
+    name = 'javaprotobuf',
+    jars = ['@java_protobuf//file']
+)
+
 java_binary_multiple(
     name = 'compile-scripts-java',
     srcs = glob(['src/scripts/*.java']),
     deps = [
         '//client/java:krpc-jar',
-        '//tools/build/protobuf:protobuf',
+        ':javaprotobuf',
         ':javatuples'
     ]
 )

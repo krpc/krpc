@@ -49,7 +49,7 @@ protobuf_lua = rule(
     attrs = {
         'src': attr.label(allow_files=FileType(['.proto']), single_file=True),
         'out': attr.output(mandatory=True),
-        '_protoc': attr.label(default=Label('//tools/build/protobuf:protoc'), allow_files=True, single_file=True),
+        '_protoc': attr.label(default=Label('@protobuf//:protoc'), allow_files=True, single_file=True),
         '_protoc_lua': attr.label(default=Label('@protoc_lua//:plugin'), allow_files=True),
         '_protoc_lua_env': attr.label(default=Label('//tools/build/protobuf:protoc-lua-env'), allow_files=True, single_file=True)
     },
