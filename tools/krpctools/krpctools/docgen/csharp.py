@@ -24,6 +24,10 @@ class CsharpDomain(Domain):
     def __init__(self, macros):
         super(CsharpDomain, self).__init__(macros)
 
+    def currentmodule(self, name):
+        super(CsharpDomain, self).currentmodule(name)
+        return '.. namespace:: KRPC.Client.Services.%s' % name
+
     def type(self, typ):
         if typ is None:
             return 'void'
@@ -61,9 +65,7 @@ class CsharpDomain(Domain):
         return ':%s:`%s`' % (prefix, self.ref(obj))
 
     def shorten_ref(self, name, obj=None):
-        # TODO: Drop service name from all non-service members.
-        # TODO: This will cause issues if there a a name clash is introduced between services.
+        # Only drop service name for non-service members
         if obj and (isinstance(obj, Procedure) or isinstance(obj, Property)):
             return name
-        _, _, name = name.partition('.')
-        return name
+        return super(CsharpDomain, self).shorten_ref (name, obj)
