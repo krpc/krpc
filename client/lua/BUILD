@@ -12,7 +12,8 @@ pkg_zip(
     ],
     path_map = {
         'client/lua/': ''
-    }
+    },
+    visibility = ['//visibility:public']
 )
 
 genrule(
