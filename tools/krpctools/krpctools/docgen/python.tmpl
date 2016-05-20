@@ -1,7 +1,7 @@
 {% macro service(x) %}{{ mark_documented(x) }}
 .. module:: {{ x.name }}
 
-{{ x.documentation | parsedoc }}
+{{ gendoc(x.documentation) }}
 
 {% for member in x.members.values() %}
 {% if member.member_type == 'procedure' %}
@@ -16,7 +16,7 @@
 {% macro class(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -36,16 +36,16 @@
 {% macro procedure(x) %}{{ mark_documented(x) }}
 .. staticmethod:: {{ x.name | snakecase }}({{ parameters(x.parameters) }})
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters %}
-   :param {{ p.type | parameter_type }} {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+   :param {{ domain.parameter_type(p.type) }} {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}
 
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
 {% if x.return_type != None %}
-   :rtype: {{ x.return_type | type_description }}
+   :rtype: {{ domain.type_description(x.return_type) }}
 {% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -58,13 +58,13 @@
 {% macro property(x) %}{{ mark_documented(x) }}
 .. attribute:: {{ x.name | snakecase }}
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
    :Attribute: {% if x.getter != None and x.setter != None %}Can be read or written{% elif x.getter != None %}Read-only, cannot be set{% else %}Write-only, cannot be read{% endif %}
 
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
-   :rtype: {{ x.type | type_description }}
+   :rtype: {{ domain.type_description(x.type) }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -76,16 +76,16 @@
 {% macro class_method(x) %}{{ mark_documented(x) }}
 .. method:: {{ x.name | snakecase }}({{ parameters(x.parameters[1:]) }})
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters[1:] %}
-   :param {{ p.type | parameter_type }} {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+   :param {{ domain.parameter_type(p.type) }} {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}
 
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
 {% if x.return_type != None %}
-   :rtype: {{ x.return_type | type_description }}
+   :rtype: {{ domain.type_description(x.return_type) }}
 {% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -98,16 +98,16 @@
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
 .. staticmethod:: {{ x.name | snakecase }}({{ parameters(x.parameters) }})
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters %}
-   :param {{ p.type | parameter_type }} {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+   :param {{ domain.parameter_type(p.type) }} {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}
 
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
 {% if x.return_type != None %}
-   :rtype: {{ x.return_type | type_description }}
+   :rtype: {{ domain.type_description(x.return_type) }}
 {% endif %}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
@@ -124,13 +124,13 @@
 {% macro enumeration(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
    .. data:: {{ value.name | snakecase }}
 
-{{ value.documentation | parsedoc | indent(width=6) }}
+{{ gendoc(value.documentation) | indent(width=6) }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent(width=6) }}{% endif %}
 {% endfor %}
@@ -149,11 +149,11 @@
 {% endmacro %}
 
 {% macro returns(x) %}
-:returns: {{ x | parsedoc('./returns') | singleline }}
+:returns: {{ gendoc(x, './returns') | singleline }}
 {% endmacro %}
 
 {% macro remarks(x) %}
 .. note::
 
-{{ x | parsedoc('./remarks') | indent }}
+{{ gendoc(x, './remarks') | indent }}
 {% endmacro %}

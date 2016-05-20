@@ -15,7 +15,7 @@ from .java import JavaDomain
 from .lua import LuaDomain
 from .python import PythonDomain
 from .nodes import Service
-from .docparser import DocumentationParser
+from .docgen import DocumentationGenerator
 from .extensions import AppendExtension
 from ..version import __version__
 
@@ -104,7 +104,14 @@ def process_file(args, domain, services, path):
     )
 
     def hasdoc(xml, selector='./summary'):
-        return DocumentationParser(domain, services, xml).has(selector)
+        return DocumentationGenerator(domain, services, xml).has(selector)
+
+    def gendoc(xml, selector='./summary'):
+        return DocumentationGenerator(domain, services, xml).generate(selector)
+
+    def see(cref):
+        obj = lookup_cref(cref, services)
+        return domain.see(obj)
 
     documented = set()
     def mark_documented(x):
@@ -116,38 +123,15 @@ def process_file(args, domain, services, path):
         'domain': domain,
         'services': services,
         'hasdoc': hasdoc,
+        'gendoc': gendoc,
+        'see': see,
         'mark_documented': mark_documented
     }
-
-    def return_type_filter(typ):
-        return domain.return_type(typ)
-
-    def parameter_type_filter(typ):
-        return domain.parameter_type(typ)
-
-    def type_description_filter(typ):
-        return domain.type_description(typ)
-
-    def parsedoc_filter(xml, selector='./summary'):
-        return DocumentationParser(domain, services, xml).parse(selector)
-
-    def parsesee_filter(cref):
-        obj = lookup_cref(cref, services)
-        return domain.see(obj)
-
-    def parsecode_filter(value):
-        return domain.code(value)
 
     template_env.filters['snakecase'] = snake_case
     template_env.filters['lower_camelcase'] = lower_camel_case
     template_env.filters['indent'] = indent
     template_env.filters['singleline'] = single_line
-    template_env.filters['parameter_type'] = parameter_type_filter
-    template_env.filters['return_type'] = return_type_filter
-    template_env.filters['type_description'] = type_description_filter
-    template_env.filters['parsedoc'] = parsedoc_filter
-    template_env.filters['parsesee'] = parsesee_filter
-    template_env.filters['parsecode'] = parsecode_filter
 
     template = template_env.get_template(path)
     content = template.render(context)

@@ -43,6 +43,10 @@ class JavaDomain(Domain):
     def __init__(self, macros):
         super(JavaDomain, self).__init__(macros)
 
+    def currentmodule(self, name):
+        super(JavaDomain, self).currentmodule(name)
+        return '.. package:: krpc.client.services.%s' % name
+
     def type(self, typ):
         return self._type(typ)
 
@@ -112,12 +116,6 @@ class JavaDomain(Domain):
             name[-1] = snake_case(name[-1]).upper()
             name = '.'.join(name)
         return self.shorten_ref(name)
-
-    def shorten_ref(self, name, obj=None):
-        # TODO: Drop service name from all members.
-        # TODO: This will cause issues if there a a name clash is introduced between services.
-        _, _, name = name.partition('.')
-        return name
 
     def see(self, obj):
         if any(isinstance(obj, cls) for cls in

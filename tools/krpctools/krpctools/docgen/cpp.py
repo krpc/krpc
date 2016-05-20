@@ -24,6 +24,10 @@ class CppDomain(Domain):
     def __init__(self, macros):
         super(CppDomain, self).__init__(macros)
 
+    def currentmodule(self, name):
+        super(CppDomain, self).currentmodule(name)
+        return '.. namespace:: krpc::services::%s' % name
+
     def type(self, typ):
         if typ is None:
             return 'void'
@@ -92,6 +96,3 @@ class CppDomain(Domain):
 
     def paramref(self, name):
         return super(CppDomain, self).paramref(snake_case(name))
-
-    def shorten_ref(self, name, obj=None):
-        return name
