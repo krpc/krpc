@@ -1,6 +1,7 @@
 from setuptools import setup
 import sys
 import os
+import re
 
 dirpath = os.path.dirname(os.path.realpath(__file__))
 
@@ -19,7 +20,7 @@ if sys.version_info < (3, 4):
 
 setup(
     name='krpc',
-    version=open(os.path.join(dirpath, 'VERSION.txt')).read().strip(),
+    version=re.search(r'\'(.+)\'', open(os.path.join(dirpath, 'krpc/version.py')).read()).group(1),
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     packages=['krpc', 'krpc.schema', 'krpc.test', 'krpc.test.schema'],

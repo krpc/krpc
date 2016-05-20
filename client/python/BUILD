@@ -3,12 +3,6 @@ load('/tools/build/client_test', 'client_test')
 load('/config', 'version')
 
 genrule(
-    name = 'version',
-    outs = ['krpc/version.py'],
-    cmd = 'echo "__version__ = \'%s\'" > "$@"' % version
-)
-
-genrule(
     name = 'python',
     srcs = [':python-pypi'],
     outs = ['krpc-python-%s.zip' % version],
@@ -23,10 +17,11 @@ py_sdist(
     files = [
         '//:readme', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-        'setup.py', 'MANIFEST.in', ':version',
+        'setup.py', 'MANIFEST.in', '//:python_version',
         '//protobuf:python'
     ] + glob(['krpc/**/*']),
     path_map = {
+        'version.py': 'krpc/version.py',
         'client/python/': '',
         'protobuf/': 'krpc/schema/'
     }
