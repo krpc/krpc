@@ -27,11 +27,11 @@ def _build_impl(ctx):
     exec_reqs = {}
     sub_commands = []
 
-    runfiles_dir = out.path + '.runfiles'
+    runfiles_dir = out.path + '.runfiles/krpc'
     sub_commands.append('rm -rf %s' % runfiles_dir)
     _add_runfile(sub_commands, sphinx_build.path, runfiles_dir + '/' + sphinx_build.basename)
     for f in sphinx_build_runfiles:
-        _add_runfile(sub_commands, f.path, runfiles_dir+ '/' + sphinx_build.basename + '.runfiles/' + f.short_path)
+        _add_runfile(sub_commands, f.path, runfiles_dir+ '/' + sphinx_build.basename + '.runfiles/krpc/' + f.short_path)
 
     sub_commands.append('%s/%s -b %s -E -d /tmp/bazel-sphinx-build-%s -W -n -N -q %s %s %s' % (runfiles_dir, sphinx_build.basename, builder, builder, src_dir, out_dir, opts))
 
@@ -75,16 +75,16 @@ def _spelling_impl(ctx):
     opts = ' '.join(['-D%s=%s' % x for x in ctx.attr.opts.items()])
     sub_commands = []
 
-    _add_runfile(sub_commands, sphinx_build.short_path, sphinx_build.basename + '.runfiles/' + sphinx_build.short_path)
+    _add_runfile(sub_commands, sphinx_build.short_path, sphinx_build.basename + '.runfiles/krpc/' + sphinx_build.short_path)
     for f in sphinx_build_runfiles:
-        _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/' + sphinx_build.short_path + '.runfiles/' + f.short_path)
+        _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/krpc/' + sphinx_build.short_path + '.runfiles/krpc/' + f.short_path)
 
     sphinx_commands = [
-        '(cd %s.runfiles; %s -b spelling -E -W -N ../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
+        '(cd %s.runfiles/krpc; %s -b spelling -E -W -N ../../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
         'ret=$?',
-        'lines=`cat %s.runfiles/out/output.txt | wc -l`' % sphinx_build.basename,
+        'lines=`cat %s.runfiles/krpc/out/output.txt | wc -l`' % sphinx_build.basename,
         'echo "Spelling checker messages ($lines lines):"',
-        'cat %s.runfiles/out/output.txt' % sphinx_build.basename,
+        'cat %s.runfiles/krpc/out/output.txt' % sphinx_build.basename,
         'if [ $ret -ne 0 ]; then exit 1; fi'
     ]
     sub_commands.append('('+'; '.join(sphinx_commands)+')')
@@ -120,16 +120,16 @@ def _linkcheck_impl(ctx):
     opts = ' '.join(['-D%s=%s' % x for x in ctx.attr.opts.items()])
     sub_commands = []
 
-    _add_runfile(sub_commands, sphinx_build.short_path, sphinx_build.basename + '.runfiles/' + sphinx_build.short_path)
+    _add_runfile(sub_commands, sphinx_build.short_path, sphinx_build.basename + '.runfiles/krpc/' + sphinx_build.short_path)
     for f in sphinx_build_runfiles:
-        _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/' + sphinx_build.short_path + '.runfiles/' + f.short_path)
+        _add_runfile(sub_commands, f.short_path, sphinx_build.basename + '.runfiles/krpc/' + sphinx_build.short_path + '.runfiles/krpc/' + f.short_path)
 
     sphinx_commands = [
-        '(cd %s.runfiles; %s -b linkcheck -E -N ../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
+        '(cd %s.runfiles/krpc; %s -b linkcheck -E -N ../../%s ./out %s)' % (sphinx_build.basename, sphinx_build.short_path, src_dir, opts),
         'ret=$?',
-        'lines=`cat %s.runfiles/out/output.txt | wc -l`' % sphinx_build.basename,
+        'lines=`cat %s.runfiles/krpc/out/output.txt | wc -l`' % sphinx_build.basename,
         'echo "Link checker messages ($lines lines):"',
-        'cat %s.runfiles/out/output.txt' % sphinx_build.basename,
+        'cat %s.runfiles/krpc/out/output.txt' % sphinx_build.basename,
         'if [ $ret -ne 0 ]; then exit 1; fi'
     ]
     sub_commands.append('('+'; '.join(sphinx_commands)+')')
