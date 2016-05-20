@@ -1,3 +1,6 @@
+v0.3.4
+ * Update protobuf to v3.0.0-beta-3
+
 v0.2.2
  * Refactor into 'krpctools' package containing 'krpc-clientgen', 'krpc-docgen' and 'krpc-servicedefs'.
  * Fixes caused by removal of support for protobuf enumeration and custom protobuf messages from server and clients
