@@ -94,7 +94,7 @@ def _script_impl(ctx):
     )
 
     env = ctx.attr.script+'.py_script-env'
-    sub_commands = _extract_py_env('$0.runfiles/%s' % script_env.short_path, env)
+    sub_commands = _extract_py_env('$0.runfiles/krpc/%s' % script_env.short_path, env)
     sub_commands.append('%s/bin/python %s/bin/%s "$@"' % (env, env, ctx.attr.script))
     ctx.file_action(
         output = script_run,

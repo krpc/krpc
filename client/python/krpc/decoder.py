@@ -1,4 +1,4 @@
-from google.protobuf.internal import decoder as protobuf_decoder
+from google.protobuf.internal import decoder as protobuf_decoder #pylint: disable=import-error,no-name-in-module
 from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
 from krpc.types import ListType, DictionaryType, SetType, TupleType
 import krpc.platform

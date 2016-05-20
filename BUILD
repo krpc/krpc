@@ -1,7 +1,5 @@
 load('/tools/build/pkg', 'pkg_zip')
-load('/config', 'version')
-load('/config', 'avc_version')
-load('/config', 'ksp_avc_version')
+load('/config', 'version', 'python_version', 'avc_version', 'ksp_avc_version')
 
 exports_files(['COPYING', 'COPYING.LESSER'])
 
@@ -56,6 +54,13 @@ genrule(
     name = 'version',
     outs = ['VERSION.txt'],
     cmd = 'echo "%s" > "$@"' % version,
+    visibility = ['//visibility:public']
+)
+
+genrule(
+    name = 'python_version',
+    outs = ['version.py'],
+    cmd = 'echo "__version__ = \'%s\'" > "$@"' % python_version,
     visibility = ['//visibility:public']
 )
 

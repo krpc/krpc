@@ -1,11 +1,5 @@
 load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test', 'py_lint_test')
-load('/config', 'version')
-
-genrule(
-    name = 'version',
-    outs = ['krpctools/version.py'],
-    cmd = 'echo "__version__ = \'%s\'" > "$@"' % version
-)
+load('/config', 'version', 'python_version')
 
 py_sdist(
     name = 'krpctest',
@@ -13,9 +7,10 @@ py_sdist(
     files = [
         'README.txt', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING',
-        'setup.py', 'MANIFEST.in', ':version'
+        'setup.py', 'MANIFEST.in', '//:python_version'
     ] + glob(['krpctest/**/*.py']),
     path_map = {
+        'version.py': 'krpctest/version.py',
         'tools/krpctest/': ''
     },
     visibility = ['//visibility:public']
@@ -35,7 +30,7 @@ deps = [
 py_test(
     name = 'test2',
     src = ':krpctest',
-    pkg = 'krpctest-'+version,
+    pkg = 'krpctest-'+python_version,
     deps = deps + ['@python_enum34//file'],
     size = 'small'
 )
@@ -43,7 +38,7 @@ py_test(
 py3_test(
     name = 'test3',
     src = ':krpctest',
-    pkg = 'krpctest-'+version,
+    pkg = 'krpctest-'+python_version,
     deps = deps,
     size = 'small'
 )

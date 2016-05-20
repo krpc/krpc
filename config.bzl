@@ -4,12 +4,18 @@ version = '0.3.3'
 ksp_version = '1.1.2.1260'
 ksp_version_parts = ksp_version.split('.')
 
-version_parts = version.split('-')[0].split('.')
+version_parts = version.partition('-')[0].split('.')
 if '-' in version:
-   version_parts.append(version.split('-')[1])
+   version_parts.extend(version.partition('-')[2].split('-'))
+
+# Python version x.y.z[+w.w]
+if len(version_parts) == 3:
+  python_version = '.'.join(version_parts)
+else:
+  python_version = '.'.join(version_parts[:3])+'+'+'.'.join(version_parts[3:])
 
 # C# assembly version: x.y.z[.w]
-assembly_version = '.'.join(version_parts)
+assembly_version = '.'.join(version_parts[:4])
 
 # Nuget package version: x.y.z[-buildw]
 if len(version_parts) == 3:
@@ -18,8 +24,8 @@ if len(version_parts) == 3:
 else:
    nuget_version = '.'.join(version_parts[:3])+'-build'+version_parts[3]
 
-# Lua rock version: x.y.z[.w]-0
-lua_version = '.'.join(version_parts)+'-0'
+# Lua rock version: x.y.z[.w]
+lua_version = '.'.join(version_parts[:4])
 
 # KSP-AVC versions
 if len(version_parts) == 3:

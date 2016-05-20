@@ -1,6 +1,7 @@
 from setuptools import setup
 import sys
 import os
+import re
 
 dirpath = os.path.dirname(os.path.realpath(__file__))
 
@@ -16,7 +17,7 @@ if os.getenv('BAZEL_BUILD') and not os.path.exists(os.path.join(dirpath, 'VERSIO
 install_requires=['krpc', 'jinja2']
 setup(
     name='krpctools',
-    version=open(os.path.join(dirpath, 'VERSION.txt')).read().strip(),
+    version=re.search(r'\'(.+)\'', open(os.path.join(dirpath, 'krpctools/version.py')).read()).group(1),
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     url='https://krpc.github.io/krpc',

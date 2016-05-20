@@ -1,45 +1,47 @@
-load('/tools/build/lua', 'lua_rock', 'lua_test')
+load('/tools/build/pkg', 'pkg_zip')
+load('/tools/build/lua', 'lua_test')
 load('/tools/build/client_test', 'client_test')
 load('/config', 'version', 'lua_version')
 
-filegroup(
+pkg_zip(
     name = 'lua',
-    srcs = [':zip'],
-    visibility = ['//visibility:public']
-)
-
-genrule(
-    name = 'zip',
-    srcs = [':rock'],
-    outs = ['krpc-lua-%s.zip' % version],
-    cmd = 'ln -f -s "`pwd`/$<" "`pwd`/$@"',
-    output_to_bindir = True
-)
-
-lua_rock(
-    name = 'rock',
-    pkg = 'krpc',
-    version = lua_version,
-    rockspec = ':rockspec',
-    srcs = glob(['krpc/**/*.lua']) + [
-        '//:readme', '//:version', 'CHANGES.txt',
-        'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-        '//protobuf:lua'
+    out = 'krpc-lua-%s.zip' % version,
+    files = [
+        ':rockspec',
+        ':src'
     ],
     path_map = {
-        'client/lua/CHANGES.txt': 'CHANGES.txt',
-        'client/lua/LICENSE': 'LICENSE',
-        'client/': '',
-        'protobuf/KRPC.lua': 'lua/krpc/schema/KRPC.lua'
-    }
+        'client/lua/': ''
+    },
+    visibility = ['//visibility:public']
 )
 
 genrule(
     name = 'rockspec',
     srcs = ['rockspec.tmpl'],
-    outs = ['krpc-'+lua_version+'.rockspec'],
-    cmd = 'sed \'s/%VERSION%/'+lua_version+'/g\' $(locations :rockspec.tmpl) > $@',
+    outs = ['krpc-'+lua_version+'-0.rockspec'],
+    cmd = 'sed \'s/%VERSION%/'+version+'/g\' $(locations :rockspec.tmpl) | sed \'s/%LUA_VERSION%/'+lua_version+'/g\' > $@',
     output_to_bindir = True
+)
+
+pkg_zip(
+    name = 'src',
+    out = 'krpc-%s.zip' % version,
+    files = glob(['krpc/**/*.lua']) + [
+        '//:readme', '//:version', 'CHANGES.txt',
+        'LICENSE', '//:COPYING', '//:COPYING.LESSER',
+        '//protobuf:lua'
+    ],
+    path_map = {
+        'COPYING': 'krpc-%s/COPYING' % version,
+        'COPYING.LESSER': 'krpc-%s/COPYING.LESSER' % version,
+        'README.txt': 'krpc-%s/README.txt' % version,
+        'VERSION.txt': 'krpc-%s/VERSION.txt' % version,
+        'client/lua/CHANGES.txt': 'krpc-%s/CHANGES.txt' % version,
+        'client/lua/LICENSE': 'krpc-%s/LICENSE' % version,
+        'client/': 'krpc-%s/' % version,
+        'protobuf/KRPC.lua': 'krpc-%s/lua/krpc/schema/KRPC.lua' % version
+    }
 )
 
 client_test(
@@ -53,7 +55,7 @@ client_test(
 lua_test(
     name = 'luatest',
     rockspec = ':rockspec',
-    srcrock = ':rock',
+    src = ':src',
     deps = [
         '@lua_luafilesystem//file',
         '@lua_luasocket//file',
