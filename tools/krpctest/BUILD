@@ -1,5 +1,5 @@
 load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test', 'py_lint_test')
-load('/config', 'version')
+load('/config', 'version', 'python_version')
 
 py_sdist(
     name = 'krpctest',
@@ -30,7 +30,7 @@ deps = [
 py_test(
     name = 'test2',
     src = ':krpctest',
-    pkg = 'krpctest-'+version,
+    pkg = 'krpctest-'+python_version,
     deps = deps + ['@python_enum34//file'],
     size = 'small'
 )
@@ -38,7 +38,7 @@ py_test(
 py3_test(
     name = 'test3',
     src = ':krpctest',
-    pkg = 'krpctest-'+version,
+    pkg = 'krpctest-'+python_version,
     deps = deps,
     size = 'small'
 )
