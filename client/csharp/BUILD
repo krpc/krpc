@@ -24,7 +24,7 @@ nuget_package(
     project_url = 'https://github.com/krpc/krpc',
     license_url = 'https://github.com/krpc/krpc/blob/master/LICENSE',
     deps = {
-        'Google.Protobuf': '3.0.0-beta2'
+        'Google.Protobuf': '3.0.0-beta3'
     }
 )
 

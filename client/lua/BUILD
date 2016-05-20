@@ -19,7 +19,7 @@ pkg_zip(
 genrule(
     name = 'rockspec',
     srcs = ['rockspec.tmpl'],
-    outs = ['krpc-'+lua_version+'.rockspec'],
+    outs = ['krpc-'+lua_version+'-0.rockspec'],
     cmd = 'sed \'s/%VERSION%/'+version+'/g\' $(locations :rockspec.tmpl) | sed \'s/%LUA_VERSION%/'+lua_version+'/g\' > $@',
     output_to_bindir = True
 )
