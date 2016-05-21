@@ -105,6 +105,7 @@ pkg_zip(
         '//service/InfernalRobotics',
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
+        '//service/UI',
         # Clients
         '//client/python',
         '//client/cpp',
@@ -141,6 +142,8 @@ pkg_zip(
         'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
         'service/RemoteTech/': 'GameData/kRPC/',
         'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
+        'service/UI/': 'GameData/kRPC/',
+        'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
         # Clients
         'client/csharp/': 'client/',
         'client/cpp/': 'client/',
@@ -182,6 +185,7 @@ filegroup(
         '//service/InfernalRobotics',
         '//service/KerbalAlarmClock',
         '//service/RemoteTech',
+        '//service/UI',
         '//client/csharp',
         '//client/csharp:test',
         '//tools/ServiceDefinitions',

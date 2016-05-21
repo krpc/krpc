@@ -43,7 +43,8 @@ java_library(
         ':services-drawing',
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
-        ':services-remotetech'
+        ':services-remotetech',
+        ':services-ui'
     ],
     resources = [
         '//:readme', '//:version', 'CHANGES.txt',
@@ -134,6 +135,13 @@ clientgen_java(
     service = 'RemoteTech',
     defs = '//service/RemoteTech:ServiceDefinitions',
     out = 'services/RemoteTech.java'
+)
+
+clientgen_java(
+    name = 'services-ui',
+    service = 'UI',
+    defs = '//service/UI:ServiceDefinitions',
+    out = 'services/UI.java'
 )
 
 clientgen_java(

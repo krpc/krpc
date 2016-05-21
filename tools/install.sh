@@ -13,6 +13,7 @@ bazel build \
     //service/InfernalRobotics \
     //service/KerbalAlarmClock \
     //service/RemoteTech \
+    //service/UI \
     //tools/TestingTools
 
 rm -rf $GAMEDATA

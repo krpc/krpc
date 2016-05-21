@@ -21,7 +21,8 @@ autotools_dist(
         ':services-drawing',
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
-        ':services-remotetech'
+        ':services-remotetech',
+        ':services-ui'
     ],
     path_map = {
         'client/cpp/': '%s/' % name,
@@ -95,6 +96,13 @@ clientgen_cpp(
 )
 
 clientgen_cpp(
+    name = 'services-ui',
+    service = 'UI',
+    defs = '//service/UI:ServiceDefinitions',
+    out = 'include/krpc/services/ui.hpp'
+)
+
+clientgen_cpp(
     name = 'services-test-service',
     service = 'TestService',
     defs = '//tools/TestServer:ServiceDefinitions',
@@ -111,7 +119,8 @@ cc_library(
         ':services-drawing',
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
-        ':services-remotetech'
+        ':services-remotetech',
+        ':services-ui'
     ],
     includes = ['include'],
     deps = ['@protobuf//:protobuf', '@cpp_asio//:asio'],

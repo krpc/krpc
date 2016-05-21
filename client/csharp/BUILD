@@ -47,7 +47,8 @@ csharp_library(
         ':services-drawing',
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
-        ':services-remotetech'
+        ':services-remotetech',
+        ':services-ui'
     ],
     deps = [
         '//tools/build/mono-4.5:Google.Protobuf',
@@ -102,6 +103,13 @@ clientgen_csharp(
     service = 'RemoteTech',
     defs = '//service/RemoteTech:ServiceDefinitions',
     out = 'Services/RemoteTech.cs'
+)
+
+clientgen_csharp(
+    name = 'services-ui',
+    service = 'UI',
+    defs = '//service/UI:ServiceDefinitions',
+    out = 'Services/UI.cs'
 )
 
 client_test(

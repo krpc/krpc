@@ -10,3 +10,4 @@ C++
    cpp/api/infernal-robotics
    cpp/api/kerbal-alarm-clock
    cpp/api/remote-tech
+   cpp/api/ui
