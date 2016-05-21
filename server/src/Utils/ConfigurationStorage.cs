@@ -29,8 +29,9 @@ namespace KRPC.Utils
         public void Load ()
         {
             if (FileExists) {
-                ConfigNode node = ConfigNode.Load (filePath).GetNode (GetType ().Name);
-                ConfigNode.LoadObjectFromConfig (this, node);
+                ConfigNode node = ConfigNode.Load (filePath);
+                if (node != null && node.HasNode (GetType ().Name))
+                    ConfigNode.LoadObjectFromConfig (this, node.GetNode (GetType ().Name));
             }
         }
 
