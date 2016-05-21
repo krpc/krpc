@@ -9,6 +9,7 @@ bazel build \
     //:ksp-avc-version \
     //server \
     //service/SpaceCenter \
+    //service/Drawing \
     //service/InfernalRobotics \
     //service/KerbalAlarmClock \
     //service/RemoteTech \

@@ -18,6 +18,7 @@ autotools_dist(
         '//protobuf:cpp',
         ':services-krpc',
         ':services-spacecenter',
+        ':services-drawing',
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
         ':services-remotetech'
@@ -66,6 +67,13 @@ clientgen_cpp(
 )
 
 clientgen_cpp(
+    name = 'services-drawing',
+    service = 'Drawing',
+    defs = '//service/Drawing:ServiceDefinitions',
+    out = 'include/krpc/services/drawing.hpp'
+)
+
+clientgen_cpp(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
@@ -100,6 +108,7 @@ cc_library(
         ':protobuf',
         ':services-krpc',
         ':services-spacecenter',
+        ':services-drawing',
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
         ':services-remotetech'

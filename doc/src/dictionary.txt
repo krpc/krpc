@@ -29,6 +29,7 @@ Kerbin
 Kosmo
 krpc
 kRPC
+kRPCs
 kRPCSpaceCenter
 libxml
 libxslt
@@ -57,6 +58,7 @@ proto
 protobuf
 py
 quicksave
+rect
 serializable
 streamPort
 symlink
@@ -69,4 +71,5 @@ undocking
 undocks
 unserialize
 varint
+vertices
 virtualenv

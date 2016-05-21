@@ -44,6 +44,7 @@ csharp_library(
         '//protobuf:csharp',
         ':services-krpc',
         ':services-spacecenter',
+        ':services-drawing',
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
         ':services-remotetech'
@@ -73,6 +74,13 @@ clientgen_csharp(
     service = 'SpaceCenter',
     defs = '//service/SpaceCenter:ServiceDefinitions',
     out = 'Services/SpaceCenter.cs'
+)
+
+clientgen_csharp(
+    name = 'services-drawing',
+    service = 'Drawing',
+    defs = '//service/Drawing:ServiceDefinitions',
+    out = 'Services/Drawing.cs'
 )
 
 clientgen_csharp(

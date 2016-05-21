@@ -40,6 +40,7 @@ java_library(
         '//protobuf:java',
         ':services-krpc',
         ':services-spacecenter',
+        ':services-drawing',
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
         ':services-remotetech'
@@ -105,6 +106,13 @@ clientgen_java(
     service = 'SpaceCenter',
     defs = '//service/SpaceCenter:ServiceDefinitions',
     out = 'services/SpaceCenter.java'
+)
+
+clientgen_java(
+    name = 'services-drawing',
+    service = 'Drawing',
+    defs = '//service/Drawing:ServiceDefinitions',
+    out = 'services/Drawing.java'
 )
 
 clientgen_java(
