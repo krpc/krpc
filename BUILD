@@ -51,6 +51,12 @@ genrule(
 )
 
 genrule(
+    name = 'blank_settings',
+    outs = ['GameData/kRPC/PluginData/settings.cfg'],
+    cmd = 'echo "" > "$@"'
+)
+
+genrule(
     name = 'version',
     outs = ['VERSION.txt'],
     cmd = 'echo "%s" > "$@"' % version,
@@ -90,6 +96,7 @@ pkg_zip(
         'COPYING.LESSER',
         # Server
         '//server',
+        ':blank_settings',
         '//tools/build/ksp:Google.Protobuf',
         '//tools/build/protobuf:LICENSE',
         # Services
