@@ -59,9 +59,11 @@ namespace KRPC.Service.Scanner
         public ServiceSignature (string name)
         {
             Name = name;
+            Documentation = "";
             Classes = new Dictionary<string, ClassSignature> ();
             Enumerations = new Dictionary<string, EnumerationSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
+            GameScene = GameScene.All;
         }
 
         /// <summary>
