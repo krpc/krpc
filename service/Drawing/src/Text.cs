@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using KRPC.UI.ExtensionMethods;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPC.Drawing
 {
@@ -20,7 +22,7 @@ namespace KRPC.Drawing
         Vector3d position;
         QuaternionD rotation;
 
-        internal Text (string content, ReferenceFrame referenceFrame, Vector3d position, QuaternionD rotation)
+        internal Text (string content, ReferenceFrame referenceFrame, Vector3d position, QuaternionD rotation, bool visible)
             : base ("text", typeof(MeshRenderer))
         {
             mesh = GameObject.AddComponent<TextMesh> ();
@@ -32,6 +34,7 @@ namespace KRPC.Drawing
             ReferenceFrame = referenceFrame;
             this.position = position;
             this.rotation = rotation;
+            Visible = visible;
         }
 
         /// <summary>
@@ -39,8 +42,27 @@ namespace KRPC.Drawing
         /// </summary>
         public override void Update ()
         {
+            renderer.enabled = Visible;
             renderer.transform.position = ReferenceFrame.PositionToWorldSpace (position);
             renderer.transform.rotation = ReferenceFrame.RotationToWorldSpace (rotation);
+        }
+
+        /// <summary>
+        /// Position of the text.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 Position {
+            get { return position.ToTuple (); }
+            set { position = value.ToVector (); }
+        }
+
+        /// <summary>
+        /// Rotation of the text as a quaternion.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple4 Rotation {
+            get { return rotation.ToTuple (); }
+            set { rotation = value.ToQuaternion (); }
         }
 
         /// <summary>

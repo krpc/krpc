@@ -20,7 +20,7 @@ namespace KRPC.Drawing
         Tuple3 color;
         float thickness;
 
-        internal Line (Vector3d start, Vector3d end, ReferenceFrame referenceFrame)
+        internal Line (Vector3d start, Vector3d end, ReferenceFrame referenceFrame, bool visible)
             : base ("line", typeof(LineRenderer))
         {
             renderer = GameObject.GetComponent<LineRenderer> ();
@@ -31,8 +31,9 @@ namespace KRPC.Drawing
             this.start = start;
             this.end = end;
             ReferenceFrame = referenceFrame;
+            Visible = visible;
             Color = new Tuple3 (1, 1, 1);
-            Thickness = 0.25f;
+            Thickness = 0.1f;
         }
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace KRPC.Drawing
         /// </summary>
         public override void Update ()
         {
+            renderer.enabled = Visible;
             renderer.SetPosition (0, ReferenceFrame.PositionToWorldSpace (start));
             renderer.SetPosition (1, ReferenceFrame.PositionToWorldSpace (end));
         }

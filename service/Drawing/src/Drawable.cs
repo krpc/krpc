@@ -83,6 +83,12 @@ namespace KRPC.Drawing
         public ReferenceFrame ReferenceFrame { get; set; }
 
         /// <summary>
+        /// Whether the object is visible.
+        /// </summary>
+        [KRPCProperty]
+        public bool Visible { get; set; }
+
+        /// <summary>
         /// Material used to render the object.
         /// Creates the material from a shader with the given name.
         /// </summary>

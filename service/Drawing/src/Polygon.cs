@@ -21,7 +21,7 @@ namespace KRPC.Drawing
         Tuple3 color;
         float thickness;
 
-        internal Polygon (IList<Vector3d> vertices, ReferenceFrame referenceFrame)
+        internal Polygon (IList<Vector3d> vertices, ReferenceFrame referenceFrame, bool visible)
             : base ("polygon", typeof(LineRenderer))
         {
             renderer = GameObject.GetComponent<LineRenderer> ();
@@ -31,8 +31,9 @@ namespace KRPC.Drawing
                 renderer.SetPosition (i, Vector3d.zero);
             this.vertices = vertices;
             ReferenceFrame = referenceFrame;
+            Visible = visible;
             Color = new Tuple3 (1, 1, 1);
-            Thickness = 0.25f;
+            Thickness = 0.1f;
         }
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace KRPC.Drawing
         /// </summary>
         public override void Update ()
         {
+            renderer.enabled = Visible;
             for (int i = 0; i < vertices.Count; i++)
                 renderer.SetPosition (i, ReferenceFrame.PositionToWorldSpace (vertices [i]));
             renderer.SetPosition (vertices.Count, ReferenceFrame.PositionToWorldSpace (vertices [0]));
