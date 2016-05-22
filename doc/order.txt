@@ -650,6 +650,7 @@ Drawing.Line
 Drawing.Line.Start
 Drawing.Line.End
 Drawing.Line.ReferenceFrame
+Drawing.Line.Visible
 Drawing.Line.Color
 Drawing.Line.Material
 Drawing.Line.Thickness
@@ -657,11 +658,17 @@ Drawing.Line.Remove
 Drawing.Polygon
 Drawing.Polygon.Vertices
 Drawing.Polygon.ReferenceFrame
+Drawing.Polygon.Visible
+Drawing.Polygon.Remove
 Drawing.Polygon.Color
 Drawing.Polygon.Material
 Drawing.Polygon.Thickness
-Drawing.Polygon.Remove
 Drawing.Text
+Drawing.Text.Position
+Drawing.Text.Rotation
+Drawing.Text.ReferenceFrame
+Drawing.Text.Visible
+Drawing.Text.Remove
 Drawing.Text.Content
 Drawing.Text.Font
 Drawing.Text.AvailableFonts
@@ -673,8 +680,6 @@ Drawing.Text.Material
 Drawing.Text.Alignment
 Drawing.Text.LineSpacing
 Drawing.Text.Anchor
-Drawing.Text.ReferenceFrame
-Drawing.Text.Remove
 InfernalRobotics
 InfernalRobotics.ServoGroups
 InfernalRobotics.ServoGroupWithName
