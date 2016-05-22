@@ -162,6 +162,7 @@ test_suite(
     tests = [
         '//server:test',
         '//service/SpaceCenter:test',
+        '//service/Drawing:test',
         '//service/InfernalRobotics:test',
         '//service/RemoteTech:test',
         '//client/csharp:test',
