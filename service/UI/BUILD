@@ -4,7 +4,7 @@ load('/config', 'assembly_version', 'author')
 
 filegroup(
     name = 'UI',
-    srcs = [':KRPC.UI', ':ServiceDefinitions', 'CHANGES.txt'],
+    srcs = [':KRPC.UI', ':ServiceDefinitions', 'CHANGES.txt', 'KRPC.UI.ksp'],
     visibility = ['//:__pkg__']
 )
 

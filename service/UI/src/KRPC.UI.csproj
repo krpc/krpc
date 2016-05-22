@@ -79,10 +79,19 @@
     <Compile Include="..\..\..\bazel-bin\service\UI\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Addon.cs" />
+    <Compile Include="Button.cs" />
+    <Compile Include="DragPanel.cs" />
     <Compile Include="ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="ExtensionMethods\TextExtensions.cs" />
     <Compile Include="FontStyle.cs" />
+    <Compile Include="InputField.cs" />
+    <Compile Include="Panel.cs" />
+    <Compile Include="RectTransform.cs" />
+    <Compile Include="Text.cs" />
     <Compile Include="TextAlignment.cs" />
     <Compile Include="TextAnchor.cs" />
+    <Compile Include="UI.cs" />
+    <Compile Include="UIObject.cs" />
   </ItemGroup>
 </Project>
