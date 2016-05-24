@@ -138,9 +138,10 @@ namespace KRPC.Server.TCP
         public void Update ()
         {
             // Remove disconnected clients
-            if (clients.Count > 0) {
-                foreach (var client in clients.Where (x => !x.Connected).ToList ()) {
-                    clients.Remove (client);
+            for (int i = clients.Count - 1; i >= 0; i--) {
+                var client = clients [i];
+                if (!client.Connected) {
+                    clients.RemoveAt (i);
                     DisconnectClient (client);
                 }
             }
