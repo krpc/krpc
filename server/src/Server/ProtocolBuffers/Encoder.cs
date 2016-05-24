@@ -11,13 +11,20 @@ namespace KRPC.Server.ProtocolBuffers
 {
     static class Encoder
     {
+        static MemoryStream cachedBuffer = new MemoryStream ();
+        static CodedOutputStream cachedStream = new CodedOutputStream (cachedBuffer);
+
         /// <summary>
         /// Encode an object using the protocol buffer encoding scheme.
         /// </summary>
         public static ByteString Encode (object value)
         {
-            var buffer = new MemoryStream ();
-            var stream = new CodedOutputStream (buffer);
+            return EncodeObject (value, cachedBuffer, cachedStream);
+        }
+
+        static ByteString EncodeObject (object value, MemoryStream buffer, CodedOutputStream stream)
+        {
+            buffer.SetLength (0);
             if (value == null) {
                 stream.WriteUInt64 (0);
                 stream.Flush ();
@@ -64,26 +71,36 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteMessage (object value, CodedOutputStream stream)
         {
+            var savedCachedBuffer = cachedBuffer;
+            var savedCachedStream = cachedStream;
+            cachedBuffer = new MemoryStream ();
+            cachedStream = new CodedOutputStream (cachedBuffer);
             Google.Protobuf.IMessage message = ((Service.Messages.IMessage)value).ToProtobufMessage ();
+            cachedBuffer = savedCachedBuffer;
+            cachedStream = savedCachedStream;
             message.WriteTo (stream);
         }
 
         static void WriteList (object value, CodedOutputStream stream)
         {
+            var internalBuffer = new MemoryStream ();
+            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedList = new KRPC.Schema.KRPC.List ();
             var list = (IList)value;
             foreach (var item in list)
-                encodedList.Items.Add (Encode (item));
+                encodedList.Items.Add (EncodeObject (item, internalBuffer, internalStream));
             encodedList.WriteTo (stream);
         }
 
         static void WriteDictionary (object value, CodedOutputStream stream)
         {
+            var internalBuffer = new MemoryStream ();
+            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedDictionary = new KRPC.Schema.KRPC.Dictionary ();
             foreach (DictionaryEntry entry in (IDictionary) value) {
                 var encodedEntry = new KRPC.Schema.KRPC.DictionaryEntry ();
-                encodedEntry.Key = Encode (entry.Key);
-                encodedEntry.Value = Encode (entry.Value);
+                encodedEntry.Key = EncodeObject (entry.Key, internalBuffer, internalStream);
+                encodedEntry.Value = EncodeObject (entry.Value, internalBuffer, internalStream);
                 encodedDictionary.Entries.Add (encodedEntry);
             }
             encodedDictionary.WriteTo (stream);
@@ -91,15 +108,19 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteSet (object value, CodedOutputStream stream)
         {
+            var internalBuffer = new MemoryStream ();
+            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedSet = new KRPC.Schema.KRPC.Set ();
             var set = (IEnumerable)value;
             foreach (var item in set)
-                encodedSet.Items.Add (Encode (item));
+                encodedSet.Items.Add (EncodeObject (item, internalBuffer, internalStream));
             encodedSet.WriteTo (stream);
         }
 
         static void WriteTuple (object value, CodedOutputStream stream)
         {
+            var internalBuffer = new MemoryStream ();
+            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedTuple = new KRPC.Schema.KRPC.Tuple ();
             var valueTypes = value.GetType ().GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
@@ -107,7 +128,7 @@ namespace KRPC.Server.ProtocolBuffers
             for (int i = 0; i < valueTypes.Length; i++) {
                 var property = tupleType.GetProperty ("Item" + (i + 1));
                 var item = property.GetGetMethod ().Invoke (value, null);
-                encodedTuple.Items.Add (Encode (item));
+                encodedTuple.Items.Add (EncodeObject (item, internalBuffer, internalStream));
             }
             encodedTuple.WriteTo (stream);
         }
