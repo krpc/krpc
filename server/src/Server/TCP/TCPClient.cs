@@ -8,6 +8,7 @@ namespace KRPC.Server.TCP
     {
         readonly Guid guid;
         readonly TcpClient tcpClient;
+        readonly TCPStream stream;
 
         public TCPClient (TcpClient tcpClient)
         {
@@ -19,6 +20,7 @@ namespace KRPC.Server.TCP
             } catch {
                 Address = "";
             }
+            stream = new TCPStream (tcpClient.GetStream ());
         }
 
         public string Name {
@@ -32,16 +34,10 @@ namespace KRPC.Server.TCP
         public string Address { get; private set; }
 
         public IStream<byte,byte> Stream {
-            get {
-                try {
-                    return new TCPStream (tcpClient.GetStream ());
-                } catch (ObjectDisposedException) {
-                    throw new ClientDisconnectedException ();
-                } catch (InvalidOperationException) {
-                    throw new ClientDisconnectedException ();
-                }
-            }
+            get { return stream; }
         }
+
+        byte[] connectedTestBuffer = new byte[1];
 
         public bool Connected {
             get {
@@ -49,10 +45,8 @@ namespace KRPC.Server.TCP
                     if (!tcpClient.Client.Connected) {
                         return false;
                     }
-                    if (tcpClient.Client.Poll (0, SelectMode.SelectRead)) {
-                        var buffer = new byte[1];
-                        return tcpClient.Client.Receive (buffer, SocketFlags.Peek) != 0;
-                    }
+                    if (tcpClient.Client.Poll (0, SelectMode.SelectRead))
+                        return tcpClient.Client.Receive (connectedTestBuffer, SocketFlags.Peek) != 0;
                     return true;
                 } catch {
                     return false;
