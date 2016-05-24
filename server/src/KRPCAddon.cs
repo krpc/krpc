@@ -30,7 +30,7 @@ namespace KRPC
                 return;
 
             // Load config
-            config = new KRPCConfiguration ("settings.cfg");
+            config = new KRPCConfiguration ("PluginData/settings.cfg");
             config.Load ();
 
             // Set up core
@@ -245,7 +245,7 @@ namespace KRPC
         {
             if (!ServicesChecker.OK)
                 return;
-            if (server.Running)
+            if (server != null && server.Running)
                 core.Update ();
         }
     }

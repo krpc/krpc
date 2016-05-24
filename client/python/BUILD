@@ -1,12 +1,6 @@
-load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test')
+load('/tools/build/python', 'py_sdist', 'py_test', 'py3_test', 'py_lint_test')
 load('/tools/build/client_test', 'client_test')
-load('/config', 'version')
-
-genrule(
-    name = 'version',
-    outs = ['krpc/version.py'],
-    cmd = 'echo "__version__ = \'%s\'" > "$@"' % version
-)
+load('/config', 'version', 'python_version')
 
 genrule(
     name = 'python',
@@ -23,10 +17,11 @@ py_sdist(
     files = [
         '//:readme', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
-        'setup.py', 'MANIFEST.in', ':version',
+        'setup.py', 'MANIFEST.in', '//:python_version',
         '//protobuf:python'
     ] + glob(['krpc/**/*']),
     path_map = {
+        'version.py': 'krpc/version.py',
         'client/python/': '',
         'protobuf/': 'krpc/schema/'
     }
@@ -34,7 +29,7 @@ py_sdist(
 
 test_suite(
     name = 'test',
-    tests = [':test2', ':test3']
+    tests = [':test2', ':test3', ':lint']
 )
 
 client_test(
@@ -53,11 +48,13 @@ client_test(
     size = 'small'
 )
 
+deps = ['@python_six//file', '@python_protobuf//file']
+
 py_test(
     name = 'py2test',
     src = ':python',
-    pkg = 'krpc-'+version,
-    deps = ['@python_six//file', '@python_protobuf//file', '@python_enum34//file'],
+    pkg = 'krpc-'+python_version,
+    deps = deps + ['@python_enum34//file'],
     tags = ['requires-network'],
     size = 'small'
 )
@@ -65,9 +62,17 @@ py_test(
 py3_test(
     name = 'py3test',
     src = ':python',
-    pkg = 'krpc-'+version,
-    #use3 = True,
-    deps = ['@python_six//file', '@python_protobuf//file'],
+    pkg = 'krpc-'+python_version,
+    deps = deps,
     tags = ['requires-network'],
+    size = 'small'
+)
+
+py_lint_test(
+    name = 'lint',
+    src = ':python',
+    pkg = 'krpc',
+    deps = deps + ['@python_enum34//file'],
+    rcfile = 'pylint.rc',
     size = 'small'
 )

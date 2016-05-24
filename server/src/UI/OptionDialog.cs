@@ -7,6 +7,7 @@ namespace KRPC.UI
     abstract class OptionDialog : MonoBehaviour
     {
         MultiOptionDialog dialog;
+        PopupDialog popup;
         bool hasInit;
 
         protected string Title { get; set; }
@@ -35,6 +36,10 @@ namespace KRPC.UI
 
         public void Open ()
         {
+            if (!hasInit) {
+                Init ();
+                hasInit = true;
+            }
             if (!Visible) {
                 if (Skin == null)
                     Skin = HighLogic.UISkin;
@@ -43,28 +48,24 @@ namespace KRPC.UI
                 if (OnOpen != null)
                     OnOpen (this, EventArgs.Empty);
                 dialog = new MultiOptionDialog (Message, Title, Skin, Options.ToArray ());
+                popup = PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), dialog, true, HighLogic.UISkin);
             }
         }
 
         public void Close ()
         {
             if (Visible) {
+                try {
+                    UnityEngine.Object.Destroy (popup.gameObject);
+                } catch (NullReferenceException) {
+                    //FIXME: Nasty hack catching this. Dialog may have already been removed by other UI logic.
+                }
                 Visible = false;
                 dialog = null;
+                popup = null;
                 Closed ();
                 if (OnClose != null)
                     OnClose (this, EventArgs.Empty);
-            }
-        }
-
-        void OnGUI ()
-        {
-            if (!hasInit) {
-                Init ();
-                hasInit = true;
-            }
-            if (Visible) {
-                dialog.Update ();
             }
         }
     }

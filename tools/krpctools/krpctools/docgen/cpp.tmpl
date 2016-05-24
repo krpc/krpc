@@ -2,7 +2,7 @@
 .. namespace:: krpc::services
 .. class:: {{ x.name }} : public krpc::Service
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
    .. function:: {{ x.name }}(krpc::Client* client)
 
@@ -19,10 +19,9 @@
 {% endmacro %}
 
 {% macro class(x) %}{{ mark_documented(x) }}
-.. namespace:: krpc::services::{{ x.service_name }}
 .. class:: {{ x.name }}
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -40,9 +39,9 @@
 {% endmacro %}
 
 {% macro procedure(x) %}{{ mark_documented(x) }}
-.. function:: {{ x.return_type | return_type }} {{ x.name | snakecase }}({{ parameters(x.parameters) }})
+.. function:: {{ domain.return_type(x.return_type) }} {{ x.name | snakecase }}({{ parameters(x.parameters) }})
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {{ parameters_description(x.parameters) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
@@ -57,13 +56,13 @@
 
 {% macro property(x) %}{{ mark_documented(x) }}
 {% if x.getter != None %}
-.. function:: {{ x.type | return_type }} {{ x.name | snakecase }}()
+.. function:: {{ domain.return_type(x.type) }} {{ x.name | snakecase }}()
 {% endif %}
 {% if x.setter != None %}
-.. function:: void set_{{ x.name | snakecase }}({{ x.type | parameter_type }} value)
+.. function:: void set_{{ x.name | snakecase }}({{ domain.parameter_type(x.type) }} value)
 {% endif %}
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
@@ -76,9 +75,9 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. function:: {{ x.return_type | return_type }} {{ x.name | snakecase }}({{ parameters(x.parameters[1:]) }})
+.. function:: {{ domain.return_type(x.return_type) }} {{ x.name | snakecase }}({{ parameters(x.parameters[1:]) }})
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {{ parameters_description(x.parameters[1:]) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
@@ -92,9 +91,9 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. function:: static {{ x.return_type | return_type }} {{ x.name | snakecase }}({{ parameters(x.parameters) }})
+.. function:: static {{ domain.return_type(x.return_type) }} {{ x.name | snakecase }}({{ parameters(x.parameters) }})
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {{ parameters_description(x.parameters) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
@@ -115,13 +114,13 @@
 .. namespace:: krpc::services::{{ x.service_name }}
 .. enum-struct:: {{ x.name }}
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
    .. enumerator:: {{ value.name | snakecase }}
 
-{{ value.documentation | parsedoc | indent(width=6) }}
+{{ gendoc(value.documentation) | indent(width=6) }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent(width=6) }}{% endif %}
 {% endfor %}
@@ -133,9 +132,9 @@
 
 {% macro parameter(x) %}
 {% if not x.has_default_value -%}
-{{ x.type | parameter_type }} {{ x.name | snakecase }}
+{{ domain.parameter_type(x.type) }} {{ x.name | snakecase }}
 {%- else -%}
-{{ x.type | parameter_type }} {{ x.name | snakecase }} = {{ x.default_value }}
+{{ domain.parameter_type(x.type) }} {{ x.name | snakecase }} = {{ x.default_value }}
 {%- endif %}
 {% endmacro %}
 
@@ -144,18 +143,18 @@
    :Parameters:
 
    {% for p in x %}
-   {% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %}    * **{{ p.name | snakecase }}** -- {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+   {% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %}    * **{{ p.name | snakecase }}** -- {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}
 
    {% endfor %}
 {% endif %}
 {% endmacro %}
 
 {% macro returns(x) %}
-:returns: {{ x | parsedoc('./returns') | singleline }}
+:returns: {{ gendoc(x, './returns') | singleline }}
 {% endmacro %}
 
 {% macro remarks(x) %}
 .. note::
 
-{{ x | parsedoc('./remarks') | indent }}
+{{ gendoc(x, './remarks') | indent }}
 {% endmacro %}

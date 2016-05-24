@@ -1,102 +1,102 @@
 import unittest
-import testingtools
-import krpc
 import time
+import krpctest
+import krpc
 
-class TestResourceTransfer(testingtools.TestCase):
+class TestResourceTransfer(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('ResourceTransfer')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestResourceTransfer')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('ResourceTransfer')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(cls)
         cls.sc = cls.conn.space_center
-        cls.vessel = cls.sc.active_vessel
-        cls.vessel.parts.decouplers[0].decouple()
-        time.sleep(0.1)
-        cls.other_vessel = next(iter(filter(lambda v: v != cls.vessel, cls.sc.vessels)))
+        vessel = cls.sc.active_vessel
+        cls.parts = vessel.parts
+        other_vessel = vessel.parts.decouplers[0].decouple()
+        cls.other_parts = other_vessel.parts
 
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
 
     def test_transfer(self):
-        fromPart = next(iter(self.vessel.parts.with_title('Stratus-V Cylindrified Monopropellant Tank')))
-        toPart = next(iter(self.vessel.parts.with_title('Stratus-V Roundified Monopropellant Tank')))
-        fromPartAmount = fromPart.resources.amount('MonoPropellant')
-        toPartAmount = toPart.resources.amount('MonoPropellant')
-        transfer = self.sc.ResourceTransfer.start(fromPart, toPart, 'MonoPropellant', 10)
+        from_part = self.parts.with_title('Stratus-V Cylindrified Monopropellant Tank')[0]
+        to_part = self.parts.with_title('Stratus-V Roundified Monopropellant Tank')[0]
+        from_part_amount = from_part.resources.amount('MonoPropellant')
+        to_part_amount = to_part.resources.amount('MonoPropellant')
+        transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'MonoPropellant', 10)
         while not transfer.complete:
             time.sleep(0.1)
-        self.assertClose (transfer.amount, 10)
-        self.assertClose (fromPartAmount - 10, fromPart.resources.amount('MonoPropellant'))
-        self.assertClose (toPartAmount + 10, toPart.resources.amount('MonoPropellant'))
+        self.assertClose(10, transfer.amount)
+        self.assertClose(from_part_amount - 10, from_part.resources.amount('MonoPropellant'))
+        self.assertClose(to_part_amount + 10, to_part.resources.amount('MonoPropellant'))
 
     def test_transfer_all(self):
-        fromPart = next(iter(self.vessel.parts.with_title('PB-X50R Xenon Container')))
-        toPart = next(iter(self.vessel.parts.with_title('PB-X750 Xenon Container')))
-        transfer = self.sc.ResourceTransfer.start(fromPart, toPart, 'XenonGas', float('inf'))
+        from_part = self.parts.with_title('PB-X50R Xenon Container')[0]
+        to_part = self.parts.with_title('PB-X750 Xenon Container')[0]
+        transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'XenonGas', float('inf'))
         while not transfer.complete:
             time.sleep(0.1)
-        self.assertClose (transfer.amount, 200)
-        self.assertClose (200, fromPart.resources.amount('XenonGas'))
-        self.assertClose (5250, toPart.resources.amount('XenonGas'))
+        self.assertClose(200, transfer.amount)
+        self.assertClose(200, from_part.resources.amount('XenonGas'))
+        self.assertClose(5250, to_part.resources.amount('XenonGas'))
 
-    def test_transfer_with_limited_source (self):
-        fromPart = next(iter(self.vessel.parts.with_title('FL-T400 Fuel Tank')))
-        toPart = next(iter(self.vessel.parts.with_title('FL-T100 Fuel Tank')))
-        toPartAmount = toPart.resources.amount('LiquidFuel')
-        transfer = self.sc.ResourceTransfer.start(fromPart, toPart, 'LiquidFuel', 10)
+    def test_transfer_with_limited_source(self):
+        from_part = self.parts.with_title('FL-T400 Fuel Tank')[0]
+        to_part = self.parts.with_title('FL-T100 Fuel Tank')[0]
+        to_part_amount = to_part.resources.amount('LiquidFuel')
+        transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'LiquidFuel', 10)
         while not transfer.complete:
             time.sleep(0.1)
-        self.assertClose (transfer.amount, 5)
-        self.assertClose (0, fromPart.resources.amount('LiquidFuel'))
-        self.assertClose (toPartAmount + 5, toPart.resources.amount('LiquidFuel'))
+        self.assertClose(5, transfer.amount)
+        self.assertClose(0, from_part.resources.amount('LiquidFuel'))
+        self.assertClose(to_part_amount + 5, to_part.resources.amount('LiquidFuel'))
 
-    def test_transfer_with_limited_destination (self):
-        fromPart = next(iter(self.vessel.parts.with_title('FL-T400 Fuel Tank')))
-        toPart = next(iter(self.vessel.parts.with_title('FL-T100 Fuel Tank')))
-        fromPartAmount = fromPart.resources.amount('Oxidizer')
-        transfer = self.sc.ResourceTransfer.start(fromPart, toPart, 'Oxidizer', 40)
+    def test_transfer_with_limited_destination(self):
+        from_part = self.parts.with_title('FL-T400 Fuel Tank')[0]
+        to_part = self.parts.with_title('FL-T100 Fuel Tank')[0]
+        from_part_amount = from_part.resources.amount('Oxidizer')
+        transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'Oxidizer', 40)
         while not transfer.complete:
             time.sleep(0.1)
-        self.assertClose (transfer.amount, 25)
-        self.assertClose (fromPartAmount - 25, fromPart.resources.amount('Oxidizer'))
-        self.assertClose (55, toPart.resources.amount('Oxidizer'))
+        self.assertClose(25, transfer.amount)
+        self.assertClose(from_part_amount - 25, from_part.resources.amount('Oxidizer'))
+        self.assertClose(55, to_part.resources.amount('Oxidizer'))
 
     def test_transfer_between_different_vessels(self):
-        fromPart = next(iter(self.vessel.parts.all))
-        toPart = next(iter(self.other_vessel.parts.all))
+        from_part = self.parts.all[0]
+        to_part = self.other_parts.all[0]
         with self.assertRaises(krpc.error.RPCError) as cm:
-            self.sc.ResourceTransfer.start(fromPart, toPart, 'Oxidizer', 100)
+            self.sc.ResourceTransfer.start(from_part, to_part, 'Oxidizer', 100)
         self.assertTrue('Parts are not on the same vessel' in str(cm.exception))
 
     def test_transfer_between_same_parts(self):
-        part = next(iter(self.vessel.parts.with_title('FL-T400 Fuel Tank')))
+        part = self.parts.with_title('FL-T400 Fuel Tank')[0]
         with self.assertRaises(krpc.error.RPCError) as cm:
             self.sc.ResourceTransfer.start(part, part, 'Oxidizer', 100)
         self.assertTrue('Source and destination parts are the same' in str(cm.exception))
 
     def test_transfer_unknown_resource(self):
-        fromPart = next(iter(self.vessel.parts.with_title('FL-T400 Fuel Tank')))
-        toPart = next(iter(self.vessel.parts.with_title('FL-T100 Fuel Tank')))
+        from_part = self.parts.with_title('FL-T400 Fuel Tank')[0]
+        to_part = self.parts.with_title('FL-T100 Fuel Tank')[0]
         with self.assertRaises(krpc.error.RPCError) as cm:
-            self.sc.ResourceTransfer.start(fromPart, toPart, 'DoesntExist', 100)
+            self.sc.ResourceTransfer.start(from_part, to_part, 'DoesntExist', 100)
         self.assertTrue('Resource \'DoesntExist\' does not exist' in str(cm.exception))
 
     def test_transfer_from_part_without_resource(self):
-        fromPart = next(iter(self.vessel.parts.with_title('Stratus-V Roundified Monopropellant Tank')))
-        toPart = next(iter(self.vessel.parts.with_title('FL-T100 Fuel Tank')))
+        from_part = self.parts.with_title('Stratus-V Roundified Monopropellant Tank')[0]
+        to_part = self.parts.with_title('FL-T100 Fuel Tank')[0]
         with self.assertRaises(krpc.error.RPCError) as cm:
-            self.sc.ResourceTransfer.start(fromPart, toPart, 'Oxidizer', 100)
+            self.sc.ResourceTransfer.start(from_part, to_part, 'Oxidizer', 100)
         self.assertTrue('Source part does not contain' in str(cm.exception))
 
     def test_transfer_to_part_without_resource(self):
-        fromPart = next(iter(self.vessel.parts.with_title('FL-T100 Fuel Tank')))
-        toPart = next(iter(self.vessel.parts.with_title('Stratus-V Roundified Monopropellant Tank')))
+        from_part = self.parts.with_title('FL-T100 Fuel Tank')[0]
+        to_part = self.parts.with_title('Stratus-V Roundified Monopropellant Tank')[0]
         with self.assertRaises(krpc.error.RPCError) as cm:
-            self.sc.ResourceTransfer.start(fromPart, toPart, 'Oxidizer', 100)
+            self.sc.ResourceTransfer.start(from_part, to_part, 'Oxidizer', 100)
         self.assertTrue('Destination part cannot store' in str(cm.exception))
 
 if __name__ == '__main__':

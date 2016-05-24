@@ -3,13 +3,13 @@ using UnityEngine;
 namespace KRPC.InfernalRobotics
 {
     /// <summary>
-    /// kRPC InfernalRobotics wrapper.
+    /// kRPC InfernalRobotics addon.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class Addon : MonoBehaviour
     {
         /// <summary>
-        /// Start the addon.
+        /// Load the InfernalRobotics API.
         /// </summary>
         public void Start ()
         {

@@ -1,8 +1,8 @@
 using System;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
+using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
@@ -179,7 +179,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Check that FAR is installed and that it is active for the vessel
         /// </summary>
-        void CheckFAR ()
+        static void CheckFAR ()
         {
             if (!FAR.IsAvailable)
                 throw new InvalidOperationException ("FAR is not available");
@@ -279,7 +279,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 var speed = Speed;
                 var verticalSpeed = VerticalSpeed;
-                return Math.Sqrt (Speed * Speed - VerticalSpeed * VerticalSpeed);
+                return Math.Sqrt (speed * speed - verticalSpeed * verticalSpeed);
             }
         }
 

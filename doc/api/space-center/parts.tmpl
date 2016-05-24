@@ -225,17 +225,17 @@ tree of parts in Figure 2. The craft file for this example can also be
 Traversing the Tree
 ^^^^^^^^^^^^^^^^^^^
 
-The tree of parts can be traversed using the attributes {{ 'M:SpaceCenter.Parts.Root' | parsesee }},
-{{ 'M:SpaceCenter.Part.Parent' | parsesee }} and {{ 'M:SpaceCenter.Part.Children' | parsesee }}.
+The tree of parts can be traversed using the attributes {{ see('M:SpaceCenter.Parts.Root') }},
+{{ see('M:SpaceCenter.Part.Parent') }} and {{ see('M:SpaceCenter.Part.Children') }}.
 
 The root of the tree is the same as the vessels *root part* (part number 1 in
-the example above) and can be obtained by calling {{ 'M:SpaceCenter.Parts.Root' | parsesee }}.
-A parts children can be obtained by calling {{ 'M:SpaceCenter.Part.Children' | parsesee }}.
-If the part does not have any children, {{ 'M:SpaceCenter.Part.Children' | parsesee }}
+the example above) and can be obtained by calling {{ see('M:SpaceCenter.Parts.Root') }}.
+A parts children can be obtained by calling {{ see('M:SpaceCenter.Part.Children') }}.
+If the part does not have any children, {{ see('M:SpaceCenter.Part.Children') }}
 returns an empty list. A parts parent can be obtained by calling
-{{ 'M:SpaceCenter.Part.Parent' | parsesee }}. If the part does not have a parent
-(as is the case for the root part), {{ 'M:SpaceCenter.Part.Parent' | parsesee }}
-returns {{ 'null' | parsecode }}.
+{{ see('M:SpaceCenter.Part.Parent') }}. If the part does not have a parent
+(as is the case for the root part), {{ see('M:SpaceCenter.Part.Parent') }}
+returns {{ domain.code('null') }}.
 
 The following {{ domain.prettyname }} example uses these attributes to perform a
 depth-first traversal over all of the parts in a vessel:
@@ -344,12 +344,12 @@ line part 15 (in red) takes fuel from a fuel tank (part 11 -- in green) and
 feeds it into another fuel tank (part 9 -- in blue). The fuel line is therefore
 a child of part 11, but its connection to part 9 is not represented in the tree.
 
-The attributes {{ 'M:SpaceCenter.Part.FuelLinesFrom' | parsesee }} and
-{{ 'M:SpaceCenter.Part.FuelLinesTo' | parsesee }} can be used to discover these
+The attributes {{ see('M:SpaceCenter.Part.FuelLinesFrom') }} and
+{{ see('M:SpaceCenter.Part.FuelLinesTo') }} can be used to discover these
 connections. In the example in Figure 5, when
-{{ 'M:SpaceCenter.Part.FuelLinesTo' | parsesee }} is called on fuel tank part
+{{ see('M:SpaceCenter.Part.FuelLinesTo') }} is called on fuel tank part
 11, it will return a list of parts containing just fuel tank part 9 (the blue
-part). When {{ 'M:SpaceCenter.Part.FuelLinesFrom' | parsesee }} is called on
+part). When {{ see('M:SpaceCenter.Part.FuelLinesFrom') }} is called on
 fuel tank part 9, it will return a list containing fuel tank parts 11 and 17
 (the parts colored green).
 
@@ -366,11 +366,11 @@ Staging
 
 Each part has two staging numbers associated with it: the stage in which the
 part is *activated* and the stage in which the part is *decoupled*. These values
-can be obtained using {{ 'M:SpaceCenter.Part.Stage' | parsesee }} and
-{{ 'M:SpaceCenter.Part.DecoupleStage' | parsesee }} respectively. For parts that
-are not activated by staging, {{ 'M:SpaceCenter.Part.Stage' | parsesee }} returns
+can be obtained using {{ see('M:SpaceCenter.Part.Stage') }} and
+{{ see('M:SpaceCenter.Part.DecoupleStage') }} respectively. For parts that
+are not activated by staging, {{ see('M:SpaceCenter.Part.Stage') }} returns
 -1. For parts that are never decoupled,
-{{ 'M:SpaceCenter.Part.DecoupleStage' | parsesee }} returns a value of -1.
+{{ see('M:SpaceCenter.Part.DecoupleStage') }} returns a value of -1.
 
 Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
 stages in which each part of the vessel will be *activated*. Figure 8 shows the

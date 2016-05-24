@@ -1,15 +1,17 @@
 import unittest
-import testingtools
-from mathtools import vector, norm, normalize
+import krpctest
+from krpctest.geometry import vector, norm, normalize
 import krpc
 
-class TestNode(testingtools.TestCase):
+class TestNode(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.set_circular_orbit('Kerbin', 100000)
-        cls.conn = testingtools.connect(name='TestNode')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('Basic')
+        krpctest.remove_other_vessels()
+        krpctest.set_circular_orbit('Kerbin', 100000)
+        cls.conn = krpctest.connect(cls)
         cls.vessel = cls.conn.space_center.active_vessel
         cls.control = cls.vessel.control
         for node in cls.control.nodes:
@@ -19,46 +21,46 @@ class TestNode(testingtools.TestCase):
     def tearDownClass(cls):
         cls.conn.close()
 
-    def check(self, node, deltav):
-        self.assertClose(deltav[0], node.prograde)
-        self.assertClose(deltav[1], node.normal)
-        self.assertClose(deltav[2], node.radial)
-        self.assertClose(norm(deltav), node.delta_v)
-        self.assertClose(norm(deltav), node.remaining_delta_v, 0.2)
+    def check(self, node, delta_v):
+        self.assertClose(delta_v[0], node.prograde)
+        self.assertClose(delta_v[1], node.normal)
+        self.assertClose(delta_v[2], node.radial)
+        self.assertClose(norm(delta_v), node.delta_v)
+        self.assertClose(norm(delta_v), node.remaining_delta_v, 0.2)
 
         bv = node.burn_vector(node.reference_frame)
-        self.assertClose(norm(deltav), norm(bv))
-        self.assertClose((0,1,0), normalize(bv))
+        self.assertClose(norm(delta_v), norm(bv))
+        self.assertClose((0, 1, 0), normalize(bv))
 
         orbital_bv = node.burn_vector(node.orbital_reference_frame)
-        self.assertClose(norm(deltav), norm(orbital_bv))
-        self.assertClose((-deltav[2],deltav[0],deltav[1]), orbital_bv)
+        self.assertClose(norm(delta_v), norm(orbital_bv))
+        self.assertClose((-delta_v[2], delta_v[0], delta_v[1]), orbital_bv)
 
-        d = node.direction(node.reference_frame)
-        self.assertClose((0,1,0), d)
-        orbital_d = node.direction(node.orbital_reference_frame)
-        self.assertClose(normalize((-deltav[2],deltav[0],deltav[1])), orbital_d)
+        direction = node.direction(node.reference_frame)
+        self.assertClose((0, 1, 0), direction)
+        orbital_direction = node.direction(node.orbital_reference_frame)
+        self.assertClose(normalize((-delta_v[2], delta_v[0], delta_v[1])), orbital_direction)
 
     def test_add_node(self):
         start_ut = self.conn.space_center.ut
         ut = start_ut + 60
-        deltav = [100,200,-350]
-        node = self.control.add_node(ut, *deltav)
+        delta_v = (100, 200, -350)
+        node = self.control.add_node(ut, *delta_v)
         self.assertClose(ut, node.ut, error=1)
         self.assertClose(ut - start_ut, node.time_to, error=1)
-        self.check(node, deltav)
+        self.check(node, delta_v)
         node.remove()
 
     def test_remove_node(self):
         node = self.control.add_node(self.conn.space_center.ut, 0, 0, 0)
         node.remove()
-        with self.assertRaises (krpc.client.RPCError):
+        with self.assertRaises(krpc.client.RPCError):
             node.prograde = 0
 
     def test_remove_nodes(self):
-        node0 = self.control.add_node(self.conn.space_center.ut+15, 4, -2, 1)
-        node1 = self.control.add_node(self.conn.space_center.ut+40, 1, 3, 2)
-        node2 = self.control.add_node(self.conn.space_center.ut+60, 0, 4, 0)
+        self.control.add_node(self.conn.space_center.ut+15, 4, -2, 1)
+        self.control.add_node(self.conn.space_center.ut+40, 1, 3, 2)
+        self.control.add_node(self.conn.space_center.ut+60, 0, 4, 0)
         self.control.remove_nodes()
         # TODO: don't skip the following
         #with self.assertRaises (krpc.client.RPCError):
@@ -79,7 +81,7 @@ class TestNode(testingtools.TestCase):
         start_ut = self.conn.space_center.ut
         ut = start_ut + 60
         node = self.control.add_node(ut, 0, 0, 0)
-        v = [-50,500,-150]
+        v = (-50, 500, -150)
         ut2 = ut + 500
         node.ut = ut2
         node.prograde = v[0]
@@ -94,35 +96,35 @@ class TestNode(testingtools.TestCase):
         node = self.control.add_node(self.conn.space_center.ut, 1, -2, 3)
         magnitude = 128
         node.delta_v = magnitude
-        v = vector(normalize([1,-2,3])) * magnitude
-        self.check(node, v)
+        delta_v = vector(normalize((1, -2, 3))) * magnitude
+        self.check(node, delta_v)
         node.remove()
 
     def test_orbit(self):
         start_ut = self.conn.space_center.ut
         ut = start_ut + 60
-        v = [100,0,0]
-        node = self.control.add_node(ut, *v)
-        self.check(node, v)
+        delta_v = (100, 0, 0)
+        node = self.control.add_node(ut, *delta_v)
+        self.check(node, delta_v)
 
         orbit0 = self.vessel.orbit
         orbit1 = node.orbit
 
         # Check semi-major axis using vis-viva equation
-        GM = self.conn.space_center.bodies['Kerbin'].gravitational_parameter
-        vsq = (orbit0.speed + v[0])**2
-        r = orbit0.radius
-        self.assertClose (GM / ((2*GM/r) - vsq), orbit1.semi_major_axis, error=1)
+        gm = self.conn.space_center.bodies['Kerbin'].gravitational_parameter
+        vsq = (orbit0.speed + delta_v[0])**2
+        radius = orbit0.radius
+        self.assertClose(gm / ((2*gm/radius) - vsq), orbit1.semi_major_axis, error=1)
 
         # Check there is no inclination change
         self.assertClose(orbit0.inclination, orbit1.inclination)
 
         # Check the eccentricity
-        rp = orbit1.periapsis
-        ra = orbit1.apoapsis
-        e = (ra - rp) / (ra + rp)
+        radius_pe = orbit1.periapsis
+        radius_ap = orbit1.apoapsis
+        eccentricit = (radius_ap - radius_pe) / (radius_ap + radius_pe)
         self.assertGreater(orbit1.eccentricity, orbit0.eccentricity)
-        self.assertClose(e, orbit1.eccentricity)
+        self.assertClose(eccentricit, orbit1.eccentricity)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

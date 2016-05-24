@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
-using KRPC.SpaceCenter.ExtensionMethods;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -13,18 +11,17 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class ResourceTransfer : Equatable<ResourceTransfer>
     {
-        static ulong nextId = 0;
+        static ulong nextId;
         readonly ulong id;
-        readonly global::Part fromPart;
-        readonly global::Part toPart;
+        readonly Part fromPart;
+        readonly Part toPart;
         readonly PartResourceDefinition resource;
         readonly float amount;
         readonly float transferRate;
 
-        private ResourceTransfer (global::Part fromPart, global::Part toPart, PartResourceDefinition resource,
-                                  float amount)
+        ResourceTransfer (Part fromPart, Part toPart, PartResourceDefinition resource, float amount)
         {
-            this.id = nextId;
+            id = nextId;
             nextId++;
             this.fromPart = fromPart;
             this.toPart = toPart;
@@ -32,7 +29,7 @@ namespace KRPC.SpaceCenter.Services
             this.amount = amount;
             // Compute the transfer rate (in units/sec) as one tenth the size of the destination tank (determined experimentally from the KSP transfer UI)
             var totalStorage = (float)toPart.Resources.GetAll (resource.id).Sum (r => r.maxAmount);
-            this.transferRate = 0.1f * totalStorage;
+            transferRate = 0.1f * totalStorage;
             ResourceTransferAddon.AddTransfer (this);
         }
 
@@ -112,15 +109,14 @@ namespace KRPC.SpaceCenter.Services
         {
             if (Complete)
                 return;
-            var resourceAvailable = fromPart.Resources.GetAll (resource.id).Sum (r => r.amount);
-            var storageAvailable = toPart.Resources.GetAll (resource.id).Sum (r => r.maxAmount - r.amount);
-            var available = (float)Math.Min (resourceAvailable, storageAvailable);
-            var amountToTransfer = (float)Math.Min (available, Math.Min (amount - Amount, transferRate * deltaTime));
+            var resourceAvailable = (float)fromPart.Resources.GetAll (resource.id).Sum (r => r.amount);
+            var storageAvailable = (float)toPart.Resources.GetAll (resource.id).Sum (r => r.maxAmount - r.amount);
+            var available = Math.Min (resourceAvailable, storageAvailable);
+            var amountToTransfer = Math.Min (available, Math.Min (amount - Amount, transferRate * deltaTime));
             fromPart.TransferResource (resource.id, -amountToTransfer);
             toPart.TransferResource (resource.id, amountToTransfer);
             Amount += amountToTransfer;
-            if (amountToTransfer < 0.0001f)
-                Complete = true;
+            Complete |= amountToTransfer < 0.0001f;
         }
     }
 }

@@ -61,30 +61,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Compute the sign of a vector's elements
-        /// </summary>
-        public static Vector3d Sign (this Vector3d v)
-        {
-            return new Vector3d (Math.Sign (v.x), Math.Sign (v.y), Math.Sign (v.z));
-        }
-
-        /// <summary>
-        /// Raise the elements of a vector's elements to the given exponent
-        /// </summary>
-        public static Vector3d Pow (this Vector3d v, double e)
-        {
-            return new Vector3d (Math.Pow (v.x, e), Math.Pow (v.y, e), Math.Pow (v.z, e));
-        }
-
-        /// <summary>
-        /// Compute the element-wise inverse of a vector
-        /// </summary>
-        public static Vector3d Inverse (this Vector3d v)
-        {
-            return new Vector3d (1d / v.x, 1d / v.y, 1d / v.z);
-        }
-
-        /// <summary>
         /// Swap the Y and Z components of a vector
         /// </summary>
         public static Vector3d SwapYZ (this Vector3d v)
@@ -98,26 +74,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static double NormAngle (double angle)
         {
             return angle - 360d * Math.Floor ((angle + 180d) / 360d);
-        }
-
-        /// <summary>
-        /// Apply NormAngle element-wise to a vector
-        /// </summary>
-        public static Vector3d ReduceAngles (this Vector3d v)
-        {
-            return new Vector3d (NormAngle (v.x), NormAngle (v.y), NormAngle (v.z));
-        }
-
-        /// <summary>
-        /// Round all values in a vector to the given precision
-        /// </summary>
-        public static Vector3 Round (this Vector3 v, int decimalPlaces)
-        {
-            // TODO: remove horrid casts
-            return new Vector3 (
-                (float)Math.Round ((double)v.x, decimalPlaces),
-                (float)Math.Round ((double)v.y, decimalPlaces),
-                (float)Math.Round ((double)v.z, decimalPlaces));
         }
 
         /// <summary>
@@ -177,6 +133,22 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             if (angle > 180)
                 angle -= 360;
             return angle;
+        }
+
+        /// <summary>
+        /// Convert radians to degrees.
+        /// </summary>
+        public static float ToDegrees (float radians)
+        {
+            return radians * (180f / (float)Math.PI);
+        }
+
+        /// <summary>
+        /// Convert degrees to radians.
+        /// </summary>
+        public static float ToRadians (float degrees)
+        {
+            return degrees * ((float)Math.PI / 180f);
         }
 
         public enum AxisOrder
@@ -276,23 +248,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Compute the norm of a quaternion
-        /// </summary>
-        public static double Norm (this QuaternionD q)
-        {
-            return Math.Sqrt (q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
-        }
-
-        /// <summary>
-        /// Normalize a quaternion
-        /// </summary>
-        public static QuaternionD Normalize (this QuaternionD q)
-        {
-            var sf = 1d / q.Norm ();
-            return new QuaternionD (q.x * sf, q.y * sf, q.z * sf, q.w * sf);
-        }
-
-        /// <summary>
         /// Implementation of QuaternionD.LookRotation
         /// </summary>
         public static QuaternionD LookRotation2 (Vector3d forward, Vector3d up)
@@ -321,21 +276,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static Matrix4x4 Add (this Matrix4x4 left, Matrix4x4 right)
         {
             Matrix4x4 m = Matrix4x4.zero;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++)
                 m.SetColumn (i, left.GetColumn (i) + right.GetColumn (i));
-            }
-            return m;
-        }
-
-        /// <summary>
-        /// Subtract a 4x4 Matrix from another one (does not allocate)
-        /// </summary>
-        public static Matrix4x4 Subtract (this Matrix4x4 left, Matrix4x4 right)
-        {
-            Matrix4x4 m = Matrix4x4.zero;
-            for (int i = 0; i < 4; i++) {
-                m.SetColumn (i, left.GetColumn (i) - right.GetColumn (i));
-            }
             return m;
         }
 
@@ -344,11 +286,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static Matrix4x4 MultiplyScalar (this Matrix4x4 left, float right)
         {
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
                     left [i, j] = left [i, j] * right;
-                }
-            }
             return left;
         }
 
@@ -358,9 +298,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static Vector3d Diag (this Matrix4x4 m)
         {
             Vector3d v = Vector3d.zero;
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++)
                 v [i] = m [i, i];
-            }
             return v;
         }
 
@@ -370,9 +309,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static Matrix4x4 ToDiagonalMatrix (this float v)
         {
             Matrix4x4 m = Matrix4x4.identity;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++)
                 m [i, i] = v;
-            }
             return m;
         }
 
@@ -382,9 +320,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static Matrix4x4 ToDiagonalMatrix (this Vector3 v)
         {
             Matrix4x4 m = Matrix4x4.identity;
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++)
                 m [i, i] = v [i];
-            }
             return m;
         }
 
@@ -394,28 +331,10 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static Matrix4x4 OuterProduct (this Vector3 left, Vector3 right)
         {
             Matrix4x4 m = Matrix4x4.identity;
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
                     m [i, j] = left [i] * right [j];
-                }
-            }
             return m;
-        }
-
-        /// <summary>
-        /// Convert radians to degrees.
-        /// </summary>
-        public static float ToDegrees (float radians)
-        {
-            return radians * (180f / (float)Math.PI);
-        }
-
-        /// <summary>
-        /// Convert degrees to radians.
-        /// </summary>
-        public static float ToRadians (float degrees)
-        {
-            return degrees * ((float)Math.PI / 180f);
         }
     }
 }

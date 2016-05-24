@@ -1,6 +1,7 @@
 from setuptools import setup
 import sys
 import os
+import re
 
 dirpath = os.path.dirname(os.path.realpath(__file__))
 
@@ -13,13 +14,13 @@ if os.getenv('BAZEL_BUILD') and hasattr(os, 'link'):
 if os.getenv('BAZEL_BUILD') and not os.path.exists(os.path.join(dirpath, 'VERSION.txt')):
     dirpath = os.getcwd()
 
-install_requires=['protobuf == 3.0.0b2']
+install_requires=['protobuf == 3.0.0b3']
 if sys.version_info < (3, 4):
     install_requires.append('enum34 >= 0.9')
 
 setup(
     name='krpc',
-    version=open(os.path.join(dirpath, 'VERSION.txt')).read().strip(),
+    version=re.search(r'\'(.+)\'', open(os.path.join(dirpath, 'krpc/version.py')).read()).group(1),
     author='djungelorm',
     author_email='djungelorm@users.noreply.github.com',
     packages=['krpc', 'krpc.schema', 'krpc.test', 'krpc.test.schema'],

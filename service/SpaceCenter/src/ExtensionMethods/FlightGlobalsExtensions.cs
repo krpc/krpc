@@ -4,7 +4,7 @@ namespace KRPC.SpaceCenter
 {
     static class FlightGlobalsExtensions
     {
-        public static global::Vessel GetVesselById (Guid id)
+        public static Vessel GetVesselById (Guid id)
         {
             if (FlightGlobals.ActiveVessel.id == id)
                 return FlightGlobals.ActiveVessel;

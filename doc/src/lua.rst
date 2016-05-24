@@ -8,3 +8,4 @@ Lua
    lua/api/space-center
    lua/api/infernal-robotics
    lua/api/kerbal-alarm-clock
+   lua/api/remote-tech

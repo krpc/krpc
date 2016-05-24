@@ -20,6 +20,11 @@ genrule(
 )
 
 java_import(
+    name = 'protobuf',
+    jars = ['@java_protobuf//file'],
+)
+
+java_import(
     name = 'javatuples',
     jars = ['@java_javatuples//file']
 )
@@ -36,14 +41,15 @@ java_library(
         ':services-krpc',
         ':services-spacecenter',
         ':services-infernalrobotics',
-        ':services-kerbalalarmclock'
+        ':services-kerbalalarmclock',
+        ':services-remotetech'
     ],
     resources = [
         '//:readme', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING', '//:COPYING.LESSER',
     ],
     deps = [
-        '//tools/build/protobuf:protobuf',
+        ':protobuf',
         ':javatuples'
     ],
     javacopts = copts,
@@ -55,9 +61,10 @@ java_library(
     srcs = glob(['test/**/*.java']) + [':services-testservice'],
     deps = [
         ':krpc',
-        '//tools/build/protobuf:protobuf',
+        ':protobuf',
         ':junit',
-        ':javatuples'],
+        ':javatuples'
+    ],
     javacopts = copts
 )
 
@@ -67,7 +74,7 @@ java_test(
     runtime_deps = [
         ':krpc',
         ':testlib',
-        '//tools/build/protobuf:protobuf',
+        ':protobuf',
         ':junit',
         ':javatuples'
     ],
@@ -112,6 +119,13 @@ clientgen_java(
     service = 'KerbalAlarmClock',
     defs = '//service/KerbalAlarmClock:ServiceDefinitions',
     out = 'services/KerbalAlarmClock.java'
+)
+
+clientgen_java(
+    name = 'services-remotetech',
+    service = 'RemoteTech',
+    defs = '//service/RemoteTech:ServiceDefinitions',
+    out = 'services/RemoteTech.java'
 )
 
 clientgen_java(

@@ -24,7 +24,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             case Vessel.Situations.SUB_ORBITAL:
                 return KRPC.SpaceCenter.Services.VesselSituation.SubOrbital;
             default:
-                throw new ArgumentException ("Unsupported vessel situation");
+                throw new ArgumentOutOfRangeException ("situation");
             }
         }
 
@@ -48,7 +48,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             case KRPC.SpaceCenter.Services.VesselSituation.SubOrbital:
                 return Vessel.Situations.SUB_ORBITAL;
             default:
-                throw new ArgumentException ("Unsupported vessel situation");
+                throw new ArgumentOutOfRangeException ("situation");
             }
         }
     }

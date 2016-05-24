@@ -1,7 +1,7 @@
-from google.protobuf.internal import encoder as protobuf_encoder
+from google.protobuf.internal import encoder as protobuf_encoder #pylint: disable=import-error,no-name-in-module
 from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
 from krpc.types import ListType, DictionaryType, SetType, TupleType
-import platform
+from krpc.platform import bytelength
 
 class Encoder(object):
     """ Routines for encoding messages and values in the protocol buffer serialization format """
@@ -48,7 +48,7 @@ class Encoder(object):
             msg = cls._types.as_type('KRPC.Dictionary').python_type()
             entry_type = cls._types.as_type('KRPC.DictionaryEntry')
             entries = []
-            for key,value in sorted(x.items(), key=lambda i: i[0]):
+            for key, value in sorted(x.items(), key=lambda i: i[0]):
                 entry = entry_type.python_type()
                 entry.key = cls.encode(key, typ.key_type)
                 entry.value = cls.encode(value, typ.value_type)
@@ -61,10 +61,10 @@ class Encoder(object):
             return msg.SerializeToString()
         elif isinstance(typ, TupleType):
             msg = cls._types.as_type('KRPC.Tuple').python_type()
-            msg.items.extend(cls.encode(item, value_type) for item,value_type in zip(x,typ.value_types))
+            msg.items.extend(cls.encode(item, value_type) for item, value_type in zip(x, typ.value_types))
             return msg.SerializeToString()
         else:
-            raise RuntimeError ('Cannot encode objects of type ' + str(type(x)))
+            raise RuntimeError('Cannot encode objects of type ' + str(type(x)))
 
     @classmethod
     def encode_delimited(cls, x, typ):
@@ -86,7 +86,7 @@ class _ValueEncoder(object):
         data = []
         def write(x):
             data.append(x)
-        encoder = protobuf_encoder.DoubleEncoder(1,False,False)
+        encoder = protobuf_encoder.DoubleEncoder(1, False, False)
         encoder(write, value)
         return b''.join(data[1:]) # strips the tag value
 
@@ -95,7 +95,7 @@ class _ValueEncoder(object):
         data = []
         def write(x):
             data.append(x)
-        encoder = protobuf_encoder.FloatEncoder(1,False,False)
+        encoder = protobuf_encoder.FloatEncoder(1, False, False)
         encoder(write, value)
         return b''.join(data[1:]) # strips the tag value
 
@@ -141,7 +141,7 @@ class _ValueEncoder(object):
 
     @classmethod
     def encode_string(cls, value):
-        size = cls._encode_varint(platform.bytelength(value))
+        size = cls._encode_varint(bytelength(value))
         data = value.encode('utf-8')
         return size + data
 

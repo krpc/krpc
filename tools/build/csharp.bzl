@@ -83,10 +83,11 @@ def _bin_impl(ctx):
     )
 
     runfiles = outputs + ctx.files.deps
-    sub_commands = ['mkdir -p $0.runfiles']
+    runfile_dir = '$0.runfiles/krpc'
+    sub_commands = ['mkdir -p %s' % runfile_dir]
     for dep in runfiles:
-        sub_commands.append('ln -f -s %s $0.runfiles/%s' % (dep.short_path, dep.basename))
-    sub_commands.append('/usr/bin/mono $0.runfiles/%s "$@" %s' % (bin_output.basename, ' '.join(ctx.attr.runargs)))
+        sub_commands.append('ln -f -s %s %s/%s' % (dep.short_path, runfile_dir, dep.basename))
+    sub_commands.append('/usr/bin/mono %s/%s "$@" %s' % (runfile_dir, bin_output.basename, ' '.join(ctx.attr.runargs)))
     ctx.file_action(
         ctx.outputs.executable,
         ' && \\\n'.join(sub_commands)+'\n'

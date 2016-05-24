@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using KRPC.Utils;
+using System.Linq;
 using KRPC.SpaceCenter.Services;
+using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
-using System.Linq;
 
 namespace KRPC.SpaceCenter
 {

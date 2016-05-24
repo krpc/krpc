@@ -1,4 +1,4 @@
-from google.protobuf.internal import decoder as protobuf_decoder
+from google.protobuf.internal import decoder as protobuf_decoder #pylint: disable=import-error,no-name-in-module
 from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
 from krpc.types import ListType, DictionaryType, SetType, TupleType
 import krpc.platform
@@ -39,15 +39,16 @@ class Decoder(object):
             return [cls.decode(item, typ.value_type) for item in msg.items]
         elif isinstance(typ, DictionaryType):
             msg = cls._decode_message(data, cls._types.as_type('KRPC.Dictionary'))
-            return dict((cls.decode(entry.key, typ.key_type), cls.decode(entry.value, typ.value_type)) for entry in msg.entries)
+            return dict((cls.decode(entry.key, typ.key_type), cls.decode(entry.value, typ.value_type))
+                        for entry in msg.entries)
         elif isinstance(typ, SetType):
             msg = cls._decode_message(data, cls._types.as_type('KRPC.Set'))
             return set(cls.decode(item, typ.value_type) for item in msg.items)
         elif isinstance(typ, TupleType):
             msg = cls._decode_message(data, cls._types.as_type('KRPC.Tuple'))
-            return tuple(cls.decode(item, value_type) for item,value_type in zip(msg.items,typ.value_types))
+            return tuple(cls.decode(item, value_type) for item, value_type in zip(msg.items, typ.value_types))
         else:
-            raise RuntimeError ('Cannot decode type %s' % str(typ))
+            raise RuntimeError('Cannot decode type %s' % str(typ))
 
     @classmethod
     def decode_size_and_position(cls, data):
@@ -58,7 +59,7 @@ class Decoder(object):
     def decode_delimited(cls, data, typ):
         """ Decode a message or value with size information
             (used in a delimited communication stream) """
-        (size, position) = cls.decode_size_and_position(data)
+        size, position = cls.decode_size_and_position(data)
         return cls.decode(data[position:position+size], typ)
 
     @classmethod
@@ -108,7 +109,6 @@ class _ValueDecoder(object):
     def decode_double(cls, data):
         import struct
         local_unpack = struct.unpack
-        b = (lambda x:x) if krpc.platform.PY2 else lambda x:x.encode('latin1')  ##PY25
 
         # We expect a 64-bit value in little-endian byte order.  Bit 1 is the sign
         # bit, bits 2-12 represent the exponent, and bits 13-64 are the significand.
@@ -117,13 +117,10 @@ class _ValueDecoder(object):
         # If this value has all its exponent bits set and at least one significand
         # bit set, it's not a number.  In Python 2.4, struct.unpack will treat it
         # as inf or -inf.  To avoid that, we treat it specially.
-##!PY25    if ((double_bytes[7:8] in b'\x7F\xFF')
-##!PY25        and (double_bytes[6:7] >= b'\xF0')
-##!PY25        and (double_bytes[0:7] != b'\x00\x00\x00\x00\x00\x00\xF0')):
-        if ((double_bytes[7:8] in b('\x7F\xFF'))  ##PY25
-            and (double_bytes[6:7] >= b('\xF0'))  ##PY25
-            and (double_bytes[0:7] != b('\x00\x00\x00\x00\x00\x00\xF0'))):  ##PY25
-          return krpc.platform.NAN
+        if (double_bytes[7:8] in b'\x7F\xFF') and \
+           (double_bytes[6:7] >= b'\xF0') and \
+           (double_bytes[0:7] != b'\x00\x00\x00\x00\x00\x00\xF0'):
+            return krpc.platform.NAN
 
         # Note that we expect someone up-stack to catch struct.error and convert
         # it to _DecodeError -- this way we don't have to set up exception-
@@ -134,7 +131,6 @@ class _ValueDecoder(object):
     def decode_float(cls, data):
         import struct
         local_unpack = struct.unpack
-        b = (lambda x:x) if krpc.platform.PY2 else lambda x:x.encode('latin1')  ##PY25
 
         # We expect a 32-bit value in little-endian byte order.  Bit 1 is the sign
         # bit, bits 2-9 represent the exponent, and bits 10-32 are the significand.
@@ -143,19 +139,14 @@ class _ValueDecoder(object):
         # If this value has all its exponent bits set, then it's non-finite.
         # In Python 2.4, struct.unpack will convert it to a finite 64-bit value.
         # To avoid that, we parse it specially.
-        if ((float_bytes[3:4] in b('\x7F\xFF'))  ##PY25
-##!PY25    if ((float_bytes[3:4] in b'\x7F\xFF')
-            and (float_bytes[2:3] >= b('\x80'))):  ##PY25
-##!PY25        and (float_bytes[2:3] >= b'\x80')):
-          # If at least one significand bit is set...
-          if float_bytes[0:3] != b('\x00\x00\x80'):  ##PY25
-##!PY25      if float_bytes[0:3] != b'\x00\x00\x80':
-            return krpc.platform.NAN
-          # If sign bit is set...
-          if float_bytes[3:4] == b('\xFF'):  ##PY25
-##!PY25      if float_bytes[3:4] == b'\xFF':
-            return krpc.platform.NEG_INF
-          return krpc.platform.POS_INF
+        if float_bytes[3:4] in b'\x7F\xFF' and float_bytes[2:3] >= b'\x80':
+            # If at least one significand bit is set...
+            if float_bytes[0:3] != b'\x00\x00\x80':
+                return krpc.platform.NAN
+            # If sign bit is set...
+            if float_bytes[3:4] == b'\xFF':
+                return krpc.platform.NEG_INF
+            return krpc.platform.POS_INF
 
         # Note that we expect someone up-stack to catch struct.error and convert
         # it to _DecodeError -- this way we don't have to set up exception-

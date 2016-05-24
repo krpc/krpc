@@ -12,16 +12,16 @@ class Connection(object):
     def connect(self, retries=0, timeout=0):
         try:
             socket.getaddrinfo(self._address, self._port)
-        except socket.gaierror as e:
-            raise NetworkError(self._address, self._port, str(e))
+        except socket.gaierror as ex:
+            raise NetworkError(self._address, self._port, str(ex))
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         while True:
             try:
                 self._socket.connect((self._address, self._port))
                 break
-            except socket.error as e:
+            except socket.error as ex:
                 if retries <= 0:
-                    raise NetworkError(self._address, self._port, str(e))
+                    raise NetworkError(self._address, self._port, str(ex))
                 retries -= 1
                 time.sleep(timeout)
 

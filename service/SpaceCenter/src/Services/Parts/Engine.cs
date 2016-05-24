@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -434,6 +435,24 @@ namespace KRPC.SpaceCenter.Services.Parts
             set {
                 CheckGimballed ();
                 gimbal.gimbalLimiter = (value * 100f).Clamp (0f, 100f);
+            }
+        }
+
+        /// <summary>
+        /// The available torque in the pitch, roll and yaw axes of the vessel, in Newton meters.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// Returns zero if the engine is inactive, or not gimballed.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 AvailableTorque {
+            get { return AvailableTorqueVector.ToTuple (); }
+        }
+
+        internal Vector3d AvailableTorqueVector {
+            get {
+                if (!Active || !Gimballed)
+                    return Vector3d.zero;
+                return gimbal.GetPotentialTorque () * 1000f;
             }
         }
     }

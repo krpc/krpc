@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.KerbalAlarmClock.ExtensionMethods;
 using KRPC.Service;
 using KRPC.Service.Attributes;
-using KRPC.KerbalAlarmClock.ExtensionMethods;
 
 namespace KRPC.KerbalAlarmClock.Services
 {

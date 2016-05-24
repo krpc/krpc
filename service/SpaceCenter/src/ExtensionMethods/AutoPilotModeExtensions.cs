@@ -28,7 +28,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             case VesselAutopilot.AutopilotMode.AntiTarget:
                 return KRPC.SpaceCenter.Services.SASMode.AntiTarget;
             default:
-                throw new ArgumentException ("Unsupported auto-pilot mode");
+                throw new ArgumentOutOfRangeException ("mode");
             }
         }
 
@@ -56,7 +56,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             case KRPC.SpaceCenter.Services.SASMode.AntiTarget:
                 return VesselAutopilot.AutopilotMode.AntiTarget;
             default:
-                throw new ArgumentException ("Unsupported SAS mode");
+                throw new ArgumentOutOfRangeException ("mode");
             }
         }
     }

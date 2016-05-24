@@ -3,8 +3,6 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
-using System.Reflection;
-using System.Collections.Generic;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -17,7 +15,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Create a camera object.
         /// </summary>
-        public Camera ()
+        internal Camera ()
         {
         }
 
@@ -298,9 +296,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 CheckCameraFocus ();
                 var body = PlanetariumCamera.fetch.target.celestialBody;
-                if (body == null)
-                    return null;
-                return new CelestialBody (body);
+                return body == null ? null : new CelestialBody (body);
             }
             set {
                 CheckCameraFocus ();
@@ -318,9 +314,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 CheckCameraFocus ();
                 var vessel = PlanetariumCamera.fetch.target.vessel;
-                if (vessel == null)
-                    return null;
-                return new Vessel (vessel);
+                return vessel == null ? null : new Vessel (vessel);
             }
             set {
                 CheckCameraFocus ();
@@ -340,9 +334,7 @@ namespace KRPC.SpaceCenter.Services
                 CheckCameraFocus ();
                 var vessel = PlanetariumCamera.fetch.target.vessel;
                 var node = PlanetariumCamera.fetch.target.maneuverNode;
-                if (vessel == null || node == null)
-                    return null;
-                return new Node (vessel, node);
+                return (vessel == null || node == null) ? null : new Node (vessel, node);
             }
             set {
                 CheckCameraFocus ();
@@ -351,7 +343,7 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
-        void CheckCameraFocus ()
+        static void CheckCameraFocus ()
         {
             if (!MapView.MapIsEnabled)
                 throw new InvalidOperationException ("There is no camera focus when the camera is not in map mode.");

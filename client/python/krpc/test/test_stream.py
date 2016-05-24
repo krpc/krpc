@@ -15,32 +15,33 @@ class TestStream(ServerTestCase, unittest.TestCase):
     def setUp(self):
         super(TestStream, self).setUp()
 
-    def wait(self):
+    @staticmethod
+    def wait():
         time.sleep(0.05)
 
     def test_method(self):
         with self.conn.stream(self.conn.test_service.float_to_string, 3.14159) as x:
-            for i in range(5):
+            for _ in range(5):
                 self.assertEqual('3.14159', x())
                 self.wait()
 
     def test_property(self):
         self.conn.test_service.string_property = 'foo'
         with self.conn.stream(getattr, self.conn.test_service, 'string_property') as x:
-            for i in range(5):
+            for _ in range(5):
                 self.assertEqual('foo', x())
                 self.wait()
 
     def test_class_method(self):
         obj = self.conn.test_service.create_test_object('bob')
         with self.conn.stream(obj.float_to_string, 3.14159) as x:
-            for i in range(5):
+            for _ in range(5):
                 self.assertEqual('bob3.14159', x())
                 self.wait()
 
     def test_class_static_method(self):
         with self.conn.stream(self.conn.test_service.TestClass.static_method, 'foo') as x:
-            for i in range(5):
+            for _ in range(5):
                 self.assertEqual('jebfoo', x())
                 self.wait()
 
@@ -48,7 +49,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object('jeb')
         obj.int_property = 42
         with self.conn.stream(getattr, obj, 'int_property') as x:
-            for i in range(5):
+            for _ in range(5):
                 self.assertEqual(42, x())
                 self.wait()
 
@@ -60,7 +61,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
     def test_counter(self):
         count = -1
         with self.conn.stream(self.conn.test_service.counter) as x:
-            for i in range(5):
+            for _ in range(5):
                 self.assertLess(count, x())
                 count = x()
                 self.wait()
@@ -68,7 +69,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
     def test_nested(self):
         with self.conn.stream(self.conn.test_service.float_to_string, 0.123) as x0:
             with self.conn.stream(self.conn.test_service.float_to_string, 1.234) as x1:
-                for i in range(5):
+                for _ in range(5):
                     self.assertEqual('0.123', x0())
                     self.assertEqual('1.234', x1())
                     self.wait()
@@ -127,16 +128,16 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertRaises(RuntimeError, s2)
 
     def test_remove_stream_twice(self):
-        s = self.conn.add_stream(self.conn.test_service.int32_to_string, 0)
-        self.assertEqual('0', s())
+        stream = self.conn.add_stream(self.conn.test_service.int32_to_string, 0)
+        self.assertEqual('0', stream())
 
         self.wait()
-        self.assertEqual('0', s())
+        self.assertEqual('0', stream())
 
-        s.remove()
-        self.assertRaises(RuntimeError, s)
-        s.remove()
-        self.assertRaises(RuntimeError, s)
+        stream.remove()
+        self.assertRaises(RuntimeError, stream)
+        stream.remove()
+        self.assertRaises(RuntimeError, stream)
 
     def test_add_stream_twice(self):
         s0 = self.conn.add_stream(self.conn.test_service.int32_to_string, 42)

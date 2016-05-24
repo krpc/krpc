@@ -1,21 +1,19 @@
 import unittest
-import testingtools
-import krpc
 import time
+import krpctest
 
-class TestPartsResourceHarvester(testingtools.TestCase):
+class TestPartsResourceHarvester(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'PartsHarvester':
-            testingtools.new_save()
-            testingtools.launch_vessel_from_vab('PartsHarvester')
-            testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsResourceHarvester')
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.parts = cls.vessel.parts
-        cls.state = cls.conn.space_center.ResourceHarvesterState
-        cls.drill = next(iter(filter(lambda e: e.part.title == '\'Drill-O-Matic\' Mining Excavator', cls.parts.resource_harvesters)))
+        if krpctest.connect().space_center.active_vessel.name != 'PartsHarvester':
+            krpctest.new_save()
+            krpctest.launch_vessel_from_vab('PartsHarvester')
+            krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(cls)
+        cls.State = cls.conn.space_center.ResourceHarvesterState
+        parts = cls.conn.space_center.active_vessel.parts
+        cls.drill = parts.with_title('\'Drill-O-Matic\' Mining Excavator')[0].resource_harvester
 
     @classmethod
     def tearDownClass(cls):
@@ -28,7 +26,7 @@ class TestPartsResourceHarvester(testingtools.TestCase):
         self.assertEqual(500, self.drill.optimum_core_temperature)
 
     def test_operate(self):
-        self.assertEqual(self.state.retracted, self.drill.state)
+        self.assertEqual(self.State.retracted, self.drill.state)
         self.assertFalse(self.drill.deployed)
         self.assertFalse(self.drill.active)
         self.check_inactive_properties()
@@ -36,15 +34,15 @@ class TestPartsResourceHarvester(testingtools.TestCase):
         self.drill.deployed = True
         time.sleep(0.1)
 
-        self.assertEqual(self.state.deploying, self.drill.state)
+        self.assertEqual(self.State.deploying, self.drill.state)
         self.assertFalse(self.drill.deployed)
         self.assertFalse(self.drill.active)
         self.check_inactive_properties()
 
-        while self.drill.state == self.state.deploying:
+        while self.drill.state == self.State.deploying:
             time.sleep(0.1)
 
-        self.assertEqual(self.state.deployed, self.drill.state)
+        self.assertEqual(self.State.deployed, self.drill.state)
         self.assertTrue(self.drill.deployed)
         self.assertFalse(self.drill.active)
         self.check_inactive_properties()
@@ -52,7 +50,7 @@ class TestPartsResourceHarvester(testingtools.TestCase):
         self.drill.active = True
         time.sleep(3)
 
-        self.assertEqual(self.state.active, self.drill.state)
+        self.assertEqual(self.State.active, self.drill.state)
         self.assertTrue(self.drill.deployed)
         self.assertTrue(self.drill.active)
         self.assertGreater(self.drill.extraction_rate, 0)
@@ -64,7 +62,7 @@ class TestPartsResourceHarvester(testingtools.TestCase):
         self.drill.active = False
         time.sleep(3)
 
-        self.assertEqual(self.state.deployed, self.drill.state)
+        self.assertEqual(self.State.deployed, self.drill.state)
         self.assertTrue(self.drill.deployed)
         self.assertFalse(self.drill.active)
         self.check_inactive_properties()
@@ -72,15 +70,15 @@ class TestPartsResourceHarvester(testingtools.TestCase):
         self.drill.deployed = False
         time.sleep(0.1)
 
-        self.assertEqual(self.state.retracting, self.drill.state)
+        self.assertEqual(self.State.retracting, self.drill.state)
         self.assertFalse(self.drill.deployed)
         self.assertFalse(self.drill.active)
         self.check_inactive_properties()
 
-        while self.drill.state == self.state.retracting:
+        while self.drill.state == self.State.retracting:
             time.sleep(0.1)
 
-        self.assertEqual(self.state.retracted, self.drill.state)
+        self.assertEqual(self.State.retracted, self.drill.state)
         self.assertFalse(self.drill.deployed)
         self.assertFalse(self.drill.active)
         self.check_inactive_properties()
@@ -92,5 +90,5 @@ class TestPartsResourceHarvester(testingtools.TestCase):
         self.assertFalse(self.drill.deployed)
         self.assertFalse(self.drill.active)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

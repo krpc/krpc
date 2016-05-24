@@ -61,7 +61,8 @@ directly.
 
 For example, consider the following loop that continuously prints out the
 position of the active vessel. This loop incurs significant communication
-overheads, as the :meth:`Vessel.Position` method is called repeatedly.
+overheads, as the :meth:`KRPC.Client.Services.SpaceCenter.Vessel.Position`
+method is called repeatedly.
 
 .. literalinclude:: /scripts/Streaming.cs
 

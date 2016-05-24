@@ -33,9 +33,10 @@ class DocParser(object):
             raise RuntimeError('Failed to parse node \'%s\'' % node.tag)
         return getattr(self, 'parse_'+node.tag)(node)
 
-    def indent(self, s, width):
-        lines = s.split('\n')
-        for i in range(len(lines)):
-            if len(lines[i].strip()) > 0:
-                lines[i] = (' '*width) + lines[i]
+    @staticmethod
+    def indent(string, width):
+        lines = string.split('\n')
+        for i, line in enumerate(lines):
+            if len(line.strip()) > 0:
+                lines[i] = (' '*width) + line
         return '\n'.join(lines).strip('\n')

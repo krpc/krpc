@@ -1,23 +1,16 @@
-import sys
 import struct
+import binascii
 
-PY2 = sys.version_info[0] < 3
 POS_INF = 1e10000
 NEG_INF = -POS_INF
 NAN = POS_INF * 0
 
-def bytelength(s):
+def bytelength(string):
     """ Get the number of bytes in a string """
-    if PY2 and type(s) == str:
-        return len(s)
-    else:
-        return len(s.encode('utf-8'))
+    return len(string.encode('utf-8'))
 
 def hexlify(value):
-    if PY2:
-        return ''.join('%02x' % ord(x) for x in value)
-    else:
-        return ''.join('%02x' % x for x in value)
+    return binascii.hexlify(value).decode()
 
 def unhexlify(data):
     value = []

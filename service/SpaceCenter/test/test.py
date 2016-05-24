@@ -1,15 +1,15 @@
 import unittest
 import os
-import testingtools
+import krpctest
+import krpc
 
 def main():
-    # Check that a kRPC server is running
-    import krpc
     try:
-        conn = testingtools.connect()
-    except:
-        print('kRPC server not running; skipping tests')
-        exit(0)
+        conn = krpctest.connect()
+    except krpc.error.NetworkError:
+        print 'kRPC server not running'
+        exit(1)
+    conn.close()
 
     suite = unittest.TestLoader().discover(os.path.dirname(__file__), pattern='test_*.py')
     result = unittest.TextTestRunner(verbosity=2).run(suite)

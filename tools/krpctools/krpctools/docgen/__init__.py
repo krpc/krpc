@@ -15,7 +15,7 @@ from .java import JavaDomain
 from .lua import LuaDomain
 from .python import PythonDomain
 from .nodes import Service
-from .docparser import DocumentationParser
+from .docgen import DocumentationGenerator
 from .extensions import AppendExtension
 from ..version import __version__
 
@@ -35,6 +35,7 @@ def main():
 
     macros = resource_filename(__name__, '%s.tmpl' % args.language).decode('utf-8')
 
+    #pylint: disable=redefined-variable-type
     if args.language == 'csharp':
         domain = CsharpDomain(macros)
     elif args.language == 'cpp':
@@ -45,16 +46,17 @@ def main():
         domain = LuaDomain(macros)
     else: #python
         domain = PythonDomain(macros)
+    #pylint: enable=redefined-variable-type
 
     if not os.path.exists(args.order_file):
         raise RuntimeError('Ordering file \'%s\' does not exist' % args.order_file)
-    with open(args.order_file, 'r') as f:
-        ordering = [x.strip() for x in f.readlines()]
+    with open(args.order_file, 'r') as fp:
+        ordering = [x.strip() for x in fp.readlines()]
 
     services_info = {}
     for path in args.definitions:
-        with open(path, 'r') as f:
-            services_info.update(json.load(f))
+        with open(path, 'r') as fp:
+            services_info.update(json.load(fp))
 
     if services_info == {}:
         print 'No services found in services definition files'
@@ -69,30 +71,30 @@ def main():
         else:
             return ordering.index(member.fullname)
 
-    services = [Service(name, sort=sort, **info) for name,info in services_info.iteritems()]
+    services = [Service(name, sort=sort, **info) for name, info in services_info.iteritems()]
     services = {service.name: service for service in services}
 
     if len(sort_failed) > 0:
-        raise RuntimeError ('Don\'t know how to order:\n'+'\n'.join(sort_failed))
+        raise RuntimeError('Don\'t know how to order:\n'+'\n'.join(sort_failed))
 
-    content,documented = process_file(args, domain, services, args.source)
+    content, documented = process_file(args, domain, services, args.source)
 
     output = os.path.abspath(os.path.expanduser(os.path.expandvars(args.output)))
     if not os.path.exists(os.path.dirname(output)):
         os.makedirs(os.path.dirname(output))
-    with codecs.open(output, 'w', encoding='utf8') as f:
-        f.write(content)
+    with codecs.open(output, 'w', encoding='utf8') as fp:
+        fp.write(content)
 
     if args.documented:
         documented_path = os.path.abspath(os.path.expanduser(os.path.expandvars(args.documented)))
         if not os.path.exists(os.path.dirname(documented_path)):
             os.makedirs(os.path.dirname(documented_path))
-        with open(documented_path, 'w') as f:
-            f.write('\n'.join(documented)+'\n')
+        with open(documented_path, 'w') as fp:
+            fp.write('\n'.join(documented)+'\n')
 
 def process_file(args, domain, services, path):
 
-    loader = jinja2.FileSystemLoader(searchpath=['./','/'])
+    loader = jinja2.FileSystemLoader(searchpath=['./', '/'])
     template_env = jinja2.Environment(
         loader=loader,
         trim_blocks=True,
@@ -102,7 +104,14 @@ def process_file(args, domain, services, path):
     )
 
     def hasdoc(xml, selector='./summary'):
-        return DocumentationParser(domain, services, xml).has(selector)
+        return DocumentationGenerator(domain, services, xml).has(selector)
+
+    def gendoc(xml, selector='./summary'):
+        return DocumentationGenerator(domain, services, xml).generate(selector)
+
+    def see(cref):
+        obj = lookup_cref(cref, services)
+        return domain.see(obj)
 
     documented = set()
     def mark_documented(x):
@@ -114,38 +123,15 @@ def process_file(args, domain, services, path):
         'domain': domain,
         'services': services,
         'hasdoc': hasdoc,
+        'gendoc': gendoc,
+        'see': see,
         'mark_documented': mark_documented
     }
-
-    def return_type_filter(typ):
-        return domain.return_type(typ)
-
-    def parameter_type_filter(typ):
-        return domain.parameter_type(typ)
-
-    def type_description_filter(typ):
-        return domain.type_description(typ)
-
-    def parsedoc_filter(xml, selector='./summary'):
-        return DocumentationParser(domain, services, xml).parse(selector)
-
-    def parsesee_filter(cref):
-        obj = lookup_cref(cref, services)
-        return domain.see(obj)
-
-    def parsecode_filter(value):
-        return domain.code(value)
 
     template_env.filters['snakecase'] = snake_case
     template_env.filters['lower_camelcase'] = lower_camel_case
     template_env.filters['indent'] = indent
     template_env.filters['singleline'] = single_line
-    template_env.filters['parameter_type'] = parameter_type_filter
-    template_env.filters['return_type'] = return_type_filter
-    template_env.filters['type_description'] = type_description_filter
-    template_env.filters['parsedoc'] = parsedoc_filter
-    template_env.filters['parsesee'] = parsesee_filter
-    template_env.filters['parsecode'] = parsecode_filter
 
     template = template_env.get_template(path)
     content = template.render(context)

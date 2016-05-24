@@ -1,7 +1,7 @@
-using KRPC.Service.Attributes;
-using KRPC.Utils;
-using KRPC.SpaceCenter.ExtensionMethods;
 using System;
+using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services
@@ -20,11 +20,11 @@ namespace KRPC.SpaceCenter.Services
 
         readonly Guid vesselId;
 
-        internal Node (global::Vessel vessel, double UT, float prograde, float normal, float radial)
+        internal Node (global::Vessel vessel, double ut, float prograde, float normal, float radial)
         {
             vesselId = vessel.id;
-            InternalNode = vessel.patchedConicSolver.AddManeuverNode (UT);
-            InternalNode.OnGizmoUpdated (new Vector3d (radial, normal, prograde), UT);
+            InternalNode = vessel.patchedConicSolver.AddManeuverNode (ut);
+            InternalNode.OnGizmoUpdated (new Vector3d (radial, normal, prograde), ut);
         }
 
         /// <summary>
