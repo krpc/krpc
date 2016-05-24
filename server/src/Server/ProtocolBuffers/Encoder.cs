@@ -118,7 +118,7 @@ namespace KRPC.Server.ProtocolBuffers
         /// </summary>
         public static object Decode (ByteString value, Type type)
         {
-            var stream = new CodedInputStream (value.ToByteArray ());
+            var stream = value.CreateCodedInput ();
             if (type == typeof(double))
                 return stream.ReadDouble ();
             else if (type == typeof(float))
