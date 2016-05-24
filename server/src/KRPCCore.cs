@@ -549,20 +549,25 @@ namespace KRPC
             streamResultCache.Remove (identifier);
         }
 
+        HashSet<IClient<Request,Response>> pollRequestsCurrentClients = new HashSet<IClient<Request, Response>> ();
+
         /// <summary>
         /// Poll connected clients for new requests.
         /// Adds a continuation to the queue for any client with a new request,
         /// if a continuation is not already being processed for the client.
         /// </summary>
-        void PollRequests (IEnumerable<RequestContinuation> yieldedContinuations)
+        void PollRequests (IList<RequestContinuation> yieldedContinuations)
         {
             if (clientScheduler.Empty)
                 return;
-            var currentClients = continuations.Select ((c => c.Client)).ToList ();
-            currentClients.AddRange (yieldedContinuations.Select ((c => c.Client)));
+            pollRequestsCurrentClients.Clear ();
+            for (int i = 0; i < continuations.Count; i++)
+                pollRequestsCurrentClients.Add (continuations [i].Client);
+            for (int i = 0; i < yieldedContinuations.Count; i++)
+                pollRequestsCurrentClients.Add (yieldedContinuations [i].Client);
             foreach (var client in clientScheduler) {
                 try {
-                    if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
+                    if (!pollRequestsCurrentClients.Contains (client) && client.Stream.DataAvailable) {
                         Request request = client.Stream.Read ();
                         if (OnClientActivity != null)
                             OnClientActivity (this, new ClientActivityArgs (client));
