@@ -60,10 +60,14 @@ namespace KRPC.Test.Server
 
         public void Write (byte[] buffer)
         {
+            Write (buffer, 0, buffer.Length);
+        }
+
+        public void Write (byte[] buffer, int offset, int size)
+        {
             if (Closed || writeStream == null)
                 throw new InvalidOperationException ();
-            var size = buffer.Length;
-            writeStream.Write (buffer, 0, size);
+            writeStream.Write (buffer, offset, size);
             BytesWritten += (ulong)size;
         }
 

@@ -15,7 +15,8 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var data = new MemoryStream ();
             value.ToProtobufMessage ().WriteDelimitedTo (data);
-            Stream.Write (data.ToArray ());
+            var buffer = data.ToArray ();
+            Stream.Write (buffer, 0, buffer.Length);
         }
     }
 }

@@ -74,6 +74,11 @@ namespace KRPC.Server.Message
             throw new NotSupportedException ();
         }
 
+        public void Write (Response[] value, int offset, int size)
+        {
+            throw new NotSupportedException ();
+        }
+
         public ulong BytesRead {
             get { return Stream.BytesRead; }
         }
