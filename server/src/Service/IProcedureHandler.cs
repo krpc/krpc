@@ -8,7 +8,7 @@ namespace KRPC.Service
     /// </summary>
     interface IProcedureHandler
     {
-        object Invoke (params object[] parameters);
+        object Invoke (params object[] arguments);
 
         IEnumerable<ProcedureParameter> Parameters { get; }
 
