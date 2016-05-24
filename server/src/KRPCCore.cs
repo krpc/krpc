@@ -380,12 +380,12 @@ namespace KRPC
                         break;
                     if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
                         break;
-                    if (continuations.Any ())
+                    if (continuations.Count > 0)
                         break;
                 }
                 rpcPollTimer.Stop ();
 
-                if (!continuations.Any ())
+                if (continuations.Count == 0)
                     break;
 
                 // Execute RPCs
