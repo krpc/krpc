@@ -18,7 +18,7 @@ namespace KRPC
     {
         //TODO: remove servers list, replace with events etc.
         IList<KRPCServer> servers = new List<KRPCServer> ();
-        IScheduler<IClient<Request,Response>> clientScheduler;
+        RoundRobinScheduler<IClient<Request,Response>> clientScheduler;
         IList<RequestContinuation> continuations;
         IDictionary<IClient<NoMessage,StreamMessage>, IList<StreamRequest>> streamRequests;
         IDictionary<uint, object> streamResultCache = new Dictionary<uint, object> ();
@@ -565,8 +565,10 @@ namespace KRPC
                 pollRequestsCurrentClients.Add (continuations [i].Client);
             for (int i = 0; i < yieldedContinuations.Count; i++)
                 pollRequestsCurrentClients.Add (yieldedContinuations [i].Client);
-            foreach (var client in clientScheduler) {
+            var item = clientScheduler.Items.First;
+            while (item != null) {
                 try {
+                    var client = item.Value;
                     if (!pollRequestsCurrentClients.Contains (client) && client.Stream.DataAvailable) {
                         Request request = client.Stream.Read ();
                         if (OnClientActivity != null)
@@ -579,6 +581,7 @@ namespace KRPC
                     Logger.WriteLine ("Error receiving request from client " + client.Address + ": " + e.Message, Logger.Severity.Error);
                     continue;
                 }
+                item = item.Next;
             }
         }
 

@@ -74,6 +74,10 @@ namespace KRPC.Utils
         {
             return GetEnumerator ();
         }
+
+        public LinkedList<T> Items {
+            get { return items; }
+        }
     }
 }
 
