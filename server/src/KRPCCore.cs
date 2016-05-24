@@ -178,14 +178,24 @@ namespace KRPC
         /// Get the total number of bytes read from the network.
         /// </summary>
         public ulong BytesRead {
-            get { return servers.Select (x => x.BytesRead).SumUnsignedLong (); }
+            get {
+                ulong read = 0;
+                for (int i = 0; i < servers.Count; i++)
+                    read += servers [i].BytesRead;
+                return read;
+            }
         }
 
         /// <summary>
         /// Get the total number of bytes written to the network.
         /// </summary>
         public ulong BytesWritten {
-            get { return servers.Select (x => x.BytesWritten).SumUnsignedLong (); }
+            get {
+                ulong written = 0;
+                for (int i = 0; i < servers.Count; i++)
+                    written += servers [i].BytesWritten;
+                return written;
+            }
         }
 
         /// <summary>

@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Linq;
-using System.Collections.Generic;
 using KRPC.Utils;
 
 namespace KRPC.Server.TCP
@@ -191,11 +191,21 @@ namespace KRPC.Server.TCP
         }
 
         public ulong BytesRead {
-            get { return closedClientsBytesRead + clients.Select (c => c.Stream.BytesRead).SumUnsignedLong (); }
+            get {
+                ulong read = closedClientsBytesRead;
+                for (int i = 0; i < clients.Count; i++)
+                    read += clients [i].Stream.BytesRead;
+                return read;
+            }
         }
 
         public ulong BytesWritten {
-            get { return closedClientsBytesWritten + clients.Select (c => c.Stream.BytesWritten).SumUnsignedLong (); }
+            get {
+                ulong written = closedClientsBytesWritten;
+                for (int i = 0; i < clients.Count; i++)
+                    written += clients [i].Stream.BytesWritten;
+                return written;
+            }
         }
 
         public void ClearStats ()
