@@ -1,4 +1,3 @@
-using System.IO;
 using Google.Protobuf;
 using KRPC.Service.Messages;
 
@@ -6,15 +5,17 @@ namespace KRPC.Server.ProtocolBuffers
 {
     sealed class RPCStream : Message.RPCStream
     {
+        readonly CodedOutputStream codedOutputStream;
+
         public RPCStream (IStream<byte,byte> stream) : base (stream)
         {
+            codedOutputStream = new CodedOutputStream (new ByteOutputStreamAdapter (stream));
         }
 
         public override void Write (Response value)
         {
-            var bufferStream = new MemoryStream ();
-            value.ToProtobufMessage ().WriteDelimitedTo (bufferStream);
-            Stream.Write (bufferStream.ToArray ());
+            codedOutputStream.WriteMessage (value.ToProtobufMessage ());
+            codedOutputStream.Flush ();
         }
 
         protected override int Read (ref Request request, byte[] data, int offset, int length)

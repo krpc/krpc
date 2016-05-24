@@ -104,6 +104,7 @@
     <Compile Include="KRPCCore.cs" />
     <Compile Include="KRPCServer.cs" />
     <Compile Include="Properties\AssemblyKSPVersion.cs" />
+    <Compile Include="Server\ByteOutputStreamAdapter.cs" />
     <Compile Include="Server\ClientActivityArgs.cs" />
     <Compile Include="Server\ClientConnectedArgs.cs" />
     <Compile Include="Server\ClientConnectionRequest.cs" />
