@@ -546,6 +546,8 @@ namespace KRPC
         /// </summary>
         void PollRequests (IEnumerable<RequestContinuation> yieldedContinuations)
         {
+            if (clientScheduler.Empty)
+                return;
             var currentClients = continuations.Select ((c => c.Client)).ToList ();
             currentClients.AddRange (yieldedContinuations.Select ((c => c.Client)));
             foreach (var client in clientScheduler) {
