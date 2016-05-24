@@ -465,7 +465,7 @@ namespace KRPC
                 foreach (var entry in streamRequests) {
                     var streamClient = entry.Key;
                     var requests = entry.Value;
-                    if (!requests.Any ())
+                    if (requests.Count == 0)
                         continue;
                     var streamMessage = new StreamMessage ();
                     foreach (var request in requests) {
