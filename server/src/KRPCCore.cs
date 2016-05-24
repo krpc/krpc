@@ -567,8 +567,8 @@ namespace KRPC
                 pollRequestsCurrentClients.Add (yieldedContinuations [i].Client);
             var item = clientScheduler.Items.First;
             while (item != null) {
+                var client = item.Value;
                 try {
-                    var client = item.Value;
                     if (!pollRequestsCurrentClients.Contains (client) && client.Stream.DataAvailable) {
                         Request request = client.Stream.Read ();
                         if (OnClientActivity != null)
