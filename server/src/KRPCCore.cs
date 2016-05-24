@@ -336,6 +336,11 @@ namespace KRPC
             }
         }
 
+        Stopwatch rpcTimer = new Stopwatch ();
+        Stopwatch rpcPollTimeout = new Stopwatch ();
+        Stopwatch rpcPollTimer = new Stopwatch ();
+        Stopwatch rpcExecTimer = new Stopwatch ();
+
         /// <summary>
         /// Update the RPC server, called once every FixedUpdate.
         /// This method receives and executes RPCs, for up to MaxTimePerUpdate microseconds.
@@ -347,10 +352,11 @@ namespace KRPC
         /// </summary>
         void RPCServerUpdate ()
         {
-            var timer = Stopwatch.StartNew ();
-            var pollTimeout = new Stopwatch ();
-            var pollTimer = new Stopwatch ();
-            var execTimer = new Stopwatch ();
+            rpcTimer.Reset ();
+            rpcTimer.Start ();
+            rpcPollTimeout.Reset ();
+            rpcPollTimer.Reset ();
+            rpcExecTimer.Reset ();
             long maxTimePerUpdateTicks = StopwatchExtensions.MicrosecondsToTicks (MaxTimePerUpdate);
             long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (RecvTimeout);
             ulong rpcsExecuted = 0;
@@ -362,27 +368,27 @@ namespace KRPC
             while (true) {
 
                 // Poll for RPCs
-                pollTimer.Start ();
-                pollTimeout.Reset ();
-                pollTimeout.Start ();
+                rpcPollTimer.Start ();
+                rpcPollTimeout.Reset ();
+                rpcPollTimeout.Start ();
                 while (true) {
                     PollRequests (yieldedContinuations);
                     if (!BlockingRecv)
                         break;
-                    if (pollTimeout.ElapsedTicks > recvTimeoutTicks)
+                    if (rpcPollTimeout.ElapsedTicks > recvTimeoutTicks)
                         break;
-                    if (timer.ElapsedTicks > maxTimePerUpdateTicks)
+                    if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
                         break;
                     if (continuations.Any ())
                         break;
                 }
-                pollTimer.Stop ();
+                rpcPollTimer.Stop ();
 
                 if (!continuations.Any ())
                     break;
 
                 // Execute RPCs
-                execTimer.Start ();
+                rpcExecTimer.Start ();
                 foreach (var continuation in continuations) {
 
                     // Ignore the continuation if the client has disconnected
@@ -390,7 +396,7 @@ namespace KRPC
                         continue;
 
                     // Max exec time exceeded, delay to next update
-                    if (timer.ElapsedTicks > maxTimePerUpdateTicks) {
+                    if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks) {
                         yieldedContinuations.Add (continuation);
                         continue;
                     }
@@ -404,34 +410,37 @@ namespace KRPC
                     rpcsExecuted++;
                 }
                 continuations.Clear ();
-                execTimer.Stop ();
+                rpcExecTimer.Stop ();
 
                 // Exit if only execute one RPC per update
                 if (OneRPCPerUpdate)
                     break;
 
                 // Exit if max exec time exceeded
-                if (timer.ElapsedTicks > maxTimePerUpdateTicks)
+                if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
                     break;
             }
 
             // Run yielded continuations on the next update
             continuations = yieldedContinuations;
 
-            timer.Stop ();
+            rpcTimer.Stop ();
 
             RPCsExecuted += rpcsExecuted;
-            TimePerRPCUpdate = (float)timer.ElapsedSeconds ();
-            PollTimePerRPCUpdate = (float)pollTimer.ElapsedSeconds ();
-            ExecTimePerRPCUpdate = (float)execTimer.ElapsedSeconds ();
+            TimePerRPCUpdate = (float)rpcTimer.ElapsedSeconds ();
+            PollTimePerRPCUpdate = (float)rpcPollTimer.ElapsedSeconds ();
+            ExecTimePerRPCUpdate = (float)rpcExecTimer.ElapsedSeconds ();
         }
+
+        Stopwatch streamTimer = new Stopwatch ();
 
         /// <summary>
         /// Update the Stream server. Executes all streaming RPCs and sends the results to clients (if they have changed).
         /// </summary>
         void StreamServerUpdate ()
         {
-            Stopwatch timer = Stopwatch.StartNew ();
+            streamTimer.Reset ();
+            streamTimer.Start ();
             uint rpcsExecuted = 0;
 
             foreach (var server in servers)
@@ -469,10 +478,10 @@ namespace KRPC
                 streamClient.Stream.Write (streamMessage);
             }
 
-            timer.Stop ();
+            streamTimer.Stop ();
             StreamRPCs = rpcsExecuted;
             StreamRPCsExecuted += rpcsExecuted;
-            TimePerStreamUpdate = (float)timer.ElapsedSeconds ();
+            TimePerStreamUpdate = (float)streamTimer.ElapsedSeconds ();
         }
 
         IClient<NoMessage,StreamMessage> GetStreamClient (IClient rpcClient)
