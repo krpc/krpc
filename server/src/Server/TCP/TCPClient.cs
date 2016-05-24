@@ -8,7 +8,7 @@ namespace KRPC.Server.TCP
     {
         readonly Guid guid;
         readonly TcpClient tcpClient;
-        readonly TCPStream stream;
+        TCPStream stream;
 
         public TCPClient (TcpClient tcpClient)
         {
@@ -20,7 +20,6 @@ namespace KRPC.Server.TCP
             } catch {
                 Address = "";
             }
-            stream = new TCPStream (tcpClient.GetStream ());
         }
 
         public string Name {
@@ -34,7 +33,11 @@ namespace KRPC.Server.TCP
         public string Address { get; private set; }
 
         public IStream<byte,byte> Stream {
-            get { return stream; }
+            get {
+                if (stream == null)
+                    stream = new TCPStream (tcpClient.GetStream ());
+                return stream;
+            }
         }
 
         byte[] connectedTestBuffer = new byte[1];
