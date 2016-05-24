@@ -85,7 +85,7 @@ namespace KRPC.Client
             if (value == null) {
                 stream.WriteUInt64 (0);
                 stream.Flush ();
-                return ByteString.CopyFrom (buffer.ToArray ());
+                return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
             }
             if (type == typeof(Double))
                 stream.WriteDouble ((Double)value);
@@ -122,7 +122,7 @@ namespace KRPC.Client
             else
                 throw new ArgumentException (type + " is not a serializable type");
             stream.Flush ();
-            return ByteString.CopyFrom (buffer.ToArray ());
+            return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
         }
 
         static bool IsAListType (Type type)

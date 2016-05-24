@@ -21,7 +21,7 @@ namespace KRPC.Server.ProtocolBuffers
             if (value == null) {
                 stream.WriteUInt64 (0);
                 stream.Flush ();
-                return ByteString.CopyFrom (buffer.ToArray ());
+                return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
             }
             Type type = value.GetType ();
             if (type == typeof(double))
@@ -59,7 +59,7 @@ namespace KRPC.Server.ProtocolBuffers
             else
                 throw new ArgumentException (type + " is not a serializable type");
             stream.Flush ();
-            return ByteString.CopyFrom (buffer.ToArray ());
+            return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
         }
 
         static void WriteMessage (object value, CodedOutputStream stream)
