@@ -86,6 +86,7 @@
     <Compile Include="ExtensionMethods\TextExtensions.cs" />
     <Compile Include="FontStyle.cs" />
     <Compile Include="InputField.cs" />
+    <Compile Include="MessagePosition.cs" />
     <Compile Include="Panel.cs" />
     <Compile Include="RectTransform.cs" />
     <Compile Include="Text.cs" />

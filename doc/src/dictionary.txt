@@ -57,6 +57,7 @@ prograde
 proto
 protobuf
 py
+quickload
 quicksave
 rect
 serializable

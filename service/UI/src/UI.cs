@@ -1,5 +1,6 @@
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.UI.ExtensionMethods;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
@@ -30,6 +31,21 @@ namespace KRPC.UI
         public static Panel AddPanel (bool visible = true)
         {
             return new Panel (Addon.Canvas, visible);
+        }
+
+        /// <summary>
+        /// Display a message on the screen.
+        /// </summary>
+        /// <remarks>
+        /// The message appears just like a stock message, for example quicksave or quickload messages.
+        /// </remarks>
+        /// <param name="content">Message content.</param>
+        /// <param name="duration">Duration before the message disappears, in seconds.</param>
+        /// <param name="position">Position to display the message.</param>
+        [KRPCProcedure]
+        public static void Message (string content, float duration, MessagePosition position = MessagePosition.TopCenter)
+        {
+            ScreenMessages.PostScreenMessage (content, duration, position.ToScreenMessageStyle ());
         }
 
         /// <summary>

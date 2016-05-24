@@ -136,6 +136,25 @@ namespace KRPC.UI.ExtensionMethods
                 throw new ArgumentOutOfRangeException ();
             }
         }
+
+        /// <summary>
+        /// Convert a kRPC message position to a screen message style.
+        /// </summary>
+        public static ScreenMessageStyle ToScreenMessageStyle (this MessagePosition position)
+        {
+            switch (position) {
+            case MessagePosition.BottomCenter:
+                return ScreenMessageStyle.LOWER_CENTER;
+            case MessagePosition.TopCenter:
+                return ScreenMessageStyle.UPPER_CENTER;
+            case MessagePosition.TopLeft:
+                return ScreenMessageStyle.UPPER_LEFT;
+            case MessagePosition.TopRight:
+                return ScreenMessageStyle.UPPER_RIGHT;
+            default:
+                throw new ArgumentOutOfRangeException ();
+            }
+        }
     }
 }
 

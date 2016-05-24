@@ -794,8 +794,14 @@ RemoteTech.Target.GroundStation
 RemoteTech.Target.Vessel
 RemoteTech.Target.None
 UI
+UI.Message
 UI.AddPanel
 UI.Clear
+UI.MessagePosition
+UI.MessagePosition.TopLeft
+UI.MessagePosition.TopCenter
+UI.MessagePosition.TopRight
+UI.MessagePosition.BottomCenter
 UI.RectTransform
 UI.RectTransform.Position
 UI.RectTransform.LocalPosition
