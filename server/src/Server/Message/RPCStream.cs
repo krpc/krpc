@@ -37,14 +37,7 @@ namespace KRPC.Server.Message
         /// if a malformed request is received.
         /// </summary>
         public bool DataAvailable {
-            get {
-                try {
-                    Poll ();
-                    return true;
-                } catch (NoRequestException) {
-                    return false;
-                }
-            }
+            get { return Poll (); }
         }
 
         /// <summary>
@@ -54,7 +47,8 @@ namespace KRPC.Server.Message
         /// </summary>
         public Request Read ()
         {
-            Poll ();
+            if (!Poll ())
+                throw new NoRequestException ();
             var request = bufferedRequest;
             bufferedRequest = null;
             return request;
@@ -103,23 +97,23 @@ namespace KRPC.Server.Message
             Stream.Close ();
         }
 
-        /// Returns quietly if there is a buffered message.
+        /// Returns true if there is a buffered message.
         /// Otherwise attempts to receive a new message.
-        /// Throws NoRequestException if no message could be received.
+        /// Returns false if no message could be received.
         /// Closes the stream and throws MalformedRequestException if a malformed message is received.
-        void Poll ()
+        bool Poll ()
         {
             // Check if the stream is closed
             if (buffer == null)
-                throw new NoRequestException ();
+                return false;
 
             // If there is already a request, don't need to poll for another one
             if (bufferedRequest != null)
-                return;
+                return true;
 
             // No data is available, so there is no request to receive
             if (size == 0 && !Stream.DataAvailable)
-                throw new NoRequestException ();
+                return false;
 
             // Read as much data as we can from the client
             while (Stream.DataAvailable) {
@@ -136,8 +130,6 @@ namespace KRPC.Server.Message
             int read;
             try {
                 read = Read (ref bufferedRequest, buffer, 0, size);
-            } catch (NoRequestException e) {
-                throw new InvalidOperationException ("Read should not throw NoRequestException", e);
             } catch (MalformedRequestException e) {
                 Close ();
                 throw e;
@@ -158,9 +150,8 @@ namespace KRPC.Server.Message
                 size -= read;
             }
 
-            // Check if a request was not decoded
-            if (bufferedRequest == null)
-                throw new NoRequestException ();
+            // Return whether a request was decoded and is available
+            return (bufferedRequest != null);
         }
     }
 }
