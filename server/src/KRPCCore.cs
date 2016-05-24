@@ -340,6 +340,7 @@ namespace KRPC
         Stopwatch rpcPollTimeout = new Stopwatch ();
         Stopwatch rpcPollTimer = new Stopwatch ();
         Stopwatch rpcExecTimer = new Stopwatch ();
+        IList<RequestContinuation> yieldedContinuations = new List<RequestContinuation> ();
 
         /// <summary>
         /// Update the RPC server, called once every FixedUpdate.
@@ -361,7 +362,7 @@ namespace KRPC
             long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (RecvTimeout);
             ulong rpcsExecuted = 0;
 
-            var yieldedContinuations = new List<RequestContinuation> ();
+            yieldedContinuations.Clear();
             foreach (var server in servers)
                 server.RPCServer.Update ();
 
@@ -422,7 +423,9 @@ namespace KRPC
             }
 
             // Run yielded continuations on the next update
+            var tmp = continuations;
             continuations = yieldedContinuations;
+            yieldedContinuations = tmp;
 
             rpcTimer.Stop ();
 
