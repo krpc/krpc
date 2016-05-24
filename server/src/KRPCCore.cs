@@ -350,7 +350,7 @@ namespace KRPC
         Stopwatch rpcPollTimeout = new Stopwatch ();
         Stopwatch rpcPollTimer = new Stopwatch ();
         Stopwatch rpcExecTimer = new Stopwatch ();
-        IList<RequestContinuation> yieldedContinuations = new List<RequestContinuation> ();
+        IList<RequestContinuation> rpcYieldedContinuations = new List<RequestContinuation> ();
 
         /// <summary>
         /// Update the RPC server, called once every FixedUpdate.
@@ -372,7 +372,7 @@ namespace KRPC
             long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (RecvTimeout);
             ulong rpcsExecuted = 0;
 
-            yieldedContinuations.Clear ();
+            rpcYieldedContinuations.Clear ();
             for (int i = 0; i < servers.Count; i++)
                 servers [i].RPCServer.Update ();
 
@@ -383,7 +383,7 @@ namespace KRPC
                 rpcPollTimeout.Reset ();
                 rpcPollTimeout.Start ();
                 while (true) {
-                    PollRequests (yieldedContinuations);
+                    PollRequests (rpcYieldedContinuations);
                     if (!BlockingRecv)
                         break;
                     if (rpcPollTimeout.ElapsedTicks > recvTimeoutTicks)
@@ -409,7 +409,7 @@ namespace KRPC
 
                     // Max exec time exceeded, delay to next update
                     if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks) {
-                        yieldedContinuations.Add (continuation);
+                        rpcYieldedContinuations.Add (continuation);
                         continue;
                     }
 
@@ -417,7 +417,7 @@ namespace KRPC
                     try {
                         ExecuteContinuation (continuation);
                     } catch (YieldException e) {
-                        yieldedContinuations.Add ((RequestContinuation)e.Continuation);
+                        rpcYieldedContinuations.Add ((RequestContinuation)e.Continuation);
                     }
                     rpcsExecuted++;
                 }
@@ -435,8 +435,8 @@ namespace KRPC
 
             // Run yielded continuations on the next update
             var tmp = continuations;
-            continuations = yieldedContinuations;
-            yieldedContinuations = tmp;
+            continuations = rpcYieldedContinuations;
+            rpcYieldedContinuations = tmp;
 
             rpcTimer.Stop ();
 
