@@ -138,40 +138,44 @@ namespace KRPC.Server.TCP
         public void Update ()
         {
             // Remove disconnected clients
-            foreach (var client in clients.Where (x => !x.Connected).ToList ()) {
-                clients.Remove (client);
-                DisconnectClient (client);
+            if (clients.Count > 0) {
+                foreach (var client in clients.Where (x => !x.Connected).ToList ()) {
+                    clients.Remove (client);
+                    DisconnectClient (client);
+                }
             }
 
             // Process pending clients
             lock (pendingClientsLock) {
-                var stillPendingClients = new List<TCPClient> ();
-                foreach (var client in pendingClients) {
-                    // Trigger OnClientRequestingConnection events to verify the connection
-                    var args = new ClientRequestingConnectionArgs<byte,byte> (client);
-                    if (OnClientRequestingConnection != null)
-                        OnClientRequestingConnection (this, args);
+                if (pendingClients.Count > 0) {
+                    var stillPendingClients = new List<TCPClient> ();
+                    foreach (var client in pendingClients) {
+                        // Trigger OnClientRequestingConnection events to verify the connection
+                        var args = new ClientRequestingConnectionArgs<byte,byte> (client);
+                        if (OnClientRequestingConnection != null)
+                            OnClientRequestingConnection (this, args);
 
-                    // Deny the connection
-                    if (args.Request.ShouldDeny) {
-                        Logger.WriteLine ("TCPServer(" + name + "): client connection denied (" + client.Address + ")", Logger.Severity.Warning);
-                        DisconnectClient (client, true);
-                    }
+                        // Deny the connection
+                        if (args.Request.ShouldDeny) {
+                            Logger.WriteLine ("TCPServer(" + name + "): client connection denied (" + client.Address + ")", Logger.Severity.Warning);
+                            DisconnectClient (client, true);
+                        }
 
-                    // Allow the connection
-                    if (args.Request.ShouldAllow) {
-                        Logger.WriteLine ("TCPServer(" + name + "): client connection accepted (" + client.Address + ")");
-                        clients.Add (client);
-                        if (OnClientConnected != null)
-                            OnClientConnected (this, new ClientConnectedArgs<byte,byte> (client));
-                    }
+                        // Allow the connection
+                        if (args.Request.ShouldAllow) {
+                            Logger.WriteLine ("TCPServer(" + name + "): client connection accepted (" + client.Address + ")");
+                            clients.Add (client);
+                            if (OnClientConnected != null)
+                                OnClientConnected (this, new ClientConnectedArgs<byte,byte> (client));
+                        }
 
-                    // Still pending, will either be denied or allowed on a subsequent called to Update
-                    if (args.Request.StillPending) {
-                        stillPendingClients.Add (client);
+                        // Still pending, will either be denied or allowed on a subsequent called to Update
+                        if (args.Request.StillPending) {
+                            stillPendingClients.Add (client);
+                        }
                     }
+                    pendingClients = stillPendingClients;
                 }
-                pendingClients = stillPendingClients;
             }
         }
 

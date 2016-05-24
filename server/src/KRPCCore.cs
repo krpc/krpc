@@ -362,9 +362,9 @@ namespace KRPC
             long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (RecvTimeout);
             ulong rpcsExecuted = 0;
 
-            yieldedContinuations.Clear();
-            foreach (var server in servers)
-                server.RPCServer.Update ();
+            yieldedContinuations.Clear ();
+            for (int i = 0; i < servers.Count; i++)
+                servers [i].RPCServer.Update ();
 
             while (true) {
 
@@ -390,7 +390,8 @@ namespace KRPC
 
                 // Execute RPCs
                 rpcExecTimer.Start ();
-                foreach (var continuation in continuations) {
+                for (int i = 0; i < continuations.Count; i++) {
+                    var continuation = continuations [i];
 
                     // Ignore the continuation if the client has disconnected
                     if (!continuation.Client.Connected)
@@ -446,39 +447,41 @@ namespace KRPC
             streamTimer.Start ();
             uint rpcsExecuted = 0;
 
-            foreach (var server in servers)
-                server.StreamServer.Update ();
+            for (int i = 0; i < servers.Count; i++)
+                servers [i].StreamServer.Update ();
 
             // Run streaming requests
-            foreach (var entry in streamRequests) {
-                var streamClient = entry.Key;
-                var requests = entry.Value;
-                if (!requests.Any ())
-                    continue;
-                var streamMessage = new StreamMessage ();
-                foreach (var request in requests) {
-                    // Run the RPC
-                    Response response;
-                    try {
-                        response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
-                    } catch (Exception e) {
-                        response = new Response ();
-                        response.HasError = true;
-                        response.Error = e.ToString ();
-                    }
-                    rpcsExecuted++;
-                    // Don't send an update if it is the previous one
-                    //FIXME: does the following comparison work?!? The objects have not been serialized
-                    if (response.ReturnValue == streamResultCache [request.Identifier])
+            if (streamRequests.Count > 0) {
+                foreach (var entry in streamRequests) {
+                    var streamClient = entry.Key;
+                    var requests = entry.Value;
+                    if (!requests.Any ())
                         continue;
-                    // Add the update to the response message
-                    streamResultCache [request.Identifier] = response.ReturnValue;
-                    response.Time = GetUniversalTime ();
-                    var streamResponse = request.Response;
-                    streamResponse.Response = response;
-                    streamMessage.Responses.Add (streamResponse);
+                    var streamMessage = new StreamMessage ();
+                    foreach (var request in requests) {
+                        // Run the RPC
+                        Response response;
+                        try {
+                            response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
+                        } catch (Exception e) {
+                            response = new Response ();
+                            response.HasError = true;
+                            response.Error = e.ToString ();
+                        }
+                        rpcsExecuted++;
+                        // Don't send an update if it is the previous one
+                        //FIXME: does the following comparison work?!? The objects have not been serialized
+                        if (response.ReturnValue == streamResultCache [request.Identifier])
+                            continue;
+                        // Add the update to the response message
+                        streamResultCache [request.Identifier] = response.ReturnValue;
+                        response.Time = GetUniversalTime ();
+                        var streamResponse = request.Response;
+                        streamResponse.Response = response;
+                        streamMessage.Responses.Add (streamResponse);
+                    }
+                    streamClient.Stream.Write (streamMessage);
                 }
-                streamClient.Stream.Write (streamMessage);
             }
 
             streamTimer.Stop ();
@@ -503,7 +506,7 @@ namespace KRPC
         /// Add a stream to the server
         /// </summary>
         internal uint AddStream (IClient rpcClient, Request request)
-        {   
+        {
             var streamClient = GetStreamClient (rpcClient);
 
             // Check for an existing stream for the request
