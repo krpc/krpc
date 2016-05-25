@@ -40,12 +40,18 @@ namespace KRPC.Client.Services.{{ service_name }}
     /// </summary>
     public class Service
     {
+        {% if procedures.items() | length > 0 or properties.items() | length > 0 %}
         global::KRPC.Client.IConnection connection;
 
         internal Service (global::KRPC.Client.IConnection connection)
         {
             this.connection = connection;
         }
+        {% else %}
+        internal Service (global::KRPC.Client.IConnection connection)
+        {
+        }
+        {% endif %}
 
         {% for procedure_name,procedure in procedures.items() %}
         {{ procedure.documentation | indent(width=8) }}

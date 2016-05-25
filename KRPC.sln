@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Client", "client\cshar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Client.Test", "client\csharp\test\KRPC.Client.Test.csproj", "{2E186057-56B2-499B-BFE8-C414FF24E55F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Drawing", "service\Drawing\src\KRPC.Drawing.csproj", "{6373C212-899C-402C-8C2E-187C96318B81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.UI", "service\UI\src\KRPC.UI.csproj", "{AB9F4881-4C8E-4E54-8412-B3FB92861CE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,10 @@ Global
 		{5D390973-8F07-4B28-827F-FB3A1E739FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D390973-8F07-4B28-827F-FB3A1E739FD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D390973-8F07-4B28-827F-FB3A1E739FD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6373C212-899C-402C-8C2E-187C96318B81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6373C212-899C-402C-8C2E-187C96318B81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6373C212-899C-402C-8C2E-187C96318B81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6373C212-899C-402C-8C2E-187C96318B81}.Release|Any CPU.Build.0 = Release|Any CPU
 		{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,6 +73,10 @@ Global
 		{AA218C22-7832-4E2F-9F32-870DC2D5B4B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA218C22-7832-4E2F-9F32-870DC2D5B4B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA218C22-7832-4E2F-9F32-870DC2D5B4B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB9F4881-4C8E-4E54-8412-B3FB92861CE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB9F4881-4C8E-4E54-8412-B3FB92861CE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB9F4881-4C8E-4E54-8412-B3FB92861CE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB9F4881-4C8E-4E54-8412-B3FB92861CE9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC3C589C-91A8-472F-B312-3E5512F77CA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC3C589C-91A8-472F-B312-3E5512F77CA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC3C589C-91A8-472F-B312-3E5512F77CA1}.Release|Any CPU.ActiveCfg = Release|Any CPU

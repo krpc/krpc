@@ -9,11 +9,14 @@ bazel build \
     //:ksp-avc-version \
     //server \
     //service/SpaceCenter \
+    //service/Drawing \
     //service/InfernalRobotics \
     //service/KerbalAlarmClock \
     //service/RemoteTech \
+    //service/UI \
     //tools/TestingTools
 
+rm $GAMEDATA/KRPC.dll
 rm -rf $GAMEDATA
 mkdir -p $GAMEDATA
 cp -R -L \
@@ -24,6 +27,7 @@ cp -R -L \
     bazel-bin/service/**/*.dll \
     bazel-bin/service/**/*.xml \
     bazel-krpc/external/csharp_protobuf_net35/file/Google.Protobuf.dll \
+    service/**/*.ksp \
     bazel-bin/tools/TestingTools/TestingTools.dll \
     bazel-bin/tools/TestingTools/TestingTools.xml \
     $GAMEDATA/

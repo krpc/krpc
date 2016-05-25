@@ -1,3 +1,6 @@
+v0.3.4
+ * Move drawing functionality into new Drawing service (#253)
+
 v0.3.3
  * Add AvailableTorque properties to vessels, reaction wheels, RCS, engines and control surfaces
  * Rename ReactionWheel.Torque to ReactionWheel.MaxTorque

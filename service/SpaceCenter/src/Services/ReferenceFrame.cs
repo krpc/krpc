@@ -458,7 +458,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Convert the given position in world space, to a position in this reference frame.
         /// </summary>
-        internal Vector3d PositionFromWorldSpace (Vector3d worldPosition)
+        public Vector3d PositionFromWorldSpace (Vector3d worldPosition)
         {
             return Rotation.Inverse () * (worldPosition - Position);
         }
@@ -466,7 +466,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Convert the given position in this reference frame, to a position in world space.
         /// </summary>
-        internal Vector3d PositionToWorldSpace (Vector3d position)
+        public Vector3d PositionToWorldSpace (Vector3d position)
         {
             return Position + (Rotation * position);
         }
@@ -474,7 +474,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Convert the given direction in world space, to a direction in this reference frame.
         /// </summary>
-        internal Vector3d DirectionFromWorldSpace (Vector3d worldDirection)
+        public Vector3d DirectionFromWorldSpace (Vector3d worldDirection)
         {
             return Rotation.Inverse () * worldDirection;
         }
@@ -482,7 +482,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Convert the given position in this reference frame, to a position in world space.
         /// </summary>
-        internal Vector3d DirectionToWorldSpace (Vector3d direction)
+        public Vector3d DirectionToWorldSpace (Vector3d direction)
         {
             return Rotation * direction;
         }
@@ -490,7 +490,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Convert the given rotation in world space, to a rotation in this reference frame.
         /// </summary>
-        internal QuaternionD RotationFromWorldSpace (QuaternionD worldRotation)
+        public QuaternionD RotationFromWorldSpace (QuaternionD worldRotation)
         {
             return Rotation.Inverse () * worldRotation;
         }
@@ -498,7 +498,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Convert the given rotation in this reference frame, to a rotation in world space.
         /// </summary>
-        internal QuaternionD RotationToWorldSpace (QuaternionD rotation)
+        public QuaternionD RotationToWorldSpace (QuaternionD rotation)
         {
             return Rotation * rotation;
         }
@@ -506,7 +506,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Convert the given velocity at the given position in world space, to a velocity in this reference frame.
         /// </summary>
-        internal Vector3d VelocityFromWorldSpace (Vector3d worldPosition, Vector3d worldVelocity)
+        public Vector3d VelocityFromWorldSpace (Vector3d worldPosition, Vector3d worldVelocity)
         {
             return (Rotation.Inverse () * (worldVelocity - Velocity)) - AngularVelocityAt (PositionFromWorldSpace (worldPosition));
         }
@@ -514,7 +514,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Convert the given velocity at the given position in this reference frame, to a velocity in world space.
         /// </summary>
-        internal Vector3d VelocityToWorldSpace (Vector3d position, Vector3d velocity)
+        public Vector3d VelocityToWorldSpace (Vector3d position, Vector3d velocity)
         {
             return Velocity + (Rotation * (velocity + AngularVelocityAt (position)));
         }
@@ -523,7 +523,7 @@ namespace KRPC.SpaceCenter.Services
         /// Convert the given angular velocity in world space, to an angular velocity in this reference frame.
         /// This only make sense when considering an object that is rotating at the origin of the reference frame.
         /// </summary>
-        internal Vector3d AngularVelocityFromWorldSpace (Vector3d worldAngularVelocity)
+        public Vector3d AngularVelocityFromWorldSpace (Vector3d worldAngularVelocity)
         {
             return Rotation.Inverse () * (worldAngularVelocity - AngularVelocity);
         }
@@ -532,7 +532,7 @@ namespace KRPC.SpaceCenter.Services
         /// Convert the given angular velocity at the given position in this reference frame, to an angular velocity in world space.
         /// This only make sense when considering an object that is rotating at the origin of the reference frame.
         /// </summary>
-        internal Vector3d AngularVelocityToWorldSpace (Vector3d angularVelocity)
+        public Vector3d AngularVelocityToWorldSpace (Vector3d angularVelocity)
         {
             return AngularVelocity + (Rotation * angularVelocity);
         }

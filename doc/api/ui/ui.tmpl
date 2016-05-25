@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.name }}
+{{ domain.currentmodule('UI') }}
+{% import domain.macros as macros with context %}
+
+UI
+==
+
+{{ macros.service(services['UI']) }}
+{{ macros.enumeration(services['UI'].enumerations['MessagePosition']) }}
