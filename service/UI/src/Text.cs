@@ -42,7 +42,7 @@ namespace KRPC.UI
         /// A list of all available fonts.
         /// </summary>
         [KRPCProperty]
-        public static IList<string> AvailableFonts {
+        public IList<string> AvailableFonts {
             get { return UnityEngine.Font.GetOSInstalledFontNames ().ToList (); }
         }
 

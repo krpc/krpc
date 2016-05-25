@@ -30,6 +30,7 @@ class TestText(krpctest.TestCase):
         self.assertEquals((0, 0, 0), text.position)
         self.assertEquals((0, 0, 0, 1), text.rotation)
         self.assertEquals("Arial", text.font)
+        self.assertGreater(len(text.available_fonts), 0)
         self.assertEquals(12, text.size)
         self.assertEquals(1, text.character_size)
         self.assertEquals(self.style.normal, text.style)
@@ -41,10 +42,6 @@ class TestText(krpctest.TestCase):
         time.sleep(0.5)
         text.remove()
         self.assertRaises(krpc.client.RPCError, text.remove)
-
-    def test_available_fonts(self):
-        # FIXME: shouldn't need to call fget!?
-        self.assertGreater(len(self.conn.drawing.Text.available_fonts.fget(None)), 0)
 
     def test_text_properties(self):
         text = self.add_text()
