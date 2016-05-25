@@ -1,5 +1,6 @@
 using KRPC.Service.Attributes;
 using UnityEngine;
+using Tuple2 = KRPC.Utils.Tuple<double, double>;
 
 namespace KRPC.UI
 {
@@ -12,6 +13,7 @@ namespace KRPC.UI
         internal Panel (GameObject parent, bool visible)
             : base (Addon.Instantiate (parent, "Panel"), visible)
         {
+            RectTransform.Anchor = new Tuple2 (0.5f, 0.5f);
         }
 
         /// <summary>
