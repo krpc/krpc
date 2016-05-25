@@ -448,6 +448,7 @@ SpaceCenter.LaunchClamp.Release
 SpaceCenter.Light
 SpaceCenter.Light.Part
 SpaceCenter.Light.Active
+SpaceCenter.Light.Color
 SpaceCenter.Light.PowerUsage
 SpaceCenter.Parachute
 SpaceCenter.Parachute.Part
