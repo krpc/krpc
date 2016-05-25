@@ -333,6 +333,10 @@ SpaceCenter.Module.Part
 SpaceCenter.Module.Fields
 SpaceCenter.Module.HasField
 SpaceCenter.Module.GetField
+SpaceCenter.Module.SetFieldInt
+SpaceCenter.Module.SetFieldFloat
+SpaceCenter.Module.SetFieldString
+SpaceCenter.Module.ResetField
 SpaceCenter.Module.Events
 SpaceCenter.Module.HasEvent
 SpaceCenter.Module.TriggerEvent
