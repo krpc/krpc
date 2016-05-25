@@ -43,7 +43,7 @@ namespace KRPC.UI
         /// <param name="duration">Duration before the message disappears, in seconds.</param>
         /// <param name="position">Position to display the message.</param>
         [KRPCProcedure]
-        public static void Message (string content, float duration, MessagePosition position = MessagePosition.TopCenter)
+        public static void Message (string content, float duration = 1f, MessagePosition position = MessagePosition.TopCenter)
         {
             ScreenMessages.PostScreenMessage (content, duration, position.ToScreenMessageStyle ());
         }
