@@ -165,6 +165,7 @@ test_suite(
         '//service/Drawing:test',
         '//service/InfernalRobotics:test',
         '//service/RemoteTech:test',
+        '//service/UI:test',
         '//client/csharp:test',
         '//client/cpp:test',
         '//client/java:test',
