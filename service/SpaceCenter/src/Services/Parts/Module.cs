@@ -95,6 +95,11 @@ namespace KRPC.SpaceCenter.Services.Parts
             return AllFields.Any (x => x.guiName == name);
         }
 
+        BaseField GetBaseField (string name)
+        {
+            return AllFields.First (x => x.guiName == name);
+        }
+
         /// <summary>
         /// Returns the value of a field.
         /// </summary>
@@ -102,7 +107,50 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public string GetField (string name)
         {
-            return AllFields.First (x => x.guiName == name).GetValue (module).ToString ();
+            return GetBaseField (name).GetValue (module).ToString ();
+        }
+
+        /// <summary>
+        /// Set the value of a field to the given integer number.
+        /// </summary>
+        /// <param name="name">Name of the field.</param>
+        /// <param name="value">Value to set.</param>
+        [KRPCMethod]
+        public void SetFieldInt (string name, int value)
+        {
+            GetBaseField (name).SetValue (value, module);
+        }
+
+        /// <summary>
+        /// Set the value of a field to the given floating point number.
+        /// </summary>
+        /// <param name="name">Name of the field.</param>
+        /// <param name="value">Value to set.</param>
+        [KRPCMethod]
+        public void SetFieldFloat (string name, float value)
+        {
+            GetBaseField (name).SetValue (value, module);
+        }
+
+        /// <summary>
+        /// Set the value of a field to the given string.
+        /// </summary>
+        /// <param name="name">Name of the field.</param>
+        /// <param name="value">Value to set.</param>
+        [KRPCMethod]
+        public void SetFieldString (string name, string value)
+        {
+            GetBaseField (name).SetValue (value, module);
+        }
+
+        /// <summary>
+        /// Set the value of a field to its original value.
+        /// </summary>
+        /// <param name="name">Name of the field.</param>
+        [KRPCMethod]
+        public void ResetField (string name)
+        {
+            GetBaseField (name).SetOriginalValue ();
         }
 
         /// <summary>
