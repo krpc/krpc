@@ -40,6 +40,18 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// The text component of the input field.
+        /// </summary>
+        /// <remarks>
+        /// Use <see cref="Value"/> to get and set the value in the field.
+        /// This object can be used to alter the style of the input field's text.
+        /// </remarks>
+        [KRPCProperty]
+        public Text Text {
+            get { return new Text (obj); }
+        }
+
+        /// <summary>
         /// Whether the input field has been changed.
         /// </summary>
         /// <remarks>

@@ -863,5 +863,6 @@ UI.InputField
 UI.InputField.RectTransform
 UI.InputField.Visible
 UI.InputField.Value
+UI.InputField.Text
 UI.InputField.Changed
 UI.InputField.Remove
