@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
