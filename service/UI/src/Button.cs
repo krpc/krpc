@@ -6,7 +6,7 @@ using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 namespace KRPC.UI
 {
     /// <summary>
-    /// A text label. See <see cref="Panel.AddText" />.
+    /// A text label. See <see cref="Panel.AddButton" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
     public class Button : UIObject
