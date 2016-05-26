@@ -16,7 +16,7 @@ bazel build \
     //service/UI \
     //tools/TestingTools
 
-rm $GAMEDATA/KRPC.dll
+rm -f $GAMEDATA/KRPC.dll
 rm -rf $GAMEDATA
 mkdir -p $GAMEDATA
 cp -R -L \
