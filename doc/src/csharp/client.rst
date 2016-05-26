@@ -6,16 +6,16 @@ C# Client
 
 This client provides functionality to interact with a kRPC server from programs
 written in C#. The ``KRPC.Client.dll`` assembly can be `installed using NuGet
-<https://www.nuget.com/packages/KRPC.Client>`_ or
+<http://www.nuget.com/packages/KRPC.Client>`_ or
 :github-download-zip:`downloaded from GitHub <krpc-csharp>`.
 
 Installing the Library
 ----------------------
 
-Install the client `using NuGet <https://www.nuget.com/packages/KRPC.Client>`_
+Install the client `using NuGet <http://www.nuget.com/packages/KRPC.Client>`_
 or download the assembly :github-download-zip:`from GitHub <krpc-csharp>` and
 reference it in your project. You also need to `install Google.Protobuf using
-NuGet <https://www.nuget.org/packages/Google.Protobuf>`_.
+NuGet <http://www.nuget.org/packages/Google.Protobuf>`_.
 
 .. note::
 
