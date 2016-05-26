@@ -1,39 +1,27 @@
 using System;
-using System.Net;
-using System.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Google.Protobuf;
+using System.Linq;
+using System.Net;
 using KRPC.Server;
-using KRPC.Server.Net;
-using KRPC.Server.RPC;
-using KRPC.Server.Stream;
+using KRPC.Server.ProtocolBuffers;
+using KRPC.Server.TCP;
 using KRPC.Service;
-using KRPC.Continuations;
+using KRPC.Service.Messages;
 using KRPC.Utils;
-using KRPC.Schema.KRPC;
-
 
 namespace KRPC
 {
     /// <summary>
-    /// The kRPC server
+    /// A kRPC server.
     /// </summary>
     public class KRPCServer : IServer
     {
         readonly TCPServer rpcTcpServer;
         readonly TCPServer streamTcpServer;
-        readonly RPCServer rpcServer;
-        readonly StreamServer streamServer;
 
-        IScheduler<IClient<Request,Response>> clientScheduler;
-        IList<RequestContinuation> continuations;
-        IDictionary<IClient<byte,StreamMessage>, IList<StreamRequest>> streamRequests;
-        IDictionary<uint, ByteString> streamResultCache = new Dictionary<uint, ByteString> ();
+        internal IServer<Request,Response> RPCServer { get; private set; }
 
-        internal delegate double UniversalTimeFunction ();
-
-        internal UniversalTimeFunction GetUniversalTime;
+        internal IServer<NoMessage,StreamMessage> StreamServer { get; private set; }
 
         /// <summary>
         /// Event triggered when the server starts
@@ -65,96 +53,48 @@ namespace KRPC
         /// </summary>
         public event EventHandler<ClientDisconnectedArgs> OnClientDisconnected;
 
-        /// <summary>
-        /// Stores the context in which a continuation is executed.
-        /// For example, used by a continuation to find out which client made the request.
-        /// </summary>
-        public static class Context
+        internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort)
         {
-            /// <summary>
-            /// The server instance
-            /// </summary>
-            public static KRPCServer Server { get; private set; }
+            KRPCCore.Instance.AddServer (this);
 
-            /// <summary>
-            /// The current client
-            /// </summary>
-            public static IClient RPCClient { get; private set; }
-
-            /// <summary>
-            /// The current game scene
-            /// </summary>
-            public static GameScene GameScene { get; private set; }
-
-            internal static void Set (KRPCServer server, IClient rpcClient)
-            {
-                Server = server;
-                RPCClient = rpcClient;
-            }
-
-            internal static void Clear ()
-            {
-                Server = null;
-                RPCClient = null;
-            }
-
-            internal static void SetGameScene (GameScene gameScene)
-            {
-                GameScene = gameScene;
-            }
-        }
-
-        internal KRPCServer (IPAddress address, ushort rpcPort, ushort streamPort,
-                             bool oneRPCPerUpdate = false, uint maxTimePerUpdate = 5000,
-                             bool adaptiveRateControl = true, bool blockingRecv = true, uint recvTimeout = 1000)
-        {
             rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
             streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
-            rpcServer = new RPCServer (rpcTcpServer);
-            streamServer = new StreamServer (streamTcpServer);
-            clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
-            continuations = new List<RequestContinuation> ();
-            streamRequests = new Dictionary<IClient<byte,StreamMessage>,IList<StreamRequest>> ();
-
-            OneRPCPerUpdate = oneRPCPerUpdate;
-            MaxTimePerUpdate = maxTimePerUpdate;
-            AdaptiveRateControl = adaptiveRateControl;
-            BlockingRecv = blockingRecv;
-            RecvTimeout = recvTimeout;
+            RPCServer = new RPCServer (rpcTcpServer);
+            StreamServer = new StreamServer (streamTcpServer);
 
             // Tie events to underlying server
-            rpcServer.OnStarted += (s, e) => {
+            RPCServer.OnStarted += (s, e) => {
                 if (OnStarted != null)
                     OnStarted (this, EventArgs.Empty);
             };
-            rpcServer.OnStopped += (s, e) => {
+            RPCServer.OnStopped += (s, e) => {
                 if (OnStopped != null)
                     OnStopped (this, EventArgs.Empty);
             };
-            rpcServer.OnClientRequestingConnection += (s, e) => {
+            RPCServer.OnClientRequestingConnection += (s, e) => {
                 if (OnClientRequestingConnection != null)
                     OnClientRequestingConnection (s, e);
             };
-            rpcServer.OnClientConnected += (s, e) => {
+            RPCServer.OnClientConnected += (s, e) => {
                 if (OnClientConnected != null)
                     OnClientConnected (s, e);
             };
-            rpcServer.OnClientDisconnected += (s, e) => {
+            RPCServer.OnClientDisconnected += (s, e) => {
                 if (OnClientDisconnected != null)
                     OnClientDisconnected (s, e);
             };
 
             // Add/remove clients from the scheduler
-            rpcServer.OnClientConnected += (s, e) => clientScheduler.Add (e.Client);
-            rpcServer.OnClientDisconnected += (s, e) => clientScheduler.Remove (e.Client);
+            RPCServer.OnClientConnected += (s, e) => KRPCCore.Instance.RPCClientConnected (e.Client);
+            RPCServer.OnClientDisconnected += (s, e) => KRPCCore.Instance.RPCClientDisconnected (e.Client);
 
             // Add/remove clients from the list of stream requests
-            streamServer.OnClientConnected += (s, e) => streamRequests [e.Client] = new List<StreamRequest> ();
-            streamServer.OnClientDisconnected += (s, e) => streamRequests.Remove (e.Client);
+            StreamServer.OnClientConnected += (s, e) => KRPCCore.Instance.StreamClientConnected (e.Client);
+            StreamServer.OnClientDisconnected += (s, e) => KRPCCore.Instance.StreamClientDisconnected (e.Client);
 
             // Validate stream client identifiers
-            streamServer.OnClientRequestingConnection += (s, e) => {
-                if (rpcServer.Clients.Where (c => c.Guid == e.Client.Guid).Any ())
+            StreamServer.OnClientRequestingConnection += (s, e) => {
+                if (RPCServer.Clients.Any (c => c.Guid == e.Client.Guid))
                     e.Request.Allow ();
                 else
                     e.Request.Deny ();
@@ -166,8 +106,8 @@ namespace KRPC
         /// </summary>
         public void Start ()
         {
-            rpcServer.Start ();
-            streamServer.Start ();
+            RPCServer.Start ();
+            StreamServer.Start ();
             ClearStats ();
         }
 
@@ -176,9 +116,18 @@ namespace KRPC
         /// </summary>
         public void Stop ()
         {
-            rpcServer.Stop ();
-            streamServer.Stop ();
+            RPCServer.Stop ();
+            StreamServer.Stop ();
             ObjectStore.Clear ();
+        }
+
+        /// <summary>
+        /// Update the server.
+        /// </summary>
+        public void Update ()
+        {
+            RPCServer.Update ();
+            StreamServer.Update ();
         }
 
         /// <summary>
@@ -209,35 +158,10 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Only execute one RPC for each client per update.
-        /// </summary>
-        public bool OneRPCPerUpdate { get; set; }
-
-        /// <summary>
-        /// Get/set the maximum number of microseconds to spend in a call to FixedUpdate
-        /// </summary>
-        public uint MaxTimePerUpdate { get; set; }
-
-        /// <summary>
-        /// Get/set whether MaxTimePerUpdate should be adjusted to achieve a target framerate.
-        /// </summary>
-        public bool AdaptiveRateControl { get; set; }
-
-        /// <summary>
-        /// Get/set whether FixedUpdate should block for RecvTimeout microseconds to receive RPCs.
-        /// </summary>
-        public bool BlockingRecv { get; set; }
-
-        /// <summary>
-        /// Get/set the timeout for blocking for RPCs, in microseconds.
-        /// </summary>
-        public uint RecvTimeout { get; set; }
-
-        /// <summary>
         /// Returns true if the server is running
         /// </summary>
         public bool Running {
-            get { return rpcServer.Running && streamServer.Running; }
+            get { return RPCServer.Running && StreamServer.Running; }
         }
 
         /// <summary>
@@ -245,7 +169,7 @@ namespace KRPC
         /// not be connected to the server.
         /// </summary>
         public IEnumerable<IClient> Clients {
-            get { return rpcServer.Clients.Select (x => (IClient)x); }
+            get { return RPCServer.Clients.Cast <IClient> (); }
         }
 
         ExponentialMovingAverage bytesReadRate = new ExponentialMovingAverage (0.25);
@@ -255,14 +179,14 @@ namespace KRPC
         /// Get the total number of bytes read from the network.
         /// </summary>
         public ulong BytesRead {
-            get { return rpcServer.BytesRead + streamServer.BytesRead; }
+            get { return RPCServer.BytesRead + StreamServer.BytesRead; }
         }
 
         /// <summary>
         /// Get the total number of bytes written to the network.
         /// </summary>
         public ulong BytesWritten {
-            get { return rpcServer.BytesWritten + streamServer.BytesWritten; }
+            get { return RPCServer.BytesWritten + StreamServer.BytesWritten; }
         }
 
         /// <summary>
@@ -356,8 +280,8 @@ namespace KRPC
         /// </summary>
         public void ClearStats ()
         {
-            rpcServer.ClearStats ();
-            streamServer.ClearStats ();
+            RPCServer.ClearStats ();
+            StreamServer.ClearStats ();
             RPCsExecuted = 0;
             RPCRate = 0;
             TimePerRPCUpdate = 0;
@@ -366,284 +290,6 @@ namespace KRPC
             StreamRPCs = 0;
             StreamRPCsExecuted = 0;
             TimePerStreamUpdate = 0;
-        }
-
-        Stopwatch updateTimer = Stopwatch.StartNew ();
-
-        /// <summary>
-        /// Update the server
-        /// </summary>
-        public void Update ()
-        {
-            ulong startRPCsExecuted = RPCsExecuted;
-            ulong startStreamRPCsExecuted = StreamRPCsExecuted;
-            ulong startBytesRead = BytesRead;
-            ulong startBytesWritten = BytesWritten;
-
-            RPCServerUpdate ();
-            StreamServerUpdate ();
-
-            var timeElapsed = updateTimer.ElapsedSeconds ();
-            var ticksElapsed = updateTimer.ElapsedTicks;
-            updateTimer.Reset ();
-            updateTimer.Start ();
-
-            RPCRate = (float)((double)(RPCsExecuted - startRPCsExecuted) / timeElapsed);
-            StreamRPCRate = (float)((double)(StreamRPCsExecuted - startStreamRPCsExecuted) / timeElapsed);
-            BytesReadRate = (float)((double)(BytesRead - startBytesRead) / timeElapsed);
-            BytesWrittenRate = (float)((double)(BytesWritten - startBytesWritten) / timeElapsed);
-
-            // Adjust MaxTimePerUpdate to get a target FixedUpdate rate of 59 FPS. This is slightly smaller
-            // than 60 FPS, so that it pushes against the target 60 FPS for FixedUpdate.
-            // The minimum MaxTimePerUpdate that will be set is 1ms, and the maximum is 25ms.
-            // If very little time is being spent executing RPCs (<1ms), MaxTimePerUpdate is set to 10ms.
-            // This prevents MaxTimePerUpdate from being set to a high value when the server is idle, which would
-            // cause a drop in framerate if a large burst of RPCs are received.
-            if (AdaptiveRateControl) {
-                var targetTicks = Stopwatch.Frequency / 59;
-                if (ticksElapsed > targetTicks) {
-                    if (MaxTimePerUpdate > 1000)
-                        MaxTimePerUpdate -= 100;
-                } else {
-                    if (ExecTimePerRPCUpdate < 0.001) {
-                        MaxTimePerUpdate = 10000;
-                    } else {
-                        if (MaxTimePerUpdate < 25000)
-                            MaxTimePerUpdate += 100;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Update the RPC server, called once every FixedUpdate.
-        /// This method receives and executes RPCs, for up to MaxTimePerUpdate microseconds.
-        /// RPCs are delayed to the next update if this time expires. If AdaptiveRateControl
-        /// is true, MaxTimePerUpdate will be automatically adjusted to achieve a target framerate.
-        /// If NonBlockingUpdate is false, this call will block waiting for new RPCs for up to
-        /// MaxPollTimePerUpdate microseconds. If NonBlockingUpdate is true, a single non-blocking call
-        /// will be made to check for new RPCs.
-        /// </summary>
-        void RPCServerUpdate ()
-        {
-            var timer = Stopwatch.StartNew ();
-            var pollTimeout = new Stopwatch ();
-            var pollTimer = new Stopwatch ();
-            var execTimer = new Stopwatch ();
-            long maxTimePerUpdateTicks = StopwatchExtensions.MicrosecondsToTicks (MaxTimePerUpdate);
-            long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (RecvTimeout);
-            ulong rpcsExecuted = 0;
-
-            var yieldedContinuations = new List<RequestContinuation> ();
-            rpcServer.Update ();
-
-            while (true) {
-
-                // Poll for RPCs
-                pollTimer.Start ();
-                pollTimeout.Reset ();
-                pollTimeout.Start ();
-                while (true) {
-                    PollRequests (yieldedContinuations);
-                    if (!BlockingRecv)
-                        break;
-                    if (pollTimeout.ElapsedTicks > recvTimeoutTicks)
-                        break;
-                    if (timer.ElapsedTicks > maxTimePerUpdateTicks)
-                        break;
-                    if (continuations.Any ())
-                        break;
-                }
-                pollTimer.Stop ();
-
-                if (!continuations.Any ())
-                    break;
-
-                // Execute RPCs
-                execTimer.Start ();
-                foreach (var continuation in continuations) {
-
-                    // Ignore the continuation if the client has disconnected
-                    if (!continuation.Client.Connected)
-                        continue;
-
-                    // Max exec time exceeded, delay to next update
-                    if (timer.ElapsedTicks > maxTimePerUpdateTicks) {
-                        yieldedContinuations.Add (continuation);
-                        continue;
-                    }
-
-                    // Execute the continuation
-                    try {
-                        ExecuteContinuation (continuation);
-                    } catch (YieldException e) {
-                        yieldedContinuations.Add ((RequestContinuation)e.Continuation);
-                    }
-                    rpcsExecuted++;
-                }
-                continuations.Clear ();
-                execTimer.Stop ();
-
-                // Exit if only execute one RPC per update
-                if (OneRPCPerUpdate)
-                    break;
-
-                // Exit if max exec time exceeded
-                if (timer.ElapsedTicks > maxTimePerUpdateTicks)
-                    break;
-            }
-
-            // Run yielded continuations on the next update
-            continuations = yieldedContinuations;
-
-            timer.Stop ();
-
-            RPCsExecuted += rpcsExecuted;
-            TimePerRPCUpdate = (float)timer.ElapsedSeconds ();
-            PollTimePerRPCUpdate = (float)pollTimer.ElapsedSeconds ();
-            ExecTimePerRPCUpdate = (float)execTimer.ElapsedSeconds ();
-        }
-
-        /// <summary>
-        /// Update the Stream server. Executes all streaming RPCs and sends the results to clients (if they have changed).
-        /// </summary>
-        void StreamServerUpdate ()
-        {
-            Stopwatch timer = Stopwatch.StartNew ();
-            uint rpcsExecuted = 0;
-
-            streamServer.Update ();
-
-            // Run streaming requests
-            foreach (var entry in streamRequests) {
-                var streamClient = entry.Key;
-                var requests = entry.Value;
-                if (!requests.Any ())
-                    continue;
-                var streamMessage = new StreamMessage ();
-                foreach (var request in requests) {
-                    // Run the RPC
-                    Response response;
-                    try {
-                        response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
-                    } catch (Exception e) {
-                        response = new Response ();
-                        response.HasError = true;
-                        response.Error = e.ToString ();
-                    }
-                    rpcsExecuted++;
-                    // Don't send an update if it is the previous one
-                    if (response.ReturnValue == streamResultCache [request.Identifier])
-                        continue;
-                    // Add the update to the response message
-                    streamResultCache [request.Identifier] = response.ReturnValue;
-                    response.Time = GetUniversalTime ();
-                    var streamResponse = request.Response;
-                    streamResponse.Response = response;
-                    streamMessage.Responses.Add (streamResponse);
-                }
-                streamClient.Stream.Write (streamMessage);
-            }
-
-            timer.Stop ();
-            StreamRPCs = rpcsExecuted;
-            StreamRPCsExecuted += rpcsExecuted;
-            TimePerStreamUpdate = (float)timer.ElapsedSeconds ();
-        }
-
-        /// <summary>
-        /// Add a stream to the server
-        /// </summary>
-        internal uint AddStream (IClient client, Request request)
-        {
-            var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
-
-            // Check for an existing stream for the request
-            var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request);
-            var arguments = KRPC.Service.Services.Instance.DecodeArguments (procedure, request);
-            foreach (var streamRequest in streamRequests[streamClient]) {
-                if (streamRequest.Procedure == procedure && streamRequest.Arguments.SequenceEqual (arguments))
-                    return streamRequest.Identifier;
-            }
-
-            // Create a new stream
-            {
-                var streamRequest = new StreamRequest (request);
-                streamRequests [streamClient].Add (streamRequest);
-                streamResultCache [streamRequest.Identifier] = null;
-                return streamRequest.Identifier;
-            }
-        }
-
-        /// <summary>
-        /// Remove a stream from the server
-        /// </summary>
-        internal void RemoveStream (IClient client, uint identifier)
-        {
-            var streamClient = streamServer.Clients.Single (c => c.Guid == client.Guid);
-            var requests = streamRequests [streamClient].Where (x => x.Identifier == identifier).ToList ();
-            if (!requests.Any ())
-                return;
-            streamRequests [streamClient].Remove (requests.Single ());
-            streamResultCache.Remove (identifier);
-        }
-
-        /// <summary>
-        /// Poll connected clients for new requests.
-        /// Adds a continuation to the queue for any client with a new request,
-        /// if a continuation is not already being processed for the client.
-        /// </summary>
-        void PollRequests (IEnumerable<RequestContinuation> yieldedContinuations)
-        {
-            var currentClients = continuations.Select (((c) => c.Client)).ToList ();
-            currentClients.AddRange (yieldedContinuations.Select (((c) => c.Client)));
-            foreach (var client in clientScheduler) {
-                if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
-                    Request request = client.Stream.Read ();
-                    if (OnClientActivity != null)
-                        OnClientActivity (this, new ClientActivityArgs (client));
-                    if (Logger.ShouldLog (Logger.Severity.Debug))
-                        Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")", Logger.Severity.Debug);
-                    continuations.Add (new RequestContinuation (client, request));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Execute the continuation and send a response to the client,
-        /// or throw a YieldException if the continuation is not complete.
-        /// </summary>
-        void ExecuteContinuation (RequestContinuation continuation)
-        {
-            var client = continuation.Client;
-
-            // Run the continuation, and either return a result, an error,
-            // or throw a YieldException if the continuation has not completed
-            Response response;
-            try {
-                Context.Set (this, client);
-                response = continuation.Run ();
-            } catch (YieldException) {
-                throw;
-            } catch (Exception e) {
-                response = new Response ();
-                response.HasError = true;
-                response.Error = e.Message;
-                if (Logger.ShouldLog (Logger.Severity.Debug))
-                    Logger.WriteLine (e.Message, Logger.Severity.Debug);
-            } finally {
-                Context.Clear ();
-            }
-
-            // Send response to the client
-            response.Time = GetUniversalTime ();
-            ((RPCClient)client).Stream.Write (response);
-            if (Logger.ShouldLog (Logger.Severity.Debug)) {
-                if (response.HasError)
-                    Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
-                else
-                    Logger.WriteLine ("Sent response to client " + client.Address, Logger.Severity.Debug);
-            }
         }
     }
 }

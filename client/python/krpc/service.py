@@ -228,11 +228,11 @@ class ServiceBase(DynamicType):
         param_names = [snake_case(param.name) for param in procedure.parameters]
         param_types = [cls._client._types.get_parameter_type(i, param.type, procedure.attributes)
                        for i, param in enumerate(procedure.parameters)]
-        param_required = [not param.has_default_argument for param in procedure.parameters]
+        param_required = [not param.has_default_value for param in procedure.parameters]
         param_default = []
         for param, typ in zip(procedure.parameters, param_types):
-            if param.has_default_argument:
-                param_default.append(Decoder.decode(param.default_argument, typ))
+            if param.has_default_value:
+                param_default.append(Decoder.decode(param.default_value, typ))
             else:
                 param_default.append(None)
         return_type = None

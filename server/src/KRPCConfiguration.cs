@@ -1,9 +1,8 @@
 using System;
 using System.Net;
-using UnityEngine;
 using KRPC.Service;
 using KRPC.Utils;
-using KRPC.Service.Scanner;
+using UnityEngine;
 
 namespace KRPC
 {

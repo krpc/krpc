@@ -2,7 +2,7 @@ using System;
 using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service.Scanner;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
 
 namespace KRPC.Service
 {
@@ -11,25 +11,25 @@ namespace KRPC.Service
     /// </summary>
     class RequestContinuation : Continuation<Response>
     {
-        public IClient Client { get; private set; }
+        public IClient<Request,Response> Client { get; private set; }
 
         readonly Request request;
         readonly ProcedureSignature procedure;
         readonly Exception exception;
         readonly IContinuation continuation;
 
-        public RequestContinuation (IClient client, Request request)
+        public RequestContinuation (IClient<Request,Response> client, Request request)
         {
             Client = client;
             this.request = request;
             try {
-                procedure = Services.Instance.GetProcedureSignature (request);
+                procedure = Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
             } catch (Exception e) {
                 exception = e;
             }
         }
 
-        RequestContinuation (IClient client, Request request, ProcedureSignature procedure, IContinuation continuation)
+        RequestContinuation (IClient<Request,Response> client, Request request, ProcedureSignature procedure, IContinuation continuation)
         {
             Client = client;
             this.request = request;

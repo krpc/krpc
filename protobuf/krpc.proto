@@ -56,8 +56,8 @@ message Procedure {
 message Parameter {
   string name = 1;
   string type = 2;
-  bool has_default_argument = 3;
-  bytes default_argument = 4;
+  bool has_default_value = 3;
+  bytes default_value = 4;
 }
 
 message Class {

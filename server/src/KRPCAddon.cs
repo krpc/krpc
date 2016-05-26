@@ -7,13 +7,14 @@ using KSP.UI.Screens;
 namespace KRPC
 {
     /// <summary>
-    /// Main KRPC addon. Contains the server instance and UI.
+    /// Main KRPC addon. Contains the kRPC core, config and UI.
     /// </summary>
     [KSPAddonImproved (KSPAddonImproved.Startup.All, false)]
     sealed public class KRPCAddon : MonoBehaviour
     {
-        static KRPCServer server;
         static KRPCConfiguration config;
+        static KRPCCore core;
+        static KRPCServer server;
         static Texture textureOnline;
         static Texture textureOffline;
 
@@ -23,17 +24,25 @@ namespace KRPC
         ClientConnectingDialog clientConnectingDialog;
         ClientDisconnectDialog clientDisconnectDialog;
 
-        void Init ()
+        static void Init ()
         {
-            if (server != null)
+            if (config != null)
                 return;
 
+            // Load config
             config = new KRPCConfiguration ("PluginData/settings.cfg");
             config.Load ();
-            server = new KRPCServer (
-                config.Address, config.RPCPort, config.StreamPort,
-                config.OneRPCPerUpdate, config.MaxTimePerUpdate, config.AdaptiveRateControl,
-                config.BlockingRecv, config.RecvTimeout);
+
+            // Set up core
+            core = KRPCCore.Instance;
+            core.OneRPCPerUpdate = config.OneRPCPerUpdate;
+            core.MaxTimePerUpdate = config.MaxTimePerUpdate;
+            core.AdaptiveRateControl = config.AdaptiveRateControl;
+            core.BlockingRecv = config.BlockingRecv;
+            core.RecvTimeout = config.RecvTimeout;
+
+            // Set up server
+            server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
         }
 
         /// <summary>
@@ -47,9 +56,9 @@ namespace KRPC
 
             Init ();
 
-            KRPCServer.Context.SetGameScene (KSPAddonImproved.CurrentGameScene.ToGameScene ());
-            Logger.WriteLine ("Game scene switched to " + KRPCServer.Context.GameScene);
-            server.GetUniversalTime = Planetarium.GetUniversalTime;
+            KRPCCore.Context.SetGameScene (KSPAddonImproved.CurrentGameScene.ToGameScene ());
+            Logger.WriteLine ("Game scene switched to " + KRPCCore.Context.GameScene);
+            core.GetUniversalTime = Planetarium.GetUniversalTime;
 
             // If a game is not loaded, ensure the server is stopped and then exit
             if (KSPAddonImproved.CurrentGameScene != GameScenes.EDITOR &&
@@ -77,7 +86,6 @@ namespace KRPC
 
             // Info window
             infoWindow = gameObject.AddComponent<InfoWindow> ();
-            infoWindow.Server = server;
             infoWindow.Closable = true;
             infoWindow.Visible = config.InfoWindowVisible;
             infoWindow.Position = config.InfoWindowPosition;
@@ -183,11 +191,11 @@ namespace KRPC
             server.RPCPort = config.RPCPort;
             server.StreamPort = config.StreamPort;
             server.Address = config.Address;
-            server.OneRPCPerUpdate = config.OneRPCPerUpdate;
-            server.MaxTimePerUpdate = config.MaxTimePerUpdate;
-            server.AdaptiveRateControl = config.AdaptiveRateControl;
-            server.BlockingRecv = config.BlockingRecv;
-            server.RecvTimeout = config.RecvTimeout;
+            core.OneRPCPerUpdate = config.OneRPCPerUpdate;
+            core.MaxTimePerUpdate = config.MaxTimePerUpdate;
+            core.AdaptiveRateControl = config.AdaptiveRateControl;
+            core.BlockingRecv = config.BlockingRecv;
+            core.RecvTimeout = config.RecvTimeout;
             try {
                 server.Start ();
             } catch (ServerException exn) {
@@ -238,7 +246,7 @@ namespace KRPC
             if (!ServicesChecker.OK)
                 return;
             if (server != null && server.Running)
-                server.Update ();
+                core.Update ();
         }
     }
 }

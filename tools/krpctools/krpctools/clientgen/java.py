@@ -150,7 +150,7 @@ class JavaGenerator(Generator):
         return self.parse_type(typ)
 
     @staticmethod
-    def parse_default_argument(value, typ): #pylint: disable=unused-argument
+    def parse_default_value(value, typ): #pylint: disable=unused-argument
         # No default arguments in Java
         return None
 

@@ -86,11 +86,11 @@ local ServiceBase = class(Types.DynamicType)
 function ServiceBase:_parse_procedure(procedure)
   local param_names = get_names(procedure.parameters)
   local param_types = get_types(self._client._types, procedure.parameters, procedure.attributes)
-  local param_required = seq.copy(seq.map(function (x) return not x:HasField('default_argument') end, procedure.parameters))
+  local param_required = seq.copy(seq.map(function (x) return not x:HasField('default_value') end, procedure.parameters))
   local param_default = List{}
   for param,typ in seq.zip(procedure.parameters, param_types) do
-    if param:HasField('default_argument') then
-      param_default:append(decoder.decode(param.default_argument, typ))
+    if param:HasField('default_value') then
+      param_default:append(decoder.decode(param.default_value, typ))
     else
       param_default:append(nil)
     end

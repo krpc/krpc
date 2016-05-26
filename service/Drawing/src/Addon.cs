@@ -17,7 +17,7 @@ namespace KRPC.Drawing
 
         internal static void AddObject (IDrawingObject obj)
         {
-            var client = KRPCServer.Context.RPCClient;
+            var client = KRPCCore.Context.RPCClient;
             if (!objects.ContainsKey (client))
                 objects [client] = new List<IDrawingObject> ();
             objects [client].Add (obj);
@@ -25,7 +25,7 @@ namespace KRPC.Drawing
 
         internal static void RemoveObject (IDrawingObject obj)
         {
-            var client = KRPCServer.Context.RPCClient;
+            var client = KRPCCore.Context.RPCClient;
             if (!objects.ContainsKey (client) || !objects [client].Contains (obj))
                 throw new ArgumentException ("Drawing object not found");
             obj.Destroy ();

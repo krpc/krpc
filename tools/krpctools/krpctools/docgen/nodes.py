@@ -1,3 +1,4 @@
+import base64
 from collections import OrderedDict, defaultdict
 from krpc.attributes import Attributes
 from krpc.types import Types, EnumType
@@ -92,19 +93,19 @@ class Class(Appendable):
         self.members = OrderedDict((member.name, member) for member in sorted(members, key=sort))
 
 class Parameter(Appendable):
-    def __init__(self, name, position, type, attributes, documentation, default_argument=None): #pylint: disable=redefined-builtin
+    def __init__(self, name, position, type, attributes, documentation, default_value=None): #pylint: disable=redefined-builtin
         super(Parameter, self).__init__()
         self.name = name
         self.type = self.types.get_parameter_type(position, type, attributes)
-        self.has_default_argument = default_argument is not None
-        if default_argument is not None:
+        self.has_default_value = default_value is not None
+        if default_value is not None:
             # Note: following is a workaround for decoding EnumType, as set_values has not been called
             if not isinstance(self.type, EnumType):
                 typ = self.type
             else:
                 typ = self.types.as_type('int32')
-            default_argument = Decoder.decode(str(bytearray(default_argument)), typ)
-        self.default_argument = default_argument
+            default_value = Decoder.decode(str(bytearray(base64.b64decode(default_value))), typ)
+        self.default_value = default_value
         self.documentation = documentation
 
 class Procedure(Appendable):

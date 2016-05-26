@@ -1,5 +1,4 @@
 using System;
-using Google.Protobuf;
 using KRPC.Utils;
 using System.Runtime.Serialization;
 
@@ -21,16 +20,14 @@ namespace KRPC.Service.Scanner
         public Type Type { get; private set; }
 
         /// <summary>
-        /// Serialized value of its default argument, or null if it has no default argument.
+        /// True if this parameter is optional and has a default argument.
         /// </summary>
-        public ByteString DefaultArgument { get; private set; }
+        public bool HasDefaultValue { get; private set; }
 
         /// <summary>
-        /// True if this parameter is optional.
+        /// Default argument, if <see cref="HasDefaultValue"/> is true.
         /// </summary>
-        public bool HasDefaultArgument {
-            get { return DefaultArgument != null; }
-        }
+        public object DefaultValue { get; private set; }
 
         public ParameterSignature (string fullProcedureName, ProcedureParameter parameter)
         {
@@ -41,27 +38,17 @@ namespace KRPC.Service.Scanner
             if (!TypeUtils.IsAValidType (Type))
                 throw new ServiceException (Type + " is not a valid Procedure parameter type, in " + fullProcedureName);
 
-            // Encode the default value as a ByteString
-            if (parameter.HasDefaultValue) {
-                var value = parameter.DefaultValue;
-                if (TypeUtils.IsAClassType (Type))
-                    DefaultArgument = ProtocolBuffers.WriteValue (ObjectStore.Instance.AddInstance (value), typeof(ulong));
-                else if (TypeUtils.IsAnEnumType (Type)) {
-                    // TODO: Assumes it's underlying type is int
-                    DefaultArgument = ProtocolBuffers.WriteValue ((int)value, typeof(int));
-                } else if (ProtocolBuffers.IsAMessageType (Type))
-                    DefaultArgument = ProtocolBuffers.WriteMessage (value as IMessage);
-                else
-                    DefaultArgument = ProtocolBuffers.WriteValue (value, Type);
-            }
+            HasDefaultValue = parameter.HasDefaultValue;
+            if (parameter.HasDefaultValue)
+                DefaultValue = parameter.DefaultValue;
         }
 
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("name", Name);
             info.AddValue ("type", TypeUtils.GetTypeName (Type));
-            if (DefaultArgument != null)
-                info.AddValue ("default_argument", DefaultArgument);
+            if (HasDefaultValue)
+                info.AddValue ("default_value", global::KRPC.Server.ProtocolBuffers.Encoder.Encode (DefaultValue).ToByteArray ());
         }
     }
 }

@@ -54,6 +54,7 @@
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\bazel-krpc\external\csharp_nunit\NUnit-2.6.4\bin\framework\nunit.framework.dll</HintPath>
+      <Package>nunit</Package>
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\bazel-krpc\external\csharp_moq\lib\net40\Moq.dll</HintPath>
@@ -74,16 +75,17 @@
   <ItemGroup>
     <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
     <Compile Include="KRPCConfigurationTest.cs" />
-    <Compile Include="Schema\RpcTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
-    <Compile Include="Server\Net\AssumptionsTest.cs" />
-    <Compile Include="Server\Net\NetworkInformationTest.cs" />
-    <Compile Include="Server\Net\TCPClientTest.cs" />
-    <Compile Include="Server\Net\TCPServerTest.cs" />
-    <Compile Include="Server\RPC\RPCServerTest.cs" />
-    <Compile Include="Server\RPC\RPCStreamTest.cs" />
-    <Compile Include="Server\Stream\StreamServerTest.cs" />
-    <Compile Include="Server\Stream\StreamStreamTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\EncoderTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPCServerTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\RPCStreamTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\SchemaTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\StreamServerTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\StreamStreamTest.cs" />
+    <Compile Include="Server\TCP\AssumptionsTest.cs" />
+    <Compile Include="Server\TCP\NetworkInformationTest.cs" />
+    <Compile Include="Server\TCP\TCPClientTest.cs" />
+    <Compile Include="Server\TCP\TCPServerTest.cs" />
     <Compile Include="Server\TestClient.cs" />
     <Compile Include="Server\TestStream.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
@@ -100,10 +102,10 @@
     <Compile Include="Service\TestService3.cs" />
     <Compile Include="Service\TestTopLevelClass.cs" />
     <Compile Include="Service\TypeUtilsTest.cs" />
+    <Compile Include="TestingTools.cs" />
     <Compile Include="Utils\DocumentationExtensionsTest.cs" />
     <Compile Include="Utils\EquatableTest.cs" />
     <Compile Include="Utils\IEnumerableExtensionsTest.cs" />
-    <Compile Include="Utils\ProtocolBuffersTest.cs" />
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
     <Compile Include="Utils\TupleTest.cs" />

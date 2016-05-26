@@ -40,7 +40,7 @@ namespace KRPC.UI
 
         internal static void AddObject (UIObject obj)
         {
-            var client = KRPCServer.Context.RPCClient;
+            var client = KRPCCore.Context.RPCClient;
             if (!objects.ContainsKey (client))
                 objects [client] = new List<UIObject> ();
             objects [client].Add (obj);
@@ -48,7 +48,7 @@ namespace KRPC.UI
 
         internal static void RemoveObject (UIObject obj)
         {
-            var client = KRPCServer.Context.RPCClient;
+            var client = KRPCCore.Context.RPCClient;
             if (!objects.ContainsKey (client) || !objects [client].Contains (obj))
                 throw new ArgumentException ("UI object not found");
             obj.Destroy ();

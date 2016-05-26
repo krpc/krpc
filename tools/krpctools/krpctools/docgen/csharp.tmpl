@@ -120,10 +120,10 @@
 {% endmacro %}
 
 {% macro parameter(x) %}
-{% if not x.has_default_argument -%}
+{% if not x.has_default_value -%}
 {{ domain.parameter_type(x.type) }} {{ x.name }}
 {%- else -%}
-{{ domain.parameter_type(x.type) }} {{ x.name }} = {{ x.default_argument }}
+{{ domain.parameter_type(x.type) }} {{ x.name }} = {{ x.default_value }}
 {%- endif %}
 {% endmacro %}
 

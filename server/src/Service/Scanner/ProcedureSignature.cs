@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Google.Protobuf;
 using KRPC.Utils;
 using System.Runtime.Serialization;
 
@@ -61,34 +60,14 @@ namespace KRPC.Service.Scanner
             for (int position = 0; position < Parameters.Count; position++)
                 Attributes.AddRange (TypeUtils.ParameterTypeAttributes (position, Parameters [position].Type));
 
-            // Create builders for the parameter types that are message types
-            //ParameterBuilders = Parameters
-            //    .Select (x => {
-            //    try {
-            //        return ProtocolBuffers.IsAMessageType (x.Type) ? ProtocolBuffers.BuilderForMessageType (x.Type) : null;
-            //    } catch (ArgumentException) {
-            //        throw new ServiceException ("Failed to instantiate a message builder for parameter type " + x.Type.Name);
-            //    }
-            //}).ToArray ();
             HasReturnType = (handler.ReturnType != typeof(void));
             if (HasReturnType) {
                 ReturnType = handler.ReturnType;
                 // Check it's a valid return type
-                if (!TypeUtils.IsAValidType (ReturnType)) {
-                    throw new ServiceException (
-                        ReturnType + " is not a valid Procedure return type, " +
-                        "in " + FullyQualifiedName);
-                }
+                if (!TypeUtils.IsAValidType (ReturnType))
+                    throw new ServiceException (ReturnType + " is not a valid Procedure return type, " + "in " + FullyQualifiedName);
                 // Add return type attributes
                 Attributes.AddRange (TypeUtils.ReturnTypeAttributes (ReturnType));
-                // Create a builder if it's a message type
-                //if (ProtocolBuffers.IsAMessageType (ReturnType)) {
-                //    try {
-                //        ReturnBuilder = ProtocolBuffers.BuilderForMessageType (ReturnType);
-                //    } catch (ArgumentException) {
-                //        throw new ServiceException ("Failed to instantiate a message builder for return type " + ReturnType.Name);
-                //    }
-                //}
             }
         }
 

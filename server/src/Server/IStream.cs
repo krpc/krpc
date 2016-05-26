@@ -62,5 +62,10 @@ namespace KRPC.Server
         /// Write multiple values to the stream.
         /// </summary>
         void Write (TOut[] buffer);
+
+        /// <summary>
+        /// Write size values to the stream, from the buffer starting at offset.
+        /// </summary>
+        void Write (TOut[] buffer, int offset, int size);
     }
 }

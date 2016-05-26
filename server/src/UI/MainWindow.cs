@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using KRPC.Server;
-using KRPC.Server.Net;
+using KRPC.Server.TCP;
 using UnityEngine;
 
 namespace KRPC.UI

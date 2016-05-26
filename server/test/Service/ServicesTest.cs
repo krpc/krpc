@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Google.Protobuf;
 using KRPC;
 using KRPC.Continuations;
-using KRPC.Schema.KRPC;
 using KRPC.Service;
+using KRPC.Service.Messages;
 using KRPC.Utils;
 using Moq;
 using NUnit.Framework;
@@ -33,21 +32,7 @@ namespace KRPC.Test.Service
             };
         }
 
-        static Response Res (ByteString data)
-        {
-            var response = new Response ();
-            response.MergeFrom (data);
-            return response;
-        }
-
-        static Response Res (Response response)
-        {
-            var newResponse = new Response ();
-            newResponse.MergeFrom (response);
-            return newResponse;
-        }
-
-        static Argument Arg (uint position, ByteString value)
+        static Argument Arg (uint position, object value)
         {
             return new Argument {
                 Position = position,
@@ -57,52 +42,14 @@ namespace KRPC.Test.Service
 
         static Response Run (Request request)
         {
-            var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request);
+            var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
             return KRPC.Service.Services.Instance.HandleRequest (procedure, request);
-        }
-
-        static byte[] ToBytes<T> (T x) where T : IMessage
-        {
-            using (var stream = new MemoryStream ()) {
-                x.WriteTo (stream);
-                return stream.ToArray ();
-            }
-        }
-
-        static byte[] ToBytes (float x)
-        {
-            using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteFloat (x);
-                codedStream.Flush ();
-                return stream.ToArray ();
-            }
-        }
-
-        static byte[] ToBytes (string x)
-        {
-            using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteString (x);
-                codedStream.Flush ();
-                return stream.ToArray ();
-            }
-        }
-
-        static byte[] ToBytes (byte[] x)
-        {
-            using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
-                codedStream.WriteBytes (ByteString.CopyFrom (x));
-                codedStream.Flush ();
-                return stream.ToArray ();
-            }
         }
 
         [SetUp]
         public void SetUp ()
         {
-            KRPCServer.Context.SetGameScene (GameScene.Flight);
+            KRPCCore.Context.SetGameScene (GameScene.Flight);
         }
 
         [Test]
@@ -137,22 +84,14 @@ namespace KRPC.Test.Service
         }
 
         /// <summary>
-        /// Test calling a service method with a malformed argument
+        /// Test calling a service method with an invalid argument
         /// </summary>
         [Test]
-        public void HandleRequestSingleMalformedArgNoReturn ()
+        public void HandleRequestSingleInvalidArgNoReturn ()
         {
-            var arg = Res ("foo", 42);
-            byte[] argBytes = ToBytes (arg);
-            // Screw it up!
-            for (int i = 0; i < argBytes.Length; i++)
-                argBytes [i] = (byte)(argBytes [i] + 2);
-            var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureSingleArgNoReturn (It.IsAny<Response> ()));
-            TestService.Service = mock.Object;
-            var request = Req ("TestService", "ProcedureSingleArgNoReturn", Arg (0, ByteString.CopyFrom (argBytes)));
+            // should pass a string, not an int
+            var request = Req ("TestService", "CreateTestObject", Arg (0, 42));
             Assert.Throws<RPCException> (() => Run (request));
-            mock.Verify (x => x.ProcedureSingleArgNoReturn (It.IsAny<Response> ()), Times.Never ());
         }
 
         /// <summary>
@@ -188,12 +127,11 @@ namespace KRPC.Test.Service
         public void HandleRequestSingleArgNoReturn ()
         {
             var arg = Res ("foo", 42);
-            byte[] argBytes = ToBytes (arg);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureSingleArgNoReturn (It.IsAny<Response> ()))
-                .Callback ((Response x) => Assert.AreEqual (argBytes, x.ToByteArray ()));
+                .Callback ((Response x) => Assert.AreEqual (arg, x));
             TestService.Service = mock.Object;
-            Run (Req ("TestService", "ProcedureSingleArgNoReturn", Arg (0, ByteString.CopyFrom (argBytes))));
+            Run (Req ("TestService", "ProcedureSingleArgNoReturn", Arg (0, arg)));
             mock.Verify (x => x.ProcedureSingleArgNoReturn (It.IsAny<Response> ()), Times.Once ());
         }
 
@@ -203,31 +141,26 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestThreeArgsNoReturn ()
         {
-            var args = new IMessage [3];
-            args [0] = Res ("foo", 42);
-            args [1] = Req ("bar", "bar");
-            args [2] = Res ("baz", 123);
-            var argBytes = new List<byte[]> ();
-            argBytes.Add (ToBytes (args [0]));
-            argBytes.Add (ToBytes (args [1]));
-            argBytes.Add (ToBytes (args [2]));
+            var arg0 = Res ("foo", 42);
+            var arg1 = Req ("bar", "bar");
+            var arg2 = Res ("baz", 123);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureThreeArgsNoReturn (
                 It.IsAny<Response> (),
                 It.IsAny<Request> (),
                 It.IsAny<Response> ()))
-                .Callback ((Response x,
-                            Request y,
-                            Response z) => {
-                Assert.AreEqual (argBytes [0], x.ToByteArray ());
-                Assert.AreEqual (argBytes [1], y.ToByteArray ());
-                Assert.AreEqual (argBytes [2], z.ToByteArray ());
+                        .Callback ((Response x,
+                                    Request y,
+                                    Response z) => {
+                Assert.AreEqual (arg0, x);
+                Assert.AreEqual (arg1, y);
+                Assert.AreEqual (arg2, z);
             });
             TestService.Service = mock.Object;
             Run (Req ("TestService", "ProcedureThreeArgsNoReturn",
-                Arg (0, ByteString.CopyFrom (argBytes [0])),
-                Arg (1, ByteString.CopyFrom (argBytes [1])),
-                Arg (2, ByteString.CopyFrom (argBytes [2]))));
+                Arg (0, arg0),
+                Arg (1, arg1),
+                Arg (2, arg2)));
             mock.Verify (x => x.ProcedureThreeArgsNoReturn (
                 It.IsAny<Response> (),
                 It.IsAny<Request> (),
@@ -247,7 +180,7 @@ namespace KRPC.Test.Service
             var response = Run (Req ("TestService", "ProcedureNoArgsReturns"));
             response.Time = 42;
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
-            Response innerResponse = Res (response.ReturnValue);
+            Response innerResponse = (Response)response.ReturnValue;
             Assert.AreEqual (expectedResponse.Error, innerResponse.Error);
         }
 
@@ -257,18 +190,16 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestArgsReturn ()
         {
-            var expectedResponse = Res ("bar", 42);
-            byte[] expectedResponseBytes = ToBytes (expectedResponse);
+            var expectedResponse = new Response { Error = "bar", Time = 42 };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureSingleArgReturns (It.IsAny<Response> ()))
-                .Returns ((Response x) => Res (x));
+                .Returns ((Response x) => x);
             TestService.Service = mock.Object;
-            var request = Req ("TestService", "ProcedureSingleArgReturns",
-                              Arg (0, ByteString.CopyFrom (expectedResponseBytes)));
+            var request = Req ("TestService", "ProcedureSingleArgReturns", Arg (0, expectedResponse));
             Response response = Run (request);
             response.Time = 42;
             mock.Verify (x => x.ProcedureSingleArgReturns (It.IsAny<Response> ()), Times.Once ());
-            Response innerResponse = Res (response.ReturnValue);
+            Response innerResponse = (Response)response.ReturnValue;
             Assert.AreEqual (expectedResponse.Error, innerResponse.Error);
         }
 
@@ -278,27 +209,24 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestWithValueTypes ()
         {
-            const float expectedX = 3.14159f;
-            const string expectedY = "foo";
-            var expectedZ = new byte[] { 0xDE, 0xAD, 0xBE, 0xEF };
-            byte[] xBytes = ToBytes (expectedX);
-            byte[] yBytes = ToBytes (expectedY);
-            byte[] zBytes = ToBytes (expectedZ);
+            const float arg0 = 3.14159f;
+            const string arg1 = "foo";
+            var arg2 = new byte[] { 0xDE, 0xAD, 0xBE, 0xEF };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureWithValueTypes (
                 It.IsAny<float> (),
                 It.IsAny<string> (),
                 It.IsAny<byte[]> ()))
                 .Callback ((float x, string y, byte[] z) => {
-                Assert.AreEqual (expectedX, x);
-                Assert.AreEqual (expectedY, y);
-                Assert.AreEqual (expectedZ, z);
+                Assert.AreEqual (arg0, x);
+                Assert.AreEqual (arg1, y);
+                Assert.AreEqual (arg2, z);
             }).Returns (42);
             TestService.Service = mock.Object;
             Run (Req ("TestService", "ProcedureWithValueTypes",
-                Arg (0, ByteString.CopyFrom (xBytes)),
-                Arg (1, ByteString.CopyFrom (yBytes)),
-                Arg (2, ByteString.CopyFrom (zBytes))));
+                Arg (0, arg0),
+                Arg (1, arg1),
+                Arg (2, arg2)));
             mock.Verify (x => x.ProcedureWithValueTypes (
                 It.IsAny<float> (), It.IsAny<string> (), It.IsAny<byte[]> ()), Times.Once ());
         }
@@ -313,7 +241,7 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.PropertyWithGet).Returns ("foo");
             TestService.Service = mock.Object;
             Response response = Run (Req ("TestService", "get_PropertyWithGet"));
-            Assert.AreEqual ("foo", ProtocolBuffers.ReadValue (response.ReturnValue, typeof(string)));
+            Assert.AreEqual ("foo", (string)response.ReturnValue);
             mock.Verify (x => x.PropertyWithGet, Times.Once ());
         }
 
@@ -326,8 +254,7 @@ namespace KRPC.Test.Service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.SetupSet (x => x.PropertyWithSet = "foo");
             TestService.Service = mock.Object;
-            var request = Req ("TestService", "set_PropertyWithSet",
-                              Arg (0, ProtocolBuffers.WriteValue ("foo", typeof(string))));
+            var request = Req ("TestService", "set_PropertyWithSet", Arg (0, "foo"));
             Response response = Run (request);
             Assert.AreEqual ("", response.Error);
         }
@@ -339,16 +266,14 @@ namespace KRPC.Test.Service
         public void HandleRequestWithObjectReturn ()
         {
             var instance = new TestService.TestClass ("foo");
-            var guid = ObjectStore.Instance.AddInstance (instance);
-            var argBytes = ProtocolBuffers.WriteValue ("foo", typeof(string));
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.CreateTestObject ("foo")).Returns (instance);
             TestService.Service = mock.Object;
-            Response response = Run (Req ("TestService", "CreateTestObject", Arg (0, argBytes)));
+            Response response = Run (Req ("TestService", "CreateTestObject", Arg (0, "foo")));
             Assert.AreEqual ("", response.Error);
             response.Time = 42;
             Assert.IsNotNull (response.ReturnValue);
-            Assert.AreEqual (guid, ProtocolBuffers.ReadValue (response.ReturnValue, typeof(ulong)));
+            Assert.AreEqual (instance, (TestService.TestClass)response.ReturnValue);
         }
 
         /// <summary>
@@ -358,13 +283,12 @@ namespace KRPC.Test.Service
         public void HandleRequestWithObjectParameter ()
         {
             var instance = new TestService.TestClass ("foo");
-            var arg = ObjectStore.Instance.AddInstance (instance);
-            ByteString argBytes = ProtocolBuffers.WriteValue (arg, typeof(ulong));
+            ObjectStore.Instance.AddInstance (instance);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.DeleteTestObject (It.IsAny<TestService.TestClass> ()))
                 .Callback ((TestService.TestClass x) => Assert.AreSame (instance, x));
             TestService.Service = mock.Object;
-            Run (Req ("TestService", "DeleteTestObject", Arg (0, argBytes)));
+            Run (Req ("TestService", "DeleteTestObject", Arg (0, instance)));
             mock.Verify (x => x.DeleteTestObject (It.IsAny<TestService.TestClass> ()), Times.Once ());
         }
 
@@ -374,17 +298,15 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestWithNullObjectParameterAndReturn ()
         {
-            ByteString argBytes = ProtocolBuffers.WriteValue (0ul, typeof(ulong));
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoTestObject (It.IsAny<TestService.TestClass> ()))
                 .Callback ((TestService.TestClass x) => Assert.AreEqual (null, x))
                 .Returns ((TestService.TestClass x) => x);
             TestService.Service = mock.Object;
-            Response response = Run (Req ("TestService", "EchoTestObject", Arg (0, argBytes)));
+            Response response = Run (Req ("TestService", "EchoTestObject", Arg (0, null)));
             Assert.AreEqual ("", response.Error);
             response.Time = 42;
-            Assert.IsNotNull (response.ReturnValue);
-            Assert.AreEqual (0, ProtocolBuffers.ReadValue (response.ReturnValue, typeof(ulong)));
+            Assert.IsNull (response.ReturnValue);
         }
 
         /// <summary>
@@ -395,12 +317,11 @@ namespace KRPC.Test.Service
         {
             var instance = new TestService.TestClass ("jeb");
             var guid = ObjectStore.Instance.AddInstance (instance);
-            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
-            ByteString argBytes = ProtocolBuffers.WriteValue (3.14159f, typeof(float));
-            var request = Req ("TestService", "TestClass_FloatToString", Arg (0, guidBytes), Arg (1, argBytes));
+            var arg = 3.14159f;
+            var request = Req ("TestService", "TestClass_FloatToString", Arg (0, guid), Arg (1, arg));
             var response = Run (request);
             response.Time = 42;
-            Assert.AreEqual ("jeb3.14159", ProtocolBuffers.ReadValue (response.ReturnValue, typeof(string)));
+            Assert.AreEqual ("jeb3.14159", (string)response.ReturnValue);
         }
 
         /// <summary>
@@ -410,15 +331,12 @@ namespace KRPC.Test.Service
         public void HandleRequestForObjectMethodWithObjectParameter ()
         {
             var instance = new TestService.TestClass ("bill");
-            var argInstance = new TestService.TestClass ("bob");
+            var arg = new TestService.TestClass ("bob");
             var guid = ObjectStore.Instance.AddInstance (instance);
-            var argGuid = ObjectStore.Instance.AddInstance (argInstance);
-            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
-            ByteString argBytes = ProtocolBuffers.WriteValue (argGuid, typeof(ulong));
-            var request = Req ("TestService", "TestClass_ObjectToString", Arg (0, guidBytes), Arg (1, argBytes));
+            var request = Req ("TestService", "TestClass_ObjectToString", Arg (0, guid), Arg (1, arg));
             var response = Run (request);
             response.Time = 42;
-            Assert.AreEqual ("billbob", ProtocolBuffers.ReadValue (response.ReturnValue, typeof(string)));
+            Assert.AreEqual ("billbob", (string)(response.ReturnValue));
         }
 
         /// <summary>
@@ -430,12 +348,11 @@ namespace KRPC.Test.Service
             var instance = new TestService.TestClass ("jeb");
             instance.IntProperty = 42;
             var guid = ObjectStore.Instance.AddInstance (instance);
-            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
-            var request = Req ("TestService", "TestClass_get_IntProperty", Arg (0, guidBytes));
+            var request = Req ("TestService", "TestClass_get_IntProperty", Arg (0, guid));
             var response = Run (request);
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (42, ProtocolBuffers.ReadValue (response.ReturnValue, typeof(int)));
+            Assert.AreEqual (42, (int)response.ReturnValue);
         }
 
         /// <summary>
@@ -447,9 +364,8 @@ namespace KRPC.Test.Service
             var instance = new TestService.TestClass ("jeb");
             instance.IntProperty = 42;
             var guid = ObjectStore.Instance.AddInstance (instance);
-            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
             var request = Req ("TestService", "TestClass_set_IntProperty",
-                              Arg (0, guidBytes), Arg (1, ProtocolBuffers.WriteValue (1337, typeof(int))));
+                              Arg (0, guid), Arg (1, 1337));
             var response = Run (request);
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
@@ -462,11 +378,10 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestForClassStaticMethod ()
         {
-            ByteString argBytes = ProtocolBuffers.WriteValue ("bob", typeof(string));
-            var request = Req ("TestService", "TestClass_StaticMethod", Arg (0, argBytes));
+            var request = Req ("TestService", "TestClass_StaticMethod", Arg (0, "bob"));
             var response = Run (request);
             response.Time = 42;
-            Assert.AreEqual ("jebbob", ProtocolBuffers.ReadValue (response.ReturnValue, typeof(string)));
+            Assert.AreEqual ("jebbob", (string)response.ReturnValue);
         }
 
         /// <summary>
@@ -478,13 +393,12 @@ namespace KRPC.Test.Service
         {
             var instance = new TestService.TestClass ("jeb");
             instance.IntProperty = 42;
-            var guid = ObjectStore.Instance.AddInstance (instance);
-            ByteString guidBytes = ProtocolBuffers.WriteValue (guid, typeof(ulong));
-            var request = Req ("TestService2", "ClassTypeFromOtherServiceAsParameter", Arg (0, guidBytes));
+            ObjectStore.Instance.AddInstance (instance);
+            var request = Req ("TestService2", "ClassTypeFromOtherServiceAsParameter", Arg (0, instance));
             var response = Run (request);
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (42, ProtocolBuffers.ReadValue (response.ReturnValue, typeof(long)));
+            Assert.AreEqual (42, (int)response.ReturnValue);
         }
 
         /// <summary>
@@ -494,13 +408,11 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestWithClassTypeReturnFromDifferentService ()
         {
-            var request = Req ("TestService2", "ClassTypeFromOtherServiceAsReturn",
-                              Arg (0, ProtocolBuffers.WriteValue ("jeb", typeof(string))));
+            var request = Req ("TestService2", "ClassTypeFromOtherServiceAsReturn", Arg (0, "jeb"));
             var response = Run (request);
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            var guid = (ulong)ProtocolBuffers.ReadValue (response.ReturnValue, typeof(ulong));
-            var obj = (TestService.TestClass)ObjectStore.Instance.GetInstance (guid);
+            var obj = (TestService.TestClass)response.ReturnValue;
             Assert.AreEqual ("jeb", obj.value);
         }
 
@@ -540,8 +452,8 @@ namespace KRPC.Test.Service
             });
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureThreeOptionalArgsNoReturn",
-                              Arg (2, ProtocolBuffers.WriteValue (arg2, arg2.GetType ())),
-                              Arg (0, ProtocolBuffers.WriteValue (arg0, arg0.GetType ())));
+                              Arg (2, arg2),
+                              Arg (0, arg0));
             Run (request);
             mock.Verify (x => x.ProcedureThreeOptionalArgsNoReturn (
                 It.IsAny<float> (),
@@ -589,8 +501,7 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.ProcedureEnumArg (It.IsAny<TestService.TestEnum> ()))
                 .Callback ((TestService.TestEnum x) => Assert.AreEqual (TestService.TestEnum.y, x));
             TestService.Service = mock.Object;
-            var request = Req ("TestService", "ProcedureEnumArg",
-                              Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
+            var request = Req ("TestService", "ProcedureEnumArg", Arg (0, arg));
             Run (request);
             mock.Verify (x => x.ProcedureEnumArg (It.IsAny<TestService.TestEnum> ()), Times.Once ());
         }
@@ -607,7 +518,7 @@ namespace KRPC.Test.Service
             var response = Run (Req ("TestService", "ProcedureEnumReturn"));
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (ProtocolBuffers.WriteValue ((int)TestService.TestEnum.z, typeof(int)), response.ReturnValue);
+            Assert.AreEqual (TestService.TestEnum.z, response.ReturnValue);
             mock.Verify (x => x.ProcedureEnumReturn (), Times.Once ());
         }
 
@@ -621,8 +532,7 @@ namespace KRPC.Test.Service
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureEnumArg (It.IsAny<TestService.TestEnum> ()));
             TestService.Service = mock.Object;
-            var request = Req ("TestService", "ProcedureTestEnumArg",
-                              Arg (0, ProtocolBuffers.WriteValue ((int)arg, typeof(int))));
+            var request = Req ("TestService", "ProcedureTestEnumArg", Arg (0, arg));
             Assert.Throws<RPCException> (() => Run (request));
         }
 
@@ -659,8 +569,7 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.BlockingProcedureNoReturn (It.IsAny<int> ()))
                 .Callback ((int n) => BlockingProcedureNoReturnFn (n));
             TestService.Service = mock.Object;
-            var request = Req ("TestService", "BlockingProcedureNoReturn",
-                              Arg (0, ProtocolBuffers.WriteValue (num, typeof(int))));
+            var request = Req ("TestService", "BlockingProcedureNoReturn", Arg (0, num));
             BlockingProcedureNoReturnFnCount = 0;
             Response response = null;
             Continuation<Response> continuation = new RequestContinuation (null, request);
@@ -690,8 +599,7 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()))
                 .Returns ((int n, int sum) => BlockingProcedureReturnsFn (n, sum));
             TestService.Service = mock.Object;
-            var request = Req ("TestService", "BlockingProcedureReturns",
-                              Arg (0, ProtocolBuffers.WriteValue (num, typeof(int))));
+            var request = Req ("TestService", "BlockingProcedureReturns", Arg (0, num));
             BlockingProcedureReturnsFnCount = 0;
             Response response = null;
             Continuation<Response> continuation = new RequestContinuation (null, request);
@@ -704,7 +612,7 @@ namespace KRPC.Test.Service
             }
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (expectedResult, ProtocolBuffers.ReadValue (response.ReturnValue, typeof(int)));
+            Assert.AreEqual (expectedResult, (int)response.ReturnValue);
             // Verify the KRPCProcedure is called once, but the handler function is called multiple times
             mock.Verify (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()), Times.Once ());
             Assert.AreEqual (num + 1, BlockingProcedureReturnsFnCount);
@@ -716,19 +624,15 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoList ()
         {
-            var list = new KRPC.Schema.KRPC.List ();
-            list.Items.Add (ProtocolBuffers.WriteValue ("jeb", typeof(string)));
-            list.Items.Add (ProtocolBuffers.WriteValue ("bob", typeof(string)));
-            list.Items.Add (ProtocolBuffers.WriteValue ("bill", typeof(string)));
+            var list = new List<string> { "jeb", "bob", "bill" };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoList (It.IsAny<IList<string>> ()))
                 .Returns ((IList<string> x) => x);
             TestService.Service = mock.Object;
-            var response = Run (Req ("TestService", "EchoList",
-                               Arg (0, ProtocolBuffers.WriteMessage (list))));
+            var response = Run (Req ("TestService", "EchoList", Arg (0, list)));
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (ProtocolBuffers.WriteMessage (list), response.ReturnValue);
+            CollectionAssert.AreEqual (list, (IList<string>)response.ReturnValue);
             mock.Verify (x => x.EchoList (It.IsAny<IList<string>> ()), Times.Once ());
         }
 
@@ -738,28 +642,15 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoDictionary ()
         {
-            var dictionary = new Dictionary ();
-            dictionary.Entries.Add (new DictionaryEntry {
-                Key = ProtocolBuffers.WriteValue (0, typeof(int)),
-                Value = ProtocolBuffers.WriteValue ("jeb", typeof(string))
-            });
-            dictionary.Entries.Add (new DictionaryEntry {
-                Key = ProtocolBuffers.WriteValue (1, typeof(int)),
-                Value = ProtocolBuffers.WriteValue ("bob", typeof(string))
-            });
-            dictionary.Entries.Add (new DictionaryEntry {
-                Key = ProtocolBuffers.WriteValue (2, typeof(int)),
-                Value = ProtocolBuffers.WriteValue ("bill", typeof(string))
-            });
+            var dictionary = new Dictionary<int,string> { { 0, "jeb" }, { 1, "bob" }, { 2, "bill" } };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoDictionary (It.IsAny<IDictionary<int,string>> ()))
                 .Returns ((IDictionary<int,string> x) => x);
             TestService.Service = mock.Object;
-            var response = Run (Req ("TestService", "EchoDictionary",
-                               Arg (0, ProtocolBuffers.WriteMessage (dictionary))));
+            var response = Run (Req ("TestService", "EchoDictionary", Arg (0, dictionary)));
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (ProtocolBuffers.WriteMessage (dictionary), response.ReturnValue);
+            CollectionAssert.AreEquivalent (dictionary, (IDictionary<int,string>)response.ReturnValue);
             mock.Verify (x => x.EchoDictionary (It.IsAny<IDictionary<int,string>> ()), Times.Once ());
         }
 
@@ -769,19 +660,15 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoSet ()
         {
-            var set = new Set ();
-            set.Items.Add (ProtocolBuffers.WriteValue (345, typeof(int)));
-            set.Items.Add (ProtocolBuffers.WriteValue (723, typeof(int)));
-            set.Items.Add (ProtocolBuffers.WriteValue (112, typeof(int)));
+            var set = new HashSet<int> { 345, 723, 112 };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoSet (It.IsAny<HashSet<int>> ()))
                 .Returns ((HashSet<int> x) => x);
             TestService.Service = mock.Object;
-            var response = Run (Req ("TestService", "EchoSet",
-                               Arg (0, ProtocolBuffers.WriteMessage (set))));
+            var response = Run (Req ("TestService", "EchoSet", Arg (0, set)));
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (ProtocolBuffers.WriteMessage (set), response.ReturnValue);
+            CollectionAssert.AreEqual (set, (HashSet<int>)response.ReturnValue);
             mock.Verify (x => x.EchoSet (It.IsAny<HashSet<int>> ()), Times.Once ());
         }
 
@@ -791,18 +678,15 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoTuple ()
         {
-            var tuple = new KRPC.Schema.KRPC.Tuple ();
-            tuple.Items.Add (ProtocolBuffers.WriteValue (42, typeof(int)));
-            tuple.Items.Add (ProtocolBuffers.WriteValue (false, typeof(bool)));
+            var tuple = KRPC.Utils.Tuple.Create (42, false);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoTuple (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()))
                 .Returns ((KRPC.Utils.Tuple<int,bool> x) => x);
             TestService.Service = mock.Object;
-            var response = Run (Req ("TestService", "EchoTuple",
-                               Arg (0, ProtocolBuffers.WriteMessage (tuple))));
+            var response = Run (Req ("TestService", "EchoTuple", Arg (0, tuple)));
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (ProtocolBuffers.WriteMessage (tuple), response.ReturnValue);
+            Assert.AreEqual (tuple, (KRPC.Utils.Tuple<int,bool>)response.ReturnValue);
             mock.Verify (x => x.EchoTuple (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()), Times.Once ());
         }
 
@@ -812,35 +696,18 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoNestedCollection ()
         {
-            var list0 = new KRPC.Schema.KRPC.List ();
-            list0.Items.Add (ProtocolBuffers.WriteValue ("jeb", typeof(string)));
-            list0.Items.Add (ProtocolBuffers.WriteValue ("bob", typeof(string)));
-            var list1 = new KRPC.Schema.KRPC.List ();
-            var list2 = new KRPC.Schema.KRPC.List ();
-            list2.Items.Add (ProtocolBuffers.WriteValue ("bill", typeof(string)));
-            list2.Items.Add (ProtocolBuffers.WriteValue ("edzor", typeof(string)));
-            var collection = new Dictionary ();
-            collection.Entries.Add (new DictionaryEntry {
-                Key = ProtocolBuffers.WriteValue (0, typeof(int)),
-                Value = ProtocolBuffers.WriteMessage (list0)
-            });
-            collection.Entries.Add (new DictionaryEntry {
-                Key = ProtocolBuffers.WriteValue (1, typeof(int)),
-                Value = ProtocolBuffers.WriteMessage (list1)
-            });
-            collection.Entries.Add (new DictionaryEntry {
-                Key = ProtocolBuffers.WriteValue (2, typeof(int)),
-                Value = ProtocolBuffers.WriteMessage (list2)
-            });
+            var list0 = new List<String> { "jeb", "bob" };
+            var list1 = new List<String> ();
+            var list2 = new List<String> { "bill", "edzor" };
+            var collection = new Dictionary<int, IList<string>> { { 0, list0 }, { 1, list1 }, { 2, list2 } };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoNestedCollection (It.IsAny<IDictionary<int,IList<string>>> ()))
                 .Returns ((IDictionary<int,IList<string>> x) => x);
             TestService.Service = mock.Object;
-            var response = Run (Req ("TestService", "EchoNestedCollection",
-                               Arg (0, ProtocolBuffers.WriteMessage (collection))));
+            var response = Run (Req ("TestService", "EchoNestedCollection", Arg (0, collection)));
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (ProtocolBuffers.WriteMessage (collection), response.ReturnValue);
+            CollectionAssert.AreEqual (collection, (IDictionary<int, IList<string>>)response.ReturnValue);
             mock.Verify (x => x.EchoNestedCollection (It.IsAny<IDictionary<int,IList<string>>> ()), Times.Once ());
         }
 
@@ -850,22 +717,18 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoListOfObjects ()
         {
-            var instance0 = new TestService.TestClass ("foo");
-            var instance1 = new TestService.TestClass ("bar");
-            var guid0 = ObjectStore.Instance.AddInstance (instance0);
-            var guid1 = ObjectStore.Instance.AddInstance (instance1);
-            var list = new KRPC.Schema.KRPC.List ();
-            list.Items.Add (ProtocolBuffers.WriteValue (guid0, typeof(ulong)));
-            list.Items.Add (ProtocolBuffers.WriteValue (guid1, typeof(ulong)));
+            var list = new List<TestService.TestClass> {
+                new TestService.TestClass ("foo"),
+                new TestService.TestClass ("bar")
+            };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoListOfObjects (It.IsAny<IList<TestService.TestClass>> ()))
                 .Returns ((IList<TestService.TestClass> x) => x);
             TestService.Service = mock.Object;
-            var response = Run (Req ("TestService", "EchoListOfObjects",
-                               Arg (0, ProtocolBuffers.WriteMessage (list))));
+            var response = Run (Req ("TestService", "EchoListOfObjects", Arg (0, list)));
             response.Time = 0;
             Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (ProtocolBuffers.WriteMessage (list), response.ReturnValue);
+            CollectionAssert.AreEqual (list, (IList<TestService.TestClass>)response.ReturnValue);
             mock.Verify (x => x.EchoListOfObjects (It.IsAny<IList<TestService.TestClass>> ()), Times.Once ());
         }
 
@@ -875,7 +738,7 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestWrongGameMode ()
         {
-            KRPCServer.Context.SetGameScene (GameScene.TrackingStation);
+            KRPCCore.Context.SetGameScene (GameScene.TrackingStation);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureNoArgsNoReturn ());
             TestService.Service = mock.Object;

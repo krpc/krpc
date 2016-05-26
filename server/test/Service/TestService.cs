@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using KRPC.Service;
 using KRPC.Service.Attributes;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
 
 namespace KRPC.Test.Service
 {

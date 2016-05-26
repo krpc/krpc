@@ -20,12 +20,12 @@ namespace KRPC.Test.Service
             Assert.IsNotNull (services);
             Assert.AreEqual (4, services.Services_.Count);
             bool foundKRPCService = false;
-            foreach (KRPC.Schema.KRPC.Service service in services.Services_) {
+            foreach (var service in services.Services_) {
                 if (service.Name == "KRPC") {
                     foundKRPCService = true;
                     Assert.AreEqual (5, service.Procedures.Count);
                     int found = 0;
-                    foreach (Procedure method in service.Procedures) {
+                    foreach (var method in service.Procedures) {
                         if (method.Name == "GetStatus") {
                             Assert.AreEqual ("KRPC.Status", method.ReturnType);
                             Assert.AreEqual (0, method.Parameters.Count);
@@ -45,7 +45,7 @@ namespace KRPC.Test.Service
                             Assert.AreEqual (1, method.Parameters.Count);
                             Assert.AreEqual ("request", method.Parameters [0].Name);
                             Assert.AreEqual ("KRPC.Request", method.Parameters [0].Type);
-                            Assert.IsTrue (method.Parameters [0].DefaultArgument.IsEmpty);
+                            Assert.IsNull (method.Parameters [0].DefaultValue);
                             Assert.AreEqual (0, method.Attributes.Count);
                             Assert.AreNotEqual ("", method.Documentation);
                             found++;
@@ -55,7 +55,7 @@ namespace KRPC.Test.Service
                             Assert.AreEqual (1, method.Parameters.Count);
                             Assert.AreEqual ("id", method.Parameters [0].Name);
                             Assert.AreEqual ("uint32", method.Parameters [0].Type);
-                            Assert.IsTrue (method.Parameters [0].DefaultArgument.IsEmpty);
+                            Assert.IsNull (method.Parameters [0].DefaultValue);
                             Assert.AreEqual (0, method.Attributes.Count);
                             Assert.AreNotEqual ("", method.Documentation);
                             found++;

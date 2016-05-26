@@ -6,39 +6,49 @@ namespace KRPC.Test.Server
 {
     public class TestStream : IStream<byte,byte>
     {
-        MemoryStream write_stream;
-        MemoryStream read_stream;
+        MemoryStream writeStream;
+        MemoryStream readStream;
 
-        public TestStream (MemoryStream read_stream, MemoryStream write_stream)
+        public TestStream (byte[] readBytes, byte[] writeBytes = null)
         {
-            this.read_stream = read_stream;
-            this.write_stream = write_stream;
-            if (read_stream != null) {
-                read_stream.Seek (0, SeekOrigin.Begin);
-            }
+            readStream = new MemoryStream (readBytes);
+            if (writeBytes != null)
+                writeStream = new MemoryStream (writeBytes);
+        }
+
+        public TestStream (MemoryStream readStream, MemoryStream writeStream = null)
+        {
+            this.readStream = readStream;
+            this.writeStream = writeStream;
+            if (readStream != null)
+                readStream.Seek (0, SeekOrigin.Begin);
         }
 
         public bool DataAvailable {
-            get {
-                return read_stream.Position < read_stream.Length;
-            }
+            get { return !Closed && readStream.Position < readStream.Length; }
         }
 
         public byte Read ()
         {
-            return (byte)read_stream.ReadByte ();
+            if (Closed)
+                throw new InvalidOperationException ();
+            return (byte)readStream.ReadByte ();
         }
 
         public int Read (byte[] buffer, int offset)
         {
-            var size = read_stream.Read (buffer, offset, buffer.Length - offset);
+            if (Closed)
+                throw new InvalidOperationException ();
+            var size = readStream.Read (buffer, offset, buffer.Length - offset);
             BytesRead += (ulong)size;
             return size;
         }
 
         public int Read (byte[] buffer, int offset, int size)
         {
-            size = read_stream.Read (buffer, offset, size);
+            if (Closed)
+                throw new InvalidOperationException ();
+            size = readStream.Read (buffer, offset, size);
             BytesRead += (ulong)size;
             return size;
         }
@@ -50,8 +60,14 @@ namespace KRPC.Test.Server
 
         public void Write (byte[] buffer)
         {
-            var size = buffer.Length;
-            write_stream.Write (buffer, 0, size);
+            Write (buffer, 0, buffer.Length);
+        }
+
+        public void Write (byte[] buffer, int offset, int size)
+        {
+            if (Closed || writeStream == null)
+                throw new InvalidOperationException ();
+            writeStream.Write (buffer, offset, size);
             BytesWritten += (ulong)size;
         }
 
@@ -65,9 +81,13 @@ namespace KRPC.Test.Server
             BytesWritten = 0;
         }
 
+        public bool Closed { get; set; }
+
         public void Close ()
         {
-            throw new NotSupportedException ();
+            readStream = null;
+            writeStream = null;
+            Closed = true;
         }
     }
 }

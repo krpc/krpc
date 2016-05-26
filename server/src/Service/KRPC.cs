@@ -1,6 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
-using KRPC.Schema.KRPC;
+using KRPC.Service.Messages;
 
 namespace KRPC.Service
 {
@@ -19,25 +19,24 @@ namespace KRPC.Service
             var status = new Status ();
             var version = System.Reflection.Assembly.GetExecutingAssembly ().GetName ().Version;
             status.Version = version.Major + "." + version.Minor + "." + version.Build;
-            var server = KRPCServer.Context.Server;
-            status.BytesRead = server != null ? server.BytesRead : 0;
-            status.BytesWritten = server != null ? server.BytesWritten : 0;
-            status.BytesReadRate = server != null ? server.BytesReadRate : 0;
-            status.BytesWrittenRate = server != null ? server.BytesWrittenRate : 0;
-            status.RpcsExecuted = server != null ? server.RPCsExecuted : 0;
-            status.RpcRate = server != null ? server.RPCRate : 0;
-            status.OneRpcPerUpdate = server != null ? server.OneRPCPerUpdate : false;
-            status.MaxTimePerUpdate = server != null ? server.MaxTimePerUpdate : 0;
-            status.AdaptiveRateControl = server != null ? server.AdaptiveRateControl : false;
-            status.BlockingRecv = server != null ? server.BlockingRecv : false;
-            status.RecvTimeout = server != null ? server.RecvTimeout : 0;
-            status.TimePerRpcUpdate = server != null ? server.TimePerRPCUpdate : 0;
-            status.PollTimePerRpcUpdate = server != null ? server.PollTimePerRPCUpdate : 0;
-            status.ExecTimePerRpcUpdate = server != null ? server.ExecTimePerRPCUpdate : 0;
-            status.StreamRpcs = server != null ? server.StreamRPCs : 0;
-            status.StreamRpcsExecuted = server != null ? server.StreamRPCsExecuted : 0;
-            status.StreamRpcRate = server != null ? server.StreamRPCRate : 0;
-            status.TimePerStreamUpdate = server != null ? server.TimePerStreamUpdate : 0;
+            status.BytesRead = KRPCCore.Instance.BytesRead;
+            status.BytesWritten = KRPCCore.Instance.BytesWritten;
+            status.BytesReadRate = KRPCCore.Instance.BytesReadRate;
+            status.BytesWrittenRate = KRPCCore.Instance.BytesWrittenRate;
+            status.RpcsExecuted = KRPCCore.Instance.RPCsExecuted;
+            status.RpcRate = KRPCCore.Instance.RPCRate;
+            status.OneRpcPerUpdate = KRPCCore.Instance.OneRPCPerUpdate;
+            status.MaxTimePerUpdate = KRPCCore.Instance.MaxTimePerUpdate;
+            status.AdaptiveRateControl = KRPCCore.Instance.AdaptiveRateControl;
+            status.BlockingRecv = KRPCCore.Instance.BlockingRecv;
+            status.RecvTimeout = KRPCCore.Instance.RecvTimeout;
+            status.TimePerRpcUpdate = KRPCCore.Instance.TimePerRPCUpdate;
+            status.PollTimePerRpcUpdate = KRPCCore.Instance.PollTimePerRPCUpdate;
+            status.ExecTimePerRpcUpdate = KRPCCore.Instance.ExecTimePerRPCUpdate;
+            status.StreamRpcs = KRPCCore.Instance.StreamRPCs;
+            status.StreamRpcsExecuted = KRPCCore.Instance.StreamRPCsExecuted;
+            status.StreamRpcRate = KRPCCore.Instance.StreamRPCRate;
+            status.TimePerStreamUpdate = KRPCCore.Instance.TimePerStreamUpdate;
             return status;
         }
 
@@ -46,11 +45,11 @@ namespace KRPC.Service
         /// Can be used by client libraries to automatically create functionality such as stubs.
         /// </summary>
         [KRPCProcedure]
-        public static Schema.KRPC.Services GetServices ()
+        public static Messages.Services GetServices ()
         {
-            var services = new Schema.KRPC.Services ();
+            var services = new Messages.Services ();
             foreach (var serviceSignature in Services.Instance.Signatures.Values) {
-                var service = new Schema.KRPC.Service ();
+                var service = new Messages.Service ();
                 service.Name = serviceSignature.Name;
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
                     var procedure = new Procedure ();
@@ -63,9 +62,9 @@ namespace KRPC.Service
                         var parameter = new Parameter ();
                         parameter.Name = parameterSignature.Name;
                         parameter.Type = TypeUtils.GetTypeName (parameterSignature.Type);
-                        if (parameterSignature.HasDefaultArgument) {
-                            parameter.HasDefaultArgument = true;
-                            parameter.DefaultArgument = parameterSignature.DefaultArgument;
+                        if (parameterSignature.HasDefaultValue) {
+                            parameter.HasDefaultValue = true;
+                            parameter.DefaultValue = parameterSignature.DefaultValue;
                         }
                         procedure.Parameters.Add (parameter);
                     }
@@ -139,7 +138,7 @@ namespace KRPC.Service
         [KRPCProperty]
         public static GameScene CurrentGameScene {
             get {
-                var scene = KRPCServer.Context.GameScene;
+                var scene = KRPCCore.Context.GameScene;
                 if ((scene & global::KRPC.Service.GameScene.SpaceCenter) != 0)
                     return GameScene.SpaceCenter;
                 else if ((scene & global::KRPC.Service.GameScene.Flight) != 0)
@@ -162,7 +161,7 @@ namespace KRPC.Service
         [KRPCProcedure]
         public static uint AddStream (Request request)
         {
-            return KRPCServer.Context.Server.AddStream (KRPCServer.Context.RPCClient, request);
+            return KRPCCore.Instance.AddStream (KRPCCore.Context.RPCClient, request);
         }
 
         /// <summary>
@@ -171,7 +170,7 @@ namespace KRPC.Service
         [KRPCProcedure]
         public static void RemoveStream (uint id)
         {
-            KRPCServer.Context.Server.RemoveStream (KRPCServer.Context.RPCClient, id);
+            KRPCCore.Instance.RemoveStream (KRPCCore.Context.RPCClient, id);
         }
     }
 }

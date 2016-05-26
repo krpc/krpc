@@ -1,12 +1,83 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using KRPC.Service.Messages;
 
 namespace KRPC.Test.Service.Scanner
 {
     [TestFixture]
     public class ScannerTest
     {
-        KRPC.Schema.KRPC.Services services;
+        Services services;
+
+        void AssertHasNoParameters (Procedure procedure)
+        {
+            Assert.AreEqual (0, procedure.Parameters.Count);
+        }
+
+        void AssertHasParameters (Procedure procedure, int count)
+        {
+            Assert.AreEqual (count, procedure.Parameters.Count);
+        }
+
+        void AssertHasParameter (Procedure procedure, int position, string type, string name)
+        {
+            Assert.Less (position, procedure.Parameters.Count);
+            var parameter = procedure.Parameters [position];
+            Assert.AreEqual (type, parameter.Type);
+            Assert.AreEqual (name, parameter.Name);
+            Assert.IsFalse (parameter.HasDefaultValue);
+            Assert.IsNull (parameter.DefaultValue);
+        }
+
+        void AssertHasParameterWithDefaultValue (Procedure procedure, int position, string type, string name, object defaultValue)
+        {
+            Assert.Less (position, procedure.Parameters.Count);
+            var parameter = procedure.Parameters [position];
+            Assert.AreEqual (type, parameter.Type);
+            Assert.AreEqual (name, parameter.Name);
+            Assert.IsTrue (parameter.HasDefaultValue);
+            Assert.AreEqual (defaultValue, parameter.DefaultValue);
+        }
+
+        void AssertHasNoReturnType (Procedure procedure)
+        {
+            Assert.IsFalse (procedure.HasReturnType);
+            Assert.AreEqual ("", procedure.ReturnType);
+        }
+
+        void AssertHasReturnType (Procedure procedure, string returnType)
+        {
+            Assert.IsTrue (procedure.HasReturnType);
+            Assert.AreEqual (returnType, procedure.ReturnType);
+        }
+
+        void AssertHasNoAttributes (Procedure procedure)
+        {
+            Assert.AreEqual (0, procedure.Attributes.Count);
+        }
+
+        void AssertHasAttributes (Procedure procedure, int count)
+        {
+            Assert.AreEqual (count, procedure.Attributes.Count);
+        }
+
+        void AssertHasAttribute (Procedure procedure, int position, string attribute)
+        {
+            Assert.Less (position, procedure.Attributes.Count);
+            Assert.AreEqual (attribute, procedure.Attributes [position]);
+        }
+
+        void AssertHasNoDocumentation (Procedure procedure)
+        {
+            Assert.AreEqual ("", procedure.Documentation);
+        }
+
+        void AssertHasDocumentation (Procedure procedure, string documentation)
+        {
+            Assert.AreEqual (documentation, procedure.Documentation);
+        }
 
         [SetUp]
         public void SetUp ()
@@ -61,437 +132,354 @@ namespace KRPC.Test.Service.Scanner
             int foundProcedures = 0;
             foreach (var proc in service.Procedures) {
                 if (proc.Name == "ProcedureNoArgsNoReturn") {
-                    Assert.AreEqual (0, proc.Parameters.Count);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("<doc>\n  <summary>\nProcedure with no return arguments.\n</summary>\n</doc>", proc.Documentation);
+                    AssertHasNoParameters (proc);
+                    AssertHasNoReturnType (proc);
+                    AssertHasNoAttributes (proc);
+                    AssertHasDocumentation (proc, "<doc>\n  <summary>\nProcedure with no return arguments.\n</summary>\n</doc>");
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureSingleArgNoReturn") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("data", proc.Parameters [0].Name);
-                    Assert.AreEqual ("KRPC.Response", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("<doc>\n  <summary>\nProcedure with a single return argument.\n</summary>\n</doc>", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "KRPC.Response", "data");
+                    AssertHasNoReturnType (proc);
+                    AssertHasNoAttributes (proc);
+                    AssertHasDocumentation (proc, "<doc>\n  <summary>\nProcedure with a single return argument.\n</summary>\n</doc>");
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureThreeArgsNoReturn") {
-                    Assert.AreEqual (3, proc.Parameters.Count);
-                    Assert.AreEqual ("x", proc.Parameters [0].Name);
-                    Assert.AreEqual ("y", proc.Parameters [1].Name);
-                    Assert.AreEqual ("z", proc.Parameters [2].Name);
-                    Assert.AreEqual ("KRPC.Response", proc.Parameters [0].Type);
-                    Assert.AreEqual ("KRPC.Request", proc.Parameters [1].Type);
-                    Assert.AreEqual ("KRPC.Response", proc.Parameters [2].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [2].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 3);
+                    AssertHasParameter (proc, 0, "KRPC.Response", "x");
+                    AssertHasParameter (proc, 1, "KRPC.Request", "y");
+                    AssertHasParameter (proc, 2, "KRPC.Response", "z");
+                    AssertHasNoReturnType (proc);
+                    AssertHasNoAttributes (proc);
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureNoArgsReturns") {
-                    Assert.AreEqual (0, proc.Parameters.Count);
-                    Assert.AreEqual ("KRPC.Response", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasNoParameters (proc);
+                    AssertHasReturnType (proc, "KRPC.Response");
+                    AssertHasNoAttributes (proc);
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureSingleArgReturns") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("data", proc.Parameters [0].Name);
-                    Assert.AreEqual ("KRPC.Response", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("KRPC.Response", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "KRPC.Response", "data");
+                    AssertHasReturnType (proc, "KRPC.Response");
+                    AssertHasNoAttributes (proc);
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureWithValueTypes") {
-                    Assert.AreEqual (3, proc.Parameters.Count);
-                    Assert.AreEqual ("x", proc.Parameters [0].Name);
-                    Assert.AreEqual ("y", proc.Parameters [1].Name);
-                    Assert.AreEqual ("z", proc.Parameters [2].Name);
-                    Assert.AreEqual ("float", proc.Parameters [0].Type);
-                    Assert.AreEqual ("string", proc.Parameters [1].Type);
-                    Assert.AreEqual ("bytes", proc.Parameters [2].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [2].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("int32", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 3);
+                    AssertHasParameter (proc, 0, "float", "x");
+                    AssertHasParameter (proc, 1, "string", "y");
+                    AssertHasParameter (proc, 2, "bytes", "z");
+                    AssertHasReturnType (proc, "int32");
+                    AssertHasNoAttributes (proc);
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "get_PropertyWithGetAndSet") {
-                    Assert.AreEqual (0, proc.Parameters.Count);
-                    Assert.AreEqual ("string", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("Property.Get(PropertyWithGetAndSet)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasNoParameters (proc);
+                    AssertHasReturnType (proc, "string");
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "Property.Get(PropertyWithGetAndSet)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "set_PropertyWithGetAndSet") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("value", proc.Parameters [0].Name);
-                    Assert.AreEqual ("string", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("Property.Set(PropertyWithGetAndSet)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "string", "value");
+                    AssertHasNoReturnType (proc);
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "Property.Set(PropertyWithGetAndSet)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "get_PropertyWithGet") {
-                    Assert.AreEqual (0, proc.Parameters.Count);
-                    Assert.AreEqual ("string", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("Property.Get(PropertyWithGet)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasNoParameters (proc);
+                    AssertHasReturnType (proc, "string");
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "Property.Get(PropertyWithGet)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "set_PropertyWithSet") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("value", proc.Parameters [0].Name);
-                    Assert.AreEqual ("string", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("Property.Set(PropertyWithSet)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "string", "value");
+                    AssertHasNoReturnType (proc);
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "Property.Set(PropertyWithSet)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "CreateTestObject") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("value", proc.Parameters [0].Name);
-                    Assert.AreEqual ("string", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("uint64", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "string", "value");
+                    AssertHasReturnType (proc, "uint64");
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "ReturnType.Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "DeleteTestObject") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("obj", proc.Parameters [0].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "uint64", "obj");
+                    AssertHasNoReturnType (proc);
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "EchoTestObject") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("obj", proc.Parameters [0].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("uint64", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [0]);
-                    Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "uint64", "obj");
+                    AssertHasReturnType (proc, "uint64");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasAttribute (proc, 1, "ReturnType.Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "TestClass_FloatToString") {
-                    Assert.AreEqual (2, proc.Parameters.Count);
-                    Assert.AreEqual ("this", proc.Parameters [0].Name);
-                    Assert.AreEqual ("x", proc.Parameters [1].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.AreEqual ("float", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("string", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.Method(TestService.TestClass,FloatToString)", proc.Attributes [0]);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 2);
+                    AssertHasParameter (proc, 0, "uint64", "this");
+                    AssertHasParameter (proc, 1, "float", "x");
+                    AssertHasReturnType (proc, "string");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "Class.Method(TestService.TestClass,FloatToString)");
+                    AssertHasAttribute (proc, 1, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "TestClass_ObjectToString") {
-                    Assert.AreEqual (2, proc.Parameters.Count);
-                    Assert.AreEqual ("this", proc.Parameters [0].Name);
-                    Assert.AreEqual ("other", proc.Parameters [1].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.AreEqual ("uint64", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("string", proc.ReturnType);
-                    Assert.AreEqual (3, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.Method(TestService.TestClass,ObjectToString)", proc.Attributes [0]);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("ParameterType(1).Class(TestService.TestClass)", proc.Attributes [2]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 2);
+                    AssertHasParameter (proc, 0, "uint64", "this");
+                    AssertHasParameter (proc, 1, "uint64", "other");
+                    AssertHasReturnType (proc, "string");
+                    AssertHasAttributes (proc, 3);
+                    AssertHasAttribute (proc, 0, "Class.Method(TestService.TestClass,ObjectToString)");
+                    AssertHasAttribute (proc, 1, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasAttribute (proc, 2, "ParameterType(1).Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "TestClass_IntToString") {
-                    Assert.AreEqual (2, proc.Parameters.Count);
-                    Assert.AreEqual ("this", proc.Parameters [0].Name);
-                    Assert.AreEqual ("x", proc.Parameters [1].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.AreEqual ("int32", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual (new byte[] { 0x2a }, proc.Parameters [1].DefaultArgument.ToByteArray ());
-                    Assert.AreEqual ("string", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.Method(TestService.TestClass,IntToString)", proc.Attributes [0]);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 2);
+                    AssertHasParameter (proc, 0, "uint64", "this");
+                    AssertHasParameterWithDefaultValue (proc, 1, "int32", "x", 42);
+                    AssertHasReturnType (proc, "string");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "Class.Method(TestService.TestClass,IntToString)");
+                    AssertHasAttribute (proc, 1, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "TestClass_get_IntProperty") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("this", proc.Parameters [0].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("int32", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.Property.Get(TestService.TestClass,IntProperty)", proc.Attributes [0]);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "uint64", "this");
+                    AssertHasReturnType (proc, "int32");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "Class.Property.Get(TestService.TestClass,IntProperty)");
+                    AssertHasAttribute (proc, 1, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "TestClass_set_IntProperty") {
-                    Assert.AreEqual (2, proc.Parameters.Count);
-                    Assert.AreEqual ("this", proc.Parameters [0].Name);
-                    Assert.AreEqual ("value", proc.Parameters [1].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.AreEqual ("int32", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.Property.Set(TestService.TestClass,IntProperty)", proc.Attributes [0]);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 2);
+                    AssertHasParameter (proc, 0, "uint64", "this");
+                    AssertHasParameter (proc, 1, "int32", "value");
+                    AssertHasNoReturnType (proc);
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "Class.Property.Set(TestService.TestClass,IntProperty)");
+                    AssertHasAttribute (proc, 1, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "TestClass_get_ObjectProperty") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("this", proc.Parameters [0].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("uint64", proc.ReturnType);
-                    Assert.AreEqual (3, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.Property.Get(TestService.TestClass,ObjectProperty)", proc.Attributes [0]);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", proc.Attributes [2]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "uint64", "this");
+                    AssertHasReturnType (proc, "uint64");
+                    AssertHasAttributes (proc, 3);
+                    AssertHasAttribute (proc, 0, "Class.Property.Get(TestService.TestClass,ObjectProperty)");
+                    AssertHasAttribute (proc, 1, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasAttribute (proc, 2, "ReturnType.Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "TestClass_set_ObjectProperty") {
-                    Assert.AreEqual (2, proc.Parameters.Count);
-                    Assert.AreEqual ("this", proc.Parameters [0].Name);
-                    Assert.AreEqual ("value", proc.Parameters [1].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.AreEqual ("uint64", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (3, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.Property.Set(TestService.TestClass,ObjectProperty)", proc.Attributes [0]);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("ParameterType(1).Class(TestService.TestClass)", proc.Attributes [2]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 2);
+                    AssertHasParameter (proc, 0, "uint64", "this");
+                    AssertHasParameter (proc, 1, "uint64", "value");
+                    AssertHasNoReturnType (proc);
+                    AssertHasAttributes (proc, 3);
+                    AssertHasAttribute (proc, 0, "Class.Property.Set(TestService.TestClass,ObjectProperty)");
+                    AssertHasAttribute (proc, 1, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasAttribute (proc, 2, "ParameterType(1).Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "TestClass_StaticMethod") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("a", proc.Parameters [0].Name);
-                    Assert.AreEqual ("string", proc.Parameters [0].Type);
-                    Assert.AreEqual (new byte[] { 0x00 }, proc.Parameters [0].DefaultArgument);
-                    Assert.AreEqual ("string", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.StaticMethod(TestService.TestClass,StaticMethod)", proc.Attributes [0]);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameterWithDefaultValue (proc, 0, "string", "a", "");
+                    AssertHasReturnType (proc, "string");
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "Class.StaticMethod(TestService.TestClass,StaticMethod)");
                     foundProcedures++;
                 }
                 if (proc.Name == "TestTopLevelClass_AMethod") {
-                    Assert.AreEqual (2, proc.Parameters.Count);
-                    Assert.AreEqual ("this", proc.Parameters [0].Name);
-                    Assert.AreEqual ("x", proc.Parameters [1].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.AreEqual ("int32", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("string", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.Method(TestService.TestTopLevelClass,AMethod)", proc.Attributes [0]);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestTopLevelClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 2);
+                    AssertHasParameter (proc, 0, "uint64", "this");
+                    AssertHasParameter (proc, 1, "int32", "x");
+                    AssertHasReturnType (proc, "string");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "Class.Method(TestService.TestTopLevelClass,AMethod)");
+                    AssertHasAttribute (proc, 1, "ParameterType(0).Class(TestService.TestTopLevelClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "TestTopLevelClass_get_AProperty") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("this", proc.Parameters [0].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("string", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.Property.Get(TestService.TestTopLevelClass,AProperty)", proc.Attributes [0]);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestTopLevelClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "uint64", "this");
+                    AssertHasReturnType (proc, "string");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "Class.Property.Get(TestService.TestTopLevelClass,AProperty)");
+                    AssertHasAttribute (proc, 1, "ParameterType(0).Class(TestService.TestTopLevelClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "TestTopLevelClass_set_AProperty") {
-                    Assert.AreEqual (2, proc.Parameters.Count);
-                    Assert.AreEqual ("this", proc.Parameters [0].Name);
-                    Assert.AreEqual ("value", proc.Parameters [1].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.AreEqual ("string", proc.Parameters [1].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.IsTrue (proc.Parameters [1].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("Class.Property.Set(TestService.TestTopLevelClass,AProperty)", proc.Attributes [0]);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestTopLevelClass)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 2);
+                    AssertHasParameter (proc, 0, "uint64", "this");
+                    AssertHasParameter (proc, 1, "string", "value");
+                    AssertHasNoReturnType (proc);
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "Class.Property.Set(TestService.TestTopLevelClass,AProperty)");
+                    AssertHasAttribute (proc, 1, "ParameterType(0).Class(TestService.TestTopLevelClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureSingleOptionalArgNoReturn") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("x", proc.Parameters [0].Name);
-                    Assert.AreEqual ("string", proc.Parameters [0].Type);
-                    Assert.AreEqual (new byte[] { 0x03, 0x66, 0x6f, 0x6f }, proc.Parameters [0].DefaultArgument);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameterWithDefaultValue (proc, 0, "string", "x", "foo");
+                    AssertHasNoReturnType (proc);
+                    AssertHasNoAttributes (proc);
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureThreeOptionalArgsNoReturn") {
-                    Assert.AreEqual (3, proc.Parameters.Count);
-                    Assert.AreEqual ("x", proc.Parameters [0].Name);
-                    Assert.AreEqual ("y", proc.Parameters [1].Name);
-                    Assert.AreEqual ("z", proc.Parameters [2].Name);
-                    Assert.AreEqual ("float", proc.Parameters [0].Type);
-                    Assert.AreEqual ("string", proc.Parameters [1].Type);
-                    Assert.AreEqual ("int32", proc.Parameters [2].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual (new byte[] { 0x03, 0x6a, 0x65, 0x62 }, proc.Parameters [1].DefaultArgument);
-                    Assert.AreEqual (new byte[] { 0x2a }, proc.Parameters [2].DefaultArgument);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 3);
+                    AssertHasParameter (proc, 0, "float", "x");
+                    AssertHasParameterWithDefaultValue (proc, 1, "string", "y", "jeb");
+                    AssertHasParameterWithDefaultValue (proc, 2, "int32", "z", 42);
+                    AssertHasNoReturnType (proc);
+                    AssertHasNoAttributes (proc);
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureOptionalNullArg") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("x", proc.Parameters [0].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.AreEqual (new byte[] { 0x00 }, proc.Parameters [0].DefaultArgument);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameterWithDefaultValue (proc, 0, "uint64", "x", null);
+                    AssertHasNoReturnType (proc);
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureEnumArg") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("x", proc.Parameters [0].Name);
-                    Assert.AreEqual ("int32", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).Enum(TestService.TestEnum)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "int32", "x");
+                    AssertHasNoReturnType (proc);
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).Enum(TestService.TestEnum)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "ProcedureEnumReturn") {
-                    Assert.AreEqual (0, proc.Parameters.Count);
-                    Assert.AreEqual ("int32", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("ReturnType.Enum(TestService.TestEnum)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasNoParameters (proc);
+                    AssertHasReturnType (proc, "int32");
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "ReturnType.Enum(TestService.TestEnum)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "BlockingProcedureNoReturn") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("n", proc.Parameters [0].Name);
-                    Assert.AreEqual ("int32", proc.Parameters [0].Type);
-                    Assert.AreEqual ("", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "int32", "n");
+                    AssertHasNoReturnType (proc);
+                    AssertHasNoAttributes (proc);
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "BlockingProcedureReturns") {
-                    Assert.AreEqual (2, proc.Parameters.Count);
-                    Assert.AreEqual ("n", proc.Parameters [0].Name);
-                    Assert.AreEqual ("int32", proc.Parameters [0].Type);
-                    Assert.AreEqual ("sum", proc.Parameters [1].Name);
-                    Assert.AreEqual ("int32", proc.Parameters [1].Type);
-                    Assert.AreEqual ("int32", proc.ReturnType);
-                    Assert.AreEqual (0, proc.Attributes.Count);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 2);
+                    AssertHasParameter (proc, 0, "int32", "n");
+                    AssertHasParameterWithDefaultValue (proc, 1, "int32", "sum", 0);
+                    AssertHasReturnType (proc, "int32");
+                    AssertHasNoAttributes (proc);
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "EchoList") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("l", proc.Parameters [0].Name);
-                    Assert.AreEqual ("KRPC.List", proc.Parameters [0].Type);
-                    Assert.AreEqual ("KRPC.List", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).List(string)", proc.Attributes [0]);
-                    Assert.AreEqual ("ReturnType.List(string)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "KRPC.List", "l");
+                    AssertHasReturnType (proc, "KRPC.List");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).List(string)");
+                    AssertHasAttribute (proc, 1, "ReturnType.List(string)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "EchoDictionary") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("d", proc.Parameters [0].Name);
-                    Assert.AreEqual ("KRPC.Dictionary", proc.Parameters [0].Type);
-                    Assert.AreEqual ("KRPC.Dictionary", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).Dictionary(int32,string)", proc.Attributes [0]);
-                    Assert.AreEqual ("ReturnType.Dictionary(int32,string)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "KRPC.Dictionary", "d");
+                    AssertHasReturnType (proc, "KRPC.Dictionary");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).Dictionary(int32,string)");
+                    AssertHasAttribute (proc, 1, "ReturnType.Dictionary(int32,string)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "EchoSet") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("h", proc.Parameters [0].Name);
-                    Assert.AreEqual ("KRPC.Set", proc.Parameters [0].Type);
-                    Assert.AreEqual ("KRPC.Set", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).Set(int32)", proc.Attributes [0]);
-                    Assert.AreEqual ("ReturnType.Set(int32)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "KRPC.Set", "h");
+                    AssertHasReturnType (proc, "KRPC.Set");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).Set(int32)");
+                    AssertHasAttribute (proc, 1, "ReturnType.Set(int32)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "EchoTuple") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("t", proc.Parameters [0].Name);
-                    Assert.AreEqual ("KRPC.Tuple", proc.Parameters [0].Type);
-                    Assert.AreEqual ("KRPC.Tuple", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).Tuple(int32,bool)", proc.Attributes [0]);
-                    Assert.AreEqual ("ReturnType.Tuple(int32,bool)", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "KRPC.Tuple", "t");
+                    AssertHasReturnType (proc, "KRPC.Tuple");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).Tuple(int32,bool)");
+                    AssertHasAttribute (proc, 1, "ReturnType.Tuple(int32,bool)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "EchoNestedCollection") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("c", proc.Parameters [0].Name);
-                    Assert.AreEqual ("KRPC.Dictionary", proc.Parameters [0].Type);
-                    Assert.AreEqual ("KRPC.Dictionary", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).Dictionary(int32,List(string))", proc.Attributes [0]);
-                    Assert.AreEqual ("ReturnType.Dictionary(int32,List(string))", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "KRPC.Dictionary", "c");
+                    AssertHasReturnType (proc, "KRPC.Dictionary");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).Dictionary(int32,List(string))");
+                    AssertHasAttribute (proc, 1, "ReturnType.Dictionary(int32,List(string))");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
                 if (proc.Name == "EchoListOfObjects") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("l", proc.Parameters [0].Name);
-                    Assert.AreEqual ("KRPC.List", proc.Parameters [0].Type);
-                    Assert.AreEqual ("KRPC.List", proc.ReturnType);
-                    Assert.AreEqual (2, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).List(Class(TestService.TestClass))", proc.Attributes [0]);
-                    Assert.AreEqual ("ReturnType.List(Class(TestService.TestClass))", proc.Attributes [1]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "KRPC.List", "l");
+                    AssertHasReturnType (proc, "KRPC.List");
+                    AssertHasAttributes (proc, 2);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).List(Class(TestService.TestClass))");
+                    AssertHasAttribute (proc, 1, "ReturnType.List(Class(TestService.TestClass))");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
             }
@@ -550,25 +538,21 @@ namespace KRPC.Test.Service.Scanner
             int foundProcedures = 0;
             foreach (var proc in service.Procedures) {
                 if (proc.Name == "ClassTypeFromOtherServiceAsParameter") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("obj", proc.Parameters [0].Name);
-                    Assert.AreEqual ("uint64", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("int32", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("ParameterType(0).Class(TestService.TestClass)", proc.Attributes [0]);
-                    Assert.AreEqual ("<doc>\n  <summary>\nTestService2 procedure documentation.\n</summary>\n</doc>", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "uint64", "obj");
+                    AssertHasReturnType (proc, "int32");
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "ParameterType(0).Class(TestService.TestClass)");
+                    AssertHasDocumentation (proc, "<doc>\n  <summary>\nTestService2 procedure documentation.\n</summary>\n</doc>");
                     foundProcedures++;
                 }
                 if (proc.Name == "ClassTypeFromOtherServiceAsReturn") {
-                    Assert.AreEqual (1, proc.Parameters.Count);
-                    Assert.AreEqual ("value", proc.Parameters [0].Name);
-                    Assert.AreEqual ("string", proc.Parameters [0].Type);
-                    Assert.IsTrue (proc.Parameters [0].DefaultArgument.IsEmpty);
-                    Assert.AreEqual ("uint64", proc.ReturnType);
-                    Assert.AreEqual (1, proc.Attributes.Count);
-                    Assert.AreEqual ("ReturnType.Class(TestService.TestClass)", proc.Attributes [0]);
-                    Assert.AreEqual ("", proc.Documentation);
+                    AssertHasParameters (proc, 1);
+                    AssertHasParameter (proc, 0, "string", "value");
+                    AssertHasReturnType (proc, "uint64");
+                    AssertHasAttributes (proc, 1);
+                    AssertHasAttribute (proc, 0, "ReturnType.Class(TestService.TestClass)");
+                    AssertHasNoDocumentation (proc);
                     foundProcedures++;
                 }
             }
@@ -577,4 +561,3 @@ namespace KRPC.Test.Service.Scanner
         }
     }
 }
-
