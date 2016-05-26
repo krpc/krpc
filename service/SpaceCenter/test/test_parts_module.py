@@ -58,6 +58,16 @@ class TestPartsModule(krpctest.TestCase):
         self.assertRaises(krpc.client.RPCError, module.set_action, 'DoesntExist', True)
         self.assertRaises(krpc.client.RPCError, module.set_action, 'DoesntExist', False)
 
+    def test_set_field_int(self):
+        part = self.parts.with_title('LY-10 Small Landing Gear')[0]
+        module = next(m for m in part.modules if m.name == 'ModuleWheelBrakes')
+        self.assertEqual({'Brakes': '100'}, module.fields)
+        module.set_field_int('Brakes', 50)
+        time.sleep(1)
+        self.assertEqual({'Brakes': '50'}, module.fields)
+        module.set_field_int('Brakes', 100)
+        self.assertEqual({'Brakes': '100'}, module.fields)
+
     def test_events(self):
         part = self.parts.with_title('Illuminator Mk1')[0]
         module = next(m for m in part.modules if m.name == 'ModuleLight')

@@ -14,3 +14,4 @@ all of the client languages.
    tutorials/pitch-heading-roll
    tutorials/parts
    tutorials/docking-guidance
+   tutorials/user-interface

@@ -1,7 +1,7 @@
 import base64
 from collections import OrderedDict, defaultdict
 from krpc.attributes import Attributes
-from krpc.types import Types
+from krpc.types import Types, EnumType
 from krpc.decoder import Decoder
 
 class Appendable(object):
@@ -99,7 +99,12 @@ class Parameter(Appendable):
         self.type = self.types.get_parameter_type(position, type, attributes)
         self.has_default_value = default_value is not None
         if default_value is not None:
-            default_value = Decoder.decode(str(bytearray(base64.b64decode(default_value))), self.type)
+            # Note: following is a workaround for decoding EnumType, as set_values has not been called
+            if not isinstance(self.type, EnumType):
+                typ = self.type
+            else:
+                typ = self.types.as_type('int32')
+            default_value = Decoder.decode(str(bytearray(base64.b64decode(default_value))), typ)
         self.default_value = default_value
         self.documentation = documentation
 

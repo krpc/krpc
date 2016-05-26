@@ -522,40 +522,5 @@ namespace KRPC.SpaceCenter.Services
         public static bool FARAvailable {
             get { return ExternalAPI.FAR.IsAvailable; }
         }
-
-        /// <summary>
-        /// Draw a direction vector on the active vessel.
-        /// </summary>
-        /// <param name="direction">Direction to draw the line in.</param>
-        /// <param name="referenceFrame">Reference frame that the direction is in.</param>
-        /// <param name="color">The color to use for the line, as an RGB color.</param>
-        /// <param name="length">The length of the line. Defaults to 10.</param>
-        [KRPCProcedure]
-        public static void DrawDirection (Tuple3 direction, ReferenceFrame referenceFrame, Tuple3 color, float length = 10f)
-        {
-            DrawAddon.AddDirection (direction.ToVector (), referenceFrame, color, length);
-        }
-
-        /// <summary>
-        /// Draw a line.
-        /// </summary>
-        /// <param name="start">Position of the start of the line.</param>
-        /// <param name="end">Position of the end of the line.</param>
-        /// <param name="referenceFrame">Reference frame that the position are in.</param>
-        /// <param name="color">The color to use for the line, as an RGB color.</param>
-        [KRPCProcedure]
-        public static void DrawLine (Tuple3 start, Tuple3 end, ReferenceFrame referenceFrame, Tuple3 color)
-        {
-            DrawAddon.AddLine (start.ToVector (), end.ToVector (), referenceFrame, color);
-        }
-
-        /// <summary>
-        /// Remove all directions and lines currently being drawn.
-        /// </summary>
-        [KRPCProcedure]
-        public static void ClearDrawing ()
-        {
-            DrawAddon.ClearDrawing ();
-        }
     }
 }

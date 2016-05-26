@@ -40,9 +40,11 @@ java_library(
         '//protobuf:java',
         ':services-krpc',
         ':services-spacecenter',
+        ':services-drawing',
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
-        ':services-remotetech'
+        ':services-remotetech',
+        ':services-ui'
     ],
     resources = [
         '//:readme', '//:version', 'CHANGES.txt',
@@ -108,6 +110,13 @@ clientgen_java(
 )
 
 clientgen_java(
+    name = 'services-drawing',
+    service = 'Drawing',
+    defs = '//service/Drawing:ServiceDefinitions',
+    out = 'services/Drawing.java'
+)
+
+clientgen_java(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
@@ -126,6 +135,13 @@ clientgen_java(
     service = 'RemoteTech',
     defs = '//service/RemoteTech:ServiceDefinitions',
     out = 'services/RemoteTech.java'
+)
+
+clientgen_java(
+    name = 'services-ui',
+    service = 'UI',
+    defs = '//service/UI:ServiceDefinitions',
+    out = 'services/UI.java'
 )
 
 clientgen_java(

@@ -44,9 +44,11 @@ csharp_library(
         '//protobuf:csharp',
         ':services-krpc',
         ':services-spacecenter',
+        ':services-drawing',
         ':services-infernalrobotics',
         ':services-kerbalalarmclock',
-        ':services-remotetech'
+        ':services-remotetech',
+        ':services-ui'
     ],
     deps = [
         '//tools/build/mono-4.5:Google.Protobuf',
@@ -76,6 +78,13 @@ clientgen_csharp(
 )
 
 clientgen_csharp(
+    name = 'services-drawing',
+    service = 'Drawing',
+    defs = '//service/Drawing:ServiceDefinitions',
+    out = 'Services/Drawing.cs'
+)
+
+clientgen_csharp(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
@@ -94,6 +103,13 @@ clientgen_csharp(
     service = 'RemoteTech',
     defs = '//service/RemoteTech:ServiceDefinitions',
     out = 'Services/RemoteTech.cs'
+)
+
+clientgen_csharp(
+    name = 'services-ui',
+    service = 'UI',
+    defs = '//service/UI:ServiceDefinitions',
+    out = 'Services/UI.cs'
 )
 
 client_test(

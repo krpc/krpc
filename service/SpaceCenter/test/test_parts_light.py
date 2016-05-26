@@ -1,4 +1,5 @@
 import unittest
+import time
 import krpctest
 
 class TestPartsLight(krpctest.TestCase):
@@ -24,12 +25,33 @@ class TestPartsLight(krpctest.TestCase):
         while not self.light.active:
             pass
         self.assertTrue(self.light.active)
+        time.sleep(0.2)
         self.assertClose(0.04, self.light.power_usage)
         self.light.active = False
         while self.light.active:
             pass
         self.assertFalse(self.light.active)
         self.assertEqual(0, self.light.power_usage)
+
+    def test_color(self):
+        self.assertEqual((1, 1, 1), self.light.color)
+        self.light.active = True
+        while not self.light.active:
+            pass
+        self.light.color = (1, 0, 0)
+        self.assertClose((1, 0, 0), self.light.color)
+        time.sleep(0.2)
+        self.light.color = (0, 1, 0)
+        self.assertClose((0, 1, 0), self.light.color)
+        time.sleep(0.2)
+        self.light.color = (0, 0, 1)
+        self.assertClose((0, 0, 1), self.light.color)
+        time.sleep(0.2)
+        self.light.color = (1, 1, 1)
+        self.assertEqual((1, 1, 1), self.light.color)
+        self.light.active = False
+        while self.light.active:
+            pass
 
 if __name__ == '__main__':
     unittest.main()
