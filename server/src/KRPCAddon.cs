@@ -28,7 +28,7 @@ namespace KRPC
             if (server != null)
                 return;
 
-            config = new KRPCConfiguration ("settings.cfg");
+            config = new KRPCConfiguration ("PluginData/settings.cfg");
             config.Load ();
             server = new KRPCServer (
                 config.Address, config.RPCPort, config.StreamPort,

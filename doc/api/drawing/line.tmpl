@@ -1,0 +1,9 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.name }}
+{{ domain.currentmodule('Drawing') }}
+{% import domain.macros as macros with context %}
+
+Line
+====
+
+{{ macros.class(services['Drawing'].classes['Line']) }}

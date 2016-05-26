@@ -1,6 +1,6 @@
 from collections import OrderedDict, defaultdict
 from krpc.attributes import Attributes
-from krpc.types import Types
+from krpc.types import Types, EnumType
 from krpc.decoder import Decoder
 
 class Appendable(object):
@@ -98,7 +98,12 @@ class Parameter(Appendable):
         self.type = self.types.get_parameter_type(position, type, attributes)
         self.has_default_argument = default_argument is not None
         if default_argument is not None:
-            default_argument = Decoder.decode(str(bytearray(default_argument)), self.type)
+            # Note: following is a workaround for decoding EnumType, as set_values has not been called
+            if not isinstance(self.type, EnumType):
+                typ = self.type
+            else:
+                typ = self.types.as_type('int32')
+            default_argument = Decoder.decode(str(bytearray(default_argument)), typ)
         self.default_argument = default_argument
         self.documentation = documentation
 

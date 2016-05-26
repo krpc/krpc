@@ -32,14 +32,14 @@ namespace KRPC.Service
         {
             if (VerboseErrors) {
                 message = "'" + procedure.FullyQualifiedName + "' threw an exception.";
-                message += " " + exception.GetType () + ": " + exception.Message;
+                message += " " + exception.GetType () + ": " + exception.Message + " " + exception.StackTrace;
             } else {
                 message = exception.Message;
             }
         }
 
         public override string Message {
-            get { return message + (VerboseErrors ? "\n" + StackTrace : ""); }
+            get { return message; }
         }
     }
 }

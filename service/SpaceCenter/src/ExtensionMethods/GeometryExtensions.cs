@@ -1,13 +1,25 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Tuple2 = KRPC.Utils.Tuple<double,double>;
 using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
 using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
-    static class GeometryExtensions
+    /// <summary>
+    /// Extensions for geometry classes
+    /// </summary>
+    public static class GeometryExtensions
     {
+        /// <summary>
+        /// Convert a vector to a tuple
+        /// </summary>
+        public static Tuple2 ToTuple (this Vector2 v)
+        {
+            return new Tuple2 (v.x, v.y);
+        }
+
         /// <summary>
         /// Convert a vector to a tuple
         /// </summary>
@@ -27,9 +39,25 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Convert a tuple to a vector
         /// </summary>
+        public static Vector2 ToVector (this Tuple2 t)
+        {
+            return new Vector2 ((float)t.Item1, (float)t.Item2);
+        }
+
+        /// <summary>
+        /// Convert a tuple to a vector
+        /// </summary>
         public static Vector3d ToVector (this Tuple3 t)
         {
             return new Vector3d (t.Item1, t.Item2, t.Item3);
+        }
+
+        /// <summary>
+        /// Convert a quaternion to tuple
+        /// </summary>
+        public static Tuple4 ToTuple (this Quaternion q)
+        {
+            return new Tuple4 (q.x, q.y, q.z, q.w);
         }
 
         /// <summary>
@@ -151,8 +179,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             return degrees * ((float)Math.PI / 180f);
         }
 
+        /// <summary>
+        /// Axis ordering
+        /// </summary>
         public enum AxisOrder
         {
+            /// <summary>
+            /// y-z-x axis order
+            /// </summary>
             YZX
         }
 

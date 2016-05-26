@@ -168,12 +168,12 @@ Visual Debugging
 ----------------
 
 References frames can be confusing, and choosing the correct one is a challenge
-in itself. To aid debugging, kRPC provides some methods with which you can draw
-direction vectors in-game.
+in itself. To aid debugging, kRPCs drawing functionality can be used to
+visualize direction vectors in-game.
 
-:meth:`SpaceCenter.draw_direction` will draw a direction vector, starting from
-the center of mass of the active vessel. For example, the following code draws
-the direction of the current vessels velocity relative to the surface:
+:meth:`Drawing.add_direction` will draw a direction vector, starting from the
+center of mass of the active vessel. For example, the following code draws the
+direction of the current vessels velocity relative to the surface:
 
 .. literalinclude:: /scripts/VisualDebugging.py
    :linenos:
