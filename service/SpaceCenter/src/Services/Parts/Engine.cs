@@ -227,6 +227,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The actual propellant objects that the engine consumes.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Propellant> PropellantResources {
+            get {
+                List<Propellant> enginePropellants = CurrentEngine.propellants;
+                Part engine = CurrentEngine.part;
+                List<PropellantResource> propellants = new List<PropellantResource> ();
+                foreach(Propellant propellant in enginePropellants)
+                {
+                    propellants.Add(new PropellantResource(propellant, engine));
+                }
+                return propellants;
+            }
+        }
+
+        /// <summary>
         /// The ratios of resources that the engine consumes. A dictionary mapping resource names
         /// to the ratios at which they are consumed by the engine.
         /// </summary>
