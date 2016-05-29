@@ -145,5 +145,6 @@
     <Compile Include="Services\WarpMode.cs" />
     <Compile Include="Utils\PIDController.cs" />
     <Compile Include="Utils\RotationRateController.cs" />
+    <Compile Include="Services\PropellantResource.cs" />
   </ItemGroup>
 </Project>

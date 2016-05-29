@@ -222,7 +222,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The names of resources that the engine consumes.
         /// </summary>
         [KRPCProperty]
-        public IList<string> Propellants {
+        public IList<string> PropellantNames {
             get { return CurrentEngine.propellants.Select (x => x.name).ToList (); }
         }
 
@@ -230,7 +230,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The actual propellant objects that the engine consumes.
         /// </summary>
         [KRPCProperty]
-        public IList<Propellant> PropellantResources {
+        public IList<Propellant> Propellants {
             get {
                 List<Propellant> enginePropellants = CurrentEngine.propellants;
                 Part engine = CurrentEngine.part;

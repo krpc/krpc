@@ -8,7 +8,7 @@ namespace KRPC.SpaceCenter.Services
     public sealed class PropellantResource : Equatable<PropellantResource>
     {
         readonly int resourceId;
-        readonly int partId;
+        readonly uint partId;
 
         internal PropellantResource (Propellant propellantResource, Part underlyingPart)
         {
@@ -59,7 +59,7 @@ namespace KRPC.SpaceCenter.Services
             get { return InternalPropellant.name; }
         }
 
-    
+
         /// <summary>
         /// The current amount of propellant
         /// </summary>
