@@ -580,6 +580,15 @@ namespace KRPC
                 } catch (ServerException e) {
                     Logger.WriteLine ("Error receiving request from client " + client.Address + ": " + e.Message, Logger.Severity.Error);
                     continue;
+                } catch (Exception e) {
+                    var response = new Response ();
+                    response.HasError = true;
+                    response.Error = "Error receiving message\n" + e.Message + "\n" + e.StackTrace;
+                    response.Time = GetUniversalTime ();
+                    if (Logger.ShouldLog (Logger.Severity.Debug))
+                        Logger.WriteLine (e.Message + "\n" + e.StackTrace, Logger.Severity.Error);
+                    Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
+                    client.Stream.Write (response);
                 }
                 item = item.Next;
             }

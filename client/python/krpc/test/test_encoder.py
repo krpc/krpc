@@ -77,5 +77,10 @@ class TestEncoder(unittest.TestCase):
         data = Encoder.encode(value, typ)
         self.assertEqual('00', hexlify(data))
 
+    def test_encode_tuple_wrong_arity(self):
+        typ = self.types.as_type('Tuple(int32,int32,int32)')
+        value = (0, 1)
+        self.assertRaises(ValueError, Encoder.encode, value, typ)
+
 if __name__ == '__main__':
     unittest.main()
