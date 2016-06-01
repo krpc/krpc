@@ -1,3 +1,6 @@
+v0.3.5
+ * Fix issue with uncaught exceptions when receiving malformed tuples from clients (#276)
+
 v0.3.4
  * Update protobuf to v3.0.0-beta-3 (#270)
  * Move settings.cfg to PluginData directory to avoid trashing module managers cache
