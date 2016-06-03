@@ -2,7 +2,7 @@ import java.io.IOException;
 import krpc.client.Connection;
 import krpc.client.RPCException;
 import krpc.client.services.InfernalRobotics;
-import krpc.client.services.InfernalRobotics.ControlGroup;
+import krpc.client.services.InfernalRobotics.ServoGroup;
 import krpc.client.services.InfernalRobotics.Servo;
 
 public class IR {
@@ -10,7 +10,7 @@ public class IR {
         Connection connection = Connection.newInstance("InfernalRobotics Example");
         InfernalRobotics ir = InfernalRobotics.newInstance(connection);
 
-        ControlGroup group = ir.servoGroupWithName("MyGroup");
+        ServoGroup group = ir.servoGroupWithName("MyGroup");
         if (group == null) {
             System.out.println("Group not found");
             return;

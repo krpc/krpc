@@ -1,4 +1,4 @@
-load('/tools/build/python', 'py_sdist', 'py_script')
+load('/tools/build/python', 'py_sdist', 'py_script', 'py_lint_test')
 load('/config', 'version')
 
 license_text = """This license (GPL v3) applies to all parts of krpc.clientgen except for the following:
@@ -37,19 +37,13 @@ genrule(
     cmd = 'echo "%s" > "$@"' % license_text
 )
 
-genrule(
-    name = 'version',
-    outs = ['krpctools/version.py'],
-    cmd = 'echo "__version__ = \'%s\'" > "$@"' % version
-)
-
 py_sdist(
     name = 'krpctools',
     out = 'krpctools-%s.zip' % version,
     files = [
         'README.txt', '//:version', 'CHANGES.txt',
         ':license', '//:COPYING',
-        'setup.py', 'MANIFEST.in', ':version',
+        'setup.py', 'MANIFEST.in', '//:python_version',
         '//tools/ServiceDefinitions',
         '//tools/ServiceDefinitions:KRPC',
         '//tools/build/mono-4.5:Google.Protobuf.dll',
@@ -64,6 +58,7 @@ py_sdist(
         '//tools/build/mono-4.5:System.Xml.Linq'
     ] + glob(['krpctools/**/*.py', 'krpctools/**/*.tmpl']),
     path_map = {
+        'version.py': 'krpctools/version.py',
         'tools/krpctools/': '',
         'tools/ServiceDefinitions/ServiceDefinitions.exe': 'krpctools/bin/ServiceDefinitions.exe',
         'tools/ServiceDefinitions/KRPC.dll': 'krpctools/bin/KRPC.dll',
@@ -95,4 +90,18 @@ py_script(
     pkg = ':krpctools',
     deps = deps,
     visibility = ['//visibility:public']
+)
+
+test_suite(
+    name = 'test',
+    tests = [':lint']
+)
+
+py_lint_test(
+    name = 'lint',
+    src = ':krpctools',
+    pkg = 'krpctools',
+    deps = deps,
+    rcfile = 'pylint.rc',
+    size = 'small'
 )

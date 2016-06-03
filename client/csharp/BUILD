@@ -24,7 +24,7 @@ nuget_package(
     project_url = 'https://github.com/krpc/krpc',
     license_url = 'https://github.com/krpc/krpc/blob/master/LICENSE',
     deps = {
-        'Google.Protobuf': '3.0.0-beta2'
+        'Google.Protobuf': '3.0.0-beta3'
     }
 )
 
@@ -40,8 +40,16 @@ csharp_assembly_info(
 csharp_library(
     name = 'KRPC.Client',
     srcs = glob(['src/**/*.cs']) + [
-        ':AssemblyInfo', '//protobuf:csharp',
-        ':services-krpc', ':services-spacecenter', ':services-infernalrobotics', ':services-kerbalalarmclock'],
+        ':AssemblyInfo',
+        '//protobuf:csharp',
+        ':services-krpc',
+        ':services-spacecenter',
+        ':services-drawing',
+        ':services-infernalrobotics',
+        ':services-kerbalalarmclock',
+        ':services-remotetech',
+        ':services-ui'
+    ],
     deps = [
         '//tools/build/mono-4.5:Google.Protobuf',
         '//tools/build/mono-4.5:mscorlib',
@@ -70,6 +78,13 @@ clientgen_csharp(
 )
 
 clientgen_csharp(
+    name = 'services-drawing',
+    service = 'Drawing',
+    defs = '//service/Drawing:ServiceDefinitions',
+    out = 'Services/Drawing.cs'
+)
+
+clientgen_csharp(
     name = 'services-infernalrobotics',
     service = 'InfernalRobotics',
     defs = '//service/InfernalRobotics:ServiceDefinitions',
@@ -81,6 +96,20 @@ clientgen_csharp(
     service = 'KerbalAlarmClock',
     defs = '//service/KerbalAlarmClock:ServiceDefinitions',
     out = 'Services/KerbalAlarmClock.cs'
+)
+
+clientgen_csharp(
+    name = 'services-remotetech',
+    service = 'RemoteTech',
+    defs = '//service/RemoteTech:ServiceDefinitions',
+    out = 'Services/RemoteTech.cs'
+)
+
+clientgen_csharp(
+    name = 'services-ui',
+    service = 'UI',
+    defs = '//service/UI:ServiceDefinitions',
+    out = 'Services/UI.cs'
 )
 
 client_test(

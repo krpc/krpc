@@ -1,3 +1,6 @@
+v0.3.3
+ * Rename ControlGroup to ServoGroup
+
 v0.2.0
  * None
 

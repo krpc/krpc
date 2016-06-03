@@ -1,18 +1,17 @@
 import unittest
-import testingtools
+import krpctest
 import krpc
 
-class TestPartsFuelLines(testingtools.TestCase):
+class TestPartsFuelLines(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'PartsFuelLines':
-            testingtools.new_save()
-            testingtools.launch_vessel_from_vab('PartsFuelLines')
-            testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsFuelLines')
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.parts = cls.vessel.parts
+        if krpctest.connect().space_center.active_vessel.name != 'PartsFuelLines':
+            krpctest.new_save()
+            krpctest.launch_vessel_from_vab('PartsFuelLines')
+            krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(cls)
+        cls.parts = cls.conn.space_center.active_vessel.parts
 
     @classmethod
     def tearDownClass(cls):
@@ -57,11 +56,11 @@ class TestPartsFuelLines(testingtools.TestCase):
     def test_error_on_fuel_line_part(self):
         part = self.parts.with_title('FTX-2 External Fuel Duct')[0]
         with self.assertRaises(krpc.error.RPCError) as cm:
-            part.fuel_lines_to
+            getattr(part, 'fuel_lines_to')
         self.assertTrue('Part is a fuel line' in str(cm.exception))
         with self.assertRaises(krpc.error.RPCError) as cm:
-            part.fuel_lines_from
+            getattr(part, 'fuel_lines_from')
         self.assertTrue('Part is a fuel line' in str(cm.exception))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

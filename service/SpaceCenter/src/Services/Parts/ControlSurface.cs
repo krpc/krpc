@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -108,6 +105,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float SurfaceArea {
             get { return controlSurface.ctrlSurfaceArea; }
+        }
+
+        /// <summary>
+        /// The available torque in the pitch, roll and yaw axes of the vessel, in Newton meters.
+        /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 AvailableTorque {
+            get { return AvailableTorqueVector.ToTuple (); }
+        }
+
+        internal Vector3d AvailableTorqueVector {
+            get { return controlSurface.GetPotentialTorque () * 1000f; }
         }
     }
 }

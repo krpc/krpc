@@ -18,7 +18,7 @@ namespace KRPC
     {
         //TODO: remove servers list, replace with events etc.
         IList<KRPCServer> servers = new List<KRPCServer> ();
-        IScheduler<IClient<Request,Response>> clientScheduler;
+        RoundRobinScheduler<IClient<Request,Response>> clientScheduler;
         IList<RequestContinuation> continuations;
         IDictionary<IClient<NoMessage,StreamMessage>, IList<StreamRequest>> streamRequests;
         IDictionary<uint, object> streamResultCache = new Dictionary<uint, object> ();
@@ -178,14 +178,24 @@ namespace KRPC
         /// Get the total number of bytes read from the network.
         /// </summary>
         public ulong BytesRead {
-            get { return servers.Select (x => x.BytesRead).SumUnsignedLong (); }
+            get {
+                ulong read = 0;
+                for (int i = 0; i < servers.Count; i++)
+                    read += servers [i].BytesRead;
+                return read;
+            }
         }
 
         /// <summary>
         /// Get the total number of bytes written to the network.
         /// </summary>
         public ulong BytesWritten {
-            get { return servers.Select (x => x.BytesWritten).SumUnsignedLong (); }
+            get {
+                ulong written = 0;
+                for (int i = 0; i < servers.Count; i++)
+                    written += servers [i].BytesWritten;
+                return written;
+            }
         }
 
         /// <summary>
@@ -336,6 +346,12 @@ namespace KRPC
             }
         }
 
+        Stopwatch rpcTimer = new Stopwatch ();
+        Stopwatch rpcPollTimeout = new Stopwatch ();
+        Stopwatch rpcPollTimer = new Stopwatch ();
+        Stopwatch rpcExecTimer = new Stopwatch ();
+        IList<RequestContinuation> rpcYieldedContinuations = new List<RequestContinuation> ();
+
         /// <summary>
         /// Update the RPC server, called once every FixedUpdate.
         /// This method receives and executes RPCs, for up to MaxTimePerUpdate microseconds.
@@ -347,51 +363,53 @@ namespace KRPC
         /// </summary>
         void RPCServerUpdate ()
         {
-            var timer = Stopwatch.StartNew ();
-            var pollTimeout = new Stopwatch ();
-            var pollTimer = new Stopwatch ();
-            var execTimer = new Stopwatch ();
+            rpcTimer.Reset ();
+            rpcTimer.Start ();
+            rpcPollTimeout.Reset ();
+            rpcPollTimer.Reset ();
+            rpcExecTimer.Reset ();
             long maxTimePerUpdateTicks = StopwatchExtensions.MicrosecondsToTicks (MaxTimePerUpdate);
             long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (RecvTimeout);
             ulong rpcsExecuted = 0;
 
-            var yieldedContinuations = new List<RequestContinuation> ();
-            foreach (var server in servers)
-                server.RPCServer.Update ();
+            rpcYieldedContinuations.Clear ();
+            for (int i = 0; i < servers.Count; i++)
+                servers [i].RPCServer.Update ();
 
             while (true) {
 
                 // Poll for RPCs
-                pollTimer.Start ();
-                pollTimeout.Reset ();
-                pollTimeout.Start ();
+                rpcPollTimer.Start ();
+                rpcPollTimeout.Reset ();
+                rpcPollTimeout.Start ();
                 while (true) {
-                    PollRequests (yieldedContinuations);
+                    PollRequests (rpcYieldedContinuations);
                     if (!BlockingRecv)
                         break;
-                    if (pollTimeout.ElapsedTicks > recvTimeoutTicks)
+                    if (rpcPollTimeout.ElapsedTicks > recvTimeoutTicks)
                         break;
-                    if (timer.ElapsedTicks > maxTimePerUpdateTicks)
+                    if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
                         break;
-                    if (continuations.Any ())
+                    if (continuations.Count > 0)
                         break;
                 }
-                pollTimer.Stop ();
+                rpcPollTimer.Stop ();
 
-                if (!continuations.Any ())
+                if (continuations.Count == 0)
                     break;
 
                 // Execute RPCs
-                execTimer.Start ();
-                foreach (var continuation in continuations) {
+                rpcExecTimer.Start ();
+                for (int i = 0; i < continuations.Count; i++) {
+                    var continuation = continuations [i];
 
                     // Ignore the continuation if the client has disconnected
                     if (!continuation.Client.Connected)
                         continue;
 
                     // Max exec time exceeded, delay to next update
-                    if (timer.ElapsedTicks > maxTimePerUpdateTicks) {
-                        yieldedContinuations.Add (continuation);
+                    if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks) {
+                        rpcYieldedContinuations.Add (continuation);
                         continue;
                     }
 
@@ -399,80 +417,87 @@ namespace KRPC
                     try {
                         ExecuteContinuation (continuation);
                     } catch (YieldException e) {
-                        yieldedContinuations.Add ((RequestContinuation)e.Continuation);
+                        rpcYieldedContinuations.Add ((RequestContinuation)e.Continuation);
                     }
                     rpcsExecuted++;
                 }
                 continuations.Clear ();
-                execTimer.Stop ();
+                rpcExecTimer.Stop ();
 
                 // Exit if only execute one RPC per update
                 if (OneRPCPerUpdate)
                     break;
 
                 // Exit if max exec time exceeded
-                if (timer.ElapsedTicks > maxTimePerUpdateTicks)
+                if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
                     break;
             }
 
             // Run yielded continuations on the next update
-            continuations = yieldedContinuations;
+            var tmp = continuations;
+            continuations = rpcYieldedContinuations;
+            rpcYieldedContinuations = tmp;
 
-            timer.Stop ();
+            rpcTimer.Stop ();
 
             RPCsExecuted += rpcsExecuted;
-            TimePerRPCUpdate = (float)timer.ElapsedSeconds ();
-            PollTimePerRPCUpdate = (float)pollTimer.ElapsedSeconds ();
-            ExecTimePerRPCUpdate = (float)execTimer.ElapsedSeconds ();
+            TimePerRPCUpdate = (float)rpcTimer.ElapsedSeconds ();
+            PollTimePerRPCUpdate = (float)rpcPollTimer.ElapsedSeconds ();
+            ExecTimePerRPCUpdate = (float)rpcExecTimer.ElapsedSeconds ();
         }
+
+        Stopwatch streamTimer = new Stopwatch ();
 
         /// <summary>
         /// Update the Stream server. Executes all streaming RPCs and sends the results to clients (if they have changed).
         /// </summary>
         void StreamServerUpdate ()
         {
-            Stopwatch timer = Stopwatch.StartNew ();
+            streamTimer.Reset ();
+            streamTimer.Start ();
             uint rpcsExecuted = 0;
 
-            foreach (var server in servers)
-                server.StreamServer.Update ();
+            for (int i = 0; i < servers.Count; i++)
+                servers [i].StreamServer.Update ();
 
             // Run streaming requests
-            foreach (var entry in streamRequests) {
-                var streamClient = entry.Key;
-                var requests = entry.Value;
-                if (!requests.Any ())
-                    continue;
-                var streamMessage = new StreamMessage ();
-                foreach (var request in requests) {
-                    // Run the RPC
-                    Response response;
-                    try {
-                        response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
-                    } catch (Exception e) {
-                        response = new Response ();
-                        response.HasError = true;
-                        response.Error = e.ToString ();
-                    }
-                    rpcsExecuted++;
-                    // Don't send an update if it is the previous one
-                    //FIXME: does the following comparison work?!? The objects have not been serialized
-                    if (response.ReturnValue == streamResultCache [request.Identifier])
+            if (streamRequests.Count > 0) {
+                foreach (var entry in streamRequests) {
+                    var streamClient = entry.Key;
+                    var requests = entry.Value;
+                    if (requests.Count == 0)
                         continue;
-                    // Add the update to the response message
-                    streamResultCache [request.Identifier] = response.ReturnValue;
-                    response.Time = GetUniversalTime ();
-                    var streamResponse = request.Response;
-                    streamResponse.Response = response;
-                    streamMessage.Responses.Add (streamResponse);
+                    var streamMessage = new StreamMessage ();
+                    foreach (var request in requests) {
+                        // Run the RPC
+                        Response response;
+                        try {
+                            response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
+                        } catch (Exception e) {
+                            response = new Response ();
+                            response.HasError = true;
+                            response.Error = e.ToString ();
+                        }
+                        rpcsExecuted++;
+                        // Don't send an update if it is the previous one
+                        //FIXME: does the following comparison work?!? The objects have not been serialized
+                        if (response.ReturnValue == streamResultCache [request.Identifier])
+                            continue;
+                        // Add the update to the response message
+                        streamResultCache [request.Identifier] = response.ReturnValue;
+                        response.Time = GetUniversalTime ();
+                        var streamResponse = request.Response;
+                        streamResponse.Response = response;
+                        streamMessage.Responses.Add (streamResponse);
+                    }
+                    streamClient.Stream.Write (streamMessage);
                 }
-                streamClient.Stream.Write (streamMessage);
             }
 
-            timer.Stop ();
+            streamTimer.Stop ();
             StreamRPCs = rpcsExecuted;
             StreamRPCsExecuted += rpcsExecuted;
-            TimePerStreamUpdate = (float)timer.ElapsedSeconds ();
+            TimePerStreamUpdate = (float)streamTimer.ElapsedSeconds ();
         }
 
         IClient<NoMessage,StreamMessage> GetStreamClient (IClient rpcClient)
@@ -491,7 +516,7 @@ namespace KRPC
         /// Add a stream to the server
         /// </summary>
         internal uint AddStream (IClient rpcClient, Request request)
-        {   
+        {
             var streamClient = GetStreamClient (rpcClient);
 
             // Check for an existing stream for the request
@@ -524,18 +549,27 @@ namespace KRPC
             streamResultCache.Remove (identifier);
         }
 
+        HashSet<IClient<Request,Response>> pollRequestsCurrentClients = new HashSet<IClient<Request, Response>> ();
+
         /// <summary>
         /// Poll connected clients for new requests.
         /// Adds a continuation to the queue for any client with a new request,
         /// if a continuation is not already being processed for the client.
         /// </summary>
-        void PollRequests (IEnumerable<RequestContinuation> yieldedContinuations)
+        void PollRequests (IList<RequestContinuation> yieldedContinuations)
         {
-            var currentClients = continuations.Select ((c => c.Client)).ToList ();
-            currentClients.AddRange (yieldedContinuations.Select ((c => c.Client)));
-            foreach (var client in clientScheduler) {
+            if (clientScheduler.Empty)
+                return;
+            pollRequestsCurrentClients.Clear ();
+            for (int i = 0; i < continuations.Count; i++)
+                pollRequestsCurrentClients.Add (continuations [i].Client);
+            for (int i = 0; i < yieldedContinuations.Count; i++)
+                pollRequestsCurrentClients.Add (yieldedContinuations [i].Client);
+            var item = clientScheduler.Items.First;
+            while (item != null) {
+                var client = item.Value;
                 try {
-                    if (!currentClients.Contains (client) && client.Stream.DataAvailable) {
+                    if (!pollRequestsCurrentClients.Contains (client) && client.Stream.DataAvailable) {
                         Request request = client.Stream.Read ();
                         if (OnClientActivity != null)
                             OnClientActivity (this, new ClientActivityArgs (client));
@@ -547,6 +581,7 @@ namespace KRPC
                     Logger.WriteLine ("Error receiving request from client " + client.Address + ": " + e.Message, Logger.Severity.Error);
                     continue;
                 }
+                item = item.Next;
             }
         }
 

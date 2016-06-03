@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {

@@ -10,10 +10,6 @@ function Connection:_init(address, port)
 end
 
 function Connection:connect()
-  result,err = socket.dns.toip(self._address)
-  if result == nil then
-    error('Socket error: ' .. err)
-  end
   self._socket = socket.tcp()
   result,err = self._socket:connect(self._address, self._port)
   if result == nil then

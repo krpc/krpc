@@ -1,5 +1,6 @@
 from .domain import Domain
-from .nodes import *
+from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
+from .nodes import Enumeration, EnumerationValue
 from ..utils import lower_camel_case
 from krpc.utils import snake_case
 from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
@@ -42,8 +43,15 @@ class JavaDomain(Domain):
     def __init__(self, macros):
         super(JavaDomain, self).__init__(macros)
 
-    def type(self, typ, generic=False):
-        if typ == None:
+    def currentmodule(self, name):
+        super(JavaDomain, self).currentmodule(name)
+        return '.. package:: krpc.client.services.%s' % name
+
+    def type(self, typ):
+        return self._type(typ)
+
+    def _type(self, typ, generic=False):
+        if typ is None:
             return 'void'
         elif not generic and isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type]
@@ -56,14 +64,14 @@ class JavaDomain(Domain):
         elif isinstance(typ, EnumType):
             return self.shorten_ref(typ.protobuf_type[5:-1])
         elif isinstance(typ, ListType):
-            return 'java.util.List<%s>' % self.type(typ.value_type, True)
+            return 'java.util.List<%s>' % self._type(typ.value_type, True)
         elif isinstance(typ, DictionaryType):
-            return 'java.util.Map<%s,%s>' % (self.type(typ.key_type, True), self.type(typ.value_type, True))
+            return 'java.util.Map<%s,%s>' % (self._type(typ.key_type, True), self._type(typ.value_type, True))
         elif isinstance(typ, SetType):
-            return 'java.util.Set<%s>' % self.type(typ.value_type, True)
+            return 'java.util.Set<%s>' % self._type(typ.value_type, True)
         elif isinstance(typ, TupleType):
             name = self.tuple_types[len(typ.value_types)-1]
-            return 'org.javatuples.%s<%s>' % (name, ','.join(self.type(typ, True) for typ in typ.value_types))
+            return 'org.javatuples.%s<%s>' % (name, ','.join(self._type(typ, True) for typ in typ.value_types))
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
@@ -79,12 +87,14 @@ class JavaDomain(Domain):
         elif isinstance(typ, ListType):
             return ':class:`java.util.List<%s>`' % self.type(typ.value_type, True)
         elif isinstance(typ, DictionaryType):
-            return ':class:`java.util.Map<%s,%s>`' % (self.type(typ.key_type, True), self.type(typ.value_type, True))
+            return ':class:`java.util.Map<%s,%s>`' % (self.type(typ.key_type, True),
+                                                      self.type(typ.value_type, True))
         elif isinstance(typ, SetType):
             return ':class:`java.util.Set<%s>`' % self.type(typ.value_type, True)
         elif isinstance(typ, TupleType):
             name = self.tuple_types[len(typ.value_types)-1]
-            return ':class:`org.javatuples.%s<%s>`' % (name, ','.join(self.type(typ, True) for typ in typ.value_types))
+            return ':class:`org.javatuples.%s<%s>`' % (name, ','.join(self.type(typ, True)
+                                                                      for typ in typ.value_types))
         else:
             raise RuntimeError('Unknown type \'%s\'' % str(typ))
 
@@ -107,17 +117,11 @@ class JavaDomain(Domain):
             name = '.'.join(name)
         return self.shorten_ref(name)
 
-    def shorten_ref(self, name):
-        # TODO: Drop service name from all members.
-        # TODO: This will cause issues if there a a name clash is introduced between services.
-        _,_,name = name.partition('.')
-        return name
-
     def see(self, obj):
-        if isinstance(obj, Procedure) or isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod) or \
-             isinstance(obj, Property) or isinstance(obj, ClassProperty) or isinstance(obj, EnumerationValue):
+        if any(isinstance(obj, cls) for cls in
+               (Procedure, ClassMethod, ClassStaticMethod, Property, ClassProperty, EnumerationValue)):
             prefix = 'meth'
-        elif isinstance(obj, Class) or isinstance(obj, Enumeration):
+        elif any(isinstance(obj, cls) for cls in (Class, Enumeration)):
             prefix = 'type'
         else:
             raise RuntimeError(str(obj))

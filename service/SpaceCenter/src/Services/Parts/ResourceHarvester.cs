@@ -1,8 +1,8 @@
 using System;
+using System.Text.RegularExpressions;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
-using System.Text.RegularExpressions;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -20,8 +20,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal static bool Is (Part part)
         {
             return
-                part.InternalPart.HasModule<ModuleResourceHarvester> () &&
-                part.InternalPart.HasModule<ModuleAnimationGroup> ();
+            part.InternalPart.HasModule<ModuleResourceHarvester> () &&
+            part.InternalPart.HasModule<ModuleAnimationGroup> ();
         }
 
         internal ResourceHarvester (Part part)

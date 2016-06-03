@@ -29,7 +29,7 @@ class Domain(object):
     def ref(self, obj):
         return self.shorten_ref(obj.fullname, obj)
 
-    def shorten_ref(self, name, obj=None):
+    def shorten_ref(self, name, obj=None): #pylint: disable=unused-argument
         name = name.split('.')
         if name[0] == self.module:
             del name[0]
@@ -38,11 +38,13 @@ class Domain(object):
     def see(self, obj):
         raise NotImplementedError
 
-    def paramref(self, name):
+    @staticmethod
+    def paramref(name):
         return '*%s*' % name
 
     def code(self, value):
         return '``%s``' % self.value(value)
 
-    def math(self, value):
+    @staticmethod
+    def math(value):
         return ':math:`%s`' % value

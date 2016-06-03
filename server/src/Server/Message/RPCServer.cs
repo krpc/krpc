@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
@@ -82,11 +81,21 @@ namespace KRPC.Server.Message
         }
 
         public ulong BytesRead {
-            get { return closedClientsBytesRead + clients.Values.Select (c => c.Stream.BytesRead).SumUnsignedLong (); }
+            get {
+                ulong read = closedClientsBytesRead;
+                foreach (var client in clients.Values)
+                    read += client.Stream.BytesRead;
+                return read;
+            }
         }
 
         public ulong BytesWritten {
-            get { return closedClientsBytesWritten + clients.Values.Select (c => c.Stream.BytesWritten).SumUnsignedLong (); }
+            get {
+                ulong written = closedClientsBytesWritten;
+                foreach (var client in clients.Values)
+                    written += client.Stream.BytesWritten;
+                return written;
+            }
         }
 
         public void ClearStats ()

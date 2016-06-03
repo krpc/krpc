@@ -105,8 +105,11 @@ png_images(
 defs = [
     '//server:ServiceDefinitions',
     '//service/SpaceCenter:ServiceDefinitions',
+    '//service/Drawing:ServiceDefinitions',
     '//service/InfernalRobotics:ServiceDefinitions',
-    '//service/KerbalAlarmClock:ServiceDefinitions'
+    '//service/KerbalAlarmClock:ServiceDefinitions',
+    '//service/RemoteTech:ServiceDefinitions',
+    '//service/UI:ServiceDefinitions'
 ]
 
 docgen_multiple(
@@ -283,12 +286,17 @@ java_import(
     jars = ['@java_javatuples//file']
 )
 
+java_import(
+    name = 'javaprotobuf',
+    jars = ['@java_protobuf//file']
+)
+
 java_binary_multiple(
     name = 'compile-scripts-java',
     srcs = glob(['src/scripts/*.java']),
     deps = [
         '//client/java:krpc-jar',
-        '//tools/build/protobuf:protobuf',
+        ':javaprotobuf',
         ':javatuples'
     ]
 )

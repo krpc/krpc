@@ -9,8 +9,8 @@ int main() {
   auto conn = krpc::connect("InfernalRobotics Example");
   InfernalRobotics infernal_robotics(&conn);
 
-  InfernalRobotics::ControlGroup group = infernal_robotics.servo_group_with_name("MyGroup");
-  if (group == InfernalRobotics::ControlGroup())
+  InfernalRobotics::ServoGroup group = infernal_robotics.servo_group_with_name("MyGroup");
+  if (group == InfernalRobotics::ServoGroup())
     std::cout << "Group not found" << std::endl;
 
   std::vector<InfernalRobotics::Servo> servos = group.servos();

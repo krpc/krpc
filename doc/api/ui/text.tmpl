@@ -1,0 +1,12 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.name }}
+{{ domain.currentmodule('UI') }}
+{% import domain.macros as macros with context %}
+
+Text
+====
+
+{{ macros.class(services['UI'].classes['Text']) }}
+{{ macros.enumeration(services['UI'].enumerations['FontStyle']) }}
+{{ macros.enumeration(services['UI'].enumerations['TextAlignment']) }}
+{{ macros.enumeration(services['UI'].enumerations['TextAnchor']) }}

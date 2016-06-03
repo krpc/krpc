@@ -1,19 +1,17 @@
 import unittest
-import testingtools
-import krpc
 import time
+import krpctest
 
-class TestPartsCargoBay(testingtools.TestCase):
+class TestPartsCargoBay(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if testingtools.connect().space_center.active_vessel.name != 'PartsCargoBay':
-            testingtools.new_save()
-            testingtools.launch_vessel_from_vab('PartsCargoBay')
-            testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='PartsCargoBay')
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.parts = cls.vessel.parts
+        if krpctest.connect().space_center.active_vessel.name != 'PartsCargoBay':
+            krpctest.new_save()
+            krpctest.launch_vessel_from_vab('PartsCargoBay')
+            krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(cls)
+        cls.cargo_bays = cls.conn.space_center.active_vessel.parts.cargo_bays
         cls.state = cls.conn.space_center.CargoBayState
 
     @classmethod
@@ -21,7 +19,7 @@ class TestPartsCargoBay(testingtools.TestCase):
         cls.conn.close()
 
     def test_open_close(self):
-        for bay in self.parts.cargo_bays:
+        for bay in self.cargo_bays:
 
             self.assertFalse(bay.open)
             self.assertEqual(bay.state, self.state.closed)
@@ -52,5 +50,5 @@ class TestPartsCargoBay(testingtools.TestCase):
             self.assertFalse(bay.open)
             self.assertEqual(bay.state, self.state.closed)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

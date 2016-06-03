@@ -3,13 +3,13 @@ using UnityEngine;
 namespace KRPC.KerbalAlarmClock
 {
     /// <summary>
-    /// kRPC KAC wrapper.
+    /// kRPC KerbalAlarmClock addon.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class Addon : MonoBehaviour
     {
         /// <summary>
-        /// Start the addon.
+        /// Load the KerbalAlarmClock API.
         /// </summary>
         public void Start ()
         {

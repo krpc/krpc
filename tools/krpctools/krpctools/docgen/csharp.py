@@ -1,5 +1,6 @@
 from .domain import Domain
-from .nodes import *
+from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
+from .nodes import Enumeration, EnumerationValue
 from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CsharpDomain(Domain):
@@ -23,8 +24,12 @@ class CsharpDomain(Domain):
     def __init__(self, macros):
         super(CsharpDomain, self).__init__(macros)
 
+    def currentmodule(self, name):
+        super(CsharpDomain, self).currentmodule(name)
+        return '.. namespace:: KRPC.Client.Services.%s' % name
+
     def type(self, typ):
-        if typ == None:
+        if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type]
@@ -37,7 +42,8 @@ class CsharpDomain(Domain):
         elif isinstance(typ, ListType):
             return 'System.Collections.Generic.IList<%s>' % self.type(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'System.Collections.Generic.IDictionary<%s,%s>' % (self.type(typ.key_type), self.type(typ.value_type))
+            return 'System.Collections.Generic.IDictionary<%s,%s>' % (self.type(typ.key_type),
+                                                                      self.type(typ.value_type))
         elif isinstance(typ, SetType):
             return 'System.Collections.Generic.ISet<%s>' % self.type(typ.value_type)
         elif isinstance(typ, TupleType):
@@ -59,9 +65,7 @@ class CsharpDomain(Domain):
         return ':%s:`%s`' % (prefix, self.ref(obj))
 
     def shorten_ref(self, name, obj=None):
-        # TODO: Drop service name from all non-service members.
-        # TODO: This will cause issues if there a a name clash is introduced between services.
+        # Only drop service name for non-service members
         if obj and (isinstance(obj, Procedure) or isinstance(obj, Property)):
             return name
-        _,_,name = name.partition('.')
-        return name
+        return super(CsharpDomain, self).shorten_ref(name, obj)

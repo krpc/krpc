@@ -1,7 +1,9 @@
 using System;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
+using Tuple3 = KRPC.Utils.Tuple<float,float,float>;
+using UnityEngine;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -62,6 +64,21 @@ namespace KRPC.SpaceCenter.Services.Parts
                     light.LightsOn ();
                 else
                     light.LightsOff ();
+            }
+        }
+
+        /// <summary>
+        /// The color of the light, as an RGB triple.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 Color {
+            get { return new Tuple3 (light.lightR, light.lightG, light.lightB); }
+            set {
+                light.lightR = value.Item1;
+                light.lightG = value.Item2;
+                light.lightB = value.Item3;
+                foreach (var unityLight in light.lights)
+                    unityLight.color = new Color (value.Item1, value.Item2, value.Item3);
             }
         }
 

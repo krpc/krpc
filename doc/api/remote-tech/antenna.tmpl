@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.name }}
+{{ domain.currentmodule('RemoteTech') }}
+{% import domain.macros as macros with context %}
+
+Antenna
+=======
+
+{{ macros.class(services['RemoteTech'].classes['Antenna']) }}
+{{ macros.enumeration(services['RemoteTech'].enumerations['Target']) }}

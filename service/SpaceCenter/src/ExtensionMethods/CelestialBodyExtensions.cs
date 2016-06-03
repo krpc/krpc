@@ -2,7 +2,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class CelestialBodyExtensions
     {
-        public static Vector3d GetWorldVelocity (this global::CelestialBody body)
+        public static Vector3d GetWorldVelocity (this CelestialBody body)
         {
             if (body != body.referenceBody) {
                 // Body orbits something

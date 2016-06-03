@@ -1,14 +1,13 @@
+from contextlib import contextmanager
+import threading
 from krpc.types import Types, DefaultArgument
 from krpc.service import create_service
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
-from krpc.attributes import Attributes
 from krpc.utils import snake_case
 from krpc.error import RPCError
 import krpc.stream
 import krpc.schema.KRPC
-from contextlib import contextmanager
-import threading
 
 class Client(object):
     """
@@ -22,6 +21,8 @@ class Client(object):
         self._rpc_connection = rpc_connection
         self._rpc_connection_lock = threading.Lock()
         self._stream_connection = stream_connection
+        self._stream_cache = {}
+        self._stream_cache_lock = threading.Lock()
         self._request_type = self._types.as_type('KRPC.Request')
         self._response_type = self._types.as_type('KRPC.Response')
 
@@ -36,7 +37,8 @@ class Client(object):
         if stream_connection is not None:
             self._stream_thread_stop = threading.Event()
             self._stream_thread = threading.Thread(target=krpc.stream.update_thread,
-                                                   args=(stream_connection,self._stream_thread_stop))
+                                                   args=(stream_connection, self._stream_thread_stop,
+                                                         self._stream_cache, self._stream_cache_lock))
             self._stream_thread.daemon = True
             self._stream_thread.start()
         else:
@@ -62,13 +64,14 @@ class Client(object):
     @contextmanager
     def stream(self, func, *args, **kwargs):
         """ 'with' support """
-        s = self.add_stream(func, *args, **kwargs)
+        stream = self.add_stream(func, *args, **kwargs)
         try:
-            yield s
+            yield stream
         finally:
-            s.remove()
+            stream.remove()
 
-    def _invoke(self, service, procedure, args=[], kwargs={}, param_names=[], param_types=[], return_type=None):
+    def _invoke(self, service, procedure, args=None, kwargs=None,
+                param_names=None, param_types=None, return_type=None):
         """ Execute an RPC """
 
         # Build the request
@@ -89,13 +92,21 @@ class Client(object):
             result = Decoder.decode(response.return_value, return_type)
         return result
 
-    def _build_request(self, service, procedure, args=[], kwargs={},
-                       param_names=[], param_types=[], return_type=None):
+    def _build_request(self, service, procedure, args=None, kwargs=None,
+                       param_names=None, param_types=None, return_type=None): #pylint: disable=unused-argument
         """ Build a KRPC.Request object """
+        if args is None:
+            args = []
+        if kwargs is None:
+            kwargs = {}
+        if param_names is None:
+            param_names = []
+        if param_types is None:
+            param_types = []
 
         def encode_argument(i, value):
             typ = param_types[i]
-            if type(value) != typ.python_type:
+            if not isinstance(value, typ.python_type):
                 # Try coercing to the correct type
                 try:
                     value = self._types.coerce_to(value, typ)
@@ -110,7 +121,7 @@ class Client(object):
 
         arguments = []
         nargs = len(args)
-        for i,param in enumerate(param_names):
+        for i, param in enumerate(param_names):
             add = False
             if i < nargs and not isinstance(args[i], DefaultArgument):
                 arg = args[i]
@@ -144,7 +155,7 @@ class Client(object):
         while True:
             try:
                 data += self._rpc_connection.partial_receive(1)
-                size,position = Decoder.decode_size_and_position(data)
+                size, _ = Decoder.decode_size_and_position(data)
                 break
             except IndexError:
                 pass

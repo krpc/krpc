@@ -1,85 +1,81 @@
 import unittest
-import testingtools
-import krpc
 import time
+import krpctest
 
-class TestPartsSolarPanel(testingtools.TestCase):
+class TestPartsSolarPanel(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsSolarPanel')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsSolarPanel')
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsSolarPanel')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(cls)
         cls.vessel = cls.conn.space_center.active_vessel
-        cls.parts = cls.vessel.parts
+        parts = cls.vessel.parts
         cls.state = cls.conn.space_center.SolarPanelState
+        cls.panel = parts.with_title('Gigantor XL Solar Array')[0].solar_panel
+        cls.fixed_panel = parts.with_title('OX-STAT Photovoltaic Panels')[0].solar_panel
+        cls.panel_break = parts.with_title('OX-4L 1x6 Photovoltaic Panels')[0].solar_panel
 
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
 
     def test_fixed_panel(self):
-        panel = next(iter(filter(lambda e: e.part.title == 'OX-STAT Photovoltaic Panels', self.parts.solar_panels)))
-        self.assertTrue(panel.deployed)
-        self.assertEqual(panel.state, self.state.extended)
-        self.assertGreater(panel.energy_flow, 0)
-        self.assertGreater(panel.sun_exposure, 0)
+        time.sleep(1)
+        self.assertTrue(self.fixed_panel.deployed)
+        self.assertEqual(self.state.extended, self.fixed_panel.state)
+        self.assertGreater(self.fixed_panel.energy_flow, 0)
+        self.assertGreater(self.fixed_panel.sun_exposure, 0)
 
     def test_extendable_panel(self):
-        panel = next(iter(filter(lambda e: e.part.title == 'Gigantor XL Solar Array', self.parts.solar_panels)))
-        self.assertFalse(panel.deployed)
-        self.assertEqual(panel.state, self.state.retracted)
-        self.assertEqual(panel.energy_flow, 0)
-        self.assertEqual(panel.sun_exposure, 0)
+        self.assertFalse(self.panel.deployed)
+        self.assertEqual(self.state.retracted, self.panel.state)
+        self.assertEqual(0, self.panel.energy_flow)
+        self.assertEqual(0, self.panel.sun_exposure)
 
-        panel.deployed = True
+        self.panel.deployed = True
         time.sleep(0.1)
 
-        self.assertTrue(panel.deployed)
-        self.assertEqual(panel.state, self.state.extending)
-        self.assertEqual(panel.energy_flow, 0)
-        self.assertEqual(panel.sun_exposure, 0)
+        self.assertTrue(self.panel.deployed)
+        self.assertEqual(self.state.extending, self.panel.state)
+        self.assertEqual(0, self.panel.energy_flow)
+        self.assertEqual(0, self.panel.sun_exposure)
 
-        while panel.state == self.state.extending:
+        while self.panel.state == self.state.extending:
             pass
         time.sleep(0.1)
 
-        self.assertTrue(panel.deployed)
-        self.assertEqual(panel.state, self.state.extended)
-        self.assertGreater(panel.energy_flow, 0)
-        self.assertGreater(panel.sun_exposure, 0)
+        self.assertTrue(self.panel.deployed)
+        self.assertEqual(self.state.extended, self.panel.state)
+        self.assertGreater(self.panel.energy_flow, 0)
+        self.assertGreater(self.panel.sun_exposure, 0)
 
-        panel.deployed = False
+        self.panel.deployed = False
         time.sleep(0.1)
 
-        self.assertFalse(panel.deployed)
-        self.assertEqual(panel.state, self.state.retracting)
-        self.assertEqual(panel.energy_flow, 0)
-        self.assertEqual(panel.sun_exposure, 0)
+        self.assertFalse(self.panel.deployed)
+        self.assertEqual(self.state.retracting, self.panel.state)
+        self.assertEqual(0, self.panel.energy_flow)
+        self.assertEqual(0, self.panel.sun_exposure)
 
-        while panel.state == self.state.retracting:
+        while self.panel.state == self.state.retracting:
             pass
         time.sleep(0.1)
 
-        self.assertFalse(panel.deployed)
-        self.assertEqual(panel.state, self.state.retracted)
-        self.assertEqual(panel.energy_flow, 0)
-        self.assertEqual(panel.sun_exposure, 0)
+        self.assertFalse(self.panel.deployed)
+        self.assertEqual(self.state.retracted, self.panel.state)
+        self.assertEqual(0, self.panel.energy_flow)
+        self.assertEqual(0, self.panel.sun_exposure)
 
     def test_break_panel(self):
-        panel = next(iter(filter(lambda e: e.part.title == 'OX-4L 1x6 Photovoltaic Panels', self.parts.solar_panels)))
-
-        self.assertEqual(panel.state, self.state.retracted)
-        panel.deployed = True
-        while panel.state == self.state.extending:
+        self.assertEqual(self.state.retracted, self.panel_break.state)
+        self.panel_break.deployed = True
+        while self.panel_break.state == self.state.extending:
             pass
-        time.sleep(0.1)
-
         self.vessel.control.activate_next_stage()
         time.sleep(1)
+        self.assertEqual(self.state.broken, self.panel_break.state)
 
-        self.assertEqual(panel.state, self.state.broken)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

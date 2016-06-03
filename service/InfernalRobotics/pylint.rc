@@ -1,0 +1,8 @@
+[FORMAT]
+max-line-length=116
+
+[MESSAGES CONTROL]
+disable=no-member,missing-docstring,similarities
+
+[REPORTS]
+reports=no

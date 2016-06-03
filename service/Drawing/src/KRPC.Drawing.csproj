@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6373C212-899C-402C-8C2E-187C96318B81}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>KRPC.Drawing</RootNamespace>
+    <AssemblyName>KRPC.Drawing</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Debug\KRPC.Drawing.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DebugType>full</DebugType>
+    <DocumentationFile>bin\Release\KRPC.Drawing.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
+      <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
+      <Name>KRPC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SpaceCenter\src\KRPC.SpaceCenter.csproj">
+      <Project>{48205F2E-3CEE-4480-873A-DEAFCD291407}</Project>
+      <Name>KRPC.SpaceCenter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\src\KRPC.UI.csproj">
+      <Project>{AB9F4881-4C8E-4E54-8412-B3FB92861CE9}</Project>
+      <Name>KRPC.UI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="KSPUtil">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\KSPUtil.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\..\bazel-krpc\external\csharp_protobuf_net35\file\Google.Protobuf.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\bazel-bin\service\Drawing\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Addon.cs" />
+    <Compile Include="Drawable.cs" />
+    <Compile Include="Drawing.cs" />
+    <Compile Include="IDrawingObject.cs" />
+    <Compile Include="Line.cs" />
+    <Compile Include="Polygon.cs" />
+    <Compile Include="Text.cs" />
+  </ItemGroup>
+</Project>

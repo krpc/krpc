@@ -13,15 +13,16 @@ namespace KRPC.Service
     class ClassMethodHandler : IProcedureHandler
     {
         readonly MethodInfo method;
-        readonly IList<ProcedureParameter> parameters;
-        readonly ProcedureParameter[] parametersArray;
+        readonly ProcedureParameter[] parameters;
+        readonly object[] methodArguments;
 
         public ClassMethodHandler (MethodInfo method)
         {
             this.method = method;
-            parameters = method.GetParameters ().Select (x => new ProcedureParameter (x)).ToList ();
-            parameters.Insert (0, new ProcedureParameter (typeof(ulong), "this"));
-            parametersArray = Parameters.ToArray ();
+            var parameterList = method.GetParameters ().Select (x => new ProcedureParameter (x)).ToList ();
+            parameterList.Insert (0, new ProcedureParameter (typeof(ulong), "this"));
+            parameters = parameterList.ToArray ();
+            methodArguments = new object[parameters.Length - 1];
         }
 
         /// <summary>
@@ -32,9 +33,8 @@ namespace KRPC.Service
         {
             ulong instanceGuid = (ulong)arguments [0];
             // TODO: should be able to invoke default arguments using Type.Missing, but get "System.ArgumentException : failed to convert parameters"
-            var methodArguments = new object[arguments.Length - 1];
             for (int i = 1; i < arguments.Length; i++)
-                methodArguments [i - 1] = (arguments [i] == Type.Missing) ? parametersArray [i].DefaultValue : arguments [i];
+                methodArguments [i - 1] = (arguments [i] == Type.Missing) ? parameters [i].DefaultValue : arguments [i];
             return method.Invoke (ObjectStore.Instance.GetInstance (instanceGuid), methodArguments);
         }
 

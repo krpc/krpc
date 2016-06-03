@@ -1,14 +1,13 @@
 import unittest
-import testingtools
-from mathtools import norm, normalize, dot
-import krpc
 import math
+import krpctest
+from krpctest.geometry import norm, normalize, dot
 
-class TestBody(testingtools.TestCase):
+class TestBody(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.conn = testingtools.connect(name='TestBody')
+        cls.conn = krpctest.connect(cls)
 
     @classmethod
     def tearDownClass(cls):
@@ -17,7 +16,7 @@ class TestBody(testingtools.TestCase):
     def test_equality(self):
         bodies = self.conn.space_center.bodies
         bodies2 = self.conn.space_center.bodies
-        for key,body in bodies.items():
+        for key, body in bodies.items():
             self.assertEqual(bodies2[key], body)
 
     def test_kerbin(self):
@@ -32,9 +31,9 @@ class TestBody(testingtools.TestCase):
         self.assertClose(8.4159e7, kerbin.sphere_of_influence, error=0.0001e7)
         self.assertClose(1.36e10, kerbin.orbit.apoapsis, error=0.0001e10)
         self.assertClose(1.36e10, kerbin.orbit.periapsis, error=0.0001e10)
-        self.assertEqual(True, kerbin.has_atmosphere)
+        self.assertTrue(kerbin.has_atmosphere)
         self.assertClose(70000, kerbin.atmosphere_depth)
-        self.assertEqual(True, kerbin.has_atmospheric_oxygen)
+        self.assertTrue(kerbin.has_atmospheric_oxygen)
 
     def test_mun(self):
         mun = self.conn.space_center.bodies['Mun']
@@ -48,9 +47,9 @@ class TestBody(testingtools.TestCase):
         self.assertClose(2.4296e6, mun.sphere_of_influence, error=0.0001e6)
         self.assertClose(1.2e7, mun.orbit.apoapsis, error=0.0001e7)
         self.assertClose(1.2e7, mun.orbit.periapsis, error=0.0001e7)
-        self.assertEqual(False, mun.has_atmosphere)
+        self.assertFalse(mun.has_atmosphere)
         self.assertClose(0, mun.atmosphere_depth)
-        self.assertEqual(False, mun.has_atmospheric_oxygen)
+        self.assertFalse(mun.has_atmospheric_oxygen)
 
     def test_minmus(self):
         minmus = self.conn.space_center.bodies['Minmus']
@@ -58,9 +57,9 @@ class TestBody(testingtools.TestCase):
         self.assertClose(4.7e7, minmus.orbit.apoapsis, error=0.0001e7)
         self.assertClose(4.7e7, minmus.orbit.periapsis, error=0.0001e7)
         self.assertClose(6 * (math.pi/180), minmus.orbit.inclination)
-        self.assertEqual(False, minmus.has_atmosphere)
+        self.assertFalse(minmus.has_atmosphere)
         self.assertClose(0, minmus.atmosphere_depth)
-        self.assertEqual(False, minmus.has_atmospheric_oxygen)
+        self.assertFalse(minmus.has_atmospheric_oxygen)
 
     def test_sun(self):
         sun = self.conn.space_center.bodies['Sun']
@@ -69,16 +68,16 @@ class TestBody(testingtools.TestCase):
         self.assertClose(1.1723e18, sun.gravitational_parameter, error=0.0001e18)
         self.assertClose(2.616e8, sun.equatorial_radius, error=0.0001e8)
         self.assertEqual(float('inf'), sun.sphere_of_influence)
-        self.assertEqual(None, sun.orbit)
-        self.assertEqual(True, sun.has_atmosphere)
+        self.assertIsNone(sun.orbit)
+        self.assertTrue(sun.has_atmosphere)
         self.assertClose(600000, sun.atmosphere_depth)
-        self.assertEqual(False, sun.has_atmospheric_oxygen)
+        self.assertFalse(sun.has_atmospheric_oxygen)
 
     def test_duna(self):
         duna = self.conn.space_center.bodies['Duna']
-        self.assertEqual(True, duna.has_atmosphere)
+        self.assertTrue(duna.has_atmosphere)
         self.assertClose(50000, duna.atmosphere_depth)
-        self.assertEqual(False, duna.has_atmospheric_oxygen)
+        self.assertFalse(duna.has_atmospheric_oxygen)
 
     def test_system(self):
         bodies = self.conn.space_center.bodies
@@ -98,7 +97,7 @@ class TestBody(testingtools.TestCase):
         self.assertNotEqual(sun, minmus.orbit.body)
         self.assertNotEqual(mun, kerbin.orbit.body)
 
-        self.assertEqual(set([mun,minmus]), set(kerbin.satellites))
+        self.assertEqual(set([mun, minmus]), set(kerbin.satellites))
         self.assertEqual(set([ike]), set(duna.satellites))
         self.assertEqual(set(), set(mun.satellites))
 
@@ -106,17 +105,18 @@ class TestBody(testingtools.TestCase):
         for body in self.conn.space_center.bodies.values():
 
             # Check body position in body's reference frame
-            p = body.position(body.reference_frame)
-            self.assertClose((0,0,0), p)
+            pos = body.position(body.reference_frame)
+            self.assertClose((0, 0, 0), pos)
 
             # Check body position in parent body's reference frame
             if body.orbit is not None:
-                p = body.position(body.orbit.body.reference_frame)
+                pos = body.position(body.orbit.body.reference_frame)
                 if body.orbit.inclination == 0:
-                    self.assertClose(0, p[1])
+                    self.assertClose(0, pos[1])
                 else:
-                    self.assertNotClose(0, p[1])
-                self.assertClose(body.orbit.radius, norm(p), error=10)
+                    self.assertNotClose(0, pos[1])
+                #TODO: large error
+                self.assertClose(body.orbit.radius, norm(pos), error=100)
 
     def test_velocity(self):
         for body in self.conn.space_center.bodies.values():
@@ -125,7 +125,7 @@ class TestBody(testingtools.TestCase):
 
             # Check body velocity in body's reference frame
             v = body.velocity(body.reference_frame)
-            self.assertClose((0,0,0), v)
+            self.assertClose((0, 0, 0), v)
 
             # Check body velocity in parent body's non-rotating reference frame
             v = body.velocity(body.orbit.body.non_rotating_reference_frame)
@@ -137,23 +137,24 @@ class TestBody(testingtools.TestCase):
                 self.assertClose(0, v[1])
             else:
                 self.assertNotClose(0, v[1])
-            angular_velocity = body.orbit.body.angular_velocity(body.orbit.body.non_rotating_reference_frame)
+            angular_velocity = body.orbit.body.angular_velocity(
+                body.orbit.body.non_rotating_reference_frame)
             self.assertClose(0, angular_velocity[0])
             self.assertClose(0, angular_velocity[2])
-            rotational_speed = dot((0,1,0), angular_velocity)
+            rotational_speed = dot((0, 1, 0), angular_velocity)
             position = list(body.position(body.orbit.body.reference_frame))
             position[1] = 0
             radius = norm(position)
             rotational_speed *= radius
             #TODO: large error
-            self.assertClose(abs(rotational_speed + body.orbit.speed), norm(v), error=200)
+            self.assertClose(abs(rotational_speed + body.orbit.speed), norm(v), error=500)
 
     def test_rotation(self):
         for body in self.conn.space_center.bodies.values():
             # Check body's rotation relative to itself is zero
             r = body.rotation(body.reference_frame)
             #TODO: better test for identity quaternion
-            self.assertClose((0,0,0), (r[0], r[1], r[2]))
+            self.assertClose((0, 0, 0), (r[0], r[1], r[2]))
 
             #TODO: more thorough testing
 
@@ -161,12 +162,12 @@ class TestBody(testingtools.TestCase):
         for body in self.conn.space_center.bodies.values():
             # Check body's angular velocity relative to itself is zero
             av = body.angular_velocity(body.reference_frame)
-            self.assertClose((0,0,0), av)
+            self.assertClose((0, 0, 0), av)
 
             # Check body's angular velocity relative to it's own non-rotating reference frame
             av = body.angular_velocity(body.non_rotating_reference_frame)
-            self.assertClose((0,-1,0), normalize(av))
+            self.assertClose((0, -1, 0), normalize(av))
             self.assertClose(body.rotational_speed, norm(av))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

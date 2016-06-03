@@ -6,13 +6,13 @@ namespace KRPC.Client
     /// <summary>
     /// Thrown when a error occurs executing a remote procedure.
     /// </summary>
-    [Serializable ()]
+    [Serializable]
     public class RPCException : Exception
     {
         /// <summary>
         /// Construct an RPCException with no message.
         /// </summary>
-        public RPCException () : base ()
+        public RPCException ()
         {
         }
 
@@ -26,7 +26,7 @@ namespace KRPC.Client
         /// <summary>
         /// Construct an RPCException with the given message and inner exception.
         /// </summary>
-        public RPCException (string message, System.Exception inner) : base (message, inner)
+        public RPCException (string message, Exception inner) : base (message, inner)
         {
         }
 
@@ -35,6 +35,8 @@ namespace KRPC.Client
         /// </summary>
         protected RPCException (SerializationInfo info, StreamingContext context)
         {
+            if (info == null)
+                throw new ArgumentNullException ("info");
         }
     }
 }

@@ -1,7 +1,7 @@
 {% macro service(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% for member in x.members.values() %}
 {% if member.member_type == 'procedure' %}
@@ -16,7 +16,7 @@
 {% macro class(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
@@ -34,9 +34,9 @@
 {% endmacro %}
 
 {% macro procedure(x) %}{{ mark_documented(x) }}
-.. method:: {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters) }})
+.. method:: {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters) }})
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {{ parameters_description(x.parameters) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
@@ -50,9 +50,9 @@
 {% endmacro %}
 
 {% macro property(x) %}{{ mark_documented(x) }}
-.. property:: {{ x.type | return_type }} {{ x.name }} {{'{'}}{% if x.getter != None %} get;{% endif %}{% if x.setter != None %} set;{% endif %} {{'}'}}
+.. property:: {{ domain.return_type(x.type) }} {{ x.name }} {{'{'}}{% if x.getter != None %} get;{% endif %}{% if x.setter != None %} set;{% endif %} {{'}'}}
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
@@ -65,9 +65,9 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. method:: {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters[1:]) }})
+.. method:: {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters[1:]) }})
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {{ parameters_description(x.parameters[1:]) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
@@ -81,9 +81,9 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. method:: static {{ x.return_type | return_type }} {{ x.name }}({{ parameters(x.parameters) }})
+.. method:: static {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters) }})
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {{ parameters_description(x.parameters) }}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
@@ -103,13 +103,13 @@
 {% macro enumeration(x) %}{{ mark_documented(x) }}
 .. enum:: {{ x.name }}
 
-{{ x.documentation | parsedoc | indent }}
+{{ gendoc(x.documentation) | indent }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
    .. value:: {{ value.name }}
 
-{{ value.documentation | parsedoc | indent(width=6) }}
+{{ gendoc(value.documentation) | indent(width=6) }}
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent(width=6) }}{% endif %}
 {% endfor %}
@@ -121,9 +121,9 @@
 
 {% macro parameter(x) %}
 {% if not x.has_default_value -%}
-{{ x.type | parameter_type }} {{ x.name }}
+{{ domain.parameter_type(x.type) }} {{ x.name }}
 {%- else -%}
-{{ x.type | parameter_type }} {{ x.name }} = {{ x.default_value }}
+{{ domain.parameter_type(x.type) }} {{ x.name }} = {{ x.default_value }}
 {%- endif %}
 {% endmacro %}
 
@@ -132,18 +132,18 @@
    :parameters:
 
    {% for p in x %}
-   {% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %}    * **{{ p.name }}** -- {{ p.documentation | parsedoc('./param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+   {% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %}    * **{{ p.name }}** -- {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}
 
    {% endfor %}
 {% endif %}
 {% endmacro %}
 
 {% macro returns(x) %}
-:returns: {{ x | parsedoc('./returns') | singleline }}
+:returns: {{ gendoc(x, './returns') | singleline }}
 {% endmacro %}
 
 {% macro remarks(x) %}
 .. note::
 
-{{ x | parsedoc('./remarks') | indent }}
+{{ gendoc(x, './remarks') | indent }}
 {% endmacro %}

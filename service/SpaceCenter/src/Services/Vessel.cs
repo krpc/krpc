@@ -1,13 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
+using KRPC.Utils;
+using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
-using System.Collections.Generic;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -170,26 +170,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// A <see cref="Comms"/> object, that can used to interact with RemoteTech for this vessel.
-        /// </summary>
-        /// <remarks>
-        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/75245-11-remotetech-v1610-2016-04-12/">RemoteTech</a> to be installed.
-        /// </remarks>
-        [KRPCProperty]
-        public Comms Comms {
-            get {
-                if (!RemoteTech.IsAvailable)
-                    throw new InvalidOperationException ("RemoteTech is not installed");
-                return new Comms (InternalVessel);
-            }
-        }
-
-        /// <summary>
         /// The total mass of the vessel, including resources, in kg.
         /// </summary>
         [KRPCProperty]
         public float Mass {
-            get { return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.TotalMass ()); }
+            get { return InternalVessel.parts.Where (PartExtensions.IsPhysicallySignificant).Sum (PartExtensions.TotalMass); }
         }
 
         /// <summary>
@@ -197,7 +182,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float DryMass {
-            get { return InternalVessel.parts.Where (p => p.IsPhysicallySignificant ()).Sum (p => p.DryMass ()); }
+            get { return InternalVessel.parts.Where (PartExtensions.IsPhysicallySignificant).Sum (PartExtensions.TotalMass); }
         }
 
         /// <summary>
@@ -287,16 +272,17 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The moment of inertia of the vessel in <math>kg.m^2</math> around its center of mass
-        /// in vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// The moment of inertia of the vessel around its center of mass in <math>kg.m^2</math>.
+        /// The inertia values are around the pitch, roll and yaw directions respectively.
+        /// This corresponds to the vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
-            get { return InternalVessel.MOI.ToTuple (); }
+            get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
         }
 
         /// <summary>
-        /// The inertia tensor of the vessel in the vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// The inertia tensor of the vessel around its center of mass, in the vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
         /// Returns the 3x3 matrix as a list of elements, in row-major order.
         /// </summary>
         [KRPCProperty]
@@ -305,22 +291,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The maximum torque that the currently active and powered reaction wheels can generate.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
-        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
-        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
-        /// </summary>
-        [KRPCProperty]
-        public Tuple3 ReactionWheelTorque {
-            get { return ComputeReactionWheelTorque ().ToTuple (); }
-        }
-
-        /// <summary>
         /// Computes the inertia tensor of the vessel. Uses the parallel axis theorem to
         /// sum the contributions to the inertia tensor from every part in the vessel.
         /// It (ab)uses the Matrix4x4 class in order to do 3x3 matrix operations.
         /// </summary>
-        /// TODO: verify this use of the Matrix4x4 is beneficial for performance
         Matrix4x4 ComputeInertiaTensor ()
         {
             Matrix4x4 inertiaTensor = Matrix4x4.zero;
@@ -333,60 +307,124 @@ namespace KRPC.SpaceCenter.Services
                     Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
 
                     // translate:  inertiaTensor frame to part frame, part frame to world frame, world frame to vessel frame
-                    Quaternion rot = Quaternion.Inverse(vesselTransform.rotation) * part.transform.rotation * part.rb.inertiaTensorRotation;
-                    Quaternion inv = Quaternion.Inverse(rot);
+                    Quaternion rot = Quaternion.Inverse (vesselTransform.rotation) * part.transform.rotation * part.rb.inertiaTensorRotation;
+                    Quaternion inv = Quaternion.Inverse (rot);
 
-                    Matrix4x4 rotMatrix = Matrix4x4.TRS(Vector3.zero, rot, Vector3.one);
-                    Matrix4x4 invMatrix = Matrix4x4.TRS(Vector3.zero, inv, Vector3.one);
+                    Matrix4x4 rotMatrix = Matrix4x4.TRS (Vector3.zero, rot, Vector3.one);
+                    Matrix4x4 invMatrix = Matrix4x4.TRS (Vector3.zero, inv, Vector3.one);
 
                     // add the part inertiaTensor to the ship inertiaTensor
-                    inertiaTensor = inertiaTensor.Add(rotMatrix * partTensor * invMatrix);
+                    inertiaTensor = inertiaTensor.Add (rotMatrix * partTensor * invMatrix);
 
-                    Vector3 position = vesselTransform.InverseTransformDirection(part.rb.position - CoM);
+                    Vector3 position = vesselTransform.InverseTransformDirection (part.rb.position - CoM);
 
                     // add the part mass to the ship inertiaTensor
-                    inertiaTensor = inertiaTensor.Add((part.rb.mass * position.sqrMagnitude).ToDiagonalMatrix ());
+                    inertiaTensor = inertiaTensor.Add ((part.rb.mass * position.sqrMagnitude).ToDiagonalMatrix ());
 
                     // add the part distance offset to the ship inertiaTensor
-                    inertiaTensor = inertiaTensor.Add(position.OuterProduct(-part.rb.mass * position));
+                    inertiaTensor = inertiaTensor.Add (position.OuterProduct (-part.rb.mass * position));
                 }
             }
             return inertiaTensor.MultiplyScalar (1000f);
         }
 
         /// <summary>
-        /// Computes the total torque available from reaction wheels, in the pitch, roll and yaw axes.
+        /// The maximum torque that the vessel generate. Includes contributions from reaction wheels,
+        /// RCS, gimballed engines and aerodynamic control surfaces.
+        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
-        Vector3d ComputeReactionWheelTorque ()
-        {
-            Vector3d reactionWheelTorque = Vector3d.zero;
-            foreach (var rw in Parts.ReactionWheels.Where (e => e.Active && !e.Broken))
-                reactionWheelTorque += rw.TorqueVector ();
-            return reactionWheelTorque;
+        [KRPCProperty]
+        public Tuple3 AvailableTorque {
+            get {
+                return (
+                    AvailableReactionWheelTorqueVector +
+                    AvailableRCSTorqueVector +
+                    AvailableEngineTorqueVector +
+                    AvailableControlSurfaceTorqueVector
+                ).ToTuple ();
+            }
         }
 
         /// <summary>
-        /// Computes the total torque available from RCS thrusters, in the pitch, roll and yaw axes.
+        /// The maximum torque that the currently active and powered reaction wheels can generate.
+        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
-        Vector3d ComputeRCSTorque ()
-        {
-            throw new NotImplementedException ();
+        [KRPCProperty]
+        public Tuple3 AvailableReactionWheelTorque {
+            get { return AvailableReactionWheelTorqueVector.ToTuple (); }
         }
 
         /// <summary>
-        /// Computes the total torque available from gimballed engines, in the pitch, roll and yaw axes.
+        /// The maximum torque that the currently active RCS thrusters can generate.
+        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
-        Vector3d ComputeEngineTorque ()
-        {
-            throw new NotImplementedException ();
+        [KRPCProperty]
+        public Tuple3 AvailableRCSTorque {
+            get { return AvailableRCSTorqueVector.ToTuple (); }
         }
 
         /// <summary>
-        /// Computes the total torque available from aerodynamic control surfaces, in the pitch, roll and yaw axes.
+        /// The maximum torque that the currently active and gimballed engines can generate.
+        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
-        Vector3d ComputeControlSurfaceTorque ()
-        {
-            throw new NotImplementedException ();
+        [KRPCProperty]
+        public Tuple3 AvailableEngineTorque {
+            get { return AvailableEngineTorqueVector.ToTuple (); }
+        }
+
+        /// <summary>
+        /// The maximum torque that the aerodynamic control surfaces can generate.
+        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 AvailableControlSurfaceTorque {
+            get { return AvailableControlSurfaceTorqueVector.ToTuple (); }
+        }
+
+        Vector3d AvailableReactionWheelTorqueVector {
+            get {
+                Vector3d torque = Vector3d.zero;
+                foreach (var rw in Parts.ReactionWheels)
+                    torque += rw.AvailableTorqueVector;
+                return torque;
+            }
+        }
+
+        Vector3d AvailableRCSTorqueVector {
+            get {
+                Vector3d torque = Vector3d.zero;
+                foreach (var rw in Parts.RCS)
+                    torque += rw.AvailableTorqueVector;
+                return torque;
+            }
+        }
+
+        Vector3d AvailableEngineTorqueVector {
+            get {
+                Vector3d torque = Vector3d.zero;
+                foreach (var rw in Parts.Engines)
+                    torque += rw.AvailableTorqueVector;
+                return torque;
+            }
+        }
+
+        Vector3d AvailableControlSurfaceTorqueVector {
+            get {
+                Vector3d torque = Vector3d.zero;
+                foreach (var rw in Parts.ControlSurfaces)
+                    torque += rw.AvailableTorqueVector;
+                return torque;
+            }
         }
 
         /// <summary>

@@ -4,47 +4,47 @@ namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class VesselTypeExtensions
     {
-        public static KRPC.SpaceCenter.Services.VesselType ToVesselType (this global::VesselType type)
+        public static KRPC.SpaceCenter.Services.VesselType ToVesselType (this VesselType type)
         {
             switch (type) {
-            case global::VesselType.Ship:
+            case VesselType.Ship:
                 return KRPC.SpaceCenter.Services.VesselType.Ship;
-            case global::VesselType.Station:
+            case VesselType.Station:
                 return KRPC.SpaceCenter.Services.VesselType.Station;
-            case global::VesselType.Lander:
+            case VesselType.Lander:
                 return KRPC.SpaceCenter.Services.VesselType.Lander;
-            case global::VesselType.Probe:
+            case VesselType.Probe:
                 return KRPC.SpaceCenter.Services.VesselType.Probe;
-            case global::VesselType.Rover:
+            case VesselType.Rover:
                 return KRPC.SpaceCenter.Services.VesselType.Rover;
-            case global::VesselType.Base:
+            case VesselType.Base:
                 return KRPC.SpaceCenter.Services.VesselType.Base;
-            case global::VesselType.Debris:
+            case VesselType.Debris:
                 return KRPC.SpaceCenter.Services.VesselType.Debris;
             default:
-                throw new ArgumentException ("Unsupported vessel type");
+                throw new ArgumentOutOfRangeException ("type");
             }
         }
 
-        public static global::VesselType FromVesselType (this KRPC.SpaceCenter.Services.VesselType type)
+        public static VesselType FromVesselType (this KRPC.SpaceCenter.Services.VesselType type)
         {
             switch (type) {
             case KRPC.SpaceCenter.Services.VesselType.Ship:
-                return global::VesselType.Ship;
+                return VesselType.Ship;
             case KRPC.SpaceCenter.Services.VesselType.Station:
-                return global::VesselType.Station;
+                return VesselType.Station;
             case KRPC.SpaceCenter.Services.VesselType.Lander:
-                return global::VesselType.Lander;
+                return VesselType.Lander;
             case KRPC.SpaceCenter.Services.VesselType.Probe:
-                return global::VesselType.Probe;
+                return VesselType.Probe;
             case KRPC.SpaceCenter.Services.VesselType.Rover:
-                return global::VesselType.Rover;
+                return VesselType.Rover;
             case KRPC.SpaceCenter.Services.VesselType.Base:
-                return global::VesselType.Base;
+                return VesselType.Base;
             case KRPC.SpaceCenter.Services.VesselType.Debris:
-                return global::VesselType.Debris;
+                return VesselType.Debris;
             default:
-                throw new ArgumentException ("Unsupported vessel type");
+                throw new ArgumentOutOfRangeException ("type");
             }
         }
     }

@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Linq;
-using System.Collections.Generic;
 using KRPC.Utils;
 
 namespace KRPC.Server.TCP
@@ -138,40 +138,45 @@ namespace KRPC.Server.TCP
         public void Update ()
         {
             // Remove disconnected clients
-            foreach (var client in clients.Where (x => !x.Connected).ToList ()) {
-                clients.Remove (client);
-                DisconnectClient (client);
+            for (int i = clients.Count - 1; i >= 0; i--) {
+                var client = clients [i];
+                if (!client.Connected) {
+                    clients.RemoveAt (i);
+                    DisconnectClient (client);
+                }
             }
 
             // Process pending clients
             lock (pendingClientsLock) {
-                var stillPendingClients = new List<TCPClient> ();
-                foreach (var client in pendingClients) {
-                    // Trigger OnClientRequestingConnection events to verify the connection
-                    var args = new ClientRequestingConnectionArgs<byte,byte> (client);
-                    if (OnClientRequestingConnection != null)
-                        OnClientRequestingConnection (this, args);
+                if (pendingClients.Count > 0) {
+                    var stillPendingClients = new List<TCPClient> ();
+                    foreach (var client in pendingClients) {
+                        // Trigger OnClientRequestingConnection events to verify the connection
+                        var args = new ClientRequestingConnectionArgs<byte,byte> (client);
+                        if (OnClientRequestingConnection != null)
+                            OnClientRequestingConnection (this, args);
 
-                    // Deny the connection
-                    if (args.Request.ShouldDeny) {
-                        Logger.WriteLine ("TCPServer(" + name + "): client connection denied (" + client.Address + ")", Logger.Severity.Warning);
-                        DisconnectClient (client, true);
-                    }
+                        // Deny the connection
+                        if (args.Request.ShouldDeny) {
+                            Logger.WriteLine ("TCPServer(" + name + "): client connection denied (" + client.Address + ")", Logger.Severity.Warning);
+                            DisconnectClient (client, true);
+                        }
 
-                    // Allow the connection
-                    if (args.Request.ShouldAllow) {
-                        Logger.WriteLine ("TCPServer(" + name + "): client connection accepted (" + client.Address + ")");
-                        clients.Add (client);
-                        if (OnClientConnected != null)
-                            OnClientConnected (this, new ClientConnectedArgs<byte,byte> (client));
-                    }
+                        // Allow the connection
+                        if (args.Request.ShouldAllow) {
+                            Logger.WriteLine ("TCPServer(" + name + "): client connection accepted (" + client.Address + ")");
+                            clients.Add (client);
+                            if (OnClientConnected != null)
+                                OnClientConnected (this, new ClientConnectedArgs<byte,byte> (client));
+                        }
 
-                    // Still pending, will either be denied or allowed on a subsequent called to Update
-                    if (args.Request.StillPending) {
-                        stillPendingClients.Add (client);
+                        // Still pending, will either be denied or allowed on a subsequent called to Update
+                        if (args.Request.StillPending) {
+                            stillPendingClients.Add (client);
+                        }
                     }
+                    pendingClients = stillPendingClients;
                 }
-                pendingClients = stillPendingClients;
             }
         }
 
@@ -191,11 +196,21 @@ namespace KRPC.Server.TCP
         }
 
         public ulong BytesRead {
-            get { return closedClientsBytesRead + clients.Select (c => c.Stream.BytesRead).SumUnsignedLong (); }
+            get {
+                ulong read = closedClientsBytesRead;
+                for (int i = 0; i < clients.Count; i++)
+                    read += clients [i].Stream.BytesRead;
+                return read;
+            }
         }
 
         public ulong BytesWritten {
-            get { return closedClientsBytesWritten + clients.Select (c => c.Stream.BytesWritten).SumUnsignedLong (); }
+            get {
+                ulong written = closedClientsBytesWritten;
+                for (int i = 0; i < clients.Count; i++)
+                    written += clients [i].Stream.BytesWritten;
+                return written;
+            }
         }
 
         public void ClearStats ()

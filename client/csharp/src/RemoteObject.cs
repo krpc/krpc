@@ -14,7 +14,7 @@ namespace KRPC.Client
         internal RemoteObject (IConnection connection, UInt64 id = 0)
         {
             this.connection = connection;
-            this._ID = id;
+            _ID = id;
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace KRPC.Client
         /// </summary>
         public bool Equals (RemoteObject other)
         {
-            return this._ID == other._ID;
+            return _ID == other._ID;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace KRPC.Client
         /// </summary>
         public override int GetHashCode ()
         {
-            return this._ID.GetHashCode ();
+            return _ID.GetHashCode ();
         }
 
         /// <summary>

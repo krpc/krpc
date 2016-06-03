@@ -1,3 +1,13 @@
+v0.3.4
+ * Update protobuf to v3.0.0-beta-3 (#270)
+ * Move settings.cfg to PluginData directory to avoid trashing module managers cache
+ * Fix stack trace output when verbose errors is enabled
+ * Performance improvements and reduced memory allocation pressure in main server loop
+ * Renamed Parameter.default_argument to default_value in protobuf definitions
+
+v0.3.3
+ * Fix popup dialogs not displaying (#266)
+
 v0.3.2
  * Fix KRPC.CurrentGameScene (#262)
 

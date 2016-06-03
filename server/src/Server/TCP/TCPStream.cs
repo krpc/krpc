@@ -61,9 +61,13 @@ namespace KRPC.Server.TCP
 
         public void Write (byte[] buffer)
         {
-            var size = buffer.Length;
+            Write (buffer, 0, buffer.Length);
+        }
+
+        public void Write (byte[] buffer, int offset, int size)
+        {
             try {
-                stream.Write (buffer, 0, size);
+                stream.Write (buffer, offset, size);
                 BytesWritten += (ulong)size;
             } catch (IOException e) {
                 throw new ServerException (e.Message);

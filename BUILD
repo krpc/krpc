@@ -1,7 +1,5 @@
 load('/tools/build/pkg', 'pkg_zip')
-load('/config', 'version')
-load('/config', 'avc_version')
-load('/config', 'ksp_avc_version')
+load('/config', 'version', 'python_version', 'avc_version', 'ksp_avc_version')
 
 exports_files(['COPYING', 'COPYING.LESSER'])
 
@@ -53,9 +51,22 @@ genrule(
 )
 
 genrule(
+    name = 'blank_settings',
+    outs = ['GameData/kRPC/PluginData/settings.cfg'],
+    cmd = 'echo "" > "$@"'
+)
+
+genrule(
     name = 'version',
     outs = ['VERSION.txt'],
     cmd = 'echo "%s" > "$@"' % version,
+    visibility = ['//visibility:public']
+)
+
+genrule(
+    name = 'python_version',
+    outs = ['version.py'],
+    cmd = 'echo "__version__ = \'%s\'" > "$@"' % python_version,
     visibility = ['//visibility:public']
 )
 
@@ -85,11 +96,16 @@ pkg_zip(
         'COPYING.LESSER',
         # Server
         '//server',
-        '//service/SpaceCenter',
-        '//service/InfernalRobotics',
-        '//service/KerbalAlarmClock',
+        ':blank_settings',
         '//tools/build/ksp:Google.Protobuf',
         '//tools/build/protobuf:LICENSE',
+        # Services
+        '//service/SpaceCenter',
+        '//service/Drawing',
+        '//service/InfernalRobotics',
+        '//service/KerbalAlarmClock',
+        '//service/RemoteTech',
+        '//service/UI',
         # Clients
         '//client/python',
         '//client/cpp',
@@ -112,15 +128,22 @@ pkg_zip(
         # Server
         'server/': 'GameData/kRPC/',
         'server/src/icons': 'GameData/kRPC/icons',
-        'service/SpaceCenter/CHANGES.txt': 'GameData/kRPC/CHANGES.SpaceCenter.txt',
-        'service/InfernalRobotics/CHANGES.txt': 'GameData/kRPC/CHANGES.InfernalRobotics.txt',
-        'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
-        'service/SpaceCenter/': 'GameData/kRPC/',
-        'service/InfernalRobotics/': 'GameData/kRPC/',
-        'service/KerbalAlarmClock/': 'GameData/kRPC/',
         'tools/build/ksp/': 'GameData/kRPC/',
         'tools/build/protobuf/LICENSE': 'LICENSE.Google.Protobuf',
+        # Services
+        'service/SpaceCenter/': 'GameData/kRPC/',
+        'service/SpaceCenter/CHANGES.txt': 'GameData/kRPC/CHANGES.SpaceCenter.txt',
         'service/SpaceCenter/LICENSE': 'LICENSE.KRPC.SpaceCenter',
+        'service/Drawing/': 'GameData/kRPC/',
+        'service/Drawing/CHANGES.txt': 'GameData/kRPC/CHANGES.Drawing.txt',
+        'service/InfernalRobotics/': 'GameData/kRPC/',
+        'service/InfernalRobotics/CHANGES.txt': 'GameData/kRPC/CHANGES.InfernalRobotics.txt',
+        'service/KerbalAlarmClock/': 'GameData/kRPC/',
+        'service/KerbalAlarmClock/CHANGES.txt': 'GameData/kRPC/CHANGES.KerbalAlarmClock.txt',
+        'service/RemoteTech/': 'GameData/kRPC/',
+        'service/RemoteTech/CHANGES.txt': 'GameData/kRPC/CHANGES.RemoteTech.txt',
+        'service/UI/': 'GameData/kRPC/',
+        'service/UI/CHANGES.txt': 'GameData/kRPC/CHANGES.UI.txt',
         # Clients
         'client/csharp/': 'client/',
         'client/cpp/': 'client/',
@@ -138,12 +161,19 @@ test_suite(
     name = 'test',
     tests = [
         '//server:test',
-        '//doc:test',
+        '//service/SpaceCenter:test',
+        '//service/Drawing:test',
+        '//service/InfernalRobotics:test',
+        '//service/RemoteTech:test',
+        '//service/UI:test',
         '//client/csharp:test',
         '//client/cpp:test',
         '//client/java:test',
         '//client/lua:test',
-        '//client/python:test'
+        '//client/python:test',
+        '//tools/krpctest:test',
+        '//tools/krpctools:test',
+        '//doc:test'
     ]
 )
 
@@ -153,8 +183,11 @@ filegroup(
         '//server',
         '//server:test',
         '//service/SpaceCenter',
+        '//service/Drawing',
         '//service/InfernalRobotics',
         '//service/KerbalAlarmClock',
+        '//service/RemoteTech',
+        '//service/UI',
         '//client/csharp',
         '//client/csharp:test',
         '//tools/ServiceDefinitions',

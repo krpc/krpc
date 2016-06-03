@@ -13,6 +13,7 @@ class AppendExtension(jinja2.ext.Extension):
         body = parser.parse_statements(['name:endappend'], drop_needle=True)
         return jinja2.nodes.CallBlock(self.call_method('_append_support', args), [], [], body).set_lineno(lineno)
 
-    def _append_support(self, obj, caller):
+    @staticmethod
+    def _append_support(obj, caller):
         obj.append(caller())
         return ''

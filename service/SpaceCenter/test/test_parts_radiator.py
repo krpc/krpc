@@ -1,75 +1,62 @@
 import unittest
-import testingtools
-import krpc
-import time
+import krpctest
 
-class TestPartsRadiator(testingtools.TestCase):
+class TestPartsRadiator(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        testingtools.new_save()
-        testingtools.launch_vessel_from_vab('PartsRadiator')
-        testingtools.remove_other_vessels()
-        cls.conn = testingtools.connect(name='TestPartsRadiator')
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.parts = cls.vessel.parts
-        cls.state = cls.conn.space_center.RadiatorState
+        krpctest.new_save()
+        krpctest.launch_vessel_from_vab('PartsRadiator')
+        krpctest.remove_other_vessels()
+        cls.conn = krpctest.connect(cls)
+        vessel = cls.conn.space_center.active_vessel
+        cls.control = vessel.control
+        cls.State = cls.conn.space_center.RadiatorState
+        cls.radiator = vessel.parts.with_title('Thermal Control System (medium)')[0].radiator
+        cls.radiator_break = vessel.parts.with_title('Thermal Control System (small)')[0].radiator
+        cls.fixed_radiator = vessel.parts.with_title('Radiator Panel (small)')[0].radiator
 
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
 
     def test_fixed_radiator(self):
-        radiator = next(iter(filter(lambda e: e.part.title == 'Radiator Panel (small)', self.parts.radiators)))
-        self.assertFalse(radiator.deployable)
-        self.assertTrue(radiator.deployed)
-        self.assertEqual(radiator.state, self.state.extended)
+        self.assertFalse(self.fixed_radiator.deployable)
+        self.assertTrue(self.fixed_radiator.deployed)
+        self.assertEqual(self.State.extended, self.fixed_radiator.state)
 
     def test_extendable_radiator(self):
-        radiator = next(iter(filter(lambda e: e.part.title == 'Thermal Control System (medium)', self.parts.radiators)))
-        self.assertTrue(radiator.deployable)
-        self.assertFalse(radiator.deployed)
-        self.assertEqual(radiator.state, self.state.retracted)
-
-        radiator.deployed = True
-        time.sleep(0.1)
-
-        self.assertTrue(radiator.deployed)
-        self.assertEqual(radiator.state, self.state.extending)
-
-        while radiator.state == self.state.extending:
+        self.assertTrue(self.radiator.deployable)
+        self.assertFalse(self.radiator.deployed)
+        self.assertEqual(self.State.retracted, self.radiator.state)
+        self.radiator.deployed = True
+        while not self.radiator.deployed:
             pass
-        time.sleep(0.1)
-
-        self.assertTrue(radiator.deployed)
-        self.assertEqual(radiator.state, self.state.extended)
-
-        radiator.deployed = False
-        time.sleep(0.1)
-
-        self.assertFalse(radiator.deployed)
-        self.assertEqual(radiator.state, self.state.retracting)
-
-        while radiator.state == self.state.retracting:
+        self.assertTrue(self.radiator.deployed)
+        self.assertEqual(self.State.extending, self.radiator.state)
+        while self.radiator.state == self.State.extending:
             pass
-        time.sleep(0.1)
-
-        self.assertFalse(radiator.deployed)
-        self.assertEqual(radiator.state, self.state.retracted)
+        self.assertTrue(self.radiator.deployed)
+        self.assertEqual(self.State.extended, self.radiator.state)
+        self.radiator.deployed = False
+        while self.radiator.deployed:
+            pass
+        self.assertFalse(self.radiator.deployed)
+        self.assertEqual(self.State.retracting, self.radiator.state)
+        while self.radiator.state == self.State.retracting:
+            pass
+        self.assertFalse(self.radiator.deployed)
+        self.assertEqual(self.State.retracted, self.radiator.state)
 
     def test_break_radiator(self):
-        radiator = next(iter(filter(lambda e: e.part.title == 'Thermal Control System (small)', self.parts.radiators)))
-
-        self.assertEqual(radiator.state, self.state.retracted)
-        radiator.deployed = True
-        while radiator.state == self.state.extending:
+        self.assertEqual(self.State.retracted, self.radiator.state)
+        self.radiator.deployed = True
+        while self.radiator.state == self.State.extending:
             pass
-        time.sleep(0.1)
+        self.control.activate_next_stage()
+        while self.radiator.state != self.State.broken:
+            pass
+        self.assertEqual(self.State.broken, self.radiator.state)
 
-        self.vessel.control.activate_next_stage()
-        time.sleep(1)
-
-        self.assertEqual(radiator.state, self.state.broken)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

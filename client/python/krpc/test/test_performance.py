@@ -16,14 +16,14 @@ class TestPerformance(ServerTestCase, unittest.TestCase):
         super(TestPerformance, self).setUp()
 
     def test_performance(self):
-        n = 100
+        samples = 100
         def wrapper():
             self.conn.test_service.float_to_string(float(3.14159))
-        t = timeit.timeit(stmt=wrapper, number=n)
+        delta_t = timeit.timeit(stmt=wrapper, number=samples)
         print
-        print 'Total execution time: %.2f seconds' % t
-        print 'RPC execution rate: %d per second' % (n/t)
-        print 'Latency: %.3f milliseconds' % ((t*1000)/n)
+        print 'Total execution time: %.2f seconds' % delta_t
+        print 'RPC execution rate: %d per second' % (samples/delta_t)
+        print 'Latency: %.3f milliseconds' % ((delta_t*1000)/samples)
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,9 +4,9 @@ using System.Linq;
 using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Utils;
+using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
@@ -212,13 +212,13 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Sets the gains for the rotation rate PID controller.
         /// </summary>
-        /// <param name="Kp">Proportional gain.</param>
-        /// <param name="Ki">Integral gain.</param>
-        /// <param name="Kd">Derivative gain.</param>
+        /// <param name="kp">Proportional gain.</param>
+        /// <param name="ki">Integral gain.</param>
+        /// <param name="kd">Derivative gain.</param>
         [KRPCMethod]
-        public void SetPIDParameters (float Kp = 1, float Ki = 0, float Kd = 0)
+        public void SetPIDParameters (float kp = 1, float ki = 0, float kd = 0)
         {
-            rotationRateController.pid.SetParameters (Kp, Ki, Kd);
+            rotationRateController.PID.SetParameters (kp, ki, kd);
         }
 
         /// <summary>

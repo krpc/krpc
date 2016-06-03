@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using KRPC.SpaceCenter.Services;
+using UnityEngine;
 
 namespace KRPC.SpaceCenter
 {
@@ -14,7 +13,7 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// The transfers currently in progress.
         /// </summary>
-        static List<ResourceTransfer> transfers = new List<ResourceTransfer> ();
+        static readonly List<ResourceTransfer> transfers = new List<ResourceTransfer> ();
 
         /// <summary>
         /// Destroy the addon

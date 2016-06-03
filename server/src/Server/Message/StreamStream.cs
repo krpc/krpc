@@ -41,6 +41,11 @@ namespace KRPC.Server.Message
             throw new NotImplementedException ();
         }
 
+        public void Write (StreamMessage[] value, int offset, int size)
+        {
+            throw new NotImplementedException ();
+        }
+
         public ulong BytesRead {
             get { return Stream.BytesRead; }
         }

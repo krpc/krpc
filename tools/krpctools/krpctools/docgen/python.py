@@ -1,5 +1,6 @@
 from .domain import Domain
-from .nodes import *
+from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
+from .nodes import Enumeration, EnumerationValue
 from krpc.utils import snake_case
 from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
@@ -54,7 +55,8 @@ class PythonDomain(Domain):
         elif isinstance(typ, ListType):
             return 'list of %s' % self.type_description(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'dict from %s to %s' % (self.type_description(typ.key_type), self.type_description(typ.value_type))
+            return 'dict from %s to %s' % (self.type_description(typ.key_type),
+                                           self.type_description(typ.value_type))
         elif isinstance(typ, SetType):
             return 'set of %s' % self.type_description(typ.value_type)
         elif isinstance(typ, TupleType):
@@ -64,20 +66,19 @@ class PythonDomain(Domain):
 
     def ref(self, obj):
         name = obj.fullname
-        if isinstance(obj, Procedure) or isinstance(obj, Property) or \
-           isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod) or isinstance(obj, ClassProperty) or \
-           isinstance(obj, EnumerationValue):
+        if any(isinstance(obj, cls) for cls in
+               (Procedure, Property, ClassMethod, ClassStaticMethod, ClassProperty, EnumerationValue)):
             name = name.split('.')
             name[-1] = snake_case(name[-1])
             name = '.'.join(name)
         return self.shorten_ref(name)
 
     def see(self, obj):
-        if isinstance(obj, Property) or isinstance(obj, ClassProperty) or isinstance(obj, EnumerationValue):
+        if any(isinstance(obj, cls) for cls in (Property, ClassProperty, EnumerationValue)):
             prefix = 'attr'
-        elif isinstance(obj, Procedure) or isinstance(obj, ClassMethod) or isinstance(obj, ClassStaticMethod):
+        elif any(isinstance(obj, cls) for cls in (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = 'meth'
-        elif isinstance(obj, Class) or isinstance(obj, Enumeration):
+        elif any(isinstance(obj, cls) for cls in (Class, Enumeration)):
             prefix = 'class'
         else:
             raise RuntimeError(str(obj))

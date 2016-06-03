@@ -94,7 +94,7 @@ def _script_impl(ctx):
     )
 
     env = ctx.attr.script+'.py_script-env'
-    sub_commands = _extract_py_env('$0.runfiles/%s' % script_env.short_path, env)
+    sub_commands = _extract_py_env('$0.runfiles/krpc/%s' % script_env.short_path, env)
     sub_commands.append('%s/bin/python %s/bin/%s "$@"' % (env, env, ctx.attr.script))
     ctx.file_action(
         output = script_run,
@@ -121,7 +121,7 @@ py_script = rule(
 def _test_impl(ctx, pyexe='python2'):
     sub_commands = ['virtualenv env --quiet --no-site-packages --python=%s' % pyexe]
     for dep in ctx.files.deps:
-        sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.path)
+        sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
     sub_commands.extend([
         'unzip -o %s' % (ctx.file.src.short_path), #TODO: install the package then run the tests??
         '(cd %s ; ../env/bin/python setup.py test)' % ctx.attr.pkg
@@ -159,6 +159,59 @@ py3_test = rule(
         'src': attr.label(allow_files=True, single_file=True),
         'pkg': attr.string(mandatory=True),
         'deps': attr.label_list(allow_files=True)
+    },
+    test = True
+)
+
+def _lint_impl(ctx):
+    files = []
+    deps = ctx.files._pylint + ctx.files.deps
+    if ctx.attr.src:
+        # Run pylint on a python package
+        args = [ctx.attr.pkg]
+        deps.append(ctx.file.src)
+    else:
+        # Run pylint on a list of file paths
+        args = []
+        for x in ctx.files.srcs:
+            args.append(x.short_path)
+        files.extend(ctx.files.srcs)
+
+    sub_commands = ['virtualenv env --quiet --no-site-packages']
+    for dep in deps:
+        sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
+    args = ' '.join(args)
+    sub_commands.append('env/bin/python env/bin/pylint --rcfile=%s %s' % (ctx.file.rcfile.short_path, args))
+
+    ctx.file_action(
+        output = ctx.outputs.executable,
+        content = '&& \\\n'.join(sub_commands)+'\n',
+        executable = True
+    )
+
+    runfiles = ctx.runfiles(files = files + deps + [ctx.file.rcfile])
+
+    return struct(
+        name = ctx.label.name,
+        out = ctx.outputs.executable,
+        runfiles = runfiles
+    )
+
+py_lint_test = rule(
+    implementation = _lint_impl,
+    attrs = {
+        'src': attr.label(allow_files=True, single_file=True),
+        'pkg': attr.string(),
+        'srcs': attr.label_list(allow_files=True),
+        'deps': attr.label_list(allow_files=True),
+        'rcfile': attr.label(allow_files=True, single_file=True),
+        '_pylint': attr.label_list(default=[
+            Label('@python_six//file'),
+            Label('@python_pylint//file'),
+            Label('@python_astroid//file'),
+            Label('@python_wrapt//file'),
+            Label('@python_lazy_object_proxy//file')
+        ], allow_files=True)
     },
     test = True
 )

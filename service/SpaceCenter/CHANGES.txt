@@ -1,3 +1,14 @@
+v0.3.4
+ * Move drawing functionality into new Drawing service (#253)
+ * Add Light.Color
+ * Add RPCs for setting PartModule fields: Module.ResetField, SetFieldInt, SetFieldFloat and SetFieldString
+
+v0.3.3
+ * Add AvailableTorque properties to vessels, reaction wheels, RCS, engines and control surfaces
+ * Rename ReactionWheel.Torque to ReactionWheel.MaxTorque
+ * Fix Vessel.MomentOfInertia - use custom inertia tensor calculations to avoid issues with KSPs Vessel.MoI and Vessel.findLocalMoI
+ * Move RemoteTech functionality to separate RemoteTech service
+
 v0.3.2
  * Fix Control.SpeedMode (#258)
 
