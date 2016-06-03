@@ -1,11 +1,8 @@
 #!/bin/bash
 set -ev
 VERSION=`tools/ksp-version.sh`
-KEY_VAR="KEY_KSP_${VERSION//./_}"
-KEY=${!KEY_VAR}
 mkdir -p lib/ksp
-wget -O lib/ksp/ksp-$VERSION.tar.gpg https://s3.amazonaws.com/krpc/lib/ksp-$VERSION.tar.gpg
-gpg --version
-(cd lib/ksp; echo $KEY | gpg -d --batch --no-tty --yes --passphrase-fd=0 ksp-$VERSION.tar.gpg > ksp-$VERSION.tar)
-(cd lib/ksp; tar -xf ksp-$VERSION.tar)
-rm lib/ksp/ksp-$VERSION.tar.gpg lib/ksp/ksp-$VERSION.tar
+wget -O lib/ksp/ksp-$VERSION.tar.gz https://s3.amazonaws.com/krpc/lib/ksp-$VERSION.tar.gz
+(cd lib/ksp; tar -xf ksp-$VERSION.tar.gz)
+rm lib/ksp/ksp-$VERSION.tar.gz
+cp lib/mono-4.5/mscorlib.dll lib/mono-4.5/System.Core.dll lib/mono-4.5/System.dll lib/mono-4.5/System.Xml.dll lib/mono-4.5/System.Xml.Linq.dll lib/ksp/KSP_Data/Managed
