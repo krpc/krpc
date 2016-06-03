@@ -1,3 +1,7 @@
+v0.3.5
+ * Rename Engine.Propellants to Engine.PropellantNames
+ * Add Propellant class, obtained using Engine.Propellants property
+
 v0.3.4
  * Move drawing functionality into new Drawing service (#253)
  * Add Light.Color
