@@ -21,8 +21,12 @@ class TestServoGroup(krpctest.TestCase):
         group2 = self.ir.servo_group_with_name(self.vessel, 'Group2')
         self.assertEqual('Group1', group1.name)
         self.assertEqual(['Hinge', 'Rail', 'Rotatron'], sorted(x.name for x in group1.servos))
+        self.assertEqual(['Adjustable Rail', 'IR Rotatron', 'Powered Hinge'], sorted(x.title for x in group1.parts))
         self.assertEqual('Group2', group2.name)
         self.assertEqual(['DockingFree', 'DockingRotatron'], sorted(x.name for x in group2.servos))
+        self.assertEqual(
+            ['Docking Washer Standard', 'Docking Washer Standard (Free Moving)'],
+            sorted(x.title for x in group2.parts))
 
     def test_servo_with_name(self):
         group = self.ir.servo_group_with_name(self.vessel, 'Group1')
