@@ -102,6 +102,14 @@ namespace KRPC.InfernalRobotics.Services
         }
 
         /// <summary>
+        /// The parts containing the servos in the group.
+        /// </summary>
+        [KRPCProperty]
+        public IList<KRPC.SpaceCenter.Services.Parts.Part> Parts {
+            get { return controlGroup.Servos.Select (x => new KRPC.SpaceCenter.Services.Parts.Part (x.HostPart)).ToList (); }
+        }
+
+        /// <summary>
         /// Moves all of the servos in the group to the right.
         /// </summary>
         [KRPCMethod]

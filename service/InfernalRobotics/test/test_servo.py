@@ -11,14 +11,16 @@ class TestServo(krpctest.TestCase):
         krpctest.remove_other_vessels()
         cls.conn = krpctest.connect(cls)
         cls.ir = cls.conn.infernal_robotics
+        cls.vessel = cls.conn.space_center.active_vessel
 
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
 
     def test_rotatron(self):
-        servo = self.ir.servo_with_name('Rotatron')
+        servo = self.ir.servo_with_name(self.vessel, 'Rotatron')
         self.assertEqual('Rotatron', servo.name)
+        self.assertEqual('IR Rotatron', servo.part.title)
         self.assertEqual(0, servo.position)
         self.assertEqual(-360, servo.min_config_position)
         self.assertEqual(360, servo.max_config_position)
@@ -34,8 +36,9 @@ class TestServo(krpctest.TestCase):
         self.assertFalse(servo.is_axis_inverted)
 
     def test_rail(self):
-        servo = self.ir.servo_with_name('Rail')
+        servo = self.ir.servo_with_name(self.vessel, 'Rail')
         self.assertEqual('Rail', servo.name)
+        self.assertEqual('Adjustable Rail', servo.part.title)
         self.assertEqual(0, servo.position)
         self.assertEqual(0, servo.min_config_position)
         self.assertEqual(2, servo.max_config_position)
@@ -51,7 +54,7 @@ class TestServo(krpctest.TestCase):
         self.assertFalse(servo.is_axis_inverted)
 
     def test_move(self):
-        servo = self.ir.servo_with_name('Rail')
+        servo = self.ir.servo_with_name(self.vessel, 'Rail')
         self.assertFalse(servo.is_moving)
         servo.move_right()
         time.sleep(0.1)
@@ -65,7 +68,7 @@ class TestServo(krpctest.TestCase):
         self.assertFalse(servo.is_moving)
 
     def test_stop(self):
-        servo = self.ir.servo_with_name('Rail')
+        servo = self.ir.servo_with_name(self.vessel, 'Rail')
         self.assertFalse(servo.is_moving)
         servo.move_right()
         time.sleep(0.1)

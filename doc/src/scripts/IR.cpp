@@ -1,4 +1,5 @@
 #include <krpc.hpp>
+#include <krpc/services/space_center.hpp>
 #include <krpc/services/infernal_robotics.hpp>
 #include <iostream>
 #include <vector>
@@ -7,9 +8,10 @@ using namespace krpc::services;
 
 int main() {
   auto conn = krpc::connect("InfernalRobotics Example");
+  SpaceCenter space_center(&conn);
   InfernalRobotics infernal_robotics(&conn);
 
-  InfernalRobotics::ServoGroup group = infernal_robotics.servo_group_with_name("MyGroup");
+  InfernalRobotics::ServoGroup group = infernal_robotics.servo_group_with_name(space_center.active_vessel(), "MyGroup");
   if (group == InfernalRobotics::ServoGroup())
     std::cout << "Group not found" << std::endl;
 

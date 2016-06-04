@@ -1,7 +1,8 @@
 import krpc, time
 conn = krpc.connect(name='InfernalRobotics Example')
+vessel = conn.space_center.active_vessel
 
-group = conn.infernal_robotics.servo_group_with_name('MyGroup')
+group = conn.infernal_robotics.servo_group_with_name(vessel, 'MyGroup')
 if group is None:
     print('Group not found')
     exit(1)
