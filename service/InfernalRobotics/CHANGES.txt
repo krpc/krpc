@@ -1,5 +1,6 @@
 v0.3.4
  * Add vessel parameter to ServoGroups, Servos and ServoWithName (#282)
+ * Add Servo.Part
 
 v0.3.3
  * Rename ControlGroup to ServoGroup

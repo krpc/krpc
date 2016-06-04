@@ -705,6 +705,7 @@ InfernalRobotics.ServoGroup.MovePrevPreset
 InfernalRobotics.ServoGroup.Stop
 InfernalRobotics.Servo
 InfernalRobotics.Servo.Name
+InfernalRobotics.Servo.Part
 InfernalRobotics.Servo.Highlight
 InfernalRobotics.Servo.Position
 InfernalRobotics.Servo.MinConfigPosition
