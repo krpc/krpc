@@ -1,4 +1,4 @@
-v0.3.4
+v0.3.5
  * Add vessel parameter to ServoGroups, Servos and ServoWithName (#282)
  * Add Servo.Part
  * Add ServoGroup.Parts
