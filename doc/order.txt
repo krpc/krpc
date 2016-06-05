@@ -573,6 +573,7 @@ SpaceCenter.Resources.Amount
 SpaceCenter.Resources.Max
 SpaceCenter.Resources.Density
 SpaceCenter.Resources.FlowMode
+SpaceCenter.Resources.Enabled
 SpaceCenter.Resource
 SpaceCenter.Resource.Name
 SpaceCenter.Resource.Part

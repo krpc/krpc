@@ -174,5 +174,20 @@ namespace KRPC.SpaceCenter.Services
                 throw new ArgumentException ("Resource not found");
             return resource.resourceFlowMode.ToResourceFlowMode ();
         }
+
+        /// <summary>
+        /// Whether use of all the resources are enabled.
+        /// </summary>
+        /// <remarks>
+        /// This is true if all of the resources are enabled. If any of the resources are not enabled, this is false.
+        /// </remarks>
+        [KRPCProperty]
+        public bool Enabled {
+            get { return GetResources ().All (resource => resource.flowState); }
+            set {
+                foreach (var resource in GetResources ())
+                    resource.flowState = value;
+            }
+        }
     }
 }
