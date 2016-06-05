@@ -89,6 +89,25 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether the vessel is recoverable.
+        /// </summary>
+        [KRPCProperty]
+        public bool Recoverable {
+            get { return InternalVessel.IsRecoverable; }
+        }
+
+        /// <summary>
+        /// Recover the vessel.
+        /// </summary>
+        [KRPCMethod]
+        public void Recover ()
+        {
+            if (!Recoverable)
+                throw new InvalidOperationException ("Vessel is not recoverable");
+            GameEvents.OnVesselRecoveryRequested.Fire (InternalVessel);
+        }
+
+        /// <summary>
         /// The mission elapsed time in seconds.
         /// </summary>
         [KRPCProperty]

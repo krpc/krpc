@@ -21,8 +21,8 @@ namespace KRPC.Service
         public RPCException (ProcedureSignature procedure, string message)
         {
             if (VerboseErrors) {
-                this.message = "'" + procedure.FullyQualifiedName + "' threw an exception.";
-                this.message += " " + GetType () + ": " + message;
+                this.message = "'" + procedure.FullyQualifiedName + "' threw an exception.\n";
+                this.message += GetType () + ": " + message;
             } else {
                 this.message = message;
             }
@@ -31,8 +31,8 @@ namespace KRPC.Service
         public RPCException (ProcedureSignature procedure, Exception exception)
         {
             if (VerboseErrors) {
-                message = "'" + procedure.FullyQualifiedName + "' threw an exception.";
-                message += " " + exception.GetType () + ": " + exception.Message + " " + exception.StackTrace;
+                message = "'" + procedure.FullyQualifiedName + "' threw an exception.\n";
+                message += exception.GetType () + ": " + exception.Message + "\n" + exception.StackTrace;
             } else {
                 message = exception.Message;
             }

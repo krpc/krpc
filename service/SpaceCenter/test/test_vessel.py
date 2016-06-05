@@ -1,5 +1,6 @@
 import unittest
 import time
+import krpc
 import krpctest
 
 class TestVessel(krpctest.TestCase):
@@ -34,6 +35,10 @@ class TestVessel(krpctest.TestCase):
 
     def test_situation(self):
         self.assertEqual(self.Situation.orbiting, self.vessel.situation)
+
+    def test_recoverable(self):
+        self.assertFalse(self.vessel.recoverable)
+        self.assertRaises(krpc.client.RPCError, self.vessel.recover)
 
     def test_met(self):
         ut = self.conn.space_center.ut
