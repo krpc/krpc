@@ -48,6 +48,8 @@ SpaceCenter.Vessel
 SpaceCenter.Vessel.Name
 SpaceCenter.Vessel.Type
 SpaceCenter.Vessel.Situation
+SpaceCenter.Vessel.Recoverable
+SpaceCenter.Vessel.Recover
 SpaceCenter.Vessel.MET
 SpaceCenter.Vessel.Flight
 SpaceCenter.Vessel.Orbit
