@@ -150,6 +150,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
         self.assertEqual(set(['SolidFuel']), set(resources.names))
         self.assertEqual(300, resources.amount('SolidFuel'))
         self.assertEqual(850, resources.max('SolidFuel'))
+        self.assertTrue(resources.enabled)
 
         part_resources = resources.all
         self.assertEqual(1, len(part_resources))
@@ -170,6 +171,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
         self.assertEqual(720, resources.max('LiquidFuel'))
         self.assertEqual(400, resources.amount('Oxidizer'))
         self.assertEqual(880, resources.max('Oxidizer'))
+        self.assertTrue(resources.enabled)
 
         part_resources = resources.all
         self.assertEqual(2, len(part_resources))
