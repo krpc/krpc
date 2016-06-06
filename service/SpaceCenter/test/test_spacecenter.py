@@ -35,6 +35,10 @@ class TestSpaceCenter(krpctest.TestCase):
     def tearDownClass(cls):
         cls.conn.close()
 
+    def test_launchable_vessels(self):
+        print self.sc.launchable_vessels("SPH")
+        print self.sc.launchable_vessels("VAB")
+
     def test_active_vessel(self):
         active = self.sc.active_vessel
         self.assertEqual('Vessel', active.name)
