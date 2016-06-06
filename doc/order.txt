@@ -18,6 +18,8 @@ SpaceCenter.TargetBody
 SpaceCenter.TargetVessel
 SpaceCenter.TargetDockingPort
 SpaceCenter.ClearTarget
+SpaceCenter.LaunchableVessels
+SpaceCenter.LaunchVessel
 SpaceCenter.LaunchVesselFromVAB
 SpaceCenter.LaunchVesselFromSPH
 SpaceCenter.Save

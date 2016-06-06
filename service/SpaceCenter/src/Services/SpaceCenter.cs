@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -121,29 +123,59 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Returns a list of vessels from the given <paramref name="craftDirectory"/> that can be launched.
+        /// </summary>
+        /// <param name="craftDirectory">Name of the directory in the current saves "Ships" directory. For example <c>"VAB"</c> or <c>"SPH"</c>.</param>
+        [KRPCProcedure]
+        public static IList<string> LaunchableVessels (string craftDirectory)
+        {
+            try {
+                var directory = new DirectoryInfo (KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/" + craftDirectory);
+                return directory.GetFiles ("*.craft").Select (file => Path.GetFileNameWithoutExtension (file.Name)).ToList ();
+            } catch (DirectoryNotFoundException) {
+                return new List<string> ();
+            }
+        }
+
+        /// <summary>
+        /// Launch a vessel.
+        /// </summary>
+        /// <param name="craftDirectory">Name of the directory in the current saves "Ships" directory, that contains the craft file. For example <c>"VAB"</c> or <c>"SPH"</c>.</param>
+        /// <param name="name">Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.</param>
+        /// <param name="launchSite">Name of the launch site. For example <c>"LaunchPad"</c> or <c>"Runway"</c>.</param>
+        [KRPCProcedure]
+        public static void LaunchVessel (string craftDirectory, string name, string launchSite)
+        {
+            var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/" + craftDirectory + "/" + name + ".craft";
+            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
+            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, launchSite, crew);
+            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+        }
+
+        /// <summary>
         /// Launch a new vessel from the VAB onto the launchpad.
         /// </summary>
-        /// <param name="name">Name of the vessel's craft file.</param>
+        /// <param name="name">Name of the vessel to launch.</param>
+        /// <remarks>
+        /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory set to "VAB" and the launch site set to "LaunchPad". 
+        /// </remarks>
         [KRPCProcedure]
         public static void LaunchVesselFromVAB (string name)
         {
-            var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/VAB/" + name + ".craft";
-            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
-            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "LaunchPad", crew);
-            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            LaunchVessel ("VAB", name, "LaunchPad");
         }
 
         /// <summary>
         /// Launch a new vessel from the SPH onto the runway.
         /// </summary>
-        /// <param name="name">Name of the vessel's craft file.</param>
+        /// <param name="name">Name of the vessel to launch.</param>
+        /// <remarks>
+        /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory set to "SPH" and the launch site set to "Runway". 
+        /// </remarks>
         [KRPCProcedure]
         public static void LaunchVesselFromSPH (string name)
         {
-            var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/SPH/" + name + ".craft";
-            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
-            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "Runway", crew);
-            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            LaunchVessel ("SPH", name, "Runway");
         }
 
         /// <summary>
