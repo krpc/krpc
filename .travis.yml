@@ -44,6 +44,7 @@ script:
   - bazel build //:krpc //doc:html //doc:compile-scripts //:csproj
   - xbuild KRPC.sln
   - bazel test //:test
+  - tools/dist/genfiles.sh
 
 after_script:
   - rm -rf lib/ksp
