@@ -355,10 +355,15 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void RemoveNodes ()
         {
+            if (FlightGlobals.ActiveVessel == null)
+                throw new InvalidOperationException ("NRE for FlightGlobals.ActiveVessel");
             if (vesselId != FlightGlobals.ActiveVessel.id)
-                throw new InvalidOperationException ("Cannot remove maneuver ndoes; vessel is not the active vessel");
-            var nodes = FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.ToArray ();
-            foreach (var node in nodes)
+                throw new InvalidOperationException ("Cannot remove maneuver nodes; vessel is not the active vessel");
+            if (FlightGlobals.ActiveVessel.patchedConicSolver == null)
+                throw new InvalidOperationException ("NRE for FlightGlobals.ActiveVessel.patchedConicSolver");
+            if (FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes == null)
+                throw new InvalidOperationException ("NRE for FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes");
+            foreach (var node in FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes)
                 node.RemoveSelf ();
             // TODO: delete the Node objects
         }
