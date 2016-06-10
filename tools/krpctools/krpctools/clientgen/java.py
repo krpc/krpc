@@ -131,20 +131,10 @@ class JavaGenerator(Generator):
         else:
             return 'new TypeSpecification(%s.class)' % self.parse_type(typ, True)
 
-    def get_return_type(self, procedure):
-        if 'return_type' in procedure is not None:
-            return self.types.get_return_type(procedure['return_type'], procedure['attributes'])
-        return None
-
-    def get_parameter_type(self, procedure, pos):
-        return self.types.get_parameter_type(pos, procedure['parameters'][pos]['type'], procedure['attributes'])
-
-    def parse_return_type(self, procedure):
-        if 'return_type' in procedure is not None:
-            typ = self.types.get_return_type(procedure['return_type'], procedure['attributes'])
-            return self.parse_type(typ)
-        else:
+    def parse_return_type(self, typ):
+        if typ is None:
             return 'void'
+        return self.parse_type(typ)
 
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
