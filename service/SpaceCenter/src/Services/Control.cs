@@ -332,8 +332,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Node AddNode (double ut, float prograde = 0, float normal = 0, float radial = 0)
         {
-            if (vesselId != FlightGlobals.ActiveVessel.id)
-                throw new InvalidOperationException ("Cannot add maneuver node; vessel is not the active vessel");
+            CheckManeuverNodes ();
             return new Node (InternalVessel, ut, prograde, normal, radial);
         }
 
@@ -343,8 +342,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public IList<Node> Nodes {
             get {
-                if (vesselId != FlightGlobals.ActiveVessel.id)
-                    throw new InvalidOperationException ("Cannot get maneuver nodes; vessel is not the active vessel");
+                CheckManeuverNodes ();
                 return FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.Select (x => new Node (FlightGlobals.ActiveVessel, x)).OrderBy (x => x.UT).ToList ();
             }
         }
@@ -355,12 +353,19 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void RemoveNodes ()
         {
-            if (vesselId != FlightGlobals.ActiveVessel.id)
-                throw new InvalidOperationException ("Cannot remove maneuver ndoes; vessel is not the active vessel");
-            var nodes = FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.ToArray ();
+            CheckManeuverNodes ();
+            var nodes = FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.ToList ();
             foreach (var node in nodes)
                 node.RemoveSelf ();
             // TODO: delete the Node objects
+        }
+
+        void CheckManeuverNodes ()
+        {
+            if (vesselId != FlightGlobals.ActiveVessel.id)
+                throw new InvalidOperationException ("Maneuver nodes not available as this is not the active vessel");
+            if (FlightGlobals.ActiveVessel.patchedConicSolver == null)
+                throw new InvalidOperationException ("Maneuver node editing is not available. Either the vessel is in a situation where maneuver nodes cannot be used, or the tracking station has not been upgraded to support them.");
         }
     }
 }
