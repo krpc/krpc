@@ -9,18 +9,14 @@ class TestInputField(krpctest.TestCase):
     def setUp(cls):
         krpctest.new_save()
         cls.conn = krpctest.connect(cls)
-        cls.ui = cls.conn.ui
+        cls.canvas = cls.conn.ui.stock_canvas
 
     @classmethod
     def tearDown(cls):
         cls.conn.close()
 
-    def add_input_field(self):
-        panel = self.ui.add_panel()
-        return panel.add_input_field()
-
     def test_input_field(self):
-        input_field = self.add_input_field()
+        input_field = self.canvas.add_input_field()
         self.assertIsNotNone(input_field.rect_transform)
         self.assertTrue(input_field.visible)
         self.assertEquals('', input_field.value)
@@ -31,7 +27,7 @@ class TestInputField(krpctest.TestCase):
         self.assertRaises(krpc.client.RPCError, input_field.remove)
 
     def test_value(self):
-        input_field = self.add_input_field()
+        input_field = self.canvas.add_input_field()
         self.assertEquals('', input_field.value)
         self.assertFalse(input_field.changed)
         input_field.value = 'Foo'
