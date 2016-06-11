@@ -122,7 +122,6 @@ class TestResources(krpctest.TestCase, ResourcesTest):
             set(['SolidFuel', 'ElectricCharge', 'MonoPropellant', 'LiquidFuel', 'Oxidizer']),
             set(resources.names))
         for name in resources.names:
-            name = str(name) #TODO: remove str(.)
             expected_amount = sum(self.expected[stage][name][0] for stage in range(self.num_stages))
             expected_max = sum(self.expected[stage][name][1] for stage in range(self.num_stages))
             self.assertClose(expected_amount, resources.amount(name), error=0.5)
