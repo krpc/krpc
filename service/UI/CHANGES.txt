@@ -1,2 +1,5 @@
+v0.3.5
+ * Add Canvas class (#281)
+
 v0.3.4
  * Initial version
