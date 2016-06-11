@@ -50,5 +50,37 @@ namespace KRPC.UI
         {
             return new Panel (obj, visible);
         }
+
+        /// <summary>
+        /// Add text to the canvas.
+        /// </summary>
+        /// <param name="content">The text.</param>
+        /// <param name="visible">Whether the text is visible.</param>
+        [KRPCMethod]
+        public Text AddText (string content, bool visible = true)
+        {
+            return new Text (obj, content, visible);
+        }
+
+        /// <summary>
+        /// Add an input field to the canvas.
+        /// </summary>
+        /// <param name="visible">Whether the input field is visible.</param>
+        [KRPCMethod]
+        public InputField AddInputField (bool visible = true)
+        {
+            return new InputField (obj, visible);
+        }
+
+        /// <summary>
+        /// Add a button to the canvas.
+        /// </summary>
+        /// <param name="content">The label for the button.</param>
+        /// <param name="visible">Whether the button is visible.</param>
+        [KRPCMethod]
+        public Button AddButton (string content, bool visible = true)
+        {
+            return new Button (obj, content, visible);
+        }
     }
 }

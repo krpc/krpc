@@ -831,6 +831,9 @@ UI.Canvas
 UI.Canvas.RectTransform
 UI.Canvas.Visible
 UI.Canvas.AddPanel
+UI.Canvas.AddText
+UI.Canvas.AddInputField
+UI.Canvas.AddButton
 UI.Canvas.Remove
 UI.Panel
 UI.Panel.RectTransform
