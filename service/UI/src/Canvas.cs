@@ -1,23 +1,40 @@
 using KRPC.Service.Attributes;
+using KSP.UI;
 using UnityEngine;
 using Tuple2 = KRPC.Utils.Tuple<double, double>;
 
 namespace KRPC.UI
 {
     /// <summary>
-    /// A container for user interface elements. See <see cref="Canvas.AddPanel" />.
+    /// A canvas for user interface elements. See <see cref="UI.StockCanvas" /> and <see cref="UI.AddCanvas" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class Panel : UIObject
+    public class Canvas : UIObject
     {
-        internal Panel (GameObject parent, bool visible)
-            : base (Addon.Instantiate (parent, "Panel"), visible)
+        static Canvas stockCanvas;
+
+        internal static Canvas StockCanvas {
+            get {
+                if (stockCanvas == null)
+                    stockCanvas = new Canvas (UIMasterController.Instance.appCanvas);
+                return stockCanvas;
+            }
+        }
+
+        Canvas (UnityEngine.Canvas canvas)
+            : base (canvas)
         {
-            RectTransform.Anchor = new Tuple2 (0.5f, 0.5f);
+        }
+
+        internal Canvas ()
+            : base (new GameObject ("krpc.canvas", typeof(UnityEngine.Canvas)), true)
+        {
+            obj.GetComponent<UnityEngine.Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
+            obj.GetComponent<UnityEngine.RectTransform> ().sizeDelta = new Vector2 (Screen.width, Screen.height);
         }
 
         /// <summary>
-        /// The rect transform for the panel.
+        /// The rect transform for the canvas.
         /// </summary>
         [KRPCProperty]
         public RectTransform RectTransform {
@@ -25,9 +42,9 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// Create a panel within this panel.
+        /// Create a new container for user interface elements.
         /// </summary>
-        /// <param name="visible">Whether the new panel is visible.</param>
+        /// <param name="visible">Whether the panel is visible.</param>
         [KRPCMethod]
         public Panel AddPanel (bool visible = true)
         {
@@ -35,7 +52,7 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// Add text to the panel.
+        /// Add text to the canvas.
         /// </summary>
         /// <param name="content">The text.</param>
         /// <param name="visible">Whether the text is visible.</param>
@@ -46,7 +63,7 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// Add an input field to the panel.
+        /// Add an input field to the canvas.
         /// </summary>
         /// <param name="visible">Whether the input field is visible.</param>
         [KRPCMethod]
@@ -56,7 +73,7 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// Add a button to the panel.
+        /// Add a button to the canvas.
         /// </summary>
         /// <param name="content">The label for the button.</param>
         /// <param name="visible">Whether the button is visible.</param>
