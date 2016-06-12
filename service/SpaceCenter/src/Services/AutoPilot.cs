@@ -93,7 +93,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Wait ()
         {
-            if (Error > 0.5f || RollError > 0.5f || InternalVessel.angularVelocity.magnitude > 0.05f)
+            if (Error > 0.5f || RollError > 0.5f || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > 0.05f)
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
         }
 
