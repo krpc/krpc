@@ -15,3 +15,4 @@ all of the client languages.
    tutorials/parts
    tutorials/docking-guidance
    tutorials/user-interface
+   tutorials/autopilot
