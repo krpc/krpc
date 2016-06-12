@@ -38,10 +38,11 @@ namespace KRPC.SpaceCenter.Services
             ReferenceFrame = ReferenceFrame.Surface (vessel);
             TargetDirection = null;
             TargetRoll = float.NaN;
-            RotationSpeedMultiplier = 1f;
-            RollSpeedMultiplier = 1f;
-            MaxRollSpeed = 1f;
             MaxRotationSpeed = 1f;
+            MaxRollSpeed = 1f;
+            AutoTune = true;
+            Overshoot = 0.01f;
+            TimeToPeak = 3;
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Engage ()
         {
-            requestingClient = KRPC.KRPCCore.Context.RPCClient;
+            requestingClient = KRPCCore.Context.RPCClient;
             engaged [vesselId] = this;
         }
 
@@ -186,39 +187,79 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Target rotation speed multiplier. Defaults to 1.
-        /// </summary>
-        [KRPCProperty]
-        public float RotationSpeedMultiplier { get; set; }
-
-        /// <summary>
-        /// Maximum target rotation speed. Defaults to 1.
+        /// Maximum target rotation speed to pass to the rotation rate controller, in radians per second. Defaults to 1.
         /// </summary>
         [KRPCProperty]
         public float MaxRotationSpeed { get; set; }
 
         /// <summary>
-        /// Target roll speed multiplier. Defaults to 1.
-        /// </summary>
-        [KRPCProperty]
-        public float RollSpeedMultiplier { get; set; }
-
-        /// <summary>
-        /// Maximum target roll speed. Defaults to 1.
+        /// Maximum target roll speed to pass to the rotation rate controller, in radians per second. Defaults to 1.
         /// </summary>
         [KRPCProperty]
         public float MaxRollSpeed { get; set; }
 
         /// <summary>
-        /// Sets the gains for the rotation rate PID controller.
+        /// Whether the rotation rate controllers PID parameters should be automatically tuned using the vessels moment of inertia and available torque. Defaults to <c>true</c>.
+        /// See <see cref="TimeToPeak"/> and  <see cref="Overshoot"/>.
         /// </summary>
-        /// <param name="kp">Proportional gain.</param>
-        /// <param name="ki">Integral gain.</param>
-        /// <param name="kd">Derivative gain.</param>
-        [KRPCMethod]
-        public void SetPIDParameters (float kp = 1, float ki = 0, float kd = 0)
-        {
-            rotationRateController.PID.SetParameters (kp, ki, kd);
+        [KRPCProperty]
+        public bool AutoTune { get; set; }
+
+        /// <summary>
+        /// The target time to peak used to autotune the rotation rate controller, in seconds. Defaults to 1 second.
+        /// </summary>
+        [KRPCProperty]
+        public float TimeToPeak { get; set; }
+
+        /// <summary>
+        /// The target overshoot percentage used to autotune the rotation rate controller, as a value between 0 and 1. Defaults to 0.01.
+        /// </summary>
+        [KRPCProperty]
+        public float Overshoot { get; set; }
+
+        /// <summary>
+        /// PID gains for the pitch rotation rate controller.
+        /// </summary>
+        /// <remarks>
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically and will overwrite any manual changes.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 PitchPIDGains {
+            get {
+                var pid = rotationRateController.PitchPID;
+                return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
+            }
+            set { rotationRateController.PitchPID.SetParameters (value.Item1, value.Item2, value.Item3); }
+        }
+
+        /// <summary>
+        /// PID gains for the roll rotation rate controller.
+        /// </summary>
+        /// <remarks>
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically and will overwrite any manual changes.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 RollPIDGains {
+            get {
+                var pid = rotationRateController.RollPID;
+                return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
+            }
+            set { rotationRateController.RollPID.SetParameters (value.Item1, value.Item2, value.Item3); }
+        }
+
+        /// <summary>
+        /// PID gains for the yaw rotation rate controller.
+        /// </summary>
+        /// <remarks>
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically and will overwrite any manual changes.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 YawPIDGains {
+            get {
+                var pid = rotationRateController.YawPID;
+                return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
+            }
+            set { rotationRateController.YawPID.SetParameters (value.Item1, value.Item2, value.Item3); }
         }
 
         /// <summary>
@@ -333,14 +374,22 @@ namespace KRPC.SpaceCenter.Services
             var currentDirection = ReferenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up);
             rotationRateController.ReferenceFrame = ReferenceFrame;
             var targetRotation = Vector3d.zero;
-            if (targetDirection != Vector3d.zero)
-                targetRotation += (Vector3.Cross (targetDirection, currentDirection) * RotationSpeedMultiplier).ClampMagnitude (0f, MaxRotationSpeed);
+            if (targetDirection != Vector3d.zero) {
+                var crossProd = Vector3.Cross (targetDirection, currentDirection);
+                var direction = crossProd.normalized;
+                var magnitude = 1f;
+                if (Vector3.Dot (targetDirection, currentDirection) > 0)
+                    magnitude = (float)(Math.Asin (crossProd.magnitude) / (Math.PI / 2d));
+                targetRotation += direction * magnitude * MaxRotationSpeed;
+            }
             if (!Double.IsNaN (TargetRoll)) {
                 float currentRoll = (float)ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                var rollError = GeometryExtensions.NormAngle (TargetRoll - currentRoll) * (Math.PI / 180f);
-                targetRotation += targetDirection * (rollError * RollSpeedMultiplier).Clamp (-MaxRollSpeed, MaxRollSpeed);
+                var magnitude = GeometryExtensions.NormAngle (TargetRoll - currentRoll) / 180f;
+                targetRotation += targetDirection * magnitude * MaxRollSpeed;
             }
             rotationRateController.Target = targetRotation;
+            if (AutoTune)
+                rotationRateController.AutoTune (Overshoot, TimeToPeak);
             rotationRateController.Update (state);
         }
     }

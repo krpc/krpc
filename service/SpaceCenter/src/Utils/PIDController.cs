@@ -1,5 +1,6 @@
+using System;
+using System.Diagnostics;
 using KRPC.SpaceCenter.ExtensionMethods;
-using UnityEngine;
 
 namespace KRPC.SpaceCenter.Utils
 {
@@ -9,34 +10,49 @@ namespace KRPC.SpaceCenter.Utils
     /// </summary>
     class PIDController
     {
-        float kp;
-        float ki;
-        float kd;
-        Vector3 ti;
-        Vector3 lastPosition;
+        public double Kp { get; private set; }
 
-        public PIDController ()
+        public double Ki { get; private set; }
+
+        public double Kd { get; private set; }
+
+        public double OutputMin { get; private set; }
+
+        public double OutputMax { get; private set; }
+
+        double lastInput;
+        double integralTerm;
+        readonly Stopwatch lastUpdate = new Stopwatch ();
+
+        public PIDController (double input, double kp = 1, double ki = 0, double kd = 0, double outputMin = -1, double outputMax = 1)
         {
-            ti = Vector3.zero;
-            lastPosition = Vector3.zero;
-            SetParameters ();
+            lastUpdate.Start ();
+            integralTerm = 0;
+            lastInput = input;
+            SetParameters (kp, ki, kd, outputMin, outputMax);
         }
 
-        public void SetParameters (float kp = 1, float ki = 0, float kd = 0, float dt = 1)
+        public void SetParameters (double kp, double ki, double kd, double outputMin = -1, double outputMax = 1)
         {
-            this.kp = kp;
-            this.ki = ki * dt;
-            this.kd = kd / dt;
+            Kp = kp;
+            Ki = ki;
+            Kd = kd;
+            OutputMin = outputMin;
+            OutputMax = outputMax;
+            integralTerm = integralTerm.Clamp (outputMin, outputMax);
         }
 
-        public Vector3 Update (Vector3 error, Vector3 position, float minOutput, float maxOutput)
+        public double Update (double error, double input)
         {
-            ti += ki * error;
-            ti = ti.Clamp (minOutput, maxOutput);
-            var dInput = position - lastPosition;
-            var output = kp * error + ti - kd * dInput;
-            output = output.Clamp (minOutput, maxOutput);
-            lastPosition = position;
+            var timeChange = lastUpdate.ElapsedMilliseconds / 1000d;
+            integralTerm += Ki * error * timeChange;
+            integralTerm = integralTerm.Clamp (OutputMin, OutputMax);
+            var derivativeInput = (input - lastInput) / timeChange;
+            var output = Kp * error + integralTerm - Kd * derivativeInput;
+            output = output.Clamp (OutputMin, OutputMax);
+            lastInput = input;
+            lastUpdate.Reset ();
+            lastUpdate.Start ();
             return output;
         }
     }

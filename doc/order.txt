@@ -624,11 +624,14 @@ SpaceCenter.AutoPilot.TargetPitchAndHeading
 SpaceCenter.AutoPilot.TargetRoll
 SpaceCenter.AutoPilot.SAS
 SpaceCenter.AutoPilot.SASMode
-SpaceCenter.AutoPilot.RotationSpeedMultiplier
 SpaceCenter.AutoPilot.MaxRotationSpeed
-SpaceCenter.AutoPilot.RollSpeedMultiplier
 SpaceCenter.AutoPilot.MaxRollSpeed
-SpaceCenter.AutoPilot.SetPIDParameters
+SpaceCenter.AutoPilot.AutoTune
+SpaceCenter.AutoPilot.TimeToPeak
+SpaceCenter.AutoPilot.Overshoot
+SpaceCenter.AutoPilot.PitchPIDGains
+SpaceCenter.AutoPilot.RollPIDGains
+SpaceCenter.AutoPilot.YawPIDGains
 SpaceCenter.Camera
 SpaceCenter.Camera.Mode
 SpaceCenter.Camera.Pitch
