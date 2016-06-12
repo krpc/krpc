@@ -29,6 +29,7 @@ namespace KRPC.UI
         internal Canvas ()
             : base (new GameObject ("krpc.canvas", typeof(UnityEngine.Canvas)), true)
         {
+            obj.AddComponent<KSPGraphicRaycaster> ();
             obj.GetComponent<UnityEngine.Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
             obj.GetComponent<UnityEngine.RectTransform> ().sizeDelta = new Vector2 (Screen.width, Screen.height);
         }
