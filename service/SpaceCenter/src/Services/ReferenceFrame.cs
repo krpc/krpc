@@ -425,7 +425,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.CelestialBodyOrbital:
                     return Vector3d.zero; //TODO: check this
                 case Type.Vessel:
-                    return InternalVessel.angularVelocity;
+                    return InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                 case Type.VesselSurfaceVelocity:
