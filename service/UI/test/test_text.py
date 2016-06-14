@@ -36,7 +36,7 @@ class TestText(krpctest.TestCase):
     def test_properties(self):
         text = self.canvas.add_text("Jebediah Kerman")
         font = text.available_fonts[-1:][0]
-        text.font = str(font) # FIXME: font has type unicode not type str
+        text.font = font
         text.size = 20
         text.style = self.style.bold
         text.color = (1, 0, 0)

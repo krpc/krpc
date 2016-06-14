@@ -275,8 +275,7 @@ class TestParts(krpctest.TestCase):
         if 'ModuleDockingNodeNamed' not in set(x.name for x in port.part.modules):
             # Docking Port Alignment Indicator mod not installed
             return
-        # FIXME: unicode -> str bug
-        name = str(port.name)
+        name = port.name
         self.assertEqual(port, self.parts.docking_port_with_name(name))
         self.assertNone(self.parts.docking_port_with_name('Not the name'))
         port.name = 'Jeb\'s port'

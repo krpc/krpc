@@ -211,6 +211,14 @@ class TestTypes(unittest.TestCase):
             self.assertEqual(expected, coerced_value)
             self.assertEqual(type(expected), type(coerced_value))
 
+        strings = [
+            u'foo',
+            u'\xe2\x84\xa2',
+            u'Mystery Goo\xe2\x84\xa2 Containment Unit'
+        ]
+        for string in strings:
+            self.assertEqual(string, types.coerce_to(string, types.as_type('string')))
+
         self.assertEqual(['foo', 'bar'], types.coerce_to(['foo', 'bar'], types.as_type('List(string)')))
 
         self.assertRaises(ValueError, types.coerce_to, None, types.as_type('float'))

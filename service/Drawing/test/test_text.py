@@ -46,7 +46,7 @@ class TestText(krpctest.TestCase):
     def test_text_properties(self):
         text = self.add_text()
         font = text.available_fonts[-1:][0]
-        text.font = str(font) # FIXME: font has type unicode not type str
+        text.font = font
         text.size = 20
         text.character_size = 2
         text.style = self.style.bold
