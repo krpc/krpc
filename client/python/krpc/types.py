@@ -132,6 +132,9 @@ class Types(object):
             Raises ValueError if the coercion is not possible. """
         if isinstance(value, typ.python_type):
             return value
+        # A unicode type can be coerced to a string
+        if typ.python_type == str and isinstance(value, unicode):
+            return value
         # A NoneType can be coerced to a ClassType
         if isinstance(typ, ClassType) and value is None:
             return None
