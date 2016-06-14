@@ -9,18 +9,14 @@ class TestButton(krpctest.TestCase):
     def setUp(cls):
         krpctest.new_save()
         cls.conn = krpctest.connect(cls)
-        cls.ui = cls.conn.ui
+        cls.canvas = cls.conn.ui.stock_canvas
 
     @classmethod
     def tearDown(cls):
         cls.conn.close()
 
-    def add_button(self):
-        panel = self.ui.add_panel()
-        return panel.add_button('Foo')
-
     def test_button(self):
-        button = self.add_button()
+        button = self.canvas.add_button('Foo')
         self.assertIsNotNone(button.rect_transform)
         self.assertTrue(button.visible)
         self.assertIsNotNone(button.text)

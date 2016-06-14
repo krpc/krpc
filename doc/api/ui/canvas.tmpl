@@ -1,0 +1,9 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.name }}
+{{ domain.currentmodule('UI') }}
+{% import domain.macros as macros with context %}
+
+Canvas
+======
+
+{{ macros.class(services['UI'].classes['Canvas']) }}

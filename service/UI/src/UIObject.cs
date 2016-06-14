@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace KRPC.UI
     {
         static int nextId;
         readonly int id;
+        readonly bool removable;
 
         /// <summary>
         /// Unity game object for the UI element.
@@ -28,6 +30,17 @@ namespace KRPC.UI
             obj.SetActive (visible);
             if (register)
                 Addon.AddObject (this);
+            removable = true;
+        }
+
+        /// <summary>
+        /// Create a UI object from a canvas.
+        /// </summary>
+        protected UIObject (UnityEngine.Canvas canvas)
+        {
+            id = nextId;
+            nextId++;
+            obj = canvas.gameObject;
         }
 
         /// <summary>
@@ -60,7 +73,9 @@ namespace KRPC.UI
         /// </summary>
         public void Destroy ()
         {
-            Object.Destroy (obj);
+            if (!removable)
+                throw new InvalidOperationException ("UI object is not removable");
+            UnityEngine.Object.Destroy (obj);
         }
 
         /// <summary>
@@ -69,6 +84,8 @@ namespace KRPC.UI
         [KRPCMethod]
         public void Remove ()
         {
+            if (!removable)
+                throw new InvalidOperationException ("UI object is not removable");
             Addon.RemoveObject (this);
         }
     }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Server;
-using KSP.UI;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
@@ -14,10 +13,6 @@ namespace KRPC.UI
     [KSPAddon (KSPAddon.Startup.Flight, false)]
     public class Addon : MonoBehaviour
     {
-        internal static GameObject Canvas {
-            get { return UIMasterController.Instance.appCanvas.gameObject; }
-        }
-
         static AssetBundle prefabs;
 
         /// <summary>

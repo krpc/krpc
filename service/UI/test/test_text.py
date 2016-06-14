@@ -9,7 +9,7 @@ class TestText(krpctest.TestCase):
     def setUp(cls):
         krpctest.new_save()
         cls.conn = krpctest.connect(cls)
-        cls.ui = cls.conn.ui
+        cls.canvas = cls.conn.ui.stock_canvas
         cls.style = cls.conn.ui.FontStyle
         cls.anchor = cls.conn.ui.TextAnchor
 
@@ -17,12 +17,8 @@ class TestText(krpctest.TestCase):
     def tearDown(cls):
         cls.conn.close()
 
-    def add_text(self):
-        panel = self.ui.add_panel()
-        return panel.add_text("Jebediah Kerman")
-
     def test_text(self):
-        text = self.add_text()
+        text = self.canvas.add_text("Jebediah Kerman")
         self.assertIsNotNone(text.rect_transform)
         self.assertTrue(text.visible)
         self.assertEquals("Jebediah Kerman", text.content)
@@ -38,7 +34,7 @@ class TestText(krpctest.TestCase):
         self.assertRaises(krpc.client.RPCError, text.remove)
 
     def test_properties(self):
-        text = self.add_text()
+        text = self.canvas.add_text("Jebediah Kerman")
         font = text.available_fonts[-1:][0]
         text.font = font
         text.size = 20

@@ -1,11 +1,12 @@
 import krpc, time
 conn = krpc.connect(name='User Interface Example')
+canvas = conn.ui.stock_canvas
 
 # Get the size of the game window in pixels
-screen_size = conn.ui.rect_transform.size
+screen_size = canvas.rect_transform.size
 
 # Add a panel to contain the UI elements
-panel = conn.ui.add_panel()
+panel = canvas.add_panel()
 
 # Position the panel on the left of the screen
 rect = panel.rect_transform
