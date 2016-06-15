@@ -26,6 +26,12 @@ namespace KRPC.SpaceCenter.Utils
 
         public PIDController (double input, double kp = 1, double ki = 0, double kd = 0, double outputMin = -1, double outputMax = 1)
         {
+            Reset (input, kp, ki, kd, outputMin, outputMax);
+        }
+
+        public void Reset (double input, double kp = 1, double ki = 0, double kd = 0, double outputMin = -1, double outputMax = 1)
+        {
+            lastUpdate.Reset ();
             lastUpdate.Start ();
             integralTerm = 0;
             lastInput = input;
@@ -54,6 +60,11 @@ namespace KRPC.SpaceCenter.Utils
             lastUpdate.Reset ();
             lastUpdate.Start ();
             return output;
+        }
+
+        public void ClearIntegralTerm ()
+        {
+            integralTerm = 0;
         }
     }
 }

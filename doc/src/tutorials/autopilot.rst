@@ -49,7 +49,7 @@ where the normangle function clamps the angle to the interval
 :math:`[-\pi,+\pi]`. The magnitude of this is between 0 and :math:`\beta`, and
 linearly decreases the closer the vessel gets to the target roll
 angle. :math:`\beta` is the maximum rotation rate and is configurable using
-:csharp:prop:`KRPC.Client.Services.SpaceCenter.AutoPilot.MaxRollSpeed`.
+KRPC.Client.Services.SpaceCenter.AutoPilot.MaxRollSpeed.
 
 These two components are then summed to get the target angular velocity, which
 is passed to the rotation rate controller.

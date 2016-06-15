@@ -480,7 +480,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Convert the given position in this reference frame, to a position in world space.
+        /// Convert the given direction in this reference frame, to a direction in world space.
         /// </summary>
         public Vector3d DirectionToWorldSpace (Vector3d direction)
         {

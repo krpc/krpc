@@ -27,22 +27,17 @@ namespace KRPC.SpaceCenter.Services
         readonly Guid vesselId;
         readonly RotationRateController rotationRateController;
         IClient requestingClient;
-        Vector3d targetDirection;
+        Vector3d targetPHR;
 
         internal AutoPilot (global::Vessel vessel)
         {
             if (!engaged.ContainsKey (vessel.id))
                 engaged [vessel.id] = null;
             vesselId = vessel.id;
-            rotationRateController = new RotationRateController (vessel);
-            ReferenceFrame = ReferenceFrame.Surface (vessel);
-            TargetDirection = null;
-            TargetRoll = float.NaN;
+            rotationRateController = new RotationRateController (vessel, ReferenceFrame.Surface (vessel));
+            targetPHR = Vector3.zero;
+            targetPHR.z = double.NaN;
             MaxRotationSpeed = 1f;
-            MaxRollSpeed = 1f;
-            AutoTune = true;
-            Overshoot = 0.01f;
-            TimeToPeak = 3;
         }
 
         /// <summary>
@@ -76,6 +71,7 @@ namespace KRPC.SpaceCenter.Services
         {
             requestingClient = KRPCCore.Context.RPCClient;
             engaged [vesselId] = this;
+            rotationRateController.Reset ();
         }
 
         /// <summary>
@@ -89,7 +85,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Blocks until the vessel is pointing in the target direction (if set) and has the target roll (if set).
+        /// Blocks until the vessel is pointing in the target direction and has the target roll (if set).
         /// </summary>
         [KRPCMethod]
         public void Wait ()
@@ -101,18 +97,27 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The error, in degrees, between the direction the ship has been asked
         /// to point in and the direction it is pointing in. Returns zero if the auto-pilot
-        /// has not been engaged, SAS is not enabled, SAS is in stability assist mode,
-        /// or no target direction is set.
+        /// has not been engaged and SAS is not enabled or is in stability assist mode.
         /// </summary>
         [KRPCProperty]
         public float Error {
             get {
-                if (engaged [vesselId] == this && targetDirection != Vector3d.zero)
-                    return Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (targetDirection));
+                if (engaged [vesselId] == this)
+                    return Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (TargetDirectionVector));
                 else if (engaged [vesselId] != this && SAS && SASMode != SASMode.StabilityAssist)
                     return Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ());
                 else
                     return 0f;
+            }
+        }
+
+        Vector3d TargetDirectionVector {
+            get {
+                // set roll to 0 as it could be NaN
+                var phr = targetPHR;
+                phr.z = 0;
+                var targetRotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (phr);
+                return targetRotation * Vector3.up;
             }
         }
 
@@ -124,10 +129,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float RollError {
             get {
-                if (engaged [vesselId] != this || Double.IsNaN (TargetRoll))
+                if (engaged [vesselId] != this || double.IsNaN (targetPHR.z))
                     return 0f;
                 var currentRoll = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                return (float)Math.Abs (TargetRoll - currentRoll);
+                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (targetPHR.z - currentRoll));
             }
         }
 
@@ -135,15 +140,24 @@ namespace KRPC.SpaceCenter.Services
         /// The reference frame for the target direction (<see cref="AutoPilot.TargetDirection"/>).
         /// </summary>
         [KRPCProperty]
-        public ReferenceFrame ReferenceFrame { get; set; }
+        public ReferenceFrame ReferenceFrame {
+            get { return rotationRateController.ReferenceFrame; }
+            set { rotationRateController.ReferenceFrame = value; }
+        }
 
         /// <summary>
-        /// The target direction. <c>null</c> if no target direction is set.
+        /// The target direction.
         /// </summary>
         [KRPCProperty]
         public Tuple3 TargetDirection {
-            get { return targetDirection == Vector3d.zero ? null : targetDirection.ToTuple (); }
-            set { targetDirection = value == null ? Vector3d.zero : value.ToVector ().normalized; }
+            get { return TargetDirectionVector.ToTuple (); }
+            set {
+                //FIXME: QuaternionD.FromToRotation method not available at runtime
+                var rotation = (QuaternionD)Quaternion.FromToRotation (Vector3d.up, value.ToVector ());
+                var phr = rotation.PitchHeadingRoll ();
+                targetPHR.x = phr.x;
+                targetPHR.y = phr.y;
+            }
         }
 
         /// <summary>
@@ -154,15 +168,18 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void TargetPitchAndHeading (float pitch, float heading)
         {
-            var rotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (new Vector3 (pitch, heading, 0));
-            targetDirection = rotation * Vector3.up;
+            targetPHR.x = pitch;
+            targetPHR.y = heading;
         }
 
         /// <summary>
         /// The target roll, in degrees. <c>NaN</c> if no target roll is set.
         /// </summary>
         [KRPCProperty]
-        public float TargetRoll { get; set; }
+        public float TargetRoll {
+            get { return (float)targetPHR.z; }
+            set { targetPHR.z = value; }
+        }
 
         /// <summary>
         /// The state of SAS.
@@ -193,29 +210,32 @@ namespace KRPC.SpaceCenter.Services
         public float MaxRotationSpeed { get; set; }
 
         /// <summary>
-        /// Maximum target roll speed to pass to the rotation rate controller, in radians per second. Defaults to 1.
-        /// </summary>
-        [KRPCProperty]
-        public float MaxRollSpeed { get; set; }
-
-        /// <summary>
         /// Whether the rotation rate controllers PID parameters should be automatically tuned using the vessels moment of inertia and available torque. Defaults to <c>true</c>.
         /// See <see cref="TimeToPeak"/> and  <see cref="Overshoot"/>.
         /// </summary>
         [KRPCProperty]
-        public bool AutoTune { get; set; }
+        public bool AutoTune {
+            get { return rotationRateController.AutoTune; }
+            set { rotationRateController.AutoTune = value; }
+        }
 
         /// <summary>
         /// The target time to peak used to autotune the rotation rate controller, in seconds. Defaults to 1 second.
         /// </summary>
         [KRPCProperty]
-        public float TimeToPeak { get; set; }
+        public float TimeToPeak {
+            get { return rotationRateController.TimeToPeak; }
+            set { rotationRateController.TimeToPeak = value; }
+        }
 
         /// <summary>
         /// The target overshoot percentage used to autotune the rotation rate controller, as a value between 0 and 1. Defaults to 0.01.
         /// </summary>
         [KRPCProperty]
-        public float Overshoot { get; set; }
+        public float Overshoot {
+            get { return rotationRateController.Overshoot; }
+            set { rotationRateController.Overshoot = value; }
+        }
 
         /// <summary>
         /// PID gains for the pitch rotation rate controller.
@@ -358,8 +378,8 @@ namespace KRPC.SpaceCenter.Services
             // If the client that engaged the auto-pilot has disconnected, disengage and reset the auto-pilot
             if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected) {
                 autoPilot.ReferenceFrame = ReferenceFrame.Surface (vessel);
-                autoPilot.TargetDirection = null;
-                autoPilot.TargetRoll = float.NaN;
+                autoPilot.targetPHR = Vector3.zero;
+                autoPilot.targetPHR.z = double.NaN;
                 autoPilot.Disengage ();
                 return false;
             }
@@ -371,26 +391,40 @@ namespace KRPC.SpaceCenter.Services
         void DoAutoPiloting (PilotAddon.ControlInputs state)
         {
             SAS = false;
-            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up);
-            rotationRateController.ReferenceFrame = ReferenceFrame;
-            var targetRotation = Vector3d.zero;
-            if (targetDirection != Vector3d.zero) {
-                var crossProd = Vector3.Cross (targetDirection, currentDirection);
-                var direction = crossProd.normalized;
-                var magnitude = 1f;
-                if (Vector3.Dot (targetDirection, currentDirection) > 0)
-                    magnitude = (float)(Math.Asin (crossProd.magnitude) / (Math.PI / 2d));
-                targetRotation += direction * magnitude * MaxRotationSpeed;
-            }
-            if (!Double.IsNaN (TargetRoll)) {
-                float currentRoll = (float)ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                var magnitude = GeometryExtensions.NormAngle (TargetRoll - currentRoll) / 180f;
-                targetRotation += targetDirection * magnitude * MaxRollSpeed;
-            }
-            rotationRateController.Target = targetRotation;
-            if (AutoTune)
-                rotationRateController.AutoTune (Overshoot, TimeToPeak);
+            rotationRateController.Target = ComputeTargetRotationRate ();
             rotationRateController.Update (state);
+        }
+
+        Vector3 ComputeTargetRotationRate ()
+        {
+            var currentRotation = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation);
+            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up);
+
+            var targetDirection = TargetDirectionVector;
+
+            QuaternionD rotation;
+            if (Vector3.Angle (currentDirection, targetDirection) < 5 && !double.IsNaN (targetPHR.z)) {
+                // Pointing close to target direction and roll angle set.
+                // Compute rotation necessary to rotate from currentRotation -> targetRotation
+                var targetRotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (targetPHR);
+                rotation = targetRotation * currentRotation.Inverse ();
+            } else {
+                // Pointing far away from target direction or roll angle not set. Exclude roll.
+                // Compute rotation necessary to rotate from currentDirection -> targetDirection
+                //FIXME: QuaternionD.FromToRotation method not available at runtime
+                rotation = Quaternion.FromToRotation (currentDirection, targetDirection);
+            }
+
+            // Compute angles for the rotation in pitch (x), roll (y), yaw (z) axes of the reference frame
+            float angleFloat;
+            Vector3 axisFloat;
+            //FIXME: QuaternionD.ToAngleAxis method not available at runtime
+            ((Quaternion)rotation).ToAngleAxis (out angleFloat, out axisFloat);
+            double angle = GeometryExtensions.ClampAngle180 (angleFloat);
+            Vector3d axis = axisFloat;
+            var angles = axis * angle;
+            var rate = (MaxRotationSpeed / 180) * angles;
+            return -rate;
         }
     }
 }

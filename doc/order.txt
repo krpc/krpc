@@ -625,7 +625,6 @@ SpaceCenter.AutoPilot.TargetRoll
 SpaceCenter.AutoPilot.SAS
 SpaceCenter.AutoPilot.SASMode
 SpaceCenter.AutoPilot.MaxRotationSpeed
-SpaceCenter.AutoPilot.MaxRollSpeed
 SpaceCenter.AutoPilot.AutoTune
 SpaceCenter.AutoPilot.TimeToPeak
 SpaceCenter.AutoPilot.Overshoot
