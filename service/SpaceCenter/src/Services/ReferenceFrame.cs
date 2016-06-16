@@ -230,7 +230,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns the rotation of the given frame of reference, relative to world space.
         /// Applying the rotation to a vector in reference-frame-space produces the corresponding vector in world-space.
         /// </summary>
-        QuaternionD Rotation {
+        internal QuaternionD Rotation {
             get {
                 // Note: up is along the y-axis, forward is along the z-axis
                 Vector3d up = UpNotNormalized;

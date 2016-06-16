@@ -1,8 +1,7 @@
 using System;
-using System.Diagnostics;
 using KRPC.SpaceCenter.ExtensionMethods;
 
-namespace KRPC.SpaceCenter.Utils
+namespace KRPC.SpaceCenter.AutoPilot
 {
     /// <summary>
     /// Robust, 3-parameter, proportional-integral-derivative controller
@@ -22,7 +21,6 @@ namespace KRPC.SpaceCenter.Utils
 
         double lastInput;
         double integralTerm;
-        readonly Stopwatch lastUpdate = new Stopwatch ();
 
         public PIDController (double input, double kp = 1, double ki = 0, double kd = 0, double outputMin = -1, double outputMax = 1)
         {
@@ -31,8 +29,6 @@ namespace KRPC.SpaceCenter.Utils
 
         public void Reset (double input, double kp = 1, double ki = 0, double kd = 0, double outputMin = -1, double outputMax = 1)
         {
-            lastUpdate.Reset ();
-            lastUpdate.Start ();
             integralTerm = 0;
             lastInput = input;
             SetParameters (kp, ki, kd, outputMin, outputMax);
@@ -48,17 +44,14 @@ namespace KRPC.SpaceCenter.Utils
             integralTerm = integralTerm.Clamp (outputMin, outputMax);
         }
 
-        public double Update (double error, double input)
+        public double Update (double error, double input, double deltaTime)
         {
-            var timeChange = lastUpdate.ElapsedMilliseconds / 1000d;
-            integralTerm += Ki * error * timeChange;
+            integralTerm += Ki * error * deltaTime;
             integralTerm = integralTerm.Clamp (OutputMin, OutputMax);
-            var derivativeInput = (input - lastInput) / timeChange;
+            var derivativeInput = (input - lastInput) / deltaTime;
             var output = Kp * error + integralTerm - Kd * derivativeInput;
             output = output.Clamp (OutputMin, OutputMax);
             lastInput = input;
-            lastUpdate.Reset ();
-            lastUpdate.Start ();
             return output;
         }
 
