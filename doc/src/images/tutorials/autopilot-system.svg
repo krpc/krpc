@@ -9,13 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="79.517975mm"
-   height="14.692806mm"
-   viewBox="0 0 281.7566 52.061125"
+   width="81.517975mm"
+   height="16.692804mm"
+   viewBox="0 0 288.84321 59.147732"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="autopilot-controller.svg">
+   sodipodi:docname="autopilot-system.svg">
   <defs
      id="defs4">
     <marker
@@ -177,16 +177,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="51.053131"
-     inkscape:cy="26.609626"
+     inkscape:cx="-24.19546"
+     inkscape:cy="29.142777"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:object-nodes="true"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0"
+     fit-margin-top="1"
+     fit-margin-left="1"
+     fit-margin-right="1"
+     fit-margin-bottom="1"
      inkscape:window-width="1920"
      inkscape:window-height="907"
      inkscape:window-x="0"
@@ -195,8 +195,8 @@
     <inkscape:grid
        type="xygrid"
        id="grid4136"
-       originx="12.056014"
-       originy="-1002.598" />
+       originx="15.599319"
+       originy="-999.05466" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -214,7 +214,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(12.056014,2.2968618)">
+     transform="translate(15.599321,5.8401691)">
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.80411422;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
        d="m 95.785378,22.02232 30.556342,0"
