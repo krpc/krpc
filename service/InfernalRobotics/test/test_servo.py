@@ -1,21 +1,15 @@
 import unittest
-import time
 import krpctest
 
 class TestServo(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('InfernalRobotics')
-        krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.ir = cls.conn.infernal_robotics
-        cls.vessel = cls.conn.space_center.active_vessel
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.new_save()
+        cls.launch_vessel_from_vab('InfernalRobotics', directory='./')
+        cls.remove_other_vessels()
+        cls.ir = cls.connect().infernal_robotics
+        cls.vessel = cls.connect().space_center.active_vessel
 
     def test_rotatron(self):
         servo = self.ir.servo_with_name(self.vessel, 'Rotatron')
@@ -57,29 +51,29 @@ class TestServo(krpctest.TestCase):
         servo = self.ir.servo_with_name(self.vessel, 'Rail')
         self.assertFalse(servo.is_moving)
         servo.move_right()
-        time.sleep(0.1)
+        self.wait()
         while servo.is_moving:
-            time.sleep(0.1)
+            self.wait()
         self.assertFalse(servo.is_moving)
         servo.move_left()
-        time.sleep(0.1)
+        self.wait()
         while servo.is_moving:
-            time.sleep(0.1)
+            self.wait()
         self.assertFalse(servo.is_moving)
 
     def test_stop(self):
         servo = self.ir.servo_with_name(self.vessel, 'Rail')
         self.assertFalse(servo.is_moving)
         servo.move_right()
-        time.sleep(0.1)
+        self.wait()
         self.assertTrue(servo.is_moving)
         servo.stop()
-        time.sleep(0.1)
+        self.wait()
         self.assertFalse(servo.is_moving)
-        time.sleep(0.1)
+        self.wait()
         servo.move_left()
         while servo.is_moving:
-            time.sleep(0.1)
+            self.wait()
         self.assertFalse(servo.is_moving)
 
 if __name__ == '__main__':

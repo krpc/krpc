@@ -5,16 +5,11 @@ class TestInfernalRobotics(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('InfernalRobotics')
-        krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.ir = cls.conn.infernal_robotics
-        cls.vessel = cls.conn.space_center.active_vessel
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.new_save()
+        cls.launch_vessel_from_vab('InfernalRobotics', directory='./')
+        cls.remove_other_vessels()
+        cls.ir = cls.connect().infernal_robotics
+        cls.vessel = cls.connect().space_center.active_vessel
 
     def test_servo_groups(self):
         groups = self.ir.servo_groups(self.vessel)
