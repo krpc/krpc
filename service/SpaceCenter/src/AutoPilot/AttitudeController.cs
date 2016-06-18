@@ -125,15 +125,15 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             // Compute the input and error for the controllers
             var input = ComputeTargetAngularVelocity ();
-            var error = input + ReferenceFrame.AngularVelocityFromWorldSpace (vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity); //FIXME: why is this not a subtraction?
+            var current = -ReferenceFrame.AngularVelocityFromWorldSpace (vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity);
 
             // Convert input and error to reference frame rotated with the control axes
             var rotation = vessel.ReferenceFrame.Rotation.Inverse () * ReferenceFrame.Rotation;
             input = rotation * input;
-            error = rotation * error;
+            current = rotation * current;
 
             Console.WriteLine ("input = " + input);
-            Console.WriteLine ("error = " + error);
+            Console.WriteLine ("current = " + current);
 
             // Autotune the controllers if enabled
             if (AutoTune)
@@ -150,9 +150,9 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             // Run per-axis PID controllers
             var output = new Vector3d (
-                             PitchPID.Update (error.x, input.x, deltaTime),
-                             RollPID.Update (error.y, input.y, deltaTime),
-                             YawPID.Update (error.z, input.z, deltaTime));
+                             PitchPID.Update (input.x, current.x, deltaTime),
+                             RollPID.Update (input.y, current.y, deltaTime),
+                             YawPID.Update (input.z, current.z, deltaTime));
             state.Pitch = (float)output.x;
             state.Roll = (float)output.y;
             state.Yaw = (float)output.z;
