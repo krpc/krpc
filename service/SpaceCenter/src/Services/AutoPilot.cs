@@ -132,7 +132,47 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The target direction.
+        /// Set target pitch and heading angles.
+        /// </summary>
+        /// <param name="pitch">Target pitch angle, in degrees between -90° and +90°.</param>
+        /// <param name="heading">Target heading angle, in degrees between 0° and 360°.</param>
+        //TODO: deprecate this in favour of TargetPitch and TargetHeading properties?
+        [KRPCMethod]
+        public void TargetPitchAndHeading (float pitch, float heading)
+        {
+            attitudeController.TargetPitch = pitch;
+            attitudeController.TargetHeading = heading;
+        }
+
+        /// <summary>
+        /// The target pitch, in degrees, between -90° and +90°.
+        /// </summary>
+        [KRPCProperty]
+        public double TargetPitch {
+            get { return attitudeController.TargetPitch; }
+            set { attitudeController.TargetPitch = value; }
+        }
+
+        /// <summary>
+        /// The target heading, in degrees, between 0° and 360°.
+        /// </summary>
+        [KRPCProperty]
+        public double TargetHeading {
+            get { return attitudeController.TargetHeading; }
+            set { attitudeController.TargetHeading = value; }
+        }
+
+        /// <summary>
+        /// The target roll, in degrees. <c>NaN</c> if no target roll is set.
+        /// </summary>
+        [KRPCProperty]
+        public float TargetRoll {
+            get { return (float)attitudeController.TargetRoll; }
+            set { attitudeController.TargetRoll = value; }
+        }
+
+        /// <summary>
+        /// Direction vector corresponding to the target pitch and heading.
         /// </summary>
         [KRPCProperty]
         public Tuple3 TargetDirection {
@@ -144,27 +184,6 @@ namespace KRPC.SpaceCenter.Services
                 attitudeController.TargetPitch = phr.x;
                 attitudeController.TargetHeading = phr.y;
             }
-        }
-
-        /// <summary>
-        /// Set (<see cref="AutoPilot.TargetDirection"/>) from a pitch and heading angle.
-        /// </summary>
-        /// <param name="pitch">Target pitch angle, in degrees between -90° and +90°.</param>
-        /// <param name="heading">Target heading angle, in degrees between 0° and 360°.</param>
-        [KRPCMethod]
-        public void TargetPitchAndHeading (float pitch, float heading)
-        {
-            attitudeController.TargetPitch = pitch;
-            attitudeController.TargetHeading = heading;
-        }
-
-        /// <summary>
-        /// The target roll, in degrees. <c>NaN</c> if no target roll is set.
-        /// </summary>
-        [KRPCProperty]
-        public float TargetRoll {
-            get { return (float)attitudeController.TargetRoll; }
-            set { attitudeController.TargetRoll = value; }
         }
 
         /// <summary>
@@ -190,16 +209,63 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Maximum target rotation speed to pass to the rotation rate controller, in radians per second. Defaults to 1.
+        /// Threshold at which the autopilot will try to match the target roll angle. Defaults to 10 degrees.
         /// </summary>
         [KRPCProperty]
-        public float MaxRotationSpeed {
-            get { return attitudeController.MaxRotationSpeed; }
-            set { attitudeController.MaxRotationSpeed = value; }
+        public double RollThreshold {
+            get { return attitudeController.RollThreshold; }
+            set { attitudeController.RollThreshold = value; }
         }
 
         /// <summary>
-        /// Whether the rotation rate controllers PID parameters should be automatically tuned using the vessels moment of inertia and available torque. Defaults to <c>true</c>.
+        /// The maximum amount of time that the vessel should need to come to a complete stop.
+        /// A vector of three stopping times, one for each of the pitch, roll and yaw axes.
+        /// Defaults to 1 second for each axis.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 StoppingTime {
+            get { return attitudeController.StoppingTime.ToTuple (); }
+            set { attitudeController.StoppingTime = value.ToVector (); }
+        }
+
+        /// <summary>
+        /// The percentage of the vessels angular acceleration used to decelerate
+        /// the vessel.
+        /// A vector of three acceleration factors, each between 0 and 1, for
+        /// each of the pitch, roll and yaw axes.
+        /// Defaults to 0.8 for each axis.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 AccelerationFactor {
+            get { return attitudeController.AccelerationFactor.ToTuple (); }
+            set { attitudeController.AccelerationFactor = value.ToVector (); }
+        }
+
+        /// <summary>
+        /// Percentage of the target angular velocity to use.
+        /// A vector of three velocity factors, each between 0 and 1, for
+        /// each of the pitch, roll and yaw axes.
+        /// Defaults to 0.8 for each axis.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 VelocityFactor {
+            get { return attitudeController.VelocityFactor.ToTuple (); }
+            set { attitudeController.VelocityFactor = value.ToVector (); }
+        }
+
+        /// <summary>
+        /// Angle of the midpoint of the sigmoid function used to attenuate the target velocity as the vessel approaches the target direction.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 AttenuationAngle {
+            get { return attitudeController.AttenuationAngle.ToTuple (); }
+            set { attitudeController.AttenuationAngle = value.ToVector (); }
+        }
+
+        /// <summary>
+        /// Whether the rotation rate controllers PID parameters should be
+        /// automatically tuned using the vessels moment of inertia and
+        /// available torque. Defaults to <c>true</c>.
         /// See <see cref="TimeToPeak"/> and  <see cref="Overshoot"/>.
         /// </summary>
         [KRPCProperty]
@@ -209,28 +275,33 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The target time to peak used to autotune the rotation rate controller, in seconds. Defaults to 1 second.
+        /// The target time to peak used to autotune the PID controllers.
+        /// A vector of three times, in seconds, for each of the pitch, roll and yaw axes.
+        /// Defaults to 3 seconds for each axis.
         /// </summary>
         [KRPCProperty]
-        public float TimeToPeak {
-            get { return attitudeController.TimeToPeak; }
-            set { attitudeController.TimeToPeak = value; }
+        public Tuple3 TimeToPeak {
+            get { return attitudeController.TimeToPeak.ToTuple (); }
+            set { attitudeController.TimeToPeak = value.ToVector (); }
         }
 
         /// <summary>
-        /// The target overshoot percentage used to autotune the rotation rate controller, as a value between 0 and 1. Defaults to 0.01.
+        /// The target overshoot percentage used to autotune the PID controllers.
+        /// A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
+        /// Defaults to 0.01 for each axis.
         /// </summary>
         [KRPCProperty]
-        public float Overshoot {
-            get { return attitudeController.Overshoot; }
-            set { attitudeController.Overshoot = value; }
+        public Tuple3 Overshoot {
+            get { return attitudeController.Overshoot.ToTuple (); }
+            set { attitudeController.Overshoot = value.ToVector (); }
         }
 
         /// <summary>
-        /// PID gains for the pitch rotation rate controller.
+        /// Gains for the pitch PID controller.
         /// </summary>
         /// <remarks>
-        /// When <see cref="AutoTune"/> is true, these values are updated automatically and will overwrite any manual changes.
+        /// When <see cref="AutoTune"/> is true, these values are updated
+        /// automatically, which will overwrite any manual changes.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 PitchPIDGains {
@@ -242,10 +313,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// PID gains for the roll rotation rate controller.
+        /// Gains for the roll PID controller.
         /// </summary>
         /// <remarks>
-        /// When <see cref="AutoTune"/> is true, these values are updated automatically and will overwrite any manual changes.
+        /// When <see cref="AutoTune"/> is true, these values are updated
+        /// automatically, which will overwrite any manual changes.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 RollPIDGains {
@@ -257,10 +329,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// PID gains for the yaw rotation rate controller.
+        /// Gains for the yaw PID controller.
         /// </summary>
         /// <remarks>
-        /// When <see cref="AutoTune"/> is true, these values are updated automatically and will overwrite any manual changes.
+        /// When <see cref="AutoTune"/> is true, these values are updated
+        /// automatically, which will overwrite any manual changes.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 YawPIDGains {

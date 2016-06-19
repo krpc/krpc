@@ -180,6 +180,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Convert degrees to radians.
+        /// </summary>
+        public static double ToRadians (double degrees)
+        {
+            return degrees * (Math.PI / 180d);
+        }
+
+        /// <summary>
         /// Axis ordering
         /// </summary>
         public enum AxisOrder

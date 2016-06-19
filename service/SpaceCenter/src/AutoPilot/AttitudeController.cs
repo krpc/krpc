@@ -14,26 +14,36 @@ namespace KRPC.SpaceCenter.AutoPilot
         public readonly PIDController PitchPID = new PIDController (0);
         public readonly PIDController RollPID = new PIDController (0);
         public readonly PIDController YawPID = new PIDController (0);
+
+        // Target direction
         double targetPitch;
         double targetHeading;
         double targetRoll;
         Vector3d targetDirection;
         QuaternionD targetRotation;
-        float overshoot;
-        float timeToPeak;
-        double twiceZetaOmega;
-        double omegaSquared;
+
+        // Perform control adjustments 10 times per second
         const float timePerUpdate = 0.1f;
         float deltaTime;
+
+        // PID autotuning variables
+        Vector3d overshoot;
+        Vector3d timeToPeak;
+        Vector3d twiceZetaOmega = Vector3d.zero;
+        Vector3d omegaSquared = Vector3d.zero;
 
         public AttitudeController (Vessel vessel)
         {
             this.vessel = new KRPC.SpaceCenter.Services.Vessel (vessel);
             ReferenceFrame = this.vessel.SurfaceReferenceFrame;
-            MaxRotationSpeed = 1f;
+            StoppingTime = new Vector3d (1, 1, 1);
+            AccelerationFactor = new Vector3d (0.5, 0.5, 0.5);
+            VelocityFactor = new Vector3d (0.5, 0.5, 0.5);
+            AttenuationAngle = new Vector3d (0.25, 0.5, 0.25);
+            RollThreshold = 10;
             AutoTune = true;
-            Overshoot = 0.01f;
-            TimeToPeak = 3f;
+            Overshoot = new Vector3d (0.01, 0.01, 0.01);
+            TimeToPeak = new Vector3d (3, 3, 3);
             Start ();
         }
 
@@ -78,34 +88,44 @@ namespace KRPC.SpaceCenter.AutoPilot
             targetDirection = targetRotation * Vector3.up;
         }
 
-        public float MaxRotationSpeed { get; set; }
+        public Vector3d StoppingTime { get; set; }
+
+        public Vector3d AccelerationFactor  { get; set; }
+
+        public Vector3d VelocityFactor { get; set; }
+
+        public Vector3d AttenuationAngle { get; set; }
+
+        public double RollThreshold { get; set; }
 
         public bool AutoTune { get; set; }
 
-        public float Overshoot {
+        public Vector3d Overshoot {
             get { return overshoot; }
             set {
                 overshoot = value;
-                UpdateParameters ();
+                UpdatePIDParameters ();
             }
         }
 
-        public float TimeToPeak {
+        public Vector3d TimeToPeak {
             get { return timeToPeak; }
             set {
                 timeToPeak = value;
-                UpdateParameters ();
+                UpdatePIDParameters ();
             }
         }
 
-        void UpdateParameters ()
+        void UpdatePIDParameters ()
         {
-            var logOvershoot = Math.Log (overshoot);
-            var sqLogOvershoot = logOvershoot * logOvershoot;
-            var zeta = Math.Sqrt (sqLogOvershoot / (Math.PI * Math.PI + sqLogOvershoot));
-            var omega = Math.PI / (timeToPeak * Math.Sqrt (1.0 - zeta * zeta));
-            twiceZetaOmega = 2 * zeta * omega;
-            omegaSquared = omega * omega;
+            for (int i = 0; i < 3; i++) {
+                var logOvershoot = Math.Log (overshoot [i]);
+                var sqLogOvershoot = logOvershoot * logOvershoot;
+                var zeta = Math.Sqrt (sqLogOvershoot / (Math.PI * Math.PI + sqLogOvershoot));
+                var omega = Math.PI / (timeToPeak [i] * Math.Sqrt (1.0 - zeta * zeta));
+                twiceZetaOmega [i] = 2 * zeta * omega;
+                omegaSquared [i] = omega * omega;
+            }
         }
 
         public void Start ()
@@ -122,18 +142,21 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (deltaTime < timePerUpdate)
                 return;
 
-            // Compute the input and error for the controllers
-            var input = ComputeTargetAngularVelocity ();
-            var current = -ReferenceFrame.AngularVelocityFromWorldSpace (vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity);
+            var torque = vessel.AvailableTorqueVector;
+            var moi = vessel.MomentOfInertiaVector;
 
-            // Convert input and error to reference frame rotated with the control axes
-            var rotation = vessel.ReferenceFrame.Rotation.Inverse () * ReferenceFrame.Rotation;
-            input = rotation * input;
-            current = rotation * current;
+            // Compute the input and error for the controllers
+            var target = ComputeTargetAngularVelocity (torque, moi);
+            var current = ComputeCurrentAngularVelocity ();
+
+            // If roll not set, or not close to target direction, set roll target velocity to 0
+            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (vessel.InternalVessel.ReferenceTransform.up);
+            if (double.IsNaN (TargetRoll) || Vector3.Angle (currentDirection, targetDirection) > RollThreshold)
+                target.y = 0;
 
             // Autotune the controllers if enabled
             if (AutoTune)
-                DoAutoTune ();
+                DoAutoTune (torque, moi);
 
             // If vessel is sat on the pad, zero out the integral terms
             if (vessel.InternalVessel.situation == Vessel.Situations.PRELAUNCH) {
@@ -144,9 +167,9 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             // Run per-axis PID controllers
             var output = new Vector3d (
-                             PitchPID.Update (input.x, current.x, deltaTime),
-                             RollPID.Update (input.y, current.y, deltaTime),
-                             YawPID.Update (input.z, current.z, deltaTime));
+                             PitchPID.Update (target.x, current.x, deltaTime),
+                             RollPID.Update (target.y, current.y, deltaTime),
+                             YawPID.Update (target.z, current.z, deltaTime));
             state.Pitch = (float)output.x;
             state.Roll = (float)output.y;
             state.Yaw = (float)output.z;
@@ -154,19 +177,31 @@ namespace KRPC.SpaceCenter.AutoPilot
             deltaTime = 0;
         }
 
-        Vector3 ComputeTargetAngularVelocity ()
+        /// <summary>
+        /// Compute current angular velocity in pitch,roll,yaw axes
+        /// </summary>
+        Vector3 ComputeCurrentAngularVelocity ()
+        {
+            var worldAngularVelocity = vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
+            var localAngularVelocity = ReferenceFrame.AngularVelocityFromWorldSpace (worldAngularVelocity);
+            //TODO: why does this need to be negative?
+            return -vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (localAngularVelocity));
+        }
+
+        /// <summary>
+        /// Compute target angular velocity in pitch,roll,yaw axes
+        /// </summary>
+        Vector3 ComputeTargetAngularVelocity (Vector3d torque, Vector3d moi)
         {
             var currentRotation = ReferenceFrame.RotationFromWorldSpace (vessel.InternalVessel.ReferenceTransform.rotation);
             var currentDirection = ReferenceFrame.DirectionFromWorldSpace (vessel.InternalVessel.ReferenceTransform.up);
 
             QuaternionD rotation;
-            if (Vector3.Angle (currentDirection, targetDirection) < 5 && !double.IsNaN (TargetRoll))
-                // Pointing close to target direction and roll angle set
-                // Use rotation from currentRotation -> targetRotation
+            if (!double.IsNaN (TargetRoll))
+                // Roll angle set => use rotation from currentRotation -> targetRotation
                 rotation = targetRotation * currentRotation.Inverse ();
             else
-                // Pointing far from target direction or roll angle not set
-                // Use rotation from currentDirection -> targetDirection
+                // Roll angle not set => use rotation from currentDirection -> targetDirection
                 //FIXME: QuaternionD.FromToRotation method not available at runtime
                 rotation = Quaternion.FromToRotation (currentDirection, targetDirection);
 
@@ -178,28 +213,46 @@ namespace KRPC.SpaceCenter.AutoPilot
             double angle = GeometryExtensions.ClampAngle180 (angleFloat);
             Vector3d axis = axisFloat;
             var angles = axis * angle;
-            //TODO: compute max rotation speed based on torque and angular acceleration, per axis
-            var rate = (MaxRotationSpeed / 180) * angles;
-            return -rate; //FIXME: why negative here???
+            angles = vessel.ReferenceFrame.DirectionFromWorldSpace (ReferenceFrame.DirectionToWorldSpace (angles));
+            return AnglesToAngularVelocity (angles, torque, moi);
         }
 
-        void DoAutoTune ()
+        /// <summary>
+        /// Convert a vector of angles to a vector of angular velocities. This
+        /// implements the function f(x) from the documentation.
+        /// </summary>
+        Vector3d AnglesToAngularVelocity (Vector3d angles, Vector3d torque, Vector3d moi)
         {
-            var torque = vessel.AvailableTorqueVector;
-            var moi = vessel.MomentOfInertiaVector;
-            DoAutoTuneAxis (PitchPID, torque.x, moi.x);
-            DoAutoTuneAxis (RollPID, torque.y, moi.y);
-            DoAutoTuneAxis (YawPID, torque.z, moi.z);
+            var result = Vector3d.zero;
+            for (int i = 0; i < 3; i++) {
+                var theta = GeometryExtensions.ToRadians (angles [i]);
+                var acceleration = torque [i] / moi [i];
+                var maxVelocity = acceleration * StoppingTime [i];
+                var velocity = -Math.Sign (angles [i]) * Math.Min (maxVelocity, VelocityFactor [i] * Math.Sqrt (2.0 * Math.Abs (theta) * acceleration * AccelerationFactor [i]));
+                var attenuationAngle = GeometryExtensions.ToRadians (AttenuationAngle [i]);
+                var attenuation = 1.0 / (1.0 + Math.Exp (-((Math.Abs (theta) - attenuationAngle) * (6.0 / attenuationAngle))));
+                if (double.IsNaN (attenuation))
+                    attenuation = 0;
+                result [i] = velocity * attenuation;
+            }
+            return result;
         }
 
-        void DoAutoTuneAxis (PIDController pid, double torque, double moi)
+        void DoAutoTune (Vector3d torque, Vector3d moi)
         {
-            var accelerationInv = moi / torque;
+            DoAutoTuneAxis (PitchPID, 0, torque, moi);
+            DoAutoTuneAxis (RollPID, 1, torque, moi);
+            DoAutoTuneAxis (YawPID, 2, torque, moi);
+        }
+
+        void DoAutoTuneAxis (PIDController pid, int index, Vector3d torque, Vector3d moi)
+        {
+            var accelerationInv = moi [index] / torque [index];
             // Don't tune when the available acceleration is less than 0.001 radian.s^-2
             if (accelerationInv > 1000)
                 return;
-            var kp = twiceZetaOmega * accelerationInv;
-            var ki = omegaSquared * accelerationInv;
+            var kp = twiceZetaOmega [index] * accelerationInv;
+            var ki = omegaSquared [index] * accelerationInv;
             pid.SetParameters (kp, ki, 0, -1, 1);
         }
     }
