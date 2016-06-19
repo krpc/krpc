@@ -108,9 +108,36 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The error, in degrees, between the roll the ship has been asked to be
-        /// in and the actual roll. Returns zero if the auto-pilot has not been engaged
-        /// or no target roll is set.
+        /// The error, in degrees, between the vessels current and target pitch.
+        /// Returns zero if the auto-pilot has not been engaged.
+        /// </summary>
+        [KRPCProperty]
+        public float PitchError {
+            get {
+                if (engaged [vesselId] != this)
+                    return 0f;
+                var currentPitch = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().x;
+                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetPitch - currentPitch));
+            }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the vessels current and target heading.
+        /// Returns zero if the auto-pilot has not been engaged.
+        /// </summary>
+        [KRPCProperty]
+        public float HeadingError {
+            get {
+                if (engaged [vesselId] != this)
+                    return 0f;
+                var currentHeading = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().y;
+                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetHeading - currentHeading));
+            }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the vessels current and target roll.
+        /// Returns zero if the auto-pilot has not been engaged or no target roll is set.
         /// </summary>
         [KRPCProperty]
         public float RollError {
@@ -132,24 +159,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Set target pitch and heading angles.
-        /// </summary>
-        /// <param name="pitch">Target pitch angle, in degrees between -90° and +90°.</param>
-        /// <param name="heading">Target heading angle, in degrees between 0° and 360°.</param>
-        //TODO: deprecate this in favour of TargetPitch and TargetHeading properties?
-        [KRPCMethod]
-        public void TargetPitchAndHeading (float pitch, float heading)
-        {
-            attitudeController.TargetPitch = pitch;
-            attitudeController.TargetHeading = heading;
-        }
-
-        /// <summary>
         /// The target pitch, in degrees, between -90° and +90°.
         /// </summary>
         [KRPCProperty]
-        public double TargetPitch {
-            get { return attitudeController.TargetPitch; }
+        public float TargetPitch {
+            get { return (float)attitudeController.TargetPitch; }
             set { attitudeController.TargetPitch = value; }
         }
 
@@ -157,8 +171,8 @@ namespace KRPC.SpaceCenter.Services
         /// The target heading, in degrees, between 0° and 360°.
         /// </summary>
         [KRPCProperty]
-        public double TargetHeading {
-            get { return attitudeController.TargetHeading; }
+        public float TargetHeading {
+            get { return (float)attitudeController.TargetHeading; }
             set { attitudeController.TargetHeading = value; }
         }
 
@@ -169,6 +183,19 @@ namespace KRPC.SpaceCenter.Services
         public float TargetRoll {
             get { return (float)attitudeController.TargetRoll; }
             set { attitudeController.TargetRoll = value; }
+        }
+
+        /// <summary>
+        /// Set target pitch and heading angles.
+        /// </summary>
+        /// <param name="pitch">Target pitch angle, in degrees between -90° and +90°.</param>
+        /// <param name="heading">Target heading angle, in degrees between 0° and 360°.</param>
+        //TODO: deprecate this in favour of TargetPitch and TargetHeading properties?
+        [KRPCMethod]
+        public void TargetPitchAndHeading (float pitch, float heading)
+        {
+            attitudeController.TargetPitch = pitch;
+            attitudeController.TargetHeading = heading;
         }
 
         /// <summary>
@@ -198,8 +225,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The current <see cref="SASMode"/>.
-        /// These modes are equivalent to the mode buttons to
-        /// the left of the navball that appear when SAS is enabled.
+        /// These modes are equivalent to the mode buttons to the left of the navball that appear when SAS is enabled.
         /// </summary>
         /// <remarks>Equivalent to <see cref="Control.SASMode"/></remarks>
         [KRPCProperty]
@@ -229,11 +255,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The percentage of the vessels angular acceleration used to decelerate
-        /// the vessel.
-        /// A vector of three acceleration factors, each between 0 and 1, for
-        /// each of the pitch, roll and yaw axes.
-        /// Defaults to 0.8 for each axis.
+        /// The percentage of the vessels angular acceleration used to decelerate the vessel.
+        /// A vector of three acceleration factors, each between 0 and 1, for each of the pitch, roll and yaw axes.
+        /// Defaults to 0.5 for each axis.
         /// </summary>
         [KRPCProperty]
         public Tuple3 AccelerationFactor {
@@ -243,9 +267,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Percentage of the target angular velocity to use.
-        /// A vector of three velocity factors, each between 0 and 1, for
-        /// each of the pitch, roll and yaw axes.
-        /// Defaults to 0.8 for each axis.
+        /// A vector of three velocity factors, each between 0 and 1, for each of the pitch, roll and yaw axes.
+        /// Defaults to 0.5 for each axis.
         /// </summary>
         [KRPCProperty]
         public Tuple3 VelocityFactor {
@@ -254,7 +277,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Angle of the midpoint of the sigmoid function used to attenuate the target velocity as the vessel approaches the target direction.
+        /// The midpoint of the target velocity attenuation function, in degrees.
         /// </summary>
         [KRPCProperty]
         public Tuple3 AttenuationAngle {
@@ -263,9 +286,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether the rotation rate controllers PID parameters should be
-        /// automatically tuned using the vessels moment of inertia and
-        /// available torque. Defaults to <c>true</c>.
+        /// Whether the rotation rate controllers PID parameters should be automatically tuned using the
+        /// vessels moment of inertia and available torque. Defaults to <c>true</c>.
         /// See <see cref="TimeToPeak"/> and  <see cref="Overshoot"/>.
         /// </summary>
         [KRPCProperty]
@@ -300,8 +322,7 @@ namespace KRPC.SpaceCenter.Services
         /// Gains for the pitch PID controller.
         /// </summary>
         /// <remarks>
-        /// When <see cref="AutoTune"/> is true, these values are updated
-        /// automatically, which will overwrite any manual changes.
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically, which will overwrite any manual changes.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 PitchPIDGains {
@@ -316,8 +337,7 @@ namespace KRPC.SpaceCenter.Services
         /// Gains for the roll PID controller.
         /// </summary>
         /// <remarks>
-        /// When <see cref="AutoTune"/> is true, these values are updated
-        /// automatically, which will overwrite any manual changes.
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically, which will overwrite any manual changes.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 RollPIDGains {
@@ -332,8 +352,7 @@ namespace KRPC.SpaceCenter.Services
         /// Gains for the yaw PID controller.
         /// </summary>
         /// <remarks>
-        /// When <see cref="AutoTune"/> is true, these values are updated
-        /// automatically, which will overwrite any manual changes.
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically, which will overwrite any manual changes.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 YawPIDGains {

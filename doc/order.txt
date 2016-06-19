@@ -617,6 +617,8 @@ SpaceCenter.AutoPilot.Engage
 SpaceCenter.AutoPilot.Disengage
 SpaceCenter.AutoPilot.Wait
 SpaceCenter.AutoPilot.Error
+SpaceCenter.AutoPilot.PitchError
+SpaceCenter.AutoPilot.HeadingError
 SpaceCenter.AutoPilot.RollError
 SpaceCenter.AutoPilot.ReferenceFrame
 SpaceCenter.AutoPilot.TargetPitch
