@@ -3,23 +3,24 @@ import inspect
 import math
 import os
 import shutil
+import time
+from pkg_resources import Requirement, resource_filename
 import krpc
 
-def connect(test_suite=None, test_case=None):
+def _connect(use_cached=True):
+    if _connect.connection is not None and use_cached:
+        return _connect.connection
     address = '127.0.0.1'
     if 'KRPC_ADDRESS' in os.environ:
         address = os.environ['KRPC_ADDRESS']
-    if test_suite and inspect.isclass(test_suite):
-        name = test_suite.__name__
-    elif test_suite:
-        name = test_suite.__class__.__name__
-    else:
-        name = 'krpctest'
-    if test_case:
-        name += '.'+test_case
-    return krpc.connect(name=name, address=address)
+    connection = krpc.connect(name='krpctest', address=address)
+    if use_cached:
+        _connect.connection = connection
+    return connection
 
-def get_ksp_dir():
+_connect.connection = None
+
+def _get_ksp_dir():
     path = None
     if 'KSP_DIR' in os.environ:
         path = os.environ['KSP_DIR']
@@ -27,63 +28,58 @@ def get_ksp_dir():
         raise RuntimeError('KSP dir not found at %s' % path)
     return path
 
-def _connect():
-    if not _connect.conn:
-        _connect.conn = connect()
-    return _connect.conn
-_connect.conn = None
-
-def new_save(name='test'):
-    # Return if the save is already running
-    if _connect().testing_tools.current_save == name:
-        return
-
-    # Load a new save using template from fixtures directory
-    fixtures_path = os.path.abspath('fixtures')
-    save_path = os.path.join(get_ksp_dir(), 'saves', name)
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    shutil.copy(os.path.join(fixtures_path, 'blank.sfs'), os.path.join(save_path, 'persistent.sfs'))
-    _connect().testing_tools.load_save('test', 'persistent')
-
-def load_save(name):
-    # Copy save file to save directory
-    fixtures_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
-    save_path = os.path.join(get_ksp_dir(), 'saves', 'test')
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    shutil.copy(os.path.join(fixtures_path, name + '.sfs'), os.path.join(save_path, name + '.sfs'))
-
-    # Load the save file
-    _connect().testing_tools.load_save('test', name)
-
-def remove_other_vessels():
-    _connect().testing_tools.remove_other_vessels()
-
-def launch_vessel_from_vab(name):
-    # Copy craft file to save directory
-    fixtures_path = os.path.abspath('fixtures')
-    save_path = os.path.join(get_ksp_dir(), 'saves', _connect().testing_tools.current_save)
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    ships_path = os.path.join(save_path, 'Ships', 'VAB')
-    if not os.path.exists(ships_path):
-        os.makedirs(ships_path)
-    shutil.copy(os.path.join(fixtures_path, name + '.craft'), os.path.join(ships_path, name + '.craft'))
-
-    # Launch the craft
-    _connect().space_center.launch_vessel_from_vab(name)
-
-def set_orbit(body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node,
-              argument_of_periapsis, mean_anomaly_at_epoch, epoch):
-    _connect().testing_tools.set_orbit(
-        body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node,
-        argument_of_periapsis, mean_anomaly_at_epoch, epoch)
-
-def set_circular_orbit(body, altitude):
-    _connect().testing_tools.set_circular_orbit(body, altitude)
-
 class TestCase(unittest.TestCase):
+
+    @classmethod
+    def connect(cls, use_cached=True):
+        return _connect(use_cached)
+
+    @classmethod
+    def new_save(cls, name='krpctest'):
+        # Return if the save is already loaded
+        if cls.connect().testing_tools.current_save == name:
+            return
+
+        # Load a blank save with the given name
+        blank_save = resource_filename(Requirement.parse('krpctest'), 'krpctest/krpctest.sfs')
+        save_path = os.path.join(_get_ksp_dir(), 'saves', name)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+        shutil.copy(blank_save, os.path.join(save_path, 'persistent.sfs'))
+        cls.connect().testing_tools.load_save(name, 'persistent')
+
+    @classmethod
+    def remove_other_vessels(cls):
+        cls.connect().testing_tools.remove_other_vessels()
+
+    @classmethod
+    def launch_vessel_from_vab(cls, name, directory='craft'):
+        # Copy craft file to save directory
+        fixtures_path = os.path.abspath(directory)
+        save_path = os.path.join(_get_ksp_dir(), 'saves', cls.connect().testing_tools.current_save)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+        ships_path = os.path.join(save_path, 'Ships', 'VAB')
+        if not os.path.exists(ships_path):
+            os.makedirs(ships_path)
+        shutil.copy(os.path.join(fixtures_path, name + '.craft'), os.path.join(ships_path, name + '.craft'))
+        # Launch the craft
+        cls.connect().space_center.launch_vessel_from_vab(name)
+
+    @classmethod
+    def set_orbit(cls, body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node,
+                  argument_of_periapsis, mean_anomaly_at_epoch, epoch):
+        cls.connect().testing_tools.set_orbit(
+            body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node,
+            argument_of_periapsis, mean_anomaly_at_epoch, epoch)
+
+    @classmethod
+    def set_circular_orbit(cls, body, altitude):
+        cls.connect().testing_tools.set_circular_orbit(body, altitude)
+
+    @classmethod
+    def wait(cls, timeout=0.1):
+        time.sleep(timeout)
 
     @staticmethod
     def _is_in_range(min_value, max_value, value):
