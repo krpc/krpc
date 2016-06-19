@@ -121,7 +121,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             deltaTime += Time.fixedDeltaTime;
             if (deltaTime < timePerUpdate)
                 return;
-            Console.WriteLine ("dT = " + deltaTime);
 
             // Compute the input and error for the controllers
             var input = ComputeTargetAngularVelocity ();
@@ -132,9 +131,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             input = rotation * input;
             current = rotation * current;
 
-            Console.WriteLine ("input = " + input);
-            Console.WriteLine ("current = " + current);
-
             // Autotune the controllers if enabled
             if (AutoTune)
                 DoAutoTune ();
@@ -144,8 +140,6 @@ namespace KRPC.SpaceCenter.AutoPilot
                 PitchPID.ClearIntegralTerm ();
                 RollPID.ClearIntegralTerm ();
                 YawPID.ClearIntegralTerm ();
-                Console.WriteLine ("prelaunch");
-
             }
 
             // Run per-axis PID controllers
@@ -156,7 +150,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             state.Pitch = (float)output.x;
             state.Roll = (float)output.y;
             state.Yaw = (float)output.z;
-            Console.WriteLine ("output = " + output);
 
             deltaTime = 0;
         }
