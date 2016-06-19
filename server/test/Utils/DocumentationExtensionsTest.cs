@@ -134,6 +134,7 @@ namespace KRPC.Test.Utils
         }
 
         [Test]
+        [Ignore]
         public void TestGetMultiLineDocumentation ()
         {
             Assert.AreEqual (
