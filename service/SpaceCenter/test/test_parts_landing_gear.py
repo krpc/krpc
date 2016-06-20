@@ -5,19 +5,14 @@ class TestPartsLandingGear(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if krpctest.connect().space_center.active_vessel.name != 'PartsLandingGear':
-            krpctest.new_save()
-            krpctest.launch_vessel_from_vab('PartsLandingGear')
-            krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        parts = cls.conn.space_center.active_vessel.parts
+        cls.new_save()
+        if cls.connect().space_center.active_vessel.name != 'PartsLandingGear':
+            cls.launch_vessel_from_vab('PartsLandingGear')
+            cls.remove_other_vessels()
+        parts = cls.connect().space_center.active_vessel.parts
         cls.gear = parts.with_title('LY-99 Extra Large Landing Gear')[0].landing_gear
         cls.fixed_gear = parts.with_title('LY-01 Fixed Landing Gear')[0].landing_gear
-        cls.State = cls.conn.space_center.LandingGearState
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.State = cls.connect().space_center.LandingGearState
 
     def test_deploy_and_retract(self):
         self.assertTrue(self.gear.deployable)
@@ -27,14 +22,14 @@ class TestPartsLandingGear(krpctest.TestCase):
         self.assertEqual(self.State.retracting, self.gear.state)
         self.assertFalse(self.gear.deployed)
         while self.gear.state == self.State.retracting:
-            pass
+            self.wait()
         self.assertEqual(self.State.retracted, self.gear.state)
         self.assertFalse(self.gear.deployed)
         self.gear.deployed = True
         self.assertEqual(self.State.deploying, self.gear.state)
         self.assertFalse(self.gear.deployed)
         while self.gear.state == self.State.deploying:
-            pass
+            self.wait()
         self.assertEqual(self.State.deployed, self.gear.state)
         self.assertTrue(self.gear.deployed)
 

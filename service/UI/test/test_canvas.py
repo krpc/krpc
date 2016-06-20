@@ -4,15 +4,9 @@ import krpctest
 class TestCanvas(krpctest.TestCase):
 
     @classmethod
-    def setUp(cls):
-        krpctest.new_save()
-        cls.conn = krpctest.connect(cls)
-        cls.ui = cls.conn.ui
-        cls.canvas = cls.ui.stock_canvas
-
-    @classmethod
-    def tearDown(cls):
-        cls.conn.close()
+    def setUpClass(cls):
+        cls.new_save()
+        cls.canvas = cls.connect().ui.stock_canvas
 
     def test_add_panel(self):
         panel = self.canvas.add_panel()

@@ -1,5 +1,4 @@
 import unittest
-import time
 import krpctest
 import krpc
 
@@ -7,17 +6,12 @@ class TestPartsModule(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if krpctest.connect().space_center.active_vessel.name != 'Parts':
-            krpctest.new_save()
-            krpctest.launch_vessel_from_vab('Parts')
-            krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        if cls.connect().space_center.active_vessel.name != 'Parts':
+            cls.launch_vessel_from_vab('Parts')
+            cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
     def test_command_module(self):
         part = self.parts.with_title('Mk1-2 Command Pod')[0]
@@ -29,7 +23,7 @@ class TestPartsModule(krpctest.TestCase):
         self.assertFalse(module.has_field('DoesntExist'))
         self.assertEqual('Operational', module.get_field('State'))
         self.assertRaises(krpc.client.RPCError, module.get_field, 'DoesntExist')
-        self.assertEqual(['Control From Here', 'Rename Vessel'], sorted(module.events))
+        self.assertItemsEqual(['Control From Here', 'Rename Vessel'], module.events)
         self.assertTrue(module.has_event('Control From Here'))
         self.assertFalse(module.has_event('DoesntExist'))
         module.trigger_event('Control From Here')
@@ -49,11 +43,11 @@ class TestPartsModule(krpctest.TestCase):
         self.assertFalse(module.has_field('DoesntExist'))
         self.assertEqual('Retracted', module.get_field('Status'))
         self.assertRaises(krpc.client.RPCError, module.get_field, 'DoesntExist')
-        self.assertEqual(['Extend Panels'], sorted(module.events))
+        self.assertItemsEqual(['Extend Panels'], module.events)
         self.assertTrue(module.has_event('Extend Panels'))
         self.assertFalse(module.has_event('DoesntExist'))
         self.assertRaises(krpc.client.RPCError, module.trigger_event, 'DoesntExist')
-        self.assertEqual(['Extend Panel', 'Retract Panel', 'Toggle Panels'], sorted(module.actions))
+        self.assertItemsEqual(['Extend Panel', 'Retract Panel', 'Toggle Panels'], module.actions)
         self.assertFalse(module.has_action('DoesntExist'))
         self.assertRaises(krpc.client.RPCError, module.set_action, 'DoesntExist', True)
         self.assertRaises(krpc.client.RPCError, module.set_action, 'DoesntExist', False)
@@ -63,7 +57,7 @@ class TestPartsModule(krpctest.TestCase):
         module = next(m for m in part.modules if m.name == 'ModuleWheelBrakes')
         self.assertEqual({'Brakes': '100'}, module.fields)
         module.set_field_int('Brakes', 50)
-        time.sleep(1)
+        self.wait(1)
         self.assertEqual({'Brakes': '50'}, module.fields)
         module.set_field_int('Brakes', 100)
         self.assertEqual({'Brakes': '100'}, module.fields)
@@ -74,11 +68,11 @@ class TestPartsModule(krpctest.TestCase):
         self.assertTrue(module.has_event('Lights On'))
         self.assertFalse(module.has_event('Lights Off'))
         module.trigger_event('Lights On')
-        time.sleep(0.1)
+        self.wait()
         self.assertFalse(module.has_event('Lights On'))
         self.assertTrue(module.has_event('Lights Off'))
         module.trigger_event('Lights Off')
-        time.sleep(0.1)
+        self.wait()
         self.assertTrue(module.has_event('Lights On'))
         self.assertFalse(module.has_event('Lights Off'))
 
@@ -88,11 +82,11 @@ class TestPartsModule(krpctest.TestCase):
         self.assertTrue(module.has_event('Lights On'))
         self.assertFalse(module.has_event('Lights Off'))
         module.set_action('ToggleLight', True)
-        time.sleep(0.1)
+        self.wait()
         self.assertFalse(module.has_event('Lights On'))
         self.assertTrue(module.has_event('Lights Off'))
         module.set_action('ToggleLight', False)
-        time.sleep(0.1)
+        self.wait()
         self.assertTrue(module.has_event('Lights On'))
         self.assertFalse(module.has_event('Lights Off'))
 

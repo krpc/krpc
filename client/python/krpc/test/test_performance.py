@@ -8,13 +8,6 @@ class TestPerformance(ServerTestCase, unittest.TestCase):
     def setUpClass(cls):
         super(TestPerformance, cls).setUpClass()
 
-    @classmethod
-    def tearDownClass(cls):
-        super(TestPerformance, cls).tearDownClass()
-
-    def setUp(self):
-        super(TestPerformance, self).setUp()
-
     def test_performance(self):
         samples = 100
         def wrapper():
