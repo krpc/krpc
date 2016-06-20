@@ -20,9 +20,9 @@ class TestPartsDecoupler(krpctest.TestCase):
         self.assertTrue(self.stack_decoupler.decoupled)
         self.assertNotEqual(self.vessel, self.stack_decoupler.part.vessel)
         self.assertNotEqual(self.vessel, new_vessel)
-        self.assertEqual(
+        self.assertItemsEqual(
             ['FL-T400 Fuel Tank', 'TR-18A Stack Decoupler'],
-            sorted(part.title for part in new_vessel.parts.all))
+            [part.title for part in new_vessel.parts.all])
 
     def test_radial_decoupler(self):
         self.assertEqual(2600, self.radial_decoupler.impulse)
@@ -32,9 +32,9 @@ class TestPartsDecoupler(krpctest.TestCase):
         self.assertTrue(self.radial_decoupler.decoupled)
         self.assertNotEqual(self.vessel, self.radial_decoupler.part.vessel)
         self.assertNotEqual(self.vessel, new_vessel)
-        self.assertEqual(
+        self.assertItemsEqual(
             ['FL-T400 Fuel Tank', 'FL-T400 Fuel Tank', 'TT-70 Radial Decoupler'],
-            sorted(part.title for part in new_vessel.parts.all))
+            [part.title for part in new_vessel.parts.all])
 
 if __name__ == '__main__':
     unittest.main()

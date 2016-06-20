@@ -60,7 +60,7 @@ class RCSTest(RCSTestBase):
         self.assertClose(data['isp'], rcs.specific_impulse, error=0.1)
         self.assertEqual(data['vac_isp'], rcs.vacuum_specific_impulse)
         self.assertEqual(data['msl_isp'], rcs.kerbin_sea_level_specific_impulse)
-        self.assertEqual(sorted(data['propellants'].keys()), sorted(rcs.propellants))
+        self.assertItemsEqual(data['propellants'].keys(), rcs.propellants)
         self.assertClose(data['propellants'], rcs.propellant_ratios)
         self.assertTrue(rcs.has_fuel)
         self.control.rcs = False

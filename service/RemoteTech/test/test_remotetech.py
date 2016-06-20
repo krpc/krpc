@@ -9,7 +9,7 @@ class TestRemoteTech(krpctest.TestCase):
         cls.rt = cls.connect().remote_tech
 
     def test_ground_stations(self):
-        self.assertEqual(['Mission Control'], self.rt.ground_stations)
+        self.assertItemsEqual(self.rt.ground_stations, ['Mission Control'])
 
 if __name__ == '__main__':
     unittest.main()

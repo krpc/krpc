@@ -13,7 +13,7 @@ class TestInfernalRobotics(krpctest.TestCase):
 
     def test_servo_groups(self):
         groups = self.ir.servo_groups(self.vessel)
-        self.assertEqual(['Group1', 'Group2'], sorted(g.name for g in groups))
+        self.assertItemsEqual(['Group1', 'Group2'], [g.name for g in groups])
 
     def test_servo_group_with_name(self):
         group1 = self.ir.servo_group_with_name(self.vessel, 'Group1')

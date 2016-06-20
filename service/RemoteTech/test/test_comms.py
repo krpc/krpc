@@ -22,8 +22,8 @@ class TestComms(krpctest.TestCase):
         self.assertGreater(self.comms.signal_delay, 0)
         self.assertGreater(self.comms.signal_delay_to_ground_station, 0)
         self.assertGreater(self.comms.signal_delay_to_vessel(self.other_vessel), 0)
-        self.assertEqual(['Reflectron DP-10', 'Reflectron KR-7'],
-                         sorted(x.part.title for x in self.comms.antennas))
+        self.assertItemsEqual(['Reflectron DP-10', 'Reflectron KR-7'],
+                              [x.part.title for x in self.comms.antennas])
 
 if __name__ == '__main__':
     unittest.main()
