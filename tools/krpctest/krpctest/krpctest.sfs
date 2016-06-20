@@ -69,7 +69,7 @@ GAME
     }
     DIFFICULTY
     {
-      AutoHireCrews = False
+      AutoHireCrews = True
       MissingCrewsRespawn = True
       BypassEntryPurchaseAfterResearch = True
       AllowStockVessels = True
