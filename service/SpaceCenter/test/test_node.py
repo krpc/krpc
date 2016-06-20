@@ -7,19 +7,12 @@ class TestNode(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('Basic')
-        krpctest.remove_other_vessels()
-        krpctest.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        cls.set_circular_orbit('Kerbin', 100000)
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
-        for node in cls.control.nodes:
-            node.remove()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.control.remove_nodes()
 
     def check(self, node, delta_v):
         self.assertClose(delta_v[0], node.prograde)
@@ -42,7 +35,7 @@ class TestNode(krpctest.TestCase):
         self.assertClose(normalize((-delta_v[2], delta_v[0], delta_v[1])), orbital_direction)
 
     def test_add_node(self):
-        start_ut = self.conn.space_center.ut
+        start_ut = self.space_center.ut
         ut = start_ut + 60
         delta_v = (100, 200, -350)
         node = self.control.add_node(ut, *delta_v)
@@ -52,15 +45,15 @@ class TestNode(krpctest.TestCase):
         node.remove()
 
     def test_remove_node(self):
-        node = self.control.add_node(self.conn.space_center.ut, 0, 0, 0)
+        node = self.control.add_node(self.space_center.ut, 0, 0, 0)
         node.remove()
         with self.assertRaises(krpc.client.RPCError):
             node.prograde = 0
 
     def test_remove_nodes(self):
-        self.control.add_node(self.conn.space_center.ut+15, 4, -2, 1)
-        self.control.add_node(self.conn.space_center.ut+40, 1, 3, 2)
-        self.control.add_node(self.conn.space_center.ut+60, 0, 4, 0)
+        self.control.add_node(self.space_center.ut+15, 4, -2, 1)
+        self.control.add_node(self.space_center.ut+40, 1, 3, 2)
+        self.control.add_node(self.space_center.ut+60, 0, 4, 0)
         self.control.remove_nodes()
         # TODO: don't skip the following
         #with self.assertRaises (krpc.client.RPCError):
@@ -68,17 +61,17 @@ class TestNode(krpctest.TestCase):
 
     def test_get_nodes(self):
         self.assertEqual([], self.control.nodes)
-        node0 = self.control.add_node(self.conn.space_center.ut+35, 4, -2, 1)
+        node0 = self.control.add_node(self.space_center.ut+35, 4, -2, 1)
         self.assertEqual([node0], self.control.nodes)
-        node1 = self.control.add_node(self.conn.space_center.ut+15, 1, 3, 2)
+        node1 = self.control.add_node(self.space_center.ut+15, 1, 3, 2)
         self.assertEqual([node1, node0], self.control.nodes)
-        node2 = self.control.add_node(self.conn.space_center.ut+60, 0, 4, 0)
+        node2 = self.control.add_node(self.space_center.ut+60, 0, 4, 0)
         self.assertEqual([node1, node0, node2], self.control.nodes)
         self.control.remove_nodes()
         self.assertEqual([], self.control.nodes)
 
     def test_setters(self):
-        start_ut = self.conn.space_center.ut
+        start_ut = self.space_center.ut
         ut = start_ut + 60
         node = self.control.add_node(ut, 0, 0, 0)
         v = (-50, 500, -150)
@@ -93,7 +86,7 @@ class TestNode(krpctest.TestCase):
         node.remove()
 
     def test_set_magnitude(self):
-        node = self.control.add_node(self.conn.space_center.ut, 1, -2, 3)
+        node = self.control.add_node(self.space_center.ut, 1, -2, 3)
         magnitude = 128
         node.delta_v = magnitude
         delta_v = vector(normalize((1, -2, 3))) * magnitude
@@ -101,7 +94,7 @@ class TestNode(krpctest.TestCase):
         node.remove()
 
     def test_orbit(self):
-        start_ut = self.conn.space_center.ut
+        start_ut = self.space_center.ut
         ut = start_ut + 60
         delta_v = (100, 0, 0)
         node = self.control.add_node(ut, *delta_v)
@@ -111,7 +104,7 @@ class TestNode(krpctest.TestCase):
         orbit1 = node.orbit
 
         # Check semi-major axis using vis-viva equation
-        gm = self.conn.space_center.bodies['Kerbin'].gravitational_parameter
+        gm = self.space_center.bodies['Kerbin'].gravitational_parameter
         vsq = (orbit0.speed + delta_v[0])**2
         radius = orbit0.radius
         self.assertClose(gm / ((2*gm/radius) - vsq), orbit1.semi_major_axis, error=1)

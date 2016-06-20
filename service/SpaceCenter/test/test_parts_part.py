@@ -11,17 +11,13 @@ class TestPartsPart(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if krpctest.connect().space_center.active_vessel.name != 'Parts':
-            krpctest.new_save()
-            krpctest.launch_vessel_from_vab('Parts')
-            krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        if cls.connect().space_center.active_vessel.name != 'Parts':
+            cls.launch_vessel_from_vab('Parts')
+            cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.far_available = cls.connect().space_center.far_available
 
     def test_root_part(self):
         part = self.parts.root
@@ -59,7 +55,7 @@ class TestPartsPart(krpctest.TestCase):
             'ModuleTripLogger',
             'TransferDialogSpawner'
         ]
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNone(part.cargo_bay)
@@ -123,7 +119,7 @@ class TestPartsPart(krpctest.TestCase):
             'ModuleConductionMultiplier',
             'ModuleSeeThroughObject'
         ]
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.cargo_bay)
@@ -151,7 +147,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
         modules = ['ModuleControlSurface']
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.control_surface)
@@ -179,7 +175,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
         modules = ['ModuleAnchoredDecoupler', 'ModuleTestSubject', 'ModuleToggleCrossfeed']
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.decoupler)
@@ -208,7 +204,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
         modules = ['ModuleDockingNode']
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.docking_port)
@@ -236,7 +232,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
         modules = ['FXModuleAnimateThrottle', 'ModuleEnginesFX', 'ModuleSurfaceFX', 'ModuleTestSubject']
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.engine)
@@ -262,7 +258,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
         modules = ['ModuleCargoBay', 'ModuleProceduralFairing', 'ModuleTestSubject']
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.fairing)
@@ -289,7 +285,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
         modules = ['ModuleResourceIntake']
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.intake)
@@ -327,7 +323,7 @@ class TestPartsPart(krpctest.TestCase):
             'ModuleWheelSteering',
             'ModuleWheelSuspension'
         ]
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.landing_gear)
@@ -362,7 +358,7 @@ class TestPartsPart(krpctest.TestCase):
             'ModuleWheelLock',
             'ModuleWheelSuspension'
         ]
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.landing_leg)
@@ -391,7 +387,8 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_to)
         modules = ['LaunchClamp', 'ModuleGenerator', 'ModuleTestSubject']
         actual_modules = module_names(part.modules)
-        actual_modules.remove('ModuleRTAntennaPassive')
+        if 'ModuleRTAntennaPassive' in actual_modules:
+            actual_modules.remove('ModuleRTAntennaPassive')
         self.assertEqual(sorted(modules), actual_modules)
         self.assertIsNotNone(part.launch_clamp)
 
@@ -418,7 +415,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
         modules = ['ModuleLight']
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.light)
@@ -614,7 +611,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
         modules = ['ModuleEnviroSensor', 'ModuleScienceExperiment']
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.sensor)
@@ -642,7 +639,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
         modules = ['ModuleDeployableSolarPanel']
-        if self.conn.space_center.far_available:
+        if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertEqual(sorted(modules), module_names(part.modules))
         self.assertIsNotNone(part.solar_panel)

@@ -8,12 +8,8 @@ class TestOrbit(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        cls.conn = krpctest.connect(cls)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.new_save()
+        cls.space_center = cls.connect().space_center
 
     def check_radius_and_speed(self, obj, orbit):
         # Compute position from orbital elements
@@ -27,8 +23,8 @@ class TestOrbit(krpctest.TestCase):
         self.assertClose(speed, orbit.speed, error=1)
 
     def check_anomalies(self, obj, orbit):
-        g = self.conn.space_center.g
-        ut = self.conn.space_center.ut
+        g = self.space_center.g
+        ut = self.space_center.ut
         mean_anomaly_at_epoch = orbit.mean_anomaly_at_epoch
         epoch = orbit.epoch
 
@@ -45,7 +41,7 @@ class TestOrbit(krpctest.TestCase):
 
     def check_time_to_apoapsis_and_periapsis(self, obj, orbit):
         # Compute the time to apoapsis and periapsis using mean motion
-        g = self.conn.space_center.g
+        g = self.space_center.g
         mean_motion = math.sqrt((g * (orbit.body.mass + obj.mass)) / (orbit.semi_major_axis ** 3))
         time_since_periapsis = orbit.mean_anomaly / mean_motion
         time_to_periapsis = orbit.period - time_since_periapsis
@@ -57,8 +53,8 @@ class TestOrbit(krpctest.TestCase):
         self.assertClose(time_to_periapsis, orbit.time_to_periapsis, error=2)
 
     def test_fix(self):
-        krpctest.set_circular_orbit('Kerbin', 100000)
-        vessel = self.conn.space_center.active_vessel
+        self.set_circular_orbit('Kerbin', 100000)
+        vessel = self.space_center.active_vessel
         orbit = vessel.orbit
         self.assertClose(0, orbit.eccentricity, error=0.1)
         self.assertClose(0, orbit.inclination, error=0.1)
@@ -68,8 +64,8 @@ class TestOrbit(krpctest.TestCase):
         #self.assertClose(0, orbit.epoch, error=0.1)
 
     def test_vessel_orbiting_kerbin(self):
-        krpctest.set_circular_orbit('Kerbin', 100000)
-        vessel = self.conn.space_center.active_vessel
+        self.set_circular_orbit('Kerbin', 100000)
+        vessel = self.space_center.active_vessel
         orbit = vessel.orbit
         self.assertEqual('Kerbin', orbit.body.name)
         self.assertClose(100000 + 600000, orbit.apoapsis, error=50)
@@ -93,8 +89,8 @@ class TestOrbit(krpctest.TestCase):
         self.assertIsNone(orbit.next_orbit)
 
     def test_vessel_orbiting_bop(self):
-        krpctest.set_orbit('Bop', 320000, 0.18, 27, 38, 241, 2.3, 0)
-        vessel = self.conn.space_center.active_vessel
+        self.set_orbit('Bop', 320000, 0.18, 27, 38, 241, 2.3, 0)
+        vessel = self.space_center.active_vessel
         orbit = vessel.orbit
         self.assertEqual('Bop', orbit.body.name)
         self.assertClose(377600, orbit.apoapsis, error=50)
@@ -118,8 +114,8 @@ class TestOrbit(krpctest.TestCase):
         #self.assertNone(orbit.next_orbit)
 
     def test_vessel_orbiting_mun_on_escape_soi(self):
-        krpctest.set_orbit('Mun', 1800000, 0.52, 0, 13, 67, 6.25, 0)
-        vessel = self.conn.space_center.active_vessel
+        self.set_orbit('Mun', 1800000, 0.52, 0, 13, 67, 6.25, 0)
+        vessel = self.space_center.active_vessel
         orbit = vessel.orbit
         self.assertEqual('Mun', orbit.body.name)
         self.assertClose(2736000, orbit.apoapsis, error=100)
@@ -146,8 +142,8 @@ class TestOrbit(krpctest.TestCase):
         self.assertEqual('Kerbin', orbit.body.name)
 
     def test_vessel_orbiting_minmus_on_parabolic_arc(self):
-        krpctest.set_orbit('Minmus', 80000, 3, 0, 0, 0, 0, 0)
-        vessel = self.conn.space_center.active_vessel
+        self.set_orbit('Minmus', 80000, 3, 0, 0, 0, 0, 0)
+        vessel = self.space_center.active_vessel
         orbit = vessel.orbit
         self.assertEqual('Minmus', orbit.body.name)
         self.assertClose(-320000, orbit.apoapsis, error=50)
@@ -174,11 +170,11 @@ class TestOrbit(krpctest.TestCase):
         self.assertEqual('Kerbin', orbit.body.name)
 
     def test_sun_orbit(self):
-        sun = self.conn.space_center.bodies['Sun']
+        sun = self.space_center.bodies['Sun']
         self.assertIsNone(sun.orbit)
 
     def test_kerbin_orbiting_sun(self):
-        body = self.conn.space_center.bodies['Kerbin']
+        body = self.space_center.bodies['Kerbin']
         orbit = body.orbit
         self.assertEqual('Sun', orbit.body.name)
         self.assertClose(13599840256, orbit.apoapsis)
@@ -199,7 +195,7 @@ class TestOrbit(krpctest.TestCase):
         self.check_anomalies(body, orbit)
 
     def test_minmus_orbiting_kerbin(self):
-        body = self.conn.space_center.bodies['Minmus']
+        body = self.space_center.bodies['Minmus']
         orbit = body.orbit
         self.assertEqual('Kerbin', orbit.body.name)
         self.assertClose(47000000, orbit.apoapsis)
@@ -220,7 +216,7 @@ class TestOrbit(krpctest.TestCase):
         self.check_anomalies(body, orbit)
 
     def test_eeloo_orbiting_sun(self):
-        body = self.conn.space_center.bodies['Eeloo']
+        body = self.space_center.bodies['Eeloo']
         orbit = body.orbit
         self.assertEqual('Sun', orbit.body.name)
         self.assertClose(113549713200, orbit.apoapsis)
@@ -241,7 +237,7 @@ class TestOrbit(krpctest.TestCase):
         self.check_anomalies(body, orbit)
 
     def test_reference_plane(self):
-        kerbin = self.conn.space_center.bodies['Kerbin']
+        kerbin = self.space_center.bodies['Kerbin']
         ref = kerbin.non_rotating_reference_frame
         normal = kerbin.orbit.reference_plane_normal(ref)
         direction = kerbin.orbit.reference_plane_direction(ref)

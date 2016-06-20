@@ -1,5 +1,4 @@
 import unittest
-import time
 import krpc
 import krpctest
 
@@ -7,19 +6,15 @@ class TestVessel(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('Vessel')
-        krpctest.remove_other_vessels()
-        krpctest.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpctest.connect(cls)
-        cls.Type = cls.conn.space_center.VesselType
-        cls.Situation = cls.conn.space_center.VesselSituation
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.far = cls.conn.space_center.far_available
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.new_save()
+        cls.launch_vessel_from_vab('Vessel')
+        cls.remove_other_vessels()
+        cls.set_circular_orbit('Kerbin', 100000)
+        cls.space_center = cls.connect().space_center
+        cls.Type = cls.space_center.VesselType
+        cls.Situation = cls.space_center.VesselSituation
+        cls.vessel = cls.space_center.active_vessel
+        cls.far = cls.space_center.far_available
 
     def test_name(self):
         self.assertEqual('Vessel', self.vessel.name)
@@ -41,12 +36,12 @@ class TestVessel(krpctest.TestCase):
         self.assertRaises(krpc.client.RPCError, self.vessel.recover)
 
     def test_met(self):
-        ut = self.conn.space_center.ut
+        ut = self.space_center.ut
         met = self.vessel.met
-        time.sleep(1)
-        self.assertClose(ut+1, self.conn.space_center.ut, error=0.5)
+        self.wait(1)
+        self.assertClose(ut+1, self.space_center.ut, error=0.5)
         self.assertClose(met+1, self.vessel.met, error=0.5)
-        self.assertGreater(self.conn.space_center.ut, self.vessel.met)
+        self.assertGreater(self.space_center.ut, self.vessel.met)
 
     def test_mass(self):
         # 2645 kg dry mass
@@ -85,10 +80,10 @@ class TestVessel(krpctest.TestCase):
     def test_available_rcs_torque(self):
         self.assertClose((0, 0, 0), self.vessel.available_rcs_torque)
         self.vessel.control.rcs = True
-        time.sleep(0.1)
+        self.wait()
         self.assertClose((6005, 5575, 6005), self.vessel.available_rcs_torque, error=1)
         self.vessel.control.rcs = False
-        time.sleep(0.1)
+        self.wait()
         self.assertClose((0, 0, 0), self.vessel.available_rcs_torque)
 
     def test_available_engine_torque(self):
@@ -101,12 +96,11 @@ class TestVesselEngines(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('PartsEngine')
-        krpctest.remove_other_vessels()
-        krpctest.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        cls.launch_vessel_from_vab('PartsEngine')
+        cls.remove_other_vessels()
+        cls.set_circular_orbit('Kerbin', 100000)
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.control = cls.vessel.control
 
         cls.engines = []
@@ -183,15 +177,11 @@ class TestVesselEngines(krpctest.TestCase):
         cls.vac_combined_isp = sum(max_thrusts) / sum(t/i if i > 0 else 0 for t, i in zip(max_thrusts, vac_isps))
         cls.msl_combined_isp = sum(max_thrusts) / sum(t/i if i > 0 else 0 for t, i in zip(max_thrusts, msl_isps))
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
-
     def test_inactive(self):
         self.control.throttle = 0.0
         for engine in self.engines:
             engine.active = False
-        time.sleep(0.5)
+        self.wait(0.5)
         self.assertClose(0, self.vessel.thrust)
         self.assertClose(0, self.vessel.available_thrust)
         self.assertClose(0, self.vessel.max_thrust)
@@ -205,13 +195,13 @@ class TestVesselEngines(krpctest.TestCase):
         title = 'LV-N "Nerv" Atomic Rocket Motor'
         engine = self.vessel.parts.with_title(title)[0].engine
         engine.active = True
-        time.sleep(0.5)
+        self.wait(0.5)
 
         #FIXME: need to run the engines to update their has fuel status
         self.control.throttle = 0.1
-        time.sleep(0.5)
+        self.wait(0.5)
         self.control.throttle = 0.0
-        time.sleep(0.5)
+        self.wait(0.5)
 
         info = self.engine_info[title]
         self.assertClose(0, self.vessel.thrust)
@@ -222,19 +212,19 @@ class TestVesselEngines(krpctest.TestCase):
         self.assertClose(info['msl_isp'], self.vessel.kerbin_sea_level_specific_impulse)
         self.assertClose((0, 0, 0), self.vessel.available_engine_torque)
         engine.active = False
-        time.sleep(0.5)
+        self.wait(0.5)
 
     def test_all_idle(self):
         self.control.throttle = 0.0
         for engine in self.engines:
             engine.active = True
-        time.sleep(0.5)
+        self.wait(0.5)
 
         #FIXME: need to run the engines to update their has fuel status
         self.control.throttle = 0.1
-        time.sleep(0.5)
+        self.wait(0.5)
         self.control.throttle = 0.0
-        time.sleep(0.5)
+        self.wait(0.5)
 
         self.assertClose(0, self.vessel.thrust, 1)
         self.assertClose(self.available_thrust, self.vessel.available_thrust, 1)
@@ -245,25 +235,25 @@ class TestVesselEngines(krpctest.TestCase):
         self.assertClose((0, 0, 0), self.vessel.available_engine_torque)
         for engine in self.engines:
             engine.active = False
-        time.sleep(0.5)
+        self.wait(0.5)
 
     def test_throttle(self):
         for engine in self.engines:
             engine.active = True
         for throttle in (0.3, 0.7, 1):
             self.control.throttle = throttle
-            time.sleep(1)
+            self.wait(1)
             self.assertClose(throttle*self.available_thrust, self.vessel.thrust, 1)
             self.assertClose(self.available_thrust, self.vessel.available_thrust, 1)
             self.assertClose(self.max_thrust, self.vessel.max_thrust, 1)
             self.assertClose(self.combined_isp, self.vessel.specific_impulse, 1)
             self.assertClose(self.vac_combined_isp, self.vessel.vacuum_specific_impulse, 1)
             self.assertClose(self.msl_combined_isp, self.vessel.kerbin_sea_level_specific_impulse, 1)
-            self.assertGreater((0, 0, 0), self.vessel.available_engine_torque)
+            self.assertGreater(self.vessel.available_engine_torque, (0, 0, 0))
         self.control.throttle = 0
         for engine in self.engines:
             engine.active = False
-        time.sleep(1)
+        self.wait(1)
 
 if __name__ == '__main__':
     unittest.main()

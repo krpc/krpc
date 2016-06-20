@@ -1,5 +1,4 @@
 import unittest
-import time
 import krpctest
 
 class EngineTestBase(object):
@@ -110,7 +109,7 @@ class EngineTestBase(object):
         data = self.engine_data[engine.part.title]
         self.vessel.control.throttle = 0
         engine.active = False
-        time.sleep(1)
+        self.wait(1)
         if not data['throttle_locked']:
             self.assertClose(0, engine.throttle)
 
@@ -118,7 +117,7 @@ class EngineTestBase(object):
         data = self.engine_data[engine.part.title]
         self.vessel.control.throttle = value
         engine.active = True
-        time.sleep(1)
+        self.wait(1)
         if not data['throttle_locked']:
             self.assertClose(value, engine.throttle)
 
@@ -225,16 +224,11 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('PartsEngine')
-        krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        cls.launch_vessel_from_vab('PartsEngine')
+        cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
     def test_has_fuel(self):
         engine = self.get_engine('LV-T30 "Reliant" Liquid Fuel Engine')
@@ -244,7 +238,7 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         engine = self.get_engine('LV-909 "Terrier" Liquid Fuel Engine')
         #FIXME: have to activate engine for this to work
         engine.active = True
-        time.sleep(0.1)
+        self.wait()
         self.assertFalse(engine.has_fuel)
         engine.active = False
 
@@ -267,7 +261,7 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
             for thrust_limit in (1, 0.8, 0.333, 0.1, 0):
                 engine.thrust_limit = thrust_limit
                 self.assertClose(thrust_limit, engine.thrust_limit)
-                time.sleep(0.5)
+                self.wait(0.5)
                 self.assertClose(throttle * thrust_limit * thrust, engine.thrust, 500)
                 self.assertClose(thrust_limit * thrust, engine.available_thrust, 500)
                 self.assertClose(thrust, engine.max_thrust, 500)
@@ -279,17 +273,17 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
     def test_set_mode(self):
         engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
         engine.mode = 'ClosedCycle'
-        time.sleep(0.1)
+        self.wait()
         self.assertEqual('ClosedCycle', engine.mode)
         engine.mode = 'AirBreathing'
 
     def test_auto_mode_switch(self):
         engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
         engine.auto_mode_switch = True
-        time.sleep(0.1) #TODO: need to sleep for the auto mode switch setting to take effect
+        self.wait()
         self.assertTrue(engine.auto_mode_switch)
         engine.auto_mode_switch = False
-        time.sleep(0.1)
+        self.wait()
         self.assertFalse(engine.auto_mode_switch)
 
     def test_gimbal_lock(self):
@@ -298,10 +292,10 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.assertEqual(3, engine.gimbal_range)
         self.assertFalse(engine.gimbal_locked)
         engine.gimbal_locked = True
-        time.sleep(0.1)
+        self.wait()
         self.assertTrue(engine.gimbal_locked)
         engine.gimbal_locked = False
-        time.sleep(0.1)
+        self.wait()
         self.assertFalse(engine.gimbal_locked)
 
     def test_gimbal_limit(self):
@@ -312,7 +306,7 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         for limit in (1, 0.6, 0.234, 0):
             engine.gimbal_limit = limit
             self.assertClose(limit, engine.gimbal_limit)
-            time.sleep(1)
+            self.wait(1)
         engine.gimbal_limit = 1
         engine.gimbal_locked = True
         self.assertEqual(0, engine.gimbal_limit)
@@ -323,11 +317,10 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('PartsEngine')
-        krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        cls.launch_vessel_from_vab('PartsEngine')
+        cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.add_engine_data(
             'LV-T30 "Reliant" Liquid Fuel Engine',
@@ -354,10 +347,6 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
             'CR-7 R.A.P.I.E.R. Engine',
             {'max_thrust': 105000, 'isp': 3200})
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
-
     def test_jet_engine(self):
         engine = self.get_engine('J-33 "Wheesley" Basic Jet Engine')
         self.set_idle(engine)
@@ -367,7 +356,7 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
         for throttle in (1, 0.6, 0.2):
             self.vessel.control.throttle = throttle
             while abs(engine.throttle - throttle) > 0.1:
-                time.sleep(1)
+                self.wait(1)
             self.check_engine_properties(engine)
             self.check_engine_active(engine, engine.throttle)
         engine.active = False
@@ -382,7 +371,7 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
         for throttle in (1, 0.6, 0.2):
             self.vessel.control.throttle = throttle
             while abs(engine.throttle - throttle) > 0.1:
-                time.sleep(1)
+                self.wait(1)
             self.check_engine_properties(engine)
             self.check_engine_active(engine, engine.throttle)
         engine.active = False
@@ -391,12 +380,11 @@ class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('PartsEngine')
-        krpctest.remove_other_vessels()
-        krpctest.set_circular_orbit('Kerbin', 250000)
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        cls.launch_vessel_from_vab('PartsEngine')
+        cls.remove_other_vessels()
+        cls.set_circular_orbit('Kerbin', 250000)
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
         cls.add_engine_data(
             'LV-T30 "Reliant" Liquid Fuel Engine',
@@ -430,10 +418,6 @@ class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
              'modes': ['AirBreathing', 'ClosedCycle'],
              'max_thrust': 180000,
              'isp': 305})
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
     def test_multi_mode_engine(self):
         engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')

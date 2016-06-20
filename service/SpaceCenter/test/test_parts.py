@@ -12,17 +12,12 @@ class TestParts(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if krpctest.connect().space_center.active_vessel.name != 'Parts':
-            krpctest.new_save()
-            krpctest.launch_vessel_from_vab('Parts')
-            krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        if cls.connect().space_center.active_vessel.name != 'Parts':
+            cls.launch_vessel_from_vab('Parts')
+            cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
     def test_all_parts(self):
         self.assertEqual([

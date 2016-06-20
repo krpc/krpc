@@ -1,5 +1,4 @@
 import unittest
-import time
 import krpctest
 from krpctest.geometry import normalize
 
@@ -7,25 +6,20 @@ class TestAutoPilot(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.remove_other_vessels()
-        krpctest.launch_vessel_from_vab('Basic')
-        krpctest.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.launch_vessel_from_vab('Basic')
+        cls.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
         cls.ap.sas = False
-        cls.SASMode = cls.conn.space_center.SASMode
+        cls.sas_mode = cls.connect().space_center.SASMode
         cls.ap.rotation_speed_multiplier = 2
         cls.ap.roll_speed_multiplier = 2
         cls.ap.set_pid_parameters(3, 0, 0)
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
-
     def setUp(self):
-        self.conn.testing_tools.clear_rotation()
+        self.connect().testing_tools.clear_rotation()
 
     def test_equality(self):
         self.assertEqual(self.ap, self.vessel.auto_pilot)
@@ -207,7 +201,7 @@ class TestAutoPilot(krpctest.TestCase):
             wheel.active = True
 
     def test_reset_on_disconnect(self):
-        conn = krpctest.connect(self, 'test_reset_on_disconnect')
+        conn = self.connect(use_cached=False)
         vessel = conn.space_center.active_vessel
         ap = vessel.auto_pilot
         ap.reference_frame = vessel.orbital_reference_frame
@@ -216,9 +210,9 @@ class TestAutoPilot(krpctest.TestCase):
         ap.engage()
         conn.close()
 
-        time.sleep(0.1)
+        self.wait()
 
-        conn = krpctest.connect(self, 'test_reset_on_disconnect')
+        conn = self.connect(use_cached=False)
         vessel = conn.space_center.active_vessel
         ap = vessel.auto_pilot
         self.assertEqual(vessel.surface_reference_frame, ap.reference_frame)
@@ -228,24 +222,24 @@ class TestAutoPilot(krpctest.TestCase):
         conn.close()
 
     def test_dont_reset_on_clean_disconnect(self):
-        conn = krpctest.connect(self, 'test_dont_reset_on_clean_disconnect')
+        conn = self.connect(use_cached=False)
         vessel = conn.space_center.active_vessel
         ap = vessel.auto_pilot
         ap.reference_frame = vessel.orbital_reference_frame
         ap.target_pitch_and_heading(10, 20)
         ap.target_roll = 30
         ap.engage()
-        time.sleep(0.1)
+        self.wait()
         ap.disengage()
         conn.close()
 
-        time.sleep(0.1)
+        self.wait()
 
-        conn = krpctest.connect(self, 'test_dont_reset_on_clean_disconnect')
+        conn = self.connect(use_cached=False)
         vessel = conn.space_center.active_vessel
         ap = vessel.auto_pilot
         self.assertEqual(vessel.orbital_reference_frame, ap.reference_frame)
-        self.assertNotNone(ap.target_direction)
+        self.assertIsNotNone(ap.target_direction)
         self.assertEqual(30, ap.target_roll)
         conn.close()
 
@@ -253,25 +247,20 @@ class TestAutoPilotSAS(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.remove_other_vessels()
-        krpctest.launch_vessel_from_vab('Basic')
-        krpctest.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.launch_vessel_from_vab('Basic')
+        cls.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.ap = cls.vessel.auto_pilot
-        cls.sas_mode = cls.conn.space_center.SASMode
-        cls.speed_mode = cls.conn.space_center.SpeedMode
+        cls.sas_mode = cls.connect().space_center.SASMode
+        cls.speed_mode = cls.connect().space_center.SpeedMode
         cls.ap.rotation_speed_multiplier = 2
         cls.ap.roll_speed_multiplier = 2
         cls.ap.set_pid_parameters(3, 0, 0)
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
-
     def setUp(self):
-        self.conn.testing_tools.clear_rotation()
+        self.connect().testing_tools.clear_rotation()
 
     def wait_for_autopilot(self):
         self.ap.engage()
@@ -294,22 +283,22 @@ class TestAutoPilotSAS(krpctest.TestCase):
 
         self.ap.speed_mode = self.speed_mode.orbit
 
-        self.ap.sas_mode = self.SASMode.prograde
+        self.ap.sas_mode = self.sas_mode.prograde
         self.assertClose(0, self.ap.error, 1)
 
-        self.ap.sas_mode = self.SASMode.retrograde
+        self.ap.sas_mode = self.sas_mode.retrograde
         self.assertClose(180, self.ap.error, 1)
 
-        self.ap.sas_mode = self.SASMode.normal
+        self.ap.sas_mode = self.sas_mode.normal
         self.assertClose(90, self.ap.error, 1)
 
-        self.ap.sas_mode = self.SASMode.anti_normal
+        self.ap.sas_mode = self.sas_mode.anti_normal
         self.assertClose(90, self.ap.error, 1)
 
-        self.ap.sas_mode = self.SASMode.radial
+        self.ap.sas_mode = self.sas_mode.radial
         self.assertClose(90, self.ap.error, 1)
 
-        self.ap.sas_mode = self.SASMode.anti_radial
+        self.ap.sas_mode = self.sas_mode.anti_radial
         self.assertClose(90, self.ap.error, 1)
 
         self.ap.sas = False
@@ -320,22 +309,19 @@ class TestAutoPilotOtherVessel(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.remove_other_vessels()
-        krpctest.launch_vessel_from_vab('Multi')
-        krpctest.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
-        cls.conn = krpctest.connect(cls)
-        next(iter(cls.conn.space_center.active_vessel.parts.docking_ports)).undock()
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.other_vessel = next(v for v in cls.conn.space_center.vessels if v != cls.vessel)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.new_save()
+        cls.launch_vessel_from_vab('Multi')
+        cls.remove_other_vessels()
+        cls.set_orbit('Eve', 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        space_center = cls.connect().space_center
+        next(iter(space_center.active_vessel.parts.docking_ports)).undock()
+        cls.vessel = space_center.active_vessel
+        cls.other_vessel = next(v for v in space_center.vessels if v != cls.vessel)
 
     def test_autopilot(self):
         ap = self.other_vessel.auto_pilot
-        ap.target_pitch_and_heading(90, 0)
+        ap.target_pitch_and_heading(0, 0)
+        ap.target_roll = 0
         ap.engage()
         ap.wait()
         ap.disengage()

@@ -6,16 +6,11 @@ class TestPartsFuelLines(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if krpctest.connect().space_center.active_vessel.name != 'PartsFuelLines':
-            krpctest.new_save()
-            krpctest.launch_vessel_from_vab('PartsFuelLines')
-            krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.parts = cls.conn.space_center.active_vessel.parts
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.new_save()
+        if cls.connect().space_center.active_vessel.name != 'PartsFuelLines':
+            cls.launch_vessel_from_vab('PartsFuelLines')
+            cls.remove_other_vessels()
+        cls.parts = cls.connect().space_center.active_vessel.parts
 
     def test_fuel_line_part(self):
         part = self.parts.with_title('FTX-2 External Fuel Duct')[0]

@@ -1,5 +1,4 @@
 import unittest
-import time
 import krpctest
 from krpctest.geometry import norm, normalize
 
@@ -7,14 +6,13 @@ class TestSpaceCenter(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('Basic')
-        krpctest.remove_other_vessels()
-        krpctest.set_circular_orbit('Kerbin', 1000000)
-        krpctest.launch_vessel_from_vab('Basic')
-        krpctest.set_circular_orbit('Kerbin', 1010000)
-        cls.conn = krpctest.connect(cls)
-        cls.sc = cls.conn.space_center
+        cls.new_save()
+        cls.launch_vessel_from_vab('Basic')
+        cls.remove_other_vessels()
+        cls.set_circular_orbit('Kerbin', 1000000)
+        cls.launch_vessel_from_vab('Basic')
+        cls.set_circular_orbit('Kerbin', 1010000)
+        cls.sc = cls.connect().space_center
         cls.vessel = cls.sc.active_vessel
         cls.other_vessel = next(v for v in cls.sc.vessels if v != cls.vessel)
         cls.vessel.name = 'Vessel'
@@ -31,13 +29,11 @@ class TestSpaceCenter(krpctest.TestCase):
         cls.ref_nr_kerbin = cls.kerbin.non_rotating_reference_frame
         cls.ref_nr_mun = cls.mun.non_rotating_reference_frame
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
-
     def test_launchable_vessels(self):
-        print self.sc.launchable_vessels("SPH")
-        print self.sc.launchable_vessels("VAB")
+        #TODO: implement test
+        #print self.sc.launchable_vessels("SPH")
+        #print self.sc.launchable_vessels("VAB")
+        pass
 
     def test_active_vessel(self):
         active = self.sc.active_vessel
@@ -74,12 +70,12 @@ class TestSpaceCenter(krpctest.TestCase):
     def test_target_body(self):
         self.assertIsNone(self.sc.target_body)
         self.sc.target_body = self.mun
-        time.sleep(0.1)
+        self.wait()
         self.assertEqual(self.mun, self.sc.target_body)
         self.assertIsNone(self.sc.target_vessel)
         self.assertIsNone(self.sc.target_docking_port)
         self.sc.target_body = None
-        time.sleep(0.1)
+        self.wait()
         self.assertIsNone(self.sc.target_body)
         self.assertIsNone(self.sc.target_vessel)
         self.assertIsNone(self.sc.target_docking_port)
@@ -87,12 +83,12 @@ class TestSpaceCenter(krpctest.TestCase):
     def test_target_vessel(self):
         self.assertIsNone(self.sc.target_vessel)
         self.sc.target_vessel = self.other_vessel
-        time.sleep(0.1)
+        self.wait()
         self.assertIsNone(self.sc.target_body)
         self.assertEqual(self.other_vessel, self.sc.target_vessel)
         self.assertIsNone(self.sc.target_docking_port)
         self.sc.target_vessel = None
-        time.sleep(0.1)
+        self.wait()
         self.assertIsNone(self.sc.target_body)
         self.assertIsNone(self.sc.target_vessel)
         self.assertIsNone(self.sc.target_docking_port)
@@ -122,14 +118,14 @@ class TestSpaceCenter(krpctest.TestCase):
         name = self.vessel.name
         self.sc.save('test_save_and_load')
         self.vessel.name = 'vessel_name_before_load'
-        time.sleep(0.1)
+        self.wait()
         self.assertEqual('vessel_name_before_load', self.vessel.name)
         self.sc.load('test_save_and_load')
         self.assertEqual(name, self.vessel.name)
 
     def test_ut(self):
         ut = self.sc.ut
-        time.sleep(1)
+        self.wait(1)
         self.assertClose(ut + 1, self.sc.ut, error=0.25)
 
     def test_g(self):
@@ -191,14 +187,13 @@ class TestSpaceCenter(krpctest.TestCase):
         r = (1, 0, 0, 0)
         self.assertClose(r, self.sc.transform_rotation(r, self.ref_vessel, self.ref_vessel))
 
-    #TODO: improve transform velcoity tests - check it includes rotational velocities
+    #TODO: improve transform velocity tests - check it includes rotational velocities
 
     def test_transform_velocity_same_reference_frame(self):
-        pos = (0, 0, 0)
         vel = (1, 2, 3)
         ref = self.ref_vessel
-        self.assertClose(vel, self.sc.transform_velocity(pos, vel, ref, ref))
-        self.assertClose(vel, self.sc.transform_velocity(pos + (10, 20, 30), vel, ref, ref))
+        self.assertClose(vel, self.sc.transform_velocity((0, 0, 0), vel, ref, ref))
+        self.assertClose(vel, self.sc.transform_velocity((10, 20, 30), vel, ref, ref))
 
     def test_transform_velocity_between_vessel_and_celestial_body(self):
         vel = self.sc.transform_velocity((0, 0, 0), (0, 0, 0), self.ref_vessel, self.ref_nr_kerbin)
@@ -253,30 +248,30 @@ class WarpTestBase(object):
         self.assertEqual(1, self.sc.warp_rate)
         for factor in range(1, self.maximum_rails_warp_factor+1):
             self.sc.rails_warp_factor = factor
-            time.sleep(2)
+            self.wait(2)
             self.assertEqual(rates[factor], self.sc.warp_rate)
             self.assertEqual(self.sc.WarpMode.rails, self.sc.warp_mode)
             self.assertEqual(factor, self.sc.rails_warp_factor)
             self.assertEqual(0, self.sc.physics_warp_factor)
 
         self.sc.rails_warp_factor = 8
-        time.sleep(1)
+        self.wait(1)
         self.assertEqual(rates[self.maximum_rails_warp_factor], self.sc.warp_rate)
         self.assertEqual(self.maximum_rails_warp_factor, self.sc.rails_warp_factor)
         self.sc.rails_warp_factor = 42
-        time.sleep(0.5)
+        self.wait(0.5)
         self.assertEqual(rates[self.maximum_rails_warp_factor], self.sc.warp_rate)
         self.assertEqual(self.maximum_rails_warp_factor, self.sc.rails_warp_factor)
 
         self.sc.rails_warp_factor = 0
-        time.sleep(1)
+        self.wait(1)
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.assertEqual(0, self.sc.rails_warp_factor)
         self.assertEqual(0, self.sc.physics_warp_factor)
         self.assertEqual(1, self.sc.warp_rate)
 
         self.sc.rails_warp_factor = -1
-        time.sleep(0.5)
+        self.wait(0.5)
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.assertEqual(0, self.sc.rails_warp_factor)
         self.assertEqual(0, self.sc.physics_warp_factor)
@@ -287,12 +282,12 @@ class WarpTestBase(object):
             self.vessel.control.throttle = 1
             for engine in self.vessel.parts.engines:
                 engine.active = True
-            time.sleep(0.1)
+            self.wait()
             self.assertEqual(0, self.sc.maximum_rails_warp_factor)
             self.vessel.control.throttle = 0
             for engine in self.vessel.parts.engines:
                 engine.active = False
-            time.sleep(1)
+            self.wait(1)
             self.assertEqual(self.maximum_rails_warp_factor, self.sc.maximum_rails_warp_factor)
 
     def test_physics_warp(self):
@@ -300,23 +295,23 @@ class WarpTestBase(object):
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         for factor in range(1, 4):
             self.sc.physics_warp_factor = factor
-            time.sleep(2)
+            self.wait(2)
             self.assertEqual(rates[factor], self.sc.warp_rate)
             self.assertEqual(self.sc.WarpMode.physics, self.sc.warp_mode)
             self.assertEqual(0, self.sc.rails_warp_factor)
             self.assertEqual(factor, self.sc.physics_warp_factor)
 
         self.sc.physics_warp_factor = 4
-        time.sleep(0.5)
+        self.wait(0.5)
         self.assertEqual(rates[3], self.sc.warp_rate)
         self.assertEqual(3, self.sc.physics_warp_factor)
         self.sc.physics_warp_factor = 42
-        time.sleep(0.5)
+        self.wait(0.5)
         self.assertEqual(rates[3], self.sc.warp_rate)
         self.assertEqual(3, self.sc.physics_warp_factor)
 
         self.sc.physics_warp_factor = 0
-        time.sleep(0.5)
+        self.wait(0.5)
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.assertEqual(0, self.sc.rails_warp_factor)
         self.assertEqual(0, self.sc.physics_warp_factor)
@@ -325,15 +320,15 @@ class WarpTestBase(object):
     def test_switch_mode(self):
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.sc.rails_warp_factor = 2
-        time.sleep(2)
+        self.wait(2)
         self.assertEqual(self.sc.WarpMode.rails, self.sc.warp_mode)
         self.assertEqual(10, self.sc.warp_rate)
         self.sc.physics_warp_factor = 2
-        time.sleep(2)
+        self.wait(2)
         self.assertEqual(self.sc.WarpMode.physics, self.sc.warp_mode)
         self.assertEqual(3, self.sc.warp_rate)
         self.sc.rails_warp_factor = 0
-        time.sleep(2)
+        self.wait(2)
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
 
     def test_warp_to(self):
@@ -345,18 +340,13 @@ class TestWarpOnLaunchpad(krpctest.TestCase, WarpTestBase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('Basic')
-        krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.sc = cls.conn.space_center
+        cls.new_save()
+        cls.launch_vessel_from_vab('Basic')
+        cls.remove_other_vessels()
+        cls.sc = cls.connect().space_center
         cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 7
         cls.landed = True
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
     def test_warp_to_long(self):
         ut = self.sc.ut + (100*60*60) # 100 hours in future
@@ -367,37 +357,27 @@ class TestWarpInOrbit(krpctest.TestCase, WarpTestBase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('Basic')
-        krpctest.remove_other_vessels()
-        krpctest.set_circular_orbit('Kerbin', 200000)
-        cls.conn = krpctest.connect(cls)
-        cls.sc = cls.conn.space_center
+        cls.new_save()
+        cls.launch_vessel_from_vab('Basic')
+        cls.remove_other_vessels()
+        cls.set_circular_orbit('Kerbin', 200000)
+        cls.sc = cls.connect().space_center
         cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 4
         cls.landed = False
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
 class TestWarpInSpace(krpctest.TestCase, WarpTestBase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('Basic')
-        krpctest.remove_other_vessels()
-        krpctest.set_circular_orbit('Kerbin', 700000)
-        cls.conn = krpctest.connect(cls)
-        cls.sc = cls.conn.space_center
+        cls.new_save()
+        cls.launch_vessel_from_vab('Basic')
+        cls.remove_other_vessels()
+        cls.set_circular_orbit('Kerbin', 700000)
+        cls.sc = cls.connect().space_center
         cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 7
         cls.landed = False
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
 if __name__ == '__main__':
     unittest.main()

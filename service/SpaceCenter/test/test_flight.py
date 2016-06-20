@@ -1,6 +1,5 @@
 import unittest
 import math
-import time
 import krpctest
 from krpctest.geometry import rad2deg, norm, normalize, dot, cross, vector
 
@@ -8,16 +7,16 @@ class TestFlight(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.remove_other_vessels()
-        krpctest.set_circular_orbit('Kerbin', 100000)
-        cls.conn = krpctest.connect()
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.conn.testing_tools.clear_rotation()
-        cls.conn.testing_tools.apply_rotation(116, (0, 0, -1))
-        cls.conn.testing_tools.apply_rotation(27, (-1, 0, 0))
-        cls.conn.testing_tools.apply_rotation(40, (0, -1, 0))
-        cls.far = cls.conn.space_center.far_available
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.set_circular_orbit('Kerbin', 100000)
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.connect().testing_tools.clear_rotation()
+        cls.connect().testing_tools.apply_rotation(116, (0, 0, -1))
+        cls.connect().testing_tools.apply_rotation(27, (-1, 0, 0))
+        cls.connect().testing_tools.apply_rotation(40, (0, -1, 0))
+        cls.far = cls.space_center.far_available
 
     def test_equality(self):
         flight = self.vessel.flight(self.vessel.reference_frame)
@@ -166,26 +165,20 @@ class TestFlight(krpctest.TestCase):
         # Longitude should be gradually increasing
         flight = self.vessel.flight()
         longitude = flight.longitude
-        time.sleep(1)
+        self.wait()
         for _ in range(5):
             self.assertClose(0, flight.latitude, 0.001)
             self.assertLess(longitude, flight.longitude)
             longitude = flight.longitude
-            time.sleep(1)
+            self.wait()
 
 class TestFlightVerticalSpeed(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.conn.testing_tools.remove_other_vessels()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
 
     def check_speed(self, flight, ref):
         up = normalize(vector(self.vessel.position(ref))
@@ -201,21 +194,21 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
         self.assertClose(horizontal_speed, flight.horizontal_speed, error=0.5)
 
     def test_vertical_speed_positive(self):
-        krpctest.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, 0, 0)
+        self.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, 0, 0)
         ref = self.vessel.orbit.body.reference_frame
         flight = self.vessel.flight(ref)
         self.assertGreater(flight.vertical_speed, 0)
         self.check_speed(flight, ref)
 
     def test_vertical_speed_negative(self):
-        krpctest.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, 2, 0)
+        self.set_orbit('Kerbin', 2000000, 0.2, 0, 0, 0, -2, 0)
         ref = self.vessel.orbit.body.reference_frame
         flight = self.vessel.flight(ref)
         self.assertGreater(0, flight.vertical_speed)
         self.check_speed(flight, ref)
 
     def test_surface_speed(self):
-        krpctest.set_circular_orbit('Kerbin', 100000)
+        self.set_circular_orbit('Kerbin', 100000)
         ref = self.vessel.orbit.body.reference_frame
         flight = self.vessel.flight(ref)
         self.check_speed(flight, ref)
@@ -224,7 +217,7 @@ class TestFlightVerticalSpeed(krpctest.TestCase):
         self.assertClose(0, flight.vertical_speed, error=0.1)
 
     def test_orbital_speed(self):
-        krpctest.set_circular_orbit('Kerbin', 100000)
+        self.set_circular_orbit('Kerbin', 100000)
         ref = self.vessel.orbit.body.non_rotating_reference_frame
         flight = self.vessel.flight(ref)
         self.check_speed(flight, ref)
@@ -236,17 +229,11 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.remove_other_vessels()
-        krpctest.launch_vessel_from_vab('Basic')
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.conn.testing_tools.remove_other_vessels()
-        cls.far = cls.conn.space_center.far_available
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.new_save()
+        cls.launch_vessel_from_vab('Basic')
+        cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
+        cls.far = cls.connect().space_center.far_available
 
     def test_latitude_and_longitude(self):
         flight = self.vessel.flight()

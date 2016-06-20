@@ -7,20 +7,16 @@ class TestBody(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.conn = krpctest.connect(cls)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.space_center = cls.connect().space_center
 
     def test_equality(self):
-        bodies = self.conn.space_center.bodies
-        bodies2 = self.conn.space_center.bodies
+        bodies = self.space_center.bodies
+        bodies2 = self.space_center.bodies
         for key, body in bodies.items():
             self.assertEqual(bodies2[key], body)
 
     def test_kerbin(self):
-        kerbin = self.conn.space_center.bodies['Kerbin']
+        kerbin = self.space_center.bodies['Kerbin']
         self.assertEqual('Kerbin', kerbin.name)
         self.assertClose(5.2915e22, kerbin.mass, error=0.0001e22)
         self.assertClose(3.5316e12, kerbin.gravitational_parameter, error=0.0001e12)
@@ -36,7 +32,7 @@ class TestBody(krpctest.TestCase):
         self.assertTrue(kerbin.has_atmospheric_oxygen)
 
     def test_mun(self):
-        mun = self.conn.space_center.bodies['Mun']
+        mun = self.space_center.bodies['Mun']
         self.assertEqual('Mun', mun.name)
         self.assertClose(9.76e20, mun.mass, error=0.0001e20)
         self.assertClose(6.5138e10, mun.gravitational_parameter, error=0.0001e10)
@@ -52,7 +48,7 @@ class TestBody(krpctest.TestCase):
         self.assertFalse(mun.has_atmospheric_oxygen)
 
     def test_minmus(self):
-        minmus = self.conn.space_center.bodies['Minmus']
+        minmus = self.space_center.bodies['Minmus']
         self.assertEqual('Minmus', minmus.name)
         self.assertClose(4.7e7, minmus.orbit.apoapsis, error=0.0001e7)
         self.assertClose(4.7e7, minmus.orbit.periapsis, error=0.0001e7)
@@ -62,7 +58,7 @@ class TestBody(krpctest.TestCase):
         self.assertFalse(minmus.has_atmospheric_oxygen)
 
     def test_sun(self):
-        sun = self.conn.space_center.bodies['Sun']
+        sun = self.space_center.bodies['Sun']
         self.assertEqual('Sun', sun.name)
         self.assertClose(1.7566e28, sun.mass, error=0.0001e28)
         self.assertClose(1.1723e18, sun.gravitational_parameter, error=0.0001e18)
@@ -74,13 +70,13 @@ class TestBody(krpctest.TestCase):
         self.assertFalse(sun.has_atmospheric_oxygen)
 
     def test_duna(self):
-        duna = self.conn.space_center.bodies['Duna']
+        duna = self.space_center.bodies['Duna']
         self.assertTrue(duna.has_atmosphere)
         self.assertClose(50000, duna.atmosphere_depth)
         self.assertFalse(duna.has_atmospheric_oxygen)
 
     def test_system(self):
-        bodies = self.conn.space_center.bodies
+        bodies = self.space_center.bodies
         kerbin = bodies['Kerbin']
         mun = bodies['Mun']
         minmus = bodies['Minmus']
@@ -102,7 +98,7 @@ class TestBody(krpctest.TestCase):
         self.assertEqual(set(), set(mun.satellites))
 
     def test_position(self):
-        for body in self.conn.space_center.bodies.values():
+        for body in self.space_center.bodies.values():
 
             # Check body position in body's reference frame
             pos = body.position(body.reference_frame)
@@ -119,7 +115,7 @@ class TestBody(krpctest.TestCase):
                 self.assertClose(body.orbit.radius, norm(pos), error=100)
 
     def test_velocity(self):
-        for body in self.conn.space_center.bodies.values():
+        for body in self.space_center.bodies.values():
             if body.orbit is None:
                 continue
 
@@ -150,7 +146,7 @@ class TestBody(krpctest.TestCase):
             self.assertClose(abs(rotational_speed + body.orbit.speed), norm(v), error=500)
 
     def test_rotation(self):
-        for body in self.conn.space_center.bodies.values():
+        for body in self.space_center.bodies.values():
             # Check body's rotation relative to itself is zero
             r = body.rotation(body.reference_frame)
             #TODO: better test for identity quaternion
@@ -159,7 +155,7 @@ class TestBody(krpctest.TestCase):
             #TODO: more thorough testing
 
     def test_angular_velocity(self):
-        for body in self.conn.space_center.bodies.values():
+        for body in self.space_center.bodies.values():
             # Check body's angular velocity relative to itself is zero
             av = body.angular_velocity(body.reference_frame)
             self.assertClose((0, 0, 0), av)

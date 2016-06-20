@@ -1,5 +1,4 @@
 import unittest
-import time
 import krpctest
 from krpctest.geometry import norm
 import krpc
@@ -8,22 +7,17 @@ class TestPartsDockingPort(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.remove_other_vessels()
-        krpctest.launch_vessel_from_vab('PartsDockingPort')
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.launch_vessel_from_vab('PartsDockingPort')
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.parts = cls.vessel.parts
-        cls.State = cls.conn.space_center.DockingPortState
+        cls.State = cls.connect().space_center.DockingPortState
         cls.port1 = cls.parts.with_title('Clamp-O-Tron Docking Port Jr.')[0].docking_port
         cls.port2 = cls.parts.with_title('Clamp-O-Tron Shielded Docking Port')[0].docking_port
         cls.port3 = cls.parts.with_title('Mk2 Clamp-O-Tron')[0].docking_port
         cls.port4 = cls.parts.with_title('Inline Clamp-O-Tron')[0].docking_port
         cls.port5 = cls.parts.with_title('Clamp-O-Tron Docking Port Sr.')[0].docking_port
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
     def test_docking_port(self):
         self.assertEqual(self.State.ready, self.port1.state)
@@ -53,18 +47,16 @@ class TestPartsDockingPort(krpctest.TestCase):
 
     def open_and_close_shield(self, port):
         port.shielded = False
-        time.sleep(0.1)
+        self.wait()
         self.assertEqual(self.State.moving, port.state)
         while port.state == self.State.moving:
-            pass
-        time.sleep(0.1)
+            self.wait()
         self.assertEqual(self.State.ready, port.state)
         port.shielded = True
-        time.sleep(0.1)
+        self.wait()
         self.assertEqual(self.State.moving, port.state)
         while port.state == self.State.moving:
-            pass
-        time.sleep(0.1)
+            self.wait()
         self.assertEqual(self.State.shielded, port.state)
 
     def test_shielded_docking_port1(self):
@@ -154,16 +146,12 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
         in flight (as opposed to pre-attached in the VAB)"""
 
     def setUp(self):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('PartsDockingPortInFlight')
-        krpctest.remove_other_vessels()
-        krpctest.set_circular_orbit('Kerbin', 100000)
-        self.conn = krpctest.connect(self)
-        self.sc = self.conn.space_center
+        self.new_save()
+        self.launch_vessel_from_vab('PartsDockingPortInFlight')
+        self.remove_other_vessels()
+        self.set_circular_orbit('Kerbin', 100000)
+        self.sc = self.connect().space_center
         self.state = self.sc.DockingPortState
-
-    def tearDown(self):
-        self.conn.close()
 
     def test_docking_port1(self):
         port1, port2 = self.sc.active_vessel.parts.docking_ports
@@ -181,9 +169,9 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
 
             # Kill rotation
             vessel.control.sas = True
-            time.sleep(3)
+            self.wait(3)
             vessel.control.sas = False
-            time.sleep(1)
+            self.wait()
 
             self.assertEqual(self.state.docked, port1.state)
             self.assertEqual(self.state.docked, port2.state)
@@ -205,10 +193,10 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
             # Move backwards to reengage distance
             vessel.control.rcs = True
             vessel.control.forward = -0.5
-            time.sleep(0.5)
+            self.wait(0.5)
             vessel.control.forward = 0.0
             while port1.state == self.state.undocking or port2.state == self.state.undocking:
-                pass
+                self.wait()
             self.assertEqual(self.state.ready, port1.state)
             self.assertEqual(self.state.ready, port2.state)
             self.assertIsNone(port2.docked_part)
@@ -216,7 +204,7 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
             distance = norm(port1.position(port2.reference_frame))
             self.assertGreater(distance, port1.reengage_distance)
             self.assertLess(distance, port1.reengage_distance+1)
-            time.sleep(0.5)
+            self.wait(0.5)
 
             # Check undocking when not docked
             with self.assertRaises(krpc.error.RPCError) as cm:
@@ -228,17 +216,17 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
 
             # Move forward
             vessel.control.forward = 0.5
-            time.sleep(1)
+            self.wait(1)
             vessel.control.forward = 0.0
             vessel.control.rcs = False
             while port1.state == self.state.ready or port2.state == self.state.ready:
-                pass
+                self.wait()
 
             # Docking
             self.assertEqual(self.state.docking, port1.state)
             self.assertEqual(self.state.docking, port2.state)
             while port1.state == self.state.docking or port2.state == self.state.docking:
-                pass
+                self.wait()
 
             # Docked
             self.assertEqual(self.state.docked, port1.state)
@@ -254,12 +242,11 @@ class TestPartsDockingPortPreAttachedTo(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.remove_other_vessels()
-        krpctest.launch_vessel_from_vab('PartsDockingPortPreAttachedTo')
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
-        cls.state = cls.conn.space_center.DockingPortState
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.launch_vessel_from_vab('PartsDockingPortPreAttachedTo')
+        cls.vessel = cls.connect().space_center.active_vessel
+        cls.state = cls.connect().space_center.DockingPortState
 
         # Stack is as follows, from top to bottom:
         # parts[0] - Pod
@@ -282,10 +269,6 @@ class TestPartsDockingPortPreAttachedTo(krpctest.TestCase):
         cls.port2 = cls.parts[2].docking_port
         cls.port4 = cls.parts[4].docking_port
         cls.port6 = cls.parts[6].docking_port
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
     def test_facing_parent_port(self):
         self.assertEqual(self.port2.docked_part, self.parts[1])

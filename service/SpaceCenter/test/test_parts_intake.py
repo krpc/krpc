@@ -5,17 +5,12 @@ class TestPartsIntake(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if krpctest.connect().space_center.active_vessel.name != 'Parts':
-            krpctest.new_save()
-            krpctest.launch_vessel_from_vab('Parts')
-            krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        parts = cls.conn.space_center.active_vessel.parts
+        cls.new_save()
+        if cls.connect().space_center.active_vessel.name != 'Parts':
+            cls.launch_vessel_from_vab('Parts')
+            cls.remove_other_vessels()
+        parts = cls.connect().space_center.active_vessel.parts
         cls.intake = parts.with_title('XM-G50 Radial Air Intake')[0].intake
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
     def test_properties(self):
         self.assertEqual(15, self.intake.speed)

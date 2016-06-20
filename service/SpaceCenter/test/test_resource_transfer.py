@@ -1,5 +1,4 @@
 import unittest
-import time
 import krpctest
 import krpc
 
@@ -7,19 +6,14 @@ class TestResourceTransfer(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('ResourceTransfer')
-        krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.sc = cls.conn.space_center
+        cls.new_save()
+        cls.launch_vessel_from_vab('ResourceTransfer')
+        cls.remove_other_vessels()
+        cls.sc = cls.connect().space_center
         vessel = cls.sc.active_vessel
         cls.parts = vessel.parts
         other_vessel = vessel.parts.decouplers[0].decouple()
         cls.other_parts = other_vessel.parts
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
     def test_transfer(self):
         from_part = self.parts.with_title('Stratus-V Cylindrified Monopropellant Tank')[0]
@@ -28,7 +22,7 @@ class TestResourceTransfer(krpctest.TestCase):
         to_part_amount = to_part.resources.amount('MonoPropellant')
         transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'MonoPropellant', 10)
         while not transfer.complete:
-            time.sleep(0.1)
+            self.wait()
         self.assertClose(10, transfer.amount)
         self.assertClose(from_part_amount - 10, from_part.resources.amount('MonoPropellant'))
         self.assertClose(to_part_amount + 10, to_part.resources.amount('MonoPropellant'))
@@ -38,7 +32,7 @@ class TestResourceTransfer(krpctest.TestCase):
         to_part = self.parts.with_title('PB-X750 Xenon Container')[0]
         transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'XenonGas', float('inf'))
         while not transfer.complete:
-            time.sleep(0.1)
+            self.wait()
         self.assertClose(200, transfer.amount)
         self.assertClose(200, from_part.resources.amount('XenonGas'))
         self.assertClose(5250, to_part.resources.amount('XenonGas'))
@@ -49,7 +43,7 @@ class TestResourceTransfer(krpctest.TestCase):
         to_part_amount = to_part.resources.amount('LiquidFuel')
         transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'LiquidFuel', 10)
         while not transfer.complete:
-            time.sleep(0.1)
+            self.wait()
         self.assertClose(5, transfer.amount)
         self.assertClose(0, from_part.resources.amount('LiquidFuel'))
         self.assertClose(to_part_amount + 5, to_part.resources.amount('LiquidFuel'))
@@ -60,7 +54,7 @@ class TestResourceTransfer(krpctest.TestCase):
         from_part_amount = from_part.resources.amount('Oxidizer')
         transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'Oxidizer', 40)
         while not transfer.complete:
-            time.sleep(0.1)
+            self.wait()
         self.assertClose(25, transfer.amount)
         self.assertClose(from_part_amount - 25, from_part.resources.amount('Oxidizer'))
         self.assertClose(55, to_part.resources.amount('Oxidizer'))
