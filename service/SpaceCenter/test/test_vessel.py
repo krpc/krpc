@@ -39,8 +39,8 @@ class TestVessel(krpctest.TestCase):
         ut = self.space_center.ut
         met = self.vessel.met
         self.wait(1)
-        self.assertClose(ut+1, self.space_center.ut, error=0.5)
-        self.assertClose(met+1, self.vessel.met, error=0.5)
+        self.assertAlmostEqual(ut+1, self.space_center.ut, delta=0.5)
+        self.assertAlmostEqual(met+1, self.vessel.met, delta=0.5)
         self.assertGreater(self.space_center.ut, self.vessel.met)
 
     def test_mass(self):
@@ -57,40 +57,40 @@ class TestVessel(krpctest.TestCase):
         self.assertEqual(3082, self.vessel.dry_mass)
 
     def test_moment_of_inertia(self):
-        self.assertClose((13411, 2219, 13366), self.vessel.moment_of_inertia, error=10)
+        self.assertAlmostEqual((13411, 2219, 13366), self.vessel.moment_of_inertia, delta=10)
 
     def test_inertia_tensor(self):
-        self.assertClose(
+        self.assertAlmostEqual(
             [13411, 0, 0,
              0, 2219, 0,
              0, 0, 13366],
-            self.vessel.inertia_tensor, error=10)
+            self.vessel.inertia_tensor, delta=10)
 
     def test_available_torque(self):
-        self.assertClose((5000, 5000, 5000), self.vessel.available_torque, error=1)
+        self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_torque, delta=1)
 
     def test_available_reaction_wheel_torque(self):
-        self.assertClose((5000, 5000, 5000), self.vessel.available_reaction_wheel_torque)
+        self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_reaction_wheel_torque)
         for rw in self.vessel.parts.reaction_wheels:
             rw.active = False
-        self.assertClose((0, 0, 0), self.vessel.available_reaction_wheel_torque)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_reaction_wheel_torque)
         for rw in self.vessel.parts.reaction_wheels:
             rw.active = True
 
     def test_available_rcs_torque(self):
-        self.assertClose((0, 0, 0), self.vessel.available_rcs_torque)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque)
         self.vessel.control.rcs = True
         self.wait()
-        self.assertClose((6005, 5575, 6005), self.vessel.available_rcs_torque, error=1)
+        self.assertAlmostEqual((6005, 5575, 6005), self.vessel.available_rcs_torque, delta=1)
         self.vessel.control.rcs = False
         self.wait()
-        self.assertClose((0, 0, 0), self.vessel.available_rcs_torque)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque)
 
     def test_available_engine_torque(self):
-        self.assertClose((0, 0, 0), self.vessel.available_engine_torque)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque)
 
     def test_available_control_surface_torque(self):
-        self.assertClose((0, 0, 0), self.vessel.available_control_surface_torque)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_control_surface_torque)
 
 class TestVesselEngines(krpctest.TestCase):
 
@@ -182,13 +182,13 @@ class TestVesselEngines(krpctest.TestCase):
         for engine in self.engines:
             engine.active = False
         self.wait(0.5)
-        self.assertClose(0, self.vessel.thrust)
-        self.assertClose(0, self.vessel.available_thrust)
-        self.assertClose(0, self.vessel.max_thrust)
-        self.assertClose(0, self.vessel.specific_impulse)
-        self.assertClose(0, self.vessel.vacuum_specific_impulse)
-        self.assertClose(0, self.vessel.kerbin_sea_level_specific_impulse)
-        self.assertClose((0, 0, 0), self.vessel.available_engine_torque)
+        self.assertAlmostEqual(0, self.vessel.thrust)
+        self.assertAlmostEqual(0, self.vessel.available_thrust)
+        self.assertAlmostEqual(0, self.vessel.max_thrust)
+        self.assertAlmostEqual(0, self.vessel.specific_impulse)
+        self.assertAlmostEqual(0, self.vessel.vacuum_specific_impulse)
+        self.assertAlmostEqual(0, self.vessel.kerbin_sea_level_specific_impulse)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque)
 
     def test_one_idle(self):
         self.control.throttle = 0.0
@@ -204,13 +204,13 @@ class TestVesselEngines(krpctest.TestCase):
         self.wait(0.5)
 
         info = self.engine_info[title]
-        self.assertClose(0, self.vessel.thrust)
-        self.assertClose(info['available_thrust'], self.vessel.available_thrust)
-        self.assertClose(info['max_thrust'], self.vessel.max_thrust)
-        self.assertClose(info['isp'], self.vessel.specific_impulse)
-        self.assertClose(info['vac_isp'], self.vessel.vacuum_specific_impulse)
-        self.assertClose(info['msl_isp'], self.vessel.kerbin_sea_level_specific_impulse)
-        self.assertClose((0, 0, 0), self.vessel.available_engine_torque)
+        self.assertAlmostEqual(0, self.vessel.thrust, places=3)
+        self.assertAlmostEqual(info['available_thrust'], self.vessel.available_thrust, places=3)
+        self.assertAlmostEqual(info['max_thrust'], self.vessel.max_thrust, places=3)
+        self.assertAlmostEqual(info['isp'], self.vessel.specific_impulse, places=3)
+        self.assertAlmostEqual(info['vac_isp'], self.vessel.vacuum_specific_impulse, places=3)
+        self.assertAlmostEqual(info['msl_isp'], self.vessel.kerbin_sea_level_specific_impulse, places=3)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque, places=3)
         engine.active = False
         self.wait(0.5)
 
@@ -226,13 +226,13 @@ class TestVesselEngines(krpctest.TestCase):
         self.control.throttle = 0.0
         self.wait(0.5)
 
-        self.assertClose(0, self.vessel.thrust, 1)
-        self.assertClose(self.available_thrust, self.vessel.available_thrust, 1)
-        self.assertClose(self.max_thrust, self.vessel.max_thrust, 1)
-        self.assertClose(self.combined_isp, self.vessel.specific_impulse, 1)
-        self.assertClose(self.vac_combined_isp, self.vessel.vacuum_specific_impulse, 1)
-        self.assertClose(self.msl_combined_isp, self.vessel.kerbin_sea_level_specific_impulse, 1)
-        self.assertClose((0, 0, 0), self.vessel.available_engine_torque)
+        self.assertAlmostEqual(0, self.vessel.thrust, delta=1)
+        self.assertAlmostEqual(self.available_thrust, self.vessel.available_thrust, delta=1)
+        self.assertAlmostEqual(self.max_thrust, self.vessel.max_thrust, delta=1)
+        self.assertAlmostEqual(self.combined_isp, self.vessel.specific_impulse, delta=1)
+        self.assertAlmostEqual(self.vac_combined_isp, self.vessel.vacuum_specific_impulse, delta=1)
+        self.assertAlmostEqual(self.msl_combined_isp, self.vessel.kerbin_sea_level_specific_impulse, delta=1)
+        self.assertAlmostEqual((0, 0, 0), self.vessel.available_engine_torque)
         for engine in self.engines:
             engine.active = False
         self.wait(0.5)
@@ -243,12 +243,12 @@ class TestVesselEngines(krpctest.TestCase):
         for throttle in (0.3, 0.7, 1):
             self.control.throttle = throttle
             self.wait(1)
-            self.assertClose(throttle*self.available_thrust, self.vessel.thrust, 1)
-            self.assertClose(self.available_thrust, self.vessel.available_thrust, 1)
-            self.assertClose(self.max_thrust, self.vessel.max_thrust, 1)
-            self.assertClose(self.combined_isp, self.vessel.specific_impulse, 1)
-            self.assertClose(self.vac_combined_isp, self.vessel.vacuum_specific_impulse, 1)
-            self.assertClose(self.msl_combined_isp, self.vessel.kerbin_sea_level_specific_impulse, 1)
+            self.assertAlmostEqual(throttle*self.available_thrust, self.vessel.thrust, delta=1)
+            self.assertAlmostEqual(self.available_thrust, self.vessel.available_thrust, delta=1)
+            self.assertAlmostEqual(self.max_thrust, self.vessel.max_thrust, delta=1)
+            self.assertAlmostEqual(self.combined_isp, self.vessel.specific_impulse, delta=1)
+            self.assertAlmostEqual(self.vac_combined_isp, self.vessel.vacuum_specific_impulse, delta=1)
+            self.assertAlmostEqual(self.msl_combined_isp, self.vessel.kerbin_sea_level_specific_impulse, delta=1)
             self.assertGreater(self.vessel.available_engine_torque, (0, 0, 0))
         self.control.throttle = 0
         for engine in self.engines:

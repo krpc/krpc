@@ -15,14 +15,14 @@ class TestPartsParachute(krpctest.TestCase):
         for parachute in self.parachutes:
             self.assertFalse(parachute.deployed)
             self.assertEqual(parachute.state, self.state.stowed)
-            self.assertClose(parachute.deploy_altitude, 500)
-            self.assertClose(parachute.deploy_min_pressure, 0.01)
+            self.assertAlmostEqual(parachute.deploy_altitude, 500)
+            self.assertAlmostEqual(parachute.deploy_min_pressure, 0.01)
 
         for alt in (50, 200, 500, 750, 643):
             for parachute in self.parachutes:
                 parachute.deploy_altitude = alt
                 self.wait()
-                self.assertClose(parachute.deploy_altitude, alt)
+                self.assertAlmostEqual(parachute.deploy_altitude, alt)
                 self.wait()
 
         for parachute in self.parachutes:
@@ -40,8 +40,8 @@ class TestPartsParachute(krpctest.TestCase):
         for parachute in self.parachutes:
             self.assertFalse(parachute.deployed)
             self.assertEqual(self.state.stowed, parachute.state)
-            self.assertClose(deploy_altitude, parachute.deploy_altitude)
-            self.assertClose(0.01, parachute.deploy_min_pressure)
+            self.assertAlmostEqual(deploy_altitude, parachute.deploy_altitude)
+            self.assertAlmostEqual(0.01, parachute.deploy_min_pressure)
 
         flight = self.vessel.flight(self.vessel.orbit.body.reference_frame)
         self.vessel.control.activate_next_stage()

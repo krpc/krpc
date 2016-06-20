@@ -23,9 +23,9 @@ class TestResourceTransfer(krpctest.TestCase):
         transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'MonoPropellant', 10)
         while not transfer.complete:
             self.wait()
-        self.assertClose(10, transfer.amount)
-        self.assertClose(from_part_amount - 10, from_part.resources.amount('MonoPropellant'))
-        self.assertClose(to_part_amount + 10, to_part.resources.amount('MonoPropellant'))
+        self.assertAlmostEqual(10, transfer.amount)
+        self.assertAlmostEqual(from_part_amount - 10, from_part.resources.amount('MonoPropellant'), places=3)
+        self.assertAlmostEqual(to_part_amount + 10, to_part.resources.amount('MonoPropellant'), places=3)
 
     def test_transfer_all(self):
         from_part = self.parts.with_title('PB-X50R Xenon Container')[0]
@@ -33,9 +33,9 @@ class TestResourceTransfer(krpctest.TestCase):
         transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'XenonGas', float('inf'))
         while not transfer.complete:
             self.wait()
-        self.assertClose(200, transfer.amount)
-        self.assertClose(200, from_part.resources.amount('XenonGas'))
-        self.assertClose(5250, to_part.resources.amount('XenonGas'))
+        self.assertAlmostEqual(200, transfer.amount)
+        self.assertAlmostEqual(200, from_part.resources.amount('XenonGas'))
+        self.assertAlmostEqual(5250, to_part.resources.amount('XenonGas'))
 
     def test_transfer_with_limited_source(self):
         from_part = self.parts.with_title('FL-T400 Fuel Tank')[0]
@@ -44,9 +44,9 @@ class TestResourceTransfer(krpctest.TestCase):
         transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'LiquidFuel', 10)
         while not transfer.complete:
             self.wait()
-        self.assertClose(5, transfer.amount)
-        self.assertClose(0, from_part.resources.amount('LiquidFuel'))
-        self.assertClose(to_part_amount + 5, to_part.resources.amount('LiquidFuel'))
+        self.assertAlmostEqual(5, transfer.amount)
+        self.assertAlmostEqual(0, from_part.resources.amount('LiquidFuel'))
+        self.assertAlmostEqual(to_part_amount + 5, to_part.resources.amount('LiquidFuel'))
 
     def test_transfer_with_limited_destination(self):
         from_part = self.parts.with_title('FL-T400 Fuel Tank')[0]
@@ -55,9 +55,9 @@ class TestResourceTransfer(krpctest.TestCase):
         transfer = self.sc.ResourceTransfer.start(from_part, to_part, 'Oxidizer', 40)
         while not transfer.complete:
             self.wait()
-        self.assertClose(25, transfer.amount)
-        self.assertClose(from_part_amount - 25, from_part.resources.amount('Oxidizer'))
-        self.assertClose(55, to_part.resources.amount('Oxidizer'))
+        self.assertAlmostEqual(25, transfer.amount, places=3)
+        self.assertAlmostEqual(from_part_amount - 25, from_part.resources.amount('Oxidizer'))
+        self.assertAlmostEqual(55, to_part.resources.amount('Oxidizer'))
 
     def test_transfer_between_different_vessels(self):
         from_part = self.parts.all[0]

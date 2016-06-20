@@ -98,8 +98,8 @@ class TestResources(krpctest.TestCase, ResourcesTest):
             self.assertEqual(self.expected_names[stage], set(resources.names))
             for name in resources.names:
                 self.assertTrue(resources.has_resource(name))
-                self.assertClose(self.expected[stage][name][0], resources.amount(name), error=0.5)
-                self.assertClose(self.expected[stage][name][1], resources.max(name), error=0.5)
+                self.assertAlmostEqual(self.expected[stage][name][0], resources.amount(name), delta=1)
+                self.assertAlmostEqual(self.expected[stage][name][1], resources.max(name), delta=1)
 
     def test_per_stage_amounts_cumulative(self):
         for stage in range(self.num_stages):
@@ -108,8 +108,8 @@ class TestResources(krpctest.TestCase, ResourcesTest):
             for name in resources.names:
                 expected_amount = sum(self.expected[x][name][0] for x in range(stage+1))
                 expected_max = sum(self.expected[x][name][1] for x in range(stage+1))
-                self.assertClose(expected_amount, resources.amount(name), error=0.5)
-                self.assertClose(expected_max, resources.max(name), error=0.5)
+                self.assertAlmostEqual(expected_amount, resources.amount(name), delta=1)
+                self.assertAlmostEqual(expected_max, resources.max(name), delta=1)
 
     def test_total_amounts(self):
         resources = self.vessel.resources
@@ -119,8 +119,8 @@ class TestResources(krpctest.TestCase, ResourcesTest):
         for name in resources.names:
             expected_amount = sum(self.expected[stage][name][0] for stage in range(self.num_stages))
             expected_max = sum(self.expected[stage][name][1] for stage in range(self.num_stages))
-            self.assertClose(expected_amount, resources.amount(name), error=0.5)
-            self.assertClose(expected_max, resources.max(name), error=0.5)
+            self.assertAlmostEqual(expected_amount, resources.amount(name), delta=1)
+            self.assertAlmostEqual(expected_max, resources.max(name), delta=1)
 
     def test_vessel_mass(self):
         mass = self.vessel.dry_mass

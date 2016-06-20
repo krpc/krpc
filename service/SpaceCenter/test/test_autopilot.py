@@ -38,9 +38,9 @@ class TestAutoPilot(krpctest.TestCase):
         flight = self.vessel.flight()
         ph = (pitch, heading)
         actual_ph = (flight.pitch, flight.heading)
-        self.assertClose(ph, actual_ph, error=1)
+        self.assertAlmostEqual(ph, actual_ph, delta=1)
         if roll:
-            self.assertClose(roll, flight.roll, error=1)
+            self.assertAlmostEqual(roll, flight.roll, delta=1)
 
     def set_direction(self, direction, roll=float('nan')):
         self.ap.reference_frame = self.vessel.surface_reference_frame
@@ -49,9 +49,9 @@ class TestAutoPilot(krpctest.TestCase):
 
     def check_direction(self, direction, roll=None):
         flight = self.vessel.flight()
-        self.assertClose(direction, flight.direction, error=0.1)
+        self.assertAlmostEqual(direction, flight.direction, delta=0.1)
         if roll is not None:
-            self.assertClose(roll, flight.roll, error=1)
+            self.assertAlmostEqual(roll, flight.roll, delta=1)
 
     def test_sas(self):
         self.ap.sas = True
@@ -146,7 +146,7 @@ class TestAutoPilot(krpctest.TestCase):
         flight = self.vessel.flight()
 
         self.ap.disengage()
-        self.assertClose(0, self.ap.error)
+        self.assertAlmostEqual(0, self.ap.error)
 
         self.set_direction(flight.prograde, roll=27)
         self.wait_for_autopilot()
@@ -157,22 +157,22 @@ class TestAutoPilot(krpctest.TestCase):
         self.ap.engage()
 
         self.ap.target_direction = flight.prograde
-        self.assertClose(0, self.ap.error, 1)
+        self.assertAlmostEqual(0, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.retrograde
-        self.assertClose(180, self.ap.error, 1)
+        self.assertAlmostEqual(180, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.normal
-        self.assertClose(90, self.ap.error, 1)
+        self.assertAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.anti_normal
-        self.assertClose(90, self.ap.error, 1)
+        self.assertAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.radial
-        self.assertClose(90, self.ap.error, 1)
+        self.assertAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.anti_radial
-        self.assertClose(90, self.ap.error, 1)
+        self.assertAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.disengage()
 
@@ -181,7 +181,7 @@ class TestAutoPilot(krpctest.TestCase):
 
     def test_roll_error(self):
         self.ap.disengage()
-        self.assertClose(0, self.ap.roll_error)
+        self.assertAlmostEqual(0, self.ap.roll_error)
 
         set_roll = -57
         direction = self.vessel.direction(self.vessel.surface_reference_frame)
@@ -194,7 +194,7 @@ class TestAutoPilot(krpctest.TestCase):
         self.ap.engage()
         for roll in (0, -54, -90, 27, 45, 90):
             self.ap.target_roll = roll
-            self.assertClose(abs(set_roll - roll), self.ap.roll_error, 1)
+            self.assertAlmostEqual(abs(set_roll - roll), self.ap.roll_error, delta=1)
         self.ap.disengage()
 
         for wheel in self.vessel.parts.reaction_wheels:
@@ -284,22 +284,22 @@ class TestAutoPilotSAS(krpctest.TestCase):
         self.ap.speed_mode = self.speed_mode.orbit
 
         self.ap.sas_mode = self.sas_mode.prograde
-        self.assertClose(0, self.ap.error, 1)
+        self.assertAlmostEqual(0, self.ap.error, delta=1)
 
         self.ap.sas_mode = self.sas_mode.retrograde
-        self.assertClose(180, self.ap.error, 1)
+        self.assertAlmostEqual(180, self.ap.error, delta=1)
 
         self.ap.sas_mode = self.sas_mode.normal
-        self.assertClose(90, self.ap.error, 1)
+        self.assertAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.sas_mode = self.sas_mode.anti_normal
-        self.assertClose(90, self.ap.error, 1)
+        self.assertAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.sas_mode = self.sas_mode.radial
-        self.assertClose(90, self.ap.error, 1)
+        self.assertAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.sas_mode = self.sas_mode.anti_radial
-        self.assertClose(90, self.ap.error, 1)
+        self.assertAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.sas = False
         for wheel in self.vessel.parts.reaction_wheels:

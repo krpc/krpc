@@ -94,7 +94,7 @@ class TestPartsDockingPort(krpctest.TestCase):
         # Undocking
         self.assertNotEqual(self.vessel, undocked)
         self.assertLess(mass_after, mass_before)
-        self.assertClose(mass_after, mass_before - undocked.mass)
+        self.assertAlmostEqual(mass_after, mass_before - undocked.mass)
         self.assertEqual(self.State.undocking, top_port.state)
         self.assertEqual(self.State.undocking, bottom_port.state)
         self.assertIsNone(bottom_port.docked_part)
@@ -132,14 +132,14 @@ class TestPartsDockingPort(krpctest.TestCase):
         # Undocked (there is no undocking state when undocking from a part)
         self.assertNotEqual(self.vessel, undocked)
         self.assertLess(mass_after, mass_before)
-        self.assertClose(mass_after, mass_before - undocked.mass)
+        self.assertAlmostEqual(mass_after, mass_before - undocked.mass)
         self.assertEqual(self.State.ready, port.state)
         self.assertIsNone(port.docked_part)
 
     def test_direction(self):
-        self.assertClose((0, 0, -1), self.port1.direction(self.vessel.reference_frame))
-        self.assertClose((0, 1, 0), self.port2.direction(self.vessel.reference_frame))
-        self.assertClose((1, 0, 0), self.port3.direction(self.vessel.reference_frame))
+        self.assertAlmostEqual((0, 0, -1), self.port1.direction(self.vessel.reference_frame), places=3)
+        self.assertAlmostEqual((0, 1, 0), self.port2.direction(self.vessel.reference_frame), places=3)
+        self.assertAlmostEqual((1, 0, 0), self.port3.direction(self.vessel.reference_frame), places=3)
 
 class TestPartsDockingPortInFlight(krpctest.TestCase):
     """ Test docking and undocking of ports that have been docked
@@ -188,7 +188,7 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
             self.assertIsNone(port1.docked_part)
             mass_after = vessel.mass
             self.assertLess(mass_after, mass_before)
-            self.assertClose(mass_after, mass_before - undocked.mass)
+            self.assertAlmostEqual(mass_after, mass_before - undocked.mass, places=3)
 
             # Move backwards to reengage distance
             vessel.control.rcs = True

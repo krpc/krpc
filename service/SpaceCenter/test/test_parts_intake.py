@@ -14,8 +14,8 @@ class TestPartsIntake(krpctest.TestCase):
 
     def test_properties(self):
         self.assertEqual(15, self.intake.speed)
-        self.assertClose(4.14, self.intake.flow, error=0.05)
-        self.assertClose(0.0031, self.intake.area)
+        self.assertAlmostEqual(4.14, self.intake.flow, delta=0.05)
+        self.assertAlmostEqual(0.0031, self.intake.area)
 
     def test_open_and_close(self):
         self.assertTrue(self.intake.open)

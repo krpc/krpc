@@ -20,7 +20,7 @@ class TestPartsLight(krpctest.TestCase):
             self.wait()
         self.assertTrue(self.light.active)
         self.wait(0.2)
-        self.assertClose(0.04, self.light.power_usage)
+        self.assertAlmostEqual(0.04, self.light.power_usage)
         self.light.active = False
         while self.light.active:
             self.wait()
@@ -33,13 +33,13 @@ class TestPartsLight(krpctest.TestCase):
         while not self.light.active:
             self.wait()
         self.light.color = (1, 0, 0)
-        self.assertClose((1, 0, 0), self.light.color)
+        self.assertAlmostEqual((1, 0, 0), self.light.color)
         self.wait(0.2)
         self.light.color = (0, 1, 0)
-        self.assertClose((0, 1, 0), self.light.color)
+        self.assertAlmostEqual((0, 1, 0), self.light.color)
         self.wait(0.2)
         self.light.color = (0, 0, 1)
-        self.assertClose((0, 0, 1), self.light.color)
+        self.assertAlmostEqual((0, 0, 1), self.light.color)
         self.wait(0.2)
         self.light.color = (1, 1, 1)
         self.assertEqual((1, 1, 1), self.light.color)

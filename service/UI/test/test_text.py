@@ -21,7 +21,7 @@ class TestText(krpctest.TestCase):
         self.assertGreater(len(text.available_fonts), 0)
         self.assertEqual(14, text.size)
         self.assertEqual(self.style.normal, text.style)
-        self.assertClose((0.196, 0.196, 0.196), text.color, error=0.001)
+        self.assertAlmostEqual((0.196, 0.196, 0.196), text.color, places=3)
         self.assertEqual(self.anchor.upper_left, text.alignment)
         self.assertEqual(1, text.line_spacing)
         self.wait()

@@ -63,8 +63,8 @@ class TestControlMixin(object):
         self.wait(1)
         self.control.roll = 0.0
 
-        self.assertClose(pitch, self.orbital_flight.pitch, error=1)
-        self.assertCloseDegrees(heading, self.orbital_flight.heading, error=1)
+        self.assertAlmostEqual(pitch, self.orbital_flight.pitch, delta=1)
+        self.assertAlmostEqualDegrees(heading, self.orbital_flight.heading, delta=1)
 
         # Check flight is rolling in correct direction
         roll = self.orbital_flight.roll
@@ -228,7 +228,7 @@ class TestControlRover(krpctest.TestCase):
         self.control = self.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertClose(0, self.flight.horizontal_speed, error=0.01)
+        self.assertAlmostEqual(0, self.flight.horizontal_speed, places=2)
 
         # Forward throttle for 1 second
         self.control.wheel_steer = 0
@@ -241,7 +241,7 @@ class TestControlRover(krpctest.TestCase):
         direction = normalize(self.flight.velocity)
         # In the body's reference frame, y-axis points from CoM to north pole
         # As we are close to the equator, this is very close to the north direction
-        self.assertClose((0, 1, 0), direction, 0.2)
+        self.assertAlmostEqual((0, 1, 0), direction, delta=0.2)
 
         # Apply brakes
         self.control.wheel_throttle = 0.0
@@ -255,7 +255,7 @@ class TestControlRover(krpctest.TestCase):
         self.control = self.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertClose(0, self.flight.horizontal_speed, error=0.01)
+        self.assertAlmostEqual(0, self.flight.horizontal_speed, places=2)
 
         # Reverse throttle for 1 second
         self.control.wheel_steer = 0
@@ -268,7 +268,7 @@ class TestControlRover(krpctest.TestCase):
         direction = normalize(self.flight.velocity)
         # In the body's reference frame, y-axis points from CoM to north pole
         # As we are close to the equator, this is very close to the north direction
-        self.assertClose((0, -1, 0), direction, 0.2)
+        self.assertAlmostEqual((0, -1, 0), direction, delta=0.2)
 
         # Apply brakes
         self.control.wheel_throttle = 0.0
@@ -282,7 +282,7 @@ class TestControlRover(krpctest.TestCase):
         self.control = self.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertClose(0, self.flight.horizontal_speed, error=0.01)
+        self.assertAlmostEqual(0, self.flight.horizontal_speed, places=2)
 
         # Forward throttle and steering
         self.control.wheel_steering = -1
@@ -313,7 +313,7 @@ class TestControlRover(krpctest.TestCase):
         self.control = self.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertClose(0, self.flight.horizontal_speed, error=0.01)
+        self.assertAlmostEqual(0, self.flight.horizontal_speed, places=2)
 
         # Forward throttle and steering
         self.control.wheel_steering = 1

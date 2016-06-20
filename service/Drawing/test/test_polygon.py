@@ -28,7 +28,7 @@ class TestPolygon(krpctest.TestCase):
         self.assertTrue(polygon.visible)
         self.assertEqual((1, 1, 1), polygon.color)
         self.assertEqual("Particles/Additive", polygon.material)
-        self.assertClose(0.1, polygon.thickness)
+        self.assertAlmostEqual(0.1, polygon.thickness)
         self.wait()
         polygon.remove()
         self.assertRaises(krpc.client.RPCError, polygon.remove)
@@ -49,7 +49,7 @@ class TestPolygon(krpctest.TestCase):
         polygon.thickness = 1.234
         polygon.visible = True
         self.assertTrue(polygon.visible)
-        self.assertClose(1.234, polygon.thickness)
+        self.assertAlmostEqual(1.234, polygon.thickness)
         self.wait()
         polygon.remove()
 

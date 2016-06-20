@@ -69,12 +69,12 @@ class TestPartsControlSurface(krpctest.TestCase):
         self.assertFalse(self.ctrlsrf.deployed)
 
     def test_surface_area(self):
-        self.assertClose(1, self.ctrlsrf.surface_area)
-        self.assertClose(0.2, self.winglet.surface_area)
+        self.assertAlmostEqual(1, self.ctrlsrf.surface_area)
+        self.assertAlmostEqual(0.2, self.winglet.surface_area)
 
     def test_available_torque(self):
-        self.assertClose((0, 0, 0), self.ctrlsrf.available_torque)
-        self.assertClose((0, 0, 0), self.winglet.available_torque)
+        self.assertAlmostEqual((0, 0, 0), self.ctrlsrf.available_torque, places=3)
+        self.assertAlmostEqual((0, 0, 0), self.winglet.available_torque, places=3)
 
 if __name__ == '__main__':
     unittest.main()

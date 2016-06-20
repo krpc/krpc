@@ -126,26 +126,26 @@ class TestSpaceCenter(krpctest.TestCase):
     def test_ut(self):
         ut = self.sc.ut
         self.wait(1)
-        self.assertClose(ut + 1, self.sc.ut, error=0.25)
+        self.assertAlmostEqual(ut + 1, self.sc.ut, delta=0.25)
 
     def test_g(self):
-        self.assertClose(6.673e-11, self.sc.g, error=0.0005e-11)
+        self.assertAlmostEqual(6.673e-11, self.sc.g, delta=0.0005e-11)
 
     def test_transform_position_same_reference_frame(self):
-        self.assertClose(
+        self.assertAlmostEqual(
             (1, 2, 3),
             self.sc.transform_position((1, 2, 3), self.ref_vessel, self.ref_vessel))
 
     def test_transform_position_between_celestial_bodies(self):
         pos = self.sc.transform_position((0, 0, 0), self.ref_kerbin, self.ref_mun)
-        self.assertClose(norm(pos), self.mun.orbit.radius)
+        self.assertAlmostEqual(norm(pos), self.mun.orbit.radius, places=3)
 
         pos = self.sc.transform_position((0, 0, 0), self.ref_sun, self.ref_kerbin)
-        self.assertClose(norm(pos), self.kerbin.orbit.radius)
+        self.assertAlmostEqual(norm(pos), self.kerbin.orbit.radius, places=3)
 
     def test_transform_position_between_vessel_and_celestial_body(self):
         pos = self.sc.transform_position((0, 0, 0), self.ref_vessel, self.ref_kerbin)
-        self.assertClose(norm(pos), self.vessel.orbit.radius, error=0.01)
+        self.assertAlmostEqual(norm(pos), self.vessel.orbit.radius, places=2)
 
     def test_transform_position_between_vessel_and_celestial_bodies(self):
         p0 = self.sc.transform_position((0, 0, 0), self.ref_vessel, self.ref_kerbin)
@@ -154,76 +154,68 @@ class TestSpaceCenter(krpctest.TestCase):
 
         p3 = tuple(x-y for (x, y) in zip(p1, p2))
         #TODO: sometimes there is a large difference?!?! but only sometimes...
-        self.assertClose(norm(p0), norm(p3), error=500)
+        self.assertAlmostEqual(norm(p0), norm(p3), delta=500)
 
     #TODO: improve transform direction tests
 
     def test_transform_direction_same_reference_frame(self):
         direction = normalize((1, 2, 3))
-        self.assertClose(direction,
-                         self.sc.transform_direction(direction, self.ref_vessel, self.ref_vessel))
+        self.assertAlmostEqual(direction, self.sc.transform_direction(direction, self.ref_vessel, self.ref_vessel))
 
     def test_transform_direction_between_celestial_bodies(self):
         up = (0, 1, 0)
         forward = (0, 0, 1)
-        self.assertClose(up, self.sc.transform_direction(up, self.ref_kerbin, self.ref_mun))
-        self.assertNotClose(
-            forward,
-            self.sc.transform_direction(forward, self.ref_kerbin, self.ref_mun))
-        self.assertClose(
-            up,
-            self.sc.transform_direction(up, self.ref_sun, self.ref_kerbin))
-        self.assertNotClose(
-            forward,
-            self.sc.transform_direction(forward, self.ref_sun, self.ref_kerbin))
+        self.assertAlmostEqual(up, self.sc.transform_direction(up, self.ref_kerbin, self.ref_mun))
+        self.assertNotAlmostEqual(forward, self.sc.transform_direction(forward, self.ref_kerbin, self.ref_mun))
+        self.assertAlmostEqual(up, self.sc.transform_direction(up, self.ref_sun, self.ref_kerbin))
+        self.assertNotAlmostEqual(forward, self.sc.transform_direction(forward, self.ref_sun, self.ref_kerbin))
 
     def test_transform_direction_between_vessel_and_celestial_body(self):
         up = (0, 1, 0)
-        self.assertNotClose(up, self.sc.transform_direction(up, self.ref_vessel, self.ref_kerbin))
+        self.assertNotAlmostEqual(up, self.sc.transform_direction(up, self.ref_vessel, self.ref_kerbin))
 
     #TODO: improve transform rotation tests
 
     def test_transform_rotation_same_reference_frame(self):
         r = (1, 0, 0, 0)
-        self.assertClose(r, self.sc.transform_rotation(r, self.ref_vessel, self.ref_vessel))
+        self.assertAlmostEqual(r, self.sc.transform_rotation(r, self.ref_vessel, self.ref_vessel))
 
     #TODO: improve transform velocity tests - check it includes rotational velocities
 
     def test_transform_velocity_same_reference_frame(self):
         vel = (1, 2, 3)
         ref = self.ref_vessel
-        self.assertClose(vel, self.sc.transform_velocity((0, 0, 0), vel, ref, ref))
-        self.assertClose(vel, self.sc.transform_velocity((10, 20, 30), vel, ref, ref))
+        self.assertAlmostEqual(vel, self.sc.transform_velocity((0, 0, 0), vel, ref, ref))
+        self.assertAlmostEqual(vel, self.sc.transform_velocity((10, 20, 30), vel, ref, ref))
 
     def test_transform_velocity_between_vessel_and_celestial_body(self):
         vel = self.sc.transform_velocity((0, 0, 0), (0, 0, 0), self.ref_vessel, self.ref_nr_kerbin)
-        self.assertClose(norm(vel), self.vessel.orbit.speed)
+        self.assertAlmostEqual(norm(vel), self.vessel.orbit.speed, places=3)
 
     def test_transform_velocity_between_vessel_and_celestial_bodies(self):
         v0 = self.sc.transform_velocity((0, 0, 0), (0, 0, 0), self.ref_vessel, self.ref_nr_kerbin)
         v1 = self.sc.transform_velocity((0, 0, 0), (0, 0, 0), self.ref_vessel, self.ref_nr_sun)
         v2 = self.sc.transform_velocity((0, 0, 0), (0, 0, 0), self.ref_nr_kerbin, self.ref_nr_sun)
         v3 = tuple(x-y for (x, y) in zip(v1, v2))
-        self.assertClose(norm(v0), norm(v3))
+        self.assertAlmostEqual(norm(v0), norm(v3), places=3)
 
     def test_transform_velocity_between_celestial_bodies(self):
         v1 = self.sc.transform_velocity((0, 0, 0), (0, 0, 0), self.ref_nr_mun, self.ref_nr_kerbin)
         v2 = self.sc.transform_velocity((0, 0, 0), (0, 0, 0), self.ref_nr_kerbin, self.ref_nr_mun)
-        self.assertClose(self.mun.orbit.speed, norm(v1))
-        self.assertClose(self.mun.orbit.speed, norm(v2))
-        self.assertClose(v1, tuple(-x for x in v2))
+        self.assertAlmostEqual(self.mun.orbit.speed, norm(v1), places=3)
+        self.assertAlmostEqual(self.mun.orbit.speed, norm(v2), places=3)
+        self.assertAlmostEqual(v1, tuple(-x for x in v2), places=3)
 
         v1 = self.sc.transform_velocity((0, 0, 0), (0, 0, 0), self.ref_nr_kerbin, self.ref_nr_sun)
         v2 = self.sc.transform_velocity((0, 0, 0), (0, 0, 0), self.ref_nr_sun, self.ref_nr_kerbin)
-        self.assertClose(self.kerbin.orbit.speed, norm(v1))
-        self.assertClose(self.kerbin.orbit.speed, norm(v2))
-        self.assertClose(v1, tuple(-x for x in v2))
+        self.assertAlmostEqual(self.kerbin.orbit.speed, norm(v1), places=3)
+        self.assertAlmostEqual(self.kerbin.orbit.speed, norm(v2), places=3)
+        self.assertAlmostEqual(v1, tuple(-x for x in v2), places=3)
 
     def test_transform_velocity_with_rotational_velocity(self):
         direction = 100000 + 600000
-        vel = self.sc.transform_velocity((direction, 0, 0), (0, 0, 0),
-                                         self.ref_kerbin, self.ref_nr_kerbin)
-        self.assertClose(norm(vel), direction * self.kerbin.rotational_speed)
+        vel = self.sc.transform_velocity((direction, 0, 0), (0, 0, 0), self.ref_kerbin, self.ref_nr_kerbin)
+        self.assertAlmostEqual(norm(vel), direction * self.kerbin.rotational_speed, places=3)
 
 class WarpTestBase(object):
 
@@ -334,7 +326,7 @@ class WarpTestBase(object):
     def test_warp_to(self):
         ut = self.sc.ut + (30*60) # 30 minutes in future
         self.sc.warp_to(ut)
-        self.assertClose(ut, self.sc.ut, error=2)
+        self.assertAlmostEqual(ut, self.sc.ut, delta=2)
 
 class TestWarpOnLaunchpad(krpctest.TestCase, WarpTestBase):
 
@@ -351,7 +343,7 @@ class TestWarpOnLaunchpad(krpctest.TestCase, WarpTestBase):
     def test_warp_to_long(self):
         ut = self.sc.ut + (100*60*60) # 100 hours in future
         self.sc.warp_to(ut)
-        self.assertClose(ut, self.sc.ut, error=2)
+        self.assertAlmostEqual(ut, self.sc.ut, delta=2)
 
 class TestWarpInOrbit(krpctest.TestCase, WarpTestBase):
 

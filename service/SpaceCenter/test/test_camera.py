@@ -55,7 +55,7 @@ class CameraTestBase(object):
             self.assertLess(distance, self.camera.max_distance)
             self.camera.distance = distance
             self.wait(0.5)
-            self.assertClose(distance, self.camera.distance)
+            self.assertAlmostEqual(distance, self.camera.distance, places=3)
 
     def test_heading(self):
         #TODO: not supported in IVA mode
@@ -66,7 +66,7 @@ class CameraTestBase(object):
         for heading in self.headings:
             self.camera.heading = heading
             self.wait(0.01)
-            self.assertClose(heading, self.camera.heading)
+            self.assertAlmostEqual(heading, self.camera.heading, places=3)
 
     def test_pitch(self):
         #TODO: not supported in IVA mode
@@ -79,7 +79,7 @@ class CameraTestBase(object):
             self.assertLess(pitch, self.camera.max_pitch)
             self.camera.pitch = pitch
             self.wait(0.01)
-            self.assertClose(pitch, self.camera.pitch, 0.1)
+            self.assertAlmostEqual(pitch, self.camera.pitch, places=1)
 
 class TestCameraFlight(krpctest.TestCase, CameraTestBase):
 

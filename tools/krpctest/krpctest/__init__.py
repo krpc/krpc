@@ -81,79 +81,99 @@ class TestCase(unittest.TestCase):
     def wait(cls, timeout=0.1):
         time.sleep(timeout)
 
-    @staticmethod
-    def _is_in_range(min_value, max_value, value):
-        return min_value <= value and value <= max_value
+    def assertAlmostEqual(self, expected, actual, places=7, msg=None, delta=None):
+        """ Check that actual is equal to expected, within the given error """
+        if not self._is_almost_equal(expected, actual, places, delta):
+            if msg is None:
+                msg = self._almost_equal_summary(actual, expected, 'not almost equal')
+                msg = self._almost_equal_error_msg(msg, places, delta)
+            self.fail(msg)
 
-    def _is_close(self, expected, actual, error=0.001):
-        if isinstance(expected, list) or isinstance(expected, tuple):
-            return self._list_is_close(expected, actual, error)
-        elif isinstance(expected, dict):
-            return self._dict_is_close(expected, actual, error)
-        else:
-            return self._is_in_range(expected-error, expected+error, actual)
+    def assertNotAlmostEqual(self, expected, actual, places=7, msg=None, delta=None):
+        """ Check that actual is not equal to expected, within the given error """
+        if self._is_almost_equal(expected, actual, places, delta):
+            if msg is None:
+                msg = self._almost_equal_summary(actual, expected, 'almost equal')
+                msg = self._almost_equal_error_msg(msg, places, delta)
+            self.fail(msg)
 
-    def _list_is_close(self, expected, actual, error):
-        if len(expected) != len(actual):
-            return False
-        for x, y in zip(expected, actual):
-            if not self._is_in_range(x - error, x + error, y):
-                return False
-        return True
-
-    def _dict_is_close(self, expected, actual, error):
-        if set(expected.keys()) != set(actual.keys()):
-            return False
-        for k in expected.keys():
-            x = expected[k]
-            y = actual[k]
-            if not self._is_in_range(x - error, x + error, y):
-                return False
-        return True
-
-    def assertNotClose(self, expected, actual, error=0.01):
-        """ Check that actual is not equal to expected, within the given absolute error
-            i.e. actual is not in the range (expected-error, expected+error) """
-        if self._is_close(expected, actual, error):
-            if isinstance(expected, list) or isinstance(expected, tuple):
-                args = [str(tuple(x)) for x in (actual, expected)] + [error]
-                self.fail('%s is close to %s, within an absolute error of %f' % tuple(args))
-            else:
-                self.fail('%f is close to %f, within an absolute error of %f' % (actual, expected, error))
-
-    def assertClose(self, expected, actual, error=0.01):
-        """ Check that actual is equal to expected, within the given absolute error
-            i.e. actual is in the range (expected-error, expected+error) """
-        if not self._is_close(expected, actual, error):
-            if isinstance(expected, list) or isinstance(expected, tuple):
-                args = [str(tuple(x)) for x in (actual, expected)] + [error]
-                self.fail('%s is not close to %s, within an absolute error of %f' % tuple(args))
-            elif isinstance(expected, dict):
-                args = [str(dict(x)) for x in (actual, expected)] + [error]
-                self.fail('%s is not close to %s, within an absolute error of %f' % tuple(args))
-            else:
-                self.fail('%f is not close to %f, within an absolute error of %f' % (actual, expected, error))
-
-    def assertCloseDegrees(self, expected, actual, error=0.001):
-        """ Check that angle actual is equal to angle expected, within the given absolute error.
+    def assertDegreesAlmostEqual(self, expected, actual, places=7, msg=None, delta=None):
+        """ Check that angle actual is equal to angle expected, within the given error.
             Uses clock arithmetic to compare angles, in range (0,360] """
-        def _clamp_degrees(angle):
+
+        def clamp_degrees(angle):
             angle = angle % 360
             if angle < 0:
                 angle += 360
             return angle
 
-        min_degrees, max_degrees = _clamp_degrees(expected - error), _clamp_degrees(expected + error)
-        actual_clamped = _clamp_degrees(actual)
+        expected_clamped = clamp_degrees(expected)
+        actual_clamped = clamp_degrees(actual)
 
-        if max_degrees >= actual_clamped and actual_clamped >= min_degrees:
-            return
-        if min_degrees > max_degrees and max_degrees >= actual_clamped and actual_clamped >= 0:
-            return
-        if min_degrees > max_degrees and min_degrees <= actual_clamped and actual_clamped <= 360:
-            return
+        if msg is None:
+            msg = self._almost_equal_error_msg(
+                'Angle %f is not close to %f' % (actual, expected), places, delta)
 
-        self.fail('Angle %.2f is not close to %.2f, within an absolute error of %f' % (actual, expected, error))
+        if delta is not None:
+            min_degrees, max_degrees = clamp_degrees(expected - delta), clamp_degrees(expected + delta)
+            if max_degrees >= actual_clamped and actual_clamped >= min_degrees:
+                return
+            if min_degrees > max_degrees and max_degrees >= actual_clamped and actual_clamped >= 0:
+                return
+            if min_degrees > max_degrees and min_degrees <= actual_clamped and actual_clamped <= 360:
+                return
+            self.fail(msg)
+
+        else:
+            self.assertAlmostEqual(expected_clamped, actual_clamped, msg=msg, places=places)
+
+    @staticmethod
+    def _is_value_almost_equal(expected, actual, places, delta=None):
+        diff = abs(expected - actual)
+        if delta != None:
+            return diff <= delta
+        else:
+            return round(diff, places) == 0
+
+    def _is_almost_equal(self, expected, actual, places, delta=None):
+        if isinstance(expected, list) or isinstance(expected, tuple):
+            return self._list_is_almost_equal(expected, actual, places, delta)
+        elif isinstance(expected, dict):
+            return self._dict_is_almost_equal(expected, actual, places, delta)
+        else:
+            return self._is_value_almost_equal(expected, actual, places, delta)
+
+    def _list_is_almost_equal(self, expected, actual, places, delta=None):
+        if len(expected) != len(actual):
+            return False
+        for x, y in zip(expected, actual):
+            if not self._is_value_almost_equal(x, y, places, delta):
+                return False
+        return True
+
+    def _dict_is_almost_equal(self, expected, actual, places, delta=None):
+        if set(expected.keys()) != set(actual.keys()):
+            return False
+        for k in expected.keys():
+            if not self._is_value_almost_equal(expected[k], actual[k], places, delta):
+                return False
+        return True
+
+    @staticmethod
+    def _almost_equal_summary(actual, expected, comparison):
+        if isinstance(expected, list) or isinstance(expected, tuple):
+            return '%s is %s to %s' % (str(actual), comparison, str(expected))
+        elif isinstance(expected, dict):
+            return '%s is %s to %s' % (str(actual), comparison, str(expected))
+        else:
+            return '%f is %s to %f' % (actual, comparison, expected)
+
+    @staticmethod
+    def _almost_equal_error_msg(msg, places, delta):
+        if delta is not None:
+            return '%s, within a delta of %f' % (msg, delta)
+        else:
+            return '%s, to %d places' % (msg, places)
 
     def assertIsNaN(self, value):
         """ Check that the value is nan """

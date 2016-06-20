@@ -111,7 +111,7 @@ class EngineTestBase(object):
         engine.active = False
         self.wait(1)
         if not data['throttle_locked']:
-            self.assertClose(0, engine.throttle)
+            self.assertAlmostEqual(0, engine.throttle)
 
     def set_throttle(self, engine, value):
         data = self.engine_data[engine.part.title]
@@ -119,20 +119,20 @@ class EngineTestBase(object):
         engine.active = True
         self.wait(1)
         if not data['throttle_locked']:
-            self.assertClose(value, engine.throttle)
+            self.assertAlmostEqual(value, engine.throttle)
 
 class EngineTest(EngineTestBase):
 
     def check_engine_properties(self, engine):
         """ Check engine properties independent of activity/throttle """
         data = self.engine_data[engine.part.title]
-        self.assertClose(data['max_vac_thrust'], engine.max_vacuum_thrust)
+        self.assertAlmostEqual(data['max_vac_thrust'], engine.max_vacuum_thrust)
         self.assertItemsEqual(data['propellants'].keys(), engine.propellants)
-        self.assertClose(data['propellants'], engine.propellant_ratios)
+        self.assertAlmostEqual(data['propellants'], engine.propellant_ratios, places=3)
         self.assertTrue(engine.has_fuel)
         self.assertEqual(data['throttle_locked'], engine.throttle_locked)
-        self.assertClose(data['msl_isp'], engine.kerbin_sea_level_specific_impulse)
-        self.assertClose(data['vac_isp'], engine.vacuum_specific_impulse)
+        self.assertAlmostEqual(data['msl_isp'], engine.kerbin_sea_level_specific_impulse)
+        self.assertAlmostEqual(data['vac_isp'], engine.vacuum_specific_impulse)
         self.assertEqual(data['can_restart'], engine.can_restart)
         self.assertEqual(data['can_shutdown'], engine.can_shutdown)
         self.assertEqual(data['modes'] is not None, engine.has_modes)
@@ -141,38 +141,38 @@ class EngineTest(EngineTestBase):
             self.assertTrue(engine.mode in data['modes'])
         self.assertEqual(data['gimballed'], engine.gimballed)
         if not data['gimballed']:
-            self.assertClose(0, engine.gimbal_range)
+            self.assertAlmostEqual(0, engine.gimbal_range)
         else:
             self.assertFalse(engine.gimbal_locked)
-            self.assertClose(data['gimbal_range'], engine.gimbal_range)
+            self.assertAlmostEqual(data['gimbal_range'], engine.gimbal_range)
 
     def check_engine_idle(self, engine):
         """ Check engine properties when engine is deactivated """
         data = self.engine_data[engine.part.title]
         self.assertFalse(engine.active)
-        self.assertClose(1, engine.thrust_limit)
+        self.assertAlmostEqual(1, engine.thrust_limit)
         self.assertEqual(0, engine.thrust)
-        self.assertClose(data['max_thrust'], engine.available_thrust, error=500)
-        self.assertClose(data['max_thrust'], engine.max_thrust, error=500)
-        self.assertClose(0, engine.specific_impulse, error=5)
+        self.assertAlmostEqual(data['max_thrust'], engine.available_thrust, delta=500)
+        self.assertAlmostEqual(data['max_thrust'], engine.max_thrust, delta=500)
+        self.assertAlmostEqual(0, engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
-        self.assertClose((0, 0, 0), engine.available_torque)
+        self.assertAlmostEqual((0, 0, 0), engine.available_torque)
 
     def check_engine_active(self, engine, throttle):
         """ Check engine properties when engine is activated """
         data = self.engine_data[engine.part.title]
         self.assertTrue(engine.active)
-        self.assertClose(throttle, engine.throttle)
-        self.assertClose(1, engine.thrust_limit, error=1)
-        self.assertClose(data['max_thrust'] * throttle, engine.thrust, error=500)
-        self.assertClose(data['max_thrust'], engine.available_thrust, error=500)
-        self.assertClose(data['max_thrust'], engine.max_thrust, error=500)
-        self.assertClose(data['isp'], engine.specific_impulse, error=5)
+        self.assertAlmostEqual(throttle, engine.throttle, places=2)
+        self.assertAlmostEqual(1, engine.thrust_limit, delta=1)
+        self.assertAlmostEqual(data['max_thrust'] * throttle, engine.thrust, delta=500)
+        self.assertAlmostEqual(data['max_thrust'], engine.available_thrust, delta=500)
+        self.assertAlmostEqual(data['max_thrust'], engine.max_thrust, delta=500)
+        self.assertAlmostEqual(data['isp'], engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
         if data['gimballed'] and throttle > 0:
             self.assertGreater(engine.available_torque, (100, 100, 100))
         else:
-            self.assertClose((0, 0, 0), engine.available_torque)
+            self.assertAlmostEqual((0, 0, 0), engine.available_torque)
 
     def check_engine(self, engine):
         self.set_idle(engine)
@@ -251,24 +251,24 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.vessel.control.throttle = 1
         self.assertTrue(engine.has_fuel)
         self.assertEqual(1, engine.thrust_limit)
-        self.assertClose(0, engine.thrust, 500)
-        self.assertClose(thrust, engine.available_thrust, 500)
-        self.assertClose(thrust, engine.max_thrust, 500)
+        self.assertAlmostEqual(0, engine.thrust, 500)
+        self.assertAlmostEqual(thrust, engine.available_thrust, delta=500)
+        self.assertAlmostEqual(thrust, engine.max_thrust, delta=500)
         engine.active = True
 
         for throttle in (1, 0.666, 0.2, 0):
             self.vessel.control.throttle = throttle
             for thrust_limit in (1, 0.8, 0.333, 0.1, 0):
                 engine.thrust_limit = thrust_limit
-                self.assertClose(thrust_limit, engine.thrust_limit)
+                self.assertAlmostEqual(thrust_limit, engine.thrust_limit)
                 self.wait(0.5)
-                self.assertClose(throttle * thrust_limit * thrust, engine.thrust, 500)
-                self.assertClose(thrust_limit * thrust, engine.available_thrust, 500)
-                self.assertClose(thrust, engine.max_thrust, 500)
+                self.assertAlmostEqual(throttle * thrust_limit * thrust, engine.thrust, delta=500)
+                self.assertAlmostEqual(thrust_limit * thrust, engine.available_thrust, delta=500)
+                self.assertAlmostEqual(thrust, engine.max_thrust, delta=500)
 
         engine.active = False
         engine.thrust_limit = 1
-        self.assertClose(1, engine.thrust_limit)
+        self.assertAlmostEqual(1, engine.thrust_limit)
 
     def test_set_mode(self):
         engine = self.get_engine('CR-7 R.A.P.I.E.R. Engine')
@@ -305,7 +305,7 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.assertEqual(1, engine.gimbal_limit)
         for limit in (1, 0.6, 0.234, 0):
             engine.gimbal_limit = limit
-            self.assertClose(limit, engine.gimbal_limit)
+            self.assertAlmostEqual(limit, engine.gimbal_limit)
             self.wait(1)
         engine.gimbal_limit = 1
         engine.gimbal_locked = True
