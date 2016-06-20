@@ -18,13 +18,6 @@ class TestThreading(ServerTestCase, unittest.TestCase):
     def setUpClass(cls):
         super(TestThreading, cls).setUpClass()
 
-    @classmethod
-    def tearDownClass(cls):
-        super(TestThreading, cls).tearDownClass()
-
-    def setUp(self):
-        super(TestThreading, self).setUp()
-
     def test_thread_safe_connection(self):
         thread0 = threading.Thread(target=worker_thread, args=(self.conn,))
         thread1 = threading.Thread(target=worker_thread, args=(self.conn,))

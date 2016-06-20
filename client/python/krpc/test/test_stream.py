@@ -8,16 +8,9 @@ class TestStream(ServerTestCase, unittest.TestCase):
     def setUpClass(cls):
         super(TestStream, cls).setUpClass()
 
-    @classmethod
-    def tearDownClass(cls):
-        super(TestStream, cls).tearDownClass()
-
-    def setUp(self):
-        super(TestStream, self).setUp()
-
     @staticmethod
     def wait():
-        time.sleep(0.05)
+        time.sleep(0.01)
 
     def test_method(self):
         with self.conn.stream(self.conn.test_service.float_to_string, 3.14159) as x:
@@ -64,7 +57,12 @@ class TestStream(ServerTestCase, unittest.TestCase):
             for _ in range(5):
                 self.assertLess(count, x())
                 count = x()
-                self.wait()
+                i = 0
+                while count == x():
+                    self.wait()
+                    if i > 1000:
+                        self.fail('Timed out waiting for stream to update')
+                    i += 1
 
     def test_nested(self):
         with self.conn.stream(self.conn.test_service.float_to_string, 0.123) as x0:

@@ -1,7 +1,6 @@
 import unittest
 import threading
 import socket
-import time
 from krpc.connection import Connection
 
 def server_thread(started):
@@ -9,7 +8,6 @@ def server_thread(started):
     sock.bind(('', 0))
     server_thread.port = sock.getsockname()[1]
     sock.listen(1)
-    time.sleep(1)
     started.set()
 
     while True:

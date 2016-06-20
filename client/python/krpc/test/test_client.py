@@ -9,13 +9,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def setUpClass(cls):
         super(TestClient, cls).setUpClass()
 
-    @classmethod
-    def tearDownClass(cls):
-        super(TestClient, cls).tearDownClass()
-
-    def setUp(self):
-        super(TestClient, self).setUp()
-
     def test_get_status(self):
         status = self.conn.krpc.get_status()
         self.assertRegexpMatches(status.version, r'^[0-9]+\.[0-9]+\.[0-9]+$')
@@ -290,8 +283,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(type(obj2), conn2.test_service.TestClass)
 
     def test_thread_safe(self):
-        thread_count = 4
-        repeats = 1000
+        thread_count = 32
+        repeats = 100
 
         latch = [threading.Condition(), thread_count]
 
