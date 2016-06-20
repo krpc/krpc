@@ -1,21 +1,15 @@
 import unittest
-import time
 import krpc
 import krpctest
 
 class TestPolygon(krpctest.TestCase):
 
     @classmethod
-    def setUp(cls):
-        krpctest.new_save()
-        cls.conn = krpctest.connect(cls)
-        cls.drawing = cls.conn.drawing
-        cls.vessel = cls.conn.space_center.active_vessel
+    def setUpClass(cls):
+        cls.new_save()
+        cls.drawing = cls.connect().drawing
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.ref = cls.vessel.reference_frame
-
-    @classmethod
-    def tearDown(cls):
-        cls.conn.close()
 
     vertices = [
         (0, 0, 0),
@@ -30,12 +24,12 @@ class TestPolygon(krpctest.TestCase):
         polygon = self.add_polygon()
         polygon.visible = True
         self.assertEqual(self.vertices, polygon.vertices)
-        self.assertEquals(self.ref, polygon.reference_frame)
+        self.assertEqual(self.ref, polygon.reference_frame)
         self.assertTrue(polygon.visible)
-        self.assertEquals((1, 1, 1), polygon.color)
-        self.assertEquals("Particles/Additive", polygon.material)
+        self.assertEqual((1, 1, 1), polygon.color)
+        self.assertEqual("Particles/Additive", polygon.material)
         self.assertClose(0.1, polygon.thickness)
-        time.sleep(0.5)
+        self.wait()
         polygon.remove()
         self.assertRaises(krpc.client.RPCError, polygon.remove)
 
@@ -45,8 +39,8 @@ class TestPolygon(krpctest.TestCase):
         polygon.color = (1, 0, 0)
         polygon.visible = True
         self.assertTrue(polygon.visible)
-        self.assertEquals((1, 0, 0), polygon.color)
-        time.sleep(0.5)
+        self.assertEqual((1, 0, 0), polygon.color)
+        self.wait()
         polygon.remove()
 
     def test_thickness(self):
@@ -56,7 +50,7 @@ class TestPolygon(krpctest.TestCase):
         polygon.visible = True
         self.assertTrue(polygon.visible)
         self.assertClose(1.234, polygon.thickness)
-        time.sleep(0.5)
+        self.wait()
         polygon.remove()
 
 if __name__ == '__main__':
