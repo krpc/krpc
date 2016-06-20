@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -38,7 +38,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The KSP propellant resource.
+        /// The KSP propellant
         /// </summary>
         public Propellant InternalPropellant {
             get
@@ -70,7 +70,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The current required amount of propellant
+        /// The required amount of propellant
         /// </summary>
         [KRPCProperty]
         public double CurrentRequirement {
@@ -79,7 +79,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The total propellant resource available
+        /// The total amount of the underlying resource (fuel or oxidizer) currently available 
         /// </summary>
         [KRPCProperty]
         public double TotalResourceAvailable {
@@ -88,7 +88,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The total propellant resource capacity
+        /// The total vehicle capacity for the underyling propellant resource (fuel or oxidizer)
         /// </summary>
         [KRPCProperty]
         public double TotalResourceCapacity {
@@ -141,6 +141,9 @@ namespace KRPC.SpaceCenter.Services
             { return InternalPropellant.ratio; }
         }
 
+        /// <summary>
+        /// The resources (fuel or oxidizer) used for this propellant
+        ///
         [KRPCProperty]
         public IList<Resource> ConnectedResources {
             get {
@@ -156,4 +159,3 @@ namespace KRPC.SpaceCenter.Services
 
     }
 }
-
