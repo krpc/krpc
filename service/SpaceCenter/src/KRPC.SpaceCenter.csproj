@@ -132,6 +132,7 @@
     <Compile Include="Services\Parts\SolarPanelState.cs" />
     <Compile Include="Services\Parts\Thruster.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
+    <Compile Include="Services\ReferenceFrameType.cs" />
     <Compile Include="Services\Resource.cs" />
     <Compile Include="Services\ResourceFlowMode.cs" />
     <Compile Include="Services\Resources.cs" />
