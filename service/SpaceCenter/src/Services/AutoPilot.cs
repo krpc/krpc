@@ -86,8 +86,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Wait ()
         {
-            if (Error > 0.5f || RollError > 0.5f || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > 0.05f)
+            if (Error > 0.75f || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > 0.05f) {
+                Console.WriteLine (String.Format ("{0:F} {1:F}", Error, InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude));
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
+            }
         }
 
         /// <summary>
@@ -98,12 +100,23 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float Error {
             get {
-                if (engaged [vesselId] == this)
-                    return Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (attitudeController.TargetDirection));
-                else if (engaged [vesselId] != this && SAS && SASMode != SASMode.StabilityAssist)
-                    return Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ());
-                else
+                if (engaged [vesselId] == this) {
+                    if (!double.IsNaN (attitudeController.TargetRoll)) {
+                        var currentRotation = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation);
+                        var targetRotation = attitudeController.TargetRotation;
+                        var rotation = targetRotation * currentRotation.Inverse ();
+                        float angle;
+                        Vector3 axis;
+                        ((Quaternion)rotation).ToAngleAxis (out angle, out axis);
+                        return GeometryExtensions.NormAngle (angle);
+                    } else {
+                        return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (attitudeController.TargetDirection)));
+                    }
+                } else if (engaged [vesselId] != this && SAS && SASMode != SASMode.StabilityAssist) {
+                    return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ()));
+                } else {
                     return 0f;
+                }
             }
         }
 
