@@ -145,6 +145,37 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
+        /// <summary>
+        /// The transform for the object that this reference frame is attached to.
+        /// </summary>
+        public Transform Transform {
+            get {
+                switch (type) {
+                case ReferenceFrameType.CelestialBody:
+                case ReferenceFrameType.CelestialBodyNonRotating:
+                case ReferenceFrameType.CelestialBodyOrbital:
+                    return body.transform;
+                case ReferenceFrameType.Vessel:
+                case ReferenceFrameType.VesselOrbital:
+                case ReferenceFrameType.VesselSurface:
+                case ReferenceFrameType.VesselSurfaceVelocity:
+                    return InternalVessel.transform;
+                case ReferenceFrameType.Maneuver:
+                case ReferenceFrameType.ManeuverOrbital:
+                    throw new InvalidOperationException ("Maneuver nodes do not have a transform");
+                case ReferenceFrameType.Part:
+                case ReferenceFrameType.PartCenterOfMass:
+                    return InternalPart.transform;
+                case ReferenceFrameType.DockingPort:
+                    return dockingPort.nodeTransform;
+                case ReferenceFrameType.Thrust:
+                    return thruster.WorldTransform;
+                default:
+                    throw new ArgumentException ("No such reference frame");
+                }
+            }
+        }
+
         global::Vessel InternalVessel {
             get {
                 if (vesselId == Guid.Empty)
