@@ -36,11 +36,10 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             this.vessel = new KRPC.SpaceCenter.Services.Vessel (vessel);
             ReferenceFrame = this.vessel.SurfaceReferenceFrame;
-            StoppingTime = new Vector3d (1, 1, 1);
-            AccelerationFactor = new Vector3d (0.5, 0.5, 0.5);
-            VelocityFactor = new Vector3d (0.5, 0.5, 0.5);
-            AttenuationAngle = new Vector3d (0.25, 0.5, 0.25);
-            RollThreshold = 10;
+            StoppingTime = new Vector3d (0.5, 0.5, 0.5);
+            DecelerationTime = new Vector3d (5, 5, 5);
+            AttenuationAngle = new Vector3d (1, 1, 1);
+            RollThreshold = 5;
             AutoTune = true;
             Overshoot = new Vector3d (0.01, 0.01, 0.01);
             TimeToPeak = new Vector3d (3, 3, 3);
@@ -90,9 +89,7 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public Vector3d StoppingTime { get; set; }
 
-        public Vector3d AccelerationFactor  { get; set; }
-
-        public Vector3d VelocityFactor { get; set; }
+        public Vector3d DecelerationTime  { get; set; }
 
         public Vector3d AttenuationAngle { get; set; }
 
@@ -226,9 +223,10 @@ namespace KRPC.SpaceCenter.AutoPilot
             var result = Vector3d.zero;
             for (int i = 0; i < 3; i++) {
                 var theta = GeometryExtensions.ToRadians (angles [i]);
-                var acceleration = torque [i] / moi [i];
-                var maxVelocity = acceleration * StoppingTime [i];
-                var velocity = -Math.Sign (angles [i]) * Math.Min (maxVelocity, VelocityFactor [i] * Math.Sqrt (2.0 * Math.Abs (theta) * acceleration * AccelerationFactor [i]));
+                var maxAcceleration = torque [i] / moi [i];
+                var maxVelocity = maxAcceleration * StoppingTime [i];
+                var acceleration = Math.Min (maxAcceleration, maxVelocity / DecelerationTime [i]);
+                var velocity = -Math.Sign (angles [i]) * Math.Min (maxVelocity, Math.Sqrt (2.0 * Math.Abs (theta) * acceleration));
                 var attenuationAngle = GeometryExtensions.ToRadians (AttenuationAngle [i]);
                 var attenuation = 1.0 / (1.0 + Math.Exp (-((Math.Abs (theta) - attenuationAngle) * (6.0 / attenuationAngle))));
                 if (double.IsNaN (attenuation))

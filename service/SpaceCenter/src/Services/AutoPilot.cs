@@ -235,7 +235,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Threshold at which the autopilot will try to match the target roll angle. Defaults to 10 degrees.
+        /// The threshold at which the autopilot will try to match the target roll angle, if any.
+        /// Defaults to 5 degrees.
         /// </summary>
         [KRPCProperty]
         public double RollThreshold {
@@ -245,8 +246,9 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The maximum amount of time that the vessel should need to come to a complete stop.
-        /// A vector of three stopping times, one for each of the pitch, roll and yaw axes.
-        /// Defaults to 1 second for each axis.
+        /// This determines the maximum angular velocity of the vessel.
+        /// A vector of three stopping times, in seconds, one for each of the pitch, roll and yaw axes.
+        /// Defaults to 0.5 seconds for each axis.
         /// </summary>
         [KRPCProperty]
         public Tuple3 StoppingTime {
@@ -255,29 +257,22 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The percentage of the vessels angular acceleration used to decelerate the vessel.
-        /// A vector of three acceleration factors, each between 0 and 1, for each of the pitch, roll and yaw axes.
-        /// Defaults to 0.5 for each axis.
+        /// The time the vessel should take to come to a stop pointing in the target direction.
+        /// This determines the angular acceleration used to decelerate the vessel.
+        /// A vector of three times, in seconds, one for each of the pitch, roll and yaw axes.
+        /// Defaults to 5 seconds for each axis.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AccelerationFactor {
-            get { return attitudeController.AccelerationFactor.ToTuple (); }
-            set { attitudeController.AccelerationFactor = value.ToVector (); }
+        public Tuple3 DecelerationTime {
+            get { return attitudeController.DecelerationTime.ToTuple (); }
+            set { attitudeController.DecelerationTime = value.ToVector (); }
         }
 
         /// <summary>
-        /// Percentage of the target angular velocity to use.
-        /// A vector of three velocity factors, each between 0 and 1, for each of the pitch, roll and yaw axes.
-        /// Defaults to 0.5 for each axis.
-        /// </summary>
-        [KRPCProperty]
-        public Tuple3 VelocityFactor {
-            get { return attitudeController.VelocityFactor.ToTuple (); }
-            set { attitudeController.VelocityFactor = value.ToVector (); }
-        }
-
-        /// <summary>
-        /// The midpoint of the target velocity attenuation function, in degrees.
+        /// The angle at which the autopilot considers the vessel to be pointing close to the target.
+        /// This determines the midpoint of the target velocity attenuation function.
+        /// A vector of three angles, in degrees, one for each of the pitch, roll and yaw axes.
+        /// Defaults to 1° for each axis.
         /// </summary>
         [KRPCProperty]
         public Tuple3 AttenuationAngle {
