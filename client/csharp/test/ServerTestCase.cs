@@ -17,5 +17,13 @@ namespace KRPC.Client.Test
             ushort streamPort = envStreamPort == null ? (ushort)50001 : ushort.Parse (envStreamPort);
             connection = new Connection (name: "CSharpClientTest", rpcPort: rpcPort, streamPort: streamPort);
         }
+
+        [TearDown]
+        public virtual void TearDown ()
+        {
+            // TODO: This shouldn't be necessary, but avoids an assertion in Mono 4.4.0.182
+            //       when the stream update thread is still running when the process exits.
+            connection.Dispose ();
+        }
     }
 }
