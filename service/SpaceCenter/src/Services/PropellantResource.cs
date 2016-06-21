@@ -79,7 +79,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The total amount of the underlying resource (fuel or oxidizer) currently available 
+        /// The total amount of the underlying resource currently reachable given resource flow rules 
         /// </summary>
         [KRPCProperty]
         public double TotalResourceAvailable {
@@ -88,7 +88,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The total vehicle capacity for the underyling propellant resource (fuel or oxidizer)
+        /// The total vehicle capacity for the underyling propellant resource
         /// </summary>
         [KRPCProperty]
         public double TotalResourceCapacity {
@@ -97,7 +97,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// If this propellant should be ignored for Isp calculations
+        /// Ff this propellant should be ignored when calculating required mass flow given Isp
         /// </summary>
         [KRPCProperty]
         public bool IgnoreForIsp {
@@ -142,7 +142,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The resources (fuel or oxidizer) used for this propellant
+        /// The reachable resources connected to this propellant
         ///
         [KRPCProperty]
         public IList<Resource> ConnectedResources {
