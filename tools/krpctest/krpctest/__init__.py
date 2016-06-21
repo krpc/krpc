@@ -3,23 +3,24 @@ import inspect
 import math
 import os
 import shutil
+import time
+from pkg_resources import Requirement, resource_filename
 import krpc
 
-def connect(test_suite=None, test_case=None):
+def _connect(use_cached=True):
+    if _connect.connection is not None and use_cached:
+        return _connect.connection
     address = '127.0.0.1'
     if 'KRPC_ADDRESS' in os.environ:
         address = os.environ['KRPC_ADDRESS']
-    if test_suite and inspect.isclass(test_suite):
-        name = test_suite.__name__
-    elif test_suite:
-        name = test_suite.__class__.__name__
-    else:
-        name = 'krpctest'
-    if test_case:
-        name += '.'+test_case
-    return krpc.connect(name=name, address=address)
+    connection = krpc.connect(name='krpctest', address=address)
+    if use_cached:
+        _connect.connection = connection
+    return connection
 
-def get_ksp_dir():
+_connect.connection = None
+
+def _get_ksp_dir():
     path = None
     if 'KSP_DIR' in os.environ:
         path = os.environ['KSP_DIR']
@@ -27,137 +28,152 @@ def get_ksp_dir():
         raise RuntimeError('KSP dir not found at %s' % path)
     return path
 
-def _connect():
-    if not _connect.conn:
-        _connect.conn = connect()
-    return _connect.conn
-_connect.conn = None
-
-def new_save(name='test'):
-    # Return if the save is already running
-    if _connect().testing_tools.current_save == name:
-        return
-
-    # Load a new save using template from fixtures directory
-    fixtures_path = os.path.abspath('fixtures')
-    save_path = os.path.join(get_ksp_dir(), 'saves', name)
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    shutil.copy(os.path.join(fixtures_path, 'blank.sfs'), os.path.join(save_path, 'persistent.sfs'))
-    _connect().testing_tools.load_save('test', 'persistent')
-
-def load_save(name):
-    # Copy save file to save directory
-    fixtures_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
-    save_path = os.path.join(get_ksp_dir(), 'saves', 'test')
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    shutil.copy(os.path.join(fixtures_path, name + '.sfs'), os.path.join(save_path, name + '.sfs'))
-
-    # Load the save file
-    _connect().testing_tools.load_save('test', name)
-
-def remove_other_vessels():
-    _connect().testing_tools.remove_other_vessels()
-
-def launch_vessel_from_vab(name):
-    # Copy craft file to save directory
-    fixtures_path = os.path.abspath('fixtures')
-    save_path = os.path.join(get_ksp_dir(), 'saves', _connect().testing_tools.current_save)
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    ships_path = os.path.join(save_path, 'Ships', 'VAB')
-    if not os.path.exists(ships_path):
-        os.makedirs(ships_path)
-    shutil.copy(os.path.join(fixtures_path, name + '.craft'), os.path.join(ships_path, name + '.craft'))
-
-    # Launch the craft
-    _connect().space_center.launch_vessel_from_vab(name)
-
-def set_orbit(body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node,
-              argument_of_periapsis, mean_anomaly_at_epoch, epoch):
-    _connect().testing_tools.set_orbit(
-        body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node,
-        argument_of_periapsis, mean_anomaly_at_epoch, epoch)
-
-def set_circular_orbit(body, altitude):
-    _connect().testing_tools.set_circular_orbit(body, altitude)
-
 class TestCase(unittest.TestCase):
 
-    @staticmethod
-    def _is_in_range(min_value, max_value, value):
-        return min_value <= value and value <= max_value
+    @classmethod
+    def connect(cls, use_cached=True):
+        return _connect(use_cached)
 
-    def _is_close(self, expected, actual, error=0.001):
-        if isinstance(expected, list) or isinstance(expected, tuple):
-            return self._list_is_close(expected, actual, error)
-        elif isinstance(expected, dict):
-            return self._dict_is_close(expected, actual, error)
-        else:
-            return self._is_in_range(expected-error, expected+error, actual)
+    @classmethod
+    def new_save(cls, name='krpctest'):
+        # Return if the save is already loaded
+        if cls.connect().testing_tools.current_save == name:
+            return
 
-    def _list_is_close(self, expected, actual, error):
-        if len(expected) != len(actual):
-            return False
-        for x, y in zip(expected, actual):
-            if not self._is_in_range(x - error, x + error, y):
-                return False
-        return True
+        # Load a blank save with the given name
+        blank_save = resource_filename(Requirement.parse('krpctest'), 'krpctest/krpctest.sfs')
+        save_path = os.path.join(_get_ksp_dir(), 'saves', name)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+        shutil.copy(blank_save, os.path.join(save_path, 'persistent.sfs'))
+        cls.connect().testing_tools.load_save(name, 'persistent')
 
-    def _dict_is_close(self, expected, actual, error):
-        if set(expected.keys()) != set(actual.keys()):
-            return False
-        for k in expected.keys():
-            x = expected[k]
-            y = actual[k]
-            if not self._is_in_range(x - error, x + error, y):
-                return False
-        return True
+    @classmethod
+    def remove_other_vessels(cls):
+        cls.connect().testing_tools.remove_other_vessels()
 
-    def assertNotClose(self, expected, actual, error=0.01):
-        """ Check that actual is not equal to expected, within the given absolute error
-            i.e. actual is not in the range (expected-error, expected+error) """
-        if self._is_close(expected, actual, error):
-            if isinstance(expected, list) or isinstance(expected, tuple):
-                args = [str(tuple(x)) for x in (actual, expected)] + [error]
-                self.fail('%s is close to %s, within an absolute error of %f' % tuple(args))
-            else:
-                self.fail('%f is close to %f, within an absolute error of %f' % (actual, expected, error))
+    @classmethod
+    def launch_vessel_from_vab(cls, name, directory='craft'):
+        # Copy craft file to save directory
+        fixtures_path = os.path.abspath(directory)
+        save_path = os.path.join(_get_ksp_dir(), 'saves', cls.connect().testing_tools.current_save)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+        ships_path = os.path.join(save_path, 'Ships', 'VAB')
+        if not os.path.exists(ships_path):
+            os.makedirs(ships_path)
+        shutil.copy(os.path.join(fixtures_path, name + '.craft'), os.path.join(ships_path, name + '.craft'))
+        # Launch the craft
+        cls.connect().space_center.launch_vessel_from_vab(name)
 
-    def assertClose(self, expected, actual, error=0.01):
-        """ Check that actual is equal to expected, within the given absolute error
-            i.e. actual is in the range (expected-error, expected+error) """
-        if not self._is_close(expected, actual, error):
-            if isinstance(expected, list) or isinstance(expected, tuple):
-                args = [str(tuple(x)) for x in (actual, expected)] + [error]
-                self.fail('%s is not close to %s, within an absolute error of %f' % tuple(args))
-            elif isinstance(expected, dict):
-                args = [str(dict(x)) for x in (actual, expected)] + [error]
-                self.fail('%s is not close to %s, within an absolute error of %f' % tuple(args))
-            else:
-                self.fail('%f is not close to %f, within an absolute error of %f' % (actual, expected, error))
+    @classmethod
+    def set_orbit(cls, body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node,
+                  argument_of_periapsis, mean_anomaly_at_epoch, epoch):
+        cls.connect().testing_tools.set_orbit(
+            body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node,
+            argument_of_periapsis, mean_anomaly_at_epoch, epoch)
 
-    def assertCloseDegrees(self, expected, actual, error=0.001):
-        """ Check that angle actual is equal to angle expected, within the given absolute error.
+    @classmethod
+    def set_circular_orbit(cls, body, altitude):
+        cls.connect().testing_tools.set_circular_orbit(body, altitude)
+
+    @classmethod
+    def wait(cls, timeout=0.1):
+        time.sleep(timeout)
+
+    def assertAlmostEqual(self, expected, actual, places=7, msg=None, delta=None):
+        """ Check that actual is equal to expected, within the given error """
+        if not self._is_almost_equal(expected, actual, places, delta):
+            if msg is None:
+                msg = self._almost_equal_summary(actual, expected, 'not almost equal')
+                msg = self._almost_equal_error_msg(msg, places, delta)
+            self.fail(msg)
+
+    def assertNotAlmostEqual(self, expected, actual, places=7, msg=None, delta=None):
+        """ Check that actual is not equal to expected, within the given error """
+        if self._is_almost_equal(expected, actual, places, delta):
+            if msg is None:
+                msg = self._almost_equal_summary(actual, expected, 'almost equal')
+                msg = self._almost_equal_error_msg(msg, places, delta)
+            self.fail(msg)
+
+    def assertDegreesAlmostEqual(self, expected, actual, places=7, msg=None, delta=None):
+        """ Check that angle actual is equal to angle expected, within the given error.
             Uses clock arithmetic to compare angles, in range (0,360] """
-        def _clamp_degrees(angle):
+
+        def clamp_degrees(angle):
             angle = angle % 360
             if angle < 0:
                 angle += 360
             return angle
 
-        min_degrees, max_degrees = _clamp_degrees(expected - error), _clamp_degrees(expected + error)
-        actual_clamped = _clamp_degrees(actual)
+        expected_clamped = clamp_degrees(expected)
+        actual_clamped = clamp_degrees(actual)
 
-        if max_degrees >= actual_clamped and actual_clamped >= min_degrees:
-            return
-        if min_degrees > max_degrees and max_degrees >= actual_clamped and actual_clamped >= 0:
-            return
-        if min_degrees > max_degrees and min_degrees <= actual_clamped and actual_clamped <= 360:
-            return
+        if msg is None:
+            msg = self._almost_equal_error_msg(
+                'Angle %f is not close to %f' % (actual, expected), places, delta)
 
-        self.fail('Angle %.2f is not close to %.2f, within an absolute error of %f' % (actual, expected, error))
+        if delta is not None:
+            min_degrees, max_degrees = clamp_degrees(expected - delta), clamp_degrees(expected + delta)
+            if max_degrees >= actual_clamped and actual_clamped >= min_degrees:
+                return
+            if min_degrees > max_degrees and max_degrees >= actual_clamped and actual_clamped >= 0:
+                return
+            if min_degrees > max_degrees and min_degrees <= actual_clamped and actual_clamped <= 360:
+                return
+            self.fail(msg)
+
+        else:
+            self.assertAlmostEqual(expected_clamped, actual_clamped, msg=msg, places=places)
+
+    @staticmethod
+    def _is_value_almost_equal(expected, actual, places, delta=None):
+        diff = abs(expected - actual)
+        if delta != None:
+            return diff <= delta
+        else:
+            return round(diff, places) == 0
+
+    def _is_almost_equal(self, expected, actual, places, delta=None):
+        if isinstance(expected, list) or isinstance(expected, tuple):
+            return self._list_is_almost_equal(expected, actual, places, delta)
+        elif isinstance(expected, dict):
+            return self._dict_is_almost_equal(expected, actual, places, delta)
+        else:
+            return self._is_value_almost_equal(expected, actual, places, delta)
+
+    def _list_is_almost_equal(self, expected, actual, places, delta=None):
+        if len(expected) != len(actual):
+            return False
+        for x, y in zip(expected, actual):
+            if not self._is_value_almost_equal(x, y, places, delta):
+                return False
+        return True
+
+    def _dict_is_almost_equal(self, expected, actual, places, delta=None):
+        if set(expected.keys()) != set(actual.keys()):
+            return False
+        for k in expected.keys():
+            if not self._is_value_almost_equal(expected[k], actual[k], places, delta):
+                return False
+        return True
+
+    @staticmethod
+    def _almost_equal_summary(actual, expected, comparison):
+        if isinstance(expected, list) or isinstance(expected, tuple):
+            return '%s is %s to %s' % (str(actual), comparison, str(expected))
+        elif isinstance(expected, dict):
+            return '%s is %s to %s' % (str(actual), comparison, str(expected))
+        else:
+            return '%f is %s to %f' % (actual, comparison, expected)
+
+    @staticmethod
+    def _almost_equal_error_msg(msg, places, delta):
+        if delta is not None:
+            return '%s, within a delta of %f' % (msg, delta)
+        else:
+            return '%s, to %d places' % (msg, places)
 
     def assertIsNaN(self, value):
         """ Check that the value is nan """

@@ -25,6 +25,7 @@ setup(
     description='Utilities for running service tests for kRPC.',
     long_description=open(os.path.join(dirpath, 'README.txt')).read(),
     packages=['krpctest', 'krpctest.test'],
+    package_data={'': ['krpctest.sfs']},
     install_requires=install_requires,
     test_suite='krpctest.test',
     use_2to3=True,

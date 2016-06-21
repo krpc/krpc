@@ -24,16 +24,20 @@ namespace KRPC.Utils
             for (int i = 1; i < lines.Length; i++) {
                 var newindex = 0;
                 for (var j = 0; j < lines [i].Length; j++) {
-                    if (lines [i] [j] != ' ')
+                    if (lines [i] [j] != ' ') {
+                        indent = Math.Min (indent, newindex);
                         break;
+                    }
                     newindex++;
                 }
-                indent = Math.Min (indent, newindex);
             }
             lines [0] = new String (' ', indent) + lines [0];
             var result = "";
-            foreach (var line in lines)
-                result += line.Substring (indent) + "\n";
+            foreach (var line in lines) {
+                if (line.Length > indent)
+                    result += line.Substring (indent);
+                result += "\n";
+            }
             return result.Trim ();
         }
 

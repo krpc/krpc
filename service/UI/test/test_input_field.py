@@ -1,34 +1,28 @@
 import unittest
-import time
 import krpc
 import krpctest
 
 class TestInputField(krpctest.TestCase):
 
     @classmethod
-    def setUp(cls):
-        krpctest.new_save()
-        cls.conn = krpctest.connect(cls)
-        cls.canvas = cls.conn.ui.stock_canvas
-
-    @classmethod
-    def tearDown(cls):
-        cls.conn.close()
+    def setUpClass(cls):
+        cls.new_save()
+        cls.canvas = cls.connect().ui.stock_canvas
 
     def test_input_field(self):
         input_field = self.canvas.add_input_field()
         self.assertIsNotNone(input_field.rect_transform)
         self.assertTrue(input_field.visible)
-        self.assertEquals('', input_field.value)
+        self.assertEqual('', input_field.value)
         self.assertIsNotNone(input_field.text)
         self.assertFalse(input_field.changed)
-        time.sleep(0.5)
+        self.wait()
         input_field.remove()
         self.assertRaises(krpc.client.RPCError, input_field.remove)
 
     def test_value(self):
         input_field = self.canvas.add_input_field()
-        self.assertEquals('', input_field.value)
+        self.assertEqual('', input_field.value)
         self.assertFalse(input_field.changed)
         input_field.value = 'Foo'
         self.assertTrue(input_field.changed)

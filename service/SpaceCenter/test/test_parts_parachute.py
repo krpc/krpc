@@ -1,38 +1,33 @@
 import unittest
-import time
 import krpctest
 
 class TestPartsParachute(krpctest.TestCase):
 
     def setUp(self):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('PartsParachute')
-        krpctest.remove_other_vessels()
-        self.conn = krpctest.connect(self)
-        self.vessel = self.conn.space_center.active_vessel
-        self.state = self.conn.space_center.ParachuteState
+        self.new_save()
+        self.launch_vessel_from_vab('PartsParachute')
+        self.remove_other_vessels()
+        self.vessel = self.connect().space_center.active_vessel
+        self.state = self.connect().space_center.ParachuteState
         self.parachutes = self.vessel.parts.parachutes
-
-    def tearDown(self):
-        self.conn.close()
 
     def test_parachute_on_ground(self):
         for parachute in self.parachutes:
             self.assertFalse(parachute.deployed)
             self.assertEqual(parachute.state, self.state.stowed)
-            self.assertClose(parachute.deploy_altitude, 500)
-            self.assertClose(parachute.deploy_min_pressure, 0.01)
+            self.assertAlmostEqual(parachute.deploy_altitude, 500)
+            self.assertAlmostEqual(parachute.deploy_min_pressure, 0.01)
 
         for alt in (50, 200, 500, 750, 643):
             for parachute in self.parachutes:
                 parachute.deploy_altitude = alt
-                time.sleep(0.1)
-                self.assertClose(parachute.deploy_altitude, alt)
-                time.sleep(0.1)
+                self.wait()
+                self.assertAlmostEqual(parachute.deploy_altitude, alt)
+                self.wait()
 
         for parachute in self.parachutes:
             parachute.deploy()
-        time.sleep(0.1)
+        self.wait()
         for parachute in self.parachutes:
             self.assertTrue(parachute.deployed)
             self.assertEqual(parachute.state, self.state.active)
@@ -45,8 +40,8 @@ class TestPartsParachute(krpctest.TestCase):
         for parachute in self.parachutes:
             self.assertFalse(parachute.deployed)
             self.assertEqual(self.state.stowed, parachute.state)
-            self.assertClose(deploy_altitude, parachute.deploy_altitude)
-            self.assertClose(0.01, parachute.deploy_min_pressure)
+            self.assertAlmostEqual(deploy_altitude, parachute.deploy_altitude)
+            self.assertAlmostEqual(0.01, parachute.deploy_min_pressure)
 
         flight = self.vessel.flight(self.vessel.orbit.body.reference_frame)
         self.vessel.control.activate_next_stage()
@@ -59,7 +54,7 @@ class TestPartsParachute(krpctest.TestCase):
 
         for parachute in self.parachutes:
             parachute.deploy()
-        time.sleep(0.5)
+        self.wait(0.5)
 
         for parachute in self.parachutes:
             self.assertTrue(parachute.deployed)
@@ -74,7 +69,7 @@ class TestPartsParachute(krpctest.TestCase):
 
         while abs(flight.vertical_speed) > 0.1:
             pass
-        time.sleep(0.5)
+        self.wait(0.5)
 
         for parachute in self.parachutes:
             self.assertTrue(parachute.deployed)

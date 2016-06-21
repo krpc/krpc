@@ -1,21 +1,15 @@
 import unittest
-import time
 import krpctest
 
 class TestServo(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('InfernalRobotics')
-        krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.ir = cls.conn.infernal_robotics
-        cls.vessel = cls.conn.space_center.active_vessel
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.new_save()
+        cls.launch_vessel_from_vab('InfernalRobotics', directory='./')
+        cls.remove_other_vessels()
+        cls.ir = cls.connect().infernal_robotics
+        cls.vessel = cls.connect().space_center.active_vessel
 
     def test_rotatron(self):
         servo = self.ir.servo_with_name(self.vessel, 'Rotatron')
@@ -26,10 +20,10 @@ class TestServo(krpctest.TestCase):
         self.assertEqual(360, servo.max_config_position)
         self.assertEqual(-360, servo.min_position)
         self.assertEqual(360, servo.max_position)
-        self.assertClose(50, servo.config_speed)
-        self.assertClose(1, servo.speed)
-        self.assertClose(0, servo.current_speed)
-        self.assertClose(4, servo.acceleration)
+        self.assertAlmostEqual(50, servo.config_speed)
+        self.assertAlmostEqual(1, servo.speed)
+        self.assertAlmostEqual(0, servo.current_speed)
+        self.assertAlmostEqual(4, servo.acceleration)
         self.assertFalse(servo.is_moving)
         self.assertFalse(servo.is_free_moving)
         self.assertFalse(servo.is_locked)
@@ -44,10 +38,10 @@ class TestServo(krpctest.TestCase):
         self.assertEqual(2, servo.max_config_position)
         self.assertEqual(0, servo.min_position)
         self.assertEqual(2, servo.max_position)
-        self.assertClose(0.3, servo.config_speed)
-        self.assertClose(4, servo.speed)
-        self.assertClose(0, servo.current_speed)
-        self.assertClose(4, servo.acceleration)
+        self.assertAlmostEqual(0.3, servo.config_speed)
+        self.assertAlmostEqual(4, servo.speed)
+        self.assertAlmostEqual(0, servo.current_speed)
+        self.assertAlmostEqual(4, servo.acceleration)
         self.assertFalse(servo.is_moving)
         self.assertFalse(servo.is_free_moving)
         self.assertFalse(servo.is_locked)
@@ -57,29 +51,29 @@ class TestServo(krpctest.TestCase):
         servo = self.ir.servo_with_name(self.vessel, 'Rail')
         self.assertFalse(servo.is_moving)
         servo.move_right()
-        time.sleep(0.1)
+        self.wait()
         while servo.is_moving:
-            time.sleep(0.1)
+            self.wait()
         self.assertFalse(servo.is_moving)
         servo.move_left()
-        time.sleep(0.1)
+        self.wait()
         while servo.is_moving:
-            time.sleep(0.1)
+            self.wait()
         self.assertFalse(servo.is_moving)
 
     def test_stop(self):
         servo = self.ir.servo_with_name(self.vessel, 'Rail')
         self.assertFalse(servo.is_moving)
         servo.move_right()
-        time.sleep(0.1)
+        self.wait()
         self.assertTrue(servo.is_moving)
         servo.stop()
-        time.sleep(0.1)
+        self.wait()
         self.assertFalse(servo.is_moving)
-        time.sleep(0.1)
+        self.wait()
         servo.move_left()
         while servo.is_moving:
-            time.sleep(0.1)
+            self.wait()
         self.assertFalse(servo.is_moving)
 
 if __name__ == '__main__':
