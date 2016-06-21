@@ -81,9 +81,71 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The KSP vessel.
+        /// The type of the reference frame.
         /// </summary>
-        public global::Vessel InternalVessel {
+        public ReferenceFrameType Type {
+            get { return type; }
+        }
+
+        /// <summary>
+        /// The celestial body.
+        /// </summary>
+        public CelestialBody Body {
+            get {
+                if (body == null)
+                    throw new InvalidOperationException ("Reference frame has no celestial body");
+                return new CelestialBody (body);
+            }
+        }
+
+        /// <summary>
+        /// The vessel.
+        /// </summary>
+        public Vessel Vessel {
+            get { return new Vessel (InternalVessel); }
+        }
+
+        /// <summary>
+        /// The node.
+        /// </summary>
+        public Node Node {
+            get {
+                if (node == null)
+                    throw new InvalidOperationException ("Reference frame has no maneuver node");
+                return new Node (InternalVessel, node);
+            }
+        }
+
+        /// <summary>
+        /// The part.
+        /// </summary>
+        public Parts.Part Part {
+            get { return new Parts.Part (InternalPart); }
+        }
+
+        /// <summary>
+        /// The docking port.
+        /// </summary>
+        public Parts.DockingPort DockingPort {
+            get {
+                if (dockingPort == null)
+                    throw new InvalidOperationException ("Reference frame has no docking port");
+                return new Parts.DockingPort (new Parts.Part (dockingPort.part));
+            }
+        }
+
+        /// <summary>
+        /// The thruster.
+        /// </summary>
+        public Thruster Thruster {
+            get {
+                if (thruster == null)
+                    throw new InvalidOperationException ("Reference frame has no thruster");
+                return thruster;
+            }
+        }
+
+        global::Vessel InternalVessel {
             get {
                 if (vesselId == Guid.Empty)
                     throw new InvalidOperationException ("Reference frame has no vessel");
@@ -91,22 +153,12 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
-        /// <summary>
-        /// The KSP part.
-        /// </summary>
-        public Part InternalPart {
+        Part InternalPart {
             get {
                 if (partId == 0)
                     throw new InvalidOperationException ("Reference frame has no part");
                 return FlightGlobals.FindPartByID (partId);
             }
-        }
-
-        /// <summary>
-        /// The type of the reference frame.
-        /// </summary>
-        public ReferenceFrameType Type {
-            get { return type; }
         }
 
         internal static ReferenceFrame Object (global::CelestialBody body)
