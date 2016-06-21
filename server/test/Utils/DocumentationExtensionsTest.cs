@@ -140,7 +140,7 @@ namespace KRPC.Test.Utils
                 "<doc>\n" +
                 "<summary>\n" +
                 "This is the first line.\n" +
-                "And the second.\n" +
+                "And the second.\n\n" +
                 "And the third after a line break.\n" +
                 "</summary>\n" +
                 "<param name=\"param1\">Param1.</param>\n" +

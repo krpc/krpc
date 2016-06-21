@@ -1,3 +1,9 @@
+v0.3.5
+ * Fix race condition where the connection constructor returns before the stream server connection has been established
+ * Make Connection and StreamManager disposable so that they clean up resources correctly
+ * Fix issue where network streams are closed prematurely
+ * Fix issue with receiving partial protobuf messages
+
 v0.3.4
  * Update protobuf to v3.0.0-beta-3
 
