@@ -174,6 +174,7 @@ test_suite(
         '//client/python:test',
         '//tools/krpctest:test',
         '//tools/krpctools:test',
+        '//tools/ServiceDefinitions:test',
         '//tools/TestServer:test',
         '//doc:test'
     ]

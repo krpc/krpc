@@ -1,29 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Security;
 using KRPC.Utils;
 using NDesk.Options;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Security;
-using System.Diagnostics;
 
 namespace ServiceDefinitions
 {
-    class MainClass
+    static class MainClass
     {
         static void Help (OptionSet options)
         {
             Console.Error.WriteLine ("usage: ServiceDefinitions.exe [-h] [-v] [--output=PATH] service assembly...");
-            Console.Error.WriteLine ("");
+            Console.Error.WriteLine ();
             Console.Error.WriteLine ("Generate service definitions JSON file for a kRPC service");
-            Console.Error.WriteLine ("");
+            Console.Error.WriteLine ();
             options.WriteOptionDescriptions (Console.Error);
             Console.Error.WriteLine ("  service                    Name of service to generate");
             Console.Error.WriteLine ("  assembly...                Path(s) to assembly DLL(s) to load");
         }
 
+        [SuppressMessage ("Gendarme.Rules.Portability", "ExitCodeIsLimitedOnUnixRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static int Main (string[] args)
         {
             bool showHelp = false;
@@ -51,7 +54,7 @@ namespace ServiceDefinitions
             if (showVersion) {
                 var assembly = Assembly.GetEntryAssembly ();
                 var info = FileVersionInfo.GetVersionInfo (assembly.Location);
-                var version = String.Format ("{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
+                var version = String.Format (CultureInfo.InvariantCulture, "{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
                 Console.Error.WriteLine ("ServiceDefinitions.exe version " + version);
                 return 0;
             }
@@ -68,7 +71,8 @@ namespace ServiceDefinitions
                 var path = positionalArgs [i];
 
                 try {
-                    Assembly.LoadFrom (path);
+                    AssemblyName name = AssemblyName.GetAssemblyName (path);
+                    Assembly.Load (name);
                 } catch (FileNotFoundException) {
                     Console.Error.WriteLine ("Assembly '" + path + "' not found.");
                     return 1;

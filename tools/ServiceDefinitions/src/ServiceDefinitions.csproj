@@ -27,45 +27,45 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\server\src\KRPC.csproj">
+    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
       <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
       <Name>KRPC</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\bazel-krpc\external\csharp_json\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\bazel-krpc\external\csharp_json\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
-      <HintPath>..\..\bazel-krpc\external\csharp_options\lib\NDesk.Options.dll</HintPath>
+      <HintPath>..\..\..\bazel-krpc\external\csharp_options\lib\NDesk.Options.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
     </Reference>
     <Reference Include="System.Core">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Core.dll</HintPath>
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Core.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\System.Xml.Linq.dll</HintPath>
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO">
-      <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
+      <HintPath>..\..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime">
-      <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.Runtime.dll</HintPath>
+      <HintPath>..\..\..\bazel-krpc\lib\mono-4.5\Facades\System.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\bazel-bin\tools\ServiceDefinitions\AssemblyInfo.cs">
+    <Compile Include="..\..\..\bazel-bin\tools\ServiceDefinitions\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />

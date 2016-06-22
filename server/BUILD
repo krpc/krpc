@@ -33,6 +33,7 @@ csharp_assembly_info(
         'TestServer',
         'TestServer.Debug',
         'ServiceDefinitions',
+        'ServiceDefinitions.Debug',
         'DynamicProxyGenAssembly2'
     ],
     cls_compliant = False,
