@@ -1,10 +1,10 @@
-Auto Pilot
-==========
+AutoPilot
+=========
 
 kRPC provides an autopilot that can be used to hold a vessel in a chosen
 orientation. It automatically tunes itself to cope with vessels of differing
-size and control authority. This tutorial explains the operation of the
-autopilot, how to configure it and mathematics behind it.
+size and control authority. This tutorial explains how the autopilot works, how
+to configure it and mathematics behind it.
 
 Overview
 --------
@@ -12,22 +12,22 @@ Overview
 The inputs to the autopilot are:
 
 * A reference frame defining where zero rotation is,
-* pitch and heading angles,
-* and an optional roll angle.
+* target pitch and heading angles,
+* and an (optional) target roll angle.
 
 When a roll angle is not specified, the autopilot will try to zero out any
 rotation around the roll axis but will not try to hold a specific roll
 angle.
 
 The diagram below shows a high level overview of the autopilot. First, the
-current and target rotations are used to compute the :rst:ref:`target angular
-velocity <target-angular-velocity>` that is needed to rotate the vessel to the
-target rotation. Next, the components of this angular velocity in the pitch, yaw
-and roll axes of the vessel are passed to three PID controllers. The outputs of
-these controllers are used as the control inputs for the vessel.
+current rotation and target rotation are used to compute the :rst:ref:`target
+angular velocity <target-angular-velocity>` that is needed to rotate the vessel
+to face the target. Next, the components of this angular velocity in the pitch,
+yaw and roll axes of the vessel are passed to three PID controllers. The outputs
+of these controllers are used as the control inputs for the vessel.
 
-..
-   TODO: add stopping time, acceleration factor, dead zone etc. to diagram
+There are several parameters affecting the operation of the autopilot, shown the
+the left of the diagram. They are covered in the next section.
 
 .. image:: /images/tutorials/autopilot-schematic.png
    :align: center
@@ -35,177 +35,138 @@ these controllers are used as the control inputs for the vessel.
 Configuring the AutoPilot
 -------------------------
 
-The default settings should suffice in most cases, but there are various
-parameters that affect the behavior of the autopilot:
+There are several parameters that affect the behavior of the autopilot. The
+default values for these should suffice in most cases, but they can be adjusted
+to fit your needs.
 
-* The **stopping time** is the maximum amount of time that the vessel will need
-  to come to a complete stop. In other words, the autopilot will not rotate
-  rotate the vessel faster than a maximum angular speed such that it can stop
-  its rotation within this time. Decreasing this parameter will allow the
-  autopilot to rotate the vessel more quickly, but risks overshooting the
-  target.
+* The **stopping time** is the maximum amount of time that the vessel should
+  need to come to a complete stop. This limits the maximum angular velocity of
+  the vessel. It is a vector of three stopping times, one for each of the pitch,
+  roll and yaw axes. The default value is 0.5 seconds for each axis.
 
-  This parameter is a vector of three stopping times, one for each of the pitch,
-  roll and yaw axes. The default value is 1 second for each axis.
+* The **deceleration time** is the minimum time the autopilot should take to
+  decelerate the vessel to a stop, as it approaches the target direction. This
+  is a minimum value, as the time required may be higher if the vessel does not
+  have sufficient angular acceleration. It is a vector of three deceleration
+  times, in seconds, for each of the pitch, roll and yaw axes. The default value
+  is 5 seconds for each axis. A smaller value will make the autopilot decelerate
+  more aggressively, turning the vessel towards the target more
+  quickly. However, decreasing the value too much could result in overshoot.
 
-* The **acceleration factor** is how quickly the autopilot will try to
-  decelerate the vessel as it approaches the target direction. More
-  specifically, it is the percentage of the vessels angular acceleration used to
-  decelerate the vessel.
+* In order to avoid overshoot, the stopping time should be smaller than the
+  deceleration time. This gives the autopilot some 'spare' accelerlation, to
+  adjust for errors in the vessels rotation, for example due to changing
+  aerodynamic forces.
 
-  This parameter is a vector of three acceleration factors, each between 0 and
-  1, for each of the pitch, roll and yaw axes. The default value is 0.8 for each
-  axis.
-
-  A value of 1 means that the vessel will try to decelerate the vessel as late
-  as possible, as it approaches the target direction. This will result in the
-  vessel turning faster but risks overshooting. Setting it to a smaller value
-  will cause the vessel to slow down sooner, which gives it more time to avoid
-  overshoot.
-
-* The **dead zone** angle sets the region in which the vessel is considered to
-  be pointing in the correct direction.
-
-  This parameter is a vector of three angles, one for each of the pitch, roll
-  and yaw axes. The default value is 0 degrees in each axis - i.e. no dead zone.
-
-  A value of 1 means that when the vessel is within 1 degree of the target
-  direction, the autopilot will stop rotating the vessel. This value defaults to
-  zero, as it is not needed for most vessels. However, if your vessel
-  experiences oscillation when trying to hold the target direction, increasing
-  this value might help resolve the issue.
+* The **attenuation angle** sets the region in which the autopilot considers the
+  vessel to be 'close' to the target direction. In this region, the target
+  velocity is attenuated based on how close the vessel is to the target. It is
+  an angle, in degrees, for each of the pitch, roll and yaw axes. The default
+  value is 1 degree in each axis. This attenuation prevents the controls from
+  oscillating when the vessel is pointing in the correct direction. If you find
+  that the vessel still oscillates, try increasing this value.
 
 * The **time to peak**, in seconds, that the PID controllers take to adjust the
-  angular velocity of the vessel to the target angular velocity.
+  angular velocity of the vessel to the target angular velocity. Decreasing this
+  value will make the controllers try to match the target velocity more
+  aggressively. It is a vector of three times, one for each of the pitch, roll
+  and yaw axes. The default is 3 seconds in each axis.
 
-  This parameter is a vector of three times, one for each of the pitch, roll and
-  yaw axes. The default is 3 seconds in each axis.
-
-  Decreasing this value will make the controllers try to match the target
-  velocity more aggressively.
-
-* The **overshoot**, as a percentage, which is the amount by which the PID
-  controllers are allowed to overshoot the target angular velocity.
-
-  This parameter is a vector of three values, between 0 and 1, and one for each
-  of the pitch, roll and yaw axes. The default is 0.01 in each axis.
-
-  Increasing this value will make the controllers try to match the target
-  velocity more aggressively, but will cause some overshoot.
+* The **overshoot** is the percentage by which the PID controllers are allowed
+  to overshoot the target angular velocity. Increasing this value will make the
+  controllers try to match the target velocity more aggressively, but will cause
+  more overshoot. It is a vector of three values, between 0 and 1, for each of
+  the pitch, roll and yaw axes. The default is 0.01 in each axis.
 
 .. _target-angular-velocity:
 
 Computing the Target Angular Velocity
 -------------------------------------
 
-First, a quaternion :math:`R` representing the rotation from the vessels current
-rotation to the target rotation is calculated. If a target roll angle is not
-specified, or if the vessel is not pointing close to the target direction,
-:math:`R` is the rotation from the vessels current direction to the direction
-defined by the target pitch and heading angles. Otherwise, :math:`R` is the
-rotation from the vessels current rotation to the rotation defined by the target
-pitch, heading and roll angles. A vessel is considered to be close to the target
-direction when it is within 5 degrees of it.
+The target angular velocity is the angular velocity needed to the vessel to
+rotate it towards the target direction. It is computed by summing a target
+angular speed for each of pitch, yaw and roll axes. If no roll angle is set,
+then the target angular velocity in the roll axis is simply set to 0.
 
-This means that the autopilot will only roll when the vessel is pointing close
-to its target direction. This is done because if the vessel is not pointing
-close to the target direction, trying to achieve a target roll angle could be
-problematic. For example, if the vessel is spinning around its pitch axis, the
-roll angle will be changing very rapidly. Trying to correct the roll angle would
-have no effect, as the rotation in the pitch axis needs to be corrected first.
-
-The target angular velocity, denoted :math:`\vec{\omega_T}`, is then calculated from
-:math:`R` as follows:
-
-.. math::
-   \vec{x}, \theta &= \text{axisangle}(R) \\
-   \vec{\Theta} &= \theta \vec{x} \\
-   \vec{\omega_T} &= \big( f(\vec{\Theta}_x), f(\vec{\Theta}_y), f(\vec{\Theta}_z) \big)
-
-The components of :math:`\vec{\Theta}` are the rotations described by :math:`R`
-around the pitch, roll and yaw axes. :math:`\vec{\omega_T}` is calculated from
-this, by applying a function :math:`f` to its elements. This function converts
-the angles to rotational speeds, and is defined as follows:
+The target angular speed :math:`\omega` in a given axis is computed from the
+angular error :math:`\theta` using the following function:
 
 .. image:: /images/tutorials/autopilot-angular-speed.png
    :align: center
 
+The equation for this function is:
+
 .. math::
-   f(\theta)
-        &= \text{min} \big(
-               \dot{\theta}_{max},
-               m \cdot (\theta + \theta_{dead}
-           \big) \text{ if } \theta < -\theta_{dead} \\
-        &= 0 \text{ if } -\theta_{dead} \leq \theta \leq \theta_{dead} \\
-        &= \text{max} \big(
-               -\dot{\theta}_{max},
-               m \cdot (\theta - \theta_{dead}
-           \big) \text{ if } \theta > \theta_{dead} \\
+   \omega &= -\frac{\theta}{\lvert\theta\rvert}
+             \text{min} \big(
+                 \omega_{max},
+                 \sqrt{2 \alpha \lvert\theta\rvert} \cdot f_a(\theta)
+             \big) \\
    \text{where} & \\
-   m &= -\alpha \frac{2}{t_{stop}} \\
-   \dot{\theta}_{max} &= \frac{\tau_{max}t_{stop}}{I}
+   \alpha &= \frac{\omega_{max}}{t_{decel}} \\
+   \omega_{max} &= \frac{\tau_{max}t_{stop}}{I} \\
+   f_a(\theta) &= \frac{1}{1 + e^{-6/\theta_a(\lvert\theta\rvert - \theta_a)}}
 
-The reasoning for this is as follows:
+The reasoning and derivation for this is as follows:
 
-* We want the vessel to rotate towards :math:`\theta = 0`. This means that the
-  target angular velocity :math:`f(\theta)` needs to be positive when
-  :math:`\theta` is negative, and negative when :math:`\theta` is positive.
+* The vessel needs to rotate towards :math:`\theta = 0`. This means that the
+  target angular speed :math:`\omega` needs to be positive when :math:`\theta`
+  is negative, and negative when :math:`\theta` is positive. This is done by
+  multiplying by the term :math:`-\frac{\theta}{\lvert\theta\rvert}`, which is 1
+  when :math:`\theta < 0` and -1 when :math:`\theta >= 0`
 
-* As the vessel approaches the target :math:`\theta = 0` we want its velocity to
-  decrease, so that the vessel stops rotating at the target. This means we need
-  :math:`f(\theta)` to tend to zero as :math:`\theta` tends to zero.
-
-* :math:`t_{stop}` is the maximum stopping time in seconds, which determines the
-  vessels maximum angular speed :math:`\dot{\theta}_{max}`. This is the maximum
-  speed the vessel should rotate at so that it is able to stop within
-  :math:`t_{stop}` seconds. To derive it, assume the vessel is at initially at
-  rest and then accelerates as fast as it can for :math:`t_{stop}` seconds. The
-  resulting velocity is :math:`\dot{\theta}_{max}`. Using the equation of motion
-  under constant acceleration:
+* We want the vessel to rotate at a maximum angular speed :math:`\omega_{max}`,
+  which is determined by the stopping time :math:`t_{stop}`. Using the equations
+  of motion under constant acceleration we can derive it as follows:
 
   .. math::
-     \dot{\theta}_{max} &= \ddot{\theta} \cdot t_{stop} \\
-                        &= \frac{\tau_{max}}{I} \cdot t_{stop}
+     \omega &= \alpha t \\
+     \Rightarrow \omega_{max} &= \alpha_{max} t_{stop} \\
+                              &= \frac{\tau_{max}t_{stop}}{I}
 
-* :math:`\alpha` is the percentage of the vessels angular acceleration that
-  should used to decelerate the vessel, called the 'acceleration factor'. A
-  value of 1 means that the autopilot will start decelerating the vessels
-  rotation as late as possible. Smaller values make the deceleration less
-  aggressive.
+  where :math:`\tau_{max}` is the maximum torque the vessel can generate, and
+  :math:`I` is its moment of inertia.
 
-  This parameter controls the gradient :math:`m` of :math:`f` which is:
-
-  .. math::
-     m = -\alpha \frac{\dot{\theta}_{max}}{\theta_{max}}
-
-  :math:`\dot{\theta}_{max}` is as defined above, and :math:`\theta_{max}` is
-  the angle at which the vessel must start decelerating in order to stop
-  rotating when it reaches :math:`\theta = 0` when using all of the vessels
-  available angular acceleration.
-
-  To derive :math:`\theta_{max}` imagine that the vessel is at rest at angle
-  :math:`\theta = 0`. It then accelerates fully for :math:`t_{stop}`
-  seconds. The angle it reaches is :math:`\theta_{max}`. From the equation of
-  motion under constant acceleration we have:
+* We want the vessel to take time :math:`t_{decel}` (the deceleration time) to
+  go from moving at speed :math:`\omega_{max}` to rest, when facing the
+  target. And we want it to do this using a constant acceleration
+  :math:`\alpha`. Using the equations of motion under constant acceleration we
+  can derive the target velocity :math:`\omega` in terms of the current angular
+  error :math:`\theta`:
 
   .. math::
-     \theta_{max} &= \frac{1}{2}\ddot{\theta}t_{stop}^2 \\
-                  &= \frac{1}{2} \cdot \frac{\tau_{max}}{I} \cdot t_{stop}^2 \\
-                  &= \frac{\tau_{max}t_{stop}^2}{2I}
+     \omega &= \alpha t \\
+     \Rightarrow \alpha &= \frac{\omega}{t}
+                         = \frac{\omega_{max}}{t_{decel}} \\
+     \theta &= \frac{1}{2} \alpha t^2
+     \Rightarrow t = \sqrt{\frac{2 \theta}{\alpha}} \\
+     \Rightarrow \omega &= \alpha \sqrt{\frac{2 \theta}{\alpha}}
+                         = \sqrt{2 \alpha \theta}
 
-  We can now substitute these into the equation for the gradient:
+* To prevent the vessel from oscillating when it is pointing in the target
+  direction, the gradient of the target angular speed curve at :math:`\theta =
+  0` needs to be 0, and increase/decrease smoothly with increasing/decreasing
+  :math:`\theta`.
+
+  This is not the case for the target angular speed calculated above. To correct
+  this, we multiply by an attenuation function which has the required shape. The
+  following diagram shows the shape of the attenuation function (line in red),
+  the target velocity as calculated previously (line in blue) and the result of
+  multiplying these together (dashed line in black):
+
+  .. image:: /images/tutorials/autopilot-attenuation.png
+     :align: center
+
+  The formula for the attenuation function is a logistic function, with the
+  following formula:
 
   .. math::
-     m &= -\alpha \frac{\dot{\theta}_{max}}{\theta_{max}} \\
-       &= -\alpha \frac{\tau_{max}t_{stop}}{I} \big/ \frac{\tau_{max}t_{stop}^2}{2I} \\
-       &= -\alpha \frac{2}{t_{stop}}
+     f_a(\theta) &= \frac{1}{1 + e^{-6/\theta_a(\lvert\theta\rvert - \theta_a)}}
 
-* :math:`\theta_{dead}` specifies the dead zone. If the rotational error is less
-  than this threshold angle, the vessel is assumed to be pointing in the target
-  direction so the target angular speed is 0. This is used to prevent small
-  magnitude oscillations in the target velocity when the vessel is pointing very
-  close to the correct direction. It should usually be set to a very small
-  value.
+  Note that the original function, derived from the equations of motion under
+  constant acceleration, is only affected by the attenuation function close to
+  the attenuation angle. This means that autopilot will use a constant
+  acceleration to slow the vessel, until it gets close to the target direction.
 
 .. _tuning-the-controllers:
 
@@ -224,14 +185,13 @@ The schematic for the entire system, in a single control axis, is as follows:
    :align: center
 
 The input to the system is the angular speed around the control axis, denoted
-:math:`\dot{\theta}`. The error in the angular speed
-:math:`\dot{\theta_\epsilon}` is calculated from this and passed to controller
-:math:`C`. This is a PID controller that we need to tune. The output of the
-controller is the control input, :math:`x`, that is passed to the vessel. The
-plant :math:`H` describes the physical system, i.e. how the control input
-affects the angular acceleration of the vessel. The derivative of this is
-computed to get the new angular speed of the vessel, which is then fed back to
-compute the new error.
+:math:`\omega`. The error in the angular speed :math:`\omega_\epsilon` is
+calculated from this and passed to controller :math:`C`. This is a PID
+controller that we need to tune. The output of the controller is the control
+input, :math:`x`, that is passed to the vessel. The plant :math:`H` describes
+the physical system, i.e. how the control input affects the angular acceleration
+of the vessel. The derivative of this is computed to get the new angular speed
+of the vessel, which is then fed back to compute the new error.
 
 For the controller, :math:`C`, we use a proportional-integral controller. Note
 that the controller does not have a derivative term, so that the system behaves
@@ -245,7 +205,7 @@ The transfer function for the controller in the :math:`s` domain is:
 From the schematic, the transfer function for the plant :math:`H` is:
 
 .. math::
-   H(s) &= \frac{\dot{\theta_\epsilon}(s)}{X(s)}
+   H(s) &= \frac{\omega_\epsilon(s)}{X(s)}
 
 :math:`x` is the control input to the vessel, which is the percentage of the
 available torque :math:`\tau_{max}` that is being applied to the vessel. Call
@@ -260,15 +220,15 @@ acceleration in terms of the control input:
 
 .. math::
    I &= \text{moment of inertia of the vessel} \\
-   \tau &= I \dot{\theta_\epsilon} \\
-   \Rightarrow \dot{\theta_\epsilon} &= \frac{x\tau_{max}}{I}
+   \tau &= I \omega_\epsilon \\
+   \Rightarrow \omega_\epsilon &= \frac{x\tau_{max}}{I}
 
 Taking the laplace transform of this gives us:
 
 .. math::
-   \mathcal{L}(\dot{\theta_\epsilon}(t)) &= s\dot{\theta_\epsilon}(s) \\
+   \mathcal{L}(\omega_\epsilon(t)) &= s\omega_\epsilon(s) \\
                                 &= \frac{sX(s)\tau_{max}}{I} \\
-   \Rightarrow \frac{\dot{\theta_\epsilon}(s)}{X(s)} &= \frac{\tau_{max}}{I}
+   \Rightarrow \frac{\omega_\epsilon(s)}{X(s)} &= \frac{\tau_{max}}{I}
 
 We can now rewrite the transfer function for :math:`H` as:
 
