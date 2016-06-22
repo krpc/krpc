@@ -52,13 +52,5 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         {
             return part.rb != null ? part.rb.worldCenterOfMass : part.transform.position;
         }
-
-        /// <summary>
-        /// Returns the total mass of the part and any resources it contains, in kg.
-        /// </summary>
-        public static float TotalMass (this Part part)
-        {
-            return (part.mass + part.GetResourceMass ()) * 1000;
-        }
     }
 }
