@@ -121,6 +121,7 @@
     <Compile Include="Services\Parts\ParachuteState.cs" />
     <Compile Include="Services\Parts\Part.cs" />
     <Compile Include="Services\Parts\Parts.cs" />
+    <Compile Include="Services\Parts\Propellant.cs" />
     <Compile Include="Services\Parts\Radiator.cs" />
     <Compile Include="Services\Parts\RadiatorState.cs" />
     <Compile Include="Services\Parts\RCS.cs" />

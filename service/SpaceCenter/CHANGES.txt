@@ -4,6 +4,8 @@ v0.3.5
  * Add Vessel.Recoverable and Vessel.Recover() (#277)
  * Add SpaceCenter.LaunchableVessels to get a list of names of launchable vessels (#278)
  * Add SpaceCenter.LaunchVessel so that, for example, rockets built in the VAB can be launched from the runway (#278)
+ * Rename Engine.Propellants to Engine.PropellantNames
+ * Add Propellant class, obtained using Engine.Propellants property
  * Fix angular velocity for vessel reference frames
  * Make ReferenceFrame type, underlying object and its transform accessible via public properties (#290)
 
