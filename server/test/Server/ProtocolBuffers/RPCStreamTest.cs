@@ -23,7 +23,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             // Create a request object and get the binary representation of it
             expectedRequest = new Request ("TestService", "ProcedureNoArgsNoReturn");
             using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
+                var codedStream = new CodedOutputStream (stream, true);
                 codedStream.WriteInt32 (expectedRequest.ToProtobufMessage ().CalculateSize ());
                 expectedRequest.ToProtobufMessage ().WriteTo (codedStream);
                 codedStream.Flush ();
@@ -35,7 +35,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             expectedResponse.Error = "SomeErrorMessage";
             expectedResponse.Time = 42;
             using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
+                var codedStream = new CodedOutputStream (stream, true);
                 codedStream.WriteInt32 (expectedResponse.ToProtobufMessage ().CalculateSize ());
                 expectedResponse.ToProtobufMessage ().WriteTo (codedStream);
                 codedStream.Flush ();

@@ -11,7 +11,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         public StreamStream (IStream<byte,byte> stream) : base (stream)
         {
-            codedOutputStream = new CodedOutputStream (new ByteOutputAdapterStream (stream));
+            codedOutputStream = new CodedOutputStream (new ByteOutputAdapterStream (stream), true);
         }
 
         public override void Write (StreamMessage value)
