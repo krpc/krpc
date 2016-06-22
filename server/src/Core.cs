@@ -461,7 +461,8 @@ namespace KRPC
                         streamResponse.Response = response;
                         streamMessage.Responses.Add (streamResponse);
                     }
-                    streamClient.Stream.Write (streamMessage);
+                    if (streamMessage.Responses.Count > 0)
+                        streamClient.Stream.Write (streamMessage);
                 }
             }
 
