@@ -426,7 +426,7 @@ SpaceCenter.Propellant.CurrentAmount
 SpaceCenter.Propellant.CurrentRequirement
 SpaceCenter.Propellant.TotalResourceAvailable
 SpaceCenter.Propellant.TotalResourceCapacity
-SpaceCenter.Propellant.IgnoreForISP
+SpaceCenter.Propellant.IgnoreForIsp
 SpaceCenter.Propellant.IgnoreForThrustCurve
 SpaceCenter.Propellant.DrawStackGauge
 SpaceCenter.Propellant.IsDeprived
