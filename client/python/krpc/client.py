@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+import itertools
 import threading
 from krpc.types import Types, DefaultArgument
 from krpc.service import create_service
@@ -27,7 +28,7 @@ class Client(object):
         self._response_type = self._types.as_type('KRPC.Response')
 
         # Get the services
-        services = self._invoke('KRPC', 'GetServices', return_type=self._types.as_type('KRPC.Services')).services
+        services = self._invoke('KRPC', 'GetServices', [], [], [], self._types.as_type('KRPC.Services')).services
 
         # Set up services
         for service in services:
@@ -70,12 +71,11 @@ class Client(object):
         finally:
             stream.remove()
 
-    def _invoke(self, service, procedure, args=None, kwargs=None,
-                param_names=None, param_types=None, return_type=None):
+    def _invoke(self, service, procedure, args, param_names, param_types, return_type):
         """ Execute an RPC """
 
         # Build the request
-        request = self._build_request(service, procedure, args, kwargs, param_names, param_types, return_type)
+        request = self._build_request(service, procedure, args, param_names, param_types, return_type)
 
         # Send the request
         with self._rpc_connection_lock:
@@ -92,54 +92,23 @@ class Client(object):
             result = Decoder.decode(response.return_value, return_type)
         return result
 
-    def _build_request(self, service, procedure, args=None, kwargs=None,
-                       param_names=None, param_types=None, return_type=None): #pylint: disable=unused-argument
+    def _build_request(self, service, procedure, args,
+                       param_names, param_types, return_type): #pylint: disable=unused-argument
         """ Build a KRPC.Request object """
-        if args is None:
-            args = []
-        if kwargs is None:
-            kwargs = {}
-        if param_names is None:
-            param_names = []
-        if param_types is None:
-            param_types = []
 
-        def encode_argument(i, value):
-            typ = param_types[i]
+        request = krpc.schema.KRPC.Request(service=service, procedure=procedure)
+
+        for i, (value, typ) in enumerate(itertools.izip(args, param_types)):
+            if isinstance(value, DefaultArgument):
+                continue
             if not isinstance(value, typ.python_type):
-                # Try coercing to the correct type
                 try:
                     value = self._types.coerce_to(value, typ)
                 except ValueError:
                     raise TypeError('%s.%s() argument %d must be a %s, got a %s' % \
                                     (service, procedure, i, typ.python_type, type(value)))
-            return Encoder.encode(value, typ)
+            request.arguments.add(position=i, value=Encoder.encode(value, typ))
 
-        if len(args) > len(param_types):
-            raise TypeError('%s.%s() takes exactly %d arguments (%d given)' % \
-                            (service, procedure, len(param_types), len(args)))
-
-        arguments = []
-        nargs = len(args)
-        for i, param in enumerate(param_names):
-            add = False
-            if i < nargs and not isinstance(args[i], DefaultArgument):
-                arg = args[i]
-                add = True
-            elif param in kwargs:
-                arg = kwargs[param]
-                add = True
-            if add:
-                argument = krpc.schema.KRPC.Argument()
-                argument.position = i
-                argument.value = encode_argument(i, arg)
-                arguments.append(argument)
-
-        # Build the request object
-        request = krpc.schema.KRPC.Request()
-        request.service = service
-        request.procedure = procedure
-        request.arguments.extend(arguments)
         return request
 
     def _send_request(self, request):

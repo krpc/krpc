@@ -133,6 +133,11 @@ class TestClient(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object('jeb')
         self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', '5')
 
+    def test_too_few_arguments(self):
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments)
+        obj = self.conn.test_service.create_test_object('jeb')
+        self.assertRaises(TypeError, obj.optional_arguments)
+
     def test_enums(self):
         enum = self.conn.test_service.TestEnum
         self.assertEqual(enum.value_b, self.conn.test_service.enum_return())
