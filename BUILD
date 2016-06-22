@@ -154,7 +154,8 @@ pkg_zip(
         'protobuf/': 'schema/',
         # Docs
         'doc/kRPC.pdf': 'kRPC.pdf',
-    }
+    },
+    exclude = ['*.mdb']
 )
 
 test_suite(

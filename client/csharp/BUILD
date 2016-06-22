@@ -11,6 +11,7 @@ pkg_zip(
              'LICENSE', '//:COPYING', '//:COPYING.LESSER',
              ':KRPC.Client'],
     path_map = {'client/csharp/': ''},
+    exclude = ['*.mdb'],
     visibility = ['//visibility:public']
 )
 
