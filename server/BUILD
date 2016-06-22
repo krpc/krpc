@@ -29,6 +29,7 @@ csharp_assembly_info(
     version = assembly_version,
     custom = {'AssemblyKSPVersion': '"%s"' % ksp_version},
     internals_visible_to = ['KRPC.Test', 'TestServer', 'ServiceDefinitions', 'DynamicProxyGenAssembly2'],
+    cls_compliant = False,
     visibility = ['//tools/ServiceDefinitions:__pkg__'] # Make visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references
 )
 

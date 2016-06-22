@@ -26,5 +26,6 @@ csharp_assembly_info(
     name = 'AssemblyInfo',
     title = 'TestingTools',
     version = assembly_version,
-    copyright = author
+    copyright = author,
+    cls_compliant = False
 )

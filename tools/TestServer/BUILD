@@ -7,7 +7,8 @@ csharp_assembly_info(
     name = 'AssemblyInfo',
     title = 'TestServer',
     version = assembly_version,
-    copyright = author
+    copyright = author,
+    cls_compliant = False
 )
 
 csharp_binary(

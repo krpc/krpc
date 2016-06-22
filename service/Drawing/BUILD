@@ -14,7 +14,8 @@ csharp_assembly_info(
     title = 'KRPC.Drawing',
     description = 'Drawing API for kRPC',
     version = assembly_version,
-    copyright = author
+    copyright = author,
+    cls_compliant = False
 )
 
 csharp_library(

@@ -13,7 +13,8 @@ csharp_assembly_info(
     title = 'KRPC.KerbalAlarmClock',
     description = 'Kerbal Alarm Clock service for kRPC',
     version = assembly_version,
-    copyright = author
+    copyright = author,
+    cls_compliant = False
 )
 
 csharp_library(

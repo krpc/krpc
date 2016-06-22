@@ -14,7 +14,8 @@ csharp_assembly_info(
     title = 'KRPC.InfernalRobotics',
     description = 'Infernal Robotics service for kRPC',
     version = assembly_version,
-    copyright = author
+    copyright = author,
+    cls_compliant = False
 )
 
 csharp_library(

@@ -15,7 +15,8 @@ csharp_assembly_info(
     description = 'Basic services for kRPC',
     version = assembly_version,
     copyright = author,
-    internals_visible_to = ['TestingTools']
+    internals_visible_to = ['TestingTools'],
+    cls_compliant = False
 )
 
 csharp_library(

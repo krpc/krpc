@@ -34,7 +34,8 @@ csharp_assembly_info(
     description = 'C# client for kRPC',
     copyright = author,
     version = assembly_version,
-    internals_visible_to = ['KRPC.Client.Test']
+    internals_visible_to = ['KRPC.Client.Test'],
+    cls_compliant = False
 )
 
 csharp_library(
