@@ -10,40 +10,47 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.LandingLeg"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class LandingLeg : Equatable<LandingLeg>
+    public class LandingLeg : Equatable<LandingLeg>
     {
-        readonly Part part;
         readonly ModuleWheels.ModuleWheelDeployment deployment;
         readonly ModuleWheels.ModuleWheelDamage damage;
 
         internal static bool Is (Part part)
         {
-            return part.InternalPart.HasModule<ModuleWheelBase> () && part.InternalPart.Module<ModuleWheelBase> ().wheelType == WheelType.LEG;
+            var internalPart = part.InternalPart;
+            return
+            internalPart.HasModule<ModuleWheelBase> () &&
+            internalPart.Module<ModuleWheelBase> ().wheelType == WheelType.LEG;
         }
 
         internal LandingLeg (Part part)
         {
             if (!Is (part))
                 throw new ArgumentException ("Part is not a landing leg");
-            this.part = part;
-            deployment = part.InternalPart.Module<ModuleWheels.ModuleWheelDeployment> ();
-            damage = part.InternalPart.Module<ModuleWheels.ModuleWheelDamage> ();
+            Part = part;
+            var internalPart = part.InternalPart;
+            deployment = internalPart.Module<ModuleWheels.ModuleWheelDeployment> ();
+            damage = internalPart.Module<ModuleWheels.ModuleWheelDamage> ();
         }
 
         /// <summary>
-        /// Check if the landing legs are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (LandingLeg obj)
+        public override bool Equals (LandingLeg other)
         {
-            return part == obj.part && deployment == obj.deployment && damage == obj.damage;
+            return
+            !ReferenceEquals (other, null) &&
+            Part == other.Part &&
+            (deployment == other.deployment || deployment.Equals (other.deployment)) &&
+            (damage == other.damage || damage.Equals (other.damage));
         }
 
         /// <summary>
-        /// Hash the landing leg.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            var hash = part.GetHashCode ();
+            var hash = Part.GetHashCode ();
             if (deployment != null)
                 hash ^= deployment.GetHashCode ();
             if (damage != null)
@@ -55,9 +62,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part object for this landing leg.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// The current state of the landing leg.
@@ -76,7 +81,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                         return LandingLegState.Deploying;
                     else if (deployment.stateString.Contains ("Retracting"))
                         return LandingLegState.Retracting;
-                    throw new ArgumentException ("Unknown landing leg state");
+                    throw new InvalidOperationException ();
                 }
                 return LandingLegState.Deployed;
             }

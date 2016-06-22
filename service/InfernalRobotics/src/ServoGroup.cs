@@ -3,7 +3,7 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
-namespace KRPC.InfernalRobotics.Services
+namespace KRPC.InfernalRobotics
 {
     /// <summary>
     /// A group of servos, obtained by calling <see cref="InfernalRobotics.ServoGroups"/>
@@ -11,21 +11,21 @@ namespace KRPC.InfernalRobotics.Services
     /// in the InfernalRobotics UI.
     /// </summary>
     [KRPCClass (Service = "InfernalRobotics")]
-    public sealed class ServoGroup : Equatable<ServoGroup>
+    public class ServoGroup : Equatable<ServoGroup>
     {
         readonly IRWrapper.IControlGroup controlGroup;
 
-        internal ServoGroup (IRWrapper.IControlGroup controlGroup)
+        internal ServoGroup (IRWrapper.IControlGroup innerControlGroup)
         {
-            this.controlGroup = controlGroup;
+            controlGroup = innerControlGroup;
         }
 
         /// <summary>
         /// Check if control groups are equivalent.
         /// </summary>
-        public override bool Equals (ServoGroup obj)
+        public override bool Equals (ServoGroup other)
         {
-            return controlGroup == obj.controlGroup;
+            return !ReferenceEquals (other, null) && controlGroup == other.controlGroup;
         }
 
         /// <summary>

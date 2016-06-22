@@ -1,0 +1,2 @@
+R: Gendarme.Rules.Naming.UseCorrectCasingRule
+N: KRPC.Drawing

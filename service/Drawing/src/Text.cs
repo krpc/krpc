@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -15,15 +16,16 @@ namespace KRPC.Drawing
     /// Text. Created using <see cref="Drawing.AddText" />.
     /// </summary>
     [KRPCClass (Service = "Drawing")]
-    public class Text : Drawable
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    public class Text : Drawable<Text>
     {
         readonly MeshRenderer renderer;
         readonly TextMesh mesh;
         Vector3d position;
         QuaternionD rotation;
 
-        internal Text (string content, ReferenceFrame referenceFrame, Vector3d position, QuaternionD rotation, bool visible)
-            : base ("text", typeof(MeshRenderer))
+        internal Text (string content, ReferenceFrame referenceFrame, Vector3d textPosition, QuaternionD textRotation, bool visible)
+            : base (typeof(MeshRenderer))
         {
             mesh = GameObject.AddComponent<TextMesh> ();
             mesh.text = content;
@@ -32,8 +34,8 @@ namespace KRPC.Drawing
             renderer = GameObject.GetComponent<MeshRenderer> ();
             renderer.material = mesh.font.material;
             ReferenceFrame = referenceFrame;
-            this.position = position;
-            this.rotation = rotation;
+            position = textPosition;
+            rotation = textRotation;
             Visible = visible;
         }
 
@@ -78,6 +80,7 @@ namespace KRPC.Drawing
         /// A list of all available fonts.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public IList<string> AvailableFonts {
             get { return UnityEngine.Font.GetOSInstalledFontNames ().ToList (); }
         }

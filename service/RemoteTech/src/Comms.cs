@@ -4,31 +4,31 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
-namespace KRPC.RemoteTech.Services
+namespace KRPC.RemoteTech
 {
     /// <summary>
     /// Communications for a vessel.
     /// </summary>
     [KRPCClass (Service = "RemoteTech")]
-    public sealed class Comms : Equatable<Comms>
+    public class Comms : Equatable<Comms>
     {
         readonly KRPC.SpaceCenter.Services.Vessel vessel;
         readonly Guid vesselId;
 
-        internal Comms (KRPC.SpaceCenter.Services.Vessel vessel)
+        internal Comms (KRPC.SpaceCenter.Services.Vessel innerVessel)
         {
             if (!API.IsAvailable)
                 throw new InvalidOperationException ("RemoteTech is not installed");
-            this.vessel = vessel;
+            vessel = innerVessel;
             vesselId = vessel.InternalVessel.id;
         }
 
         /// <summary>
         /// Check that the comms are for the same vessel.
         /// </summary>
-        public override bool Equals (Comms obj)
+        public override bool Equals (Comms other)
         {
-            return vessel == obj.vessel;
+            return !ReferenceEquals (other, null) && vessel == other.vessel;
         }
 
         /// <summary>

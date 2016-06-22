@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.UI
@@ -5,6 +6,7 @@ namespace KRPC.UI
     /// <summary>
     /// Message position.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "UI")]
     public enum MessagePosition
     {

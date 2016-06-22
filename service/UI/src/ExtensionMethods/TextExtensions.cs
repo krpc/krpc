@@ -1,10 +1,13 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.UI.ExtensionMethods
 {
     /// <summary>
     /// Text extensions.
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
     public static class TextExtensions
     {
         /// <summary>
@@ -22,7 +25,7 @@ namespace KRPC.UI.ExtensionMethods
             case UnityEngine.FontStyle.BoldAndItalic:
                 return FontStyle.BoldAndItalic;
             default:
-                throw new ArgumentOutOfRangeException ();
+                throw new ArgumentOutOfRangeException ("style");
             }
         }
 
@@ -41,7 +44,7 @@ namespace KRPC.UI.ExtensionMethods
             case FontStyle.BoldAndItalic:
                 return UnityEngine.FontStyle.BoldAndItalic;
             default:
-                throw new ArgumentOutOfRangeException ();
+                throw new ArgumentOutOfRangeException ("style");
             }
         }
 
@@ -58,7 +61,7 @@ namespace KRPC.UI.ExtensionMethods
             case UnityEngine.TextAlignment.Center:
                 return TextAlignment.Center;
             default:
-                throw new ArgumentOutOfRangeException ();
+                throw new ArgumentOutOfRangeException ("style");
             }
         }
 
@@ -75,7 +78,7 @@ namespace KRPC.UI.ExtensionMethods
             case TextAlignment.Center:
                 return UnityEngine.TextAlignment.Center;
             default:
-                throw new ArgumentOutOfRangeException ();
+                throw new ArgumentOutOfRangeException ("style");
             }
         }
 
@@ -104,7 +107,7 @@ namespace KRPC.UI.ExtensionMethods
             case UnityEngine.TextAnchor.UpperRight:
                 return TextAnchor.UpperRight;
             default:
-                throw new ArgumentOutOfRangeException ();
+                throw new ArgumentOutOfRangeException ("style");
             }
         }
 
@@ -133,7 +136,7 @@ namespace KRPC.UI.ExtensionMethods
             case TextAnchor.UpperRight:
                 return UnityEngine.TextAnchor.UpperRight;
             default:
-                throw new ArgumentOutOfRangeException ();
+                throw new ArgumentOutOfRangeException ("style");
             }
         }
 
@@ -152,9 +155,8 @@ namespace KRPC.UI.ExtensionMethods
             case MessagePosition.TopRight:
                 return ScreenMessageStyle.UPPER_RIGHT;
             default:
-                throw new ArgumentOutOfRangeException ();
+                throw new ArgumentOutOfRangeException ("position");
             }
         }
     }
 }
-

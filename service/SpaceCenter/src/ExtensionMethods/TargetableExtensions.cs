@@ -2,7 +2,7 @@ using System;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
-    static class ITargetableExtensions
+    static class TargetableExtensions
     {
         public static Vector3d GetWorldPosition (this ITargetable target)
         {

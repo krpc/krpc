@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -14,22 +15,24 @@ namespace KRPC.Drawing
     /// A polygon. Created using <see cref="Drawing.AddPolygon" />.
     /// </summary>
     [KRPCClass (Service = "Drawing")]
-    public class Polygon : Drawable
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    public class Polygon : Drawable<Polygon>
     {
         readonly LineRenderer renderer;
         IList<Vector3d> vertices;
         Tuple3 color;
         float thickness;
 
-        internal Polygon (IList<Vector3d> vertices, ReferenceFrame referenceFrame, bool visible)
-            : base ("polygon", typeof(LineRenderer))
+        internal Polygon (IList<Vector3d> polygonVertices, ReferenceFrame referenceFrame, bool visible)
+            : base (typeof(LineRenderer))
         {
             renderer = GameObject.GetComponent<LineRenderer> ();
             renderer.useWorldSpace = true;
-            renderer.SetVertexCount (vertices.Count + 1);
-            for (int i = 0; i < vertices.Count + 1; i++)
+            var numVertices = polygonVertices.Count + 1;
+            renderer.SetVertexCount (numVertices);
+            for (int i = 0; i < numVertices; i++)
                 renderer.SetPosition (i, Vector3d.zero);
-            this.vertices = vertices;
+            vertices = polygonVertices;
             ReferenceFrame = referenceFrame;
             Visible = visible;
             Color = new Tuple3 (1, 1, 1);
@@ -42,9 +45,10 @@ namespace KRPC.Drawing
         public override void Update ()
         {
             renderer.enabled = Visible;
-            for (int i = 0; i < vertices.Count; i++)
+            var numVertices = vertices.Count;
+            for (int i = 0; i < numVertices; i++)
                 renderer.SetPosition (i, ReferenceFrame.PositionToWorldSpace (vertices [i]));
-            renderer.SetPosition (vertices.Count, ReferenceFrame.PositionToWorldSpace (vertices [0]));
+            renderer.SetPosition (numVertices, ReferenceFrame.PositionToWorldSpace (vertices [0]));
         }
 
         /// <summary>
@@ -60,6 +64,8 @@ namespace KRPC.Drawing
         /// Vertices for the polygon.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Design", "DoNotDeclareSettersOnCollectionPropertiesRule")]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public IList<Tuple3> Vertices {
             get { return vertices.Select (x => x.ToTuple ()).ToList (); }
             set { vertices = value.Select (x => x.ToVector ()).ToList (); }

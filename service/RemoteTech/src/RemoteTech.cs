@@ -4,7 +4,7 @@ using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 
-namespace KRPC.RemoteTech.Services
+namespace KRPC.RemoteTech
 {
     /// <summary>
     /// This service provides functionality to interact with

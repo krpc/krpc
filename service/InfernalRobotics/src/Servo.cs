@@ -1,7 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
-namespace KRPC.InfernalRobotics.Services
+namespace KRPC.InfernalRobotics
 {
     /// <summary>
     /// Represents a servo. Obtained using
@@ -10,21 +11,21 @@ namespace KRPC.InfernalRobotics.Services
     /// or <see cref="InfernalRobotics.ServoWithName"/>.
     /// </summary>
     [KRPCClass (Service = "InfernalRobotics")]
-    public sealed class Servo : Equatable<Servo>
+    public class Servo : Equatable<Servo>
     {
         readonly IRWrapper.IServo servo;
 
-        internal Servo (IRWrapper.IServo servo)
+        internal Servo (IRWrapper.IServo innerServo)
         {
-            this.servo = servo;
+            servo = innerServo;
         }
 
         /// <summary>
         /// Check if servos are equivalent.
         /// </summary>
-        public override bool Equals (Servo obj)
+        public override bool Equals (Servo other)
         {
-            return servo == obj.servo;
+            return !ReferenceEquals (other, null) && servo == other.servo;
         }
 
         /// <summary>
@@ -56,7 +57,10 @@ namespace KRPC.InfernalRobotics.Services
         /// Whether the servo should be highlighted in-game.
         /// </summary>
         [KRPCProperty]
-        public bool Highlight { set { servo.Highlight = value; } }
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidPropertiesWithoutGetAccessorRule")]
+        public bool Highlight {
+            set { servo.Highlight = value; }
+        }
 
         /// <summary>
         /// The position of the servo.

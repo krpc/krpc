@@ -5,7 +5,7 @@ using KRPC.KerbalAlarmClock.ExtensionMethods;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 
-namespace KRPC.KerbalAlarmClock.Services
+namespace KRPC.KerbalAlarmClock
 {
     /// <summary>
     /// This service provides functionality to interact with

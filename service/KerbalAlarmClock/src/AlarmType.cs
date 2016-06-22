@@ -1,10 +1,12 @@
+using System;
 using KRPC.Service.Attributes;
 
-namespace KRPC.KerbalAlarmClock.Services
+namespace KRPC.KerbalAlarmClock
 {
     /// <summary>
     /// The type of an alarm.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "KerbalAlarmClock")]
     public enum AlarmType
     {

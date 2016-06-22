@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Server;
 using KRPC.Service;
@@ -12,7 +13,7 @@ namespace KRPC.UI
     /// Addon for managing the UI
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public class Addon : MonoBehaviour
+    sealed public class Addon : MonoBehaviour
     {
         static AssetBundle prefabs;
 
@@ -32,17 +33,17 @@ namespace KRPC.UI
             return obj;
         }
 
-        static IDictionary<IClient, IList<UIObject>> objects = new Dictionary<IClient, IList<UIObject>> ();
+        static IDictionary<IClient, IList<Object>> objects = new Dictionary<IClient, IList<Object>> ();
 
-        internal static void AddObject (UIObject obj)
+        internal static void Add (Object obj)
         {
             var client = CallContext.Client;
             if (!objects.ContainsKey (client))
-                objects [client] = new List<UIObject> ();
+                objects [client] = new List<Object> ();
             objects [client].Add (obj);
         }
 
-        internal static void RemoveObject (UIObject obj)
+        internal static void Remove (Object obj)
         {
             var client = CallContext.Client;
             if (!objects.ContainsKey (client) || !objects [client].Contains (obj))
@@ -71,6 +72,7 @@ namespace KRPC.UI
         /// <summary>
         /// Wake the addon
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Awake ()
         {
         }
@@ -78,6 +80,7 @@ namespace KRPC.UI
         /// <summary>
         /// Update the addon
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Update ()
         {
             if (!objects.Any ())
@@ -91,6 +94,7 @@ namespace KRPC.UI
         /// <summary>
         /// Destroy the addon
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnDestroy ()
         {
             Clear ();

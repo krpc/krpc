@@ -2,8 +2,8 @@ using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
-using Tuple3 = KRPC.Utils.Tuple<float,float,float>;
 using UnityEngine;
+using Tuple3 = KRPC.Utils.Tuple<float, float, float>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -11,9 +11,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.Light"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Light : Equatable<Light>
+    public class Light : Equatable<Light>
     {
-        readonly Part part;
         readonly ModuleLight light;
 
         internal static bool Is (Part part)
@@ -23,35 +22,33 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal Light (Part part)
         {
-            this.part = part;
+            Part = part;
             light = part.InternalPart.Module<ModuleLight> ();
             if (light == null)
                 throw new ArgumentException ("Part is not a light");
         }
 
         /// <summary>
-        /// Check if the lights are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Light obj)
+        public override bool Equals (Light other)
         {
-            return part == obj.part && light == obj.light;
+            return !ReferenceEquals (other, null) && Part == other.Part && light.Equals (other.light);
         }
 
         /// <summary>
-        /// Hash the light.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ light.GetHashCode ();
+            return Part.GetHashCode () ^ light.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this light.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the light is switched on.

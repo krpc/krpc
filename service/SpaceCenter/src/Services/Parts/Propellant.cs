@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
@@ -9,7 +10,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// An engine propellant. See <see cref="Engine.Propellants"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Propellant : Equatable<Propellant>
+    public class Propellant : Equatable<Propellant>
     {
         readonly int resourceId;
         readonly uint partId;
@@ -21,19 +22,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Check if the propellants are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Propellant obj)
+        public override bool Equals (Propellant other)
         {
-            return obj.resourceId == resourceId;
+            return !ReferenceEquals (other, null) && partId == other.partId && resourceId == other.resourceId;
         }
 
         /// <summary>
-        /// Hash the propellant.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return resourceId.GetHashCode ();
+            return partId.GetHashCode () ^ resourceId.GetHashCode ();
         }
 
         /// <summary>
@@ -49,10 +50,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         public global::Propellant InternalPropellant {
             get {
                 var engineModule = InternalPart.GetComponent<ModuleEngines> ();
-                if (engineModule != null)
-                    return engineModule.propellants.Find (p => p.id == resourceId);
-                else
-                    return null;
+                if (engineModule == null)
+                    throw new InvalidOperationException ("Propellant has no engine");
+                return engineModule.propellants.Find (p => p.id == resourceId);
             }
         }
 

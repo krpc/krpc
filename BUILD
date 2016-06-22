@@ -165,6 +165,7 @@ test_suite(
         '//service/SpaceCenter:test',
         '//service/Drawing:test',
         '//service/InfernalRobotics:test',
+        '//service/KerbalAlarmClock:test',
         '//service/RemoteTech:test',
         '//service/UI:test',
         #'//client/csharp:test',

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -51,6 +52,7 @@ namespace KRPC.Drawing
         /// <param name="referenceFrame">Reference frame that the vertices are in.</param>
         /// <param name="visible">Whether the polygon is visible.</param>
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public static Polygon AddPolygon (IList<Tuple3> vertices, ReferenceFrame referenceFrame, bool visible = true)
         {
             return new Polygon (vertices.Select (x => x.ToVector ()).ToList (), referenceFrame, visible);

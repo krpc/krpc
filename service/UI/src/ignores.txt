@@ -1,0 +1,6 @@
+R: Gendarme.Rules.Design.AvoidSmallNamespaceRule
+N: KRPC.UI.ExtensionMethods
+
+R: Gendarme.Rules.Naming.UseCorrectCasingRule
+N: KRPC.UI
+N: KRPC.UI.ExtensionMethods

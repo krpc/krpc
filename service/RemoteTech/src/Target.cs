@@ -1,11 +1,13 @@
+using System;
 using KRPC.Service.Attributes;
 
-namespace KRPC.RemoteTech.Services
+namespace KRPC.RemoteTech
 {
     /// <summary>
     /// The type of object an antenna is targetting.
     /// See <see cref="Antenna.Target"/>.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "RemoteTech")]
     public enum Target
     {

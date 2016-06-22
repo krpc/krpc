@@ -1,6 +1,6 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
-using System.Linq;
 using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service;
@@ -22,7 +22,8 @@ namespace KRPC.SpaceCenter.Services
     /// the auto-pilot will be disengaged and its target reference frame, direction and roll reset to default.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class AutoPilot : Equatable<AutoPilot>
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    public class AutoPilot : Equatable<AutoPilot>
     {
         static readonly IDictionary<Guid, AutoPilot> engaged = new Dictionary<Guid, AutoPilot> ();
         readonly Guid vesselId;
@@ -38,15 +39,15 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Check the auto-pilots are for the same vessel.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (AutoPilot obj)
+        public override bool Equals (AutoPilot other)
         {
-            return vesselId == obj.vesselId;
+            return !ReferenceEquals (other, null) && vesselId == other.vesselId;
         }
 
         /// <summary>
-        /// Hash the auto-pilot.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
@@ -87,10 +88,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Wait ()
         {
-            if (Error > 0.75f || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > 0.05f) {
-                Console.WriteLine (String.Format ("{0:F} {1:F}", Error, InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude));
+            if (Error > 0.75f || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > 0.05f)
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
-            }
         }
 
         /// <summary>
@@ -99,6 +98,7 @@ namespace KRPC.SpaceCenter.Services
         /// has not been engaged and SAS is not enabled or is in stability assist mode.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         public float Error {
             get {
                 if (engaged [vesselId] == this) {
@@ -126,6 +126,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns zero if the auto-pilot has not been engaged.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float PitchError {
             get {
                 if (engaged [vesselId] != this)
@@ -140,6 +141,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns zero if the auto-pilot has not been engaged.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float HeadingError {
             get {
                 if (engaged [vesselId] != this)
@@ -154,6 +156,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns zero if the auto-pilot has not been engaged or no target roll is set.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float RollError {
             get {
                 if (engaged [vesselId] != this || double.IsNaN (attitudeController.TargetRoll))
@@ -375,81 +378,90 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The direction vector that the SAS autopilot is trying to hold in world space
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         Vector3d SASTargetDirection ()
         {
+            var vessel = InternalVessel;
+            var sasMode = SASMode;
+
             // Stability assist
-            if (SASMode == SASMode.StabilityAssist)
+            if (sasMode == SASMode.StabilityAssist)
                 throw new InvalidOperationException ("No target direction in stability assist mode");
 
             // Maneuver node
-            if (SASMode == SASMode.Maneuver) {
-                var node = InternalVessel.patchedConicSolver.maneuverNodes.OrderBy (x => x.UT).FirstOrDefault ();
-                if (node == null)
+            if (sasMode == SASMode.Maneuver) {
+                if (vessel.patchedConicSolver.maneuverNodes.Count == 0)
                     throw new InvalidOperationException ("No maneuver node");
-                return new Node (InternalVessel, node).WorldBurnVector;
+                var nextNode = vessel.patchedConicSolver.maneuverNodes [0];
+                foreach (var node in vessel.patchedConicSolver.maneuverNodes)
+                    if (node.UT < nextNode.UT)
+                        nextNode = node;
+                return new Node (vessel, nextNode).WorldBurnVector;
             }
 
             // Orbital directions, in different speed modes
-            if (SASMode == SASMode.Prograde || SASMode == SASMode.Retrograde ||
-                SASMode == SASMode.Normal || SASMode == SASMode.AntiNormal ||
-                SASMode == SASMode.Radial || SASMode == SASMode.AntiRadial) {
+            if (sasMode == SASMode.Prograde || sasMode == SASMode.Retrograde ||
+                sasMode == SASMode.Normal || sasMode == SASMode.AntiNormal ||
+                sasMode == SASMode.Radial || sasMode == SASMode.AntiRadial) {
 
-                if (Control.GetSpeedMode () == SpeedMode.Orbit) {
-                    switch (SASMode) {
+                if (Control.GlobalSpeedMode == SpeedMode.Orbit) {
+                    switch (sasMode) {
                     case SASMode.Prograde:
-                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.up);
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.up);
                     case SASMode.Retrograde:
-                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.down);
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.down);
                     case SASMode.Normal:
-                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.forward);
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.forward);
                     case SASMode.AntiNormal:
-                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.back);
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.back);
                     case SASMode.Radial:
-                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.left);
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.left);
                     case SASMode.AntiRadial:
-                        return ReferenceFrame.Orbital (InternalVessel).DirectionToWorldSpace (Vector3d.right);
+                        return ReferenceFrame.Orbital (vessel).DirectionToWorldSpace (Vector3d.right);
                     }
-                } else if (Control.GetSpeedMode () == SpeedMode.Surface) {
-                    switch (SASMode) {
+                } else if (Control.GlobalSpeedMode == SpeedMode.Surface) {
+                    switch (sasMode) {
                     case SASMode.Prograde:
-                        return ReferenceFrame.SurfaceVelocity (InternalVessel).DirectionToWorldSpace (Vector3d.up);
+                        return ReferenceFrame.SurfaceVelocity (vessel).DirectionToWorldSpace (Vector3d.up);
                     case SASMode.Retrograde:
-                        return ReferenceFrame.SurfaceVelocity (InternalVessel).DirectionToWorldSpace (Vector3d.down);
+                        return ReferenceFrame.SurfaceVelocity (vessel).DirectionToWorldSpace (Vector3d.down);
                     case SASMode.Normal:
-                        return ReferenceFrame.Object (InternalVessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
                     case SASMode.AntiNormal:
-                        return ReferenceFrame.Object (InternalVessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
                     case SASMode.Radial:
-                        return ReferenceFrame.Surface (InternalVessel).DirectionToWorldSpace (Vector3d.right);
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.right);
                     case SASMode.AntiRadial:
-                        return ReferenceFrame.Surface (InternalVessel).DirectionToWorldSpace (Vector3d.left);
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.left);
                     }
-                } else if (Control.GetSpeedMode () == SpeedMode.Target) {
-                    switch (SASMode) {
+                } else if (Control.GlobalSpeedMode == SpeedMode.Target) {
+                    switch (sasMode) {
                     case SASMode.Prograde:
-                        return InternalVessel.GetWorldVelocity () - FlightGlobals.fetch.VesselTarget.GetWorldVelocity ();
+                        return vessel.GetWorldVelocity () - FlightGlobals.fetch.VesselTarget.GetWorldVelocity ();
                     case SASMode.Retrograde:
-                        return FlightGlobals.fetch.VesselTarget.GetWorldVelocity () - InternalVessel.GetWorldVelocity ();
+                        return FlightGlobals.fetch.VesselTarget.GetWorldVelocity () - vessel.GetWorldVelocity ();
                     case SASMode.Normal:
-                        return ReferenceFrame.Object (InternalVessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.up);
                     case SASMode.AntiNormal:
-                        return ReferenceFrame.Object (InternalVessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
+                        return ReferenceFrame.Object (vessel.orbit.referenceBody).DirectionToWorldSpace (Vector3d.down);
                     case SASMode.Radial:
-                        return ReferenceFrame.Surface (InternalVessel).DirectionToWorldSpace (Vector3d.right);
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.right);
                     case SASMode.AntiRadial:
-                        return ReferenceFrame.Surface (InternalVessel).DirectionToWorldSpace (Vector3d.left);
+                        return ReferenceFrame.Surface (vessel).DirectionToWorldSpace (Vector3d.left);
                     }
                 }
                 throw new InvalidOperationException ("Unknown speed mode for orbital direction");
             }
 
             // Target and anti-target
-            if (SASMode == SASMode.Target || SASMode == SASMode.AntiTarget) {
+            if (sasMode == SASMode.Target || sasMode == SASMode.AntiTarget) {
                 var target = FlightGlobals.fetch.VesselTarget;
                 if (target == null)
                     throw new InvalidOperationException ("No target");
-                var direction = target.GetWorldPosition () - InternalVessel.GetWorldPos3D ();
-                if (SASMode == SASMode.AntiTarget)
+                var direction = target.GetWorldPosition () - vessel.GetWorldPos3D ();
+                if (sasMode == SASMode.AntiTarget)
                     direction *= -1;
                 return direction;
             }

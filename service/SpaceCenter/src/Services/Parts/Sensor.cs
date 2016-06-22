@@ -9,9 +9,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.Sensor"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Sensor : Equatable<Sensor>
+    public class Sensor : Equatable<Sensor>
     {
-        readonly Part part;
         readonly ModuleEnviroSensor sensor;
 
         internal static bool Is (Part part)
@@ -21,35 +20,33 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal Sensor (Part part)
         {
-            this.part = part;
+            Part = part;
             sensor = part.InternalPart.Module<ModuleEnviroSensor> ();
             if (sensor == null)
                 throw new ArgumentException ("Part is not a sensor");
         }
 
         /// <summary>
-        /// Check if sensors are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Sensor obj)
+        public override bool Equals (Sensor other)
         {
-            return part == obj.part && sensor == obj.sensor;
+            return !ReferenceEquals (other, null) && Part == other.Part && sensor == other.sensor;
         }
 
         /// <summary>
-        /// Hash the sensor.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ sensor.GetHashCode ();
+            return Part.GetHashCode () ^ sensor.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this sensor.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the sensor is active.

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
@@ -7,6 +8,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Returns true if the part contains the given part module
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public static bool HasModule<T> (this Part part) where T : PartModule
         {
             return part.Modules.OfType<T> ().Any ();
@@ -15,6 +17,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Returns the first part module of the specified type, and null if none can be found
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public static T Module<T> (this Part part) where T : PartModule
         {
             return part.Modules.OfType<T> ().FirstOrDefault ();
@@ -56,14 +59,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static float TotalMass (this Part part)
         {
             return (part.mass + part.GetResourceMass ()) * 1000;
-        }
-
-        /// <summary>
-        /// Returns the total mass of the part, excluding any resources it contains, in kg.
-        /// </summary>
-        public static float DryMass (this Part part)
-        {
-            return part.mass * 1000;
         }
     }
 }

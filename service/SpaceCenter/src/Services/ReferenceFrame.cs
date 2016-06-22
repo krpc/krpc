@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services.Parts;
@@ -22,6 +23,8 @@ namespace KRPC.SpaceCenter.Services
     /// used as a parameter to other functions.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
     public class ReferenceFrame : Equatable<ReferenceFrame>
     {
         readonly ReferenceFrameType type;
@@ -32,6 +35,7 @@ namespace KRPC.SpaceCenter.Services
         readonly ModuleDockingNode dockingPort;
         readonly Thruster thruster;
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         ReferenceFrame (
             ReferenceFrameType type, global::CelestialBody body = null, global::Vessel vessel = null,
             ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null, Thruster thruster = null)
@@ -41,28 +45,30 @@ namespace KRPC.SpaceCenter.Services
             vesselId = vessel != null ? vessel.id : Guid.Empty;
             this.node = node;
             //TODO: is it safe to use a part id of 0 to mean no part?
-            partId = part != null ? part.flightID : 0;
+            if (part != null)
+                partId = part.flightID;
             this.dockingPort = dockingPort;
             this.thruster = thruster;
         }
 
         /// <summary>
-        /// Check if reference frames are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (ReferenceFrame obj)
+        public override bool Equals (ReferenceFrame other)
         {
             return
-                type == obj.type &&
-            body == obj.body &&
-            vesselId == obj.vesselId &&
-            node == obj.node &&
-            partId == obj.partId &&
-            dockingPort == obj.dockingPort &&
-            thruster == obj.thruster;
+            !ReferenceEquals (other, null) &&
+            type == other.type &&
+            body == other.body &&
+            vesselId == other.vesselId &&
+            node == other.node &&
+            partId == other.partId &&
+            dockingPort == other.dockingPort &&
+            thruster == other.thruster;
         }
 
         /// <summary>
-        /// Hash the reference frame.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
@@ -148,6 +154,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The transform for the object that this reference frame is attached to.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public Transform Transform {
             get {
                 switch (type) {
@@ -171,7 +178,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldTransform;
                 default:
-                    throw new ArgumentException ("No such reference frame");
+                    throw new InvalidOperationException ("No such reference frame");
                 }
             }
         }
@@ -262,6 +269,8 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Returns the position of the origin of the reference frame in world-space.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public Vector3d Position {
             get {
                 switch (type) {
@@ -294,7 +303,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldTransform.position;
                 default:
-                    throw new ArgumentException ("No such reference frame");
+                    throw new InvalidOperationException ();
                 }
             }
         }
@@ -310,7 +319,7 @@ namespace KRPC.SpaceCenter.Services
                 Vector3d forward = ForwardNotNormalized;
                 // Check that the up and forward directions are roughly perpendicular
                 if (Math.Abs (Vector3d.Dot (up.normalized, forward.normalized)) > 0.1)
-                    throw new ArithmeticException ("Forward and up directions are not close to perpendicular, got " + up + " and " + forward);
+                    throw new InvalidOperationException ("Forward and up directions are not close to perpendicular, got " + up + " and " + forward);
                 GeometryExtensions.OrthoNormalize2 (ref forward, ref up);
                 return GeometryExtensions.LookRotation2 (forward, up);
             }
@@ -342,19 +351,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Vector from center of given body to north pole of body being orbited, in world space.
-        /// </summary>
-        static Vector3d ToNorthPole (global::CelestialBody body)
-        {
-            var parent = body.referenceBody;
-            return parent.position + (((Vector3d)parent.transform.up) * parent.Radius) - body.position;
-        }
-
-        /// <summary>
         /// Returns the up vector for the reference frame in world coordinates.
         /// The direction in which the y-axis points.
         /// The vector is not normalized.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         Vector3d UpNotNormalized {
             get {
                 switch (type) {
@@ -387,7 +389,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldThrustDirection;
                 default:
-                    throw new ArgumentException ("No such reference frame");
+                    throw new InvalidOperationException ();
                 }
             }
         }
@@ -397,6 +399,8 @@ namespace KRPC.SpaceCenter.Services
         /// The direction in which the z-axis points.
         /// The vector is not normalized.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         Vector3d ForwardNotNormalized {
             get {
                 switch (type) {
@@ -449,7 +453,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldThrustPerpendicularDirection;
                 default:
-                    throw new ArgumentException ("No such reference frame");
+                    throw new InvalidOperationException ();
                 }
             }
         }
@@ -457,6 +461,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Returns the velocity of the reference frame in world-space.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public Vector3d Velocity {
             get {
                 switch (type) {
@@ -478,7 +483,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.DockingPort:
                     return dockingPort.vessel.GetOrbit ().GetVel ();
                 default:
-                    throw new ArgumentException ("No such reference frame");
+                    throw new InvalidOperationException ();
                 }
             }
         }
@@ -488,6 +493,7 @@ namespace KRPC.SpaceCenter.Services
         /// Vector points in direction of axis of rotation
         /// Vector's magnitude is the speed of rotation in radians per second
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public Vector3d AngularVelocity {
             get {
                 switch (type) {
@@ -509,7 +515,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Thrust:
                     return Vector3d.zero; //TODO: check this
                 default:
-                    throw new ArgumentException ("No such reference frame");
+                    throw new InvalidOperationException ();
                 }
             }
         }
@@ -520,12 +526,13 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public Vector3d AngularVelocityAt (Vector3d position)
         {
-            var axis = AngularVelocity.normalized;
+            var angularVelocity = AngularVelocity;
+            var axis = angularVelocity.normalized;
             var plane_position = Vector3d.Exclude (axis, position);
             var radius = plane_position.magnitude;
             var plane_direction = plane_position.normalized;
             var direction = Vector3d.Cross (axis, plane_direction);
-            return direction * AngularVelocity.magnitude * radius;
+            return direction * angularVelocity.magnitude * radius;
         }
 
         /// <summary>

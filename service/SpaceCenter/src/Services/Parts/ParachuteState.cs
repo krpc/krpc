@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services.Parts
@@ -5,6 +6,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// See <see cref="Parachute.State"/>.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum ParachuteState
     {

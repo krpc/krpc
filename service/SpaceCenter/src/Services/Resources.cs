@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -13,19 +14,20 @@ namespace KRPC.SpaceCenter.Services
     /// <see cref="Parts.Part.Resources"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Resources : Equatable<Resources>
+    public class Resources : Equatable<Resources>
     {
         readonly Guid vesselId;
         readonly int stage;
         readonly bool cumulative;
         readonly uint partId;
+        // Note: 0 indicates no part
 
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         internal Resources (global::Vessel vessel, int stage = -1, bool cumulative = true)
         {
             vesselId = vessel.id;
             this.stage = stage;
             this.cumulative = cumulative;
-            partId = 0;
         }
 
         internal Resources (Part part)
@@ -37,15 +39,20 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Check if resources objects are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Resources obj)
+        public override bool Equals (Resources other)
         {
-            return vesselId == obj.vesselId && stage == obj.stage && cumulative == obj.cumulative && partId == obj.partId;
+            return
+            !ReferenceEquals (other, null) &&
+            vesselId == other.vesselId &&
+            stage == other.stage &&
+            cumulative == other.cumulative &&
+            partId == other.partId;
         }
 
         /// <summary>
-        /// Hash the resources object.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
@@ -74,22 +81,23 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
-        List<PartResource> GetResources ()
-        {
-            var resources = new List<PartResource> ();
-            if (vesselId != Guid.Empty) {
-                foreach (var vesselPart in InternalVessel.Parts) {
-                    if (stage < 0 || vesselPart.DecoupledAt () + 1 == stage || (cumulative && vesselPart.DecoupledAt () < stage)) {
-                        foreach (PartResource resource in vesselPart.Resources)
-                            resources.Add (resource);
+        List<PartResource> PartResources {
+            get {
+                var resources = new List<PartResource> ();
+                if (vesselId != Guid.Empty) {
+                    foreach (var vesselPart in InternalVessel.Parts) {
+                        if (stage < 0 || vesselPart.DecoupledAt () + 1 == stage || (cumulative && vesselPart.DecoupledAt () < stage)) {
+                            foreach (PartResource resource in vesselPart.Resources)
+                                resources.Add (resource);
+                        }
                     }
                 }
+                if (partId != 0) {
+                    foreach (PartResource resource in InternalPart.Resources)
+                        resources.Add (resource);
+                }
+                return resources;
             }
-            if (partId != 0) {
-                foreach (PartResource resource in InternalPart.Resources)
-                    resources.Add (resource);
-            }
-            return resources;
         }
 
         /// <summary>
@@ -97,7 +105,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public IList<Resource> All {
-            get { return GetResources ().Select (r => new Resource (r)).ToList (); }
+            get { return PartResources.Select (r => new Resource (r)).ToList (); }
         }
 
         /// <summary>
@@ -106,7 +114,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public IList<Resource> WithResource (string name)
         {
-            return GetResources ().Where (r => r.resourceName == name).Select (r => new Resource (r)).ToList ();
+            return PartResources.Where (r => r.resourceName == name).Select (r => new Resource (r)).ToList ();
         }
 
         /// <summary>
@@ -115,7 +123,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public IList<string> Names {
             get {
-                return GetResources ().Select (r => r.resourceName).Distinct ().ToList ();
+                return PartResources.Select (r => r.resourceName).Distinct ().ToList ();
             }
         }
 
@@ -126,7 +134,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public bool HasResource (string name)
         {
-            return GetResources ().Any (r => r.resourceName == name);
+            return PartResources.Any (r => r.resourceName == name);
         }
 
         /// <summary>
@@ -136,7 +144,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public float Max (string name)
         {
-            return GetResources ().Where (r => r.resourceName == name).Sum (r => (float)r.maxAmount);
+            return PartResources.Where (r => r.resourceName == name).Sum (r => (float)r.maxAmount);
         }
 
         /// <summary>
@@ -146,7 +154,15 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public float Amount (string name)
         {
-            return GetResources ().Where (r => r.resourceName == name).Sum (r => (float)r.amount);
+            return PartResources.Where (r => r.resourceName == name).Sum (r => (float)r.amount);
+        }
+
+        static PartResourceDefinition GetResource (string name)
+        {
+            var resource = PartResourceLibrary.Instance.GetDefinition (name);
+            if (resource == null)
+                throw new ArgumentException ("Resource not found");
+            return resource;
         }
 
         /// <summary>
@@ -156,10 +172,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static float Density (string name)
         {
-            var resource = PartResourceLibrary.Instance.GetDefinition (name);
-            if (resource == null)
-                throw new ArgumentException ("Resource not found");
-            return resource.density * 1000f;
+            return GetResource (name).density * 1000f;
         }
 
         /// <summary>
@@ -169,10 +182,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static ResourceFlowMode FlowMode (string name)
         {
-            var resource = PartResourceLibrary.Instance.GetDefinition (name);
-            if (resource == null)
-                throw new ArgumentException ("Resource not found");
-            return resource.resourceFlowMode.ToResourceFlowMode ();
+            return GetResource (name).resourceFlowMode.ToResourceFlowMode ();
         }
 
         /// <summary>
@@ -183,9 +193,9 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public bool Enabled {
-            get { return GetResources ().All (resource => resource.flowState); }
+            get { return PartResources.All (resource => resource.flowState); }
             set {
-                foreach (var resource in GetResources ())
+                foreach (var resource in PartResources)
                     resource.flowState = value;
             }
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
@@ -8,7 +9,9 @@ namespace KRPC.SpaceCenter.AutoPilot
     /// <summary>
     /// Controller to hold a vessels attitude in a chosen orientation.
     /// </summary>
-    class AttitudeController
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
+    sealed class AttitudeController
     {
         readonly KRPC.SpaceCenter.Services.Vessel vessel;
         public readonly PIDController PitchPID = new PIDController (0);
@@ -32,6 +35,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         Vector3d twiceZetaOmega = Vector3d.zero;
         Vector3d omegaSquared = Vector3d.zero;
 
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         public AttitudeController (Vessel vessel)
         {
             this.vessel = new KRPC.SpaceCenter.Services.Vessel (vessel);
@@ -138,7 +142,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             deltaTime += Time.fixedDeltaTime;
             if (deltaTime < timePerUpdate)
                 return;
-
+            
+            var internalVessel = vessel.InternalVessel;
             var torque = vessel.AvailableTorqueVector;
             var moi = vessel.MomentOfInertiaVector;
 
@@ -147,7 +152,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var current = ComputeCurrentAngularVelocity ();
 
             // If roll not set, or not close to target direction, set roll target velocity to 0
-            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (vessel.InternalVessel.ReferenceTransform.up);
+            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
             if (double.IsNaN (TargetRoll) || Vector3.Angle (currentDirection, targetDirection) > RollThreshold)
                 target.y = 0;
 
@@ -156,7 +161,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 DoAutoTune (torque, moi);
 
             // If vessel is sat on the pad, zero out the integral terms
-            if (vessel.InternalVessel.situation == Vessel.Situations.PRELAUNCH) {
+            if (internalVessel.situation == Vessel.Situations.PRELAUNCH) {
                 PitchPID.ClearIntegralTerm ();
                 RollPID.ClearIntegralTerm ();
                 YawPID.ClearIntegralTerm ();
@@ -190,8 +195,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// </summary>
         Vector3 ComputeTargetAngularVelocity (Vector3d torque, Vector3d moi)
         {
-            var currentRotation = ReferenceFrame.RotationFromWorldSpace (vessel.InternalVessel.ReferenceTransform.rotation);
-            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (vessel.InternalVessel.ReferenceTransform.up);
+            var internalVessel = vessel.InternalVessel;
+            var currentRotation = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
+            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
 
             QuaternionD rotation;
             if (!double.IsNaN (TargetRoll))

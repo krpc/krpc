@@ -1,0 +1,67 @@
+R: Gendarme.Rules.Design.AvoidSmallNamespaceRule
+N:
+N: KRPC.SpaceCenter
+N: KRPC.SpaceCenter.AutoPilot
+N: KRPC.SpaceCenter.ExtensionMethods
+
+R: Gendarme.Rules.Globalization.PreferStringComparisonOverrideRule
+A: *
+
+R: Gendarme.Rules.Globalization.PreferIFormatProviderOverrideRule
+A: *
+
+R: Gendarme.Rules.Naming.AvoidRedundancyInMethodNameRule
+M: System.String KRPC.SpaceCenter.Services.Parts.Engine::<get_PropellantNames>m__0(Propellant)
+M: System.Single KRPC.SpaceCenter.Services.Parts.Engine::<get_PropellantRatios>m__2(Propellant)
+M: System.String KRPC.SpaceCenter.Services.Parts.Engine::<get_PropellantRatios>m__3(Propellant)
+M: System.Single KRPC.SpaceCenter.Services.Parts.RCS::<get_PropellantRatios>m__2(Propellant)
+M: System.String KRPC.SpaceCenter.Services.Parts.RCS::<get_PropellantRatios>m__3(Propellant)
+
+R: Gendarme.Rules.Naming.UseCorrectCasingRule
+N: KRPC.SpaceCenter
+N: KRPC.SpaceCenter.AutoPilot
+N: KRPC.SpaceCenter.ExtensionMethods
+N: KRPC.SpaceCenter.ExternalAPI
+N: KRPC.SpaceCenter.Services
+N: KRPC.SpaceCenter.Services.Parts
+
+R: Gendarme.Rules.Performance.AvoidConcatenatingCharsRule
+A: *
+
+R: Gendarme.Rules.Design.ImplementEqualsAndGetHashCodeInPairRule
+T: KRPC.SpaceCenter.Services.AutoPilot
+T: KRPC.SpaceCenter.Services.Camera
+T: KRPC.SpaceCenter.Services.CelestialBody
+T: KRPC.SpaceCenter.Services.Control
+T: KRPC.SpaceCenter.Services.Flight
+T: KRPC.SpaceCenter.Services.Node
+T: KRPC.SpaceCenter.Services.Orbit
+T: KRPC.SpaceCenter.Services.Parts.CargoBay
+T: KRPC.SpaceCenter.Services.Parts.ControlSurface
+T: KRPC.SpaceCenter.Services.Parts.Decoupler
+T: KRPC.SpaceCenter.Services.Parts.DockingPort
+T: KRPC.SpaceCenter.Services.Parts.Engine
+T: KRPC.SpaceCenter.Services.Parts.Fairing
+T: KRPC.SpaceCenter.Services.Parts.Intake
+T: KRPC.SpaceCenter.Services.Parts.LandingGear
+T: KRPC.SpaceCenter.Services.Parts.LandingLeg
+T: KRPC.SpaceCenter.Services.Parts.LaunchClamp
+T: KRPC.SpaceCenter.Services.Parts.Light
+T: KRPC.SpaceCenter.Services.Parts.Module
+T: KRPC.SpaceCenter.Services.Parts.Parachute
+T: KRPC.SpaceCenter.Services.Parts.Part
+T: KRPC.SpaceCenter.Services.Parts.Parts
+T: KRPC.SpaceCenter.Services.Parts.Propellant
+T: KRPC.SpaceCenter.Services.Parts.Radiator
+T: KRPC.SpaceCenter.Services.Parts.RCS
+T: KRPC.SpaceCenter.Services.Parts.ReactionWheel
+T: KRPC.SpaceCenter.Services.Parts.ResourceConverter
+T: KRPC.SpaceCenter.Services.Parts.ResourceHarvester
+T: KRPC.SpaceCenter.Services.Parts.Sensor
+T: KRPC.SpaceCenter.Services.Parts.SolarPanel
+T: KRPC.SpaceCenter.Services.Parts.Thruster
+T: KRPC.SpaceCenter.Services.ReferenceFrame
+T: KRPC.SpaceCenter.Services.Resource
+T: KRPC.SpaceCenter.Services.Resources
+T: KRPC.SpaceCenter.Services.ResourceTransfer
+T: KRPC.SpaceCenter.Services.Vessel

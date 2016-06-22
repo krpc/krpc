@@ -1,7 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.Services;
-using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.Drawing
@@ -9,38 +8,17 @@ namespace KRPC.Drawing
     /// <summary>
     /// Abstract base class for objects that can be drawn.
     /// </summary>
-    public abstract class Drawable : Equatable<Drawable>, IDrawingObject
+    public abstract class Drawable<T> : IDrawable
     {
-        readonly ulong id;
-        static ulong nextId;
-
         /// <summary>
         /// Create a drawable and register it with the draw addon.
         /// </summary>
-        protected Drawable (string type, Type rendererType)
+        protected Drawable (Type rendererType)
         {
-            id = nextId;
-            nextId++;
-            GameObject = new GameObject ("krpc.drawing." + type + "." + id);
+            GameObject = new GameObject ("KRPC.Drawing." + typeof(T).Name);
             Renderer = (Renderer)GameObject.AddComponent (rendererType);
             Material = "Particles/Additive";
             Addon.AddObject (this);
-        }
-
-        /// <summary>
-        /// Check if drawables are equal.
-        /// </summary>
-        public override bool Equals (Drawable obj)
-        {
-            return id == obj.id;
-        }
-
-        /// <summary>
-        /// Hash the drawable.
-        /// </summary>
-        public override int GetHashCode ()
-        {
-            return (int)id;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace KRPC.SpaceCenter
     /// Addon to perform resource transfers between parts.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public class ResourceTransferAddon : MonoBehaviour
+    sealed public class ResourceTransferAddon : MonoBehaviour
     {
         /// <summary>
         /// The transfers currently in progress.
@@ -18,6 +19,7 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Destroy the addon
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnDestroy ()
         {
             transfers.Clear ();
@@ -34,6 +36,7 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Update the transfers
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void FixedUpdate ()
         {
             foreach (var transfer in transfers)

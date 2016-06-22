@@ -3,7 +3,7 @@ using KRPC.KerbalAlarmClock.ExtensionMethods;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
-namespace KRPC.KerbalAlarmClock.Services
+namespace KRPC.KerbalAlarmClock
 {
     /// <summary>
     /// Represents an alarm. Obtained by calling
@@ -12,21 +12,21 @@ namespace KRPC.KerbalAlarmClock.Services
     /// <see cref="KerbalAlarmClock.AlarmsWithType"/>.
     /// </summary>
     [KRPCClass (Service = "KerbalAlarmClock")]
-    public sealed class Alarm : Equatable<Alarm>
+    public class Alarm : Equatable<Alarm>
     {
         readonly KACWrapper.KACAPI.KACAlarm alarm;
 
-        internal Alarm (KACWrapper.KACAPI.KACAlarm alarm)
+        internal Alarm (KACWrapper.KACAPI.KACAlarm innerAlarm)
         {
-            this.alarm = alarm;
+            alarm = innerAlarm;
         }
 
         /// <summary>
         /// Check if two alarms are equal.
         /// </summary>
-        public override bool Equals (Alarm obj)
+        public override bool Equals (Alarm other)
         {
-            return alarm == obj.alarm;
+            return !ReferenceEquals (other, null) && alarm == other.alarm;
         }
 
         /// <summary>

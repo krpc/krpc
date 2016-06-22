@@ -3,24 +3,24 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
-namespace KRPC.RemoteTech.Services
+namespace KRPC.RemoteTech
 {
     /// <summary>
     /// A RemoteTech antenna. Obtained by calling <see cref="Comms.Antennas"/> or  <see cref="RemoteTech.Antenna"/>.
     /// </summary>
     [KRPCClass (Service = "RemoteTech")]
-    public sealed class Antenna : Equatable<Antenna>
+    public class Antenna : Equatable<Antenna>
     {
         readonly KRPC.SpaceCenter.Services.Parts.Part part;
 
-        internal static Boolean Is (KRPC.SpaceCenter.Services.Parts.Part part)
+        internal static Boolean Is (KRPC.SpaceCenter.Services.Parts.Part innerPart)
         {
-            return part.InternalPart.Modules.Contains ("ModuleRTAntenna");
+            return innerPart.InternalPart.Modules.Contains ("ModuleRTAntenna");
         }
 
-        internal Antenna (KRPC.SpaceCenter.Services.Parts.Part part)
+        internal Antenna (KRPC.SpaceCenter.Services.Parts.Part innerPart)
         {
-            this.part = part;
+            part = innerPart;
             if (!Is (part))
                 throw new ArgumentException ("Part is not a RemoteTech antenna");
         }
@@ -28,9 +28,9 @@ namespace KRPC.RemoteTech.Services
         /// <summary>
         /// Check that the antennas are the same.
         /// </summary>
-        public override bool Equals (Antenna obj)
+        public override bool Equals (Antenna other)
         {
-            return part == obj.part;
+            return !ReferenceEquals (other, null) && part == other.part;
         }
 
         /// <summary>

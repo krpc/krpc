@@ -9,14 +9,14 @@ namespace KRPC.UI
     /// An input field. See <see cref="Panel.AddInputField" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class InputField : UIObject
+    public class InputField : Object
     {
         readonly UnityEngine.UI.InputField inputField;
 
         internal InputField (GameObject parent, bool visible)
             : base (Addon.Instantiate (parent, "InputField"), visible)
         {
-            inputField = obj.GetComponent<UnityEngine.UI.InputField> ();
+            inputField = GameObject.GetComponent<UnityEngine.UI.InputField> ();
             inputField.onValueChange.AddListener (x => {
                 Changed = true;
             });
@@ -27,7 +27,7 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public RectTransform RectTransform {
-            get { return new RectTransform (obj.GetComponent<UnityEngine.RectTransform> ()); }
+            get { return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public Text Text {
-            get { return new Text (obj); }
+            get { return new Text (GameObject); }
         }
 
         /// <summary>

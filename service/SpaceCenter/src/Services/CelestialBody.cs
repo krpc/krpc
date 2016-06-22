@@ -13,7 +13,7 @@ namespace KRPC.SpaceCenter.Services
     /// Represents a celestial body (such as a planet or moon).
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class CelestialBody : Equatable<CelestialBody>
+    public class CelestialBody : Equatable<CelestialBody>
     {
         Orbit orbit;
 
@@ -28,25 +28,25 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The KSP celestial body object.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public global::CelestialBody InternalBody { get; private set; }
-
-        /// <summary>
-        /// Check that the celestial bodies are equal.
-        /// </summary>
-        public override bool Equals (CelestialBody obj)
+        public override bool Equals (CelestialBody other)
         {
-            return InternalBody == obj.InternalBody;
+            return !ReferenceEquals (other, null) && InternalBody == other.InternalBody;
         }
 
         /// <summary>
-        /// Hash the celestial body.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
             return InternalBody.GetHashCode ();
         }
+
+        /// <summary>
+        /// The KSP celestial body object.
+        /// </summary>
+        public global::CelestialBody InternalBody { get; private set; }
 
         /// <summary>
         /// The name of the body.
@@ -144,10 +144,12 @@ namespace KRPC.SpaceCenter.Services
         {
             if (InternalBody.pqsController == null)
                 return 0;
-            var cosLatitude = Math.Cos ((Math.PI / 180) * latitude);
-            var sinLatitude = Math.Sin ((Math.PI / 180) * latitude);
-            var cosLongitude = Math.Cos ((Math.PI / 180) * longitude);
-            var sinLongitude = Math.Sin ((Math.PI / 180) * longitude);
+            var latitudeRadians = GeometryExtensions.ToRadians (latitude);
+            var longitudeRadians = GeometryExtensions.ToRadians (longitude);
+            var cosLatitude = Math.Cos (latitudeRadians);
+            var sinLatitude = Math.Sin (latitudeRadians);
+            var cosLongitude = Math.Cos (longitudeRadians);
+            var sinLongitude = Math.Sin (longitudeRadians);
             var position = new Vector3d (cosLatitude * cosLongitude, sinLatitude, cosLatitude * sinLongitude);
             return InternalBody.pqsController.GetSurfaceHeight (position) - InternalBody.pqsController.radius;
         }
@@ -161,8 +163,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 MSLPosition (double latitude, double longitude, ReferenceFrame referenceFrame)
         {
-            var position = InternalBody.GetWorldSurfacePosition (latitude, longitude, 0);
-            return referenceFrame.PositionFromWorldSpace (position).ToTuple ();
+            return PositionAt (latitude, longitude, 0, referenceFrame);
         }
 
         /// <summary>
@@ -175,9 +176,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 SurfacePosition (double latitude, double longitude, ReferenceFrame referenceFrame)
         {
-            var altitude = SurfaceHeight (latitude, longitude);
-            var position = InternalBody.GetWorldSurfacePosition (latitude, longitude, altitude);
-            return referenceFrame.PositionFromWorldSpace (position).ToTuple ();
+            return PositionAt (latitude, longitude, SurfaceHeight (latitude, longitude), referenceFrame);
         }
 
         /// <summary>
@@ -190,7 +189,13 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 BedrockPosition (double latitude, double longitude, ReferenceFrame referenceFrame)
         {
-            var altitude = BedrockHeight (latitude, longitude);
+            return PositionAt (latitude, longitude, BedrockHeight (latitude, longitude), referenceFrame);
+        }
+
+        Tuple3 PositionAt (double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             var position = InternalBody.GetWorldSurfacePosition (latitude, longitude, altitude);
             return referenceFrame.PositionFromWorldSpace (position).ToTuple ();
         }
@@ -302,6 +307,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.PositionFromWorldSpace (InternalBody.position).ToTuple ();
         }
 
@@ -312,6 +319,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.VelocityFromWorldSpace (InternalBody.position, InternalBody.GetWorldVelocity ()).ToTuple ();
         }
 
@@ -322,6 +331,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             var up = Vector3.up;
             var right = InternalBody.GetRelSurfacePosition (0, 0, 1).normalized;
             var forward = Vector3.Cross (right, up);
@@ -338,6 +349,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.DirectionFromWorldSpace (InternalBody.transform.up).ToTuple ();
         }
 
@@ -352,6 +365,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.AngularVelocityFromWorldSpace (InternalBody.angularVelocity).ToTuple ();
         }
     }

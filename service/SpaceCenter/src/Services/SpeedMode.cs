@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services
@@ -5,6 +6,7 @@ namespace KRPC.SpaceCenter.Services
     /// <summary>
     /// See <see cref="Control.SpeedMode"/>.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum SpeedMode
     {
