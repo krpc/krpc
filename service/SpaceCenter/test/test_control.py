@@ -64,7 +64,7 @@ class TestControlMixin(object):
         self.control.roll = 0.0
 
         self.assertAlmostEqual(pitch, self.orbital_flight.pitch, delta=1)
-        self.assertAlmostEqualDegrees(heading, self.orbital_flight.heading, delta=1)
+        self.assertDegreesAlmostEqual(heading, self.orbital_flight.heading, delta=1)
 
         # Check flight is rolling in correct direction
         roll = self.orbital_flight.roll
