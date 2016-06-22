@@ -154,11 +154,12 @@ docgen_multiple(
 
 test_suite(
     name = 'test',
-    tests = [
-        'spelling',
-        #'linkcheck',
-        'check-documented'
-    ]
+    tests = [':spelling', ':check-documented'] # ':linkcheck'
+)
+
+test_suite(
+    name = 'ci-test',
+    tests = [':spelling', ':check-documented']
 )
 
 sphinx_spelling_test(

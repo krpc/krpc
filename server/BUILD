@@ -15,6 +15,11 @@ test_suite(
     visibility = ['//:__pkg__']
 )
 
+test_suite(
+    name = 'ci-test',
+    tests = [':KRPC.Test']
+)
+
 genrule(
     name = 'version',
     outs = ['VERSION.txt'],

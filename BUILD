@@ -181,6 +181,20 @@ test_suite(
     ]
 )
 
+test_suite(
+    name = 'ci-test',
+    tests = [
+        '//server:ci-test',
+        '//client/csharp:ci-test',
+        '//client/cpp:ci-test',
+        '//client/java:ci-test',
+        '//client/lua:ci-test',
+        '//client/python:ci-test',
+        '//tools/krpctest:ci-test',
+        '//doc:ci-test'
+    ]
+)
+
 filegroup(
     name = 'csproj',
     srcs = [

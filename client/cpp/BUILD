@@ -132,7 +132,12 @@ cc_library(
 
 test_suite(
     name = 'test',
-    tests = ['client', 'check', 'lint']
+    tests = [':client', ':check', ':lint']
+)
+
+test_suite(
+    name = 'ci-test',
+    tests = [':client']
 )
 
 client_test(

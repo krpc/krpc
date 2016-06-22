@@ -22,6 +22,11 @@ test_suite(
     tests = [':test2', ':test3', ':lint']
 )
 
+test_suite(
+    name = 'ci-test',
+    tests = [':test2', ':test3']
+)
+
 deps = [
     '//client/python',
     '@python_six//file',

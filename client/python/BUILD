@@ -32,6 +32,11 @@ test_suite(
     tests = [':test2', ':test3', ':lint']
 )
 
+test_suite(
+    name = 'ci-test',
+    tests = [':test2', ':test3']
+)
+
 client_test(
     name = 'test2',
     test_executable = ':py2test',
