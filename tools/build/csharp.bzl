@@ -97,6 +97,8 @@ def _bin_impl(ctx):
     return struct(
         name = ctx.label.name,
         target_type = ctx.attr._target_type,
+        bin = bin_output,
+        doc = doc_output,
         out = outputs,
         runfiles = runfiles
     )
@@ -146,6 +148,33 @@ def _nunit_impl(ctx):
         doc = doc_output,
         out = outputs,
         runfiles = runfiles
+    )
+
+def _gendarme_impl(ctx):
+    if ctx.attr.lib:
+        src = ctx.attr.lib.lib
+    else:
+        src = ctx.attr.exe.bin
+    runfiles = [src, ctx.file.config]
+    if ctx.attr.ignores:
+        runfiles.append(ctx.file.ignores)
+
+    cmd = ctx.attr._gendarme
+    args = ['--severity=all', '--confidence=all']
+    args.append('--config=%s' % ctx.file.config.short_path)
+    args.append('--set=%s' % ctx.attr.ruleset)
+    if ctx.attr.ignores:
+        args.append('--ignore=%s' % ctx.file.ignores.short_path)
+    args.append(src.short_path)
+
+    ctx.file_action(
+        ctx.outputs.executable,
+        '%s %s "$@"' % (cmd, ' '.join(args))
+    )
+
+    return struct(
+        name = ctx.label.name,
+        runfiles = ctx.runfiles(files = runfiles)
     )
 
 def _assembly_info_impl(ctx):
@@ -209,6 +238,20 @@ csharp_nunit_test = rule(
         '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
     },
     outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml'},
+    test = True
+)
+
+csharp_gendarme_test = rule(
+    implementation = _gendarme_impl,
+    attrs = {
+        'lib': attr.label(allow_files=True),
+        'exe': attr.label(allow_files=True),
+        'config': attr.label(default=Label('//tools/build:csharp_gendarme_rules.xml'),
+                             allow_files=True, single_file=True),
+        'ruleset': attr.string(default='default'),
+        'ignores': attr.label(allow_files=True, single_file=True),
+        '_gendarme': attr.string(default='/usr/bin/gendarme')
+    },
     test = True
 )
 
