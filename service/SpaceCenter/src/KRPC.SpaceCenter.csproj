@@ -75,6 +75,8 @@
     <Compile Include="..\..\..\bazel-bin\service\SpaceCenter\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AutoPilot\PIDController.cs" />
+    <Compile Include="AutoPilot\AttitudeController.cs" />
     <Compile Include="ExtensionMethods\ActionGroupExtensions.cs" />
     <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
     <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
@@ -133,6 +135,7 @@
     <Compile Include="Services\Parts\SolarPanelState.cs" />
     <Compile Include="Services\Parts\Thruster.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
+    <Compile Include="Services\ReferenceFrameType.cs" />
     <Compile Include="Services\Resource.cs" />
     <Compile Include="Services\ResourceFlowMode.cs" />
     <Compile Include="Services\Resources.cs" />
@@ -144,7 +147,5 @@
     <Compile Include="Services\VesselSituation.cs" />
     <Compile Include="Services\VesselType.cs" />
     <Compile Include="Services\WarpMode.cs" />
-    <Compile Include="Utils\PIDController.cs" />
-    <Compile Include="Utils\RotationRateController.cs" />
   </ItemGroup>
 </Project>

@@ -20,7 +20,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     {
         readonly uint partFlightId;
 
-        internal Part (global::Part part)
+        /// <summary>
+        /// Create a part object for the given KSP part
+        /// </summary>
+        public Part (global::Part part)
         {
             partFlightId = part.flightID;
         }

@@ -4,16 +4,11 @@ import krpctest
 
 class TestPerformance(krpctest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        krpctest.new_save()
-        cls.conn = krpctest.connect()
-        cls.control = cls.conn.space_center.active_vessel.control
-
     def test_performance(self):
+        control = self.connect().space_center.active_vessel.control
         samples = 1000
         def wrapper():
-            self.control.throttle = 1
+            control.throttle = 1
         times = [timeit.timeit(stmt=wrapper, number=1) for _ in range(samples)]
         print 'Running %d RPCs' % samples
         print 'Total execution time: %.2f seconds' % sum(times)

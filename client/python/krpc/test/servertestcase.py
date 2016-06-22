@@ -3,11 +3,12 @@ import krpc
 
 class ServerTestCase(object):
 
-    def setUp(self): #pylint: disable=invalid-name
-        self.conn = self.connect()
+    conn = None
 
-    def tearDown(self): #pylint: disable=invalid-name
-        self.conn.close()
+    @classmethod
+    def setUpClass(cls):
+        if cls.conn is None:
+            cls.conn = cls.connect()
 
     @staticmethod
     def connect():

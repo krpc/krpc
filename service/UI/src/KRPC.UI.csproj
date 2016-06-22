@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="Button.cs" />
+    <Compile Include="Canvas.cs" />
     <Compile Include="ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="ExtensionMethods\TextExtensions.cs" />
     <Compile Include="FontStyle.cs" />

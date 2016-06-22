@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Google.Protobuf;
@@ -10,24 +9,57 @@ using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
 {
-    class StreamManager
+    sealed class StreamManager : IDisposable
     {
         readonly Connection connection;
         readonly Object accessLock = new Object ();
         readonly IDictionary<UInt32, Type> streamTypes = new Dictionary<UInt32, Type> ();
         readonly IDictionary<UInt32, ByteString> streamData = new Dictionary<UInt32, ByteString> ();
         readonly IDictionary<UInt32, Object> streamValues = new Dictionary<UInt32, Object> ();
+        readonly UpdateThread updateThreadObject;
         readonly Thread updateThread;
 
-        internal StreamManager (Connection connection, IPAddress address, int port, byte[] clientIdentifier)
+        public StreamManager (Connection serverConnection, TcpClient streamClient)
         {
-            this.connection = connection;
-            updateThread = new Thread (new ThreadStart (new UpdateThread (this, address, port, clientIdentifier).Main));
+            connection = serverConnection;
+            updateThreadObject = new UpdateThread (this, streamClient);
+            updateThread = new Thread (new ThreadStart (updateThreadObject.Main));
             updateThread.Start ();
         }
 
-        internal UInt32 AddStream (Request request, Type type)
+        bool disposed;
+
+        ~StreamManager ()
         {
+            Dispose (false);
+        }
+
+        public void Dispose ()
+        {
+            Dispose (true);
+            GC.SuppressFinalize (this);
+        }
+
+        void Dispose (bool disposing)
+        {
+            if (!disposed) {
+                if (disposing) {
+                    updateThreadObject.Stop ();
+                    updateThread.Join ();
+                }
+                disposed = true;
+            }
+        }
+
+        void CheckDisposed ()
+        {
+            if (disposed)
+                throw new ObjectDisposedException (GetType ().Name);
+        }
+
+        public UInt32 AddStream (Request request, Type type)
+        {
+            CheckDisposed ();
             var id = connection.KRPC ().AddStream (request);
             lock (accessLock) {
                 if (!streamTypes.ContainsKey (id)) {
@@ -38,8 +70,9 @@ namespace KRPC.Client
             return id;
         }
 
-        internal void RemoveStream (UInt32 id)
+        public void RemoveStream (UInt32 id)
         {
+            CheckDisposed ();
             connection.KRPC ().RemoveStream (id);
             lock (accessLock) {
                 streamTypes.Remove (id);
@@ -48,8 +81,9 @@ namespace KRPC.Client
             }
         }
 
-        internal Object GetValue (UInt32 id)
+        public Object GetValue (UInt32 id)
         {
+            CheckDisposed ();
             Object result;
             lock (accessLock) {
                 if (!streamTypes.ContainsKey (id))
@@ -66,7 +100,7 @@ namespace KRPC.Client
         {
             lock (accessLock) {
                 if (!streamData.ContainsKey (id))
-                    throw new InvalidOperationException ("Stream does not exist or has been closed");
+                    return;
                 if (response.HasError)
                     return; //TODO: do something with the error
                 var data = response.ReturnValue;
@@ -75,50 +109,49 @@ namespace KRPC.Client
             }
         }
 
-        class UpdateThread
+        sealed class UpdateThread
         {
             readonly StreamManager manager;
-            readonly IPAddress address;
-            readonly int port;
-            readonly byte[] clientIdentifier;
+            readonly NetworkStream stream;
+            volatile bool stop;
+            EventWaitHandle stopEvent = new EventWaitHandle (false, EventResetMode.ManualReset);
+            byte[] buffer = new byte [Connection.BUFFER_INITIAL_SIZE];
 
-            TcpClient client;
-            Stream stream;
-            CodedInputStream codedStream;
-
-            internal UpdateThread (StreamManager manager, IPAddress address, int port, byte[] clientIdentifier)
+            public UpdateThread (StreamManager streamManager, TcpClient streamClient)
             {
-                this.manager = manager;
-                this.address = address;
-                this.port = port;
-                this.clientIdentifier = clientIdentifier;
+                manager = streamManager;
+                stream = streamClient.GetStream ();
             }
 
-            internal void Main ()
+            public void Stop ()
             {
-                client = new TcpClient ();
-                client.Connect (address, port);
-                stream = client.GetStream ();
-                stream.Write (Encoder.StreamHelloMessage, 0, Encoder.StreamHelloMessage.Length);
-                stream.Write (clientIdentifier, 0, clientIdentifier.Length);
-                var recvOkMessage = new byte [Encoder.OkMessage.Length];
-                stream.Read (recvOkMessage, 0, Encoder.OkMessage.Length);
-                if (recvOkMessage.Equals (Encoder.OkMessage))
-                    throw new Exception ("Invalid hello message received from stream server. " +
-                    "Got " + Encoder.ToHexString (recvOkMessage));
-                codedStream = new CodedInputStream (stream);
+                stop = true;
+                stopEvent.Set ();
+            }
 
+            public void Main ()
+            {
                 try {
-                    while (true) {
-                        var message = new StreamMessage ();
-                        codedStream.ReadMessage (message);
-                        foreach (var response in message.Responses)
+                    while (!stop) {
+                        var size = Connection.ReadMessageData (stream, ref buffer, stopEvent);
+                        if (size == 0 || stop)
+                            break;
+                        var message = StreamMessage.Parser.ParseFrom (new CodedInputStream (buffer, 0, size));
+                        //TODO: handle errors
+                        if (stop)
+                            break;
+                        foreach (var response in message.Responses) {
                             manager.Update (response.Id, response.Response);
+                            if (stop)
+                                break;
+                        }
                     }
+                } catch (ObjectDisposedException) {
+                    // Connection closed, so exit
+                    //FIXME: is there a better way to handle this?
                 } catch (IOException) {
-                    // Exit when the connection closes
-                } catch (InvalidOperationException) {
-                    // Exit when a stream update fails - connection has been closed
+                    // Connection closed, so exit
+                    //FIXME: is there a better way to handle this?
                 }
             }
         }

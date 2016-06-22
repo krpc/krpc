@@ -67,7 +67,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             return hash;
         }
 
-        internal ModuleDockingNode InternalPort {
+        /// <summary>
+        /// The KSP docking node object.
+        /// </summary>
+        public ModuleDockingNode InternalPort {
             get { return port; }
         }
 

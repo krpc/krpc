@@ -45,6 +45,14 @@ namespace KRPC.InfernalRobotics.Services
         }
 
         /// <summary>
+        /// The part containing the servo.
+        /// </summary>
+        [KRPCProperty]
+        public KRPC.SpaceCenter.Services.Parts.Part Part {
+            get { return new KRPC.SpaceCenter.Services.Parts.Part (servo.HostPart); }
+        }
+
+        /// <summary>
         /// Whether the servo should be highlighted in-game.
         /// </summary>
         [KRPCProperty]

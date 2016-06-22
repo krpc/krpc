@@ -70,16 +70,16 @@ namespace KRPC.Client
             return false;
         }
 
-        static MemoryStream cachedBuffer = new MemoryStream ();
-        static CodedOutputStream cachedStream = new CodedOutputStream (cachedBuffer);
-
         /// <summary>
         /// Encode an object of the given type using the protocol buffer encoding scheme.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
         public static ByteString Encode (object value, Type type)
         {
-            return EncodeObject (value, type, cachedBuffer, cachedStream);
+            using (var buffer = new MemoryStream ()) {
+                var stream = new CodedOutputStream (buffer, true);
+                return EncodeObject (value, type, buffer, stream);
+            }
         }
 
         static ByteString EncodeObject (object value, Type type, MemoryStream buffer, CodedOutputStream stream)

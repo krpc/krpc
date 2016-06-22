@@ -5,7 +5,7 @@ using Tuple2 = KRPC.Utils.Tuple<double, double>;
 namespace KRPC.UI
 {
     /// <summary>
-    /// A container for user interface elements. See <see cref="UI.AddPanel" />.
+    /// A container for user interface elements. See <see cref="Canvas.AddPanel" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
     public class Panel : UIObject

@@ -89,6 +89,25 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether the vessel is recoverable.
+        /// </summary>
+        [KRPCProperty]
+        public bool Recoverable {
+            get { return InternalVessel.IsRecoverable; }
+        }
+
+        /// <summary>
+        /// Recover the vessel.
+        /// </summary>
+        [KRPCMethod]
+        public void Recover ()
+        {
+            if (!Recoverable)
+                throw new InvalidOperationException ("Vessel is not recoverable");
+            GameEvents.OnVesselRecoveryRequested.Fire (InternalVessel);
+        }
+
+        /// <summary>
         /// The mission elapsed time in seconds.
         /// </summary>
         [KRPCProperty]
@@ -278,7 +297,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
-            get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
+            get { return MomentOfInertiaVector.ToTuple (); }
+        }
+
+        internal Vector3d MomentOfInertiaVector {
+            get { return ComputeInertiaTensor ().Diag (); }
         }
 
         /// <summary>
@@ -337,14 +360,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 AvailableTorque {
-            get {
-                return (
-                    AvailableReactionWheelTorqueVector +
-                    AvailableRCSTorqueVector +
-                    AvailableEngineTorqueVector +
-                    AvailableControlSurfaceTorqueVector
-                ).ToTuple ();
-            }
+            get { return AvailableTorqueVector.ToTuple (); }
         }
 
         /// <summary>
@@ -389,6 +405,16 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 AvailableControlSurfaceTorque {
             get { return AvailableControlSurfaceTorqueVector.ToTuple (); }
+        }
+
+        internal Vector3d AvailableTorqueVector {
+            get {
+                return
+                AvailableReactionWheelTorqueVector +
+                AvailableRCSTorqueVector +
+                AvailableEngineTorqueVector +
+                AvailableControlSurfaceTorqueVector;
+            }
         }
 
         Vector3d AvailableReactionWheelTorqueVector {

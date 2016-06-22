@@ -20,39 +20,43 @@ namespace KRPC.InfernalRobotics.Services
         }
 
         /// <summary>
-        /// A list of all the servo groups in the active vessel.
+        /// A list of all the servo groups in the given <paramref name="vessel"/>.
         /// </summary>
-        [KRPCProperty]
-        public static IList<ServoGroup> ServoGroups {
-            get {
-                CheckAPI ();
-                return IRWrapper.IRController.ServoGroups.Select (x => new ServoGroup (x)).ToList ();
-            }
+        [KRPCProcedure]
+        public static IList<ServoGroup> ServoGroups (KRPC.SpaceCenter.Services.Vessel vessel)
+        {
+            CheckAPI ();
+            return IRWrapper.IRController.ServoGroups.Where (x => x.Vessel.id == vessel.Id).Select (x => new ServoGroup (x)).ToList ();
         }
 
         /// <summary>
-        /// Returns the servo group with the given <paramref name="name"/> or <c>null</c> if none
-        /// exists. If multiple servo groups have the same name, only one of them is returned.
+        /// Returns the servo group in the given <paramref name="vessel"/> with the given <paramref name="name"/>,
+        /// or <c>null</c> if none exists. If multiple servo groups have the same name, only one of them is returned.
         /// </summary>
+        /// <param name="vessel">Vessel to check.</param>
         /// <param name="name">Name of servo group to find.</param>
         [KRPCProcedure]
-        public static ServoGroup ServoGroupWithName (string name)
+        public static ServoGroup ServoGroupWithName (KRPC.SpaceCenter.Services.Vessel vessel, string name)
         {
             CheckAPI ();
-            var servoGroup = IRWrapper.IRController.ServoGroups.FirstOrDefault (x => x.Name == name);
+            var servoGroup = IRWrapper.IRController.ServoGroups.FirstOrDefault (x => x.Vessel.id == vessel.Id && x.Name == name);
             return servoGroup != null ? new ServoGroup (servoGroup) : null;
         }
 
         /// <summary>
-        /// Returns the servo with the given <paramref name="name"/>, from all servo groups, or
+        /// Returns the servo in the given <paramref name="vessel"/> with the given <paramref name="name"/> or
         /// <c>null</c> if none exists. If multiple servos have the same name, only one of them is returned.
         /// </summary>
+        /// <param name="vessel">Vessel to check.</param>
         /// <param name="name">Name of the servo to find.</param>
         [KRPCProcedure]
-        public static Servo ServoWithName (string name)
+        public static Servo ServoWithName (KRPC.SpaceCenter.Services.Vessel vessel, string name)
         {
             CheckAPI ();
-            var servo = IRWrapper.IRController.ServoGroups.SelectMany (x => x.Servos).FirstOrDefault (x => x.Name == name);
+            var servo = IRWrapper.IRController.ServoGroups
+                .Where (x => x.Vessel.id == vessel.Id)
+                .SelectMany (x => x.Servos)
+                .FirstOrDefault (x => x.Name == name);
             return servo != null ? new Servo (servo) : null;
         }
     }

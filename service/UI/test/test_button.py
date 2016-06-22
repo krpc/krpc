@@ -1,32 +1,22 @@
 import unittest
-import time
 import krpc
 import krpctest
 
 class TestButton(krpctest.TestCase):
 
     @classmethod
-    def setUp(cls):
-        krpctest.new_save()
-        cls.conn = krpctest.connect(cls)
-        cls.ui = cls.conn.ui
-
-    @classmethod
-    def tearDown(cls):
-        cls.conn.close()
-
-    def add_button(self):
-        panel = self.ui.add_panel()
-        return panel.add_button('Foo')
+    def setUpClass(cls):
+        cls.new_save()
+        cls.canvas = cls.connect().ui.stock_canvas
 
     def test_button(self):
-        button = self.add_button()
+        button = self.canvas.add_button('Foo')
         self.assertIsNotNone(button.rect_transform)
         self.assertTrue(button.visible)
         self.assertIsNotNone(button.text)
         self.assertEqual('Foo', button.text.content)
         self.assertFalse(button.clicked)
-        time.sleep(0.5)
+        self.wait()
         button.remove()
         self.assertRaises(krpc.client.RPCError, button.remove)
 

@@ -101,6 +101,10 @@ Client API Reference
       Create a new stream from the given lambda expression. Returns a stream
       object that can be used to obtain the latest value of the stream.
 
+   .. method:: Dispose ()
+
+      Close the connection and free any resources associated with it.
+
 .. class:: Stream<ReturnType>
 
    Object representing a stream.

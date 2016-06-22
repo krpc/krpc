@@ -1,5 +1,4 @@
 import unittest
-import time
 import krpctest
 
 class RCSTestBase(object):
@@ -39,14 +38,14 @@ class RCSTestBase(object):
     def set_fuel_enabled(self, value):
         for r in self.vessel.resources.all:
             r.enabled = value
-        time.sleep(0.1)
+        self.wait()
 
 class RCSTest(RCSTestBase):
 
     def check_properties(self, rcs):
         data = self.rcs_data[rcs.part.title]
         self.control.rcs = True
-        time.sleep(0.1)
+        self.wait()
         self.assertTrue(rcs.active)
         self.assertTrue(rcs.pitch_enabled)
         self.assertTrue(rcs.yaw_enabled)
@@ -54,18 +53,18 @@ class RCSTest(RCSTestBase):
         self.assertTrue(rcs.forward_enabled)
         self.assertTrue(rcs.up_enabled)
         self.assertTrue(rcs.right_enabled)
-        self.assertClose(data['torque'], rcs.available_torque, error=10)
-        self.assertClose(data['max_thrust'], rcs.max_thrust, error=1)
+        self.assertAlmostEqual(data['torque'], rcs.available_torque, delta=10)
+        self.assertAlmostEqual(data['max_thrust'], rcs.max_thrust, delta=1)
         self.assertEqual(data['max_vac_thrust'], rcs.max_vacuum_thrust)
         self.assertEqual(data['thrusters'], len(rcs.thrusters))
-        self.assertClose(data['isp'], rcs.specific_impulse, error=0.1)
+        self.assertAlmostEqual(data['isp'], rcs.specific_impulse, places=1)
         self.assertEqual(data['vac_isp'], rcs.vacuum_specific_impulse)
         self.assertEqual(data['msl_isp'], rcs.kerbin_sea_level_specific_impulse)
-        self.assertEqual(sorted(data['propellants'].keys()), sorted(rcs.propellants))
-        self.assertClose(data['propellants'], rcs.propellant_ratios)
+        self.assertItemsEqual(data['propellants'].keys(), rcs.propellants)
+        self.assertAlmostEqual(data['propellants'], rcs.propellant_ratios, places=3)
         self.assertTrue(rcs.has_fuel)
         self.control.rcs = False
-        time.sleep(0.1)
+        self.wait()
 
     def test_rcs_single(self):
         rcs = self.get_rcs('Place-Anywhere 7 Linear RCS Port')
@@ -83,38 +82,33 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
 
     @classmethod
     def setUpClass(cls):
-        if krpctest.connect().space_center.active_vessel.name != 'PartsRCS':
-            krpctest.new_save()
-            krpctest.launch_vessel_from_vab('PartsRCS')
-            krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        if cls.connect().space_center.active_vessel.name != 'PartsRCS':
+            cls.launch_vessel_from_vab('PartsRCS')
+            cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
     def test_active_and_enabled(self):
         rcs = self.get_rcs('RV-105 RCS Thruster Block')
         self.control.rcs = True
         rcs.enabled = True
-        time.sleep(0.1)
+        self.wait()
         self.assertTrue(self.control.rcs)
         self.assertTrue(rcs.enabled)
         self.assertFalse(rcs.part.shielded)
         self.assertTrue(rcs.active)
         rcs.enabled = False
-        time.sleep(0.1)
+        self.wait()
         self.assertFalse(rcs.enabled)
         self.assertFalse(rcs.active)
         rcs.enabled = True
-        time.sleep(0.1)
+        self.wait()
         self.assertTrue(rcs.enabled)
         self.assertTrue(rcs.active)
         self.control.rcs = False
-        time.sleep(0.1)
+        self.wait()
         self.assertFalse(rcs.active)
 
     def test_enabled_properties(self):
@@ -127,14 +121,14 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
             for prop2 in props:
                 self.assertTrue(getattr(rcs, prop2))
             setattr(rcs, prop, False)
-            time.sleep(0.1)
+            self.wait()
             for prop2 in props:
                 if prop2 == prop:
                     self.assertFalse(getattr(rcs, prop2))
                 else:
                     self.assertTrue(getattr(rcs, prop2))
             setattr(rcs, prop, True)
-            time.sleep(0.1)
+            self.wait()
             for prop2 in props:
                 self.assertTrue(getattr(rcs, prop2))
 
@@ -152,11 +146,10 @@ class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('PartsRCS')
-        krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        cls.launch_vessel_from_vab('PartsRCS')
+        cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
         cls.add_rcs_data(
@@ -172,20 +165,15 @@ class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
             {'max_thrust': 6503, 'isp': 140.9, 'torque': (7400, 320, 7570)}
         )
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
-
 class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
 
     @classmethod
     def setUpClass(cls):
-        krpctest.new_save()
-        krpctest.launch_vessel_from_vab('PartsRCS')
-        krpctest.remove_other_vessels()
-        krpctest.set_circular_orbit('Kerbin', 250000)
-        cls.conn = krpctest.connect(cls)
-        cls.vessel = cls.conn.space_center.active_vessel
+        cls.new_save()
+        cls.launch_vessel_from_vab('PartsRCS')
+        cls.remove_other_vessels()
+        cls.set_circular_orbit('Kerbin', 250000)
+        cls.vessel = cls.connect().space_center.active_vessel
         cls.control = cls.vessel.control
         cls.parts = cls.vessel.parts
         cls.add_rcs_data(
@@ -200,10 +188,6 @@ class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
             'Vernor Engine',
             {'max_thrust': 12000, 'isp': 260, 'torque': (6900, 1, 6900)}
         )
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
 
 if __name__ == '__main__':
     unittest.main()
