@@ -14,9 +14,6 @@ class TestAutoPilot(krpctest.TestCase):
         cls.ap = cls.vessel.auto_pilot
         cls.ap.sas = False
         cls.sas_mode = cls.connect().space_center.SASMode
-        cls.ap.rotation_speed_multiplier = 2
-        cls.ap.roll_speed_multiplier = 2
-        cls.ap.set_pid_parameters(3, 0, 0)
 
     def setUp(self):
         self.connect().testing_tools.clear_rotation()
@@ -31,7 +28,8 @@ class TestAutoPilot(krpctest.TestCase):
 
     def set_rotation(self, pitch, heading, roll=float('nan')):
         self.ap.reference_frame = self.vessel.surface_reference_frame
-        self.ap.target_pitch_and_heading(pitch, heading)
+        self.ap.target_pitch = pitch
+        self.ap.target_heading = heading
         self.ap.target_roll = roll
 
     def check_rotation(self, pitch, heading, roll=None):
@@ -146,33 +144,41 @@ class TestAutoPilot(krpctest.TestCase):
         flight = self.vessel.flight()
 
         self.ap.disengage()
-        self.assertAlmostEqual(0, self.ap.error)
+        self.assertDegreesAlmostEqual(0, self.ap.error)
 
-        self.set_direction(flight.prograde, roll=27)
+        self.set_direction(flight.prograde, roll=0)
         self.wait_for_autopilot()
         self.ap.sas = True
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = False
 
+        self.ap.target_roll = float('nan')
         self.ap.engage()
 
         self.ap.target_direction = flight.prograde
-        self.assertAlmostEqual(0, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(0, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.retrograde
-        self.assertAlmostEqual(180, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(180, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.normal
-        self.assertAlmostEqual(90, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.anti_normal
-        self.assertAlmostEqual(90, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.radial
-        self.assertAlmostEqual(90, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.anti_radial
-        self.assertAlmostEqual(90, self.ap.error, delta=1)
+        self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
+
+        self.ap.target_direction = flight.anti_radial
+        self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
+
+        self.ap.target_direction = flight.prograde
+        self.ap.target_roll = 30
+        self.assertDegreesAlmostEqual(30, self.ap.error, delta=1)
 
         self.ap.disengage()
 
@@ -255,9 +261,6 @@ class TestAutoPilotSAS(krpctest.TestCase):
         cls.ap = cls.vessel.auto_pilot
         cls.sas_mode = cls.connect().space_center.SASMode
         cls.speed_mode = cls.connect().space_center.SpeedMode
-        cls.ap.rotation_speed_multiplier = 2
-        cls.ap.roll_speed_multiplier = 2
-        cls.ap.set_pid_parameters(3, 0, 0)
 
     def setUp(self):
         self.connect().testing_tools.clear_rotation()
