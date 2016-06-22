@@ -152,6 +152,8 @@ def _assembly_info_impl(ctx):
     content = ['using System.Reflection;']
     if len(ctx.attr.internals_visible_to) > 0:
         content.append('using System.Runtime.CompilerServices;')
+    for x in ctx.attr.using:
+        content.append('using %s;' % x)
     content.append('[assembly: AssemblyTitle ("%s")]' % ctx.attr.title)
     content.append('[assembly: AssemblyDescription ("%s")]' % ctx.attr.description)
     content.append('[assembly: AssemblyCopyright ("%s")]' % ctx.attr.copyright)
@@ -161,7 +163,7 @@ def _assembly_info_impl(ctx):
         content.append('[assembly: InternalsVisibleTo ("%s")]' % pkg)
 
     for k,v in ctx.attr.custom.items():
-        content.append('[assembly: Assembly%s ("%s")]' % (k,v))
+        content.append('[assembly: %s (%s)]' % (k,v))
 
     ctx.file_action(
         output = ctx.outputs.out,
@@ -217,6 +219,7 @@ csharp_assembly_info = rule(
         'description': attr.string(),
         'copyright': attr.string(mandatory=True),
         'version': attr.string(mandatory=True),
+        'using': attr.string_list(),
         'custom': attr.string_dict(),
         'internals_visible_to': attr.string_list()
     },
