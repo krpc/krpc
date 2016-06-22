@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace KRPC.Utils
@@ -88,12 +89,14 @@ namespace KRPC.Utils
             return documentation [path];
         }
 
+        [SuppressMessage ("Gendarme.Rules.Portability", "DoNotHardcodePathsRule")]
         internal static string GetDocumentationName (MemberInfo member)
         {
             char prefix;
             var memberType = member as Type;
             string name = memberType != null ? memberType.FullName : member.DeclaringType.FullName + "." + member.Name;
             name = name.Replace ('+', '.');
+            name = Regex.Replace (name, @"\[\[.+\]\]", String.Empty);
 
             switch (member.MemberType) {
 
