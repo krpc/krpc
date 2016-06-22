@@ -1,16 +1,12 @@
-#ifndef HEADER_KRPC_PLATFORM
-#define HEADER_KRPC_PLATFORM
+#pragma once
 
 #include <string>
-#include <cstdio>
 
 namespace krpc {
-  namespace platform {
+namespace platform {
 
-    std::string hexlify(const std::string& data);
-    std::string unhexlify(const std::string& data);
+std::string hexlify(const std::string& data);
+std::string unhexlify(const std::string& data);
 
-  }
-}
-
-#endif
+}  // namespace platform
+}  // namespace krpc

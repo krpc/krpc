@@ -1,17 +1,14 @@
-#ifndef HEADER_KRPC_SERVICE
-#define HEADER_KRPC_SERVICE
+#pragma once
 
 #include "krpc/client.hpp"
 
 namespace krpc {
 
-  class Service {
-  protected:
-    Client* _client;
-  public:
-    Service(Client* client);
-  };
+class Service {
+ public:
+  explicit Service(Client * client) : _client(client) {}
+ protected:
+  Client * _client;
+};
 
-}
-
-#endif
+}  // namespace krpc

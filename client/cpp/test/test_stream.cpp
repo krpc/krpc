@@ -1,10 +1,14 @@
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
+#include <string>
+
 #include <krpc/platform.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/stream.hpp>
-#include "services/test_service.hpp"
+
 #include "server_test.hpp"
+#include "services/test_service.hpp"
 
 class test_stream: public server_test {
 };
