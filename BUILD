@@ -175,6 +175,7 @@ test_suite(
         '//tools/krpctest:test',
         '//tools/krpctools:test',
         '//tools/ServiceDefinitions:test',
+        '//tools/TestingTools:test',
         '//tools/TestServer:test',
         '//doc:test'
     ]

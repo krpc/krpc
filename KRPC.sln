@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefinitions", "tools
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "tools\TestServer\src\TestServer.csproj", "{A75677CB-9D81-4C3F-8B53-C99110B4F124}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingTools", "tools\TestingTools\TestingTools.csproj", "{D0F002FB-E12F-4EE3-9A95-AC3AC08086A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingTools", "tools\TestingTools\src\TestingTools.csproj", "{D0F002FB-E12F-4EE3-9A95-AC3AC08086A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Client", "client\csharp\src\KRPC.Client.csproj", "{5D390973-8F07-4B28-827F-FB3A1E739FD7}"
 EndProject

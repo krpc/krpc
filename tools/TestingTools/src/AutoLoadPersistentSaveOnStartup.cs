@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace TestingTools
@@ -6,16 +7,20 @@ namespace TestingTools
     /// Addon that loads a save called "default" and switches to the first active vessel.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.MainMenu, false)]
-    public class AutoLoadPersistentSaveOnStartup : MonoBehaviour
+    sealed public class AutoLoadPersistentSaveOnStartup : MonoBehaviour
     {
-        static bool hasRun = false;
+        /// <summary>
+        /// Whether the addon has been run.
+        /// </summary>
+        public static bool HasRun { get; private set; }
 
         /// <summary>
         /// Start the addon.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Start ()
         {
-            if (!hasRun) {
+            if (!HasRun) {
                 HighLogic.SaveFolder = "default";
                 var game = GamePersistence.LoadGame ("persistent", HighLogic.SaveFolder, true, false);
                 if (game != null && game.flightState != null && game.compatible) {
@@ -31,7 +36,7 @@ namespace TestingTools
                     }
                     // Load the vessel
                     FlightDriver.StartAndFocusVessel (game, vesselIdx);
-                    hasRun = true;
+                    HasRun = true;
                 }
             }
         }

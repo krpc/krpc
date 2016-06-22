@@ -1,10 +1,11 @@
 #pragma warning disable 0618
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using UnityEngine;
-using KRPC.Service.Attributes;
 using KRPC.Continuations;
+using KRPC.Service.Attributes;
+using UnityEngine;
 
 namespace TestingTools
 {
@@ -61,7 +62,7 @@ namespace TestingTools
         {
             var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
             var semiMajorAxis = celestialBody.Radius + altitude;
-            OrbitTools.OrbitDriver.orbit.SetOrbit (OrbitTools.CreateOrbit (celestialBody, semiMajorAxis, 0, 0, 0, 0, 0, 0));
+            OrbitTools.OrbitDriver.orbit.Set (OrbitTools.CreateOrbit (celestialBody, semiMajorAxis, 0, 0, 0, 0, 0, 0));
             throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
         }
 
@@ -69,10 +70,11 @@ namespace TestingTools
         /// Set the orbit of the active vessel.
         /// </summary>
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public static void SetOrbit (string body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
         {
             var celestialBody = FlightGlobals.Bodies.First (b => b.bodyName == body);
-            OrbitTools.OrbitDriver.orbit.SetOrbit (OrbitTools.CreateOrbit (celestialBody, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch));
+            OrbitTools.OrbitDriver.orbit.Set (OrbitTools.CreateOrbit (celestialBody, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch));
             throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
         }
 

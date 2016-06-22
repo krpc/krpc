@@ -1,6 +1,7 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace TestingTools
 {
@@ -11,7 +12,8 @@ namespace TestingTools
      */
     static class OrbitTools
     {
-        internal static Orbit CreateOrbit (CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
+        public static Orbit CreateOrbit (CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
         {
             if (Math.Sign (eccentricity - 1) == Math.Sign (semiMajorAxis))
                 semiMajorAxis = -semiMajorAxis;
@@ -24,15 +26,15 @@ namespace TestingTools
             return new Orbit (inclination, eccentricity, semiMajorAxis, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch, body);
         }
 
-        internal static OrbitDriver OrbitDriver {
+        public static OrbitDriver OrbitDriver {
             get {
                 if (FlightGlobals.fetch == null || FlightGlobals.fetch.activeVessel == null)
-                    throw new ArgumentException ("No active vessel");
+                    throw new InvalidOperationException ("No active vessel");
                 return FlightGlobals.fetch.activeVessel.orbitDriver;
             }
         }
 
-        internal static void SetOrbit (this Orbit orbit, Orbit newOrbit)
+        public static void Set (this Orbit orbit, Orbit newOrbit)
         {
             var vessel = FlightGlobals.fetch == null ? null : FlightGlobals.Vessels.FirstOrDefault (v => v.orbitDriver != null && v.orbit == orbit);
             var body = FlightGlobals.fetch == null ? null : FlightGlobals.Bodies.FirstOrDefault (v => v.orbitDriver != null && v.orbit == orbit);
@@ -41,7 +43,7 @@ namespace TestingTools
             else if (body != null)
                 WarpPlanet (body, newOrbit);
             else
-                HardsetOrbit (orbit, newOrbit);
+                HardSet (orbit, newOrbit);
         }
 
         static void WarpShip (Vessel vessel, Orbit newOrbit)
@@ -67,7 +69,7 @@ namespace TestingTools
             foreach (var v in (FlightGlobals.fetch == null ? (IEnumerable<Vessel>)new[] { vessel } : FlightGlobals.Vessels).Where(v => !v.packed))
                 v.GoOnRails ();
 
-            HardsetOrbit (vessel.orbit, newOrbit);
+            HardSet (vessel.orbit, newOrbit);
 
             vessel.orbitDriver.pos = vessel.orbit.pos.xzy;
             vessel.orbitDriver.vel = vessel.orbit.vel;
@@ -76,7 +78,7 @@ namespace TestingTools
         static void WarpPlanet (CelestialBody body, Orbit newOrbit)
         {
             var oldBody = body.referenceBody;
-            HardsetOrbit (body.orbit, newOrbit);
+            HardSet (body.orbit, newOrbit);
             if (oldBody != newOrbit.referenceBody) {
                 oldBody.orbitingBodies.Remove (body);
                 newOrbit.referenceBody.orbitingBodies.Add (body);
@@ -84,7 +86,7 @@ namespace TestingTools
             body.CBUpdate ();
         }
 
-        static void HardsetOrbit (Orbit orbit, Orbit newOrbit)
+        static void HardSet (Orbit orbit, Orbit newOrbit)
         {
             orbit.inclination = newOrbit.inclination;
             orbit.eccentricity = newOrbit.eccentricity;
@@ -99,4 +101,3 @@ namespace TestingTools
         }
     }
 }
-
