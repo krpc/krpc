@@ -128,7 +128,11 @@ def _nunit_impl(ctx):
     for dep in runfiles:
         sub_commands.append('ln -f -s %s %s' % (dep.short_path, dep.basename))
     sub_commands.extend([
-        '/usr/bin/mono %s %s "$@"' % (ctx.file._nunit_exe.basename, lib_output.basename)
+        '/usr/bin/mono %s %s "$@" 2>stderr.txt' % (ctx.file._nunit_exe.basename, lib_output.basename),
+        'RESULT=$?',
+        'cat stderr.txt',
+        '(if grep "FATAL UNHANDLED EXCEPTION" stderr.txt; then exit 1; fi)',
+        'exit $RESULT'
     ])
     ctx.file_action(
         ctx.outputs.executable,
