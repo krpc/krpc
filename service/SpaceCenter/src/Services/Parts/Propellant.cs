@@ -92,7 +92,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The total vehicle capacity for the underyling propellant resource, restricted by resource flow rules
+        /// The total vehicle capacity for the underlying propellant resource, restricted by resource flow rules
         /// </summary>
         [KRPCProperty]
         public double TotalResourceCapacity {
@@ -101,7 +101,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// If this propellant should be ignored when calculating required mass flow given Isp
+        /// If this propellant should be ignored when calculating required mass flow given specific impulse
         /// </summary>
         [KRPCProperty]
         public bool IgnoreForIsp {
