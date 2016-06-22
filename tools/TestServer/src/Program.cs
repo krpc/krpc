@@ -1,29 +1,30 @@
+using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Reflection;
 using KRPC;
 using KRPC.Server;
 using KRPC.Service;
 using KRPC.Utils;
 using NDesk.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Diagnostics;
-using System.Net;
-using System.Reflection;
 
 namespace TestServer
 {
-    class MainClass
+    [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
+    static class MainClass
     {
         static void Help (OptionSet options)
         {
             Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--rpc_port=VALUE] [--stream_port=VALUE]");
             Console.WriteLine ("                      [--debug] [--quiet] [--server-debug]");
-            Console.WriteLine ("");
+            Console.WriteLine ();
             Console.WriteLine ("A kRPC test server for the client library unit tests");
-            Console.WriteLine ("");
+            Console.WriteLine ();
             options.WriteOptionDescriptions (Console.Out);
         }
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static void Main (string[] args)
         {
             bool showHelp = false;
@@ -36,7 +37,7 @@ namespace TestServer
             ushort rpcPort = 0;
             ushort streamPort = 0;
 
-            var options = new OptionSet () { {
+            var options = new OptionSet { {
                     "h|help", "show this help message and exit",
                     v => showHelp = v != null
                 }, {

@@ -1,10 +1,12 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using KRPC.Service.Attributes;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using KRPC.Continuations;
+using KRPC.Service.Attributes;
+using KRPC.Utils;
 
-namespace TestServer.Services
+namespace TestServer
 {
     /// <summary>
     /// Service documentation string.
@@ -55,7 +57,7 @@ namespace TestServer.Services
         public static string BytesToHexString (byte[] value)
         {
 
-            return BitConverter.ToString (value).Replace ("-", "").ToLower ();
+            return BitConverter.ToString (value).Replace ("-", String.Empty).ToLower ();
         }
 
         [KRPCProcedure]
@@ -76,6 +78,7 @@ namespace TestServer.Services
         static string stringPropertyPrivateSet = "foo";
 
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
         public static string StringPropertyPrivateSet {
             get { return stringPropertyPrivateSet; }
             private set { stringPropertyPrivateSet = value; }
@@ -100,13 +103,25 @@ namespace TestServer.Services
         /// Class documentation string.
         /// </summary>
         [KRPCClass]
-        public class TestClass : KRPC.Utils.Equatable<TestClass>
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [SuppressMessage ("Gendarme.Rules.Design", "ImplementEqualsAndGetHashCodeInPairRule")]
+        public sealed class TestClass : Equatable<TestClass>
         {
-            readonly string value;
+            readonly string instanceValue;
 
             public TestClass (string value)
             {
-                this.value = value;
+                instanceValue = value;
+            }
+
+            public sealed override bool Equals (TestClass other)
+            {
+                return !ReferenceEquals (other, null) && instanceValue == other.instanceValue;
+            }
+
+            public sealed override int GetHashCode ()
+            {
+                return instanceValue.GetHashCode ();
             }
 
             /// <summary>
@@ -115,19 +130,19 @@ namespace TestServer.Services
             [KRPCMethod]
             public string GetValue ()
             {
-                return "value=" + value;
+                return "value=" + instanceValue;
             }
 
             [KRPCMethod]
             public string FloatToString (float x)
             {
-                return value + x;
+                return instanceValue + x;
             }
 
             [KRPCMethod]
             public string ObjectToString (TestClass other)
             {
-                return value + (other == null ? "null" : other.value);
+                return instanceValue + (ReferenceEquals (other, null) ? "null" : other.instanceValue);
             }
 
             /// <summary>
@@ -140,6 +155,7 @@ namespace TestServer.Services
             public TestClass ObjectProperty { get; set; }
 
             [KRPCMethod]
+            [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
             public string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
             {
                 return x + y + z + anotherParameter;
@@ -150,16 +166,6 @@ namespace TestServer.Services
             {
                 return "jeb" + a + b;
             }
-
-            public override bool Equals (TestClass obj)
-            {
-                return value == obj.value;
-            }
-
-            public override int GetHashCode ()
-            {
-                return value.GetHashCode ();
-            }
         }
 
         [KRPCProcedure]
@@ -169,12 +175,15 @@ namespace TestServer.Services
         }
 
         [KRPCEnum]
+        [Serializable]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
         public enum TestEnum
         {
             ValueA,
             ValueB,
-            ValueC}
-        ;
+            ValueC
+        }
 
         [KRPCProcedure]
         public static TestEnum EnumReturn ()
@@ -205,12 +214,16 @@ namespace TestServer.Services
         [KRPCProcedure]
         public static IList<int> IncrementList (IList<int> l)
         {
+            if (l == null)
+                throw new ArgumentNullException ("l");
             return l.Select (x => x + 1).ToList ();
         }
 
         [KRPCProcedure]
         public static IDictionary<string,int> IncrementDictionary (IDictionary<string,int> d)
         {
+            if (d == null)
+                throw new ArgumentNullException ("d");
             var result = new Dictionary<string,int> ();
             foreach (var entry in d)
                 result [entry.Key] = entry.Value + 1;
@@ -218,8 +231,11 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
         public static HashSet<int> IncrementSet (HashSet<int> h)
         {
+            if (h == null)
+                throw new ArgumentNullException ("h");
             var result = new HashSet<int> ();
             foreach (var item in h)
                 result.Add (item + 1);
@@ -233,8 +249,11 @@ namespace TestServer.Services
         }
 
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public static IDictionary<string,IList<int>> IncrementNestedCollection (IDictionary<string,IList<int>> d)
         {
+            if (d == null)
+                throw new ArgumentNullException ("d");
             IDictionary<string,IList<int>> result = new Dictionary<string,IList<int>> ();
             foreach (var entry in d)
                 result [entry.Key] = entry.Value.Select (x => x + 1).ToList ();
@@ -244,6 +263,8 @@ namespace TestServer.Services
         [KRPCProcedure]
         public static IList<TestClass> AddToObjectList (IList<TestClass> l, string value)
         {
+            if (l == null)
+                throw new ArgumentNullException ("l");
             l.Add (new TestClass (value));
             return l;
         }

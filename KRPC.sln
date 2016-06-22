@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.RemoteTech", "service\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefinitions", "tools\ServiceDefinitions\ServiceDefinitions.csproj", "{3F97909B-0ABE-49F2-8CA0-100F4286E03F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "tools\TestServer\TestServer.csproj", "{A75677CB-9D81-4C3F-8B53-C99110B4F124}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "tools\TestServer\src\TestServer.csproj", "{A75677CB-9D81-4C3F-8B53-C99110B4F124}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingTools", "tools\TestingTools\TestingTools.csproj", "{D0F002FB-E12F-4EE3-9A95-AC3AC08086A9}"
 EndProject

@@ -31,7 +31,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\server\src\KRPC.csproj">
+    <ProjectReference Include="..\..\..\server\src\KRPC.csproj">
       <Project>{3707639F-5EA3-461B-B939-587E51A25CCA}</Project>
       <Name>KRPC</Name>
     </ProjectReference>
@@ -39,29 +39,29 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Google.Protobuf">
-      <HintPath>..\..\bazel-krpc\external\csharp_protobuf_net35\file\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\..\bazel-krpc\external\csharp_protobuf_net35\file\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
-      <HintPath>..\..\bazel-krpc\external\csharp_options\lib\NDesk.Options.dll</HintPath>
+      <HintPath>..\..\..\bazel-krpc\external\csharp_options\lib\NDesk.Options.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO">
-      <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
+      <HintPath>..\..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime">
-      <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.Runtime.dll</HintPath>
+      <HintPath>..\..\..\bazel-krpc\lib\mono-4.5\Facades\System.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
-      <HintPath>..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
+      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\mscorlib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\bazel-bin\tools\TestServer\AssemblyInfo.cs">
+    <Compile Include="..\..\..\bazel-bin\tools\TestServer\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Services\TestService.cs" />
+    <Compile Include="TestService.cs" />
   </ItemGroup>
 </Project>
