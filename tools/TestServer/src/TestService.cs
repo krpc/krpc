@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Continuations;
+using KRPC.Server;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -269,13 +271,16 @@ namespace TestServer
             return l;
         }
 
-        static int count = -1;
+        static Dictionary<Guid, int> counters = new Dictionary<Guid, int> ();
 
         [KRPCProcedure]
         public static int Counter ()
         {
-            count++;
-            return count;
+            var client = CallContext.Client.Guid;
+            if (!counters.ContainsKey (client))
+                counters [client] = 0;
+            counters [client]++;
+            return counters [client];
         }
 
         [KRPCProcedure]

@@ -73,9 +73,14 @@ namespace KRPC.Client.Test
         [Test]
         public void Counter ()
         {
-            var count = -1;
+            var count = 0;
             var x = Connection.AddStream (() => Connection.TestService ().Counter ());
             for (int i = 0; i < 5; i++) {
+                int repeat = 0;
+                while (count == x.Get() && repeat < 1000) {
+                    Wait ();
+                    repeat++;
+                }
                 Assert.IsTrue (count < x.Get ());
                 count = x.Get ();
                 Wait ();
