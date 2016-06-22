@@ -65,7 +65,7 @@ class TestVessel(krpctest.TestCase):
             self.vessel.inertia_tensor, delta=10)
 
     def test_available_torque(self):
-        self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_torque, delta=1)
+        self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_torque, delta=5)
 
     def test_available_reaction_wheel_torque(self):
         self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_reaction_wheel_torque)
@@ -79,7 +79,7 @@ class TestVessel(krpctest.TestCase):
         self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque)
         self.vessel.control.rcs = True
         self.wait()
-        self.assertAlmostEqual((6005, 5575, 6005), self.vessel.available_rcs_torque, delta=1)
+        self.assertAlmostEqual((6005, 5575, 6005), self.vessel.available_rcs_torque, delta=5)
         self.vessel.control.rcs = False
         self.wait()
         self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque)
