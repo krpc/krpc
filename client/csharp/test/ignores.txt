@@ -1,0 +1,33 @@
+R: Gendarme.Rules.Correctness.CheckParametersNullityInVisibleMethodsRule
+A: *
+
+R: Gendarme.Rules.Correctness.MethodCanBeMadeStaticRule
+A: *
+
+R: Gendarme.Rules.Design.AvoidSmallNamespaceRule
+N: KRPC.Client.Services.TestService
+
+R: Gendarme.Rules.Globalization.PreferIFormatProviderOverrideRule
+A: *
+
+R: Gendarme.Rules.Naming.UseCorrectCasingRule
+N: KRPC.Client.Test
+
+R: Gendarme.Rules.Performance.AvoidConcatenatingCharsRule
+A: *
+
+R: Gendarme.Rules.Smells.AvoidCodeDuplicatedInSiblingClassesRule
+A: *
+
+R: Gendarme.Rules.Smells.AvoidCodeDuplicatedInSameClassRule
+A: *
+
+# Services
+R: Gendarme.Rules.Design.AvoidPropertiesWithoutGetAccessorRule
+N: KRPC.Client.Services.TestService
+R: Gendarme.Rules.Design.Generic.DoNotExposeNestedGenericSignaturesRule
+N: KRPC.Client.Services.TestService
+R: Gendarme.Rules.Naming.UseCorrectCasingRule
+N: KRPC.Client.Services.TestService
+R: Gendarme.Rules.Naming.UseCorrectSuffixRule
+N: KRPC.Client.Services.TestService

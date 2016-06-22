@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;
 
@@ -9,12 +10,13 @@ namespace KRPC.Client.Test
     public class PerformanceTest : ServerTestCase
     {
         [Test]
+        [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
         public void Performance ()
         {
-            int n = 100;
-            Stopwatch stopWatch = new Stopwatch ();
+            const int n = 100;
+            var stopWatch = new Stopwatch ();
             stopWatch.Start ();
-            var testService = connection.TestService ();
+            var testService = Connection.TestService ();
             for (int i = 0; i < n; i++)
                 testService.FloatToString (3.14159f);
             stopWatch.Stop ();

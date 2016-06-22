@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Client;
 using KRPC.Schema.KRPC;
 
@@ -7,7 +8,8 @@ namespace KRPC.Client
     /// <summary>
     /// Object representing a stream.
     /// </summary>
-    public class Stream<ReturnType>
+    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
+    public class Stream<TReturnType>
     {
         readonly StreamManager streamManager;
 
@@ -16,15 +18,17 @@ namespace KRPC.Client
         internal Stream (Connection connection, Request request)
         {
             streamManager = connection.StreamManager;
-            Id = streamManager.AddStream (request, typeof(ReturnType));
+            Id = streamManager.AddStream (request, typeof(TReturnType));
         }
 
         /// <summary>
         /// Get the most recent value of the stream.
         /// </summary>
-        public ReturnType Get ()
+        //FIXME: Change this to a property. This breaks compatibility.
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
+        public TReturnType Get ()
         {
-            return (ReturnType)streamManager.GetValue (Id);
+            return (TReturnType)streamManager.GetValue (Id);
         }
 
         /// <summary>
