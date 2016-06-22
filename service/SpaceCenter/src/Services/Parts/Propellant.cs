@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -37,16 +36,23 @@ namespace KRPC.SpaceCenter.Services.Parts
             return resourceId.GetHashCode ();
         }
 
-        internal global::Part InternalPart {
+        /// <summary>
+        /// The KSP part.
+        /// </summary>
+        public global::Part InternalPart {
             get { return FlightGlobals.FindPartByID (partId); }
         }
 
-        internal global::Propellant InternalPropellant {
-            get { 
+        /// <summary>
+        /// The KSP propellant
+        /// </summary>
+        public global::Propellant InternalPropellant {
+            get {
                 var engineModule = InternalPart.GetComponent<ModuleEngines> ();
-                if (engineModule == null)
-                    throw new InvalidOperationException ("Part is not an engine");
-                return engineModule.propellants.Find (propellant => propellant.id == resourceId);
+                if (engineModule != null)
+                    return engineModule.propellants.Find (p => p.id == resourceId);
+                else
+                    return null;
             }
         }
 
@@ -59,79 +65,88 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The current amount of the propellant.
+        /// The current amount of propellant
         /// </summary>
         [KRPCProperty]
         public double CurrentAmount {
-            get { return InternalPropellant.currentAmount; }
+            get
+            { return InternalPropellant.currentAmount; }
         }
 
         /// <summary>
-        /// The current required amount of propellant.
+        /// The required amount of propellant
         /// </summary>
         [KRPCProperty]
         public double CurrentRequirement {
-            get { return InternalPropellant.currentRequirement; }
+            get
+            { return InternalPropellant.currentRequirement; }
         }
 
         /// <summary>
-        /// The total propellant resource available.
+        /// The total amount of the underlying resource currently reachable given resource flow rules
         /// </summary>
         [KRPCProperty]
         public double TotalResourceAvailable {
-            get { return InternalPropellant.totalResourceAvailable; }
+            get
+            { return InternalPropellant.totalResourceAvailable; }
         }
 
         /// <summary>
-        /// The total propellant resource capacity.
+        /// The total vehicle capacity for the underyling propellant resource, restricted by resource flow rules
         /// </summary>
         [KRPCProperty]
         public double TotalResourceCapacity {
-            get { return InternalPropellant.totalResourceCapacity; }
+            get
+            { return InternalPropellant.totalResourceCapacity; }
         }
 
         /// <summary>
-        /// Whether the propellant should be ignored for specific impulse calculations.
+        /// If this propellant should be ignored when calculating required mass flow given Isp
         /// </summary>
         [KRPCProperty]
-        public bool IgnoreForISP {
-            get { return InternalPropellant.ignoreForIsp; }
+        public bool IgnoreForIsp {
+            get
+            { return InternalPropellant.ignoreForIsp; }
         }
 
         /// <summary>
-        /// Whether the propellant should be ignored for thrust curve calculations.
+        /// If this propellant should be ignored for thrust curve calculations
         /// </summary>
         [KRPCProperty]
         public bool IgnoreForThrustCurve {
-            get { return InternalPropellant.ignoreForThrustCurve; }
+            get
+            { return InternalPropellant.ignoreForThrustCurve; }
         }
 
         /// <summary>
-        /// Whether this propellant has a stack gauge.
+        /// If this propellant has a stack gauge or not
         /// </summary>
         [KRPCProperty]
         public bool DrawStackGauge {
-            get { return InternalPropellant.drawStackGauge; }
+            get
+            { return InternalPropellant.drawStackGauge; }
         }
 
         /// <summary>
-        /// Whether the propellant is deprived.
+        /// If this propellant is deprived
         /// </summary>
         [KRPCProperty]
         public bool IsDeprived {
-            get { return InternalPropellant.isDeprived; }
+            get
+            { return InternalPropellant.isDeprived; }
         }
 
         /// <summary>
-        /// The propellant ratio.
+        /// The propellant ratio
         /// </summary>
         [KRPCProperty]
         public float Ratio {
-            get { return InternalPropellant.ratio; }
+            get
+            { return InternalPropellant.ratio; }
         }
 
         /// <summary>
-        /// The connected resources.
+        /// The reachable resources connected to this propellant
         /// </summary>
         [KRPCProperty]
         public IList<Resource> ConnectedResources {
