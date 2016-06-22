@@ -54,7 +54,7 @@ to fit your needs.
   quickly. However, decreasing the value too much could result in overshoot.
 
 * In order to avoid overshoot, the stopping time should be smaller than the
-  deceleration time. This gives the autopilot some 'spare' accelerlation, to
+  deceleration time. This gives the autopilot some 'spare' acceleration, to
   adjust for errors in the vessels rotation, for example due to changing
   aerodynamic forces.
 
