@@ -153,7 +153,8 @@ csharp_nunit_test(
     define = ['CODE_ANALYSIS'],
     nowarn = ['1591', '1573'],
     size = 'small',
-    tags = ['requires-network']
+    tags = ['requires-network'],
+    visibility = ['//:__pkg__']
 )
 
 clientgen_csharp(

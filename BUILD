@@ -199,7 +199,7 @@ filegroup(
     name = 'csproj',
     srcs = [
         '//server',
-        '//server:test',
+        '//server:KRPC.Test',
         '//service/SpaceCenter',
         '//service/Drawing',
         '//service/InfernalRobotics',
@@ -207,7 +207,7 @@ filegroup(
         '//service/RemoteTech',
         '//service/UI',
         '//client/csharp',
-        '//client/csharp:test',
+        '//client/csharp:KRPC.Client.Test',
         '//tools/ServiceDefinitions',
         '//tools/TestingTools',
         '//tools/TestServer'

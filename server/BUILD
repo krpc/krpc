@@ -119,7 +119,8 @@ csharp_nunit_test(
     optimize = False,
     define = ['CODE_ANALYSIS'],
     nowarn = ['1591'],
-    size = 'small'
+    size = 'small',
+    visibility = ['//:__pkg__']
 )
 
 csharp_library(
