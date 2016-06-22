@@ -630,7 +630,7 @@ SpaceCenter.AutoPilot.SAS
 SpaceCenter.AutoPilot.SASMode
 SpaceCenter.AutoPilot.RollThreshold
 SpaceCenter.AutoPilot.StoppingTime
-SpaceCenter.AutoPilot.AccelerationFactor
+SpaceCenter.AutoPilot.DecelerationTime
 SpaceCenter.AutoPilot.AttenuationAngle
 SpaceCenter.AutoPilot.AutoTune
 SpaceCenter.AutoPilot.TimeToPeak
