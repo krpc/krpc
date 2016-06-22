@@ -95,7 +95,7 @@ namespace KRPC
         }
 
         public Configuration (string filePath) :
-            base (filePath)
+            base (filePath, "KRPCConfiguration")
         {
             AfterLoad ();
         }

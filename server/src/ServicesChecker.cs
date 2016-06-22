@@ -24,8 +24,6 @@ namespace KRPC
         /// </summary>
         public void Start ()
         {
-            var config = new Configuration ("settings.cfg");
-            config.Load ();
             OK = true;
             try {
                 var services = Scanner.GetServices ();

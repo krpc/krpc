@@ -8,17 +8,18 @@ namespace KRPC.Utils
     abstract class ConfigurationStorage : ConfigurationStorageNode
     {
         readonly string path;
+        readonly string nodeName;
 
         /// <summary>
         /// Create a configuration object with default values. Call Load() to load from the file.
         /// The file path is relative to the directory containing this assembly.
         /// </summary>
-        protected ConfigurationStorage (string filePath)
+        protected ConfigurationStorage (string filePath, string name)
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly ().Location;
             var dir = Path.GetDirectoryName (assembly).Replace ('\\', '/');
             path = dir + "/" + filePath;
-            Logger.WriteLine ("Configuration file path " + path);
+            nodeName = name;
         }
 
         ConfigurationStorage ()
@@ -32,9 +33,8 @@ namespace KRPC.Utils
         {
             if (FileExists) {
                 ConfigNode node = ConfigNode.Load (path);
-                var name = GetType ().Name;
-                if (node != null && node.HasNode (name))
-                    ConfigNode.LoadObjectFromConfig (this, node.GetNode (name));
+                if (node != null && node.HasNode (nodeName))
+                    ConfigNode.LoadObjectFromConfig (this, node.GetNode (nodeName));
             }
         }
 
@@ -44,7 +44,7 @@ namespace KRPC.Utils
         public void Save ()
         {
             ConfigNode node = AsConfigNode;
-            var clsNode = new ConfigNode (GetType ().Name);
+            var clsNode = new ConfigNode (nodeName);
             clsNode.AddNode (node);
             clsNode.Save (path);
         }
@@ -55,7 +55,7 @@ namespace KRPC.Utils
 
         ConfigNode AsConfigNode {
             get {
-                var node = new ConfigNode (GetType ().Name);
+                var node = new ConfigNode (nodeName);
                 return ConfigNode.CreateConfigFromObject (this, node);
             }
         }
