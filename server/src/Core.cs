@@ -18,11 +18,13 @@ namespace KRPC
     sealed class Core
     {
         //TODO: remove servers list, replace with events etc.
-        List<Server.Server> servers = new List<Server.Server> ();
+        List<Server.Server> servers;
+        IDictionary<Guid, IClient<Request, Response>> rpcClients;
+        IDictionary<Guid, IClient<NoMessage, StreamMessage>> streamClients;
         RoundRobinScheduler<IClient<Request,Response>> clientScheduler;
         List<RequestContinuation> continuations;
         IDictionary<IClient<NoMessage,StreamMessage>, IList<StreamRequest>> streamRequests;
-        IDictionary<uint, object> streamResultCache = new Dictionary<uint, object> ();
+        IDictionary<uint, object> streamResultCache;
 
         internal Func<double> GetUniversalTime;
 
@@ -48,24 +50,28 @@ namespace KRPC
 
         internal void RPCClientConnected (IClient<Request,Response> client)
         {
+            rpcClients [client.Guid] = client;
             clientScheduler.Add (client);
             EventHandlerExtensions.Invoke (OnRPCClientConnected, this, new ClientConnectedEventArgs (client));
         }
 
         internal void RPCClientDisconnected (IClient<Request,Response> client)
         {
+            rpcClients.Remove (client.Guid);
             clientScheduler.Remove (client);
             EventHandlerExtensions.Invoke (OnRPCClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
 
         internal void StreamClientConnected (IClient<NoMessage,StreamMessage> client)
         {
+            streamClients [client.Guid] = client;
             streamRequests [client] = new List<StreamRequest> ();
             EventHandlerExtensions.Invoke (OnStreamClientConnected, this, new ClientConnectedEventArgs (client));
         }
 
         internal void StreamClientDisconnected (IClient<NoMessage,StreamMessage> client)
         {
+            streamClients.Remove (client.Guid);
             streamRequests.Remove (client);
             EventHandlerExtensions.Invoke (OnStreamClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
@@ -90,10 +96,13 @@ namespace KRPC
 
         Core ()
         {
-            clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
+            servers = new List<Server.Server> ();
+            rpcClients = new Dictionary<Guid, IClient<Request, Response>> ();
+            streamClients = new Dictionary<Guid, IClient<NoMessage, StreamMessage>> ();
+            clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
             continuations = new List<RequestContinuation> ();
             streamRequests = new Dictionary<IClient<NoMessage,StreamMessage>,IList<StreamRequest>> ();
-
+            streamResultCache = new Dictionary<uint, object> ();
             OneRPCPerUpdate = false;
             MaxTimePerUpdate = 5000;
             AdaptiveRateControl = true;
@@ -430,9 +439,13 @@ namespace KRPC
             if (streamRequests.Count > 0) {
                 foreach (var entry in streamRequests) {
                     var streamClient = entry.Key;
+                    var id = streamClient.Guid;
                     var requests = entry.Value;
                     if (requests.Count == 0)
                         continue;
+                    if (!rpcClients.ContainsKey (id))
+                        continue;
+                    CallContext.Set (rpcClients [id]);
                     var streamMessage = new StreamMessage ();
                     foreach (var request in requests) {
                         // Run the RPC
@@ -472,24 +485,15 @@ namespace KRPC
             TimePerStreamUpdate = (float)streamTimer.ElapsedSeconds ();
         }
 
-        IClient<NoMessage,StreamMessage> GetStreamClient (IClient rpcClient)
-        {
-            // Find stream client corresponding to the RPC client
-            IClient<NoMessage,StreamMessage> streamClient;
-            foreach (var server in servers) {
-                streamClient = server.StreamServer.Clients.SingleOrDefault (c => c.Guid == rpcClient.Guid);
-                if (streamClient != null)
-                    return streamClient;
-            }
-            throw new ArgumentException ("Stream client does not exist");
-        }
-
         /// <summary>
         /// Add a stream to the server
         /// </summary>
         internal uint AddStream (IClient rpcClient, Request request)
         {
-            var streamClient = GetStreamClient (rpcClient);
+            var id = rpcClient.Guid;
+            if (!streamClients.ContainsKey (id))
+                throw new InvalidOperationException ("No stream client is connected for this RPC client");
+            var streamClient = streamClients [id];
 
             // Check for an existing stream for the request
             var services = Service.Services.Instance;
@@ -514,7 +518,10 @@ namespace KRPC
         /// </summary>
         internal void RemoveStream (IClient rpcClient, uint identifier)
         {
-            var streamClient = GetStreamClient (rpcClient);
+            var id = rpcClient.Guid;
+            if (!streamClients.ContainsKey (id))
+                throw new InvalidOperationException ("No stream client is connected for this RPC client");
+            var streamClient = streamClients [id];
             var requests = streamRequests [streamClient].Where (x => x.Identifier == identifier).ToList ();
             if (!requests.Any ())
                 return;
