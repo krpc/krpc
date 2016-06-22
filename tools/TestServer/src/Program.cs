@@ -32,7 +32,7 @@ namespace TestServer
 
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Info;
-            RPCException.VerboseErrors = false;
+            RPCException.VerboseErrors = true;
             bool serverDebug = false;
             ushort rpcPort = 0;
             ushort streamPort = 0;
@@ -55,7 +55,6 @@ namespace TestServer
                         if (v != null) {
                             Logger.Enabled = true;
                             Logger.Level = Logger.Severity.Debug;
-                            RPCException.VerboseErrors = true;
                         }
                     }
                 }, { "quiet", "Set log level to 'warning'",
@@ -63,7 +62,6 @@ namespace TestServer
                         if (v != null) {
                             Logger.Enabled = true;
                             Logger.Level = Logger.Severity.Warning;
-                            RPCException.VerboseErrors = false;
                         }
                     }
                 }, {

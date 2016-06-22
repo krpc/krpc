@@ -23,13 +23,13 @@ TEST_F(test_client, test_error) {
   try {
     test_service.throw_argument_exception();
   } catch(krpc::RPCError& e) {
-    ASSERT_EQ("Invalid argument", std::string(e.what()));
+    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid argument"));
   }
   ASSERT_THROW(test_service.throw_invalid_operation_exception(), krpc::RPCError);
   try {
     test_service.throw_invalid_operation_exception();
   } catch(krpc::RPCError& e) {
-    ASSERT_EQ("Invalid operation", std::string(e.what()));
+    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid operation"));
   }
 }
 

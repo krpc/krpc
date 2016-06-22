@@ -34,9 +34,9 @@ namespace KRPC.Client.Test
         public void Error ()
         {
             var e1 = Assert.Throws<RPCException> (connection.TestService ().ThrowArgumentException);
-            Assert.AreEqual (e1.Message, "Invalid argument");
+            Assert.That(e1.Message, Is.StringContaining("Invalid argument"));
             var e2 = Assert.Throws<RPCException> (connection.TestService ().ThrowInvalidOperationException);
-            Assert.AreEqual (e2.Message, "Invalid operation");
+            Assert.That(e2.Message, Is.StringContaining("Invalid operation"));
         }
 
         [Test]
