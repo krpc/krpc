@@ -1,16 +1,16 @@
-using NUnit.Framework;
 using System.Net;
 using KRPC;
+using NUnit.Framework;
 
 namespace KRPC.Test
 {
     [TestFixture]
-    public class KRPCConfigurationTest
+    public class ConfigurationTest
     {
         [Test]
         public void DefaultConfig ()
         {
-            var config = new KRPCConfiguration ("settings.cfg");
+            var config = new Configuration ("settings.cfg");
             Assert.AreEqual (IPAddress.Loopback, config.Address);
             Assert.AreEqual (50000, config.RPCPort);
             Assert.AreEqual (50001, config.StreamPort);
@@ -19,4 +19,3 @@ namespace KRPC.Test
         }
     }
 }
-

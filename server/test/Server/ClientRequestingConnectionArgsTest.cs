@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using KRPC.Server;
+using NUnit.Framework;
 
 namespace KRPC.Test.Server
 {
@@ -9,7 +9,7 @@ namespace KRPC.Test.Server
         [Test]
         public void DefaultBehaviour ()
         {
-            var attempt = new ClientRequestingConnectionArgs<byte,byte> (null);
+            var attempt = new ClientRequestingConnectionEventArgs<byte,byte> (null);
             Assert.IsFalse (attempt.Request.ShouldDeny);
             Assert.IsFalse (attempt.Request.ShouldAllow);
             Assert.IsTrue (attempt.Request.StillPending);
@@ -18,7 +18,7 @@ namespace KRPC.Test.Server
         [Test]
         public void Deny ()
         {
-            var attempt = new ClientRequestingConnectionArgs<byte,byte> (null);
+            var attempt = new ClientRequestingConnectionEventArgs<byte,byte> (null);
             attempt.Request.Deny ();
             Assert.IsTrue (attempt.Request.ShouldDeny);
             Assert.IsFalse (attempt.Request.ShouldAllow);
@@ -28,7 +28,7 @@ namespace KRPC.Test.Server
         [Test]
         public void Allow ()
         {
-            var attempt = new ClientRequestingConnectionArgs<byte,byte> (null);
+            var attempt = new ClientRequestingConnectionEventArgs<byte,byte> (null);
             attempt.Request.Allow ();
             Assert.IsFalse (attempt.Request.ShouldDeny);
             Assert.IsTrue (attempt.Request.ShouldAllow);
@@ -38,7 +38,7 @@ namespace KRPC.Test.Server
         [Test]
         public void AllowAndDeny ()
         {
-            var attempt = new ClientRequestingConnectionArgs<byte,byte> (null);
+            var attempt = new ClientRequestingConnectionEventArgs<byte,byte> (null);
             attempt.Request.Allow ();
             attempt.Request.Deny ();
             Assert.IsTrue (attempt.Request.ShouldDeny);
@@ -47,4 +47,3 @@ namespace KRPC.Test.Server
         }
     }
 }
-

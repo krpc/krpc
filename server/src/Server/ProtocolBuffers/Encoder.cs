@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -22,49 +23,63 @@ namespace KRPC.Server.ProtocolBuffers
             return EncodeObject (value, cachedBuffer, cachedStream);
         }
 
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnneededUnboxingRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         static ByteString EncodeObject (object value, MemoryStream buffer, CodedOutputStream stream)
         {
             buffer.SetLength (0);
             if (value == null) {
                 stream.WriteUInt64 (0);
-                stream.Flush ();
-                return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
+            } else if (value is Enum) {
+                stream.WriteInt32 ((int)value);
+            } else {
+                Type type = value.GetType ();
+                switch (Type.GetTypeCode (type)) {
+                case TypeCode.Int32:
+                    stream.WriteInt32 ((int)value);
+                    break;
+                case TypeCode.Int64:
+                    stream.WriteInt64 ((long)value);
+                    break;
+                case TypeCode.UInt32:
+                    stream.WriteUInt32 ((uint)value);
+                    break;
+                case TypeCode.UInt64:
+                    stream.WriteUInt64 ((ulong)value);
+                    break;
+                case TypeCode.Single:
+                    stream.WriteFloat ((float)value);
+                    break;
+                case TypeCode.Double:
+                    stream.WriteDouble ((double)value);
+                    break;
+                case TypeCode.Boolean:
+                    stream.WriteBool ((bool)value);
+                    break;
+                case TypeCode.String:
+                    stream.WriteString ((string)value);
+                    break;
+                default:
+                    if (type == typeof(byte[]))
+                        stream.WriteBytes (ByteString.CopyFrom ((byte[])value));
+                    else if (TypeUtils.IsAClassType (type))
+                        stream.WriteUInt64 (ObjectStore.Instance.AddInstance (value));
+                    else if (TypeUtils.IsAMessageType (type))
+                        WriteMessage (value, stream);
+                    else if (TypeUtils.IsAListCollectionType (type))
+                        WriteList (value, stream);
+                    else if (TypeUtils.IsADictionaryCollectionType (type))
+                        WriteDictionary (value, stream);
+                    else if (TypeUtils.IsASetCollectionType (type))
+                        WriteSet (value, stream);
+                    else if (TypeUtils.IsATupleCollectionType (type))
+                        WriteTuple (value, stream);
+                    else
+                        throw new ArgumentException (type + " is not a serializable type");
+                    break;
+                }
             }
-            Type type = value.GetType ();
-            if (type == typeof(double))
-                stream.WriteDouble ((double)value);
-            else if (type == typeof(float))
-                stream.WriteFloat ((float)value);
-            else if (type == typeof(int))
-                stream.WriteInt32 ((int)value);
-            else if (type == typeof(long))
-                stream.WriteInt64 ((long)value);
-            else if (type == typeof(uint))
-                stream.WriteUInt32 ((uint)value);
-            else if (type == typeof(ulong))
-                stream.WriteUInt64 ((ulong)value);
-            else if (type == typeof(bool))
-                stream.WriteBool ((bool)value);
-            else if (type == typeof(string))
-                stream.WriteString ((string)value);
-            else if (type == typeof(byte[]))
-                stream.WriteBytes (ByteString.CopyFrom ((byte[])value));
-            else if (value is Enum)
-                stream.WriteInt32 ((int)value);
-            else if (TypeUtils.IsAClassType (type))
-                stream.WriteUInt64 (ObjectStore.Instance.AddInstance (value));
-            else if (TypeUtils.IsAMessageType (type)) {
-                WriteMessage (value, stream);
-            } else if (TypeUtils.IsAListCollectionType (type))
-                WriteList (value, stream);
-            else if (TypeUtils.IsADictionaryCollectionType (type))
-                WriteDictionary (value, stream);
-            else if (TypeUtils.IsASetCollectionType (type))
-                WriteSet (value, stream);
-            else if (TypeUtils.IsATupleCollectionType (type))
-                WriteTuple (value, stream);
-            else
-                throw new ArgumentException (type + " is not a serializable type");
             stream.Flush ();
             return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
         }
@@ -83,52 +98,56 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteList (object value, CodedOutputStream stream)
         {
-            var internalBuffer = new MemoryStream ();
-            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedList = new KRPC.Schema.KRPC.List ();
             var list = (IList)value;
-            foreach (var item in list)
-                encodedList.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+            using (var internalBuffer = new MemoryStream ()) {
+                var internalStream = new CodedOutputStream (internalBuffer);
+                foreach (var item in list)
+                    encodedList.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+            }
             encodedList.WriteTo (stream);
         }
 
         static void WriteDictionary (object value, CodedOutputStream stream)
         {
-            var internalBuffer = new MemoryStream ();
-            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedDictionary = new KRPC.Schema.KRPC.Dictionary ();
-            foreach (DictionaryEntry entry in (IDictionary) value) {
-                var encodedEntry = new KRPC.Schema.KRPC.DictionaryEntry ();
-                encodedEntry.Key = EncodeObject (entry.Key, internalBuffer, internalStream);
-                encodedEntry.Value = EncodeObject (entry.Value, internalBuffer, internalStream);
-                encodedDictionary.Entries.Add (encodedEntry);
+            using (var internalBuffer = new MemoryStream ()) {
+                var internalStream = new CodedOutputStream (internalBuffer);
+                foreach (DictionaryEntry entry in (IDictionary) value) {
+                    var encodedEntry = new KRPC.Schema.KRPC.DictionaryEntry ();
+                    encodedEntry.Key = EncodeObject (entry.Key, internalBuffer, internalStream);
+                    encodedEntry.Value = EncodeObject (entry.Value, internalBuffer, internalStream);
+                    encodedDictionary.Entries.Add (encodedEntry);
+                }
             }
             encodedDictionary.WriteTo (stream);
         }
 
         static void WriteSet (object value, CodedOutputStream stream)
         {
-            var internalBuffer = new MemoryStream ();
-            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedSet = new KRPC.Schema.KRPC.Set ();
             var set = (IEnumerable)value;
-            foreach (var item in set)
-                encodedSet.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+            using (var internalBuffer = new MemoryStream ()) {
+                var internalStream = new CodedOutputStream (internalBuffer);
+                foreach (var item in set)
+                    encodedSet.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+            }
             encodedSet.WriteTo (stream);
         }
 
         static void WriteTuple (object value, CodedOutputStream stream)
         {
-            var internalBuffer = new MemoryStream ();
-            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedTuple = new KRPC.Schema.KRPC.Tuple ();
             var valueTypes = value.GetType ().GetGenericArguments ().ToArray ();
             var genericType = Type.GetType ("KRPC.Utils.Tuple`" + valueTypes.Length);
             var tupleType = genericType.MakeGenericType (valueTypes);
-            for (int i = 0; i < valueTypes.Length; i++) {
-                var property = tupleType.GetProperty ("Item" + (i + 1));
-                var item = property.GetGetMethod ().Invoke (value, null);
-                encodedTuple.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+            using (var internalBuffer = new MemoryStream ()) {
+                var internalStream = new CodedOutputStream (internalBuffer);
+                for (int i = 0; i < valueTypes.Length; i++) {
+                    var property = tupleType.GetProperty ("Item" + (i + 1));
+                    var item = property.GetGetMethod ().Invoke (value, null);
+                    encodedTuple.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+                }
             }
             encodedTuple.WriteTo (stream);
         }
@@ -137,41 +156,49 @@ namespace KRPC.Server.ProtocolBuffers
         /// Decode a value of the given type.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static object Decode (ByteString value, Type type)
         {
             var stream = value.CreateCodedInput ();
-            if (type == typeof(double))
-                return stream.ReadDouble ();
-            else if (type == typeof(float))
-                return stream.ReadFloat ();
-            else if (type == typeof(int))
-                return stream.ReadInt32 ();
-            else if (type == typeof(long))
-                return stream.ReadInt64 ();
-            else if (type == typeof(uint))
-                return stream.ReadUInt32 ();
-            else if (type == typeof(ulong))
-                return stream.ReadUInt64 ();
-            else if (type == typeof(bool))
-                return stream.ReadBool ();
-            else if (type == typeof(string))
-                return stream.ReadString ();
-            else if (type == typeof(byte[]))
-                return stream.ReadBytes ().ToByteArray ();
-            else if (TypeUtils.IsAnEnumType (type))
-                return Enum.ToObject (type, stream.ReadInt32 ());
-            else if (TypeUtils.IsAClassType (type))
-                return ObjectStore.Instance.GetInstance (stream.ReadUInt64 ());
-            else if (TypeUtils.IsAMessageType (type)) {
-                return DecodeMessage (stream, type);
-            } else if (TypeUtils.IsAListCollectionType (type))
-                return DecodeList (stream, type);
-            else if (TypeUtils.IsADictionaryCollectionType (type))
-                return DecodeDictionary (stream, type);
-            else if (TypeUtils.IsASetCollectionType (type))
-                return DecodeSet (stream, type);
-            else if (TypeUtils.IsATupleCollectionType (type))
-                return DecodeTuple (stream, type);
+            if (type.IsEnum) {
+                if (TypeUtils.IsAnEnumType (type))
+                    return Enum.ToObject (type, stream.ReadInt32 ());
+            } else {
+                switch (Type.GetTypeCode (type)) {
+                case TypeCode.Int32:
+                    return stream.ReadInt32 ();
+                case TypeCode.Int64:
+                    return stream.ReadInt64 ();
+                case TypeCode.UInt32:
+                    return stream.ReadUInt32 ();
+                case TypeCode.UInt64:
+                    return stream.ReadUInt64 ();
+                case TypeCode.Single:
+                    return stream.ReadFloat ();
+                case TypeCode.Double:
+                    return stream.ReadDouble ();
+                case TypeCode.Boolean:
+                    return stream.ReadBool ();
+                case TypeCode.String:
+                    return stream.ReadString ();
+                default:
+                    if (type == typeof(byte[]))
+                        return stream.ReadBytes ().ToByteArray ();
+                    else if (TypeUtils.IsAClassType (type))
+                        return ObjectStore.Instance.GetInstance (stream.ReadUInt64 ());
+                    else if (TypeUtils.IsAMessageType (type))
+                        return DecodeMessage (stream, type);
+                    else if (TypeUtils.IsAListCollectionType (type))
+                        return DecodeList (stream, type);
+                    else if (TypeUtils.IsADictionaryCollectionType (type))
+                        return DecodeDictionary (stream, type);
+                    else if (TypeUtils.IsASetCollectionType (type))
+                        return DecodeSet (stream, type);
+                    else if (TypeUtils.IsATupleCollectionType (type))
+                        return DecodeTuple (stream, type);
+                    break;
+                }
+            }
             throw new ArgumentException (type + " is not a serializable type");
         }
 

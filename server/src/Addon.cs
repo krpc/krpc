@@ -1,8 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Server;
 using KRPC.UI;
 using KRPC.Utils;
-using UnityEngine;
 using KSP.UI.Screens;
+using UnityEngine;
 
 namespace KRPC
 {
@@ -10,11 +11,12 @@ namespace KRPC
     /// Main KRPC addon. Contains the kRPC core, config and UI.
     /// </summary>
     [KSPAddonImproved (KSPAddonImproved.Startup.All, false)]
-    sealed public class KRPCAddon : MonoBehaviour
+    [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
+    sealed public class Addon : MonoBehaviour
     {
-        static KRPCConfiguration config;
-        static KRPCCore core;
-        static KRPCServer server;
+        static Configuration config;
+        static Core core;
+        static Server.Server server;
         static Texture textureOnline;
         static Texture textureOffline;
 
@@ -30,11 +32,11 @@ namespace KRPC
                 return;
 
             // Load config
-            config = new KRPCConfiguration ("PluginData/settings.cfg");
+            config = new Configuration ("PluginData/settings.cfg");
             config.Load ();
 
             // Set up core
-            core = KRPCCore.Instance;
+            core = Core.Instance;
             core.OneRPCPerUpdate = config.OneRPCPerUpdate;
             core.MaxTimePerUpdate = config.MaxTimePerUpdate;
             core.AdaptiveRateControl = config.AdaptiveRateControl;
@@ -42,7 +44,7 @@ namespace KRPC
             core.RecvTimeout = config.RecvTimeout;
 
             // Set up server
-            server = new KRPCServer (config.Address, config.RPCPort, config.StreamPort);
+            server = new Server.Server (config.Address, config.RPCPort, config.StreamPort);
         }
 
         /// <summary>
@@ -56,8 +58,8 @@ namespace KRPC
 
             Init ();
 
-            KRPCCore.Context.SetGameScene (KSPAddonImproved.CurrentGameScene.ToGameScene ());
-            Logger.WriteLine ("Game scene switched to " + KRPCCore.Context.GameScene);
+            Service.CallContext.SetGameScene (KSPAddonImproved.CurrentGameScene.ToGameScene ());
+            Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
             core.GetUniversalTime = Planetarium.GetUniversalTime;
 
             // If a game is not loaded, ensure the server is stopped and then exit
@@ -65,8 +67,7 @@ namespace KRPC
                 KSPAddonImproved.CurrentGameScene != GameScenes.FLIGHT &&
                 KSPAddonImproved.CurrentGameScene != GameScenes.SPACECENTER &&
                 KSPAddonImproved.CurrentGameScene != GameScenes.TRACKSTATION) {
-                if (server.Running)
-                    server.Stop ();
+                server.Stop ();
                 return;
             }
 
@@ -77,7 +78,12 @@ namespace KRPC
             }
 
             // (Re)create the UI
+            InitUI ();
+        }
 
+        [SuppressMessage ("Gendarme.Rules.Concurrency", "WriteStaticFieldFromInstanceMethodRule")]
+        void InitUI ()
+        {
             // Layout extensions
             GUILayoutExtensions.Init (gameObject);
 
@@ -102,6 +108,29 @@ namespace KRPC
             // New connection dialog
             clientConnectingDialog = gameObject.AddComponent<ClientConnectingDialog> ();
 
+            // Set up events
+            InitEvents ();
+
+            // Add button to the applauncher
+            mainWindow.Closable = true;
+            textureOnline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-online", false);
+            textureOffline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-offline", false);
+            GameEvents.onGUIApplicationLauncherReady.Add (OnGUIApplicationLauncherReady);
+            GameEvents.onGUIApplicationLauncherDestroyed.Add (OnGUIApplicationLauncherDestroyed);
+            server.OnStarted += (s, e) => {
+                if (applauncherButton != null) {
+                    applauncherButton.SetTexture (textureOnline);
+                }
+            };
+            server.OnStopped += (s, e) => {
+                if (applauncherButton != null) {
+                    applauncherButton.SetTexture (textureOffline);
+                }
+            };
+        }
+
+        void InitEvents ()
+        {
             // Main window events
             mainWindow.OnStartServerPressed += (s, e) => StartServer ();
             mainWindow.OnStopServerPressed += (s, e) => {
@@ -150,23 +179,6 @@ namespace KRPC
                 else
                     clientConnectingDialog.OnClientRequestingConnection (s, e);
             };
-
-            // Add button to the applauncher
-            mainWindow.Closable = true;
-            textureOnline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-online", false);
-            textureOffline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-offline", false);
-            GameEvents.onGUIApplicationLauncherReady.Add (OnGUIApplicationLauncherReady);
-            GameEvents.onGUIApplicationLauncherDestroyed.Add (OnGUIApplicationLauncherDestroyed);
-            server.OnStarted += (s, e) => {
-                if (applauncherButton != null) {
-                    applauncherButton.SetTexture (textureOnline);
-                }
-            };
-            server.OnStopped += (s, e) => {
-                if (applauncherButton != null) {
-                    applauncherButton.SetTexture (textureOffline);
-                }
-            };
         }
 
         void OnGUIApplicationLauncherReady ()
@@ -198,8 +210,8 @@ namespace KRPC
             core.RecvTimeout = config.RecvTimeout;
             try {
                 server.Start ();
-            } catch (ServerException exn) {
-                mainWindow.Errors.Add (exn.Message);
+            } catch (ServerException e) {
+                mainWindow.Errors.Add (e.Message);
             }
         }
 
@@ -218,12 +230,13 @@ namespace KRPC
             GameEvents.onGUIApplicationLauncherDestroyed.Remove (OnGUIApplicationLauncherDestroyed);
             Object.Destroy (mainWindow);
             Object.Destroy (clientConnectingDialog);
-            GUILayoutExtensions.Destroy (gameObject);
+            GUILayoutExtensions.Destroy ();
         }
 
         /// <summary>
         /// Stop the server if running
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnApplicationQuit ()
         {
             if (server.Running)
@@ -233,6 +246,7 @@ namespace KRPC
         /// <summary>
         /// GUI update
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnGUI ()
         {
             GUILayoutExtensions.OnGUI ();
@@ -241,6 +255,7 @@ namespace KRPC
         /// <summary>
         /// Trigger server update
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void FixedUpdate ()
         {
             if (!ServicesChecker.OK)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -45,8 +46,7 @@ namespace KRPC.UI
                     Skin = HighLogic.UISkin;
                 Visible = true;
                 Opened ();
-                if (OnOpen != null)
-                    OnOpen (this, EventArgs.Empty);
+                EventHandlerExtensions.Invoke (OnOpen, this);
                 dialog = new MultiOptionDialog (Message, Title, Skin, Options.ToArray ());
                 popup = PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), dialog, true, HighLogic.UISkin);
             }
@@ -64,8 +64,7 @@ namespace KRPC.UI
                 dialog = null;
                 popup = null;
                 Closed ();
-                if (OnClose != null)
-                    OnClose (this, EventArgs.Empty);
+                EventHandlerExtensions.Invoke (OnClose, this);
             }
         }
     }

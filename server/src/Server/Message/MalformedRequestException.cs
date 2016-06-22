@@ -1,10 +1,19 @@
+using System;
 using KRPC.Server;
 
-namespace KRPC
+namespace KRPC.Server.Message
 {
-    class MalformedRequestException: ServerException
+    sealed class MalformedRequestException: ServerException
     {
+        public MalformedRequestException ()
+        {
+        }
+
         public MalformedRequestException (string message) : base (message)
+        {
+        }
+
+        public MalformedRequestException (string message, Exception innerException) : base (message, innerException)
         {
         }
     }

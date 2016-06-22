@@ -20,7 +20,7 @@ namespace KRPC.Server.ProtocolBuffers
         /// When a client requests a connection, check and parse the hello message
         /// (which should consist of a header and a client name)
         /// </summary>
-        protected override IClient<Request,Response> CreateClient (object sender, ClientRequestingConnectionArgs<byte,byte> args)
+        protected override IClient<Request,Response> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
             string clientName = CheckHelloMessage (args.Client);
             if (clientName != null)
@@ -33,7 +33,7 @@ namespace KRPC.Server.ProtocolBuffers
         /// <summary>
         /// When a client requests a connection, and is successful, send the clients guid
         /// </summary>
-        public override void HandleClientRequestingConnection (object sender, ClientRequestingConnectionArgs<byte,byte> args)
+        public override void HandleClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
             base.HandleClientRequestingConnection (sender, args);
             if (args.Request.ShouldAllow)
@@ -112,7 +112,7 @@ namespace KRPC.Server.ProtocolBuffers
         /// <returns>The decoded client name, or null if not valid.</returns>
         static string CheckAndDecodeClientName (byte[] receivedClientName)
         {
-            string clientNameString = "";
+            string clientNameString = String.Empty;
 
             // Strip null bytes from the end
             int length = 0;

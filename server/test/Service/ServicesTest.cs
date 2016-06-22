@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using KRPC;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Messages;
@@ -16,9 +14,7 @@ namespace KRPC.Test.Service
     {
         static Request Req (string service, string procedure, params Argument[] args)
         {
-            var request = new Request ();
-            request.Service = service;
-            request.Procedure = procedure;
+            var request = new Request (service, procedure);
             foreach (var arg in args)
                 request.Arguments.Add (arg);
             return request;
@@ -34,10 +30,7 @@ namespace KRPC.Test.Service
 
         static Argument Arg (uint position, object value)
         {
-            return new Argument {
-                Position = position,
-                Value = value
-            };
+            return new Argument (position, value);
         }
 
         static Response Run (Request request)
@@ -49,7 +42,7 @@ namespace KRPC.Test.Service
         [SetUp]
         public void SetUp ()
         {
-            KRPCCore.Context.SetGameScene (GameScene.Flight);
+            CallContext.SetGameScene (GameScene.Flight);
         }
 
         [Test]
@@ -114,7 +107,7 @@ namespace KRPC.Test.Service
         public void HandleRequestNoArgsThrows ()
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureNoArgsReturns ()).Throws (new ArgumentException ());
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Throws (new ArgumentException ("test exception"));
             TestService.Service = mock.Object;
             Assert.Throws<RPCException> (() => Run (Req ("TestService", "ProcedureNoArgsReturns")));
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
@@ -180,7 +173,7 @@ namespace KRPC.Test.Service
             var response = Run (Req ("TestService", "ProcedureNoArgsReturns"));
             response.Time = 42;
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
-            Response innerResponse = (Response)response.ReturnValue;
+            var innerResponse = (Response)response.ReturnValue;
             Assert.AreEqual (expectedResponse.Error, innerResponse.Error);
         }
 
@@ -199,7 +192,7 @@ namespace KRPC.Test.Service
             Response response = Run (request);
             response.Time = 42;
             mock.Verify (x => x.ProcedureSingleArgReturns (It.IsAny<Response> ()), Times.Once ());
-            Response innerResponse = (Response)response.ReturnValue;
+            var innerResponse = (Response)response.ReturnValue;
             Assert.AreEqual (expectedResponse.Error, innerResponse.Error);
         }
 
@@ -256,7 +249,7 @@ namespace KRPC.Test.Service
             TestService.Service = mock.Object;
             var request = Req ("TestService", "set_PropertyWithSet", Arg (0, "foo"));
             Response response = Run (request);
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
         }
 
         /// <summary>
@@ -270,7 +263,7 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.CreateTestObject ("foo")).Returns (instance);
             TestService.Service = mock.Object;
             Response response = Run (Req ("TestService", "CreateTestObject", Arg (0, "foo")));
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             response.Time = 42;
             Assert.IsNotNull (response.ReturnValue);
             Assert.AreEqual (instance, (TestService.TestClass)response.ReturnValue);
@@ -304,7 +297,7 @@ namespace KRPC.Test.Service
                 .Returns ((TestService.TestClass x) => x);
             TestService.Service = mock.Object;
             Response response = Run (Req ("TestService", "EchoTestObject", Arg (0, null)));
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             response.Time = 42;
             Assert.IsNull (response.ReturnValue);
         }
@@ -317,7 +310,7 @@ namespace KRPC.Test.Service
         {
             var instance = new TestService.TestClass ("jeb");
             var guid = ObjectStore.Instance.AddInstance (instance);
-            var arg = 3.14159f;
+            const float arg = 3.14159f;
             var request = Req ("TestService", "TestClass_FloatToString", Arg (0, guid), Arg (1, arg));
             var response = Run (request);
             response.Time = 42;
@@ -351,7 +344,7 @@ namespace KRPC.Test.Service
             var request = Req ("TestService", "TestClass_get_IntProperty", Arg (0, guid));
             var response = Run (request);
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             Assert.AreEqual (42, (int)response.ReturnValue);
         }
 
@@ -368,7 +361,7 @@ namespace KRPC.Test.Service
                               Arg (0, guid), Arg (1, 1337));
             var response = Run (request);
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             Assert.AreEqual (1337, instance.IntProperty);
         }
 
@@ -397,7 +390,7 @@ namespace KRPC.Test.Service
             var request = Req ("TestService2", "ClassTypeFromOtherServiceAsParameter", Arg (0, instance));
             var response = Run (request);
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             Assert.AreEqual (42, (int)response.ReturnValue);
         }
 
@@ -411,9 +404,9 @@ namespace KRPC.Test.Service
             var request = Req ("TestService2", "ClassTypeFromOtherServiceAsReturn", Arg (0, "jeb"));
             var response = Run (request);
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             var obj = (TestService.TestClass)response.ReturnValue;
-            Assert.AreEqual ("jeb", obj.value);
+            Assert.AreEqual ("jeb", obj.Value);
         }
 
         /// <summary>
@@ -496,10 +489,10 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestSingleEnumArgNoReturn ()
         {
-            var arg = TestService.TestEnum.y;
+            var arg = TestService.TestEnum.Y;
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureEnumArg (It.IsAny<TestService.TestEnum> ()))
-                .Callback ((TestService.TestEnum x) => Assert.AreEqual (TestService.TestEnum.y, x));
+                .Callback ((TestService.TestEnum x) => Assert.AreEqual (TestService.TestEnum.Y, x));
             TestService.Service = mock.Object;
             var request = Req ("TestService", "ProcedureEnumArg", Arg (0, arg));
             Run (request);
@@ -513,12 +506,12 @@ namespace KRPC.Test.Service
         public void HandleRequestNoArgEnumReturn ()
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);
-            mock.Setup (x => x.ProcedureEnumReturn ()).Returns (TestService.TestEnum.z);
+            mock.Setup (x => x.ProcedureEnumReturn ()).Returns (TestService.TestEnum.Z);
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "ProcedureEnumReturn"));
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
-            Assert.AreEqual (TestService.TestEnum.z, response.ReturnValue);
+            Assert.AreEqual (String.Empty, response.Error);
+            Assert.AreEqual (TestService.TestEnum.Z, response.ReturnValue);
             mock.Verify (x => x.ProcedureEnumReturn (), Times.Once ());
         }
 
@@ -581,7 +574,7 @@ namespace KRPC.Test.Service
                 }
             }
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             // Verify the KRPCProcedure is called once, but the handler function is called multiple times
             mock.Verify (x => x.BlockingProcedureNoReturn (It.IsAny<int> ()), Times.Once ());
             Assert.AreEqual (num + 1, BlockingProcedureNoReturnFnCount);
@@ -611,7 +604,7 @@ namespace KRPC.Test.Service
                 }
             }
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             Assert.AreEqual (expectedResult, (int)response.ReturnValue);
             // Verify the KRPCProcedure is called once, but the handler function is called multiple times
             mock.Verify (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()), Times.Once ());
@@ -631,7 +624,7 @@ namespace KRPC.Test.Service
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoList", Arg (0, list)));
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             CollectionAssert.AreEqual (list, (IList<string>)response.ReturnValue);
             mock.Verify (x => x.EchoList (It.IsAny<IList<string>> ()), Times.Once ());
         }
@@ -649,7 +642,7 @@ namespace KRPC.Test.Service
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoDictionary", Arg (0, dictionary)));
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             CollectionAssert.AreEquivalent (dictionary, (IDictionary<int,string>)response.ReturnValue);
             mock.Verify (x => x.EchoDictionary (It.IsAny<IDictionary<int,string>> ()), Times.Once ());
         }
@@ -667,7 +660,7 @@ namespace KRPC.Test.Service
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoSet", Arg (0, set)));
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             CollectionAssert.AreEqual (set, (HashSet<int>)response.ReturnValue);
             mock.Verify (x => x.EchoSet (It.IsAny<HashSet<int>> ()), Times.Once ());
         }
@@ -685,7 +678,7 @@ namespace KRPC.Test.Service
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoTuple", Arg (0, tuple)));
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             Assert.AreEqual (tuple, (KRPC.Utils.Tuple<int,bool>)response.ReturnValue);
             mock.Verify (x => x.EchoTuple (It.IsAny<KRPC.Utils.Tuple<int,bool>> ()), Times.Once ());
         }
@@ -706,7 +699,7 @@ namespace KRPC.Test.Service
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoNestedCollection", Arg (0, collection)));
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             CollectionAssert.AreEqual (collection, (IDictionary<int, IList<string>>)response.ReturnValue);
             mock.Verify (x => x.EchoNestedCollection (It.IsAny<IDictionary<int,IList<string>>> ()), Times.Once ());
         }
@@ -727,7 +720,7 @@ namespace KRPC.Test.Service
             TestService.Service = mock.Object;
             var response = Run (Req ("TestService", "EchoListOfObjects", Arg (0, list)));
             response.Time = 0;
-            Assert.AreEqual ("", response.Error);
+            Assert.AreEqual (String.Empty, response.Error);
             CollectionAssert.AreEqual (list, (IList<TestService.TestClass>)response.ReturnValue);
             mock.Verify (x => x.EchoListOfObjects (It.IsAny<IList<TestService.TestClass>> ()), Times.Once ());
         }
@@ -738,7 +731,7 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestWrongGameMode ()
         {
-            KRPCCore.Context.SetGameScene (GameScene.TrackingStation);
+            CallContext.SetGameScene (GameScene.TrackingStation);
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.ProcedureNoArgsNoReturn ());
             TestService.Service = mock.Object;

@@ -1,15 +1,17 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Messages;
 
 namespace KRPC.Server.Message
 {
+    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     abstract class RPCStream : IStream<Request,Response>
     {
         Request bufferedRequest;
         const int BUFFER_INITIAL_SIZE = 4 * 1024 * 1024;
         const int BUFFER_INCREASE_SIZE = 1 * 1024 * 1024;
-        byte[] buffer = new byte [BUFFER_INITIAL_SIZE];
-        int size;
+        byte[] receiveBuffer = new byte [BUFFER_INITIAL_SIZE];
+        int receiveBufferSize;
 
         protected RPCStream (IStream<byte,byte> stream)
         {
@@ -69,12 +71,13 @@ namespace KRPC.Server.Message
         /// </summary>
         public abstract void Write (Response value);
 
-        public void Write (Response[] value)
+        [SuppressMessage ("Gendarme.Rules.Naming", "ParameterNamesShouldMatchOverriddenMethodRule")]
+        public void Write (Response[] buffer)
         {
             throw new NotSupportedException ();
         }
 
-        public void Write (Response[] value, int offset, int size)
+        public void Write (Response[] buffer, int offset, int size)
         {
             throw new NotSupportedException ();
         }
@@ -97,7 +100,7 @@ namespace KRPC.Server.Message
         /// </summary>
         public void Close ()
         {
-            buffer = null;
+            receiveBuffer = null;
             bufferedRequest = null;
             Stream.Close ();
         }
@@ -106,10 +109,11 @@ namespace KRPC.Server.Message
         /// Otherwise attempts to receive a new message.
         /// Returns false if no message could be received.
         /// Closes the stream and throws MalformedRequestException if a malformed message is received.
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         bool Poll ()
         {
             // Check if the stream is closed
-            if (buffer == null)
+            if (receiveBuffer == null)
                 return false;
 
             // If there is already a request, don't need to poll for another one
@@ -117,42 +121,42 @@ namespace KRPC.Server.Message
                 return true;
 
             // No data is available, so there is no request to receive
-            if (size == 0 && !Stream.DataAvailable)
+            if (receiveBufferSize == 0 && !Stream.DataAvailable)
                 return false;
 
             // Read as much data as we can from the client
             while (Stream.DataAvailable) {
                 // Increase the size of the buffer if the remaining space is low
-                if (buffer.Length - size < BUFFER_INCREASE_SIZE) {
-                    var newBuffer = new byte [buffer.Length + BUFFER_INCREASE_SIZE];
-                    Array.Copy (buffer, newBuffer, size);
-                    buffer = newBuffer;
+                if (receiveBuffer.Length - receiveBufferSize < BUFFER_INCREASE_SIZE) {
+                    var newBuffer = new byte [receiveBuffer.Length + BUFFER_INCREASE_SIZE];
+                    Array.Copy (receiveBuffer, newBuffer, receiveBufferSize);
+                    receiveBuffer = newBuffer;
                 }
-                size += Stream.Read (buffer, size);
+                receiveBufferSize += Stream.Read (receiveBuffer, receiveBufferSize);
             }
 
             // Try decoding a request
             int read;
             try {
-                read = Read (ref bufferedRequest, buffer, 0, size);
-            } catch (MalformedRequestException e) {
+                read = Read (ref bufferedRequest, receiveBuffer, 0, receiveBufferSize);
+            } catch (MalformedRequestException) {
                 Close ();
-                throw e;
+                throw;
             }
 
             // Sanity check the bytes read by the class implementing Read()
-            if (read > size) {
+            if (read > receiveBufferSize) {
                 Close ();
                 throw new InvalidOperationException ("Read too many bytes");
             }
 
             // Update the buffer
             // Note: shuffling the buffer by copying should happen rarely as Read() usually consumes the entire buffer
-            if (read == size)
-                size = 0;
-            else if (read > 0 && size > 0) {
-                Array.Copy (buffer, read, buffer, 0, size - read);
-                size -= read;
+            if (read == receiveBufferSize)
+                receiveBufferSize = 0;
+            else if (read > 0 && receiveBufferSize > 0) {
+                Array.Copy (receiveBuffer, read, receiveBuffer, 0, receiveBufferSize - read);
+                receiveBufferSize -= read;
             }
 
             // Return whether a request was decoded and is available

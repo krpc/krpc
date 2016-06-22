@@ -4,7 +4,7 @@ namespace KRPC.Server
     /// Used by a client requesting connection event to determine
     /// if the request should be allowed or denied.
     /// </summary>
-    public class ClientConnectionRequest
+    public sealed class ClientConnectionRequest
     {
         bool allow;
         bool deny;

@@ -3,18 +3,18 @@ using System.Diagnostics;
 
 namespace KRPC.Utils
 {
-    class ExponentialMovingAverage
+    sealed class ExponentialMovingAverage
     {
         double value;
-        readonly double W;
+        readonly double w;
 
         readonly Stopwatch timer;
         long lastUpdate;
 
-        public ExponentialMovingAverage (double W = 1d)
+        public ExponentialMovingAverage (double meanLifetime = 1d)
         {
             value = 0d;
-            this.W = W;
+            w = meanLifetime;
             timer = Stopwatch.StartNew ();
             lastUpdate = timer.ElapsedTicks;
         }
@@ -24,7 +24,7 @@ namespace KRPC.Utils
             var time = timer.ElapsedTicks;
             var timeDiff = (time - lastUpdate) / (double)Stopwatch.Frequency;
             lastUpdate = time;
-            var alpha = 1d - Math.Exp (-timeDiff / W);
+            var alpha = 1d - Math.Exp (-timeDiff / w);
             value = alpha * newValue + (1d - alpha) * value;
             return (float)value;
         }

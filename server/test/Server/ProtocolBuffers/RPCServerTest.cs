@@ -45,7 +45,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsTrue (eventArgs.Request.ShouldAllow);
@@ -53,7 +53,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
 
             server.Update ();
             Assert.AreEqual (1, server.Clients.Count ());
-            Assert.AreEqual ("", server.Clients.First ().Name);
+            Assert.AreEqual (String.Empty, server.Clients.First ().Name);
 
             byte[] bytes = responseStream.ToArray ();
             byte[] responseBytes = byteClient.Guid.ToByteArray ();
@@ -76,7 +76,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsTrue (eventArgs.Request.ShouldAllow);
@@ -111,7 +111,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
@@ -140,7 +140,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
@@ -169,7 +169,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
@@ -199,7 +199,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
@@ -226,7 +226,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);

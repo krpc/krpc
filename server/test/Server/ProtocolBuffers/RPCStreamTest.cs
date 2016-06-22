@@ -1,8 +1,7 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using Google.Protobuf;
-using KRPC.Server;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service.Messages;
 using NUnit.Framework;
@@ -10,6 +9,7 @@ using NUnit.Framework;
 namespace KRPC.Test.Server.ProtocolBuffers
 {
     [TestFixture]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class RPCStreamTest
     {
         Request expectedRequest;
@@ -21,9 +21,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void SetUp ()
         {
             // Create a request object and get the binary representation of it
-            expectedRequest = new Request ();
-            expectedRequest.Service = "TestService";
-            expectedRequest.Procedure = "ProcedureNoArgsNoReturn";
+            expectedRequest = new Request ("TestService", "ProcedureNoArgsNoReturn");
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream);
                 codedStream.WriteInt32 (expectedRequest.ToProtobufMessage ().CalculateSize ());
@@ -51,7 +49,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var byteStream = new TestStream (new MemoryStream ());
             var rpcStream = new RPCStream (byteStream);
             Assert.IsFalse (rpcStream.DataAvailable);
-            Assert.Throws<NoRequestException> (() => rpcStream.Read ());
+            Assert.Throws<KRPC.Server.Message.NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (0, rpcStream.BytesRead);
             Assert.IsFalse (byteStream.Closed);
@@ -69,7 +67,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (requestBytes.Length, rpcStream.BytesRead);
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
-            Assert.Throws<NoRequestException> (() => rpcStream.Read ());
+            Assert.Throws<KRPC.Server.Message.NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (expectedRequest.Service, request.Service);
             Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
             Assert.AreEqual (0, rpcStream.BytesWritten);
@@ -96,7 +94,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
                     Assert.IsTrue (rpcStream.DataAvailable);
                 else {
                     Assert.IsFalse (rpcStream.DataAvailable);
-                    Assert.Throws<NoRequestException> (() => rpcStream.Read ());
+                    Assert.Throws<KRPC.Server.Message.NoRequestException> (() => rpcStream.Read ());
                 }
                 Assert.AreEqual (expectedRequest.Service, request.Service);
                 Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
@@ -107,6 +105,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void ReadSingleRequestInParts ()
         {
             // Split the message bytes into 3 parts
@@ -127,7 +127,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var byteStream = new TestStream (stream);
             var rpcStream = new RPCStream (byteStream);
             Assert.IsFalse (rpcStream.DataAvailable);
-            Assert.Throws<NoRequestException> (() => rpcStream.Read ());
+            Assert.Throws<KRPC.Server.Message.NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (part1.Length, rpcStream.BytesRead);
 
@@ -138,7 +138,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
 
             // Read part 2
             Assert.IsFalse (rpcStream.DataAvailable);
-            Assert.Throws<NoRequestException> (() => rpcStream.Read ());
+            Assert.Throws<KRPC.Server.Message.NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (part1.Length + part2.Length, rpcStream.BytesRead);
 
@@ -153,7 +153,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (part1.Length + part2.Length + part3.Length, rpcStream.BytesRead);
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
-            Assert.Throws<NoRequestException> (() => rpcStream.Read ());
+            Assert.Throws<KRPC.Server.Message.NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (part1.Length + part2.Length + part3.Length, rpcStream.BytesRead);
             Assert.AreEqual (expectedRequest.Service, request.Service);
@@ -169,7 +169,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             rand.NextBytes (data);
             var byteStream = new TestStream (data);
             var rpcStream = new RPCStream (byteStream);
-            Assert.Throws<MalformedRequestException> (() => rpcStream.Read ());
+            Assert.Throws<KRPC.Server.Message.MalformedRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (data.Length, rpcStream.BytesRead);
             Assert.IsTrue (byteStream.Closed);

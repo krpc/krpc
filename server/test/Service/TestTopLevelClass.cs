@@ -18,4 +18,3 @@ namespace KRPC.Test.Service
         public string AProperty { get; set; }
     }
 }
-

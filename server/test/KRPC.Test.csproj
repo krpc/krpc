@@ -73,8 +73,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\bazel-bin\server\TestAssemblyInfo.cs">
+      <Link>TestAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="ConfigurationTest.cs" />
     <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
-    <Compile Include="KRPCConfigurationTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
     <Compile Include="Server\ProtocolBuffers\EncoderTest.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCServerTest.cs" />
@@ -92,10 +95,11 @@
     <Compile Include="Service\DocumentationUtilsTest.cs" />
     <Compile Include="Service\ITestService.cs" />
     <Compile Include="Service\KRPCTest.cs" />
+    <Compile Include="Service\MessageAssert.cs" />
     <Compile Include="Service\ObjectStoreTest.cs" />
     <Compile Include="Service\ProcedureHandlerTest.cs" />
     <Compile Include="Service\ProcedureParameterTest.cs" />
-    <Compile Include="Service\Scanner\ScannerTest.cs" />
+    <Compile Include="Service\ScannerTest.cs" />
     <Compile Include="Service\ServicesTest.cs" />
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Service\TestService2.cs" />
@@ -105,7 +109,6 @@
     <Compile Include="TestingTools.cs" />
     <Compile Include="Utils\DocumentationExtensionsTest.cs" />
     <Compile Include="Utils\EquatableTest.cs" />
-    <Compile Include="Utils\IEnumerableExtensionsTest.cs" />
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
     <Compile Include="Utils\TupleTest.cs" />

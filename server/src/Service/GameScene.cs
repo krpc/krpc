@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Service
 {
@@ -6,6 +7,9 @@ namespace KRPC.Service
     /// KSP game scenes
     /// </summary>
     [Flags]
+    [Serializable]
+    [SuppressMessage ("Gendarme.Rules.Design", "FlagsShouldNotDefineAZeroValueRule")]
+    [SuppressMessage ("Gendarme.Rules.Naming", "UsePluralNameInEnumFlagsRule")]
     public enum GameScene
     {
         /// <summary>

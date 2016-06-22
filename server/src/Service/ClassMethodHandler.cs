@@ -10,15 +10,15 @@ namespace KRPC.Service
     /// Invoke() gets the instance of the class using the guid
     /// (which is always the first parameter) and runs the method.
     /// </summary>
-    class ClassMethodHandler : IProcedureHandler
+    sealed class ClassMethodHandler : IProcedureHandler
     {
         readonly MethodInfo method;
         readonly ProcedureParameter[] parameters;
         readonly object[] methodArguments;
 
-        public ClassMethodHandler (MethodInfo method)
+        public ClassMethodHandler (MethodInfo methodInfo)
         {
-            this.method = method;
+            method = methodInfo;
             var parameterList = method.GetParameters ().Select (x => new ProcedureParameter (x)).ToList ();
             parameterList.Insert (0, new ProcedureParameter (typeof(ulong), "this"));
             parameters = parameterList.ToArray ();

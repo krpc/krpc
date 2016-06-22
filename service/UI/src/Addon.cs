@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Server;
+using KRPC.Service;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
@@ -35,7 +36,7 @@ namespace KRPC.UI
 
         internal static void AddObject (UIObject obj)
         {
-            var client = KRPCCore.Context.RPCClient;
+            var client = CallContext.Client;
             if (!objects.ContainsKey (client))
                 objects [client] = new List<UIObject> ();
             objects [client].Add (obj);
@@ -43,7 +44,7 @@ namespace KRPC.UI
 
         internal static void RemoveObject (UIObject obj)
         {
-            var client = KRPCCore.Context.RPCClient;
+            var client = CallContext.Client;
             if (!objects.ContainsKey (client) || !objects [client].Contains (obj))
                 throw new ArgumentException ("UI object not found");
             obj.Destroy ();

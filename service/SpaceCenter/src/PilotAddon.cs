@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Server;
+using KRPC.Service;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
 using UnityEngine;
@@ -180,7 +181,7 @@ namespace KRPC.SpaceCenter
 
         internal static ControlInputs Set (Vessel vessel)
         {
-            manualInputClients.Add (KRPC.KRPCCore.Context.RPCClient);
+            manualInputClients.Add (CallContext.Client);
             if (!manualInputs.ContainsKey (vessel))
                 manualInputs [vessel] = new ControlInputs ();
             return manualInputs [vessel];

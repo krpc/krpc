@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
 
@@ -14,29 +15,30 @@ namespace KRPC.Service
         /// Returns some information about the server, such as the version.
         /// </summary>
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
         public static Status GetStatus ()
         {
-            var status = new Status ();
+            var core = Core.Instance;
             var version = System.Reflection.Assembly.GetExecutingAssembly ().GetName ().Version;
-            status.Version = version.Major + "." + version.Minor + "." + version.Build;
-            status.BytesRead = KRPCCore.Instance.BytesRead;
-            status.BytesWritten = KRPCCore.Instance.BytesWritten;
-            status.BytesReadRate = KRPCCore.Instance.BytesReadRate;
-            status.BytesWrittenRate = KRPCCore.Instance.BytesWrittenRate;
-            status.RpcsExecuted = KRPCCore.Instance.RPCsExecuted;
-            status.RpcRate = KRPCCore.Instance.RPCRate;
-            status.OneRpcPerUpdate = KRPCCore.Instance.OneRPCPerUpdate;
-            status.MaxTimePerUpdate = KRPCCore.Instance.MaxTimePerUpdate;
-            status.AdaptiveRateControl = KRPCCore.Instance.AdaptiveRateControl;
-            status.BlockingRecv = KRPCCore.Instance.BlockingRecv;
-            status.RecvTimeout = KRPCCore.Instance.RecvTimeout;
-            status.TimePerRpcUpdate = KRPCCore.Instance.TimePerRPCUpdate;
-            status.PollTimePerRpcUpdate = KRPCCore.Instance.PollTimePerRPCUpdate;
-            status.ExecTimePerRpcUpdate = KRPCCore.Instance.ExecTimePerRPCUpdate;
-            status.StreamRpcs = KRPCCore.Instance.StreamRPCs;
-            status.StreamRpcsExecuted = KRPCCore.Instance.StreamRPCsExecuted;
-            status.StreamRpcRate = KRPCCore.Instance.StreamRPCRate;
-            status.TimePerStreamUpdate = KRPCCore.Instance.TimePerStreamUpdate;
+            var status = new Status (version.Major + "." + version.Minor + "." + version.Build);
+            status.BytesRead = core.BytesRead;
+            status.BytesWritten = core.BytesWritten;
+            status.BytesReadRate = core.BytesReadRate;
+            status.BytesWrittenRate = core.BytesWrittenRate;
+            status.RpcsExecuted = core.RPCsExecuted;
+            status.RpcRate = core.RPCRate;
+            status.OneRpcPerUpdate = core.OneRPCPerUpdate;
+            status.MaxTimePerUpdate = core.MaxTimePerUpdate;
+            status.AdaptiveRateControl = core.AdaptiveRateControl;
+            status.BlockingRecv = core.BlockingRecv;
+            status.RecvTimeout = core.RecvTimeout;
+            status.TimePerRpcUpdate = core.TimePerRPCUpdate;
+            status.PollTimePerRpcUpdate = core.PollTimePerRPCUpdate;
+            status.ExecTimePerRpcUpdate = core.ExecTimePerRPCUpdate;
+            status.StreamRpcs = core.StreamRPCs;
+            status.StreamRpcsExecuted = core.StreamRPCsExecuted;
+            status.StreamRpcRate = core.StreamRPCRate;
+            status.TimePerStreamUpdate = core.TimePerStreamUpdate;
             return status;
         }
 
@@ -45,61 +47,50 @@ namespace KRPC.Service
         /// Can be used by client libraries to automatically create functionality such as stubs.
         /// </summary>
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static Messages.Services GetServices ()
         {
             var services = new Messages.Services ();
             foreach (var serviceSignature in Services.Instance.Signatures.Values) {
-                var service = new Messages.Service ();
-                service.Name = serviceSignature.Name;
+                var service = new Messages.Service (serviceSignature.Name);
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
-                    var procedure = new Procedure ();
-                    procedure.Name = procedureSignature.Name;
-                    if (procedureSignature.HasReturnType) {
-                        procedure.HasReturnType = true;
+                    var procedure = new Procedure (procedureSignature.Name);
+                    if (procedureSignature.HasReturnType)
                         procedure.ReturnType = TypeUtils.GetTypeName (procedureSignature.ReturnType);
-                    }
                     foreach (var parameterSignature in procedureSignature.Parameters) {
-                        var parameter = new Parameter ();
-                        parameter.Name = parameterSignature.Name;
-                        parameter.Type = TypeUtils.GetTypeName (parameterSignature.Type);
-                        if (parameterSignature.HasDefaultValue) {
-                            parameter.HasDefaultValue = true;
+                        var parameter = new Parameter (parameterSignature.Name, TypeUtils.GetTypeName (parameterSignature.Type));
+                        if (parameterSignature.HasDefaultValue)
                             parameter.DefaultValue = parameterSignature.DefaultValue;
-                        }
                         procedure.Parameters.Add (parameter);
                     }
-                    foreach (var attribute in procedureSignature.Attributes) {
+                    foreach (var attribute in procedureSignature.Attributes)
                         procedure.Attributes.Add (attribute);
-                    }
-                    if (procedureSignature.Documentation != "")
+                    if (procedureSignature.Documentation.Length > 0)
                         procedure.Documentation = procedureSignature.Documentation;
                     service.Procedures.Add (procedure);
                 }
                 foreach (var clsSignature in serviceSignature.Classes.Values) {
-                    var cls = new Class ();
-                    cls.Name = clsSignature.Name;
-                    if (clsSignature.Documentation != "")
+                    var cls = new Class (clsSignature.Name);
+                    if (clsSignature.Documentation.Length > 0)
                         cls.Documentation = clsSignature.Documentation;
                     service.Classes.Add (cls);
                 }
                 foreach (var enmSignature in serviceSignature.Enumerations.Values) {
-                    var enm = new Enumeration ();
-                    enm.Name = enmSignature.Name;
-                    if (enmSignature.Documentation != "")
+                    var enm = new Enumeration (enmSignature.Name);
+                    if (enmSignature.Documentation.Length > 0)
                         enm.Documentation = enmSignature.Documentation;
                     foreach (var enmValueSignature in enmSignature.Values) {
-                        var enmValue = new EnumerationValue ();
-                        enmValue.Name = enmValueSignature.Name;
-                        enmValue.Value = enmValueSignature.Value;
-                        if (enmValueSignature.Documentation != "")
+                        var enmValue = new EnumerationValue (enmValueSignature.Name, enmValueSignature.Value);
+                        if (enmValueSignature.Documentation.Length > 0)
                             enmValue.Documentation = enmValueSignature.Documentation;
                         enm.Values.Add (enmValue);
                     }
                     service.Enumerations.Add (enm);
                 }
-                if (serviceSignature.Documentation != "")
+                if (serviceSignature.Documentation.Length > 0)
                     service.Documentation = serviceSignature.Documentation;
-                services.Services_.Add (service);
+                services.ServicesList.Add (service);
             }
             return services;
         }
@@ -108,6 +99,9 @@ namespace KRPC.Service
         /// The game scene. See <see cref="CurrentGameScene"/>.
         /// </summary>
         [KRPCEnum]
+        [Serializable]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [SuppressMessage ("Gendarme.Rules.Naming", "UsePluralNameInEnumFlagsRule")]
         public enum GameScene
         {
             /// <summary>
@@ -138,7 +132,7 @@ namespace KRPC.Service
         [KRPCProperty]
         public static GameScene CurrentGameScene {
             get {
-                var scene = KRPCCore.Context.GameScene;
+                var scene = CallContext.GameScene;
                 if ((scene & global::KRPC.Service.GameScene.SpaceCenter) != 0)
                     return GameScene.SpaceCenter;
                 else if ((scene & global::KRPC.Service.GameScene.Flight) != 0)
@@ -161,7 +155,7 @@ namespace KRPC.Service
         [KRPCProcedure]
         public static uint AddStream (Request request)
         {
-            return KRPCCore.Instance.AddStream (KRPCCore.Context.RPCClient, request);
+            return Core.Instance.AddStream (CallContext.Client, request);
         }
 
         /// <summary>
@@ -170,7 +164,7 @@ namespace KRPC.Service
         [KRPCProcedure]
         public static void RemoveStream (uint id)
         {
-            KRPCCore.Instance.RemoveStream (KRPCCore.Context.RPCClient, id);
+            Core.Instance.RemoveStream (CallContext.Client, id);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Continuations;
 using KRPC.Server;
@@ -14,118 +15,80 @@ namespace KRPC
     /// The kRPC core. Manages the execution of remote procedures,
     /// bridging the gap between servers and services.
     /// </summary>
-    public class KRPCCore
+    sealed class Core
     {
         //TODO: remove servers list, replace with events etc.
-        IList<KRPCServer> servers = new List<KRPCServer> ();
+        List<Server.Server> servers = new List<Server.Server> ();
         RoundRobinScheduler<IClient<Request,Response>> clientScheduler;
-        IList<RequestContinuation> continuations;
+        List<RequestContinuation> continuations;
         IDictionary<IClient<NoMessage,StreamMessage>, IList<StreamRequest>> streamRequests;
         IDictionary<uint, object> streamResultCache = new Dictionary<uint, object> ();
 
-        internal delegate double UniversalTimeFunction ();
-
-        internal UniversalTimeFunction GetUniversalTime;
+        internal Func<double> GetUniversalTime;
 
         /// <summary>
         /// Event triggered when a RPC client has connected
         /// </summary>
-        public event EventHandler<ClientConnectedArgs> OnRPCClientConnected;
+        public event EventHandler<ClientConnectedEventArgs> OnRPCClientConnected;
 
         /// <summary>
         /// Event triggered when a RPC client has disconnected
         /// </summary>
-        public event EventHandler<ClientDisconnectedArgs> OnRPCClientDisconnected;
+        public event EventHandler<ClientDisconnectedEventArgs> OnRPCClientDisconnected;
 
         /// <summary>
         /// Event triggered when a stream client has connected
         /// </summary>
-        public event EventHandler<ClientConnectedArgs> OnStreamClientConnected;
+        public event EventHandler<ClientConnectedEventArgs> OnStreamClientConnected;
 
         /// <summary>
         /// Event triggered when a stream client has disconnected
         /// </summary>
-        public event EventHandler<ClientDisconnectedArgs> OnStreamClientDisconnected;
+        public event EventHandler<ClientDisconnectedEventArgs> OnStreamClientDisconnected;
 
         internal void RPCClientConnected (IClient<Request,Response> client)
         {
             clientScheduler.Add (client);
-            if (OnRPCClientConnected != null)
-                OnRPCClientConnected (this, new ClientConnectedArgs (client));
+            EventHandlerExtensions.Invoke (OnRPCClientConnected, this, new ClientConnectedEventArgs (client));
         }
 
         internal void RPCClientDisconnected (IClient<Request,Response> client)
         {
             clientScheduler.Remove (client);
-            if (OnRPCClientDisconnected != null)
-                OnRPCClientDisconnected (this, new ClientDisconnectedArgs (client));
+            EventHandlerExtensions.Invoke (OnRPCClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
 
         internal void StreamClientConnected (IClient<NoMessage,StreamMessage> client)
         {
             streamRequests [client] = new List<StreamRequest> ();
-            if (OnStreamClientConnected != null)
-                OnStreamClientConnected (this, new ClientConnectedArgs (client));
+            EventHandlerExtensions.Invoke (OnStreamClientConnected, this, new ClientConnectedEventArgs (client));
         }
 
         internal void StreamClientDisconnected (IClient<NoMessage,StreamMessage> client)
         {
             streamRequests.Remove (client);
-            if (OnStreamClientDisconnected != null)
-                OnStreamClientDisconnected (this, new ClientDisconnectedArgs (client));
+            EventHandlerExtensions.Invoke (OnStreamClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
 
         /// <summary>
         /// Event triggered when a client performs some activity
         /// </summary>
-        public event EventHandler<ClientActivityArgs> OnClientActivity;
+        public event EventHandler<ClientActivityEventArgs> OnClientActivity;
 
-        /// <summary>
-        /// Stores the context in which a continuation is executed.
-        /// For example, used by a continuation to find out which client made the request.
-        /// </summary>
-        public static class Context
-        {
-            /// <summary>
-            /// The current client
-            /// </summary>
-            public static IClient RPCClient { get; private set; }
-
-            /// <summary>
-            /// The current game scene
-            /// </summary>
-            public static GameScene GameScene { get; private set; }
-
-            internal static void Set (IClient rpcClient)
-            {
-                RPCClient = rpcClient;
-            }
-
-            internal static void Clear ()
-            {
-                RPCClient = null;
-            }
-
-            internal static void SetGameScene (GameScene gameScene)
-            {
-                GameScene = gameScene;
-            }
-        }
-
-        static KRPCCore instance;
+        static Core instance;
 
         /// <summary>
         /// Instance of KRPCCore
         /// </summary>
-        public static KRPCCore Instance {
+        public static Core Instance {
             get {
                 if (instance == null)
-                    instance = new KRPCCore ();
+                    instance = new Core ();
                 return instance;
             }
         }
 
-        KRPCCore ()
+        Core ()
         {
             clientScheduler = new RoundRobinScheduler<IClient<Request,Response>> ();
             continuations = new List<RequestContinuation> ();
@@ -141,7 +104,7 @@ namespace KRPC
         /// <summary>
         /// Add a server to the core.
         /// </summary>
-        public void AddServer (KRPCServer server)
+        internal void Add (Server.Server server)
         {
             servers.Add (server);
         }
@@ -304,6 +267,7 @@ namespace KRPC
         /// <summary>
         /// Update the server
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         public void Update ()
         {
             ulong startRPCsExecuted = RPCsExecuted;
@@ -350,7 +314,7 @@ namespace KRPC
         Stopwatch rpcPollTimeout = new Stopwatch ();
         Stopwatch rpcPollTimer = new Stopwatch ();
         Stopwatch rpcExecTimer = new Stopwatch ();
-        IList<RequestContinuation> rpcYieldedContinuations = new List<RequestContinuation> ();
+        List<RequestContinuation> rpcYieldedContinuations = new List<RequestContinuation> ();
 
         /// <summary>
         /// Update the RPC server, called once every FixedUpdate.
@@ -361,6 +325,7 @@ namespace KRPC
         /// MaxPollTimePerUpdate microseconds. If NonBlockingUpdate is true, a single non-blocking call
         /// will be made to check for new RPCs.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         void RPCServerUpdate ()
         {
             rpcTimer.Reset ();
@@ -451,6 +416,7 @@ namespace KRPC
         /// <summary>
         /// Update the Stream server. Executes all streaming RPCs and sends the results to clients (if they have changed).
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         void StreamServerUpdate ()
         {
             streamTimer.Reset ();
@@ -473,7 +439,12 @@ namespace KRPC
                         Response response;
                         try {
                             response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
-                        } catch (Exception e) {
+                        } catch (RPCException e) {
+                            response = new Response ();
+                            response.HasError = true;
+                            response.Error = e.ToString ();
+                        } catch (YieldException e) {
+                            //FIXME: handle yields correctly
                             response = new Response ();
                             response.HasError = true;
                             response.Error = e.ToString ();
@@ -520,8 +491,9 @@ namespace KRPC
             var streamClient = GetStreamClient (rpcClient);
 
             // Check for an existing stream for the request
-            var procedure = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
-            var arguments = KRPC.Service.Services.Instance.GetArguments (procedure, request.Arguments);
+            var services = Service.Services.Instance;
+            var procedure = services.GetProcedureSignature (request.Service, request.Procedure);
+            var arguments = services.GetArguments (procedure, request.Arguments);
             foreach (var streamRequest in streamRequests[streamClient]) {
                 if (streamRequest.Procedure == procedure && streamRequest.Arguments.SequenceEqual (arguments))
                     return streamRequest.Identifier;
@@ -556,6 +528,9 @@ namespace KRPC
         /// Adds a continuation to the queue for any client with a new request,
         /// if a continuation is not already being processed for the client.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         void PollRequests (IList<RequestContinuation> yieldedContinuations)
         {
             if (clientScheduler.Empty)
@@ -568,11 +543,11 @@ namespace KRPC
             var item = clientScheduler.Items.First;
             while (item != null) {
                 var client = item.Value;
+                var stream = client.Stream;
                 try {
-                    if (!pollRequestsCurrentClients.Contains (client) && client.Stream.DataAvailable) {
-                        Request request = client.Stream.Read ();
-                        if (OnClientActivity != null)
-                            OnClientActivity (this, new ClientActivityArgs (client));
+                    if (!pollRequestsCurrentClients.Contains (client) && stream.DataAvailable) {
+                        Request request = stream.Read ();
+                        EventHandlerExtensions.Invoke (OnClientActivity, this, new ClientActivityEventArgs (client));
                         if (Logger.ShouldLog (Logger.Severity.Debug))
                             Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")", Logger.Severity.Debug);
                         continuations.Add (new RequestContinuation (client, request));
@@ -583,10 +558,10 @@ namespace KRPC
                 } catch (Exception e) {
                     var response = new Response ();
                     response.HasError = true;
-                    response.Error = "Error receiving message\n" + e.Message + "\n" + e.StackTrace;
+                    response.Error = "Error receiving message" + Environment.NewLine + e.Message + Environment.NewLine + e.StackTrace;
                     response.Time = GetUniversalTime ();
                     if (Logger.ShouldLog (Logger.Severity.Debug))
-                        Logger.WriteLine (e.Message + "\n" + e.StackTrace, Logger.Severity.Error);
+                        Logger.WriteLine (e.Message + Environment.NewLine + e.StackTrace, Logger.Severity.Error);
                     Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
                     client.Stream.Write (response);
                 }
@@ -598,6 +573,8 @@ namespace KRPC
         /// Execute the continuation and send a response to the client,
         /// or throw a YieldException if the continuation is not complete.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         void ExecuteContinuation (RequestContinuation continuation)
         {
             var client = continuation.Client;
@@ -606,7 +583,7 @@ namespace KRPC
             // or throw a YieldException if the continuation has not completed
             Response response;
             try {
-                Context.Set (client);
+                CallContext.Set (client);
                 response = continuation.Run ();
             } catch (YieldException) {
                 throw;
@@ -615,15 +592,15 @@ namespace KRPC
                 response.HasError = true;
                 response.Error = e.Message;
                 if (Logger.ShouldLog (Logger.Severity.Debug))
-                    Logger.WriteLine (e.Message, Logger.Severity.Debug);
+                    Logger.WriteLine (response.Error, Logger.Severity.Debug);
             } catch (Exception e) {
                 response = new Response ();
                 response.HasError = true;
-                response.Error = e.Message + "\n" + e.StackTrace;
+                response.Error = e.Message + Environment.NewLine + e.StackTrace;
                 if (Logger.ShouldLog (Logger.Severity.Debug))
-                    Logger.WriteLine (e.Message + "\n" + e.StackTrace, Logger.Severity.Debug);
+                    Logger.WriteLine (response.Error, Logger.Severity.Debug);
             } finally {
-                Context.Clear ();
+                CallContext.Clear ();
             }
 
             // Send response to the client

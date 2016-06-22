@@ -1,8 +1,19 @@
 using System;
 
-namespace KRPC.Server
+namespace KRPC.Server.Message
 {
-    class NoRequestException : Exception
+    sealed class NoRequestException : Exception
     {
+        public NoRequestException ()
+        {
+        }
+
+        public NoRequestException (string message) : base (message)
+        {
+        }
+
+        public NoRequestException (string message, Exception innerException) : base (message, innerException)
+        {
+        }
     }
 }

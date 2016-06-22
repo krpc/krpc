@@ -13,18 +13,17 @@ namespace KRPC.Test.Server.TCP
         [Test]
         public void NetworkAdapters ()
         {
-            List<IPAddress> addresses = NetworkInformation.GetLocalIPAddresses ().ToList ();
+            List<IPAddress> addresses = NetworkInformation.LocalIPAddresses.ToList ();
             Assert.IsTrue (addresses.Contains (IPAddress.Loopback));
-            foreach (var address in addresses) {
-                Console.WriteLine (address);
-            }
+            //foreach (var address in addresses)
+            //    Console.WriteLine (address);
         }
 
         [Test]
         [Ignore]
         public void GetLoopbackSubnetMask ()
         {
-            Assert.AreEqual ("", NetworkInformation.GetSubnetMask (IPAddress.Loopback).ToString ());
+            Assert.AreEqual (String.Empty, NetworkInformation.GetSubnetMask (IPAddress.Loopback).ToString ());
         }
     }
 }

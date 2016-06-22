@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using KRPC.Utils;
 using System.Runtime.Serialization;
 
 namespace KRPC.Service.Scanner
@@ -10,7 +10,7 @@ namespace KRPC.Service.Scanner
     /// Signature information for a procedure, including procedure name,
     /// parameter types and return types.
     /// </summary>
-    class ProcedureSignature : ISerializable
+    sealed class ProcedureSignature : ISerializable
     {
         /// <summary>
         /// Name of the procedure, not including the service it is in.
@@ -46,6 +46,7 @@ namespace KRPC.Service.Scanner
 
         public List<string> Attributes { get; private set; }
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public ProcedureSignature (string serviceName, string procedureName, string documentation, IProcedureHandler handler, GameScene gameScene, params string[] attributes)
         {
             Name = procedureName;
@@ -60,14 +61,15 @@ namespace KRPC.Service.Scanner
             for (int position = 0; position < Parameters.Count; position++)
                 Attributes.AddRange (TypeUtils.ParameterTypeAttributes (position, Parameters [position].Type));
 
-            HasReturnType = (handler.ReturnType != typeof(void));
+            var returnType = handler.ReturnType;
+            HasReturnType = (returnType != typeof(void));
             if (HasReturnType) {
-                ReturnType = handler.ReturnType;
+                ReturnType = returnType;
                 // Check it's a valid return type
-                if (!TypeUtils.IsAValidType (ReturnType))
-                    throw new ServiceException (ReturnType + " is not a valid Procedure return type, " + "in " + FullyQualifiedName);
+                if (!TypeUtils.IsAValidType (returnType))
+                    throw new ServiceException (returnType + " is not a valid Procedure return type, " + "in " + FullyQualifiedName);
                 // Add return type attributes
-                Attributes.AddRange (TypeUtils.ReturnTypeAttributes (ReturnType));
+                Attributes.AddRange (TypeUtils.ReturnTypeAttributes (returnType));
             }
         }
 

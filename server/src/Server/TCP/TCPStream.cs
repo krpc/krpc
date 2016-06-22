@@ -1,23 +1,30 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Sockets;
 
 namespace KRPC.Server.TCP
 {
+    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInTypeNameRule")]
+    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     sealed class TCPStream : IStream<byte,byte>
     {
         readonly NetworkStream stream;
 
-        public TCPStream (NetworkStream stream)
+        public TCPStream (NetworkStream innerStream)
         {
-            this.stream = stream;
+            stream = innerStream;
         }
 
         public bool DataAvailable {
             get {
                 try {
                     return stream.DataAvailable;
-                } catch {
+                } catch (IOException) {
+                    return false;
+                } catch (ObjectDisposedException) {
+                    return false;
+                } catch (SocketException) {
                     return false;
                 }
             }
@@ -37,7 +44,7 @@ namespace KRPC.Server.TCP
             } catch (IOException e) {
                 throw new ServerException (e.Message);
             } catch (ObjectDisposedException) {
-                throw new ServerException ("Connection closed");
+                throw new ClientDisconnectedException ();
             }
         }
 
@@ -50,7 +57,7 @@ namespace KRPC.Server.TCP
             } catch (IOException e) {
                 throw new ServerException (e.Message);
             } catch (ObjectDisposedException) {
-                throw new ServerException ("Connection closed");
+                throw new ClientDisconnectedException ();
             }
         }
 
@@ -59,6 +66,7 @@ namespace KRPC.Server.TCP
             throw new NotSupportedException ();
         }
 
+        [SuppressMessage ("Gendarme.Rules.Naming", "ParameterNamesShouldMatchOverriddenMethodRule")]
         public void Write (byte[] buffer)
         {
             Write (buffer, 0, buffer.Length);
@@ -72,7 +80,7 @@ namespace KRPC.Server.TCP
             } catch (IOException e) {
                 throw new ServerException (e.Message);
             } catch (ObjectDisposedException) {
-                throw new ServerException ("Connection closed");
+                throw new ClientDisconnectedException ();
             }
         }
 

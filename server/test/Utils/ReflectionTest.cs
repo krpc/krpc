@@ -1,9 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using NUnit.Framework;
-using KRPC.Utils;
 using KRPC.Service.Attributes;
 using KRPC.Test.Service;
+using KRPC.Utils;
+using NUnit.Framework;
 
 namespace KRPC.Test.Utils
 {
@@ -58,11 +59,12 @@ namespace KRPC.Test.Utils
             Assert.IsFalse (Reflection.HasAttribute<KRPCServiceAttribute> (typeof(TestService.TestClass)));
         }
 
-        public static class TestStaticClass
+        static class TestStaticClass
         {
         }
 
-        public class TestNonStaticClass
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderUsingStaticTypeRule")]
+        sealed class TestNonStaticClass
         {
         }
 
@@ -99,4 +101,3 @@ namespace KRPC.Test.Utils
         }
     }
 }
-

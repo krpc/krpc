@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace KRPC.UI
 {
-    class MovedArgs : EventArgs
+    sealed class MovedEventArgs : EventArgs
     {
         public Rect Position { get; private set; }
 
-        public MovedArgs (Rect position)
+        public MovedEventArgs (Rect position)
         {
             Position = position;
         }

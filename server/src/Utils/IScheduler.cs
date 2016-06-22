@@ -8,8 +8,8 @@ namespace KRPC.Utils
 
         T Next ();
 
-        void Add (T client);
+        void Add (T item);
 
-        void Remove (T client);
+        void Remove (T item);
     }
 }

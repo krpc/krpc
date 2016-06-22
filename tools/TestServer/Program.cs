@@ -1,4 +1,5 @@
 using KRPC;
+using KRPC.Server;
 using KRPC.Service;
 using KRPC.Utils;
 using NDesk.Options;
@@ -86,12 +87,12 @@ namespace TestServer
 
             KRPC.Service.Scanner.Scanner.GetServices ();
 
-            var core = KRPCCore.Instance;
-            KRPCCore.Context.SetGameScene (GameScene.SpaceCenter);
+            var core = Core.Instance;
+            CallContext.SetGameScene (GameScene.SpaceCenter);
             var timeSpan = new TimeSpan ();
-            KRPCCore.Instance.GetUniversalTime = () => timeSpan.TotalSeconds;
+            Core.Instance.GetUniversalTime = () => timeSpan.TotalSeconds;
 
-            var server = new KRPCServer (IPAddress.Loopback, rpcPort, streamPort);
+            var server = new Server (IPAddress.Loopback, rpcPort, streamPort);
             server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
 
             Console.WriteLine ("Starting server...");

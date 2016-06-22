@@ -14,37 +14,27 @@ namespace KRPC.Server.Message
 
         public event EventHandler OnStarted;
         public event EventHandler OnStopped;
-        public event EventHandler<ClientRequestingConnectionArgs<NoMessage,StreamMessage>> OnClientRequestingConnection;
-        public event EventHandler<ClientConnectedArgs<NoMessage,StreamMessage>> OnClientConnected;
+        public event EventHandler<ClientRequestingConnectionEventArgs<NoMessage,StreamMessage>> OnClientRequestingConnection;
+        public event EventHandler<ClientConnectedEventArgs<NoMessage,StreamMessage>> OnClientConnected;
         /// <summary>
         /// Does not trigger this event, unless the underlying server does.
         /// </summary>
-        public event EventHandler<ClientActivityArgs<NoMessage,StreamMessage>> OnClientActivity;
-        public event EventHandler<ClientDisconnectedArgs<NoMessage,StreamMessage>> OnClientDisconnected;
+        public event EventHandler<ClientActivityEventArgs<NoMessage,StreamMessage>> OnClientActivity;
+        public event EventHandler<ClientDisconnectedEventArgs<NoMessage,StreamMessage>> OnClientDisconnected;
 
         IServer<byte,byte> server;
         readonly Dictionary<IClient<byte,byte>,IClient<NoMessage,StreamMessage>> clients = new Dictionary<IClient<byte,byte>, IClient<NoMessage,StreamMessage>> ();
         readonly Dictionary<IClient<byte,byte>,IClient<NoMessage,StreamMessage>> pendingClients = new Dictionary<IClient<byte,byte>, IClient<NoMessage,StreamMessage>> ();
 
-        protected StreamServer (IServer<byte,byte> server)
+        protected StreamServer (IServer<byte,byte> innerServer)
         {
-            this.server = server;
-            server.OnStarted += (s, e) => {
-                if (OnStarted != null)
-                    OnStarted (this, EventArgs.Empty);
-            };
-            server.OnStopped += (s, e) => {
-                if (OnStopped != null)
-                    OnStopped (this, EventArgs.Empty);
-            };
+            server = innerServer;
+            server.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
+            server.OnStopped += (s, e) => EventHandlerExtensions.Invoke (OnStopped, this);
             server.OnClientRequestingConnection += HandleClientRequestingConnection;
             server.OnClientConnected += HandleClientConnected;
             server.OnClientConnected += HandleClientActivity;
             server.OnClientDisconnected += HandleClientDisconnected;
-        }
-
-        public IServer<byte,byte> Server {
-            get { return server; }
         }
 
         public void Start ()
@@ -87,39 +77,33 @@ namespace KRPC.Server.Message
             server.ClearStats ();
         }
 
-        void HandleClientConnected (object sender, IClientEventArgs<byte,byte> args)
+        void HandleClientConnected (object sender, ClientEventArgs<byte,byte> args)
         {
             // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
-            if (OnClientConnected != null) {
-                var client = clients [args.Client];
-                OnClientConnected (this, new ClientConnectedArgs<NoMessage,StreamMessage> (client));
-            }
+            var client = clients [args.Client];
+            EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<NoMessage,StreamMessage> (client));
         }
 
-        void HandleClientActivity (object sender, IClientEventArgs<byte,byte> args)
+        void HandleClientActivity (object sender, ClientEventArgs<byte,byte> args)
         {
-            if (OnClientActivity != null) {
-                var client = clients [args.Client];
-                OnClientActivity (this, new ClientActivityArgs<NoMessage,StreamMessage> (client));
-            }
+            var client = clients [args.Client];
+            EventHandlerExtensions.Invoke (OnClientActivity, this, new ClientActivityEventArgs<NoMessage,StreamMessage> (client));
         }
 
-        void HandleClientDisconnected (object sender, IClientEventArgs<byte,byte> args)
+        void HandleClientDisconnected (object sender, ClientEventArgs<byte,byte> args)
         {
             var client = clients [args.Client];
             clients.Remove (args.Client);
-            if (OnClientDisconnected != null) {
-                OnClientDisconnected (this, new ClientDisconnectedArgs<NoMessage,StreamMessage> (client));
-            }
+            EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<NoMessage,StreamMessage> (client));
         }
 
-        protected abstract IClient<NoMessage,StreamMessage> CreateClient (object sender, ClientRequestingConnectionArgs<byte,byte> args);
+        protected abstract IClient<NoMessage,StreamMessage> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args);
 
         /// <summary>
         /// When a client requests a connection, check the hello message,
         /// then trigger RPCServer.OnClientRequestingConnection to get response of delegates
         /// </summary>
-        public virtual void HandleClientRequestingConnection (object sender, ClientRequestingConnectionArgs<byte,byte> args)
+        public virtual void HandleClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
             if (!pendingClients.ContainsKey (args.Client)) {
                 var client = CreateClient (sender, args);
@@ -132,10 +116,11 @@ namespace KRPC.Server.Message
 
             // Client is in pending clients and passed hello message verification.
             // Invoke connection request events.
-            if (OnClientRequestingConnection != null) {
+            var handler = OnClientRequestingConnection;
+            if (handler != null) {
                 var client = pendingClients [args.Client];
-                var subArgs = new ClientRequestingConnectionArgs<NoMessage,StreamMessage> (client);
-                OnClientRequestingConnection (this, subArgs);
+                var subArgs = new ClientRequestingConnectionEventArgs<NoMessage,StreamMessage> (client);
+                handler (this, subArgs);
                 if (subArgs.Request.ShouldAllow) {
                     args.Request.Allow ();
                     clients [args.Client] = client;

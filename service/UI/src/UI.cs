@@ -58,7 +58,7 @@ namespace KRPC.UI
         public static void Clear (bool clientOnly = false)
         {
             if (clientOnly)
-                Addon.Clear (KRPCCore.Context.RPCClient);
+                Addon.Clear (CallContext.Client);
             else
                 Addon.Clear ();
         }

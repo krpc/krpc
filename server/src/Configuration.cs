@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using KRPC.Service;
 using KRPC.Utils;
@@ -6,21 +7,21 @@ using UnityEngine;
 
 namespace KRPC
 {
-    sealed class KRPCConfiguration : ConfigurationStorage
+    sealed class Configuration : ConfigurationStorage
     {
         [Persistent] string address = "127.0.0.1";
         [Persistent] ushort rpcPort = 50000;
         [Persistent] ushort streamPort = 50001;
         [Persistent] bool mainWindowVisible = true;
         [Persistent] RectStorage mainWindowPosition = new RectStorage ();
-        [Persistent] bool infoWindowVisible = false;
+        [Persistent] bool infoWindowVisible;
         [Persistent] RectStorage infoWindowPosition = new RectStorage ();
-        [Persistent] bool autoStartServer = false;
-        [Persistent] bool autoAcceptConnections = false;
+        [Persistent] bool autoStartServer;
+        [Persistent] bool autoAcceptConnections;
         [Persistent] string logLevel = Logger.Severity.Info.ToString ();
-        [Persistent] bool verboseErrors = false;
-        [Persistent] bool checkDocumented = false;
-        [Persistent] bool oneRPCPerUpdate = false;
+        [Persistent] bool verboseErrors;
+        [Persistent] bool checkDocumented;
+        [Persistent] bool oneRPCPerUpdate;
         [Persistent] uint maxTimePerUpdate = 5000;
         [Persistent] bool adaptiveRateControl = true;
         [Persistent] bool blockingRecv = true;
@@ -93,13 +94,10 @@ namespace KRPC
             set { recvTimeout = value; }
         }
 
-        public KRPCConfiguration (string filePath) :
+        public Configuration (string filePath) :
             base (filePath)
         {
-            Address = IPAddress.Parse (address);
-            Logger.Level = (Logger.Severity)Enum.Parse (typeof(Logger.Severity), logLevel);
-            RPCException.VerboseErrors = verboseErrors;
-            ServicesChecker.CheckDocumented = checkDocumented;
+            AfterLoad ();
         }
 
         protected override void BeforeSave ()
@@ -110,15 +108,18 @@ namespace KRPC
             checkDocumented = ServicesChecker.CheckDocumented;
         }
 
+        [SuppressMessage ("Gendarme.Rules.BadPractice", "DisableDebuggingCodeRule")]
         protected override void AfterLoad ()
         {
-            try {
-                Address = IPAddress.Parse (address);
-            } catch (FormatException) {
+            IPAddress ipAddress;
+            bool validAddress = IPAddress.TryParse (address, out ipAddress);
+            if (!validAddress) {
                 Console.WriteLine (
                     "[kRPC] Error parsing IP address from configuration file. Got '" + address + "'. " +
                     "Defaulting to loopback address " + IPAddress.Loopback);
                 Address = IPAddress.Loopback;
+            } else {
+                Address = ipAddress;
             }
             try {
                 Logger.Level = (Logger.Severity)Enum.Parse (typeof(Logger.Severity), logLevel);

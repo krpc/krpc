@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Continuations;
 using KRPC.Server;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.AutoPilot;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -65,7 +66,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Engage ()
         {
-            requestingClient = KRPCCore.Context.RPCClient;
+            requestingClient = CallContext.Client;
             engaged [vesselId] = this;
             attitudeController.Start ();
         }

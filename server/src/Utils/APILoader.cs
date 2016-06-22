@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 
@@ -17,17 +18,21 @@ namespace KRPC.Utils
         /// <param name="assemblyName">Name of the assembly to load.</param>
         /// <param name="apiName">Name of the API to load.</param>
         /// <param name="requiredVersion">Required API version.</param>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static bool Load (Type api, string assemblyName, string apiName, Version requiredVersion)
         {
+            if (api == null)
+                throw new ArgumentNullException ("api");
+
             // Find the assembly
             var assembly = AssemblyLoader.loadedAssemblies.FirstOrDefault (a => a.assembly.GetName ().Name == assemblyName);
             if (assembly == null) {
                 Logger.WriteLine ("Load API: " + assemblyName + " not found; skipping");
                 return false;
             }
-            var version = new Version (assembly.versionMajor, assembly.versionMinor);
 
             // Version check
+            var version = new Version (assembly.versionMajor, assembly.versionMinor);
             if (version.CompareTo (requiredVersion) < 0) {
                 Error ("Failed to load " + assemblyName + "; found version " + version + " but version >= " + requiredVersion + " is required");
                 return false;
@@ -40,6 +45,7 @@ namespace KRPC.Utils
                 return false;
             }
 
+            // Load the API methods
             var apiMethods = type.GetMethods ();
             foreach (var property in api.GetProperties()) {
                 // Skip the property if it does not return a delegate

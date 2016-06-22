@@ -1,15 +1,16 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Continuations;
 using KRPC.Server;
-using KRPC.Service.Scanner;
 using KRPC.Service.Messages;
+using KRPC.Service.Scanner;
 
 namespace KRPC.Service
 {
     /// <summary>
     /// A continuation that runs a client request.
     /// </summary>
-    class RequestContinuation : Continuation<Response>
+    sealed class RequestContinuation : Continuation<Response>
     {
         public IClient<Request,Response> Client { get; private set; }
 
@@ -18,10 +19,11 @@ namespace KRPC.Service
         readonly Exception exception;
         readonly IContinuation continuation;
 
-        public RequestContinuation (IClient<Request,Response> client, Request request)
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
+        public RequestContinuation (IClient<Request,Response> client, Request clientRequest)
         {
             Client = client;
-            this.request = request;
+            request = clientRequest;
             try {
                 procedure = Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
             } catch (Exception e) {
@@ -29,12 +31,12 @@ namespace KRPC.Service
             }
         }
 
-        RequestContinuation (IClient<Request,Response> client, Request request, ProcedureSignature procedure, IContinuation continuation)
+        RequestContinuation (IClient<Request,Response> client, Request clientRequest, ProcedureSignature invokedProcedure, IContinuation currentContinuation)
         {
             Client = client;
-            this.request = request;
-            this.procedure = procedure;
-            this.continuation = continuation;
+            request = clientRequest;
+            procedure = invokedProcedure;
+            continuation = currentContinuation;
         }
 
         public override Response Run ()
@@ -42,10 +44,11 @@ namespace KRPC.Service
             if (exception != null)
                 throw exception;
             try {
+                var services = Services.Instance;
                 if (continuation == null)
-                    return Services.Instance.HandleRequest (procedure, request);
+                    return services.HandleRequest (procedure, request);
                 else
-                    return Services.Instance.HandleRequest (procedure, continuation);
+                    return services.HandleRequest (procedure, continuation);
             } catch (YieldException e) {
                 throw new YieldException (new RequestContinuation (Client, request, procedure, e.Continuation));
             }

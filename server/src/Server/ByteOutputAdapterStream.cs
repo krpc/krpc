@@ -3,23 +3,27 @@ using System.IO;
 
 namespace KRPC.Server
 {
-    class ByteOutputStreamAdapter : Stream
+    sealed class ByteOutputAdapterStream : Stream
     {
-        readonly IStream<byte,byte> stream;
+        readonly IStream<byte,byte> innerStream;
 
-        public ByteOutputStreamAdapter (IStream<byte,byte> stream)
+        public ByteOutputAdapterStream (IStream<byte,byte> stream)
         {
-            this.stream = stream;
+            innerStream = stream;
         }
 
         public override int Read (byte[] buffer, int offset, int count)
         {
-            throw new NotImplementedException ();
+            throw new InvalidOperationException ();
         }
 
         public override void Write (byte[] buffer, int offset, int count)
         {
-            stream.Write (buffer, offset, count);
+            try {
+                innerStream.Write (buffer, offset, count);
+            } catch (ClientDisconnectedException e) {
+                throw new ObjectDisposedException ("Client disconnected", e);
+            }
         }
 
         public override bool CanRead {
@@ -35,22 +39,22 @@ namespace KRPC.Server
         }
 
         public override long Length {
-            get { throw new NotImplementedException (); }
+            get { throw new InvalidOperationException (); }
         }
 
         public override void SetLength (long value)
         {
-            throw new NotImplementedException ();
+            throw new InvalidOperationException ();
         }
 
         public override long Position {
-            get { throw new NotImplementedException (); }
-            set { throw new NotImplementedException (); }
+            get { throw new InvalidOperationException (); }
+            set { throw new InvalidOperationException (); }
         }
 
         public override long Seek (long offset, SeekOrigin origin)
         {
-            throw new NotImplementedException ();
+            throw new InvalidOperationException ();
         }
 
         public override void Flush ()

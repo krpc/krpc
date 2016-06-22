@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace KRPC.Service
 {
-    class ProcedureParameter
+    sealed class ProcedureParameter
     {
         public Type Type { get; private set; }
 
@@ -38,4 +38,3 @@ namespace KRPC.Service
         }
     }
 }
-

@@ -7,10 +7,10 @@ namespace KRPC.Server.Message
     {
         readonly IClient<byte,byte> client;
 
-        protected RPCClient (string name, IClient<byte,byte> client, IStream<Request,Response> stream)
+        protected RPCClient (string name, IClient<byte,byte> innerClient, IStream<Request,Response> stream)
         {
             Name = name;
-            this.client = client;
+            client = innerClient;
             Stream = stream;
         }
 
@@ -70,4 +70,3 @@ namespace KRPC.Server.Message
         }
     }
 }
-

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Server;
+using KRPC.Service;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
@@ -17,7 +18,7 @@ namespace KRPC.Drawing
 
         internal static void AddObject (IDrawingObject obj)
         {
-            var client = KRPCCore.Context.RPCClient;
+            var client = CallContext.Client;
             if (!objects.ContainsKey (client))
                 objects [client] = new List<IDrawingObject> ();
             objects [client].Add (obj);
@@ -25,7 +26,7 @@ namespace KRPC.Drawing
 
         internal static void RemoveObject (IDrawingObject obj)
         {
-            var client = KRPCCore.Context.RPCClient;
+            var client = CallContext.Client;
             if (!objects.ContainsKey (client) || !objects [client].Contains (obj))
                 throw new ArgumentException ("Drawing object not found");
             obj.Destroy ();
