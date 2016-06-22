@@ -177,7 +177,7 @@ class TestAutoPilot(krpctest.TestCase):
         self.assertDegreesAlmostEqual(90, self.ap.error, delta=1)
 
         self.ap.target_direction = flight.prograde
-        self.ap.target_roll = 30
+        self.ap.target_roll = 30.0
         self.assertDegreesAlmostEqual(30, self.ap.error, delta=1)
 
         self.ap.disengage()
