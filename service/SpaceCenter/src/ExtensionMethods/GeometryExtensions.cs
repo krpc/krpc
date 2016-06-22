@@ -105,6 +105,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Normalize an angle to the range (-180,180)
+        /// </summary>
+        public static float NormAngle (float angle)
+        {
+            return angle - 360f * Mathf.Floor ((angle + 180f) / 360f);
+        }
+
+        /// <summary>
         /// Clamp the elements of a vector to the given range
         /// </summary>
         public static Vector3 Clamp (this Vector3 v, float min, float max)
@@ -177,6 +185,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static float ToRadians (float degrees)
         {
             return degrees * ((float)Math.PI / 180f);
+        }
+
+        /// <summary>
+        /// Convert degrees to radians.
+        /// </summary>
+        public static double ToRadians (double degrees)
+        {
+            return degrees * (Math.PI / 180d);
         }
 
         /// <summary>

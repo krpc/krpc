@@ -4,8 +4,8 @@ using System.Linq;
 using KRPC.Continuations;
 using KRPC.Server;
 using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.AutoPilot;
 using KRPC.SpaceCenter.ExtensionMethods;
-using KRPC.SpaceCenter.Utils;
 using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
@@ -23,25 +23,17 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class AutoPilot : Equatable<AutoPilot>
     {
-        static IDictionary<Guid, AutoPilot> engaged = new Dictionary<Guid, AutoPilot> ();
+        static readonly IDictionary<Guid, AutoPilot> engaged = new Dictionary<Guid, AutoPilot> ();
         readonly Guid vesselId;
-        readonly RotationRateController rotationRateController;
+        readonly AttitudeController attitudeController;
         IClient requestingClient;
-        Vector3d targetDirection;
 
         internal AutoPilot (global::Vessel vessel)
         {
             if (!engaged.ContainsKey (vessel.id))
                 engaged [vessel.id] = null;
             vesselId = vessel.id;
-            rotationRateController = new RotationRateController (vessel);
-            ReferenceFrame = ReferenceFrame.Surface (vessel);
-            TargetDirection = null;
-            TargetRoll = float.NaN;
-            RotationSpeedMultiplier = 1f;
-            RollSpeedMultiplier = 1f;
-            MaxRollSpeed = 1f;
-            MaxRotationSpeed = 1f;
+            attitudeController = new AttitudeController (vessel);
         }
 
         /// <summary>
@@ -73,8 +65,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Engage ()
         {
-            requestingClient = KRPC.KRPCCore.Context.RPCClient;
+            requestingClient = KRPCCore.Context.RPCClient;
             engaged [vesselId] = this;
+            attitudeController.Start ();
         }
 
         /// <summary>
@@ -88,45 +81,84 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Blocks until the vessel is pointing in the target direction (if set) and has the target roll (if set).
+        /// Blocks until the vessel is pointing in the target direction and has the target roll (if set).
         /// </summary>
         [KRPCMethod]
         public void Wait ()
         {
-            if (Error > 0.5f || RollError > 0.5f || InternalVessel.angularVelocity.magnitude > 0.05f)
+            if (Error > 0.75f || InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > 0.05f) {
+                Console.WriteLine (String.Format ("{0:F} {1:F}", Error, InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude));
                 throw new YieldException (new ParameterizedContinuationVoid (Wait));
+            }
         }
 
         /// <summary>
         /// The error, in degrees, between the direction the ship has been asked
         /// to point in and the direction it is pointing in. Returns zero if the auto-pilot
-        /// has not been engaged, SAS is not enabled, SAS is in stability assist mode,
-        /// or no target direction is set.
+        /// has not been engaged and SAS is not enabled or is in stability assist mode.
         /// </summary>
         [KRPCProperty]
         public float Error {
             get {
-                if (engaged [vesselId] == this && targetDirection != Vector3d.zero)
-                    return Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (targetDirection));
-                else if (engaged [vesselId] != this && SAS && SASMode != SASMode.StabilityAssist)
-                    return Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ());
-                else
+                if (engaged [vesselId] == this) {
+                    if (!double.IsNaN (attitudeController.TargetRoll)) {
+                        var currentRotation = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation);
+                        var targetRotation = attitudeController.TargetRotation;
+                        var rotation = targetRotation * currentRotation.Inverse ();
+                        float angle;
+                        Vector3 axis;
+                        ((Quaternion)rotation).ToAngleAxis (out angle, out axis);
+                        return GeometryExtensions.NormAngle (angle);
+                    } else {
+                        return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, ReferenceFrame.DirectionToWorldSpace (attitudeController.TargetDirection)));
+                    }
+                } else if (engaged [vesselId] != this && SAS && SASMode != SASMode.StabilityAssist) {
+                    return GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ()));
+                } else {
                     return 0f;
+                }
             }
         }
 
         /// <summary>
-        /// The error, in degrees, between the roll the ship has been asked to be
-        /// in and the actual roll. Returns zero if the auto-pilot has not been engaged
-        /// or no target roll is set.
+        /// The error, in degrees, between the vessels current and target pitch.
+        /// Returns zero if the auto-pilot has not been engaged.
+        /// </summary>
+        [KRPCProperty]
+        public float PitchError {
+            get {
+                if (engaged [vesselId] != this)
+                    return 0f;
+                var currentPitch = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().x;
+                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetPitch - currentPitch));
+            }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the vessels current and target heading.
+        /// Returns zero if the auto-pilot has not been engaged.
+        /// </summary>
+        [KRPCProperty]
+        public float HeadingError {
+            get {
+                if (engaged [vesselId] != this)
+                    return 0f;
+                var currentHeading = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().y;
+                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetHeading - currentHeading));
+            }
+        }
+
+        /// <summary>
+        /// The error, in degrees, between the vessels current and target roll.
+        /// Returns zero if the auto-pilot has not been engaged or no target roll is set.
         /// </summary>
         [KRPCProperty]
         public float RollError {
             get {
-                if (engaged [vesselId] != this || Double.IsNaN (TargetRoll))
+                if (engaged [vesselId] != this || double.IsNaN (attitudeController.TargetRoll))
                     return 0f;
                 var currentRoll = ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                return (float)Math.Abs (TargetRoll - currentRoll);
+                return (float)Math.Abs (GeometryExtensions.ClampAngle180 (attitudeController.TargetRoll - currentRoll));
             }
         }
 
@@ -134,34 +166,65 @@ namespace KRPC.SpaceCenter.Services
         /// The reference frame for the target direction (<see cref="AutoPilot.TargetDirection"/>).
         /// </summary>
         [KRPCProperty]
-        public ReferenceFrame ReferenceFrame { get; set; }
-
-        /// <summary>
-        /// The target direction. <c>null</c> if no target direction is set.
-        /// </summary>
-        [KRPCProperty]
-        public Tuple3 TargetDirection {
-            get { return targetDirection == Vector3d.zero ? null : targetDirection.ToTuple (); }
-            set { targetDirection = value == null ? Vector3d.zero : value.ToVector ().normalized; }
+        public ReferenceFrame ReferenceFrame {
+            get { return attitudeController.ReferenceFrame; }
+            set { attitudeController.ReferenceFrame = value; }
         }
 
         /// <summary>
-        /// Set (<see cref="AutoPilot.TargetDirection"/>) from a pitch and heading angle.
+        /// The target pitch, in degrees, between -90° and +90°.
         /// </summary>
-        /// <param name="pitch">Target pitch angle, in degrees between -90° and +90°.</param>
-        /// <param name="heading">Target heading angle, in degrees between 0° and 360°.</param>
-        [KRPCMethod]
-        public void TargetPitchAndHeading (float pitch, float heading)
-        {
-            var rotation = GeometryExtensions.QuaternionFromPitchHeadingRoll (new Vector3 (pitch, heading, 0));
-            targetDirection = rotation * Vector3.up;
+        [KRPCProperty]
+        public float TargetPitch {
+            get { return (float)attitudeController.TargetPitch; }
+            set { attitudeController.TargetPitch = value; }
+        }
+
+        /// <summary>
+        /// The target heading, in degrees, between 0° and 360°.
+        /// </summary>
+        [KRPCProperty]
+        public float TargetHeading {
+            get { return (float)attitudeController.TargetHeading; }
+            set { attitudeController.TargetHeading = value; }
         }
 
         /// <summary>
         /// The target roll, in degrees. <c>NaN</c> if no target roll is set.
         /// </summary>
         [KRPCProperty]
-        public float TargetRoll { get; set; }
+        public float TargetRoll {
+            get { return (float)attitudeController.TargetRoll; }
+            set { attitudeController.TargetRoll = value; }
+        }
+
+        /// <summary>
+        /// Set target pitch and heading angles.
+        /// </summary>
+        /// <param name="pitch">Target pitch angle, in degrees between -90° and +90°.</param>
+        /// <param name="heading">Target heading angle, in degrees between 0° and 360°.</param>
+        //TODO: deprecate this in favour of TargetPitch and TargetHeading properties?
+        [KRPCMethod]
+        public void TargetPitchAndHeading (float pitch, float heading)
+        {
+            attitudeController.TargetPitch = pitch;
+            attitudeController.TargetHeading = heading;
+        }
+
+        /// <summary>
+        /// Direction vector corresponding to the target pitch and heading.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 TargetDirection {
+            get { return attitudeController.TargetDirection.ToTuple (); }
+            set {
+                //FIXME: QuaternionD.FromToRotation method not available at runtime
+                var rotation = (QuaternionD)Quaternion.FromToRotation (Vector3d.up, value.ToVector ());
+                var phr = rotation.PitchHeadingRoll ();
+                attitudeController.TargetPitch = phr.x;
+                attitudeController.TargetHeading = phr.y;
+            }
+        }
 
         /// <summary>
         /// The state of SAS.
@@ -175,8 +238,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The current <see cref="SASMode"/>.
-        /// These modes are equivalent to the mode buttons to
-        /// the left of the navball that appear when SAS is enabled.
+        /// These modes are equivalent to the mode buttons to the left of the navball that appear when SAS is enabled.
         /// </summary>
         /// <remarks>Equivalent to <see cref="Control.SASMode"/></remarks>
         [KRPCProperty]
@@ -186,39 +248,127 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Target rotation speed multiplier. Defaults to 1.
+        /// The threshold at which the autopilot will try to match the target roll angle, if any.
+        /// Defaults to 5 degrees.
         /// </summary>
         [KRPCProperty]
-        public float RotationSpeedMultiplier { get; set; }
+        public double RollThreshold {
+            get { return attitudeController.RollThreshold; }
+            set { attitudeController.RollThreshold = value; }
+        }
 
         /// <summary>
-        /// Maximum target rotation speed. Defaults to 1.
+        /// The maximum amount of time that the vessel should need to come to a complete stop.
+        /// This determines the maximum angular velocity of the vessel.
+        /// A vector of three stopping times, in seconds, one for each of the pitch, roll and yaw axes.
+        /// Defaults to 0.5 seconds for each axis.
         /// </summary>
         [KRPCProperty]
-        public float MaxRotationSpeed { get; set; }
+        public Tuple3 StoppingTime {
+            get { return attitudeController.StoppingTime.ToTuple (); }
+            set { attitudeController.StoppingTime = value.ToVector (); }
+        }
 
         /// <summary>
-        /// Target roll speed multiplier. Defaults to 1.
+        /// The time the vessel should take to come to a stop pointing in the target direction.
+        /// This determines the angular acceleration used to decelerate the vessel.
+        /// A vector of three times, in seconds, one for each of the pitch, roll and yaw axes.
+        /// Defaults to 5 seconds for each axis.
         /// </summary>
         [KRPCProperty]
-        public float RollSpeedMultiplier { get; set; }
+        public Tuple3 DecelerationTime {
+            get { return attitudeController.DecelerationTime.ToTuple (); }
+            set { attitudeController.DecelerationTime = value.ToVector (); }
+        }
 
         /// <summary>
-        /// Maximum target roll speed. Defaults to 1.
+        /// The angle at which the autopilot considers the vessel to be pointing close to the target.
+        /// This determines the midpoint of the target velocity attenuation function.
+        /// A vector of three angles, in degrees, one for each of the pitch, roll and yaw axes.
+        /// Defaults to 1° for each axis.
         /// </summary>
         [KRPCProperty]
-        public float MaxRollSpeed { get; set; }
+        public Tuple3 AttenuationAngle {
+            get { return attitudeController.AttenuationAngle.ToTuple (); }
+            set { attitudeController.AttenuationAngle = value.ToVector (); }
+        }
 
         /// <summary>
-        /// Sets the gains for the rotation rate PID controller.
+        /// Whether the rotation rate controllers PID parameters should be automatically tuned using the
+        /// vessels moment of inertia and available torque. Defaults to <c>true</c>.
+        /// See <see cref="TimeToPeak"/> and  <see cref="Overshoot"/>.
         /// </summary>
-        /// <param name="kp">Proportional gain.</param>
-        /// <param name="ki">Integral gain.</param>
-        /// <param name="kd">Derivative gain.</param>
-        [KRPCMethod]
-        public void SetPIDParameters (float kp = 1, float ki = 0, float kd = 0)
-        {
-            rotationRateController.PID.SetParameters (kp, ki, kd);
+        [KRPCProperty]
+        public bool AutoTune {
+            get { return attitudeController.AutoTune; }
+            set { attitudeController.AutoTune = value; }
+        }
+
+        /// <summary>
+        /// The target time to peak used to autotune the PID controllers.
+        /// A vector of three times, in seconds, for each of the pitch, roll and yaw axes.
+        /// Defaults to 3 seconds for each axis.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 TimeToPeak {
+            get { return attitudeController.TimeToPeak.ToTuple (); }
+            set { attitudeController.TimeToPeak = value.ToVector (); }
+        }
+
+        /// <summary>
+        /// The target overshoot percentage used to autotune the PID controllers.
+        /// A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
+        /// Defaults to 0.01 for each axis.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 Overshoot {
+            get { return attitudeController.Overshoot.ToTuple (); }
+            set { attitudeController.Overshoot = value.ToVector (); }
+        }
+
+        /// <summary>
+        /// Gains for the pitch PID controller.
+        /// </summary>
+        /// <remarks>
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically, which will overwrite any manual changes.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 PitchPIDGains {
+            get {
+                var pid = attitudeController.PitchPID;
+                return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
+            }
+            set { attitudeController.PitchPID.SetParameters (value.Item1, value.Item2, value.Item3); }
+        }
+
+        /// <summary>
+        /// Gains for the roll PID controller.
+        /// </summary>
+        /// <remarks>
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically, which will overwrite any manual changes.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 RollPIDGains {
+            get {
+                var pid = attitudeController.RollPID;
+                return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
+            }
+            set { attitudeController.RollPID.SetParameters (value.Item1, value.Item2, value.Item3); }
+        }
+
+        /// <summary>
+        /// Gains for the yaw PID controller.
+        /// </summary>
+        /// <remarks>
+        /// When <see cref="AutoTune"/> is true, these values are updated automatically, which will overwrite any manual changes.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 YawPIDGains {
+            get {
+                var pid = attitudeController.YawPID;
+                return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
+            }
+            set { attitudeController.YawPID.SetParameters (value.Item1, value.Item2, value.Item3); }
         }
 
         /// <summary>
@@ -316,32 +466,17 @@ namespace KRPC.SpaceCenter.Services
                 return false;
             // If the client that engaged the auto-pilot has disconnected, disengage and reset the auto-pilot
             if (autoPilot.requestingClient != null && !autoPilot.requestingClient.Connected) {
-                autoPilot.ReferenceFrame = ReferenceFrame.Surface (vessel);
-                autoPilot.TargetDirection = null;
-                autoPilot.TargetRoll = float.NaN;
+                autoPilot.attitudeController.ReferenceFrame = ReferenceFrame.Surface (vessel);
+                autoPilot.attitudeController.TargetPitch = 0;
+                autoPilot.attitudeController.TargetHeading = 0;
+                autoPilot.attitudeController.TargetRoll = double.NaN;
                 autoPilot.Disengage ();
                 return false;
             }
             // Run the auto-pilot
-            autoPilot.DoAutoPiloting (state);
+            autoPilot.SAS = false;
+            autoPilot.attitudeController.Update (state);
             return true;
-        }
-
-        void DoAutoPiloting (PilotAddon.ControlInputs state)
-        {
-            SAS = false;
-            var currentDirection = ReferenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up);
-            rotationRateController.ReferenceFrame = ReferenceFrame;
-            var targetRotation = Vector3d.zero;
-            if (targetDirection != Vector3d.zero)
-                targetRotation += (Vector3.Cross (targetDirection, currentDirection) * RotationSpeedMultiplier).ClampMagnitude (0f, MaxRotationSpeed);
-            if (!Double.IsNaN (TargetRoll)) {
-                float currentRoll = (float)ReferenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).PitchHeadingRoll ().z;
-                var rollError = GeometryExtensions.NormAngle (TargetRoll - currentRoll) * (Math.PI / 180f);
-                targetRotation += targetDirection * (rollError * RollSpeedMultiplier).Clamp (-MaxRollSpeed, MaxRollSpeed);
-            }
-            rotationRateController.Target = targetRotation;
-            rotationRateController.Update (state);
         }
     }
 }

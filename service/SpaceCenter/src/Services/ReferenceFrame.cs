@@ -230,7 +230,7 @@ namespace KRPC.SpaceCenter.Services
         /// Returns the rotation of the given frame of reference, relative to world space.
         /// Applying the rotation to a vector in reference-frame-space produces the corresponding vector in world-space.
         /// </summary>
-        QuaternionD Rotation {
+        internal QuaternionD Rotation {
             get {
                 // Note: up is along the y-axis, forward is along the z-axis
                 Vector3d up = UpNotNormalized;
@@ -425,7 +425,7 @@ namespace KRPC.SpaceCenter.Services
                 case Type.CelestialBodyOrbital:
                     return Vector3d.zero; //TODO: check this
                 case Type.Vessel:
-                    return InternalVessel.angularVelocity;
+                    return InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
                 case Type.VesselOrbital:
                 case Type.VesselSurface:
                 case Type.VesselSurfaceVelocity:
@@ -480,7 +480,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Convert the given position in this reference frame, to a position in world space.
+        /// Convert the given direction in this reference frame, to a direction in world space.
         /// </summary>
         public Vector3d DirectionToWorldSpace (Vector3d direction)
         {

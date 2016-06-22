@@ -1,5 +1,6 @@
 apoapsis
 atm
+autotune
 Bazel
 circularization
 clickable
@@ -31,6 +32,7 @@ krpc
 kRPC
 kRPCs
 kRPCSpaceCenter
+laplace
 libxml
 libxslt
 linux
@@ -42,12 +44,14 @@ namespace
 namespaces
 namespacing
 navball
+normangle
 nozzel
 nozzels
 ns
 NUnit
 Olex
 online
+overdamped
 pdflatex
 periapsis
 physicsless

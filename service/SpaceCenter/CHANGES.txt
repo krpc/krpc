@@ -1,8 +1,10 @@
 v0.3.5
+ * Improved AutoPilot that auto-tunes itself based on the vessels available torque and moment of inertia (#289)
  * Add Resources.Enabled to enable/disable all of the resources in a part or stage at once (#283)
  * Add Vessel.Recoverable and Vessel.Recover() (#277)
  * Add SpaceCenter.LaunchableVessels to get a list of names of launchable vessels (#278)
  * Add SpaceCenter.LaunchVessel so that, for example, rockets built in the VAB can be launched from the runway (#278)
+ * Fix angular velocity for vessel reference frames
 
 v0.3.4
  * Move drawing functionality into new Drawing service (#253)
