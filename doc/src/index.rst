@@ -9,6 +9,9 @@ It comes with client libraries for many popular languages including
 :doc:`Java <java/client>`,
 :doc:`Lua <lua/client>` and
 :doc:`Python <python/client>`.
+Clients, made by others, are also available for
+`Ruby <https://github.com/TeWu/krpc-rb>`_ and
+`Haskell <https://github.com/Cahu/krpc-hs>`_.
 
  * :doc:`Getting Started Guide <getting-started>`
  * :doc:`Tutorials and Examples <tutorials>`
