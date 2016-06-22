@@ -101,7 +101,7 @@ namespace KRPC.Client.Test
 
         [Test]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        public void Inerleaved ()
+        public void Interleaved ()
         {
             var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (0));
             Assert.AreEqual ("0", s0.Get ());
