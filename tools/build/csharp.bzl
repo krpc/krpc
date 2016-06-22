@@ -19,10 +19,14 @@ def _ref_impl(ctx):
         out = output
     )
 
-def _csc_args(srcs, deps, exe=None, lib=None, doc=None, warn=4, nowarn=[], warnaserror=True):
+def _csc_args(srcs, deps, exe=None, lib=None, doc=None, optimize=True, warn=4, nowarn=[], define=[], warnaserror=True):
     if exe: target_type = 'exe'
     if lib: target_type = 'library'
-    args = ['-optimize+', '-debug-', '-target:%s' % target_type]
+    args = ['-target:%s' % target_type, '-debug']
+    if optimize:
+        args.extend(['-optimize+'])
+    else:
+        args.extend(['-optimize-'])
     args.extend(_MCS_FLAGS)
     if exe: args.append('-out:%s' % exe.path)
     if lib: args.append('-out:%s' % lib.path)
@@ -30,6 +34,7 @@ def _csc_args(srcs, deps, exe=None, lib=None, doc=None, warn=4, nowarn=[], warna
     args.append('-warn:%d' % warn)
     if warnaserror: args.append('-warnaserror+')
     if len(nowarn) > 0: args.append('-nowarn:%s' % ','.join(nowarn))
+    if len(define) > 0: args.append('-define:%s' % ','.join(define))
     args.extend([x.path for x in srcs])
     args.extend(['-reference:%s' % x.path for x in deps])
     return args
@@ -37,15 +42,16 @@ def _csc_args(srcs, deps, exe=None, lib=None, doc=None, warn=4, nowarn=[], warna
 def _lib_impl(ctx):
     lib_output = ctx.outputs.lib
     doc_output = ctx.outputs.doc
-    outputs = [lib_output, doc_output]
+    mdb_output = ctx.outputs.mdb
+    outputs = [lib_output, doc_output, mdb_output]
     srcs = ctx.files.srcs
     deps = [dep.lib for dep in ctx.attr.deps]
     inputs = srcs + deps
 
     cmd = ctx.attr.csc
     args = _csc_args(
-        srcs, deps, lib=lib_output, doc=doc_output,
-        warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror)
+        srcs, deps, lib=lib_output, doc=doc_output, optimize=ctx.attr.optimize,
+        warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror, define=ctx.attr.define)
 
     ctx.action(
         mnemonic = 'CSharpCompile',
@@ -59,21 +65,23 @@ def _lib_impl(ctx):
         target_type = ctx.attr._target_type,
         lib = lib_output,
         doc = doc_output,
+        mdb = mdb_output,
         out = outputs
     )
 
 def _bin_impl(ctx):
     bin_output = ctx.outputs.bin
     doc_output = ctx.outputs.doc
-    outputs = [bin_output, doc_output]
+    mdb_output = ctx.outputs.mdb
+    outputs = [bin_output, doc_output, mdb_output]
     srcs = ctx.files.srcs
     deps = [dep.lib for dep in ctx.attr.deps]
     inputs = srcs + deps
 
     cmd = ctx.attr.csc
     args = _csc_args(
-        srcs, deps, exe=bin_output, doc=doc_output,
-        warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror)
+        srcs, deps, exe=bin_output, doc=doc_output, optimize=ctx.attr.optimize,
+        warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror, define=ctx.attr.define)
 
     ctx.action(
         mnemonic = 'CSharpCompile',
@@ -99,6 +107,7 @@ def _bin_impl(ctx):
         target_type = ctx.attr._target_type,
         bin = bin_output,
         doc = doc_output,
+        mdb = mdb_output,
         out = outputs,
         runfiles = runfiles
     )
@@ -106,7 +115,8 @@ def _bin_impl(ctx):
 def _nunit_impl(ctx):
     lib_output = ctx.outputs.lib
     doc_output = ctx.outputs.doc
-    outputs = [lib_output, doc_output]
+    mdb_output = ctx.outputs.mdb
+    outputs = [lib_output, doc_output, mdb_output]
     srcs = ctx.files.srcs
     deps = ctx.files._nunit_exe_libs + ctx.files._nunit_framework
     deps += [dep.lib for dep in ctx.attr.deps]
@@ -115,8 +125,8 @@ def _nunit_impl(ctx):
 
     cmd = ctx.attr.csc
     args = _csc_args(
-        srcs, deps, lib=lib_output, doc=doc_output,
-        warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror)
+        srcs, deps, lib=lib_output, doc=doc_output, optimize=ctx.attr.optimize,
+        warn=ctx.attr.warn, nowarn=ctx.attr.nowarn, warnaserror=ctx.attr.warnaserror, define=ctx.attr.define)
 
     ctx.action(
         mnemonic = 'CSharpCompile',
@@ -130,7 +140,7 @@ def _nunit_impl(ctx):
     for dep in runfiles:
         sub_commands.append('ln -f -s %s %s' % (dep.short_path, dep.basename))
     sub_commands.extend([
-        '/usr/bin/mono %s %s "$@" 2>stderr.txt' % (ctx.file._nunit_exe.basename, lib_output.basename),
+        '/usr/bin/mono --debug %s %s "$@" 2>stderr.txt' % (ctx.file._nunit_exe.basename, lib_output.basename),
         'RESULT=$?',
         'cat stderr.txt',
         '(if grep "FATAL UNHANDLED EXCEPTION" stderr.txt; then exit 1; fi)',
@@ -146,6 +156,7 @@ def _nunit_impl(ctx):
         name = ctx.label.name,
         lib = lib_output,
         doc = doc_output,
+        mdb = mdb_output,
         out = outputs,
         runfiles = runfiles
     )
@@ -153,13 +164,14 @@ def _nunit_impl(ctx):
 def _gendarme_impl(ctx):
     if ctx.attr.lib:
         src = ctx.attr.lib.lib
+        mdb = ctx.attr.lib.mdb
     else:
         src = ctx.attr.exe.bin
-    runfiles = [src, ctx.file.config]
+        mdb = ctx.attr.exe.mdb
+    runfiles = [src, mdb, ctx.file.config]
     if ctx.attr.ignores:
         runfiles.append(ctx.file.ignores)
 
-    cmd = ctx.attr._gendarme
     args = ['--severity=all', '--confidence=all']
     args.append('--config=%s' % ctx.file.config.short_path)
     args.append('--set=%s' % ctx.attr.ruleset)
@@ -169,7 +181,7 @@ def _gendarme_impl(ctx):
 
     ctx.file_action(
         ctx.outputs.executable,
-        '%s %s "$@"' % (cmd, ' '.join(args))
+        'MONO_OPTIONS="--debug" /usr/bin/gendarme %s\n' % ' '.join(args)
     )
 
     return struct(
@@ -215,9 +227,11 @@ _COMMON_ATTRS = {
     'csc': attr.string(default=_MCS),
     'deps': attr.label_list(providers=['out', 'lib', 'target_type']),
     'srcs': attr.label_list(allow_files=FileType(['.cs'])),
+    'optimize': attr.bool(default=True),
     'warn': attr.int(default=4),
     'nowarn': attr.string_list(),
-    'warnaserror': attr.bool(default=True)
+    'warnaserror': attr.bool(default=True),
+    'define': attr.string_list()
 }
 
 csharp_reference = rule(
@@ -232,13 +246,13 @@ csharp_reference = rule(
 csharp_library = rule(
     implementation = _lib_impl,
     attrs = _COMMON_ATTRS + {'_target_type': attr.string(default='lib')},
-    outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml'}
+    outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml', 'mdb': '%{name}.dll.mdb'}
 )
 
 csharp_binary = rule(
     implementation = _bin_impl,
     attrs = _COMMON_ATTRS + {'runargs': attr.string_list(), '_target_type': attr.string(default='bin')},
-    outputs = {'bin': '%{name}.exe', 'doc': '%{name}.xml'},
+    outputs = {'bin': '%{name}.exe', 'doc': '%{name}.xml', 'mdb': '%{name}.exe.mdb'},
     executable = True
 )
 
@@ -249,7 +263,7 @@ csharp_nunit_test = rule(
         '_nunit_exe_libs': attr.label(default=Label('@csharp_nunit//:nunit_exe_libs'), allow_files=True),
         '_nunit_framework': attr.label(default=Label('@csharp_nunit//:nunit_framework'), allow_files=True)
     },
-    outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml'},
+    outputs = {'lib': '%{name}.dll', 'doc': '%{name}.xml', 'mdb': '%{name}.dll.mdb'},
     test = True
 )
 
@@ -261,8 +275,7 @@ csharp_gendarme_test = rule(
         'config': attr.label(default=Label('//tools/build:csharp_gendarme_rules.xml'),
                              allow_files=True, single_file=True),
         'ruleset': attr.string(default='default'),
-        'ignores': attr.label(allow_files=True, single_file=True),
-        '_gendarme': attr.string(default='/usr/bin/gendarme')
+        'ignores': attr.label(allow_files=True, single_file=True)
     },
     test = True
 )
