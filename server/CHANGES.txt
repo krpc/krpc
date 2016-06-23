@@ -1,4 +1,5 @@
 v0.3.5
+ * Support for KSP 1.1.3
  * Fix issue with uncaught exceptions when receiving malformed tuples from clients (#276)
  * Fix issue causing empty stream update messages to be sent to clients
 

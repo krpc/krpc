@@ -25,7 +25,7 @@ class TestPartsPart(krpctest.TestCase):
             ['LT-1 Landing Struts']*3 + \
             ['LY-10 Small Landing Gear', 'TR-XL Stack Separator'],
             [x.title for x in part.children])
-        self.assertTrue(part.axially_attached)
+        self.assertFalse(part.axially_attached)
         self.assertFalse(part.radially_attached)
         self.assertEqual(-1, part.stage)
         self.assertEqual(-1, part.decouple_stage)
@@ -237,7 +237,7 @@ class TestPartsPart(krpctest.TestCase):
         part = self.parts.with_title('AE-FF1 Airstream Protective Shell (1.25m)')[0]
         self.assertEqual('fairingSize1', part.name)
         self.assertEqual('AE-FF1 Airstream Protective Shell (1.25m)', part.title)
-        self.assertEqual(900, part.cost)
+        self.assertEqual(300, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Mk1-2 Command Pod', part.parent.title)
         self.assertEqual([], part.children)
