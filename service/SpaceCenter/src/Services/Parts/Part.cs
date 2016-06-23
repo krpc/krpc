@@ -418,6 +418,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// An <see cref="Experiment"/> if the part is a science experiment, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public Experiment Experiment {
+            get { return Experiment.Is (this) ? new Experiment (this) : null; }
+        }
+
+        /// <summary>
         /// A <see cref="Fairing"/> if the part is a fairing, otherwise <c>null</c>.
         /// </summary>
         [KRPCProperty]

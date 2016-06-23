@@ -112,6 +112,7 @@
     <Compile Include="Services\Parts\DockingPort.cs" />
     <Compile Include="Services\Parts\DockingPortState.cs" />
     <Compile Include="Services\Parts\Engine.cs" />
+    <Compile Include="Services\Parts\Experiment.cs" />
     <Compile Include="Services\Parts\Fairing.cs" />
     <Compile Include="Services\Parts\Intake.cs" />
     <Compile Include="Services\Parts\LandingGear.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Services\Parts\ResourceConverterState.cs" />
     <Compile Include="Services\Parts\ResourceHarvester.cs" />
     <Compile Include="Services\Parts\ResourceHarvesterState.cs" />
+    <Compile Include="Services\Parts\ScienceData.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />
     <Compile Include="Services\Parts\SolarPanel.cs" />
     <Compile Include="Services\Parts\SolarPanelState.cs" />

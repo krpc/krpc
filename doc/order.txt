@@ -254,6 +254,7 @@ SpaceCenter.Parts.Decouplers
 SpaceCenter.Parts.DockingPorts
 SpaceCenter.Parts.DockingPortWithName
 SpaceCenter.Parts.Engines
+SpaceCenter.Parts.Experiments
 SpaceCenter.Parts.Fairings
 SpaceCenter.Parts.Intakes
 SpaceCenter.Parts.LandingGear
@@ -308,6 +309,7 @@ SpaceCenter.Part.ControlSurface
 SpaceCenter.Part.Decoupler
 SpaceCenter.Part.DockingPort
 SpaceCenter.Part.Engine
+SpaceCenter.Part.Experiment
 SpaceCenter.Part.Fairing
 SpaceCenter.Part.Intake
 SpaceCenter.Part.LandingGear
@@ -432,6 +434,21 @@ SpaceCenter.Propellant.DrawStackGauge
 SpaceCenter.Propellant.IsDeprived
 SpaceCenter.Propellant.Ratio
 SpaceCenter.Propellant.ConnectedResources
+SpaceCenter.Experiment
+SpaceCenter.Experiment.Part
+SpaceCenter.Experiment.Run
+SpaceCenter.Experiment.Transmit
+SpaceCenter.Experiment.Dump
+SpaceCenter.Experiment.Reset
+SpaceCenter.Experiment.Deployed
+SpaceCenter.Experiment.Rerunnable
+SpaceCenter.Experiment.Inoperable
+SpaceCenter.Experiment.HasData
+SpaceCenter.Experiment.Data
+SpaceCenter.ScienceData
+SpaceCenter.ScienceData.DataAmount
+SpaceCenter.ScienceData.ScienceValue
+SpaceCenter.ScienceData.TransmitValue
 SpaceCenter.Fairing
 SpaceCenter.Fairing.Part
 SpaceCenter.Fairing.Jettison
