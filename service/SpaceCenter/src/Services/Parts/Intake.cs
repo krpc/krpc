@@ -6,7 +6,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.Intake"/>.
+    /// An air intake. Obtained by calling <see cref="Part.Intake"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Intake : Equatable<Intake>

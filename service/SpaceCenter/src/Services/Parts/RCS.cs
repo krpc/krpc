@@ -9,8 +9,7 @@ using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.RCS"/>.
-    /// Provides functionality to interact with RCS blocks and thrusters.
+    /// An RCS block or thruster. Obtained by calling <see cref="Part.RCS"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class RCS : Equatable<RCS>

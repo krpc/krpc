@@ -10,11 +10,11 @@ using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
+    /// An engine, including ones of various types.
+    /// For example liquid fuelled gimballed engines, solid rocket boosters and jet engines.
     /// Obtained by calling <see cref="Part.Engine"/>.
     /// </summary>
     /// <remarks>
-    /// Provides functionality to interact with engines of various types,
-    /// for example liquid fuelled gimballed engines, solid rocket boosters and jet engines.
     /// For RCS thrusters <see cref="Part.RCS"/>.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]

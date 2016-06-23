@@ -9,6 +9,7 @@ namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// Controls the game's camera.
+    /// Obtained by calling <see cref="SpaceCenter.Camera"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Camera : Equatable<Camera>

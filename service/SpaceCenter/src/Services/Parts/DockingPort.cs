@@ -12,7 +12,7 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.DockingPort"/>
+    /// A docking port. Obtained by calling <see cref="Part.DockingPort"/>
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]

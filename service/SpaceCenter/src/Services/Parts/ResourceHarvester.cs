@@ -8,7 +8,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.ResourceHarvester"/>.
+    /// A resource harvester (drill). Obtained by calling <see cref="Part.ResourceHarvester"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]

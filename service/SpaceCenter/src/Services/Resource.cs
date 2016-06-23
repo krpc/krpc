@@ -4,7 +4,8 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
-    /// A resource stored within a part.
+    /// An individual resource stored within a part.
+    /// Created using methods in the <see cref="Resources"/> class.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Resource : Equatable<Resource>

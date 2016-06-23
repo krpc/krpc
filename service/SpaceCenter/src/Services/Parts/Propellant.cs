@@ -7,7 +7,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// An engine propellant. See <see cref="Engine.Propellants"/>.
+    /// A propellant for an engine. Obtains by calling <see cref="Engine.Propellants"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Propellant : Equatable<Propellant>

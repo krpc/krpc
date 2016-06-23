@@ -8,7 +8,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.ResourceConverter"/>.
+    /// A resource converter. Obtained by calling <see cref="Part.ResourceConverter"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class ResourceConverter: Equatable<ResourceConverter>

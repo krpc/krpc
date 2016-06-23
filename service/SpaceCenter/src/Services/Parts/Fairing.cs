@@ -6,7 +6,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.Fairing"/>.
+    /// A fairing. Obtained by calling <see cref="Part.Fairing"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Fairing : Equatable<Fairing>

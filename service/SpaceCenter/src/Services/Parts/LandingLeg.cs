@@ -7,7 +7,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.LandingLeg"/>.
+    /// A landing leg. Obtained by calling <see cref="Part.LandingLeg"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class LandingLeg : Equatable<LandingLeg>

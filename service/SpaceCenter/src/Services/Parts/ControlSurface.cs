@@ -8,8 +8,7 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.ControlSurface"/>.
-    /// Provides functionality to interact with aerodynamic control surfaces.
+    /// An aerodynamic control surface. Obtained by calling <see cref="Part.ControlSurface"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class ControlSurface : Equatable<ControlSurface>
