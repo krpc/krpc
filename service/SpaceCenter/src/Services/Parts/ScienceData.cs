@@ -1,4 +1,3 @@
-using System;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -8,27 +7,27 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Experiment.Data"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class ScienceData : Equatable<ScienceData>
+    public class ScienceData : Equatable<ScienceData>
     {
         readonly ModuleScienceExperiment experiment;
         readonly global::ScienceData data;
 
-        internal ScienceData (ModuleScienceExperiment experiment, global::ScienceData data)
+        internal ScienceData (ModuleScienceExperiment experimentModule, global::ScienceData scienceData)
         {
-            this.experiment = experiment;
-            this.data = data;
+            experiment = experimentModule;
+            data = scienceData;
         }
 
         /// <summary>
-        /// Check if data are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (ScienceData obj)
+        public override bool Equals (ScienceData other)
         {
-            return experiment == obj.experiment && data == obj.data;
+            return !ReferenceEquals (other, null) && experiment == other.experiment && data == other.data;
         }
 
         /// <summary>
-        /// Hash the data.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {

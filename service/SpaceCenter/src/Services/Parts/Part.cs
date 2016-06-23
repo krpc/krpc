@@ -153,7 +153,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Massless {
-            get { return InternalPart.IsPhysicallySignificant (); }
+            get { return !InternalPart.IsPhysicallySignificant (); }
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using KRPC.Service.Attributes;
@@ -13,9 +14,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.Experiment"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Experiment : Equatable<Experiment>
+    public class Experiment : Equatable<Experiment>
     {
-        readonly Part part;
         readonly ModuleScienceExperiment experiment;
 
         internal static bool Is (Part part)
@@ -25,35 +25,33 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal Experiment (Part part)
         {
-            this.part = part;
+            Part = part;
             experiment = part.InternalPart.Module<ModuleScienceExperiment> ();
             if (experiment == null)
                 throw new ArgumentException ("Part is not a science experiment");
         }
 
         /// <summary>
-        /// Check if experiments are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Experiment obj)
+        public override bool Equals (Experiment other)
         {
-            return part == obj.part && experiment == obj.experiment;
+            return !ReferenceEquals (other, null) && Part == other.Part && experiment == other.experiment;
         }
 
         /// <summary>
-        /// Hash the experiment.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ experiment.GetHashCode ();
+            return Part.GetHashCode () ^ experiment.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this experiment.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Run the experiment.
@@ -75,6 +73,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Transmit all experimental data contained by this part.
         /// </summary>
         [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Performance", "ReviewLinqMethodRule")]
         public void Transmit ()
         {
             var data = experiment.GetData ();
