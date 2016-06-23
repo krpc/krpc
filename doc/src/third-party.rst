@@ -11,6 +11,7 @@ Clients
 
  * `Ruby client <https://github.com/TeWu/krpc-rb>`_ by `TeWu <https://github.com/TeWu>`_
  * `Haskell client <https://github.com/Cahu/krpc-hs>`_ by `Cahu <https://github.com/Cahu>`_
+ * `Using the plugin in F# <http://fssnip.net/7Pi>`_
 
 Services
 --------
