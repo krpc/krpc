@@ -115,7 +115,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertFalse(self.pod.has_data)
         self.assertItemsEqual([], self.pod.data)
 
-        for i in range(2):
+        for _ in range(2):
             self.pod.run()
             self.wait()
 
