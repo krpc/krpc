@@ -9,42 +9,47 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.Radiator"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Radiator : Equatable<Radiator>
+    public class Radiator : Equatable<Radiator>
     {
-        readonly Part part;
         readonly ModuleActiveRadiator activeRadiator;
         readonly ModuleDeployableRadiator deployableRadiator;
 
         internal static bool Is (Part part)
         {
+            var internalPart = part.InternalPart;
             return
-            part.InternalPart.HasModule<ModuleActiveRadiator> () ||
-            part.InternalPart.HasModule<ModuleDeployableRadiator> ();
+            internalPart.HasModule<ModuleActiveRadiator> () ||
+            internalPart.HasModule<ModuleDeployableRadiator> ();
         }
 
         internal Radiator (Part part)
         {
-            this.part = part;
-            activeRadiator = part.InternalPart.Module<ModuleActiveRadiator> ();
-            deployableRadiator = part.InternalPart.Module<ModuleDeployableRadiator> ();
+            Part = part;
+            var internalPart = part.InternalPart;
+            activeRadiator = internalPart.Module<ModuleActiveRadiator> ();
+            deployableRadiator = internalPart.Module<ModuleDeployableRadiator> ();
             if (activeRadiator == null && deployableRadiator == null)
                 throw new ArgumentException ("Part is not a radiator");
         }
 
         /// <summary>
-        /// Check if radiators are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Radiator obj)
+        public override bool Equals (Radiator other)
         {
-            return part == obj.part && activeRadiator == obj.activeRadiator && deployableRadiator == obj.deployableRadiator;
+            return
+            !ReferenceEquals (other, null) &&
+            Part == other.Part &&
+            activeRadiator == other.activeRadiator &&
+            deployableRadiator == other.deployableRadiator;
         }
 
         /// <summary>
-        /// Hash the radiator.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = part.GetHashCode ();
+            int hash = Part.GetHashCode ();
             if (activeRadiator != null)
                 hash ^= activeRadiator.GetHashCode ();
             if (deployableRadiator != null)
@@ -56,9 +61,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part object for this radiator.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the radiator is deployable.
@@ -75,9 +78,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Deployed {
             get {
-                if (!Deployable)
-                    return true;
-                return deployableRadiator.panelState == ModuleDeployableRadiator.panelStates.EXTENDED ||
+                return
+                !Deployable ||
+                deployableRadiator.panelState == ModuleDeployableRadiator.panelStates.EXTENDED ||
                 deployableRadiator.panelState == ModuleDeployableRadiator.panelStates.EXTENDING;
             }
             set {
@@ -101,20 +104,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Deployable)
                     return RadiatorState.Extended;
-                switch (deployableRadiator.panelState) {
-                case ModuleDeployableRadiator.panelStates.EXTENDED:
-                    return RadiatorState.Extended;
-                case ModuleDeployableRadiator.panelStates.RETRACTED:
-                    return RadiatorState.Retracted;
-                case ModuleDeployableRadiator.panelStates.EXTENDING:
-                    return RadiatorState.Extending;
-                case ModuleDeployableRadiator.panelStates.RETRACTING:
-                    return RadiatorState.Retracting;
-                case ModuleDeployableRadiator.panelStates.BROKEN:
-                    return RadiatorState.Broken;
-                default:
-                    throw new ArgumentException ("Unsupported radiator state");
-                }
+                return deployableRadiator.panelState.ToRadiatorState ();
             }
         }
     }

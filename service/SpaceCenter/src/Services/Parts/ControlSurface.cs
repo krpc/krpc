@@ -12,9 +12,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Provides functionality to interact with aerodynamic control surfaces.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class ControlSurface : Equatable<ControlSurface>
+    public class ControlSurface : Equatable<ControlSurface>
     {
-        readonly Part part;
         readonly ModuleControlSurface controlSurface;
 
         internal static bool Is (Part part)
@@ -24,35 +23,33 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal ControlSurface (Part part)
         {
-            this.part = part;
+            Part = part;
             controlSurface = part.InternalPart.Module<ModuleControlSurface> ();
             if (controlSurface == null)
                 throw new ArgumentException ("Part does not have a ModuleControlSurface PartModule");
         }
 
         /// <summary>
-        /// Check the control surfaces are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (ControlSurface obj)
+        public override bool Equals (ControlSurface other)
         {
-            return part == obj.part && controlSurface == obj.controlSurface;
+            return !ReferenceEquals (other, null) && Part == other.Part && controlSurface.Equals (other.controlSurface);
         }
 
         /// <summary>
-        /// Hash the control surface.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ controlSurface.GetHashCode ();
+            return Part.GetHashCode () ^ controlSurface.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this control surface.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the control surface has pitch control enabled.

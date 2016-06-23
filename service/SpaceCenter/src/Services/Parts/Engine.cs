@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -17,9 +18,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// For RCS thrusters <see cref="Part.RCS"/>.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Engine : Equatable<Engine>
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    public class Engine : Equatable<Engine>
     {
-        readonly Part part;
         readonly IList<ModuleEngines> engines;
         readonly MultiModeEngine multiModeEngine;
         readonly ModuleGimbal gimbal;
@@ -31,39 +32,44 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal Engine (Part part)
         {
-            this.part = part;
-            engines = part.InternalPart.Modules.OfType<ModuleEngines> ().ToList ();
-            multiModeEngine = part.InternalPart.Module<MultiModeEngine> ();
-            gimbal = part.InternalPart.Module<ModuleGimbal> ();
+            Part = part;
+            var internalPart = part.InternalPart;
+            engines = internalPart.Modules.OfType<ModuleEngines> ().ToList ();
+            multiModeEngine = internalPart.Module<MultiModeEngine> ();
+            gimbal = internalPart.Module<ModuleGimbal> ();
             if (engines.Count == 0)
                 throw new ArgumentException ("Part is not an engine");
         }
 
         Engine (ModuleEngines engine)
         {
-            part = new Part (engine.part);
+            Part = new Part (engine.part);
             engines = new List<ModuleEngines> ();
             engines.Add (engine);
-            multiModeEngine = null;
-            gimbal = part.InternalPart.Module<ModuleGimbal> ();
+            gimbal = Part.InternalPart.Module<ModuleGimbal> ();
             if (engine == null)
                 throw new ArgumentException ("Part does not have a ModuleEngines PartModule");
         }
 
         /// <summary>
-        /// Check the engines are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Engine obj)
+        public override bool Equals (Engine other)
         {
-            return part == obj.part && engines.SequenceEqual (obj.engines) && multiModeEngine == obj.multiModeEngine && gimbal == obj.gimbal;
+            return
+            !ReferenceEquals (other, null) &&
+            Part == other.Part &&
+            engines.SequenceEqual (other.engines) &&
+            (multiModeEngine == other.multiModeEngine || multiModeEngine.Equals (other.multiModeEngine)) &&
+            (gimbal == other.gimbal || gimbal.Equals (other.gimbal));
         }
 
         /// <summary>
-        /// Hash the engine.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = part.GetHashCode ();
+            int hash = Part.GetHashCode ();
             hash ^= engines.GetHashCode ();
             foreach (var engine in engines)
                 hash ^= engine.GetHashCode ();
@@ -86,9 +92,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part object for this engine.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the engine is active. Setting this attribute may have no effect,
@@ -98,10 +102,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Active {
             get { return CurrentEngine.EngineIgnited; }
             set {
+                var engine = CurrentEngine;
                 if (value)
-                    CurrentEngine.Activate ();
+                    engine.Activate ();
                 else
-                    CurrentEngine.Shutdown ();
+                    engine.Shutdown ();
             }
         }
 
@@ -124,7 +129,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active || !HasFuel)
                     return 0f;
-                return GetThrust (CurrentEngine.currentThrottle, part.InternalPart.vessel.staticPressurekPa);
+                return GetThrust (CurrentEngine.currentThrottle, Part.InternalPart.vessel.staticPressurekPa);
             }
         }
 
@@ -139,7 +144,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!HasFuel)
                     return 0f;
-                return GetThrust (ThrustLimit, part.InternalPart.vessel.staticPressurekPa);
+                return GetThrust (ThrustLimit, Part.InternalPart.vessel.staticPressurekPa);
             }
         }
 
@@ -151,7 +156,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
-            get { return GetThrust (1f, part.InternalPart.vessel.staticPressurekPa); }
+            get { return GetThrust (1f, Part.InternalPart.vessel.staticPressurekPa); }
         }
 
         /// <summary>
@@ -189,7 +194,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<Thruster> Thrusters {
             get {
                 var engine = CurrentEngine;
-                return Enumerable.Range (0, engine.thrustTransforms.Count).Select (i => new Thruster (part, engine, gimbal, i)).ToList ();
+                return Enumerable.Range (0, engine.thrustTransforms.Count).Select (i => new Thruster (Part, engine, gimbal, i)).ToList ();
             }
         }
 
@@ -424,9 +429,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
             set {
                 CheckGimballed ();
-                if (value && !GimbalLocked) {
+                if (value && !gimbal.gimbalLock) {
                     gimbal.LockAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
-                } else if (!value && GimbalLocked) {
+                } else if (!value && gimbal.gimbalLock) {
                     gimbal.FreeAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
                 }
             }

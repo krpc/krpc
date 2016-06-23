@@ -58,12 +58,12 @@ class CppGenerator(Generator):
             return cpp_template_fix('std::set<%s>' % self.parse_type(self.types.as_type(typ.protobuf_type[4:-1])))
         elif isinstance(typ, krpc.types.DictionaryType):
             key_type, value_type = tuple(typ.protobuf_type[11:-1].split(','))
-            return cpp_template_fix('std::map<%s,%s>' % \
+            return cpp_template_fix('std::map<%s, %s>' % \
                 (self.parse_type(self.types.as_type(key_type)), self.parse_type(self.types.as_type(value_type))))
         elif isinstance(typ, krpc.types.TupleType):
             value_types = typ.protobuf_type[6:-1].split(',')
             return cpp_template_fix('std::tuple<%s>' % \
-                ','.join(self.parse_type(self.types.as_type(t)) for t in value_types))
+                ', '.join(self.parse_type(self.types.as_type(t)) for t in value_types))
         elif isinstance(typ, krpc.types.ClassType):
             return typ.protobuf_type[6:-1].replace('.', '::')
         elif isinstance(typ, krpc.types.EnumType):

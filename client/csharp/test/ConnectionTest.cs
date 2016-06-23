@@ -1,13 +1,10 @@
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using KRPC.Client;
-using KRPC.Client.Services;
 using KRPC.Client.Services.KRPC;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-
 using GameScene = KRPC.Client.Services.KRPC.GameScene;
 using TestEnum = KRPC.Client.Services.TestService.TestEnum;
 
@@ -19,7 +16,7 @@ namespace KRPC.Client.Test
         [Test]
         public void GetStatus ()
         {
-            var status = connection.KRPC ().GetStatus ();
+            var status = Connection.KRPC ().GetStatus ();
             StringAssert.IsMatch ("^[0-9]+\\.[0-9]+\\.[0-9]+$", status.Version);
             Assert.Greater (status.BytesRead, 0);
         }
@@ -27,29 +24,29 @@ namespace KRPC.Client.Test
         [Test]
         public void CurrentGameScene ()
         {
-            Assert.AreEqual (GameScene.SpaceCenter, connection.KRPC ().CurrentGameScene);
+            Assert.AreEqual (GameScene.SpaceCenter, Connection.KRPC ().CurrentGameScene);
         }
 
         [Test]
         public void Error ()
         {
-            var e1 = Assert.Throws<RPCException> (connection.TestService ().ThrowArgumentException);
-            Assert.AreEqual (e1.Message, "Invalid argument");
-            var e2 = Assert.Throws<RPCException> (connection.TestService ().ThrowInvalidOperationException);
-            Assert.AreEqual (e2.Message, "Invalid operation");
+            var e1 = Assert.Throws<RPCException> (Connection.TestService ().ThrowArgumentException);
+            Assert.That(e1.Message, Is.StringContaining("Invalid argument"));
+            var e2 = Assert.Throws<RPCException> (Connection.TestService ().ThrowInvalidOperationException);
+            Assert.That(e2.Message, Is.StringContaining("Invalid operation"));
         }
 
         [Test]
         public void ValueParameters ()
         {
-            Assert.AreEqual ("3.14159", connection.TestService ().FloatToString (3.14159f));
-            Assert.AreEqual ("3.14159", connection.TestService ().DoubleToString (3.14159));
-            Assert.AreEqual ("42", connection.TestService ().Int32ToString (42));
-            Assert.AreEqual ("123456789000", connection.TestService ().Int64ToString (123456789000L));
-            Assert.AreEqual ("True", connection.TestService ().BoolToString (true));
-            Assert.AreEqual ("False", connection.TestService ().BoolToString (false));
-            Assert.AreEqual (12345, connection.TestService ().StringToInt32 ("12345"));
-            Assert.AreEqual ("deadbeef", connection.TestService ().BytesToHexString (new byte[] {
+            Assert.AreEqual ("3.14159", Connection.TestService ().FloatToString (3.14159f));
+            Assert.AreEqual ("3.14159", Connection.TestService ().DoubleToString (3.14159));
+            Assert.AreEqual ("42", Connection.TestService ().Int32ToString (42));
+            Assert.AreEqual ("123456789000", Connection.TestService ().Int64ToString (123456789000L));
+            Assert.AreEqual ("True", Connection.TestService ().BoolToString (true));
+            Assert.AreEqual ("False", Connection.TestService ().BoolToString (false));
+            Assert.AreEqual (12345, Connection.TestService ().StringToInt32 ("12345"));
+            Assert.AreEqual ("deadbeef", Connection.TestService ().BytesToHexString (new byte[] {
                 0xDE,
                 0xAD,
                 0xBE,
@@ -60,129 +57,136 @@ namespace KRPC.Client.Test
         [Test]
         public void MultipleValueParameters ()
         {
-            Assert.AreEqual ("3.14159", connection.TestService ().AddMultipleValues (0.14159f, 1, 2));
+            Assert.AreEqual ("3.14159", Connection.TestService ().AddMultipleValues (0.14159f, 1, 2));
         }
 
         [Test]
         public void Properties ()
         {
-            connection.TestService ().StringProperty = "foo";
-            Assert.AreEqual ("foo", connection.TestService ().StringProperty);
-            Assert.AreEqual ("foo", connection.TestService ().StringPropertyPrivateSet);
-            connection.TestService ().StringPropertyPrivateGet = "foo";
-            var obj = connection.TestService ().CreateTestObject ("bar");
-            connection.TestService ().ObjectProperty = obj;
-            Assert.AreEqual (obj._ID, connection.TestService ().ObjectProperty._ID);
+            Connection.TestService ().StringProperty = "foo";
+            Assert.AreEqual ("foo", Connection.TestService ().StringProperty);
+            Assert.AreEqual ("foo", Connection.TestService ().StringPropertyPrivateSet);
+            Connection.TestService ().StringPropertyPrivateGet = "foo";
+            var obj = Connection.TestService ().CreateTestObject ("bar");
+            Connection.TestService ().ObjectProperty = obj;
+            Assert.AreEqual (obj.id, Connection.TestService ().ObjectProperty.id);
         }
 
         [Test]
         public void ClassAsReturnValue ()
         {
-            var obj = connection.TestService ().CreateTestObject ("jeb");
-            Assert.AreEqual (typeof(KRPC.Client.Services.TestService.TestClass), obj.GetType ());
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            Assert.AreEqual (typeof(TestClass), obj.GetType ());
         }
 
         [Test]
         public void ClassNullValues ()
         {
-            Assert.AreEqual (null, connection.TestService ().EchoTestObject (null));
-            var obj = connection.TestService ().CreateTestObject ("bob");
+            Assert.AreEqual (null, Connection.TestService ().EchoTestObject (null));
+            var obj = Connection.TestService ().CreateTestObject ("bob");
             Assert.AreEqual ("bobnull", obj.ObjectToString (null));
-            connection.TestService ().ObjectProperty = null;
-            Assert.IsNull (connection.TestService ().ObjectProperty);
+            Connection.TestService ().ObjectProperty = null;
+            Assert.IsNull (Connection.TestService ().ObjectProperty);
         }
 
         [Test]
         public void ClassMethods ()
         {
-            var obj = connection.TestService ().CreateTestObject ("bob");
+            var obj = Connection.TestService ().CreateTestObject ("bob");
             Assert.AreEqual ("value=bob", obj.GetValue ());
             Assert.AreEqual ("bob3.14159", obj.FloatToString (3.14159f));
-            var obj2 = connection.TestService ().CreateTestObject ("bill");
+            var obj2 = Connection.TestService ().CreateTestObject ("bill");
             Assert.AreEqual ("bobbill", obj.ObjectToString (obj2));
         }
 
         [Test]
+        [SuppressMessage ("Gendarme.Rules.Performance", "UseStringEmptyRule")]
         public void ClassStaticMethods ()
         {
-            //TODO: way to avoid passing client object to static class methods?
-            Assert.AreEqual ("jeb", TestClass.StaticMethod (connection));
-            Assert.AreEqual ("jebbobbill", TestClass.StaticMethod (connection, "bob", "bill"));
+            Assert.AreEqual ("jeb", TestClass.StaticMethod (Connection));
+            Assert.AreEqual ("jebbobbill", TestClass.StaticMethod (Connection, "bob", "bill"));
         }
 
         [Test]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         public void ClassProperties ()
         {
-            var obj = connection.TestService ().CreateTestObject ("jeb");
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
             obj.IntProperty = 0;
             Assert.AreEqual (0, obj.IntProperty);
             obj.IntProperty = 42;
             Assert.AreEqual (42, obj.IntProperty);
-            var obj2 = connection.TestService ().CreateTestObject ("kermin");
+            var obj2 = Connection.TestService ().CreateTestObject ("kermin");
             obj.ObjectProperty = obj2;
-            Assert.AreEqual (obj2._ID, obj.ObjectProperty._ID);
+            Assert.AreEqual (obj2.id, obj.ObjectProperty.id);
         }
 
         [Test]
         public void OptionalArguments ()
         {
-            Assert.AreEqual ("jebfoobarbaz", connection.TestService ().OptionalArguments ("jeb"));
-            Assert.AreEqual ("jebbobbillbaz", connection.TestService ().OptionalArguments ("jeb", "bob", "bill"));
+            Assert.AreEqual ("jebfoobarbaz", Connection.TestService ().OptionalArguments ("jeb"));
+            Assert.AreEqual ("jebbobbillbaz", Connection.TestService ().OptionalArguments ("jeb", "bob", "bill"));
         }
 
-        [Test]
-        public void BlockingProcedure ()
+        [TestCase (0, 0)]
+        [TestCase (1, 1)]
+        [TestCase (2, 3)]
+        [TestCase (42, 903)]
+        public void BlockingProcedure (int input, int output)
         {
-            Assert.AreEqual (0, connection.TestService ().BlockingProcedure (0, 0));
-            Assert.AreEqual (1, connection.TestService ().BlockingProcedure (1, 0));
-            Assert.AreEqual (1 + 2, connection.TestService ().BlockingProcedure (2));
-            Assert.AreEqual (Enumerable.Range (1, 42).Sum (), connection.TestService ().BlockingProcedure (42));
+            Assert.AreEqual (output, Connection.TestService ().BlockingProcedure (input));
         }
 
         [Test]
         public void Enums ()
         {
-            Assert.AreEqual (TestEnum.ValueB, connection.TestService ().EnumReturn ());
-            Assert.AreEqual (TestEnum.ValueA, connection.TestService ().EnumEcho (TestEnum.ValueA));
-            Assert.AreEqual (TestEnum.ValueB, connection.TestService ().EnumEcho (TestEnum.ValueB));
-            Assert.AreEqual (TestEnum.ValueC, connection.TestService ().EnumEcho (TestEnum.ValueC));
+            Assert.AreEqual (TestEnum.ValueB, Connection.TestService ().EnumReturn ());
+            Assert.AreEqual (TestEnum.ValueA, Connection.TestService ().EnumEcho (TestEnum.ValueA));
+            Assert.AreEqual (TestEnum.ValueB, Connection.TestService ().EnumEcho (TestEnum.ValueB));
+            Assert.AreEqual (TestEnum.ValueC, Connection.TestService ().EnumEcho (TestEnum.ValueC));
+            Assert.AreEqual (TestEnum.ValueA, Connection.TestService ().EnumDefaultArg (TestEnum.ValueA));
+            Assert.AreEqual (TestEnum.ValueC, Connection.TestService ().EnumDefaultArg ());
+            Assert.AreEqual (TestEnum.ValueB, Connection.TestService ().EnumDefaultArg (TestEnum.ValueB));
+        }
 
-            Assert.AreEqual (TestEnum.ValueA, connection.TestService ().EnumDefaultArg (TestEnum.ValueA));
-            Assert.AreEqual (TestEnum.ValueC, connection.TestService ().EnumDefaultArg ());
-            Assert.AreEqual (TestEnum.ValueB, connection.TestService ().EnumDefaultArg (TestEnum.ValueB));
+        [TestCase (new int[] { }, new int[] { })]
+        [TestCase (new [] { 42 }, new [] { 43 })]
+        [TestCase (new [] { 0, 1, 2 }, new [] { 1, 2, 3 })]
+        public void CollectionsList (IList<int> input, IList<int> output)
+        {
+            CollectionAssert.AreEqual (output, Connection.TestService ().IncrementList (input));
+        }
+
+        [TestCase (new string[] { }, new int[] { }, new int[] { })]
+        [TestCase (new [] { "foo" }, new [] { 42 }, new [] { 43 })]
+        [TestCase (new [] { "a", "b", "c" }, new [] { 0, 1, 2 }, new [] { 1, 2, 3 })]
+        public void CollectionsDictionary (IList<string> keys, IList<int> inputValues, IList<int> outputValues)
+        {
+            var input = new Dictionary<string,int> ();
+            var output = new Dictionary<string,int> ();
+            for (int i = 0; i < keys.Count; i++) {
+                input [keys [i]] = inputValues [i];
+                output [keys [i]] = outputValues [i];
+            }
+            CollectionAssert.AreEqual (output, Connection.TestService ().IncrementDictionary (input));
+        }
+
+        [TestCase (new int [] { }, new int [] { })]
+        [TestCase (new [] { 42 }, new [] { 43 })]
+        [TestCase (new [] { 0, 1, 2 }, new [] { 1, 2, 3 })]
+        public void CollectionsSet (IList<int> inputValues, IList<int> outputValues)
+        {
+            var input = new HashSet<int> (inputValues);
+            var output = new HashSet<int> (outputValues);
+            CollectionAssert.AreEqual (output, Connection.TestService ().IncrementSet (input));
         }
 
         [Test]
-        public void CollectionsList ()
+        public void CollectionsTuple ()
         {
-            CollectionAssert.AreEqual (new int[] { }, connection.TestService ().IncrementList (new int[] { }));
-            CollectionAssert.AreEqual (new int[] { 1, 2, 3 }, connection.TestService ().IncrementList (new int[] {
-                0,
-                1,
-                2
-            }));
-        }
-
-        [Test]
-        public void Collections ()
-        {
-            CollectionAssert.AreEqual (
-                new Dictionary<string,int> (),
-                connection.TestService ().IncrementDictionary (new Dictionary<string,int> ()));
-            CollectionAssert.AreEqual (
-                new Dictionary<string,int> { { "a",1 }, { "b",2 }, { "c",3 } },
-                connection.TestService ().IncrementDictionary (new Dictionary<string,int> {
-                    { "a",0 },
-                    { "b",1 },
-                    { "c",2 }
-                }));
-            CollectionAssert.AreEqual (new HashSet<int> (), connection.TestService ().IncrementSet (new HashSet<int> ()));
-            CollectionAssert.AreEqual (new HashSet<int> { 1, 2, 3 }, connection.TestService ().IncrementSet (new HashSet<int> {
-                0,
-                1,
-                2
-            }));
-            //Assert.AreEqual (new KRPCClient.Tuple<int,long> (2,3), client.TestService().IncrementTuple (new KRPCClient.Tuple<int,long> (1,2)));
+            var input = new System.Tuple<int,long> (0, 1);
+            var output = new System.Tuple<int,long> (1, 2);
+            Assert.AreEqual (output, Connection.TestService ().IncrementTuple (input));
         }
 
         [Test]
@@ -190,82 +194,58 @@ namespace KRPC.Client.Test
         {
             CollectionAssert.AreEqual (
                 new Dictionary<string,IList<int>> (),
-                connection.TestService ().IncrementNestedCollection (new Dictionary<string,IList<int>> ()));
+                Connection.TestService ().IncrementNestedCollection (new Dictionary<string,IList<int>> ()));
             CollectionAssert.AreEqual (
                 new Dictionary<string,IList<int>> {
                     { "a", new List<int> { 1, 2 } },
-                    { "b",  new List<int> () }, {
-                        "c",
-                        new List<int> { 3 }
-                    }
+                    { "b", new List<int> () },
+                    { "c", new List<int> { 3 } }
                 },
-                connection.TestService ().IncrementNestedCollection (new Dictionary<string,IList<int>> { {
-                        "a",
-                        new List<int> {
-                            0,
-                            1
-                        }
-                    }, {
-                        "b",
-                        new List<int> ()
-                    }, {
-                        "c",
-                        new List<int> { 2 }
-                    }
+                Connection.TestService ().IncrementNestedCollection (new Dictionary<string,IList<int>> {
+                    { "a", new List<int> { 0, 1 } },
+                    { "b", new List<int> () },
+                    { "c", new List<int> { 2 } }
                 }));
         }
 
         [Test]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         public void CollectionsOfObjects ()
         {
-            var l = connection.TestService ().AddToObjectList (new List<TestClass> (), "jeb");
+            var l = Connection.TestService ().AddToObjectList (new List<TestClass> (), "jeb");
             Assert.AreEqual (1, l.Count);
             Assert.AreEqual ("value=jeb", l [0].GetValue ());
-            l = connection.TestService ().AddToObjectList (l, "bob");
+            l = Connection.TestService ().AddToObjectList (l, "bob");
             Assert.AreEqual (2, l.Count);
             Assert.AreEqual ("value=jeb", l [0].GetValue ());
             Assert.AreEqual ("value=bob", l [1].GetValue ());
         }
 
-        [Test, Sequential]
-        public void LineEndings (
-            [Values (
-                "foo\nbar",
-                "foo\rbar",
-                "foo\n\rbar",
-                "foo\r\nbar",
-                "foo\x10bar",
-                "foo\x13bar",
-                "foo\x10\x13bar",
-                "foo\x13\x10bar"
-            )] string data)
+        [TestCase ("foo\nbar")]
+        [TestCase ("foo\rbar")]
+        [TestCase ("foo\n\rbar")]
+        [TestCase ("foo\r\nbar")]
+        [TestCase ("foo\x10bar")]
+        [TestCase ("foo\x13bar")]
+        [TestCase ("foo\x10\x13bar")]
+        [TestCase ("foo\x13\x10bar")]
+        public void LineEndings (string data)
         {
-            connection.TestService ().StringProperty = data;
-            Assert.AreEqual (data, connection.TestService ().StringProperty);
+            Connection.TestService ().StringProperty = data;
+            Assert.AreEqual (data, Connection.TestService ().StringProperty);
         }
-
-        //def test_types_from_different_connections(self):
-        //conn1 = self.connect()
-        //conn2 = self.connect()
-        //self.assertNotEqual(conn1.test_service.TestClass, conn2.test_service.TestClass)
-        //obj2 = conn2.test_service.TestClass(0)
-        //obj1 = conn1._types.coerce_to(obj2, conn1._types.as_type('Class(TestService.TestClass)'))
-        //self.assertEqual(obj1, obj2)
-        //self.assertNotEqual(type(obj1), type(obj2))
-        //self.assertEqual(type(obj1), conn1.test_service.TestClass)
-        //self.assertEqual(type(obj2), conn2.test_service.TestClass)
 
         [Test]
         public void ThreadSafe ()
         {
-            int threadCount = 4;
-            int repeats = 1000;
+            const int threadCount = 4;
+            const int repeats = 1000;
             var counter = new CountdownEvent (threadCount);
             for (int i = 0; i < threadCount; i++) {
                 new Thread (() => {
                     for (int j = 0; j < repeats; j++) {
-                        Assert.AreEqual ("False", connection.TestService ().BoolToString (false));
-                        Assert.AreEqual (12345, connection.TestService ().StringToInt32 ("12345"));
+                        Assert.AreEqual ("False", Connection.TestService ().BoolToString (false));
+                        Assert.AreEqual (12345, Connection.TestService ().StringToInt32 ("12345"));
                     }
                     counter.Signal ();
                 }).Start ();

@@ -1,7 +1,7 @@
 using System;
 
 [AttributeUsage (AttributeTargets.Assembly)]
-class AssemblyKSPVersionAttribute : Attribute
+sealed class AssemblyKSPVersionAttribute : Attribute
 {
     public AssemblyKSPVersionAttribute (string version)
     {
@@ -11,14 +11,21 @@ class AssemblyKSPVersionAttribute : Attribute
     public string Version { get; private set; }
 
     public int Major {
-        get { return Int32.Parse (Version.Split ('.') [0]); }
+        get { return GetVersionPart (0); }
     }
 
     public int Minor {
-        get { return Int32.Parse (Version.Split ('.') [1]); }
+        get { return GetVersionPart (1); }
     }
 
     public int Patch {
-        get { return Int32.Parse (Version.Split ('.') [2]); }
+        get { return GetVersionPart (2); }
+    }
+
+    int GetVersionPart (int part)
+    {
+        int result;
+        Int32.TryParse (Version.Split ('.') [part], out result);
+        return result;
     }
 }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 
@@ -11,9 +13,9 @@ namespace KRPC.UI
             ComboBoxWindow.MainInit (gameObject);
         }
 
-        public static void Destroy (GameObject gameObject)
+        public static void Destroy ()
         {
-            ComboBoxWindow.MainDestroy (gameObject);
+            ComboBoxWindow.MainDestroy ();
         }
 
         public static void OnGUI ()
@@ -33,7 +35,7 @@ namespace KRPC.UI
 
         public static void Separator (GUIStyle style, params GUILayoutOption[] options)
         {
-            GUILayout.Label ("", style, options);
+            GUILayout.Label (String.Empty, style, options);
         }
 
         public static GUIStyle LightStyle ()
@@ -57,7 +59,7 @@ namespace KRPC.UI
 
         public static void Light (bool enabled, GUIStyle style, params GUILayoutOption[] options)
         {
-            GUILayout.Toggle (enabled, "", style, options);
+            GUILayout.Toggle (enabled, String.Empty, style, options);
         }
 
         public static GUIStyle ComboOptionsStyle ()
@@ -95,6 +97,7 @@ namespace KRPC.UI
 
         static readonly IDictionary<object, Rect> comboButtonPositions = new Dictionary<object, Rect> ();
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public static int ComboBox (object caller, int selectedItem, IList<string> entries, GUIStyle buttonStyle, GUIStyle optionsStyle, GUIStyle optionStyle)
         {
             // Main button
@@ -141,9 +144,9 @@ namespace KRPC.UI
 
             public int SelectedOption { get; private set; }
 
-            IList<string> options;
+            IList<string> Options { get; set; }
 
-            GUIStyle optionStyle;
+            GUIStyle OptionStyle { get; set; }
 
             bool stalePosition;
 
@@ -152,7 +155,7 @@ namespace KRPC.UI
                 Instance = gameObject.AddComponent<ComboBoxWindow> ();
             }
 
-            public static void MainDestroy (GameObject gameObject)
+            public static void MainDestroy ()
             {
                 UnityEngine.Object.Destroy (Instance);
             }
@@ -167,7 +170,7 @@ namespace KRPC.UI
 
             protected override void Init ()
             {
-                Title = "";
+                Title = String.Empty;
                 Visible = false;
                 Style.border.top = Style.border.bottom;
                 Style.padding.top = Style.padding.bottom;
@@ -176,8 +179,8 @@ namespace KRPC.UI
 
             protected override void Draw ()
             {
-                if (options != null) {
-                    int selectedOption = GUILayout.SelectionGrid (-1, options.ToArray (), 1, optionStyle);
+                if (Options != null) {
+                    int selectedOption = GUILayout.SelectionGrid (-1, Options.ToArray (), 1, OptionStyle);
                     if (selectedOption >= 0) {
                         SelectedOption = selectedOption;
                     }
@@ -190,8 +193,8 @@ namespace KRPC.UI
                 Visible = true;
                 Caller = caller;
                 SelectedOption = -1;
-                this.options = options;
-                this.optionStyle = optionStyle;
+                Options = options;
+                OptionStyle = optionStyle;
                 stalePosition = true;
                 GUI.BringWindowToFront (Id);
             }
@@ -200,8 +203,8 @@ namespace KRPC.UI
             {
                 Visible = false;
                 Caller = null;
-                options = null;
-                optionStyle = null;
+                Options = null;
+                OptionStyle = null;
             }
 
             public void SetPosition (Rect position)

@@ -1,0 +1,6 @@
+R: Gendarme.Rules.Design.ImplementEqualsAndGetHashCodeInPairRule
+T: KRPC.RemoteTech.Antenna
+T: KRPC.RemoteTech.Comms
+
+R: Gendarme.Rules.Naming.UseCorrectCasingRule
+N: KRPC.RemoteTech

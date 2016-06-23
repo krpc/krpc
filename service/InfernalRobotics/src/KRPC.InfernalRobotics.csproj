@@ -81,8 +81,8 @@
     </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="IRWrapper.cs" />
-    <Compile Include="Services\InfernalRobotics.cs" />
-    <Compile Include="Services\Servo.cs" />
-    <Compile Include="Services\ServoGroup.cs" />
+    <Compile Include="InfernalRobotics.cs" />
+    <Compile Include="Servo.cs" />
+    <Compile Include="ServoGroup.cs" />
   </ItemGroup>
 </Project>

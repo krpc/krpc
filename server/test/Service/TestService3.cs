@@ -1,5 +1,6 @@
-using KRPC.Service.Attributes;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
+using KRPC.Service.Attributes;
 
 namespace KRPC.Test.Service
 {
@@ -13,6 +14,8 @@ namespace KRPC.Test.Service
     }
 
     [KRPCClass (Service = "TestService3Name")]
+    [SuppressMessage ("Gendarme.Rules.Correctness", "AvoidConstructorsInStaticTypesRule")]
+    [SuppressMessage ("Gendarme.Rules.Design", "ConsiderUsingStaticTypeRule")]
     public class TestClass3
     {
     }

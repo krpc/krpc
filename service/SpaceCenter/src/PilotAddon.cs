@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Server;
+using KRPC.Service;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
 using UnityEngine;
@@ -12,9 +14,10 @@ namespace KRPC.SpaceCenter
     /// Addon to update a vessels control inputs.
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public class PilotAddon : MonoBehaviour
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
+    public sealed class PilotAddon : MonoBehaviour
     {
-        internal class ControlInputs
+        internal sealed class ControlInputs
         {
             readonly FlightCtrlState state;
 
@@ -24,9 +27,9 @@ namespace KRPC.SpaceCenter
                 ThrottleUpdated = false;
             }
 
-            public ControlInputs (FlightCtrlState state)
+            public ControlInputs (FlightCtrlState ctrlState)
             {
-                this.state = state;
+                state = ctrlState;
                 ThrottleUpdated = false;
             }
 
@@ -117,15 +120,15 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// The current control inputs that the craft is using.
         /// </summary>
-        static IDictionary<Vessel, ControlInputs> currentInputs;
+        static IDictionary<Vessel, ControlInputs> currentInputs = new Dictionary<Vessel, ControlInputs> ();
         /// <summary>
         /// Control inputs that have been manually set.
         /// </summary>
-        static IDictionary<Vessel, ControlInputs> manualInputs;
+        static IDictionary<Vessel, ControlInputs> manualInputs = new Dictionary<Vessel, ControlInputs> ();
         /// <summary>
         /// Set of all clients that have set a manual control input.
         /// </summary>
-        static HashSet<IClient> manualInputClients;
+        static HashSet<IClient> manualInputClients = new HashSet<IClient> ();
         /// <summary>
         /// Flag to determine if manual control inputs have been cleared
         /// as a result of all clients disconnecting.
@@ -134,34 +137,35 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Control inputs that have been set by the auto-pilot.
         /// </summary>
-        static IDictionary<Vessel, ControlInputs> autoPilotInputs;
-
+        static IDictionary<Vessel, ControlInputs> autoPilotInputs = new Dictionary<Vessel, ControlInputs> ();
         /// <summary>
         /// FlyByWire callbacks for vessels.
         /// </summary>
-        static IDictionary<Vessel, Action<FlightCtrlState>> controlDelegates;
+        static IDictionary<Vessel, Action<FlightCtrlState>> controlDelegates = new Dictionary<Vessel, Action<FlightCtrlState>> ();
         /// <summary>
         /// Set of FlyByWire callbacks that have been registered with RemoteTech.
         /// </summary>
-        static HashSet<Vessel> remoteTechSanctionedDelegates;
+        static HashSet<Vessel> remoteTechSanctionedDelegates = new HashSet<Vessel> ();
 
         /// <summary>
         /// Wake the addon
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Awake ()
         {
-            currentInputs = new Dictionary<Vessel, ControlInputs> ();
-            manualInputs = new Dictionary<Vessel, ControlInputs> ();
-            manualInputClients = new HashSet<IClient> ();
-            autoPilotInputs = new Dictionary<Vessel, ControlInputs> ();
-            controlDelegates = new Dictionary<Vessel, Action<FlightCtrlState>> ();
-            remoteTechSanctionedDelegates = new HashSet<Vessel> ();
+            Clear ();
         }
 
         /// <summary>
         /// Destroy the addon
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnDestroy ()
+        {
+            Clear ();
+        }
+
+        static void Clear ()
         {
             currentInputs.Clear ();
             manualInputs.Clear ();
@@ -180,7 +184,7 @@ namespace KRPC.SpaceCenter
 
         internal static ControlInputs Set (Vessel vessel)
         {
-            manualInputClients.Add (KRPC.KRPCCore.Context.RPCClient);
+            manualInputClients.Add (CallContext.Client);
             if (!manualInputs.ContainsKey (vessel))
                 manualInputs [vessel] = new ControlInputs ();
             return manualInputs [vessel];
@@ -208,6 +212,7 @@ namespace KRPC.SpaceCenter
         /// <summary>
         /// Update the pilot addon
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void FixedUpdate ()
         {
             CheckClients ();

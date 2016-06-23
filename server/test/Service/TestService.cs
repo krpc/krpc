@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
@@ -9,9 +11,11 @@ namespace KRPC.Test.Service
     /// Test service documentation.
     /// </summary>
     [KRPCService (GameScene = GameScene.Flight)]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
+    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidTypeInterfaceInconsistencyRule")]
     public static class TestService
     {
-        public static ITestService Service;
+        internal static ITestService Service;
 
         public static void ProcedureWithoutAttribute ()
         {
@@ -71,6 +75,7 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidPropertiesWithoutGetAccessorRule")]
         public static string PropertyWithSet {
             set { Service.PropertyWithSet = value; }
         }
@@ -94,31 +99,32 @@ namespace KRPC.Test.Service
         }
 
         [KRPCClass]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public class TestClass
         {
-            public readonly string value;
+            public readonly string Value;
 
             public TestClass (string value)
             {
-                this.value = value;
+                Value = value;
             }
 
             [KRPCMethod]
             public string FloatToString (float x)
             {
-                return value + x;
+                return Value + x;
             }
 
             [KRPCMethod]
             public string ObjectToString (TestClass other)
             {
-                return value + other.value;
+                return Value + other.Value;
             }
 
             [KRPCMethod]
             public string IntToString (int x = 42)
             {
-                return value + x;
+                return Value + x;
             }
 
             [KRPCProperty]
@@ -156,21 +162,27 @@ namespace KRPC.Test.Service
         /// Documentation string for TestEnum.
         /// </summary>
         [KRPCEnum]
+        [Serializable]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
         public enum TestEnum
         {
             /// <summary>
             /// Documented enum field
             /// </summary>
-            x,
-            y,
-            z
+            X,
+            Y,
+            Z
         }
 
+        [Serializable]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
+        [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
         public enum TestEnumWithoutAttribute
         {
-            foo,
-            bar,
-            baz
+            Foo,
+            Bar,
+            Baz
         }
 
         [KRPCProcedure]
@@ -222,6 +234,7 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         public static IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c)
         {
             return Service.EchoNestedCollection (c);
@@ -234,4 +247,3 @@ namespace KRPC.Test.Service
         }
     }
 }
-

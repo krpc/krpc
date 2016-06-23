@@ -9,9 +9,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.Parachute"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Parachute : Equatable<Parachute>
+    public class Parachute : Equatable<Parachute>
     {
-        readonly Part part;
         readonly ModuleParachute parachute;
 
         internal static bool Is (Part part)
@@ -21,35 +20,33 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal Parachute (Part part)
         {
-            this.part = part;
+            Part = part;
             parachute = part.InternalPart.Module<ModuleParachute> ();
             if (parachute == null)
                 throw new ArgumentException ("Part is not a parachute");
         }
 
         /// <summary>
-        /// Check if the parachutes are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Parachute obj)
+        public override bool Equals (Parachute other)
         {
-            return part == obj.part && parachute == obj.parachute;
+            return !ReferenceEquals (other, null) && Part == other.Part && parachute.Equals (other.parachute);
         }
 
         /// <summary>
-        /// Hash the parachute.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ parachute.GetHashCode ();
+            return Part.GetHashCode () ^ parachute.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this parachute.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Deploys the parachute. This has no effect if the parachute has already
@@ -74,22 +71,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public ParachuteState State {
-            get {
-                switch (parachute.deploymentState) {
-                case ModuleParachute.deploymentStates.ACTIVE:
-                    return ParachuteState.Active;
-                case ModuleParachute.deploymentStates.CUT:
-                    return ParachuteState.Cut;
-                case ModuleParachute.deploymentStates.DEPLOYED:
-                    return ParachuteState.Deployed;
-                case ModuleParachute.deploymentStates.SEMIDEPLOYED:
-                    return ParachuteState.SemiDeployed;
-                case ModuleParachute.deploymentStates.STOWED:
-                    return ParachuteState.Stowed;
-                default:
-                    throw new ArgumentException ("Unsupported parachute state");
-                }
-            }
+            get { return parachute.deploymentState.ToParachuteState (); }
         }
 
         /// <summary>

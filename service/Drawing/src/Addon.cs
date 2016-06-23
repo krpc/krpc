@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Server;
+using KRPC.Service;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
@@ -11,21 +13,21 @@ namespace KRPC.Drawing
     /// Addon for doing the drawing
     /// </summary>
     [KSPAddon (KSPAddon.Startup.Flight, false)]
-    public class Addon : MonoBehaviour
+    sealed public class Addon : MonoBehaviour
     {
-        static IDictionary<IClient, IList<IDrawingObject>> objects = new Dictionary<IClient, IList<IDrawingObject>> ();
+        static IDictionary<IClient, IList<IDrawable>> objects = new Dictionary<IClient, IList<IDrawable>> ();
 
-        internal static void AddObject (IDrawingObject obj)
+        internal static void AddObject (IDrawable obj)
         {
-            var client = KRPCCore.Context.RPCClient;
+            var client = CallContext.Client;
             if (!objects.ContainsKey (client))
-                objects [client] = new List<IDrawingObject> ();
+                objects [client] = new List<IDrawable> ();
             objects [client].Add (obj);
         }
 
-        internal static void RemoveObject (IDrawingObject obj)
+        internal static void RemoveObject (IDrawable obj)
         {
-            var client = KRPCCore.Context.RPCClient;
+            var client = CallContext.Client;
             if (!objects.ContainsKey (client) || !objects [client].Contains (obj))
                 throw new ArgumentException ("Drawing object not found");
             obj.Destroy ();
@@ -52,6 +54,7 @@ namespace KRPC.Drawing
         /// <summary>
         /// Wake the addon
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Awake ()
         {
         }
@@ -59,6 +62,7 @@ namespace KRPC.Drawing
         /// <summary>
         /// Update the addon
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void Update ()
         {
             if (!objects.Any ())
@@ -76,6 +80,7 @@ namespace KRPC.Drawing
         /// <summary>
         /// Destroy the addon
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnDestroy ()
         {
             Clear ();

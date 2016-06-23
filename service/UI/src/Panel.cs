@@ -8,7 +8,7 @@ namespace KRPC.UI
     /// A container for user interface elements. See <see cref="Canvas.AddPanel" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class Panel : UIObject
+    public class Panel : Object
     {
         internal Panel (GameObject parent, bool visible)
             : base (Addon.Instantiate (parent, "Panel"), visible)
@@ -21,7 +21,7 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public RectTransform RectTransform {
-            get{ return new RectTransform (obj.GetComponent<UnityEngine.RectTransform> ()); }
+            get{ return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Panel AddPanel (bool visible = true)
         {
-            return new Panel (obj, visible);
+            return new Panel (GameObject, visible);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Text AddText (string content, bool visible = true)
         {
-            return new Text (obj, content, visible);
+            return new Text (GameObject, content, visible);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public InputField AddInputField (bool visible = true)
         {
-            return new InputField (obj, visible);
+            return new InputField (GameObject, visible);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Button AddButton (string content, bool visible = true)
         {
-            return new Button (obj, content, visible);
+            return new Button (GameObject, content, visible);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
@@ -15,6 +16,8 @@ namespace KRPC.Client
     /// <summary>
     /// A connection to the kRPC server. All interaction with kRPC is performed via an instance of this class.
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Correctness", "DisposableFieldsShouldBeDisposedRule")]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class Connection : IConnection, IDisposable
     {
         Object invokeLock = new Object ();
@@ -34,6 +37,7 @@ namespace KRPC.Client
         /// streamPort is 0, does not connect to the stream server.
         /// Passes an optional name to the server to identify the client (up to 32 bytes of UTF-8 encoded text).
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "EnsureLocalDisposalRule")]
         public Connection (string name = "", IPAddress address = null, int rpcPort = 50000, int streamPort = 50001)
         {
             if (address == null)
@@ -107,6 +111,7 @@ namespace KRPC.Client
         /// Create a new stream from the given lambda expression.
         /// Returns a stream object that can be used to obtain the latest value of the stream.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
@@ -117,6 +122,8 @@ namespace KRPC.Client
         /// <summary>
         /// See <see ref="AddStream"/>.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidUnnecessarySpecializationRule")]
         public Stream<TResult> AddStream<TResult> (Expression<Func<TResult>> expression)
         {
             CheckDisposed ();
@@ -152,7 +159,7 @@ namespace KRPC.Client
             return response.HasReturnValue ? response.ReturnValue : null;
         }
 
-        internal Request BuildRequest (string service, string procedure, IList<ByteString> arguments = null)
+        internal static Request BuildRequest (string service, string procedure, IList<ByteString> arguments = null)
         {
             var request = new Request ();
             request.Service = service;
@@ -170,18 +177,22 @@ namespace KRPC.Client
             return request;
         }
 
-        internal Request BuildRequest (LambdaExpression expression)
+        internal static Request BuildRequest (LambdaExpression expression)
         {
             Expression body = expression.Body;
-            if (body is MethodCallExpression)
-                return BuildRequest (body as MethodCallExpression);
-            else if (body is MemberExpression)
-                return BuildRequest (body as MemberExpression);
-            else
-                throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
+
+            var methodCallExpression = body as MethodCallExpression;
+            if (methodCallExpression != null)
+                return BuildRequest (methodCallExpression);
+
+            var memberExpression = body as MemberExpression;
+            if (memberExpression != null)
+                return BuildRequest (memberExpression);
+
+            throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
         }
 
-        internal Request BuildRequest (MethodCallExpression expression)
+        internal static Request BuildRequest (MethodCallExpression expression)
         {
             var method = expression.Method;
 
@@ -223,7 +234,7 @@ namespace KRPC.Client
             return BuildRequest (attribute.Service, attribute.Procedure, arguments);
         }
 
-        internal Request BuildRequest (MemberExpression expression)
+        internal static Request BuildRequest (MemberExpression expression)
         {
             var member = expression.Member;
 

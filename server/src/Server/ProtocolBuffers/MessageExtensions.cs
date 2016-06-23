@@ -67,7 +67,7 @@ namespace KRPC.Server.ProtocolBuffers
         public static Schema.KRPC.Services ToProtobufMessage (this Services services)
         {
             var result = new Schema.KRPC.Services ();
-            result.Services_.Add (services.Services_.Select (ToProtobufMessage));
+            result.Services_.Add (services.ServicesList.Select (ToProtobufMessage));
             return result;
         }
 
@@ -159,9 +159,7 @@ namespace KRPC.Server.ProtocolBuffers
         public static Request ToMessage (this Schema.KRPC.Request request)
         {
             var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
-            var result = new Request ();
-            result.Service = request.Service;
-            result.Procedure = request.Procedure;
+            var result = new Request (request.Service, request.Procedure);
             foreach (var argument in request.Arguments) {
                 var type = procedureSignature.Parameters [(int)argument.Position].Type;
                 result.Arguments.Add (argument.ToMessage (type));
@@ -171,10 +169,7 @@ namespace KRPC.Server.ProtocolBuffers
 
         public static Argument ToMessage (this Schema.KRPC.Argument argument, Type type)
         {
-            var result = new Argument ();
-            result.Position = argument.Position;
-            result.Value = Encoder.Decode (argument.Value, type);
-            return result;
+            return new Argument (argument.Position, Encoder.Decode (argument.Value, type));
         }
     }
 }

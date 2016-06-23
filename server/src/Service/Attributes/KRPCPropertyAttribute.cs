@@ -6,8 +6,7 @@ namespace KRPC.Service.Attributes
     /// A kRPC property.
     /// </summary>
     [AttributeUsage (AttributeTargets.Property)]
-    public class KRPCPropertyAttribute : Attribute
+    public sealed class KRPCPropertyAttribute : Attribute
     {
     }
 }
-

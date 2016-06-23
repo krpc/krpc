@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using KRPC.Service.Attributes;
@@ -13,6 +14,8 @@ namespace KRPC.Service.Scanner
 
         public static bool CheckDocumented { get; set; }
 
+        [SuppressMessage ("Gendarme.Rules.Design", "ConsiderConvertingMethodToPropertyRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static IDictionary<string, ServiceSignature> GetServices ()
         {
             IDictionary<string, ServiceSignature> signatures = new Dictionary<string, ServiceSignature> ();
@@ -22,8 +25,8 @@ namespace KRPC.Service.Scanner
             // FIXME: Following is a hack to workaround a bug in Reflection.GetTypesWith
             //        When running unit tests, Service.KRPC is not found as it contains types that depend on UnityEngine
             var serviceTypes = Reflection.GetTypesWith<KRPCServiceAttribute> ().ToList ();
-            if (!serviceTypes.Contains (typeof(Service.KRPC)))
-                serviceTypes.Add (typeof(Service.KRPC));
+            if (!serviceTypes.Contains (typeof(KRPC)))
+                serviceTypes.Add (typeof(KRPC));
 
             foreach (var serviceType in serviceTypes) {
                 CurrentAssembly = serviceType.Assembly;
@@ -82,4 +85,3 @@ namespace KRPC.Service.Scanner
         }
     }
 }
-

@@ -1,20 +1,18 @@
-#ifndef HEADER_KRPC_ERROR
-#define HEADER_KRPC_ERROR
+#pragma once
 
 #include <stdexcept>
+#include <string>
 
 namespace krpc {
 
-  class RPCError: public std::runtime_error {
-  public:
-    RPCError(const std::string& msg): std::runtime_error(msg) {}
-  };
+class RPCError : public std::runtime_error {
+ public:
+  explicit RPCError(const std::string& msg) : std::runtime_error(msg) {}
+};
 
-  class StreamError: public std::runtime_error {
-  public:
-    StreamError(const std::string& msg): std::runtime_error(msg) {}
-  };
+class StreamError : public std::runtime_error {
+ public:
+  explicit StreamError(const std::string& msg) : std::runtime_error(msg) {}
+};
 
-}
-
-#endif
+}  // namespace krpc

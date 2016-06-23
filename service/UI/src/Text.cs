@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.UI.ExtensionMethods;
@@ -13,14 +14,14 @@ namespace KRPC.UI
     /// A text label. See <see cref="Panel.AddText" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class Text : UIObject
+    public class Text : Object
     {
         readonly UnityEngine.UI.Text text;
 
         internal Text (GameObject parent, string content, bool visible)
             : base (Addon.Instantiate (parent, "Text"), visible)
         {
-            text = obj.GetComponent<UnityEngine.UI.Text> ();
+            text = GameObject.GetComponent<UnityEngine.UI.Text> ();
             Content = content;
         }
 
@@ -35,13 +36,14 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public RectTransform RectTransform {
-            get{ return new RectTransform (obj.GetComponent<UnityEngine.RectTransform> ()); }
+            get{ return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
         }
 
         /// <summary>
         /// A list of all available fonts.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public IList<string> AvailableFonts {
             get { return UnityEngine.Font.GetOSInstalledFontNames ().ToList (); }
         }

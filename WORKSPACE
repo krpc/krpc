@@ -304,3 +304,9 @@ http_file(
     url = 'https://pypi.python.org/packages/source/l/lazy-object-proxy/lazy-object-proxy-1.2.2.tar.gz',
     sha256 = 'ddd4cf1c74279c349cb7b9c54a2efa5105854f57de5f2d35829ee93631564268'
 )
+
+http_file(
+    name = 'python_cpplint',
+    url = 'https://pypi.python.org/packages/29/56/f80296456e320ce88a52189b0b08a890520fa88049d4b6cec0f6a3d55fb3/cpplint-1.2.2.tar.gz',
+    sha256 = 'b2979ff630299293f23c52096e408f2b359e2e26cb5cdf24aed4ce53e4293468'
+)

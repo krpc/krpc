@@ -9,9 +9,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.SolarPanel"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class SolarPanel : Equatable<SolarPanel>
+    public class SolarPanel : Equatable<SolarPanel>
     {
-        readonly Part part;
         readonly ModuleDeployableSolarPanel panel;
 
         internal static bool Is (Part part)
@@ -21,35 +20,33 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal SolarPanel (Part part)
         {
-            this.part = part;
+            Part = part;
             panel = part.InternalPart.Module<ModuleDeployableSolarPanel> ();
             if (panel == null)
                 throw new ArgumentException ("Part is not a solar panel");
         }
 
         /// <summary>
-        /// Check if solar panels are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (SolarPanel obj)
+        public override bool Equals (SolarPanel other)
         {
-            return part == obj.part && panel == obj.panel;
+            return !ReferenceEquals (other, null) && Part == other.Part && panel == other.panel;
         }
 
         /// <summary>
-        /// Hash the solar panel.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ panel.GetHashCode ();
+            return Part.GetHashCode () ^ panel.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this solar panel.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the solar panel is extended.
@@ -72,22 +69,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public SolarPanelState State {
-            get {
-                switch (panel.panelState) {
-                case ModuleDeployableSolarPanel.panelStates.EXTENDED:
-                    return SolarPanelState.Extended;
-                case ModuleDeployableSolarPanel.panelStates.RETRACTED:
-                    return SolarPanelState.Retracted;
-                case ModuleDeployableSolarPanel.panelStates.EXTENDING:
-                    return SolarPanelState.Extending;
-                case ModuleDeployableSolarPanel.panelStates.RETRACTING:
-                    return SolarPanelState.Retracting;
-                case ModuleDeployableSolarPanel.panelStates.BROKEN:
-                    return SolarPanelState.Broken;
-                default:
-                    throw new ArgumentException ("Unsupported solar panel state");
-                }
-            }
+            get { return panel.panelState.ToSolarPanelState (); }
         }
 
         /// <summary>

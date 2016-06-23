@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
 using KRPC.Service;
 using KRPC.Service.Scanner;
@@ -6,19 +7,23 @@ using UnityEngine;
 
 namespace KRPC
 {
+    /// <summary>
+    /// Check kRPC services.
+    /// </summary>
     [KSPAddon (KSPAddon.Startup.Instantly, true)]
-    class ServicesChecker : MonoBehaviour
+    sealed public class ServicesChecker : MonoBehaviour
     {
-        public static bool OK { get; private set; }
+        internal static bool OK { get; private set; }
 
-        public static bool CheckDocumented { get; set; }
+        internal static bool CheckDocumented { get; set; }
 
-        readonly IList<string> notDocumented = new List<string> ();
+        readonly List<string> notDocumented = new List<string> ();
 
+        /// <summary>
+        /// Start the services checker addon
+        /// </summary>
         public void Start ()
         {
-            var config = new KRPCConfiguration ("settings.cfg");
-            config.Load ();
             OK = true;
             try {
                 var services = Scanner.GetServices ();
@@ -26,11 +31,12 @@ namespace KRPC
                     CheckDocumentation (services.Values);
             } catch (ServiceException e) {
                 OK = false;
-                var path = (e.Assembly == null ? "unknown" : e.Assembly.Location);
-                PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "kRPC service error - plugin disabled", e.Message + "\n\n" + path, "OK", true, HighLogic.UISkin);
+                var msg = e.Message + Environment.NewLine + (e.Assembly == null ? "unknown" : e.Assembly.Location);
+                PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "kRPC service error - plugin disabled", msg, "OK", true, HighLogic.UISkin);
             }
         }
 
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         void CheckDocumentation (IEnumerable<ServiceSignature> services)
         {
             foreach (var service in services)
@@ -39,9 +45,9 @@ namespace KRPC
                 var n = notDocumented.Count;
                 var msg = n + " item" + (n != 1 ? "s are" : " is") + " not documented.";
                 for (int i = 0; i < 10 && i < n; i++)
-                    msg += "\n" + notDocumented [i];
+                    msg += Environment.NewLine + notDocumented [i];
                 if (n > 10)
-                    msg += "\n...";
+                    msg += Environment.NewLine + "...";
                 PopupDialog.SpawnPopupDialog (new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "kRPC service warning", msg, "OK", true, HighLogic.UISkin);
             }
         }
@@ -76,7 +82,7 @@ namespace KRPC
 
         void CheckDocumentation (string fullyQualifiedName, string documentation)
         {
-            if (documentation == "")
+            if (documentation.Length == 0)
                 notDocumented.Add (fullyQualifiedName);
         }
     }

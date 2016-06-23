@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using KRPC.Client;
 using KRPC.Client.Services.TestService;
@@ -9,14 +10,7 @@ namespace KRPC.Client.Test
     [TestFixture]
     public class StreamsTest : ServerTestCase
     {
-        [SetUp]
-        public void Init ()
-        {
-            // FIXME: there is a race condition in the server, if we call add stream too soon!
-            Thread.Sleep (50);
-        }
-
-        void Wait ()
+        static void Wait ()
         {
             Thread.Sleep (50);
         }
@@ -24,7 +18,7 @@ namespace KRPC.Client.Test
         [Test]
         public void Method ()
         {
-            var x = connection.AddStream (() => connection.TestService ().FloatToString (3.14159f));
+            var x = Connection.AddStream (() => Connection.TestService ().FloatToString (3.14159f));
             for (int i = 0; i < 5; i++) {
                 Assert.AreEqual ("3.14159", x.Get ());
                 Wait ();
@@ -34,8 +28,8 @@ namespace KRPC.Client.Test
         [Test]
         public void Property ()
         {
-            connection.TestService ().StringProperty = "foo";
-            var x = connection.AddStream (() => connection.TestService ().StringProperty);
+            Connection.TestService ().StringProperty = "foo";
+            var x = Connection.AddStream (() => Connection.TestService ().StringProperty);
             for (int i = 0; i < 5; i++) {
                 Assert.AreEqual ("foo", x.Get ());
                 Wait ();
@@ -45,8 +39,8 @@ namespace KRPC.Client.Test
         [Test]
         public void ClassMethod ()
         {
-            var obj = connection.TestService ().CreateTestObject ("bob");
-            var x = connection.AddStream (() => obj.FloatToString (3.14159f));
+            var obj = Connection.TestService ().CreateTestObject ("bob");
+            var x = Connection.AddStream (() => obj.FloatToString (3.14159f));
             for (int i = 0; i < 5; i++) {
                 Assert.AreEqual ("bob3.14159", x.Get ());
                 Wait ();
@@ -56,8 +50,8 @@ namespace KRPC.Client.Test
         [Test]
         public void ClassStaticMethod ()
         {
-            // FIXME: have to specify optional parameter ""
-            var x = connection.AddStream (() => TestClass.StaticMethod (connection, "foo", ""));
+            // Note: have to specify optional parameter "" in expression trees
+            var x = Connection.AddStream (() => TestClass.StaticMethod (Connection, "foo", String.Empty));
             for (int i = 0; i < 5; i++) {
                 Assert.AreEqual ("jebfoo", x.Get ());
                 Wait ();
@@ -67,9 +61,9 @@ namespace KRPC.Client.Test
         [Test]
         public void ClassProperty ()
         {
-            var obj = connection.TestService ().CreateTestObject ("jeb");
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
             obj.IntProperty = 42;
-            var x = connection.AddStream (() => obj.IntProperty);
+            var x = Connection.AddStream (() => obj.IntProperty);
             for (int i = 0; i < 5; i++) {
                 Assert.AreEqual (42, x.Get ());
                 Wait ();
@@ -79,9 +73,14 @@ namespace KRPC.Client.Test
         [Test]
         public void Counter ()
         {
-            var count = -1;
-            var x = connection.AddStream (() => connection.TestService ().Counter ());
+            var count = 0;
+            var x = Connection.AddStream (() => Connection.TestService ().Counter ());
             for (int i = 0; i < 5; i++) {
+                int repeat = 0;
+                while (count == x.Get() && repeat < 1000) {
+                    Wait ();
+                    repeat++;
+                }
                 Assert.IsTrue (count < x.Get ());
                 count = x.Get ();
                 Wait ();
@@ -91,8 +90,8 @@ namespace KRPC.Client.Test
         [Test]
         public void Nested ()
         {
-            var x0 = connection.AddStream (() => connection.TestService ().FloatToString (0.123f));
-            var x1 = connection.AddStream (() => connection.TestService ().FloatToString (1.234f));
+            var x0 = Connection.AddStream (() => Connection.TestService ().FloatToString (0.123f));
+            var x1 = Connection.AddStream (() => Connection.TestService ().FloatToString (1.234f));
             for (int i = 0; i < 5; i++) {
                 Assert.AreEqual ("0.123", x0.Get ());
                 Assert.AreEqual ("1.234", x1.Get ());
@@ -101,15 +100,16 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void Inerleaved ()
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        public void Interleaved ()
         {
-            var s0 = connection.AddStream (() => connection.TestService ().Int32ToString (0));
+            var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (0));
             Assert.AreEqual ("0", s0.Get ());
 
             Wait ();
             Assert.AreEqual ("0", s0.Get ());
 
-            var s1 = connection.AddStream (() => connection.TestService ().Int32ToString (1));
+            var s1 = Connection.AddStream (() => Connection.TestService ().Int32ToString (1));
             Assert.AreEqual ("0", s0.Get ());
             Assert.AreEqual ("1", s1.Get ());
 
@@ -125,7 +125,7 @@ namespace KRPC.Client.Test
             Assert.AreEqual ("0", s0.Get ());
             Assert.Throws<InvalidOperationException> (() => s1.Get ());
 
-            var s2 = connection.AddStream (() => connection.TestService ().Int32ToString (2));
+            var s2 = Connection.AddStream (() => Connection.TestService ().Int32ToString (2));
             Assert.AreEqual ("0", s0.Get ());
             Assert.Throws<InvalidOperationException> (() => s1.Get ());
             Assert.AreEqual ("2", s2.Get ());
@@ -159,7 +159,7 @@ namespace KRPC.Client.Test
         [Test]
         public void RemoveStreamTwice ()
         {
-            var s = connection.AddStream (() => connection.TestService ().Int32ToString (0));
+            var s = Connection.AddStream (() => Connection.TestService ().Int32ToString (0));
             Assert.AreEqual ("0", s.Get ());
 
             Wait ();
@@ -174,14 +174,14 @@ namespace KRPC.Client.Test
         [Test]
         public void AddStreamTwice ()
         {
-            var s0 = connection.AddStream (() => connection.TestService ().Int32ToString (42));
+            var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (42));
             var streamId = s0.Id;
             Assert.AreEqual ("42", s0.Get ());
 
             Wait ();
             Assert.AreEqual ("42", s0.Get ());
 
-            var s1 = connection.AddStream (() => connection.TestService ().Int32ToString (42));
+            var s1 = Connection.AddStream (() => Connection.TestService ().Int32ToString (42));
             Assert.AreEqual (streamId, s1.Id);
             Assert.AreEqual ("42", s0.Get ());
             Assert.AreEqual ("42", s1.Get ());

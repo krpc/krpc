@@ -6,7 +6,7 @@ namespace KRPC.Client.Attributes
     /// Attribute attached to methods and properties that invoke remote procedure calls.
     /// </summary>
     [AttributeUsage (AttributeTargets.Method | AttributeTargets.Property)]
-    public class RPCAttribute : Attribute
+    public sealed class RPCAttribute : Attribute
     {
         /// <summary>
         /// The remote service the method/property calls.

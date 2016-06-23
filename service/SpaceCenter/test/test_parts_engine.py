@@ -127,7 +127,7 @@ class EngineTest(EngineTestBase):
         """ Check engine properties independent of activity/throttle """
         data = self.engine_data[engine.part.title]
         self.assertAlmostEqual(data['max_vac_thrust'], engine.max_vacuum_thrust)
-        self.assertItemsEqual(data['propellants'].keys(), engine.propellants)
+        self.assertItemsEqual(data['propellants'].keys(), engine.propellant_names)
         self.assertAlmostEqual(data['propellants'], engine.propellant_ratios, places=3)
         self.assertTrue(engine.has_fuel)
         self.assertEqual(data['throttle_locked'], engine.throttle_locked)

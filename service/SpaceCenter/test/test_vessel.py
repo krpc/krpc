@@ -44,17 +44,15 @@ class TestVessel(krpctest.TestCase):
         self.assertGreater(self.space_center.ut, self.vessel.met)
 
     def test_mass(self):
-        # 2645 kg dry mass
         # 260 l of monoprop at 4 kg/l
-        # 180 l of LiquidFueld at 5 kg/l
+        # 180 l of LiquidFuel at 5 kg/l
         # 220 l of Oxidizer at 5 kg/l
-        dry_mass = 3082
+        dry_mass = 3492
         resource_mass = 260 * 4 + 180 * 5 + 220 * 5
-        self.assertEqual(dry_mass + resource_mass, self.vessel.mass)
+        self.assertAlmostEqual(dry_mass + resource_mass, self.vessel.mass, places=3)
 
     def test_dry_mass(self):
-        # 2645 kg dry mass
-        self.assertEqual(3082, self.vessel.dry_mass)
+        self.assertAlmostEqual(3492, self.vessel.dry_mass, places=3)
 
     def test_moment_of_inertia(self):
         self.assertAlmostEqual((13411, 2219, 13366), self.vessel.moment_of_inertia, delta=10)
@@ -67,7 +65,7 @@ class TestVessel(krpctest.TestCase):
             self.vessel.inertia_tensor, delta=10)
 
     def test_available_torque(self):
-        self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_torque, delta=1)
+        self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_torque, delta=5)
 
     def test_available_reaction_wheel_torque(self):
         self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_reaction_wheel_torque)
@@ -81,7 +79,7 @@ class TestVessel(krpctest.TestCase):
         self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque)
         self.vessel.control.rcs = True
         self.wait()
-        self.assertAlmostEqual((6005, 5575, 6005), self.vessel.available_rcs_torque, delta=1)
+        self.assertAlmostEqual((6005, 5575, 6005), self.vessel.available_rcs_torque, delta=5)
         self.vessel.control.rcs = False
         self.wait()
         self.assertAlmostEqual((0, 0, 0), self.vessel.available_rcs_torque)

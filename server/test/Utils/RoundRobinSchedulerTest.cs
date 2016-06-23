@@ -1,6 +1,6 @@
-using NUnit.Framework;
 using System;
 using KRPC.Utils;
+using NUnit.Framework;
 
 namespace KRPC.Test.Utils
 {
@@ -115,4 +115,3 @@ namespace KRPC.Test.Utils
         }
     }
 }
-

@@ -1,8 +1,11 @@
+using System;
+
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// Type of a reference frame.
     /// </summary>
+    [Serializable]
     public enum ReferenceFrameType
     {
         /// <summary>

@@ -1,5 +1,7 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using NUnit.Framework;
-using KRPC.Schema.KRPC;
 
 namespace KRPC.Test.Service
 {
@@ -10,91 +12,81 @@ namespace KRPC.Test.Service
         public void GetVersion ()
         {
             var status = KRPC.Service.KRPC.GetStatus ();
-            Assert.AreNotEqual ("", status.Version);
+            Assert.AreNotEqual (String.Empty, status.Version);
         }
 
         [Test]
+        [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void GetServices ()
         {
             var services = KRPC.Service.KRPC.GetServices ();
             Assert.IsNotNull (services);
-            Assert.AreEqual (4, services.Services_.Count);
-            bool foundKRPCService = false;
-            foreach (var service in services.Services_) {
-                if (service.Name == "KRPC") {
-                    foundKRPCService = true;
-                    Assert.AreEqual (5, service.Procedures.Count);
-                    int found = 0;
-                    foreach (var method in service.Procedures) {
-                        if (method.Name == "GetStatus") {
-                            Assert.AreEqual ("KRPC.Status", method.ReturnType);
-                            Assert.AreEqual (0, method.Parameters.Count);
-                            Assert.AreEqual (0, method.Attributes.Count);
-                            Assert.AreNotEqual ("", method.Documentation);
-                            found++;
-                        }
-                        if (method.Name == "GetServices") {
-                            Assert.AreEqual ("KRPC.Services", method.ReturnType);
-                            Assert.AreEqual (0, method.Parameters.Count);
-                            Assert.AreEqual (0, method.Attributes.Count);
-                            Assert.AreNotEqual ("", method.Documentation);
-                            found++;
-                        }
-                        if (method.Name == "AddStream") {
-                            Assert.AreEqual ("uint32", method.ReturnType);
-                            Assert.AreEqual (1, method.Parameters.Count);
-                            Assert.AreEqual ("request", method.Parameters [0].Name);
-                            Assert.AreEqual ("KRPC.Request", method.Parameters [0].Type);
-                            Assert.IsNull (method.Parameters [0].DefaultValue);
-                            Assert.AreEqual (0, method.Attributes.Count);
-                            Assert.AreNotEqual ("", method.Documentation);
-                            found++;
-                        }
-                        if (method.Name == "RemoveStream") {
-                            Assert.AreEqual ("", method.ReturnType);
-                            Assert.AreEqual (1, method.Parameters.Count);
-                            Assert.AreEqual ("id", method.Parameters [0].Name);
-                            Assert.AreEqual ("uint32", method.Parameters [0].Type);
-                            Assert.IsNull (method.Parameters [0].DefaultValue);
-                            Assert.AreEqual (0, method.Attributes.Count);
-                            Assert.AreNotEqual ("", method.Documentation);
-                            found++;
-                        }
-                        if (method.Name == "get_CurrentGameScene") {
-                            Assert.AreEqual ("int32", method.ReturnType);
-                            Assert.AreEqual (0, method.Parameters.Count);
-                            Assert.AreEqual (2, method.Attributes.Count);
-                            Assert.AreEqual ("Property.Get(CurrentGameScene)", method.Attributes [0]);
-                            Assert.AreEqual ("ReturnType.Enum(KRPC.GameScene)", method.Attributes [1]);
-                            Assert.AreNotEqual ("", method.Documentation);
-                            found++;
-                        }
-                    }
-                    Assert.AreEqual (5, found);
-                    Assert.AreEqual (0, service.Classes.Count);
-                    Assert.AreEqual (1, service.Enumerations.Count);
-                    bool foundGameSceneEnumeration = false;
-                    foreach (var enm in service.Enumerations) {
-                        if (enm.Name == "GameScene") {
-                            foundGameSceneEnumeration = true;
-                            Assert.AreEqual (5, enm.Values.Count);
-                            Assert.AreEqual ("SpaceCenter", enm.Values [0].Name);
-                            Assert.AreEqual (0, enm.Values [0].Value);
-                            Assert.AreEqual ("Flight", enm.Values [1].Name);
-                            Assert.AreEqual (1, enm.Values [1].Value);
-                            Assert.AreEqual ("TrackingStation", enm.Values [2].Name);
-                            Assert.AreEqual (2, enm.Values [2].Value);
-                            Assert.AreEqual ("EditorVAB", enm.Values [3].Name);
-                            Assert.AreEqual (3, enm.Values [3].Value);
-                            Assert.AreEqual ("EditorSPH", enm.Values [4].Name);
-                            Assert.AreEqual (4, enm.Values [4].Value);
-                        }
-                    }
-                    Assert.IsTrue (foundGameSceneEnumeration);
+            Assert.AreEqual (4, services.ServicesList.Count);
+
+            var service = services.ServicesList.First (x => x.Name == "KRPC");
+            Assert.AreEqual (5, service.Procedures.Count);
+            Assert.AreEqual (0, service.Classes.Count);
+            Assert.AreEqual (1, service.Enumerations.Count);
+
+            int foundProcedures = 0;
+            foreach (var method in service.Procedures) {
+                if (method.Name == "GetStatus") {
+                    MessageAssert.HasReturnType (method, "KRPC.Status");
+                    MessageAssert.HasNoParameters (method);
+                    MessageAssert.HasNoAttributes (method);
+                    MessageAssert.HasDocumentation (method);
+                } else if (method.Name == "GetServices") {
+                    MessageAssert.HasReturnType (method, "KRPC.Services");
+                    MessageAssert.HasNoParameters (method);
+                    MessageAssert.HasNoAttributes (method);
+                    MessageAssert.HasDocumentation (method);
+                } else if (method.Name == "AddStream") {
+                    MessageAssert.HasReturnType (method, "uint32");
+                    MessageAssert.HasParameters (method, 1);
+                    MessageAssert.HasParameter (method, 0, "KRPC.Request", "request");
+                    MessageAssert.HasNoAttributes (method);
+                    MessageAssert.HasDocumentation (method);
+                } else if (method.Name == "RemoveStream") {
+                    MessageAssert.HasNoReturnType (method);
+                    MessageAssert.HasParameters (method, 1);
+                    MessageAssert.HasParameter (method, 0, "uint32", "id");
+                    MessageAssert.HasNoAttributes (method);
+                    MessageAssert.HasDocumentation (method);
+                } else if (method.Name == "get_CurrentGameScene") {
+                    MessageAssert.HasReturnType (method, "int32");
+                    MessageAssert.HasNoParameters (method);
+                    MessageAssert.HasAttributes (method, 2);
+                    MessageAssert.HasAttribute (method, 0, "Property.Get(CurrentGameScene)");
+                    MessageAssert.HasAttribute (method, 1, "ReturnType.Enum(KRPC.GameScene)");
+                    MessageAssert.HasDocumentation (method);
+                } else {
+                    Assert.Fail ();
+                }
+                foundProcedures++;
+            }
+            Assert.AreEqual (5, foundProcedures);
+
+            bool foundEnumeration = false;
+            foreach (var enumeration in service.Enumerations) {
+                if (enumeration.Name == "GameScene") {
+                    foundEnumeration = true;
+                    MessageAssert.HasDocumentation (enumeration,
+                        "<doc>\n  <summary>\nThe game scene. See <see cref=\"M:KRPC.CurrentGameScene\" />.\n</summary>\n</doc>");
+                    MessageAssert.HasValues (enumeration, 5);
+                    MessageAssert.HasValue (enumeration, 0, "SpaceCenter", 0,
+                        "<doc>\n  <summary>\nThe game scene showing the Kerbal Space Center buildings.\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 1, "Flight", 1,
+                        "<doc>\n  <summary>\nThe game scene showing a vessel in flight (or on the launchpad/runway).\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 2, "TrackingStation", 2,
+                        "<doc>\n  <summary>\nThe tracking station.\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 3, "EditorVAB", 3,
+                        "<doc>\n  <summary>\nThe Vehicle Assembly Building.\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 4, "EditorSPH", 4,
+                        "<doc>\n  <summary>\nThe Space Plane Hangar.\n</summary>\n</doc>");
                 }
             }
-            Assert.IsTrue (foundKRPCService);
+            Assert.IsTrue (foundEnumeration);
         }
     }
 }
-

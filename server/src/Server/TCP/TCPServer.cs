@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -12,12 +12,12 @@ namespace KRPC.Server.TCP
     {
         public event EventHandler OnStarted;
         public event EventHandler OnStopped;
-        public event EventHandler<ClientRequestingConnectionArgs<byte,byte>> OnClientRequestingConnection;
-        public event EventHandler<ClientConnectedArgs<byte,byte>> OnClientConnected;
+        public event EventHandler<ClientRequestingConnectionEventArgs<byte,byte>> OnClientRequestingConnection;
+        public event EventHandler<ClientConnectedEventArgs<byte,byte>> OnClientConnected;
         #pragma warning disable 0067
-        public event EventHandler<ClientActivityArgs<byte,byte>> OnClientActivity;
+        public event EventHandler<ClientActivityEventArgs<byte,byte>> OnClientActivity;
         #pragma warning restore 0067
-        public event EventHandler<ClientDisconnectedArgs<byte,byte>> OnClientDisconnected;
+        public event EventHandler<ClientDisconnectedEventArgs<byte,byte>> OnClientDisconnected;
 
         /// <summary>
         /// A name for the server.
@@ -27,7 +27,7 @@ namespace KRPC.Server.TCP
         /// Port that the server listens on for new connections. If set to 0,
         /// a port number with be automatically chosen.
         /// </summary>
-        ushort port;
+        ushort listenPort;
         /// <summary>
         /// The actual local port number of the server. Will be identical to
         /// port, unless port was set to 0.
@@ -62,13 +62,14 @@ namespace KRPC.Server.TCP
         /// Create a TCP server. After Start() is called, the server will listen for
         /// connections to the specified local address and port number.
         /// </summary>
-        public TCPServer (String name, IPAddress address, ushort port)
+        public TCPServer (String serverName, IPAddress address, ushort port)
         {
-            this.name = name;
+            name = serverName;
             Address = address;
-            this.port = port;
+            listenPort = port;
         }
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void Start ()
         {
             if (running) {
@@ -76,7 +77,7 @@ namespace KRPC.Server.TCP
                 return;
             }
             Logger.WriteLine ("TCPServer(" + name + "): starting", Logger.Severity.Debug);
-            tcpListener = new TcpListener (Address, port);
+            tcpListener = new TcpListener (Address, listenPort);
             try {
                 tcpListener.Start ();
             } catch (SocketException exn) {
@@ -97,8 +98,7 @@ namespace KRPC.Server.TCP
                 tcpListener = null;
                 throw new ServerException ("Failed to start server, timed out waiting for TcpListener to start");
             }
-            if (OnStarted != null)
-                OnStarted (this, EventArgs.Empty);
+            EventHandlerExtensions.Invoke (OnStarted, this);
             Logger.WriteLine ("TCPServer(" + name + "): started successfully");
             if (Address.ToString () == "0.0.0.0")
                 Logger.WriteLine ("TCPServer(" + name + "): listening on all local network interfaces", Logger.Severity.Debug);
@@ -109,6 +109,9 @@ namespace KRPC.Server.TCP
 
         public void Stop ()
         {
+            if (!running)
+                return;
+
             Logger.WriteLine ("TCPServer(" + name + "): stop requested", Logger.Severity.Debug);
             tcpListener.Stop ();
             if (!listenerThread.Join (3000))
@@ -131,8 +134,7 @@ namespace KRPC.Server.TCP
             running = false;
             Logger.WriteLine ("TCPServer(" + name + "): stopped successfully");
 
-            if (OnStopped != null)
-                OnStopped (this, EventArgs.Empty);
+            EventHandlerExtensions.Invoke (OnStopped, this);
         }
 
         public void Update ()
@@ -152,9 +154,8 @@ namespace KRPC.Server.TCP
                     var stillPendingClients = new List<TCPClient> ();
                     foreach (var client in pendingClients) {
                         // Trigger OnClientRequestingConnection events to verify the connection
-                        var args = new ClientRequestingConnectionArgs<byte,byte> (client);
-                        if (OnClientRequestingConnection != null)
-                            OnClientRequestingConnection (this, args);
+                        var args = new ClientRequestingConnectionEventArgs<byte,byte> (client);
+                        EventHandlerExtensions.Invoke (OnClientRequestingConnection, OnClientRequestingConnection, args);
 
                         // Deny the connection
                         if (args.Request.ShouldDeny) {
@@ -166,8 +167,7 @@ namespace KRPC.Server.TCP
                         if (args.Request.ShouldAllow) {
                             Logger.WriteLine ("TCPServer(" + name + "): client connection accepted (" + client.Address + ")");
                             clients.Add (client);
-                            if (OnClientConnected != null)
-                                OnClientConnected (this, new ClientConnectedArgs<byte,byte> (client));
+                            EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<byte,byte> (client));
                         }
 
                         // Still pending, will either be denied or allowed on a subsequent called to Update
@@ -222,7 +222,7 @@ namespace KRPC.Server.TCP
         /// </summary>
         public ushort Port {
             get { return actualPort; }
-            set { port = value; }
+            set { listenPort = value; }
         }
 
         /// <summary>
@@ -230,6 +230,8 @@ namespace KRPC.Server.TCP
         /// </summary>
         public IPAddress Address { get; set; }
 
+        [SuppressMessage ("Gendarme.Rules.Correctness", "EnsureLocalDisposalRule")]
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         void ListenerThread ()
         {
             try {
@@ -264,13 +266,14 @@ namespace KRPC.Server.TCP
         {
             var clientAddress = client.Address;
             try {
-                closedClientsBytesRead += client.Stream.BytesRead;
-                closedClientsBytesWritten += client.Stream.BytesWritten;
+                var stream = client.Stream;
+                closedClientsBytesRead += stream.BytesRead;
+                closedClientsBytesWritten += stream.BytesWritten;
             } catch (ClientDisconnectedException) {
             }
             client.Close ();
-            if (!noEvent && OnClientDisconnected != null)
-                OnClientDisconnected (this, new ClientDisconnectedArgs<byte,byte> (client));
+            if (!noEvent)
+                EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<byte,byte> (client));
             Logger.WriteLine ("TCPServer(" + name + "): client disconnected (" + clientAddress + ")");
         }
     }

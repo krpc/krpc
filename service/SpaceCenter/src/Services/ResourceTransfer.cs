@@ -1,7 +1,7 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -9,44 +9,26 @@ namespace KRPC.SpaceCenter.Services
     /// Transfer resources between parts.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class ResourceTransfer : Equatable<ResourceTransfer>
+    public class ResourceTransfer
     {
-        static ulong nextId;
-        readonly ulong id;
-        readonly Part fromPart;
-        readonly Part toPart;
-        readonly PartResourceDefinition resource;
-        readonly float amount;
+        readonly Part internalFromPart;
+        readonly Part internalToPart;
+        readonly PartResourceDefinition internalResource;
         readonly float transferRate;
 
         ResourceTransfer (Part fromPart, Part toPart, PartResourceDefinition resource, float amount)
         {
-            id = nextId;
-            nextId++;
-            this.fromPart = fromPart;
-            this.toPart = toPart;
-            this.resource = resource;
-            this.amount = amount;
+            internalFromPart = fromPart;
+            internalToPart = toPart;
+            internalResource = resource;
+            FromPart = new Parts.Part (fromPart);
+            ToPart = new Parts.Part (toPart);
+            Resource = resource.name;
+            TotalAmount = amount;
             // Compute the transfer rate (in units/sec) as one tenth the size of the destination tank (determined experimentally from the KSP transfer UI)
             var totalStorage = (float)toPart.Resources.GetAll (resource.id).Sum (r => r.maxAmount);
             transferRate = 0.1f * totalStorage;
             ResourceTransferAddon.AddTransfer (this);
-        }
-
-        /// <summary>
-        /// Check if resource transfer objects are equal.
-        /// </summary>
-        public override bool Equals (ResourceTransfer obj)
-        {
-            return id == obj.id;
-        }
-
-        /// <summary>
-        /// Hash the resource transfer object.
-        /// </summary>
-        public override int GetHashCode ()
-        {
-            return (int)id;
         }
 
         /// <summary>
@@ -61,8 +43,13 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="resource">The name of the resource to transfer.</param>
         /// <param name="maxAmount">The maximum amount of resource to transfer.</param>
         [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         public static ResourceTransfer Start (Parts.Part fromPart, Parts.Part toPart, string resource, float maxAmount)
         {
+            if (ReferenceEquals (fromPart, null))
+                throw new ArgumentNullException ("fromPart");
+            if (ReferenceEquals (toPart, null))
+                throw new ArgumentNullException ("toPart");
             // Get the internal part objects
             var internalFromPart = fromPart.InternalPart;
             var internalToPart = toPart.InternalPart;
@@ -87,6 +74,26 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Part the resource is being transferred from.
+        /// </summary>
+        public Parts.Part FromPart { get; private set; }
+
+        /// <summary>
+        /// Part the resource is being transferred to.
+        /// </summary>
+        public Parts.Part ToPart { get; private set; }
+
+        /// <summary>
+        /// The resource being transferred.
+        /// </summary>
+        public string Resource { get; private set; }
+
+        /// <summary>
+        /// The total amount to be transferred.
+        /// </summary>
+        public float TotalAmount { get; private set; }
+
+        /// <summary>
         /// Whether the transfer has completed.
         /// </summary>
         [KRPCProperty]
@@ -109,12 +116,12 @@ namespace KRPC.SpaceCenter.Services
         {
             if (Complete)
                 return;
-            var resourceAvailable = (float)fromPart.Resources.GetAll (resource.id).Sum (r => r.amount);
-            var storageAvailable = (float)toPart.Resources.GetAll (resource.id).Sum (r => r.maxAmount - r.amount);
+            var resourceAvailable = (float)internalFromPart.Resources.GetAll (internalResource.id).Sum (r => r.amount);
+            var storageAvailable = (float)internalToPart.Resources.GetAll (internalResource.id).Sum (r => r.maxAmount - r.amount);
             var available = Math.Min (resourceAvailable, storageAvailable);
-            var amountToTransfer = Math.Min (available, Math.Min (amount - Amount, transferRate * deltaTime));
-            fromPart.TransferResource (resource.id, -amountToTransfer);
-            toPart.TransferResource (resource.id, amountToTransfer);
+            var amountToTransfer = Math.Min (available, Math.Min (TotalAmount - Amount, transferRate * deltaTime));
+            internalFromPart.TransferResource (internalResource.id, -amountToTransfer);
+            internalToPart.TransferResource (internalResource.id, amountToTransfer);
             Amount += amountToTransfer;
             Complete |= amountToTransfer < 0.0001f;
         }

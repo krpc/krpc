@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services
@@ -5,6 +6,7 @@ namespace KRPC.SpaceCenter.Services
     /// <summary>
     /// The behavior of the SAS auto-pilot. See <see cref="AutoPilot.SASMode"/>.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum SASMode
     {

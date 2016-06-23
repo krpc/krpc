@@ -1,0 +1,214 @@
+R: Gendarme.Rules.Design.AvoidSmallNamespaceRule
+N: KRPC
+N: KRPC.Server
+N: KRPC.Service
+
+R: Gendarme.Rules.Globalization.PreferIFormatProviderOverrideRule
+A: *
+
+R: Gendarme.Rules.Globalization.PreferStringComparisonOverrideRule
+A: *
+
+R: Gendarme.Rules.Maintainability.AvoidLackOfCohesionOfMethodsRule
+T: KRPC.Addon
+T: KRPC.Configuration
+T: KRPC.Core
+T: KRPC.Server.Server
+T: KRPC.Server.TCP.TCPClient
+T: KRPC.Server.TCP.TCPServer
+T: KRPC.Service.Scanner.ProcedureSignature
+T: KRPC.Service.Scanner.ServiceSignature
+T: KRPC.UI.MainWindow
+
+R: Gendarme.Rules.Naming.UseCorrectCasingRule
+N: KRPC
+N: KRPC.Continuations
+N: KRPC.Server
+N: KRPC.Server.Message
+N: KRPC.Server.ProtocolBuffers
+N: KRPC.Server.TCP
+N: KRPC.Service
+N: KRPC.Service.Attributes
+N: KRPC.Service.Scanner
+N: KRPC.Service.Messages
+N: KRPC.Messagew
+N: KRPC.Schema.KRPC
+N: KRPC.Utils
+N: KRPC.UI
+
+R: Gendarme.Rules.Performance.AvoidConcatenatingCharsRule
+A: *
+
+R: Gendarme.Rules.Security.Cas.SecureGetObjectDataOverridesRule
+A: *
+
+R: Gendarme.Rules.Smells.AvoidLargeClassesRule
+T: KRPC.Addon
+T: KRPC.Configuration
+T: KRPC.Core
+T: KRPC.Server.TCP.TCPServer
+T: KRPC.Server.Message.RPCServer
+T: KRPC.Server.Message.RPCStream
+T: KRPC.Server.ProtocolBuffers.Encoder
+T: KRPC.Service.Scanner.ServiceSignature
+T: KRPC.UI.MainWindow
+T: KRPC.UI.InfoWindow
+T: KRPC.UI.Icons
+
+R: Gendarme.Rules.Smells.AvoidCodeDuplicatedInSameClassRule
+T: KRPC.Addon
+T: KRPC.Core
+T: KRPC.ServicesChecker
+T: KRPC.Server.ClientConnectionRequest
+T: KRPC.Server.ProtocolBuffers.Encoder
+T: KRPC.Server.TCP.TCPServer
+T: KRPC.Service.TypeUtils
+T: KRPC.UI.GUILayoutExtensions
+T: KRPC.UI.MainWindow
+
+R: Gendarme.Rules.Smells.AvoidCodeDuplicatedInSiblingClassesRule
+T: KRPC.UI.MainWindow
+
+R: Gendarme.Rules.Performance.UseStringEmptyRule
+M: System.Void KRPC.CompatibilityChecker::Start()
+M: System.Void KRPC.ServicesChecker::Start()
+M: System.Void KRPC.ServicesChecker::CheckDocumentation(System.Collections.Generic.IEnumerable`1<KRPC.Service.Scanner.ServiceSignature>)
+M: System.Void KRPC.UI.OptionDialog::Open()
+M: System.Void KRPC.Utils.APILoader::Error(System.String)
+
+# Speculative generality caused by websockets server not yet implemented
+R: Gendarme.Rules.Smells.AvoidSpeculativeGeneralityRule
+T: KRPC.Server.Message.RPCClient
+T: KRPC.Server.Message.RPCServer
+T: KRPC.Server.Message.RPCStream
+T: KRPC.Server.Message.StreamClient
+T: KRPC.Server.Message.StreamServer
+T: KRPC.Server.Message.StreamStream
+
+# Private exceptions
+R: Gendarme.Rules.Exceptions.ExceptionShouldBeVisibleRule
+T: KRPC.Server.ServerException
+T: KRPC.Server.Message.NoRequestException
+T: KRPC.Service.RPCException
+T: KRPC.Service.ServiceException
+R: Gendarme.Rules.Serialization.MissingSerializableAttributeOnISerializableTypeRule
+T: KRPC.Server.ServerException
+T: KRPC.Server.Message.NoRequestException
+T: KRPC.Service.DocumentationException
+T: KRPC.Service.RPCException
+T: KRPC.Service.ServiceException
+R: Gendarme.Rules.Serialization.MissingSerializationConstructorRule
+T: KRPC.Server.ClientDisconnectedException
+T: KRPC.Server.ServerException
+T: KRPC.Server.Message.NoRequestException
+T: KRPC.Server.Message.MalformedRequestException
+T: KRPC.Service.DocumentationException
+T: KRPC.Service.RPCException
+T: KRPC.Service.ServiceException
+R: Gendarme.Rules.Exceptions.MissingExceptionConstructorsRule
+T: KRPC.Server.ClientDisconnectedException
+T: KRPC.Server.ServerException
+T: KRPC.Server.Message.NoRequestException
+T: KRPC.Server.Message.MalformedRequestException
+T: KRPC.Service.DocumentationException
+T: KRPC.Service.RPCException
+T: KRPC.Service.ServiceException
+
+# Serialization
+R: Gendarme.Rules.Serialization.MissingSerializableAttributeOnISerializableTypeRule
+T: KRPC.Service.Scanner.ClassSignature
+T: KRPC.Service.Scanner.EnumerationSignature
+T: KRPC.Service.Scanner.EnumerationValueSignature
+T: KRPC.Service.Scanner.ParameterSignature
+T: KRPC.Service.Scanner.ProcedureSignature
+T: KRPC.Service.Scanner.ServiceSignature
+T: KRPC.Continuations.YieldException
+R: Gendarme.Rules.Serialization.ImplementISerializableCorrectlyRule
+T: KRPC.Service.Scanner.ClassSignature
+T: KRPC.Service.Scanner.EnumerationSignature
+T: KRPC.Service.Scanner.EnumerationValueSignature
+T: KRPC.Service.Scanner.ParameterSignature
+T: KRPC.Service.Scanner.ProcedureSignature
+T: KRPC.Service.Scanner.ServiceSignature
+T: KRPC.Continuations.YieldException
+R: Gendarme.Rules.Serialization.MissingSerializationConstructorRule
+T: KRPC.Service.Scanner.ClassSignature
+T: KRPC.Service.Scanner.EnumerationSignature
+T: KRPC.Service.Scanner.EnumerationValueSignature
+T: KRPC.Service.Scanner.ParameterSignature
+T: KRPC.Service.Scanner.ProcedureSignature
+T: KRPC.Service.Scanner.ServiceSignature
+T: KRPC.Continuations.YieldException
+R: Gendarme.Rules.Exceptions.MissingExceptionConstructorsRule
+T: KRPC.Service.Scanner.ClassSignature
+T: KRPC.Service.Scanner.EnumerationSignature
+T: KRPC.Service.Scanner.EnumerationValueSignature
+T: KRPC.Service.Scanner.ParameterSignature
+T: KRPC.Service.Scanner.ProcedureSignature
+T: KRPC.Service.Scanner.ServiceSignature
+T: KRPC.Continuations.YieldException
+
+# Compatibility checker
+R: Gendarme.Rules.Concurrency.WriteStaticFieldFromInstanceMethodRule
+T: KRPC.CompatibilityChecker
+R: Gendarme.Rules.Correctness.MethodCanBeMadeStaticRule
+T: KRPC.CompatibilityChecker
+R: Gendarme.Rules.Design.ConsiderConvertingMethodToPropertyRule
+T: KRPC.CompatibilityChecker
+R: Gendarme.Rules.Exceptions.DoNotSwallowErrorsCatchingNonSpecificExceptionsRule
+T: KRPC.CompatibilityChecker
+M: System.Boolean KRPC.CompatibilityChecker/<getAllTypes>c__Iterator0::MoveNext()
+R: Gendarme.Rules.Globalization.PreferIFormatProviderOverrideRule
+T: System.Void KRPC.CompatibilityChecker
+R: Gendarme.Rules.Performance.AvoidUncalledPrivateCodeRule
+T: KRPC.CompatibilityChecker
+R: Gendarme.Rules.Portability.NewLineLiteralRule
+T: KRPC.CompatibilityChecker
+R: Gendarme.Rules.Smells.AvoidLongMethodsRule
+T: KRPC.CompatibilityChecker
+
+# KSPAddonImproved
+R: Gendarme.Rules.Design.DoNotDeclareVirtualMethodsInSealedTypeRule
+T: KRPC.Utils._KSPAddonImproved
+R: Gendarme.Rules.Design.FlagsShouldNotDefineAZeroValueRule
+T: KRPC.Utils.KSPAddonImproved/Startup
+R: Gendarme.Rules.Maintainability.VariableNamesShouldNotMatchFieldNamesRule
+T: KRPC.Utils._KSPAddonImproved
+R: Gendarme.Rules.Naming.ParameterNamesShouldMatchOverriddenMethodRule
+T: KRPC.Utils._KSPAddonImproved
+R: Gendarme.Rules.Performance.AvoidUncalledPrivateCodeRule
+T: KRPC.Utils.CustomAddonLoader
+R: Gendarme.Rules.Naming.UseCorrectSuffixRule
+T: KRPC.Utils.KSPAddonImproved
+R: Gendarme.Rules.Naming.UsePluralNameInEnumFlagsRule
+T: KRPC.Utils.KSPAddonImproved/Startup
+R: Gendarme.Rules.Serialization.MarkEnumerationsAsSerializableRule
+T: KRPC.Utils.KSPAddonImproved/Startup
+R: Gendarme.Rules.Smells.AvoidSpeculativeGeneralityRule
+T: KRPC.Utils.CustomAddonLoader/AddonInfo
+R: Gendarme.Rules.Smells.AvoidSwitchStatementsRule
+T: KRPC.Utils.CustomAddonLoader
+
+# Protocol buffers
+R: Gendarme.Rules.BadPractice.AvoidVisibleConstantFieldRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Correctness.CheckParametersNullityInVisibleMethodsRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Correctness.ReviewInconsistentIdentityRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Maintainability.AvoidLackOfCohesionOfMethodsRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Naming.AvoidNonAlphanumericIdentifierRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Naming.ParameterNamesShouldMatchOverriddenMethodRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Naming.UseCorrectSuffixRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Performance.UseStringEmptyRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Smells.AvoidLargeClassesRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Smells.AvoidLongMethodsRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Smells.AvoidSwitchStatementsRule
+N: KRPC.Schema.KRPC

@@ -6,8 +6,12 @@ namespace KRPC.Client
     {
         internal static bool IsAClassMethod (MethodCallExpression expression)
         {
-            var instance = expression.Object;
-            return instance != null && typeof(RemoteObject).IsAssignableFrom (instance.Type);
+            return IsARemoteObject (expression.Object);
+        }
+
+        internal static bool IsAClassProperty (MemberExpression expression)
+        {
+            return IsARemoteObject (expression.Expression);
         }
 
         internal static bool IsAClassStaticMethod (MethodCallExpression expression)
@@ -15,9 +19,8 @@ namespace KRPC.Client
             return expression.Object == null;
         }
 
-        internal static bool IsAClassProperty (MemberExpression expression)
+        static bool IsARemoteObject (Expression instance)
         {
-            var instance = expression.Expression;
             return instance != null && typeof(RemoteObject).IsAssignableFrom (instance.Type);
         }
     }

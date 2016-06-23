@@ -1,7 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
+    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
     static class VesselTypeExtensions
     {
         public static KRPC.SpaceCenter.Services.VesselType ToVesselType (this VesselType type)

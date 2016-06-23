@@ -9,7 +9,7 @@ namespace KRPC.UI
     /// A canvas for user interface elements. See <see cref="UI.StockCanvas" /> and <see cref="UI.AddCanvas" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class Canvas : UIObject
+    public class Canvas : Object
     {
         static Canvas stockCanvas;
 
@@ -21,7 +21,7 @@ namespace KRPC.UI
             }
         }
 
-        Canvas (UnityEngine.Canvas canvas)
+        internal Canvas (UnityEngine.Canvas canvas)
             : base (canvas)
         {
         }
@@ -29,9 +29,9 @@ namespace KRPC.UI
         internal Canvas ()
             : base (new GameObject ("krpc.canvas", typeof(UnityEngine.Canvas)), true)
         {
-            obj.AddComponent<KSPGraphicRaycaster> ();
-            obj.GetComponent<UnityEngine.Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
-            obj.GetComponent<UnityEngine.RectTransform> ().sizeDelta = new Vector2 (Screen.width, Screen.height);
+            GameObject.AddComponent<KSPGraphicRaycaster> ();
+            GameObject.GetComponent<UnityEngine.Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
+            GameObject.GetComponent<UnityEngine.RectTransform> ().sizeDelta = new Vector2 (Screen.width, Screen.height);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public RectTransform RectTransform {
-            get{ return new RectTransform (obj.GetComponent<UnityEngine.RectTransform> ()); }
+            get{ return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Panel AddPanel (bool visible = true)
         {
-            return new Panel (obj, visible);
+            return new Panel (GameObject, visible);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Text AddText (string content, bool visible = true)
         {
-            return new Text (obj, content, visible);
+            return new Text (GameObject, content, visible);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public InputField AddInputField (bool visible = true)
         {
-            return new InputField (obj, visible);
+            return new InputField (GameObject, visible);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Button AddButton (string content, bool visible = true)
         {
-            return new Button (obj, content, visible);
+            return new Button (GameObject, content, visible);
         }
     }
 }

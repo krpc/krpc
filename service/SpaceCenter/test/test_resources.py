@@ -124,7 +124,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
 
     def test_vessel_mass(self):
         mass = self.vessel.dry_mass
-        self.assertEqual(28595, mass)
+        self.assertAlmostEqual(29195, mass, places=2)
         resources = self.vessel.resources
         self.assertEqual(
             set(['SolidFuel', 'ElectricCharge', 'MonoPropellant', 'LiquidFuel', 'Oxidizer']),
@@ -133,7 +133,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
             amount = sum(self.expected[stage][name][0] for stage in range(self.num_stages))
             if name in self.density:
                 mass += amount * self.density[name]
-        self.assertEqual(mass, self.vessel.mass)
+        self.assertAlmostEqual(mass, self.vessel.mass, places=2)
 
     def test_part_resources(self):
         mode = self.connect().space_center.ResourceFlowMode

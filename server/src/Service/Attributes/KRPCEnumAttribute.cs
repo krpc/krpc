@@ -6,7 +6,7 @@ namespace KRPC.Service.Attributes
     /// A kRPC enum.
     /// </summary>
     [AttributeUsage (AttributeTargets.Enum)]
-    public class KRPCEnumAttribute : Attribute
+    public sealed class KRPCEnumAttribute : Attribute
     {
         /// <summary>
         /// Name of the service in which the enum is declared.

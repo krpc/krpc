@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
@@ -12,7 +13,8 @@ namespace KRPC.Drawing
     /// A line. Created using <see cref="Drawing.AddLine" />.
     /// </summary>
     [KRPCClass (Service = "Drawing")]
-    public class Line : Drawable
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    public class Line : Drawable<Line>
     {
         readonly LineRenderer renderer;
         Vector3d start;
@@ -20,16 +22,16 @@ namespace KRPC.Drawing
         Tuple3 color;
         float thickness;
 
-        internal Line (Vector3d start, Vector3d end, ReferenceFrame referenceFrame, bool visible)
-            : base ("line", typeof(LineRenderer))
+        internal Line (Vector3d lineStart, Vector3d lineEnd, ReferenceFrame referenceFrame, bool visible)
+            : base (typeof(LineRenderer))
         {
             renderer = GameObject.GetComponent<LineRenderer> ();
             renderer.useWorldSpace = true;
             renderer.SetVertexCount (2);
             renderer.SetPosition (0, Vector3d.zero);
             renderer.SetPosition (1, Vector3d.zero);
-            this.start = start;
-            this.end = end;
+            start = lineStart;
+            end = lineEnd;
             ReferenceFrame = referenceFrame;
             Visible = visible;
             Color = new Tuple3 (1, 1, 1);

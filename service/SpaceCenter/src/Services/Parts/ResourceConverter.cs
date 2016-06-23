@@ -11,9 +11,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.ResourceConverter"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class ResourceConverter: Equatable<ResourceConverter>
+    public class ResourceConverter: Equatable<ResourceConverter>
     {
-        readonly Part part;
         readonly IList<ModuleResourceConverter> converters;
 
         internal static bool Is (Part part)
@@ -23,26 +22,26 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal ResourceConverter (Part part)
         {
-            this.part = part;
+            Part = part;
             converters = part.InternalPart.Modules.OfType<ModuleResourceConverter> ().ToList ();
             if (converters.Count == 0)
                 throw new ArgumentException ("Part is does not contain any resource converters");
         }
 
         /// <summary>
-        /// Check if resource converters are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (ResourceConverter obj)
+        public override bool Equals (ResourceConverter other)
         {
-            return part == obj.part && converters.SequenceEqual (obj.converters);
+            return !ReferenceEquals (other, null) && Part == other.Part && converters.SequenceEqual (other.converters);
         }
 
         /// <summary>
-        /// Hash the resource converter.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = part.GetHashCode ();
+            int hash = Part.GetHashCode ();
             foreach (var converter in converters)
                 hash ^= converter.GetHashCode ();
             return hash;
@@ -52,9 +51,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part object for this converter.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// The number of converters in the part.

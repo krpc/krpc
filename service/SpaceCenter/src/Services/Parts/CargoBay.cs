@@ -10,49 +10,51 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.CargoBay"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class CargoBay : Equatable<CargoBay>
+    public class CargoBay : Equatable<CargoBay>
     {
-        readonly Part part;
         readonly ModuleCargoBay bay;
         readonly ModuleAnimateGeneric animation;
 
         internal static bool Is (Part part)
         {
-            return part.InternalPart.HasModule<ModuleCargoBay> () && !part.InternalPart.HasModule<ModuleProceduralFairing> ();
+            var internalPart = part.InternalPart;
+            return
+            internalPart.HasModule<ModuleCargoBay> () &&
+            internalPart.HasModule<ModuleAnimateGeneric> () &&
+            !internalPart.HasModule<ModuleProceduralFairing> ();
         }
 
         internal CargoBay (Part part)
         {
-            this.part = part;
-            bay = part.InternalPart.Module<ModuleCargoBay> ();
-            animation = part.InternalPart.Module<ModuleAnimateGeneric> ();
-            if (bay == null || animation == null)
+            if (!Is (part))
                 throw new ArgumentException ("Part is not a cargo bay");
+            Part = part;
+            var internalPart = part.InternalPart;
+            bay = internalPart.Module<ModuleCargoBay> ();
+            animation = internalPart.Module<ModuleAnimateGeneric> ();
         }
 
         /// <summary>
-        /// Check if cargo bays are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (CargoBay obj)
+        public override bool Equals (CargoBay other)
         {
-            return part == obj.part && bay == obj.bay;
+            return !ReferenceEquals (other, null) && Part == other.Part && bay.Equals (other.bay);
         }
 
         /// <summary>
-        /// Hash the cargo bay.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ bay.GetHashCode ();
+            return Part.GetHashCode () ^ bay.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this cargo bay.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// The state of the cargo bay.
@@ -76,12 +78,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Open {
-            get { return State == CargoBayState.Open || State == CargoBayState.Opening; }
+            get {
+                var state = State;
+                return state == CargoBayState.Open || state == CargoBayState.Opening;
+            }
             set {
-                if (value && OpenEvent != null)
-                    OpenEvent.Invoke ();
-                else if (!value && CloseEvent != null)
-                    CloseEvent.Invoke ();
+                var openEvent = OpenEvent;
+                var closeEvent = CloseEvent;
+                if (value && openEvent != null)
+                    openEvent.Invoke ();
+                else if (!value && closeEvent != null)
+                    closeEvent.Invoke ();
             }
         }
 

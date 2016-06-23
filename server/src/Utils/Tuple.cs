@@ -1,15 +1,17 @@
 /*[[[cog
 import cog
 import itertools
-def wrap(s, x, e): return s + x + e if x != '' else ''
-def prepend (s, x): return s + x if x != '' else ''
 
 cog.out("""
+using System.Diagnostics.CodeAnalysis;
+
 namespace KRPC.Utils
 {
     /// <summary>
     /// Interface for tuples.
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design", "AvoidEmptyInterfaceRule")]
+    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidTypeInterfaceInconsistencyRule")]
     public interface ITuple
     {
     }
@@ -20,6 +22,7 @@ for n in range(1,int(nargs)+1):
     /// <summary>
     /// A tuple with """ + str(n) + """ elements
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidExcessiveParametersOnGenericTypesRule")]
     public class Tuple<""" + ','.join(['T%d' % (i+1) for i in range(n)]) + """> : ITuple
     {""")
     for i in range(n):
@@ -32,6 +35,7 @@ for n in range(1,int(nargs)+1):
         /// <summary>
         /// Create a tuple with the given values as its elements
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public Tuple (""" + ', '.join(['T%d item%d' % (i+1,i+1) for i in range(n)]) + """)
         {
             """ + '\n            '.join(['Item%d = item%d;' % (i+1,i+1) for i in range(n)]) + """
@@ -57,11 +61,15 @@ cog.outl('    }')
 cog.outl('}')
 ]]]*/
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace KRPC.Utils
 {
     /// <summary>
     /// Interface for tuples.
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design", "AvoidEmptyInterfaceRule")]
+    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidTypeInterfaceInconsistencyRule")]
     public interface ITuple
     {
     }
@@ -69,6 +77,7 @@ namespace KRPC.Utils
     /// <summary>
     /// A tuple with 1 elements
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidExcessiveParametersOnGenericTypesRule")]
     public class Tuple<T1> : ITuple
     {
         /// <summary>
@@ -79,6 +88,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Create a tuple with the given values as its elements
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public Tuple (T1 item1)
         {
             Item1 = item1;
@@ -88,6 +98,7 @@ namespace KRPC.Utils
     /// <summary>
     /// A tuple with 2 elements
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidExcessiveParametersOnGenericTypesRule")]
     public class Tuple<T1,T2> : ITuple
     {
         /// <summary>
@@ -103,6 +114,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Create a tuple with the given values as its elements
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public Tuple (T1 item1, T2 item2)
         {
             Item1 = item1;
@@ -113,6 +125,7 @@ namespace KRPC.Utils
     /// <summary>
     /// A tuple with 3 elements
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidExcessiveParametersOnGenericTypesRule")]
     public class Tuple<T1,T2,T3> : ITuple
     {
         /// <summary>
@@ -133,6 +146,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Create a tuple with the given values as its elements
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public Tuple (T1 item1, T2 item2, T3 item3)
         {
             Item1 = item1;
@@ -144,6 +158,7 @@ namespace KRPC.Utils
     /// <summary>
     /// A tuple with 4 elements
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidExcessiveParametersOnGenericTypesRule")]
     public class Tuple<T1,T2,T3,T4> : ITuple
     {
         /// <summary>
@@ -169,6 +184,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Create a tuple with the given values as its elements
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public Tuple (T1 item1, T2 item2, T3 item3, T4 item4)
         {
             Item1 = item1;
@@ -181,6 +197,7 @@ namespace KRPC.Utils
     /// <summary>
     /// A tuple with 5 elements
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidExcessiveParametersOnGenericTypesRule")]
     public class Tuple<T1,T2,T3,T4,T5> : ITuple
     {
         /// <summary>
@@ -211,6 +228,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Create a tuple with the given values as its elements
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public Tuple (T1 item1, T2 item2, T3 item3, T4 item4, T5 item5)
         {
             Item1 = item1;
@@ -224,6 +242,7 @@ namespace KRPC.Utils
     /// <summary>
     /// A tuple with 6 elements
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidExcessiveParametersOnGenericTypesRule")]
     public class Tuple<T1,T2,T3,T4,T5,T6> : ITuple
     {
         /// <summary>
@@ -259,6 +278,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Create a tuple with the given values as its elements
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public Tuple (T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6)
         {
             Item1 = item1;
@@ -273,6 +293,7 @@ namespace KRPC.Utils
     /// <summary>
     /// A tuple with 7 elements
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidExcessiveParametersOnGenericTypesRule")]
     public class Tuple<T1,T2,T3,T4,T5,T6,T7> : ITuple
     {
         /// <summary>
@@ -313,6 +334,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Create a tuple with the given values as its elements
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public Tuple (T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7)
         {
             Item1 = item1;
@@ -328,6 +350,7 @@ namespace KRPC.Utils
     /// <summary>
     /// A tuple with 8 elements
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidExcessiveParametersOnGenericTypesRule")]
     public class Tuple<T1,T2,T3,T4,T5,T6,T7,T8> : ITuple
     {
         /// <summary>
@@ -373,6 +396,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Create a tuple with the given values as its elements
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public Tuple (T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8)
         {
             Item1 = item1;

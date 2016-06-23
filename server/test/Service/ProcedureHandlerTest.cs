@@ -1,7 +1,7 @@
-using NUnit.Framework;
 using System;
 using System.Linq;
 using KRPC.Service;
+using NUnit.Framework;
 
 namespace KRPC.Test.Service
 {
@@ -64,4 +64,3 @@ namespace KRPC.Test.Service
         }
     }
 }
-

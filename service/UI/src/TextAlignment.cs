@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.UI
@@ -5,6 +6,7 @@ namespace KRPC.UI
     /// <summary>
     /// Text alignment.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "UI")]
     public enum TextAlignment
     {
@@ -22,4 +24,3 @@ namespace KRPC.UI
         Center
     }
 }
-

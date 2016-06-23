@@ -7,10 +7,10 @@ namespace KRPC.Server.Message
     {
         readonly IClient<byte,byte> client;
 
-        protected StreamClient (Guid guid, IClient<byte,byte> client, IStream<NoMessage,StreamMessage> stream)
+        protected StreamClient (Guid guid, IClient<byte,byte> innerClient, IStream<NoMessage,StreamMessage> stream)
         {
             Guid = guid;
-            this.client = client;
+            client = innerClient;
             Stream = stream;
         }
 

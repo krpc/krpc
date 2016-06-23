@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Utils
 {
@@ -6,52 +7,57 @@ namespace KRPC.Utils
     /// Abstract base class for equatable objects.
     /// Provides implementations of comparison operators.
     /// </summary>
-    public abstract class Equatable<T> : IEquatable<T>
+    public abstract class Equatable<T> : IEquatable<T> where T : class
     {
         /// <summary>
-        /// Returns true if the objects are equal
+        /// Returns true if the objects are equal.
         /// </summary>
-        public abstract bool Equals (T obj);
+        public abstract bool Equals (T other);
 
         /// <summary>
-        /// Hash function
+        /// Hash the object.
         /// </summary>
         public override abstract int GetHashCode ();
 
         /// <summary>
-        /// Returns true if the objects are equal
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (object obj)
+        public sealed override bool Equals (object obj)
         {
+            if (Object.ReferenceEquals (this, obj))
+                return true;
             if (Object.ReferenceEquals (obj, null))
                 return false;
-            if (obj is T)
-                return Equals ((T)obj);
-            return false;
+            var typedObj = obj as T;
+            return typedObj != null && Equals (typedObj);
         }
 
         /// <summary>
-        /// Returns true if the lhs equals the rhs
+        /// Returns true if the objects are equal.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotDeclareStaticMembersOnGenericTypesRule")]
         public static bool operator == (Equatable<T> lhs, Equatable<T> rhs)
         {
-            if (Object.ReferenceEquals (lhs, rhs))
+            if (Object.ReferenceEquals (lhs, null) || Object.ReferenceEquals (rhs, null))
+                return Object.ReferenceEquals (lhs, rhs);
+            else if (Object.ReferenceEquals (lhs, rhs))
                 return true;
-            if (Object.ReferenceEquals (lhs, null))
-                return false;
-            return lhs.Equals (rhs);
+            else
+                return lhs.Equals (rhs);
         }
 
         /// <summary>
-        /// Returns true if the lhs does not equal the rhs
+        /// Returns true if the objects are not equal.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotDeclareStaticMembersOnGenericTypesRule")]
         public static bool operator != (Equatable<T> lhs, Equatable<T> rhs)
         {
-            if (Object.ReferenceEquals (lhs, rhs))
+            if (Object.ReferenceEquals (lhs, null) || Object.ReferenceEquals (rhs, null))
+                return !Object.ReferenceEquals (lhs, rhs);
+            else if (Object.ReferenceEquals (lhs, rhs))
                 return false;
-            if (Object.ReferenceEquals (lhs, null))
-                return true;
-            return !(lhs.Equals (rhs));
+            else
+                return !(lhs.Equals (rhs));
         }
     }
 }

@@ -1,37 +1,59 @@
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 
 namespace KRPC.Test.Utils
 {
-    class MyEquatable : KRPC.Utils.Equatable<MyEquatable>
+    [SuppressMessage ("Gendarme.Rules.Design", "ImplementEqualsAndGetHashCodeInPairRule")]
+    sealed class MyEquatable : KRPC.Utils.Equatable<MyEquatable>
     {
-        readonly public string key;
+        readonly public string Key;
 
         public MyEquatable (string key)
         {
-            this.key = key;
+            Key = key;
         }
 
-        public override bool Equals (MyEquatable obj)
+        public sealed override bool Equals (MyEquatable other)
         {
-            return key == obj.key;
+            return Key == other.Key;
         }
 
-        public override int GetHashCode ()
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+        public sealed override int GetHashCode ()
         {
-            return key.GetHashCode ();
+            return Key.GetHashCode ();
         }
     }
 
     [TestFixture]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class EquatableTest
     {
+        static MyEquatable obj1 = new MyEquatable ("foo");
+        static MyEquatable obj1a = obj1;
+        static MyEquatable obj2 = new MyEquatable ("foo");
+        static MyEquatable obj3 = new MyEquatable ("bar");
+
         [Test]
-        public void EqualityOperators ()
+        public void EqualsTMethod ()
         {
-            var obj1 = new MyEquatable ("foo");
-            var obj1a = obj1;
-            var obj2 = new MyEquatable ("foo");
-            var obj3 = new MyEquatable ("bar");
+            Assert.True (obj1.Equals (obj1a));
+            Assert.True (obj1.Equals (obj2));
+            Assert.False (obj1.Equals (obj3));
+        }
+
+        [Test]
+        public void EqualsObjectMethod ()
+        {
+            Assert.True (obj1.Equals ((object)obj1a));
+            Assert.True (obj1.Equals ((object)obj2));
+            Assert.False (obj1.Equals ((object)obj3));
+            Assert.False (obj1.Equals ("foo"));
+        }
+
+        [Test]
+        public void EqualityOperator ()
+        {
             Assert.True (obj1 == obj1a);
             Assert.True (obj1 == obj2);
             Assert.False (obj1 == obj3);
@@ -43,9 +65,6 @@ namespace KRPC.Test.Utils
         [Test]
         public void HashCodes ()
         {
-            var obj1 = new MyEquatable ("foo");
-            var obj2 = new MyEquatable ("foo");
-            var obj3 = new MyEquatable ("bar");
             Assert.AreEqual (obj1.GetHashCode (), obj1.GetHashCode ());
             Assert.AreEqual (obj1.GetHashCode (), obj2.GetHashCode ());
             Assert.AreNotEqual (obj1.GetHashCode (), obj3.GetHashCode ());
@@ -54,14 +73,10 @@ namespace KRPC.Test.Utils
         [Test]
         public void NullReferences ()
         {
-            var obj = new MyEquatable ("foo");
-            Assert.False (obj == null);
-            Assert.False (null == obj);
-            Assert.True ((MyEquatable)null == (MyEquatable)null);
-            Assert.True (obj != null);
-            Assert.True (null != obj);
-            Assert.False ((MyEquatable)null != (MyEquatable)null);
+            Assert.False (obj1 == null);
+            Assert.False (null == obj1);
+            Assert.True (obj1 != null);
+            Assert.True (null != obj1);
         }
     }
 }
-

@@ -15,4 +15,3 @@ namespace KRPC.Service
         Type ReturnType { get; }
     }
 }
-

@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Google.Protobuf;
@@ -9,6 +12,8 @@ using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
 {
+    [SuppressMessage ("Gendarme.Rules.Correctness", "DisposableFieldsShouldBeDisposedRule")]
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     sealed class StreamManager : IDisposable
     {
         readonly Connection connection;
@@ -57,6 +62,7 @@ namespace KRPC.Client
                 throw new ObjectDisposedException (GetType ().Name);
         }
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public UInt32 AddStream (Request request, Type type)
         {
             CheckDisposed ();
@@ -70,6 +76,7 @@ namespace KRPC.Client
             return id;
         }
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public void RemoveStream (UInt32 id)
         {
             CheckDisposed ();
@@ -109,6 +116,7 @@ namespace KRPC.Client
             }
         }
 
+        [SuppressMessage ("Gendarme.Rules.Correctness", "TypesWithDisposableFieldsShouldBeDisposableRule")]
         sealed class UpdateThread
         {
             readonly StreamManager manager;

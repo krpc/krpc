@@ -9,9 +9,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.Intake"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Intake : Equatable<Intake>
+    public class Intake : Equatable<Intake>
     {
-        readonly Part part;
         readonly ModuleResourceIntake intake;
 
         internal static bool Is (Part part)
@@ -21,35 +20,33 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal Intake (Part part)
         {
-            this.part = part;
+            Part = part;
             intake = part.InternalPart.Module<ModuleResourceIntake> ();
             if (intake == null)
                 throw new ArgumentException ("Part is not an intake");
         }
 
         /// <summary>
-        /// Check if intakes are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Intake obj)
+        public override bool Equals (Intake other)
         {
-            return part == obj.part && intake == obj.intake;
+            return !ReferenceEquals (other, null) && Part == other.Part && intake.Equals (other.intake);
         }
 
         /// <summary>
-        /// Hash the intake.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ intake.GetHashCode ();
+            return Part.GetHashCode () ^ intake.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this intake.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the intake is open.

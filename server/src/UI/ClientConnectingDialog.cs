@@ -1,4 +1,3 @@
-using UnityEngine;
 using KRPC.Server;
 using KRPC.Utils;
 
@@ -6,7 +5,7 @@ namespace KRPC.UI
 {
     sealed class ClientConnectingDialog : OptionDialog
     {
-        ClientRequestingConnectionArgs args;
+        ClientRequestingConnectionEventArgs args;
 
         protected override void Init ()
         {
@@ -17,10 +16,12 @@ namespace KRPC.UI
 
         protected override void Opened ()
         {
-            if (args.Client.Name == "")
-                Message = "A client is attempting to connect from " + args.Client.Address;
+            var clientName = args.Client.Name;
+            var clientAddress = args.Client.Address;
+            if (name.Length == 0)
+                Message = "A client is attempting to connect from " + clientAddress;
             else
-                Message = "'" + args.Client.Name + "' is attempting to connect from " + args.Client.Address;
+                Message = "'" + clientName + "' is attempting to connect from " + clientAddress;
         }
 
         protected override void Closed ()
@@ -28,26 +29,26 @@ namespace KRPC.UI
             args = null;
         }
 
-        public void OnClientRequestingConnection (object sender, ClientRequestingConnectionArgs args)
+        public void OnClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs eventArgs)
         {
             // Not open, so open the dialog
             if (!Visible) {
                 Logger.WriteLine ("Asking player to allow/deny connection attempt...");
-                this.args = args;
+                args = eventArgs;
                 Open ();
                 return;
             }
 
             // Already open for a different request, so ignore
-            if (Visible && this.args.Client != args.Client)
+            if (Visible && args.Client != eventArgs.Client)
                 return;
 
             // Open, and we have a decision (must be the correct client at this point), to close the dialog
-            if (Visible && !this.args.Request.StillPending) {
-                if (this.args.Request.ShouldAllow)
-                    args.Request.Allow ();
+            if (Visible && !args.Request.StillPending) {
+                if (args.Request.ShouldAllow)
+                    eventArgs.Request.Allow ();
                 else
-                    args.Request.Deny ();
+                    eventArgs.Request.Deny ();
                 Close ();
             }
         }

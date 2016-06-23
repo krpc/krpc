@@ -1,4 +1,5 @@
 load('/tools/build/autotools', 'autotools_dist')
+load('/tools/build/cpp', 'cpp_check_test', 'cpp_lint_test')
 load('/tools/build/protobuf/cpp', 'protobuf_cpp')
 load('/tools/build/client_test', 'client_test')
 load('/tools/krpctools/clientgen', 'clientgen_cpp')
@@ -106,43 +107,75 @@ clientgen_cpp(
     name = 'services-test-service',
     service = 'TestService',
     defs = '//tools/TestServer:ServiceDefinitions',
-    out = 'include/services/test_service.hpp'
+    out = 'test/services/test_service.hpp'
 )
+
+srcs = glob(['src/*.cpp'])
+hdrs = glob(['include/**/*.hpp']) + [
+    ':services-krpc',
+    ':services-spacecenter',
+    ':services-drawing',
+    ':services-infernalrobotics',
+    ':services-kerbalalarmclock',
+    ':services-remotetech',
+    ':services-ui'
+]
 
 cc_library(
     name = 'krpc',
-    srcs = glob(['src/*.cpp']) + [':protobuf'],
-    hdrs = glob(['include/**/*.hpp']) + [
-        ':protobuf',
-        ':services-krpc',
-        ':services-spacecenter',
-        ':services-drawing',
-        ':services-infernalrobotics',
-        ':services-kerbalalarmclock',
-        ':services-remotetech',
-        ':services-ui'
-    ],
+    srcs = srcs + [':protobuf'],
+    hdrs = hdrs + [':protobuf'],
     includes = ['include'],
     deps = ['@protobuf//:protobuf', '@cpp_asio//:asio'],
     visibility = ['//visibility:public']
 )
 
-client_test(
+test_suite(
     name = 'test',
+    tests = [':client', ':check', ':lint']
+)
+
+test_suite(
+    name = 'ci-test',
+    tests = [':client']
+)
+
+client_test(
+    name = 'client',
     test_executable = ':cpptest',
     server_executable = '//tools/TestServer',
     tags = ['requires-network'],
     size = 'small'
 )
 
+test_srcs = glob(['test/test_*.cpp']) + [
+    ':services-test-service',
+    'test/server_test.hpp'
+]
+
 cc_binary(
     name = 'cpptest',
-    srcs = glob(['test/test_*.cpp']) + [
-        ':services-test-service',
-        'test/server_test.hpp'
-    ],
+    srcs = test_srcs,
     includes = ['test'],
     deps = [':krpc', '@cpp_gmock//:main']
+)
+
+cpp_check_test(
+    name = 'check',
+    srcs = srcs + test_srcs,
+    hdrs = hdrs,
+    includes = ['include'],
+    size = 'small'
+)
+
+cpp_lint_test(
+    name = 'lint',
+    srcs = srcs + test_srcs,
+    hdrs = hdrs,
+    includes = ['include'],
+    filters = ['-legal/copyright', '-readability/todo', '-runtime/references'], #FIXME: dont pass non-const references
+    extra_files = ['include/krpc/services/CPPLINT.cfg', 'test/services/CPPLINT.cfg'],
+    size = 'small'
 )
 
 #TODO: use targets in //protobuf:... instead of the following

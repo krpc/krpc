@@ -9,9 +9,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.Fairing"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Fairing : Equatable<Fairing>
+    public class Fairing : Equatable<Fairing>
     {
-        readonly Part part;
         readonly ModuleProceduralFairing fairing;
 
         internal static bool Is (Part part)
@@ -21,35 +20,33 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal Fairing (Part part)
         {
-            this.part = part;
+            Part = part;
             fairing = part.InternalPart.Module<ModuleProceduralFairing> ();
             if (fairing == null)
                 throw new ArgumentException ("Part is not a fairing");
         }
 
         /// <summary>
-        /// Check if fairings are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Fairing obj)
+        public override bool Equals (Fairing other)
         {
-            return part == obj.part && fairing == obj.fairing;
+            return !ReferenceEquals (other, null) && Part == other.Part && fairing.Equals (other.fairing);
         }
 
         /// <summary>
-        /// Hash the fairing.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ fairing.GetHashCode ();
+            return Part.GetHashCode () ^ fairing.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this fairing.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Jettison the fairing. Has no effect if it has already been jettisoned.

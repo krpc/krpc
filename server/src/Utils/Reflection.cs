@@ -1,6 +1,7 @@
 using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace KRPC.Utils
 {
@@ -20,11 +21,10 @@ namespace KRPC.Utils
                     // FIXME: should include loadable types from partially loadable assembly, but causes MonoDevelop crash:
                     // Assertion at class.c:5594, condition `!mono_loader_get_last_error ()
                     //types = e.Types.Where (x => x != null).ToArray ();
-                    types = new Type[] { };
+                    types = Type.EmptyTypes;
                 }
-                foreach (var type in types) {
+                foreach (var type in types)
                     yield return type;
-                }
             }
         }
 
@@ -44,6 +44,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Returns all types with the specified attribute, from all assemblies.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public static IEnumerable<Type> GetTypesWith<TAttribute> (bool inherit = false)
             where TAttribute : Attribute
         {
@@ -56,6 +57,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Returns all methods within a given type that have the specified attribute.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public static IEnumerable<MethodInfo> GetMethodsWith<TAttribute> (Type cls, bool inherit = false)
             where TAttribute : Attribute
         {
@@ -69,6 +71,7 @@ namespace KRPC.Utils
         /// <summary>
         /// Returns all properties within a given type that have the specified attribute.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public static IEnumerable<PropertyInfo> GetPropertiesWith<TAttribute> (Type cls, bool inherit = false)
             where TAttribute : Attribute
         {
@@ -83,18 +86,20 @@ namespace KRPC.Utils
         /// Return attribute of type T for the given member. Does not follow inheritance.
         /// Throws ArgumentException if there is no attribute, or more than one attribute.
         /// </summary>
-        public static T GetAttribute<T> (MemberInfo member)
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
+        public static T GetAttribute<T> (ICustomAttributeProvider member)
         {
             object[] attributes = member.GetCustomAttributes (typeof(T), false);
             if (attributes.Length != 1)
-                throw new ArgumentException ();
+                throw new ArgumentException ("Does not have any attributes", "member");
             return (T)attributes [0];
         }
 
         /// <summary>
         /// Return true if member has the attribute of type T. Does not follow inheritance.
         /// </summary>
-        public static bool HasAttribute<T> (MemberInfo member)
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
+        public static bool HasAttribute<T> (ICustomAttributeProvider member)
         {
             return member.GetCustomAttributes (typeof(T), false).Length == 1;
         }

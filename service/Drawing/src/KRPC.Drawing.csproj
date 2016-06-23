@@ -86,9 +86,9 @@
     <Compile Include="Addon.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Drawing.cs" />
-    <Compile Include="IDrawingObject.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Text.cs" />
+    <Compile Include="IDrawable.cs" />
   </ItemGroup>
 </Project>

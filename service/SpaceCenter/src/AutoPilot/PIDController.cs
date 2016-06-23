@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.SpaceCenter.ExtensionMethods;
 
 namespace KRPC.SpaceCenter.AutoPilot
@@ -7,7 +8,8 @@ namespace KRPC.SpaceCenter.AutoPilot
     /// Robust, 3-parameter, proportional-integral-derivative controller
     /// http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/
     /// </summary>
-    class PIDController
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    sealed class PIDController
     {
         public double Kp { get; private set; }
 
@@ -22,11 +24,13 @@ namespace KRPC.SpaceCenter.AutoPilot
         double lastInput;
         double integralTerm;
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public PIDController (double input, double kp = 1, double ki = 0, double kd = 0, double outputMin = -1, double outputMax = 1)
         {
             Reset (input, kp, ki, kd, outputMin, outputMax);
         }
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
         public void Reset (double input, double kp = 1, double ki = 0, double kd = 0, double outputMin = -1, double outputMax = 1)
         {
             integralTerm = 0;

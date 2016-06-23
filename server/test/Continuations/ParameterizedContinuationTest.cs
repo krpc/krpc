@@ -1,12 +1,12 @@
-using NUnit.Framework;
 using KRPC.Continuations;
+using NUnit.Framework;
 
 namespace KRPC.Test.Continuations
 {
     [TestFixture]
     public class ParameterizedContinuationTest
     {
-        int x;
+        int value;
 
         public int FnEcho (double x)
         {
@@ -15,7 +15,7 @@ namespace KRPC.Test.Continuations
 
         public void FnSet (int x)
         {
-            this.x = x;
+            value = x;
         }
 
         public void FnYield (int x)
@@ -25,7 +25,7 @@ namespace KRPC.Test.Continuations
 
         public void FnAdd (double x, float y)
         {
-            this.x = (int)(x + y);
+            value = (int)(x + y);
         }
 
         public int FnAddReturn (float x, double y)
@@ -43,10 +43,10 @@ namespace KRPC.Test.Continuations
         [Test]
         public void ContinuationWithoutReturn ()
         {
-            x = 0;
+            value = 0;
             IContinuation cont = new ParameterizedContinuationVoid<int> (FnSet, 42);
             Assert.AreEqual (null, cont.RunUntyped ());
-            Assert.AreEqual (42, x);
+            Assert.AreEqual (42, value);
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace KRPC.Test.Continuations
         {
             IContinuation cont = new ParameterizedContinuationVoid<double,float> (FnAdd, 40d, 2f);
             Assert.AreEqual (null, cont.RunUntyped ());
-            Assert.AreEqual (42, x);
+            Assert.AreEqual (42, value);
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace KRPC.Test.Continuations
         {
             IContinuation cont = new ParameterizedContinuation<int,float,double> (FnAddReturn, 40f, 2d);
             Assert.AreEqual (42, cont.RunUntyped ());
-            Assert.AreEqual (42, x);
+            Assert.AreEqual (42, value);
         }
     }
 }

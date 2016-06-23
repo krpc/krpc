@@ -8,7 +8,7 @@ namespace KRPC.Client.Test
     {
         public static string ToHexString (this byte[] data)
         {
-            return BitConverter.ToString (data).Replace ("-", "").ToLower ();
+            return BitConverter.ToString (data).Replace ("-", String.Empty).ToLower ();
         }
 
         public static string ToHexString (this ByteString data)
@@ -27,4 +27,3 @@ namespace KRPC.Client.Test
 
     }
 }
-
