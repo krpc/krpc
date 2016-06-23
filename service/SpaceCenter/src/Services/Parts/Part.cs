@@ -153,7 +153,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Massless {
-            get { return InternalPart.IsPhysicallySignificant (); }
+            get { return !InternalPart.IsPhysicallySignificant (); }
         }
 
         /// <summary>
@@ -415,6 +415,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public Engine Engine {
             get { return Engine.Is (this) ? new Engine (this) : null; }
+        }
+
+        /// <summary>
+        /// An <see cref="Experiment"/> if the part is a science experiment, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public Experiment Experiment {
+            get { return Experiment.Is (this) ? new Experiment (this) : null; }
         }
 
         /// <summary>

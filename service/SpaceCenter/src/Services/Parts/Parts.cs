@@ -204,6 +204,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all science experiments in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Experiment> Experiments {
+            get { return All.Where (Experiment.Is).Select (part => new Experiment (part)).ToList (); }
+        }
+
+        /// <summary>
         /// A list of all fairings in the vessel.
         /// </summary>
         [KRPCProperty]

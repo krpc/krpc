@@ -57,6 +57,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertIsNone(part.decoupler)
         self.assertIsNone(part.docking_port)
         self.assertIsNone(part.engine)
+        self.assertIsNone(part.experiment)
         self.assertIsNone(part.fairing)
         self.assertIsNone(part.intake)
         self.assertIsNone(part.landing_gear)
@@ -232,6 +233,34 @@ class TestPartsPart(krpctest.TestCase):
             modules.append('FARBasicDragModel')
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.engine)
+
+    def test_experiment(self):
+        part = self.parts.with_title(u'Mystery Goo\u2122 Containment Unit')[0]
+        self.assertEqual('GooExperiment', part.name)
+        self.assertEqual(u'Mystery Goo\u2122 Containment Unit', part.title)
+        self.assertEqual(800, part.cost)
+        self.assertEqual(self.vessel, part.vessel)
+        self.assertEqual('Rockomax X200-32 Fuel Tank', part.parent.title)
+        self.assertItemsEqual([], [p.title for p in part.children])
+        self.assertFalse(part.axially_attached)
+        self.assertTrue(part.radially_attached)
+        self.assertEqual(-1, part.stage)
+        self.assertEqual(3, part.decouple_stage)
+        self.assertFalse(part.massless)
+        self.assertAlmostEqual(50, part.mass, places=4)
+        self.assertAlmostEqual(50, part.dry_mass, places=4)
+        self.assertFalse(part.shielded)
+        self.assertAlmostEqual(0, part.dynamic_pressure, places=4)
+        self.assertEqual(12, part.impact_tolerance)
+        self.assertTrue(part.crossfeed)
+        self.assertFalse(part.is_fuel_line)
+        self.assertEqual([], part.fuel_lines_from)
+        self.assertEqual([], part.fuel_lines_to)
+        modules = ['ModuleScienceExperiment', 'ModuleAnimateGeneric']
+        if self.far_available:
+            modules.append('FARBasicDragModel')
+        self.assertItemsEqual(modules, [x.name for x in part.modules])
+        self.assertIsNotNone(part.experiment)
 
     def test_fairing(self):
         part = self.parts.with_title('AE-FF1 Airstream Protective Shell (1.25m)')[0]

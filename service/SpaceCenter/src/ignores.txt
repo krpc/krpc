@@ -41,6 +41,7 @@ T: KRPC.SpaceCenter.Services.Parts.ControlSurface
 T: KRPC.SpaceCenter.Services.Parts.Decoupler
 T: KRPC.SpaceCenter.Services.Parts.DockingPort
 T: KRPC.SpaceCenter.Services.Parts.Engine
+T: KRPC.SpaceCenter.Services.Parts.Experiment
 T: KRPC.SpaceCenter.Services.Parts.Fairing
 T: KRPC.SpaceCenter.Services.Parts.Intake
 T: KRPC.SpaceCenter.Services.Parts.LandingGear
@@ -57,6 +58,7 @@ T: KRPC.SpaceCenter.Services.Parts.RCS
 T: KRPC.SpaceCenter.Services.Parts.ReactionWheel
 T: KRPC.SpaceCenter.Services.Parts.ResourceConverter
 T: KRPC.SpaceCenter.Services.Parts.ResourceHarvester
+T: KRPC.SpaceCenter.Services.Parts.ScienceData
 T: KRPC.SpaceCenter.Services.Parts.Sensor
 T: KRPC.SpaceCenter.Services.Parts.SolarPanel
 T: KRPC.SpaceCenter.Services.Parts.Thruster

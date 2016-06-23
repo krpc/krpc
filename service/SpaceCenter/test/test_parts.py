@@ -282,6 +282,14 @@ class TestParts(krpctest.TestCase):
             ['S1 SRB-KD25k "Kickback" Solid Fuel Booster']*3,
             [p.part.title for p in self.parts.engines])
 
+    def test_experiments(self):
+        self.assertItemsEqual(
+            ['Mk1-2 Command Pod',
+             'GRAVMAX Negative Gravioli Detector',
+             'PresMat Barometer'] + \
+            [u'Mystery Goo\u2122 Containment Unit']*3,
+            [p.part.title for p in self.parts.experiments])
+
     def test_fairings(self):
         self.assertItemsEqual(
             ['AE-FF1 Airstream Protective Shell (1.25m)'],
