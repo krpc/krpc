@@ -1,6 +1,7 @@
 using UnityEngine;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KSP.UI.Screens;
 
 namespace LaunchControl {
 
@@ -25,7 +26,7 @@ namespace LaunchControl {
         [KRPCProcedure]
         public static void ActivateStage ()
         {
-            Staging.ActivateNextStage ();
+            StageManager.ActivateNextStage ();
         }
     }
 }
