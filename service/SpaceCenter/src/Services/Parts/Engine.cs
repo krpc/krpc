@@ -242,9 +242,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The ratios of resources that the engine consumes. A dictionary mapping resource names
-        /// to the ratios at which they are consumed by the engine.
+        /// The ratio of resources that the engine consumes. A dictionary mapping resource names
+        /// to the ratio at which they are consumed by the engine.
         /// </summary>
+        /// <remarks>
+        /// For example, if the ratios are 0.6 for LiquidFuel and 0.4 for Oxidizer, then for every 0.6 units of
+        /// LiquidFuel that the engine burns, it will burn 0.4 units of Oxidizer.
+        /// </remarks>
         [KRPCProperty]
         public IDictionary<string, float> PropellantRatios {
             get {
