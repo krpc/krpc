@@ -7,7 +7,7 @@ using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.ReactionWheel"/>.
+    /// A reaction wheel. Obtained by calling <see cref="Part.ReactionWheel"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class ReactionWheel : Equatable<ReactionWheel>

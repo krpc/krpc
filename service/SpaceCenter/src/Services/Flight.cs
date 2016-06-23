@@ -14,6 +14,7 @@ namespace KRPC.SpaceCenter.Services
     /// Used to get flight telemetry for a vessel, by calling <see cref="Vessel.Flight"/>.
     /// All of the information returned by this class is given in the reference frame
     /// passed to that method.
+    /// Obtained by calling <see cref="Vessel.Flight"/>.
     /// </summary>
     /// <remarks>
     /// To get orbital information, such as the apoapsis or inclination, see <see cref="Orbit"/>.

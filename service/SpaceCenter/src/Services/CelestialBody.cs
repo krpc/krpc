@@ -11,6 +11,7 @@ namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
     /// Represents a celestial body (such as a planet or moon).
+    /// See <see cref="SpaceCenter.Bodies"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class CelestialBody : Equatable<CelestialBody>

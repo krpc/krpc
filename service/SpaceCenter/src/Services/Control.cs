@@ -14,6 +14,7 @@ namespace KRPC.SpaceCenter.Services
     /// Used to manipulate the controls of a vessel. This includes adjusting the
     /// throttle, enabling/disabling systems such as SAS and RCS, or altering the
     /// direction in which the vessel is pointing.
+    /// Obtained by calling <see cref="Vessel.Control"/>.
     /// </summary>
     /// <remarks>
     /// Control inputs (such as pitch, yaw and roll) are zeroed when all clients

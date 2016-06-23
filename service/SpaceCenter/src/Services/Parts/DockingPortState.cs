@@ -4,7 +4,7 @@ using KRPC.Service.Attributes;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="DockingPort.State"/>.
+    /// The state of a docking port. See <see cref="DockingPort.State"/>.
     /// </summary>
     [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]

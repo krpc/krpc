@@ -13,8 +13,8 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Instances of this class represents a part. A vessel is made of multiple parts.
-    /// Instances can be obtained by various methods in <see cref="Parts"/>.
+    /// Represents an individual part. Vessels are made up of multiple parts.
+    /// Instances of this class can be obtained by several methods in <see cref="Parts"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Part : Equatable<Part>

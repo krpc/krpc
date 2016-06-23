@@ -4,7 +4,7 @@ using KRPC.Service.Attributes;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="SolarPanel.State"/>.
+    /// The state of a solar panel. See <see cref="SolarPanel.State"/>.
     /// </summary>
     [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]

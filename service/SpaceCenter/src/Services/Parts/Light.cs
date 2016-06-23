@@ -8,7 +8,7 @@ using Tuple3 = KRPC.Utils.Tuple<float, float, float>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.Light"/>.
+    /// A light. Obtained by calling <see cref="Part.Light"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Light : Equatable<Light>

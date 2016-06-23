@@ -6,7 +6,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.LaunchClamp"/>.
+    /// A launch clamp. Obtained by calling <see cref="Part.LaunchClamp"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class LaunchClamp : Equatable<LaunchClamp>

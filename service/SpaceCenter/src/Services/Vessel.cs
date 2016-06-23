@@ -13,6 +13,7 @@ namespace KRPC.SpaceCenter.Services
     /// <summary>
     /// These objects are used to interact with vessels in KSP. This includes getting
     /// orbital and flight data, manipulating control inputs and managing resources.
+    /// Created using <see cref="SpaceCenter.ActiveVessel"/> or <see cref="SpaceCenter.Vessels"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Vessel : Equatable<Vessel>

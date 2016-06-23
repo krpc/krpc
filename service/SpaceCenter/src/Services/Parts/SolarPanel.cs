@@ -6,7 +6,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.SolarPanel"/>.
+    /// A solar panel. Obtained by calling <see cref="Part.SolarPanel"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class SolarPanel : Equatable<SolarPanel>

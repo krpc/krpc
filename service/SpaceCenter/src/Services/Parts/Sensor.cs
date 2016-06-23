@@ -6,7 +6,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.Sensor"/>.
+    /// A sensor, such as a thermometer. Obtained by calling <see cref="Part.Sensor"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Sensor : Equatable<Sensor>

@@ -7,7 +7,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.CargoBay"/>.
+    /// A cargo bay. Obtained by calling <see cref="Part.CargoBay"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class CargoBay : Equatable<CargoBay>

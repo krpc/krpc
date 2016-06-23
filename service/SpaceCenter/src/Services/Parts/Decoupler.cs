@@ -10,7 +10,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.Decoupler"/>
+    /// A decoupler. Obtained by calling <see cref="Part.Decoupler"/>
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class Decoupler : Equatable<Decoupler>

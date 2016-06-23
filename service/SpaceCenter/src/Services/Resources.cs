@@ -9,6 +9,7 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
+    /// Represents the collection of resources stored in a vessel, stage or part.
     /// Created by calling <see cref="Vessel.Resources"/>,
     /// <see cref="Vessel.ResourcesInDecoupleStage"/> or
     /// <see cref="Parts.Part.Resources"/>.

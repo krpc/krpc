@@ -4,6 +4,7 @@ using KRPC.Service.Attributes;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
+    /// The situation a vessel is in.
     /// See <see cref="Vessel.Situation"/>.
     /// </summary>
     [Serializable]
