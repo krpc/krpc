@@ -45,7 +45,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The KSP propellant
+        /// The KSP propellant.
         /// </summary>
         public global::Propellant InternalPropellant {
             get {
@@ -65,8 +65,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The current amount of propellant
+        /// The current amount of propellant.
         /// </summary>
+        // TODO: units?
         [KRPCProperty]
         public double CurrentAmount {
             get
@@ -74,8 +75,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The required amount of propellant
+        /// The required amount of propellant.
         /// </summary>
+        // TODO: units?
         [KRPCProperty]
         public double CurrentRequirement {
             get
@@ -83,8 +85,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The total amount of the underlying resource currently reachable given resource flow rules
+        /// The total amount of the underlying resource currently reachable given resource flow rules.
         /// </summary>
+        // TODO: units?
         [KRPCProperty]
         public double TotalResourceAvailable {
             get
@@ -92,8 +95,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The total vehicle capacity for the underlying propellant resource, restricted by resource flow rules
+        /// The total vehicle capacity for the underlying propellant resource, restricted by resource flow rules.
         /// </summary>
+        // TODO: units?
         [KRPCProperty]
         public double TotalResourceCapacity {
             get
@@ -101,8 +105,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// If this propellant should be ignored when calculating required mass flow given specific impulse
+        /// If this propellant should be ignored when calculating required mass flow given specific impulse.
         /// </summary>
+        // TODO: units?
         [KRPCProperty]
         public bool IgnoreForIsp {
             get
@@ -110,7 +115,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// If this propellant should be ignored for thrust curve calculations
+        /// If this propellant should be ignored for thrust curve calculations.
         /// </summary>
         [KRPCProperty]
         public bool IgnoreForThrustCurve {
@@ -119,7 +124,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// If this propellant has a stack gauge or not
+        /// If this propellant has a stack gauge or not.
         /// </summary>
         [KRPCProperty]
         public bool DrawStackGauge {
@@ -128,7 +133,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// If this propellant is deprived
+        /// If this propellant is deprived.
         /// </summary>
         [KRPCProperty]
         public bool IsDeprived {
@@ -137,7 +142,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The propellant ratio
+        /// The propellant ratio.
         /// </summary>
         [KRPCProperty]
         public float Ratio {
@@ -146,7 +151,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The reachable resources connected to this propellant
+        /// The reachable resources connected to this propellant.
         /// </summary>
         [KRPCProperty]
         public IList<Resource> ConnectedResources {
