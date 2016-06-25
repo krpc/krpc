@@ -121,8 +121,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The current amount of thrust being produced by the engine, in
-        /// Newtons. Returns zero if the engine is not active or if it has no fuel.
+        /// The current amount of thrust being produced by the engine, in Newtons.
         /// </summary>
         [KRPCProperty]
         public float Thrust {
@@ -134,10 +133,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The maximum available amount of thrust that can be produced by the
-        /// engine, in Newtons. This takes <see cref="ThrustLimit"/> into account,
-        /// and is the amount of thrust produced by the engine when activated and the
-        /// main throttle is set to 100%. Returns zero if the engine does not have any fuel.
+        /// The amount of thrust, in Newtons, that would be produced by the engine
+        /// when activated and with its throttle set to 100%.
+        /// Returns zero if the engine does not have any fuel.
+        /// Takes the engine's current <see cref="ThrustLimit"/> and atmospheric conditions into account.
         /// </summary>
         [KRPCProperty]
         public float AvailableThrust {
@@ -149,10 +148,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The maximum amount of thrust that can be produced by the engine, in
-        /// Newtons. This is the amount of thrust produced by the engine when
-        /// activated, <see cref="ThrustLimit"/> is set to 100% and the main vessel's
-        /// throttle is set to 100%.
+        /// The amount of thrust, in Newtons, that would be produced by the engine
+        /// when activated and fueled, with its throttle and throttle limiter set to 100%.
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
@@ -268,8 +265,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool HasFuel {
             get {
+                if (CurrentEngine.flameout)
+                    return false;
                 foreach (var propellant in CurrentEngine.propellants)
-                    if (propellant.isDeprived && !propellant.ignoreForIsp)
+                    if (propellant.isDeprived)
                         return false;
                 return true;
             }
