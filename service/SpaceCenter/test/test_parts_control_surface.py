@@ -9,6 +9,7 @@ class TestPartsControlSurface(krpctest.TestCase):
             cls.new_save()
             cls.launch_vessel_from_vab('PartsControlSurface')
             cls.remove_other_vessels()
+            cls.wait(3) #TODO: needed to let available torque calculations settle
         parts = cls.connect().space_center.active_vessel.parts
         cls.ctrlsrf = parts.with_title('FAT-455 Aeroplane Control Surface')[0].control_surface
         cls.winglets = [x.control_surface for x in parts.with_title('Delta-Deluxe Winglet')]

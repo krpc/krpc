@@ -103,7 +103,7 @@ class TestVesselEngines(krpctest.TestCase):
 
         cls.engines = []
         for engine in cls.vessel.parts.engines:
-            if 'IntakeAir' not in engine.propellants and engine.can_shutdown:
+            if 'IntakeAir' not in engine.propellant_names and engine.can_shutdown:
                 cls.engines.append(engine)
 
         cls.engine_info = {
@@ -157,6 +157,13 @@ class TestVesselEngines(krpctest.TestCase):
                 'msl_isp': 85
             },
             'J-33 "Wheesley" Basic Jet Engine': {
+                'max_thrust': 0,
+                'available_thrust': 0,
+                'isp': 0,
+                'vac_isp': 0,
+                'msl_isp': 0
+            },
+            'CR-7 R.A.P.I.E.R. Engine': {
                 'max_thrust': 0,
                 'available_thrust': 0,
                 'isp': 0,

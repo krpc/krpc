@@ -112,24 +112,24 @@ class TestParts(krpctest.TestCase):
         vessel_dir = self.vessel.direction(ref)
         root_dir = root.direction(ref)
         port_dir = port.direction(ref)
-        self.assertAlmostEqual(vessel_dir, root_dir)
-        self.assertAlmostEqual(0, dot(vessel_dir, port_dir))
+        self.assertAlmostEqual(vessel_dir, root_dir, places=2)
+        self.assertAlmostEqual(0, dot(vessel_dir, port_dir), places=2)
 
         # Control from the docking port
         self.parts.controlling = port
 
         # Check vessel direction is now the direction of the docking port
         vessel_dir = self.vessel.direction(ref)
-        self.assertAlmostEqual(0, dot(vessel_dir, root_dir))
-        self.assertAlmostEqual(vessel_dir, port_dir)
+        self.assertAlmostEqual(0, dot(vessel_dir, root_dir), places=2)
+        self.assertAlmostEqual(vessel_dir, port_dir, places=2)
 
         # Control from the root part
         self.parts.controlling = root
 
         # Check vessel direction is now the direction of the root part
         vessel_dir = self.vessel.direction(ref)
-        self.assertAlmostEqual(vessel_dir, root_dir)
-        self.assertAlmostEqual(0, dot(vessel_dir, port_dir))
+        self.assertAlmostEqual(vessel_dir, root_dir, places=2)
+        self.assertAlmostEqual(0, dot(vessel_dir, port_dir), places=2)
 
     def test_parts_with_name(self):
         parts = self.parts.with_name('spotLight1')

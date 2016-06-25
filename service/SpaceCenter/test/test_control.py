@@ -228,7 +228,7 @@ class TestControlRover(krpctest.TestCase):
         self.control = self.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertAlmostEqual(0, self.flight.horizontal_speed, places=2)
+        self.assertAlmostEqual(0, self.flight.horizontal_speed, delta=0.01)
 
         # Forward throttle for 1 second
         self.control.wheel_steer = 0
@@ -255,7 +255,7 @@ class TestControlRover(krpctest.TestCase):
         self.control = self.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertAlmostEqual(0, self.flight.horizontal_speed, places=2)
+        self.assertAlmostEqual(0, self.flight.horizontal_speed, delta=0.01)
 
         # Reverse throttle for 1 second
         self.control.wheel_steer = 0
@@ -282,7 +282,7 @@ class TestControlRover(krpctest.TestCase):
         self.control = self.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertAlmostEqual(0, self.flight.horizontal_speed, places=2)
+        self.assertAlmostEqual(0, self.flight.horizontal_speed, delta=0.01)
 
         # Forward throttle and steering
         self.control.wheel_steering = -1
@@ -313,7 +313,7 @@ class TestControlRover(krpctest.TestCase):
         self.control = self.space_center.active_vessel.control
 
         # Check the rover is stationary
-        self.assertAlmostEqual(0, self.flight.horizontal_speed, places=2)
+        self.assertAlmostEqual(0, self.flight.horizontal_speed, delta=0.01)
 
         # Forward throttle and steering
         self.control.wheel_steering = 1

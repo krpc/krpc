@@ -124,7 +124,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
 
     def test_vessel_mass(self):
         mass = self.vessel.dry_mass
-        self.assertAlmostEqual(29195, mass, places=2)
+        self.assertAlmostEqual(28795, mass, places=2)
         resources = self.vessel.resources
         self.assertEqual(
             set(['SolidFuel', 'ElectricCharge', 'MonoPropellant', 'LiquidFuel', 'Oxidizer']),
