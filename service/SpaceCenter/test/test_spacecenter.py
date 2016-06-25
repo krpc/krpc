@@ -339,6 +339,7 @@ class TestWarpOnLaunchpad(krpctest.TestCase, WarpTestBase):
         cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 7
         cls.landed = True
+        cls.wait(1) #TODO: why is this wait needed?
 
     def test_warp_to_long(self):
         ut = self.sc.ut + (100*60*60) # 100 hours in future
@@ -357,6 +358,7 @@ class TestWarpInOrbit(krpctest.TestCase, WarpTestBase):
         cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 4
         cls.landed = False
+        cls.wait(1) #TODO: why is this wait needed?
 
 class TestWarpInSpace(krpctest.TestCase, WarpTestBase):
 
@@ -370,6 +372,7 @@ class TestWarpInSpace(krpctest.TestCase, WarpTestBase):
         cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 7
         cls.landed = False
+        cls.wait(1) #TODO: why is this wait needed?
 
 if __name__ == '__main__':
     unittest.main()
