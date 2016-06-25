@@ -170,7 +170,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double DryMass {
-            get { return InternalPart.mass * 1000f; }
+            get { return Massless ? 0f : InternalPart.mass * 1000f; }
         }
 
         /// <summary>
