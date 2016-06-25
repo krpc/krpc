@@ -8,6 +8,7 @@ v0.3.5
  * Add Propellant class, obtained using Engine.Propellants property
  * Add Experiment and ScienceData classes for interacting with science experiments
  * Fix angular velocity for vessel reference frames
+ * Fix Engine.AvailableThrust so that it returns 0 if the vessel is not active
  * Make ReferenceFrame type, underlying object and its transform accessible via public properties (#290)
 
 v0.3.4
