@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using KRPC.Continuations;
@@ -429,9 +430,13 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Decrease the regular "on-rails" time warp factor.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void DecreaseRailsWarp ()
         {
-            CheckInRailsWarp ();
+            if (TimeWarp.WarpMode != TimeWarp.Modes.HIGH)
+                throw new InvalidOperationException ("Not in on-rails time warp");
+            if (TimeWarp.CurrentRateIndex > 0)
+                TimeWarp.SetRate (TimeWarp.CurrentRateIndex - 1, false);
         }
 
         /// <summary>
@@ -439,7 +444,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         static void IncreaseRailsWarp ()
         {
-            CheckInRailsWarp ();
+            if (TimeWarp.WarpMode != TimeWarp.Modes.HIGH)
+                throw new InvalidOperationException ("Not in on-rails time warp");
             // Check if we're already warping at the maximum rate
             if (TimeWarp.CurrentRateIndex >= MaximumRailsWarpFactor)
                 return;
@@ -448,13 +454,7 @@ namespace KRPC.SpaceCenter.Services
             if (Math.Abs (currentRate - TimeWarp.CurrentRate) > 0.01)
                 return;
             // Increase the rate
-            IncrementWarpRate ();
-        }
-
-        static void CheckInRailsWarp ()
-        {
-            if (TimeWarp.WarpMode != TimeWarp.Modes.HIGH)
-                throw new InvalidOperationException ("Not in on-rails time warp");
+            TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
         }
 
         /// <summary>
@@ -473,10 +473,13 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Decrease the physics time warp factor.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void DecreasePhysicsWarp ()
         {
-            CheckInPhysicsWarp ();
-            DecrementWarpRate ();
+            if (TimeWarp.WarpMode != TimeWarp.Modes.LOW)
+                throw new InvalidOperationException ("Not in physical time warp");
+            if (TimeWarp.CurrentRateIndex > 0)
+                TimeWarp.SetRate (TimeWarp.CurrentRateIndex - 1, false);
         }
 
         /// <summary>
@@ -484,7 +487,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         static void IncreasePhysicsWarp ()
         {
-            CheckInPhysicsWarp ();
+            if (TimeWarp.WarpMode != TimeWarp.Modes.LOW)
+                throw new InvalidOperationException ("Not in physical time warp");
             // Check if we're already warping at the maximum rate
             if (TimeWarp.CurrentRateIndex + 1 >= TimeWarp.fetch.physicsWarpRates.Length)
                 return;
@@ -493,23 +497,6 @@ namespace KRPC.SpaceCenter.Services
             if (Math.Abs (currentRate - TimeWarp.CurrentRate) > 0.01)
                 return;
             // Increase the rate
-            IncrementWarpRate ();
-        }
-
-        static void CheckInPhysicsWarp ()
-        {
-            if (TimeWarp.WarpMode != TimeWarp.Modes.LOW)
-                throw new InvalidOperationException ("Not in physical time warp");
-        }
-
-        static void DecrementWarpRate ()
-        {
-            if (TimeWarp.CurrentRateIndex > 0)
-                TimeWarp.SetRate (TimeWarp.CurrentRateIndex - 1, false);
-        }
-
-        static void IncrementWarpRate ()
-        {
             TimeWarp.SetRate (TimeWarp.CurrentRateIndex + 1, false);
         }
 
