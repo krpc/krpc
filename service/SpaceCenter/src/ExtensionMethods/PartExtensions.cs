@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using UnityEngine;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
@@ -24,11 +25,27 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Returns true if the part contributes to the physics simulation (e.g. it has mass)
+        /// Returns true if the part is massless
         /// </summary>
-        public static bool IsPhysicallySignificant (this Part part)
+        public static bool IsMassless (this Part part)
         {
-            return !part.HasModule<LaunchClamp> () && part.physicalSignificance != Part.PhysicalSignificance.NONE;
+            return part.physicalSignificance == Part.PhysicalSignificance.NONE || part.HasModule<LaunchClamp> ();
+        }
+
+        /// <summary>
+        /// The mass of the part, including resources, in kg.
+        /// </summary>
+        public static float WetMass (this Part part)
+        {
+            return !part.IsMassless () && part.rb != null ? part.rb.mass * 1000f : 0f;
+        }
+
+        /// <summary>
+        /// The mass of the part, excluding resources.
+        /// </summary>
+        public static float DryMass (this Part part)
+        {
+            return !part.IsMassless () && part.rb != null ? Mathf.Max (0f, (part.rb.mass - part.resourceMass) * 1000f) : 0f;
         }
 
         /// <summary>

@@ -153,7 +153,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Massless {
-            get { return !InternalPart.IsPhysicallySignificant (); }
+            get { return InternalPart.IsMassless (); }
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double Mass {
-            get { return Massless ? 0f : InternalPart.rb.mass * 1000f; }
+            get { return InternalPart.WetMass (); }
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double DryMass {
-            get { return Massless ? 0f : InternalPart.mass * 1000f; }
+            get { return InternalPart.DryMass (); }
         }
 
         /// <summary>
