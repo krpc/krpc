@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -13,7 +14,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// An instance can be obtained by calling <see cref="Vessel.Parts"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Parts : Equatable<Parts>
+    public class Parts : Equatable<Parts>
     {
         readonly Guid vesselId;
 
@@ -23,15 +24,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Check if the parts objects are for the same vessel.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Parts obj)
+        public override bool Equals (Parts other)
         {
-            return vesselId == obj.vesselId;
+            return !ReferenceEquals (other, null) && vesselId == other.vesselId;
         }
 
         /// <summary>
-        /// Hash the parts object.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
@@ -65,9 +66,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part from which the vessel is controlled.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public Part Controlling {
-            get { return new Part (InternalVessel.GetReferenceTransformPart () ?? InternalVessel.rootPart); }
+            get {
+                var vessel = InternalVessel;
+                return new Part (vessel.GetReferenceTransformPart () ?? vessel.rootPart);
+            }
             set {
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException ("Controlling");
                 var part = value.InternalPart;
                 if (part.HasModule <ModuleCommand> ()) {
                     part.Module<ModuleCommand> ().MakeReference ();
@@ -194,6 +201,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public IList<Engine> Engines {
             get { return All.Where (Engine.Is).Select (part => new Engine (part)).ToList (); }
+        }
+
+        /// <summary>
+        /// A list of all science experiments in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Experiment> Experiments {
+            get { return All.Where (Experiment.Is).Select (part => new Experiment (part)).ToList (); }
         }
 
         /// <summary>

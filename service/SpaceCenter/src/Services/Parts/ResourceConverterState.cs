@@ -1,10 +1,12 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="ResourceConverter.State"/>.
+    /// The state of a resource converter. See <see cref="ResourceConverter.State"/>.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum ResourceConverterState
     {

@@ -1,4 +1,5 @@
 import argparse
+import importlib
 import json
 import os
 import sys
@@ -10,11 +11,18 @@ from .java import JavaGenerator
 from ..version import __version__
 from ..servicedefs import servicedefs
 
+GENERATORS = {
+    'csharp': CsharpGenerator,
+    'cpp': CppGenerator,
+    'java': JavaGenerator
+}
+
 def main():
     prog = 'krpc-clientgen'
+    languages = ', '.join(sorted(GENERATORS.keys()))
     parser = argparse.ArgumentParser(prog=prog, description='Generate client source code for kRPC services.')
     parser.add_argument('-v', '--version', action='version', version='%s version %s' % (prog, __version__))
-    parser.add_argument('language', choices=('csharp', 'cpp', 'java'), help='Language to generate')
+    parser.add_argument('language', help='Language to generate (%s) or path to generator' % languages)
     parser.add_argument('service', help='Name of service to generate')
     parser.add_argument('input', nargs='+', help='Path to service definition JSON file or assembly DLL(s)')
     parser.add_argument('-o', '--output', help='Path to write source code to. ' +
@@ -67,14 +75,16 @@ def main():
         if args.service not in defs.keys():
             raise RuntimeError('Service \'%s\' not found in input.' % args.service)
 
-        # Generate code
-        if args.language == 'csharp':
-            generator = CsharpGenerator
-        elif args.language == 'cpp':
-            generator = CppGenerator
+        # Get generator and template
+        if args.language in GENERATORS:
+            # Built-in generator and template
+            generator = GENERATORS[args.language]
+            macro_template = resource_string(__name__, args.language+'.tmpl').decode('utf-8')
         else:
-            generator = JavaGenerator
-        macro_template = resource_string(__name__, args.language+'.tmpl').decode('utf-8')
+            # Generator defined in a python module
+            generator, macro_template = load_generator(args.language)
+
+        # Run the generator
         g = generator(macro_template, args.service, defs[args.service])
         if args.output:
             g.generate_file(args.output)
@@ -84,6 +94,17 @@ def main():
     except RuntimeError, ex:
         sys.stderr.write('Error: %s\n' % str(ex))
         return 1
+
+def load_generator(path):
+    path = os.path.abspath(os.path.expanduser(os.path.expandvars(path)))
+    dirpath = os.path.dirname(path)
+    modulepath = os.path.basename(path).rstrip('.py')
+    sys.path.append(dirpath)
+    module = importlib.import_module(modulepath)
+    generator = module.generator
+    with open(module.tmpl, 'r') as fp:
+        macro_template = ''.join(fp.readlines()).decode('utf-8')
+    return generator, macro_template
 
 if __name__ == '__main__':
     main()

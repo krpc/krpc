@@ -1,9 +1,17 @@
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
+#include <map>
+#include <set>
+#include <string>
+#include <tuple>
+#include <vector>
+
 #include <krpc/platform.hpp>
-#include "krpc/services/krpc.hpp"
-#include "services/test_service.hpp"
+#include <krpc/services/krpc.hpp>
+
 #include "server_test.hpp"
+#include "services/test_service.hpp"
 
 class test_client: public server_test {
 };
@@ -23,13 +31,13 @@ TEST_F(test_client, test_error) {
   try {
     test_service.throw_argument_exception();
   } catch(krpc::RPCError& e) {
-    ASSERT_EQ("Invalid argument", std::string(e.what()));
+    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid argument"));
   }
   ASSERT_THROW(test_service.throw_invalid_operation_exception(), krpc::RPCError);
   try {
     test_service.throw_invalid_operation_exception();
   } catch(krpc::RPCError& e) {
-    ASSERT_EQ("Invalid operation", std::string(e.what()));
+    EXPECT_THAT(e.what(), testing::HasSubstr("Invalid operation"));
   }
 }
 
@@ -106,8 +114,8 @@ TEST_F(test_client, test_optional_arguments) {
 }
 
 TEST_F(test_client, test_blocking_procedure) {
-  ASSERT_EQ(0, test_service.blocking_procedure(0,0));
-  ASSERT_EQ(1, test_service.blocking_procedure(1,0));
+  ASSERT_EQ(0, test_service.blocking_procedure(0, 0));
+  ASSERT_EQ(1, test_service.blocking_procedure(1, 0));
   ASSERT_EQ(1+2, test_service.blocking_procedure(2));
   int expected = 0;
   for (int i = 1; i <= 42; i++)
@@ -146,15 +154,15 @@ TEST_F(test_client, test_collections) {
     ASSERT_EQ(l2, test_service.increment_list(l1));
   }
   {
-    std::map<std::string,int> m;
+    std::map<std::string, int> m;
     ASSERT_EQ(m, test_service.increment_dictionary(m));
   }
   {
-    std::map<std::string,int> m1;
+    std::map<std::string, int> m1;
     m1["a"] = 0;
     m1["b"] = 1;
     m1["c"] = 2;
-    std::map<std::string,int> m2;
+    std::map<std::string, int> m2;
     m2["a"] = 1;
     m2["b"] = 2;
     m2["c"] = 3;
@@ -176,26 +184,26 @@ TEST_F(test_client, test_collections) {
     ASSERT_EQ(s2, test_service.increment_set(s1));
   }
   {
-    std::tuple<int,int> t1(1,2);
-    std::tuple<int,int> t2(2,3);
+    std::tuple<int, int> t1(1, 2);
+    std::tuple<int, int> t2(2, 3);
     ASSERT_EQ(t2, test_service.increment_tuple(t1));
   }
 }
 
 TEST_F(test_client, test_nested_collections) {
   {
-    std::map<std::string,std::vector<google::protobuf::int32> > m;
+    std::map<std::string, std::vector<google::protobuf::int32>> m;
     ASSERT_EQ(m, test_service.increment_nested_collection(m));
   }
   {
-    std::map<std::string,std::vector<google::protobuf::int32> > m1;
+    std::map<std::string, std::vector<google::protobuf::int32>> m1;
     m1["a"] = std::vector<int>();
     m1["a"].push_back(0);
     m1["a"].push_back(1);
     m1["b"] = std::vector<int>();
     m1["c"] = std::vector<int>();
     m1["c"].push_back(2);
-    std::map<std::string,std::vector<google::protobuf::int32> > m2;
+    std::map<std::string, std::vector<google::protobuf::int32>> m2;
     m2["a"] = std::vector<int>();
     m2["a"].push_back(1);
     m2["a"].push_back(2);
@@ -252,8 +260,7 @@ TEST_F(test_client, test_thread_safe) {
     threads.push_back(
       std::thread(
         [this](std::atomic_int* count) {
-          for (int j = 0; j < repeats; j++)
-          {
+          for (int j = 0; j < repeats; j++) {
             ASSERT_EQ("False", test_service.bool_to_string(false));
             ASSERT_EQ(12345, test_service.string_to_int32("12345"));
           }

@@ -1,4 +1,5 @@
-load('/tools/build/csharp', 'csharp_library', 'csharp_nunit_test', 'csharp_assembly_info', 'nuget_package')
+load('/tools/build/csharp', 'csharp_library', 'csharp_assembly_info', 'nuget_package')
+load('/tools/build/csharp', 'csharp_nunit_test', 'csharp_gendarme_test')
 load('/tools/build/client_test', 'client_test')
 load('/tools/krpctools/clientgen', 'clientgen_csharp')
 load('/tools/build/pkg', 'pkg_zip')
@@ -11,6 +12,7 @@ pkg_zip(
              'LICENSE', '//:COPYING', '//:COPYING.LESSER',
              ':KRPC.Client'],
     path_map = {'client/csharp/': ''},
+    exclude = ['*.mdb'],
     visibility = ['//visibility:public']
 )
 
@@ -34,32 +36,36 @@ csharp_assembly_info(
     description = 'C# client for kRPC',
     copyright = author,
     version = assembly_version,
-    internals_visible_to = ['KRPC.Client.Test']
+    internals_visible_to = ['KRPC.Client.Test'],
+    cls_compliant = False
 )
+
+srcs = glob(['src/**/*.cs']) + [
+    ':AssemblyInfo',
+    '//protobuf:csharp',
+    ':services-krpc',
+    ':services-spacecenter',
+    ':services-drawing',
+    ':services-infernalrobotics',
+    ':services-kerbalalarmclock',
+    ':services-remotetech',
+    ':services-ui'
+]
+deps = [
+    '//tools/build/mono-4.5:Google.Protobuf',
+    '//tools/build/mono-4.5:mscorlib',
+    '//tools/build/mono-4.5:System',
+    '//tools/build/mono-4.5:System.Core',
+    '//tools/build/mono-4.5:System.Runtime',
+    '//tools/build/mono-4.5:System.IO',
+    '//tools/build/mono-4.5:System.Xml',
+    '//tools/build/mono-4.5:System.Xml.Linq'
+]
 
 csharp_library(
     name = 'KRPC.Client',
-    srcs = glob(['src/**/*.cs']) + [
-        ':AssemblyInfo',
-        '//protobuf:csharp',
-        ':services-krpc',
-        ':services-spacecenter',
-        ':services-drawing',
-        ':services-infernalrobotics',
-        ':services-kerbalalarmclock',
-        ':services-remotetech',
-        ':services-ui'
-    ],
-    deps = [
-        '//tools/build/mono-4.5:Google.Protobuf',
-        '//tools/build/mono-4.5:mscorlib',
-        '//tools/build/mono-4.5:System',
-        '//tools/build/mono-4.5:System.Core',
-        '//tools/build/mono-4.5:System.Runtime',
-        '//tools/build/mono-4.5:System.IO',
-        '//tools/build/mono-4.5:System.Xml',
-        '//tools/build/mono-4.5:System.Xml.Linq'
-    ],
+    srcs = srcs,
+    deps = deps,
     visibility = ['//visibility:public']
 )
 
@@ -112,33 +118,43 @@ clientgen_csharp(
     out = 'Services/UI.cs'
 )
 
-client_test(
+test_suite(
     name = 'test',
+    tests = [':client', ':gendarme-KRPC.Client', ':gendarme-KRPC.Client.Test'],
+    visibility = ['//:__pkg__']
+)
+
+test_suite(
+    name = 'ci-test',
+    tests = [':client']
+)
+
+client_test(
+    name = 'client',
     test_executable = ':KRPC.Client.Test',
     server_executable = '//tools/TestServer',
     tags = ['requires-network'],
-    size = 'small',
-    visibility = ['//:__pkg__']
+    size = 'small'
+)
+
+csharp_assembly_info(
+    name = 'TestAssemblyInfo',
+    title = 'KRPC.Client.Test',
+    copyright = author,
+    version = assembly_version,
+    cls_compliant = False
 )
 
 csharp_nunit_test(
     name = 'KRPC.Client.Test',
-    srcs = glob(['test/**/*.cs']) + [':services-testservice'],
-    deps = [
-        ':KRPC.Client',
-        '//tools/build/mono-4.5:Moq',
-        '//tools/build/mono-4.5:Google.Protobuf',
-        '//tools/build/mono-4.5:mscorlib',
-        '//tools/build/mono-4.5:System',
-        '//tools/build/mono-4.5:System.Core',
-        '//tools/build/mono-4.5:System.Runtime',
-        '//tools/build/mono-4.5:System.IO',
-        '//tools/build/mono-4.5:System.Xml',
-        '//tools/build/mono-4.5:System.Xml.Linq'
-    ],
+    srcs = glob(['test/**/*.cs']) + [':TestAssemblyInfo'] + [':services-testservice'],
+    deps = [':KRPC.Client', '//tools/build/mono-4.5:Moq'] + deps,
+    optimize = False,
+    define = ['CODE_ANALYSIS'],
     nowarn = ['1591', '1573'],
     size = 'small',
-    tags = ['requires-network']
+    tags = ['requires-network'],
+    visibility = ['//:__pkg__']
 )
 
 clientgen_csharp(
@@ -146,4 +162,26 @@ clientgen_csharp(
     service = 'TestService',
     defs = '//tools/TestServer:ServiceDefinitions',
     out = 'Services/TestService.cs'
+)
+
+csharp_library(
+    name = 'KRPC.Client.Debug',
+    srcs = srcs,
+    deps = deps,
+    optimize = False,
+    define = ['CODE_ANALYSIS']
+)
+
+csharp_gendarme_test(
+    name = 'gendarme-KRPC.Client',
+    lib = ':KRPC.Client.Debug',
+    ignores = 'src/ignores.txt',
+    size = 'small'
+)
+
+csharp_gendarme_test(
+    name = 'gendarme-KRPC.Client.Test',
+    lib = ':KRPC.Client.Test',
+    ignores = 'test/ignores.txt',
+    size = 'small'
 )

@@ -2,12 +2,21 @@ using System;
 
 namespace KRPC.Service
 {
-    sealed class ServiceException : Exception
+    class ServiceException : Exception
     {
         public System.Reflection.Assembly Assembly { get; private set; }
 
-        internal ServiceException (string message) :
-            base (message)
+        public ServiceException ()
+        {
+            Assembly = Service.Scanner.Scanner.CurrentAssembly;
+        }
+
+        public ServiceException (string message) : base (message)
+        {
+            Assembly = Service.Scanner.Scanner.CurrentAssembly;
+        }
+
+        public ServiceException (string message, Exception innerException) : base (message, innerException)
         {
             Assembly = Service.Scanner.Scanner.CurrentAssembly;
         }

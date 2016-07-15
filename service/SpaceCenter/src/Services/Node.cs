@@ -11,7 +11,7 @@ namespace KRPC.SpaceCenter.Services
     /// </summary>
     //FIXME: need to perform memory management for node objects
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Node : Equatable<Node>
+    public class Node : Equatable<Node>
     {
         /// Note: Maneuver node delta-v vectors use a special coordinate system.
         /// The z-component is the prograde component.
@@ -32,8 +32,32 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public Node (global::Vessel vessel, ManeuverNode node)
         {
+            if (ReferenceEquals (vessel, null))
+                throw new ArgumentNullException ("vessel");
+            if (ReferenceEquals (node, null))
+                throw new ArgumentNullException ("node");
             vesselId = vessel.id;
             InternalNode = node;
+        }
+
+        /// <summary>
+        /// Returns true if the objects are equal.
+        /// </summary>
+        public override bool Equals (Node other)
+        {
+            return !ReferenceEquals (other, null) && vesselId == other.vesselId && InternalNode == other.InternalNode;
+        }
+
+        /// <summary>
+        /// Hash code for the object.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = vesselId.GetHashCode ();
+            //TODO: InternalNode should not be null, but Remove could set it to null
+            if (InternalNode != null)
+                hash ^= InternalNode.GetHashCode ();
+            return hash;
         }
 
         /// <summary>
@@ -47,26 +71,6 @@ namespace KRPC.SpaceCenter.Services
         /// The KSP node.
         /// </summary>
         public ManeuverNode InternalNode { get; private set; }
-
-        /// <summary>
-        /// Check the nodes are the same.
-        /// </summary>
-        public override bool Equals (Node obj)
-        {
-            return vesselId == obj.vesselId && InternalNode == obj.InternalNode;
-        }
-
-        /// <summary>
-        /// Hash the node.
-        /// </summary>
-        public override int GetHashCode ()
-        {
-            int hash = vesselId.GetHashCode ();
-            //TODO: InternalNode should not be null, but Remove could set it to null
-            if (InternalNode != null)
-                hash ^= InternalNode.GetHashCode ();
-            return hash;
-        }
 
         internal Vector3d WorldBurnVector {
             get {
@@ -148,7 +152,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 BurnVector (ReferenceFrame referenceFrame = null)
         {
-            if (referenceFrame == null)
+            if (ReferenceEquals (referenceFrame, null))
                 referenceFrame = ReferenceFrame.Orbital (InternalVessel);
             return referenceFrame.DirectionFromWorldSpace (WorldBurnVector).ToTuple ();
         }
@@ -161,7 +165,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 RemainingBurnVector (ReferenceFrame referenceFrame = null)
         {
-            if (referenceFrame == null)
+            if (ReferenceEquals (referenceFrame, null))
                 referenceFrame = ReferenceFrame.Orbital (InternalVessel);
             return referenceFrame.DirectionFromWorldSpace (InternalNode.GetBurnVector (InternalNode.patch)).ToTuple ();
         }
@@ -241,6 +245,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.PositionFromWorldSpace (InternalNode.patch.getPositionAtUT (InternalNode.UT)).ToTuple ();
         }
 
@@ -251,6 +257,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.DirectionFromWorldSpace (WorldBurnVector.normalized).ToTuple ();
         }
     }

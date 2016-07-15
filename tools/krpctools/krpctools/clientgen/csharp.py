@@ -1,5 +1,3 @@
-import array
-import base64
 from .generator import Generator
 import krpc.types
 
@@ -76,24 +74,16 @@ class CsharpGenerator(Generator):
             return 'global::KRPC.Client.Services.%s' % typ.protobuf_type[5:-1]
         raise RuntimeError('Unknown type ' + typ)
 
-    def parse_return_type(self, procedure):
-        if 'return_type' in procedure is not None:
-            typ = self.types.get_return_type(procedure['return_type'], procedure['attributes'])
-            return self.parse_type(typ)
-        else:
+    def parse_return_type(self, typ):
+        if typ is None:
             return 'void'
+        return self.parse_type(typ)
 
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
 
-    def parse_default_value(self, value, typ):
-        value = base64.b64decode(value)
-        #TODO: following is a workaround for decoding EnumType, as set_values has not been called
-        value = array.array('B', value).tostring()
-        if not isinstance(typ, krpc.types.EnumType):
-            value = krpc.decoder.Decoder.decode(value, typ)
-        else:
-            value = krpc.decoder.Decoder.decode(value, self.types.as_type('int32'))
+    @staticmethod
+    def parse_default_value(value, typ):
         if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'string':
             return '"%s"' % value
         if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'bool':

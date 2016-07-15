@@ -1,6 +1,8 @@
 import java.io.IOException;
 import krpc.client.Connection;
 import krpc.client.RPCException;
+import krpc.client.services.SpaceCenter;
+import krpc.client.services.SpaceCenter.Vessel;
 import krpc.client.services.InfernalRobotics;
 import krpc.client.services.InfernalRobotics.ServoGroup;
 import krpc.client.services.InfernalRobotics.Servo;
@@ -8,9 +10,10 @@ import krpc.client.services.InfernalRobotics.Servo;
 public class IR {
     public static void main(String[] args) throws IOException, RPCException, InterruptedException {
         Connection connection = Connection.newInstance("InfernalRobotics Example");
+        Vessel vessel = SpaceCenter.newInstance(connection).getActiveVessel();
         InfernalRobotics ir = InfernalRobotics.newInstance(connection);
 
-        ServoGroup group = ir.servoGroupWithName("MyGroup");
+        ServoGroup group = ir.servoGroupWithName(vessel, "MyGroup");
         if (group == null) {
             System.out.println("Group not found");
             return;

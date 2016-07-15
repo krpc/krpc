@@ -75,15 +75,21 @@
     <Compile Include="..\..\..\bazel-bin\service\SpaceCenter\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AutoPilot\PIDController.cs" />
+    <Compile Include="AutoPilot\AttitudeController.cs" />
     <Compile Include="ExtensionMethods\ActionGroupExtensions.cs" />
     <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
     <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightGlobalsExtensions.cs" />
-    <Compile Include="ExtensionMethods\ITargetableExtensions.cs" />
+    <Compile Include="ExtensionMethods\FlightCameraModeExtensions.cs" />
+    <Compile Include="ExtensionMethods\ParachuteStateExtensions.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
+    <Compile Include="ExtensionMethods\RadiatorStateExtensions.cs" />
     <Compile Include="ExtensionMethods\ResourceFlowModeExtensions.cs" />
+    <Compile Include="ExtensionMethods\SolarPanelStateExtensions.cs" />
     <Compile Include="ExtensionMethods\SpeedDisplayModesExtensions.cs" />
+    <Compile Include="ExtensionMethods\TargetableExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ExternalAPIAddon.cs" />
@@ -106,6 +112,7 @@
     <Compile Include="Services\Parts\DockingPort.cs" />
     <Compile Include="Services\Parts\DockingPortState.cs" />
     <Compile Include="Services\Parts\Engine.cs" />
+    <Compile Include="Services\Parts\Experiment.cs" />
     <Compile Include="Services\Parts\Fairing.cs" />
     <Compile Include="Services\Parts\Intake.cs" />
     <Compile Include="Services\Parts\LandingGear.cs" />
@@ -119,6 +126,7 @@
     <Compile Include="Services\Parts\ParachuteState.cs" />
     <Compile Include="Services\Parts\Part.cs" />
     <Compile Include="Services\Parts\Parts.cs" />
+    <Compile Include="Services\Parts\Propellant.cs" />
     <Compile Include="Services\Parts\Radiator.cs" />
     <Compile Include="Services\Parts\RadiatorState.cs" />
     <Compile Include="Services\Parts\RCS.cs" />
@@ -127,11 +135,13 @@
     <Compile Include="Services\Parts\ResourceConverterState.cs" />
     <Compile Include="Services\Parts\ResourceHarvester.cs" />
     <Compile Include="Services\Parts\ResourceHarvesterState.cs" />
+    <Compile Include="Services\Parts\ScienceData.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />
     <Compile Include="Services\Parts\SolarPanel.cs" />
     <Compile Include="Services\Parts\SolarPanelState.cs" />
     <Compile Include="Services\Parts\Thruster.cs" />
     <Compile Include="Services\ReferenceFrame.cs" />
+    <Compile Include="Services\ReferenceFrameType.cs" />
     <Compile Include="Services\Resource.cs" />
     <Compile Include="Services\ResourceFlowMode.cs" />
     <Compile Include="Services\Resources.cs" />
@@ -143,7 +153,5 @@
     <Compile Include="Services\VesselSituation.cs" />
     <Compile Include="Services\VesselType.cs" />
     <Compile Include="Services\WarpMode.cs" />
-    <Compile Include="Utils\PIDController.cs" />
-    <Compile Include="Utils\RotationRateController.cs" />
   </ItemGroup>
 </Project>

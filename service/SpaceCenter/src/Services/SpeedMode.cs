@@ -1,10 +1,13 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
+    /// The mode of the speed reported in the navball.
     /// See <see cref="Control.SpeedMode"/>.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum SpeedMode
     {

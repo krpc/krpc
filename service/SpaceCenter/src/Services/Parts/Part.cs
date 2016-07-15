@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CompoundParts;
 using KRPC.Service.Attributes;
@@ -12,29 +13,34 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Instances of this class represents a part. A vessel is made of multiple parts.
-    /// Instances can be obtained by various methods in <see cref="Parts"/>.
+    /// Represents an individual part. Vessels are made up of multiple parts.
+    /// Instances of this class can be obtained by several methods in <see cref="Parts"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Part : Equatable<Part>
+    public class Part : Equatable<Part>
     {
         readonly uint partFlightId;
 
-        internal Part (global::Part part)
+        /// <summary>
+        /// Create a part object for the given KSP part
+        /// </summary>
+        public Part (global::Part part)
         {
+            if (ReferenceEquals (part, null))
+                throw new ArgumentNullException ("part");
             partFlightId = part.flightID;
         }
 
         /// <summary>
-        /// Check if the parts are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Part obj)
+        public override bool Equals (Part other)
         {
-            return partFlightId == obj.partFlightId;
+            return !ReferenceEquals (other, null) && partFlightId == other.partFlightId;
         }
 
         /// <summary>
-        /// Hash the part.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
@@ -82,13 +88,17 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return new Vessel (InternalPart.vessel); }
         }
 
+        bool HasParent {
+            get { return InternalPart.parent != null; }
+        }
+
         /// <summary>
         /// The parts parent. Returns <c>null</c> if the part does not have a parent.
         /// This, in combination with <see cref="Part.Children"/>, can be used to traverse the vessels parts tree.
         /// </summary>
         [KRPCProperty]
         public Part Parent {
-            get { return InternalPart.parent == null ? null : new Part (InternalPart.parent); }
+            get { return HasParent ? new Part (InternalPart.parent) : null; }
         }
 
         /// <summary>
@@ -105,8 +115,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// or bottom of its parent. If the part has no parent, returns <c>false</c>.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public bool AxiallyAttached {
-            get { return InternalPart.parent == null || InternalPart.attachMode == AttachModes.STACK; }
+            get { return HasParent && InternalPart.attachMode == AttachModes.STACK; }
         }
 
         /// <summary>
@@ -115,7 +126,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool RadiallyAttached {
-            get { return InternalPart.parent != null && InternalPart.attachMode == AttachModes.SRF_ATTACH; }
+            get { return HasParent && InternalPart.attachMode == AttachModes.SRF_ATTACH; }
         }
 
         /// <summary>
@@ -123,7 +134,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public int Stage {
-            get { return InternalPart.hasStagingIcon ? InternalPart.inverseStage : -1; }
+            get {
+                var part = InternalPart;
+                return part.hasStagingIcon ? part.inverseStage : -1;
+            }
         }
 
         /// <summary>
@@ -139,7 +153,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Massless {
-            get { return InternalPart.physicalSignificance == global::Part.PhysicalSignificance.NONE; }
+            get { return InternalPart.IsMassless (); }
         }
 
         /// <summary>
@@ -148,7 +162,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double Mass {
-            get { return Massless ? 0f : (InternalPart.mass + InternalPart.GetResourceMass ()) * 1000f; }
+            get { return InternalPart.WetMass (); }
         }
 
         /// <summary>
@@ -156,7 +170,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public double DryMass {
-            get { return Massless ? 0f : InternalPart.mass * 1000f; }
+            get { return InternalPart.DryMass (); }
         }
 
         /// <summary>
@@ -315,14 +329,19 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return InternalPart.HasModule<CModuleFuelLine> (); }
         }
 
+        void CheckPartIsNotAFuelLine ()
+        {
+            if (IsFuelLine)
+                throw new InvalidOperationException ("Part is a fuel line");
+        }
+
         /// <summary>
         /// The parts that are connected to this part via fuel lines, where the direction of the fuel line is into this part.
         /// </summary>
         [KRPCProperty]
         public IList<Part> FuelLinesFrom {
             get {
-                if (IsFuelLine)
-                    throw new ArgumentException ("Part is a fuel line");
+                CheckPartIsNotAFuelLine ();
                 return InternalPart.fuelLookupTargets.Select (x => new Part (x.parent)).ToList ();
             }
         }
@@ -333,8 +352,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public IList<Part> FuelLinesTo {
             get {
-                if (IsFuelLine)
-                    throw new ArgumentException ("Part is a fuel line");
+                CheckPartIsNotAFuelLine ();
                 var result = new List<global::Part> ();
                 foreach (var otherPart in InternalPart.vessel.parts) {
                     foreach (var target in otherPart.fuelLookupTargets.Select (x => x.parent)) {
@@ -397,6 +415,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public Engine Engine {
             get { return Engine.Is (this) ? new Engine (this) : null; }
+        }
+
+        /// <summary>
+        /// An <see cref="Experiment"/> if the part is a science experiment, otherwise <c>null</c>.
+        /// </summary>
+        [KRPCProperty]
+        public Experiment Experiment {
+            get { return Experiment.Is (this) ? new Experiment (this) : null; }
         }
 
         /// <summary>
@@ -528,6 +554,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.PositionFromWorldSpace (InternalPart.transform.position).ToTuple ();
         }
 
@@ -539,6 +567,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 CenterOfMass (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.PositionFromWorldSpace (InternalPart.CenterOfMass ()).ToTuple ();
         }
 
@@ -549,6 +579,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.DirectionFromWorldSpace (InternalPart.transform.up).ToTuple ();
         }
 
@@ -559,7 +591,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.VelocityFromWorldSpace (InternalPart.transform.position, InternalPart.orbit.GetVel ()).ToTuple ();
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
+            var part = InternalPart;
+            return referenceFrame.VelocityFromWorldSpace (part.transform.position, part.orbit.GetVel ()).ToTuple ();
         }
 
         /// <summary>
@@ -569,6 +604,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.RotationToWorldSpace (InternalPart.transform.rotation).ToTuple ();
         }
 
@@ -578,7 +615,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
-            get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
+            get { return ComputeInertiaTensor ().Diagonal ().ToTuple (); }
         }
 
         /// <summary>

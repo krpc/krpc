@@ -1,18 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using KRPC.Server;
 using KRPC.Server.TCP;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
 {
     sealed class MainWindow : Window
     {
-        public KRPCConfiguration Config { private get; set; }
+        public Configuration Config { private get; set; }
 
-        public KRPCServer Server { private get; set; }
+        public Server.Server Server { private get; set; }
 
         public InfoWindow InfoWindow { private get; set; }
 
@@ -87,6 +89,7 @@ namespace KRPC.UI
         const string autoAcceptingConnectionsText = "auto-accepting new clients";
         const string stringSeparatorText = ", ";
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         protected override void Init ()
         {
             Title = title;
@@ -150,7 +153,7 @@ namespace KRPC.UI
             recvTimeout = Config.RecvTimeout.ToString ();
 
             // Get list of available addresses for drop down
-            var interfaceAddresses = NetworkInformation.GetLocalIPAddresses ().Select (x => x.ToString ()).ToList ();
+            var interfaceAddresses = NetworkInformation.LocalIPAddresses.Select (x => x.ToString ()).ToList ();
             interfaceAddresses.Remove (IPAddress.Loopback.ToString ());
             interfaceAddresses.Remove (IPAddress.Any.ToString ());
             availableAddresses = new List<string> (new [] { localhostText, anyText });
@@ -160,8 +163,9 @@ namespace KRPC.UI
 
         void DrawServerStatus ()
         {
-            GUILayoutExtensions.Light (Server.Running, lightStyle);
-            if (Server.Running)
+            bool running = Server.Running;
+            GUILayoutExtensions.Light (running, lightStyle);
+            if (running)
                 GUILayout.Label (serverOnlineText, stretchyLabelStyle);
             else
                 GUILayout.Label (serverOfflineText, stretchyLabelStyle);
@@ -171,16 +175,15 @@ namespace KRPC.UI
         {
             if (Server.Running) {
                 if (GUILayout.Button (stopButtonText, buttonStyle)) {
-                    if (OnStopServerPressed != null)
-                        OnStopServerPressed (this, EventArgs.Empty);
+                    EventHandlerExtensions.Invoke (OnStopServerPressed, this);
                     // Force window to resize to height of content
                     // TODO: better way to do this?
                     Position = new Rect (Position.x, Position.y, Position.width, 0f);
                 }
             } else {
                 if (GUILayout.Button (startButtonText, buttonStyle)) {
-                    if (StartServer () && OnStartServerPressed != null)
-                        OnStartServerPressed (this, EventArgs.Empty);
+                    if (StartServer ())
+                        EventHandlerExtensions.Invoke (OnStartServerPressed, this);
                 }
             }
         }
@@ -200,7 +203,7 @@ namespace KRPC.UI
                 else if (!manualAddress && availableAddresses.Contains (address))
                     selected = availableAddresses.IndexOf (address);
                 else
-                    selected = availableAddresses.Count () - 1;
+                    selected = availableAddresses.Count - 1;
                 // Display the combo box
                 selected = GUILayoutExtensions.ComboBox ("address", selected, availableAddresses, buttonStyle, comboOptionsStyle, comboOptionStyle);
                 // Get the address from the combo box selection
@@ -210,7 +213,7 @@ namespace KRPC.UI
                 } else if (selected == 1) {
                     address = IPAddress.Any.ToString ();
                     manualAddress = false;
-                } else if (selected < availableAddresses.Count () - 1) {
+                } else if (selected < availableAddresses.Count - 1) {
                     address = availableAddresses [selected];
                     manualAddress = false;
                 } else {
@@ -325,18 +328,20 @@ namespace KRPC.UI
 
         void DrawClientsList ()
         {
+            var clients = Server.Clients.ToList ();
+
             // Resize window if number of connected clients changes
-            if (Server.Clients.Count () != numClientsDisplayed) {
-                numClientsDisplayed = Server.Clients.Count ();
+            if (clients.Count != numClientsDisplayed) {
+                numClientsDisplayed = clients.Count;
                 resized = true;
             }
             // Get list of client descriptions
             IDictionary<IClient,string> clientDescriptions = new Dictionary<IClient,string> ();
-            if (Server.Clients.Any ()) {
-                foreach (var client in Server.Clients) {
+            if (clients.Count > 0) {
+                foreach (var client in clients) {
                     try {
-                        string clientName = (client.Name == "") ? unknownClientNameText : client.Name;
-                        clientDescriptions [client] = clientName + " @ " + client.Address;
+                        var clientName = client.Name;
+                        clientDescriptions [client] = (clientName.Length == 0 ? unknownClientNameText : clientName) + " @ " + client.Address;
                     } catch (ClientDisconnectedException) {
                     }
                 }
@@ -350,7 +355,7 @@ namespace KRPC.UI
                     GUILayout.BeginHorizontal ();
                     GUILayoutExtensions.Light (IsClientActive (client), lightStyle);
                     GUILayout.Label (description, stretchyLabelStyle);
-                    if (GUILayout.Button (new GUIContent (Icons.Instance.buttonDisconnectClient, "Disconnect client"),
+                    if (GUILayout.Button (new GUIContent (Icons.Instance.ButtonDisconnectClient, "Disconnect client"),
                             buttonStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20))) {
                         ClientDisconnectDialog.Show (client);
                     }
@@ -363,6 +368,7 @@ namespace KRPC.UI
             }
         }
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         protected override void Draw ()
         {
             // Force window to resize to height of content
@@ -370,6 +376,8 @@ namespace KRPC.UI
                 Position = new Rect (Position.x, Position.y, Position.width, 0f);
                 resized = false;
             }
+
+            var running = Server.Running;
 
             GUILayout.BeginVertical ();
 
@@ -382,7 +390,7 @@ namespace KRPC.UI
 
             GUILayout.BeginHorizontal ();
             DrawAddress ();
-            if (Server.Running) {
+            if (running) {
                 GUILayout.Space (4);
                 DrawShowInfoWindow ();
             }
@@ -394,7 +402,7 @@ namespace KRPC.UI
             DrawStreamPort ();
             GUILayout.EndHorizontal ();
 
-            if (Server.Running) {
+            if (running) {
                 GUILayout.BeginHorizontal ();
                 DrawServerInfo ();
                 GUILayout.EndHorizontal ();
@@ -456,9 +464,9 @@ namespace KRPC.UI
 
             // Validate the settings
             Errors.Clear ();
-            IPAddress ignoreAddress;
+            IPAddress ipAddress;
             ushort ignoreInt;
-            bool validAddress = IPAddress.TryParse (address, out ignoreAddress);
+            bool validAddress = IPAddress.TryParse (address, out ipAddress);
             bool validRPCPort = UInt16.TryParse (rpcPort, out ignoreInt);
             bool validStreamPort = UInt16.TryParse (streamPort, out ignoreInt);
             bool validMaxTimePerUpdate = UInt16.TryParse (maxTimePerUpdate, out ignoreInt);
@@ -479,7 +487,7 @@ namespace KRPC.UI
             // Save the settings and trigger start server event
             if (Errors.Count == 0) {
                 Config.Load ();
-                Config.Address = IPAddress.Parse (address);
+                Config.Address = ipAddress;
                 Config.RPCPort = Convert.ToUInt16 (rpcPort);
                 Config.StreamPort = Convert.ToUInt16 (streamPort);
                 Config.MaxTimePerUpdate = Convert.ToUInt16 (maxTimePerUpdate);
@@ -521,4 +529,3 @@ namespace KRPC.UI
         }
     }
 }
-

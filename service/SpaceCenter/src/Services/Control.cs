@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
@@ -13,13 +14,14 @@ namespace KRPC.SpaceCenter.Services
     /// Used to manipulate the controls of a vessel. This includes adjusting the
     /// throttle, enabling/disabling systems such as SAS and RCS, or altering the
     /// direction in which the vessel is pointing.
+    /// Obtained by calling <see cref="Vessel.Control"/>.
     /// </summary>
     /// <remarks>
     /// Control inputs (such as pitch, yaw and roll) are zeroed when all clients
     /// that have set one or more of these inputs are no longer connected.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Control : Equatable<Control>
+    public class Control : Equatable<Control>
     {
         readonly Guid vesselId;
 
@@ -29,15 +31,15 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Check that the control objects are for the same vessel.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Control obj)
+        public override bool Equals (Control other)
         {
-            return vesselId == obj.vesselId;
+            return !ReferenceEquals (other, null) && vesselId == other.vesselId;
         }
 
         /// <summary>
-        /// Hash the control object.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
@@ -95,14 +97,15 @@ namespace KRPC.SpaceCenter.Services
         /// This is the mode displayed next to the speed at the top of the navball.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public SpeedMode SpeedMode {
-            get { return GetSpeedMode (); }
+            get { return GlobalSpeedMode; }
             set { FlightGlobals.SetSpeedMode (value.FromSpeedMode ()); }
         }
 
-        internal static SpeedMode GetSpeedMode ()
-        {
-            return FlightGlobals.speedDisplayMode.ToSpeedMode ();
+        [KRPCProperty]
+        internal static SpeedMode GlobalSpeedMode {
+            get { return FlightGlobals.speedDisplayMode.ToSpeedMode (); }
         }
 
         /// <summary>
@@ -264,8 +267,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public IList<Vessel> ActivateNextStage ()
         {
-            if (vesselId != FlightGlobals.ActiveVessel.id)
-                throw new InvalidOperationException ("Cannot activate stage; vessel is not the active vessel");
+            CheckActiveVessel ();
             if (!StageManager.CanSeparate)
                 throw new YieldException (new ParameterizedContinuation<IList<Vessel>> (ActivateNextStage));
             var preVessels = FlightGlobals.Vessels.ToArray ();
@@ -332,8 +334,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Node AddNode (double ut, float prograde = 0, float normal = 0, float radial = 0)
         {
-            if (vesselId != FlightGlobals.ActiveVessel.id)
-                throw new InvalidOperationException ("Cannot add maneuver node; vessel is not the active vessel");
+            CheckManeuverNodes ();
             return new Node (InternalVessel, ut, prograde, normal, radial);
         }
 
@@ -343,8 +344,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public IList<Node> Nodes {
             get {
-                if (vesselId != FlightGlobals.ActiveVessel.id)
-                    throw new InvalidOperationException ("Cannot get maneuver nodes; vessel is not the active vessel");
+                CheckManeuverNodes ();
                 return FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.Select (x => new Node (FlightGlobals.ActiveVessel, x)).OrderBy (x => x.UT).ToList ();
             }
         }
@@ -355,12 +355,24 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void RemoveNodes ()
         {
-            if (vesselId != FlightGlobals.ActiveVessel.id)
-                throw new InvalidOperationException ("Cannot remove maneuver ndoes; vessel is not the active vessel");
-            var nodes = FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.ToArray ();
+            CheckManeuverNodes ();
+            var nodes = FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.ToList ();
             foreach (var node in nodes)
                 node.RemoveSelf ();
             // TODO: delete the Node objects
+        }
+
+        void CheckActiveVessel ()
+        {
+            if (vesselId != FlightGlobals.ActiveVessel.id)
+                throw new InvalidOperationException ("Not the active vessel");
+        }
+
+        void CheckManeuverNodes ()
+        {
+            CheckActiveVessel ();
+            if (FlightGlobals.ActiveVessel.patchedConicSolver == null)
+                throw new InvalidOperationException ("Maneuver node editing is not available. Either the vessel is in a situation where maneuver nodes cannot be used, or the tracking station has not been upgraded to support them.");
         }
     }
 }

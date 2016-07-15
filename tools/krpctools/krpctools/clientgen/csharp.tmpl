@@ -10,10 +10,10 @@ var _args = new ByteString[] {
 };
 {% endmacro %}
 {% macro call(service, procedure, has_return, has_args, is_static=False) %}
-{% if has_return %}ByteString _data = {% endif %}{% if is_static %}_connection{% else %}this.connection{% endif %}.Invoke ("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+{% if has_return %}ByteString _data = {% endif %}connection.Invoke ("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
 {% endmacro %}
 {% macro return(type, is_static=False) %}
-return ({{type}})global::KRPC.Client.Encoder.Decode (_data, typeof({{type}}), {% if is_static %}_connection{% else %}this.connection{% endif %});
+return ({{type}})global::KRPC.Client.Encoder.Decode (_data, typeof({{type}}), connection);
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_value' in x %} = {{x.default_value}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
@@ -24,7 +24,7 @@ namespace KRPC.Client.Services.{{ service_name }}
     /// <summary>
     /// Extension methods for {{ service_name }} service.
     /// </summary>
-    public static class {{ service_name }}Extensions
+    public static class ExtensionMethods
     {
         /// <summary>
         /// Create an instance of the {{ service_name }} service.
@@ -43,12 +43,12 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% if procedures.items() | length > 0 or properties.items() | length > 0 %}
         global::KRPC.Client.IConnection connection;
 
-        internal Service (global::KRPC.Client.IConnection connection)
+        internal Service (global::KRPC.Client.IConnection serverConnection)
         {
-            this.connection = connection;
+            connection = serverConnection;
         }
         {% else %}
-        internal Service (global::KRPC.Client.IConnection connection)
+        internal Service (global::KRPC.Client.IConnection serverConnection)
         {
         }
         {% endif %}
@@ -93,6 +93,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 
     {% for enum_name,enm in enumerations.items() %}
     {{ enm.documentation | indent(width=4) }}
+    [Serializable]
     public enum {{ enum_name }}
     {
         {% for value in enm['values'] %}
@@ -130,9 +131,9 @@ namespace KRPC.Client.Services.{{ service_name }}
 
         {% for method_name,method in cls.static_methods.items() %}
         {{ method.documentation | indent(width=8) }}
-        /// <param name="_connection">A connection object.</param>
+        /// <param name="connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
-        public static {{ method.return_type }} {{ method_name }} (IConnection _connection, {{ sig_parameters(method.parameters) }})
+        public static {{ method.return_type }} {{ method_name }} (IConnection connection, {{ sig_parameters(method.parameters) }})
         {
             {% if method.parameters | length > 0 %}            {{ args(method.parameters) | indent(width=12) }}
             {% endif %}

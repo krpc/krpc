@@ -1,11 +1,10 @@
-#ifndef HEADER_KRPC_TEST_SERVER_TEST
-#define HEADER_KRPC_TEST_SERVER_TEST
+#pragma once
 
 #include <krpc.hpp>
 #include "services/test_service.hpp"
 
 class server_test: public ::testing::Test {
-public:
+ public:
   server_test();
   krpc::Client connect();
   krpc::Client conn;
@@ -25,5 +24,3 @@ inline krpc::Client server_test::connect() {
   int stream_port = env_stream_port == nullptr ? 50001 : std::stoi(env_stream_port);
   return krpc::connect("C++ClientTest", "localhost", rpc_port, stream_port);
 }
-
-#endif

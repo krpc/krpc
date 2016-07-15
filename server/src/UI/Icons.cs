@@ -1,17 +1,16 @@
 using System;
-using UnityEngine;
 using KRPC.Utils;
+using UnityEngine;
 
 namespace KRPC.UI
 {
-    class Icons
+    sealed class Icons
     {
         /// <summary>
         /// Path to directory in GameData when icons are stored
         /// </summary>
         const string iconsPath = "kRPC/icons";
-        public Texture2D buttonDisconnectClient;
-        public Texture2D buttonCloseWindow;
+
         static Icons instance;
 
         public static Icons Instance {
@@ -23,10 +22,14 @@ namespace KRPC.UI
             }
         }
 
+        public Texture2D ButtonDisconnectClient { get; private set; }
+
+        public Texture2D ButtonCloseWindow { get; private set; }
+
         Icons ()
         {
-            buttonDisconnectClient = LoadTexture ("button-disconnect-client.png");
-            buttonCloseWindow = LoadTexture ("button-close-window.png");
+            ButtonDisconnectClient = LoadTexture ("button-disconnect-client.png");
+            ButtonCloseWindow = LoadTexture ("button-close-window.png");
         }
 
         /// <summary>
@@ -35,11 +38,10 @@ namespace KRPC.UI
         static Texture2D LoadTexture (string filepath)
         {
             if (!filepath.EndsWith (".png", StringComparison.OrdinalIgnoreCase))
-                throw new ArgumentException ();
+                throw new ArgumentException ("Not a PNG file", "filepath");
             filepath = iconsPath + "/" + filepath.Substring (0, filepath.Length - 4);
             Logger.WriteLine ("Loading texture " + filepath);
             return GameDatabase.Instance.GetTexture (filepath, false);
         }
     }
 }
-

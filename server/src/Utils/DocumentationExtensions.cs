@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace KRPC.Utils
 {
+    [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
     static class DocumentationExtensions
     {
         static IDictionary<string, XElement> documentation = new Dictionary<string, XElement> ();
@@ -24,29 +27,52 @@ namespace KRPC.Utils
             for (int i = 1; i < lines.Length; i++) {
                 var newindex = 0;
                 for (var j = 0; j < lines [i].Length; j++) {
-                    if (lines [i] [j] != ' ')
+                    if (lines [i] [j] != ' ') {
+                        indent = Math.Min (indent, newindex);
                         break;
+                    }
                     newindex++;
                 }
-                indent = Math.Min (indent, newindex);
             }
             lines [0] = new String (' ', indent) + lines [0];
-            var result = "";
-            foreach (var line in lines)
-                result += line.Substring (indent) + "\n";
+            var result = String.Empty;
+            foreach (var line in lines) {
+                if (line.Length > indent)
+                    result += line.Substring (indent);
+                result += "\n";
+            }
             return result.Trim ();
         }
 
         internal static String GetDocumentation (this MemberInfo member)
         {
-            var location = member.Module.Assembly.Location;
-            var path = Path.GetDirectoryName (location) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension (location) + ".xml";
+            var membersNode = GetDocumentation (member.Module.Assembly.Location);
+            if (membersNode == null)
+                return String.Empty;
+            var name = GetDocumentationName (member);
+            foreach (var node in membersNode.Descendants()) {
+                foreach (var attribute in node.Attributes ()) {
+                    if (attribute.Name == "name" && attribute.Value == name) {
+                        var content = String.Empty;
+                        foreach (var descnode in node.Elements()) {
+                            content += Dedent (descnode.ToString ().Replace ("\r\n", "\n")) + "\n";
+                        }
+                        return "<doc>\n" + content.TrimEnd () + "\n</doc>";
+                    }
+                }
+            }
+            return String.Empty;
+        }
+
+        static XElement GetDocumentation (string assemblyPath)
+        {
+            var path = Path.GetDirectoryName (assemblyPath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension (assemblyPath) + ".xml";
             if (!documentation.ContainsKey (path)) {
                 if (!File.Exists (path)) {
-                    Logger.WriteLine ("No documentation found for " + member.Module.Assembly.Location + " at " + path, Logger.Severity.Warning);
+                    Logger.WriteLine ("No documentation found for " + assemblyPath + " at " + path, Logger.Severity.Warning);
                     documentation [path] = null;
                 } else {
-                    Logger.WriteLine ("Loading documentation for " + member.Module.Assembly.Location + " from " + path);
+                    Logger.WriteLine ("Loading documentation for " + assemblyPath + " from " + path);
                     var document = XDocument.Load (path);
                     XElement membersNode = null;
                     foreach (var node in document.Root.Descendants()) {
@@ -56,36 +82,21 @@ namespace KRPC.Utils
                         }
                     }
                     if (membersNode == null)
-                        Logger.WriteLine ("Failed to load documentation for " + member.Module.Assembly.Location + " from " + path);
+                        Logger.WriteLine ("Failed to load documentation for " + assemblyPath + " from " + path);
                     documentation [path] = membersNode;
                 }
             }
-
-            {
-                var membersNode = documentation [path];
-                if (membersNode == null)
-                    return "";
-                var name = GetDocumentationName (member);
-                foreach (var node in membersNode.Descendants()) {
-                    foreach (var attribute in node.Attributes ()) {
-                        if (attribute.Name == "name" && attribute.Value == name) {
-                            var content = "";
-                            foreach (var descnode in node.Elements()) {
-                                content += Dedent (descnode.ToString ().Replace ("\r\n", "\n")) + "\n";
-                            }
-                            return "<doc>\n" + content.TrimEnd () + "\n</doc>";
-                        }
-                    }
-                }
-                return "";
-            }
+            return documentation [path];
         }
 
+        [SuppressMessage ("Gendarme.Rules.Portability", "DoNotHardcodePathsRule")]
         internal static string GetDocumentationName (MemberInfo member)
         {
             char prefix;
-            string name = member is Type ? ((Type)member).FullName : (member.DeclaringType.FullName + "." + member.Name);
+            var memberType = member as Type;
+            string name = memberType != null ? memberType.FullName : member.DeclaringType.FullName + "." + member.Name;
             name = name.Replace ('+', '.');
+            name = Regex.Replace (name, @"\[\[.+\]\]", String.Empty);
 
             switch (member.MemberType) {
 

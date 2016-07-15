@@ -1,43 +1,46 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.KerbalAlarmClock.ExtensionMethods
 {
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
     static class AlarmActionExtensions
     {
-        public static KRPC.KerbalAlarmClock.Services.AlarmAction ToAlarmAction (this KACWrapper.KACAPI.AlarmActionEnum action)
+        public static AlarmAction ToAlarmAction (this KACWrapper.KACAPI.AlarmActionEnum action)
         {
             switch (action) {
             case KACWrapper.KACAPI.AlarmActionEnum.DoNothing:
-                return KRPC.KerbalAlarmClock.Services.AlarmAction.DoNothing;
+                return AlarmAction.DoNothing;
             case KACWrapper.KACAPI.AlarmActionEnum.DoNothingDeleteWhenPassed:
-                return KRPC.KerbalAlarmClock.Services.AlarmAction.DoNothingDeleteWhenPassed;
+                return AlarmAction.DoNothingDeleteWhenPassed;
             case KACWrapper.KACAPI.AlarmActionEnum.KillWarp:
-                return KRPC.KerbalAlarmClock.Services.AlarmAction.KillWarp;
+                return AlarmAction.KillWarp;
             case KACWrapper.KACAPI.AlarmActionEnum.KillWarpOnly:
-                return KRPC.KerbalAlarmClock.Services.AlarmAction.KillWarpOnly;
+                return AlarmAction.KillWarpOnly;
             case KACWrapper.KACAPI.AlarmActionEnum.MessageOnly:
-                return KRPC.KerbalAlarmClock.Services.AlarmAction.MessageOnly;
+                return AlarmAction.MessageOnly;
             case KACWrapper.KACAPI.AlarmActionEnum.PauseGame:
-                return KRPC.KerbalAlarmClock.Services.AlarmAction.PauseGame;
+                return AlarmAction.PauseGame;
             default:
                 throw new ArgumentException ("Unsupported alarm action");
             }
         }
 
-        public static KACWrapper.KACAPI.AlarmActionEnum FromAlarmAction (this KRPC.KerbalAlarmClock.Services.AlarmAction action)
+        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
+        public static KACWrapper.KACAPI.AlarmActionEnum FromAlarmAction (this KRPC.KerbalAlarmClock.AlarmAction action)
         {
             switch (action) {
-            case KRPC.KerbalAlarmClock.Services.AlarmAction.DoNothing:
+            case AlarmAction.DoNothing:
                 return KACWrapper.KACAPI.AlarmActionEnum.DoNothing;
-            case KRPC.KerbalAlarmClock.Services.AlarmAction.DoNothingDeleteWhenPassed:
+            case AlarmAction.DoNothingDeleteWhenPassed:
                 return KACWrapper.KACAPI.AlarmActionEnum.DoNothingDeleteWhenPassed;
-            case KRPC.KerbalAlarmClock.Services.AlarmAction.KillWarp:
+            case AlarmAction.KillWarp:
                 return KACWrapper.KACAPI.AlarmActionEnum.KillWarp;
-            case KRPC.KerbalAlarmClock.Services.AlarmAction.KillWarpOnly:
+            case AlarmAction.KillWarpOnly:
                 return KACWrapper.KACAPI.AlarmActionEnum.KillWarpOnly;
-            case KRPC.KerbalAlarmClock.Services.AlarmAction.MessageOnly:
+            case AlarmAction.MessageOnly:
                 return KACWrapper.KACAPI.AlarmActionEnum.MessageOnly;
-            case KRPC.KerbalAlarmClock.Services.AlarmAction.PauseGame:
+            case AlarmAction.PauseGame:
                 return KACWrapper.KACAPI.AlarmActionEnum.PauseGame;
             default:
                 throw new ArgumentException ("Unsupported alarm action");

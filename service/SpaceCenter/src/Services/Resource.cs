@@ -4,10 +4,11 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
-    /// A resource stored within a part.
+    /// An individual resource stored within a part.
+    /// Created using methods in the <see cref="Resources"/> class.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Resource : Equatable<Resource>
+    public class Resource : Equatable<Resource>
     {
         readonly uint partId;
         readonly int resourceId;
@@ -19,15 +20,15 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Check if resource objects are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Resource obj)
+        public override bool Equals (Resource other)
         {
-            return partId == obj.partId && resourceId == obj.resourceId;
+            return !ReferenceEquals (other, null) && partId == other.partId && resourceId == other.resourceId;
         }
 
         /// <summary>
-        /// Hash the resource object.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {

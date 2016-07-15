@@ -30,6 +30,12 @@ def _extract_py_env(env, path):
         '(CWD=`pwd`; cd %s; tar -xf $CWD/%s)' % (path, env)
     ]
 
+def _add_runfile(sub_commands, path, runfile_path):
+    sub_commands.extend([
+        'mkdir -p `dirname %s`' % runfile_path,
+        'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (path, runfile_path)
+    ])
+
 def _sdist_impl(ctx):
     output = ctx.outputs.out
     inputs = ctx.files.files
@@ -164,8 +170,10 @@ py3_test = rule(
 )
 
 def _lint_impl(ctx):
+
+    out = ctx.outputs.executable
     files = []
-    deps = ctx.files._pylint + ctx.files.deps
+    deps = list(ctx.files.deps)
     if ctx.attr.src:
         # Run pylint on a python package
         args = [ctx.attr.pkg]
@@ -176,25 +184,35 @@ def _lint_impl(ctx):
         for x in ctx.files.srcs:
             args.append(x.short_path)
         files.extend(ctx.files.srcs)
+    pylint = ctx.executable.pylint
+    pylint_runfiles = list(ctx.attr.pylint.default_runfiles.files)
+    runfiles = [pylint] + pylint_runfiles + files + deps + [ctx.file.rcfile]
+    sub_commands = []
 
+    # Install dependences in a new virtual env
     sub_commands = ['virtualenv env --quiet --no-site-packages']
     for dep in deps:
         sub_commands.append('env/bin/python env/bin/pip install --quiet --no-deps %s' % dep.short_path)
-    args = ' '.join(args)
-    sub_commands.append('env/bin/python env/bin/pylint --rcfile=%s %s' % (ctx.file.rcfile.short_path, args))
+
+    # Run the pylint tool
+    runfiles_dir = out.path + '.runfiles/krpc'
+    sub_commands.append('rm -rf %s' % runfiles_dir)
+    _add_runfile(sub_commands, pylint.short_path, runfiles_dir + '/' + pylint.basename)
+    for f in pylint_runfiles:
+        _add_runfile(sub_commands, f.short_path, runfiles_dir+ '/' + pylint.basename + '.runfiles/krpc/' + f.short_path)
+    # Set pythonpath so that pylint finds the dependent packags from the new env
+    #FIXME: make this generic, depends on usingn python2.7
+    sub_commands.append('PYTHONPATH=env/lib/python2.7/site-packages %s/%s %s %s' % (runfiles_dir, pylint.basename, '--rcfile=%s' % ctx.file.rcfile.short_path, ' '.join(args)))
 
     ctx.file_action(
-        output = ctx.outputs.executable,
-        content = '&& \\\n'.join(sub_commands)+'\n',
+        ctx.outputs.executable,
+        content = ' &&\n'.join(sub_commands)+'\n',
         executable = True
     )
 
-    runfiles = ctx.runfiles(files = files + deps + [ctx.file.rcfile])
-
     return struct(
         name = ctx.label.name,
-        out = ctx.outputs.executable,
-        runfiles = runfiles
+        runfiles = ctx.runfiles(files = runfiles)
     )
 
 py_lint_test = rule(
@@ -205,13 +223,7 @@ py_lint_test = rule(
         'srcs': attr.label_list(allow_files=True),
         'deps': attr.label_list(allow_files=True),
         'rcfile': attr.label(allow_files=True, single_file=True),
-        '_pylint': attr.label_list(default=[
-            Label('@python_six//file'),
-            Label('@python_pylint//file'),
-            Label('@python_astroid//file'),
-            Label('@python_wrapt//file'),
-            Label('@python_lazy_object_proxy//file')
-        ], allow_files=True)
+        'pylint': attr.label(default=Label('//tools/build/pylint'), executable=True)
     },
     test = True
 )

@@ -10,7 +10,7 @@ namespace KRPC.Utils
     /// http://forum.kerbalspaceprogram.com/threads/79889-Expanded-KSPAddon-modes
     /// </remarks>
     [AttributeUsage (AttributeTargets.Class)]
-    class KSPAddonImproved : Attribute
+    sealed class KSPAddonImproved : Attribute
     {
         [Flags]
         public enum Startup
@@ -48,7 +48,7 @@ namespace KRPC.Utils
         public static GameScenes CurrentGameScene { get; set; }
     }
 
-    class _KSPAddonImproved : KSPAddon, IEquatable<_KSPAddonImproved>
+    sealed class _KSPAddonImproved : KSPAddon, IEquatable<_KSPAddonImproved>
     {
         readonly Type type;
 
@@ -81,11 +81,11 @@ namespace KRPC.Utils
     }
 
     [_KSPAddonImproved (KSPAddon.Startup.Instantly, true, typeof(CustomAddonLoader))]
-    class CustomAddonLoader : MonoBehaviour
+    sealed class CustomAddonLoader : MonoBehaviour
     {
         readonly List<AddonInfo> addons = new List<AddonInfo> ();
 
-        class AddonInfo
+        sealed class AddonInfo
         {
             public readonly Type type;
             public readonly KSPAddonImproved addon;
@@ -95,7 +95,6 @@ namespace KRPC.Utils
             {
                 type = t;
                 addon = add;
-                created = false;
             }
 
             internal bool RunOnce {

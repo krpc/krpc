@@ -9,15 +9,15 @@ namespace KRPC.Service
     /// Used to invoke a static method with the KRPCMethod attribute.
     /// Invoke() and runs the static method.
     /// </summary>
-    class ClassStaticMethodHandler : IProcedureHandler
+    sealed class ClassStaticMethodHandler : IProcedureHandler
     {
         readonly MethodInfo method;
         readonly ProcedureParameter[] parameters;
         readonly object[] methodArguments;
 
-        public ClassStaticMethodHandler (MethodInfo method)
+        public ClassStaticMethodHandler (MethodInfo methodInfo)
         {
-            this.method = method;
+            method = methodInfo;
             parameters = method.GetParameters ().Select (x => new ProcedureParameter (x)).ToArray ();
             methodArguments = new object[parameters.Length];
         }

@@ -17,7 +17,7 @@ namespace KRPC.Server.WebSockets
         /// Read a websockets connection request. If the request is invalid,
         /// writes the approprate HTTP response and denies the connection attempt.
         /// </summary>
-        public static HTTPRequest ReadRequest (ClientRequestingConnectionArgs<byte,byte> args)
+        public static HTTPRequest ReadRequest (ClientRequestingConnectionEventArgs<byte,byte> args)
         {
             try {
                 var buffer = new byte [BUFFER_SIZE];

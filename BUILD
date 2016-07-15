@@ -154,7 +154,8 @@ pkg_zip(
         'protobuf/': 'schema/',
         # Docs
         'doc/kRPC.pdf': 'kRPC.pdf',
-    }
+    },
+    exclude = ['*.mdb']
 )
 
 test_suite(
@@ -164,16 +165,34 @@ test_suite(
         '//service/SpaceCenter:test',
         '//service/Drawing:test',
         '//service/InfernalRobotics:test',
+        '//service/KerbalAlarmClock:test',
         '//service/RemoteTech:test',
         '//service/UI:test',
-        '//client/csharp:test',
+        #'//client/csharp:test',
         '//client/cpp:test',
         '//client/java:test',
         '//client/lua:test',
         '//client/python:test',
         '//tools/krpctest:test',
         '//tools/krpctools:test',
+        '//tools/ServiceDefinitions:test',
+        '//tools/TestingTools:test',
+        '//tools/TestServer:test',
         '//doc:test'
+    ]
+)
+
+test_suite(
+    name = 'ci-test',
+    tests = [
+        '//server:ci-test',
+        '//client/csharp:ci-test',
+        '//client/cpp:ci-test',
+        '//client/java:ci-test',
+        '//client/lua:ci-test',
+        '//client/python:ci-test',
+        '//tools/krpctest:ci-test',
+        '//doc:ci-test'
     ]
 )
 
@@ -181,7 +200,7 @@ filegroup(
     name = 'csproj',
     srcs = [
         '//server',
-        '//server:test',
+        '//server:KRPC.Test',
         '//service/SpaceCenter',
         '//service/Drawing',
         '//service/InfernalRobotics',
@@ -189,7 +208,7 @@ filegroup(
         '//service/RemoteTech',
         '//service/UI',
         '//client/csharp',
-        '//client/csharp:test',
+        '//client/csharp:KRPC.Client.Test',
         '//tools/ServiceDefinitions',
         '//tools/TestingTools',
         '//tools/TestServer'

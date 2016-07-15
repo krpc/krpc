@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -9,17 +10,17 @@ using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
+    /// An engine, including ones of various types.
+    /// For example liquid fuelled gimballed engines, solid rocket boosters and jet engines.
     /// Obtained by calling <see cref="Part.Engine"/>.
     /// </summary>
     /// <remarks>
-    /// Provides functionality to interact with engines of various types,
-    /// for example liquid fuelled gimballed engines, solid rocket boosters and jet engines.
     /// For RCS thrusters <see cref="Part.RCS"/>.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Engine : Equatable<Engine>
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    public class Engine : Equatable<Engine>
     {
-        readonly Part part;
         readonly IList<ModuleEngines> engines;
         readonly MultiModeEngine multiModeEngine;
         readonly ModuleGimbal gimbal;
@@ -31,39 +32,44 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal Engine (Part part)
         {
-            this.part = part;
-            engines = part.InternalPart.Modules.OfType<ModuleEngines> ().ToList ();
-            multiModeEngine = part.InternalPart.Module<MultiModeEngine> ();
-            gimbal = part.InternalPart.Module<ModuleGimbal> ();
+            Part = part;
+            var internalPart = part.InternalPart;
+            engines = internalPart.Modules.OfType<ModuleEngines> ().ToList ();
+            multiModeEngine = internalPart.Module<MultiModeEngine> ();
+            gimbal = internalPart.Module<ModuleGimbal> ();
             if (engines.Count == 0)
                 throw new ArgumentException ("Part is not an engine");
         }
 
         Engine (ModuleEngines engine)
         {
-            part = new Part (engine.part);
+            Part = new Part (engine.part);
             engines = new List<ModuleEngines> ();
             engines.Add (engine);
-            multiModeEngine = null;
-            gimbal = part.InternalPart.Module<ModuleGimbal> ();
+            gimbal = Part.InternalPart.Module<ModuleGimbal> ();
             if (engine == null)
                 throw new ArgumentException ("Part does not have a ModuleEngines PartModule");
         }
 
         /// <summary>
-        /// Check the engines are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Engine obj)
+        public override bool Equals (Engine other)
         {
-            return part == obj.part && engines.SequenceEqual (obj.engines) && multiModeEngine == obj.multiModeEngine && gimbal == obj.gimbal;
+            return
+            !ReferenceEquals (other, null) &&
+            Part == other.Part &&
+            engines.SequenceEqual (other.engines) &&
+            (multiModeEngine == other.multiModeEngine || multiModeEngine.Equals (other.multiModeEngine)) &&
+            (gimbal == other.gimbal || gimbal.Equals (other.gimbal));
         }
 
         /// <summary>
-        /// Hash the engine.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = part.GetHashCode ();
+            int hash = Part.GetHashCode ();
             hash ^= engines.GetHashCode ();
             foreach (var engine in engines)
                 hash ^= engine.GetHashCode ();
@@ -86,9 +92,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part object for this engine.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the engine is active. Setting this attribute may have no effect,
@@ -98,10 +102,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Active {
             get { return CurrentEngine.EngineIgnited; }
             set {
+                var engine = CurrentEngine;
                 if (value)
-                    CurrentEngine.Activate ();
+                    engine.Activate ();
                 else
-                    CurrentEngine.Shutdown ();
+                    engine.Shutdown ();
             }
         }
 
@@ -116,42 +121,39 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The current amount of thrust being produced by the engine, in
-        /// Newtons. Returns zero if the engine is not active or if it has no fuel.
+        /// The current amount of thrust being produced by the engine, in Newtons.
         /// </summary>
         [KRPCProperty]
         public float Thrust {
             get {
                 if (!Active || !HasFuel)
                     return 0f;
-                return GetThrust (CurrentEngine.currentThrottle, part.InternalPart.vessel.staticPressurekPa);
+                return GetThrust (CurrentEngine.currentThrottle, Part.InternalPart.vessel.staticPressurekPa);
             }
         }
 
         /// <summary>
-        /// The maximum available amount of thrust that can be produced by the
-        /// engine, in Newtons. This takes <see cref="ThrustLimit"/> into account,
-        /// and is the amount of thrust produced by the engine when activated and the
-        /// main throttle is set to 100%. Returns zero if the engine does not have any fuel.
+        /// The amount of thrust, in Newtons, that would be produced by the engine
+        /// when activated and with its throttle set to 100%.
+        /// Returns zero if the engine does not have any fuel.
+        /// Takes the engine's current <see cref="ThrustLimit"/> and atmospheric conditions into account.
         /// </summary>
         [KRPCProperty]
         public float AvailableThrust {
             get {
                 if (!HasFuel)
                     return 0f;
-                return GetThrust (ThrustLimit, part.InternalPart.vessel.staticPressurekPa);
+                return GetThrust (ThrustLimit, Part.InternalPart.vessel.staticPressurekPa);
             }
         }
 
         /// <summary>
-        /// The maximum amount of thrust that can be produced by the engine, in
-        /// Newtons. This is the amount of thrust produced by the engine when
-        /// activated, <see cref="ThrustLimit"/> is set to 100% and the main vessel's
-        /// throttle is set to 100%.
+        /// The amount of thrust, in Newtons, that would be produced by the engine
+        /// when activated and fueled, with its throttle and throttle limiter set to 100%.
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
-            get { return GetThrust (1f, part.InternalPart.vessel.staticPressurekPa); }
+            get { return GetThrust (1f, Part.InternalPart.vessel.staticPressurekPa); }
         }
 
         /// <summary>
@@ -189,7 +191,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<Thruster> Thrusters {
             get {
                 var engine = CurrentEngine;
-                return Enumerable.Range (0, engine.thrustTransforms.Count).Select (i => new Thruster (part, engine, gimbal, i)).ToList ();
+                return Enumerable.Range (0, engine.thrustTransforms.Count).Select (i => new Thruster (Part, engine, gimbal, i)).ToList ();
             }
         }
 
@@ -219,17 +221,31 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The names of resources that the engine consumes.
+        /// The names of the propellants that the engine consumes.
         /// </summary>
         [KRPCProperty]
-        public IList<string> Propellants {
+        public IList<string> PropellantNames {
             get { return CurrentEngine.propellants.Select (x => x.name).ToList (); }
         }
 
         /// <summary>
-        /// The ratios of resources that the engine consumes. A dictionary mapping resource names
-        /// to the ratios at which they are consumed by the engine.
+        /// The propellants that the engine consumes.
         /// </summary>
+        [KRPCProperty]
+        public IList<Propellant> Propellants {
+            get {
+                return CurrentEngine.propellants.Select (propellant => new Propellant (propellant, CurrentEngine.part)).ToList ();
+            }
+        }
+
+        /// <summary>
+        /// The ratio of resources that the engine consumes. A dictionary mapping resource names
+        /// to the ratio at which they are consumed by the engine.
+        /// </summary>
+        /// <remarks>
+        /// For example, if the ratios are 0.6 for LiquidFuel and 0.4 for Oxidizer, then for every 0.6 units of
+        /// LiquidFuel that the engine burns, it will burn 0.4 units of Oxidizer.
+        /// </remarks>
         [KRPCProperty]
         public IDictionary<string, float> PropellantRatios {
             get {
@@ -249,8 +265,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool HasFuel {
             get {
+                if (CurrentEngine.flameout)
+                    return false;
                 foreach (var propellant in CurrentEngine.propellants)
-                    if (propellant.isDeprived && !propellant.ignoreForIsp)
+                    if (propellant.isDeprived)
                         return false;
                 return true;
             }
@@ -414,9 +432,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
             set {
                 CheckGimballed ();
-                if (value && !GimbalLocked) {
+                if (value && !gimbal.gimbalLock) {
                     gimbal.LockAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
-                } else if (!value && GimbalLocked) {
+                } else if (!value && gimbal.gimbalLock) {
                     gimbal.FreeAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
                 }
             }

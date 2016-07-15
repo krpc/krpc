@@ -44,7 +44,7 @@ namespace KRPC
      */
 
     [KSPAddon (KSPAddon.Startup.Instantly, true)]
-    internal class CompatibilityChecker : MonoBehaviour
+    sealed class CompatibilityChecker : MonoBehaviour
     {
         public static bool IsCompatible ()
         {

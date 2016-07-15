@@ -7,13 +7,6 @@ class TestObjects(ServerTestCase, unittest.TestCase):
     def setUpClass(cls):
         super(TestObjects, cls).setUpClass()
 
-    @classmethod
-    def tearDownClass(cls):
-        super(TestObjects, cls).tearDownClass()
-
-    def setUp(self):
-        super(TestObjects, self).setUp()
-
     def test_equality(self):
         obj1 = self.conn.test_service.create_test_object('jeb')
         obj2 = self.conn.test_service.create_test_object('jeb')

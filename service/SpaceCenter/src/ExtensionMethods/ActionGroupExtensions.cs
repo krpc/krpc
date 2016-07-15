@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
@@ -7,6 +8,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Get the custom action group for a given index (1 through 9)
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static KSPActionGroup GetActionGroup (uint index)
         {
             switch (index) {

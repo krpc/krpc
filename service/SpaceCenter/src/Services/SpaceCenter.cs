@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -25,6 +28,8 @@ namespace KRPC.SpaceCenter.Services
         public static Vessel ActiveVessel {
             get { return new Vessel (FlightGlobals.ActiveVessel); }
             set {
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException ("ActiveVessel");
                 FlightGlobals.SetActiveVessel (value.InternalVessel);
                 throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
             }
@@ -80,10 +85,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public static CelestialBody TargetBody {
             get {
-                var target = FlightGlobals.fetch.VesselTarget;
-                return target is global::CelestialBody ? new CelestialBody (target as global::CelestialBody) : null;
+                var target = FlightGlobals.fetch.VesselTarget as global::CelestialBody;
+                return target != null ? new CelestialBody (target) : null;
             }
-            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalBody); }
+            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalBody); }
         }
 
         /// <summary>
@@ -92,10 +97,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public static Vessel TargetVessel {
             get {
-                var target = FlightGlobals.fetch.VesselTarget;
-                return target is global::Vessel ? new Vessel (target as global::Vessel) : null;
+                var target = FlightGlobals.fetch.VesselTarget as global::Vessel;
+                return target != null ? new Vessel (target) : null;
             }
-            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalVessel); }
+            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalVessel); }
         }
 
         /// <summary>
@@ -104,11 +109,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public static Parts.DockingPort TargetDockingPort {
             get {
-                var target = FlightGlobals.fetch.VesselTarget;
-                var part = target is ModuleDockingNode ? new Parts.Part ((target as ModuleDockingNode).part) : null;
-                return part != null ? new Parts.DockingPort (part) : null;
+                var target = FlightGlobals.fetch.VesselTarget as ModuleDockingNode;
+                return target != null ? new Parts.DockingPort (new Parts.Part (target.part)) : null;
             }
-            set { FlightGlobals.fetch.SetVesselTarget (value == null ? null : value.InternalPort); }
+            set { FlightGlobals.fetch.SetVesselTarget (ReferenceEquals (value, null) ? null : value.InternalPort); }
         }
 
         /// <summary>
@@ -120,30 +124,65 @@ namespace KRPC.SpaceCenter.Services
             FlightGlobals.fetch.SetVesselTarget (null);
         }
 
+        static string GetFullCraftDirectory (string craftDirectory)
+        {
+            return KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/" + craftDirectory;
+        }
+
+        /// <summary>
+        /// Returns a list of vessels from the given <paramref name="craftDirectory"/> that can be launched.
+        /// </summary>
+        /// <param name="craftDirectory">Name of the directory in the current saves "Ships" directory. For example <c>"VAB"</c> or <c>"SPH"</c>.</param>
+        [KRPCProcedure]
+        public static IList<string> LaunchableVessels (string craftDirectory)
+        {
+            try {
+                var directory = new DirectoryInfo (GetFullCraftDirectory (craftDirectory));
+                return directory.GetFiles ("*.craft").Select (file => Path.GetFileNameWithoutExtension (file.Name)).ToList ();
+            } catch (DirectoryNotFoundException) {
+                return new List<string> ();
+            }
+        }
+
+        /// <summary>
+        /// Launch a vessel.
+        /// </summary>
+        /// <param name="craftDirectory">Name of the directory in the current saves "Ships" directory, that contains the craft file. For example <c>"VAB"</c> or <c>"SPH"</c>.</param>
+        /// <param name="name">Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.</param>
+        /// <param name="launchSite">Name of the launch site. For example <c>"LaunchPad"</c> or <c>"Runway"</c>.</param>
+        [KRPCProcedure]
+        public static void LaunchVessel (string craftDirectory, string name, string launchSite)
+        {
+            var craft = GetFullCraftDirectory (craftDirectory) + "/" + name + ".craft";
+            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
+            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, launchSite, crew);
+            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+        }
+
         /// <summary>
         /// Launch a new vessel from the VAB onto the launchpad.
         /// </summary>
-        /// <param name="name">Name of the vessel's craft file.</param>
+        /// <param name="name">Name of the vessel to launch.</param>
+        /// <remarks>
+        /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory set to "VAB" and the launch site set to "LaunchPad".
+        /// </remarks>
         [KRPCProcedure]
         public static void LaunchVesselFromVAB (string name)
         {
-            var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/VAB/" + name + ".craft";
-            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
-            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "LaunchPad", crew);
-            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            LaunchVessel ("VAB", name, "LaunchPad");
         }
 
         /// <summary>
         /// Launch a new vessel from the SPH onto the runway.
         /// </summary>
-        /// <param name="name">Name of the vessel's craft file.</param>
+        /// <param name="name">Name of the vessel to launch.</param>
+        /// <remarks>
+        /// This is equivalent to calling <see cref="LaunchVessel"/> with the craft directory set to "SPH" and the launch site set to "Runway".
+        /// </remarks>
         [KRPCProcedure]
         public static void LaunchVesselFromSPH (string name)
         {
-            var craft = KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/SPH/" + name + ".craft";
-            var crew = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel (ConfigNode.Load (craft));
-            FlightDriver.StartWithNewLaunch (craft, EditorLogic.FlagURL, "Runway", crew);
-            throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
+            LaunchVessel ("SPH", name, "Runway");
         }
 
         /// <summary>
@@ -301,11 +340,12 @@ namespace KRPC.SpaceCenter.Services
             if (factor < 0 || factor >= TimeWarp.fetch.warpRates.Length)
                 return false;
             // Landed
-            if (ActiveVessel.InternalVessel.LandedOrSplashed)
+            var vessel = ActiveVessel.InternalVessel;
+            if (vessel.LandedOrSplashed)
                 return true;
             // Below altitude limit
-            var altitude = ActiveVessel.InternalVessel.mainBody.GetAltitude (ActiveVessel.InternalVessel.findWorldCenterOfMass ());
-            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, ActiveVessel.InternalVessel.mainBody);
+            var altitude = vessel.mainBody.GetAltitude (vessel.findWorldCenterOfMass ());
+            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, vessel.mainBody);
             if (altitude < altitudeLimit)
                 return false;
             // Throttle is non-zero
@@ -390,6 +430,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Decrease the regular "on-rails" time warp factor.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void DecreaseRailsWarp ()
         {
             if (TimeWarp.WarpMode != TimeWarp.Modes.HIGH)
@@ -432,6 +473,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Decrease the physics time warp factor.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void DecreasePhysicsWarp ()
         {
             if (TimeWarp.WarpMode != TimeWarp.Modes.LOW)
@@ -468,6 +510,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static Tuple3 TransformPosition (Tuple3 position, ReferenceFrame from, ReferenceFrame to)
         {
+            CheckReferenceFrames (from, to);
             return to.PositionFromWorldSpace (from.PositionToWorldSpace (position.ToVector ())).ToTuple ();
         }
 
@@ -481,6 +524,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static Tuple3 TransformDirection (Tuple3 direction, ReferenceFrame from, ReferenceFrame to)
         {
+            CheckReferenceFrames (from, to);
             return to.DirectionFromWorldSpace (from.DirectionToWorldSpace (direction.ToVector ())).ToTuple ();
         }
 
@@ -494,6 +538,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static Tuple4 TransformRotation (Tuple4 rotation, ReferenceFrame from, ReferenceFrame to)
         {
+            CheckReferenceFrames (from, to);
             return to.RotationFromWorldSpace (from.RotationToWorldSpace (rotation.ToQuaternion ())).ToTuple ();
         }
 
@@ -510,6 +555,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static Tuple3 TransformVelocity (Tuple3 position, Tuple3 velocity, ReferenceFrame from, ReferenceFrame to)
         {
+            CheckReferenceFrames (from, to);
             var worldPosition = from.PositionToWorldSpace (position.ToVector ());
             var worldVelocity = from.VelocityToWorldSpace (position.ToVector (), velocity.ToVector ());
             return to.VelocityFromWorldSpace (worldPosition, worldVelocity).ToTuple ();
@@ -521,6 +567,14 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public static bool FARAvailable {
             get { return ExternalAPI.FAR.IsAvailable; }
+        }
+
+        static void CheckReferenceFrames (ReferenceFrame from, ReferenceFrame to)
+        {
+            if (ReferenceEquals (from, null))
+                throw new ArgumentNullException ("from");
+            if (ReferenceEquals (to, null))
+                throw new ArgumentNullException ("to");
         }
     }
 }

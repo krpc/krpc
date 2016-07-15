@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
-using KRPC.SpaceCenter.ExternalAPI;
 using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
@@ -14,15 +13,18 @@ namespace KRPC.SpaceCenter.Services
     /// <summary>
     /// These objects are used to interact with vessels in KSP. This includes getting
     /// orbital and flight data, manipulating control inputs and managing resources.
+    /// Created using <see cref="SpaceCenter.ActiveVessel"/> or <see cref="SpaceCenter.Vessels"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Vessel : Equatable<Vessel>
+    public class Vessel : Equatable<Vessel>
     {
         /// <summary>
         /// Construct from a KSP vessel object.
         /// </summary>
         public Vessel (global::Vessel vessel)
         {
+            if (ReferenceEquals (vessel, null))
+                throw new ArgumentNullException ("vessel");
             Id = vessel.id;
         }
 
@@ -35,15 +37,15 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Check if vessels are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Vessel obj)
+        public override bool Equals (Vessel other)
         {
-            return Id == obj.Id;
+            return !ReferenceEquals (other, null) && Id == other.Id;
         }
 
         /// <summary>
-        /// Hash the vessel.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
@@ -89,6 +91,25 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether the vessel is recoverable.
+        /// </summary>
+        [KRPCProperty]
+        public bool Recoverable {
+            get { return InternalVessel.IsRecoverable; }
+        }
+
+        /// <summary>
+        /// Recover the vessel.
+        /// </summary>
+        [KRPCMethod]
+        public void Recover ()
+        {
+            if (!Recoverable)
+                throw new InvalidOperationException ("Vessel is not recoverable");
+            GameEvents.OnVesselRecoveryRequested.Fire (InternalVessel);
+        }
+
+        /// <summary>
         /// The mission elapsed time in seconds.
         /// </summary>
         [KRPCProperty]
@@ -106,9 +127,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Flight Flight (ReferenceFrame referenceFrame = null)
         {
-            if (referenceFrame == null)
-                referenceFrame = ReferenceFrame.Surface (InternalVessel);
-            return new Flight (InternalVessel, referenceFrame);
+            var vessel = InternalVessel;
+            if (ReferenceEquals (referenceFrame, null))
+                referenceFrame = ReferenceFrame.Surface (vessel);
+            return new Flight (vessel, referenceFrame);
         }
 
         /// <summary>
@@ -174,7 +196,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float Mass {
-            get { return InternalVessel.parts.Where (PartExtensions.IsPhysicallySignificant).Sum (PartExtensions.TotalMass); }
+            get { return InternalVessel.parts.Sum (PartExtensions.WetMass); }
         }
 
         /// <summary>
@@ -182,7 +204,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float DryMass {
-            get { return InternalVessel.parts.Where (PartExtensions.IsPhysicallySignificant).Sum (PartExtensions.TotalMass); }
+            get { return InternalVessel.parts.Sum (PartExtensions.DryMass); }
+        }
+
+        IEnumerable<Parts.Engine> ActiveEngines {
+            get { return Parts.Engines.Where (e => e.Active); }
         }
 
         /// <summary>
@@ -202,7 +228,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float AvailableThrust {
-            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.AvailableThrust); }
+            get { return ActiveEngines.Sum (e => e.AvailableThrust); }
         }
 
         /// <summary>
@@ -212,7 +238,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
-            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust); }
+            get { return ActiveEngines.Sum (e => e.MaxThrust); }
         }
 
         /// <summary>
@@ -222,7 +248,12 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float MaxVacuumThrust {
-            get { return Parts.Engines.Where (e => e.Active).Sum (e => e.MaxVacuumThrust); }
+            get { return ActiveEngines.Sum (e => e.MaxVacuumThrust); }
+        }
+
+        static float SpecificImpulseAtConsumption (IList<Parts.Engine> engines, float fuelConsumption)
+        {
+            return fuelConsumption > 0f ? engines.Sum (e => e.MaxThrust) / fuelConsumption : 0f;
         }
 
         /// <summary>
@@ -232,11 +263,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float SpecificImpulse {
             get {
-                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust);
-                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust / e.SpecificImpulse);
-                if (fuelConsumption > 0f)
-                    return thrust / fuelConsumption;
-                return 0f;
+                var activeEngines = ActiveEngines.ToList ();
+                var fuelConsumption = activeEngines.Sum (e => e.MaxThrust / e.SpecificImpulse);
+                return SpecificImpulseAtConsumption (activeEngines, fuelConsumption);
             }
         }
 
@@ -247,11 +276,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float VacuumSpecificImpulse {
             get {
-                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust);
-                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust / e.VacuumSpecificImpulse);
-                if (fuelConsumption > 0f)
-                    return thrust / fuelConsumption;
-                return 0f;
+                var activeEngines = ActiveEngines.ToList ();
+                var fuelConsumption = activeEngines.Sum (e => e.MaxThrust / e.VacuumSpecificImpulse);
+                return SpecificImpulseAtConsumption (activeEngines, fuelConsumption);
             }
         }
 
@@ -263,11 +290,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float KerbinSeaLevelSpecificImpulse {
             get {
-                var thrust = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust);
-                var fuelConsumption = Parts.Engines.Where (e => e.Active).Sum (e => e.MaxThrust / e.KerbinSeaLevelSpecificImpulse);
-                if (fuelConsumption > 0f)
-                    return thrust / fuelConsumption;
-                return 0f;
+                var activeEngines = ActiveEngines.ToList ();
+                var fuelConsumption = activeEngines.Sum (e => e.MaxThrust / e.KerbinSeaLevelSpecificImpulse);
+                return SpecificImpulseAtConsumption (activeEngines, fuelConsumption);
             }
         }
 
@@ -278,7 +303,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
-            get { return ComputeInertiaTensor ().Diag ().ToTuple (); }
+            get { return MomentOfInertiaVector.ToTuple (); }
+        }
+
+        internal Vector3d MomentOfInertiaVector {
+            get { return ComputeInertiaTensor ().Diagonal (); }
         }
 
         /// <summary>
@@ -297,12 +326,13 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         Matrix4x4 ComputeInertiaTensor ()
         {
+            var vessel = InternalVessel;
             Matrix4x4 inertiaTensor = Matrix4x4.zero;
-            Vector3 CoM = InternalVessel.findWorldCenterOfMass ();
+            Vector3 CoM = vessel.findWorldCenterOfMass ();
             // Use the part ReferenceTransform because we want pitch/roll/yaw relative to controlling part
-            Transform vesselTransform = InternalVessel.GetTransform ();
+            Transform vesselTransform = vessel.GetTransform ();
 
-            foreach (var part in InternalVessel.parts) {
+            foreach (var part in vessel.parts) {
                 if (part.rb != null) {
                     Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
 
@@ -337,14 +367,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 AvailableTorque {
-            get {
-                return (
-                    AvailableReactionWheelTorqueVector +
-                    AvailableRCSTorqueVector +
-                    AvailableEngineTorqueVector +
-                    AvailableControlSurfaceTorqueVector
-                ).ToTuple ();
-            }
+            get { return AvailableTorqueVector.ToTuple (); }
         }
 
         /// <summary>
@@ -389,6 +412,16 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 AvailableControlSurfaceTorque {
             get { return AvailableControlSurfaceTorqueVector.ToTuple (); }
+        }
+
+        internal Vector3d AvailableTorqueVector {
+            get {
+                return
+                AvailableReactionWheelTorqueVector +
+                AvailableRCSTorqueVector +
+                AvailableEngineTorqueVector +
+                AvailableControlSurfaceTorqueVector;
+            }
         }
 
         Vector3d AvailableReactionWheelTorqueVector {
@@ -511,6 +544,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.PositionFromWorldSpace (InternalVessel.findWorldCenterOfMass ()).ToTuple ();
         }
 
@@ -521,7 +556,12 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.VelocityFromWorldSpace (InternalVessel.findWorldCenterOfMass (), InternalVessel.GetOrbit ().GetVel ()).ToTuple ();
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
+            var vessel = InternalVessel;
+            var worldCoM = vessel.findWorldCenterOfMass ();
+            var worldVelocity = vessel.GetOrbit ().GetVel ();
+            return referenceFrame.VelocityFromWorldSpace (worldCoM, worldVelocity).ToTuple ();
         }
 
         /// <summary>
@@ -531,6 +571,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).ToTuple ();
         }
 
@@ -541,6 +583,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up).ToTuple ();
         }
 
@@ -554,6 +598,8 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
             //FIXME: finding the rigidbody is expensive - cache it
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.GetComponent<Rigidbody> ().angularVelocity).ToTuple ();
         }
     }

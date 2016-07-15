@@ -39,7 +39,7 @@ namespace KRPC.Test.Server.WebSockets
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsTrue (eventArgs.Request.ShouldAllow);
@@ -84,7 +84,7 @@ namespace KRPC.Test.Server.WebSockets
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
@@ -125,7 +125,7 @@ namespace KRPC.Test.Server.WebSockets
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);

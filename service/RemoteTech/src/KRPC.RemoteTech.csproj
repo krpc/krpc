@@ -81,9 +81,9 @@
     </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
-    <Compile Include="Services\Comms.cs" />
-    <Compile Include="Services\RemoteTech.cs" />
-    <Compile Include="Services\Antenna.cs" />
-    <Compile Include="Services\Target.cs" />
+    <Compile Include="Antenna.cs" />
+    <Compile Include="Comms.cs" />
+    <Compile Include="RemoteTech.cs" />
+    <Compile Include="Target.cs" />
   </ItemGroup>
 </Project>

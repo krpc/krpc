@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Service
 {
-    class ObjectStore
+    sealed class ObjectStore
     {
         readonly IDictionary<object, ulong> instances = new Dictionary<object, ulong> ();
         readonly IDictionary<ulong, object> objectIds = new Dictionary<ulong, object> ();
-        ulong nextObjectId = 1; // 0 is reserved to represent null values
+        // Note: 0 is reserved to represent null values
+        ulong nextObjectId = 1;
         static ObjectStore instance;
 
         public static ObjectStore Instance {
@@ -20,9 +22,10 @@ namespace KRPC.Service
 
         public static void Clear ()
         {
-            Instance.nextObjectId = 1;
-            Instance.objectIds.Clear ();
-            Instance.instances.Clear ();
+            var store = Instance;
+            store.nextObjectId = 1;
+            store.objectIds.Clear ();
+            store.instances.Clear ();
         }
 
         /// <summary>
@@ -30,16 +33,16 @@ namespace KRPC.Service
         /// identifier with the instance that can be passed to clients.
         /// If the instance has already been added, this just returns it's object identifier.
         /// </summary>
-        public ulong AddInstance (object instance)
+        public ulong AddInstance (object obj)
         {
-            if (instance == null)
+            if (obj == null)
                 return 0;
-            if (instances.ContainsKey (instance))
-                return instances [instance];
+            if (instances.ContainsKey (obj))
+                return instances [obj];
             var objectId = nextObjectId;
             nextObjectId++;
-            instances [instance] = objectId;
-            objectIds [objectId] = instance;
+            instances [obj] = objectId;
+            objectIds [objectId] = obj;
             return objectId;
         }
 
@@ -47,13 +50,14 @@ namespace KRPC.Service
         /// Remove an instance from the object store.
         /// Note: this doesn't destroy the instance, just removes the reference to it.
         /// </summary>
-        public void RemoveInstance (object instance)
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+        public void RemoveInstance (object obj)
         {
-            if (instance == null)
+            if (obj == null)
                 return;
-            if (instances.ContainsKey (instance)) {
-                var objectId = instances [instance];
-                instances.Remove (instance);
+            if (instances.ContainsKey (obj)) {
+                var objectId = instances [obj];
+                instances.Remove (obj);
                 objectIds.Remove (objectId);
             }
         }
@@ -61,26 +65,26 @@ namespace KRPC.Service
         /// <summary>
         /// Get an instance by it's unique object identifier.
         /// </summary>
-        public object GetInstance (ulong objectId)
+        public object GetInstance (ulong id)
         {
-            if (objectId == 0ul)
+            if (id == 0ul)
                 return null;
-            if (!objectIds.ContainsKey (objectId))
+            if (!objectIds.ContainsKey (id))
                 throw new ArgumentException ("Instance not found");
-            return objectIds [objectId];
+            return objectIds [id];
         }
 
         /// <summary>
         /// Get the object identifier for a given instance.
         /// </summary>
-        public ulong GetObjectId (object instance)
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+        public ulong GetObjectId (object obj)
         {
-            if (instance == null)
+            if (obj == null)
                 return 0;
-            if (!instances.ContainsKey (instance))
+            if (!instances.ContainsKey (obj))
                 throw new ArgumentException ("Instance not found");
-            return instances [instance];
+            return instances [obj];
         }
     }
 }
-

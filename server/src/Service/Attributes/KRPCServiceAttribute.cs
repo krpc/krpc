@@ -6,7 +6,7 @@ namespace KRPC.Service.Attributes
     /// A kRPC service.
     /// </summary>
     [AttributeUsage (AttributeTargets.Class)]
-    public class KRPCServiceAttribute : Attribute
+    public sealed class KRPCServiceAttribute : Attribute
     {
         /// <summary>
         /// Name of the service.

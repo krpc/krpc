@@ -12,7 +12,7 @@ namespace KRPC.SpaceCenter.Services
     /// <see cref="CelestialBody.Orbit"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Orbit : Equatable<Orbit>
+    public class Orbit : Equatable<Orbit>
     {
         internal Orbit (global::Vessel vessel)
         {
@@ -35,25 +35,25 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The KSP orbit object.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public global::Orbit InternalOrbit { get; private set; }
-
-        /// <summary>
-        /// Check that the orbits are equal.
-        /// </summary>
-        public override bool Equals (Orbit obj)
+        public override bool Equals (Orbit other)
         {
-            return InternalOrbit == obj.InternalOrbit;
+            return !ReferenceEquals (other, null) && InternalOrbit == other.InternalOrbit;
         }
 
         /// <summary>
-        /// Hash the orbit.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
             return InternalOrbit.GetHashCode ();
         }
+
+        /// <summary>
+        /// The KSP orbit object.
+        /// </summary>
+        public global::Orbit InternalOrbit { get; private set; }
 
         /// <summary>
         /// The celestial body (e.g. planet or moon) around which the object is orbiting.
@@ -120,7 +120,10 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double SemiMinorAxis {
-            get { return SemiMajorAxis * Math.Sqrt (1d - (Eccentricity * Eccentricity)); }
+            get {
+                var e = Eccentricity;
+                return SemiMajorAxis * Math.Sqrt (1d - (e * e));
+            }
         }
 
         /// <summary>
@@ -184,7 +187,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Inclination {
-            get { return InternalOrbit.inclination * (Math.PI / 180d); }
+            get { return GeometryExtensions.ToRadians (InternalOrbit.inclination); }
         }
 
         /// <summary>
@@ -193,7 +196,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double LongitudeOfAscendingNode {
-            get { return InternalOrbit.LAN * (Math.PI / 180d); }
+            get { return GeometryExtensions.ToRadians (InternalOrbit.LAN); }
         }
 
         /// <summary>
@@ -201,7 +204,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double ArgumentOfPeriapsis {
-            get { return InternalOrbit.argumentOfPeriapsis * (Math.PI / 180d); }
+            get { return GeometryExtensions.ToRadians (InternalOrbit.argumentOfPeriapsis); }
         }
 
         /// <summary>
@@ -245,6 +248,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static Tuple3 ReferencePlaneNormal (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.DirectionFromWorldSpace (Planetarium.up).normalized.ToTuple ();
         }
 
@@ -256,6 +261,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static Tuple3 ReferencePlaneDirection (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.DirectionFromWorldSpace (Planetarium.right).normalized.ToTuple ();
         }
 
@@ -265,9 +272,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Orbit NextOrbit {
-            get {
-                return (Double.IsNaN (TimeToSOIChange)) ? null : new Orbit (InternalOrbit.nextPatch);
-            }
+            get { return (Double.IsNaN (TimeToSOIChange)) ? null : new Orbit (InternalOrbit.nextPatch); }
         }
 
         /// <summary>

@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -7,6 +9,7 @@ using NUnit.Framework;
 namespace KRPC.Test.Server.TCP
 {
     [TestFixture]
+    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInTypeNameRule")]
     public class TCPServerTest
     {
         [Test]
@@ -149,10 +152,9 @@ namespace KRPC.Test.Server.TCP
             Assert.AreEqual (0, server.BytesWritten);
         }
 
-        delegate bool BooleanPredicate ();
         // Calls server.Update repeatedly every 50 ms, until predicate is true
         // or up to a maximum number of iterations, after which point the test fails
-        static void UpdateUntil (KRPC.Server.IServer<byte, byte> server, BooleanPredicate predicate, int iterations = 10)
+        static void UpdateUntil (KRPC.Server.IServer<byte, byte> server, Func<bool> predicate, int iterations = 10)
         {
             for (int i = 0; i < iterations; i++) {
                 server.Update ();
@@ -187,4 +189,3 @@ namespace KRPC.Test.Server.TCP
         }
     }
 }
-

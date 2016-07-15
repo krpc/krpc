@@ -9,13 +9,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def setUpClass(cls):
         super(TestClient, cls).setUpClass()
 
-    @classmethod
-    def tearDownClass(cls):
-        super(TestClient, cls).tearDownClass()
-
-    def setUp(self):
-        super(TestClient, self).setUp()
-
     def test_get_status(self):
         status = self.conn.krpc.get_status()
         self.assertRegexpMatches(status.version, r'^[0-9]+\.[0-9]+\.[0-9]+$')
@@ -27,11 +20,11 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def test_error(self):
         with self.assertRaises(krpc.client.RPCError) as cm:
             self.conn.test_service.throw_argument_exception()
-        self.assertEqual('Invalid argument', str(cm.exception))
+        self.assertTrue('Invalid argument' in str(cm.exception))
 
         with self.assertRaises(krpc.client.RPCError) as cm:
             self.conn.test_service.throw_invalid_operation_exception()
-        self.assertEqual('Invalid operation', str(cm.exception))
+        self.assertTrue('Invalid operation' in str(cm.exception))
 
     def test_value_parameters(self):
         self.assertEqual('3.14159', self.conn.test_service.float_to_string(float(3.14159)))
@@ -139,6 +132,11 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', '4', '5')
         obj = self.conn.test_service.create_test_object('jeb')
         self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', '5')
+
+    def test_too_few_arguments(self):
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments)
+        obj = self.conn.test_service.create_test_object('jeb')
+        self.assertRaises(TypeError, obj.optional_arguments)
 
     def test_enums(self):
         enum = self.conn.test_service.TestEnum
@@ -290,8 +288,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(type(obj2), conn2.test_service.TestClass)
 
     def test_thread_safe(self):
-        thread_count = 4
-        repeats = 1000
+        thread_count = 32
+        repeats = 100
 
         latch = [threading.Condition(), thread_count]
 

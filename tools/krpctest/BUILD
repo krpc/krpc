@@ -7,7 +7,8 @@ py_sdist(
     files = [
         'README.txt', '//:version', 'CHANGES.txt',
         'LICENSE', '//:COPYING',
-        'setup.py', 'MANIFEST.in', '//:python_version'
+        'setup.py', 'MANIFEST.in', '//:python_version',
+        'krpctest/krpctest.sfs',
     ] + glob(['krpctest/**/*.py']),
     path_map = {
         'version.py': 'krpctest/version.py',
@@ -19,6 +20,11 @@ py_sdist(
 test_suite(
     name = 'test',
     tests = [':test2', ':test3', ':lint']
+)
+
+test_suite(
+    name = 'ci-test',
+    tests = [':test2', ':test3']
 )
 
 deps = [

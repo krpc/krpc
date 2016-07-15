@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
@@ -9,45 +10,50 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.Decoupler"/>
+    /// A decoupler. Obtained by calling <see cref="Part.Decoupler"/>
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Decoupler : Equatable<Decoupler>
+    public class Decoupler : Equatable<Decoupler>
     {
-        readonly Part part;
         readonly ModuleDecouple decoupler;
         readonly ModuleAnchoredDecoupler anchoredDecoupler;
 
         internal static bool Is (Part part)
         {
+            var internalPart = part.InternalPart;
             return
-                part.InternalPart.HasModule<ModuleDecouple> () ||
-            part.InternalPart.HasModule<ModuleAnchoredDecoupler> ();
+            internalPart.HasModule<ModuleDecouple> () ||
+            internalPart.HasModule<ModuleAnchoredDecoupler> ();
         }
 
         internal Decoupler (Part part)
         {
-            this.part = part;
-            decoupler = part.InternalPart.Module<ModuleDecouple> ();
-            anchoredDecoupler = part.InternalPart.Module<ModuleAnchoredDecoupler> ();
+            Part = part;
+            var internalPart = part.InternalPart;
+            decoupler = internalPart.Module<ModuleDecouple> ();
+            anchoredDecoupler = internalPart.Module<ModuleAnchoredDecoupler> ();
             if (decoupler == null && anchoredDecoupler == null)
                 throw new ArgumentException ("Part is not a decoupler");
         }
 
         /// <summary>
-        /// Check the decouplers are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Decoupler obj)
+        public override bool Equals (Decoupler other)
         {
-            return part == obj.part && decoupler == obj.decoupler && anchoredDecoupler == obj.anchoredDecoupler;
+            return
+            !ReferenceEquals (other, null) &&
+            Part != other.Part &&
+            (decoupler == other.decoupler || decoupler.Equals (other.decoupler)) &&
+            (anchoredDecoupler == other.anchoredDecoupler || anchoredDecoupler.Equals (other.anchoredDecoupler));
         }
 
         /// <summary>
-        /// Hash the decoupler.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = part.GetHashCode ();
+            int hash = Part.GetHashCode ();
             if (decoupler != null)
                 hash ^= decoupler.GetHashCode ();
             if (anchoredDecoupler != null)
@@ -59,9 +65,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part object for this decoupler.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Fires the decoupler. Returns the new vessel created when the decoupler fires.
@@ -98,6 +102,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the decoupler has fired.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public bool Decoupled {
             get { return decoupler != null ? decoupler.isDecoupled : anchoredDecoupler.isDecoupled; }
         }

@@ -1,9 +1,11 @@
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
 #include <krpc/platform.hpp>
-#include "krpc/services/krpc.hpp"
-#include "services/test_service.hpp"
+#include <krpc/services/krpc.hpp>
+
 #include "server_test.hpp"
+#include "services/test_service.hpp"
 
 class test_object: public server_test {
 };

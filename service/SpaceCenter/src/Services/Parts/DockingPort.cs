@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Continuations;
 using KRPC.Service.Attributes;
@@ -11,12 +12,12 @@ using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.DockingPort"/>
+    /// A docking port. Obtained by calling <see cref="Part.DockingPort"/>
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class DockingPort : Equatable<DockingPort>
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    public class DockingPort : Equatable<DockingPort>
     {
-        readonly Part part;
         readonly ModuleDockingNode port;
         readonly ModuleAnimateGeneric shield;
 
@@ -30,10 +31,11 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal DockingPort (Part part)
         {
-            this.part = part;
-            port = part.InternalPart.Module<ModuleDockingNode> ();
-            shield = part.InternalPart.Module<ModuleAnimateGeneric> ();
-            foreach (PartModule module in part.InternalPart.Modules) {
+            Part = part;
+            var internalPart = part.InternalPart;
+            port = internalPart.Module<ModuleDockingNode> ();
+            shield = internalPart.Module<ModuleAnimateGeneric> ();
+            foreach (PartModule module in internalPart.Modules) {
                 if (module.moduleName == "ModuleDockingNodeNamed") {
                     portNameModule = module;
                     portNameField = module.Fields.Cast<BaseField> ().FirstOrDefault (x => x.guiName == "Port Name");
@@ -45,19 +47,25 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Check the docking ports are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (DockingPort obj)
+        public override bool Equals (DockingPort other)
         {
-            return part == obj.part && port == obj.port && shield == obj.shield && portNameModule == obj.portNameModule && portNameField == obj.portNameField;
+            return
+            !ReferenceEquals (other, null) &&
+            Part == other.Part &&
+            port.Equals (other.port) &&
+            (shield == other.shield || shield.Equals (other.shield)) &&
+            (portNameModule == other.portNameModule || portNameModule.Equals (other.portNameModule)) &&
+            (portNameField == other.portNameField || portNameField.Equals (other.portNameField));
         }
 
         /// <summary>
-        /// Hash the docking ports.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = part.GetHashCode () ^ port.GetHashCode ();
+            int hash = Part.GetHashCode () ^ port.GetHashCode ();
             if (shield != null)
                 hash ^= shield.GetHashCode ();
             if (portNameModule != null)
@@ -67,7 +75,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             return hash;
         }
 
-        internal ModuleDockingNode InternalPort {
+        /// <summary>
+        /// The KSP docking node object.
+        /// </summary>
+        public ModuleDockingNode InternalPort {
             get { return port; }
         }
 
@@ -75,9 +86,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part object for this docking port.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// The port name of the docking port. This is the name of the port that can be set
@@ -88,7 +97,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return portNameField == null ? part.Title : portNameField.GetValue (portNameModule).ToString (); }
+            get { return portNameField == null ? Part.Title : portNameField.GetValue (portNameModule).ToString (); }
             set {
                 if (portNameField == null)
                     throw new InvalidOperationException ("Docking port does not have a 'Port Name' field");
@@ -130,6 +139,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// docking port is not docked to anything.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public Part DockedPart {
             get {
                 var dockedPart = GetDockedPart;
@@ -213,10 +223,11 @@ namespace KRPC.SpaceCenter.Services.Parts
                 if (state != DockingPortState.Shielded && state != DockingPortState.Ready)
                     return;
                 // Open the shield if we are shielded, and value is false
-                if (!value && Shielded)
+                var shielded = Shielded;
+                if (!value && shielded)
                     shield.Events.First (e => e.guiName == shield.startEventGUIName).Invoke ();
                 // Close the shield if we are not shielded, and value is true
-                if (value && !Shielded)
+                else if (value && !shielded)
                     shield.Events.First (e => e.guiName == shield.endEventGUIName).Invoke ();
             }
         }
@@ -227,6 +238,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.PositionFromWorldSpace (port.nodeTransform.position).ToTuple ();
         }
 
@@ -236,6 +249,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.DirectionFromWorldSpace (port.nodeTransform.forward).ToTuple ();
         }
 
@@ -245,6 +260,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.RotationToWorldSpace (port.nodeTransform.rotation).ToTuple ();
         }
 
@@ -273,20 +290,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         global::Part GetDockedPart {
             get {
+                var part = Part.InternalPart;
                 if (port.state == "PreAttached") {
                     // If the port is "PreAttached" (docked from the VAB/SPH) find the connected part
                     // If the docking port points at an axially connected child part, return it
-                    var child = part.InternalPart.children.SingleOrDefault (p => p.attachMode == AttachModes.STACK);
+                    var child = part.children.SingleOrDefault (p => p.attachMode == AttachModes.STACK);
                     if (child != null && PointsTowards (child))
                         return child;
                     // If the docking port points at an axially connected parent part, return it
-                    var parent = part.InternalPart.attachMode == AttachModes.STACK ? part.InternalPart.parent : null;
+                    var parent = part.attachMode == AttachModes.STACK ? part.parent : null;
                     if (parent != null && PointsTowards (parent))
                         return parent;
                     throw new InvalidOperationException ("Docking port is 'PreAttached' but is not docked to any parts");
                 } else {
                     // Find the port that is "Docked" to this port, if any
-                    return part.InternalPart.vessel [port.dockedPartUId];
+                    return part.vessel [port.dockedPartUId];
                 }
             }
         }
@@ -302,9 +320,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Gets the state of a docking port. Does not consider the state of an attached docking port.
         /// </summary>
-        static DockingPortState IndividualState (ModuleDockingNode port)
+        static DockingPortState IndividualState (ModuleDockingNode node)
         {
-            var state = port.state;
+            var state = node.state;
             if (state == "Ready")
                 return DockingPortState.Ready;
             else if (state.StartsWith ("Docked") || state == "PreAttached")
@@ -314,23 +332,24 @@ namespace KRPC.SpaceCenter.Services.Parts
             else if (state == "Disengage")
                 return DockingPortState.Undocking;
             else if (state == "Disabled") {
-                var shield = port.part.Module<ModuleAnimateGeneric> ();
-                if (shield == null)
-                    throw new InvalidOperationException ("Docking port state is '" + port.state + "', but it does not have a shield!");
-                if (shield.status.StartsWith ("Moving"))
+                var shieldModule = node.part.Module<ModuleAnimateGeneric> ();
+                if (shieldModule == null)
+                    throw new InvalidOperationException ("Docking port state is '" + node.state + "', but it does not have a shield!");
+                if (shieldModule.status.StartsWith ("Moving"))
                     return DockingPortState.Moving;
                 else
                     return DockingPortState.Shielded;
             } else
-                throw new ArgumentException ("Unknown docking port state '" + port.state + "'");
+                throw new ArgumentException ("Unknown docking port state '" + node.state + "'");
         }
 
         /// <summary>
         /// Try invoking a named event for a docking port. Returns true if an event is found and invoked.
         /// </summary>
-        static bool InvokeEvent (PartModule port, string eventName)
+        // TODO: move to PartModule extension methods
+        static bool InvokeEvent (PartModule module, string eventName)
         {
-            var e = port.Events
+            var e = module.Events
                 .Where (x => x != null && (HighLogic.LoadedSceneIsEditor ? x.guiActiveEditor : x.guiActive) && x.active)
                 .FirstOrDefault (x => x.guiName == eventName);
             if (e != null) {

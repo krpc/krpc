@@ -1,4 +1,5 @@
 using System;
+using KRPC.Server.Message;
 
 namespace KRPC.Server.WebSockets
 {

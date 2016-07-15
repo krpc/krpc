@@ -1,10 +1,13 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter
 {
     /// <summary>
+    /// The time warp mode.
     /// Returned by <see cref="SpaceCenter.WarpMode"/>
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum WarpMode
     {

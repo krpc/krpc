@@ -1,10 +1,12 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
-    /// See <see cref="Resources.FlowMode"/>.
+    /// The way in which a resource flows between parts. See <see cref="Resources.FlowMode"/>.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum ResourceFlowMode
     {

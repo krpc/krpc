@@ -1,10 +1,13 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
+    /// The type of a vessel.
     /// See <see cref="Vessel.Type"/>.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum VesselType
     {

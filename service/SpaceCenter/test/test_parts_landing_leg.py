@@ -5,17 +5,12 @@ class TestPartsLandingLeg(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if krpctest.connect().space_center.active_vessel.name != 'Parts':
-            krpctest.new_save()
-            krpctest.launch_vessel_from_vab('Parts')
-            krpctest.remove_other_vessels()
-        cls.conn = krpctest.connect(cls)
-        cls.State = cls.conn.space_center.LandingLegState
-        cls.leg = cls.conn.space_center.active_vessel.parts.landing_legs[0]
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.conn.close()
+        cls.new_save()
+        if cls.connect().space_center.active_vessel.name != 'Parts':
+            cls.launch_vessel_from_vab('Parts')
+            cls.remove_other_vessels()
+        cls.State = cls.connect().space_center.LandingLegState
+        cls.leg = cls.connect().space_center.active_vessel.parts.landing_legs[0]
 
     def test_deploy_and_retract(self):
         self.assertEqual(self.State.retracted, self.leg.state)
@@ -24,14 +19,14 @@ class TestPartsLandingLeg(krpctest.TestCase):
         self.assertEqual(self.State.deploying, self.leg.state)
         self.assertFalse(self.leg.deployed)
         while self.leg.state == self.State.deploying:
-            pass
+            self.wait()
         self.assertEqual(self.State.deployed, self.leg.state)
         self.assertTrue(self.leg.deployed)
         self.leg.deployed = False
         self.assertEqual(self.State.retracting, self.leg.state)
         self.assertFalse(self.leg.deployed)
         while self.leg.state == self.State.retracting:
-            pass
+            self.wait()
         self.assertEqual(self.State.retracted, self.leg.state)
         self.assertFalse(self.leg.deployed)
 

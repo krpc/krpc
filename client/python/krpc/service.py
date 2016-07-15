@@ -54,7 +54,6 @@ def _construct_func(invoke, service_name, procedure_name, prefix_param_names, pa
         '\''+str(service_name)+'\'',
         '\''+str(procedure_name)+'\'',
         '['+','.join(param_names)+']',
-        '{}',
         'param_names',
         'param_types',
         'return_type'

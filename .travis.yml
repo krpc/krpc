@@ -43,7 +43,8 @@ script:
   - ./tools/travis-ci/set-version.sh
   - bazel build //:krpc //doc:html //doc:compile-scripts //:csproj
   - xbuild KRPC.sln
-  - bazel test //:test
+  - bazel test //:ci-test
+  - tools/dist/genfiles.sh
 
 after_script:
   - rm -rf lib/ksp

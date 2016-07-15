@@ -1,5 +1,4 @@
 using System;
-using KRPC.Utils;
 using System.Runtime.Serialization;
 
 namespace KRPC.Service.Scanner
@@ -7,7 +6,7 @@ namespace KRPC.Service.Scanner
     /// <summary>
     /// Signature information for a parameter.
     /// </summary>
-    class ParameterSignature : ISerializable
+    sealed class ParameterSignature : ISerializable
     {
         /// <summary>
         /// Name of the parameter.
@@ -39,7 +38,7 @@ namespace KRPC.Service.Scanner
                 throw new ServiceException (Type + " is not a valid Procedure parameter type, in " + fullProcedureName);
 
             HasDefaultValue = parameter.HasDefaultValue;
-            if (parameter.HasDefaultValue)
+            if (HasDefaultValue)
                 DefaultValue = parameter.DefaultValue;
         }
 

@@ -44,8 +44,18 @@ pkg_zip(
     }
 )
 
-client_test(
+test_suite(
     name = 'test',
+    tests = [':client']
+)
+
+test_suite(
+    name = 'ci-test',
+    tests = [':client']
+)
+
+client_test(
+    name = 'client',
     test_executable = ':luatest',
     server_executable = '//tools/TestServer',
     tags = ['requires-network'],

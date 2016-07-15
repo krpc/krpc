@@ -1,7 +1,17 @@
 #include <gtest/gtest.h>
-#include <krpc/encoder.hpp>
+
+#include <limits>
+#include <map>
+#include <set>
+#include <string>
+#include <tuple>
+#include <vector>
+#include <cmath>
+
 #include <krpc/decoder.hpp>
+#include <krpc/encoder.hpp>
 #include <krpc/platform.hpp>
+
 #include "services/test_service.hpp"
 
 namespace pb = google::protobuf;
@@ -17,20 +27,20 @@ void test_float(float decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   float value = 0;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
-  if (!isnan(decoded))
+  if (!std::isnan(decoded))
     ASSERT_FLOAT_EQ(decoded, value);
   else
-    ASSERT_TRUE(isnan(value));
+    ASSERT_TRUE(std::isnan(value));
 }
 
 void test_double(double decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   double value = 0;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
-  if (!isnan(decoded))
+  if (!std::isnan(decoded))
     ASSERT_DOUBLE_EQ(decoded, value);
   else
-    ASSERT_TRUE(isnan(value));
+    ASSERT_TRUE(std::isnan(value));
 }
 
 void test_string(std::string decoded, std::string encoded) {
@@ -52,9 +62,9 @@ template <typename T> void test_list(const std::vector<T>& decoded, std::string 
   ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
 }
 
-template <typename K, typename V> void test_dictionary(const std::map<K,V>& decoded, std::string encoded) {
+template <typename K, typename V> void test_dictionary(const std::map<K, V>& decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
-  std::map<K,V> value;
+  std::map<K, V> value;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   ASSERT_EQ(decoded.size(), value.size());
   ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), value.begin()));
@@ -75,9 +85,10 @@ template <typename T1> void test_tuple1(const std::tuple<T1>& decoded, std::stri
   ASSERT_EQ(std::get<0>(decoded), std::get<0>(value));
 }
 
-template <typename T1, typename T2, typename T3> void test_tuple3(const std::tuple<T1,T2,T3>& decoded, std::string encoded) {
+template <typename T1, typename T2, typename T3>
+void test_tuple3(const std::tuple<T1, T2, T3>& decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
-  std::tuple<T1,T2,T3> value;
+  std::tuple<T1, T2, T3> value;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
   ASSERT_EQ(std::get<0>(decoded), std::get<0>(value));
   ASSERT_EQ(std::get<1>(decoded), std::get<1>(value));
@@ -110,8 +121,8 @@ TEST(test_encode_decode, test_int32) {
   test_value<pb::int32>(42, "2a");
   test_value<pb::int32>(300, "ac02");
   test_value<pb::int32>(-33, "dfffffffffffffffff01");
-  test_value<pb::int32>(std::numeric_limits<pb::int32>::max(), "ffffffff07"); //should be ffffffffffffffff7f ?
-  test_value<pb::int32>(std::numeric_limits<pb::int32>::min(), "80808080f8ffffffff01"); //should be 80808080808080808001 ?
+  test_value<pb::int32>(std::numeric_limits<pb::int32>::max(), "ffffffff07");
+  test_value<pb::int32>(std::numeric_limits<pb::int32>::min(), "80808080f8ffffffff01");
 }
 
 TEST(test_encode_decode, test_int64) {
@@ -128,7 +139,7 @@ TEST(test_encode_decode, test_uint32) {
   test_value<pb::uint32>(1, "01");
   test_value<pb::uint32>(42, "2a");
   test_value<pb::uint32>(300, "ac02");
-  test_value<pb::uint32>(std::numeric_limits<pb::uint32>::max(), "ffffffff0f"); //should be ffffffffffffffff7f ?
+  test_value<pb::uint32>(std::numeric_limits<pb::uint32>::max(), "ffffffff0f");
 }
 
 TEST(test_encode_decode, test_uint64) {
@@ -147,9 +158,11 @@ TEST(test_encode_decode, test_bool) {
 TEST(test_encode_decode, test_string) {
   test_string("", "00");
   test_string("testing", "0774657374696e67");
-  test_string("One small step for Kerbal-kind!", "1f4f6e6520736d616c6c207374657020666f72204b657262616c2d6b696e6421");
+  test_string("One small step for Kerbal-kind!",
+              "1f4f6e6520736d616c6c207374657020666f72204b657262616c2d6b696e6421");
   test_string(krpc::platform::unhexlify("e284a2"), "03e284a2");
-  test_string("Mystery Goo" + krpc::platform::unhexlify("e284a2") + " Containment Unit", "1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974");
+  test_string("Mystery Goo" + krpc::platform::unhexlify("e284a2") +
+              " Containment Unit", "1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974");
 }
 
 TEST(test_encode_decode, test_bytes) {
@@ -210,16 +223,16 @@ TEST(test_encode_decode, test_set) {
 
 TEST(test_encode_decode, test_tuple) {
   test_tuple1(std::tuple<int>(1), "0a0101");
-  test_tuple3(std::tuple<int,std::string,bool>(1,"jeb",false), "0a01010a04036a65620a0100");
+  test_tuple3(std::tuple<int, std::string, bool>(1, "jeb", false), "0a01010a04036a65620a0100");
 }
 
 TEST(test_encode_decode, test_list_of_objects) {
-   test_list(std::vector<krpc::services::TestService::TestClass>(), "");
-   {
-     std::vector<krpc::services::TestService::TestClass> l;
-     l.push_back(krpc::services::TestService::TestClass(nullptr, 1));
-     l.push_back(krpc::services::TestService::TestClass(nullptr, 2));
-     l.push_back(krpc::services::TestService::TestClass(nullptr, 3));
-     test_list(l, "0a01010a01020a0103");
-   }
+  test_list(std::vector<krpc::services::TestService::TestClass>(), "");
+  {
+    std::vector<krpc::services::TestService::TestClass> l;
+    l.push_back(krpc::services::TestService::TestClass(nullptr, 1));
+    l.push_back(krpc::services::TestService::TestClass(nullptr, 2));
+    l.push_back(krpc::services::TestService::TestClass(nullptr, 3));
+    test_list(l, "0a01010a01020a0103");
+  }
 }

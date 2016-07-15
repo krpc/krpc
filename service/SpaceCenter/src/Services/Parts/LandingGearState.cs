@@ -1,10 +1,12 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="LandingGear.State"/>.
+    /// The state of a landing gear. See <see cref="LandingGear.State"/>.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum LandingGearState
     {

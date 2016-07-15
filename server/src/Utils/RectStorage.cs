@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace KRPC.Utils
 {
-    class RectStorage : ConfigurationStorageNode
+    sealed class RectStorage : ConfigurationStorageNode
     {
         [Persistent] Single x, y, width, height;
 

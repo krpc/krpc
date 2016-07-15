@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,7 @@ using Google.Protobuf;
 
 namespace KRPC.Client
 {
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     static class Encoder
     {
         public static readonly byte[] RPCHelloMessage = {
@@ -52,36 +54,21 @@ namespace KRPC.Client
             return clientNameBytes;
         }
 
-        internal static string ToHexString (byte[] data)
-        {
-            return "0x" + BitConverter.ToString (data).Replace ("-", " 0x");
-        }
-
-        static bool IsAGenericType (Type type, Type genericType)
-        {
-            while (type != null) {
-                if (type.IsGenericType && type.GetGenericTypeDefinition () == genericType)
-                    return true;
-                foreach (var intType in type.GetInterfaces())
-                    if (IsAGenericType (intType, genericType))
-                        return true;
-                type = type.BaseType;
-            }
-            return false;
-        }
-
-        static MemoryStream cachedBuffer = new MemoryStream ();
-        static CodedOutputStream cachedStream = new CodedOutputStream (cachedBuffer);
-
         /// <summary>
         /// Encode an object of the given type using the protocol buffer encoding scheme.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
         public static ByteString Encode (object value, Type type)
         {
-            return EncodeObject (value, type, cachedBuffer, cachedStream);
+            using (var buffer = new MemoryStream ()) {
+                var stream = new CodedOutputStream (buffer, true);
+                return EncodeObject (value, type, buffer, stream);
+            }
         }
 
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUnneededUnboxingRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         static ByteString EncodeObject (object value, Type type, MemoryStream buffer, CodedOutputStream stream)
         {
             buffer.SetLength (0);
@@ -89,129 +76,118 @@ namespace KRPC.Client
                 throw new ArgumentException ("Value of type " + value.GetType () + " cannot be encoded to type " + type);
             if (value == null && !type.IsSubclassOf (typeof(RemoteObject)))
                 throw new ArgumentException ("null cannot be encoded to type " + type);
-            if (value == null) {
+            if (value == null)
                 stream.WriteUInt64 (0);
-                stream.Flush ();
-                return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
-            }
-            if (type == typeof(Double))
-                stream.WriteDouble ((Double)value);
-            else if (type == typeof(Single))
-                stream.WriteFloat ((Single)value);
-            else if (type == typeof(Int32))
-                stream.WriteInt32 ((Int32)value);
-            else if (type == typeof(Int64))
-                stream.WriteInt64 ((Int64)value);
-            else if (type == typeof(UInt32))
-                stream.WriteUInt32 ((UInt32)value);
-            else if (type == typeof(UInt64))
-                stream.WriteUInt64 ((UInt64)value);
-            else if (type == typeof(Boolean))
-                stream.WriteBool ((Boolean)value);
-            else if (type == typeof(String))
-                stream.WriteString ((String)value);
-            else if (type == typeof(byte[]))
-                stream.WriteBytes (ByteString.CopyFrom ((byte[])value));
             else if (value is Enum)
                 stream.WriteInt32 ((int)value);
-            else if (type.IsSubclassOf (typeof(RemoteObject)))
-                stream.WriteUInt64 (((RemoteObject)value)._ID);
-            else if ((value as IMessage) != null)
-                ((IMessage)value).WriteTo (buffer);
-            else if (IsAListType (type))
-                WriteList (value, type, buffer);
-            else if (IsADictionaryType (type))
-                WriteDictionary (value, type, buffer);
-            else if (IsASetType (type))
-                WriteSet (value, type, buffer);
-            else if (IsATupleType (type))
-                WriteTuple (value, type, buffer);
-            else
-                throw new ArgumentException (type + " is not a serializable type");
+            else {
+                switch (Type.GetTypeCode (type)) {
+                case TypeCode.Int32:
+                    stream.WriteInt32 ((int)value);
+                    break;
+                case TypeCode.Int64:
+                    stream.WriteInt64 ((long)value);
+                    break;
+                case TypeCode.UInt32:
+                    stream.WriteUInt32 ((uint)value);
+                    break;
+                case TypeCode.UInt64:
+                    stream.WriteUInt64 ((ulong)value);
+                    break;
+                case TypeCode.Single:
+                    stream.WriteFloat ((float)value);
+                    break;
+                case TypeCode.Double:
+                    stream.WriteDouble ((double)value);
+                    break;
+                case TypeCode.Boolean:
+                    stream.WriteBool ((bool)value);
+                    break;
+                case TypeCode.String:
+                    stream.WriteString ((string)value);
+                    break;
+                default:
+                    if (type.Equals (typeof(byte[])))
+                        stream.WriteBytes (ByteString.CopyFrom ((byte[])value));
+                    else if (IsAClassType (type))
+                        stream.WriteUInt64 (((RemoteObject)value).id);
+                    else if (IsAMessageType (type))
+                        ((IMessage)value).WriteTo (buffer);
+                    else if (IsAListType (type))
+                        WriteList (value, type, buffer);
+                    else if (IsADictionaryType (type))
+                        WriteDictionary (value, type, buffer);
+                    else if (IsASetType (type))
+                        WriteSet (value, type, buffer);
+                    else if (IsATupleType (type))
+                        WriteTuple (value, type, buffer);
+                    else
+                        throw new ArgumentException (type + " is not a serializable type");
+                    break;
+                }
+            }
             stream.Flush ();
             return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
         }
 
-        static bool IsAListType (Type type)
-        {
-            return IsAGenericType (type, typeof(IList<>));
-        }
-
-        static bool IsADictionaryType (Type type)
-        {
-            return IsAGenericType (type, typeof(IDictionary<,>));
-        }
-
-        static bool IsASetType (Type type)
-        {
-            return IsAGenericType (type, typeof(ISet<>));
-        }
-
-        static bool IsATupleType (Type type)
-        {
-            return
-            IsAGenericType (type, typeof(Tuple<>)) ||
-            IsAGenericType (type, typeof(Tuple<,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,,,,>));
-        }
-
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void WriteList (object value, Type type, Stream stream)
         {
-            var internalBuffer = new MemoryStream ();
-            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedList = new KRPC.Schema.KRPC.List ();
             var list = (IList)value;
             var valueType = type.GetGenericArguments ().Single ();
-            foreach (var item in list)
-                encodedList.Items.Add (EncodeObject (item, valueType, internalBuffer, internalStream));
+            using (var internalBuffer = new MemoryStream ()) {
+                var internalStream = new CodedOutputStream (internalBuffer);
+                foreach (var item in list)
+                    encodedList.Items.Add (EncodeObject (item, valueType, internalBuffer, internalStream));
+            }
             encodedList.WriteTo (stream);
         }
 
         static void WriteDictionary (object value, Type type, Stream stream)
         {
-            var internalBuffer = new MemoryStream ();
-            var internalStream = new CodedOutputStream (internalBuffer);
             var keyType = type.GetGenericArguments () [0];
             var valueType = type.GetGenericArguments () [1];
             var encodedDictionary = new KRPC.Schema.KRPC.Dictionary ();
-            foreach (DictionaryEntry entry in (IDictionary) value) {
-                var encodedEntry = new KRPC.Schema.KRPC.DictionaryEntry ();
-                encodedEntry.Key = EncodeObject (entry.Key, keyType, internalBuffer, internalStream);
-                encodedEntry.Value = EncodeObject (entry.Value, valueType, internalBuffer, internalStream);
-                encodedDictionary.Entries.Add (encodedEntry);
+            using (var internalBuffer = new MemoryStream ()) {
+                var internalStream = new CodedOutputStream (internalBuffer);
+                foreach (DictionaryEntry entry in (IDictionary) value) {
+                    var encodedEntry = new KRPC.Schema.KRPC.DictionaryEntry ();
+                    encodedEntry.Key = EncodeObject (entry.Key, keyType, internalBuffer, internalStream);
+                    encodedEntry.Value = EncodeObject (entry.Value, valueType, internalBuffer, internalStream);
+                    encodedDictionary.Entries.Add (encodedEntry);
+                }
             }
             encodedDictionary.WriteTo (stream);
         }
 
         static void WriteSet (object value, Type type, Stream stream)
         {
-            var internalBuffer = new MemoryStream ();
-            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedSet = new KRPC.Schema.KRPC.Set ();
             var set = (IEnumerable)value;
             var valueType = type.GetGenericArguments ().Single ();
-            foreach (var item in set)
-                encodedSet.Items.Add (EncodeObject (item, valueType, internalBuffer, internalStream));
+            using (var internalBuffer = new MemoryStream ()) {
+                var internalStream = new CodedOutputStream (internalBuffer);
+                foreach (var item in set)
+                    encodedSet.Items.Add (EncodeObject (item, valueType, internalBuffer, internalStream));
+            }
             encodedSet.WriteTo (stream);
         }
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         static void WriteTuple (object value, Type type, Stream stream)
         {
-            var internalBuffer = new MemoryStream ();
-            var internalStream = new CodedOutputStream (internalBuffer);
             var encodedTuple = new KRPC.Schema.KRPC.Tuple ();
             var valueTypes = type.GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
+            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString ());
             var tupleType = genericType.MakeGenericType (valueTypes);
-            for (int i = 0; i < valueTypes.Length; i++) {
-                var property = tupleType.GetProperty ("Item" + (i + 1));
-                var item = property.GetGetMethod ().Invoke (value, null);
-                encodedTuple.Items.Add (EncodeObject (item, valueTypes [i], internalBuffer, internalStream));
+            using (var internalBuffer = new MemoryStream ()) {
+                var internalStream = new CodedOutputStream (internalBuffer);
+                for (int i = 0; i < valueTypes.Length; i++) {
+                    var property = tupleType.GetProperty ("Item" + (i + 1).ToString ());
+                    var item = property.GetGetMethod ().Invoke (value, null);
+                    encodedTuple.Items.Add (EncodeObject (item, valueTypes [i], internalBuffer, internalStream));
+                }
             }
             encodedTuple.WriteTo (stream);
         }
@@ -220,47 +196,51 @@ namespace KRPC.Client
         /// Decode a value of the given type.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static object Decode (ByteString value, Type type, IConnection client)
         {
             var stream = value.CreateCodedInput ();
-            if (type == typeof(double))
-                return stream.ReadDouble ();
-            else if (type == typeof(float))
-                return stream.ReadFloat ();
-            else if (type == typeof(int))
+            if (type.IsEnum)
                 return stream.ReadInt32 ();
-            else if (type == typeof(long))
+            switch (Type.GetTypeCode (type)) {
+            case TypeCode.Int32:
+                return stream.ReadInt32 ();
+            case TypeCode.Int64:
                 return stream.ReadInt64 ();
-            else if (type == typeof(uint))
+            case TypeCode.UInt32:
                 return stream.ReadUInt32 ();
-            else if (type == typeof(ulong))
+            case TypeCode.UInt64:
                 return stream.ReadUInt64 ();
-            else if (type == typeof(bool))
+            case TypeCode.Single:
+                return stream.ReadFloat ();
+            case TypeCode.Double:
+                return stream.ReadDouble ();
+            case TypeCode.Boolean:
                 return stream.ReadBool ();
-            else if (type == typeof(string))
+            case TypeCode.String:
                 return stream.ReadString ();
-            else if (type == typeof(byte[]))
-                return stream.ReadBytes ().ToByteArray ();
-            else if (type.IsEnum)
-                return stream.ReadInt32 ();
-            else if (typeof(RemoteObject).IsAssignableFrom (type)) {
-                if (client == null)
-                    throw new ArgumentException ("Client not passed when decoding remote object");
-                var id = stream.ReadUInt64 ();
-                return id == 0 ? null : (RemoteObject)Activator.CreateInstance (type, client, id);
-            } else if (typeof(IMessage).IsAssignableFrom (type)) {
-                var message = (IMessage)Activator.CreateInstance (type);
-                message.MergeFrom (stream);
-                return message;
-            } else if (IsAListType (type))
-                return DecodeList (stream, type, client);
-            else if (IsADictionaryType (type))
-                return DecodeDictionary (stream, type, client);
-            else if (IsASetType (type))
-                return DecodeSet (stream, type, client);
-            else if (IsATupleType (type))
-                return DecodeTuple (stream, type, client);
-            throw new ArgumentException (type + " is not a serializable type");
+            default:
+                if (type.Equals (typeof(byte[])))
+                    return stream.ReadBytes ().ToByteArray ();
+                else if (IsAClassType (type)) {
+                    if (client == null)
+                        throw new ArgumentException ("Client not passed when decoding remote object");
+                    var id = stream.ReadUInt64 ();
+                    return id == 0 ? null : (RemoteObject)Activator.CreateInstance (type, client, id);
+                } else if (IsAMessageType (type)) {
+                    var message = (IMessage)Activator.CreateInstance (type);
+                    message.MergeFrom (stream);
+                    return message;
+                } else if (IsAListType (type))
+                    return DecodeList (stream, type, client);
+                else if (IsADictionaryType (type))
+                    return DecodeDictionary (stream, type, client);
+                else if (IsASetType (type))
+                    return DecodeSet (stream, type, client);
+                else if (IsATupleType (type))
+                    return DecodeTuple (stream, type, client);
+                throw new ArgumentException (type + " is not a serializable type");
+            }
         }
 
         static object DecodeList (CodedInputStream stream, Type type, IConnection client)
@@ -309,7 +289,7 @@ namespace KRPC.Client
         {
             var encodedTuple = KRPC.Schema.KRPC.Tuple.Parser.ParseFrom (stream);
             var valueTypes = type.GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
+            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString ());
             var values = new object[valueTypes.Length];
             for (int i = 0; i < valueTypes.Length; i++) {
                 var item = encodedTuple.Items [i];
@@ -320,6 +300,57 @@ namespace KRPC.Client
                 .GetConstructor (valueTypes)
                 .Invoke (values);
             return tuple;
+        }
+
+        static bool IsAGenericType (Type type, Type genericType)
+        {
+            while (!Object.ReferenceEquals (type, null)) {
+                if (type.IsGenericType && type.GetGenericTypeDefinition ().Equals (genericType))
+                    return true;
+                foreach (var intType in type.GetInterfaces())
+                    if (IsAGenericType (intType, genericType))
+                        return true;
+                type = type.BaseType;
+            }
+            return false;
+        }
+
+        static bool IsAMessageType (Type type)
+        {
+            return typeof(IMessage).IsAssignableFrom (type);
+        }
+
+        static bool IsAClassType (Type type)
+        {
+            return type.IsSubclassOf (typeof(RemoteObject));
+        }
+
+        static bool IsAListType (Type type)
+        {
+            return IsAGenericType (type, typeof(IList<>));
+        }
+
+        static bool IsADictionaryType (Type type)
+        {
+            return IsAGenericType (type, typeof(IDictionary<,>));
+        }
+
+        static bool IsASetType (Type type)
+        {
+            return IsAGenericType (type, typeof(ISet<>));
+        }
+
+        static bool IsATupleType (Type type)
+        {
+            return
+                IsAGenericType (type, typeof(Tuple<>)) ||
+            IsAGenericType (type, typeof(Tuple<,>)) ||
+            IsAGenericType (type, typeof(Tuple<,,>)) ||
+            IsAGenericType (type, typeof(Tuple<,,,>)) ||
+            IsAGenericType (type, typeof(Tuple<,,,,>)) ||
+            IsAGenericType (type, typeof(Tuple<,,,,,>)) ||
+            IsAGenericType (type, typeof(Tuple<,,,,,,>)) ||
+            IsAGenericType (type, typeof(Tuple<,,,,,,,>));
         }
     }
 }

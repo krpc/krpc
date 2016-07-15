@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Messages;
 
 namespace KRPC.Test.Service
@@ -21,6 +22,7 @@ namespace KRPC.Test.Service
 
         string PropertyWithGet { get; }
 
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidPropertiesWithoutGetAccessorRule")]
         string PropertyWithSet { set; }
 
         TestService.TestClass CreateTestObject (string value);
@@ -51,6 +53,7 @@ namespace KRPC.Test.Service
 
         KRPC.Utils.Tuple<int,bool> EchoTuple (KRPC.Utils.Tuple<int,bool> t);
 
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
         IDictionary<int,IList<string>> EchoNestedCollection (IDictionary<int,IList<string>> c);
 
         IList<TestService.TestClass> EchoListOfObjects (IList<TestService.TestClass> l);

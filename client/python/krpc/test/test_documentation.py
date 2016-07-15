@@ -7,13 +7,6 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
     def setUpClass(cls):
         super(TestDocumentation, cls).setUpClass()
 
-    @classmethod
-    def tearDownClass(cls):
-        super(TestDocumentation, cls).tearDownClass()
-
-    def setUp(self):
-        super(TestDocumentation, self).setUp()
-
     def test_basic(self):
         #TODO: fix tests
         self.assertEqual('Service documentation string.', self.conn.test_service.__doc__)

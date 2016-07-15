@@ -81,17 +81,18 @@
     </Compile>
     <Compile Include="Addon.cs" />
     <Compile Include="Button.cs" />
+    <Compile Include="Canvas.cs" />
     <Compile Include="ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="ExtensionMethods\TextExtensions.cs" />
     <Compile Include="FontStyle.cs" />
     <Compile Include="InputField.cs" />
     <Compile Include="MessagePosition.cs" />
+    <Compile Include="Object.cs" />
     <Compile Include="Panel.cs" />
     <Compile Include="RectTransform.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="TextAlignment.cs" />
     <Compile Include="TextAnchor.cs" />
     <Compile Include="UI.cs" />
-    <Compile Include="UIObject.cs" />
   </ItemGroup>
 </Project>

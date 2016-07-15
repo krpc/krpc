@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
-using Tuple2 = KRPC.Utils.Tuple<double,double>;
-using Tuple3 = KRPC.Utils.Tuple<double,double,double>;
-using Tuple4 = KRPC.Utils.Tuple<double,double,double,double>;
+using Tuple2 = KRPC.Utils.Tuple<double, double>;
+using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
+using Tuple4 = KRPC.Utils.Tuple<double, double, double, double>;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
@@ -105,6 +106,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Normalize an angle to the range (-180,180)
+        /// </summary>
+        public static float NormAngle (float angle)
+        {
+            return angle - 360f * Mathf.Floor ((angle + 180f) / 360f);
+        }
+
+        /// <summary>
         /// Clamp the elements of a vector to the given range
         /// </summary>
         public static Vector3 Clamp (this Vector3 v, float min, float max)
@@ -131,6 +140,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Clamp a value to the given range
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
         public static T Clamp<T> (this T value, T min, T max) where T : IComparable<T>
         {
             if (value.CompareTo (min) < 0)
@@ -172,6 +182,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Convert radians to degrees.
+        /// </summary>
+        public static double ToDegrees (double radians)
+        {
+            return radians * (180d / Math.PI);
+        }
+
+        /// <summary>
         /// Convert degrees to radians.
         /// </summary>
         public static float ToRadians (float degrees)
@@ -180,8 +198,18 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Convert degrees to radians.
+        /// </summary>
+        public static double ToRadians (double degrees)
+        {
+            return degrees * (Math.PI / 180d);
+        }
+
+        /// <summary>
         /// Axis ordering
         /// </summary>
+        [Serializable]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         public enum AxisOrder
         {
             /// <summary>
@@ -272,6 +300,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Implementation of QuaternionD.OrthoNormalize, using stabilized Gram-Schmidt
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidRefAndOutParametersRule")]
         public static void OrthoNormalize2 (ref Vector3d normal, ref Vector3d tangent)
         {
             normal.Normalize ();
@@ -307,6 +336,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Add a 4x4 Matrix into another one (does not allocate)
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static Matrix4x4 Add (this Matrix4x4 left, Matrix4x4 right)
         {
             Matrix4x4 m = Matrix4x4.zero;
@@ -329,12 +359,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Returns the diagonal 3-vector from the 4x4 matrix (simulating 3x3 matrix)
         /// </summary>
-        public static Vector3d Diag (this Matrix4x4 m)
+        public static Vector3d Diagonal (this Matrix4x4 m)
         {
-            Vector3d v = Vector3d.zero;
-            for (int i = 0; i < 3; i++)
-                v [i] = m [i, i];
-            return v;
+            return new Vector3d (m [0, 0], m [1, 1], m [2, 2]);
         }
 
         /// <summary>
@@ -351,6 +378,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Constructs diagonal matrix from a 3-vector (simulating 3x3 matrix)
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public static Matrix4x4 ToDiagonalMatrix (this Vector3 v)
         {
             Matrix4x4 m = Matrix4x4.identity;

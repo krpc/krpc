@@ -6,7 +6,7 @@ namespace KRPC.Service.Attributes
     /// A kRPC method.
     /// </summary>
     [AttributeUsage (AttributeTargets.Method)]
-    public class KRPCMethodAttribute : Attribute
+    public sealed class KRPCMethodAttribute : Attribute
     {
     }
 }

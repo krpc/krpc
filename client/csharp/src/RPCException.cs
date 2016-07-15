@@ -33,10 +33,8 @@ namespace KRPC.Client
         /// <summary>
         /// Construct an RPCException with the given serialization info and streaming context.
         /// </summary>
-        protected RPCException (SerializationInfo info, StreamingContext context)
+        protected RPCException (SerializationInfo info, StreamingContext context) : base (info, context)
         {
-            if (info == null)
-                throw new ArgumentNullException ("info");
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
@@ -13,16 +14,18 @@ namespace KRPC.SpaceCenter.Services
     /// Used to get flight telemetry for a vessel, by calling <see cref="Vessel.Flight"/>.
     /// All of the information returned by this class is given in the reference frame
     /// passed to that method.
+    /// Obtained by calling <see cref="Vessel.Flight"/>.
     /// </summary>
     /// <remarks>
     /// To get orbital information, such as the apoapsis or inclination, see <see cref="Orbit"/>.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Flight : Equatable<Flight>
+    public class Flight : Equatable<Flight>
     {
         readonly Guid vesselId;
         readonly ReferenceFrame referenceFrame;
 
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "VariableNamesShouldNotMatchFieldNamesRule")]
         internal Flight (global::Vessel vessel, ReferenceFrame referenceFrame)
         {
             vesselId = vessel.id;
@@ -30,19 +33,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Check that the flight objects are the same vessel and reference frame.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Flight obj)
+        public override bool Equals (Flight other)
         {
-            return vesselId == obj.vesselId && referenceFrame == obj.referenceFrame;
+            return !ReferenceEquals (other, null) && vesselId == other.vesselId && referenceFrame == other.referenceFrame;
         }
 
         /// <summary>
-        /// Hash the flight object.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return vesselId.GetHashCode () ^ referenceFrame.GetHashCode ();
+            return vesselId.GetHashCode ();
         }
 
         /// <summary>
@@ -161,7 +164,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         Vector3d WorldLift {
             get {
-                Vector3d direction = -Vector3d.Cross (InternalVessel.transform.right, InternalVessel.srf_velocity.normalized);
+                var vessel = InternalVessel;
+                Vector3d direction = -Vector3d.Cross (vessel.transform.right, vessel.srf_velocity.normalized);
                 return Vector3d.Dot (WorldAerodynamicForce, direction) * direction;
             }
         }
@@ -289,8 +293,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public double VerticalSpeed {
             get {
-                var velocity = referenceFrame.VelocityFromWorldSpace (WorldCoM, WorldVelocity);
-                var up = referenceFrame.DirectionFromWorldSpace ((WorldCoM - InternalVessel.orbit.referenceBody.position).normalized);
+                var worldCoM = WorldCoM;
+                var velocity = referenceFrame.VelocityFromWorldSpace (worldCoM, WorldVelocity);
+                var up = referenceFrame.DirectionFromWorldSpace ((worldCoM - InternalVessel.orbit.referenceBody.position).normalized);
                 return Vector3d.Dot (velocity, up);
             }
         }
@@ -413,11 +418,11 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float DynamicPressure {
             get {
-                if (FAR.IsAvailable) {
-                    return (float)FAR.VesselDynPres (InternalVessel);
-                } else {
-                    return (float)(0.5f * InternalVessel.atmDensity * InternalVessel.srf_velocity.sqrMagnitude);
-                }
+                var vessel = InternalVessel;
+                if (FAR.IsAvailable)
+                    return (float)FAR.VesselDynPres (vessel);
+                else
+                    return (float)(0.5f * vessel.atmDensity * vessel.srf_velocity.sqrMagnitude);
             }
         }
 
@@ -522,7 +527,8 @@ namespace KRPC.SpaceCenter.Services
         public float EquivalentAirSpeed {
             get {
                 CheckNoFAR ();
-                return (float)Math.Sqrt (InternalVessel.srf_velocity.sqrMagnitude * InternalVessel.atmDensity / 1.225d);
+                var vessel = InternalVessel;
+                return (float)Math.Sqrt (vessel.srf_velocity.sqrMagnitude * vessel.atmDensity / 1.225d);
             }
         }
 
@@ -537,11 +543,12 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float TerminalVelocity {
             get {
+                var vessel = InternalVessel;
                 if (FAR.IsAvailable) {
-                    return (float)FAR.VesselTermVelEst (InternalVessel);
+                    return (float)FAR.VesselTermVelEst (vessel);
                 } else {
-                    var gravity = Math.Sqrt (InternalVessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (WorldCoM).magnitude);
-                    return (float)(Math.Sqrt (gravity / WorldDrag.magnitude) * InternalVessel.speed);
+                    var gravity = Math.Sqrt (vessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (WorldCoM).magnitude);
+                    return (float)(Math.Sqrt (gravity / WorldDrag.magnitude) * vessel.speed);
                 }
             }
         }
@@ -550,13 +557,15 @@ namespace KRPC.SpaceCenter.Services
         /// Gets the pitch angle between the orientation of the vessel and its velocity vector, in degrees.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float AngleOfAttack {
             get {
+                var vessel = InternalVessel;
                 if (FAR.IsAvailable) {
                     CheckFAR ();
-                    return (float)FAR.VesselAoA (InternalVessel);
+                    return (float)FAR.VesselAoA (vessel);
                 } else {
-                    return (float)(Vector3d.Dot (InternalVessel.transform.forward, InternalVessel.srf_velocity.normalized) * (180d / Math.PI));
+                    return (float)GeometryExtensions.ToDegrees (Vector3d.Dot (vessel.transform.forward, vessel.srf_velocity.normalized));
                 }
             }
         }
@@ -567,11 +576,12 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float SideslipAngle {
             get {
+                var vessel = InternalVessel;
                 if (FAR.IsAvailable) {
                     CheckFAR ();
-                    return (float)FAR.VesselSideslip (InternalVessel);
+                    return (float)FAR.VesselSideslip (vessel);
                 } else {
-                    return (float)(Vector3d.Dot (InternalVessel.transform.right, InternalVessel.srf_velocity.normalized) * (180d / Math.PI));
+                    return (float)GeometryExtensions.ToDegrees (Vector3d.Dot (vessel.transform.right, vessel.srf_velocity.normalized));
                 }
             }
         }

@@ -6,41 +6,40 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
+    /// This can be used to interact with a specific part module. This includes part modules in stock KSP,
+    /// and those added by mods.
+    ///
     /// In KSP, each part has zero or more
     /// <a href="http://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES">PartModules</a>
     /// associated with it. Each one contains some of the functionality of the part.
-    /// For example, an engine has a "ModuleEngines" PartModule that contains all the
+    /// For example, an engine has a "ModuleEngines" part module that contains all the
     /// functionality of an engine.
-    ///
-    /// This class allows you to interact with KSPs PartModules, and any PartModules
-    /// that have been added by other mods.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Module : Equatable<Module>
+    public class Module : Equatable<Module>
     {
-        readonly Part part;
         readonly PartModule module;
 
-        internal Module (Part part, PartModule module)
+        internal Module (Part part, PartModule partModule)
         {
-            this.part = part;
-            this.module = module;
+            Part = part;
+            module = partModule;
         }
 
         /// <summary>
-        /// Check if the modules are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Module obj)
+        public override bool Equals (Module other)
         {
-            return part == obj.part && module == obj.module;
+            return !ReferenceEquals (other, null) && Part == other.Part && module.Equals (other.module);
         }
 
         /// <summary>
-        /// Hash the module.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ module.GetHashCode ();
+            return Part.GetHashCode () ^ module.GetHashCode ();
         }
 
         /// <summary>
@@ -55,9 +54,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The part that contains this module.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         IEnumerable<BaseField> AllFields {
             get { return module.Fields.Cast<BaseField> ().Where (f => f != null && (HighLogic.LoadedSceneIsEditor ? f.guiActiveEditor : f.guiActive)); }

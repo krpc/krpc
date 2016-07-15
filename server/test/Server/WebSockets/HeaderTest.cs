@@ -1,6 +1,7 @@
+using KRPC.Server;
+using KRPC.Server.Message;
 using KRPC.Server.WebSockets;
 using NUnit.Framework;
-using KRPC.Server;
 
 namespace KRPC.Test.Server.WebSockets
 {

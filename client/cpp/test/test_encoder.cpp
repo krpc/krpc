@@ -1,7 +1,11 @@
 #include <gtest/gtest.h>
+
+#include <string>
+
 #include <krpc/client.hpp>
 #include <krpc/encoder.hpp>
 #include <krpc/platform.hpp>
+
 #include "services/test_service.hpp"
 
 TEST(test_encoder, test_rpc_hello_message) {

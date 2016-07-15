@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Messages;
 
 namespace KRPC.Server.Message
 {
+    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
     abstract class StreamStream : IStream<NoMessage,StreamMessage>
     {
         protected StreamStream (IStream<byte,byte> stream)
@@ -13,22 +15,22 @@ namespace KRPC.Server.Message
         protected IStream<byte,byte> Stream { get; private set; }
 
         public bool DataAvailable {
-            get { throw new NotImplementedException (); }
+            get { throw new InvalidOperationException (); }
         }
 
         public NoMessage Read ()
         {
-            throw new NotImplementedException ();
+            throw new InvalidOperationException ();
         }
 
         public int Read (NoMessage[] buffer, int offset)
         {
-            throw new NotImplementedException ();
+            throw new InvalidOperationException ();
         }
 
         public int Read (NoMessage[] buffer, int offset, int size)
         {
-            throw new NotImplementedException ();
+            throw new InvalidOperationException ();
         }
 
         /// <summary>
@@ -36,14 +38,17 @@ namespace KRPC.Server.Message
         /// </summary>
         public abstract void Write (StreamMessage value);
 
-        public void Write (StreamMessage[] value)
+        [SuppressMessage ("Gendarme.Rules.Naming", "ParameterNamesShouldMatchOverriddenMethodRule")]
+        public void Write (StreamMessage[] buffer)
         {
-            throw new NotImplementedException ();
+            foreach (var value in buffer)
+                Write (value);
         }
 
-        public void Write (StreamMessage[] value, int offset, int size)
+        public void Write (StreamMessage[] buffer, int offset, int size)
         {
-            throw new NotImplementedException ();
+            for (int i = 0; i < size; i++)
+                Write (buffer [i + offset]);
         }
 
         public ulong BytesRead {
@@ -65,4 +70,3 @@ namespace KRPC.Server.Message
         }
     }
 }
-

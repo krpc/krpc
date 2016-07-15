@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using KRPC.Continuations;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
-using System.Collections.Specialized;
 
 namespace KRPC.Service
 {
-    class Services
+    sealed class Services
     {
         internal IDictionary<string, ServiceSignature> Signatures { get; private set; }
 
@@ -55,21 +56,21 @@ namespace KRPC.Service
         /// fields populated. Throws YieldException, containing a continuation, if the request yields.
         /// Throws RPCException if processing the request fails.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public Response HandleRequest (ProcedureSignature procedure, object[] arguments)
         {
-            if ((KRPCCore.Context.GameScene & procedure.GameScene) == 0)
-                throw new RPCException (procedure, "Procedure not available in game scene '" + KRPCCore.Context.GameScene + "'");
+            if ((CallContext.GameScene & procedure.GameScene) == 0)
+                throw new RPCException (procedure, "Procedure not available in game scene '" + CallContext.GameScene + "'");
             object returnValue;
             try {
                 returnValue = procedure.Handler.Invoke (arguments);
             } catch (TargetInvocationException e) {
-                if (e.InnerException.GetType () == typeof(YieldException))
+                if (e.InnerException is YieldException)
                     throw e.InnerException;
                 throw new RPCException (procedure, e.InnerException);
             }
             var response = new Response ();
             if (procedure.HasReturnType) {
-                response.HasReturnValue = true;
                 CheckReturnValue (procedure, returnValue);
                 response.ReturnValue = returnValue;
             }
@@ -81,6 +82,8 @@ namespace KRPC.Service
         /// fields populated. Throws YieldException, containing a continuation, if the request yields.
         /// Throws RPCException if processing the request fails.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
+        [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         public Response HandleRequest (ProcedureSignature procedure, IContinuation continuation)
         {
             object returnValue;
@@ -93,7 +96,6 @@ namespace KRPC.Service
             }
             var response = new Response ();
             if (procedure.HasReturnType) {
-                response.HasReturnValue = true;
                 CheckReturnValue (procedure, returnValue);
                 response.ReturnValue = returnValue;
             }
@@ -103,10 +105,13 @@ namespace KRPC.Service
         /// <summary>
         /// Get the arguments for a procedure from a list of argument messages.
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public object[] GetArguments (ProcedureSignature procedure, IList<Argument> arguments)
         {
             // Get list of supplied argument values and whether they were set
-            var argumentValues = new object [procedure.Parameters.Count];
+            var numParameters = procedure.Parameters.Count;
+            var argumentValues = new object [numParameters];
             var argumentSet = new BitVector32 (0);
             foreach (var argument in arguments) {
                 argumentValues [argument.Position] = argument.Value;
@@ -114,7 +119,7 @@ namespace KRPC.Service
             }
 
             var mask = BitVector32.CreateMask ();
-            for (int i = 0; i < procedure.Parameters.Count; i++) {
+            for (int i = 0; i < numParameters; i++) {
                 var value = argumentValues [i];
                 var parameter = procedure.Parameters [i];
                 var type = parameter.Type;
@@ -161,4 +166,3 @@ namespace KRPC.Service
         }
     }
 }
-

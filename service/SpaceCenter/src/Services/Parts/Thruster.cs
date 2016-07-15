@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -17,7 +18,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// For example, the S3 KS-25x4 "Mammoth" has four rocket nozzels, and so consists of four thrusters.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class Thruster : Equatable<Thruster>
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    public class Thruster : Equatable<Thruster>
     {
         readonly Part part;
         readonly ModuleEngines engine;
@@ -25,31 +27,31 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly ModuleGimbal gimbal;
         readonly int transformIndex;
 
-        internal Thruster (Part part, ModuleEngines engine, ModuleGimbal gimbal, int transformIndex)
+        internal Thruster (Part thrusterPart, ModuleEngines thrusterEngine, ModuleGimbal thrusterGimbal, int thrusterTransformIndex)
         {
-            this.part = part;
-            this.engine = engine;
-            this.gimbal = gimbal;
-            this.transformIndex = transformIndex;
+            part = thrusterPart;
+            engine = thrusterEngine;
+            gimbal = thrusterGimbal;
+            transformIndex = thrusterTransformIndex;
         }
 
-        internal Thruster (Part part, ModuleRCS rcs, int transformIndex)
+        internal Thruster (Part thrusterPart, ModuleRCS thrusterRCS, int thrusterTransformIndex)
         {
-            this.part = part;
-            this.rcs = rcs;
-            this.transformIndex = transformIndex;
+            part = thrusterPart;
+            rcs = thrusterRCS;
+            transformIndex = thrusterTransformIndex;
         }
 
         /// <summary>
-        /// Check the thrusters are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (Thruster obj)
+        public override bool Equals (Thruster other)
         {
-            return part == obj.part && transformIndex == obj.transformIndex;
+            return !ReferenceEquals (other, null) && part == other.part && transformIndex == other.transformIndex;
         }
 
         /// <summary>
-        /// Hash the thruster.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
@@ -72,6 +74,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 ThrustPosition (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.PositionFromWorldSpace (WorldTransform.position).ToTuple ();
         }
 
@@ -84,6 +88,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 ThrustDirection (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.DirectionFromWorldSpace (WorldThrustDirection).ToTuple ();
         }
 
@@ -99,6 +105,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 InitialThrustPosition (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             StashGimbalRotation ();
             var position = WorldTransform.position;
             RestoreGimbalRotation ();
@@ -114,6 +122,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 InitialThrustDirection (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             StashGimbalRotation ();
             var direction = WorldThrustDirection;
             RestoreGimbalRotation ();
@@ -161,6 +171,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 GimbalPosition (ReferenceFrame referenceFrame)
         {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
             CheckGimballed ();
             return referenceFrame.PositionFromWorldSpace (gimbal.gimbalTransforms [transformIndex].position).ToTuple ();
         }
@@ -187,7 +199,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The direction of the thrust vector in world space
         /// </summary>
         internal Vector3d WorldThrustDirection {
-            get { return (rcs != null && !rcs.useZaxis) ? -WorldTransform.up : -WorldTransform.forward; }
+            get {
+                var transform = WorldTransform;
+                return (rcs != null && !rcs.useZaxis) ? -transform.up : -transform.forward;
+            }
         }
 
         /// <summary>

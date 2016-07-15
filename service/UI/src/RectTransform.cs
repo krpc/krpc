@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using Tuple2 = KRPC.Utils.Tuple<double, double>;
@@ -15,9 +16,9 @@ namespace KRPC.UI
     {
         readonly UnityEngine.RectTransform rectTransform;
 
-        internal RectTransform (UnityEngine.RectTransform rectTransform)
+        internal RectTransform (UnityEngine.RectTransform innerRectTransform)
         {
-            this.rectTransform = rectTransform;
+            rectTransform = innerRectTransform;
         }
 
         /// <summary>
@@ -69,6 +70,7 @@ namespace KRPC.UI
         /// Set the minimum and maximum anchor points as a fraction of the size of the parent rectangle.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Design", "AvoidPropertiesWithoutGetAccessorRule")]
         public Tuple2 Anchor {
             set {
                 rectTransform.anchorMax = value.ToVector ();
@@ -122,4 +124,3 @@ namespace KRPC.UI
         }
     }
 }
-

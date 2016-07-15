@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -17,35 +19,31 @@ namespace KRPC.UI
 
         public event EventHandler OnShow;
         public event EventHandler OnHide;
-        public event EventHandler<MovedArgs> OnMoved;
+        public event EventHandler<MovedEventArgs> OnMoved;
 
         bool visible = true;
-        bool closable = false;
 
         public bool Visible {
             get { return visible; }
             set {
-                if (OnShow != null && !visible && value)
-                    OnShow (this, EventArgs.Empty);
-                if (OnHide != null && visible && !value)
-                    OnHide (this, EventArgs.Empty);
+                if (!visible && value)
+                    EventHandlerExtensions.Invoke (OnShow, this);
+                if (visible && !value)
+                    EventHandlerExtensions.Invoke (OnHide, this);
                 visible = value;
             }
         }
 
-        public bool Closable {
-            get { return closable; }
-            set { closable = value; }
-        }
+        public bool Closable { get; set; }
 
-        Rect position = new Rect ();
+        Rect position;
 
         public Rect Position {
             get { return position; }
             set {
                 ConstrainToScreen (ref value);
-                if (OnMoved != null && position != value)
-                    OnMoved (this, new MovedArgs (value));
+                if (position != value)
+                    EventHandlerExtensions.Invoke (OnMoved, this, new MovedEventArgs (value));
                 position = value;
             }
         }
@@ -54,12 +52,14 @@ namespace KRPC.UI
 
         protected abstract void Draw ();
 
-        void OnGUI ()
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidUncalledPrivateCodeRule")]
+        public void OnGUI ()
         {
             if (!hasInit) {
-                Style = new GUIStyle (Skin.DefaultSkin.window);
+                var skin = Skin.DefaultSkin;
+                Style = new GUIStyle (skin.window);
                 Init ();
-                closeButtonStyle = new GUIStyle (Skin.DefaultSkin.button);
+                closeButtonStyle = new GUIStyle (skin.button);
                 closeButtonStyle.margin = new RectOffset (0, 0, 0, 0);
                 closeButtonStyle.padding = new RectOffset (0, 0, 0, 0);
                 closeButtonStyle.fixedWidth = 16;
@@ -75,7 +75,7 @@ namespace KRPC.UI
         {
             if (Closable) {
                 if (GUI.Button (new Rect (Position.width - 18, 2, closeButtonStyle.fixedWidth, closeButtonStyle.fixedHeight),
-                        new GUIContent (Icons.Instance.buttonCloseWindow, "Close window"), closeButtonStyle)) {
+                        new GUIContent (Icons.Instance.ButtonCloseWindow, "Close window"), closeButtonStyle)) {
                     Visible = false;
                 }
             }
@@ -92,4 +92,3 @@ namespace KRPC.UI
         }
     }
 }
-

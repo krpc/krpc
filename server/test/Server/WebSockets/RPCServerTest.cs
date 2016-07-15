@@ -1,11 +1,12 @@
 using System.IO;
-using KRPC.Test.Server;
-using NUnit.Framework;
 using System.Text;
+using System.Linq;
+using NUnit.Framework;
 using Moq;
 using KRPC.Server;
+using KRPC.Test.Server;
+using KRPC.Server.Message;
 using KRPC.Server.WebSockets;
-using System.Linq;
 
 namespace KRPC.Test.Server.WebSockets
 {
@@ -32,12 +33,12 @@ namespace KRPC.Test.Server.WebSockets
             var byteServer = mockByteServer.Object;
             var byteClient = new TestClient (stream);
 
-            var server = new RPCServer (byteServer);
+            var server = new KRPC.Server.WebSockets.RPCServer (byteServer);
             server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsTrue (eventArgs.Request.ShouldAllow);
@@ -77,12 +78,12 @@ namespace KRPC.Test.Server.WebSockets
             var byteServer = mockByteServer.Object;
             var byteClient = new TestClient (stream);
 
-            var server = new RPCServer (byteServer);
+            var server = new KRPC.Server.WebSockets.RPCServer (byteServer);
             server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsTrue (eventArgs.Request.ShouldAllow);
@@ -117,12 +118,12 @@ namespace KRPC.Test.Server.WebSockets
             var byteServer = mockByteServer.Object;
             var byteClient = new TestClient (stream);
 
-            var server = new RPCServer (byteServer);
+            var server = new KRPC.Server.WebSockets.RPCServer (byteServer);
             server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
             server.Start ();
 
             // Fire a client connection event
-            var eventArgs = new ClientRequestingConnectionArgs<byte,byte> (byteClient);
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
             mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
 
             Assert.IsFalse (eventArgs.Request.ShouldAllow);

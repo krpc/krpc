@@ -1,24 +1,30 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 
 namespace KRPC.Server.TCP
 {
+    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInTypeNameRule")]
     sealed class TCPClient : IClient<byte,byte>
     {
         readonly Guid guid;
-        readonly TcpClient tcpClient;
+        readonly TcpClient client;
         TCPStream stream;
 
-        public TCPClient (TcpClient tcpClient)
+        public TCPClient (TcpClient innerClient)
         {
+            if (innerClient == null)
+                throw new ArgumentNullException ("innerClient");
             guid = Guid.NewGuid ();
-            this.tcpClient = tcpClient;
+            client = innerClient;
+            Address = String.Empty;
             try {
-                var remoteEndPoint = tcpClient.Client.RemoteEndPoint as IPEndPoint;
-                Address = remoteEndPoint.Address.ToString ();
-            } catch {
-                Address = "";
+                var remoteEndPoint = client.Client.RemoteEndPoint as IPEndPoint;
+                if (remoteEndPoint != null)
+                    Address = remoteEndPoint.Address.ToString ();
+            } catch (SocketException) {
+            } catch (ObjectDisposedException) {
             }
         }
 
@@ -35,7 +41,7 @@ namespace KRPC.Server.TCP
         public IStream<byte,byte> Stream {
             get {
                 if (stream == null)
-                    stream = new TCPStream (tcpClient.GetStream ());
+                    stream = new TCPStream (client.GetStream ());
                 return stream;
             }
         }
@@ -45,13 +51,14 @@ namespace KRPC.Server.TCP
         public bool Connected {
             get {
                 try {
-                    if (!tcpClient.Client.Connected) {
+                    if (!client.Client.Connected)
                         return false;
-                    }
-                    if (tcpClient.Client.Poll (0, SelectMode.SelectRead))
-                        return tcpClient.Client.Receive (connectedTestBuffer, SocketFlags.Peek) != 0;
+                    if (client.Client.Poll (0, SelectMode.SelectRead))
+                        return client.Client.Receive (connectedTestBuffer, SocketFlags.Peek) != 0;
                     return true;
-                } catch {
+                } catch (SocketException) {
+                    return false;
+                } catch (ObjectDisposedException) {
                     return false;
                 }
             }
@@ -59,7 +66,7 @@ namespace KRPC.Server.TCP
 
         public void Close ()
         {
-            tcpClient.Close ();
+            client.Close ();
         }
 
         public override bool Equals (Object obj)
@@ -97,4 +104,3 @@ namespace KRPC.Server.TCP
         }
     }
 }
-

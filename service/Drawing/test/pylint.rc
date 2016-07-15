@@ -1,0 +1,11 @@
+[BASIC]
+good-names=i,j,k,ex,Run,_,u,v,q,r,g,x,y,z,w
+variable-rgx=[a-z_][a-z0-9_]{1,30}$
+attr-rgx=[a-z_][a-z0-9_]{1,30}$
+method-rgx=[a-z_][a-z0-9_]{2,60}$
+
+[MESSAGES CONTROL]
+disable=no-member,missing-docstring,similarities,too-few-public-methods,too-many-public-methods
+
+[REPORTS]
+reports=no

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using UnityEngine;
 using Tuple2 = KRPC.Utils.Tuple<double, double>;
@@ -9,7 +10,8 @@ namespace KRPC.UI
     /// A text label. See <see cref="Panel.AddButton" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class Button : UIObject
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    public class Button : Object
     {
         readonly UnityEngine.UI.Button button;
         readonly Text text;
@@ -17,8 +19,8 @@ namespace KRPC.UI
         internal Button (GameObject parent, string content, bool visible)
             : base (Addon.Instantiate (parent, "Button"), visible)
         {
-            button = obj.GetComponent<UnityEngine.UI.Button> ();
-            text = new Text (obj.GetChild ("Text"));
+            button = GameObject.GetComponent<UnityEngine.UI.Button> ();
+            text = new Text (GameObject.GetChild ("Text"));
             text.Content = content;
             button.onClick.AddListener (() => {
                 Clicked = true;
@@ -30,7 +32,7 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public RectTransform RectTransform {
-            get { return new RectTransform (obj.GetComponent<UnityEngine.RectTransform> ()); }
+            get { return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
         }
 
         /// <summary>

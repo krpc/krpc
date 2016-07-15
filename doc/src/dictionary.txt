@@ -1,5 +1,7 @@
 apoapsis
 atm
+Autotools
+autotune
 Bazel
 circularization
 clickable
@@ -28,9 +30,10 @@ Kerbals
 Kerbin
 Kosmo
 krpc
+krpctest
 kRPC
 kRPCs
-kRPCSpaceCenter
+laplace
 libxml
 libxslt
 linux
@@ -42,12 +45,14 @@ namespace
 namespaces
 namespacing
 navball
+normangle
 nozzel
 nozzels
 ns
 NUnit
 Olex
 online
+overdamped
 pdflatex
 periapsis
 physicsless
@@ -60,6 +65,7 @@ py
 quickload
 quicksave
 rect
+rsvg
 serializable
 streamPort
 symlink

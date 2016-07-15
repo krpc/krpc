@@ -18,10 +18,12 @@ namespace KRPC.UI
 
         protected override void Opened ()
         {
-            if (client.Name == "")
-                Message = "Are you sure you want to disconnect the client at address " + client.Address + "?";
+            var clientName = client.Name;
+            var clientAddress = client.Address;
+            if (clientName.Length == 0)
+                Message = "Are you sure you want to disconnect the client at address " + clientAddress + "?";
             else
-                Message = "Are you sure you want to disconnect '" + client.Name + "' at address " + client.Address + "?";
+                Message = "Are you sure you want to disconnect '" + clientName + "' at address " + clientAddress + "?";
         }
 
         protected override void Closed ()
@@ -29,10 +31,10 @@ namespace KRPC.UI
             client = null;
         }
 
-        public void Show (IClient client)
+        public void Show (IClient connectingClient)
         {
             if (!Visible) {
-                this.client = client;
+                client = connectingClient;
                 Open ();
             }
         }

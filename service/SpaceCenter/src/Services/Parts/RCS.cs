@@ -9,51 +9,47 @@ using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.RCS"/>.
-    /// Provides functionality to interact with RCS blocks and thrusters.
+    /// An RCS block or thruster. Obtained by calling <see cref="Part.RCS"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class RCS : Equatable<RCS>
+    public class RCS : Equatable<RCS>
     {
-        readonly Part part;
         readonly ModuleRCS rcs;
 
         internal static bool Is (Part part)
         {
-            return part.InternalPart.HasModule<ModuleRCS> () && !part.InternalPart.HasModule<ModuleProceduralFairing> ();
+            return part.InternalPart.HasModule<ModuleRCS> ();
         }
 
         internal RCS (Part part)
         {
-            this.part = part;
+            Part = part;
             rcs = part.InternalPart.Module<ModuleRCS> ();
             if (rcs == null)
                 throw new ArgumentException ("Part does not have a ModuleRCS PartModule");
         }
 
         /// <summary>
-        /// Check the RCS are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (RCS obj)
+        public override bool Equals (RCS other)
         {
-            return part == obj.part && rcs == obj.rcs;
+            return !ReferenceEquals (other, null) && Part == other.Part && rcs.Equals (other.rcs);
         }
 
         /// <summary>
-        /// Hash the RCS.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ rcs.GetHashCode ();
+            return Part.GetHashCode () ^ rcs.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this RCS.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the RCS thrusters are active.
@@ -65,7 +61,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Active {
             get {
                 //TODO: what about rcs.shieldedCanThrust?
-                var p = part.InternalPart;
+                var p = Part.InternalPart;
                 return
                 p.vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)] &&
                 !p.ShieldedFromAirstream &&
@@ -186,7 +182,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Thruster> Thrusters {
-            get { return Enumerable.Range (0, rcs.thrusterTransforms.Count).Select (i => new Thruster (part, rcs, i)).ToList (); }
+            get { return Enumerable.Range (0, rcs.thrusterTransforms.Count).Select (i => new Thruster (Part, rcs, i)).ToList (); }
         }
 
         /// <summary>

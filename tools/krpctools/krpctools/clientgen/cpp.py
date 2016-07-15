@@ -1,5 +1,3 @@
-import array
-import base64
 from .generator import Generator
 from .docparser import DocParser
 import krpc.types
@@ -60,42 +58,27 @@ class CppGenerator(Generator):
             return cpp_template_fix('std::set<%s>' % self.parse_type(self.types.as_type(typ.protobuf_type[4:-1])))
         elif isinstance(typ, krpc.types.DictionaryType):
             key_type, value_type = tuple(typ.protobuf_type[11:-1].split(','))
-            return cpp_template_fix('std::map<%s,%s>' % \
+            return cpp_template_fix('std::map<%s, %s>' % \
                 (self.parse_type(self.types.as_type(key_type)), self.parse_type(self.types.as_type(value_type))))
         elif isinstance(typ, krpc.types.TupleType):
             value_types = typ.protobuf_type[6:-1].split(',')
             return cpp_template_fix('std::tuple<%s>' % \
-                ','.join(self.parse_type(self.types.as_type(t)) for t in value_types))
+                ', '.join(self.parse_type(self.types.as_type(t)) for t in value_types))
         elif isinstance(typ, krpc.types.ClassType):
             return typ.protobuf_type[6:-1].replace('.', '::')
         elif isinstance(typ, krpc.types.EnumType):
             return typ.protobuf_type[5:-1].replace('.', '::')
         raise RuntimeError('Unknown type ' + typ)
 
-    def get_return_type(self, procedure):
-        if 'return_type' not in procedure:
-            return None
-        else:
-            return self.types.get_return_type(procedure['return_type'], procedure['attributes'])
-
-    def parse_return_type(self, procedure):
-        typ = self.get_return_type(procedure)
+    def parse_return_type(self, typ):
         if typ is None:
             return 'void'
-        else:
-            return self.parse_type(typ)
+        return self.parse_type(typ)
 
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
 
     def parse_default_value(self, value, typ):
-        value = base64.b64decode(value)
-        # Note: following is a workaround for decoding EnumType, as set_values has not been called
-        value = array.array('B', value).tostring()
-        if not isinstance(typ, krpc.types.EnumType):
-            value = krpc.decoder.Decoder.decode(value, typ)
-        else:
-            value = krpc.decoder.Decoder.decode(value, self.types.as_type('int32'))
         if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'string':
             return '"%s"' % value
         if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'bool':

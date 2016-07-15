@@ -1,50 +1,36 @@
-using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service;
+using NUnit.Framework;
 
 namespace KRPC.Test.Service
 {
     [TestFixture]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     public class DocumentationUtilsTest
     {
-        [Test]
-        public void ResolveCrefs ()
+        [TestCase ("<see cref=\"T:KRPC.Test.Service.TestService\" />", "<see cref=\"T:TestService\" />")]
+        [TestCase ("<see cref=\"M:KRPC.Test.Service.TestService.ProcedureNoArgsNoReturn\" />", "<see cref=\"M:TestService.ProcedureNoArgsNoReturn\" />")]
+        [TestCase ("<see cref=\"P:KRPC.Test.Service.TestService.PropertyWithGetAndSet\" />", "<see cref=\"M:TestService.PropertyWithGetAndSet\" />")]
+        [TestCase ("<see cref=\"T:KRPC.Test.Service.TestService.TestEnum\" />", "<see cref=\"T:TestService.TestEnum\" />")]
+        [TestCase ("<see cref=\"F:KRPC.Test.Service.TestService.TestEnum.X\" />", "<see cref=\"M:TestService.TestEnum.X\" />")]
+        [TestCase ("<see cref=\"T:KRPC.Test.Service.TestService+TestClass\" />", "<see cref=\"T:TestService.TestClass\" />")]
+        [TestCase ("<see cref=\"M:KRPC.Test.Service.TestService.TestClass.FloatToString(System.Single)\" />", "<see cref=\"M:TestService.TestClass.FloatToString\" />")]
+        [TestCase ("<see cref=\"P:KRPC.Test.Service.TestService.TestClass.IntProperty\" />", "<see cref=\"M:TestService.TestClass.IntProperty\" />")]
+        public void ResolveCrefs (string input, string output)
         {
-            Assert.AreEqual (
-                "<see cref=\"T:TestService\" />",
-                DocumentationUtils.ResolveCrefs ("<see cref=\"T:KRPC.Test.Service.TestService\" />"));
-            Assert.AreEqual (
-                "<see cref=\"M:TestService.ProcedureNoArgsNoReturn\" />",
-                DocumentationUtils.ResolveCrefs ("<see cref=\"M:KRPC.Test.Service.TestService.ProcedureNoArgsNoReturn\" />"));
-            Assert.AreEqual (
-                "<see cref=\"M:TestService.PropertyWithGetAndSet\" />",
-                DocumentationUtils.ResolveCrefs ("<see cref=\"P:KRPC.Test.Service.TestService.PropertyWithGetAndSet\" />"));
-            Assert.AreEqual (
-                "<see cref=\"T:TestService.TestEnum\" />",
-                DocumentationUtils.ResolveCrefs ("<see cref=\"T:KRPC.Test.Service.TestService.TestEnum\" />"));
-            Assert.AreEqual (
-                "<see cref=\"M:TestService.TestEnum.x\" />",
-                DocumentationUtils.ResolveCrefs ("<see cref=\"F:KRPC.Test.Service.TestService.TestEnum.x\" />"));
-            Assert.AreEqual (
-                "<see cref=\"T:TestService.TestClass\" />",
-                DocumentationUtils.ResolveCrefs ("<see cref=\"T:KRPC.Test.Service.TestService+TestClass\" />"));
-            Assert.AreEqual (
-                "<see cref=\"M:TestService.TestClass.FloatToString\" />",
-                DocumentationUtils.ResolveCrefs ("<see cref=\"M:KRPC.Test.Service.TestService.TestClass.FloatToString(System.Single)\" />"));
-            Assert.AreEqual (
-                "<see cref=\"M:TestService.TestClass.IntProperty\" />",
-                DocumentationUtils.ResolveCrefs ("<see cref=\"P:KRPC.Test.Service.TestService.TestClass.IntProperty\" />"));
+            Assert.AreEqual (output, DocumentationUtils.ResolveCrefs (input));
         }
 
-        [Test]
-        public void ResolveIncorrectCrefs ()
+        [TestCase ("<see cref=\"\" />")]
+        [TestCase ("<see cref=\"Foo\" />")]
+        [TestCase ("<see cref=\"Foo.Bar\" />")]
+        [TestCase ("<see cref=\"T:Foo.Bar\" />")]
+        [TestCase ("<see cref=\"M:Foo.Bar\" />")]
+        [TestCase ("<see cref=\"P:Foo.Bar\" />")]
+        [TestCase ("<see cref=\"F:Foo.Bar\" />")]
+        public void ResolveIncorrectCrefs (string input)
         {
-            Assert.Throws<ServiceException> (() => DocumentationUtils.ResolveCrefs ("<see cref=\"\" />"));
-            Assert.Throws<ServiceException> (() => DocumentationUtils.ResolveCrefs ("<see cref=\"Foo\" />"));
-            Assert.Throws<ServiceException> (() => DocumentationUtils.ResolveCrefs ("<see cref=\"Foo.Bar\" />"));
-            Assert.Throws<ServiceException> (() => DocumentationUtils.ResolveCrefs ("<see cref=\"T:Foo.Bar\" />"));
-            Assert.Throws<ServiceException> (() => DocumentationUtils.ResolveCrefs ("<see cref=\"M:Foo.Bar\" />"));
-            Assert.Throws<ServiceException> (() => DocumentationUtils.ResolveCrefs ("<see cref=\"P:Foo.Bar\" />"));
-            Assert.Throws<ServiceException> (() => DocumentationUtils.ResolveCrefs ("<see cref=\"F:Foo.Bar\" />"));
+            Assert.Throws<DocumentationException> (() => DocumentationUtils.ResolveCrefs (input));
         }
     }
 }

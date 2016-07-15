@@ -16,21 +16,23 @@ namespace KRPC.UI
     public static class UI
     {
         /// <summary>
-        /// The rect transform for the canvas.
+        /// Add a new canvas.
         /// </summary>
-        [KRPCProperty]
-        public static RectTransform RectTransform {
-            get{ return new RectTransform (Addon.Canvas.GetComponent<UnityEngine.RectTransform> ()); }
+        /// <remarks>
+        /// If you want to add UI elements to KSPs stock UI canvas, use <see cref="StockCanvas"/>.
+        /// </remarks>
+        [KRPCProcedure]
+        public static Canvas AddCanvas ()
+        {
+            return new Canvas ();
         }
 
         /// <summary>
-        /// Create a new container for user interface elements.
+        /// The stock UI canvas.
         /// </summary>
-        /// <param name="visible">Whether the panel is visible.</param>
-        [KRPCProcedure]
-        public static Panel AddPanel (bool visible = true)
-        {
-            return new Panel (Addon.Canvas, visible);
+        [KRPCProperty]
+        public static Canvas StockCanvas {
+            get { return Canvas.StockCanvas; }
         }
 
         /// <summary>
@@ -56,7 +58,7 @@ namespace KRPC.UI
         public static void Clear (bool clientOnly = false)
         {
             if (clientOnly)
-                Addon.Clear (KRPCCore.Context.RPCClient);
+                Addon.Clear (CallContext.Client);
             else
                 Addon.Clear ();
         }

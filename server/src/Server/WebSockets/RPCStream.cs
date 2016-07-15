@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Google.Protobuf;
+using KRPC.Server.Message;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service.Messages;
 using KRPC.Utils;

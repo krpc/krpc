@@ -1,10 +1,12 @@
+using System;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// See <see cref="ResourceHarvester.State"/>.
+    /// The state of a resource harvester. See <see cref="ResourceHarvester.State"/>.
     /// </summary>
+    [Serializable]
     [KRPCEnum (Service = "SpaceCenter")]
     public enum ResourceHarvesterState
     {

@@ -9,12 +9,12 @@ namespace KRPC.Client
     {
         internal IConnection connection;
 
-        internal UInt64 _ID { get; private set; }
+        internal UInt64 id { get; private set; }
 
-        internal RemoteObject (IConnection connection, UInt64 id = 0)
+        internal RemoteObject (IConnection serverConnection, UInt64 objectId = 0)
         {
-            this.connection = connection;
-            _ID = id;
+            connection = serverConnection;
+            id = objectId;
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace KRPC.Client
         /// </summary>
         public bool Equals (RemoteObject other)
         {
-            return _ID == other._ID;
+            return other != null && id == other.id;
         }
 
         /// <summary>
@@ -30,13 +30,12 @@ namespace KRPC.Client
         /// </summary>
         public override bool Equals (Object obj)
         {
-            if (obj == null)
+            if (Object.ReferenceEquals (this, obj))
+                return true;
+            if (Object.ReferenceEquals (obj, null))
                 return false;
-            RemoteObject obj2 = obj as RemoteObject;
-            if (obj2 == null)
-                return false;
-            else
-                return Equals (obj2);
+            var typedObj = obj as RemoteObject;
+            return typedObj != null && Equals (typedObj);
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace KRPC.Client
         /// </summary>
         public override int GetHashCode ()
         {
-            return _ID.GetHashCode ();
+            return id.GetHashCode ();
         }
 
         /// <summary>
@@ -52,9 +51,12 @@ namespace KRPC.Client
         /// </summary>
         public static bool operator == (RemoteObject lhs, RemoteObject rhs)
         {
-            if (((object)lhs) == null || ((object)rhs) == null)
-                return RemoteObject.Equals (lhs, rhs);
-            return lhs.Equals (rhs);
+            if (Object.ReferenceEquals (lhs, null) || Object.ReferenceEquals (rhs, null))
+                return Object.ReferenceEquals (lhs, rhs);
+            else if (Object.ReferenceEquals (lhs, rhs))
+                return true;
+            else
+                return lhs.Equals (rhs);
         }
 
         /// <summary>
@@ -62,9 +64,12 @@ namespace KRPC.Client
         /// </summary>
         public static bool operator != (RemoteObject lhs, RemoteObject rhs)
         {
-            if (((object)lhs) == null || ((object)rhs) == null)
-                return !RemoteObject.Equals (lhs, rhs);
-            return !lhs.Equals (rhs);
+            if (Object.ReferenceEquals (lhs, null) || Object.ReferenceEquals (rhs, null))
+                return !Object.ReferenceEquals (lhs, rhs);
+            else if (Object.ReferenceEquals (lhs, rhs))
+                return false;
+            else
+                return !(lhs.Equals (rhs));
         }
     }
 }

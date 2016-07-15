@@ -10,6 +10,14 @@ def _apply_path_map(path_map, path):
                 matchlen = len(x)
     return match
 
+def _apply_exclude(exclude, path):
+    """ Apply wildcard exclusion patterns to the path. """
+    # TODO: improve this
+    for pattern in exclude:
+        if pattern[0] == '*' and path.endswith(pattern[1:]):
+            return True
+    return False
+
 def _get_mode(mode_map, path):
     """ Get the mode for a file using the mode mapping. """
     matchlen = 0
@@ -52,6 +60,7 @@ def _pkg_zip_impl(ctx):
     inputs = ctx.files.files
     path_map = ctx.attr.path_map
     mode_map = ctx.attr.mode_map
+    exclude = ctx.attr.exclude
 
     sub_commands = []
 
@@ -60,6 +69,8 @@ def _pkg_zip_impl(ctx):
     # (Note: can't use symlinking as we need to set permissions)
     staging_dir = output.basename + '.package-tmp'
     for input in inputs:
+        if _apply_exclude(exclude, input.short_path):
+            continue
         staging_path = staging_dir + '/' + _apply_path_map(path_map, input.short_path)
         mode = _get_mode(mode_map, input.short_path)
         sub_commands.extend([
@@ -83,6 +94,7 @@ pkg_zip = rule(
         'files': attr.label_list(allow_files=True, mandatory=True, non_empty=True),
         'path_map': attr.string_dict(),
         'mode_map': attr.string_dict(),
+        'exclude': attr.string_list(),
         'out': attr.output(mandatory=True)
     }
 )

@@ -85,15 +85,24 @@ java_test(
     tags = ['requires-network']
 )
 
-client_test(
+test_suite(
     name = 'test',
+    tests = [':client']
+)
+
+test_suite(
+    name = 'ci-test',
+    tests = [':client']
+)
+
+client_test(
+    name = 'client',
     test_executable = ':testexe',
     server_executable = '//tools/TestServer',
     tags = ['requires-network'],
     size = 'small',
     visibility = ['//:__pkg__']
 )
-
 
 clientgen_java(
     name = 'services-krpc',

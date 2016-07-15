@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -7,55 +8,57 @@ using KRPC.Utils;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.ResourceHarvester"/>.
+    /// A resource harvester (drill). Obtained by calling <see cref="Part.ResourceHarvester"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public sealed class ResourceHarvester : Equatable<ResourceHarvester>
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
+    public class ResourceHarvester : Equatable<ResourceHarvester>
     {
-        readonly Part part;
         readonly ModuleResourceHarvester harvester;
         readonly ModuleAnimationGroup animator;
-        readonly Regex numberRegex = new Regex (@"(\d+(\.\d+)?)");
 
         internal static bool Is (Part part)
         {
+            var internalPart = part.InternalPart;
             return
-            part.InternalPart.HasModule<ModuleResourceHarvester> () &&
-            part.InternalPart.HasModule<ModuleAnimationGroup> ();
+            internalPart.HasModule<ModuleResourceHarvester> () &&
+            internalPart.HasModule<ModuleAnimationGroup> ();
         }
 
         internal ResourceHarvester (Part part)
         {
-            this.part = part;
-            harvester = part.InternalPart.Module<ModuleResourceHarvester> ();
-            animator = part.InternalPart.Module<ModuleAnimationGroup> ();
+            Part = part;
+            var internalPart = part.InternalPart;
+            harvester = internalPart.Module<ModuleResourceHarvester> ();
+            animator = internalPart.Module<ModuleAnimationGroup> ();
             if (harvester == null || animator == null)
                 throw new ArgumentException ("Part is not a resource harvester");
         }
 
         /// <summary>
-        /// Check if resource harvesters are equal.
+        /// Returns true if the objects are equal.
         /// </summary>
-        public override bool Equals (ResourceHarvester obj)
+        public override bool Equals (ResourceHarvester other)
         {
-            return part == obj.part && harvester == obj.harvester && animator == obj.animator;
+            return
+            !ReferenceEquals (other, null) &&
+            Part == other.Part &&
+            (harvester == other.harvester || harvester.Equals (other.harvester));
         }
 
         /// <summary>
-        /// Hash the resource harvester.
+        /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
         {
-            return part.GetHashCode () ^ harvester.GetHashCode () ^ animator.GetHashCode ();
+            return Part.GetHashCode () ^ harvester.GetHashCode ();
         }
 
         /// <summary>
         /// The part object for this harvester.
         /// </summary>
         [KRPCProperty]
-        public Part Part {
-            get { return part; }
-        }
+        public Part Part { get; private set; }
 
         /// <summary>
         /// The state of the harvester.
@@ -79,7 +82,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Deployed {
-            get { return State == ResourceHarvesterState.Deployed || State == ResourceHarvesterState.Active; }
+            get {
+                var state = State;
+                return state == ResourceHarvesterState.Deployed || state == ResourceHarvesterState.Active;
+            }
             set {
                 if (value && !animator.isDeployed)
                     animator.DeployModule ();
@@ -110,13 +116,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float ExtractionRate {
             get {
-                if (!Deployed || !Active)
+                if (!Active)
                     return 0;
-                var status = harvester.ResourceStatus;
-                Match match = numberRegex.Match (status);
-                if (!match.Success)
-                    return 0;
-                return Single.Parse (match.Groups [1].Value);
+                return GetFloatValue (harvester.ResourceStatus);
             }
         }
 
@@ -126,15 +128,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float ThermalEfficiency {
             get {
-                if (!Deployed || !Active)
+                if (!Active)
                     return 0;
                 var status = harvester.status;
                 if (!status.Contains ("load"))
                     return 0;
-                Match match = numberRegex.Match (status);
-                if (!match.Success)
-                    return 0;
-                return Single.Parse (match.Groups [1].Value);
+                return GetFloatValue (status);
             }
         }
 
@@ -152,6 +151,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float OptimumCoreTemperature {
             get { return (float)harvester.GetGoalTemperature (); }
+        }
+
+        static readonly Regex numberRegex = new Regex (@"(\d+(\.\d+)?)");
+
+        static float GetFloatValue (string value)
+        {
+            Match match = numberRegex.Match (value);
+            if (!match.Success)
+                return 0;
+            float result;
+            if (!Single.TryParse (match.Groups [1].Value, out result))
+                return 0;
+            return result;
         }
     }
 }

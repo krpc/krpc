@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Google.Protobuf;
 using KRPC.Server;
+using KRPC.Server.Message;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Server.WebSockets;
 using KRPC.Service.Messages;
@@ -22,9 +23,7 @@ namespace KRPC.Test.Server.WebSockets
         public void SetUp ()
         {
             // Create a request object and get the binary representation of it
-            expectedRequest = new Request ();
-            expectedRequest.Service = "TestService";
-            expectedRequest.Procedure = "ProcedureNoArgsNoReturn";
+            expectedRequest = new Request ("TestService", "ProcedureNoArgsNoReturn");
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream);
                 expectedRequest.ToProtobufMessage ().WriteTo (codedStream);

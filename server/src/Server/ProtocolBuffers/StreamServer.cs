@@ -19,7 +19,7 @@ namespace KRPC.Server.ProtocolBuffers
         /// <summary>
         /// When a client requests a connection, check the hello message
         /// </summary>
-        protected override IClient<NoMessage,StreamMessage> CreateClient (object sender, ClientRequestingConnectionArgs<byte,byte> args)
+        protected override IClient<NoMessage,StreamMessage> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
             var guid = CheckHelloMessage (args.Client);
             if (guid != Guid.Empty)
@@ -33,7 +33,7 @@ namespace KRPC.Server.ProtocolBuffers
         /// <summary>
         /// When a client requests a connection, and is successful, send the ok message
         /// </summary>
-        public override void HandleClientRequestingConnection (object sender, ClientRequestingConnectionArgs<byte,byte> args)
+        public override void HandleClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
             base.HandleClientRequestingConnection (sender, args);
             if (args.Request.ShouldAllow)

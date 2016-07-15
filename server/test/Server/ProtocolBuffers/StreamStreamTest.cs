@@ -22,16 +22,14 @@ namespace KRPC.Test.Server.ProtocolBuffers
             response1.Time = 42;
             response1.Error = "Foo";
 
-            var streamResponse1 = new StreamResponse ();
-            streamResponse1.Id = 1263;
+            var streamResponse1 = new StreamResponse (1263);
             streamResponse1.Response = response1;
 
             var response2 = new Response ();
             response2.Time = 123;
             response2.Error = "Bar";
 
-            var streamResponse2 = new StreamResponse ();
-            streamResponse2.Id = 3443;
+            var streamResponse2 = new StreamResponse (3443);
             streamResponse2.Response = response2;
 
             streamMessage.Responses.Add (streamResponse1);

@@ -1,9 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     static class ResourceFlowModeExtensions
     {
+        [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static KRPC.SpaceCenter.Services.ResourceFlowMode ToResourceFlowMode (this ResourceFlowMode mode)
         {
             switch (mode) {
@@ -15,22 +18,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 return KRPC.SpaceCenter.Services.ResourceFlowMode.Adjacent;
             case ResourceFlowMode.NO_FLOW:
                 return KRPC.SpaceCenter.Services.ResourceFlowMode.None;
-            default:
-                throw new ArgumentOutOfRangeException ("mode");
-            }
-        }
-
-        public static ResourceFlowMode FromResourceFlowMode (this KRPC.SpaceCenter.Services.ResourceFlowMode mode)
-        {
-            switch (mode) {
-            case KRPC.SpaceCenter.Services.ResourceFlowMode.Vessel:
-                return ResourceFlowMode.ALL_VESSEL;
-            case KRPC.SpaceCenter.Services.ResourceFlowMode.Stage:
-                return ResourceFlowMode.STAGE_PRIORITY_FLOW;
-            case KRPC.SpaceCenter.Services.ResourceFlowMode.Adjacent:
-                return ResourceFlowMode.STACK_PRIORITY_SEARCH;
-            case KRPC.SpaceCenter.Services.ResourceFlowMode.None:
-                return ResourceFlowMode.NO_FLOW;
             default:
                 throw new ArgumentOutOfRangeException ("mode");
             }

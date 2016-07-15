@@ -61,6 +61,9 @@ class Encoder(object):
             return msg.SerializeToString()
         elif isinstance(typ, TupleType):
             msg = cls._types.as_type('KRPC.Tuple').python_type()
+            if len(x) != len(typ.value_types):
+                raise ValueError('Tuple has wrong number of elements. ' +
+                                 'Expected %d, got %d.' % (len(typ.value_types), len(x)))
             msg.items.extend(cls.encode(item, value_type) for item, value_type in zip(x, typ.value_types))
             return msg.SerializeToString()
         else:
