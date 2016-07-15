@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net;
 using KRPC.Server;
-using KRPC.Server.ProtocolBuffers;
-using KRPC.Server.TCP;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Utils;
@@ -117,6 +114,13 @@ namespace KRPC.Server
         /// </summary>
         public string Address {
             get { return RPCServer.Address; }
+        }
+
+        /// <summary>
+        /// Information about the server.
+        /// </summary>
+        public string Info {
+            get { return RPCServer.Info; }
         }
 
         /// <summary>

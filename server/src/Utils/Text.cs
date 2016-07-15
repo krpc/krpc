@@ -1,8 +1,10 @@
-using System.Text;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace KRPC.Utils
 {
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSpeculativeGeneralityRule")]
     static class Text
     {
         const byte CONTINUATION_MASK = 0xc0;
@@ -15,11 +17,6 @@ namespace KRPC.Utils
         const byte THREE_BYTE_HEAD = 0xe0;
         const byte FOUR_BYTE_MASK = 0xf8;
         const byte FOUR_BYTE_HEAD = 0xf0;
-
-        public static string ToHexString (this byte[] data)
-        {
-            return BitConverter.ToString (data).Replace ("-", "").ToLower ();
-        }
 
         /// <summary>
         /// Returns true if the given data is a valid UTF8 string.

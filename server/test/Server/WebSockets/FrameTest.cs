@@ -9,13 +9,18 @@ namespace KRPC.Test.Server.WebSockets
     [TestFixture]
     public class FrameTest
     {
+        static Frame FrameFromString (string data) {
+            var buffer = data.ToBytes ();
+            return Frame.FromBytes (buffer, 0, buffer.Length);
+        }
+
         /// <summary>
         /// Decode a frame from data, check it decodes the expected header and unmasked payload,
         /// and encode it again and compare it to the original data.
         /// </summary>
         static void CheckBytes (string data, string expectedHeader, string expectedPayload)
         {
-            var frame = Frame.FromBytes (data.ToBytes ());
+            var frame = FrameFromString (data);
             Assert.AreEqual (expectedHeader, frame.Header.ToBytes ().ToHexString ());
             if (expectedPayload.Length == 0)
                 Assert.IsEmpty (frame.Payload);
@@ -29,13 +34,13 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void FromBytesEmptyUnmaskedPayload ()
         {
-            CheckBytes ("8800", "8800", "");
+            CheckBytes ("8800", "8800", String.Empty);
         }
 
         [Test]
         public void FromBytesEmptyMaskedPayload ()
         {
-            CheckBytes ("888000000000", "888000000000", "");
+            CheckBytes ("888000000000", "888000000000", String.Empty);
         }
 
         [Test]
@@ -50,15 +55,15 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void FromBytesTruncatedHeader ()
         {
-            Assert.Throws<NoRequestException> (() => Frame.FromBytes ("88".ToBytes ()));
+            Assert.Throws<NoRequestException> (() => FrameFromString ("88"));
         }
 
         [Test]
         public void FromBytesTruncatedPayloadEmpty ()
         {
-            var frame = Frame.FromBytes ("888412345678".ToBytes ());
+            var frame = FrameFromString ("888412345678");
             Assert.AreEqual ("888412345678", frame.Header.ToBytes ().ToHexString ());
-            Assert.AreEqual ("", frame.Payload.ToHexString ());
+            Assert.AreEqual (String.Empty, frame.Payload.ToHexString ());
             Assert.AreEqual (6, frame.Length);
             Assert.IsTrue (frame.IsPartial);
         }
@@ -66,7 +71,7 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void FromBytesTruncatedPayloadPartial ()
         {
-            var frame = Frame.FromBytes ("888412345678cc99".ToBytes ());
+            var frame = FrameFromString ("888412345678cc99");
             Assert.AreEqual ("888412345678", frame.Header.ToBytes ().ToHexString ());
             Assert.AreEqual ("dead", frame.Payload.ToHexString ());
             Assert.AreEqual (8, frame.Length);
@@ -76,7 +81,7 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void FromBytesExtra ()
         {
-            var frame = Frame.FromBytes ("888412345678cc99e8971234".ToBytes ());
+            var frame = FrameFromString ("888412345678cc99e8971234");
             Assert.AreEqual ("888412345678", frame.Header.ToBytes ().ToHexString ());
             Assert.AreEqual ("deadbeef", frame.Payload.ToHexString ());
             Assert.AreEqual (10, frame.Length);

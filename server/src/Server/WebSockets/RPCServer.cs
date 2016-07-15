@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using KRPC.Server.HTTP;
+using KRPC.Server;
 using KRPC.Service.Messages;
 
 namespace KRPC.Server.WebSockets
 {
     sealed class RPCServer : Message.RPCServer
     {
-        readonly bool echo;
+        readonly bool shouldEcho;
         readonly IDictionary<IClient<byte,byte>,string> clientKeys = new Dictionary<IClient<byte, byte>, string> ();
 
         /// <summary>
@@ -17,7 +17,7 @@ namespace KRPC.Server.WebSockets
         /// </summary>
         public RPCServer (IServer<byte,byte> server, bool echo = false) : base (server)
         {
-            this.echo = echo;
+            shouldEcho = echo;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace KRPC.Server.WebSockets
                 return null;
             var clientName = GetClientName (request);
             clientKeys [args.Client] = request.Headers ["Sec-WebSocket-Key"];
-            return new RPCClient (clientName, args.Client, echo);
+            return new RPCClient (clientName, args.Client, shouldEcho);
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace KRPC.Server.WebSockets
         /// <summary>
         /// Get the client name from a connection request
         /// </summary>
-        public static string GetClientName (HTTPRequest request)
+        public static string GetClientName (HTTP.Request request)
         {
-            string name = "";
+            string name = String.Empty;
             var query = request.URI.Query;
             //TODO: make this name extraction more robust
             if (query.StartsWith ("?name="))

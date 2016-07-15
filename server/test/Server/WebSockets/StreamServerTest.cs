@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,11 @@ using NUnit.Framework;
 namespace KRPC.Test.Server.WebSockets
 {
     [TestFixture]
+    [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
     public class StreamServerTest
     {
         [Test]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         public void ValidConnectionRequest ()
         {
             var clientGuid = new Guid ("1234567890abcdef1234567890abcdef".ToBytes ());
@@ -62,7 +65,8 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void InvalidConnectionRequestNoGuid ()
         {
-            var request = Encoding.ASCII.GetBytes (
+            var ascii = Encoding.ASCII;
+            var request = ascii.GetBytes (
                               "GET / HTTP/1.1\r\n" +
                               "Host: localhost\r\n" +
                               "Upgrade: websocket\r\n" +
@@ -93,7 +97,7 @@ namespace KRPC.Test.Server.WebSockets
             server.Update ();
             Assert.AreEqual (0, server.Clients.Count ());
 
-            var response = Encoding.ASCII.GetString (responseStream.ToArray ());
+            var response = ascii.GetString (responseStream.ToArray ());
             Assert.AreEqual (
                 "HTTP/1.1 400 Bad Request\r\n\r\n",
                 response
@@ -103,7 +107,8 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void InvalidConnectionRequestMalformedGuid ()
         {
-            var request = Encoding.ASCII.GetBytes (
+            var ascii = Encoding.ASCII;
+            var request = ascii.GetBytes (
                               "GET /?id=foo HTTP/1.1\r\n" +
                               "Host: localhost\r\n" +
                               "Upgrade: websocket\r\n" +
@@ -134,7 +139,7 @@ namespace KRPC.Test.Server.WebSockets
             server.Update ();
             Assert.AreEqual (0, server.Clients.Count ());
 
-            var response = Encoding.ASCII.GetString (responseStream.ToArray ());
+            var response = ascii.GetString (responseStream.ToArray ());
             Assert.AreEqual (
                 "HTTP/1.1 400 Bad Request\r\n\r\n",
                 response

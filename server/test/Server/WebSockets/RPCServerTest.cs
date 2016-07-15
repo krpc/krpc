@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using System.Linq;
@@ -11,12 +13,14 @@ using KRPC.Server.WebSockets;
 namespace KRPC.Test.Server.WebSockets
 {
     [TestFixture]
+    [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
     public class RPCServerTest
     {
         [Test]
         public void ValidConnectionRequestWithNoName ()
         {
-            var request = Encoding.ASCII.GetBytes (
+            var ascii = Encoding.ASCII;
+            var request = ascii.GetBytes (
                               "GET / HTTP/1.1\r\n" +
                               "Host: localhost\r\n" +
                               "Upgrade: websocket\r\n" +
@@ -46,9 +50,9 @@ namespace KRPC.Test.Server.WebSockets
 
             server.Update ();
             Assert.AreEqual (1, server.Clients.Count ());
-            Assert.AreEqual ("", server.Clients.First ().Name);
+            Assert.AreEqual (String.Empty, server.Clients.First ().Name);
 
-            var response = Encoding.ASCII.GetString (responseStream.ToArray ());
+            var response = ascii.GetString (responseStream.ToArray ());
             Assert.AreEqual (
                 "HTTP/1.1 101 Switching Protocols\r\n" +
                 "Upgrade: websocket\r\n" +
@@ -61,7 +65,8 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void ValidConnectionRequestWithName ()
         {
-            var request = Encoding.ASCII.GetBytes (
+            var ascii = Encoding.ASCII;
+            var request = ascii.GetBytes (
                               "GET /?name=Jebediah%20Kerman!%23%24%25%5E%26 HTTP/1.1\r\n" +
                               "Host: localhost\r\n" +
                               "Upgrade: websocket\r\n" +
@@ -93,7 +98,7 @@ namespace KRPC.Test.Server.WebSockets
             Assert.AreEqual (1, server.Clients.Count ());
             Assert.AreEqual ("Jebediah Kerman!#$%^&", server.Clients.First ().Name);
 
-            var response = Encoding.ASCII.GetString (responseStream.ToArray ());
+            var response = ascii.GetString (responseStream.ToArray ());
             Assert.AreEqual (
                 "HTTP/1.1 101 Switching Protocols\r\n" +
                 "Upgrade: websocket\r\n" +

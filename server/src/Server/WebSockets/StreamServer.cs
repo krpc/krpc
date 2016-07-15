@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using KRPC.Server.HTTP;
+using KRPC.Server;
 using KRPC.Service.Messages;
 
 namespace KRPC.Server.WebSockets
@@ -23,7 +23,7 @@ namespace KRPC.Server.WebSockets
                 return null;
             var guid = GetGuid (request);
             if (guid == Guid.Empty) {
-                args.Client.Stream.Write (HTTPResponse.BadRequest.ToBytes ());
+                args.Client.Stream.Write (HTTP.Response.CreateBadRequest ().ToBytes ());
                 args.Request.Deny ();
                 return null;
             }
@@ -47,7 +47,7 @@ namespace KRPC.Server.WebSockets
         /// Get the client guid from a connection request
         /// Returns an empty guid on failure
         /// </summary>
-        public static Guid GetGuid (HTTPRequest request)
+        public static Guid GetGuid (HTTP.Request request)
         {
             //TODO: make this id extraction more robust
             var query = request.URI.Query;

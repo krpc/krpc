@@ -108,7 +108,7 @@ namespace TestServer
                 var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
                 server = new Server (rpcServer, streamServer);
             } else if (type == "websockets-echo") {
-                var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer, echo: true);
+                var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer, true);
                 var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
                 server = new Server (rpcServer, streamServer);
             } else {

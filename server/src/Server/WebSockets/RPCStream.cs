@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Google.Protobuf;
 using KRPC.Server.Message;
@@ -8,13 +9,15 @@ using KRPC.Utils;
 
 namespace KRPC.Server.WebSockets
 {
+    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
+    [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     sealed class RPCStream : Message.RPCStream
     {
         /// <summary>
         /// Whether the stream should just echo messages back to the client.
         /// Used for running the Autobahn tests.
         /// </summary>
-        readonly bool echo;
+        readonly bool shouldEcho;
 
         /// <summary>
         /// Op code for the fragements.
@@ -25,7 +28,7 @@ namespace KRPC.Server.WebSockets
         /// <summary>
         /// Concatenated payloads for current fragmented message.
         /// </summary>
-        readonly MemoryStream fragmentsPayload = new MemoryStream ();
+        readonly DynamicBuffer fragmentsPayload = new DynamicBuffer ();
 
         /// <summary>
         /// Position up to which the fragments payload has been verified as valid UTF8 (for text messages).
@@ -34,20 +37,24 @@ namespace KRPC.Server.WebSockets
 
         public RPCStream (IStream<byte,byte> stream, bool echo = false) : base (stream)
         {
-            this.echo = echo;
+            shouldEcho = echo;
         }
 
         public override void Write (Response value)
         {
-            var message = value.ToProtobufMessage ();
-            var bufferStream = new MemoryStream ();
-            message.WriteTo (bufferStream);
-            var payload = bufferStream.ToArray ();
-            var frame = new Frame (OpCode.Binary, payload);
-            Stream.Write (frame.Header.ToBytes ());
-            Stream.Write (frame.Payload);
+            using (var bufferStream = new MemoryStream ()) {
+                var message = value.ToProtobufMessage ();
+                message.WriteTo (bufferStream);
+                var payload = bufferStream.ToArray ();
+                var frame = new Frame (OpCode.Binary, payload);
+                Stream.Write (frame.Header.ToBytes ());
+                Stream.Write (frame.Payload);
+            }
         }
 
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         protected override int Read (ref Request request, byte[] data, int offset, int length)
         {
             int read = 0;
@@ -92,14 +99,14 @@ namespace KRPC.Server.WebSockets
                 if (frame.IsPartial) {
                     // Check that partially received text frames are valid UTF8
                     if (frame.Header.OpCode == OpCode.Text || (frame.Header.OpCode == OpCode.Continue && fragmentsOpCode == OpCode.Text)) {
-                        fragmentsPayload.Write (frame.Payload, 0, frame.Payload.Length);
+                        fragmentsPayload.Append (frame.Payload, 0, frame.Payload.Length);
                         int truncatedCharLength = 0;
-                        if (!Text.IsValidTruncatedUTF8 (fragmentsPayload.GetBuffer (), fragmentsVerifiedPosition, (int)fragmentsPayload.Length - fragmentsVerifiedPosition, ref truncatedCharLength)) {
+                        if (!Text.IsValidTruncatedUTF8 (fragmentsPayload.GetBuffer (), fragmentsVerifiedPosition, fragmentsPayload.Length - fragmentsVerifiedPosition, ref truncatedCharLength)) {
                             Logger.WriteLine ("WebSockets invalid message: malformed UTF8 string", Logger.Severity.Error);
                             Stream.Write (Frame.Close (1007, "Malformed UTF8 string").ToBytes ());
                             Stream.Close ();
                         }
-                        fragmentsPayload.Position -= frame.Payload.Length;
+                        fragmentsPayload.Length -= frame.Payload.Length;
                     }
                     break;
                 }
@@ -117,12 +124,12 @@ namespace KRPC.Server.WebSockets
                 if (!frame.Header.IsControl) {
                     if (!frame.Header.FinalFragment) {
                         // We haven't received the entire message yet
-                        fragmentsPayload.Write (frame.Payload, 0, frame.Payload.Length);
-                    } else if (fragmentsPayload.Position > 0) {
+                        fragmentsPayload.Append (frame.Payload, 0, frame.Payload.Length);
+                    } else if (fragmentsPayload.Length > 0) {
                         // Payload for the entire message from the fragments
-                        fragmentsPayload.Write (frame.Payload, 0, frame.Payload.Length);
+                        fragmentsPayload.Append (frame.Payload, 0, frame.Payload.Length);
                         payload = fragmentsPayload.ToArray ();
-                        fragmentsPayload.Position = 0;
+                        fragmentsPayload.Length = 0;
                         fragmentsVerifiedPosition = 0;
                     } else {
                         // Unfragmented message
@@ -131,11 +138,10 @@ namespace KRPC.Server.WebSockets
                 }
 
                 // Handle the frame
-                switch (opCode) {
-                case OpCode.Binary:
+                if (opCode == OpCode.Binary) {
                     // Process binary frame
                     if (frame.Header.FinalFragment) {
-                        if (echo)
+                        if (shouldEcho)
                             Stream.Write (Frame.Binary (payload).ToBytes ());
                         else {
                             try {
@@ -147,8 +153,7 @@ namespace KRPC.Server.WebSockets
                             }
                         }
                     }
-                    break;
-                case OpCode.Text:
+                } else if (opCode == OpCode.Text) {
                     // Process text frame
                     if (frame.Header.FinalFragment) {
                         if (!Text.IsValidUTF8 (payload, 0, payload.Length)) {
@@ -156,7 +161,7 @@ namespace KRPC.Server.WebSockets
                             Stream.Write (Frame.Close (1007, "Malformed UTF8 string").ToBytes ());
                             Stream.Close ();
                         } else {
-                            if (echo) {
+                            if (shouldEcho) {
                                 Stream.Write (new Frame (OpCode.Text, payload).ToBytes ());
                             } else {
                                 Logger.WriteLine ("WebSockets invalid message: text frames are not permitted", Logger.Severity.Error);
@@ -164,21 +169,19 @@ namespace KRPC.Server.WebSockets
                                 Stream.Close ();
                             }
                         }
-                    } else if (fragmentsPayload.Position > 0) {
+                    } else if (fragmentsPayload.Length > 0) {
                         int truncatedCharLength = 0;
-                        if (!Text.IsValidTruncatedUTF8 (fragmentsPayload.GetBuffer (), fragmentsVerifiedPosition, (int)fragmentsPayload.Position - fragmentsVerifiedPosition, ref truncatedCharLength)) {
+                        if (!Text.IsValidTruncatedUTF8 (fragmentsPayload.GetBuffer (), fragmentsVerifiedPosition, fragmentsPayload.Length - fragmentsVerifiedPosition, ref truncatedCharLength)) {
                             Logger.WriteLine ("WebSockets invalid message: malformed UTF8 string", Logger.Severity.Error);
                             Stream.Write (Frame.Close (1007, "Malformed UTF8 string").ToBytes ());
                             Stream.Close ();
                         }
-                        fragmentsVerifiedPosition = (int)fragmentsPayload.Position - truncatedCharLength;
+                        fragmentsVerifiedPosition = fragmentsPayload.Length - truncatedCharLength;
                     }
-                    break;
-                case OpCode.Ping:
+                } else if (opCode == OpCode.Ping) {
                     // Send pong with copy of ping's payload
                     Stream.Write (Frame.Pong (frame.Payload).ToBytes ());
-                    break;
-                case OpCode.Close:
+                } else if (opCode == OpCode.Close) {
                     if (frame.Header.Length >= 2) {
                         // Get status code from frame
                         var status = BitConverter.ToUInt16 (new [] { frame.Payload [1], frame.Payload [0] }, 0);
@@ -206,7 +209,6 @@ namespace KRPC.Server.WebSockets
                         Stream.Write (Frame.Close ().ToBytes ());
                     }
                     Stream.Close ();
-                    break;
                 }
 
                 read += frame.Length;

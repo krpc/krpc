@@ -184,6 +184,28 @@ namespace KRPC.Server.TCP
             get { return ListenAddress + ":" + Port; }
         }
 
+        const string localClientOnlyText = "Local clients only";
+        const string anyClientText = "Any client";
+        const string subnetAllowedText = "Subnet {0}";
+        const string unknownClientsAllowedText = "Unknown visibility";
+
+        public string Info {
+            get {
+                if (IPAddress.IsLoopback (ListenAddress))
+                    return localClientOnlyText;
+                else if (ListenAddress == IPAddress.Any)
+                    return anyClientText;
+                try {
+                    var subnet = NetworkInformation.GetSubnetMask (ListenAddress);
+                    return String.Format (subnetAllowedText, subnet);
+                } catch (NotImplementedException) {
+                } catch (ArgumentException) {
+                } catch (DllNotFoundException) {
+                }
+                return unknownClientsAllowedText;
+            }
+        }
+
         public bool Running {
             get { return running; }
         }

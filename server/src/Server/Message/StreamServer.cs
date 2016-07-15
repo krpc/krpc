@@ -56,6 +56,10 @@ namespace KRPC.Server.Message
             get { return server.Address; }
         }
 
+        public string Info {
+            get { return server.Info; }
+        }
+
         public bool Running {
             get { return server.Running; }
         }

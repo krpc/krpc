@@ -8,6 +8,11 @@ namespace KRPC.Test.Server.WebSockets
     [TestFixture]
     public class HeaderTest
     {
+        static Header HeaderFromString (string data) {
+            var buffer = data.ToBytes ();
+            return Header.FromBytes (buffer, 0, buffer.Length);
+        }
+
         /// <summary>
         /// Decode a header from the given bytes (starting at index), check it decodes the expected length,
         /// and encode it again and compare it to canonicalData (expected shortest version of the header
@@ -109,10 +114,10 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void FromBytesTruncated ()
         {
-            Assert.Throws<NoRequestException> (() => Header.FromBytes ("82".ToBytes ()));
-            Assert.Throws<NoRequestException> (() => Header.FromBytes ("827f".ToBytes ()));
-            Assert.Throws<NoRequestException> (() => Header.FromBytes ("827f12".ToBytes ()));
-            Assert.Throws<NoRequestException> (() => Header.FromBytes ("827f1234".ToBytes ()));
+            Assert.Throws<NoRequestException> (() => HeaderFromString ("82"));
+            Assert.Throws<NoRequestException> (() => HeaderFromString ("827f"));
+            Assert.Throws<NoRequestException> (() => HeaderFromString ("827f12"));
+            Assert.Throws<NoRequestException> (() => HeaderFromString ("827f1234"));
         }
 
         [Test]
@@ -140,7 +145,7 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void FinalFragment ()
         {
-            var request1 = Header.FromBytes ("a212".ToBytes ());
+            var request1 = HeaderFromString ("a212");
             Assert.IsTrue (request1.FinalFragment);
             Assert.IsFalse (request1.Rsv1);
             Assert.IsTrue (request1.Rsv2);
@@ -149,7 +154,7 @@ namespace KRPC.Test.Server.WebSockets
             Assert.AreEqual (18, request1.Length);
             Assert.AreEqual (2, request1.HeaderLength);
 
-            var request2 = Header.FromBytes ("2212".ToBytes ());
+            var request2 = HeaderFromString ("2212");
             Assert.IsFalse (request2.FinalFragment);
             Assert.IsFalse (request2.Rsv1);
             Assert.IsTrue (request2.Rsv2);
@@ -162,7 +167,7 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void WithReservations ()
         {
-            var request1 = Header.FromBytes ("f212".ToBytes ());
+            var request1 = HeaderFromString ("f212");
             Assert.IsTrue (request1.FinalFragment);
             Assert.IsTrue (request1.Rsv1);
             Assert.IsTrue (request1.Rsv2);
@@ -171,7 +176,7 @@ namespace KRPC.Test.Server.WebSockets
             Assert.AreEqual (18, request1.Length);
             Assert.AreEqual (2, request1.HeaderLength);
 
-            var request2 = Header.FromBytes ("a212".ToBytes ());
+            var request2 = HeaderFromString ("a212");
             Assert.IsTrue (request2.FinalFragment);
             Assert.IsFalse (request2.Rsv1);
             Assert.IsTrue (request2.Rsv2);
@@ -184,7 +189,7 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void WithMaskingKey ()
         {
-            var request = Header.FromBytes ("828012345678".ToBytes ());
+            var request = HeaderFromString ("828012345678");
             Assert.IsTrue (request.Masked);
             Assert.AreEqual (new byte[] { 0x12, 0x34, 0x56, 0x78 }, request.MaskingKey);
             Assert.IsTrue (request.FinalFragment);
@@ -198,7 +203,7 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void MissingMaskingKey ()
         {
-            Assert.Throws<NoRequestException> (() => Header.FromBytes ("8280".ToBytes ()));
+            Assert.Throws<NoRequestException> (() => HeaderFromString ("8280"));
         }
     }
 }

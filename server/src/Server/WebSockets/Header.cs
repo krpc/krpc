@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Server.Message;
 
 namespace KRPC.Server.WebSockets
 {
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     sealed class Header
     {
         public bool FinalFragment { get; set; }
@@ -26,6 +28,7 @@ namespace KRPC.Server.WebSockets
 
         public bool Masked { get; private set; }
 
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidReturningArraysOnPropertiesRule")]
         public byte[] MaskingKey {
             get { return maskingKey; }
             set {
@@ -81,6 +84,7 @@ namespace KRPC.Server.WebSockets
         {
         }
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public byte[] ToBytes ()
         {
             var bytes = new byte[HeaderLength];
@@ -117,11 +121,7 @@ namespace KRPC.Server.WebSockets
             return bytes;
         }
 
-        public static Header FromBytes (byte[] data)
-        {
-            return FromBytes (data, 0, data.Length);
-        }
-
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public static Header FromBytes (byte[] data, int index, int length)
         {
             var header = new Header ();
@@ -141,7 +141,8 @@ namespace KRPC.Server.WebSockets
                 throw new FramingException (1002, "Invalid op code");
             header.OpCode = (OpCode)(firstByte & OP_CODE_MASK);
 
-            if (!header.FinalFragment && header.IsControl)
+            var isControl = header.IsControl;
+            if (!header.FinalFragment && isControl)
                 throw new FramingException (1002, "Control frames must not be fragmented");
 
             var isMasked = ((secondByte & MASK_MASK) != 0);
@@ -169,7 +170,7 @@ namespace KRPC.Server.WebSockets
             } else
                 header.Length = payloadLength;
 
-            if (header.IsControl && header.Length >= 126)
+            if (isControl && header.Length >= 126)
                 throw new FramingException (1002, "Control frame payload must not exceed 125 bytes");
 
             if (isMasked) {

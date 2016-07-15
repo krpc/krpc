@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KRPC.Server.WebSockets
 {
@@ -6,8 +7,10 @@ namespace KRPC.Server.WebSockets
     {
         public Header Header { get; private set; }
 
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidReturningArraysOnPropertiesRule")]
         public byte[] Payload { get; private set; }
 
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidReturningArraysOnPropertiesRule")]
         public byte[] MaskedPayload {
             get {
                 if (!Header.Masked)
@@ -59,17 +62,13 @@ namespace KRPC.Server.WebSockets
             return bytes;
         }
 
-        public static Frame FromBytes (byte[] data)
-        {
-            return FromBytes (data, 0, data.Length);
-        }
-
         public static Frame FromBytes (byte[] data, int index, int count)
         {
             var frame = new Frame ();
             frame.Header = Header.FromBytes (data, index, count);
-            index += frame.Header.HeaderLength;
-            count -= frame.Header.HeaderLength;
+            var headerLength = frame.Header.HeaderLength;
+            index += headerLength;
+            count -= headerLength;
             if (frame.Header.Length == 0)
                 frame.Payload = new byte[0];
             else {
@@ -97,8 +96,10 @@ namespace KRPC.Server.WebSockets
         /// <summary>
         /// A close frame with a status and optional message.
         /// </summary>
-        public static Frame Close (ushort status, string message = "")
+        public static Frame Close (ushort status, string message = null)
         {
+            if (message == null)
+                message = String.Empty;
             var statusBytes = BitConverter.GetBytes (status);
             var messageBytes = System.Text.Encoding.UTF8.GetBytes (message);
             var payload = new byte [statusBytes.Length + messageBytes.Length];

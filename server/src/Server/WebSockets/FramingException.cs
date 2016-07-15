@@ -1,8 +1,8 @@
-using KRPC.Server;
+using System;
 
-namespace KRPC
+namespace KRPC.Server.WebSockets
 {
-    class FramingException : ServerException
+    sealed class FramingException : ServerException
     {
         public FramingException (ushort status, string message) : base (message)
         {
@@ -10,5 +10,17 @@ namespace KRPC
         }
 
         public ushort Status { get; private set; }
+
+        public FramingException ()
+        {
+        }
+
+        public FramingException (string message) : base (message)
+        {
+        }
+
+        public FramingException (string message, Exception innerException) : base (message, innerException)
+        {
+        }
     }
 }
