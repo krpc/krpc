@@ -324,7 +324,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="tA">True Anomaly.</param>
         /// <param name="wrapAfterSeconds">Seconds after which to wrap the orbit</param>
         [KRPCMethod]
-        public double GetUTforTrueAnomaly (double tA, double wrapAfterSeconds) {
+        public double UAtTrueAnomaly (double tA, double wrapAfterSeconds) {
             return InternalOrbit.GetUTforTrueAnomaly (tA, wrapAfterSeconds);
         }
 
@@ -344,7 +344,7 @@ namespace KRPC.SpaceCenter.Services
         /// <returns>The orbital speed at the given time.</returns>
         /// <param name="time">Time from now.</param>
         [KRPCMethod]
-        public double getOrbitalSpeedAt (double time) {
+        public double OrbitalSpeedAtTime (double time) {
             return InternalOrbit.getOrbitalSpeedAt (time);
         }
 
@@ -353,7 +353,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <value>The orbital speed.</value>
         [KRPCProperty]
-        public double orbitalSpeed {
+        public double OrbitalSpeed {
             get { return InternalOrbit.orbitalSpeed; }
         }
     }
