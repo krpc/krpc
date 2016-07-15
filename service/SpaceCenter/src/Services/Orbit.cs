@@ -322,10 +322,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <returns>The UT for true anomaly.</returns>
         /// <param name="tA">True Anomaly.</param>
-        /// <param name="wrapAfterSeconds">Seconds after which to wrap the orbit</param>
         [KRPCMethod]
-        public double UAtTrueAnomaly (double tA, double wrapAfterSeconds) {
-            return InternalOrbit.GetUTforTrueAnomaly (tA, wrapAfterSeconds);
+        public double UTAtTrueAnomaly (double tA) {
+            return InternalOrbit.GetUTforTrueAnomaly (tA, 0);
         }
 
         /// <summary>
