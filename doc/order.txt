@@ -333,6 +333,14 @@ SpaceCenter.Part.MomentOfInertia
 SpaceCenter.Part.InertiaTensor
 SpaceCenter.Part.ReferenceFrame
 SpaceCenter.Part.CenterOfMassReferenceFrame
+SpaceCenter.Part.AddForce
+SpaceCenter.Part.InstantaneousForce
+SpaceCenter.Force
+SpaceCenter.Force.Part
+SpaceCenter.Force.ForceVector
+SpaceCenter.Force.Position
+SpaceCenter.Force.ReferenceFrame
+SpaceCenter.Force.Remove
 SpaceCenter.Module
 SpaceCenter.Module.Name
 SpaceCenter.Module.Part

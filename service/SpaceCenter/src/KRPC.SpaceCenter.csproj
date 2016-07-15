@@ -95,6 +95,7 @@
     <Compile Include="ExternalAPIAddon.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
+    <Compile Include="PartForcesAddon.cs" />
     <Compile Include="PilotAddon.cs" />
     <Compile Include="ResourceTransferAddon.cs" />
     <Compile Include="Services\AutoPilot.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Services\Parts\Engine.cs" />
     <Compile Include="Services\Parts\Experiment.cs" />
     <Compile Include="Services\Parts\Fairing.cs" />
+    <Compile Include="Services\Parts\Force.cs" />
     <Compile Include="Services\Parts\Intake.cs" />
     <Compile Include="Services\Parts\LandingGear.cs" />
     <Compile Include="Services\Parts\LandingGearState.cs" />
