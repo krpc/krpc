@@ -1,6 +1,7 @@
 KRPC
 KRPC.GetStatus
 KRPC.GetServices
+KRPC.Clients
 KRPC.CurrentGameScene
 KRPC.GameScene
 KRPC.GameScene.SpaceCenter
