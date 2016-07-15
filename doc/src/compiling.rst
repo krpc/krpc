@@ -1,39 +1,51 @@
 Compiling kRPC
 ==============
 
-kRPC uses the `Bazel build system <http://bazel.io>`_.
+Getting the source code
+-----------------------
+
+First you need to download a copy of the source code, which is available from
+`GitHub <https://github.com/krpc/krpc>`_ or using the following on the command
+line:
+
+.. code-block:: bash
+
+   git clone http://github.com/krpc/krpc
 
 Install Dependencies
 --------------------
 
-Bazel automatically downloads most of the required dependencies to build
-kRPC. However the following will need to be installed on your system:
+Next you need to install `Bazel <http://bazel.io>`_. This is the build system
+used to compile the project.
 
- * `Mono C# compiler and runtime <http://www.mono-project.com/download/>`_
- * Python, including virtualenv and pip
- * pdflatex for building the documentation
- * RSVG for converting SVGs to PNGs
- * libxml, libxslt and Python headers, for building the Java documentation
+The Bazel build scripts will automatically download most of the required
+dependencies for the project, but the following need to be installed manually on
+your system:
 
-To install the latest C# compiler and runtime on Ubuntu, follow the instructions
+ * `Mono C# compiler, runtime and tools <http://www.mono-project.com/download/>`_
+ * Python and virtualenv
+ * Autotools
+ * LuaRocks
+ * pdflatex, rsvg, libxml, libxslt and python headers (for building the documentation)
+
+To install these dependencies via apt on Ubuntu, first follow the instructions
 on `Mono's website
 <http://www.mono-project.com/docs/getting-started/install/linux/#debian-ubuntu-and-derivatives>`_
-The other dependencies can be installed via apt:
+to add their apt repository. Then run the following command:
 
 .. code-block:: bash
 
-   $ sudo apt-get install mono-complete \
-     python-virtualenv python-pip \
-     texlive-latex-base texlive-latex-recommended \
-     texlive-fonts-recommended texlive-latex-extra \
-     librsvg2-bin libxml2-dev libxslt1-dev python-dev
+   sudo apt-get install mono-complete python-setuptools python-virtualenv \
+   python-dev autoconf libtool luarocks texlive-latex-base \
+   texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
+   libxml2-dev libxslt1-dev librsvg2-bin
 
-Setup your Environment
-----------------------
+Set Up your Environment
+-----------------------
 
 Before building kRPC you need to make ``lib/ksp`` point to a directory
 containing Kerbal Space Program. For example on Linux, if your KSP directory is
-at ``/path/to/ksp`` and your kRPC source tree at ``/path/to/krpc`` you can
+at ``/path/to/ksp`` and your kRPC source tree is at ``/path/to/krpc`` you can
 create a symlink using ``ln -s /path/to/ksp /path/to/krpc/lib/ksp``
 
 You may also need to modify the symlink at ``lib/mono-4.5`` to point to the
@@ -46,8 +58,8 @@ To build the kRPC release archive, run ``bazel build //:krpc``. The resulting
 archive containing the GameData directory, client libraries etc will be created
 at ``bazel-out/krpc-<version>.zip``.
 
-The build scripts also define specific other targets that may be useful. Build
-them using ``bazel build <target>``:
+The build scripts also define targets for the different parts of the
+project. They can be built using ``bazel build <target>``:
 
 * ``//server`` builds the server plugin and associated files
 * Targets for building individual clients:
@@ -61,6 +73,8 @@ them using ``bazel build <target>``:
 * Targets for building individual services:
 
   * ``//service/SpaceCenter``
+  * ``//service/Drawing``
+  * ``//service/UI``
   * ``//service/InfernalRobotics``
   * ``//service/KerbalAlarmClock``
   * ``//service/RemoteTech``
@@ -78,9 +92,9 @@ them using ``bazel build <target>``:
 
 There are also several convenience scripts:
 
-* ``tools/serve-docs.sh`` -- build the documentation and serve it from
+* ``tools/serve-docs.sh`` -- builds the documentation and serves it from
   ``http://localhost:8080``
-* ``tools/install.sh`` -- build the plugin and the testing tools, and install
+* ``tools/install.sh`` -- builds the plugin and the testing tools, and installs
   them into the GameData directory of the copy of KSP found at ``lib/ksp``.
 
 Building the C# projects using an IDE
@@ -104,21 +118,14 @@ kRPC contains a suite of tests for the server plugin, services, client
 libraries and others.
 
 The tests, which do not require KSP to be running, can be executed using:
-``bazel test //:test``. Bazel will automatically download most of the required
-dependencies to run the tests, however you will also need to install Lua and
-LuaRocks on your system. On Ubuntu, these can be installed using: ``sudo apt-get
-install lua5.1 luarocks``
-
-.. note::
-
-   You need to install luarocks version 2.2.0 or higher. On older versions of
-   Ubuntu, the version in the apt repositories is too old and luarocks will need
-   to be installed via other means.
+``bazel test //:test``
 
 kRPC also includes a suite of tests that require KSP to be running. First run
 ``tools/install.sh`` to build kRPC and a testing tools DLL, and install them
 into the GameData directory of the copy of KSP found at ``lib/ksp``. Then run
 KSP, load a save game and start the server (with automatically accept client
-connected enabled). Then install the krpc python client, and run the scripts
-found in ``service/SpaceCenter/test``. These tests will automatically load a
-save game called ``test``, launch a vessel and run various tests on it.
+connections enabled). Then install the krpc python client, the krpctest package
+(built by target ``//tools/krpctest``) and run the scripts to test a particular
+service, for example those found in ``service/SpaceCenter/test``. These tests
+will automatically load a save game called ``krpctest``, launch a vessel and run
+various tests on it.
