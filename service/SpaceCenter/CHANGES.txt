@@ -1,3 +1,6 @@
+v0.3.6
+ * Fix value returned by Orbit.Inclination (#301)
+
 v0.3.5
  * Improved AutoPilot that auto-tunes itself based on the vessels available torque and moment of inertia (#289)
  * Add Resources.Enabled to enable/disable all of the resources in a part or stage at once (#283)
