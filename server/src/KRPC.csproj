@@ -112,9 +112,6 @@
     <Compile Include="Server\ClientDisconnectedException.cs" />
     <Compile Include="Server\ClientEventArgs.cs" />
     <Compile Include="Server\ClientRequestingConnectionEventArgs.cs" />
-    <Compile Include="Server\HTTP\Request.cs" />
-    <Compile Include="Server\HTTP\Response.cs" />
-    <Compile Include="Server\HTTP\MalformedRequestException.cs" />
     <Compile Include="Server\IClient.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IStream.cs" />
@@ -140,18 +137,6 @@
     <Compile Include="Server\TCP\TCPClient.cs" />
     <Compile Include="Server\TCP\TCPServer.cs" />
     <Compile Include="Server\TCP\TCPStream.cs" />
-    <Compile Include="Server\WebSockets\ConnectionRequest.cs" />
-    <Compile Include="Server\WebSockets\Frame.cs" />
-    <Compile Include="Server\WebSockets\FramingException.cs" />
-    <Compile Include="Server\WebSockets\HandshakeException.cs" />
-    <Compile Include="Server\WebSockets\Header.cs" />
-    <Compile Include="Server\WebSockets\OpCode.cs" />
-    <Compile Include="Server\WebSockets\RPCClient.cs" />
-    <Compile Include="Server\WebSockets\RPCServer.cs" />
-    <Compile Include="Server\WebSockets\RPCStream.cs" />
-    <Compile Include="Server\WebSockets\StreamClient.cs" />
-    <Compile Include="Server\WebSockets\StreamServer.cs" />
-    <Compile Include="Server\WebSockets\StreamStream.cs" />
     <Compile Include="ServicesChecker.cs" />
     <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
@@ -212,7 +197,6 @@
     <Compile Include="Utils\ConfigurationStorage.cs" />
     <Compile Include="Utils\ConfigurationStorageNode.cs" />
     <Compile Include="Utils\DocumentationExtensions.cs" />
-    <Compile Include="Utils\DynamicBuffer.cs" />
     <Compile Include="Utils\Equatable.cs" />
     <Compile Include="Utils\EventHandlerExtensions.cs" />
     <Compile Include="Utils\ExponentialMovingAverage.cs" />
@@ -224,7 +208,6 @@
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\RoundRobinScheduler.cs" />
     <Compile Include="Utils\StopwatchExtensions.cs" />
-    <Compile Include="Utils\Text.cs" />
     <Compile Include="Utils\Tuple.cs" />
   </ItemGroup>
 </Project>
