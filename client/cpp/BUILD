@@ -34,8 +34,8 @@ autotools_dist(
         'client/cpp/': '%s/' % name,
         'protobuf/krpc.pb.hpp': '%s/include/krpc/krpc.pb.hpp' % name,
         'protobuf/krpc.pb.cpp': '%s/src/krpc.pb.cpp' % name,
-        'external/m4_stdcxx/file/gitweb': '%s/m4/ax_cxx_compile_stdcxx.m4' % name,
-        'external/m4_stdcxx_11/file/gitweb': '%s/m4/ax_cxx_compile_stdcxx_11.m4' % name
+        '../m4_stdcxx/file/gitweb': '%s/m4/ax_cxx_compile_stdcxx.m4' % name,
+        '../m4_stdcxx_11/file/gitweb': '%s/m4/ax_cxx_compile_stdcxx_11.m4' % name
     },
     visibility = ['//:__pkg__']
 )
