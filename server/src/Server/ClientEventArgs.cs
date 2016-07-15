@@ -2,8 +2,14 @@ using System;
 
 namespace KRPC.Server
 {
-    abstract class ClientEventArgs : EventArgs
+    /// <summary>
+    /// Abstract base class for a client event.
+    /// </summary>
+    public abstract class ClientEventArgs : EventArgs
     {
+        /// <summary>
+        /// A client event for the given client.
+        /// </summary>
         protected ClientEventArgs (IClient client)
         {
             Client = client;
