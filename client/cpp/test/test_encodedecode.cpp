@@ -6,6 +6,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <cmath>
 
 #include <krpc/decoder.hpp>
 #include <krpc/encoder.hpp>
@@ -26,20 +27,20 @@ void test_float(float decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   float value = 0;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
-  if (!isnan(decoded))
+  if (!std::isnan(decoded))
     ASSERT_FLOAT_EQ(decoded, value);
   else
-    ASSERT_TRUE(isnan(value));
+    ASSERT_TRUE(std::isnan(value));
 }
 
 void test_double(double decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   double value = 0;
   krpc::decoder::decode(value, krpc::platform::unhexlify(encoded));
-  if (!isnan(decoded))
+  if (!std::isnan(decoded))
     ASSERT_DOUBLE_EQ(decoded, value);
   else
-    ASSERT_TRUE(isnan(value));
+    ASSERT_TRUE(std::isnan(value));
 }
 
 void test_string(std::string decoded, std::string encoded) {
