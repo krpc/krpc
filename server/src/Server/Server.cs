@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net;
 using KRPC.Server;
-using KRPC.Server.ProtocolBuffers;
-using KRPC.Server.TCP;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Utils;
@@ -18,9 +15,6 @@ namespace KRPC.Server
     [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
     sealed class Server : IServer
     {
-        readonly TCPServer rpcTcpServer;
-        readonly TCPServer streamTcpServer;
-
         internal IServer<Request,Response> RPCServer { get; private set; }
 
         internal IServer<NoMessage,StreamMessage> StreamServer { get; private set; }
@@ -55,14 +49,12 @@ namespace KRPC.Server
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
 
-        internal Server (IPAddress address, ushort rpcPort, ushort streamPort)
+        internal Server (IServer<Request,Response> rpcServer, IServer<NoMessage,StreamMessage> streamServer)
         {
             Core.Instance.Add (this);
 
-            rpcTcpServer = new TCPServer ("RPCServer", address, rpcPort);
-            streamTcpServer = new TCPServer ("StreamServer", address, streamPort);
-            RPCServer = new RPCServer (rpcTcpServer);
-            StreamServer = new StreamServer (streamTcpServer);
+            RPCServer = rpcServer;
+            StreamServer = streamServer;
 
             // Tie events to underlying server
             RPCServer.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
@@ -118,30 +110,17 @@ namespace KRPC.Server
         }
 
         /// <summary>
-        /// Get/set the servers listen address
+        /// The servers address.
         /// </summary>
-        public IPAddress Address {
-            get { return rpcTcpServer.Address; }
-            set {
-                rpcTcpServer.Address = value;
-                streamTcpServer.Address = value;
-            }
+        public string Address {
+            get { return RPCServer.Address; }
         }
 
         /// <summary>
-        /// Get/set the RPC port
+        /// Information about the server.
         /// </summary>
-        public ushort RPCPort {
-            get { return rpcTcpServer.Port; }
-            set { rpcTcpServer.Port = value; }
-        }
-
-        /// <summary>
-        /// Get/set the Stream port
-        /// </summary>
-        public ushort StreamPort {
-            get { return streamTcpServer.Port; }
-            set { streamTcpServer.Port = value; }
+        public string Info {
+            get { return RPCServer.Info; }
         }
 
         /// <summary>

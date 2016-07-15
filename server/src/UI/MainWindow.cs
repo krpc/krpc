@@ -82,10 +82,6 @@ namespace KRPC.UI
         const string invalidStreamPortText = "Stream port must be between 0 and 65535";
         const string invalidMaxTimePerUpdateText = "Max. time per update must be an integer";
         const string invalidRecvTimeoutText = "Receive timeout must be an integer";
-        const string localClientOnlyText = "Local clients only";
-        const string anyClientText = "Any client";
-        const string subnetAllowedText = "Subnet {0}";
-        const string unknownClientsAllowedText = "Unknown visibility";
         const string autoAcceptingConnectionsText = "auto-accepting new clients";
         const string stringSeparatorText = ", ";
 
@@ -234,7 +230,7 @@ namespace KRPC.UI
         void DrawRPCPort ()
         {
             if (Server.Running)
-                GUILayout.Label (rpcPortLabelText + " " + Server.RPCPort, labelStyle);
+                GUILayout.Label (rpcPortLabelText + " n/a", labelStyle);
             else {
                 GUILayout.Label (rpcPortLabelText, labelStyle);
                 rpcPort = GUILayout.TextField (rpcPort, portMaxLength, textFieldStyle);
@@ -244,10 +240,10 @@ namespace KRPC.UI
         void DrawStreamPort ()
         {
             if (Server.Running)
-                GUILayout.Label (streamPortLabelText + " " + Server.StreamPort, labelStyle);
+                GUILayout.Label (streamPortLabelText + " n/a", labelStyle);
             else {
-                GUILayout.Label (streamPortLabelText, labelStyle);
-                streamPort = GUILayout.TextField (streamPort, portMaxLength, textFieldStyle);
+                //GUILayout.Label (streamPortLabelText, labelStyle);
+                //streamPort = GUILayout.TextField (streamPort, portMaxLength, textFieldStyle);
             }
         }
 
@@ -319,7 +315,7 @@ namespace KRPC.UI
 
         void DrawServerInfo ()
         {
-            string info = AllowedClientsString (Server.Address);
+            string info = Server.Info;
             if (Config.AutoAcceptConnections)
                 info = info + stringSeparatorText + autoAcceptingConnectionsText;
             GUILayout.Label (info, labelStyle);
@@ -509,22 +505,6 @@ namespace KRPC.UI
             long now = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long lastActivity = lastClientActivity [client];
             return now - lastActivityMillisecondsInterval < lastActivity;
-        }
-
-        static string AllowedClientsString (IPAddress localAddress)
-        {
-            if (IPAddress.IsLoopback (localAddress))
-                return localClientOnlyText;
-            else if (localAddress == IPAddress.Any)
-                return anyClientText;
-            try {
-                var subnet = NetworkInformation.GetSubnetMask (localAddress);
-                return String.Format (subnetAllowedText, subnet);
-            } catch (NotImplementedException) {
-            } catch (ArgumentException) {
-            } catch (DllNotFoundException) {
-            }
-            return unknownClientsAllowedText;
         }
     }
 }

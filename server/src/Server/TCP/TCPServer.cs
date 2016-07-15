@@ -65,7 +65,7 @@ namespace KRPC.Server.TCP
         public TCPServer (String serverName, IPAddress address, ushort port)
         {
             name = serverName;
-            Address = address;
+            ListenAddress = address;
             listenPort = port;
         }
 
@@ -77,7 +77,7 @@ namespace KRPC.Server.TCP
                 return;
             }
             Logger.WriteLine ("TCPServer(" + name + "): starting", Logger.Severity.Debug);
-            tcpListener = new TcpListener (Address, listenPort);
+            tcpListener = new TcpListener (ListenAddress, listenPort);
             try {
                 tcpListener.Start ();
             } catch (SocketException exn) {
@@ -100,7 +100,7 @@ namespace KRPC.Server.TCP
             }
             EventHandlerExtensions.Invoke (OnStarted, this);
             Logger.WriteLine ("TCPServer(" + name + "): started successfully");
-            if (Address.ToString () == "0.0.0.0")
+            if (ListenAddress.ToString () == "0.0.0.0")
                 Logger.WriteLine ("TCPServer(" + name + "): listening on all local network interfaces", Logger.Severity.Debug);
             else
                 Logger.WriteLine ("TCPServer(" + name + "): listening on local address " + Address, Logger.Severity.Debug);
@@ -180,6 +180,32 @@ namespace KRPC.Server.TCP
             }
         }
 
+        public string Address {
+            get { return ListenAddress + ":" + Port; }
+        }
+
+        const string localClientOnlyText = "Local clients only";
+        const string anyClientText = "Any client";
+        const string subnetAllowedText = "Subnet {0}";
+        const string unknownClientsAllowedText = "Unknown visibility";
+
+        public string Info {
+            get {
+                if (IPAddress.IsLoopback (ListenAddress))
+                    return localClientOnlyText;
+                else if (ListenAddress == IPAddress.Any)
+                    return anyClientText;
+                try {
+                    var subnet = NetworkInformation.GetSubnetMask (ListenAddress);
+                    return String.Format (subnetAllowedText, subnet);
+                } catch (NotImplementedException) {
+                } catch (ArgumentException) {
+                } catch (DllNotFoundException) {
+                }
+                return unknownClientsAllowedText;
+            }
+        }
+
         public bool Running {
             get { return running; }
         }
@@ -228,7 +254,7 @@ namespace KRPC.Server.TCP
         /// <summary>
         /// Local address that the server listens on. Server must be restarted for changes to take effect.
         /// </summary>
-        public IPAddress Address { get; set; }
+        public IPAddress ListenAddress { get; set; }
 
         [SuppressMessage ("Gendarme.Rules.Correctness", "EnsureLocalDisposalRule")]
         [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]

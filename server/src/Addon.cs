@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Server;
+using KRPC.Server.TCP;
 using KRPC.UI;
 using KRPC.Utils;
 using KSP.UI.Screens;
@@ -17,6 +18,10 @@ namespace KRPC
         static Configuration config;
         static Core core;
         static Server.Server server;
+        static TCPServer rpcTcpServer;
+        static TCPServer streamTcpServer;
+        static KRPC.Server.ProtocolBuffers.RPCServer rpcServer;
+        static KRPC.Server.ProtocolBuffers.StreamServer streamServer;
         static Texture textureOnline;
         static Texture textureOffline;
 
@@ -44,7 +49,11 @@ namespace KRPC
             core.RecvTimeout = config.RecvTimeout;
 
             // Set up server
-            server = new Server.Server (config.Address, config.RPCPort, config.StreamPort);
+            rpcTcpServer = new TCPServer ("RPCServer", config.Address, config.RPCPort);
+            streamTcpServer = new TCPServer ("StreamServer", config.Address, config.StreamPort);
+            rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcTcpServer);
+            streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer);
+            server = new Server.Server (rpcServer, streamServer);
         }
 
         /// <summary>
@@ -200,9 +209,10 @@ namespace KRPC
         void StartServer ()
         {
             config.Load ();
-            server.RPCPort = config.RPCPort;
-            server.StreamPort = config.StreamPort;
-            server.Address = config.Address;
+            rpcTcpServer.ListenAddress = config.Address;
+            rpcTcpServer.Port = config.RPCPort;
+            streamTcpServer.ListenAddress = config.Address;
+            streamTcpServer.Port = config.StreamPort;
             core.OneRPCPerUpdate = config.OneRPCPerUpdate;
             core.MaxTimePerUpdate = config.MaxTimePerUpdate;
             core.AdaptiveRateControl = config.AdaptiveRateControl;
