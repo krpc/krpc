@@ -1,9 +1,12 @@
+import sys
 import hashlib
 from .generator import Generator
 from .docparser import DocParser
 from ..utils import lower_camel_case, upper_camel_case
 from krpc.utils import snake_case
 import krpc.types
+
+PY3K = sys.version_info >= (3,0)
 
 class JavaGenerator(Generator):
 
@@ -236,7 +239,10 @@ class JavaGenerator(Generator):
 
         # Add serial version UIDs to classes (generated using seeded hash of class' name)
         for class_name, cls in context['classes'].items():
-            cls['serial_version_uid'] = int(hashlib.sha1('bada55'+class_name).hexdigest(), 16) % (10 ** 18)
+            tohash = 'bada55'+class_name
+            if PY3K:
+                tohash = tohash.encode('UTF-8')
+            cls['serial_version_uid'] = int(hashlib.sha1(tohash).hexdigest(), 16) % (10 ** 18)
 
         return context
 
