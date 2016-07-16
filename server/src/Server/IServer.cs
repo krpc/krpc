@@ -25,6 +25,16 @@ namespace KRPC.Server
         void Update ();
 
         /// <summary>
+        /// The servers address.
+        /// </summary>
+        string Address { get; }
+
+        /// <summary>
+        /// Information about the server, displayed in the UI.
+        /// </summary>
+        string Info { get; }
+
+        /// <summary>
         /// Returns true if the server is running and accepting client connections.
         /// </summary>
         bool Running { get; }

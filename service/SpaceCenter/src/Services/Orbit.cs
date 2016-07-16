@@ -187,7 +187,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Inclination {
-            get { return GeometryExtensions.ToDegrees (InternalOrbit.inclination); }
+            get { return GeometryExtensions.ToRadians (InternalOrbit.inclination); }
         }
 
         /// <summary>

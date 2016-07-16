@@ -1,5 +1,6 @@
 apoapsis
 atm
+Autotools
 autotune
 Bazel
 circularization
@@ -29,9 +30,9 @@ Kerbals
 Kerbin
 Kosmo
 krpc
+krpctest
 kRPC
 kRPCs
-kRPCSpaceCenter
 laplace
 libxml
 libxslt
@@ -64,6 +65,7 @@ py
 quickload
 quicksave
 rect
+rsvg
 serializable
 streamPort
 symlink
