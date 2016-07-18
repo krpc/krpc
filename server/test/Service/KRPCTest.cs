@@ -25,7 +25,7 @@ namespace KRPC.Test.Service
             Assert.AreEqual (4, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (5, service.Procedures.Count);
+            Assert.AreEqual (6, service.Procedures.Count);
             Assert.AreEqual (0, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
 
@@ -53,6 +53,13 @@ namespace KRPC.Test.Service
                     MessageAssert.HasParameter (method, 0, "uint32", "id");
                     MessageAssert.HasNoAttributes (method);
                     MessageAssert.HasDocumentation (method);
+                } else if (method.Name == "get_Clients") {
+                    MessageAssert.HasReturnType (method, "KRPC.List");
+                    MessageAssert.HasNoParameters (method);
+                    MessageAssert.HasAttributes (method, 2);
+                    MessageAssert.HasAttribute (method, 0, "Property.Get(Clients)");
+                    MessageAssert.HasAttribute (method, 1, "ReturnType.List(Tuple(bytes,string,string))");
+                    MessageAssert.HasDocumentation (method);
                 } else if (method.Name == "get_CurrentGameScene") {
                     MessageAssert.HasReturnType (method, "int32");
                     MessageAssert.HasNoParameters (method);
@@ -65,7 +72,7 @@ namespace KRPC.Test.Service
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (5, foundProcedures);
+            Assert.AreEqual (6, foundProcedures);
 
             bool foundEnumeration = false;
             foreach (var enumeration in service.Enumerations) {

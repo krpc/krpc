@@ -186,7 +186,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_krpc_service_members(self):
         self.assertSetEqual(
-            set(['get_services', 'get_status', 'add_stream', 'remove_stream', 'current_game_scene', 'GameScene']),
+            set(['get_services', 'get_status', 'add_stream', 'remove_stream',
+                 'current_game_scene', 'GameScene', 'clients']),
             set(x for x in dir(self.conn.krpc) if not x.startswith('_')))
 
     def test_test_service_service_members(self):

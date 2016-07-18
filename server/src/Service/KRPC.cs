@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
+using KRPC.Utils;
 
 namespace KRPC.Service
 {
@@ -93,6 +96,16 @@ namespace KRPC.Service
                 services.ServicesList.Add (service);
             }
             return services;
+        }
+
+        /// <summary>
+        /// A list of RPC clients that are currently connected to the server.
+        /// Each entry in the list is a clients identifier, name and address.
+        /// </summary>
+        [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public static IList<Utils.Tuple<byte[], string, string>> Clients {
+            get { return Core.Instance.RPCClients.Select (x => new Utils.Tuple<byte[], string, string> (x.Guid.ToByteArray (), x.Name, x.Address)).ToList (); }
         }
 
         /// <summary>

@@ -3,9 +3,9 @@ namespace KRPC.Server
     /// <summary>
     /// Arguments passed to a client activity event
     /// </summary>
-    sealed class ClientActivityEventArgs : ClientEventArgs
+    public sealed class ClientActivityEventArgs : ClientEventArgs
     {
-        public ClientActivityEventArgs (IClient client) : base (client)
+        internal ClientActivityEventArgs (IClient client) : base (client)
         {
         }
     }
@@ -15,7 +15,7 @@ namespace KRPC.Server
     /// </summary>
     sealed class ClientActivityEventArgs<TIn,TOut> : ClientEventArgs<TIn,TOut>
     {
-        public ClientActivityEventArgs (IClient<TIn,TOut> client) : base (client)
+        internal ClientActivityEventArgs (IClient<TIn,TOut> client) : base (client)
         {
         }
     }
