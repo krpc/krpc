@@ -12,10 +12,11 @@ using KRPC.Utils;
 namespace KRPC
 {
     /// <summary>
-    /// The kRPC core. Manages the execution of remote procedures,
+    /// The kRPC core, which manages the execution of remote procedures,
     /// bridging the gap between servers and services.
+    /// This class is a singleton. The instance can be obtained via the <see cref="Instance"/> property.
     /// </summary>
-    sealed class Core
+    public sealed class Core
     {
         //TODO: remove servers list, replace with events etc.
         List<Server.Server> servers;
@@ -25,8 +26,36 @@ namespace KRPC
         List<RequestContinuation> continuations;
         IDictionary<IClient<NoMessage,StreamMessage>, IList<StreamRequest>> streamRequests;
         IDictionary<uint, object> streamResultCache;
-
         internal Func<double> GetUniversalTime;
+
+        static Core instance;
+
+        /// <summary>
+        /// Get or create an instance of KRPC.Core
+        /// </summary>
+        public static Core Instance {
+            get {
+                if (instance == null)
+                    instance = new Core ();
+                return instance;
+            }
+        }
+
+        Core ()
+        {
+            servers = new List<Server.Server> ();
+            rpcClients = new Dictionary<Guid, IClient<Request, Response>> ();
+            streamClients = new Dictionary<Guid, IClient<NoMessage, StreamMessage>> ();
+            clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
+            continuations = new List<RequestContinuation> ();
+            streamRequests = new Dictionary<IClient<NoMessage,StreamMessage>,IList<StreamRequest>> ();
+            streamResultCache = new Dictionary<uint, object> ();
+            OneRPCPerUpdate = false;
+            MaxTimePerUpdate = 5000;
+            AdaptiveRateControl = true;
+            BlockingRecv = true;
+            RecvTimeout = 1000;
+        }
 
         /// <summary>
         /// Event triggered when a RPC client has connected
@@ -77,38 +106,23 @@ namespace KRPC
         }
 
         /// <summary>
+        /// Get a list of all RPC clients connected to the server.
+        /// </summary>
+        public IEnumerable<IClient> RPCClients {
+            get { return rpcClients.Values.Cast<IClient> (); }
+        }
+
+        /// <summary>
+        /// Get a list of all Stream clients connected to the server.
+        /// </summary>
+        public IEnumerable<IClient> StreamClients {
+            get { return streamClients.Values.Cast<IClient> (); }
+        }
+
+        /// <summary>
         /// Event triggered when a client performs some activity
         /// </summary>
         public event EventHandler<ClientActivityEventArgs> OnClientActivity;
-
-        static Core instance;
-
-        /// <summary>
-        /// Instance of KRPCCore
-        /// </summary>
-        public static Core Instance {
-            get {
-                if (instance == null)
-                    instance = new Core ();
-                return instance;
-            }
-        }
-
-        Core ()
-        {
-            servers = new List<Server.Server> ();
-            rpcClients = new Dictionary<Guid, IClient<Request, Response>> ();
-            streamClients = new Dictionary<Guid, IClient<NoMessage, StreamMessage>> ();
-            clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
-            continuations = new List<RequestContinuation> ();
-            streamRequests = new Dictionary<IClient<NoMessage,StreamMessage>,IList<StreamRequest>> ();
-            streamResultCache = new Dictionary<uint, object> ();
-            OneRPCPerUpdate = false;
-            MaxTimePerUpdate = 5000;
-            AdaptiveRateControl = true;
-            BlockingRecv = true;
-            RecvTimeout = 1000;
-        }
 
         /// <summary>
         /// Add a server to the core.
@@ -277,7 +291,7 @@ namespace KRPC
         /// Update the server
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        public void Update ()
+        internal void Update ()
         {
             ulong startRPCsExecuted = RPCsExecuted;
             ulong startStreamRPCsExecuted = StreamRPCsExecuted;
