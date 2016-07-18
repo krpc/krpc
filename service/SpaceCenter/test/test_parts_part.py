@@ -670,5 +670,26 @@ class TestPartsPart(krpctest.TestCase):
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.solar_panel)
 
+class TestPartsPartForce(krpctest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab('Basic')
+        cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
+        cls.part = cls.vessel.parts.root
+
+    def test_add_force(self):
+        force = self.part.add_force((1, 2, 3), (4, 5, 6), self.part.reference_frame)
+        self.assertEqual(force.part.title, self.part.title)
+        self.assertEqual((1, 2, 3), force.force_vector)
+        self.assertEqual((4, 5, 6), force.position)
+        self.assertEqual(self.part.reference_frame, force.reference_frame)
+        force.remove()
+
+    def test_instantaneous_force(self):
+        self.part.instantaneous_force((1, 2, 3), (4, 5, 6), self.part.reference_frame)
+
 if __name__ == '__main__':
     unittest.main()

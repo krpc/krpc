@@ -682,5 +682,29 @@ namespace KRPC.SpaceCenter.Services.Parts
         public ReferenceFrame CenterOfMassReferenceFrame {
             get { return ReferenceFrame.ObjectCenterOfMass (InternalPart); }
         }
+
+        /// <summary>
+        /// Exert a constant force on the part, acting at the given position.
+        /// Returns an object that can be used to remove or modify the force.
+        /// </summary>
+        [KRPCMethod]
+        public Force AddForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
+        {
+            var obj = new Force (this, force, position, referenceFrame);
+            PartForcesAddon.Add (obj);
+            return obj;
+        }
+
+        /// <summary>
+        /// Exert an instantaneous force on the part, acting at the given position.
+        /// </summary>
+        /// <remarks>
+        /// The force is applied instantaneously in a single physics update.
+        /// </remarks>
+        [KRPCMethod]
+        public void InstantaneousForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
+        {
+            PartForcesAddon.AddInstantaneous (new Force (this, force, position, referenceFrame));
+        }
     }
 }

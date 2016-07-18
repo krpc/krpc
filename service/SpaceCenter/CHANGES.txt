@@ -1,5 +1,6 @@
 v0.3.6
  * Fix value returned by Orbit.Inclination (#301)
+ * Add Part.AddForce, Part.InstantaneousFource and Force class for exerting arbitrary forces on parts (#287)
 
 v0.3.5
  * Improved AutoPilot that auto-tunes itself based on the vessels available torque and moment of inertia (#289)
