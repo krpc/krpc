@@ -55,8 +55,38 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static int DecoupledAt (this Part part)
         {
             do {
-                if (part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> () || part.HasModule<LaunchClamp> ())
+                var parent = part.parent;
+
+                // If the part will decouple itself from its parent, return its activation stage
+                if (part.HasModule<LaunchClamp> ())
                     return part.inverseStage;
+                var moduleDecouple = part.Module<ModuleDecouple> ();
+                if (moduleDecouple != null) {
+                    if (moduleDecouple.isOmniDecoupler)
+                        return part.inverseStage;
+                    else if (parent != null && moduleDecouple.ExplosiveNode != null && moduleDecouple.ExplosiveNode.attachedPart == parent)
+                        return part.inverseStage;
+                }
+                var moduleAnchoredDecoupler = part.Module<ModuleAnchoredDecoupler> ();
+                if (moduleAnchoredDecoupler != null) {
+                    if (parent != null && moduleAnchoredDecoupler.ExplosiveNode != null && moduleAnchoredDecoupler.ExplosiveNode.attachedPart == parent)
+                        return part.inverseStage;
+                }
+
+                // If the part will be decoupled by its parent, return the parents activation stage
+                if (parent != null) {
+                    if (moduleDecouple != null) {
+                        if (moduleDecouple.isOmniDecoupler)
+                            return parent.inverseStage;
+                        else if (moduleDecouple.ExplosiveNode != null && moduleDecouple.ExplosiveNode.attachedPart == part)
+                            return parent.inverseStage;
+                    }
+                    if (moduleAnchoredDecoupler) {
+                        if (moduleAnchoredDecoupler.ExplosiveNode != null && moduleAnchoredDecoupler.ExplosiveNode.attachedPart == part)
+                            return parent.inverseStage;
+                    }
+                }
+
                 part = part.parent;
             } while (part != null);
             return -1;
