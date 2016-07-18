@@ -16,12 +16,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         Vector3 force;
         Vector3 position;
 
-        internal Force (Part part, Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
+        internal Force (Part part, Tuple3 forceVector, Tuple3 forcePosition, ReferenceFrame referenceFrame)
         {
             Part = part;
             rigidBody = part.InternalPart.GetComponent<Rigidbody> ();
-            this.force = force.ToVector ();
-            this.position = position.ToVector ();
+            force = forceVector.ToVector ();
+            position = forcePosition.ToVector ();
             ReferenceFrame = referenceFrame;
         }
 
@@ -65,9 +65,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             //TODO: delete the object
         }
 
-        internal void Update (float deltaTime)
+        internal void Update ()
         {
-            //FIXME: use delta time to scale the force???
             var worldForce = ReferenceFrame.DirectionToWorldSpace (force);
             var worldPosition = ReferenceFrame.PositionToWorldSpace (position);
             rigidBody.AddForceAtPosition (worldForce, worldPosition, ForceMode.Force);
