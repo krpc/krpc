@@ -3,6 +3,8 @@ atm
 Autotools
 autotune
 Bazel
+biome
+biomes
 circularization
 clickable
 clientgen
