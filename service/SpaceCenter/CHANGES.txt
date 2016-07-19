@@ -1,5 +1,6 @@
 v0.3.6
  * Fix value returned by Orbit.Inclination (#301)
+ * Fix issues with Part.DecoupleStage (#307)
  * Add Part.AddForce, Part.InstantaneousFource and Force class for exerting arbitrary forces on parts (#287)
 
 v0.3.5
