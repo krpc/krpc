@@ -148,5 +148,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<ScienceData> Data {
             get { return experiment.GetData ().Select (data => new ScienceData (experiment, data)).ToList (); }
         }
+
+        /// <summary>
+        /// The name of the biome the experiment is currently in.
+        /// </summary>
+        [KRPCProperty]
+        public string Biome {
+            get {
+                var vessel = experiment.part.vessel;
+                var body = vessel.orbit.referenceBody;
+                return ScienceUtil.GetExperimentBiome (body, vessel.latitude, vessel.longitude);
+            }
+        }
     }
 }

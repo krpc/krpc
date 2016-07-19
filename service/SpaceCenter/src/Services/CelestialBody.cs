@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -239,6 +240,23 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public bool HasAtmosphericOxygen {
             get { return InternalBody.atmosphereContainsOxygen; }
+        }
+
+        /// <summary>
+        /// The biomes present on this body.
+        /// </summary>
+        [KRPCProperty]
+        public IList<string> Biomes {
+            get { return InternalBody.BiomeMap.Attributes.Select (x => x.name).ToList (); }
+        }
+
+        /// <summary>
+        /// The biomes at the given latitude and longitude, in degrees.
+        /// </summary>
+        [KRPCMethod]
+        public string BiomeAt (double latitude, double longitude)
+        {
+            return InternalBody.BiomeMap.GetAtt (latitude, longitude).name;
         }
 
         /// <summary>

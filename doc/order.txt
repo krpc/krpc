@@ -54,6 +54,7 @@ SpaceCenter.Vessel.Situation
 SpaceCenter.Vessel.Recoverable
 SpaceCenter.Vessel.Recover
 SpaceCenter.Vessel.MET
+SpaceCenter.Vessel.Biome
 SpaceCenter.Vessel.Flight
 SpaceCenter.Vessel.Orbit
 SpaceCenter.Vessel.Control
@@ -122,6 +123,8 @@ SpaceCenter.CelestialBody.SphereOfInfluence
 SpaceCenter.CelestialBody.HasAtmosphere
 SpaceCenter.CelestialBody.AtmosphereDepth
 SpaceCenter.CelestialBody.HasAtmosphericOxygen
+SpaceCenter.CelestialBody.Biomes
+SpaceCenter.CelestialBody.BiomeAt
 SpaceCenter.CelestialBody.ReferenceFrame
 SpaceCenter.CelestialBody.NonRotatingReferenceFrame
 SpaceCenter.CelestialBody.OrbitalReferenceFrame
@@ -454,6 +457,7 @@ SpaceCenter.Experiment.Rerunnable
 SpaceCenter.Experiment.Inoperable
 SpaceCenter.Experiment.HasData
 SpaceCenter.Experiment.Data
+SpaceCenter.Experiment.Biome
 SpaceCenter.ScienceData
 SpaceCenter.ScienceData.DataAmount
 SpaceCenter.ScienceData.ScienceValue
