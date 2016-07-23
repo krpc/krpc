@@ -219,7 +219,10 @@ class ServiceBase(DynamicType):
         name = enum.name
         enum_type = cls._client._types.as_type('Enum(' + cls._name + '.' + name + ')',
                                                _parse_documentation(enum.documentation))
-        enum_type.set_values(dict((str(snake_case(x.name)), x.value) for x in enum.values))
+        enum_type.set_values(dict(
+            (str(snake_case(x.name)), {
+                'value': x.value, 'doc': _parse_documentation(x.documentation)
+            }) for x in enum.values))
         setattr(cls, name, enum_type.python_type)
 
     @classmethod

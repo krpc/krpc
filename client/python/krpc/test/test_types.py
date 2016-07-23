@@ -50,7 +50,11 @@ class TestTypes(unittest.TestCase):
         self.assertTrue(isinstance(typ, EnumType))
         self.assertIsNone(typ.python_type)
         self.assertEqual('Enum(ServiceName.EnumName)', typ.protobuf_type)
-        typ.set_values({'a': 0, 'b': 42, 'c': 100})
+        typ.set_values({
+            'a': {'value': 0, 'doc': ''},
+            'b': {'value': 42, 'doc': ''},
+            'c': {'value': 100, 'doc': ''}
+        })
         self.assertTrue(issubclass(typ.python_type, Enum))
         self.assertEquals(0, typ.python_type.a.value)
         self.assertEquals(42, typ.python_type.b.value)
