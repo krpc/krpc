@@ -1,4 +1,5 @@
 v0.3.6
+ * Add FAR support for Flight.Mach and add Flight.ReynoldsNumber (#313)
  * Fix value returned by Orbit.Inclination (#301)
  * An error is now thrown when Autopilot.ReferenceFrame is set to a reference frame that rotates with the vessel
  * Fix issues with Part.DecoupleStage (#307)
