@@ -52,61 +52,57 @@ namespace KRPC.Client.Services.{{ service_name }}
         {
         }
         {% endif %}
-
         {% for procedure_name,procedure in procedures.items() %}
-        {{ procedure.documentation | indent(width=8) }}
+
+{{ procedure.documentation | indent(width=8) }}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ procedure_name }}")]
         public {{ procedure.return_type }} {{ procedure_name }} ({{ sig_parameters(procedure.parameters) }})
         {
-            {% if procedure.parameters | length > 0 %}            {{ args(procedure.parameters) | indent(width=12) }}
-            {% endif %}
-            {{ call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters | length > 0) | indent(width=12) }}
-{% if procedure.return_type != 'void' %}            {{ return(procedure.return_type) | indent(width=12) }}
-            {% endif %}
+{% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=12) }}
+{% endif %}
+{{ call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters | length > 0) | indent(width=12) }}
+{% if procedure.return_type != 'void' %}{{ return(procedure.return_type) | indent(width=12) }}
+{% endif %}
         }
-
         {% endfor %}
-
         {% for property_name,property in properties.items() %}
-        {{ property.documentation | indent(width=8) }}
+
+{{ property.documentation | indent(width=8) }}
         {% if property.getter %}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}")]
         {% endif %}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}
             get {
-                {{ call(service_name, property.getter.remote_name, true, false) | indent(width=16) }}
-                {{ return(property.type, false) | indent(width=16) }}
+{{ call(service_name, property.getter.remote_name, true, false) | indent(width=16) }}
+{{ return(property.type, false) | indent(width=16) }}
             }
         {% endif %}
         {% if property.setter %}
             set {
-                {{ args([{'name': 'value', 'type': property.type}]) | indent(width=16) }}
-                {{ call(service_name, property.setter.remote_name, false, true) | indent(width=16) }}
+{{ args([{'name': 'value', 'type': property.type}]) | indent(width=16) }}
+{{ call(service_name, property.setter.remote_name, false, true) | indent(width=16) }}
             }
         {% endif %}
         }
-
         {% endfor %}
-
     }
-
     {% for enum_name,enm in enumerations.items() %}
-    {{ enm.documentation | indent(width=4) }}
+
+{{ enm.documentation | indent(width=4) }}
     [Serializable]
     public enum {{ enum_name }}
     {
         {% for value in enm['values'] %}
-        {{ value.documentation | indent(width=8) }}
+{{ value.documentation | indent(width=8) }}
         {{ value.name }} = {{ value.value }}{% if not loop.last %},{% endif %}
 
         {% endfor %}
     }
-
     {% endfor %}
-
     {% for class_name,cls in classes.items() %}
-    {{ cls.documentation | indent(width=4) }}
+
+{{ cls.documentation | indent(width=4) }}
     public class {{ class_name }} : global::KRPC.Client.RemoteObject
     {
         /// <summary>
@@ -115,59 +111,54 @@ namespace KRPC.Client.Services.{{ service_name }}
         public {{ class_name }} (global::KRPC.Client.IConnection connection, UInt64 id) : base (connection, id)
         {
         }
-
         {% for method_name,method in cls.methods.items() %}
-        {{ method.documentation | indent(width=8) }}
+
+{{ method.documentation | indent(width=8) }}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
         public {{ method.return_type }} {{ method_name }} ({{ sig_parameters(method.parameters) }})
         {
-            {{ args([{'name': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
-            {{ call(service_name, method.remote_name, method.return_type != 'void', true) | indent(width=12) }}
-{% if method.return_type != 'void' %}            {{ return(method.return_type) | indent(width=12) }}
-            {% endif %}
+{{ args([{'name': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
+{{ call(service_name, method.remote_name, method.return_type != 'void', true) | indent(width=12) }}
+{% if method.return_type != 'void' %}{{ return(method.return_type) | indent(width=12) }}
+{% endif %}
         }
-
         {% endfor %}
-
         {% for method_name,method in cls.static_methods.items() %}
-        {{ method.documentation | indent(width=8) }}
+
+{{ method.documentation | indent(width=8) }}
         /// <param name="connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
         public static {{ method.return_type }} {{ method_name }} (IConnection connection, {{ sig_parameters(method.parameters) }})
         {
-            {% if method.parameters | length > 0 %}            {{ args(method.parameters) | indent(width=12) }}
-            {% endif %}
-            {{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, true) | indent(width=12) }}
-{% if method.return_type != 'void' %}            {{ return(method.return_type, true) | indent(width=12) }}
-            {% endif %}
+{% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
+{% endif %}
+{{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, true) | indent(width=12) }}
+{% if method.return_type != 'void' %}{{ return(method.return_type, true) | indent(width=12) }}
+{% endif %}
         }
-
         {% endfor %}
-
         {% for property_name,property in cls.properties.items() %}
-        {{ property.documentation | indent(width=8) }}
+
+{{ property.documentation | indent(width=8) }}
         {% if property.getter %}
         [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}")]
         {% endif %}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}
             get {
-                {{ args([{'name': 'this', 'type': service_name+'.'+class_name }]) | indent(width=16) }}
-                {{ call(service_name, property.getter.remote_name, true, true) | indent(width=16) }}
-                {{ return(property.type, false) | indent(width=16) }}
+{{ args([{'name': 'this', 'type': service_name+'.'+class_name }]) | indent(width=16) }}
+{{ call(service_name, property.getter.remote_name, true, true) | indent(width=16) }}
+{{ return(property.type, false) | indent(width=16) }}
             }
         {% endif %}
         {% if property.setter %}
             set {
-                {{ args([{'name': 'this', 'type': service_name+'.'+class_name }, {'name': 'value', 'type': property.type}]) | indent(width=16) }}
-                {{ call(service_name, property.setter.remote_name, false, true) | indent(width=16) }}
+{{ args([{'name': 'this', 'type': service_name+'.'+class_name }, {'name': 'value', 'type': property.type}]) | indent(width=16) }}
+{{ call(service_name, property.setter.remote_name, false, true) | indent(width=16) }}
             }
         {% endif %}
         }
-
         {% endfor %}
     }
-
     {% endfor %}
-
 }
