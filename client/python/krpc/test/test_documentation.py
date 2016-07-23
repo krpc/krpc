@@ -16,6 +16,10 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object('Jeb')
         self.assertEqual('Method documentation string.', obj.get_value.__doc__)
         #self.assertEqual('Property documentation string.', obj.int_property.__doc__)
+        self.assertEqual('Enum documentation string.', self.conn.test_service.TestEnum.__doc__)
+        self.assertEqual('Enum ValueA documentation string.', self.conn.test_service.TestEnum.value_a.__doc__)
+        self.assertEqual('Enum ValueB documentation string.', self.conn.test_service.TestEnum.value_b.__doc__)
+        self.assertEqual('Enum ValueC documentation string.', self.conn.test_service.TestEnum.value_c.__doc__)
 
 if __name__ == '__main__':
     unittest.main()
