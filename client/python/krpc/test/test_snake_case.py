@@ -1,8 +1,8 @@
 import unittest
 from krpc.utils import snake_case as t
 
-class TestSnakeCase(unittest.TestCase):
 
+class TestSnakeCase(unittest.TestCase):
     def test_examples(self):
         # Simple cases
         self.assertEqual('server', t('Server'))
@@ -22,7 +22,6 @@ class TestSnakeCase(unittest.TestCase):
         # With underscores
         self.assertEqual('_http_server', t('_HTTPServer'))
         self.assertEqual('http__server', t('HTTP_Server'))
-
 
     def test_non_camel_case_examples(self):
         self.assertEqual('foobar', t('foobar'))

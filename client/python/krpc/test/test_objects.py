@@ -1,8 +1,8 @@
 import unittest
 from krpc.test.servertestcase import ServerTestCase
 
-class TestObjects(ServerTestCase, unittest.TestCase):
 
+class TestObjects(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestObjects, cls).setUpClass()
@@ -60,6 +60,7 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         obj3 = self.conn.test_service.create_test_object('bob')
         self.assertEqual(obj1._object_id, obj2._object_id)
         self.assertNotEqual(obj1._object_id, obj3._object_id)
+
 
 if __name__ == '__main__':
     unittest.main()

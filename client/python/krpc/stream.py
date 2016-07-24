@@ -2,10 +2,12 @@ from krpc.types import Types
 from krpc.decoder import Decoder
 from krpc.error import RPCError
 
+
 class StreamExistsError(RuntimeError):
     def __init__(self, stream_id):
         super(StreamExistsError, self).__init__('stream %d already exists' % stream_id)
         self.stream_id = stream_id
+
 
 class Stream(object):
     """ A streamed request. When invoked, returns the most recent value of the request. """
@@ -64,12 +66,14 @@ class Stream(object):
         """ Update the stream's most recent value """
         self._value = value
 
+
 def add_stream(conn, func, *args, **kwargs):
     """ Create a stream and return it """
     try:
         return Stream(conn, func, *args, **kwargs)
     except StreamExistsError as ex:
         return conn._stream_cache[ex.stream_id]
+
 
 def update_thread(connection, stop, cache, cache_lock):
     stream_message_type = Types().as_type('KRPC.StreamMessage')
@@ -85,8 +89,8 @@ def update_thread(connection, stop, cache, cache_lock):
                 break
             except IndexError:
                 pass
-            except: #pylint: disable=bare-except
-                #TODO: is there a better way to catch exceptions when the
+            except:  # pylint: disable=bare-except
+                # TODO: is there a better way to catch exceptions when the
                 #      thread is forcibly stopped (e.g. by CTRL+c)?
                 return
             if stop.is_set():

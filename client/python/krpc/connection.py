@@ -3,6 +3,7 @@ import select
 import time
 from krpc.error import NetworkError
 
+
 class Connection(object):
     def __init__(self, address, port):
         self._address = address

@@ -10,6 +10,7 @@ _RE_CLASS_PROPERTY_NAME = re.compile(r'^Class\.Property\.(Get|Set)\([^,]+,([^,]+
 _RE_RETURN_TYPE = re.compile(r'^ReturnType\.(.+)$')
 _RE_PARAMETER_TYPE = re.compile(r'^ParameterType\((\d+)\)\.(.+)$')
 
+
 class Attributes(object):
     """ Methods for extracting information from procedure attributes """
 
@@ -17,8 +18,7 @@ class Attributes(object):
     def is_a_procedure(cls, attrs):
         """ Return true if the attributes are for a plain procedure,
             i.e. not a property accessor, class method etc. """
-        return not cls.is_a_property_accessor(attrs) and \
-               not cls.is_a_class_member(attrs)
+        return not (cls.is_a_property_accessor(attrs) or cls.is_a_class_member(attrs))
 
     @classmethod
     def is_a_property_accessor(cls, attrs):
@@ -38,9 +38,11 @@ class Attributes(object):
     @classmethod
     def is_a_class_member(cls, attrs):
         """ Return true if the attributes are for a class member. """
-        return cls.is_a_class_method(attrs) or \
-               cls.is_a_class_static_method(attrs) or \
-               cls.is_a_class_property_accessor(attrs)
+        return (
+            cls.is_a_class_method(attrs)
+            or cls.is_a_class_static_method(attrs)
+            or cls.is_a_class_property_accessor(attrs)
+        )
 
     @classmethod
     def is_a_class_method(cls, attrs):

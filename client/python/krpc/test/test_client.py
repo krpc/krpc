@@ -3,8 +3,8 @@ import threading
 import krpc
 from krpc.test.servertestcase import ServerTestCase
 
-class TestClient(ServerTestCase, unittest.TestCase):
 
+class TestClient(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestClient, cls).setUpClass()

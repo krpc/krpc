@@ -3,6 +3,7 @@ import threading
 import socket
 from krpc.connection import Connection
 
+
 def server_thread(started):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind(('', 0))
@@ -34,8 +35,8 @@ def server_thread(started):
 
 server_thread.port = None
 
-class TestConnection(unittest.TestCase):
 
+class TestConnection(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._started_server = threading.Event()

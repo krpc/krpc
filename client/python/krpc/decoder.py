@@ -1,8 +1,9 @@
-from google.protobuf.internal import decoder as protobuf_decoder #pylint: disable=import-error,no-name-in-module
+from google.protobuf.internal import decoder as protobuf_decoder  # pylint: disable=import-error,no-name-in-module
 from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
 from krpc.types import ListType, DictionaryType, SetType, TupleType
 import krpc.platform
 from krpc.platform import hexlify
+
 
 class Decoder(object):
     """ Routines for decoding messages and values from the protocol buffer serialization format """

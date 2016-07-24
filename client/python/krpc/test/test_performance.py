@@ -2,16 +2,18 @@ import unittest
 import timeit
 from krpc.test.servertestcase import ServerTestCase
 
-class TestPerformance(ServerTestCase, unittest.TestCase):
 
+class TestPerformance(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestPerformance, cls).setUpClass()
 
     def test_performance(self):
         samples = 100
+
         def wrapper():
             self.conn.test_service.float_to_string(float(3.14159))
+
         delta_t = timeit.timeit(stmt=wrapper, number=samples)
         print
         print 'Total execution time: %.2f seconds' % delta_t
