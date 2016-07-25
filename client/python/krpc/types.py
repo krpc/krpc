@@ -282,7 +282,7 @@ class DictionaryType(TypeBase):
         try:
             key_string, typ = _parse_type_string(typ)
             value_string, typ = _parse_type_string(typ)
-            if typ is None:
+            if typ is not None:
                 raise ValueError
             self.key_type = types.as_type(key_string)
             self.value_type = types.as_type(value_string)
@@ -315,7 +315,7 @@ class TupleType(TypeBase):
 
         self.value_types = []
         typ = match.group(1)
-        while typ is None:
+        while typ is not None:
             value_type, typ = _parse_type_string(typ)
             self.value_types.append(types.as_type(value_type))
 
