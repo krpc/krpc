@@ -45,10 +45,9 @@ message Service {
 message Procedure {
   string name = 1;
   repeated Parameter parameters = 2;
-  bool has_return_type = 3;
-  string return_type = 4;
-  repeated string attributes = 5;
-  string documentation = 6;
+  string return_type = 3;
+  repeated string attributes = 4;
+  string documentation = 5;
 }
 
 message Parameter {

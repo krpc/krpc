@@ -415,10 +415,9 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
    message Procedure {
      string name = 1;
      repeated Parameter parameters = 2;
-     bool has_return_type = 3;
-     string return_type = 4;
-     repeated string attributes = 5;
-     string documentation = 6;
+     string return_type = 3;
+     repeated string attributes = 4;
+     string documentation = 5;
    }
 
    message Parameter {
@@ -443,10 +442,9 @@ The fields are:
      parameter, if any, :ref:`encoded using Protocol Buffer format
      <communication-protocol-protobuf-encoding>`.
 
-* ``has_return_type`` - True if the procedure returns a value.
-
-* ``return_type`` - If ``has_return_type`` is true, contains the :ref:`return
-  type <communication-protocol-type-names>` of the procedure.
+* ``return_type`` - The :ref:`return type <communication-protocol-type-names>`
+  of the procedure, or an empty string if the procedure does not return
+  anything.
 
 * ``attributes`` - The procedure's :ref:`attributes
   <communication-protocol-attributes>`.
