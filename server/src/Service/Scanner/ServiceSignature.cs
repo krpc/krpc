@@ -58,6 +58,7 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public ServiceSignature (string name)
         {
+            TypeUtils.ValidateIdentifier (name);
             Name = name;
             Documentation = String.Empty;
             Classes = new Dictionary<string, ClassSignature> ();
@@ -142,6 +143,9 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public void AddClassMethod (string cls, Type classType, MethodInfo method)
         {
+            TypeUtils.ValidateIdentifier (cls);
+            TypeUtils.ValidateKRPCClass (classType);
+            TypeUtils.ValidateKRPCMethod (method);
             if (!Classes.ContainsKey (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var name = method.Name;
@@ -159,6 +163,9 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public void AddClassProperty (string cls, Type classType, PropertyInfo property)
         {
+            TypeUtils.ValidateIdentifier (cls);
+            TypeUtils.ValidateKRPCClass (classType);
+            TypeUtils.ValidateKRPCClassProperty (property);
             if (!Classes.ContainsKey (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var getter = property.GetGetMethod ();

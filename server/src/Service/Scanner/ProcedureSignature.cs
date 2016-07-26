@@ -57,7 +57,7 @@ namespace KRPC.Service.Scanner
         public GameScene GameScene { get; private set; }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
-        public ProcedureSignature (string serviceName, string procedureName, string documentation, IProcedureHandler handler, GameScene gameScene)
+        internal ProcedureSignature (string serviceName, string procedureName, string documentation, IProcedureHandler handler, GameScene gameScene)
         {
             Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;

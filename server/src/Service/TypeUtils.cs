@@ -12,12 +12,12 @@ namespace KRPC.Service
 {
     static class TypeUtils
     {
-        static Regex identifierPattern = new Regex ("^[a-z][a-z0-9]*$", RegexOptions.IgnoreCase);
+        static Regex identifierPattern = new Regex ("^[A-Z][A-Za-z0-9]*$");
 
         /// <summary>
         /// Returns true if the given identifier is a valid kRPC identifier.
         /// A valid identifier is a non-zero length string, containing letters and numbers,
-        /// and starting with a letter.
+        /// starting with an uppercase letter.
         /// </summary>
         public static bool IsAValidIdentifier (string identifier)
         {

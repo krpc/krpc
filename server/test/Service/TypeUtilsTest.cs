@@ -22,6 +22,7 @@ namespace KRPC.Test.Service
         [TestCase ("")]
         [TestCase ("_Foo")]
         [TestCase ("Foo%")]
+        [TestCase ("foo")]
         public void IsNotAValidIdentifier (string input)
         {
             Assert.IsFalse (TypeUtils.IsAValidIdentifier (input));
