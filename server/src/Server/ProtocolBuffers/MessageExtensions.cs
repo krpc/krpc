@@ -43,7 +43,6 @@ namespace KRPC.Server.ProtocolBuffers
             result.Time = response.Time;
             if (response.HasError)
                 result.Error = response.Error.Length > 0 ? response.Error : "Unknown error";
-            result.HasReturnValue = response.HasReturnValue;
             if (response.HasReturnValue)
                 result.ReturnValue = Encoder.Encode (response.ReturnValue);
             return result;

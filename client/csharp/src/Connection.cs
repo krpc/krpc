@@ -156,7 +156,7 @@ namespace KRPC.Client
 
             if (response.Error.Length > 0)
                 throw new RPCException (response.Error);
-            return response.HasReturnValue ? response.ReturnValue : null;
+            return response.ReturnValue;
         }
 
         internal static Request BuildRequest (string service, string procedure, IList<ByteString> arguments = null)

@@ -158,8 +158,7 @@ with the following format:
    message Response {
      double time = 1;
      string error = 2;
-     bool has_return_value = 3;
-     bytes return_value = 4;
+     bytes return_value = 3;
    }
 
 The fields are:
@@ -170,10 +169,8 @@ The fields are:
 * ``error`` - An error message, if there was an error executing the remote
   procedure. An empty string if there was no error.
 
-* ``has_return_value`` - True if the remote procedure returned a value.
-
-* ``return_value`` - If ``has_return_value`` is true, contains the value
-  returned by the remote procedure, encoded in protocol buffer format.
+* ``return_value`` - Contains the value returned by the remote procedure, if
+  any, encoded in protocol buffer format.
 
 See :ref:`communication-protocol-protobuf-encoding` for details on how to
 unserialize the return value.
