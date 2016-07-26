@@ -4,10 +4,10 @@ import codecs
 import collections
 import jinja2
 from krpc.attributes import Attributes
-import krpc.types
-import krpc.decoder
+from krpc.types import Types, EnumerationType
+from krpc.decoder import Decoder
 from krpc.utils import snake_case
-from ..utils import lower_camel_case, indent, single_line
+from ..utils import lower_camel_case, indent, single_line, as_type
 
 class Generator(object):
 
@@ -16,7 +16,7 @@ class Generator(object):
         self._service = service
         self._defs = definitions
 
-    types = krpc.types.Types()
+    types = Types()
 
     def generate_file(self, path):
         content = self.generate()
@@ -42,8 +42,8 @@ class Generator(object):
 
     def generate_context_parameters(self, procedure):
         parameters = []
-        for pos, parameter in enumerate(procedure['parameters']):
-            typ = self.get_parameter_type(procedure, pos)
+        for parameter in procedure['parameters']:
+            typ = as_type(self.types, parameter['type'])
             info = {
                 'name': self.parse_name(parameter['name']),
                 'type': self.parse_parameter_type(typ),
@@ -80,7 +80,7 @@ class Generator(object):
 
         for name, procedure in self._defs['procedures'].items():
 
-            if Attributes.is_a_procedure(procedure['attributes']):
+            if Attributes.is_a_procedure(name):
                 procedures[self.parse_name(name)] = {
                     'procedure': procedure,
                     'remote_name': name,
@@ -89,8 +89,8 @@ class Generator(object):
                     'documentation': self.parse_documentation(procedure['documentation'])
                 }
 
-            elif Attributes.is_a_property_getter(procedure['attributes']):
-                property_name = self.parse_name(Attributes.get_property_name(procedure['attributes']))
+            elif Attributes.is_a_property_getter(name):
+                property_name = self.parse_name(Attributes.get_property_name(name))
                 if property_name not in properties:
                     properties[property_name] = {
                         'type': self.parse_return_type(self.get_return_type(procedure)),
@@ -103,8 +103,8 @@ class Generator(object):
                     'remote_name': name
                 }
 
-            elif Attributes.is_a_property_setter(procedure['attributes']):
-                property_name = self.parse_name(Attributes.get_property_name(procedure['attributes']))
+            elif Attributes.is_a_property_setter(name):
+                property_name = self.parse_name(Attributes.get_property_name(name))
                 if property_name not in properties:
                     properties[property_name] = {
                         'type': self.generate_context_parameters(procedure)[0]['type'],
@@ -117,9 +117,9 @@ class Generator(object):
                     'remote_name': name
                 }
 
-            elif Attributes.is_a_class_method(procedure['attributes']):
-                class_name = Attributes.get_class_name(procedure['attributes'])
-                method_name = self.parse_name(Attributes.get_class_method_name(procedure['attributes']))
+            elif Attributes.is_a_class_method(name):
+                class_name = Attributes.get_class_name(name)
+                method_name = self.parse_name(Attributes.get_class_member_name(name))
                 classes[class_name]['methods'][method_name] = {
                     'procedure': procedure,
                     'remote_name': name,
@@ -128,9 +128,9 @@ class Generator(object):
                     'documentation': self.parse_documentation(procedure['documentation'])
                 }
 
-            elif Attributes.is_a_class_static_method(procedure['attributes']):
-                class_name = Attributes.get_class_name(procedure['attributes'])
-                method_name = self.parse_name(Attributes.get_class_method_name(procedure['attributes']))
+            elif Attributes.is_a_class_static_method(name):
+                class_name = Attributes.get_class_name(name)
+                method_name = self.parse_name(Attributes.get_class_member_name(name))
                 classes[class_name]['static_methods'][method_name] = {
                     'procedure': procedure,
                     'remote_name': name,
@@ -139,9 +139,9 @@ class Generator(object):
                     'documentation': self.parse_documentation(procedure['documentation'])
                 }
 
-            elif Attributes.is_a_class_property_getter(procedure['attributes']):
-                class_name = Attributes.get_class_name(procedure['attributes'])
-                property_name = self.parse_name(Attributes.get_class_property_name(procedure['attributes']))
+            elif Attributes.is_a_class_property_getter(name):
+                class_name = Attributes.get_class_name(name)
+                property_name = self.parse_name(Attributes.get_class_member_name(name))
                 if property_name not in classes[class_name]['properties']:
                     classes[class_name]['properties'][property_name] = {
                         'type': self.parse_return_type(self.get_return_type(procedure)),
@@ -154,9 +154,9 @@ class Generator(object):
                     'remote_name': name
                 }
 
-            elif Attributes.is_a_class_property_setter(procedure['attributes']):
-                class_name = Attributes.get_class_name(procedure['attributes'])
-                property_name = self.parse_name(Attributes.get_class_property_name(procedure['attributes']))
+            elif Attributes.is_a_class_property_setter(name):
+                class_name = Attributes.get_class_name(name)
+                property_name = self.parse_name(Attributes.get_class_member_name(name))
                 if property_name not in classes[class_name]['properties']:
                     classes[class_name]['properties'][property_name] = {
                         'type': self.generate_context_parameters(procedure)[1]['type'],
@@ -185,17 +185,14 @@ class Generator(object):
 
     def decode_default_value(self, value, typ):
         value = base64.b64decode(value)
-        # Note: following is a workaround for decoding EnumType, as set_values has not been called
+        # Note: following is a workaround for decoding EnumerationType, as set_values has not been called
         value = array.array('B', value).tostring()
-        if not isinstance(typ, krpc.types.EnumType):
-            return krpc.decoder.Decoder.decode(value, typ)
+        if not isinstance(typ, EnumerationType):
+            return Decoder.decode(value, typ)
         else:
-            return krpc.decoder.Decoder.decode(value, self.types.as_type('int32'))
+            return Decoder.decode(value, self.types.sint32_type)
 
     def get_return_type(self, procedure):
         if 'return_type' not in procedure:
             return None
-        return self.types.get_return_type(procedure['return_type'], procedure['attributes'])
-
-    def get_parameter_type(self, procedure, pos):
-        return self.types.get_parameter_type(pos, procedure['parameters'][pos]['type'], procedure['attributes'])
+        return as_type(self.types, procedure['return_type'])

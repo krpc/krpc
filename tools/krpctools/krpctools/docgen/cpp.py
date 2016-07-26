@@ -1,8 +1,10 @@
 from .domain import Domain
 from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
 from .nodes import Enumeration, EnumerationValue
+from krpc.schema.KRPC import Type
+from krpc.types import ValueType, ClassType, EnumerationType, MessageType
+from krpc.types import TupleType, ListType, SetType, DictionaryType
 from krpc.utils import snake_case
-from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
 
 class CppDomain(Domain):
     name = 'cpp'
@@ -11,10 +13,15 @@ class CppDomain(Domain):
     codeext = 'cpp'
 
     type_map = {
-        'int32': 'int32_t',
-        'uint32': 'uint32_t',
-        'string': 'std::string',
-        'bytes': 'std::string'
+        Type.DOUBLE: 'double',
+        Type.FLOAT: 'float',
+        Type.SINT32: 'int32_t',
+        Type.SINT64: 'int64_t',
+        Type.UINT32: 'uint32_t',
+        Type.UINT64: 'uint64_t',
+        Type.BOOL: 'bool',
+        Type.STRING: 'std::string',
+        Type.BYTES: 'std::string'
     }
 
     value_map = {
@@ -32,13 +39,12 @@ class CppDomain(Domain):
         if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
-            return self.type_map.get(typ.protobuf_type, typ.protobuf_type)
+            return self.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
-            return 'krpc::schema::%s' % typ.protobuf_type.split('.')[1]
-        elif isinstance(typ, ClassType):
-            return self.shorten_ref(typ.protobuf_type[6:-1]).replace('.', '::')
-        elif isinstance(typ, EnumType):
-            return self.shorten_ref(typ.protobuf_type[5:-1]).replace('.', '::')
+            return 'krpc::schema::%s' % typ.python_type.__name__
+        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+            name = '%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name)
+            return self.shorten_ref(name).replace('.', '::')
         elif isinstance(typ, ListType):
             return 'std::vector<%s>' % self.type(typ.value_type)
         elif isinstance(typ, DictionaryType):
@@ -54,12 +60,12 @@ class CppDomain(Domain):
         if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
-            return typ.python_type.__name__
+            return self.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
-            return ':class:`krpc::schema::%s`' % typ.protobuf_type.split('.')[1]
+            return ':class:`krpc::schema::%s`' % typ.python_type.__name__
         elif isinstance(typ, ClassType):
             return ':class:`%s`' % self.type(typ)
-        elif isinstance(typ, EnumType):
+        elif isinstance(typ, EnumerationType):
             return ':class:`%s`' % self.type(typ)
         elif isinstance(typ, ListType):
             return 'std::vector<%s>' % self.type_description(typ.value_type)

@@ -1,6 +1,7 @@
 from google.protobuf.internal import decoder as protobuf_decoder  # pylint: disable=import-error,no-name-in-module
-from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
-from krpc.types import ListType, DictionaryType, SetType, TupleType
+from google.protobuf.internal import wire_format as protobuf_wire_format  # pylint: disable=import-error,no-name-in-module
+from krpc.types import Types, ValueType, ClassType, EnumerationType, MessageType
+from krpc.types import TupleType, ListType, SetType, DictionaryType
 import krpc.platform
 from krpc.platform import hexlify
 
@@ -25,28 +26,28 @@ class Decoder(object):
     def decode(cls, data, typ):
         """ Given a python type, and serialized data, decode the value """
         if isinstance(typ, MessageType):
-            return cls._decode_message(data, typ)
-        elif isinstance(typ, EnumType):
-            value = cls._decode_value(data, cls._types.as_type('int32'))
+            return cls._decode_message(data, typ.python_type)
+        elif isinstance(typ, EnumerationType):
+            value = cls._decode_value(data, cls._types.sint32_type)
             return typ.python_type(value)
         elif isinstance(typ, ValueType):
             return cls._decode_value(data, typ)
         elif isinstance(typ, ClassType):
-            object_id_typ = cls._types.as_type('uint64')
+            object_id_typ = cls._types.uint64_type
             object_id = cls._decode_value(data, object_id_typ)
             return typ.python_type(object_id) if object_id != 0 else None
         elif isinstance(typ, ListType):
-            msg = cls._decode_message(data, cls._types.as_type('KRPC.List'))
+            msg = cls._decode_message(data, krpc.schema.KRPC.List)
             return [cls.decode(item, typ.value_type) for item in msg.items]
         elif isinstance(typ, DictionaryType):
-            msg = cls._decode_message(data, cls._types.as_type('KRPC.Dictionary'))
+            msg = cls._decode_message(data, krpc.schema.KRPC.Dictionary)
             return dict((cls.decode(entry.key, typ.key_type), cls.decode(entry.value, typ.value_type))
                         for entry in msg.entries)
         elif isinstance(typ, SetType):
-            msg = cls._decode_message(data, cls._types.as_type('KRPC.Set'))
+            msg = cls._decode_message(data, krpc.schema.KRPC.Set)
             return set(cls.decode(item, typ.value_type) for item in msg.items)
         elif isinstance(typ, TupleType):
-            msg = cls._decode_message(data, cls._types.as_type('KRPC.Tuple'))
+            msg = cls._decode_message(data, krpc.schema.KRPC.Tuple)
             return tuple(cls.decode(item, value_type) for item, value_type in zip(msg.items, typ.value_types))
         else:
             raise RuntimeError('Cannot decode type %s' % str(typ))
@@ -65,14 +66,32 @@ class Decoder(object):
 
     @classmethod
     def _decode_message(cls, data, typ):
-        message = typ.python_type()
+        message = typ()
         message.ParseFromString(data)
         return message
 
     @classmethod
     def _decode_value(cls, data, typ):
-        return getattr(_ValueDecoder, 'decode_' + typ.protobuf_type)(data)
-
+        if typ.protobuf_type.code == krpc.schema.KRPC.Type.SINT32:
+            return _ValueDecoder.decode_sint32(data)
+        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.SINT64:
+            return _ValueDecoder.decode_sint64(data)
+        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.UINT32:
+            return _ValueDecoder.decode_uint32(data)
+        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.UINT64:
+            return _ValueDecoder.decode_uint64(data)
+        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.DOUBLE:
+            return _ValueDecoder.decode_double(data)
+        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.FLOAT:
+            return _ValueDecoder.decode_float(data)
+        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.BOOL:
+            return _ValueDecoder.decode_bool(data)
+        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.STRING:
+            return _ValueDecoder.decode_string(data)
+        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.BYTES:
+            return _ValueDecoder.decode_bytes(data)
+        else:
+            raise ValueError('Invalid type')
 
 class _ValueDecoder(object):
     """ Routines for encoding values from the protocol buffer serialization format """
@@ -86,12 +105,12 @@ class _ValueDecoder(object):
         return protobuf_decoder._DecodeVarint(data, 0)[0]
 
     @classmethod
-    def decode_int32(cls, data):
-        return int(cls._decode_signed_varint(data))
+    def decode_sint32(cls, data):
+        return int(protobuf_wire_format.ZigZagDecode(cls._decode_signed_varint(data)))
 
     @classmethod
-    def decode_int64(cls, data):
-        return cls._decode_signed_varint(data)
+    def decode_sint64(cls, data):
+        return protobuf_wire_format.ZigZagDecode(cls._decode_signed_varint(data))
 
     @classmethod
     def decode_uint32(cls, data):

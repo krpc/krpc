@@ -2,7 +2,7 @@ package krpc.client.services;
 {% macro args(parameters) %}
 ByteString[] _args = new ByteString[] {
 {% for x in parameters %}
-    Encoder.encode({{x.name}}){% if not loop.last %},{% endif %}
+    Encoder.encode({{x.name}}, {{x.type.spec}}){% if not loop.last %},{% endif %}
 
 {% endfor %}
 };
@@ -27,7 +27,7 @@ import krpc.client.RemoteEnum;
 import krpc.client.RemoteObject;
 import krpc.client.RPCInfo;
 import krpc.client.RPCException;
-import krpc.client.TypeSpecification;
+import krpc.client.Types;
 
 public class {{ service_name }} {
 
@@ -40,33 +40,11 @@ public class {{ service_name }} {
     private {{ service_name }}(Connection connection) {
         this._connection = connection;
     }
-
-    public static class _ReturnTypeSpec {
-        public static TypeSpecification get(String procedure) {
-            switch (procedure) {
-            {% for procedure in procedures.values()|list + properties.values()|list %}
-            {% if procedure.return_type.name != 'void' %}
-            case "{{ procedure.remote_name }}":
-                return {{ procedure.return_type.spec }};
-            {% endif %}
-            {% endfor %}
-            {% for cls in classes.values() %}
-            {% for procedure in cls.methods.values()|list + cls.static_methods.values()|list + cls.properties.values()|list %}
-            {% if procedure.return_type.name != 'void' %}
-            case "{{ procedure.remote_name }}":
-                return {{ procedure.return_type.spec }};
-            {% endif %}
-            {% endfor %}
-            {% endfor %}
-            }
-            throw new IllegalArgumentException("No type specification found for '" + procedure +"'");
-        }
-    }
     {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 
 {{ procedure.documentation | indent(width=4) }}
     @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "{{ service_name }}", procedure = "{{ procedure.remote_name }}", returnTypeSpec = _ReturnTypeSpec.class)
+    @RPCInfo(service = "{{ service_name }}", procedure = "{{ procedure.remote_name }}", types = _Types.class)
     public {{ procedure.return_type.name }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }}) throws RPCException, IOException {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=8) }}
 {% endif %}
@@ -83,8 +61,8 @@ public class {{ service_name }} {
 {{ value.documentation | indent(width=8) }}
         {{ value.name }}({{ value.value }}){% if not loop.last %},{% else %};{% endif %}
 
-        {% endfor %}
 
+        {% endfor %}
         private final int value;
 
         private {{ enum_name }} (int value) {
@@ -121,10 +99,10 @@ public class {{ service_name }} {
 
 {{ method.documentation | indent(width=8) }}
         @SuppressWarnings({ "unchecked" })
-        @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", returnTypeSpec = _ReturnTypeSpec.class)
+        @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
         public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }}) throws RPCException, IOException
         {
-{{ args([{'name': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
+{{ args([{'name': 'this', 'type': {'name': service_name+'.'+class_name, 'spec': 'krpc.client.Types.CreateClass("'+service_name+'", "'+class_name+'")'}}] + method.parameters) | indent(width=12) }}
 {{ call(service_name, method.remote_name, method.return_type.name != 'void', true) | indent(width=12) }}
 {% if method.return_type.name != 'void' %}{{ return(method.return_type) | indent(width=12) }}
 {% endif %}
@@ -134,7 +112,7 @@ public class {{ service_name }} {
 
 {{ method.documentation | indent(width=8) }}
         @SuppressWarnings({ "unchecked" })
-        @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", returnTypeSpec = _ReturnTypeSpec.class)
+        @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
         public static {{ method.return_type.name }} {{ method_name }}(Connection _connection, {{ sig_parameters(method.parameters) }}) throws RPCException, IOException
         {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
@@ -146,4 +124,67 @@ public class {{ service_name }} {
         {% endfor %}
     }
     {% endfor %}
+
+    public static class _Types {
+        public static krpc.schema.KRPC.Type getReturnType(String procedure) {
+            switch (procedure) {
+            {% for procedure in procedures.values()|list + properties.values()|list %}
+            case "{{ procedure.remote_name }}":
+            {% if procedure.return_type.name != 'void' %}
+                return {{ procedure.return_type.spec }};
+            {% else %}
+                return null;
+            {% endif %}
+            {% endfor %}
+            {% for cls in classes.values() %}
+            {% for procedure in cls.methods.values()|list + cls.static_methods.values()|list + cls.properties.values()|list %}
+            case "{{ procedure.remote_name }}":
+            {% if procedure.return_type.name != 'void' %}
+                return {{ procedure.return_type.spec }};
+            {% else %}
+                return null;
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+            }
+            throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+        }
+
+        public static krpc.schema.KRPC.Type[] getParameterTypes(String procedure) {
+            switch (procedure) {
+            {% for procedure in procedures.values()|list + properties.values()|list %}
+            case "{{ procedure.remote_name }}":
+                return new krpc.schema.KRPC.Type[] {
+                    {% for parameter in procedure.parameters %}
+                    {{ parameter.type.spec }}{% if not loop.last %},{% endif %}
+
+                    {% endfor %}
+                };
+            {% endfor %}
+            {% for class_name, cls in classes.items() %}
+            {% for procedure in cls.methods.values()|list + cls.properties.values()|list %}
+            case "{{ procedure.remote_name }}":
+                return new krpc.schema.KRPC.Type[] {
+                    krpc.client.Types.CreateClass("{{ service_name }}", "{{ class_name }}"){% if procedure.parameters | length > 0 %},{% endif %}
+
+                    {% for parameter in procedure.parameters %}
+                    {{ parameter.type.spec }}{% if not loop.last %},{% endif %}
+
+                    {% endfor %}
+                };
+            {% endfor %}
+            {% for procedure in cls.static_methods.values()|list %}
+            case "{{ procedure.remote_name }}":
+                return new krpc.schema.KRPC.Type[] {
+                    {% for parameter in procedure.parameters %}
+                    {{ parameter.type.spec }}{% if not loop.last %},{% endif %}
+
+                    {% endfor %}
+                };
+            {% endfor %}
+            {% endfor %}
+            }
+            throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+        }
+    }
 }

@@ -1,5 +1,7 @@
 from .generator import Generator
-import krpc.types
+from krpc.schema.KRPC import Type
+from krpc.types import ValueType, ClassType, EnumerationType, MessageType
+from krpc.types import TupleType, ListType, SetType, DictionaryType
 
 class CsharpGenerator(Generator):
 
@@ -17,6 +19,18 @@ class CsharpGenerator(Generator):
         'unchecked', 'unsafe', 'ushort', 'using', 'virtual', 'void', 'volatile', 'while'
     ])
 
+    _type_map = {
+        Type.DOUBLE: 'double',
+        Type.FLOAT: 'float',
+        Type.SINT32: 'int',
+        Type.SINT64: 'long',
+        Type.UINT32: 'uint',
+        Type.UINT64: 'ulong',
+        Type.BOOL: 'bool',
+        Type.STRING: 'string',
+        Type.BYTES: 'byte[]'
+    }
+
     def parse_name(self, name):
         if name in self._keywords:
             return '%s_' % name
@@ -24,54 +38,21 @@ class CsharpGenerator(Generator):
             return name
 
     def parse_type(self, typ):
-        if isinstance(typ, krpc.types.ValueType):
-            typ = typ.protobuf_type
-            if typ == 'string':
-                return 'String'
-            elif typ == 'bytes':
-                return 'byte[]'
-            elif typ == 'float':
-                return 'Single'
-            elif typ == 'double':
-                return 'Double'
-            elif typ == 'bool':
-                return 'Boolean'
-            elif 'int' in typ:
-                int_type_map = {
-                    'int16' : 'Int16',
-                    'uint16': 'UInt16',
-                    'int32' : 'Int32',
-                    'uint32': 'UInt32',
-                    'int64' : 'Int64',
-                    'uint64': 'UInt64'
-                }
-                return int_type_map[typ]
-        elif isinstance(typ, krpc.types.MessageType):
-            typ = typ.protobuf_type
-            if typ.startswith('KRPC.'):
-                _, _, x = typ.rpartition('.')
-                return 'global::KRPC.Schema.KRPC.%s' % x
-            elif typ.startswith('Test.'):
-                _, _, x = typ.rpartition('.')
-                return 'global::Test.%s' % x
-        elif isinstance(typ, krpc.types.ListType):
-            return 'global::System.Collections.Generic.IList<%s>' % \
-                self.parse_type(self.types.as_type(typ.protobuf_type[5:-1]))
-        elif isinstance(typ, krpc.types.SetType):
-            return 'global::System.Collections.Generic.ISet<%s>' % \
-                self.parse_type(self.types.as_type(typ.protobuf_type[4:-1]))
-        elif isinstance(typ, krpc.types.DictionaryType):
-            key_type, value_type = tuple(typ.protobuf_type[11:-1].split(','))
+        if isinstance(typ, ValueType):
+            return self._type_map[typ.protobuf_type.code]
+        elif isinstance(typ, MessageType):
+            return 'global::KRPC.Schema.KRPC.%s' % typ.python_type.__name__
+        elif isinstance(typ, ListType):
+            return 'global::System.Collections.Generic.IList<%s>' % self.parse_type(typ.value_type)
+        elif isinstance(typ, SetType):
+            return 'global::System.Collections.Generic.ISet<%s>' % self.parse_type(typ.value_type)
+        elif isinstance(typ, DictionaryType):
             return 'global::System.Collections.Generic.IDictionary<%s,%s>' % \
-                (self.parse_type(self.types.as_type(key_type)), self.parse_type(self.types.as_type(value_type)))
-        elif isinstance(typ, krpc.types.TupleType):
-            value_types = typ.protobuf_type[6:-1].split(',')
-            return 'global::System.Tuple<%s>' % ','.join(self.parse_type(self.types.as_type(t))
-                                                         for t in value_types)
-        elif isinstance(typ, krpc.types.ClassType):
-            return 'global::KRPC.Client.Services.%s' % typ.protobuf_type[6:-1]
-        elif isinstance(typ, krpc.types.EnumType):
-            return 'global::KRPC.Client.Services.%s' % typ.protobuf_type[5:-1]
+                (self.parse_type(typ.key_type), self.parse_type(typ.value_type))
+        elif isinstance(typ, TupleType):
+            return 'global::System.Tuple<%s>' % ','.join(self.parse_type(t) for t in typ.value_types)
+        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+            return 'global::KRPC.Client.Services.%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name)
         raise RuntimeError('Unknown type ' + typ)
 
     def parse_return_type(self, typ):
@@ -84,19 +65,20 @@ class CsharpGenerator(Generator):
 
     @staticmethod
     def parse_default_value(value, typ):
-        if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'string':
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return '"%s"' % value
-        if isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'bool':
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
             if value:
                 return 'true'
             else:
                 return 'false'
-        elif isinstance(typ, krpc.types.ValueType) and typ.protobuf_type == 'float':
+        elif isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
             return str(value) + "f"
-        elif isinstance(typ, krpc.types.ClassType) and value is None:
+        elif isinstance(typ, ClassType) and value is None:
             return 'null'
-        elif isinstance(typ, krpc.types.EnumType):
-            return '(global::KRPC.Client.Services.%s)%s' % (typ.protobuf_type[5:-1], value)
+        elif isinstance(typ, EnumerationType):
+            return '(global::KRPC.Client.Services.%s.%s)%s' % \
+                (typ.protobuf_type.service, typ.protobuf_type.name, value)
         else:
             return value
 

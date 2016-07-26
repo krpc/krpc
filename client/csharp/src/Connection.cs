@@ -154,9 +154,9 @@ namespace KRPC.Client
                 response = Response.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
             }
 
-            if (response.HasError)
+            if (response.Error.Length > 0)
                 throw new RPCException (response.Error);
-            return response.HasReturnValue ? response.ReturnValue : null;
+            return response.ReturnValue;
         }
 
         internal static Request BuildRequest (string service, string procedure, IList<ByteString> arguments = null)

@@ -8,7 +8,6 @@ from krpc.decoder import Decoder
 from krpc.utils import snake_case
 from krpc.error import RPCError
 import krpc.stream
-import krpc.schema.KRPC
 
 
 class Client(object):
@@ -25,11 +24,11 @@ class Client(object):
         self._stream_connection = stream_connection
         self._stream_cache = {}
         self._stream_cache_lock = threading.Lock()
-        self._request_type = self._types.as_type('KRPC.Request')
-        self._response_type = self._types.as_type('KRPC.Response')
+        self._request_type = self._types.request_type
+        self._response_type = self._types.response_type
 
         # Get the services
-        services = self._invoke('KRPC', 'GetServices', [], [], [], self._types.as_type('KRPC.Services')).services
+        services = self._invoke('KRPC', 'GetServices', [], [], [], self._types.services_type).services
 
         # Set up services
         for service in services:
@@ -84,7 +83,7 @@ class Client(object):
             response = self._receive_response()
 
         # Check for an error response
-        if response.has_error:
+        if response.error:
             raise RPCError(response.error)
 
         # Decode the response and return the (optional) result

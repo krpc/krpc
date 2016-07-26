@@ -34,17 +34,18 @@ std::string encode(double value) {
 }
 
 std::string encode(pb::int32 value) {
-  size_t length = pb::io::CodedOutputStream::VarintSize32SignExtended(value);
+  pb::uint32 zigZagValue = pb::internal::WireFormatLite::ZigZagEncode32(value);
+  size_t length = pb::io::CodedOutputStream::VarintSize32(zigZagValue);
   std::string data(length, 0);
-  pb::io::CodedOutputStream::WriteVarint32SignExtendedToArray(value, (pb::uint8*)&data[0]);
+  pb::io::CodedOutputStream::WriteVarint32ToArray(zigZagValue, (pb::uint8*)&data[0]);
   return data;
 }
 
 std::string encode(pb::int64 value) {
-  pb::uint64 value2 = static_cast<pb::uint64>(value);
-  size_t length = pb::io::CodedOutputStream::VarintSize64(value2);
+  pb::uint64 zigZagValue = pb::internal::WireFormatLite::ZigZagEncode64(value);
+  size_t length = pb::io::CodedOutputStream::VarintSize64(zigZagValue);
   std::string data(length, 0);
-  pb::io::CodedOutputStream::WriteVarint64ToArray(value2, (pb::uint8*)&data[0]);
+  pb::io::CodedOutputStream::WriteVarint64ToArray(zigZagValue, (pb::uint8*)&data[0]);
   return data;
 }
 

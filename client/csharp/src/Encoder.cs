@@ -79,14 +79,14 @@ namespace KRPC.Client
             if (value == null)
                 stream.WriteUInt64 (0);
             else if (value is Enum)
-                stream.WriteInt32 ((int)value);
+                stream.WriteSInt32 ((int)value);
             else {
                 switch (Type.GetTypeCode (type)) {
                 case TypeCode.Int32:
-                    stream.WriteInt32 ((int)value);
+                    stream.WriteSInt32 ((int)value);
                     break;
                 case TypeCode.Int64:
-                    stream.WriteInt64 ((long)value);
+                    stream.WriteSInt64 ((long)value);
                     break;
                 case TypeCode.UInt32:
                     stream.WriteUInt32 ((uint)value);
@@ -201,12 +201,12 @@ namespace KRPC.Client
         {
             var stream = value.CreateCodedInput ();
             if (type.IsEnum)
-                return stream.ReadInt32 ();
+                return stream.ReadSInt32 ();
             switch (Type.GetTypeCode (type)) {
             case TypeCode.Int32:
-                return stream.ReadInt32 ();
+                return stream.ReadSInt32 ();
             case TypeCode.Int64:
-                return stream.ReadInt64 ();
+                return stream.ReadSInt64 ();
             case TypeCode.UInt32:
                 return stream.ReadUInt32 ();
             case TypeCode.UInt64:

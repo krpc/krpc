@@ -1,9 +1,12 @@
 import hashlib
+import itertools
 from .generator import Generator
 from .docparser import DocParser
-from ..utils import lower_camel_case, upper_camel_case
+from ..utils import lower_camel_case, upper_camel_case, as_type
+from krpc.schema.KRPC import Type
+from krpc.types import ValueType, ClassType, EnumerationType, MessageType
+from krpc.types import TupleType, ListType, SetType, DictionaryType
 from krpc.utils import snake_case
-import krpc.types
 
 class JavaGenerator(Generator):
 
@@ -23,6 +26,30 @@ class JavaGenerator(Generator):
         'Unit', 'Pair', 'Triplet', 'Quartet', 'Quintet', 'Sextet', 'Septet', 'Octet', 'Ennead', 'Decade'
     ]
 
+    _type_map = {
+        Type.DOUBLE: 'double',
+        Type.FLOAT: 'float',
+        Type.SINT32: 'int',
+        Type.SINT64: 'long',
+        Type.UINT32: 'int',
+        Type.UINT64: 'long',
+        Type.BOOL: 'boolean',
+        Type.STRING: 'String',
+        Type.BYTES: 'byte[]'
+    }
+
+    _type_map_classes = {
+        Type.DOUBLE: 'Double',
+        Type.FLOAT: 'Float',
+        Type.SINT32: 'Integer',
+        Type.SINT64: 'Long',
+        Type.UINT32: 'Integer',
+        Type.UINT64: 'Long',
+        Type.BOOL: 'Boolean',
+        Type.STRING: 'String',
+        Type.BYTES: 'byte[]'
+    }
+
     @classmethod
     def get_tuple_class_name(cls, value_types):
         return cls._tuple_class_names[len(value_types)-1]
@@ -40,96 +67,56 @@ class JavaGenerator(Generator):
         return snake_case(name).upper()
 
     def parse_type(self, typ, in_collection=False):
-        if not in_collection and isinstance(typ, krpc.types.ValueType):
-            typ = typ.protobuf_type
-            if typ == 'string':
-                return 'String'
-            elif typ == 'bytes':
-                return 'byte[]'
-            elif typ == 'float':
-                return 'float'
-            elif typ == 'double':
-                return 'double'
-            elif typ == 'bool':
-                return 'boolean'
-            elif 'int' in typ:
-                int_type_map = {
-                    'int32' : 'int',
-                    'uint32': 'int',
-                    'int64' : 'long',
-                    'uint64': 'long'
-                }
-                return int_type_map[typ]
-        elif isinstance(typ, krpc.types.ValueType):
-            typ = typ.protobuf_type
-            if typ == 'string':
-                return 'String'
-            elif typ == 'bytes':
-                return 'byte[]'
-            elif typ == 'float':
-                return 'Float'
-            elif typ == 'double':
-                return 'Double'
-            elif typ == 'bool':
-                return 'Boolean'
-            elif 'int' in typ:
-                int_type_map = {
-                    'int32' : 'Integer',
-                    'uint32': 'Integer',
-                    'int64' : 'Long',
-                    'uint64': 'Long'
-                }
-                return int_type_map[typ]
-        elif isinstance(typ, krpc.types.MessageType):
-            typ = typ.protobuf_type
-            if typ.startswith('KRPC.'):
-                _, _, x = typ.rpartition('.')
-                return 'krpc.schema.KRPC.%s' % x
-            elif typ.startswith('Test.'):
-                _, _, x = typ.rpartition('.')
-                return 'test.Test.%s' % x
-        elif isinstance(typ, krpc.types.ListType):
-            return 'java.util.List<%s>' % \
-                self.parse_type(self.types.as_type(typ.protobuf_type[5:-1]), True)
-        elif isinstance(typ, krpc.types.SetType):
-            return 'java.util.Set<%s>' % \
-                self.parse_type(self.types.as_type(typ.protobuf_type[4:-1]), True)
-        elif isinstance(typ, krpc.types.DictionaryType):
-            key_type, value_type = tuple(typ.protobuf_type[11:-1].split(','))
-            return 'java.util.Map<%s,%s>' % (self.parse_type(self.types.as_type(key_type)),
-                                             self.parse_type(self.types.as_type(value_type), True))
-        elif isinstance(typ, krpc.types.TupleType):
-            value_types = typ.protobuf_type[6:-1].split(',')
-            name = self.get_tuple_class_name(value_types)
-            return 'org.javatuples.'+name+'<%s>' % (','.join(self.parse_type(self.types.as_type(t), True)
-                                                             for t in value_types))
-        elif isinstance(typ, krpc.types.ClassType):
-            return 'krpc.client.services.%s' % typ.protobuf_type[6:-1]
-        elif isinstance(typ, krpc.types.EnumType):
-            return 'krpc.client.services.%s' % typ.protobuf_type[5:-1]
+        if not in_collection and isinstance(typ, ValueType):
+            return self._type_map[typ.protobuf_type.code]
+        elif isinstance(typ, ValueType):
+            return self._type_map_classes[typ.protobuf_type.code]
+        elif isinstance(typ, MessageType):
+            return 'krpc.schema.KRPC.%s' % typ.python_type.__name__
+        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+            return 'krpc.client.services.%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name)
+        elif isinstance(typ, TupleType):
+            name = self.get_tuple_class_name(typ.value_types)
+            return 'org.javatuples.'+name+'<%s>' % \
+                (','.join(self.parse_type(t, True) for t in typ.value_types))
+        elif isinstance(typ, ListType):
+            return 'java.util.List<%s>' % self.parse_type(typ.value_type, True)
+        elif isinstance(typ, SetType):
+            return 'java.util.Set<%s>' % self.parse_type(typ.value_type, True)
+        elif isinstance(typ, DictionaryType):
+            return 'java.util.Map<%s,%s>' % \
+                (self.parse_type(typ.key_type, True), self.parse_type(typ.value_type, True))
         raise RuntimeError('Unknown type ' + typ)
 
     def parse_type_specification(self, typ):
         if typ is None:
             return None
-        if isinstance(typ, krpc.types.ListType):
-            return 'new TypeSpecification(java.util.List.class, %s)' % \
-                self.parse_type_specification(self.types.as_type(typ.protobuf_type[5:-1]))
-        elif isinstance(typ, krpc.types.SetType):
-            return 'new TypeSpecification(java.util.Set.class, %s)' % \
-                self.parse_type_specification(self.types.as_type(typ.protobuf_type[4:-1]))
-        elif isinstance(typ, krpc.types.DictionaryType):
-            key_type, value_type = tuple(typ.protobuf_type[11:-1].split(','))
-            return 'new TypeSpecification(java.util.Map.class, %s, %s)' % \
-                (self.parse_type_specification(self.types.as_type(key_type)),
-                 self.parse_type_specification(self.types.as_type(value_type)))
-        elif isinstance(typ, krpc.types.TupleType):
-            value_types = typ.protobuf_type[6:-1].split(',')
-            return 'new TypeSpecification(org.javatuples.%s.class, %s)' % \
-                (self.get_tuple_class_name(value_types),
-                 ','.join(self.parse_type_specification(self.types.as_type(t)) for t in value_types))
-        else:
-            return 'new TypeSpecification(%s.class)' % self.parse_type(typ, True)
+        if isinstance(typ, ValueType):
+            return 'krpc.client.Types.CreateValue(krpc.schema.KRPC.Type.TypeCode.%s)' % \
+                Type.TypeCode.Name(typ.protobuf_type.code)
+        elif isinstance(typ, MessageType):
+            return 'krpc.client.Types.CreateMessage(krpc.schema.KRPC.Type.TypeCode.%s)' % \
+                Type.TypeCode.Name(typ.protobuf_type.code)
+        elif isinstance(typ, ClassType):
+            return 'krpc.client.Types.CreateClass("%s", "%s")' % \
+                (typ.protobuf_type.service, typ.protobuf_type.name)
+        elif isinstance(typ, EnumerationType):
+            return 'krpc.client.Types.CreateEnumeration("%s", "%s")' % \
+                (typ.protobuf_type.service, typ.protobuf_type.name)
+        elif isinstance(typ, TupleType):
+            return 'krpc.client.Types.CreateTuple(%s)' % \
+                ','.join(self.parse_type_specification(t) for t in typ.value_types)
+        elif isinstance(typ, ListType):
+            return 'krpc.client.Types.CreateList(%s)' % \
+                self.parse_type_specification(typ.value_type)
+        elif isinstance(typ, SetType):
+            return 'krpc.client.Types.CreateSet(%s)' % \
+                self.parse_type_specification(typ.value_type)
+        elif isinstance(typ, DictionaryType):
+            return 'krpc.client.Types.CreateDictionary(%s, %s)' % \
+                (self.parse_type_specification(typ.key_type),
+                 self.parse_type_specification(typ.value_type))
+        raise RuntimeError('Unknown type ' + typ)
 
     def parse_return_type(self, typ):
         if typ is None:
@@ -197,32 +184,33 @@ class JavaGenerator(Generator):
             class_info['properties'] = class_properties
 
         # Add type specifications to types
-        for info in context['procedures'].values() + context['properties'].values():
+        procedures = context['procedures'].values() + \
+                     context['properties'].values() + \
+                     list(itertools.chain(*[class_info['static_methods'].values()
+                                            for class_info in context['classes'].values()]))
+        for info in procedures:
             info['return_type'] = {
                 'name': info['return_type'],
                 'spec': self.parse_type_specification(self.get_return_type(info['procedure']))
             }
             pos = 0
-            for pinfo in info['parameters']:
-                param_type = self.get_parameter_type(info['procedure'], pos)
+            for i, pinfo in enumerate(info['parameters']):
+                param_type = as_type(self.types, info['procedure']['parameters'][i]['type'])
                 pinfo['type'] = {
                     'name': pinfo['type'],
                     'spec': self.parse_type_specification(param_type)
                 }
                 pos += 1
 
-        for class_name, class_info in context['classes'].items():
-            members = class_info['methods'].items() + \
-                      class_info['static_methods'].items() + \
-                      class_info['properties'].items()
-            for name, info in members:
+        for class_info in context['classes'].values():
+            for info in class_info['methods'].values() + class_info['properties'].values():
                 info['return_type'] = {
                     'name': info['return_type'],
                     'spec': self.parse_type_specification(self.get_return_type(info['procedure']))
                 }
                 pos = 0
-                for pinfo in info['parameters']:
-                    param_type = self.get_parameter_type(info['procedure'], pos)
+                for i, pinfo in enumerate(info['parameters']):
+                    param_type = as_type(self.types, info['procedure']['parameters'][i+1]['type'])
                     pinfo['type'] = {
                         'name': pinfo['type'],
                         'spec': self.parse_type_specification(param_type)
