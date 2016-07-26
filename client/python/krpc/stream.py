@@ -108,7 +108,7 @@ def update_thread(connection, stop, cache, cache_lock):
                     continue
 
                 # Check for an error response
-                if response.response.has_error:
+                if response.response.error:
                     cache[response.id].value = RPCError(response.response.error)
                     continue
 

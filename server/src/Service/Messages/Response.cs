@@ -17,15 +17,22 @@ namespace KRPC.Service.Messages
             }
         }
 
-        public bool HasError { get; set; }
+        public bool HasError { get; private set; }
 
-        public string Error { get; set; }
+        public string Error {
+            get { return error; }
+            set {
+                error = value;
+                HasError = true;
+            }
+        }
 
         object returnValue;
 
+        string error;
+
         public Response ()
         {
-            Error = String.Empty;
         }
     }
 }

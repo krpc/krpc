@@ -71,7 +71,7 @@ class StreamManager {
         synchronized (streamData) {
             if (!streamData.containsKey(id))
                 throw new StreamException("Stream does not exist");
-            if (response.getHasError())
+            if (!response.getError().isEmpty())
                 return; // TODO: do something with the error
             streamData.put(id, response.getReturnValue());
             streamValues.remove(id);

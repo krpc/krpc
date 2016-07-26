@@ -468,12 +468,10 @@ namespace KRPC
                             response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
                         } catch (RPCException e) {
                             response = new Response ();
-                            response.HasError = true;
                             response.Error = e.ToString ();
                         } catch (YieldException e) {
                             //FIXME: handle yields correctly
                             response = new Response ();
-                            response.HasError = true;
                             response.Error = e.ToString ();
                         }
                         rpcsExecuted++;
@@ -580,7 +578,6 @@ namespace KRPC
                     continue;
                 } catch (Exception e) {
                     var response = new Response ();
-                    response.HasError = true;
                     response.Error = "Error receiving message" + Environment.NewLine + e.Message + Environment.NewLine + e.StackTrace;
                     response.Time = GetUniversalTime ();
                     if (Logger.ShouldLog (Logger.Severity.Debug))
@@ -612,13 +609,11 @@ namespace KRPC
                 throw;
             } catch (RPCException e) {
                 response = new Response ();
-                response.HasError = true;
                 response.Error = e.Message;
                 if (Logger.ShouldLog (Logger.Severity.Debug))
                     Logger.WriteLine (response.Error, Logger.Severity.Debug);
             } catch (Exception e) {
                 response = new Response ();
-                response.HasError = true;
                 response.Error = e.Message + Environment.NewLine + e.StackTrace;
                 if (Logger.ShouldLog (Logger.Severity.Debug))
                     Logger.WriteLine (response.Error, Logger.Severity.Debug);

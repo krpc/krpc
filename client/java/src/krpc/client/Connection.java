@@ -188,7 +188,7 @@ public class Connection {
             data = rpcInputStream.readRawBytes(size);
         }
         KRPC.Response response = KRPC.Response.parseFrom(data);
-        if (response.getHasError())
+        if (!response.getError().isEmpty())
             throw new RPCException(response.getError());
         return response.getHasReturnValue() ? response.getReturnValue() : null;
     }

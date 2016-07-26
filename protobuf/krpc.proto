@@ -17,10 +17,9 @@ message Argument {
 
 message Response {
   double time = 1;
-  bool has_error = 2;
-  string error = 3;
-  bool has_return_value = 4;
-  bytes return_value = 5;
+  string error = 2;
+  bool has_return_value = 3;
+  bytes return_value = 4;
 }
 
 message StreamMessage {
