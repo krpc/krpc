@@ -98,8 +98,7 @@ namespace KRPC.Server.ProtocolBuffers
             var result = new Schema.KRPC.Parameter ();
             result.Name = parameter.Name;
             result.Type = parameter.Type;
-            result.HasDefaultValue = parameter.HasDefaultValue;
-            if (result.HasDefaultValue)
+            if (parameter.HasDefaultValue)
                 result.DefaultValue = Encoder.Encode (parameter.DefaultValue);
             return result;
         }
