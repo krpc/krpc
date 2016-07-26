@@ -3,8 +3,8 @@ from krpc.decoder import Decoder
 from krpc.types import Types
 from krpc.platform import unhexlify
 
-class TestDecoder(unittest.TestCase):
 
+class TestDecoder(unittest.TestCase):
     types = Types()
 
     def test_decode_message(self):

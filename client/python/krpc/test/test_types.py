@@ -20,8 +20,8 @@ PROTOBUF_TO_PYTHON_VALUE_TYPE = {
     'bytes': bytes
 }
 
-class TestTypes(unittest.TestCase):
 
+class TestTypes(unittest.TestCase):
     def test_value_types(self):
         types = Types()
         for protobuf_typ in PROTOBUF_VALUE_TYPES:

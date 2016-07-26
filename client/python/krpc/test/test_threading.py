@@ -2,9 +2,11 @@ import unittest
 import threading
 from krpc.test.servertestcase import ServerTestCase
 
+
 def worker_thread(conn):
     for _ in range(100):
         conn.krpc.get_status()
+
 
 def worker_thread2(conn, test):
     for _ in range(10):
@@ -12,8 +14,8 @@ def worker_thread2(conn, test):
         test.assertEqual('3.14159', conn.test_service.double_to_string(float(3.14159)))
         test.assertEqual('42', conn.test_service.int32_to_string(42))
 
-class TestThreading(ServerTestCase, unittest.TestCase):
 
+class TestThreading(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestThreading, cls).setUpClass()
