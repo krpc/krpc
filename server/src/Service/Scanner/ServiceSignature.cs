@@ -144,8 +144,7 @@ namespace KRPC.Service.Scanner
         public void AddClassMethod (string cls, Type classType, MethodInfo method)
         {
             TypeUtils.ValidateIdentifier (cls);
-            TypeUtils.ValidateKRPCClass (classType);
-            TypeUtils.ValidateKRPCMethod (method);
+            TypeUtils.ValidateKRPCMethod (classType, method);
             if (!Classes.ContainsKey (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var name = method.Name;
@@ -164,8 +163,7 @@ namespace KRPC.Service.Scanner
         public void AddClassProperty (string cls, Type classType, PropertyInfo property)
         {
             TypeUtils.ValidateIdentifier (cls);
-            TypeUtils.ValidateKRPCClass (classType);
-            TypeUtils.ValidateKRPCClassProperty (property);
+            TypeUtils.ValidateKRPCClassProperty (classType, property);
             if (!Classes.ContainsKey (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var getter = property.GetGetMethod ();
