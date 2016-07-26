@@ -16,14 +16,14 @@ function Client:_init(rpc_connection, stream_connection)
   self._types = Types()
   self._rpc_connection = rpc_connection
   self._stream_connection = stream_connection
-  self._request_type = self._types:as_type('KRPC.Request')
-  self._response_type = self._types:as_type('KRPC.Response')
+  self._request_type = self._types:request_type()
+  self._response_type = self._types:response_type()
 
   -- Set up the main KRPC service
-  local services = self:_invoke('KRPC', 'GetServices', nil, nil, nil, nil, self._types:as_type('KRPC.Services')).services
+  local services = self:_invoke('KRPC', 'GetServices', nil, nil, nil, nil, self._types:services_type()).services
 
   -- Set up services
-  for _,service in ipairs(services) do
+  for _, service in ipairs(services) do
     self[to_snake_case(service.name)] = create_service(self, service)
   end
 end

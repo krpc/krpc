@@ -91,20 +91,18 @@ namespace KRPC.Service.Scanner
         public void AddProperty (PropertyInfo property)
         {
             TypeUtils.ValidateKRPCProperty (property);
-            var name = property.Name;
             var getter = property.GetGetMethod ();
             var setter = property.GetSetMethod ();
             if (getter != null)
-                AddPropertyMethod (property, getter, "Property.Get(" + name + ")");
-            if (setter != null) {
-                AddPropertyMethod (property, setter, "Property.Set(" + name + ")");
-            }
+                AddPropertyProcedure (property, getter);
+            if (setter != null)
+                AddPropertyProcedure (property, setter);
         }
 
-        void AddPropertyMethod (MemberInfo property, MethodInfo method, String attribute)
+        void AddPropertyProcedure (MemberInfo property, MethodInfo method)
         {
             var handler = new ProcedureHandler (method);
-            AddProcedure (new ProcedureSignature (Name, method.Name, property.GetDocumentation (), handler, GameScene, attribute));
+            AddProcedure (new ProcedureSignature (Name, method.Name, property.GetDocumentation (), handler, GameScene));
         }
 
         /// <summary>
@@ -142,43 +140,39 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// Add a class method to the given class in the given service for the given class type annotated with the KRPCClass attribute.
         /// </summary>
-        public void AddClassMethod (string cls, MethodInfo method)
+        public void AddClassMethod (string cls, Type classType, MethodInfo method)
         {
             if (!Classes.ContainsKey (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var name = method.Name;
             if (!method.IsStatic) {
-                var handler = new ClassMethodHandler (method);
-                AddProcedure (new ProcedureSignature (Name, cls + '_' + name, method.GetDocumentation (), handler, GameScene,
-                    "Class.Method(" + Name + "." + cls + "," + name + ")", "ParameterType(0).Class(" + Name + "." + cls + ")"));
+                var handler = new ClassMethodHandler (classType, method);
+                AddProcedure (new ProcedureSignature (Name, cls + '_' + name, method.GetDocumentation (), handler, GameScene));
             } else {
                 var handler = new ClassStaticMethodHandler (method);
-                AddProcedure (new ProcedureSignature (Name, cls + '_' + name, method.GetDocumentation (), handler, GameScene,
-                    "Class.StaticMethod(" + Name + "." + cls + "," + name + ")"));
+                AddProcedure (new ProcedureSignature (Name, cls + "_static_" + name, method.GetDocumentation (), handler, GameScene));
             }
         }
 
         /// <summary>
         /// Add a class property to the given class in the given service for the given property annotated with the KRPCProperty attribute.
         /// </summary>
-        public void AddClassProperty (string cls, PropertyInfo property)
+        public void AddClassProperty (string cls, Type classType, PropertyInfo property)
         {
             if (!Classes.ContainsKey (cls))
                 throw new ArgumentException ("Class " + cls + " does not exist");
-            var name = property.Name;
             var getter = property.GetGetMethod ();
             var setter = property.GetSetMethod ();
             if (getter != null)
-                AddClassPropertyMethod (cls, property, getter, "Class.Property.Get(" + Name + "." + cls + "," + name + ")");
+                AddClassPropertyMethod (cls, classType, property, getter);
             if (setter != null)
-                AddClassPropertyMethod (cls, property, setter, "Class.Property.Set(" + Name + "." + cls + "," + name + ")");
+                AddClassPropertyMethod (cls, classType, property, setter);
         }
 
-        void AddClassPropertyMethod (String cls, MemberInfo property, MethodInfo method, String attribute)
+        void AddClassPropertyMethod (String cls, Type classType, MemberInfo property, MethodInfo method)
         {
-            var handler = new ClassMethodHandler (method);
-            var parameter_attribute = "ParameterType(0).Class(" + Name + "." + cls + ")";
-            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, property.GetDocumentation (), handler, GameScene, attribute, parameter_attribute));
+            var handler = new ClassMethodHandler (classType, method);
+            AddProcedure (new ProcedureSignature (Name, cls + '_' + method.Name, property.GetDocumentation (), handler, GameScene));
         }
 
         public void GetObjectData (SerializationInfo info, StreamingContext context)

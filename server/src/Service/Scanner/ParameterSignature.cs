@@ -45,7 +45,7 @@ namespace KRPC.Service.Scanner
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("name", Name);
-            info.AddValue ("type", TypeUtils.GetTypeName (Type));
+            info.AddValue ("type", TypeUtils.SerializeType (Type));
             if (HasDefaultValue)
                 info.AddValue ("default_value", global::KRPC.Server.ProtocolBuffers.Encoder.Encode (DefaultValue).ToByteArray ());
         }

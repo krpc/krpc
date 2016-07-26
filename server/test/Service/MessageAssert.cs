@@ -16,7 +16,7 @@ namespace KRPC.Test.Service
             Assert.AreEqual (count, procedure.Parameters.Count);
         }
 
-        public static void HasParameter (Procedure procedure, int position, string type, string name)
+        public static void HasParameter (Procedure procedure, int position, Type type, string name)
         {
             Assert.Less (position, procedure.Parameters.Count);
             var parameter = procedure.Parameters [position];
@@ -26,7 +26,7 @@ namespace KRPC.Test.Service
             Assert.IsNull (parameter.DefaultValue);
         }
 
-        public static void HasParameterWithDefaultValue (Procedure procedure, int position, string type, string name, object defaultValue)
+        public static void HasParameterWithDefaultValue (Procedure procedure, int position, Type type, string name, object defaultValue)
         {
             Assert.Less (position, procedure.Parameters.Count);
             var parameter = procedure.Parameters [position];
@@ -39,29 +39,13 @@ namespace KRPC.Test.Service
         public static void HasNoReturnType (Procedure procedure)
         {
             Assert.IsFalse (procedure.HasReturnType);
-            Assert.AreEqual (String.Empty, procedure.ReturnType);
+            Assert.IsNull (procedure.ReturnType);
         }
 
-        public static void HasReturnType (Procedure procedure, string returnType)
+        public static void HasReturnType (Procedure procedure, Type returnType)
         {
             Assert.IsTrue (procedure.HasReturnType);
             Assert.AreEqual (returnType, procedure.ReturnType);
-        }
-
-        public static void HasNoAttributes (Procedure procedure)
-        {
-            Assert.AreEqual (0, procedure.Attributes.Count);
-        }
-
-        public static void HasAttributes (Procedure procedure, int count)
-        {
-            Assert.AreEqual (count, procedure.Attributes.Count);
-        }
-
-        public static void HasAttribute (Procedure procedure, int position, string attribute)
-        {
-            Assert.Less (position, procedure.Attributes.Count);
-            Assert.AreEqual (attribute, procedure.Attributes [position]);
         }
 
         public static void HasNoDocumentation (Procedure procedure)

@@ -18,7 +18,7 @@ namespace KRPC.Client
     {
         readonly Connection connection;
         readonly Object accessLock = new Object ();
-        readonly IDictionary<UInt32, Type> streamTypes = new Dictionary<UInt32, Type> ();
+        readonly IDictionary<UInt32, System.Type> streamTypes = new Dictionary<UInt32, System.Type> ();
         readonly IDictionary<UInt32, ByteString> streamData = new Dictionary<UInt32, ByteString> ();
         readonly IDictionary<UInt32, Object> streamValues = new Dictionary<UInt32, Object> ();
         readonly UpdateThread updateThreadObject;
@@ -63,7 +63,7 @@ namespace KRPC.Client
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public UInt32 AddStream (Request request, Type type)
+        public UInt32 AddStream (Request request, System.Type type)
         {
             CheckDisposed ();
             var id = connection.KRPC ().AddStream (request);

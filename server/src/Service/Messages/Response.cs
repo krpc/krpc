@@ -1,5 +1,3 @@
-using System;
-
 namespace KRPC.Service.Messages
 {
     #pragma warning disable 1591
@@ -30,9 +28,5 @@ namespace KRPC.Service.Messages
         object returnValue;
 
         string error;
-
-        public Response ()
-        {
-        }
     }
 }

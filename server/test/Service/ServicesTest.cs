@@ -309,9 +309,8 @@ namespace KRPC.Test.Service
         public void HandleRequestForObjectMethod ()
         {
             var instance = new TestService.TestClass ("jeb");
-            var guid = ObjectStore.Instance.AddInstance (instance);
             const float arg = 3.14159f;
-            var request = Req ("TestService", "TestClass_FloatToString", Arg (0, guid), Arg (1, arg));
+            var request = Req ("TestService", "TestClass_FloatToString", Arg (0, instance), Arg (1, arg));
             var response = Run (request);
             response.Time = 42;
             Assert.AreEqual ("jeb3.14159", (string)response.ReturnValue);
@@ -325,8 +324,7 @@ namespace KRPC.Test.Service
         {
             var instance = new TestService.TestClass ("bill");
             var arg = new TestService.TestClass ("bob");
-            var guid = ObjectStore.Instance.AddInstance (instance);
-            var request = Req ("TestService", "TestClass_ObjectToString", Arg (0, guid), Arg (1, arg));
+            var request = Req ("TestService", "TestClass_ObjectToString", Arg (0, instance), Arg (1, arg));
             var response = Run (request);
             response.Time = 42;
             Assert.AreEqual ("billbob", (string)(response.ReturnValue));
@@ -340,8 +338,7 @@ namespace KRPC.Test.Service
         {
             var instance = new TestService.TestClass ("jeb");
             instance.IntProperty = 42;
-            var guid = ObjectStore.Instance.AddInstance (instance);
-            var request = Req ("TestService", "TestClass_get_IntProperty", Arg (0, guid));
+            var request = Req ("TestService", "TestClass_get_IntProperty", Arg (0, instance));
             var response = Run (request);
             response.Time = 0;
             Assert.IsFalse (response.HasError);
@@ -356,9 +353,8 @@ namespace KRPC.Test.Service
         {
             var instance = new TestService.TestClass ("jeb");
             instance.IntProperty = 42;
-            var guid = ObjectStore.Instance.AddInstance (instance);
             var request = Req ("TestService", "TestClass_set_IntProperty",
-                              Arg (0, guid), Arg (1, 1337));
+                              Arg (0, instance), Arg (1, 1337));
             var response = Run (request);
             response.Time = 0;
             Assert.IsFalse (response.HasError);
@@ -371,7 +367,7 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleRequestForClassStaticMethod ()
         {
-            var request = Req ("TestService", "TestClass_StaticMethod", Arg (0, "bob"));
+            var request = Req ("TestService", "TestClass_static_StaticMethod", Arg (0, "bob"));
             var response = Run (request);
             response.Time = 42;
             Assert.AreEqual ("jebbob", (string)response.ReturnValue);

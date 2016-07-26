@@ -1,66 +1,37 @@
-import re
 import collections
-import importlib
 from enum import Enum
-from krpc.attributes import Attributes
+import krpc.schema.KRPC
 
-
-def _parse_type_string(typ):
-    """ Given a string, extract a substring up to the first comma. Parses parentheses.
-        Multiple calls can be used to separate a string by commas. """
-    if typ is None:
-        raise ValueError
-    result = ''
-    level = 0
-    for x in typ:
-        if level == 0 and x == ',':
-            break
-        if x == '(':
-            level += 1
-        if x == ')':
-            level -= 1
-        result += x
-    if level != 0:
-        raise ValueError
-    if result == typ:
-        return result, None
-    if typ[len(result)] != ',':
-        raise ValueError
-    return result, typ[len(result) + 1:]
-
-
-PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
-PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
-PROTOBUF_TO_PYTHON_VALUE_TYPE = {
-    'double': float,
-    'float': float,
-    'int32': int,
-    'int64': long,
-    'uint32': int,
-    'uint64': long,
-    'bool': bool,
-    'string': str,
-    'bytes': bytes
+VALUE_TYPES = {
+    krpc.schema.KRPC.Type.DOUBLE: float,
+    krpc.schema.KRPC.Type.FLOAT: float,
+    krpc.schema.KRPC.Type.INT32: int,
+    krpc.schema.KRPC.Type.INT64: long,
+    krpc.schema.KRPC.Type.UINT32: int,
+    krpc.schema.KRPC.Type.UINT64: long,
+    krpc.schema.KRPC.Type.BOOL: bool,
+    krpc.schema.KRPC.Type.STRING: str,
+    krpc.schema.KRPC.Type.BYTES: bytes
 }
-PROTOBUF_TO_MESSAGE_TYPE = {}
 
+MESSAGE_TYPES = {
+    krpc.schema.KRPC.Type.REQUEST: krpc.schema.KRPC.Request,
+    krpc.schema.KRPC.Type.RESPONSE: krpc.schema.KRPC.Response,
+    krpc.schema.KRPC.Type.STREAM_MESSAGE: krpc.schema.KRPC.StreamMessage,
+    krpc.schema.KRPC.Type.STATUS: krpc.schema.KRPC.Status,
+    krpc.schema.KRPC.Type.SERVICES: krpc.schema.KRPC.Services,
+}
 
-def _load_types(package):
-    """ Load all message and enum types from the given package,
-        and populate PROTOBUF_TO_MESSAGE_TYPE """
-    if package in _load_types.loaded:
-        return
-    _load_types.loaded.add(package)
-    try:
-        module = importlib.import_module('krpc.schema.' + package)
-        if hasattr(module, 'DESCRIPTOR'):
-            for name in module.DESCRIPTOR.message_types_by_name.keys():
-                PROTOBUF_TO_MESSAGE_TYPE[package + '.' + name] = getattr(module, name)
-    except (KeyError, ImportError, AttributeError, ValueError):
-        pass
-
-
-_load_types.loaded = set()
+def _protobuf_type(code, service=None, name=None, types=None):
+    protobuf_type = krpc.schema.KRPC.Type()
+    protobuf_type.code = code
+    if service is not None:
+        protobuf_type.service = service
+    if name is not None:
+        protobuf_type.name = name
+    if types is not None:
+        protobuf_type.types.extend(types)
+    return protobuf_type
 
 
 class Types(object):
@@ -72,65 +43,137 @@ class Types(object):
         # Mapping from protobuf type strings to type objects
         self._types = {}
 
-    def as_type(self, type_string, doc=None):
-        """ Return a type object given a protocol buffer type string """
-        if type_string in self._types:
-            return self._types[type_string]
+    def as_type(self, protobuf_type, doc=None):
+        """ Return a type object given a protocol buffer type """
 
-        # TODO: add enumeration types
-        # Update kRPC server to attach type attributes to parameters/return types etc. that are of type KRPCEnum
-        # Will allow proper type checking of enum values passed to procedures
+        # Get cached type
+        key = protobuf_type.SerializeToString()
+        if key in self._types:
+            return self._types[key]
+
         # pylint: disable=redefined-variable-type
-        if type_string in PROTOBUF_VALUE_TYPES:
-            typ = ValueType(type_string)
-        elif type_string.startswith('Class(') or type_string == 'Class':
-            typ = ClassType(type_string, doc)
-        elif type_string.startswith('Enum(') or type_string == 'Enum':
-            typ = EnumType(type_string, doc)
-        elif type_string.startswith('List(') or type_string == 'List':
-            typ = ListType(type_string, self)
-        elif type_string.startswith('Dictionary(') or type_string == 'Dictionary':
-            typ = DictionaryType(type_string, self)
-        elif type_string.startswith('Set(') or type_string == 'Set':
-            typ = SetType(type_string, self)
-        elif type_string.startswith('Tuple(') or type_string == 'Tuple':
-            typ = TupleType(type_string, self)
+        if protobuf_type.code in VALUE_TYPES:
+            typ = ValueType(protobuf_type)
+        elif protobuf_type.code in MESSAGE_TYPES:
+            typ = MessageType(protobuf_type)
+        elif protobuf_type.code == krpc.schema.KRPC.Type.CLASS:
+            typ = ClassType(protobuf_type, doc)
+        elif protobuf_type.code == krpc.schema.KRPC.Type.ENUMERATION:
+            typ = EnumerationType(protobuf_type, doc)
+        elif protobuf_type.code == krpc.schema.KRPC.Type.TUPLE:
+            typ = TupleType(protobuf_type, self)
+        elif protobuf_type.code == krpc.schema.KRPC.Type.LIST:
+            typ = ListType(protobuf_type, self)
+        elif protobuf_type.code == krpc.schema.KRPC.Type.SET:
+            typ = SetType(protobuf_type, self)
+        elif protobuf_type.code == krpc.schema.KRPC.Type.DICTIONARY:
+            typ = DictionaryType(protobuf_type, self)
         else:
-            # A message type
-            if not re.match(r'^[A-Za-z0-9_\.]+$', type_string):
-                raise ValueError('\'%s\' is not a valid type string' % type_string)
-            package, _, _ = type_string.rpartition('.')
-            _load_types(package)
-            if type_string in PROTOBUF_TO_MESSAGE_TYPE:
-                typ = MessageType(type_string)
-            else:
-                raise ValueError('\'%s\' is not a valid type string' % type_string)
+            raise ValueError('Invalid type')
         # pylint: enable=redefined-variable-type
 
-        self._types[type_string] = typ
+        self._types[key] = typ
         return typ
 
-    def get_parameter_type(self, pos, typ, attrs):
-        """ Return a type object for a parameter at the given
-            position, with the given protocol buffer type and attributes """
-        attrs = Attributes.get_parameter_type_attrs(pos, attrs)
-        for attr in attrs:
-            try:
-                return self.as_type(attr)
-            except ValueError:
-                pass
-        return self.as_type(typ)
+    @classmethod
+    def is_none_type(cls, protobuf_type):
+        return protobuf_type.code == krpc.schema.KRPC.Type.NONE
 
-    def get_return_type(self, typ, attrs):
-        """ Return a type object for the return value with the given
-            protocol buffer type and procedure attributes """
-        attrs = Attributes.get_return_type_attrs(attrs)
-        for attr in attrs:
-            try:
-                return self.as_type(attr)
-            except ValueError:
-                pass
-        return self.as_type(typ)
+    @property
+    def double_type(self):
+        """ Get a double value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.DOUBLE))
+
+    @property
+    def float_type(self):
+        """ Get a float value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.FLOAT))
+
+    @property
+    def int32_type(self):
+        """ Get an int32 value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.INT32))
+
+    @property
+    def int64_type(self):
+        """ Get an int64 value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.INT64))
+
+    @property
+    def uint32_type(self):
+        """ Get a uint32 value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.UINT32))
+
+    @property
+    def uint64_type(self):
+        """ Get a uint64 value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.UINT64))
+
+    @property
+    def bool_type(self):
+        """ Get a bool value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.BOOL))
+
+    @property
+    def string_type(self):
+        """ Get a string value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.STRING))
+
+    @property
+    def bytes_type(self):
+        """ Get a bytes value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.BYTES))
+
+    def class_type(self, service, name, doc=None):
+        """ Get a class type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.CLASS, service, name), doc=doc)
+
+    def enumeration_type(self, service, name, doc=None):
+        """ Get an enumeration type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.ENUMERATION, service, name), doc=doc)
+
+    @property
+    def request_type(self):
+        """ Get a Request message type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.REQUEST))
+
+    @property
+    def response_type(self):
+        """ Get a Response message type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.RESPONSE))
+
+    @property
+    def stream_message_type(self):
+        """ Get a StreamMessage message type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.STREAM_MESSAGE))
+
+    @property
+    def status_type(self):
+        """ Get a Status message type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.STATUS))
+
+    @property
+    def services_type(self):
+        """ Get a Services message type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.SERVICES))
+
+    def tuple_type(self, *value_types):
+        """ Get a tuple type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.TUPLE, None, None,
+                                           [t.protobuf_type for t in value_types]))
+
+    def list_type(self, value_type):
+        """ Get a list type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.LIST, None, None, [value_type.protobuf_type]))
+
+    def set_type(self, value_type):
+        """ Get a set type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.SET, None, None, [value_type.protobuf_type]))
+
+    def dictionary_type(self, key_type, value_type):
+        """ Get a dictionary type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.DICTIONARY, None, None,
+                                           [key_type.protobuf_type, value_type.protobuf_type]))
 
     def coerce_to(self, value, typ):
         """ Coerce a value to the specified type (specified by a type object).
@@ -185,9 +228,10 @@ class Types(object):
 class TypeBase(object):
     """ Base class for all type objects """
 
-    def __init__(self, protobuf_type, python_type):
+    def __init__(self, protobuf_type, python_type, string):
         self._protobuf_type = protobuf_type
         self._python_type = python_type
+        self._string = string
 
     @property
     def protobuf_type(self):
@@ -200,126 +244,117 @@ class TypeBase(object):
         return self._python_type
 
     def __str__(self):
-        return '<pbtype: \'' + self.protobuf_type + '\'>'
+        return '<type: ' + str(self._string) + '>'
 
 
 class ValueType(TypeBase):
     """ A protocol buffer value type """
 
-    def __init__(self, type_string):
-        if type_string not in PROTOBUF_TO_PYTHON_VALUE_TYPE:
-            raise ValueError('\'%s\' is not a valid type string for a value type' % type_string)
-        typ = PROTOBUF_TO_PYTHON_VALUE_TYPE[type_string]
-        super(ValueType, self).__init__(type_string, typ)
-
-
-class MessageType(TypeBase):
-    """ A protocol buffer message type """
-
-    def __init__(self, type_string):
-        package, _, _ = type_string.rpartition('.')
-        _load_types(package)
-        if type_string not in PROTOBUF_TO_MESSAGE_TYPE:
-            raise ValueError('\'%s\' is not a valid type string for a message type' % type_string)
-        typ = PROTOBUF_TO_MESSAGE_TYPE[type_string]
-        super(MessageType, self).__init__(type_string, typ)
+    def __init__(self, protobuf_type):
+        if protobuf_type.code not in VALUE_TYPES:
+            raise ValueError('Not a value type')
+        string = krpc.schema.KRPC.Type.TypeCode.Name(protobuf_type.code).lower()
+        super(ValueType, self).__init__(protobuf_type, VALUE_TYPES[protobuf_type.code], string)
 
 
 class ClassType(TypeBase):
     """ A class type, represented by a uint64 identifier """
 
-    def __init__(self, type_string, doc):
-        match = re.match(r'Class\(([^\.]+)\.([^\.]+)\)', type_string)
-        if not match:
-            raise ValueError('\'%s\' is not a valid type string for a class type' % type_string)
-        service_name = match.group(1)
-        class_name = match.group(2)
-        typ = _create_class_type(service_name, class_name, doc)
-        super(ClassType, self).__init__(str(type_string), typ)
+    def __init__(self, protobuf_type, doc):
+        if protobuf_type.code != krpc.schema.KRPC.Type.CLASS:
+            raise ValueError('Not a class type')
+        if not protobuf_type.service:
+            raise ValueError('Class type has no service name')
+        if not protobuf_type.name:
+            raise ValueError('Class type has no class name')
+        typ = _create_class_type(protobuf_type.service, protobuf_type.name, doc)
+        string = 'Class(%s.%s)' % (protobuf_type.service, protobuf_type.name)
+        super(ClassType, self).__init__(protobuf_type, typ, string)
 
 
-class EnumType(TypeBase):
+class EnumerationType(TypeBase):
     """ An enumeration type, represented by an int32 value """
 
-    def __init__(self, type_string, doc):
-        match = re.match(r'Enum\(([^\.]+)\.([^\.]+)\)', type_string)
-        if not match:
-            raise ValueError('\'%s\' is not a valid type string for an enumeration type' % type_string)
-        self._service_name = match.group(1)
-        self._enum_name = match.group(2)
+    def __init__(self, protobuf_type, doc):
+        if protobuf_type.code != krpc.schema.KRPC.Type.ENUMERATION:
+            raise ValueError('Not an enum type')
+        if not protobuf_type.service:
+            raise ValueError('Enum type has no service name')
+        if not protobuf_type.name:
+            raise ValueError('Enum type has no class name')
+        self._service_name = protobuf_type.service
+        self._enum_name = protobuf_type.name
         self._doc = doc
+        string = 'Enum(%s.%s)' % (protobuf_type.service, protobuf_type.name)
         # Sets python_type to None, set_values must be called to set the python_type
-        super(EnumType, self).__init__(str(type_string), None)
+        super(EnumerationType, self).__init__(protobuf_type, None, string)
 
     def set_values(self, values):
         """ Set the python type. Creates an Enum class using the given values. """
         self._python_type = _create_enum_type(self._enum_name, values, self._doc)
 
 
-class ListType(TypeBase):
-    """ A list collection type, represented by a protobuf message """
+class MessageType(TypeBase):
+    """ A protocol buffer message type """
 
-    def __init__(self, type_string, types):
-        match = re.match(r'^List\((.+)\)$', type_string)
-        if not match:
-            raise ValueError('\'%s\' is not a valid type string for a list type' % type_string)
-
-        self.value_type = types.as_type(match.group(1))
-
-        super(ListType, self).__init__(str(type_string), list)
-
-
-class DictionaryType(TypeBase):
-    """ A dictionary collection type, represented by a protobuf message """
-
-    def __init__(self, type_string, types):
-        match = re.match(r'^Dictionary\((.+)\)$', type_string)
-        if not match:
-            raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
-
-        typ = match.group(1)
-
-        try:
-            key_string, typ = _parse_type_string(typ)
-            value_string, typ = _parse_type_string(typ)
-            if typ is not None:
-                raise ValueError
-            self.key_type = types.as_type(key_string)
-            self.value_type = types.as_type(value_string)
-        except ValueError:
-            raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
-
-        super(DictionaryType, self).__init__(str(type_string), dict)
-
-
-class SetType(TypeBase):
-    """ A set collection type, represented by a protobuf message """
-
-    def __init__(self, type_string, types):
-        match = re.match(r'^Set\((.+)\)$', type_string)
-        if not match:
-            raise ValueError('\'%s\' is not a valid type string for a set type' % type_string)
-
-        self.value_type = types.as_type(match.group(1))
-
-        super(SetType, self).__init__(str(type_string), set)
+    def __init__(self, protobuf_type):
+        if protobuf_type.code not in MESSAGE_TYPES:
+            raise ValueError('Not a message type')
+        typ = MESSAGE_TYPES[protobuf_type.code]
+        super(MessageType, self).__init__(protobuf_type, typ, typ.__name__)
 
 
 class TupleType(TypeBase):
-    """ A tuple collection type, represented by a protobuf message """
+    """ A tuple collection type """
 
-    def __init__(self, type_string, types):
-        match = re.match(r'^Tuple\((.+)\)$', type_string)
-        if not match:
-            raise ValueError('\'%s\' is not a valid type string for a tuple type' % type_string)
+    def __init__(self, protobuf_type, types):
+        if protobuf_type.code != krpc.schema.KRPC.Type.TUPLE:
+            raise ValueError('Not a tuple type')
+        if len(protobuf_type.types) < 1:
+            raise ValueError('Wrong number of sub-types for tuple type')
+        self.value_types = [types.as_type(t) for t in protobuf_type.types]
+        string = 'Tuple(%s)' % ','.join(t._string for t in self.value_types)
+        super(TupleType, self).__init__(protobuf_type, tuple, string)
 
-        self.value_types = []
-        typ = match.group(1)
-        while typ is not None:
-            value_type, typ = _parse_type_string(typ)
-            self.value_types.append(types.as_type(value_type))
 
-        super(TupleType, self).__init__(str(type_string), tuple)
+class ListType(TypeBase):
+    """ A list collection type """
+
+    def __init__(self, protobuf_type, types):
+        if protobuf_type.code != krpc.schema.KRPC.Type.LIST:
+            raise ValueError('Not a list type')
+        if len(protobuf_type.types) != 1:
+            raise ValueError('Wrong number of sub-types for list type')
+        self.value_type = types.as_type(protobuf_type.types[0])
+        string = 'List(%s)' % self.value_type._string
+        super(ListType, self).__init__(protobuf_type, list, string)
+
+
+class SetType(TypeBase):
+    """ A set collection type """
+
+    def __init__(self, protobuf_type, types):
+        if protobuf_type.code != krpc.schema.KRPC.Type.SET:
+            raise ValueError('Not a set type')
+        if len(protobuf_type.types) != 1:
+            raise ValueError('Wrong number of sub-types for set type')
+        self.value_type = types.as_type(protobuf_type.types[0])
+        string = 'Set(%s)' % self.value_type._string
+        super(SetType, self).__init__(protobuf_type, set, string)
+
+
+class DictionaryType(TypeBase):
+    """ A dictionary collection type """
+
+    def __init__(self, protobuf_type, types):
+        if protobuf_type.code != krpc.schema.KRPC.Type.DICTIONARY:
+            raise ValueError('Not a dictionary type')
+        if len(protobuf_type.types) != 2:
+            raise ValueError('Wrong number of sub-types for dictionary type')
+        self.key_type = types.as_type(protobuf_type.types[0])
+        self.value_type = types.as_type(protobuf_type.types[1])
+        string = 'Dict(%s,%s)' % (self.key_type._string, self.value_type._string)
+        super(DictionaryType, self).__init__(protobuf_type, dict, string)
 
 
 class DynamicType(object):

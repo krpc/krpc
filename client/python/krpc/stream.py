@@ -76,7 +76,7 @@ def add_stream(conn, func, *args, **kwargs):
 
 
 def update_thread(connection, stop, cache, cache_lock):
-    stream_message_type = Types().as_type('KRPC.StreamMessage')
+    stream_message_type = Types().stream_message_type
 
     while True:
 

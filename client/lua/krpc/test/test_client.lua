@@ -151,7 +151,7 @@ function TestClient:test_client_members()
   )
 end
 
-function TestClient:test_enums()
+function TestClient:test_enumerations()
   local enum = self.conn.test_service.TestEnum
 
   luaunit.assertEquals(enum.value_b, self.conn.test_service.enum_return())
@@ -302,7 +302,7 @@ function TestClient:test_types_from_different_connections()
   local conn2 = self:connect()
   luaunit.assertFalse(conn1.test_service.TestClass == conn2.test_service.TestClass)
   local obj2 = conn2.test_service.TestClass(0)
-  local obj1 = conn1._types:coerce_to(obj2, conn1._types:as_type('Class(TestService.TestClass)'))
+  local obj1 = conn1._types:coerce_to(obj2, conn1._types:class_type('TestService', 'TestClass'))
   luaunit.assertEquals(obj1, obj2)
   luaunit.assertTrue(conn1.test_service.TestClass:class_of(obj1))
   luaunit.assertTrue(conn2.test_service.TestClass:class_of(obj2))

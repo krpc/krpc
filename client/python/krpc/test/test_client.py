@@ -279,7 +279,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         conn2 = self.connect()
         self.assertNotEqual(conn1.test_service.TestClass, conn2.test_service.TestClass)
         obj2 = conn2.test_service.TestClass(0)
-        obj1 = conn1._types.coerce_to(obj2, conn1._types.as_type('Class(TestService.TestClass)'))
+        obj1 = conn1._types.coerce_to(obj2, conn1._types.class_type('TestService', 'TestClass'))
         self.assertEqual(obj1, obj2)
         self.assertNotEqual(type(obj1), type(obj2))
         self.assertEqual(type(obj1), conn1.test_service.TestClass)

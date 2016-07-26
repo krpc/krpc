@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Messages;
 
 namespace KRPC.Server.ProtocolBuffers
@@ -13,8 +15,8 @@ namespace KRPC.Server.ProtocolBuffers
                 return ((Request)message).ToProtobufMessage ();
             else if (type == typeof(Response))
                 return ((Response)message).ToProtobufMessage ();
-            else if (type == typeof(Services))
-                return ((Services)message).ToProtobufMessage ();
+            else if (type == typeof(KRPC.Service.Messages.Services))
+                return ((KRPC.Service.Messages.Services)message).ToProtobufMessage ();
             else if (type == typeof(Status))
                 return ((Status)message).ToProtobufMessage ();
             throw new ArgumentException ("Cannot convert a " + type + " to a protobuf message");
@@ -63,7 +65,7 @@ namespace KRPC.Server.ProtocolBuffers
             return result;
         }
 
-        public static Schema.KRPC.Services ToProtobufMessage (this Services services)
+        public static Schema.KRPC.Services ToProtobufMessage (this KRPC.Service.Messages.Services services)
         {
             var result = new Schema.KRPC.Services ();
             result.Services_.Add (services.ServicesList.Select (ToProtobufMessage));
@@ -87,8 +89,7 @@ namespace KRPC.Server.ProtocolBuffers
             result.Name = procedure.Name;
             result.Parameters.Add (procedure.Parameters.Select (ToProtobufMessage));
             if (procedure.ReturnType != null)
-                result.ReturnType = procedure.ReturnType;
-            result.Attributes.Add (procedure.Attributes);
+                result.ReturnType = procedure.ReturnType.ToProtobufMessage ();
             result.Documentation = procedure.Documentation;
             return result;
         }
@@ -97,7 +98,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Parameter ();
             result.Name = parameter.Name;
-            result.Type = parameter.Type;
+            result.Type = parameter.Type.ToProtobufMessage ();
             if (parameter.HasDefaultValue)
                 result.DefaultValue = Encoder.Encode (parameter.DefaultValue);
             return result;
@@ -151,6 +152,81 @@ namespace KRPC.Server.ProtocolBuffers
             result.StreamRpcsExecuted = status.StreamRpcsExecuted;
             result.StreamRpcRate = status.StreamRpcRate;
             result.TimePerStreamUpdate = status.TimePerStreamUpdate;
+            return result;
+        }
+
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
+        public static Schema.KRPC.Type ToProtobufMessage (this Type type)
+        {
+            var result = new Schema.KRPC.Type ();
+            if (TypeUtils.IsAValueType (type)) {
+                switch (Type.GetTypeCode (type)) {
+                case TypeCode.Single:
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Float;
+                    break;
+                case TypeCode.Double:
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Double;
+                    break;
+                case TypeCode.Int32:
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Int32;
+                    break;
+                case TypeCode.Int64:
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Int64;
+                    break;
+                case TypeCode.UInt32:
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Uint32;
+                    break;
+                case TypeCode.UInt64:
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Uint64;
+                    break;
+                case TypeCode.Boolean:
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Bool;
+                    break;
+                case TypeCode.String:
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.String;
+                    break;
+                }
+                if (type == typeof(byte[]))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Bytes;
+            } else if (TypeUtils.IsAMessageType (type)) {
+                // TODO: move these to the message classes
+                if (type == typeof(Request))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Request;
+                else if (type == typeof(Response))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Response;
+                else if (type == typeof(StreamMessage))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.StreamMessage;
+                else if (type == typeof(Status))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Status;
+                else if (type == typeof(KRPC.Service.Messages.Services))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Services;
+                else
+                    throw new ArgumentException ("Type " + type + " is not valid");
+            } else if (TypeUtils.IsAClassType (type)) {
+                result.Code = Schema.KRPC.Type.Types.TypeCode.Class;
+                result.Service = TypeUtils.GetClassServiceName (type);
+                result.Name = type.Name;
+            } else if (TypeUtils.IsAnEnumType (type)) {
+                result.Code = Schema.KRPC.Type.Types.TypeCode.Enumeration;
+                result.Service = TypeUtils.GetEnumServiceName (type);
+                result.Name = type.Name;
+            } else if (TypeUtils.IsAListCollectionType (type)) {
+                result.Code = Schema.KRPC.Type.Types.TypeCode.List;
+                result.Types_.Add (type.GetGenericArguments () [0].ToProtobufMessage ());
+            } else if (TypeUtils.IsADictionaryCollectionType (type)) {
+                result.Code = Schema.KRPC.Type.Types.TypeCode.Dictionary;
+                result.Types_.Add (type.GetGenericArguments () [0].ToProtobufMessage ());
+                result.Types_.Add (type.GetGenericArguments () [1].ToProtobufMessage ());
+            } else if (TypeUtils.IsASetCollectionType (type)) {
+                result.Code = Schema.KRPC.Type.Types.TypeCode.Set;
+                result.Types_.Add (type.GetGenericArguments () [0].ToProtobufMessage ());
+            } else if (TypeUtils.IsATupleCollectionType (type)) {
+                result.Code = Schema.KRPC.Type.Types.TypeCode.Tuple;
+                foreach (var subType in type.GetGenericArguments())
+                    result.Types_.Add (subType.ToProtobufMessage ());
+            }
             return result;
         }
 

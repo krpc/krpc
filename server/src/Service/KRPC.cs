@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
-using KRPC.Utils;
 
 namespace KRPC.Service
 {
@@ -60,15 +59,13 @@ namespace KRPC.Service
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
                     var procedure = new Procedure (procedureSignature.Name);
                     if (procedureSignature.HasReturnType)
-                        procedure.ReturnType = TypeUtils.GetTypeName (procedureSignature.ReturnType);
+                        procedure.ReturnType = procedureSignature.ReturnType;
                     foreach (var parameterSignature in procedureSignature.Parameters) {
-                        var parameter = new Parameter (parameterSignature.Name, TypeUtils.GetTypeName (parameterSignature.Type));
+                        var parameter = new Parameter (parameterSignature.Name, parameterSignature.Type);
                         if (parameterSignature.HasDefaultValue)
                             parameter.DefaultValue = parameterSignature.DefaultValue;
                         procedure.Parameters.Add (parameter);
                     }
-                    foreach (var attribute in procedureSignature.Attributes)
-                        procedure.Attributes.Add (attribute);
                     if (procedureSignature.Documentation.Length > 0)
                         procedure.Documentation = procedureSignature.Documentation;
                     service.Procedures.Add (procedure);

@@ -34,7 +34,7 @@ namespace KRPC.Server.ProtocolBuffers
             } else if (value is Enum) {
                 stream.WriteInt32 ((int)value);
             } else {
-                Type type = value.GetType ();
+                var type = value.GetType ();
                 switch (Type.GetTypeCode (type)) {
                 case TypeCode.Int32:
                     stream.WriteInt32 ((int)value);
