@@ -60,31 +60,31 @@ function TestEncodeDecode:test_double()
   _run_test_decode_value(types:double_type(), cases)
 end
 
-function TestEncodeDecode:test_int32()
+function TestEncodeDecode:test_sint32()
   local cases = {
     {0, '00'},
-    {1, '01'},
-    {42, '2a'},
-    {300, 'ac02'},
-    {-33, 'dfffffffffffffffff01'},
-    {math.huge, 'ffffffffffffffff7f'},
-    {-math.huge, '80808080808080808001'}
+    {1, '02'},
+    {42, '54'},
+    {300, 'd804'},
+    {-33, '41'},
+    {2147483647, 'feffffff0f'},
+    {-2147483648, 'ffffffff0f'}
   }
-  _run_test_encode_value(types:int32_type(), cases)
-  _run_test_decode_value(types:int32_type(), cases)
+  _run_test_encode_value(types:sint32_type(), cases)
+  _run_test_decode_value(types:sint32_type(), cases)
 end
 
-function TestEncodeDecode:test_int64()
+function TestEncodeDecode:test_sint64()
   local cases = {
     {0, '00'},
-    {1, '01'},
-    {42, '2a'},
-    {300, 'ac02'},
-    {1234567890000, 'd088ec8ff723'},
-    {-33, 'dfffffffffffffffff01'}
+    {1, '02'},
+    {42, '54'},
+    {300, 'd804'},
+    {1234567890000, 'a091d89fee47'},
+    {-33, '41'}
   }
-  _run_test_encode_value(types:int64_type(), cases)
-  _run_test_decode_value(types:int64_type(), cases)
+  _run_test_encode_value(types:sint64_type(), cases)
+  _run_test_decode_value(types:sint64_type(), cases)
 end
 
 function TestEncodeDecode:test_uint32()
@@ -150,11 +150,11 @@ end
 
 function TestEncodeDecode:test_tuple()
   local cases = {{List{1}, '0a0101'}}
-  typ = types:tuple_type({types:int32_type()})
+  typ = types:tuple_type({types:uint32_type()})
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
   local cases = {{List{1,'jeb',false}, '0a01010a04036a65620a0100'}}
-  typ = types:tuple_type({types:int32_type(), types:string_type(), types:bool_type()})
+  typ = types:tuple_type({types:uint32_type(), types:string_type(), types:bool_type()})
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -165,7 +165,7 @@ function TestEncodeDecode:test_list()
     {List{1}, '0a0101'},
     {List{1,2,3,4}, '0a01010a01020a01030a0104'}
   }
-  typ = types:list_type(types:int32_type())
+  typ = types:list_type(types:uint32_type())
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -176,7 +176,7 @@ function TestEncodeDecode:test_set()
     {Set{1}, '0a0101'},
     {Set{1,2,3,4}, '0a01010a01020a01030a0104'}
   }
-  typ = types:set_type(types:int32_type())
+  typ = types:set_type(types:uint32_type())
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -189,7 +189,7 @@ function TestEncodeDecode:test_dictionary()
     {x, '0a060a0100120100'},
     {Map{foo = 42, bar = 365, baz = 3}, '0a0a0a04036261721202ed020a090a040362617a1201030a090a0403666f6f12012a'}
   }
-  typ = types:dictionary_type(types:string_type(), types:int32_type())
+  typ = types:dictionary_type(types:string_type(), types:uint32_type())
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end

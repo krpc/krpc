@@ -49,7 +49,7 @@ function TestEncoder:test_encode_message()
 end
 
 function TestEncoder:test_encode_value()
-  local data = encoder.encode(300, types:int32_type())
+  local data = encoder.encode(300, types:uint32_type())
   luaunit.assertEquals('ac02', platform.hexlify(data))
 end
 
@@ -68,7 +68,7 @@ function TestEncoder:test_encode_message_delimited()
 end
 
 function TestEncoder:test_encode_value_delimited()
-  local data = encoder.encode_delimited(300, types:int32_type())
+  local data = encoder.encode_delimited(300, types:uint32_type())
   luaunit.assertEquals('02'..'ac02', platform.hexlify(data))
 end
 

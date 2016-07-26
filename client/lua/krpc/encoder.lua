@@ -30,21 +30,6 @@ local function _encode_varint(x)
   end
 end
 
-local function _encode_signed_varint(x)
-  if x == math.huge then
-    return '\255\255\255\255\255\255\255\255\127'
-  elseif x == -math.huge then
-    return '\128\128\128\128\128\128\128\128\128\1'
-  else
-    local data = ''
-    local function write(y)
-      data = y
-    end
-    pb.signed_varint_encoder(write, x)
-    return data
-  end
-end
-
 local function _encode_float(value)
   local data = ''
   local function write(x)
@@ -71,8 +56,10 @@ local function _encode_value(x, typ)
     return _encode_double(x)
   elseif code == Types.FLOAT then
     return _encode_float(x)
-  elseif code == Types.INT32 or code == Types.INT64 then
-    return _encode_signed_varint(x)
+  elseif code == Types.SINT32 then
+    return _encode_varint(pb.zig_zag_encode32(x))
+  elseif code == Types.SINT64 then
+    return _encode_varint(pb.zig_zag_encode64(x))
   elseif code == Types.UINT32 or code == Types.UINT64 then
     return _encode_varint(x)
   elseif code == Types.BOOL then
@@ -99,7 +86,7 @@ function encoder.encode(x, typ)
   elseif typ:is_a(Types.ValueType) then
     return _encode_value(x, typ)
   elseif typ:is_a(Types.EnumerationType) then
-    return _encode_value(x.value, _types:int32_type())
+    return _encode_value(x.value, _types:sint32_type())
   elseif typ:is_a(Types.ClassType) then
     local object_id = 0
     if x then

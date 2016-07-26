@@ -1,4 +1,5 @@
 from google.protobuf.internal import decoder as protobuf_decoder  # pylint: disable=import-error,no-name-in-module
+from google.protobuf.internal import wire_format as protobuf_wire_format  # pylint: disable=import-error,no-name-in-module
 from krpc.types import Types, ValueType, ClassType, EnumerationType, MessageType
 from krpc.types import TupleType, ListType, SetType, DictionaryType
 import krpc.platform
@@ -27,7 +28,7 @@ class Decoder(object):
         if isinstance(typ, MessageType):
             return cls._decode_message(data, typ.python_type)
         elif isinstance(typ, EnumerationType):
-            value = cls._decode_value(data, cls._types.int32_type)
+            value = cls._decode_value(data, cls._types.sint32_type)
             return typ.python_type(value)
         elif isinstance(typ, ValueType):
             return cls._decode_value(data, typ)
@@ -71,10 +72,10 @@ class Decoder(object):
 
     @classmethod
     def _decode_value(cls, data, typ):
-        if typ.protobuf_type.code == krpc.schema.KRPC.Type.INT32:
-            return _ValueDecoder.decode_int32(data)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.INT64:
-            return _ValueDecoder.decode_int64(data)
+        if typ.protobuf_type.code == krpc.schema.KRPC.Type.SINT32:
+            return _ValueDecoder.decode_sint32(data)
+        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.SINT64:
+            return _ValueDecoder.decode_sint64(data)
         elif typ.protobuf_type.code == krpc.schema.KRPC.Type.UINT32:
             return _ValueDecoder.decode_uint32(data)
         elif typ.protobuf_type.code == krpc.schema.KRPC.Type.UINT64:
@@ -104,12 +105,12 @@ class _ValueDecoder(object):
         return protobuf_decoder._DecodeVarint(data, 0)[0]
 
     @classmethod
-    def decode_int32(cls, data):
-        return int(cls._decode_signed_varint(data))
+    def decode_sint32(cls, data):
+        return int(protobuf_wire_format.ZigZagDecode(cls._decode_signed_varint(data)))
 
     @classmethod
-    def decode_int64(cls, data):
-        return cls._decode_signed_varint(data)
+    def decode_sint64(cls, data):
+        return protobuf_wire_format.ZigZagDecode(cls._decode_signed_varint(data))
 
     @classmethod
     def decode_uint32(cls, data):

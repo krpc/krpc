@@ -22,16 +22,6 @@ local function _decode_varint(data)
   end
 end
 
-local function _decode_signed_varint(data)
-  if data == '\255\255\255\255\255\255\255\255\127' then
-    return math.huge
-  elseif data == '\128\128\128\128\128\128\128\128\128\1' then
-    return -math.huge
-  else
-    return pb.signed_varint_decoder(data, 0)
-  end
-end
-
 local function _decode_float(data)
   local field_dict = {}
   local key = 1
@@ -60,8 +50,10 @@ local function _decode_value(data, typ)
     return _decode_double(data)
   elseif code == Types.FLOAT then
     return _decode_float(data)
-  elseif code == Types.INT32 or code == Types.INT64 then
-    return _decode_signed_varint(data)
+  elseif code == Types.SINT32 then
+    return pb.zig_zag_decode32(_decode_varint(data))
+  elseif code == Types.SINT64 then
+    return pb.zig_zag_decode64(_decode_varint(data))
   elseif code == Types.UINT32 or code == Types.UINT64 then
     return _decode_varint(data)
   elseif code == Types.BOOL then
@@ -89,7 +81,7 @@ function decoder.decode(data, typ)
   if typ:is_a(Types.MessageType) then
     return _decode_message(data, typ.lua_type)
   elseif typ:is_a(Types.EnumerationType) then
-    return typ.lua_type(_decode_value(data, _types:int32_type()))
+    return typ.lua_type(_decode_value(data, _types:sint32_type()))
   elseif typ:is_a(Types.ValueType) then
     return _decode_value(data, typ)
   elseif typ:is_a(Types.ClassType) then

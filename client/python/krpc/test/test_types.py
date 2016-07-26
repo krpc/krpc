@@ -25,8 +25,8 @@ class TestTypes(unittest.TestCase):
         cases = [
             (types.double_type, Type.DOUBLE, float),
             (types.float_type, Type.FLOAT, float),
-            (types.int32_type, Type.INT32, int),
-            (types.int64_type, Type.INT64, long),
+            (types.sint32_type, Type.SINT32, int),
+            (types.sint64_type, Type.SINT64, long),
             (types.uint32_type, Type.UINT32, int),
             (types.uint64_type, Type.UINT64, long),
             (types.bool_type, Type.BOOL, bool),
@@ -102,28 +102,28 @@ class TestTypes(unittest.TestCase):
 
     def test_tuple_2_types(self):
         types = Types()
-        typ = types.tuple_type(types.int32_type, types.string_type)
+        typ = types.tuple_type(types.uint32_type, types.string_type)
         self.assertTrue(isinstance(typ, TupleType))
         self.assertEqual(typ.python_type, tuple)
         self.check_protobuf_type(Type.TUPLE, '', '', 2, typ.protobuf_type)
-        self.check_protobuf_type(Type.INT32, '', '', 0, typ.protobuf_type.types[0])
+        self.check_protobuf_type(Type.UINT32, '', '', 0, typ.protobuf_type.types[0])
         self.check_protobuf_type(Type.STRING, '', '', 0, typ.protobuf_type.types[1])
         self.assertEqual(2, len(typ.value_types))
         self.assertTrue(isinstance(typ.value_types[0], ValueType))
         self.assertTrue(isinstance(typ.value_types[1], ValueType))
         self.assertEqual(int, typ.value_types[0].python_type)
         self.assertEqual(str, typ.value_types[1].python_type)
-        self.check_protobuf_type(Type.INT32, '', '', 0, typ.value_types[0].protobuf_type)
+        self.check_protobuf_type(Type.UINT32, '', '', 0, typ.value_types[0].protobuf_type)
         self.check_protobuf_type(Type.STRING, '', '', 0, typ.value_types[1].protobuf_type)
 
     def test_tuple_3_types(self):
         types = Types()
-        typ = types.tuple_type(types.float_type, types.int64_type, types.string_type)
+        typ = types.tuple_type(types.float_type, types.uint64_type, types.string_type)
         self.assertTrue(isinstance(typ, TupleType))
         self.assertEqual(typ.python_type, tuple)
         self.check_protobuf_type(Type.TUPLE, '', '', 3, typ.protobuf_type)
         self.check_protobuf_type(Type.FLOAT, '', '', 0, typ.protobuf_type.types[0])
-        self.check_protobuf_type(Type.INT64, '', '', 0, typ.protobuf_type.types[1])
+        self.check_protobuf_type(Type.UINT64, '', '', 0, typ.protobuf_type.types[1])
         self.check_protobuf_type(Type.STRING, '', '', 0, typ.protobuf_type.types[2])
         self.assertEqual(3, len(typ.value_types))
         self.assertTrue(isinstance(typ.value_types[0], ValueType))
@@ -133,19 +133,19 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(long, typ.value_types[1].python_type)
         self.assertEqual(str, typ.value_types[2].python_type)
         self.check_protobuf_type(Type.FLOAT, '', '', 0, typ.value_types[0].protobuf_type)
-        self.check_protobuf_type(Type.INT64, '', '', 0, typ.value_types[1].protobuf_type)
+        self.check_protobuf_type(Type.UINT64, '', '', 0, typ.value_types[1].protobuf_type)
         self.check_protobuf_type(Type.STRING, '', '', 0, typ.value_types[2].protobuf_type)
 
     def test_list_types(self):
         types = Types()
-        typ = types.list_type(types.int32_type)
+        typ = types.list_type(types.uint32_type)
         self.assertTrue(isinstance(typ, ListType))
         self.assertEqual(typ.python_type, list)
         self.check_protobuf_type(Type.LIST, '', '', 1, typ.protobuf_type)
-        self.check_protobuf_type(Type.INT32, '', '', 0, typ.protobuf_type.types[0])
+        self.check_protobuf_type(Type.UINT32, '', '', 0, typ.protobuf_type.types[0])
         self.assertTrue(isinstance(typ.value_type, ValueType))
         self.assertEqual(int, typ.value_type.python_type)
-        self.check_protobuf_type(Type.INT32, '', '', 0, typ.value_type.protobuf_type)
+        self.check_protobuf_type(Type.UINT32, '', '', 0, typ.value_type.protobuf_type)
 
     def test_set_types(self):
         types = Types()
@@ -160,35 +160,35 @@ class TestTypes(unittest.TestCase):
 
     def test_dictionary_types(self):
         types = Types()
-        typ = types.dictionary_type(types.string_type, types.int32_type)
+        typ = types.dictionary_type(types.string_type, types.uint32_type)
         self.assertTrue(isinstance(typ, DictionaryType))
         self.assertEqual(typ.python_type, dict)
         self.check_protobuf_type(Type.DICTIONARY, '', '', 2, typ.protobuf_type)
         self.check_protobuf_type(Type.STRING, '', '', 0, typ.protobuf_type.types[0])
-        self.check_protobuf_type(Type.INT32, '', '', 0, typ.protobuf_type.types[1])
+        self.check_protobuf_type(Type.UINT32, '', '', 0, typ.protobuf_type.types[1])
         self.assertTrue(isinstance(typ.key_type, ValueType))
         self.assertEqual(str, typ.key_type.python_type)
         self.check_protobuf_type(Type.STRING, '', '', 0, typ.key_type.protobuf_type)
         self.assertTrue(isinstance(typ.value_type, ValueType))
         self.assertEqual(int, typ.value_type.python_type)
-        self.check_protobuf_type(Type.INT32, '', '', 0, typ.value_type.protobuf_type)
+        self.check_protobuf_type(Type.UINT32, '', '', 0, typ.value_type.protobuf_type)
 
     def test_coerce_to(self):
         types = Types()
         cases = [
             (42.0, 42, types.double_type),
             (42.0, 42, types.float_type),
-            (42, 42.0, types.int32_type),
-            (42, 42L, types.int32_type),
-            (42L, 42.0, types.int64_type),
-            (42L, 42, types.int64_type),
+            (42, 42.0, types.sint32_type),
+            (42, 42L, types.sint32_type),
+            (42L, 42.0, types.sint64_type),
+            (42L, 42, types.sint64_type),
             (42, 42.0, types.uint32_type),
             (42, 42L, types.uint32_type),
             (42L, 42.0, types.uint64_type),
             (42L, 42, types.uint64_type),
             (list(), tuple(), types.list_type(types.string_type)),
-            ((0, 1, 2), [0, 1, 2], types.tuple_type(types.int32_type, types.int32_type, types.int32_type)),
-            ([0, 1, 2], (0, 1, 2), types.list_type(types.int32_type)),
+            ((0, 1, 2), [0, 1, 2], types.tuple_type(types.sint32_type, types.sint32_type, types.sint32_type)),
+            ([0, 1, 2], (0, 1, 2), types.list_type(types.sint32_type)),
             (['foo', 'bar'], ['foo', 'bar'], types.list_type(types.string_type))
         ]
         for expected, value, typ in cases:
@@ -208,7 +208,7 @@ class TestTypes(unittest.TestCase):
         self.assertRaises(ValueError, types.coerce_to, '', types.float_type)
         self.assertRaises(ValueError, types.coerce_to, True, types.float_type)
 
-        self.assertRaises(ValueError, types.coerce_to, list(), types.tuple_type(types.int32_type))
+        self.assertRaises(ValueError, types.coerce_to, list(), types.tuple_type(types.uint32_type))
         self.assertRaises(ValueError, types.coerce_to, ['foo', 2], types.tuple_type(types.string_type))
         self.assertRaises(ValueError, types.coerce_to, [1], types.tuple_type(types.string_type))
 

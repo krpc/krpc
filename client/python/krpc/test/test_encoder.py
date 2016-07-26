@@ -42,7 +42,7 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual(expected, hexlify(data))
 
     def test_encode_value(self):
-        data = Encoder.encode(300, self.types.int32_type)
+        data = Encoder.encode(300, self.types.uint32_type)
         self.assertEqual('ac02', hexlify(data))
 
     def test_encode_unicode_string(self):
@@ -58,7 +58,7 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual(expected, hexlify(data))
 
     def test_encode_value_delimited(self):
-        data = Encoder.encode_delimited(300, self.types.int32_type)
+        data = Encoder.encode_delimited(300, self.types.uint32_type)
         self.assertEqual('02' + 'ac02', hexlify(data))
 
     def test_encode_class(self):
@@ -77,7 +77,7 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual('00', hexlify(data))
 
     def test_encode_tuple_wrong_arity(self):
-        typ = self.types.tuple_type(self.types.int32_type, self.types.int32_type, self.types.int32_type)
+        typ = self.types.tuple_type(self.types.uint32_type, self.types.uint32_type, self.types.uint32_type)
         value = (0, 1)
         self.assertRaises(ValueError, Encoder.encode, value, typ)
 

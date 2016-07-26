@@ -14,7 +14,7 @@ class TestDecoder(unittest.TestCase):
         self.assertEqual('ProcedureName', request.procedure)
 
     def test_decode_value(self):
-        value = Decoder.decode(unhexlify('ac02'), self.types.int32_type)
+        value = Decoder.decode(unhexlify('ac02'), self.types.uint32_type)
         self.assertEqual(int(300), value)
 
     def test_decode_unicode_string(self):
@@ -34,7 +34,7 @@ class TestDecoder(unittest.TestCase):
         self.assertEqual('ProcedureName', request.procedure)
 
     def test_decode_value_delimited(self):
-        value = Decoder.decode_delimited(unhexlify('02'+'ac02'), self.types.int32_type)
+        value = Decoder.decode_delimited(unhexlify('02'+'ac02'), self.types.uint32_type)
         self.assertEqual(300, value)
 
     def test_decode_class(self):

@@ -104,7 +104,7 @@ class Parameter(Appendable):
             if not isinstance(self.type, EnumerationType):
                 typ = self.type
             else:
-                typ = self.types.int32_type
+                typ = self.types.sint32_type
             default_value = Decoder.decode(str(bytearray(base64.b64decode(default_value))), typ)
         self.default_value = default_value
         self.documentation = documentation

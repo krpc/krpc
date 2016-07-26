@@ -190,7 +190,7 @@ class Generator(object):
         if not isinstance(typ, EnumerationType):
             return Decoder.decode(value, typ)
         else:
-            return Decoder.decode(value, self.types.int32_type)
+            return Decoder.decode(value, self.types.sint32_type)
 
     def get_return_type(self, procedure):
         if 'return_type' not in procedure:

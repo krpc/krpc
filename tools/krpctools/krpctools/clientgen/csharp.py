@@ -22,8 +22,8 @@ class CsharpGenerator(Generator):
     _type_map = {
         Type.DOUBLE: 'double',
         Type.FLOAT: 'float',
-        Type.INT32: 'int',
-        Type.INT64: 'long',
+        Type.SINT32: 'int',
+        Type.SINT64: 'long',
         Type.UINT32: 'uint',
         Type.UINT64: 'ulong',
         Type.BOOL: 'bool',

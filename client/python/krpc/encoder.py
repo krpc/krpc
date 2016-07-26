@@ -1,4 +1,5 @@
 from google.protobuf.internal import encoder as protobuf_encoder  # pylint: disable=import-error,no-name-in-module
+from google.protobuf.internal import wire_format as protobuf_wire_format  # pylint: disable=import-error,no-name-in-module
 from krpc.types import Types, ValueType, ClassType, EnumerationType, MessageType
 from krpc.types import TupleType, ListType, SetType, DictionaryType
 from krpc.platform import bytelength
@@ -38,7 +39,7 @@ class Encoder(object):
         elif isinstance(typ, ValueType):
             return cls._encode_value(x, typ)
         elif isinstance(typ, EnumerationType):
-            return cls._encode_value(x.value, cls._types.int32_type)
+            return cls._encode_value(x.value, cls._types.sint32_type)
         elif isinstance(typ, ClassType):
             object_id = x._object_id if x is not None else 0
             return cls._encode_value(object_id, cls._types.uint64_type)
@@ -80,10 +81,10 @@ class Encoder(object):
 
     @classmethod
     def _encode_value(cls, value, typ):
-        if typ.protobuf_type.code == krpc.schema.KRPC.Type.INT32:
-            return _ValueEncoder.encode_int32(value)
-        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.INT64:
-            return _ValueEncoder.encode_int64(value)
+        if typ.protobuf_type.code == krpc.schema.KRPC.Type.SINT32:
+            return _ValueEncoder.encode_sint32(value)
+        elif typ.protobuf_type.code == krpc.schema.KRPC.Type.SINT64:
+            return _ValueEncoder.encode_sint64(value)
         elif typ.protobuf_type.code == krpc.schema.KRPC.Type.UINT32:
             return _ValueEncoder.encode_uint32(value)
         elif typ.protobuf_type.code == krpc.schema.KRPC.Type.UINT64:
@@ -139,6 +140,7 @@ class _ValueEncoder(object):
 
     @classmethod
     def _encode_signed_varint(cls, value):
+        value = protobuf_wire_format.ZigZagEncode(value)
         data = []
 
         def write(x):
@@ -148,11 +150,11 @@ class _ValueEncoder(object):
         return b''.join(data)
 
     @classmethod
-    def encode_int32(cls, value):
+    def encode_sint32(cls, value):
         return cls._encode_signed_varint(value)
 
     @classmethod
-    def encode_int64(cls, value):
+    def encode_sint64(cls, value):
         return cls._encode_signed_varint(value)
 
     @classmethod

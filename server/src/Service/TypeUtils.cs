@@ -398,10 +398,10 @@ namespace KRPC.Service
                     result["code"] = "FLOAT";
                     break;
                 case TypeCode.Int32:
-                    result["code"] = "INT32";
+                    result["code"] = "SINT32";
                     break;
                 case TypeCode.Int64:
-                    result["code"] = "INT64";
+                    result["code"] = "SINT64";
                     break;
                 case TypeCode.UInt32:
                     result["code"] = "UINT32";

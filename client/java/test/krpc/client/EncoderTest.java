@@ -18,10 +18,13 @@ import org.junit.runners.Suite;
 import com.google.protobuf.ByteString;
 
 import krpc.client.services.TestService;
+import krpc.client.Types;
 import krpc.schema.KRPC;
+import krpc.schema.KRPC.Type;
+import krpc.schema.KRPC.Type.TypeCode;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ EncoderInt32ValueTest.class, EncoderInt64ValueTest.class, EncoderUInt32ValueTest.class, EncoderUInt64ValueTest.class,
+@Suite.SuiteClasses({ EncoderSInt32ValueTest.class, EncoderSInt64ValueTest.class, EncoderUInt32ValueTest.class, EncoderUInt64ValueTest.class,
         EncoderSingleValueTest.class, EncoderDoubleValueTest.class, EncoderBooleanValueTest.class, EncoderStringValueTest.class,
         EncoderBytesValueTest.class, EncoderListCollectionTest.class, EncoderDictionaryCollectionTest.class, EncoderSetCollectionTest.class, })
 public class EncoderTest {
@@ -62,65 +65,75 @@ public class EncoderTest {
     @Test
     public void testEncodeMessage() throws IOException {
         KRPC.Request request = KRPC.Request.newBuilder().setService("ServiceName").setProcedure("ProcedureName").build();
-        ByteString data = Encoder.encode(request);
+        Type type = Types.CreateMessage(TypeCode.REQUEST);
+        ByteString data = Encoder.encode(request, type);
         String expected = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
         assertEquals(expected, hexlify(data));
     }
 
     @Test
     public void testEncodeValue() throws IOException {
-        ByteString data = Encoder.encode(300);
+        Type type = Types.CreateValue(TypeCode.UINT32);
+        ByteString data = Encoder.encode(300, type);
         assertEquals("ac02", hexlify(data));
     }
 
     @Test
     public void testEncodeUnicodeString() throws IOException {
-        ByteString data = Encoder.encode("\u2122");
+        Type type = Types.CreateValue(TypeCode.STRING);
+        ByteString data = Encoder.encode("\u2122", type);
         assertEquals("03e284a2", hexlify(data));
     }
 
     @Test
     public void testEncodeClass() throws IOException {
         TestService.TestClass obj = new TestService.TestClass(null, 300);
-        ByteString data = Encoder.encode(obj);
+        Type type = Types.CreateClass("TestService", "TestClass");
+        ByteString data = Encoder.encode(obj, type);
         assertEquals("ac02", hexlify(data));
     }
 
     @Test
     public void testEncodeClassNull() throws IOException {
-        ByteString data = Encoder.encode(null);
+        Type type = Types.CreateClass("TestService", "TestClass");
+        ByteString data = Encoder.encode(null, type);
         assertEquals("00", hexlify(data));
     }
 
     @Test
     public void testDecodeMessage() throws IOException {
         ByteString message = unhexlify("0a0b536572766963654e616d65120d50726f6365647572654e616d65");
-        KRPC.Request request = (KRPC.Request) Encoder.decodeMessage(KRPC.Request.newBuilder(), message);
+        Type type = Types.CreateMessage(TypeCode.REQUEST);
+        KRPC.Request request = (KRPC.Request) Encoder.decode(message, type, null);
         assertEquals("ServiceName", request.getService());
         assertEquals("ProcedureName", request.getProcedure());
     }
 
     @Test
     public void testDecodeValue() throws IOException {
-        int value = Encoder.decodeUInt32(unhexlify("ac02"));
+        Type type = Types.CreateValue(TypeCode.UINT32);
+        int value = (int) Encoder.decode(unhexlify("ac02"), type, null);
         assertEquals(300, value);
     }
 
     @Test
     public void testDecodeUnicodeString() throws IOException {
-        String value = Encoder.decodeString(unhexlify("03e284a2"));
+        Type type = Types.CreateValue(TypeCode.STRING);
+        String value = (String) Encoder.decode(unhexlify("03e284a2"), type, null);
         assertEquals("\u2122", value);
     }
 
     @Test
     public void testDecodeClass() throws IOException {
-        TestService.TestClass value = Encoder.decodeObject(unhexlify("ac02"), TestService.TestClass.class, null);
+        Type type = Types.CreateClass("TestService", "TestClass");
+        TestService.TestClass value = (TestService.TestClass) Encoder.decode(unhexlify("ac02"), type, null);
         assertEquals(new TestService.TestClass(null, 300), value);
     }
 
     @Test
     public void testDecodeClassNull() throws IOException {
-        TestService.TestClass value = Encoder.decodeObject(unhexlify("00"), TestService.TestClass.class, null);
+        Type type = Types.CreateClass("TestService", "TestClass");
+        TestService.TestClass value = (TestService.TestClass) Encoder.decode(unhexlify("00"), type, null);
         assertNull(value);
     }
 
@@ -134,10 +147,10 @@ public class EncoderTest {
     public void testTupleCollection1() throws IOException {
         Unit<Integer> value = new Unit<Integer>(1);
         String data = "0a0101";
-        ByteString encodeResult = Encoder.encode(value);
+        Type type = Types.CreateTuple(Types.CreateValue(TypeCode.UINT32));
+        ByteString encodeResult = Encoder.encode(value, type);
         assertEquals(data, hexlify(encodeResult));
-        TypeSpecification typeSpec = new TypeSpecification(Unit.class, new TypeSpecification(Integer.class));
-        Unit<Integer> decodeResult = (Unit<Integer>) Encoder.decodeTuple(unhexlify(data), typeSpec, null);
+        Unit<Integer> decodeResult = (Unit<Integer>) Encoder.decode(unhexlify(data), type, null);
         assertEquals(value, decodeResult);
     }
 
@@ -146,11 +159,13 @@ public class EncoderTest {
     public void testTupleCollection2() throws IOException {
         Triplet<Integer, String, Boolean> value = new Triplet<Integer, String, Boolean>(1, "jeb", false);
         String data = "0a01010a04036a65620a0100";
-        ByteString encodeResult = Encoder.encode(value);
+        Type type = Types.CreateTuple(
+            Types.CreateValue(TypeCode.UINT32),
+            Types.CreateValue(TypeCode.STRING),
+            Types.CreateValue(TypeCode.BOOL));
+        ByteString encodeResult = Encoder.encode(value, type);
         assertEquals(data, hexlify(encodeResult));
-        TypeSpecification typeSpec = new TypeSpecification(Triplet.class, new TypeSpecification(Integer.class), new TypeSpecification(String.class),
-                new TypeSpecification(Boolean.class));
-        Triplet<Integer, String, Boolean> decodeResult = (Triplet<Integer, String, Boolean>) Encoder.decode(unhexlify(data), typeSpec, null);
+        Triplet<Integer, String, Boolean> decodeResult = (Triplet<Integer, String, Boolean>) Encoder.decode(unhexlify(data), type, null);
         assertEquals(value, decodeResult);
     }
 }

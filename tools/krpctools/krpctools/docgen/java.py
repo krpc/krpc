@@ -16,8 +16,8 @@ class JavaDomain(Domain):
     type_map = {
         Type.DOUBLE: 'double',
         Type.FLOAT: 'float',
-        Type.INT32: 'int',
-        Type.INT64: 'long',
+        Type.SINT32: 'int',
+        Type.SINT64: 'long',
         Type.UINT32: 'int',
         Type.UINT64: 'long',
         Type.BYTES: 'byte[]',
@@ -28,8 +28,8 @@ class JavaDomain(Domain):
     boxed_type_map = {
         Type.DOUBLE: 'Double',
         Type.FLOAT: 'Single',
-        Type.INT32: 'Integer',
-        Type.INT64: 'Long',
+        Type.SINT32: 'Integer',
+        Type.SINT64: 'Long',
         Type.UINT32: 'Integer',
         Type.UINT64: 'Long',
         Type.BYTES: 'Byte[]',

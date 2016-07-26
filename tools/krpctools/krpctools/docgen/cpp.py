@@ -15,8 +15,8 @@ class CppDomain(Domain):
     type_map = {
         Type.DOUBLE: 'double',
         Type.FLOAT: 'float',
-        Type.INT32: 'int32_t',
-        Type.INT64: 'int64_t',
+        Type.SINT32: 'int32_t',
+        Type.SINT64: 'int64_t',
         Type.UINT32: 'uint32_t',
         Type.UINT64: 'uint64_t',
         Type.BOOL: 'bool',

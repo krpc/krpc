@@ -14,8 +14,8 @@ local Types = class()
 Types.NONE = schema.TYPE_TYPECODE_NONE_ENUM.number
 Types.DOUBLE = schema.TYPE_TYPECODE_DOUBLE_ENUM.number
 Types.FLOAT = schema.TYPE_TYPECODE_FLOAT_ENUM.number
-Types.INT32 = schema.TYPE_TYPECODE_INT32_ENUM.number
-Types.INT64 = schema.TYPE_TYPECODE_INT64_ENUM.number
+Types.SINT32 = schema.TYPE_TYPECODE_SINT32_ENUM.number
+Types.SINT64 = schema.TYPE_TYPECODE_SINT64_ENUM.number
 Types.UINT32 = schema.TYPE_TYPECODE_UINT32_ENUM.number
 Types.UINT64 = schema.TYPE_TYPECODE_UINT64_ENUM.number
 Types.BOOL = schema.TYPE_TYPECODE_BOOL_ENUM.number
@@ -36,8 +36,8 @@ Types.DICTIONARY = schema.TYPE_TYPECODE_DICTIONARY_ENUM.number
 VALUE_TYPES = Map{}
 VALUE_TYPES:set(Types.DOUBLE, 'number')
 VALUE_TYPES:set(Types.FLOAT, 'number')
-VALUE_TYPES:set(Types.INT32, 'number')
-VALUE_TYPES:set(Types.INT64, 'number')
+VALUE_TYPES:set(Types.SINT32, 'number')
+VALUE_TYPES:set(Types.SINT64, 'number')
 VALUE_TYPES:set(Types.UINT32, 'number')
 VALUE_TYPES:set(Types.UINT64, 'number')
 VALUE_TYPES:set(Types.BOOL, 'boolean')
@@ -54,8 +54,8 @@ MESSAGE_TYPES:set(Types.SERVICES, schema.Services)
 CODE_TO_STRING = Map{}
 CODE_TO_STRING:set(Types.DOUBLE, 'double')
 CODE_TO_STRING:set(Types.FLOAT, 'float')
-CODE_TO_STRING:set(Types.INT32, 'int32')
-CODE_TO_STRING:set(Types.INT64, 'int64')
+CODE_TO_STRING:set(Types.SINT32, 'sint32')
+CODE_TO_STRING:set(Types.SINT64, 'sint64')
 CODE_TO_STRING:set(Types.UINT32, 'uint32')
 CODE_TO_STRING:set(Types.UINT64, 'uint64')
 CODE_TO_STRING:set(Types.BOOL, 'bool')
@@ -143,14 +143,14 @@ function Types:float_type()
   return self:as_type(_protobuf_type(Types.FLOAT))
 end
 
-function Types:int32_type()
-  -- Get an int32 value type
-  return self:as_type(_protobuf_type(Types.INT32))
+function Types:sint32_type()
+  -- Get an sint32 value type
+  return self:as_type(_protobuf_type(Types.SINT32))
 end
 
-function Types:int64_type()
-  -- Get an int64 value type
-  return self:as_type(_protobuf_type(Types.INT64))
+function Types:sint64_type()
+  -- Get an sint64 value type
+  return self:as_type(_protobuf_type(Types.SINT64))
 end
 
 function Types:uint32_type()

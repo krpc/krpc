@@ -18,7 +18,7 @@ function TestDecoder:test_decode_message()
 end
 
 function TestDecoder:test_decode_value()
-  local value = decoder.decode(platform.unhexlify('ac02'), types:int32_type())
+  local value = decoder.decode(platform.unhexlify('ac02'), types:uint32_type())
   luaunit.assertEquals(300, value)
 end
 
@@ -43,7 +43,7 @@ function TestDecoder:test_decode_message_delimited()
 end
 
 function TestDecoder:test_decode_value_delimited()
-  local value = decoder.decode_delimited(platform.unhexlify('02'..'ac02'), types:int32_type())
+  local value = decoder.decode_delimited(platform.unhexlify('02'..'ac02'), types:uint32_type())
   luaunit.assertEquals(300, value)
 end
 

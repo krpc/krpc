@@ -66,97 +66,112 @@ public class Encoder {
         return builder.toString();
     }
 
-    public static ByteString encode(Object value) throws IOException {
-        // TODO: cannot distinguish whether to encode integers as
-        // signed/unsigned
-        if (value == null)
-            return encodeUInt64(0); // null remote object
-        else if (value instanceof Integer)
-            return encodeInt32((int) value);
-        else if (value instanceof Long)
-            return encodeInt64((long) value);
-        else if (value instanceof Float)
-            return encodeFloat((float) value);
-        else if (value instanceof Double)
-            return encodeDouble((double) value);
-        else if (value instanceof Boolean)
-            return encodeBoolean((boolean) value);
-        else if (value instanceof String)
-            return encodeString((String) value);
-        else if (value instanceof byte[])
-            return encodeBytes((byte[]) value);
-        else if (value instanceof Message)
+    public static ByteString encode(Object value, KRPC.Type type) throws IOException {
+        switch (type.getCode()) {
+        case DOUBLE:
+            return encodeDouble((double)value);
+        case FLOAT:
+            return encodeFloat((float)value);
+        case SINT32:
+            return encodeSInt32((int)value);
+        case SINT64:
+            return encodeSInt64((long)value);
+        case UINT32:
+            return encodeUInt32((int)value);
+        case UINT64:
+            return encodeUInt64((long)value);
+        case BOOL:
+            return encodeBoolean((boolean)value);
+        case STRING:
+            return encodeString((String)value);
+        case BYTES:
+            return encodeBytes((byte[])value);
+        case REQUEST:
+        case RESPONSE:
+        case STREAM_MESSAGE:
+        case STATUS:
+        case SERVICES:
             return encodeMessage((Message) value);
-        else if (value instanceof RemoteObject)
-            return encodeObject((RemoteObject) value);
-        else if (value instanceof RemoteEnum)
+        case CLASS:
+            if (value == null)
+                return encodeUInt64(0);
+            else
+                return encodeObject((RemoteObject) value);
+        case ENUMERATION:
             return encodeEnum((RemoteEnum) value);
-        else if (value instanceof List<?>)
-            return encodeList((List<?>) value);
-        else if (value instanceof Map<?, ?>)
-            return encodeDictionary((Map<?, ?>) value);
-        else if (value instanceof Tuple)
-            return encodeTuple((Tuple) value);
-        else if (value instanceof Set<?>)
-            return encodeSet((Set<?>) value);
-        throw new IOException("Failed to encode value of type " + value.getClass().toString());
+        case TUPLE:
+            return encodeTuple((Tuple) value, type.getTypesList());
+        case LIST:
+            return encodeList((List<?>) value, type.getTypes(0));
+        case SET:
+            return encodeSet((Set<?>) value, type.getTypes(0));
+        case DICTIONARY:
+            return encodeDictionary((Map<?, ?>) value, type.getTypes(0), type.getTypes(1));
+        default:
+            throw new IOException("Failed to encode value");
+        }
     }
 
-    public static Object decode(ByteString data, TypeSpecification typeSpec, Connection connection) throws IOException {
-        Class<?> type = typeSpec.getType();
-        if (type == Integer.class)
-            return decodeInt32(data);
-        else if (type == Long.class)
-            return decodeInt64(data);
-        else if (type == Float.class)
-            return decodeFloat(data);
-        else if (type == Double.class)
+    public static Object decode(ByteString data, KRPC.Type type, Connection connection) throws IOException {
+        switch (type.getCode()) {
+        case DOUBLE:
             return decodeDouble(data);
-        else if (type == Boolean.class)
+        case FLOAT:
+            return decodeFloat(data);
+        case SINT32:
+            return decodeSInt32(data);
+        case SINT64:
+            return decodeSInt64(data);
+        case UINT32:
+            return decodeUInt32(data);
+        case UINT64:
+            return decodeUInt64(data);
+        case BOOL:
             return decodeBoolean(data);
-        else if (type == String.class)
+        case STRING:
             return decodeString(data);
-        else if (type == byte[].class)
+        case BYTES:
             return decodeBytes(data);
-        else if (Message.class.isAssignableFrom(type))
-            try {
-                Message.Builder builder = (Message.Builder) type.getMethod("newBuilder").invoke(null);
-                return decodeMessage(builder, data);
-            } catch (InvocationTargetException e) {
-                throw new IOException("Failed to decode message", e);
-            } catch (IllegalAccessException e) {
-                throw new IOException("Failed to decode message", e);
-            } catch (NoSuchMethodException e) {
-                throw new IOException("Failed to decode message", e);
-            }
-        else if (RemoteObject.class.isAssignableFrom(type))
+        case REQUEST:
+            return decodeMessage(KRPC.Request.newBuilder(), data);
+        case RESPONSE:
+            return decodeMessage(KRPC.Response.newBuilder(), data);
+        case STREAM_MESSAGE:
+            return decodeMessage(KRPC.StreamMessage.newBuilder(), data);
+        case STATUS:
+            return decodeMessage(KRPC.Status.newBuilder(), data);
+        case SERVICES:
+            return decodeMessage(KRPC.Services.newBuilder(), data);
+        case CLASS:
             return decodeObject(data, type, connection);
-        else if (RemoteEnum.class.isAssignableFrom(type))
+        case ENUMERATION:
             return decodeEnum(data, type);
-        else if (type == List.class)
-            return decodeList(data, typeSpec, connection);
-        else if (type == Map.class)
-            return decodeDictionary(data, typeSpec, connection);
-        else if (Tuple.class.isAssignableFrom(type))
-            return decodeTuple(data, typeSpec, connection);
-        else if (type == Set.class)
-            return decodeSet(data, typeSpec, connection);
-        throw new IOException("Failed to decode value " + type);
+        case TUPLE:
+            return decodeTuple(data, type.getTypesList(), connection);
+        case LIST:
+            return decodeList(data, type.getTypes(0), connection);
+        case SET:
+            return decodeSet(data, type.getTypes(0), connection);
+        case DICTIONARY:
+            return decodeDictionary(data, type.getTypes(0), type.getTypes(1), connection);
+        default:
+            throw new IOException("Failed to decode value");
+        }
     }
 
-    static ByteString encodeInt32(int value) throws IOException {
-        byte[] data = new byte[CodedOutputStream.computeInt32SizeNoTag(value)];
+    static ByteString encodeSInt32(int value) throws IOException {
+        byte[] data = new byte[CodedOutputStream.computeSInt32SizeNoTag(value)];
         CodedOutputStream stream = CodedOutputStream.newInstance(data);
-        stream.writeInt32NoTag(value);
+        stream.writeSInt32NoTag(value);
         stream.flush();
         stream.checkNoSpaceLeft();
         return ByteString.copyFrom(data);
     }
 
-    static ByteString encodeInt64(long value) throws IOException {
-        byte[] data = new byte[CodedOutputStream.computeInt64SizeNoTag(value)];
+    static ByteString encodeSInt64(long value) throws IOException {
+        byte[] data = new byte[CodedOutputStream.computeSInt64SizeNoTag(value)];
         CodedOutputStream stream = CodedOutputStream.newInstance(data);
-        stream.writeInt64NoTag(value);
+        stream.writeSInt64NoTag(value);
         stream.flush();
         stream.checkNoSpaceLeft();
         return ByteString.copyFrom(data);
@@ -234,49 +249,51 @@ public class Encoder {
     }
 
     static ByteString encodeEnum(RemoteEnum value) throws IOException {
-        return encodeInt32(value.getValue());
+        return encodeSInt32(value.getValue());
     }
 
-    static ByteString encodeList(List<?> value) throws IOException {
+    static ByteString encodeTuple(Tuple value, List<KRPC.Type> valueTypes) throws IOException {
+        if (value.getSize() != valueTypes.size())
+            throw new IOException ("Failed to encode tuple");
+        KRPC.Tuple.Builder tuple = KRPC.Tuple.newBuilder();
+        for (int i = 0; i < value.getSize(); i++)
+            tuple.addItems(encode(value.getValue(i), valueTypes.get(i)));
+        return ByteString.copyFrom(tuple.build().toByteArray());
+    }
+
+    static ByteString encodeList(List<?> value, KRPC.Type valueType) throws IOException {
         KRPC.List.Builder list = KRPC.List.newBuilder();
         for (Object item : value)
-            list.addItems(encode(item));
+            list.addItems(encode(item, valueType));
         return ByteString.copyFrom(list.build().toByteArray());
     }
 
-    static ByteString encodeDictionary(Map<?, ?> value) throws IOException {
+    static ByteString encodeSet(Set<?> value, KRPC.Type valueType) throws IOException {
+        KRPC.Set.Builder set = KRPC.Set.newBuilder();
+        for (Object item : value)
+            set.addItems(encode(item, valueType));
+        return ByteString.copyFrom(set.build().toByteArray());
+    }
+
+    static ByteString encodeDictionary(Map<?, ?> value, KRPC.Type keyType, KRPC.Type valueType) throws IOException {
         KRPC.Dictionary.Builder dictionary = KRPC.Dictionary.newBuilder();
         KRPC.DictionaryEntry.Builder dictionaryEntry = KRPC.DictionaryEntry.newBuilder();
         for (Map.Entry<?, ?> entry : value.entrySet()) {
-            dictionaryEntry.setKey(encode(entry.getKey()));
-            dictionaryEntry.setValue(encode(entry.getValue()));
+            dictionaryEntry.setKey(encode(entry.getKey(), keyType));
+            dictionaryEntry.setValue(encode(entry.getValue(), valueType));
             dictionary.addEntries(dictionaryEntry.build());
         }
         return ByteString.copyFrom(dictionary.build().toByteArray());
     }
 
-    static ByteString encodeTuple(Tuple value) throws IOException {
-        KRPC.Tuple.Builder tuple = KRPC.Tuple.newBuilder();
-        for (Object item : value)
-            tuple.addItems(encode(item));
-        return ByteString.copyFrom(tuple.build().toByteArray());
-    }
-
-    static ByteString encodeSet(Set<?> value) throws IOException {
-        KRPC.Set.Builder set = KRPC.Set.newBuilder();
-        for (Object item : value)
-            set.addItems(encode(item));
-        return ByteString.copyFrom(set.build().toByteArray());
-    }
-
-    static int decodeInt32(ByteString data) throws IOException {
+    static int decodeSInt32(ByteString data) throws IOException {
         CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
-        return stream.readInt32();
+        return stream.readSInt32();
     }
 
-    static long decodeInt64(ByteString data) throws IOException {
+    static long decodeSInt64(ByteString data) throws IOException {
         CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
-        return stream.readInt64();
+        return stream.readSInt64();
     }
 
     static int decodeUInt32(ByteString data) throws IOException {
@@ -320,11 +337,14 @@ public class Encoder {
     }
 
     @SuppressWarnings({ "unchecked" })
-    static <T> T decodeObject(ByteString data, Class<T> type, Connection connection) throws IOException {
+    static <T> T decodeObject(ByteString data, KRPC.Type type, Connection connection) throws IOException {
         try {
             long id = decodeUInt64(data);
-            Constructor<?> ctor = type.getConstructor(Connection.class, long.class);
+            Class<?> classType = Class.forName("krpc.client.services." + type.getService() + "$" + type.getName());
+            Constructor<?> ctor = classType.getConstructor(Connection.class, long.class);
             return id == 0 ? null : (T) ctor.newInstance(connection, id);
+        } catch (ClassNotFoundException e) {
+            throw new IOException("Failed to decode object", e);
         } catch (NoSuchMethodException e) {
             throw new IOException("Failed to decode object", e);
         } catch (InstantiationException e) {
@@ -337,10 +357,13 @@ public class Encoder {
     }
 
     @SuppressWarnings({ "unchecked" })
-    static <T> T decodeEnum(ByteString data, Class<T> type) throws IOException {
+    static <T> T decodeEnum(ByteString data, KRPC.Type type) throws IOException {
         try {
-            int value = decodeInt32(data);
-            return (T) type.getMethod("fromValue", int.class).invoke(null, value);
+            int value = decodeSInt32(data);
+            Class<?> enumType = Class.forName("krpc.client.services." + type.getService() + "$" + type.getName());
+            return (T) enumType.getMethod("fromValue", int.class).invoke(null, value);
+        } catch (ClassNotFoundException e) {
+            throw new IOException("Failed to decode object", e);
         } catch (NoSuchMethodException e) {
             throw new IOException("Failed to decode object", e);
         } catch (IllegalAccessException e) {
@@ -350,24 +373,13 @@ public class Encoder {
         }
     }
 
-    @SuppressWarnings({ "unchecked" })
-    static <T> List<T> decodeList(ByteString data, TypeSpecification typeSpec, Connection connection) throws IOException {
-        KRPC.List listMessage = KRPC.List.newBuilder().mergeFrom(data).build();
-        List<T> list = new ArrayList<T>(listMessage.getItemsCount());
-        for (ByteString item : listMessage.getItemsList())
-            list.add((T) decode(item, typeSpec.getGenericTypes()[0], connection));
-        return list;
-    }
-
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    static Tuple decodeTuple(ByteString data, TypeSpecification typeSpec, Connection connection) throws IOException {
+    static Tuple decodeTuple(ByteString data, List<KRPC.Type> valueTypes, Connection connection) throws IOException {
         KRPC.Tuple tupleMessage = KRPC.Tuple.newBuilder().mergeFrom(data).build();
         int numElements = tupleMessage.getItemsCount();
         Object[] e = new Object[numElements];
-        for (int i = 0; i < numElements; i++) {
-            ByteString item = tupleMessage.getItems(i);
-            e[i] = decode(item, typeSpec.getGenericTypes()[i], connection);
-        }
+        for (int i = 0; i < numElements; i++)
+            e[i] = decode(tupleMessage.getItems(i), valueTypes.get(i), connection);
         switch (numElements) {
         case 1:
             return new Unit(e[0]);
@@ -389,28 +401,39 @@ public class Encoder {
             return new Ennead(e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7], e[8]);
         case 10:
             return new Decade(e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7], e[8], e[9]);
+        default:
+            throw new IOException("Failed to decode tuple");
         }
-        throw new IOException("Failed to decode tuple");
     }
 
     @SuppressWarnings({ "unchecked" })
-    static <K, V> Map<K, V> decodeDictionary(ByteString data, TypeSpecification typeSpec, Connection connection) throws IOException {
-        KRPC.Dictionary dictionaryMessage = KRPC.Dictionary.newBuilder().mergeFrom(data).build();
-        Map<K, V> dictionary = new HashMap<K, V>(dictionaryMessage.getEntriesCount());
-        for (KRPC.DictionaryEntry entry : dictionaryMessage.getEntriesList()) {
-            K key = (K) decode(entry.getKey(), typeSpec.getGenericTypes()[0], connection);
-            V value = (V) decode(entry.getValue(), typeSpec.getGenericTypes()[1], connection);
-            dictionary.put(key, value);
-        }
-        return dictionary;
+    static <T> List<T> decodeList(ByteString data, KRPC.Type valueType, Connection connection) throws IOException {
+        KRPC.List listMessage = KRPC.List.newBuilder().mergeFrom(data).build();
+        List<T> list = new ArrayList<T>(listMessage.getItemsCount());
+        for (ByteString item : listMessage.getItemsList())
+            list.add((T) decode(item, valueType, connection));
+        return list;
     }
 
     @SuppressWarnings({ "unchecked" })
-    static <T> Set<T> decodeSet(ByteString data, TypeSpecification typeSpec, Connection connection) throws IOException {
+    static <T> Set<T> decodeSet(ByteString data, KRPC.Type valueType, Connection connection) throws IOException {
         KRPC.Set setMessage = KRPC.Set.newBuilder().mergeFrom(data).build();
         Set<T> set = new HashSet<T>(setMessage.getItemsCount());
         for (ByteString item : setMessage.getItemsList())
-            set.add((T) decode(item, typeSpec.getGenericTypes()[0], connection));
+            set.add((T) decode(item, valueType, connection));
         return set;
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    static <K, V> Map<K, V> decodeDictionary(ByteString data, KRPC.Type keyType, KRPC.Type valueType,
+                                             Connection connection) throws IOException {
+        KRPC.Dictionary dictionaryMessage = KRPC.Dictionary.newBuilder().mergeFrom(data).build();
+        Map<K, V> dictionary = new HashMap<K, V>(dictionaryMessage.getEntriesCount());
+        for (KRPC.DictionaryEntry entry : dictionaryMessage.getEntriesList()) {
+            K key = (K) decode(entry.getKey(), keyType, connection);
+            V value = (V) decode(entry.getValue(), valueType, connection);
+            dictionary.put(key, value);
+        }
+        return dictionary;
     }
 }

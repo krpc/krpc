@@ -103,8 +103,8 @@ message Type {
     NONE = 0;
     DOUBLE = 1;
     FLOAT = 2;
-    INT32 = 3;
-    INT64 = 4;
+    SINT32 = 3;
+    SINT64 = 4;
     UINT32 = 5;
     UINT64 = 6;
     BOOL = 7;

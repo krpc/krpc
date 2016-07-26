@@ -42,18 +42,18 @@ void decode(double& value, const std::string& data, Client* client) {
 
 void decode(pb::int32& value, const std::string& data, Client* client) {
   pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
-  pb::uint32 value2 = 0;
-  if (!stream.ReadVarint32(&value2))
-    throw DecodeFailed("Failed to decode int32");
-  value = static_cast<pb::int32>(value2);
+  pb::uint32 zigZagValue = 0;
+  if (!stream.ReadVarint32(&zigZagValue))
+    throw DecodeFailed("Failed to decode sint32");
+  value = pb::internal::WireFormatLite::ZigZagDecode32(zigZagValue);
 }
 
 void decode(pb::int64& value, const std::string& data, Client* client) {
   pb::io::CodedInputStream stream((pb::uint8*)&data[0], data.size());
-  pb::uint64 value2 = 0;
-  if (!stream.ReadVarint64(&value2))
-    throw DecodeFailed("Failed to decode int64");
-  value = static_cast<pb::int64>(value2);
+  pb::uint64 zigZagValue = 0;
+  if (!stream.ReadVarint64(&zigZagValue))
+    throw DecodeFailed("Failed to decode sint64");
+  value = pb::internal::WireFormatLite::ZigZagDecode64(zigZagValue);
 }
 
 void decode(pb::uint32& value, const std::string& data, Client* client) {

@@ -27,8 +27,8 @@ function TestTypes:test_value_types()
   cases = List{
     { types:double_type(), Types.DOUBLE, 'number' },
     { types:float_type(), Types.FLOAT, 'number' },
-    { types:int32_type(), Types.INT32, 'number' },
-    { types:int64_type(), Types.INT64, 'number' },
+    { types:sint32_type(), Types.SINT32, 'number' },
+    { types:sint64_type(), Types.SINT64, 'number' },
     { types:uint32_type(), Types.UINT32, 'number' },
     { types:uint64_type(), Types.UINT64, 'number' },
     { types:bool_type(), Types.BOOL, 'boolean' },
@@ -105,29 +105,29 @@ end
 
 function TestTypes:test_tuple_2_types()
   local types = Types()
-  local typ = types:tuple_type({types:int32_type(), types:string_type()})
+  local typ = types:tuple_type({types:uint32_type(), types:string_type()})
   luaunit.assertTrue(typ:is_a(Types.TupleType))
   luaunit.assertTrue(typ.lua_type == List)
   self:check_protobuf_type(Types.TUPLE, '', '', 2, typ.protobuf_type)
-  self:check_protobuf_type(Types.INT32, '', '', 0, typ.protobuf_type.types[1])
+  self:check_protobuf_type(Types.UINT32, '', '', 0, typ.protobuf_type.types[1])
   self:check_protobuf_type(Types.STRING, '', '', 0, typ.protobuf_type.types[2])
   luaunit.assertEquals(2, typ.value_types:len())
   luaunit.assertTrue(typ.value_types[1]:is_a(Types.ValueType))
   luaunit.assertTrue(typ.value_types[2]:is_a(Types.ValueType))
   luaunit.assertEquals('number', typ.value_types[1].lua_type)
   luaunit.assertEquals('string', typ.value_types[2].lua_type)
-  self:check_protobuf_type(Types.INT32, '', '', 0, typ.value_types[1].protobuf_type)
+  self:check_protobuf_type(Types.UINT32, '', '', 0, typ.value_types[1].protobuf_type)
   self:check_protobuf_type(Types.STRING, '', '', 0, typ.value_types[2].protobuf_type)
 end
 
 function TestTypes:test_tuple_3_types()
   local types = Types()
-  local typ = types:tuple_type({types:float_type(), types:int64_type(), types:string_type()})
+  local typ = types:tuple_type({types:float_type(), types:uint64_type(), types:string_type()})
   luaunit.assertTrue(typ:is_a(Types.TupleType))
   luaunit.assertTrue(typ.lua_type == List)
   self:check_protobuf_type(Types.TUPLE, '', '', 3, typ.protobuf_type)
   self:check_protobuf_type(Types.FLOAT, '', '', 0, typ.protobuf_type.types[1])
-  self:check_protobuf_type(Types.INT64, '', '', 0, typ.protobuf_type.types[2])
+  self:check_protobuf_type(Types.UINT64, '', '', 0, typ.protobuf_type.types[2])
   luaunit.assertEquals(3, typ.value_types:len())
   luaunit.assertTrue(typ.value_types[1]:is_a(Types.ValueType))
   luaunit.assertTrue(typ.value_types[2]:is_a(Types.ValueType))
@@ -136,20 +136,20 @@ function TestTypes:test_tuple_3_types()
   luaunit.assertEquals('number', typ.value_types[2].lua_type)
   luaunit.assertEquals('string', typ.value_types[3].lua_type)
   self:check_protobuf_type(Types.FLOAT, '', '', 0, typ.value_types[1].protobuf_type)
-  self:check_protobuf_type(Types.INT64, '', '', 0, typ.value_types[2].protobuf_type)
+  self:check_protobuf_type(Types.UINT64, '', '', 0, typ.value_types[2].protobuf_type)
   self:check_protobuf_type(Types.STRING, '', '', 0, typ.value_types[3].protobuf_type)
 end
 
 function TestTypes:test_list_types()
   local types = Types()
-  local typ = types:list_type(types:int32_type())
+  local typ = types:list_type(types:uint32_type())
   luaunit.assertTrue(typ:is_a(Types.ListType))
   luaunit.assertTrue(typ.lua_type == List)
   self:check_protobuf_type(Types.LIST, '', '', 1, typ.protobuf_type)
-  self:check_protobuf_type(Types.INT32, '', '', 0, typ.protobuf_type.types[1])
+  self:check_protobuf_type(Types.UINT32, '', '', 0, typ.protobuf_type.types[1])
   luaunit.assertTrue(typ.value_type:is_a(Types.ValueType))
   luaunit.assertEquals('number', typ.value_type.lua_type)
-  self:check_protobuf_type(Types.INT32, '', '', 0, typ.value_type.protobuf_type)
+  self:check_protobuf_type(Types.UINT32, '', '', 0, typ.value_type.protobuf_type)
 end
 
 function TestTypes:test_set_types()
@@ -166,18 +166,18 @@ end
 
 function TestTypes:test_dictionary_types()
   local types = Types()
-  local typ = types:dictionary_type(types:string_type(), types:int32_type())
+  local typ = types:dictionary_type(types:string_type(), types:uint32_type())
   luaunit.assertTrue(typ:is_a(Types.DictionaryType))
   luaunit.assertTrue(typ.lua_type == Map)
   self:check_protobuf_type(Types.DICTIONARY, '', '', 2, typ.protobuf_type)
   self:check_protobuf_type(Types.STRING, '', '', 0, typ.protobuf_type.types[1])
-  self:check_protobuf_type(Types.INT32, '', '', 0, typ.protobuf_type.types[2])
+  self:check_protobuf_type(Types.UINT32, '', '', 0, typ.protobuf_type.types[2])
   luaunit.assertTrue(typ.key_type:is_a(Types.ValueType))
   luaunit.assertEquals('string', typ.key_type.lua_type)
   self:check_protobuf_type(Types.STRING, '', '', 0, typ.key_type.protobuf_type)
   luaunit.assertTrue(typ.value_type:is_a(Types.ValueType))
   luaunit.assertEquals('number', typ.value_type.lua_type)
-  self:check_protobuf_type(Types.INT32, '', '', 0, typ.value_type.protobuf_type)
+  self:check_protobuf_type(Types.UINT32, '', '', 0, typ.value_type.protobuf_type)
 end
 
 function TestTypes:test_coerce_to()
@@ -185,13 +185,13 @@ function TestTypes:test_coerce_to()
   local cases = List{
     {42, types:double_type()},
     {42, types:float_type()},
-    {42, types:int32_type()},
-    {42, types:int64_type()},
+    {42, types:sint32_type()},
+    {42, types:sint64_type()},
     {42, types:uint32_type()},
     {42, types:uint64_type()},
     {List{}, types:list_type(types:string_type())},
-    {{0, 1, 2}, types:tuple_type({types:int32_type(), types:int32_type(), types:int32_type()})},
-    {{0, 1, 2}, types:list_type(types:int32_type())},
+    {{0, 1, 2}, types:tuple_type({types:uint32_type(), types:uint32_type(), types:uint32_type()})},
+    {{0, 1, 2}, types:list_type(types:uint32_type())},
     {{'foo', 'bar'}, types:list_type(types:string_type())}
   }
   for _, x in ipairs(cases) do
@@ -206,7 +206,7 @@ function TestTypes:test_coerce_to()
   luaunit.assertError(types.coerce_to, types, '', types:float_type())
   luaunit.assertError(types.coerce_to, types, true, types:float_type())
 
-  luaunit.assertError(types.coerce_to, types, List{}, types:tuple_type({types:int32_type()}))
+  luaunit.assertError(types.coerce_to, types, List{}, types:tuple_type({types:uint32_type()}))
   luaunit.assertError(types.coerce_to, types, List{'foo', 2}, types:tuple_type({types:string_type()}))
   luaunit.assertError(types.coerce_to, types, List{1}, types:tuple_type({types:string_type()}))
 end

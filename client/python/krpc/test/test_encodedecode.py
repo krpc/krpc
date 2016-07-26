@@ -46,30 +46,30 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.float_type, cases)
         self._run_test_decode_value(self.types.float_type, cases)
 
-    def test_int32(self):
+    def test_sint32(self):
         cases = [
             (0, '00'),
-            (1, '01'),
-            (42, '2a'),
-            (300, 'ac02'),
-            (-33, 'dfffffffffffffffff01'),
-            (sys.maxint, 'ffffffffffffffff7f'),
-            (-sys.maxint - 1, '80808080808080808001')
+            (1, '02'),
+            (42, '54'),
+            (300, 'd804'),
+            (-33, '41'),
+            (2147483647, 'feffffff0f'),
+            (-2147483648, 'ffffffff0f')
         ]
-        self._run_test_encode_value(self.types.int32_type, cases)
-        self._run_test_decode_value(self.types.int32_type, cases)
+        self._run_test_encode_value(self.types.sint32_type, cases)
+        self._run_test_decode_value(self.types.sint32_type, cases)
 
-    def test_int64(self):
+    def test_sint64(self):
         cases = [
             (0, '00'),
-            (1, '01'),
-            (42, '2a'),
-            (300, 'ac02'),
-            (1234567890000L, 'd088ec8ff723'),
-            (-33, 'dfffffffffffffffff01')
+            (1, '02'),
+            (42, '54'),
+            (300, 'd804'),
+            (1234567890000L, 'a091d89fee47'),
+            (-33, '41')
         ]
-        self._run_test_encode_value(self.types.int64_type, cases)
-        self._run_test_decode_value(self.types.int64_type, cases)
+        self._run_test_encode_value(self.types.sint64_type, cases)
+        self._run_test_decode_value(self.types.sint64_type, cases)
 
     def test_uint32(self):
         cases = [
@@ -131,10 +131,10 @@ class TestEncodeDecode(unittest.TestCase):
 
     def test_tuple(self):
         cases = [((1,), '0a0101')]
-        self._run_test_encode_value(self.types.tuple_type(self.types.int32_type), cases)
-        self._run_test_decode_value(self.types.tuple_type(self.types.int32_type), cases)
+        self._run_test_encode_value(self.types.tuple_type(self.types.uint32_type), cases)
+        self._run_test_decode_value(self.types.tuple_type(self.types.uint32_type), cases)
         cases = [((1, 'jeb', False), '0a01010a04036a65620a0100')]
-        typ = self.types.tuple_type(self.types.int32_type, self.types.string_type, self.types.bool_type)
+        typ = self.types.tuple_type(self.types.uint32_type, self.types.string_type, self.types.bool_type)
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
@@ -144,7 +144,7 @@ class TestEncodeDecode(unittest.TestCase):
             ([1], '0a0101'),
             ([1, 2, 3, 4], '0a01010a01020a01030a0104')
         ]
-        typ = self.types.list_type(self.types.int32_type)
+        typ = self.types.list_type(self.types.uint32_type)
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
@@ -154,7 +154,7 @@ class TestEncodeDecode(unittest.TestCase):
             (set([1]), '0a0101'),
             (set([1, 2, 3, 4]), '0a01010a01020a01030a0104')
         ]
-        typ = self.types.set_type(self.types.int32_type)
+        typ = self.types.set_type(self.types.uint32_type)
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
@@ -165,7 +165,7 @@ class TestEncodeDecode(unittest.TestCase):
             ({'foo': 42, 'bar': 365, 'baz': 3},
              '0a0a0a04036261721202ed020a090a040362617a1201030a090a0403666f6f12012a')
         ]
-        typ = self.types.dictionary_type(self.types.string_type, self.types.int32_type)
+        typ = self.types.dictionary_type(self.types.string_type, self.types.uint32_type)
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 

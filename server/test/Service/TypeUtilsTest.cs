@@ -311,24 +311,24 @@ namespace KRPC.Test.Service
         }
 
         [TestCase ("{\"code\":\"STRING\"}", typeof(string))]
-        [TestCase ("{\"code\":\"INT64\"}", typeof(long))]
+        [TestCase ("{\"code\":\"SINT64\"}", typeof(long))]
         [TestCase ("{\"code\":\"STATUS\"}", typeof(Status))]
         [TestCase ("{\"code\":\"CLASS\",\"service\":\"TestService\",\"name\":\"TestClass\"}",
                    typeof(TestService.TestClass))]
         [TestCase ("{\"code\":\"ENUMERATION\",\"service\":\"TestService\",\"name\":\"TestEnum\"}",
                    typeof(TestService.TestEnum))]
         [TestCase ("{\"code\":\"LIST\",\"types\":[{\"code\":\"STRING\"}]}", typeof(IList<string>))]
-        [TestCase ("{\"code\":\"DICTIONARY\",\"types\":[{\"code\":\"INT32\"},{\"code\":\"STRING\"}]}",
+        [TestCase ("{\"code\":\"DICTIONARY\",\"types\":[{\"code\":\"SINT32\"},{\"code\":\"STRING\"}]}",
                    typeof(IDictionary<int,string>))]
-        [TestCase ("{\"code\":\"SET\",\"types\":[{\"code\":\"INT64\"}]}", typeof(HashSet<long>))]
-        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"INT64\"}]}", typeof(KRPC.Utils.Tuple<long>))]
-        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"INT64\"},{\"code\":\"INT32\"}]}",
+        [TestCase ("{\"code\":\"SET\",\"types\":[{\"code\":\"SINT64\"}]}", typeof(HashSet<long>))]
+        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"SINT64\"}]}", typeof(KRPC.Utils.Tuple<long>))]
+        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"SINT64\"},{\"code\":\"SINT32\"}]}",
                    typeof(KRPC.Utils.Tuple<long,int>))]
-        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"INT64\"}," +
-                   "{\"code\":\"INT32\"},{\"code\":\"STRING\"}]}",
+        [TestCase ("{\"code\":\"TUPLE\",\"types\":[{\"code\":\"SINT64\"}," +
+                   "{\"code\":\"SINT32\"},{\"code\":\"STRING\"}]}",
                    typeof(KRPC.Utils.Tuple<long,int,string>))]
         [TestCase ("{\"code\":\"LIST\",\"types\":[" +
-                   "{\"code\":\"DICTIONARY\",\"types\":[{\"code\":\"INT32\"},{\"code\":\"STRING\"}]}" +
+                   "{\"code\":\"DICTIONARY\",\"types\":[{\"code\":\"SINT32\"},{\"code\":\"STRING\"}]}" +
                    "]}", typeof(IList<IDictionary<int,string>>))]
         [TestCase ("{\"code\":\"LIST\",\"types\":[" +
                    "{\"code\":\"CLASS\",\"service\":\"TestService\",\"name\":\"TestClass\"}" +

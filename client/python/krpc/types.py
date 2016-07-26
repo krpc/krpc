@@ -5,8 +5,8 @@ import krpc.schema.KRPC
 VALUE_TYPES = {
     krpc.schema.KRPC.Type.DOUBLE: float,
     krpc.schema.KRPC.Type.FLOAT: float,
-    krpc.schema.KRPC.Type.INT32: int,
-    krpc.schema.KRPC.Type.INT64: long,
+    krpc.schema.KRPC.Type.SINT32: int,
+    krpc.schema.KRPC.Type.SINT64: long,
     krpc.schema.KRPC.Type.UINT32: int,
     krpc.schema.KRPC.Type.UINT64: long,
     krpc.schema.KRPC.Type.BOOL: bool,
@@ -90,14 +90,14 @@ class Types(object):
         return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.FLOAT))
 
     @property
-    def int32_type(self):
-        """ Get an int32 value type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.INT32))
+    def sint32_type(self):
+        """ Get an sint32 value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.SINT32))
 
     @property
-    def int64_type(self):
-        """ Get an int64 value type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.INT64))
+    def sint64_type(self):
+        """ Get an sint64 value type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.SINT64))
 
     @property
     def uint32_type(self):
@@ -273,7 +273,7 @@ class ClassType(TypeBase):
 
 
 class EnumerationType(TypeBase):
-    """ An enumeration type, represented by an int32 value """
+    """ An enumeration type, represented by an sint32 value """
 
     def __init__(self, protobuf_type, doc):
         if protobuf_type.code != krpc.schema.KRPC.Type.ENUMERATION:

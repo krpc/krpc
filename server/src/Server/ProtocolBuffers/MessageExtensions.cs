@@ -170,10 +170,10 @@ namespace KRPC.Server.ProtocolBuffers
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Double;
                     break;
                 case TypeCode.Int32:
-                    result.Code = Schema.KRPC.Type.Types.TypeCode.Int32;
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Sint32;
                     break;
                 case TypeCode.Int64:
-                    result.Code = Schema.KRPC.Type.Types.TypeCode.Int64;
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Sint64;
                     break;
                 case TypeCode.UInt32:
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Uint32;

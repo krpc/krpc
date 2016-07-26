@@ -21,8 +21,8 @@ class LuaDomain(Domain):
     type_map = {
         Type.DOUBLE: 'number',
         Type.FLOAT: 'number',
-        Type.INT32: 'number',
-        Type.INT64: 'number',
+        Type.SINT32: 'number',
+        Type.SINT64: 'number',
         Type.UINT32: 'number',
         Type.UINT64: 'number',
         Type.BOOL: 'boolean',
