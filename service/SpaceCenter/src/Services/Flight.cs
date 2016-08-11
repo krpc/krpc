@@ -420,7 +420,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 var vessel = InternalVessel;
                 if (FAR.IsAvailable)
-                    return (float)FAR.VesselDynPres (vessel);
+                    return (float)FAR.VesselDynPres (vessel) * 1000f;
                 else
                     return (float)(0.5f * vessel.atmDensity * vessel.srf_velocity.sqrMagnitude);
             }
