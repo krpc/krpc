@@ -157,6 +157,7 @@ SpaceCenter.Flight.AntiRadial
 SpaceCenter.Flight.AtmosphereDensity
 SpaceCenter.Flight.DynamicPressure
 SpaceCenter.Flight.StaticPressure
+SpaceCenter.Flight.StaticPressureAtMSL
 SpaceCenter.Flight.AerodynamicForce
 SpaceCenter.Flight.Lift
 SpaceCenter.Flight.Drag
