@@ -539,6 +539,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The <a href="https://en.wikipedia.org/wiki/True_airspeed">true air speed</a> of the vessel, in <math>m/s</math>.
+        /// </summary>
+        [KRPCProperty]
+        public float TrueAirSpeed {
+            get { return (float)InternalVessel.srfSpeed; }
+        }
+
+        /// <summary>
         /// The <a href="https://en.wikipedia.org/wiki/Equivalent_airspeed">equivalent air speed</a> of the vessel, in <math>m/s</math>.
         /// </summary>
         [KRPCProperty]

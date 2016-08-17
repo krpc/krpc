@@ -164,6 +164,7 @@ SpaceCenter.Flight.Drag
 SpaceCenter.Flight.SpeedOfSound
 SpaceCenter.Flight.Mach
 SpaceCenter.Flight.ReynoldsNumber
+SpaceCenter.Flight.TrueAirSpeed
 SpaceCenter.Flight.EquivalentAirSpeed
 SpaceCenter.Flight.TerminalVelocity
 SpaceCenter.Flight.AngleOfAttack
