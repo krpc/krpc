@@ -381,6 +381,7 @@ SpaceCenter.Decoupler
 SpaceCenter.Decoupler.Part
 SpaceCenter.Decoupler.Decouple
 SpaceCenter.Decoupler.Decoupled
+SpaceCenter.Decoupler.Staged
 SpaceCenter.Decoupler.Impulse
 SpaceCenter.DockingPort
 SpaceCenter.DockingPort.Part

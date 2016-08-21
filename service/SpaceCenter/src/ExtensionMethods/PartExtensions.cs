@@ -66,12 +66,12 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 // If the part will decouple itself from its parent, use the parts activation stage
                 if (part.HasModule<LaunchClamp> ()) {
                     candidate = part.inverseStage;
-                } else if (moduleDecouple != null) {
+                } else if (moduleDecouple != null && moduleDecouple.isEnabled) {
                     if (moduleDecouple.isOmniDecoupler)
                         candidate = part.inverseStage;
                     else if (parent != null && moduleDecouple.ExplosiveNode != null && moduleDecouple.ExplosiveNode.attachedPart == parent)
                         candidate = part.inverseStage;
-                } else if (moduleAnchoredDecoupler != null) {
+                } else if (moduleAnchoredDecoupler != null && moduleAnchoredDecoupler.isEnabled) {
                     if (parent != null && moduleAnchoredDecoupler.ExplosiveNode != null && moduleAnchoredDecoupler.ExplosiveNode.attachedPart == parent)
                         candidate = part.inverseStage;
                 }
@@ -79,11 +79,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 // If the part will be decoupled by its parent, use the parents activation stage
                 if (candidate == -1 && parent != null) {
                     if (moduleDecouple != null) {
-                        if (moduleDecouple.isOmniDecoupler)
+                        if (moduleDecouple.isOmniDecoupler && moduleDecouple.isEnabled)
                             candidate = parent.inverseStage;
                         else if (moduleDecouple.ExplosiveNode != null && moduleDecouple.ExplosiveNode.attachedPart == part)
                             candidate = parent.inverseStage;
-                    } else if (moduleAnchoredDecoupler != null) {
+                    } else if (moduleAnchoredDecoupler != null && moduleAnchoredDecoupler.isEnabled) {
                         if (moduleAnchoredDecoupler.ExplosiveNode != null && moduleAnchoredDecoupler.ExplosiveNode.attachedPart == part)
                             candidate = parent.inverseStage;
                     }

@@ -5,6 +5,8 @@ v0.3.6
  * Fix issues with Part.DecoupleStage (#307)
  * Add Part.AddForce, Part.InstantaneousFource and Force class for exerting arbitrary forces on parts (#287)
  * Fix units for Flight.DynamicPressure when FAR is installed - value returned is now in Pa, not kPa (#329)
+ * Add Decoupler.Staged
+ * Fix issue where disabled decouplers are included in stage index calculation (#323)
 
 v0.3.5
  * Improved AutoPilot that auto-tunes itself based on the vessels available torque and moment of inertia (#289)

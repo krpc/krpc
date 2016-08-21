@@ -108,6 +108,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the decoupler is enabled in the staging sequence.
+        /// </summary>
+        [KRPCProperty]
+        public bool Staged {
+            get { return decoupler != null ? decoupler.StagingEnabled () : anchoredDecoupler.StagingEnabled (); }
+        }
+
+        /// <summary>
         /// The impulse that the decoupler imparts when it is fired, in Newton seconds.
         /// </summary>
         [KRPCProperty]
