@@ -286,5 +286,74 @@ namespace KRPC.SpaceCenter.Services
                 return time < 0 ? Double.NaN : time;
             }
         }
+        
+        /// <summary>
+        /// Returns the orbit radius at the point in the orbit given by the true anomaly
+        /// </summary>
+        /// <returns>The radius at true anomaly.</returns>
+        /// <param name="tA">True anomaly.</param>
+        [KRPCMethod]
+        public double RadiusAtTrueAnomaly (double tA) {
+            return InternalOrbit.RadiusAtTrueAnomaly (tA);
+        }
+
+        /// <summary>
+        /// True anomaly at radius.
+        /// </summary>
+        /// <returns>The anomaly at radius.</returns>
+        /// <param name="R">Radius.</param>
+        [KRPCMethod]
+        public double TrueAnomalyAtRadius (double R) {
+            return InternalOrbit.TrueAnomalyAtRadius (R);
+        }
+
+        /// <summary>
+        /// True anomaly at UT.
+        /// </summary>
+        /// <returns>The anomaly at UT.</returns>
+        /// <param name="UT">UT.</param>
+        [KRPCMethod]
+        public double TrueAnomalyAtUT (double UT) {
+            return InternalOrbit.TrueAnomalyAtUT (UT);
+        }
+
+        /// <summary>
+        /// Gets the UT for given true anomaly.
+        /// </summary>
+        /// <returns>The UT for true anomaly.</returns>
+        /// <param name="tA">True Anomaly.</param>
+        [KRPCMethod]
+        public double UTAtTrueAnomaly (double tA) {
+            return InternalOrbit.GetUTforTrueAnomaly (tA, 0);
+        }
+
+        /// <summary>
+        /// Eccentric anomaly at UT.
+        /// </summary>
+        /// <returns>The eccentric anomaly at UT.</returns>
+        /// <param name="UT">UT.</param>
+        [KRPCMethod]
+        public double EccentricAnomalyAtUT (double UT) {
+            return InternalOrbit.EccentricAnomalyAtUT (UT);
+        }
+
+        /// <summary>
+        /// Gets the orbital speed at time.
+        /// </summary>
+        /// <returns>The orbital speed at the given time.</returns>
+        /// <param name="time">Time from now.</param>
+        [KRPCMethod]
+        public double OrbitalSpeedAtTime (double time) {
+            return InternalOrbit.getOrbitalSpeedAt (time);
+        }
+
+        /// <summary>
+        /// Gets the current orbital speed.
+        /// </summary>
+        /// <value>The orbital speed.</value>
+        [KRPCProperty]
+        public double OrbitalSpeed {
+            get { return InternalOrbit.orbitalSpeed; }
+        }
     }
 }
