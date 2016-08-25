@@ -54,7 +54,7 @@ namespace KRPC.SpaceCenter.Services
         public override int GetHashCode ()
         {
             int hash = vesselId.GetHashCode ();
-            //TODO: InternalNode should not be null, but Remove could set it to null
+            // Note: InternalNode could be set to null by Remove
             if (InternalNode != null)
                 hash ^= InternalNode.GetHashCode ();
             return hash;
@@ -201,6 +201,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Remove ()
         {
+            if (InternalNode == null)
+                throw new InvalidOperationException ("Node does not exist");
             InternalNode.RemoveSelf ();
             InternalNode = null;
             // TODO: delete this Node object
