@@ -19,6 +19,8 @@ namespace KRPC.Server.ProtocolBuffers
                 return ((KRPC.Service.Messages.Services)message).ToProtobufMessage ();
             else if (type == typeof(Status))
                 return ((Status)message).ToProtobufMessage ();
+            else if (type == typeof(Stream))
+                return ((Stream)message).ToProtobufMessage ();
             throw new ArgumentException ("Cannot convert a " + type + " to a protobuf message");
         }
 
@@ -130,6 +132,13 @@ namespace KRPC.Server.ProtocolBuffers
             return result;
         }
 
+        public static Schema.KRPC.Stream ToProtobufMessage (this Stream stream)
+        {
+            var result = new Schema.KRPC.Stream ();
+            result.Id = stream.Id;
+            return result;
+        }
+
         public static Schema.KRPC.Status ToProtobufMessage (this Status status)
         {
             var result = new Schema.KRPC.Status ();
@@ -155,6 +164,7 @@ namespace KRPC.Server.ProtocolBuffers
             return result;
         }
 
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
@@ -202,6 +212,8 @@ namespace KRPC.Server.ProtocolBuffers
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Status;
                 else if (type == typeof(KRPC.Service.Messages.Services))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Services;
+                else if (type == typeof(KRPC.Service.Messages.Stream))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Stream;
                 else
                     throw new ArgumentException ("Type " + type + " is not valid");
             } else if (TypeUtils.IsAClassType (type)) {

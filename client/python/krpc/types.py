@@ -20,6 +20,7 @@ MESSAGE_TYPES = {
     krpc.schema.KRPC.Type.STREAM_MESSAGE: krpc.schema.KRPC.StreamMessage,
     krpc.schema.KRPC.Type.STATUS: krpc.schema.KRPC.Status,
     krpc.schema.KRPC.Type.SERVICES: krpc.schema.KRPC.Services,
+    krpc.schema.KRPC.Type.STREAM: krpc.schema.KRPC.Stream,
 }
 
 def _protobuf_type(code, service=None, name=None, types=None):

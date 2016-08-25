@@ -163,16 +163,16 @@ namespace KRPC.Service
         /// Add a streaming request and return its identifier.
         /// </summary>
         [KRPCProcedure]
-        public static uint AddStream (Request request)
+        public static Stream AddStream (Request request)
         {
-            return Core.Instance.AddStream (CallContext.Client, request);
+            return new Stream(Core.Instance.AddStream (CallContext.Client, request));
         }
 
         /// <summary>
         /// Remove a streaming request.
         /// </summary>
         [KRPCProcedure]
-        public static void RemoveStream (uint id)
+        public static void RemoveStream (ulong id)
         {
             Core.Instance.RemoveStream (CallContext.Client, id);
         }

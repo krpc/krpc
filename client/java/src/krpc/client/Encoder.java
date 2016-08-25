@@ -131,6 +131,8 @@ public class Encoder {
             return decodeMessage(KRPC.Status.newBuilder(), data);
         case SERVICES:
             return decodeMessage(KRPC.Services.newBuilder(), data);
+        case STREAM:
+            return decodeMessage(KRPC.Stream.newBuilder(), data);
         case CLASS:
             return decodeObject(data, type, connection);
         case ENUMERATION:

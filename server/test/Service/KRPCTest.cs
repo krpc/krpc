@@ -41,14 +41,14 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "AddStream") {
-                    MessageAssert.HasReturnType (proc, typeof(uint));
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Stream));
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, typeof(KRPC.Service.Messages.Request), "request");
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "RemoveStream") {
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameter (proc, 0, typeof(uint), "id");
+                    MessageAssert.HasParameter (proc, 0, typeof(ulong), "id");
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "get_Clients") {
                     MessageAssert.HasReturnType (proc, typeof(IList<KRPC.Utils.Tuple<byte[],string,string>>));

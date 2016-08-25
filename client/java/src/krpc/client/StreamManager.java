@@ -19,9 +19,9 @@ class StreamManager {
     private Connection connection;
     private Socket socket;
     private KRPC krpc;
-    private Map<Integer, ByteString> streamData = new HashMap<Integer, ByteString>();
-    private Map<Integer, Object> streamValues = new HashMap<Integer, Object>();
-    private Map<Integer, Type> streamTypes = new HashMap<Integer, Type>();
+    private Map<Long, ByteString> streamData = new HashMap<Long, ByteString>();
+    private Map<Long, Object> streamValues = new HashMap<Long, Object>();
+    private Map<Long, Type> streamTypes = new HashMap<Long, Type>();
     private Thread updateThread;
 
     StreamManager(Connection connection, Socket socket) {
@@ -37,7 +37,7 @@ class StreamManager {
     }
 
     <T> Stream<T> add(Request request, Type type) throws IOException, RPCException {
-        int id = krpc.addStream(request);
+        long id = krpc.addStream(request).getId();
         synchronized (streamData) {
             if (!streamTypes.containsKey(id)) {
                 streamData.put(id, connection.invoke(request));
@@ -47,7 +47,7 @@ class StreamManager {
         return new Stream<T>(this, id);
     }
 
-    void remove(int id) throws IOException, RPCException {
+    void remove(long id) throws IOException, RPCException {
         krpc.removeStream(id);
         synchronized (streamData) {
             streamData.remove(id);
@@ -55,7 +55,7 @@ class StreamManager {
         }
     }
 
-    Object get(int id) throws IOException, StreamException {
+    Object get(long id) throws IOException, StreamException {
         Object result;
         synchronized (streamData) {
             if (!streamTypes.containsKey(id))
@@ -68,7 +68,7 @@ class StreamManager {
         return result;
     }
 
-    void update(int id, Response response) throws StreamException {
+    void update(long id, Response response) throws StreamException {
         synchronized (streamData) {
             if (!streamData.containsKey(id))
                 throw new StreamException("Stream does not exist");

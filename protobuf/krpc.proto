@@ -43,7 +43,7 @@ message StreamMessage {
 }
 
 message StreamResponse {
-  uint32 id = 1;
+  uint64 id = 1;
   Response response = 2;
 }
 
@@ -89,6 +89,10 @@ message EnumerationValue {
   string documentation = 3;
 }
 
+message Stream {
+  uint64 id = 1;
+}
+
 message List {
   repeated bytes items = 1;
 }
@@ -131,19 +135,20 @@ message Type {
     // Objects
     CLASS = 10;
     ENUMERATION = 11;
+    STREAM = 12;
 
     // Messages
-    REQUEST = 12;
-    RESPONSE = 13;
-    STATUS = 14;
-    STREAM_MESSAGE = 15;
-    SERVICES = 16;
+    REQUEST = 13;
+    RESPONSE = 14;
+    STATUS = 15;
+    STREAM_MESSAGE = 16;
+    SERVICES = 17;
 
     // Collections
-    TUPLE = 17;
-    LIST = 18;
-    SET = 19;
-    DICTIONARY = 20;
+    TUPLE = 18;
+    LIST = 19;
+    SET = 20;
+    DICTIONARY = 21;
   };
 }
 

@@ -25,7 +25,7 @@ namespace KRPC
         RoundRobinScheduler<IClient<Request,Response>> clientScheduler;
         List<RequestContinuation> continuations;
         IDictionary<IClient<NoMessage,StreamMessage>, IList<StreamRequest>> streamRequests;
-        IDictionary<uint, object> streamResultCache;
+        IDictionary<ulong, object> streamResultCache;
         internal Func<double> GetUniversalTime;
 
         static Core instance;
@@ -49,7 +49,7 @@ namespace KRPC
             clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
             continuations = new List<RequestContinuation> ();
             streamRequests = new Dictionary<IClient<NoMessage,StreamMessage>,IList<StreamRequest>> ();
-            streamResultCache = new Dictionary<uint, object> ();
+            streamResultCache = new Dictionary<ulong, object> ();
             OneRPCPerUpdate = false;
             MaxTimePerUpdate = 5000;
             AdaptiveRateControl = true;
@@ -500,7 +500,7 @@ namespace KRPC
         /// <summary>
         /// Add a stream to the server
         /// </summary>
-        internal uint AddStream (IClient rpcClient, Request request)
+        internal ulong AddStream (IClient rpcClient, Request request)
         {
             var id = rpcClient.Guid;
             if (!streamClients.ContainsKey (id))
@@ -528,7 +528,7 @@ namespace KRPC
         /// <summary>
         /// Remove a stream from the server
         /// </summary>
-        internal void RemoveStream (IClient rpcClient, uint identifier)
+        internal void RemoveStream (IClient rpcClient, ulong identifier)
         {
             var id = rpcClient.Guid;
             if (!streamClients.ContainsKey (id))

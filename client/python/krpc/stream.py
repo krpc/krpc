@@ -38,7 +38,7 @@ class Stream(object):
         self._value = func(*args, **kwargs)
         # Add the stream to the server and add the initial value to the cache
         with self._conn._stream_cache_lock:
-            self._stream_id = self._conn.krpc.add_stream(self._request)
+            self._stream_id = self._conn.krpc.add_stream(self._request).id
             if self._stream_id in self._conn._stream_cache:
                 raise StreamExistsError(self._stream_id)
             self._conn._stream_cache[self._stream_id] = self

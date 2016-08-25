@@ -6,6 +6,7 @@
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
+#include "krpc/services/krpc.hpp"
 
 namespace krpc {
 
@@ -53,18 +54,14 @@ StreamManager::~StreamManager() {
 
 google::protobuf::uint64 StreamManager::add_stream(const schema::Request& request) {
   std::lock_guard<std::mutex> guard(*data_lock);
-  std::vector<std::string> args = { encoder::encode(request) };
-  std::string response = client->invoke("KRPC", "AddStream", args);
-  google::protobuf::uint64 id = 0;
-  decoder::decode(id, response, client);
-  data[id] = client->invoke(request);
-  return id;
+  schema::Stream stream = services::KRPC(client).add_stream(request);
+  data[stream.id()] = client->invoke(request);
+  return stream.id();
 }
 
 void StreamManager::remove_stream(google::protobuf::uint64 id) {
   std::lock_guard<std::mutex> guard(*data_lock);
-  std::vector<std::string> args = { encoder::encode(id) };
-  client->invoke("KRPC", "RemoveStream", args);
+  services::KRPC(client).remove_stream(id);
   data.erase(id);
 }
 

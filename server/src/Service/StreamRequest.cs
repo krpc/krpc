@@ -6,7 +6,7 @@ namespace KRPC.Service
 {
     sealed class StreamRequest
     {
-        public uint Identifier { get; private set; }
+        public ulong Identifier { get; private set; }
 
         public ProcedureSignature Procedure { get; private set; }
 
@@ -24,9 +24,9 @@ namespace KRPC.Service
             Response = new StreamResponse (Identifier);
         }
 
-        static uint nextIdentifier;
+        static ulong nextIdentifier;
 
-        static uint NextIdentifier {
+        static ulong NextIdentifier {
             get {
                 var result = nextIdentifier;
                 nextIdentifier++;

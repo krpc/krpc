@@ -23,6 +23,7 @@ Types.STRING = schema.TYPE_TYPECODE_STRING_ENUM.number
 Types.BYTES = schema.TYPE_TYPECODE_BYTES_ENUM.number
 Types.CLASS = schema.TYPE_TYPECODE_CLASS_ENUM.number
 Types.ENUMERATION = schema.TYPE_TYPECODE_ENUMERATION_ENUM.number
+Types.STREAM = schema.TYPE_TYPECODE_STREAM_ENUM.number
 Types.REQUEST = schema.TYPE_TYPECODE_REQUEST_ENUM.number
 Types.RESPONSE = schema.TYPE_TYPECODE_RESPONSE_ENUM.number
 Types.STREAM_MESSAGE = schema.TYPE_TYPECODE_STREAM_MESSAGE_ENUM.number
@@ -50,6 +51,7 @@ MESSAGE_TYPES:set(Types.RESPONSE, schema.Response)
 MESSAGE_TYPES:set(Types.STREAM_MESSAGE, schema.StreamMessage)
 MESSAGE_TYPES:set(Types.STATUS, schema.Status)
 MESSAGE_TYPES:set(Types.SERVICES, schema.Services)
+MESSAGE_TYPES:set(Types.STREAM, schema.Stream)
 
 CODE_TO_STRING = Map{}
 CODE_TO_STRING:set(Types.DOUBLE, 'double')
@@ -66,6 +68,7 @@ CODE_TO_STRING:set(Types.RESPONSE, 'Response')
 CODE_TO_STRING:set(Types.STREAM_MESSAGE, 'StreamMessage')
 CODE_TO_STRING:set(Types.STATUS, 'Status')
 CODE_TO_STRING:set(Types.SERVICES, 'Services')
+CODE_TO_STRING:set(Types.STREAM, 'Stream')
 
 function Types:_init()
   self._types = Map{}
