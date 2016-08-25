@@ -197,6 +197,14 @@ SpaceCenter.Orbit.MeanAnomalyAtEpoch
 SpaceCenter.Orbit.Epoch
 SpaceCenter.Orbit.MeanAnomaly
 SpaceCenter.Orbit.EccentricAnomaly
+SpaceCenter.Orbit.EccentricAnomalyAtUT
+SpaceCenter.Orbit.TrueAnomaly
+SpaceCenter.Orbit.TrueAnomalyAtUT
+SpaceCenter.Orbit.TrueAnomalyAtRadius
+SpaceCenter.Orbit.UTAtTrueAnomaly
+SpaceCenter.Orbit.RadiusAtTrueAnomaly
+SpaceCenter.Orbit.OrbitalSpeed
+SpaceCenter.Orbit.OrbitalSpeedAt
 SpaceCenter.Orbit.ReferencePlaneNormal
 SpaceCenter.Orbit.ReferencePlaneDirection
 SpaceCenter.Orbit.TimeToSOIChange
