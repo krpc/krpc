@@ -241,6 +241,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The <a href="https://en.wikipedia.org/wiki/True_anomaly">true anomaly</a>.
+        /// </summary>
+        [KRPCProperty]
+        public double TrueAnomaly {
+            get { return InternalOrbit.trueAnomaly; }
+        }
+
+        /// <summary>
         /// The unit direction vector that is normal to the orbits reference plane, in the given
         /// reference frame. The reference plane is the plane from which the orbits inclination is measured.
         /// </summary>
@@ -285,6 +293,74 @@ namespace KRPC.SpaceCenter.Services
                 var time = InternalOrbit.UTsoi - SpaceCenter.UT;
                 return time < 0 ? Double.NaN : time;
             }
+        }
+
+        /// <summary>
+        /// The orbital radius at the point in the orbit given by the true anomaly.
+        /// </summary>
+        /// <param name="trueAnomaly">The true anomaly.</param>
+        [KRPCMethod]
+        public double RadiusAtTrueAnomaly (double trueAnomaly)
+        {
+            return InternalOrbit.RadiusAtTrueAnomaly (trueAnomaly);
+        }
+
+        /// <summary>
+        /// The true anomaly at the given orbital radius.
+        /// </summary>
+        /// <param name="radius">The orbital radius in meters.</param>
+        [KRPCMethod]
+        public double TrueAnomalyAtRadius (double radius)
+        {
+            return InternalOrbit.TrueAnomalyAtRadius (radius);
+        }
+
+        /// <summary>
+        /// The true anomaly at the given time.
+        /// </summary>
+        /// <param name="ut">The universal time in seconds.</param>
+        [KRPCMethod]
+        public double TrueAnomalyAtUT (double ut)
+        {
+            return InternalOrbit.TrueAnomalyAtUT (ut);
+        }
+
+        /// <summary>
+        /// The universal time, in seconds, corresponding to the given true anomaly.
+        /// </summary>
+        /// <param name="trueAnomaly">True anomaly.</param>
+        [KRPCMethod]
+        public double UTAtTrueAnomaly (double trueAnomaly)
+        {
+            return InternalOrbit.GetUTforTrueAnomaly (trueAnomaly, 0);
+        }
+
+        /// <summary>
+        /// The eccentric anomaly at the given universal time.
+        /// </summary>
+        /// <param name="ut">The universal time, in seconds.</param>
+        [KRPCMethod]
+        public double EccentricAnomalyAtUT (double ut)
+        {
+            return InternalOrbit.EccentricAnomalyAtUT (ut);
+        }
+
+        /// <summary>
+        /// The current orbital speed in meters per second.
+        /// </summary>
+        [KRPCProperty]
+        public double OrbitalSpeed {
+            get { return InternalOrbit.orbitalSpeed; }
+        }
+
+        /// <summary>
+        /// The orbital speed at the given time, in meters per second.
+        /// </summary>
+        /// <param name="time">Time from now, in seconds.</param>
+        [KRPCMethod]
+        public double OrbitalSpeedAt (double time)
+        {
+            return InternalOrbit.getOrbitalSpeedAt (time);
         }
     }
 }
