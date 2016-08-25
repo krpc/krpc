@@ -24,8 +24,6 @@ class Client(object):
         self._stream_connection = stream_connection
         self._stream_cache = {}
         self._stream_cache_lock = threading.Lock()
-        self._request_type = self._types.request_type
-        self._response_type = self._types.response_type
 
         # Get the services
         services = self._invoke('KRPC', 'GetServices', [], [], [], self._types.services_type).services
@@ -79,8 +77,8 @@ class Client(object):
 
         # Send the request
         with self._rpc_connection_lock:
-            self._send_request(request)
-            response = self._receive_response()
+            self._rpc_connection.send_message(request)
+            response = self._rpc_connection.receive_message(krpc.schema.KRPC.Response)
 
         # Check for an error response
         if response.error:
@@ -110,25 +108,3 @@ class Client(object):
             request.arguments.add(position=i, value=Encoder.encode(value, typ))
 
         return request
-
-    def _send_request(self, request):
-        """ Send a KRPC.Request object to the server """
-        data = Encoder.encode_delimited(request, self._request_type)
-        self._rpc_connection.send(data)
-
-    def _receive_response(self):
-        """ Receive data from the server and decode it into a KRPC.Response object """
-
-        # Read the size and position of the response message
-        data = b''
-        while True:
-            try:
-                data += self._rpc_connection.partial_receive(1)
-                size, _ = Decoder.decode_size_and_position(data)
-                break
-            except IndexError:
-                pass
-
-        # Read and decode the response message
-        data = self._rpc_connection.receive(size)
-        return Decoder.decode(data, self._response_type)

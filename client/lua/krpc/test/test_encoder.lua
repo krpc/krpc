@@ -11,32 +11,14 @@ local types = Types()
 
 function TestEncoder:test_rpc_hello_message()
   local message = encoder.RPC_HELLO_MESSAGE
-  luaunit.assertEquals(message:len(), 12)
-  luaunit.assertEquals(platform.hexlify(message), '48454c4c4f2d525043000000')
+  luaunit.assertEquals(message:len(), 8)
+  luaunit.assertEquals(platform.hexlify(message), '4b5250432d525043')
 end
 
 function TestEncoder:test_stream_hello_message()
   local message = encoder.STREAM_HELLO_MESSAGE
-  luaunit.assertEquals(message:len(), 12)
-  luaunit.assertEquals(platform.hexlify(message), '48454c4c4f2d53545245414d')
-end
-
-function TestEncoder:test_client_name()
-  local message = encoder.client_name('foo')
-  luaunit.assertEquals(message:len(), 32)
-  luaunit.assertEquals(platform.hexlify(message), '666f6f' .. string.rep('00', 29))
-end
-
-function TestEncoder:test_empty_client_name()
-  local message = encoder.client_name()
-  luaunit.assertEquals(message:len(), 32)
-  luaunit.assertEquals(platform.hexlify(message), string.rep('00', 32))
-end
-
-function TestEncoder:test_long_client_name()
-  local message = encoder.client_name(string.rep('a', 33))
-  luaunit.assertEquals(message:len(), 32)
-  luaunit.assertEquals(platform.hexlify(message), string.rep('61', 32))
+  luaunit.assertEquals(message:len(), 8)
+  luaunit.assertEquals(platform.hexlify(message), '4b5250432d535452')
 end
 
 function TestEncoder:test_encode_message()
@@ -58,18 +40,13 @@ function TestEncoder:test_encode_unicode_string()
   luaunit.assertEquals('03e284a2', platform.hexlify(data))
 end
 
-function TestEncoder:test_encode_message_delimited()
+function TestEncoder:test_encode_message_with_size()
   local request = schema.Request()
   request.service = 'ServiceName'
   request.procedure = 'ProcedureName'
-  local data = encoder.encode_delimited(request, types:request_type())
+  local data = encoder.encode_message_with_size(request, types:request_type())
   local expected = '1c'..'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
   luaunit.assertEquals(expected, platform.hexlify(data))
-end
-
-function TestEncoder:test_encode_value_delimited()
-  local data = encoder.encode_delimited(300, types:uint32_type())
-  luaunit.assertEquals('02'..'ac02', platform.hexlify(data))
 end
 
 function TestEncoder:test_encode_class()

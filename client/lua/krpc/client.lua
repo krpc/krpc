@@ -12,12 +12,9 @@ local create_service = service.create_service
 
 local Client = class()
 
-function Client:_init(rpc_connection, stream_connection)
+function Client:_init(rpc_connection)
   self._types = Types()
   self._rpc_connection = rpc_connection
-  self._stream_connection = stream_connection
-  self._request_type = self._types:request_type()
-  self._response_type = self._types:response_type()
 
   -- Set up the main KRPC service
   local services = self:_invoke('KRPC', 'GetServices', nil, nil, nil, nil, self._types:services_type()).services
@@ -30,9 +27,6 @@ end
 
 function Client:close()
   self._rpc_connection:close()
-  if self._stream_connection then
-    self._stream_connection:close()
-  end
 end
 
 --- Execute an RPC
@@ -46,8 +40,8 @@ function Client:_invoke(service, procedure, args, kwargs, param_names, param_typ
   local request = self:_build_request(service, procedure, args, kwargs, param_names, param_types, return_type)
 
   -- Send the request
-  self:_send_request(request)
-  local response = self:_receive_response()
+  self._rpc_connection:send_message(request)
+  local response = self._rpc_connection:receive_message(schema.Response)
 
   -- Check for an error response
   if response:HasField('error') then
@@ -109,27 +103,6 @@ function Client:_build_request(service, procedure, args, kwargs, param_names, pa
   end
 
   return request
-end
-
-function Client:_send_request(request)
-  data = encoder.encode_delimited(request, self._request_type)
-  self._rpc_connection:send(data)
-end
-
-function Client:_receive_response()
-  local size
-  local data = ''
-  while true do
-    data = data .. self._rpc_connection:receive(1)
-    local ok, result = pcall(decoder.decode_size_and_position, data)
-    if ok then
-      size = result
-      break
-    end
-  end
-
-  data = self._rpc_connection:receive(size)
-  return decoder.decode(data, self._response_type)
 end
 
 return Client

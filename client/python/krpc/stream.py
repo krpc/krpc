@@ -76,7 +76,7 @@ def add_stream(conn, func, *args, **kwargs):
 
 
 def update_thread(connection, stop, cache, cache_lock):
-    stream_message_type = Types().stream_message_type
+    stream_message_type = Types().stream_message_type.python_type
 
     while True:
 
@@ -85,7 +85,7 @@ def update_thread(connection, stop, cache, cache_lock):
         while True:
             try:
                 data += connection.partial_receive(1)
-                size, _ = Decoder.decode_size_and_position(data)
+                size = Decoder.decode_message_size(data)
                 break
             except IndexError:
                 pass
@@ -99,7 +99,7 @@ def update_thread(connection, stop, cache, cache_lock):
 
         # Read and decode the response message
         data = connection.receive(size)
-        response = Decoder.decode(data, stream_message_type)
+        response = Decoder.decode_message(data, stream_message_type)
 
         # Add the data to the cache
         with cache_lock:

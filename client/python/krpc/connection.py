@@ -2,6 +2,8 @@ import socket
 import select
 import time
 from krpc.error import NetworkError
+from krpc.encoder import Encoder
+from krpc.decoder import Decoder
 
 
 class Connection(object):
@@ -32,6 +34,27 @@ class Connection(object):
 
     def __del__(self):
         self.close()
+
+    def send_message(self, message):
+        """ Send a protobuf message """
+        self.send(Encoder.encode_message_with_size(message))
+
+    def receive_message(self, typ):
+        """ Receive a protobuf message and decode it """
+
+        # Read the size and position of the response message
+        data = b''
+        while True:
+            try:
+                data += self.partial_receive(1)
+                size = Decoder.decode_message_size(data)
+                break
+            except IndexError:
+                pass
+
+        # Read and decode the response message
+        data = self.receive(size)
+        return Decoder.decode_message(data, typ)
 
     def send(self, data):
         """ Send data to the connection. Blocks until all data has been sent. """

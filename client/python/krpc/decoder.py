@@ -9,9 +9,6 @@ from krpc.platform import hexlify
 class Decoder(object):
     """ Routines for decoding messages and values from the protocol buffer serialization format """
 
-    OK_LENGTH = 2
-    OK_MESSAGE = b'\x4F\x4B'
-
     GUID_LENGTH = 16
 
     _types = Types()
@@ -26,7 +23,7 @@ class Decoder(object):
     def decode(cls, data, typ):
         """ Given a python type, and serialized data, decode the value """
         if isinstance(typ, MessageType):
-            return cls._decode_message(data, typ.python_type)
+            return cls.decode_message(data, typ.python_type)
         elif isinstance(typ, EnumerationType):
             value = cls._decode_value(data, cls._types.sint32_type)
             return typ.python_type(value)
@@ -37,35 +34,27 @@ class Decoder(object):
             object_id = cls._decode_value(data, object_id_typ)
             return typ.python_type(object_id) if object_id != 0 else None
         elif isinstance(typ, ListType):
-            msg = cls._decode_message(data, krpc.schema.KRPC.List)
+            msg = cls.decode_message(data, krpc.schema.KRPC.List)
             return [cls.decode(item, typ.value_type) for item in msg.items]
         elif isinstance(typ, DictionaryType):
-            msg = cls._decode_message(data, krpc.schema.KRPC.Dictionary)
+            msg = cls.decode_message(data, krpc.schema.KRPC.Dictionary)
             return dict((cls.decode(entry.key, typ.key_type), cls.decode(entry.value, typ.value_type))
                         for entry in msg.entries)
         elif isinstance(typ, SetType):
-            msg = cls._decode_message(data, krpc.schema.KRPC.Set)
+            msg = cls.decode_message(data, krpc.schema.KRPC.Set)
             return set(cls.decode(item, typ.value_type) for item in msg.items)
         elif isinstance(typ, TupleType):
-            msg = cls._decode_message(data, krpc.schema.KRPC.Tuple)
+            msg = cls.decode_message(data, krpc.schema.KRPC.Tuple)
             return tuple(cls.decode(item, value_type) for item, value_type in zip(msg.items, typ.value_types))
         else:
             raise RuntimeError('Cannot decode type %s' % str(typ))
 
     @classmethod
-    def decode_size_and_position(cls, data):
-        """ Decode a varint and return the (size, position) """
-        return protobuf_decoder._DecodeVarint(data, 0)
+    def decode_message_size(cls, data):
+        return protobuf_decoder._DecodeVarint(data, 0)[0]
 
     @classmethod
-    def decode_delimited(cls, data, typ):
-        """ Decode a message or value with size information
-            (used in a delimited communication stream) """
-        size, position = cls.decode_size_and_position(data)
-        return cls.decode(data[position:position+size], typ)
-
-    @classmethod
-    def _decode_message(cls, data, typ):
+    def decode_message(cls, data, typ):
         message = typ()
         message.ParseFromString(data)
         return message

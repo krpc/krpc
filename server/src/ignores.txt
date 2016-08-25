@@ -102,6 +102,7 @@ T: KRPC.Server.ClientDisconnectedException
 T: KRPC.Server.ServerException
 T: KRPC.Server.Message.NoRequestException
 T: KRPC.Server.Message.MalformedRequestException
+T: KRPC.Server.ProtocolBuffers.ConnectionException
 T: KRPC.Service.DocumentationException
 T: KRPC.Service.RPCException
 T: KRPC.Service.ServiceException
@@ -110,6 +111,7 @@ T: KRPC.Server.ClientDisconnectedException
 T: KRPC.Server.ServerException
 T: KRPC.Server.Message.NoRequestException
 T: KRPC.Server.Message.MalformedRequestException
+T: KRPC.Server.ProtocolBuffers.ConnectionException
 T: KRPC.Service.DocumentationException
 T: KRPC.Service.RPCException
 T: KRPC.Service.ServiceException
@@ -199,6 +201,8 @@ N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Design.AvoidVisibleNestedTypesRule
 T: KRPC.Schema.KRPC.Type/Types
 T: KRPC.Schema.KRPC.Type/Types/TypeCode
+T: KRPC.Schema.KRPC.ConnectionResponse/Types
+T: KRPC.Schema.KRPC.ConnectionResponse/Types/Status
 R: Gendarme.Rules.Maintainability.AvoidLackOfCohesionOfMethodsRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Naming.AvoidNonAlphanumericIdentifierRule
@@ -207,12 +211,15 @@ R: Gendarme.Rules.Naming.ParameterNamesShouldMatchOverriddenMethodRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Naming.UseCorrectSuffixRule
 N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Naming.UseSingularNameInEnumsUnlessAreFlagsRule
+T: KRPC.Schema.KRPC.ConnectionResponse/Types/Status
 R: Gendarme.Rules.Performance.AvoidUnneededFieldInitializationRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Performance.UseStringEmptyRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Serialization.MarkEnumerationsAsSerializableRule
 T: KRPC.Schema.KRPC.Type/Types/TypeCode
+T: KRPC.Schema.KRPC.ConnectionResponse/Types/Status
 R: Gendarme.Rules.Smells.AvoidLargeClassesRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Smells.AvoidLongMethodsRule

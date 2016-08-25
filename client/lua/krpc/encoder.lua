@@ -9,11 +9,8 @@ local encoder = {}
 
 local _types = Types()
 
-encoder.RPC_HELLO_MESSAGE = '\72\69\76\76\79\45\82\80\67\0\0\0'
-encoder.STREAM_HELLO_MESSAGE = '\72\69\76\76\79\45\83\84\82\69\65\77'
-
-encoder.CLIENT_NAME_LENGTH = 32
-encoder.CLIENT_IDENTIFIER_LENGTH = 16
+encoder.RPC_HELLO_MESSAGE = '\75\82\80\67\45\82\80\67'
+encoder.STREAM_HELLO_MESSAGE = '\75\82\80\67\45\83\84\82'
 
 local function _encode_varint(x)
   if x < 0 then
@@ -125,10 +122,9 @@ function encoder.encode(x, typ)
   end
 end
 
-function encoder.encode_delimited(x, typ)
-  -- Encode a message or value with size information
-  -- (for use in a delimited communication stream)
-  local data = encoder.encode(x, typ)
+function encoder.encode_message_with_size(message)
+  -- Encode a message prefixed by its size
+  local data = message:SerializeToString()
   local delimiter = _encode_varint(data:len())
   return delimiter .. data
 end

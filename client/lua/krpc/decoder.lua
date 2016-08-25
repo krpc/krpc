@@ -38,12 +38,6 @@ local function _decode_double(data)
   return field_dict[1]
 end
 
-local function _decode_message(data, typ)
-  local message = typ()
-  message:ParseFromString(data)
-  return message
-end
-
 local function _decode_value(data, typ)
   code = typ.protobuf_type.code
   if code == Types.DOUBLE then
@@ -79,7 +73,7 @@ end
 
 function decoder.decode(data, typ)
   if typ:is_a(Types.MessageType) then
-    return _decode_message(data, typ.lua_type)
+    return decoder.decode_message(data, typ.lua_type)
   elseif typ:is_a(Types.EnumerationType) then
     return typ.lua_type(_decode_value(data, _types:sint32_type()))
   elseif typ:is_a(Types.ValueType) then
@@ -93,14 +87,14 @@ function decoder.decode(data, typ)
       return typ.lua_type(object_id)
     end
   elseif typ:is_a(Types.ListType) then
-    local msg = _decode_message(data, schema.List)
+    local msg = decoder.decode_message(data, schema.List)
     local result = List{}
     for _,item in ipairs(msg.items) do
       result:append(decoder.decode(item, typ.value_type))
     end
     return result
   elseif typ:is_a(Types.DictionaryType) then
-    local msg = _decode_message(data, schema.Dictionary)
+    local msg = decoder.decode_message(data, schema.Dictionary)
     local result = Map{}
     for _,item in ipairs(msg.entries) do
        key = decoder.decode(item.key, typ.key_type)
@@ -109,14 +103,14 @@ function decoder.decode(data, typ)
     end
     return result
   elseif typ:is_a(Types.SetType) then
-    local msg = _decode_message(data, schema.Set)
+    local msg = decoder.decode_message(data, schema.Set)
     local result = Set{}
     for _,item in ipairs(msg.items) do
       result[decoder.decode(item, typ.value_type)] = true
     end
     return result
   elseif typ:is_a(Types.TupleType) then
-    local msg = _decode_message(data, schema.Tuple)
+    local msg = decoder.decode_message(data, schema.Tuple)
     local result = List{}
     for _,item in ipairs(tablex.zip(msg.items, typ.value_types)) do
       result:append(decoder.decode(item[1], item[2]))
@@ -125,6 +119,12 @@ function decoder.decode(data, typ)
   else
     error('Cannot decode type ' .. tostring(typ))
   end
+end
+
+function decoder.decode_message(data, typ)
+  local message = typ()
+  message:ParseFromString(data)
+  return message
 end
 
 function decoder.decode_size_and_position(data)

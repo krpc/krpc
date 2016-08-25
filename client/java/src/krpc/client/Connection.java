@@ -136,26 +136,34 @@ public class Connection {
 
     private Connection(String name, InetAddress address, int rpcPort, int streamPort) throws IOException {
         rpcSocket = new Socket(address, rpcPort);
-        rpcSocket.getOutputStream().write(Encoder.RPC_HELLO_MESSAGE);
-        rpcSocket.getOutputStream().write(Encoder.encodeClientName(name));
-        rpcSocket.getOutputStream().flush();
-        byte[] clientIdentifier = new byte[Encoder.CLIENT_IDENTIFIER_LENGTH];
-        int read = 0;
-        while (read < Encoder.CLIENT_IDENTIFIER_LENGTH)
-            read += rpcSocket.getInputStream().read(clientIdentifier, read, Encoder.CLIENT_IDENTIFIER_LENGTH - read);
-
-        Socket streamSocket = new Socket(address, streamPort);
-        streamSocket.getOutputStream().write(Encoder.STREAM_HELLO_MESSAGE);
-        streamSocket.getOutputStream().write(clientIdentifier);
-        streamSocket.getOutputStream().flush();
-        byte[] okMessage = new byte[Encoder.OK_MESSAGE.length];
-        read = 0;
-        while (read < Encoder.OK_MESSAGE.length)
-            read += streamSocket.getInputStream().read(okMessage, read, Encoder.OK_MESSAGE.length - read);
-        assert (Arrays.equals(okMessage, Encoder.OK_MESSAGE));
-
         rpcOutputStream = CodedOutputStream.newInstance(rpcSocket.getOutputStream());
         rpcInputStream = CodedInputStream.newInstance(rpcSocket.getInputStream());
+
+        rpcSocket.getOutputStream().write(Encoder.RPC_HELLO_MESSAGE);
+        KRPC.ConnectionRequest request = KRPC.ConnectionRequest.newBuilder().setClientName(name).build();
+        rpcOutputStream.writeMessageNoTag(request);
+        rpcOutputStream.flush();
+
+        int size = rpcInputStream.readRawVarint32();
+        byte[] data = rpcInputStream.readRawBytes(size);
+        KRPC.ConnectionResponse response = KRPC.ConnectionResponse.parseFrom(data);
+        ByteString clientIdentifier = response.getClientIdentifier();
+
+        Socket streamSocket = new Socket(address, streamPort);
+        CodedOutputStream streamOutputStream = CodedOutputStream.newInstance(streamSocket.getOutputStream());
+        CodedInputStream streamInputStream = CodedInputStream.newInstance(streamSocket.getInputStream());
+
+        streamSocket.getOutputStream().write(Encoder.STREAM_HELLO_MESSAGE);
+        request = KRPC.ConnectionRequest.newBuilder().setClientIdentifier(clientIdentifier).build();
+        streamOutputStream.writeMessageNoTag(request);
+        streamOutputStream.flush();
+
+        size = streamInputStream.readRawVarint32();
+        data = streamInputStream.readRawBytes(size);
+        response = KRPC.ConnectionResponse.parseFrom(data);
+
+        assert (response.getStatus() == KRPC.ConnectionResponse.Status.OK);
+
         streamManager = new StreamManager(this, streamSocket);
     }
 

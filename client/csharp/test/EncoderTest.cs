@@ -14,39 +14,15 @@ namespace KRPC.Client.Test
         [Test]
         public void RpcHelloMessage ()
         {
-            Assert.AreEqual (12, Encoder.RPCHelloMessage.Length);
-            Assert.AreEqual ("48454c4c4f2d525043000000", Encoder.RPCHelloMessage.ToHexString ());
+            Assert.AreEqual (8, Encoder.RPCHelloMessage.Length);
+            Assert.AreEqual ("4b5250432d525043", Encoder.RPCHelloMessage.ToHexString ());
         }
 
         [Test]
         public void StreamHelloMessage ()
         {
-            Assert.AreEqual (12, Encoder.StreamHelloMessage.Length);
-            Assert.AreEqual ("48454c4c4f2d53545245414d", Encoder.StreamHelloMessage.ToHexString ());
-        }
-
-        [Test]
-        public void ClientName ()
-        {
-            var clientName = Encoder.EncodeClientName ("foo");
-            Assert.AreEqual (32, clientName.Length);
-            Assert.AreEqual ("666f6f" + new String ('0', 29 * 2), clientName.ToHexString ());
-        }
-
-        [Test]
-        public void EmptyClientName ()
-        {
-            var clientName = Encoder.EncodeClientName (String.Empty);
-            Assert.AreEqual (32, clientName.Length);
-            Assert.AreEqual (new String ('0', 32 * 2), clientName.ToHexString ());
-        }
-
-        [Test]
-        public void LongClientName ()
-        {
-            var clientName = Encoder.EncodeClientName (new String ('a', 33));
-            Assert.AreEqual (32, clientName.Length);
-            Assert.AreEqual (String.Concat (Enumerable.Repeat ("61", 32)), clientName.ToHexString ());
+            Assert.AreEqual (8, Encoder.StreamHelloMessage.Length);
+            Assert.AreEqual ("4b5250432d535452", Encoder.StreamHelloMessage.ToHexString ());
         }
 
         [Test]

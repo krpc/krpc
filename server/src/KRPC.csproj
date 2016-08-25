@@ -123,6 +123,7 @@
     <Compile Include="Server\Message\StreamClient.cs" />
     <Compile Include="Server\Message\StreamServer.cs" />
     <Compile Include="Server\Message\StreamStream.cs" />
+    <Compile Include="Server\ProtocolBuffers\ConnectionException.cs" />
     <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCClient.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Server\ProtocolBuffers\StreamClient.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamServer.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamStream.cs" />
+    <Compile Include="Server\ProtocolBuffers\Utils.cs" />
     <Compile Include="Server\Server.cs" />
     <Compile Include="Server\ServerException.cs" />
     <Compile Include="Server\TCP\NetworkInformation.cs" />
@@ -197,6 +199,7 @@
     <Compile Include="Utils\ConfigurationStorage.cs" />
     <Compile Include="Utils\ConfigurationStorageNode.cs" />
     <Compile Include="Utils\DocumentationExtensions.cs" />
+    <Compile Include="Utils\DynamicBuffer.cs" />
     <Compile Include="Utils\Equatable.cs" />
     <Compile Include="Utils\EventHandlerExtensions.cs" />
     <Compile Include="Utils\ExponentialMovingAverage.cs" />

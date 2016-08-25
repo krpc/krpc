@@ -4,6 +4,23 @@ option csharp_namespace = 'KRPC.Schema.KRPC';
 option java_package = 'krpc.schema';
 option java_outer_classname = 'KRPC';
 
+message ConnectionRequest {
+  string client_name = 1;
+  bytes client_identifier = 2;
+}
+
+message ConnectionResponse {
+  Status status = 1;
+  enum Status {
+    OK = 0;
+    MALFORMED_HEADER = 1;
+    MALFORMED_MESSAGE = 2;
+    TIMEOUT = 3;
+  }
+  string message = 2;
+  bytes client_identifier = 3;
+}
+
 message Request {
   string service = 1;
   string procedure = 2;

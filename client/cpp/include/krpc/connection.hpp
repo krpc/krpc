@@ -23,6 +23,8 @@ class Connection {
   /** Send data to the connection. Blocks until all data has been sent. */
   void send(const char* data, size_t length);
   void send(const std::string& data);
+  /** Receive data from the connection for a message. Blocks until a message has been received. */
+  std::string receive_message();
   /** Receive data from the connection. Blocks until length bytes have been received. */
   std::string receive(size_t length);
   /** Receive up to length bytes of data from the connection. */

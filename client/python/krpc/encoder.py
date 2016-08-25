@@ -9,27 +9,10 @@ import krpc.schema.KRPC
 class Encoder(object):
     """ Routines for encoding messages and values in the protocol buffer serialization format """
 
-    RPC_HELLO_MESSAGE = b'\x48\x45\x4C\x4C\x4F\x2D\x52\x50\x43\x00\x00\x00'
-    STREAM_HELLO_MESSAGE = b'\x48\x45\x4C\x4C\x4F\x2D\x53\x54\x52\x45\x41\x4D'
+    RPC_HELLO_MESSAGE = b'\x4b\x52\x50\x43\x2d\x52\x50\x43'
+    STREAM_HELLO_MESSAGE = b'\x4b\x52\x50\x43\x2d\x53\x54\x52'
 
     _types = Types()
-
-    @classmethod
-    def client_name(cls, name=None):
-        """ A client name, truncated/lengthened to fit 32 bytes """
-        if name is None:
-            name = ''
-        else:
-            name = cls._unicode_truncate(name, 32, 'utf-8')
-        name = name.encode('utf-8')
-        return name + (b'\x00' * (32 - len(name)))
-
-    @classmethod
-    def _unicode_truncate(cls, string, length, encoding='utf-8'):
-        """ Shorten a unicode string so that it's encoding uses at
-            most length bytes. """
-        encoded = string.encode(encoding=encoding)[:length]
-        return encoded.decode(encoding, 'ignore')
 
     @classmethod
     def encode(cls, x, typ):
@@ -72,12 +55,11 @@ class Encoder(object):
             raise RuntimeError('Cannot encode objects of type ' + str(type(x)))
 
     @classmethod
-    def encode_delimited(cls, x, typ):
-        """ Encode a message or value with size information
-            (for use in a delimited communication stream) """
-        data = cls.encode(x, typ)
-        delimiter = protobuf_encoder._VarintBytes(len(data))
-        return delimiter + data
+    def encode_message_with_size(cls, message):
+        """ Encode a protobuf message, prepended with its size """
+        data = message.SerializeToString()
+        size = protobuf_encoder._VarintBytes(len(data))
+        return size + data
 
     @classmethod
     def _encode_value(cls, value, typ):

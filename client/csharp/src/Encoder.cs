@@ -14,45 +14,11 @@ namespace KRPC.Client
     static class Encoder
     {
         public static readonly byte[] RPCHelloMessage = {
-            0x48,
-            0x45,
-            0x4C,
-            0x4C,
-            0x4F,
-            0x2D,
-            0x52,
-            0x50,
-            0x43,
-            0x00,
-            0x00,
-            0x00
+            0x4b, 0x52, 0x50, 0x43, 0x2d, 0x52, 0x50, 0x43
         };
         public static readonly byte[] StreamHelloMessage = {
-            0x48,
-            0x45,
-            0x4C,
-            0x4C,
-            0x4F,
-            0x2D,
-            0x53,
-            0x54,
-            0x52,
-            0x45,
-            0x41,
-            0x4D
+            0x4b, 0x52, 0x50, 0x43, 0x2d, 0x53, 0x54, 0x52
         };
-        public static readonly byte[] OkMessage = { 0x4f, 0x4b };
-        public const int ClientNameLength = 32;
-        public const int ClientIdentifierLength = 16;
-
-        internal static byte[] EncodeClientName (string name)
-        {
-            var encoder = new UTF8Encoding (false, true);
-            var clientName = encoder.GetBytes (name);
-            var clientNameBytes = new byte[ClientNameLength];
-            Array.Copy (clientName, clientNameBytes, Math.Min (ClientNameLength, clientName.Length));
-            return clientNameBytes;
-        }
 
         /// <summary>
         /// Encode an object of the given type using the protocol buffer encoding scheme.

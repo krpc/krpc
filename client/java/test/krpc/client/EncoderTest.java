@@ -23,43 +23,18 @@ import krpc.schema.KRPC;
 import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ EncoderSInt32ValueTest.class, EncoderSInt64ValueTest.class, EncoderUInt32ValueTest.class, EncoderUInt64ValueTest.class,
-        EncoderSingleValueTest.class, EncoderDoubleValueTest.class, EncoderBooleanValueTest.class, EncoderStringValueTest.class,
-        EncoderBytesValueTest.class, EncoderListCollectionTest.class, EncoderDictionaryCollectionTest.class, EncoderSetCollectionTest.class, })
 public class EncoderTest {
 
     @Test
     public void testRPCHelloMessage() {
-        assertEquals(12, Encoder.RPC_HELLO_MESSAGE.length);
-        assertEquals("48454c4c4f2d525043000000", hexlify(Encoder.RPC_HELLO_MESSAGE));
+        assertEquals(8, Encoder.RPC_HELLO_MESSAGE.length);
+        assertEquals("4b5250432d525043", hexlify(Encoder.RPC_HELLO_MESSAGE));
     }
 
     @Test
     public void testStreamHelloMessage() {
-        assertEquals(12, Encoder.STREAM_HELLO_MESSAGE.length);
-        assertEquals("48454c4c4f2d53545245414d", hexlify(Encoder.STREAM_HELLO_MESSAGE));
-    }
-
-    @Test
-    public void testClientName() throws UnsupportedEncodingException {
-        byte[] clientName = Encoder.encodeClientName("foo");
-        assertEquals(32, clientName.length);
-        assertEquals("666f6f" + repeatedString("00", 29), hexlify(clientName));
-    }
-
-    @Test
-    public void EmptyClientName() throws UnsupportedEncodingException {
-        byte[] clientName = Encoder.encodeClientName("");
-        assertEquals(32, clientName.length);
-        assertEquals(repeatedString("00", 32), hexlify(clientName));
-    }
-
-    @Test
-    public void LongClientName() throws UnsupportedEncodingException {
-        byte[] clientName = Encoder.encodeClientName(repeatedString("a", 33));
-        assertEquals(32, clientName.length);
-        assertEquals(repeatedString("61", 32), hexlify(clientName));
+        assertEquals(8, Encoder.STREAM_HELLO_MESSAGE.length);
+        assertEquals("4b5250432d535452", hexlify(Encoder.STREAM_HELLO_MESSAGE));
     }
 
     @Test

@@ -33,19 +33,8 @@ import krpc.schema.KRPC;
 // TODO: remove all the ByteString.copyFrom calls
 
 public class Encoder {
-    static final byte[] RPC_HELLO_MESSAGE = new byte[] { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x52, 0x50, 0x43, 0x00, 0x00, 0x00 };
-    static final byte[] STREAM_HELLO_MESSAGE = new byte[] { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x53, 0x54, 0x52, 0x45, 0x41, 0x4D };
-    static final int CLIENT_IDENTIFIER_LENGTH = 16;
-    static final int CLIENT_NAME_LENGTH = 32;
-    static final byte[] OK_MESSAGE = { 0x4F, 0x4B };
-
-    static byte[] encodeClientName(String name) throws UnsupportedEncodingException {
-        byte[] clientName = new byte[CLIENT_NAME_LENGTH];
-        byte[] tmp = name.getBytes("UTF-8");
-        for (int i = 0; i < tmp.length && i < CLIENT_NAME_LENGTH; i++)
-            clientName[i] = tmp[i];
-        return clientName;
-    }
+    static final byte[] RPC_HELLO_MESSAGE = new byte[] { 0x4b, 0x52, 0x50, 0x43, 0x2d, 0x52, 0x50, 0x43 };
+    static final byte[] STREAM_HELLO_MESSAGE = new byte[] { 0x4b, 0x52, 0x50, 0x43, 0x2d, 0x53, 0x54, 0x52 };
 
     static String guidToString(byte[] guid) {
         StringBuilder builder = new StringBuilder();

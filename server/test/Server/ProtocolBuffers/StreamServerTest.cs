@@ -1,35 +1,26 @@
 using System;
 using System.IO;
 using System.Linq;
+using KRPC.Schema.KRPC;
 using KRPC.Server;
 using KRPC.Server.ProtocolBuffers;
 using Moq;
 using NUnit.Framework;
+
+using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
 
 namespace KRPC.Test.Server.ProtocolBuffers
 {
     [TestFixture]
     public class StreamServerTest
     {
-        byte[] helloMessage;
-        Guid clientGuid;
-
-        [SetUp]
-        public void SetUp ()
-        {
-            helloMessage = new byte[12 + 16];
-            byte[] header = { 0x48, 0x45, 0x4C, 0x4C, 0x4F, 0x2D, 0x53, 0x54, 0x52, 0x45, 0x41, 0x4D };
-            Array.Copy (header, helloMessage, header.Length);
-            clientGuid = new Guid ("1234567890abcdef1234567890abcdef".ToBytes ());
-            byte[] identifier = clientGuid.ToByteArray ();
-            Array.Copy (identifier, 0, helloMessage, header.Length, identifier.Length);
-        }
+        Guid clientId = new Guid ("1234567890abcdef1234567890abcdef".ToBytes ());
 
         [Test]
-        public void ValidHelloMessage ()
+        public void ValidConnectionMessage ()
         {
             var responseStream = new MemoryStream ();
-            var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
+            var stream = new TestStream (new MemoryStream (TestingTools.CreateStreamConnectionRequest (clientId.ToByteArray ())), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -49,20 +40,19 @@ namespace KRPC.Test.Server.ProtocolBuffers
 
             server.Update ();
             Assert.AreEqual (1, server.Clients.Count ());
-            Assert.AreEqual (clientGuid, server.Clients.First ().Guid);
+            Assert.AreEqual (clientId, server.Clients.First ().Guid);
 
-            byte[] bytes = responseStream.ToArray ();
-            byte[] expectedBytes = { 0x4F, 0x4B };
-            Assert.IsTrue (expectedBytes.SequenceEqual (bytes));
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 19, Status.Ok, String.Empty, 16);
         }
 
         [Test]
-        public void InvalidHelloMessageHeader ()
+        public void InvalidConnectionMessageHeader ()
         {
             var responseStream = new MemoryStream ();
 
-            helloMessage [4] = 0x42;
-            var stream = new TestStream (new MemoryStream (helloMessage), responseStream);
+            var connectionMessage = TestingTools.CreateStreamConnectionRequest (clientId.ToByteArray ());
+            connectionMessage [4] = 0x42;
+            var stream = new TestStream (new MemoryStream (connectionMessage), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -82,17 +72,17 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
 
-            Assert.AreEqual (0, responseStream.Length);
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 3, Status.MalformedHeader, String.Empty, 0);
         }
 
         [Test]
-        public void ShortHelloMessageHeader ()
+        public void ShortConnectionMessageHeader ()
         {
-            var shortHelloMessage = new byte[5];
-            Array.Copy (helloMessage, shortHelloMessage, shortHelloMessage.Length);
+            var connectionMessage = new byte[5];
+            Array.Copy (TestingTools.CreateStreamConnectionRequest (clientId.ToByteArray ()), connectionMessage, connectionMessage.Length);
 
             var responseStream = new MemoryStream ();
-            var stream = new TestStream (new MemoryStream (shortHelloMessage), responseStream);
+            var stream = new TestStream (new MemoryStream (connectionMessage), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -112,17 +102,16 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
 
-            Assert.AreEqual (0, responseStream.Length);
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 33, Status.Timeout, "The operation has timed out.", 0);
         }
 
         [Test]
-        public void ShortHelloMessageIdentifier ()
+        public void InvalidConnectionMessageIdentifier ()
         {
-            var shortHelloMessage = new byte[8 + 15];
-            Array.Copy (helloMessage, shortHelloMessage, shortHelloMessage.Length);
+            var connectionMessage = TestingTools.CreateStreamConnectionRequest ("123456".ToBytes ());
 
             var responseStream = new MemoryStream ();
-            var stream = new TestStream (new MemoryStream (shortHelloMessage), responseStream);
+            var stream = new TestStream (new MemoryStream (connectionMessage), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -142,11 +131,11 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
 
-            Assert.AreEqual (0, responseStream.Length);
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 40, Status.MalformedMessage, "Client identifier must be 16 bytes.", 0);
         }
 
         [Test]
-        public void NoHelloMessage ()
+        public void NoConnectionMessage ()
         {
             var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (), responseStream);
@@ -169,7 +158,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
 
-            Assert.AreEqual (0, responseStream.Length);
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 33, Status.Timeout, "The operation has timed out.", 0);
         }
     }
 }

@@ -6,6 +6,8 @@
 
 #include <asio/steady_timer.hpp>
 
+#include "krpc/decoder.hpp"
+
 namespace krpc {
 
 Connection::Connection(const std::string& address, unsigned int port):
@@ -35,6 +37,20 @@ void Connection::send(const char* data, size_t length) {
 
 void Connection::send(const std::string& data) {
   asio::write(socket, asio::buffer(data));
+}
+
+std::string Connection::receive_message() {
+  std::string data;
+  size_t size = 0;
+  while (true) {
+    try {
+      data += this->receive(1);
+      size = decoder::decode_size_and_position(data).first;
+      break;
+    } catch (decoder::DecodeFailed&) {
+    }
+  }
+  return this->receive(size);
 }
 
 std::string Connection::receive(size_t length) {

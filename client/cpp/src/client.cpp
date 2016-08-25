@@ -37,20 +37,8 @@ std::string Client::invoke(const schema::Request& request) {
   std::string data;
   {
     std::lock_guard<std::mutex> lock_guard(*lock);
-
     rpc_connection->send(encoder::encode_delimited(request));
-
-    size_t size = 0;
-    while (true) {
-      try {
-        data += rpc_connection->receive(1);
-        size = decoder::decode_size_and_position(data).first;
-        break;
-      } catch (decoder::DecodeFailed&) {
-      }
-    }
-
-    data = rpc_connection->receive(size);
+    data = rpc_connection->receive_message();
   }
 
   schema::Response response;
