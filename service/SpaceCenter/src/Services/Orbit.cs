@@ -241,6 +241,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The <a href="https://en.wikipedia.org/wiki/True_anomaly">true anomaly</a>.
+        /// </summary>
+        [KRPCProperty]
+        public double TrueAnomaly {
+            get { return InternalOrbit.trueAnomaly; }
+        }
+
+        /// <summary>
         /// The unit direction vector that is normal to the orbits reference plane, in the given
         /// reference frame. The reference plane is the plane from which the orbits inclination is measured.
         /// </summary>
