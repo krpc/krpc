@@ -167,6 +167,7 @@
     <Compile Include="Service\Messages\Service.cs" />
     <Compile Include="Service\Messages\Services.cs" />
     <Compile Include="Service\Messages\Status.cs" />
+    <Compile Include="Service\Messages\Stream.cs" />
     <Compile Include="Service\Messages\StreamMessage.cs" />
     <Compile Include="Service\Messages\StreamResponse.cs" />
     <Compile Include="Service\ObjectStore.cs" />
