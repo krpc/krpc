@@ -146,7 +146,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<ScienceData> Data {
-            get { return experiment.GetData ().Select (data => new ScienceData (experiment, data)).ToList (); }
+            get { return experiment.GetData().Select(data => new ScienceData(experiment, data)).ToList (); }
+        }
 
         /// <summary>
         /// Determines if the experiment is available given the situationMask and requireAtmosphere.
@@ -158,7 +159,6 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var situation = ScienceUtil.GetExperimentSituation(vessel);
                 var rndExperiment = ResearchAndDevelopment.GetExperiment(experiment.experimentID);
                 return rndExperiment.IsAvailableWhile(situation, vessel.mainBody);
-              
             }
         }
 
@@ -198,9 +198,6 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var biome = rndExperiment.BiomeIsRelevantWhile(situation) ? Biome : "";
                 var subjectId = string.Format("{0}@{1}{2}{3}", id, bodyName, situation, biome);
                 var subject = ResearchAndDevelopment.GetSubjectByID(subjectId);
-                if (experiment.experiment.id.Equals("")) {
-                    experiment.experiment.id = id;
-                }
                 subject = subject ?? new global::ScienceSubject(rndExperiment, situation, vessel.mainBody, biome);
                 return new ScienceSubject(experiment, subject);
             }
