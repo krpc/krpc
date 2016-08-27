@@ -114,6 +114,7 @@
     <Compile Include="Services\Parts\DockingPortState.cs" />
     <Compile Include="Services\Parts\Engine.cs" />
     <Compile Include="Services\Parts\Experiment.cs" />
+    <Compile Include="Services\Parts\ScienceSubject.cs" />
     <Compile Include="Services\Parts\Fairing.cs" />
     <Compile Include="Services\Parts\Force.cs" />
     <Compile Include="Services\Parts\Intake.cs" />
