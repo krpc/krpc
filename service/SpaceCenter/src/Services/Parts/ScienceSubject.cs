@@ -1,6 +1,9 @@
 ﻿using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services.Parts {
+    /// <summary>
+    /// Obtained by calling <see cref="Experiment.ScienceSubject"/>.
+    /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
     public class ScienceSubject {
         readonly global::ScienceSubject data;
