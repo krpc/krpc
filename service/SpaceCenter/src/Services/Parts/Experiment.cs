@@ -199,7 +199,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var subjectId = string.Format("{0}@{1}{2}{3}", id, bodyName, situation, biome);
                 var subject = ResearchAndDevelopment.GetSubjectByID(subjectId);
                 subject = subject ?? new global::ScienceSubject(rndExperiment, situation, vessel.mainBody, biome);
-                return new ScienceSubject(experiment, subject);
+                return new ScienceSubject(subject);
             }
         }
     }

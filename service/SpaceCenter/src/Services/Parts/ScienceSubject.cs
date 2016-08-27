@@ -7,12 +7,10 @@ namespace KRPC.SpaceCenter.Services.Parts {
     [KRPCClass(Service = "SpaceCenter")]
     public class ScienceSubject {
         readonly global::ScienceSubject data;
-        readonly ModuleScienceExperiment experiment;
 
         private readonly float gainMultiplier = HighLogic.CurrentGame.Parameters.Career.ScienceGainMultiplier;
 
-        internal ScienceSubject(ModuleScienceExperiment experimentModule, global::ScienceSubject subject) {
-            experiment = experimentModule;
+        internal ScienceSubject(global::ScienceSubject subject) {
             data = subject;
         }
 
