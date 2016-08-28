@@ -157,7 +157,7 @@ cc_binary(
     name = 'cpptest',
     srcs = test_srcs,
     includes = ['test'],
-    deps = [':krpc', '@cpp_gmock//:main']
+    deps = [':krpc', '@cpp_googletest//:gtest', '@cpp_googletest//:gmock']
 )
 
 cpp_check_test(

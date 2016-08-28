@@ -68,11 +68,11 @@ new_http_archive(
 )
 
 new_http_archive(
-    name = 'cpp_gmock',
-    build_file = 'tools/build/cpp_gmock.BUILD',
-    url = 'https://googlemock.googlecode.com/files/gmock-1.7.0.zip',
-    strip_prefix = 'gmock-1.7.0',
-    sha256 = '26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b'
+    name = 'cpp_googletest',
+    build_file = 'tools/build/cpp_googletest.BUILD',
+    url = 'https://github.com/google/googletest/archive/release-1.8.0.zip',
+    strip_prefix = 'googletest-release-1.8.0',
+    sha256 = 'f3ed3b58511efd272eb074a3a6d6fb79d7c2e6a0e374323d1e6bcbcc1ef141bf'
 )
 
 http_file(
