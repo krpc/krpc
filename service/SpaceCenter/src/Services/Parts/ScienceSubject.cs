@@ -23,7 +23,7 @@ namespace KRPC.SpaceCenter.Services.Parts {
         }
 
         /// <summary>
-        /// Total science allowable for this subject, based on subjectValue.
+        /// Total science allowable for this subject.
         /// </summary>
         [KRPCProperty]
         public float ScienceCap {
@@ -39,7 +39,7 @@ namespace KRPC.SpaceCenter.Services.Parts {
         }
 
         /// <summary>
-        /// Multiply science value by this dataScale value to determine data amount in mits.
+        /// Multiply science value by this to determine data amount in mits.
         /// </summary>
         [KRPCProperty]
         public float DataScale {

@@ -150,7 +150,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Determines if the experiment is available given the situationMask and requireAtmosphere.
+        /// Determines if the experiment is available given the current conditions.
         /// </summary>
         [KRPCProperty]
         public bool Available {
@@ -181,7 +181,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Containing information on the corresponding specific science result for the current situation.
+        /// Containing information on the corresponding specific science result for the current conditions.
         /// Returns null if experiment is unavailable.
         /// </summary>
         [KRPCProperty]
