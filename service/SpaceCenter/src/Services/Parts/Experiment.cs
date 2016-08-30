@@ -155,7 +155,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Available {
             get {
-                var vessel = FlightGlobals.ActiveVessel;
+                var vessel = Part.InternalPart.vessel;
                 var situation = ScienceUtil.GetExperimentSituation (vessel);
                 var rndExperiment = ResearchAndDevelopment.GetExperiment (experiment.experimentID);
                 return rndExperiment.IsAvailableWhile (situation, vessel.mainBody);
@@ -168,7 +168,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public string Biome {
             get {
-                var vessel = FlightGlobals.ActiveVessel;
+                var vessel = Part.InternalPart.vessel;
                 var biome = vessel.LandedInKSC ? getKSCBiome (vessel)
                     : ScienceUtil.GetExperimentBiome (vessel.mainBody, vessel.latitude, vessel.longitude);
                 return biome.Replace (" ", String.Empty);
@@ -188,11 +188,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public ScienceSubject ScienceSubject {
             get {
-                if (!Available) {
+                if (!Available)
                     return null;
-                }
                 var id = experiment.experimentID;
-                var vessel = FlightGlobals.ActiveVessel;
+                var vessel = Part.InternalPart.vessel;
                 var bodyName = vessel.mainBody.name;
                 var situation = ScienceUtil.GetExperimentSituation (vessel);
                 var rndExperiment = ResearchAndDevelopment.GetExperiment (id);
