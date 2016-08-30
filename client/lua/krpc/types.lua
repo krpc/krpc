@@ -259,7 +259,7 @@ function Types:coerce_to(value, typ)
   end
   -- Collection types
   -- Coerce tuples to lists
-  if type(value) == 'table' and typ:is_a(Types.ListType) then
+  if type(value) == 'table' and value._object_id ~= 0 and typ:is_a(Types.ListType) then
     local result = typ.lua_type()
     for _, x in ipairs(value) do
       result:append(self:coerce_to(x, typ.value_type))
@@ -267,7 +267,7 @@ function Types:coerce_to(value, typ)
     return result
   end
   -- Coerce lists (with appropriate number of elements) to tuples
-  if type(value) == 'table' and typ:is_a(Types.TupleType) and #(value) == #(typ.value_types) then
+  if type(value) == 'table' and value._object_id ~= 0 and typ:is_a(Types.TupleType) and #(value) == #(typ.value_types) then
     local result = typ.lua_type()
     for i, x in ipairs(value) do
       result:append(self:coerce_to(x, typ.value_types[i]))
