@@ -1,4 +1,5 @@
-﻿using KRPC.Service.Attributes;
+﻿using System;
+using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -38,7 +39,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool IsComplete {
-            get { return ScienceCap - Science == 0; }
+            get { return Math.Abs (ScienceCap - Science) < 0.0001; }
         }
 
         /// <summary>
