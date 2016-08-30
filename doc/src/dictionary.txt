@@ -43,6 +43,7 @@ localhost
 lua
 luarocks
 mach
+mits
 namespace
 namespaces
 namespacing
@@ -82,4 +83,3 @@ unserialize
 varint
 vertices
 virtualenv
-mits

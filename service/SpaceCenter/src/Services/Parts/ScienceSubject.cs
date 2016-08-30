@@ -1,16 +1,19 @@
 ﻿using KRPC.Service.Attributes;
 
-namespace KRPC.SpaceCenter.Services.Parts {
+namespace KRPC.SpaceCenter.Services.Parts
+{
     /// <summary>
     /// Obtained by calling <see cref="Experiment.ScienceSubject"/>.
     /// </summary>
-    [KRPCClass(Service = "SpaceCenter")]
-    public class ScienceSubject {
+    [KRPCClass (Service = "SpaceCenter")]
+    public class ScienceSubject
+    {
         readonly global::ScienceSubject data;
 
-        private readonly float gainMultiplier = HighLogic.CurrentGame.Parameters.Career.ScienceGainMultiplier;
+        readonly float gainMultiplier = HighLogic.CurrentGame.Parameters.Career.ScienceGainMultiplier;
 
-        internal ScienceSubject(global::ScienceSubject subject) {
+        internal ScienceSubject (global::ScienceSubject subject)
+        {
             data = subject;
         }
 
@@ -19,7 +22,7 @@ namespace KRPC.SpaceCenter.Services.Parts {
         /// </summary>
         [KRPCProperty]
         public float Science {
-            get { return data.science  * gainMultiplier; }
+            get { return data.science * gainMultiplier; }
         }
 
         /// <summary>
@@ -67,7 +70,7 @@ namespace KRPC.SpaceCenter.Services.Parts {
         /// </summary>
         [KRPCProperty]
         public string Title {
-            get { return data.title ; }
+            get { return data.title; }
         }
     }
 }
