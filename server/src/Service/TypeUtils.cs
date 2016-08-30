@@ -428,9 +428,6 @@ namespace KRPC.Service
                 result["code"] = "ENUMERATION";
                 result["service"] = GetEnumServiceName (type);
                 result["name"] = type.Name;
-            } else if (IsAMessageType (type)) {
-                var name = type.ToString ();
-                result["code"] = name.Substring (name.LastIndexOf ('.') + 1).ToUpper();
             } else if (IsATupleCollectionType (type)) {
                 result["code"] = "TUPLE";
                 result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
@@ -443,6 +440,18 @@ namespace KRPC.Service
             } else if (IsADictionaryCollectionType (type)) {
                 result["code"] = "DICTIONARY";
                 result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+            } else if (IsAMessageType (type)) {
+                var name = type.ToString ();
+                var camelCase = name.Substring (name.LastIndexOf ('.') + 1);
+                var snakeCase = String.Empty;
+                for (var i = 0; i < camelCase.Length-1; i++) {
+                    if (Char.IsLower(camelCase[i]) && Char.IsUpper(camelCase[i+1]))
+                        snakeCase += camelCase[i] + "_";
+                    else
+                        snakeCase += camelCase[i];
+                }
+                snakeCase += camelCase[camelCase.Length-1];
+                result["code"] = snakeCase.ToUpper();
             }
             if (!result.ContainsKey("code"))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
