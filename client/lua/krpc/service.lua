@@ -55,8 +55,7 @@ local function _construct_func(invoke, service_name, procedure_name, prefix_para
       ',',
       {'service_name',
        'procedure_name',
-       'nil',
-       'Map{'..stringx.join(',', seq.copy(seq.map(function (x) return x..'='..x end, param_names)))..'}',
+       '{'..stringx.join(',', param_names)..'}',
        'param_names',
        'param_types',
        'return_type'

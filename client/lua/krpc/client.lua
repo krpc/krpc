@@ -17,7 +17,7 @@ function Client:_init(rpc_connection)
   self._rpc_connection = rpc_connection
 
   -- Set up the main KRPC service
-  local services = self:_invoke('KRPC', 'GetServices', nil, nil, nil, nil, self._types:services_type()).services
+  local services = self:_invoke('KRPC', 'GetServices', nil, nil, nil, self._types:services_type()).services
 
   -- Set up services
   for _, service in ipairs(services) do
@@ -30,14 +30,13 @@ function Client:close()
 end
 
 --- Execute an RPC
-function Client:_invoke(service, procedure, args, kwargs, param_names, param_types, return_type)
+function Client:_invoke(service, procedure, args, param_names, param_types, return_type)
   args = args or List{}
-  kwargs = kwargs or Map{}
   param_names = param_names or List{}
   param_types = param_types or List{}
 
   -- Build the request
-  local request = self:_build_request(service, procedure, args, kwargs, param_names, param_types, return_type)
+  local request = self:_build_request(service, procedure, args, param_names, param_types, return_type)
 
   -- Send the request
   self._rpc_connection:send_message(request)
@@ -57,12 +56,12 @@ function Client:_invoke(service, procedure, args, kwargs, param_names, param_typ
 end
 
 --- Build a KRPC.Request object
-function Client:_build_request(service, procedure, args, kwargs, param_names, param_types, return_type)
+function Client:_build_request(service, procedure, args, param_names, param_types, return_type)
   local request = schema.Request()
   request.service = service
   request.procedure = procedure
 
-  local function encode_argument(i, value)
+  for i,value in ipairs(args) do
     local typ = param_types[i]
     local valid = false
     if type(typ.lua_type) == 'string' then
@@ -71,35 +70,14 @@ function Client:_build_request(service, procedure, args, kwargs, param_names, pa
       valid = typ.lua_type:class_of(value)
     end
     if not valid then
-      ok,coerced_value = pcall(self._types.coerce_to, self._types, value, typ)
+      ok,value = pcall(self._types.coerce_to, self._types, value, typ)
       if not ok then
         error(string.format('%s.%s() argument %d must be a %s, got a %s', service, procedure, i, typ.lua_type, type(value)))
       end
     end
-    return encoder.encode(value, typ)
-  end
-
-  if args:len() > param_types:len() then
-    error(string.format('%s.%s() takes exactly %d arguments (%d given)',
-                        service, procedure, param_types:len(), args:len()))
-  end
-
-  local nargs = args:len()
-  for i,param in ipairs(param_names) do
-    local arg
-    local add = false
-    if i <= nargs and args[i] ~= nil then
-      arg = args[i]
-      add = true
-    elseif kwargs[param] ~= nil then
-      arg = kwargs[param]
-      add = true
-    end
-    if add then
-      argument = request.arguments:add()
-      argument.position = i-1
-      argument.value = encode_argument(i, arg)
-    end
+    local arg = request.arguments:add()
+    arg.position = i-1
+    arg.value = encoder.encode(value, typ)
   end
 
   return request
