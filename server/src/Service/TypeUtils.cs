@@ -92,7 +92,16 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsACollectionType (Type type)
         {
-            return IsAListCollectionType (type) || IsADictionaryCollectionType (type) || IsASetCollectionType (type) || IsATupleCollectionType (type);
+            return IsATupleCollectionType (type) || IsAListCollectionType (type) || IsASetCollectionType (type) || IsADictionaryCollectionType (type);
+        }
+
+        /// <summary>
+        /// Returns true if the given type can be used as a kRPC tuple collection type.
+        /// </summary>
+        public static bool IsATupleCollectionType (Type type)
+        {
+            return typeof(ITuple).IsAssignableFrom (type) &&
+            type.GetGenericArguments ().All (IsAValidType);
         }
 
         /// <summary>
@@ -106,17 +115,6 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Returns true if the given type can be used as a kRPC dictionary collection type.
-        /// </summary>
-        public static bool IsADictionaryCollectionType (Type type)
-        {
-            return Reflection.IsGenericType (type, typeof(IDictionary<,>)) &&
-            type.GetGenericArguments ().Length == 2 &&
-            IsAValidKeyType (type.GetGenericArguments () [0]) &&
-            IsAValidType (type.GetGenericArguments () [1]);
-        }
-
-        /// <summary>
         /// Returns true if the given type can be used as a kRPC list collection type.
         /// </summary>
         public static bool IsASetCollectionType (Type type)
@@ -127,12 +125,14 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Returns true if the given type can be used as a kRPC tuple collection type.
+        /// Returns true if the given type can be used as a kRPC dictionary collection type.
         /// </summary>
-        public static bool IsATupleCollectionType (Type type)
+        public static bool IsADictionaryCollectionType (Type type)
         {
-            return typeof(ITuple).IsAssignableFrom (type) &&
-            type.GetGenericArguments ().All (IsAValidType);
+            return Reflection.IsGenericType (type, typeof(IDictionary<,>)) &&
+            type.GetGenericArguments ().Length == 2 &&
+            IsAValidKeyType (type.GetGenericArguments () [0]) &&
+            IsAValidType (type.GetGenericArguments () [1]);
         }
 
         /// <summary>
@@ -381,6 +381,7 @@ namespace KRPC.Service
         /// <summary>
         /// Return the name of the kRPC type used to represent the given C# type
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
