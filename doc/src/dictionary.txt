@@ -3,6 +3,8 @@ atm
 Autotools
 autotune
 Bazel
+biome
+biomes
 circularization
 clickable
 clientgen
@@ -41,6 +43,7 @@ localhost
 lua
 luarocks
 mach
+mits
 namespace
 namespaces
 namespacing

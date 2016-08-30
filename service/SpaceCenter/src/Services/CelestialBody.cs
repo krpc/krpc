@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -239,6 +240,50 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public bool HasAtmosphericOxygen {
             get { return InternalBody.atmosphereContainsOxygen; }
+        }
+
+        /// <summary>
+        /// The biomes present on this body.
+        /// </summary>
+        [KRPCProperty]
+        public IList<string> Biomes {
+            get {
+                CheckHasBiomes ();
+                return InternalBody.BiomeMap.Attributes.Select (x => x.name).ToList ();
+            }
+        }
+
+        /// <summary>
+        /// The biomes at the given latitude and longitude, in degrees.
+        /// </summary>
+        [KRPCMethod]
+        public string BiomeAt (double latitude, double longitude)
+        {
+            CheckHasBiomes ();
+            return InternalBody.BiomeMap.GetAtt (latitude, longitude).name;
+        }
+
+        void CheckHasBiomes ()
+        {
+            var body = InternalBody;
+            if (body.BiomeMap == null)
+                throw new InvalidOperationException ("Body does not have any biomes");
+        }
+
+        /// <summary>
+        /// The altitude, in meters, above which a vessel is considered to be flying "high" when doing science.
+        /// </summary>
+        [KRPCProperty]
+        public float FlyingHighAltitudeThreshold {
+            get { return InternalBody.scienceValues.flyingAltitudeThreshold; }
+        }
+
+        /// <summary>
+        /// The altitude, in meters, above which a vessel is considered to be in "high" space when doing science.
+        /// </summary>
+        [KRPCProperty]
+        public float SpaceHighAltitudeThreshold {
+            get { return InternalBody.scienceValues.spaceAltitudeThreshold; }
         }
 
         /// <summary>
