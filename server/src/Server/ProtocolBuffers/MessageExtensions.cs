@@ -247,7 +247,11 @@ namespace KRPC.Server.ProtocolBuffers
             var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
             var result = new Request (request.Service, request.Procedure);
             foreach (var argument in request.Arguments) {
-                var type = procedureSignature.Parameters [(int)argument.Position].Type;
+                var position = (int)argument.Position;
+                // Ignore the argument if its position is not valid
+                if (position >= procedureSignature.Parameters.Count)
+                    continue;
+                var type = procedureSignature.Parameters [position].Type;
                 result.Arguments.Add (argument.ToMessage (type));
             }
             return result;
