@@ -5,8 +5,8 @@ from krpc.decoder import Decoder
 from krpc.types import Types
 from krpc.platform import hexlify, unhexlify
 
-class TestEncodeDecode(unittest.TestCase):
 
+class TestEncodeDecode(unittest.TestCase):
     types = Types()
 
     def _run_test_encode_value(self, typ, cases):
@@ -54,7 +54,7 @@ class TestEncodeDecode(unittest.TestCase):
             (300, 'ac02'),
             (-33, 'dfffffffffffffffff01'),
             (sys.maxint, 'ffffffffffffffff7f'),
-            (-sys.maxint-1, '80808080808080808001')
+            (-sys.maxint - 1, '80808080808080808001')
         ]
         self._run_test_encode_value('int32', cases)
         self._run_test_decode_value('int32', cases)
@@ -164,6 +164,7 @@ class TestEncodeDecode(unittest.TestCase):
         cases = [((1, 'jeb', False), '0a01010a04036a65620a0100')]
         self._run_test_encode_value('Tuple(int32,string,bool)', cases)
         self._run_test_decode_value('Tuple(int32,string,bool)', cases)
+
 
 if __name__ == '__main__':
     unittest.main()

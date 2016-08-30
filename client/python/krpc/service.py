@@ -6,6 +6,7 @@ from krpc.types import DynamicType, DefaultArgument
 from krpc.decoder import Decoder
 from krpc.utils import snake_case
 
+
 def _signature(param_types, return_type):
     """ Generate a signature for a procedure that can be used as its docstring """
     if len(param_types) == 0 and return_type is None:
@@ -15,15 +16,17 @@ def _signature(param_types, return_type):
     if len(types) == 0:
         sig = '()'
     elif len(types) > 1:
-        sig = '('+sig+')'
+        sig = '(' + sig + ')'
     if return_type is not None:
-        sig += ' -> '+return_type.python_type.__name__
+        sig += ' -> ' + return_type.python_type.__name__
     return sig
+
 
 def _as_literal(value, typ):
     if typ.python_type == str:
-        return '\''+value+'\''
+        return '\'' + value + '\''
     return str(value)
+
 
 def _update_param_names(names):
     """ Given a list of parameter names, append underscores to reserved keywords
@@ -31,11 +34,12 @@ def _update_param_names(names):
     newnames = []
     for name in names:
         if keyword.iskeyword(name):
-            name = name+'_'
+            name += '_'
             while name in names:
                 name += '_'
         newnames.append(name)
     return newnames
+
 
 def _construct_func(invoke, service_name, procedure_name, prefix_param_names, param_names,
                     param_types, param_required, param_default, return_type):
@@ -47,18 +51,18 @@ def _construct_func(invoke, service_name, procedure_name, prefix_param_names, pa
     params = []
     for name, required, default, typ in zip(param_names, param_required, param_default, param_types):
         if not required:
-            name += ' = DefaultArgument('+repr(_as_literal(default, typ))+')'
+            name += ' = DefaultArgument(' + repr(_as_literal(default, typ)) + ')'
         params.append(name)
 
     invoke_args = [
-        '\''+str(service_name)+'\'',
-        '\''+str(procedure_name)+'\'',
-        '['+','.join(param_names)+']',
+        '\'' + str(service_name) + '\'',
+        '\'' + str(procedure_name) + '\'',
+        '[' + ','.join(param_names) + ']',
         'param_names',
         'param_types',
         'return_type'
     ]
-    code = 'lambda ' + ', '.join(prefix_param_names + params) + ': invoke('+', '.join(invoke_args)+')'
+    code = 'lambda ' + ', '.join(prefix_param_names + params) + ': invoke(' + ', '.join(invoke_args) + ')'
     context = {
         'invoke': invoke,
         'DefaultArgument': DefaultArgument,
@@ -66,16 +70,18 @@ def _construct_func(invoke, service_name, procedure_name, prefix_param_names, pa
         'param_types': param_types,
         'return_type': return_type
     }
-    return eval(code, context) #pylint: disable=eval-used
+    return eval(code, context)  # pylint: disable=eval-used
+
 
 def _indent(lines, level):
     result = []
     for line in lines:
         if line:
-            result.append((' '*level)+line)
+            result.append((' ' * level) + line)
         else:
             result.append(line)
     return result
+
 
 def _parse_documentation_node(node):
     if node.tag == 'see':
@@ -102,6 +108,7 @@ def _parse_documentation_node(node):
     else:
         return node.text
 
+
 def _parse_documentation_content(node):
     desc = node.text
     for child in node:
@@ -109,6 +116,7 @@ def _parse_documentation_content(node):
         if child.tail:
             desc += child.tail
     return desc.strip()
+
 
 def _parse_documentation(xml):
     if xml.strip() == '':
@@ -130,10 +138,11 @@ def _parse_documentation(xml):
         elif node.tag == 'remarks':
             note = 'Note: %s' % _parse_documentation_content(node)
     if len(params) > 0:
-        params_str = 'Args:\n%s' % '\n'.join('    '+x for x in params)
+        params_str = 'Args:\n%s' % '\n'.join('    ' + x for x in params)
     else:
         params_str = ''
     return '\n\n'.join(x for x in (summary, params_str, returns, note) if x != '')
+
 
 def create_service(client, service):
     """ Create a new service type """
@@ -202,6 +211,7 @@ def create_service(client, service):
 
     return cls()
 
+
 class ServiceBase(DynamicType):
     """ Base class for service objects, created at runtime using information received from the server. """
 
@@ -219,7 +229,10 @@ class ServiceBase(DynamicType):
         name = enum.name
         enum_type = cls._client._types.as_type('Enum(' + cls._name + '.' + name + ')',
                                                _parse_documentation(enum.documentation))
-        enum_type.set_values(dict((str(snake_case(x.name)), x.value) for x in enum.values))
+        enum_type.set_values(dict(
+            (str(snake_case(x.name)), {
+                'value': x.value, 'doc': _parse_documentation(x.documentation)
+            }) for x in enum.values))
         setattr(cls, name, enum_type.python_type)
 
     @classmethod
@@ -279,7 +292,7 @@ class ServiceBase(DynamicType):
     @classmethod
     def _add_service_class_method(cls, class_name, method_name, procedure):
         """ Add a method to a class """
-        class_cls = cls._client._types.as_type('Class('+cls._name+'.'+class_name+')').python_type
+        class_cls = cls._client._types.as_type('Class(' + cls._name + '.' + class_name + ')').python_type
         param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(procedure)
         # Rename this to self if it doesn't cause a name clash
         if 'self' not in param_names:
@@ -296,7 +309,7 @@ class ServiceBase(DynamicType):
     @classmethod
     def _add_service_class_static_method(cls, class_name, method_name, procedure):
         """ Add a static method to a class """
-        class_cls = cls._client._types.as_type('Class('+cls._name+'.'+class_name+')').python_type
+        class_cls = cls._client._types.as_type('Class(' + cls._name + '.' + class_name + ')').python_type
         param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(procedure)
         func = _construct_func(cls._client._invoke, cls._name, procedure.name, [],
                                param_names, param_types, param_required, param_default, return_type)
@@ -310,7 +323,7 @@ class ServiceBase(DynamicType):
     @classmethod
     def _add_service_class_property(cls, class_name, property_name, getter=None, setter=None):
         """ Add a property to a class """
-        class_cls = cls._client._types.as_type('Class('+cls._name+'.'+class_name+')').python_type
+        class_cls = cls._client._types.as_type('Class(' + cls._name + '.' + class_name + ')').python_type
         doc = None
         if getter:
             doc = _parse_documentation(getter.documentation)

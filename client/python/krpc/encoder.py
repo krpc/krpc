@@ -1,7 +1,8 @@
-from google.protobuf.internal import encoder as protobuf_encoder #pylint: disable=import-error,no-name-in-module
+from google.protobuf.internal import encoder as protobuf_encoder  # pylint: disable=import-error,no-name-in-module
 from krpc.types import Types, ValueType, MessageType, ClassType, EnumType
 from krpc.types import ListType, DictionaryType, SetType, TupleType
 from krpc.platform import bytelength
+
 
 class Encoder(object):
     """ Routines for encoding messages and values in the protocol buffer serialization format """
@@ -19,7 +20,7 @@ class Encoder(object):
         else:
             name = cls._unicode_truncate(name, 32, 'utf-8')
         name = name.encode('utf-8')
-        return name + (b'\x00' * (32-len(name)))
+        return name + (b'\x00' * (32 - len(name)))
 
     @classmethod
     def _unicode_truncate(cls, string, length, encoding='utf-8'):
@@ -81,40 +82,49 @@ class Encoder(object):
     def _encode_value(cls, value, typ):
         return getattr(_ValueEncoder, 'encode_' + typ.protobuf_type)(value)
 
+
 class _ValueEncoder(object):
     """ Routines for encoding values in the protocol buffer serialization format """
 
     @classmethod
     def encode_double(cls, value):
         data = []
+
         def write(x):
             data.append(x)
+
         encoder = protobuf_encoder.DoubleEncoder(1, False, False)
         encoder(write, value)
-        return b''.join(data[1:]) # strips the tag value
+        return b''.join(data[1:])  # strips the tag value
 
     @classmethod
     def encode_float(cls, value):
         data = []
+
         def write(x):
             data.append(x)
+
         encoder = protobuf_encoder.FloatEncoder(1, False, False)
         encoder(write, value)
-        return b''.join(data[1:]) # strips the tag value
+        return b''.join(data[1:])  # strips the tag value
 
     @classmethod
     def _encode_varint(cls, value):
         data = []
+
         def write(x):
             data.append(x)
+
         protobuf_encoder._VarintEncoder()(write, value)
         return b''.join(data)
 
     @classmethod
     def _encode_signed_varint(cls, value):
         data = []
+
         def write(x):
             data.append(x)
+
         protobuf_encoder._SignedVarintEncoder()(write, value)
         return b''.join(data)
 

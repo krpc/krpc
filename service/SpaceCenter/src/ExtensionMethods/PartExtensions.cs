@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
@@ -49,17 +50,49 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Returns the index of the stage in which the part will be decoupled,
-        /// or 0 if it is never decoupled.
+        /// Returns the index of the stage in which the part will be decoupled, or -1 if it is never decoupled.
+        /// Transversed the tree of parts from the desired part to the root, and finds the activation stage
+        /// for the first decoupler that will decouple the part (the one with the highest stage number)
         /// </summary>
         public static int DecoupledAt (this Part part)
         {
+            int stage = -1;
             do {
-                if (part.HasModule<ModuleDecouple> () || part.HasModule<ModuleAnchoredDecoupler> () || part.HasModule<LaunchClamp> ())
-                    return part.inverseStage;
+                int candidate = -1;
+                var parent = part.parent;
+                var moduleDecouple = part.Module<ModuleDecouple> ();
+                var moduleAnchoredDecoupler = part.Module<ModuleAnchoredDecoupler> ();
+
+                // If the part will decouple itself from its parent, use the parts activation stage
+                if (part.HasModule<LaunchClamp> ()) {
+                    candidate = part.inverseStage;
+                } else if (moduleDecouple != null && moduleDecouple.isEnabled) {
+                    if (moduleDecouple.isOmniDecoupler)
+                        candidate = part.inverseStage;
+                    else if (parent != null && moduleDecouple.ExplosiveNode != null && moduleDecouple.ExplosiveNode.attachedPart == parent)
+                        candidate = part.inverseStage;
+                } else if (moduleAnchoredDecoupler != null && moduleAnchoredDecoupler.isEnabled) {
+                    if (parent != null && moduleAnchoredDecoupler.ExplosiveNode != null && moduleAnchoredDecoupler.ExplosiveNode.attachedPart == parent)
+                        candidate = part.inverseStage;
+                }
+
+                // If the part will be decoupled by its parent, use the parents activation stage
+                if (candidate == -1 && parent != null) {
+                    if (moduleDecouple != null) {
+                        if (moduleDecouple.isOmniDecoupler && moduleDecouple.isEnabled)
+                            candidate = parent.inverseStage;
+                        else if (moduleDecouple.ExplosiveNode != null && moduleDecouple.ExplosiveNode.attachedPart == part)
+                            candidate = parent.inverseStage;
+                    } else if (moduleAnchoredDecoupler != null && moduleAnchoredDecoupler.isEnabled) {
+                        if (moduleAnchoredDecoupler.ExplosiveNode != null && moduleAnchoredDecoupler.ExplosiveNode.attachedPart == part)
+                            candidate = parent.inverseStage;
+                    }
+                }
+
+                stage = Math.Max (candidate, stage);
                 part = part.parent;
             } while (part != null);
-            return -1;
+            return stage;
         }
 
         /// <summary>

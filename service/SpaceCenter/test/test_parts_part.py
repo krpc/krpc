@@ -670,6 +670,60 @@ class TestPartsPart(krpctest.TestCase):
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.solar_panel)
 
+class TestPartsPartDecoupleStage(krpctest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        if cls.connect().space_center.active_vessel.name != 'PartsDecoupleStage':
+            cls.launch_vessel_from_vab('PartsDecoupleStage')
+            cls.remove_other_vessels()
+        cls.vessel = cls.connect().space_center.active_vessel
+        cls.parts = cls.vessel.parts
+
+    def check(self, part, title, stage, decouple_stage):
+        self.assertEqual(title, part.title)
+        self.assertEqual(stage, part.stage)
+        self.assertEqual(decouple_stage, part.decouple_stage)
+
+    def test_stage_numbers(self):
+        stage_numbering = []
+        stack = [(0, self.parts.root)]
+        while len(stack) > 0:
+            level, part = stack.pop()
+            stage_numbering.append(' '*(level*2) + '%s %d %d' % (part.title, part.stage, part.decouple_stage))
+            stack.extend((level+1, part) for part in sorted(part.children, key=lambda part: part.title))
+        expected_stage_numbering = [
+            'Mk1 Command Pod -1 -1',
+            '  TR-18D Stack Separator 1 1',
+            '    FL-T400 Fuel Tank -1 1',
+            '      TT18-A Launch Stability Enhancer 5 5',
+            '      TT18-A Launch Stability Enhancer 5 5',
+            '      TT-70 Radial Decoupler 0 1',
+            '        FL-R10 RCS Fuel Tank -1 1',
+            '      TT-70 Radial Decoupler 0 1',
+            '        FL-R10 RCS Fuel Tank -1 1',
+            '      TR-18A Stack Decoupler 2 1',
+            '        FL-T800 Fuel Tank -1 1',
+            '          TT-70 Radial Decoupler 3 3',
+            '            FL-T200 Fuel Tank -1 3',
+            '              TR-18A Stack Decoupler 4 4',
+            '                FL-R25 RCS Fuel Tank -1 4',
+            '          TT-70 Radial Decoupler 3 3',
+            '            FL-T200 Fuel Tank -1 3',
+            '              TR-18A Stack Decoupler 4 4',
+            '                FL-R25 RCS Fuel Tank -1 4',
+            '          TT-70 Radial Decoupler 3 3',
+            '            FL-T200 Fuel Tank -1 3',
+            '              TR-18A Stack Decoupler 4 4',
+            '                FL-R25 RCS Fuel Tank -1 4',
+            '          TT-70 Radial Decoupler 3 3',
+            '            FL-T200 Fuel Tank -1 3',
+            '              TR-18A Stack Decoupler 4 4',
+            '                FL-R25 RCS Fuel Tank -1 4'
+        ]
+        self.assertEqual(expected_stage_numbering, stage_numbering)
+
 class TestPartsPartForce(krpctest.TestCase):
 
     @classmethod

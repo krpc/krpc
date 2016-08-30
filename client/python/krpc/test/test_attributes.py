@@ -1,8 +1,8 @@
 import unittest
 from krpc.attributes import Attributes
 
-class TestTypes(unittest.TestCase):
 
+class TestTypes(unittest.TestCase):
     def test_is_a_procedure(self):
         self.assertTrue(Attributes.is_a_procedure([]))
         self.assertFalse(Attributes.is_a_procedure(

@@ -176,14 +176,26 @@ namespace TestServer
             return x + y + z + anotherParameter;
         }
 
+        /// <summary>
+        /// Enum documentation string.
+        /// </summary>
         [KRPCEnum]
         [Serializable]
         [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
         public enum TestEnum
         {
+            /// <summary>
+            /// Enum ValueA documentation string.
+            /// </summary>
             ValueA,
+            /// <summary>
+            /// Enum ValueB documentation string.
+            /// </summary>
             ValueB,
+            /// <summary>
+            /// Enum ValueC documentation string.
+            /// </summary>
             ValueC
         }
 

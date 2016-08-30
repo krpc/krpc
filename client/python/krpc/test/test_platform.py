@@ -1,8 +1,8 @@
 import unittest
 from krpc.platform import bytelength, hexlify, unhexlify
 
-class TestPlatform(unittest.TestCase):
 
+class TestPlatform(unittest.TestCase):
     def test_bytelength(self):
         self.assertEqual(0, bytelength(''))
         self.assertEqual(3, bytelength('foo'))

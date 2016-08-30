@@ -10,6 +10,7 @@ from krpc.error import RPCError
 import krpc.stream
 import krpc.schema.KRPC
 
+
 class Client(object):
     """
     A kRPC client, through which all Remote Procedure Calls are made.
@@ -93,7 +94,7 @@ class Client(object):
         return result
 
     def _build_request(self, service, procedure, args,
-                       param_names, param_types, return_type): #pylint: disable=unused-argument
+                       param_names, param_types, return_type):  # pylint: disable=unused-argument
         """ Build a KRPC.Request object """
 
         request = krpc.schema.KRPC.Request(service=service, procedure=procedure)
@@ -105,7 +106,7 @@ class Client(object):
                 try:
                     value = self._types.coerce_to(value, typ)
                 except ValueError:
-                    raise TypeError('%s.%s() argument %d must be a %s, got a %s' % \
+                    raise TypeError('%s.%s() argument %d must be a %s, got a %s' %
                                     (service, procedure, i, typ.python_type, type(value)))
             request.arguments.add(position=i, value=Encoder.encode(value, typ))
 

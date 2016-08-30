@@ -1,4 +1,3 @@
-import socket
 from krpc.connection import Connection
 from krpc.client import Client
 from krpc.encoder import Encoder
@@ -9,6 +8,7 @@ from krpc.version import __version__
 DEFAULT_ADDRESS = '127.0.0.1'
 DEFAULT_RPC_PORT = 50000
 DEFAULT_STREAM_PORT = 50001
+
 
 def connect(address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, stream_port=DEFAULT_STREAM_PORT, name=None):
     """

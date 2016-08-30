@@ -5,8 +5,8 @@ from krpc.types import ClassBase
 from krpc.platform import hexlify
 import krpc.schema.KRPC
 
-class TestEncoder(unittest.TestCase):
 
+class TestEncoder(unittest.TestCase):
     types = Types()
 
     def test_rpc_hello_message(self):
@@ -22,17 +22,17 @@ class TestEncoder(unittest.TestCase):
     def test_client_name(self):
         message = Encoder.client_name('foo')
         self.assertEqual(32, len(message))
-        self.assertEqual('666f6f'+'00'*29, hexlify(message))
+        self.assertEqual('666f6f' + '00' * 29, hexlify(message))
 
     def test_empty_client_name(self):
         message = Encoder.client_name()
         self.assertEqual(32, len(message))
-        self.assertEqual('00'*32, hexlify(message))
+        self.assertEqual('00' * 32, hexlify(message))
 
     def test_long_client_name(self):
-        message = Encoder.client_name('a'*33)
+        message = Encoder.client_name('a' * 33)
         self.assertEqual(32, len(message))
-        self.assertEqual('61'*32, hexlify(message))
+        self.assertEqual('61' * 32, hexlify(message))
 
     def test_encode_message(self):
         request = krpc.schema.KRPC.Request()
@@ -55,12 +55,12 @@ class TestEncoder(unittest.TestCase):
         request.service = 'ServiceName'
         request.procedure = 'ProcedureName'
         data = Encoder.encode_delimited(request, self.types.as_type('KRPC.Request'))
-        expected = '1c'+'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
+        expected = '1c' + '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         self.assertEqual(expected, hexlify(data))
 
     def test_encode_value_delimited(self):
         data = Encoder.encode_delimited(300, self.types.as_type('int32'))
-        self.assertEqual('02'+'ac02', hexlify(data))
+        self.assertEqual('02' + 'ac02', hexlify(data))
 
     def test_encode_class(self):
         typ = self.types.as_type('Class(ServiceName.ClassName)')
@@ -81,6 +81,7 @@ class TestEncoder(unittest.TestCase):
         typ = self.types.as_type('Tuple(int32,int32,int32)')
         value = (0, 1)
         self.assertRaises(ValueError, Encoder.encode, value, typ)
+
 
 if __name__ == '__main__':
     unittest.main()

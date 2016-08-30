@@ -4,6 +4,7 @@ import importlib
 from enum import Enum
 from krpc.attributes import Attributes
 
+
 def _parse_type_string(typ):
     """ Given a string, extract a substring up to the first comma. Parses parentheses.
         Multiple calls can be used to separate a string by commas. """
@@ -25,7 +26,8 @@ def _parse_type_string(typ):
         return result, None
     if typ[len(result)] != ',':
         raise ValueError
-    return result, typ[len(result)+1:]
+    return result, typ[len(result) + 1:]
+
 
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
 PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
@@ -42,6 +44,7 @@ PROTOBUF_TO_PYTHON_VALUE_TYPE = {
 }
 PROTOBUF_TO_MESSAGE_TYPE = {}
 
+
 def _load_types(package):
     """ Load all message and enum types from the given package,
         and populate PROTOBUF_TO_MESSAGE_TYPE """
@@ -52,11 +55,13 @@ def _load_types(package):
         module = importlib.import_module('krpc.schema.' + package)
         if hasattr(module, 'DESCRIPTOR'):
             for name in module.DESCRIPTOR.message_types_by_name.keys():
-                PROTOBUF_TO_MESSAGE_TYPE[package+'.'+name] = getattr(module, name)
+                PROTOBUF_TO_MESSAGE_TYPE[package + '.' + name] = getattr(module, name)
     except (KeyError, ImportError, AttributeError, ValueError):
         pass
 
+
 _load_types.loaded = set()
+
 
 class Types(object):
     """ A type store. Used to obtain type objects from protocol buffer type strings,
@@ -75,7 +80,7 @@ class Types(object):
         # TODO: add enumeration types
         # Update kRPC server to attach type attributes to parameters/return types etc. that are of type KRPCEnum
         # Will allow proper type checking of enum values passed to procedures
-        #pylint: disable=redefined-variable-type
+        # pylint: disable=redefined-variable-type
         if type_string in PROTOBUF_VALUE_TYPES:
             typ = ValueType(type_string)
         elif type_string.startswith('Class(') or type_string == 'Class':
@@ -100,7 +105,7 @@ class Types(object):
                 typ = MessageType(type_string)
             else:
                 raise ValueError('\'%s\' is not a valid type string' % type_string)
-        #pylint: enable=redefined-variable-type
+        # pylint: enable=redefined-variable-type
 
         self._types[type_string] = typ
         return typ
@@ -141,8 +146,10 @@ class Types(object):
         # Coerce identical class types from different client connections
         if isinstance(typ, ClassType) and isinstance(value, ClassBase):
             value_type = type(value)
-            if typ.python_type._service_name == value_type._service_name and \
-               typ.python_type._class_name == value_type._class_name:
+            if (
+                    typ.python_type._service_name == value_type._service_name
+                    and typ.python_type._class_name == value_type._class_name
+            ):
                 return typ.python_type(value._object_id)
         # Collection types
         try:
@@ -160,8 +167,11 @@ class Types(object):
         # Numeric types
         # See http://docs.python.org/2/reference/datamodel.html#coercion-rules
         numeric_types = (float, int, long)
-        if isinstance(value, bool) or not any(isinstance(value, t) for t in numeric_types) or \
-           typ.python_type not in numeric_types:
+        if (
+                isinstance(value, bool)
+                or not any(isinstance(value, t) for t in numeric_types)
+                or typ.python_type not in numeric_types
+        ):
             raise ValueError('Failed to coerce value ' + str(value) + ' of type ' + str(type(value)) +
                              ' to type ' + str(typ))
         if typ.python_type == float:
@@ -170,6 +180,7 @@ class Types(object):
             return int(value)
         else:
             return long(value)
+
 
 class TypeBase(object):
     """ Base class for all type objects """
@@ -191,6 +202,7 @@ class TypeBase(object):
     def __str__(self):
         return '<pbtype: \'' + self.protobuf_type + '\'>'
 
+
 class ValueType(TypeBase):
     """ A protocol buffer value type """
 
@@ -199,6 +211,7 @@ class ValueType(TypeBase):
             raise ValueError('\'%s\' is not a valid type string for a value type' % type_string)
         typ = PROTOBUF_TO_PYTHON_VALUE_TYPE[type_string]
         super(ValueType, self).__init__(type_string, typ)
+
 
 class MessageType(TypeBase):
     """ A protocol buffer message type """
@@ -211,6 +224,7 @@ class MessageType(TypeBase):
         typ = PROTOBUF_TO_MESSAGE_TYPE[type_string]
         super(MessageType, self).__init__(type_string, typ)
 
+
 class ClassType(TypeBase):
     """ A class type, represented by a uint64 identifier """
 
@@ -222,6 +236,7 @@ class ClassType(TypeBase):
         class_name = match.group(2)
         typ = _create_class_type(service_name, class_name, doc)
         super(ClassType, self).__init__(str(type_string), typ)
+
 
 class EnumType(TypeBase):
     """ An enumeration type, represented by an int32 value """
@@ -240,6 +255,7 @@ class EnumType(TypeBase):
         """ Set the python type. Creates an Enum class using the given values. """
         self._python_type = _create_enum_type(self._enum_name, values, self._doc)
 
+
 class ListType(TypeBase):
     """ A list collection type, represented by a protobuf message """
 
@@ -251,6 +267,7 @@ class ListType(TypeBase):
         self.value_type = types.as_type(match.group(1))
 
         super(ListType, self).__init__(str(type_string), list)
+
 
 class DictionaryType(TypeBase):
     """ A dictionary collection type, represented by a protobuf message """
@@ -265,7 +282,7 @@ class DictionaryType(TypeBase):
         try:
             key_string, typ = _parse_type_string(typ)
             value_string, typ = _parse_type_string(typ)
-            if typ != None:
+            if typ is not None:
                 raise ValueError
             self.key_type = types.as_type(key_string)
             self.value_type = types.as_type(value_string)
@@ -273,6 +290,7 @@ class DictionaryType(TypeBase):
             raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
 
         super(DictionaryType, self).__init__(str(type_string), dict)
+
 
 class SetType(TypeBase):
     """ A set collection type, represented by a protobuf message """
@@ -286,6 +304,7 @@ class SetType(TypeBase):
 
         super(SetType, self).__init__(str(type_string), set)
 
+
 class TupleType(TypeBase):
     """ A tuple collection type, represented by a protobuf message """
 
@@ -296,14 +315,14 @@ class TupleType(TypeBase):
 
         self.value_types = []
         typ = match.group(1)
-        while typ != None:
+        while typ is not None:
             value_type, typ = _parse_type_string(typ)
             self.value_types.append(types.as_type(value_type))
 
         super(TupleType, self).__init__(str(type_string), tuple)
 
-class DynamicType(object):
 
+class DynamicType(object):
     @classmethod
     def _add_method(cls, name, func, doc=None):
         """ Add a method """
@@ -329,6 +348,7 @@ class DynamicType(object):
         prop = property(getter, setter, doc=doc)
         setattr(cls, name, prop)
         return getattr(cls, name)
+
 
 class ClassBase(DynamicType):
     """ Base class for service-defined class types """
@@ -370,17 +390,23 @@ class ClassBase(DynamicType):
     def __repr__(self):
         return '<%s.%s remote object #%d>' % (self._service_name, self._class_name, self._object_id)
 
+
 def _create_class_type(service_name, class_name, doc):
     return type(str(class_name), (ClassBase,),
                 {'_service_name': service_name, '_class_name': class_name, '__doc__': doc})
 
+
 def _create_enum_type(enum_name, values, doc):
-    typ = Enum(str(enum_name), values)
+    typ = Enum(str(enum_name), dict((name, x['value']) for name, x in values.items()))
     setattr(typ, '__doc__', doc)
+    for name in values.keys():
+        setattr(getattr(typ, name), '__doc__', values[name]['doc'])
     return typ
+
 
 class DefaultArgument(object):
     """ A sentinel value for default arguments """
+
     def __init__(self, value):
         self._value = value
 

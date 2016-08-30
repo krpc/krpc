@@ -14,7 +14,7 @@ if os.getenv('BAZEL_BUILD') and hasattr(os, 'link'):
 if os.getenv('BAZEL_BUILD') and not os.path.exists(os.path.join(dirpath, 'VERSION.txt')):
     dirpath = os.getcwd()
 
-install_requires=['protobuf == 3.0.0b3']
+install_requires = ['protobuf == 3.0.0b3']
 if sys.version_info < (3, 4):
     install_requires.append('enum34 >= 0.9')
 
