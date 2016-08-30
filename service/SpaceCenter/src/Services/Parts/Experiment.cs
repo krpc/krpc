@@ -171,14 +171,14 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var vessel = FlightGlobals.ActiveVessel;
                 var biome = vessel.LandedInKSC ? getKSCBiome (vessel)
                     : ScienceUtil.GetExperimentBiome (vessel.mainBody, vessel.latitude, vessel.longitude);
-                return biome.Replace (" ", "");
+                return biome.Replace (" ", String.Empty);
             }
         }
 
         static string getKSCBiome (global::Vessel vessel)
         {
             var at = vessel.landedAt;
-            return at == "KSC" ? at : at.Replace ("KSC", "").Replace ("Grounds", "").Replace ("_", "");
+            return at == "KSC" ? at : at.Replace ("KSC", String.Empty).Replace ("Grounds", String.Empty).Replace ("_", String.Empty);
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var bodyName = vessel.mainBody.name;
                 var situation = ScienceUtil.GetExperimentSituation (vessel);
                 var rndExperiment = ResearchAndDevelopment.GetExperiment (id);
-                var biome = rndExperiment.BiomeIsRelevantWhile (situation) ? Biome : "";
+                var biome = rndExperiment.BiomeIsRelevantWhile (situation) ? Biome : String.Empty;
                 var subjectId = string.Format ("{0}@{1}{2}{3}", id, bodyName, situation, biome);
                 var subject = ResearchAndDevelopment.GetSubjectByID (subjectId);
                 subject = subject ?? new global::ScienceSubject (rndExperiment, situation, vessel.mainBody, biome);
