@@ -73,13 +73,13 @@ namespace KRPC.SpaceCenter.Services.Parts
                 if (damage != null && damage.isDamaged)
                     return LandingLegState.Broken;
                 if (deployment != null) {
-                    if (deployment.stateString.Contains ("Deployed"))
+                    if (deployment.position == deployment.deployedPosition)
                         return LandingLegState.Deployed;
-                    else if (deployment.stateString.Contains ("Retracted"))
+                    else if (deployment.position == deployment.retractedPosition)
                         return LandingLegState.Retracted;
-                    else if (deployment.stateString.Contains ("Deploying"))
+                    else if (deployment.stateString.Equals (deployment.st_deploying.name))
                         return LandingLegState.Deploying;
-                    else if (deployment.stateString.Contains ("Retracting"))
+                    else if (deployment.stateString.Equals (deployment.st_retracting.name))
                         return LandingLegState.Retracting;
                     throw new InvalidOperationException ();
                 }
