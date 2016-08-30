@@ -69,7 +69,6 @@ namespace KRPC
 
             Service.CallContext.SetGameScene (KSPAddonImproved.CurrentGameScene.ToGameScene ());
             Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
-            core.GetUniversalTime = Planetarium.GetUniversalTime;
 
             // If a game is not loaded, ensure the server is stopped and then exit
             if (KSPAddonImproved.CurrentGameScene != GameScenes.EDITOR &&

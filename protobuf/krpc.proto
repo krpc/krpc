@@ -37,9 +37,8 @@ message Argument {
 }
 
 message Response {
-  double time = 1;
-  string error = 2;
-  bytes return_value = 3;
+  string error = 1;
+  bytes return_value = 2;
 }
 
 // Messages for receiving stream updates

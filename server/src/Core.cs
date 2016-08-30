@@ -26,7 +26,6 @@ namespace KRPC
         List<RequestContinuation> continuations;
         IDictionary<IClient<NoMessage,StreamUpdate>, IList<StreamRequest>> streamRequests;
         IDictionary<ulong, object> streamResultCache;
-        internal Func<double> GetUniversalTime;
 
         static Core instance;
 
@@ -481,7 +480,6 @@ namespace KRPC
                             continue;
                         // Add the update to the response message
                         streamResultCache [request.Identifier] = response.ReturnValue;
-                        response.Time = GetUniversalTime ();
                         var streamResult = request.Result;
                         streamResult.Response = response;
                         streamUpdate.Results.Add (streamResult);
@@ -579,7 +577,6 @@ namespace KRPC
                 } catch (Exception e) {
                     var response = new Response ();
                     response.Error = "Error receiving message" + Environment.NewLine + e.Message + Environment.NewLine + e.StackTrace;
-                    response.Time = GetUniversalTime ();
                     if (Logger.ShouldLog (Logger.Severity.Debug))
                         Logger.WriteLine (e.Message + Environment.NewLine + e.StackTrace, Logger.Severity.Error);
                     Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
@@ -595,7 +592,7 @@ namespace KRPC
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        void ExecuteContinuation (RequestContinuation continuation)
+        static void ExecuteContinuation (RequestContinuation continuation)
         {
             var client = continuation.Client;
 
@@ -622,7 +619,6 @@ namespace KRPC
             }
 
             // Send response to the client
-            response.Time = GetUniversalTime ();
             client.Stream.Write (response);
             if (Logger.ShouldLog (Logger.Severity.Debug)) {
                 if (response.HasError)
