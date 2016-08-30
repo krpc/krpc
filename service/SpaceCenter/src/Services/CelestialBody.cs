@@ -260,6 +260,22 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The altitude, in meters, above which a vessel is considered to be flying "high" when doing science.
+        /// </summary>
+        [KRPCProperty]
+        public float FlyingHighAltitudeThreshold {
+            get { return InternalBody.scienceValues.flyingAltitudeThreshold; }
+        }
+
+        /// <summary>
+        /// The altitude, in meters, above which a vessel is considered to be in "high" space when doing science.
+        /// </summary>
+        [KRPCProperty]
+        public float SpaceHighAltitudeThreshold {
+            get { return InternalBody.scienceValues.spaceAltitudeThreshold; }
+        }
+
+        /// <summary>
         /// The reference frame that is fixed relative to the celestial body.
         /// <list type="bullet">
         /// <item><description>The origin is at the center of the body.

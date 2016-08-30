@@ -125,6 +125,8 @@ SpaceCenter.CelestialBody.AtmosphereDepth
 SpaceCenter.CelestialBody.HasAtmosphericOxygen
 SpaceCenter.CelestialBody.Biomes
 SpaceCenter.CelestialBody.BiomeAt
+SpaceCenter.CelestialBody.FlyingHighAltitudeThreshold
+SpaceCenter.CelestialBody.SpaceHighAltitudeThreshold
 SpaceCenter.CelestialBody.ReferenceFrame
 SpaceCenter.CelestialBody.NonRotatingReferenceFrame
 SpaceCenter.CelestialBody.OrbitalReferenceFrame
