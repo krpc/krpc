@@ -247,7 +247,10 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public IList<string> Biomes {
-            get { return InternalBody.BiomeMap.Attributes.Select (x => x.name).ToList (); }
+            get {
+                CheckHasBiomes ();
+                return InternalBody.BiomeMap.Attributes.Select (x => x.name).ToList ();
+            }
         }
 
         /// <summary>
@@ -256,7 +259,15 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public string BiomeAt (double latitude, double longitude)
         {
+            CheckHasBiomes ();
             return InternalBody.BiomeMap.GetAtt (latitude, longitude).name;
+        }
+
+        void CheckHasBiomes ()
+        {
+            var body = InternalBody;
+            if (body.BiomeMap == null)
+                throw new InvalidOperationException ("Body does not have any biomes");
         }
 
         /// <summary>
