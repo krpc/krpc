@@ -45,7 +45,7 @@ std::string Connection::receive_message() {
   while (true) {
     try {
       data += this->receive(1);
-      size = decoder::decode_size_and_position(data).first;
+      size = decoder::decode_size(data);
       break;
     } catch (decoder::DecodeFailed&) {
     }

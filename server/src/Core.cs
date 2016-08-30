@@ -21,10 +21,10 @@ namespace KRPC
         //TODO: remove servers list, replace with events etc.
         List<Server.Server> servers;
         IDictionary<Guid, IClient<Request, Response>> rpcClients;
-        IDictionary<Guid, IClient<NoMessage, StreamMessage>> streamClients;
+        IDictionary<Guid, IClient<NoMessage, StreamUpdate>> streamClients;
         RoundRobinScheduler<IClient<Request,Response>> clientScheduler;
         List<RequestContinuation> continuations;
-        IDictionary<IClient<NoMessage,StreamMessage>, IList<StreamRequest>> streamRequests;
+        IDictionary<IClient<NoMessage,StreamUpdate>, IList<StreamRequest>> streamRequests;
         IDictionary<ulong, object> streamResultCache;
         internal Func<double> GetUniversalTime;
 
@@ -45,10 +45,10 @@ namespace KRPC
         {
             servers = new List<Server.Server> ();
             rpcClients = new Dictionary<Guid, IClient<Request, Response>> ();
-            streamClients = new Dictionary<Guid, IClient<NoMessage, StreamMessage>> ();
+            streamClients = new Dictionary<Guid, IClient<NoMessage, StreamUpdate>> ();
             clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
             continuations = new List<RequestContinuation> ();
-            streamRequests = new Dictionary<IClient<NoMessage,StreamMessage>,IList<StreamRequest>> ();
+            streamRequests = new Dictionary<IClient<NoMessage,StreamUpdate>,IList<StreamRequest>> ();
             streamResultCache = new Dictionary<ulong, object> ();
             OneRPCPerUpdate = false;
             MaxTimePerUpdate = 5000;
@@ -91,14 +91,14 @@ namespace KRPC
             EventHandlerExtensions.Invoke (OnRPCClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
 
-        internal void StreamClientConnected (IClient<NoMessage,StreamMessage> client)
+        internal void StreamClientConnected (IClient<NoMessage,StreamUpdate> client)
         {
             streamClients [client.Guid] = client;
             streamRequests [client] = new List<StreamRequest> ();
             EventHandlerExtensions.Invoke (OnStreamClientConnected, this, new ClientConnectedEventArgs (client));
         }
 
-        internal void StreamClientDisconnected (IClient<NoMessage,StreamMessage> client)
+        internal void StreamClientDisconnected (IClient<NoMessage,StreamUpdate> client)
         {
             streamClients.Remove (client.Guid);
             streamRequests.Remove (client);
@@ -460,7 +460,7 @@ namespace KRPC
                     if (!rpcClients.ContainsKey (id))
                         continue;
                     CallContext.Set (rpcClients [id]);
-                    var streamMessage = new StreamMessage ();
+                    var streamUpdate = new StreamUpdate ();
                     foreach (var request in requests) {
                         // Run the RPC
                         Response response;
@@ -482,12 +482,12 @@ namespace KRPC
                         // Add the update to the response message
                         streamResultCache [request.Identifier] = response.ReturnValue;
                         response.Time = GetUniversalTime ();
-                        var streamResponse = request.Response;
-                        streamResponse.Response = response;
-                        streamMessage.Responses.Add (streamResponse);
+                        var streamResult = request.Result;
+                        streamResult.Response = response;
+                        streamUpdate.Results.Add (streamResult);
                     }
-                    if (streamMessage.Responses.Count > 0)
-                        streamClient.Stream.Write (streamMessage);
+                    if (streamUpdate.Results.Count > 0)
+                        streamClient.Stream.Write (streamUpdate);
                 }
             }
 

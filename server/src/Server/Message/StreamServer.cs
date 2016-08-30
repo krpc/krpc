@@ -8,23 +8,23 @@ namespace KRPC.Server.Message
     /// <summary>
     /// Abstract Stream server for sending stream messages over a byte server.
     /// </summary>
-    abstract class StreamServer : IServer<NoMessage,StreamMessage>
+    abstract class StreamServer : IServer<NoMessage,StreamUpdate>
     {
         const double defaultTimeout = 0.1;
 
         public event EventHandler OnStarted;
         public event EventHandler OnStopped;
-        public event EventHandler<ClientRequestingConnectionEventArgs<NoMessage,StreamMessage>> OnClientRequestingConnection;
-        public event EventHandler<ClientConnectedEventArgs<NoMessage,StreamMessage>> OnClientConnected;
+        public event EventHandler<ClientRequestingConnectionEventArgs<NoMessage,StreamUpdate>> OnClientRequestingConnection;
+        public event EventHandler<ClientConnectedEventArgs<NoMessage,StreamUpdate>> OnClientConnected;
         /// <summary>
         /// Does not trigger this event, unless the underlying server does.
         /// </summary>
-        public event EventHandler<ClientActivityEventArgs<NoMessage,StreamMessage>> OnClientActivity;
-        public event EventHandler<ClientDisconnectedEventArgs<NoMessage,StreamMessage>> OnClientDisconnected;
+        public event EventHandler<ClientActivityEventArgs<NoMessage,StreamUpdate>> OnClientActivity;
+        public event EventHandler<ClientDisconnectedEventArgs<NoMessage,StreamUpdate>> OnClientDisconnected;
 
         IServer<byte,byte> server;
-        readonly Dictionary<IClient<byte,byte>,IClient<NoMessage,StreamMessage>> clients = new Dictionary<IClient<byte,byte>, IClient<NoMessage,StreamMessage>> ();
-        readonly Dictionary<IClient<byte,byte>,IClient<NoMessage,StreamMessage>> pendingClients = new Dictionary<IClient<byte,byte>, IClient<NoMessage,StreamMessage>> ();
+        readonly Dictionary<IClient<byte,byte>,IClient<NoMessage,StreamUpdate>> clients = new Dictionary<IClient<byte,byte>, IClient<NoMessage,StreamUpdate>> ();
+        readonly Dictionary<IClient<byte,byte>,IClient<NoMessage,StreamUpdate>> pendingClients = new Dictionary<IClient<byte,byte>, IClient<NoMessage,StreamUpdate>> ();
 
         protected StreamServer (IServer<byte,byte> innerServer)
         {
@@ -64,7 +64,7 @@ namespace KRPC.Server.Message
             get { return server.Running; }
         }
 
-        public IEnumerable<IClient<NoMessage,StreamMessage>> Clients {
+        public IEnumerable<IClient<NoMessage,StreamUpdate>> Clients {
             get {
                 foreach (var client in clients.Values) {
                     yield return client;
@@ -89,23 +89,23 @@ namespace KRPC.Server.Message
         {
             // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
             var client = clients [args.Client];
-            EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<NoMessage,StreamMessage> (client));
+            EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<NoMessage,StreamUpdate> (client));
         }
 
         void HandleClientActivity (object sender, ClientEventArgs<byte,byte> args)
         {
             var client = clients [args.Client];
-            EventHandlerExtensions.Invoke (OnClientActivity, this, new ClientActivityEventArgs<NoMessage,StreamMessage> (client));
+            EventHandlerExtensions.Invoke (OnClientActivity, this, new ClientActivityEventArgs<NoMessage,StreamUpdate> (client));
         }
 
         void HandleClientDisconnected (object sender, ClientEventArgs<byte,byte> args)
         {
             var client = clients [args.Client];
             clients.Remove (args.Client);
-            EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<NoMessage,StreamMessage> (client));
+            EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<NoMessage,StreamUpdate> (client));
         }
 
-        protected abstract IClient<NoMessage,StreamMessage> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args);
+        protected abstract IClient<NoMessage,StreamUpdate> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args);
 
         /// <summary>
         /// When a client requests a connection, check the hello message,
@@ -127,7 +127,7 @@ namespace KRPC.Server.Message
             var handler = OnClientRequestingConnection;
             if (handler != null) {
                 var client = pendingClients [args.Client];
-                var subArgs = new ClientRequestingConnectionEventArgs<NoMessage,StreamMessage> (client);
+                var subArgs = new ClientRequestingConnectionEventArgs<NoMessage,StreamUpdate> (client);
                 handler (this, subArgs);
                 if (subArgs.Request.ShouldAllow) {
                     args.Request.Allow ();

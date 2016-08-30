@@ -23,16 +23,14 @@ Types.STRING = schema.TYPE_TYPECODE_STRING_ENUM.number
 Types.BYTES = schema.TYPE_TYPECODE_BYTES_ENUM.number
 Types.CLASS = schema.TYPE_TYPECODE_CLASS_ENUM.number
 Types.ENUMERATION = schema.TYPE_TYPECODE_ENUMERATION_ENUM.number
-Types.STREAM = schema.TYPE_TYPECODE_STREAM_ENUM.number
-Types.REQUEST = schema.TYPE_TYPECODE_REQUEST_ENUM.number
-Types.RESPONSE = schema.TYPE_TYPECODE_RESPONSE_ENUM.number
-Types.STREAM_MESSAGE = schema.TYPE_TYPECODE_STREAM_MESSAGE_ENUM.number
-Types.STATUS = schema.TYPE_TYPECODE_STATUS_ENUM.number
-Types.SERVICES = schema.TYPE_TYPECODE_SERVICES_ENUM.number
 Types.TUPLE = schema.TYPE_TYPECODE_TUPLE_ENUM.number
 Types.LIST = schema.TYPE_TYPECODE_LIST_ENUM.number
 Types.SET = schema.TYPE_TYPECODE_SET_ENUM.number
 Types.DICTIONARY = schema.TYPE_TYPECODE_DICTIONARY_ENUM.number
+Types.REQUEST = schema.TYPE_TYPECODE_REQUEST_ENUM.number
+Types.SERVICES = schema.TYPE_TYPECODE_SERVICES_ENUM.number
+Types.STREAM = schema.TYPE_TYPECODE_STREAM_ENUM.number
+Types.STATUS = schema.TYPE_TYPECODE_STATUS_ENUM.number
 
 VALUE_TYPES = Map{}
 VALUE_TYPES:set(Types.DOUBLE, 'number')
@@ -47,11 +45,9 @@ VALUE_TYPES:set(Types.BYTES, 'string')
 
 MESSAGE_TYPES = Map{}
 MESSAGE_TYPES:set(Types.REQUEST, schema.Request)
-MESSAGE_TYPES:set(Types.RESPONSE, schema.Response)
-MESSAGE_TYPES:set(Types.STREAM_MESSAGE, schema.StreamMessage)
-MESSAGE_TYPES:set(Types.STATUS, schema.Status)
 MESSAGE_TYPES:set(Types.SERVICES, schema.Services)
 MESSAGE_TYPES:set(Types.STREAM, schema.Stream)
+MESSAGE_TYPES:set(Types.STATUS, schema.Status)
 
 CODE_TO_STRING = Map{}
 CODE_TO_STRING:set(Types.DOUBLE, 'double')
@@ -64,11 +60,9 @@ CODE_TO_STRING:set(Types.BOOL, 'bool')
 CODE_TO_STRING:set(Types.STRING, 'string')
 CODE_TO_STRING:set(Types.BYTES, 'bytes')
 CODE_TO_STRING:set(Types.REQUEST, 'Request')
-CODE_TO_STRING:set(Types.RESPONSE, 'Response')
-CODE_TO_STRING:set(Types.STREAM_MESSAGE, 'StreamMessage')
-CODE_TO_STRING:set(Types.STATUS, 'Status')
 CODE_TO_STRING:set(Types.SERVICES, 'Services')
 CODE_TO_STRING:set(Types.STREAM, 'Stream')
+CODE_TO_STRING:set(Types.STATUS, 'Status')
 
 function Types:_init()
   self._types = Map{}
@@ -114,8 +108,6 @@ function Types:as_type(protobuf_type)
   local typ
   if VALUE_TYPES:get(protobuf_type.code) then
     typ = Types.ValueType(protobuf_type)
-  elseif MESSAGE_TYPES:get(protobuf_type.code) then
-    typ = Types.MessageType(protobuf_type)
   elseif protobuf_type.code == Types.CLASS then
     typ = Types.ClassType(protobuf_type)
   elseif protobuf_type.code == Types.ENUMERATION then
@@ -128,6 +120,8 @@ function Types:as_type(protobuf_type)
     typ = Types.SetType(protobuf_type, self)
   elseif protobuf_type.code == Types.DICTIONARY then
     typ = Types.DictionaryType(protobuf_type, self)
+  elseif MESSAGE_TYPES:get(protobuf_type.code) then
+    typ = Types.MessageType(protobuf_type)
   else
     error('Invalid type')
   end
@@ -191,31 +185,6 @@ function Types:enumeration_type(service, name)
   return self:as_type(_protobuf_type(Types.ENUMERATION, service, name))
 end
 
-function Types:request_type()
-  -- Get a Request message type
-  return self:as_type(_protobuf_type(Types.REQUEST))
-end
-
-function Types:response_type()
-  -- Get a Response message type
-  return self:as_type(_protobuf_type(Types.RESPONSE))
-end
-
-function Types:stream_message_type()
-  -- Get a StreamMessage message type
-  return self:as_type(_protobuf_type(Types.STREAM_MESSAGE))
-end
-
-function Types:status_type()
-  -- Get a Status message type
-  return self:as_type(_protobuf_type(Types.STATUS))
-end
-
-function Types:services_type()
-  -- Get a Services message type
-  return self:as_type(_protobuf_type(Types.SERVICES))
-end
-
 function Types:tuple_type(value_types)
   -- Get a tuple type
   local types = seq.copy(seq.map(function (x) return x.protobuf_type end, value_types))
@@ -238,6 +207,26 @@ function Types:dictionary_type(key_type, value_type)
   -- Get a dictionary type
   return self:as_type(_protobuf_type(Types.DICTIONARY, nil, nil,
                                      { key_type.protobuf_type, value_type.protobuf_type }))
+end
+
+function Types:request_type()
+  -- Get a Request message type
+  return self:as_type(_protobuf_type(Types.REQUEST))
+end
+
+function Types:services_type()
+  -- Get a Services message type
+  return self:as_type(_protobuf_type(Types.SERVICES))
+end
+
+function Types:stream_type()
+  -- Get a Status message type
+  return self:as_type(_protobuf_type(Types.STREAM))
+end
+
+function Types:status_type()
+  -- Get a Status message type
+  return self:as_type(_protobuf_type(Types.STATUS))
 end
 
 function Types:coerce_to(value, typ)
@@ -360,15 +349,6 @@ function Types.EnumerationType:set_values(values)
   self.lua_type = _create_enum_type(self._service_name, self._enum_name, values)
 end
 
-Types.MessageType = class(Types.TypeBase)
-
-function Types.MessageType:_init(protobuf_type)
-  if not MESSAGE_TYPES:get(protobuf_type.code) then
-    error('Not a message type')
-  end
-  self:super(protobuf_type, MESSAGE_TYPES:get(protobuf_type.code), CODE_TO_STRING:get(protobuf_type.code))
-end
-
 Types.TupleType = class(Types.TypeBase)
 
 function Types.TupleType:_init(protobuf_type, types)
@@ -428,6 +408,15 @@ function Types.DictionaryType:_init(protobuf_type, types)
   self.value_type = types:as_type(protobuf_type.types[2])
   type_string = 'Dict(' .. self.key_type._string .. ',' .. self.value_type._string .. ')'
   self:super(protobuf_type, Map, type_string)
+end
+
+Types.MessageType = class(Types.TypeBase)
+
+function Types.MessageType:_init(protobuf_type)
+  if not MESSAGE_TYPES:get(protobuf_type.code) then
+    error('Not a message type')
+  end
+  self:super(protobuf_type, MESSAGE_TYPES:get(protobuf_type.code), CODE_TO_STRING:get(protobuf_type.code))
 end
 
 Types.DynamicType = class(class.properties)

@@ -144,12 +144,12 @@ namespace KRPC.Client
                         var size = Connection.ReadMessageData (stream, ref buffer, stopEvent);
                         if (size == 0 || stop)
                             break;
-                        var message = StreamMessage.Parser.ParseFrom (new CodedInputStream (buffer, 0, size));
+                        var update = StreamUpdate.Parser.ParseFrom (new CodedInputStream (buffer, 0, size));
                         //TODO: handle errors
                         if (stop)
                             break;
-                        foreach (var response in message.Responses) {
-                            manager.Update (response.Id, response.Response);
+                        foreach (var result in update.Results) {
+                            manager.Update (result.Id, result.Response);
                             if (stop)
                                 break;
                         }

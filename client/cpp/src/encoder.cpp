@@ -13,23 +13,17 @@ namespace encoder {
 static const size_t LITTLE_ENDIAN_32_LENGTH = 4;
 static const size_t LITTLE_ENDIAN_64_LENGTH = 8;
 
-std::string client_name(const std::string& name) {
-  std::string result(name);
-  result.resize(32);
-  return result;
+std::string encode(double value) {
+  pb::uint64 value2 = pb::internal::WireFormatLite::EncodeDouble(value);
+  std::string data(LITTLE_ENDIAN_64_LENGTH, 0);
+  pb::io::CodedOutputStream::WriteLittleEndian64ToArray(value2, (pb::uint8*)&data[0]);
+  return data;
 }
 
 std::string encode(float value) {
   pb::uint32 value2 = pb::internal::WireFormatLite::EncodeFloat(value);
   std::string data(LITTLE_ENDIAN_32_LENGTH, 0);
   pb::io::CodedOutputStream::WriteLittleEndian32ToArray(value2, (pb::uint8*)&data[0]);
-  return data;
-}
-
-std::string encode(double value) {
-  pb::uint64 value2 = pb::internal::WireFormatLite::EncodeDouble(value);
-  std::string data(LITTLE_ENDIAN_64_LENGTH, 0);
-  pb::io::CodedOutputStream::WriteLittleEndian64ToArray(value2, (pb::uint8*)&data[0]);
   return data;
 }
 
@@ -91,13 +85,13 @@ std::string encode(const pb::Message& message) {
   return data;
 }
 
-std::string encode_delimited(const pb::Message& message) {
+std::string encode_message_with_size(const pb::Message& message) {
   size_t length = message.ByteSize();
   size_t header_length = pb::io::CodedOutputStream::VarintSize64(length);
   std::string data(header_length + length, 0);
   pb::io::CodedOutputStream::WriteVarint64ToArray(length, (pb::uint8*)&data[0]);
   if (!message.SerializeWithCachedSizesToArray((pb::uint8*)&data[header_length]))
-    throw EncodeFailed("Failed to encode delimited message");
+    throw EncodeFailed("Failed to encode message with size");
   return data;
 }
 

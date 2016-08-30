@@ -17,7 +17,7 @@ namespace KRPC.Server
     {
         internal IServer<Request,Response> RPCServer { get; private set; }
 
-        internal IServer<NoMessage,StreamMessage> StreamServer { get; private set; }
+        internal IServer<NoMessage,StreamUpdate> StreamServer { get; private set; }
 
         /// <summary>
         /// Event triggered when the server starts
@@ -49,7 +49,7 @@ namespace KRPC.Server
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
 
-        internal Server (IServer<Request,Response> rpcServer, IServer<NoMessage,StreamMessage> streamServer)
+        internal Server (IServer<Request,Response> rpcServer, IServer<NoMessage,StreamUpdate> streamServer)
         {
             Core.Instance.Add (this);
 

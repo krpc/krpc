@@ -20,7 +20,7 @@ namespace KRPC.Server.ProtocolBuffers
         /// <summary>
         /// Handle the initiation of a client connection request
         /// </summary>
-        protected override IClient<NoMessage,StreamMessage> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
+        protected override IClient<NoMessage,StreamUpdate> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
             var stream = args.Client.Stream;
             try {

@@ -20,27 +20,6 @@ TEST(test_encoder, test_stream_hello_message) {
   ASSERT_EQ("4b5250432d535452", krpc::platform::hexlify(message));
 }
 
-TEST(test_encoder, test_client_name) {
-  std::string message = krpc::encoder::client_name("foo");
-  ASSERT_EQ(32, message.size());
-  ASSERT_EQ("666f6f" + std::string(29*2, '0'), krpc::platform::hexlify(message));
-}
-
-TEST(test_encoder, test_empty_client_name) {
-  std::string message = krpc::encoder::client_name("");
-  ASSERT_EQ(32, message.size());
-  ASSERT_EQ(std::string(32*2, '0'), krpc::platform::hexlify(message));
-}
-
-TEST(test_encoder, test_long_client_name) {
-  std::string message = krpc::encoder::client_name(std::string(33, 'a'));
-  ASSERT_EQ(32, message.size());
-  std::string expected;
-  for (int i = 0; i < 32; i++)
-    expected += "61";
-  ASSERT_EQ(expected, krpc::platform::hexlify(message));
-}
-
 TEST(test_encoder, test_encode_message) {
   krpc::schema::Request request;
   request.set_service("ServiceName");
@@ -67,11 +46,11 @@ TEST(test_encoder, test_encode_unicode_string) {
   ASSERT_EQ("03e284a2", krpc::platform::hexlify(data));
 }
 
-TEST(test_encoder, test_encode_message_delimited) {
+TEST(test_encoder, test_encode_message_with_size) {
   krpc::schema::Request request;
   request.set_service("ServiceName");
   request.set_procedure("ProcedureName");
-  std::string data = krpc::encoder::encode_delimited(request);
+  std::string data = krpc::encoder::encode_message_with_size(request);
   std::string expected = "1c0a0b536572766963654e616d65120d50726f6365647572654e616d65";
   ASSERT_EQ(expected, krpc::platform::hexlify(data));
 }

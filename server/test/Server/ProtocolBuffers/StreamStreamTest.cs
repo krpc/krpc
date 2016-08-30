@@ -9,36 +9,36 @@ namespace KRPC.Test.Server.ProtocolBuffers
     [TestFixture]
     public class StreamStreamTest
     {
-        StreamMessage expectedMessage;
-        byte[] messageBytes;
+        StreamUpdate expectedUpdate;
+        byte[] updateBytes;
 
         [SetUp]
         public void SetUp ()
         {
             // Create a response object and get the binary representation of it
-            var streamMessage = new StreamMessage ();
+            var streamUpdate = new StreamUpdate ();
 
             var response1 = new Response ();
             response1.Time = 42;
             response1.Error = "Foo";
 
-            var streamResponse1 = new StreamResponse (1263);
-            streamResponse1.Response = response1;
+            var streamResult1 = new StreamResult (1263);
+            streamResult1.Response = response1;
 
             var response2 = new Response ();
             response2.Time = 123;
             response2.Error = "Bar";
 
-            var streamResponse2 = new StreamResponse (3443);
-            streamResponse2.Response = response2;
+            var streamResult2 = new StreamResult (3443);
+            streamResult2.Response = response2;
 
-            streamMessage.Responses.Add (streamResponse1);
-            streamMessage.Responses.Add (streamResponse2);
+            streamUpdate.Results.Add (streamResult1);
+            streamUpdate.Results.Add (streamResult2);
 
-            expectedMessage = streamMessage;
+            expectedUpdate = streamUpdate;
             using (var stream = new MemoryStream ()) {
-                expectedMessage.ToProtobufMessage ().WriteDelimitedTo (stream);
-                messageBytes = stream.ToArray ();
+                expectedUpdate.ToProtobufMessage ().WriteDelimitedTo (stream);
+                updateBytes = stream.ToArray ();
             }
         }
 
@@ -49,10 +49,10 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var streamStream = new StreamStream (new TestStream (null, stream));
             Assert.AreEqual (0, streamStream.BytesWritten);
             Assert.AreEqual (0, streamStream.BytesRead);
-            streamStream.Write (expectedMessage);
-            Assert.AreEqual (messageBytes.Length, streamStream.BytesWritten);
+            streamStream.Write (expectedUpdate);
+            Assert.AreEqual (updateBytes.Length, streamStream.BytesWritten);
             Assert.AreEqual (0, streamStream.BytesRead);
-            Assert.AreEqual (messageBytes.ToHexString (), stream.ToArray ().ToHexString ());
+            Assert.AreEqual (updateBytes.ToHexString (), stream.ToArray ().ToHexString ());
         }
     }
 }

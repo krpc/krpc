@@ -27,24 +27,10 @@ function TestDecoder:test_decode_unicode_string()
   luaunit.assertEquals(value, '\226\132\162')
 end
 
-function TestDecoder:test_decode_size_and_position()
+function TestDecoder:test_decode_size()
   local message = '1c'
-  local size,position = decoder.decode_size_and_position(platform.unhexlify(message))
+  local size = decoder.decode_size(platform.unhexlify(message))
   luaunit.assertEquals(28, size)
-  luaunit.assertEquals(1, position)
-end
-
-function TestDecoder:test_decode_message_delimited()
-  local typ = schema.Request
-  local message = '1c'..'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
-  local request = decoder.decode_delimited(platform.unhexlify(message), types:request_type())
-  luaunit.assertEquals('ServiceName', request.service)
-  luaunit.assertEquals('ProcedureName', request.procedure)
-end
-
-function TestDecoder:test_decode_value_delimited()
-  local value = decoder.decode_delimited(platform.unhexlify('02'..'ac02'), types:uint32_type())
-  luaunit.assertEquals(300, value)
 end
 
 function TestDecoder:test_decode_class()

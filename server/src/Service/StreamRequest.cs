@@ -13,7 +13,7 @@ namespace KRPC.Service
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidReturningArraysOnPropertiesRule")]
         public object[] Arguments { get; private set; }
 
-        public StreamResponse Response { get; private set; }
+        public StreamResult Result { get; private set; }
 
         public StreamRequest (Request request)
         {
@@ -21,7 +21,7 @@ namespace KRPC.Service
             var services = Services.Instance;
             Procedure = services.GetProcedureSignature (request.Service, request.Procedure);
             Arguments = services.GetArguments (Procedure, request.Arguments);
-            Response = new StreamResponse (Identifier);
+            Result = new StreamResult (Identifier);
         }
 
         static ulong nextIdentifier;

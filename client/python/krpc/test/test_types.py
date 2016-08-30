@@ -1,9 +1,8 @@
 import unittest
 from enum import Enum
-from krpc.types import Types, ValueType, ClassType, EnumerationType, MessageType
+from krpc.types import Types, ValueType, ClassType, EnumerationType, MessageType, ClassBase
 from krpc.types import TupleType, ListType, SetType, DictionaryType
-from krpc.types import ClassBase
-from krpc.schema.KRPC import Type, Request, Response, StreamMessage, Status, Services
+from krpc.schema.KRPC import Type, Request, Stream, Status, Services
 
 
 class TestTypes(unittest.TestCase):
@@ -78,8 +77,7 @@ class TestTypes(unittest.TestCase):
         types = Types()
         cases = [
             (types.request_type, Type.REQUEST, Request),
-            (types.response_type, Type.RESPONSE, Response),
-            (types.stream_message_type, Type.STREAM_MESSAGE, StreamMessage),
+            (types.stream_type, Type.STREAM, Stream),
             (types.status_type, Type.STATUS, Status),
             (types.services_type, Type.SERVICES, Services)
         ]

@@ -68,7 +68,7 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4>
 std::string encode(const std::tuple<T0, T1, T2, T3, T4>& tuple);
 // [[[end]]]
 
-std::string encode_delimited(const google::protobuf::Message& message);
+std::string encode_message_with_size(const google::protobuf::Message& message);
 
 template <typename T>
 inline std::string encode(const Object<T>& object) {

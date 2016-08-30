@@ -184,7 +184,7 @@ public class Connection {
      * interface is for generated service code.
      */
     public ByteString invoke(String service, String procedure, ByteString... arguments) throws RPCException, IOException {
-        return invoke(request(service, procedure, arguments));
+        return invoke(buildRequest(service, procedure, arguments));
     }
 
     ByteString invoke(KRPC.Request request) throws RPCException, IOException {
@@ -201,7 +201,7 @@ public class Connection {
         return response.getReturnValue();
     }
 
-    KRPC.Request request(String service, String procedure, ByteString... arguments) throws IOException {
+    KRPC.Request buildRequest(String service, String procedure, ByteString... arguments) throws IOException {
         KRPC.Request.Builder requestBuilder = KRPC.Request.newBuilder();
         requestBuilder.setService(service);
         requestBuilder.setProcedure(procedure);
@@ -217,11 +217,11 @@ public class Connection {
         return requestBuilder.build();
     }
 
-    private KRPC.Request request(Method method, ByteString... args) throws IOException {
+    private KRPC.Request buildRequest(Method method, ByteString... args) throws IOException {
         RPCInfo info = method.getAnnotation(RPCInfo.class);
         String service = info.service();
         String procedure = info.procedure();
-        return request(service, procedure, args);
+        return buildRequest(service, procedure, args);
     }
 
     /**
@@ -317,6 +317,6 @@ public class Connection {
         ByteString[] encodedArgs = new ByteString[args.length];
         for (int i = 0; i < args.length; i++)
             encodedArgs[i] = Encoder.encode(args[i], parameterTypes[i]);
-        return streamManager.add(request(method, encodedArgs), returnType);
+        return streamManager.add(buildRequest(method, encodedArgs), returnType);
     }
 }

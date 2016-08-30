@@ -4,6 +4,8 @@ option csharp_namespace = 'KRPC.Schema.KRPC';
 option java_package = 'krpc.schema';
 option java_outer_classname = 'KRPC';
 
+// Messages for connecting to the server
+
 message ConnectionRequest {
   string client_name = 1;
   bytes client_identifier = 2;
@@ -20,6 +22,8 @@ message ConnectionResponse {
   string message = 2;
   bytes client_identifier = 3;
 }
+
+// Messages for calling remote procedures
 
 message Request {
   string service = 1;
@@ -38,14 +42,18 @@ message Response {
   bytes return_value = 3;
 }
 
-message StreamMessage {
-  repeated StreamResponse responses = 1;
+// Messages for receiving stream updates
+
+message StreamUpdate {
+  repeated StreamResult results = 1;
 }
 
-message StreamResponse {
+message StreamResult {
   uint64 id = 1;
   Response response = 2;
 }
+
+// Messages for receiving information about the server
 
 message Services {
   repeated Service services = 1;
@@ -89,11 +97,56 @@ message EnumerationValue {
   string documentation = 3;
 }
 
-message Stream {
-  uint64 id = 1;
+message Type {
+  TypeCode code = 1;
+  string service = 2;
+  string name = 3;
+  repeated Type types = 4;
+
+  enum TypeCode {
+    NONE = 0;
+
+    // Values
+    DOUBLE = 1;
+    FLOAT = 2;
+    SINT32 = 3;
+    SINT64 = 4;
+    UINT32 = 5;
+    UINT64 = 6;
+    BOOL = 7;
+    STRING = 8;
+    BYTES = 9;
+
+    // Objects
+    CLASS = 100;
+    ENUMERATION = 101;
+
+    // Messages
+    REQUEST = 200;
+    STREAM_UPDATE = 201;
+    STREAM = 202;
+    STATUS = 203;
+    SERVICES = 204;
+
+    // Collections
+    TUPLE = 300;
+    LIST = 301;
+    SET = 302;
+    DICTIONARY = 303;
+  };
+}
+
+// Collection data structures
+
+message Tuple {
+  repeated bytes items = 1;
 }
 
 message List {
+  repeated bytes items = 1;
+}
+
+message Set {
   repeated bytes items = 1;
 }
 
@@ -106,50 +159,10 @@ message DictionaryEntry {
   bytes value = 2;
 }
 
-message Set {
-  repeated bytes items = 1;
-}
+// Aggregate data structures
 
-message Tuple {
-  repeated bytes items = 1;
-}
-
-message Type {
-  TypeCode code = 1;
-  string service = 2;
-  string name = 3;
-  repeated Type types = 4;
-
-  enum TypeCode {
-    NONE = 0;
-    DOUBLE = 1;
-    FLOAT = 2;
-    SINT32 = 3;
-    SINT64 = 4;
-    UINT32 = 5;
-    UINT64 = 6;
-    BOOL = 7;
-    STRING = 8;
-    BYTES = 9;
-
-    // Objects
-    CLASS = 10;
-    ENUMERATION = 11;
-    STREAM = 12;
-
-    // Messages
-    REQUEST = 13;
-    RESPONSE = 14;
-    STATUS = 15;
-    STREAM_MESSAGE = 16;
-    SERVICES = 17;
-
-    // Collections
-    TUPLE = 18;
-    LIST = 19;
-    SET = 20;
-    DICTIONARY = 21;
-  };
+message Stream {
+  uint64 id = 1;
 }
 
 message Status {

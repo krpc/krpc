@@ -75,12 +75,6 @@ public class Encoder {
             return encodeString((String)value);
         case BYTES:
             return encodeBytes((byte[])value);
-        case REQUEST:
-        case RESPONSE:
-        case STREAM_MESSAGE:
-        case STATUS:
-        case SERVICES:
-            return encodeMessage((Message) value);
         case CLASS:
             if (value == null)
                 return encodeUInt64(0);
@@ -96,6 +90,11 @@ public class Encoder {
             return encodeSet((Set<?>) value, type.getTypes(0));
         case DICTIONARY:
             return encodeDictionary((Map<?, ?>) value, type.getTypes(0), type.getTypes(1));
+        case REQUEST:
+        case SERVICES:
+        case STREAM:
+        case STATUS:
+            return encodeMessage((Message) value);
         default:
             throw new IOException("Failed to encode value");
         }
@@ -121,18 +120,6 @@ public class Encoder {
             return decodeString(data);
         case BYTES:
             return decodeBytes(data);
-        case REQUEST:
-            return decodeMessage(KRPC.Request.newBuilder(), data);
-        case RESPONSE:
-            return decodeMessage(KRPC.Response.newBuilder(), data);
-        case STREAM_MESSAGE:
-            return decodeMessage(KRPC.StreamMessage.newBuilder(), data);
-        case STATUS:
-            return decodeMessage(KRPC.Status.newBuilder(), data);
-        case SERVICES:
-            return decodeMessage(KRPC.Services.newBuilder(), data);
-        case STREAM:
-            return decodeMessage(KRPC.Stream.newBuilder(), data);
         case CLASS:
             return decodeObject(data, type, connection);
         case ENUMERATION:
@@ -145,9 +132,35 @@ public class Encoder {
             return decodeSet(data, type.getTypes(0), connection);
         case DICTIONARY:
             return decodeDictionary(data, type.getTypes(0), type.getTypes(1), connection);
+        case REQUEST:
+            return decodeMessage(KRPC.Request.newBuilder(), data);
+        case SERVICES:
+            return decodeMessage(KRPC.Services.newBuilder(), data);
+        case STREAM:
+            return decodeMessage(KRPC.Stream.newBuilder(), data);
+        case STATUS:
+            return decodeMessage(KRPC.Status.newBuilder(), data);
         default:
             throw new IOException("Failed to decode value");
         }
+    }
+
+    static ByteString encodeDouble(double value) throws IOException {
+        byte[] data = new byte[CodedOutputStream.computeDoubleSizeNoTag(value)];
+        CodedOutputStream stream = CodedOutputStream.newInstance(data);
+        stream.writeDoubleNoTag(value);
+        stream.flush();
+        stream.checkNoSpaceLeft();
+        return ByteString.copyFrom(data);
+    }
+
+    static ByteString encodeFloat(float value) throws IOException {
+        byte[] data = new byte[CodedOutputStream.computeFloatSizeNoTag(value)];
+        CodedOutputStream stream = CodedOutputStream.newInstance(data);
+        stream.writeFloatNoTag(value);
+        stream.flush();
+        stream.checkNoSpaceLeft();
+        return ByteString.copyFrom(data);
     }
 
     static ByteString encodeSInt32(int value) throws IOException {
@@ -186,24 +199,6 @@ public class Encoder {
         return ByteString.copyFrom(data);
     }
 
-    static ByteString encodeFloat(float value) throws IOException {
-        byte[] data = new byte[CodedOutputStream.computeFloatSizeNoTag(value)];
-        CodedOutputStream stream = CodedOutputStream.newInstance(data);
-        stream.writeFloatNoTag(value);
-        stream.flush();
-        stream.checkNoSpaceLeft();
-        return ByteString.copyFrom(data);
-    }
-
-    static ByteString encodeDouble(double value) throws IOException {
-        byte[] data = new byte[CodedOutputStream.computeDoubleSizeNoTag(value)];
-        CodedOutputStream stream = CodedOutputStream.newInstance(data);
-        stream.writeDoubleNoTag(value);
-        stream.flush();
-        stream.checkNoSpaceLeft();
-        return ByteString.copyFrom(data);
-    }
-
     static ByteString encodeBoolean(boolean value) throws IOException {
         byte[] data = new byte[CodedOutputStream.computeBoolSizeNoTag(value)];
         CodedOutputStream stream = CodedOutputStream.newInstance(data);
@@ -229,10 +224,6 @@ public class Encoder {
         stream.flush();
         stream.checkNoSpaceLeft();
         return ByteString.copyFrom(data);
-    }
-
-    static ByteString encodeMessage(Message value) throws IOException {
-        return ByteString.copyFrom(value.toByteArray());
     }
 
     static ByteString encodeObject(RemoteObject value) throws IOException {
@@ -277,6 +268,20 @@ public class Encoder {
         return ByteString.copyFrom(dictionary.build().toByteArray());
     }
 
+    static ByteString encodeMessage(Message value) throws IOException {
+        return ByteString.copyFrom(value.toByteArray());
+    }
+
+    static double decodeDouble(ByteString data) throws IOException {
+        CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
+        return stream.readDouble();
+    }
+
+    static float decodeFloat(ByteString data) throws IOException {
+        CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
+        return stream.readFloat();
+    }
+
     static int decodeSInt32(ByteString data) throws IOException {
         CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
         return stream.readSInt32();
@@ -297,16 +302,6 @@ public class Encoder {
         return stream.readUInt64();
     }
 
-    static float decodeFloat(ByteString data) throws IOException {
-        CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
-        return stream.readFloat();
-    }
-
-    static double decodeDouble(ByteString data) throws IOException {
-        CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
-        return stream.readDouble();
-    }
-
     static boolean decodeBoolean(ByteString data) throws IOException {
         CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
         return stream.readBool();
@@ -320,11 +315,6 @@ public class Encoder {
     static byte[] decodeBytes(ByteString data) throws IOException {
         CodedInputStream stream = CodedInputStream.newInstance(data.toByteArray());
         return stream.readByteArray();
-    }
-
-    static Message decodeMessage(Message.Builder builder, ByteString data) throws IOException {
-        builder.mergeFrom(data);
-        return builder.build();
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -426,5 +416,10 @@ public class Encoder {
             dictionary.put(key, value);
         }
         return dictionary;
+    }
+
+    static Message decodeMessage(Message.Builder builder, ByteString data) throws IOException {
+        builder.mergeFrom(data);
+        return builder.build();
     }
 }

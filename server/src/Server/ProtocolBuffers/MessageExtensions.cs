@@ -11,40 +11,18 @@ namespace KRPC.Server.ProtocolBuffers
         public static Google.Protobuf.IMessage ToProtobufMessage (this IMessage message)
         {
             var type = message.GetType ();
-            if (type == typeof(Request))
-                return ((Request)message).ToProtobufMessage ();
-            else if (type == typeof(Response))
-                return ((Response)message).ToProtobufMessage ();
-            else if (type == typeof(KRPC.Service.Messages.Services))
+            if (type == typeof(KRPC.Service.Messages.Services))
                 return ((KRPC.Service.Messages.Services)message).ToProtobufMessage ();
-            else if (type == typeof(Status))
-                return ((Status)message).ToProtobufMessage ();
             else if (type == typeof(Stream))
                 return ((Stream)message).ToProtobufMessage ();
+            else if (type == typeof(Status))
+                return ((Status)message).ToProtobufMessage ();
             throw new ArgumentException ("Cannot convert a " + type + " to a protobuf message");
-        }
-
-        public static Schema.KRPC.Request ToProtobufMessage (this Request request)
-        {
-            var result = new Schema.KRPC.Request ();
-            result.Service = request.Service;
-            result.Procedure = request.Procedure;
-            result.Arguments.Add (request.Arguments.Select (ToProtobufMessage));
-            return result;
-        }
-
-        public static Schema.KRPC.Argument ToProtobufMessage (this Argument argument)
-        {
-            var result = new Schema.KRPC.Argument ();
-            result.Position = argument.Position;
-            result.Value = Encoder.Encode (argument.Value);
-            return result;
         }
 
         public static Schema.KRPC.Response ToProtobufMessage (this Response response)
         {
             var result = new Schema.KRPC.Response ();
-            result.Time = response.Time;
             if (response.HasError)
                 result.Error = response.Error.Length > 0 ? response.Error : "Unknown error";
             if (response.HasReturnValue)
@@ -52,18 +30,18 @@ namespace KRPC.Server.ProtocolBuffers
             return result;
         }
 
-        public static Schema.KRPC.StreamMessage ToProtobufMessage (this StreamMessage streamMessage)
+        public static Schema.KRPC.StreamUpdate ToProtobufMessage (this StreamUpdate streamUpdate)
         {
-            var result = new Schema.KRPC.StreamMessage ();
-            result.Responses.Add (streamMessage.Responses.Select (ToProtobufMessage));
+            var result = new Schema.KRPC.StreamUpdate ();
+            result.Results.Add (streamUpdate.Results.Select (ToProtobufMessage));
             return result;
         }
 
-        public static Schema.KRPC.StreamResponse ToProtobufMessage (this StreamResponse streamResponse)
+        public static Schema.KRPC.StreamResult ToProtobufMessage (this StreamResult streamResult)
         {
-            var result = new Schema.KRPC.StreamResponse ();
-            result.Id = streamResponse.Id;
-            result.Response = streamResponse.Response.ToProtobufMessage ();
+            var result = new Schema.KRPC.StreamResult ();
+            result.Id = streamResult.Id;
+            result.Response = streamResult.Response.ToProtobufMessage ();
             return result;
         }
 
@@ -132,38 +110,6 @@ namespace KRPC.Server.ProtocolBuffers
             return result;
         }
 
-        public static Schema.KRPC.Stream ToProtobufMessage (this Stream stream)
-        {
-            var result = new Schema.KRPC.Stream ();
-            result.Id = stream.Id;
-            return result;
-        }
-
-        public static Schema.KRPC.Status ToProtobufMessage (this Status status)
-        {
-            var result = new Schema.KRPC.Status ();
-            result.Version = status.Version;
-            result.BytesRead = status.BytesRead;
-            result.BytesWritten = status.BytesWritten;
-            result.BytesReadRate = status.BytesReadRate;
-            result.BytesWrittenRate = status.BytesWrittenRate;
-            result.RpcsExecuted = status.RpcsExecuted;
-            result.RpcRate = status.RpcRate;
-            result.OneRpcPerUpdate = status.OneRpcPerUpdate;
-            result.MaxTimePerUpdate = status.MaxTimePerUpdate;
-            result.AdaptiveRateControl = status.AdaptiveRateControl;
-            result.BlockingRecv = status.BlockingRecv;
-            result.RecvTimeout = status.RecvTimeout;
-            result.TimePerRpcUpdate = status.TimePerRpcUpdate;
-            result.PollTimePerRpcUpdate = status.PollTimePerRpcUpdate;
-            result.ExecTimePerRpcUpdate = status.ExecTimePerRpcUpdate;
-            result.StreamRpcs = status.StreamRpcs;
-            result.StreamRpcsExecuted = status.StreamRpcsExecuted;
-            result.StreamRpcRate = status.StreamRpcRate;
-            result.TimePerStreamUpdate = status.TimePerStreamUpdate;
-            return result;
-        }
-
         [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
@@ -202,18 +148,16 @@ namespace KRPC.Server.ProtocolBuffers
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Bytes;
             } else if (TypeUtils.IsAMessageType (type)) {
                 // TODO: move these to the message classes
-                if (type == typeof(Request))
-                    result.Code = Schema.KRPC.Type.Types.TypeCode.Request;
-                else if (type == typeof(Response))
-                    result.Code = Schema.KRPC.Type.Types.TypeCode.Response;
-                else if (type == typeof(StreamMessage))
-                    result.Code = Schema.KRPC.Type.Types.TypeCode.StreamMessage;
+                if (type == typeof(StreamUpdate))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.StreamUpdate;
                 else if (type == typeof(Status))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Status;
                 else if (type == typeof(KRPC.Service.Messages.Services))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Services;
                 else if (type == typeof(KRPC.Service.Messages.Stream))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Stream;
+                else if (type == typeof(KRPC.Service.Messages.Request))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Request;
                 else
                     throw new ArgumentException ("Type " + type + " is not valid");
             } else if (TypeUtils.IsAClassType (type)) {
@@ -239,6 +183,38 @@ namespace KRPC.Server.ProtocolBuffers
                 foreach (var subType in type.GetGenericArguments())
                     result.Types_.Add (subType.ToProtobufMessage ());
             }
+            return result;
+        }
+
+        public static Schema.KRPC.Stream ToProtobufMessage (this Stream stream)
+        {
+            var result = new Schema.KRPC.Stream ();
+            result.Id = stream.Id;
+            return result;
+        }
+
+        public static Schema.KRPC.Status ToProtobufMessage (this Status status)
+        {
+            var result = new Schema.KRPC.Status ();
+            result.Version = status.Version;
+            result.BytesRead = status.BytesRead;
+            result.BytesWritten = status.BytesWritten;
+            result.BytesReadRate = status.BytesReadRate;
+            result.BytesWrittenRate = status.BytesWrittenRate;
+            result.RpcsExecuted = status.RpcsExecuted;
+            result.RpcRate = status.RpcRate;
+            result.OneRpcPerUpdate = status.OneRpcPerUpdate;
+            result.MaxTimePerUpdate = status.MaxTimePerUpdate;
+            result.AdaptiveRateControl = status.AdaptiveRateControl;
+            result.BlockingRecv = status.BlockingRecv;
+            result.RecvTimeout = status.RecvTimeout;
+            result.TimePerRpcUpdate = status.TimePerRpcUpdate;
+            result.PollTimePerRpcUpdate = status.PollTimePerRpcUpdate;
+            result.ExecTimePerRpcUpdate = status.ExecTimePerRpcUpdate;
+            result.StreamRpcs = status.StreamRpcs;
+            result.StreamRpcsExecuted = status.StreamRpcsExecuted;
+            result.StreamRpcRate = status.StreamRpcRate;
+            result.TimePerStreamUpdate = status.TimePerStreamUpdate;
             return result;
         }
 

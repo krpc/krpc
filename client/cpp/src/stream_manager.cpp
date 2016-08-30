@@ -21,7 +21,7 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
     while (!stop->load()) {
       try {
         data += connection->partial_receive(1);
-        size = decoder::decode_size_and_position(data).first;
+        size = decoder::decode_size(data);
         break;
       } catch (decoder::DecodeFailed&) {
       }
@@ -30,11 +30,11 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
       break;
 
     data = connection->receive(size);
-    schema::StreamMessage message;
-    decoder::decode(message, data, client);
+    schema::StreamUpdate update;
+    decoder::decode(update, data, client);
 
-    for (auto response : message.responses())
-      stream_manager->update(response.id(), response.response());
+    for (auto result : update.results())
+      stream_manager->update(result.id(), result.response());
   }
 }
 

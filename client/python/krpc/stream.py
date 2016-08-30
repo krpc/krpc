@@ -1,6 +1,6 @@
-from krpc.types import Types
 from krpc.decoder import Decoder
 from krpc.error import RPCError
+import krpc.schema
 
 
 class StreamExistsError(RuntimeError):
@@ -76,11 +76,9 @@ def add_stream(conn, func, *args, **kwargs):
 
 
 def update_thread(connection, stop, cache, cache_lock):
-    stream_message_type = Types().stream_message_type.python_type
-
     while True:
 
-        # Read the size and position of the response message
+        # Read the size and position of the update message
         data = b''
         while True:
             try:
@@ -97,22 +95,22 @@ def update_thread(connection, stop, cache, cache_lock):
                 connection.close()
                 return
 
-        # Read and decode the response message
+        # Read and decode the update message
         data = connection.receive(size)
-        response = Decoder.decode_message(data, stream_message_type)
+        update = Decoder.decode_message(data, krpc.schema.KRPC.StreamUpdate)
 
         # Add the data to the cache
         with cache_lock:
-            for response in response.responses:
-                if response.id not in cache:
+            for result in update.results:
+                if result.id not in cache:
                     continue
 
                 # Check for an error response
-                if response.response.error:
-                    cache[response.id].value = RPCError(response.response.error)
+                if result.response.error:
+                    cache[result.id].value = RPCError(result.response.error)
                     continue
 
                 # Decode the return value and store it in the cache
-                typ = cache[response.id].return_type
-                value = Decoder.decode(response.response.return_value, typ)
-                cache[response.id].update(value)
+                typ = cache[result.id].return_type
+                value = Decoder.decode(result.response.return_value, typ)
+                cache[result.id].update(value)

@@ -78,10 +78,9 @@ function TestTypes:test_message_types()
   local types = Types()
   cases = List{
     { types:request_type(), Types.REQUEST },
-    { types:response_type(), Types.RESPONSE },
-    { types:stream_message_type(), Types.STREAM_MESSAGE },
-    { types:status_type(), Types.STATUS },
-    { types:services_type(), Types.SERVICES }
+    { types:services_type(), Types.SERVICES },
+    { types:stream_type(), Types.STREAM },
+    { types:status_type(), Types.STATUS }
   }
   for _, case in ipairs(cases) do
     local typ = case[1]

@@ -11,8 +11,8 @@ import com.google.protobuf.CodedInputStream;
 import krpc.client.services.KRPC;
 import krpc.schema.KRPC.Request;
 import krpc.schema.KRPC.Response;
-import krpc.schema.KRPC.StreamMessage;
-import krpc.schema.KRPC.StreamResponse;
+import krpc.schema.KRPC.StreamResult;
+import krpc.schema.KRPC.StreamUpdate;
 import krpc.schema.KRPC.Type;
 
 class StreamManager {
@@ -93,9 +93,9 @@ class StreamManager {
                 while (true) {
                     int size = inputStream.readRawVarint32();
                     byte[] data = inputStream.readRawBytes(size);
-                    StreamMessage message = StreamMessage.parseFrom(data);
-                    for (StreamResponse response : message.getResponsesList())
-                        manager.update(response.getId(), response.getResponse());
+                    StreamUpdate update = StreamUpdate.parseFrom(data);
+                    for (StreamResult result : update.getResultsList())
+                        manager.update(result.getId(), result.getResponse());
                 }
              // TODO: handle these exceptions properly
             } catch (StreamException e) {

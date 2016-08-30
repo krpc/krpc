@@ -15,11 +15,11 @@ class Client {
   Client();
   Client(const std::shared_ptr<Connection>& rpc_connection, const std::shared_ptr<Connection>& stream_connection);
 
-  schema::Request request(
-    const std::string& service, const std::string& procedure,
-    const std::vector<std::string>& args = std::vector<std::string>());
   std::string invoke(const schema::Request& request);
   std::string invoke(
+    const std::string& service, const std::string& procedure,
+    const std::vector<std::string>& args = std::vector<std::string>());
+  schema::Request build_request(
     const std::string& service, const std::string& procedure,
     const std::vector<std::string>& args = std::vector<std::string>());
 

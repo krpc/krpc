@@ -54,7 +54,7 @@ local function _decode_value(data, typ)
     local x = _decode_varint(data)
     return x ~= 0
   elseif code == Types.STRING or code == Types.BYTES then
-    local size, position = decoder.decode_size_and_position(data)
+    local size, position = pb.varint_decoder(data, 0)
     return data:sub(position+1, position+size+1)
   end
   error('Failed to decode data')
@@ -127,16 +127,9 @@ function decoder.decode_message(data, typ)
   return message
 end
 
-function decoder.decode_size_and_position(data)
-  return pb.varint_decoder(data, 0)
-end
-
-function decoder.decode_delimited(data, typ)
-  -- Decode a message or value with size information
-  -- (used in a delimited communication stream)
-  local size, position = decoder.decode_size_and_position(data)
-  return decoder.decode(data:sub(position+1,position+size+1), typ)
-
+function decoder.decode_size(data)
+  local size, _ = pb.varint_decoder(data, 0)
+  return size
 end
 
 return decoder

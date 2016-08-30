@@ -18,7 +18,7 @@ Client connect(const std::string& name, const std::string& address,
   rpc_connection->send(encoder::RPC_HELLO_MESSAGE, encoder::RPC_HELLO_MESSAGE_LENGTH);
   schema::ConnectionRequest request;
   request.set_client_name(name);
-  rpc_connection->send(encoder::encode_delimited(request));
+  rpc_connection->send(encoder::encode_message_with_size(request));
   schema::ConnectionResponse response;
   decoder::decode(response, rpc_connection->receive_message(), nullptr);
 
@@ -30,7 +30,7 @@ Client connect(const std::string& name, const std::string& address,
     stream_connection->send(encoder::STREAM_HELLO_MESSAGE, encoder::STREAM_HELLO_MESSAGE_LENGTH);
     schema::ConnectionRequest request;
     request.set_client_identifier(response.client_identifier());
-    stream_connection->send(encoder::encode_delimited(request));
+    stream_connection->send(encoder::encode_message_with_size(request));
     schema::ConnectionResponse response;
     decoder::decode(response, stream_connection->receive_message(), nullptr);
     if (response.status() != schema::ConnectionResponse::OK)

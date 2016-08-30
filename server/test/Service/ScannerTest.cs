@@ -34,7 +34,7 @@ namespace KRPC.Test.Service
         public void TestService ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");
-            Assert.AreEqual (37, service.Procedures.Count);
+            Assert.AreEqual (36, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
             Assert.AreEqual ("<doc>\n  <summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
@@ -74,31 +74,24 @@ namespace KRPC.Test.Service
                     MessageAssert.HasDocumentation (proc, "<doc>\n  <summary>\nProcedure with no return arguments.\n</summary>\n</doc>");
                 } else if (proc.Name == "ProcedureSingleArgNoReturn") {
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameter (proc, 0, typeof(Response), "data");
+                    MessageAssert.HasParameter (proc, 0, typeof(string), "x");
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasDocumentation (proc, "<doc>\n  <summary>\nProcedure with a single return argument.\n</summary>\n</doc>");
                 } else if (proc.Name == "ProcedureThreeArgsNoReturn") {
                     MessageAssert.HasParameters (proc, 3);
-                    MessageAssert.HasParameter (proc, 0, typeof(Response), "x");
-                    MessageAssert.HasParameter (proc, 1, typeof(Request), "y");
-                    MessageAssert.HasParameter (proc, 2, typeof(Response), "z");
+                    MessageAssert.HasParameter (proc, 0, typeof(string), "x");
+                    MessageAssert.HasParameter (proc, 1, typeof(int), "y");
+                    MessageAssert.HasParameter (proc, 2, typeof(string), "z");
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "ProcedureNoArgsReturns") {
                     MessageAssert.HasNoParameters (proc);
-                    MessageAssert.HasReturnType (proc, typeof(Response));
+                    MessageAssert.HasReturnType (proc, typeof(string));
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "ProcedureSingleArgReturns") {
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameter (proc, 0, typeof(Response), "data");
-                    MessageAssert.HasReturnType (proc, typeof(Response));
-                    MessageAssert.HasNoDocumentation (proc);
-                } else if (proc.Name == "ProcedureWithValueTypes") {
-                    MessageAssert.HasParameters (proc, 3);
-                    MessageAssert.HasParameter (proc, 0, typeof(float), "x");
-                    MessageAssert.HasParameter (proc, 1, typeof(string), "y");
-                    MessageAssert.HasParameter (proc, 2, typeof(byte[]), "z");
-                    MessageAssert.HasReturnType (proc, typeof(int));
+                    MessageAssert.HasParameter (proc, 0, typeof(string), "x");
+                    MessageAssert.HasReturnType (proc, typeof(string));
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "get_PropertyWithGetAndSet") {
                     MessageAssert.HasNoParameters (proc);
@@ -266,8 +259,8 @@ namespace KRPC.Test.Service
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (37, foundProcedures);
-            Assert.AreEqual (37, service.Procedures.Count);
+            Assert.AreEqual (36, foundProcedures);
+            Assert.AreEqual (36, service.Procedures.Count);
         }
 
         [Test]

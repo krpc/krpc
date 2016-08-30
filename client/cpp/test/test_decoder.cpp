@@ -30,12 +30,10 @@ TEST(test_decoder, test_decode_unicode_string) {
   ASSERT_EQ(krpc::platform::unhexlify("e284a2"), value);
 }
 
-TEST(test_decoder, test_decode_size_and_position) {
+TEST(test_decoder, test_decode_size) {
   std::string message = "1c";
-  std::pair<pb::uint32, pb::uint32> result =
-    krpc::decoder::decode_size_and_position(krpc::platform::unhexlify(message));
-  ASSERT_EQ(28, result.first);
-  ASSERT_EQ(1, result.second);
+  pb::uint32 size = krpc::decoder::decode_size(krpc::platform::unhexlify(message));
+  ASSERT_EQ(28, size);
 }
 
 TEST(test_decoder, test_decode_class) {

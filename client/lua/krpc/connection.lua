@@ -61,7 +61,7 @@ function Connection:receive_message(typ)
   local data = ''
   while true do
     data = data .. self:receive(1)
-    local ok, result = pcall(decoder.decode_size_and_position, data)
+    local ok, result = pcall(decoder.decode_size, data)
     if ok then
       size = result
       break

@@ -16,11 +16,9 @@ VALUE_TYPES = {
 
 MESSAGE_TYPES = {
     krpc.schema.KRPC.Type.REQUEST: krpc.schema.KRPC.Request,
-    krpc.schema.KRPC.Type.RESPONSE: krpc.schema.KRPC.Response,
-    krpc.schema.KRPC.Type.STREAM_MESSAGE: krpc.schema.KRPC.StreamMessage,
-    krpc.schema.KRPC.Type.STATUS: krpc.schema.KRPC.Status,
     krpc.schema.KRPC.Type.SERVICES: krpc.schema.KRPC.Services,
     krpc.schema.KRPC.Type.STREAM: krpc.schema.KRPC.Stream,
+    krpc.schema.KRPC.Type.STATUS: krpc.schema.KRPC.Status,
 }
 
 def _protobuf_type(code, service=None, name=None, types=None):
@@ -55,8 +53,6 @@ class Types(object):
         # pylint: disable=redefined-variable-type
         if protobuf_type.code in VALUE_TYPES:
             typ = ValueType(protobuf_type)
-        elif protobuf_type.code in MESSAGE_TYPES:
-            typ = MessageType(protobuf_type)
         elif protobuf_type.code == krpc.schema.KRPC.Type.CLASS:
             typ = ClassType(protobuf_type, doc)
         elif protobuf_type.code == krpc.schema.KRPC.Type.ENUMERATION:
@@ -69,6 +65,8 @@ class Types(object):
             typ = SetType(protobuf_type, self)
         elif protobuf_type.code == krpc.schema.KRPC.Type.DICTIONARY:
             typ = DictionaryType(protobuf_type, self)
+        elif protobuf_type.code in MESSAGE_TYPES:
+            typ = MessageType(protobuf_type)
         else:
             raise ValueError('Invalid type')
         # pylint: enable=redefined-variable-type
@@ -133,31 +131,6 @@ class Types(object):
         """ Get an enumeration type """
         return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.ENUMERATION, service, name), doc=doc)
 
-    @property
-    def request_type(self):
-        """ Get a Request message type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.REQUEST))
-
-    @property
-    def response_type(self):
-        """ Get a Response message type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.RESPONSE))
-
-    @property
-    def stream_message_type(self):
-        """ Get a StreamMessage message type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.STREAM_MESSAGE))
-
-    @property
-    def status_type(self):
-        """ Get a Status message type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.STATUS))
-
-    @property
-    def services_type(self):
-        """ Get a Services message type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.SERVICES))
-
     def tuple_type(self, *value_types):
         """ Get a tuple type """
         return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.TUPLE, None, None,
@@ -175,6 +148,26 @@ class Types(object):
         """ Get a dictionary type """
         return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.DICTIONARY, None, None,
                                            [key_type.protobuf_type, value_type.protobuf_type]))
+
+    @property
+    def request_type(self):
+        """ Get a Request message type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.REQUEST))
+
+    @property
+    def services_type(self):
+        """ Get a Services message type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.SERVICES))
+
+    @property
+    def stream_type(self):
+        """ Get a Stream message type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.STREAM))
+
+    @property
+    def status_type(self):
+        """ Get a Status message type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.STATUS))
 
     def coerce_to(self, value, typ):
         """ Coerce a value to the specified type (specified by a type object).
@@ -295,16 +288,6 @@ class EnumerationType(TypeBase):
         self._python_type = _create_enum_type(self._enum_name, values, self._doc)
 
 
-class MessageType(TypeBase):
-    """ A protocol buffer message type """
-
-    def __init__(self, protobuf_type):
-        if protobuf_type.code not in MESSAGE_TYPES:
-            raise ValueError('Not a message type')
-        typ = MESSAGE_TYPES[protobuf_type.code]
-        super(MessageType, self).__init__(protobuf_type, typ, typ.__name__)
-
-
 class TupleType(TypeBase):
     """ A tuple collection type """
 
@@ -356,6 +339,16 @@ class DictionaryType(TypeBase):
         self.value_type = types.as_type(protobuf_type.types[1])
         string = 'Dict(%s,%s)' % (self.key_type._string, self.value_type._string)
         super(DictionaryType, self).__init__(protobuf_type, dict, string)
+
+
+class MessageType(TypeBase):
+    """ A protocol buffer message type """
+
+    def __init__(self, protobuf_type):
+        if protobuf_type.code not in MESSAGE_TYPES:
+            raise ValueError('Not a message type')
+        typ = MESSAGE_TYPES[protobuf_type.code]
+        super(MessageType, self).__init__(protobuf_type, typ, typ.__name__)
 
 
 class DynamicType(object):

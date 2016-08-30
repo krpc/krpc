@@ -19,6 +19,7 @@ namespace KRPC.Test.Service
 
         public static void ProcedureWithoutAttribute ()
         {
+            Service.ProcedureWithoutAttribute ();
         }
 
         /// <summary>
@@ -34,33 +35,27 @@ namespace KRPC.Test.Service
         /// Procedure with a single return argument.
         /// </summary>
         [KRPCProcedure]
-        public static void ProcedureSingleArgNoReturn (Response data)
+        public static void ProcedureSingleArgNoReturn (string x)
         {
-            Service.ProcedureSingleArgNoReturn (data);
+            Service.ProcedureSingleArgNoReturn (x);
         }
 
         [KRPCProcedure]
-        public static void ProcedureThreeArgsNoReturn (Response x, Request y, Response z)
+        public static void ProcedureThreeArgsNoReturn (string x, int y, string z)
         {
             Service.ProcedureThreeArgsNoReturn (x, y, z);
         }
 
         [KRPCProcedure]
-        public static Response ProcedureNoArgsReturns ()
+        public static string ProcedureNoArgsReturns ()
         {
             return Service.ProcedureNoArgsReturns ();
         }
 
         [KRPCProcedure]
-        public static Response ProcedureSingleArgReturns (Response data)
+        public static string ProcedureSingleArgReturns (string x)
         {
-            return Service.ProcedureSingleArgReturns (data);
-        }
-
-        [KRPCProcedure]
-        public static int ProcedureWithValueTypes (float x, string y, byte[] z)
-        {
-            return Service.ProcedureWithValueTypes (x, y, z);
+            return Service.ProcedureSingleArgReturns (x);
         }
 
         [KRPCProperty]

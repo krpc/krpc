@@ -15,9 +15,9 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void EncodeMessage ()
         {
-            var request = new Request ("TestService", "ProcedureNoArgsNoReturn");
-            var data = Encoder.Encode (request);
-            const string expected = "0a0b5465737453657276696365121750726f6365647572654e6f417267734e6f52657475726e";
+            var message = new Stream (42);
+            var data = Encoder.Encode (message);
+            const string expected = "082a";
             Assert.AreEqual (expected, data.ToHexString ());
         }
 
