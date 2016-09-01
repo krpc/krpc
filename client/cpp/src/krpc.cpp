@@ -14,7 +14,7 @@ Client connect(const std::string& name, const std::string& address,
 
   // Connect to RPC server
   std::shared_ptr<Connection> rpc_connection(new Connection(address, rpc_port));
-  rpc_connection->connect(10, 0.1f);
+  rpc_connection->connect();
   rpc_connection->send(encoder::RPC_HELLO_MESSAGE, encoder::RPC_HELLO_MESSAGE_LENGTH);
   schema::ConnectionRequest request;
   request.set_client_name(name);
@@ -26,7 +26,7 @@ Client connect(const std::string& name, const std::string& address,
   std::shared_ptr<Connection> stream_connection;
   if (stream_port != 0) {
     stream_connection = std::shared_ptr<Connection>(new Connection(address, stream_port));
-    stream_connection->connect(10, 0.1f);
+    stream_connection->connect();
     stream_connection->send(encoder::STREAM_HELLO_MESSAGE, encoder::STREAM_HELLO_MESSAGE_LENGTH);
     schema::ConnectionRequest request;
     request.set_client_identifier(response.client_identifier());

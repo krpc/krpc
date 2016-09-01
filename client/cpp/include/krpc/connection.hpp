@@ -18,7 +18,7 @@ class ConnectionFailed : public std::runtime_error {
 class Connection {
  public:
   Connection(const std::string& address, unsigned int port);
-  void connect(unsigned int retries = 0, float timeout = 0);
+  void connect();
   void close();
   /** Send data to the connection. Blocks until all data has been sent. */
   void send(const char* data, size_t length);

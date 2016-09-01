@@ -1,3 +1,6 @@
+v0.4.0
+ * Remove connection retries. Client will now fail fast if it fails to connect to the server.
+
 v0.3.6
  * Fix values not being documented in generated enumeration classes
 
