@@ -1,4 +1,7 @@
 v0.3.6
+ * Add Part.Tag which can be used to get/set the name tag set via the NameTag mod, or kOS (#297)
+ * Add Parts.WithTag to get a list of all parts with the given tag value
+ * Remove DockingPort.Name and Parts.DockingPortsWithName - part tagging can now be used instead
  * Add Flight.TrueAirSpeed
  * Add FAR support for Flight.Mach and add Flight.ReynoldsNumber (#313)
  * Fix value returned by Orbit.Inclination (#301)
