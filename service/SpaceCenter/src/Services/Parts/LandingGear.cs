@@ -85,13 +85,13 @@ namespace KRPC.SpaceCenter.Services.Parts
                 if (damage != null && damage.isDamaged)
                     return LandingGearState.Broken;
                 if (deployment != null) {
-                    if (deployment.stateString.Contains ("Deployed"))
+                    if (Math.Abs (deployment.position - deployment.deployedPosition) < 0.0001)
                         return LandingGearState.Deployed;
-                    else if (deployment.stateString.Contains ("Retracted"))
+                    else if (Math.Abs (deployment.position - deployment.retractedPosition) < 0.0001)
                         return LandingGearState.Retracted;
-                    else if (deployment.stateString.Contains ("Deploying"))
+                    else if (deployment.stateString.Equals (deployment.st_deploying.name))
                         return LandingGearState.Deploying;
-                    else if (deployment.stateString.Contains ("Retracting"))
+                    else if (deployment.stateString.Equals (deployment.st_retracting.name))
                         return LandingGearState.Retracting;
                     throw new InvalidOperationException ();
                 }
