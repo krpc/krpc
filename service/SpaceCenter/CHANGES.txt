@@ -14,6 +14,7 @@ v0.3.6
  * Add Experiment.Biome to get the biome an experiment part is currently in (#296)
  * Add Experiment.IsAvailable which indicates if there is science that be gathered by the experiment part
  * Add ScienceSubject class for getting information about a type of experiment. Accessed via Experiment.ScienceSubject.
+ * Fix landing gear state on launch (#314)
 
 v0.3.5
  * Improved AutoPilot that auto-tunes itself based on the vessels available torque and moment of inertia (#289)
