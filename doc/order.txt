@@ -289,6 +289,7 @@ SpaceCenter.Parts.SolarPanels
 SpaceCenter.Part
 SpaceCenter.Part.Name
 SpaceCenter.Part.Title
+SpaceCenter.Part.Tag
 SpaceCenter.Part.Cost
 SpaceCenter.Part.Vessel
 SpaceCenter.Part.Parent

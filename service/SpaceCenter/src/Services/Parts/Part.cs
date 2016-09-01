@@ -73,6 +73,30 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The name tag for the part. Can be set to a custom string using the in-game user interface.
+        /// </summary>
+        /// <remarks>
+        /// This requires either the <a href="http://github.com/krpc/NameTag/releases/latest">NameTag</a> or
+        /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a> mods to be installed.
+        /// </remarks>
+        [KRPCProperty]
+        public string Tag {
+            get {
+                var module = InternalPart.Module ("KOSNameTag");
+                if (module == null) {
+                    throw new InvalidOperationException ("NameTag mod is not installed");
+                }
+                return (string)module.GetType ().GetField ("nameTag").GetValue (module);
+            }
+            set {
+                var module = InternalPart.Module ("KOSNameTag");
+                if (module == null)
+                    throw new InvalidOperationException ("NameTag mod is not installed");
+                module.GetType ().GetField ("nameTag").SetValue (module, value);
+            }
+        }
+
+        /// <summary>
         /// The cost of the part, in units of funds.
         /// </summary>
         [KRPCProperty]
