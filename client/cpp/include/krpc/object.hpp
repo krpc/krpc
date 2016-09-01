@@ -29,7 +29,7 @@ template <typename T> std::ostream& operator<<(std::ostream& stream, const Objec
 
 template <typename T> inline Object<T>::Object(
   Client* client, const std::string& name, google::protobuf::uint64 id):
-  _client(client), _name(name), _id(id) {}
+  _client(client), _id(id), _name(name) {}
 
 template <typename T> inline std::ostream& operator<<(std::ostream& stream, const Object<T>& object) {
   stream << object._name << "<" << object._id << ">";

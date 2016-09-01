@@ -78,7 +78,7 @@ inline std::string encode(const Object<T>& object) {
 template <typename T>
 inline std::string encode(const std::vector<T>& list) {
   krpc::schema::List listMessage;
-  for (typename std::vector<T>::const_iterator x = list.begin(); x != list.end(); x++)
+  for (typename std::vector<T>::const_iterator x = list.begin(); x != list.end(); ++x)
     listMessage.add_items(encode(*x));
   return encode(listMessage);
 }
@@ -86,7 +86,7 @@ inline std::string encode(const std::vector<T>& list) {
 template <typename K, typename V>
 inline std::string encode(const std::map<K, V>& dictionary) {
   krpc::schema::Dictionary dictionaryMessage;
-  for (typename std::map<K, V>::const_iterator x = dictionary.begin(); x != dictionary.end(); x++) {
+  for (typename std::map<K, V>::const_iterator x = dictionary.begin(); x != dictionary.end(); ++x) {
     schema::DictionaryEntry* entry = dictionaryMessage.add_entries();
     entry->set_key(encode(x->first));
     entry->set_value(encode(x->second));
@@ -97,7 +97,7 @@ inline std::string encode(const std::map<K, V>& dictionary) {
 template <typename T>
 inline std::string encode(const std::set<T>& set) {
   krpc::schema::Set setMessage;
-  for (typename std::set<T>::const_iterator x = set.begin(); x != set.end(); x++)
+  for (typename std::set<T>::const_iterator x = set.begin(); x != set.end(); ++x)
     setMessage.add_items(encode(*x));
   return encode(setMessage);
 }
