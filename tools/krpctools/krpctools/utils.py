@@ -1,4 +1,5 @@
 import re
+from krpc.schema.KRPC import Type
 
 _CAMEL_CASE_REGEX = re.compile(r'([a-z]+|[A-Z][^A-Z]*)')
 
@@ -23,3 +24,18 @@ def indent(string, width=3):
 def single_line(string):
     """ Convert the given string into a single line """
     return ' '.join(line.strip() for line in string.split('\n'))
+
+def as_type(types, type_info):
+    """ Convert a type parsed from a JSON service definitions file into a type object """
+    return types.as_type(_as_protobuf_type(types, type_info))
+
+def _as_protobuf_type(types, type_info):
+    protobuf_type = Type()
+    protobuf_type.code = getattr(Type, type_info['code'])
+    if 'service' in type_info:
+        protobuf_type.service = type_info['service']
+    if 'name' in type_info:
+        protobuf_type.name = type_info['name']
+    if 'types' in type_info:
+        protobuf_type.types.extend([_as_protobuf_type(types, t) for t in type_info['types']])
+    return protobuf_type

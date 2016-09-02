@@ -37,7 +37,7 @@ namespace KRPC.Utils
         public byte[] ToArray ()
         {
             var result = new byte [Length];
-            Array.Copy (buffer, 0, result, 0, Length);
+            Array.Copy (buffer, result, Length);
             return result;
         }
     }

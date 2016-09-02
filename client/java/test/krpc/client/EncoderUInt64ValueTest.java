@@ -16,6 +16,10 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.protobuf.ByteString;
 
+import krpc.client.Types;
+import krpc.schema.KRPC.Type;
+import krpc.schema.KRPC.Type.TypeCode;
+
 @RunWith(Parameterized.class)
 public class EncoderUInt64ValueTest {
     @Parameters
@@ -26,8 +30,6 @@ public class EncoderUInt64ValueTest {
             { 42, "2a" },
             { 300, "ac02" },
             { 1234567890000L, "d088ec8ff723" }
-            // { Long.MAX_VALUE, "????"},
-            // { Long.MIN_VALUE, "????" }
         });
     }
 
@@ -36,15 +38,17 @@ public class EncoderUInt64ValueTest {
     @Parameter(value = 1)
     public String data;
 
+    Type type = Types.CreateValue(TypeCode.UINT64);
+
     @Test
     public void testEncode() throws IOException {
-        ByteString encodeResult = Encoder.encode(value);
+        ByteString encodeResult = Encoder.encode(value, type);
         assertEquals(data, hexlify(encodeResult));
     }
 
     @Test
     public void testDecode() throws IOException {
-        long decodeResult = Encoder.decodeUInt64(unhexlify(data));
+        long decodeResult = (long) Encoder.decode(unhexlify(data), type, null);
         assertEquals(value, decodeResult);
     }
 }

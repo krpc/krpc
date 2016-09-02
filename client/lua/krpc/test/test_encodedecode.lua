@@ -16,7 +16,7 @@ local function _run_test_encode_value(typ, cases)
   for _, case in ipairs(cases) do
     decoded = case[1]
     encoded = case[2]
-    local data = encoder.encode(decoded, types:as_type(typ))
+    local data = encoder.encode(decoded, typ)
     luaunit.assertEquals(platform.hexlify(data), encoded)
   end
 end
@@ -25,8 +25,8 @@ local function _run_test_decode_value(typ, cases)
   for _, case in ipairs(cases) do
     decoded = case[1]
     encoded = case[2]
-    local value = decoder.decode(platform.unhexlify(encoded), types:as_type(typ))
-    if typ == 'float' or typ == 'double' then
+    local value = decoder.decode(platform.unhexlify(encoded), typ)
+    if typ.protobuf_type.code == Types.FLOAT or typ.protobuf_type.code == Types.DOUBLE then
       luaunit.assertEquals(tostring(decoded):sub(1,8), tostring(value):sub(1,8))
     else
       luaunit.assertEquals(value, decoded)
@@ -43,8 +43,8 @@ function TestEncodeDecode:test_float()
     {-math.huge, '000080ff'},
     {0/0, '0000c0ff'} -- should be 0000c07f ??
   }
-  _run_test_encode_value('float', cases)
-  _run_test_decode_value('float', cases)
+  _run_test_encode_value(types:float_type(), cases)
+  _run_test_decode_value(types:float_type(), cases)
 end
 
 function TestEncodeDecode:test_double()
@@ -56,35 +56,35 @@ function TestEncodeDecode:test_double()
     {-math.huge, '000000000000f0ff'},
     {0/0, '000000000000f8ff'} -- should be 000000000000f87f ??
   }
-  _run_test_encode_value('double', cases)
-  _run_test_decode_value('double', cases)
+  _run_test_encode_value(types:double_type(), cases)
+  _run_test_decode_value(types:double_type(), cases)
 end
 
-function TestEncodeDecode:test_int32()
+function TestEncodeDecode:test_sint32()
   local cases = {
     {0, '00'},
-    {1, '01'},
-    {42, '2a'},
-    {300, 'ac02'},
-    {-33, 'dfffffffffffffffff01'},
-    {math.huge, 'ffffffffffffffff7f'},
-    {-math.huge, '80808080808080808001'}
+    {1, '02'},
+    {42, '54'},
+    {300, 'd804'},
+    {-33, '41'},
+    {2147483647, 'feffffff0f'},
+    {-2147483648, 'ffffffff0f'}
   }
-  _run_test_encode_value('int32', cases)
-  _run_test_decode_value('int32', cases)
+  _run_test_encode_value(types:sint32_type(), cases)
+  _run_test_decode_value(types:sint32_type(), cases)
 end
 
-function TestEncodeDecode:test_int64()
+function TestEncodeDecode:test_sint64()
   local cases = {
     {0, '00'},
-    {1, '01'},
-    {42, '2a'},
-    {300, 'ac02'},
-    {1234567890000, 'd088ec8ff723'},
-    {-33, 'dfffffffffffffffff01'}
+    {1, '02'},
+    {42, '54'},
+    {300, 'd804'},
+    {1234567890000, 'a091d89fee47'},
+    {-33, '41'}
   }
-  _run_test_encode_value('int64', cases)
-  _run_test_decode_value('int64', cases)
+  _run_test_encode_value(types:sint64_type(), cases)
+  _run_test_decode_value(types:sint64_type(), cases)
 end
 
 function TestEncodeDecode:test_uint32()
@@ -95,11 +95,11 @@ function TestEncodeDecode:test_uint32()
     {300, 'ac02'},
     {math.huge, 'ffffffffffffffff7f'}
   }
-  _run_test_encode_value('uint32', cases)
-  _run_test_decode_value('uint32', cases)
+  _run_test_encode_value(types:uint32_type(), cases)
+  _run_test_decode_value(types:uint32_type(), cases)
 
-  luaunit.assertError(encoder.encode, -1, types:as_type('uint32'))
-  luaunit.assertError(encoder.encode, -849, types:as_type('uint32'))
+  luaunit.assertError(encoder.encode, -1, types:uint32_type())
+  luaunit.assertError(encoder.encode, -849, types:uint32_type())
 end
 
 function TestEncodeDecode:test_uint64()
@@ -110,11 +110,11 @@ function TestEncodeDecode:test_uint64()
     {300, 'ac02'},
     {1234567890000, 'd088ec8ff723'}
   }
-  _run_test_encode_value('uint64', cases)
-  _run_test_decode_value('uint64', cases)
+  _run_test_encode_value(types:uint64_type(), cases)
+  _run_test_decode_value(types:uint64_type(), cases)
 
-  luaunit.assertError(encoder.encode, -1, types:as_type('uint64'))
-  luaunit.assertError(encoder.encode, -849, types:as_type('uint64'))
+  luaunit.assertError(encoder.encode, -1, types:uint64_type())
+  luaunit.assertError(encoder.encode, -849, types:uint64_type())
 end
 
 function TestEncodeDecode:test_bool()
@@ -122,8 +122,8 @@ function TestEncodeDecode:test_bool()
     {true, '01'},
     {false, '00'}
   }
-  _run_test_encode_value('bool', cases)
-  _run_test_decode_value('bool', cases)
+  _run_test_encode_value(types:bool_type(), cases)
+  _run_test_decode_value(types:bool_type(), cases)
 end
 
 function TestEncodeDecode:test_string()
@@ -134,8 +134,8 @@ function TestEncodeDecode:test_string()
     {'\226\132\162', '03e284a2'},
     {'Mystery Goo\226\132\162 Containment Unit', '1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974'}
   }
-  _run_test_encode_value('string', cases)
-  _run_test_decode_value('string', cases)
+  _run_test_encode_value(types:string_type(), cases)
+  _run_test_decode_value(types:string_type(), cases)
 end
 
 function TestEncodeDecode:test_bytes()
@@ -144,8 +144,19 @@ function TestEncodeDecode:test_bytes()
     {'\186\218\85', '03bada55'},
     {'\222\173\190\239', '04deadbeef'}
   }
-  _run_test_encode_value('bytes', cases)
-  _run_test_decode_value('bytes', cases)
+  _run_test_encode_value(types:bytes_type(), cases)
+  _run_test_decode_value(types:bytes_type(), cases)
+end
+
+function TestEncodeDecode:test_tuple()
+  local cases = {{List{1}, '0a0101'}}
+  typ = types:tuple_type({types:uint32_type()})
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
+  local cases = {{List{1,'jeb',false}, '0a01010a04036a65620a0100'}}
+  typ = types:tuple_type({types:uint32_type(), types:string_type(), types:bool_type()})
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
 end
 
 function TestEncodeDecode:test_list()
@@ -154,8 +165,20 @@ function TestEncodeDecode:test_list()
     {List{1}, '0a0101'},
     {List{1,2,3,4}, '0a01010a01020a01030a0104'}
   }
-  _run_test_encode_value('List(int32)', cases)
-  _run_test_decode_value('List(int32)', cases)
+  typ = types:list_type(types:uint32_type())
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
+end
+
+function TestEncodeDecode:test_set()
+  local cases = {
+    {Set{}, ''},
+    {Set{1}, '0a0101'},
+    {Set{1,2,3,4}, '0a01010a01020a01030a0104'}
+  }
+  typ = types:set_type(types:uint32_type())
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
 end
 
 function TestEncodeDecode:test_dictionary()
@@ -166,27 +189,9 @@ function TestEncodeDecode:test_dictionary()
     {x, '0a060a0100120100'},
     {Map{foo = 42, bar = 365, baz = 3}, '0a0a0a04036261721202ed020a090a040362617a1201030a090a0403666f6f12012a'}
   }
-  _run_test_encode_value('Dictionary(string,int32)', cases)
-  _run_test_decode_value('Dictionary(string,int32)', cases)
-end
-
-function TestEncodeDecode:test_set()
-  local cases = {
-    {Set{}, ''},
-    {Set{1}, '0a0101'},
-    {Set{1,2,3,4}, '0a01010a01020a01030a0104'}
-  }
-  _run_test_encode_value('Set(int32)', cases)
-  _run_test_decode_value('Set(int32)', cases)
-end
-
-function TestEncodeDecode:test_tuple()
-  local cases = {{List{1}, '0a0101'}}
-  _run_test_encode_value('Tuple(int32)', cases)
-  _run_test_decode_value('Tuple(int32)', cases)
-  local cases = {{List{1,'jeb',false}, '0a01010a04036a65620a0100'}}
-  _run_test_encode_value('Tuple(int32,string,bool)', cases)
-  _run_test_decode_value('Tuple(int32,string,bool)', cases)
+  typ = types:dictionary_type(types:string_type(), types:uint32_type())
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
 end
 
 return TestEncodeDecode

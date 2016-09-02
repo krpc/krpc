@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
@@ -25,47 +26,44 @@ namespace KRPC.Test.Service
             Assert.AreEqual (4, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (5, service.Procedures.Count);
+            Assert.AreEqual (6, service.Procedures.Count);
             Assert.AreEqual (0, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
 
             int foundProcedures = 0;
-            foreach (var method in service.Procedures) {
-                if (method.Name == "GetStatus") {
-                    MessageAssert.HasReturnType (method, "KRPC.Status");
-                    MessageAssert.HasNoParameters (method);
-                    MessageAssert.HasNoAttributes (method);
-                    MessageAssert.HasDocumentation (method);
-                } else if (method.Name == "GetServices") {
-                    MessageAssert.HasReturnType (method, "KRPC.Services");
-                    MessageAssert.HasNoParameters (method);
-                    MessageAssert.HasNoAttributes (method);
-                    MessageAssert.HasDocumentation (method);
-                } else if (method.Name == "AddStream") {
-                    MessageAssert.HasReturnType (method, "uint32");
-                    MessageAssert.HasParameters (method, 1);
-                    MessageAssert.HasParameter (method, 0, "KRPC.Request", "request");
-                    MessageAssert.HasNoAttributes (method);
-                    MessageAssert.HasDocumentation (method);
-                } else if (method.Name == "RemoveStream") {
-                    MessageAssert.HasNoReturnType (method);
-                    MessageAssert.HasParameters (method, 1);
-                    MessageAssert.HasParameter (method, 0, "uint32", "id");
-                    MessageAssert.HasNoAttributes (method);
-                    MessageAssert.HasDocumentation (method);
-                } else if (method.Name == "get_CurrentGameScene") {
-                    MessageAssert.HasReturnType (method, "int32");
-                    MessageAssert.HasNoParameters (method);
-                    MessageAssert.HasAttributes (method, 2);
-                    MessageAssert.HasAttribute (method, 0, "Property.Get(CurrentGameScene)");
-                    MessageAssert.HasAttribute (method, 1, "ReturnType.Enum(KRPC.GameScene)");
-                    MessageAssert.HasDocumentation (method);
+            foreach (var proc in service.Procedures) {
+                if (proc.Name == "GetStatus") {
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Status));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "GetServices") {
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Services));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "AddStream") {
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Stream));
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(KRPC.Service.Messages.Request), "request");
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "RemoveStream") {
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(ulong), "id");
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "get_Clients") {
+                    MessageAssert.HasReturnType (proc, typeof(IList<KRPC.Utils.Tuple<byte[],string,string>>));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
+                } else if (proc.Name == "get_CurrentGameScene") {
+                    MessageAssert.HasReturnType (proc, typeof(KRPC.Service.KRPC.GameScene));
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasDocumentation (proc);
                 } else {
                     Assert.Fail ();
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (5, foundProcedures);
+            Assert.AreEqual (6, foundProcedures);
 
             bool foundEnumeration = false;
             foreach (var enumeration in service.Enumerations) {

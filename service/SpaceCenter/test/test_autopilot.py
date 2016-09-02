@@ -1,6 +1,7 @@
 import unittest
 import krpctest
 from krpctest.geometry import normalize
+import krpc
 
 class TestAutoPilot(krpctest.TestCase):
 
@@ -205,6 +206,17 @@ class TestAutoPilot(krpctest.TestCase):
 
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = True
+
+    def test_invalid_reference_frame(self):
+        frames = [
+            self.vessel.reference_frame,
+            self.vessel.parts.all[0].reference_frame,
+            self.vessel.parts.all[0].center_of_mass_reference_frame,
+            self.vessel.parts.docking_ports[0].reference_frame,
+            self.vessel.parts.engines[0].thrusters[0].thrust_reference_frame
+        ]
+        for frame in frames:
+            self.assertRaises(krpc.client.RPCError, setattr, self.ap, 'reference_frame', frame)
 
     def test_reset_on_disconnect(self):
         conn = self.connect(use_cached=False)

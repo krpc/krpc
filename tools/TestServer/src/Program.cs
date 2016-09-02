@@ -93,8 +93,6 @@ namespace TestServer
 
             var core = Core.Instance;
             CallContext.SetGameScene (GameScene.SpaceCenter);
-            var timeSpan = new TimeSpan ();
-            Core.Instance.GetUniversalTime = () => timeSpan.TotalSeconds;
 
             var rpcTcpServer = new TCPServer ("RPCServer", IPAddress.Loopback, rpcPort);
             var streamTcpServer = new TCPServer ("StreamServer", IPAddress.Loopback, streamPort);

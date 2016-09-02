@@ -157,10 +157,8 @@ with the following format:
 
    message Response {
      double time = 1;
-     bool has_error = 2;
-     string error = 3;
-     bool has_return_value = 4;
-     bytes return_value = 5;
+     string error = 2;
+     bytes return_value = 3;
    }
 
 The fields are:
@@ -168,15 +166,11 @@ The fields are:
 * ``time`` - The universal time (in seconds) when the request completed
   processing.
 
-* ``has_error`` - True if there was an error executing the remote procedure.
+* ``error`` - An error message, if there was an error executing the remote
+  procedure. An empty string if there was no error.
 
-* ``error`` - If ``has_error`` is true, contains a description of the error.
-
-* ``has_return_value`` - True if the remote procedure returned a value.
-
-* ``return_value`` - If ``has_return_value`` is true and ``has_error`` is false,
-  contains the value returned by the remote procedure, encoded in protocol
-  buffer format.
+* ``return_value`` - Contains the value returned by the remote procedure, if
+  any, encoded in protocol buffer format.
 
 See :ref:`communication-protocol-protobuf-encoding` for details on how to
 unserialize the return value.
@@ -421,17 +415,15 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
    message Procedure {
      string name = 1;
      repeated Parameter parameters = 2;
-     bool has_return_type = 3;
-     string return_type = 4;
-     repeated string attributes = 5;
-     string documentation = 6;
+     string return_type = 3;
+     repeated string attributes = 4;
+     string documentation = 5;
    }
 
    message Parameter {
      string name = 1;
      string type = 2;
-     bool has_default_value = 3;
-     bytes default_value = 4;
+     bytes default_value = 3;
    }
 
 The fields are:
@@ -446,16 +438,13 @@ The fields are:
    * ``type`` - The :ref:`type <communication-protocol-type-names>` of the
      parameter.
 
-   * ``has_default_value`` - True if the parameter has a default value.
+   * ``default_value`` - Contains the value of the default value of the
+     parameter, if any, :ref:`encoded using Protocol Buffer format
+     <communication-protocol-protobuf-encoding>`.
 
-   * ``default_value`` - If ``has_default_value`` is true, contains the
-     value of the default value of the parameter, :ref:`encoded using Protocol
-     Buffer format <communication-protocol-protobuf-encoding>`.
-
-* ``has_return_type`` - True if the procedure returns a value.
-
-* ``return_type`` - If ``has_return_type`` is true, contains the :ref:`return
-  type <communication-protocol-type-names>` of the procedure.
+* ``return_type`` - The :ref:`return type <communication-protocol-type-names>`
+  of the procedure, or an empty string if the procedure does not return
+  anything.
 
 * ``attributes`` - The procedure's :ref:`attributes
   <communication-protocol-attributes>`.

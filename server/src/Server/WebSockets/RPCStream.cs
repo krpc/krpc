@@ -43,8 +43,9 @@ namespace KRPC.Server.WebSockets
         public override void Write (Response value)
         {
             using (var bufferStream = new MemoryStream ()) {
-                var message = value.ToProtobufMessage ();
-                message.WriteTo (bufferStream);
+                var codedOutputStream = new CodedOutputStream (bufferStream, true);
+                codedOutputStream.WriteMessage (value.ToProtobufMessage ());
+                codedOutputStream.Flush ();
                 var payload = bufferStream.ToArray ();
                 var frame = new Frame (OpCode.Binary, payload);
                 Stream.Write (frame.Header.ToBytes ());

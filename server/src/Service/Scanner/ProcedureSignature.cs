@@ -39,27 +39,32 @@ namespace KRPC.Service.Scanner
 
         public Type ReturnType { get; private set; }
 
+        public bool IsStatic { get; private set; }
+
+        public bool IsClassMember { get; private set; }
+
+        public string ClassName { get; private set; }
+
+        public bool IsPropertyGetter { get; private set; }
+
+        public bool IsPropertySetter { get; private set; }
+
+        public string PropertyName { get; private set; }
+
         /// <summary>
         /// Which game scene(s) the service should be active during
         /// </summary>
         public GameScene GameScene { get; private set; }
 
-        public List<string> Attributes { get; private set; }
-
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
-        public ProcedureSignature (string serviceName, string procedureName, string documentation, IProcedureHandler handler, GameScene gameScene, params string[] attributes)
+        internal ProcedureSignature (string serviceName, string procedureName, string documentation, IProcedureHandler handler, GameScene gameScene)
         {
             Name = procedureName;
             FullyQualifiedName = serviceName + "." + Name;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Handler = handler;
             GameScene = gameScene;
-            Attributes = attributes.ToList ();
             Parameters = handler.Parameters.Select (x => new ParameterSignature (FullyQualifiedName, x)).ToList ();
-
-            // Add parameter type attributes
-            for (int position = 0; position < Parameters.Count; position++)
-                Attributes.AddRange (TypeUtils.ParameterTypeAttributes (position, Parameters [position].Type));
 
             var returnType = handler.ReturnType;
             HasReturnType = (returnType != typeof(void));
@@ -68,17 +73,44 @@ namespace KRPC.Service.Scanner
                 // Check it's a valid return type
                 if (!TypeUtils.IsAValidType (returnType))
                     throw new ServiceException (returnType + " is not a valid Procedure return type, " + "in " + FullyQualifiedName);
-                // Add return type attributes
-                Attributes.AddRange (TypeUtils.ReturnTypeAttributes (returnType));
+            }
+
+            var parts = procedureName.Split ('_');
+            if (parts.Length == 2) {
+                if (parts [0] == ("get")) {
+                    IsPropertyGetter = true;
+                    PropertyName = parts [1];
+                } else if (parts [0] == "set") {
+                    IsPropertySetter = true;
+                    PropertyName = parts [1];
+                } else {
+                    IsClassMember = true;
+                    ClassName = parts [0];
+                }
+            } else if (parts.Length == 3) {
+                if (parts [1] == "get") {
+                    IsClassMember = true;
+                    IsPropertyGetter = true;
+                    PropertyName = parts [2];
+                } else if (parts [1] == "set") {
+                    IsClassMember = true;
+                    ClassName = parts [0];
+                    IsPropertySetter = true;
+                    PropertyName = parts [2];
+                } else if (parts [1] == "static") {
+                    IsClassMember = true;
+                    ClassName = parts [0];
+                    IsStatic = true;
+                }
             }
         }
 
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("parameters", Parameters);
-            if (ReturnType != null)
-                info.AddValue ("return_type", TypeUtils.GetTypeName (ReturnType));
-            info.AddValue ("attributes", Attributes);
+            if (ReturnType != null) {
+                info.AddValue ("return_type", TypeUtils.SerializeType (ReturnType));
+            }
             info.AddValue ("documentation", Documentation);
         }
     }

@@ -2,8 +2,8 @@ import unittest
 import time
 from krpc.test.servertestcase import ServerTestCase
 
-class TestStream(ServerTestCase, unittest.TestCase):
 
+class TestStream(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestStream, cls).setUpClass()

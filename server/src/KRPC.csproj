@@ -126,6 +126,7 @@
     <Compile Include="Server\Message\StreamClient.cs" />
     <Compile Include="Server\Message\StreamServer.cs" />
     <Compile Include="Server\Message\StreamStream.cs" />
+    <Compile Include="Server\ProtocolBuffers\ConnectionException.cs" />
     <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCClient.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Server\ProtocolBuffers\StreamClient.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamServer.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamStream.cs" />
+    <Compile Include="Server\ProtocolBuffers\Utils.cs" />
     <Compile Include="Server\Server.cs" />
     <Compile Include="Server\ServerException.cs" />
     <Compile Include="Server\TCP\NetworkInformation.cs" />
@@ -180,8 +182,9 @@
     <Compile Include="Service\Messages\Service.cs" />
     <Compile Include="Service\Messages\Services.cs" />
     <Compile Include="Service\Messages\Status.cs" />
-    <Compile Include="Service\Messages\StreamMessage.cs" />
-    <Compile Include="Service\Messages\StreamResponse.cs" />
+    <Compile Include="Service\Messages\Stream.cs" />
+    <Compile Include="Service\Messages\StreamResult.cs" />
+    <Compile Include="Service\Messages\StreamUpdate.cs" />
     <Compile Include="Service\ObjectStore.cs" />
     <Compile Include="Service\ProcedureHandler.cs" />
     <Compile Include="Service\ProcedureParameter.cs" />

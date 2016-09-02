@@ -33,7 +33,7 @@ public class Connection {
      * address {@value #DEFAULT_ADDRESS}, RPC port number
      * {@value #DEFAULT_RPC_PORT} and stream port number
      * {@value #DEFAULT_STREAM_PORT}.
-     * 
+     *
      * @return A connection to the kRPC server.
      * @throws IOException
      */
@@ -46,7 +46,7 @@ public class Connection {
      * address {@value #DEFAULT_ADDRESS}, RPC port number
      * {@value #DEFAULT_RPC_PORT} and stream port number
      * {@value #DEFAULT_STREAM_PORT}.
-     * 
+     *
      * @param name
      *            The name of the client.
      * @return A connection to the kRPC server.
@@ -60,12 +60,12 @@ public class Connection {
      * Connect to a kRPC server using the given client name, on the given
      * address, RPC port number {@value #DEFAULT_RPC_PORT} and stream port
      * number {@value #DEFAULT_STREAM_PORT}.
-     * 
+     *
      * @param name
      *            The name of the client.
      * @param address
      *            The server address to connect to.
-     * 
+     *
      * @return A connection to the kRPC server.
      * @throws IOException
      */
@@ -76,7 +76,7 @@ public class Connection {
     /**
      * Connect to a kRPC server using the given client name, on the given
      * address, RPC port number and stream port.
-     * 
+     *
      * @param name
      *            The name of the client.
      * @param address
@@ -85,7 +85,7 @@ public class Connection {
      *            The RPC port to connect to.
      * @param streamPort
      *            The stream port to connect to.
-     * 
+     *
      * @return A connection to the kRPC server.
      * @throws IOException
      */
@@ -97,14 +97,14 @@ public class Connection {
      * Connect to a kRPC server using the given client name, on the given
      * address, RPC port number {@value #DEFAULT_RPC_PORT} and stream port
      * number {@value #DEFAULT_STREAM_PORT}.
-     * 
+     *
      * @param name
      *            The name of the client.
      * @param address
      *            The server address to connect to. Can be either the name of
      *            the host or a textual representation of its IP address. See
      *            {@link InetAddress.getByName}.
-     * 
+     *
      * @return A connection to the kRPC server.
      * @throws IOException
      */
@@ -115,7 +115,7 @@ public class Connection {
     /**
      * Connect to a kRPC server using the given client name, on the given
      * address, RPC port number and stream port.
-     * 
+     *
      * @param name
      *            The name of the client.
      * @param address
@@ -126,7 +126,7 @@ public class Connection {
      *            The RPC port to connect to.
      * @param streamPort
      *            The stream port to connect to.
-     * 
+     *
      * @return A connection to the kRPC server.
      * @throws IOException
      */
@@ -136,32 +136,40 @@ public class Connection {
 
     private Connection(String name, InetAddress address, int rpcPort, int streamPort) throws IOException {
         rpcSocket = new Socket(address, rpcPort);
-        rpcSocket.getOutputStream().write(Encoder.RPC_HELLO_MESSAGE);
-        rpcSocket.getOutputStream().write(Encoder.encodeClientName(name));
-        rpcSocket.getOutputStream().flush();
-        byte[] clientIdentifier = new byte[Encoder.CLIENT_IDENTIFIER_LENGTH];
-        int read = 0;
-        while (read < Encoder.CLIENT_IDENTIFIER_LENGTH)
-            read += rpcSocket.getInputStream().read(clientIdentifier, read, Encoder.CLIENT_IDENTIFIER_LENGTH - read);
-
-        Socket streamSocket = new Socket(address, streamPort);
-        streamSocket.getOutputStream().write(Encoder.STREAM_HELLO_MESSAGE);
-        streamSocket.getOutputStream().write(clientIdentifier);
-        streamSocket.getOutputStream().flush();
-        byte[] okMessage = new byte[Encoder.OK_MESSAGE.length];
-        read = 0;
-        while (read < Encoder.OK_MESSAGE.length)
-            read += streamSocket.getInputStream().read(okMessage, read, Encoder.OK_MESSAGE.length - read);
-        assert (Arrays.equals(okMessage, Encoder.OK_MESSAGE));
-
         rpcOutputStream = CodedOutputStream.newInstance(rpcSocket.getOutputStream());
         rpcInputStream = CodedInputStream.newInstance(rpcSocket.getInputStream());
+
+        rpcSocket.getOutputStream().write(Encoder.RPC_HELLO_MESSAGE);
+        KRPC.ConnectionRequest request = KRPC.ConnectionRequest.newBuilder().setClientName(name).build();
+        rpcOutputStream.writeMessageNoTag(request);
+        rpcOutputStream.flush();
+
+        int size = rpcInputStream.readRawVarint32();
+        byte[] data = rpcInputStream.readRawBytes(size);
+        KRPC.ConnectionResponse response = KRPC.ConnectionResponse.parseFrom(data);
+        ByteString clientIdentifier = response.getClientIdentifier();
+
+        Socket streamSocket = new Socket(address, streamPort);
+        CodedOutputStream streamOutputStream = CodedOutputStream.newInstance(streamSocket.getOutputStream());
+        CodedInputStream streamInputStream = CodedInputStream.newInstance(streamSocket.getInputStream());
+
+        streamSocket.getOutputStream().write(Encoder.STREAM_HELLO_MESSAGE);
+        request = KRPC.ConnectionRequest.newBuilder().setClientIdentifier(clientIdentifier).build();
+        streamOutputStream.writeMessageNoTag(request);
+        streamOutputStream.flush();
+
+        size = streamInputStream.readRawVarint32();
+        data = streamInputStream.readRawBytes(size);
+        response = KRPC.ConnectionResponse.parseFrom(data);
+
+        assert (response.getStatus() == KRPC.ConnectionResponse.Status.OK);
+
         streamManager = new StreamManager(this, streamSocket);
     }
 
     /**
      * Close the connection.
-     * 
+     *
      * @throws IOException
      */
     public void close() throws IOException {
@@ -176,7 +184,7 @@ public class Connection {
      * interface is for generated service code.
      */
     public ByteString invoke(String service, String procedure, ByteString... arguments) throws RPCException, IOException {
-        return invoke(request(service, procedure, arguments));
+        return invoke(buildRequest(service, procedure, arguments));
     }
 
     ByteString invoke(KRPC.Request request) throws RPCException, IOException {
@@ -188,12 +196,12 @@ public class Connection {
             data = rpcInputStream.readRawBytes(size);
         }
         KRPC.Response response = KRPC.Response.parseFrom(data);
-        if (response.getHasError())
+        if (!response.getError().isEmpty())
             throw new RPCException(response.getError());
-        return response.getHasReturnValue() ? response.getReturnValue() : null;
+        return response.getReturnValue();
     }
 
-    KRPC.Request request(String service, String procedure, ByteString... arguments) throws IOException {
+    KRPC.Request buildRequest(String service, String procedure, ByteString... arguments) throws IOException {
         KRPC.Request.Builder requestBuilder = KRPC.Request.newBuilder();
         requestBuilder.setService(service);
         requestBuilder.setProcedure(procedure);
@@ -209,29 +217,23 @@ public class Connection {
         return requestBuilder.build();
     }
 
-    private KRPC.Request request(Method method, Object... args) throws IOException {
+    private KRPC.Request buildRequest(Method method, ByteString... args) throws IOException {
         RPCInfo info = method.getAnnotation(RPCInfo.class);
         String service = info.service();
         String procedure = info.procedure();
-        ByteString[] encodedArgs = new ByteString[args.length];
-        int position = 0;
-        for (Object arg : args) {
-            encodedArgs[position] = Encoder.encode(arg);
-            position++;
-        }
-        return request(service, procedure, encodedArgs);
+        return buildRequest(service, procedure, args);
     }
 
     /**
      * Create a stream for a static method call.
-     * 
+     *
      * @param clazz
      *            The class containing the static method.
      * @param method
      *            The name of the static method.
      * @param args
      *            The arguments to pass to the method.
-     * 
+     *
      * @return A stream object.
      * @throws StreamException
      * @throws IOException
@@ -242,14 +244,14 @@ public class Connection {
 
     /**
      * Create a stream for a method call on an object.
-     * 
+     *
      * @param instance
      *            An instance of the object.
      * @param method
      *            The name of the method.
      * @param args
      *            The arguments to pass to the method.
-     * 
+     *
      * @return A stream object.
      * @throws StreamException
      * @throws IOException
@@ -281,6 +283,24 @@ public class Connection {
     }
 
     private <T> Stream<T> internalAddStream(Method method, Object instance, Object... args) throws StreamException, RPCException, IOException {
+        KRPC.Type returnType;
+        KRPC.Type[] parameterTypes;
+        RPCInfo info = method.getAnnotation(RPCInfo.class);
+        if (info == null)
+            throw new StreamException("Failed to add stream. Method is not an RPC.");
+        try {
+            Method getReturnType = info.types().getMethod("getReturnType", String.class);
+            Method getParameterTypes = info.types().getMethod("getParameterTypes", String.class);
+            returnType = (KRPC.Type) getReturnType.invoke(null, info.procedure());
+            parameterTypes = (KRPC.Type[]) getParameterTypes.invoke(null, info.procedure());
+        } catch (NoSuchMethodException e) {
+            throw new StreamException("Failed to add stream", e);
+        } catch (IllegalAccessException e) {
+            throw new StreamException("Failed to add stream", e);
+        } catch (InvocationTargetException e) {
+            throw new StreamException("Failed to add stream", e);
+        }
+
         if (instance == null && Modifier.isStatic(method.getModifiers())) {
             // Remove connection parameter for static methods
             args = Arrays.copyOfRange(args, 1, args.length);
@@ -291,22 +311,12 @@ public class Connection {
             System.arraycopy(args, 0, newArgs, 1, args.length);
             args = newArgs;
         }
-        KRPC.Request request = request(method, args);
-        RPCInfo info = method.getAnnotation(RPCInfo.class);
-        if (info == null)
-            throw new StreamException("Failed to add stream. Method is not an RPC.");
-        TypeSpecification returnTypeSpec;
-        try {
-            Method getReturnTypeSpec = info.returnTypeSpec().getMethod("get", String.class);
-            returnTypeSpec = (TypeSpecification) getReturnTypeSpec.invoke(null, info.procedure());
-        } catch (NoSuchMethodException e) {
-            throw new StreamException("Failed to add stream. NoSuchMethodException when getting return type spec.");
-        } catch (IllegalAccessException e) {
-            throw new StreamException("Failed to add stream. IllegalAccessException when getting return type spec.");
-        } catch (InvocationTargetException e) {
-            throw new StreamException("Failed to add stream. InvocationTargetException when getting return type spec.");
-        }
-        return streamManager.add(request, returnTypeSpec);
-    }
 
+        if (args.length != parameterTypes.length)
+            throw new StreamException("Failed to add stream. Incorrect number of arguments.");
+        ByteString[] encodedArgs = new ByteString[args.length];
+        for (int i = 0; i < args.length; i++)
+            encodedArgs[i] = Encoder.encode(args[i], parameterTypes[i]);
+        return streamManager.add(buildRequest(method, encodedArgs), returnType);
+    }
 }

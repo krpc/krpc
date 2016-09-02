@@ -12,5 +12,5 @@ public @interface RPCInfo {
 
     String procedure();
 
-    Class<?> returnTypeSpec();
+    Class<?> types();
 }

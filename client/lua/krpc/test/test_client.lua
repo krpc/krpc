@@ -113,31 +113,10 @@ function TestClient:test_class_properties()
 end
 
 function TestClient:test_optional_arguments()
-  luaunit.assertEquals('jebfoobarbaz', self.conn.test_service.optional_arguments('jeb'))
-  luaunit.assertEquals('jebbobbillbaz', self.conn.test_service.optional_arguments('jeb', 'bob', 'bill'))
-end
-
-function TestClient:test_named_parameters()
-  -- FIXME: Lua doens't support this. Have to pass arguments as a single table
-  --self.conn.test_service.optional_arguments(x='1', y='2', z='3', another_parameter='4')
-  --self.assertEqual('1234', self.conn.test_service.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
-  --self.assertEqual('2413', self.conn.test_service.optional_arguments(z='1', x='2', another_parameter='3', y='4'))
-  --self.assertEqual('1243', self.conn.test_service.optional_arguments('1', '2', another_parameter='3', z='4'))
-  --self.assertEqual('123baz', self.conn.test_service.optional_arguments('1', '2', z='3'))
-  --self.assertEqual('12bar3', self.conn.test_service.optional_arguments('1', '2', another_parameter='3'))
-  --self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', '4', another_parameter='5')
-  --self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', y='4')
-  --self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', foo='4')
-  --
-  --obj = self.conn.test_service.create_test_object('jeb')
-  --self.assertEqual('1234', obj.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
-  --self.assertEqual('2413', obj.optional_arguments(z='1', x='2', another_parameter='3', y='4'))
-  --self.assertEqual('1243', obj.optional_arguments('1', '2', another_parameter='3', z='4'))
-  --self.assertEqual('123baz', obj.optional_arguments('1', '2', z='3'))
-  --self.assertEqual('12bar3', obj.optional_arguments('1', '2', another_parameter='3'))
-  --self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', another_parameter='5')
-  --self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', y='4')
-  --self.assertRaises(TypeError, obj.optional_arguments, '1', foo='4')
+  luaunit.assertEquals('jebfoobarnull', self.conn.test_service.optional_arguments('jeb'))
+  luaunit.assertEquals('jebbobbillnull', self.conn.test_service.optional_arguments('jeb', 'bob', 'bill'))
+  local obj = self.conn.test_service.create_test_object('kermin')
+  luaunit.assertEquals('jebbobbillkermin', self.conn.test_service.optional_arguments('jeb', 'bob', 'bill', obj))
 end
 
 function TestClient:test_blocking_procedure()
@@ -172,7 +151,7 @@ function TestClient:test_client_members()
   )
 end
 
-function TestClient:test_enums()
+function TestClient:test_enumerations()
   local enum = self.conn.test_service.TestEnum
 
   luaunit.assertEquals(enum.value_b, self.conn.test_service.enum_return())
@@ -323,7 +302,7 @@ function TestClient:test_types_from_different_connections()
   local conn2 = self:connect()
   luaunit.assertFalse(conn1.test_service.TestClass == conn2.test_service.TestClass)
   local obj2 = conn2.test_service.TestClass(0)
-  local obj1 = conn1._types:coerce_to(obj2, conn1._types:as_type('Class(TestService.TestClass)'))
+  local obj1 = conn1._types:coerce_to(obj2, conn1._types:class_type('TestService', 'TestClass'))
   luaunit.assertEquals(obj1, obj2)
   luaunit.assertTrue(conn1.test_service.TestClass:class_of(obj1))
   luaunit.assertTrue(conn2.test_service.TestClass:class_of(obj2))

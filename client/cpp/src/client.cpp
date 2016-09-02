@@ -19,9 +19,32 @@ Client::Client(const std::shared_ptr<Connection>& rpc_connection,
   stream_manager(this, stream_connection),
   lock(new std::mutex) {}
 
-schema::Request Client::request(const std::string& service,
-                                const std::string& procedure,
-                                const std::vector<std::string>& args) {
+std::string Client::invoke(const schema::Request& request) {
+  std::string data;
+  {
+    std::lock_guard<std::mutex> lock_guard(*lock);
+    rpc_connection->send(encoder::encode_message_with_size(request));
+    data = rpc_connection->receive_message();
+  }
+
+  schema::Response response;
+  decoder::decode(response, data, this);
+
+  if (!response.error().empty())
+    throw RPCError(response.error());
+
+  return response.return_value();
+}
+
+std::string Client::invoke(const std::string& service,
+                           const std::string& procedure,
+                           const std::vector<std::string>& args) {
+  return this->invoke(this->build_request(service, procedure, args));
+}
+
+schema::Request Client::build_request(const std::string& service,
+                                      const std::string& procedure,
+                                      const std::vector<std::string>& args) {
   schema::Request request;
   request.set_service(service);
   request.set_procedure(procedure);
@@ -31,41 +54,6 @@ schema::Request Client::request(const std::string& service,
     arg->set_value(args[i]);
   }
   return request;
-}
-
-std::string Client::invoke(const schema::Request& request) {
-  std::string data;
-  {
-    std::lock_guard<std::mutex> lock_guard(*lock);
-
-    rpc_connection->send(encoder::encode_delimited(request));
-
-    size_t size = 0;
-    while (true) {
-      try {
-        data += rpc_connection->receive(1);
-        size = decoder::decode_size_and_position(data).first;
-        break;
-      } catch (decoder::DecodeFailed&) {
-      }
-    }
-
-    data = rpc_connection->receive(size);
-  }
-
-  schema::Response response;
-  decoder::decode(response, data, this);
-
-  if (response.has_error())
-    throw RPCError(response.error());
-
-  return response.return_value();
-}
-
-std::string Client::invoke(const std::string& service,
-                           const std::string& procedure,
-                           const std::vector<std::string>& args) {
-  return this->invoke (this->request(service, procedure, args));
 }
 
 google::protobuf::uint64 Client::add_stream(const schema::Request& request) {

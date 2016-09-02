@@ -265,9 +265,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool HasFuel {
             get {
-                if (CurrentEngine.flameout)
+                var engine = CurrentEngine;
+                if (engine.flameout)
                     return false;
-                foreach (var propellant in CurrentEngine.propellants)
+                foreach (var propellant in engine.propellants)
                     if (propellant.isDeprived)
                         return false;
                 return true;

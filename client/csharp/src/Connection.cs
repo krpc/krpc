@@ -46,23 +46,31 @@ namespace KRPC.Client
             rpcClient = new TcpClient ();
             rpcClient.Connect (address, rpcPort);
             rpcStream = rpcClient.GetStream ();
-            rpcStream.Write (Encoder.RPCHelloMessage, 0, Encoder.RPCHelloMessage.Length);
-            var clientName = Encoder.EncodeClientName (name);
-            rpcStream.Write (clientName, 0, clientName.Length);
-            var clientIdentifier = new byte[Encoder.ClientIdentifierLength];
-            rpcStream.Read (clientIdentifier, 0, Encoder.ClientIdentifierLength);
             codedRpcStream = new CodedOutputStream (rpcStream, true);
+            rpcStream.Write (Encoder.RPCHelloMessage, 0, Encoder.RPCHelloMessage.Length);
+            var request = new ConnectionRequest ();
+            request.ClientName = name;
+            codedRpcStream.WriteLength (request.CalculateSize ());
+            request.WriteTo (codedRpcStream);
+            codedRpcStream.Flush ();
+            int size = ReadMessageData (rpcStream, ref responseBuffer);
+            var response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
 
             if (streamPort != 0) {
                 streamClient = new TcpClient ();
                 streamClient.Connect (address, streamPort);
                 var streamStream = streamClient.GetStream ();
                 streamStream.Write (Encoder.StreamHelloMessage, 0, Encoder.StreamHelloMessage.Length);
-                streamStream.Write (clientIdentifier, 0, clientIdentifier.Length);
-                var recvOkMessage = new byte [Encoder.OkMessage.Length];
-                streamStream.Read (recvOkMessage, 0, Encoder.OkMessage.Length);
-                if (!recvOkMessage.SequenceEqual (Encoder.OkMessage))
-                    throw new InvalidOperationException ("Did not receive OK message from server");
+                request = new ConnectionRequest ();
+                request.ClientIdentifier = response.ClientIdentifier;
+                var codedStreamStream = new CodedOutputStream (streamStream, true);
+                codedStreamStream.WriteLength (request.CalculateSize ());
+                request.WriteTo (codedStreamStream);
+                codedStreamStream.Flush ();
+                size = ReadMessageData (streamStream, ref responseBuffer);
+                response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
+                if (response.Status != ConnectionResponse.Types.Status.Ok)
+                    throw new InvalidOperationException ("Failed to connect to server");
                 StreamManager = new StreamManager (this, streamClient);
             }
         }
@@ -154,9 +162,9 @@ namespace KRPC.Client
                 response = Response.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
             }
 
-            if (response.HasError)
+            if (response.Error.Length > 0)
                 throw new RPCException (response.Error);
-            return response.HasReturnValue ? response.ReturnValue : null;
+            return response.ReturnValue;
         }
 
         internal static Request BuildRequest (string service, string procedure, IList<ByteString> arguments = null)

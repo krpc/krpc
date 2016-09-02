@@ -1,13 +1,13 @@
 namespace KRPC.Service.Messages
 {
     #pragma warning disable 1591
-    public class StreamResponse : IMessage
+    public class StreamResult : IMessage
     {
-        public uint Id { get; private set; }
+        public ulong Id { get; private set; }
 
         public Response Response { get; set; }
 
-        public StreamResponse (uint id)
+        public StreamResult (ulong id)
         {
             Id = id;
         }

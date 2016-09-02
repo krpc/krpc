@@ -6,17 +6,17 @@ namespace KRPC.Test.Service
 {
     public interface ITestService
     {
+        void ProcedureWithoutAttribute ();
+
         void ProcedureNoArgsNoReturn ();
 
-        void ProcedureSingleArgNoReturn (Response data);
+        void ProcedureSingleArgNoReturn (string x);
 
-        void ProcedureThreeArgsNoReturn (Response x, Request y, Response z);
+        void ProcedureThreeArgsNoReturn (string x, int y, string z);
 
-        Response ProcedureNoArgsReturns ();
+        string ProcedureNoArgsReturns ();
 
-        Response ProcedureSingleArgReturns (Response data);
-
-        int ProcedureWithValueTypes (float x, string y, byte[] z);
+        string ProcedureSingleArgReturns (string x);
 
         string PropertyWithGetAndSet { get; set; }
 

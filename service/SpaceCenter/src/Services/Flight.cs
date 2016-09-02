@@ -506,14 +506,25 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The speed of the vessel, in multiples of the speed of sound.
         /// </summary>
-        /// <remarks>
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
-        /// </remarks>
         [KRPCProperty]
         public float Mach {
             get {
-                CheckNoFAR ();
-                return (float)InternalVessel.rootPart.machNumber;
+                var vessel = InternalVessel;
+                return (float)(FAR.IsAvailable ? FAR.VesselMachNumber (vessel) : vessel.rootPart.machNumber);
+            }
+        }
+
+        /// <summary>
+        /// The vessels Reynolds number.
+        /// </summary>
+        /// <remarks>
+        /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.
+        /// </remarks>
+        [KRPCProperty]
+        public float ReynoldsNumber {
+            get {
+                CheckFAR ();
+                return (float)FAR.VesselReynoldsNumber (InternalVessel);
             }
         }
 
@@ -541,6 +552,7 @@ namespace KRPC.SpaceCenter.Services
         /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> if it is installed.
         /// </remarks>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float TerminalVelocity {
             get {
                 var vessel = InternalVessel;
@@ -562,7 +574,6 @@ namespace KRPC.SpaceCenter.Services
             get {
                 var vessel = InternalVessel;
                 if (FAR.IsAvailable) {
-                    CheckFAR ();
                     return (float)FAR.VesselAoA (vessel);
                 } else {
                     return (float)GeometryExtensions.ToDegrees (Vector3d.Dot (vessel.transform.forward, vessel.srf_velocity.normalized));
@@ -578,7 +589,6 @@ namespace KRPC.SpaceCenter.Services
             get {
                 var vessel = InternalVessel;
                 if (FAR.IsAvailable) {
-                    CheckFAR ();
                     return (float)FAR.VesselSideslip (vessel);
                 } else {
                     return (float)GeometryExtensions.ToDegrees (Vector3d.Dot (vessel.transform.right, vessel.srf_velocity.normalized));

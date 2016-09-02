@@ -109,7 +109,7 @@ namespace TestServer
         [SuppressMessage ("Gendarme.Rules.Design", "ImplementEqualsAndGetHashCodeInPairRule")]
         public sealed class TestClass : Equatable<TestClass>
         {
-            readonly string instanceValue;
+            internal readonly string instanceValue;
 
             public TestClass (string value)
             {
@@ -158,9 +158,10 @@ namespace TestServer
 
             [KRPCMethod]
             [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-            public string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
+            [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
+            public string OptionalArguments (string x, string y = "foo", string z = "bar", TestClass obj = null)
             {
-                return x + y + z + anotherParameter;
+                return x + y + z + (obj == null ? "null" : obj.instanceValue);
             }
 
             [KRPCMethod]
@@ -171,19 +172,32 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        public static string OptionalArguments (string x, string y = "foo", string z = "bar", string anotherParameter = "baz")
+        [SuppressMessage ("Gendarme.Rules.Correctness", "CheckParametersNullityInVisibleMethodsRule")]
+        public static string OptionalArguments (string x, string y = "foo", string z = "bar", TestClass obj = null)
         {
-            return x + y + z + anotherParameter;
+            return x + y + z + (obj == null ? "null" : obj.instanceValue);
         }
 
+        /// <summary>
+        /// Enum documentation string.
+        /// </summary>
         [KRPCEnum]
         [Serializable]
         [SuppressMessage ("Gendarme.Rules.Design", "AvoidVisibleNestedTypesRule")]
         [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
         public enum TestEnum
         {
+            /// <summary>
+            /// Enum ValueA documentation string.
+            /// </summary>
             ValueA,
+            /// <summary>
+            /// Enum ValueB documentation string.
+            /// </summary>
             ValueB,
+            /// <summary>
+            /// Enum ValueC documentation string.
+            /// </summary>
             ValueC
         }
 

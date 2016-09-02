@@ -21,13 +21,7 @@ namespace KRPC.Service.Scanner
             IDictionary<string, ServiceSignature> signatures = new Dictionary<string, ServiceSignature> ();
 
             // Scan for static classes annotated with KRPCService
-
-            // FIXME: Following is a hack to workaround a bug in Reflection.GetTypesWith
-            //        When running unit tests, Service.KRPC is not found as it contains types that depend on UnityEngine
             var serviceTypes = Reflection.GetTypesWith<KRPCServiceAttribute> ().ToList ();
-            if (!serviceTypes.Contains (typeof(KRPC)))
-                serviceTypes.Add (typeof(KRPC));
-
             foreach (var serviceType in serviceTypes) {
                 CurrentAssembly = serviceType.Assembly;
                 var service = new ServiceSignature (serviceType);
@@ -58,10 +52,10 @@ namespace KRPC.Service.Scanner
                 var cls = service.AddClass (classType);
                 // Add class methods
                 foreach (var method in Reflection.GetMethodsWith<KRPCMethodAttribute> (classType))
-                    service.AddClassMethod (cls, method);
+                    service.AddClassMethod (cls, classType, method);
                 // Add class properties
                 foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (classType))
-                    service.AddClassProperty (cls, property);
+                    service.AddClassProperty (cls, classType, property);
             }
 
             // Scan for enumerations annotated with KRPCEnum

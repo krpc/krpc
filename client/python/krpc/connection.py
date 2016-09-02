@@ -1,7 +1,9 @@
 import socket
 import select
-import time
 from krpc.error import NetworkError
+from krpc.encoder import Encoder
+from krpc.decoder import Decoder
+
 
 class Connection(object):
     def __init__(self, address, port):
@@ -9,21 +11,16 @@ class Connection(object):
         self._port = port
         self._socket = None
 
-    def connect(self, retries=0, timeout=0):
+    def connect(self):
         try:
             socket.getaddrinfo(self._address, self._port)
         except socket.gaierror as ex:
             raise NetworkError(self._address, self._port, str(ex))
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        while True:
-            try:
-                self._socket.connect((self._address, self._port))
-                break
-            except socket.error as ex:
-                if retries <= 0:
-                    raise NetworkError(self._address, self._port, str(ex))
-                retries -= 1
-                time.sleep(timeout)
+        try:
+            self._socket.connect((self._address, self._port))
+        except socket.error as ex:
+            raise NetworkError(self._address, self._port, str(ex))
 
     def close(self):
         if self._socket is not None:
@@ -31,6 +28,27 @@ class Connection(object):
 
     def __del__(self):
         self.close()
+
+    def send_message(self, message):
+        """ Send a protobuf message """
+        self.send(Encoder.encode_message_with_size(message))
+
+    def receive_message(self, typ):
+        """ Receive a protobuf message and decode it """
+
+        # Read the size and position of the response message
+        data = b''
+        while True:
+            try:
+                data += self.partial_receive(1)
+                size = Decoder.decode_message_size(data)
+                break
+            except IndexError:
+                pass
+
+        # Read and decode the response message
+        data = self.receive(size)
+        return Decoder.decode_message(data, typ)
 
     def send(self, data):
         """ Send data to the connection. Blocks until all data has been sent. """

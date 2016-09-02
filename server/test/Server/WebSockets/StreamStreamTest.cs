@@ -10,38 +10,36 @@ namespace KRPC.Test.Server.WebSockets
     [TestFixture]
     public class StreamStreamTest
     {
-        StreamMessage expectedMessage;
-        byte[] messageBytes;
+        StreamUpdate expectedUpdate;
+        byte[] updateBytes;
 
         [SetUp]
         public void SetUp ()
         {
             // Create a response object and get the binary representation of it
-            var streamMessage = new StreamMessage ();
+            var streamUpdate = new StreamUpdate ();
 
             var response1 = new Response ();
             response1.Time = 42;
             response1.Error = "Foo";
 
-            var streamResponse1 = new StreamResponse (1263);
-            streamResponse1.Response = response1;
+            var streamResult1 = new StreamResult (1263);
+            streamResult1.Response = response1;
 
             var response2 = new Response ();
             response2.Time = 123;
             response2.Error = "Bar";
 
-            var streamResponse2 = new StreamResponse (3443);
-            streamResponse2.Response = response2;
+            var streamResult2 = new StreamResult (3443);
+            streamResult2.Response = response2;
 
-            streamMessage.Responses.Add (streamResponse1);
-            streamMessage.Responses.Add (streamResponse2);
+            streamUpdate.Results.Add (streamResult1);
+            streamUpdate.Results.Add (streamResult2);
 
-            expectedMessage = streamMessage;
+            expectedUpdate = streamUpdate;
             using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
-                expectedMessage.ToProtobufMessage ().WriteTo (codedStream);
-                codedStream.Flush ();
-                messageBytes = Frame.Binary (stream.ToArray ()).ToBytes ();
+                expectedUpdate.ToProtobufMessage ().WriteDelimitedTo (stream);
+                updateBytes = stream.ToArray ();
             }
         }
 
@@ -49,13 +47,15 @@ namespace KRPC.Test.Server.WebSockets
         public void WriteSingleResponse ()
         {
             var stream = new MemoryStream ();
-            var streamStream = new KRPC.Server.WebSockets.StreamStream (new TestStream (null, stream));
-            Assert.AreEqual (0, streamStream.BytesWritten);
+            var byteStream = new TestStream (null, stream);
+            var streamStream = new KRPC.Server.WebSockets.StreamStream (byteStream);
+            streamStream.Write (expectedUpdate);
+            byte[] bytes = stream.ToArray ();
+            var frameBytes = Frame.Binary (updateBytes).ToBytes ();
+            Assert.AreEqual (frameBytes.ToHexString (), bytes.ToHexString ());
+            Assert.AreEqual (bytes.Length, streamStream.BytesWritten);
             Assert.AreEqual (0, streamStream.BytesRead);
-            streamStream.Write (expectedMessage);
-            Assert.AreEqual (messageBytes.Length, streamStream.BytesWritten);
-            Assert.AreEqual (0, streamStream.BytesRead);
-            Assert.AreEqual (messageBytes.ToHexString (), stream.ToArray ().ToHexString ());
+            Assert.IsFalse (byteStream.Closed);
         }
     }
 }

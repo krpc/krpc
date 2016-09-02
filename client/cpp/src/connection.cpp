@@ -6,27 +6,19 @@
 
 #include <asio/steady_timer.hpp>
 
+#include "krpc/decoder.hpp"
+
 namespace krpc {
 
 Connection::Connection(const std::string& address, unsigned int port):
   socket(io_service), address(address), port(port), resolver(io_service) {}
 
-void Connection::connect(unsigned int retries, float timeout) {
+void Connection::connect() {
   std::ostringstream port_str;
   port_str << port;
   asio::ip::tcp::resolver::query query(asio::ip::tcp::v4(), address, port_str.str());
   asio::ip::tcp::resolver::iterator iterator = resolver.resolve(query);
-  while (true) {
-    try {
-      asio::connect(socket, iterator);
-      break;
-    } catch(const asio::system_error&) {
-      if (retries <= 0)
-        throw;
-      retries -= 1;
-      std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(timeout*1000)));
-    }
-  }
+  asio::connect(socket, iterator);
 }
 
 void Connection::send(const char* data, size_t length) {
@@ -35,6 +27,20 @@ void Connection::send(const char* data, size_t length) {
 
 void Connection::send(const std::string& data) {
   asio::write(socket, asio::buffer(data));
+}
+
+std::string Connection::receive_message() {
+  std::string data;
+  size_t size = 0;
+  while (true) {
+    try {
+      data += this->receive(1);
+      size = decoder::decode_size(data);
+      break;
+    } catch (decoder::DecodeFailed&) {
+    }
+  }
+  return this->receive(size);
 }
 
 std::string Connection::receive(size_t length) {

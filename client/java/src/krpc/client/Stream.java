@@ -4,9 +4,9 @@ import java.io.IOException;
 
 public class Stream<T> {
     private StreamManager manager;
-    private int id;
+    private long id;
 
-    Stream(StreamManager manager, int id) {
+    Stream(StreamManager manager, long id) {
         this.manager = manager;
         this.id = id;
     }

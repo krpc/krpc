@@ -1,5 +1,3 @@
-using System;
-
 namespace KRPC.Service.Messages
 {
     #pragma warning disable 1591
@@ -17,15 +15,18 @@ namespace KRPC.Service.Messages
             }
         }
 
-        public bool HasError { get; set; }
+        public bool HasError { get; private set; }
 
-        public string Error { get; set; }
+        public string Error {
+            get { return error; }
+            set {
+                error = value;
+                HasError = true;
+            }
+        }
 
         object returnValue;
 
-        public Response ()
-        {
-            Error = String.Empty;
-        }
+        string error;
     }
 }

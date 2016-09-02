@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
 
@@ -57,15 +59,13 @@ namespace KRPC.Service
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
                     var procedure = new Procedure (procedureSignature.Name);
                     if (procedureSignature.HasReturnType)
-                        procedure.ReturnType = TypeUtils.GetTypeName (procedureSignature.ReturnType);
+                        procedure.ReturnType = procedureSignature.ReturnType;
                     foreach (var parameterSignature in procedureSignature.Parameters) {
-                        var parameter = new Parameter (parameterSignature.Name, TypeUtils.GetTypeName (parameterSignature.Type));
+                        var parameter = new Parameter (parameterSignature.Name, parameterSignature.Type);
                         if (parameterSignature.HasDefaultValue)
                             parameter.DefaultValue = parameterSignature.DefaultValue;
                         procedure.Parameters.Add (parameter);
                     }
-                    foreach (var attribute in procedureSignature.Attributes)
-                        procedure.Attributes.Add (attribute);
                     if (procedureSignature.Documentation.Length > 0)
                         procedure.Documentation = procedureSignature.Documentation;
                     service.Procedures.Add (procedure);
@@ -93,6 +93,16 @@ namespace KRPC.Service
                 services.ServicesList.Add (service);
             }
             return services;
+        }
+
+        /// <summary>
+        /// A list of RPC clients that are currently connected to the server.
+        /// Each entry in the list is a clients identifier, name and address.
+        /// </summary>
+        [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public static IList<Utils.Tuple<byte[], string, string>> Clients {
+            get { return Core.Instance.RPCClients.Select (x => new Utils.Tuple<byte[], string, string> (x.Guid.ToByteArray (), x.Name, x.Address)).ToList (); }
         }
 
         /// <summary>
@@ -153,16 +163,16 @@ namespace KRPC.Service
         /// Add a streaming request and return its identifier.
         /// </summary>
         [KRPCProcedure]
-        public static uint AddStream (Request request)
+        public static Stream AddStream (Request request)
         {
-            return Core.Instance.AddStream (CallContext.Client, request);
+            return new Stream(Core.Instance.AddStream (CallContext.Client, request));
         }
 
         /// <summary>
         /// Remove a streaming request.
         /// </summary>
         [KRPCProcedure]
-        public static void RemoveStream (uint id)
+        public static void RemoveStream (ulong id)
         {
             Core.Instance.RemoveStream (CallContext.Client, id);
         }

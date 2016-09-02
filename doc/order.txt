@@ -1,6 +1,7 @@
 KRPC
 KRPC.GetStatus
 KRPC.GetServices
+KRPC.Clients
 KRPC.CurrentGameScene
 KRPC.GameScene
 KRPC.GameScene.SpaceCenter
@@ -161,6 +162,7 @@ SpaceCenter.Flight.Lift
 SpaceCenter.Flight.Drag
 SpaceCenter.Flight.SpeedOfSound
 SpaceCenter.Flight.Mach
+SpaceCenter.Flight.ReynoldsNumber
 SpaceCenter.Flight.EquivalentAirSpeed
 SpaceCenter.Flight.TerminalVelocity
 SpaceCenter.Flight.AngleOfAttack
@@ -333,6 +335,14 @@ SpaceCenter.Part.MomentOfInertia
 SpaceCenter.Part.InertiaTensor
 SpaceCenter.Part.ReferenceFrame
 SpaceCenter.Part.CenterOfMassReferenceFrame
+SpaceCenter.Part.AddForce
+SpaceCenter.Part.InstantaneousForce
+SpaceCenter.Force
+SpaceCenter.Force.Part
+SpaceCenter.Force.ForceVector
+SpaceCenter.Force.Position
+SpaceCenter.Force.ReferenceFrame
+SpaceCenter.Force.Remove
 SpaceCenter.Module
 SpaceCenter.Module.Name
 SpaceCenter.Module.Part

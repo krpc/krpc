@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Google.Protobuf;
-using KRPC.Server;
 using KRPC.Server.Message;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Server.WebSockets;
@@ -16,30 +15,36 @@ namespace KRPC.Test.Server.WebSockets
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class RPCStreamTest
     {
-        Request expectedRequest;
+        KRPC.Schema.KRPC.Request expectedRequest;
         byte[] requestBytes;
-        Response expectedResponse;
+        Response expectedResponseMessage;
+        KRPC.Schema.KRPC.Response expectedResponse;
         byte[] responseBytes;
 
         [SetUp]
         public void SetUp ()
         {
             // Create a request object and get the binary representation of it
-            expectedRequest = new Request ("TestService", "ProcedureNoArgsNoReturn");
+            expectedRequest = new KRPC.Schema.KRPC.Request ();
+            expectedRequest.Service = "TestService";
+            expectedRequest.Procedure = "ProcedureNoArgsNoReturn";
             using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
-                expectedRequest.ToProtobufMessage ().WriteTo (codedStream);
+                var codedStream = new CodedOutputStream (stream, true);
+                codedStream.WriteInt32 (expectedRequest.CalculateSize ());
+                expectedRequest.WriteTo (codedStream);
                 codedStream.Flush ();
                 requestBytes = stream.ToArray ();
             }
 
             // Create a response object and get the binary representation of it
-            expectedResponse = new Response ();
-            expectedResponse.Error = "SomeErrorMessage";
-            expectedResponse.Time = 42;
+            expectedResponseMessage = new Response ();
+            expectedResponseMessage.Error = "SomeErrorMessage";
+            expectedResponseMessage.Time = 42;
+            expectedResponse = expectedResponseMessage.ToProtobufMessage ();
             using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream);
-                expectedResponse.ToProtobufMessage ().WriteTo (codedStream);
+                var codedStream = new CodedOutputStream (stream, true);
+                codedStream.WriteInt32 (expectedResponse.CalculateSize ());
+                expectedResponse.WriteTo (codedStream);
                 codedStream.Flush ();
                 responseBytes = stream.ToArray ();
             }
@@ -322,7 +327,7 @@ namespace KRPC.Test.Server.WebSockets
             var stream = new MemoryStream ();
             var byteStream = new TestStream (null, stream);
             var rpcStream = new KRPC.Server.WebSockets.RPCStream (byteStream);
-            rpcStream.Write (expectedResponse);
+            rpcStream.Write (expectedResponseMessage);
             byte[] bytes = stream.ToArray ();
             var frameBytes = Frame.Binary (responseBytes).ToBytes ();
             Assert.AreEqual (frameBytes.ToHexString (), bytes.ToHexString ());

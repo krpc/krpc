@@ -3,8 +3,8 @@ import threading
 import krpc
 from krpc.test.servertestcase import ServerTestCase
 
-class TestClient(ServerTestCase, unittest.TestCase):
 
+class TestClient(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestClient, cls).setUpClass()
@@ -91,34 +91,31 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(obj2._object_id, obj.object_property._object_id)
 
     def test_optional_arguments(self):
-        self.assertEqual('jebfoobarbaz', self.conn.test_service.optional_arguments('jeb'))
-        self.assertEqual('jebbobbillbaz', self.conn.test_service.optional_arguments('jeb', 'bob', 'bill'))
+        self.assertEqual('jebfoobarnull', self.conn.test_service.optional_arguments('jeb'))
+        self.assertEqual('jebbobbillnull', self.conn.test_service.optional_arguments('jeb', 'bob', 'bill'))
+        obj = self.conn.test_service.create_test_object('kermin')
+        self.assertEqual('jebbobbillkermin', self.conn.test_service.optional_arguments('jeb', 'bob', 'bill', obj))
 
     def test_named_parameters(self):
-        self.assertEqual('1234',
-                         self.conn.test_service.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
-        self.assertEqual('2413',
-                         self.conn.test_service.optional_arguments(z='1', x='2', another_parameter='3', y='4'))
-        self.assertEqual('1243',
-                         self.conn.test_service.optional_arguments('1', '2', another_parameter='3', z='4'))
-        self.assertEqual('123baz',
-                         self.conn.test_service.optional_arguments('1', '2', z='3'))
-        self.assertEqual('12bar3',
-                         self.conn.test_service.optional_arguments('1', '2', another_parameter='3'))
-        self.assertRaises(TypeError,
-                          self.conn.test_service.optional_arguments, '1', '2', '3', '4', another_parameter='5')
-        self.assertRaises(TypeError,
-                          self.conn.test_service.optional_arguments, '1', '2', '3', y='4')
-        self.assertRaises(TypeError,
-                          self.conn.test_service.optional_arguments, '1', foo='4')
+        obj3 = self.conn.test_service.create_test_object('3')
+        obj4 = self.conn.test_service.create_test_object('4')
+        obj5 = self.conn.test_service.create_test_object('5')
+        self.assertEqual('1234', self.conn.test_service.optional_arguments(x='1', y='2', z='3', obj=obj4))
+        self.assertEqual('2413', self.conn.test_service.optional_arguments(z='1', x='2', obj=obj3, y='4'))
+        self.assertEqual('1243', self.conn.test_service.optional_arguments('1', '2', obj=obj3, z='4'))
+        self.assertEqual('123null', self.conn.test_service.optional_arguments('1', '2', z='3'))
+        self.assertEqual('12bar3', self.conn.test_service.optional_arguments('1', '2', obj=obj3))
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', '4', obj=obj5)
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', '2', '3', y='4')
+        self.assertRaises(TypeError, self.conn.test_service.optional_arguments, '1', foo='4')
 
         obj = self.conn.test_service.create_test_object('jeb')
-        self.assertEqual('1234', obj.optional_arguments(x='1', y='2', z='3', another_parameter='4'))
-        self.assertEqual('2413', obj.optional_arguments(z='1', x='2', another_parameter='3', y='4'))
-        self.assertEqual('1243', obj.optional_arguments('1', '2', another_parameter='3', z='4'))
-        self.assertEqual('123baz', obj.optional_arguments('1', '2', z='3'))
-        self.assertEqual('12bar3', obj.optional_arguments('1', '2', another_parameter='3'))
-        self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', another_parameter='5')
+        self.assertEqual('1234', obj.optional_arguments(x='1', y='2', z='3', obj=obj4))
+        self.assertEqual('2413', obj.optional_arguments(z='1', x='2', obj=obj3, y='4'))
+        self.assertEqual('1243', obj.optional_arguments('1', '2', obj=obj3, z='4'))
+        self.assertEqual('123null', obj.optional_arguments('1', '2', z='3'))
+        self.assertEqual('12bar3', obj.optional_arguments('1', '2', obj=obj3))
+        self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', '4', obj=obj5)
         self.assertRaises(TypeError, obj.optional_arguments, '1', '2', '3', y='4')
         self.assertRaises(TypeError, obj.optional_arguments, '1', foo='4')
 
@@ -186,7 +183,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_krpc_service_members(self):
         self.assertSetEqual(
-            set(['get_services', 'get_status', 'add_stream', 'remove_stream', 'current_game_scene', 'GameScene']),
+            set(['get_services', 'get_status', 'add_stream', 'remove_stream',
+                 'current_game_scene', 'GameScene', 'clients']),
             set(x for x in dir(self.conn.krpc) if not x.startswith('_')))
 
     def test_test_service_service_members(self):
@@ -281,7 +279,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         conn2 = self.connect()
         self.assertNotEqual(conn1.test_service.TestClass, conn2.test_service.TestClass)
         obj2 = conn2.test_service.TestClass(0)
-        obj1 = conn1._types.coerce_to(obj2, conn1._types.as_type('Class(TestService.TestClass)'))
+        obj1 = conn1._types.coerce_to(obj2, conn1._types.class_type('TestService', 'TestClass'))
         self.assertEqual(obj1, obj2)
         self.assertNotEqual(type(obj1), type(obj2))
         self.assertEqual(type(obj1), conn1.test_service.TestClass)

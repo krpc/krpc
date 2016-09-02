@@ -71,6 +71,9 @@
     <Reference Include="System.Runtime">
       <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\bazel-krpc\external\csharp_json\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\bazel-bin\server\TestAssemblyInfo.cs">
@@ -87,6 +90,7 @@
     <Compile Include="Server\ProtocolBuffers\SchemaTest.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamServerTest.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamStreamTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\TestingTools.cs" />
     <Compile Include="Server\TCP\AssumptionsTest.cs" />
     <Compile Include="Server\TCP\NetworkInformationTest.cs" />
     <Compile Include="Server\TCP\TCPClientTest.cs" />

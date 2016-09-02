@@ -8,7 +8,7 @@ from krpc.decoder import Decoder
 from krpc.utils import snake_case
 from krpc.error import RPCError
 import krpc.stream
-import krpc.schema.KRPC
+
 
 class Client(object):
     """
@@ -24,11 +24,9 @@ class Client(object):
         self._stream_connection = stream_connection
         self._stream_cache = {}
         self._stream_cache_lock = threading.Lock()
-        self._request_type = self._types.as_type('KRPC.Request')
-        self._response_type = self._types.as_type('KRPC.Response')
 
         # Get the services
-        services = self._invoke('KRPC', 'GetServices', [], [], [], self._types.as_type('KRPC.Services')).services
+        services = self._invoke('KRPC', 'GetServices', [], [], [], self._types.services_type).services
 
         # Set up services
         for service in services:
@@ -79,11 +77,11 @@ class Client(object):
 
         # Send the request
         with self._rpc_connection_lock:
-            self._send_request(request)
-            response = self._receive_response()
+            self._rpc_connection.send_message(request)
+            response = self._rpc_connection.receive_message(krpc.schema.KRPC.Response)
 
         # Check for an error response
-        if response.has_error:
+        if response.error:
             raise RPCError(response.error)
 
         # Decode the response and return the (optional) result
@@ -93,7 +91,7 @@ class Client(object):
         return result
 
     def _build_request(self, service, procedure, args,
-                       param_names, param_types, return_type): #pylint: disable=unused-argument
+                       param_names, param_types, return_type):  # pylint: disable=unused-argument
         """ Build a KRPC.Request object """
 
         request = krpc.schema.KRPC.Request(service=service, procedure=procedure)
@@ -105,30 +103,8 @@ class Client(object):
                 try:
                     value = self._types.coerce_to(value, typ)
                 except ValueError:
-                    raise TypeError('%s.%s() argument %d must be a %s, got a %s' % \
+                    raise TypeError('%s.%s() argument %d must be a %s, got a %s' %
                                     (service, procedure, i, typ.python_type, type(value)))
             request.arguments.add(position=i, value=Encoder.encode(value, typ))
 
         return request
-
-    def _send_request(self, request):
-        """ Send a KRPC.Request object to the server """
-        data = Encoder.encode_delimited(request, self._request_type)
-        self._rpc_connection.send(data)
-
-    def _receive_response(self):
-        """ Receive data from the server and decode it into a KRPC.Response object """
-
-        # Read the size and position of the response message
-        data = b''
-        while True:
-            try:
-                data += self._rpc_connection.partial_receive(1)
-                size, _ = Decoder.decode_size_and_position(data)
-                break
-            except IndexError:
-                pass
-
-        # Read and decode the response message
-        data = self._rpc_connection.receive(size)
-        return Decoder.decode(data, self._response_type)

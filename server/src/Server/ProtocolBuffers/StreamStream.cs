@@ -14,7 +14,7 @@ namespace KRPC.Server.ProtocolBuffers
             codedOutputStream = new CodedOutputStream (new ByteOutputAdapterStream (stream), true);
         }
 
-        public override void Write (StreamMessage value)
+        public override void Write (StreamUpdate value)
         {
             codedOutputStream.WriteMessage (value.ToProtobufMessage ());
             codedOutputStream.Flush ();

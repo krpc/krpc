@@ -39,20 +39,24 @@ nitpick_ignore = [
     ('csharp:type', 'KRPC.Schema.KRPC.Request'),
     ('csharp:type', 'KRPC.Schema.KRPC.Services'),
     ('csharp:type', 'KRPC.Schema.KRPC.Status'),
+    ('csharp:type', 'KRPC.Schema.KRPC.Stream'),
 
     ('cpp:type', 'T'),
     ('cpp:class', 'T'),
     ('cpp:type', 'int32_t'),
     ('cpp:type', 'uint32_t'),
+    ('cpp:type', 'uint64_t'),
     ('cpp:type', 'std'),
     ('cpp:type', 'std::string'),
     ('cpp:type', 'std::tuple<float, float, float>'),
     ('cpp:type', 'std::tuple<double, double>'),
     ('cpp:type', 'std::tuple<double, double, double>'),
     ('cpp:type', 'std::tuple<double, double, double, double>'),
+    ('cpp:type', 'std::tuple<std::string, std::string, std::string>'),
     ('cpp:type', 'std::vector<std::string>'),
     ('cpp:type', 'std::vector<double>'),
     ('cpp:type', 'std::vector<std::tuple<double, double, double>>'),
+    ('cpp:type', 'std::vector<std::tuple<std::string, std::string, std::string>>'),
     ('cpp:type', 'std::map<std::string, float>'),
     ('cpp:type', 'std::map<std::string, std::string>'),
     ('cpp:type', 'krpc'),
@@ -60,6 +64,7 @@ nitpick_ignore = [
     ('cpp:type', 'krpc::schema::Request'),
     ('cpp:type', 'krpc::schema::Services'),
     ('cpp:type', 'krpc::schema::Status'),
+    ('cpp:type', 'krpc::schema::Stream'),
     ('cpp:type', 'krpc::services'),
     # TODO: shouldn't need to add ignores for the following... but it seems that you do
     ('cpp:type', 'std::vector<Servo>'),
@@ -101,6 +106,7 @@ nitpick_ignore = [
     ('cpp:type', 'std::vector<SpaceCenter::Part>'),
 
     ('java:type', 'int'),
+    ('java:type', 'long'),
     ('java:type', 'boolean'),
     ('java:type', 'float'),
     ('java:type', 'double'),
@@ -115,6 +121,7 @@ nitpick_ignore = [
     ('java:type', 'krpc.schema.KRPC.Request'),
     ('java:type', 'krpc.schema.KRPC.Services'),
     ('java:type', 'krpc.schema.KRPC.Status'),
+    ('java:type', 'krpc.schema.KRPC.Stream'),
     #FIXME: ignore javasphinx bug
     ('java:meth', 'UICanvas.addText(String, org.javatuples.Pair<Double,Double>)'),
 
@@ -126,9 +133,11 @@ nitpick_ignore = [
     ('lua:obj', 'krpc.schema.KRPC.Request'),
     ('lua:class', 'krpc.schema.KRPC.Services'),
     ('lua:class', 'krpc.schema.KRPC.Status'),
+    ('lua:class', 'krpc.schema.KRPC.Stream'),
 
     ('py:obj', 'str'),
     ('py:obj', 'int'),
+    ('py:obj', 'long'),
     ('py:obj', 'bool'),
     ('py:obj', 'float'),
     ('py:obj', 'tuple'),
@@ -136,12 +145,15 @@ nitpick_ignore = [
     ('py:obj', 'list of str'),
     ('py:obj', 'list of float'),
     ('py:obj', 'list of tuple of (float, float, float)'),
+    ('py:obj', 'list of tuple of (str, str, str)'),
     ('py:obj', 'tuple of (float, float)'),
     ('py:obj', 'tuple of (float, float, float)'),
     ('py:obj', 'tuple of (float, float, float, float)'),
+    ('py:obj', 'tuple of (str, str, str)'),
     ('py:obj', 'dict from str to str'),
     ('py:obj', 'dict from str to float'),
     ('py:obj', 'krpc.schema.KRPC.Request'),
     ('py:class', 'krpc.schema.KRPC.Services'),
-    ('py:class', 'krpc.schema.KRPC.Status')
+    ('py:class', 'krpc.schema.KRPC.Status'),
+    ('py:class', 'krpc.schema.KRPC.Stream')
 ]

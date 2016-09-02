@@ -1,3 +1,9 @@
+v0.4.0
+ * Remove connection retries. Client will now fail fast if it fails to connect to the server
+ * Reorder parameters to krpc.connect() so that name is first - to be consistent with other client libraries
+v0.3.6
+ * Fix values not being documented in generated enumeration classes
+
 v0.3.5
  * Add check for number of elements in a tuple before invoking an RPC (#276)
  * Fix unicode issue (#284)

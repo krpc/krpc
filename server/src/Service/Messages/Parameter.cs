@@ -1,3 +1,5 @@
+using System;
+
 namespace KRPC.Service.Messages
 {
     #pragma warning disable 1591
@@ -5,7 +7,7 @@ namespace KRPC.Service.Messages
     {
         public string Name { get; private set; }
 
-        public string Type { get; private set; }
+        public Type Type { get; private set; }
 
         public bool HasDefaultValue { get; private set; }
 
@@ -19,7 +21,7 @@ namespace KRPC.Service.Messages
 
         object defaultValue;
 
-        public Parameter (string name, string type)
+        public Parameter (string name, Type type)
         {
             Name = name;
             Type = type;

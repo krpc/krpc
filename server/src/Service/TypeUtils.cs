@@ -12,12 +12,12 @@ namespace KRPC.Service
 {
     static class TypeUtils
     {
-        static Regex identifierPattern = new Regex ("^[a-z][a-z0-9]*$", RegexOptions.IgnoreCase);
+        static Regex identifierPattern = new Regex ("^[A-Z][A-Za-z0-9]*$");
 
         /// <summary>
         /// Returns true if the given identifier is a valid kRPC identifier.
         /// A valid identifier is a non-zero length string, containing letters and numbers,
-        /// and starting with a letter.
+        /// starting with an uppercase letter.
         /// </summary>
         public static bool IsAValidIdentifier (string identifier)
         {
@@ -92,7 +92,16 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsACollectionType (Type type)
         {
-            return IsAListCollectionType (type) || IsADictionaryCollectionType (type) || IsASetCollectionType (type) || IsATupleCollectionType (type);
+            return IsATupleCollectionType (type) || IsAListCollectionType (type) || IsASetCollectionType (type) || IsADictionaryCollectionType (type);
+        }
+
+        /// <summary>
+        /// Returns true if the given type can be used as a kRPC tuple collection type.
+        /// </summary>
+        public static bool IsATupleCollectionType (Type type)
+        {
+            return typeof(ITuple).IsAssignableFrom (type) &&
+            type.GetGenericArguments ().All (IsAValidType);
         }
 
         /// <summary>
@@ -106,17 +115,6 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Returns true if the given type can be used as a kRPC dictionary collection type.
-        /// </summary>
-        public static bool IsADictionaryCollectionType (Type type)
-        {
-            return Reflection.IsGenericType (type, typeof(IDictionary<,>)) &&
-            type.GetGenericArguments ().Length == 2 &&
-            IsAValidKeyType (type.GetGenericArguments () [0]) &&
-            IsAValidType (type.GetGenericArguments () [1]);
-        }
-
-        /// <summary>
         /// Returns true if the given type can be used as a kRPC list collection type.
         /// </summary>
         public static bool IsASetCollectionType (Type type)
@@ -127,105 +125,14 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Returns true if the given type can be used as a kRPC tuple collection type.
+        /// Returns true if the given type can be used as a kRPC dictionary collection type.
         /// </summary>
-        public static bool IsATupleCollectionType (Type type)
+        public static bool IsADictionaryCollectionType (Type type)
         {
-            return typeof(ITuple).IsAssignableFrom (type) &&
-            type.GetGenericArguments ().All (IsAValidType);
-        }
-
-        /// <summary>
-        /// Return the name of the kRPC type used to represent the given C# type
-        /// </summary>
-        public static string GetTypeName (Type type)
-        {
-            if (type == typeof(double))
-                return "double";
-            else if (type == typeof(float))
-                return "float";
-            else if (type == typeof(int))
-                return "int32";
-            else if (type == typeof(long))
-                return "int64";
-            else if (type == typeof(uint))
-                return "uint32";
-            else if (type == typeof(ulong))
-                return "uint64";
-            else if (type == typeof(bool))
-                return "bool";
-            else if (type == typeof(string))
-                return "string";
-            else if (type == typeof(byte[]))
-                return "bytes";
-            else if (IsAMessageType (type)) {
-                var name = type.ToString ();
-                return "KRPC." + name.Substring (name.LastIndexOf ('.') + 1);
-            } else if (IsAClassType (type))
-                return "uint64"; // Class instance GUIDs are uint64
-            else if (IsAnEnumType (type))
-                return "int32"; // Enums are int32
-            else if (IsAListCollectionType (type))
-                return "KRPC.List";
-            else if (IsADictionaryCollectionType (type))
-                return "KRPC.Dictionary";
-            else if (IsASetCollectionType (type))
-                return "KRPC.Set";
-            else if (IsATupleCollectionType (type))
-                return "KRPC.Tuple";
-            else
-                throw new ArgumentException ("Type " + type + " is not valid");
-        }
-
-        /// <summary>
-        /// Return the name of the kRPC type for the given C# type, as used in procedure attributes
-        /// </summary>
-        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        public static string GetFullTypeName (Type type)
-        {
-            if (!IsAValidType (type))
-                throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
-            else if (IsAClassType (type))
-                return "Class(" + GetClassServiceName (type) + "." + type.Name + ")";
-            else if (IsAnEnumType (type))
-                return "Enum(" + GetEnumServiceName (type) + "." + type.Name + ")";
-            else if (IsAListCollectionType (type))
-                return "List(" + GetFullTypeName (type.GetGenericArguments ().Single ()) + ")";
-            else if (IsADictionaryCollectionType (type))
-                return "Dictionary(" + GetFullTypeName (type.GetGenericArguments () [0]) + "," +
-                GetFullTypeName (type.GetGenericArguments () [1]) + ")";
-            else if (IsASetCollectionType (type))
-                return "Set(" + GetFullTypeName (type.GetGenericArguments ().Single ()) + ")";
-            else if (IsATupleCollectionType (type))
-                return "Tuple(" + String.Join (",", type.GetGenericArguments ().Select (t => GetFullTypeName (t)).ToArray ()) + ")";
-            else
-                return GetTypeName (type);
-        }
-
-        /// <summary>
-        /// Get the parameter type attributes for the given kRPC procedure parameter
-        /// </summary>
-        public static string[] ParameterTypeAttributes (int position, Type type)
-        {
-            if (!IsAValidType (type))
-                throw new ArgumentException ("Not a valid kRPC type", "type");
-            else if (IsAClassType (type) || IsAnEnumType (type) || IsACollectionType (type))
-                return new [] { "ParameterType(" + position + ")." + GetFullTypeName (type) };
-            else
-                return new string[] { };
-        }
-
-        /// <summary>
-        /// Get the return type attributes for the given type
-        /// </summary>
-        public static string[] ReturnTypeAttributes (Type type)
-        {
-            if (!IsAValidType (type))
-                throw new ArgumentException ("Not a valid kRPC type", "type");
-            else if (IsAClassType (type) || IsAnEnumType (type) || IsACollectionType (type))
-                return new [] { "ReturnType." + GetFullTypeName (type) };
-            else
-                return new string[] { };
+            return Reflection.IsGenericType (type, typeof(IDictionary<,>)) &&
+            type.GetGenericArguments ().Length == 2 &&
+            IsAValidKeyType (type.GetGenericArguments () [0]) &&
+            IsAValidType (type.GetGenericArguments () [1]);
         }
 
         /// <summary>
@@ -428,9 +335,9 @@ namespace KRPC.Service
         ///  1. Must have KRPCMethod attribute
         ///  2. Must have a valid identifier
         ///  3. Must be a public method
-        ///  4. Must be declared inside a kRPC class
+        ///  4. Must be declared inside a class that is assignable from the given kRPC class
         /// </summary>
-        public static void ValidateKRPCMethod (MethodBase method)
+        public static void ValidateKRPCMethod (Type cls, MethodBase method)
         {
             if (!Reflection.HasAttribute<KRPCMethodAttribute> (method))
                 throw new ArgumentException (method + " does not have KRPCMethod attribute");
@@ -440,9 +347,10 @@ namespace KRPC.Service
             // Check it's public non-static
             if (!method.IsPublic)
                 throw new ServiceException ("KRPCMethod " + method + " is not public");
-            // Check the class is defined in a KRPCClass
+            // Check the method is defined in a KRPCClass
+            ValidateKRPCClass (cls);
             var declaringType = method.DeclaringType;
-            if (declaringType == null || !Reflection.HasAttribute<KRPCClassAttribute> (declaringType))
+            if (declaringType == null || !declaringType.IsAssignableFrom (cls))
                 throw new ServiceException ("KRPCMethod " + method + " is not declared inside a KRPCClass");
         }
 
@@ -451,9 +359,9 @@ namespace KRPC.Service
         ///  1. Must have KRPCProperty attribute
         ///  2. Must have a valid identifier
         ///  3. Must be a public non-static property
-        ///  4. Must be declared inside a kRPC class
+        ///  4. Must be declared inside a class that is assignable from the given kRPC class
         /// </summary>
-        public static void ValidateKRPCClassProperty (PropertyInfo property)
+        public static void ValidateKRPCClassProperty (Type cls, PropertyInfo property)
         {
             if (!Reflection.HasAttribute<KRPCPropertyAttribute> (property))
                 throw new ArgumentException (property + " does not have KRPCProperty attribute");
@@ -463,10 +371,92 @@ namespace KRPC.Service
             // Check it's not static
             if (!(property.IsPublic () && !property.IsStatic ()))
                 throw new ServiceException ("KRPCProperty " + property + " is not public non-static");
-            // Check the method is defined directly inside a KRPCClass
+            // Check the method is defined in a KRPCClass
+            ValidateKRPCClass (cls);
             var declaringType = property.DeclaringType;
-            if (declaringType == null || !Reflection.HasAttribute<KRPCClassAttribute> (declaringType))
+            if (declaringType == null || !declaringType.IsAssignableFrom (cls))
                 throw new ServiceException ("KRPCProperty " + property + " is not declared inside a KRPCClass");
+        }
+
+        /// <summary>
+        /// Return the name of the kRPC type used to represent the given C# type
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
+        public static object SerializeType (Type type)
+        {
+            if (!IsAValidType (type))
+                throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
+            var result = new Dictionary<string,object> ();
+            if (IsAValueType (type)) {
+                switch (Type.GetTypeCode (type)) {
+                case TypeCode.Double:
+                    result["code"] = "DOUBLE";
+                    break;
+                case TypeCode.Single:
+                    result["code"] = "FLOAT";
+                    break;
+                case TypeCode.Int32:
+                    result["code"] = "SINT32";
+                    break;
+                case TypeCode.Int64:
+                    result["code"] = "SINT64";
+                    break;
+                case TypeCode.UInt32:
+                    result["code"] = "UINT32";
+                    break;
+                case TypeCode.UInt64:
+                    result["code"] = "UINT64";
+                    break;
+                case TypeCode.Boolean:
+                    result["code"] = "BOOL";
+                    break;
+                case TypeCode.String:
+                    result["code"] = "STRING";
+                    break;
+                default:
+                    if (type == typeof(byte[]))
+                        result["code"] = "BYTES";
+                    break;
+                }
+            } else if (IsAClassType (type)) {
+                result["code"] = "CLASS";
+                result["service"] = GetClassServiceName (type);
+                result["name"] = type.Name;
+            } else if (IsAnEnumType (type)) {
+                result["code"] = "ENUMERATION";
+                result["service"] = GetEnumServiceName (type);
+                result["name"] = type.Name;
+            } else if (IsATupleCollectionType (type)) {
+                result["code"] = "TUPLE";
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+            } else if (IsAListCollectionType (type)) {
+                result["code"] = "LIST";
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+            } else if (IsASetCollectionType (type)) {
+                result["code"] = "SET";
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+            } else if (IsADictionaryCollectionType (type)) {
+                result["code"] = "DICTIONARY";
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+            } else if (IsAMessageType (type)) {
+                var name = type.ToString ();
+                var camelCase = name.Substring (name.LastIndexOf ('.') + 1);
+                var snakeCase = String.Empty;
+                for (var i = 0; i < camelCase.Length-1; i++) {
+                    if (Char.IsLower(camelCase[i]) && Char.IsUpper(camelCase[i+1]))
+                        snakeCase += camelCase[i] + "_";
+                    else
+                        snakeCase += camelCase[i];
+                }
+                snakeCase += camelCase[camelCase.Length-1];
+                result["code"] = snakeCase.ToUpper();
+            }
+            if (!result.ContainsKey("code"))
+                throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
+            return result;
         }
     }
 }

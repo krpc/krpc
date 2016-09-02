@@ -31,5 +31,17 @@ namespace KRPC.SpaceCenter.ExternalAPI
         public static Func<Vessel, double> VesselTSFC { get; internal set; }
 
         public static Func<Vessel, double> VesselStallFrac { get; internal set; }
+
+        public static double VesselMachNumber (Vessel vessel)
+        {
+            var aero = vessel.GetComponent ("FARVesselAero");
+            return (double)aero.GetType ().GetProperty ("MachNumber").GetValue (aero, null);
+        }
+
+        public static double VesselReynoldsNumber (Vessel vessel)
+        {
+            var aero = vessel.GetComponent ("FARVesselAero");
+            return (double)aero.GetType ().GetProperty ("ReynoldsNumber").GetValue (aero, null);
+        }
     }
 }

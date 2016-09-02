@@ -1,4 +1,5 @@
 R: Gendarme.Rules.Design.AvoidSmallNamespaceRule
+N:
 N: KRPC.Client.Attributes
 
 R: Gendarme.Rules.Naming.UseCorrectCasingRule
@@ -19,6 +20,7 @@ N: KRPC.Client.Services.KRPC
 R: Gendarme.Rules.Design.DoNotDeclareSettersOnCollectionPropertiesRule
 N: KRPC.Client.Services.Drawing
 R: Gendarme.Rules.Design.Generic.DoNotExposeNestedGenericSignaturesRule
+N: KRPC.Client.Services.KRPC
 N: KRPC.Client.Services.Drawing
 R: Gendarme.Rules.Naming.AvoidRedundancyInMethodNameRule
 N: KRPC.Client.Services.RemoteTech
@@ -41,6 +43,11 @@ R: Gendarme.Rules.Correctness.CheckParametersNullityInVisibleMethodsRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Correctness.ReviewInconsistentIdentityRule
 N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Design.AvoidVisibleNestedTypesRule
+T: KRPC.Schema.KRPC.ConnectionResponse/Types
+T: KRPC.Schema.KRPC.ConnectionResponse/Types/Status
+T: KRPC.Schema.KRPC.Type/Types
+T: KRPC.Schema.KRPC.Type/Types/TypeCode
 R: Gendarme.Rules.Maintainability.AvoidLackOfCohesionOfMethodsRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Naming.AvoidNonAlphanumericIdentifierRule
@@ -51,8 +58,16 @@ R: Gendarme.Rules.Naming.UseCorrectCasingRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Naming.UseCorrectSuffixRule
 N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Naming.UseSingularNameInEnumsUnlessAreFlagsRule
+T: KRPC.Schema.KRPC.ConnectionResponse/Types/Status
+R: Gendarme.Rules.Performance.AvoidUnneededFieldInitializationRule
+N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Performance.UseStringEmptyRule
 N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Serialization.MarkEnumerationsAsSerializableRule
+N: KRPC.Schema.KRPC
+T: KRPC.Schema.KRPC.ConnectionResponse/Types/Status
+T: KRPC.Schema.KRPC.Type/Types/TypeCode
 R: Gendarme.Rules.Smells.AvoidLargeClassesRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Smells.AvoidLongMethodsRule

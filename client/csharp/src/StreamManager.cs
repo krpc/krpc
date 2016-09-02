@@ -18,9 +18,9 @@ namespace KRPC.Client
     {
         readonly Connection connection;
         readonly Object accessLock = new Object ();
-        readonly IDictionary<UInt32, Type> streamTypes = new Dictionary<UInt32, Type> ();
-        readonly IDictionary<UInt32, ByteString> streamData = new Dictionary<UInt32, ByteString> ();
-        readonly IDictionary<UInt32, Object> streamValues = new Dictionary<UInt32, Object> ();
+        readonly IDictionary<ulong, System.Type> streamTypes = new Dictionary<ulong, System.Type> ();
+        readonly IDictionary<ulong, ByteString> streamData = new Dictionary<ulong, ByteString> ();
+        readonly IDictionary<ulong, Object> streamValues = new Dictionary<ulong, Object> ();
         readonly UpdateThread updateThreadObject;
         readonly Thread updateThread;
 
@@ -63,10 +63,10 @@ namespace KRPC.Client
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public UInt32 AddStream (Request request, Type type)
+        public ulong AddStream (Request request, System.Type type)
         {
             CheckDisposed ();
-            var id = connection.KRPC ().AddStream (request);
+            var id = connection.KRPC ().AddStream (request).Id;
             lock (accessLock) {
                 if (!streamTypes.ContainsKey (id)) {
                     streamTypes [id] = type;
@@ -77,7 +77,7 @@ namespace KRPC.Client
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public void RemoveStream (UInt32 id)
+        public void RemoveStream (ulong id)
         {
             CheckDisposed ();
             connection.KRPC ().RemoveStream (id);
@@ -88,7 +88,7 @@ namespace KRPC.Client
             }
         }
 
-        public Object GetValue (UInt32 id)
+        public Object GetValue (ulong id)
         {
             CheckDisposed ();
             Object result;
@@ -103,12 +103,12 @@ namespace KRPC.Client
             return result;
         }
 
-        void Update (UInt32 id, Response response)
+        void Update (ulong id, Response response)
         {
             lock (accessLock) {
                 if (!streamData.ContainsKey (id))
                     return;
-                if (response.HasError)
+                if (response.Error.Length > 0)
                     return; //TODO: do something with the error
                 var data = response.ReturnValue;
                 streamData [id] = data;
@@ -144,12 +144,12 @@ namespace KRPC.Client
                         var size = Connection.ReadMessageData (stream, ref buffer, stopEvent);
                         if (size == 0 || stop)
                             break;
-                        var message = StreamMessage.Parser.ParseFrom (new CodedInputStream (buffer, 0, size));
+                        var update = StreamUpdate.Parser.ParseFrom (new CodedInputStream (buffer, 0, size));
                         //TODO: handle errors
                         if (stop)
                             break;
-                        foreach (var response in message.Responses) {
-                            manager.Update (response.Id, response.Response);
+                        foreach (var result in update.Results) {
+                            manager.Update (result.Id, result.Response);
                             if (stop)
                                 break;
                         }

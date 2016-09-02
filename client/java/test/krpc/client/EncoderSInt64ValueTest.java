@@ -16,35 +16,40 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.protobuf.ByteString;
 
+import krpc.client.Types;
+import krpc.schema.KRPC.Type;
+import krpc.schema.KRPC.Type.TypeCode;
+
 @RunWith(Parameterized.class)
-public class EncoderInt32ValueTest {
+public class EncoderSInt64ValueTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
             { 0, "00" },
-            { 1, "01" },
-            { 42, "2a" },
-            { 300, "ac02" },
-            { -33, "dfffffffffffffffff01" }
-            // { Integer.MAX_VALUE, "ffffffffffffffff7f"},
-            // { Integer.MIN_VALUE, "808080808080808001" }
+            { 1, "02" },
+            { 42, "54" },
+            { 300, "d804" },
+            { 1234567890000L, "a091d89fee47" },
+            { -33, "41" }
         });
     }
 
     @Parameter(value = 0)
-    public int value;
+    public long value;
     @Parameter(value = 1)
     public String data;
 
+    Type type = Types.CreateValue(TypeCode.SINT64);
+
     @Test
     public void testEncode() throws IOException {
-        ByteString encodeResult = Encoder.encode(value);
+        ByteString encodeResult = Encoder.encode(value, type);
         assertEquals(data, hexlify(encodeResult));
     }
 
     @Test
     public void testDecode() throws IOException {
-        int decodeResult = Encoder.decodeInt32(unhexlify(data));
+        long decodeResult = (long) Encoder.decode(unhexlify(data), type, null);
         assertEquals(value, decodeResult);
     }
 }

@@ -6,14 +6,14 @@ namespace KRPC.Service
 {
     sealed class StreamRequest
     {
-        public uint Identifier { get; private set; }
+        public ulong Identifier { get; private set; }
 
         public ProcedureSignature Procedure { get; private set; }
 
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidReturningArraysOnPropertiesRule")]
         public object[] Arguments { get; private set; }
 
-        public StreamResponse Response { get; private set; }
+        public StreamResult Result { get; private set; }
 
         public StreamRequest (Request request)
         {
@@ -21,12 +21,12 @@ namespace KRPC.Service
             var services = Services.Instance;
             Procedure = services.GetProcedureSignature (request.Service, request.Procedure);
             Arguments = services.GetArguments (Procedure, request.Arguments);
-            Response = new StreamResponse (Identifier);
+            Result = new StreamResult (Identifier);
         }
 
-        static uint nextIdentifier;
+        static ulong nextIdentifier;
 
-        static uint NextIdentifier {
+        static ulong NextIdentifier {
             get {
                 var result = nextIdentifier;
                 nextIdentifier++;

@@ -12,21 +12,49 @@ using KRPC.Utils;
 namespace KRPC
 {
     /// <summary>
-    /// The kRPC core. Manages the execution of remote procedures,
+    /// The kRPC core, which manages the execution of remote procedures,
     /// bridging the gap between servers and services.
+    /// This class is a singleton. The instance can be obtained via the <see cref="Instance"/> property.
     /// </summary>
-    sealed class Core
+    public sealed class Core
     {
         //TODO: remove servers list, replace with events etc.
         List<Server.Server> servers;
         IDictionary<Guid, IClient<Request, Response>> rpcClients;
-        IDictionary<Guid, IClient<NoMessage, StreamMessage>> streamClients;
+        IDictionary<Guid, IClient<NoMessage, StreamUpdate>> streamClients;
         RoundRobinScheduler<IClient<Request,Response>> clientScheduler;
         List<RequestContinuation> continuations;
-        IDictionary<IClient<NoMessage,StreamMessage>, IList<StreamRequest>> streamRequests;
-        IDictionary<uint, object> streamResultCache;
+        IDictionary<IClient<NoMessage,StreamUpdate>, IList<StreamRequest>> streamRequests;
+        IDictionary<ulong, object> streamResultCache;
 
-        internal Func<double> GetUniversalTime;
+        static Core instance;
+
+        /// <summary>
+        /// Get or create an instance of KRPC.Core
+        /// </summary>
+        public static Core Instance {
+            get {
+                if (instance == null)
+                    instance = new Core ();
+                return instance;
+            }
+        }
+
+        Core ()
+        {
+            servers = new List<Server.Server> ();
+            rpcClients = new Dictionary<Guid, IClient<Request, Response>> ();
+            streamClients = new Dictionary<Guid, IClient<NoMessage, StreamUpdate>> ();
+            clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
+            continuations = new List<RequestContinuation> ();
+            streamRequests = new Dictionary<IClient<NoMessage,StreamUpdate>,IList<StreamRequest>> ();
+            streamResultCache = new Dictionary<ulong, object> ();
+            OneRPCPerUpdate = false;
+            MaxTimePerUpdate = 5000;
+            AdaptiveRateControl = true;
+            BlockingRecv = true;
+            RecvTimeout = 1000;
+        }
 
         /// <summary>
         /// Event triggered when a RPC client has connected
@@ -62,14 +90,14 @@ namespace KRPC
             EventHandlerExtensions.Invoke (OnRPCClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
 
-        internal void StreamClientConnected (IClient<NoMessage,StreamMessage> client)
+        internal void StreamClientConnected (IClient<NoMessage,StreamUpdate> client)
         {
             streamClients [client.Guid] = client;
             streamRequests [client] = new List<StreamRequest> ();
             EventHandlerExtensions.Invoke (OnStreamClientConnected, this, new ClientConnectedEventArgs (client));
         }
 
-        internal void StreamClientDisconnected (IClient<NoMessage,StreamMessage> client)
+        internal void StreamClientDisconnected (IClient<NoMessage,StreamUpdate> client)
         {
             streamClients.Remove (client.Guid);
             streamRequests.Remove (client);
@@ -77,38 +105,23 @@ namespace KRPC
         }
 
         /// <summary>
+        /// Get a list of all RPC clients connected to the server.
+        /// </summary>
+        public IEnumerable<IClient> RPCClients {
+            get { return rpcClients.Values.Cast<IClient> (); }
+        }
+
+        /// <summary>
+        /// Get a list of all Stream clients connected to the server.
+        /// </summary>
+        public IEnumerable<IClient> StreamClients {
+            get { return streamClients.Values.Cast<IClient> (); }
+        }
+
+        /// <summary>
         /// Event triggered when a client performs some activity
         /// </summary>
         public event EventHandler<ClientActivityEventArgs> OnClientActivity;
-
-        static Core instance;
-
-        /// <summary>
-        /// Instance of KRPCCore
-        /// </summary>
-        public static Core Instance {
-            get {
-                if (instance == null)
-                    instance = new Core ();
-                return instance;
-            }
-        }
-
-        Core ()
-        {
-            servers = new List<Server.Server> ();
-            rpcClients = new Dictionary<Guid, IClient<Request, Response>> ();
-            streamClients = new Dictionary<Guid, IClient<NoMessage, StreamMessage>> ();
-            clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
-            continuations = new List<RequestContinuation> ();
-            streamRequests = new Dictionary<IClient<NoMessage,StreamMessage>,IList<StreamRequest>> ();
-            streamResultCache = new Dictionary<uint, object> ();
-            OneRPCPerUpdate = false;
-            MaxTimePerUpdate = 5000;
-            AdaptiveRateControl = true;
-            BlockingRecv = true;
-            RecvTimeout = 1000;
-        }
 
         /// <summary>
         /// Add a server to the core.
@@ -277,7 +290,7 @@ namespace KRPC
         /// Update the server
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        public void Update ()
+        internal void Update ()
         {
             ulong startRPCsExecuted = RPCsExecuted;
             ulong startStreamRPCsExecuted = StreamRPCsExecuted;
@@ -446,7 +459,7 @@ namespace KRPC
                     if (!rpcClients.ContainsKey (id))
                         continue;
                     CallContext.Set (rpcClients [id]);
-                    var streamMessage = new StreamMessage ();
+                    var streamUpdate = new StreamUpdate ();
                     foreach (var request in requests) {
                         // Run the RPC
                         Response response;
@@ -454,12 +467,10 @@ namespace KRPC
                             response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
                         } catch (RPCException e) {
                             response = new Response ();
-                            response.HasError = true;
                             response.Error = e.ToString ();
                         } catch (YieldException e) {
                             //FIXME: handle yields correctly
                             response = new Response ();
-                            response.HasError = true;
                             response.Error = e.ToString ();
                         }
                         rpcsExecuted++;
@@ -469,13 +480,12 @@ namespace KRPC
                             continue;
                         // Add the update to the response message
                         streamResultCache [request.Identifier] = response.ReturnValue;
-                        response.Time = GetUniversalTime ();
-                        var streamResponse = request.Response;
-                        streamResponse.Response = response;
-                        streamMessage.Responses.Add (streamResponse);
+                        var streamResult = request.Result;
+                        streamResult.Response = response;
+                        streamUpdate.Results.Add (streamResult);
                     }
-                    if (streamMessage.Responses.Count > 0)
-                        streamClient.Stream.Write (streamMessage);
+                    if (streamUpdate.Results.Count > 0)
+                        streamClient.Stream.Write (streamUpdate);
                 }
             }
 
@@ -488,7 +498,7 @@ namespace KRPC
         /// <summary>
         /// Add a stream to the server
         /// </summary>
-        internal uint AddStream (IClient rpcClient, Request request)
+        internal ulong AddStream (IClient rpcClient, Request request)
         {
             var id = rpcClient.Guid;
             if (!streamClients.ContainsKey (id))
@@ -516,7 +526,7 @@ namespace KRPC
         /// <summary>
         /// Remove a stream from the server
         /// </summary>
-        internal void RemoveStream (IClient rpcClient, uint identifier)
+        internal void RemoveStream (IClient rpcClient, ulong identifier)
         {
             var id = rpcClient.Guid;
             if (!streamClients.ContainsKey (id))
@@ -566,9 +576,7 @@ namespace KRPC
                     continue;
                 } catch (Exception e) {
                     var response = new Response ();
-                    response.HasError = true;
                     response.Error = "Error receiving message" + Environment.NewLine + e.Message + Environment.NewLine + e.StackTrace;
-                    response.Time = GetUniversalTime ();
                     if (Logger.ShouldLog (Logger.Severity.Debug))
                         Logger.WriteLine (e.Message + Environment.NewLine + e.StackTrace, Logger.Severity.Error);
                     Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
@@ -584,7 +592,7 @@ namespace KRPC
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
         [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
-        void ExecuteContinuation (RequestContinuation continuation)
+        static void ExecuteContinuation (RequestContinuation continuation)
         {
             var client = continuation.Client;
 
@@ -598,13 +606,11 @@ namespace KRPC
                 throw;
             } catch (RPCException e) {
                 response = new Response ();
-                response.HasError = true;
                 response.Error = e.Message;
                 if (Logger.ShouldLog (Logger.Severity.Debug))
                     Logger.WriteLine (response.Error, Logger.Severity.Debug);
             } catch (Exception e) {
                 response = new Response ();
-                response.HasError = true;
                 response.Error = e.Message + Environment.NewLine + e.StackTrace;
                 if (Logger.ShouldLog (Logger.Severity.Debug))
                     Logger.WriteLine (response.Error, Logger.Severity.Debug);
@@ -613,7 +619,6 @@ namespace KRPC
             }
 
             // Send response to the client
-            response.Time = GetUniversalTime ();
             client.Stream.Write (response);
             if (Logger.ShouldLog (Logger.Severity.Debug)) {
                 if (response.HasError)

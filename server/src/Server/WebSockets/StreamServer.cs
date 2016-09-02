@@ -16,7 +16,7 @@ namespace KRPC.Server.WebSockets
         /// <summary>
         /// When a client requests a connection, process the websockets HTTP request
         /// </summary>
-        protected override IClient<NoMessage,StreamMessage> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
+        protected override IClient<NoMessage,StreamUpdate> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
             var request = ConnectionRequest.ReadRequest (args);
             if (args.Request.ShouldDeny)

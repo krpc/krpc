@@ -12,32 +12,36 @@ namespace KRPC.Test.Server.ProtocolBuffers
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     public class RPCStreamTest
     {
-        Request expectedRequest;
+        KRPC.Schema.KRPC.Request expectedRequest;
         byte[] requestBytes;
-        Response expectedResponse;
+        Response expectedResponseMessage;
+        KRPC.Schema.KRPC.Response expectedResponse;
         byte[] responseBytes;
 
         [SetUp]
         public void SetUp ()
         {
             // Create a request object and get the binary representation of it
-            expectedRequest = new Request ("TestService", "ProcedureNoArgsNoReturn");
+            expectedRequest = new KRPC.Schema.KRPC.Request ();
+            expectedRequest.Service = "TestService";
+            expectedRequest.Procedure = "ProcedureNoArgsNoReturn";
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream, true);
-                codedStream.WriteInt32 (expectedRequest.ToProtobufMessage ().CalculateSize ());
-                expectedRequest.ToProtobufMessage ().WriteTo (codedStream);
+                codedStream.WriteInt32 (expectedRequest.CalculateSize ());
+                expectedRequest.WriteTo (codedStream);
                 codedStream.Flush ();
                 requestBytes = stream.ToArray ();
             }
 
             // Create a response object and get the binary representation of it
-            expectedResponse = new Response ();
-            expectedResponse.Error = "SomeErrorMessage";
-            expectedResponse.Time = 42;
+            expectedResponseMessage = new Response ();
+            expectedResponseMessage.Error = "SomeErrorMessage";
+            expectedResponseMessage.Time = 42;
+            expectedResponse = expectedResponseMessage.ToProtobufMessage ();
             using (var stream = new MemoryStream ()) {
                 var codedStream = new CodedOutputStream (stream, true);
-                codedStream.WriteInt32 (expectedResponse.ToProtobufMessage ().CalculateSize ());
-                expectedResponse.ToProtobufMessage ().WriteTo (codedStream);
+                codedStream.WriteInt32 (expectedResponse.CalculateSize ());
+                expectedResponse.WriteTo (codedStream);
                 codedStream.Flush ();
                 responseBytes = stream.ToArray ();
             }
@@ -181,7 +185,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var stream = new MemoryStream ();
             var byteStream = new TestStream (null, stream);
             var rpcStream = new RPCStream (byteStream);
-            rpcStream.Write (expectedResponse);
+            rpcStream.Write (expectedResponseMessage);
             Assert.AreEqual (responseBytes.ToHexString (), stream.ToArray ().ToHexString ());
             Assert.AreEqual (responseBytes.Length, rpcStream.BytesWritten);
             Assert.AreEqual (0, rpcStream.BytesRead);

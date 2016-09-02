@@ -13,7 +13,7 @@ namespace KRPC.Client
     {
         readonly StreamManager streamManager;
 
-        internal UInt32 Id { get; private set; }
+        internal ulong Id { get; private set; }
 
         internal Stream (Connection connection, Request request)
         {

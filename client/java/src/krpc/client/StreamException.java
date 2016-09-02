@@ -9,4 +9,8 @@ public class StreamException extends Exception {
     public StreamException(String message) {
         super(message);
     }
+
+    public StreamException(String message, Exception innerException) {
+        super(message, innerException);
+    }
 }

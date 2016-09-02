@@ -1,11 +1,13 @@
-from krpc.types import Types
 from krpc.decoder import Decoder
 from krpc.error import RPCError
+import krpc.schema
+
 
 class StreamExistsError(RuntimeError):
     def __init__(self, stream_id):
         super(StreamExistsError, self).__init__('stream %d already exists' % stream_id)
         self.stream_id = stream_id
+
 
 class Stream(object):
     """ A streamed request. When invoked, returns the most recent value of the request. """
@@ -36,7 +38,7 @@ class Stream(object):
         self._value = func(*args, **kwargs)
         # Add the stream to the server and add the initial value to the cache
         with self._conn._stream_cache_lock:
-            self._stream_id = self._conn.krpc.add_stream(self._request)
+            self._stream_id = self._conn.krpc.add_stream(self._request).id
             if self._stream_id in self._conn._stream_cache:
                 raise StreamExistsError(self._stream_id)
             self._conn._stream_cache[self._stream_id] = self
@@ -64,6 +66,7 @@ class Stream(object):
         """ Update the stream's most recent value """
         self._value = value
 
+
 def add_stream(conn, func, *args, **kwargs):
     """ Create a stream and return it """
     try:
@@ -71,44 +74,43 @@ def add_stream(conn, func, *args, **kwargs):
     except StreamExistsError as ex:
         return conn._stream_cache[ex.stream_id]
 
-def update_thread(connection, stop, cache, cache_lock):
-    stream_message_type = Types().as_type('KRPC.StreamMessage')
 
+def update_thread(connection, stop, cache, cache_lock):
     while True:
 
-        # Read the size and position of the response message
+        # Read the size and position of the update message
         data = b''
         while True:
             try:
                 data += connection.partial_receive(1)
-                size, _ = Decoder.decode_size_and_position(data)
+                size = Decoder.decode_message_size(data)
                 break
             except IndexError:
                 pass
-            except: #pylint: disable=bare-except
-                #TODO: is there a better way to catch exceptions when the
+            except:  # pylint: disable=bare-except
+                # TODO: is there a better way to catch exceptions when the
                 #      thread is forcibly stopped (e.g. by CTRL+c)?
                 return
             if stop.is_set():
                 connection.close()
                 return
 
-        # Read and decode the response message
+        # Read and decode the update message
         data = connection.receive(size)
-        response = Decoder.decode(data, stream_message_type)
+        update = Decoder.decode_message(data, krpc.schema.KRPC.StreamUpdate)
 
         # Add the data to the cache
         with cache_lock:
-            for response in response.responses:
-                if response.id not in cache:
+            for result in update.results:
+                if result.id not in cache:
                     continue
 
                 # Check for an error response
-                if response.response.has_error:
-                    cache[response.id].value = RPCError(response.response.error)
+                if result.response.error:
+                    cache[result.id].value = RPCError(result.response.error)
                     continue
 
                 # Decode the return value and store it in the cache
-                typ = cache[response.id].return_type
-                value = Decoder.decode(response.response.return_value, typ)
-                cache[response.id].update(value)
+                typ = cache[result.id].return_type
+                value = Decoder.decode(result.response.return_value, typ)
+                cache[result.id].update(value)

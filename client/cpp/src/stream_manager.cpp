@@ -6,6 +6,7 @@
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
+#include "krpc/services/krpc.hpp"
 
 namespace krpc {
 
@@ -20,7 +21,7 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
     while (!stop->load()) {
       try {
         data += connection->partial_receive(1);
-        size = decoder::decode_size_and_position(data).first;
+        size = decoder::decode_size(data);
         break;
       } catch (decoder::DecodeFailed&) {
       }
@@ -29,11 +30,11 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
       break;
 
     data = connection->receive(size);
-    schema::StreamMessage message;
-    decoder::decode(message, data, client);
+    schema::StreamUpdate update;
+    decoder::decode(update, data, client);
 
-    for (auto response : message.responses())
-      stream_manager->update(response.id(), response.response());
+    for (auto result : update.results())
+      stream_manager->update(result.id(), result.response());
   }
 }
 
@@ -53,18 +54,14 @@ StreamManager::~StreamManager() {
 
 google::protobuf::uint64 StreamManager::add_stream(const schema::Request& request) {
   std::lock_guard<std::mutex> guard(*data_lock);
-  std::vector<std::string> args = { encoder::encode(request) };
-  std::string response = client->invoke("KRPC", "AddStream", args);
-  google::protobuf::uint64 id = 0;
-  decoder::decode(id, response, client);
-  data[id] = client->invoke(request);
-  return id;
+  schema::Stream stream = services::KRPC(client).add_stream(request);
+  data[stream.id()] = client->invoke(request);
+  return stream.id();
 }
 
 void StreamManager::remove_stream(google::protobuf::uint64 id) {
   std::lock_guard<std::mutex> guard(*data_lock);
-  std::vector<std::string> args = { encoder::encode(id) };
-  client->invoke("KRPC", "RemoveStream", args);
+  services::KRPC(client).remove_stream(id);
   data.erase(id);
 }
 
