@@ -156,5 +156,7 @@
     <Compile Include="Services\VesselSituation.cs" />
     <Compile Include="Services\VesselType.cs" />
     <Compile Include="Services\WarpMode.cs" />
+    <Compile Include="Services\Waypoint.cs" />
+    <Compile Include="Services\WaypointManager.cs" />
   </ItemGroup>
 </Project>

@@ -576,5 +576,14 @@ namespace KRPC.SpaceCenter.Services
             if (ReferenceEquals (to, null))
                 throw new ArgumentNullException ("to");
         }
+
+        /// <summary>
+        /// The waypointManager.
+        /// </summary>
+        [KRPCProperty]
+        public static WaypointManager WaypointManager
+        {
+            get { return new WaypointManager(); }
+        }
     }
 }

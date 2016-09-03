@@ -22,6 +22,7 @@ fuelled
 gimbal
 gimballed
 gimballing
+greek
 hostname
 inkscape
 integration
@@ -83,3 +84,6 @@ unserialize
 varint
 vertices
 virtualenv
+waypoint
+waypoints
+waypointManager
