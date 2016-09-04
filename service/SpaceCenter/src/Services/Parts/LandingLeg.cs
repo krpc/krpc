@@ -73,9 +73,9 @@ namespace KRPC.SpaceCenter.Services.Parts
                 if (damage != null && damage.isDamaged)
                     return LandingLegState.Broken;
                 if (deployment != null) {
-                    if (deployment.position == deployment.deployedPosition)
+                    if (Math.Abs (deployment.position - deployment.deployedPosition) < 0.0001)
                         return LandingLegState.Deployed;
-                    else if (deployment.position == deployment.retractedPosition)
+                    else if (Math.Abs (deployment.position - deployment.retractedPosition) < 0.0001)
                         return LandingLegState.Retracted;
                     else if (deployment.stateString.Equals (deployment.st_deploying.name))
                         return LandingLegState.Deploying;

@@ -261,6 +261,7 @@ SpaceCenter.Parts.Root
 SpaceCenter.Parts.Controlling
 SpaceCenter.Parts.WithName
 SpaceCenter.Parts.WithTitle
+SpaceCenter.Parts.WithTag
 SpaceCenter.Parts.WithModule
 SpaceCenter.Parts.InStage
 SpaceCenter.Parts.InDecoupleStage
@@ -269,7 +270,6 @@ SpaceCenter.Parts.CargoBays
 SpaceCenter.Parts.ControlSurfaces
 SpaceCenter.Parts.Decouplers
 SpaceCenter.Parts.DockingPorts
-SpaceCenter.Parts.DockingPortWithName
 SpaceCenter.Parts.Engines
 SpaceCenter.Parts.Experiments
 SpaceCenter.Parts.Fairings
@@ -289,6 +289,7 @@ SpaceCenter.Parts.SolarPanels
 SpaceCenter.Part
 SpaceCenter.Part.Name
 SpaceCenter.Part.Title
+SpaceCenter.Part.Tag
 SpaceCenter.Part.Cost
 SpaceCenter.Part.Vessel
 SpaceCenter.Part.Parent
@@ -400,7 +401,6 @@ SpaceCenter.Decoupler.Staged
 SpaceCenter.Decoupler.Impulse
 SpaceCenter.DockingPort
 SpaceCenter.DockingPort.Part
-SpaceCenter.DockingPort.Name
 SpaceCenter.DockingPort.State
 SpaceCenter.DockingPort.DockedPart
 SpaceCenter.DockingPort.Undock

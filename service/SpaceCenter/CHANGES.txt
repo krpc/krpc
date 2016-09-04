@@ -1,4 +1,7 @@
 v0.3.6
+ * Add Part.Tag which can be used to get/set the name tag set via the NameTag mod, or kOS (#297)
+ * Add Parts.WithTag to get a list of all parts with the given tag value
+ * Remove DockingPort.Name and Parts.DockingPortsWithName - part tagging can now be used instead
  * Add Flight.TrueAirSpeed
  * Add FAR support for Flight.Mach and add Flight.ReynoldsNumber (#313)
  * Fix value returned by Orbit.Inclination (#301)
@@ -14,6 +17,7 @@ v0.3.6
  * Add Experiment.Biome to get the biome an experiment part is currently in (#296)
  * Add Experiment.IsAvailable which indicates if there is science that be gathered by the experiment part
  * Add ScienceSubject class for getting information about a type of experiment. Accessed via Experiment.ScienceSubject.
+ * Fix landing gear state on launch (#314)
 
 v0.3.5
  * Improved AutoPilot that auto-tunes itself based on the vessels available torque and moment of inertia (#289)

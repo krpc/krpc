@@ -17,12 +17,24 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Returns the first part module of the specified type, and null if none can be found
+        /// Returns the first part module of the specified type, or null if none can be found
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public static T Module<T> (this Part part) where T : PartModule
         {
             return part.Modules.OfType<T> ().FirstOrDefault ();
+        }
+
+        /// <summary>
+        /// Returns the first part module of the named type, or null if none can be found
+        /// </summary>
+        public static object Module (this Part part, string type)
+        {
+            foreach (var module in part.Modules) {
+                if (module.GetType ().Name == type)
+                    return module;
+            }
+            return null;
         }
 
         /// <summary>
