@@ -111,6 +111,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the decoupler is enabled in the staging sequence.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public bool Staged {
             get { return decoupler != null ? decoupler.StagingEnabled () : anchoredDecoupler.StagingEnabled (); }
         }
@@ -119,6 +120,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The impulse that the decoupler imparts when it is fired, in Newton seconds.
         /// </summary>
         [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float Impulse {
             get { return (decoupler != null ? decoupler.ejectionForce : anchoredDecoupler.ejectionForce) * 10f; }
         }

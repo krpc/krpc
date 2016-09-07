@@ -66,6 +66,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// Transversed the tree of parts from the desired part to the root, and finds the activation stage
         /// for the first decoupler that will decouple the part (the one with the highest stage number)
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
         public static int DecoupledAt (this Part part)
         {
             int stage = -1;

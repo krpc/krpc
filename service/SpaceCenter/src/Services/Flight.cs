@@ -165,6 +165,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Reference area used for lift and drag calculations
+        /// </summary>
+        double ReferenceArea {
+            // TODO: avoid creating vessel object
+            get { return new Vessel (InternalVessel).Mass / (BallisticCoefficient * DragCoefficient); }
+        }
+
+        /// <summary>
         /// Direction of the lift force acting on the vessel (perpendicular to air stream and up wrt roll angle) in world space.
         /// </summary>
         Vector3d WorldLiftDirection {
@@ -179,12 +187,10 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         double LiftMagnitude {
             get {
-                if (FAR.IsAvailable) {
-                    var area = new Vessel (InternalVessel).Mass / (BallisticCoefficient * DragCoefficient);
-                    return LiftCoefficient * area * DynamicPressure;
-                } else {
+                if (FAR.IsAvailable)
+                    return LiftCoefficient * ReferenceArea * DynamicPressure;
+                else
                     return Vector3d.Dot (WorldAerodynamicForce, WorldLiftDirection);
-                }
             }
         }
 
@@ -200,12 +206,10 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         double DragMagnitude {
             get {
-                if (FAR.IsAvailable) {
-                    var area = new Vessel (InternalVessel).Mass / (BallisticCoefficient * DragCoefficient);
-                    return DragCoefficient * area * DynamicPressure;
-                } else {
+                if (FAR.IsAvailable)
+                    return DragCoefficient * ReferenceArea * DynamicPressure;
+                else
                     return Vector3d.Dot (WorldAerodynamicForce, WorldDragDirection);
-                }
             }
         }
 
