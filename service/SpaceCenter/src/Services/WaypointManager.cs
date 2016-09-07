@@ -1,9 +1,9 @@
-﻿using KRPC.Service.Attributes;
-using KRPC.Utils;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using UnityEngine;
-using FinePrint.Utilities;
+using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -15,78 +15,11 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class WaypointManager : Equatable<WaypointManager>
     {
+        IList<string> icons;
+        IDictionary<string, int> colors;
 
         internal WaypointManager ()
         {
-        }
-
-        /// <summary>
-        /// Returns a list of all existing waypoints.
-        /// </summary>
-        [KRPCProperty]
-        public IList<Waypoint> Waypoints
-        {
-            get
-            {
-                var wpm = FinePrint.WaypointManager.Instance ();
-                if (wpm == null) {
-                    return new List<Waypoint> ();
-                }
-                return wpm.Waypoints.Select (wp => new Waypoint (wp)).ToList ();
-            }
-        }
-
-        /// <summary>
-        /// Creates a waypoint at the given position at ground level, and returns a
-        /// <see cref="Waypoint"/> object that can be used to modify it.
-        /// </summary>
-        /// <param name="longitude">Longitude of the waypoint.</param>
-        /// <param name="latitude">Latitude of the waypoint.</param>
-        /// <param name="name">Name of the waypoint.</param>
-        /// <param name="body">Celestial body the waypoint is attached to.</param>
-        /// <returns></returns>
-        [KRPCMethod]
-        public Waypoint AddWaypoint (double longitude, double latitude, CelestialBody body, string name)
-        {
-            return new Waypoint (longitude, latitude, body, name);
-        }
-
-        /// <summary>
-        /// Removes the given waypoint.
-        /// </summary>
-        /// <param name="waypoint">The waypoint to remove</param>
-        /// <returns></returns>
-        [KRPCMethod]
-        public void RemoveWaypoint (Waypoint waypoint)
-        {
-            if (waypoint.HasContract) {
-                throw new System.Exception ("Cannot remove waypoint attached to a contract.");
-            } else {
-                FinePrint.WaypointManager.RemoveWaypoint (waypoint.InternalWaypoint);
-            }
-        }
-
-        private IList<string> _icons;
-
-        /// <summary>
-        /// Returns all available icons (from "GameData/Squad/Contracts/Icons/").
-        /// </summary>
-        [KRPCProperty]
-        public IList<string> Icons
-        {
-            get
-            {
-                if (_icons == null) {
-                    var icons = new List<string> ();
-
-                    foreach (GameDatabase.TextureInfo texInfo in GameDatabase.Instance.databaseTexture.Where (t => t.name.StartsWith ("Squad/Contracts/Icons/"))) {
-                        string name = texInfo.name.Replace ("Squad/Contracts/Icons/", "");
-                        icons.Add (name);
-                    }
-                    _icons = icons;
-                }
-                return _icons;
-            }
         }
 
         /// <summary>
@@ -105,20 +38,61 @@ namespace KRPC.SpaceCenter.Services
             return 0;
         }
 
-        private IDictionary<string, int> _waypointColors;
+        /// <summary>
+        /// A list of all existing waypoints.
+        /// </summary>
+        [KRPCProperty]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
+        public IList<Waypoint> Waypoints {
+            get {
+                var wpm = FinePrint.WaypointManager.Instance ();
+                if (wpm == null)
+                    return new List<Waypoint> ();
+                return wpm.Waypoints.Select (wp => new Waypoint (wp)).ToList ();
+            }
+        }
+
+        /// <summary>
+        /// Creates a waypoint at the given position at ground level, and returns a
+        /// <see cref="Waypoint"/> object that can be used to modify it.
+        /// </summary>
+        /// <param name="latitude">Latitude of the waypoint.</param>
+        /// <param name="longitude">Longitude of the waypoint.</param>
+        /// <param name="body">Celestial body the waypoint is attached to.</param>
+        /// <param name="name">Name of the waypoint.</param>
+        /// <returns></returns>
+        [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
+        public Waypoint AddWaypoint (double latitude, double longitude, CelestialBody body, string name)
+        {
+            return new Waypoint (latitude, longitude, body, name);
+        }
+
+        /// <summary>
+        /// Returns all available icons (from "GameData/Squad/Contracts/Icons/").
+        /// </summary>
+        [KRPCProperty]
+        public IList<string> Icons {
+            get {
+                if (icons == null) {
+                    icons = GameDatabase.Instance.databaseTexture
+                        .Where (t => t.name.StartsWith ("Squad/Contracts/Icons/"))
+                        .Select (texInfo => texInfo.name.Replace ("Squad/Contracts/Icons/", String.Empty))
+                        .ToList ();
+                }
+                return icons;
+            }
+        }
 
         /// <summary>
         /// An example map of known color - seed pairs. 
         /// Any other integers may be used as seed.
         /// </summary>
         [KRPCProperty]
-        public IDictionary<string, int> WaypointColors
-        {
-            get
-            {
-                if (_waypointColors == null) {
-                    _waypointColors = new Dictionary<string, int> ()
-                    {
+        public IDictionary<string, int> Colors {
+            get {
+                if (colors == null) {
+                    colors = new Dictionary<string, int> {
                         { "blue", 1115 },
                         { "green", 487 },
                         { "lightblue", 651 },
@@ -128,7 +102,7 @@ namespace KRPC.SpaceCenter.Services
                         { "yellow", 23 }
                     };
                 }
-                return _waypointColors;
+                return colors;
             }
         }
     }

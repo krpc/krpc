@@ -86,4 +86,3 @@ vertices
 virtualenv
 waypoint
 waypoints
-waypointManager
