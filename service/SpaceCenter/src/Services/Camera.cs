@@ -159,7 +159,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The distance from the camera to the subject.
+        /// The distance from the camera to the subject, in meters.
         /// A value between <see cref="MinDistance"/> and <see cref="MaxDistance"/>.
         /// </summary>
         [KRPCProperty]
@@ -169,7 +169,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 switch (Mode) {
                 case CameraMode.Map:
-                    return PlanetariumCamera.fetch.Distance;
+                    return PlanetariumCamera.fetch.Distance * ScaledSpace.ScaleFactor;
                 case CameraMode.IVA:
                     throw new NotImplementedException ();
                 default:
@@ -181,7 +181,7 @@ namespace KRPC.SpaceCenter.Services
                 case CameraMode.Map:
                     {
                         var camera = PlanetariumCamera.fetch;
-                        camera.SetDistance (value.Clamp (camera.minDistance, camera.maxDistance));
+                        camera.SetDistance (value.Clamp (camera.minDistance, camera.maxDistance) / ScaledSpace.ScaleFactor);
                         break;
                     }
                 case CameraMode.IVA:
@@ -233,7 +233,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Minimum distance from the camera to the subject.
+        /// Minimum distance from the camera to the subject, in meters.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
@@ -241,7 +241,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 switch (Mode) {
                 case CameraMode.Map:
-                    return PlanetariumCamera.fetch.minDistance;
+                    return PlanetariumCamera.fetch.minDistance * ScaledSpace.ScaleFactor;
                 case CameraMode.IVA:
                     return InternalCamera.Instance.maxZoom;
                 default:
@@ -251,7 +251,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Maximum distance from the camera to the subject.
+        /// Maximum distance from the camera to the subject, in meters.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
@@ -259,7 +259,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 switch (Mode) {
                 case CameraMode.Map:
-                    return PlanetariumCamera.fetch.maxDistance;
+                    return PlanetariumCamera.fetch.maxDistance * ScaledSpace.ScaleFactor;
                 case CameraMode.IVA:
                     return InternalCamera.Instance.minZoom;
                 default:
@@ -269,7 +269,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Default distance from the camera to the subject.
+        /// Default distance from the camera to the subject, in meters.
         /// </summary>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.BadPractice", "DoNotForgetNotImplementedMethodsRule")]
@@ -277,7 +277,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 switch (Mode) {
                 case CameraMode.Map:
-                    return PlanetariumCamera.fetch.startDistance;
+                    return PlanetariumCamera.fetch.startDistance * ScaledSpace.ScaleFactor;
                 case CameraMode.IVA:
                     throw new NotImplementedException ();
                 default:

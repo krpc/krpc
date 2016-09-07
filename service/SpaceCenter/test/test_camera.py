@@ -130,7 +130,7 @@ class TestCameraMap(krpctest.TestCase, CameraTestBase):
         cls.wait(1)
         cls.pitches = range(-90, 90, 5)
         cls.headings = range(0, 360, 5)
-        cls.distances = (100, 1000, 10000)
+        cls.distances = (100000, 120000, 200000)
 
     @classmethod
     def tearDownClass(cls):
