@@ -296,8 +296,8 @@ csharp_assembly_info = rule(
     outputs = {'out': '%{name}.cs'}
 )
 
-def _nuget_package_out(attr):
-    return {'out': '%s.%s.nupkg' % (attr.id, attr.version)}
+def _nuget_package_out(id, version):
+    return {'out': '%s.%s.nupkg' % (id, version)}
 
 def _nuget_package_impl(ctx):
     assembly = ctx.attr.assembly.lib

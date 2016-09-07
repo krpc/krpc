@@ -1,7 +1,7 @@
-def _outputs(attr):
+def _outputs(outdir, src):
     return {
-        'out': attr.outdir + '/' + attr.src.name.replace('.tmpl','.rst'),
-        'documented': attr.outdir + '/' + attr.src.name.replace('.tmpl','.documented.txt')
+        'out': outdir + '/' + src.name.replace('.tmpl','.rst'),
+        'documented': outdir + '/' + src.name.replace('.tmpl','.documented.txt')
     }
 
 def _impl(ctx):
