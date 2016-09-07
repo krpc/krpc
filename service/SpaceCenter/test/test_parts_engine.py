@@ -342,10 +342,10 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
             {'max_thrust': 197897, 'isp': 170.4})
         cls.add_engine_data(
             'J-33 "Wheesley" Basic Jet Engine',
-            {'max_thrust': 80000, 'isp': 9600})
+            {'max_thrust': 73720, 'isp': 9600})
         cls.add_engine_data(
             'CR-7 R.A.P.I.E.R. Engine',
-            {'max_thrust': 105000, 'isp': 3200})
+            {'max_thrust': 95250, 'isp': 3200})
 
     def test_jet_engine(self):
         engine = self.get_engine('J-33 "Wheesley" Basic Jet Engine')
