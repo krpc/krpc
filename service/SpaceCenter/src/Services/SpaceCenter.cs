@@ -124,6 +124,14 @@ namespace KRPC.SpaceCenter.Services
             FlightGlobals.fetch.SetVesselTarget (null);
         }
 
+        /// <summary>
+        /// The waypoint manager.
+        /// </summary>
+        [KRPCProperty]
+        public static WaypointManager WaypointManager {
+            get { return new WaypointManager (); }
+        }
+
         static string GetFullCraftDirectory (string craftDirectory)
         {
             return KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/" + craftDirectory;
