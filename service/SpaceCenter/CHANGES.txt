@@ -19,6 +19,7 @@ v0.3.6
  * Add ScienceSubject class for getting information about a type of experiment. Accessed via Experiment.ScienceSubject.
  * Fix landing gear state on launch (#314)
  * Add SpaceCenter.WaypointManager and Waypoint class for interacting with waypoints (#335)
+ * Change camera distances to use meters (#339)
 
 v0.3.5
  * Improved AutoPilot that auto-tunes itself based on the vessels available torque and moment of inertia (#289)
