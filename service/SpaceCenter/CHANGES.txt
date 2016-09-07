@@ -20,6 +20,7 @@ v0.3.6
  * Fix landing gear state on launch (#314)
  * Add SpaceCenter.WaypointManager and Waypoint class for interacting with waypoints (#335)
  * Change camera distances to use meters (#339)
+ * Fix engine thrust calculation for air breathing engines (#327)
 
 v0.3.5
  * Improved AutoPilot that auto-tunes itself based on the vessels available torque and moment of inertia (#289)

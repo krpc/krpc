@@ -5,6 +5,7 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services.Parts
@@ -111,13 +112,29 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Get the thrust of the engine with the given throttle and atmospheric conditions in Newtons
+        /// Get the thrust of the engine in Newtons, with the given throttle percentage and atmospheric pressure in atmospheres
         /// </summary>
         float GetThrust (float throttle, double pressure)
         {
             var engine = CurrentEngine;
-            pressure *= PhysicsGlobals.KpaToAtmospheres;
-            return 1000f * throttle * engine.maxFuelFlow * engine.g * engine.atmosphereCurve.Evaluate ((float)pressure);
+
+            // Compute fuel flow multiplier
+            float flowMultiplier = 1;
+            if (engine.atmChangeFlow)
+                flowMultiplier = (float)(engine.part.atmDensity / 1.225d);
+            if (engine.useAtmCurve && engine.atmCurve != null)
+                flowMultiplier = engine.atmCurve.Evaluate (flowMultiplier);
+
+            // Compute velocity multiplier
+            float velocityMultiplier = 1;
+            if (engine.useVelCurve && engine.velCurve != null)
+                velocityMultiplier = velocityMultiplier * engine.velCurve.Evaluate ((float)engine.vessel.mach);
+
+            // Get specific impulse at the given pressure
+            var specificImpulse = engine.atmosphereCurve.Evaluate ((float)pressure);
+
+            // Compute thrust
+            return 1000f * Mathf.Lerp (engine.minFuelFlow, engine.maxFuelFlow, throttle) * flowMultiplier * specificImpulse * engine.g * velocityMultiplier;
         }
 
         /// <summary>
@@ -128,7 +145,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active || !HasFuel)
                     return 0f;
-                return GetThrust (CurrentEngine.currentThrottle, Part.InternalPart.vessel.staticPressurekPa);
+                return CurrentEngine.finalThrust * 1000f;
+                //return GetThrust (CurrentEngine.currentThrottle, Part.InternalPart.staticPressureAtm);
             }
         }
 
@@ -143,7 +161,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!HasFuel)
                     return 0f;
-                return GetThrust (ThrustLimit, Part.InternalPart.vessel.staticPressurekPa);
+                return GetThrust (ThrustLimit, Part.InternalPart.staticPressureAtm);
             }
         }
 
@@ -153,7 +171,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
-            get { return GetThrust (1f, Part.InternalPart.vessel.staticPressurekPa); }
+            get { return GetThrust (1f, Part.InternalPart.staticPressureAtm); }
         }
 
         /// <summary>
