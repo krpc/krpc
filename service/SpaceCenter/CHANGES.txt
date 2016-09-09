@@ -1,9 +1,26 @@
 v0.3.6
+ * Add Part.Tag which can be used to get/set the name tag set via the NameTag mod, or kOS (#297)
+ * Add Parts.WithTag to get a list of all parts with the given tag value
+ * Remove DockingPort.Name and Parts.DockingPortsWithName - part tagging can now be used instead
+ * Add Flight.TrueAirSpeed
  * Add FAR support for Flight.Mach and add Flight.ReynoldsNumber (#313)
  * Fix value returned by Orbit.Inclination (#301)
  * An error is now thrown when Autopilot.ReferenceFrame is set to a reference frame that rotates with the vessel
  * Fix issues with Part.DecoupleStage (#307)
  * Add Part.AddForce, Part.InstantaneousFource and Force class for exerting arbitrary forces on parts (#287)
+ * Fix units for Flight.DynamicPressure when FAR is installed - value returned is now in Pa, not kPa (#329)
+ * Add Decoupler.Staged
+ * Fix issue where disabled decouplers are included in stage index calculation (#323)
+ * Add CelestialBody.Biomes to get all the biomes for a planet/moon (#296)
+ * Add CelestialBody.BiomeAt to get the biome at a location on a planet/moon (#296)
+ * Add altitude thresholds for science to CelestialBody
+ * Add Experiment.Biome to get the biome an experiment part is currently in (#296)
+ * Add Experiment.IsAvailable which indicates if there is science that be gathered by the experiment part
+ * Add ScienceSubject class for getting information about a type of experiment. Accessed via Experiment.ScienceSubject.
+ * Fix landing gear state on launch (#314)
+ * Add SpaceCenter.WaypointManager and Waypoint class for interacting with waypoints (#335)
+ * Change camera distances to use meters (#339)
+ * Fix engine thrust calculation for air breathing engines (#327)
 
 v0.3.5
  * Improved AutoPilot that auto-tunes itself based on the vessels available torque and moment of inertia (#289)

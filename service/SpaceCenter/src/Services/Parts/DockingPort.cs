@@ -21,9 +21,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         readonly ModuleDockingNode port;
         readonly ModuleAnimateGeneric shield;
 
-        readonly PartModule portNameModule;
-        readonly BaseField portNameField;
-
         internal static bool Is (Part part)
         {
             return part.InternalPart.HasModule<ModuleDockingNode> ();
@@ -35,13 +32,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             var internalPart = part.InternalPart;
             port = internalPart.Module<ModuleDockingNode> ();
             shield = internalPart.Module<ModuleAnimateGeneric> ();
-            foreach (PartModule module in internalPart.Modules) {
-                if (module.moduleName == "ModuleDockingNodeNamed") {
-                    portNameModule = module;
-                    portNameField = module.Fields.Cast<BaseField> ().FirstOrDefault (x => x.guiName == "Port Name");
-                    break;
-                }
-            }
             if (port == null)
                 throw new ArgumentException ("Part is not a docking port");
         }
@@ -55,9 +45,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             !ReferenceEquals (other, null) &&
             Part == other.Part &&
             port.Equals (other.port) &&
-            (shield == other.shield || shield.Equals (other.shield)) &&
-            (portNameModule == other.portNameModule || portNameModule.Equals (other.portNameModule)) &&
-            (portNameField == other.portNameField || portNameField.Equals (other.portNameField));
+            (shield == other.shield || shield.Equals (other.shield));
         }
 
         /// <summary>
@@ -68,10 +56,6 @@ namespace KRPC.SpaceCenter.Services.Parts
             int hash = Part.GetHashCode () ^ port.GetHashCode ();
             if (shield != null)
                 hash ^= shield.GetHashCode ();
-            if (portNameModule != null)
-                hash ^= portNameModule.GetHashCode ();
-            if (portNameField != null)
-                hash ^= portNameField.GetHashCode ();
             return hash;
         }
 
@@ -87,23 +71,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Part Part { get; private set; }
-
-        /// <summary>
-        /// The port name of the docking port. This is the name of the port that can be set
-        /// in the right click menu, when the
-        /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/40423-11-docking-port-alignment-indicator-version-621-beta-updated-04122016/">Docking Port Alignment Indicator</a>
-        /// mod is installed. If this mod is not installed, returns the title of the part
-        /// (<see cref="Part.Title"/>).
-        /// </summary>
-        [KRPCProperty]
-        public string Name {
-            get { return portNameField == null ? Part.Title : portNameField.GetValue (portNameModule).ToString (); }
-            set {
-                if (portNameField == null)
-                    throw new InvalidOperationException ("Docking port does not have a 'Port Name' field");
-                portNameField.SetValue (Convert.ChangeType (value, portNameField.FieldInfo.FieldType), portNameModule);
-            }
-        }
 
         /// <summary>
         /// The current state of the docking port.

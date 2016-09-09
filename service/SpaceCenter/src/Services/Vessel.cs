@@ -118,6 +118,18 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The name of the biome the vessel is currently in.
+        /// </summary>
+        [KRPCProperty]
+        public string Biome {
+            get {
+                var vessel = InternalVessel;
+                var body = vessel.orbit.referenceBody;
+                return ScienceUtil.GetExperimentBiome (body, vessel.latitude, vessel.longitude);
+            }
+        }
+
+        /// <summary>
         /// Returns a <see cref="Flight"/> object that can be used to get flight
         /// telemetry for the vessel, in the specified reference frame.
         /// </summary>

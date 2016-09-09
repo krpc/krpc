@@ -3,6 +3,8 @@ atm
 Autotools
 autotune
 Bazel
+biome
+biomes
 circularization
 clickable
 clientgen
@@ -20,6 +22,7 @@ fuelled
 gimbal
 gimballed
 gimballing
+greek
 hostname
 inkscape
 integration
@@ -41,6 +44,7 @@ localhost
 lua
 luarocks
 mach
+mits
 namespace
 namespaces
 namespacing
@@ -80,3 +84,5 @@ unserialize
 varint
 vertices
 virtualenv
+waypoint
+waypoints

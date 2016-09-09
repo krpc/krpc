@@ -109,11 +109,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Sum of the lift force acting on each part.
+        /// Sum of the lift forces acting every part.
         /// Note this is NOT the force in the vessel's lift direction.
         /// </summary>
         Vector3d WorldPartsLift {
             get {
+                CheckNoFAR ();
                 Vector3d lift = Vector3d.zero;
                 foreach (var part in InternalVessel.Parts) {
                     if (!part.hasLiftModule) {
@@ -132,11 +133,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Sum of the drag force acting on each part.
+        /// Sum of the drag forces acting on every part.
         /// Note this is NOT the force in the vessel's drag direction.
         /// </summary>
         Vector3d WorldPartsDrag {
             get {
+                CheckNoFAR ();
                 Vector3d drag = Vector3d.zero;
                 foreach (var part in InternalVessel.Parts) {
                     // Part drag
@@ -156,27 +158,58 @@ namespace KRPC.SpaceCenter.Services
         /// Total aerodynamic forces acting on vessel in world space.
         /// </summary>
         Vector3d WorldAerodynamicForce {
-            get { return WorldPartsLift + WorldPartsDrag; }
-        }
-
-        /// <summary>
-        /// Total lift force acting on vessel (perpendicular to air stream and up wrt roll angle) in world space.
-        /// </summary>
-        Vector3d WorldLift {
             get {
-                var vessel = InternalVessel;
-                Vector3d direction = -Vector3d.Cross (vessel.transform.right, vessel.srf_velocity.normalized);
-                return Vector3d.Dot (WorldAerodynamicForce, direction) * direction;
+                CheckNoFAR ();
+                return WorldPartsLift + WorldPartsDrag;
             }
         }
 
         /// <summary>
-        /// Total drag force acting on vessel (in opposite direction to air stream) in world space.
+        /// Reference area used for lift and drag calculations
         /// </summary>
-        Vector3d WorldDrag {
+        double ReferenceArea {
+            // TODO: avoid creating vessel object
+            get { return new Vessel (InternalVessel).Mass / (BallisticCoefficient * DragCoefficient); }
+        }
+
+        /// <summary>
+        /// Direction of the lift force acting on the vessel (perpendicular to air stream and up wrt roll angle) in world space.
+        /// </summary>
+        Vector3d WorldLiftDirection {
             get {
-                Vector3d direction = -InternalVessel.srf_velocity.normalized;
-                return Vector3d.Dot (WorldAerodynamicForce, direction) * direction;
+                var vessel = InternalVessel;
+                return -Vector3d.Cross (vessel.transform.right, vessel.srf_velocity.normalized);
+            }
+        }
+
+        /// <summary>
+        /// Magnitude of the lift force acting on the vessel.
+        /// </summary>
+        double LiftMagnitude {
+            get {
+                if (FAR.IsAvailable)
+                    return LiftCoefficient * ReferenceArea * DynamicPressure;
+                else
+                    return Vector3d.Dot (WorldAerodynamicForce, WorldLiftDirection);
+            }
+        }
+
+        /// <summary>
+        /// Direction of the drag force acting on the vessel (opposite direction to air stream) in world space.
+        /// </summary>
+        Vector3d WorldDragDirection {
+            get { return -InternalVessel.srf_velocity.normalized; }
+        }
+
+        /// <summary>
+        /// Magnitude of the drag force acting on the vessel.
+        /// </summary>
+        double DragMagnitude {
+            get {
+                if (FAR.IsAvailable)
+                    return DragCoefficient * ReferenceArea * DynamicPressure;
+                else
+                    return Vector3d.Dot (WorldAerodynamicForce, WorldDragDirection);
             }
         }
 
@@ -409,34 +442,35 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The dynamic pressure acting on the vessel, in Pascals. This is a measure of the strength of the
         /// aerodynamic forces. It is equal to <math>\frac{1}{2} . \mbox{air density} .  \mbox{velocity}^2</math>.
-        /// It is commonly denoted as <math>Q</math>.
+        /// It is commonly denoted <math>Q</math>.
         /// </summary>
-        /// <remarks>
-        /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>, or
-        /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> if it is installed.
-        /// </remarks>
         [KRPCProperty]
         public float DynamicPressure {
             get {
                 var vessel = InternalVessel;
                 if (FAR.IsAvailable)
-                    return (float)FAR.VesselDynPres (vessel);
+                    return (float)FAR.VesselDynPres (vessel) * 1000f;
                 else
                     return (float)(0.5f * vessel.atmDensity * vessel.srf_velocity.sqrMagnitude);
             }
         }
 
         /// <summary>
+        /// The static atmospheric pressure at mean sea level, in Pascals.
+        /// </summary>
+        [KRPCProperty]
+        public float StaticPressureAtMSL {
+            get {
+                return (float)InternalVessel.mainBody.atmospherePressureSeaLevel * 1000f;
+            }
+        }
+
+        /// <summary>
         /// The static atmospheric pressure acting on the vessel, in Pascals.
         /// </summary>
-        /// <remarks>
-        /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>.
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
-        /// </remarks>
         [KRPCProperty]
         public float StaticPressure {
             get {
-                CheckNoFAR ();
                 return (float)InternalVessel.staticPressurekPa * 1000f;
             }
         }
@@ -445,15 +479,13 @@ namespace KRPC.SpaceCenter.Services
         /// The total aerodynamic forces acting on the vessel, as a vector pointing in the direction of the force, with its
         /// magnitude equal to the strength of the force in Newtons.
         /// </summary>
-        /// <remarks>
-        /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>.
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
-        /// </remarks>
         [KRPCProperty]
         public Tuple3 AerodynamicForce {
             get {
-                CheckNoFAR ();
-                return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicForce).ToTuple ();
+                if (FAR.IsAvailable)
+                    return referenceFrame.DirectionFromWorldSpace (WorldDragDirection * DragMagnitude + WorldLiftDirection * LiftMagnitude).ToTuple ();
+                else
+                    return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicForce).ToTuple ();
             }
         }
 
@@ -461,44 +493,26 @@ namespace KRPC.SpaceCenter.Services
         /// The <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic lift</a> currently acting on the vessel,
         /// as a vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
         /// </summary>
-        /// <remarks>
-        /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>.
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
-        /// </remarks>
         [KRPCProperty]
         public Tuple3 Lift {
-            get {
-                CheckNoFAR ();
-                return referenceFrame.DirectionFromWorldSpace (WorldLift).ToTuple ();
-            }
+            get { return (referenceFrame.DirectionFromWorldSpace (WorldLiftDirection) * LiftMagnitude).ToTuple (); }
         }
 
         /// <summary>
         /// The <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">aerodynamic drag</a> currently acting on the vessel,
         /// as a vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
         /// </summary>
-        /// <remarks>
-        /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>.
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
-        /// </remarks>
         [KRPCProperty]
         public Tuple3 Drag {
-            get {
-                CheckNoFAR ();
-                return referenceFrame.DirectionFromWorldSpace (WorldDrag).ToTuple ();
-            }
+            get { return (referenceFrame.DirectionFromWorldSpace (WorldDragDirection) * DragMagnitude).ToTuple (); }
         }
 
         /// <summary>
         /// The speed of sound, in the atmosphere around the vessel, in <math>m/s</math>.
         /// </summary>
-        /// <remarks>
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
-        /// </remarks>
         [KRPCProperty]
         public float SpeedOfSound {
             get {
-                CheckNoFAR ();
                 return (float)InternalVessel.speedOfSound;
             }
         }
@@ -529,15 +543,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The <a href="https://en.wikipedia.org/wiki/True_airspeed">true air speed</a> of the vessel, in <math>m/s</math>.
+        /// </summary>
+        [KRPCProperty]
+        public float TrueAirSpeed {
+            get { return (float)InternalVessel.srfSpeed; }
+        }
+
+        /// <summary>
         /// The <a href="https://en.wikipedia.org/wiki/Equivalent_airspeed">equivalent air speed</a> of the vessel, in <math>m/s</math>.
         /// </summary>
-        /// <remarks>
-        /// Not available when <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> is installed.
-        /// </remarks>
         [KRPCProperty]
         public float EquivalentAirSpeed {
             get {
-                CheckNoFAR ();
                 var vessel = InternalVessel;
                 return (float)Math.Sqrt (vessel.srf_velocity.sqrMagnitude * vessel.atmDensity / 1.225d);
             }
@@ -547,10 +565,6 @@ namespace KRPC.SpaceCenter.Services
         /// An estimate of the current terminal velocity of the vessel, in <math>m/s</math>.
         /// This is the speed at which the drag forces cancel out the force of gravity.
         /// </summary>
-        /// <remarks>
-        /// Calculated using <a href="http://wiki.kerbalspaceprogram.com/wiki/Atmosphere">KSPs stock aerodynamic model</a>, or
-        /// <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a> if it is installed.
-        /// </remarks>
         [KRPCProperty]
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
         public float TerminalVelocity {
@@ -560,7 +574,7 @@ namespace KRPC.SpaceCenter.Services
                     return (float)FAR.VesselTermVelEst (vessel);
                 } else {
                     var gravity = Math.Sqrt (vessel.GetTotalMass () * FlightGlobals.getGeeForceAtPosition (WorldCoM).magnitude);
-                    return (float)(Math.Sqrt (gravity / WorldDrag.magnitude) * vessel.speed);
+                    return (float)(Math.Sqrt (gravity / DragMagnitude) * vessel.speed);
                 }
             }
         }
@@ -675,7 +689,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Gets the thrust specific fuel consumption for the jet engines on the vessel. This is a measure of the
         /// efficiency of the engines, with a lower value indicating a more efficient vessel. This value is the
-        /// number of Newtons of fuel that are burned, per hour, to product one newton of thrust.
+        /// number of Newtons of fuel that are burned, per hour, to produce one newton of thrust.
         /// </summary>
         /// <remarks>
         /// Requires <a href="http://forum.kerbalspaceprogram.com/index.php?/topic/19321-105-ferram-aerospace-research-v01557-johnson-21816/">Ferram Aerospace Research</a>.

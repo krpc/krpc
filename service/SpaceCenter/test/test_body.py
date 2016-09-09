@@ -1,5 +1,6 @@
 import unittest
 import math
+import krpc
 import krpctest
 from krpctest.geometry import norm, normalize, dot
 
@@ -30,6 +31,12 @@ class TestBody(krpctest.TestCase):
         self.assertTrue(kerbin.has_atmosphere)
         self.assertAlmostEqual(70000, kerbin.atmosphere_depth)
         self.assertTrue(kerbin.has_atmospheric_oxygen)
+        self.assertEqual(['Badlands', 'Deserts', 'Grasslands', 'Highlands', 'Ice Caps',
+                          'Mountains', 'Shores', 'Tundra', 'Water'], sorted(kerbin.biomes))
+        self.assertEqual('Water', kerbin.biome_at(0, 0))
+        self.assertEqual('Highlands', kerbin.biome_at(42, 4))
+        self.assertEqual(18000, kerbin.flying_high_altitude_threshold)
+        self.assertEqual(250000, kerbin.space_high_altitude_threshold)
 
     def test_mun(self):
         mun = self.space_center.bodies['Mun']
@@ -46,6 +53,15 @@ class TestBody(krpctest.TestCase):
         self.assertFalse(mun.has_atmosphere)
         self.assertAlmostEqual(0, mun.atmosphere_depth)
         self.assertFalse(mun.has_atmospheric_oxygen)
+        self.assertEqual(['Canyons', 'East Crater', 'East Farside Crater', 'Farside Crater',
+                          'Highland Craters', 'Highlands', 'Midland Craters', 'Midlands',
+                          'Northern Basin', 'Northwest Crater', 'Polar Crater',
+                          'Polar Lowlands', 'Poles', 'Southwest Crater', 'Twin Craters'],
+                         sorted(mun.biomes))
+        self.assertEqual('Midlands', mun.biome_at(0, 0))
+        self.assertEqual('Highlands', mun.biome_at(42, 4))
+        self.assertEqual(18000, mun.flying_high_altitude_threshold)
+        self.assertEqual(60000, mun.space_high_altitude_threshold)
 
     def test_minmus(self):
         minmus = self.space_center.bodies['Minmus']
@@ -56,6 +72,13 @@ class TestBody(krpctest.TestCase):
         self.assertFalse(minmus.has_atmosphere)
         self.assertAlmostEqual(0, minmus.atmosphere_depth)
         self.assertFalse(minmus.has_atmospheric_oxygen)
+        self.assertEqual(['Flats', 'Great Flats', 'Greater Flats', 'Highlands',
+                          'Lesser Flats', 'Lowlands', 'Midlands', 'Poles', 'Slopes'],
+                         sorted(minmus.biomes))
+        self.assertEqual('Greater Flats', minmus.biome_at(0, 0))
+        self.assertEqual('Midlands', minmus.biome_at(42, 4))
+        self.assertEqual(18000, minmus.flying_high_altitude_threshold)
+        self.assertEqual(30000, minmus.space_high_altitude_threshold)
 
     def test_sun(self):
         sun = self.space_center.bodies['Sun']
@@ -68,6 +91,11 @@ class TestBody(krpctest.TestCase):
         self.assertTrue(sun.has_atmosphere)
         self.assertAlmostEqual(600000, sun.atmosphere_depth)
         self.assertFalse(sun.has_atmospheric_oxygen)
+        self.assertRaises(krpc.client.RPCError, getattr, sun, 'biomes')
+        self.assertRaises(krpc.client.RPCError, sun.biome_at, 0, 0)
+        self.assertRaises(krpc.client.RPCError, sun.biome_at, 42, 4)
+        self.assertEqual(18000, sun.flying_high_altitude_threshold)
+        self.assertEqual(1e9, sun.space_high_altitude_threshold)
 
     def test_duna(self):
         duna = self.space_center.bodies['Duna']

@@ -138,6 +138,7 @@
     <Compile Include="Services\Parts\ResourceHarvester.cs" />
     <Compile Include="Services\Parts\ResourceHarvesterState.cs" />
     <Compile Include="Services\Parts\ScienceData.cs" />
+    <Compile Include="Services\Parts\ScienceSubject.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />
     <Compile Include="Services\Parts\SolarPanel.cs" />
     <Compile Include="Services\Parts\SolarPanelState.cs" />
@@ -155,5 +156,7 @@
     <Compile Include="Services\VesselSituation.cs" />
     <Compile Include="Services\VesselType.cs" />
     <Compile Include="Services\WarpMode.cs" />
+    <Compile Include="Services\Waypoint.cs" />
+    <Compile Include="Services\WaypointManager.cs" />
   </ItemGroup>
 </Project>

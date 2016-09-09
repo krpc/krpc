@@ -148,5 +148,59 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<ScienceData> Data {
             get { return experiment.GetData ().Select (data => new ScienceData (experiment, data)).ToList (); }
         }
+
+        /// <summary>
+        /// Determines if the experiment is available given the current conditions.
+        /// </summary>
+        [KRPCProperty]
+        public bool Available {
+            get {
+                var vessel = Part.InternalPart.vessel;
+                var situation = ScienceUtil.GetExperimentSituation (vessel);
+                var rndExperiment = ResearchAndDevelopment.GetExperiment (experiment.experimentID);
+                return rndExperiment.IsAvailableWhile (situation, vessel.mainBody);
+            }
+        }
+
+        /// <summary>
+        /// The name of the biome the experiment is currently in.
+        /// </summary>
+        [KRPCProperty]
+        public string Biome {
+            get {
+                var vessel = Part.InternalPart.vessel;
+                var biome = vessel.LandedInKSC ? getKSCBiome (vessel)
+                    : ScienceUtil.GetExperimentBiome (vessel.mainBody, vessel.latitude, vessel.longitude);
+                return biome.Replace (" ", String.Empty);
+            }
+        }
+
+        static string getKSCBiome (global::Vessel vessel)
+        {
+            var at = vessel.landedAt;
+            return at == "KSC" ? at : at.Replace ("KSC", String.Empty).Replace ("Grounds", String.Empty).Replace ("_", String.Empty);
+        }
+
+        /// <summary>
+        /// Containing information on the corresponding specific science result for the current conditions.
+        /// Returns null if experiment is unavailable.
+        /// </summary>
+        [KRPCProperty]
+        public ScienceSubject ScienceSubject {
+            get {
+                if (!Available)
+                    return null;
+                var id = experiment.experimentID;
+                var vessel = Part.InternalPart.vessel;
+                var bodyName = vessel.mainBody.name;
+                var situation = ScienceUtil.GetExperimentSituation (vessel);
+                var rndExperiment = ResearchAndDevelopment.GetExperiment (id);
+                var biome = rndExperiment.BiomeIsRelevantWhile (situation) ? Biome : String.Empty;
+                var subjectId = string.Format ("{0}@{1}{2}{3}", id, bodyName, situation, biome);
+                var subject = ResearchAndDevelopment.GetSubjectByID (subjectId);
+                subject = subject ?? new global::ScienceSubject (rndExperiment, situation, vessel.mainBody, biome);
+                return new ScienceSubject (subject);
+            }
+        }
     }
 }
