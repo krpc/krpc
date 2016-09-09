@@ -26,7 +26,8 @@ def connect(name=None, address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, strea
     rpc_connection.connect()
     rpc_connection.send(Encoder.RPC_HELLO_MESSAGE)
     request = ConnectionRequest()
-    request.client_name = name
+    if name != None:
+        request.client_name = name
     rpc_connection.send_message(request)
     response = rpc_connection.receive_message(ConnectionResponse)
     if response.status != ConnectionResponse.OK:
