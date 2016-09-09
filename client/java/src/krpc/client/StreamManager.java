@@ -9,8 +9,8 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 
 import krpc.client.services.KRPC;
-import krpc.schema.KRPC.Request;
-import krpc.schema.KRPC.Response;
+import krpc.schema.KRPC.ProcedureCall;
+import krpc.schema.KRPC.ProcedureResult;
 import krpc.schema.KRPC.StreamResult;
 import krpc.schema.KRPC.StreamUpdate;
 import krpc.schema.KRPC.Type;
@@ -36,11 +36,11 @@ class StreamManager {
         socket.close();
     }
 
-    <T> Stream<T> add(Request request, Type type) throws IOException, RPCException {
-        long id = krpc.addStream(request).getId();
+    <T> Stream<T> add(ProcedureCall call, Type type) throws IOException, RPCException {
+        long id = krpc.addStream(call).getId();
         synchronized (streamData) {
             if (!streamTypes.containsKey(id)) {
-                streamData.put(id, connection.invoke(request));
+                streamData.put(id, connection.invoke(call));
                 streamTypes.put(id, type);
             }
         }
@@ -68,13 +68,13 @@ class StreamManager {
         return result;
     }
 
-    void update(long id, Response response) throws StreamException {
+    void update(long id, ProcedureResult result) throws StreamException {
         synchronized (streamData) {
             if (!streamData.containsKey(id))
                 throw new StreamException("Stream does not exist");
-            if (!response.getError().isEmpty())
+            if (!result.getError().isEmpty())
                 return; // TODO: do something with the error
-            streamData.put(id, response.getReturnValue());
+            streamData.put(id, result.getValue());
             streamValues.remove(id);
         }
     }
@@ -95,7 +95,7 @@ class StreamManager {
                     byte[] data = inputStream.readRawBytes(size);
                     StreamUpdate update = StreamUpdate.parseFrom(data);
                     for (StreamResult result : update.getResultsList())
-                        manager.update(result.getId(), result.getResponse());
+                        manager.update(result.getId(), result.getResult());
                 }
              // TODO: handle these exceptions properly
             } catch (StreamException e) {

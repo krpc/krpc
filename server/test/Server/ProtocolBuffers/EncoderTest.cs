@@ -62,9 +62,9 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void DecodeMessage ()
         {
             var message = "0a0b5465737453657276696365121750726f6365647572654e6f417267734e6f52657475726e".ToByteString ();
-            var request = (Request)Encoder.Decode (message, typeof(Request));
-            Assert.AreEqual ("TestService", request.Service);
-            Assert.AreEqual ("ProcedureNoArgsNoReturn", request.Procedure);
+            var call = (ProcedureCall)Encoder.Decode (message, typeof(ProcedureCall));
+            Assert.AreEqual ("TestService", call.Service);
+            Assert.AreEqual ("ProcedureNoArgsNoReturn", call.Procedure);
         }
 
         [Test]

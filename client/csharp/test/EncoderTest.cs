@@ -28,10 +28,10 @@ namespace KRPC.Client.Test
         [Test]
         public void EncodeMessage ()
         {
-            var request = new KRPC.Schema.KRPC.Request ();
-            request.Service = "ServiceName";
-            request.Procedure = "ProcedureName";
-            var data = Encoder.Encode (request, typeof(KRPC.Schema.KRPC.Request));
+            var call = new KRPC.Schema.KRPC.ProcedureCall ();
+            call.Service = "ServiceName";
+            call.Procedure = "ProcedureName";
+            var data = Encoder.Encode (call, typeof(KRPC.Schema.KRPC.ProcedureCall));
             const string expected = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
             Assert.AreEqual (expected, data.ToHexString ());
         }
@@ -72,9 +72,9 @@ namespace KRPC.Client.Test
         public void DecodeMessage ()
         {
             var message = "0a0b536572766963654e616d65120d50726f6365647572654e616d65".ToByteString ();
-            var request = (KRPC.Schema.KRPC.Request)Encoder.Decode (message, typeof(KRPC.Schema.KRPC.Request), null);
-            Assert.AreEqual ("ServiceName", request.Service);
-            Assert.AreEqual ("ProcedureName", request.Procedure);
+            var call = (KRPC.Schema.KRPC.ProcedureCall)Encoder.Decode (message, typeof(KRPC.Schema.KRPC.ProcedureCall), null);
+            Assert.AreEqual ("ServiceName", call.Service);
+            Assert.AreEqual ("ProcedureName", call.Procedure);
         }
 
         [Test]

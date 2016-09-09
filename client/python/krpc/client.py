@@ -73,7 +73,9 @@ class Client(object):
         """ Execute an RPC """
 
         # Build the request
-        request = self._build_request(service, procedure, args, param_names, param_types, return_type)
+        call = self._build_call(service, procedure, args, param_names, param_types, return_type)
+        request = krpc.schema.KRPC.Request()
+        request.calls.extend([call])
 
         # Send the request
         with self._rpc_connection_lock:
@@ -84,17 +86,23 @@ class Client(object):
         if response.error:
             raise RPCError(response.error)
 
+        # Check for an error in the procedure results
+        if response.results[0].error:
+            raise RPCError(response.results[0].error)
+
         # Decode the response and return the (optional) result
         result = None
         if return_type is not None:
-            result = Decoder.decode(response.return_value, return_type)
+            result = Decoder.decode(response.results[0].value, return_type)
         return result
 
-    def _build_request(self, service, procedure, args,
-                       param_names, param_types, return_type):  # pylint: disable=unused-argument
-        """ Build a KRPC.Request object """
+    def _build_call(self, service, procedure, args,
+                    param_names, param_types, return_type):  # pylint: disable=unused-argument
+        """ Build a KRPC.ProcedureCall object """
 
-        request = krpc.schema.KRPC.Request(service=service, procedure=procedure)
+        call = krpc.schema.KRPC.ProcedureCall()
+        call.service = service
+        call.procedure = procedure
 
         for i, (value, typ) in enumerate(itertools.izip(args, param_types)):
             if isinstance(value, DefaultArgument):
@@ -105,6 +113,6 @@ class Client(object):
                 except ValueError:
                     raise TypeError('%s.%s() argument %d must be a %s, got a %s' %
                                     (service, procedure, i, typ.python_type, type(value)))
-            request.arguments.add(position=i, value=Encoder.encode(value, typ))
+            call.arguments.add(position=i, value=Encoder.encode(value, typ))
 
-        return request
+        return call

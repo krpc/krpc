@@ -263,8 +263,8 @@ namespace KRPC.Server.ProtocolBuffers
 
         static object DecodeMessage (CodedInputStream stream, Type type)
         {
-            if (type == typeof(Request)) {
-                var message = new Schema.KRPC.Request ();
+            if (type == typeof(ProcedureCall)) {
+                var message = new Schema.KRPC.ProcedureCall ();
                 message.MergeFrom (stream);
                 return message.ToMessage ();
             }

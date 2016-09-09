@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Continuations;
 using KRPC.Server;
@@ -14,43 +15,64 @@ namespace KRPC.Service
     {
         public IClient<Request,Response> Client { get; private set; }
 
-        readonly Request request;
-        readonly ProcedureSignature procedure;
-        readonly Exception exception;
-        readonly IContinuation continuation;
+        ProcedureCallContinuation call;
+        readonly ProcedureCallContinuation[] calls;
+        readonly ProcedureResult[] results;
 
         [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
-        public RequestContinuation (IClient<Request,Response> client, Request clientRequest)
+        public RequestContinuation (IClient<Request,Response> client, Request request)
         {
             Client = client;
-            request = clientRequest;
-            try {
-                procedure = Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
-            } catch (Exception e) {
-                exception = e;
+            int size = request.Calls.Count;
+            if (size == 1) {
+                // Special case for requests with a single call, to avoid allocating arrays
+                call = new ProcedureCallContinuation (request.Calls [0]);
+            } else {
+                calls = new ProcedureCallContinuation[size];
+                results = new ProcedureResult[size];
+                for (int i = 0; i < size; i++)
+                    calls [i] = new ProcedureCallContinuation (request.Calls [i]);
             }
         }
 
-        RequestContinuation (IClient<Request,Response> client, Request clientRequest, ProcedureSignature invokedProcedure, IContinuation currentContinuation)
-        {
-            Client = client;
-            request = clientRequest;
-            procedure = invokedProcedure;
-            continuation = currentContinuation;
-        }
-
+        /// <summary>
+        /// Execute the procedure calls contained in the request.
+        /// Throws a YieldException if any of the procedure calls yield. Calling this method again will
+        /// then re-execute those procedure calls that yielded.
+        /// If all of the procedures complete, with either a return value or an error,
+        /// a response containing all of the return values and errors is returned.
+        /// </summary>
         public override Response Run ()
         {
-            if (exception != null)
-                throw exception;
-            try {
-                var services = Services.Instance;
-                if (continuation == null)
-                    return services.HandleRequest (procedure, request);
-                else
-                    return services.HandleRequest (procedure, continuation);
-            } catch (YieldException e) {
-                throw new YieldException (new RequestContinuation (Client, request, procedure, e.Continuation));
+            if (call != null) {
+                // Special case when the request contains a single call, as the logic is much simpler
+                try {
+                    var result = call.Run();
+                    var response = new Response ();
+                    response.Results.Add(result);
+                    return response;
+                } catch (YieldException e) {
+                    call = (ProcedureCallContinuation)e.Continuation;
+                    throw new YieldException (this);
+                }
+            } else {
+                bool yielded = false;
+                for (int i = 0; i < calls.Length; i++) {
+                    if (results [i] == null) {
+                        try {
+                            results [i] = calls [i].Run ();
+                        } catch (YieldException e) {
+                            calls [i] = (ProcedureCallContinuation)e.Continuation;
+                            yielded = true;
+                        }
+                    }
+                }
+                if (yielded)
+                    throw new YieldException (this);
+                var response = new Response ();
+                for (int i = 0; i < results.Length; i++)
+                    response.Results.Add (results [i]);
+                return response;
             }
         }
     };

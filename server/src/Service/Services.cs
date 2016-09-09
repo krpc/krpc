@@ -42,22 +42,22 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Executes the given request and returns a response builder with the relevant
-        /// fields populated. Throws YieldException, containing a continuation, if the request yields.
-        /// Throws RPCException if processing the request fails.
+        /// Executes a procedure call and returns the result.
+        /// Throws YieldException, containing a continuation, if the call yields.
+        /// Throws RPCException if the call fails.
         /// </summary>
-        public Response HandleRequest (ProcedureSignature procedure, Request request)
+        public ProcedureResult ExecuteCall (ProcedureSignature procedure, ProcedureCall call)
         {
-            return HandleRequest (procedure, GetArguments (procedure, request.Arguments));
+            return ExecuteCall (procedure, GetArguments (procedure, call.Arguments));
         }
 
         /// <summary>
-        /// Executes a request (from an array of decoded arguments) and returns a response builder with the relevant
-        /// fields populated. Throws YieldException, containing a continuation, if the request yields.
-        /// Throws RPCException if processing the request fails.
+        /// Executes a procedure call and returns the result.
+        /// Throws YieldException, containing a continuation, if the call yields.
+        /// Throws RPCException if the call fails.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
-        public Response HandleRequest (ProcedureSignature procedure, object[] arguments)
+        public ProcedureResult ExecuteCall (ProcedureSignature procedure, object[] arguments)
         {
             if ((CallContext.GameScene & procedure.GameScene) == 0)
                 throw new RPCException (procedure, "Procedure not available in game scene '" + CallContext.GameScene + "'");
@@ -69,22 +69,22 @@ namespace KRPC.Service
                     throw e.InnerException;
                 throw new RPCException (procedure, e.InnerException);
             }
-            var response = new Response ();
+            var result = new ProcedureResult ();
             if (procedure.HasReturnType) {
                 CheckReturnValue (procedure, returnValue);
-                response.ReturnValue = returnValue;
+                result.Value = returnValue;
             }
-            return response;
+            return result;
         }
 
         /// <summary>
-        /// Executes the request, continuing using the given continuation. Returns a response builder with the relevant
-        /// fields populated. Throws YieldException, containing a continuation, if the request yields.
-        /// Throws RPCException if processing the request fails.
+        /// Executes a procedure call and returns the result.
+        /// Throws YieldException, containing a continuation, if the call yields.
+        /// Throws RPCException if the call fails.
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         [SuppressMessage ("Gendarme.Rules.Exceptions", "DoNotSwallowErrorsCatchingNonSpecificExceptionsRule")]
-        public Response HandleRequest (ProcedureSignature procedure, IContinuation continuation)
+        public ProcedureResult ExecuteCall (ProcedureSignature procedure, IContinuation continuation)
         {
             object returnValue;
             try {
@@ -94,12 +94,12 @@ namespace KRPC.Service
             } catch (Exception e) {
                 throw new RPCException (procedure, e);
             }
-            var response = new Response ();
+            var result = new ProcedureResult ();
             if (procedure.HasReturnType) {
                 CheckReturnValue (procedure, returnValue);
-                response.ReturnValue = returnValue;
+                result.Value = returnValue;
             }
-            return response;
+            return result;
         }
 
         /// <summary>

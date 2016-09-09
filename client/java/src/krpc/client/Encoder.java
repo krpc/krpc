@@ -90,7 +90,7 @@ public class Encoder {
             return encodeSet((Set<?>) value, type.getTypes(0));
         case DICTIONARY:
             return encodeDictionary((Map<?, ?>) value, type.getTypes(0), type.getTypes(1));
-        case REQUEST:
+        case PROCEDURE_CALL:
         case SERVICES:
         case STREAM:
         case STATUS:
@@ -132,8 +132,8 @@ public class Encoder {
             return decodeSet(data, type.getTypes(0), connection);
         case DICTIONARY:
             return decodeDictionary(data, type.getTypes(0), type.getTypes(1), connection);
-        case REQUEST:
-            return decodeMessage(KRPC.Request.newBuilder(), data);
+        case PROCEDURE_CALL:
+            return decodeMessage(KRPC.ProcedureCall.newBuilder(), data);
         case SERVICES:
             return decodeMessage(KRPC.Services.newBuilder(), data);
         case STREAM:

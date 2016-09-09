@@ -39,9 +39,9 @@ public class EncoderTest {
 
     @Test
     public void testEncodeMessage() throws IOException {
-        KRPC.Request request = KRPC.Request.newBuilder().setService("ServiceName").setProcedure("ProcedureName").build();
-        Type type = Types.CreateMessage(TypeCode.REQUEST);
-        ByteString data = Encoder.encode(request, type);
+        KRPC.ProcedureCall call = KRPC.ProcedureCall.newBuilder().setService("ServiceName").setProcedure("ProcedureName").build();
+        Type type = Types.CreateMessage(TypeCode.PROCEDURE_CALL);
+        ByteString data = Encoder.encode(call, type);
         String expected = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
         assertEquals(expected, hexlify(data));
     }
@@ -78,10 +78,10 @@ public class EncoderTest {
     @Test
     public void testDecodeMessage() throws IOException {
         ByteString message = unhexlify("0a0b536572766963654e616d65120d50726f6365647572654e616d65");
-        Type type = Types.CreateMessage(TypeCode.REQUEST);
-        KRPC.Request request = (KRPC.Request) Encoder.decode(message, type, null);
-        assertEquals("ServiceName", request.getService());
-        assertEquals("ProcedureName", request.getProcedure());
+        Type type = Types.CreateMessage(TypeCode.PROCEDURE_CALL);
+        KRPC.ProcedureCall call = (KRPC.ProcedureCall) Encoder.decode(message, type, null);
+        assertEquals("ServiceName", call.getService());
+        assertEquals("ProcedureName", call.getProcedure());
     }
 
     @Test

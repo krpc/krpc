@@ -22,10 +22,10 @@ function TestEncoder:test_stream_hello_message()
 end
 
 function TestEncoder:test_encode_message()
-  local request = schema.Request()
-  request.service = 'ServiceName'
-  request.procedure = 'ProcedureName'
-  data = encoder.encode(request, types:request_type())
+  local call = schema.ProcedureCall()
+  call.service = 'ServiceName'
+  call.procedure = 'ProcedureName'
+  data = encoder.encode(call, types:procedure_call_type())
   expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
   luaunit.assertEquals(platform.hexlify(data), expected)
 end
@@ -41,10 +41,10 @@ function TestEncoder:test_encode_unicode_string()
 end
 
 function TestEncoder:test_encode_message_with_size()
-  local request = schema.Request()
-  request.service = 'ServiceName'
-  request.procedure = 'ProcedureName'
-  local data = encoder.encode_message_with_size(request, types:request_type())
+  local call = schema.ProcedureCall()
+  call.service = 'ServiceName'
+  call.procedure = 'ProcedureName'
+  local data = encoder.encode_message_with_size(call, types:procedure_call_type())
   local expected = '1c'..'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
   luaunit.assertEquals(expected, platform.hexlify(data))
 end

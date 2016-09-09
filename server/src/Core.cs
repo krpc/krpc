@@ -462,26 +462,26 @@ namespace KRPC
                     var streamUpdate = new StreamUpdate ();
                     foreach (var request in requests) {
                         // Run the RPC
-                        Response response;
+                        ProcedureResult result;
                         try {
-                            response = KRPC.Service.Services.Instance.HandleRequest (request.Procedure, request.Arguments);
+                            result = KRPC.Service.Services.Instance.ExecuteCall (request.Procedure, request.Arguments);
                         } catch (RPCException e) {
-                            response = new Response ();
-                            response.Error = e.ToString ();
+                            result = new ProcedureResult ();
+                            result.Error = e.ToString ();
                         } catch (YieldException e) {
                             //FIXME: handle yields correctly
-                            response = new Response ();
-                            response.Error = e.ToString ();
+                            result = new ProcedureResult ();
+                            result.Error = e.ToString ();
                         }
                         rpcsExecuted++;
                         // Don't send an update if it is the previous one
                         //FIXME: does the following comparison work?!? The objects have not been serialized
-                        if (response.ReturnValue == streamResultCache [request.Identifier])
+                        if (result.Value == streamResultCache [request.Identifier])
                             continue;
                         // Add the update to the response message
-                        streamResultCache [request.Identifier] = response.ReturnValue;
+                        streamResultCache [request.Identifier] = result.Value;
                         var streamResult = request.Result;
-                        streamResult.Response = response;
+                        streamResult.Result = result;
                         streamUpdate.Results.Add (streamResult);
                     }
                     if (streamUpdate.Results.Count > 0)
@@ -498,7 +498,7 @@ namespace KRPC
         /// <summary>
         /// Add a stream to the server
         /// </summary>
-        internal ulong AddStream (IClient rpcClient, Request request)
+        internal ulong AddStream (IClient rpcClient, ProcedureCall call)
         {
             var id = rpcClient.Guid;
             if (!streamClients.ContainsKey (id))
@@ -507,8 +507,8 @@ namespace KRPC
 
             // Check for an existing stream for the request
             var services = Service.Services.Instance;
-            var procedure = services.GetProcedureSignature (request.Service, request.Procedure);
-            var arguments = services.GetArguments (procedure, request.Arguments);
+            var procedure = services.GetProcedureSignature (call.Service, call.Procedure);
+            var arguments = services.GetArguments (procedure, call.Arguments);
             foreach (var streamRequest in streamRequests[streamClient]) {
                 if (streamRequest.Procedure == procedure && streamRequest.Arguments.SequenceEqual (arguments))
                     return streamRequest.Identifier;
@@ -516,7 +516,7 @@ namespace KRPC
 
             // Create a new stream
             {
-                var streamRequest = new StreamRequest (request);
+                var streamRequest = new StreamRequest (call);
                 streamRequests [streamClient].Add (streamRequest);
                 streamResultCache [streamRequest.Identifier] = null;
                 return streamRequest.Identifier;
@@ -567,7 +567,9 @@ namespace KRPC
                         Request request = stream.Read ();
                         EventHandlerExtensions.Invoke (OnClientActivity, this, new ClientActivityEventArgs (client));
                         if (Logger.ShouldLog (Logger.Severity.Debug))
-                            Logger.WriteLine ("Received request from client " + client.Address + " (" + request.Service + "." + request.Procedure + ")", Logger.Severity.Debug);
+                            Logger.WriteLine ("Received request from client " + client.Address +
+                                              " (" + String.Join(", ", request.Calls.Select(call => call.Service + "." + call.Procedure).ToArray()) + ")",
+                                              Logger.Severity.Debug);
                         continuations.Add (new RequestContinuation (client, request));
                     }
                 } catch (ServerException e) {

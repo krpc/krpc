@@ -162,6 +162,8 @@
     <Compile Include="Service\Messages\NoMessage.cs" />
     <Compile Include="Service\Messages\Parameter.cs" />
     <Compile Include="Service\Messages\Procedure.cs" />
+    <Compile Include="Service\Messages\ProcedureCall.cs" />
+    <Compile Include="Service\Messages\ProcedureResult.cs" />
     <Compile Include="Service\Messages\Response.cs" />
     <Compile Include="Service\Messages\Request.cs" />
     <Compile Include="Service\Messages\Service.cs" />
@@ -171,6 +173,7 @@
     <Compile Include="Service\Messages\StreamResult.cs" />
     <Compile Include="Service\Messages\StreamUpdate.cs" />
     <Compile Include="Service\ObjectStore.cs" />
+    <Compile Include="Service\ProcedureCallContinuation.cs" />
     <Compile Include="Service\ProcedureHandler.cs" />
     <Compile Include="Service\ProcedureParameter.cs" />
     <Compile Include="Service\RequestContinuation.cs" />

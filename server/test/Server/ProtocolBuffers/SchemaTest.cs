@@ -14,18 +14,18 @@ namespace KRPC.Test.Server.ProtocolBuffers
             const string SERVICE = "a";
             const string METHOD = "b";
 
-            var request = new Request ();
-            request.Service = SERVICE;
-            request.Procedure = METHOD;
+            var call = new ProcedureCall ();
+            call.Service = SERVICE;
+            call.Procedure = METHOD;
 
-            Assert.AreEqual (METHOD, request.Procedure);
-            Assert.AreEqual (SERVICE, request.Service);
+            Assert.AreEqual (METHOD, call.Procedure);
+            Assert.AreEqual (SERVICE, call.Service);
 
-            var buffer = new byte [request.CalculateSize ()];
+            var buffer = new byte [call.CalculateSize ()];
             var stream = new CodedOutputStream (buffer);
-            request.WriteTo (stream);
+            call.WriteTo (stream);
 
-            Request reqCopy = Request.Parser.ParseFrom (buffer);
+            var reqCopy = ProcedureCall.Parser.ParseFrom (buffer);
 
             Assert.AreEqual (METHOD, reqCopy.Procedure);
             Assert.AreEqual (SERVICE, reqCopy.Service);

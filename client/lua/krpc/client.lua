@@ -47,19 +47,24 @@ function Client:_invoke(service, procedure, args, param_names, param_types, retu
     error(response.error)
   end
 
-  -- Decode the response and return the (optional) result
-  local result = nil
-  if return_type then
-    result = decoder.decode(response.return_value, return_type)
+  local result = response.results[1]
+  if result:HasField('error') then
+    error(result.error)
   end
-  return result
+
+  -- Decode the response and return the (optional) result
+  if return_type then
+    return decoder.decode(result.value, return_type)
+  end
+  return nil
 end
 
 --- Build a KRPC.Request object
 function Client:_build_request(service, procedure, args, param_names, param_types, return_type)
   local request = schema.Request()
-  request.service = service
-  request.procedure = procedure
+  local call = request.calls:add()
+  call.service = service
+  call.procedure = procedure
 
   for i,value in ipairs(args) do
     local typ = param_types[i]
@@ -75,7 +80,7 @@ function Client:_build_request(service, procedure, args, param_names, param_type
         error(string.format('%s.%s() argument %d must be a %s, got a %s', service, procedure, i, typ.lua_type, type(value)))
       end
     end
-    local arg = request.arguments:add()
+    local arg = call.arguments:add()
     arg.position = i-1
     arg.value = encoder.encode(value, typ)
   end

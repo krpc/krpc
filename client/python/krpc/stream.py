@@ -21,24 +21,24 @@ class Stream(object):
         if func == getattr:
             # A property or class property getter
             attr = func(args[0].__class__, args[1])
-            self._request = attr.fget._build_request(args[0])
+            self._call = attr.fget._build_call(args[0])
             self._return_type = attr.fget._return_type
         elif func == setattr:
             # A property setter
             raise ValueError('Cannot stream a property setter')
         elif hasattr(func, '__self__'):
             # A method
-            self._request = func._build_request(func.__self__, *args, **kwargs)
+            self._call = func._build_call(func.__self__, *args, **kwargs)
             self._return_type = func._return_type
         else:
             # A class method
-            self._request = func._build_request(*args, **kwargs)
+            self._call = func._build_call(*args, **kwargs)
             self._return_type = func._return_type
         # Set the initial value by running the RPC once
         self._value = func(*args, **kwargs)
         # Add the stream to the server and add the initial value to the cache
         with self._conn._stream_cache_lock:
-            self._stream_id = self._conn.krpc.add_stream(self._request).id
+            self._stream_id = self._conn.krpc.add_stream(self._call).id
             if self._stream_id in self._conn._stream_cache:
                 raise StreamExistsError(self._stream_id)
             self._conn._stream_cache[self._stream_id] = self
@@ -106,11 +106,11 @@ def update_thread(connection, stop, cache, cache_lock):
                     continue
 
                 # Check for an error response
-                if result.response.error:
-                    cache[result.id].value = RPCError(result.response.error)
+                if result.result.error:
+                    cache[result.id].value = RPCError(result.result.error)
                     continue
 
                 # Decode the return value and store it in the cache
                 typ = cache[result.id].return_type
-                value = Decoder.decode(result.response.return_value, typ)
+                value = Decoder.decode(result.result.value, typ)
                 cache[result.id].update(value)

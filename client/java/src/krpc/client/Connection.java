@@ -184,10 +184,11 @@ public class Connection {
      * interface is for generated service code.
      */
     public ByteString invoke(String service, String procedure, ByteString... arguments) throws RPCException, IOException {
-        return invoke(buildRequest(service, procedure, arguments));
+        return invoke(buildCall(service, procedure, arguments));
     }
 
-    ByteString invoke(KRPC.Request request) throws RPCException, IOException {
+    ByteString invoke(KRPC.ProcedureCall call) throws RPCException, IOException {
+        KRPC.Request request = KRPC.Request.newBuilder().addCalls(call).build();
         byte[] data;
         synchronized (connectionLock) {
             rpcOutputStream.writeMessageNoTag(request);
@@ -198,30 +199,32 @@ public class Connection {
         KRPC.Response response = KRPC.Response.parseFrom(data);
         if (!response.getError().isEmpty())
             throw new RPCException(response.getError());
-        return response.getReturnValue();
+        if (!response.getResultsList().get(0).getError().isEmpty())
+            throw new RPCException(response.getResultsList().get(0).getError());
+        return response.getResultsList().get(0).getValue();
     }
 
-    KRPC.Request buildRequest(String service, String procedure, ByteString... arguments) throws IOException {
-        KRPC.Request.Builder requestBuilder = KRPC.Request.newBuilder();
-        requestBuilder.setService(service);
-        requestBuilder.setProcedure(procedure);
+    KRPC.ProcedureCall buildCall(String service, String procedure, ByteString... arguments) throws IOException {
+        KRPC.ProcedureCall.Builder callBuilder = KRPC.ProcedureCall.newBuilder();
+        callBuilder.setService(service);
+        callBuilder.setProcedure(procedure);
         if (arguments.length > 0) {
             KRPC.Argument.Builder argumentBuilder = KRPC.Argument.newBuilder();
             int position = 0;
             for (ByteString value : arguments) {
                 KRPC.Argument argument = argumentBuilder.setPosition(position).setValue(value).build();
-                requestBuilder.addArguments(argument);
+                callBuilder.addArguments(argument);
                 position++;
             }
         }
-        return requestBuilder.build();
+        return callBuilder.build();
     }
 
-    private KRPC.Request buildRequest(Method method, ByteString... args) throws IOException {
+    private KRPC.ProcedureCall buildCall(Method method, ByteString... args) throws IOException {
         RPCInfo info = method.getAnnotation(RPCInfo.class);
         String service = info.service();
         String procedure = info.procedure();
-        return buildRequest(service, procedure, args);
+        return buildCall(service, procedure, args);
     }
 
     /**
@@ -317,6 +320,6 @@ public class Connection {
         ByteString[] encodedArgs = new ByteString[args.length];
         for (int i = 0; i < args.length; i++)
             encodedArgs[i] = Encoder.encode(args[i], parameterTypes[i]);
-        return streamManager.add(buildRequest(method, encodedArgs), returnType);
+        return streamManager.add(buildCall(method, encodedArgs), returnType);
     }
 }

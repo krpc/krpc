@@ -2,7 +2,7 @@ import unittest
 from enum import Enum
 from krpc.types import Types, ValueType, ClassType, EnumerationType, MessageType, ClassBase
 from krpc.types import TupleType, ListType, SetType, DictionaryType
-from krpc.schema.KRPC import Type, Request, Stream, Status, Services
+from krpc.schema.KRPC import Type, ProcedureCall, Stream, Status, Services
 
 
 class TestTypes(unittest.TestCase):
@@ -76,7 +76,7 @@ class TestTypes(unittest.TestCase):
     def test_message_types(self):
         types = Types()
         cases = [
-            (types.request_type, Type.REQUEST, Request),
+            (types.procedure_call_type, Type.PROCEDURE_CALL, ProcedureCall),
             (types.stream_type, Type.STREAM, Stream),
             (types.status_type, Type.STATUS, Status),
             (types.services_type, Type.SERVICES, Services)

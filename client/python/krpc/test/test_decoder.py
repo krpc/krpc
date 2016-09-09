@@ -26,9 +26,9 @@ class TestDecoder(unittest.TestCase):
 
     def test_decode_message(self):
         message = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
-        request = Decoder.decode(unhexlify(message), self.types.request_type)
-        self.assertEqual('ServiceName', request.service)
-        self.assertEqual('ProcedureName', request.procedure)
+        call = Decoder.decode(unhexlify(message), self.types.procedure_call_type)
+        self.assertEqual('ServiceName', call.service)
+        self.assertEqual('ProcedureName', call.procedure)
 
     def test_decode_class(self):
         typ = self.types.class_type('ServiceName', 'ClassName')

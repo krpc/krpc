@@ -15,12 +15,12 @@ namespace KRPC.Service
 
         public StreamResult Result { get; private set; }
 
-        public StreamRequest (Request request)
+        public StreamRequest (ProcedureCall call)
         {
             Identifier = NextIdentifier;
             var services = Services.Instance;
-            Procedure = services.GetProcedureSignature (request.Service, request.Procedure);
-            Arguments = services.GetArguments (Procedure, request.Arguments);
+            Procedure = services.GetProcedureSignature (call.Service, call.Procedure);
+            Arguments = services.GetArguments (Procedure, call.Arguments);
             Result = new StreamResult (Identifier);
         }
 

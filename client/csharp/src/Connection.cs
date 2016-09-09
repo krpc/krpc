@@ -123,8 +123,8 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
-            var request = BuildRequest (expression);
-            return new Stream<TResult> (this, request);
+            var call = BuildCall (expression);
+            return new Stream<TResult> (this, call);
         }
 
         /// <summary>
@@ -145,11 +145,13 @@ namespace KRPC.Client
         public ByteString Invoke (string service, string procedure, IList<ByteString> arguments = null)
         {
             CheckDisposed ();
-            return Invoke (BuildRequest (service, procedure, arguments));
+            return Invoke (BuildCall (service, procedure, arguments));
         }
 
-        internal ByteString Invoke (Request request)
+        internal ByteString Invoke (ProcedureCall call)
         {
+            var request = new Request ();
+            request.Calls.Add (call);
             Response response;
 
             lock (invokeLock) {
@@ -164,43 +166,45 @@ namespace KRPC.Client
 
             if (response.Error.Length > 0)
                 throw new RPCException (response.Error);
-            return response.ReturnValue;
+            if (response.Results[0].Error.Length > 0)
+                throw new RPCException (response.Results[0].Error);
+            return response.Results[0].Value;
         }
 
-        internal static Request BuildRequest (string service, string procedure, IList<ByteString> arguments = null)
+        internal static ProcedureCall BuildCall (string service, string procedure, IList<ByteString> arguments = null)
         {
-            var request = new Request ();
-            request.Service = service;
-            request.Procedure = procedure;
+            var call = new ProcedureCall ();
+            call.Service = service;
+            call.Procedure = procedure;
             if (arguments != null) {
                 uint position = 0;
                 foreach (var value in arguments) {
                     var argument = new Argument ();
                     argument.Position = position;
                     argument.Value = value;
-                    request.Arguments.Add (argument);
+                    call.Arguments.Add (argument);
                     position++;
                 }
             }
-            return request;
+            return call;
         }
 
-        internal static Request BuildRequest (LambdaExpression expression)
+        internal static ProcedureCall BuildCall (LambdaExpression expression)
         {
             Expression body = expression.Body;
 
             var methodCallExpression = body as MethodCallExpression;
             if (methodCallExpression != null)
-                return BuildRequest (methodCallExpression);
+                return BuildCall (methodCallExpression);
 
             var memberExpression = body as MemberExpression;
             if (memberExpression != null)
-                return BuildRequest (memberExpression);
+                return BuildCall (memberExpression);
 
             throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
         }
 
-        internal static Request BuildRequest (MethodCallExpression expression)
+        internal static ProcedureCall BuildCall (MethodCallExpression expression)
         {
             var method = expression.Method;
 
@@ -238,11 +242,11 @@ namespace KRPC.Client
                 position++;
             }
 
-            // Build the request
-            return BuildRequest (attribute.Service, attribute.Procedure, arguments);
+            // Build the call
+            return BuildCall (attribute.Service, attribute.Procedure, arguments);
         }
 
-        internal static Request BuildRequest (MemberExpression expression)
+        internal static ProcedureCall BuildCall (MemberExpression expression)
         {
             var member = expression.Member;
 
@@ -265,8 +269,8 @@ namespace KRPC.Client
                 arguments.Add (encodedValue);
             }
 
-            // Build the request
-            return BuildRequest (attribute.Service, attribute.Procedure, arguments);
+            // Build the call
+            return BuildCall (attribute.Service, attribute.Procedure, arguments);
         }
 
         // Initial buffer size of 1 MB

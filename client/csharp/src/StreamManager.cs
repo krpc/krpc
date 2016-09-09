@@ -63,14 +63,14 @@ namespace KRPC.Client
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidCodeDuplicatedInSameClassRule")]
-        public ulong AddStream (Request request, System.Type type)
+        public ulong AddStream (ProcedureCall call, System.Type type)
         {
             CheckDisposed ();
-            var id = connection.KRPC ().AddStream (request).Id;
+            var id = connection.KRPC ().AddStream (call).Id;
             lock (accessLock) {
                 if (!streamTypes.ContainsKey (id)) {
                     streamTypes [id] = type;
-                    streamData [id] = connection.Invoke (request);
+                    streamData [id] = connection.Invoke (call);
                 }
             }
             return id;
@@ -103,14 +103,14 @@ namespace KRPC.Client
             return result;
         }
 
-        void Update (ulong id, Response response)
+        void Update (ulong id, ProcedureResult result)
         {
             lock (accessLock) {
                 if (!streamData.ContainsKey (id))
                     return;
-                if (response.Error.Length > 0)
+                if (result.Error.Length > 0)
                     return; //TODO: do something with the error
-                var data = response.ReturnValue;
+                var data = result.Value;
                 streamData [id] = data;
                 streamValues.Remove (id);
             }
@@ -149,7 +149,7 @@ namespace KRPC.Client
                         if (stop)
                             break;
                         foreach (var result in update.Results) {
-                            manager.Update (result.Id, result.Response);
+                            manager.Update (result.Id, result.Result);
                             if (stop)
                                 break;
                         }
