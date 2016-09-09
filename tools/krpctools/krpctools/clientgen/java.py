@@ -92,28 +92,28 @@ class JavaGenerator(Generator):
         if typ is None:
             return None
         if isinstance(typ, ValueType):
-            return 'krpc.client.Types.CreateValue(krpc.schema.KRPC.Type.TypeCode.%s)' % \
+            return 'krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.%s)' % \
                 Type.TypeCode.Name(typ.protobuf_type.code)
         elif isinstance(typ, MessageType):
-            return 'krpc.client.Types.CreateMessage(krpc.schema.KRPC.Type.TypeCode.%s)' % \
+            return 'krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.%s)' % \
                 Type.TypeCode.Name(typ.protobuf_type.code)
         elif isinstance(typ, ClassType):
-            return 'krpc.client.Types.CreateClass("%s", "%s")' % \
+            return 'krpc.client.Types.createClass("%s", "%s")' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name)
         elif isinstance(typ, EnumerationType):
-            return 'krpc.client.Types.CreateEnumeration("%s", "%s")' % \
+            return 'krpc.client.Types.createEnumeration("%s", "%s")' % \
                 (typ.protobuf_type.service, typ.protobuf_type.name)
         elif isinstance(typ, TupleType):
-            return 'krpc.client.Types.CreateTuple(%s)' % \
+            return 'krpc.client.Types.createTuple(%s)' % \
                 ','.join(self.parse_type_specification(t) for t in typ.value_types)
         elif isinstance(typ, ListType):
-            return 'krpc.client.Types.CreateList(%s)' % \
+            return 'krpc.client.Types.createList(%s)' % \
                 self.parse_type_specification(typ.value_type)
         elif isinstance(typ, SetType):
-            return 'krpc.client.Types.CreateSet(%s)' % \
+            return 'krpc.client.Types.createSet(%s)' % \
                 self.parse_type_specification(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            return 'krpc.client.Types.CreateDictionary(%s, %s)' % \
+            return 'krpc.client.Types.createDictionary(%s, %s)' % \
                 (self.parse_type_specification(typ.key_type),
                  self.parse_type_specification(typ.value_type))
         raise RuntimeError('Unknown type ' + typ)

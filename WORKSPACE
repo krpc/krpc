@@ -106,6 +106,62 @@ http_file(
 )
 
 http_file(
+    name = 'java_checkstyle',
+    url = 'https://repo1.maven.org/maven2/com/puppycrawl/tools/checkstyle/7.1/checkstyle-7.1.jar',
+    sha256 = 'dc5cd55d0771c15f2a58cc20ed5b437a42e4183b51ee49a39126a458628776b9'
+)
+
+new_http_archive(
+    name = 'java_apache_commons_beanutils',
+    build_file = 'tools/build/java_apache_commons_beanutils.BUILD',
+    url = 'http://mirror.olnevhost.net/pub/apache/commons/beanutils/binaries/commons-beanutils-1.9.2-bin.zip',
+    sha256 = 'ebabc3daba4c227ea868a4d1a526afde84b682c8f511d0c3a159f8e7a0d0151f',
+    strip_prefix = 'commons-beanutils-1.9.2'
+)
+
+new_http_archive(
+    name = 'java_apache_commons_cli',
+    build_file = 'tools/build/java_apache_commons_cli.BUILD',
+    url = 'http://mirror.olnevhost.net/pub/apache//commons/cli/binaries/commons-cli-1.3.1-bin.zip',
+    sha256 = '294437b1958b49dc171104cfff6ab90a85fdea473679304ee860a2b3b486f384',
+    strip_prefix = 'commons-cli-1.3.1'
+)
+
+new_http_archive(
+    name = 'java_apache_commons_collections',
+    build_file = 'tools/build/java_apache_commons_collections.BUILD',
+    url = 'http://mirror.olnevhost.net/pub/apache/commons/collections/binaries/commons-collections-3.2.2-bin.zip',
+    sha256 = '45c1981cab4a831336bba38903aaa184856b303dfba640083e9103d61d3507b6',
+    strip_prefix = 'commons-collections-3.2.2'
+)
+
+new_http_archive(
+    name = 'java_apache_commons_logging',
+    build_file = 'tools/build/java_apache_commons_logging.BUILD',
+    url = 'http://mirror.olnevhost.net/pub/apache/commons/logging/binaries/commons-logging-1.2-bin.zip',
+    sha256 = '8a5bbf1bc8916a1f99ee7584be494bd9ec069025a345a0f0c78eea7407e395ca',
+    strip_prefix = 'commons-logging-1.2'
+)
+
+http_file(
+    name = 'java_antlr2',
+    url = 'http://central.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.jar',
+    sha256 = '88fbda4b912596b9f56e8e12e580cc954bacfb51776ecfddd3e18fc1cf56dc4c'
+)
+
+http_file(
+    name = 'java_antlr4_runtime',
+    url = 'http://www.antlr.org/download/antlr-runtime-4.5.3.jar',
+    sha256 = '93bca08ec995caeaaf60bdf80035a0be8507fcdabd3c2618fd8c5aab4444a752'
+)
+
+http_file(
+    name = 'java_guava',
+    url = 'http://central.maven.org/maven2/com/google/guava/guava/19.0/guava-19.0.jar',
+    sha256 = '58d4cc2e05ebb012bbac568b032f75623be1cb6fb096f3c60c72a86f7f057de4'
+)
+
+http_file(
     name = 'java_javatuples',
     url = 'http://central.maven.org/maven2/org/javatuples/javatuples/1.2/javatuples-1.2.jar',
     sha256 = '2eda5b19d9820e1cc2f69fcd01639a715a673c11f8507e3d1ed593cf765d5e0a'
