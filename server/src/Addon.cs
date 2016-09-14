@@ -68,7 +68,7 @@ namespace KRPC
             Init ();
 
             Service.CallContext.SetGameScene (KSPAddonImproved.CurrentGameScene.ToGameScene ());
-            Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
+            KRPC.Utils.Logger.WriteLine ("Game scene switched to " + Service.CallContext.GameScene);
             core.GetUniversalTime = Planetarium.GetUniversalTime;
 
             // If a game is not loaded, ensure the server is stopped and then exit
@@ -82,7 +82,7 @@ namespace KRPC
 
             // Auto-start the server, if required
             if (config.AutoStartServer && !server.Running) {
-                Logger.WriteLine ("Auto-starting server");
+                KRPC.Utils.Logger.WriteLine ("Auto-starting server");
                 StartServer ();
             }
 

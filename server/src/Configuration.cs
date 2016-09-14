@@ -18,7 +18,7 @@ namespace KRPC
         [Persistent] RectStorage infoWindowPosition = new RectStorage ();
         [Persistent] bool autoStartServer;
         [Persistent] bool autoAcceptConnections;
-        [Persistent] string logLevel = Logger.Severity.Info.ToString ();
+        [Persistent] string logLevel = KRPC.Utils.Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors;
         [Persistent] bool checkDocumented;
         [Persistent] bool oneRPCPerUpdate;
@@ -103,7 +103,7 @@ namespace KRPC
         protected override void BeforeSave ()
         {
             address = Address.ToString ();
-            logLevel = Logger.Level.ToString ();
+            logLevel = KRPC.Utils.Logger.Level.ToString ();
             verboseErrors = RPCException.VerboseErrors;
             checkDocumented = ServicesChecker.CheckDocumented;
         }
@@ -122,12 +122,12 @@ namespace KRPC
                 Address = ipAddress;
             }
             try {
-                Logger.Level = (Logger.Severity)Enum.Parse (typeof(Logger.Severity), logLevel);
+                KRPC.Utils.Logger.Level = (KRPC.Utils.Logger.Severity)Enum.Parse (typeof(KRPC.Utils.Logger.Severity), logLevel);
             } catch (ArgumentException) {
                 Console.WriteLine (
                     "[kRPC] Error parsing log level from configuration file. Got '" + logLevel + "'. " +
-                    "Defaulting to " + Logger.Severity.Info);
-                Logger.Level = Logger.Severity.Info;
+                    "Defaulting to " + KRPC.Utils.Logger.Severity.Info);
+                KRPC.Utils.Logger.Level = KRPC.Utils.Logger.Severity.Info;
             }
             RPCException.VerboseErrors = verboseErrors;
             ServicesChecker.CheckDocumented = checkDocumented;
