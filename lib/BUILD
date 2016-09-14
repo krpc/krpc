@@ -11,7 +11,6 @@ exports_files ([
     'ksp/KSP_Data/Managed/Assembly-CSharp-firstpass.dll',
     'ksp/KSP_Data/Managed/UnityEngine.dll',
     'ksp/KSP_Data/Managed/UnityEngine.UI.dll',
-    'ksp/KSP_Data/Managed/KSPUtil.dll',
 
     'ksp/KSP_Data/Managed/mscorlib.dll',
     'ksp/KSP_Data/Managed/System.dll',
