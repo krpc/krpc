@@ -17,7 +17,7 @@ namespace KRPC.UI
             : base (Addon.Instantiate (parent, "InputField"), visible)
         {
             inputField = GameObject.GetComponent<UnityEngine.UI.InputField> ();
-            inputField.onValueChange.AddListener (x => {
+            inputField.onValueChanged.AddListener (x => {
                 Changed = true;
             });
         }
