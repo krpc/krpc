@@ -27,6 +27,12 @@ http_file(
     sha256 = '9031bd7ece9a80ad0efd9bb0ed837b1933ccb01c7acd180b5456baf55ebd5d9e'
 )
 
+http_file(
+    name = 'csharp_system_xml_linq_net35',
+    url = 'https://s3.amazonaws.com/krpc/lib/System.Xml.Linq.dll',
+    sha256 = 'edb05b9de757f8a93137650f1655d37eae0fd6f2c3ebe1db3a2b5330f56f6675'
+)
+
 new_http_archive(
     name = 'csharp_nunit',
     build_file = 'tools/build/csharp_nunit.BUILD',
