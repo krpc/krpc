@@ -612,7 +612,6 @@ SpaceCenter.Sensor
 SpaceCenter.Sensor.Part
 SpaceCenter.Sensor.Active
 SpaceCenter.Sensor.Value
-SpaceCenter.Sensor.PowerUsage
 SpaceCenter.SolarPanel
 SpaceCenter.SolarPanel.Part
 SpaceCenter.SolarPanel.Deployed
