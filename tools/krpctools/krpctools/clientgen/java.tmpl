@@ -102,7 +102,7 @@ public class {{ service_name }} {
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
         public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }}) throws RPCException, IOException
         {
-{{ args([{'name': 'this', 'type': {'name': service_name+'.'+class_name, 'spec': 'krpc.client.Types.CreateClass("'+service_name+'", "'+class_name+'")'}}] + method.parameters) | indent(width=12) }}
+{{ args([{'name': 'this', 'type': {'name': service_name+'.'+class_name, 'spec': 'krpc.client.Types.createClass("'+service_name+'", "'+class_name+'")'}}] + method.parameters) | indent(width=12) }}
 {{ call(service_name, method.remote_name, method.return_type.name != 'void', true) | indent(width=12) }}
 {% if method.return_type.name != 'void' %}{{ return(method.return_type) | indent(width=12) }}
 {% endif %}
@@ -165,7 +165,7 @@ public class {{ service_name }} {
             {% for procedure in cls.methods.values()|list + cls.properties.values()|list %}
             case "{{ procedure.remote_name }}":
                 return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.CreateClass("{{ service_name }}", "{{ class_name }}"){% if procedure.parameters | length > 0 %},{% endif %}
+                    krpc.client.Types.createClass("{{ service_name }}", "{{ class_name }}"){% if procedure.parameters | length > 0 %},{% endif %}
 
                     {% for parameter in procedure.parameters %}
                     {{ parameter.type.spec }}{% if not loop.last %},{% endif %}

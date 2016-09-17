@@ -27,9 +27,9 @@ Types.TUPLE = schema.TYPE_TYPECODE_TUPLE_ENUM.number
 Types.LIST = schema.TYPE_TYPECODE_LIST_ENUM.number
 Types.SET = schema.TYPE_TYPECODE_SET_ENUM.number
 Types.DICTIONARY = schema.TYPE_TYPECODE_DICTIONARY_ENUM.number
-Types.REQUEST = schema.TYPE_TYPECODE_REQUEST_ENUM.number
-Types.SERVICES = schema.TYPE_TYPECODE_SERVICES_ENUM.number
+Types.PROCEDURE_CALL = schema.TYPE_TYPECODE_PROCEDURE_CALL_ENUM.number
 Types.STREAM = schema.TYPE_TYPECODE_STREAM_ENUM.number
+Types.SERVICES = schema.TYPE_TYPECODE_SERVICES_ENUM.number
 Types.STATUS = schema.TYPE_TYPECODE_STATUS_ENUM.number
 
 VALUE_TYPES = Map{}
@@ -44,9 +44,9 @@ VALUE_TYPES:set(Types.STRING, 'string')
 VALUE_TYPES:set(Types.BYTES, 'string')
 
 MESSAGE_TYPES = Map{}
-MESSAGE_TYPES:set(Types.REQUEST, schema.Request)
-MESSAGE_TYPES:set(Types.SERVICES, schema.Services)
+MESSAGE_TYPES:set(Types.PROCEDURE_CALL, schema.ProcedureCall)
 MESSAGE_TYPES:set(Types.STREAM, schema.Stream)
+MESSAGE_TYPES:set(Types.SERVICES, schema.Services)
 MESSAGE_TYPES:set(Types.STATUS, schema.Status)
 
 CODE_TO_STRING = Map{}
@@ -59,9 +59,9 @@ CODE_TO_STRING:set(Types.UINT64, 'uint64')
 CODE_TO_STRING:set(Types.BOOL, 'bool')
 CODE_TO_STRING:set(Types.STRING, 'string')
 CODE_TO_STRING:set(Types.BYTES, 'bytes')
-CODE_TO_STRING:set(Types.REQUEST, 'Request')
-CODE_TO_STRING:set(Types.SERVICES, 'Services')
+CODE_TO_STRING:set(Types.PROCEDURE_CALL, 'ProcedureCall')
 CODE_TO_STRING:set(Types.STREAM, 'Stream')
+CODE_TO_STRING:set(Types.SERVICES, 'Services')
 CODE_TO_STRING:set(Types.STATUS, 'Status')
 
 function Types:_init()
@@ -209,19 +209,19 @@ function Types:dictionary_type(key_type, value_type)
                                      { key_type.protobuf_type, value_type.protobuf_type }))
 end
 
-function Types:request_type()
-  -- Get a Request message type
-  return self:as_type(_protobuf_type(Types.REQUEST))
-end
-
-function Types:services_type()
-  -- Get a Services message type
-  return self:as_type(_protobuf_type(Types.SERVICES))
+function Types:procedure_call_type()
+  -- Get a StreamMessage message type
+  return self:as_type(_protobuf_type(Types.PROCEDURE_CALL))
 end
 
 function Types:stream_type()
   -- Get a Status message type
   return self:as_type(_protobuf_type(Types.STREAM))
+end
+
+function Types:services_type()
+  -- Get a Services message type
+  return self:as_type(_protobuf_type(Types.SERVICES))
 end
 
 function Types:status_type()

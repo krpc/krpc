@@ -34,7 +34,7 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
     decoder::decode(update, data, client);
 
     for (auto result : update.results())
-      stream_manager->update(result.id(), result.response());
+      stream_manager->update(result.id(), result.result());
   }
 }
 
@@ -52,10 +52,10 @@ StreamManager::~StreamManager() {
   update_thread->join();
 }
 
-google::protobuf::uint64 StreamManager::add_stream(const schema::Request& request) {
+google::protobuf::uint64 StreamManager::add_stream(const schema::ProcedureCall& call) {
   std::lock_guard<std::mutex> guard(*data_lock);
-  schema::Stream stream = services::KRPC(client).add_stream(request);
-  data[stream.id()] = client->invoke(request);
+  schema::Stream stream = services::KRPC(client).add_stream(call);
+  data[stream.id()] = client->invoke(call);
   return stream.id();
 }
 
@@ -73,12 +73,12 @@ std::string StreamManager::get(google::protobuf::uint64 id) {
   return it->second;
 }
 
-void StreamManager::update(google::protobuf::uint64 id, const schema::Response& response) {
+void StreamManager::update(google::protobuf::uint64 id, const schema::ProcedureResult& result) {
   std::lock_guard<std::mutex> guard(*data_lock);
   auto it = data.find(id);
   if (it == data.end())
     return;
-  it->second = response.return_value();
+  it->second = result.value();
 }
 
 }  // namespace krpc

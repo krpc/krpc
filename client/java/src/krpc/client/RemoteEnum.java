@@ -5,5 +5,5 @@ package krpc.client;
  * calls.
  */
 public interface RemoteEnum {
-    public int getValue();
+  public int getValue();
 }

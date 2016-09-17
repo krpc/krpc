@@ -19,10 +19,10 @@ class StreamManager {
   StreamManager();
   ~StreamManager();
   StreamManager(Client* client, const std::shared_ptr<Connection>& connection);
-  google::protobuf::uint64 add_stream(const schema::Request& request);
+  google::protobuf::uint64 add_stream(const schema::ProcedureCall& call);
   void remove_stream(google::protobuf::uint64 id);
   std::string get(google::protobuf::uint64 id);
-  void update(google::protobuf::uint64 id, const schema::Response& response);
+  void update(google::protobuf::uint64 id, const schema::ProcedureResult& result);
  private:
   static void update_thread_main(StreamManager* stream_manager,
                                  const std::shared_ptr<Connection>& connection,

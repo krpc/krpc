@@ -19,10 +19,10 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual('4b5250432d535452', hexlify(message))
 
     def test_encode_message(self):
-        request = self.types.request_type.python_type()
-        request.service = 'ServiceName'
-        request.procedure = 'ProcedureName'
-        data = Encoder.encode(request, self.types.request_type)
+        call = self.types.procedure_call_type.python_type()
+        call.service = 'ServiceName'
+        call.procedure = 'ProcedureName'
+        data = Encoder.encode(call, self.types.procedure_call_type)
         expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         self.assertEqual(expected, hexlify(data))
 
@@ -35,10 +35,10 @@ class TestEncoder(unittest.TestCase):
         self.assertEqual('03e284a2', hexlify(data))
 
     def test_encode_message_with_size(self):
-        request = self.types.request_type.python_type()
-        request.service = 'ServiceName'
-        request.procedure = 'ProcedureName'
-        data = Encoder.encode_message_with_size(request)
+        call = self.types.procedure_call_type.python_type()
+        call.service = 'ServiceName'
+        call.procedure = 'ProcedureName'
+        data = Encoder.encode_message_with_size(call)
         expected = '1c' + '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
         self.assertEqual(expected, hexlify(data))
 

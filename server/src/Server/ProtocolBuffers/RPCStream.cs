@@ -32,6 +32,9 @@ namespace KRPC.Server.ProtocolBuffers
                 if (length < totalSize)
                     return 0;
                 // Decode the request
+                // FIXME: If multiple requests are received, decoding a single request fails unless the
+                //        coded stream is recreated to be precisely the message size. Why is this?
+                codedStream = new CodedInputStream (data, offset + (int)codedStream.Position, size);
                 request = Schema.KRPC.Request.Parser.ParseFrom (codedStream).ToMessage ();
                 return totalSize;
             } catch (InvalidProtocolBufferException e) {

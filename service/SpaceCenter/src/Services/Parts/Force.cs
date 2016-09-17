@@ -69,7 +69,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             var worldForce = ReferenceFrame.DirectionToWorldSpace (force);
             var worldPosition = ReferenceFrame.PositionToWorldSpace (position);
-            rigidBody.AddForceAtPosition (worldForce, worldPosition, ForceMode.Force);
+            rigidBody.AddForceAtPosition (worldForce / 1000f, worldPosition, ForceMode.Force);
         }
     }
 }

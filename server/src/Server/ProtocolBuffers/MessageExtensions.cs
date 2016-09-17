@@ -24,9 +24,18 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Response ();
             if (response.HasError)
-                result.Error = response.Error.Length > 0 ? response.Error : "Unknown error";
-            if (response.HasReturnValue)
-                result.ReturnValue = Encoder.Encode (response.ReturnValue);
+                result.Error = response.Error;
+            result.Results.Add (response.Results.Select (ToProtobufMessage));
+            return result;
+        }
+
+        public static Schema.KRPC.ProcedureResult ToProtobufMessage (this ProcedureResult procedureResult)
+        {
+            var result = new Schema.KRPC.ProcedureResult ();
+            if (procedureResult.HasError)
+                result.Error = procedureResult.Error.Length > 0 ? procedureResult.Error : "Unknown error";
+            if (procedureResult.HasValue)
+                result.Value = Encoder.Encode (procedureResult.Value);
             return result;
         }
 
@@ -41,7 +50,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.StreamResult ();
             result.Id = streamResult.Id;
-            result.Response = streamResult.Response.ToProtobufMessage ();
+            result.Result = streamResult.Result.ToProtobufMessage ();
             return result;
         }
 
@@ -147,17 +156,14 @@ namespace KRPC.Server.ProtocolBuffers
                 if (type == typeof(byte[]))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Bytes;
             } else if (TypeUtils.IsAMessageType (type)) {
-                // TODO: move these to the message classes
-                if (type == typeof(StreamUpdate))
-                    result.Code = Schema.KRPC.Type.Types.TypeCode.StreamUpdate;
+                if (type == typeof(KRPC.Service.Messages.ProcedureCall))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.ProcedureCall;
+                else if (type == typeof(KRPC.Service.Messages.Stream))
+                    result.Code = Schema.KRPC.Type.Types.TypeCode.Stream;
                 else if (type == typeof(Status))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Status;
                 else if (type == typeof(KRPC.Service.Messages.Services))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Services;
-                else if (type == typeof(KRPC.Service.Messages.Stream))
-                    result.Code = Schema.KRPC.Type.Types.TypeCode.Stream;
-                else if (type == typeof(KRPC.Service.Messages.Request))
-                    result.Code = Schema.KRPC.Type.Types.TypeCode.Request;
                 else
                     throw new ArgumentException ("Type " + type + " is not valid");
             } else if (TypeUtils.IsAClassType (type)) {
@@ -220,9 +226,17 @@ namespace KRPC.Server.ProtocolBuffers
 
         public static Request ToMessage (this Schema.KRPC.Request request)
         {
-            var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (request.Service, request.Procedure);
-            var result = new Request (request.Service, request.Procedure);
-            foreach (var argument in request.Arguments) {
+            var result = new Request ();
+            foreach (var call in request.Calls)
+                result.Calls.Add (call.ToMessage ());
+            return result;
+        }
+
+        public static ProcedureCall ToMessage (this Schema.KRPC.ProcedureCall call)
+        {
+            var procedureSignature = KRPC.Service.Services.Instance.GetProcedureSignature (call.Service, call.Procedure);
+            var result = new ProcedureCall (call.Service, call.Procedure);
+            foreach (var argument in call.Arguments) {
                 var position = (int)argument.Position;
                 // Ignore the argument if its position is not valid
                 if (position >= procedureSignature.Parameters.Count)

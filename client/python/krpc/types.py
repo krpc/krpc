@@ -15,7 +15,7 @@ VALUE_TYPES = {
 }
 
 MESSAGE_TYPES = {
-    krpc.schema.KRPC.Type.REQUEST: krpc.schema.KRPC.Request,
+    krpc.schema.KRPC.Type.PROCEDURE_CALL: krpc.schema.KRPC.ProcedureCall,
     krpc.schema.KRPC.Type.SERVICES: krpc.schema.KRPC.Services,
     krpc.schema.KRPC.Type.STREAM: krpc.schema.KRPC.Stream,
     krpc.schema.KRPC.Type.STATUS: krpc.schema.KRPC.Status,
@@ -150,9 +150,9 @@ class Types(object):
                                            [key_type.protobuf_type, value_type.protobuf_type]))
 
     @property
-    def request_type(self):
-        """ Get a Request message type """
-        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.REQUEST))
+    def procedure_call_type(self):
+        """ Get a ProcedureCall message type """
+        return self.as_type(_protobuf_type(krpc.schema.KRPC.Type.PROCEDURE_CALL))
 
     @property
     def services_type(self):

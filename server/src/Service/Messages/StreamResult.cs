@@ -5,7 +5,7 @@ namespace KRPC.Service.Messages
     {
         public ulong Id { get; private set; }
 
-        public Response Response { get; set; }
+        public ProcedureResult Result { get; set; }
 
         public StreamResult (ulong id)
         {

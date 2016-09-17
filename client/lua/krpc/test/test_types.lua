@@ -77,9 +77,9 @@ end
 function TestTypes:test_message_types()
   local types = Types()
   cases = List{
-    { types:request_type(), Types.REQUEST },
-    { types:services_type(), Types.SERVICES },
+    { types:procedure_call_type(), Types.PROCEDURE_CALL },
     { types:stream_type(), Types.STREAM },
+    { types:services_type(), Types.SERVICES },
     { types:status_type(), Types.STATUS }
   }
   for _, case in ipairs(cases) do

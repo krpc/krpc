@@ -12,10 +12,10 @@ namespace pb = google::protobuf;
 
 TEST(test_decoder, test_decode_message) {
   std::string message = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
-  krpc::schema::Request request;
-  krpc::decoder::decode(request, krpc::platform::unhexlify(message));
-  ASSERT_EQ("ServiceName", request.service());
-  ASSERT_EQ("ProcedureName", request.procedure());
+  krpc::schema::ProcedureCall call;
+  krpc::decoder::decode(call, krpc::platform::unhexlify(message));
+  ASSERT_EQ("ServiceName", call.service());
+  ASSERT_EQ("ProcedureName", call.procedure());
 }
 
 TEST(test_decoder, test_decode_value) {

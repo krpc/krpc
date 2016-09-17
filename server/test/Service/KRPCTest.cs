@@ -43,7 +43,7 @@ namespace KRPC.Test.Service
                 } else if (proc.Name == "AddStream") {
                     MessageAssert.HasReturnType (proc, typeof(KRPC.Service.Messages.Stream));
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameter (proc, 0, typeof(KRPC.Service.Messages.Request), "request");
+                    MessageAssert.HasParameter (proc, 0, typeof(KRPC.Service.Messages.ProcedureCall), "call");
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "RemoveStream") {
                     MessageAssert.HasNoReturnType (proc);

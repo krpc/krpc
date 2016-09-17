@@ -26,6 +26,10 @@ message ConnectionResponse {
 // Messages for calling remote procedures
 
 message Request {
+  repeated ProcedureCall calls = 1;
+}
+
+message ProcedureCall {
   string service = 1;
   string procedure = 2;
   repeated Argument arguments = 3;
@@ -38,7 +42,12 @@ message Argument {
 
 message Response {
   string error = 1;
-  bytes return_value = 2;
+  repeated ProcedureResult results = 2;
+}
+
+message ProcedureResult {
+  string error = 1;
+  bytes value = 2;
 }
 
 // Messages for receiving stream updates
@@ -49,7 +58,7 @@ message StreamUpdate {
 
 message StreamResult {
   uint64 id = 1;
-  Response response = 2;
+  ProcedureResult result = 2;
 }
 
 // Messages for receiving information about the server
@@ -121,11 +130,10 @@ message Type {
     ENUMERATION = 101;
 
     // Messages
-    REQUEST = 200;
-    STREAM_UPDATE = 201;
-    STREAM = 202;
-    STATUS = 203;
-    SERVICES = 204;
+    PROCEDURE_CALL = 200;
+    STREAM = 201;
+    STATUS = 202;
+    SERVICES = 203;
 
     // Collections
     TUPLE = 300;

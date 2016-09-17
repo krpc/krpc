@@ -1,5 +1,6 @@
 load('/tools/krpctools/clientgen', 'clientgen_java')
 load('/tools/build/client_test', 'client_test')
+load('/tools/build/java', 'java_checkstyle_test')
 load('/config', 'version')
 
 copts = ['-Werror', '-Xlint:all', '-target 1.7', '-source 1.7']
@@ -87,7 +88,7 @@ java_test(
 
 test_suite(
     name = 'test',
-    tests = [':client']
+    tests = [':client', ':checkstyle']
 )
 
 test_suite(
@@ -102,6 +103,12 @@ client_test(
     tags = ['requires-network'],
     size = 'small',
     visibility = ['//:__pkg__']
+)
+
+java_checkstyle_test(
+    name = 'checkstyle',
+    srcs = glob(['**/*.java']),
+    size = 'small'
 )
 
 clientgen_java(

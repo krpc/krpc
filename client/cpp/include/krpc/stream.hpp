@@ -10,7 +10,7 @@ namespace krpc {
 template <typename T>
 class Stream {
  public:
-  Stream(Client* client, const schema::Request& request);
+  Stream(Client* client, const schema::ProcedureCall& call);
   ~Stream();
   T operator()();
   void remove();
@@ -21,9 +21,9 @@ class Stream {
   google::protobuf::uint32 id;
 };
 
-template <typename T> inline Stream<T>::Stream(Client* client, const schema::Request& request)
+template <typename T> inline Stream<T>::Stream(Client* client, const schema::ProcedureCall& call)
   : client(client) {
-  id = client->add_stream(request);
+  id = client->add_stream(call);
 }
 
 template <typename T> inline Stream<T>::~Stream() {

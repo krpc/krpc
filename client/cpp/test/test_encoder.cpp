@@ -21,10 +21,10 @@ TEST(test_encoder, test_stream_hello_message) {
 }
 
 TEST(test_encoder, test_encode_message) {
-  krpc::schema::Request request;
-  request.set_service("ServiceName");
-  request.set_procedure("ProcedureName");
-  std::string data = krpc::encoder::encode(request);
+  krpc::schema::ProcedureCall call;
+  call.set_service("ServiceName");
+  call.set_procedure("ProcedureName");
+  std::string data = krpc::encoder::encode(call);
   std::string expected = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
   ASSERT_EQ(expected, krpc::platform::hexlify(data));
 }
@@ -47,10 +47,10 @@ TEST(test_encoder, test_encode_unicode_string) {
 }
 
 TEST(test_encoder, test_encode_message_with_size) {
-  krpc::schema::Request request;
-  request.set_service("ServiceName");
-  request.set_procedure("ProcedureName");
-  std::string data = krpc::encoder::encode_message_with_size(request);
+  krpc::schema::ProcedureCall call;
+  call.set_service("ServiceName");
+  call.set_procedure("ProcedureName");
+  std::string data = krpc::encoder::encode_message_with_size(call);
   std::string expected = "1c0a0b536572766963654e616d65120d50726f6365647572654e616d65";
   ASSERT_EQ(expected, krpc::platform::hexlify(data));
 }

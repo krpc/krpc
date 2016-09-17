@@ -16,6 +16,7 @@ class TestPartsLandingLeg(krpctest.TestCase):
         self.assertEqual(self.State.retracted, self.leg.state)
         self.assertFalse(self.leg.deployed)
         self.leg.deployed = True
+        self.wait()
         self.assertEqual(self.State.deploying, self.leg.state)
         self.assertFalse(self.leg.deployed)
         while self.leg.state == self.State.deploying:
@@ -23,6 +24,7 @@ class TestPartsLandingLeg(krpctest.TestCase):
         self.assertEqual(self.State.deployed, self.leg.state)
         self.assertTrue(self.leg.deployed)
         self.leg.deployed = False
+        self.wait()
         self.assertEqual(self.State.retracting, self.leg.state)
         self.assertFalse(self.leg.deployed)
         while self.leg.state == self.State.retracting:

@@ -163,9 +163,9 @@ namespace KRPC.Service
         /// Add a streaming request and return its identifier.
         /// </summary>
         [KRPCProcedure]
-        public static Stream AddStream (Request request)
+        public static Stream AddStream (ProcedureCall call)
         {
-            return new Stream(Core.Instance.AddStream (CallContext.Client, request));
+            return new Stream (Core.Instance.AddStream (CallContext.Client, call));
         }
 
         /// <summary>

@@ -1,19 +1,11 @@
+using System.Collections.Generic;
+
 namespace KRPC.Service.Messages
 {
     #pragma warning disable 1591
     public class Response : IMessage
     {
-        public double Time { get; set; }
-
-        public bool HasReturnValue { get; private set; }
-
-        public object ReturnValue {
-            get { return returnValue; }
-            set {
-                returnValue = value;
-                HasReturnValue = true;
-            }
-        }
+        public IList<ProcedureResult> Results { get; private set; }
 
         public bool HasError { get; private set; }
 
@@ -25,8 +17,11 @@ namespace KRPC.Service.Messages
             }
         }
 
-        object returnValue;
-
         string error;
+
+        public Response ()
+        {
+            Results = new List<ProcedureResult> ();
+        }
     }
 }

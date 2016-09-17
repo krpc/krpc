@@ -107,6 +107,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all parts whose <see cref="Part.Tag"/> is <paramref name="tag"/>.
+        /// </summary>
+        /// <param name="tag"></param>
+        [KRPCMethod]
+        public IList<Part> WithTag (string tag)
+        {
+            return All.Where (part => part.Tag == tag).ToList ();
+        }
+
+        /// <summary>
         /// A list of all parts that contain a <see cref="Module"/> whose
         /// <see cref="Module.Name"/> is <paramref name="moduleName"/>.
         /// </summary>
@@ -178,17 +188,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public IList<DockingPort> DockingPorts {
             get { return All.Where (DockingPort.Is).Select (part => new DockingPort (part)).ToList (); }
-        }
-
-        /// <summary>
-        /// The first docking port in the vessel with the given port name, as returned by <see cref="DockingPort.Name"/>.
-        /// Returns <c>null</c> if there are no such docking ports.
-        /// </summary>
-        /// <param name="name"></param>
-        [KRPCMethod]
-        public DockingPort DockingPortWithName (string name)
-        {
-            return All.Where (DockingPort.Is).Select (part => new DockingPort (part)).FirstOrDefault (port => port.Name == name);
         }
 
         /// <summary>

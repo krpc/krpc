@@ -15,10 +15,10 @@ namespace KRPC.Client
 
         internal ulong Id { get; private set; }
 
-        internal Stream (Connection connection, Request request)
+        internal Stream (Connection connection, ProcedureCall call)
         {
             streamManager = connection.StreamManager;
-            Id = streamManager.AddStream (request, typeof(TReturnType));
+            Id = streamManager.AddStream (call, typeof(TReturnType));
         }
 
         /// <summary>

@@ -66,4 +66,6 @@ T: KRPC.SpaceCenter.Services.ReferenceFrame
 T: KRPC.SpaceCenter.Services.Resource
 T: KRPC.SpaceCenter.Services.Resources
 T: KRPC.SpaceCenter.Services.ResourceTransfer
+T: KRPC.SpaceCenter.Services.Waypoint
+T: KRPC.SpaceCenter.Services.WaypointManager
 T: KRPC.SpaceCenter.Services.Vessel

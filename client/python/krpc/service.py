@@ -256,9 +256,9 @@ class ServiceBase(DynamicType):
         param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(procedure)
         func = _construct_func(cls._client._invoke, cls._name, procedure.name, [],
                                param_names, param_types, param_required, param_default, return_type)
-        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [],
-                                        param_names, param_types, param_required, param_default, return_type)
-        setattr(func, '_build_request', build_request)
+        build_call = _construct_func(cls._client._build_call, cls._name, procedure.name, [],
+                                     param_names, param_types, param_required, param_default, return_type)
+        setattr(func, '_build_call', build_call)
         setattr(func, '_return_type', return_type)
         name = str(snake_case(procedure.name))
         return cls._add_static_method(name, func, doc=_parse_documentation(procedure.documentation))
@@ -276,9 +276,9 @@ class ServiceBase(DynamicType):
             _, _, _, _, return_type = cls._parse_procedure(getter)
             getter = _construct_func(cls._client._invoke, cls._name, getter_name, ['self'],
                                      [], [], [], [], return_type)
-            build_request = _construct_func(cls._client._build_request, cls._name, getter_name, ['self'],
-                                            [], [], [], [], return_type)
-            setattr(getter, '_build_request', build_request)
+            build_call = _construct_func(cls._client._build_call, cls._name, getter_name, ['self'],
+                                         [], [], [], [], return_type)
+            setattr(getter, '_build_call', build_call)
             setattr(getter, '_return_type', return_type)
         if setter:
             param_names, param_types, _, _, _ = cls._parse_procedure(setter)
@@ -297,9 +297,9 @@ class ServiceBase(DynamicType):
             param_names[0] = 'self'
         func = _construct_func(cls._client._invoke, cls._name, procedure.name, [],
                                param_names, param_types, param_required, param_default, return_type)
-        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [],
-                                        param_names, param_types, param_required, param_default, return_type)
-        setattr(func, '_build_request', build_request)
+        build_call = _construct_func(cls._client._build_call, cls._name, procedure.name, [],
+                                     param_names, param_types, param_required, param_default, return_type)
+        setattr(func, '_build_call', build_call)
         setattr(func, '_return_type', return_type)
         name = str(snake_case(method_name))
         class_cls._add_method(name, func, doc=_parse_documentation(procedure.documentation))
@@ -311,9 +311,9 @@ class ServiceBase(DynamicType):
         param_names, param_types, param_required, param_default, return_type = cls._parse_procedure(procedure)
         func = _construct_func(cls._client._invoke, cls._name, procedure.name, [],
                                param_names, param_types, param_required, param_default, return_type)
-        build_request = _construct_func(cls._client._build_request, cls._name, procedure.name, [],
-                                        param_names, param_types, param_required, param_default, return_type)
-        setattr(func, '_build_request', build_request)
+        build_call = _construct_func(cls._client._build_call, cls._name, procedure.name, [],
+                                     param_names, param_types, param_required, param_default, return_type)
+        setattr(func, '_build_call', build_call)
         setattr(func, '_return_type', return_type)
         name = str(snake_case(method_name))
         class_cls._add_static_method(name, func, doc=_parse_documentation(procedure.documentation))
@@ -335,9 +335,9 @@ class ServiceBase(DynamicType):
                 param_names[0] = 'self'
             getter = _construct_func(cls._client._invoke, cls._name, getter_name, [],
                                      param_names, param_types, [True], [None], return_type)
-            build_request = _construct_func(cls._client._build_request, cls._name, getter_name, [],
-                                            param_names, param_types, [True], [None], return_type)
-            setattr(getter, '_build_request', build_request)
+            build_call = _construct_func(cls._client._build_call, cls._name, getter_name, [],
+                                         param_names, param_types, [True], [None], return_type)
+            setattr(getter, '_build_call', build_call)
             setattr(getter, '_return_type', return_type)
         if setter:
             param_names, param_types, _, _, return_type = cls._parse_procedure(setter)

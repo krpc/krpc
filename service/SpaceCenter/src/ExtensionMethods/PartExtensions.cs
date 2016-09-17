@@ -17,12 +17,24 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Returns the first part module of the specified type, and null if none can be found
+        /// Returns the first part module of the specified type, or null if none can be found
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
         public static T Module<T> (this Part part) where T : PartModule
         {
             return part.Modules.OfType<T> ().FirstOrDefault ();
+        }
+
+        /// <summary>
+        /// Returns the first part module of the named type, or null if none can be found
+        /// </summary>
+        public static object Module (this Part part, string type)
+        {
+            foreach (var module in part.Modules) {
+                if (module.GetType ().Name == type)
+                    return module;
+            }
+            return null;
         }
 
         /// <summary>
@@ -54,6 +66,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// Transversed the tree of parts from the desired part to the root, and finds the activation stage
         /// for the first decoupler that will decouple the part (the one with the highest stage number)
         /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidComplexMethodsRule")]
         public static int DecoupledAt (this Part part)
         {
             int stage = -1;
@@ -66,12 +79,12 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 // If the part will decouple itself from its parent, use the parts activation stage
                 if (part.HasModule<LaunchClamp> ()) {
                     candidate = part.inverseStage;
-                } else if (moduleDecouple != null) {
+                } else if (moduleDecouple != null && moduleDecouple.isEnabled) {
                     if (moduleDecouple.isOmniDecoupler)
                         candidate = part.inverseStage;
                     else if (parent != null && moduleDecouple.ExplosiveNode != null && moduleDecouple.ExplosiveNode.attachedPart == parent)
                         candidate = part.inverseStage;
-                } else if (moduleAnchoredDecoupler != null) {
+                } else if (moduleAnchoredDecoupler != null && moduleAnchoredDecoupler.isEnabled) {
                     if (parent != null && moduleAnchoredDecoupler.ExplosiveNode != null && moduleAnchoredDecoupler.ExplosiveNode.attachedPart == parent)
                         candidate = part.inverseStage;
                 }
@@ -79,11 +92,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 // If the part will be decoupled by its parent, use the parents activation stage
                 if (candidate == -1 && parent != null) {
                     if (moduleDecouple != null) {
-                        if (moduleDecouple.isOmniDecoupler)
+                        if (moduleDecouple.isOmniDecoupler && moduleDecouple.isEnabled)
                             candidate = parent.inverseStage;
                         else if (moduleDecouple.ExplosiveNode != null && moduleDecouple.ExplosiveNode.attachedPart == part)
                             candidate = parent.inverseStage;
-                    } else if (moduleAnchoredDecoupler != null) {
+                    } else if (moduleAnchoredDecoupler != null && moduleAnchoredDecoupler.isEnabled) {
                         if (moduleAnchoredDecoupler.ExplosiveNode != null && moduleAnchoredDecoupler.ExplosiveNode.attachedPart == part)
                             candidate = parent.inverseStage;
                     }

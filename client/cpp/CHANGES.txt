@@ -1,6 +1,9 @@
 v0.4.0
  * Remove connection retries. Client will now fail fast if it fails to connect to the server.
 
+v0.3.6
+ * Fix configure script
+
 v0.3.4
  * Update protobuf to v3.0.0-beta-3
 

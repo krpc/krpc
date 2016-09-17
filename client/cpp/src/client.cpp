@@ -33,7 +33,24 @@ std::string Client::invoke(const schema::Request& request) {
   if (!response.error().empty())
     throw RPCError(response.error());
 
-  return response.return_value();
+  if (!response.results(0).error().empty())
+    throw RPCError(response.results(0).error());
+
+  return response.results(0).value();
+}
+
+std::string Client::invoke(const schema::ProcedureCall& call) {
+  // TODO: is there a way to avoid copying the ProcedureCall in order to create a Request?
+  schema::Request request;
+  schema::ProcedureCall* call2 = request.add_calls();
+  call2->set_service(call.service());
+  call2->set_procedure(call.procedure());
+  for (auto arg : call.arguments()) {
+    schema::Argument* arg2 = call2->add_arguments();
+    arg2->set_position(arg.position());
+    arg2->set_value(arg.value());
+  }
+  return this->invoke(request);
 }
 
 std::string Client::invoke(const std::string& service,
@@ -46,18 +63,33 @@ schema::Request Client::build_request(const std::string& service,
                                       const std::string& procedure,
                                       const std::vector<std::string>& args) {
   schema::Request request;
-  request.set_service(service);
-  request.set_procedure(procedure);
+  schema::ProcedureCall * call = request.add_calls();
+  call->set_service(service);
+  call->set_procedure(procedure);
   for (unsigned int i = 0; i < args.size(); i++) {
-    schema::Argument* arg = request.add_arguments();
+    schema::Argument* arg = call->add_arguments();
     arg->set_position(i);
     arg->set_value(args[i]);
   }
   return request;
 }
 
-google::protobuf::uint64 Client::add_stream(const schema::Request& request) {
-  return stream_manager.add_stream(request);
+schema::ProcedureCall Client::build_call(const std::string& service,
+                                         const std::string& procedure,
+                                         const std::vector<std::string>& args) {
+  schema::ProcedureCall call;
+  call.set_service(service);
+  call.set_procedure(procedure);
+  for (unsigned int i = 0; i < args.size(); i++) {
+    schema::Argument* arg = call.add_arguments();
+    arg->set_position(i);
+    arg->set_value(args[i]);
+  }
+  return call;
+}
+
+google::protobuf::uint64 Client::add_stream(const schema::ProcedureCall& call) {
+  return stream_manager.add_stream(call);
 }
 
 void Client::remove_stream(google::protobuf::uint64 id) {
