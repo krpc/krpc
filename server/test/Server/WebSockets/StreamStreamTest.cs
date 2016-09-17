@@ -19,19 +19,17 @@ namespace KRPC.Test.Server.WebSockets
             // Create a response object and get the binary representation of it
             var streamUpdate = new StreamUpdate ();
 
-            var response1 = new Response ();
-            response1.Time = 42;
-            response1.Error = "Foo";
+            var result1 = new ProcedureResult ();
+            result1.Error = "Foo";
 
             var streamResult1 = new StreamResult (1263);
-            streamResult1.Response = response1;
+            streamResult1.Result = result1;
 
-            var response2 = new Response ();
-            response2.Time = 123;
-            response2.Error = "Bar";
+            var result2 = new ProcedureResult ();
+            result2.Error = "Bar";
 
             var streamResult2 = new StreamResult (3443);
-            streamResult2.Response = response2;
+            streamResult2.Result = result2;
 
             streamUpdate.Results.Add (streamResult1);
             streamUpdate.Results.Add (streamResult2);

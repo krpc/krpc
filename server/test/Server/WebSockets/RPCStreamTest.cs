@@ -26,26 +26,24 @@ namespace KRPC.Test.Server.WebSockets
         {
             // Create a request object and get the binary representation of it
             expectedRequest = new KRPC.Schema.KRPC.Request ();
-            expectedRequest.Service = "TestService";
-            expectedRequest.Procedure = "ProcedureNoArgsNoReturn";
+            expectedRequest.Calls.Add (
+                new KRPC.Schema.KRPC.ProcedureCall {
+                    Service = "TestService",
+                    Procedure = "ProcedureNoArgsNoReturn"
+                });
             using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream, true);
-                codedStream.WriteInt32 (expectedRequest.CalculateSize ());
-                expectedRequest.WriteTo (codedStream);
-                codedStream.Flush ();
+                expectedRequest.WriteTo (stream);
+                stream.Flush ();
                 requestBytes = stream.ToArray ();
             }
 
             // Create a response object and get the binary representation of it
             expectedResponseMessage = new Response ();
             expectedResponseMessage.Error = "SomeErrorMessage";
-            expectedResponseMessage.Time = 42;
             expectedResponse = expectedResponseMessage.ToProtobufMessage ();
             using (var stream = new MemoryStream ()) {
-                var codedStream = new CodedOutputStream (stream, true);
-                codedStream.WriteInt32 (expectedResponse.CalculateSize ());
-                expectedResponse.WriteTo (codedStream);
-                codedStream.Flush ();
+                expectedResponse.WriteTo (stream);
+                stream.Flush ();
                 responseBytes = stream.ToArray ();
             }
         }
@@ -91,8 +89,9 @@ namespace KRPC.Test.Server.WebSockets
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
             Assert.Throws<NoRequestException> (() => rpcStream.Read ());
-            Assert.AreEqual (expectedRequest.Service, request.Service);
-            Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
+            Assert.AreEqual (expectedRequest.Calls.Count, request.Calls.Count);
+            Assert.AreEqual (expectedRequest.Calls [0].Service, request.Calls [0].Service);
+            Assert.AreEqual (expectedRequest.Calls [0].Procedure, request.Calls [0].Procedure);
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (frameBytes.Length, rpcStream.BytesRead);
             Assert.IsFalse (byteStream.Closed);
@@ -101,27 +100,29 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void ReadMultipleRequests ()
         {
+            var repeats = 5;
             var frameBytes = Frame.Binary (requestBytes, "deadbeef".ToBytes ()).ToBytes ();
-            var multipleFrameBytes = new byte [frameBytes.Length * 5];
-            for (int i = 0; i < 5; i++)
+            var multipleFrameBytes = new byte [frameBytes.Length * repeats];
+            for (int i = 0; i < repeats; i++)
                 Array.Copy (frameBytes, 0, multipleFrameBytes, i * frameBytes.Length, frameBytes.Length);
             var byteStream = new TestStream (multipleFrameBytes);
             var rpcStream = new KRPC.Server.WebSockets.RPCStream (byteStream);
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (0, rpcStream.BytesRead);
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < repeats; i++) {
                 Assert.IsTrue (rpcStream.DataAvailable);
                 Assert.AreEqual (0, rpcStream.BytesWritten);
                 Assert.AreEqual (multipleFrameBytes.Length, rpcStream.BytesRead);
                 Request request = rpcStream.Read ();
-                if (i < 4)
+                if (i < repeats - 1)
                     Assert.IsTrue (rpcStream.DataAvailable);
                 else {
                     Assert.IsFalse (rpcStream.DataAvailable);
                     Assert.Throws<NoRequestException> (() => rpcStream.Read ());
                 }
-                Assert.AreEqual (expectedRequest.Service, request.Service);
-                Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
+                Assert.AreEqual (expectedRequest.Calls.Count, request.Calls.Count);
+                Assert.AreEqual (expectedRequest.Calls [0].Service, request.Calls [0].Service);
+                Assert.AreEqual (expectedRequest.Calls [0].Procedure, request.Calls [0].Procedure);
                 Assert.AreEqual (0, rpcStream.BytesWritten);
                 Assert.AreEqual (multipleFrameBytes.Length, rpcStream.BytesRead);
             }
@@ -182,8 +183,9 @@ namespace KRPC.Test.Server.WebSockets
             Assert.Throws<NoRequestException> (() => rpcStream.Read ());
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (part1.Length + part2.Length + part3.Length, rpcStream.BytesRead);
-            Assert.AreEqual (expectedRequest.Service, request.Service);
-            Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
+            Assert.AreEqual (expectedRequest.Calls.Count, request.Calls.Count);
+            Assert.AreEqual (expectedRequest.Calls [0].Service, request.Calls [0].Service);
+            Assert.AreEqual (expectedRequest.Calls [0].Procedure, request.Calls [0].Procedure);
             Assert.IsFalse (byteStream.Closed);
         }
 
@@ -230,8 +232,9 @@ namespace KRPC.Test.Server.WebSockets
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
             Assert.Throws<NoRequestException> (() => rpcStream.Read ());
-            Assert.AreEqual (expectedRequest.Service, request.Service);
-            Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
+            Assert.AreEqual (expectedRequest.Calls.Count, request.Calls.Count);
+            Assert.AreEqual (expectedRequest.Calls [0].Service, request.Calls [0].Service);
+            Assert.AreEqual (expectedRequest.Calls [0].Procedure, request.Calls [0].Procedure);
             Assert.AreEqual (0, rpcStream.BytesWritten);
             Assert.AreEqual (frame1.Length + frame2.Length + frame3.Length, rpcStream.BytesRead);
             Assert.IsFalse (byteStream.Closed);
@@ -294,8 +297,9 @@ namespace KRPC.Test.Server.WebSockets
             Request request = rpcStream.Read ();
             Assert.IsFalse (rpcStream.DataAvailable);
             Assert.Throws<NoRequestException> (() => rpcStream.Read ());
-            Assert.AreEqual (expectedRequest.Service, request.Service);
-            Assert.AreEqual (expectedRequest.Procedure, request.Procedure);
+            Assert.AreEqual (expectedRequest.Calls.Count, request.Calls.Count);
+            Assert.AreEqual (expectedRequest.Calls [0].Service, request.Calls [0].Service);
+            Assert.AreEqual (expectedRequest.Calls [0].Procedure, request.Calls [0].Procedure);
             Assert.AreEqual (7 * expectedPongFrameBytes.Length, rpcStream.BytesWritten);
             Assert.AreEqual (totalSize, rpcStream.BytesRead);
             Assert.IsFalse (byteStream.Closed);
