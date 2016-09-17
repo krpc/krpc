@@ -352,7 +352,7 @@ namespace KRPC.SpaceCenter.Services
             if (vessel.LandedOrSplashed)
                 return true;
             // Below altitude limit
-            var altitude = vessel.mainBody.GetAltitude (vessel.findWorldCenterOfMass ());
+            var altitude = vessel.mainBody.GetAltitude (vessel.CoM);
             var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, vessel.mainBody);
             if (altitude < altitudeLimit)
                 return false;

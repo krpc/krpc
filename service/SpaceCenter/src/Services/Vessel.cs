@@ -340,7 +340,7 @@ namespace KRPC.SpaceCenter.Services
         {
             var vessel = InternalVessel;
             Matrix4x4 inertiaTensor = Matrix4x4.zero;
-            Vector3 CoM = vessel.findWorldCenterOfMass ();
+            Vector3 CoM = vessel.CoM;
             // Use the part ReferenceTransform because we want pitch/roll/yaw relative to controlling part
             Transform vesselTransform = vessel.GetTransform ();
 
@@ -558,7 +558,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException ("referenceFrame");
-            return referenceFrame.PositionFromWorldSpace (InternalVessel.findWorldCenterOfMass ()).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (InternalVessel.CoM).ToTuple ();
         }
 
         /// <summary>
@@ -571,7 +571,7 @@ namespace KRPC.SpaceCenter.Services
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException ("referenceFrame");
             var vessel = InternalVessel;
-            var worldCoM = vessel.findWorldCenterOfMass ();
+            var worldCoM = vessel.CoM;
             var worldVelocity = vessel.GetOrbit ().GetVel ();
             return referenceFrame.VelocityFromWorldSpace (worldCoM, worldVelocity).ToTuple ();
         }

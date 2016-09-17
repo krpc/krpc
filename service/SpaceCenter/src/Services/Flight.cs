@@ -66,7 +66,7 @@ namespace KRPC.SpaceCenter.Services
         /// Position of the vessels center of mass in world space
         /// </summary>
         Vector3d WorldCoM {
-            get { return InternalVessel.findWorldCenterOfMass (); }
+            get { return InternalVessel.CoM; }
         }
 
         /// <summary>
