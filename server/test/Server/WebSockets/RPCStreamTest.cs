@@ -13,6 +13,7 @@ namespace KRPC.Test.Server.WebSockets
 {
     [TestFixture]
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class RPCStreamTest
     {
         KRPC.Schema.KRPC.Request expectedRequest;
