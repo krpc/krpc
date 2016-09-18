@@ -14,7 +14,7 @@ class TestWaypoints(krpctest.TestCase):
         self.assertItemsEqual([], self.wpm.waypoints)
         self.assertItemsEqual(
             ['balloon', 'default', 'dish', 'eva', 'gravity', 'marker', 'pressure', 'report',
-             'sample', 'seismic', 'thermometer', 'vessel'],
+             'sample', 'seismic', 'thermometer', 'vessel', 'custom'],
             self.wpm.icons)
         colors = self.wpm.colors
         self.assertTrue('blue' in colors)

@@ -42,13 +42,14 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_to)
         modules = [
             'FlagDecal',
+            'ModuleColorChanger',
             'ModuleCommand',
             'ModuleConductionMultiplier',
             'ModuleReactionWheel',
             'ModuleScienceContainer',
             'ModuleScienceExperiment',
-            'ModuleTripLogger',
-            'TransferDialogSpawner'
+            'ModuleDataTransmitter',
+            'ModuleTripLogger'
         ]
         if self.far_available:
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
@@ -189,7 +190,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
         #TODO: why is this not -1? Docking ports aren't activated in stages?
-        self.assertEqual(4, part.stage)
+        self.assertEqual(3, part.stage)
         self.assertEqual(3, part.decouple_stage)
         self.assertFalse(part.massless)
         self.assertAlmostEqual(50, part.mass, places=4)
@@ -283,7 +284,8 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ['ModuleCargoBay', 'ModuleProceduralFairing', 'ModuleTestSubject']
+        modules = ['ModuleCargoBay', 'ModuleProceduralFairing', 'ModuleTestSubject'] + \
+                  ['ModuleStructuralNode'] * 12
         if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertItemsEqual(modules, [x.name for x in part.modules])
@@ -347,7 +349,9 @@ class TestPartsPart(krpctest.TestCase):
             'ModuleWheelDamage',
             'ModuleWheelDeployment',
             'ModuleWheelSteering',
-            'ModuleWheelSuspension'
+            'ModuleWheelSuspension',
+            'ModuleDragModifier',
+            'ModuleDragModifier'
         ]
         if self.far_available:
             modules.append('FARBasicDragModel')
@@ -522,7 +526,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ['ModuleRCS']
+        modules = ['ModuleRCSFX']
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.rcs)
 

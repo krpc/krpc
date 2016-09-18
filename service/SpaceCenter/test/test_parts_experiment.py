@@ -5,9 +5,9 @@ import krpc
 class TestPartsExperiment(krpctest.TestCase):
 
     def setUp(self):
-        #self.new_save()
-        #self.launch_vessel_from_vab('PartsExperiment')
-        #self.remove_other_vessels()
+        self.new_save()
+        self.launch_vessel_from_vab('PartsExperiment')
+        self.remove_other_vessels()
         parts = self.connect().space_center.active_vessel.parts
         self.pod = parts.with_title('Mk1 Command Pod')[0].experiment
         self.goo = [x for x in parts.all if x.name == 'GooExperiment'][0].experiment
