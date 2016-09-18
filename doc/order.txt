@@ -459,7 +459,6 @@ SpaceCenter.Propellant.IgnoreForThrustCurve
 SpaceCenter.Propellant.DrawStackGauge
 SpaceCenter.Propellant.IsDeprived
 SpaceCenter.Propellant.Ratio
-SpaceCenter.Propellant.ConnectedResources
 SpaceCenter.Experiment
 SpaceCenter.Experiment.Part
 SpaceCenter.Experiment.Run
