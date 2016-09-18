@@ -262,8 +262,8 @@ namespace KRPC.SpaceCenter.Services
         /// G in <math>N(m/kg)^2</math>.
         /// </summary>
         [KRPCProperty]
-        public static float G {
-            get { return 6.673e-11f; }
+        public static double G {
+            get { return 6.67408e-11; }
         }
 
         /// <summary>
