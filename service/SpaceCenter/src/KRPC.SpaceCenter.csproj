@@ -78,6 +78,7 @@
     <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
     <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
+    <Compile Include="ExtensionMethods\ITorqueProviderExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightGlobalsExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightCameraModeExtensions.cs" />
     <Compile Include="ExtensionMethods\ParachuteStateExtensions.cs" />
