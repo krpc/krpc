@@ -22,7 +22,8 @@ namespace KRPC.Server.Message
         public event EventHandler<ClientActivityEventArgs<Request,Response>> OnClientActivity;
         public event EventHandler<ClientDisconnectedEventArgs<Request,Response>> OnClientDisconnected;
 
-        IServer<byte,byte> server;
+        internal IServer<byte,byte> Server { get; private set; }
+
         readonly Dictionary<IClient<byte,byte>,IClient<Request,Response>> clients = new Dictionary<IClient<byte, byte>, IClient<Request,Response>> ();
         readonly Dictionary<IClient<byte,byte>,IClient<Request,Response>> pendingClients = new Dictionary<IClient<byte, byte>, IClient<Request,Response>> ();
         ulong closedClientsBytesRead;
@@ -30,40 +31,40 @@ namespace KRPC.Server.Message
 
         protected RPCServer (IServer<byte,byte> innerServer)
         {
-            server = innerServer;
-            server.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
-            server.OnStopped += (s, e) => EventHandlerExtensions.Invoke (OnStopped, this);
-            server.OnClientRequestingConnection += HandleClientRequestingConnection;
-            server.OnClientConnected += HandleClientConnected;
-            server.OnClientConnected += HandleClientActivity;
-            server.OnClientDisconnected += HandleClientDisconnected;
+            Server = innerServer;
+            Server.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
+            Server.OnStopped += (s, e) => EventHandlerExtensions.Invoke (OnStopped, this);
+            Server.OnClientRequestingConnection += HandleClientRequestingConnection;
+            Server.OnClientConnected += HandleClientConnected;
+            Server.OnClientConnected += HandleClientActivity;
+            Server.OnClientDisconnected += HandleClientDisconnected;
         }
 
         public void Start ()
         {
-            server.Start ();
+            Server.Start ();
         }
 
         public void Stop ()
         {
-            server.Stop ();
+            Server.Stop ();
         }
 
         public void Update ()
         {
-            server.Update ();
+            Server.Update ();
         }
 
-        public string Address {
-            get { return server.Address; }
+        public virtual string Address {
+            get { return Server.Address; }
         }
 
         public string Info {
-            get { return server.Info; }
+            get { return Server.Info; }
         }
 
         public bool Running {
-            get { return server.Running; }
+            get { return Server.Running; }
         }
 
         public IEnumerable<IClient<Request,Response>> Clients {

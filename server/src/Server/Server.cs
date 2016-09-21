@@ -13,8 +13,14 @@ namespace KRPC.Server
     /// A kRPC server.
     /// </summary>
     [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
-    sealed class Server : IServer
+    public sealed class Server : IServer
     {
+        internal Guid Id { get; private set; }
+
+        internal Protocol Protocol { get; private set; }
+
+        internal string Name { get; set; }
+
         internal IServer<Request,Response> RPCServer { get; private set; }
 
         internal IServer<NoMessage,StreamUpdate> StreamServer { get; private set; }
@@ -49,10 +55,11 @@ namespace KRPC.Server
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
 
-        internal Server (IServer<Request,Response> rpcServer, IServer<NoMessage,StreamUpdate> streamServer)
+        internal Server (Guid id, Protocol protocol, string name, IServer<Request,Response> rpcServer, IServer<NoMessage,StreamUpdate> streamServer)
         {
-            Core.Instance.Add (this);
-
+            Id = id;
+            Protocol = protocol;
+            Name = name;
             RPCServer = rpcServer;
             StreamServer = streamServer;
 
@@ -62,6 +69,7 @@ namespace KRPC.Server
             RPCServer.OnClientRequestingConnection += (s, e) => EventHandlerExtensions.Invoke (OnClientRequestingConnection, s, e);
             RPCServer.OnClientConnected += (s, e) => EventHandlerExtensions.Invoke (OnClientConnected, s, new ClientConnectedEventArgs (e.Client));
             RPCServer.OnClientDisconnected += (s, e) => EventHandlerExtensions.Invoke (OnClientDisconnected, s, new ClientDisconnectedEventArgs (e.Client));
+            RPCServer.OnClientActivity += (s, e) => EventHandlerExtensions.Invoke (OnClientActivity, s, new ClientActivityEventArgs (e.Client));
 
             // Add/remove clients from the scheduler
             RPCServer.OnClientConnected += (s, e) => Core.Instance.RPCClientConnected (e.Client);
@@ -113,7 +121,11 @@ namespace KRPC.Server
         /// The servers address.
         /// </summary>
         public string Address {
-            get { return RPCServer.Address; }
+            get {
+                return
+                "RPC server: " + RPCServer.Address + Environment.NewLine +
+                "Stream server: " + StreamServer.Address;
+            }
         }
 
         /// <summary>

@@ -82,6 +82,8 @@
     <Compile Include="ConfigurationTest.cs" />
     <Compile Include="Continuations\ParameterizedContinuationTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
+    <Compile Include="Server\HTTP\RequestTest.cs" />
+    <Compile Include="Server\HTTP\ResponseTest.cs" />
     <Compile Include="Server\ProtocolBuffers\EncoderTest.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCServerTest.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCStreamTest.cs" />
@@ -95,6 +97,12 @@
     <Compile Include="Server\TCP\TCPServerTest.cs" />
     <Compile Include="Server\TestClient.cs" />
     <Compile Include="Server\TestStream.cs" />
+    <Compile Include="Server\WebSockets\FrameTest.cs" />
+    <Compile Include="Server\WebSockets\HeaderTest.cs" />
+    <Compile Include="Server\WebSockets\RPCServerTest.cs" />
+    <Compile Include="Server\WebSockets\RPCStreamTest.cs" />
+    <Compile Include="Server\WebSockets\StreamServerTest.cs" />
+    <Compile Include="Server\WebSockets\StreamStreamTest.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
     <Compile Include="Service\DocumentationUtilsTest.cs" />
     <Compile Include="Service\ITestService.cs" />
@@ -116,5 +124,6 @@
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
     <Compile Include="Utils\TupleTest.cs" />
+    <Compile Include="Utils\DynamicBufferTest.cs" />
   </ItemGroup>
 </Project>

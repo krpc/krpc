@@ -52,7 +52,7 @@ namespace TestServer
                     "stream-port=", "Port number to use for the stream server. If unspecified, use an ephemeral port.",
                     (ushort v) => streamPort = v
                 }, {
-                    "type=", "Type of server to run. Current just 'protobuf'.",
+                    "type=", "Type of server to run. Either protobuf, websockets or websockets-echo.",
                     v => type = v
                 }, {
                     "debug", "Set log level to 'debug', defaults to 'info'",
@@ -93,25 +93,37 @@ namespace TestServer
 
             var core = Core.Instance;
             CallContext.SetGameScene (GameScene.SpaceCenter);
+            core.OnClientRequestingConnection += (s, e) => {
+                Console.WriteLine ("allowing connection");
+                e.Request.Allow ();
+            };
 
-            var rpcTcpServer = new TCPServer ("RPCServer", IPAddress.Loopback, rpcPort);
-            var streamTcpServer = new TCPServer ("StreamServer", IPAddress.Loopback, streamPort);
+            var rpcTcpServer = new TCPServer (IPAddress.Loopback, rpcPort);
+            var streamTcpServer = new TCPServer (IPAddress.Loopback, streamPort);
             Server server;
             if (type == "protobuf") {
                 var rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcTcpServer);
                 var streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer);
-                server = new Server (rpcServer, streamServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverTCP, "TestServer", rpcServer, streamServer);
+            } else if (type == "websockets") {
+                var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
+                var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", rpcServer, streamServer);
+            } else if (type == "websockets-echo") {
+                var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer, true);
+                var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", rpcServer, streamServer);
             } else {
                 Console.WriteLine ("Server type '" + type + "' not supported");
                 return;
             }
-            server.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
+            core.Add (server);
 
             Console.WriteLine ("Starting server...");
-            server.Start ();
+            core.StartAll ();
             Console.WriteLine ("type = " + type);
-            Console.WriteLine ("rpc_port = " + rpcTcpServer.Port);
-            Console.WriteLine ("stream_port = " + streamTcpServer.Port);
+            Console.WriteLine ("rpc_port = " + rpcTcpServer.ActualPort);
+            Console.WriteLine ("stream_port = " + streamTcpServer.ActualPort);
             Console.WriteLine ("Server started successfully");
 
             const long targetFPS = 60;

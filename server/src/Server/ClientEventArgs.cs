@@ -21,8 +21,14 @@ namespace KRPC.Server
         public IClient Client { get; }
     }
 
-    abstract class ClientEventArgs<TIn,TOut> : EventArgs
+    /// <summary>
+    /// Abstract base class for a client event.
+    /// </summary>
+    public abstract class ClientEventArgs<TIn,TOut> : EventArgs
     {
+        /// <summary>
+        /// A client event for the given client.
+        /// </summary>
         protected ClientEventArgs (IClient<TIn,TOut> client)
         {
             Client = client;

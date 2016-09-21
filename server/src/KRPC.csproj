@@ -112,6 +112,9 @@
     <Compile Include="Server\ClientDisconnectedException.cs" />
     <Compile Include="Server\ClientEventArgs.cs" />
     <Compile Include="Server\ClientRequestingConnectionEventArgs.cs" />
+    <Compile Include="Server\HTTP\Request.cs" />
+    <Compile Include="Server\HTTP\Response.cs" />
+    <Compile Include="Server\HTTP\MalformedRequestException.cs" />
     <Compile Include="Server\IClient.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Server\IStream.cs" />
@@ -123,6 +126,7 @@
     <Compile Include="Server\Message\StreamClient.cs" />
     <Compile Include="Server\Message\StreamServer.cs" />
     <Compile Include="Server\Message\StreamStream.cs" />
+    <Compile Include="Server\Protocol.cs" />
     <Compile Include="Server\ProtocolBuffers\ConnectionException.cs" />
     <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
@@ -134,11 +138,26 @@
     <Compile Include="Server\ProtocolBuffers\StreamStream.cs" />
     <Compile Include="Server\ProtocolBuffers\Utils.cs" />
     <Compile Include="Server\Server.cs" />
+    <Compile Include="Server\ServerEventArgs.cs" />
     <Compile Include="Server\ServerException.cs" />
+    <Compile Include="Server\ServerStartedEventArgs.cs" />
+    <Compile Include="Server\ServerStoppedEventArgs.cs" />
     <Compile Include="Server\TCP\NetworkInformation.cs" />
     <Compile Include="Server\TCP\TCPClient.cs" />
     <Compile Include="Server\TCP\TCPServer.cs" />
     <Compile Include="Server\TCP\TCPStream.cs" />
+    <Compile Include="Server\WebSockets\ConnectionRequest.cs" />
+    <Compile Include="Server\WebSockets\Frame.cs" />
+    <Compile Include="Server\WebSockets\FramingException.cs" />
+    <Compile Include="Server\WebSockets\HandshakeException.cs" />
+    <Compile Include="Server\WebSockets\Header.cs" />
+    <Compile Include="Server\WebSockets\OpCode.cs" />
+    <Compile Include="Server\WebSockets\RPCClient.cs" />
+    <Compile Include="Server\WebSockets\RPCServer.cs" />
+    <Compile Include="Server\WebSockets\RPCStream.cs" />
+    <Compile Include="Server\WebSockets\StreamClient.cs" />
+    <Compile Include="Server\WebSockets\StreamServer.cs" />
+    <Compile Include="Server\WebSockets\StreamStream.cs" />
     <Compile Include="ServicesChecker.cs" />
     <Compile Include="Service\Attributes\KRPCClassAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCEnumAttribute.cs" />
@@ -191,6 +210,7 @@
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="UI\ClientConnectingDialog.cs" />
     <Compile Include="UI\ClientDisconnectDialog.cs" />
+    <Compile Include="UI\EditServer.cs" />
     <Compile Include="UI\GUILayoutExtensions.cs" />
     <Compile Include="UI\Icons.cs" />
     <Compile Include="UI\InfoWindow.cs" />
@@ -215,6 +235,7 @@
     <Compile Include="Utils\Reflection.cs" />
     <Compile Include="Utils\RoundRobinScheduler.cs" />
     <Compile Include="Utils\StopwatchExtensions.cs" />
+    <Compile Include="Utils\Text.cs" />
     <Compile Include="Utils\Tuple.cs" />
   </ItemGroup>
 </Project>
