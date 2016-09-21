@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using KRPC.Server;
+using KRPC.Server.TCP;
 using KRPC.Service;
 using KRPC.Utils;
 using UnityEngine;
-using KRPC.Server.TCP;
 
 namespace KRPC
 {
