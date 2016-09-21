@@ -1,3 +1,6 @@
+v0.3.7
+ * Fix missing headers to automake script
+
 v0.3.6
  * Fix configure script
 
