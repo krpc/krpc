@@ -1,3 +1,13 @@
+v0.4.0
+ * New server architecture that allows multiple concurrent servers, using different settings and protocols
+ * Add websockets server protocol for communication with browsers
+ * Improved communication protocol (#325)
+   * Multiple RPCs can now be grouped into a single network message
+   * Remove unnecessary message fields
+   * Improved message encoding when establishing a connection
+   * Significantly reduced the size of the message returned by GetServices
+   * More compact encoding of signed integers
+
 v0.3.6
  * Add KRPC.Clients that clients can use to get a list of connected clients (#304)
  * Make KRPC.Core.Instance public so that other mods can subscribe to server events and access other server APIs (#304)
