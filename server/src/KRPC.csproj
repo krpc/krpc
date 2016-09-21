@@ -126,6 +126,7 @@
     <Compile Include="Server\Message\StreamClient.cs" />
     <Compile Include="Server\Message\StreamServer.cs" />
     <Compile Include="Server\Message\StreamStream.cs" />
+    <Compile Include="Server\Protocol.cs" />
     <Compile Include="Server\ProtocolBuffers\ConnectionException.cs" />
     <Compile Include="Server\ProtocolBuffers\Encoder.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensions.cs" />
@@ -137,7 +138,10 @@
     <Compile Include="Server\ProtocolBuffers\StreamStream.cs" />
     <Compile Include="Server\ProtocolBuffers\Utils.cs" />
     <Compile Include="Server\Server.cs" />
+    <Compile Include="Server\ServerEventArgs.cs" />
     <Compile Include="Server\ServerException.cs" />
+    <Compile Include="Server\ServerStartedEventArgs.cs" />
+    <Compile Include="Server\ServerStoppedEventArgs.cs" />
     <Compile Include="Server\TCP\NetworkInformation.cs" />
     <Compile Include="Server\TCP\TCPClient.cs" />
     <Compile Include="Server\TCP\TCPServer.cs" />
@@ -206,6 +210,7 @@
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="UI\ClientConnectingDialog.cs" />
     <Compile Include="UI\ClientDisconnectDialog.cs" />
+    <Compile Include="UI\EditServer.cs" />
     <Compile Include="UI\GUILayoutExtensions.cs" />
     <Compile Include="UI\Icons.cs" />
     <Compile Include="UI\InfoWindow.cs" />

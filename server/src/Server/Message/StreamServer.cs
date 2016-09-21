@@ -22,46 +22,47 @@ namespace KRPC.Server.Message
         public event EventHandler<ClientActivityEventArgs<NoMessage,StreamUpdate>> OnClientActivity;
         public event EventHandler<ClientDisconnectedEventArgs<NoMessage,StreamUpdate>> OnClientDisconnected;
 
-        IServer<byte,byte> server;
+        internal IServer<byte,byte> Server { get; private set; }
+
         readonly Dictionary<IClient<byte,byte>,IClient<NoMessage,StreamUpdate>> clients = new Dictionary<IClient<byte,byte>, IClient<NoMessage,StreamUpdate>> ();
         readonly Dictionary<IClient<byte,byte>,IClient<NoMessage,StreamUpdate>> pendingClients = new Dictionary<IClient<byte,byte>, IClient<NoMessage,StreamUpdate>> ();
 
         protected StreamServer (IServer<byte,byte> innerServer)
         {
-            server = innerServer;
-            server.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
-            server.OnStopped += (s, e) => EventHandlerExtensions.Invoke (OnStopped, this);
-            server.OnClientRequestingConnection += HandleClientRequestingConnection;
-            server.OnClientConnected += HandleClientConnected;
-            server.OnClientConnected += HandleClientActivity;
-            server.OnClientDisconnected += HandleClientDisconnected;
+            Server = innerServer;
+            Server.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
+            Server.OnStopped += (s, e) => EventHandlerExtensions.Invoke (OnStopped, this);
+            Server.OnClientRequestingConnection += HandleClientRequestingConnection;
+            Server.OnClientConnected += HandleClientConnected;
+            Server.OnClientConnected += HandleClientActivity;
+            Server.OnClientDisconnected += HandleClientDisconnected;
         }
 
         public void Start ()
         {
-            server.Start ();
+            Server.Start ();
         }
 
         public void Stop ()
         {
-            server.Stop ();
+            Server.Stop ();
         }
 
         public void Update ()
         {
-            server.Update ();
+            Server.Update ();
         }
 
-        public string Address {
-            get { return server.Address; }
+        public virtual string Address {
+            get { return Server.Address; }
         }
 
         public string Info {
-            get { return server.Info; }
+            get { return Server.Info; }
         }
 
         public bool Running {
-            get { return server.Running; }
+            get { return Server.Running; }
         }
 
         public IEnumerable<IClient<NoMessage,StreamUpdate>> Clients {
@@ -73,16 +74,16 @@ namespace KRPC.Server.Message
         }
 
         public ulong BytesRead {
-            get { return server.BytesRead; }
+            get { return Server.BytesRead; }
         }
 
         public ulong BytesWritten {
-            get { return server.BytesWritten; }
+            get { return Server.BytesWritten; }
         }
 
         public void ClearStats ()
         {
-            server.ClearStats ();
+            Server.ClearStats ();
         }
 
         void HandleClientConnected (object sender, ClientEventArgs<byte,byte> args)

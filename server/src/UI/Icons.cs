@@ -26,10 +26,16 @@ namespace KRPC.UI
 
         public Texture2D ButtonCloseWindow { get; private set; }
 
+        public Texture2D ButtonExpand { get; private set; }
+
+        public Texture2D ButtonCollapse { get; private set; }
+
         Icons ()
         {
             ButtonDisconnectClient = LoadTexture ("button-disconnect-client.png");
             ButtonCloseWindow = LoadTexture ("button-close-window.png");
+            ButtonExpand = LoadTexture ("button-expand.png");
+            ButtonCollapse = LoadTexture ("button-collapse.png");
         }
 
         /// <summary>

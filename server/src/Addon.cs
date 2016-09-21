@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using KRPC.Server;
-using KRPC.Server.TCP;
 using KRPC.UI;
 using KRPC.Utils;
 using KSP.UI.Screens;
@@ -17,11 +16,6 @@ namespace KRPC
     {
         static Configuration config;
         static Core core;
-        static Server.Server server;
-        static TCPServer rpcTcpServer;
-        static TCPServer streamTcpServer;
-        static KRPC.Server.WebSockets.RPCServer rpcServer;
-        static KRPC.Server.ProtocolBuffers.StreamServer streamServer;
         static Texture textureOnline;
         static Texture textureOffline;
 
@@ -33,27 +27,12 @@ namespace KRPC
 
         static void Init ()
         {
-            if (config != null)
-                return;
-
-            // Load config
-            config = new Configuration ("PluginData/settings.cfg");
-            config.Load ();
-
-            // Set up core
-            core = Core.Instance;
-            core.OneRPCPerUpdate = config.OneRPCPerUpdate;
-            core.MaxTimePerUpdate = config.MaxTimePerUpdate;
-            core.AdaptiveRateControl = config.AdaptiveRateControl;
-            core.BlockingRecv = config.BlockingRecv;
-            core.RecvTimeout = config.RecvTimeout;
-
-            // Set up server
-            rpcTcpServer = new TCPServer ("RPCServer", config.Address, config.RPCPort);
-            streamTcpServer = new TCPServer ("StreamServer", config.Address, config.StreamPort);
-            rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
-            streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer);
-            server = new Server.Server (rpcServer, streamServer);
+            if (core == null) {
+                core = Core.Instance;
+                config = Configuration.Instance;
+                foreach (var server in config.Servers)
+                    core.Add (server.Create ());
+            }
         }
 
         /// <summary>
@@ -75,14 +54,14 @@ namespace KRPC
                 KSPAddonImproved.CurrentGameScene != GameScenes.FLIGHT &&
                 KSPAddonImproved.CurrentGameScene != GameScenes.SPACECENTER &&
                 KSPAddonImproved.CurrentGameScene != GameScenes.TRACKSTATION) {
-                server.Stop ();
+                core.StopAll ();
                 return;
             }
 
-            // Auto-start the server, if required
-            if (config.AutoStartServer && !server.Running) {
-                Logger.WriteLine ("Auto-starting server");
-                StartServer ();
+            // Auto-start the servers, if required
+            if (config.AutoStartServers) {
+                Logger.WriteLine ("Auto-starting servers");
+                core.StartAll ();
             }
 
             // (Re)create the UI
@@ -106,8 +85,6 @@ namespace KRPC
 
             // Main window
             mainWindow = gameObject.AddComponent<MainWindow> ();
-            mainWindow.Config = config;
-            mainWindow.Server = server;
             mainWindow.Visible = config.MainWindowVisible;
             mainWindow.Position = config.MainWindowPosition;
             mainWindow.ClientDisconnectDialog = clientDisconnectDialog;
@@ -125,14 +102,14 @@ namespace KRPC
             textureOffline = GameDatabase.Instance.GetTexture ("kRPC/icons/applauncher-offline", false);
             GameEvents.onGUIApplicationLauncherReady.Add (OnGUIApplicationLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Add (OnGUIApplicationLauncherDestroyed);
-            server.OnStarted += (s, e) => {
+            core.OnServerStarted += (s, e) => {
                 if (applauncherButton != null) {
-                    applauncherButton.SetTexture (textureOnline);
+                    applauncherButton.SetTexture (core.AnyRunning ? textureOnline : textureOffline);
                 }
             };
-            server.OnStopped += (s, e) => {
+            core.OnServerStopped += (s, e) => {
                 if (applauncherButton != null) {
-                    applauncherButton.SetTexture (textureOffline);
+                    applauncherButton.SetTexture (core.AnyRunning ? textureOnline : textureOffline);
                 }
             };
         }
@@ -140,9 +117,15 @@ namespace KRPC
         void InitEvents ()
         {
             // Main window events
-            mainWindow.OnStartServerPressed += (s, e) => StartServer ();
+            mainWindow.OnStartServerPressed += (s, e) => {
+                try {
+                    e.Server.Start ();
+                } catch (ServerException exn) {
+                    mainWindow.Errors.Add (exn.Message);
+                }
+            };
             mainWindow.OnStopServerPressed += (s, e) => {
-                server.Stop ();
+                e.Server.Stop ();
                 clientConnectingDialog.Close ();
             };
             mainWindow.OnHide += (s, e) => {
@@ -181,7 +164,7 @@ namespace KRPC
             };
 
             // Server events
-            server.OnClientRequestingConnection += (s, e) => {
+            core.OnClientRequestingConnection += (s, e) => {
                 if (config.AutoAcceptConnections)
                     e.Request.Allow ();
                 else
@@ -196,32 +179,13 @@ namespace KRPC
                 () => mainWindow.Visible = !mainWindow.Visible,
                 null, null, null, null,
                 ApplicationLauncher.AppScenes.ALWAYS,
-                server.Running ? textureOnline : textureOffline);
+                core.AnyRunning ? textureOnline : textureOffline);
         }
 
         void OnGUIApplicationLauncherDestroyed ()
         {
             ApplicationLauncher.Instance.RemoveModApplication (applauncherButton);
             applauncherButton = null;
-        }
-
-        void StartServer ()
-        {
-            config.Load ();
-            rpcTcpServer.ListenAddress = config.Address;
-            rpcTcpServer.Port = config.RPCPort;
-            streamTcpServer.ListenAddress = config.Address;
-            streamTcpServer.Port = config.StreamPort;
-            core.OneRPCPerUpdate = config.OneRPCPerUpdate;
-            core.MaxTimePerUpdate = config.MaxTimePerUpdate;
-            core.AdaptiveRateControl = config.AdaptiveRateControl;
-            core.BlockingRecv = config.BlockingRecv;
-            core.RecvTimeout = config.RecvTimeout;
-            try {
-                server.Start ();
-            } catch (ServerException e) {
-                mainWindow.Errors.Add (e.Message);
-            }
         }
 
         /// <summary>
@@ -248,8 +212,7 @@ namespace KRPC
         [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public void OnApplicationQuit ()
         {
-            if (server.Running)
-                server.Stop ();
+            core.StopAll ();
         }
 
         /// <summary>
@@ -269,7 +232,7 @@ namespace KRPC
         {
             if (!ServicesChecker.OK)
                 return;
-            if (server != null && server.Running)
+            if (core.AnyRunning)
                 core.Update ();
         }
     }

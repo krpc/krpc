@@ -13,6 +13,10 @@ namespace KRPC.Server.WebSockets
         {
         }
 
+        public override string Address {
+            get { return "ws://" + base.Address; }
+        }
+
         /// <summary>
         /// When a client requests a connection, process the websockets HTTP request
         /// </summary>

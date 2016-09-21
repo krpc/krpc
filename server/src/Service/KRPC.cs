@@ -21,6 +21,7 @@ namespace KRPC.Service
         public static Status GetStatus ()
         {
             var core = Core.Instance;
+            var config = Configuration.Instance;
             var version = System.Reflection.Assembly.GetExecutingAssembly ().GetName ().Version;
             var status = new Status (version.Major + "." + version.Minor + "." + version.Build);
             status.BytesRead = core.BytesRead;
@@ -29,11 +30,11 @@ namespace KRPC.Service
             status.BytesWrittenRate = core.BytesWrittenRate;
             status.RpcsExecuted = core.RPCsExecuted;
             status.RpcRate = core.RPCRate;
-            status.OneRpcPerUpdate = core.OneRPCPerUpdate;
-            status.MaxTimePerUpdate = core.MaxTimePerUpdate;
-            status.AdaptiveRateControl = core.AdaptiveRateControl;
-            status.BlockingRecv = core.BlockingRecv;
-            status.RecvTimeout = core.RecvTimeout;
+            status.OneRpcPerUpdate = config.OneRPCPerUpdate;
+            status.MaxTimePerUpdate = config.MaxTimePerUpdate;
+            status.AdaptiveRateControl = config.AdaptiveRateControl;
+            status.BlockingRecv = config.BlockingRecv;
+            status.RecvTimeout = config.RecvTimeout;
             status.TimePerRpcUpdate = core.TimePerRPCUpdate;
             status.PollTimePerRpcUpdate = core.PollTimePerRPCUpdate;
             status.ExecTimePerRpcUpdate = core.ExecTimePerRPCUpdate;

@@ -38,7 +38,7 @@ namespace KRPC.Server
     /// <summary>
     /// Generic client interface.
     /// </summary>
-    interface IClient<TIn,TOut> : IEquatable<IClient<TIn,TOut>>, IClient
+    public interface IClient<TIn,TOut> : IEquatable<IClient<TIn,TOut>>, IClient
     {
         /// <summary>
         /// A stream for communicating with the client.

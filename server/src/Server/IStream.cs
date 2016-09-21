@@ -6,7 +6,7 @@ namespace KRPC.Server
     /// A non-generic stream.
     /// </summary>
     [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
-    interface IStream
+    public interface IStream
     {
         /// <summary>
         /// Returns true if the stream contains data to read.
@@ -38,7 +38,7 @@ namespace KRPC.Server
     /// A generic stream, from which values of type In can be read and values of type Out can be written.
     /// </summary>
     [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectSuffixRule")]
-    interface IStream<TIn,TOut> : IStream
+    public interface IStream<TIn,TOut> : IStream
     {
         /// <summary>
         /// Read a single value from the stream.
