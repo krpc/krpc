@@ -67,7 +67,7 @@ namespace KRPC.Service
                 TypeUtils.ValidateKRPCProcedure (method);
                 return "M:" + name;
             } else if (Reflection.HasAttribute<KRPCMethodAttribute> (method)) {
-                TypeUtils.ValidateKRPCMethod (method);
+                TypeUtils.ValidateKRPCMethod (type, method);
                 return "M:" + TypeUtils.GetClassServiceName (type) + "." + name;
             }
             throw new DocumentationException ("'" + name + "' is not a kRPC procedure or method");
@@ -84,7 +84,7 @@ namespace KRPC.Service
                 return "M:" + name;
             } else if (Reflection.HasAttribute<KRPCClassAttribute> (type) &&
                        Reflection.HasAttribute<KRPCPropertyAttribute> (property)) {
-                TypeUtils.ValidateKRPCClassProperty (property);
+                TypeUtils.ValidateKRPCClassProperty (type, property);
                 return "M:" + TypeUtils.GetClassServiceName (type) + "." + name;
             }
             throw new DocumentationException ("'" + name + "' is not a kRPC property");

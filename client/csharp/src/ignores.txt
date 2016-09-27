@@ -19,6 +19,7 @@ N: KRPC.Client.Services.KRPC
 R: Gendarme.Rules.Design.DoNotDeclareSettersOnCollectionPropertiesRule
 N: KRPC.Client.Services.Drawing
 R: Gendarme.Rules.Design.Generic.DoNotExposeNestedGenericSignaturesRule
+N: KRPC.Client.Services.KRPC
 N: KRPC.Client.Services.Drawing
 R: Gendarme.Rules.Naming.AvoidRedundancyInMethodNameRule
 N: KRPC.Client.Services.RemoteTech
@@ -51,7 +52,11 @@ R: Gendarme.Rules.Naming.UseCorrectCasingRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Naming.UseCorrectSuffixRule
 N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Performance.AvoidUnneededFieldInitializationRule
+N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Performance.UseStringEmptyRule
+N: KRPC.Schema.KRPC
+R: Gendarme.Rules.Serialization.MarkEnumerationsAsSerializableRule
 N: KRPC.Schema.KRPC
 R: Gendarme.Rules.Smells.AvoidLargeClassesRule
 N: KRPC.Schema.KRPC

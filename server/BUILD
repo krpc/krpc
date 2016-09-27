@@ -114,7 +114,8 @@ csharp_nunit_test(
         '//tools/build/mono-4.5:System.Runtime',
         '//tools/build/mono-4.5:System.IO',
         '//tools/build/mono-4.5:System.Xml',
-        '//tools/build/mono-4.5:System.Xml.Linq'
+        '//tools/build/mono-4.5:System.Xml.Linq',
+        '//tools/build/mono-4.5:Newtonsoft.Json'
     ],
     optimize = False,
     define = ['CODE_ANALYSIS'],

@@ -18,6 +18,10 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.protobuf.ByteString;
 
+import krpc.client.Types;
+import krpc.schema.KRPC.Type;
+import krpc.schema.KRPC.Type.TypeCode;
+
 @RunWith(Parameterized.class)
 public class EncoderSetCollectionTest {
     @Parameters
@@ -34,17 +38,18 @@ public class EncoderSetCollectionTest {
     @Parameter(value = 1)
     public String data;
 
+    Type type = Types.CreateSet(Types.CreateValue(TypeCode.UINT32));
+
     @Test
     public void testEncode() throws IOException {
-        ByteString encodeResult = Encoder.encode(value);
+        ByteString encodeResult = Encoder.encode(value, type);
         assertEquals(data, hexlify(encodeResult));
     }
 
     @SuppressWarnings({ "unchecked" })
     @Test
     public void testDecode() throws IOException {
-        TypeSpecification typeSpec = new TypeSpecification(Set.class, new TypeSpecification(Integer.class));
-        Set<Integer> decodeResult = (Set<Integer>) Encoder.decode(unhexlify(data), typeSpec, null);
+        Set<Integer> decodeResult = (Set<Integer>) Encoder.decode(unhexlify(data), type, null);
         assertEquals(value, decodeResult);
     }
 }

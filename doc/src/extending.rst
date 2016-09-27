@@ -385,13 +385,9 @@ functionality to the kRPC server.
 Identifiers
 ^^^^^^^^^^^
 
-An identifier must only contain alphanumeric characters and underscores. An
-identifier must not start with an underscore. Identifiers should follow
-`CamelCase <https://en.wikipedia.org/wiki/CamelCase>`_ capitalization
-conventions.
-
-.. note:: Although underscores are permitted, they should be avoided as they are
-          used for internal name mangling.
+An identifier can only contain letters and numbers, and must start with an upper
+case letter.  They should follow `CamelCase
+<https://en.wikipedia.org/wiki/CamelCase>`_ capitalization conventions.
 
 .. _service-api-serializable-types:
 

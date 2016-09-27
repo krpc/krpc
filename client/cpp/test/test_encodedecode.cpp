@@ -115,23 +115,23 @@ TEST(test_encode_decode, test_float) {
   test_float(std::numeric_limits<float>::signaling_NaN(), "0000a07f");
 }
 
-TEST(test_encode_decode, test_int32) {
+TEST(test_encode_decode, test_sint32) {
   test_value<pb::int32>(0, "00");
-  test_value<pb::int32>(1, "01");
-  test_value<pb::int32>(42, "2a");
-  test_value<pb::int32>(300, "ac02");
-  test_value<pb::int32>(-33, "dfffffffffffffffff01");
-  test_value<pb::int32>(std::numeric_limits<pb::int32>::max(), "ffffffff07");
-  test_value<pb::int32>(std::numeric_limits<pb::int32>::min(), "80808080f8ffffffff01");
+  test_value<pb::int32>(1, "02");
+  test_value<pb::int32>(42, "54");
+  test_value<pb::int32>(300, "d804");
+  test_value<pb::int32>(-33, "41");
+  test_value<pb::int32>(2147483647, "feffffff0f");
+  test_value<pb::int32>(-2147483648, "ffffffff0f");
 }
 
-TEST(test_encode_decode, test_int64) {
+TEST(test_encode_decode, test_sint64) {
   test_value<pb::int64>(0, "00");
-  test_value<pb::int64>(1, "01");
-  test_value<pb::int64>(42, "2a");
-  test_value<pb::int64>(300, "ac02");
-  test_value<pb::int64>(1234567890000L, "d088ec8ff723");
-  test_value<pb::int64>(-33, "dfffffffffffffffff01");
+  test_value<pb::int64>(1, "02");
+  test_value<pb::int64>(42, "54");
+  test_value<pb::int64>(300, "d804");
+  test_value<pb::int64>(1234567890000L, "a091d89fee47");
+  test_value<pb::int64>(-33, "41");
 }
 
 TEST(test_encode_decode, test_uint32) {
@@ -189,14 +189,14 @@ TEST(test_encode_decode, test_list) {
 }
 
 TEST(test_encode_decode, test_dictionary) {
-  test_dictionary(std::map<std::string, int>(), "");
+  test_dictionary(std::map<std::string, unsigned int>(), "");
   {
-    std::map<std::string, int> d;
+    std::map<std::string, unsigned int> d;
     d[""] = 0;
     test_dictionary(d, "0a060a0100120100");
   }
   {
-    std::map<std::string, int> d;
+    std::map<std::string, unsigned int> d;
     d["foo"] = 42;
     d["bar"] = 365;
     d["baz"] = 3;
@@ -205,14 +205,14 @@ TEST(test_encode_decode, test_dictionary) {
 }
 
 TEST(test_encode_decode, test_set) {
-  test_set(std::set<int>(), "");
+  test_set(std::set<unsigned int>(), "");
   {
-    std::set<int> s;
+    std::set<unsigned int> s;
     s.insert(1);
     test_set(s, "0a0101");
   }
   {
-    std::set<int> s;
+    std::set<unsigned int> s;
     s.insert(1);
     s.insert(2);
     s.insert(3);
@@ -222,8 +222,8 @@ TEST(test_encode_decode, test_set) {
 }
 
 TEST(test_encode_decode, test_tuple) {
-  test_tuple1(std::tuple<int>(1), "0a0101");
-  test_tuple3(std::tuple<int, std::string, bool>(1, "jeb", false), "0a01010a04036a65620a0100");
+  test_tuple1(std::tuple<unsigned int>(1), "0a0101");
+  test_tuple3(std::tuple<unsigned int, std::string, bool>(1, "jeb", false), "0a01010a04036a65620a0100");
 }
 
 TEST(test_encode_decode, test_list_of_objects) {

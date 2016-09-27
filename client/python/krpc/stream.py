@@ -17,6 +17,9 @@ class Stream(object):
         self._func = func
         self._args = args
         self._kwargs = kwargs
+        self._removed = False
+        self._callbacks = list()
+
         # Get the request and return type
         if func == getattr:
             # A property or class property getter
@@ -44,18 +47,33 @@ class Stream(object):
             self._conn._stream_cache[self._stream_id] = self
 
     def __call__(self):
-        """ Get the most recent value for this stream """
+        """Returns the most recent value for this stream"""
         if isinstance(self._value, Exception):
             raise self._value
         return self._value
 
     def remove(self):
-        """ Remove the stream """
+        """
+        Removes this stream
+
+        If any callbacks are registered, they will be called after the stream is removed.
+        """
         with self._conn._stream_cache_lock:
             if self._stream_id in self._conn._stream_cache:
                 self._conn.krpc.remove_stream(self._stream_id)
                 del self._conn._stream_cache[self._stream_id]
-                self._value = RuntimeError('Stream has been removed')
+                self._removed = True
+                self.update(RuntimeError('Stream has been removed'))
+
+    @property
+    def removed(self):
+        """True if the stream has been removed"""
+        return self._removed
+
+    @property
+    def error(self):
+        """True if this stream currently is an error (its current value is an exception)"""
+        return isinstance(self._value, Exception)
 
     @property
     def return_type(self):
@@ -63,8 +81,71 @@ class Stream(object):
         return self._return_type
 
     def update(self, value):
-        """ Update the stream's most recent value """
+        """Update the stream's most recent value """
         self._value = value
+
+        for callback in self._callbacks:
+            callback(self)
+
+    def add_callback(self, callback, allow_duplicates=True):
+        """
+        Adds a callback function that will be called any time this stream's value is changed.
+
+        Callbacks will receive this stream as their sole argument.  Note that callbacks are called whenever the stream
+        value updates, including when the new value is an exception and when the stream is removed.
+
+        Callbacks can examine the values of `Stream.error` and `Stream.removed` to determine the current state of the
+        stream.
+
+        Adding a callback that already exists will result in it being called twice.  To prevent this, specify
+        `False` for the allow_duplicates parameter.
+
+        This function is not thread-safe other than against kRPC's stream update thread.
+
+        :param callback: Function to call when value changes
+        :param allow_duplicates: True to allow duplicates, False to suppress
+        :return: True if the callback was added, False otherwise
+        """
+        if not allow_duplicates and callback in self._callbacks:
+            return False
+
+        # It'd be bad to remove/add items to the callback structure while we were mid-update, since adding to an
+        # iterable during iteration is bad.  However, we probably don't want to have to acquire a lock every time
+        # update() is called (since it may be very, very frequently).  So our compromise is to duplicate the callback
+        # list and modify the duplicate in add/remove_callback.
+        callbacks = self._callbacks.copy()
+        callbacks.append(callback)
+        self._callbacks = callbacks
+        return True
+
+    def remove_callback(self, callback, remove_all=False):
+        """
+        Removes a previously-added callback function.
+
+        If the callback function was previously added multiple times, only one instance of it will be removed.
+        Specify `True` for the remove_all parameter to remove all instances.
+
+        :param callback: Callback to remove
+        :param remove_all: True to remove all instances instead of just the first.
+        :return: True if at least one instance of the callback was removed.
+        """
+        if not self._callbacks:
+            return False
+
+        if remove_all:
+            # This implementation is 'safe' to the same extent add_callback is, see the comments there.
+            prevlen = len(self._callbacks)
+            self._callbacks = list(item for item in self._callbacks if item != callback)
+            return prevlen != len(self._callbacks)
+
+        # See add_callback for why we do this.
+        callbacks = self._callbacks.copy()
+        try:
+            callbacks.remove(callback)
+        except ValueError:
+            return False
+        self._callbacks = callbacks
+        return True
 
 
 def add_stream(conn, func, *args, **kwargs):
@@ -76,7 +157,7 @@ def add_stream(conn, func, *args, **kwargs):
 
 
 def update_thread(connection, stop, cache, cache_lock):
-    stream_message_type = Types().as_type('KRPC.StreamMessage')
+    stream_message_type = Types().stream_message_type
 
     while True:
 
@@ -108,7 +189,7 @@ def update_thread(connection, stop, cache, cache_lock):
                     continue
 
                 # Check for an error response
-                if response.response.has_error:
+                if response.response.error:
                     cache[response.id].value = RPCError(response.response.error)
                     continue
 

@@ -16,6 +16,10 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.protobuf.ByteString;
 
+import krpc.client.Types;
+import krpc.schema.KRPC.Type;
+import krpc.schema.KRPC.Type.TypeCode;
+
 @RunWith(Parameterized.class)
 public class EncoderBytesValueTest {
     @Parameters
@@ -28,15 +32,17 @@ public class EncoderBytesValueTest {
     @Parameter(value = 1)
     public String data;
 
+    Type type = Types.CreateValue(TypeCode.BYTES);
+
     @Test
     public void testEncode() throws IOException {
-        ByteString encodeResult = Encoder.encode(unhexlify(value).toByteArray());
+        ByteString encodeResult = Encoder.encode(unhexlify(value).toByteArray(), type);
         assertEquals(data, hexlify(encodeResult));
     }
 
     @Test
     public void testDecode() throws IOException {
-        byte[] decodeResult = Encoder.decodeBytes(unhexlify(data));
+        byte[] decodeResult = (byte[]) Encoder.decode(unhexlify(data), type, null);
         assertEquals(value, hexlify(decodeResult));
     }
 }

@@ -1,7 +1,9 @@
 from .domain import Domain
 from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
 from .nodes import Enumeration, EnumerationValue
-from krpc.types import ValueType, MessageType, ClassType, EnumType, ListType, DictionaryType, SetType, TupleType
+from krpc.schema.KRPC import Type
+from krpc.types import ValueType, ClassType, EnumerationType, MessageType
+from krpc.types import TupleType, ListType, SetType, DictionaryType
 
 class CsharpDomain(Domain):
     name = 'csharp'
@@ -10,15 +12,15 @@ class CsharpDomain(Domain):
     codeext = 'cs'
 
     type_map = {
-        'int32': 'int',
-        'int64': 'long',
-        'uint32': 'uint',
-        'uint64': 'ulong',
-        'bytes': 'byte[]',
-        'string': 'string',
-        'float': 'float',
-        'double': 'double',
-        'bool': 'bool'
+        Type.DOUBLE: 'double',
+        Type.FLOAT: 'float',
+        Type.SINT32: 'int',
+        Type.SINT64: 'long',
+        Type.UINT32: 'uint',
+        Type.UINT64: 'ulong',
+        Type.BOOL: 'bool',
+        Type.STRING: 'string',
+        Type.BYTES: 'byte[]'
     }
 
     def __init__(self, macros):
@@ -32,13 +34,11 @@ class CsharpDomain(Domain):
         if typ is None:
             return 'void'
         elif isinstance(typ, ValueType):
-            return self.type_map[typ.protobuf_type]
+            return self.type_map[typ.protobuf_type.code]
         elif isinstance(typ, MessageType):
-            return 'KRPC.Schema.%s' % typ.protobuf_type
-        elif isinstance(typ, ClassType):
-            return self.shorten_ref(typ.protobuf_type[6:-1])
-        elif isinstance(typ, EnumType):
-            return self.shorten_ref(typ.protobuf_type[5:-1])
+            return 'KRPC.Schema.KRPC.%s' % typ.python_type.__name__
+        elif isinstance(typ, ClassType) or isinstance(typ, EnumerationType):
+            return self.shorten_ref('%s.%s' % (typ.protobuf_type.service, typ.protobuf_type.name))
         elif isinstance(typ, ListType):
             return 'System.Collections.Generic.IList<%s>' % self.type(typ.value_type)
         elif isinstance(typ, DictionaryType):
