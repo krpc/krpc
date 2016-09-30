@@ -679,6 +679,8 @@ SpaceCenter.Node.OrbitalReferenceFrame
 SpaceCenter.Node.Position
 SpaceCenter.Node.Direction
 SpaceCenter.ReferenceFrame
+SpaceCenter.ReferenceFrame.CreateRelative
+SpaceCenter.ReferenceFrame.CreateHybrid
 SpaceCenter.AutoPilot
 SpaceCenter.AutoPilot.Engage
 SpaceCenter.AutoPilot.Disengage
