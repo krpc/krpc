@@ -166,7 +166,7 @@ position offset and a fixed rotation offset. For example, this could be used to
 construct a reference frame whose origin is 10m below the vessel as follows, by
 applying a position offset of 10 along the z-axis to
 :attr:`Vessel.reference_frame`. Relative reference frames can be constructed by
-calling `:meth:ReferenceFrame.CreateRelative`.
+calling :meth:`ReferenceFrame.create_relative`.
 
 A hybrid reference frame inherits its components (position, rotation, velocity
 and angular velocity) from the components of other reference frames. Note that
@@ -175,7 +175,7 @@ frame whose position is the center of mass of the vessel (inherited from
 :attr:`Vessel.reference_frame`) and whose rotation is that of the planet being
 orbited (inherited from :attr:`CelestialBody.reference_frame`). Relative
 reference frames can be constructed by calling
-`:meth:ReferenceFrame.CreateHybrid`.
+:meth:`ReferenceFrame.create_hybrid`.
 
 The parent reference frame(s) of a custom reference frame can also be other
 custom reference frames. For example, you could combine the two example frames
