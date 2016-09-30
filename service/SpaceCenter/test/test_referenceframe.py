@@ -2,13 +2,14 @@ import unittest
 import krpctest
 from krpctest.geometry import compute_position, norm, dot
 import krpc
+import math
 
 class TestReferenceFrame(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.new_save()
-        cls.set_circular_orbit('Kerbin', 100000)
+        #cls.new_save()
+        #cls.set_circular_orbit('Kerbin', 100000)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
         cls.bodies = cls.space_center.bodies
@@ -172,6 +173,38 @@ class TestReferenceFrame(krpctest.TestCase):
     def test_node_orbital_direction(self):
         # TODO: implement
         pass
+
+    def test_relative_position(self):
+        position = (1, 2, 3)
+        ref = self.space_center.ReferenceFrame.create_relative(self.vessel.reference_frame, position, (0, 0, 0, 1))
+        self.assertAlmostEqual(tuple(-x for x in position), self.vessel.position(ref))
+
+    def test_relative_rotation(self):
+        cases = [
+            # 90 degrees rotation around x
+            # vessel points along -z
+            { 'rot': (math.sin(math.pi/4), 0, 0, math.cos(math.pi/4)),
+              'dir': (0, 0, -1) },
+            # 90 degrees rotation around y
+            # vessel points along y
+            { 'rot': (0, math.sin(math.pi/4), 0, math.cos(math.pi/4)),
+              'dir': (0, 1, 0) },
+            # 90 degrees rotation around z
+            # vessel points along x
+            { 'rot': (0, 0, math.sin(math.pi/4), math.cos(math.pi/4)),
+              'dir': (1, 0, 0) }
+        ]
+        self.assertAlmostEqual((0, 1, 0), self.vessel.direction(self.vessel.reference_frame), places=4)
+        for case in cases:
+            ref = self.space_center.ReferenceFrame.create_relative(self.vessel.reference_frame, (0, 0, 0), case['rot'])
+            self.assertAlmostEqual(case['dir'], self.vessel.direction(ref), places=4)
+
+    def test_hybrid(self):
+        position = self.vessel.reference_frame
+        direction = self.vessel.orbit.body.reference_frame
+        ref = self.space_center.ReferenceFrame.create_hybrid(position, direction)
+        self.assertAlmostEqual(self.vessel.position(position), self.vessel.position(ref))
+        self.assertAlmostEqual(self.vessel.direction(direction), self.vessel.direction(ref))
 
 if __name__ == '__main__':
     unittest.main()
