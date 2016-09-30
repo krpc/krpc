@@ -63,6 +63,14 @@ namespace KRPC.SpaceCenter.Services
         /// Centered on a thruster (e.g. an engine nozzle) and
         /// oriented with the direction of thrust.
         /// </summary>
-        Thrust
+        Thrust,
+        /// <summary>
+        /// Centered and rotated by fixed quantities relative to another reference frame.
+        /// </summary>
+        Relative,
+        /// <summary>
+        /// Centered and rotated based on quantities from other reference frames.
+        /// </summary>
+        Hybrid
     }
 }
