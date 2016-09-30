@@ -382,7 +382,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldTransform.position;
                 case ReferenceFrameType.Relative:
-                    return parent.Position + relativePosition;
+                    return parent.PositionToWorldSpace (relativePosition);
                 case ReferenceFrameType.Hybrid:
                     return hybridPosition.Position;
                 default:
@@ -472,7 +472,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldThrustDirection;
                 case ReferenceFrameType.Relative:
-                    return relativeRotation * parent.UpNotNormalized;
+                    return parent.DirectionToWorldSpace (relativeRotation * Vector3d.up);
                 case ReferenceFrameType.Hybrid:
                     return hybridRotation.UpNotNormalized;
                 default:
@@ -540,7 +540,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldThrustPerpendicularDirection;
                 case ReferenceFrameType.Relative:
-                    return relativeRotation * parent.ForwardNotNormalized;
+                    return parent.DirectionToWorldSpace (relativeRotation * Vector3d.forward);
                 case ReferenceFrameType.Hybrid:
                     return hybridRotation.ForwardNotNormalized;
                 default:
