@@ -38,8 +38,10 @@ namespace KRPC.SpaceCenter.Services
         readonly ModuleDockingNode dockingPort;
         readonly Thruster thruster;
         readonly ReferenceFrame parent;
-        Vector3d relativePosition;
-        QuaternionD relativeRotation;
+        readonly Vector3d relativePosition;
+        readonly QuaternionD relativeRotation;
+        readonly Vector3d relativeVelocity;
+        readonly Vector3d relativeAngularVelocity;
         readonly ReferenceFrame hybridPosition;
         readonly ReferenceFrame hybridRotation;
         readonly ReferenceFrame hybridVelocity;
@@ -69,6 +71,17 @@ namespace KRPC.SpaceCenter.Services
             this.hybridAngularVelocity = hybridAngularVelocity;
         }
 
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongParameterListsRule")]
+        ReferenceFrame (ReferenceFrame parent, Vector3d relativePosition, QuaternionD relativeRotation, Vector3d relativeVelocity, Vector3d relativeAngularVelocity)
+        {
+            type = ReferenceFrameType.Relative;
+            this.parent = parent;
+            this.relativePosition = relativePosition;
+            this.relativeRotation = relativeRotation;
+            this.relativeVelocity = relativeVelocity;
+            this.relativeAngularVelocity = relativeAngularVelocity;
+        }
+
         /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
@@ -86,6 +99,8 @@ namespace KRPC.SpaceCenter.Services
             parent == other.parent &&
             relativePosition == other.relativePosition &&
             relativeRotation == other.relativeRotation &&
+            relativeVelocity == other.relativeVelocity &&
+            relativeAngularVelocity == other.relativeAngularVelocity &&
             hybridPosition == other.hybridPosition &&
             hybridRotation == other.hybridRotation &&
             hybridVelocity == other.hybridVelocity &&
@@ -112,6 +127,8 @@ namespace KRPC.SpaceCenter.Services
                 hash ^= parent.GetHashCode ();
             hash ^= relativePosition.GetHashCode ();
             hash ^= relativeRotation.GetHashCode ();
+            hash ^= relativeVelocity.GetHashCode ();
+            hash ^= relativeAngularVelocity.GetHashCode ();
             if (hybridPosition != null)
                 hash ^= hybridPosition.GetHashCode ();
             if (hybridRotation != null)
@@ -311,14 +328,19 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="referenceFrame">The parent reference frame.</param>
         /// <param name="position">The offset of the position of the origin.</param>
-        /// <param name="rotation">The rotation to apply to the parent frames rotation, as a quaternion.</param>
+        /// <param name="rotation">The rotation to apply to the parent frames rotation, as a quaternion. Defaults to zero.</param>
+        /// <param name="velocity">The linear velocity to offset the parent frame by. Defaults to zero.</param>
+        /// <param name="angularVelocity">The angular velocity to offset the parent frame by. Defaults to zero.</param>
+        //FIXME: make rotation, velocity and angularVelocity default to null when null tuple bug is fixed
         [KRPCMethod]
-        public static ReferenceFrame CreateRelative (ReferenceFrame referenceFrame, Tuple3 position, Tuple4 rotation)
+        public static ReferenceFrame CreateRelative (ReferenceFrame referenceFrame, Tuple3 position, Tuple4 rotation, Tuple3 velocity, Tuple3 angularVelocity)
         {
-            var frame = new ReferenceFrame (ReferenceFrameType.Relative, parent: referenceFrame);
-            frame.relativePosition = position.ToVector ();
-            frame.relativeRotation = rotation.ToQuaternion ();
-            return frame;
+            return new ReferenceFrame (
+                referenceFrame,
+                position.ToVector (),
+                rotation != null ? rotation.ToQuaternion () : QuaternionD.identity,
+                velocity != null ? velocity.ToVector () : Vector3d.zero,
+                angularVelocity != null ? angularVelocity.ToVector () : Vector3d.zero);
         }
 
         /// <summary>
@@ -574,7 +596,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.DockingPort:
                     return dockingPort.vessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.Relative:
-                    return relativeRotation * parent.Velocity; //TODO: check this
+                    return parent.VelocityToWorldSpace (Vector3d.zero, relativeVelocity);
                 case ReferenceFrameType.Hybrid:
                     return hybridVelocity.Velocity;
                 default:
@@ -610,7 +632,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Thrust:
                     return Vector3d.zero; //TODO: check this
                 case ReferenceFrameType.Relative:
-                    return relativeRotation * parent.AngularVelocity; // TODO: check this
+                    return parent.AngularVelocityToWorldSpace (relativeAngularVelocity);
                 case ReferenceFrameType.Hybrid:
                     return hybridVelocity.AngularVelocity;
                 default:
