@@ -97,14 +97,16 @@ namespace KRPC.SpaceCenter.Services
             dockingPort == other.dockingPort &&
             thruster == other.thruster &&
             parent == other.parent &&
-            relativePosition == other.relativePosition &&
+            (type != ReferenceFrameType.Relative ||
+            (relativePosition == other.relativePosition &&
             relativeRotation == other.relativeRotation &&
             relativeVelocity == other.relativeVelocity &&
-            relativeAngularVelocity == other.relativeAngularVelocity &&
-            hybridPosition == other.hybridPosition &&
+            relativeAngularVelocity == other.relativeAngularVelocity)) &&
+            (type != ReferenceFrameType.Hybrid ||
+            (hybridPosition == other.hybridPosition &&
             hybridRotation == other.hybridRotation &&
             hybridVelocity == other.hybridVelocity &&
-            hybridAngularVelocity == other.hybridAngularVelocity;
+            hybridAngularVelocity == other.hybridAngularVelocity));
         }
 
         /// <summary>
@@ -125,18 +127,18 @@ namespace KRPC.SpaceCenter.Services
                 hash ^= thruster.GetHashCode ();
             if (parent != null)
                 hash ^= parent.GetHashCode ();
-            hash ^= relativePosition.GetHashCode ();
-            hash ^= relativeRotation.GetHashCode ();
-            hash ^= relativeVelocity.GetHashCode ();
-            hash ^= relativeAngularVelocity.GetHashCode ();
-            if (hybridPosition != null)
+            if (type == ReferenceFrameType.Relative) {
+                hash ^= relativePosition.GetHashCode ();
+                hash ^= relativeRotation.GetHashCode ();
+                hash ^= relativeVelocity.GetHashCode ();
+                hash ^= relativeAngularVelocity.GetHashCode ();
+            }
+            if (type == ReferenceFrameType.Hybrid) {
                 hash ^= hybridPosition.GetHashCode ();
-            if (hybridRotation != null)
                 hash ^= hybridRotation.GetHashCode ();
-            if (hybridVelocity != null)
                 hash ^= hybridVelocity.GetHashCode ();
-            if (hybridAngularVelocity != null)
                 hash ^= hybridAngularVelocity.GetHashCode ();
+            }
             return hash;
         }
 
