@@ -51,6 +51,7 @@ nitpick_ignore = [
     ('cpp:type', 'std::tuple<double, double>'),
     ('cpp:type', 'std::tuple<double, double, double>'),
     ('cpp:type', 'std::tuple<double, double, double, double>'),
+    ('cpp:type', 'std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>>'),
     ('cpp:type', 'std::tuple<std::string, std::string, std::string>'),
     ('cpp:type', 'std::vector<std::string>'),
     ('cpp:type', 'std::vector<double>'),
@@ -148,8 +149,8 @@ nitpick_ignore = [
     ('py:obj', 'tuple of (float, float)'),
     ('py:obj', 'tuple of (float, float, float)'),
     ('py:obj', 'tuple of (float, float, float, float)'),
+    ('py:obj', 'tuple of (tuple of (float, float, float), tuple of (float, float, float))'),
     ('py:obj', 'tuple of (str, str, str)'),
-
     ('py:obj', 'dict from str to str'),
     ('py:obj', 'dict from str to int'),
     ('py:obj', 'dict from str to float'),

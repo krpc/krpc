@@ -83,6 +83,7 @@ SpaceCenter.Vessel.OrbitalReferenceFrame
 SpaceCenter.Vessel.SurfaceReferenceFrame
 SpaceCenter.Vessel.SurfaceVelocityReferenceFrame
 SpaceCenter.Vessel.Position
+SpaceCenter.Vessel.BoundingBox
 SpaceCenter.Vessel.Velocity
 SpaceCenter.Vessel.Rotation
 SpaceCenter.Vessel.Direction
@@ -344,6 +345,7 @@ SpaceCenter.Part.Sensor
 SpaceCenter.Part.SolarPanel
 SpaceCenter.Part.Position
 SpaceCenter.Part.CenterOfMass
+SpaceCenter.Part.BoundingBox
 SpaceCenter.Part.Direction
 SpaceCenter.Part.Velocity
 SpaceCenter.Part.Rotation
