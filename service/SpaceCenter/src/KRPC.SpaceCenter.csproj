@@ -80,6 +80,7 @@
     <Compile Include="ExtensionMethods\ActionGroupExtensions.cs" />
     <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
     <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
+    <Compile Include="ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="ExtensionMethods\GeometryExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightGlobalsExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightCameraModeExtensions.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="ExternalAPI\FAR.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
     <Compile Include="PartForcesAddon.cs" />
+    <Compile Include="PartHighlightAddon.cs" />
     <Compile Include="PilotAddon.cs" />
     <Compile Include="ResourceTransferAddon.cs" />
     <Compile Include="Services\AutoPilot.cs" />
