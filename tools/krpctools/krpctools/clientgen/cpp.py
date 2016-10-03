@@ -1,7 +1,7 @@
 from .generator import Generator
 from .docparser import DocParser
 import krpc.types
-from krpc.utils import snake_case
+from krpc.utils import snake_case, split_type_string
 
 def cpp_template_fix(typ):
     """ Ensure nested templates are separated by spaces for the C++ parser """
@@ -57,11 +57,11 @@ class CppGenerator(Generator):
         elif isinstance(typ, krpc.types.SetType):
             return cpp_template_fix('std::set<%s>' % self.parse_type(self.types.as_type(typ.protobuf_type[4:-1])))
         elif isinstance(typ, krpc.types.DictionaryType):
-            key_type, value_type = tuple(typ.protobuf_type[11:-1].split(','))
+            typs = split_type_string(typ.protobuf_type[11:-1])
             return cpp_template_fix('std::map<%s, %s>' % \
-                (self.parse_type(self.types.as_type(key_type)), self.parse_type(self.types.as_type(value_type))))
+                (self.parse_type(self.types.as_type(typs[0])), self.parse_type(self.types.as_type(typs[1]))))
         elif isinstance(typ, krpc.types.TupleType):
-            value_types = typ.protobuf_type[6:-1].split(',')
+            value_types = split_type_string(typ.protobuf_type[6:-1])
             return cpp_template_fix('std::tuple<%s>' % \
                 ', '.join(self.parse_type(self.types.as_type(t)) for t in value_types))
         elif isinstance(typ, krpc.types.ClassType):
