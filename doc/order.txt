@@ -503,6 +503,7 @@ SpaceCenter.LandingGear.Part
 SpaceCenter.LandingGear.State
 SpaceCenter.LandingGear.Deployable
 SpaceCenter.LandingGear.Deployed
+SpaceCenter.LandingGear.IsGrounded
 SpaceCenter.LandingGearState
 SpaceCenter.LandingGearState.Deployed
 SpaceCenter.LandingGearState.Retracted
@@ -513,6 +514,7 @@ SpaceCenter.LandingLeg
 SpaceCenter.LandingLeg.Part
 SpaceCenter.LandingLeg.State
 SpaceCenter.LandingLeg.Deployed
+SpaceCenter.LandingLeg.IsGrounded
 SpaceCenter.LandingLegState
 SpaceCenter.LandingLegState.Deployed
 SpaceCenter.LandingLegState.Retracted
