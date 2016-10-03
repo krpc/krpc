@@ -3,16 +3,14 @@ import krpctest
 
 class TestPartsLandingGear(krpctest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        cls.new_save()
-        if cls.connect().space_center.active_vessel.name != 'PartsLandingGear':
-            cls.launch_vessel_from_vab('PartsLandingGear')
-            cls.remove_other_vessels()
-        parts = cls.connect().space_center.active_vessel.parts
-        cls.gear = parts.with_title('LY-99 Extra Large Landing Gear')[0].landing_gear
-        cls.fixed_gear = parts.with_title('LY-01 Fixed Landing Gear')[0].landing_gear
-        cls.State = cls.connect().space_center.LandingGearState
+    def setUp(self):
+        self.new_save()
+        self.launch_vessel_from_vab('PartsLandingGear')
+        self.remove_other_vessels()
+        self.parts = self.connect().space_center.active_vessel.parts
+        self.gear = self.parts.with_title('LY-99 Extra Large Landing Gear')[0].landing_gear
+        self.fixed_gear = self.parts.with_title('LY-01 Fixed Landing Gear')[0].landing_gear
+        self.State = self.connect().space_center.LandingGearState
 
     def test_deploy_and_retract(self):
         self.assertTrue(self.gear.deployable)
@@ -39,6 +37,13 @@ class TestPartsLandingGear(krpctest.TestCase):
         self.assertFalse(self.fixed_gear.deployable)
         self.assertEqual(self.State.deployed, self.fixed_gear.state)
         self.assertTrue(self.fixed_gear.deployed)
+
+    def test_grounded(self):
+        self.assertTrue(self.gear.deployed)
+        self.assertFalse(self.gear.is_grounded)
+        self.parts.launch_clamps[0].release()
+        self.wait(1)
+        self.assertTrue(self.gear.is_grounded)
 
 if __name__ == '__main__':
     unittest.main()
