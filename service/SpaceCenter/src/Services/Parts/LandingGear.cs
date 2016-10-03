@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -10,8 +11,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Landing gear with wheels. Obtained by calling <see cref="Part.LandingGear"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     public class LandingGear : Equatable<LandingGear>
     {
+        readonly ModuleWheelBase wheel;
         readonly ModuleWheels.ModuleWheelDeployment deployment;
         readonly ModuleWheels.ModuleWheelDamage damage;
 
@@ -30,6 +33,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part is not landing gear");
             Part = part;
             var internalPart = part.InternalPart;
+            wheel = internalPart.Module<ModuleWheelBase> ();
             deployment = internalPart.Module<ModuleWheels.ModuleWheelDeployment> ();
             damage = internalPart.Module<ModuleWheels.ModuleWheelDamage> ();
         }
@@ -39,11 +43,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (LandingGear other)
         {
-            return
-            !ReferenceEquals (other, null) &&
-            Part == other.Part &&
-            (deployment == other.deployment || deployment.Equals (other.deployment)) &&
-            (damage == other.damage || damage.Equals (other.damage));
+            return !ReferenceEquals (other, null) && Part == other.Part && wheel == other.wheel;
         }
 
         /// <summary>
@@ -51,12 +51,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            var hash = Part.GetHashCode ();
-            if (deployment != null)
-                hash ^= deployment.GetHashCode ();
-            if (damage != null)
-                hash ^= damage.GetHashCode ();
-            return hash;
+            return Part.GetHashCode () ^ wheel.GetHashCode ();
         }
 
         /// <summary>
@@ -122,6 +117,14 @@ namespace KRPC.SpaceCenter.Services.Parts
                         retract.Invoke ();
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns whether the gear is touching the ground.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsGrounded {
+            get { return wheel.isGrounded; }
         }
     }
 }

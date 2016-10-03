@@ -31,6 +31,7 @@ class TestPartsLandingLeg(krpctest.TestCase):
             self.wait()
         self.assertEqual(self.State.retracted, self.leg.state)
         self.assertFalse(self.leg.deployed)
+        self.assertFalse(self.leg.is_grounded)
 
 if __name__ == '__main__':
     unittest.main()
