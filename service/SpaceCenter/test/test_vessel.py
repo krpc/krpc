@@ -90,6 +90,11 @@ class TestVessel(krpctest.TestCase):
     def test_available_control_surface_torque(self):
         self.assertAlmostEqual((0, 0, 0), self.vessel.available_control_surface_torque)
 
+    def test_bounding_box(self):
+        box = self.vessel.bounding_box(self.vessel.reference_frame)
+        self.assertAlmostEqual((-1.55, -2.58, -1.55), box[0], places=2)
+        self.assertAlmostEqual((1.55, 2.66, 1.55), box[1], places=2)
+
 class TestVesselEngines(krpctest.TestCase):
 
     @classmethod

@@ -2,7 +2,7 @@ import hashlib
 from .generator import Generator
 from .docparser import DocParser
 from ..utils import lower_camel_case, upper_camel_case
-from krpc.utils import snake_case
+from krpc.utils import snake_case, split_type_string
 import krpc.types
 
 class JavaGenerator(Generator):
@@ -95,11 +95,11 @@ class JavaGenerator(Generator):
             return 'java.util.Set<%s>' % \
                 self.parse_type(self.types.as_type(typ.protobuf_type[4:-1]), True)
         elif isinstance(typ, krpc.types.DictionaryType):
-            key_type, value_type = tuple(typ.protobuf_type[11:-1].split(','))
-            return 'java.util.Map<%s,%s>' % (self.parse_type(self.types.as_type(key_type)),
-                                             self.parse_type(self.types.as_type(value_type), True))
+            typs = split_type_string(typ.protobuf_type[11:-1])
+            return 'java.util.Map<%s,%s>' % (self.parse_type(self.types.as_type(typs[0])),
+                                             self.parse_type(self.types.as_type(typs[1]), True))
         elif isinstance(typ, krpc.types.TupleType):
-            value_types = typ.protobuf_type[6:-1].split(',')
+            value_types = split_type_string(typ.protobuf_type[6:-1])
             name = self.get_tuple_class_name(value_types)
             return 'org.javatuples.'+name+'<%s>' % (','.join(self.parse_type(self.types.as_type(t), True)
                                                              for t in value_types))
@@ -119,12 +119,12 @@ class JavaGenerator(Generator):
             return 'new TypeSpecification(java.util.Set.class, %s)' % \
                 self.parse_type_specification(self.types.as_type(typ.protobuf_type[4:-1]))
         elif isinstance(typ, krpc.types.DictionaryType):
-            key_type, value_type = tuple(typ.protobuf_type[11:-1].split(','))
+            typs = split_type_string(typ.protobuf_type[11:-1])
             return 'new TypeSpecification(java.util.Map.class, %s, %s)' % \
-                (self.parse_type_specification(self.types.as_type(key_type)),
-                 self.parse_type_specification(self.types.as_type(value_type)))
+                (self.parse_type_specification(self.types.as_type(typs[0])),
+                 self.parse_type_specification(self.types.as_type(typs[1])))
         elif isinstance(typ, krpc.types.TupleType):
-            value_types = typ.protobuf_type[6:-1].split(',')
+            value_types = split_type_string(typ.protobuf_type[6:-1])
             return 'new TypeSpecification(org.javatuples.%s.class, %s)' % \
                 (self.get_tuple_class_name(value_types),
                  ','.join(self.parse_type_specification(self.types.as_type(t)) for t in value_types))

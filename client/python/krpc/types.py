@@ -3,31 +3,7 @@ import collections
 import importlib
 from enum import Enum
 from krpc.attributes import Attributes
-
-
-def _parse_type_string(typ):
-    """ Given a string, extract a substring up to the first comma. Parses parentheses.
-        Multiple calls can be used to separate a string by commas. """
-    if typ is None:
-        raise ValueError
-    result = ''
-    level = 0
-    for x in typ:
-        if level == 0 and x == ',':
-            break
-        if x == '(':
-            level += 1
-        if x == ')':
-            level -= 1
-        result += x
-    if level != 0:
-        raise ValueError
-    if result == typ:
-        return result, None
-    if typ[len(result)] != ',':
-        raise ValueError
-    return result, typ[len(result) + 1:]
-
+from krpc.utils import split_type_string
 
 PROTOBUF_VALUE_TYPES = ['double', 'float', 'int32', 'int64', 'uint32', 'uint64', 'bool', 'string', 'bytes']
 PYTHON_VALUE_TYPES = [float, int, long, bool, str, bytes]
@@ -260,11 +236,10 @@ class ListType(TypeBase):
     """ A list collection type, represented by a protobuf message """
 
     def __init__(self, type_string, types):
-        match = re.match(r'^List\((.+)\)$', type_string)
-        if not match:
+        if not (type_string.startswith('List(') and type_string.endswith(')')):
             raise ValueError('\'%s\' is not a valid type string for a list type' % type_string)
 
-        self.value_type = types.as_type(match.group(1))
+        self.value_type = types.as_type(type_string[5:-1])
 
         super(ListType, self).__init__(str(type_string), list)
 
@@ -273,21 +248,14 @@ class DictionaryType(TypeBase):
     """ A dictionary collection type, represented by a protobuf message """
 
     def __init__(self, type_string, types):
-        match = re.match(r'^Dictionary\((.+)\)$', type_string)
-        if not match:
+        if not (type_string.startswith('Dictionary(') and type_string.endswith(')')):
             raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
 
-        typ = match.group(1)
-
-        try:
-            key_string, typ = _parse_type_string(typ)
-            value_string, typ = _parse_type_string(typ)
-            if typ is not None:
-                raise ValueError
-            self.key_type = types.as_type(key_string)
-            self.value_type = types.as_type(value_string)
-        except ValueError:
+        type_strings = split_type_string(type_string[11:-1])
+        if len(type_strings) != 2:
             raise ValueError('\'%s\' is not a valid type string for a dictionary type' % type_string)
+        self.key_type = types.as_type(type_strings[0])
+        self.value_type = types.as_type(type_strings[1])
 
         super(DictionaryType, self).__init__(str(type_string), dict)
 
@@ -296,11 +264,10 @@ class SetType(TypeBase):
     """ A set collection type, represented by a protobuf message """
 
     def __init__(self, type_string, types):
-        match = re.match(r'^Set\((.+)\)$', type_string)
-        if not match:
+        if not (type_string.startswith('Set(') and type_string.endswith(')')):
             raise ValueError('\'%s\' is not a valid type string for a set type' % type_string)
 
-        self.value_type = types.as_type(match.group(1))
+        self.value_type = types.as_type(type_string[4:-1])
 
         super(SetType, self).__init__(str(type_string), set)
 
@@ -309,15 +276,10 @@ class TupleType(TypeBase):
     """ A tuple collection type, represented by a protobuf message """
 
     def __init__(self, type_string, types):
-        match = re.match(r'^Tuple\((.+)\)$', type_string)
-        if not match:
+        if not (type_string.startswith('Tuple(') and type_string.endswith(')')):
             raise ValueError('\'%s\' is not a valid type string for a tuple type' % type_string)
 
-        self.value_types = []
-        typ = match.group(1)
-        while typ is not None:
-            value_type, typ = _parse_type_string(typ)
-            self.value_types.append(types.as_type(value_type))
+        self.value_types = [types.as_type(typ) for typ in split_type_string(type_string[6:-1])]
 
         super(TupleType, self).__init__(str(type_string), tuple)
 

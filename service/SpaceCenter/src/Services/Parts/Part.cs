@@ -597,6 +597,25 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The axis-aligned bounding box of the vessel in the given reference frame.
+        /// Returns the minimum and maximum vertices of the box.
+        /// </summary>
+        /// <param name="referenceFrame"></param>
+        /// <remarks>
+        /// This is computed from the collision meshes of the part.
+        /// If the part is not collidable, the box has zero volume and is centered on
+        /// the <see cref="Position"/> of the part.
+        /// </remarks>
+        [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public Tuple<Tuple3,Tuple3> BoundingBox (ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
+            return InternalPart.GetBounds (referenceFrame).ToTuples ();
+        }
+
+        /// <summary>
         /// The direction of the part in the given reference frame.
         /// </summary>
         /// <param name="referenceFrame"></param>
