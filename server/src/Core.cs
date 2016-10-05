@@ -125,7 +125,7 @@ namespace KRPC
         {
             Servers.Add (server);
             Configure (server);
-            Logger.WriteLine ("Added server '" + server.Name + "'");
+            Logger.WriteLine ("Added server '" + server.Name);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace KRPC
                     if (server.Running)
                         server.Stop ();
                     Servers.RemoveAt (i);
-                    Logger.WriteLine ("Removed server '" + server.Name + "'");
+                    Logger.WriteLine ("Removed server '" + server.Name);
                     return;
                 }
             }
@@ -158,20 +158,22 @@ namespace KRPC
                         server.Stop ();
                     Servers [i] = newServer;
                     Configure (newServer);
-                    Logger.WriteLine ("Updated server '" + server.Name + "' + to '" + newServer.Name + "'");
+                    Logger.WriteLine ("Updated server '" + server.Name + " to '" + newServer.Name);
                     return;
                 }
             }
             throw new KeyNotFoundException (newServer.Id.ToString ());
         }
 
-        void Configure (Server.Server server)
+        void Configure (IServer server)
         {
             server.OnStarted += (s, e) => {
+                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' started");
                 AnyRunning = true;
                 EventHandlerExtensions.Invoke (OnServerStarted, this, new ServerStartedEventArgs ((Server.Server)s));
             };
             server.OnStopped += (s, e) => {
+                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' stopped");
                 AnyRunning = Servers.Any (x => x.Running);
                 EventHandlerExtensions.Invoke (OnServerStopped, this, new ServerStoppedEventArgs ((Server.Server)s));
             };

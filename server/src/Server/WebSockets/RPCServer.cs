@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using KRPC.Server;
 using KRPC.Service.Messages;
+using KRPC.Utils;
 
 namespace KRPC.Server.WebSockets
 {
@@ -18,6 +19,8 @@ namespace KRPC.Server.WebSockets
         public RPCServer (IServer<byte,byte> server, bool echo = false) : base (server)
         {
             shouldEcho = echo;
+            if (echo)
+                Logger.WriteLine ("WebSockets server running in echo mode", Logger.Severity.Warning);
         }
 
         public override string Address {
@@ -29,9 +32,13 @@ namespace KRPC.Server.WebSockets
         /// </summary>
         protected override IClient<Request,Response> CreateClient (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
+            var address = args.Client.Address;
+            Logger.WriteLine ("WebSockets: client requesting connection (" + address + ")", Logger.Severity.Debug);
             var request = ConnectionRequest.ReadRequest (args);
-            if (args.Request.ShouldDeny)
+            if (args.Request.ShouldDeny) {
+                Logger.WriteLine ("WebSockets: client connection denied (" + address + ")", Logger.Severity.Error);
                 return null;
+            }
             var clientName = GetClientName (request);
             clientKeys [args.Client] = request.Headers ["Sec-WebSocket-Key"];
             return new RPCClient (clientName, args.Client, shouldEcho);
@@ -43,8 +50,10 @@ namespace KRPC.Server.WebSockets
         public override void HandleClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
             base.HandleClientRequestingConnection (sender, args);
-            if (args.Request.ShouldAllow)
+            if (args.Request.ShouldAllow) {
                 args.Client.Stream.Write (ConnectionRequest.WriteResponse (clientKeys [args.Client]));
+                Logger.WriteLine ("WebSockets: client connection accepted (" + args.Client.Address + ")");
+            }
             if (args.Request.ShouldDeny && clientKeys.ContainsKey (args.Client))
                 clientKeys.Remove (args.Client);
         }

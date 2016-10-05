@@ -81,10 +81,13 @@ namespace KRPC.Server
 
             // Validate stream client identifiers
             StreamServer.OnClientRequestingConnection += (s, e) => {
-                if (RPCServer.Clients.Any (c => c.Guid == e.Client.Guid))
+                if (RPCServer.Clients.Any (c => c.Guid == e.Client.Guid)) {
+                    Logger.WriteLine ("Accepting stream server connection (" + e.Client.Address + ")", Logger.Severity.Debug);
                     e.Request.Allow ();
-                else
+                } else {
+                    Logger.WriteLine ("Denying stream server connection, invalid client id (" + e.Client.Address + ")", Logger.Severity.Debug);
                     e.Request.Deny ();
+                }
             };
         }
 

@@ -24,18 +24,18 @@ namespace KRPC.Server.WebSockets
             try {
                 var buffer = new byte [BUFFER_SIZE];
                 var count = stream.Read (buffer, 0);
-                Logger.WriteLine ("WebSockets connection request:" + Environment.NewLine + Encoding.ASCII.GetString (buffer, 0, count), Logger.Severity.Debug);
                 var request = Request.FromBytes (buffer, 0, count);
                 CheckValid (request);
+                Logger.WriteLine ("WebSockets: received valid connection request", Logger.Severity.Debug);
                 return request;
             } catch (HandshakeException e) {
-                Logger.WriteLine ("WebSockets handshake exception: " + e.Response);
+                Logger.WriteLine ("WebSockets handshake failed: " + e.Response, Logger.Severity.Error);
                 args.Request.Deny ();
                 stream.Write (e.Response.ToBytes ());
                 return null;
             } catch (MalformedRequestException e) {
                 //TODO: wait for timeout seconds to see if the request was truncated
-                Logger.WriteLine ("WebSockets malformed request: " + e.Message);
+                Logger.WriteLine ("Malformed WebSockets connection request: " + e.Message, Logger.Severity.Error);
                 args.Request.Deny ();
                 stream.Write (Response.CreateBadRequest ().ToBytes ());
                 return null;
@@ -49,7 +49,6 @@ namespace KRPC.Server.WebSockets
             response.AddHeaderField ("Upgrade", "websocket");
             response.AddHeaderField ("Connection", "Upgrade");
             response.AddHeaderField ("Sec-WebSocket-Accept", returnKey);
-            Logger.WriteLine ("WebSockets connection response:" + Environment.NewLine + response, Logger.Severity.Debug);
             return response.ToBytes ();
         }
 

@@ -128,25 +128,25 @@ namespace KRPC.Server.Message
             var handler = OnClientRequestingConnection;
             if (handler != null) {
                 var client = pendingClients [args.Client];
+                var address = client.Address;
                 var subArgs = new ClientRequestingConnectionEventArgs<NoMessage,StreamUpdate> (client);
                 handler (this, subArgs);
                 if (subArgs.Request.ShouldAllow) {
                     args.Request.Allow ();
                     clients [args.Client] = client;
-                    Logger.WriteLine ("StreamServer: Client connection allowed.");
-                }
-                if (subArgs.Request.ShouldDeny) {
+                    Logger.WriteLine ("StreamServer: client connection allowed (" + address + ")", Logger.Severity.Debug);
+                } else if (subArgs.Request.ShouldDeny) {
                     args.Request.Deny ();
-                    Logger.WriteLine ("StreamServer: Client connection denied.", Logger.Severity.Warning);
-                }
-                if (!subArgs.Request.StillPending) {
+                    Logger.WriteLine ("StreamServer: client connection denied (" + address + ")", Logger.Severity.Debug);
+                } else {
                     pendingClients.Remove (args.Client);
+                    Logger.WriteLine ("StreamServer: client connection still pending (" + address + ")", Logger.Severity.Debug);
                 }
             } else {
                 args.Request.Allow ();
                 clients [args.Client] = pendingClients [args.Client];
-                Logger.WriteLine ("StreamServer: Client connection allowed.");
                 pendingClients.Remove (args.Client);
+                Logger.WriteLine ("StreamServer: client connection allowed (" + args.Client.Address + ")", Logger.Severity.Debug);
             }
         }
     }

@@ -133,6 +133,7 @@ namespace KRPC.Server.Message
         /// </summary>
         public virtual void HandleClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs<byte,byte> args)
         {
+            Logger.WriteLine ("Message.RPCServer: handling client connection request", Logger.Severity.Debug);
             if (!pendingClients.ContainsKey (args.Client)) {
                 // A new client connection attempt. Try to create the client.
                 var client = CreateClient (sender, args);
@@ -156,20 +157,19 @@ namespace KRPC.Server.Message
                 if (subArgs.Request.ShouldAllow) {
                     args.Request.Allow ();
                     clients [args.Client] = client;
-                    Logger.WriteLine ("RPCServer: client connection allowed");
-                }
-                if (subArgs.Request.ShouldDeny) {
+                    Logger.WriteLine ("RPCServer: client connection allowed", Logger.Severity.Debug);
+                } else if (subArgs.Request.ShouldDeny) {
                     args.Request.Deny ();
-                    Logger.WriteLine ("RPCServer: client connection denied", Logger.Severity.Warning);
-                }
-                if (!subArgs.Request.StillPending) {
+                    Logger.WriteLine ("RPCServer: client connection denied", Logger.Severity.Debug);
+                } else {
                     pendingClients.Remove (args.Client);
+                    Logger.WriteLine ("RPCServer: client connection still pending", Logger.Severity.Debug);
                 }
             } else {
                 // No events configured, so allow the connection
                 args.Request.Allow ();
                 clients [args.Client] = pendingClients [args.Client];
-                Logger.WriteLine ("RPCServer: client connection allowed");
+                Logger.WriteLine ("RPCServer: client connection allowed", Logger.Severity.Debug);
                 pendingClients.Remove (args.Client);
             }
         }

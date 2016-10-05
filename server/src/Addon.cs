@@ -103,14 +103,12 @@ namespace KRPC
             GameEvents.onGUIApplicationLauncherReady.Add (OnGUIApplicationLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Add (OnGUIApplicationLauncherDestroyed);
             core.OnServerStarted += (s, e) => {
-                if (applauncherButton != null) {
+                if (applauncherButton != null)
                     applauncherButton.SetTexture (core.AnyRunning ? textureOnline : textureOffline);
-                }
             };
             core.OnServerStopped += (s, e) => {
-                if (applauncherButton != null) {
+                if (applauncherButton != null)
                     applauncherButton.SetTexture (core.AnyRunning ? textureOnline : textureOffline);
-                }
             };
         }
 
@@ -121,6 +119,7 @@ namespace KRPC
                 try {
                     e.Server.Start ();
                 } catch (ServerException exn) {
+                    Logger.WriteLine ("Server exception: " + exn.Message, Logger.Severity.Error);
                     mainWindow.Errors.Add (exn.Message);
                 }
             };
@@ -165,10 +164,13 @@ namespace KRPC
 
             // Server events
             core.OnClientRequestingConnection += (s, e) => {
-                if (config.AutoAcceptConnections)
+                if (config.AutoAcceptConnections) {
+                    Logger.WriteLine ("Auto-accepting client connection (" + e.Client.Address + ")");
                     e.Request.Allow ();
-                else
+                } else {
+                    Logger.WriteLine ("Asking player to accept client connection (" + e.Client.Address + ")");
                     clientConnectingDialog.OnClientRequestingConnection (s, e);
+                }
             };
         }
 

@@ -215,6 +215,7 @@ namespace KRPC
             set { recvTimeout = value; }
         }
 
+        [SuppressMessage ("Gendarme.Rules.Correctness", "MethodCanBeMadeStaticRule")]
         public bool DebugLogging {
             get { return Logger.Level == Logger.Severity.Debug; }
             set { Logger.Level = value ? Logger.Severity.Debug : Logger.Severity.Info; }
@@ -228,6 +229,7 @@ namespace KRPC
 
         protected override void BeforeSave ()
         {
+            Logger.WriteLine ("Saving configuration", Logger.Severity.Debug);
             logLevel = Logger.Level.ToString ();
             verboseErrors = RPCException.VerboseErrors;
             checkDocumented = ServicesChecker.CheckDocumented;
@@ -248,6 +250,7 @@ namespace KRPC
             }
             RPCException.VerboseErrors = verboseErrors;
             ServicesChecker.CheckDocumented = checkDocumented;
+            Logger.WriteLine ("Loaded configuration", Logger.Severity.Debug);
         }
     }
 }
