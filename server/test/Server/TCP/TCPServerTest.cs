@@ -20,6 +20,9 @@ namespace KRPC.Test.Server.TCP
             var server = new TCPServer (IPAddress.Loopback, 0);
             server.OnStarted += (s, e) => serverStarted = true;
             server.OnStopped += (s, e) => serverStopped = true;
+            server.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
             Assert.IsFalse (server.Running);
             server.Start ();
             Assert.IsTrue (server.Running);
@@ -43,6 +46,9 @@ namespace KRPC.Test.Server.TCP
             var server = new TCPServer (IPAddress.Loopback, 0);
             server.OnStarted += (s, e) => serverStarted++;
             server.OnStopped += (s, e) => serverStopped++;
+            server.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
             Assert.IsFalse (server.Running);
             for (int i = 0; i < 5; i++) {
                 server.Start ();
@@ -173,6 +179,9 @@ namespace KRPC.Test.Server.TCP
             var server = new TCPServer (IPAddress.Any, 0);
             server.OnStarted += (s, e) => serverStarted = true;
             server.OnStopped += (s, e) => serverStopped = true;
+            server.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
             Assert.IsFalse (server.Running);
             server.Start ();
             Assert.IsTrue (server.Running);
