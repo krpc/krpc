@@ -215,6 +215,11 @@ namespace KRPC
             set { recvTimeout = value; }
         }
 
+        public bool DebugLogging {
+            get { return Logger.Level == Logger.Severity.Debug; }
+            set { Logger.Level = value ? Logger.Severity.Debug : Logger.Severity.Info; }
+        }
+
         public Configuration (string filePath) :
             base (filePath, "KRPCConfiguration")
         {

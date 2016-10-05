@@ -66,6 +66,7 @@ namespace KRPC.UI
         const string adaptiveRateControlText = "Adaptive rate control";
         const string blockingRecvText = "Blocking receives";
         const string recvTimeoutText = "Receive timeout";
+        const string debugLoggingText = "Debug logging";
         const string invalidMaxTimePerUpdateText = "Max. time per update must be an integer";
         const string invalidRecvTimeoutText = "Receive timeout must be an integer";
         const string showInfoWindowText = "Show info";
@@ -323,6 +324,11 @@ namespace KRPC.UI
                 GUILayout.Space (indentWidth);
                 DrawRecvTimeout ();
                 GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (indentWidth);
+                DrawDebugLogging ();
+                GUILayout.EndHorizontal ();
             }
         }
 
@@ -400,6 +406,15 @@ namespace KRPC.UI
                 uint value = config.RecvTimeout;
                 uint.TryParse (newRecvTimeout, out value);
                 config.RecvTimeout = value;
+                config.Save ();
+            }
+        }
+
+        void DrawDebugLogging ()
+        {
+            bool debugLogging = GUILayout.Toggle (config.DebugLogging, debugLoggingText, toggleStyle, new GUILayoutOption[] { });
+            if (debugLogging != config.DebugLogging) {
+                config.DebugLogging = debugLogging;
                 config.Save ();
             }
         }
