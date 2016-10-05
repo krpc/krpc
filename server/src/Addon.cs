@@ -232,7 +232,7 @@ namespace KRPC
         {
             if (!ServicesChecker.OK)
                 return;
-            if (core.AnyRunning)
+            if (core != null && core.AnyRunning)
                 core.Update ();
         }
     }
