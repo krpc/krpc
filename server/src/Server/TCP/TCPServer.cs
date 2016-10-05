@@ -62,6 +62,8 @@ namespace KRPC.Server.TCP
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
         public void Start ()
         {
+            if (OnClientRequestingConnection == null)
+                throw new ServerException ("Client request handler not set");
             if (running) {
                 Logger.WriteLine ("TCPServer: start requested, but server is already running", Logger.Severity.Warning);
                 return;
