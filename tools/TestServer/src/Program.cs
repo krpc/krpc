@@ -93,10 +93,7 @@ namespace TestServer
 
             var core = Core.Instance;
             CallContext.SetGameScene (GameScene.SpaceCenter);
-            core.OnClientRequestingConnection += (s, e) => {
-                Console.WriteLine ("allowing connection");
-                e.Request.Allow ();
-            };
+            core.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
 
             var rpcTcpServer = new TCPServer (IPAddress.Loopback, rpcPort);
             var streamTcpServer = new TCPServer (IPAddress.Loopback, streamPort);
