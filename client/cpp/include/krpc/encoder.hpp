@@ -19,18 +19,6 @@ class EncodeFailed : std::runtime_error {
   explicit EncodeFailed(const std::string& msg) : std::runtime_error(msg) {}
 };
 
-const char RPC_HELLO_MESSAGE[] = {
-  0x4b, 0x52, 0x50, 0x43,
-  0x2d, 0x52, 0x50, 0x43
-};
-const size_t RPC_HELLO_MESSAGE_LENGTH = 8;
-const char STREAM_HELLO_MESSAGE[] = {
-  0x4b, 0x52, 0x50, 0x43,
-  0x2d, 0x53, 0x54, 0x52
-};
-const size_t STREAM_HELLO_MESSAGE_LENGTH = 8;
-std::string client_name(const std::string& name);
-
 std::string encode(float value);
 std::string encode(double value);
 std::string encode(google::protobuf::int32 value);

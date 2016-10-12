@@ -25,18 +25,6 @@ import java.io.UnsupportedEncodingException;
 
 public class EncoderTest {
   @Test
-  public void testRpcHelloMessage() {
-    assertEquals(8, Encoder.RPC_HELLO_MESSAGE.length);
-    assertEquals("4b5250432d525043", hexlify(Encoder.RPC_HELLO_MESSAGE));
-  }
-
-  @Test
-  public void testStreamHelloMessage() {
-    assertEquals(8, Encoder.STREAM_HELLO_MESSAGE.length);
-    assertEquals("4b5250432d535452", hexlify(Encoder.STREAM_HELLO_MESSAGE));
-  }
-
-  @Test
   public void testEncodeMessage() throws IOException {
     KRPC.ProcedureCall call = KRPC.ProcedureCall.newBuilder()
         .setService("ServiceName").setProcedure("ProcedureName").build();

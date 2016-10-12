@@ -135,7 +135,6 @@ public class Connection {
     rpcOutputStream = CodedOutputStream.newInstance(rpcSocket.getOutputStream());
     rpcInputStream = CodedInputStream.newInstance(rpcSocket.getInputStream());
 
-    rpcSocket.getOutputStream().write(Encoder.RPC_HELLO_MESSAGE);
     KRPC.ConnectionRequest request =
         KRPC.ConnectionRequest.newBuilder().setClientName(name).build();
     rpcOutputStream.writeMessageNoTag(request);
@@ -152,7 +151,6 @@ public class Connection {
     final CodedInputStream streamInputStream =
         CodedInputStream.newInstance(streamSocket.getInputStream());
 
-    streamSocket.getOutputStream().write(Encoder.STREAM_HELLO_MESSAGE);
     request = KRPC.ConnectionRequest.newBuilder().setClientIdentifier(clientIdentifier).build();
     streamOutputStream.writeMessageNoTag(request);
     streamOutputStream.flush();

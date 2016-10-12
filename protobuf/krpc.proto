@@ -15,9 +15,8 @@ message ConnectionResponse {
   Status status = 1;
   enum Status {
     OK = 0;
-    MALFORMED_HEADER = 1;
-    MALFORMED_MESSAGE = 2;
-    TIMEOUT = 3;
+    MALFORMED_MESSAGE = 1;
+    TIMEOUT = 2;
   }
   string message = 2;
   bytes client_identifier = 3;

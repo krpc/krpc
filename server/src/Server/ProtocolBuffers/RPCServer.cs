@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Google.Protobuf;
 using KRPC.Service.Messages;
 using KRPC.Utils;
@@ -11,8 +10,6 @@ namespace KRPC.Server.ProtocolBuffers
 {
     sealed class RPCServer : Message.RPCServer
     {
-        byte[] expectedHeader = { 0x4b, 0x52, 0x50, 0x43, 0x2d, 0x52, 0x50, 0x43 };
-
         public RPCServer (IServer<byte,byte> server) : base (server)
         {
         }
@@ -26,7 +23,7 @@ namespace KRPC.Server.ProtocolBuffers
             var address = args.Client.Address;
             try {
                 Logger.WriteLine ("ProtocolBuffers: client requesting connection (" + address + ")", Logger.Severity.Debug);
-                var request = ReadConnectionRequest (stream);
+                var request = Utils.ReadMessage<ConnectionRequest> (stream);
                 return new RPCClient (request.ClientName, args.Client);
             } catch (InvalidProtocolBufferException e) {
                 WriteErrorConnectionResponse (Status.MalformedMessage, e.Message, stream);
@@ -55,15 +52,6 @@ namespace KRPC.Server.ProtocolBuffers
                 Logger.WriteLine ("ProtocolBuffers: client connection accepted (" + args.Client.Address + ")");
             } else if (args.Request.ShouldDeny)
                 args.Client.Stream.Close ();
-        }
-
-        ConnectionRequest ReadConnectionRequest (IStream<byte, byte> stream)
-        {
-            var receivedHeader = new byte[expectedHeader.Length];
-            Utils.Read (stream, receivedHeader);
-            if (!receivedHeader.SequenceEqual (expectedHeader))
-                throw new ConnectionException (Status.MalformedHeader, String.Empty);
-            return Utils.ReadMessage<ConnectionRequest> (stream);
         }
 
         static void WriteErrorConnectionResponse (Status status, string message, IStream<byte,byte> stream)

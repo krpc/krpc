@@ -12,20 +12,6 @@ namespace KRPC.Client.Test
     public class EncoderTest
     {
         [Test]
-        public void RpcHelloMessage ()
-        {
-            Assert.AreEqual (8, Encoder.RPCHelloMessage.Length);
-            Assert.AreEqual ("4b5250432d525043", Encoder.RPCHelloMessage.ToHexString ());
-        }
-
-        [Test]
-        public void StreamHelloMessage ()
-        {
-            Assert.AreEqual (8, Encoder.StreamHelloMessage.Length);
-            Assert.AreEqual ("4b5250432d535452", Encoder.StreamHelloMessage.ToHexString ());
-        }
-
-        [Test]
         public void EncodeMessage ()
         {
             var call = new KRPC.Schema.KRPC.ProcedureCall ();

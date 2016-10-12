@@ -8,18 +8,6 @@
 
 #include "services/test_service.hpp"
 
-TEST(test_encoder, test_rpc_hello_message) {
-  std::string message(krpc::encoder::RPC_HELLO_MESSAGE, krpc::encoder::RPC_HELLO_MESSAGE_LENGTH);
-  ASSERT_EQ(8, message.size());
-  ASSERT_EQ("4b5250432d525043", krpc::platform::hexlify(message));
-}
-
-TEST(test_encoder, test_stream_hello_message) {
-  std::string message(krpc::encoder::STREAM_HELLO_MESSAGE, krpc::encoder::STREAM_HELLO_MESSAGE_LENGTH);
-  ASSERT_EQ(8, message.size());
-  ASSERT_EQ("4b5250432d535452", krpc::platform::hexlify(message));
-}
-
 TEST(test_encoder, test_encode_message) {
   krpc::schema::ProcedureCall call;
   call.set_service("ServiceName");

@@ -18,7 +18,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void ValidConnectionMessage ()
         {
             var responseStream = new MemoryStream ();
-            var stream = new TestStream (new MemoryStream (TestingTools.CreateRPCConnectionRequest ()), responseStream);
+            var stream = new TestStream (new MemoryStream (TestingTools.CreateConnectionRequest ()), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -46,8 +46,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void InvalidConnectionMessageHeader ()
         {
-            var connectionMessage = TestingTools.CreateRPCConnectionRequest ();
-            connectionMessage [4] = 0x42;
+            var connectionMessage = TestingTools.CreateConnectionRequest ();
+            connectionMessage [1] ^= 0x42;
 
             var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (connectionMessage), responseStream);
@@ -70,14 +70,16 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
 
-            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 3, Status.MalformedHeader, String.Empty, 0);
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 209, Status.MalformedMessage,
+                "While parsing a protocol message, the input ended unexpectedly in the middle of a field.  " +
+                "This could mean either than the input has been truncated or that an embedded message misreported its own length.", 0);
         }
 
         [Test]
         public void ShortConnectionMessageHeader ()
         {
             var connectionMessage = new byte[5];
-            Array.Copy (TestingTools.CreateRPCConnectionRequest (), connectionMessage, connectionMessage.Length);
+            Array.Copy (TestingTools.CreateConnectionRequest (), connectionMessage, connectionMessage.Length);
 
             var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (connectionMessage), responseStream);

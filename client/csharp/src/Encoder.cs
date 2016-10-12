@@ -13,13 +13,6 @@ namespace KRPC.Client
     [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLargeClassesRule")]
     static class Encoder
     {
-        public static readonly byte[] RPCHelloMessage = {
-            0x4b, 0x52, 0x50, 0x43, 0x2d, 0x52, 0x50, 0x43
-        };
-        public static readonly byte[] StreamHelloMessage = {
-            0x4b, 0x52, 0x50, 0x43, 0x2d, 0x53, 0x54, 0x52
-        };
-
         /// <summary>
         /// Encode an object of the given type using the protocol buffer encoding scheme.
         /// Should not be called directly. This interface is used by service client stubs.

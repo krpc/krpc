@@ -1,8 +1,6 @@
 using System;
-using System.Linq;
 using Google.Protobuf;
 using KRPC.Service.Messages;
-
 using ConnectionRequest = KRPC.Schema.KRPC.ConnectionRequest;
 using ConnectionResponse = KRPC.Schema.KRPC.ConnectionResponse;
 using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
@@ -11,8 +9,6 @@ namespace KRPC.Server.ProtocolBuffers
 {
     sealed class StreamServer : Message.StreamServer
     {
-        byte[] expectedHeader = { 0x4b, 0x52, 0x50, 0x43, 0x2d, 0x53, 0x54, 0x52 };
-
         public StreamServer (IServer<byte,byte> server) : base (server)
         {
         }
@@ -24,7 +20,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var stream = args.Client.Stream;
             try {
-                var request = ReadConnectionRequest (stream);
+                var request = Utils.ReadMessage<ConnectionRequest> (stream);
                 if (request.ClientIdentifier.Length != 16) {
                     WriteErrorConnectionResponse (Status.MalformedMessage, "Client identifier must be 16 bytes.", stream);
                 } else {
@@ -56,15 +52,6 @@ namespace KRPC.Server.ProtocolBuffers
                 Utils.WriteMessage (client.Stream, response);
             } else if (args.Request.ShouldDeny)
                 args.Client.Stream.Close ();
-        }
-
-        ConnectionRequest ReadConnectionRequest (IStream<byte, byte> stream)
-        {
-            var receivedHeader = new byte[expectedHeader.Length];
-            Utils.Read (stream, receivedHeader);
-            if (!receivedHeader.SequenceEqual (expectedHeader))
-                throw new ConnectionException (Status.MalformedHeader, String.Empty);
-            return Utils.ReadMessage<ConnectionRequest> (stream);
         }
 
         static void WriteErrorConnectionResponse (Status status, string message, IStream<byte,byte> stream)

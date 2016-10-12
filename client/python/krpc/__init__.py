@@ -24,7 +24,6 @@ def connect(name=None, address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, strea
     # Connect to RPC server
     rpc_connection = Connection(address, rpc_port)
     rpc_connection.connect()
-    rpc_connection.send(Encoder.RPC_HELLO_MESSAGE)
     request = ConnectionRequest()
     if name != None:
         request.client_name = name
@@ -38,7 +37,6 @@ def connect(name=None, address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, strea
     if stream_port is not None:
         stream_connection = Connection(address, stream_port)
         stream_connection.connect()
-        stream_connection.send(Encoder.STREAM_HELLO_MESSAGE)
         request = ConnectionRequest()
         request.client_identifier = client_identifier
         stream_connection.send_message(request)

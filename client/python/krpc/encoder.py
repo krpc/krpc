@@ -9,9 +9,6 @@ import krpc.schema.KRPC
 class Encoder(object):
     """ Routines for encoding messages and values in the protocol buffer serialization format """
 
-    RPC_HELLO_MESSAGE = b'\x4b\x52\x50\x43\x2d\x52\x50\x43'
-    STREAM_HELLO_MESSAGE = b'\x4b\x52\x50\x43\x2d\x53\x54\x52'
-
     _types = Types()
 
     @classmethod

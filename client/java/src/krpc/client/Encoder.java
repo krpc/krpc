@@ -33,13 +33,6 @@ import java.util.Set;
 // TODO: remove all the ByteString.copyFrom calls
 
 public class Encoder {
-  static final byte[] RPC_HELLO_MESSAGE = new byte[] {
-    0x4b, 0x52, 0x50, 0x43, 0x2d, 0x52, 0x50, 0x43
-  };
-  static final byte[] STREAM_HELLO_MESSAGE = new byte[] {
-    0x4b, 0x52, 0x50, 0x43, 0x2d, 0x53, 0x54, 0x52
-  };
-
   static String guidToString(byte[] guid) {
     StringBuilder builder = new StringBuilder();
     for (int i = 3; i >= 0; i--) {

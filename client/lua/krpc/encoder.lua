@@ -9,9 +9,6 @@ local encoder = {}
 
 local _types = Types()
 
-encoder.RPC_HELLO_MESSAGE = '\75\82\80\67\45\82\80\67'
-encoder.STREAM_HELLO_MESSAGE = '\75\82\80\67\45\83\84\82'
-
 local function _encode_varint(x)
   if x < 0 then
     error('Value must be non-negative, got ' .. x)

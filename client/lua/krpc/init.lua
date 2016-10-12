@@ -17,7 +17,6 @@ function krpc.connect(name, address, rpc_port)
   -- Connect to RPC server
   local rpc_connection = Connection(address, rpc_port)
   rpc_connection:connect()
-  rpc_connection:send(encoder.RPC_HELLO_MESSAGE)
   local request = schema.ConnectionRequest()
   request.client_name = name
   rpc_connection:send_message(request)

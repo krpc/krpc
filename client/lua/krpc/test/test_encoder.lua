@@ -9,18 +9,6 @@ local TestEncoder = class()
 
 local types = Types()
 
-function TestEncoder:test_rpc_hello_message()
-  local message = encoder.RPC_HELLO_MESSAGE
-  luaunit.assertEquals(message:len(), 8)
-  luaunit.assertEquals(platform.hexlify(message), '4b5250432d525043')
-end
-
-function TestEncoder:test_stream_hello_message()
-  local message = encoder.STREAM_HELLO_MESSAGE
-  luaunit.assertEquals(message:len(), 8)
-  luaunit.assertEquals(platform.hexlify(message), '4b5250432d535452')
-end
-
 function TestEncoder:test_encode_message()
   local call = schema.ProcedureCall()
   call.service = 'ServiceName'

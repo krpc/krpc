@@ -8,16 +8,6 @@ from krpc.platform import hexlify
 class TestEncoder(unittest.TestCase):
     types = Types()
 
-    def test_rpc_hello_message(self):
-        message = Encoder.RPC_HELLO_MESSAGE
-        self.assertEqual(8, len(message))
-        self.assertEqual('4b5250432d525043', hexlify(message))
-
-    def test_stream_hello_message(self):
-        message = Encoder.STREAM_HELLO_MESSAGE
-        self.assertEqual(8, len(message))
-        self.assertEqual('4b5250432d535452', hexlify(message))
-
     def test_encode_message(self):
         call = self.types.procedure_call_type.python_type()
         call.service = 'ServiceName'

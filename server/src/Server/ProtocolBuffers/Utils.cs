@@ -9,25 +9,6 @@ namespace KRPC.Server.ProtocolBuffers
     static class Utils
     {
         /// <summary>
-        /// Read a data from the client, up to the given timeout
-        /// </summary>
-        public static void Read (IStream<byte,byte> stream, byte[] buffer, float timeout = 1)
-        {
-            Stopwatch timer = Stopwatch.StartNew ();
-            int offset = 0;
-            while (timer.ElapsedSeconds () < timeout)
-            {
-                if (stream.DataAvailable) {
-                    offset += stream.Read (buffer, offset);
-                    if (offset == buffer.Length)
-                        return;
-                }
-                System.Threading.Thread.Sleep (50);
-            }
-            throw new TimeoutException();
-        }
-
-        /// <summary>
         /// Read a message from the client, up to the given timeout
         /// </summary>
         [SuppressMessage ("Gendarme.Rules.Design.Generic", "AvoidMethodWithUnusedGenericTypeRule")]
@@ -37,16 +18,14 @@ namespace KRPC.Server.ProtocolBuffers
             var data = new DynamicBuffer ();
 
             Stopwatch timer = Stopwatch.StartNew ();
-            while (timer.ElapsedSeconds () < timeout)
-            {
-                if (stream.DataAvailable)
-                {
-                    int read = stream.Read(buffer, 0, buffer.Length);
+            while (timer.ElapsedSeconds () < timeout) {
+                if (stream.DataAvailable) {
+                    int read = stream.Read (buffer, 0, buffer.Length);
                     if (read == 0)
                         continue;
-                    data.Append(buffer, 0, read);
+                    data.Append (buffer, 0, read);
 
-                    var codedStream = new CodedInputStream (data.GetBuffer(), 0, data.Length);
+                    var codedStream = new CodedInputStream (data.GetBuffer (), 0, data.Length);
                     // Get the protobuf message size
                     int size = (int)codedStream.ReadUInt32 ();
                     int totalSize = (int)codedStream.Position + size;
@@ -60,7 +39,7 @@ namespace KRPC.Server.ProtocolBuffers
                 }
                 System.Threading.Thread.Sleep (50);
             }
-            throw new TimeoutException();
+            throw new TimeoutException ();
         }
 
         /// <summary>

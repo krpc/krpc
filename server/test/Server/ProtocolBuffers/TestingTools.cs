@@ -10,19 +10,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
 {
     public static class TestingTools
     {
-        public static byte[] CreateRPCConnectionRequest (byte[] clientIdentifier = null)
+        public static byte[] CreateConnectionRequest (byte[] clientIdentifier = null)
         {
-            return CreateConnectionRequest (new byte[]{ 0x4b, 0x52, 0x50, 0x43, 0x2d, 0x52, 0x50, 0x43 }, clientIdentifier);
-        }
-
-        public static byte[] CreateStreamConnectionRequest (byte[] clientIdentifier = null)
-        {
-            return CreateConnectionRequest (new byte[]{ 0x4b, 0x52, 0x50, 0x43, 0x2d, 0x53, 0x54, 0x52 }, clientIdentifier);
-        }
-
-        static byte[] CreateConnectionRequest (byte[] header, byte[] clientIdentifier = null)
-        {
-            byte[] requestBytes;
             var request = new ConnectionRequest ();
             request.ClientName = "Jebediah Kerman!!!";
             if (clientIdentifier != null)
@@ -31,13 +20,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
                 var stream = new CodedOutputStream (buffer, true);
                 stream.WriteMessage (request);
                 stream.Flush ();
-                requestBytes = buffer.ToArray ();
+                return buffer.ToArray ();
             }
-
-            var connectionMessage = new byte[header.Length + requestBytes.Length];
-            Array.Copy (header, 0, connectionMessage, 0, header.Length);
-            Array.Copy (requestBytes, 0, connectionMessage, header.Length, requestBytes.Length);
-            return connectionMessage;
         }
 
         public static void CheckConnectionResponse (byte[] responseBytes, int expectedLength, Status expectedStatus, string expectedMessage, int expectedIdLength)

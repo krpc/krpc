@@ -47,7 +47,6 @@ namespace KRPC.Client
             rpcClient.Connect (address, rpcPort);
             rpcStream = rpcClient.GetStream ();
             codedRpcStream = new CodedOutputStream (rpcStream, true);
-            rpcStream.Write (Encoder.RPCHelloMessage, 0, Encoder.RPCHelloMessage.Length);
             var request = new ConnectionRequest ();
             request.ClientName = name;
             codedRpcStream.WriteLength (request.CalculateSize ());
@@ -60,7 +59,6 @@ namespace KRPC.Client
                 streamClient = new TcpClient ();
                 streamClient.Connect (address, streamPort);
                 var streamStream = streamClient.GetStream ();
-                streamStream.Write (Encoder.StreamHelloMessage, 0, Encoder.StreamHelloMessage.Length);
                 request = new ConnectionRequest ();
                 request.ClientIdentifier = response.ClientIdentifier;
                 var codedStreamStream = new CodedOutputStream (streamStream, true);
