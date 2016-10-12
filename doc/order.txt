@@ -83,6 +83,7 @@ SpaceCenter.Vessel.OrbitalReferenceFrame
 SpaceCenter.Vessel.SurfaceReferenceFrame
 SpaceCenter.Vessel.SurfaceVelocityReferenceFrame
 SpaceCenter.Vessel.Position
+SpaceCenter.Vessel.BoundingBox
 SpaceCenter.Vessel.Velocity
 SpaceCenter.Vessel.Rotation
 SpaceCenter.Vessel.Direction
@@ -344,6 +345,7 @@ SpaceCenter.Part.Sensor
 SpaceCenter.Part.SolarPanel
 SpaceCenter.Part.Position
 SpaceCenter.Part.CenterOfMass
+SpaceCenter.Part.BoundingBox
 SpaceCenter.Part.Direction
 SpaceCenter.Part.Velocity
 SpaceCenter.Part.Rotation
@@ -500,6 +502,7 @@ SpaceCenter.LandingGear.Part
 SpaceCenter.LandingGear.State
 SpaceCenter.LandingGear.Deployable
 SpaceCenter.LandingGear.Deployed
+SpaceCenter.LandingGear.IsGrounded
 SpaceCenter.LandingGearState
 SpaceCenter.LandingGearState.Deployed
 SpaceCenter.LandingGearState.Retracted
@@ -510,6 +513,7 @@ SpaceCenter.LandingLeg
 SpaceCenter.LandingLeg.Part
 SpaceCenter.LandingLeg.State
 SpaceCenter.LandingLeg.Deployed
+SpaceCenter.LandingLeg.IsGrounded
 SpaceCenter.LandingLegState
 SpaceCenter.LandingLegState.Deployed
 SpaceCenter.LandingLegState.Retracted
@@ -677,6 +681,8 @@ SpaceCenter.Node.OrbitalReferenceFrame
 SpaceCenter.Node.Position
 SpaceCenter.Node.Direction
 SpaceCenter.ReferenceFrame
+SpaceCenter.ReferenceFrame.CreateRelative
+SpaceCenter.ReferenceFrame.CreateHybrid
 SpaceCenter.AutoPilot
 SpaceCenter.AutoPilot.Engage
 SpaceCenter.AutoPilot.Disengage

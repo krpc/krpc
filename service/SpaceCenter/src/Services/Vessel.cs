@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -559,6 +560,24 @@ namespace KRPC.SpaceCenter.Services
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException ("referenceFrame");
             return referenceFrame.PositionFromWorldSpace (InternalVessel.CoM).ToTuple ();
+        }
+
+        /// <summary>
+        /// The axis-aligned bounding box of the vessel in the given reference frame.
+        /// Returns the minimum and maximum vertices of the box.
+        /// </summary>
+        /// <param name="referenceFrame"></param>
+        [KRPCMethod]
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public Tuple<Tuple3,Tuple3> BoundingBox (ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException ("referenceFrame");
+            var parts = InternalVessel.parts;
+            var bounds = parts [0].GetBounds (referenceFrame);
+            for (int i = 1; i < parts.Count; i++)
+                bounds.Encapsulate (parts [i].GetBounds (referenceFrame));
+            return bounds.ToTuples ();
         }
 
         /// <summary>

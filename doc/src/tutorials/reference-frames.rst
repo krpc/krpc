@@ -153,6 +153,38 @@ kRPC provides the following reference frames:
 * :attr:`DockingPort.reference_frame`
 * :attr:`Thruster.thrust_reference_frame`
 
+Relative and hybrid reference frames can also be constructed from the above.
+
+Custom Reference Frames
+-----------------------
+
+Custom reference frames can be constructed from the built in frames listed
+above. They come in two varieties: 'relative' and 'hybrid'.
+
+A relative reference frame is constructed from a parent reference frame, a fixed
+position offset and a fixed rotation offset. For example, this could be used to
+construct a reference frame whose origin is 10m below the vessel as follows, by
+applying a position offset of 10 along the z-axis to
+:attr:`Vessel.reference_frame`. Relative reference frames can be constructed by
+calling :meth:`ReferenceFrame.create_relative`.
+
+A hybrid reference frame inherits its components (position, rotation, velocity
+and angular velocity) from the components of other reference frames. Note that
+these components need not be fixed. For example, you could construct a reference
+frame whose position is the center of mass of the vessel (inherited from
+:attr:`Vessel.reference_frame`) and whose rotation is that of the planet being
+orbited (inherited from :attr:`CelestialBody.reference_frame`). Relative
+reference frames can be constructed by calling
+:meth:`ReferenceFrame.create_hybrid`.
+
+The parent reference frame(s) of a custom reference frame can also be other
+custom reference frames. For example, you could combine the two example frames
+from above: construct a hybrid reference frame, centered on the vessel and
+rotated with the planet being orbited, and then create a relative reference that
+offsets the position of this 10m along the z-axis. The resulting frame will have
+its origin 10m below the vessel, and will be rotated with the planet being
+orbited.
+
 Converting Between Reference Frames
 -----------------------------------
 

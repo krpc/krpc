@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using KRPC.SpaceCenter.Services;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
@@ -114,6 +115,30 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static Vector3d CenterOfMass (this Part part)
         {
             return part.rb != null ? part.rb.worldCenterOfMass : part.transform.position;
+        }
+
+        /// <summary>
+        /// Computes the axis-aligned bounding box for a part in the given reference frame.
+        /// </summary>
+        /// <remarks>
+        /// This is an expensive calculation. It iterates over the parts collider meshes
+        /// to compute a tight axis-aligned bounding box.
+        /// It does not use part.collider.bounds, as this is aligned to world space and
+        /// would not provide a tight bounding box in the given reference frame.
+        /// </remarks>
+        public static Bounds GetBounds (this Part part, ReferenceFrame referenceFrame)
+        {
+            var colliders = part.GetComponentsInChildren<MeshCollider> ();
+            var bounds = new Bounds (referenceFrame.PositionFromWorldSpace (part.WCoM), Vector3.zero);
+            foreach (var collider in colliders) {
+                var vertices = collider.sharedMesh.bounds.ToVertices ();
+                for (int i = 0; i < vertices.Length; i++) {
+                    // part space -> world space -> reference frame space
+                    var vertex = referenceFrame.PositionFromWorldSpace (collider.transform.TransformPoint (vertices [i]));
+                    bounds.Encapsulate (vertex);
+                }
+            }
+            return bounds;
         }
     }
 }

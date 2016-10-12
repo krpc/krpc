@@ -54,6 +54,9 @@ class TestPartsPart(krpctest.TestCase):
         if self.far_available:
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
         self.assertItemsEqual(modules, [x.name for x in part.modules])
+        box = part.bounding_box(part.reference_frame)
+        self.assertAlmostEqual((-1.19, -0.49, -1.16), box[0], places=2)
+        self.assertAlmostEqual((1.19, 1.16, 1.16), box[1], places=2)
         self.assertIsNone(part.cargo_bay)
         self.assertIsNone(part.control_surface)
         self.assertIsNone(part.decoupler)
