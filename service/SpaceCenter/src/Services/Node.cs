@@ -23,8 +23,11 @@ namespace KRPC.SpaceCenter.Services
         internal Node (global::Vessel vessel, double ut, float prograde, float normal, float radial)
         {
             vesselId = vessel.id;
-            InternalNode = vessel.patchedConicSolver.AddManeuverNode (ut);
-            InternalNode.OnGizmoUpdated (new Vector3d (radial, normal, prograde), ut);
+            var node = vessel.patchedConicSolver.AddManeuverNode (ut);
+            if (node.attachedGizmo == null)
+                node.AttachGizmo (MapView.ManeuverNodePrefab, FlightGlobals.ActiveVessel.patchedConicRenderer);
+            node.OnGizmoUpdated (new Vector3d (radial, normal, prograde), ut);
+            InternalNode = node;
         }
 
         /// <summary>
