@@ -7,8 +7,14 @@ option java_outer_classname = 'KRPC';
 // Messages for connecting to the server
 
 message ConnectionRequest {
-  string client_name = 1;
-  bytes client_identifier = 2;
+  Type type = 1;
+  string client_name = 2;
+  bytes client_identifier = 3;
+
+  enum Type {
+    RPC = 0;
+    STREAM = 1;
+  };
 }
 
 message ConnectionResponse {
@@ -17,6 +23,7 @@ message ConnectionResponse {
     OK = 0;
     MALFORMED_MESSAGE = 1;
     TIMEOUT = 2;
+    WRONG_TYPE = 3;
   }
   string message = 2;
   bytes client_identifier = 3;

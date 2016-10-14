@@ -21,6 +21,52 @@ TEST_F(test_client, test_version) {
   ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
 }
 
+TEST_F(test_client, test_wrong_server_address) {
+  ASSERT_THROW(
+    krpc::connect("C++ClientTestWrongServerAddress", "doesntexist", get_rpc_port(), get_stream_port()),
+    std::exception);
+}
+
+TEST_F(test_client, test_wrong_rpc_port) {
+  ASSERT_THROW(
+    krpc::connect("C++ClientTestWrongRpcPort", "localhost", get_rpc_port() ^ get_stream_port(), get_stream_port()),
+    std::exception);
+}
+
+TEST_F(test_client, test_wrong_stream_port) {
+  ASSERT_THROW(
+    krpc::connect("C++ClientTestWrongStreamPort", "localhost", get_rpc_port(), get_rpc_port() ^ get_stream_port()),
+    std::exception);
+}
+
+TEST_F(test_client, test_wrong_rpc_server) {
+  auto fn = [] () {
+    krpc::connect("C++ClientTestWrongRpcServer", "localhost", get_stream_port(), get_stream_port());
+  };
+  ASSERT_THROW(fn(), krpc::ConnectionFailed);
+  try {
+    fn();
+  } catch(krpc::ConnectionFailed& e) {
+    ASSERT_STREQ(e.what(),
+      "Connection request was for the rpc server, but this is the stream server. "
+      "Did you connect to the wrong port number?");
+  }
+}
+
+TEST_F(test_client, test_wrong_stream_server) {
+  auto fn = [] () {
+    krpc::connect("C++ClientTestWrongStreamServer", "localhost", get_rpc_port(), get_rpc_port());
+  };
+  ASSERT_THROW(fn(), krpc::ConnectionFailed);
+  try {
+    fn();
+  } catch(krpc::ConnectionFailed& e) {
+    ASSERT_STREQ(e.what(),
+      "Connection request was for the stream server, but this is the rpc server. "
+      "Did you connect to the wrong port number?");
+  }
+}
+
 TEST_F(test_client, test_current_game_scene) {
   krpc::services::KRPC::GameScene scene = krpc.current_game_scene();
   ASSERT_EQ(krpc::services::KRPC::GameScene::space_center, scene);

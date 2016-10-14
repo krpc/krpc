@@ -14,6 +14,45 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRegexpMatches(status.version, r'^[0-9]+\.[0-9]+\.[0-9]+$')
         self.assertGreater(status.bytes_read, 0)
 
+    def test_wrong_server_address(self):
+        with self.assertRaises(krpc.error.NetworkError):
+            krpc.connect(name='python_client_test_wrong_server_address',
+                         address='doesntexist',
+                         rpc_port=ServerTestCase.rpc_port(),
+                         stream_port=ServerTestCase.stream_port())
+
+    def test_wrong_rpc_port(self):
+        with self.assertRaises(krpc.error.NetworkError):
+            krpc.connect(name='python_client_test_wrong_rpc_port',
+                         address='localhost',
+                         rpc_port=ServerTestCase.rpc_port() ^ ServerTestCase.stream_port(),
+                         stream_port=ServerTestCase.stream_port())
+
+    def test_wrong_stream_port(self):
+        with self.assertRaises(krpc.error.NetworkError):
+            krpc.connect(name='python_client_test_wrong_stream_port',
+                         address='localhost',
+                         rpc_port=ServerTestCase.rpc_port(),
+                         stream_port=ServerTestCase.rpc_port() ^ ServerTestCase.stream_port())
+
+    def test_wrong_rpc_server(self):
+        with self.assertRaises(krpc.error.ConnectionError) as cm:
+            krpc.connect(name='python_client_test_wrong_rpc_server',
+                         address='localhost',
+                         rpc_port=ServerTestCase.stream_port(),
+                         stream_port=ServerTestCase.stream_port())
+        self.assertEqual('Connection request was for the rpc server, but this is the stream server. ' +
+                         'Did you connect to the wrong port number?', str(cm.exception))
+
+    def test_wrong_stream_server(self):
+        with self.assertRaises(krpc.error.ConnectionError) as cm:
+            krpc.connect(name='python_client_test_wrong_stream_server',
+                         address='localhost',
+                         rpc_port=ServerTestCase.rpc_port(),
+                         stream_port=ServerTestCase.rpc_port())
+        self.assertEqual('Connection request was for the stream server, but this is the rpc server. ' +
+                         'Did you connect to the wrong port number?', str(cm.exception))
+
     def test_current_game_scene(self):
         self.assertEqual(self.conn.krpc.GameScene.space_center, self.conn.krpc.current_game_scene)
 

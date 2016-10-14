@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using KRPC.Client;
 using KRPC.Client.Services.KRPC;
@@ -19,6 +22,38 @@ namespace KRPC.Client.Test
             var status = Connection.KRPC ().GetStatus ();
             StringAssert.IsMatch ("^[0-9]+\\.[0-9]+\\.[0-9]+$", status.Version);
             Assert.Greater (status.BytesRead, 0);
+        }
+
+        [Test]
+        public void WrongRpcPort() {
+            Assert.Throws<SocketException> (() => new Connection (
+                "CSharpClientTestWrongRPCPort",
+                rpcPort: RPCPort ^ StreamPort, streamPort: StreamPort));
+        }
+
+        [Test]
+        public void WrongStreamPort() {
+            Assert.Throws<SocketException> (() => new Connection (
+                "CSharpClientTestWrongStreamPort",
+                rpcPort: RPCPort, streamPort: RPCPort ^ StreamPort));
+        }
+
+        [Test]
+        public void WrongRPCServer() {
+            var exn = Assert.Throws<InvalidOperationException> (() => new Connection (
+                "CSharpClientTestWrongRPCServer",
+                rpcPort: StreamPort, streamPort: StreamPort));
+            Assert.AreEqual ("Connection request was for the rpc server, but this is the stream server. " +
+                             "Did you connect to the wrong port number?", exn.Message);
+        }
+
+        [Test]
+        public void WrongStreamServer() {
+            var exn = Assert.Throws<InvalidOperationException> (() => new Connection (
+                "CSharpClientTestWrongStreamServer",
+                rpcPort: RPCPort, streamPort: RPCPort));
+            Assert.AreEqual ("Connection request was for the stream server, but this is the rpc server. " +
+                             "Did you connect to the wrong port number?", exn.Message);
         }
 
         [Test]

@@ -4,6 +4,7 @@ using KRPC.Service.Messages;
 using ConnectionRequest = KRPC.Schema.KRPC.ConnectionRequest;
 using ConnectionResponse = KRPC.Schema.KRPC.ConnectionResponse;
 using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
+using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Server.ProtocolBuffers
 {
@@ -21,7 +22,12 @@ namespace KRPC.Server.ProtocolBuffers
             var stream = args.Client.Stream;
             try {
                 var request = Utils.ReadMessage<ConnectionRequest> (stream);
-                if (request.ClientIdentifier.Length != 16) {
+                if (request.Type != Type.Stream) {
+                    var name = request.Type.ToString ().ToLower ();
+                    WriteErrorConnectionResponse (Status.WrongType,
+                        "Connection request was for the " + name + " server, but this is the stream server. " +
+                        "Did you connect to the wrong port number?", stream);
+                } else if (request.ClientIdentifier.Length != 16) {
                     WriteErrorConnectionResponse (Status.MalformedMessage, "Client identifier must be 16 bytes.", stream);
                 } else {
                     var guid = new Guid (request.ClientIdentifier.ToByteArray ());

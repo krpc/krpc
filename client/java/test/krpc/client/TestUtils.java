@@ -6,12 +6,18 @@ import java.io.IOException;
 
 class TestUtils {
 
-  public static Connection connect() throws IOException {
+  public static int getRpcPort() {
     String envRpcPort = System.getenv("RPC_PORT");
+    return envRpcPort == null ? 50000 : Integer.parseInt(envRpcPort);
+  }
+
+  public static int getStreamPort() {
     String envStreamPort = System.getenv("STREAM_PORT");
-    int rpcPort = envRpcPort == null ? 50000 : Integer.parseInt(envRpcPort);
-    int streamPort = envStreamPort == null ? 50001 : Integer.parseInt(envStreamPort);
-    return Connection.newInstance("JavaClientTest", "localhost", rpcPort, streamPort);
+    return envStreamPort == null ? 50001 : Integer.parseInt(envStreamPort);
+  }
+
+  public static Connection connect() throws IOException {
+    return Connection.newInstance("JavaClientTest", "localhost", getRpcPort(), getStreamPort());
   }
 
   public static String hexlify(byte[] data) {

@@ -6,8 +6,8 @@ using KRPC.Server;
 using KRPC.Server.ProtocolBuffers;
 using Moq;
 using NUnit.Framework;
-
 using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
+using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Test.Server.ProtocolBuffers
 {
@@ -20,7 +20,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void ValidConnectionMessage ()
         {
             var responseStream = new MemoryStream ();
-            var stream = new TestStream (new MemoryStream (TestingTools.CreateConnectionRequest (clientId.ToByteArray ())), responseStream);
+            var stream = new TestStream (new MemoryStream (TestingTools.CreateConnectionRequest (Type.Stream, clientId.ToByteArray ())), responseStream);
 
             // Create mock byte server and client
             var mockByteServer = new Mock<IServer<byte,byte>> ();
@@ -46,12 +46,46 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
-        public void InvalidConnectionMessageHeader ()
+        public void WrongConnectionType ()
         {
             var responseStream = new MemoryStream ();
 
-            var connectionMessage = TestingTools.CreateConnectionRequest (clientId.ToByteArray ());
+            var connectionMessage = TestingTools.CreateConnectionRequest (Type.Rpc, clientId.ToByteArray ());
+            var stream = new TestStream (new MemoryStream (connectionMessage), responseStream);
+
+            // Create mock byte server and client
+            var mockByteServer = new Mock<IServer<byte,byte>> ();
+            var byteServer = mockByteServer.Object;
+            var mockByteClient = new Mock<IClient<byte,byte>> ();
+            mockByteClient.Setup (x => x.Stream).Returns (stream);
+            var byteClient = mockByteClient.Object;
+
+            var server = new StreamServer (byteServer);
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
+            server.Start ();
+
+            // Fire a client connection event
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
+
+            Assert.IsFalse (eventArgs.Request.ShouldAllow);
+            Assert.IsTrue (eventArgs.Request.ShouldDeny);
+
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 120, Status.WrongType,
+                "Connection request was for the rpc server, but this is the stream server. " +
+                "Did you connect to the wrong port number?", 0);
+        }
+
+        [Test]
+        public void InvalidConnectionMessageHeader ()
+        {
+            var connectionMessage = TestingTools.CreateConnectionRequest (Type.Stream, clientId.ToByteArray ());
             connectionMessage [2] ^= 0x42;
+            connectionMessage [3] ^= 0x42;
+            connectionMessage [4] ^= 0x42;
+            connectionMessage [5] ^= 0x42;
+
+            var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (connectionMessage), responseStream);
 
             // Create mock byte server and client
@@ -81,7 +115,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void ShortConnectionMessageHeader ()
         {
             var connectionMessage = new byte[5];
-            Array.Copy (TestingTools.CreateConnectionRequest (clientId.ToByteArray ()), connectionMessage, connectionMessage.Length);
+            Array.Copy (TestingTools.CreateConnectionRequest (Type.Stream, clientId.ToByteArray ()), connectionMessage, connectionMessage.Length);
 
             var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (connectionMessage), responseStream);
@@ -110,7 +144,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void InvalidConnectionMessageIdentifier ()
         {
-            var connectionMessage = TestingTools.CreateConnectionRequest ("123456".ToBytes ());
+            var connectionMessage = TestingTools.CreateConnectionRequest (Type.Stream, "123456".ToBytes ());
 
             var responseStream = new MemoryStream ();
             var stream = new TestStream (new MemoryStream (connectionMessage), responseStream);

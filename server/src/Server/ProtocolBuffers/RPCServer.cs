@@ -5,6 +5,7 @@ using KRPC.Utils;
 using ConnectionRequest = KRPC.Schema.KRPC.ConnectionRequest;
 using ConnectionResponse = KRPC.Schema.KRPC.ConnectionResponse;
 using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
+using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Server.ProtocolBuffers
 {
@@ -24,7 +25,14 @@ namespace KRPC.Server.ProtocolBuffers
             try {
                 Logger.WriteLine ("ProtocolBuffers: client requesting connection (" + address + ")", Logger.Severity.Debug);
                 var request = Utils.ReadMessage<ConnectionRequest> (stream);
-                return new RPCClient (request.ClientName, args.Client);
+                if (request.Type != Type.Rpc) {
+                    var name = request.Type.ToString ().ToLower ();
+                    WriteErrorConnectionResponse (Status.WrongType,
+                        "Connection request was for the " + name + " server, but this is the rpc server. " +
+                        "Did you connect to the wrong port number?", stream);
+                } else {
+                    return new RPCClient (request.ClientName, args.Client);
+                }
             } catch (InvalidProtocolBufferException e) {
                 WriteErrorConnectionResponse (Status.MalformedMessage, e.Message, stream);
             } catch (TimeoutException e) {

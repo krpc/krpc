@@ -16,6 +16,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,6 +32,9 @@ public class ConnectionTest {
   private Connection connection;
   private KRPC krpc;
   private TestService testService;
+
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
 
   @Before
   @SuppressWarnings("checkstyle:javadocmethod")
@@ -46,13 +51,47 @@ public class ConnectionTest {
     assertTrue(status.getBytesRead() > 0);
   }
 
+  @Test(expected = UnknownHostException.class)
+  public void testWrongServerAddress() throws RPCException, IOException {
+    Connection.newInstance("JavaClientTestWrongAddress", "doesntexist", 10000, 100001);
+  }
+
+  @Test(expected = ConnectException.class)
+  public void testWrongRpcPort() throws RPCException, IOException {
+    Connection.newInstance("JavaClientTestWrongRpcPort", "localhost",
+        TestUtils.getRpcPort() ^ TestUtils.getStreamPort(), TestUtils.getStreamPort());
+  }
+
+  @Test(expected = ConnectException.class)
+  public void testWrongStreamPort() throws RPCException, IOException {
+    Connection.newInstance("JavaClientTestWrongStreamPort", "localhost",
+        TestUtils.getRpcPort(), TestUtils.getRpcPort() ^ TestUtils.getStreamPort());
+  }
+
+  @Test
+  public void testWrongRpcServer() throws RPCException, IOException {
+    expectedException.expect(IOException.class);
+    expectedException.expectMessage(
+        "Connection request was for the rpc server, but this is the stream server. "
+        + "Did you connect to the wrong port number?");
+    Connection.newInstance("JavaClientTestWrongRpcServer", "localhost",
+        TestUtils.getStreamPort(), TestUtils.getStreamPort());
+  }
+
+  @Test
+  public void testWrongStreamServer() throws RPCException, IOException {
+    expectedException.expect(IOException.class);
+    expectedException.expectMessage(
+        "Connection request was for the stream server, but this is the rpc server. "
+        + "Did you connect to the wrong port number?");
+    Connection.newInstance("JavaClientTestWrongStreamServer", "localhost",
+        TestUtils.getRpcPort(), TestUtils.getRpcPort());
+  }
+
   @Test
   public void testCurrentGameScene() throws RPCException, IOException {
     assertEquals(KRPC.GameScene.SPACE_CENTER, krpc.getCurrentGameScene());
   }
-
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
 
   @Test
   public void testErrorInvalidArgument() throws RPCException, IOException {

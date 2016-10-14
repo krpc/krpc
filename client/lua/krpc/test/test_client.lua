@@ -17,6 +17,30 @@ function TestClient:test_version()
   luaunit.assertStrMatches(status.version, '%d+.%d+.%d+')
 end
 
+function TestClient:test_wrong_server_address()
+  luaunit.assertError(
+    krpc.connect, 'LuaClientTestWrongServerAddress',
+    'doesntexist', self.get_rpc_port(), self.get_stream_port())
+end
+
+function TestClient:test_wrong_rpc_port()
+  luaunit.assertError(
+    krpc.connect, 'LuaClientTestWrongRpcPort',
+    'localhost', self.get_rpc_port() ^ self.get_stream_port(), self.get_stream_port())
+end
+
+function TestClient:test_wrong_rpc_server()
+  luaunit.assertErrorMsgContains(
+    'Connection request was for the rpc server, but this is the stream server. ' ..
+    'Did you connect to the wrong port number?',
+    krpc.connect, 'LuaClientTestWrongRpcServer',
+    'localhost', self.get_stream_port(), self.get_stream_port())
+end
+
+function TestClient:test_error()
+  luaunit.assertErrorMsgContains('Invalid argument', self.conn.test_service.throw_argument_exception)
+end
+
 function TestClient:test_current_game_scene()
   luaunit.assertEquals(self.conn.krpc.GameScene.space_center, self.conn.krpc:get_current_game_scene())
 end

@@ -18,9 +18,14 @@ function krpc.connect(name, address, rpc_port)
   local rpc_connection = Connection(address, rpc_port)
   rpc_connection:connect()
   local request = schema.ConnectionRequest()
+  request.type = schema.CONNECTIONREQUEST_TYPE_RPC_ENUM.number
   request.client_name = name
   rpc_connection:send_message(request)
   local response = rpc_connection:receive_message(schema.ConnectionResponse)
+  -- FIXME: status field reported as not set when set to OK, as that's the default value
+  if response.status and response.status ~= schema.CONNECTIONRESPONSE_STATUS_OK_ENUM.number then
+    error('Failed to connect: ' .. response.message)
+  end
   local client_identifier = response.client_identifier
 
   return Client(rpc_connection)

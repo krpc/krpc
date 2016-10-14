@@ -10,6 +10,7 @@ using System.Threading;
 using Google.Protobuf;
 using KRPC.Client.Attributes;
 using KRPC.Schema.KRPC;
+using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Client
 {
@@ -48,18 +49,22 @@ namespace KRPC.Client
             rpcStream = rpcClient.GetStream ();
             codedRpcStream = new CodedOutputStream (rpcStream, true);
             var request = new ConnectionRequest ();
+            request.Type = Type.Rpc;
             request.ClientName = name;
             codedRpcStream.WriteLength (request.CalculateSize ());
             request.WriteTo (codedRpcStream);
             codedRpcStream.Flush ();
             int size = ReadMessageData (rpcStream, ref responseBuffer);
             var response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
+            if (response.Status != ConnectionResponse.Types.Status.Ok)
+                throw new InvalidOperationException (response.Message);
 
             if (streamPort != 0) {
                 streamClient = new TcpClient ();
                 streamClient.Connect (address, streamPort);
                 var streamStream = streamClient.GetStream ();
                 request = new ConnectionRequest ();
+                request.Type = Type.Stream;
                 request.ClientIdentifier = response.ClientIdentifier;
                 var codedStreamStream = new CodedOutputStream (streamStream, true);
                 codedStreamStream.WriteLength (request.CalculateSize ());
@@ -68,7 +73,7 @@ namespace KRPC.Client
                 size = ReadMessageData (streamStream, ref responseBuffer);
                 response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
                 if (response.Status != ConnectionResponse.Types.Status.Ok)
-                    throw new InvalidOperationException ("Failed to connect to server");
+                    throw new InvalidOperationException (response.Message);
                 StreamManager = new StreamManager (this, streamClient);
             }
         }

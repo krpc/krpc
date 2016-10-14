@@ -135,14 +135,19 @@ public class Connection {
     rpcOutputStream = CodedOutputStream.newInstance(rpcSocket.getOutputStream());
     rpcInputStream = CodedInputStream.newInstance(rpcSocket.getInputStream());
 
-    KRPC.ConnectionRequest request =
-        KRPC.ConnectionRequest.newBuilder().setClientName(name).build();
+    KRPC.ConnectionRequest request = KRPC.ConnectionRequest.newBuilder()
+        .setType(KRPC.ConnectionRequest.Type.RPC)
+        .setClientName(name)
+        .build();
     rpcOutputStream.writeMessageNoTag(request);
     rpcOutputStream.flush();
 
     int size = rpcInputStream.readRawVarint32();
     byte[] data = rpcInputStream.readRawBytes(size);
     KRPC.ConnectionResponse response = KRPC.ConnectionResponse.parseFrom(data);
+    if (response.getStatus() != KRPC.ConnectionResponse.Status.OK) {
+      throw new IOException(response.getMessage());
+    }
     ByteString clientIdentifier = response.getClientIdentifier();
 
     Socket streamSocket = new Socket(address, streamPort);
@@ -151,15 +156,19 @@ public class Connection {
     final CodedInputStream streamInputStream =
         CodedInputStream.newInstance(streamSocket.getInputStream());
 
-    request = KRPC.ConnectionRequest.newBuilder().setClientIdentifier(clientIdentifier).build();
+    request = KRPC.ConnectionRequest.newBuilder()
+        .setType(KRPC.ConnectionRequest.Type.STREAM)
+        .setClientIdentifier(clientIdentifier)
+        .build();
     streamOutputStream.writeMessageNoTag(request);
     streamOutputStream.flush();
 
     size = streamInputStream.readRawVarint32();
     data = streamInputStream.readRawBytes(size);
     response = KRPC.ConnectionResponse.parseFrom(data);
-
-    assert (response.getStatus() == KRPC.ConnectionResponse.Status.OK);
+    if (response.getStatus() != KRPC.ConnectionResponse.Status.OK) {
+      throw new IOException(response.getMessage());
+    }
 
     streamManager = new StreamManager(this, streamSocket);
   }

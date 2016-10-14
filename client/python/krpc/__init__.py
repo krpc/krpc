@@ -19,12 +19,12 @@ def connect(name=None, address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, strea
     Optionally give the kRPC server the supplied name to identify the client (up
     to 32 bytes of UTF-8 encoded text).
     """
-    assert rpc_port != stream_port
 
     # Connect to RPC server
     rpc_connection = Connection(address, rpc_port)
     rpc_connection.connect()
     request = ConnectionRequest()
+    request.type = ConnectionRequest.RPC
     if name != None:
         request.client_name = name
     rpc_connection.send_message(request)
@@ -38,6 +38,7 @@ def connect(name=None, address=DEFAULT_ADDRESS, rpc_port=DEFAULT_RPC_PORT, strea
         stream_connection = Connection(address, stream_port)
         stream_connection.connect()
         request = ConnectionRequest()
+        request.type = ConnectionRequest.STREAM
         request.client_identifier = client_identifier
         stream_connection.send_message(request)
         response = stream_connection.receive_message(ConnectionResponse)

@@ -3,16 +3,17 @@ using Google.Protobuf;
 using KRPC.Schema.KRPC;
 using NUnit.Framework;
 using System.IO;
-
+using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 using Status = KRPC.Schema.KRPC.ConnectionResponse.Types.Status;
 
 namespace KRPC.Test.Server.ProtocolBuffers
 {
     public static class TestingTools
     {
-        public static byte[] CreateConnectionRequest (byte[] clientIdentifier = null)
+        public static byte[] CreateConnectionRequest (Type type, byte[] clientIdentifier = null)
         {
             var request = new ConnectionRequest ();
+            request.Type = type;
             request.ClientName = "Jebediah Kerman!!!";
             if (clientIdentifier != null)
                 request.ClientIdentifier = ByteString.CopyFrom (clientIdentifier);
