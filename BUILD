@@ -99,7 +99,6 @@ pkg_zip(
         ':blank_settings',
         '//tools/build/ksp:Google.Protobuf',
         '//tools/build/protobuf:LICENSE',
-        '//tools/build/ksp:System.Xml.Linq',
         # Services
         '//service/SpaceCenter',
         '//service/Drawing',

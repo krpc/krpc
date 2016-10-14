@@ -1,8 +1,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Xml.Linq;
+using System.Text;
+using System.Xml;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -10,17 +12,61 @@ namespace KRPC.Service
 {
     static class DocumentationUtils
     {
+        [SuppressMessage ("Gendarme.Rules.Correctness", "EnsureLocalDisposalRule")]
+        [SuppressMessage ("Gendarme.Rules.Performance", "AvoidRepetitiveCallsToPropertiesRule")]
         [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
+        [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
         public static string ResolveCrefs (string documentation)
         {
             if (documentation.Length == 0)
                 return String.Empty;
-            var xml = XDocument.Parse (documentation);
-            foreach (var node in xml.Descendants())
-                foreach (var attr in node.Attributes())
-                    if (attr.Name == "cref")
-                        attr.SetValue (ResolveCref (attr.Value));
-            return xml.ToString ().Replace ("\r\n", "\n");
+
+            var output = new StringBuilder ();
+            using (XmlReader reader = XmlReader.Create (new StringReader (documentation))) {
+                var ws = new XmlWriterSettings ();
+                ws.OmitXmlDeclaration = true;
+                ws.NewLineChars = "\n";
+                using (XmlWriter writer = XmlWriter.Create (output, ws)) {
+                    while (reader.Read ()) {
+                        switch (reader.NodeType) {
+                        case XmlNodeType.Element:
+                            writer.WriteStartElement (reader.Name);
+                            bool shortTag = reader.IsEmptyElement;
+                            for (int i = 0; i < reader.AttributeCount; i++) {
+                                reader.MoveToAttribute (i);
+                                var name = reader.Name;
+                                var value = reader.Value;
+                                if (name == "cref")
+                                    value = ResolveCref (value);
+                                writer.WriteStartAttribute (name);
+                                writer.WriteValue (value);
+                                writer.WriteEndAttribute ();
+                            }
+                            if (shortTag)
+                                writer.WriteEndElement ();
+                            break;
+                        case XmlNodeType.Text:
+                        case XmlNodeType.SignificantWhitespace:
+                        case XmlNodeType.Whitespace:
+                            writer.WriteString (reader.Value);
+                            break;
+                        case XmlNodeType.XmlDeclaration:
+                        case XmlNodeType.ProcessingInstruction:
+                            writer.WriteProcessingInstruction (reader.Name, reader.Value);
+                            break;
+                        case XmlNodeType.Comment:
+                            writer.WriteComment (reader.Value);
+                            break;
+                        case XmlNodeType.EndElement:
+                            writer.WriteFullEndElement ();
+                            break;
+                        default:
+                            throw new InvalidOperationException ("Unhandled");
+                        }
+                    }
+                }
+            }
+            return output.ToString ();
         }
 
         static string ResolveCref (string cref)

@@ -54,9 +54,6 @@
     <Reference Include="System.Xml">
       <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq">
-      <HintPath>..\..\..\lib\ksp\KSP_Data\Managed\System.Xml.Linq.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\bazel-bin\tools\TestingTools\AssemblyInfo.cs">

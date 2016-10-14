@@ -5,14 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
+using System.Xml;
 
 namespace KRPC.Utils
 {
     [SuppressMessage ("Gendarme.Rules.Portability", "NewLineLiteralRule")]
     static class DocumentationExtensions
     {
-        static IDictionary<string, XElement> documentation = new Dictionary<string, XElement> ();
+        static IDictionary<string, XmlNode> documentation = new Dictionary<string, XmlNode> ();
 
         /// <summary>
         /// Remove indentiation from a multi-line string, where the first line
@@ -34,6 +34,8 @@ namespace KRPC.Utils
                     newindex++;
                 }
             }
+            if (indent == int.MaxValue)
+                return content;
             lines [0] = new String (' ', indent) + lines [0];
             var result = String.Empty;
             foreach (var line in lines) {
@@ -50,21 +52,23 @@ namespace KRPC.Utils
             if (membersNode == null)
                 return String.Empty;
             var name = GetDocumentationName (member);
-            foreach (var node in membersNode.Descendants()) {
-                foreach (var attribute in node.Attributes ()) {
-                    if (attribute.Name == "name" && attribute.Value == name) {
-                        var content = String.Empty;
-                        foreach (var descnode in node.Elements()) {
-                            content += Dedent (descnode.ToString ().Replace ("\r\n", "\n")) + "\n";
-                        }
-                        return "<doc>\n" + content.TrimEnd () + "\n</doc>";
-                    }
+            var it = membersNode.ChildNodes.GetEnumerator ();
+            while (it.MoveNext ()) {
+                var node = (XmlNode)it.Current;
+                var attr = node.Attributes.GetNamedItem ("name");
+                if (attr != null && attr.Value == name) {
+                    var content = String.Empty;
+                    var descnode = node.GetEnumerator ();
+                    while (descnode.MoveNext ())
+                        content += Dedent (((XmlNode)descnode.Current).OuterXml.Replace ("\r\n", "\n")) + "\n";
+                    return "<doc>\n" + content.TrimEnd () + "\n</doc>";
                 }
             }
             return String.Empty;
         }
 
-        static XElement GetDocumentation (string assemblyPath)
+        [SuppressMessage ("Gendarme.Rules.Correctness", "EnsureLocalDisposalRule")]
+        static XmlNode GetDocumentation (string assemblyPath)
         {
             var path = Path.GetDirectoryName (assemblyPath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension (assemblyPath) + ".xml";
             if (!documentation.ContainsKey (path)) {
@@ -73,17 +77,12 @@ namespace KRPC.Utils
                     documentation [path] = null;
                 } else {
                     Logger.WriteLine ("Loading documentation for " + assemblyPath + " from " + path);
-                    var document = XDocument.Load (path);
-                    XElement membersNode = null;
-                    foreach (var node in document.Root.Descendants()) {
-                        if (node.Name == "members") {
-                            membersNode = node;
-                            break;
-                        }
-                    }
-                    if (membersNode == null)
+                    var document = new XmlDocument ();
+                    document.Load (path);
+                    var membersNodes = document.DocumentElement.GetElementsByTagName ("members");
+                    if (membersNodes.Count == 0)
                         Logger.WriteLine ("Failed to load documentation for " + assemblyPath + " from " + path);
-                    documentation [path] = membersNode;
+                    documentation [path] = membersNodes.Item (0);
                 }
             }
             return documentation [path];

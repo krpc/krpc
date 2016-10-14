@@ -61,7 +61,6 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.IO">
       <HintPath>..\..\bazel-krpc\lib\mono-4.5\Facades\System.IO.dll</HintPath>
     </Reference>

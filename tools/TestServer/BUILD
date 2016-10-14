@@ -24,8 +24,7 @@ deps = [
     '//tools/build/mono-4.5:System.Core',
     '//tools/build/mono-4.5:System.Runtime',
     '//tools/build/mono-4.5:System.IO',
-    '//tools/build/mono-4.5:System.Xml',
-    '//tools/build/mono-4.5:System.Xml.Linq'
+    '//tools/build/mono-4.5:System.Xml'
 ]
 
 exe_srcs = srcs + ['src/Program.cs']

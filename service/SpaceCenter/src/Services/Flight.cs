@@ -322,7 +322,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The vertical speed of the vessel in meters per second.
-        /// </summary>s
+        /// </summary>
         [KRPCProperty]
         public double VerticalSpeed {
             get {

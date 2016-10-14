@@ -252,8 +252,7 @@ csharp_binary_multiple(
         '//tools/build/mono-4.5:System.Core',
         '//tools/build/mono-4.5:System.Runtime',
         '//tools/build/mono-4.5:System.IO',
-        '//tools/build/mono-4.5:System.Xml',
-        '//tools/build/mono-4.5:System.Xml.Linq'
+        '//tools/build/mono-4.5:System.Xml'
     ]
 )
 
@@ -270,8 +269,7 @@ csharp_library_multiple(
         '//tools/build/ksp:mscorlib',
         '//tools/build/ksp:System',
         '//tools/build/ksp:System.Core',
-        '//tools/build/ksp:System.Xml',
-        '//tools/build/ksp:System.Xml.Linq'
+        '//tools/build/ksp:System.Xml'
     ]
 )
 

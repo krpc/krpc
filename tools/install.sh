@@ -38,7 +38,6 @@ cp -R -L \
     bazel-bin/service/UI/KRPC.UI.xml \
     service/UI/KRPC.UI.ksp \
     bazel-krpc/external/csharp_protobuf_net35/file/Google.Protobuf.dll \
-    bazel-krpc/external/csharp_system_xml_linq_net35/file/System.Xml.Linq.dll \
     bazel-bin/tools/TestingTools/TestingTools.dll \
     bazel-bin/tools/TestingTools/TestingTools.xml \
     $GAMEDATA/

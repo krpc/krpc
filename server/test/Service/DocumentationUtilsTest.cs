@@ -16,6 +16,8 @@ namespace KRPC.Test.Service
         [TestCase ("<see cref=\"T:KRPC.Test.Service.TestService+TestClass\" />", "<see cref=\"T:TestService.TestClass\" />")]
         [TestCase ("<see cref=\"M:KRPC.Test.Service.TestService.TestClass.FloatToString(System.Single)\" />", "<see cref=\"M:TestService.TestClass.FloatToString\" />")]
         [TestCase ("<see cref=\"P:KRPC.Test.Service.TestService.TestClass.IntProperty\" />", "<see cref=\"M:TestService.TestClass.IntProperty\" />")]
+        [TestCase ("<doc>\n<summary>\nThe game scene. See <see cref=\"P:KRPC.Service.KRPC.CurrentGameScene\" />.\n</summary>\n</doc>",
+            "<doc>\n<summary>\nThe game scene. See <see cref=\"M:KRPC.CurrentGameScene\" />.\n</summary>\n</doc>")]
         public void ResolveCrefs (string input, string output)
         {
             Assert.AreEqual (output, DocumentationUtils.ResolveCrefs (input));

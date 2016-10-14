@@ -54,8 +54,7 @@ py_sdist(
         '//tools/build/mono-4.5:System.Core',
         '//tools/build/mono-4.5:System.Runtime',
         '//tools/build/mono-4.5:System.IO',
-        '//tools/build/mono-4.5:System.Xml',
-        '//tools/build/mono-4.5:System.Xml.Linq'
+        '//tools/build/mono-4.5:System.Xml'
     ] + glob(['krpctools/**/*.py', 'krpctools/**/*.tmpl']),
     path_map = {
         'version.py': 'krpctools/version.py',
