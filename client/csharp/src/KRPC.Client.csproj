@@ -56,6 +56,7 @@
     </Compile>
     <Compile Include="Attributes\RPCAttribute.cs" />
     <Compile Include="Connection.cs" />
+    <Compile Include="ConnectionException.cs" />
     <Compile Include="Encoder.cs" />
     <Compile Include="ExpressionUtils.cs" />
     <Compile Include="IConnection.cs" />
