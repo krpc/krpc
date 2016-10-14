@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics.CodeAnalysis;
+using UnityEngine;
 
 namespace KRPC.SpaceCenter
 {
     /// <summary>
     /// Extension methods for torque providers
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Naming", "UseCorrectPrefixRule")]
     public static class ITorqueProviderExtensions
     {
         /// <summary>
