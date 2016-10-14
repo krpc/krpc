@@ -16,7 +16,6 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -41,13 +40,13 @@ public class EncoderUInt32ValueTest {
   Type type = Types.createValue(TypeCode.UINT32);
 
   @Test
-  public void testEncode() throws IOException {
+  public void testEncode() {
     ByteString encodeResult = Encoder.encode(value, type);
     assertEquals(data, hexlify(encodeResult));
   }
 
   @Test
-  public void testDecode() throws IOException {
+  public void testDecode() {
     int decodeResult = (int) Encoder.decode(unhexlify(data), type, null);
     assertEquals(value, decodeResult);
   }

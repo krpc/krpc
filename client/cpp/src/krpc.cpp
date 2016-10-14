@@ -19,7 +19,7 @@ Client connect(const std::string& name, const std::string& address,
   schema::ConnectionResponse response;
   decoder::decode(response, rpc_connection->receive_message(), nullptr);
   if (response.status() != schema::ConnectionResponse::OK)
-    throw ConnectionFailed(response.message());
+    throw ConnectionError(response.message());
 
   // Connect to Stream server
   std::shared_ptr<Connection> stream_connection;
@@ -33,7 +33,7 @@ Client connect(const std::string& name, const std::string& address,
     schema::ConnectionResponse response;
     decoder::decode(response, stream_connection->receive_message(), nullptr);
     if (response.status() != schema::ConnectionResponse::OK)
-      throw ConnectionFailed(response.message());
+      throw ConnectionError(response.message());
   }
 
   return Client(rpc_connection, stream_connection);

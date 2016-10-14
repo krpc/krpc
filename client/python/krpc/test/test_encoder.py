@@ -1,5 +1,6 @@
 import unittest
 from krpc.encoder import Encoder
+from krpc.error import EncodingError
 from krpc.types import Types
 from krpc.types import ClassBase
 from krpc.platform import hexlify
@@ -50,7 +51,7 @@ class TestEncoder(unittest.TestCase):
     def test_encode_tuple_wrong_arity(self):
         typ = self.types.tuple_type(self.types.uint32_type, self.types.uint32_type, self.types.uint32_type)
         value = (0, 1)
-        self.assertRaises(ValueError, Encoder.encode, value, typ)
+        self.assertRaises(EncodingError, Encoder.encode, value, typ)
 
 
 if __name__ == '__main__':

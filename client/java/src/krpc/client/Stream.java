@@ -12,11 +12,11 @@ public class Stream<T> {
   }
 
   @SuppressWarnings("unchecked")
-    public T get() throws StreamException, RPCException, IOException {
+  public T get() throws StreamException {
     return (T) manager.get(id);
   }
 
-  public void remove() throws RPCException, IOException {
+  public void remove() throws RPCException {
     manager.remove(id);
   }
 }

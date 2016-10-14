@@ -17,8 +17,6 @@ return ({{type.name}}) Encoder.decode(_data, {{type.spec}}, {% if is_static %}_c
 {% for x in parameters %}{{x.type.name}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}
 
-import java.io.IOException;
-
 import com.google.protobuf.ByteString;
 
 import krpc.client.Connection;
@@ -45,7 +43,7 @@ public class {{ service_name }} {
 {{ procedure.documentation | indent(width=4) }}
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "{{ service_name }}", procedure = "{{ procedure.remote_name }}", types = _Types.class)
-    public {{ procedure.return_type.name }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }}) throws RPCException, IOException {
+    public {{ procedure.return_type.name }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }}) throws RPCException {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=8) }}
 {% endif %}
 {{ call(service_name, procedure.remote_name, procedure.return_type.name != 'void', procedure.parameters | length > 0) | indent(width=8) }}
@@ -100,7 +98,7 @@ public class {{ service_name }} {
 {{ method.documentation | indent(width=8) }}
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
-        public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }}) throws RPCException, IOException
+        public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }}) throws RPCException
         {
 {{ args([{'name': 'this', 'type': {'name': service_name+'.'+class_name, 'spec': 'krpc.client.Types.createClass("'+service_name+'", "'+class_name+'")'}}] + method.parameters) | indent(width=12) }}
 {{ call(service_name, method.remote_name, method.return_type.name != 'void', true) | indent(width=12) }}
@@ -113,7 +111,7 @@ public class {{ service_name }} {
 {{ method.documentation | indent(width=8) }}
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
-        public static {{ method.return_type.name }} {{ method_name }}(Connection _connection, {{ sig_parameters(method.parameters) }}) throws RPCException, IOException
+        public static {{ method.return_type.name }} {{ method_name }}(Connection _connection, {{ sig_parameters(method.parameters) }}) throws RPCException
         {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}

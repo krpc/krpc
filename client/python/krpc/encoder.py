@@ -1,9 +1,10 @@
 from google.protobuf.internal import encoder as protobuf_encoder  # pylint: disable=import-error,no-name-in-module
 from google.protobuf.internal import wire_format as protobuf_wire_format  # pylint: disable=import-error,no-name-in-module
-from krpc.types import Types, ValueType, ClassType, EnumerationType, MessageType
-from krpc.types import TupleType, ListType, SetType, DictionaryType
+from krpc.error import EncodingError
 from krpc.platform import bytelength
 import krpc.schema.KRPC
+from krpc.types import Types, ValueType, ClassType, EnumerationType, MessageType
+from krpc.types import TupleType, ListType, SetType, DictionaryType
 
 
 class Encoder(object):
@@ -44,12 +45,12 @@ class Encoder(object):
         elif isinstance(typ, TupleType):
             msg = krpc.schema.KRPC.Tuple()
             if len(x) != len(typ.value_types):
-                raise ValueError('Tuple has wrong number of elements. ' +
-                                 'Expected %d, got %d.' % (len(typ.value_types), len(x)))
+                raise EncodingError('Tuple has wrong number of elements. ' +
+                                    'Expected %d, got %d.' % (len(typ.value_types), len(x)))
             msg.items.extend(cls.encode(item, value_type) for item, value_type in zip(x, typ.value_types))
             return msg.SerializeToString()
         else:
-            raise RuntimeError('Cannot encode objects of type ' + str(type(x)))
+            raise EncodingError('Cannot encode objects of type ' + str(type(x)))
 
     @classmethod
     def encode_message_with_size(cls, message):
@@ -79,7 +80,7 @@ class Encoder(object):
         elif typ.protobuf_type.code == krpc.schema.KRPC.Type.BYTES:
             return _ValueEncoder.encode_bytes(value)
         else:
-            raise ValueError('Invalid type')
+            raise EncodingError('Invalid type')
 
 
 class _ValueEncoder(object):
@@ -139,13 +140,13 @@ class _ValueEncoder(object):
     @classmethod
     def encode_uint32(cls, value):
         if value < 0:
-            raise ValueError('Value must be non-negative, got %d' % value)
+            raise EncodingError('Value must be non-negative, got %d' % value)
         return cls._encode_varint(value)
 
     @classmethod
     def encode_uint64(cls, value):
         if value < 0:
-            raise ValueError('Value must be non-negative, got %d' % value)
+            raise EncodingError('Value must be non-negative, got %d' % value)
         return cls._encode_varint(value)
 
     @classmethod

@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 import itertools
 import threading
+from krpc.error import StreamError
 from krpc.types import Types, DefaultArgument
 from krpc.service import create_service
 from krpc.encoder import Encoder
@@ -57,7 +58,7 @@ class Client(object):
 
     def add_stream(self, func, *args, **kwargs):
         if self._stream_connection is None:
-            raise RuntimeError('Not connected to stream server')
+            raise StreamError('Not connected to stream server')
         return krpc.stream.add_stream(self, func, *args, **kwargs)
 
     @contextmanager

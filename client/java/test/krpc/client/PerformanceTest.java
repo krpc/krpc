@@ -19,7 +19,7 @@ public class PerformanceTest {
   }
 
   @Test
-  public void testPerformance() throws RPCException, IOException {
+  public void testPerformance() throws RPCException {
     int numRepeats = 100;
     long startTime = System.nanoTime();
     for (int i = 0; i < numRepeats; i++) {

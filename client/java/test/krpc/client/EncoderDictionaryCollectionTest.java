@@ -54,14 +54,14 @@ public class EncoderDictionaryCollectionTest {
       Types.createValue(TypeCode.STRING), Types.createValue(TypeCode.UINT32));
 
   @Test
-  public void testEncode() throws IOException {
+  public void testEncode() {
     ByteString encodeResult = Encoder.encode(value, type);
     assertEquals(data, hexlify(encodeResult));
   }
 
   @SuppressWarnings("unchecked")
   @Test
-  public void testDecode() throws IOException {
+  public void testDecode() {
     Map<String, Integer> decodeResult =
         (Map<String, Integer>) Encoder.decode(unhexlify(data), type, null);
     assertEquals(value, decodeResult);

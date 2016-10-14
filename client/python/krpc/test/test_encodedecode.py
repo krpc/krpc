@@ -1,6 +1,7 @@
 import unittest
 import sys
 from krpc.encoder import Encoder
+from krpc.error import EncodingError
 from krpc.decoder import Decoder
 from krpc.types import Types
 from krpc.platform import hexlify, unhexlify
@@ -82,8 +83,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.uint32_type, cases)
         self._run_test_decode_value(self.types.uint32_type, cases)
 
-        self.assertRaises(ValueError, Encoder.encode, -1, self.types.uint32_type)
-        self.assertRaises(ValueError, Encoder.encode, -849, self.types.uint32_type)
+        self.assertRaises(EncodingError, Encoder.encode, -1, self.types.uint32_type)
+        self.assertRaises(EncodingError, Encoder.encode, -849, self.types.uint32_type)
 
     def test_uint64(self):
         cases = [
@@ -96,8 +97,8 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(self.types.uint64_type, cases)
         self._run_test_decode_value(self.types.uint64_type, cases)
 
-        self.assertRaises(ValueError, Encoder.encode, -1, self.types.uint64_type)
-        self.assertRaises(ValueError, Encoder.encode, -849, self.types.uint64_type)
+        self.assertRaises(EncodingError, Encoder.encode, -1, self.types.uint64_type)
+        self.assertRaises(EncodingError, Encoder.encode, -849, self.types.uint64_type)
 
     def test_bool(self):
         cases = [

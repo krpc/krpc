@@ -10,11 +10,6 @@
 
 namespace krpc {
 
-class ConnectionFailed : public std::runtime_error {
- public:
-  explicit ConnectionFailed(const std::string& msg) : std::runtime_error(msg) {}
-};
-
 class Connection {
  public:
   Connection(const std::string& address, unsigned int port);

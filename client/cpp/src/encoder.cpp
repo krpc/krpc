@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "krpc/error.hpp"
+
 namespace pb = google::protobuf;
 
 namespace krpc {
@@ -81,7 +83,7 @@ std::string encode(const std::string& value) {
 std::string encode(const pb::Message& message) {
   std::string data;
   if (!message.SerializeToString(&data))
-    throw EncodeFailed("Failed to encode message");
+    throw EncodingError("Failed to encode message");
   return data;
 }
 
@@ -91,7 +93,7 @@ std::string encode_message_with_size(const pb::Message& message) {
   std::string data(header_length + length, 0);
   pb::io::CodedOutputStream::WriteVarint64ToArray(length, (pb::uint8*)&data[0]);
   if (!message.SerializeWithCachedSizesToArray((pb::uint8*)&data[header_length]))
-    throw EncodeFailed("Failed to encode message with size");
+    throw EncodingError("Failed to encode message with size");
   return data;
 }
 

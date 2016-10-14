@@ -1,6 +1,5 @@
 import socket
 import select
-from krpc.error import NetworkError
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
 
@@ -12,15 +11,9 @@ class Connection(object):
         self._socket = None
 
     def connect(self):
-        try:
-            socket.getaddrinfo(self._address, self._port)
-        except socket.gaierror as ex:
-            raise NetworkError(self._address, self._port, str(ex))
+        socket.getaddrinfo(self._address, self._port)
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            self._socket.connect((self._address, self._port))
-        except socket.error as ex:
-            raise NetworkError(self._address, self._port, str(ex))
+        self._socket.connect((self._address, self._port))
 
     def close(self):
         if self._socket is not None:

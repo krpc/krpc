@@ -36,13 +36,13 @@ public class EncoderBooleanValueTest {
   Type type = Types.createValue(TypeCode.BOOL);
 
   @Test
-  public void testEncode() throws IOException {
+  public void testEncode() {
     ByteString encodeResult = Encoder.encode(value, type);
     assertEquals(data, hexlify(encodeResult));
   }
 
   @Test
-  public void testDecode() throws IOException {
+  public void testDecode() {
     boolean decodeResult = (boolean) Encoder.decode(unhexlify(data), type, null);
     assertEquals(value, decodeResult);
   }

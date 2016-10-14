@@ -7,6 +7,7 @@
 #include <asio/steady_timer.hpp>
 
 #include "krpc/decoder.hpp"
+#include "krpc/error.hpp"
 
 namespace krpc {
 
@@ -37,7 +38,7 @@ std::string Connection::receive_message() {
       data += this->receive(1);
       size = decoder::decode_size(data);
       break;
-    } catch (decoder::DecodeFailed&) {
+    } catch (EncodingError&) {
     }
   }
   return this->receive(size);

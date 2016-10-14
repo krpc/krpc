@@ -1,4 +1,5 @@
 import unittest
+import socket
 import threading
 import krpc
 from krpc.test.servertestcase import ServerTestCase
@@ -15,21 +16,21 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertGreater(status.bytes_read, 0)
 
     def test_wrong_server_address(self):
-        with self.assertRaises(krpc.error.NetworkError):
+        with self.assertRaises(socket.gaierror):
             krpc.connect(name='python_client_test_wrong_server_address',
                          address='doesntexist',
                          rpc_port=ServerTestCase.rpc_port(),
                          stream_port=ServerTestCase.stream_port())
 
     def test_wrong_rpc_port(self):
-        with self.assertRaises(krpc.error.NetworkError):
+        with self.assertRaises(socket.error):
             krpc.connect(name='python_client_test_wrong_rpc_port',
                          address='localhost',
                          rpc_port=ServerTestCase.rpc_port() ^ ServerTestCase.stream_port(),
                          stream_port=ServerTestCase.stream_port())
 
     def test_wrong_stream_port(self):
-        with self.assertRaises(krpc.error.NetworkError):
+        with self.assertRaises(socket.error):
             krpc.connect(name='python_client_test_wrong_stream_port',
                          address='localhost',
                          rpc_port=ServerTestCase.rpc_port(),

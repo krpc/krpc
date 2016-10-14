@@ -8,4 +8,8 @@ public class RPCException extends Exception {
   public RPCException(String message) {
     super(message);
   }
+
+  public RPCException(String message, Exception innerException) {
+    super(message, innerException);
+  }
 }

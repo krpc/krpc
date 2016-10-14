@@ -5,6 +5,7 @@ import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.Message;
 
+import krpc.client.EncodingException;
 import krpc.schema.KRPC;
 
 import org.javatuples.Decade;
@@ -58,96 +59,103 @@ public class Encoder {
   }
 
   /** Encode an object. */
-  public static ByteString encode(Object value, KRPC.Type type) throws IOException {
-    switch (type.getCode()) {
-      case DOUBLE:
-        return encodeDouble((double)value);
-      case FLOAT:
-        return encodeFloat((float)value);
-      case SINT32:
-        return encodeSInt32((int)value);
-      case SINT64:
-        return encodeSInt64((long)value);
-      case UINT32:
-        return encodeUInt32((int)value);
-      case UINT64:
-        return encodeUInt64((long)value);
-      case BOOL:
-        return encodeBoolean((boolean)value);
-      case STRING:
-        return encodeString((String)value);
-      case BYTES:
-        return encodeBytes((byte[])value);
-      case CLASS:
-        if (value == null) {
-          return encodeUInt64(0);
-        } else {
-          return encodeObject((RemoteObject) value);
-        }
-      case ENUMERATION:
-        return encodeEnum((RemoteEnum) value);
-      case TUPLE:
-        return encodeTuple((Tuple) value, type.getTypesList());
-      case LIST:
-        return encodeList((List<?>) value, type.getTypes(0));
-      case SET:
-        return encodeSet((Set<?>) value, type.getTypes(0));
-      case DICTIONARY:
-        return encodeDictionary((Map<?, ?>) value, type.getTypes(0), type.getTypes(1));
-      case PROCEDURE_CALL:
-      case SERVICES:
-      case STREAM:
-      case STATUS:
-        return encodeMessage((Message) value);
-      default:
-        throw new IOException("Failed to encode value");
+  public static ByteString encode(Object value, KRPC.Type type) {
+    try {
+      switch (type.getCode()) {
+        case DOUBLE:
+          return encodeDouble((double)value);
+        case FLOAT:
+          return encodeFloat((float)value);
+        case SINT32:
+          return encodeSInt32((int)value);
+        case SINT64:
+          return encodeSInt64((long)value);
+        case UINT32:
+          return encodeUInt32((int)value);
+        case UINT64:
+          return encodeUInt64((long)value);
+        case BOOL:
+          return encodeBoolean((boolean)value);
+        case STRING:
+          return encodeString((String)value);
+        case BYTES:
+          return encodeBytes((byte[])value);
+        case CLASS:
+          if (value == null) {
+            return encodeUInt64(0);
+          } else {
+            return encodeObject((RemoteObject) value);
+          }
+        case ENUMERATION:
+          return encodeEnum((RemoteEnum) value);
+        case TUPLE:
+          return encodeTuple((Tuple) value, type.getTypesList());
+        case LIST:
+          return encodeList((List<?>) value, type.getTypes(0));
+        case SET:
+          return encodeSet((Set<?>) value, type.getTypes(0));
+        case DICTIONARY:
+          return encodeDictionary((Map<?, ?>) value, type.getTypes(0), type.getTypes(1));
+        case PROCEDURE_CALL:
+        case SERVICES:
+        case STREAM:
+        case STATUS:
+          return encodeMessage((Message) value);
+        default:
+          throw new EncodingException("Failed to encode value");
+      }
+    } catch (IOException exn) {
+      throw new EncodingException("Failed to encode value", exn);
     }
   }
 
   /** Decode an object. */
-  public static Object decode(ByteString data, KRPC.Type type, Connection connection)
-      throws IOException {
-    switch (type.getCode()) {
-      case DOUBLE:
-        return decodeDouble(data);
-      case FLOAT:
-        return decodeFloat(data);
-      case SINT32:
-        return decodeSInt32(data);
-      case SINT64:
-        return decodeSInt64(data);
-      case UINT32:
-        return decodeUInt32(data);
-      case UINT64:
-        return decodeUInt64(data);
-      case BOOL:
-        return decodeBoolean(data);
-      case STRING:
-        return decodeString(data);
-      case BYTES:
-        return decodeBytes(data);
-      case CLASS:
-        return decodeObject(data, type, connection);
-      case ENUMERATION:
-        return decodeEnum(data, type);
-      case TUPLE:
-        return decodeTuple(data, type.getTypesList(), connection);
-      case LIST:
-        return decodeList(data, type.getTypes(0), connection);
-      case SET:
-        return decodeSet(data, type.getTypes(0), connection);
-      case DICTIONARY:
-        return decodeDictionary(data, type.getTypes(0), type.getTypes(1), connection);
-      case PROCEDURE_CALL:
-        return decodeMessage(KRPC.ProcedureCall.newBuilder(), data);
-      case SERVICES:
-        return decodeMessage(KRPC.Services.newBuilder(), data);
-      case STREAM:
-        return decodeMessage(KRPC.Stream.newBuilder(), data);
-      case STATUS:
-        return decodeMessage(KRPC.Status.newBuilder(), data);
-      default:
-        throw new IOException("Failed to decode value");
+  public static Object decode(ByteString data, KRPC.Type type, Connection connection) {
+    try {
+      switch (type.getCode()) {
+        case DOUBLE:
+          return decodeDouble(data);
+        case FLOAT:
+          return decodeFloat(data);
+        case SINT32:
+          return decodeSInt32(data);
+        case SINT64:
+          return decodeSInt64(data);
+        case UINT32:
+          return decodeUInt32(data);
+        case UINT64:
+          return decodeUInt64(data);
+        case BOOL:
+          return decodeBoolean(data);
+        case STRING:
+          return decodeString(data);
+        case BYTES:
+          return decodeBytes(data);
+        case CLASS:
+          return decodeObject(data, type, connection);
+        case ENUMERATION:
+          return decodeEnum(data, type);
+        case TUPLE:
+          return decodeTuple(data, type.getTypesList(), connection);
+        case LIST:
+          return decodeList(data, type.getTypes(0), connection);
+        case SET:
+          return decodeSet(data, type.getTypes(0), connection);
+        case DICTIONARY:
+          return decodeDictionary(data, type.getTypes(0), type.getTypes(1), connection);
+        case PROCEDURE_CALL:
+          return decodeMessage(KRPC.ProcedureCall.newBuilder(), data);
+        case SERVICES:
+          return decodeMessage(KRPC.Services.newBuilder(), data);
+        case STREAM:
+          return decodeMessage(KRPC.Stream.newBuilder(), data);
+        case STATUS:
+          return decodeMessage(KRPC.Status.newBuilder(), data);
+        default:
+          throw new EncodingException("Failed to decode value");
+      }
+    } catch (IOException exn) {
+      throw new EncodingException("Failed to encode value", exn);
     }
   }
 
@@ -242,7 +250,7 @@ public class Encoder {
 
   static ByteString encodeTuple(Tuple value, List<KRPC.Type> valueTypes) throws IOException {
     if (value.getSize() != valueTypes.size()) {
-      throw new IOException("Failed to encode tuple");
+      throw new EncodingException("Failed to encode tuple");
     }
     KRPC.Tuple.Builder tuple = KRPC.Tuple.newBuilder();
     for (int i = 0; i < value.getSize(); i++) {
@@ -338,33 +346,35 @@ public class Encoder {
       Constructor<?> ctor = classType.getConstructor(Connection.class, long.class);
       return id == 0 ? null : (T) ctor.newInstance(connection, id);
     } catch (ClassNotFoundException exn) {
-      throw new IOException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object", exn);
     } catch (NoSuchMethodException exn) {
-      throw new IOException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object", exn);
     } catch (InstantiationException exn) {
-      throw new IOException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object", exn);
     } catch (IllegalAccessException exn) {
-      throw new IOException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object", exn);
     } catch (InvocationTargetException exn) {
-      throw new IOException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object", exn);
     }
   }
 
   @SuppressWarnings({ "unchecked" })
-  static <T> T decodeEnum(ByteString data, KRPC.Type type) throws IOException {
+  static <T> T decodeEnum(ByteString data, KRPC.Type type) {
     try {
       int value = decodeSInt32(data);
       Class<?> enumType = Class.forName(
           "krpc.client.services." + type.getService() + "$" + type.getName());
       return (T) enumType.getMethod("fromValue", int.class).invoke(null, value);
+    } catch (IOException exn) {
+      throw new EncodingException("Failed to decode object", exn);
     } catch (ClassNotFoundException exn) {
-      throw new IOException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object", exn);
     } catch (NoSuchMethodException exn) {
-      throw new IOException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object", exn);
     } catch (IllegalAccessException exn) {
-      throw new IOException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object", exn);
     } catch (InvocationTargetException exn) {
-      throw new IOException("Failed to decode object", exn);
+      throw new EncodingException("Failed to decode object", exn);
     }
   }
 
@@ -399,7 +409,7 @@ public class Encoder {
       case 10:
         return new Decade(es[0], es[1], es[2], es[3], es[4], es[5], es[6], es[7], es[8], es[9]);
       default:
-        throw new IOException("Failed to decode tuple");
+        throw new EncodingException("Failed to decode tuple");
     }
   }
 

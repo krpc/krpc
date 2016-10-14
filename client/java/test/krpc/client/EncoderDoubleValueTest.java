@@ -43,13 +43,13 @@ public class EncoderDoubleValueTest {
   Type type = Types.createValue(TypeCode.DOUBLE);
 
   @Test
-  public void testEncode() throws IOException {
+  public void testEncode() {
     ByteString encodeResult = Encoder.encode(value, type);
     assertEquals(data, hexlify(encodeResult));
   }
 
   @Test
-  public void testDecode() throws IOException {
+  public void testDecode() {
     double decodeResult = (double) Encoder.decode(unhexlify(data), type, null);
     assertEquals(value, decodeResult, 0.0001);
   }

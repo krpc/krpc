@@ -1,8 +1,6 @@
 package krpc.client;
 
-/**
- * An error caused when a kRPC stream fails.
- */
+/** Thrown when a stream operation encouters an error. */
 public class StreamException extends Exception {
   private static final long serialVersionUID = 54119455204332164L;
 

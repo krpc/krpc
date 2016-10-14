@@ -15,11 +15,6 @@
 namespace krpc {
 namespace decoder {
 
-class DecodeFailed : public std::runtime_error {
- public:
-  explicit DecodeFailed(const std::string& msg) : std::runtime_error(msg) {}
-};
-
 const size_t GUID_LENGTH = 16;
 
 std::string guid(const std::string& data);

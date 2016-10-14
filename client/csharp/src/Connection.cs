@@ -57,7 +57,7 @@ namespace KRPC.Client
             int size = ReadMessageData (rpcStream, ref responseBuffer);
             var response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
             if (response.Status != ConnectionResponse.Types.Status.Ok)
-                throw new InvalidOperationException (response.Message);
+                throw new ConnectionException (response.Message);
 
             if (streamPort != 0) {
                 streamClient = new TcpClient ();
@@ -73,7 +73,7 @@ namespace KRPC.Client
                 size = ReadMessageData (streamStream, ref responseBuffer);
                 response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
                 if (response.Status != ConnectionResponse.Types.Status.Ok)
-                    throw new InvalidOperationException (response.Message);
+                    throw new ConnectionException (response.Message);
                 StreamManager = new StreamManager (this, streamClient);
             }
         }

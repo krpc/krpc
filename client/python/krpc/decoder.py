@@ -1,9 +1,10 @@
 from google.protobuf.internal import decoder as protobuf_decoder  # pylint: disable=import-error,no-name-in-module
 from google.protobuf.internal import wire_format as protobuf_wire_format  # pylint: disable=import-error,no-name-in-module
-from krpc.types import Types, ValueType, ClassType, EnumerationType, MessageType
-from krpc.types import TupleType, ListType, SetType, DictionaryType
+from krpc.error import EncodingError
 import krpc.platform
 from krpc.platform import hexlify
+from krpc.types import Types, ValueType, ClassType, EnumerationType, MessageType
+from krpc.types import TupleType, ListType, SetType, DictionaryType
 
 
 class Decoder(object):
@@ -47,7 +48,7 @@ class Decoder(object):
             msg = cls.decode_message(data, krpc.schema.KRPC.Tuple)
             return tuple(cls.decode(item, value_type) for item, value_type in zip(msg.items, typ.value_types))
         else:
-            raise RuntimeError('Cannot decode type %s' % str(typ))
+            raise EncodingError('Cannot decode type %s' % str(typ))
 
     @classmethod
     def decode_message_size(cls, data):
@@ -80,7 +81,7 @@ class Decoder(object):
         elif typ.protobuf_type.code == krpc.schema.KRPC.Type.BYTES:
             return _ValueDecoder.decode_bytes(data)
         else:
-            raise ValueError('Invalid type')
+            raise EncodingError('Invalid type')
 
 class _ValueDecoder(object):
     """ Routines for encoding values from the protocol buffer serialization format """

@@ -40,13 +40,13 @@ public class EncoderBytesValueTest {
   Type type = Types.createValue(TypeCode.BYTES);
 
   @Test
-  public void testEncode() throws IOException {
+  public void testEncode() {
     ByteString encodeResult = Encoder.encode(unhexlify(value).toByteArray(), type);
     assertEquals(data, hexlify(encodeResult));
   }
 
   @Test
-  public void testDecode() throws IOException {
+  public void testDecode() {
     byte[] decodeResult = (byte[]) Encoder.decode(unhexlify(data), type, null);
     assertEquals(value, hexlify(decodeResult));
   }

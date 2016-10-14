@@ -1,5 +1,6 @@
 import unittest
 import time
+from krpc.error import StreamError
 from krpc.test.servertestcase import ServerTestCase
 
 
@@ -47,9 +48,9 @@ class TestStream(ServerTestCase, unittest.TestCase):
                 self.wait()
 
     def test_property_setters_are_invalid(self):
-        self.assertRaises(ValueError, self.conn.add_stream, setattr, self.conn.test_service, 'string_property')
+        self.assertRaises(StreamError, self.conn.add_stream, setattr, self.conn.test_service, 'string_property')
         obj = self.conn.test_service.create_test_object('bill')
-        self.assertRaises(ValueError, self.conn.add_stream, setattr, obj.int_property, 42)
+        self.assertRaises(StreamError, self.conn.add_stream, setattr, obj.int_property, 42)
 
     def test_counter(self):
         count = -1
@@ -89,41 +90,41 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
         s1.remove()
         self.assertEqual('0', s0())
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s1)
 
         self.wait()
         self.assertEqual('0', s0())
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s1)
 
         s2 = self.conn.add_stream(self.conn.test_service.int32_to_string, 2)
         self.assertEqual('0', s0())
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s1)
         self.assertEqual('2', s2())
 
         self.wait()
         self.assertEqual('0', s0())
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s1)
         self.assertEqual('2', s2())
 
         s0.remove()
-        self.assertRaises(RuntimeError, s0)
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s0)
+        self.assertRaises(StreamError, s1)
         self.assertEqual('2', s2())
 
         self.wait()
-        self.assertRaises(RuntimeError, s0)
-        self.assertRaises(RuntimeError, s1)
+        self.assertRaises(StreamError, s0)
+        self.assertRaises(StreamError, s1)
         self.assertEqual('2', s2())
 
         s2.remove()
-        self.assertRaises(RuntimeError, s0)
-        self.assertRaises(RuntimeError, s1)
-        self.assertRaises(RuntimeError, s2)
+        self.assertRaises(StreamError, s0)
+        self.assertRaises(StreamError, s1)
+        self.assertRaises(StreamError, s2)
 
         self.wait()
-        self.assertRaises(RuntimeError, s0)
-        self.assertRaises(RuntimeError, s1)
-        self.assertRaises(RuntimeError, s2)
+        self.assertRaises(StreamError, s0)
+        self.assertRaises(StreamError, s1)
+        self.assertRaises(StreamError, s2)
 
     def test_remove_stream_twice(self):
         stream = self.conn.add_stream(self.conn.test_service.int32_to_string, 0)
@@ -133,9 +134,9 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertEqual('0', stream())
 
         stream.remove()
-        self.assertRaises(RuntimeError, stream)
+        self.assertRaises(StreamError, stream)
         stream.remove()
-        self.assertRaises(RuntimeError, stream)
+        self.assertRaises(StreamError, stream)
 
     def test_add_stream_twice(self):
         s0 = self.conn.add_stream(self.conn.test_service.int32_to_string, 42)

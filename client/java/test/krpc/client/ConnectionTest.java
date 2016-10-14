@@ -16,8 +16,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,32 +43,32 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testGetStatus() throws RPCException, IOException {
+  public void testGetStatus() throws RPCException {
     Status status = krpc.getStatus();
     assertTrue(Pattern.matches("^[0-9]+\\.[0-9]+\\.[0-9]+$", status.getVersion()));
     assertTrue(status.getBytesRead() > 0);
   }
 
-  @Test(expected = UnknownHostException.class)
-  public void testWrongServerAddress() throws RPCException, IOException {
+  @Test(expected = IOException.class)
+  public void testWrongServerAddress() throws IOException {
     Connection.newInstance("JavaClientTestWrongAddress", "doesntexist", 10000, 100001);
   }
 
-  @Test(expected = ConnectException.class)
-  public void testWrongRpcPort() throws RPCException, IOException {
+  @Test(expected = IOException.class)
+  public void testWrongRpcPort() throws IOException {
     Connection.newInstance("JavaClientTestWrongRpcPort", "localhost",
         TestUtils.getRpcPort() ^ TestUtils.getStreamPort(), TestUtils.getStreamPort());
   }
 
-  @Test(expected = ConnectException.class)
-  public void testWrongStreamPort() throws RPCException, IOException {
+  @Test(expected = IOException.class)
+  public void testWrongStreamPort() throws IOException {
     Connection.newInstance("JavaClientTestWrongStreamPort", "localhost",
         TestUtils.getRpcPort(), TestUtils.getRpcPort() ^ TestUtils.getStreamPort());
   }
 
   @Test
-  public void testWrongRpcServer() throws RPCException, IOException {
-    expectedException.expect(IOException.class);
+  public void testWrongRpcServer() throws IOException {
+    expectedException.expect(ConnectionException.class);
     expectedException.expectMessage(
         "Connection request was for the rpc server, but this is the stream server. "
         + "Did you connect to the wrong port number?");
@@ -79,8 +77,8 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testWrongStreamServer() throws RPCException, IOException {
-    expectedException.expect(IOException.class);
+  public void testWrongStreamServer() throws IOException {
+    expectedException.expect(ConnectionException.class);
     expectedException.expectMessage(
         "Connection request was for the stream server, but this is the rpc server. "
         + "Did you connect to the wrong port number?");
@@ -89,26 +87,26 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testCurrentGameScene() throws RPCException, IOException {
+  public void testCurrentGameScene() throws RPCException {
     assertEquals(KRPC.GameScene.SPACE_CENTER, krpc.getCurrentGameScene());
   }
 
   @Test
-  public void testErrorInvalidArgument() throws RPCException, IOException {
+  public void testErrorInvalidArgument() throws RPCException {
     expectedException.expect(RPCException.class);
     expectedException.expectMessage("Invalid argument");
     TestService.newInstance(connection).throwArgumentException();
   }
 
   @Test
-  public void testErrorInvalidOperation() throws RPCException, IOException {
+  public void testErrorInvalidOperation() throws RPCException {
     expectedException.expect(RPCException.class);
     expectedException.expectMessage("Invalid operation");
     TestService.newInstance(connection).throwInvalidOperationException();
   }
 
   @Test
-  public void testValueParameters() throws RPCException, IOException {
+  public void testValueParameters() throws RPCException {
     assertEquals("3.14159", testService.floatToString(3.14159f));
     assertEquals("3.14159", testService.doubleToString(3.14159));
     assertEquals("42", testService.int32ToString(42));
@@ -121,12 +119,12 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testMultipleValueParameters() throws RPCException, IOException {
+  public void testMultipleValueParameters() throws RPCException {
     assertEquals("3.14159", testService.addMultipleValues(0.14159f, 1, 2));
   }
 
   @Test
-  public void testProperties() throws RPCException, IOException {
+  public void testProperties() throws RPCException {
     testService.setStringProperty("foo");
     assertEquals("foo", testService.getStringProperty());
     assertEquals("foo", testService.getStringPropertyPrivateSet());
@@ -137,7 +135,7 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testClassNullValue() throws RPCException, IOException {
+  public void testClassNullValue() throws RPCException {
     assertNull(testService.echoTestObject(null));
     TestService.TestClass obj = testService.createTestObject("bob");
     assertEquals("bobnull", obj.objectToString(null));
@@ -147,7 +145,7 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testClassMethods() throws RPCException, IOException {
+  public void testClassMethods() throws RPCException {
     TestService.TestClass obj = testService.createTestObject("bob");
     assertEquals("value=bob", obj.getValue());
     assertEquals("bob3.14159", obj.floatToString(3.14159f));
@@ -156,14 +154,14 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testClassStaticMethods() throws RPCException, IOException {
+  public void testClassStaticMethods() throws RPCException {
     // Note: default arguments not supported, so have to pass "", ""
     assertEquals("jeb", TestService.TestClass.staticMethod(this.connection, "", ""));
     assertEquals("jebbobbill", TestService.TestClass.staticMethod(this.connection, "bob", "bill"));
   }
 
   @Test
-  public void testClassProperties() throws RPCException, IOException {
+  public void testClassProperties() throws RPCException {
     TestService.TestClass obj = testService.createTestObject("jeb");
     obj.setIntProperty(0);
     assertEquals(0, obj.getIntProperty());
@@ -175,7 +173,7 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testBlockingProcedure() throws RPCException, IOException {
+  public void testBlockingProcedure() throws RPCException {
     // Note: must pass 0 as default arguments not possible
     assertEquals(0, testService.blockingProcedure(0, 0));
     assertEquals(1, testService.blockingProcedure(1, 0));
@@ -187,7 +185,7 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testEnums() throws RPCException, IOException {
+  public void testEnums() throws RPCException {
     assertEquals(TestService.TestEnum.VALUE_B, testService.enumReturn());
     assertEquals(TestService.TestEnum.VALUE_A, testService.enumEcho(TestService.TestEnum.VALUE_A));
     assertEquals(TestService.TestEnum.VALUE_B, testService.enumEcho(TestService.TestEnum.VALUE_B));
@@ -195,7 +193,7 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testCollectionsList() throws RPCException, IOException {
+  public void testCollectionsList() throws RPCException {
     assertEquals(new ArrayList<Integer>(), testService.incrementList(new ArrayList<Integer>()));
     assertEquals(Arrays.asList(new Integer[] { 1, 2, 3 }),
                  testService.incrementList(Arrays.asList(new Integer[] { 0, 1, 2 })));
@@ -203,7 +201,7 @@ public class ConnectionTest {
 
   @Test
   @SuppressWarnings("serial")
-  public void testCollectionsDictionary() throws RPCException, IOException {
+  public void testCollectionsDictionary() throws RPCException {
     assertEquals(new HashMap<String, Integer>(),
                  testService.incrementDictionary(new HashMap<String, Integer>()));
     assertEquals(new HashMap<String, Integer>() {
@@ -222,7 +220,7 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testCollectionsSet() throws RPCException, IOException {
+  public void testCollectionsSet() throws RPCException {
     assertEquals(new HashSet<Integer>(), testService.incrementSet(new HashSet<Integer>()));
     assertEquals(new HashSet<Integer>(Arrays.asList(new Integer[] { 1, 2, 3 })),
                  testService.incrementSet(
@@ -230,14 +228,14 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testCollectionsTuple() throws RPCException, IOException {
+  public void testCollectionsTuple() throws RPCException {
     assertEquals(new Pair<Integer, Long>(2, 3L),
                  testService.incrementTuple(new Pair<Integer, Long>(1, 2L)));
   }
 
   @Test
   @SuppressWarnings("serial")
-  public void testCollectionsNested() throws RPCException, IOException {
+  public void testCollectionsNested() throws RPCException {
     assertEquals(new HashMap<String, List<Integer>>(),
                  testService.incrementNestedCollection(new HashMap<String, List<Integer>>()));
     assertEquals(new HashMap<String, List<Integer>>() {
@@ -257,7 +255,7 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testCollectionsOfObjects() throws RPCException, IOException {
+  public void testCollectionsOfObjects() throws RPCException {
     List<TestService.TestClass> list =
         testService.addToObjectList(new ArrayList<TestService.TestClass>(), "jeb");
     assertEquals(1, list.size());
@@ -269,7 +267,7 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testLineEndings() throws RPCException, IOException {
+  public void testLineEndings() throws RPCException {
     String[] strings = new String[] { "foo\nbar", "foo\rbar", "foo\n\rbar", "foo\r\nbar" };
     for (String string : strings) {
       testService.setStringProperty(string);

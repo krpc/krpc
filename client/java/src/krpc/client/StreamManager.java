@@ -36,7 +36,7 @@ class StreamManager {
     socket.close();
   }
 
-  <T> Stream<T> add(ProcedureCall call, Type type) throws IOException, RPCException {
+  <T> Stream<T> add(ProcedureCall call, Type type) throws RPCException {
     long id = krpc.addStream(call).getId();
     synchronized (streamData) {
       if (!streamTypes.containsKey(id)) {
@@ -47,7 +47,7 @@ class StreamManager {
     return new Stream<T>(this, id);
   }
 
-  void remove(long id) throws IOException, RPCException {
+  void remove(long id) throws RPCException {
     krpc.removeStream(id);
     synchronized (streamData) {
       streamData.remove(id);
@@ -55,7 +55,7 @@ class StreamManager {
     }
   }
 
-  Object get(long id) throws IOException, StreamException {
+  Object get(long id) throws StreamException {
     Object result;
     synchronized (streamData) {
       if (!streamTypes.containsKey(id)) {

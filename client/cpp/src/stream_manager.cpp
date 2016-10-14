@@ -23,7 +23,7 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
         data += connection->partial_receive(1);
         size = decoder::decode_size(data);
         break;
-      } catch (decoder::DecodeFailed&) {
+      } catch (EncodingError&) {
       }
     }
     if (stop->load())

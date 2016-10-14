@@ -14,11 +14,6 @@
 namespace krpc {
 namespace encoder {
 
-class EncodeFailed : std::runtime_error {
- public:
-  explicit EncodeFailed(const std::string& msg) : std::runtime_error(msg) {}
-};
-
 std::string encode(float value);
 std::string encode(double value);
 std::string encode(google::protobuf::int32 value);

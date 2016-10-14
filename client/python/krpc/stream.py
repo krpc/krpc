@@ -1,12 +1,6 @@
 from krpc.decoder import Decoder
-from krpc.error import RPCError
+from krpc.error import RPCError, StreamError
 import krpc.schema
-
-
-class StreamExistsError(RuntimeError):
-    def __init__(self, stream_id):
-        super(StreamExistsError, self).__init__('stream %d already exists' % stream_id)
-        self.stream_id = stream_id
 
 
 class Stream(object):
@@ -25,7 +19,7 @@ class Stream(object):
             self._return_type = attr.fget._return_type
         elif func == setattr:
             # A property setter
-            raise ValueError('Cannot stream a property setter')
+            raise StreamError('Cannot stream a property setter')
         elif hasattr(func, '__self__'):
             # A method
             self._call = func._build_call(func.__self__, *args, **kwargs)
@@ -39,9 +33,8 @@ class Stream(object):
         # Add the stream to the server and add the initial value to the cache
         with self._conn._stream_cache_lock:
             self._stream_id = self._conn.krpc.add_stream(self._call).id
-            if self._stream_id in self._conn._stream_cache:
-                raise StreamExistsError(self._stream_id)
-            self._conn._stream_cache[self._stream_id] = self
+            if self._stream_id not in self._conn._stream_cache:
+                self._conn._stream_cache[self._stream_id] = self
 
     def __call__(self):
         """ Get the most recent value for this stream """
@@ -55,7 +48,7 @@ class Stream(object):
             if self._stream_id in self._conn._stream_cache:
                 self._conn.krpc.remove_stream(self._stream_id)
                 del self._conn._stream_cache[self._stream_id]
-                self._value = RuntimeError('Stream has been removed')
+                self._value = StreamError('Stream has been removed')
 
     @property
     def return_type(self):
@@ -69,10 +62,8 @@ class Stream(object):
 
 def add_stream(conn, func, *args, **kwargs):
     """ Create a stream and return it """
-    try:
-        return Stream(conn, func, *args, **kwargs)
-    except StreamExistsError as ex:
-        return conn._stream_cache[ex.stream_id]
+    stream = Stream(conn, func, *args, **kwargs)
+    return conn._stream_cache[stream._stream_id]
 
 
 def update_thread(connection, stop, cache, cache_lock):

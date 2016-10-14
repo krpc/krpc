@@ -66,7 +66,8 @@ public class Connection {
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newInstance(String name, InetAddress address) throws IOException {
+  public static Connection newInstance(String name, InetAddress address)
+      throws IOException {
     return new Connection(name, address, DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT);
   }
 
@@ -86,7 +87,8 @@ public class Connection {
    * @return A connection to the kRPC server.
    */
   public static Connection newInstance(
-      String name, InetAddress address, int rpcPort, int streamPort) throws IOException {
+      String name, InetAddress address, int rpcPort, int streamPort)
+      throws IOException {
     return new Connection(name, address, rpcPort, streamPort);
   }
 
@@ -103,7 +105,8 @@ public class Connection {
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newInstance(String name, String address) throws IOException {
+  public static Connection newInstance(String name, String address)
+      throws IOException {
     return new Connection(
       name, InetAddress.getByName(address), DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT);
   }
@@ -125,7 +128,8 @@ public class Connection {
    * @return A connection to the kRPC server.
    */
   public static Connection newInstance(
-      String name, String address, int rpcPort, int streamPort) throws IOException {
+      String name, String address, int rpcPort, int streamPort)
+      throws IOException {
     return new Connection(name, InetAddress.getByName(address), rpcPort, streamPort);
   }
 
@@ -146,7 +150,7 @@ public class Connection {
     byte[] data = rpcInputStream.readRawBytes(size);
     KRPC.ConnectionResponse response = KRPC.ConnectionResponse.parseFrom(data);
     if (response.getStatus() != KRPC.ConnectionResponse.Status.OK) {
-      throw new IOException(response.getMessage());
+      throw new ConnectionException(response.getMessage());
     }
     ByteString clientIdentifier = response.getClientIdentifier();
 
@@ -167,7 +171,7 @@ public class Connection {
     data = streamInputStream.readRawBytes(size);
     response = KRPC.ConnectionResponse.parseFrom(data);
     if (response.getStatus() != KRPC.ConnectionResponse.Status.OK) {
-      throw new IOException(response.getMessage());
+      throw new ConnectionException(response.getMessage());
     }
 
     streamManager = new StreamManager(this, streamSocket);
@@ -186,31 +190,34 @@ public class Connection {
    * interface is for generated service code.
    */
   public ByteString invoke(String service, String procedure, ByteString... arguments)
-      throws RPCException, IOException {
+      throws RPCException {
     return invoke(buildCall(service, procedure, arguments));
   }
 
-  ByteString invoke(KRPC.ProcedureCall call) throws RPCException, IOException {
-    KRPC.Request request = KRPC.Request.newBuilder().addCalls(call).build();
-    byte[] data;
-    synchronized (connectionLock) {
-      rpcOutputStream.writeMessageNoTag(request);
-      rpcOutputStream.flush();
-      int size = rpcInputStream.readRawVarint32();
-      data = rpcInputStream.readRawBytes(size);
+  ByteString invoke(KRPC.ProcedureCall call) throws RPCException {
+    try {
+      KRPC.Request request = KRPC.Request.newBuilder().addCalls(call).build();
+      byte[] data;
+      synchronized (connectionLock) {
+        rpcOutputStream.writeMessageNoTag(request);
+        rpcOutputStream.flush();
+        int size = rpcInputStream.readRawVarint32();
+        data = rpcInputStream.readRawBytes(size);
+      }
+      KRPC.Response response = KRPC.Response.parseFrom(data);
+      if (!response.getError().isEmpty()) {
+        throw new RPCException(response.getError());
+      }
+      if (!response.getResultsList().get(0).getError().isEmpty()) {
+        throw new RPCException(response.getResultsList().get(0).getError());
+      }
+      return response.getResultsList().get(0).getValue();
+    } catch (IOException exn) {
+      throw new RPCException("Failed to invoke call", exn);
     }
-    KRPC.Response response = KRPC.Response.parseFrom(data);
-    if (!response.getError().isEmpty()) {
-      throw new RPCException(response.getError());
-    }
-    if (!response.getResultsList().get(0).getError().isEmpty()) {
-      throw new RPCException(response.getResultsList().get(0).getError());
-    }
-    return response.getResultsList().get(0).getValue();
   }
 
-  KRPC.ProcedureCall buildCall(String service, String procedure, ByteString... arguments)
-      throws IOException {
+  KRPC.ProcedureCall buildCall(String service, String procedure, ByteString... arguments) {
     KRPC.ProcedureCall.Builder callBuilder = KRPC.ProcedureCall.newBuilder();
     callBuilder.setService(service);
     callBuilder.setProcedure(procedure);
@@ -226,7 +233,7 @@ public class Connection {
     return callBuilder.build();
   }
 
-  private KRPC.ProcedureCall buildCall(Method method, ByteString... args) throws IOException {
+  private KRPC.ProcedureCall buildCall(Method method, ByteString... args) {
     RPCInfo info = method.getAnnotation(RPCInfo.class);
     String service = info.service();
     String procedure = info.procedure();
@@ -246,8 +253,12 @@ public class Connection {
    * @return A stream object.
    */
   public <T> Stream<T> addStream(Class<?> clazz, String method, Object... args)
-      throws StreamException, RPCException, IOException {
-    return internalAddStream(clazz, null, method, args);
+      throws StreamException, RPCException {
+    try {
+      return internalAddStream(clazz, null, method, args);
+    } catch (IOException exn) {
+      throw new StreamException("Failed to add stream", exn);
+    }
   }
 
   /**
@@ -263,8 +274,12 @@ public class Connection {
    * @return A stream object.
    */
   public <T> Stream<T> addStream(RemoteObject instance, String method, Object... args)
-      throws StreamException, RPCException, IOException {
-    return internalAddStream(instance.getClass(), instance, method, args);
+      throws StreamException, RPCException {
+    try {
+      return internalAddStream(instance.getClass(), instance, method, args);
+    } catch (IOException exn) {
+      throw new StreamException("Failed to add stream", exn);
+    }
   }
 
   private <T> Stream<T> internalAddStream(

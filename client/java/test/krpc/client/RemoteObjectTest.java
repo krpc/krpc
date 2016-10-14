@@ -24,7 +24,7 @@ public class RemoteObjectTest {
   }
 
   @Test
-  public void testEquality() throws RPCException, IOException {
+  public void testEquality() throws RPCException {
     TestService.TestClass obj1 = testService.createTestObject("jeb");
     TestService.TestClass obj2 = testService.createTestObject("jeb");
     assertTrue(obj1.equals(obj2));
@@ -40,7 +40,7 @@ public class RemoteObjectTest {
   }
 
   @Test
-  public void testHash() throws RPCException, IOException {
+  public void testHash() throws RPCException {
     TestService.TestClass obj1 = testService.createTestObject("jeb");
     TestService.TestClass obj2 = testService.createTestObject("jeb");
     TestService.TestClass obj3 = testService.createTestObject("bob");
@@ -53,7 +53,7 @@ public class RemoteObjectTest {
   }
 
   @Test
-  public void testMemoryAllocation() throws RPCException, IOException {
+  public void testMemoryAllocation() throws RPCException {
     TestService.TestClass obj1 = testService.createTestObject("jeb");
     TestService.TestClass obj2 = testService.createTestObject("jeb");
     TestService.TestClass obj3 = testService.createTestObject("bob");

@@ -33,7 +33,7 @@ public class StreamTest {
 
   @Test
   public void testMethod()
-      throws RPCException, StreamException, IOException, NoSuchMethodException {
+      throws RPCException, StreamException, NoSuchMethodException {
     Stream<String> stream = connection.addStream(TestService.class, "floatToString", 3.14159f);
     for (int i = 0; i < 5; i++) {
       assertEquals("3.14159", stream.get());
@@ -43,7 +43,7 @@ public class StreamTest {
 
   @Test
   public void testProperty()
-      throws RPCException, StreamException, IOException, NoSuchMethodException {
+      throws RPCException, StreamException, NoSuchMethodException {
     testService.setStringProperty("foo");
     Stream<String> stream = connection.addStream(TestService.class, "getStringProperty");
     for (int i = 0; i < 5; i++) {
@@ -54,7 +54,7 @@ public class StreamTest {
 
   @Test
   public void testClassMethod()
-      throws RPCException, StreamException, IOException, NoSuchMethodException {
+      throws RPCException, StreamException, NoSuchMethodException {
     TestClass obj = testService.createTestObject("bob");
     Stream<String> stream = connection.addStream(obj, "floatToString", 3.14159f);
     for (int i = 0; i < 5; i++) {
@@ -65,7 +65,7 @@ public class StreamTest {
 
   @Test
   public void testClassStaticMethod()
-      throws RPCException, StreamException, IOException, NoSuchMethodException {
+      throws RPCException, StreamException, NoSuchMethodException {
     // FIXME: Java does not support default parameter values, so have to pass ""
     Stream<String> stream = connection.addStream(
         TestClass.class, "staticMethod", connection, "foo", "");
@@ -77,7 +77,7 @@ public class StreamTest {
 
   @Test
   public void testClassProperty()
-      throws RPCException, StreamException, IOException, NoSuchMethodException {
+      throws RPCException, StreamException, NoSuchMethodException {
     TestClass obj = testService.createTestObject("jeb");
     obj.setIntProperty(42);
     Stream<Integer> stream = connection.addStream(obj, "getIntProperty");
@@ -89,7 +89,7 @@ public class StreamTest {
 
   @Test
   public void testCounter()
-      throws RPCException, StreamException, IOException, NoSuchMethodException {
+      throws RPCException, StreamException, NoSuchMethodException {
     int count = -1;
     Stream<Integer> stream = connection.addStream(TestService.class, "counter");
     for (int i = 0; i < 5; i++) {
@@ -101,7 +101,7 @@ public class StreamTest {
 
   @Test
   public void testNested()
-      throws RPCException, StreamException, IOException, NoSuchMethodException {
+      throws RPCException, StreamException, NoSuchMethodException {
     Stream<String> x0 = connection.addStream(TestService.class, "floatToString", 0.123f);
     Stream<String> x1 = connection.addStream(TestService.class, "floatToString", 1.234f);
     for (int i = 0; i < 5; i++) {
@@ -114,7 +114,7 @@ public class StreamTest {
   @Test
   @SuppressWarnings("checkstyle:emptycatchblock")
   public void testInerleaved()
-      throws RPCException, StreamException, IOException, NoSuchMethodException {
+      throws RPCException, StreamException, NoSuchMethodException {
     Stream<String> stream0 = connection.addStream(TestService.class, "int32ToString", 0);
     assertEquals("0", stream0.get());
 
@@ -227,7 +227,7 @@ public class StreamTest {
   @Test
   @SuppressWarnings("checkstyle:emptycatchblock")
   public void testRemoveStreamTwice()
-      throws RPCException, StreamException, IOException, NoSuchMethodException {
+      throws RPCException, StreamException, NoSuchMethodException {
     Stream<String> stream = connection.addStream(TestService.class, "int32ToString", 0);
     assertEquals("0", stream.get());
 
@@ -250,7 +250,7 @@ public class StreamTest {
 
   @Test
   public void testAddStreamTwice()
-      throws RPCException, StreamException, IOException, NoSuchMethodException {
+      throws RPCException, StreamException, NoSuchMethodException {
     Stream<String> stream0 = connection.addStream(TestService.class, "int32ToString", 42);
     // var streamId = stream0.Id;
     assertEquals("42", stream0.get());
