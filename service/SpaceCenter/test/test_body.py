@@ -32,7 +32,8 @@ class TestBody(krpctest.TestCase):
         self.assertAlmostEqual(70000, kerbin.atmosphere_depth)
         self.assertTrue(kerbin.has_atmospheric_oxygen)
         self.assertEqual(['Badlands', 'Deserts', 'Grasslands', 'Highlands', 'Ice Caps',
-                          'Mountains', 'Shores', 'Tundra', 'Water'], sorted(kerbin.biomes))
+                          'Mountains', 'Northern Ice Shelf', 'Shores', 'Southern Ice Shelf',
+                          'Tundra', 'Water'], sorted(kerbin.biomes))
         self.assertEqual('Water', kerbin.biome_at(0, 0))
         self.assertEqual('Grasslands', kerbin.biome_at(42, 4))
         self.assertEqual(18000, kerbin.flying_high_altitude_threshold)
@@ -53,12 +54,12 @@ class TestBody(krpctest.TestCase):
         self.assertFalse(mun.has_atmosphere)
         self.assertAlmostEqual(0, mun.atmosphere_depth)
         self.assertFalse(mun.has_atmospheric_oxygen)
-        self.assertEqual(['Canyons', 'East Crater', 'East Farside Crater', 'Farside Crater',
-                          'Highland Craters', 'Highlands', 'Midland Craters', 'Midlands',
-                          'Northern Basin', 'Northwest Crater', 'Polar Crater',
-                          'Polar Lowlands', 'Poles', 'Southwest Crater', 'Twin Craters'],
-                         sorted(mun.biomes))
-        self.assertEqual('Midlands', mun.biome_at(0, 0))
+        self.assertEqual(['Canyons', 'East Crater', 'East Farside Crater', 'Farside Basin',
+                          'Farside Crater', 'Highland Craters', 'Highlands', 'Lowlands',
+                          'Midland Craters', 'Midlands', 'Northern Basin', 'Northwest Crater',
+                          'Polar Crater', 'Polar Lowlands', 'Poles', 'Southwest Crater',
+                          'Twin Craters'], sorted(mun.biomes))
+        self.assertEqual('Lowlands', mun.biome_at(0, 0))
         self.assertEqual('Highlands', mun.biome_at(42, 4))
         self.assertEqual(18000, mun.flying_high_altitude_threshold)
         self.assertEqual(60000, mun.space_high_altitude_threshold)
