@@ -206,7 +206,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (InternalNode == null)
                 throw new InvalidOperationException ("Node does not exist");
-            InternalNode.RemoveSelf ();
+            InternalVessel.patchedConicSolver.RemoveManeuverNode (InternalNode);
             InternalNode = null;
             // TODO: delete this Node object
         }
