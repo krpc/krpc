@@ -92,8 +92,8 @@ class TestVessel(krpctest.TestCase):
 
     def test_bounding_box(self):
         box = self.vessel.bounding_box(self.vessel.reference_frame)
-        self.assertAlmostEqual((-1.55, -2.58, -1.55), box[0], places=2)
-        self.assertAlmostEqual((1.55, 2.66, 1.55), box[1], places=2)
+        self.assertAlmostEqual((-1.55, -2.57, -1.55), box[0], places=2)
+        self.assertAlmostEqual((1.55, 2.67, 1.55), box[1], places=2)
 
 class TestVesselEngines(krpctest.TestCase):
 
@@ -120,18 +120,18 @@ class TestVesselEngines(krpctest.TestCase):
                 'msl_isp': 100
             },
             'LV-T45 "Swivel" Liquid Fuel Engine': {
-                'max_thrust': 200000,
-                'available_thrust': 200000,
-                'isp': 320,
-                'vac_isp': 320,
-                'msl_isp': 270
-            },
-            'LV-T30 "Reliant" Liquid Fuel Engine': {
                 'max_thrust': 215000,
                 'available_thrust': 215000,
-                'isp': 300,
-                'vac_isp': 300,
-                'msl_isp': 280
+                'isp': 320,
+                'vac_isp': 320,
+                'msl_isp': 250
+            },
+            'LV-T30 "Reliant" Liquid Fuel Engine': {
+                'max_thrust': 240000,
+                'available_thrust': 240000,
+                'isp': 310,
+                'vac_isp': 310,
+                'msl_isp': 265
             },
             'LV-N "Nerv" Atomic Rocket Motor': {
                 'max_thrust': 60000,
