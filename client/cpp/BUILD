@@ -126,7 +126,7 @@ cc_library(
     srcs = srcs + [':protobuf'],
     hdrs = hdrs + [':protobuf'],
     includes = ['include'],
-    deps = ['@protobuf//:protobuf', '@cpp_asio//:asio'],
+    deps = ['@cpp_protobuf//:protobuf', '@cpp_asio//:asio'],
     visibility = ['//visibility:public']
 )
 
