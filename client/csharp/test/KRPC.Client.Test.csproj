@@ -28,12 +28,11 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\bazel-krpc\external\csharp_nunit\bin\net-4.5\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\..\bazel-krpc\external\csharp_moq\lib\net40\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\bazel-krpc\external\csharp_nunit\NUnit-2.6.4\bin\framework\nunit.framework.dll</HintPath>
-      <Package>nunit</Package>
     </Reference>
     <Reference Include="Google.Protobuf">
       <HintPath>..\..\..\bazel-krpc\external\csharp_protobuf\lib\net45\Google.Protobuf.dll</HintPath>
