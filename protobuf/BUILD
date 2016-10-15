@@ -34,8 +34,16 @@ protobuf_lua(
     src = 'krpc.proto'
 )
 
-protobuf_java(
+# Workaround to fix redundant casts in protobuf v3.1.0 generated output
+genrule(
     name = 'java',
-    out = 'KRPC.java',
+    srcs = [':java_gen'],
+    outs = ['KRPC.java'],
+    cmd = 'sed \'s/(Builder) super/super/g\' $(location :java_gen) > "$@"'
+)
+
+protobuf_java(
+    name = 'java_gen',
+    out = 'KRPC.java.tmp',
     src = 'krpc.proto'
 )

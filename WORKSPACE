@@ -2,9 +2,9 @@ workspace(name = "krpc")
 
 http_archive(
     name = 'protobuf',
-    url = 'https://github.com/google/protobuf/archive/v3.0.0-beta-3.tar.gz',
-    strip_prefix = 'protobuf-3.0.0-beta-3',
-    sha256 = 'd8d11564ff4085e7095cf5601fdc094946e6dbb0085863829668eb3a50b1ae0d'
+    url = 'https://github.com/google/protobuf/releases/download/v3.1.0/protobuf-cpp-3.1.0.tar.gz',
+    strip_prefix = 'protobuf-3.1.0',
+    sha256 = '51ceea9957c875bdedeb1f64396b5b0f3864fe830eed6a2d9c066448373ea2d6'
 )
 
 http_file(
@@ -16,15 +16,15 @@ http_file(
 new_http_archive(
     name = 'csharp_protobuf',
     build_file = 'tools/build/csharp_protobuf.BUILD',
-    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.0.0-beta3',
+    url = 'https://www.nuget.org/api/v2/package/Google.Protobuf/3.1.0',
     type = 'zip',
-    sha256 = '0b647895f3cbb9f1ed2be601aacc1c7fb724d14f3aaa82a2af81ac5317a39fc9'
+    sha256 = '032057472194471ab61cc6e8fd9046f2e243338a1194d9cfa5c0e2aaaad42a0d'
 )
 
 http_file(
     name = 'csharp_protobuf_net35',
-    url = 'https://github.com/djungelorm/protobuf/releases/download/v3.0.0-beta-3-net35/Google.Protobuf.dll',
-    sha256 = '9031bd7ece9a80ad0efd9bb0ed837b1933ccb01c7acd180b5456baf55ebd5d9e'
+    url = 'https://github.com/djungelorm/protobuf/releases/download/v3.1.0-net35/Google.Protobuf.dll',
+    sha256 = 'a2b8e37fcf7e27218073a7a21db456bcf48e9ec44473d6c1a5b4b2e32148044b'
 )
 
 new_http_archive(
@@ -89,8 +89,8 @@ http_file(
 
 http_file(
     name = 'java_protobuf',
-    url = 'https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.0.0-beta-3/protobuf-java-3.0.0-beta-3.jar',
-    sha256 = '9a99ae680c1e5682ed2bfee834d6f18f7772e6b7d338d38b210bf94b44247044'
+    url = 'https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.1.0/protobuf-java-3.1.0.jar',
+    sha256 = '8d7ec605ca105747653e002bfe67bddba90ab964da697aaa5daa1060923585db'
 )
 
 http_file(
@@ -207,8 +207,8 @@ http_file(
 
 http_file(
     name = 'python_protobuf',
-    url = 'https://pypi.python.org/packages/52/f8/1b0d57028ca6144a03e1fdb5eeca6bd10194dcbfc2405d920c47bb7a79ca/protobuf-3.0.0b3.tar.gz',
-    sha256 = 'b4f0a326f1776f874152243bea10ba924278bf76b7b9e10991c7f8d17eb71525'
+    url = 'https://pypi.python.org/packages/a5/bb/11821bdc46cb9aad8e18618715e5e93eef44abb642ed862c4b080c474183/protobuf-3.1.0.post1-py2.py3-none-any.whl',
+    sha256 = '42315e73409eaefdcc11e216695ff21f87dc483ad0595c57999baddf7f841180'
 )
 
 http_file(

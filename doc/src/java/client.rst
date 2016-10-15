@@ -29,7 +29,7 @@ To compile this program using javac on the command line, save the source as
 
 .. code-block:: bash
 
-   javac -cp krpc-java-0.2.3.jar:protobuf-java-3.0.0-beta-2.jar:javatuples-1.2.jar Example.java
+   javac -cp krpc-java-0.4.0.jar:protobuf-java-3.1.0.jar:javatuples-1.2.jar Example.java
 
 You may need to change the paths to the JAR files.
 

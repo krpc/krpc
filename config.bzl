@@ -19,8 +19,7 @@ assembly_version = '.'.join(version_parts[:4])
 
 # Nuget package version: x.y.z[-buildw]
 if len(version_parts) == 3:
-   #TODO: remove pre suffix when Google.Protobuf is released
-   nuget_version = '.'.join(version_parts[:3])+'-pre'
+   nuget_version = '.'.join(version_parts[:3])
 else:
    nuget_version = '.'.join(version_parts[:3])+'-build'+version_parts[3]
 
