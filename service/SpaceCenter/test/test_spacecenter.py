@@ -129,7 +129,7 @@ class TestSpaceCenter(krpctest.TestCase):
         self.assertAlmostEqual(ut + 1, self.sc.ut, delta=0.25)
 
     def test_g(self):
-        self.assertAlmostEqual(6.673e-11, self.sc.g, delta=0.0005e-11)
+        self.assertAlmostEqual(6.67408e-11, self.sc.g, delta=0.001e-11)
 
     def test_transform_position_same_reference_frame(self):
         self.assertAlmostEqual(

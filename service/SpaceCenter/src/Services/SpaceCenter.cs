@@ -30,7 +30,7 @@ namespace KRPC.SpaceCenter.Services
             set {
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException ("ActiveVessel");
-                FlightGlobals.SetActiveVessel (value.InternalVessel);
+                FlightGlobals.ForceSetActiveVessel (value.InternalVessel);
                 throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
             }
         }
@@ -42,7 +42,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (FlightGlobals.ActiveVessel.packed)
                 throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
-            if (tick < 10)
+            if (tick < 25)
                 throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, tick + 1));
         }
 
