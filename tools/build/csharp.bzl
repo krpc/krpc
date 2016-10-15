@@ -319,7 +319,7 @@ def _nuget_package_impl(ctx):
     nuspec_contents.extend([
         '  <frameworkAssemblies>'
     ])
-    nuspec_contents.extend(['    <frameworkAssembly assemblyName="%s" targetFramework="net40"/>' % x for x in ctx.attr.framework_deps])
+    nuspec_contents.extend(['    <frameworkAssembly assemblyName="%s" targetFramework="net45"/>' % x for x in ctx.attr.framework_deps])
     nuspec_contents.extend([
         '  </frameworkAssemblies>',
         '  <dependencies>'
@@ -329,8 +329,8 @@ def _nuget_package_impl(ctx):
         '  </dependencies>',
         '</metadata>',
         '<files>',
-        '  <file src="%s" target="lib/net40" />' % assembly.basename,
-        '  <file src="%s" target="lib/net40" />' % doc.basename,
+        '  <file src="%s" target="lib/net45" />' % assembly.basename,
+        '  <file src="%s" target="lib/net45" />' % doc.basename,
         '</files>',
         '</package>'
     ])
