@@ -18,10 +18,14 @@ class TestPartsModule(krpctest.TestCase):
         module = next(m for m in part.modules if m.name == 'ModuleCommand')
         self.assertEqual('ModuleCommand', module.name)
         self.assertEqual(part, module.part)
-        self.assertEqual({'State': 'Operational'}, module.fields)
-        self.assertTrue(module.has_field('State'))
+        self.assertEqual({
+            'Command State': 'Operational',
+            'Comm First Hop Dist': 'NA',
+            'Comm Signal': 'NA'
+        }, module.fields)
+        self.assertTrue(module.has_field('Command State'))
         self.assertFalse(module.has_field('DoesntExist'))
-        self.assertEqual('Operational', module.get_field('State'))
+        self.assertEqual('Operational', module.get_field('Command State'))
         self.assertRaises(krpc.client.RPCError, module.get_field, 'DoesntExist')
         self.assertItemsEqual(['Control From Here', 'Rename Vessel'], module.events)
         self.assertTrue(module.has_event('Control From Here'))
