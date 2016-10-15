@@ -1,9 +1,9 @@
-from .generator import Generator
-from .docparser import DocParser
 from krpc.schema.KRPC import Type
 from krpc.types import ValueType, ClassType, EnumerationType, MessageType
 from krpc.types import TupleType, ListType, SetType, DictionaryType
 from krpc.utils import snake_case
+from .generator import Generator
+from .docparser import DocParser
 
 def cpp_template_fix(typ):
     """ Ensure nested templates are separated by spaces for the C++ parser """

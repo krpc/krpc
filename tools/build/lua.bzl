@@ -2,14 +2,13 @@ _LUA_VERSION = '5.1'
 
 def _test_impl(ctx):
     sub_commands = []
-    for dep in ctx.files.deps:
+    for dep in [ctx.file._luaunit] + ctx.files.deps:
         sub_commands.append('luarocks --tree=lua-tree install %s' % dep.short_path)
     sub_commands.extend([
         'rm -rf lua-src',
         'unzip -q %s -d lua-src' % ctx.file.src.short_path,
         'CWD=`pwd`',
         '(cd lua-src/*/; luarocks --tree=$CWD/lua-tree make $CWD/%s)' % ctx.file.rockspec.short_path,
-        'ln -f -s %s luaunit.lua' % ctx.file._luaunit.short_path,
         'LUA_PATH="lua-tree/share/lua/'+_LUA_VERSION+'/?.lua;lua-tree/share/lua/'+_LUA_VERSION+'/?/init.lua;;" ' + \
         'LUA_CPATH="lua-tree/lib/lua/'+_LUA_VERSION+'/?.so;lua-tree/lib/lua/'+_LUA_VERSION+'/?/init.so;;" ' + \
         'lua'+_LUA_VERSION+' lua-tree/share/lua/'+_LUA_VERSION+'/krpc/test/init.lua -v'

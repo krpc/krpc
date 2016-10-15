@@ -1,1 +1,1 @@
-exports_files(['lib/net40/Newtonsoft.Json.dll'])
+exports_files(['lib/net45/Newtonsoft.Json.dll'])

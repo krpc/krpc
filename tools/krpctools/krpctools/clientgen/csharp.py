@@ -1,7 +1,7 @@
-from .generator import Generator
 from krpc.schema.KRPC import Type
 from krpc.types import ValueType, ClassType, EnumerationType, MessageType
 from krpc.types import TupleType, ListType, SetType, DictionaryType
+from .generator import Generator
 
 class CsharpGenerator(Generator):
 

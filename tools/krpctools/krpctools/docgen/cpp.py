@@ -1,10 +1,10 @@
-from .domain import Domain
-from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
-from .nodes import Enumeration, EnumerationValue
 from krpc.schema.KRPC import Type
 from krpc.types import ValueType, ClassType, EnumerationType, MessageType
 from krpc.types import TupleType, ListType, SetType, DictionaryType
 from krpc.utils import snake_case
+from .domain import Domain
+from .nodes import Procedure, Property, Class, ClassMethod, ClassStaticMethod, ClassProperty
+from .nodes import Enumeration, EnumerationValue
 
 class CppDomain(Domain):
     name = 'cpp'

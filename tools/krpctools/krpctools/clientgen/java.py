@@ -1,12 +1,12 @@
 import hashlib
 import itertools
-from .generator import Generator
-from .docparser import DocParser
-from ..utils import lower_camel_case, upper_camel_case, as_type
 from krpc.schema.KRPC import Type
 from krpc.types import ValueType, ClassType, EnumerationType, MessageType
 from krpc.types import TupleType, ListType, SetType, DictionaryType
 from krpc.utils import snake_case
+from .generator import Generator
+from .docparser import DocParser
+from ..utils import lower_camel_case, upper_camel_case, as_type
 
 class JavaGenerator(Generator):
 
