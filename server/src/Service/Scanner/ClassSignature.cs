@@ -8,7 +8,7 @@ namespace KRPC.Service.Scanner
     sealed class ClassSignature : ISerializable
     {
         /// <summary>
-        /// Name of the procedure, not including the service it is in.
+        /// Name of the class, not including the service it is in.
         /// </summary>
         public string Name { get; private set; }
 
@@ -19,7 +19,7 @@ namespace KRPC.Service.Scanner
         public string FullyQualifiedName { get; private set; }
 
         /// <summary>
-        /// Documentation for the procedure
+        /// Documentation for the class
         /// </summary>
         public string Documentation { get; private set; }
 

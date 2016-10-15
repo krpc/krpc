@@ -24,12 +24,12 @@ namespace KRPC.Service.Scanner
         public Dictionary<string,ProcedureSignature> Procedures { get; private set; }
 
         /// <summary>
-        /// The names of all classes defined in this service
+        /// The classes defined in this service
         /// </summary>
         public Dictionary<string,ClassSignature> Classes { get; private set; }
 
         /// <summary>
-        /// The names of all C# defined enums defined in this service, and their allowed values
+        /// The enumerations defined in this service, and their allowed values
         /// </summary>
         public Dictionary<string,EnumerationSignature> Enumerations { get; private set; }
 
