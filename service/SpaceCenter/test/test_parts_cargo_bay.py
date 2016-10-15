@@ -15,32 +15,32 @@ class TestPartsCargoBay(krpctest.TestCase):
     def test_open_close(self):
         for bay in self.cargo_bays:
 
-            self.assertFalse(bay.open)
             self.assertEqual(bay.state, self.state.closed)
+            self.assertFalse(bay.open)
 
             bay.open = True
             self.wait()
 
-            self.assertTrue(bay.open)
             self.assertEqual(bay.state, self.state.opening)
+            self.assertTrue(bay.open)
 
             while bay.state == self.state.opening:
                 self.wait()
 
-            self.assertTrue(bay.open)
             self.assertEqual(bay.state, self.state.open)
+            self.assertTrue(bay.open)
 
             bay.open = False
             self.wait()
 
-            self.assertFalse(bay.open)
             self.assertEqual(bay.state, self.state.closing)
+            self.assertFalse(bay.open)
 
             while bay.state == self.state.closing:
                 self.wait()
 
-            self.assertFalse(bay.open)
             self.assertEqual(bay.state, self.state.closed)
+            self.assertFalse(bay.open)
 
 if __name__ == '__main__':
     unittest.main()
