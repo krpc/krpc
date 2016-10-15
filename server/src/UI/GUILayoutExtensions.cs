@@ -44,17 +44,21 @@ namespace KRPC.UI
             style.active = HighLogic.Skin.toggle.normal;
             style.focused = HighLogic.Skin.toggle.normal;
             style.hover = HighLogic.Skin.toggle.normal;
-            float size = style.lineHeight;
+            SetLightStyleSize (style, style.lineHeight);
+            style.padding = new RectOffset (0, 0, 0, 0);
+            style.overflow = new RectOffset (0, 0, 0, 0);
+            style.imagePosition = ImagePosition.ImageOnly;
+            style.clipping = TextClipping.Overflow;
+            return style;
+        }
+
+        public static void SetLightStyleSize (GUIStyle style, float size)
+        {
             style.fixedWidth = size;
             style.fixedHeight = size;
             int offset = (int)(-0.8 * size);
             style.border = new RectOffset (offset - 4, offset + 4, offset + 4, offset - 4);
-            style.padding = new RectOffset (0, 0, 0, 0);
-            style.overflow = new RectOffset (0, 0, 0, 0);
             style.margin = new RectOffset (4, 0, 0, 0);
-            style.imagePosition = ImagePosition.ImageOnly;
-            style.clipping = TextClipping.Overflow;
-            return style;
         }
 
         public static void Light (bool enabled, GUIStyle style, params GUILayoutOption[] options)
@@ -177,7 +181,7 @@ namespace KRPC.UI
                 stalePosition = true;
             }
 
-            protected override void Draw ()
+            protected override void Draw (bool needRescale)
             {
                 if (Options != null) {
                     int selectedOption = GUILayout.SelectionGrid (-1, Options.ToArray (), 1, OptionStyle);
