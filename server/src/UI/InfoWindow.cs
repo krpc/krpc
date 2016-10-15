@@ -87,8 +87,22 @@ namespace KRPC.UI
         }
 
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidLongMethodsRule")]
-        protected override void Draw ()
+        protected override void Draw (bool needRescale)
         {
+            if (needRescale) {
+                int scaledFontSize = Style.fontSize;
+                Style.fixedWidth = windowWidth * GameSettings.UI_SCALE;
+                labelStyle.fontSize = scaledFontSize;
+                nameLabelStyle.fontSize = scaledFontSize;
+                nameLabelStyle.fixedWidth = 160f * GameSettings.UI_SCALE;
+                valueLabelStyle.fontSize = scaledFontSize;
+                valueLabelStyle.fixedWidth = 120f * GameSettings.UI_SCALE;
+                buttonStyle.fontSize = scaledFontSize;
+
+                // Force window to resize to height of content
+                Position = new Rect (Position.x, Position.y, Position.width, 0f);
+            }
+
             update = ((DateTime.Now - lastUpdate).TotalSeconds > updateTime);
             if (update)
                 lastUpdate = DateTime.Now;
