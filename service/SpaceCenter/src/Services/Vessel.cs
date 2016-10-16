@@ -17,6 +17,8 @@ namespace KRPC.SpaceCenter.Services
     /// Created using <see cref="SpaceCenter.ActiveVessel"/> or <see cref="SpaceCenter.Vessels"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
+    [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+    [SuppressMessage ("Gendarme.Rules.Naming", "AvoidRedundancyInMethodNameRule")]
     public class Vessel : Equatable<Vessel>
     {
         /// <summary>
@@ -379,8 +381,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AvailableTorque {
-            get { return AvailableTorqueVector.ToTuple (); }
+        public Tuple<Tuple3,Tuple3> AvailableTorque {
+            get { return AvailableTorqueVectors.ToTuple (); }
         }
 
         /// <summary>
@@ -390,8 +392,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AvailableReactionWheelTorque {
-            get { return AvailableReactionWheelTorqueVector.ToTuple (); }
+        public Tuple<Tuple3, Tuple3> AvailableReactionWheelTorque {
+            get { return AvailableReactionWheelTorqueVectors.ToTuple (); }
         }
 
         /// <summary>
@@ -401,8 +403,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AvailableRCSTorque {
-            get { return AvailableRCSTorqueVector.ToTuple (); }
+        public Tuple<Tuple3, Tuple3> AvailableRCSTorque {
+            get { return AvailableRCSTorqueVectors.ToTuple (); }
         }
 
         /// <summary>
@@ -412,8 +414,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AvailableEngineTorque {
-            get { return AvailableEngineTorqueVector.ToTuple (); }
+        public Tuple<Tuple3, Tuple3> AvailableEngineTorque {
+            get { return AvailableEngineTorqueVectors.ToTuple (); }
         }
 
         /// <summary>
@@ -423,53 +425,69 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AvailableControlSurfaceTorque {
-            get { return AvailableControlSurfaceTorqueVector.ToTuple (); }
+        public Tuple<Tuple3, Tuple3> AvailableControlSurfaceTorque {
+            get { return AvailableControlSurfaceTorqueVectors.ToTuple (); }
         }
 
-        internal Vector3d AvailableTorqueVector {
+        /// <summary>
+        /// The maximum torque that parts (excluding reaction wheels, gimballed engines, RCS and control surfaces) can generate.
+        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// vessels reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple<Tuple3, Tuple3> AvailableOtherTorque {
+            get { return AvailableOtherTorqueVectors.ToTuple (); }
+        }
+
+        internal Tuple<Vector3d,Vector3d> AvailableTorqueVectors {
             get {
-                return
-                AvailableReactionWheelTorqueVector +
-                AvailableRCSTorqueVector +
-                AvailableEngineTorqueVector +
-                AvailableControlSurfaceTorqueVector;
+                return ITorqueProviderExtensions.Sum (new [] {
+                    AvailableReactionWheelTorqueVectors,
+                    AvailableRCSTorqueVectors,
+                    AvailableEngineTorqueVectors,
+                    AvailableControlSurfaceTorqueVectors,
+                    AvailableOtherTorqueVectors
+                });
             }
         }
 
-        Vector3d AvailableReactionWheelTorqueVector {
-            get {
-                Vector3d torque = Vector3d.zero;
-                foreach (var rw in Parts.ReactionWheels)
-                    torque += rw.AvailableTorqueVector;
-                return torque;
-            }
+        Tuple<Vector3d,Vector3d> AvailableReactionWheelTorqueVectors {
+            get { return ITorqueProviderExtensions.Sum (Parts.ReactionWheels.Select (x => x.AvailableTorqueVectors)); }
         }
 
-        Vector3d AvailableRCSTorqueVector {
-            get {
-                Vector3d torque = Vector3d.zero;
-                foreach (var rw in Parts.RCS)
-                    torque += rw.AvailableTorqueVector;
-                return torque;
-            }
+        Tuple<Vector3d,Vector3d> AvailableRCSTorqueVectors {
+            get { return ITorqueProviderExtensions.Sum (Parts.RCS.Select (x => x.AvailableTorqueVectors)); }
         }
 
-        Vector3d AvailableEngineTorqueVector {
-            get {
-                Vector3d torque = Vector3d.zero;
-                foreach (var rw in Parts.Engines)
-                    torque += rw.AvailableTorqueVector;
-                return torque;
-            }
+        Tuple<Vector3d,Vector3d> AvailableEngineTorqueVectors {
+            get { return ITorqueProviderExtensions.Sum (Parts.Engines.Select (x => x.AvailableTorqueVectors)); }
         }
 
-        Vector3d AvailableControlSurfaceTorqueVector {
+        Tuple<Vector3d,Vector3d> AvailableControlSurfaceTorqueVectors {
+            get { return ITorqueProviderExtensions.Sum (Parts.ControlSurfaces.Select (x => x.AvailableTorqueVectors)); }
+        }
+
+        Tuple<Vector3d,Vector3d> AvailableOtherTorqueVectors {
             get {
-                Vector3d torque = Vector3d.zero;
-                foreach (var rw in Parts.ControlSurfaces)
-                    torque += rw.AvailableTorqueVector;
-                return torque;
+                var torques = new List<Tuple<Vector3d,Vector3d>> ();
+                // Include contributions from other ITorqueProviders
+                var parts = InternalVessel.parts;
+                for (var i = 0; i < parts.Count; i++) {
+                    var part = parts [i];
+                    if (Services.Parts.ReactionWheel.Is (part) ||
+                        Services.Parts.RCS.Is (part) ||
+                        Services.Parts.Engine.Is (part) ||
+                        Services.Parts.ControlSurface.Is (part))
+                        continue;
+                    for (var j = 0; j < part.Modules.Count; j++) {
+                        var module = part.Modules [j];
+                        var torqueProvider = module as ITorqueProvider;
+                        if (torqueProvider != null)
+                            torques.Add (torqueProvider.GetPotentialTorque ());
+                    }
+                }
+                return ITorqueProviderExtensions.Sum (torques);
             }
         }
 

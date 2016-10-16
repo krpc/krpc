@@ -78,6 +78,7 @@ SpaceCenter.Vessel.AvailableReactionWheelTorque
 SpaceCenter.Vessel.AvailableRCSTorque
 SpaceCenter.Vessel.AvailableEngineTorque
 SpaceCenter.Vessel.AvailableControlSurfaceTorque
+SpaceCenter.Vessel.AvailableOtherTorque
 SpaceCenter.Vessel.ReferenceFrame
 SpaceCenter.Vessel.OrbitalReferenceFrame
 SpaceCenter.Vessel.SurfaceReferenceFrame

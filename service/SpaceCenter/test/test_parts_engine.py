@@ -157,7 +157,8 @@ class EngineTest(EngineTestBase):
         self.assertAlmostEqual(data['max_thrust'], engine.max_thrust, delta=500)
         self.assertAlmostEqual(0, engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
-        self.assertAlmostEqual((0, 0, 0), engine.available_torque)
+        self.assertAlmostEqual((0, 0, 0), engine.available_torque[0])
+        self.assertAlmostEqual((0, 0, 0), engine.available_torque[1])
 
     def check_engine_active(self, engine, throttle):
         """ Check engine properties when engine is activated """
@@ -171,9 +172,11 @@ class EngineTest(EngineTestBase):
         self.assertAlmostEqual(data['isp'], engine.specific_impulse, delta=5)
         self.assertTrue(engine.has_fuel)
         if data['gimballed'] and throttle > 0:
-            self.assertGreater(engine.available_torque, (100, 100, 100))
+            self.assertGreater(engine.available_torque[0], (100, 100, 100))
+            self.assertLess(engine.available_torque[1], (-100, -100, -100))
         else:
-            self.assertAlmostEqual((0, 0, 0), engine.available_torque)
+            self.assertAlmostEqual((0, 0, 0), engine.available_torque[0])
+            self.assertAlmostEqual((0, 0, 0), engine.available_torque[1])
 
     def check_engine(self, engine):
         self.set_idle(engine)

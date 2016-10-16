@@ -91,6 +91,15 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Convert a pair of vectors to a pair of tuples
+        /// </summary>
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public static Tuple<Tuple3, Tuple3> ToTuple (this Tuple<Vector3d, Vector3d> v)
+        {
+            return new Tuple<Tuple3,Tuple3> (v.Item1.ToTuple (), v.Item2.ToTuple ());
+        }
+
+        /// <summary>
         /// Swap the Y and Z components of a vector
         /// </summary>
         public static Vector3d SwapYZ (this Vector3d v)

@@ -3,6 +3,11 @@ v0.3.7
  * Add Vessel.BoundingBox and Part.BoundingBox (#352)
  * Add LandingGear.IsGrounded and LandingLeg.IsGrounded (#352)
  * Change CelestialBody.Biomes to return a set instead of a list
+ * Change available torque methods to return a pair of torque vectors, one in the positive control directions
+   and one in the negative control direction.
+ * Add Vessel.AvailableOtherTorque which returns the available torque from other parts (i.e. torque providers
+   other than the stock reaction wheels, RCS thrusters, gimballed engines and control surfaces)
+ * Include this 'other' torque in Vessel.AvailableTorque
 
 v0.3.6
  * Add Part.Tag which can be used to get/set the name tag set via the NameTag mod, or kOS (#297)
