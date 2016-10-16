@@ -55,14 +55,14 @@ class TestVessel(krpctest.TestCase):
         self.assertAlmostEqual(3492, self.vessel.dry_mass, places=3)
 
     def test_moment_of_inertia(self):
-        self.assertAlmostEqual((13411, 2219, 13366), self.vessel.moment_of_inertia, delta=10)
+        self.assertAlmostEqual((13394, 2255, 13348), self.vessel.moment_of_inertia, delta=1)
 
     def test_inertia_tensor(self):
         self.assertAlmostEqual(
-            [13411, 0, 0,
-             0, 2219, 0,
-             0, 0, 13366],
-            self.vessel.inertia_tensor, delta=10)
+            [13394, 0, 0,
+             0, 2255, 0,
+             0, 0, 13348],
+            self.vessel.inertia_tensor, delta=1)
 
     def test_available_torque(self):
         self.assertAlmostEqual((5000, 5000, 5000), self.vessel.available_torque, delta=5)
