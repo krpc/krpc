@@ -1,7 +1,7 @@
 using UnityEngine;
 using Tuple3 = KRPC.Utils.Tuple<double, double, double>;
 
-namespace KRPC.UI.ExtensionMethods
+namespace KRPC.SpaceCenter.ExtensionMethods
 {
     /// <summary>
     /// Color extensions.

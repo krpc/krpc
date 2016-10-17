@@ -680,6 +680,20 @@ class TestPartsPart(krpctest.TestCase):
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.solar_panel)
 
+    def test_highlighting(self):
+        part = self.parts.with_title('Rockomax Jumbo-64 Fuel Tank')[0]
+        init_color = part.highlight_color
+        self.assertEqual((0, 1, 0), init_color)
+        self.assertFalse(part.highlighted)
+        colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
+        for color in colors:
+            part.highlight_color = color
+            part.highlighted = True
+            self.wait(0.5)
+            part.highlighted = False
+            self.wait(0.5)
+        part.highlight_color = init_color
+
 class TestPartsPartDecoupleStage(krpctest.TestCase):
 
     @classmethod

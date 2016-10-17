@@ -3,6 +3,7 @@ v0.3.7
  * Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (#252)
  * Add Vessel.BoundingBox and Part.BoundingBox (#352)
  * Add LandingGear.IsGrounded and LandingLeg.IsGrounded (#352)
+ * Add Part.Highlight and HighlightColor (#332)
  * Change CelestialBody.Biomes to return a set instead of a list
  * Change available torque methods to return a pair of torque vectors, one in the positive control directions
    and one in the negative control direction.

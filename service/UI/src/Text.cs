@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.UI.ExtensionMethods;
 using UnityEngine;
 using Tuple2 = KRPC.Utils.Tuple<double, double>;

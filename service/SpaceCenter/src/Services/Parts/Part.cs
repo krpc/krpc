@@ -97,6 +97,30 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the part is highlighted.
+        /// </summary>
+        [KRPCProperty]
+        public bool Highlighted {
+            get { return InternalPart.HighlightActive; }
+            set {
+                var part = InternalPart;
+                if (value)
+                    PartHighlightAddon.Add (part);
+                else
+                    PartHighlightAddon.Remove (part);
+            }
+        }
+
+        /// <summary>
+        /// The color used to highlight the part.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 HighlightColor {
+            get { return InternalPart.highlightColor.ToTuple (); }
+            set { InternalPart.highlightColor = value.ToColor (); }
+        }
+
+        /// <summary>
         /// The cost of the part, in units of funds.
         /// </summary>
         [KRPCProperty]
