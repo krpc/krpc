@@ -79,18 +79,18 @@ namespace KRPC.Test.Service
                 if (enumeration.Name == "GameScene") {
                     foundEnumeration = true;
                     MessageAssert.HasDocumentation (enumeration,
-                        "<doc>\n  <summary>\nThe game scene. See <see cref=\"M:KRPC.CurrentGameScene\" />.\n</summary>\n</doc>");
+                        "<doc>\n<summary>\nThe game scene. See <see cref=\"M:KRPC.CurrentGameScene\" />.\n</summary>\n</doc>");
                     MessageAssert.HasValues (enumeration, 5);
                     MessageAssert.HasValue (enumeration, 0, "SpaceCenter", 0,
-                        "<doc>\n  <summary>\nThe game scene showing the Kerbal Space Center buildings.\n</summary>\n</doc>");
+                        "<doc>\n<summary>\nThe game scene showing the Kerbal Space Center buildings.\n</summary>\n</doc>");
                     MessageAssert.HasValue (enumeration, 1, "Flight", 1,
-                        "<doc>\n  <summary>\nThe game scene showing a vessel in flight (or on the launchpad/runway).\n</summary>\n</doc>");
+                        "<doc>\n<summary>\nThe game scene showing a vessel in flight (or on the launchpad/runway).\n</summary>\n</doc>");
                     MessageAssert.HasValue (enumeration, 2, "TrackingStation", 2,
-                        "<doc>\n  <summary>\nThe tracking station.\n</summary>\n</doc>");
+                        "<doc>\n<summary>\nThe tracking station.\n</summary>\n</doc>");
                     MessageAssert.HasValue (enumeration, 3, "EditorVAB", 3,
-                        "<doc>\n  <summary>\nThe Vehicle Assembly Building.\n</summary>\n</doc>");
+                        "<doc>\n<summary>\nThe Vehicle Assembly Building.\n</summary>\n</doc>");
                     MessageAssert.HasValue (enumeration, 4, "EditorSPH", 4,
-                        "<doc>\n  <summary>\nThe Space Plane Hangar.\n</summary>\n</doc>");
+                        "<doc>\n<summary>\nThe Space Plane Hangar.\n</summary>\n</doc>");
                 }
             }
             Assert.IsTrue (foundEnumeration);

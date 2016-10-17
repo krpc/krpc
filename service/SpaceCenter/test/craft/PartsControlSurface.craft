@@ -1,21 +1,23 @@
 ship = PartsControlSurface
-version = 1.1.2
+version = 1.2.0
 description = 
 type = VAB
-size = 4.321621,8.567087,7.048415
+size = 4.32162142,8.56708717,7.04841518
 PART
 {
 	part = mk1pod_4294682792
 	partName = Part
-	pos = -1.353885,5.499333,0.8956068
+	pos = -1.35388505,5.4993329,0.895606816
 	attPos = 0,0,0
-	attPos0 = -1.353885,5.499333,0.8956068
+	attPos0 = -1.35388505,5.4993329,0.895606816
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
+	autostrutMode = Off
 	istg = 0
+	resPri = 0
 	dstg = 0
 	sidx = -1
 	sqor = -1
@@ -23,12 +25,78 @@ PART
 	attm = 0
 	modCost = 0
 	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
+	modSize = 0,0,0
 	link = fuelTank.long_4294669568
 	link = launchClamp1_4294653222
 	attN = bottom,fuelTank.long_4294669568
 	EVENTS
 	{
+		AimCamera
+		{
+			active = True
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Aim Camera
+			guiName = Aim Camera
+			category = Aim Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		ResetCamera
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = True
+			guiIcon = Reset Camera
+			guiName = Reset Camera
+			category = Reset Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		SpawnTransferDialog
+		{
+			active = True
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Transfer Crew
+			guiName = Transfer Crew
+			category = Transfer Crew
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ShowUpgradeStats
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = False
+			guiIcon = Show Upgraded Stats
+			guiName = Show Upgraded Stats
+			category = Show Upgraded Stats
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ToggleAutoStrut
+		{
+			active = True
+			guiActive = True
+			guiActiveEditor = True
+			guiActiveUncommand = False
+			guiIcon = Autostrut: Disabled
+			guiName = Autostrut: Disabled
+			category = Autostrut: Disabled
+			advancedTweakable = True
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
 	}
 	ACTIONS
 	{
@@ -40,8 +108,18 @@ PART
 	{
 		name = ModuleCommand
 		isEnabled = True
+		hibernation = False
+		hibernateOnWarp = False
 		controlSrcStatusText = 
 		stagingEnabled = True
+		hibernation_UIFlight
+		{
+			controlEnabled = True
+		}
+		hibernateOnWarp_UIFlight
+		{
+			controlEnabled = True
+		}
 		EVENTS
 		{
 			MakeReference
@@ -52,6 +130,7 @@ PART
 				guiIcon = Control From Here
 				guiName = Control From Here
 				category = Control From Here
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -64,6 +143,7 @@ PART
 				guiIcon = Rename Vessel
 				guiName = Rename Vessel
 				category = Rename Vessel
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -76,12 +156,21 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
 		}
 		ACTIONS
+		{
+			HibernateToggle
+			{
+				actionGroup = None
+				active = False
+			}
+		}
+		UPGRADESAPPLIED
 		{
 		}
 	}
@@ -90,6 +179,7 @@ PART
 		name = ModuleReactionWheel
 		isEnabled = True
 		actuatorModeCycle = 0
+		authorityLimiter = 100
 		stateString = Active
 		stagingEnabled = True
 		WheelState = Active
@@ -97,6 +187,13 @@ PART
 		{
 			controlEnabled = True
 			stateNames = Normal, SAS Only, Pilot Only
+		}
+		authorityLimiter_UIFlight
+		{
+			controlEnabled = True
+			minValue = 0
+			maxValue = 100
+			stepIncrement = 0.1
 		}
 		EVENTS
 		{
@@ -109,6 +206,7 @@ PART
 				guiIcon = Toggle Torque
 				guiName = Toggle Torque
 				category = Toggle Torque
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -121,6 +219,7 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -128,6 +227,10 @@ PART
 		}
 		ACTIONS
 		{
+			CycleAction
+			{
+				actionGroup = None
+			}
 			Activate
 			{
 				actionGroup = None
@@ -140,6 +243,56 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleColorChanger
+		isEnabled = True
+		animState = False
+		stagingEnabled = True
+		EVENTS
+		{
+			ToggleEvent
+			{
+				active = True
+				guiActive = True
+				guiActiveEditor = True
+				guiActiveUncommand = False
+				guiIcon = Toggle Color
+				guiName = Lights On
+				category = Toggle Color
+				advancedTweakable = False
+				guiActiveUnfocused = False
+				unfocusedRange = 5
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				advancedTweakable = True
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			ToggleAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
+		{
 		}
 	}
 	MODULE
@@ -160,6 +313,7 @@ PART
 				guiIcon = Deploy
 				guiName = Deploy
 				category = Deploy
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -172,6 +326,7 @@ PART
 				guiIcon = 
 				guiName = 
 				category = 
+				advancedTweakable = False
 				guiActiveUnfocused = True
 				unfocusedRange = 1.5
 				externalToEVAOnly = True
@@ -184,6 +339,7 @@ PART
 				guiIcon = Review Data
 				guiName = Review Data
 				category = Review Data
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -196,6 +352,7 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -208,6 +365,7 @@ PART
 				guiIcon = Deploy
 				guiName = Deploy
 				category = Deploy
+				advancedTweakable = False
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -220,6 +378,7 @@ PART
 				guiIcon = Reset
 				guiName = Reset
 				category = Reset
+				advancedTweakable = False
 				guiActiveUnfocused = True
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -232,7 +391,21 @@ PART
 				guiIcon = Restore
 				guiName = Restore
 				category = Restore
+				advancedTweakable = False
 				guiActiveUnfocused = True
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			TransferDataEvent
+			{
+				active = True
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Transfer Data
+				guiName = Transfer Data
+				category = Transfer Data
+				advancedTweakable = False
+				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
@@ -244,6 +417,7 @@ PART
 				guiIcon = Disable Staging
 				guiName = Experiment: Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -259,6 +433,9 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+		UPGRADESAPPLIED
+		{
 		}
 	}
 	MODULE
@@ -276,6 +453,7 @@ PART
 				guiIcon = 
 				guiName = Store Experiments (0)
 				category = 
+				advancedTweakable = False
 				guiActiveUnfocused = True
 				unfocusedRange = 1.3
 				externalToEVAOnly = True
@@ -288,8 +466,35 @@ PART
 				guiIcon = 
 				guiName = Take Data (0)
 				category = 
+				advancedTweakable = False
 				guiActiveUnfocused = True
 				unfocusedRange = 1.3
+				externalToEVAOnly = True
+			}
+			TransferDataEvent
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Container: Transfer Data
+				guiName = Container: Transfer Data
+				category = Container: Transfer Data
+				advancedTweakable = False
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			CollectAllEvent
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Container: Collect All
+				guiName = Container: Collect All
+				category = Container: Collect All
+				advancedTweakable = False
+				guiActiveUnfocused = False
+				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
 			ReviewDataEvent
@@ -300,6 +505,7 @@ PART
 				guiIcon = Review Data
 				guiName = Review Stored Data (0)
 				category = Review Data
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -312,12 +518,16 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
 		}
 		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
 		{
 		}
 	}
@@ -338,6 +548,7 @@ PART
 				guiIcon = Toggle Flag
 				guiName = Toggle Flag
 				category = Toggle Flag
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -350,12 +561,16 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
 		}
 		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
 		{
 		}
 	}
@@ -374,12 +589,87 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
 		}
 		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
+		{
+		}
+	}
+	MODULE
+	{
+		name = ModuleDataTransmitter
+		isEnabled = True
+		stagingEnabled = True
+		EVENTS
+		{
+			StartTransmission
+			{
+				active = True
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Transmit Data
+				guiName = Transmit Data
+				category = Transmit Data
+				advancedTweakable = False
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			TransmitIncompleteToggle
+			{
+				active = True
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Toggle Transmit Incomplete
+				guiName = Toggle Transmit Incomplete
+				category = Toggle Transmit Incomplete
+				advancedTweakable = False
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			StopTransmission
+			{
+				active = False
+				guiActive = True
+				guiActiveUncommand = False
+				guiIcon = Stop Transmitting
+				guiName = Stop Transmitting
+				category = Stop Transmitting
+				advancedTweakable = False
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+			ToggleStaging
+			{
+				active = True
+				guiActive = False
+				guiActiveUncommand = False
+				guiIcon = Disable Staging
+				guiName = Disable Staging
+				category = Disable Staging
+				advancedTweakable = True
+				guiActiveUnfocused = False
+				unfocusedRange = 2
+				externalToEVAOnly = True
+			}
+		}
+		ACTIONS
+		{
+			StartTransmissionAction
+			{
+				actionGroup = None
+			}
+		}
+		UPGRADESAPPLIED
 		{
 		}
 	}
@@ -398,6 +688,7 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -410,40 +701,7 @@ PART
 		{
 			flight = 0
 		}
-	}
-	MODULE
-	{
-		name = TransferDialogSpawner
-		isEnabled = True
-		stagingEnabled = True
-		EVENTS
-		{
-			SpawnDialog
-			{
-				active = True
-				guiActive = True
-				guiActiveUncommand = True
-				guiIcon = Transfer Crew
-				guiName = Transfer Crew
-				category = Transfer Crew
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-			ToggleStaging
-			{
-				active = True
-				guiActive = False
-				guiActiveUncommand = False
-				guiIcon = Disable Staging
-				guiName = Disable Staging
-				category = Disable Staging
-				guiActiveUnfocused = False
-				unfocusedRange = 2
-				externalToEVAOnly = True
-			}
-		}
-		ACTIONS
+		UPGRADESAPPLIED
 		{
 		}
 	}
@@ -474,15 +732,17 @@ PART
 {
 	part = fuelTank.long_4294669568
 	partName = Part
-	pos = -1.353885,3.219295,0.8956068
+	pos = -1.35388505,3.21929502,0.895606816
 	attPos = 0,0,0
-	attPos0 = 0,-2.280038,0
+	attPos0 = 0,-2.28003812,0
 	rot = 0,0,0,1
 	attRot = 0,0,0,1
 	attRot0 = 0,0,0,1
 	mir = 1,1,1
 	symMethod = Radial
+	autostrutMode = Off
 	istg = 0
+	resPri = 0
 	dstg = 0
 	sidx = -1
 	sqor = -1
@@ -490,13 +750,79 @@ PART
 	attm = 0
 	modCost = 0
 	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
+	modSize = 0,0,0
 	link = winglet3_4294651602
 	link = winglet3_4294649916
 	link = deltaWing_4294640220
 	attN = top,mk1pod_4294682792
 	EVENTS
 	{
+		AimCamera
+		{
+			active = True
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Aim Camera
+			guiName = Aim Camera
+			category = Aim Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		ResetCamera
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = True
+			guiIcon = Reset Camera
+			guiName = Reset Camera
+			category = Reset Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		SpawnTransferDialog
+		{
+			active = False
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Transfer Crew
+			guiName = Transfer Crew
+			category = Transfer Crew
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ShowUpgradeStats
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = False
+			guiIcon = Show Upgraded Stats
+			guiName = Show Upgraded Stats
+			category = Show Upgraded Stats
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ToggleAutoStrut
+		{
+			active = True
+			guiActive = True
+			guiActiveEditor = True
+			guiActiveUncommand = False
+			guiIcon = Autostrut: Disabled
+			guiName = Autostrut: Disabled
+			category = Autostrut: Disabled
+			advancedTweakable = True
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
 	}
 	ACTIONS
 	{
@@ -531,15 +857,17 @@ PART
 {
 	part = launchClamp1_4294653222
 	partName = Part
-	pos = -1.353884,4.694158,2.57141
+	pos = -1.35388398,4.69415808,2.57140994
 	attPos = 0,0,0
-	attPos0 = 2.759132E-07,-0.8051748,1.675803
-	rot = -2.027891E-08,0.9832945,-0.1820219,-1.095481E-07
+	attPos0 = 2.75913209E-07,-0.805174828,1.67580295
+	rot = -2.02789092E-08,0.983294487,-0.182021901,-1.09548097E-07
 	attRot = 0,0,0,1
-	attRot0 = -2.027891E-08,0.9832945,-0.1820219,-1.095481E-07
+	attRot0 = -2.02789092E-08,0.983294487,-0.182021901,-1.09548097E-07
 	mir = 1,1,1
 	symMethod = Radial
+	autostrutMode = Off
 	istg = 0
+	resPri = 0
 	dstg = 0
 	sidx = 0
 	sqor = 0
@@ -547,10 +875,76 @@ PART
 	attm = 1
 	modCost = 0
 	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
+	modSize = 0,0,0
 	srfN = srfAttach,mk1pod_4294682792
 	EVENTS
 	{
+		AimCamera
+		{
+			active = True
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Aim Camera
+			guiName = Aim Camera
+			category = Aim Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		ResetCamera
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = True
+			guiIcon = Reset Camera
+			guiName = Reset Camera
+			category = Reset Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		SpawnTransferDialog
+		{
+			active = False
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Transfer Crew
+			guiName = Transfer Crew
+			category = Transfer Crew
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ShowUpgradeStats
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = False
+			guiIcon = Show Upgraded Stats
+			guiName = Show Upgraded Stats
+			category = Show Upgraded Stats
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ToggleAutoStrut
+		{
+			active = True
+			guiActive = True
+			guiActiveEditor = True
+			guiActiveUncommand = False
+			guiIcon = Autostrut: Disabled
+			guiName = Autostrut: Disabled
+			category = Autostrut: Disabled
+			advancedTweakable = True
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
 	}
 	ACTIONS
 	{
@@ -562,10 +956,10 @@ PART
 	{
 		name = LaunchClamp
 		isEnabled = True
-		scaleFactor = 2.223765
-		height = 5.610998
+		scaleFactor = 2.22376537
+		height = 5.61099815
 		stagingEnabled = True
-		towerRot = 2.027891E-08,-0.9832945,0.1820219,-1.095481E-07
+		towerRot = 2.02789092E-08,-0.983294487,0.182021901,-1.09548097E-07
 		EVENTS
 		{
 			Release
@@ -576,6 +970,7 @@ PART
 				guiIcon = Release Clamp
 				guiName = Release Clamp
 				category = Release Clamp
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -588,6 +983,7 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -599,6 +995,9 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+		UPGRADESAPPLIED
+		{
 		}
 	}
 	MODULE
@@ -618,6 +1017,7 @@ PART
 				guiIcon = Activate Generator
 				guiName = Activate Generator
 				category = Activate Generator
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -630,6 +1030,7 @@ PART
 				guiIcon = Shutdown Generator
 				guiName = Shutdown Generator
 				category = Shutdown Generator
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -642,6 +1043,7 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -662,6 +1064,9 @@ PART
 				actionGroup = None
 			}
 		}
+		UPGRADESAPPLIED
+		{
+		}
 	}
 	MODULE
 	{
@@ -678,6 +1083,7 @@ PART
 				guiIcon = Run Test
 				guiName = Run Test
 				category = Run Test
+				advancedTweakable = False
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -690,12 +1096,16 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
 			}
 		}
 		ACTIONS
+		{
+		}
+		UPGRADESAPPLIED
 		{
 		}
 	}
@@ -704,15 +1114,17 @@ PART
 {
 	part = winglet3_4294651602
 	partName = Part
-	pos = -2.451039,2.555725,0.8956069
+	pos = -2.45103908,2.5557251,0.895606875
 	attPos = 0,0,0
-	attPos0 = -1.097154,-0.6635704,3.689981E-08
-	rot = -7.486784E-23,0,-1.842297E-15,1
+	attPos0 = -1.09715402,-0.663570404,3.68998094E-08
+	rot = -7.48678413E-23,0,-1.84229708E-15,1
 	attRot = 0,0,0,1
-	attRot0 = -7.486784E-23,0,-1.842297E-15,1
+	attRot0 = -7.48678413E-23,0,-1.84229708E-15,1
 	mir = 1,1,1
 	symMethod = Radial
+	autostrutMode = Off
 	istg = 0
+	resPri = 0
 	dstg = 0
 	sidx = -1
 	sqor = -1
@@ -720,11 +1132,77 @@ PART
 	attm = 1
 	modCost = 0
 	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
+	modSize = 0,0,0
 	sym = winglet3_4294649916
 	srfN = srfAttach,fuelTank.long_4294669568
 	EVENTS
 	{
+		AimCamera
+		{
+			active = True
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Aim Camera
+			guiName = Aim Camera
+			category = Aim Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		ResetCamera
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = True
+			guiIcon = Reset Camera
+			guiName = Reset Camera
+			category = Reset Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		SpawnTransferDialog
+		{
+			active = False
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Transfer Crew
+			guiName = Transfer Crew
+			category = Transfer Crew
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ShowUpgradeStats
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = False
+			guiIcon = Show Upgraded Stats
+			guiName = Show Upgraded Stats
+			category = Show Upgraded Stats
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ToggleAutoStrut
+		{
+			active = True
+			guiActive = True
+			guiActiveEditor = True
+			guiActiveUncommand = False
+			guiIcon = Autostrut: Disabled
+			guiName = Autostrut: Disabled
+			category = Autostrut: Disabled
+			advancedTweakable = True
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
 	}
 	ACTIONS
 	{
@@ -787,6 +1265,7 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -806,6 +1285,9 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+		UPGRADESAPPLIED
+		{
 		}
 	}
 }
@@ -813,15 +1295,17 @@ PART
 {
 	part = winglet3_4294649916
 	partName = Part
-	pos = -0.2567307,2.555725,0.8956067
+	pos = -0.256730676,2.5557251,0.895606697
 	attPos = 0,0,0
-	attPos0 = 1.097154,-0.6635704,-1.328161E-07
-	rot = -1.842297E-15,1,1.553972E-22,-4.371139E-08
+	attPos0 = 1.09715402,-0.663570404,-1.32816098E-07
+	rot = -1.84229708E-15,1,1.55397205E-22,-4.37113883E-08
 	attRot = 0,0,0,1
-	attRot0 = -1.842297E-15,1,1.553972E-22,-4.371139E-08
+	attRot0 = -1.84229708E-15,1,1.55397205E-22,-4.37113883E-08
 	mir = 1,1,1
 	symMethod = Radial
+	autostrutMode = Off
 	istg = 0
+	resPri = 0
 	dstg = 0
 	sidx = -1
 	sqor = -1
@@ -829,11 +1313,77 @@ PART
 	attm = 1
 	modCost = 0
 	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
+	modSize = 0,0,0
 	sym = winglet3_4294651602
 	srfN = srfAttach,fuelTank.long_4294669568
 	EVENTS
 	{
+		AimCamera
+		{
+			active = True
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Aim Camera
+			guiName = Aim Camera
+			category = Aim Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		ResetCamera
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = True
+			guiIcon = Reset Camera
+			guiName = Reset Camera
+			category = Reset Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		SpawnTransferDialog
+		{
+			active = False
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Transfer Crew
+			guiName = Transfer Crew
+			category = Transfer Crew
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ShowUpgradeStats
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = False
+			guiIcon = Show Upgraded Stats
+			guiName = Show Upgraded Stats
+			category = Show Upgraded Stats
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ToggleAutoStrut
+		{
+			active = True
+			guiActive = True
+			guiActiveEditor = True
+			guiActiveUncommand = False
+			guiIcon = Autostrut: Disabled
+			guiName = Autostrut: Disabled
+			category = Autostrut: Disabled
+			advancedTweakable = True
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
 	}
 	ACTIONS
 	{
@@ -896,6 +1446,7 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -916,21 +1467,26 @@ PART
 				actionGroup = None
 			}
 		}
+		UPGRADESAPPLIED
+		{
+		}
 	}
 }
 PART
 {
 	part = deltaWing_4294640220
 	partName = Part
-	pos = -1.353885,3.17833,0.2755494
+	pos = -1.35388505,3.17832994,0.275549412
 	attPos = 0,0,0
-	attPos0 = -5.420715E-08,-0.04096508,-0.6200575
-	rot = 1.210161E-08,0.7071065,-1.210162E-08,-0.7071071
+	attPos0 = -5.4207149E-08,-0.0409650803,-0.620057523
+	rot = 1.21016104E-08,0.707106471,-1.21016202E-08,-0.707107127
 	attRot = 0,0,0,1
-	attRot0 = 1.210161E-08,0.7071066,-1.210162E-08,-0.7071071
+	attRot0 = 1.21016104E-08,0.70710659,-1.21016202E-08,-0.707107127
 	mir = 1,1,1
 	symMethod = Radial
+	autostrutMode = Off
 	istg = 0
+	resPri = 0
 	dstg = 0
 	sidx = -1
 	sqor = -1
@@ -938,11 +1494,77 @@ PART
 	attm = 1
 	modCost = 0
 	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
+	modSize = 0,0,0
 	link = airlinerCtrlSrf_4294639150
 	srfN = srfAttach,fuelTank.long_4294669568
 	EVENTS
 	{
+		AimCamera
+		{
+			active = True
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Aim Camera
+			guiName = Aim Camera
+			category = Aim Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		ResetCamera
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = True
+			guiIcon = Reset Camera
+			guiName = Reset Camera
+			category = Reset Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		SpawnTransferDialog
+		{
+			active = False
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Transfer Crew
+			guiName = Transfer Crew
+			category = Transfer Crew
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ShowUpgradeStats
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = False
+			guiIcon = Show Upgraded Stats
+			guiName = Show Upgraded Stats
+			category = Show Upgraded Stats
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ToggleAutoStrut
+		{
+			active = True
+			guiActive = True
+			guiActiveEditor = True
+			guiActiveUncommand = False
+			guiIcon = Autostrut: Disabled
+			guiName = Autostrut: Disabled
+			category = Autostrut: Disabled
+			advancedTweakable = True
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
 	}
 	ACTIONS
 	{
@@ -965,6 +1587,7 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -973,21 +1596,26 @@ PART
 		ACTIONS
 		{
 		}
+		UPGRADESAPPLIED
+		{
+		}
 	}
 }
 PART
 {
 	part = airlinerCtrlSrf_4294639150
 	partName = Part
-	pos = -1.353886,2.13592,-1.589272
+	pos = -1.35388601,2.13592005,-1.58927202
 	attPos = 0,0,0
-	attPos0 = -1.864821,-1.04241,1.111521E-07
-	rot = -2.197061E-07,0.7071066,2.197062E-07,-0.707107
+	attPos0 = -1.86482096,-1.04241002,1.11152097E-07
+	rot = -2.19706095E-07,0.70710659,2.19706209E-07,-0.707107008
 	attRot = 0,0,0,1
-	attRot0 = 3.309943E-14,-8.42937E-08,-3.278256E-07,1
+	attRot0 = 3.30994286E-14,-8.42937027E-08,-3.27825603E-07,1
 	mir = 1,1,1
 	symMethod = Radial
+	autostrutMode = Off
 	istg = 0
+	resPri = 0
 	dstg = 0
 	sidx = -1
 	sqor = -1
@@ -995,10 +1623,76 @@ PART
 	attm = 1
 	modCost = 0
 	modMass = 0
-	modSize = (0.0, 0.0, 0.0)
+	modSize = 0,0,0
 	srfN = srfAttach,deltaWing_4294640220
 	EVENTS
 	{
+		AimCamera
+		{
+			active = True
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Aim Camera
+			guiName = Aim Camera
+			category = Aim Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		ResetCamera
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = True
+			guiIcon = Reset Camera
+			guiName = Reset Camera
+			category = Reset Camera
+			advancedTweakable = True
+			guiActiveUnfocused = True
+			unfocusedRange = 3.402823E+38
+			externalToEVAOnly = False
+		}
+		SpawnTransferDialog
+		{
+			active = False
+			guiActive = True
+			guiActiveUncommand = True
+			guiIcon = Transfer Crew
+			guiName = Transfer Crew
+			category = Transfer Crew
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ShowUpgradeStats
+		{
+			active = True
+			guiActive = False
+			guiActiveUncommand = False
+			guiIcon = Show Upgraded Stats
+			guiName = Show Upgraded Stats
+			category = Show Upgraded Stats
+			advancedTweakable = False
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
+		ToggleAutoStrut
+		{
+			active = True
+			guiActive = True
+			guiActiveEditor = True
+			guiActiveUncommand = False
+			guiIcon = Autostrut: Disabled
+			guiName = Autostrut: Disabled
+			category = Autostrut: Disabled
+			advancedTweakable = True
+			guiActiveUnfocused = False
+			unfocusedRange = 2
+			externalToEVAOnly = True
+		}
 	}
 	ACTIONS
 	{
@@ -1061,6 +1755,7 @@ PART
 				guiIcon = Disable Staging
 				guiName = Disable Staging
 				category = Disable Staging
+				advancedTweakable = True
 				guiActiveUnfocused = False
 				unfocusedRange = 2
 				externalToEVAOnly = True
@@ -1080,6 +1775,9 @@ PART
 			{
 				actionGroup = None
 			}
+		}
+		UPGRADESAPPLIED
+		{
 		}
 	}
 }

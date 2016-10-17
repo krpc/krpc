@@ -36,7 +36,7 @@ namespace KRPC.Test.Service
             Assert.AreEqual (37, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
-            Assert.AreEqual ("<doc>\n  <summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
+            Assert.AreEqual ("<doc>\n<summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace KRPC.Test.Service
             Assert.AreEqual (2, service.Procedures.Count);
             Assert.AreEqual (0, service.Classes.Count);
             Assert.AreEqual (0, service.Enumerations.Count);
-            Assert.AreEqual ("<doc>\n  <summary>\nTestService2 documentation.\n</summary>\n</doc>", service.Documentation);
+            Assert.AreEqual ("<doc>\n<summary>\nTestService2 documentation.\n</summary>\n</doc>", service.Documentation);
         }
 
         [Test]
@@ -71,13 +71,13 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasNoAttributes (proc);
-                    MessageAssert.HasDocumentation (proc, "<doc>\n  <summary>\nProcedure with no return arguments.\n</summary>\n</doc>");
+                    MessageAssert.HasDocumentation (proc, "<doc>\n<summary>\nProcedure with no return arguments.\n</summary>\n</doc>");
                 } else if (proc.Name == "ProcedureSingleArgNoReturn") {
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, "KRPC.Response", "data");
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasNoAttributes (proc);
-                    MessageAssert.HasDocumentation (proc, "<doc>\n  <summary>\nProcedure with a single return argument.\n</summary>\n</doc>");
+                    MessageAssert.HasDocumentation (proc, "<doc>\n<summary>\nProcedure with a single return argument.\n</summary>\n</doc>");
                 } else if (proc.Name == "ProcedureThreeArgsNoReturn") {
                     MessageAssert.HasParameters (proc, 3);
                     MessageAssert.HasParameter (proc, 0, "KRPC.Response", "x");
@@ -362,7 +362,7 @@ namespace KRPC.Test.Service
                 if (cls.Name == "TestClass") {
                     MessageAssert.HasNoDocumentation (cls);
                 } else if (cls.Name == "TestTopLevelClass") {
-                    MessageAssert.HasDocumentation (cls, "<doc>\n  <summary>\nA class defined at the top level, but included in a service\n</summary>\n</doc>");
+                    MessageAssert.HasDocumentation (cls, "<doc>\n<summary>\nA class defined at the top level, but included in a service\n</summary>\n</doc>");
                 } else {
                     Assert.Fail ();
                 }
@@ -379,9 +379,9 @@ namespace KRPC.Test.Service
             int foundEnumerations = 0;
             foreach (var enumeration in service.Enumerations) {
                 if (enumeration.Name == "TestEnum") {
-                    MessageAssert.HasDocumentation (enumeration, "<doc>\n  <summary>\nDocumentation string for TestEnum.\n</summary>\n</doc>");
+                    MessageAssert.HasDocumentation (enumeration, "<doc>\n<summary>\nDocumentation string for TestEnum.\n</summary>\n</doc>");
                     MessageAssert.HasValues (enumeration, 3);
-                    MessageAssert.HasValue (enumeration, 0, "X", 0, "<doc>\n  <summary>\nDocumented enum field\n</summary>\n</doc>");
+                    MessageAssert.HasValue (enumeration, 0, "X", 0, "<doc>\n<summary>\nDocumented enum field\n</summary>\n</doc>");
                     MessageAssert.HasValue (enumeration, 1, "Y", 1);
                     MessageAssert.HasValue (enumeration, 2, "Z", 2);
                 } else {
@@ -405,7 +405,7 @@ namespace KRPC.Test.Service
                     MessageAssert.HasReturnType (proc, "int32");
                     MessageAssert.HasAttributes (proc, 1);
                     MessageAssert.HasAttribute (proc, 0, "ParameterType(0).Class(TestService.TestClass)");
-                    MessageAssert.HasDocumentation (proc, "<doc>\n  <summary>\nTestService2 procedure documentation.\n</summary>\n</doc>");
+                    MessageAssert.HasDocumentation (proc, "<doc>\n<summary>\nTestService2 procedure documentation.\n</summary>\n</doc>");
                 } else if (proc.Name == "ClassTypeFromOtherServiceAsReturn") {
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, "string", "value");

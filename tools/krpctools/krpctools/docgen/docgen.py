@@ -27,7 +27,7 @@ class DocumentationGenerator(object):
         return node is not None and node.text is not None and node.text.strip() != ''
 
     def _generate(self, node):
-        content = node.text
+        content = node.text or ''
         for child in node:
             content += self._generate_node(child)
             if child.tail:

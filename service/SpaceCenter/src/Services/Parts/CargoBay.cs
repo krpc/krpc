@@ -66,10 +66,10 @@ namespace KRPC.SpaceCenter.Services.Parts
                     return CargoBayState.Closed;
                 else if (!animation.IsMoving ())
                     return CargoBayState.Open;
-                else if (OpenEvent == null)
-                    return CargoBayState.Opening;
+                else if (!animation.animSwitch)
+                    return animation.startEventGUIName == "Open" ? CargoBayState.Opening : CargoBayState.Closing;
                 else
-                    return CargoBayState.Closing;
+                    return animation.startEventGUIName == "Close" ? CargoBayState.Opening : CargoBayState.Closing;
             }
         }
 

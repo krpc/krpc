@@ -8,7 +8,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         {
             var vessel = target as Vessel;
             if (vessel != null)
-                return vessel.findWorldCenterOfMass ();
+                return vessel.CoM;
 
             var celestialBody = target as CelestialBody;
             if (celestialBody != null)

@@ -80,8 +80,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 return
                 !Deployable ||
-                deployableRadiator.panelState == ModuleDeployableRadiator.panelStates.EXTENDED ||
-                deployableRadiator.panelState == ModuleDeployableRadiator.panelStates.EXTENDING;
+                deployableRadiator.deployState == ModuleDeployableRadiator.DeployState.EXTENDED ||
+                deployableRadiator.deployState == ModuleDeployableRadiator.DeployState.EXTENDING;
             }
             set {
                 if (!Deployable)
@@ -104,7 +104,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Deployable)
                     return RadiatorState.Extended;
-                return deployableRadiator.panelState.ToRadiatorState ();
+                return deployableRadiator.deployState.ToRadiatorState ();
             }
         }
     }

@@ -144,7 +144,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 return;
             
             var internalVessel = vessel.InternalVessel;
-            var torque = vessel.AvailableTorqueVector;
+            var torque = vessel.AvailableTorqueVectors.Item1;
             var moi = vessel.MomentOfInertiaVector;
 
             // Compute the input and error for the controllers

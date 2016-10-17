@@ -7,18 +7,18 @@ namespace KRPC.SpaceCenter.ExtensionMethods
     static class SolarPanelStateExtensions
     {
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
-        public static SolarPanelState ToSolarPanelState (this ModuleDeployableSolarPanel.panelStates state)
+        public static SolarPanelState ToSolarPanelState (this ModuleDeployableSolarPanel.DeployState state)
         {
             switch (state) {
-            case ModuleDeployableSolarPanel.panelStates.EXTENDED:
+            case ModuleDeployableSolarPanel.DeployState.EXTENDED:
                 return SolarPanelState.Extended;
-            case ModuleDeployableSolarPanel.panelStates.RETRACTED:
+            case ModuleDeployableSolarPanel.DeployState.RETRACTED:
                 return SolarPanelState.Retracted;
-            case ModuleDeployableSolarPanel.panelStates.EXTENDING:
+            case ModuleDeployableSolarPanel.DeployState.EXTENDING:
                 return SolarPanelState.Extending;
-            case ModuleDeployableSolarPanel.panelStates.RETRACTING:
+            case ModuleDeployableSolarPanel.DeployState.RETRACTING:
                 return SolarPanelState.Retracting;
-            case ModuleDeployableSolarPanel.panelStates.BROKEN:
+            case ModuleDeployableSolarPanel.DeployState.BROKEN:
                 return SolarPanelState.Broken;
             default:
                 throw new ArgumentOutOfRangeException ("state");

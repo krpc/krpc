@@ -26,7 +26,7 @@ namespace KRPC.SpaceCenter.Services
             Resource = resource.name;
             TotalAmount = amount;
             // Compute the transfer rate (in units/sec) as one tenth the size of the destination tank (determined experimentally from the KSP transfer UI)
-            var totalStorage = (float)toPart.Resources.GetAll (resource.id).Sum (r => r.maxAmount);
+            var totalStorage = (float)toPart.Resources.Get (resource.id).maxAmount;
             transferRate = 0.1f * totalStorage;
             ResourceTransferAddon.AddTransfer (this);
         }
@@ -60,10 +60,9 @@ namespace KRPC.SpaceCenter.Services
             if (internalFromPart.flightID == internalToPart.flightID)
                 throw new ArgumentException ("Source and destination parts are the same");
             // Get the resource info object
-            var resourceInfo = PartResourceLibrary.Instance.resourceDefinitions
-                .FirstOrDefault (r => r.name == resource);
-            if (resourceInfo == null)
+            if (!PartResourceLibrary.Instance.resourceDefinitions.Contains (resource))
                 throw new ArgumentException ("Resource '" + resource + "' does not exist");
+            var resourceInfo = PartResourceLibrary.Instance.GetDefinition (resource);
             // Check the parts contain the required resource
             if (internalFromPart.Resources.Get (resourceInfo.id) == null)
                 throw new ArgumentException ("Source part does not contain '" + resource + "'");
@@ -116,8 +115,9 @@ namespace KRPC.SpaceCenter.Services
         {
             if (Complete)
                 return;
-            var resourceAvailable = (float)internalFromPart.Resources.GetAll (internalResource.id).Sum (r => r.amount);
-            var storageAvailable = (float)internalToPart.Resources.GetAll (internalResource.id).Sum (r => r.maxAmount - r.amount);
+            var resourceAvailable = (float)internalFromPart.Resources.Get (internalResource.id).amount;
+            var storage = internalToPart.Resources.Get (internalResource.id);
+            var storageAvailable = (float)(storage.maxAmount - storage.amount);
             var available = Math.Min (resourceAvailable, storageAvailable);
             var amountToTransfer = Math.Min (available, Math.Min (TotalAmount - Amount, transferRate * deltaTime));
             internalFromPart.TransferResource (internalResource.id, -amountToTransfer);

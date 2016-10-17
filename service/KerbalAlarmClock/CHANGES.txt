@@ -1,11 +1,8 @@
-v0.2.0
- * None
+v0.3.7
+ * Add KerbalAlarmClock.Available
 
 v0.1.12
  * Renamed Alarm.Delete to Alarm.Remove (to not clash with C++ keyword)
-
-v0.1.11
- * None
 
 v0.1.10
  * Service now available in all game scenes (#135)

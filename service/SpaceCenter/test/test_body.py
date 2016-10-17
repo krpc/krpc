@@ -19,8 +19,8 @@ class TestBody(krpctest.TestCase):
     def test_kerbin(self):
         kerbin = self.space_center.bodies['Kerbin']
         self.assertEqual('Kerbin', kerbin.name)
-        self.assertAlmostEqual(5.2915e22, kerbin.mass, delta=0.0001e22)
-        self.assertAlmostEqual(3.5316e12, kerbin.gravitational_parameter, delta=0.0001e12)
+        self.assertAlmostEqual(5.2897e22, kerbin.mass, delta=0.0001e22)
+        self.assertAlmostEqual(3.5303e12, kerbin.gravitational_parameter, delta=0.0001e12)
         self.assertAlmostEqual(9.81, kerbin.surface_gravity, places=2)
         self.assertAlmostEqual(21549.425, kerbin.rotational_period, delta=0.1)
         self.assertAlmostEqual((2*3.14159) / 21549.425, kerbin.rotational_speed, delta=0.1)
@@ -32,19 +32,20 @@ class TestBody(krpctest.TestCase):
         self.assertAlmostEqual(70000, kerbin.atmosphere_depth)
         self.assertTrue(kerbin.has_atmospheric_oxygen)
         self.assertEqual(['Badlands', 'Deserts', 'Grasslands', 'Highlands', 'Ice Caps',
-                          'Mountains', 'Shores', 'Tundra', 'Water'], sorted(kerbin.biomes))
+                          'Mountains', 'Northern Ice Shelf', 'Shores', 'Southern Ice Shelf',
+                          'Tundra', 'Water'], sorted(kerbin.biomes))
         self.assertEqual('Water', kerbin.biome_at(0, 0))
-        self.assertEqual('Highlands', kerbin.biome_at(42, 4))
+        self.assertEqual('Grasslands', kerbin.biome_at(42, 4))
         self.assertEqual(18000, kerbin.flying_high_altitude_threshold)
         self.assertEqual(250000, kerbin.space_high_altitude_threshold)
 
     def test_mun(self):
         mun = self.space_center.bodies['Mun']
         self.assertEqual('Mun', mun.name)
-        self.assertAlmostEqual(9.76e20, mun.mass, delta=0.0001e20)
-        self.assertAlmostEqual(6.5138e10, mun.gravitational_parameter, delta=0.0001e10)
+        self.assertAlmostEqual(9.7566e20, mun.mass, delta=0.0001e20)
+        self.assertAlmostEqual(6.5116e10, mun.gravitational_parameter, delta=0.0001e10)
         self.assertAlmostEqual(1.6285, mun.surface_gravity, places=4)
-        self.assertAlmostEqual(1.3898e5, mun.rotational_period, delta=0.0001e5)
+        self.assertAlmostEqual(1.3901e5, mun.rotational_period, delta=0.0001e5)
         self.assertAlmostEqual((2 * 3.14159) / 1.3898e5, mun.rotational_speed, delta=0.0001e5)
         self.assertAlmostEqual(200000, mun.equatorial_radius)
         self.assertAlmostEqual(2.4296e6, mun.sphere_of_influence, delta=0.0001e6)
@@ -53,12 +54,12 @@ class TestBody(krpctest.TestCase):
         self.assertFalse(mun.has_atmosphere)
         self.assertAlmostEqual(0, mun.atmosphere_depth)
         self.assertFalse(mun.has_atmospheric_oxygen)
-        self.assertEqual(['Canyons', 'East Crater', 'East Farside Crater', 'Farside Crater',
-                          'Highland Craters', 'Highlands', 'Midland Craters', 'Midlands',
-                          'Northern Basin', 'Northwest Crater', 'Polar Crater',
-                          'Polar Lowlands', 'Poles', 'Southwest Crater', 'Twin Craters'],
-                         sorted(mun.biomes))
-        self.assertEqual('Midlands', mun.biome_at(0, 0))
+        self.assertEqual(['Canyons', 'East Crater', 'East Farside Crater', 'Farside Basin',
+                          'Farside Crater', 'Highland Craters', 'Highlands', 'Lowlands',
+                          'Midland Craters', 'Midlands', 'Northern Basin', 'Northwest Crater',
+                          'Polar Crater', 'Polar Lowlands', 'Poles', 'Southwest Crater',
+                          'Twin Craters'], sorted(mun.biomes))
+        self.assertEqual('Lowlands', mun.biome_at(0, 0))
         self.assertEqual('Highlands', mun.biome_at(42, 4))
         self.assertEqual(18000, mun.flying_high_altitude_threshold)
         self.assertEqual(60000, mun.space_high_altitude_threshold)
@@ -83,8 +84,8 @@ class TestBody(krpctest.TestCase):
     def test_sun(self):
         sun = self.space_center.bodies['Sun']
         self.assertEqual('Sun', sun.name)
-        self.assertAlmostEqual(1.7566e28, sun.mass, delta=0.0001e28)
-        self.assertAlmostEqual(1.1723e18, sun.gravitational_parameter, delta=0.0001e18)
+        self.assertAlmostEqual(1.7559e28, sun.mass, delta=0.0001e28)
+        self.assertAlmostEqual(1.1719e18, sun.gravitational_parameter, delta=0.0001e18)
         self.assertAlmostEqual(2.616e8, sun.equatorial_radius, delta=0.0001e8)
         self.assertEqual(float('inf'), sun.sphere_of_influence)
         self.assertIsNone(sun.orbit)
@@ -153,7 +154,7 @@ class TestBody(krpctest.TestCase):
 
             # Check body velocity in parent body's non-rotating reference frame
             v = body.velocity(body.orbit.body.non_rotating_reference_frame)
-            self.assertAlmostEqual(body.orbit.speed, norm(v), places=3)
+            self.assertAlmostEqual(body.orbit.speed, norm(v), places=2)
 
             # Check body velocity in parent body's reference frame
             v = body.velocity(body.orbit.body.reference_frame)

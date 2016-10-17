@@ -10,7 +10,7 @@ namespace KRPC.RemoteTech
 
         public static void Load ()
         {
-            IsAvailable = APILoader.Load (typeof(API), "RemoteTech", "RemoteTech.API.API", new Version (1, 7));
+            IsAvailable = APILoader.Load (typeof(API), "RemoteTech", "RemoteTech.API.API", new Version (1, 8));
         }
 
         public static Func<Guid, bool> HasLocalControl { get; internal set; }

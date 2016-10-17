@@ -81,7 +81,7 @@ namespace TestingTools
         static Quaternion ZeroRotation {
             get {
                 var vessel = FlightGlobals.ActiveVessel;
-                var vesselCoM = vessel.findWorldCenterOfMass ();
+                var vesselCoM = vessel.CoM;
                 var right = vesselCoM - vessel.mainBody.position;
                 var northPole = vessel.mainBody.position + ((Vector3d)vessel.mainBody.transform.up) * vessel.mainBody.Radius - vesselCoM;
                 northPole.Normalize ();

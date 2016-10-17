@@ -64,13 +64,5 @@ namespace KRPC.SpaceCenter.Services.Parts
         public string Value {
             get { return sensor.readoutInfo; }
         }
-
-        /// <summary>
-        /// The current power usage of the sensor, in units of charge per second.
-        /// </summary>
-        [KRPCProperty]
-        public float PowerUsage {
-            get { return sensor.powerConsumption; }
-        }
     }
 }

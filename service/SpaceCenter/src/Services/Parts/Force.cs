@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -9,17 +10,16 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// Obtained by calling <see cref="Part.AddForce"/>.
     /// </summary>
+    [SuppressMessage ("Gendarme.Rules.Maintainability", "AvoidLackOfCohesionOfMethodsRule")]
     [KRPCClass (Service = "SpaceCenter")]
     public sealed class Force
     {
-        readonly Rigidbody rigidBody;
         Vector3 force;
         Vector3 position;
 
         internal Force (Part part, Tuple3 forceVector, Tuple3 forcePosition, ReferenceFrame referenceFrame)
         {
             Part = part;
-            rigidBody = part.InternalPart.GetComponent<Rigidbody> ();
             force = forceVector.ToVector ();
             position = forcePosition.ToVector ();
             ReferenceFrame = referenceFrame;
@@ -69,7 +69,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             var worldForce = ReferenceFrame.DirectionToWorldSpace (force);
             var worldPosition = ReferenceFrame.PositionToWorldSpace (position);
-            rigidBody.AddForceAtPosition (worldForce / 1000f, worldPosition, ForceMode.Force);
+            Part.InternalPart.AddForceAtPosition (worldForce / 1000f, worldPosition);
         }
     }
 }
