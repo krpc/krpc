@@ -837,6 +837,7 @@ InfernalRobotics.Servo.MovePrevPreset
 InfernalRobotics.Servo.MoveTo
 InfernalRobotics.Servo.Stop
 KerbalAlarmClock
+KerbalAlarmClock.Available
 KerbalAlarmClock.Alarms
 KerbalAlarmClock.AlarmWithName
 KerbalAlarmClock.AlarmsWithType
