@@ -96,7 +96,7 @@ class JavaGenerator(Generator):
                 self.parse_type(self.types.as_type(typ.protobuf_type[4:-1]), True)
         elif isinstance(typ, krpc.types.DictionaryType):
             typs = split_type_string(typ.protobuf_type[11:-1])
-            return 'java.util.Map<%s,%s>' % (self.parse_type(self.types.as_type(typs[0])),
+            return 'java.util.Map<%s,%s>' % (self.parse_type(self.types.as_type(typs[0]), True),
                                              self.parse_type(self.types.as_type(typs[1]), True))
         elif isinstance(typ, krpc.types.TupleType):
             value_types = split_type_string(typ.protobuf_type[6:-1])
