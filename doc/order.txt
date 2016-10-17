@@ -794,6 +794,7 @@ Drawing.Text.Alignment
 Drawing.Text.LineSpacing
 Drawing.Text.Anchor
 InfernalRobotics
+InfernalRobotics.Available
 InfernalRobotics.ServoGroups
 InfernalRobotics.ServoGroupWithName
 InfernalRobotics.ServoWithName

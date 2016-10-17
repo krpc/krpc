@@ -20,6 +20,14 @@ namespace KRPC.InfernalRobotics
         }
 
         /// <summary>
+        /// Whether Infernal Robotics is installed.
+        /// </summary>
+        [KRPCProperty]
+        public static bool Available {
+            get { return IRWrapper.APIReady; }
+        }
+
+        /// <summary>
         /// A list of all the servo groups in the given <paramref name="vessel"/>.
         /// </summary>
         [KRPCProcedure]
