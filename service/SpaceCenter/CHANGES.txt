@@ -8,6 +8,7 @@ v0.3.7
  * Add Vessel.AvailableOtherTorque which returns the available torque from other parts (i.e. torque providers
    other than the stock reaction wheels, RCS thrusters, gimballed engines and control surfaces)
  * Include this 'other' torque in Vessel.AvailableTorque
+ * Change required RemoteTech version to 1.8.0
 
 v0.3.6
  * Add Part.Tag which can be used to get/set the name tag set via the NameTag mod, or kOS (#297)

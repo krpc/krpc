@@ -883,6 +883,7 @@ KerbalAlarmClock.AlarmAction.KillWarpOnly
 KerbalAlarmClock.AlarmAction.MessageOnly
 KerbalAlarmClock.AlarmAction.PauseGame
 RemoteTech
+RemoteTech.Available
 RemoteTech.GroundStations
 RemoteTech.Comms
 RemoteTech.Antenna
