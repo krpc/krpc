@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -17,7 +18,12 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal static bool Is (Part part)
         {
-            return part.InternalPart.HasModule<ModuleControlSurface> ();
+            return Is (part.InternalPart);
+        }
+
+        internal static bool Is (global::Part part)
+        {
+            return part.HasModule<ModuleControlSurface> ();
         }
 
         internal ControlSurface (Part part)
@@ -104,16 +110,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The available torque in the pitch, roll and yaw axes of the vessel, in Newton meters.
+        /// The available torque in the positive pitch, roll and yaw axes and
+        /// negative pitch, roll and yaw axes of the vessel, in Newton meters.
         /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AvailableTorque {
-            get { return AvailableTorqueVector.ToTuple (); }
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public Tuple<Tuple3, Tuple3> AvailableTorque {
+            get { return AvailableTorqueVectors.ToTuple (); }
         }
 
-        internal Vector3d AvailableTorqueVector {
-            get { return controlSurface.GetPotentialTorque () * 1000f; }
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        internal Tuple<Vector3d,Vector3d> AvailableTorqueVectors {
+            get { return controlSurface.GetPotentialTorque (); }
         }
     }
 }

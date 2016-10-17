@@ -1,4 +1,6 @@
 #pragma warning disable 1591
+#pragma warning disable 1572
+#pragma warning disable 1573
 
 using System;
 using System.Collections;
@@ -6,7 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace KRPC.KerbalAlarmClock
 {
@@ -64,6 +65,7 @@ namespace KRPC.KerbalAlarmClock
         /// <summary>
         /// This method will set up the KAC object and wrap all the methods/functions
         /// </summary>
+        /// <param name="Force">This option will force the Init function to rebind everything</param>
         /// <returns></returns>
         public static Boolean InitKACWrapper ()
         {
@@ -76,10 +78,10 @@ namespace KRPC.KerbalAlarmClock
             LogFormatted ("Attempting to Grab KAC Types...");
 
             //find the base type
-            KACType = AssemblyLoader.loadedAssemblies
-                .Select (a => a.assembly.GetExportedTypes ())
-                .SelectMany (t => t)
-                .FirstOrDefault (t => t.FullName == "KerbalAlarmClock.KerbalAlarmClock");
+            AssemblyLoader.loadedAssemblies.TypeOperation (t => {
+                if (t.FullName == "KerbalAlarmClock.KerbalAlarmClock")
+                    KACType = t;
+            });
 
             if (KACType == null) {
                 return false;
@@ -339,6 +341,7 @@ namespace KRPC.KerbalAlarmClock
             /// <summary>
             /// Delete an Alarm
             /// </summary>
+            /// <param name="AlarmID">Unique ID of the alarm</param>
             /// <returns>Success of the deletion</returns>
             internal Boolean DrawAlarmActionChoice (ref AlarmActionEnum Choice, String LabelText, Int32 LabelWidth, Int32 ButtonWidth)
             {
@@ -568,7 +571,8 @@ namespace KRPC.KerbalAlarmClock
                 Crew,
                 EarthTime,
                 Contract,
-                ContractAuto
+                ContractAuto,
+                ScienceLab
             }
 
             public enum AlarmActionEnum

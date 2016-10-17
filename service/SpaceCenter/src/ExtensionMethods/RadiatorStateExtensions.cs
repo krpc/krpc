@@ -7,18 +7,18 @@ namespace KRPC.SpaceCenter.ExtensionMethods
     static class RadiatorStateExtensions
     {
         [SuppressMessage ("Gendarme.Rules.Smells", "AvoidSwitchStatementsRule")]
-        public static RadiatorState ToRadiatorState (this ModuleDeployableRadiator.panelStates state)
+        public static RadiatorState ToRadiatorState (this ModuleDeployableRadiator.DeployState state)
         {
             switch (state) {
-            case ModuleDeployableRadiator.panelStates.EXTENDED:
+            case ModuleDeployableRadiator.DeployState.EXTENDED:
                 return RadiatorState.Extended;
-            case ModuleDeployableRadiator.panelStates.RETRACTED:
+            case ModuleDeployableRadiator.DeployState.RETRACTED:
                 return RadiatorState.Retracted;
-            case ModuleDeployableRadiator.panelStates.EXTENDING:
+            case ModuleDeployableRadiator.DeployState.EXTENDING:
                 return RadiatorState.Extending;
-            case ModuleDeployableRadiator.panelStates.RETRACTING:
+            case ModuleDeployableRadiator.DeployState.RETRACTING:
                 return RadiatorState.Retracting;
-            case ModuleDeployableRadiator.panelStates.BROKEN:
+            case ModuleDeployableRadiator.DeployState.BROKEN:
                 return RadiatorState.Broken;
             default:
                 throw new ArgumentOutOfRangeException ("state");

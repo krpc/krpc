@@ -42,13 +42,16 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.fuel_lines_to)
         modules = [
             'FlagDecal',
+            'ModuleColorChanger',
             'ModuleCommand',
             'ModuleConductionMultiplier',
             'ModuleReactionWheel',
             'ModuleScienceContainer',
             'ModuleScienceExperiment',
+            'ModuleDataTransmitter',
             'ModuleTripLogger',
-            'TransferDialogSpawner'
+            'ModuleProbeControlPoint',
+            'ModuleLiftingSurface'
         ]
         if self.far_available:
             modules.extend(['FARBasicDragModel', 'FARControlSys'])
@@ -192,7 +195,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
         #TODO: why is this not -1? Docking ports aren't activated in stages?
-        self.assertEqual(4, part.stage)
+        self.assertEqual(3, part.stage)
         self.assertEqual(3, part.decouple_stage)
         self.assertFalse(part.massless)
         self.assertAlmostEqual(50, part.mass, places=4)
@@ -279,14 +282,16 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual(0, part.stage)
         self.assertEqual(-1, part.decouple_stage)
         self.assertFalse(part.massless)
-        self.assertAlmostEqual(121.74388, part.mass, places=4)
-        self.assertAlmostEqual(121.74388, part.dry_mass, places=4)
+        self.assertAlmostEqual(106.16, part.mass, places=2)
+        self.assertAlmostEqual(106.16, part.dry_mass, places=2)
         self.assertEqual(9, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ['ModuleCargoBay', 'ModuleProceduralFairing', 'ModuleTestSubject']
+        modules = ['ModuleCargoBay', 'ModuleProceduralFairing',
+                   'ModuleTestSubject', 'ModuleStructuralNodeToggle'] + \
+                  ['ModuleStructuralNode'] * 12
         if self.far_available:
             modules.append('FARBasicDragModel')
         self.assertItemsEqual(modules, [x.name for x in part.modules])
@@ -350,7 +355,9 @@ class TestPartsPart(krpctest.TestCase):
             'ModuleWheelDamage',
             'ModuleWheelDeployment',
             'ModuleWheelSteering',
-            'ModuleWheelSuspension'
+            'ModuleWheelSuspension',
+            'ModuleDragModifier',
+            'ModuleDragModifier'
         ]
         if self.far_available:
             modules.append('FARBasicDragModel')
@@ -525,7 +532,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ['ModuleRCS']
+        modules = ['ModuleRCSFX']
         self.assertItemsEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.rcs)
 
@@ -621,7 +628,7 @@ class TestPartsPart(krpctest.TestCase):
         part = self.parts.with_title('PresMat Barometer')[0]
         self.assertEqual('sensorBarometer', part.name)
         self.assertEqual('PresMat Barometer', part.title)
-        self.assertEqual(3300, part.cost)
+        self.assertEqual(880, part.cost)
         self.assertEqual(self.vessel, part.vessel)
         self.assertEqual('Rockomax X200-8 Fuel Tank', part.parent.title)
         self.assertEqual([], part.children)
@@ -632,7 +639,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertTrue(part.massless)
         self.assertAlmostEqual(0, part.mass, places=4)
         self.assertAlmostEqual(0, part.dry_mass, places=4)
-        self.assertFalse(part.shielded)
+        self.assertTrue(part.shielded)
         self.assertAlmostEqual(0, part.dynamic_pressure, places=3)
         self.assertEqual(8, part.impact_tolerance)
         self.assertTrue(part.crossfeed)

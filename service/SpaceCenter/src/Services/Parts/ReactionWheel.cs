@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -16,7 +17,12 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal static bool Is (Part part)
         {
-            return part.InternalPart.HasModule<ModuleReactionWheel> ();
+            return Is (part.InternalPart);
+        }
+
+        internal static bool Is (global::Part part)
+        {
+            return part.HasModule<ModuleReactionWheel> ();
         }
 
         internal ReactionWheel (Part part)
@@ -76,8 +82,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns zero if the reaction wheel is inactive or broken.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AvailableTorque {
-            get { return AvailableTorqueVector.ToTuple (); }
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public Tuple<Tuple3,Tuple3> AvailableTorque {
+            get { return AvailableTorqueVectors.ToTuple (); }
         }
 
         /// <summary>
@@ -86,20 +93,28 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame" />.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 MaxTorque {
-            get { return MaxTorqueVector.ToTuple (); }
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public Tuple<Tuple3,Tuple3> MaxTorque {
+            get { return MaxTorqueVectors.ToTuple (); }
         }
 
-        internal Vector3d AvailableTorqueVector {
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        internal Tuple<Vector3d,Vector3d> AvailableTorqueVectors {
             get {
                 if (!Active || Broken)
-                    return Vector3d.zero;
-                return reactionWheel.GetPotentialTorque () * 1000f;
+                    return ITorqueProviderExtensions.zero;
+                var torque = reactionWheel.GetPotentialTorque ();
+                // Note: GetPotentialTorque returns negative torques with incorrect sign
+                return new Tuple<Vector3d,Vector3d> (torque.Item1, -torque.Item2);
             }
         }
 
-        internal Vector3d MaxTorqueVector {
-            get { return new Vector3d (reactionWheel.PitchTorque, reactionWheel.RollTorque, reactionWheel.YawTorque) * 1000f; }
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        internal Tuple<Vector3d,Vector3d> MaxTorqueVectors {
+            get {
+                var torque = new Vector3d (reactionWheel.PitchTorque, reactionWheel.RollTorque, reactionWheel.YawTorque) * 1000.0d;
+                return new Tuple<Vector3d,Vector3d> (torque, -torque);
+            }
         }
     }
 }

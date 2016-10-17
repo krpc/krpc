@@ -40,6 +40,7 @@ class TestPartsSolarPanel(krpctest.TestCase):
 
         self.assertTrue(self.panel.deployed)
         self.assertEqual(self.state.extended, self.panel.state)
+        self.wait()
         self.assertGreater(self.panel.energy_flow, 0)
         self.assertGreater(self.panel.sun_exposure, 0)
 

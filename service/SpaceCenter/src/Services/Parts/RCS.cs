@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -18,7 +19,12 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal static bool Is (Part part)
         {
-            return part.InternalPart.HasModule<ModuleRCS> ();
+            return Is (part.InternalPart);
+        }
+
+        internal static bool Is (global::Part part)
+        {
+            return part.HasModule<ModuleRCS> ();
         }
 
         internal RCS (Part part)
@@ -140,15 +146,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns zero if the RCS is inactive.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AvailableTorque {
-            get { return AvailableTorqueVector.ToTuple (); }
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public Tuple<Tuple3, Tuple3> AvailableTorque {
+            get { return AvailableTorqueVectors.ToTuple (); }
         }
 
-        internal Vector3d AvailableTorqueVector {
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        internal Tuple<Vector3d,Vector3d> AvailableTorqueVectors {
             get {
                 if (!Active)
-                    return Vector3d.zero;
-                return rcs.GetPotentialTorque () * 1000f;
+                    return ITorqueProviderExtensions.zero;
+                return rcs.GetPotentialTorque ();
             }
         }
 

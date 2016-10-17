@@ -30,7 +30,7 @@ namespace KRPC.SpaceCenter.Services
             set {
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException ("ActiveVessel");
-                FlightGlobals.SetActiveVessel (value.InternalVessel);
+                FlightGlobals.ForceSetActiveVessel (value.InternalVessel);
                 throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
             }
         }
@@ -42,7 +42,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (FlightGlobals.ActiveVessel.packed)
                 throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, 0));
-            if (tick < 10)
+            if (tick < 25)
                 throw new YieldException (new ParameterizedContinuationVoid<int> (WaitForVesselSwitch, tick + 1));
         }
 
@@ -262,8 +262,8 @@ namespace KRPC.SpaceCenter.Services
         /// G in <math>N(m/kg)^2</math>.
         /// </summary>
         [KRPCProperty]
-        public static float G {
-            get { return 6.673e-11f; }
+        public static double G {
+            get { return 6.67408e-11; }
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace KRPC.SpaceCenter.Services
             if (vessel.LandedOrSplashed)
                 return true;
             // Below altitude limit
-            var altitude = vessel.mainBody.GetAltitude (vessel.findWorldCenterOfMass ());
+            var altitude = vessel.mainBody.GetAltitude (vessel.CoM);
             var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, vessel.mainBody);
             if (altitude < altitudeLimit)
                 return false;

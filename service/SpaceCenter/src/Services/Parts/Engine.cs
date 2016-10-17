@@ -28,7 +28,12 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal static bool Is (Part part)
         {
-            return part.InternalPart.HasModule<ModuleEngines> ();
+            return Is (part.InternalPart);
+        }
+
+        internal static bool Is (global::Part part)
+        {
+            return part.HasModule<ModuleEngines> ();
         }
 
         internal Engine (Part part)
@@ -481,15 +486,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns zero if the engine is inactive, or not gimballed.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 AvailableTorque {
-            get { return AvailableTorqueVector.ToTuple (); }
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        public Tuple<Tuple3, Tuple3> AvailableTorque {
+            get { return AvailableTorqueVectors.ToTuple (); }
         }
 
-        internal Vector3d AvailableTorqueVector {
+        [SuppressMessage ("Gendarme.Rules.Design.Generic", "DoNotExposeNestedGenericSignaturesRule")]
+        internal Tuple<Vector3d, Vector3d> AvailableTorqueVectors {
             get {
                 if (!Active || !Gimballed)
-                    return Vector3d.zero;
-                return gimbal.GetPotentialTorque () * 1000f;
+                    return ITorqueProviderExtensions.zero;
+                var torque = gimbal.GetPotentialTorque ();
+                // Note: GetPotentialTorque returns negative torques with incorrect sign
+                return new Tuple<Vector3d,Vector3d> (torque.Item1, -torque.Item2);
             }
         }
     }

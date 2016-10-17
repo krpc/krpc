@@ -356,9 +356,9 @@ namespace KRPC.SpaceCenter.Services
         public void RemoveNodes ()
         {
             CheckManeuverNodes ();
-            var nodes = FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes.ToList ();
-            foreach (var node in nodes)
-                node.RemoveSelf ();
+            var pcs = InternalVessel.patchedConicSolver;
+            foreach (var node in pcs.maneuverNodes.ToList())
+                pcs.RemoveManeuverNode (node);
             // TODO: delete the Node objects
         }
 

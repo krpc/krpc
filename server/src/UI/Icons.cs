@@ -40,7 +40,7 @@ namespace KRPC.UI
             if (!filepath.EndsWith (".png", StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException ("Not a PNG file", "filepath");
             filepath = iconsPath + "/" + filepath.Substring (0, filepath.Length - 4);
-            Logger.WriteLine ("Loading texture " + filepath);
+            KRPC.Utils.Logger.WriteLine ("Loading texture " + filepath);
             return GameDatabase.Instance.GetTexture (filepath, false);
         }
     }

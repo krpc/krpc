@@ -1,12 +1,13 @@
 import unittest
 import krpctest
 
+@unittest.skipIf(not krpctest.TestCase.connect().remote_tech.available, "RemoteTech not installed")
 class TestAntenna(krpctest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.launch_vessel_from_vab('RemoteTech', directory='./')
+        cls.launch_vessel_from_vab('RemoteTech')
         cls.remove_other_vessels()
         cls.space_center = cls.connect().space_center
         cls.rt = cls.connect().remote_tech

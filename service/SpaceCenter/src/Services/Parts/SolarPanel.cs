@@ -54,7 +54,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Deployed {
             get {
-                return panel.panelState == ModuleDeployableSolarPanel.panelStates.EXTENDED || panel.panelState == ModuleDeployableSolarPanel.panelStates.EXTENDING;
+                return
+                panel.deployState == ModuleDeployableSolarPanel.DeployState.EXTENDED ||
+                panel.deployState == ModuleDeployableSolarPanel.DeployState.EXTENDING;
             }
             set {
                 if (value)
@@ -69,7 +71,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public SolarPanelState State {
-            get { return panel.panelState.ToSolarPanelState (); }
+            get { return panel.deployState.ToSolarPanelState (); }
         }
 
         /// <summary>

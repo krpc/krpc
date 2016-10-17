@@ -8,7 +8,7 @@ namespace KRPC.SpaceCenter.ExternalAPI
     {
         public static void Load ()
         {
-            IsAvailable = APILoader.Load (typeof(RemoteTech), "RemoteTech", "RemoteTech.API.API", new Version (1, 7));
+            IsAvailable = APILoader.Load (typeof(RemoteTech), "RemoteTech", "RemoteTech.API.API", new Version (1, 8));
         }
 
         public static bool IsAvailable { get; private set; }
