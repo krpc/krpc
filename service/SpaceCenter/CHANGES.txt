@@ -1,4 +1,5 @@
 v0.3.7
+ * KSP 1.2 support
  * Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (#252)
  * Add Vessel.BoundingBox and Part.BoundingBox (#352)
  * Add LandingGear.IsGrounded and LandingLeg.IsGrounded (#352)
