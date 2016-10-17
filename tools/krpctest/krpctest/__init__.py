@@ -3,6 +3,7 @@ import inspect
 import math
 import os
 import shutil
+import sys
 import time
 from pkg_resources import Requirement, resource_filename
 import krpc
@@ -53,8 +54,10 @@ class TestCase(unittest.TestCase):
         cls.connect().testing_tools.remove_other_vessels()
 
     @classmethod
-    def launch_vessel_from_vab(cls, name, directory='craft'):
+    def launch_vessel_from_vab(cls, name, directory=None):
         # Copy craft file to save directory
+        if directory is None:
+            directory = os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), 'craft')
         fixtures_path = os.path.abspath(directory)
         save_path = os.path.join(_get_ksp_dir(), 'saves', cls.connect().testing_tools.current_save)
         if not os.path.exists(save_path):
