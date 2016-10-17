@@ -18,6 +18,7 @@ namespace KRPC
         [Persistent] RectStorage infoWindowPosition = new RectStorage ();
         [Persistent] bool autoStartServer;
         [Persistent] bool autoAcceptConnections;
+        [Persistent] bool confirmRemoveClient = true;
         [Persistent] string logLevel = KRPC.Utils.Logger.Severity.Info.ToString ();
         [Persistent] bool verboseErrors;
         [Persistent] bool checkDocumented;
@@ -67,6 +68,11 @@ namespace KRPC
         public bool AutoAcceptConnections {
             get { return autoAcceptConnections; }
             set { autoAcceptConnections = value; }
+        }
+
+        public bool ConfirmRemoveClient {
+            get { return confirmRemoveClient; }
+            set { confirmRemoveClient = value; }
         }
 
         public bool OneRPCPerUpdate {

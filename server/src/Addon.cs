@@ -15,7 +15,8 @@ namespace KRPC
     [SuppressMessage ("Gendarme.Rules.Correctness", "DeclareEventsExplicitlyRule")]
     sealed public class Addon : MonoBehaviour
     {
-        static Configuration config;
+        // TODO: clean this up
+        internal static Configuration config;
         static Core core;
         static Server.Server server;
         static TCPServer rpcTcpServer;

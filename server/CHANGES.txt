@@ -1,6 +1,7 @@
 v0.3.6
  * Add KRPC.Clients that clients can use to get a list of connected clients (#304)
  * Make KRPC.Core.Instance public so that other mods can subscribe to server events and access other server APIs (#304)
+ * Add "Yes (don't show again)" options to dialogs, add option to skip confirmation when force disconnecting a client
 
 v0.3.5
  * Support for KSP 1.1.3

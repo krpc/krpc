@@ -71,6 +71,7 @@ namespace KRPC.UI
         const string advancedText = "Advanced settings";
         const string autoStartServerText = "Auto-start server";
         const string autoAcceptConnectionsText = "Auto-accept new clients";
+        const string confirmRemoveClientText = "Confirm disconnecting a client";
         const string oneRPCPerUpdateText = "One RPC per update";
         const string maxTimePerUpdateText = "Max. time per update";
         const string adaptiveRateControlText = "Adaptive rate control";
@@ -271,6 +272,15 @@ namespace KRPC.UI
             }
         }
 
+        void DrawConfirmRemoveClientToggle ()
+        {
+            bool confirmRemoveClient = GUILayout.Toggle (Config.ConfirmRemoveClient, confirmRemoveClientText, toggleStyle, new GUILayoutOption[] { });
+            if (confirmRemoveClient != Config.ConfirmRemoveClient) {
+                Config.ConfirmRemoveClient = confirmRemoveClient;
+                Config.Save ();
+            }
+        }
+
         void DrawOneRPCPerUpdateToggle ()
         {
             bool oneRPCPerUpdate = GUILayout.Toggle (Config.OneRPCPerUpdate, oneRPCPerUpdateText, toggleStyle, new GUILayoutOption[] { });
@@ -349,7 +359,10 @@ namespace KRPC.UI
                     GUILayout.Label (description, stretchyLabelStyle);
                     if (GUILayout.Button (new GUIContent (Icons.Instance.ButtonDisconnectClient, "Disconnect client"),
                             buttonStyle, GUILayout.MaxWidth (20), GUILayout.MaxHeight (20))) {
-                        ClientDisconnectDialog.Show (client);
+                        if (Config.ConfirmRemoveClient)
+                            ClientDisconnectDialog.Show (client);
+                        else
+                            client.Close ();
                     }
                     GUILayout.EndHorizontal ();
                 }
@@ -438,6 +451,11 @@ namespace KRPC.UI
                     GUILayout.BeginHorizontal ();
                     GUILayout.Space (scaledIndentWidth);
                     DrawAutoAcceptConnectionsToggle ();
+                    GUILayout.EndHorizontal ();
+
+                    GUILayout.BeginHorizontal ();
+                    GUILayout.Space (scaledIndentWidth);
+                    DrawConfirmRemoveClientToggle ();
                     GUILayout.EndHorizontal ();
 
                     GUILayout.BeginHorizontal ();
